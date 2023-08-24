@@ -30,5 +30,5 @@ node_modules
 firebase.json
 *.cache
 
-*.tar.gz
+dist.tar.gz
 *.sh

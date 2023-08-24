@@ -77,11 +77,12 @@ function toggleFavorite() {
 					:class="{ 'isfavorite': contentStore.favorites.includes(`${content.id}`) }"
 					@click="toggleFavorite"><span>favorite</span></button>
 				<!-- Change @click to a report issue function to implement functionality -->
-				<button title="回報問題"
+				<button title="回報問題" class="show-if-mobile"
 					@click="dialogStore.showReportIssue(content.id, content.name)"><span>flag</span></button>
 				<!-- deleteComponent is currently a dummy function to demonstrate what adding components may look like
                      Connect a backend to actually implement the function or remove altogether -->
-				<button v-if="!isMapLayer" @click="contentStore.deleteComponent(content.id)"><span>delete</span></button>
+				<button v-if="!isMapLayer" @click="contentStore.deleteComponent(content.id)"
+					class="isDelete"><span>delete</span></button>
 			</div>
 		</div>
 		<div class="componentcontainer-control" v-if="props.content.chart_config.types.length > 1">
@@ -101,9 +102,12 @@ function toggleFavorite() {
 		</div>
 		<div class="componentcontainer-footer">
 			<div>
-				<ComponentTag v-if="content.chart_config.map_filter && content.map_config" icon="tune" text="篩選地圖" />
-				<ComponentTag v-if="content.map_config" icon="map" text="空間資料" />
-				<ComponentTag v-if="content.history_data" icon="insights" text="歷史資料" />
+				<ComponentTag v-if="content.chart_config.map_filter && content.map_config" icon="tune" text="篩選地圖"
+					@click="dialogStore.showNotification('info', '本組件有篩選地圖功能，歡迎至地圖頁面嘗試')" class="hide-if-mobile" />
+				<ComponentTag v-if="content.map_config" icon="map" text="空間資料"
+					@click="dialogStore.showNotification('info', '本組件有空間資料，歡迎至地圖頁面查看')" />
+				<ComponentTag v-if="content.history_data" icon="insights" text="歷史資料"
+					@click="dialogStore.showNotification('info', '本組件有歷史資訊，點擊「組件資訊」以查看')" class="history-tag" />
 			</div>
 			<!-- The content in the target component should be passed into the "showMoreInfo" function of the mapStore to show more info -->
 			<button v-if="notMoreInfo && !isMapLayer" @click="dialogStore.showMoreInfo(content)">
@@ -177,6 +181,12 @@ function toggleFavorite() {
 				color: rgb(160, 112, 106)
 			}
 		}
+
+		@media (max-width: 760px) {
+			button.isDelete {
+				display: none !important;
+			}
+		}
 	}
 
 	&-control {
@@ -240,6 +250,12 @@ function toggleFavorite() {
 		align-items: center;
 		justify-content: space-between;
 		overflow: visible;
+
+		@media (max-width: 760px) {
+			.history-tag {
+				display: none !important;
+			}
+		}
 
 		div {
 			display: flex;

@@ -1694,7 +1694,7 @@
 		},
 		"61": {
 			"id": 61,
-			"index": "youbike_availability_alt",
+			"index": "youbike_alt",
 			"map_config": [
 				{
 					"index": "traffic_youbike",
@@ -1954,7 +1954,7 @@
 		},
 		"74": {
 			"id": 74,
-			"index": "metro_passengers_3d",
+			"index": "metro_3d",
 			"map_config": [
 				{
 					"color": "#555",
@@ -3415,7 +3415,7 @@
 		},
 		"117": {
 			"id": 117,
-			"index": "public_parking_lots_alt",
+			"index": "public_parking_alt",
 			"map_config": [
 				{
 					"index": "parking_realtime_new",
@@ -3515,7 +3515,7 @@
 		},
 		"118": {
 			"id": 118,
-			"index": "public_parking_lots_3d",
+			"index": "public_parking_3d",
 			"map_config": [
 				{
 					"index": "parking_realtime_3d2",
