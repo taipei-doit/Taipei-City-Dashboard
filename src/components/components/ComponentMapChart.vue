@@ -6,10 +6,12 @@
 <script setup>
 import { ref, computed } from 'vue';
 import { useMapStore } from '../../store/mapStore';
+import { useDialogStore } from '../../store/dialogStore';
 
 import { chartTypes } from '../../assets/configs/apexcharts/chartTypes';
 
 const mapStore = useMapStore();
+const dialogStore = useDialogStore();
 
 const props = defineProps({
 	// The complete config (incl. chart data) of a dashboard component will be passed in
@@ -36,6 +38,9 @@ const dataTime = computed(() => {
 // Open and closes the component as well as communicates to the mapStore to turn on and off map layers
 function handleToggle() {
 	if (!props.content.map_config) {
+		if (checked.value) {
+			dialogStore.showNotification('info', '本組件沒有空間資料，不會渲染地圖');
+		}
 		return;
 	}
 	if (checked.value) {
@@ -58,9 +63,12 @@ function changeActiveChart(chartName) {
 			<div>
 				<div>
 					<h3>{{ content.name }}</h3>
-					<span v-if="content.chart_config.map_filter && content.map_config">tune</span>
-					<span v-if="content.map_config">map</span>
-					<span v-if="content.history_data">insights</span>
+					<span v-if="content.chart_config.map_filter && content.map_config"
+						@click="dialogStore.showNotification('info', '本組件有篩選地圖功能，點擊圖表資料點以篩選')">tune</span>
+					<span v-if="content.map_config"
+						@click="dialogStore.showNotification('info', '本組件有空間資料，點擊開關以顯示地圖')">map</span>
+					<span v-if="content.history_data"
+						@click="dialogStore.showNotification('info', '回到儀表板頁面並點擊「組件資訊」以查看')">insights</span>
 				</div>
 				<h4 v-if="checked">{{ `${content.source} | ${dataTime}` }}</h4>
 			</div>
@@ -128,7 +136,6 @@ function changeActiveChart(chartName) {
 				color: var(--color-complement-text);
 				font-family: var(--font-icon);
 				user-select: none;
-				pointer-events: none;
 			}
 		}
 

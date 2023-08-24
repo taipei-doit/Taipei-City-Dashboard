@@ -31,7 +31,6 @@ defineProps({
 	border: solid 1px var(--color-complement-text);
 	border-radius: 5px;
 	overflow-x: hidden;
-	pointer-events: none;
 	user-select: none;
 
 	span {

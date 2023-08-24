@@ -21,9 +21,9 @@ const contentStore = useContentStore();
 			<ComponentContainer :content="dialogStore.moreInfoContent" :not-more-info="false" />
 			<div class="moreinfo-info">
 				<div class="moreinfo-info-data">
-					<h3>組件說明</h3>
+					<h3>組件說明（{{ ` ID: ${dialogStore.moreInfoContent.id}｜Index:
+											${dialogStore.moreInfoContent.index} ` }}）</h3>
 					<p>{{ dialogStore.moreInfoContent.long_desc }}</p>
-					<p>{{ `ID: ${dialogStore.moreInfoContent.id}｜Index: ${dialogStore.moreInfoContent.index}` }}</p>
 					<h3>範例情境</h3>
 					<p>{{ dialogStore.moreInfoContent.use_case }}</p>
 					<div v-if="dialogStore.moreInfoContent.history_data">
@@ -36,7 +36,7 @@ const contentStore = useContentStore();
 					<div v-if="dialogStore.moreInfoContent.contributors">
 						<h3>協作者</h3>
 						<div class="moreinfo-info-contributors">
-							<div v-for="contributor in dialogStore.moreInfoContent.contributors" :key="contributor">
+							<div v-for=" contributor  in  dialogStore.moreInfoContent.contributors " :key="contributor">
 								<a :href="contentStore.contributors[contributor].link" target="_blank" rel="noreferrer"><img
 										:src="`${BASE_URL}/images/contributors/${contributor}.png`"
 										:alt="`協作者-${contentStore.contributors[contributor].name}`">
@@ -48,9 +48,10 @@ const contentStore = useContentStore();
 					<div v-if="dialogStore.moreInfoContent.links">
 						<h3>原始資料</h3>
 						<div class="moreinfo-info-links">
-							<a v-for="(link, index) in dialogStore.moreInfoContent.links" :href="link" :key="link"
+							<a v-for="( link, index ) in  dialogStore.moreInfoContent.links " :href="link" :key="link"
 								target="_blank" rel="noreferrer">{{
-									link.includes("data.taipei") ? `資料集-${index + 1} (data.taipei)` : `資料集-${index + 1}(其他)`
+									link.includes("data.taipei") ? `資料集 - ${index + 1} (data.taipei)` : `資料集 - ${index + 1}
+								(其他)`
 								}}</a>
 						</div>
 					</div>

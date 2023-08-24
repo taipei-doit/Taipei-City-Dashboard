@@ -39,15 +39,14 @@ const linkQuery = computed(() => {
 			<router-link :to="`/mapview${linkQuery}`">地圖交叉比對</router-link>
 		</div>
 		<div class="navbar-user">
-			<a href="https://tuic.gov.taipei/documentation/front-end" target="_blank" rel="noreferrer"><button
-					class="hide-if-mobile"><span>school</span></button></a>
+			<a href="https://tuic.gov.taipei/documentation/front-end" target="_blank"
+				rel="noreferrer"><button><span>help</span></button></a>
 			<button class="hide-if-mobile" @click="toggle"><span>{{ isFullscreen ? 'fullscreen_exit' : 'fullscreen'
 			}}</span></button>
-			<div class="navbar-user-user">
-				<button class="hide-if-mobile">{{ authStore.user.name }}</button>
-				<button class="show-if-mobile"><span>account_circle</span></button>
+			<div class="navbar-user-user hide-if-mobile">
+				<button>{{ authStore.user.name }}</button>
 				<ul>
-					<li class="hide-if-mobile"><button @click="dialogStore.showDialog('userSettings')">用戶設定</button></li>
+					<li><button @click="dialogStore.showDialog('userSettings')">用戶設定</button></li>
 					<li><button @click="authStore.handleLogout">登出</button></li>
 				</ul>
 				<teleport to="body">
