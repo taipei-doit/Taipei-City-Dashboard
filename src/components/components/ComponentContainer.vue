@@ -83,6 +83,8 @@ function toggleFavorite() {
                      Connect a backend to actually implement the function or remove altogether -->
 				<button v-if="!isMapLayer" @click="contentStore.deleteComponent(content.id)"
 					class="isDelete"><span>delete</span></button>
+				<button v-if="!isMapLayer && contentStore.currentDashboard.index === 'favorites'"
+					@click="contentStore.deleteComponent(content.id)" class="isUnfavorite"><span>delete</span></button>
 			</div>
 		</div>
 		<div class="componentcontainer-control" v-if="props.content.chart_config.types.length > 1">
@@ -184,6 +186,12 @@ function toggleFavorite() {
 
 		@media (max-width: 760px) {
 			button.isDelete {
+				display: none !important;
+			}
+		}
+
+		@media (min-width: 759px) {
+			button.isUnfavorite {
 				display: none !important;
 			}
 		}
