@@ -16,13 +16,17 @@ Please refer to the docs for the [Chinese Version](https://tuic.gov.taipei/docum
 
 [Demo](https://tuic.gov.taipei/dashboard-demo) | [License](https://github.com/tpe-doit/Taipei-City-Dashboard-FE/blob/main/LICENSE) | [Code of Conduct](https://github.com/tpe-doit/Taipei-City-Dashboard-FE/blob/main/.github/CODE_OF_CONDUCT.md) | [Contribution Guide](https://tuic.gov.taipei/documentation/front-end/contribution-overview)
 
+## Quick Start
+
+Follow this [guide](https://tuic.gov.taipei/documentation/front-end/project-setup) to quickly set up this project in your local environment.
+
 ## Documentation
 
-Check out the documentation for Taipei City Dashboard [here](https://tuic.gov.taipei/documentation).
+Check out the complete documentation for Taipei City Dashboard FE [here](https://tuic.gov.taipei/documentation).
 
 ## Contributors
 
-Many thanks to the contributors of this project!
+Many thanks to the contributors to this project!
 
 <a href="https://github.com/tpe-doit/Taipei-City-Dashboard-FE/graphs/contributors">
 <img src="https://contrib.rocks/image?repo=tpe-doit/Taipei-City-Dashboard-FE" />
