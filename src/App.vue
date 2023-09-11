@@ -17,6 +17,14 @@ const dialogStore = useDialogStore();
 onBeforeMount(() => {
 	authStore.setUser();
 	authStore.checkIfMobile();
+
+	let vh = window.innerHeight * 0.01;
+	document.documentElement.style.setProperty('--vh', `${vh}px`);
+
+	window.addEventListener('resize', () => {
+		let vh = window.innerHeight * 0.01;
+		document.documentElement.style.setProperty('--vh', `${vh}px`);
+	});
 });
 onMounted(() => {
 	const showInitialWarning = localStorage.getItem('initialWarning');
@@ -30,7 +38,7 @@ onMounted(() => {
 	<div class="app-container">
 		<NotificationBar />
 		<NavBar />
-		<div :class="{ 'app-content': true, 'app-mobile': authStore.isMobileDevice }">
+		<div class="app-content">
 			<SideBar />
 			<div class="app-content-main">
 				<SettingsBar />
@@ -46,12 +54,14 @@ onMounted(() => {
 	&-container {
 		max-width: 100vw;
 		max-height: 100vh;
+		max-height: calc(var(--vh) * 100);
 	}
 
 	&-content {
 		width: 100vw;
 		max-width: 100vw;
 		height: calc(100vh - 60px);
+		height: calc(var(--vh) * 100 - 60px);
 		display: flex;
 
 		&-main {
@@ -59,10 +69,6 @@ onMounted(() => {
 			display: flex;
 			flex-direction: column;
 		}
-	}
-
-	&-mobile {
-		height: calc(100vh - 140px);
 	}
 }
 </style>

@@ -29,6 +29,7 @@ defineEmits(['onClose']);
 .dialogcontainer {
 	width: 100vw;
 	height: 100vh;
+	height: calc(var(--vh) * 100);
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -41,6 +42,7 @@ defineEmits(['onClose']);
 	&-background {
 		width: 100vw;
 		height: 100vh;
+		height: calc(var(--vh) * 100);
 		position: absolute;
 		top: 0;
 		left: 0;

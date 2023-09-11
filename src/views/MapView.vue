@@ -67,6 +67,7 @@ const parseMapLayers = computed(() => {
 <style scoped lang="scss">
 .map {
 	height: calc(100vh - 127px);
+	height: calc(var(--vh) * 100 - 127px);
 	display: flex;
 	margin: var(--font-m) var(--font-m);
 
@@ -91,6 +92,7 @@ const parseMapLayers = computed(() => {
 		&-nodashboard {
 			width: 360px;
 			height: calc(100vh - 127px);
+			height: calc(var(--vh) * 100 - 127px);
 			display: flex;
 			flex-direction: column;
 			align-items: center;
