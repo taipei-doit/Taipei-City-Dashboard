@@ -49,7 +49,7 @@
 				"unit": "件"
 			},
 			"name": "臺北市陳情系統",
-			"source": "HelloTaipei",
+			"source": "臺北市陳情系統",
 			"time_from": "2023-05-28T00:00:00+08:00",
 			"time_to": "2023-06-01T00:00:00+08:00",
 			"update_freq": 1,

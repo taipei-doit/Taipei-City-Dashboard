@@ -76,6 +76,11 @@ function handleDataSelection(index) {
 		<div class="districtchart-title">
 			<h5>總合</h5>
 			<h6>{{ districtData.sum }} {{ chart_config.unit }}</h6>
+			<div class="districtchart-title-legend">
+				<p>多</p>
+				<div :style="{ backgroundColor: props.chart_config.color[0] }"></div>
+				<p>少</p>
+			</div>
 		</div>
 		<div class="districtchart-chart">
 			<svg viewBox="0 0 413 550" xmlns="http://www.w3.org/2000/svg">
@@ -188,6 +193,32 @@ function handleDataSelection(index) {
 			color: var(--color-complement-text);
 			font-size: var(--font-m);
 			font-weight: 400;
+		}
+
+		&-legend {
+			display: flex;
+			justify-content: space-between;
+
+			div {
+				position: relative;
+				width: 3rem;
+				margin: 0 4px;
+				border-radius: 5px;
+			}
+
+			div:before {
+				content: "";
+				width: 3rem;
+				height: var(--font-l);
+				position: absolute;
+				top: 0;
+				left: 0;
+				background: linear-gradient(270deg, rgba(40, 42, 44, 1), rgba(40, 42, 44, 0.2));
+			}
+
+			p {
+				color: var(--color-complement-text)
+			}
 		}
 	}
 
