@@ -55,6 +55,9 @@ export const useAuthStore = defineStore("auth", {
 			if (navigator.maxTouchPoints > 2) {
 				this.isMobileDevice = true;
 			}
+			if (window.matchMedia("(pointer:fine)").matches) {
+				this.isMobileDevice = false;
+			}
 		},
 	},
 });

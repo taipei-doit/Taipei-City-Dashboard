@@ -53,6 +53,7 @@ const dialogStore = useDialogStore();
 <style scoped lang="scss">
 .dashboard {
 	max-height: calc(100vh - 127px);
+	max-height: calc(var(--vh) * 100 - 127px);
 	display: grid;
 	row-gap: var(--font-s);
 	column-gap: var(--font-s);
@@ -81,6 +82,7 @@ const dialogStore = useDialogStore();
 		&-content {
 			width: 100%;
 			height: calc(100vh - 127px);
+			height: calc(var(--vh) * 100 - 127px);
 			display: flex;
 			flex-direction: column;
 			align-items: center;
