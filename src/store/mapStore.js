@@ -68,6 +68,11 @@ export const useMapStore = defineStore("map", {
 						this.popup = null;
 					}
 					this.addPopup(event);
+				})
+				.on("idle", () => {
+					this.loadingLayers = this.loadingLayers.filter(
+						(el) => el !== "rendering"
+					);
 				});
 		},
 		// 2. Adds three basic layers to the map (Taipei District, Taipei Village labels, and Taipei 3D Buildings)
@@ -135,6 +140,7 @@ export const useMapStore = defineStore("map", {
 				if (
 					this.currentLayers.find((element) => element === mapLayerId)
 				) {
+					this.loadingLayers.push("rendering");
 					this.turnOnMapLayerVisibility(mapLayerId);
 					if (
 						!this.currentVisibleLayers.find(
@@ -148,7 +154,7 @@ export const useMapStore = defineStore("map", {
 				let appendLayerId = { ...element };
 				appendLayerId.layerId = mapLayerId;
 				// 1-2. If the layer doesn't exist, call an API to get the layer data
-				this.loadingLayers.push(appendLayerId);
+				this.loadingLayers.push(appendLayerId.layerId);
 				this.fetchLocalGeoJson(appendLayerId);
 			});
 		},
@@ -200,6 +206,7 @@ export const useMapStore = defineStore("map", {
 					],
 				};
 			}
+			this.loadingLayers.push("rendering");
 			this.map.addLayer({
 				id: map_config.layerId,
 				type: map_config.type,
@@ -218,7 +225,7 @@ export const useMapStore = defineStore("map", {
 			this.mapConfigs[map_config.layerId] = map_config;
 			this.currentVisibleLayers.push(map_config.layerId);
 			this.loadingLayers = this.loadingLayers.filter(
-				(el) => el === map_config.layerId
+				(el) => el !== map_config.layerId
 			);
 		},
 		//  5. Turn on the visibility for a exisiting map layer
@@ -229,6 +236,10 @@ export const useMapStore = defineStore("map", {
 		turnOffMapLayerVisibility(map_config) {
 			map_config.forEach((element) => {
 				let mapLayerId = `${element.index}-${element.type}`;
+				this.loadingLayers = this.loadingLayers.filter(
+					(el) => el !== mapLayerId
+				);
+
 				if (this.map.getLayer(mapLayerId)) {
 					this.map.setFilter(mapLayerId, null);
 					this.map.setLayoutProperty(

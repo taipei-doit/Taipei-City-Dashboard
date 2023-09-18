@@ -35,6 +35,15 @@ const dataTime = computed(() => {
 	return `${props.content.time_from.slice(0, 10)} ~ ${props.content.time_to.slice(0, 10)}`;
 });
 
+// If any map layers are loading, disable the toggle
+const shouldDisable = computed(() => {
+	if (!props.content.map_config) return false;
+
+	const allMapLayerIds = props.content.map_config.map((el) => `${el.index}-${el.type}`);
+
+	return mapStore.loadingLayers.filter((el) => allMapLayerIds.includes(el)).length > 0;
+});
+
 // Open and closes the component as well as communicates to the mapStore to turn on and off map layers
 function handleToggle() {
 	if (!props.content.map_config) {
@@ -75,7 +84,7 @@ function changeActiveChart(chartName) {
 			<div class="componentmapchart-header-toggle">
 				<!-- The class "toggleswitch" could be edited in /assets/styles/toggleswitch.css -->
 				<label class="toggleswitch">
-					<input type="checkbox" @change="handleToggle" v-model="checked">
+					<input type="checkbox" @change="handleToggle" v-model="checked" :disabled="shouldDisable">
 					<span class="toggleswitch-slider"></span>
 				</label>
 			</div>

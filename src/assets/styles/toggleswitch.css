@@ -47,9 +47,17 @@
 	box-shadow: 0 0 1px var(--color-highlight);
 }
 
+.toggleswitch input:disabled + .toggleswitch-slider {
+	opacity: 0.6;
+}
+
 .toggleswitch input:checked + .toggleswitch-slider:before {
 	background-color: white;
 	-webkit-transform: translateX(1rem);
 	-ms-transform: translateX(1rem);
 	transform: translateX(1rem);
+}
+
+.toggleswitch input:disabled + .toggleswitch-slider:before {
+	opacity: 0.6;
 }
