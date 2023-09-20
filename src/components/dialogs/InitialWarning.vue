@@ -34,6 +34,9 @@ function handleClose() {
 			<div class="initialwarning-message" v-if="authStore.isMobileDevice">
 				<p>臺北城市儀表板主要為給平板與電腦使用的平台，手機版僅為概覽使用，因此許多功能在行動版無法使用，效能亦仍在優化中。</p>
 				<br />
+				<p>This is the demo version of Taipei City Dashboard 2.0. All data displayed are static and are not
+					regularly updated.</p>
+				<br />
 				<p>如希望完整體驗本產品，建議改成使用平板或電腦檢視。</p>
 			</div>
 			<div class="initialwarning-message" v-else>
@@ -41,6 +44,9 @@ function handleClose() {
 				<br />
 				<p>本產品所呈現的資料集均以臺北開放資料為基礎，經由臺北大數據中心清理建構，但由於資安與個資考量，本產品為純前端展示，並未串接資料API，資料的有效性因此將受到影響，新增儀表板、設定儀表板、新增組件、刪除組件等功能亦只有暫存，煩請留意及見諒。
 				</p>
+				<br />
+				<p>This is the demo version of Taipei City Dashboard 2.0. All data displayed are static and are not
+					regularly updated.</p>
 			</div>
 			<div class="initialwarning-dontshow">
 				<input type="checkbox" id="dontshow" :value="true" v-model="dontShowAgain" class="custom-check-input" />
