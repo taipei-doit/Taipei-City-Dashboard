@@ -6,7 +6,7 @@
 	"scripts": {
 		"start": "vite",
 		"dev": "vite",
-		"build": "npm run lint && vite build",
+		"build": "eslint --fix --ext .js,.vue . && vite build",
 		"lint": "eslint --fix --ext .js,.vue . && cd public && tar zcfv mapData.tar.gz mapData && cd .",
 		"test": "vitest run --dom",
 		"preview": "vite preview"

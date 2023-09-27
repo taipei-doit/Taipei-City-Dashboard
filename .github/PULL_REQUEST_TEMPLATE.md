@@ -15,7 +15,7 @@ A clear and concise description of this pull request
 -   [ ] New Feature (Chart / Map Type)
 -   [ ] New Component
 
-## Check list
+## Checklist
 
 Please make sure that all items are checked before submitting this request.
 
