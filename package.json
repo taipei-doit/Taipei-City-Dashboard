@@ -6,8 +6,8 @@
 	"scripts": {
 		"start": "vite",
 		"dev": "vite",
-		"build": "eslint src --ext .js,.vue . && vite build",
-		"lint": "eslint --fix --ext .js,.vue .",
+		"build": "npm run lint && vite build",
+		"lint": "eslint --fix --ext .js,.vue . && cd public && tar zcfv mapData.tar.gz mapData && cd .",
 		"test": "vitest run --dom",
 		"preview": "vite preview"
 	},
@@ -19,6 +19,7 @@
 		"happy-dom": "^6.0.4",
 		"mapbox-gl": "^2.14.1",
 		"pinia": "^2.0.35",
+		"threebox-plugin": "^2.2.7",
 		"uuid": "^9.0.0",
 		"vue": "^3.2.47",
 		"vue-router": "^4.1.6",
