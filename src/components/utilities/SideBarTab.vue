@@ -1,4 +1,4 @@
-<!-- Cleaned -->
+<!-- Developed by Taipei Urban Intelligence Center 2023 -->
 
 <!-- This component has two modes "expanded" and "collapsed" which is controlled by the prop "expanded" -->
 

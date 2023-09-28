@@ -1,4 +1,4 @@
-<!-- Cleaned -->
+<!-- Developed by Taipei Urban Intelligence Center 2023 -->
 
 <!-- Navigation will be hidden from the navbar in mobile mode and moved to the settingsbar -->
 

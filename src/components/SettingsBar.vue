@@ -1,4 +1,4 @@
-<!-- Cleaned -->
+<!-- Developed by Taipei Urban Intelligence Center 2023 -->
 
 <!-- Navigation between dashboard and mapview will switch here in the mobile version -->
 <!-- Adding new components and settings is disabled in the map layer dashboard and the mobile version -->

@@ -1,4 +1,4 @@
-<!-- Cleaned -->
+<!-- Developed by Taipei Urban Intelligence Center 2023 -->
 
 <!-- The slot holds text for the checkbox -->
 <!-- This checkbox was created by Andreas Storm. Check out her original code here: https://codepen.io/avstorm/pen/deRvMy -->

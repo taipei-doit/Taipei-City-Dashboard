@@ -1,9 +1,9 @@
-<!-- Cleaned -->
+<!-- Developed by Taipei Urban Intelligence Center 2023 -->
 
 <script setup>
 import { ref } from 'vue';
 
-const props = defineProps(['chart_config', 'activeChart', 'series'])
+const props = defineProps(['chart_config', 'activeChart', 'series']);
 
 const chartOptions = ref({
 	chart: {
@@ -42,9 +42,9 @@ const chartOptions = ref({
 		custom: function ({ series, seriesIndex, dataPointIndex, w }) {
 			// The class "chart-tooltip" could be edited in /assets/styles/chartStyles.css
 			return '<div class="chart-tooltip">' +
-                '<h6>' + `${parseTime(w.config.series[seriesIndex].data[dataPointIndex].x)}` + ` - ${w.globals.seriesNames[seriesIndex]}` + '</h6>' +
-                '<span>' + series[seriesIndex][dataPointIndex] + ` ${props.chart_config.unit}` + '</span>' +
-                '</div>'
+				'<h6>' + `${parseTime(w.config.series[seriesIndex].data[dataPointIndex].x)}` + ` - ${w.globals.seriesNames[seriesIndex]}` + '</h6>' +
+				'<span>' + series[seriesIndex][dataPointIndex] + ` ${props.chart_config.unit}` + '</span>' +
+				'</div>';
 		},
 	},
 	xaxis: {
@@ -63,15 +63,15 @@ const chartOptions = ref({
 		},
 		type: 'datetime',
 	},
-})
+});
 
 function parseTime(time) {
-	return time.replace('T', ' ').slice(0, -4)
+	return time.replace('T', ' ').slice(0, -4);
 }
 </script>
 
 <template>
-    <div v-if="activeChart === 'TimelineStackedChart'">
-        <apexchart width="100%" height="260px" type="area" :options="chartOptions" :series="series"></apexchart>
-    </div>
+	<div v-if="activeChart === 'TimelineStackedChart'">
+		<apexchart width="100%" height="260px" type="area" :options="chartOptions" :series="series"></apexchart>
+	</div>
 </template>
