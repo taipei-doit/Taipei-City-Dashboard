@@ -3,7 +3,7 @@
 		{
 			"name": "民情熱議",
 			"index": "public-opinion",
-			"components": ["142", "4", "5", "72"],
+			"components": ["4", "5", "72"],
 			"icon": "mic"
 		},
 		{

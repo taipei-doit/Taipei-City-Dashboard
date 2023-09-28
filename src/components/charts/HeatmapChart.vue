@@ -1,9 +1,56 @@
 <!-- Developed by Taipei Urban Intelligence Center 2023 -->
 
 <script setup>
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 
 const props = defineProps(['chart_config', 'activeChart', 'series']);
+
+const heatmapData = computed(() => {
+	let output = {};
+	let highest = 0;
+	let sum = 0;
+	if (props.series.length === 1) {
+		props.series[0].data.forEach((item) => {
+			output[item.x] = item.y;
+			if (item.y > highest) {
+				highest = item.y;
+			}
+			sum += item.y;
+		});
+	} else {
+		props.series.forEach((serie) => {
+			for (let i = 0; i < 12; i++) {
+				if (!output[props.chart_config.categories[i]]) {
+					output[props.chart_config.categories[i]] = 0;
+				}
+				output[props.chart_config.categories[i]] += +serie.data[i];
+			}
+		});
+		highest = Object.values(output).sort(function (a, b) { return b - a; })[0];
+		sum = Object.values(output).reduce((partialSum, a) => partialSum + a, 0);
+	}
+
+	output.highest = highest;
+	output.sum = sum;
+	return output;
+});
+
+const colorScale = computed(() => {
+	const ranges = props.chart_config.color.map((el, index) => (
+		{
+			to: Math.round((heatmapData.value.highest / props.chart_config.color.length) * (props.chart_config.color.length - index)),
+			from: Math.round((heatmapData.value.highest / props.chart_config.color.length) * (props.chart_config.color.length - index - 1)) + 1,
+			color: el
+		}
+	)
+	);
+	ranges.unshift({
+		to: 0,
+		from: 0,
+		color: "#444444"
+	});
+	return ranges;
+});
 
 const chartOptions = ref({
 	chart: {
@@ -12,28 +59,29 @@ const chartOptions = ref({
 			show: false,
 		},
 	},
-	colors: props.chart_config.color,
 	grid: {
 		show: false,
 	},
 	legend: {
-		show: props.chart_config.categories ? true : false,
+		show: false,
 	},
 	markers: {
 		size: 3,
 		strokeWidth: 0,
 	},
 	plotOptions: {
-		radar: {
-			polygons: {
-				connectorColors: '#444',
-				strokeColors: '#555',
-			},
+		heatmap: {
+			enableShades: false,
+			radius: 4,
+			colorScale: {
+				ranges: colorScale.value,
+			}
 		},
 	},
 	stroke: {
 		show: true,
 		width: 2,
+		colors: ['#282a2c'],
 	},
 	tooltip: {
 		custom: function ({ series, seriesIndex, dataPointIndex, w }) {
@@ -45,6 +93,12 @@ const chartOptions = ref({
 		},
 	},
 	xaxis: {
+		axisBorder: {
+			show: false,
+		},
+		axisTicks: {
+			show: false,
+		},
 		categories: props.chart_config.categories ? props.chart_config.categories : [],
 		labels: {
 			offsetY: 5,
@@ -52,36 +106,50 @@ const chartOptions = ref({
 				return value.length > 7 ? value.slice(0, 6) + "..." : value;
 			}
 		},
+		tooltip: {
+			enabled: false
+		},
 		type: 'category',
 	},
 	yaxis: {
-		axisBorder: {
-			color: '#000',
-		},
-		labels: {
-			formatter: (value) => { return ''; },
-		},
-		// To fix a bug when there is more than 1 series
-		// Orginal behavior: max will default to the max sum of each series
 		max: function (max) {
 			if (!props.chart_config.categories) {
 				return max;
 			}
-			let adjustedMax = 0;
-			props.series.forEach((element) => {
-				const maxOfSeries = Math.max.apply(null, element.data);
-				if (maxOfSeries > adjustedMax) {
-					adjustedMax = maxOfSeries;
-				}
-			});
-			return adjustedMax * 1.1;
+			return heatmapData.value.highest;
 		},
 	}
 });
 </script>
 
 <template>
-	<div v-if="activeChart === 'HeatmapChart'">
+	<div v-if="activeChart === 'HeatmapChart'" class="heatmapchart">
+		<div class="heatmapchart-title">
+			<h5>總合</h5>
+			<h6>{{ heatmapData.sum }} {{ chart_config.unit }}</h6>
+		</div>
 		<apexchart width="100%" height="360px" type="heatmap" :options="chartOptions" :series="series"></apexchart>
 	</div>
 </template>
+
+<style scoped lang="scss">
+.heatmapchart {
+
+	&-title {
+		display: flex;
+		justify-content: center;
+		flex-direction: column;
+		margin: -0.2rem 0 -1.5rem;
+
+		h5 {
+			color: var(--color-complement-text);
+		}
+
+		h6 {
+			color: var(--color-complement-text);
+			font-size: var(--font-m);
+			font-weight: 400;
+		}
+	}
+}
+</style>
