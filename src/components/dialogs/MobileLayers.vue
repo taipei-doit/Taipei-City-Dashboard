@@ -1,4 +1,4 @@
-<!-- Cleaned -->
+<!-- Developed by Taipei Urban Intelligence Center 2023 -->
 
 <!-- This component controls map layers in the mobile version. To preserve state, the dialog is only hidden but not removed when disabled -->
 

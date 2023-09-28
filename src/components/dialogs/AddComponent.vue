@@ -1,4 +1,4 @@
-<!-- Cleaned -->
+<!-- Developed by Taipei Urban Intelligence Center 2023 -->
 
 <!-- This component only serves a functional purpose if a backend is connected -->
 <!-- For static applications, this component could be removed or modified to be a dashboard component overviewer -->

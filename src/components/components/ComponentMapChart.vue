@@ -1,4 +1,4 @@
-<!-- Cleaned -->
+<!-- Developed by Taipei Urban Intelligence Center 2023 -->
 
 <!-- This component has two modes 'normal mapview charts' / 'basic map layers' -->
 <!-- The different modes are controlled by the prop "isMapLayer" (default false) -->

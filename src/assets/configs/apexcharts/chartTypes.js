@@ -10,6 +10,7 @@ export const chartTypes = {
 	TimelineStackedChart: "折線圖(堆疊)", // [V] V
 	GuageChart: "量表圖", // [V] V
 	RadarChart: "雷達圖", // [V] V
+	HeatmapChart: "熱力圖", // [V] V
 	PolarChart: "極座標圖", // []
 	WordcloudChart: "文字雲", // []
 };

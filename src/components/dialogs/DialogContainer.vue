@@ -1,4 +1,4 @@
-<!-- Cleaned -->
+<!-- Developed by Taipei Urban Intelligence Center 2023 -->
 
 <!-- This component is the template for most dialogs. It will show a dialog centered in the middle of the screen with the rest of the application blurred out -->
 <!-- The "dialog" prop defines the target dialog to control whether it is shown, the "onClose" emit allows for a closing function to be passed in  -->

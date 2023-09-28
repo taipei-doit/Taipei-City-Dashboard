@@ -1,4 +1,4 @@
-<!-- Cleaned -->
+<!-- Developed by Taipei Urban Intelligence Center 2023 -->
 
 <!-- This component has two modes "outline" and "fill" which is controlled via the prop "mode" -->
 

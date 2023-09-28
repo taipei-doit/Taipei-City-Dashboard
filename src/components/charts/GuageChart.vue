@@ -1,27 +1,27 @@
-<!-- Cleaned -->
+<!-- Developed by Taipei Urban Intelligence Center 2023 -->
 
 <script setup>
 import { ref, computed } from 'vue';
 import { useMapStore } from '../../store/mapStore';
 
-const props = defineProps(['chart_config', 'activeChart', 'series', 'map_config'])
-const mapStore = useMapStore()
+const props = defineProps(['chart_config', 'activeChart', 'series', 'map_config']);
+const mapStore = useMapStore();
 
 // Guage charts in apexcharts uses a slightly different data format from other chart types
 // As such, the following parsing function are required
 const parseSeries = computed(() => {
-	let output = {}
-	let parsedSeries = []
-	let parsedTooltip = []
+	let output = {};
+	let parsedSeries = [];
+	let parsedTooltip = [];
 	for (let i = 0; i < props.series[0].data.length; i++) {
-		let total = props.series[0].data[i] + props.series[1].data[i]
-		parsedSeries.push(Math.round(props.series[0].data[i] / total * 100))
-		parsedTooltip.push(`${props.series[0].data[i]} / ${total}`)
+		let total = props.series[0].data[i] + props.series[1].data[i];
+		parsedSeries.push(Math.round(props.series[0].data[i] / total * 100));
+		parsedTooltip.push(`${props.series[0].data[i]} / ${total}`);
 	}
-	output.series = parsedSeries
-	output.tooltipText = parsedTooltip
-	return output
-})
+	output.series = parsedSeries;
+	output.tooltipText = parsedTooltip;
+	return output;
+});
 
 // chartOptions needs to be in the bottom since it uses computed data
 const chartOptions = ref({
@@ -68,34 +68,34 @@ const chartOptions = ref({
 		custom: function ({ seriesIndex, w }) {
 			// The class "chart-tooltip" could be edited in /assets/styles/chartStyles.css
 			return '<div class="chart-tooltip">' +
-                '<h6>' + w.globals.seriesNames[seriesIndex] + '</h6>' +
-                '<span>' + `${parseSeries.value.tooltipText[seriesIndex]}` + '</span>' +
-                '</div>'
+				'<h6>' + w.globals.seriesNames[seriesIndex] + '</h6>' +
+				'<span>' + `${parseSeries.value.tooltipText[seriesIndex]}` + '</span>' +
+				'</div>';
 		},
 		enabled: true,
 	},
-})
+});
 
-const selectedIndex = ref(null)
+const selectedIndex = ref(null);
 
 function handleDataSelection(e, chartContext, config) {
 	if (!props.chart_config.map_filter) {
-		return
+		return;
 	}
 	if (config.seriesIndex !== selectedIndex.value) {
-		mapStore.addLayerFilter(`${props.map_config[0].index}-${props.map_config[0].type}`, props.chart_config.map_filter[0], props.chart_config.map_filter[1][config.seriesIndex])
-		selectedIndex.value = config.seriesIndex
+		mapStore.addLayerFilter(`${props.map_config[0].index}-${props.map_config[0].type}`, props.chart_config.map_filter[0], props.chart_config.map_filter[1][config.seriesIndex]);
+		selectedIndex.value = config.seriesIndex;
 	} else {
-		mapStore.clearLayerFilter(`${props.map_config[0].index}-${props.map_config[0].type}`)
-		selectedIndex.value = null
+		mapStore.clearLayerFilter(`${props.map_config[0].index}-${props.map_config[0].type}`);
+		selectedIndex.value = null;
 	}
 }
 </script>
 
 <template>
-    <div v-if="activeChart === 'GuageChart'">
-        <apexchart width="80%" height="300px" type="radialBar" :options="chartOptions" :series="parseSeries.series"
-            @dataPointSelection="handleDataSelection">
-        </apexchart>
-    </div>
+	<div v-if="activeChart === 'GuageChart'">
+		<apexchart width="80%" height="300px" type="radialBar" :options="chartOptions" :series="parseSeries.series"
+			@dataPointSelection="handleDataSelection">
+		</apexchart>
+	</div>
 </template>

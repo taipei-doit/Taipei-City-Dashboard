@@ -1,4 +1,4 @@
-<!-- Cleaned -->
+<!-- Developed by Taipei Urban Intelligence Center 2023 -->
 
 <script setup>
 import { useDialogStore } from '../../store/dialogStore';

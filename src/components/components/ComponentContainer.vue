@@ -1,4 +1,4 @@
-<!-- Cleaned -->
+<!-- Developed by Taipei Urban Intelligence Center 2023 -->
 
 <!-- This component has three modes 'normal dashboard' / 'more info' / 'basic map layers' -->
 <!-- The different modes are controlled by the props "notMoreInfo" (default true) and "isMapLayer" (default false) -->

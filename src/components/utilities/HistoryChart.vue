@@ -1,9 +1,9 @@
-<!-- Cleaned -->
+<!-- Developed by Taipei Urban Intelligence Center 2023 -->
 
 <script setup>
 import { ref } from 'vue';
 
-const props = defineProps(['chart_config', 'series', 'history_data_color'])
+const props = defineProps(['chart_config', 'series', 'history_data_color']);
 
 const chartOptions = ref({
 	chart: {
@@ -44,9 +44,9 @@ const chartOptions = ref({
 		custom: function ({ series, seriesIndex, dataPointIndex, w }) {
 			// The class "chart-tooltip" could be edited in /assets/styles/chartStyles.css
 			return '<div class="chart-tooltip">' +
-                '<h6>' + `${w.config.series[seriesIndex].data[dataPointIndex].x}` + '</h6>' +
-                '<span>' + series[seriesIndex][dataPointIndex] + ` ${props.chart_config.unit}` + '</span>' +
-                '</div>'
+				'<h6>' + `${w.config.series[seriesIndex].data[dataPointIndex].x}` + '</h6>' +
+				'<span>' + series[seriesIndex][dataPointIndex] + ` ${props.chart_config.unit}` + '</span>' +
+				'</div>';
 		},
 	},
 	xaxis: {
@@ -65,11 +65,11 @@ const chartOptions = ref({
 		},
 		type: 'datetime',
 	},
-})
+});
 </script>
 
 <template>
-    <div>
-        <apexchart width="100%" height="140px" type="area" :options="chartOptions" :series="series"></apexchart>
-    </div>
+	<div>
+		<apexchart width="100%" height="140px" type="area" :options="chartOptions" :series="series"></apexchart>
+	</div>
 </template>

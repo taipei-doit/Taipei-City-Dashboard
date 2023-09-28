@@ -3855,6 +3855,48 @@
 			],
 			"tags": [],
 			"contributors": ["tuic"]
+		},
+		"142": {
+			"id": 142,
+			"index": "youbike_weekend",
+			"chart_config": {
+				"types": ["HeatmapChart"],
+				"categories": [
+					"北投區",
+					"士林區",
+					"內湖區",
+					"南港區",
+					"松山區",
+					"信義區",
+					"中山區",
+					"大同區",
+					"中正區",
+					"萬華區",
+					"大安區",
+					"文山區"
+				]
+			},
+			"map_config": [
+				{
+					"index": "youbike_weekend",
+					"paint": {
+						"arc-color": ["#fd7900", "#47d3d9"],
+						"arc-width": 3
+					},
+					"type": "arc",
+					"title": "週間群像"
+				}
+			],
+			"name": "Youbike週末群像",
+			"source": "交通局/Youbike",
+			"time_from": "2023-07-28T00:00:00+08:00",
+			"time_to": null,
+			"short_desc": "",
+			"long_desc": "",
+			"use_case": "",
+			"links": [],
+			"tags": [],
+			"contributors": ["tuic"]
 		}
 	}
 }

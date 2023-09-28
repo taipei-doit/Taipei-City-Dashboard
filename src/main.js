@@ -1,3 +1,13 @@
+/* Developed By Taipei Urban Intelligence Center 2023 */
+
+// Lead Developer:  Igor Ho (FE Engineer)
+// Data Pipelines:  Iima Yu (Data Scientist)
+// Design and UX: Roy Lin (Prev. Consultant), Chu Chen (Researcher)
+// Systems: Ann Shih (Systems Engineer)
+// Testing: Jack Huang (Data Scientist), Ian Huang (Data Analysis Intern)
+
+/* Department of Information Technology, Taipei City Government */
+
 // Import the Essentials
 import { createApp } from "vue";
 import "./assets/styles/globalStyles.css";
@@ -23,6 +33,7 @@ import TimelineSeparateChart from "./components/charts/TimelineSeparateChart.vue
 import TimelineStackedChart from "./components/charts/TimelineStackedChart.vue";
 import MapLegend from "./components/charts/MapLegend.vue";
 import MetroChart from "./components/charts/MetroChart.vue";
+import HeatmapChart from "./components/charts/HeatmapChart.vue";
 
 const app = createApp(App);
 
@@ -44,5 +55,6 @@ app.component("TimelineSeparateChart", TimelineSeparateChart);
 app.component("TimelineStackedChart", TimelineStackedChart);
 app.component("MapLegend", MapLegend);
 app.component("MetroChart", MetroChart);
+app.component("HeatmapChart", HeatmapChart);
 
 app.mount("#app");
