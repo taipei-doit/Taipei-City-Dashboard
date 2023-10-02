@@ -173,7 +173,7 @@ export const useMapStore = defineStore("map", {
 		addMapLayerSource(map_config, data) {
 			this.map.addSource(`${map_config.layerId}-source`, {
 				type: "geojson",
-				data: data,
+				data: { ...data },
 			});
 			if (map_config.type === "arc") {
 				this.AddArcMapLayer(map_config, data);
@@ -237,7 +237,7 @@ export const useMapStore = defineStore("map", {
 		// 4-2. Add Map Layer for Arc Maps
 		AddArcMapLayer(map_config, data) {
 			const authStore = useAuthStore();
-			const lines = [...data.features];
+			const lines = [...JSON.parse(JSON.stringify(data.features))];
 			const arcInterval = 20;
 
 			this.loadingLayers.push("rendering");
@@ -447,15 +447,36 @@ export const useMapStore = defineStore("map", {
 
 		/* Map Filtering */
 		// Add a filter based on a property on a map layer
-		addLayerFilter(layer_id, property, key) {
+		addLayerFilter(layer_id, property, key, map_config) {
 			if (!this.map) {
+				return;
+			}
+			if (map_config && map_config.type === "arc") {
+				this.map.removeLayer(layer_id);
+				let toBeFiltered = {
+					...this.map.getSource(`${layer_id}-source`)._data,
+				};
+				toBeFiltered.features = toBeFiltered.features.filter(
+					(el) => el.properties[property] === key
+				);
+				map_config.layerId = layer_id;
+				this.AddArcMapLayer(map_config, toBeFiltered);
 				return;
 			}
 			this.map.setFilter(layer_id, ["==", ["get", property], key]);
 		},
 		// Remove any filters on a map layer
-		clearLayerFilter(layer_id) {
+		clearLayerFilter(layer_id, map_config) {
 			if (!this.map) {
+				return;
+			}
+			if (map_config && map_config.type === "arc") {
+				this.map.removeLayer(layer_id);
+				let toRestore = {
+					...this.map.getSource(`${layer_id}-source`)._data,
+				};
+				map_config.layerId = layer_id;
+				this.AddArcMapLayer(map_config, toRestore);
 				return;
 			}
 			this.map.setFilter(layer_id, null);

@@ -2,8 +2,11 @@
 
 <script setup>
 import { computed, ref } from 'vue';
+import { useMapStore } from '../../store/mapStore';
 
-const props = defineProps(['chart_config', 'activeChart', 'series']);
+const props = defineProps(['chart_config', 'activeChart', 'series', 'map_config']);
+
+const mapStore = useMapStore();
 
 const heatmapData = computed(() => {
 	let output = {};
@@ -19,14 +22,15 @@ const heatmapData = computed(() => {
 		});
 	} else {
 		props.series.forEach((serie) => {
-			for (let i = 0; i < 12; i++) {
+			for (let i = 0; i < props.chart_config.categories.length; i++) {
 				if (!output[props.chart_config.categories[i]]) {
 					output[props.chart_config.categories[i]] = 0;
 				}
 				output[props.chart_config.categories[i]] += +serie.data[i];
+
+				if (+serie.data[i] > highest) highest = +serie.data[i];
 			}
 		});
-		highest = Object.values(output).sort(function (a, b) { return b - a; })[0];
 		sum = Object.values(output).reduce((partialSum, a) => partialSum + a, 0);
 	}
 
@@ -38,8 +42,8 @@ const heatmapData = computed(() => {
 const colorScale = computed(() => {
 	const ranges = props.chart_config.color.map((el, index) => (
 		{
-			to: Math.round((heatmapData.value.highest / props.chart_config.color.length) * (props.chart_config.color.length - index)),
-			from: Math.round((heatmapData.value.highest / props.chart_config.color.length) * (props.chart_config.color.length - index - 1)) + 1,
+			to: Math.floor((heatmapData.value.highest / props.chart_config.color.length) * (props.chart_config.color.length - index)),
+			from: Math.floor((heatmapData.value.highest / props.chart_config.color.length) * (props.chart_config.color.length - index - 1)) + 1,
 			color: el
 		}
 	)
@@ -58,6 +62,13 @@ const chartOptions = ref({
 		toolbar: {
 			show: false,
 		},
+	},
+	dataLabels: {
+		distributed: true,
+		style: {
+			fontSize: '12px',
+			fontWeight: 'normal'
+		}
 	},
 	grid: {
 		show: false,
@@ -120,6 +131,22 @@ const chartOptions = ref({
 		},
 	}
 });
+
+const selectedIndex = ref(null);
+
+function handleDataSelection(e, chartContext, config) {
+	if (!props.chart_config.map_filter) {
+		return;
+	}
+	let toFilter = `${config.dataPointIndex}-${config.seriesIndex}`;
+	if (toFilter !== selectedIndex.value) {
+		mapStore.addLayerFilter(`${props.map_config[0].index}-${props.map_config[0].type}`, props.chart_config.map_filter[0], props.chart_config.map_filter[1][config.dataPointIndex], props.map_config[0]);
+		selectedIndex.value = toFilter;
+	} else {
+		mapStore.clearLayerFilter(`${props.map_config[0].index}-${props.map_config[0].type}`, props.map_config[0]);
+		selectedIndex.value = null;
+	}
+}
 </script>
 
 <template>
@@ -128,7 +155,8 @@ const chartOptions = ref({
 			<h5>總合</h5>
 			<h6>{{ heatmapData.sum }} {{ chart_config.unit }}</h6>
 		</div>
-		<apexchart width="100%" height="360px" type="heatmap" :options="chartOptions" :series="series"></apexchart>
+		<apexchart width="100%" height="360px" type="heatmap" :options="chartOptions" :series="series"
+			@dataPointSelection="handleDataSelection"></apexchart>
 	</div>
 </template>
 
