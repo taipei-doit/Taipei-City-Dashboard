@@ -52,7 +52,7 @@ const outputList = computed(() => {
 	let output = [...availableComponents.value];
 
 	if (searchName.value) {
-		output = output.filter((item) => item.name.includes(searchName.value));
+		output = output.filter((item) => item.name.toLowerCase().includes(searchName.value.toLowerCase()));
 	}
 	if (searchIndex.value) {
 		output = output.filter((item) => item.index.toString().includes(searchIndex.value));
