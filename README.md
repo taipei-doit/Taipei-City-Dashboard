@@ -1,5 +1,7 @@
 # <img src='src/assets/images/TUIC.svg' height='28'>   Taipei City Dashboard Open Source FE
 
+> 歡慶中華民國國慶 🇹🇼 Happy Double Tenth Day 🔟🔟
+
 Taipei City Dashboard is a data visualization platform developed by [Taipei Urban Intelligence Center (TUIC)](https://tuic.gov.taipei/en).
 
 Our main goal is to create a comprehensive data visualization tool to assist in Taipei City policy decisions. This was achieved through the first version of the Taipei City Dashboard, which displayed a mix of internal and open data, seamlessly blending statistical and geographical data.
