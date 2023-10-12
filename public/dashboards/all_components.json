@@ -3986,6 +3986,130 @@
 			"links": [],
 			"tags": [],
 			"contributors": ["tuic"]
+		},
+		"146": {
+			"id": 146,
+			"index": "youbike_grid",
+			"chart_config": {
+				"types": ["TreemapChart", "BarChart"],
+				"unit": "個網格",
+				"color": [
+					"#7FBF7B",
+					"#8E8E8E",
+					"#40A461",
+					"#BEBEBE",
+					"#3D56FF",
+					"#BFDAB8",
+					"#ACCFFF"
+				],
+				"map_filter": [
+					"class",
+					[
+						"山區且土地限制",
+						"已設站",
+						"山區",
+						"鄰近已設站",
+						"未設站",
+						"土地限制",
+						"特殊條件限制"
+					]
+				]
+			},
+			"map_config": [
+				{
+					"index": "youbike_grid",
+					"paint": {
+						"fill-color": [
+							"case",
+							["==", ["get", "class"], "山區"],
+							"#40A461",
+							["==", ["get", "class"], "山區且土地限制"],
+							"#7FBF7B",
+							["==", ["get", "class"], "特殊條件限制"],
+							"#ACCFFF",
+							["==", ["get", "class"], "鄰近已設站"],
+							"#BEBEBE",
+							["==", ["get", "class"], "土地限制"],
+							"#BFDAB8",
+							["==", ["get", "class"], "未設站"],
+							"#3D56FF",
+							"#8E8E8E"
+						],
+						"fill-opacity": 0.5,
+						"fill-outline-color": "#555555"
+					},
+					"property": [
+						{
+							"key": "class",
+							"name": "類型"
+						}
+					],
+					"title": "Youbike設站狀態",
+					"type": "fill"
+				}
+			],
+			"name": "YouBike設站狀態",
+			"source": "資訊局",
+			"time_from": "2023-09-28T00:00:00+08:00",
+			"time_to": null,
+			"short_desc": "",
+			"long_desc": "全市由250公尺見方的網格組成，依據是否已設站、鄰近是否有站點及土地使用等條件，將各網格分為7大類，資料來源為大數據中心研究，更新頻率不定期。",
+			"use_case": "本組件可讓您快速查看各區域的YouBike設站情況。這有助於您了解哪些區域已提供YouBike服務；哪些因為土地或地形限制無法設站；和哪些地區目前未設站但具有設站潛能。",
+			"links": [],
+			"tags": [],
+			"contributors": ["tuic"]
+		},
+		"147": {
+			"id": 147,
+			"index": "youbike_demand",
+			"map_config": [
+				{
+					"index": "youbike_demand",
+					"type": "fill",
+					"paint": {
+						"fill-color": [
+							"match",
+							["get", "category"],
+							"極低",
+							"#FFFFCC",
+							"低",
+							"#e7d198",
+							"中低",
+							"#d1a26c",
+							"中",
+							"#b9734a",
+							"高",
+							"#800026",
+							"#800026"
+						],
+						"fill-opacity": 0.8
+					},
+					"property": [{ "key": "category", "name": "總體需求" }],
+					"title": "潛在需求"
+				}
+			],
+			"chart_config": {
+				"types": ["TreemapChart", "BarChart"],
+				"color": [
+					"#FFFFCC",
+					"#e7d198",
+					"#d1a26c",
+					"#b9734a",
+					"#9f4333",
+					"#800026"
+				],
+				"unit": "個網格",
+				"map_filter": ["category", ["極低", "低", "中低", "中", "高"]]
+			},
+			"name": "YouBike未設站區潛在需求",
+			"source": "資訊局",
+			"time_from": "2023-07-28T00:00:00+08:00",
+			"time_to": null,
+			"short_desc": "",
+			"long_desc": "展示YouBike未設站區的潛在用車需求，這些資訊基於大數據中心研究提供，詳細預測方法可參考開源成果Github，更新頻率不定期。",
+			"use_case": "YouBike未設站區潛在需求將協助您了解未來可能需要增設YouBike站點的地區。這有助於規劃YouBike的擴展和改進，以滿足日益增長的需求。",
+			"tags": [],
+			"contributors": ["tuic"]
 		}
 	}
 }
