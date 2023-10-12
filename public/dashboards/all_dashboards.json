@@ -1,6 +1,12 @@
 {
 	"data": [
 		{
+			"name": "YouBike研究",
+			"index": "youbike",
+			"components": ["60", "142", "143", "144", "145", "146", "147"],
+			"icon": "pedal_bike"
+		},
+		{
 			"name": "民情熱議",
 			"index": "public-opinion",
 			"components": ["4", "5", "72"],
