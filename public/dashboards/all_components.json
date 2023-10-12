@@ -1882,22 +1882,15 @@
 				}
 			],
 			"chart_config": {
-				"types": [
-					"BarPercentChart",
-					"GuageChart"
-				],
-				"color": [
-					"#9DC56E",
-					"#356340",
-					"#9DC56E"
-				],
+				"types": ["GuageChart", "BarPercentChart"],
+				"color": ["#9DC56E", "#356340", "#9DC56E"],
 				"unit": "輛",
 				"categories": [
 					"Youbike在站車輛"
 				]
 			},
 			"source": "交通局/Youbike",
-			"name": "Youbike使用情況",
+			"name": "YouBike使用情況",
 			"time_from": "2023-05-31T00:00:00+08:00",
 			"time_to": null,
 			"update_freq": 5,
@@ -2007,7 +2000,7 @@
 				]
 			},
 			"source": "交通局/Youbike",
-			"name": "Youbike使用情況(Alt)",
+			"name": "YouBike使用情況(Alt)",
 			"time_from": "2023-05-31T00:00:00+08:00",
 			"time_to": null,
 			"update_freq": 5,

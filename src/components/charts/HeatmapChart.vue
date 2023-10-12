@@ -98,8 +98,8 @@ const chartOptions = ref({
 		custom: function ({ series, seriesIndex, dataPointIndex, w }) {
 			// The class "chart-tooltip" could be edited in /assets/styles/chartStyles.css
 			return '<div class="chart-tooltip">' +
-				'<h6>' + w.globals.labels[dataPointIndex] + `${props.chart_config.categories ? '-' + w.globals.seriesNames[seriesIndex] : ''}` + '</h6>' +
-				'<span>' + series[seriesIndex][dataPointIndex] + ` ${props.chart_config.unit}` + '</span>' +
+				'<h6>' + `${w.globals.seriesNames[seriesIndex]}-${w.globals.labels[dataPointIndex]}` + '</h6>' +
+				'<span>' + `${series[seriesIndex][dataPointIndex]}` + `${props.chart_config.unit}` + '</span>' +
 				'</div>';
 		},
 	},
@@ -138,7 +138,7 @@ function handleDataSelection(e, chartContext, config) {
 	if (!props.chart_config.map_filter) {
 		return;
 	}
-	let toFilter = `${config.dataPointIndex}-${config.seriesIndex}`;
+	let toFilter = `${config.dataPointIndex} -${config.seriesIndex}`;
 	if (toFilter !== selectedIndex.value) {
 		mapStore.addLayerFilter(`${props.map_config[0].index}-${props.map_config[0].type}`, props.chart_config.map_filter[0], props.chart_config.map_filter[1][config.dataPointIndex], props.map_config[0]);
 		selectedIndex.value = toFilter;
