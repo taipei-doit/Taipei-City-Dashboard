@@ -13,7 +13,10 @@
 					"#17675a",
 					"#C2d1d0"
 				],
-				"types": ["BarChart", "DonutChart"],
+				"types": [
+					"BarChart",
+					"DonutChart"
+				],
 				"unit": "件"
 			},
 			"history_data": true,
@@ -28,7 +31,9 @@
 			"use_case": "概覽台北市近期案件的分佈情況，可透過相關指標資料進行深入探討，如一年內案件數統計，有助於更全面地瞭解情況。",
 			"links": null,
 			"tags": [],
-			"contributors": ["tuic"]
+			"contributors": [
+				"tuic"
+			]
 		},
 		"5": {
 			"id": 5,
@@ -45,7 +50,10 @@
 					"#00563F",
 					"#04432C"
 				],
-				"types": ["DonutChart", "BarChart"],
+				"types": [
+					"DonutChart",
+					"BarChart"
+				],
 				"unit": "件"
 			},
 			"name": "臺北市陳情系統",
@@ -59,7 +67,9 @@
 			"use_case": "透過陳情案件的統計資訊，我們可以追蹤近一週內台北市各行政區收到的陳情案件，也可了解一年內每個月的陳情案件總數變化。",
 			"links": null,
 			"tags": [],
-			"contributors": ["tuic"]
+			"contributors": [
+				"tuic"
+			]
 		},
 		"7": {
 			"id": 7,
@@ -67,8 +77,13 @@
 			"history_data": false,
 			"map_config": null,
 			"chart_config": {
-				"color": ["#FD5696", "#00A9E0"],
-				"types": ["TimelineSeparateChart"],
+				"color": [
+					"#FD5696",
+					"#00A9E0"
+				],
+				"types": [
+					"TimelineSeparateChart"
+				],
 				"unit": "件"
 			},
 			"name": "刑事統計",
@@ -84,7 +99,9 @@
 				"https://data.taipei/dataset/detail?id=dc7e246a-a88e-42f8-8cd6-9739209af774"
 			],
 			"tags": [],
-			"contributors": ["tuic"]
+			"contributors": [
+				"tuic"
+			]
 		},
 		"8": {
 			"id": 8,
@@ -98,7 +115,10 @@
 					"#fb8c8c",
 					"#C53E5E"
 				],
-				"types": ["BarChart", "DonutChart"],
+				"types": [
+					"BarChart",
+					"DonutChart"
+				],
 				"unit": "件"
 			},
 			"history_data": true,
@@ -119,7 +139,9 @@
 				"https://data.taipei/dataset/detail?id=68785231-d6c5-47a1-b001-77eec70bec02"
 			],
 			"tags": [],
-			"contributors": ["tuic"]
+			"contributors": [
+				"tuic"
+			]
 		},
 		"9": {
 			"id": 9,
@@ -167,7 +189,9 @@
 			],
 			"name": "警察相關設施",
 			"chart_config": {
-				"types": ["MapLegend"]
+				"types": [
+					"MapLegend"
+				]
 			},
 			"chart_data": [
 				{
@@ -182,7 +206,9 @@
 				}
 			],
 			"source": "警察局",
-			"contributors": ["tuic"]
+			"contributors": [
+				"tuic"
+			]
 		},
 		"11": {
 			"id": 11,
@@ -194,8 +220,16 @@
 						"circle-opacity": 0,
 						"circle-radius": [
 							"interpolate",
-							["linear"],
-							["to-number", ["get", "容納人數"]],
+							[
+								"linear"
+							],
+							[
+								"to-number",
+								[
+									"get",
+									"容納人數"
+								]
+							],
 							0,
 							2.5,
 							50,
@@ -225,7 +259,9 @@
 				}
 			],
 			"chart_config": {
-				"types": ["MapLegend"]
+				"types": [
+					"MapLegend"
+				]
 			},
 			"chart_data": [
 				{
@@ -241,7 +277,9 @@
 			"time_to": null,
 			"update_freq": null,
 			"update_freq_unit": null,
-			"contributors": ["tuic"]
+			"contributors": [
+				"tuic"
+			]
 		},
 		"14": {
 			"id": 14,
@@ -249,7 +287,9 @@
 			"map_config": null,
 			"name": "火災風險地點",
 			"chart_config": {
-				"types": ["MapLegend"]
+				"types": [
+					"MapLegend"
+				]
 			},
 			"chart_data": [
 				{
@@ -270,7 +310,9 @@
 			"time_to": null,
 			"update_freq": null,
 			"update_freq_unit": null,
-			"contributors": ["tuic"]
+			"contributors": [
+				"tuic"
+			]
 		},
 		"15": {
 			"id": 15,
@@ -311,7 +353,9 @@
 				}
 			],
 			"chart_config": {
-				"types": ["MapLegend"]
+				"types": [
+					"MapLegend"
+				]
 			},
 			"chart_data": [
 				{
@@ -334,7 +378,9 @@
 			"time_to": null,
 			"update_freq": null,
 			"update_freq_unit": null,
-			"contributors": ["tuic"]
+			"contributors": [
+				"tuic"
+			]
 		},
 		"16": {
 			"id": 16,
@@ -458,7 +504,9 @@
 			],
 			"name": "山坡地風險地點",
 			"chart_config": {
-				"types": ["MapLegend"],
+				"types": [
+					"MapLegend"
+				],
 				"unit": "處"
 			},
 			"chart_data": [
@@ -488,7 +536,9 @@
 				}
 			],
 			"source": "工務局",
-			"contributors": ["tuic"]
+			"contributors": [
+				"tuic"
+			]
 		},
 		"20": {
 			"id": 20,
@@ -529,8 +579,13 @@
 			],
 			"history_data": true,
 			"chart_config": {
-				"color": ["#2f9ca1"],
-				"types": ["DistrictChart", "BarChart"],
+				"color": [
+					"#2f9ca1"
+				],
+				"types": [
+					"DistrictChart",
+					"BarChart"
+				],
 				"unit": "件",
 				"map_filter": [
 					"c_name",
@@ -563,7 +618,9 @@
 				"https://data.taipei/dataset/detail?id=c208dabd-2da0-4e6d-8dbd-a004b9782b0a"
 			],
 			"tags": [],
-			"contributors": ["tuic"]
+			"contributors": [
+				"tuic"
+			]
 		},
 		"22": {
 			"id": 22,
@@ -578,7 +635,10 @@
 					"paint": {
 						"circle-color": [
 							"match",
-							["get", "type"],
+							[
+								"get",
+								"type"
+							],
 							"1",
 							"#CA0020",
 							"2",
@@ -609,10 +669,24 @@
 				}
 			],
 			"chart_config": {
-				"color": ["#CA0020", "#ff996d", "#f8c3ac"],
-				"types": ["DonutChart", "BarChart"],
+				"color": [
+					"#CA0020",
+					"#ff996d",
+					"#f8c3ac"
+				],
+				"types": [
+					"DonutChart",
+					"BarChart"
+				],
 				"unit": "件",
-				"map_filter": ["type", ["1", "2", "3"]]
+				"map_filter": [
+					"type",
+					[
+						"1",
+						"2",
+						"3"
+					]
+				]
 			},
 			"history_data": true,
 			"source": "警察局",
@@ -629,7 +703,9 @@
 				"https://data.taipei/dataset/detail?id=2f238b4f-1b27-4085-93e9-d684ef0e2735"
 			],
 			"tags": [],
-			"contributors": ["tuic"]
+			"contributors": [
+				"tuic"
+			]
 		},
 		"26": {
 			"id": 26,
@@ -669,10 +745,18 @@
 				}
 			],
 			"chart_config": {
-				"color": ["#d59f0b", "#ff8c1a"],
-				"types": ["GuageChart"],
+				"color": [
+					"#d59f0b",
+					"#ff8c1a"
+				],
+				"types": [
+					"GuageChart"
+				],
 				"unit": "個",
-				"categories": ["運行中公車", "運行中路線"]
+				"categories": [
+					"運行中公車",
+					"運行中路線"
+				]
 			},
 			"name": "公車行駛狀態",
 			"source": "交通局",
@@ -687,7 +771,9 @@
 				"https://tdx.transportdata.tw/api-service/swagger/basic/2998e851-81d0-40f5-b26d-77e2f5ac4118#/CityBus/CityBusApi_RealTimeNearStop_2031"
 			],
 			"tags": [],
-			"contributors": ["tuic"]
+			"contributors": [
+				"tuic"
+			]
 		},
 		"28": {
 			"id": 28,
@@ -784,7 +870,10 @@
 					"#9b976c",
 					"#fbf3ac"
 				],
-				"types": ["DonutChart", "BarChart"],
+				"types": [
+					"DonutChart",
+					"BarChart"
+				],
 				"unit": "件"
 			},
 			"name": "都市更新案件",
@@ -796,9 +885,13 @@
 			"short_desc": "顯示全市在冊都市更新案件數量及類型統計",
 			"long_desc": "顯示全市在冊都市更新案件數量及類型統計，資料來源為台北都市發展局，不定期更新。",
 			"use_case": "圖表所呈現的內容僅限於社會住宅類型及案件統計，若需更詳細的資料或特定範圍的更新案件資訊，可透過地圖模式進行查詢。",
-			"links": ["https://gis.uro.taipei/r_progress.aspx"],
+			"links": [
+				"https://gis.uro.taipei/r_progress.aspx"
+			],
 			"tags": [],
-			"contributors": ["tuic"]
+			"contributors": [
+				"tuic"
+			]
 		},
 		"29": {
 			"id": 29,
@@ -809,7 +902,10 @@
 					"paint": {
 						"circle-color": [
 							"match",
-							["get", "progress"],
+							[
+								"get",
+								"progress"
+							],
 							"已完工",
 							"#fff495",
 							"施工中及待開工",
@@ -856,7 +952,10 @@
 					"#c2651c",
 					"#a65818"
 				],
-				"types": ["DonutChart", "BarChart"],
+				"types": [
+					"DonutChart",
+					"BarChart"
+				],
 				"unit": "棟",
 				"map_filter": [
 					"progress",
@@ -882,7 +981,9 @@
 				"https://data.taipei/dataset/detail?id=659c3565-df41-4f80-915f-95e83071bdcd"
 			],
 			"tags": [],
-			"contributors": ["tuic"]
+			"contributors": [
+				"tuic"
+			]
 		},
 		"30": {
 			"admin_desc": null,
@@ -969,7 +1070,9 @@
 			],
 			"name": "閒置市有財產",
 			"chart_config": {
-				"types": ["MapLegend"],
+				"types": [
+					"MapLegend"
+				],
 				"unit": "處"
 			},
 			"chart_data": [
@@ -987,7 +1090,9 @@
 				}
 			],
 			"source": "財政局",
-			"contributors": ["tuic"]
+			"contributors": [
+				"tuic"
+			]
 		},
 		"32": {
 			"id": 32,
@@ -998,8 +1103,13 @@
 					"paint": {
 						"fill-extrusion-color": [
 							"interpolate",
-							["linear"],
-							["get", "work_l_w"],
+							[
+								"linear"
+							],
+							[
+								"get",
+								"work_l_w"
+							],
 							-11533,
 							"#77dddf",
 							-4,
@@ -1011,8 +1121,13 @@
 						],
 						"fill-extrusion-height": [
 							"interpolate",
-							["linear"],
-							["get", "work_l+w"],
+							[
+								"linear"
+							],
+							[
+								"get",
+								"work_l+w"
+							],
 							0,
 							0,
 							19895,
@@ -1036,7 +1151,9 @@
 				}
 			],
 			"chart_config": {
-				"types": ["MapLegend"],
+				"types": [
+					"MapLegend"
+				],
 				"unit": "人"
 			},
 			"chart_data": [
@@ -1059,7 +1176,9 @@
 			"update_freq": null,
 			"update_freq_unit": null,
 			"name": "居職人口推估",
-			"contributors": ["tuic"]
+			"contributors": [
+				"tuic"
+			]
 		},
 		"33": {
 			"id": 33,
@@ -1070,7 +1189,10 @@
 					"paint": {
 						"fill-color": [
 							"match",
-							["get", "publand_1_土地權屬情形"],
+							[
+								"get",
+								"publand_1_土地權屬情形"
+							],
 							"國有",
 							"#2d7b7d",
 							"臺北市有",
@@ -1106,7 +1228,10 @@
 					"paint": {
 						"fill-color": [
 							"match",
-							["get", "publand_1_土地權屬情形"],
+							[
+								"get",
+								"publand_1_土地權屬情形"
+							],
 							"國有",
 							"#2d7b7d",
 							"臺北市有",
@@ -1142,7 +1267,10 @@
 					"paint": {
 						"fill-color": [
 							"match",
-							["get", "publand_1_土地權屬情形"],
+							[
+								"get",
+								"publand_1_土地權屬情形"
+							],
 							"國有",
 							"#2d7b7d",
 							"臺北市有",
@@ -1184,7 +1312,10 @@
 					"#3975b7",
 					"#223477"
 				],
-				"types": ["BarChart", "TreemapChart"],
+				"types": [
+					"BarChart",
+					"TreemapChart"
+				],
 				"unit": "km²"
 			},
 			"name": "公有土地",
@@ -1200,7 +1331,9 @@
 				"https://data.taipei/dataset/detail?id=ca644935-035e-4ecf-bd93-3d8df351bdb7"
 			],
 			"tags": [],
-			"contributors": ["tuic"]
+			"contributors": [
+				"tuic"
+			]
 		},
 		"34": {
 			"id": 34,
@@ -1211,7 +1344,10 @@
 					"paint": {
 						"fill-color": [
 							"match",
-							["get", "顏色"],
+							[
+								"get",
+								"顏色"
+							],
 							"0",
 							"#00ff00",
 							"3",
@@ -1310,7 +1446,10 @@
 					"#00ff00",
 					"#00ff00"
 				],
-				"types": ["TreemapChart", "BarChart"],
+				"types": [
+					"TreemapChart",
+					"BarChart"
+				],
 				"unit": "km²",
 				"map_filter": [
 					"landuse group_metadata_用地分類",
@@ -1355,7 +1494,9 @@
 				"https://data.taipei/dataset/detail?id=3bab0a01-7936-4218-8cb5-f74dfcb43dda"
 			],
 			"tags": [],
-			"contributors": ["tuic"]
+			"contributors": [
+				"tuic"
+			]
 		},
 		"42": {
 			"id": 42,
@@ -1366,8 +1507,13 @@
 					"paint": {
 						"circle-color": [
 							"interpolate",
-							["linear"],
-							["get", "age_2021"],
+							[
+								"linear"
+							],
+							[
+								"get",
+								"age_2021"
+							],
 							5,
 							"#8ce8ff",
 							6,
@@ -1379,8 +1525,12 @@
 						],
 						"circle-radius": [
 							"interpolate",
-							["linear"],
-							["zoom"],
+							[
+								"linear"
+							],
+							[
+								"zoom"
+							],
 							11.99,
 							0,
 							12,
@@ -1410,8 +1560,16 @@
 				}
 			],
 			"chart_config": {
-				"color": ["#9c7a3e", "#b7e28e", "#7febd0", "#8ce8ff"],
-				"types": ["BarPercentChart", "ColumnChart"],
+				"color": [
+					"#9c7a3e",
+					"#b7e28e",
+					"#7febd0",
+					"#8ce8ff"
+				],
+				"types": [
+					"BarPercentChart",
+					"ColumnChart"
+				],
 				"unit": "棟",
 				"categories": [
 					"北投區",
@@ -1439,7 +1597,9 @@
 			"use_case": "屋齡的計算基準是以建物使用執照生效年份起算，這可以作為了解台北市建築屋齡分佈情況的參考依據。",
 			"links": null,
 			"tags": [],
-			"contributors": ["tuic"]
+			"contributors": [
+				"tuic"
+			]
 		},
 		"43": {
 			"id": 43,
@@ -1450,7 +1610,10 @@
 					"paint": {
 						"circle-color": [
 							"match",
-							["get", "all_pumb_lights"],
+							[
+								"get",
+								"all_pumb_lights"
+							],
 							"+",
 							"#ff9800",
 							"#00B2FF"
@@ -1496,11 +1659,24 @@
 				}
 			],
 			"chart_config": {
-				"types": ["GuageChart", "BarPercentChart"],
-				"color": ["#ff9800"],
+				"types": [
+					"GuageChart",
+					"BarPercentChart"
+				],
+				"color": [
+					"#ff9800"
+				],
 				"unit": "站",
-				"categories": ["啟動抽水站"],
-				"map_filter": ["all_pumb_lights", ["+", "-"]]
+				"categories": [
+					"啟動抽水站"
+				],
+				"map_filter": [
+					"all_pumb_lights",
+					[
+						"+",
+						"-"
+					]
+				]
 			},
 			"name": "抽水站狀態",
 			"source": "工務局水利處",
@@ -1513,7 +1689,9 @@
 			"use_case": "考慮當日天氣及「水位監測」組件的資料，來探討抽水站的運作狀況與水位異常之間的關聯性。",
 			"links": null,
 			"tags": [],
-			"contributors": ["tuic"]
+			"contributors": [
+				"tuic"
+			]
 		},
 		"57": {
 			"id": 57,
@@ -1524,7 +1702,10 @@
 					"paint": {
 						"fill-color": [
 							"match",
-							["get", "壅塞程度"],
+							[
+								"get",
+								"壅塞程度"
+							],
 							"壅塞",
 							"#EC4037",
 							"車多",
@@ -1557,10 +1738,20 @@
 				}
 			],
 			"history_data": true,
-			"history_data_color": ["#EC4037", "#BBB"],
+			"history_data_color": [
+				"#EC4037",
+				"#BBB"
+			],
 			"chart_config": {
-				"color": ["#4dd97a", "#ff8c1a", "#EC4037"],
-				"types": ["DonutChart", "BarChart"],
+				"color": [
+					"#4dd97a",
+					"#ff8c1a",
+					"#EC4037"
+				],
+				"types": [
+					"DonutChart",
+					"BarChart"
+				],
 				"unit": "%"
 			},
 			"name": "交通路況",
@@ -1576,7 +1767,9 @@
 				"https://data.taipei/dataset/detail?id=e57afe7f-3c9e-4f31-9208-eed859a92600"
 			],
 			"tags": [],
-			"contributors": ["tuic"]
+			"contributors": [
+				"tuic"
+			]
 		},
 		"59": {
 			"id": 59,
@@ -1587,8 +1780,16 @@
 					"paint": {
 						"circle-color": [
 							"interpolate",
-							["linear"],
-							["to-number", ["get", "ground_far"]],
+							[
+								"linear"
+							],
+							[
+								"to-number",
+								[
+									"get",
+									"ground_far"
+								]
+							],
 							-100,
 							"#F92623",
 							0.51,
@@ -1623,10 +1824,17 @@
 				}
 			],
 			"chart_config": {
-				"types": ["GuageChart", "BarPercentChart"],
-				"color": ["#F92623"],
+				"types": [
+					"GuageChart",
+					"BarPercentChart"
+				],
+				"color": [
+					"#F92623"
+				],
 				"unit": "站",
-				"categories": ["警戒水位站"]
+				"categories": [
+					"警戒水位站"
+				]
 			},
 			"name": "水位監測",
 			"source": "工務局水利處",
@@ -1639,7 +1847,9 @@
 			"use_case": "了解水位監測站的異常值，可結合其他組件資料，對異常水位的原因進行更深入的瞭解，並檢視相關抽水站是否有適時運作。",
 			"links": null,
 			"tags": [],
-			"contributors": ["tuic"]
+			"contributors": [
+				"tuic"
+			]
 		},
 		"60": {
 			"id": 60,
@@ -1675,7 +1885,9 @@
 				"types": ["GuageChart", "BarPercentChart"],
 				"color": ["#9DC56E", "#356340", "#9DC56E"],
 				"unit": "輛",
-				"categories": ["Youbike在站車輛"]
+				"categories": [
+					"Youbike在站車輛"
+				]
 			},
 			"source": "交通局/Youbike",
 			"name": "YouBike使用情況",
@@ -1690,7 +1902,9 @@
 				"https://tdx.transportdata.tw/api-service/swagger/basic/2cc9b888-a592-496f-99de-9ab35b7fb70d#/Bike/BikeApi_Availability_2181"
 			],
 			"tags": [],
-			"contributors": ["tuic"]
+			"contributors": [
+				"tuic"
+			]
 		},
 		"61": {
 			"id": 61,
@@ -1704,8 +1918,16 @@
 						"circle-color": "#addd27",
 						"circle-radius": [
 							"interpolate",
-							["linear"],
-							["to-number", ["get", "left_bikes"]],
+							[
+								"linear"
+							],
+							[
+								"to-number",
+								[
+									"get",
+									"left_bikes"
+								]
+							],
 							0,
 							0,
 							200,
@@ -1714,11 +1936,25 @@
 						"circle-stroke-color": "#676767",
 						"circle-stroke-width": [
 							"interpolate",
-							["linear"],
+							[
+								"linear"
+							],
 							[
 								"-",
-								["to-number", ["get", "total_bikes"]],
-								["to-number", ["get", "left_bikes"]]
+								[
+									"to-number",
+									[
+										"get",
+										"total_bikes"
+									]
+								],
+								[
+									"to-number",
+									[
+										"get",
+										"left_bikes"
+									]
+								]
 							],
 							0,
 							0,
@@ -1749,10 +1985,19 @@
 				}
 			],
 			"chart_config": {
-				"types": ["BarPercentChart", "GuageChart"],
-				"color": ["#9DC56E", "#356340", "#9DC56E"],
+				"types": [
+					"BarPercentChart",
+					"GuageChart"
+				],
+				"color": [
+					"#9DC56E",
+					"#356340",
+					"#9DC56E"
+				],
 				"unit": "輛",
-				"categories": ["Youbike在站車輛"]
+				"categories": [
+					"Youbike在站車輛"
+				]
 			},
 			"source": "交通局/Youbike",
 			"name": "YouBike使用情況(Alt)",
@@ -1767,7 +2012,9 @@
 				"https://tdx.transportdata.tw/api-service/swagger/basic/2cc9b888-a592-496f-99de-9ab35b7fb70d#/Bike/BikeApi_Availability_2181"
 			],
 			"tags": [],
-			"contributors": ["tuic"]
+			"contributors": [
+				"tuic"
+			]
 		},
 		"72": {
 			"id": 72,
@@ -1778,7 +2025,10 @@
 					"paint": {
 						"circle-color": [
 							"match",
-							["get", "案件狀態"],
+							[
+								"get",
+								"案件狀態"
+							],
 							"已結案",
 							"#90dce9",
 							"處理中",
@@ -1821,8 +2071,16 @@
 			],
 			"history_data": true,
 			"chart_config": {
-				"types": ["BarChart", "DonutChart"],
-				"color": ["#fc9f0b", "#dac117", "#FDD79B", "#CA7F09"],
+				"types": [
+					"BarChart",
+					"DonutChart"
+				],
+				"color": [
+					"#fc9f0b",
+					"#dac117",
+					"#FDD79B",
+					"#CA7F09"
+				],
 				"unit": "件",
 				"map_filter": [
 					"案件類型",
@@ -1858,7 +2116,9 @@
 			"use_case": "概覽台北市近期哪些領域的修繕整理需求較高，可進一步查詢相關指標資料，如一年內案件數統計，以深入瞭解問題。",
 			"links": null,
 			"tags": [],
-			"contributors": ["tuic"]
+			"contributors": [
+				"tuic"
+			]
 		},
 		"73": {
 			"id": 73,
@@ -1870,18 +2130,33 @@
 					"paint": {
 						"line-color": [
 							"match",
-							["get", "mrtid"],
-							["BL"],
+							[
+								"get",
+								"mrtid"
+							],
+							[
+								"BL"
+							],
 							"#0070bd",
-							["O"],
+							[
+								"O"
+							],
 							"#f8b61c",
-							["G"],
+							[
+								"G"
+							],
 							"#008659",
-							["R"],
+							[
+								"R"
+							],
 							"#e3002c",
-							["BR"],
+							[
+								"BR"
+							],
 							"#c48c31",
-							["Y"],
+							[
+								"Y"
+							],
 							"#ffdb00",
 							"#505050"
 						]
@@ -1932,8 +2207,14 @@
 				}
 			],
 			"chart_config": {
-				"color": ["#2e999b", "#80e3d4"],
-				"types": ["TimelineStackedChart", "TimelineSeparateChart"],
+				"color": [
+					"#2e999b",
+					"#80e3d4"
+				],
+				"types": [
+					"TimelineStackedChart",
+					"TimelineSeparateChart"
+				],
 				"unit": "人次"
 			},
 			"name": "捷運人流趨勢",
@@ -1950,7 +2231,9 @@
 				"https://data.taipei/dataset/detail?id=63f31c7e-7fc3-418b-bd82-b95158755b4d"
 			],
 			"tags": [],
-			"contributors": ["tuic"]
+			"contributors": [
+				"tuic"
+			]
 		},
 		"74": {
 			"id": 74,
@@ -1962,18 +2245,33 @@
 					"paint": {
 						"line-color": [
 							"match",
-							["get", "mrtid"],
-							["BL"],
+							[
+								"get",
+								"mrtid"
+							],
+							[
+								"BL"
+							],
 							"#0070bd",
-							["O"],
+							[
+								"O"
+							],
 							"#f8b61c",
-							["G"],
+							[
+								"G"
+							],
 							"#008659",
-							["R"],
+							[
+								"R"
+							],
 							"#e3002c",
-							["BR"],
+							[
+								"BR"
+							],
 							"#c48c31",
-							["Y"],
+							[
+								"Y"
+							],
 							"#ffdb00",
 							"#505050"
 						]
@@ -2004,8 +2302,16 @@
 						"fill-extrusion-opacity": 0.8,
 						"fill-extrusion-height": [
 							"interpolate",
-							["linear"],
-							["to-number", ["get", "ppl_out"]],
+							[
+								"linear"
+							],
+							[
+								"to-number",
+								[
+									"get",
+									"ppl_out"
+								]
+							],
 							0,
 							0,
 							10000,
@@ -2036,8 +2342,16 @@
 						"fill-extrusion-opacity": 0.8,
 						"fill-extrusion-height": [
 							"interpolate",
-							["linear"],
-							["to-number", ["get", "ppl_in"]],
+							[
+								"linear"
+							],
+							[
+								"to-number",
+								[
+									"get",
+									"ppl_in"
+								]
+							],
 							0,
 							0,
 							10000,
@@ -2063,8 +2377,14 @@
 				}
 			],
 			"chart_config": {
-				"color": ["#2e999b", "#80e3d4"],
-				"types": ["TimelineSeparateChart", "TimelineStackedChart"],
+				"color": [
+					"#2e999b",
+					"#80e3d4"
+				],
+				"types": [
+					"TimelineSeparateChart",
+					"TimelineStackedChart"
+				],
 				"unit": "人次"
 			},
 			"name": "捷運人流趨勢(3D)",
@@ -2080,7 +2400,9 @@
 				"https://data.taipei/dataset/detail?id=63f31c7e-7fc3-418b-bd82-b95158755b4d"
 			],
 			"tags": [],
-			"contributors": ["tuic"]
+			"contributors": [
+				"tuic"
+			]
 		},
 		"79": {
 			"id": 79,
@@ -2113,7 +2435,10 @@
 					"paint": {
 						"text-color": [
 							"match",
-							["get", "density"],
+							[
+								"get",
+								"density"
+							],
 							"舒適",
 							"#acc22a",
 							"普通",
@@ -2146,8 +2471,12 @@
 				}
 			],
 			"chart_config": {
-				"color": ["#0070bd"],
-				"types": ["MetroChart"],
+				"color": [
+					"#0070bd"
+				],
+				"types": [
+					"MetroChart"
+				],
 				"unit": null
 			},
 			"name": "板南線擁擠程度",
@@ -2159,9 +2488,13 @@
 			"short_desc": "顯示當前全市捷運淡水線各車廂擁擠情況",
 			"long_desc": "顯示當前全市捷運淡水線各車廂擁擠情況，以車廂號碼表示擁擠程度（由綠色到紅色），資料來源為臺北捷運公司內部資料，每3分鐘更新。",
 			"use_case": "了解全市捷運板南線各車廂擁擠情況，以數字與顏色呈現，這有助於乘客選擇車廂並提高乘車舒適度。",
-			"links": ["https://www.metro.taipei/cp.aspx?n=BDEB860F2BE3E249"],
+			"links": [
+				"https://www.metro.taipei/cp.aspx?n=BDEB860F2BE3E249"
+			],
 			"tags": [],
-			"contributors": ["tuic"]
+			"contributors": [
+				"tuic"
+			]
 		},
 		"81": {
 			"id": 81,
@@ -2172,7 +2505,10 @@
 					"paint": {
 						"circle-color": [
 							"match",
-							["get", "icon_status"],
+							[
+								"get",
+								"icon_status"
+							],
 							"階段完成",
 							"#D9ED92",
 							"實驗進行中",
@@ -2211,8 +2547,14 @@
 			],
 			"name": "TPMO智慧城市專案",
 			"chart_config": {
-				"color": ["#52B69A"],
-				"types": ["ColumnChart", "BarChart", "RadarChart"],
+				"color": [
+					"#52B69A"
+				],
+				"types": [
+					"ColumnChart",
+					"BarChart",
+					"RadarChart"
+				],
 				"unit": "件"
 			},
 			"source": "TPMO",
@@ -2225,7 +2567,9 @@
 			"use_case": "就智慧城市專案類型統計資料，由於更新頻率不定，若需最新數據，可隨時查詢相關資料來源。",
 			"links": null,
 			"tags": [],
-			"contributors": ["tuic"]
+			"contributors": [
+				"tuic"
+			]
 		},
 		"82": {
 			"id": 82,
@@ -2236,7 +2580,10 @@
 					"paint": {
 						"circle-color": [
 							"match",
-							["get", "main_type"],
+							[
+								"get",
+								"main_type"
+							],
 							"銀髮族服務",
 							"#F65658",
 							"身障機構",
@@ -2288,7 +2635,10 @@
 					"#60819C",
 					"#2F8AB1"
 				],
-				"types": ["BarChart", "DonutChart"],
+				"types": [
+					"BarChart",
+					"DonutChart"
+				],
 				"unit": "間",
 				"map_filter": [
 					"main_type",
@@ -2316,15 +2666,23 @@
 				"https://data.taipei/dataset/detail?id=cabdf272-e0ec-4e4e-9136-f4b8596f35d9"
 			],
 			"tags": [],
-			"contributors": ["tuic"]
+			"contributors": [
+				"tuic"
+			]
 		},
 		"83": {
 			"id": 83,
 			"index": "emergency_services",
 			"map_config": null,
 			"chart_config": {
-				"color": ["#bc7262"],
-				"types": ["DistrictChart", "RadarChart", "ColumnChart"],
+				"color": [
+					"#bc7262"
+				],
+				"types": [
+					"DistrictChart",
+					"RadarChart",
+					"ColumnChart"
+				],
 				"unit": "件"
 			},
 			"name": "緊急救護服務",
@@ -2339,7 +2697,9 @@
 			"use_case": "瞭解緊急救護服務案件的統計資訊，有助於優化救護服務的配置及應急措施。",
 			"links": null,
 			"tags": [],
-			"contributors": ["tuic"]
+			"contributors": [
+				"tuic"
+			]
 		},
 		"90": {
 			"id": 90,
@@ -2350,8 +2710,16 @@
 					"paint": {
 						"fill-color": [
 							"interpolate",
-							["linear"],
-							["to-number", ["get", "cnt_total"]],
+							[
+								"linear"
+							],
+							[
+								"to-number",
+								[
+									"get",
+									"cnt_total"
+								]
+							],
 							0,
 							"rgba(8,103,136,0.1)",
 							250,
@@ -2403,8 +2771,17 @@
 				}
 			],
 			"chart_config": {
-				"color": ["#2e999b", "#80e3d4", "#1f9b85", "#a5ece0"],
-				"types": ["DistrictChart", "ColumnChart", "BarPercentChart"],
+				"color": [
+					"#2e999b",
+					"#80e3d4",
+					"#1f9b85",
+					"#a5ece0"
+				],
+				"types": [
+					"DistrictChart",
+					"ColumnChart",
+					"BarPercentChart"
+				],
 				"unit": "人",
 				"categories": [
 					"北投區",
@@ -2450,7 +2827,9 @@
 			"use_case": "社福人口比例的資料能讓我們了解台北市社會福利的需求變化，從而規劃更貼近民眾需求的社會福利措施。",
 			"links": null,
 			"tags": [],
-			"contributors": ["tuic"]
+			"contributors": [
+				"tuic"
+			]
 		},
 		"91": {
 			"id": 91,
@@ -2475,7 +2854,9 @@
 			],
 			"name": "公車站",
 			"chart_config": {
-				"types": ["MapLegend"]
+				"types": [
+					"MapLegend"
+				]
 			},
 			"chart_data": [
 				{
@@ -2491,22 +2872,38 @@
 			"time_to": null,
 			"update_freq": null,
 			"update_freq_unit": null,
-			"contributors": ["tuic"]
+			"contributors": [
+				"tuic"
+			]
 		},
 		"92": {
 			"id": 92,
 			"index": "welfare_population",
 			"chart_config": {
-				"color": ["#2e999b", "#80e3d4", "#1f9b85", "#a5ece0"],
-				"types": ["RadarChart"],
+				"color": [
+					"#2e999b",
+					"#80e3d4",
+					"#1f9b85",
+					"#a5ece0"
+				],
+				"types": [
+					"RadarChart"
+				],
 				"unit": "人",
-				"categories": ["低收", "中低收", "身障補助", "身障"]
+				"categories": [
+					"低收",
+					"中低收",
+					"身障補助",
+					"身障"
+				]
 			},
 			"name": "社福人口",
 			"history_data": false,
 			"source": "社會局",
 			"time_from": "2023-05-02T08:00:18+08:00",
-			"contributors": ["tuic"],
+			"contributors": [
+				"tuic"
+			],
 			"short_desc": "顯示社會福利人口（身障、低收、中低收、低收身障）的比例",
 			"long_desc": "顯示社會福利人口（身障、低收、中低收、低收身障）的比例，資料來源為台北市社會局內部資料，每月15號更新。",
 			"use_case": "社福人口比例的資料能讓我們了解台北市社會福利的需求變化，從而規劃更貼近民眾需求的社會福利措施。",
@@ -2521,7 +2918,10 @@
 					"paint": {
 						"fill-color": [
 							"match",
-							["get", "type"],
+							[
+								"get",
+								"type"
+							],
 							"河濱公園",
 							"#90EE90",
 							"公園",
@@ -2548,12 +2948,25 @@
 				}
 			],
 			"chart_config": {
-				"color": ["#D2EE90", "#90EE90", "#4caf50", "#CAF245"],
-				"types": ["TreemapChart", "BarChart"],
+				"color": [
+					"#D2EE90",
+					"#90EE90",
+					"#4caf50",
+					"#CAF245"
+				],
+				"types": [
+					"TreemapChart",
+					"BarChart"
+				],
 				"unit": "km²",
 				"map_filter": [
 					"type",
-					["公園", "河濱公園", "公園生態化", "校園綠化"]
+					[
+						"公園",
+						"河濱公園",
+						"公園生態化",
+						"校園綠化"
+					]
 				]
 			},
 			"name": "公園綠地",
@@ -2569,7 +2982,9 @@
 				"https://data.taipei/dataset/detail?id=4717811f-c20f-4deb-8013-981f1844d6fe"
 			],
 			"tags": [],
-			"contributors": ["tuic"]
+			"contributors": [
+				"tuic"
+			]
 		},
 		"104": {
 			"id": 104,
@@ -2580,7 +2995,10 @@
 					"paint": {
 						"fill-color": [
 							"match",
-							["get", "type"],
+							[
+								"get",
+								"type"
+							],
 							"都市計畫保護區",
 							"#08B36C",
 							"都市計畫農業區",
@@ -2607,8 +3025,16 @@
 				}
 			],
 			"chart_config": {
-				"types": ["BarChart", "TreemapChart"],
-				"color": ["#08B36C", "#2B805C", "#64A2A2", "#1C8585"],
+				"types": [
+					"BarChart",
+					"TreemapChart"
+				],
+				"color": [
+					"#08B36C",
+					"#2B805C",
+					"#64A2A2",
+					"#1C8585"
+				],
 				"unit": "km²",
 				"map_filter": [
 					"type",
@@ -2633,7 +3059,9 @@
 				"https://data.taipei/dataset/detail?id=4717811f-c20f-4deb-8013-981f1844d6fe"
 			],
 			"tags": [],
-			"contributors": ["tuic"]
+			"contributors": [
+				"tuic"
+			]
 		},
 		"105": {
 			"id": 105,
@@ -2664,7 +3092,9 @@
 				}
 			],
 			"chart_config": {
-				"types": ["MapLegend"]
+				"types": [
+					"MapLegend"
+				]
 			},
 			"chart_data": [
 				{
@@ -2679,7 +3109,9 @@
 			"time_to": null,
 			"update_freq": null,
 			"update_freq_unit": null,
-			"contributors": ["tuic"]
+			"contributors": [
+				"tuic"
+			]
 		},
 		"106": {
 			"id": 106,
@@ -2690,7 +3122,10 @@
 					"paint": {
 						"circle-color": [
 							"match",
-							["get", "type"],
+							[
+								"get",
+								"type"
+							],
 							"醫院",
 							"#86e9f6",
 							"診所",
@@ -2699,14 +3134,21 @@
 						],
 						"circle-radius": [
 							"interpolate",
-							["linear"],
-							["zoom"],
+							[
+								"linear"
+							],
+							[
+								"zoom"
+							],
 							12.99,
 							2,
 							13,
 							[
 								"match",
-								["get", "type"],
+								[
+									"get",
+									"type"
+								],
 								"診所",
 								2.5,
 								"醫院",
@@ -2714,7 +3156,18 @@
 								3
 							],
 							18,
-							["match", ["get", "type"], "診所", 6, "醫院", 14, 8]
+							[
+								"match",
+								[
+									"get",
+									"type"
+								],
+								"診所",
+								6,
+								"醫院",
+								14,
+								8
+							]
 						]
 					},
 					"property": [
@@ -2737,9 +3190,17 @@
 			],
 			"name": "醫療院所分布",
 			"chart_config": {
-				"types": ["MapLegend"],
+				"types": [
+					"MapLegend"
+				],
 				"unit": "間",
-				"map_filter": ["type", ["醫院", "診所"]]
+				"map_filter": [
+					"type",
+					[
+						"醫院",
+						"診所"
+					]
+				]
 			},
 			"chart_data": [
 				{
@@ -2756,7 +3217,9 @@
 				}
 			],
 			"source": "衛生局",
-			"contributors": ["tuic"]
+			"contributors": [
+				"tuic"
+			]
 		},
 		"107": {
 			"id": 107,
@@ -2786,8 +3249,13 @@
 				}
 			],
 			"chart_config": {
-				"types": ["DistrictChart", "ColumnChart"],
-				"color": ["#A25FAD"],
+				"types": [
+					"DistrictChart",
+					"ColumnChart"
+				],
+				"color": [
+					"#A25FAD"
+				],
 				"unit": "台",
 				"map_filter": [
 					"dist",
@@ -2820,7 +3288,9 @@
 				"https://data.taipei/dataset/detail?id=cd050577-115f-4299-b37a-012ff490a632"
 			],
 			"tags": [],
-			"contributors": ["tuic"]
+			"contributors": [
+				"tuic"
+			]
 		},
 		"108": {
 			"id": 108,
@@ -2831,7 +3301,10 @@
 					"paint": {
 						"circle-color": [
 							"match",
-							["get", "light1"],
+							[
+								"get",
+								"light1"
+							],
 							"鈉光燈",
 							"#FF8C00",
 							"LED燈",
@@ -2871,8 +3344,13 @@
 				}
 			],
 			"chart_config": {
-				"types": ["DistrictChart", "ColumnChart"],
-				"color": ["#FFE677"],
+				"types": [
+					"DistrictChart",
+					"ColumnChart"
+				],
+				"color": [
+					"#FFE677"
+				],
 				"unit": "盞",
 				"map_filter": [
 					"dist",
@@ -2905,7 +3383,9 @@
 				"https://data.taipei/dataset/detail?id=262e80cf-579c-4bfb-ba73-31621bc84616"
 			],
 			"tags": [],
-			"contributors": ["tuic"]
+			"contributors": [
+				"tuic"
+			]
 		},
 		"109": {
 			"id": 109,
@@ -2916,7 +3396,10 @@
 					"paint": {
 						"line-color": [
 							"match",
-							["get", "type"],
+							[
+								"get",
+								"type"
+							],
 							"市區",
 							"#a0b8e8",
 							"河濱",
@@ -2939,8 +3422,16 @@
 				}
 			],
 			"chart_config": {
-				"types": ["MapLegend"],
-				"map_filter": ["type", ["市區", "河濱"]]
+				"types": [
+					"MapLegend"
+				],
+				"map_filter": [
+					"type",
+					[
+						"市區",
+						"河濱"
+					]
+				]
 			},
 			"chart_data": [
 				{
@@ -2960,7 +3451,9 @@
 			"time_to": null,
 			"update_freq": null,
 			"update_freq_unit": null,
-			"contributors": ["tuic"]
+			"contributors": [
+				"tuic"
+			]
 		},
 		"110": {
 			"id": 110,
@@ -2971,7 +3464,10 @@
 					"paint": {
 						"circle-color": [
 							"match",
-							["get", "type"],
+							[
+								"get",
+								"type"
+							],
 							"臺灣欒樹",
 							"#FF4500",
 							"火燄木",
@@ -3012,8 +3508,13 @@
 						],
 						"circle-opacity": [
 							"interpolate",
-							["linear"],
-							["get", "height"],
+							[
+								"linear"
+							],
+							[
+								"get",
+								"height"
+							],
 							0,
 							0.75,
 							10,
@@ -3021,8 +3522,12 @@
 						],
 						"circle-radius": [
 							"interpolate",
-							["linear"],
-							["zoom"],
+							[
+								"linear"
+							],
+							[
+								"zoom"
+							],
 							10.99,
 							0,
 							14,
@@ -3030,8 +3535,13 @@
 							16,
 							[
 								"interpolate",
-								["linear"],
-								["get", "diameter"],
+								[
+									"linear"
+								],
+								[
+									"get",
+									"diameter"
+								],
 								0,
 								2,
 								2,
@@ -3072,8 +3582,13 @@
 				}
 			],
 			"chart_config": {
-				"color": ["#33C552"],
-				"types": ["DistrictChart", "ColumnChart"],
+				"color": [
+					"#33C552"
+				],
+				"types": [
+					"DistrictChart",
+					"ColumnChart"
+				],
 				"unit": "棵",
 				"map_filter": [
 					"dist",
@@ -3107,7 +3622,9 @@
 				"https://data.taipei/dataset/detail?id=7a49d00c-a5ff-4a6b-be9e-aaa6dc1ff7e8"
 			],
 			"tags": [],
-			"contributors": ["tuic"]
+			"contributors": [
+				"tuic"
+			]
 		},
 		"111": {
 			"id": 111,
@@ -3118,7 +3635,10 @@
 					"paint": {
 						"circle-color": [
 							"match",
-							["get", "type"],
+							[
+								"get",
+								"type"
+							],
 							"小田園",
 							"#13b3a6",
 							"綠屋頂",
@@ -3162,12 +3682,25 @@
 				}
 			],
 			"chart_config": {
-				"types": ["TreemapChart", "BarChart"],
-				"color": ["#13b3a6", "#99E1E3", "#38BDC0", "#bdedee"],
+				"types": [
+					"TreemapChart",
+					"BarChart"
+				],
+				"color": [
+					"#13b3a6",
+					"#99E1E3",
+					"#38BDC0",
+					"#bdedee"
+				],
 				"unit": "m²",
 				"map_filter": [
 					"type",
-					["小田園", "快樂農園", "綠屋頂", "市民農園"]
+					[
+						"小田園",
+						"快樂農園",
+						"綠屋頂",
+						"市民農園"
+					]
 				]
 			},
 			"name": "田園城市",
@@ -3183,7 +3716,9 @@
 				"https://data.taipei/dataset/detail?id=4717811f-c20f-4deb-8013-981f1844d6fe"
 			],
 			"tags": [],
-			"contributors": ["tuic"]
+			"contributors": [
+				"tuic"
+			]
 		},
 		"114": {
 			"id": 114,
@@ -3194,8 +3729,16 @@
 					"paint": {
 						"circle-color": [
 							"interpolate",
-							["linear"],
-							["to-number", ["get", "occupied_rate"]],
+							[
+								"linear"
+							],
+							[
+								"to-number",
+								[
+									"get",
+									"occupied_rate"
+								]
+							],
 							-99,
 							"#999",
 							-98,
@@ -3249,8 +3792,15 @@
 				}
 			],
 			"chart_config": {
-				"color": ["#2e999b", "#80e3d4", "#1f9b85"],
-				"types": ["GuageChart", "BarPercentChart"],
+				"color": [
+					"#2e999b",
+					"#80e3d4",
+					"#1f9b85"
+				],
+				"types": [
+					"GuageChart",
+					"BarPercentChart"
+				],
 				"unit": "個",
 				"categories": [
 					"汽車車位使用量",
@@ -3272,7 +3822,9 @@
 				"https://data.taipei/dataset/detail?id=d5c0656b-5250-4179-a491-c94daa56ef2c"
 			],
 			"tags": [],
-			"contributors": ["tuic"]
+			"contributors": [
+				"tuic"
+			]
 		},
 		"115": {
 			"id": 115,
@@ -3283,7 +3835,10 @@
 					"paint": {
 						"fill-color": [
 							"match",
-							["get", "class"],
+							[
+								"get",
+								"class"
+							],
 							"高",
 							"#c87a74",
 							"中",
@@ -3304,8 +3859,17 @@
 				}
 			],
 			"chart_config": {
-				"types": ["MapLegend"],
-				"map_filter": ["class", ["高", "中", "低"]]
+				"types": [
+					"MapLegend"
+				],
+				"map_filter": [
+					"class",
+					[
+						"高",
+						"中",
+						"低"
+					]
+				]
 			},
 			"chart_data": [
 				{
@@ -3330,7 +3894,9 @@
 			"time_to": null,
 			"update_freq": null,
 			"update_freq_unit": null,
-			"contributors": ["tuic"]
+			"contributors": [
+				"tuic"
+			]
 		},
 		"116": {
 			"id": 116,
@@ -3363,7 +3929,10 @@
 					"paint": {
 						"text-color": [
 							"match",
-							["get", "density"],
+							[
+								"get",
+								"density"
+							],
 							"舒適",
 							"#acc22a",
 							"普通",
@@ -3396,8 +3965,12 @@
 				}
 			],
 			"chart_config": {
-				"color": ["#e3002c"],
-				"types": ["MetroChart"],
+				"color": [
+					"#e3002c"
+				],
+				"types": [
+					"MetroChart"
+				],
 				"unit": null
 			},
 			"name": "淡水線擁擠程度",
@@ -3409,9 +3982,13 @@
 			"short_desc": "顯示當前全市捷運板南線各車廂擁擠情況",
 			"long_desc": "顯示當前全市捷運板南線各車廂擁擠情況，以車廂號碼表示擁擠程度（由綠色到紅色），資料來源為臺北捷運公司內部資料，每3分鐘更新。",
 			"use_case": "了解全市捷運淡水信義線各車廂擁擠情況，以數字與顏色呈現，這有助於乘客選擇車廂並提高乘車舒適度。",
-			"links": ["https://www.metro.taipei/cp.aspx?n=BDEB860F2BE3E249"],
+			"links": [
+				"https://www.metro.taipei/cp.aspx?n=BDEB860F2BE3E249"
+			],
 			"tags": [],
-			"contributors": ["tuic"]
+			"contributors": [
+				"tuic"
+			]
 		},
 		"117": {
 			"id": 117,
@@ -3425,11 +4002,25 @@
 						"circle-color": "#02ffff",
 						"circle-radius": [
 							"interpolate",
-							["linear"],
+							[
+								"linear"
+							],
 							[
 								"-",
-								["to-number", ["get", "total_spaces"]],
-								["to-number", ["get", "left_spaces"]]
+								[
+									"to-number",
+									[
+										"get",
+										"total_spaces"
+									]
+								],
+								[
+									"to-number",
+									[
+										"get",
+										"left_spaces"
+									]
+								]
 							],
 							0,
 							0,
@@ -3441,8 +4032,16 @@
 						"circle-stroke-color": "#999999",
 						"circle-stroke-width": [
 							"interpolate",
-							["linear"],
-							["to-number", ["get", "left_spaces"]],
+							[
+								"linear"
+							],
+							[
+								"to-number",
+								[
+									"get",
+									"left_spaces"
+								]
+							],
 							0,
 							0,
 							200,
@@ -3488,8 +4087,15 @@
 				}
 			],
 			"chart_config": {
-				"color": ["#2e999b", "#80e3d4", "#1f9b85"],
-				"types": ["GuageChart", "BarPercentChart"],
+				"color": [
+					"#2e999b",
+					"#80e3d4",
+					"#1f9b85"
+				],
+				"types": [
+					"GuageChart",
+					"BarPercentChart"
+				],
 				"unit": "個",
 				"categories": [
 					"汽車車位使用量",
@@ -3511,7 +4117,9 @@
 				"https://data.taipei/dataset/detail?id=d5c0656b-5250-4179-a491-c94daa56ef2c"
 			],
 			"tags": [],
-			"contributors": ["tuic"]
+			"contributors": [
+				"tuic"
+			]
 		},
 		"118": {
 			"id": 118,
@@ -3524,8 +4132,16 @@
 						"fill-extrusion-opacity": 0.8,
 						"fill-extrusion-base": [
 							"interpolate",
-							["linear"],
-							["to-number", ["get", "NOW"]],
+							[
+								"linear"
+							],
+							[
+								"to-number",
+								[
+									"get",
+									"NOW"
+								]
+							],
 							0,
 							0,
 							10000,
@@ -3533,8 +4149,16 @@
 						],
 						"fill-extrusion-height": [
 							"interpolate",
-							["linear"],
-							["to-number", ["get", "ALL"]],
+							[
+								"linear"
+							],
+							[
+								"to-number",
+								[
+									"get",
+									"ALL"
+								]
+							],
 							0,
 							0,
 							10000,
@@ -3581,8 +4205,16 @@
 						"fill-extrusion-opacity": 1,
 						"fill-extrusion-height": [
 							"interpolate",
-							["linear"],
-							["to-number", ["get", "NOW"]],
+							[
+								"linear"
+							],
+							[
+								"to-number",
+								[
+									"get",
+									"NOW"
+								]
+							],
 							0,
 							0,
 							10000,
@@ -3624,8 +4256,15 @@
 				}
 			],
 			"chart_config": {
-				"color": ["#2e999b", "#80e3d4", "#1f9b85"],
-				"types": ["GuageChart", "BarPercentChart"],
+				"color": [
+					"#2e999b",
+					"#80e3d4",
+					"#1f9b85"
+				],
+				"types": [
+					"GuageChart",
+					"BarPercentChart"
+				],
 				"unit": "個",
 				"categories": [
 					"汽車車位使用量",
@@ -3647,7 +4286,9 @@
 				"https://data.taipei/dataset/detail?id=d5c0656b-5250-4179-a491-c94daa56ef2c"
 			],
 			"tags": [],
-			"contributors": ["tuic"]
+			"contributors": [
+				"tuic"
+			]
 		},
 		"136": {
 			"id": 136,
@@ -3658,7 +4299,10 @@
 					"paint": {
 						"circle-color": [
 							"match",
-							["get", "last_audit_result"],
+							[
+								"get",
+								"last_audit_result"
+							],
 							"合格",
 							"green",
 							"#B53535"
@@ -3696,8 +4340,14 @@
 				}
 			],
 			"chart_config": {
-				"types": ["DistrictChart", "ColumnChart", "RadarChart"],
-				"color": ["#B53535"],
+				"types": [
+					"DistrictChart",
+					"ColumnChart",
+					"RadarChart"
+				],
+				"color": [
+					"#B53535"
+				],
 				"unit": "件"
 			},
 			"name": "公安聯合稽查",
@@ -3711,7 +4361,9 @@
 			"use_case": "掌握公安聯合稽查結果及稽核件數，並結合其他指標，可有針對性地進行稽查工作。",
 			"links": null,
 			"tags": [],
-			"contributors": ["tuic"]
+			"contributors": [
+				"tuic"
+			]
 		},
 		"140": {
 			"id": 140,
@@ -3719,8 +4371,14 @@
 			"map_config": null,
 			"history_data": true,
 			"chart_config": {
-				"types": ["TimelineSeparateChart", "TimelineStackedChart"],
-				"color": ["#4dd97a", "#0a85f4"],
+				"types": [
+					"TimelineSeparateChart",
+					"TimelineStackedChart"
+				],
+				"color": [
+					"#4dd97a",
+					"#0a85f4"
+				],
 				"unit": "件"
 			},
 			"name": "建照使照發照量",
@@ -3737,7 +4395,9 @@
 				"https://data.taipei/dataset/detail?id=d8834353-ff8e-4a6c-9730-a4d3541f2669"
 			],
 			"tags": [],
-			"contributors": ["tuic"]
+			"contributors": [
+				"tuic"
+			]
 		},
 		"141": {
 			"id": 141,
@@ -3748,11 +4408,32 @@
 					"paint": {
 						"circle-color": [
 							"case",
-							["<=", ["get", "arrive_time"], 1700],
+							[
+								"<=",
+								[
+									"get",
+									"arrive_time"
+								],
+								1700
+							],
 							"#E6DF44",
-							["<=", ["get", "arrive_time"], 1900],
+							[
+								"<=",
+								[
+									"get",
+									"arrive_time"
+								],
+								1900
+							],
 							"#F4633C",
-							["<=", ["get", "arrive_time"], 2100],
+							[
+								"<=",
+								[
+									"get",
+									"arrive_time"
+								],
+								2100
+							],
 							"#D63940",
 							"#9C2A4B"
 						]
@@ -3821,8 +4502,17 @@
 					"大安區",
 					"文山區"
 				],
-				"types": ["ColumnChart", "RadarChart", "DistrictChart"],
-				"color": ["#E6DF44", "#F4633C", "#D63940", "#9C2A4B"],
+				"types": [
+					"ColumnChart",
+					"RadarChart",
+					"DistrictChart"
+				],
+				"color": [
+					"#E6DF44",
+					"#F4633C",
+					"#D63940",
+					"#9C2A4B"
+				],
 				"unit": "點",
 				"map_filter": [
 					"dist",
@@ -3854,7 +4544,589 @@
 				"https://data.taipei/dataset/detail?id=6bb3304b-4f46-4bb0-8cd1-60c66dcd1cae"
 			],
 			"tags": [],
-			"contributors": ["tuic"]
+			"contributors": [
+				"tuic"
+			]
+		},
+		"142": {
+			"id": 142,
+			"index": "youbike_weekend",
+			"chart_config": {
+				"types": [
+					"HeatmapChart"
+				],
+				"categories": [
+					"北投區",
+					"士林區",
+					"內湖區",
+					"南港區",
+					"松山區",
+					"信義區",
+					"中山區",
+					"大同區",
+					"中正區",
+					"萬華區",
+					"大安區",
+					"文山區",
+					"非臺北市"
+				],
+				"color": [
+					"#b9b929",
+					"#87a11a",
+					"#87a11a",
+					"#568811",
+					"#568811",
+					"#568811",
+					"#568811",
+					"#568811",
+					"#568811",
+					"#568811",
+					"#568811",
+					"#568811",
+					"#236e0c",
+					"#236e0c",
+					"#236e0c",
+					"#236e0c",
+					"#236e0c",
+					"#236e0c",
+					"#236e0c",
+					"#666666"
+				],
+				"unit": "百次",
+				"map_filter": [
+					"TOWNNAME_source",
+					[
+						"北投區",
+						"士林區",
+						"內湖區",
+						"南港區",
+						"松山區",
+						"信義區",
+						"中山區",
+						"大同區",
+						"中正區",
+						"萬華區",
+						"大安區",
+						"文山區",
+						"非臺北市"
+					]
+				]
+			},
+			"map_config": [
+				{
+					"index": "youbike_weekend",
+					"paint": {
+						"arc-color": [
+							"#fd7900",
+							"#47d3d9"
+						],
+						"arc-width": 3
+					},
+					"type": "arc",
+					"title": "週間群像"
+				}
+			],
+			"name": "YouBike週末群像",
+			"source": "交通局/Youbike",
+			"time_from": "2023-07-28T00:00:00+08:00",
+			"time_to": null,
+			"short_desc": "",
+			"long_desc": "顯示週末期間全市YouBike的使用情況，並將各交易的起迄點在地圖上視覺化，資料來源為微笑單車公司的交易資料，更新頻率為不定期。",
+			"use_case": "透過YouBike週末群像組件，您可以瀏覽週末期間全市YouBike的使用情況，這對於計畫週末戶外活動或確保在週末時找到可租借的YouBike非常有幫助。",
+			"links": [],
+			"tags": [],
+			"contributors": [
+				"tuic"
+			]
+		},
+		"143": {
+			"id": 143,
+			"index": "youbike_weekday",
+			"chart_config": {
+				"types": [
+					"HeatmapChart"
+				],
+				"categories": [
+					"北投區",
+					"士林區",
+					"內湖區",
+					"南港區",
+					"松山區",
+					"信義區",
+					"中山區",
+					"大同區",
+					"中正區",
+					"萬華區",
+					"大安區",
+					"文山區"
+				],
+				"color": [
+					"#b9b929",
+					"#87a11a",
+					"#87a11a",
+					"#568811",
+					"#568811",
+					"#568811",
+					"#568811",
+					"#568811",
+					"#568811",
+					"#568811",
+					"#568811",
+					"#568811",
+					"#236e0c",
+					"#236e0c",
+					"#236e0c",
+					"#236e0c",
+					"#236e0c",
+					"#236e0c",
+					"#236e0c",
+					"#666666"
+				],
+				"unit": "百次",
+				"map_filter": [
+					"TOWNNAME_source",
+					[
+						"北投區",
+						"士林區",
+						"內湖區",
+						"南港區",
+						"松山區",
+						"信義區",
+						"中山區",
+						"大同區",
+						"中正區",
+						"萬華區",
+						"大安區",
+						"文山區"
+					]
+				]
+			},
+			"map_config": [
+				{
+					"index": "youbike_weekday",
+					"paint": {
+						"arc-color": [
+							"#fd7900",
+							"#47d3d9"
+						],
+						"arc-width": 3
+					},
+					"type": "arc",
+					"title": "週間群像"
+				}
+			],
+			"name": "YouBike週間群像",
+			"source": "交通局/Youbike",
+			"time_from": "2023-07-28T00:00:00+08:00",
+			"time_to": null,
+			"short_desc": "",
+			"long_desc": "展示平日晨峰時段(早上七點至九點)全市YouBike的使用情況，並將各交易的起迄點在地圖上視覺化，資料來源為微笑單車公司的交易資料，更新頻率為不定期。",
+			"use_case": "透過YouBike週間通勤群像組件，您可以輕鬆瞭解平日早上全市YouBike的使用情況。這有助於規劃通勤或日常出行，以確保您在需要時能夠方便地找到可用的YouBike。",
+			"links": [],
+			"tags": [],
+			"contributors": [
+				"tuic"
+			]
+		},
+		"144": {
+			"id": 144,
+			"index": "youbike_avail_pct",
+			"history_data": true,
+			"chart_config": {
+				"types": [
+					"BarChart",
+					"DonutChart"
+				],
+				"color": [
+					"#ca0020",
+					"#e97c69",
+					"#bababa"
+				],
+				"unit": "站",
+				"map_filter": [
+					"category",
+					[
+						"高",
+						"中",
+						"低"
+					]
+				]
+			},
+			"map_config": [
+				{
+					"index": "youbike_avail_pct",
+					"paint": {
+						"circle-color": [
+							"match",
+							[
+								"get",
+								"category"
+							],
+							"低",
+							"#bababa",
+							"中",
+							"#e97c69",
+							"高",
+							"#ca0020",
+							"#797979"
+						],
+						"circle-stroke-color": "#888",
+						"circle-stroke-width": 1
+					},
+					"property": [
+						{
+							"key": "stop_name",
+							"name": "站點名稱"
+						},
+						{
+							"key": "category",
+							"name": "見車率"
+						}
+					],
+					"size": "big",
+					"title": "Youbike見車率",
+					"type": "circle"
+				}
+			],
+			"name": "YouBike見車率",
+			"source": "Youbike",
+			"time_from": "2023-07-01T00:00:00+08:00",
+			"time_to": "2023-07-31T00:00:00+08:00",
+			"short_desc": "",
+			"long_desc": "顯示YouBike見車率的資訊，見車率為一個車站在18小時內(早上6點至凌晨12點)至少有1台車的百分比，90%以上為高間車率；60%-90%為中；60%以下為低。資料來源為YouBike公司，更新頻率不定期。",
+			"use_case": "透過YouBike見車率組件，您可以查看各YouBike站點一個月內的平均見車率，了解缺車較為嚴重的站點在哪裡。地圖模式讓您可以輕鬆了解特定車站的見車率及其分布情形。",
+			"links": [],
+			"tags": [],
+			"contributors": [
+				"tuic"
+			]
+		},
+		"145": {
+			"id": 145,
+			"index": "youbike_sub_stn",
+			"chart_config": {
+				"types": [
+					"DonutChart"
+				],
+				"unit": "站",
+				"color": [
+					"#a8f8ff",
+					"#4cd2ff",
+					"#00a6ff"
+				],
+				"map_filter": [
+					"category",
+					[
+						"替代站<=5",
+						"替代站5~10",
+						"替代站>10"
+					]
+				]
+			},
+			"map_config": [
+				{
+					"index": "youbike_sub_stn_2",
+					"paint": {
+						"line-color": [
+							"case",
+							[
+								"<=",
+								[
+									"get",
+									"times"
+								],
+								3
+							],
+							"#5A1846",
+							[
+								"<=",
+								[
+									"get",
+									"times"
+								],
+								14
+							],
+							"#831A3D",
+							[
+								"<=",
+								[
+									"get",
+									"times"
+								],
+								75
+							],
+							"#E3611C",
+							"#FFC300"
+						]
+					},
+					"property": [
+						{
+							"key": "times",
+							"name": "路線使用次數"
+						},
+						{
+							"key": "category",
+							"name": "類別"
+						}
+					],
+					"title": "替代站點",
+					"type": "line"
+				},
+				{
+					"index": "youbike_sub_stn_1",
+					"paint": {
+						"circle-color": [
+							"case",
+							[
+								"<=",
+								[
+									"get",
+									"sum_cor"
+								],
+								132
+							],
+							"#975506",
+							[
+								"<=",
+								[
+									"get",
+									"sum_cor"
+								],
+								297.67
+							],
+							"#EF7535",
+							[
+								"<=",
+								[
+									"get",
+									"sum_cor"
+								],
+								670.83
+							],
+							"#DCC454",
+							"#F9F9F9"
+						],
+						"circle-opacity": 0.5
+					},
+					"property": [
+						{
+							"key": "stop_name",
+							"name": "站點名稱"
+						},
+						{
+							"key": "capacity",
+							"name": "總柱數"
+						}
+					],
+					"title": "Youbike站點",
+					"type": "circle"
+				}
+			],
+			"name": "YouBike替代站點",
+			"source": "資訊局",
+			"time_from": "2023-07-28T00:00:00+08:00",
+			"time_to": null,
+			"short_desc": "",
+			"long_desc": "展示YouBike替代站點的資訊，替代站點的定義標準是大數據中心基於交易資料結果分群計算，資料來源為YouBike公司，更新頻率不定期。",
+			"use_case": "YouBike替代站點組件提供任一YouBike站附近的替代站點的資訊，您下次如果租借YouBike時遇到車站沒站的情形，不妨檢視一下本組件的地圖，看看附近還有沒有鄰近的替代站點可以使用。",
+			"links": [],
+			"tags": [],
+			"contributors": [
+				"tuic"
+			]
+		},
+		"146": {
+			"id": 146,
+			"index": "youbike_grid",
+			"chart_config": {
+				"types": [
+					"TreemapChart",
+					"BarChart"
+				],
+				"unit": "個網格",
+				"color": [
+					"#7FBF7B",
+					"#8E8E8E",
+					"#40A461",
+					"#BEBEBE",
+					"#3D56FF",
+					"#BFDAB8",
+					"#ACCFFF"
+				],
+				"map_filter": [
+					"class",
+					[
+						"山區且土地限制",
+						"已設站",
+						"山區",
+						"鄰近已設站",
+						"未設站",
+						"土地限制",
+						"特殊條件限制"
+					]
+				]
+			},
+			"map_config": [
+				{
+					"index": "youbike_grid",
+					"paint": {
+						"fill-color": [
+							"case",
+							[
+								"==",
+								[
+									"get",
+									"class"
+								],
+								"山區"
+							],
+							"#40A461",
+							[
+								"==",
+								[
+									"get",
+									"class"
+								],
+								"山區且土地限制"
+							],
+							"#7FBF7B",
+							[
+								"==",
+								[
+									"get",
+									"class"
+								],
+								"特殊條件限制"
+							],
+							"#ACCFFF",
+							[
+								"==",
+								[
+									"get",
+									"class"
+								],
+								"鄰近已設站"
+							],
+							"#BEBEBE",
+							[
+								"==",
+								[
+									"get",
+									"class"
+								],
+								"土地限制"
+							],
+							"#BFDAB8",
+							[
+								"==",
+								[
+									"get",
+									"class"
+								],
+								"未設站"
+							],
+							"#3D56FF",
+							"#8E8E8E"
+						],
+						"fill-opacity": 0.5,
+						"fill-outline-color": "#555555"
+					},
+					"property": [
+						{
+							"key": "class",
+							"name": "類型"
+						}
+					],
+					"title": "Youbike設站狀態",
+					"type": "fill"
+				}
+			],
+			"name": "YouBike設站狀態",
+			"source": "資訊局",
+			"time_from": "2023-09-28T00:00:00+08:00",
+			"time_to": null,
+			"short_desc": "",
+			"long_desc": "全市由250公尺見方的網格組成，依據是否已設站、鄰近是否有站點及土地使用等條件，將各網格分為7大類，資料來源為大數據中心研究，更新頻率不定期。",
+			"use_case": "本組件可讓您快速查看各區域的YouBike設站情況。這有助於您了解哪些區域已提供YouBike服務；哪些因為土地或地形限制無法設站；和哪些地區目前未設站但具有設站潛能。",
+			"links": [],
+			"tags": [],
+			"contributors": [
+				"tuic"
+			]
+		},
+		"147": {
+			"id": 147,
+			"index": "youbike_demand",
+			"map_config": [
+				{
+					"index": "youbike_demand",
+					"type": "fill",
+					"paint": {
+						"fill-color": [
+							"match",
+							[
+								"get",
+								"category"
+							],
+							"極低",
+							"#FFFFCC",
+							"低",
+							"#e7d198",
+							"中低",
+							"#d1a26c",
+							"中",
+							"#b9734a",
+							"高",
+							"#800026",
+							"#800026"
+						],
+						"fill-opacity": 0.8
+					},
+					"property": [
+						{
+							"key": "category",
+							"name": "總體需求"
+						}
+					],
+					"title": "潛在需求"
+				}
+			],
+			"chart_config": {
+				"types": [
+					"TreemapChart",
+					"BarChart"
+				],
+				"color": [
+					"#FFFFCC",
+					"#e7d198",
+					"#d1a26c",
+					"#b9734a",
+					"#9f4333",
+					"#800026"
+				],
+				"unit": "個網格",
+				"map_filter": [
+					"category",
+					[
+						"極低",
+						"低",
+						"中低",
+						"中",
+						"高"
+					]
+				]
+			},
+			"name": "YouBike未設站區潛在需求",
+			"source": "資訊局",
+			"time_from": "2023-07-28T00:00:00+08:00",
+			"time_to": null,
+			"short_desc": "",
+			"long_desc": "展示YouBike未設站區的潛在用車需求，這些資訊基於大數據中心研究提供，詳細預測方法可參考開源成果Github，更新頻率不定期。",
+			"use_case": "YouBike未設站區潛在需求將協助您了解未來可能需要增設YouBike站點的地區。這有助於規劃YouBike的擴展和改進，以滿足日益增長的需求。",
+			"tags": [],
+			"contributors": [
+				"tuic"
+			]
 		}
 	}
 }
