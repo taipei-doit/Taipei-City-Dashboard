@@ -3855,6 +3855,137 @@
 			],
 			"tags": [],
 			"contributors": ["tuic"]
+		},
+		"144": {
+			"id": 144,
+			"index": "youbike_avail_pct",
+			"history_data": true,
+			"chart_config": {
+				"types": ["BarChart", "DonutChart"],
+				"color": ["#ca0020", "#e97c69", "#bababa"],
+				"unit": "站",
+				"map_filter": ["category", ["高", "中", "低"]]
+			},
+			"map_config": [
+				{
+					"index": "youbike_avail_pct",
+					"paint": {
+						"circle-color": [
+							"match",
+							["get", "category"],
+							"低",
+							"#bababa",
+							"中",
+							"#e97c69",
+							"高",
+							"#ca0020",
+							"#797979"
+						],
+						"circle-stroke-color": "#888",
+						"circle-stroke-width": 1
+					},
+					"property": [
+						{
+							"key": "stop_name",
+							"name": "站點名稱"
+						},
+						{
+							"key": "category",
+							"name": "見車率"
+						}
+					],
+					"size": "big",
+					"title": "Youbike見車率",
+					"type": "circle"
+				}
+			],
+			"name": "YouBike見車率",
+			"source": "Youbike",
+			"time_from": "2023-07-01T00:00:00+08:00",
+			"time_to": "2023-07-31T00:00:00+08:00",
+			"short_desc": "",
+			"long_desc": "顯示YouBike見車率的資訊，見車率為一個車站在18小時內(早上6點至凌晨12點)至少有1台車的百分比，90%以上為高間車率；60%-90%為中；60%以下為低。資料來源為YouBike公司，更新頻率不定期。",
+			"use_case": "透過YouBike見車率組件，您可以查看各YouBike站點一個月內的平均見車率，了解缺車較為嚴重的站點在哪裡。地圖模式讓您可以輕鬆了解特定車站的見車率及其分布情形。",
+			"links": [],
+			"tags": [],
+			"contributors": ["tuic"]
+		},
+		"145": {
+			"id": 145,
+			"index": "youbike_sub_stn",
+			"chart_config": {
+				"types": ["DonutChart"],
+				"unit": "站",
+				"color": ["#a8f8ff", "#4cd2ff", "#00a6ff"],
+				"map_filter": [
+					"category",
+					["替代站<=5", "替代站5~10", "替代站>10"]
+				]
+			},
+			"map_config": [
+				{
+					"index": "youbike_sub_stn_2",
+					"paint": {
+						"line-color": [
+							"case",
+							["<=", ["get", "times"], 3],
+							"#5A1846",
+							["<=", ["get", "times"], 14],
+							"#831A3D",
+							["<=", ["get", "times"], 75],
+							"#E3611C",
+							"#FFC300"
+						]
+					},
+					"property": [
+						{
+							"key": "times",
+							"name": "路線使用次數"
+						},
+						{ "key": "category", "name": "類別" }
+					],
+					"title": "替代站點",
+					"type": "line"
+				},
+				{
+					"index": "youbike_sub_stn_1",
+					"paint": {
+						"circle-color": [
+							"case",
+							["<=", ["get", "sum_cor"], 132],
+							"#975506",
+							["<=", ["get", "sum_cor"], 297.67],
+							"#EF7535",
+							["<=", ["get", "sum_cor"], 670.83],
+							"#DCC454",
+							"#F9F9F9"
+						],
+						"circle-opacity": 0.5
+					},
+					"property": [
+						{
+							"key": "stop_name",
+							"name": "站點名稱"
+						},
+						{
+							"key": "capacity",
+							"name": "總柱數"
+						}
+					],
+					"title": "Youbike站點",
+					"type": "circle"
+				}
+			],
+			"name": "YouBike替代站點",
+			"source": "資訊局",
+			"time_from": "2023-07-28T00:00:00+08:00",
+			"time_to": null,
+			"short_desc": "",
+			"long_desc": "展示YouBike替代站點的資訊，替代站點的定義標準是大數據中心基於交易資料結果分群計算，資料來源為YouBike公司，更新頻率不定期。",
+			"use_case": "YouBike替代站點組件提供任一YouBike站附近的替代站點的資訊，您下次如果租借YouBike時遇到車站沒站的情形，不妨檢視一下本組件的地圖，看看附近還有沒有鄰近的替代站點可以使用。",
+			"links": [],
+			"tags": [],
+			"contributors": ["tuic"]
 		}
 	}
 }
