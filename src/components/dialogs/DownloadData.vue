@@ -1,18 +1,18 @@
 <!-- Developed by Taipei Urban Intelligence Center 2023 -->
 
 <script setup>
-import { ref, computed } from 'vue';
-import { useDialogStore } from '../../store/dialogStore';
+import { ref, computed } from "vue";
+import { useDialogStore } from "../../store/dialogStore";
 
-import { jsonToCsv } from '../../assets/utilityFunctions/jsonToCsv';
-import DialogContainer from './DialogContainer.vue';
+import { jsonToCsv } from "../../assets/utilityFunctions/jsonToCsv";
+import DialogContainer from "./DialogContainer.vue";
 
 const dialogStore = useDialogStore();
 
 // Stores the inputted dashboard name
 const name = ref(dialogStore.moreInfoContent.name);
 // Stores the file type
-const fileType = ref('JSON');
+const fileType = ref("JSON");
 
 const parsedJson = computed(() => {
 	let json = {};
@@ -27,7 +27,10 @@ const parsedJson = computed(() => {
 });
 
 const parsedCsv = computed(() => {
-	const csvString = jsonToCsv(dialogStore.moreInfoContent.chart_data, dialogStore.moreInfoContent.chart_config);
+	const csvString = jsonToCsv(
+		dialogStore.moreInfoContent.chart_data,
+		dialogStore.moreInfoContent.chart_config
+	);
 	return encodeURI(csvString);
 });
 
@@ -45,31 +48,63 @@ function handleClose() {
 		<div class="downloaddata">
 			<h2>下載資料</h2>
 			<div class="downloaddata-input">
-				<h3>
-					請輸入檔名
-				</h3>
+				<h3>請輸入檔名</h3>
 				<input type="text" v-model="name" />
 			</div>
 			<h3>請選擇檔案格式</h3>
 			<div>
-				<input class="downloaddata-radio" type="radio" v-model="fileType" value="JSON" id="JSON" />
+				<input
+					class="downloaddata-radio"
+					type="radio"
+					v-model="fileType"
+					value="JSON"
+					id="JSON"
+				/>
 				<label for="JSON">
 					<div></div>
 					JSON
 				</label>
-				<input class="downloaddata-radio" type="radio" v-model="fileType" value="CSV" id="CSV" />
+				<input
+					class="downloaddata-radio"
+					type="radio"
+					v-model="fileType"
+					value="CSV"
+					id="CSV"
+				/>
 				<label for="CSV">
 					<div></div>
-					CSV
+					CSV (UTF-8)
 				</label>
 			</div>
 			<div class="downloaddata-control">
-				<button class="downloaddata-control-cancel" @click="handleClose">取消</button>
-				<button v-if="name && fileType === 'JSON'" class="downloaddata-control-confirm" @click="handleSubmit"><a
+				<button
+					class="downloaddata-control-cancel"
+					@click="handleClose"
+				>
+					取消
+				</button>
+				<button
+					v-if="name && fileType === 'JSON'"
+					class="downloaddata-control-confirm"
+					@click="handleSubmit"
+				>
+					<a
 						:href="`data:application/json;charset=utf-8,${parsedJson}`"
-						:download="`${name}.json`">下載JSON</a></button>
-				<button v-if="name && fileType === 'CSV'" class="downloaddata-control-confirm" @click="handleSubmit"><a
-						:href="`data:text/csv;charset=utf-8,${parsedCsv}`" :download="`${name}.csv`">下載CSV</a></button>
+						:download="`${name}.json`"
+						>下載JSON</a
+					>
+				</button>
+				<button
+					v-if="name && fileType === 'CSV'"
+					class="downloaddata-control-confirm"
+					@click="handleSubmit"
+				>
+					<a
+						:href="`data:text/csv;charset=utf-8,${parsedCsv}`"
+						:download="`${name}.csv`"
+						>下載CSV</a
+					>
+				</button>
 			</div>
 		</div>
 	</DialogContainer>
@@ -103,7 +138,7 @@ function handleClose() {
 
 			&:focus {
 				outline: none;
-				border: solid 1px var(--color-highlight)
+				border: solid 1px var(--color-highlight);
 			}
 		}
 	}
@@ -111,7 +146,7 @@ function handleClose() {
 	&-radio {
 		display: none;
 
-		&:checked+label {
+		&:checked + label {
 			color: white;
 
 			div {
@@ -119,7 +154,7 @@ function handleClose() {
 			}
 		}
 
-		&:hover+label {
+		&:hover + label {
 			color: var(--color-highlight);
 
 			div {
@@ -160,7 +195,7 @@ function handleClose() {
 			transition: color 0.2s;
 
 			&:hover {
-				color: var(--color-highlight)
+				color: var(--color-highlight);
 			}
 		}
 
