@@ -26,4 +26,8 @@ export default defineConfig({
 		environment: "happy-dom",
 	},
 	base: "/dashboard-demo",
+	server: {
+		host: "0.0.0.0",
+		port: 80,
+	},
 });
