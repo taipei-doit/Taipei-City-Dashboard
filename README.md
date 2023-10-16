@@ -51,7 +51,7 @@ npm install
 
 ### Local Environment
 
-1. Download [Node.js]() on your computer.
+1. Download [Node.js](https://nodejs.org/en) on your computer.
 2. Fork this repository then clone the project to your computer.
 3. Execute `npm install` in the respository terminal
 4. You should now be able to locally host this project by executing `npm run dev` in the respository terminal.
