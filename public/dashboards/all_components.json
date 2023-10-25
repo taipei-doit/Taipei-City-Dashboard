@@ -1774,32 +1774,14 @@
 			"index": "dispatch",
 			"map_config": [
 				{
-					"index": "dispatchingpoint",
+					"index": "dispatchingpoint_new",
 					"paint": {
-						"circle-color": [
-							"match",
-							["get", "案件狀態"],
-							"已結案",
-							"#90dce9",
-							"處理中",
-							"#ffeb3b",
-							"其他",
-							"#ffeb3b",
-							"#555"
-						]
+						"circle-color": "#90dce9"
 					},
 					"property": [
 						{
 							"key": "案件編號",
 							"name": "編號"
-						},
-						{
-							"key": "案件內容",
-							"name": "內容"
-						},
-						{
-							"key": "案件狀態",
-							"name": "案件"
 						},
 						{
 							"key": "案件類型",
@@ -1808,10 +1790,6 @@
 						{
 							"key": "成案時間",
 							"name": "成案時間"
-						},
-						{
-							"key": "結案時間",
-							"name": "結案時間"
 						}
 					],
 					"type": "circle",
