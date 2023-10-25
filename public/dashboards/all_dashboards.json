@@ -9,13 +9,13 @@
 		{
 			"name": "民情熱議",
 			"index": "public-opinion",
-			"components": ["4", "5", "72"],
+			"components": ["5", "72"],
 			"icon": "mic"
 		},
 		{
 			"name": "社會安全",
 			"index": "security",
-			"components": ["8", "7", "83", "22", "107", "136"],
+			"components": ["8", "7", "83", "22", "107"],
 			"icon": "security"
 		},
 		{

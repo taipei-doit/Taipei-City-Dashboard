@@ -1,35 +1,5 @@
 {
 	"data": {
-		"4": {
-			"id": 4,
-			"index": "hello_taipei",
-			"map_config": null,
-			"chart_config": {
-				"color": [
-					"#2e999b",
-					"#80e3d4",
-					"#1f9b85",
-					"#a5ece0",
-					"#17675a",
-					"#C2d1d0"
-				],
-				"types": ["BarChart", "DonutChart"],
-				"unit": "件"
-			},
-			"history_data": true,
-			"source": "1999話務系統",
-			"time_from": "2023-05-09T17:05:17+08:00",
-			"time_to": "2023-05-23T17:05:17+08:00",
-			"update_freq": "1",
-			"update_freq_unit": "day",
-			"name": "1999話務案件局處",
-			"short_desc": "顯示近兩週台北市1999市民當家熱線收到的案件之局處分佈",
-			"long_desc": "顯示近兩週台北市1999市民當家熱線收到的案件之局處分佈，資料來源為1999話務中心內部資料，每天更新，並提供一年內各月案件總數的歷史統計。",
-			"use_case": "概覽台北市近期案件的分佈情況，可透過相關指標資料進行深入探討，如一年內案件數統計，有助於更全面地瞭解情況。",
-			"links": null,
-			"tags": [],
-			"contributors": ["tuic"]
-		},
 		"5": {
 			"id": 5,
 			"index": "circular",
@@ -3624,70 +3594,6 @@
 			"links": [
 				"https://data.taipei/dataset/detail?id=d5c0656b-5250-4179-a491-c94daa56ef2c"
 			],
-			"tags": [],
-			"contributors": ["tuic"]
-		},
-		"136": {
-			"id": 136,
-			"index": "public_safety",
-			"map_config": [
-				{
-					"index": "ethc_check_dashboard_detail",
-					"paint": {
-						"circle-color": [
-							"match",
-							["get", "last_audit_result"],
-							"合格",
-							"green",
-							"#B53535"
-						]
-					},
-					"property": [
-						{
-							"key": "name",
-							"name": "機構"
-						},
-						{
-							"key": "addr",
-							"name": "地址"
-						},
-						{
-							"key": "last_audit_result",
-							"name": "最新稽查結果"
-						},
-						{
-							"key": "last_audit_date",
-							"name": "最新稽查時間"
-						},
-						{
-							"key": "prev_audit_result",
-							"name": "前次稽查結果"
-						},
-						{
-							"key": "prev_audit_date",
-							"name": "前次稽查時間"
-						}
-					],
-					"title": "公安聯合稽查",
-					"type": "circle",
-					"icon": "heatmap"
-				}
-			],
-			"chart_config": {
-				"types": ["DistrictChart", "ColumnChart", "RadarChart"],
-				"color": ["#B53535"],
-				"unit": "件"
-			},
-			"name": "公安聯合稽查",
-			"source": "消防局/都發局",
-			"time_from": "2023-01-01T00:00:00+08:00",
-			"time_to": "2023-06-01T00:00:00+08:00",
-			"update_freq": null,
-			"update_freq_unit": null,
-			"short_desc": "顯示被公安聯合稽查的機構稽核結果及各區稽核件數",
-			"long_desc": "顯示被公安聯合稽查的機構稽核結果及各區稽核件數，資料來源為台北市政風處內部資料，每周二更新。",
-			"use_case": "掌握公安聯合稽查結果及稽核件數，並結合其他指標，可有針對性地進行稽查工作。",
-			"links": null,
 			"tags": [],
 			"contributors": ["tuic"]
 		},
