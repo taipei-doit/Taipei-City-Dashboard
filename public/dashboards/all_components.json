@@ -586,7 +586,7 @@
 			},
 			"history_data": true,
 			"source": "警察局",
-			"time_from": "2023-01-31T14:01:00Z",
+			"time_from": "2023-01-31T14:01:00+08:00",
 			"time_to": null,
 			"update_freq": null,
 			"update_freq_unit": null,
@@ -2292,64 +2292,6 @@
 		"90": {
 			"id": 90,
 			"index": "welfare_population",
-			"map_config": [
-				{
-					"index": "socl_welfare_people_by_vil_view",
-					"paint": {
-						"fill-color": [
-							"interpolate",
-							["linear"],
-							["to-number", ["get", "cnt_total"]],
-							0,
-							"rgba(8,103,136,0.1)",
-							250,
-							"rgba(8,103,136,0.5)",
-							500,
-							"rgba(7,160,195,0.5)",
-							750,
-							"rgba(7,160,195,0.75)",
-							1000,
-							"rgba(180,91,91,0.75)",
-							1600,
-							"#dd1c1a"
-						]
-					},
-					"property": [
-						{
-							"key": "dist",
-							"name": "區名"
-						},
-						{
-							"key": "vil",
-							"name": "里名"
-						},
-						{
-							"key": "cnt_low_income",
-							"name": "低收入人口數"
-						},
-						{
-							"key": "cnt_low_middle_income",
-							"name": "中低收人口數"
-						},
-						{
-							"key": "cnt_disabled_allowance",
-							"name": "身障補助數量"
-						},
-						{
-							"key": "cnt_disabled",
-							"name": "身障人口數量"
-						},
-						{
-							"key": "cnt_total",
-							"name": "社福人口總數"
-						}
-					],
-					"type": "fill",
-					"title": "社福人口",
-					"size": null,
-					"icon": null
-				}
-			],
 			"chart_config": {
 				"color": ["#2e999b", "#80e3d4", "#1f9b85", "#a5ece0"],
 				"types": ["DistrictChart", "ColumnChart", "BarPercentChart"],
@@ -3043,7 +2985,7 @@
 			},
 			"history_data": false,
 			"source": "工務局",
-			"time_from": "2022-08-15T00:00:00Z",
+			"time_from": "2022-08-15T00:00:00+08:00",
 			"time_to": null,
 			"update_freq": null,
 			"update_freq_unit": null,
