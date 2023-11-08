@@ -10,6 +10,7 @@ https://docs.mapbox.com/mapbox-gl-js/guides/
 import { createApp, defineComponent, nextTick, ref } from "vue";
 import { defineStore } from "pinia";
 import { useAuthStore } from "./authStore";
+import { useDialogStore } from "./dialogStore";
 import mapboxGl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import axios from "axios";
@@ -448,7 +449,8 @@ export const useMapStore = defineStore("map", {
 		/* Map Filtering */
 		// Add a filter based on a property on a map layer
 		addLayerFilter(layer_id, property, key, map_config) {
-			if (!this.map) {
+			const dialogStore = useDialogStore();
+			if (!this.map || dialogStore.dialogs.moreInfo) {
 				return;
 			}
 			if (map_config && map_config.type === "arc") {
@@ -467,7 +469,8 @@ export const useMapStore = defineStore("map", {
 		},
 		// Remove any filters on a map layer
 		clearLayerFilter(layer_id, map_config) {
-			if (!this.map) {
+			const dialogStore = useDialogStore();
+			if (!this.map || dialogStore.dialogs.moreInfo) {
 				return;
 			}
 			if (map_config && map_config.type === "arc") {

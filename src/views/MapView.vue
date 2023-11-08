@@ -11,20 +11,26 @@ Testing: Jack Huang (Data Scientist), Ian Huang (Data Analysis Intern)
 <!-- Map charts will be hidden in mobile mode and be replaced with the mobileLayers dialog -->
 
 <script setup>
-import { computed } from 'vue';
-import { useContentStore } from '../store/contentStore';
-import { useDialogStore } from '../store/dialogStore';
+import { computed } from "vue";
+import { useContentStore } from "../store/contentStore";
+import { useDialogStore } from "../store/dialogStore";
 
-import ComponentMapChart from '../components/components/ComponentMapChart.vue';
-import MapContainer from '../components/map/MapContainer.vue';
+import ComponentMapChart from "../components/components/ComponentMapChart.vue";
+import MapContainer from "../components/map/MapContainer.vue";
+import MoreInfo from "../components/dialogs/MoreInfo.vue";
+import ReportIssue from "../components/dialogs/ReportIssue.vue";
 
 const contentStore = useContentStore();
 const dialogStore = useDialogStore();
 
 // Separate components with maps from those without
 const parseMapLayers = computed(() => {
-	const hasMap = contentStore.currentDashboard.content.filter((item) => item.map_config);
-	const noMap = contentStore.currentDashboard.content.filter((item) => !item.map_config);
+	const hasMap = contentStore.currentDashboard.content.filter(
+		(item) => item.map_config
+	);
+	const noMap = contentStore.currentDashboard.content.filter(
+		(item) => !item.map_config
+	);
 
 	return { hasMap: hasMap, noMap: noMap };
 });
@@ -34,24 +40,46 @@ const parseMapLayers = computed(() => {
 	<div class="map">
 		<div class="hide-if-mobile">
 			<!-- If the dashboard is map layers -->
-			<div class="map-charts" v-if="contentStore.currentDashboard.index === 'map-layers'">
-				<ComponentMapChart v-for="item in contentStore.currentDashboard.content" :content="item"
-					:key="`map-layer-${item.index}-${contentStore.currentDashboard.index}`" :is-map-layer="true" />
+			<div
+				class="map-charts"
+				v-if="contentStore.currentDashboard.index === 'map-layers'"
+			>
+				<ComponentMapChart
+					v-for="item in contentStore.currentDashboard.content"
+					:content="item"
+					:key="`map-layer-${item.index}-${contentStore.currentDashboard.index}`"
+					:is-map-layer="true"
+				/>
 			</div>
 			<!-- other dashboards that have components -->
-			<div v-else-if="contentStore.currentDashboard.content.length !== 0" class="map-charts">
-				<ComponentMapChart v-for="item in parseMapLayers.hasMap" :content="item"
-					:key="`map-layer-${item.index}-${contentStore.currentDashboard.index}`" />
+			<div
+				v-else-if="contentStore.currentDashboard.content.length !== 0"
+				class="map-charts"
+			>
+				<ComponentMapChart
+					v-for="item in parseMapLayers.hasMap"
+					:content="item"
+					:key="`map-layer-${item.index}-${contentStore.currentDashboard.index}`"
+				/>
 				<h2>基本圖層</h2>
-				<ComponentMapChart v-for="item in contentStore.mapLayers" :content="item"
-					:key="`map-layer-${item.index}-${contentStore.currentDashboard.index}`" :is-map-layer="true" />
-				<h2 v-if="parseMapLayers.noMap.length > 0">無空間資料組件
-				</h2>
-				<ComponentMapChart v-for="item in parseMapLayers.noMap" :content="item"
-					:key="`map-layer-${item.index}-${contentStore.currentDashboard.index}`" />
+				<ComponentMapChart
+					v-for="item in contentStore.mapLayers"
+					:content="item"
+					:key="`map-layer-${item.index}-${contentStore.currentDashboard.index}`"
+					:is-map-layer="true"
+				/>
+				<h2 v-if="parseMapLayers.noMap.length > 0">無空間資料組件</h2>
+				<ComponentMapChart
+					v-for="item in parseMapLayers.noMap"
+					:content="item"
+					:key="`map-layer-${item.index}-${contentStore.currentDashboard.index}`"
+				/>
 			</div>
 			<!-- if dashboard is still loading -->
-			<div v-else-if="contentStore.loading" class="map-charts-nodashboard">
+			<div
+				v-else-if="contentStore.loading"
+				class="map-charts-nodashboard"
+			>
 				<div></div>
 			</div>
 			<!-- if dashboard failed to load -->
@@ -63,12 +91,19 @@ const parseMapLayers = computed(() => {
 			<div v-else class="map-charts-nodashboard">
 				<span>addchart</span>
 				<h2>尚未加入組件</h2>
-				<button @click="dialogStore.showDialog('addComponent')" class="hide-if-mobile"
-					v-if="contentStore.currentDashboard.index !== 'favorites'">加入您的第一個組件</button>
+				<button
+					@click="dialogStore.showDialog('addComponent')"
+					class="hide-if-mobile"
+					v-if="contentStore.currentDashboard.index !== 'favorites'"
+				>
+					加入您的第一個組件
+				</button>
 				<p v-else>點擊其他儀表板組件之愛心以新增至收藏組件</p>
 			</div>
 		</div>
 		<MapContainer />
+		<MoreInfo />
+		<ReportIssue />
 	</div>
 </template>
 
