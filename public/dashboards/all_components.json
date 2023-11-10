@@ -105,6 +105,10 @@
 						{
 							"key": "STATION_NAME",
 							"name": "名稱"
+						},
+						{
+							"key": "ADDR",
+							"name": "地址"
 						}
 					],
 					"type": "symbol",
@@ -122,8 +126,12 @@
 							"name": "轄區"
 						},
 						{
-							"key": "precinct",
+							"key": "police_district_office_name",
 							"name": "所屬分局"
+						},
+						{
+							"key": "police_district_station_name",
+							"name": "所屬派出所"
 						},
 						{
 							"key": "area",
@@ -180,6 +188,10 @@
 						{
 							"key": "名稱",
 							"name": "名稱"
+						},
+						{
+							"key": "鄉鎮",
+							"name": "行政區"
 						},
 						{
 							"key": "服務里別",
@@ -421,7 +433,12 @@
 						"fill-color": "#9e7b5c"
 					},
 					"index": "patrol_old_settlement",
-					"property": [],
+					"property": [
+						{
+							"key": "name",
+							"name": "名稱"
+						}
+					],
 					"type": "fill",
 					"title": "老舊聚落"
 				}
@@ -474,6 +491,10 @@
 						{
 							"key": "app_name",
 							"name": "主管機關"
+						},
+						{
+							"key": "c_name",
+							"name": "行政區"
 						},
 						{
 							"key": "tc_na",
@@ -609,25 +630,12 @@
 					"index": "traffic_bus_route_view",
 					"property": [
 						{
-							"key": "RouteName",
-							"name": "公車",
-							"obj": "En"
-						},
-						{
-							"key": "DutyStatus",
-							"name": "運行狀態"
-						},
-						{
-							"key": "RouteUID",
+							"key": "routeuid",
 							"name": "路線ID"
 						},
 						{
-							"key": "PlateNumb",
-							"name": "車牌號碼"
-						},
-						{
-							"key": "GPSTime",
-							"name": "GPS更新時間"
+							"key": "route_status",
+							"name": "運行狀態"
 						}
 					],
 					"paint": {
@@ -666,7 +674,7 @@
 				{
 					"index": "building_renewunit_30",
 					"paint": {
-						"line-color": "#67baca"
+						"line-color": "#477653"
 					},
 					"property": [
 						{
@@ -684,7 +692,7 @@
 				{
 					"index": "building_renewunit_12",
 					"paint": {
-						"line-color": "#598965"
+						"line-color": "#67baca"
 					},
 					"property": [
 						{
@@ -702,7 +710,7 @@
 				{
 					"index": "building_renewunit_20",
 					"paint": {
-						"line-color": "#477653"
+						"line-color": "#5a8965"
 					},
 					"property": [
 						{
@@ -805,7 +813,7 @@
 							"name": "地址"
 						},
 						{
-							"key": "floors1",
+							"key": "floors",
 							"name": "樓層"
 						},
 						{
@@ -1060,6 +1068,10 @@
 					},
 					"property": [
 						{
+							"key": "thename",
+							"name": "名稱"
+						},
+						{
 							"key": "publand_1_類型",
 							"name": "類型"
 						},
@@ -1096,6 +1108,10 @@
 					},
 					"property": [
 						{
+							"key": "thename",
+							"name": "名稱"
+						},
+						{
 							"key": "publand_1_類型",
 							"name": "類型"
 						},
@@ -1131,6 +1147,10 @@
 						]
 					},
 					"property": [
+						{
+							"key": "thename",
+							"name": "名稱"
+						},
 						{
 							"key": "publand_1_類型",
 							"name": "類型"
@@ -1744,7 +1764,7 @@
 			"index": "dispatch",
 			"map_config": [
 				{
-					"index": "dispatchingpoint_new",
+					"index": "dispatchingpoint",
 					"paint": {
 						"circle-color": "#90dce9"
 					},
@@ -2108,70 +2128,6 @@
 			"long_desc": "顯示當前全市捷運淡水線各車廂擁擠情況，以車廂號碼表示擁擠程度（由綠色到紅色），資料來源為臺北捷運公司內部資料，每3分鐘更新。",
 			"use_case": "了解全市捷運板南線各車廂擁擠情況，以數字與顏色呈現，這有助於乘客選擇車廂並提高乘車舒適度。",
 			"links": ["https://www.metro.taipei/cp.aspx?n=BDEB860F2BE3E249"],
-			"tags": [],
-			"contributors": ["tuic"]
-		},
-		"81": {
-			"id": 81,
-			"index": "tpmo_smart_city",
-			"map_config": [
-				{
-					"index": "it_tpmo_poc_location",
-					"paint": {
-						"circle-color": [
-							"match",
-							["get", "icon_status"],
-							"階段完成",
-							"#D9ED92",
-							"實驗進行中",
-							"#5EBB6D",
-							"階段終止",
-							"#e91e63",
-							"#ccc"
-						]
-					},
-					"property": [
-						{
-							"key": "type",
-							"name": "類別"
-						},
-						{
-							"key": "icon_status",
-							"name": "狀態"
-						},
-						{
-							"key": "name",
-							"name": "名稱"
-						},
-						{
-							"key": "locname",
-							"name": "地點"
-						},
-						{
-							"key": "address",
-							"name": "地址"
-						}
-					],
-					"type": "circle",
-					"size": "big",
-					"title": "TPMO智慧城市專案"
-				}
-			],
-			"name": "TPMO智慧城市專案",
-			"chart_config": {
-				"color": ["#52B69A"],
-				"types": ["ColumnChart", "BarChart", "RadarChart"],
-				"unit": "件"
-			},
-			"source": "TPMO",
-			"time_from": null,
-			"time_to": null,
-			"update_freq": null,
-			"update_freq_unit": null,
-			"short_desc": "顯示全市自某年以來的智慧城市專案類型統計",
-			"long_desc": "顯示全市自某年以來的智慧城市專案類型統計，資料來源為待確定，不定期更新。",
-			"use_case": "就智慧城市專案類型統計資料，由於更新頻率不定，若需最新數據，可隨時查詢相關資料來源。",
-			"links": null,
 			"tags": [],
 			"contributors": ["tuic"]
 		},
@@ -3453,10 +3409,6 @@
 							"name": "電動充電樁"
 						},
 						{
-							"key": "occupied_rate",
-							"name": "使用率"
-						},
-						{
 							"key": "data_time",
 							"name": "更新時間"
 						}
@@ -3499,10 +3451,6 @@
 						{
 							"key": "charging",
 							"name": "電動充電樁"
-						},
-						{
-							"key": "occupied_rate",
-							"name": "使用率"
 						},
 						{
 							"key": "data_time",
@@ -3601,20 +3549,12 @@
 							"name": "車牌"
 						},
 						{
-							"key": "dist",
-							"name": "行政區"
-						},
-						{
 							"key": "route",
 							"name": "路線"
 						},
 						{
 							"key": "arrive_time",
 							"name": "抵達時間"
-						},
-						{
-							"key": "dist",
-							"name": "行政區"
 						},
 						{
 							"key": "leave_time",
@@ -3888,6 +3828,10 @@
 							"name": "站點名稱"
 						},
 						{
+							"key": "dist",
+							"name": "行政區"
+						},
+						{
 							"key": "category",
 							"name": "見車率"
 						}
@@ -3970,6 +3914,10 @@
 						{
 							"key": "stop_name",
 							"name": "站點名稱"
+						},
+						{
+							"key": "dist",
+							"name": "行政區"
 						},
 						{
 							"key": "capacity",
