@@ -3,20 +3,34 @@
 <!-- This component has two modes "outline" and "fill" which is controlled via the prop "mode" -->
 
 <script setup>
-import { useDialogStore } from '../../store/dialogStore';
+import { useDialogStore } from "../../store/dialogStore";
 
 const dialogStore = useDialogStore();
 
 defineProps({
-	icon: String, text: String, mode: {
+	icon: String,
+	text: String,
+	mode: {
 		type: String,
-		default: 'outline'
-	}
+		default: "outline",
+	},
 });
 </script>
 
 <template>
-	<div :class="{ 'componenttag': true, 'componenttag-fill': mode === 'fill', 'componenttag-small': mode === 'small' }" @click="dialogStore.showNotification('info', '為內部版本更新頻率，本展示站台均為靜態資料')">
+	<div
+		:class="{
+			componenttag: true,
+			'componenttag-fill': mode === 'fill',
+			'componenttag-small': mode === 'small',
+		}"
+		@click="
+			dialogStore.showNotification(
+				'info',
+				'為內部版本更新頻率，本展示站台均為靜態資料'
+			)
+		"
+	>
 		<span v-if="icon">{{ icon }}</span>
 		<p>{{ text }}</p>
 	</div>
@@ -53,7 +67,7 @@ defineProps({
 
 		span,
 		p {
-			color: white
+			color: white;
 		}
 	}
 

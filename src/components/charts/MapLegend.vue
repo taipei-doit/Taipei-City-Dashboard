@@ -1,13 +1,15 @@
 <!-- Developed by Taipei Urban Intelligence Center 2023 -->
 
 <script setup>
-import { ref } from 'vue';
-import { useMapStore } from '../../store/mapStore';
+import { ref } from "vue";
+import { useMapStore } from "../../store/mapStore";
+import { useContentStore } from "../../store/contentStore";
 
 const { BASE_URL } = import.meta.env;
 
-const props = defineProps(['chart_config', 'series', 'map_config']);
+const props = defineProps(["chart_config", "series", "map_config"]);
 const mapStore = useMapStore();
+const contentStore = useContentStore();
 
 const selectedIndex = ref(null);
 
@@ -16,10 +18,16 @@ function handleDataSelection(index) {
 		return;
 	}
 	if (index !== selectedIndex.value) {
-		mapStore.addLayerFilter(`${props.map_config[0].index}-${props.map_config[0].type}`, props.chart_config.map_filter[0], props.chart_config.map_filter[1][index]);
+		mapStore.addLayerFilter(
+			`${props.map_config[0].index}-${props.map_config[0].type}`,
+			props.chart_config.map_filter[0],
+			props.chart_config.map_filter[1][index]
+		);
 		selectedIndex.value = index;
 	} else {
-		mapStore.clearLayerFilter(`${props.map_config[0].index}-${props.map_config[0].type}`);
+		mapStore.clearLayerFilter(
+			`${props.map_config[0].index}-${props.map_config[0].type}`
+		);
 		selectedIndex.value = null;
 	}
 }
@@ -28,12 +36,29 @@ function handleDataSelection(index) {
 <template>
 	<div class="maplegend">
 		<div class="maplegend-legend">
-			<button v-for="(item, index) in series" :key="item.name" @click="handleDataSelection(index)"
-				:class="{ 'maplegend-legend-item': true, 'maplegend-selected': selectedIndex === index }">
+			<button
+				v-for="(item, index) in series"
+				:key="item.name"
+				@click="handleDataSelection(index)"
+				:class="{
+					'maplegend-legend-item': true,
+					'maplegend-filter':
+						contentStore.currentDashboard.mode === '/mapview' &&
+						props.chart_config.map_filter,
+					'maplegend-selected':
+						contentStore.currentDashboard.mode === '/mapview' &&
+						selectedIndex === index,
+				}"
+			>
 				<!-- Show different icons for different map types -->
-				<div v-if="item.type !== 'symbol'"
-					:style="{ backgroundColor: `${item.color}`, height: item.type === 'line' ? '0.4rem' : '1rem', borderRadius: item.type === 'circle' ? '50%' : '2px' }">
-				</div>
+				<div
+					v-if="item.type !== 'symbol'"
+					:style="{
+						backgroundColor: `${item.color}`,
+						height: item.type === 'line' ? '0.4rem' : '1rem',
+						borderRadius: item.type === 'circle' ? '50%' : '2px',
+					}"
+				></div>
 				<img v-else :src="`${BASE_URL}/images/map/${item.icon}.png`" />
 				<!-- If there is a value attached, show the value -->
 				<div v-if="item.value">
@@ -62,17 +87,18 @@ function handleDataSelection(index) {
 		width: 100%;
 		display: grid;
 		grid-template-columns: 1fr 1fr;
-		column-gap: 1rem;
-		row-gap: 1rem;
+		column-gap: 0.5rem;
+		row-gap: 0.5rem;
 		overflow: visible;
 
 		&-item {
 			display: flex;
 			align-items: center;
 			padding: 5px 10px 5px 5px;
-			border: 1px solid var(--color-border);
+			border: 1px solid transparent;
 			border-radius: 5px;
 			transition: box-shadow 0.2s;
+			cursor: auto;
 
 			div:first-child,
 			img {
@@ -91,10 +117,15 @@ function handleDataSelection(index) {
 				font-weight: 400;
 				text-align: left;
 			}
+		}
+	}
 
-			&:hover {
-				box-shadow: 0px 0px 5px black;
-			}
+	&-filter {
+		border: 1px solid var(--color-border);
+		cursor: pointer;
+
+		&:hover {
+			box-shadow: 0px 0px 5px black;
 		}
 	}
 

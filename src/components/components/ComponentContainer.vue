@@ -4,12 +4,12 @@
 <!-- The different modes are controlled by the props "notMoreInfo" (default true) and "isMapLayer" (default false) -->
 
 <script setup>
-import { computed, ref } from 'vue';
-import { useDialogStore } from '../../store/dialogStore';
-import { useContentStore } from '../../store/contentStore';
+import { computed, ref } from "vue";
+import { useDialogStore } from "../../store/dialogStore";
+import { useContentStore } from "../../store/contentStore";
 
-import ComponentTag from '../utilities/ComponentTag.vue';
-import { chartTypes } from '../../assets/configs/apexcharts/chartTypes';
+import ComponentTag from "../utilities/ComponentTag.vue";
+import { chartTypes } from "../../assets/configs/apexcharts/chartTypes";
 
 const dialogStore = useDialogStore();
 const contentStore = useContentStore();
@@ -27,12 +27,15 @@ const activeChart = ref(props.content.chart_config.types[0]);
 // Parses time data into display format
 const dataTime = computed(() => {
 	if (!props.content.time_from) {
-		return '固定資料';
+		return "固定資料";
 	}
 	if (!props.content.time_to) {
 		return props.content.time_from.slice(0, 10);
 	}
-	return `${props.content.time_from.slice(0, 10)} ~ ${props.content.time_to.slice(0, 10)}`;
+	return `${props.content.time_from.slice(
+		0,
+		10
+	)} ~ ${props.content.time_to.slice(0, 10)}`;
 });
 // Parses update frequency data into display format
 const updateFreq = computed(() => {
@@ -42,12 +45,14 @@ const updateFreq = computed(() => {
 		day: "天",
 		week: "週",
 		month: "月",
-		year: "年"
+		year: "年",
 	};
 	if (!props.content.update_freq) {
-		return '不定期更新';
+		return "不定期更新";
 	}
-	return `每${props.content.update_freq}${unitRef[props.content.update_freq_unit]}更新`;
+	return `每${props.content.update_freq}${
+		unitRef[props.content.update_freq_unit]
+	}更新`;
 });
 
 // Toggles between chart types defined in the dashboard component
@@ -64,55 +69,154 @@ function toggleFavorite() {
 </script>
 
 <template>
-	<div :class="{ 'componentcontainer': true, 'moreinfostyle': !notMoreInfo, 'maplayer': isMapLayer }">
+	<div
+		:class="{
+			componentcontainer: true,
+			moreinfostyle: !notMoreInfo,
+			maplayer: isMapLayer,
+		}"
+	>
 		<div class="componentcontainer-header">
 			<div>
-				<h3>{{ content.name }}
+				<h3>
+					{{ content.name }}
 					<ComponentTag icon="" :text="updateFreq" mode="small" />
 				</h3>
 				<h4>{{ `${content.source} | ${dataTime}` }}</h4>
 			</div>
 			<div v-if="notMoreInfo">
-				<button v-if="!isMapLayer && contentStore.currentDashboard.index !== 'favorites'"
-					:class="{ 'isfavorite': contentStore.favorites.includes(`${content.id}`) }"
-					@click="toggleFavorite"><span>favorite</span></button>
+				<button
+					v-if="
+						!isMapLayer &&
+						contentStore.currentDashboard.index !== 'favorites'
+					"
+					:class="{
+						isfavorite: contentStore.favorites.includes(
+							`${content.id}`
+						),
+					}"
+					@click="toggleFavorite"
+				>
+					<span>favorite</span>
+				</button>
 				<!-- Change @click to a report issue function to implement functionality -->
-				<button title="回報問題" class="show-if-mobile"
-					@click="dialogStore.showReportIssue(content.id, content.name)"><span>flag</span></button>
+				<button
+					title="回報問題"
+					class="show-if-mobile"
+					@click="
+						dialogStore.showReportIssue(content.id, content.name)
+					"
+				>
+					<span>flag</span>
+				</button>
 				<!-- deleteComponent is currently a dummy function to demonstrate what adding components may look like
                      Connect a backend to actually implement the function or remove altogether -->
-				<button v-if="!isMapLayer" @click="contentStore.deleteComponent(content.id)"
-					class="isDelete"><span>delete</span></button>
-				<button v-if="!isMapLayer && contentStore.currentDashboard.index === 'favorites'"
-					@click="contentStore.deleteComponent(content.id)" class="isUnfavorite"><span>delete</span></button>
+				<button
+					v-if="!isMapLayer"
+					@click="contentStore.deleteComponent(content.id)"
+					class="isDelete"
+				>
+					<span>delete</span>
+				</button>
+				<button
+					v-if="
+						!isMapLayer &&
+						contentStore.currentDashboard.index === 'favorites'
+					"
+					@click="contentStore.deleteComponent(content.id)"
+					class="isUnfavorite"
+				>
+					<span>delete</span>
+				</button>
 			</div>
 		</div>
-		<div class="componentcontainer-control" v-if="props.content.chart_config.types.length > 1">
-			<button v-for="item in props.content.chart_config.types" @click="changeActiveChart(item)"
-				:key="`${props.content.index}-${item}-button`">{{
-					chartTypes[item] }}</button>
+		<div
+			class="componentcontainer-control"
+			v-if="props.content.chart_config.types.length > 1"
+		>
+			<button
+				:class="{
+					'componentcontainer-control-button': true,
+					'componentcontainer-control-active': activeChart === item,
+				}"
+				v-for="item in props.content.chart_config.types"
+				@click="changeActiveChart(item)"
+				:key="`${props.content.index}-${item}-button`"
+			>
+				{{ chartTypes[item] }}
+			</button>
 		</div>
-		<div :class="{ 'componentcontainer-chart': true, 'maplayer-chart': isMapLayer }" v-if="content.chart_data">
+		<div
+			:class="{
+				'componentcontainer-chart': true,
+				'maplayer-chart': isMapLayer,
+			}"
+			v-if="content.chart_data"
+		>
 			<!-- The components referenced here can be edited in /components/charts -->
-			<component v-for="item in content.chart_config.types" :activeChart="activeChart" :is="item"
-				:chart_config="content.chart_config" :series="content.chart_data" :map_config="content.map_config"
-				:key="`${props.content.index}-${item}-chart`">
+			<component
+				v-for="item in content.chart_config.types"
+				:activeChart="activeChart"
+				:is="item"
+				:chart_config="content.chart_config"
+				:series="content.chart_data"
+				:map_config="content.map_config"
+				:key="`${props.content.index}-${item}-chart`"
+			>
 			</component>
 		</div>
-		<div v-else :class="{ 'componentcontainer-loading': true, 'maplayer-loading': isMapLayer }">
+		<div
+			v-else
+			:class="{
+				'componentcontainer-loading': true,
+				'maplayer-loading': isMapLayer,
+			}"
+		>
 			<div></div>
 		</div>
 		<div class="componentcontainer-footer">
 			<div>
-				<ComponentTag v-if="content.chart_config.map_filter && content.map_config" icon="tune" text="篩選地圖"
-					@click="dialogStore.showNotification('info', '本組件有篩選地圖功能，歡迎至地圖頁面嘗試')" class="hide-if-mobile" />
-				<ComponentTag v-if="content.map_config" icon="map" text="空間資料"
-					@click="dialogStore.showNotification('info', '本組件有空間資料，歡迎至地圖頁面查看')" />
-				<ComponentTag v-if="content.history_data" icon="insights" text="歷史資料"
-					@click="dialogStore.showNotification('info', '本組件有歷史資訊，點擊「組件資訊」以查看')" class="history-tag" />
+				<ComponentTag
+					v-if="content.chart_config.map_filter && content.map_config"
+					icon="tune"
+					text="篩選地圖"
+					@click="
+						dialogStore.showNotification(
+							'info',
+							'本組件有篩選地圖功能，歡迎至地圖頁面嘗試'
+						)
+					"
+					class="hide-if-mobile"
+				/>
+				<ComponentTag
+					v-if="content.map_config"
+					icon="map"
+					text="空間資料"
+					@click="
+						dialogStore.showNotification(
+							'info',
+							'本組件有空間資料，歡迎至地圖頁面查看'
+						)
+					"
+				/>
+				<ComponentTag
+					v-if="content.history_data"
+					icon="insights"
+					text="歷史資料"
+					@click="
+						dialogStore.showNotification(
+							'info',
+							'本組件有歷史資訊，點擊「組件資訊」以查看'
+						)
+					"
+					class="history-tag"
+				/>
 			</div>
 			<!-- The content in the target component should be passed into the "showMoreInfo" function of the mapStore to show more info -->
-			<button v-if="notMoreInfo && !isMapLayer" @click="dialogStore.showMoreInfo(content)">
+			<button
+				v-if="notMoreInfo && !isMapLayer"
+				@click="dialogStore.showMoreInfo(content)"
+			>
 				<p>組件資訊</p>
 				<span>arrow_circle_right</span>
 			</button>
@@ -124,8 +228,8 @@ function toggleFavorite() {
 .componentcontainer {
 	height: 330px;
 	max-height: 330px;
-	width: calc(100% - var(--font-m) *2);
-	max-width: calc(100% - var(--font-m) *2);
+	width: calc(100% - var(--font-m) * 2);
+	max-width: calc(100% - var(--font-m) * 2);
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
@@ -180,7 +284,7 @@ function toggleFavorite() {
 			color: rgb(255, 65, 44);
 
 			&:hover {
-				color: rgb(160, 112, 106)
+				color: rgb(160, 112, 106);
 			}
 		}
 
@@ -203,12 +307,12 @@ function toggleFavorite() {
 		justify-content: center;
 		align-items: center;
 		position: absolute;
-		top: 4rem;
+		top: 4.2rem;
 		left: 0;
 		z-index: 8;
 
-		button {
-			margin: 0 4px;
+		&-button {
+			margin: 0 2px;
 			padding: 4px 4px;
 			border-radius: 5px;
 			background-color: rgb(77, 77, 77);
@@ -223,6 +327,11 @@ function toggleFavorite() {
 				opacity: 1;
 				color: white;
 			}
+		}
+
+		&-active {
+			background-color: var(--color-complement-text);
+			color: white;
 		}
 	}
 
@@ -323,7 +432,6 @@ function toggleFavorite() {
 		height: 520px;
 		max-height: 520px;
 	}
-
 }
 
 .maplayer {
