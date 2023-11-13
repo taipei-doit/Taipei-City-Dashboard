@@ -145,6 +145,10 @@ function changeActiveChart(chartName) {
 			v-if="props.content.chart_config.types.length > 1 && checked"
 		>
 			<button
+				:class="{
+					'componentmapchart-control-button': true,
+					'componentmapchart-control-active': activeChart === item,
+				}"
 				v-for="item in props.content.chart_config.types"
 				@click="changeActiveChart(item)"
 				:key="`${props.content.index}-${item}-mapbutton`"
@@ -234,25 +238,31 @@ function changeActiveChart(chartName) {
 		justify-content: center;
 		align-items: center;
 		position: absolute;
-		top: 4rem;
+		top: 4.2rem;
 		left: 0;
-		z-index: 10;
+		z-index: 8;
 
-		button {
-			margin: 0 4px;
+		&-button {
+			margin: 0 2px;
 			padding: 4px 4px;
 			border-radius: 5px;
 			background-color: rgb(77, 77, 77);
-			opacity: 0.25;
+			opacity: 0.6;
 			color: var(--color-complement-text);
 			font-size: var(--font-s);
 			text-align: center;
 			transition: color 0.2s, opacity 0.2s;
+			user-select: none;
 
 			&:hover {
 				opacity: 1;
 				color: white;
 			}
+		}
+
+		&-active {
+			background-color: var(--color-complement-text);
+			color: white;
 		}
 	}
 
@@ -318,8 +328,8 @@ function changeActiveChart(chartName) {
 }
 
 .checked {
-	max-height: 320px;
-	height: 320px;
+	max-height: 330px;
+	height: 330px;
 }
 
 .maplayer {
