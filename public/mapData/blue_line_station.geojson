@@ -1,0 +1,29 @@
+{
+"type": "FeatureCollection",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "stationid": "BL23", "stationname2": "南港展覽館站", "density": "舒適" }, "geometry": { "type": "Point", "coordinates": [ 121.616861, 25.054919 ] } },
+{ "type": "Feature", "properties": { "stationid": "BL22", "stationname2": "南港站", "density": "舒適" }, "geometry": { "type": "Point", "coordinates": [ 121.60697, 25.052035 ] } },
+{ "type": "Feature", "properties": { "stationid": "BL21", "stationname2": "昆陽站", "density": "普通" }, "geometry": { "type": "Point", "coordinates": [ 121.593228, 25.050459 ] } },
+{ "type": "Feature", "properties": { "stationid": "BL20", "stationname2": "後山埤站", "density": "無列車經過" }, "geometry": { "type": "Point", "coordinates": [ 121.58227, 25.044715 ] } },
+{ "type": "Feature", "properties": { "stationid": "BL19", "stationname2": "永春站", "density": "舒適" }, "geometry": { "type": "Point", "coordinates": [ 121.5762, 25.040855 ] } },
+{ "type": "Feature", "properties": { "stationid": "BL18", "stationname2": "市政府站", "density": "舒適" }, "geometry": { "type": "Point", "coordinates": [ 121.565685, 25.041135 ] } },
+{ "type": "Feature", "properties": { "stationid": "BL17", "stationname2": "國父紀念館站", "density": "無列車經過" }, "geometry": { "type": "Point", "coordinates": [ 121.557815, 25.04137 ] } },
+{ "type": "Feature", "properties": { "stationid": "BL16", "stationname2": "忠孝敦化站", "density": "舒適" }, "geometry": { "type": "Point", "coordinates": [ 121.55045, 25.041505 ] } },
+{ "type": "Feature", "properties": { "stationid": "BL15", "stationname2": "忠孝復興站", "density": "略多" }, "geometry": { "type": "Point", "coordinates": [ 121.545026, 25.041749 ] } },
+{ "type": "Feature", "properties": { "stationid": "BL14", "stationname2": "忠孝新生站", "density": "無列車經過" }, "geometry": { "type": "Point", "coordinates": [ 121.53321, 25.042498 ] } },
+{ "type": "Feature", "properties": { "stationid": "BL13", "stationname2": "善導寺站", "density": "普通" }, "geometry": { "type": "Point", "coordinates": [ 121.523885, 25.04468 ] } },
+{ "type": "Feature", "properties": { "stationid": "BL12", "stationname2": "台北車站站", "density": "無列車經過" }, "geometry": { "type": "Point", "coordinates": [ 121.517415, 25.04631 ] } },
+{ "type": "Feature", "properties": { "stationid": "BL11", "stationname2": "西門站", "density": "普通" }, "geometry": { "type": "Point", "coordinates": [ 121.508175, 25.042025 ] } },
+{ "type": "Feature", "properties": { "stationid": "BL10", "stationname2": "龍山寺站", "density": "舒適" }, "geometry": { "type": "Point", "coordinates": [ 121.500325, 25.03528 ] } },
+{ "type": "Feature", "properties": { "stationid": "BL09", "stationname2": "江子翠站", "density": "普通" }, "geometry": { "type": "Point", "coordinates": [ 121.47257, 25.030265 ] } },
+{ "type": "Feature", "properties": { "stationid": "BL08", "stationname2": "新埔站", "density": "無列車經過" }, "geometry": { "type": "Point", "coordinates": [ 121.468055, 25.02327 ] } },
+{ "type": "Feature", "properties": { "stationid": "BL07", "stationname2": "板橋站", "density": "舒適" }, "geometry": { "type": "Point", "coordinates": [ 121.462305, 25.013825 ] } },
+{ "type": "Feature", "properties": { "stationid": "BL06", "stationname2": "府中站", "density": "舒適" }, "geometry": { "type": "Point", "coordinates": [ 121.459276, 25.008465 ] } },
+{ "type": "Feature", "properties": { "stationid": "BL05", "stationname2": "亞東醫院站", "density": "普通" }, "geometry": { "type": "Point", "coordinates": [ 121.452465, 24.99828 ] } },
+{ "type": "Feature", "properties": { "stationid": "BL04", "stationname2": "海山站", "density": "無列車經過" }, "geometry": { "type": "Point", "coordinates": [ 121.44873, 24.985305 ] } },
+{ "type": "Feature", "properties": { "stationid": "BL03", "stationname2": "土城站", "density": "舒適" }, "geometry": { "type": "Point", "coordinates": [ 121.44432, 24.97313 ] } },
+{ "type": "Feature", "properties": { "stationid": "BL02", "stationname2": "永寧站", "density": "舒適" }, "geometry": { "type": "Point", "coordinates": [ 121.43613, 24.96682 ] } },
+{ "type": "Feature", "properties": { "stationid": "BL01", "stationname2": "頂埔站", "density": "舒適" }, "geometry": { "type": "Point", "coordinates": [ 121.4205, 24.96012 ] } }
+]
+}

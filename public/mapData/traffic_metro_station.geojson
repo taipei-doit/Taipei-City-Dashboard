@@ -1,0 +1,2579 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.121",
+      "geometry": { "type": "Point", "coordinates": [121.616861, 25.054919] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "BL23",
+        "stationname1": "南港展覽館",
+        "stationname2": "南港展覽館站",
+        "lng_x": 121.616861,
+        "lat_y": 25.054919,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.6168811, 25.0545633] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:06:00Z"
+      },
+      "bbox": [121.616861, 25.0545633, 121.6168811, 25.054919]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.120",
+      "geometry": { "type": "Point", "coordinates": [121.60697, 25.052035] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "BL22",
+        "stationname1": "南港",
+        "stationname2": "南港站",
+        "lng_x": 121.60697,
+        "lat_y": 25.052035,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.6069583, 25.0521366] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:06:00Z"
+      },
+      "bbox": [121.6069583, 25.052035, 121.60697, 25.0521366]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.119",
+      "geometry": { "type": "Point", "coordinates": [121.593228, 25.050459] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "BL21",
+        "stationname1": "昆陽",
+        "stationname2": "昆陽站",
+        "lng_x": 121.593228,
+        "lat_y": 25.050459,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.5932273, 25.0504621] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:06:00Z"
+      },
+      "bbox": [121.5932273, 25.050459, 121.593228, 25.0504621]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.118",
+      "geometry": { "type": "Point", "coordinates": [121.58227, 25.044715] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "BL20",
+        "stationname1": "後山埤",
+        "stationname2": "後山埤站",
+        "lng_x": 121.58227,
+        "lat_y": 25.044715,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.5822828, 25.0447059] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:06:00Z"
+      },
+      "bbox": [121.58227, 25.0447059, 121.5822828, 25.044715]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.117",
+      "geometry": { "type": "Point", "coordinates": [121.5762, 25.040855] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "BL19",
+        "stationname1": "永春",
+        "stationname2": "永春站",
+        "lng_x": 121.5762,
+        "lat_y": 25.040855,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.5761998, 25.0408456] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:06:00Z"
+      },
+      "bbox": [121.5761998, 25.0408456, 121.5762, 25.040855]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.116",
+      "geometry": { "type": "Point", "coordinates": [121.565685, 25.041135] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "BL18",
+        "stationname1": "市政府",
+        "stationname2": "市政府站",
+        "lng_x": 121.565685,
+        "lat_y": 25.041135,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.565685, 25.0411356] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:06:00Z"
+      },
+      "bbox": [121.565685, 25.041135, 121.565685, 25.0411356]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.115",
+      "geometry": { "type": "Point", "coordinates": [121.557815, 25.04137] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "BL17",
+        "stationname1": "國父紀念館",
+        "stationname2": "國父紀念館站",
+        "lng_x": 121.557815,
+        "lat_y": 25.04137,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.5578144, 25.0413436] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:06:00Z"
+      },
+      "bbox": [121.5578144, 25.0413436, 121.557815, 25.04137]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.114",
+      "geometry": { "type": "Point", "coordinates": [121.55045, 25.041505] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "BL16",
+        "stationname1": "忠孝敦化",
+        "stationname2": "忠孝敦化站",
+        "lng_x": 121.55045,
+        "lat_y": 25.041505,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.5504498, 25.0414936] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:06:00Z"
+      },
+      "bbox": [121.5504498, 25.0414936, 121.55045, 25.041505]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.113",
+      "geometry": { "type": "Point", "coordinates": [121.545026, 25.041749] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "BL15",
+        "stationname1": "忠孝復興",
+        "stationname2": "忠孝復興站",
+        "lng_x": 121.545026,
+        "lat_y": 25.041749,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.5450235, 25.0416284] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:06:00Z"
+      },
+      "bbox": [121.5450235, 25.0416284, 121.545026, 25.041749]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.112",
+      "geometry": { "type": "Point", "coordinates": [121.53321, 25.042498] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "BL14",
+        "stationname1": "忠孝新生",
+        "stationname2": "忠孝新生站",
+        "lng_x": 121.53321,
+        "lat_y": 25.042498,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.5331698, 25.0423125] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:06:00Z"
+      },
+      "bbox": [121.5331698, 25.0423125, 121.53321, 25.042498]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.111",
+      "geometry": { "type": "Point", "coordinates": [121.523885, 25.04468] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "BL13",
+        "stationname1": "善導寺",
+        "stationname2": "善導寺站",
+        "lng_x": 121.523885,
+        "lat_y": 25.04468,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.5238855, 25.044682] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:06:00Z"
+      },
+      "bbox": [121.523885, 25.04468, 121.5238855, 25.044682]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.110",
+      "geometry": { "type": "Point", "coordinates": [121.517415, 25.04631] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "BL12",
+        "stationname1": "台北車站",
+        "stationname2": "台北車站站",
+        "lng_x": 121.517415,
+        "lat_y": 25.04631,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.5173912, 25.0462117] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:06:00Z"
+      },
+      "bbox": [121.5173912, 25.0462117, 121.517415, 25.04631]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.109",
+      "geometry": { "type": "Point", "coordinates": [121.508175, 25.042025] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "BL11",
+        "stationname1": "西門",
+        "stationname2": "西門站",
+        "lng_x": 121.508175,
+        "lat_y": 25.042025,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.508369, 25.0419695] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:06:00Z"
+      },
+      "bbox": [121.508175, 25.0419695, 121.508369, 25.042025]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.108",
+      "geometry": { "type": "Point", "coordinates": [121.500325, 25.03528] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "BL10",
+        "stationname1": "龍山寺",
+        "stationname2": "龍山寺站",
+        "lng_x": 121.500325,
+        "lat_y": 25.03528,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.5003241, 25.0352504] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:05:00Z"
+      },
+      "bbox": [121.5003241, 25.0352504, 121.500325, 25.03528]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.107",
+      "geometry": { "type": "Point", "coordinates": [121.47257, 25.030265] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "BL09",
+        "stationname1": "江子翠",
+        "stationname2": "江子翠站",
+        "lng_x": 121.47257,
+        "lat_y": 25.030265,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.4725713, 25.0302638] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:05:00Z"
+      },
+      "bbox": [121.47257, 25.0302638, 121.4725713, 25.030265]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.106",
+      "geometry": { "type": "Point", "coordinates": [121.468055, 25.02327] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "BL08",
+        "stationname1": "新埔",
+        "stationname2": "新埔站",
+        "lng_x": 121.468055,
+        "lat_y": 25.02327,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.4681252, 25.0232299] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:05:00Z"
+      },
+      "bbox": [121.468055, 25.0232299, 121.4681252, 25.02327]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.105",
+      "geometry": { "type": "Point", "coordinates": [121.462305, 25.013825] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "BL07",
+        "stationname1": "板橋",
+        "stationname2": "板橋站",
+        "lng_x": 121.462305,
+        "lat_y": 25.013825,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.4624041, 25.0137451] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:05:00Z"
+      },
+      "bbox": [121.462305, 25.0137451, 121.4624041, 25.013825]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.104",
+      "geometry": { "type": "Point", "coordinates": [121.459276, 25.008465] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "BL06",
+        "stationname1": "府中",
+        "stationname2": "府中站",
+        "lng_x": 121.459276,
+        "lat_y": 25.008465,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.4590972, 25.0086398] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:05:00Z"
+      },
+      "bbox": [121.4590972, 25.008465, 121.459276, 25.0086398]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.103",
+      "geometry": { "type": "Point", "coordinates": [121.452465, 24.99828] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "BL05",
+        "stationname1": "亞東醫院",
+        "stationname2": "亞東醫院站",
+        "lng_x": 121.452465,
+        "lat_y": 24.99828,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.4524847, 24.9982736] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:05:00Z"
+      },
+      "bbox": [121.452465, 24.9982736, 121.4524847, 24.99828]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.102",
+      "geometry": { "type": "Point", "coordinates": [121.44873, 24.985305] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "BL04",
+        "stationname1": "海山",
+        "stationname2": "海山站",
+        "lng_x": 121.44873,
+        "lat_y": 24.985305,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.4487521, 24.9853012] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:05:00Z"
+      },
+      "bbox": [121.44873, 24.9853012, 121.4487521, 24.985305]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.101",
+      "geometry": { "type": "Point", "coordinates": [121.44432, 24.97313] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "BL03",
+        "stationname1": "土城",
+        "stationname2": "土城站",
+        "lng_x": 121.44432,
+        "lat_y": 24.97313,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.4443311, 24.973119] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:05:00Z"
+      },
+      "bbox": [121.44432, 24.973119, 121.4443311, 24.97313]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.100",
+      "geometry": { "type": "Point", "coordinates": [121.43613, 24.96682] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "BL02",
+        "stationname1": "永寧",
+        "stationname2": "永寧站",
+        "lng_x": 121.43613,
+        "lat_y": 24.96682,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.4361509, 24.966791] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:05:00Z"
+      },
+      "bbox": [121.43613, 24.966791, 121.4361509, 24.96682]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.99",
+      "geometry": { "type": "Point", "coordinates": [121.4205, 24.96012] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "BL01",
+        "stationname1": "頂埔",
+        "stationname2": "頂埔站",
+        "lng_x": 121.4205,
+        "lat_y": 24.96012,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.4203147, 24.960387] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:05:00Z"
+      },
+      "bbox": [121.4203147, 24.96012, 121.4205, 24.960387]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.24",
+      "geometry": { "type": "Point", "coordinates": [121.616861, 25.054919] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "BR24",
+        "stationname1": "南港展覽館",
+        "stationname2": "南港展覽館站",
+        "lng_x": 121.616861,
+        "lat_y": 25.054919,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.6171072, 25.0554581] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:08:00Z"
+      },
+      "bbox": [121.616861, 25.054919, 121.6171072, 25.0554581]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.1",
+      "geometry": { "type": "Point", "coordinates": [121.579501, 24.998205] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "BR01",
+        "stationname1": "動物園",
+        "stationname2": "動物園站",
+        "lng_x": 121.579501,
+        "lat_y": 24.998205,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.5794375, 24.9983101] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:07:00Z"
+      },
+      "bbox": [121.5794375, 24.998205, 121.579501, 24.9983101]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.2",
+      "geometry": { "type": "Point", "coordinates": [121.573127, 24.99824] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "BR02",
+        "stationname1": "木柵",
+        "stationname2": "木柵站",
+        "lng_x": 121.573127,
+        "lat_y": 24.99824,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.5731308, 24.9982588] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:07:00Z"
+      },
+      "bbox": [121.573127, 24.99824, 121.5731308, 24.9982588]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.3",
+      "geometry": { "type": "Point", "coordinates": [121.568088, 24.99857] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "BR03",
+        "stationname1": "萬芳社區",
+        "stationname2": "萬芳社區站",
+        "lng_x": 121.568088,
+        "lat_y": 24.99857,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.5680866, 24.9986045] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:07:00Z"
+      },
+      "bbox": [121.5680866, 24.99857, 121.568088, 24.9986045]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.4",
+      "geometry": { "type": "Point", "coordinates": [121.558092, 24.99932] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "BR04",
+        "stationname1": "萬芳醫院",
+        "stationname2": "萬芳醫院站",
+        "lng_x": 121.558092,
+        "lat_y": 24.99932,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.558161, 24.9994227] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:07:00Z"
+      },
+      "bbox": [121.558092, 24.99932, 121.558161, 24.9994227]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.5",
+      "geometry": { "type": "Point", "coordinates": [121.557046, 25.005455] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "BR05",
+        "stationname1": "辛亥",
+        "stationname2": "辛亥站",
+        "lng_x": 121.557046,
+        "lat_y": 25.005455,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.5570754, 25.005439] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:07:00Z"
+      },
+      "bbox": [121.557046, 25.005439, 121.5570754, 25.005455]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.6",
+      "geometry": { "type": "Point", "coordinates": [121.558834, 25.018495] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "BR06",
+        "stationname1": "麟光",
+        "stationname2": "麟光站",
+        "lng_x": 121.558834,
+        "lat_y": 25.018495,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.5588317, 25.0184924] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:07:00Z"
+      },
+      "bbox": [121.5588317, 25.0184924, 121.558834, 25.018495]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.7",
+      "geometry": { "type": "Point", "coordinates": [121.55302, 25.02381] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "BR07",
+        "stationname1": "六張犁",
+        "stationname2": "六張犁站",
+        "lng_x": 121.55302,
+        "lat_y": 25.02381,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.5530734, 25.0238661] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:07:00Z"
+      },
+      "bbox": [121.55302, 25.02381, 121.5530734, 25.0238661]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.8",
+      "geometry": { "type": "Point", "coordinates": [121.543462, 25.02612] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "BR08",
+        "stationname1": "科技大樓",
+        "stationname2": "科技大樓站",
+        "lng_x": 121.543462,
+        "lat_y": 25.02612,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.5434467, 25.0261202] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:07:00Z"
+      },
+      "bbox": [121.5434467, 25.02612, 121.543462, 25.0261202]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.9",
+      "geometry": { "type": "Point", "coordinates": [121.54237, 25.033311] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "BR09",
+        "stationname1": "大安",
+        "stationname2": "大安站",
+        "lng_x": 121.54237,
+        "lat_y": 25.033311,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.5435944, 25.0332877] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:07:00Z"
+      },
+      "bbox": [121.54237, 25.0332877, 121.5435944, 25.033311]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.10",
+      "geometry": { "type": "Point", "coordinates": [121.545026, 25.041749] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "BR10",
+        "stationname1": "忠孝復興",
+        "stationname2": "忠孝復興站",
+        "lng_x": 121.545026,
+        "lat_y": 25.041749,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.5437749, 25.0417787] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:07:00Z"
+      },
+      "bbox": [121.5437749, 25.041749, 121.545026, 25.0417787]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.11",
+      "geometry": { "type": "Point", "coordinates": [121.544303, 25.052044] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "BR11",
+        "stationname1": "南京復興",
+        "stationname2": "南京復興站",
+        "lng_x": 121.544303,
+        "lat_y": 25.052044,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.544034, 25.0520507] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:07:00Z"
+      },
+      "bbox": [121.544034, 25.052044, 121.544303, 25.0520507]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.12",
+      "geometry": { "type": "Point", "coordinates": [121.544215, 25.06085] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "BR12",
+        "stationname1": "中山國中",
+        "stationname2": "中山國中站",
+        "lng_x": 121.544215,
+        "lat_y": 25.06085,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.5442057, 25.0608502] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:07:00Z"
+      },
+      "bbox": [121.5442057, 25.06085, 121.544215, 25.0608502]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.13",
+      "geometry": { "type": "Point", "coordinates": [121.55201, 25.062908] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "BR13",
+        "stationname1": "松山機場",
+        "stationname2": "松山機場站",
+        "lng_x": 121.55201,
+        "lat_y": 25.062908,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.5520071, 25.0630518] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:07:00Z"
+      },
+      "bbox": [121.5520071, 25.062908, 121.55201, 25.0630518]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.14",
+      "geometry": { "type": "Point", "coordinates": [121.54679, 25.07943] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "BR14",
+        "stationname1": "大直",
+        "stationname2": "大直站",
+        "lng_x": 121.54679,
+        "lat_y": 25.07943,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.5467792, 25.0794446] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:08:00Z"
+      },
+      "bbox": [121.5467792, 25.07943, 121.54679, 25.0794446]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.15",
+      "geometry": { "type": "Point", "coordinates": [121.555582, 25.08483] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "BR15",
+        "stationname1": "劍南路",
+        "stationname2": "劍南路站",
+        "lng_x": 121.555582,
+        "lat_y": 25.08483,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.5555933, 25.0848682] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:08:00Z"
+      },
+      "bbox": [121.555582, 25.08483, 121.5555933, 25.0848682]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.16",
+      "geometry": { "type": "Point", "coordinates": [121.567227, 25.08216] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "BR16",
+        "stationname1": "西湖",
+        "stationname2": "西湖站",
+        "lng_x": 121.567227,
+        "lat_y": 25.08216,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.5672271, 25.0821633] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:08:00Z"
+      },
+      "bbox": [121.567227, 25.08216, 121.5672271, 25.0821633]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.17",
+      "geometry": { "type": "Point", "coordinates": [121.57516, 25.08007] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "BR17",
+        "stationname1": "港墘",
+        "stationname2": "港墘站",
+        "lng_x": 121.57516,
+        "lat_y": 25.08007,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.5751667, 25.0800876] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:08:00Z"
+      },
+      "bbox": [121.57516, 25.08007, 121.5751667, 25.0800876]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.18",
+      "geometry": { "type": "Point", "coordinates": [121.584999, 25.078455] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "BR18",
+        "stationname1": "文德",
+        "stationname2": "文德站",
+        "lng_x": 121.584999,
+        "lat_y": 25.078455,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.584997, 25.0785567] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:08:00Z"
+      },
+      "bbox": [121.584997, 25.078455, 121.584999, 25.0785567]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.19",
+      "geometry": { "type": "Point", "coordinates": [121.594363, 25.083675] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "BR19",
+        "stationname1": "內湖",
+        "stationname2": "內湖站",
+        "lng_x": 121.594363,
+        "lat_y": 25.083675,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.594378, 25.0836546] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:08:00Z"
+      },
+      "bbox": [121.594363, 25.0836546, 121.594378, 25.083675]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.20",
+      "geometry": { "type": "Point", "coordinates": [121.602214, 25.083805] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "BR20",
+        "stationname1": "大湖公園",
+        "stationname2": "大湖公園站",
+        "lng_x": 121.602214,
+        "lat_y": 25.083805,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.6022282, 25.083828] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:08:00Z"
+      },
+      "bbox": [121.602214, 25.083805, 121.6022282, 25.083828]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.21",
+      "geometry": { "type": "Point", "coordinates": [121.607146, 25.07271] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "BR21",
+        "stationname1": "葫洲",
+        "stationname2": "葫洲站",
+        "lng_x": 121.607146,
+        "lat_y": 25.07271,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.6071528, 25.0727254] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:08:00Z"
+      },
+      "bbox": [121.607146, 25.07271, 121.6071528, 25.0727254]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.22",
+      "geometry": { "type": "Point", "coordinates": [121.611535, 25.067455] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "BR22",
+        "stationname1": "東湖",
+        "stationname2": "東湖站",
+        "lng_x": 121.611535,
+        "lat_y": 25.067455,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.6115992, 25.0674158] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:08:00Z"
+      },
+      "bbox": [121.611535, 25.0674158, 121.6115992, 25.067455]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.23",
+      "geometry": { "type": "Point", "coordinates": [121.615, 25.05992] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "BR23",
+        "stationname1": "南港軟體園區",
+        "stationname2": "南港軟體園區站",
+        "lng_x": 121.615,
+        "lat_y": 25.05992,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.6152262, 25.0603088] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:08:00Z"
+      },
+      "bbox": [121.615, 25.05992, 121.6152262, 25.0603088]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.68",
+      "geometry": { "type": "Point", "coordinates": [121.53285, 25.052693] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "G15",
+        "stationname1": "松江南京",
+        "stationname2": "松江南京站",
+        "lng_x": 121.53285,
+        "lat_y": 25.052693,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.5328445, 25.0520588] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:10:00Z"
+      },
+      "bbox": [121.5328445, 25.0520588, 121.53285, 25.052693]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.72",
+      "geometry": { "type": "Point", "coordinates": [121.577706, 25.050118] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "G19",
+        "stationname1": "松山",
+        "stationname2": "松山站",
+        "lng_x": 121.577706,
+        "lat_y": 25.050118,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.5777077, 25.050069] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:10:00Z"
+      },
+      "bbox": [121.577706, 25.050069, 121.5777077, 25.050118]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.71",
+      "geometry": { "type": "Point", "coordinates": [121.56471, 25.051588] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "G18",
+        "stationname1": "南京三民",
+        "stationname2": "南京三民站",
+        "lng_x": 121.56471,
+        "lat_y": 25.051588,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.5647064, 25.0514024] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:10:00Z"
+      },
+      "bbox": [121.5647064, 25.0514024, 121.56471, 25.051588]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.70",
+      "geometry": { "type": "Point", "coordinates": [121.552549, 25.05152] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "G17",
+        "stationname1": "台北小巨蛋",
+        "stationname2": "台北小巨蛋站",
+        "lng_x": 121.552549,
+        "lat_y": 25.05152,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.5525519, 25.0516647] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:10:00Z"
+      },
+      "bbox": [121.552549, 25.05152, 121.5525519, 25.0516647]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.69",
+      "geometry": { "type": "Point", "coordinates": [121.544303, 25.052044] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "G16",
+        "stationname1": "南京復興",
+        "stationname2": "南京復興站",
+        "lng_x": 121.544303,
+        "lat_y": 25.052044,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.5442995, 25.0518758] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:10:00Z"
+      },
+      "bbox": [121.5442995, 25.0518758, 121.544303, 25.052044]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.53",
+      "geometry": { "type": "Point", "coordinates": [121.53746, 24.95761] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "G01",
+        "stationname1": "新店",
+        "stationname2": "新店站",
+        "lng_x": 121.53746,
+        "lat_y": 24.95761,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.5374883, 24.957601] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:08:00Z"
+      },
+      "bbox": [121.53746, 24.957601, 121.5374883, 24.95761]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.54",
+      "geometry": { "type": "Point", "coordinates": [121.5413, 24.96744] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "G02",
+        "stationname1": "新店區公所",
+        "stationname2": "新店區公所站",
+        "lng_x": 121.5413,
+        "lat_y": 24.96744,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.541375, 24.9674137] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:09:00Z"
+      },
+      "bbox": [121.5413, 24.9674137, 121.541375, 24.96744]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.55",
+      "geometry": { "type": "Point", "coordinates": [121.542985, 24.97545] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "G03",
+        "stationname1": "七張",
+        "stationname2": "七張站",
+        "lng_x": 121.542985,
+        "lat_y": 24.97545,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.5429201, 24.9754493] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:09:00Z"
+      },
+      "bbox": [121.5429201, 24.9754493, 121.542985, 24.97545]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.56",
+      "geometry": { "type": "Point", "coordinates": [121.53058, 24.97188] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "G03A",
+        "stationname1": "小碧潭",
+        "stationname2": "小碧潭站",
+        "lng_x": 121.53058,
+        "lat_y": 24.97188,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.5305334, 24.9717946] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:10:00Z"
+      },
+      "bbox": [121.5305334, 24.9717946, 121.53058, 24.97188]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.57",
+      "geometry": { "type": "Point", "coordinates": [121.54134, 24.98272] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "G04",
+        "stationname1": "大坪林",
+        "stationname2": "大坪林站",
+        "lng_x": 121.54134,
+        "lat_y": 24.98272,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.5413671, 24.9827247] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:09:00Z"
+      },
+      "bbox": [121.54134, 24.98272, 121.5413671, 24.9827247]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.58",
+      "geometry": { "type": "Point", "coordinates": [121.540697, 24.992824] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "G05",
+        "stationname1": "景美",
+        "stationname2": "景美站",
+        "lng_x": 121.540697,
+        "lat_y": 24.992824,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.540732, 24.9928115] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:09:00Z"
+      },
+      "bbox": [121.540697, 24.9928115, 121.540732, 24.992824]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.59",
+      "geometry": { "type": "Point", "coordinates": [121.539008, 25.001978] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "G06",
+        "stationname1": "萬隆",
+        "stationname2": "萬隆站",
+        "lng_x": 121.539008,
+        "lat_y": 25.001978,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.5389889, 25.0019717] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:09:00Z"
+      },
+      "bbox": [121.5389889, 25.0019717, 121.539008, 25.001978]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.60",
+      "geometry": { "type": "Point", "coordinates": [121.534358, 25.014781] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "G07",
+        "stationname1": "公館",
+        "stationname2": "公館站",
+        "lng_x": 121.534358,
+        "lat_y": 25.014781,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.534328, 25.0147497] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:09:00Z"
+      },
+      "bbox": [121.534328, 25.0147497, 121.534358, 25.014781]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.61",
+      "geometry": { "type": "Point", "coordinates": [121.528143, 25.020733] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "G08",
+        "stationname1": "台電大樓",
+        "stationname2": "台電大樓站",
+        "lng_x": 121.528143,
+        "lat_y": 25.020733,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.5281402, 25.02073] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:09:00Z"
+      },
+      "bbox": [121.5281402, 25.02073, 121.528143, 25.020733]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.62",
+      "geometry": { "type": "Point", "coordinates": [121.522868, 25.026373] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "G09",
+        "stationname1": "古亭",
+        "stationname2": "古亭站",
+        "lng_x": 121.522868,
+        "lat_y": 25.026373,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.5228611, 25.0263679] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:09:00Z"
+      },
+      "bbox": [121.5228611, 25.0263679, 121.522868, 25.026373]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.63",
+      "geometry": { "type": "Point", "coordinates": [121.518273, 25.032767] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "G10",
+        "stationname1": "中正紀念堂",
+        "stationname2": "中正紀念堂站",
+        "lng_x": 121.518273,
+        "lat_y": 25.032767,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.5181771, 25.0326955] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:09:00Z"
+      },
+      "bbox": [121.5181771, 25.0326955, 121.518273, 25.032767]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.64",
+      "geometry": { "type": "Point", "coordinates": [121.51088, 25.035585] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "G11",
+        "stationname1": "小南門",
+        "stationname2": "小南門站",
+        "lng_x": 121.51088,
+        "lat_y": 25.035585,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.5109752, 25.0358964] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:09:00Z"
+      },
+      "bbox": [121.51088, 25.035585, 121.5109752, 25.0358964]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.65",
+      "geometry": { "type": "Point", "coordinates": [121.508175, 25.042025] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "G12",
+        "stationname1": "西門",
+        "stationname2": "西門站",
+        "lng_x": 121.508175,
+        "lat_y": 25.042025,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.5085349, 25.0419209] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:09:00Z"
+      },
+      "bbox": [121.508175, 25.0419209, 121.5085349, 25.042025]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.66",
+      "geometry": { "type": "Point", "coordinates": [121.510184, 25.049554] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "G13",
+        "stationname1": "北門",
+        "stationname2": "北門站",
+        "lng_x": 121.510184,
+        "lat_y": 25.049554,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.5103069, 25.0495266] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:09:00Z"
+      },
+      "bbox": [121.510184, 25.0495266, 121.5103069, 25.049554]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.67",
+      "geometry": { "type": "Point", "coordinates": [121.520364, 25.052621] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "G14",
+        "stationname1": "中山",
+        "stationname2": "中山站",
+        "lng_x": 121.520364,
+        "lat_y": 25.052621,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.5203698, 25.0526456] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:09:00Z"
+      },
+      "bbox": [121.520364, 25.052621, 121.5203698, 25.0526456]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.81",
+      "geometry": { "type": "Point", "coordinates": [121.53315, 25.05924] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "O09",
+        "stationname1": "行天宮",
+        "stationname2": "行天宮站",
+        "lng_x": 121.53315,
+        "lat_y": 25.05924,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.5331673, 25.0592396] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:11:00Z"
+      },
+      "bbox": [121.53315, 25.0592396, 121.5331673, 25.05924]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.73",
+      "geometry": { "type": "Point", "coordinates": [121.509237, 24.990065] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "O01",
+        "stationname1": "南勢角",
+        "stationname2": "南勢角站",
+        "lng_x": 121.509237,
+        "lat_y": 24.990065,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.5091506, 24.9898841] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:10:00Z"
+      },
+      "bbox": [121.5091506, 24.9898841, 121.509237, 24.990065]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.74",
+      "geometry": { "type": "Point", "coordinates": [121.505114, 24.99392] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "O02",
+        "stationname1": "景安",
+        "stationname2": "景安站",
+        "lng_x": 121.505114,
+        "lat_y": 24.99392,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.5050931, 24.993926] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:10:00Z"
+      },
+      "bbox": [121.5050931, 24.99392, 121.505114, 24.993926]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.75",
+      "geometry": { "type": "Point", "coordinates": [121.511225, 25.002895] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "O03",
+        "stationname1": "永安市場",
+        "stationname2": "永安市場站",
+        "lng_x": 121.511225,
+        "lat_y": 25.002895,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.5112277, 25.0028926] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:10:00Z"
+      },
+      "bbox": [121.511225, 25.0028926, 121.5112277, 25.002895]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.76",
+      "geometry": { "type": "Point", "coordinates": [121.515462, 25.013858] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "O04",
+        "stationname1": "頂溪",
+        "stationname2": "頂溪站",
+        "lng_x": 121.515462,
+        "lat_y": 25.013858,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.5155217, 25.0138416] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:10:00Z"
+      },
+      "bbox": [121.515462, 25.0138416, 121.5155217, 25.013858]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.77",
+      "geometry": { "type": "Point", "coordinates": [121.522868, 25.026373] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "O05",
+        "stationname1": "古亭",
+        "stationname2": "古亭站",
+        "lng_x": 121.522868,
+        "lat_y": 25.026373,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.5229802, 25.0264552] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:10:00Z"
+      },
+      "bbox": [121.522868, 25.026373, 121.5229802, 25.0264552]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.78",
+      "geometry": { "type": "Point", "coordinates": [121.528766, 25.033894] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "O06",
+        "stationname1": "東門",
+        "stationname2": "東門站",
+        "lng_x": 121.528766,
+        "lat_y": 25.033894,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.5287768, 25.033975] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:10:00Z"
+      },
+      "bbox": [121.528766, 25.033894, 121.5287768, 25.033975]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.79",
+      "geometry": { "type": "Point", "coordinates": [121.53321, 25.042498] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "O07",
+        "stationname1": "忠孝新生",
+        "stationname2": "忠孝新生站",
+        "lng_x": 121.53321,
+        "lat_y": 25.042498,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.5328562, 25.0425049] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:11:00Z"
+      },
+      "bbox": [121.5328562, 25.042498, 121.53321, 25.0425049]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.80",
+      "geometry": { "type": "Point", "coordinates": [121.53285, 25.052693] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "O08",
+        "stationname1": "松江南京",
+        "stationname2": "松江南京站",
+        "lng_x": 121.53285,
+        "lat_y": 25.052693,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.533023, 25.0526902] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:11:00Z"
+      },
+      "bbox": [121.53285, 25.0526902, 121.533023, 25.052693]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.82",
+      "geometry": { "type": "Point", "coordinates": [121.526609, 25.062665] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "O10",
+        "stationname1": "中山國小",
+        "stationname2": "中山國小站",
+        "lng_x": 121.526609,
+        "lat_y": 25.062665,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.5266092, 25.0626721] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:11:00Z"
+      },
+      "bbox": [121.526609, 25.062665, 121.5266092, 25.0626721]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.83",
+      "geometry": { "type": "Point", "coordinates": [121.519585, 25.06235] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "O11",
+        "stationname1": "民權西路",
+        "stationname2": "民權西路站",
+        "lng_x": 121.519585,
+        "lat_y": 25.06235,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.5195991, 25.0629005] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:11:00Z"
+      },
+      "bbox": [121.519585, 25.06235, 121.5195991, 25.0629005]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.84",
+      "geometry": { "type": "Point", "coordinates": [121.513003, 25.06322] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "O12",
+        "stationname1": "大橋頭",
+        "stationname2": "大橋頭站",
+        "lng_x": 121.513003,
+        "lat_y": 25.06322,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.5130022, 25.0632374] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:11:00Z"
+      },
+      "bbox": [121.5130022, 25.06322, 121.513003, 25.0632374]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.85",
+      "geometry": { "type": "Point", "coordinates": [121.500575, 25.063075] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "O13",
+        "stationname1": "台北橋",
+        "stationname2": "台北橋站",
+        "lng_x": 121.500575,
+        "lat_y": 25.063075,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.5005335, 25.0631895] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:11:00Z"
+      },
+      "bbox": [121.5005335, 25.063075, 121.500575, 25.0631895]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.86",
+      "geometry": { "type": "Point", "coordinates": [121.491421, 25.059451] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "O14",
+        "stationname1": "菜寮",
+        "stationname2": "菜寮站",
+        "lng_x": 121.491421,
+        "lat_y": 25.059451,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.4912562, 25.0596909] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:11:00Z"
+      },
+      "bbox": [121.4912562, 25.059451, 121.491421, 25.0596909]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.87",
+      "geometry": { "type": "Point", "coordinates": [121.48422, 25.05571] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "O15",
+        "stationname1": "三重",
+        "stationname2": "三重站",
+        "lng_x": 121.48422,
+        "lat_y": 25.05571,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.4842032, 25.0557768] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:11:00Z"
+      },
+      "bbox": [121.4842032, 25.05571, 121.48422, 25.0557768]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.88",
+      "geometry": { "type": "Point", "coordinates": [121.47165, 25.04632] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "O16",
+        "stationname1": "先嗇宮",
+        "stationname2": "先嗇宮站",
+        "lng_x": 121.47165,
+        "lat_y": 25.04632,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.4716245, 25.0463969] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:12:00Z"
+      },
+      "bbox": [121.4716245, 25.04632, 121.47165, 25.0463969]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.89",
+      "geometry": { "type": "Point", "coordinates": [121.460479, 25.039862] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "O17",
+        "stationname1": "頭前庄",
+        "stationname2": "頭前庄站",
+        "lng_x": 121.460479,
+        "lat_y": 25.039862,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.46089, 25.0391953] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:12:00Z"
+      },
+      "bbox": [121.460479, 25.0391953, 121.46089, 25.039862]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.90",
+      "geometry": { "type": "Point", "coordinates": [121.45218, 25.03608] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "O18",
+        "stationname1": "新莊",
+        "stationname2": "新莊站",
+        "lng_x": 121.45218,
+        "lat_y": 25.03608,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.4521776, 25.0360906] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:12:00Z"
+      },
+      "bbox": [121.4521776, 25.03608, 121.45218, 25.0360906]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.91",
+      "geometry": { "type": "Point", "coordinates": [121.435735, 25.03279] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "O19",
+        "stationname1": "輔大",
+        "stationname2": "輔大站",
+        "lng_x": 121.435735,
+        "lat_y": 25.03279,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.4357342, 25.0327948] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:12:00Z"
+      },
+      "bbox": [121.4357342, 25.03279, 121.435735, 25.0327948]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.92",
+      "geometry": { "type": "Point", "coordinates": [121.422422, 25.029073] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "O20",
+        "stationname1": "丹鳳",
+        "stationname2": "丹鳳站",
+        "lng_x": 121.422422,
+        "lat_y": 25.029073,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.4224815, 25.0288896] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:12:00Z"
+      },
+      "bbox": [121.422422, 25.0288896, 121.4224815, 25.029073]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.93",
+      "geometry": { "type": "Point", "coordinates": [121.411757, 25.022107] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "O21",
+        "stationname1": "迴龍",
+        "stationname2": "迴龍站",
+        "lng_x": 121.411757,
+        "lat_y": 25.022107,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.411753, 25.0221172] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:12:00Z"
+      },
+      "bbox": [121.411753, 25.022107, 121.411757, 25.0221172]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.94",
+      "geometry": { "type": "Point", "coordinates": [121.49701, 25.070275] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "O50",
+        "stationname1": "三重國小",
+        "stationname2": "三重國小站",
+        "lng_x": 121.49701,
+        "lat_y": 25.070275,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.4969862, 25.0702406] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:11:00Z"
+      },
+      "bbox": [121.4969862, 25.0702406, 121.49701, 25.070275]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.95",
+      "geometry": { "type": "Point", "coordinates": [121.486795, 25.07646] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "O51",
+        "stationname1": "三和國中",
+        "stationname2": "三和國中站",
+        "lng_x": 121.486795,
+        "lat_y": 25.07646,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.4868604, 25.0765779] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:11:00Z"
+      },
+      "bbox": [121.486795, 25.07646, 121.4868604, 25.0765779]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.96",
+      "geometry": { "type": "Point", "coordinates": [121.479945, 25.080485] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "O52",
+        "stationname1": "徐匯中學",
+        "stationname2": "徐匯中學站",
+        "lng_x": 121.479945,
+        "lat_y": 25.080485,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.4799528, 25.0804988] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:11:00Z"
+      },
+      "bbox": [121.479945, 25.080485, 121.4799528, 25.0804988]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.97",
+      "geometry": { "type": "Point", "coordinates": [121.473365, 25.085425] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "O53",
+        "stationname1": "三民高中",
+        "stationname2": "三民高中站",
+        "lng_x": 121.473365,
+        "lat_y": 25.085425,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.473379, 25.0854415] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:11:00Z"
+      },
+      "bbox": [121.473365, 25.085425, 121.473379, 25.0854415]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.98",
+      "geometry": { "type": "Point", "coordinates": [121.46471, 25.09152] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "O54",
+        "stationname1": "蘆洲",
+        "stationname2": "蘆洲站",
+        "lng_x": 121.46471,
+        "lat_y": 25.09152,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.4647012, 25.0915029] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:12:00Z"
+      },
+      "bbox": [121.4647012, 25.0915029, 121.46471, 25.09152]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.42",
+      "geometry": { "type": "Point", "coordinates": [121.515572, 25.114455] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "R19",
+        "stationname1": "石牌",
+        "stationname2": "石牌站",
+        "lng_x": 121.515572,
+        "lat_y": 25.114455,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.5155872, 25.1144655] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:13:00Z"
+      },
+      "bbox": [121.515572, 25.114455, 121.5155872, 25.1144655]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.50",
+      "geometry": { "type": "Point", "coordinates": [121.45955, 25.1369] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "R26",
+        "stationname1": "竹圍",
+        "stationname2": "竹圍站",
+        "lng_x": 121.45955,
+        "lat_y": 25.1369,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.4594949, 25.136898] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:14:00Z"
+      },
+      "bbox": [121.4594949, 25.136898, 121.45955, 25.1369]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.49",
+      "geometry": { "type": "Point", "coordinates": [121.467, 25.12551] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "R25",
+        "stationname1": "關渡",
+        "stationname2": "關渡站",
+        "lng_x": 121.467,
+        "lat_y": 25.12551,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.4669917, 25.1255159] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:14:00Z"
+      },
+      "bbox": [121.4669917, 25.12551, 121.467, 25.1255159]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.35",
+      "geometry": { "type": "Point", "coordinates": [121.520685, 25.057575] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "R12",
+        "stationname1": "雙連",
+        "stationname2": "雙連站",
+        "lng_x": 121.520685,
+        "lat_y": 25.057575,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.5206368, 25.0575775] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:13:00Z"
+      },
+      "bbox": [121.5206368, 25.057575, 121.520685, 25.0575775]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.34",
+      "geometry": { "type": "Point", "coordinates": [121.520364, 25.052621] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "R11",
+        "stationname1": "中山",
+        "stationname2": "中山站",
+        "lng_x": 121.520364,
+        "lat_y": 25.052621,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.5203579, 25.0526214] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:13:00Z"
+      },
+      "bbox": [121.5203579, 25.052621, 121.520364, 25.0526214]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.33",
+      "geometry": { "type": "Point", "coordinates": [121.517415, 25.04631] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "R10",
+        "stationname1": "台北車站",
+        "stationname2": "台北車站站",
+        "lng_x": 121.517415,
+        "lat_y": 25.04631,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.5175288, 25.0462575] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:13:00Z"
+      },
+      "bbox": [121.517415, 25.0462575, 121.5175288, 25.04631]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.32",
+      "geometry": { "type": "Point", "coordinates": [121.51602, 25.041399] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "R09",
+        "stationname1": "台大醫院",
+        "stationname2": "台大醫院站",
+        "lng_x": 121.51602,
+        "lat_y": 25.041399,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.5160495, 25.0413901] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:13:00Z"
+      },
+      "bbox": [121.51602, 25.0413901, 121.5160495, 25.041399]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.31",
+      "geometry": { "type": "Point", "coordinates": [121.518273, 25.032767] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "R08",
+        "stationname1": "中正紀念堂",
+        "stationname2": "中正紀念堂站",
+        "lng_x": 121.518273,
+        "lat_y": 25.032767,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.5183161, 25.0327992] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:13:00Z"
+      },
+      "bbox": [121.518273, 25.032767, 121.5183161, 25.0327992]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.30",
+      "geometry": { "type": "Point", "coordinates": [121.528766, 25.033894] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "R07",
+        "stationname1": "東門",
+        "stationname2": "東門站",
+        "lng_x": 121.528766,
+        "lat_y": 25.033894,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.5287553, 25.033814] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:13:00Z"
+      },
+      "bbox": [121.5287553, 25.033814, 121.528766, 25.033894]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.29",
+      "geometry": { "type": "Point", "coordinates": [121.536151, 25.033225] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "R06",
+        "stationname1": "大安森林公園",
+        "stationname2": "大安森林公園站",
+        "lng_x": 121.536151,
+        "lat_y": 25.033225,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.5361574, 25.0335406] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:12:00Z"
+      },
+      "bbox": [121.536151, 25.033225, 121.5361574, 25.0335406]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.28",
+      "geometry": { "type": "Point", "coordinates": [121.54237, 25.033311] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "R05",
+        "stationname1": "大安",
+        "stationname2": "大安站",
+        "lng_x": 121.54237,
+        "lat_y": 25.033311,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.542372, 25.0334091] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:12:00Z"
+      },
+      "bbox": [121.54237, 25.033311, 121.542372, 25.0334091]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.48",
+      "geometry": { "type": "Point", "coordinates": [121.473298, 25.130923] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "R24",
+        "stationname1": "忠義",
+        "stationname2": "忠義站",
+        "lng_x": 121.473298,
+        "lat_y": 25.130923,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.473305, 25.1309141] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:14:00Z"
+      },
+      "bbox": [121.473298, 25.1309141, 121.473305, 25.130923]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.27",
+      "geometry": { "type": "Point", "coordinates": [121.552326, 25.033015] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "R04",
+        "stationname1": "信義安和",
+        "stationname2": "信義安和站",
+        "lng_x": 121.552326,
+        "lat_y": 25.033015,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.5523297, 25.0331879] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:12:00Z"
+      },
+      "bbox": [121.552326, 25.033015, 121.5523297, 25.0331879]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.26",
+      "geometry": { "type": "Point", "coordinates": [121.563667, 25.032865] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "R03",
+        "stationname1": "台北101/世貿",
+        "stationname2": "台北101/世貿站",
+        "lng_x": 121.563667,
+        "lat_y": 25.032865,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.5636687, 25.032943] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:12:00Z"
+      },
+      "bbox": [121.563667, 25.032865, 121.5636687, 25.032943]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.25",
+      "geometry": { "type": "Point", "coordinates": [121.570116, 25.032395] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "R02",
+        "stationname1": "象山",
+        "stationname2": "象山站",
+        "lng_x": 121.570116,
+        "lat_y": 25.032395,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.5701168, 25.032868] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:12:00Z"
+      },
+      "bbox": [121.570116, 25.032395, 121.5701168, 25.032868]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.47",
+      "geometry": { "type": "Point", "coordinates": [121.485456, 25.137497] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "R23",
+        "stationname1": "復興崗",
+        "stationname2": "復興崗站",
+        "lng_x": 121.485456,
+        "lat_y": 25.137497,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.4854558, 25.1374984] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:14:00Z"
+      },
+      "bbox": [121.4854558, 25.137497, 121.485456, 25.1374984]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.46",
+      "geometry": { "type": "Point", "coordinates": [121.502595, 25.136931] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "R22A",
+        "stationname1": "新北投",
+        "stationname2": "新北投站",
+        "lng_x": 121.502595,
+        "lat_y": 25.136931,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.5025948, 25.1369464] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:14:00Z"
+      },
+      "bbox": [121.5025948, 25.136931, 121.502595, 25.1369464]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.45",
+      "geometry": { "type": "Point", "coordinates": [121.498648, 25.131819] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "R22",
+        "stationname1": "北投",
+        "stationname2": "北投站",
+        "lng_x": 121.498648,
+        "lat_y": 25.131819,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.4986445, 25.1318162] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:14:00Z"
+      },
+      "bbox": [121.4986445, 25.1318162, 121.498648, 25.131819]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.44",
+      "geometry": { "type": "Point", "coordinates": [121.50114, 25.12547] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "R21",
+        "stationname1": "奇岩",
+        "stationname2": "奇岩站",
+        "lng_x": 121.50114,
+        "lat_y": 25.12547,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.5011222, 25.1254664] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:14:00Z"
+      },
+      "bbox": [121.5011222, 25.1254664, 121.50114, 25.12547]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.43",
+      "geometry": { "type": "Point", "coordinates": [121.506234, 25.120852] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "R20",
+        "stationname1": "唭哩岸",
+        "stationname2": "唭哩岸站",
+        "lng_x": 121.506234,
+        "lat_y": 25.120852,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.5062329, 25.120846] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:14:00Z"
+      },
+      "bbox": [121.5062329, 25.120846, 121.506234, 25.120852]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.41",
+      "geometry": { "type": "Point", "coordinates": [121.518785, 25.109815] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "R18",
+        "stationname1": "明德",
+        "stationname2": "明德站",
+        "lng_x": 121.518785,
+        "lat_y": 25.109815,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.5187826, 25.1098133] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:13:00Z"
+      },
+      "bbox": [121.5187826, 25.1098133, 121.518785, 25.109815]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.40",
+      "geometry": { "type": "Point", "coordinates": [121.522546, 25.102718] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "R17",
+        "stationname1": "芝山",
+        "stationname2": "芝山站",
+        "lng_x": 121.522546,
+        "lat_y": 25.102718,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.5225531, 25.1027192] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:13:00Z"
+      },
+      "bbox": [121.522546, 25.102718, 121.5225531, 25.1027192]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.39",
+      "geometry": { "type": "Point", "coordinates": [121.52623, 25.093492] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "R16",
+        "stationname1": "士林",
+        "stationname2": "士林站",
+        "lng_x": 121.52623,
+        "lat_y": 25.093492,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.52621, 25.0934853] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:13:00Z"
+      },
+      "bbox": [121.52621, 25.0934853, 121.52623, 25.093492]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.38",
+      "geometry": { "type": "Point", "coordinates": [121.524955, 25.084201] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "R15",
+        "stationname1": "劍潭",
+        "stationname2": "劍潭站",
+        "lng_x": 121.524955,
+        "lat_y": 25.084201,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.5249599, 25.0841998] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:13:00Z"
+      },
+      "bbox": [121.524955, 25.0841998, 121.5249599, 25.084201]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.37",
+      "geometry": { "type": "Point", "coordinates": [121.520074, 25.071409] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "R14",
+        "stationname1": "圓山",
+        "stationname2": "圓山站",
+        "lng_x": 121.520074,
+        "lat_y": 25.071409,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.5201553, 25.0713976] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:13:00Z"
+      },
+      "bbox": [121.520074, 25.0713976, 121.5201553, 25.071409]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.36",
+      "geometry": { "type": "Point", "coordinates": [121.519585, 25.06235] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "R13",
+        "stationname1": "民權西路",
+        "stationname2": "民權西路站",
+        "lng_x": 121.519585,
+        "lat_y": 25.06235,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.5195632, 25.0623412] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:13:00Z"
+      },
+      "bbox": [121.5195632, 25.0623412, 121.519585, 25.06235]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.52",
+      "geometry": { "type": "Point", "coordinates": [121.445805, 25.167745] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "R28",
+        "stationname1": "淡水",
+        "stationname2": "淡水站",
+        "lng_x": 121.445805,
+        "lat_y": 25.167745,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.4457315, 25.1676469] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:14:00Z"
+      },
+      "bbox": [121.4457315, 25.1676469, 121.445805, 25.167745]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.51",
+      "geometry": { "type": "Point", "coordinates": [121.4588, 25.15399] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "R27",
+        "stationname1": "紅樹林",
+        "stationname2": "紅樹林站",
+        "lng_x": 121.4588,
+        "lat_y": 25.15399,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.4588429, 25.1539928] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:14:00Z"
+      },
+      "bbox": [121.4588, 25.15399, 121.4588429, 25.1539928]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.132",
+      "geometry": { "type": "Point", "coordinates": [121.466839, 25.026125] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "Y17",
+        "stationname1": "新埔民生",
+        "stationname2": "新埔民生站",
+        "lng_x": 121.466839,
+        "lat_y": 25.026125,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.4666959, 25.0260533] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:15:00Z"
+      },
+      "bbox": [121.4666959, 25.0260533, 121.466839, 25.026125]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.133",
+      "geometry": { "type": "Point", "coordinates": [121.460479, 25.039862] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "Y18",
+        "stationname1": "頭前庄",
+        "stationname2": "頭前庄站",
+        "lng_x": 121.460479,
+        "lat_y": 25.039862,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.4602511, 25.0397666] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:15:00Z"
+      },
+      "bbox": [121.4602511, 25.0397666, 121.460479, 25.039862]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.134",
+      "geometry": { "type": "Point", "coordinates": [121.460216, 25.050282] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "Y19",
+        "stationname1": "幸福",
+        "stationname2": "幸福站",
+        "lng_x": 121.460216,
+        "lat_y": 25.050282,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.4599746, 25.0502846] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:15:00Z"
+      },
+      "bbox": [121.4599746, 25.050282, 121.460216, 25.0502846]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.135",
+      "geometry": { "type": "Point", "coordinates": [121.459926, 25.061548] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "Y20",
+        "stationname1": "新北產業園區",
+        "stationname2": "新北產業園區站",
+        "lng_x": 121.459926,
+        "lat_y": 25.061548,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.4598509, 25.0606672] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:15:00Z"
+      },
+      "bbox": [121.4598509, 25.0606672, 121.459926, 25.061548]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.122",
+      "geometry": { "type": "Point", "coordinates": [121.54134, 24.98272] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "Y07",
+        "stationname1": "大坪林",
+        "stationname2": "大坪林站",
+        "lng_x": 121.54134,
+        "lat_y": 24.98272,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.5413368, 24.9829008] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:14:00Z"
+      },
+      "bbox": [121.5413368, 24.98272, 121.54134, 24.9829008]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.123",
+      "geometry": { "type": "Point", "coordinates": [121.527698, 24.984333] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "Y08",
+        "stationname1": "十四張",
+        "stationname2": "十四張站",
+        "lng_x": 121.527698,
+        "lat_y": 24.984333,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.527721, 24.9843628] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:14:00Z"
+      },
+      "bbox": [121.527698, 24.984333, 121.527721, 24.9843628]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.124",
+      "geometry": { "type": "Point", "coordinates": [121.525051, 24.990549] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "Y09",
+        "stationname1": "秀朗橋",
+        "stationname2": "秀朗橋站",
+        "lng_x": 121.525051,
+        "lat_y": 24.990549,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.5250267, 24.9903276] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:15:00Z"
+      },
+      "bbox": [121.5250267, 24.9903276, 121.525051, 24.990549]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.125",
+      "geometry": { "type": "Point", "coordinates": [121.516553, 24.991968] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "Y10",
+        "stationname1": "景平",
+        "stationname2": "景平站",
+        "lng_x": 121.516553,
+        "lat_y": 24.991968,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.5165669, 24.9920803] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:15:00Z"
+      },
+      "bbox": [121.516553, 24.991968, 121.5165669, 24.9920803]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.126",
+      "geometry": { "type": "Point", "coordinates": [121.505114, 24.99392] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "Y11",
+        "stationname1": "景安",
+        "stationname2": "景安站",
+        "lng_x": 121.505114,
+        "lat_y": 24.99392,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.5050638, 24.9934395] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:15:00Z"
+      },
+      "bbox": [121.5050638, 24.9934395, 121.505114, 24.99392]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.131",
+      "geometry": { "type": "Point", "coordinates": [121.464825, 25.015156] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "Y16",
+        "stationname1": "板橋",
+        "stationname2": "板橋站",
+        "lng_x": 121.464825,
+        "lat_y": 25.015156,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.4648062, 25.0151295] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:15:00Z"
+      },
+      "bbox": [121.4648062, 25.0151295, 121.464825, 25.015156]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.127",
+      "geometry": { "type": "Point", "coordinates": [121.496052, 25.001981] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "Y12",
+        "stationname1": "中和",
+        "stationname2": "中和站",
+        "lng_x": 121.496052,
+        "lat_y": 25.001981,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.4960212, 25.0023345] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:15:00Z"
+      },
+      "bbox": [121.4960212, 25.001981, 121.496052, 25.0023345]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.128",
+      "geometry": { "type": "Point", "coordinates": [121.490461, 25.004413] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "Y13",
+        "stationname1": "橋和",
+        "stationname2": "橋和站",
+        "lng_x": 121.490461,
+        "lat_y": 25.004413,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.4903851, 25.0043634] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:15:00Z"
+      },
+      "bbox": [121.4903851, 25.0043634, 121.490461, 25.004413]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.129",
+      "geometry": { "type": "Point", "coordinates": [121.484159, 25.00841] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "Y14",
+        "stationname1": "中原",
+        "stationname2": "中原站",
+        "lng_x": 121.484159,
+        "lat_y": 25.00841,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.4840989, 25.0082744] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:15:00Z"
+      },
+      "bbox": [121.4840989, 25.0082744, 121.484159, 25.00841]
+    },
+    {
+      "type": "Feature",
+      "id": "traffic_metro_station.130",
+      "geometry": { "type": "Point", "coordinates": [121.472212, 25.014491] },
+      "geometry_name": "wkb_geometry",
+      "properties": {
+        "stationid": "Y15",
+        "stationname1": "板新",
+        "stationname2": "板新站",
+        "lng_x": 121.472212,
+        "lat_y": 25.014491,
+        "_ctime": "2023-07-01T00:00:29.461Z",
+        "_mtime": "2023-07-01T00:00:29.480Z",
+        "snap": { "type": "Point", "coordinates": [121.4723026, 25.0146334] },
+        "data_time": "2020-11-04T16:00:00Z",
+        "tdx_update_time": "2023-06-26T16:15:00Z"
+      },
+      "bbox": [121.472212, 25.014491, 121.4723026, 25.0146334]
+    }
+  ],
+  "totalFeatures": 135,
+  "numberMatched": 135,
+  "numberReturned": 135,
+  "timeStamp": "2023-07-04T08:14:56.487Z",
+  "crs": {
+    "type": "name",
+    "properties": { "name": "urn:ogc:def:crs:EPSG::4326" }
+  },
+  "bbox": [121.4107208, 24.9565487, 121.6181412, 25.1686993]
+}
