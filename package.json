@@ -8,7 +8,6 @@
 		"dev": "vite",
 		"build": "eslint --fix --ext .js,.vue . && vite build",
 		"lint": "eslint --fix --ext .js,.vue .",
-		"test": "vitest run --dom",
 		"preview": "vite preview"
 	},
 	"dependencies": {
