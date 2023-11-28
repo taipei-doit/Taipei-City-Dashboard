@@ -7,7 +7,7 @@
 		"start": "vite",
 		"dev": "vite",
 		"build": "eslint --fix --ext .js,.vue . && vite build",
-		"lint": "eslint --fix --ext .js,.vue . && cd public && tar zcfv mapData.tar.gz mapData && cd .",
+		"lint": "eslint --fix --ext .js,.vue .",
 		"test": "vitest run --dom",
 		"preview": "vite preview"
 	},
