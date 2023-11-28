@@ -4,13 +4,13 @@
 
 <script setup>
 const { VITE_APP_TITLE } = import.meta.env;
-import { computed } from 'vue';
-import { useRoute } from 'vue-router';
-import { useAuthStore } from '../store/authStore';
-import { useDialogStore } from '../store/dialogStore';
-import { useFullscreen } from '@vueuse/core';
+import { computed } from "vue";
+import { useRoute } from "vue-router";
+import { useAuthStore } from "../store/authStore";
+import { useDialogStore } from "../store/dialogStore";
+import { useFullscreen } from "@vueuse/core";
 
-import UserSettings from './dialogs/UserSettings.vue';
+import UserSettings from "./dialogs/UserSettings.vue";
 
 const route = useRoute();
 const authStore = useAuthStore();
@@ -39,15 +39,28 @@ const linkQuery = computed(() => {
 			<router-link :to="`/mapview${linkQuery}`">地圖交叉比對</router-link>
 		</div>
 		<div class="navbar-user">
-			<a href="https://tuic.gov.taipei/documentation/front-end" target="_blank"
-				rel="noreferrer"><button><span>help</span></button></a>
-			<button class="hide-if-mobile" @click="toggle"><span>{{ isFullscreen ? 'fullscreen_exit' : 'fullscreen'
-			}}</span></button>
+			<a
+				href="https://tuic.gov.taipei/documentation/front-end"
+				target="_blank"
+				rel="noreferrer"
+				><button><span>help</span></button></a
+			>
+			<button class="hide-if-mobile" @click="toggle">
+				<span>{{
+					isFullscreen ? "fullscreen_exit" : "fullscreen"
+				}}</span>
+			</button>
 			<div class="navbar-user-user hide-if-mobile">
 				<button>{{ authStore.user.name }}</button>
 				<ul>
-					<li><button @click="dialogStore.showDialog('userSettings')">用戶設定</button></li>
-					<li><button @click="authStore.handleLogout">登出</button></li>
+					<li>
+						<button @click="dialogStore.showDialog('userSettings')">
+							用戶設定
+						</button>
+					</li>
+					<li>
+						<button @click="authStore.handleLogout">登出</button>
+					</li>
 				</ul>
 				<teleport to="body">
 					<user-settings />
@@ -90,8 +103,6 @@ const linkQuery = computed(() => {
 				filter: invert(1);
 			}
 		}
-
-
 	}
 
 	&-tabs {
@@ -101,12 +112,22 @@ const linkQuery = computed(() => {
 			height: 59px;
 			display: flex;
 			align-items: center;
-			margin-left: var(--font-s)
+			margin-left: var(--font-s);
+			transition: opacity 0.2s, border-bottom 0.2s;
+			border-bottom: solid 3px transparent;
+
+			&:hover {
+				opacity: 0.8;
+			}
 		}
 
 		.router-link-active {
 			border-bottom: solid 3px var(--color-highlight);
 			color: var(--color-highlight);
+
+			&:hover {
+				opacity: 1;
+			}
 		}
 	}
 
@@ -164,7 +185,7 @@ const linkQuery = computed(() => {
 				}
 
 				li:hover {
-					background-color: var(--color-complement-text)
+					background-color: var(--color-complement-text);
 				}
 			}
 		}
