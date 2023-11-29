@@ -4087,6 +4087,12 @@
 					"paint": {
 						"line-color": "#B5C9FF"
 					},
+					"property": [
+						{
+							"key": "name",
+							"name": "名稱"
+						}
+					],
 					"type": "line",
 					"title": "堤防系統"
 				},
@@ -4096,6 +4102,20 @@
 						"fill-color": "#3c70ff",
 						"fill-opacity": 0.7
 					},
+					"property": [
+						{
+							"key": "名稱",
+							"name": "名稱"
+						},
+						{
+							"key": "類型",
+							"name": "類型"
+						},
+						{
+							"key": "集水區",
+							"name": "集水區"
+						}
+					],
 					"type": "fill",
 					"title": "滯洪設施"
 				},
@@ -4117,29 +4137,41 @@
 							20
 						]
 					},
+					"property": [
+						{
+							"key": "P_WIDTH",
+							"name": "管徑寬度"
+						},
+						{
+							"key": "P_LENGTH",
+							"name": "管線長度"
+						}
+					],
 					"type": "line",
 					"title": "雨水下水道管線"
 				}
 			],
 			"chart_config": {
-				"types": ["MapLegend"],
-				"unit": "處"
+				"types": ["MapLegend"]
 			},
 			"chart_data": [
 				{
-					"color": "#8600FF",
+					"color": "#B5C9FF",
 					"type": "fill",
-					"name": "堤防系統"
+					"name": "堤防系統 (km)",
+					"value": "139.90"
 				},
 				{
-					"color": "#F00078",
+					"color": "#3c70ff",
 					"type": "fill",
-					"name": "滯洪設施"
+					"name": "滯洪設施 (km²)",
+					"value": "0.1115"
 				},
 				{
-					"color": "#009100",
+					"color": "#4D619D",
 					"type": "fill",
-					"name": "雨水下水道管線"
+					"name": "雨水下水道管線 (km)",
+					"value": "984.61"
 				}
 			],
 			"name": "防洪與雨水設備",
@@ -4170,6 +4202,20 @@
 					"paint": {
 						"fill-color": "#FFCA9C"
 					},
+					"property": [
+						{
+							"key": "NAME",
+							"name": "名稱"
+						},
+						{
+							"key": "Town_N",
+							"name": "行政區"
+						},
+						{
+							"key": "LENGTH",
+							"name": "長度"
+						}
+					],
 					"type": "fill",
 					"title": "人行道透水鋪面"
 				},
@@ -4178,6 +4224,12 @@
 					"paint": {
 						"fill-color": "#FFAD66"
 					},
+					"property": [
+						{
+							"key": "TOWN",
+							"name": "行政區"
+						}
+					],
 					"type": "fill",
 					"title": "學校透水鋪面"
 				},
@@ -4187,6 +4239,12 @@
 						"fill-color": "#20E1FF",
 						"fill-opacity": 0.7
 					},
+					"property": [
+						{
+							"key": "TOWN",
+							"name": "行政區"
+						}
+					],
 					"type": "fill",
 					"title": "停車場透水鋪面"
 				},
@@ -4195,6 +4253,12 @@
 					"paint": {
 						"fill-color": "#4AD84A"
 					},
+					"property": [
+						{
+							"key": "Id",
+							"name": "ID"
+						}
+					],
 					"type": "fill",
 					"title": "公園透水鋪面"
 				},
@@ -4204,41 +4268,21 @@
 						"fill-color": "#9EDBFF",
 						"fill-opacity": 0.7
 					},
+					"property": [
+						{
+							"key": "Id",
+							"name": "ID"
+						}
+					],
 					"type": "fill",
 					"title": "PAC鋪面"
 				}
 			],
 			"chart_config": {
-				"types": ["MapLegend"],
-				"unit": "處"
+				"types": ["TreemapChart"],
+				"unit": "m²",
+				"color": ["#4AD84A", "#FFAD66", "#9EDBFF", "#FFCA9C", "#20E1FF"]
 			},
-			"chart_data": [
-				{
-					"color": "#FFFF37",
-					"type": "fill",
-					"name": "人行道透水鋪面"
-				},
-				{
-					"color": "#FF8040",
-					"type": "fill",
-					"name": "學校透水鋪面"
-				},
-				{
-					"color": "#0000C6",
-					"type": "fill",
-					"name": "停車場透水鋪面"
-				},
-				{
-					"color": "#009100",
-					"type": "fill",
-					"name": "公園透水鋪面"
-				},
-				{
-					"color": "#D400FF",
-					"type": "fill",
-					"name": "PAC鋪面"
-				}
-			],
 			"name": "透水鋪面",
 			"short_desc": "顯示全市透水性鋪面的面積和分佈位置。",
 			"long_desc": "顯示全市透水性鋪面的面積和分佈位置。是一種特殊路面，能促進雨水滲入地底，減緩地表積水及提高地下水位。這種鋪面有助於改善都市排水系統，減少洪災風險，同時維護水資源生態平衡。",
