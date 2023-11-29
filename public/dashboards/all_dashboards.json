@@ -8,7 +8,7 @@
 		},
 		{
 			"name": "韌性城市",
-			"index": "watermonitor",
+			"index": "urban-resiliance",
 			"components": ["161", "162"],
 			"icon": "yard"
 		},
