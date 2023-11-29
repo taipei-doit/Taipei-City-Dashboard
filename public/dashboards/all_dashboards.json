@@ -7,6 +7,12 @@
 			"icon": "pedal_bike"
 		},
 		{
+			"name": "韌性城市",
+			"index": "watermonitor",
+			"components": ["161", "162"],
+			"icon": "yard"
+		},
+		{
 			"name": "民情熱議",
 			"index": "public-opinion",
 			"components": ["5", "72"],
@@ -41,12 +47,6 @@
 			"index": "welfare",
 			"components": ["90", "82", "29"],
 			"icon": "handshake"
-		},
-		{
-			"name": "韌性城市",
-			"index": "watermonitor",
-			"components": ["161","162"],
-			"icon": ""
 		},
 		{
 			"name": "測試組件",
