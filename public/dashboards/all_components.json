@@ -4077,6 +4077,174 @@
 				"https://github.com/tpe-doit/YouBike-Optimization"
 			],
 			"contributors": ["tuic"]
+		},
+		"161": {
+			"id": 161,
+			"index": "waterworks",
+			"map_config": [
+				{
+					"index": "waterworks_levee",
+					"paint": {
+						"line-color": "#8600FF"
+					},
+					
+					"type": "line",
+					"title": "堤防系統"
+				},
+				{
+					"index": "waterworks_detention",
+					"paint": {
+						"line-color": "#F00078"
+					},
+					
+					"type": "line",
+					"title": "滯洪設施"
+					
+				},
+				{
+					"index": "waterworks_sewer",
+					"paint": {
+						"line-color": "#009100",
+						"line-width": [
+							"interpolate",
+							["linear"],
+							["to-number", ["get", "P_WIDTH"]],
+							1,
+							1,
+							10,
+							5,
+							100,
+							10,
+							1000,
+							20
+						  ]	
+					},
+					
+					"type": "line",
+					"title": "雨水下水道管線"
+					
+				}
+			],
+			"chart_config": {
+				"types": ["MapLegend"],
+				"unit": "處"
+			},
+			"chart_data": [
+				{
+					"color": "#8600FF",
+					"type": "fill",
+					"name": "堤防系統"
+				},
+				{
+					"color": "#F00078",
+					"type": "fill",
+					"name": "滯洪設施"
+				},
+				{
+					"color": "#009100",
+					"type": "fill",
+					"name": "雨水下水道管線"
+				}
+			],
+			"name": "防洪與雨水設備",
+			"short_desc": "顯示全市防洪與雨水設備的面積和分佈位置。",
+			"long_desc": "顯示全市防洪與雨水設備的面積和分佈位置。「水資源與水利設施」是指管理、保護和有效利用水源的相關設備及基礎建設，包括水庫、水壩、灌溉系統等，為確保水源永續利用扮演關鍵角色。",
+			"use_case": "圖表顯示防洪與雨水設備分別為何，能夠幫助我們更加了解有哪些水資源與水利設施，並透過圖表了解分佈各項分佈位置。",
+			"tags": [],
+			"links": [
+				"https://data.taipei/dataset/detail?id=5b277432-f534-4d09-a24c-d3f6b514e042"
+			],
+			"source": "工務局",
+			"contributors": ["tuic"]
+		},
+		"162":{
+			"id": 162,
+			"index": "permeable_paving",
+			"map_config": [
+				{
+					"index": "permeable_sidewalk",
+					"paint": {
+						"fill-color": "#FFFF37"
+					},
+					
+					"type": "fill",
+					"title": "人行道透水鋪面"
+				},{
+					"index": "permeable_school",
+					"paint": {
+						"fill-color": "#F75000"
+					},
+					
+					"type": "fill",
+					"title": "學校透水鋪面"
+				},{
+					"index": "permeable_parking",
+					"paint": {
+						"fill-color": "#0000C6"
+					},
+					
+					"type": "fill",
+					"title": "停車場透水鋪面"
+				},{
+					"index": "permeable_park",
+					"paint": {
+						"fill-color": "#009100"
+					},
+					
+					"type": "fill",
+					"title": "公園透水鋪面"
+				},{
+					"index": "permeable_pac",
+					"paint": {
+						"fill-color": "#D400FF"
+					},
+					
+					"type": "fill",
+					"title": "PAC鋪面"
+				}
+				
+			],
+			"chart_config": {
+				"types": ["MapLegend"],
+				"unit": "處"
+			},
+			"chart_data": [
+				{
+					"color": "#FFFF37",
+					"type": "fill",
+					"name": "人行道透水鋪面"
+				},
+				{
+					"color": "#FF8040",
+					"type": "fill",
+					"name": "學校透水鋪面"
+				},
+				{
+					"color": "#0000C6",
+					"type": "fill",
+					"name": "停車場透水鋪面"
+				},
+				{
+					"color": "#009100",
+					"type": "fill",
+					"name": "公園透水鋪面"
+				},
+				{
+					"color": "#D400FF",
+					"type": "fill",
+					"name": "PAC鋪面"
+				}
+			],
+			"name": "透水鋪面",
+			"short_desc": "顯示全市透水性鋪面的面積和分佈位置。",
+			"long_desc": "顯示全市透水性鋪面的面積和分佈位置。是一種特殊路面，能促進雨水滲入地底，減緩地表積水及提高地下水位。這種鋪面有助於改善都市排水系統，減少洪災風險，同時維護水資源生態平衡。",
+			"use_case": "台北市的透水性鋪面的面積和分佈位置，將幫助我們探討透水性鋪面在城市中的遍佈及其相關性。",
+			"tags": [],
+			"links": [
+				"https://data.taipei/dataset/detail?id=5b277432-f534-4d09-a24c-d3f6b514e042"
+			],
+			"source": "工務局",
+			"contributors": ["tuic"]
 		}
 	}
 }

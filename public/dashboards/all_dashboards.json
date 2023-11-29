@@ -43,6 +43,12 @@
 			"icon": "handshake"
 		},
 		{
+			"name": "韌性城市",
+			"index": "watermonitor",
+			"components": ["161","162"],
+			"icon": ""
+		},
+		{
 			"name": "測試組件",
 			"index": "testing",
 			"components": ["117", "118", "61", "74"],
