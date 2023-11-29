@@ -4,6 +4,37 @@
 			"id": "tuic",
 			"name": "臺北大數據中心",
 			"link": "https://tuic.gov.taipei/zh"
+		},
+		"威猛先生": {
+			"id": "威猛先生",
+			"name": "威猛先生(2023)",
+			"image": "codefest",
+			"link": "https://github.com/11044123/Taipei-City-Dashboard-FE"
+		},
+		"黃梓睿": {
+			"id": "黃梓睿",
+			"name": "黃梓睿",
+			"link": "https://github.com/11044123"
+		},
+		"廖偉翔": {
+			"id": "廖偉翔",
+			"name": "廖偉翔",
+			"link": "https://github.com/XinRed"
+		},
+		"陳俊嘉": {
+			"id": "陳俊嘉",
+			"name": "陳俊嘉",
+			"link": "https://github.com/11044123/Taipei-City-Dashboard-FE"
+		},
+		"沈鈺芳": {
+			"id": "沈鈺芳",
+			"name": "沈鈺芳",
+			"link": "https://github.com/11044123/Taipei-City-Dashboard-FE"
+		},
+		"黃愉翔": {
+			"id": "黃愉翔",
+			"name": "黃愉翔",
+			"link": "https://github.com/huangyyuuu"
 		}
 	}
 }

@@ -4085,26 +4085,24 @@
 				{
 					"index": "waterworks_levee",
 					"paint": {
-						"line-color": "#8600FF"
+						"line-color": "#B5C9FF"
 					},
-					
 					"type": "line",
 					"title": "堤防系統"
 				},
 				{
 					"index": "waterworks_detention",
 					"paint": {
-						"line-color": "#F00078"
+						"fill-color": "#3c70ff",
+						"fill-opacity": 0.7
 					},
-					
-					"type": "line",
+					"type": "fill",
 					"title": "滯洪設施"
-					
 				},
 				{
 					"index": "waterworks_sewer",
 					"paint": {
-						"line-color": "#009100",
+						"line-color": "#4D619D",
 						"line-width": [
 							"interpolate",
 							["linear"],
@@ -4117,12 +4115,10 @@
 							10,
 							1000,
 							20
-						  ]	
+						]
 					},
-					
 					"type": "line",
 					"title": "雨水下水道管線"
-					
 				}
 			],
 			"chart_config": {
@@ -4155,54 +4151,62 @@
 				"https://data.taipei/dataset/detail?id=5b277432-f534-4d09-a24c-d3f6b514e042"
 			],
 			"source": "工務局",
-			"contributors": ["tuic"]
+			"contributors": [
+				"威猛先生",
+				"黃梓睿",
+				"廖偉翔",
+				"陳俊嘉",
+				"沈鈺芳",
+				"黃愉翔",
+				"tuic"
+			]
 		},
-		"162":{
+		"162": {
 			"id": 162,
 			"index": "permeable_paving",
 			"map_config": [
 				{
 					"index": "permeable_sidewalk",
 					"paint": {
-						"fill-color": "#FFFF37"
+						"fill-color": "#FFCA9C"
 					},
-					
 					"type": "fill",
 					"title": "人行道透水鋪面"
-				},{
+				},
+				{
 					"index": "permeable_school",
 					"paint": {
-						"fill-color": "#F75000"
+						"fill-color": "#FFAD66"
 					},
-					
 					"type": "fill",
 					"title": "學校透水鋪面"
-				},{
+				},
+				{
 					"index": "permeable_parking",
 					"paint": {
-						"fill-color": "#0000C6"
+						"fill-color": "#20E1FF",
+						"fill-opacity": 0.7
 					},
-					
 					"type": "fill",
 					"title": "停車場透水鋪面"
-				},{
+				},
+				{
 					"index": "permeable_park",
 					"paint": {
-						"fill-color": "#009100"
+						"fill-color": "#4AD84A"
 					},
-					
 					"type": "fill",
 					"title": "公園透水鋪面"
-				},{
+				},
+				{
 					"index": "permeable_pac",
 					"paint": {
-						"fill-color": "#D400FF"
+						"fill-color": "#9EDBFF",
+						"fill-opacity": 0.7
 					},
-					
 					"type": "fill",
 					"title": "PAC鋪面"
 				}
-				
 			],
 			"chart_config": {
 				"types": ["MapLegend"],
@@ -4244,7 +4248,15 @@
 				"https://data.taipei/dataset/detail?id=5b277432-f534-4d09-a24c-d3f6b514e042"
 			],
 			"source": "工務局",
-			"contributors": ["tuic"]
+			"contributors": [
+				"威猛先生",
+				"黃梓睿",
+				"廖偉翔",
+				"陳俊嘉",
+				"沈鈺芳",
+				"黃愉翔",
+				"tuic"
+			]
 		}
 	}
 }
