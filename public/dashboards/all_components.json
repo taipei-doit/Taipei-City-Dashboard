@@ -105,6 +105,10 @@
 						{
 							"key": "STATION_NAME",
 							"name": "名稱"
+						},
+						{
+							"key": "ADDR",
+							"name": "地址"
 						}
 					],
 					"type": "symbol",
@@ -122,8 +126,12 @@
 							"name": "轄區"
 						},
 						{
-							"key": "precinct",
+							"key": "police_district_office_name",
 							"name": "所屬分局"
+						},
+						{
+							"key": "police_district_station_name",
+							"name": "所屬派出所"
 						},
 						{
 							"key": "area",
@@ -180,6 +188,10 @@
 						{
 							"key": "名稱",
 							"name": "名稱"
+						},
+						{
+							"key": "鄉鎮",
+							"name": "行政區"
 						},
 						{
 							"key": "服務里別",
@@ -421,7 +433,12 @@
 						"fill-color": "#9e7b5c"
 					},
 					"index": "patrol_old_settlement",
-					"property": [],
+					"property": [
+						{
+							"key": "name",
+							"name": "名稱"
+						}
+					],
 					"type": "fill",
 					"title": "老舊聚落"
 				}
@@ -474,6 +491,10 @@
 						{
 							"key": "app_name",
 							"name": "主管機關"
+						},
+						{
+							"key": "c_name",
+							"name": "行政區"
 						},
 						{
 							"key": "tc_na",
@@ -586,7 +607,7 @@
 			},
 			"history_data": true,
 			"source": "警察局",
-			"time_from": "2023-01-31T14:01:00Z",
+			"time_from": "2023-01-31T14:01:00+08:00",
 			"time_to": null,
 			"update_freq": null,
 			"update_freq_unit": null,
@@ -609,25 +630,12 @@
 					"index": "traffic_bus_route_view",
 					"property": [
 						{
-							"key": "RouteName",
-							"name": "公車",
-							"obj": "En"
-						},
-						{
-							"key": "DutyStatus",
-							"name": "運行狀態"
-						},
-						{
-							"key": "RouteUID",
+							"key": "routeuid",
 							"name": "路線ID"
 						},
 						{
-							"key": "PlateNumb",
-							"name": "車牌號碼"
-						},
-						{
-							"key": "GPSTime",
-							"name": "GPS更新時間"
+							"key": "route_status",
+							"name": "運行狀態"
 						}
 					],
 					"paint": {
@@ -666,7 +674,7 @@
 				{
 					"index": "building_renewunit_30",
 					"paint": {
-						"line-color": "#67baca"
+						"line-color": "#477653"
 					},
 					"property": [
 						{
@@ -684,7 +692,7 @@
 				{
 					"index": "building_renewunit_12",
 					"paint": {
-						"line-color": "#598965"
+						"line-color": "#67baca"
 					},
 					"property": [
 						{
@@ -702,7 +710,7 @@
 				{
 					"index": "building_renewunit_20",
 					"paint": {
-						"line-color": "#477653"
+						"line-color": "#5a8965"
 					},
 					"property": [
 						{
@@ -805,7 +813,7 @@
 							"name": "地址"
 						},
 						{
-							"key": "floors1",
+							"key": "floors",
 							"name": "樓層"
 						},
 						{
@@ -1060,6 +1068,10 @@
 					},
 					"property": [
 						{
+							"key": "thename",
+							"name": "名稱"
+						},
+						{
 							"key": "publand_1_類型",
 							"name": "類型"
 						},
@@ -1096,6 +1108,10 @@
 					},
 					"property": [
 						{
+							"key": "thename",
+							"name": "名稱"
+						},
+						{
 							"key": "publand_1_類型",
 							"name": "類型"
 						},
@@ -1131,6 +1147,10 @@
 						]
 					},
 					"property": [
+						{
+							"key": "thename",
+							"name": "名稱"
+						},
 						{
 							"key": "publand_1_類型",
 							"name": "類型"
@@ -1647,15 +1667,15 @@
 				"unit": "輛",
 				"categories": ["Youbike在站車輛"]
 			},
-			"source": "交通局/Youbike",
+			"source": "交通局",
 			"name": "YouBike使用情況",
 			"time_from": "2023-05-31T00:00:00+08:00",
 			"time_to": null,
 			"update_freq": 5,
 			"update_freq_unit": "minute",
 			"short_desc": "顯示當前全市共享單車YouBike的使用情況",
-			"long_desc": "顯示當前全市共享單車YouBike的使用情況，包括可借車輛總數和可還車位總數，資料來源為微笑單車公司公開資料，每5分鐘更新。",
-			"use_case": "藉由YouBike使用情況的顯示，包括可借車輛總數及可還車位總數，我們可以了解全市YouBike使用情況，並在地圖模式查詢各站點詳細資訊。",
+			"long_desc": "顯示當前全市共享單車YouBike的使用情況，格式為可借車輛數/全市車位數。資料來源為交通局公開資料，每5分鐘更新。",
+			"use_case": "藉由YouBike使用情況的顯示，以及全市車輛約為柱數一半，可掌握全市目前停在站上與被使用中的車輛大約數字，並可在地圖模式查詢各站點詳細資訊。",
 			"links": [
 				"https://tdx.transportdata.tw/api-service/swagger/basic/2cc9b888-a592-496f-99de-9ab35b7fb70d#/Bike/BikeApi_Availability_2181"
 			],
@@ -1724,7 +1744,7 @@
 				"unit": "輛",
 				"categories": ["Youbike在站車輛"]
 			},
-			"source": "交通局/Youbike",
+			"source": "交通局",
 			"name": "YouBike使用情況(Alt)",
 			"time_from": "2023-05-31T00:00:00+08:00",
 			"time_to": null,
@@ -1744,7 +1764,7 @@
 			"index": "dispatch",
 			"map_config": [
 				{
-					"index": "dispatchingpoint_new",
+					"index": "dispatchingpoint",
 					"paint": {
 						"circle-color": "#90dce9"
 					},
@@ -2111,70 +2131,6 @@
 			"tags": [],
 			"contributors": ["tuic"]
 		},
-		"81": {
-			"id": 81,
-			"index": "tpmo_smart_city",
-			"map_config": [
-				{
-					"index": "it_tpmo_poc_location",
-					"paint": {
-						"circle-color": [
-							"match",
-							["get", "icon_status"],
-							"階段完成",
-							"#D9ED92",
-							"實驗進行中",
-							"#5EBB6D",
-							"階段終止",
-							"#e91e63",
-							"#ccc"
-						]
-					},
-					"property": [
-						{
-							"key": "type",
-							"name": "類別"
-						},
-						{
-							"key": "icon_status",
-							"name": "狀態"
-						},
-						{
-							"key": "name",
-							"name": "名稱"
-						},
-						{
-							"key": "locname",
-							"name": "地點"
-						},
-						{
-							"key": "address",
-							"name": "地址"
-						}
-					],
-					"type": "circle",
-					"size": "big",
-					"title": "TPMO智慧城市專案"
-				}
-			],
-			"name": "TPMO智慧城市專案",
-			"chart_config": {
-				"color": ["#52B69A"],
-				"types": ["ColumnChart", "BarChart", "RadarChart"],
-				"unit": "件"
-			},
-			"source": "TPMO",
-			"time_from": null,
-			"time_to": null,
-			"update_freq": null,
-			"update_freq_unit": null,
-			"short_desc": "顯示全市自某年以來的智慧城市專案類型統計",
-			"long_desc": "顯示全市自某年以來的智慧城市專案類型統計，資料來源為待確定，不定期更新。",
-			"use_case": "就智慧城市專案類型統計資料，由於更新頻率不定，若需最新數據，可隨時查詢相關資料來源。",
-			"links": null,
-			"tags": [],
-			"contributors": ["tuic"]
-		},
 		"82": {
 			"id": 82,
 			"index": "welfare_institutions",
@@ -2292,64 +2248,6 @@
 		"90": {
 			"id": 90,
 			"index": "welfare_population",
-			"map_config": [
-				{
-					"index": "socl_welfare_people_by_vil_view",
-					"paint": {
-						"fill-color": [
-							"interpolate",
-							["linear"],
-							["to-number", ["get", "cnt_total"]],
-							0,
-							"rgba(8,103,136,0.1)",
-							250,
-							"rgba(8,103,136,0.5)",
-							500,
-							"rgba(7,160,195,0.5)",
-							750,
-							"rgba(7,160,195,0.75)",
-							1000,
-							"rgba(180,91,91,0.75)",
-							1600,
-							"#dd1c1a"
-						]
-					},
-					"property": [
-						{
-							"key": "dist",
-							"name": "區名"
-						},
-						{
-							"key": "vil",
-							"name": "里名"
-						},
-						{
-							"key": "cnt_low_income",
-							"name": "低收入人口數"
-						},
-						{
-							"key": "cnt_low_middle_income",
-							"name": "中低收人口數"
-						},
-						{
-							"key": "cnt_disabled_allowance",
-							"name": "身障補助數量"
-						},
-						{
-							"key": "cnt_disabled",
-							"name": "身障人口數量"
-						},
-						{
-							"key": "cnt_total",
-							"name": "社福人口總數"
-						}
-					],
-					"type": "fill",
-					"title": "社福人口",
-					"size": null,
-					"icon": null
-				}
-			],
 			"chart_config": {
 				"color": ["#2e999b", "#80e3d4", "#1f9b85", "#a5ece0"],
 				"types": ["DistrictChart", "ColumnChart", "BarPercentChart"],
@@ -3043,7 +2941,7 @@
 			},
 			"history_data": false,
 			"source": "工務局",
-			"time_from": "2022-08-15T00:00:00Z",
+			"time_from": "2022-08-15T00:00:00+08:00",
 			"time_to": null,
 			"update_freq": null,
 			"update_freq_unit": null,
@@ -3511,10 +3409,6 @@
 							"name": "電動充電樁"
 						},
 						{
-							"key": "occupied_rate",
-							"name": "使用率"
-						},
-						{
 							"key": "data_time",
 							"name": "更新時間"
 						}
@@ -3557,10 +3451,6 @@
 						{
 							"key": "charging",
 							"name": "電動充電樁"
-						},
-						{
-							"key": "occupied_rate",
-							"name": "使用率"
 						},
 						{
 							"key": "data_time",
@@ -3659,20 +3549,12 @@
 							"name": "車牌"
 						},
 						{
-							"key": "dist",
-							"name": "行政區"
-						},
-						{
 							"key": "route",
 							"name": "路線"
 						},
 						{
 							"key": "arrive_time",
 							"name": "抵達時間"
-						},
-						{
-							"key": "dist",
-							"name": "行政區"
 						},
 						{
 							"key": "leave_time",
@@ -3782,9 +3664,9 @@
 					"#236e0c",
 					"#666666"
 				],
-				"unit": "百次",
+				"unit": "千次",
 				"map_filter": [
-					"TOWNNAME_source",
+					"TOWNNAME_origin",
 					[
 						"北投區",
 						"士林區",
@@ -3814,12 +3696,12 @@
 				}
 			],
 			"name": "YouBike週末群像",
-			"source": "交通局/Youbike",
+			"source": "臺北大數據中心",
 			"time_from": "2023-07-28T00:00:00+08:00",
 			"time_to": null,
 			"short_desc": "",
-			"long_desc": "顯示週末期間全市YouBike的使用情況，並將各交易的起迄點在地圖上視覺化，資料來源為微笑單車公司的交易資料，更新頻率為不定期。",
-			"use_case": "透過YouBike週末群像組件，您可以瀏覽週末期間全市YouBike的使用情況，這對於計畫週末戶外活動或確保在週末時找到可租借的YouBike非常有幫助。",
+			"long_desc": "除了展示週末全市YouBike的行政區起訖交易數量，可查閱地圖資料顯示詳細的起迄站點分佈(為避免雜訊影響閱讀，只顯示月交易量>35次的起訖)。資料來源為臺北大數據中心研究，更新頻率為不定期。",
+			"use_case": "透過本組件的起訖分佈，您可以發現使用者在週末如何透過YouBike移動，對於規劃大眾運輸與最後一哩路有相當幫助。",
 			"links": [
 				"https://tuic.gov.taipei/youbike",
 				"https://github.com/tpe-doit/YouBike-Optimization"
@@ -3868,9 +3750,9 @@
 					"#236e0c",
 					"#666666"
 				],
-				"unit": "百次",
+				"unit": "千次",
 				"map_filter": [
-					"TOWNNAME_source",
+					"TOWNNAME_origin",
 					[
 						"北投區",
 						"士林區",
@@ -3899,12 +3781,12 @@
 				}
 			],
 			"name": "YouBike週間群像",
-			"source": "交通局/Youbike",
+			"source": "臺北大數據中心",
 			"time_from": "2023-07-28T00:00:00+08:00",
 			"time_to": null,
 			"short_desc": "",
-			"long_desc": "展示平日晨峰時段(早上七點至九點)全市YouBike的使用情況，並將各交易的起迄點在地圖上視覺化，資料來源為微笑單車公司的交易資料，更新頻率為不定期。",
-			"use_case": "透過YouBike週間通勤群像組件，您可以輕鬆瞭解平日早上全市YouBike的使用情況。這有助於規劃通勤或日常出行，以確保您在需要時能夠方便地找到可用的YouBike。",
+			"long_desc": "除了週間全市YouBike的行政區起訖交易數量，可查閱地圖資料顯示詳細的起迄站點分佈(為強調使用情境，只顯示07:00~09:00且交易量>40次的起訖)。資料來源為臺北大數據中心研究，更新頻率為不定期。",
+			"use_case": "透過本組件的起訖分佈，您可以發現使用者在週間早高峰如何透過YouBike移動，對於規畫早高峰通勤的大眾運輸與最後一哩路有相當幫助。",
 			"links": [
 				"https://tuic.gov.taipei/youbike",
 				"https://github.com/tpe-doit/YouBike-Optimization"
@@ -3918,7 +3800,7 @@
 			"history_data": true,
 			"chart_config": {
 				"types": ["BarChart", "DonutChart"],
-				"color": ["#ca0020", "#e97c69", "#bababa"],
+				"color": ["#797979", "#e97c69", "#ca0020"],
 				"unit": "站",
 				"map_filter": ["category", ["高", "中", "低"]]
 			},
@@ -3930,11 +3812,11 @@
 							"match",
 							["get", "category"],
 							"低",
-							"#bababa",
+							"#ca0020",
 							"中",
 							"#e97c69",
 							"高",
-							"#ca0020",
+							"#bababa",
 							"#797979"
 						],
 						"circle-stroke-color": "#888",
@@ -3944,6 +3826,10 @@
 						{
 							"key": "stop_name",
 							"name": "站點名稱"
+						},
+						{
+							"key": "dist",
+							"name": "行政區"
 						},
 						{
 							"key": "category",
@@ -3956,12 +3842,12 @@
 				}
 			],
 			"name": "YouBike見車率",
-			"source": "Youbike",
+			"source": "臺北大數據中心",
 			"time_from": "2023-07-01T00:00:00+08:00",
 			"time_to": "2023-07-31T00:00:00+08:00",
 			"short_desc": "",
-			"long_desc": "顯示YouBike見車率的資訊，見車率為一個車站在18小時內(早上6點至凌晨12點)至少有1台車的百分比，90%以上為高間車率；60%-90%為中；60%以下為低。資料來源為YouBike公司，更新頻率不定期。",
-			"use_case": "透過YouBike見車率組件，您可以查看各YouBike站點一個月內的平均見車率，了解缺車較為嚴重的站點在哪裡。地圖模式讓您可以輕鬆了解特定車站的見車率及其分布情形。",
+			"long_desc": "見車率定義為為某站點在06:00~23:59期間，站上至少有1台車的時間比例。90%以上為高見車率；60%~90%為中見車率；60%以下為低見車率。資料來源為臺北大數據中心研究，更新頻率不定期。",
+			"use_case": "透過本組件您可以了解全市的缺車概況，在地圖模式您可以輕鬆的找到缺車嚴重的站點位置及分布情形。",
 			"links": [
 				"https://tuic.gov.taipei/youbike",
 				"https://github.com/tpe-doit/YouBike-Optimization"
@@ -3978,7 +3864,7 @@
 				"color": ["#a8f8ff", "#4cd2ff", "#00a6ff"],
 				"map_filter": [
 					"category",
-					["替代站<=5", "替代站5~10", "替代站>10"]
+					["互補站<=5", "互補站5~10", "互補站>10"]
 				]
 			},
 			"map_config": [
@@ -4006,7 +3892,7 @@
 							"name": "類別"
 						}
 					],
-					"title": "替代站點",
+					"title": "互補站點",
 					"type": "line"
 				},
 				{
@@ -4030,6 +3916,10 @@
 							"name": "站點名稱"
 						},
 						{
+							"key": "dist",
+							"name": "行政區"
+						},
+						{
 							"key": "capacity",
 							"name": "總柱數"
 						}
@@ -4038,13 +3928,13 @@
 					"type": "circle"
 				}
 			],
-			"name": "YouBike替代站點",
-			"source": "資訊局",
-			"time_from": "2023-07-28T00:00:00+08:00",
-			"time_to": null,
+			"name": "YouBike互補站點",
+			"source": "臺北大數據中心",
+			"time_from": "2023-03-01T00:00:00+08:00",
+			"time_to": "2023-03-31T00:00:00+08:00",
 			"short_desc": "",
-			"long_desc": "展示YouBike替代站點的資訊，替代站點的定義標準是大數據中心基於交易資料結果分群計算，資料來源為YouBike公司，更新頻率不定期。",
-			"use_case": "YouBike替代站點組件提供任一YouBike站附近的替代站點的資訊，您下次如果租借YouBike時遇到車站沒站的情形，不妨檢視一下本組件的地圖，看看附近還有沒有鄰近的替代站點可以使用。",
+			"long_desc": "互補性是大數據中心基於交易資料，計算站與站之間類似時段的重疊使用者數量，互補性強的多站可視為一個小區域共同提供服務。資料來源為臺北大數據中心研究，更新頻率不定期。",
+			"use_case": "透過本組件提供的各站互補性，對於規劃場站空間分佈、規劃調度區域、決定缺車缺位解決優先度有很大的幫助。",
 			"links": [
 				"https://tuic.gov.taipei/youbike",
 				"https://github.com/tpe-doit/YouBike-Optimization"
@@ -4070,13 +3960,13 @@
 				"map_filter": [
 					"class",
 					[
-						"山區且土地限制",
+						"無法設站-山區且土地限制",
 						"已設站",
-						"山區",
+						"無法設站-山區",
 						"鄰近已設站",
 						"未設站",
-						"土地限制",
-						"特殊條件限制"
+						"無法設站-土地限制",
+						"無法設站-特殊條件限制"
 					]
 				]
 			},
@@ -4086,15 +3976,15 @@
 					"paint": {
 						"fill-color": [
 							"case",
-							["==", ["get", "class"], "山區"],
+							["==", ["get", "class"], "無法設站-山區"],
 							"#40A461",
-							["==", ["get", "class"], "山區且土地限制"],
+							["==", ["get", "class"], "無法設站-山區且土地限制"],
 							"#7FBF7B",
-							["==", ["get", "class"], "特殊條件限制"],
+							["==", ["get", "class"], "無法設站-特殊條件限制"],
 							"#ACCFFF",
 							["==", ["get", "class"], "鄰近已設站"],
 							"#BEBEBE",
-							["==", ["get", "class"], "土地限制"],
+							["==", ["get", "class"], "無法設站-土地限制"],
 							"#BFDAB8",
 							["==", ["get", "class"], "未設站"],
 							"#3D56FF",
@@ -4115,11 +4005,11 @@
 			],
 			"name": "YouBike設站狀態",
 			"source": "資訊局",
-			"time_from": "2023-09-28T00:00:00+08:00",
+			"time_from": "2023-07-01T00:00:00+08:00",
 			"time_to": null,
 			"short_desc": "",
-			"long_desc": "全市由250公尺見方的網格組成，依據是否已設站、鄰近是否有站點及土地使用等條件，將各網格分為7大類，資料來源為大數據中心研究，更新頻率不定期。",
-			"use_case": "本組件可讓您快速查看各區域的YouBike設站情況。這有助於您了解哪些區域已提供YouBike服務；哪些因為土地或地形限制無法設站；和哪些地區目前未設站但具有設站潛能。",
+			"long_desc": "將全市用250見方的網格表示，依據各網格條件分為可設站及無法設站。可設站網格包含已設站、未設站及鄰近已設站。無法設站網格的類型包含山區、土地限制及特殊條件。土地限制為根據國土利用現況調查結果不適合開發之區域，特殊條件為軍方用地或無設站空間。資料來源為大數據中心研究，更新頻率不定期。",
+			"use_case": "本組件可讓您快速查看各區域的YouBike設站情況。了解哪些區域已提供YouBike服務?哪些因為土地或地形限制無法設站?哪些地區目前未設站但具有設站潛能。",
 			"links": [
 				"https://tuic.gov.taipei/youbike",
 				"https://github.com/tpe-doit/YouBike-Optimization"
@@ -4179,8 +4069,8 @@
 			"time_from": "2023-07-28T00:00:00+08:00",
 			"time_to": null,
 			"short_desc": "",
-			"long_desc": "展示YouBike未設站區的潛在用車需求，這些資訊基於大數據中心研究提供，詳細預測方法可參考開源成果Github，更新頻率不定期。",
-			"use_case": "YouBike未設站區潛在需求將協助您了解未來可能需要增設YouBike站點的地區。這有助於規劃YouBike的擴展和改進，以滿足日益增長的需求。",
+			"long_desc": "展示YouBike未設站區域的潛在需求，詳細預測方法可參考開源成果Github。資料來源為臺北大數據中心研究，更新頻率不定期。",
+			"use_case": "本組件可讓您掌握目前未設站地區，以及該地區可能有多少需求。這有助於規劃YouBike的擴展，並規劃適當的資源以滿足日益增長的需求。",
 			"tags": [],
 			"links": [
 				"https://tuic.gov.taipei/youbike",
