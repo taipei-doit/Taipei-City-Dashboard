@@ -55,6 +55,15 @@
 			"icon": "bug_report"
 		},
 		{
+			"name": "我們都是112A",
+			"index": "Hack",
+			"components": [
+				"163",
+				"164"
+			],
+			"icon": "handshake"
+		},
+		{
 			"name": "收藏組件",
 			"index": "favorites",
 			"components": ["108", "22", "79", "60", "107"],
