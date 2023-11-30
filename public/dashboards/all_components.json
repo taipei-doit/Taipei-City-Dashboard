@@ -3614,7 +3614,7 @@
 			"update_freq": null,
 			"update_freq_unit": null,
 			"short_desc": "顯示台北市所有垃圾車收運的點位。",
-			"long_desc": "顯示顯示台北市所有垃圾車收運的點位，資料來源為台北市環保局開放資料，不定期更新。",
+			"long_desc": "顯示台北市所有垃圾車收運的點位，資料來源為台北市環保局開放資料，不定期更新。",
 			"use_case": "透過這些點位資訊，我們可以更有效地安排垃圾車的收運路線，提升垃圾處理的效率，同時也能了解垃圾處理設施的分佈情況，並根據需求進行相應的環保政策調整。",
 			"links": [
 				"https://data.taipei/dataset/detail?id=6bb3304b-4f46-4bb0-8cd1-60c66dcd1cae"
