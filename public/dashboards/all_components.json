@@ -4335,9 +4335,9 @@
 				}
 			],
 			"chart_config": {
-				"color": ["#C3E0E5", "#41729F"],
+				"color": ["#CDF5FD", "#A0E9FF", "#00A9FF"],
 				"types": ["BarPercentChart", "ColumnChart"],
-				"unit": "強度",
+				"unit": "點",
 				"categories": [
 					"北投區",
 					"士林區",
@@ -4361,7 +4361,16 @@
 			"long_desc": "展示本市短延時強降雨條件下（78.8mm/h、100mm/h、130mm/h）之可能積水範圍、可能積水深度。資料來源為工務局水利處，更新頻率每五年。",
 			"use_case": "本組件可展示本市短延時強降雨條件下（78.8mm/h、100mm/h、130mm/h）之可能積水範圍、可能積水深度，以做防洪規劃。",
 			"tags": [],
-			"contributors": ["tuic"]
+			"links": ["https://data.gov.tw/dataset/121550"],
+			"contributors": [
+				"我們都是112A",
+				"蔡立倫",
+				"謝芝嫻",
+				"王佑豪",
+				"賴彥良",
+				"林育緹",
+				"tuic"
+			]
 		}
 	}
 }
