@@ -4301,6 +4301,67 @@
 				"黃愉翔",
 				"tuic"
 			]
+		},
+		"163": {
+			"id": 163,
+			"index": "flood_simulate",
+			"map_config": [
+				{
+					"index": "flood_simulate",
+					"type": "fill",
+					"paint": {
+						"fill-color": [
+							"match",
+							["get", "FID"],
+							0,
+							"#CDF5FD",
+							1,
+							"#A0E9FF",
+							2,
+							"#89CFF3",
+							3,
+							"#00A9FF",
+							"#00A9FF"
+						],
+						"fill-opacity": 0.8
+					},
+					"property": [
+						{
+							"key": "F_depth",
+							"name": "淹水高度"
+						}
+					],
+					"title": "淹水資訊"
+				}
+			],
+			"chart_config": {
+				"color": ["#C3E0E5", "#41729F"],
+				"types": ["BarPercentChart", "ColumnChart"],
+				"unit": "強度",
+				"categories": [
+					"北投區",
+					"士林區",
+					"內湖區",
+					"南港區",
+					"松山區",
+					"信義區",
+					"中山區",
+					"大同區",
+					"中正區",
+					"萬華區",
+					"大安區",
+					"文山區"
+				]
+			},
+			"name": "降雨淹水模擬圖",
+			"source": "工務局水利處",
+			"time_from": "2023-06-08T00:00:00+08:00",
+			"time_to": null,
+			"short_desc": "顯示全市各區降雨模擬淹水量",
+			"long_desc": "展示本市短延時強降雨條件下（78.8mm/h、100mm/h、130mm/h）之可能積水範圍、可能積水深度。資料來源為工務局水利處，更新頻率每五年。",
+			"use_case": "本組件可展示本市短延時強降雨條件下（78.8mm/h、100mm/h、130mm/h）之可能積水範圍、可能積水深度，以做防洪規劃。",
+			"tags": [],
+			"contributors": ["tuic"]
 		}
 	}
 }
