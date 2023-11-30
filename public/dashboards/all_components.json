@@ -4380,14 +4380,8 @@
 				{
 					"index": "condemned_building",
 					"paint": {
-						"circle-color": [
-							"get",
-							"color"
-						],
-						"circle-radius": [
-							"get",
-							"radius"
-						],
+						"circle-color": ["get", "color"],
+						"circle-radius": ["get", "radius"],
 						"circle-opacity": 0.7
 					},
 					"property": [
@@ -4405,23 +4399,16 @@
 				}
 			],
 			"chart_config": {
-				"types": [
-					"DistrictChart",
-					"ColumnChart"
-				],
-				"color": [
-					"#39FF14"
-				],
+				"types": ["DistrictChart", "ColumnChart"],
+				"color": ["#39FF14"],
 				"unit": "m²"
 			},
- 			"source": "台北市建築管理工程處",
-  			"name": "危樓面積",
- 			"short_desc": "顯示台北市危老核准重建計畫地點及面積。”,
-   			"long_desc": "顯示台北市危老核准重建計畫地點及面積，資料來源為台北市建築管理工程處開放資料，不定期更新。”,
-   			"use_case": "可以用於顯示需拆除的危樓資訊，促進綠色城市推動，透過這些點位資訊，我們可以知道台北市危老核准重建計畫的案例地點及面積，在進行綠地、綠色建築等相關建設時可考慮利用這些地點。”,
-   			"links": [
-    				"https://dba.gov.taipei/cp.aspx?n=56283449CC905BB4"
-   			],
+			"source": "台北市建築管理工程處",
+			"name": "危樓面積",
+			"short_desc": "顯示台北市危老核准重建計畫地點及面積。",
+			"long_desc": "顯示台北市危老核准重建計畫地點及面積，資料來源為台北市建築管理工程處開放資料，不定期更新。",
+			"use_case": "可以用於顯示需拆除的危樓資訊，促進綠色城市推動，透過這些點位資訊，我們可以知道台北市危老核准重建計畫的案例地點及面積，在進行綠地、綠色建築等相關建設時可考慮利用這些地點。",
+			"links": ["https://dba.gov.taipei/cp.aspx?n=56283449CC905BB4"],
 			"contributors": [
 				"我們都是112A",
 				"蔡立倫",
