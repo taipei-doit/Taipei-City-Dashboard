@@ -8,6 +8,7 @@ import { ref, computed } from "vue";
 import { useMapStore } from "../../store/mapStore";
 import { useDialogStore } from "../../store/dialogStore";
 
+import TagTooltip from "../utilities/TagTooltip.vue";
 import { chartTypes } from "../../assets/configs/apexcharts/chartTypes";
 
 const mapStore = useMapStore();
@@ -23,6 +24,9 @@ const props = defineProps({
 const activeChart = ref(props.content.chart_config.types[0]);
 // Stores whether the component is toggled on or not
 const checked = ref(false);
+// stores the location of the mouse when tags are hovered over
+const mousePosition = ref({ x: null, y: null });
+const showTagTooltip = ref(false);
 
 // Parses time data into display format
 const dataTime = computed(() => {
@@ -52,6 +56,14 @@ const shouldDisable = computed(() => {
 	);
 });
 
+// The style for the tag tooltip
+const tooltipPosition = computed(() => {
+	return {
+		left: `${mousePosition.value.x - 40}px`,
+		top: `${mousePosition.value.y - 110}px`,
+	};
+});
+
 // Open and closes the component as well as communicates to the mapStore to turn on and off map layers
 function handleToggle() {
 	if (!props.content.map_config) {
@@ -77,6 +89,15 @@ function changeActiveChart(chartName) {
 		`${props.content.map_config[0].index}-${props.content.map_config[0].type}`
 	);
 }
+// Updates the location for the tag tooltip
+function updateMouseLocation(e) {
+	mousePosition.value.x = e.pageX;
+	mousePosition.value.y = e.pageY;
+}
+// Updates whether to show the tag tooltip
+function changeShowTagTooltipState(state) {
+	showTagTooltip.value = state;
+}
 </script>
 
 <template>
@@ -91,39 +112,21 @@ function changeActiveChart(chartName) {
 			<div>
 				<div>
 					<h3>{{ content.name }}</h3>
-					<span
-						v-if="
-							content.chart_config.map_filter &&
-							content.map_config
-						"
-						@click="
-							dialogStore.showNotification(
-								'info',
-								'本組件有篩選地圖功能，點擊圖表資料點以篩選'
-							)
-						"
-						>tune</span
+					<div
+						@mouseenter="changeShowTagTooltipState(true)"
+						@mousemove="updateMouseLocation"
+						@mouseleave="changeShowTagTooltipState(false)"
 					>
-					<span
-						v-if="content.map_config"
-						@click="
-							dialogStore.showNotification(
-								'info',
-								'本組件有空間資料，點擊開關以顯示地圖'
-							)
-						"
-						>map</span
-					>
-					<span
-						v-if="content.history_data"
-						@click="
-							dialogStore.showNotification(
-								'info',
-								'回到儀表板頁面並點擊「組件資訊」以查看'
-							)
-						"
-						>insights</span
-					>
+						<span
+							v-if="
+								content.chart_config.map_filter &&
+								content.map_config
+							"
+							>tune</span
+						>
+						<span v-if="content.map_config">map</span>
+						<span v-if="content.history_data">insights</span>
+					</div>
 				</div>
 				<h4 v-if="checked">{{ `${content.source} | ${dataTime}` }}</h4>
 			</div>
@@ -181,6 +184,16 @@ function changeActiveChart(chartName) {
 				<span>arrow_circle_right</span>
 			</button>
 		</div>
+		<Teleport to="body">
+			<!-- The class "chart-tooltip" could be edited in /assets/styles/chartStyles.css -->
+			<TagTooltip
+				v-if="showTagTooltip"
+				:position="tooltipPosition"
+				:hasFilter="content.chart_config.map_filter ? true : false"
+				:hasMapLayer="content.map_config ? true : false"
+				:hasHistory="content.history_data ? true : false"
+			/>
+		</Teleport>
 	</div>
 </template>
 
