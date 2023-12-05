@@ -3,70 +3,122 @@
 		{
 			"name": "YouBike研究",
 			"index": "youbike",
-			"components": ["60", "142", "143", "144", "145", "146", "147"],
+			"components": [
+				"60",
+				"142",
+				"143",
+				"144",
+				"145",
+				"146",
+				"147"
+			],
 			"icon": "pedal_bike"
 		},
 		{
 			"name": "韌性城市",
 			"index": "urban-resiliance",
-			"components": ["161", "162"],
+			"components": [
+				"161",
+				"162",
+				"163",
+				"164"
+			],
 			"icon": "yard"
 		},
 		{
 			"name": "民情熱議",
 			"index": "public-opinion",
-			"components": ["5", "72"],
+			"components": [
+				"5",
+				"72"
+			],
 			"icon": "mic"
 		},
 		{
 			"name": "社會安全",
 			"index": "security",
-			"components": ["8", "7", "83", "22", "107"],
+			"components": [
+				"8",
+				"7",
+				"83",
+				"22",
+				"107"
+			],
 			"icon": "security"
 		},
 		{
 			"name": "交通運輸",
 			"index": "transport",
-			"components": ["73", "116", "114", "79", "60", "57", "26"],
+			"components": [
+				"73",
+				"116",
+				"114",
+				"79",
+				"60",
+				"57",
+				"26"
+			],
 			"icon": "train"
 		},
 		{
 			"name": "城市建設",
 			"index": "construction",
-			"components": ["140", "34", "42", "108", "20", "28", "33"],
+			"components": [
+				"140",
+				"34",
+				"42",
+				"108",
+				"20",
+				"28",
+				"33"
+			],
 			"icon": "construction"
 		},
 		{
 			"name": "生態環境",
 			"index": "environment",
-			"components": ["141", "110", "103", "104", "111", "43", "59"],
+			"components": [
+				"141",
+				"110",
+				"103",
+				"104",
+				"111",
+				"43",
+				"59"
+			],
 			"icon": "forest"
 		},
 		{
 			"name": "社會福利",
 			"index": "welfare",
-			"components": ["90", "82", "29"],
+			"components": [
+				"90",
+				"82",
+				"29"
+			],
 			"icon": "handshake"
 		},
 		{
 			"name": "測試組件",
 			"index": "testing",
-			"components": ["117", "118", "61", "74"],
-			"icon": "bug_report"
-		},
-		{
-			"name": "我們都是112A",
-			"index": "Hack",
 			"components": [
-				"163",
-				"164"
+				"117",
+				"118",
+				"61",
+				"74"
 			],
-			"icon": "handshake"
+			"icon": "bug_report"
 		},
 		{
 			"name": "收藏組件",
 			"index": "favorites",
-			"components": ["108", "22", "79", "60", "107"],
+			"components": [
+				"108",
+				"22",
+				"79",
+				"60",
+				"107"
+			],
 			"icon": "favorite"
 		},
 		{
