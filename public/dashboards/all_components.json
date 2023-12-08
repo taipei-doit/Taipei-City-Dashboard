@@ -518,28 +518,17 @@
 					"title": "施工路段"
 				}
 			],
+			"map_filter": {
+				"mode": "byParam",
+				"byParam": {
+					"xParam": "c_name"
+				}
+			},
 			"history_data": true,
 			"chart_config": {
 				"color": ["#2f9ca1"],
-				"types": ["DistrictChart", "BarChart"],
-				"unit": "件",
-				"map_filter": [
-					"c_name",
-					[
-						"北投",
-						"士林",
-						"內湖",
-						"南港",
-						"松山",
-						"信義",
-						"中山",
-						"大同",
-						"中正",
-						"萬華",
-						"大安",
-						"文山"
-					]
-				]
+				"types": ["BarChart", "DistrictChart"],
+				"unit": "件"
 			},
 			"name": "道路施工",
 			"source": "工務局",
@@ -1164,6 +1153,12 @@
 					"title": "公有土地"
 				}
 			],
+			"map_filter": {
+				"mode": "byParam",
+				"byParam": {
+					"xParam": "publand_1_土地權屬情形"
+				}
+			},
 			"chart_config": {
 				"color": [
 					"#2d7b7d",

@@ -191,6 +191,7 @@ function changeShowTagTooltipState(state) {
 				:chart_config="content.chart_config"
 				:series="content.chart_data"
 				:map_config="content.map_config"
+				:map_filter="content.map_filter"
 				:key="`${props.content.index}-${item}-chart`"
 			>
 			</component>
@@ -211,7 +212,11 @@ function changeShowTagTooltipState(state) {
 				@mouseleave="changeShowTagTooltipState(false)"
 			>
 				<ComponentTag
-					v-if="content.chart_config.map_filter && content.map_config"
+					v-if="
+						(content.chart_config.map_filter ||
+							content.map_filter) &&
+						content.map_config
+					"
 					icon="tune"
 					text="篩選地圖"
 					class="hide-if-mobile"

@@ -119,7 +119,8 @@ function changeShowTagTooltipState(state) {
 					>
 						<span
 							v-if="
-								content.chart_config.map_filter &&
+								(content.chart_config.map_filter ||
+									content.map_filter) &&
 								content.map_config
 							"
 							>tune</span
@@ -172,6 +173,7 @@ function changeShowTagTooltipState(state) {
 				:chart_config="content.chart_config"
 				:series="content.chart_data"
 				:map_config="content.map_config"
+				:map_filter="content.map_filter"
 			>
 			</component>
 		</div>

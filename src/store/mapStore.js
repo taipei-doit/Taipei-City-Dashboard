@@ -447,7 +447,41 @@ export const useMapStore = defineStore("map", {
 		},
 
 		/* Map Filtering */
-		// Add a filter based on a property on a map layer
+		// Add a filter based on a each map layer's properties
+		filterByParam(map_filter, map_configs, xParam, yParam) {
+			const dialogStore = useDialogStore();
+			if (!this.map || dialogStore.dialogs.moreInfo) {
+				return;
+			}
+			map_configs.map((map_config) => {
+				let mapLayerId = `${map_config.index}-${map_config.type}`;
+				if (map_config && map_config.type === "arc") {
+					this.map.removeLayer(mapLayerId);
+					let toBeFiltered = {
+						...this.map.getSource(`${mapLayerId}-source`)._data,
+					};
+					toBeFiltered.features = toBeFiltered.features.filter(
+						(el) => el.properties[map_filter.xParam] === xParam
+					);
+					map_config.layerId = mapLayerId;
+					this.AddArcMapLayer(map_config, toBeFiltered);
+					return;
+				}
+				if (map_filter.xParam && map_filter.yParam) {
+					this.map.setFilter(mapLayerId, [
+						"all",
+						["==", ["get", map_filter.byParam.xParam], xParam],
+						["==", ["get", map_filter.byParam.yParam], yParam],
+					]);
+				} else {
+					this.map.setFilter(mapLayerId, [
+						"==",
+						["get", map_filter.byParam.xParam],
+						xParam,
+					]);
+				}
+			});
+		},
 		addLayerFilter(layer_id, property, key, map_config) {
 			const dialogStore = useDialogStore();
 			if (!this.map || dialogStore.dialogs.moreInfo) {
@@ -466,6 +500,26 @@ export const useMapStore = defineStore("map", {
 				return;
 			}
 			this.map.setFilter(layer_id, ["==", ["get", property], key]);
+		},
+		// Remove any property filters on a map layer
+		clearParamFilter(map_configs) {
+			const dialogStore = useDialogStore();
+			if (!this.map || dialogStore.dialogs.moreInfo) {
+				return;
+			}
+			map_configs.map((map_config) => {
+				let mapLayerId = `${map_config.index}-${map_config.type}`;
+				if (map_config && map_config.type === "arc") {
+					this.map.removeLayer(mapLayerId);
+					let toRestore = {
+						...this.map.getSource(`${mapLayerId}-source`)._data,
+					};
+					map_config.layerId = mapLayerId;
+					this.AddArcMapLayer(map_config, toRestore);
+					return;
+				}
+				this.map.setFilter(mapLayerId, null);
+			});
 		},
 		// Remove any filters on a map layer
 		clearLayerFilter(layer_id, map_config) {
