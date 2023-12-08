@@ -12,7 +12,7 @@
 			"type": "Feature",
 			"properties": {
 				"Name": "0.15 m ~ 0.30 m",
-				"FID": 0,
+				"FID": 1,
 				"F_depth": "0.15 m ~ 0.30 m",
 				"Field_1": "0.15 m ~ 0.30 m",
 				"GRIDCODE": 2,
