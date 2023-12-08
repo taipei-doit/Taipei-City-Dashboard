@@ -527,7 +527,7 @@
 			"history_data": true,
 			"chart_config": {
 				"color": ["#2f9ca1"],
-				"types": ["BarChart", "DistrictChart"],
+				"types": ["DistrictChart", "BarChart"],
 				"unit": "件"
 			},
 			"name": "道路施工",
@@ -694,7 +694,7 @@
 						}
 					],
 					"type": "line",
-					"title": "公劃地區內事業(權變案件)"
+					"title": "公劃地區內事業"
 				},
 				{
 					"index": "building_renewunit_20",
@@ -743,6 +743,9 @@
 					"title": "都市計畫劃定更新地區"
 				}
 			],
+			"map_filter": {
+				"mode": "byLayer"
+			},
 			"chart_config": {
 				"color": [
 					"#67baca",

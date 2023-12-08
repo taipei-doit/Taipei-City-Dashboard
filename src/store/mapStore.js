@@ -482,6 +482,29 @@ export const useMapStore = defineStore("map", {
 				}
 			});
 		},
+		// filter by layer name
+		filterByLayer(map_configs, xParam) {
+			const dialogStore = useDialogStore();
+			if (!this.map || dialogStore.dialogs.moreInfo) {
+				return;
+			}
+			map_configs.map((map_config) => {
+				let mapLayerId = `${map_config.index}-${map_config.type}`;
+				if (map_config.title !== xParam) {
+					this.map.setLayoutProperty(
+						mapLayerId,
+						"visibility",
+						"none"
+					);
+				} else {
+					this.map.setLayoutProperty(
+						mapLayerId,
+						"visibility",
+						"visible"
+					);
+				}
+			});
+		},
 		addLayerFilter(layer_id, property, key, map_config) {
 			const dialogStore = useDialogStore();
 			if (!this.map || dialogStore.dialogs.moreInfo) {
@@ -502,7 +525,7 @@ export const useMapStore = defineStore("map", {
 			this.map.setFilter(layer_id, ["==", ["get", property], key]);
 		},
 		// Remove any property filters on a map layer
-		clearParamFilter(map_configs) {
+		clearByParamFilter(map_configs) {
 			const dialogStore = useDialogStore();
 			if (!this.map || dialogStore.dialogs.moreInfo) {
 				return;
@@ -519,6 +542,16 @@ export const useMapStore = defineStore("map", {
 					return;
 				}
 				this.map.setFilter(mapLayerId, null);
+			});
+		},
+		clearByLayerFilter(map_configs) {
+			const dialogStore = useDialogStore();
+			if (!this.map || dialogStore.dialogs.moreInfo) {
+				return;
+			}
+			map_configs.map((map_config) => {
+				let mapLayerId = `${map_config.index}-${map_config.type}`;
+				this.map.setLayoutProperty(mapLayerId, "visibility", "visible");
 			});
 		},
 		// Remove any filters on a map layer

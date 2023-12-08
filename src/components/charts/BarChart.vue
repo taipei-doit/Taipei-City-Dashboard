@@ -95,6 +95,7 @@ function handleDataSelection(e, chartContext, config) {
 	if (
 		`${config.dataPointIndex}-${config.seriesIndex}` !== selectedIndex.value
 	) {
+		// Supports filtering by xAxis + yAxis
 		if (props.map_filter.mode === "byParam") {
 			mapStore.filterByParam(
 				props.map_filter,
@@ -103,10 +104,22 @@ function handleDataSelection(e, chartContext, config) {
 				config.w.globals.seriesNames[config.seriesIndex]
 			);
 		}
+		// Supports filtering by xAxis
+		else if (
+			props.map_filter.mode === "byLayer" &&
+			!props.map_filter.buttonControls
+		) {
+			mapStore.filterByLayer(
+				props.map_config,
+				config.w.globals.labels[config.dataPointIndex]
+			);
+		}
 		selectedIndex.value = `${config.dataPointIndex}-${config.seriesIndex}`;
 	} else {
 		if (props.map_filter.mode === "byParam") {
-			mapStore.clearParamFilter(props.map_config);
+			mapStore.clearByParamFilter(props.map_config);
+		} else if (props.map_filter.mode === "byLayer") {
+			mapStore.clearByLayerFilter(props.map_config);
 		}
 		selectedIndex.value = null;
 	}
@@ -115,13 +128,15 @@ function handleDataSelection(e, chartContext, config) {
 
 <template>
 	<div v-if="activeChart === 'BarChart'">
-		<apexchart
-			width="100%"
-			:height="chartHeight"
-			type="bar"
-			:options="chartOptions"
-			:series="series"
-			@dataPointSelection="handleDataSelection"
-		></apexchart>
+		<ChartContainer :map_config="map_config" :map_filter="map_filter">
+			<apexchart
+				width="100%"
+				:height="chartHeight"
+				type="bar"
+				:options="chartOptions"
+				:series="series"
+				@dataPointSelection="handleDataSelection"
+			></apexchart>
+		</ChartContainer>
 	</div>
 </template>
