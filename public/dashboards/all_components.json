@@ -4304,7 +4304,7 @@
 		},
 		"163": {
 			"id": 163,
-			"index": "flood_simulate_78",
+			"index": "flood_simulate",
 			"map_config": [
 				{
 					"index": "flood_simulate_78",
@@ -4327,7 +4327,7 @@
 					},
 					"property": [
 						{
-							"key": "F_depth",
+							"key": "Name",
 							"name": "淹水高度"
 						}
 					],
@@ -4336,7 +4336,7 @@
 			],
 			"chart_config": {
 				"color": ["#CDF5FD", "#A0E9FF", "#00A9FF"],
-				"types": ["BarPercentChart", "ColumnChart"],
+				"types": ["ColumnChart", "BarPercentChart"],
 				"unit": "點",
 				"categories": [
 					"北投區",
@@ -4353,12 +4353,14 @@
 					"文山區"
 				]
 			},
-			"name": "降雨淹水模擬圖_78mm",
+			"name": "降雨淹水模擬圖",
 			"source": "工務局水利處",
 			"time_from": "2023-06-08T00:00:00+08:00",
 			"time_to": null,
+			"update_freq": 5,
+			"update_freq_unit": "year",
 			"short_desc": "顯示全市各區降雨模擬淹水量。",
-			"long_desc": "本圖表展示本市在短延時強降雨條件（78.8mm/h、100mm/h、130mm/h）下可能的淹水範圍及淹水高度。淹水高度以不同顏色表示，分為三級：淺藍色（#CDF5FD）代表 0.15m~0.30m，中藍色（#A0E9FF）代表 0.30m~1.0m，深藍色（#00A9FF）代表 1.0m~2.0m。資料來源為工務局水利處，每五年更新一次。",
+			"long_desc": "本圖表展示本市在短延時強降雨條件（78.8mm/h、100mm/h、130mm/h）下可能的淹水範圍及淹水高度。淹水高度以不同顏色表示，分為三級：淺藍色代表 0.15m~0.30m，中藍色代表 0.30m~1.0m，深藍色代表 1.0m~2.0m。資料來源為工務局水利處，每五年更新一次。",
 			"use_case": "本組件可展示本市短延時強降雨條件下（78.8mm/h、100mm/h、130mm/h）之可能積水範圍、可能積水深度，以做防洪規劃。",
 			"tags": [],
 			"links": ["https://data.gov.tw/dataset/121550"],
@@ -4372,149 +4374,9 @@
 				"tuic"
 			]
 		},
-
 		"164": {
 			"id": 164,
-			"index": "flood_simulate_100",
-			"map_config": [
-				{
-					"index": "flood_simulate_100",
-					"type": "fill",
-					"paint": {
-						"fill-color": [
-							"match",
-							["get", "FID"],
-							1,
-							"#A0E9FF",
-							2,
-							"#89CFF3",
-							3,
-							"#00A9FF",
-							"#00A9FF"
-						],
-						"fill-opacity": 0.8
-					},
-					"property": [
-						{
-							"key": "F_depth",
-							"name": "淹水高度"
-						}
-					],
-					"title": "淹水資訊"
-				}
-			],
-			"chart_config": {
-				"color": ["#CDF5FD", "#A0E9FF", "#00A9FF"],
-				"types": ["BarPercentChart", "ColumnChart"],
-				"unit": "點",
-				"categories": [
-					"北投區",
-					"士林區",
-					"內湖區",
-					"南港區",
-					"松山區",
-					"信義區",
-					"中山區",
-					"大同區",
-					"中正區",
-					"萬華區",
-					"大安區",
-					"文山區"
-				]
-			},
-			"name": "降雨淹水模擬圖_100mm",
-			"source": "工務局水利處",
-			"time_from": "2023-06-08T00:00:00+08:00",
-			"time_to": null,
-			"short_desc": "顯示全市各區降雨模擬淹水量。",
-			"long_desc": "本圖表展示本市在短延時強降雨條件（78.8mm/h、100mm/h、130mm/h）下可能的淹水範圍及淹水高度。淹水高度以不同顏色表示，分為三級：淺藍色（#CDF5FD）代表 0.15m~0.30m，中藍色（#A0E9FF）代表 0.30m~1.0m，深藍色（#00A9FF）代表 1.0m~2.0m。資料來源為工務局水利處，每五年更新一次。",
-			"use_case": "本組件可展示本市短延時強降雨條件下（78.8mm/h、100mm/h、130mm/h）之可能積水範圍、可能積水深度，以做防洪規劃。",
-			"tags": [],
-			"links": ["https://data.gov.tw/dataset/121550"],
-			"contributors": [
-				"我們都是112A",
-				"蔡立倫",
-				"謝芝嫻",
-				"王佑豪",
-				"賴彥良",
-				"林育緹",
-				"tuic"
-			]
-		},
-
-		"165": {
-			"id": 165,
-			"index": "flood_simulate_130",
-			"map_config": [
-				{
-					"index": "flood_simulate_130",
-					"type": "fill",
-					"paint": {
-						"fill-color": [
-							"match",
-							["get", "FID"],
-							0,
-							"#CDF5FD",
-							1,
-							"#A0E9FF",
-							2,
-							"#89CFF3",
-							3,
-							"#00A9FF",
-							"#00A9FF"
-						],
-						"fill-opacity": 0.8
-					},
-					"property": [
-						{
-							"key": "F_depth",
-							"name": "淹水高度"
-						}
-					],
-					"title": "淹水資訊"
-				}
-			],
-			"chart_config": {
-				"color": ["#CDF5FD", "#A0E9FF", "#00A9FF"],
-				"types": ["BarPercentChart", "ColumnChart"],
-				"unit": "點",
-				"categories": [
-					"北投區",
-					"士林區",
-					"內湖區",
-					"南港區",
-					"松山區",
-					"信義區",
-					"中山區",
-					"大同區",
-					"中正區",
-					"萬華區",
-					"大安區",
-					"文山區"
-				]
-			},
-			"name": "降雨淹水模擬圖_130mm",
-			"source": "工務局水利處",
-			"time_from": "2023-06-08T00:00:00+08:00",
-			"time_to": null,
-			"short_desc": "顯示全市各區降雨模擬淹水量。",
-			"long_desc": "本圖表展示本市在短延時強降雨條件（78.8mm/h、100mm/h、130mm/h）下可能的淹水範圍及淹水高度。淹水高度以不同顏色表示，分為三級：淺藍色（#CDF5FD）代表 0.15m~0.30m，中藍色（#A0E9FF）代表 0.30m~1.0m，深藍色（#00A9FF）代表 1.0m~2.0m。資料來源為工務局水利處，每五年更新一次。",
-			"use_case": "本組件可展示本市短延時強降雨條件下（78.8mm/h、100mm/h、130mm/h）之可能積水範圍、可能積水深度，以做防洪規劃。",
-			"tags": [],
-			"links": ["https://data.gov.tw/dataset/121550"],
-			"contributors": [
-				"我們都是112A",
-				"蔡立倫",
-				"謝芝嫻",
-				"王佑豪",
-				"賴彥良",
-				"林育緹",
-				"tuic"
-			]
-		},
-		"166": {
-			"id": 166,
-			"index": "condemned_building",
+			"index": "condemn_building",
 			"map_config": [
 				{
 					"index": "condemned_building",
@@ -4542,12 +4404,14 @@
 				"color": ["#39FF14"],
 				"unit": "m²"
 			},
-			"source": "台北市建築管理工程處",
+			"source": "建管處",
 			"name": "危樓面積",
-			"time_from": "2022-12-01T00:00:00+08:00",
-			"time_to": null,
+			"time_from": "2021-12-01T00:00:00+08:00",
+			"time_to": "2022-12-01T00:00:00+08:00",
+			"update_freq": 1,
+			"update_freq_unit": "month",
 			"short_desc": "顯示台北市危老核准重建計畫地點及面積。",
-			"long_desc": "顯示台北市危老核准重建計畫地點及面積，資料來源為台北市建築管理工程處開放資料，不定期更新。",
+			"long_desc": "顯示台北市危老核准重建計畫地點及面積，資料來源為台北市建築管理工程處開放資料，每一個月更新。",
 			"use_case": "可以用於顯示需拆除的危樓資訊，促進綠色城市推動，透過這些點位資訊，我們可以知道台北市危老核准重建計畫的案例地點及面積，在進行綠地、綠色建築等相關建設時可考慮利用這些地點。",
 			"links": ["https://dba.gov.taipei/cp.aspx?n=56283449CC905BB4"],
 			"contributors": [
