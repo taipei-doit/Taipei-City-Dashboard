@@ -9,7 +9,7 @@
 		{
 			"name": "韌性城市",
 			"index": "urban-resiliance",
-			"components": ["161", "162"],
+			"components": ["161", "162", "163", "164", "165", "166"],
 			"icon": "yard"
 		},
 		{
