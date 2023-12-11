@@ -467,7 +467,11 @@ export const useMapStore = defineStore("map", {
 					this.AddArcMapLayer(map_config, toBeFiltered);
 					return;
 				}
-				if (map_filter.xParam && map_filter.yParam && yParam) {
+				if (
+					map_filter.byParam.xParam &&
+					map_filter.byParam.yParam &&
+					yParam
+				) {
 					this.map.setFilter(mapLayerId, [
 						"all",
 						["==", ["get", map_filter.byParam.xParam], xParam],

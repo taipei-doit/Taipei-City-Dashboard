@@ -3611,6 +3611,13 @@
 					]
 				]
 			},
+			"map_filter": {
+				"mode": "byParam",
+				"byParam": {
+					"xParam": "dist",
+					"yParam": "group"
+				}
+			},
 			"name": "垃圾車收運點位",
 			"source": "環保局",
 			"time_from": "2023-07-28T00:00:00+08:00",

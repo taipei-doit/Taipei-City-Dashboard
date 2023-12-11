@@ -128,15 +128,13 @@ function handleDataSelection(e, chartContext, config) {
 
 <template>
 	<div v-if="activeChart === 'BarChart'">
-		<ChartContainer :map_config="map_config" :map_filter="map_filter">
-			<apexchart
-				width="100%"
-				:height="chartHeight"
-				type="bar"
-				:options="chartOptions"
-				:series="series"
-				@dataPointSelection="handleDataSelection"
-			></apexchart>
-		</ChartContainer>
+		<apexchart
+			width="100%"
+			:height="chartHeight"
+			type="bar"
+			:options="chartOptions"
+			:series="series"
+			@dataPointSelection="handleDataSelection"
+		></apexchart>
 	</div>
 </template>
