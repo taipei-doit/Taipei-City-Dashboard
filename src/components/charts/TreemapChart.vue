@@ -82,7 +82,7 @@ const sum = computed(() => {
 const selectedIndex = ref(null);
 
 function handleDataSelection(e, chartContext, config) {
-	if (!props.map_filter || !props.map_filter.byParam.xParam) {
+	if (!props.map_filter) {
 		return;
 	}
 	if (

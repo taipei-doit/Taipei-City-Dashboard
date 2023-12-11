@@ -86,7 +86,7 @@ function updateMouseLocation(e) {
 }
 
 function handleDataSelection(index) {
-	if (!props.map_filter || !props.map_filter.byParam.xParam) {
+	if (!props.map_filter) {
 		return;
 	}
 	if (`${index}-0` !== selectedIndex.value) {

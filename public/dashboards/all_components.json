@@ -1744,6 +1744,7 @@
 		"72": {
 			"id": 72,
 			"index": "dispatch",
+			"history_data": true,
 			"map_config": [
 				{
 					"index": "dispatchingpoint",
@@ -1769,33 +1770,16 @@
 					"title": "派工類別"
 				}
 			],
-			"history_data": true,
+			"map_filter": {
+				"mode": "byParam",
+				"byParam": {
+					"xParam": "案件類型"
+				}
+			},
 			"chart_config": {
 				"types": ["BarChart", "DonutChart"],
 				"color": ["#fc9f0b", "#dac117", "#FDD79B", "#CA7F09"],
-				"unit": "件",
-				"map_filter": [
-					"案件類型",
-					[
-						"市區道路坑洞處理",
-						"路燈故障或設施損壞",
-						"交通標誌及設施物損壞(含汙損)、傾斜",
-						"道路側溝溝蓋(含周邊)損壞遺失",
-						"場所與設施噪音舉發",
-						"路樹處理",
-						"交通號誌異常",
-						"用戶無水、漏水報修",
-						"人孔蓋(含周邊)破損、遺失處理",
-						"鄰里無主垃圾清運",
-						"道路散落物或油漬處理",
-						"交通號誌電纜線垂落及設施損壞",
-						"污染舉發",
-						"道路側溝內溝牆(底)破損",
-						"雨水下水道側溝清淤",
-						"大型廢棄物清運聯繫",
-						"橋梁、隧道、車(人)行地下道及涵洞積淹水"
-					]
-				]
+				"unit": "件"
 			},
 			"name": "派工案件",
 			"source": "1999派工系統",
@@ -2124,9 +2108,9 @@
 							"match",
 							["get", "main_type"],
 							"銀髮族服務",
-							"#F65658",
-							"身障機構",
 							"#F49F36",
+							"身障機構",
+							"#F65658",
 							"兒童與少年服務",
 							"#F5C860",
 							"社區服務、NPO",
@@ -2163,6 +2147,12 @@
 					"title": "社福機構"
 				}
 			],
+			"map_filter": {
+				"mode": "byParam",
+				"byParam": {
+					"xParam": "main_type"
+				}
+			},
 			"chart_config": {
 				"color": [
 					"#F65658",
@@ -2175,19 +2165,7 @@
 					"#2F8AB1"
 				],
 				"types": ["BarChart", "DonutChart"],
-				"unit": "間",
-				"map_filter": [
-					"main_type",
-					[
-						"銀髮族服務",
-						"身障機構",
-						"兒童與少年服務",
-						"社區服務、NPO",
-						"婦女服務",
-						"貧困危機家庭服務",
-						"保護性服務"
-					]
-				]
+				"unit": "間"
 			},
 			"name": "社福機構",
 			"source": "社會局",
@@ -2247,23 +2225,6 @@
 					"萬華區",
 					"大安區",
 					"文山區"
-				],
-				"map_filter": [
-					"dist",
-					[
-						"北投區",
-						"士林區",
-						"內湖區",
-						"南港區",
-						"松山區",
-						"信義區",
-						"中山區",
-						"大同區",
-						"中正區",
-						"萬華區",
-						"大安區",
-						"文山區"
-					]
 				]
 			},
 			"name": "社福人口",
@@ -2375,14 +2336,16 @@
 					"title": "公園綠地"
 				}
 			],
+			"map_filter": {
+				"mode": "byParam",
+				"byParam": {
+					"xParam": "type"
+				}
+			},
 			"chart_config": {
 				"color": ["#D2EE90", "#90EE90", "#4caf50", "#CAF245"],
 				"types": ["TreemapChart", "BarChart"],
-				"unit": "km²",
-				"map_filter": [
-					"type",
-					["公園", "河濱公園", "公園生態化", "校園綠化"]
-				]
+				"unit": "km²"
 			},
 			"name": "公園綠地",
 			"source": "工務局",
@@ -2434,19 +2397,16 @@
 					"title": "都市綠地"
 				}
 			],
+			"map_filter": {
+				"mode": "byParam",
+				"byParam": {
+					"xParam": "type"
+				}
+			},
 			"chart_config": {
 				"types": ["BarChart", "TreemapChart"],
 				"color": ["#08B36C", "#2B805C", "#64A2A2", "#1C8585"],
-				"unit": "km²",
-				"map_filter": [
-					"type",
-					[
-						"都市計畫保護區",
-						"都市計畫農業區",
-						"野雁保護區",
-						"自然保留區"
-					]
-				]
+				"unit": "km²"
 			},
 			"name": "都市綠地",
 			"source": "工務局",
@@ -2563,11 +2523,15 @@
 					"title": "醫療機構"
 				}
 			],
-			"name": "醫療院所分布",
+			"map_filter": {
+				"mode": "byParam",
+				"byParam": {
+					"xParam": "type"
+				}
+			},
 			"chart_config": {
 				"types": ["MapLegend"],
-				"unit": "間",
-				"map_filter": ["type", ["醫院", "診所"]]
+				"unit": "間"
 			},
 			"chart_data": [
 				{
@@ -2583,6 +2547,7 @@
 					"value": 3621
 				}
 			],
+			"name": "醫療院所分布",
 			"source": "衛生局",
 			"contributors": ["tuic"]
 		},
@@ -2613,27 +2578,16 @@
 					"title": "AED分布"
 				}
 			],
+			"map_filter": {
+				"mode": "byParam",
+				"byParam": {
+					"xParam": "dist"
+				}
+			},
 			"chart_config": {
 				"types": ["DistrictChart", "ColumnChart"],
 				"color": ["#A25FAD"],
-				"unit": "台",
-				"map_filter": [
-					"dist",
-					[
-						"北投區",
-						"士林區",
-						"內湖區",
-						"南港區",
-						"松山區",
-						"信義區",
-						"中山區",
-						"大同區",
-						"中正區",
-						"萬華區",
-						"大安區",
-						"文山區"
-					]
-				]
+				"unit": "台"
 			},
 			"name": "AED分布",
 			"source": "衛生局",
@@ -2698,27 +2652,16 @@
 					"title": "路燈"
 				}
 			],
+			"map_filter": {
+				"mode": "byParam",
+				"byParam": {
+					"xParam": "dist"
+				}
+			},
 			"chart_config": {
 				"types": ["DistrictChart", "ColumnChart"],
 				"color": ["#FFE677"],
-				"unit": "盞",
-				"map_filter": [
-					"dist",
-					[
-						"北投區",
-						"士林區",
-						"內湖區",
-						"南港區",
-						"松山區",
-						"信義區",
-						"中山區",
-						"大同區",
-						"中正區",
-						"萬華區",
-						"大安區",
-						"文山區"
-					]
-				]
+				"unit": "盞"
 			},
 			"name": "路燈分佈",
 			"source": "工務局公燈處",
@@ -2766,20 +2709,25 @@
 					"title": "自行車道"
 				}
 			],
+			"map_filter": {
+				"mode": "byParam",
+				"byParam": {
+					"xParam": "type"
+				}
+			},
 			"chart_config": {
-				"types": ["MapLegend"],
-				"map_filter": ["type", ["市區", "河濱"]]
+				"types": ["MapLegend"]
 			},
 			"chart_data": [
 				{
 					"type": "line",
 					"color": "#a0b8e8",
-					"name": "市區自行車道"
+					"name": "市區"
 				},
 				{
 					"type": "line",
 					"color": "#b7ff98",
-					"name": "河濱自行車道"
+					"name": "河濱"
 				}
 			],
 			"name": "自行車道",
@@ -2899,27 +2847,16 @@
 					"title": "行道樹"
 				}
 			],
+			"map_filter": {
+				"mode": "byParam",
+				"byParam": {
+					"xParam": "dist"
+				}
+			},
 			"chart_config": {
 				"color": ["#33C552"],
 				"types": ["DistrictChart", "ColumnChart"],
-				"unit": "棵",
-				"map_filter": [
-					"dist",
-					[
-						"北投區",
-						"士林區",
-						"內湖區",
-						"南港區",
-						"松山區",
-						"信義區",
-						"中山區",
-						"大同區",
-						"中正區",
-						"萬華區",
-						"大安區",
-						"文山區"
-					]
-				]
+				"unit": "棵"
 			},
 			"history_data": false,
 			"source": "工務局",
@@ -2989,14 +2926,16 @@
 					"title": "田園城市"
 				}
 			],
+			"map_filter": {
+				"mode": "byParam",
+				"byParam": {
+					"xParam": "type"
+				}
+			},
 			"chart_config": {
 				"types": ["TreemapChart", "BarChart"],
 				"color": ["#13b3a6", "#99E1E3", "#38BDC0", "#bdedee"],
-				"unit": "m²",
-				"map_filter": [
-					"type",
-					["小田園", "快樂農園", "綠屋頂", "市民農園"]
-				]
+				"unit": "m²"
 			},
 			"name": "田園城市",
 			"source": "工務局",
@@ -3112,11 +3051,11 @@
 						"fill-color": [
 							"match",
 							["get", "class"],
-							"高",
+							"高潛勢",
 							"#c87a74",
-							"中",
+							"中潛勢",
 							"#c8b974",
-							"低",
+							"低潛勢",
 							"#9bc874",
 							"#9c967f"
 						]
@@ -3131,9 +3070,14 @@
 					"title": "土壤液化潛勢"
 				}
 			],
+			"map_filter": {
+				"mode": "byParam",
+				"byParam": {
+					"xParam": "class"
+				}
+			},
 			"chart_config": {
-				"types": ["MapLegend"],
-				"map_filter": ["class", ["高", "中", "低"]]
+				"types": ["MapLegend"]
 			},
 			"chart_data": [
 				{
@@ -3504,11 +3448,11 @@
 					"paint": {
 						"circle-color": [
 							"case",
-							["<=", ["get", "arrive_time"], 1700],
+							["<", ["get", "arrive_time"], 1700],
 							"#E6DF44",
-							["<=", ["get", "arrive_time"], 1900],
+							["<", ["get", "arrive_time"], 1900],
 							"#F4633C",
-							["<=", ["get", "arrive_time"], 2100],
+							["<", ["get", "arrive_time"], 2100],
 							"#D63940",
 							"#9C2A4B"
 						]
@@ -3553,7 +3497,13 @@
 					"icon": null
 				}
 			],
-			"history_data": false,
+			"map_filter": {
+				"mode": "byParam",
+				"byParam": {
+					"xParam": "dist",
+					"yParam": "group"
+				}
+			},
 			"chart_config": {
 				"categories": [
 					"北投區",
@@ -3569,33 +3519,9 @@
 					"大安區",
 					"文山區"
 				],
-				"types": ["ColumnChart", "RadarChart", "DistrictChart"],
+				"types": ["ColumnChart", "DistrictChart"],
 				"color": ["#E6DF44", "#F4633C", "#D63940", "#9C2A4B"],
-				"unit": "點",
-				"map_filter": [
-					"dist",
-					[
-						"北投區",
-						"士林區",
-						"內湖區",
-						"南港區",
-						"松山區",
-						"信義區",
-						"中山區",
-						"大同區",
-						"中正區",
-						"萬華區",
-						"大安區",
-						"文山區"
-					]
-				]
-			},
-			"map_filter": {
-				"mode": "byParam",
-				"byParam": {
-					"xParam": "dist",
-					"yParam": "group"
-				}
+				"unit": "點"
 			},
 			"name": "垃圾車收運點位",
 			"source": "環保局",
@@ -3614,6 +3540,24 @@
 		"142": {
 			"id": 142,
 			"index": "youbike_weekend",
+			"map_config": [
+				{
+					"index": "youbike_weekend",
+					"paint": {
+						"arc-color": ["#fd7900", "#47d3d9"],
+						"arc-width": 3
+					},
+					"type": "arc",
+					"title": "週間群像"
+				}
+			],
+			"map_filter": {
+				"mode": "byParam",
+				"byParam": {
+					"xParam": "TOWNNAME_origin",
+					"yParam": "TOWNNAME_destination"
+				}
+			},
 			"chart_config": {
 				"types": ["HeatmapChart"],
 				"categories": [
@@ -3653,37 +3597,8 @@
 					"#236e0c",
 					"#666666"
 				],
-				"unit": "千次",
-				"map_filter": [
-					"TOWNNAME_origin",
-					[
-						"北投區",
-						"士林區",
-						"內湖區",
-						"南港區",
-						"松山區",
-						"信義區",
-						"中山區",
-						"大同區",
-						"中正區",
-						"萬華區",
-						"大安區",
-						"文山區",
-						"非臺北市"
-					]
-				]
+				"unit": "千次"
 			},
-			"map_config": [
-				{
-					"index": "youbike_weekend",
-					"paint": {
-						"arc-color": ["#fd7900", "#47d3d9"],
-						"arc-width": 3
-					},
-					"type": "arc",
-					"title": "週間群像"
-				}
-			],
 			"name": "YouBike週末群像",
 			"source": "臺北大數據中心",
 			"time_from": "2023-07-28T00:00:00+08:00",
