@@ -102,10 +102,7 @@ function handleDataSelection(e, chartContext, config) {
 			);
 		}
 		// Supports filtering by xAxis
-		else if (
-			props.map_filter.mode === "byLayer" &&
-			!props.map_filter.buttonControls
-		) {
+		else if (props.map_filter.mode === "byLayer") {
 			mapStore.filterByLayer(
 				props.map_config,
 				config.w.globals.labels[config.dataPointIndex]

@@ -243,7 +243,7 @@ function changeShowTagTooltipState(state) {
 			<TagTooltip
 				v-if="showTagTooltip"
 				:position="tooltipPosition"
-				:hasFilter="content.chart_config.map_filter ? true : false"
+				:hasFilter="content.map_filter ? true : false"
 				:hasMapLayer="content.map_config ? true : false"
 				:hasHistory="content.history_data ? true : false"
 			/>

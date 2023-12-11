@@ -3716,10 +3716,6 @@
 							"name": "站點名稱"
 						},
 						{
-							"key": "dist",
-							"name": "行政區"
-						},
-						{
 							"key": "category",
 							"name": "見車率"
 						}

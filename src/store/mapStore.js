@@ -449,6 +449,8 @@ export const useMapStore = defineStore("map", {
 		/* Map Filtering */
 		// Add a filter based on a each map layer's properties (byParam)
 		filterByParam(map_filter, map_configs, xParam, yParam) {
+			// If there are layers loading, don't filter
+			if (this.loadingLayers.length > 0) return;
 			const dialogStore = useDialogStore();
 			if (!this.map || dialogStore.dialogs.moreInfo) {
 				return;
@@ -523,6 +525,8 @@ export const useMapStore = defineStore("map", {
 		// filter by layer name (byLayer)
 		filterByLayer(map_configs, xParam) {
 			const dialogStore = useDialogStore();
+			// If there are layers loading, don't filter
+			if (this.loadingLayers.length > 0) return;
 			if (!this.map || dialogStore.dialogs.moreInfo) {
 				return;
 			}
@@ -558,6 +562,10 @@ export const useMapStore = defineStore("map", {
 					this.currentLayers = this.currentLayers.filter(
 						(item) => item !== `${mapLayerId}-filtered`
 					);
+					this.currentVisibleLayers =
+						this.currentVisibleLayers.filter(
+							(item) => item !== `${mapLayerId}-filtered`
+						);
 					this.map.setLayoutProperty(
 						mapLayerId,
 						"visibility",

@@ -32,10 +32,7 @@ function handleDataSelection(index) {
 			);
 		}
 		// Supports filtering by xAxis
-		else if (
-			props.map_filter.mode === "byLayer" &&
-			!props.map_filter.buttonControls
-		) {
+		else if (props.map_filter.mode === "byLayer") {
 			mapStore.filterByLayer(props.map_config, props.series[index].name);
 		}
 		selectedIndex.value = index;

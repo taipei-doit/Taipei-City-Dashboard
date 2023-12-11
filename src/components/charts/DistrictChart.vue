@@ -89,7 +89,7 @@ function handleDataSelection(index) {
 	if (!props.map_filter) {
 		return;
 	}
-	if (`${index}-0` !== selectedIndex.value) {
+	if (index !== selectedIndex.value) {
 		// Supports filtering by xAxis
 		if (props.map_filter.mode === "byParam") {
 			mapStore.filterByParam(
@@ -99,13 +99,10 @@ function handleDataSelection(index) {
 			);
 		}
 		// Supports filtering by xAxis
-		else if (
-			props.map_filter.mode === "byLayer" &&
-			!props.map_filter.buttonControls
-		) {
+		else if (props.map_filter.mode === "byLayer") {
 			mapStore.filterByLayer(props.map_config, districts[index]);
 		}
-		selectedIndex.value = `${index}-0`;
+		selectedIndex.value = index;
 	} else {
 		if (props.map_filter.mode === "byParam") {
 			mapStore.clearByParamFilter(props.map_config);
