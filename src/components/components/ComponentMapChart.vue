@@ -85,9 +85,11 @@ function handleToggle() {
 // Also clear any map filters applied
 function changeActiveChart(chartName) {
 	activeChart.value = chartName;
-	mapStore.clearLayerFilter(
-		`${props.content.map_config[0].index}-${props.content.map_config[0].type}`
-	);
+	if (props.content.map_filter.mode === "byParam") {
+		mapStore.clearByParamFilter(props.content.map_config);
+	} else if (props.content.map_filter.mode === "byLayer") {
+		mapStore.clearByLayerFilter(props.content.map_config);
+	}
 }
 // Updates the location for the tag tooltip
 function updateMouseLocation(e) {

@@ -467,6 +467,7 @@ export const useMapStore = defineStore("map", {
 					this.AddArcMapLayer(map_config, toBeFiltered);
 					return;
 				}
+				// If x and y both exist, filter by both
 				if (
 					map_filter.byParam.xParam &&
 					map_filter.byParam.yParam &&
@@ -477,7 +478,25 @@ export const useMapStore = defineStore("map", {
 						["==", ["get", map_filter.byParam.xParam], xParam],
 						["==", ["get", map_filter.byParam.yParam], yParam],
 					]);
-				} else {
+				}
+				// If only y exists, filter by y
+				else if (
+					!map_filter.byParam.xParam &&
+					map_filter.byParam.yParam &&
+					yParam
+				) {
+					this.map.setFilter(mapLayerId, [
+						"==",
+						["get", map_filter.byParam.yParam],
+						yParam,
+					]);
+				}
+				// default to filter by x
+				else if (
+					map_filter.byParam.xParam &&
+					!map_filter.byParam.yParam &&
+					xParam
+				) {
 					this.map.setFilter(mapLayerId, [
 						"==",
 						["get", map_filter.byParam.xParam],

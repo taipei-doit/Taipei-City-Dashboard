@@ -86,11 +86,11 @@ function updateMouseLocation(e) {
 }
 
 function handleDataSelection(index) {
-	if (!props.map_filter) {
+	if (!props.map_filter || !props.map_filter.byParam.xParam) {
 		return;
 	}
 	if (`${index}-0` !== selectedIndex.value) {
-		// Supports filtering by xAxis + yAxis
+		// Supports filtering by xAxis
 		if (props.map_filter.mode === "byParam") {
 			mapStore.filterByParam(
 				props.map_filter,

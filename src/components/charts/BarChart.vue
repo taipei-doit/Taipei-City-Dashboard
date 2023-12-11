@@ -89,19 +89,18 @@ const chartHeight = computed(() => {
 const selectedIndex = ref(null);
 
 function handleDataSelection(e, chartContext, config) {
-	if (!props.map_filter) {
+	if (!props.map_filter || !props.map_filter.byParam.xParam) {
 		return;
 	}
 	if (
 		`${config.dataPointIndex}-${config.seriesIndex}` !== selectedIndex.value
 	) {
-		// Supports filtering by xAxis + yAxis
+		// Supports filtering by xAxis
 		if (props.map_filter.mode === "byParam") {
 			mapStore.filterByParam(
 				props.map_filter,
 				props.map_config,
-				config.w.globals.labels[config.dataPointIndex],
-				config.w.globals.seriesNames[config.seriesIndex]
+				config.w.globals.labels[config.dataPointIndex]
 			);
 		}
 		// Supports filtering by xAxis

@@ -823,6 +823,12 @@
 					"title": "社會住宅"
 				}
 			],
+			"map_filter": {
+				"mode": "byParam",
+				"byParam": {
+					"xParam": "progress"
+				}
+			},
 			"chart_config": {
 				"color": [
 					"#fff495",
@@ -832,17 +838,7 @@
 					"#a65818"
 				],
 				"types": ["DonutChart", "BarChart"],
-				"unit": "棟",
-				"map_filter": [
-					"progress",
-					[
-						"已完工",
-						"施工中及待開工",
-						"規劃中",
-						"招標中及待上網",
-						"都更聯開分回"
-					]
-				]
+				"unit": "棟"
 			},
 			"name": "社會住宅建設進度",
 			"source": "都發局",
@@ -1277,6 +1273,12 @@
 					"title": "都市計畫用地類型"
 				}
 			],
+			"map_filter": {
+				"mode": "byParam",
+				"byParam": {
+					"xParam": "landuse group_metadata_用地分類"
+				}
+			},
 			"chart_config": {
 				"color": [
 					"#7fff00",
@@ -1304,35 +1306,7 @@
 					"#00ff00"
 				],
 				"types": ["TreemapChart", "BarChart"],
-				"unit": "km²",
-				"map_filter": [
-					"landuse group_metadata_用地分類",
-					[
-						"保護區",
-						"其他",
-						"住宅用地類",
-						"水域",
-						"綠地",
-						"文教用地類",
-						"商業用地類",
-						"交通用地類",
-						"機關用地類",
-						"農業區",
-						"工業區類",
-						"設施類",
-						"風景區",
-						"動物園用地",
-						"專用區類",
-						"醫療用地類",
-						"娛樂區",
-						"市場用地類",
-						"遊樂區",
-						"體育場",
-						"中正紀念堂",
-						"保存區",
-						"兒童遊樂場"
-					]
-				]
+				"unit": "km²"
 			},
 			"history_data": false,
 			"source": "都發局",
@@ -1444,7 +1418,7 @@
 						"circle-color": [
 							"match",
 							["get", "all_pumb_lights"],
-							"+",
+							"啟動中",
 							"#ff9800",
 							"#00B2FF"
 						]
@@ -1488,12 +1462,17 @@
 					"title": "抽水站"
 				}
 			],
+			"map_filter": {
+				"mode": "byParam",
+				"byParam": {
+					"yParam": "all_pumb_lights"
+				}
+			},
 			"chart_config": {
 				"types": ["GuageChart", "BarPercentChart"],
 				"color": ["#ff9800"],
 				"unit": "站",
-				"categories": ["啟動抽水站"],
-				"map_filter": ["all_pumb_lights", ["+", "-"]]
+				"categories": ["啟動抽水站"]
 			},
 			"name": "抽水站狀態",
 			"source": "工務局水利處",
