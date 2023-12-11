@@ -78,6 +78,7 @@ function handleToggle() {
 	if (checked.value) {
 		mapStore.addToMapLayerList(props.content.map_config);
 	} else {
+		mapStore.clearByParamFilter(props.content.map_config);
 		mapStore.turnOffMapLayerVisibility(props.content.map_config);
 	}
 }
@@ -85,9 +86,9 @@ function handleToggle() {
 // Also clear any map filters applied
 function changeActiveChart(chartName) {
 	activeChart.value = chartName;
-	if (props.content.map_filter.mode === "byParam") {
+	if (props.content.map_filter?.mode === "byParam") {
 		mapStore.clearByParamFilter(props.content.map_config);
-	} else if (props.content.map_filter.mode === "byLayer") {
+	} else if (props.content.map_filter?.mode === "byLayer") {
 		mapStore.clearByLayerFilter(props.content.map_config);
 	}
 }
@@ -119,12 +120,7 @@ function changeShowTagTooltipState(state) {
 						@mousemove="updateMouseLocation"
 						@mouseleave="changeShowTagTooltipState(false)"
 					>
-						<span
-							v-if="
-								(content.chart_config.map_filter ||
-									content.map_filter) &&
-								content.map_config
-							"
+						<span v-if="content.map_filter && content.map_config"
 							>tune</span
 						>
 						<span v-if="content.map_config">map</span>

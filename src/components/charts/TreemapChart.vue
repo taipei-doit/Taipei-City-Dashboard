@@ -103,7 +103,7 @@ function handleDataSelection(e, chartContext, config) {
 		) {
 			mapStore.filterByLayer(
 				props.map_config,
-				config.w.globals.labels[config.dataPointIndex]
+				config.w.globals.categoryLabels[config.dataPointIndex]
 			);
 		}
 		selectedIndex.value = `${config.dataPointIndex}-${config.seriesIndex}`;

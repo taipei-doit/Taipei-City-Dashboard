@@ -143,7 +143,9 @@
 					"title": "警局轄區"
 				}
 			],
-			"name": "警察相關設施",
+			"map_filter": {
+				"mode": "byLayer"
+			},
 			"chart_config": {
 				"types": ["MapLegend"]
 			},
@@ -156,9 +158,10 @@
 				{
 					"type": "line",
 					"color": "#009688",
-					"name": "警察轄區"
+					"name": "警局轄區"
 				}
 			],
+			"name": "警察相關設施",
 			"source": "警察局",
 			"contributors": ["tuic"]
 		},
@@ -292,6 +295,9 @@
 					"type": "symbol"
 				}
 			],
+			"map_filter": {
+				"mode": "byLayer"
+			},
 			"chart_config": {
 				"types": ["MapLegend"]
 			},
@@ -443,7 +449,9 @@
 					"title": "老舊聚落"
 				}
 			],
-			"name": "山坡地風險地點",
+			"map_filter": {
+				"mode": "byLayer"
+			},
 			"chart_config": {
 				"types": ["MapLegend"],
 				"unit": "處"
@@ -474,6 +482,7 @@
 					"value": 34
 				}
 			],
+			"name": "山坡地風險地點",
 			"source": "工務局",
 			"contributors": ["tuic"]
 		},
@@ -938,7 +947,9 @@
 					"title": "閒置市有(公用)建物"
 				}
 			],
-			"name": "閒置市有財產",
+			"map_filter": {
+				"mode": "byLayer"
+			},
 			"chart_config": {
 				"types": ["MapLegend"],
 				"unit": "處"
@@ -957,6 +968,7 @@
 					"value": 48
 				}
 			],
+			"name": "閒置市有財產",
 			"source": "財政局",
 			"contributors": ["tuic"]
 		},
@@ -1528,6 +1540,12 @@
 					"title": "壅塞程度"
 				}
 			],
+			"map_filter": {
+				"mode": "byParam",
+				"byParam": {
+					"xParam": "壅塞程度"
+				}
+			},
 			"history_data": true,
 			"history_data_color": ["#EC4037", "#BBB"],
 			"chart_config": {
@@ -2281,25 +2299,6 @@
 			"update_freq": null,
 			"update_freq_unit": null,
 			"contributors": ["tuic"]
-		},
-		"92": {
-			"id": 92,
-			"index": "welfare_population",
-			"chart_config": {
-				"color": ["#2e999b", "#80e3d4", "#1f9b85", "#a5ece0"],
-				"types": ["RadarChart"],
-				"unit": "人",
-				"categories": ["低收", "中低收", "身障補助", "身障"]
-			},
-			"name": "社福人口",
-			"history_data": false,
-			"source": "社會局",
-			"time_from": "2023-05-02T08:00:18+08:00",
-			"contributors": ["tuic"],
-			"short_desc": "顯示社會福利人口（身障、低收、中低收、低收身障）的比例",
-			"long_desc": "顯示社會福利人口（身障、低收、中低收、低收身障）的比例，資料來源為台北市社會局內部資料，每月15號更新。",
-			"use_case": "社福人口比例的資料能讓我們了解台北市社會福利的需求變化，從而規劃更貼近民眾需求的社會福利措施。",
-			"links": null
 		},
 		"103": {
 			"id": 103,
@@ -3616,6 +3615,24 @@
 		"143": {
 			"id": 143,
 			"index": "youbike_weekday",
+			"map_config": [
+				{
+					"index": "youbike_weekday",
+					"paint": {
+						"arc-color": ["#fd7900", "#47d3d9"],
+						"arc-width": 3
+					},
+					"type": "arc",
+					"title": "週間群像"
+				}
+			],
+			"map_filter": {
+				"mode": "byParam",
+				"byParam": {
+					"xParam": "TOWNNAME_origin",
+					"yParam": "TOWNNAME_destination"
+				}
+			},
 			"chart_config": {
 				"types": ["HeatmapChart"],
 				"categories": [
@@ -3630,7 +3647,8 @@
 					"中正區",
 					"萬華區",
 					"大安區",
-					"文山區"
+					"文山區",
+					"非臺北市"
 				],
 				"color": [
 					"#b9b929",
@@ -3654,36 +3672,8 @@
 					"#236e0c",
 					"#666666"
 				],
-				"unit": "千次",
-				"map_filter": [
-					"TOWNNAME_origin",
-					[
-						"北投區",
-						"士林區",
-						"內湖區",
-						"南港區",
-						"松山區",
-						"信義區",
-						"中山區",
-						"大同區",
-						"中正區",
-						"萬華區",
-						"大安區",
-						"文山區"
-					]
-				]
+				"unit": "千次"
 			},
-			"map_config": [
-				{
-					"index": "youbike_weekday",
-					"paint": {
-						"arc-color": ["#fd7900", "#47d3d9"],
-						"arc-width": 3
-					},
-					"type": "arc",
-					"title": "週間群像"
-				}
-			],
 			"name": "YouBike週間群像",
 			"source": "臺北大數據中心",
 			"time_from": "2023-07-28T00:00:00+08:00",
@@ -3702,12 +3692,6 @@
 			"id": 144,
 			"index": "youbike_avail_pct",
 			"history_data": true,
-			"chart_config": {
-				"types": ["BarChart", "DonutChart"],
-				"color": ["#797979", "#e97c69", "#ca0020"],
-				"unit": "站",
-				"map_filter": ["category", ["高", "中", "低"]]
-			},
 			"map_config": [
 				{
 					"index": "youbike_avail_pct",
@@ -3745,6 +3729,17 @@
 					"type": "circle"
 				}
 			],
+			"map_filter": {
+				"mode": "byParam",
+				"byParam": {
+					"xParam": "category"
+				}
+			},
+			"chart_config": {
+				"types": ["BarChart", "DonutChart"],
+				"color": ["#797979", "#e97c69", "#ca0020"],
+				"unit": "站"
+			},
 			"name": "YouBike見車率",
 			"source": "臺北大數據中心",
 			"time_from": "2023-07-01T00:00:00+08:00",
@@ -3762,15 +3757,6 @@
 		"145": {
 			"id": 145,
 			"index": "youbike_sub_stn",
-			"chart_config": {
-				"types": ["DonutChart"],
-				"unit": "站",
-				"color": ["#a8f8ff", "#4cd2ff", "#00a6ff"],
-				"map_filter": [
-					"category",
-					["互補站<=5", "互補站5~10", "互補站>10"]
-				]
-			},
 			"map_config": [
 				{
 					"index": "youbike_sub_stn_2",
@@ -3832,6 +3818,17 @@
 					"type": "circle"
 				}
 			],
+			"map_filter": {
+				"mode": "byParam",
+				"byParam": {
+					"xParam": "category"
+				}
+			},
+			"chart_config": {
+				"types": ["DonutChart"],
+				"unit": "站",
+				"color": ["#a8f8ff", "#4cd2ff", "#00a6ff"]
+			},
 			"name": "YouBike互補站點",
 			"source": "臺北大數據中心",
 			"time_from": "2023-03-01T00:00:00+08:00",
@@ -3849,31 +3846,6 @@
 		"146": {
 			"id": 146,
 			"index": "youbike_grid",
-			"chart_config": {
-				"types": ["TreemapChart", "BarChart"],
-				"unit": "個網格",
-				"color": [
-					"#7FBF7B",
-					"#8E8E8E",
-					"#40A461",
-					"#BEBEBE",
-					"#3D56FF",
-					"#BFDAB8",
-					"#ACCFFF"
-				],
-				"map_filter": [
-					"class",
-					[
-						"無法設站-山區且土地限制",
-						"已設站",
-						"無法設站-山區",
-						"鄰近已設站",
-						"未設站",
-						"無法設站-土地限制",
-						"無法設站-特殊條件限制"
-					]
-				]
-			},
 			"map_config": [
 				{
 					"index": "youbike_grid",
@@ -3907,6 +3879,25 @@
 					"type": "fill"
 				}
 			],
+			"map_filter": {
+				"mode": "byParam",
+				"byParam": {
+					"xParam": "class"
+				}
+			},
+			"chart_config": {
+				"types": ["TreemapChart", "BarChart"],
+				"unit": "個網格",
+				"color": [
+					"#7FBF7B",
+					"#8E8E8E",
+					"#40A461",
+					"#BEBEBE",
+					"#3D56FF",
+					"#BFDAB8",
+					"#ACCFFF"
+				]
+			},
 			"name": "YouBike設站狀態",
 			"source": "資訊局",
 			"time_from": "2023-07-01T00:00:00+08:00",
@@ -3955,6 +3946,12 @@
 					"title": "潛在需求"
 				}
 			],
+			"map_filter": {
+				"mode": "byParam",
+				"byParam": {
+					"xParam": "category"
+				}
+			},
 			"chart_config": {
 				"types": ["TreemapChart", "BarChart"],
 				"color": [
@@ -3965,8 +3962,7 @@
 					"#9f4333",
 					"#800026"
 				],
-				"unit": "個網格",
-				"map_filter": ["category", ["極低", "低", "中低", "中", "高"]]
+				"unit": "個網格"
 			},
 			"name": "YouBike未設站區潛在需求",
 			"source": "資訊局",
@@ -3998,7 +3994,7 @@
 						}
 					],
 					"type": "line",
-					"title": "堤防系統"
+					"title": "堤防系統 (km)"
 				},
 				{
 					"index": "waterworks_detention",
@@ -4021,7 +4017,7 @@
 						}
 					],
 					"type": "fill",
-					"title": "滯洪設施"
+					"title": "滯洪設施 (km²)"
 				},
 				{
 					"index": "waterworks_sewer",
@@ -4052,9 +4048,12 @@
 						}
 					],
 					"type": "line",
-					"title": "雨水下水道管線"
+					"title": "雨水下水道管線 (km)"
 				}
 			],
+			"map_filter": {
+				"mode": "byLayer"
+			},
 			"chart_config": {
 				"types": ["MapLegend"]
 			},
@@ -4182,6 +4181,9 @@
 					"title": "PAC鋪面"
 				}
 			],
+			"map_filter": {
+				"mode": "byLayer"
+			},
 			"chart_config": {
 				"types": ["TreemapChart"],
 				"unit": "m²",
