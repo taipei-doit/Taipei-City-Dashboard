@@ -1,10 +1,16 @@
 <!-- Developed by Taipei Urban Intelligence Center 2023 -->
 
 <script setup>
-import { computed, defineProps, ref } from 'vue';
-import { useMapStore } from '../../store/mapStore';
+import { computed, defineProps, ref } from "vue";
+import { useMapStore } from "../../store/mapStore";
 
-const props = defineProps(['chart_config', 'activeChart', 'series', 'map_config']);
+const props = defineProps([
+	"chart_config",
+	"activeChart",
+	"series",
+	"map_config",
+	"map_filter",
+]);
 const mapStore = useMapStore();
 
 // How many data points to show before summing all remaining points into "other"
@@ -23,7 +29,7 @@ const parsedSeries = computed(() => {
 	}
 	const toSum = toParse.splice(steps.value, toParse.length - steps.value);
 	let sum = 0;
-	toSum.forEach(element => sum += element.y);
+	toSum.forEach((element) => (sum += element.y));
 	output.push(sum);
 	return output;
 });
@@ -36,7 +42,7 @@ const parsedLabels = computed(() => {
 	for (let i = 0; i < steps.value; i++) {
 		output.push(toParse[i].x);
 	}
-	output.push('其他');
+	output.push("其他");
 	return output;
 });
 const sum = computed(() => {
@@ -48,7 +54,10 @@ const chartOptions = ref({
 	chart: {
 		offsetY: 10,
 	},
-	colors: props.series.length >= steps.value ? [...props.chart_config.color, '#848c94'] : props.chart_config.color,
+	colors:
+		props.series.length >= steps.value
+			? [...props.chart_config.color, "#848c94"]
+			: props.chart_config.color,
 	dataLabels: {
 		formatter: function (val, { seriesIndex, w }) {
 			let value = w.globals.labels[seriesIndex];
@@ -65,12 +74,12 @@ const chartOptions = ref({
 				offset: 15,
 			},
 			donut: {
-				size: '77.5%',
+				size: "77.5%",
 			},
-		}
+		},
 	},
 	stroke: {
-		colors: ['#282a2c'],
+		colors: ["#282a2c"],
 		show: true,
 		width: 3,
 	},
@@ -78,10 +87,17 @@ const chartOptions = ref({
 		followCursor: false,
 		custom: function ({ series, seriesIndex, w }) {
 			// The class "chart-tooltip" could be edited in /assets/styles/chartStyles.css
-			return '<div class="chart-tooltip">' +
-				'<h6>' + w.globals.labels[seriesIndex] + '</h6>' +
-				'<span>' + series[seriesIndex] + ` ${props.chart_config.unit}` + '</span>' +
-				'</div>';
+			return (
+				'<div class="chart-tooltip">' +
+				"<h6>" +
+				w.globals.labels[seriesIndex] +
+				"</h6>" +
+				"<span>" +
+				series[seriesIndex] +
+				` ${props.chart_config.unit}` +
+				"</span>" +
+				"</div>"
+			);
 		},
 	},
 });
@@ -89,14 +105,34 @@ const chartOptions = ref({
 const selectedIndex = ref(null);
 
 function handleDataSelection(e, chartContext, config) {
-	if (!props.chart_config.map_filter) {
+	if (!props.map_filter) {
 		return;
 	}
-	if (config.dataPointIndex !== selectedIndex.value) {
-		mapStore.addLayerFilter(`${props.map_config[0].index}-${props.map_config[0].type}`, props.chart_config.map_filter[0], props.chart_config.map_filter[1][config.dataPointIndex]);
-		selectedIndex.value = config.dataPointIndex;
+	if (
+		`${config.dataPointIndex}-${config.seriesIndex}` !== selectedIndex.value
+	) {
+		// Supports filtering by xAxis
+		if (props.map_filter.mode === "byParam") {
+			mapStore.filterByParam(
+				props.map_filter,
+				props.map_config,
+				config.w.globals.labels[config.dataPointIndex]
+			);
+		}
+		// Supports filtering by xAxis
+		else if (props.map_filter.mode === "byLayer") {
+			mapStore.filterByLayer(
+				props.map_config,
+				config.w.globals.labels[config.dataPointIndex]
+			);
+		}
+		selectedIndex.value = `${config.dataPointIndex}-${config.seriesIndex}`;
 	} else {
-		mapStore.clearLayerFilter(`${props.map_config[0].index}-${props.map_config[0].type}`);
+		if (props.map_filter.mode === "byParam") {
+			mapStore.clearByParamFilter(props.map_config);
+		} else if (props.map_filter.mode === "byLayer") {
+			mapStore.clearByLayerFilter(props.map_config);
+		}
 		selectedIndex.value = null;
 	}
 }
@@ -104,8 +140,13 @@ function handleDataSelection(e, chartContext, config) {
 
 <template>
 	<div v-if="activeChart === 'DonutChart'" class="donutchart">
-		<apexchart width="100%" type="donut" :options="chartOptions" :series="parsedSeries"
-			@dataPointSelection="handleDataSelection">
+		<apexchart
+			width="100%"
+			type="donut"
+			:options="chartOptions"
+			:series="parsedSeries"
+			@dataPointSelection="handleDataSelection"
+		>
 		</apexchart>
 		<div class="donutchart-title">
 			<h5>總合</h5>

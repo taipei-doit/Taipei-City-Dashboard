@@ -9,6 +9,7 @@ const props = defineProps([
 	"activeChart",
 	"series",
 	"map_config",
+	"map_filter",
 ]);
 const mapStore = useMapStore();
 
@@ -16,6 +17,20 @@ const targetDistrict = ref(null);
 const districtColor = ref(props.chart_config.color[0]);
 const mousePosition = ref({ x: null, y: null });
 const selectedIndex = ref(null);
+const districts = [
+	"北投區",
+	"士林區",
+	"內湖區",
+	"南港區",
+	"松山區",
+	"信義區",
+	"中山區",
+	"大同區",
+	"中正區",
+	"萬華區",
+	"大安區",
+	"文山區",
+];
 
 // Parse District Data (to support 2D or 3D data)
 const districtData = computed(() => {
@@ -71,20 +86,29 @@ function updateMouseLocation(e) {
 }
 
 function handleDataSelection(index) {
-	if (!props.chart_config.map_filter) {
+	if (!props.map_filter) {
 		return;
 	}
 	if (index !== selectedIndex.value) {
-		mapStore.addLayerFilter(
-			`${props.map_config[0].index}-${props.map_config[0].type}`,
-			props.chart_config.map_filter[0],
-			props.chart_config.map_filter[1][index]
-		);
+		// Supports filtering by xAxis
+		if (props.map_filter.mode === "byParam") {
+			mapStore.filterByParam(
+				props.map_filter,
+				props.map_config,
+				districts[index]
+			);
+		}
+		// Supports filtering by xAxis
+		else if (props.map_filter.mode === "byLayer") {
+			mapStore.filterByLayer(props.map_config, districts[index]);
+		}
 		selectedIndex.value = index;
 	} else {
-		mapStore.clearLayerFilter(
-			`${props.map_config[0].index}-${props.map_config[0].type}`
-		);
+		if (props.map_filter.mode === "byParam") {
+			mapStore.clearByParamFilter(props.map_config);
+		} else if (props.map_filter.mode === "byLayer") {
+			mapStore.clearByLayerFilter(props.map_config);
+		}
 		selectedIndex.value = null;
 	}
 }

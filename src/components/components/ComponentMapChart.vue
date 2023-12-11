@@ -78,6 +78,7 @@ function handleToggle() {
 	if (checked.value) {
 		mapStore.addToMapLayerList(props.content.map_config);
 	} else {
+		mapStore.clearByParamFilter(props.content.map_config);
 		mapStore.turnOffMapLayerVisibility(props.content.map_config);
 	}
 }
@@ -85,9 +86,11 @@ function handleToggle() {
 // Also clear any map filters applied
 function changeActiveChart(chartName) {
 	activeChart.value = chartName;
-	mapStore.clearLayerFilter(
-		`${props.content.map_config[0].index}-${props.content.map_config[0].type}`
-	);
+	if (props.content.map_filter?.mode === "byParam") {
+		mapStore.clearByParamFilter(props.content.map_config);
+	} else if (props.content.map_filter?.mode === "byLayer") {
+		mapStore.clearByLayerFilter(props.content.map_config);
+	}
 }
 // Updates the location for the tag tooltip
 function updateMouseLocation(e) {
@@ -117,11 +120,7 @@ function changeShowTagTooltipState(state) {
 						@mousemove="updateMouseLocation"
 						@mouseleave="changeShowTagTooltipState(false)"
 					>
-						<span
-							v-if="
-								content.chart_config.map_filter &&
-								content.map_config
-							"
+						<span v-if="content.map_filter && content.map_config"
 							>tune</span
 						>
 						<span v-if="content.map_config">map</span>
@@ -172,6 +171,7 @@ function changeShowTagTooltipState(state) {
 				:chart_config="content.chart_config"
 				:series="content.chart_data"
 				:map_config="content.map_config"
+				:map_filter="content.map_filter"
 			>
 			</component>
 		</div>
@@ -189,7 +189,7 @@ function changeShowTagTooltipState(state) {
 			<TagTooltip
 				v-if="showTagTooltip"
 				:position="tooltipPosition"
-				:hasFilter="content.chart_config.map_filter ? true : false"
+				:hasFilter="content.map_filter ? true : false"
 				:hasMapLayer="content.map_config ? true : false"
 				:hasHistory="content.history_data ? true : false"
 			/>

@@ -447,51 +447,155 @@ export const useMapStore = defineStore("map", {
 		},
 
 		/* Map Filtering */
-		// Add a filter based on a property on a map layer
-		addLayerFilter(layer_id, property, key, map_config) {
+		// Add a filter based on a each map layer's properties (byParam)
+		filterByParam(map_filter, map_configs, xParam, yParam) {
+			// If there are layers loading, don't filter
+			if (this.loadingLayers.length > 0) return;
 			const dialogStore = useDialogStore();
 			if (!this.map || dialogStore.dialogs.moreInfo) {
 				return;
 			}
-			if (map_config && map_config.type === "arc") {
-				this.map.removeLayer(layer_id);
-				let toBeFiltered = {
-					...this.map.getSource(`${layer_id}-source`)._data,
-				};
-				toBeFiltered.features = toBeFiltered.features.filter(
-					(el) => el.properties[property] === key
-				);
-				map_config.layerId = layer_id;
-				this.AddArcMapLayer(map_config, toBeFiltered);
+			map_configs.map((map_config) => {
+				let mapLayerId = `${map_config.index}-${map_config.type}`;
+				if (map_config && map_config.type === "arc") {
+					// Only turn off original layer visibility
+					this.map.setLayoutProperty(
+						mapLayerId,
+						"visibility",
+						"none"
+					);
+					// Remove any existing filtered layer
+					if (this.map.getLayer(`${mapLayerId}-filtered`)) {
+						this.map.removeLayer(`${mapLayerId}-filtered`);
+					}
+					// Filter data to render new filtered layer
+					let toBeFiltered = {
+						...this.map.getSource(`${mapLayerId}-source`)._data,
+					};
+					if (xParam) {
+						toBeFiltered.features = toBeFiltered.features.filter(
+							(el) =>
+								el.properties[map_filter.byParam.xParam] ===
+								xParam
+						);
+					}
+					if (yParam) {
+						toBeFiltered.features = toBeFiltered.features.filter(
+							(el) =>
+								el.properties[map_filter.byParam.yParam] ===
+								yParam
+						);
+					}
+					map_config.layerId = `${mapLayerId}-filtered`;
+					// Add new filtered layer
+					this.AddArcMapLayer(map_config, toBeFiltered);
+					return;
+				}
+				// If x and y both exist, filter by both
+				if (
+					map_filter.byParam.xParam &&
+					map_filter.byParam.yParam &&
+					xParam &&
+					yParam
+				) {
+					this.map.setFilter(mapLayerId, [
+						"all",
+						["==", ["get", map_filter.byParam.xParam], xParam],
+						["==", ["get", map_filter.byParam.yParam], yParam],
+					]);
+				}
+				// If only y exists, filter by y
+				else if (map_filter.byParam.yParam && yParam) {
+					this.map.setFilter(mapLayerId, [
+						"==",
+						["get", map_filter.byParam.yParam],
+						yParam,
+					]);
+				}
+				// default to filter by x
+				else if (map_filter.byParam.xParam && xParam) {
+					this.map.setFilter(mapLayerId, [
+						"==",
+						["get", map_filter.byParam.xParam],
+						xParam,
+					]);
+				}
+			});
+		},
+		// filter by layer name (byLayer)
+		filterByLayer(map_configs, xParam) {
+			const dialogStore = useDialogStore();
+			// If there are layers loading, don't filter
+			if (this.loadingLayers.length > 0) return;
+			if (!this.map || dialogStore.dialogs.moreInfo) {
 				return;
 			}
-			this.map.setFilter(layer_id, ["==", ["get", property], key]);
+			map_configs.map((map_config) => {
+				let mapLayerId = `${map_config.index}-${map_config.type}`;
+				if (map_config.title !== xParam) {
+					this.map.setLayoutProperty(
+						mapLayerId,
+						"visibility",
+						"none"
+					);
+				} else {
+					this.map.setLayoutProperty(
+						mapLayerId,
+						"visibility",
+						"visible"
+					);
+				}
+			});
 		},
-		// Remove any filters on a map layer
-		clearLayerFilter(layer_id, map_config) {
+		// Remove any property filters on a map layer
+		clearByParamFilter(map_configs) {
 			const dialogStore = useDialogStore();
 			if (!this.map || dialogStore.dialogs.moreInfo) {
 				return;
 			}
-			if (map_config && map_config.type === "arc") {
-				this.map.removeLayer(layer_id);
-				let toRestore = {
-					...this.map.getSource(`${layer_id}-source`)._data,
-				};
-				map_config.layerId = layer_id;
-				this.AddArcMapLayer(map_config, toRestore);
+			map_configs.map((map_config) => {
+				let mapLayerId = `${map_config.index}-${map_config.type}`;
+				if (map_config && map_config.type === "arc") {
+					if (this.map.getLayer(`${mapLayerId}-filtered`)) {
+						this.map.removeLayer(`${mapLayerId}-filtered`);
+					}
+					this.currentLayers = this.currentLayers.filter(
+						(item) => item !== `${mapLayerId}-filtered`
+					);
+					this.currentVisibleLayers =
+						this.currentVisibleLayers.filter(
+							(item) => item !== `${mapLayerId}-filtered`
+						);
+					this.map.setLayoutProperty(
+						mapLayerId,
+						"visibility",
+						"visible"
+					);
+					return;
+				}
+				this.map.setFilter(mapLayerId, null);
+			});
+		},
+		// Remove any layer filters on a map layer.
+		clearByLayerFilter(map_configs) {
+			const dialogStore = useDialogStore();
+			if (!this.map || dialogStore.dialogs.moreInfo) {
 				return;
 			}
-			this.map.setFilter(layer_id, null);
+			map_configs.map((map_config) => {
+				let mapLayerId = `${map_config.index}-${map_config.type}`;
+				this.map.setLayoutProperty(mapLayerId, "visibility", "visible");
+			});
 		},
-
 		/* Clearing the map */
 
 		// Called when the user is switching between maps
 		clearOnlyLayers() {
 			this.currentLayers.forEach((element) => {
 				this.map.removeLayer(element);
-				this.map.removeSource(`${element}-source`);
+				if (this.map.getSource(`${element}-source`)) {
+					this.map.removeSource(`${element}-source`);
+				}
 			});
 			this.currentLayers = [];
 			this.mapConfigs = {};
