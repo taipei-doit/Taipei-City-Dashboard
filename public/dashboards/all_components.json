@@ -559,11 +559,11 @@
 						"circle-color": [
 							"match",
 							["get", "type"],
-							"1",
+							"A1",
 							"#CA0020",
-							"2",
+							"A2",
 							"#ff996d",
-							"3",
+							"A3",
 							"#f8c3ac",
 							"#ccc"
 						]
@@ -588,11 +588,16 @@
 					"title": "交通事故統計"
 				}
 			],
+			"map_filter": {
+				"mode": "byParam",
+				"byParam": {
+					"xParam": "type"
+				}
+			},
 			"chart_config": {
 				"color": ["#CA0020", "#ff996d", "#f8c3ac"],
 				"types": ["DonutChart", "BarChart"],
-				"unit": "件",
-				"map_filter": ["type", ["1", "2", "3"]]
+				"unit": "件"
 			},
 			"history_data": true,
 			"source": "警察局",
