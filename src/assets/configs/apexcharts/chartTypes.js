@@ -13,4 +13,5 @@ export const chartTypes = {
 	HeatmapChart: "熱力圖",
 	MixedColumnLineChart: "長條折線圖",
 	BarChartWithGoal: "長條圖(目標)",
+	SpeedometerChart: "儀表板圖",
 };
