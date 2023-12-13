@@ -75,10 +75,7 @@ const updateMouseLocation = (e) => {
 </script>
 
 <template>
-	<div
-		v-if="activeChart === 'IconPercentageChart'"
-		class="iconPercentageChart"
-	>
+	<div v-if="activeChart === 'IconPercentChart'" class="iconPercentageChart">
 		<!-- chart data -->
 		<div class="iconPercentageChart__title">
 			<div
