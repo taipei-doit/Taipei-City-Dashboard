@@ -84,6 +84,7 @@ const updateMouseLocation = (e) => {
 			<div
 				class="iconPercentageChart__content"
 				v-for="(item, index) in series"
+				:key="item.name"
 			>
 				<h2>
 					{{ item.name
