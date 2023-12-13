@@ -105,6 +105,10 @@
 						{
 							"key": "STATION_NAME",
 							"name": "名稱"
+						},
+						{
+							"key": "ADDR",
+							"name": "地址"
 						}
 					],
 					"type": "symbol",
@@ -122,8 +126,12 @@
 							"name": "轄區"
 						},
 						{
-							"key": "precinct",
+							"key": "police_district_office_name",
 							"name": "所屬分局"
+						},
+						{
+							"key": "police_district_station_name",
+							"name": "所屬派出所"
 						},
 						{
 							"key": "area",
@@ -135,7 +143,9 @@
 					"title": "警局轄區"
 				}
 			],
-			"name": "警察相關設施",
+			"map_filter": {
+				"mode": "byLayer"
+			},
 			"chart_config": {
 				"types": ["MapLegend"]
 			},
@@ -148,9 +158,10 @@
 				{
 					"type": "line",
 					"color": "#009688",
-					"name": "警察轄區"
+					"name": "警局轄區"
 				}
 			],
+			"name": "警察相關設施",
 			"source": "警察局",
 			"contributors": ["tuic"]
 		},
@@ -180,6 +191,10 @@
 						{
 							"key": "名稱",
 							"name": "名稱"
+						},
+						{
+							"key": "鄉鎮",
+							"name": "行政區"
 						},
 						{
 							"key": "服務里別",
@@ -280,6 +295,9 @@
 					"type": "symbol"
 				}
 			],
+			"map_filter": {
+				"mode": "byLayer"
+			},
 			"chart_config": {
 				"types": ["MapLegend"]
 			},
@@ -421,12 +439,19 @@
 						"fill-color": "#9e7b5c"
 					},
 					"index": "patrol_old_settlement",
-					"property": [],
+					"property": [
+						{
+							"key": "name",
+							"name": "名稱"
+						}
+					],
 					"type": "fill",
 					"title": "老舊聚落"
 				}
 			],
-			"name": "山坡地風險地點",
+			"map_filter": {
+				"mode": "byLayer"
+			},
 			"chart_config": {
 				"types": ["MapLegend"],
 				"unit": "處"
@@ -457,6 +482,7 @@
 					"value": 34
 				}
 			],
+			"name": "山坡地風險地點",
 			"source": "工務局",
 			"contributors": ["tuic"]
 		},
@@ -474,6 +500,10 @@
 						{
 							"key": "app_name",
 							"name": "主管機關"
+						},
+						{
+							"key": "c_name",
+							"name": "行政區"
 						},
 						{
 							"key": "tc_na",
@@ -497,28 +527,17 @@
 					"title": "施工路段"
 				}
 			],
+			"map_filter": {
+				"mode": "byParam",
+				"byParam": {
+					"xParam": "c_name"
+				}
+			},
 			"history_data": true,
 			"chart_config": {
 				"color": ["#2f9ca1"],
 				"types": ["DistrictChart", "BarChart"],
-				"unit": "件",
-				"map_filter": [
-					"c_name",
-					[
-						"北投",
-						"士林",
-						"內湖",
-						"南港",
-						"松山",
-						"信義",
-						"中山",
-						"大同",
-						"中正",
-						"萬華",
-						"大安",
-						"文山"
-					]
-				]
+				"unit": "件"
 			},
 			"name": "道路施工",
 			"source": "工務局",
@@ -549,11 +568,11 @@
 						"circle-color": [
 							"match",
 							["get", "type"],
-							"1",
+							"A1",
 							"#CA0020",
-							"2",
+							"A2",
 							"#ff996d",
-							"3",
+							"A3",
 							"#f8c3ac",
 							"#ccc"
 						]
@@ -578,15 +597,20 @@
 					"title": "交通事故統計"
 				}
 			],
+			"map_filter": {
+				"mode": "byParam",
+				"byParam": {
+					"xParam": "type"
+				}
+			},
 			"chart_config": {
 				"color": ["#CA0020", "#ff996d", "#f8c3ac"],
 				"types": ["DonutChart", "BarChart"],
-				"unit": "件",
-				"map_filter": ["type", ["1", "2", "3"]]
+				"unit": "件"
 			},
 			"history_data": true,
 			"source": "警察局",
-			"time_from": "2023-01-31T14:01:00Z",
+			"time_from": "2023-01-31T14:01:00+08:00",
 			"time_to": null,
 			"update_freq": null,
 			"update_freq_unit": null,
@@ -609,25 +633,12 @@
 					"index": "traffic_bus_route_view",
 					"property": [
 						{
-							"key": "RouteName",
-							"name": "公車",
-							"obj": "En"
-						},
-						{
-							"key": "DutyStatus",
-							"name": "運行狀態"
-						},
-						{
-							"key": "RouteUID",
+							"key": "routeuid",
 							"name": "路線ID"
 						},
 						{
-							"key": "PlateNumb",
-							"name": "車牌號碼"
-						},
-						{
-							"key": "GPSTime",
-							"name": "GPS更新時間"
+							"key": "route_status",
+							"name": "運行狀態"
 						}
 					],
 					"paint": {
@@ -666,7 +677,7 @@
 				{
 					"index": "building_renewunit_30",
 					"paint": {
-						"line-color": "#67baca"
+						"line-color": "#477653"
 					},
 					"property": [
 						{
@@ -684,7 +695,7 @@
 				{
 					"index": "building_renewunit_12",
 					"paint": {
-						"line-color": "#598965"
+						"line-color": "#67baca"
 					},
 					"property": [
 						{
@@ -697,12 +708,12 @@
 						}
 					],
 					"type": "line",
-					"title": "公劃地區內事業(權變案件)"
+					"title": "公劃地區內事業"
 				},
 				{
 					"index": "building_renewunit_20",
 					"paint": {
-						"line-color": "#477653"
+						"line-color": "#5a8965"
 					},
 					"property": [
 						{
@@ -746,6 +757,9 @@
 					"title": "都市計畫劃定更新地區"
 				}
 			],
+			"map_filter": {
+				"mode": "byLayer"
+			},
 			"chart_config": {
 				"color": [
 					"#67baca",
@@ -805,7 +819,7 @@
 							"name": "地址"
 						},
 						{
-							"key": "floors1",
+							"key": "floors",
 							"name": "樓層"
 						},
 						{
@@ -818,6 +832,12 @@
 					"title": "社會住宅"
 				}
 			],
+			"map_filter": {
+				"mode": "byParam",
+				"byParam": {
+					"xParam": "progress"
+				}
+			},
 			"chart_config": {
 				"color": [
 					"#fff495",
@@ -827,17 +847,7 @@
 					"#a65818"
 				],
 				"types": ["DonutChart", "BarChart"],
-				"unit": "棟",
-				"map_filter": [
-					"progress",
-					[
-						"已完工",
-						"施工中及待開工",
-						"規劃中",
-						"招標中及待上網",
-						"都更聯開分回"
-					]
-				]
+				"unit": "棟"
 			},
 			"name": "社會住宅建設進度",
 			"source": "都發局",
@@ -937,7 +947,9 @@
 					"title": "閒置市有(公用)建物"
 				}
 			],
-			"name": "閒置市有財產",
+			"map_filter": {
+				"mode": "byLayer"
+			},
 			"chart_config": {
 				"types": ["MapLegend"],
 				"unit": "處"
@@ -956,6 +968,7 @@
 					"value": 48
 				}
 			],
+			"name": "閒置市有財產",
 			"source": "財政局",
 			"contributors": ["tuic"]
 		},
@@ -1060,6 +1073,10 @@
 					},
 					"property": [
 						{
+							"key": "thename",
+							"name": "名稱"
+						},
+						{
 							"key": "publand_1_類型",
 							"name": "類型"
 						},
@@ -1095,6 +1112,10 @@
 						]
 					},
 					"property": [
+						{
+							"key": "thename",
+							"name": "名稱"
+						},
 						{
 							"key": "publand_1_類型",
 							"name": "類型"
@@ -1132,6 +1153,10 @@
 					},
 					"property": [
 						{
+							"key": "thename",
+							"name": "名稱"
+						},
+						{
 							"key": "publand_1_類型",
 							"name": "類型"
 						},
@@ -1144,6 +1169,12 @@
 					"title": "公有土地"
 				}
 			],
+			"map_filter": {
+				"mode": "byParam",
+				"byParam": {
+					"xParam": "publand_1_土地權屬情形"
+				}
+			},
 			"chart_config": {
 				"color": [
 					"#2d7b7d",
@@ -1254,6 +1285,12 @@
 					"title": "都市計畫用地類型"
 				}
 			],
+			"map_filter": {
+				"mode": "byParam",
+				"byParam": {
+					"xParam": "landuse group_metadata_用地分類"
+				}
+			},
 			"chart_config": {
 				"color": [
 					"#7fff00",
@@ -1281,35 +1318,7 @@
 					"#00ff00"
 				],
 				"types": ["TreemapChart", "BarChart"],
-				"unit": "km²",
-				"map_filter": [
-					"landuse group_metadata_用地分類",
-					[
-						"保護區",
-						"其他",
-						"住宅用地類",
-						"水域",
-						"綠地",
-						"文教用地類",
-						"商業用地類",
-						"交通用地類",
-						"機關用地類",
-						"農業區",
-						"工業區類",
-						"設施類",
-						"風景區",
-						"動物園用地",
-						"專用區類",
-						"醫療用地類",
-						"娛樂區",
-						"市場用地類",
-						"遊樂區",
-						"體育場",
-						"中正紀念堂",
-						"保存區",
-						"兒童遊樂場"
-					]
-				]
+				"unit": "km²"
 			},
 			"history_data": false,
 			"source": "都發局",
@@ -1421,7 +1430,7 @@
 						"circle-color": [
 							"match",
 							["get", "all_pumb_lights"],
-							"+",
+							"啟動中",
 							"#ff9800",
 							"#00B2FF"
 						]
@@ -1465,12 +1474,17 @@
 					"title": "抽水站"
 				}
 			],
+			"map_filter": {
+				"mode": "byParam",
+				"byParam": {
+					"yParam": "all_pumb_lights"
+				}
+			},
 			"chart_config": {
 				"types": ["GuageChart", "BarPercentChart"],
 				"color": ["#ff9800"],
 				"unit": "站",
-				"categories": ["啟動抽水站"],
-				"map_filter": ["all_pumb_lights", ["+", "-"]]
+				"categories": ["啟動抽水站"]
 			},
 			"name": "抽水站狀態",
 			"source": "工務局水利處",
@@ -1526,6 +1540,12 @@
 					"title": "壅塞程度"
 				}
 			],
+			"map_filter": {
+				"mode": "byParam",
+				"byParam": {
+					"xParam": "壅塞程度"
+				}
+			},
 			"history_data": true,
 			"history_data_color": ["#EC4037", "#BBB"],
 			"chart_config": {
@@ -1647,15 +1667,15 @@
 				"unit": "輛",
 				"categories": ["Youbike在站車輛"]
 			},
-			"source": "交通局/Youbike",
+			"source": "交通局",
 			"name": "YouBike使用情況",
 			"time_from": "2023-05-31T00:00:00+08:00",
 			"time_to": null,
 			"update_freq": 5,
 			"update_freq_unit": "minute",
 			"short_desc": "顯示當前全市共享單車YouBike的使用情況",
-			"long_desc": "顯示當前全市共享單車YouBike的使用情況，包括可借車輛總數和可還車位總數，資料來源為微笑單車公司公開資料，每5分鐘更新。",
-			"use_case": "藉由YouBike使用情況的顯示，包括可借車輛總數及可還車位總數，我們可以了解全市YouBike使用情況，並在地圖模式查詢各站點詳細資訊。",
+			"long_desc": "顯示當前全市共享單車YouBike的使用情況，格式為可借車輛數/全市車位數。資料來源為交通局公開資料，每5分鐘更新。",
+			"use_case": "藉由YouBike使用情況的顯示，以及全市車輛約為柱數一半，可掌握全市目前停在站上與被使用中的車輛大約數字，並可在地圖模式查詢各站點詳細資訊。",
 			"links": [
 				"https://tdx.transportdata.tw/api-service/swagger/basic/2cc9b888-a592-496f-99de-9ab35b7fb70d#/Bike/BikeApi_Availability_2181"
 			],
@@ -1724,7 +1744,7 @@
 				"unit": "輛",
 				"categories": ["Youbike在站車輛"]
 			},
-			"source": "交通局/Youbike",
+			"source": "交通局",
 			"name": "YouBike使用情況(Alt)",
 			"time_from": "2023-05-31T00:00:00+08:00",
 			"time_to": null,
@@ -1742,9 +1762,10 @@
 		"72": {
 			"id": 72,
 			"index": "dispatch",
+			"history_data": true,
 			"map_config": [
 				{
-					"index": "dispatchingpoint_new",
+					"index": "dispatchingpoint",
 					"paint": {
 						"circle-color": "#90dce9"
 					},
@@ -1767,33 +1788,16 @@
 					"title": "派工類別"
 				}
 			],
-			"history_data": true,
+			"map_filter": {
+				"mode": "byParam",
+				"byParam": {
+					"xParam": "案件類型"
+				}
+			},
 			"chart_config": {
 				"types": ["BarChart", "DonutChart"],
 				"color": ["#fc9f0b", "#dac117", "#FDD79B", "#CA7F09"],
-				"unit": "件",
-				"map_filter": [
-					"案件類型",
-					[
-						"市區道路坑洞處理",
-						"路燈故障或設施損壞",
-						"交通標誌及設施物損壞(含汙損)、傾斜",
-						"道路側溝溝蓋(含周邊)損壞遺失",
-						"場所與設施噪音舉發",
-						"路樹處理",
-						"交通號誌異常",
-						"用戶無水、漏水報修",
-						"人孔蓋(含周邊)破損、遺失處理",
-						"鄰里無主垃圾清運",
-						"道路散落物或油漬處理",
-						"交通號誌電纜線垂落及設施損壞",
-						"污染舉發",
-						"道路側溝內溝牆(底)破損",
-						"雨水下水道側溝清淤",
-						"大型廢棄物清運聯繫",
-						"橋梁、隧道、車(人)行地下道及涵洞積淹水"
-					]
-				]
+				"unit": "件"
 			},
 			"name": "派工案件",
 			"source": "1999派工系統",
@@ -2111,70 +2115,6 @@
 			"tags": [],
 			"contributors": ["tuic"]
 		},
-		"81": {
-			"id": 81,
-			"index": "tpmo_smart_city",
-			"map_config": [
-				{
-					"index": "it_tpmo_poc_location",
-					"paint": {
-						"circle-color": [
-							"match",
-							["get", "icon_status"],
-							"階段完成",
-							"#D9ED92",
-							"實驗進行中",
-							"#5EBB6D",
-							"階段終止",
-							"#e91e63",
-							"#ccc"
-						]
-					},
-					"property": [
-						{
-							"key": "type",
-							"name": "類別"
-						},
-						{
-							"key": "icon_status",
-							"name": "狀態"
-						},
-						{
-							"key": "name",
-							"name": "名稱"
-						},
-						{
-							"key": "locname",
-							"name": "地點"
-						},
-						{
-							"key": "address",
-							"name": "地址"
-						}
-					],
-					"type": "circle",
-					"size": "big",
-					"title": "TPMO智慧城市專案"
-				}
-			],
-			"name": "TPMO智慧城市專案",
-			"chart_config": {
-				"color": ["#52B69A"],
-				"types": ["ColumnChart", "BarChart", "RadarChart"],
-				"unit": "件"
-			},
-			"source": "TPMO",
-			"time_from": null,
-			"time_to": null,
-			"update_freq": null,
-			"update_freq_unit": null,
-			"short_desc": "顯示全市自某年以來的智慧城市專案類型統計",
-			"long_desc": "顯示全市自某年以來的智慧城市專案類型統計，資料來源為待確定，不定期更新。",
-			"use_case": "就智慧城市專案類型統計資料，由於更新頻率不定，若需最新數據，可隨時查詢相關資料來源。",
-			"links": null,
-			"tags": [],
-			"contributors": ["tuic"]
-		},
 		"82": {
 			"id": 82,
 			"index": "welfare_institutions",
@@ -2186,9 +2126,9 @@
 							"match",
 							["get", "main_type"],
 							"銀髮族服務",
-							"#F65658",
-							"身障機構",
 							"#F49F36",
+							"身障機構",
+							"#F65658",
 							"兒童與少年服務",
 							"#F5C860",
 							"社區服務、NPO",
@@ -2225,6 +2165,12 @@
 					"title": "社福機構"
 				}
 			],
+			"map_filter": {
+				"mode": "byParam",
+				"byParam": {
+					"xParam": "main_type"
+				}
+			},
 			"chart_config": {
 				"color": [
 					"#F65658",
@@ -2237,19 +2183,7 @@
 					"#2F8AB1"
 				],
 				"types": ["BarChart", "DonutChart"],
-				"unit": "間",
-				"map_filter": [
-					"main_type",
-					[
-						"銀髮族服務",
-						"身障機構",
-						"兒童與少年服務",
-						"社區服務、NPO",
-						"婦女服務",
-						"貧困危機家庭服務",
-						"保護性服務"
-					]
-				]
+				"unit": "間"
 			},
 			"name": "社福機構",
 			"source": "社會局",
@@ -2292,64 +2226,6 @@
 		"90": {
 			"id": 90,
 			"index": "welfare_population",
-			"map_config": [
-				{
-					"index": "socl_welfare_people_by_vil_view",
-					"paint": {
-						"fill-color": [
-							"interpolate",
-							["linear"],
-							["to-number", ["get", "cnt_total"]],
-							0,
-							"rgba(8,103,136,0.1)",
-							250,
-							"rgba(8,103,136,0.5)",
-							500,
-							"rgba(7,160,195,0.5)",
-							750,
-							"rgba(7,160,195,0.75)",
-							1000,
-							"rgba(180,91,91,0.75)",
-							1600,
-							"#dd1c1a"
-						]
-					},
-					"property": [
-						{
-							"key": "dist",
-							"name": "區名"
-						},
-						{
-							"key": "vil",
-							"name": "里名"
-						},
-						{
-							"key": "cnt_low_income",
-							"name": "低收入人口數"
-						},
-						{
-							"key": "cnt_low_middle_income",
-							"name": "中低收人口數"
-						},
-						{
-							"key": "cnt_disabled_allowance",
-							"name": "身障補助數量"
-						},
-						{
-							"key": "cnt_disabled",
-							"name": "身障人口數量"
-						},
-						{
-							"key": "cnt_total",
-							"name": "社福人口總數"
-						}
-					],
-					"type": "fill",
-					"title": "社福人口",
-					"size": null,
-					"icon": null
-				}
-			],
 			"chart_config": {
 				"color": ["#2e999b", "#80e3d4", "#1f9b85", "#a5ece0"],
 				"types": ["DistrictChart", "ColumnChart", "BarPercentChart"],
@@ -2367,23 +2243,6 @@
 					"萬華區",
 					"大安區",
 					"文山區"
-				],
-				"map_filter": [
-					"dist",
-					[
-						"北投區",
-						"士林區",
-						"內湖區",
-						"南港區",
-						"松山區",
-						"信義區",
-						"中山區",
-						"大同區",
-						"中正區",
-						"萬華區",
-						"大安區",
-						"文山區"
-					]
 				]
 			},
 			"name": "社福人口",
@@ -2441,25 +2300,6 @@
 			"update_freq_unit": null,
 			"contributors": ["tuic"]
 		},
-		"92": {
-			"id": 92,
-			"index": "welfare_population",
-			"chart_config": {
-				"color": ["#2e999b", "#80e3d4", "#1f9b85", "#a5ece0"],
-				"types": ["RadarChart"],
-				"unit": "人",
-				"categories": ["低收", "中低收", "身障補助", "身障"]
-			},
-			"name": "社福人口",
-			"history_data": false,
-			"source": "社會局",
-			"time_from": "2023-05-02T08:00:18+08:00",
-			"contributors": ["tuic"],
-			"short_desc": "顯示社會福利人口（身障、低收、中低收、低收身障）的比例",
-			"long_desc": "顯示社會福利人口（身障、低收、中低收、低收身障）的比例，資料來源為台北市社會局內部資料，每月15號更新。",
-			"use_case": "社福人口比例的資料能讓我們了解台北市社會福利的需求變化，從而規劃更貼近民眾需求的社會福利措施。",
-			"links": null
-		},
 		"103": {
 			"id": 103,
 			"index": "parks",
@@ -2495,14 +2335,16 @@
 					"title": "公園綠地"
 				}
 			],
+			"map_filter": {
+				"mode": "byParam",
+				"byParam": {
+					"xParam": "type"
+				}
+			},
 			"chart_config": {
 				"color": ["#D2EE90", "#90EE90", "#4caf50", "#CAF245"],
 				"types": ["TreemapChart", "BarChart"],
-				"unit": "km²",
-				"map_filter": [
-					"type",
-					["公園", "河濱公園", "公園生態化", "校園綠化"]
-				]
+				"unit": "km²"
 			},
 			"name": "公園綠地",
 			"source": "工務局",
@@ -2554,19 +2396,16 @@
 					"title": "都市綠地"
 				}
 			],
+			"map_filter": {
+				"mode": "byParam",
+				"byParam": {
+					"xParam": "type"
+				}
+			},
 			"chart_config": {
 				"types": ["BarChart", "TreemapChart"],
 				"color": ["#08B36C", "#2B805C", "#64A2A2", "#1C8585"],
-				"unit": "km²",
-				"map_filter": [
-					"type",
-					[
-						"都市計畫保護區",
-						"都市計畫農業區",
-						"野雁保護區",
-						"自然保留區"
-					]
-				]
+				"unit": "km²"
 			},
 			"name": "都市綠地",
 			"source": "工務局",
@@ -2683,11 +2522,15 @@
 					"title": "醫療機構"
 				}
 			],
-			"name": "醫療院所分布",
+			"map_filter": {
+				"mode": "byParam",
+				"byParam": {
+					"xParam": "type"
+				}
+			},
 			"chart_config": {
 				"types": ["MapLegend"],
-				"unit": "間",
-				"map_filter": ["type", ["醫院", "診所"]]
+				"unit": "間"
 			},
 			"chart_data": [
 				{
@@ -2703,6 +2546,7 @@
 					"value": 3621
 				}
 			],
+			"name": "醫療院所分布",
 			"source": "衛生局",
 			"contributors": ["tuic"]
 		},
@@ -2733,27 +2577,16 @@
 					"title": "AED分布"
 				}
 			],
+			"map_filter": {
+				"mode": "byParam",
+				"byParam": {
+					"xParam": "dist"
+				}
+			},
 			"chart_config": {
 				"types": ["DistrictChart", "ColumnChart"],
 				"color": ["#A25FAD"],
-				"unit": "台",
-				"map_filter": [
-					"dist",
-					[
-						"北投區",
-						"士林區",
-						"內湖區",
-						"南港區",
-						"松山區",
-						"信義區",
-						"中山區",
-						"大同區",
-						"中正區",
-						"萬華區",
-						"大安區",
-						"文山區"
-					]
-				]
+				"unit": "台"
 			},
 			"name": "AED分布",
 			"source": "衛生局",
@@ -2818,27 +2651,16 @@
 					"title": "路燈"
 				}
 			],
+			"map_filter": {
+				"mode": "byParam",
+				"byParam": {
+					"xParam": "dist"
+				}
+			},
 			"chart_config": {
 				"types": ["DistrictChart", "ColumnChart"],
 				"color": ["#FFE677"],
-				"unit": "盞",
-				"map_filter": [
-					"dist",
-					[
-						"北投區",
-						"士林區",
-						"內湖區",
-						"南港區",
-						"松山區",
-						"信義區",
-						"中山區",
-						"大同區",
-						"中正區",
-						"萬華區",
-						"大安區",
-						"文山區"
-					]
-				]
+				"unit": "盞"
 			},
 			"name": "路燈分佈",
 			"source": "工務局公燈處",
@@ -2886,20 +2708,25 @@
 					"title": "自行車道"
 				}
 			],
+			"map_filter": {
+				"mode": "byParam",
+				"byParam": {
+					"xParam": "type"
+				}
+			},
 			"chart_config": {
-				"types": ["MapLegend"],
-				"map_filter": ["type", ["市區", "河濱"]]
+				"types": ["MapLegend"]
 			},
 			"chart_data": [
 				{
 					"type": "line",
 					"color": "#a0b8e8",
-					"name": "市區自行車道"
+					"name": "市區"
 				},
 				{
 					"type": "line",
 					"color": "#b7ff98",
-					"name": "河濱自行車道"
+					"name": "河濱"
 				}
 			],
 			"name": "自行車道",
@@ -3019,31 +2846,20 @@
 					"title": "行道樹"
 				}
 			],
+			"map_filter": {
+				"mode": "byParam",
+				"byParam": {
+					"xParam": "dist"
+				}
+			},
 			"chart_config": {
 				"color": ["#33C552"],
 				"types": ["DistrictChart", "ColumnChart"],
-				"unit": "棵",
-				"map_filter": [
-					"dist",
-					[
-						"北投區",
-						"士林區",
-						"內湖區",
-						"南港區",
-						"松山區",
-						"信義區",
-						"中山區",
-						"大同區",
-						"中正區",
-						"萬華區",
-						"大安區",
-						"文山區"
-					]
-				]
+				"unit": "棵"
 			},
 			"history_data": false,
 			"source": "工務局",
-			"time_from": "2022-08-15T00:00:00Z",
+			"time_from": "2022-08-15T00:00:00+08:00",
 			"time_to": null,
 			"update_freq": null,
 			"update_freq_unit": null,
@@ -3109,14 +2925,16 @@
 					"title": "田園城市"
 				}
 			],
+			"map_filter": {
+				"mode": "byParam",
+				"byParam": {
+					"xParam": "type"
+				}
+			},
 			"chart_config": {
 				"types": ["TreemapChart", "BarChart"],
 				"color": ["#13b3a6", "#99E1E3", "#38BDC0", "#bdedee"],
-				"unit": "m²",
-				"map_filter": [
-					"type",
-					["小田園", "快樂農園", "綠屋頂", "市民農園"]
-				]
+				"unit": "m²"
 			},
 			"name": "田園城市",
 			"source": "工務局",
@@ -3232,11 +3050,11 @@
 						"fill-color": [
 							"match",
 							["get", "class"],
-							"高",
+							"高潛勢",
 							"#c87a74",
-							"中",
+							"中潛勢",
 							"#c8b974",
-							"低",
+							"低潛勢",
 							"#9bc874",
 							"#9c967f"
 						]
@@ -3251,9 +3069,14 @@
 					"title": "土壤液化潛勢"
 				}
 			],
+			"map_filter": {
+				"mode": "byParam",
+				"byParam": {
+					"xParam": "class"
+				}
+			},
 			"chart_config": {
-				"types": ["MapLegend"],
-				"map_filter": ["class", ["高", "中", "低"]]
+				"types": ["MapLegend"]
 			},
 			"chart_data": [
 				{
@@ -3511,10 +3334,6 @@
 							"name": "電動充電樁"
 						},
 						{
-							"key": "occupied_rate",
-							"name": "使用率"
-						},
-						{
 							"key": "data_time",
 							"name": "更新時間"
 						}
@@ -3557,10 +3376,6 @@
 						{
 							"key": "charging",
 							"name": "電動充電樁"
-						},
-						{
-							"key": "occupied_rate",
-							"name": "使用率"
 						},
 						{
 							"key": "data_time",
@@ -3632,11 +3447,11 @@
 					"paint": {
 						"circle-color": [
 							"case",
-							["<=", ["get", "arrive_time"], 1700],
+							["<", ["get", "arrive_time"], 1700],
 							"#E6DF44",
-							["<=", ["get", "arrive_time"], 1900],
+							["<", ["get", "arrive_time"], 1900],
 							"#F4633C",
-							["<=", ["get", "arrive_time"], 2100],
+							["<", ["get", "arrive_time"], 2100],
 							"#D63940",
 							"#9C2A4B"
 						]
@@ -3659,20 +3474,12 @@
 							"name": "車牌"
 						},
 						{
-							"key": "dist",
-							"name": "行政區"
-						},
-						{
 							"key": "route",
 							"name": "路線"
 						},
 						{
 							"key": "arrive_time",
 							"name": "抵達時間"
-						},
-						{
-							"key": "dist",
-							"name": "行政區"
 						},
 						{
 							"key": "leave_time",
@@ -3689,7 +3496,13 @@
 					"icon": null
 				}
 			],
-			"history_data": false,
+			"map_filter": {
+				"mode": "byParam",
+				"byParam": {
+					"xParam": "dist",
+					"yParam": "group"
+				}
+			},
 			"chart_config": {
 				"categories": [
 					"北投區",
@@ -3705,26 +3518,9 @@
 					"大安區",
 					"文山區"
 				],
-				"types": ["ColumnChart", "RadarChart", "DistrictChart"],
+				"types": ["ColumnChart", "DistrictChart"],
 				"color": ["#E6DF44", "#F4633C", "#D63940", "#9C2A4B"],
-				"unit": "點",
-				"map_filter": [
-					"dist",
-					[
-						"北投區",
-						"士林區",
-						"內湖區",
-						"南港區",
-						"松山區",
-						"信義區",
-						"中山區",
-						"大同區",
-						"中正區",
-						"萬華區",
-						"大安區",
-						"文山區"
-					]
-				]
+				"unit": "點"
 			},
 			"name": "垃圾車收運點位",
 			"source": "環保局",
@@ -3732,7 +3528,7 @@
 			"update_freq": null,
 			"update_freq_unit": null,
 			"short_desc": "顯示台北市所有垃圾車收運的點位。",
-			"long_desc": "顯示顯示台北市所有垃圾車收運的點位，資料來源為台北市環保局開放資料，不定期更新。",
+			"long_desc": "顯示台北市所有垃圾車收運的點位，資料來源為台北市環保局開放資料，不定期更新。",
 			"use_case": "透過這些點位資訊，我們可以更有效地安排垃圾車的收運路線，提升垃圾處理的效率，同時也能了解垃圾處理設施的分佈情況，並根據需求進行相應的環保政策調整。",
 			"links": [
 				"https://data.taipei/dataset/detail?id=6bb3304b-4f46-4bb0-8cd1-60c66dcd1cae"
@@ -3743,6 +3539,24 @@
 		"142": {
 			"id": 142,
 			"index": "youbike_weekend",
+			"map_config": [
+				{
+					"index": "youbike_weekend",
+					"paint": {
+						"arc-color": ["#fd7900", "#47d3d9"],
+						"arc-width": 3
+					},
+					"type": "arc",
+					"title": "週間群像"
+				}
+			],
+			"map_filter": {
+				"mode": "byParam",
+				"byParam": {
+					"xParam": "TOWNNAME_origin",
+					"yParam": "TOWNNAME_destination"
+				}
+			},
 			"chart_config": {
 				"types": ["HeatmapChart"],
 				"categories": [
@@ -3782,44 +3596,15 @@
 					"#236e0c",
 					"#666666"
 				],
-				"unit": "百次",
-				"map_filter": [
-					"TOWNNAME_source",
-					[
-						"北投區",
-						"士林區",
-						"內湖區",
-						"南港區",
-						"松山區",
-						"信義區",
-						"中山區",
-						"大同區",
-						"中正區",
-						"萬華區",
-						"大安區",
-						"文山區",
-						"非臺北市"
-					]
-				]
+				"unit": "千次"
 			},
-			"map_config": [
-				{
-					"index": "youbike_weekend",
-					"paint": {
-						"arc-color": ["#fd7900", "#47d3d9"],
-						"arc-width": 3
-					},
-					"type": "arc",
-					"title": "週間群像"
-				}
-			],
 			"name": "YouBike週末群像",
-			"source": "交通局/Youbike",
+			"source": "臺北大數據中心",
 			"time_from": "2023-07-28T00:00:00+08:00",
 			"time_to": null,
 			"short_desc": "",
-			"long_desc": "顯示週末期間全市YouBike的使用情況，並將各交易的起迄點在地圖上視覺化，資料來源為微笑單車公司的交易資料，更新頻率為不定期。",
-			"use_case": "透過YouBike週末群像組件，您可以瀏覽週末期間全市YouBike的使用情況，這對於計畫週末戶外活動或確保在週末時找到可租借的YouBike非常有幫助。",
+			"long_desc": "除了展示週末全市YouBike的行政區起訖交易數量，可查閱地圖資料顯示詳細的起迄站點分佈(為避免雜訊影響閱讀，只顯示月交易量>35次的起訖)。資料來源為臺北大數據中心研究，更新頻率為不定期。",
+			"use_case": "透過本組件的起訖分佈，您可以發現使用者在週末如何透過YouBike移動，對於規劃大眾運輸與最後一哩路有相當幫助。",
 			"links": [
 				"https://tuic.gov.taipei/youbike",
 				"https://github.com/tpe-doit/YouBike-Optimization"
@@ -3830,6 +3615,24 @@
 		"143": {
 			"id": 143,
 			"index": "youbike_weekday",
+			"map_config": [
+				{
+					"index": "youbike_weekday",
+					"paint": {
+						"arc-color": ["#fd7900", "#47d3d9"],
+						"arc-width": 3
+					},
+					"type": "arc",
+					"title": "週間群像"
+				}
+			],
+			"map_filter": {
+				"mode": "byParam",
+				"byParam": {
+					"xParam": "TOWNNAME_origin",
+					"yParam": "TOWNNAME_destination"
+				}
+			},
 			"chart_config": {
 				"types": ["HeatmapChart"],
 				"categories": [
@@ -3844,7 +3647,8 @@
 					"中正區",
 					"萬華區",
 					"大安區",
-					"文山區"
+					"文山區",
+					"非臺北市"
 				],
 				"color": [
 					"#b9b929",
@@ -3868,43 +3672,15 @@
 					"#236e0c",
 					"#666666"
 				],
-				"unit": "百次",
-				"map_filter": [
-					"TOWNNAME_source",
-					[
-						"北投區",
-						"士林區",
-						"內湖區",
-						"南港區",
-						"松山區",
-						"信義區",
-						"中山區",
-						"大同區",
-						"中正區",
-						"萬華區",
-						"大安區",
-						"文山區"
-					]
-				]
+				"unit": "千次"
 			},
-			"map_config": [
-				{
-					"index": "youbike_weekday",
-					"paint": {
-						"arc-color": ["#fd7900", "#47d3d9"],
-						"arc-width": 3
-					},
-					"type": "arc",
-					"title": "週間群像"
-				}
-			],
 			"name": "YouBike週間群像",
-			"source": "交通局/Youbike",
+			"source": "臺北大數據中心",
 			"time_from": "2023-07-28T00:00:00+08:00",
 			"time_to": null,
 			"short_desc": "",
-			"long_desc": "展示平日晨峰時段(早上七點至九點)全市YouBike的使用情況，並將各交易的起迄點在地圖上視覺化，資料來源為微笑單車公司的交易資料，更新頻率為不定期。",
-			"use_case": "透過YouBike週間通勤群像組件，您可以輕鬆瞭解平日早上全市YouBike的使用情況。這有助於規劃通勤或日常出行，以確保您在需要時能夠方便地找到可用的YouBike。",
+			"long_desc": "除了週間全市YouBike的行政區起訖交易數量，可查閱地圖資料顯示詳細的起迄站點分佈(為強調使用情境，只顯示07:00~09:00且交易量>40次的起訖)。資料來源為臺北大數據中心研究，更新頻率為不定期。",
+			"use_case": "透過本組件的起訖分佈，您可以發現使用者在週間早高峰如何透過YouBike移動，對於規畫早高峰通勤的大眾運輸與最後一哩路有相當幫助。",
 			"links": [
 				"https://tuic.gov.taipei/youbike",
 				"https://github.com/tpe-doit/YouBike-Optimization"
@@ -3916,12 +3692,6 @@
 			"id": 144,
 			"index": "youbike_avail_pct",
 			"history_data": true,
-			"chart_config": {
-				"types": ["BarChart", "DonutChart"],
-				"color": ["#ca0020", "#e97c69", "#bababa"],
-				"unit": "站",
-				"map_filter": ["category", ["高", "中", "低"]]
-			},
 			"map_config": [
 				{
 					"index": "youbike_avail_pct",
@@ -3930,11 +3700,11 @@
 							"match",
 							["get", "category"],
 							"低",
-							"#bababa",
+							"#ca0020",
 							"中",
 							"#e97c69",
 							"高",
-							"#ca0020",
+							"#bababa",
 							"#797979"
 						],
 						"circle-stroke-color": "#888",
@@ -3955,13 +3725,24 @@
 					"type": "circle"
 				}
 			],
+			"map_filter": {
+				"mode": "byParam",
+				"byParam": {
+					"xParam": "category"
+				}
+			},
+			"chart_config": {
+				"types": ["BarChart", "DonutChart"],
+				"color": ["#797979", "#e97c69", "#ca0020"],
+				"unit": "站"
+			},
 			"name": "YouBike見車率",
-			"source": "Youbike",
+			"source": "臺北大數據中心",
 			"time_from": "2023-07-01T00:00:00+08:00",
 			"time_to": "2023-07-31T00:00:00+08:00",
 			"short_desc": "",
-			"long_desc": "顯示YouBike見車率的資訊，見車率為一個車站在18小時內(早上6點至凌晨12點)至少有1台車的百分比，90%以上為高間車率；60%-90%為中；60%以下為低。資料來源為YouBike公司，更新頻率不定期。",
-			"use_case": "透過YouBike見車率組件，您可以查看各YouBike站點一個月內的平均見車率，了解缺車較為嚴重的站點在哪裡。地圖模式讓您可以輕鬆了解特定車站的見車率及其分布情形。",
+			"long_desc": "見車率定義為為某站點在06:00~23:59期間，站上至少有1台車的時間比例。90%以上為高見車率；60%~90%為中見車率；60%以下為低見車率。資料來源為臺北大數據中心研究，更新頻率不定期。",
+			"use_case": "透過本組件您可以了解全市的缺車概況，在地圖模式您可以輕鬆的找到缺車嚴重的站點位置及分布情形。",
 			"links": [
 				"https://tuic.gov.taipei/youbike",
 				"https://github.com/tpe-doit/YouBike-Optimization"
@@ -3972,15 +3753,6 @@
 		"145": {
 			"id": 145,
 			"index": "youbike_sub_stn",
-			"chart_config": {
-				"types": ["DonutChart"],
-				"unit": "站",
-				"color": ["#a8f8ff", "#4cd2ff", "#00a6ff"],
-				"map_filter": [
-					"category",
-					["替代站<=5", "替代站5~10", "替代站>10"]
-				]
-			},
 			"map_config": [
 				{
 					"index": "youbike_sub_stn_2",
@@ -4006,7 +3778,7 @@
 							"name": "類別"
 						}
 					],
-					"title": "替代站點",
+					"title": "互補站點",
 					"type": "line"
 				},
 				{
@@ -4030,6 +3802,10 @@
 							"name": "站點名稱"
 						},
 						{
+							"key": "dist",
+							"name": "行政區"
+						},
+						{
 							"key": "capacity",
 							"name": "總柱數"
 						}
@@ -4038,13 +3814,24 @@
 					"type": "circle"
 				}
 			],
-			"name": "YouBike替代站點",
-			"source": "資訊局",
-			"time_from": "2023-07-28T00:00:00+08:00",
-			"time_to": null,
+			"map_filter": {
+				"mode": "byParam",
+				"byParam": {
+					"xParam": "category"
+				}
+			},
+			"chart_config": {
+				"types": ["DonutChart"],
+				"unit": "站",
+				"color": ["#a8f8ff", "#4cd2ff", "#00a6ff"]
+			},
+			"name": "YouBike互補站點",
+			"source": "臺北大數據中心",
+			"time_from": "2023-03-01T00:00:00+08:00",
+			"time_to": "2023-03-31T00:00:00+08:00",
 			"short_desc": "",
-			"long_desc": "展示YouBike替代站點的資訊，替代站點的定義標準是大數據中心基於交易資料結果分群計算，資料來源為YouBike公司，更新頻率不定期。",
-			"use_case": "YouBike替代站點組件提供任一YouBike站附近的替代站點的資訊，您下次如果租借YouBike時遇到車站沒站的情形，不妨檢視一下本組件的地圖，看看附近還有沒有鄰近的替代站點可以使用。",
+			"long_desc": "互補性是大數據中心基於交易資料，計算站與站之間類似時段的重疊使用者數量，互補性強的多站可視為一個小區域共同提供服務。資料來源為臺北大數據中心研究，更新頻率不定期。",
+			"use_case": "透過本組件提供的各站互補性，對於規劃場站空間分佈、規劃調度區域、決定缺車缺位解決優先度有很大的幫助。",
 			"links": [
 				"https://tuic.gov.taipei/youbike",
 				"https://github.com/tpe-doit/YouBike-Optimization"
@@ -4055,46 +3842,21 @@
 		"146": {
 			"id": 146,
 			"index": "youbike_grid",
-			"chart_config": {
-				"types": ["TreemapChart", "BarChart"],
-				"unit": "個網格",
-				"color": [
-					"#7FBF7B",
-					"#8E8E8E",
-					"#40A461",
-					"#BEBEBE",
-					"#3D56FF",
-					"#BFDAB8",
-					"#ACCFFF"
-				],
-				"map_filter": [
-					"class",
-					[
-						"山區且土地限制",
-						"已設站",
-						"山區",
-						"鄰近已設站",
-						"未設站",
-						"土地限制",
-						"特殊條件限制"
-					]
-				]
-			},
 			"map_config": [
 				{
 					"index": "youbike_grid",
 					"paint": {
 						"fill-color": [
 							"case",
-							["==", ["get", "class"], "山區"],
+							["==", ["get", "class"], "無法設站-山區"],
 							"#40A461",
-							["==", ["get", "class"], "山區且土地限制"],
+							["==", ["get", "class"], "無法設站-山區且土地限制"],
 							"#7FBF7B",
-							["==", ["get", "class"], "特殊條件限制"],
+							["==", ["get", "class"], "無法設站-特殊條件限制"],
 							"#ACCFFF",
 							["==", ["get", "class"], "鄰近已設站"],
 							"#BEBEBE",
-							["==", ["get", "class"], "土地限制"],
+							["==", ["get", "class"], "無法設站-土地限制"],
 							"#BFDAB8",
 							["==", ["get", "class"], "未設站"],
 							"#3D56FF",
@@ -4113,13 +3875,32 @@
 					"type": "fill"
 				}
 			],
+			"map_filter": {
+				"mode": "byParam",
+				"byParam": {
+					"xParam": "class"
+				}
+			},
+			"chart_config": {
+				"types": ["TreemapChart", "BarChart"],
+				"unit": "個網格",
+				"color": [
+					"#7FBF7B",
+					"#8E8E8E",
+					"#40A461",
+					"#BEBEBE",
+					"#3D56FF",
+					"#BFDAB8",
+					"#ACCFFF"
+				]
+			},
 			"name": "YouBike設站狀態",
 			"source": "資訊局",
-			"time_from": "2023-09-28T00:00:00+08:00",
+			"time_from": "2023-07-01T00:00:00+08:00",
 			"time_to": null,
 			"short_desc": "",
-			"long_desc": "全市由250公尺見方的網格組成，依據是否已設站、鄰近是否有站點及土地使用等條件，將各網格分為7大類，資料來源為大數據中心研究，更新頻率不定期。",
-			"use_case": "本組件可讓您快速查看各區域的YouBike設站情況。這有助於您了解哪些區域已提供YouBike服務；哪些因為土地或地形限制無法設站；和哪些地區目前未設站但具有設站潛能。",
+			"long_desc": "將全市用250見方的網格表示，依據各網格條件分為可設站及無法設站。可設站網格包含已設站、未設站及鄰近已設站。無法設站網格的類型包含山區、土地限制及特殊條件。土地限制為根據國土利用現況調查結果不適合開發之區域，特殊條件為軍方用地或無設站空間。資料來源為大數據中心研究，更新頻率不定期。",
+			"use_case": "本組件可讓您快速查看各區域的YouBike設站情況。了解哪些區域已提供YouBike服務?哪些因為土地或地形限制無法設站?哪些地區目前未設站但具有設站潛能。",
 			"links": [
 				"https://tuic.gov.taipei/youbike",
 				"https://github.com/tpe-doit/YouBike-Optimization"
@@ -4161,6 +3942,12 @@
 					"title": "潛在需求"
 				}
 			],
+			"map_filter": {
+				"mode": "byParam",
+				"byParam": {
+					"xParam": "category"
+				}
+			},
 			"chart_config": {
 				"types": ["TreemapChart", "BarChart"],
 				"color": [
@@ -4171,22 +3958,373 @@
 					"#9f4333",
 					"#800026"
 				],
-				"unit": "個網格",
-				"map_filter": ["category", ["極低", "低", "中低", "中", "高"]]
+				"unit": "個網格"
 			},
 			"name": "YouBike未設站區潛在需求",
 			"source": "資訊局",
 			"time_from": "2023-07-28T00:00:00+08:00",
 			"time_to": null,
 			"short_desc": "",
-			"long_desc": "展示YouBike未設站區的潛在用車需求，這些資訊基於大數據中心研究提供，詳細預測方法可參考開源成果Github，更新頻率不定期。",
-			"use_case": "YouBike未設站區潛在需求將協助您了解未來可能需要增設YouBike站點的地區。這有助於規劃YouBike的擴展和改進，以滿足日益增長的需求。",
+			"long_desc": "展示YouBike未設站區域的潛在需求，詳細預測方法可參考開源成果Github。資料來源為臺北大數據中心研究，更新頻率不定期。",
+			"use_case": "本組件可讓您掌握目前未設站地區，以及該地區可能有多少需求。這有助於規劃YouBike的擴展，並規劃適當的資源以滿足日益增長的需求。",
 			"tags": [],
 			"links": [
 				"https://tuic.gov.taipei/youbike",
 				"https://github.com/tpe-doit/YouBike-Optimization"
 			],
 			"contributors": ["tuic"]
+		},
+		"161": {
+			"id": 161,
+			"index": "waterworks",
+			"map_config": [
+				{
+					"index": "waterworks_levee",
+					"paint": {
+						"line-color": "#B5C9FF"
+					},
+					"property": [
+						{
+							"key": "name",
+							"name": "名稱"
+						}
+					],
+					"type": "line",
+					"title": "堤防系統 (km)"
+				},
+				{
+					"index": "waterworks_detention",
+					"paint": {
+						"fill-color": "#3c70ff",
+						"fill-opacity": 0.7
+					},
+					"property": [
+						{
+							"key": "名稱",
+							"name": "名稱"
+						},
+						{
+							"key": "類型",
+							"name": "類型"
+						},
+						{
+							"key": "集水區",
+							"name": "集水區"
+						}
+					],
+					"type": "fill",
+					"title": "滯洪設施 (km²)"
+				},
+				{
+					"index": "waterworks_sewer",
+					"paint": {
+						"line-color": "#4D619D",
+						"line-width": [
+							"interpolate",
+							["linear"],
+							["to-number", ["get", "P_WIDTH"]],
+							1,
+							1,
+							10,
+							5,
+							100,
+							10,
+							1000,
+							20
+						]
+					},
+					"property": [
+						{
+							"key": "P_WIDTH",
+							"name": "管徑寬度"
+						},
+						{
+							"key": "P_LENGTH",
+							"name": "管線長度"
+						}
+					],
+					"type": "line",
+					"title": "雨水下水道管線 (km)"
+				}
+			],
+			"map_filter": {
+				"mode": "byLayer"
+			},
+			"chart_config": {
+				"types": ["MapLegend"]
+			},
+			"chart_data": [
+				{
+					"color": "#B5C9FF",
+					"type": "fill",
+					"name": "堤防系統 (km)",
+					"value": "139.90"
+				},
+				{
+					"color": "#3c70ff",
+					"type": "fill",
+					"name": "滯洪設施 (km²)",
+					"value": "0.1115"
+				},
+				{
+					"color": "#4D619D",
+					"type": "fill",
+					"name": "雨水下水道管線 (km)",
+					"value": "984.61"
+				}
+			],
+			"name": "防洪與雨水設備",
+			"short_desc": "顯示全市防洪與雨水設備的面積和分佈位置。",
+			"long_desc": "顯示全市防洪與雨水設備的面積和分佈位置。「水資源與水利設施」是指管理、保護和有效利用水源的相關設備及基礎建設，包括水庫、水壩、灌溉系統等，為確保水源永續利用扮演關鍵角色。",
+			"use_case": "圖表顯示防洪與雨水設備分別為何，能夠幫助我們更加了解有哪些水資源與水利設施，並透過圖表了解分佈各項分佈位置。",
+			"tags": [],
+			"links": [
+				"https://data.taipei/dataset/detail?id=5b277432-f534-4d09-a24c-d3f6b514e042"
+			],
+			"source": "工務局",
+			"contributors": [
+				"威猛先生",
+				"黃梓睿",
+				"廖偉翔",
+				"陳俊嘉",
+				"沈鈺芳",
+				"黃愉翔",
+				"tuic"
+			]
+		},
+		"162": {
+			"id": 162,
+			"index": "permeable_paving",
+			"map_config": [
+				{
+					"index": "permeable_sidewalk",
+					"paint": {
+						"fill-color": "#FFCA9C"
+					},
+					"property": [
+						{
+							"key": "NAME",
+							"name": "名稱"
+						},
+						{
+							"key": "Town_N",
+							"name": "行政區"
+						},
+						{
+							"key": "LENGTH",
+							"name": "長度"
+						}
+					],
+					"type": "fill",
+					"title": "人行道透水鋪面"
+				},
+				{
+					"index": "permeable_school",
+					"paint": {
+						"fill-color": "#FFAD66"
+					},
+					"property": [
+						{
+							"key": "TOWN",
+							"name": "行政區"
+						}
+					],
+					"type": "fill",
+					"title": "學校透水鋪面"
+				},
+				{
+					"index": "permeable_parking",
+					"paint": {
+						"fill-color": "#20E1FF",
+						"fill-opacity": 0.7
+					},
+					"property": [
+						{
+							"key": "TOWN",
+							"name": "行政區"
+						}
+					],
+					"type": "fill",
+					"title": "停車場透水鋪面"
+				},
+				{
+					"index": "permeable_park",
+					"paint": {
+						"fill-color": "#4AD84A"
+					},
+					"property": [
+						{
+							"key": "Id",
+							"name": "ID"
+						}
+					],
+					"type": "fill",
+					"title": "公園透水鋪面"
+				},
+				{
+					"index": "permeable_pac",
+					"paint": {
+						"fill-color": "#9EDBFF",
+						"fill-opacity": 0.7
+					},
+					"property": [
+						{
+							"key": "Id",
+							"name": "ID"
+						}
+					],
+					"type": "fill",
+					"title": "PAC鋪面"
+				}
+			],
+			"map_filter": {
+				"mode": "byLayer"
+			},
+			"chart_config": {
+				"types": ["TreemapChart"],
+				"unit": "m²",
+				"color": ["#4AD84A", "#FFAD66", "#9EDBFF", "#FFCA9C", "#20E1FF"]
+			},
+			"name": "透水鋪面",
+			"short_desc": "顯示全市透水性鋪面的面積和分佈位置。",
+			"long_desc": "顯示全市透水性鋪面的面積和分佈位置。是一種特殊路面，能促進雨水滲入地底，減緩地表積水及提高地下水位。這種鋪面有助於改善都市排水系統，減少洪災風險，同時維護水資源生態平衡。",
+			"use_case": "台北市的透水性鋪面的面積和分佈位置，將幫助我們探討透水性鋪面在城市中的遍佈及其相關性。",
+			"tags": [],
+			"links": [
+				"https://data.taipei/dataset/detail?id=5b277432-f534-4d09-a24c-d3f6b514e042"
+			],
+			"source": "工務局",
+			"contributors": [
+				"威猛先生",
+				"黃梓睿",
+				"廖偉翔",
+				"陳俊嘉",
+				"沈鈺芳",
+				"黃愉翔",
+				"tuic"
+			]
+		},
+		"163": {
+			"id": 163,
+			"index": "flood_simulate",
+			"map_config": [
+				{
+					"index": "flood_simulate_78",
+					"type": "fill",
+					"paint": {
+						"fill-color": [
+							"match",
+							["get", "FID"],
+							0,
+							"#CDF5FD",
+							1,
+							"#A0E9FF",
+							2,
+							"#89CFF3",
+							3,
+							"#00A9FF",
+							"#00A9FF"
+						],
+						"fill-opacity": 0.8
+					},
+					"property": [
+						{
+							"key": "Name",
+							"name": "淹水高度"
+						}
+					],
+					"title": "淹水資訊"
+				}
+			],
+			"chart_config": {
+				"color": ["#CDF5FD", "#A0E9FF", "#00A9FF"],
+				"types": ["ColumnChart", "BarPercentChart"],
+				"unit": "點",
+				"categories": [
+					"北投區",
+					"士林區",
+					"內湖區",
+					"南港區",
+					"松山區",
+					"信義區",
+					"中山區",
+					"大同區",
+					"中正區",
+					"萬華區",
+					"大安區",
+					"文山區"
+				]
+			},
+			"name": "降雨淹水模擬圖",
+			"source": "工務局水利處",
+			"time_from": "2023-06-08T00:00:00+08:00",
+			"time_to": null,
+			"update_freq": 5,
+			"update_freq_unit": "year",
+			"short_desc": "顯示全市各區降雨模擬淹水量。",
+			"long_desc": "本圖表展示本市在短延時強降雨條件（78.8mm/h、100mm/h、130mm/h）下可能的淹水範圍及淹水高度。淹水高度以不同顏色表示，分為三級：淺藍色代表 0.15m~0.30m，中藍色代表 0.30m~1.0m，深藍色代表 1.0m~2.0m。資料來源為工務局水利處，每五年更新一次。",
+			"use_case": "本組件可展示本市短延時強降雨條件下（78.8mm/h、100mm/h、130mm/h）之可能積水範圍、可能積水深度，以做防洪規劃。",
+			"tags": [],
+			"links": ["https://data.gov.tw/dataset/121550"],
+			"contributors": [
+				"我們都是112A",
+				"蔡立倫",
+				"謝芝嫻",
+				"王佑豪",
+				"賴彥良",
+				"林育緹",
+				"tuic"
+			]
+		},
+		"164": {
+			"id": 164,
+			"index": "condemn_building",
+			"map_config": [
+				{
+					"index": "condemned_building",
+					"paint": {
+						"circle-color": ["get", "color"],
+						"circle-radius": ["get", "radius"],
+						"circle-opacity": 0.7
+					},
+					"property": [
+						{
+							"key": "面積",
+							"name": "危樓面積"
+						},
+						{
+							"key": "地址",
+							"name": "地址"
+						}
+					],
+					"type": "circle",
+					"title": "各地點危樓面積總量"
+				}
+			],
+			"chart_config": {
+				"types": ["DistrictChart", "ColumnChart"],
+				"color": ["#39FF14"],
+				"unit": "m²"
+			},
+			"source": "建管處",
+			"name": "危樓面積",
+			"time_from": "2021-12-01T00:00:00+08:00",
+			"time_to": "2022-12-01T00:00:00+08:00",
+			"update_freq": 1,
+			"update_freq_unit": "month",
+			"short_desc": "顯示台北市危老核准重建計畫地點及面積。",
+			"long_desc": "顯示台北市危老核准重建計畫地點及面積，資料來源為台北市建築管理工程處開放資料，每一個月更新。",
+			"use_case": "可以用於顯示需拆除的危樓資訊，促進綠色城市推動，透過這些點位資訊，我們可以知道台北市危老核准重建計畫的案例地點及面積，在進行綠地、綠色建築等相關建設時可考慮利用這些地點。",
+			"links": ["https://dba.gov.taipei/cp.aspx?n=56283449CC905BB4"],
+			"contributors": [
+				"我們都是112A",
+				"蔡立倫",
+				"謝芝嫻",
+				"王佑豪",
+				"賴彥良",
+				"林育緹",
+				"tuic"
+			]
 		}
 	}
 }

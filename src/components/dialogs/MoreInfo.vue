@@ -61,6 +61,20 @@ function getLinkTag(link, index) {
 							"
 						/>
 					</div>
+					<div v-if="dialogStore.moreInfoContent.links">
+						<h3>相關資料</h3>
+						<div class="moreinfo-info-links">
+							<a
+								v-for="(link, index) in dialogStore
+									.moreInfoContent.links"
+								:href="link"
+								:key="link"
+								target="_blank"
+								rel="noreferrer"
+								>{{ getLinkTag(link, index) }}</a
+							>
+						</div>
+					</div>
 					<div v-if="dialogStore.moreInfoContent.contributors">
 						<h3>協作者</h3>
 						<div class="moreinfo-info-contributors">
@@ -77,7 +91,16 @@ function getLinkTag(link, index) {
 									target="_blank"
 									rel="noreferrer"
 									><img
-										:src="`${BASE_URL}/images/contributors/${contributor}.png`"
+										:src="`${BASE_URL}/images/contributors/${
+											contentStore.contributors[
+												contributor
+											].image
+												? contentStore.contributors[
+														contributor
+														// eslint-disable-next-line no-mixed-spaces-and-tabs
+												  ].image
+												: contributor
+										}.png`"
 										:alt="`協作者-${contentStore.contributors[contributor].name}`"
 									/>
 									<p>
@@ -89,20 +112,6 @@ function getLinkTag(link, index) {
 									</p>
 								</a>
 							</div>
-						</div>
-					</div>
-					<div v-if="dialogStore.moreInfoContent.links">
-						<h3>相關資料</h3>
-						<div class="moreinfo-info-links">
-							<a
-								v-for="(link, index) in dialogStore
-									.moreInfoContent.links"
-								:href="link"
-								:key="link"
-								target="_blank"
-								rel="noreferrer"
-								>{{ getLinkTag(link, index) }}</a
-							>
 						</div>
 					</div>
 				</div>
@@ -213,6 +222,7 @@ function getLinkTag(link, index) {
 				img {
 					height: var(--font-xl);
 					margin-right: 4px;
+					border-radius: 50%;
 				}
 
 				&:hover p {
@@ -224,6 +234,7 @@ function getLinkTag(link, index) {
 		&-links {
 			display: grid;
 			grid-template-columns: 1fr 1fr;
+			margin: 0 0 var(--font-s);
 
 			a {
 				font-size: var(--font-s);
