@@ -9,8 +9,14 @@
 		{
 			"name": "韌性城市",
 			"index": "urban-resiliance",
-			"components": ["161", "162", "163", "164"],
+			"components": ["160", "161", "162", "163", "164"],
 			"icon": "yard"
+		},
+		{
+			"name": "祝您好孕",
+			"index": "pregnancy",
+			"components": ["153", "154", "155"],
+			"icon": "favorite"
 		},
 		{
 			"name": "民情熱議",
