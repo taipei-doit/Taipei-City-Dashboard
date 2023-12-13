@@ -1,7 +1,7 @@
 <!-- Developed by Taipei Urban Intelligence Center 2023 -->
 
 <script setup>
-import { ref, computed } from "vue";
+import { computed, ref } from "vue";
 const targetItem = ref(null);
 const mousePosition = ref({ x: null, y: null });
 
@@ -84,6 +84,7 @@ const updateMouseLocation = (e) => {
 			<div
 				class="iconPercentageChart__content"
 				v-for="(item, index) in series"
+				:key="item.name"
 			>
 				<h2>
 					{{ item.name
