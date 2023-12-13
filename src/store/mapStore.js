@@ -136,7 +136,7 @@ export const useMapStore = defineStore("map", {
 
 		/* Adding Map Layers */
 		// 1. Passes in the map_config (an Array of Objects) of a component and adds all layers to the map layer list
-		addToMapLayerList(map_config) {
+		addToMapLayerList(map_config, map_source) {
 			map_config.forEach((element) => {
 				let mapLayerId = `${element.index}-${element.type}`;
 				// 1-1. If the layer exists, simply turn on the visibility and add it to the visible layers list
@@ -158,23 +158,26 @@ export const useMapStore = defineStore("map", {
 				appendLayerId.layerId = mapLayerId;
 				// 1-2. If the layer doesn't exist, call an API to get the layer data
 				this.loadingLayers.push(appendLayerId.layerId);
-				this.fetchLocalGeoJson(appendLayerId);
+				this.fetchLocalGeoJson(appendLayerId, map_source);
 			});
 		},
 		// 2. Call an API to get the layer data
-		fetchLocalGeoJson(map_config) {
+		fetchLocalGeoJson(map_config, map_source) {
 			axios
 				.get(`${BASE_URL}/mapData/${map_config.index}.geojson`)
 				.then((rs) => {
-					this.addMapLayerSource(map_config, rs.data);
+					this.addMapLayerSource(map_config, map_source, rs.data);
 				})
 				.catch((e) => console.error(e));
 		},
 		// 3. Add the layer data as a source in mapbox
-		addMapLayerSource(map_config, data) {
+		addMapLayerSource(map_config, map_source, data) {
 			this.map.addSource(`${map_config.layerId}-source`, {
 				type: "geojson",
 				data: { ...data },
+				cluster: map_source?.cluster || false,
+				clusterMaxZoom: map_source?.clusterMaxZoom || 0,
+				clusterRadius: map_source?.clusterMaxZoom || 0,
 			});
 			if (map_config.type === "arc") {
 				this.AddArcMapLayer(map_config, data);
