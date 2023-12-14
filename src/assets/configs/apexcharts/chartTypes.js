@@ -11,6 +11,7 @@ export const chartTypes = {
 	GuageChart: "量表圖",
 	RadarChart: "雷達圖",
 	HeatmapChart: "熱力圖",
+	PolarAreaChart: "極座標圖",
 	ColumnLineChart: "長條折線圖",
 	BarChartWithGoal: "長條圖(目標)",
 	IconPercentChart: "圖示比例圖",

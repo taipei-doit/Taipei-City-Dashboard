@@ -3974,59 +3974,393 @@
 			],
 			"contributors": ["tuic"]
 		},
-		"150": {
-			"id": 150,
-			"index": "childcare_resource",
+		"153": {
+			"id": 153,
+			"index": "gynecology_clinic",
 			"map_config": [
 				{
-					"index": "childcare_resource",
+					"index": "gynecology_clinic",
 					"paint": {
 						"circle-color": [
-							"case",
-							["==", ["get", "inst_type"], "私立托嬰中心"],
-							"#E6DF44",
-							["==", ["get", "inst_type"], "公辦民營托嬰中心"],
-							"#F4633C",
-							["==", ["get", "inst_type"], "社區公共托育家園"],
-							"#D63940",
-							"#9C2A4B"
+							"match",
+							["get", "main_type"],
+							"診所",
+							"#F0B67F",
+							"醫院",
+							"#C7EFCF",
+							"#D6D1B1"
+						],
+						"circle-radius": [
+							"interpolate",
+							["linear"],
+							["zoom"],
+							12,
+							2,
+							15,
+							5,
+							18,
+							7
 						]
 					},
 					"property": [
 						{
-							"key": "district",
+							"key": "main_type",
+							"name": "主要類別"
+						},
+						{
+							"key": "name",
+							"name": "名稱"
+						},
+						{
+							"key": "address",
+							"name": "地址"
+						}
+					],
+					"type": "circle",
+					"title": "婦產科診所與醫院分佈"
+				},
+				{
+					"index": "gynecology_clinic",
+					"paint": {
+						"line-color": "#D6D1B1",
+						"line-opacity": 0.6,
+						"line-width": 1.5
+					},
+					"property": [
+						{
+							"key": "main_type",
+							"name": "主要類別"
+						},
+						{
+							"key": "name",
+							"name": "名稱"
+						},
+						{
+							"key": "address",
+							"name": "地址"
+						}
+					],
+					"type": "voronoi",
+					"title": "婦產科診所與醫院分佈"
+				}
+			],
+			"history_data": false,
+			"chart_config": {
+				"color": ["#D6D1B1"],
+				"types": ["DistrictChart", "ColumnChart"],
+				"unit": "間",
+				"map_filter": [
+					"dist",
+					[
+						"北投區",
+						"士林區",
+						"內湖區",
+						"南港區",
+						"松山區",
+						"信義區",
+						"中山區",
+						"大同區",
+						"中正區",
+						"萬華區",
+						"大安區",
+						"文山區"
+					]
+				]
+			},
+			"name": "婦產科診所與醫院分佈",
+			"source": "衛生局",
+			"time_from": "2023-07-26T10:48:26+08:00",
+			"time_to": null,
+			"update_freq": null,
+			"update_freq_unit": null,
+			"short_desc": "",
+			"long_desc": "此圖顯示各行政區婦產科診所及醫院總和個數。搭配地圖類型：Vonoroi diagram，顯示各地點距離最近的就診地，支援各區篩選功能。不定期更新。",
+			"use_case": "此圖為懷孕期使用者設計，透過地圖增加民眾使用上的便利性。",
+			"links": null,
+			"tags": [],
+			"contributors": ["tuic"]
+		},
+		"154": {
+			"id": 154,
+			"index": "newborn_stats",
+			"map_config": [
+				{
+					"index": "newborn_stats",
+					"paint": {
+						"fill-opacity": 0.5,
+						"fill-color": [
+							"case",
+							[
+								"<=",
+								[
+									"+",
+									["to-number", ["get", "0歲數量"]],
+									["to-number", ["get", "1歲數量"]],
+									["to-number", ["get", "2歲數量"]],
+									["to-number", ["get", "3歲數量"]],
+									["to-number", ["get", "4歲數量"]],
+									["to-number", ["get", "5歲數量"]]
+								],
+								50
+							],
+							"#0C303E",
+							[
+								"<=",
+								[
+									"+",
+									["to-number", ["get", "0歲數量"]],
+									["to-number", ["get", "1歲數量"]],
+									["to-number", ["get", "2歲數量"]],
+									["to-number", ["get", "3歲數量"]],
+									["to-number", ["get", "4歲數量"]],
+									["to-number", ["get", "5歲數量"]]
+								],
+								100
+							],
+							"#184556",
+							[
+								"<=",
+								[
+									"+",
+									["to-number", ["get", "0歲數量"]],
+									["to-number", ["get", "1歲數量"]],
+									["to-number", ["get", "2歲數量"]],
+									["to-number", ["get", "3歲數量"]],
+									["to-number", ["get", "4歲數量"]],
+									["to-number", ["get", "5歲數量"]]
+								],
+								150
+							],
+							"#1E4F63",
+							[
+								"<=",
+								[
+									"+",
+									["to-number", ["get", "0歲數量"]],
+									["to-number", ["get", "1歲數量"]],
+									["to-number", ["get", "2歲數量"]],
+									["to-number", ["get", "3歲數量"]],
+									["to-number", ["get", "4歲數量"]],
+									["to-number", ["get", "5歲數量"]]
+								],
+								200
+							],
+							"#24596F",
+							[
+								"<=",
+								[
+									"+",
+									["to-number", ["get", "0歲數量"]],
+									["to-number", ["get", "1歲數量"]],
+									["to-number", ["get", "2歲數量"]],
+									["to-number", ["get", "3歲數量"]],
+									["to-number", ["get", "4歲數量"]],
+									["to-number", ["get", "5歲數量"]]
+								],
+								250
+							],
+							"#2A647B",
+							[
+								"<=",
+								[
+									"+",
+									["to-number", ["get", "0歲數量"]],
+									["to-number", ["get", "1歲數量"]],
+									["to-number", ["get", "2歲數量"]],
+									["to-number", ["get", "3歲數量"]],
+									["to-number", ["get", "4歲數量"]],
+									["to-number", ["get", "5歲數量"]]
+								],
+								300
+							],
+							"#2F6E87",
+							[
+								"<=",
+								[
+									"+",
+									["to-number", ["get", "0歲數量"]],
+									["to-number", ["get", "1歲數量"]],
+									["to-number", ["get", "2歲數量"]],
+									["to-number", ["get", "3歲數量"]],
+									["to-number", ["get", "4歲數量"]],
+									["to-number", ["get", "5歲數量"]]
+								],
+								350
+							],
+							"#3B829F",
+							[
+								"<=",
+								[
+									"+",
+									["to-number", ["get", "0歲數量"]],
+									["to-number", ["get", "1歲數量"]],
+									["to-number", ["get", "2歲數量"]],
+									["to-number", ["get", "3歲數量"]],
+									["to-number", ["get", "4歲數量"]],
+									["to-number", ["get", "5歲數量"]]
+								],
+								400
+							],
+							"#4797B7",
+							[
+								"<=",
+								[
+									"+",
+									["to-number", ["get", "0歲數量"]],
+									["to-number", ["get", "1歲數量"]],
+									["to-number", ["get", "2歲數量"]],
+									["to-number", ["get", "3歲數量"]],
+									["to-number", ["get", "4歲數量"]],
+									["to-number", ["get", "5歲數量"]]
+								],
+								450
+							],
+							"#52ABCF",
+							[
+								"<=",
+								[
+									"+",
+									["to-number", ["get", "0歲數量"]],
+									["to-number", ["get", "1歲數量"]],
+									["to-number", ["get", "2歲數量"]],
+									["to-number", ["get", "3歲數量"]],
+									["to-number", ["get", "4歲數量"]],
+									["to-number", ["get", "5歲數量"]]
+								],
+								500
+							],
+							"#5EC0E7",
+							"#69D4FF"
+						]
+					},
+					"property": [
+						{
+							"key": "SECT_NAME",
 							"name": "行政區"
 						},
 						{
-							"key": "inst_type",
-							"name": "機構類型"
+							"key": "LIE_NAME",
+							"name": "里名"
 						},
 						{
-							"key": "inst_name",
-							"name": "機構名稱"
+							"key": "0歲數量",
+							"name": "0歲人口數"
 						},
+						{
+							"key": "1歲數量",
+							"name": "1歲人口數"
+						},
+						{
+							"key": "2歲數量",
+							"name": "2歲人口數"
+						},
+						{
+							"key": "3歲數量",
+							"name": "3歲人口數"
+						},
+						{
+							"key": "4歲數量",
+							"name": "4歲人口數"
+						},
+						{
+							"key": "5歲數量",
+							"name": "5歲人口數"
+						}
+					],
+					"title": "各里幼兒人數",
+					"type": "fill"
+				}
+			],
+			"history_data": true,
+			"history_data_color": ["#4797B7", "#A3B4B9", "#FED0BB"],
+			"chart_config": {
+				"color": ["#4797B7"],
+				"types": ["DistrictChart", "ColumnChart"],
+				"unit": "人",
+				"map_filter": [
+					"SECT_NAME",
+					[
+						"北投區",
+						"士林區",
+						"內湖區",
+						"南港區",
+						"松山區",
+						"信義區",
+						"中山區",
+						"大同區",
+						"中正區",
+						"萬華區",
+						"大安區",
+						"文山區"
+					]
+				]
+			},
+			"name": "幼兒人數統計",
+			"source": "民政局",
+			"time_from": "2023-10-01T00:00:00+08:00",
+			"time_to": null,
+			"update_freq": 1,
+			"update_freq_unit": "month",
+			"short_desc": "",
+			"long_desc": "此圖顯示各行政區幼兒人口年齡分布，地圖則以里為單位進行劃分，支援各里篩選功能。每月更新一次。",
+			"use_case": "此圖為政府機關或嬰幼兒服務提供者設計，可以做為政策方針的參考。",
+			"links": null,
+			"tags": [],
+			"contributors": ["tuic"]
+		},
+		"155": {
+			"id": 155,
+			"index": "breastfeeding_room",
+			"map_config": [
+				{
+					"index": "breastfeeding_room",
+					"paint": {
+						"circle-color": "#FFC0CB",
+						"circle-radius": [
+							"interpolate",
+							["linear"],
+							["zoom"],
+							12,
+							3,
+							15,
+							5,
+							18,
+							7
+						]
+					},
+					"property": [
 						{
 							"key": "address",
 							"name": "地址"
 						},
 						{
-							"key": "phone",
-							"name": "電話"
+							"key": "name",
+							"name": "名稱"
+						},
+						{
+							"key": "services",
+							"name": "服務"
+						},
+						{
+							"key": "opening_hours",
+							"name": "開放時間"
+						},
+						{
+							"key": "guide",
+							"name": "指引"
+						},
+						{
+							"key": "reminder",
+							"name": "提醒"
 						}
 					],
-					"title": "育兒支持機構地圖",
+					"title": "哺集乳室分佈",
 					"type": "circle",
 					"size": "big",
 					"icon": null
 				}
 			],
-			"map_filter": {
-				"mode": "byParam",
-				"byParam": {
-					"xParam": "district",
-					"yParam": "inst_type"
-				}
-			},
+			"history_data": false,
 			"chart_config": {
 				"categories": [
 					"北投區",
@@ -4042,72 +4376,119 @@
 					"大安區",
 					"文山區"
 				],
-				"types": ["HeatmapChart", "DistrictChart"],
-				"color": ["#A03A3B", "#BF672B", "#3A69A0"],
-				"unit": "處設施"
+				"types": ["PolarAreaChart"],
+				"color": ["#4dd97a", "#0a85f4"],
+				"unit": "",
+				"map_filter": [
+					"dist",
+					[
+						"北投區",
+						"士林區",
+						"內湖區",
+						"南港區",
+						"松山區",
+						"信義區",
+						"中山區",
+						"大同區",
+						"中正區",
+						"萬華區",
+						"大安區",
+						"文山區"
+					]
+				]
 			},
-			"name": "育兒支持資源",
-			"source": "社會局",
-			"time_from": "2020-07-27T10:46:50+08:00",
-			"time_to": "2023-10-11T17:34:44:00",
-			"update_freq": 1,
-			"update_freq_unit": "month",
-			"short_desc": "顯示臺北市育兒支持資源統計。",
-			"long_desc": "顯示臺北市育兒支持資源統計。",
-			"use_case": "顯示臺北市育兒支持資源統計。",
-			"links": [
-				"https://data.taipei/dataset/detail?id=fd4779d0-827d-4ab3-8f65-2a356abad6d9",
-				"https://data.taipei/dataset/detail?id=7262cdae-18e7-4d33-a842-4978cbc84d43",
-				"https://data.taipei/dataset/detail?id=41c729ce-c848-492a-b7a6-db468f06c17c",
-				"https://data.taipei/dataset/detail?id=a7462972-0380-4987-99fb-2071e798ce66",
-				"https://data.taipei/dataset/detail?id=7c66efcd-d073-401c-b18a-7a46728776c4",
-				"https://data.taipei/dataset/detail?id=9c9a3f77-8340-48d8-bc0e-f9155521b758",
-				"https://data.taipei/dataset/detail?id=081df75e-85c7-464c-b125-546920911c5c",
-				"https://data.taipei/dataset/detail?id=01ac5a1d-dfc3-44c7-84a7-6d76bcb2879b"
-			],
-			"contributors": [
-				"台灣大哥大",
-				"楊明倫",
-				"顏佑軒",
-				"徐慶怡",
-				"林昭宏",
-				"蔡宜秀",
-				"tuic"
-			]
+			"name": "哺集乳室分佈",
+			"source": "衛生局",
+			"time_from": "2023-03-02T00:00:00+08:00",
+			"time_to": null,
+			"update_freq": null,
+			"update_freq_unit": null,
+			"short_desc": "",
+			"long_desc": "此圖顯示台北市各行政區的哺集乳室資訊，地圖則標示出哺集乳室的具體位置指引以及提供的設施，為育嬰期使用者設計。不定期更新。",
+			"use_case": "透過此圖，能夠清晰地看到每個行政區中哺集乳室相關設施的分佈情況，以及各項相關設施的數量。",
+			"links": null,
+			"tags": [],
+			"contributors": ["tuic"]
 		},
-		"151": {
-			"id": 151,
-			"index": "parental_leave",
-			"history_data": true,
-			"map_config": null,
-			"chart_config": {
-				"color": ["#4B96FA", "#F1C40F"],
-				"types": ["IconPercentChart", "ColumnChart"],
-				"categories": ["2018", "2019", "2020", "2021", "2022"],
-				"unit": "人"
-			},
-			"name": "育嬰假性別比",
-			"source": "主計處",
-			"time_from": "2018-12-31T08:00:18+08:00",
-			"time_to": "2022-12-31T08:00:18+08:00",
-			"update_freq": 1,
-			"update_freq_unit": "year",
-			"short_desc": "顯示臺北市近五年性別比例變化。",
-			"long_desc": "顯示臺北市近五年性別比例變化。",
-			"use_case": "顯示臺北市近五年性別比例變化。",
-			"links": [
-				"https://data.taipei/dataset/detail?id=48eb75e3-8694-433d-87cd-01b08668bcc7",
-				"https://www.bli.gov.tw/0013465.html"
+		"160": {
+			"id": 160,
+			"index": "pm10_measurments",
+			"map_config": [
+				{
+					"index": "pm10_measurments",
+					"paint": {
+						"line-color": [
+							"case",
+							["<=", ["get", "value"], 45],
+							"#8AC926",
+							["<=", ["get", "value"], 49],
+							"#A8CA2B",
+							["<=", ["get", "value"], 53],
+							"#C5CA30",
+							["<=", ["get", "value"], 57],
+							"#E2CA35",
+							["<=", ["get", "value"], 61],
+							"#FFCA3A",
+							["<=", ["get", "value"], 65],
+							"#FFBC3F",
+							["<=", ["get", "value"], 69],
+							"#FFAE43",
+							["<=", ["get", "value"], 73],
+							"#FF924C",
+							["<=", ["get", "value"], 77],
+							"#FF7655",
+							"#FF595E"
+						]
+					},
+					"property": [
+						{
+							"key": "value",
+							"name": "推測值"
+						}
+					],
+					"type": "isoline",
+					"isoline-key": "value",
+					"title": "懸浮微粒量測值等值線"
+				},
+				{
+					"index": "pm10_measurments",
+					"paint": {
+						"circle-color": "#EEEEEE"
+					},
+					"property": [
+						{
+							"key": "name",
+							"name": "測站名"
+						},
+						{
+							"key": "value",
+							"name": "測量值"
+						}
+					],
+					"type": "circle",
+					"size": "big",
+					"title": "測站懸浮微粒量測值"
+				}
 			],
-			"contributors": [
-				"台灣大哥大",
-				"楊明倫",
-				"顏佑軒",
-				"徐慶怡",
-				"林昭宏",
-				"蔡宜秀",
-				"tuic"
-			]
+			"history_data": false,
+			"chart_config": {
+				"color": ["#FFBC3F"],
+				"types": ["RadarChart", "BarChart"],
+				"unit": "μg/m³"
+			},
+			"name": "懸浮微粒量測值",
+			"source": "環保局",
+			"time_from": "2023-11-18T20:00:00+08:00",
+			"time_to": null,
+			"update_freq": 1,
+			"update_freq_unit": "hour",
+			"short_desc": "",
+			"long_desc": "此圖顯示台北市各測站的一小時內平均PM10濃度，搭配地圖類型：等高線圖，顯示懸浮微粒濃度在區域上的分布。每小時更新一次。",
+			"use_case": "此圖表可供民眾參考，特別是懷孕期使用者及嬰幼兒，作為評估是否外出的依據。",
+			"links": null,
+			"tags": [],
+			"contributors": ["tuic"]
+
 		},
 		"161": {
 			"id": 161,
