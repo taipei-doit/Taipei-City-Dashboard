@@ -9,7 +9,7 @@ const props = defineProps(["chart_config", "activeChart", "series"]);
 const parseSeries = computed(() => {
 	return props.series.map((serie, index) => ({
 		...serie,
-		type: index === 0 ? "column" : index === 1 ? "line" : serie.type,
+		type: index === 0 ? "column" : "line",
 	}));
 });
 
@@ -56,39 +56,23 @@ const chartOptions = ref({
 		},
 	},
 	tooltip: {
-		// enabledOnSeries: [0],
 		// The class "chart-tooltip" could be edited in /assets/styles/chartStyles.css
-		custom: function ({ series, dataPointIndex, w }) {
-			const categoryLabel = w.globals.categoryLabels[dataPointIndex];
-			let tooltipContent = "";
-
-			for (let i = 0; i < w.globals.seriesNames.length; i++) {
-				const seriesName = w.globals.seriesNames[i];
-				const value = series[i][dataPointIndex];
-				const unit = props.chart_config.units[i];
-
-				if (series[i].length > 0) {
-					tooltipContent += `<tr><td><h6>${seriesName}</h6></td><td>${value} ${unit}</td></tr>`;
-				}
-			}
-
-			return `<div class="chart-tooltip">
-				<h6>${categoryLabel}</h6>
-				<table>${tooltipContent}</table>
-			</div>`;
+		custom: function ({ series, seriesIndex, dataPointIndex, w }) {
+			return (
+				`<div class="chart-tooltip">` +
+				`<h6>` +
+				`${parseTime(w.config.series[0].data[dataPointIndex].x)} - ${
+					w.globals.seriesNames[seriesIndex]
+				}` +
+				`</h6>` +
+				`<span>${series[seriesIndex][dataPointIndex]} ${props.chart_config.unit}</span>` +
+				`</div>`
+			);
 		},
-	},
-	states: {
-		hover: {
-			filter: {
-				type: "none",
-			},
-		},
-		active: {
-			filter: {
-				type: "none",
-			},
-		},
+		enabled: true,
+		followCursor: true,
+		intersect: true,
+		shared: false,
 	},
 	xaxis: {
 		axisBorder: {
@@ -99,7 +83,7 @@ const chartOptions = ref({
 			show: false,
 		},
 		crosshairs: {
-			// 	show: false,
+			show: false,
 			stroke: {
 				color: "var(--color-complement-text)",
 			},
@@ -107,22 +91,28 @@ const chartOptions = ref({
 		tooltip: {
 			enabled: false,
 		},
+		type: "datetime",
 	},
 	yaxis: [
 		{
+			labels: {
+				formatter: function (val) {
+					return val.toFixed(0);
+				},
+			},
 			title: {
 				text: props.series[0].name,
 				style: {
 					color: "var(--color-complement-text)",
 				},
 			},
+		},
+		{
 			labels: {
 				formatter: function (val) {
 					return val.toFixed(0);
 				},
 			},
-		},
-		{
 			opposite: true,
 			title: {
 				text: props.series?.[1]?.name ?? "",
@@ -130,18 +120,17 @@ const chartOptions = ref({
 					color: "var(--color-complement-text)",
 				},
 			},
-			labels: {
-				formatter: function (val) {
-					return val.toFixed(0);
-				},
-			},
 		},
 	],
 });
+
+function parseTime(time) {
+	return time.replace("T00:00:00+08:00", " ");
+}
 </script>
 
 <template>
-	<div v-if="activeChart === 'MixedColumnLineChart'">
+	<div v-if="activeChart === 'ColumnLineChart'">
 		<apexchart
 			width="100%"
 			height="260px"
