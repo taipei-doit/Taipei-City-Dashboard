@@ -4076,7 +4076,7 @@
 				"color": ["#4B96FA", "#F1C40F"],
 				"types": ["IconPercentChart", "ColumnChart"],
 				"categories": ["2018", "2019", "2020", "2021", "2022"],
-				"unit": "%"
+				"unit": "人"
 			},
 			"name": "育嬰假性別比",
 			"source": "主計處",
