@@ -1,4 +1,5 @@
-<!-- Developed by Taipei Urban Intelligence Center 2023 -->
+<!-- Developed by Open Possible (台灣大哥大), Taipei Codefest 2023 -->
+<!-- Refactored and Maintained by Taipei Urban Intelligence Center -->
 
 <script setup>
 import { ref, computed } from "vue";
