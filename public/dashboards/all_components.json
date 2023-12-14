@@ -4488,6 +4488,7 @@
 			"links": null,
 			"tags": [],
 			"contributors": ["tuic"]
+
 		},
 		"161": {
 			"id": 161,
@@ -4748,27 +4749,71 @@
 							"name": "淹水高度"
 						}
 					],
-					"title": "淹水資訊"
+					"title": "降雨78mm"
+				},
+				{
+					"index": "flood_simulate_100",
+					"type": "fill",
+					"paint": {
+						"fill-color": [
+							"match",
+							["get", "FID"],
+							0,
+							"#CDF5FD",
+							1,
+							"#A0E9FF",
+							2,
+							"#89CFF3",
+							3,
+							"#00A9FF",
+							"#00A9FF"
+						],
+						"fill-opacity": 0.8
+					},
+					"property": [
+						{
+							"key": "Name",
+							"name": "淹水高度"
+						}
+					],
+					"title": "降雨100mm"
+				},
+				{
+					"index": "flood_simulate_130",
+					"type": "fill",
+					"paint": {
+						"fill-color": [
+							"match",
+							["get", "FID"],
+							0,
+							"#CDF5FD",
+							1,
+							"#A0E9FF",
+							2,
+							"#89CFF3",
+							3,
+							"#00A9FF",
+							"#00A9FF"
+						],
+						"fill-opacity": 0.8
+					},
+					"property": [
+						{
+							"key": "Name",
+							"name": "淹水高度"
+						}
+					],
+					"title": "降雨130mm"
 				}
 			],
+			"map_filter": {
+				"mode": "byLayer"
+			},
 			"chart_config": {
 				"color": ["#CDF5FD", "#A0E9FF", "#00A9FF"],
 				"types": ["ColumnChart", "BarPercentChart"],
 				"unit": "點",
-				"categories": [
-					"北投區",
-					"士林區",
-					"內湖區",
-					"南港區",
-					"松山區",
-					"信義區",
-					"中山區",
-					"大同區",
-					"中正區",
-					"萬華區",
-					"大安區",
-					"文山區"
-				]
+				"categories": ["降雨78mm", "降雨100mm", "降雨130mm"]
 			},
 			"name": "降雨淹水模擬圖",
 			"source": "工務局水利處",

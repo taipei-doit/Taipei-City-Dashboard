@@ -4,12 +4,12 @@
 <!-- The different modes are controlled by the prop "isMapLayer" (default false) -->
 
 <script setup>
-import { ref, computed } from "vue";
-import { useMapStore } from "../../store/mapStore";
+import { computed, ref } from "vue";
 import { useDialogStore } from "../../store/dialogStore";
+import { useMapStore } from "../../store/mapStore";
 
-import TagTooltip from "../utilities/TagTooltip.vue";
 import { chartTypes } from "../../assets/configs/apexcharts/chartTypes";
+import TagTooltip from "../utilities/TagTooltip.vue";
 
 const mapStore = useMapStore();
 const dialogStore = useDialogStore();

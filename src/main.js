@@ -35,7 +35,9 @@ import MapLegend from "./components/charts/MapLegend.vue";
 import MetroChart from "./components/charts/MetroChart.vue";
 import HeatmapChart from "./components/charts/HeatmapChart.vue";
 import PolarAreaChart from "./components/charts/PolarAreaChart.vue";
-import TreeChart from "./components/charts/TreeChart.vue";
+import ColumnLineChart from "./components/charts/ColumnLineChart.vue";
+import BarChartWithGoal from "./components/charts/BarChartWithGoal.vue";
+import IconPercentChart from "./components/charts/IconPercentChart.vue";
 
 const app = createApp(App);
 
@@ -59,6 +61,8 @@ app.component("MapLegend", MapLegend);
 app.component("MetroChart", MetroChart);
 app.component("HeatmapChart", HeatmapChart);
 app.component("PolarAreaChart", PolarAreaChart);
-app.component("TreeChart", TreeChart);
+app.component("ColumnLineChart", ColumnLineChart);
+app.component("BarChartWithGoal", BarChartWithGoal);
+app.component("IconPercentChart", IconPercentChart);
 
 app.mount("#app");

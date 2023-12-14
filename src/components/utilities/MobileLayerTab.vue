@@ -1,14 +1,14 @@
 <!-- Developed by Taipei Urban Intelligence Center 2023 -->
 
 <script setup>
-import { ref } from 'vue';
-import { useMapStore } from '../../store/mapStore';
+import { ref } from "vue";
+import { useMapStore } from "../../store/mapStore";
 
 const { BASE_URL } = import.meta.env;
 
 const mapStore = useMapStore();
 
-const props = defineProps(['content']);
+const props = defineProps(["content"]);
 
 const checked = ref(false);
 
@@ -27,11 +27,24 @@ function handleToggle() {
 
 <template>
 	<div class="mobilelayertab">
-		<input :id="content.index" type="checkbox" v-model="checked" @change="handleToggle" />
+		<input
+			:id="content.index"
+			type="checkbox"
+			v-model="checked"
+			@change="handleToggle"
+		/>
 		<label :for="content.index" :class="{ checked: checked }">
-			<img :src="`${BASE_URL}/images/thumbnails/${content.chart_config.types[0]}.svg`" />
+			<img
+				:src="`${BASE_URL}/images/thumbnails/${content.chart_config.types[0]}.svg`"
+			/>
 		</label>
-		<p>{{ content.name.length > 6 ? `${content.name.slice(0, 5)}...` : content.name }}</p>
+		<p>
+			{{
+				content.name.length > 6
+					? `${content.name.slice(0, 5)}...`
+					: content.name
+			}}
+		</p>
 	</div>
 </template>
 
@@ -58,7 +71,7 @@ function handleToggle() {
 		}
 	}
 
-	input:checked+label {
+	input:checked + label {
 		border: solid 1px var(--color-highlight);
 	}
 
@@ -69,7 +82,7 @@ function handleToggle() {
 		text-align: center;
 	}
 
-	margin-bottom: 8px
+	margin-bottom: 8px;
 }
 
 .checked {

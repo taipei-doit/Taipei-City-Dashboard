@@ -65,6 +65,36 @@
 			"id": "我們都是112A",
 			"name": "我們都是112A",
 			"image": "codefest"
+		},
+		"楊明倫": {
+			"id": "楊明倫",
+			"name": "楊明倫",
+			"link": "https://github.com/KevinYang2229"
+		},
+		"顏佑軒": {
+			"id": "顏佑軒",
+			"name": "顏佑軒",
+			"link": "https://github.com/chrisyen8341"
+		},
+		"徐慶怡": {
+			"id": "徐慶怡",
+			"name": "徐慶怡",
+			"link": "https://github.com/pandaachuitwm"
+		},
+		"林昭宏": {
+			"id": "林昭宏",
+			"name": "林昭宏",
+			"link": "https://github.com/Toma-L"
+		},
+		"蔡宜秀": {
+			"id": "蔡宜秀",
+			"name": "蔡宜秀",
+			"link": "https://github.com/EllenTsaitw"
+		},
+		"台灣大哥大": {
+			"id": "台灣大哥大",
+			"name": "台灣大哥大",
+			"link": "https://www.taiwanmobile.com/"
 		}
 	}
 }
