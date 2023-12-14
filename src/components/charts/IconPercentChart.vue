@@ -1,21 +1,19 @@
-<!-- Developed by Taipei Urban Intelligence Center 2023 -->
+<!-- Developed by Open Possible (台灣大哥大), Taipei Codefest 2023 -->
+<!-- Refactored and Maintained by Taipei Urban Intelligence Center -->
 
 <script setup>
 import { computed, ref } from "vue";
+
+const props = defineProps(["chart_config", "activeChart", "series"]);
+
 const targetItem = ref(null);
 const mousePosition = ref({ x: null, y: null });
 
-const props = defineProps(["chart_config", "activeChart", "series"]);
 let targetData = { status: null };
-
-const { color, categories, unit } = props.chart_config;
 
 // init active index
 const activeIndex = ref(0);
-
 const chartIconTotal = 50;
-let iconColorPrimary = color[0];
-let iconColorSecondary = color[1];
 
 // calculate active sum
 const activeSum = computed(() => {
@@ -32,32 +30,10 @@ const primaryPercentage = computed(() => {
 	);
 });
 
-// calculate secondary percentage
-const secondaryPercentage = computed(() => {
-	return 100 - primaryPercentage.value;
-});
-
 // calculate primary icon number
 const primaryIconNumber = computed(() => {
 	return Math.round((primaryPercentage.value * chartIconTotal) / 100);
 });
-
-// update active data
-const updateChartData = (index) => {
-	activeIndex.value = index;
-};
-
-// tooltip setting start
-
-const toggleActive = (e) => {
-	targetItem.value = e.target.dataset.name;
-	targetData.name = e.target.dataset.name;
-	targetData.value = e.target.dataset.value;
-};
-
-const initActiveToNull = () => {
-	targetItem.value = null;
-};
 
 const tooltipPosition = computed(() => {
 	return {
@@ -66,12 +42,24 @@ const tooltipPosition = computed(() => {
 	};
 });
 
-const updateMouseLocation = (e) => {
+function updateChartData(index) {
+	activeIndex.value = index;
+}
+
+function toggleActive(e) {
+	targetItem.value = e.target.dataset.name;
+	targetData.name = e.target.dataset.name;
+	targetData.value = e.target.dataset.value;
+}
+
+function initActiveToNull() {
+	targetItem.value = null;
+}
+
+function updateMouseLocation(e) {
 	mousePosition.value.x = e.pageX;
 	mousePosition.value.y = e.pageY;
-};
-
-// tooltip setting end
+}
 </script>
 
 <template>
@@ -79,9 +67,9 @@ const updateMouseLocation = (e) => {
 		<!-- chart data -->
 		<div class="iconPercentageChart__title">
 			<div
-				class="iconPercentageChart__content"
 				v-for="(item, index) in series"
 				:key="item.name"
+				class="iconPercentageChart__content"
 			>
 				<h2>
 					{{ item.name
@@ -90,64 +78,62 @@ const updateMouseLocation = (e) => {
 						:style="{
 							color:
 								index === 0
-									? iconColorPrimary
-									: iconColorSecondary,
+									? chart_config.color[0]
+									: chart_config.color[1],
 						}"
 						>{{
 							index === 0
 								? primaryPercentage
-								: secondaryPercentage
+								: 100 - primaryPercentage
 						}}</span
 					>
-					{{ unit }}
+					％
 				</h2>
-				<p>總人數：{{ item.data[activeIndex] }}</p>
+				<p>總數：{{ item.data[activeIndex] }}{{ chart_config.unit }}</p>
 			</div>
 		</div>
 		<!-- year buttons -->
 		<div class="iconPercentageChart__buttons">
 			<button
-				@click="updateChartData(index)"
-				class="iconPercentageChart__button"
-				:class="activeIndex === index ? 'active' : ''"
-				type="button"
-				v-for="(item, index) in categories"
+				v-for="(item, index) in chart_config.categories"
 				:key="item"
+				:class="{
+					iconPercentageChart__button: true,
+					active: activeIndex === index,
+				}"
+				@click="updateChartData(index)"
 			>
 				{{ item }}
 			</button>
 		</div>
 		<!-- chart icon -->
 		<div class="iconPercentageChart__chart">
-			<div class="iconPercentageChart__chart-wrap">
-				<span
-					:data-name="
+			<span
+				v-for="(item, index) in chartIconTotal"
+				:key="item"
+				:class="`iconPercentageChart__chart-item initial-animation-${item}`"
+				:style="{
+					color:
 						index < primaryIconNumber
-							? series[0].name
-							: series[1].name
-					"
-					v-for="(item, index) in chartIconTotal"
-					:key="item"
-					:class="`initial-animation-${item} initial-animation`"
-					:data-value="
-						index < primaryIconNumber
-							? primaryPercentage
-							: secondaryPercentage
-					"
-					:style="{
-						color:
-							index < primaryIconNumber
-								? iconColorPrimary
-								: iconColorSecondary,
-					}"
-					@mouseenter="toggleActive"
-					@mouseleave="initActiveToNull"
-					@mousemove="updateMouseLocation"
-					class="material-icons-round icon-item"
-				>
-					{{ index < primaryIconNumber ? "man" : "woman" }}
-				</span>
-			</div>
+							? chart_config.color[0]
+							: chart_config.color[1],
+				}"
+				@mouseenter="toggleActive"
+				@mouseleave="initActiveToNull"
+				@mousemove="updateMouseLocation"
+				:data-value="
+					index < primaryIconNumber
+						? primaryPercentage
+						: 100 - primaryPercentage
+				"
+				:data-name="
+					index < primaryIconNumber ? series[0].name : series[1].name
+				"
+			>
+				{{
+					index < primaryIconNumber ? series[0].icon : series[1].icon
+				}}
+			</span>
 			<!-- tooltip -->
 			<Teleport to="body">
 				<div
@@ -156,7 +142,7 @@ const updateMouseLocation = (e) => {
 					:style="tooltipPosition"
 				>
 					<h6>{{ targetData.name }}比例</h6>
-					<span>{{ targetData.value }}{{ unit }}</span>
+					<span>{{ targetData.value }}％</span>
 				</div>
 			</Teleport>
 		</div>
@@ -164,30 +150,37 @@ const updateMouseLocation = (e) => {
 </template>
 
 <style scoped lang="scss">
-:root {
-	--iconPercentageChartFontColor: #fffffb;
-}
-
 .iconPercentageChart {
-	max-height: 100%;
 	position: relative;
+	max-height: 100%;
+	color: var(--color-normal-text);
 	overflow-y: scroll;
+
 	&__chart {
+		display: grid;
+		grid-template-columns: repeat(10, 1fr);
+		row-gap: 4px;
 		margin: 0 2rem;
+	}
+	&__chart-item {
+		opacity: 0;
+		font-family: var(--font-icon);
+		font-size: 2rem;
+		user-select: none;
+		cursor: default;
 	}
 	&__chart-info {
 		position: fixed;
 		z-index: 20;
 	}
-	color: var(--iconPercentageChartFontColor);
 	&__title {
-		margin-bottom: 1rem;
 		display: flex;
 		justify-content: space-around;
+		margin: 1rem 1rem;
 	}
 	&__percentage {
-		font-size: 1.3rem;
 		padding: 0 0.3em;
+		font-size: 1.3rem;
 	}
 	&__content {
 		display: flex;
@@ -195,38 +188,30 @@ const updateMouseLocation = (e) => {
 		justify-content: center;
 		align-items: center;
 		p {
-			color: var(--color-complement-text);
 			margin-top: 0.2 rem;
+			color: var(--color-complement-text);
 		}
 	}
 	&__buttons {
-		color: var(--color-complement-text);
-		margin: 0 2rem;
 		display: flex;
 		justify-content: space-around;
+		margin: 0 2rem;
 		margin-bottom: 0.5rem;
-		transition: all 0.3s ease;
+		color: var(--color-complement-text);
 	}
 	&__button {
-		color: var(--color-complement-text);
+		padding: 2px 6px;
 		border: solid 1px var(--color-complement-text);
-		padding: 0 6px;
 		border-radius: 5px;
+		color: var(--color-complement-text);
+		transition: all 0.2s ease;
 	}
 	&__button.active {
-		color: #fff;
-		background-color: #ffffff2e;
+		color: var(--color-normal-text);
+		background-color: var(--color-border);
 	}
 }
 
-.icon-item {
-	font-size: 2rem;
-	width: 10%;
-}
-
-.initial-animation {
-	opacity: 0;
-}
 @keyframes ease-in {
 	0% {
 		opacity: 0;

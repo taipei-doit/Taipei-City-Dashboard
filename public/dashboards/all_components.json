@@ -3983,11 +3983,11 @@
 					"paint": {
 						"circle-color": [
 							"case",
-							["<=", ["get", "inst_type"], "私立托嬰中心"],
+							["==", ["get", "inst_type"], "私立托嬰中心"],
 							"#E6DF44",
-							["<=", ["get", "inst_type"], "公辦民營托嬰中心"],
+							["==", ["get", "inst_type"], "公辦民營托嬰中心"],
 							"#F4633C",
-							["<=", ["get", "inst_type"], "社區公共托育家園"],
+							["==", ["get", "inst_type"], "社區公共托育家園"],
 							"#D63940",
 							"#9C2A4B"
 						]
@@ -4016,11 +4016,17 @@
 					],
 					"title": "育兒支持機構地圖",
 					"type": "circle",
-					"size": null,
+					"size": "big",
 					"icon": null
 				}
 			],
-			"history_data": false,
+			"map_filter": {
+				"mode": "byParam",
+				"byParam": {
+					"xParam": "district",
+					"yParam": "inst_type"
+				}
+			},
 			"chart_config": {
 				"categories": [
 					"北投區",
@@ -4036,80 +4042,11 @@
 					"大安區",
 					"文山區"
 				],
-				"types": ["HeatmapChart", "ColumnChart", "DistrictChart"],
+				"types": ["HeatmapChart", "DistrictChart"],
 				"color": ["#A03A3B", "#BF672B", "#3A69A0"],
-				"unit": "處設施",
-				"map_filter": [
-					"district",
-					[
-						"北投區",
-						"士林區",
-						"內湖區",
-						"南港區",
-						"松山區",
-						"信義區",
-						"中山區",
-						"大同區",
-						"中正區",
-						"萬華區",
-						"大安區",
-						"文山區"
-					]
-				],
-				"lngLat": [
-					{
-						"0": {
-							"lng": 121.50466810181683,
-							"lat": 25.134011422273673
-						},
-						"1": {
-							"lng": 121.54482147764543,
-							"lat": 25.109887853302595
-						},
-						"2": {
-							"lng": 121.59699380530856,
-							"lat": 25.083963887083655
-						},
-						"3": {
-							"lng": 121.60587638841281,
-							"lat": 25.049940039144474
-						},
-						"4": {
-							"lng": 121.55742829030271,
-							"lat": 25.058118276453342
-						},
-						"5": {
-							"lng": 121.57235304026744,
-							"lat": 25.03219144135886
-						},
-						"6": {
-							"lng": 121.53258586039789,
-							"lat": 25.05693200483404
-						},
-						"7": {
-							"lng": 121.51416892301228,
-							"lat": 25.057495376713632
-						},
-						"8": {
-							"lng": 121.51784225806136,
-							"lat": 25.04003924716919
-						},
-						"9": {
-							"lng": 121.49501319398973,
-							"lat": 25.03316564187827
-						},
-						"10": {
-							"lng": 121.54499251336932,
-							"lat": 25.033561223690782
-						},
-						"11": {
-							"lng": 121.57711011910055,
-							"lat": 24.987735959988697
-						}
-					}
-				]
+				"unit": "處設施"
 			},
-			"name": "【育兒】育兒支持資源",
+			"name": "育兒支持資源",
 			"source": "社會局",
 			"time_from": "2020-07-27T10:46:50+08:00",
 			"time_to": "2023-10-11T17:34:44:00",
@@ -4128,35 +4065,49 @@
 				"https://data.taipei/dataset/detail?id=081df75e-85c7-464c-b125-546920911c5c",
 				"https://data.taipei/dataset/detail?id=01ac5a1d-dfc3-44c7-84a7-6d76bcb2879b"
 			],
-			"tags": [],
-			"contributors": ["tuic"]
+			"contributors": [
+				"台灣大哥大",
+				"楊明倫",
+				"顏佑軒",
+				"徐慶怡",
+				"林昭宏",
+				"蔡宜秀",
+				"tuic"
+			]
 		},
 		"151": {
 			"id": 151,
 			"index": "parental_leave",
+			"history_data": true,
 			"map_config": null,
 			"chart_config": {
 				"color": ["#4B96FA", "#F1C40F"],
-				"types": ["IconPercentChart"],
+				"types": ["IconPercentChart", "ColumnChart"],
 				"categories": ["2018", "2019", "2020", "2021", "2022"],
-				"unit": "%"
+				"unit": "人"
 			},
-			"name": "【育兒】育嬰假性別比例",
-			"history_data": true,
+			"name": "育嬰假性別比",
 			"source": "主計處",
 			"time_from": "2018-12-31T08:00:18+08:00",
 			"time_to": "2022-12-31T08:00:18+08:00",
 			"update_freq": 1,
 			"update_freq_unit": "year",
-			"short_desc": "顯示兩種不同類型的樣本比例",
-			"long_desc": "顯示兩種不同類型的樣本比例不定期更新。",
-			"use_case": "顯示男女比例",
+			"short_desc": "顯示臺北市近五年性別比例變化。",
+			"long_desc": "顯示臺北市近五年性別比例變化。",
+			"use_case": "顯示臺北市近五年性別比例變化。",
 			"links": [
 				"https://data.taipei/dataset/detail?id=48eb75e3-8694-433d-87cd-01b08668bcc7",
 				"https://www.bli.gov.tw/0013465.html"
 			],
-			"tags": [],
-			"contributors": ["tuic"]
+			"contributors": [
+				"台灣大哥大",
+				"楊明倫",
+				"顏佑軒",
+				"徐慶怡",
+				"林昭宏",
+				"蔡宜秀",
+				"tuic"
+			]
 		},
 		"161": {
 			"id": 161,
@@ -4417,27 +4368,71 @@
 							"name": "淹水高度"
 						}
 					],
-					"title": "淹水資訊"
+					"title": "降雨78mm"
+				},
+				{
+					"index": "flood_simulate_100",
+					"type": "fill",
+					"paint": {
+						"fill-color": [
+							"match",
+							["get", "FID"],
+							0,
+							"#CDF5FD",
+							1,
+							"#A0E9FF",
+							2,
+							"#89CFF3",
+							3,
+							"#00A9FF",
+							"#00A9FF"
+						],
+						"fill-opacity": 0.8
+					},
+					"property": [
+						{
+							"key": "Name",
+							"name": "淹水高度"
+						}
+					],
+					"title": "降雨100mm"
+				},
+				{
+					"index": "flood_simulate_130",
+					"type": "fill",
+					"paint": {
+						"fill-color": [
+							"match",
+							["get", "FID"],
+							0,
+							"#CDF5FD",
+							1,
+							"#A0E9FF",
+							2,
+							"#89CFF3",
+							3,
+							"#00A9FF",
+							"#00A9FF"
+						],
+						"fill-opacity": 0.8
+					},
+					"property": [
+						{
+							"key": "Name",
+							"name": "淹水高度"
+						}
+					],
+					"title": "降雨130mm"
 				}
 			],
+			"map_filter": {
+				"mode": "byLayer"
+			},
 			"chart_config": {
 				"color": ["#CDF5FD", "#A0E9FF", "#00A9FF"],
 				"types": ["ColumnChart", "BarPercentChart"],
 				"unit": "點",
-				"categories": [
-					"北投區",
-					"士林區",
-					"內湖區",
-					"南港區",
-					"松山區",
-					"信義區",
-					"中山區",
-					"大同區",
-					"中正區",
-					"萬華區",
-					"大安區",
-					"文山區"
-				]
+				"categories": ["降雨78mm", "降雨100mm", "降雨130mm"]
 			},
 			"name": "降雨淹水模擬圖",
 			"source": "工務局水利處",

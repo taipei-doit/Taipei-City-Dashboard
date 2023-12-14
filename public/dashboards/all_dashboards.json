@@ -7,10 +7,16 @@
 			"icon": "pedal_bike"
 		},
 		{
+			"name": "祝您好孕",
+			"index": "childcare",
+			"components": ["150", "151"],
+			"icon": "child_friendly"
+		},
+		{
 			"name": "韌性城市",
 			"index": "urban-resiliance",
 			"components": ["161", "162", "163", "164"],
-			"icon": "yard"
+			"icon": "grass"
 		},
 		{
 			"name": "民情熱議",
