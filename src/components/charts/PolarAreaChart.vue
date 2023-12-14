@@ -1,15 +1,11 @@
+<!-- Developed by 00:21, Taipei Codefest 2023 -->
+<!-- Refactored and Maintained by Taipei Urban Intelligence Center -->
+
+<!-- eslint-disable no-mixed-spaces-and-tabs -->
 <script setup>
 import { computed, ref } from "vue";
 import { useMapStore } from "../../store/mapStore";
 
-const colors = [
-	"#F5C860",
-	"#4987B3",
-	"#5A58B8",
-	"#e9b824",
-	"#e77727",
-	"#d83f31",
-];
 const colorBG = "#282A2C";
 
 // register the four required props
@@ -18,10 +14,20 @@ const props = defineProps([
 	"activeChart",
 	"series",
 	"map_config",
+	"map_filter",
 ]);
 const mapStore = useMapStore();
-const { categories } = props.chart_config;
 
+const mousePosition = ref({ x: null, y: null });
+const tooltipPosition = computed(() => {
+	return {
+		left: `${mousePosition.value.x - 20}px`,
+		top: `${mousePosition.value.y - 74}px`,
+	};
+});
+
+/* ==== To Be Refactored ==== */
+/* ========================== */
 // data
 let data = [];
 let dataMax = -1;
@@ -47,7 +53,6 @@ for (let j = 0; j < props.series[0].data.length; j++) {
 	}
 	data[j].data.sort((a, b) => b.value - a.value);
 }
-// console.log(data);
 
 const anumTotal = data.length;
 const rnumTotal = data[0].data.length;
@@ -56,31 +61,112 @@ const showedMax = ref(dataMax);
 const rShow = ref(Array(data[0].data.length).fill(true));
 const aHovered = ref(-1);
 const rHovered = ref(-1);
+const rtext = 100;
+const aspc = (4 * Math.PI) / 180;
+const agap = (5.5 * Math.PI) / 180;
+const cr = 25;
+const rmin = 50;
+const rmax = 40;
+const rselected = 50;
+const cx = 180;
+const cy = 115;
 
-// function printShowData() {
-// 	for (let a = 0; a < showedData.value.length; a++) {
-// 		console.log(a, showedData.value[a].a);
-// 		for (let r = 0; r < showedData.value[a].data.length; r++) {
-// 			console.log(
-// 				"   ",
-// 				r,
-// 				showedData.value[a].data[r].r,
-// 				showedData.value[a].data[r].value,
-// 				data[a].data[r].r,
-// 				data[a].data[r].value
-// 			);
-// 		}
-// 	}
-// }
+// index: a
+const labels = Array.from({ length: anumTotal }, (_, index) => {
+	return {
+		name: data[index].a,
+		x: cx + rtext * Math.sin(((index + 0.5) * 2 * Math.PI) / anumTotal),
+		y: cy - rtext * Math.cos(((index + 0.5) * 2 * Math.PI) / anumTotal),
+	};
+});
 
-const mousePosition = ref({ x: null, y: null });
+// max: showedMax.value, return {radius, startAngle, endAngle}
+function calcSector(a, r) {
+	let awid = (Math.PI * 2) / anumTotal - aspc - (rnumTotal - 1) * agap;
+	let astart = (a * Math.PI * 2) / anumTotal + aspc / 2 + r * agap;
+	let aend = astart + awid;
+	let maxDataInR = 0;
+	for (let k = 0; k < showedData.value[a].data.length; k++) {
+		if (maxDataInR < showedData.value[a].data[k].value)
+			maxDataInR = showedData.value[a].data[k].value;
+	}
+	// console.log(a, r, maxDataInR)
+	let rend =
+		aHovered.value === a
+			? (showedData.value[a].data[r].value / maxDataInR) * rselected +
+			  rmin
+			: (showedData.value[a].data[r].value / showedMax.value) * rmax +
+			  rmin;
+	for (let i = 0; i < props.series.length; i++) {
+		if (props.series[i].name === showedData.value[a].data[r].r) {
+			if (!rShow.value[i]) {
+				rend = 0;
+				break;
+			}
+		}
+	}
+	return {
+		radius: rend,
+		startAngle: astart,
+		endAngle: aend,
+	};
+}
+function getSectorPath(cx, cy, radius, startAngle, endAngle) {
+	const x1 = cx + radius * Math.sin(startAngle);
+	const y1 = cy - radius * Math.cos(startAngle);
+	const x2 = cx + radius * Math.sin(endAngle);
+	const y2 = cy - radius * Math.cos(endAngle);
+	const largeArcFlag = endAngle - startAngle <= Math.PI ? "0" : "1";
+	return `M ${cx} ${cy} L ${x1} ${y1} A ${radius} ${radius} 0 ${largeArcFlag} 1 ${x2} ${y2} Z`;
+}
+
+const sectors = Array.from({ length: anumTotal * rnumTotal }, (_, index) => {
+	const a = index % anumTotal;
+	const r = (index / anumTotal) | 0;
+	let rname = -1;
+	for (let i = 0; i < props.series.length; i++) {
+		if (showedData.value[a].data[r].r === props.series[i].name) {
+			rname = i;
+		}
+	}
+	return {
+		show: true,
+		r: r,
+		a: a,
+		fill: props.chart_config.color[rname],
+		stroke: colorBG,
+		stroke_width: 1.2,
+	};
+});
+
+function sectorD(index) {
+	const a = index % anumTotal;
+	const r = (index / anumTotal) | 0;
+	const posFac = calcSector(a, r);
+	return getSectorPath(
+		cx,
+		cy,
+		posFac.radius,
+		posFac.startAngle,
+		posFac.endAngle
+	);
+}
+
+const legends = Array.from({ length: rnumTotal }, (_, index) => {
+	// const { width, height } = textwrapper.value ? textwrapper.value.getBoundingClientRect() : { width: 0, height: 0 };
+	return {
+		color: props.chart_config.color[index],
+		text: props.series[index].name,
+	};
+});
+/* ========================== */
+/* ==== To Be Refactored ==== */
+
 function toggleActive(i) {
-	// console.log('toggleActive called, ', i);
 	aHovered.value = i % anumTotal;
 	rHovered.value = (i / anumTotal) | 0;
 }
 function toggleActiveToNull() {
-	// console.log('toggleActiveToNull called, ');
 	aHovered.value = -1;
 	rHovered.value = -1;
 }
@@ -89,26 +175,33 @@ function updateMouseLocation(e) {
 	mousePosition.value.y = e.pageY;
 }
 
-// Optional
-// Required for charts that support map filtering
 const selectedIndex = ref(null);
-function handleDataSelection(index) {
-	const a = index % anumTotal;
-	// console.log(index, a);
-	if (!props.chart_config.map_filter) {
+
+function handleDataSelection(xParam, yParam) {
+	if (!props.map_filter) {
 		return;
 	}
-	if (a !== selectedIndex.value) {
-		mapStore.addLayerFilter(
-			`${props.map_config[0].index}-${props.map_config[0].type}`,
-			props.chart_config.map_filter[0],
-			props.chart_config.map_filter[1][a]
-		);
-		selectedIndex.value = a;
+	if (`${xParam}-${yParam}` !== selectedIndex.value) {
+		// Supports filtering by xAxis
+		if (props.map_filter.mode === "byParam") {
+			mapStore.filterByParam(
+				props.map_filter,
+				props.map_config,
+				xParam,
+				yParam
+			);
+		}
+		// Supports filtering by xAxis
+		else if (props.map_filter.mode === "byLayer") {
+			mapStore.filterByLayer(props.map_config, xParam);
+		}
+		selectedIndex.value = `${xParam}-${yParam}`;
 	} else {
-		mapStore.clearLayerFilter(
-			`${props.map_config[0].index}-${props.map_config[0].type}`
-		);
+		if (props.map_filter.mode === "byParam") {
+			mapStore.clearByParamFilter(props.map_config);
+		} else if (props.map_filter.mode === "byLayer") {
+			mapStore.clearByLayerFilter(props.map_config);
+		}
 		selectedIndex.value = null;
 	}
 }
@@ -155,112 +248,7 @@ function handleLegendSelection(index) {
 	}
 	showedMax.value = newMax;
 	showedData.value = newData;
-	// printShowData()
 }
-
-const rtext = 100;
-const aspc = (4 * Math.PI) / 180;
-const agap = (5.5 * Math.PI) / 180;
-const cr = 25;
-const rmin = 50;
-const rmax = 40;
-const rselected = 50;
-const cx = 180;
-const cy = 115;
-
-// index: a
-const labels = Array.from({ length: anumTotal }, (_, index) => {
-	return {
-		name: data[index].a,
-		x: cx + rtext * Math.sin(((index + 0.5) * 2 * Math.PI) / anumTotal),
-		y: cy - rtext * Math.cos(((index + 0.5) * 2 * Math.PI) / anumTotal),
-	};
-});
-
-// max: showedMax.value, return {radius, startAngle, endAngle}
-function calcSector(a, r) {
-	let awid = (Math.PI * 2) / anumTotal - aspc - (rnumTotal - 1) * agap;
-	let astart = (a * Math.PI * 2) / anumTotal + aspc / 2 + r * agap;
-	let aend = astart + awid;
-	let maxDataInR = 0;
-	for (let k = 0; k < showedData.value[a].data.length; k++) {
-		if (maxDataInR < showedData.value[a].data[k].value)
-			maxDataInR = showedData.value[a].data[k].value;
-	}
-	// console.log(a, r, maxDataInR)
-	let rend =
-		aHovered.value === a
-			? (showedData.value[a].data[r].value / maxDataInR) * rselected + rmin
-			: (showedData.value[a].data[r].value / showedMax.value) * rmax + rmin;
-	for (let i = 0; i < props.series.length; i++) {
-		if (props.series[i].name === showedData.value[a].data[r].r) {
-			if (!rShow.value[i]) {
-				rend = 0;
-				break;
-			}
-		}
-	}
-	return {
-		radius: rend,
-		startAngle: astart,
-		endAngle: aend,
-	};
-}
-function getSectorPath(cx, cy, radius, startAngle, endAngle) {
-	const x1 = cx + radius * Math.sin(startAngle);
-	const y1 = cy - radius * Math.cos(startAngle);
-	const x2 = cx + radius * Math.sin(endAngle);
-	const y2 = cy - radius * Math.cos(endAngle);
-	const largeArcFlag = endAngle - startAngle <= Math.PI ? "0" : "1";
-	return `M ${cx} ${cy} L ${x1} ${y1} A ${radius} ${radius} 0 ${largeArcFlag} 1 ${x2} ${y2} Z`;
-}
-
-const sectors = Array.from({ length: anumTotal * rnumTotal }, (_, index) => {
-	const a = index % anumTotal;
-	const r = (index / anumTotal) | 0;
-	let rname = -1;
-	for (let i = 0; i < props.series.length; i++) {
-		if (showedData.value[a].data[r].r === props.series[i].name) {
-			rname = i;
-		}
-	}
-	return {
-		show: true,
-		r: r,
-		a: a,
-		fill: colors[rname],
-		stroke: colorBG,
-		stroke_width: 1.2,
-	};
-});
-
-function sectorD(index) {
-	const a = index % anumTotal;
-	const r = (index / anumTotal) | 0;
-	const posFac = calcSector(a, r);
-	return getSectorPath(
-		cx,
-		cy,
-		posFac.radius,
-		posFac.startAngle,
-		posFac.endAngle
-	);
-}
-
-const legends = Array.from({ length: rnumTotal }, (_, index) => {
-	// const { width, height } = textwrapper.value ? textwrapper.value.getBoundingClientRect() : { width: 0, height: 0 };
-	return {
-		color: colors[index],
-		text: props.series[index].name,
-	};
-});
-
-const tooltipPosition = computed(() => {
-	return {
-		left: `${mousePosition.value.x - 20}px`,
-		top: `${mousePosition.value.y - 74}px`,
-	};
-});
 </script>
 
 <template>
@@ -268,6 +256,43 @@ const tooltipPosition = computed(() => {
 	<div v-if="activeChart === 'PolarAreaChart'" class="polarareachart">
 		<!-- The layout of the chart Vue component -->
 		<!-- Utilize the @click event listener to enable map filtering by data selection -->
+		<svg class="svg-container" xmlns="http://www.w3.org/2000/svg">
+			<g v-for="(sector, index) in sectors" :key="index">
+				<path
+					:class="{
+						[`initial-animation-sector-${sector.a}-${sector.r}`]: true,
+						sector: true,
+					}"
+					v-if="sector.show"
+					:d="sectorD(index)"
+					:fill="sector.fill"
+					:stroke="sector.stroke"
+					:stroke-width="sector.stroke_width"
+					@mouseenter="toggleActive(index)"
+					@mousemove="updateMouseLocation"
+					@mouseleave="toggleActiveToNull"
+					@click="
+						handleDataSelection(
+							chart_config.categories[aHovered],
+							showedData[aHovered].data[rHovered].r
+						)
+					"
+				/>
+			</g>
+			<g v-for="(label, index) in labels" :key="index">
+				<text
+					:x="label.x"
+					:y="label.y"
+					text-anchor="middle"
+					alignment-baseline="middle"
+					fill="#888787"
+					font-size="12"
+				>
+					{{ label.name }}
+				</text>
+			</g>
+			<circle :cx="cx" :cy="cy" :r="cr" :stroke="null" :fill="colorBG" />
+		</svg>
 		<div class="textwrapper">
 			<div
 				class="legends"
@@ -296,38 +321,6 @@ const tooltipPosition = computed(() => {
 				<span> {{ legend.text }} </span>
 			</div>
 		</div>
-		<svg class="svg-container" xmlns="http://www.w3.org/2000/svg">
-			<g v-for="(sector, index) in sectors" :key="index">
-				<path
-					:class="{
-						[`initial-animation-sector-${sector.a}-${sector.r}`]: true,
-						sector: true,
-					}"
-					v-if="sector.show"
-					:d="sectorD(index)"
-					:fill="sector.fill"
-					:stroke="sector.stroke"
-					:stroke-width="sector.stroke_width"
-					@mouseenter="toggleActive(index)"
-					@mousemove="updateMouseLocation"
-					@mouseleave="toggleActiveToNull"
-					@click="handleDataSelection(index)"
-				/>
-			</g>
-			<g v-for="(label, index) in labels" :key="index">
-				<text
-					:x="label.x"
-					:y="label.y"
-					text-anchor="middle"
-					alignment-baseline="middle"
-					fill="#888787"
-					font-size="12"
-				>
-					{{ label.name }}
-				</text>
-			</g>
-			<circle :cx="cx" :cy="cy" :r="cr" :stroke="null" :fill="colorBG" />
-		</svg>
 		<Teleport to="body">
 			<!-- The class "chart-tooltip" could be edited in /assets/styles/chartStyles.css -->
 			<div
@@ -335,10 +328,14 @@ const tooltipPosition = computed(() => {
 				class="polarareachart-chart-info chart-tooltip"
 				:style="tooltipPosition"
 			>
-				<h6>{{ categories[aHovered] }}</h6>
+				<h6>
+					{{ chart_config.categories[aHovered] }}-{{
+						showedData[aHovered].data[rHovered].r
+					}}
+				</h6>
 				<span
-					>{{ showedData[aHovered].data[rHovered].r }}:
-					{{ showedData[aHovered].data[rHovered].value }}</span
+					>{{ showedData[aHovered].data[rHovered].value
+					}}{{ chart_config.unit }}</span
 				>
 			</div>
 		</Teleport>
@@ -368,18 +365,15 @@ const tooltipPosition = computed(() => {
 			z-index: 20;
 		}
 	}
-	// border: 1px solid blue;
 }
 .textwrapper {
-	width: 80%;
 	display: flex;
 	flex-wrap: wrap;
 	gap: 8px 14px;
-	padding: 12px;
+	padding: 12px 0;
 	justify-content: center;
 	align-items: center;
 	align-content: flex-start;
-	// border: 1px solid green;
 }
 .legends {
 	height: 15px;
@@ -392,13 +386,12 @@ const tooltipPosition = computed(() => {
 	&-rect-top {
 		transition: all 0.2s ease;
 	}
-	// border: 1px solid red;
 }
 .svg-container {
-	min-height: 300px;
+	min-height: 230px;
 	width: 360px;
 	overflow: scroll;
-	// border: 1px solid red;
+	margin-top: 1.5rem;
 }
 .sector {
 	transition: all 0.3s ease;

@@ -176,24 +176,18 @@ export const useMapStore = defineStore("map", {
 		},
 		// 3. Add the layer data as a source in mapbox
 		addMapLayerSource(map_config, data) {
-			if (
-				map_config.type !== "voronoi" &&
-				map_config.type !== "isoline"
-			) {
+			if (!["voronoi", "isoline"].includes(map_config.type)) {
 				this.map.addSource(`${map_config.layerId}-source`, {
 					type: "geojson",
 					data: { ...data },
 				});
 			}
-
 			if (map_config.type === "arc") {
 				this.AddArcMapLayer(map_config, data);
 			} else if (map_config.type === "voronoi") {
 				this.AddVoronoiMapLayer(map_config, data);
 			} else if (map_config.type === "isoline") {
 				this.AddIsolineMapLayer(map_config, data);
-			} else if (map_config.type === "contour") {
-				//
 			} else {
 				this.addMapLayer(map_config);
 			}
@@ -343,8 +337,11 @@ export const useMapStore = defineStore("map", {
 				);
 			}, delay);
 		},
-
+		// 4-3. Add Map Layer for Voronoi Maps
+		// Developed by 00:21, Taipei Codefest 2023
 		AddVoronoiMapLayer(map_config, data) {
+			this.loadingLayers.push("rendering");
+
 			let voronoi_source = {
 				type: data.type,
 				crs: data.crs,
@@ -397,15 +394,19 @@ export const useMapStore = defineStore("map", {
 			new_map_config.type = "line";
 			this.addMapLayer(new_map_config);
 		},
-
+		// 4-4. Add Map Layer for Isoline Maps
+		// Developed by 00:21, Taipei Codefest 2023
 		AddIsolineMapLayer(map_config, data) {
+			this.loadingLayers.push("rendering");
 			// Step 1: Generate a 2D scalar field from known data points
 			// - Turn the original data into the format that can be accepted by interpolation()
 			let dataPoints = data.features.map((item) => {
 				return {
 					x: item.geometry.coordinates[0],
 					y: item.geometry.coordinates[1],
-					value: item.properties[map_config["isoline-key"]],
+					value: item.properties[
+						map_config.paint?.["isoline-key"] || "value"
+					],
 				};
 			});
 
@@ -481,6 +482,8 @@ export const useMapStore = defineStore("map", {
 
 				data: { ...isoline_data },
 			});
+
+			delete map_config.paint?.["isoline-key"];
 
 			let new_map_config = { ...map_config, type: "line" };
 			this.addMapLayer(new_map_config);

@@ -95,6 +95,32 @@
 			"id": "台灣大哥大",
 			"name": "台灣大哥大",
 			"link": "https://www.taiwanmobile.com/"
+		},
+		"0021": {
+			"id": "0021",
+			"name": "00:21",
+			"link": "https://github.com/fuyingxx0/Taipei-City-Dashboard-FE",
+			"image": "codefest"
+		},
+		"許富盈": {
+			"id": "許富盈",
+			"name": "許富盈",
+			"link": "https://github.com/fuyingxx0"
+		},
+		"張庭梧": {
+			"id": "張庭梧",
+			"name": "張庭梧",
+			"link": "https://github.com/tingwoo"
+		},
+		"梁璿安": {
+			"id": "梁璿安",
+			"name": "梁璿安",
+			"link": "https://github.com/NTUBOY"
+		},
+		"陳又華": {
+			"id": "陳又華",
+			"name": "陳又華",
+			"link": "https://github.com/chenjoachim"
 		}
 	}
 }
