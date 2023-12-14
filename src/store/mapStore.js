@@ -144,7 +144,11 @@ export const useMapStore = defineStore("map", {
 					this.currentLayers.find((element) => element === mapLayerId)
 				) {
 					this.loadingLayers.push("rendering");
-					this.turnOnMapLayerVisibility(mapLayerId);
+					if (element.type === "render") {
+						this.setCityColor(element);
+					} else {
+						this.turnOnMapLayerVisibility(mapLayerId);
+					}
 					if (
 						!this.currentVisibleLayers.find(
 							(element) => element === mapLayerId
@@ -158,7 +162,11 @@ export const useMapStore = defineStore("map", {
 				appendLayerId.layerId = mapLayerId;
 				// 1-2. If the layer doesn't exist, call an API to get the layer data
 				this.loadingLayers.push(appendLayerId.layerId);
-				this.fetchLocalGeoJson(appendLayerId, map_source);
+				if (element.type === "render") {
+					this.setCityColor(appendLayerId);
+				} else {
+					this.fetchLocalGeoJson(appendLayerId, map_source);
+				}
 			});
 		},
 		// 2. Call an API to get the layer data
@@ -344,11 +352,15 @@ export const useMapStore = defineStore("map", {
 
 				if (this.map.getLayer(mapLayerId)) {
 					this.map.setFilter(mapLayerId, null);
-					this.map.setLayoutProperty(
-						mapLayerId,
-						"visibility",
-						"none"
-					);
+					if (element.type === "render") {
+						this.setCityColor(element, false);
+					} else {
+						this.map.setLayoutProperty(
+							mapLayerId,
+							"visibility",
+							"none"
+						);
+					}
 				}
 				this.currentVisibleLayers = this.currentVisibleLayers.filter(
 					(element) => element !== mapLayerId
@@ -612,6 +624,21 @@ export const useMapStore = defineStore("map", {
 			this.map = null;
 			this.currentVisibleLayers = [];
 			this.removePopup();
+		},
+
+		setCityColor(appendLayerId, isOpen = true) {
+			if (isOpen) {
+				this.map.setPaintProperty(...appendLayerId.paint);
+				this.loadingLayers = this.loadingLayers.filter(
+					(el) => el !== appendLayerId.layerId
+				);
+				this.map.easeTo({
+					zoom: 15,
+					duration: 2000,
+				});
+			} else {
+				this.map.setPaintProperty(...appendLayerId["no-paint"]);
+			}
 		},
 	},
 });

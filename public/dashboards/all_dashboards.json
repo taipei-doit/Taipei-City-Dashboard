@@ -57,7 +57,7 @@
 		{
 			"name": "收藏組件",
 			"index": "favorites",
-			"components": ["108", "22", "79", "60", "107"],
+			"components": ["108", "22", "79", "60", "107", "152"],
 			"icon": "favorite"
 		},
 		{
