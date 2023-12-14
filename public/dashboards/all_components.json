@@ -4065,7 +4065,15 @@
 				"https://data.taipei/dataset/detail?id=081df75e-85c7-464c-b125-546920911c5c",
 				"https://data.taipei/dataset/detail?id=01ac5a1d-dfc3-44c7-84a7-6d76bcb2879b"
 			],
-			"contributors": ["tuic"]
+			"contributors": [
+				"台灣大哥大",
+				"楊明倫",
+				"顏佑軒",
+				"徐慶怡",
+				"林昭宏",
+				"蔡宜秀",
+				"tuic"
+			]
 		},
 		"151": {
 			"id": 151,
@@ -4091,7 +4099,15 @@
 				"https://data.taipei/dataset/detail?id=48eb75e3-8694-433d-87cd-01b08668bcc7",
 				"https://www.bli.gov.tw/0013465.html"
 			],
-			"contributors": ["tuic"]
+			"contributors": [
+				"台灣大哥大",
+				"楊明倫",
+				"顏佑軒",
+				"徐慶怡",
+				"林昭宏",
+				"蔡宜秀",
+				"tuic"
+			]
 		},
 		"161": {
 			"id": 161,
