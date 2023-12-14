@@ -4396,6 +4396,7 @@
 				{
 					"index": "pm10_measurments",
 					"paint": {
+						"isoline-key": "value",
 						"line-color": [
 							"interpolate",
 							["linear"],
@@ -4427,7 +4428,6 @@
 						}
 					],
 					"type": "isoline",
-					"isoline-key": "value",
 					"title": "懸浮微粒量測值等值線"
 				},
 				{
