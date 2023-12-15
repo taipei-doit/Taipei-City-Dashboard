@@ -4495,6 +4495,85 @@
 				"tuic"
 			]
 		},
+		"156": {
+			"id": 156,
+			"index": "maternity_hospitals",
+			"history_data": true,
+			"map_config": [
+				{
+					"index": "maternity_hospitals",
+					"type": "circle",
+					"paint": {
+						"circle-color": "#31aa96",
+						"circle-radius": 4
+					},
+					"property": [
+						{
+							"key": "醫療機構",
+							"name": "醫療機構"
+						},
+						{
+							"key": "地址",
+							"name": "地址"
+						},
+						{
+							"key": "行政區",
+							"name": "行政區"
+						}
+					],
+					"title": "生育補助合約醫院"
+				}
+			],
+			"chart_config": {
+				"types": ["DistrictChart"],
+				"unit": "家",
+				"color": ["#31aa96"],
+				"categories": [
+					"北投區",
+					"士林區",
+					"內湖區",
+					"南港區",
+					"松山區",
+					"信義區",
+					"中山區",
+					"大同區",
+					"中正區",
+					"萬華區",
+					"大安區",
+					"文山區"
+				],
+				"map_filter": [
+					"行政區",
+					[
+						"北投區",
+						"士林區",
+						"內湖區",
+						"南港區",
+						"松山區",
+						"信義區",
+						"中山區",
+						"大同區",
+						"中正區",
+						"萬華區",
+						"大安區",
+						"文山區"
+					]
+				]
+			},
+			"name": "生育補助合約醫院",
+			"source": "衛生局",
+			"time_from": "2023-06-16T00:00:00+08:00",
+			"time_to": null,
+			"short_desc": "",
+			"long_desc": "展示與本市簽訂生育篩檢補助合約的各個醫療機構，這些資訊由台北市衛生局提供",
+			"use_case": "本組件致力於協助您快速了解提供各種生育篩檢補助的醫院，並呈現各行政區簽約狀況作為施政參考。",
+			"tags": [],
+			"links": [
+				"https://data.taipei/dataset/detail?id=9ee72240-f9b3-42a7-bcbe-e1bb1a28a2dc",
+				"https://data.taipei/dataset/detail?id=a14dd58c-ecef-480c-b574-889ecfa631c3"
+			],
+			"contributors": ["tuic"]
+		},
 		"161": {
 			"id": 161,
 			"index": "waterworks",
