@@ -1,0 +1,207 @@
+{
+	"type": "FeatureCollection",
+	"crs": {
+		"type": "name",
+		"properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" }
+	},
+	"features": [
+		{
+			"type": "Feature",
+			"properties": {
+				"name": "中正",
+				"value": 67
+			},
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5164194, 25.0361194]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"name": "大直",
+				"value": 69
+			},
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5469861, 25.0815805]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"name": "信義",
+				"value": 66
+			},
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5718027, 25.0362361]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"name": "南港",
+				"value": 68
+			},
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.6075555, 25.0559666]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"name": "內湖",
+				"value": 71
+			},
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5900555, 25.0674944]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"name": "木柵",
+				"value": 49
+			},
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.57555, 24.9873611]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"name": "大安",
+				"value": 76
+			},
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5405555, 25.0401666]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"name": "天母",
+				"value": 60
+			},
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.535, 25.1027694]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"name": "延平",
+				"value": 78
+			},
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.51305, 25.0744388]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"name": "承德",
+				"value": 67
+			},
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5164944, 25.0913444]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"name": "中北",
+				"value": 70
+			},
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5226888, 25.0520527]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"name": "士林",
+				"value": 59
+			},
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.51696, 25.10546]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"name": "大同",
+				"value": 71
+			},
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5134166, 25.0633055]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"name": "中山",
+				"value": 58
+			},
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5265277, 25.0623611]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"name": "古亭",
+				"value": 64
+			},
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5957333, 25.0529555]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"name": "松山",
+				"value": 67
+			},
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5786111, 25.05]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"name": "陽明",
+				"value": 40
+			},
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5295833, 25.1827222]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"name": "萬華",
+				"value": 65
+			},
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5079722, 25.0465]
+			}
+		}
+	]
+}
