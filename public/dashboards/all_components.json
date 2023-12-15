@@ -4196,7 +4196,10 @@
 			"short_desc": "此圖顯示各行政區婦產科診所及醫院總和個數。",
 			"long_desc": "此圖顯示各行政區婦產科診所及醫院總和個數。搭配地圖類型：Vonoroi diagram，顯示各地點距離最近的就診地，支援各區篩選功能。不定期更新。",
 			"use_case": "此圖為懷孕期使用者設計，透過地圖增加民眾使用上的便利性。",
-			"links": null,
+			"links": [
+				"https://data.taipei/dataset/detail?id=ffdd5753-30db-4c38-b65f-b77892773d60",
+				"https://data.taipei/dataset/detail?id=83dc0502-245a-4d77-99f4-786127cedea2"
+			],
 			"contributors": [
 				"0021",
 				"許富盈",
@@ -4307,7 +4310,10 @@
 			"short_desc": "此圖顯示各行政區幼兒人口年齡分布。",
 			"long_desc": "此圖顯示各行政區幼兒人口年齡分布，地圖則以里為單位進行劃分，支援各里篩選功能。每月更新一次。",
 			"use_case": "此圖為政府機關或嬰幼兒服務提供者設計，可以做為政策方針的參考。",
-			"links": null,
+			"links": [
+				"https://data.taipei/dataset/detail?id=6b17b31d-4e16-495e-95b1-9fd1f47c80d8",
+				"https://data.taipei/dataset/detail?id=a6394e3f-3514-4542-87bd-de4310a40db3"
+			],
 			"contributors": [
 				"0021",
 				"許富盈",
@@ -4400,92 +4406,9 @@
 			"short_desc": "此圖顯示台北市各行政區的哺集乳室資訊。",
 			"long_desc": "此圖顯示台北市各行政區的哺集乳室資訊，地圖則標示出哺集乳室的具體位置指引以及提供的設施，為育嬰期使用者設計。不定期更新。",
 			"use_case": "透過此圖，能夠清晰地看到每個行政區中哺集乳室相關設施的分佈情況，以及各項相關設施的數量。",
-			"links": null,
-			"contributors": [
-				"0021",
-				"許富盈",
-				"張庭梧",
-				"梁璿安",
-				"陳又華",
-				"tuic"
-			]
-		},
-		"160": {
-			"id": 160,
-			"index": "pm10_measurments",
-			"map_config": [
-				{
-					"index": "pm10_measurments",
-					"paint": {
-						"isoline-key": "value",
-						"line-color": [
-							"interpolate",
-							["linear"],
-							["get", "value"],
-							45,
-							"#8AC926",
-							49,
-							"#A8CA2B",
-							53,
-							"#C5CA30",
-							57,
-							"#E2CA35",
-							61,
-							"#FFCA3A",
-							65,
-							"#FFBC3F",
-							69,
-							"#FFAE43",
-							73,
-							"#FF924C",
-							77,
-							"#FF7655"
-						]
-					},
-					"property": [
-						{
-							"key": "value",
-							"name": "推測值"
-						}
-					],
-					"type": "isoline",
-					"title": "懸浮微粒量測值等值線"
-				},
-				{
-					"index": "pm10_measurments",
-					"paint": {
-						"circle-color": "#EEEEEE"
-					},
-					"property": [
-						{
-							"key": "name",
-							"name": "測站名"
-						},
-						{
-							"key": "value",
-							"name": "測量值"
-						}
-					],
-					"type": "circle",
-					"size": "big",
-					"title": "測站懸浮微粒量測值"
-				}
+			"links": [
+				"https://data.taipei/dataset/detail?id=5d1d34d8-1b81-4162-87b6-05e0896af958"
 			],
-			"chart_config": {
-				"color": ["#FFBC3F"],
-				"types": ["RadarChart", "BarChart"],
-				"unit": "μg/m³"
-			},
-			"name": "懸浮微粒量測值",
-			"source": "環保局",
-			"time_from": "2023-11-18T20:00:00+08:00",
-			"time_to": null,
-			"update_freq": 1,
-			"update_freq_unit": "hour",
-			"short_desc": "此圖顯示台北市各測站的一小時內平均PM10濃度。",
-			"long_desc": "此圖顯示台北市各測站的一小時內平均PM10濃度，搭配地圖類型：等高線圖，顯示懸浮微粒濃度在區域上的分布。每小時更新一次。",
-			"use_case": "此圖表可供民眾參考，特別是懷孕期使用者及嬰幼兒，作為評估是否外出的依據。",
-			"links": null,
 			"contributors": [
 				"0021",
 				"許富盈",
@@ -4573,6 +4496,93 @@
 				"https://data.taipei/dataset/detail?id=a14dd58c-ecef-480c-b574-889ecfa631c3"
 			],
 			"contributors": ["tuic"]
+		},
+		"160": {
+			"id": 160,
+			"index": "pm10_measurments",
+			"map_config": [
+				{
+					"index": "pm10_measurments",
+					"paint": {
+						"isoline-key": "value",
+						"line-color": [
+							"interpolate",
+							["linear"],
+							["get", "value"],
+							45,
+							"#8AC926",
+							49,
+							"#A8CA2B",
+							53,
+							"#C5CA30",
+							57,
+							"#E2CA35",
+							61,
+							"#FFCA3A",
+							65,
+							"#FFBC3F",
+							69,
+							"#FFAE43",
+							73,
+							"#FF924C",
+							77,
+							"#FF7655"
+						]
+					},
+					"property": [
+						{
+							"key": "value",
+							"name": "推測值"
+						}
+					],
+					"type": "isoline",
+					"title": "懸浮微粒量測值等值線"
+				},
+				{
+					"index": "pm10_measurments",
+					"paint": {
+						"circle-color": "#EEEEEE"
+					},
+					"property": [
+						{
+							"key": "name",
+							"name": "測站名"
+						},
+						{
+							"key": "value",
+							"name": "測量值"
+						}
+					],
+					"type": "circle",
+					"size": "big",
+					"title": "測站懸浮微粒量測值"
+				}
+			],
+			"chart_config": {
+				"color": ["#FFBC3F"],
+				"types": ["PolarAreaChart", "RadarChart", "BarChart"],
+				"unit": "μg/m³"
+			},
+			"name": "懸浮微粒量測值",
+			"source": "環保局",
+			"time_from": "2023-11-18T20:00:00+08:00",
+			"time_to": null,
+			"update_freq": 1,
+			"update_freq_unit": "hour",
+			"short_desc": "此圖顯示台北市各測站的一小時內平均PM10濃度。",
+			"long_desc": "此圖顯示台北市各測站的一小時內平均PM10濃度，搭配地圖類型：等高線圖，顯示懸浮微粒濃度在區域上的分布。每小時更新一次。",
+			"use_case": "此圖表可供民眾參考，特別是懷孕期使用者及嬰幼兒，作為評估是否外出的依據。",
+			"links": [
+				"https://www.tldep.gov.taipei/Public/EnvMonitoring/Air_NormalStation.aspx"
+			],
+			"contributors": [
+				"0021",
+				"許富盈",
+				"張庭梧",
+				"梁璿安",
+				"陳又華",
+				"tuic"
+			]
 		},
 		"161": {
 			"id": 161,

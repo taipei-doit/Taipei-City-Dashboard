@@ -9,7 +9,7 @@
 		{
 			"name": "祝您好孕",
 			"index": "childcare",
-			"components": ["150", "151", "153", "154", "155"],
+			"components": ["150", "151", "153", "154", "155", "156"],
 			"icon": "child_friendly"
 		},
 		{
@@ -55,15 +55,9 @@
 			"icon": "handshake"
 		},
 		{
-			"name": "測試組件",
-			"index": "testing",
-			"components": ["117", "118", "61", "74", "156"],
-			"icon": "bug_report"
-		},
-		{
 			"name": "收藏組件",
 			"index": "favorites",
-			"components": ["108", "22", "79", "60", "107"],
+			"components": [],
 			"icon": "favorite"
 		},
 		{

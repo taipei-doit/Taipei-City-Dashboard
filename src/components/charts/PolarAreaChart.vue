@@ -6,9 +6,7 @@
 import { computed, ref } from "vue";
 import { useMapStore } from "../../store/mapStore";
 
-const colorBG = "#282A2C";
-
-// register the four required props
+// register the five required props
 const props = defineProps([
 	"chart_config",
 	"activeChart",
@@ -26,74 +24,98 @@ const tooltipPosition = computed(() => {
 	};
 });
 
-/* ==== To Be Refactored ==== */
-/* ========================== */
-// data
-let data = [];
-let dataMax = -1;
-for (let j = 0; j < props.series[0].data.length; j++) {
-	data = [
-		...data,
-		{
-			a: props.chart_config["categories"][j],
-			data: [],
-		},
-	];
-	for (let i = 0; i < props.series.length; i++) {
-		// i: a, j: r
-		data[j].data = [
-			...data[j].data,
-			{
-				r: props.series[i].name,
-				value: props.series[i].data[j],
-			},
-		];
-		if (dataMax < props.series[i].data[j])
-			dataMax = props.series[i].data[j];
-	}
-	data[j].data.sort((a, b) => b.value - a.value);
-}
+const parseSeries = computed(() => {
+	let output = {};
+	let series = [];
+	let max = -1;
 
-const anumTotal = data.length;
-const rnumTotal = data[0].data.length;
-const showedData = ref(data);
-const showedMax = ref(dataMax);
-const rShow = ref(Array(data[0].data.length).fill(true));
+	// 2D Data
+	if (!props.chart_config.categories) {
+		props.series[0].data.forEach((element) => {
+			series.push({
+				a: element.x,
+				data: [
+					{
+						r: "",
+						value: element.y,
+					},
+				],
+			});
+			max = max < element.y ? element.y : max;
+		});
+	}
+	// 3D Data
+	else {
+		for (let i = 0; i < props.series[0].data.length; i++) {
+			series.push({
+				a: props.chart_config["categories"][i],
+				data: [],
+			});
+			for (let j = 0; j < props.series.length; j++) {
+				series[i].data.push({
+					r: props.series[j].name,
+					value: props.series[j].data[i],
+				});
+				max =
+					max < props.series[j].data[i]
+						? props.series[j].data[i]
+						: max;
+			}
+			series[i].data.sort((a, b) => b.value - a.value);
+		}
+	}
+	output.series = series;
+	output.max = max;
+	return output;
+});
+
+// a refers to the number of categories (xAxis)
+// r refers to the number of series (yAxis)
+const anumTotal = computed(() => {
+	return parseSeries.value.series.length;
+});
+const rnumTotal = computed(() => {
+	return parseSeries.value.series[0].data.length;
+});
+const showedData = ref(parseSeries.value.series);
+const showedMax = ref(parseSeries.value.max);
+const rShow = ref(Array(rnumTotal.value).fill(true));
 const aHovered = ref(-1);
 const rHovered = ref(-1);
-const rtext = 100;
-const aspc = (4 * Math.PI) / 180;
-const agap = (5.5 * Math.PI) / 180;
-const cr = 25;
-const rmin = 50;
-const rmax = 40;
-const rselected = 50;
+const rtext = 105; // xAxis label position radius
+
+const aspc = (2 * Math.PI) / 180;
+const agap = (6 * Math.PI) / 180;
+const rmin = 10; // sector radius adder
+const rmax = 75; // sector radius multiplier
+const rselected = 80; // selected sector radius multiplier
+
 const cx = 180;
 const cy = 115;
 
 // index: a
-const labels = Array.from({ length: anumTotal }, (_, index) => {
+const labels = Array.from({ length: anumTotal.value }, (_, index) => {
 	return {
-		name: data[index].a,
-		x: cx + rtext * Math.sin(((index + 0.5) * 2 * Math.PI) / anumTotal),
-		y: cy - rtext * Math.cos(((index + 0.5) * 2 * Math.PI) / anumTotal),
+		name: parseSeries.value.series[index].a,
+		x:
+			cx +
+			rtext * Math.sin(((index + 0.5) * 2 * Math.PI) / anumTotal.value),
+		y:
+			cy -
+			rtext * Math.cos(((index + 0.5) * 2 * Math.PI) / anumTotal.value),
 	};
 });
 
 // max: showedMax.value, return {radius, startAngle, endAngle}
 function calcSector(a, r) {
-	let awid = (Math.PI * 2) / anumTotal - aspc - (rnumTotal - 1) * agap;
-	let astart = (a * Math.PI * 2) / anumTotal + aspc / 2 + r * agap;
+	let awid =
+		(Math.PI * 2) / anumTotal.value - aspc - (rnumTotal.value - 1) * agap;
+	let astart = (a * Math.PI * 2) / anumTotal.value + aspc / 2 + r * agap;
 	let aend = astart + awid;
-	let maxDataInR = 0;
-	for (let k = 0; k < showedData.value[a].data.length; k++) {
-		if (maxDataInR < showedData.value[a].data[k].value)
-			maxDataInR = showedData.value[a].data[k].value;
-	}
-	// console.log(a, r, maxDataInR)
 	let rend =
 		aHovered.value === a
-			? (showedData.value[a].data[r].value / maxDataInR) * rselected +
+			? (parseSeries.value.series[a].data[r].value / showedMax.value) *
+					rselected +
 			  rmin
 			: (showedData.value[a].data[r].value / showedMax.value) * rmax +
 			  rmin;
@@ -120,28 +142,30 @@ function getSectorPath(cx, cy, radius, startAngle, endAngle) {
 	return `M ${cx} ${cy} L ${x1} ${y1} A ${radius} ${radius} 0 ${largeArcFlag} 1 ${x2} ${y2} Z`;
 }
 
-const sectors = Array.from({ length: anumTotal * rnumTotal }, (_, index) => {
-	const a = index % anumTotal;
-	const r = (index / anumTotal) | 0;
-	let rname = -1;
-	for (let i = 0; i < props.series.length; i++) {
-		if (showedData.value[a].data[r].r === props.series[i].name) {
-			rname = i;
+const sectors = Array.from(
+	{ length: anumTotal.value * rnumTotal.value },
+	(_, index) => {
+		const a = index % anumTotal.value;
+		const r = (index / anumTotal.value) | 0;
+		let rname = -1;
+		for (let i = 0; i < props.series.length; i++) {
+			if (showedData.value[a].data[r].r === props.series[i].name) {
+				rname = i;
+			}
 		}
+		return {
+			show: true,
+			r: r,
+			a: a,
+			fill: props.chart_config.color[rname],
+			stroke_width: 1,
+		};
 	}
-	return {
-		show: true,
-		r: r,
-		a: a,
-		fill: props.chart_config.color[rname],
-		stroke: colorBG,
-		stroke_width: 1.2,
-	};
-});
+);
 
 function sectorD(index) {
-	const a = index % anumTotal;
-	const r = (index / anumTotal) | 0;
+	const a = index % anumTotal.value;
+	const r = (index / anumTotal.value) | 0;
 	const posFac = calcSector(a, r);
 	return getSectorPath(
 		cx,
@@ -152,19 +176,9 @@ function sectorD(index) {
 	);
 }
 
-const legends = Array.from({ length: rnumTotal }, (_, index) => {
-	// const { width, height } = textwrapper.value ? textwrapper.value.getBoundingClientRect() : { width: 0, height: 0 };
-	return {
-		color: props.chart_config.color[index],
-		text: props.series[index].name,
-	};
-});
-/* ========================== */
-/* ==== To Be Refactored ==== */
-
 function toggleActive(i) {
-	aHovered.value = i % anumTotal;
-	rHovered.value = (i / anumTotal) | 0;
+	aHovered.value = i % anumTotal.value;
+	rHovered.value = (i / anumTotal.value) | 0;
 }
 function toggleActiveToNull() {
 	aHovered.value = -1;
@@ -210,15 +224,15 @@ function handleLegendSelection(index) {
 	rShow.value[index] = !rShow.value[index];
 	let newData = [];
 	let newMax = -1;
-	for (let a = 0; a < anumTotal; a++) {
+	for (let a = 0; a < anumTotal.value; a++) {
 		newData = [
 			...newData,
 			{
-				a: data[a].a,
+				a: parseSeries.value.series[a].a,
 				data: [],
 			},
 		];
-		for (let r = 0; r < data[a].data.length; r++) {
+		for (let r = 0; r < parseSeries.value.series[a].data.length; r++) {
 			let index = -1;
 			for (let i = 0; i < props.series.length; i++) {
 				if (showedData.value[a].data[r].r === props.series[i].name) {
@@ -233,8 +247,8 @@ function handleLegendSelection(index) {
 						value: props.series[index].data[a],
 					},
 				];
-				if (newMax < data[a].data[r].value)
-					newMax = data[a].data[r].value;
+				if (newMax < parseSeries.value.series[a].data[r].value)
+					newMax = parseSeries.value.series[a].data[r].value;
 			} else {
 				newData[a]["data"] = [
 					...newData[a]["data"],
@@ -256,7 +270,7 @@ function handleLegendSelection(index) {
 	<div v-if="activeChart === 'PolarAreaChart'" class="polarareachart">
 		<!-- The layout of the chart Vue component -->
 		<!-- Utilize the @click event listener to enable map filtering by data selection -->
-		<svg class="svg-container" xmlns="http://www.w3.org/2000/svg">
+		<svg class="polarareachart-chart" xmlns="http://www.w3.org/2000/svg">
 			<g v-for="(sector, index) in sectors" :key="index">
 				<path
 					:class="{
@@ -266,7 +280,6 @@ function handleLegendSelection(index) {
 					v-if="sector.show"
 					:d="sectorD(index)"
 					:fill="sector.fill"
-					:stroke="sector.stroke"
 					:stroke-width="sector.stroke_width"
 					@mouseenter="toggleActive(index)"
 					@mousemove="updateMouseLocation"
@@ -291,47 +304,37 @@ function handleLegendSelection(index) {
 					{{ label.name }}
 				</text>
 			</g>
-			<circle :cx="cx" :cy="cy" :r="cr" :stroke="null" :fill="colorBG" />
+			<circle :cx="cx" :cy="cy" :r="10" :stroke="null" />
 		</svg>
-		<div class="textwrapper">
+		<div class="polarareachart-legend" v-if="chart_config.categories">
 			<div
-				class="legends"
-				v-for="(legend, index) in legends"
-				:key="index"
+				:class="{
+					'polarareachart-legend-item': true,
+					selected: !rShow[index],
+				}"
+				v-for="(serie, index) in props.series"
+				:key="serie.name"
 				@click="handleLegendSelection(index)"
 			>
-				<svg class="svg-legend" style="width: 15px; height: 15px">
-					<rect
-						width="15"
-						height="15"
-						:fill="legend.color"
-						rx="4"
-						ry="4"
-					/>
-					<rect
-						class="legends-rect-top"
-						width="15"
-						height="15"
-						:fill="colorBG"
-						:opacity="!rShow[index] ? 0.65 : 0"
-						rx="4"
-						ry="4"
-					/>
-				</svg>
-				<span> {{ legend.text }} </span>
+				<div
+					:style="{
+						backgroundColor: props.chart_config.color[index],
+					}"
+				></div>
+				<p>{{ serie.name }}</p>
 			</div>
 		</div>
 		<Teleport to="body">
 			<!-- The class "chart-tooltip" could be edited in /assets/styles/chartStyles.css -->
 			<div
 				v-if="aHovered !== -1"
-				class="polarareachart-chart-info chart-tooltip"
+				class="polarareachart-tooltip chart-tooltip"
 				:style="tooltipPosition"
 			>
 				<h6>
-					{{ chart_config.categories[aHovered] }}-{{
-						showedData[aHovered].data[rHovered].r
-					}}
+					{{ showedData[aHovered].a
+					}}{{ props.chart_config.categories && "-"
+					}}{{ showedData[aHovered].data[rHovered].r }}
 				</h6>
 				<span
 					>{{ showedData[aHovered].data[rHovered].value
@@ -350,52 +353,54 @@ function handleLegendSelection(index) {
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
+
 	&-chart {
+		min-height: 230px;
+		width: 360px;
+		overflow: scroll;
+		margin-top: 1.5rem;
+
+		circle {
+			fill: var(--color-component-background);
+		}
+		.sector {
+			stroke: var(--color-component-background);
+			transition: all 0.3s ease;
+			cursor: pointer;
+		}
+	}
+	&-legend {
 		display: flex;
-		justify-content: center;
-		svg {
-			width: 50%;
-			path {
-				transition: transform 0.2s;
-				opacity: 0;
+		flex-direction: row;
+		gap: var(--font-s);
+
+		&-item {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			gap: 4px;
+			margin-top: var(--font-s);
+			cursor: pointer;
+			transition: opacity 0.2s ease;
+
+			& > div {
+				width: 12px;
+				height: 12px;
+				border-radius: 2px;
+			}
+			& > p {
+				color: var(--color-complement-text);
 			}
 		}
-		&-info {
-			position: fixed;
-			z-index: 20;
+		.selected {
+			opacity: 0.5;
 		}
 	}
-}
-.textwrapper {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 8px 14px;
-	padding: 12px 0;
-	justify-content: center;
-	align-items: center;
-	align-content: flex-start;
-}
-.legends {
-	height: 15px;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	font-size: small;
-	gap: 6px;
-	cursor: pointer;
-	&-rect-top {
-		transition: all 0.2s ease;
+
+	&-tooltip {
+		position: fixed;
+		z-index: 20;
 	}
-}
-.svg-container {
-	min-height: 230px;
-	width: 360px;
-	overflow: scroll;
-	margin-top: 1.5rem;
-}
-.sector {
-	transition: all 0.3s ease;
-	cursor: pointer;
 }
 
 @keyframes ease-in {
