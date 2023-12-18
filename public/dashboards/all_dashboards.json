@@ -9,7 +9,7 @@
 		{
 			"name": "祝您好孕",
 			"index": "childcare",
-			"components": ["150", "151", "153", "154", "155", "156"],
+			"components": ["150", "151", "152, "153", "154", "155", "156"],
 			"icon": "child_friendly"
 		},
 		{
