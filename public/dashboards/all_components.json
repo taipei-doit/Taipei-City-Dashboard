@@ -4549,7 +4549,15 @@
 				"https://data.taipei/dataset/detail?id=9ee72240-f9b3-42a7-bcbe-e1bb1a28a2dc",
 				"https://data.taipei/dataset/detail?id=a14dd58c-ecef-480c-b574-889ecfa631c3"
 			],
-			"contributors": ["tuic"]
+			"contributors": [
+				"mosquito",
+				"李冠儀",
+				"陳柏睿",
+				"吳典睿",
+				"劉庭均",
+				"吳承羲",
+				"tuic"
+			]
 		},
 		"160": {
 			"id": 160,

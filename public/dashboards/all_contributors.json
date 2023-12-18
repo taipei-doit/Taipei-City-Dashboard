@@ -121,6 +121,37 @@
 			"id": "陳又華",
 			"name": "陳又華",
 			"link": "https://github.com/chenjoachim"
+		},
+		"mosquito": {
+			"id": "mosquito",
+			"name": "捕蚊燈",
+			"link": "https://github.com/rakechen-0307/Taipei-City-Dashboard-FE/",
+			"image": "codefest"
+		},
+		"李冠儀": {
+			"id": "李冠儀",
+			"name": "李冠儀",
+			"link": "https://github.com/gary920209"
+		},
+		"陳柏睿": {
+			"id": "陳柏睿",
+			"name": "陳柏睿",
+			"link": "https://github.com/rakechen-0307/Taipei-City-Dashboard-FE/"
+		},
+		"吳典睿": {
+			"id": "吳典睿",
+			"name": "吳典睿",
+			"link": "https://github.com/dienruei123"
+		},
+		"劉庭均": {
+			"id": "劉庭均",
+			"name": "劉庭均",
+			"link": "https://github.com/Davidliu012"
+		},
+		"吳承羲": {
+			"id": "吳承羲",
+			"name": "吳承羲",
+			"link": "https://github.com/chengxi061"
 		}
 	}
 }
