@@ -611,10 +611,6 @@
 			"index": "traffic_accident",
 			"map_config": [
 				{
-					"heatmap": {
-						"filter": "type",
-						"zoom": 16.5
-					},
 					"index": "traffic_accident_location_view",
 					"paint": {
 						"circle-color": [
@@ -4726,7 +4722,7 @@
 								],
 								"私立托嬰中心"
 							],
-							"#E6DF44",
+							"#FFE7D8",
 							[
 								"==",
 								[
@@ -4735,7 +4731,7 @@
 								],
 								"公辦民營托嬰中心"
 							],
-							"#F4633C",
+							"#D69062",
 							[
 								"==",
 								[
@@ -4744,8 +4740,8 @@
 								],
 								"社區公共托育家園"
 							],
-							"#D63940",
-							"#9C2A4B"
+							"#D0793F",
+							"#A44404"
 						]
 					},
 					"property": [
@@ -4984,10 +4980,10 @@
 								"main_type"
 							],
 							"診所",
-							"#F0B67F",
+							"#B56C28",
 							"醫院",
-							"#C7EFCF",
-							"#D6D1B1"
+							"#F0B67F",
+							"#E19044"
 						],
 						"circle-radius": [
 							"interpolate",
@@ -5250,7 +5246,7 @@
 				{
 					"index": "breastfeeding_room",
 					"paint": {
-						"circle-color": "#FFC0CB",
+						"circle-color": "#FFEB9A",
 						"circle-radius": [
 							"interpolate",
 							[
@@ -5324,9 +5320,9 @@
 					"PolarAreaChart"
 				],
 				"color": [
-					"#F5C860",
-					"#4987B3",
-					"#5A58B8"
+					"#FFEB9A",
+					"#F1C40F",
+					"#AC8B08"
 				],
 				"unit": "個"
 			},
@@ -5364,7 +5360,7 @@
 								"婚後孕前健康檢查"
 							],
 							"V",
-							"#D68D35",
+							"#FFADAD",
 							"#222222"
 						],
 						"circle-radius": 4
@@ -5396,7 +5392,7 @@
 								"初期孕婦唐氏症篩檢"
 							],
 							"V",
-							"#488887",
+							"#E06666",
 							"#222222"
 						],
 						"circle-radius": 4,
@@ -5432,7 +5428,7 @@
 								"中期孕婦唐氏症篩檢"
 							],
 							"V",
-							"#955DB6",
+							"#C12525",
 							"#222222"
 						],
 						"circle-radius": 4,
@@ -5470,9 +5466,9 @@
 				],
 				"unit": "家",
 				"color": [
-					"#D68D35",
-					"#488887",
-					"#955DB6"
+					"#FFADAD",
+					"#E06666",
+					"#C12525"
 				],
 				"categories": [
 					"北投區",
