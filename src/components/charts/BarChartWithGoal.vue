@@ -1,4 +1,5 @@
-<!-- Developed by Taipei Urban Intelligence Center 2023 -->
+<!-- Developed by Open Possible (台灣大哥大), Taipei Codefest 2023 -->
+<!-- Refactored and Maintained by Taipei Urban Intelligence Center -->
 
 <script setup>
 import { computed, ref } from "vue";
@@ -9,50 +10,29 @@ const props = defineProps([
 	"activeChart",
 	"series",
 	"map_config",
+	"map_filter",
 ]);
 const mapStore = useMapStore();
 
-const goalColor = "#fff";
-const defaultLabels = ["實際數值", "期望數值"];
-
 const parseSeries = computed(() => {
-	if (props.series[0].data[0].goal) {
-		let parsedSeries = [];
-		let colors = [];
-		let allGoalsNotMet = true;
-		const inputData = props.series[0].data;
-		for (let i = 0; i < inputData.length; i++) {
-			const item = inputData[i];
-			const goalItem = {
-				name: "目標",
-				value: item.goal,
-				strokeWidth: 4,
-				strokeColor: goalColor,
-			};
+	let parsedSeries = [];
 
-			const parsedItem = {
-				x: item.x,
-				y: item.y,
-				goals: [goalItem],
-			};
-			parsedSeries.push(parsedItem);
-			if (item.y > item.goal) {
-				allGoalsNotMet = false;
-				colors.push(props.chart_config.color[1]);
-			} else {
-				colors.push(props.chart_config.color[0]);
-			}
-		}
-		if (allGoalsNotMet) {
-			colors = props.chart_config.color;
-		}
-		return {
-			colors,
-			series: [{ name: "", data: parsedSeries }],
+	for (let i = 0; i < props.chart_config.categories.length; i++) {
+		const goalItem = {
+			name: "目標",
+			value: props.series[0].data[i] + props.series[1].data[i],
+			strokeWidth: 4,
+			strokeColor: props.chart_config.color[1] || "#fff",
 		};
-	} else {
-		return { series: props.series };
+
+		const parsedItem = {
+			x: props.chart_config.categories[i],
+			y: props.series[0].data[i],
+			goals: [goalItem],
+		};
+		parsedSeries.push(parsedItem);
 	}
+	return [{ data: parsedSeries }];
 });
 
 const chartOptions = ref({
@@ -62,7 +42,7 @@ const chartOptions = ref({
 			show: false,
 		},
 	},
-	colors: parseSeries.value.colors ?? props.chart_config.color,
+	colors: [props.chart_config.color[0]],
 	dataLabels: {
 		enabled: false,
 	},
@@ -72,9 +52,12 @@ const chartOptions = ref({
 	legend: {
 		show: true,
 		showForSingleSeries: true,
-		customLegendItems: props.chart_config.categories ?? defaultLabels,
+		customLegendItems: ["實際數值", "期望數值"],
 		markers: {
-			fillColors: [props.chart_config.color[1], goalColor],
+			fillColors: [
+				props.chart_config.color[0],
+				props.chart_config.color[1] || "#fff",
+			],
 			radius: 0,
 			height: [12, 4],
 		},
@@ -93,31 +76,16 @@ const chartOptions = ref({
 	tooltip: {
 		custom: function ({ series, seriesIndex, dataPointIndex, w }) {
 			const label = w.globals.labels[dataPointIndex];
-			const category1 =
-				props.chart_config.categories?.[0] ?? defaultLabels[0];
-			const category2 =
-				props.chart_config.categories?.[1] ?? defaultLabels[1];
 			const value = series[seriesIndex][dataPointIndex];
 			const goalValue =
 				w.globals.seriesGoals[seriesIndex][dataPointIndex]?.[0]?.value;
 
-			const goalHtml = goalValue
-				? `<td><span>${goalValue} ${props.chart_config.unit}</span></td>`
-				: "";
-
 			return `
 			<div class="chart-tooltip">
-				<h6>${label}</h6>
-				<table>
-					<tr>
-						<td><h6>${category1}</h6></td>
-						<td><span>${value} ${props.chart_config.unit}</span></td>
-					</tr>
-					<tr>
-						<td><h6>${category2}</h6></td>
-						${goalHtml}
-					</tr>
-				</table>
+				<h6>${label}-實際數值</h6>
+				<span>${value} ${props.chart_config.unit}</span>
+				<h6>${label}-目標數值</h6>
+				<span>${goalValue} ${props.chart_config.unit}</span>
 			</div>`;
 		},
 		followCursor: true,
@@ -144,26 +112,40 @@ const chartOptions = ref({
 });
 
 const chartHeight = computed(() => {
-	const height = 80 + props.series[0].data.length * 36;
-	return `${Math.min(height, 260)}`;
+	const height = 80 + props.series[0].data.length * 30;
+	return height;
 });
 const selectedIndex = ref(null);
 
 function handleDataSelection(e, chartContext, config) {
-	if (!props.chart_config.map_filter) {
+	if (!props.map_filter) {
 		return;
 	}
-	if (config.dataPointIndex !== selectedIndex.value) {
-		mapStore.addLayerFilter(
-			`${props.map_config[0].index}-${props.map_config[0].type}`,
-			props.chart_config.map_filter[0],
-			props.chart_config.map_filter[1][config.dataPointIndex]
-		);
-		selectedIndex.value = config.dataPointIndex;
+	if (
+		`${config.dataPointIndex}-${config.seriesIndex}` !== selectedIndex.value
+	) {
+		// Supports filtering by xAxis
+		if (props.map_filter.mode === "byParam") {
+			mapStore.filterByParam(
+				props.map_filter,
+				props.map_config,
+				config.w.globals.labels[config.dataPointIndex]
+			);
+		}
+		// Supports filtering by xAxis
+		else if (props.map_filter.mode === "byLayer") {
+			mapStore.filterByLayer(
+				props.map_config,
+				config.w.globals.labels[config.dataPointIndex]
+			);
+		}
+		selectedIndex.value = `${config.dataPointIndex}-${config.seriesIndex}`;
 	} else {
-		mapStore.clearLayerFilter(
-			`${props.map_config[0].index}-${props.map_config[0].type}`
-		);
+		if (props.map_filter.mode === "byParam") {
+			mapStore.clearByParamFilter(props.map_config);
+		} else if (props.map_filter.mode === "byLayer") {
+			mapStore.clearByLayerFilter(props.map_config);
+		}
 		selectedIndex.value = null;
 	}
 }
@@ -172,11 +154,11 @@ function handleDataSelection(e, chartContext, config) {
 <template>
 	<div v-if="activeChart === 'BarChartWithGoal'">
 		<apexchart
+			type="bar"
 			width="100%"
 			:height="chartHeight"
-			type="bar"
 			:options="chartOptions"
-			:series="parseSeries.series"
+			:series="parseSeries"
 			@dataPointSelection="handleDataSelection"
 		></apexchart>
 	</div>

@@ -73,7 +73,7 @@ const chartOptions = ref({
 			? props.chart_config.categories
 			: [],
 		labels: {
-			offsetY: 5,
+			offsetY: 2,
 		},
 		type: "category",
 	},

@@ -7,10 +7,16 @@
 			"icon": "pedal_bike"
 		},
 		{
+			"name": "祝您好孕",
+			"index": "childcare",
+			"components": ["150", "151", "152, "153", "154", "155", "156"],
+			"icon": "child_friendly"
+		},
+		{
 			"name": "韌性城市",
 			"index": "urban-resiliance",
-			"components": ["161", "162", "163", "164"],
-			"icon": "yard"
+			"components": ["160", "161", "162", "163", "164"],
+			"icon": "grass"
 		},
 		{
 			"name": "民情熱議",
@@ -49,15 +55,9 @@
 			"icon": "handshake"
 		},
 		{
-			"name": "測試組件",
-			"index": "testing",
-			"components": ["117", "118", "61", "74"],
-			"icon": "bug_report"
-		},
-		{
 			"name": "收藏組件",
 			"index": "favorites",
-			"components": ["108", "22", "79", "60", "107", "152"],
+			"components": [],
 			"icon": "favorite"
 		},
 		{
