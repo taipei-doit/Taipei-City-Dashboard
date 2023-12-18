@@ -594,6 +594,13 @@ export const useMapStore = defineStore("map", {
 				bearing: location_array[3],
 			});
 		},
+		// Fly to a location
+		flyToLocation(location_array) {
+			this.map.flyTo({
+				center: location_array,
+				duration: 1000,
+			});
+		},
 		// Remove a saved location
 		removeSavedLocation(index) {
 			this.savedLocations.splice(index, 1);

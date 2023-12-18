@@ -3,6 +3,8 @@
 <script setup>
 import { computed, defineProps, ref } from "vue";
 import { useMapStore } from "../../store/mapStore";
+import { useDialogStore } from "../../store/dialogStore";
+import { districtCoordinates } from "../../assets/configs/apexcharts/districtCoordinates";
 
 const props = defineProps([
 	"chart_config",
@@ -12,6 +14,7 @@ const props = defineProps([
 	"map_filter",
 ]);
 const mapStore = useMapStore();
+const dialogStore = useDialogStore();
 
 const targetDistrict = ref(null);
 const districtColor = ref(props.chart_config.color[0]);
@@ -90,6 +93,9 @@ function handleDataSelection(index) {
 		return;
 	}
 	if (index !== selectedIndex.value) {
+		if (mapStore.map && !dialogStore.dialogs.moreInfo) {
+			mapStore.flyToLocation(districtCoordinates[index]);
+		}
 		// Supports filtering by xAxis
 		if (props.map_filter.mode === "byParam") {
 			mapStore.filterByParam(
@@ -104,6 +110,9 @@ function handleDataSelection(index) {
 		}
 		selectedIndex.value = index;
 	} else {
+		if (mapStore.map && !dialogStore.dialogs.moreInfo) {
+			mapStore.flyToLocation([121.536609, 25.044808]);
+		}
 		if (props.map_filter.mode === "byParam") {
 			mapStore.clearByParamFilter(props.map_config);
 		} else if (props.map_filter.mode === "byLayer") {

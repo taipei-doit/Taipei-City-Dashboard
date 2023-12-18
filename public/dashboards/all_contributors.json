@@ -152,6 +152,32 @@
 			"id": "吳承羲",
 			"name": "吳承羲",
 			"link": "https://github.com/chengxi061"
+		},
+		"weewin": {
+			"id": "weewin",
+			"name": "Wee Win",
+			"link": "https://github.com/anne030303/Taipei-City-Dashboard-FE/",
+			"image": "codefest"
+		},
+		"林柔安": {
+			"id": "林柔安",
+			"name": "林柔安",
+			"link": "https://github.com/anne030303/"
+		},
+		"陳宇修": {
+			"id": "陳宇修",
+			"name": "陳宇修",
+			"link": "https://github.com/Kenny-Snub-Nose-Monk"
+		},
+		"黃亘立": {
+			"id": "黃亘立",
+			"name": "黃亘立",
+			"link": "https://github.com/j450nhuang"
+		},
+		"卓易霆": {
+			"id": "卓易霆",
+			"name": "卓易霆",
+			"link": "https://github.com/artgistim"
 		}
 	}
 }
