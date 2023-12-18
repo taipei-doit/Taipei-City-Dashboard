@@ -372,14 +372,18 @@ function handleLegendSelection(index) {
 	&-legend {
 		display: flex;
 		flex-direction: row;
-		gap: var(--font-s);
+		flex-wrap: wrap;
+		justify-content: center;
+		column-gap: var(--font-s);
+		row-gap: 4px;
+		margin-top: var(--font-s);
 
 		&-item {
 			display: flex;
 			flex-direction: row;
 			align-items: center;
 			gap: 4px;
-			margin-top: var(--font-s);
+
 			cursor: pointer;
 			transition: opacity 0.2s ease;
 
@@ -423,5 +427,4 @@ function handleLegendSelection(index) {
 		}
 	}
 }
-/* Animation styles aren't required but recommended */
 </style>
