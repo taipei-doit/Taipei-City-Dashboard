@@ -1,3 +1,8 @@
+<!-- Developed by Mosquito, Taipei Codefest 2023 -->
+<!-- Refactored and Maintained by Taipei Urban Intelligence Center -->
+
+<!-- STILL UNDER DEVELOPMENT. NOT READY. DO NOT USE. -->
+
 <script setup>
 import { ref } from "vue";
 const props = defineProps([
