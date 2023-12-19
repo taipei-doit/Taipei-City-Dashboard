@@ -13,6 +13,19 @@ const parseSeries = computed(() => {
 	}));
 });
 
+const totalMax = computed(() => {
+	if (props.series[0].name.slice(-2) === props.series[1].name.slice(-2)) {
+		let max = Math.max(
+			...props.series[0].data.map((d) => d.y),
+			...props.series[1].data.map((d) => d.y)
+		);
+
+		// add 10% then round up to the nearest 100
+		return Math.ceil((max * 1.1) / 100) * 100;
+	}
+	return null;
+});
+
 const chartOptions = ref({
 	chart: {
 		toolbar: {
@@ -95,6 +108,12 @@ const chartOptions = ref({
 	},
 	yaxis: [
 		{
+			max: function (max) {
+				if (totalMax.value) {
+					return totalMax.value;
+				}
+				return max;
+			},
 			labels: {
 				formatter: function (val) {
 					return val.toFixed(0);
@@ -108,6 +127,12 @@ const chartOptions = ref({
 			},
 		},
 		{
+			max: function (max) {
+				if (totalMax.value) {
+					return totalMax.value;
+				}
+				return max;
+			},
 			labels: {
 				formatter: function (val) {
 					return val.toFixed(0);

@@ -112,7 +112,7 @@ const chartOptions = ref({
 });
 
 const chartHeight = computed(() => {
-	const height = 80 + props.series[0].data.length * 30;
+	const height = 80 + props.series[0].data.length * 60;
 	return height;
 });
 const selectedIndex = ref(null);
@@ -152,7 +152,16 @@ function handleDataSelection(e, chartContext, config) {
 </script>
 
 <template>
-	<div v-if="activeChart === 'BarChartWithGoal'">
+	<div
+		v-if="activeChart === 'BarChartWithGoal'"
+		:style="{
+			marginTop: `${
+				chart_config.categories.length < 3
+					? 90 - chart_config.categories.length * 30
+					: 0
+			}px`,
+		}"
+	>
 		<apexchart
 			type="bar"
 			width="100%"
