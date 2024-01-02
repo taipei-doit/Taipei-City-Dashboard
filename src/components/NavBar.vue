@@ -34,7 +34,10 @@ const linkQuery = computed(() => {
 				<h2>Taipei City Dashboard Open Source</h2>
 			</div>
 		</div>
-		<div class="navbar-tabs hide-if-mobile">
+		<div
+			class="navbar-tabs hide-if-mobile"
+			v-if="authStore.currentPath !== 'admin'"
+		>
 			<router-link :to="`/dashboard${linkQuery}`">儀表板總覽</router-link>
 			<router-link :to="`/mapview${linkQuery}`">地圖交叉比對</router-link>
 		</div>
@@ -56,6 +59,18 @@ const linkQuery = computed(() => {
 					<li>
 						<button @click="dialogStore.showDialog('userSettings')">
 							用戶設定
+						</button>
+					</li>
+					<li v-if="authStore.currentPath !== 'admin'">
+						<button>
+							<router-link to="/admin">管理員後臺</router-link>
+						</button>
+					</li>
+					<li v-else>
+						<button>
+							<router-link to="/dashboard"
+								>返回儀表板</router-link
+							>
 						</button>
 					</li>
 					<li>
@@ -135,6 +150,7 @@ const linkQuery = computed(() => {
 		display: flex;
 		align-items: center;
 
+		button a,
 		button {
 			display: flex;
 			align-items: center;
@@ -145,6 +161,7 @@ const linkQuery = computed(() => {
 			transition: background-color 0.25s;
 		}
 
+		button a:hover,
 		button:hover {
 			background-color: var(--color-complement-text);
 		}

@@ -9,15 +9,16 @@ Testing: Jack Huang (Data Scientist), Ian Huang (Data Analysis Intern)
 <!-- Department of Information Technology, Taipei City Government -->
 
 <script setup>
-import { onBeforeMount, onMounted } from 'vue';
-import { useAuthStore } from './store/authStore';
-import { useDialogStore } from './store/dialogStore';
+import { onBeforeMount, onMounted } from "vue";
+import { useAuthStore } from "./store/authStore";
+import { useDialogStore } from "./store/dialogStore";
 
-import NavBar from './components/NavBar.vue';
-import SideBar from './components/SideBar.vue';
-import SettingsBar from './components/SettingsBar.vue';
-import NotificationBar from './components/dialogs/NotificationBar.vue';
-import InitialWarning from './components/dialogs/InitialWarning.vue';
+import NavBar from "./components/NavBar.vue";
+import SideBar from "./components/SideBar.vue";
+import AdminSideBar from "./components/admin/AdminSideBar.vue";
+import SettingsBar from "./components/SettingsBar.vue";
+import NotificationBar from "./components/dialogs/NotificationBar.vue";
+import InitialWarning from "./components/dialogs/InitialWarning.vue";
 
 const authStore = useAuthStore();
 const dialogStore = useDialogStore();
@@ -27,17 +28,17 @@ onBeforeMount(() => {
 	authStore.checkIfMobile();
 
 	let vh = window.innerHeight * 0.01;
-	document.documentElement.style.setProperty('--vh', `${vh}px`);
+	document.documentElement.style.setProperty("--vh", `${vh}px`);
 
-	window.addEventListener('resize', () => {
+	window.addEventListener("resize", () => {
 		let vh = window.innerHeight * 0.01;
-		document.documentElement.style.setProperty('--vh', `${vh}px`);
+		document.documentElement.style.setProperty("--vh", `${vh}px`);
 	});
 });
 onMounted(() => {
-	const showInitialWarning = localStorage.getItem('initialWarning');
+	const showInitialWarning = localStorage.getItem("initialWarning");
 	if (!showInitialWarning) {
-		dialogStore.showDialog('initialWarning');
+		dialogStore.showDialog("initialWarning");
 	}
 });
 </script>
@@ -46,10 +47,22 @@ onMounted(() => {
 	<div class="app-container">
 		<NotificationBar />
 		<NavBar />
-		<div class="app-content">
+		<div
+			class="app-content"
+			v-if="
+				authStore.currentPath === 'mapview' ||
+				authStore.currentPath === 'dashboard'
+			"
+		>
 			<SideBar />
 			<div class="app-content-main">
 				<SettingsBar />
+				<RouterView></RouterView>
+			</div>
+		</div>
+		<div class="app-content" v-else-if="authStore.currentPath === 'admin'">
+			<AdminSideBar />
+			<div class="app-content-main">
 				<RouterView></RouterView>
 			</div>
 		</div>
