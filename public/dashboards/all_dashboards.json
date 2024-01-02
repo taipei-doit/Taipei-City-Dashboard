@@ -1,22 +1,40 @@
 {
 	"data": [
 		{
-			"name": "YouBike研究",
-			"index": "youbike",
-			"components": ["60", "142", "143", "144", "145", "146", "147"],
-			"icon": "pedal_bike"
-		},
-		{
 			"name": "祝您好孕",
 			"index": "childcare",
-			"components": ["150", "151", "152", "153", "154", "155", "156"],
+			"components": [
+				"154",
+				"153",
+				"156",
+				"151",
+				"155",
+				"150",
+				"152",
+				"7"
+			],
 			"icon": "child_friendly"
 		},
 		{
 			"name": "韌性城市",
 			"index": "urban-resiliance",
-			"components": ["160", "161", "162", "163", "164"],
+			"components": [
+				"163",
+				"59",
+				"161",
+				"162",
+				"110",
+				"103",
+				"160",
+				"164"
+			],
 			"icon": "grass"
+		},
+		{
+			"name": "YouBike研究",
+			"index": "youbike",
+			"components": ["60", "142", "143", "144", "145", "146", "147"],
+			"icon": "pedal_bike"
 		},
 		{
 			"name": "民情熱議",
