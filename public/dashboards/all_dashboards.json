@@ -1,12 +1,6 @@
 {
 	"data": [
 		{
-			"name": "YouBike研究",
-			"index": "youbike",
-			"components": ["60", "142", "143", "144", "145", "146", "147"],
-			"icon": "pedal_bike"
-		},
-		{
 			"name": "祝您好孕",
 			"index": "childcare",
 			"components": [
@@ -29,12 +23,18 @@
 				"59",
 				"161",
 				"162",
-				"160",
-				"164",
 				"110",
-				"103"
+				"103",
+				"160",
+				"164"
 			],
 			"icon": "grass"
+		},
+		{
+			"name": "YouBike研究",
+			"index": "youbike",
+			"components": ["60", "142", "143", "144", "145", "146", "147"],
+			"icon": "pedal_bike"
 		},
 		{
 			"name": "民情熱議",

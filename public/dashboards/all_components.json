@@ -37,7 +37,7 @@
 			"history_data": false,
 			"map_config": null,
 			"chart_config": {
-				"color": ["#FD5696", "#00A9E0"],
+				"color": ["#E06666", "#00A9E0"],
 				"types": ["ColumnLineChart", "TimelineSeparateChart"],
 				"unit": "件"
 			},
@@ -4045,7 +4045,7 @@
 			"name": "育兒支持資源",
 			"source": "社會局",
 			"time_from": "2020-07-27T10:46:50+08:00",
-			"time_to": "2023-10-11T17:34:44:00",
+			"time_to": "2023-10-11T17:34:44+08:00",
 			"update_freq": 1,
 			"update_freq_unit": "month",
 			"short_desc": "顯示臺北市育兒支持資源統計。",
@@ -4169,8 +4169,6 @@
 			},
 			"name": "居住安全性",
 			"source": "都發局/工務局",
-			"time_from": "",
-			"time_to": "",
 			"short_desc": "顯示各行政區居住安全分佈之狀況。",
 			"long_desc": "顯示各行政區居住安全分佈之狀況。於地圖交叉比對中以3D建築方式呈現。",
 			"use_case": "藉由各行政區居住安全性分佈可觀察需輔助之地區，並搭配地圖交叉比對以評估各區內之區域情形及需求。",
@@ -4502,11 +4500,19 @@
 					"type": "circle",
 					"paint": {
 						"circle-color": [
-							"match",
-							["get", "婚後孕前健康檢查"],
-							"V",
-							"#FFADAD",
-							"#222222"
+							"interpolate",
+							["linear"],
+							["zoom"],
+							8,
+							"#666",
+							13.5,
+							[
+								"match",
+								["get", "婚後孕前健康檢查"],
+								"V",
+								"#FFADAD",
+								"#222222"
+							]
 						],
 						"circle-radius": 4
 					},
@@ -4537,6 +4543,17 @@
 							"#E06666",
 							"#222222"
 						],
+						"circle-opacity": [
+							"interpolate",
+							["linear"],
+							["zoom"],
+							8,
+							0,
+							14,
+							0,
+							14.5,
+							1
+						],
 						"circle-radius": 4,
 						"circle-translate": [3, -6]
 					},
@@ -4566,6 +4583,17 @@
 							"V",
 							"#C12525",
 							"#222222"
+						],
+						"circle-opacity": [
+							"interpolate",
+							["linear"],
+							["zoom"],
+							8,
+							0,
+							14,
+							0,
+							14.5,
+							1
 						],
 						"circle-radius": 4,
 						"circle-translate": [-3, -6]
