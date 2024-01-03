@@ -20,6 +20,7 @@ const props = defineProps({
 	content: { type: Object },
 	notMoreInfo: { type: Boolean, default: true },
 	isMapLayer: { type: Boolean, default: false },
+	style: { type: Object, default: () => ({}) },
 });
 
 // The default active chart is the first one in the list defined in the dashboard component
@@ -95,6 +96,7 @@ function changeShowTagTooltipState(state) {
 			moreinfostyle: !notMoreInfo,
 			maplayer: isMapLayer,
 		}"
+		:style="style"
 	>
 		<div class="componentcontainer-header">
 			<div>
@@ -218,12 +220,12 @@ function changeShowTagTooltipState(state) {
 					class="hide-if-mobile"
 				/>
 				<ComponentTag
-					v-if="content.map_config"
+					v-if="content.map_config && content.map_config[0] !== null"
 					icon="map"
 					text="空間資料"
 				/>
 				<ComponentTag
-					v-if="content.history_data"
+					v-if="content.history_data || content.history_config"
 					icon="insights"
 					text="歷史資料"
 					class="history-tag"

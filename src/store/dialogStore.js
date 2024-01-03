@@ -13,6 +13,7 @@ import { defineStore } from "pinia";
 export const useDialogStore = defineStore("dialog", {
 	state: () => ({
 		dialogs: {
+			admincomponentsettings: false,
 			addComponent: false,
 			addDashboard: false,
 			dashboardSettings: false,

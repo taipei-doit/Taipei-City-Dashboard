@@ -1,12 +1,17 @@
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, computed } from "vue";
 import { useAdminStore } from "../../store/adminStore";
+import { useDialogStore } from "../../store/dialogStore";
+
 import TableHeader from "../../components/utilities/TableHeader.vue";
 import ComponentTag from "../../components/utilities/ComponentTag.vue";
+import AdminComponentSettings from "../../components/dialogs/AdminComponentSettings.vue";
+
 import { chartTypes } from "../../assets/configs/apexcharts/chartTypes";
 import { mapTypes } from "../../assets/configs/mapbox/mapConfig";
 
 const adminStore = useAdminStore();
+const dialogStore = useDialogStore();
 
 const searchParams = ref({
 	searchbyindex: "",
@@ -15,6 +20,17 @@ const searchParams = ref({
 	order: "",
 	pagesize: 10,
 	pagenum: 1,
+});
+
+const pages = computed(() => {
+	// return an array of pages based on results no stored in admin store
+	if (adminStore.components) {
+		const pages = Math.ceil(
+			adminStore.componentResults / searchParams.value.pagesize
+		);
+		return Array.from({ length: pages }, (_, i) => i + 1);
+	}
+	return [];
 });
 
 function updateFreq(update_freq, update_freq_unit) {
@@ -52,6 +68,21 @@ function handleSort(sort) {
 	adminStore.getPublicComponents(searchParams.value);
 }
 
+function handleNewQuery() {
+	searchParams.value.pagenum = 1;
+	adminStore.getPublicComponents(searchParams.value);
+}
+
+function handleNewPage(page) {
+	searchParams.value.pagenum = page;
+	adminStore.getPublicComponents(searchParams.value);
+}
+
+function handleOpenSettings(component) {
+	adminStore.getComponentData(component);
+	dialogStore.showDialog("admincomponentsettings");
+}
+
 onMounted(() => {
 	adminStore.getPublicComponents(searchParams.value);
 });
@@ -84,9 +115,7 @@ onMounted(() => {
 					>cancel</span
 				>
 			</div>
-			<button @click="adminStore.getPublicComponents(searchParams)">
-				搜尋
-			</button>
+			<button @click="handleNewQuery">搜尋</button>
 		</div>
 		<table class="admineditcomponent-table">
 			<thead>
@@ -142,13 +171,15 @@ onMounted(() => {
 					>
 				</tr>
 			</thead>
-			<tbody>
+			<tbody v-if="adminStore.components">
 				<tr
 					v-for="component in adminStore.components"
 					:key="component.index"
 				>
 					<td class="admineditcomponent-table-settings">
-						<button><span>settings</span></button>
+						<button @click="handleOpenSettings(component)">
+							<span>settings</span>
+						</button>
 					</td>
 					<td>{{ component.id }}</td>
 					<td>{{ component.index }}</td>
@@ -181,7 +212,7 @@ onMounted(() => {
 					</td>
 					<td>
 						<span>{{
-							component.history_data !== null
+							component.history_config !== null
 								? "check_circle"
 								: ""
 						}}</span>
@@ -202,19 +233,32 @@ onMounted(() => {
 					<td>{{ parseTime(component.updated_at) }}</td>
 				</tr>
 			</tbody>
+			<div v-else class="admineditcomponent-nocontent">
+				<div class="admineditcomponent-nocontent-content">
+					<div></div>
+				</div>
+			</div>
 		</table>
 		<!-- html element to select a results per page -->
-		<div class="admineditcomponent-select">
+		<div class="admineditcomponent-control">
 			<label for="pagesize">每頁顯示</label>
-			<select
-				v-model="searchParams.pagesize"
-				@change="adminStore.getPublicComponents(searchParams)"
-			>
+			<select v-model="searchParams.pagesize" @change="handleNewQuery">
 				<option value="10">10</option>
 				<option value="20">20</option>
 				<option value="30">30</option>
 			</select>
+			<div class="admineditcomponent-control-page">
+				<button
+					v-for="page in pages"
+					:key="`component-page-${page}`"
+					:class="{ active: page === searchParams.pagenum }"
+					@click="handleNewPage(page)"
+				>
+					{{ page }}
+				</button>
+			</div>
 		</div>
+		<AdminComponentSettings />
 	</div>
 </template>
 
@@ -319,7 +363,30 @@ onMounted(() => {
 		}
 	}
 
-	&-select {
+	&-nocontent {
+		grid-template-columns: 1fr;
+
+		&-content {
+			width: 100%;
+			height: calc(100vh - 250px);
+			height: calc(100 * var(--vh) - 250px);
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+
+			div {
+				width: 2rem;
+				height: 2rem;
+				border-radius: 50%;
+				border: solid 4px var(--color-border);
+				border-top: solid 4px var(--color-highlight);
+				animation: spin 0.7s ease-in-out infinite;
+			}
+		}
+	}
+
+	&-control {
 		display: flex;
 		align-items: center;
 		margin-top: 0.5rem;
@@ -331,6 +398,24 @@ onMounted(() => {
 		}
 		select {
 			width: 100px;
+		}
+
+		&-page {
+			button {
+				margin-left: 0.5rem;
+				padding: 0.2rem 0.5rem;
+				border-radius: 5px;
+				background-color: var(--color-component-background);
+				font-size: var(--font-m);
+				transition: opacity 0.2s background-color 0.2s;
+
+				&:hover {
+					opacity: 0.7;
+				}
+			}
+			.active {
+				background-color: var(--color-complement-text);
+			}
 		}
 	}
 }

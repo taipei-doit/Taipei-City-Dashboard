@@ -74,6 +74,20 @@ select:focus {
 	border-color: var(--color-highlight);
 }
 
+textarea {
+	min-width: calc(100% - 14px);
+	max-width: calc(100% - 14px);
+	min-height: 50px;
+	padding: 4px 6px;
+	border: solid 1px var(--color-border);
+	border-radius: 5px;
+	background-color: transparent;
+	font-size: 1rem;
+}
+textarea:focus {
+	outline: none;
+	border: solid 1px var(--color-highlight);
+}
 body {
 	background-color: var(--color-background);
 }
@@ -119,5 +133,10 @@ td:last-child {
 @media (max-width: 1000px) {
 	.hide-if-mobile {
 		display: none !important;
+	}
+}
+@keyframes spin {
+	to {
+		transform: rotate(360deg);
 	}
 }
