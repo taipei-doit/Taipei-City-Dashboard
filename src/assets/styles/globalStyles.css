@@ -62,8 +62,49 @@ input:focus {
 	border-color: var(--color-highlight);
 }
 
+select {
+	padding: 4px 6px;
+	border-radius: 5px;
+	border: solid 1px var(--color-border);
+	background-color: transparent;
+	font-size: 1rem;
+	outline: none;
+}
+select:focus {
+	border-color: var(--color-highlight);
+}
+
 body {
 	background-color: var(--color-background);
+}
+
+table {
+	display: block;
+	border-radius: 5px;
+	border-collapse: collapse;
+	overflow-x: auto;
+	overflow-y: scroll;
+	white-space: nowrap;
+}
+
+th {
+	position: sticky;
+	top: 0;
+	background-color: var(--color-border);
+	height: 2.5rem;
+}
+th:last-child {
+	border-radius: 0 5px 0 0;
+}
+td {
+	text-align: center;
+	height: 4rem;
+	border-bottom: solid 1px var(--color-border);
+	background-color: var(--color-component-background);
+	padding: 4px;
+}
+td:last-child {
+	border-radius: 0 0 5px 0;
 }
 
 ::-webkit-scrollbar {

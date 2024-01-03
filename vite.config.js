@@ -29,5 +29,12 @@ export default defineConfig({
 	server: {
 		host: "0.0.0.0",
 		port: 80,
+		proxy: {
+			"/api/dev": {
+				target: "http://localhost:8888",
+				changeOrigin: true,
+				rewrite: (path) => path.replace("/dev", "/v1"),
+			},
+		},
 	},
 });

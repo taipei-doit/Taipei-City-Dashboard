@@ -67,9 +67,10 @@ const router = createRouter({
 	routes,
 });
 
-// Redirects routes based on login status
+// Sets route name to currentPath in authStore
 router.beforeEach((to) => {
 	const authStore = useAuthStore();
+
 	if (to.name.includes("admin")) {
 		authStore.setCurrentPath("admin");
 		return;

@@ -13,14 +13,14 @@ const isExpanded = ref(true);
 
 function toggleExpand() {
 	isExpanded.value = isExpanded.value ? false : true;
-	localStorage.setItem("isExpanded", isExpanded.value);
+	localStorage.setItem("isExpandedAdmin", isExpanded.value);
 	if (!isExpanded.value) {
 		mapStore.resizeMap();
 	}
 }
 
 onMounted(() => {
-	const storedExpandedState = localStorage.getItem("isExpanded");
+	const storedExpandedState = localStorage.getItem("isExpandedAdmin");
 	if (storedExpandedState === "false") {
 		isExpanded.value = false;
 	} else {

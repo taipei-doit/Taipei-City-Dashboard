@@ -13,6 +13,18 @@ export const MapObjectConfig = {
 	projection: "globe", // display the map as a 3D globe
 };
 
+// All map types
+export const mapTypes = {
+	line: "線圖",
+	circle: "點圖",
+	fill: "面圖",
+	"fill-extrusion": "立體面圖",
+	symbol: "符號圖",
+	arc: "立體弧線圖",
+	voronoi: "泰森多邊形",
+	isoline: "等高線圖",
+};
+
 // Styles for base layer "Taipei Town"
 export const TaipeiTown = {
 	id: "taipei_town",

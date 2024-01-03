@@ -62,16 +62,10 @@ const linkQuery = computed(() => {
 						</button>
 					</li>
 					<li v-if="authStore.currentPath !== 'admin'">
-						<button>
-							<router-link to="/admin">管理員後臺</router-link>
-						</button>
+						<router-link to="/admin">管理員後臺</router-link>
 					</li>
 					<li v-else>
-						<button>
-							<router-link to="/dashboard"
-								>返回儀表板</router-link
-							>
-						</button>
+						<router-link to="/dashboard">返回儀表板</router-link>
 					</li>
 					<li>
 						<button @click="authStore.handleLogout">登出</button>
@@ -150,7 +144,7 @@ const linkQuery = computed(() => {
 		display: flex;
 		align-items: center;
 
-		button a,
+		li a,
 		button {
 			display: flex;
 			align-items: center;
@@ -159,11 +153,6 @@ const linkQuery = computed(() => {
 			border-radius: 4px;
 			font-size: var(--font-m);
 			transition: background-color 0.25s;
-		}
-
-		button a:hover,
-		button:hover {
-			background-color: var(--color-complement-text);
 		}
 
 		span {
