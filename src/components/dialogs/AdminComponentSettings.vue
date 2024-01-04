@@ -8,7 +8,10 @@ import { storeToRefs } from "pinia";
 
 import DialogContainer from "./DialogContainer.vue";
 import ComponentContainer from "../components/ComponentContainer.vue";
-import InputTags from "../utilities/InputTags.vue";
+import InputTags from "../utilities/forms/InputTags.vue";
+import SelectButtons from "../utilities/forms/SelectButtons.vue";
+
+import { chartsPerDataType } from "../../assets/configs/apexcharts/chartTypes";
 
 const dialogStore = useDialogStore();
 const adminStore = useAdminStore();
@@ -24,6 +27,7 @@ const currentSettings = ref("all");
 const tempInputStorage = ref({
 	link: "",
 	contributor: "",
+	chartColor: "#000000",
 });
 
 function handleClose() {
@@ -63,6 +67,19 @@ function handleClose() {
 							:minlength="1"
 							:maxlength="20"
 						/>
+						<label>組件ID / Index</label>
+						<div class="two-block">
+							<input
+								type="text"
+								:value="currentComponent.id"
+								disabled
+							/>
+							<input
+								type="text"
+								:value="currentComponent.index"
+								disabled
+							/>
+						</div>
 						<label>資料來源*</label>
 						<input
 							type="text"
@@ -178,15 +195,85 @@ function handleClose() {
 							"
 						/>
 					</div>
+					<div
+						v-if="currentSettings === 'chart'"
+						class="admincomponentsettings-settings-items"
+					>
+						<label>圖表資料型態</label>
+						<select :value="currentComponent.query_type" disabled>
+							<option value="two_d">二維資料</option>
+							<option value="three_d">三維資料</option>
+							<option value="time">時間序列資料</option>
+							<option value="percent">百分比資料</option>
+						</select>
+						<label>資料單位*</label>
+						<input
+							type="text"
+							v-model="currentComponent.chart_config.unit"
+							:minlength="1"
+							:maxlength="6"
+						/>
+						<label>圖表類型*（限3種，依點擊順序排列）</label>
+						<SelectButtons
+							:tags="
+								chartsPerDataType[currentComponent.query_type]
+							"
+							:selected="currentComponent.chart_config.types"
+							:limit="3"
+							@updatetagorder="
+								(updatedTags) => {
+									currentComponent.chart_config.types =
+										updatedTags;
+								}
+							"
+						/>
+						<label>圖表顏色</label>
+						<InputTags
+							:tags="currentComponent.chart_config.color"
+							:colorData="true"
+							@deletetag="
+								(index) => {
+									currentComponent.chart_config.color.splice(
+										index,
+										1
+									);
+								}
+							"
+							@updatetagorder="
+								(updatedTags) => {
+									currentComponent.chart_config.color =
+										updatedTags;
+								}
+							"
+						/>
+						<input
+							type="color"
+							class="admincomponentsettings-settings-inputcolor"
+							v-model="tempInputStorage.chartColor"
+							@focusout="
+								() => {
+									if (
+										tempInputStorage.chartColor.length === 7
+									) {
+										currentComponent.chart_config.color.push(
+											tempInputStorage.chartColor
+										);
+										tempInputStorage.chartColor = '#000000';
+									}
+								}
+							"
+						/>
+					</div>
 				</div>
 				<div class="admincomponentsettings-preview">
 					<ComponentContainer
+						:key="`${currentComponent.index}-${currentComponent.chart_config.color}-${currentComponent.chart_config.types}`"
 						v-if="
 							currentSettings === 'all' ||
 							currentSettings === 'chart'
 						"
 						:notMoreInfo="false"
-						:content="currentComponent"
+						:content="JSON.parse(JSON.stringify(currentComponent))"
 						:style="{ width: '100%', height: 'calc(100% - 35px)' }"
 					/>
 				</div>
@@ -259,6 +346,38 @@ function handleClose() {
 		&-items {
 			display: flex;
 			flex-direction: column;
+		}
+
+		&-inputcolor {
+			appearance: none;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			width: 140px;
+			height: 40px;
+			padding: 0;
+			outline: none;
+			cursor: pointer;
+
+			&::-webkit-color-swatch {
+				border: none;
+				border-radius: 5px;
+			}
+			&::-moz-color-swatch {
+				border: none;
+			}
+			&:before {
+				content: "選擇顏色";
+				position: absolute;
+				display: block;
+				border-radius: 5px;
+				font-size: 1rem;
+				color: var(--color-complement-text);
+			}
+			&:focus:before {
+				content: "點擊空白處確認";
+				text-shadow: 0px 0px 1px black;
+			}
 		}
 
 		&::-webkit-scrollbar {

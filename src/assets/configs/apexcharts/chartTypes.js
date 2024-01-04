@@ -18,3 +18,32 @@ export const chartTypes = {
 	SpeedometerChart: "儀表板圖",
 	MapLegend: "地圖圖例",
 };
+
+export const chartsPerDataType = {
+	two_d: [
+		"DonutChart",
+		"BarChart",
+		"ColumnChart",
+		"TreemapChart",
+		"DistrictChart",
+		"RadarChart",
+		"PolarAreaChart",
+		"MetroChart",
+		"MapLegend",
+	],
+	three_d: [
+		"ColumnChart",
+		"BarPercentChart",
+		"RadarChart",
+		"DistrictChart",
+		"HeatmapChart",
+		"PolarAreaChart",
+	],
+	time: ["TimelineSeparateChart", "TimelineStackedChart", "ColumnLineChart"],
+	percent: [
+		"GuageChart",
+		"BarPercentChart",
+		"BarChartWithGoal",
+		"IconPercentChart",
+	],
+};

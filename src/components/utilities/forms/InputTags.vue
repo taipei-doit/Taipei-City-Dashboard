@@ -3,7 +3,7 @@ import { defineProps, ref } from "vue";
 
 const draggedItem = ref(null);
 
-const props = defineProps(["tags"]);
+const props = defineProps(["tags", "colorData"]);
 
 const emit = defineEmits({
 	deletetag: { index: Number },
@@ -45,14 +45,18 @@ const handleDragEnd = () => {
 <template>
 	<div
 		class="inputtags"
-		:style="{ marginBottom: tags.length > 0 ? '5px' : 0 }"
+		:style="{ marginBottom: props.tags.length > 0 ? '5px' : 0 }"
 	>
 		<div
 			v-for="(tag, index) in tags"
-			:key="tag"
+			:key="`${tag}`"
 			:class="{
 				'inputtags-tag': true,
 				'inputtags-tag-dragging': index === draggedItem,
+			}"
+			:style="{
+				backgroundColor: colorData ? tag : '',
+				textShadow: colorData ? '0 0 2px black' : '',
 			}"
 			:draggable="true"
 			@dragstart="(event) => handleDragStart(event, index)"
@@ -60,8 +64,16 @@ const handleDragEnd = () => {
 			@dragend="handleDragEnd"
 		>
 			{{ tag }}
-			<button @click="$emit('deletetag', index)">
-				<span>cancel</span>
+			<button
+				@click="$emit('deletetag', index)"
+				:style="{ backgroundColor: colorData ? tag : '' }"
+			>
+				<span
+					:style="{
+						textShadow: colorData ? '0 0 2px black' : '',
+					}"
+					>cancel</span
+				>
 			</button>
 		</div>
 	</div>

@@ -21,7 +21,7 @@ const chartOptions = ref({
 			show: false,
 		},
 	},
-	colors: props.chart_config.color,
+	colors: [...props.chart_config.color],
 	dataLabels: {
 		offsetX: 20,
 		textAnchor: "start",

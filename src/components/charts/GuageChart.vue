@@ -36,7 +36,7 @@ const chartOptions = ref({
 			show: false,
 		},
 	},
-	colors: props.chart_config.color,
+	colors: [...props.chart_config.color],
 	labels: props.chart_config.categories ? props.chart_config.categories : [],
 	legend: {
 		offsetY: -10,

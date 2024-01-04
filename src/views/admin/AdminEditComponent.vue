@@ -3,7 +3,7 @@ import { onMounted, ref, computed } from "vue";
 import { useAdminStore } from "../../store/adminStore";
 import { useDialogStore } from "../../store/dialogStore";
 
-import TableHeader from "../../components/utilities/TableHeader.vue";
+import TableHeader from "../../components/utilities/forms/TableHeader.vue";
 import ComponentTag from "../../components/utilities/ComponentTag.vue";
 import AdminComponentSettings from "../../components/dialogs/AdminComponentSettings.vue";
 

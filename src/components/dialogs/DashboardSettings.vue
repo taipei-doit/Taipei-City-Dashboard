@@ -1,19 +1,19 @@
 <!-- Developed by Taipei Urban Intelligence Center 2023 -->
 
 <script setup>
-import { ref } from 'vue';
-import { useDialogStore } from '../../store/dialogStore';
-import { useContentStore } from '../../store/contentStore';
+import { ref } from "vue";
+import { useDialogStore } from "../../store/dialogStore";
+import { useContentStore } from "../../store/contentStore";
 
-import DialogContainer from './DialogContainer.vue';
-import CustomCheckBox from '../utilities/CustomCheckBox.vue';
-import { validateStrInput } from '../../assets/utilityFunctions/validate';
+import DialogContainer from "./DialogContainer.vue";
+import CustomCheckBox from "../utilities/forms/CustomCheckBox.vue";
+import { validateStrInput } from "../../assets/utilityFunctions/validate";
 
 const dialogStore = useDialogStore();
 const contentStore = useContentStore();
 
 // Stores the user inputted new name
-const newName = ref('');
+const newName = ref("");
 const errorMessage = ref(null);
 // Stores whether the user confirmed to enable the delete dashboard function
 const deleteConfirm = ref(false);
@@ -29,7 +29,7 @@ function handleSubmit() {
 	handleClose();
 }
 function handleClose() {
-	newName.value = '';
+	newName.value = "";
 	errorMessage.value = null;
 	deleteConfirm.value = false;
 	dialogStore.hideAllDialogs();
@@ -48,19 +48,46 @@ function handleDelete() {
 			<h2>儀表板設定</h2>
 			<div class="dashboardsettings-input">
 				<p v-if="errorMessage">{{ errorMessage }}</p>
-				<label for="name">
-					更改名稱
-				</label>
-				<input name="name" v-model="newName" :placeholder="contentStore.currentDashboard.name" />
+				<label for="name"> 更改名稱 </label>
+				<input
+					name="name"
+					v-model="newName"
+					:placeholder="contentStore.currentDashboard.name"
+				/>
 				<div>
-					<input type="checkbox" id="delete" :value="true" v-model="deleteConfirm" class="custom-check-input" />
-					<CustomCheckBox for="delete">啟動刪除儀表板功能</CustomCheckBox>
+					<input
+						type="checkbox"
+						id="delete"
+						:value="true"
+						v-model="deleteConfirm"
+						class="custom-check-input"
+					/>
+					<CustomCheckBox for="delete"
+						>啟動刪除儀表板功能</CustomCheckBox
+					>
 				</div>
 			</div>
 			<div class="dashboardsettings-control">
-				<button class="dashboardsettings-control-cancel" @click="handleClose">取消</button>
-				<button v-if="newName" class="dashboardsettings-control-confirm" @click="handleSubmit">確定更改</button>
-				<button v-if="deleteConfirm" class="dashboardsettings-control-delete" @click="handleDelete">刪除儀表板</button>
+				<button
+					class="dashboardsettings-control-cancel"
+					@click="handleClose"
+				>
+					取消
+				</button>
+				<button
+					v-if="newName"
+					class="dashboardsettings-control-confirm"
+					@click="handleSubmit"
+				>
+					確定更改
+				</button>
+				<button
+					v-if="deleteConfirm"
+					class="dashboardsettings-control-delete"
+					@click="handleDelete"
+				>
+					刪除儀表板
+				</button>
 			</div>
 		</div>
 	</DialogContainer>
@@ -108,12 +135,12 @@ function handleDelete() {
 			input {
 				display: none;
 
-				&:checked+label {
-					color: white
+				&:checked + label {
+					color: white;
 				}
 
-				&:hover+label {
-					color: var(--color-highlight)
+				&:hover + label {
+					color: var(--color-highlight);
 				}
 			}
 		}

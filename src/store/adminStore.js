@@ -48,6 +48,8 @@ export const useAdminStore = defineStore("admin", {
 			}
 
 			if (!this.currentComponent.links) this.currentComponent.links = [];
+			if (!this.currentComponent.chart_config?.color)
+				this.currentComponent.chart_config.color = [];
 		},
 	},
 });

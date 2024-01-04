@@ -10,7 +10,7 @@ import { useContentStore } from "../../store/contentStore";
 
 import DialogContainer from "./DialogContainer.vue";
 import ComponentTag from "../utilities/ComponentTag.vue";
-import CustomCheckBox from "../utilities/CustomCheckBox.vue";
+import CustomCheckBox from "../utilities/forms/CustomCheckBox.vue";
 
 const { BASE_URL } = import.meta.env;
 

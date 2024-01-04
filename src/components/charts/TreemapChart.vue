@@ -20,7 +20,7 @@ const chartOptions = ref({
 			show: false,
 		},
 	},
-	colors: props.chart_config.color,
+	colors: [...props.chart_config.color],
 	dataLabels: {
 		formatter: function (val, { dataPointIndex }) {
 			return dataPointIndex > 5 ? "" : val;

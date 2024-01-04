@@ -62,6 +62,11 @@ input:focus {
 	border-color: var(--color-highlight);
 }
 
+input:disabled {
+	color: var(--color-complement-text);
+	cursor: not-allowed;
+}
+
 select {
 	padding: 4px 6px;
 	border-radius: 5px;
