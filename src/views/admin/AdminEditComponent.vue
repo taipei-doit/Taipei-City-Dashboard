@@ -258,7 +258,7 @@ onMounted(() => {
 				</button>
 			</div>
 		</div>
-		<AdminComponentSettings />
+		<AdminComponentSettings :searchParams="searchParams" />
 	</div>
 </template>
 

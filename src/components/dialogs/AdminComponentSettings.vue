@@ -1,7 +1,7 @@
 <!-- Developed by Taipei Urban Intelligence Center 2023 -->
 
 <script setup>
-import { ref } from "vue";
+import { ref, defineProps } from "vue";
 import { useDialogStore } from "../../store/dialogStore";
 import { useAdminStore } from "../../store/adminStore";
 import { storeToRefs } from "pinia";
@@ -12,25 +12,30 @@ import InputTags from "../utilities/forms/InputTags.vue";
 import SelectButtons from "../utilities/forms/SelectButtons.vue";
 
 import { chartsPerDataType } from "../../assets/configs/apexcharts/chartTypes";
+import { mapTypes } from "../../assets/configs/mapbox/mapConfig";
+import HistoryChart from "../utilities/HistoryChart.vue";
 
 const dialogStore = useDialogStore();
 const adminStore = useAdminStore();
 
+const props = defineProps(["searchParams"]);
+
 const { currentComponent } = storeToRefs(adminStore);
-const allSettings = {
-	all: "整體",
-	chart: "圖表",
-	history: "歷史軸",
-	map: "地圖",
-};
 const currentSettings = ref("all");
 const tempInputStorage = ref({
 	link: "",
 	contributor: "",
 	chartColor: "#000000",
+	historyColor: "#000000",
 });
 
+function handleConfirm() {
+	adminStore.updateComponent(props.searchParams);
+	handleClose();
+}
+
 function handleClose() {
+	currentSettings.value = "all";
 	dialogStore.hideAllDialogs();
 	adminStore.currentComponent = null;
 }
@@ -39,15 +44,36 @@ function handleClose() {
 <template>
 	<DialogContainer :dialog="`admincomponentsettings`" @on-close="handleClose">
 		<div class="admincomponentsettings">
-			<h2>組件設定</h2>
+			<div class="admincomponentsettings-header">
+				<h2>組件設定</h2>
+				<button @click="handleConfirm">確定更改</button>
+			</div>
 			<div class="admincomponentsettings-tabs">
 				<button
-					v-for="(setting, key) in allSettings"
-					:key="key"
-					:class="{ active: currentSettings === key }"
-					@click="currentSettings = key"
+					:class="{ active: currentSettings === 'all' }"
+					@click="currentSettings = 'all'"
 				>
-					{{ setting }}
+					整體
+				</button>
+				<button
+					:class="{ active: currentSettings === 'chart' }"
+					@click="currentSettings = 'chart'"
+				>
+					圖表
+				</button>
+				<button
+					v-if="currentComponent.history_config !== null"
+					:class="{ active: currentSettings === 'history' }"
+					@click="currentSettings = 'history'"
+				>
+					歷史軸
+				</button>
+				<button
+					v-if="currentComponent.map_config[0] !== null"
+					:class="{ active: currentSettings === 'map' }"
+					@click="currentSettings = 'map'"
+				>
+					地圖
 				</button>
 			</div>
 			<div class="admincomponentsettings-content">
@@ -196,7 +222,7 @@ function handleClose() {
 						/>
 					</div>
 					<div
-						v-if="currentSettings === 'chart'"
+						v-else-if="currentSettings === 'chart'"
 						class="admincomponentsettings-settings-items"
 					>
 						<label>圖表資料型態</label>
@@ -263,6 +289,158 @@ function handleClose() {
 								}
 							"
 						/>
+						<div v-if="currentComponent.map_filter">
+							<label>地圖篩選</label>
+							<textarea
+								v-model="currentComponent.map_filter"
+							></textarea>
+						</div>
+					</div>
+					<div
+						v-else-if="currentSettings === 'history'"
+						class="admincomponentsettings-settings-items"
+					>
+						<label>歷史軸顏色</label>
+						<InputTags
+							:tags="currentComponent.history_config.color"
+							:colorData="true"
+							@deletetag="
+								(index) => {
+									currentComponent.history_config.color.splice(
+										index,
+										1
+									);
+								}
+							"
+							@updatetagorder="
+								(updatedTags) => {
+									currentComponent.history_config.color =
+										updatedTags;
+								}
+							"
+						/>
+						<input
+							type="color"
+							class="admincomponentsettings-settings-inputcolor"
+							v-model="tempInputStorage.historyColor"
+							@focusout="
+								() => {
+									if (
+										tempInputStorage.historyColor.length ===
+										7
+									) {
+										currentComponent.history_config.color.push(
+											tempInputStorage.historyColor
+										);
+										tempInputStorage.historyColor =
+											'#000000';
+									}
+								}
+							"
+						/>
+					</div>
+					<div v-else-if="currentSettings === 'map'">
+						<div
+							class="admincomponentsettings-settings-items"
+							v-for="(
+								map_config, index
+							) in currentComponent.map_config"
+							:key="map_config.index"
+						>
+							<hr v-if="index > 0" />
+							<label>地圖{{ index + 1 }} Index</label>
+							<input
+								:value="
+									currentComponent.map_config[index].index
+								"
+								disabled
+							/>
+							<label
+								>地圖{{ index + 1 }} 名稱 ({{
+									currentComponent.map_config[index].title
+										.length
+								}}/10)</label
+							>
+							<input
+								type="text"
+								v-model="
+									currentComponent.map_config[index].title
+								"
+								:minlength="1"
+								:maxlength="10"
+							/>
+							<label>地圖{{ index + 1 }} 類型</label>
+							<select
+								v-model="
+									currentComponent.map_config[index].type
+								"
+							>
+								<option
+									v-for="(value, key) in mapTypes"
+									:key="key"
+									:value="key"
+								>
+									{{ value }}
+								</option>
+							</select>
+							<label
+								>地圖{{
+									index + 1
+								}}
+								預設變形（大小/圖示）</label
+							>
+							<div class="two-block">
+								<select
+									v-model="
+										currentComponent.map_config[index].size
+									"
+								>
+									<option :value="null">無</option>
+									<option value="small">small (點圖)</option>
+									<option value="big">big (點圖)</option>
+									<option value="wide">wide (線圖)</option>
+								</select>
+								<select
+									v-model="
+										currentComponent.map_config[index].icon
+									"
+								>
+									<option :value="null">無</option>
+									<option value="heatmap">
+										heatmap (點圖)
+									</option>
+									<option value="dash">dash (線圖)</option>
+									<option value="metro">
+										metro (符號圖)
+									</option>
+									<option value="metro-density">
+										metro-density (符號圖)
+									</option>
+									<option value="triangle_green">
+										triangle_green (符號圖)
+									</option>
+									<option value="triangle_white">
+										triangle_white (符號圖)
+									</option>
+									<option value="youbike">
+										youbike (符號圖)
+									</option>
+									<option value="bus">bus (符號圖)</option>
+								</select>
+							</div>
+							<label>地圖{{ index + 1 }} Paint屬性</label>
+							<textarea
+								v-model="
+									currentComponent.map_config[index].paint
+								"
+							></textarea>
+							<label>地圖{{ index + 1 }} Popup標籤</label>
+							<textarea
+								v-model="
+									currentComponent.map_config[index].property
+								"
+							></textarea>
+						</div>
 					</div>
 				</div>
 				<div class="admincomponentsettings-preview">
@@ -276,6 +454,25 @@ function handleClose() {
 						:content="JSON.parse(JSON.stringify(currentComponent))"
 						:style="{ width: '100%', height: 'calc(100% - 35px)' }"
 					/>
+					<HistoryChart
+						v-else-if="currentSettings === 'history'"
+						:key="`${currentComponent.index}-${currentComponent.history_config.color}`"
+						:chart_config="currentComponent.chart_config"
+						:series="currentComponent.history_data"
+						:history_data_color="
+							JSON.parse(
+								JSON.stringify(
+									currentComponent.history_config.color
+								)
+							)
+						"
+					/>
+					<div
+						v-else-if="currentSettings === 'map'"
+						index="componentsettings"
+					>
+						預覽功能 Coming Soon
+					</div>
 				</div>
 			</div>
 		</div>
@@ -292,6 +489,20 @@ function handleClose() {
 	}
 	@media (max-height: 520px) {
 		display: none;
+	}
+
+	&-header {
+		display: flex;
+		justify-content: space-between;
+		button {
+			display: flex;
+			align-items: center;
+			justify-self: baseline;
+			border-radius: 5px;
+			font-size: var(--font-m);
+			padding: 0px 4px;
+			background-color: var(--color-highlight);
+		}
 	}
 
 	&-content {
@@ -346,6 +557,12 @@ function handleClose() {
 		&-items {
 			display: flex;
 			flex-direction: column;
+
+			hr {
+				margin: 1rem 0 0.5rem;
+				border: none;
+				border-bottom: dashed 1px var(--color-complement-text);
+			}
 		}
 
 		&-inputcolor {
@@ -393,6 +610,10 @@ function handleClose() {
 	}
 
 	&-preview {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
 		border-radius: 5px;
 		border: solid 1px var(--color-border);
 	}
