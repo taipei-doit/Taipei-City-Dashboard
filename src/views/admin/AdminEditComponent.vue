@@ -301,7 +301,7 @@ onMounted(() => {
 			align-items: center;
 			justify-self: baseline;
 			margin-right: 0.4rem;
-			padding: 2px 4px;
+			padding: 0px 4px;
 			border-radius: 5px;
 			background-color: var(--color-highlight);
 			font-size: var(--font-m);

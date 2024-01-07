@@ -5,6 +5,9 @@ const { VITE_API_URL } = import.meta.env;
 
 export const useAdminStore = defineStore("admin", {
 	state: () => ({
+		// Edit Dashboard
+		dashboards: [],
+		currentDashboard: null,
 		// Edit Component
 		components: [],
 		componentResults: 0,
@@ -12,6 +15,20 @@ export const useAdminStore = defineStore("admin", {
 	}),
 	getters: {},
 	actions: {
+		// Get all dashboard configs
+		getDashboards() {
+			const dialogStore = useDialogStore();
+
+			axios
+				.get(`${VITE_API_URL}/dashboard/`)
+				.then((response) => {
+					this.dashboards = response.data.data;
+				})
+				.catch((err) => {
+					console.error(err);
+					dialogStore.showDialog("fail", "無法取得儀表板");
+				});
+		},
 		// Get all component configs
 		getPublicComponents(params) {
 			const dialogStore = useDialogStore();
