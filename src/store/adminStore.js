@@ -29,6 +29,72 @@ export const useAdminStore = defineStore("admin", {
 					dialogStore.showDialog("fail", "無法取得儀表板");
 				});
 		},
+		getCurrentDashboardComponents() {
+			const dialogStore = useDialogStore();
+
+			axios
+				.get(`${VITE_API_URL}/dashboard/${this.currentDashboard.index}`)
+				.then((response) => {
+					this.currentDashboard.components = response.data.data;
+				})
+				.catch((err) => {
+					console.error(err);
+					dialogStore.showDialog("fail", "無法取得儀表板組件");
+				});
+		},
+		async addDashboard() {
+			const dialogStore = useDialogStore();
+
+			this.currentDashboard.components =
+				this.currentDashboard.components.map((el) => el.id);
+
+			const dashboard = JSON.parse(JSON.stringify(this.currentDashboard));
+
+			try {
+				await axios.post(`${VITE_API_URL}/dashboard/`, dashboard);
+				this.getDashboards();
+				dialogStore.showNotification("success", "儀表板新增成功");
+			} catch (err) {
+				console.error(err);
+				dialogStore.showNotification("fail", "儀表板新增失敗");
+			}
+		},
+		async editDashboard() {
+			const dialogStore = useDialogStore();
+
+			this.currentDashboard.components =
+				this.currentDashboard.components.map((el) => el.id);
+
+			const dashboard = JSON.parse(JSON.stringify(this.currentDashboard));
+
+			try {
+				await axios.patch(
+					`${VITE_API_URL}/dashboard/${dashboard.index}`,
+					dashboard
+				);
+				this.getDashboards();
+				dialogStore.showNotification("success", "儀表板更新成功");
+			} catch (err) {
+				console.error(err);
+				dialogStore.showNotification("fail", "儀表板更新失敗");
+			}
+		},
+		async deleteDashboard() {
+			const dialogStore = useDialogStore();
+
+			const dashboardIndex = this.currentDashboard.index;
+
+			try {
+				await axios.delete(
+					`${VITE_API_URL}/dashboard/${dashboardIndex}`
+				);
+				this.getDashboards();
+				dialogStore.showNotification("success", "儀表板刪除成功");
+			} catch (err) {
+				console.error(err);
+				dialogStore.showNotification("fail", "儀表板刪除失敗");
+			}
+		},
 		// Get all component configs
 		getPublicComponents(params) {
 			const dialogStore = useDialogStore();

@@ -92,6 +92,7 @@ function handleClose() {
 							v-model="currentComponent.name"
 							:minlength="1"
 							:maxlength="20"
+							required
 						/>
 						<label>組件ID / Index</label>
 						<div class="two-block">
@@ -112,6 +113,7 @@ function handleClose() {
 							v-model="currentComponent.source"
 							:minlength="1"
 							:maxlength="12"
+							required
 						/>
 						<label>更新頻率* (0 = 不定期更新)</label>
 						<div class="two-block">
@@ -120,6 +122,7 @@ function handleClose() {
 								v-model="currentComponent.update_freq"
 								:min="0"
 								:max="31"
+								required
 							/>
 							<select v-model="currentComponent.update_freq_unit">
 								<option value="day">天</option>
@@ -128,7 +131,7 @@ function handleClose() {
 								<option value="year">年</option>
 							</select>
 						</div>
-						<label
+						<label required
 							>組件簡述* ({{
 								currentComponent.short_desc.length
 							}}/50)</label
@@ -137,6 +140,7 @@ function handleClose() {
 							v-model="currentComponent.short_desc"
 							:minlength="1"
 							:maxlength="50"
+							required
 						></textarea>
 						<label
 							>組件詳述* ({{
@@ -147,6 +151,7 @@ function handleClose() {
 							v-model="currentComponent.long_desc"
 							:minlength="1"
 							:maxlength="100"
+							required
 						></textarea>
 						<label
 							>範例情境* ({{
@@ -157,6 +162,7 @@ function handleClose() {
 							v-model="currentComponent.use_case"
 							:minlength="1"
 							:maxlength="100"
+							required
 						></textarea>
 						<label>資料連結</label>
 						<InputTags
@@ -238,6 +244,7 @@ function handleClose() {
 							v-model="currentComponent.chart_config.unit"
 							:minlength="1"
 							:maxlength="6"
+							required
 						/>
 						<label>圖表類型*（限3種，依點擊順序排列）</label>
 						<SelectButtons
@@ -289,7 +296,7 @@ function handleClose() {
 								}
 							"
 						/>
-						<div v-if="currentComponent.map_filter">
+						<div v-if="currentComponent.map_config[0] !== null">
 							<label>地圖篩選</label>
 							<textarea
 								v-model="currentComponent.map_filter"
@@ -356,7 +363,7 @@ function handleClose() {
 								disabled
 							/>
 							<label
-								>地圖{{ index + 1 }} 名稱 ({{
+								>地圖{{ index + 1 }} 名稱* ({{
 									currentComponent.map_config[index].title
 										.length
 								}}/10)</label
@@ -368,8 +375,9 @@ function handleClose() {
 								"
 								:minlength="1"
 								:maxlength="10"
+								required
 							/>
-							<label>地圖{{ index + 1 }} 類型</label>
+							<label>地圖{{ index + 1 }} 類型*</label>
 							<select
 								v-model="
 									currentComponent.map_config[index].type
@@ -548,6 +556,7 @@ function handleClose() {
 			font-size: var(--font-s);
 			color: var(--color-complement-text);
 		}
+
 		.two-block {
 			display: grid;
 			grid-template-columns: 1fr 1fr;

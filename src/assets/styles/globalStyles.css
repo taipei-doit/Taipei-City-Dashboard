@@ -67,6 +67,10 @@ input:disabled {
 	cursor: not-allowed;
 }
 
+input:required:invalid {
+	border: solid 1px rgb(237, 90, 90);
+}
+
 select {
 	padding: 4px 6px;
 	border-radius: 5px;
@@ -92,6 +96,9 @@ textarea {
 textarea:focus {
 	outline: none;
 	border: solid 1px var(--color-highlight);
+}
+textarea:required:invalid {
+	border: solid 1px rgb(237, 90, 90);
 }
 body {
 	background-color: var(--color-background);

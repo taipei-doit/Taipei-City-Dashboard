@@ -5,6 +5,7 @@ import { useDialogStore } from "../../store/dialogStore";
 
 import TableHeader from "../../components/utilities/forms/TableHeader.vue";
 import AdminAddEditDashboards from "../../components/dialogs/AdminAddEditDashboards.vue";
+import AdminDeleteDashboard from "../../components/dialogs/AdminDeleteDashboard.vue";
 
 const adminStore = useAdminStore();
 const dialogStore = useDialogStore();
@@ -16,7 +17,8 @@ function parseTime(time) {
 }
 
 function handleOpenSettings(dashboard) {
-	adminStore.currentDashboard = dashboard;
+	adminStore.currentDashboard = JSON.parse(JSON.stringify(dashboard));
+	adminStore.getCurrentDashboardComponents();
 	dialogMode.value = "edit";
 	dialogStore.showDialog("adminaddeditdashboards");
 }
@@ -25,11 +27,16 @@ function handleAddDashboard() {
 	adminStore.currentDashboard = {
 		index: "",
 		name: "",
-		components: "",
-		icon: "",
+		components: [],
+		icon: "star",
 	};
 	dialogMode.value = "add";
 	dialogStore.showDialog("adminaddeditdashboards");
+}
+
+function handleDeleteDashboard(dashboard) {
+	adminStore.currentDashboard = JSON.parse(JSON.stringify(dashboard));
+	dialogStore.showDialog("admindeletedashboard");
 }
 
 onMounted(() => {
@@ -45,13 +52,13 @@ onMounted(() => {
 		<table class="admindashboard-table">
 			<thead>
 				<tr class="admindashboard-table-header">
-					<TableHeader minWidth="60px"></TableHeader>
+					<TableHeader minWidth="80px"></TableHeader>
 					<TableHeader @sort="handleSort('id')" minWidth="150px"
 						>Index</TableHeader
 					>
 					<TableHeader minWidth="180px">名稱</TableHeader>
 					<TableHeader minWidth="360px">組件</TableHeader>
-					<TableHeader minWidth="180px">圖示</TableHeader>
+					<TableHeader minWidth="40px">圖示</TableHeader>
 					<TableHeader minWidth="200px">上次編輯</TableHeader>
 				</tr>
 			</thead>
@@ -64,11 +71,16 @@ onMounted(() => {
 						<button @click="handleOpenSettings(dashboard)">
 							<span>settings</span>
 						</button>
+						<button @click="handleDeleteDashboard(dashboard)">
+							<span>delete</span>
+						</button>
 					</td>
 					<td>{{ dashboard.index }}</td>
 					<td>{{ dashboard.name }}</td>
 					<td>{{ dashboard.components }}</td>
-					<td>{{ dashboard.icon }}</td>
+					<td>
+						<span>{{ dashboard.icon }}</span>
+					</td>
 					<td>{{ parseTime(dashboard.updated_at) }}</td>
 				</tr>
 			</tbody>
@@ -80,6 +92,7 @@ onMounted(() => {
 		</table>
 	</div>
 	<AdminAddEditDashboards :mode="dialogMode" />
+	<AdminDeleteDashboard />
 </template>
 
 <style scoped lang="scss">

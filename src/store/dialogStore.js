@@ -15,6 +15,8 @@ export const useDialogStore = defineStore("dialog", {
 		dialogs: {
 			admincomponentsettings: false,
 			adminaddeditdashboards: false,
+			adminaddcomponent: false,
+			admindeletedashboard: false,
 			addComponent: false,
 			addDashboard: false,
 			dashboardSettings: false,
