@@ -68,7 +68,7 @@ function handleDataSelection(index) {
 				<div
 					v-if="item.type !== 'symbol'"
 					:style="{
-						backgroundColor: `${item.color}`,
+						backgroundColor: `${chart_config.color[index]}`,
 						height: item.type === 'line' ? '0.4rem' : '1rem',
 						borderRadius: item.type === 'circle' ? '50%' : '2px',
 					}"

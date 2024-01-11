@@ -29,7 +29,6 @@ export const chartsPerDataType = {
 		"RadarChart",
 		"PolarAreaChart",
 		"MetroChart",
-		"MapLegend",
 	],
 	three_d: [
 		"ColumnChart",
@@ -46,4 +45,5 @@ export const chartsPerDataType = {
 		"BarChartWithGoal",
 		"IconPercentChart",
 	],
+	map_legend: ["MapLegend"],
 };

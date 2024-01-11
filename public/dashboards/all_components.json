@@ -147,7 +147,8 @@
 				"mode": "byLayer"
 			},
 			"chart_config": {
-				"types": ["MapLegend"]
+				"types": ["MapLegend"],
+				"color": ["", "#009688"]
 			},
 			"chart_data": [
 				{
@@ -157,7 +158,6 @@
 				},
 				{
 					"type": "line",
-					"color": "#009688",
 					"name": "警局轄區"
 				}
 			],
@@ -210,12 +210,12 @@
 				}
 			],
 			"chart_config": {
-				"types": ["MapLegend"]
+				"types": ["MapLegend"],
+				"color": ["#8bc34a"]
 			},
 			"chart_data": [
 				{
 					"type": "circle",
-					"color": "#8bc34a",
 					"name": "避難場所",
 					"value": 298
 				}
@@ -234,18 +234,17 @@
 			"map_config": null,
 			"name": "火災風險地點",
 			"chart_config": {
-				"types": ["MapLegend"]
+				"types": ["MapLegend"],
+				"color": ["#ff5722", "#d51f88"]
 			},
 			"chart_data": [
 				{
 					"type": "circle",
-					"color": "#ff5722",
 					"name": "安檢不合格場所",
 					"value": 17
 				},
 				{
 					"type": "circle",
-					"color": "#d51f88",
 					"name": "救災搶救困難地區",
 					"value": 1205
 				}
@@ -299,21 +298,18 @@
 				"mode": "byLayer"
 			},
 			"chart_config": {
-				"types": ["MapLegend"]
+				"types": ["MapLegend"],
+				"color": ["#d76c29", "#3f51b5"]
 			},
 			"chart_data": [
 				{
 					"type": "symbol",
-					"color": "#d76c29",
 					"name": "消防隊",
-					"value": null,
 					"icon": "triangle_green"
 				},
 				{
 					"type": "circle",
-					"color": "#3f51b5",
-					"name": "消防栓",
-					"value": null
+					"name": "消防栓"
 				}
 			],
 			"name": "火災應變設施",
@@ -454,31 +450,28 @@
 			},
 			"chart_config": {
 				"types": ["MapLegend"],
+				"color": ["#d7c500", "#958f00", "#ff9800", "#9e7b5c"],
 				"unit": "處"
 			},
 			"chart_data": [
 				{
 					"type": "line",
 					"name": "土石流潛勢溪流",
-					"color": "#d7c500",
 					"value": 50
 				},
 				{
 					"type": "fill",
 					"name": "土石流影響範圍",
-					"color": "#958f00",
 					"value": 163
 				},
 				{
 					"type": "line",
 					"name": "列管邊坡",
-					"color": "#ff9800",
 					"value": 34897
 				},
 				{
 					"type": "fill",
 					"name": "老舊聚落",
-					"color": "#9e7b5c",
 					"value": 34
 				}
 			],
@@ -948,19 +941,18 @@
 			},
 			"chart_config": {
 				"types": ["MapLegend"],
+				"color": ["#d16ae2", "#655fad"],
 				"unit": "處"
 			},
 			"chart_data": [
 				{
 					"type": "fill",
 					"name": "閒置市有公有地",
-					"color": "#d16ae2",
 					"value": 95
 				},
 				{
 					"type": "circle",
 					"name": "閒置市有(公用)建物",
-					"color": "#655fad",
 					"value": 48
 				}
 			],
@@ -1016,18 +1008,17 @@
 			],
 			"chart_config": {
 				"types": ["MapLegend"],
+				"color": ["#d76c29", "#77dddf"],
 				"unit": "人"
 			},
 			"chart_data": [
 				{
 					"type": "fill-extrusion",
-					"color": "#d76c29",
 					"name": "居住推估人數",
 					"value": 2350032
 				},
 				{
 					"type": "fill-extrusion",
-					"color": "#77dddf",
 					"name": "工作推估人數",
 					"value": 2759779
 				}
@@ -2283,9 +2274,7 @@
 			"chart_data": [
 				{
 					"type": "symbol",
-					"color": null,
 					"name": "公車站",
-					"value": null,
 					"icon": "bus"
 				}
 			],
@@ -2447,12 +2436,12 @@
 				}
 			],
 			"chart_config": {
-				"types": ["MapLegend"]
+				"types": ["MapLegend"],
+				"color": ["#9D9152"]
 			},
 			"chart_data": [
 				{
 					"type": "fill",
-					"color": "#9D9152",
 					"name": "人行道"
 				}
 			],
@@ -2526,19 +2515,18 @@
 			},
 			"chart_config": {
 				"types": ["MapLegend"],
+				"color": ["#86e9f6", "#03a9f4"],
 				"unit": "間"
 			},
 			"chart_data": [
 				{
 					"type": "circle",
 					"name": "醫院",
-					"color": "#86e9f6",
 					"value": 36
 				},
 				{
 					"type": "circle",
 					"name": "診所",
-					"color": "#03a9f4",
 					"value": 3621
 				}
 			],
@@ -2711,17 +2699,16 @@
 				}
 			},
 			"chart_config": {
-				"types": ["MapLegend"]
+				"types": ["MapLegend"],
+				"color": ["#a0b8e8", "#b7ff98"]
 			},
 			"chart_data": [
 				{
 					"type": "line",
-					"color": "#a0b8e8",
 					"name": "市區"
 				},
 				{
 					"type": "line",
-					"color": "#b7ff98",
 					"name": "河濱"
 				}
 			],
@@ -3072,21 +3059,19 @@
 				}
 			},
 			"chart_config": {
-				"types": ["MapLegend"]
+				"types": ["MapLegend"],
+				"color": ["#c87a74", "#c8b974", "#9bc874"]
 			},
 			"chart_data": [
 				{
-					"color": "#c87a74",
 					"type": "fill",
 					"name": "高潛勢"
 				},
 				{
-					"color": "#c8b974",
 					"type": "fill",
 					"name": "中潛勢"
 				},
 				{
-					"color": "#9bc874",
 					"type": "fill",
 					"name": "低潛勢"
 				}
@@ -4825,23 +4810,21 @@
 				"mode": "byLayer"
 			},
 			"chart_config": {
-				"types": ["MapLegend"]
+				"types": ["MapLegend"],
+				"color": ["#B5C9FF", "#3c70ff", "#4D619D"]
 			},
 			"chart_data": [
 				{
-					"color": "#B5C9FF",
 					"type": "fill",
 					"name": "堤防系統 (km)",
 					"value": "139.90"
 				},
 				{
-					"color": "#3c70ff",
 					"type": "fill",
 					"name": "滯洪設施 (km²)",
 					"value": "0.1115"
 				},
 				{
-					"color": "#4D619D",
 					"type": "fill",
 					"name": "雨水下水道管線 (km)",
 					"value": "984.61"

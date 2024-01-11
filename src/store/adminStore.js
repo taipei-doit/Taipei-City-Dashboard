@@ -1,6 +1,7 @@
 import axios from "axios";
 import { defineStore } from "pinia";
 import { useDialogStore } from "./dialogStore";
+import { getComponentDataTimeframe } from "../assets/utilityFunctions/dataTimeframe";
 const { VITE_API_URL } = import.meta.env;
 
 export const useAdminStore = defineStore("admin", {
@@ -115,9 +116,21 @@ export const useAdminStore = defineStore("admin", {
 		// Get component chart / history data and append to component config
 		getComponentData(component) {
 			this.currentComponent = JSON.parse(JSON.stringify(component));
+			const headers = {};
 
+			if (!["static", "current", "demo"].includes(component.time_from)) {
+				const { parsedTimeFrom, parsedTimeTo } =
+					getComponentDataTimeframe(
+						component.time_from,
+						component.time_to
+					);
+				headers.time_from = parsedTimeFrom.replace(" ", "T") + "+08:00";
+				headers.time_to = parsedTimeTo.replace(" ", "T") + "+08:00";
+			}
 			axios
-				.get(`${VITE_API_URL}/component/${component.id}/chart`)
+				.get(`${VITE_API_URL}/component/${component.id}/chart`, {
+					headers,
+				})
 				.then((response) => {
 					this.currentComponent.chart_data = response.data.data;
 				});

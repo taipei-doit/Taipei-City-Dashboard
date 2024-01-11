@@ -57,7 +57,7 @@ onMounted(() => {
 						>Index</TableHeader
 					>
 					<TableHeader minWidth="180px">名稱</TableHeader>
-					<TableHeader minWidth="360px">組件</TableHeader>
+					<TableHeader minWidth="480px">組件</TableHeader>
 					<TableHeader minWidth="40px">圖示</TableHeader>
 					<TableHeader minWidth="200px">上次編輯</TableHeader>
 				</tr>

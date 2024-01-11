@@ -237,6 +237,7 @@ function handleClose() {
 							<option value="three_d">三維資料</option>
 							<option value="time">時間序列資料</option>
 							<option value="percent">百分比資料</option>
+							<option value="map_legend">圖例資料</option>
 						</select>
 						<label>資料單位*</label>
 						<input

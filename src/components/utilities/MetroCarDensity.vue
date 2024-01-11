@@ -1,25 +1,29 @@
 <!-- Developed by Taipei Urban Intelligence Center 2023 -->
 
 <script setup>
-defineProps(['direction', 'weight']);
+defineProps(["direction", "weight"]);
 
 const numToColor = {
-	"1": "#acc22a",
-	"2": "#fcd100",
-	"3": "#ed8502",
-	"4": "#ce161a",
+	1: "#acc22a",
+	2: "#fcd100",
+	3: "#ed8502",
+	4: "#ce161a",
 };
 </script>
 
 <template>
 	<div class="metrocardensity">
 		<div v-if="weight" class="metrocardensity-container">
-			<div class="metrocardensity-item" v-for="(item, index) in weight.y"
-				:style="{ backgroundColor: numToColor[item] }" :key="`${item}-${index}`">{{
-					index + 1
-				}}</div>
+			<div
+				class="metrocardensity-item"
+				v-for="(item, index) in weight.y"
+				:style="{ backgroundColor: numToColor[item] }"
+				:key="`${item}-${index}`"
+			>
+				{{ index + 1 }}
+			</div>
 		</div>
-		<span v-else>{{ direction }}</span>
+		<span v-else>{{ direction === "asc" ? "north" : "south" }}</span>
 	</div>
 </template>
 

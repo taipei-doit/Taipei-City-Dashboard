@@ -11,6 +11,7 @@ import { useContentStore } from "../../store/contentStore";
 import ComponentTag from "../utilities/ComponentTag.vue";
 import TagTooltip from "../utilities/TagTooltip.vue";
 import { chartTypes } from "../../assets/configs/apexcharts/chartTypes";
+import { getComponentDataTimeframe } from "../../assets/utilityFunctions/dataTimeframe";
 
 const dialogStore = useDialogStore();
 const contentStore = useContentStore();
@@ -31,16 +32,24 @@ const showTagTooltip = ref(false);
 
 // Parses time data into display format
 const dataTime = computed(() => {
-	if (!props.content.time_from) {
+	if (props.content.time_from === "static") {
 		return "固定資料";
+	} else if (props.content.time_from === "current") {
+		return "即時資料";
+	} else if (props.content.time_from === "demo") {
+		return "示範靜態資料";
 	}
-	if (!props.content.time_to) {
-		return props.content.time_from.slice(0, 10);
+	const { parsedTimeFrom, parsedTimeTo } = getComponentDataTimeframe(
+		props.content.time_from,
+		props.content.time_to
+	);
+	if (props.content.time_from === "day_start") {
+		return `${parsedTimeFrom.slice(0, 16)} ~ ${parsedTimeTo.slice(
+			11,
+			14
+		)}00`;
 	}
-	return `${props.content.time_from.slice(
-		0,
-		10
-	)} ~ ${props.content.time_to.slice(0, 10)}`;
+	return `${parsedTimeFrom.slice(0, 10)} ~ ${parsedTimeTo.slice(0, 10)}`;
 });
 // Parses update frequency data into display format
 const updateFreq = computed(() => {
