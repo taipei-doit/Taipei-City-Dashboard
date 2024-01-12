@@ -53,7 +53,7 @@ const dataTime = computed(() => {
 
 // If any map layers are loading, disable the toggle
 const shouldDisable = computed(() => {
-	if (!props.content.map_config) return false;
+	if (!props.content.map_config[0]) return false;
 
 	const allMapLayerIds = props.content.map_config.map(
 		(el) => `${el.index}-${el.type}`
@@ -132,7 +132,7 @@ function changeShowTagTooltipState(state) {
 						<span v-if="content.map_filter && content.map_config"
 							>tune</span
 						>
-						<span v-if="content.map_config">map</span>
+						<span v-if="content.map_config[0]">map</span>
 						<span v-if="content.history_data">insights</span>
 					</div>
 				</div>
@@ -183,6 +183,13 @@ function changeShowTagTooltipState(state) {
 				:map_filter="content.map_filter"
 			>
 			</component>
+		</div>
+		<div
+			v-else-if="checked && content.chart_data === null"
+			class="componentmapchart-error"
+		>
+			<span>error</span>
+			<p>組件資料異常</p>
 		</div>
 		<div v-else-if="checked" class="componentmapchart-loading">
 			<div></div>
@@ -311,6 +318,24 @@ function changeShowTagTooltipState(state) {
 			border: solid 4px var(--color-border);
 			border-top: solid 4px var(--color-highlight);
 			animation: spin 0.7s ease-in-out infinite;
+		}
+	}
+
+	&-error {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+
+		span {
+			color: var(--color-complement-text);
+			margin-bottom: 0.5rem;
+			font-family: var(--font-icon);
+			font-size: 2rem;
+		}
+
+		p {
+			color: var(--color-complement-text);
 		}
 	}
 

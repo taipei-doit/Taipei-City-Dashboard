@@ -26,10 +26,10 @@ const dialogStore = useDialogStore();
 // Separate components with maps from those without
 const parseMapLayers = computed(() => {
 	const hasMap = contentStore.currentDashboard.content.filter(
-		(item) => item.map_config
+		(item) => item.map_config[0]
 	);
 	const noMap = contentStore.currentDashboard.content.filter(
-		(item) => !item.map_config
+		(item) => !item.map_config[0]
 	);
 
 	return { hasMap: hasMap, noMap: noMap };
@@ -39,10 +39,14 @@ const parseMapLayers = computed(() => {
 <template>
 	<div class="map">
 		<div class="hide-if-mobile">
+			<!-- if dashboard is still loading -->
+			<div v-if="contentStore.loading" class="map-charts-nodashboard">
+				<div></div>
+			</div>
 			<!-- If the dashboard is map layers -->
 			<div
 				class="map-charts"
-				v-if="contentStore.currentDashboard.index === 'map-layers'"
+				v-else-if="contentStore.currentDashboard.index === 'map-layers'"
 			>
 				<ComponentMapChart
 					v-for="item in contentStore.currentDashboard.content"
@@ -74,13 +78,6 @@ const parseMapLayers = computed(() => {
 					:content="item"
 					:key="`map-layer-${item.index}-${contentStore.currentDashboard.index}`"
 				/>
-			</div>
-			<!-- if dashboard is still loading -->
-			<div
-				v-else-if="contentStore.loading"
-				class="map-charts-nodashboard"
-			>
-				<div></div>
 			</div>
 			<!-- if dashboard failed to load -->
 			<div v-else-if="contentStore.error" class="map-charts-nodashboard">
@@ -140,6 +137,7 @@ const parseMapLayers = computed(() => {
 			flex-direction: column;
 			align-items: center;
 			justify-content: center;
+			margin-right: var(--font-s);
 
 			@media (min-width: 1000px) {
 				width: 370px;

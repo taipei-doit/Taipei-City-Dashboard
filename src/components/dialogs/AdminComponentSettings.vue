@@ -10,10 +10,11 @@ import DialogContainer from "./DialogContainer.vue";
 import ComponentContainer from "../components/ComponentContainer.vue";
 import InputTags from "../utilities/forms/InputTags.vue";
 import SelectButtons from "../utilities/forms/SelectButtons.vue";
+import HistoryChart from "../utilities/HistoryChart.vue";
 
 import { chartsPerDataType } from "../../assets/configs/apexcharts/chartTypes";
+import { timeTerms } from "../../assets/configs/allTimes";
 import { mapTypes } from "../../assets/configs/mapbox/mapConfig";
-import HistoryChart from "../utilities/HistoryChart.vue";
 
 const dialogStore = useDialogStore();
 const adminStore = useAdminStore();
@@ -131,6 +132,17 @@ function handleClose() {
 								<option value="year">年</option>
 							</select>
 						</div>
+						<label>資料區間</label>
+						<!-- eslint-disable no-mixed-spaces-and-tabs -->
+						<input
+							:value="`${timeTerms[currentComponent.time_from]}${
+								timeTerms[currentComponent.time_to]
+									? ' ~ ' +
+									  timeTerms[currentComponent.time_to]
+									: ''
+							}`"
+							disabled
+						/>
 						<label required
 							>組件簡述* ({{
 								currentComponent.short_desc.length
@@ -308,7 +320,28 @@ function handleClose() {
 						v-else-if="currentSettings === 'history'"
 						class="admincomponentsettings-settings-items"
 					>
-						<label>歷史軸顏色</label>
+						<label
+							>歷史軸時間區間
+							(依點擊順序排列，資料無法預覽)</label
+						>
+						<SelectButtons
+							:tags="[
+								'month_ago',
+								'quarter_ago',
+								'halfyear_ago',
+								'year_ago',
+								'twoyear_ago',
+							]"
+							:selected="currentComponent.history_config.range"
+							:limit="5"
+							@updatetagorder="
+								(updatedTags) => {
+									currentComponent.history_config.range =
+										updatedTags;
+								}
+							"
+						/>
+						<label>歷史軸顏色 (若無提供沿用圖表顏色)</label>
 						<InputTags
 							:tags="currentComponent.history_config.color"
 							:colorData="true"
@@ -463,19 +496,23 @@ function handleClose() {
 						:content="JSON.parse(JSON.stringify(currentComponent))"
 						:style="{ width: '100%', height: 'calc(100% - 35px)' }"
 					/>
-					<HistoryChart
+					<div
 						v-else-if="currentSettings === 'history'"
-						:key="`${currentComponent.index}-${currentComponent.history_config.color}`"
-						:chart_config="currentComponent.chart_config"
-						:series="currentComponent.history_data"
-						:history_data_color="
-							JSON.parse(
-								JSON.stringify(
-									currentComponent.history_config.color
+						:style="{ width: '300px' }"
+					>
+						<HistoryChart
+							:key="`${currentComponent.index}-${currentComponent.history_config.color}`"
+							:chart_config="currentComponent.chart_config"
+							:series="currentComponent.history_data"
+							:history_config="
+								JSON.parse(
+									JSON.stringify(
+										currentComponent.history_config
+									)
 								)
-							)
-						"
-					/>
+							"
+						/>
+					</div>
 					<div
 						v-else-if="currentSettings === 'map'"
 						index="componentsettings"
@@ -561,6 +598,11 @@ function handleClose() {
 		.two-block {
 			display: grid;
 			grid-template-columns: 1fr 1fr;
+			column-gap: 0.5rem;
+		}
+		.three-block {
+			display: grid;
+			grid-template-columns: 1fr 2rem 1fr;
 			column-gap: 0.5rem;
 		}
 

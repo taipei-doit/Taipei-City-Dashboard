@@ -11,6 +11,7 @@ import { useContentStore } from "../../store/contentStore";
 import ComponentTag from "../utilities/ComponentTag.vue";
 import TagTooltip from "../utilities/TagTooltip.vue";
 import { chartTypes } from "../../assets/configs/apexcharts/chartTypes";
+import { timeTerms } from "../../assets/configs/allTimes";
 import { getComponentDataTimeframe } from "../../assets/utilityFunctions/dataTimeframe";
 
 const dialogStore = useDialogStore();
@@ -53,19 +54,11 @@ const dataTime = computed(() => {
 });
 // Parses update frequency data into display format
 const updateFreq = computed(() => {
-	const unitRef = {
-		minute: "分",
-		hour: "時",
-		day: "天",
-		week: "週",
-		month: "月",
-		year: "年",
-	};
 	if (!props.content.update_freq) {
 		return "不定期更新";
 	}
 	return `每${props.content.update_freq}${
-		unitRef[props.content.update_freq_unit]
+		timeTerms[props.content.update_freq_unit]
 	}更新`;
 });
 // The style for the tag tooltip
@@ -206,6 +199,16 @@ function changeShowTagTooltipState(state) {
 				:key="`${props.content.index}-${item}-chart`"
 			>
 			</component>
+		</div>
+		<div
+			v-else-if="content.chart_data === null"
+			:class="{
+				'componentcontainer-error': true,
+				'maplayer-loading': isMapLayer,
+			}"
+		>
+			<span>error</span>
+			<p>組件資料異常</p>
 		</div>
 		<div
 			v-else
@@ -374,7 +377,8 @@ function changeShowTagTooltipState(state) {
 	}
 
 	&-chart,
-	&-loading {
+	&-loading,
+	&-error {
 		height: 75%;
 		position: relative;
 		padding-top: 5%;
@@ -397,6 +401,24 @@ function changeShowTagTooltipState(state) {
 			border: solid 4px var(--color-border);
 			border-top: solid 4px var(--color-highlight);
 			animation: spin 0.7s ease-in-out infinite;
+		}
+	}
+
+	&-error {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+
+		span {
+			color: var(--color-complement-text);
+			margin-bottom: 0.5rem;
+			font-family: var(--font-icon);
+			font-size: 2rem;
+		}
+
+		p {
+			color: var(--color-complement-text);
 		}
 	}
 

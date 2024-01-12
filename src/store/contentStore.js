@@ -1,3 +1,5 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
+/* eslint-disable indent */
 // Cleaned
 
 /* authStore */
@@ -9,7 +11,8 @@ import router from "../router/index";
 import { defineStore } from "pinia";
 import { useDialogStore } from "./dialogStore";
 import axios from "axios";
-const { BASE_URL } = import.meta.env;
+import { getComponentDataTimeframe } from "../assets/utilityFunctions/dataTimeframe";
+const { BASE_URL, VITE_API_URL } = import.meta.env;
 
 export const useContentStore = defineStore("content", {
 	state: () => ({
@@ -27,7 +30,7 @@ export const useContentStore = defineStore("content", {
 			mode: null,
 			index: null,
 			name: null,
-			content: [],
+			content: null,
 		},
 		// Stores all contributors data. Reference the structure in /public/dashboards/all_contributors.json
 		contributors: {},
@@ -46,10 +49,17 @@ export const useContentStore = defineStore("content", {
 			this.currentDashboard.mode = mode;
 			// 1-1. Don't do anything if the path is the same
 			if (this.currentDashboard.index === index) {
-				return;
+				if (
+					this.currentDashboard.mode === "/mapview" &&
+					index !== "map-layers"
+				) {
+					this.setMapLayers();
+				} else {
+					return;
+				}
 			}
 			this.currentDashboard.index = index;
-			// 1-2. If there is no contributor info, call the setContributors method (7.)
+			// 1-2. If there is no contributor info, call the setContributors method (5.)
 			if (Object.keys(this.contributors).length === 0) {
 				this.setContributors();
 			}
@@ -63,14 +73,16 @@ export const useContentStore = defineStore("content", {
 				this.setDashboards();
 				return;
 			}
-			// 1-5. If all info is present, skip steps 2, 3, 4, 7 and call the setCurrentDashboardContent method (5.)
+			// 1-5. If all info is present, skip steps 2, 3, 5 and call the setCurrentDashboardContent method (4.)
+			this.currentDashboard.content = [];
+			this.mapLayers = [];
 			this.setCurrentDashboardContent();
 		},
 		// 2. Call an API to get all dashboard info and reroute the user to the first dashboard in the list
 		setDashboards() {
 			this.loading = true;
 			axios
-				.get(`${BASE_URL}/dashboards/all_dashboards.json`)
+				.get(`${VITE_API_URL}/dashboard/`)
 				.then((rs) => {
 					this.dashboards = rs.data.data;
 					if (!this.currentDashboard.index) {
@@ -86,8 +98,8 @@ export const useContentStore = defineStore("content", {
 						(item) => item.index === "favorites"
 					);
 					this.favorites = [...favorites.components];
-					// After getting dashboard info, call the setComponents (3.) method to get component info
-					this.setComponents();
+					// After getting dashboard info, call the setCurrentDashboardContent (3.) method to get component info
+					this.setCurrentDashboardContent();
 				})
 				.catch((e) => {
 					this.loading = false;
@@ -95,31 +107,9 @@ export const useContentStore = defineStore("content", {
 					console.error(e);
 				});
 		},
-		// 3. Call and API to get all components info
-		setComponents() {
-			axios
-				.get(`${BASE_URL}/dashboards/all_components.json`)
-				.then((rs) => {
-					this.components = rs.data.data;
-					// Step 4.
-					this.setMapLayers();
-					// Step 5.
-					this.setCurrentDashboardContent();
-					this.loading = false;
-				})
-				.catch((e) => console.error(e));
-		},
-		// 4. Adds components that are map layers into a separate store to be used in mapview
-		setMapLayers() {
-			const mapLayerInfo = this.dashboards.find(
-				(item) => item.index === "map-layers"
-			);
-			mapLayerInfo.components.forEach((component) => {
-				this.mapLayers.push(this.components[component]);
-			});
-		},
-		// 5. Finds the info for the current dashboard based on the index and adds it to "currentDashboard"
+		// 3. Finds the info for the current dashboard based on the index and adds it to "currentDashboard"
 		setCurrentDashboardContent() {
+			this.loading = true;
 			const currentDashboardInfo = this.dashboards.find(
 				(item) => item.index === this.currentDashboard.index
 			);
@@ -133,24 +123,47 @@ export const useContentStore = defineStore("content", {
 			}
 			this.currentDashboard.name = currentDashboardInfo.name;
 			this.currentDashboard.icon = currentDashboardInfo.icon;
-			this.currentDashboard.content = currentDashboardInfo.components.map(
-				(item) => {
-					return this.components[item];
-				}
-			);
-			// no need to call additional chart data APIs for the map layers dashboard
-			if (this.currentDashboard.index === "map-layers") {
-				return;
-			}
-			this.setCurrentDashboardChartData();
+			axios
+				.get(`${VITE_API_URL}/dashboard/${this.currentDashboard.index}`)
+				.then((rs) => {
+					if (rs.data.data) {
+						this.currentDashboard.content = rs.data.data;
+					} else {
+						this.currentDashboard.content = [];
+						this.loading = false;
+						return;
+					}
+					this.setCurrentDashboardChartData();
+				})
+				.catch((e) => {
+					this.loading = false;
+					this.error = true;
+					console.error(e);
+				});
 		},
-		// 6. Call an API for each component to get its chart data and store it
+		// 4. Call an API for each component to get its chart data and store it
 		// Will call an additional API if the component has history data
-		setCurrentDashboardChartData() {
-			this.currentDashboard.content.forEach((component, index) => {
-				if (this.currentDashboard.content[index].chart_data) return;
-				axios
-					.get(`${BASE_URL}/chartData/${component.id}.json`)
+		async setCurrentDashboardChartData() {
+			for (
+				let index = 0;
+				index < this.currentDashboard.content.length;
+				index++
+			) {
+				const component = this.currentDashboard.content[index];
+				if (component.chart_data) return;
+
+				await axios
+					.get(`${VITE_API_URL}/component/${component.id}/chart`, {
+						headers: !["static", "current", "demo"].includes(
+							component.time_from
+						)
+							? getComponentDataTimeframe(
+									component.time_from,
+									component.time_to,
+									true
+							  )
+							: {},
+					})
 					.then((rs) => {
 						this.currentDashboard.content[index].chart_data =
 							rs.data.data;
@@ -158,20 +171,48 @@ export const useContentStore = defineStore("content", {
 					.catch((e) => {
 						console.error(e);
 					});
-				if (this.currentDashboard.content[index].history_data) {
-					axios
-						.get(`${BASE_URL}/historyData/${component.id}.json`)
-						.then((rs) => {
-							this.currentDashboard.content[index].history_data =
-								rs.data.data;
-						})
-						.catch((e) => {
-							console.error(e);
-						});
+				if (
+					component.history_config &&
+					component.history_config.range
+				) {
+					for (let i in component.history_config.range) {
+						await axios
+							.get(
+								`${VITE_API_URL}/component/${component.id}/history`,
+								{
+									headers: getComponentDataTimeframe(
+										component.history_config.range[i],
+										"now",
+										true
+									),
+								}
+							)
+							.then((rs) => {
+								if (i === "0") {
+									this.currentDashboard.content[
+										index
+									].history_data = [];
+								}
+								this.currentDashboard.content[
+									index
+								].history_data.push(rs.data.data);
+							})
+							.catch((e) => {
+								console.error(e);
+							});
+					}
 				}
-			});
+			}
+			if (
+				this.currentDashboard.mode === "/mapview" &&
+				this.currentDashboard.index !== "map-layers"
+			) {
+				this.setMapLayers();
+			} else {
+				this.loading = false;
+			}
 		},
-		// 7. Call an API to get contributor data (result consists of id, name, link)
+		// 5. Call an API to get contributor data (result consists of id, name, link)
 		setContributors() {
 			axios
 				.get(`${BASE_URL}/dashboards/all_contributors.json`)
@@ -179,6 +220,36 @@ export const useContentStore = defineStore("content", {
 					this.contributors = rs.data.data;
 				})
 				.catch((e) => console.error(e));
+		},
+		// 6. Call an API to get map layer component info and store it (if in /mapview)
+		setMapLayers() {
+			this.loading = true;
+			axios
+				.get(`${VITE_API_URL}/dashboard/map-layers`)
+				.then((rs) => {
+					this.mapLayers = rs.data.data;
+					this.setMapLayersContent();
+				})
+				.catch((e) => {
+					this.error = true;
+					console.error(e);
+				});
+		},
+		// 7. Call an API for each map layer component to get its chart data and store it (if in /mapview)
+		async setMapLayersContent() {
+			for (let index = 0; index < this.mapLayers.length; index++) {
+				const component = this.mapLayers[index];
+
+				await axios
+					.get(`${VITE_API_URL}/component/${component.id}/chart`)
+					.then((rs) => {
+						this.mapLayers[index].chart_data = rs.data.data;
+					})
+					.catch((e) => {
+						console.error(e);
+					});
+			}
+			this.loading = false;
 		},
 
 		/* Dummy Functions to demonstrate the logic of some functions that require a backend */

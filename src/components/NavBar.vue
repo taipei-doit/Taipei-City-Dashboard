@@ -8,6 +8,7 @@ import { computed } from "vue";
 import { useRoute } from "vue-router";
 import { useAuthStore } from "../store/authStore";
 import { useDialogStore } from "../store/dialogStore";
+import { useContentStore } from "../store/contentStore";
 import { useFullscreen } from "@vueuse/core";
 
 import UserSettings from "./dialogs/UserSettings.vue";
@@ -15,6 +16,7 @@ import UserSettings from "./dialogs/UserSettings.vue";
 const route = useRoute();
 const authStore = useAuthStore();
 const dialogStore = useDialogStore();
+const contentStore = useContentStore();
 const { isFullscreen, toggle } = useFullscreen();
 
 const linkQuery = computed(() => {
@@ -36,6 +38,7 @@ const linkQuery = computed(() => {
 		</div>
 		<div
 			class="navbar-tabs hide-if-mobile"
+			:style="{ pointerEvents: contentStore.loading ? 'none' : 'auto' }"
 			v-if="authStore.currentPath !== 'admin'"
 		>
 			<router-link :to="`/dashboard${linkQuery}`">儀表板總覽</router-link>

@@ -1,3 +1,5 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
+/* eslint-disable indent */
 import axios from "axios";
 import { defineStore } from "pinia";
 import { useDialogStore } from "./dialogStore";
@@ -114,33 +116,49 @@ export const useAdminStore = defineStore("admin", {
 				});
 		},
 		// Get component chart / history data and append to component config
-		getComponentData(component) {
+		async getComponentData(component) {
 			this.currentComponent = JSON.parse(JSON.stringify(component));
-			const headers = {};
-
-			if (!["static", "current", "demo"].includes(component.time_from)) {
-				const { parsedTimeFrom, parsedTimeTo } =
-					getComponentDataTimeframe(
-						component.time_from,
-						component.time_to
-					);
-				headers.time_from = parsedTimeFrom.replace(" ", "T") + "+08:00";
-				headers.time_to = parsedTimeTo.replace(" ", "T") + "+08:00";
-			}
 			axios
 				.get(`${VITE_API_URL}/component/${component.id}/chart`, {
-					headers,
+					headers: !["static", "current", "demo"].includes(
+						component.time_from
+					)
+						? getComponentDataTimeframe(
+								component.time_from,
+								component.time_to,
+								true
+						  )
+						: {},
 				})
 				.then((response) => {
 					this.currentComponent.chart_data = response.data.data;
 				});
 
-			if (component.history_config) {
-				axios
-					.get(`${VITE_API_URL}/component/${component.id}/history`)
-					.then((response) => {
-						this.currentComponent.history_data = response.data.data;
-					});
+			if (component.history_config && component.history_config.range) {
+				for (let i in component.history_config.range) {
+					await axios
+						.get(
+							`${VITE_API_URL}/component/${component.id}/history`,
+							{
+								headers: getComponentDataTimeframe(
+									component.history_config.range[i],
+									"now",
+									true
+								),
+							}
+						)
+						.then((rs) => {
+							if (i === "0") {
+								this.currentComponent.history_data = [];
+							}
+							this.currentComponent.history_data.push(
+								rs.data.data
+							);
+						})
+						.catch((e) => {
+							console.error(e);
+						});
+				}
 			}
 
 			if (!this.currentComponent.links) this.currentComponent.links = [];

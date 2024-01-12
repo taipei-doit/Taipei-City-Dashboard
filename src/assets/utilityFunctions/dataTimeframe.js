@@ -1,5 +1,5 @@
 /* eslint-disable indent */
-export function getComponentDataTimeframe(time_from, time_to) {
+export function getComponentDataTimeframe(time_from, time_to, api) {
 	const tzoffset = new Date().getTimezoneOffset() * 60000;
 	const nowTimeFrom = new Date(Date.now());
 	const nowTimeTo = new Date(Date.now());
@@ -12,19 +12,17 @@ export function getComponentDataTimeframe(time_from, time_to) {
 				nowTimeFrom.setHours(0, 0, 0, 0);
 				break;
 			case "week":
+				nowTimeFrom.setHours(0, 0, 0, 0);
 				nowTimeFrom.setDate(
 					nowTimeFrom.getDate() - nowTimeFrom.getDay() + 1
 				);
 				break;
 			case "month":
+				nowTimeFrom.setHours(0, 0, 0, 0);
 				nowTimeFrom.setDate(1);
 				break;
-			case "halfyear":
-				nowTimeFrom.setMonth(
-					Math.floor(nowTimeFrom.getMonth() / 6) * 6
-				);
-				break;
 			case "year":
+				nowTimeFrom.setHours(0, 0, 0, 0);
 				nowTimeFrom.setMonth(0, 1);
 				break;
 			default:
@@ -41,11 +39,17 @@ export function getComponentDataTimeframe(time_from, time_to) {
 			case "month":
 				nowTimeFrom.setMonth(nowTimeFrom.getMonth() - 1);
 				break;
+			case "quarter":
+				nowTimeFrom.setMonth(nowTimeFrom.getMonth() - 3);
+				break;
 			case "halfyear":
 				nowTimeFrom.setMonth(nowTimeFrom.getMonth() - 6);
 				break;
 			case "year":
 				nowTimeFrom.setFullYear(nowTimeFrom.getFullYear() - 1);
+				break;
+			case "twoyear":
+				nowTimeFrom.setFullYear(nowTimeFrom.getFullYear() - 2);
 				break;
 			default:
 				break;
@@ -64,5 +68,12 @@ export function getComponentDataTimeframe(time_from, time_to) {
 			.split(".")[0]
 			.replace("T", " ");
 	}
-	return { parsedTimeFrom, parsedTimeTo };
+	if (api === true) {
+		return {
+			time_from: parsedTimeFrom.replace(" ", "T") + "+08:00",
+			time_to: parsedTimeTo.replace(" ", "T") + "+08:00",
+		};
+	} else {
+		return { parsedTimeFrom, parsedTimeTo };
+	}
 }

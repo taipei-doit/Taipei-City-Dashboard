@@ -1,13 +1,21 @@
 <script setup>
-import { defineProps, defineEmits, ref } from "vue";
+import { defineProps, defineEmits, ref, computed } from "vue";
 import { chartTypes } from "../../../assets/configs/apexcharts/chartTypes";
+import { timeTerms } from "../../../assets/configs/allTimes";
 
-const props = defineProps(["tags", "selected", "limit"]);
+const props = defineProps(["tags", "selected", "limit", "disable"]);
 
 const selectedTagList = ref([...props.selected]);
 
 const emit = defineEmits({
 	updatetagorder: { updatedTags: Array },
+});
+
+const selectLabels = computed(() => {
+	return {
+		...chartTypes,
+		...timeTerms,
+	};
 });
 
 function handleClick(tag) {
@@ -39,8 +47,9 @@ function handleClick(tag) {
 					handleClick(tag);
 				}
 			"
+			:disabled="disable"
 		>
-			{{ chartTypes[tag] }}
+			{{ selectLabels[tag] }}
 		</button>
 	</div>
 </template>
