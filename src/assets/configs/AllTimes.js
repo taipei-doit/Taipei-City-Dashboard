@@ -17,8 +17,11 @@ export const timeTerms = {
 	halfyear_ago: "半年前",
 	year_ago: "一年前",
 	twoyear_ago: "兩年前",
+	fiveyear_ago: "五年前",
+	tenyear_ago: "十年前",
 	now: "現在",
 	static: "固定資料",
 	current: "即時資料",
 	demo: "示範靜態資料",
+	max: "最久",
 };

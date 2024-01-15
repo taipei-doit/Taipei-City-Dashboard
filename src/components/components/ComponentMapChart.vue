@@ -207,7 +207,7 @@ function changeShowTagTooltipState(state) {
 				:position="tooltipPosition"
 				:hasFilter="content.map_filter ? true : false"
 				:hasMapLayer="content.map_config ? true : false"
-				:hasHistory="content.history_data ? true : false"
+				:hasHistory="content.history_config ? true : false"
 			/>
 		</Teleport>
 	</div>

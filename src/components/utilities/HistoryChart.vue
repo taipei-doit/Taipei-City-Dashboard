@@ -30,7 +30,7 @@ const chartOptions = ref({
 		show: false,
 	},
 	legend: {
-		show: props.series?.length > 1 ? true : false,
+		show: true,
 	},
 	markers: {
 		hover: {
@@ -110,7 +110,7 @@ function parseTime(time) {
 		<div v-else-if="props.series[currentSeries]">
 			<apexchart
 				width="100%"
-				height="140px"
+				height="155px"
 				type="area"
 				:options="chartOptions"
 				:series="series[currentSeries]"
@@ -125,7 +125,7 @@ function parseTime(time) {
 
 <style lang="scss" scoped>
 .historychart {
-	height: 185px;
+	height: 200px;
 	width: 100%;
 	display: flex;
 	flex-direction: column;
@@ -163,7 +163,7 @@ function parseTime(time) {
 	}
 
 	&-error {
-		height: 140px;
+		height: 155px;
 		display: flex;
 		flex-direction: column;
 		align-items: center;

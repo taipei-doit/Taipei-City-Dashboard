@@ -126,6 +126,8 @@ function handleClose() {
 								required
 							/>
 							<select v-model="currentComponent.update_freq_unit">
+								<option value="minute">分</option>
+								<option value="hour">時</option>
 								<option value="day">天</option>
 								<option value="week">週</option>
 								<option value="month">月</option>
@@ -331,6 +333,8 @@ function handleClose() {
 								'halfyear_ago',
 								'year_ago',
 								'twoyear_ago',
+								'fiveyear_ago',
+								'tenyear_ago',
 							]"
 							:selected="currentComponent.history_config.range"
 							:limit="5"

@@ -6,7 +6,9 @@ export function getComponentDataTimeframe(time_from, time_to, api) {
 	let parsedTimeFrom = "";
 	let parsedTimeTo = "";
 
-	if (time_from.split("_")[1] === "start") {
+	if (time_from === "max") {
+		nowTimeFrom.setFullYear(nowTimeFrom.getFullYear() - 30);
+	} else if (time_from.split("_")[1] === "start") {
 		switch (time_from.split("_")[0]) {
 			case "day":
 				nowTimeFrom.setHours(0, 0, 0, 0);
@@ -50,6 +52,12 @@ export function getComponentDataTimeframe(time_from, time_to, api) {
 				break;
 			case "twoyear":
 				nowTimeFrom.setFullYear(nowTimeFrom.getFullYear() - 2);
+				break;
+			case "fiveyear":
+				nowTimeFrom.setFullYear(nowTimeFrom.getFullYear() - 5);
+				break;
+			case "tenyear":
+				nowTimeFrom.setFullYear(nowTimeFrom.getFullYear() - 10);
 				break;
 			default:
 				break;
