@@ -167,6 +167,17 @@
 			},
 			"geometry": {
 				"type": "Point",
+				"coordinates": [121.522512, 25.026634]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"name": "向陽",
+				"value": 75
+			},
+			"geometry": {
+				"type": "Point",
 				"coordinates": [121.5957333, 25.0529555]
 			}
 		},
