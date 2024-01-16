@@ -126,7 +126,7 @@ function handleClose() {
 								required
 							/>
 							<select v-model="currentComponent.update_freq_unit">
-								<option value="minute">分</option>
+								<option value="minute"></option>
 								<option value="hour">時</option>
 								<option value="day">天</option>
 								<option value="week">週</option>

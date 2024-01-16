@@ -14,6 +14,7 @@ import { useMapStore } from "../store/mapStore";
 import { useAuthStore } from "../store/authStore";
 import DashboardView from "../views/DashboardView.vue";
 import MapView from "../views/MapView.vue";
+import ComponentView from "../views/ComponentView.vue";
 
 const routes = [
 	{
@@ -29,6 +30,11 @@ const routes = [
 		path: "/mapview",
 		name: "mapview",
 		component: MapView,
+	},
+	{
+		path: "/component",
+		name: "component",
+		component: ComponentView,
 	},
 	{
 		path: "/admin",

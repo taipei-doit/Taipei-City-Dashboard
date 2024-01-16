@@ -41,8 +41,19 @@ const linkQuery = computed(() => {
 			:style="{ pointerEvents: contentStore.loading ? 'none' : 'auto' }"
 			v-if="authStore.currentPath !== 'admin'"
 		>
-			<router-link :to="`/dashboard${linkQuery}`">儀表板總覽</router-link>
-			<router-link :to="`/mapview${linkQuery}`">地圖交叉比對</router-link>
+			<router-link :to="`/component`">組件瀏覽平台</router-link>
+			<router-link
+				:to="`/dashboard${
+					linkQuery.includes('undefined') ? '' : linkQuery
+				}`"
+				>儀表板總覽</router-link
+			>
+			<router-link
+				:to="`/mapview${
+					linkQuery.includes('undefined') ? '' : linkQuery
+				}`"
+				>地圖交叉比對</router-link
+			>
 		</div>
 		<div class="navbar-user">
 			<a

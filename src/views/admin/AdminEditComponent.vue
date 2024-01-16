@@ -171,7 +171,7 @@ onMounted(() => {
 					>
 				</tr>
 			</thead>
-			<tbody v-if="adminStore.components">
+			<tbody v-if="adminStore.components.length !== 0">
 				<tr
 					v-for="component in adminStore.components"
 					:key="component.index"
@@ -240,7 +240,10 @@ onMounted(() => {
 			</div>
 		</table>
 		<!-- html element to select a results per page -->
-		<div class="admineditcomponent-control">
+		<div
+			class="admineditcomponent-control"
+			v-if="adminStore.components.length !== 0"
+		>
 			<label for="pagesize">每頁顯示</label>
 			<select v-model="searchParams.pagesize" @change="handleNewQuery">
 				<option value="10">10</option>

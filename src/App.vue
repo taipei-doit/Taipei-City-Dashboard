@@ -66,6 +66,14 @@ onMounted(() => {
 				<RouterView></RouterView>
 			</div>
 		</div>
+		<div
+			class="app-content"
+			v-else-if="authStore.currentPath === 'component'"
+		>
+			<div class="app-content-main">
+				<RouterView></RouterView>
+			</div>
+		</div>
 		<InitialWarning />
 	</div>
 </template>

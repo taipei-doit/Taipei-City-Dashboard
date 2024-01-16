@@ -62,7 +62,7 @@ onMounted(() => {
 					<TableHeader minWidth="200px">上次編輯</TableHeader>
 				</tr>
 			</thead>
-			<tbody v-if="adminStore.dashboards">
+			<tbody v-if="adminStore.dashboards.length !== 0">
 				<tr
 					v-for="dashboard in adminStore.dashboards"
 					:key="dashboard.index"

@@ -3,6 +3,7 @@
 import axios from "axios";
 import { defineStore } from "pinia";
 import { useDialogStore } from "./dialogStore";
+import { useAuthStore } from "./authStore";
 import { getComponentDataTimeframe } from "../assets/utilityFunctions/dataTimeframe";
 const { VITE_API_URL } = import.meta.env;
 
@@ -15,35 +16,37 @@ export const useAdminStore = defineStore("admin", {
 		components: [],
 		componentResults: 0,
 		currentComponent: null,
+		// Edit Issue
+		issues: [],
+		issueResults: 0,
+		currentIssue: null,
 	}),
 	getters: {},
 	actions: {
 		// Get all dashboard configs
-		getDashboards() {
+		async getDashboards() {
 			const dialogStore = useDialogStore();
 
-			axios
-				.get(`${VITE_API_URL}/dashboard/`)
-				.then((response) => {
-					this.dashboards = response.data.data;
-				})
-				.catch((err) => {
-					console.error(err);
-					dialogStore.showDialog("fail", "無法取得儀表板");
-				});
+			try {
+				const response = await axios.get(`${VITE_API_URL}/dashboard/`);
+				this.dashboards = response.data.data;
+			} catch (err) {
+				console.error(err);
+				dialogStore.showDialog("fail", "無法取得儀表板");
+			}
 		},
-		getCurrentDashboardComponents() {
+		async getCurrentDashboardComponents() {
 			const dialogStore = useDialogStore();
 
-			axios
-				.get(`${VITE_API_URL}/dashboard/${this.currentDashboard.index}`)
-				.then((response) => {
-					this.currentDashboard.components = response.data.data;
-				})
-				.catch((err) => {
-					console.error(err);
-					dialogStore.showDialog("fail", "無法取得儀表板組件");
-				});
+			try {
+				const response = await axios.get(
+					`${VITE_API_URL}/dashboard/${this.currentDashboard.index}`
+				);
+				return response.data.data;
+			} catch (err) {
+				console.error(err);
+				dialogStore.showDialog("fail", "無法取得儀表板組件");
+			}
 		},
 		async addDashboard() {
 			const dialogStore = useDialogStore();
@@ -99,21 +102,19 @@ export const useAdminStore = defineStore("admin", {
 			}
 		},
 		// Get all component configs
-		getPublicComponents(params) {
+		async getPublicComponents(params) {
 			const dialogStore = useDialogStore();
 
-			axios
-				.get(`${VITE_API_URL}/component/`, {
+			try {
+				const response = await axios.get(`${VITE_API_URL}/component/`, {
 					params,
-				})
-				.then((response) => {
-					this.components = response.data.data;
-					this.componentResults = response.data.results;
-				})
-				.catch((err) => {
-					console.error(err);
-					dialogStore.showDialog("fail", "無法取得組件");
 				});
+				this.components = response.data.data;
+				this.componentResults = response.data.results;
+			} catch (err) {
+				console.error(err);
+				dialogStore.showDialog("fail", "無法取得組件");
+			}
 		},
 		// Get component chart / history data and append to component config
 		async getComponentData(component) {
@@ -249,6 +250,45 @@ export const useAdminStore = defineStore("admin", {
 				console.error(err);
 				dialogStore.showNotification("fail", "組件更新失敗");
 			}
+		},
+		async getIssues(params) {
+			const dialogStore = useDialogStore();
+			const apiParams = JSON.parse(JSON.stringify(params));
+
+			apiParams.filterbystatus = apiParams.filterbystatus.join(",");
+
+			try {
+				const response = await axios.get(`${VITE_API_URL}/issue/`, {
+					params: apiParams,
+				});
+				this.issues = response.data.data;
+				this.issueResults = response.data.results;
+			} catch (err) {
+				console.error(err);
+				dialogStore.showDialog("fail", "無法取得用戶問題");
+			}
+		},
+		async updateIssue(params) {
+			const dialogStore = useDialogStore();
+			const authStore = useAuthStore();
+
+			try {
+				await axios.patch(
+					`${VITE_API_URL}/issue/${this.currentIssue.id}`,
+					{
+						status: this.currentIssue.status,
+						decision_desc: this.currentIssue.decision_desc,
+						updated_by: authStore.user.name,
+					}
+				);
+				dialogStore.showNotification("success", "問題更新成功");
+				this.getIssues(params);
+			} catch (err) {
+				console.error(err);
+				dialogStore.showNotification("fail", "問題更新失敗");
+			}
+
+			this.currentIssue = null;
 		},
 	},
 });

@@ -62,7 +62,8 @@ input:focus {
 	border-color: var(--color-highlight);
 }
 
-input:disabled {
+input:disabled,
+textarea:disabled {
 	color: var(--color-complement-text);
 	cursor: not-allowed;
 }
