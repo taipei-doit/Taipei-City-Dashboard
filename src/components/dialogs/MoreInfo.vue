@@ -120,6 +120,7 @@ function getLinkTag(link, index) {
 						@click="
 							dialogStore.showReportIssue(
 								dialogStore.moreInfoContent.id,
+								dialogStore.moreInfoContent.index,
 								dialogStore.moreInfoContent.name
 							)
 						"

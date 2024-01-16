@@ -1,32 +1,51 @@
-<!-- Developed by Taipei Urban Intelligence Center 2023 -->
+<!-- Developed by Taipei Urban Intelligence Center 2024 -->
 
 <script setup>
-import { ref } from 'vue';
-import { useDialogStore } from '../../store/dialogStore';
-import DialogContainer from './DialogContainer.vue';
+import { ref } from "vue";
+import axios from "axios";
+import { useDialogStore } from "../../store/dialogStore";
+import { useAuthStore } from "../../store/authStore";
+
+import DialogContainer from "./DialogContainer.vue";
+const { VITE_API_URL } = import.meta.env;
 
 const dialogStore = useDialogStore();
+const authStore = useAuthStore();
 
 const allInputs = ref({
 	type: "組件基本資訊有誤",
 	description: "",
-	name: "",
+	title: "",
 });
-const issueTypes = ["組件基本資訊有誤", "組件資料有誤或未更新", "系統問題", "其他建議"];
+const issueTypes = [
+	"組件基本資訊有誤",
+	"組件資料有誤或未更新",
+	"系統問題",
+	"其他建議",
+];
 
-function handleSubmit() {
-	const currentDate = new Date().toJSON().slice(0, 10).replaceAll("-", "");
-	const secondaryLabel = allInputs.value.type === "其他建議" ? "enhancement" : "bug";
-	const issueTitle = `[from-demo] ${currentDate} ${allInputs.value.type} - ${dialogStore.issue.id} | ${dialogStore.issue.name}`;
-	const issueBody = allInputs.value.description.replaceAll('\n', '%0D%0A') + '%0D%0A%0D%0A' + 'Issue Opener: ' + allInputs.value.name;
-	window.open(`https://github.com/tpe-doit/Taipei-City-Dashboard-FE/issues/new?assignees=igorho2000&labels=from-demo,${secondaryLabel}&title=${issueTitle}&body=${issueBody}`);
-	handleClose();
+async function handleSubmit() {
+	const submitObject = {
+		title: allInputs.value.title,
+		description: allInputs.value.description,
+		user_name: authStore.user.name,
+		user_id: `${authStore.user.id}`,
+		context: `類型：${allInputs.value.type} // 來源：${dialogStore.issue.id} - ${dialogStore.issue.index} - ${dialogStore.issue.name}`,
+		status: "待處理",
+	};
+	try {
+		await axios.post(`${VITE_API_URL}/issue/`, submitObject);
+		handleClose();
+		dialogStore.showNotification("success", "回報問題成功，感謝您的建議");
+	} catch {
+		dialogStore.showNotification("fail", "回報問題失敗，請再試一次");
+	}
 }
 function handleClose() {
 	allInputs.value = {
 		type: "組件基本資訊有誤",
 		description: "",
-		name: "",
+		title: "",
 	};
 	dialogStore.dialogs.reportIssue = false;
 }
@@ -36,23 +55,47 @@ function handleClose() {
 	<DialogContainer dialog="reportIssue" @on-close="handleClose">
 		<div class="reportissue">
 			<h2>回報問題</h2>
+			<h3>問題標題* ({{ allInputs.title.length }}/25)</h3>
+			<input
+				class="reportissue-input"
+				type="text"
+				v-model="allInputs.title"
+				:min="1"
+				:max="25"
+				required
+			/>
 			<h3>問題種類*</h3>
 			<div v-for="item in issueTypes" :key="item">
-				<input class="reportissue-radio" type="radio" v-model="allInputs.type" :value="item" :id="item" />
+				<input
+					class="reportissue-radio"
+					type="radio"
+					v-model="allInputs.type"
+					:value="item"
+					:id="item"
+				/>
 				<label :for="item">
 					<div></div>
 					{{ item }}
 				</label>
 			</div>
-			<h3>問題簡述*</h3>
-			<textarea v-model="allInputs.description"></textarea>
-			<h3>姓名*</h3>
-			<input class="reportissue-input" type="text" v-model="allInputs.name" />
+			<h3>問題簡述* ({{ allInputs.description.length }}/200)</h3>
+			<textarea
+				v-model="allInputs.description"
+				:min="1"
+				:max="200"
+				required
+			></textarea>
 			<div class="reportissue-control">
-				<button class="reportissue-control-cancel" @click="handleClose">取消</button>
-				<button v-if="allInputs.description && allInputs.name" class="reportissue-control-confirm"
-					@click="handleSubmit">開立 GitHub
-					Issue</button>
+				<button class="reportissue-control-cancel" @click="handleClose">
+					取消
+				</button>
+				<button
+					v-if="allInputs.description && allInputs.title"
+					class="reportissue-control-confirm"
+					@click="handleSubmit"
+				>
+					回報問題
+				</button>
 			</div>
 		</div>
 	</DialogContainer>
@@ -73,7 +116,7 @@ function handleClose() {
 	&-radio {
 		display: none;
 
-		&:checked+label {
+		&:checked + label {
 			color: white;
 
 			div {
@@ -81,7 +124,7 @@ function handleClose() {
 			}
 		}
 
-		&:hover+label {
+		&:hover + label {
 			color: var(--color-highlight);
 
 			div {
@@ -107,34 +150,6 @@ function handleClose() {
 			border-radius: 50%;
 			border: 1px solid var(--color-border);
 			transition: background-color 0.2s, border-color 0.2s;
-		}
-	}
-
-	textarea {
-		height: 125px;
-		padding: 4px 6px;
-		border: solid 1px var(--color-border);
-		border-radius: 5px;
-		background-color: transparent;
-		font-size: var(--font-m);
-		resize: none;
-
-		&:focus {
-			outline: none;
-			border: solid 1px var(--color-highlight);
-		}
-	}
-
-	&-input {
-		padding: 4px 6px;
-		border: solid 1px var(--color-border);
-		border-radius: 5px;
-		background-color: transparent;
-		font-size: var(--font-m);
-
-		&:focus {
-			outline: none;
-			border: solid 1px var(--color-highlight);
 		}
 	}
 
@@ -166,6 +181,5 @@ function handleClose() {
 			}
 		}
 	}
-
 }
 </style>

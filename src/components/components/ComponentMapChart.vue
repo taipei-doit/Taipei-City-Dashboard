@@ -206,7 +206,7 @@ function changeShowTagTooltipState(state) {
 				v-if="showTagTooltip"
 				:position="tooltipPosition"
 				:hasFilter="content.map_filter ? true : false"
-				:hasMapLayer="content.map_config ? true : false"
+				:hasMapLayer="content.map_config[0] ? true : false"
 				:hasHistory="content.history_config ? true : false"
 			/>
 		</Teleport>

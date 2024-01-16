@@ -19,6 +19,7 @@ import AdminSideBar from "./components/admin/AdminSideBar.vue";
 import SettingsBar from "./components/SettingsBar.vue";
 import NotificationBar from "./components/dialogs/NotificationBar.vue";
 import InitialWarning from "./components/dialogs/InitialWarning.vue";
+import ComponentSideBar from "./components/ComponentSideBar.vue";
 
 const authStore = useAuthStore();
 const dialogStore = useDialogStore();
@@ -70,6 +71,7 @@ onMounted(() => {
 			class="app-content"
 			v-else-if="authStore.currentPath === 'component'"
 		>
+			<ComponentSideBar />
 			<div class="app-content-main">
 				<RouterView></RouterView>
 			</div>

@@ -16,10 +16,10 @@ const { BASE_URL, VITE_API_URL } = import.meta.env;
 
 export const useContentStore = defineStore("content", {
 	state: () => ({
-		// Stores all dashboards data. Reference the structure in /public/dashboards/all_dashboards.json
+		// Stores all dashboards data. (used in /dashboard, /mapview)
 		dashboards: [],
-		// Stores all components data. Reference the structure in /public/dashboards/all_components.json
-		components: {},
+		// Stores all components data. (used in /component)
+		components: [],
 		// Picks out the components that are map layers and stores them here
 		mapLayers: [],
 		// Picks out the components that are favorites and stores them here
@@ -32,6 +32,15 @@ export const useContentStore = defineStore("content", {
 			name: null,
 			content: null,
 		},
+		// Stores information of a new dashboard (/component)
+		editDashboard: {
+			index: null,
+			name: null,
+			icon: "10k",
+			components: [],
+		},
+		// Stores information of the current component (/component)
+		currentComponent: {},
 		// Stores all contributors data. Reference the structure in /public/dashboards/all_contributors.json
 		contributors: {},
 		// Stores whether dashboards are loading
@@ -250,6 +259,20 @@ export const useContentStore = defineStore("content", {
 					});
 			}
 			this.loading = false;
+		},
+		/* /component methods */
+		async getAllComponents(params) {
+			this.loading = true;
+			try {
+				const response = await axios.get(`${VITE_API_URL}/component/`, {
+					params,
+				});
+
+				this.components = response.data.data;
+				this.loading = false;
+			} catch {
+				this.error = true;
+			}
 		},
 
 		/* Dummy Functions to demonstrate the logic of some functions that require a backend */

@@ -37,6 +37,7 @@ export const useDialogStore = defineStore("dialog", {
 		// Stores the content for report issue dialogs
 		issue: {
 			id: null,
+			index: null,
 			name: "",
 		},
 		// Stores the content for more info dialogs
@@ -76,10 +77,11 @@ export const useDialogStore = defineStore("dialog", {
 			this.moreInfoContent = content;
 		},
 		// Show the report issue dialog and enter the id and name of the component of origin
-		showReportIssue(id, name) {
+		showReportIssue(id, index, name) {
 			this.showDialog("reportIssue");
 			this.issue = {
 				id: id,
+				index: index,
 				name: name,
 			};
 		},

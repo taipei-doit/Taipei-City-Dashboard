@@ -1,8 +1,5 @@
 <!-- Developed by Taipei Urban Intelligence Center 2023 -->
 
-<!-- This component has three modes 'normal dashboard' / 'more info' / 'basic map layers' -->
-<!-- The different modes are controlled by the props "notMoreInfo" (default true) and "isMapLayer" (default false) -->
-
 <script setup>
 import { computed, ref } from "vue";
 import { useDialogStore } from "../../store/dialogStore";
@@ -10,9 +7,10 @@ import { useContentStore } from "../../store/contentStore";
 
 import ComponentTag from "../utilities/ComponentTag.vue";
 import TagTooltip from "../utilities/TagTooltip.vue";
-import { chartTypes } from "../../assets/configs/apexcharts/chartTypes";
 import { timeTerms } from "../../assets/configs/allTimes";
 import { getComponentDataTimeframe } from "../../assets/utilityFunctions/dataTimeframe";
+
+const { BASE_URL } = import.meta.env;
 
 const dialogStore = useDialogStore();
 const contentStore = useContentStore();
@@ -20,13 +18,9 @@ const contentStore = useContentStore();
 const props = defineProps({
 	// The complete config (incl. chart data) of a dashboard component will be passed in
 	content: { type: Object },
-	notMoreInfo: { type: Boolean, default: true },
-	isMapLayer: { type: Boolean, default: false },
 	style: { type: Object, default: () => ({}) },
 });
 
-// The default active chart is the first one in the list defined in the dashboard component
-const activeChart = ref(props.content.chart_config.types[0]);
 // stores the location of the mouse when tags are hovered over
 const mousePosition = ref({ x: null, y: null });
 const showTagTooltip = ref(false);
@@ -69,10 +63,6 @@ const tooltipPosition = computed(() => {
 	};
 });
 
-// Toggles between chart types defined in the dashboard component
-function changeActiveChart(chartName) {
-	activeChart.value = chartName;
-}
 function toggleFavorite() {
 	if (contentStore.favorites.includes(`${props.content.id}`)) {
 		contentStore.unfavoriteComponent(props.content.id);
@@ -92,15 +82,8 @@ function changeShowTagTooltipState(state) {
 </script>
 
 <template>
-	<div
-		:class="{
-			componentcontainer: true,
-			moreinfostyle: !notMoreInfo,
-			maplayer: isMapLayer,
-		}"
-		:style="style"
-	>
-		<div class="componentcontainer-header">
+	<div class="componentpreview" :style="style">
+		<div class="componentpreview-header">
 			<div>
 				<h3>
 					{{ content.name }}
@@ -118,12 +101,23 @@ function changeShowTagTooltipState(state) {
 				</h3>
 				<h4>{{ `${content.source} | ${dataTime}` }}</h4>
 			</div>
-			<div v-if="notMoreInfo">
+			<div>
 				<button
 					v-if="
-						!isMapLayer &&
-						contentStore.currentDashboard.index !== 'favorites'
+						!contentStore.editDashboard.components
+							.map((item) => item.id)
+							.includes(props.content.id)
 					"
+					@click="
+						contentStore.editDashboard.components.push({
+							id: props.content.id,
+							name: props.content.name,
+						})
+					"
+				>
+					<span>add_circle</span>
+				</button>
+				<button
 					:class="{
 						isfavorite: contentStore.favorites.includes(
 							`${content.id}`
@@ -133,97 +127,21 @@ function changeShowTagTooltipState(state) {
 				>
 					<span>favorite</span>
 				</button>
-				<!-- Change @click to a report issue function to implement functionality -->
-				<button
-					title="回報問題"
-					class="show-if-mobile"
-					@click="
-						dialogStore.showReportIssue(
-							content.id,
-							content.index,
-							content.name
-						)
-					"
-				>
-					<span>flag</span>
-				</button>
-				<!-- deleteComponent is currently a dummy function to demonstrate what adding components may look like
-                     Connect a backend to actually implement the function or remove altogether -->
-				<button
-					v-if="!isMapLayer"
-					@click="contentStore.deleteComponent(content.id)"
-					class="isDelete"
-				>
-					<span>delete</span>
-				</button>
-				<button
-					v-if="
-						!isMapLayer &&
-						contentStore.currentDashboard.index === 'favorites'
-					"
-					@click="contentStore.deleteComponent(content.id)"
-					class="isUnfavorite"
-				>
-					<span>delete</span>
-				</button>
 			</div>
 		</div>
-		<div
-			class="componentcontainer-control"
-			v-if="props.content.chart_config.types.length > 1"
-		>
-			<button
-				:class="{
-					'componentcontainer-control-button': true,
-					'componentcontainer-control-active': activeChart === item,
-				}"
-				v-for="item in props.content.chart_config.types"
-				@click="changeActiveChart(item)"
-				:key="`${props.content.index}-${item}-button`"
-			>
-				{{ chartTypes[item] }}
-			</button>
+		<div class="componentpreview-content">
+			<div>
+				<p>{{ props.content.short_desc }}</p>
+			</div>
+			<div class="componentpreview-content-charts">
+				<img
+					v-for="chart in props.content.chart_config.types"
+					:key="`${props.content.index} - ${chart}`"
+					:src="`${BASE_URL}/images/thumbnails/${chart}.svg`"
+				/>
+			</div>
 		</div>
-		<div
-			:class="{
-				'componentcontainer-chart': true,
-				'maplayer-chart': isMapLayer,
-			}"
-			v-if="content.chart_data"
-		>
-			<!-- The components referenced here can be edited in /components/charts -->
-			<component
-				v-for="item in content.chart_config.types"
-				:activeChart="activeChart"
-				:is="item"
-				:chart_config="content.chart_config"
-				:series="content.chart_data"
-				:map_config="content.map_config"
-				:map_filter="content.map_filter"
-				:key="`${props.content.index}-${item}-chart`"
-			>
-			</component>
-		</div>
-		<div
-			v-else-if="content.chart_data === null"
-			:class="{
-				'componentcontainer-error': true,
-				'maplayer-loading': isMapLayer,
-			}"
-		>
-			<span>error</span>
-			<p>組件資料異常</p>
-		</div>
-		<div
-			v-else
-			:class="{
-				'componentcontainer-loading': true,
-				'maplayer-loading': isMapLayer,
-			}"
-		>
-			<div></div>
-		</div>
-		<div class="componentcontainer-footer">
+		<div class="componentpreview-footer">
 			<div
 				@mouseenter="changeShowTagTooltipState(true)"
 				@mousemove="updateMouseLocation"
@@ -231,28 +149,22 @@ function changeShowTagTooltipState(state) {
 			>
 				<ComponentTag
 					v-if="content.map_filter && content.map_config"
-					icon="tune"
 					text="篩選地圖"
 					class="hide-if-mobile"
 				/>
 				<ComponentTag
 					v-if="content.map_config && content.map_config[0] !== null"
-					icon="map"
 					text="空間資料"
 				/>
 				<ComponentTag
 					v-if="content.history_data || content.history_config"
-					icon="insights"
 					text="歷史資料"
 					class="history-tag"
 				/>
 			</div>
 			<!-- The content in the target component should be passed into the "showMoreInfo" function of the mapStore to show more info -->
-			<button
-				v-if="notMoreInfo && !isMapLayer"
-				@click="dialogStore.showMoreInfo(content)"
-			>
-				<p>組件資訊</p>
+			<button @click="dialogStore.showMoreInfo(content)">
+				<p>資訊頁面</p>
 				<span>arrow_circle_right</span>
 			</button>
 		</div>
@@ -270,9 +182,9 @@ function changeShowTagTooltipState(state) {
 </template>
 
 <style scoped lang="scss">
-.componentcontainer {
-	height: 330px;
-	max-height: 330px;
+.componentpreview {
+	height: 170px;
+	max-height: 170px;
 	width: calc(100% - var(--font-m) * 2);
 	max-width: calc(100% - var(--font-m) * 2);
 	display: flex;
@@ -282,21 +194,6 @@ function changeShowTagTooltipState(state) {
 	padding: var(--font-m);
 	border-radius: 5px;
 	background-color: var(--color-component-background);
-
-	@media (min-width: 1050px) {
-		height: 370px;
-		max-height: 370px;
-	}
-
-	@media (min-width: 1650px) {
-		height: 400px;
-		max-height: 400px;
-	}
-
-	@media (min-width: 2200px) {
-		height: 500px;
-		max-height: 500px;
-	}
 
 	&-header {
 		display: flex;
@@ -346,87 +243,23 @@ function changeShowTagTooltipState(state) {
 		}
 	}
 
-	&-control {
-		width: 100%;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		position: absolute;
-		top: 4.2rem;
-		left: 0;
-		z-index: 8;
-
-		&-button {
-			margin: 0 2px;
-			padding: 4px 4px;
-			border-radius: 5px;
-			background-color: rgb(77, 77, 77);
-			opacity: 0.6;
-			color: var(--color-complement-text);
-			font-size: var(--font-s);
-			text-align: center;
-			transition: color 0.2s, opacity 0.2s;
-			user-select: none;
-
-			&:hover {
-				opacity: 1;
-				color: white;
-			}
-		}
-
-		&-active {
-			background-color: var(--color-complement-text);
-			color: white;
-		}
-	}
-
-	&-chart,
-	&-loading,
-	&-error {
-		height: 75%;
-		position: relative;
-		padding-top: 5%;
-		overflow-y: scroll;
-
-		p {
-			color: var(--color-border);
-		}
-	}
-
-	&-loading {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-
-		div {
-			width: 2rem;
-			height: 2rem;
-			border-radius: 50%;
-			border: solid 4px var(--color-border);
-			border-top: solid 4px var(--color-highlight);
-			animation: spin 0.7s ease-in-out infinite;
-		}
-	}
-
-	&-error {
+	&-content {
 		display: flex;
 		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-
-		span {
-			color: var(--color-complement-text);
-			margin-bottom: 0.5rem;
-			font-family: var(--font-icon);
-			font-size: 2rem;
-		}
-
-		p {
-			color: var(--color-complement-text);
+		row-gap: var(--font-s);
+		&-charts {
+			display: flex;
+			column-gap: 4px;
+			img {
+				width: 40px;
+				border-radius: 5px;
+				background-color: var(--color-complement-text);
+			}
 		}
 	}
 
 	&-footer {
+		height: 26px;
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
@@ -469,57 +302,6 @@ function changeShowTagTooltipState(state) {
 				user-select: none;
 			}
 		}
-	}
-}
-
-@keyframes spin {
-	to {
-		transform: rotate(360deg);
-	}
-}
-
-.moreinfostyle {
-	height: 350px;
-	max-height: 350px;
-
-	@media (min-width: 820px) {
-		height: 380px;
-		max-height: 380px;
-	}
-
-	@media (min-width: 1200px) {
-		height: 420px;
-		max-height: 420px;
-	}
-
-	@media (min-width: 2200px) {
-		height: 520px;
-		max-height: 520px;
-	}
-}
-
-.maplayer {
-	height: 180px;
-	max-height: 180px;
-
-	@media (min-width: 1050px) {
-		height: 210px;
-		max-height: 210px;
-	}
-
-	@media (min-width: 1650px) {
-		height: 225px;
-		max-height: 225px;
-	}
-
-	@media (min-width: 2200px) {
-		height: 275px;
-		max-height: 275px;
-	}
-
-	&-chart,
-	&-loading {
-		height: 60%;
 	}
 }
 </style>
