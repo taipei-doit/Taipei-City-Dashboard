@@ -66,7 +66,7 @@ onMounted(() => {
 	>
 		<div class="componentview-nodashboard-content">
 			<span>sentiment_very_dissatisfied</span>
-			<h2>發生錯誤，無法載入儀表板</h2>
+			<h2>發生錯誤，無法載入</h2>
 		</div>
 	</div>
 	<div v-else class="componentview componentview-nodashboard">

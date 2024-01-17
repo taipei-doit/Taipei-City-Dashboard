@@ -15,6 +15,7 @@ import { useAuthStore } from "../store/authStore";
 import DashboardView from "../views/DashboardView.vue";
 import MapView from "../views/MapView.vue";
 import ComponentView from "../views/ComponentView.vue";
+import ComponentInfoView from "../views/ComponentInfoView.vue";
 
 const routes = [
 	{
@@ -35,6 +36,11 @@ const routes = [
 		path: "/component",
 		name: "component",
 		component: ComponentView,
+	},
+	{
+		path: "/component/:index",
+		name: "component-info",
+		component: ComponentInfoView,
 	},
 	{
 		path: "/admin",
@@ -93,6 +99,10 @@ router.beforeEach((to) => {
 		to.path.toLowerCase() === "/mapview"
 	) {
 		contentStore.setRouteParams(to.path, to.query.index);
+	}
+	// Get Component data if the path is component-info
+	else if (to.name === "component-info") {
+		contentStore.getCurrentComponentData(to.params.index);
 	}
 	// Clear the entire mapStore if the path doesn't start with /mapview
 	if (to.path.toLowerCase() !== "/mapview") {

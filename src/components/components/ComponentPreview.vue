@@ -18,6 +18,7 @@ const contentStore = useContentStore();
 const props = defineProps({
 	// The complete config (incl. chart data) of a dashboard component will be passed in
 	content: { type: Object },
+	isStatic: { type: Boolean, default: false },
 	style: { type: Object, default: () => ({}) },
 });
 
@@ -99,9 +100,10 @@ function changeShowTagTooltipState(state) {
 						"
 					/>
 				</h3>
+				<p>{{ props.content.short_desc }}</p>
 				<h4>{{ `${content.source} | ${dataTime}` }}</h4>
 			</div>
-			<div>
+			<div class="componentpreview-header-buttons" v-if="!isStatic">
 				<button
 					v-if="
 						!contentStore.editDashboard.components
@@ -114,6 +116,7 @@ function changeShowTagTooltipState(state) {
 							name: props.content.name,
 						})
 					"
+					class="hide-if-mobile"
 				>
 					<span>add_circle</span>
 				</button>
@@ -130,8 +133,9 @@ function changeShowTagTooltipState(state) {
 			</div>
 		</div>
 		<div class="componentpreview-content">
-			<div>
-				<p>{{ props.content.short_desc }}</p>
+			<div class="componentpreview-content-id">
+				<p>ID: {{ props.content.id }}</p>
+				<p>Index: {{ props.content.index }}</p>
 			</div>
 			<div class="componentpreview-content-charts">
 				<img
@@ -163,10 +167,10 @@ function changeShowTagTooltipState(state) {
 				/>
 			</div>
 			<!-- The content in the target component should be passed into the "showMoreInfo" function of the mapStore to show more info -->
-			<button @click="dialogStore.showMoreInfo(content)">
+			<RouterLink :to="`/component/${content.index}`" v-if="!isStatic">
 				<p>資訊頁面</p>
 				<span>arrow_circle_right</span>
-			</button>
+			</RouterLink>
 		</div>
 		<Teleport to="body">
 			<!-- The class "chart-tooltip" could be edited in /assets/styles/chartStyles.css -->
@@ -211,6 +215,17 @@ function changeShowTagTooltipState(state) {
 			font-weight: 400;
 		}
 
+		p {
+			margin: 4px 0;
+		}
+
+		&-buttons {
+			min-width: 48px;
+			display: flex;
+			align-items: baseline;
+			justify-content: flex-end;
+		}
+
 		button span {
 			color: var(--color-complement-text);
 			font-family: var(--font-icon);
@@ -229,13 +244,6 @@ function changeShowTagTooltipState(state) {
 				color: rgb(160, 112, 106);
 			}
 		}
-
-		@media (max-width: 760px) {
-			button.isDelete {
-				display: none !important;
-			}
-		}
-
 		@media (min-width: 759px) {
 			button.isUnfavorite {
 				display: none !important;
@@ -245,13 +253,29 @@ function changeShowTagTooltipState(state) {
 
 	&-content {
 		display: flex;
-		flex-direction: column;
-		row-gap: var(--font-s);
+		justify-content: space-between;
+
+		&-id {
+			height: calc(100% - 2px);
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			padding: 0 4px;
+			border-radius: 5px;
+			border: 1px dashed var(--color-complement-text);
+
+			p {
+				font-size: var(--font-s);
+				color: var(--color-complement-text);
+			}
+		}
+
 		&-charts {
 			display: flex;
 			column-gap: 4px;
 			img {
 				width: 40px;
+				height: 40px;
 				border-radius: 5px;
 				background-color: var(--color-complement-text);
 			}
@@ -276,7 +300,7 @@ function changeShowTagTooltipState(state) {
 			align-items: center;
 		}
 
-		button {
+		a {
 			display: flex;
 			align-items: center;
 			transition: opacity 0.2s;

@@ -42,7 +42,7 @@ export const useAdminStore = defineStore("admin", {
 				const response = await axios.get(
 					`${VITE_API_URL}/dashboard/${this.currentDashboard.index}`
 				);
-				return response.data.data;
+				this.currentDashboard.components = response.data.data;
 			} catch (err) {
 				console.error(err);
 				dialogStore.showDialog("fail", "無法取得儀表板組件");

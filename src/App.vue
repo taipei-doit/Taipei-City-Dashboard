@@ -69,7 +69,7 @@ onMounted(() => {
 		</div>
 		<div
 			class="app-content"
-			v-else-if="authStore.currentPath === 'component'"
+			v-else-if="authStore.currentPath.includes('component')"
 		>
 			<ComponentSideBar />
 			<div class="app-content-main">

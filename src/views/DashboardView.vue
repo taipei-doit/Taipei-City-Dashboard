@@ -42,7 +42,7 @@ const dialogStore = useDialogStore();
 	</div>
 	<!-- other dashboards that have components -->
 	<div
-		v-else-if="contentStore.currentDashboard.content.length !== 0"
+		v-else-if="contentStore.currentDashboard.content?.length !== 0"
 		class="dashboard"
 	>
 		<ComponentContainer

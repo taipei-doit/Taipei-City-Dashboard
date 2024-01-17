@@ -39,8 +39,6 @@ export const useContentStore = defineStore("content", {
 			icon: "10k",
 			components: [],
 		},
-		// Stores information of the current component (/component)
-		currentComponent: {},
 		// Stores all contributors data. Reference the structure in /public/dashboards/all_contributors.json
 		contributors: {},
 		// Stores whether dashboards are loading
@@ -262,6 +260,7 @@ export const useContentStore = defineStore("content", {
 		},
 		/* /component methods */
 		async getAllComponents(params) {
+			this.error = false;
 			this.loading = true;
 			try {
 				const response = await axios.get(`${VITE_API_URL}/component/`, {
@@ -271,8 +270,84 @@ export const useContentStore = defineStore("content", {
 				this.components = response.data.data;
 				this.loading = false;
 			} catch {
+				this.loading = false;
 				this.error = true;
 			}
+		},
+		async getCurrentComponentData(index) {
+			const dialogStore = useDialogStore();
+			if (Object.keys(this.contributors).length === 0) {
+				this.setContributors();
+			}
+			this.error = false;
+			this.loading = true;
+
+			try {
+				const response = await axios.get(`${VITE_API_URL}/component/`, {
+					params: {
+						filtermode: "eq",
+						filterby: "index",
+						filtervalue: index,
+					},
+				});
+
+				dialogStore.moreInfoContent = response.data.data[0];
+			} catch {
+				this.loading = false;
+				this.error = true;
+			}
+
+			try {
+				const response = await axios.get(
+					`${VITE_API_URL}/component/${dialogStore.moreInfoContent.id}/chart`,
+					{
+						headers: !["static", "current", "demo"].includes(
+							dialogStore.moreInfoContent.time_from
+						)
+							? getComponentDataTimeframe(
+									dialogStore.moreInfoContent.time_from,
+									dialogStore.moreInfoContent.time_to,
+									true
+							  )
+							: {},
+					}
+				);
+
+				dialogStore.moreInfoContent.chart_data = response.data.data;
+			} catch {
+				this.loading = false;
+				this.error = true;
+			}
+
+			if (dialogStore.moreInfoContent.history_config) {
+				for (let i in dialogStore.moreInfoContent.history_config
+					.range) {
+					try {
+						const response = await axios.get(
+							`${VITE_API_URL}/component/${dialogStore.moreInfoContent.id}/history`,
+							{
+								headers: getComponentDataTimeframe(
+									dialogStore.moreInfoContent.history_config
+										.range[i],
+									"now",
+									true
+								),
+							}
+						);
+
+						if (i === "0") {
+							dialogStore.moreInfoContent.history_data = [];
+						}
+						dialogStore.moreInfoContent.history_data.push(
+							response.data.data
+						);
+					} catch {
+						this.loading = false;
+						this.error = true;
+					}
+				}
+			}
+			this.loading = false;
 		},
 
 		/* Dummy Functions to demonstrate the logic of some functions that require a backend */

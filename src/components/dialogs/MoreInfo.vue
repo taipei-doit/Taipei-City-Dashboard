@@ -257,7 +257,7 @@ function getLinkTag(link, index) {
 			span {
 				margin-right: 4px;
 				font-family: var(--font-icon);
-				font-size: calc(var(--font-m) * var(--font-to-icon));
+				font-size: var(--font-m);
 			}
 
 			button {
@@ -267,7 +267,7 @@ function getLinkTag(link, index) {
 				padding: 2px 4px;
 				border-radius: 5px;
 				background-color: var(--color-highlight);
-				font-size: var(--font-m);
+				font-size: 1rem;
 				transition: opacity 0.2s;
 
 				&:hover {

@@ -22,6 +22,7 @@ const props = defineProps({
 	content: { type: Object },
 	notMoreInfo: { type: Boolean, default: true },
 	isMapLayer: { type: Boolean, default: false },
+	isComponentView: { type: Boolean, default: false },
 	style: { type: Object, default: () => ({}) },
 });
 
@@ -121,7 +122,7 @@ function changeShowTagTooltipState(state) {
 			<div v-if="notMoreInfo">
 				<button
 					v-if="
-						!isMapLayer &&
+						!isMapLayer ||
 						contentStore.currentDashboard.index !== 'favorites'
 					"
 					:class="{
@@ -165,6 +166,34 @@ function changeShowTagTooltipState(state) {
 					class="isUnfavorite"
 				>
 					<span>delete</span>
+				</button>
+			</div>
+			<div v-else-if="isComponentView">
+				<button
+					v-if="
+						!contentStore.editDashboard.components
+							.map((item) => item.id)
+							.includes(props.content.id)
+					"
+					@click="
+						contentStore.editDashboard.components.push({
+							id: props.content.id,
+							name: props.content.name,
+						})
+					"
+					class="hide-if-mobile"
+				>
+					<span>add_circle</span>
+				</button>
+				<button
+					:class="{
+						isfavorite: contentStore.favorites.includes(
+							`${content.id}`
+						),
+					}"
+					@click="toggleFavorite"
+				>
+					<span>favorite</span>
 				</button>
 			</div>
 		</div>

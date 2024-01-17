@@ -107,7 +107,7 @@ function parseTime(time) {
 			<span>error</span>
 			<p>歷史資料異常</p>
 		</div>
-		<div v-else-if="props.series[currentSeries]">
+		<div v-else-if="props.series[currentSeries]" :style="{ width: '100%' }">
 			<apexchart
 				width="100%"
 				height="155px"

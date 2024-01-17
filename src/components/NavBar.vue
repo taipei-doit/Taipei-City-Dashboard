@@ -41,7 +41,14 @@ const linkQuery = computed(() => {
 			:style="{ pointerEvents: contentStore.loading ? 'none' : 'auto' }"
 			v-if="authStore.currentPath !== 'admin'"
 		>
-			<router-link :to="`/component`">組件瀏覽平台</router-link>
+			<router-link
+				:to="`/component`"
+				:class="{
+					'router-link-active':
+						authStore.currentPath.includes('component'),
+				}"
+				>組件瀏覽平台</router-link
+			>
 			<router-link
 				:to="`/dashboard${
 					linkQuery.includes('undefined') ? '' : linkQuery
