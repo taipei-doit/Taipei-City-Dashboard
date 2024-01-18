@@ -55,6 +55,7 @@ const linkActiveOrNot = computed(() => {
 	border-radius: 0 5px 5px 0;
 	transition: background-color 0.2s;
 	white-space: nowrap;
+	text-wrap: nowrap;
 
 	&:hover {
 		background-color: var(--color-component-background);

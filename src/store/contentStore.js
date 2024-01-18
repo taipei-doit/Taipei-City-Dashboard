@@ -30,13 +30,13 @@ export const useContentStore = defineStore("content", {
 			mode: null,
 			index: null,
 			name: null,
-			content: null,
+			components: null,
 		},
 		// Stores information of a new dashboard (/component)
 		editDashboard: {
-			index: null,
-			name: null,
-			icon: "10k",
+			index: "",
+			name: "",
+			icon: "star",
 			components: [],
 		},
 		// Stores all contributors data. Reference the structure in /public/dashboards/all_contributors.json
@@ -81,7 +81,7 @@ export const useContentStore = defineStore("content", {
 				return;
 			}
 			// 1-5. If all info is present, skip steps 2, 3, 5 and call the setCurrentDashboardContent method (4.)
-			this.currentDashboard.content = [];
+			this.currentDashboard.components = [];
 			this.mapLayers = [];
 			this.setCurrentDashboardContent();
 		},
@@ -134,9 +134,9 @@ export const useContentStore = defineStore("content", {
 				.get(`${VITE_API_URL}/dashboard/${this.currentDashboard.index}`)
 				.then((rs) => {
 					if (rs.data.data) {
-						this.currentDashboard.content = rs.data.data;
+						this.currentDashboard.components = rs.data.data;
 					} else {
-						this.currentDashboard.content = [];
+						this.currentDashboard.components = [];
 						this.loading = false;
 						return;
 					}
@@ -153,10 +153,10 @@ export const useContentStore = defineStore("content", {
 		async setCurrentDashboardChartData() {
 			for (
 				let index = 0;
-				index < this.currentDashboard.content.length;
+				index < this.currentDashboard.components.length;
 				index++
 			) {
-				const component = this.currentDashboard.content[index];
+				const component = this.currentDashboard.components[index];
 				if (component.chart_data) return;
 
 				await axios
@@ -172,7 +172,7 @@ export const useContentStore = defineStore("content", {
 							: {},
 					})
 					.then((rs) => {
-						this.currentDashboard.content[index].chart_data =
+						this.currentDashboard.components[index].chart_data =
 							rs.data.data;
 					})
 					.catch((e) => {
@@ -196,11 +196,11 @@ export const useContentStore = defineStore("content", {
 							)
 							.then((rs) => {
 								if (i === "0") {
-									this.currentDashboard.content[
+									this.currentDashboard.components[
 										index
 									].history_data = [];
 								}
-								this.currentDashboard.content[
+								this.currentDashboard.components[
 									index
 								].history_data.push(rs.data.data);
 							})
@@ -257,6 +257,14 @@ export const useContentStore = defineStore("content", {
 					});
 			}
 			this.loading = false;
+		},
+		clearCurrentDashboard() {
+			this.currentDashboard = {
+				mode: null,
+				index: null,
+				name: null,
+				components: [],
+			};
 		},
 		/* /component methods */
 		async getAllComponents(params) {

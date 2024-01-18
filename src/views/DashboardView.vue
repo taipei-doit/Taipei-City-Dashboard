@@ -33,7 +33,7 @@ const dialogStore = useDialogStore();
 		class="dashboard"
 	>
 		<ComponentContainer
-			v-for="item in contentStore.currentDashboard.content"
+			v-for="item in contentStore.currentDashboard.components"
 			:content="item"
 			:is-map-layer="true"
 			:key="item.index"
@@ -42,11 +42,11 @@ const dialogStore = useDialogStore();
 	</div>
 	<!-- other dashboards that have components -->
 	<div
-		v-else-if="contentStore.currentDashboard.content?.length !== 0"
+		v-else-if="contentStore.currentDashboard.components?.length !== 0"
 		class="dashboard"
 	>
 		<ComponentContainer
-			v-for="item in contentStore.currentDashboard.content"
+			v-for="item in contentStore.currentDashboard.components"
 			:content="item"
 			:key="item.index"
 		/>

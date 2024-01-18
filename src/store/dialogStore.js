@@ -21,6 +21,7 @@ export const useDialogStore = defineStore("dialog", {
 			addComponent: false,
 			addDashboard: false,
 			dashboardSettings: false,
+			addEditDashboards: false,
 			initialWarning: false,
 			mobileLayers: false,
 			mobileNavigation: false,
@@ -42,6 +43,8 @@ export const useDialogStore = defineStore("dialog", {
 		},
 		// Stores the content for more info dialogs
 		moreInfoContent: null,
+		// Stores Edit or Add mode for addeditdashboards dialog
+		addEdit: "",
 	}),
 	getters: {},
 	actions: {

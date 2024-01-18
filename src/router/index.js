@@ -99,9 +99,11 @@ router.beforeEach((to) => {
 		to.path.toLowerCase() === "/mapview"
 	) {
 		contentStore.setRouteParams(to.path, to.query.index);
+	} else {
+		contentStore.clearCurrentDashboard();
 	}
 	// Get Component data if the path is component-info
-	else if (to.name === "component-info") {
+	if (to.name === "component-info") {
 		contentStore.getCurrentComponentData(to.params.index);
 	}
 	// Clear the entire mapStore if the path doesn't start with /mapview

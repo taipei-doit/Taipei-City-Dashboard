@@ -18,67 +18,56 @@ const statusToIcon = {
 	<Teleport to="body">
 		<Transition name="notification">
 			<div
-				class="notificationcontainer"
+				class="notificationbar"
 				v-if="dialogStore.dialogs.notificationBar"
 			>
-				<div class="notificationcontainer-notification">
-					<span
-						:class="{
-							success:
-								dialogStore.notification.status === 'success',
-							fail: dialogStore.notification.status === 'fail',
-							info: dialogStore.notification.status === 'info',
-						}"
-						>{{
-							statusToIcon[dialogStore.notification.status]
-						}}</span
-					>
-					<h5
-						:class="{
-							success:
-								dialogStore.notification.status === 'success',
-							fail: dialogStore.notification.status === 'fail',
-							info: dialogStore.notification.status === 'info',
-						}"
-					>
-						{{ dialogStore.notification.message }}
-					</h5>
-				</div>
+				<span
+					:class="{
+						success: dialogStore.notification.status === 'success',
+						fail: dialogStore.notification.status === 'fail',
+						info: dialogStore.notification.status === 'info',
+					}"
+					>{{ statusToIcon[dialogStore.notification.status] }}</span
+				>
+				<h5
+					:class="{
+						success: dialogStore.notification.status === 'success',
+						fail: dialogStore.notification.status === 'fail',
+						info: dialogStore.notification.status === 'info',
+					}"
+				>
+					{{ dialogStore.notification.message }}
+				</h5>
 			</div>
 		</Transition>
 	</Teleport>
 </template>
 
 <style scoped lang="scss">
-.notificationcontainer {
-	width: 100vw;
-	display: flex;
-	justify-content: center;
+.notificationbar {
+	height: 3rem;
+	width: fit-content;
 	position: fixed;
 	top: 20px;
-	padding-bottom: 1rem;
+	left: 50%;
 	z-index: 100;
+	display: flex;
+	align-items: center;
+	padding: 0 1rem;
+	border: solid 1px var(--color-border);
+	border-radius: 5px;
+	box-shadow: 0px 5px 10px black;
+	background-color: rgb(63, 63, 63);
+	transform: translateX(-50%);
 
-	&-notification {
-		height: 3rem;
-		width: fit-content;
-		display: flex;
-		align-items: center;
-		padding: 0 1rem;
-		border: solid 1px var(--color-border);
-		border-radius: 5px;
-		box-shadow: 0px 5px 10px black;
-		background-color: rgb(63, 63, 63);
+	span {
+		margin-right: 10px;
+		font-family: var(--font-icon);
+		font-size: var(--font-l);
+	}
 
-		span {
-			margin-right: 10px;
-			font-family: var(--font-icon);
-			font-size: var(--font-l);
-		}
-
-		h5 {
-			font-weight: 400;
-		}
+	h5 {
+		font-weight: 400;
 	}
 }
 

@@ -1,13 +1,12 @@
 <!-- Developed by Taipei Urban Intelligence Center 2023 -->
 
 <script setup>
-import { onMounted, ref } from 'vue';
-import { useContentStore } from '../store/contentStore';
-import { useDialogStore } from '../store/dialogStore';
-import { useMapStore } from '../store/mapStore';
+import { onMounted, ref } from "vue";
+import { useContentStore } from "../store/contentStore";
+import { useDialogStore } from "../store/dialogStore";
+import { useMapStore } from "../store/mapStore";
 
-import AddDashboard from './dialogs/AddDashboard.vue';
-import SideBarTab from './utilities/SideBarTab.vue';
+import SideBarTab from "./utilities/SideBarTab.vue";
 
 const contentStore = useContentStore();
 const dialogStore = useDialogStore();
@@ -16,16 +15,21 @@ const mapStore = useMapStore();
 // The expanded state is also stored in localstorage to retain the setting after refresh
 const isExpanded = ref(true);
 
+function handleOpenAddDashboard() {
+	dialogStore.addEdit = "add";
+	dialogStore.showDialog("addEditDashboards");
+}
+
 function toggleExpand() {
 	isExpanded.value = isExpanded.value ? false : true;
-	localStorage.setItem('isExpanded', isExpanded.value);
+	localStorage.setItem("isExpanded", isExpanded.value);
 	if (!isExpanded.value) {
 		mapStore.resizeMap();
 	}
 }
 
 onMounted(() => {
-	const storedExpandedState = localStorage.getItem('isExpanded');
+	const storedExpandedState = localStorage.getItem("isExpanded");
 	if (storedExpandedState === "false") {
 		isExpanded.value = false;
 	} else {
@@ -35,23 +39,52 @@ onMounted(() => {
 </script>
 
 <template>
-	<div :class="{ sidebar: true, 'sidebar-collapse': !isExpanded, 'hide-if-mobile': true }">
+	<div
+		:class="{
+			sidebar: true,
+			'sidebar-collapse': !isExpanded,
+			'hide-if-mobile': true,
+		}"
+	>
+		<h2>{{ isExpanded ? `我的最愛` : `最愛` }}</h2>
+		<SideBarTab
+			icon="favorite"
+			title="收藏組件"
+			:expanded="isExpanded"
+			index="favorites"
+		/>
 		<div class="sidebar-sub-add">
-			<h2>{{ isExpanded ? `儀表板列表` : `列表` }}</h2>
-			<button v-if="isExpanded"
-				@click="dialogStore.showDialog('addDashboard')"><span>add_circle_outline</span>新增</button>
-			<AddDashboard />
+			<h2>{{ isExpanded ? `公共儀表板 ` : `公共` }}</h2>
+			<button v-if="isExpanded" @click="handleOpenAddDashboard">
+				<span>add_circle_outline</span>新增
+			</button>
 		</div>
 		<SideBarTab
-			v-for="item in contentStore.dashboards.filter((item) => item.index !== 'map-layers' && item.index !== 'favorites')"
-			:icon="item.icon" :title="item.name" :index="item.index" :key="item.index" :expanded="isExpanded" />
+			v-for="item in contentStore.dashboards.filter(
+				(item) =>
+					item.index !== 'map-layers' && item.index !== 'favorites'
+			)"
+			:icon="item.icon"
+			:title="item.name"
+			:index="item.index"
+			:key="item.index"
+			:expanded="isExpanded"
+		/>
 		<h2>{{ isExpanded ? `基本地圖圖層` : `圖層` }}</h2>
-		<SideBarTab icon="public" title="圖資資訊" :expanded="isExpanded" index="map-layers" />
-		<button class="sidebar-collapse-button" @click="toggleExpand"><span>{{ isExpanded ? "keyboard_double_arrow_left" :
-			"keyboard_double_arrow_right"
-		}}</span></button>
-		<h2>{{ isExpanded ? `我的最愛` : `最愛` }}</h2>
-		<SideBarTab icon="favorite" title="收藏組件" :expanded="isExpanded" index="favorites" />
+		<SideBarTab
+			icon="public"
+			title="圖資資訊"
+			:expanded="isExpanded"
+			index="map-layers"
+		/>
+
+		<button class="sidebar-collapse-button" @click="toggleExpand">
+			<span>{{
+				isExpanded
+					? "keyboard_double_arrow_left"
+					: "keyboard_double_arrow_right"
+			}}</span>
+		</button>
 	</div>
 </template>
 
@@ -75,6 +108,7 @@ onMounted(() => {
 	h2 {
 		color: var(--color-complement-text);
 		font-weight: 400;
+		text-wrap: nowrap;
 	}
 
 	&-sub {
@@ -83,15 +117,18 @@ onMounted(() => {
 		&-add {
 			width: 100%;
 			display: flex;
+			text-wrap: nowrap;
 
 			button {
 				display: flex;
 				align-items: center;
+				flex-wrap: nowrap;
 				margin-left: 0.5rem;
 				padding: 2px 6px;
 				border-radius: 5px;
 				background-color: var(--color-highlight);
 				color: var(--color-normal-text);
+				text-wrap: nowrap;
 
 				span {
 					margin-right: 4px;
@@ -126,8 +163,6 @@ onMounted(() => {
 				font-family: var(--font-icon);
 				font-size: var(--font-l);
 			}
-
-
 		}
 	}
 }

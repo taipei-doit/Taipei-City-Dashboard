@@ -272,6 +272,7 @@ function handleClose() {
 			grid-template-columns: 85px 85px 85px;
 			column-gap: 6px;
 			row-gap: 6px;
+			overflow-y: scroll;
 
 			button:last-child {
 				height: 48px;

@@ -86,6 +86,7 @@ export const useMapStore = defineStore("map", {
 		// Due to performance concerns, Taipei 3D Buildings won't be added in the mobile version
 		initializeBasicLayers() {
 			const authStore = useAuthStore();
+			if (!this.map) return;
 			fetch(`${BASE_URL}/mapData/taipei_town.geojson`)
 				.then((response) => response.json())
 				.then((data) => {
