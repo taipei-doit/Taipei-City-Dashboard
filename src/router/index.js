@@ -90,6 +90,16 @@ router.beforeEach((to) => {
 	authStore.setCurrentPath(to.name);
 });
 
+// Redirects blocked routes in mobile mode
+router.beforeEach((to) => {
+	const authStore = useAuthStore();
+	if (authStore.isMobileDevice && authStore.isNarrowDevice) {
+		if (!["dashboard", "component-info"].includes(to.name)) {
+			router.push("/dashboard");
+		}
+	}
+});
+
 router.beforeEach((to) => {
 	const contentStore = useContentStore();
 	const mapStore = useMapStore();

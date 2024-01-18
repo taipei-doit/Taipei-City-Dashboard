@@ -1,6 +1,9 @@
 <script setup>
+import router from "../router";
 import { useContentStore } from "../store/contentStore";
 import { useDialogStore } from "../store/dialogStore";
+import { useAuthStore } from "../store/authStore";
+
 import ComponentContainer from "../components/components/ComponentContainer.vue";
 import HistoryChart from "../components/utilities/HistoryChart.vue";
 import ReportIssue from "../components/dialogs/ReportIssue.vue";
@@ -10,11 +13,19 @@ const { BASE_URL } = import.meta.env;
 
 const contentStore = useContentStore();
 const dialogStore = useDialogStore();
+const authStore = useAuthStore();
 </script>
 
 <template>
 	<div class="componentinfoview-header">
-		<RouterLink to="/component">
+		<button
+			v-if="authStore.isMobileDevice && authStore.isNarrowDevice"
+			@click="router.back()"
+		>
+			<span>arrow_circle_left</span>
+			<p>返回儀表板</p>
+		</button>
+		<RouterLink v-else to="/component">
 			<span>arrow_circle_left</span>
 			<p>返回組件瀏覽平台</p></RouterLink
 		>
@@ -206,7 +217,8 @@ const dialogStore = useDialogStore();
 	&-header {
 		margin: 20px var(--font-m) 0 10px;
 
-		a {
+		a,
+		button {
 			display: flex;
 			align-items: center;
 			transition: opacity 0.2s;

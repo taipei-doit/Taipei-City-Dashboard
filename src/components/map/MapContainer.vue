@@ -88,11 +88,15 @@ onMounted(() => {
 .mapcontainer {
 	position: relative;
 	width: 100%;
-	height: calc(100%);
+	height: 100%;
 	flex: 1;
 
 	&-map {
 		height: calc(100% - 32px);
+
+		@media (max-width: 1000px) {
+			height: 100%;
+		}
 	}
 
 	&-loading {
@@ -220,10 +224,6 @@ onMounted(() => {
 	width: 100%;
 	height: 100%;
 	border-radius: 5px;
-
-	@media (max-width: 1000px) {
-		height: 100%;
-	}
 }
 
 @keyframes colorfade {

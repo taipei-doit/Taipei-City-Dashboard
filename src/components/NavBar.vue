@@ -37,7 +37,7 @@ const linkQuery = computed(() => {
 			</div>
 		</div>
 		<div
-			class="navbar-tabs hide-if-mobile"
+			class="navbar-tabs"
 			:style="{ pointerEvents: contentStore.loading ? 'none' : 'auto' }"
 			v-if="authStore.currentPath !== 'admin'"
 		>
@@ -74,7 +74,7 @@ const linkQuery = computed(() => {
 					isFullscreen ? "fullscreen_exit" : "fullscreen"
 				}}</span>
 			</button>
-			<div class="navbar-user-user hide-if-mobile">
+			<div class="navbar-user-user">
 				<button>{{ authStore.user.name }}</button>
 				<ul>
 					<li>
@@ -82,11 +82,16 @@ const linkQuery = computed(() => {
 							用戶設定
 						</button>
 					</li>
-					<li v-if="authStore.currentPath !== 'admin'">
+					<li
+						v-if="authStore.currentPath !== 'admin'"
+						class="hide-if-mobile"
+					>
 						<router-link to="/admin">管理員後臺</router-link>
 					</li>
 					<li v-else>
-						<router-link to="/dashboard">返回儀表板</router-link>
+						<router-link to="/dashboard" class="hide-if-mobile"
+							>返回儀表板</router-link
+						>
 					</li>
 					<li>
 						<button @click="authStore.handleLogout">登出</button>
@@ -159,6 +164,10 @@ const linkQuery = computed(() => {
 				opacity: 1;
 			}
 		}
+
+		@media screen and (max-width: 750px) {
+			display: none;
+		}
 	}
 
 	&-user {
@@ -190,6 +199,9 @@ const linkQuery = computed(() => {
 			height: 60px;
 			display: flex;
 			align-items: center;
+			@media screen and (max-width: 750px) {
+				display: none;
+			}
 
 			ul {
 				min-width: 100px;

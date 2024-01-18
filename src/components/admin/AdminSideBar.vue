@@ -34,7 +34,6 @@ onMounted(() => {
 		:class="{
 			adminsidebar: true,
 			'adminsidebar-collapse': !isExpanded,
-			'hide-if-mobile': true,
 		}"
 	>
 		<h2>{{ isExpanded ? `系統總覽` : `系統` }}</h2>

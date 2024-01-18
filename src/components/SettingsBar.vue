@@ -35,20 +35,6 @@ function handleOpenSettings() {
 	dialogStore.addEdit = "edit";
 	dialogStore.showDialog("addEditDashboards");
 }
-
-function handleToggle() {
-	if (isDashboard.value) {
-		router.replace({
-			name: "mapview",
-			query: { index: route.query.index },
-		});
-	} else {
-		router.replace({
-			name: "dashboard",
-			query: { index: route.query.index },
-		});
-	}
-}
 </script>
 
 <template>
@@ -64,6 +50,16 @@ function handleToggle() {
 					>arrow_drop_down_circle</span
 				>
 			</button>
+			<button
+				@click="handleOpenSettings"
+				class="show-if-mobile"
+				v-if="
+					contentStore.currentDashboard.index !== 'map-layers' &&
+					contentStore.currentDashboard.index !== 'favorites'
+				"
+			>
+				<span class="settingsbar-title-navigation">settings</span>
+			</button>
 			<MobileNavigation />
 			<div
 				class="settingsbar-settings hide-if-mobile"
@@ -78,21 +74,6 @@ function handleToggle() {
 				</button>
 				<AddEditDashboards />
 			</div>
-		</div>
-		<div class="settingsbar-navigation show-if-mobile">
-			<p>圖表</p>
-			<div>
-				<!-- The class "toggleswitch is slightly modified below, further changes could be made in /assets/styles/toggleswitch.css" -->
-				<label class="toggleswitch">
-					<input
-						type="checkbox"
-						@change="handleToggle"
-						v-model="isDashboard"
-					/>
-					<span class="toggleswitch-slider"></span>
-				</label>
-			</div>
-			<p>地圖</p>
 		</div>
 	</div>
 </template>

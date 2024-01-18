@@ -91,7 +91,7 @@ const dialogStore = useDialogStore();
 		grid-template-columns: 1fr 1fr;
 	}
 
-	@media (min-width: 1150px) {
+	@media (min-width: 1200px) {
 		grid-template-columns: 1fr 1fr 1fr;
 	}
 

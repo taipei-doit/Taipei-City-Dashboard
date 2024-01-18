@@ -309,10 +309,6 @@ function changeShowTagTooltipState(state) {
 				opacity: 0.8;
 			}
 
-			@media (max-width: 760px) {
-				display: none !important;
-			}
-
 			span {
 				margin-left: 4px;
 				color: var(--color-highlight);

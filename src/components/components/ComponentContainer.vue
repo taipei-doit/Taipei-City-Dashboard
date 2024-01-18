@@ -7,6 +7,7 @@
 import { computed, ref } from "vue";
 import { useDialogStore } from "../../store/dialogStore";
 import { useContentStore } from "../../store/contentStore";
+import { useAuthStore } from "../../store/authStore";
 
 import ComponentTag from "../utilities/ComponentTag.vue";
 import TagTooltip from "../utilities/TagTooltip.vue";
@@ -16,6 +17,7 @@ import { getComponentDataTimeframe } from "../../assets/utilityFunctions/dataTim
 
 const dialogStore = useDialogStore();
 const contentStore = useContentStore();
+const authStore = useAuthStore();
 
 const props = defineProps({
 	// The complete config (incl. chart data) of a dashboard component will be passed in
@@ -137,7 +139,7 @@ function changeShowTagTooltipState(state) {
 				<!-- Change @click to a report issue function to implement functionality -->
 				<button
 					title="回報問題"
-					class="show-if-mobile"
+					class="isFlag"
 					@click="
 						dialogStore.showReportIssue(
 							content.id,
@@ -284,6 +286,13 @@ function changeShowTagTooltipState(state) {
 				<p>組件資訊</p>
 				<span>arrow_circle_right</span>
 			</button>
+			<RouterLink
+				:to="`/component/${content.index}`"
+				v-if="authStore.isMobileDevice && authStore.isNarrowDevice"
+			>
+				<p>資訊頁面</p>
+				<span>arrow_circle_right</span>
+			</RouterLink>
 		</div>
 		<Teleport to="body">
 			<!-- The class "chart-tooltip" could be edited in /assets/styles/chartStyles.css -->
@@ -364,6 +373,12 @@ function changeShowTagTooltipState(state) {
 
 		@media (max-width: 760px) {
 			button.isDelete {
+				display: none !important;
+			}
+		}
+
+		@media (min-width: 760px) {
+			button.isFlag {
 				display: none !important;
 			}
 		}
@@ -472,17 +487,14 @@ function changeShowTagTooltipState(state) {
 			align-items: center;
 		}
 
-		button {
+		button,
+		a {
 			display: flex;
 			align-items: center;
 			transition: opacity 0.2s;
 
 			&:hover {
 				opacity: 0.8;
-			}
-
-			@media (max-width: 760px) {
-				display: none !important;
 			}
 
 			span {
@@ -496,6 +508,12 @@ function changeShowTagTooltipState(state) {
 				max-height: 1.2rem;
 				color: var(--color-highlight);
 				user-select: none;
+			}
+		}
+
+		button {
+			@media (max-width: 760px) {
+				display: none !important;
 			}
 		}
 	}

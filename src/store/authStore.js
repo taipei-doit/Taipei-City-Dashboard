@@ -25,6 +25,7 @@ export const useAuthStore = defineStore("auth", {
 		tokens: {},
 		errorMessage: "",
 		isMobileDevice: false,
+		isNarrowDevice: false,
 		currentPath: "",
 	}),
 	getters: {},
@@ -58,6 +59,9 @@ export const useAuthStore = defineStore("auth", {
 			}
 			if (window.matchMedia("(pointer:fine)").matches) {
 				this.isMobileDevice = false;
+			}
+			if (window.screen.width < 750) {
+				this.isNarrowDevice = true;
 			}
 		},
 		setCurrentPath(path) {
