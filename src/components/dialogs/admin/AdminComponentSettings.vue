@@ -1,20 +1,20 @@
-<!-- Developed by Taipei Urban Intelligence Center 2023 -->
+<!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 
 <script setup>
 import { ref, defineProps } from "vue";
-import { useDialogStore } from "../../store/dialogStore";
-import { useAdminStore } from "../../store/adminStore";
 import { storeToRefs } from "pinia";
+import { useDialogStore } from "../../../store/dialogStore";
+import { useAdminStore } from "../../../store/adminStore";
 
-import DialogContainer from "./DialogContainer.vue";
-import ComponentContainer from "../components/ComponentContainer.vue";
-import InputTags from "../utilities/forms/InputTags.vue";
-import SelectButtons from "../utilities/forms/SelectButtons.vue";
-import HistoryChart from "../utilities/HistoryChart.vue";
+import DialogContainer from "../DialogContainer.vue";
+import ComponentContainer from "../../components/ComponentContainer.vue";
+import InputTags from "../../utilities/forms/InputTags.vue";
+import SelectButtons from "../../utilities/forms/SelectButtons.vue";
+import HistoryChart from "../../charts/HistoryChart.vue";
 
-import { chartsPerDataType } from "../../assets/configs/apexcharts/chartTypes";
-import { timeTerms } from "../../assets/configs/allTimes";
-import { mapTypes } from "../../assets/configs/mapbox/mapConfig";
+import { chartsPerDataType } from "../../../assets/configs/apexcharts/chartTypes";
+import { timeTerms } from "../../../assets/configs/allTimes";
+import { mapTypes } from "../../../assets/configs/mapbox/mapConfig";
 
 const dialogStore = useDialogStore();
 const adminStore = useAdminStore();
@@ -43,7 +43,7 @@ function handleClose() {
 </script>
 
 <template>
-	<DialogContainer :dialog="`admincomponentsettings`" @on-close="handleClose">
+	<DialogContainer :dialog="`adminComponentSettings`" @on-close="handleClose">
 		<div class="admincomponentsettings">
 			<div class="admincomponentsettings-header">
 				<h2>組件設定</h2>
@@ -393,13 +393,24 @@ function handleClose() {
 							:key="map_config.index"
 						>
 							<hr v-if="index > 0" />
-							<label>地圖{{ index + 1 }} Index</label>
-							<input
-								:value="
-									currentComponent.map_config[index].index
-								"
-								disabled
-							/>
+							<label>地圖{{ index + 1 }} ID / Index</label>
+							<div class="two-block">
+								<input
+									:value="
+										currentComponent.map_config[index].id
+									"
+									disabled
+								/>
+								<input
+									v-model="
+										currentComponent.map_config[index].index
+									"
+									:maxlength="30"
+									:minlength="1"
+									required
+								/>
+							</div>
+
 							<label
 								>地圖{{ index + 1 }} 名稱* ({{
 									currentComponent.map_config[index].title
@@ -544,14 +555,15 @@ function handleClose() {
 	&-header {
 		display: flex;
 		justify-content: space-between;
+
 		button {
 			display: flex;
 			align-items: center;
 			justify-self: baseline;
-			border-radius: 5px;
-			font-size: var(--font-m);
 			padding: 0px 4px;
+			border-radius: 5px;
 			background-color: var(--color-highlight);
+			font-size: var(--font-m);
 		}
 	}
 
@@ -622,12 +634,12 @@ function handleClose() {
 		}
 
 		&-inputcolor {
+			width: 140px;
+			height: 40px;
 			appearance: none;
 			display: flex;
 			justify-content: center;
 			align-items: center;
-			width: 140px;
-			height: 40px;
 			padding: 0;
 			outline: none;
 			cursor: pointer;

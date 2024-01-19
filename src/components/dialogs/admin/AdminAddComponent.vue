@@ -1,30 +1,29 @@
-<!-- Developed by Taipei Urban Intelligence Center 2023 -->
+<!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 
 <!-- This component only serves a functional purpose if a backend is connected -->
 <!-- For static applications, this component could be removed or modified to be a dashboard component overviewer -->
 
 <script setup>
 import { computed, onMounted, ref } from "vue";
-import { useDialogStore } from "../../store/dialogStore";
-import { useAdminStore } from "../../store/adminStore";
+import http from "../../../router/axios";
 
-import DialogContainer from "./DialogContainer.vue";
-import axios from "axios";
-import ComponentPreview from "../components/ComponentPreview.vue";
+import { useDialogStore } from "../../../store/dialogStore";
+import { useAdminStore } from "../../../store/adminStore";
+import { useContentStore } from "../../../store/contentStore";
 
-const { VITE_API_URL } = import.meta.env;
+import DialogContainer from "../DialogContainer.vue";
+import ComponentPreview from "../../components/ComponentPreview.vue";
 
 const dialogStore = useDialogStore();
 const adminStore = useAdminStore();
-
-// The following six states store the filters / parameters inputted by the user
-const searchName = ref("");
-const searchIndex = ref("");
+const contentStore = useContentStore();
 
 const allComponents = ref(null);
 const componentsSelected = ref([]);
+const searchName = ref("");
+const searchIndex = ref("");
 
-// Filters out components already in the dashboard / maplayer components
+// Filters out components already in the dashboard
 const availableComponents = computed(() => {
 	const taken = adminStore.currentDashboard.components.map((item) => item.id);
 	const available = allComponents.value.filter(
@@ -33,18 +32,16 @@ const availableComponents = computed(() => {
 	return available;
 });
 
-function handleSearch() {
-	axios
-		.get(`${VITE_API_URL}/component/`, {
-			params: {
-				pagesize: 100,
-				searchbyindex: searchIndex.value,
-				searchbyname: searchName.value,
-			},
-		})
-		.then((res) => {
-			allComponents.value = res.data.data;
-		});
+async function handleSearch() {
+	const res = await http.get(`/component/`, {
+		params: {
+			pagesize: 100,
+			searchbyindex: searchIndex.value,
+			searchbyname: searchName.value,
+		},
+	});
+	allComponents.value = res.data.data;
+	contentStore.loading = false;
 }
 function handleSubmit() {
 	adminStore.currentDashboard.components =
@@ -55,7 +52,7 @@ function handleClose() {
 	searchName.value = "";
 	searchIndex.value = "";
 	componentsSelected.value = [];
-	dialogStore.dialogs.adminaddcomponent = false;
+	dialogStore.dialogs.adminAddComponent = false;
 }
 
 onMounted(() => {
@@ -64,7 +61,7 @@ onMounted(() => {
 </script>
 
 <template>
-	<DialogContainer :dialog="`adminaddcomponent`" @onClose="handleClose">
+	<DialogContainer :dialog="`adminAddComponent`" @onClose="handleClose">
 		<div class="addcomponent">
 			<div class="addcomponent-header">
 				<h2>新增組件至儀表板</h2>
@@ -183,8 +180,8 @@ onMounted(() => {
 						color: var(--color-complement-text);
 						font-family: var(--font-icon);
 						font-size: var(--font-m);
-						cursor: pointer;
 						transition: color 0.2s;
+						cursor: pointer;
 
 						&:hover {
 							color: var(--color-highlight);

@@ -1,3 +1,4 @@
+<!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 <script setup>
 import { defineProps, defineEmits } from "vue";
 
@@ -60,8 +61,8 @@ defineEmits(["sort"]);
 	cursor: default;
 
 	p {
-		font-size: var(--font-m);
 		margin: 0 8px;
+		font-size: var(--font-m);
 	}
 
 	&-sort {
@@ -71,10 +72,10 @@ defineEmits(["sort"]);
 		cursor: pointer;
 
 		span {
+			margin-left: -6px;
 			font-family: var(--font-icon);
 			font-size: var(--font-l);
 			transition: color 0.2s;
-			margin-left: -6px;
 		}
 		span:first-child {
 			margin-bottom: -12px;

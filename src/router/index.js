@@ -1,6 +1,6 @@
-/* Developed By Taipei Urban Intelligence Center 2023 */
+/* Developed by Taipei Urban Intelligence Center 2023-2024*/
 
-// Lead Developer:  Igor Ho (FE Engineer)
+// Lead Developer:  Igor Ho (Full Stack Engineer)
 // Data Pipelines:  Iima Yu (Data Scientist)
 // Design and UX: Roy Lin (Prev. Consultant), Chu Chen (Researcher)
 // Systems: Ann Shih (Systems Engineer)
@@ -100,6 +100,7 @@ router.beforeEach((to) => {
 	}
 });
 
+// Handles content related tasks (gets content for each route)
 router.beforeEach((to) => {
 	const contentStore = useContentStore();
 	const mapStore = useMapStore();

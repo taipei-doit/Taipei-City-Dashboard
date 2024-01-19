@@ -1,18 +1,17 @@
-<!-- Developed by Taipei Urban Intelligence Center 2023 -->
+<!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 
 <script setup>
 import { ref, computed } from "vue";
+import { storeToRefs } from "pinia";
 
 import { useDialogStore } from "../../store/dialogStore";
 import { useContentStore } from "../../store/contentStore";
-import { storeToRefs } from "pinia";
 
 import DialogContainer from "./DialogContainer.vue";
 import ComponentDragTags from "../utilities/forms/ComponentDragTags.vue";
 import CustomCheckBox from "../utilities/forms/CustomCheckBox.vue";
-
-import { allIcons } from "../../assets/configs/AllIcons";
 import AddComponent from "./AddComponent.vue";
+import { allIcons } from "../../assets/configs/AllIcons";
 
 const dialogStore = useDialogStore();
 const contentStore = useContentStore();
@@ -196,11 +195,12 @@ function handleClose() {
 				display: flex;
 				align-items: center;
 				justify-self: baseline;
-				border-radius: 5px;
-				font-size: var(--font-m);
 				padding: 0px 4px;
-				transition: opacity 0.2s;
+				border-radius: 5px;
 				background-color: var(--color-highlight);
+				font-size: var(--font-m);
+				transition: opacity 0.2s;
+
 				&:hover {
 					opacity: 0.8;
 				}

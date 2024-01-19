@@ -1,4 +1,4 @@
-<!-- Developed by Taipei Urban Intelligence Center 2023 -->
+<!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 
 <script setup>
 import { onMounted, ref } from "vue";
@@ -27,6 +27,7 @@ onMounted(() => {
 <template>
 	<div class="mapcontainer">
 		<div class="mapcontainer-map">
+			<!-- #mapboxBox needs to be empty to ensure Mapbox performance -->
 			<div id="mapboxBox"></div>
 			<div
 				class="mapcontainer-loading"
@@ -150,11 +151,11 @@ onMounted(() => {
 				width: 1.2rem;
 				height: 1.2rem;
 				position: absolute;
+				top: -0.5rem;
+				right: -0.3rem;
 				display: flex;
 				align-items: center;
 				justify-content: center;
-				top: -0.5rem;
-				right: -0.3rem;
 				border-radius: 50%;
 				opacity: 0;
 				background-color: var(--color-border);
@@ -202,12 +203,12 @@ onMounted(() => {
 	&-layers {
 		width: 1.75rem;
 		height: 1.75rem;
-		display: flex;
-		align-items: center;
-		justify-content: center;
 		position: absolute;
 		right: 10px;
 		top: 108px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
 		border-radius: 50%;
 		background-color: white;
 		z-index: 1;
@@ -237,12 +238,6 @@ onMounted(() => {
 
 	100% {
 		color: var(--color-complement-text);
-	}
-}
-
-@keyframes spin {
-	to {
-		transform: rotate(360deg);
 	}
 }
 </style>

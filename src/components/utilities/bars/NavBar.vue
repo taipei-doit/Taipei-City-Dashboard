@@ -1,4 +1,4 @@
-<!-- Developed by Taipei Urban Intelligence Center 2023 -->
+<!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 
 <!-- Navigation will be hidden from the navbar in mobile mode and moved to the settingsbar -->
 
@@ -6,17 +6,15 @@
 const { VITE_APP_TITLE } = import.meta.env;
 import { computed } from "vue";
 import { useRoute } from "vue-router";
-import { useAuthStore } from "../store/authStore";
-import { useDialogStore } from "../store/dialogStore";
-import { useContentStore } from "../store/contentStore";
 import { useFullscreen } from "@vueuse/core";
+import { useAuthStore } from "../../../store/authStore";
+import { useDialogStore } from "../../../store/dialogStore";
 
-import UserSettings from "./dialogs/UserSettings.vue";
+import UserSettings from "../../dialogs/UserSettings.vue";
 
 const route = useRoute();
 const authStore = useAuthStore();
 const dialogStore = useDialogStore();
-const contentStore = useContentStore();
 const { isFullscreen, toggle } = useFullscreen();
 
 const linkQuery = computed(() => {
@@ -29,18 +27,14 @@ const linkQuery = computed(() => {
 	<div class="navbar">
 		<div class="navbar-logo">
 			<div class="navbar-logo-image">
-				<img src="../assets/images/TUIC.svg" alt="tuic logo" />
+				<img src="../../../assets/images/TUIC.svg" alt="tuic logo" />
 			</div>
 			<div>
 				<h1>{{ VITE_APP_TITLE }}</h1>
 				<h2>Taipei City Dashboard</h2>
 			</div>
 		</div>
-		<div
-			class="navbar-tabs"
-			:style="{ pointerEvents: contentStore.loading ? 'none' : 'auto' }"
-			v-if="authStore.currentPath !== 'admin'"
-		>
+		<div class="navbar-tabs" v-if="authStore.currentPath !== 'admin'">
 			<router-link
 				:to="`/component`"
 				:class="{

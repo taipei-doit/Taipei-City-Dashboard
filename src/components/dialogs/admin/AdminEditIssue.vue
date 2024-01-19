@@ -1,12 +1,12 @@
-<!-- Developed by Taipei Urban Intelligence Center 2023 -->
+<!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 
 <script setup>
 import { defineProps } from "vue";
-import { useDialogStore } from "../../store/dialogStore";
-import { useAdminStore } from "../../store/adminStore";
 import { storeToRefs } from "pinia";
+import { useDialogStore } from "../../../store/dialogStore";
+import { useAdminStore } from "../../../store/adminStore";
 
-import DialogContainer from "./DialogContainer.vue";
+import DialogContainer from "../DialogContainer.vue";
 
 const dialogStore = useDialogStore();
 const adminStore = useAdminStore();
@@ -26,7 +26,7 @@ function handleClose() {
 </script>
 
 <template>
-	<DialogContainer :dialog="`admineditissue`" @on-close="handleClose">
+	<DialogContainer :dialog="`adminEditIssue`" @on-close="handleClose">
 		<div class="admineditissue">
 			<div class="admineditissue-header">
 				<h2>用戶問題處理</h2>
@@ -103,10 +103,10 @@ function handleClose() {
 			display: flex;
 			align-items: center;
 			justify-self: baseline;
-			border-radius: 5px;
-			font-size: var(--font-m);
 			padding: 0px 4px;
+			border-radius: 5px;
 			background-color: var(--color-highlight);
+			font-size: var(--font-m);
 		}
 	}
 
@@ -145,8 +145,8 @@ function handleClose() {
 			width: 4px;
 		}
 		&::-webkit-scrollbar-thumb {
-			background-color: rgba(136, 135, 135, 0.5);
 			border-radius: 4px;
+			background-color: rgba(136, 135, 135, 0.5);
 		}
 		&::-webkit-scrollbar-thumb:hover {
 			background-color: rgba(136, 135, 135, 1);

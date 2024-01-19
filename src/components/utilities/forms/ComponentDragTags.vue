@@ -1,3 +1,6 @@
+<!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
+
+<!-- Draggable tags that show component info to be used for dashboard settings -->
 <script setup>
 import { defineProps, ref } from "vue";
 
@@ -83,9 +86,9 @@ const handleDragEnd = () => {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
-	background-color: var(--color-complement-text);
-	border-radius: 5px;
 	padding: 4px;
+	border-radius: 5px;
+	background-color: var(--color-complement-text);
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: clip;
@@ -95,20 +98,21 @@ const handleDragEnd = () => {
 	}
 
 	button {
-		background-color: var(--color-complement-text);
 		position: absolute;
 		top: 3px;
 		right: 2px;
 		padding: 2px 2px 0;
+		background-color: var(--color-complement-text);
+
 		span {
 			font-family: var(--font-icon);
 		}
 	}
 
 	&-dragging {
-		background-color: var(--color-component-background);
-		border: dashed 1px var(--color-border);
 		padding: 2px 4px;
+		border: dashed 1px var(--color-border);
+		background-color: var(--color-component-background);
 
 		button {
 			display: none;

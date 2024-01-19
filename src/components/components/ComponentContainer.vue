@@ -1,4 +1,4 @@
-<!-- Developed by Taipei Urban Intelligence Center 2023 -->
+<!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 
 <!-- This component has three modes 'normal dashboard' / 'more info' / 'basic map layers' -->
 <!-- The different modes are controlled by the props "notMoreInfo" (default true) and "isMapLayer" (default false) -->
@@ -9,8 +9,8 @@ import { useDialogStore } from "../../store/dialogStore";
 import { useContentStore } from "../../store/contentStore";
 import { useAuthStore } from "../../store/authStore";
 
-import ComponentTag from "../utilities/ComponentTag.vue";
-import TagTooltip from "../utilities/TagTooltip.vue";
+import ComponentTag from "../utilities/miscellaneous/ComponentTag.vue";
+import TagTooltip from "../utilities/miscellaneous/TagTooltip.vue";
 import { chartTypes } from "../../assets/configs/apexcharts/chartTypes";
 import { timeTerms } from "../../assets/configs/allTimes";
 import { getComponentDataTimeframe } from "../../assets/utilityFunctions/dataTimeframe";

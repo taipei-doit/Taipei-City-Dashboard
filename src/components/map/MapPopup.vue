@@ -1,25 +1,31 @@
-<!-- Developed by Taipei Urban Intelligence Center 2023 -->
+<!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 
 <!-- This component is mounted programmically by the mapstore. "mapConfig" and "popupContent" are passed in in the mapStore -->
-<script setup>
-</script>
+<script setup></script>
 
 <template>
-	<!-- <div class="mappopup">
-        <button>{{ mapConfig.title }}</button>
-        <div>
-            <div class="mappopup-content" v-for="item in mapConfig.property" :key="item.key">
-                <h3>{{ item.name }}</h3>
-                <p>{{ popupContent.properties[item.key] }}</p>
-            </div>
-        </div>
-    </div> -->
 	<div class="mappopup">
 		<div class="mappopup-tab">
-			<div v-for="( mapConfig, index) in mapConfigs" :key="mapConfig.id"
-				:class="{ 'mappopup-tab-active': activeTab === index }">
-				<button @click="() => { activeTab = index }">{{ activeTab === index ? mapConfig.title :
-					(mapConfig.title.length > 5 ? mapConfig.title.slice(0, 4) + "..." : mapConfig.title) }}</button>
+			<div
+				v-for="(mapConfig, index) in mapConfigs"
+				:key="mapConfig.id"
+				:class="{ 'mappopup-tab-active': activeTab === index }"
+			>
+				<button
+					@click="
+						() => {
+							activeTab = index;
+						}
+					"
+				>
+					{{
+						activeTab === index
+							? mapConfig.title
+							: mapConfig.title.length > 5
+							? mapConfig.title.slice(0, 4) + "..."
+							: mapConfig.title
+					}}
+				</button>
 			</div>
 		</div>
 		<div class="mappopup-content">
@@ -34,11 +40,11 @@
 <style lang="scss">
 @keyframes easein {
 	0% {
-		opacity: 0
+		opacity: 0;
 	}
 
 	100% {
-		opacity: 1
+		opacity: 1;
 	}
 }
 

@@ -1,32 +1,16 @@
-<!-- Developed by Taipei Urban Intelligence Center 2023 -->
+<!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 
-<!-- Navigation between dashboard and mapview will switch here in the mobile version -->
-<!-- Adding new components and settings is disabled in the map layer dashboard and the mobile version -->
+<!-- Adding new components and settings is disabled in public dashboards and the mobile version -->
 
 <script setup>
-import { ref, watch } from "vue";
-import { useRoute, useRouter } from "vue-router";
-import { useContentStore } from "../store/contentStore";
-import { useDialogStore } from "../store/dialogStore";
+import { useContentStore } from "../../../store/contentStore";
+import { useDialogStore } from "../../../store/dialogStore";
 
-import MobileNavigation from "./dialogs/MobileNavigation.vue";
-import AddEditDashboards from "./dialogs/AddEditDashboards.vue";
+import MobileNavigation from "../../dialogs/MobileNavigation.vue";
+import AddEditDashboards from "../../dialogs/AddEditDashboards.vue";
 
-const route = useRoute();
-const router = useRouter();
 const contentStore = useContentStore();
 const dialogStore = useDialogStore();
-
-// The following are controls for the mobile version to toggle between dashboard and mapview
-const isDashboard = ref(false);
-
-watch(route, (newRoute) => {
-	if (newRoute.path === "/dashboard") {
-		isDashboard.value = false;
-	} else {
-		isDashboard.value = true;
-	}
-});
 
 function handleOpenSettings() {
 	contentStore.editDashboard = JSON.parse(
@@ -151,34 +135,6 @@ function handleOpenSettings() {
 				color: var(--color-highlight);
 			}
 		}
-	}
-
-	&-navigation {
-		min-width: 90px;
-		display: flex;
-		align-items: center;
-		margin-left: var(--font-m);
-
-		p {
-			color: var(--color-complement-text);
-		}
-	}
-}
-
-.toggleswitch {
-	margin: 0 4px;
-	align-self: baseline;
-
-	input:checked + &-slider {
-		background-color: var(--color-complement-text);
-	}
-
-	input:focus + &-slider {
-		box-shadow: 0 0 1px var(--color-complement-text);
-	}
-
-	input:checked + &-slider:before {
-		background-color: var(--color-border);
 	}
 }
 </style>

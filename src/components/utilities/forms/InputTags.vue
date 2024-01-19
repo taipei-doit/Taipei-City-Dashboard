@@ -1,3 +1,6 @@
+<!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
+
+<!-- Draggable tags to be used in conjunction with an input element -->
 <script setup>
 import { defineProps, ref } from "vue";
 
@@ -90,28 +93,29 @@ const handleDragEnd = () => {
 		position: relative;
 		display: flex;
 		align-items: center;
-		background-color: var(--color-complement-text);
-		border-radius: 5px;
 		padding: 2px 18px 2px 4px;
+		border-radius: 5px;
+		background-color: var(--color-complement-text);
 		font-size: var(--font-s);
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;
 
 		button {
-			background-color: var(--color-complement-text);
 			position: absolute;
 			right: 0;
 			padding: 2px 2px 0;
+			background-color: var(--color-complement-text);
+
 			span {
 				font-family: var(--font-icon);
 			}
 		}
 
 		&-dragging {
-			background-color: var(--color-component-background);
-			border: dashed 1px var(--color-border);
 			padding: 2px 4px;
+			border: dashed 1px var(--color-border);
+			background-color: var(--color-component-background);
 
 			button {
 				display: none;

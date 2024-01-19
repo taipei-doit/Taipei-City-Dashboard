@@ -1,6 +1,6 @@
-<!-- Developed By Taipei Urban Intelligence Center 2023 -->
+<!-- Developed By Taipei Urban Intelligence Center 2023-2024 -->
 <!-- 
-Lead Developer:  Igor Ho (FE Engineer)
+Lead Developer:  Igor Ho (Full Stack Engineer)
 Data Pipelines:  Iima Yu (Data Scientist)
 Design and UX: Roy Lin (Fmr. Consultant), Chu Chen (Researcher)
 Systems: Ann Shih (Systems Engineer)
@@ -39,14 +39,10 @@ const parseMapLayers = computed(() => {
 <template>
 	<div class="map">
 		<div class="hide-if-mobile">
-			<!-- if dashboard is still loading -->
-			<div v-if="contentStore.loading" class="map-charts-nodashboard">
-				<div></div>
-			</div>
-			<!-- If the dashboard is map layers -->
+			<!-- 1. If the dashboard is map-layers -->
 			<div
 				class="map-charts"
-				v-else-if="contentStore.currentDashboard.index === 'map-layers'"
+				v-if="contentStore.currentDashboard.index === 'map-layers'"
 			>
 				<ComponentMapChart
 					v-for="item in contentStore.currentDashboard.components"
@@ -55,7 +51,7 @@ const parseMapLayers = computed(() => {
 					:is-map-layer="true"
 				/>
 			</div>
-			<!-- other dashboards that have components -->
+			<!-- 2. Dashboards that have components -->
 			<div
 				v-else-if="
 					contentStore.currentDashboard.components.length !== 0
@@ -81,12 +77,19 @@ const parseMapLayers = computed(() => {
 					:key="`map-layer-${item.index}-${contentStore.currentDashboard.index}`"
 				/>
 			</div>
-			<!-- if dashboard failed to load -->
+			<!-- 3. If dashboard is still loading -->
+			<div
+				v-else-if="contentStore.loading"
+				class="map-charts-nodashboard"
+			>
+				<div></div>
+			</div>
+			<!-- 4. If dashboard failed to load -->
 			<div v-else-if="contentStore.error" class="map-charts-nodashboard">
 				<span>sentiment_very_dissatisfied</span>
 				<h2>發生錯誤，無法載入儀表板</h2>
 			</div>
-			<!-- other dashboards that don't have components -->
+			<!-- 5. Dashboards that don't have components -->
 			<div v-else class="map-charts-nodashboard">
 				<span>addchart</span>
 				<h2>尚未加入組件</h2>

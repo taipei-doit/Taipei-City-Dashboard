@@ -1,17 +1,20 @@
+<!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 <script setup>
 import { onMounted, ref, computed } from "vue";
 import { useAdminStore } from "../../store/adminStore";
 import { useDialogStore } from "../../store/dialogStore";
+import { useContentStore } from "../../store/contentStore";
 
 import TableHeader from "../../components/utilities/forms/TableHeader.vue";
-import ComponentTag from "../../components/utilities/ComponentTag.vue";
-import AdminComponentSettings from "../../components/dialogs/AdminComponentSettings.vue";
+import ComponentTag from "../../components/utilities/miscellaneous/ComponentTag.vue";
+import AdminComponentSettings from "../../components/dialogs/admin/AdminComponentSettings.vue";
 
 import { chartTypes } from "../../assets/configs/apexcharts/chartTypes";
 import { mapTypes } from "../../assets/configs/mapbox/mapConfig";
 
 const adminStore = useAdminStore();
 const dialogStore = useDialogStore();
+const contentStore = useContentStore();
 
 const searchParams = ref({
 	searchbyindex: "",
@@ -80,7 +83,7 @@ function handleNewPage(page) {
 
 function handleOpenSettings(component) {
 	adminStore.getComponentData(component);
-	dialogStore.showDialog("admincomponentsettings");
+	dialogStore.showDialog("adminComponentSettings");
 }
 
 onMounted(() => {
@@ -90,6 +93,7 @@ onMounted(() => {
 
 <template>
 	<div class="admineditcomponent">
+		<!-- 1. Search bar to search components by name or index -->
 		<div class="admineditcomponent-search">
 			<div>
 				<input
@@ -117,6 +121,7 @@ onMounted(() => {
 			</div>
 			<button @click="handleNewQuery">搜尋</button>
 		</div>
+		<!-- 2. The main table displaying all public components -->
 		<table class="admineditcomponent-table">
 			<thead>
 				<tr class="admineditcomponent-table-header">
@@ -171,6 +176,7 @@ onMounted(() => {
 					>
 				</tr>
 			</thead>
+			<!-- 2-1. Components are present -->
 			<tbody v-if="adminStore.components.length !== 0">
 				<tr
 					v-for="component in adminStore.components"
@@ -233,13 +239,34 @@ onMounted(() => {
 					<td>{{ parseTime(component.updated_at) }}</td>
 				</tr>
 			</tbody>
-			<div v-else class="admineditcomponent-nocontent">
+			<!-- 2-2. Components are still loading -->
+			<div
+				v-else-if="contentStore.loading"
+				class="admineditcomponent-nocontent"
+			>
 				<div class="admineditcomponent-nocontent-content">
 					<div></div>
 				</div>
 			</div>
+			<!-- 2-3. An Error occurred -->
+			<div
+				v-else-if="contentStore.error"
+				class="admineditcomponent-nocontent"
+			>
+				<div class="admineditcomponent-nocontent-content">
+					<span>sentiment_very_dissatisfied</span>
+					<h2>發生錯誤，無法載入組件列表</h2>
+				</div>
+			</div>
+			<!-- 2-4. Components are loaded but there are none -->
+			<div v-else class="admineditcomponent-nocontent">
+				<div class="admineditcomponent-nocontent-content">
+					<span>search_off</span>
+					<h2>查無符合篩選條件的公開組件</h2>
+				</div>
+			</div>
 		</table>
-		<!-- html element to select a results per page -->
+		<!-- 3. Records per page and pagination control -->
 		<div
 			class="admineditcomponent-control"
 			v-if="adminStore.components.length !== 0"
@@ -267,10 +294,10 @@ onMounted(() => {
 
 <style scoped lang="scss">
 .admineditcomponent {
-	display: flex;
-	flex-direction: column;
 	height: 100%;
 	width: 100%;
+	display: flex;
+	flex-direction: column;
 	margin-top: 20px;
 	padding: 0 20px 20px;
 
@@ -290,8 +317,8 @@ onMounted(() => {
 				color: var(--color-complement-text);
 				font-family: var(--font-icon);
 				font-size: var(--font-m);
-				cursor: pointer;
 				transition: color 0.2s;
+				cursor: pointer;
 
 				&:hover {
 					color: var(--color-highlight);
@@ -378,6 +405,12 @@ onMounted(() => {
 			align-items: center;
 			justify-content: center;
 
+			span {
+				margin-bottom: 1rem;
+				font-family: var(--font-icon);
+				font-size: 2rem;
+			}
+
 			div {
 				width: 2rem;
 				height: 2rem;
@@ -390,14 +423,14 @@ onMounted(() => {
 	}
 
 	&-control {
+		height: 2rem;
 		display: flex;
 		align-items: center;
 		margin-top: 0.5rem;
-		height: 2rem;
 
 		label {
-			font-size: var(--font-m);
 			margin-right: 0.5rem;
+			font-size: var(--font-m);
 		}
 		select {
 			width: 100px;

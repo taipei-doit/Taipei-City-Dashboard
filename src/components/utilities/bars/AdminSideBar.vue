@@ -1,35 +1,26 @@
-<!-- Developed by Taipei Urban Intelligence Center 2023 -->
+<!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 
 <script setup>
 import { onMounted, ref } from "vue";
-import { useContentStore } from "../store/contentStore";
-import { useDialogStore } from "../store/dialogStore";
-import { useMapStore } from "../store/mapStore";
+import { useMapStore } from "../../../store/mapStore";
 
-import SideBarTab from "./utilities/SideBarTab.vue";
+import SideBarTab from "../miscellaneous/SideBarTab.vue";
 
-const contentStore = useContentStore();
-const dialogStore = useDialogStore();
 const mapStore = useMapStore();
 
 // The expanded state is also stored in localstorage to retain the setting after refresh
 const isExpanded = ref(true);
 
-function handleOpenAddDashboard() {
-	dialogStore.addEdit = "add";
-	dialogStore.showDialog("addEditDashboards");
-}
-
 function toggleExpand() {
 	isExpanded.value = isExpanded.value ? false : true;
-	localStorage.setItem("isExpanded", isExpanded.value);
+	localStorage.setItem("isExpandedAdmin", isExpanded.value);
 	if (!isExpanded.value) {
 		mapStore.resizeMap();
 	}
 }
 
 onMounted(() => {
-	const storedExpandedState = localStorage.getItem("isExpanded");
+	const storedExpandedState = localStorage.getItem("isExpandedAdmin");
 	if (storedExpandedState === "false") {
 		isExpanded.value = false;
 	} else {
@@ -41,55 +32,51 @@ onMounted(() => {
 <template>
 	<div
 		:class="{
-			sidebar: true,
-			'sidebar-collapse': !isExpanded,
-			'hide-if-mobile': true,
+			adminsidebar: true,
+			'adminsidebar-collapse': !isExpanded,
 		}"
 	>
-		<h2>{{ isExpanded ? `我的最愛` : `最愛` }}</h2>
+		<h2>{{ isExpanded ? `系統總覽` : `系統` }}</h2>
 		<SideBarTab
-			icon="favorite"
-			title="收藏組件"
+			icon="person"
+			title="使用者資訊"
 			:expanded="isExpanded"
-			index="favorites"
+			index="overview"
 		/>
-		<div class="sidebar-sub-add">
-			<h2>{{ isExpanded ? `公共儀表板 ` : `公共` }}</h2>
-			<button v-if="isExpanded" @click="handleOpenAddDashboard">
-				<span>add_circle_outline</span>新增
-			</button>
-		</div>
-		<SideBarTab
-			v-for="item in contentStore.dashboards.filter(
-				(item) =>
-					item.index !== 'map-layers' && item.index !== 'favorites'
-			)"
-			:icon="item.icon"
-			:title="item.name"
-			:index="item.index"
-			:key="item.index"
-			:expanded="isExpanded"
-		/>
-		<h2>{{ isExpanded ? `基本地圖圖層` : `圖層` }}</h2>
-		<SideBarTab
-			icon="public"
-			title="圖資資訊"
-			:expanded="isExpanded"
-			index="map-layers"
-		/>
-
-		<button class="sidebar-collapse-button" @click="toggleExpand">
+		<button class="adminsidebar-collapse-button" @click="toggleExpand">
 			<span>{{
 				isExpanded
 					? "keyboard_double_arrow_left"
 					: "keyboard_double_arrow_right"
 			}}</span>
 		</button>
+		<h2>{{ isExpanded ? `用戶設定` : `用戶` }}</h2>
+		<h2>{{ isExpanded ? `儀表板設定` : `表板` }}</h2>
+		<SideBarTab
+			icon="dashboard"
+			title="公開儀表板"
+			:expanded="isExpanded"
+			index="dashboard"
+		/>
+		<h2>{{ isExpanded ? `組件設定` : `組件` }}</h2>
+		<SideBarTab
+			icon="edit_note"
+			title="編輯公開組件"
+			:expanded="isExpanded"
+			index="edit-component"
+		/>
+		<h2>{{ isExpanded ? `問題回報` : `問題` }}</h2>
+		<SideBarTab
+			icon="bug_report"
+			title="待回覆問題"
+			:expanded="isExpanded"
+			index="issue"
+		/>
 	</div>
 </template>
 
 <style scoped lang="scss">
-.sidebar {
+.adminsidebar {
 	width: 170px;
 	min-width: 170px;
 	height: calc(100vh - 80px);
@@ -97,8 +84,8 @@ onMounted(() => {
 	max-height: calc(100vh - 80px);
 	max-height: calc(var(--vh) * 100 - 80px);
 	position: relative;
-	padding: 0 10px 0 var(--font-m);
 	margin-top: 20px;
+	padding: 0 10px 0 var(--font-m);
 	border-right: 1px solid var(--color-border);
 	transition: min-width 0.2s ease-out;
 	overflow-x: hidden;
@@ -108,7 +95,6 @@ onMounted(() => {
 	h2 {
 		color: var(--color-complement-text);
 		font-weight: 400;
-		text-wrap: nowrap;
 	}
 
 	&-sub {
@@ -117,18 +103,15 @@ onMounted(() => {
 		&-add {
 			width: 100%;
 			display: flex;
-			text-wrap: nowrap;
 
 			button {
 				display: flex;
 				align-items: center;
-				flex-wrap: nowrap;
 				margin-left: 0.5rem;
 				padding: 2px 6px;
 				border-radius: 5px;
 				background-color: var(--color-highlight);
 				color: var(--color-normal-text);
-				text-wrap: nowrap;
 
 				span {
 					margin-right: 4px;

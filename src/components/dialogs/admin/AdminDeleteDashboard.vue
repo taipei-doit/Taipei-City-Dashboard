@@ -1,12 +1,12 @@
-<!-- Developed by Taipei Urban Intelligence Center 2023 -->
+<!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 
 <script setup>
 import { ref } from "vue";
 import { storeToRefs } from "pinia";
-import { useDialogStore } from "../../store/dialogStore";
-import { useAdminStore } from "../../store/adminStore";
+import { useDialogStore } from "../../../store/dialogStore";
+import { useAdminStore } from "../../../store/adminStore";
 
-import DialogContainer from "./DialogContainer.vue";
+import DialogContainer from "../DialogContainer.vue";
 
 const dialogStore = useDialogStore();
 const adminStore = useAdminStore();
@@ -25,7 +25,7 @@ function handleDelete() {
 </script>
 
 <template>
-	<DialogContainer dialog="admindeletedashboard" @on-close="handleClose">
+	<DialogContainer dialog="adminDeleteDashboard" @on-close="handleClose">
 		<div class="admindeletedashboard">
 			<h2>確定刪除儀表板嗎？</h2>
 			<div class="admindeletedashboard-input">

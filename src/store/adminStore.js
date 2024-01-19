@@ -1,53 +1,60 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable indent */
-import axios from "axios";
+
+// Developed by Taipei Urban Intelligence Center 2023-2024
+
+/* adminStore */
+/*
+The adminStore handles actions that are used in the admin pages.
+*/
+import http from "../router/axios";
 import { defineStore } from "pinia";
 import { useDialogStore } from "./dialogStore";
+import { useContentStore } from "./contentStore";
 import { useAuthStore } from "./authStore";
 import { getComponentDataTimeframe } from "../assets/utilityFunctions/dataTimeframe";
-const { VITE_API_URL } = import.meta.env;
 
 export const useAdminStore = defineStore("admin", {
 	state: () => ({
-		// Edit Dashboard
+		// Edit Dashboard (for /admin/dashboard)
 		dashboards: [],
 		currentDashboard: null,
-		// Edit Component
+		// Edit Component (for /admin/edit-component)
 		components: [],
 		componentResults: 0,
 		currentComponent: null,
-		// Edit Issue
+		// Edit Issue (for /admin/issue)
 		issues: [],
 		issueResults: 0,
 		currentIssue: null,
 	}),
-	getters: {},
 	actions: {
-		// Get all dashboard configs
+		/* Utility functions to access loading and error states in contentStore */
+		setLoading(state) {
+			const contentStore = useContentStore();
+			contentStore.loading = state ? true : false;
+		},
+		setError(state) {
+			const contentStore = useContentStore();
+			contentStore.error = state ? true : false;
+		},
+
+		/* Dashboard */
+		// 1. Get all public dashboards
 		async getDashboards() {
-			const dialogStore = useDialogStore();
-
-			try {
-				const response = await axios.get(`${VITE_API_URL}/dashboard/`);
-				this.dashboards = response.data.data;
-			} catch (err) {
-				console.error(err);
-				dialogStore.showDialog("fail", "無法取得儀表板");
-			}
+			const response = await http.get(`/dashboard/`);
+			this.dashboards = response.data.data;
+			this.setLoading(false);
 		},
+		// 2. Get current dashboard components
 		async getCurrentDashboardComponents() {
-			const dialogStore = useDialogStore();
-
-			try {
-				const response = await axios.get(
-					`${VITE_API_URL}/dashboard/${this.currentDashboard.index}`
-				);
-				this.currentDashboard.components = response.data.data;
-			} catch (err) {
-				console.error(err);
-				dialogStore.showDialog("fail", "無法取得儀表板組件");
-			}
+			const response = await http.get(
+				`/dashboard/${this.currentDashboard.index}`
+			);
+			this.currentDashboard.components = response.data.data;
+			this.setLoading(false);
 		},
+		// 3. Add a new public dashboard
 		async addDashboard() {
 			const dialogStore = useDialogStore();
 
@@ -56,15 +63,11 @@ export const useAdminStore = defineStore("admin", {
 
 			const dashboard = JSON.parse(JSON.stringify(this.currentDashboard));
 
-			try {
-				await axios.post(`${VITE_API_URL}/dashboard/`, dashboard);
-				this.getDashboards();
-				dialogStore.showNotification("success", "儀表板新增成功");
-			} catch (err) {
-				console.error(err);
-				dialogStore.showNotification("fail", "儀表板新增失敗");
-			}
+			await http.post(`/dashboard/`, dashboard);
+			this.getDashboards();
+			dialogStore.showNotification("success", "儀表板新增成功");
 		},
+		// 4. Edit a public dashboard
 		async editDashboard() {
 			const dialogStore = useDialogStore();
 
@@ -73,54 +76,39 @@ export const useAdminStore = defineStore("admin", {
 
 			const dashboard = JSON.parse(JSON.stringify(this.currentDashboard));
 
-			try {
-				await axios.patch(
-					`${VITE_API_URL}/dashboard/${dashboard.index}`,
-					dashboard
-				);
-				this.getDashboards();
-				dialogStore.showNotification("success", "儀表板更新成功");
-			} catch (err) {
-				console.error(err);
-				dialogStore.showNotification("fail", "儀表板更新失敗");
-			}
+			await http.patch(`/dashboard/${dashboard.index}`, dashboard);
+			this.getDashboards();
+			dialogStore.showNotification("success", "儀表板更新成功");
 		},
+		// 5. Delete a public dashboard
 		async deleteDashboard() {
 			const dialogStore = useDialogStore();
 
 			const dashboardIndex = this.currentDashboard.index;
 
-			try {
-				await axios.delete(
-					`${VITE_API_URL}/dashboard/${dashboardIndex}`
-				);
-				this.getDashboards();
-				dialogStore.showNotification("success", "儀表板刪除成功");
-			} catch (err) {
-				console.error(err);
-				dialogStore.showNotification("fail", "儀表板刪除失敗");
-			}
+			await http.delete(`/dashboard/${dashboardIndex}`);
+			this.getDashboards();
+			dialogStore.showNotification("success", "儀表板刪除成功");
 		},
-		// Get all component configs
-		async getPublicComponents(params) {
-			const dialogStore = useDialogStore();
 
-			try {
-				const response = await axios.get(`${VITE_API_URL}/component/`, {
-					params,
-				});
-				this.components = response.data.data;
-				this.componentResults = response.data.results;
-			} catch (err) {
-				console.error(err);
-				dialogStore.showDialog("fail", "無法取得組件");
-			}
+		/* Component */
+		// 1. Get all public components
+		async getPublicComponents(params) {
+			const response = await http.get(`/component/`, {
+				params,
+			});
+			this.components = response.data.data;
+			this.componentResults = response.data.results;
+			this.setLoading(false);
 		},
-		// Get component chart / history data and append to component config
+		// 2. Get component chart / history data and append to component config
 		async getComponentData(component) {
 			this.currentComponent = JSON.parse(JSON.stringify(component));
-			axios
-				.get(`${VITE_API_URL}/component/${component.id}/chart`, {
+
+			// 2.1 Get component chart data
+			const response = await http.get(
+				`/component/${component.id}/chart`,
+				{
 					headers: !["static", "current", "demo"].includes(
 						component.time_from
 					)
@@ -130,38 +118,31 @@ export const useAdminStore = defineStore("admin", {
 								true
 						  )
 						: {},
-				})
-				.then((response) => {
-					this.currentComponent.chart_data = response.data.data;
-				});
+				}
+			);
+			this.currentComponent.chart_data = response.data.data;
 
+			// 2.2 Get component history data if applicable
 			if (component.history_config && component.history_config.range) {
 				for (let i in component.history_config.range) {
-					await axios
-						.get(
-							`${VITE_API_URL}/component/${component.id}/history`,
-							{
-								headers: getComponentDataTimeframe(
-									component.history_config.range[i],
-									"now",
-									true
-								),
-							}
-						)
-						.then((rs) => {
-							if (i === "0") {
-								this.currentComponent.history_data = [];
-							}
-							this.currentComponent.history_data.push(
-								rs.data.data
-							);
-						})
-						.catch((e) => {
-							console.error(e);
-						});
+					const response = await http.get(
+						`/component/${component.id}/history`,
+						{
+							headers: getComponentDataTimeframe(
+								component.history_config.range[i],
+								"now",
+								true
+							),
+						}
+					);
+					if (i === "0") {
+						this.currentComponent.history_data = [];
+					}
+					this.currentComponent.history_data.push(response.data.data);
 				}
 			}
 
+			// 2.3 Format component config to ensure compatibility with component editor
 			if (!this.currentComponent.links) this.currentComponent.links = [];
 			if (!this.currentComponent.chart_config?.color) {
 				this.currentComponent.chart_config.color = [];
@@ -194,10 +175,13 @@ export const useAdminStore = defineStore("admin", {
 					2
 				);
 			}
+			this.setLoading(false);
 		},
+		// 3. Update a public component
 		async updateComponent(params) {
 			const dialogStore = useDialogStore();
 
+			// 3.1 Format component config to ensure compatibility with backend
 			delete this.currentComponent.chart_data;
 			delete this.currentComponent.history_data;
 
@@ -227,67 +211,51 @@ export const useAdminStore = defineStore("admin", {
 			const component_config = JSON.parse(
 				JSON.stringify(this.currentComponent)
 			);
-			try {
-				await axios.patch(
-					`${VITE_API_URL}/component/${componentId}/chart`,
-					chart_config
-				);
-				await axios.patch(
-					`${VITE_API_URL}/component/${componentId}`,
-					component_config
-				);
-				if (map_config[0] !== null) {
-					for (let i = 0; i < map_config.length; i++) {
-						await axios.patch(
-							`${VITE_API_URL}/component/${map_config[i].index}/map`,
-							map_config[i]
-						);
-					}
+			// 3.2 Update component chart config
+			await http.patch(`/component/${componentId}/chart`, chart_config);
+
+			// 3.3 Update component component config (incl. history config)
+			await http.patch(`/component/${componentId}`, component_config);
+
+			// 3.4 Update component map config
+			if (map_config[0] !== null) {
+				for (let i = 0; i < map_config.length; i++) {
+					await http.patch(
+						`/component/${map_config[i].id}/map`,
+						map_config[i]
+					);
 				}
-				dialogStore.showNotification("success", "組件更新成功");
-				this.getPublicComponents(params);
-			} catch (err) {
-				console.error(err);
-				dialogStore.showNotification("fail", "組件更新失敗");
 			}
+			dialogStore.showNotification("success", "組件更新成功");
+			this.getPublicComponents(params);
 		},
+
+		/* Issue */
+		// 1. Get all issues
 		async getIssues(params) {
-			const dialogStore = useDialogStore();
 			const apiParams = JSON.parse(JSON.stringify(params));
 
 			apiParams.filterbystatus = apiParams.filterbystatus.join(",");
 
-			try {
-				const response = await axios.get(`${VITE_API_URL}/issue/`, {
-					params: apiParams,
-				});
-				this.issues = response.data.data;
-				this.issueResults = response.data.results;
-			} catch (err) {
-				console.error(err);
-				dialogStore.showDialog("fail", "無法取得用戶問題");
-			}
+			const response = await http.get(`/issue/`, {
+				params: apiParams,
+			});
+			this.issues = response.data.data;
+			this.issueResults = response.data.results;
+			this.setLoading(false);
 		},
+		// 2. Update an issue
 		async updateIssue(params) {
 			const dialogStore = useDialogStore();
 			const authStore = useAuthStore();
 
-			try {
-				await axios.patch(
-					`${VITE_API_URL}/issue/${this.currentIssue.id}`,
-					{
-						status: this.currentIssue.status,
-						decision_desc: this.currentIssue.decision_desc,
-						updated_by: authStore.user.name,
-					}
-				);
-				dialogStore.showNotification("success", "問題更新成功");
-				this.getIssues(params);
-			} catch (err) {
-				console.error(err);
-				dialogStore.showNotification("fail", "問題更新失敗");
-			}
-
+			await http.patch(`/issue/${this.currentIssue.id}`, {
+				status: this.currentIssue.status,
+				decision_desc: this.currentIssue.decision_desc,
+				updated_by: authStore.user.name,
+			});
+			dialogStore.showNotification("success", "問題更新成功");
+			this.getIssues(params);
 			this.currentIssue = null;
 		},
 	},

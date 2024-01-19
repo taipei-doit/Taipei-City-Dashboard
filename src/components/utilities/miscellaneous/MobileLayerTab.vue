@@ -1,8 +1,8 @@
-<!-- Developed by Taipei Urban Intelligence Center 2023 -->
+<!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 
 <script setup>
 import { ref } from "vue";
-import { useMapStore } from "../../store/mapStore";
+import { useMapStore } from "../../../store/mapStore";
 
 const { BASE_URL } = import.meta.env;
 

@@ -1,4 +1,4 @@
-// Cleaned
+// Developed by Taipei Urban Intelligence Center 2023-2024
 
 /* mapStore */
 /*
@@ -9,13 +9,19 @@ https://docs.mapbox.com/mapbox-gl-js/guides/
 */
 import { createApp, defineComponent, nextTick, ref } from "vue";
 import { defineStore } from "pinia";
-import { useAuthStore } from "./authStore";
-import { useDialogStore } from "./dialogStore";
 import mapboxGl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import axios from "axios";
 import { Threebox } from "threebox-plugin";
 
+// Other Stores
+import { useAuthStore } from "./authStore";
+import { useDialogStore } from "./dialogStore";
+
+// Vue Components
+import MapPopup from "../components/map/MapPopup.vue";
+
+// Utility Functions or Configs
 import mapStyle from "../assets/configs/mapbox/mapStyle.js";
 import {
 	MapObjectConfig,
@@ -27,8 +33,6 @@ import {
 } from "../assets/configs/mapbox/mapConfig.js";
 import { savedLocations } from "../assets/configs/mapbox/savedLocations.js";
 import { calculateGradientSteps } from "../assets/configs/mapbox/arcGradient";
-import MapPopup from "../components/map/MapPopup.vue";
-
 import { voronoi } from "../assets/utilityFunctions/voronoi.js";
 import { interpolation } from "../assets/utilityFunctions/interpolation.js";
 import { marchingSquare } from "../assets/utilityFunctions/marchingSquare.js";
@@ -517,7 +521,7 @@ export const useMapStore = defineStore("map", {
 		},
 
 		/* Popup Related Functions */
-		// Adds a popup when the user clicks on a item. The event will be passed in.
+		// 1. Adds a popup when the user clicks on a item. The event will be passed in.
 		addPopup(event) {
 			// Gets the info that is contained in the coordinates that the user clicked on (only visible layers)
 			const clickFeatureDatas = this.map.queryRenderedFeatures(
@@ -566,7 +570,7 @@ export const useMapStore = defineStore("map", {
 				app.mount("#vue-popup-content");
 			});
 		},
-		// Remove the current popup
+		// 2. Remove the current popup
 		removePopup() {
 			if (this.popup) {
 				this.popup.remove();
@@ -575,8 +579,7 @@ export const useMapStore = defineStore("map", {
 		},
 
 		/* Functions that change the viewing experience of the map */
-
-		// Add new saved location that users can quickly zoom to
+		// 1. Add new saved location that users can quickly zoom to
 		addNewSavedLocation(name) {
 			const coordinates = this.map.getCenter();
 			const zoom = this.map.getZoom();
@@ -584,7 +587,7 @@ export const useMapStore = defineStore("map", {
 			const bearing = this.map.getBearing();
 			this.savedLocations.push([coordinates, zoom, pitch, bearing, name]);
 		},
-		// Zoom to a location
+		// 2. Zoom to a location
 		// [[lng, lat], zoom, pitch, bearing, savedLocationName]
 		easeToLocation(location_array) {
 			this.map.easeTo({
@@ -595,18 +598,18 @@ export const useMapStore = defineStore("map", {
 				bearing: location_array[3],
 			});
 		},
-		// Fly to a location
+		// 3. Fly to a location
 		flyToLocation(location_array) {
 			this.map.flyTo({
 				center: location_array,
 				duration: 1000,
 			});
 		},
-		// Remove a saved location
+		// 4. Remove a saved location
 		removeSavedLocation(index) {
 			this.savedLocations.splice(index, 1);
 		},
-		// Force map to resize after sidebar collapses
+		// 5. Force map to resize after sidebar collapses
 		resizeMap() {
 			if (this.map) {
 				setTimeout(() => {
@@ -616,7 +619,7 @@ export const useMapStore = defineStore("map", {
 		},
 
 		/* Map Filtering */
-		// Add a filter based on a each map layer's properties (byParam)
+		// 1. Add a filter based on a each map layer's properties (byParam)
 		filterByParam(map_filter, map_configs, xParam, yParam) {
 			// If there are layers loading, don't filter
 			if (this.loadingLayers.length > 0) return;
@@ -691,7 +694,7 @@ export const useMapStore = defineStore("map", {
 				}
 			});
 		},
-		// filter by layer name (byLayer)
+		// 2. filter by layer name (byLayer)
 		filterByLayer(map_configs, xParam) {
 			const dialogStore = useDialogStore();
 			// If there are layers loading, don't filter
@@ -716,7 +719,7 @@ export const useMapStore = defineStore("map", {
 				}
 			});
 		},
-		// Remove any property filters on a map layer
+		// 3. Remove any property filters on a map layer
 		clearByParamFilter(map_configs) {
 			const dialogStore = useDialogStore();
 			if (!this.map || dialogStore.dialogs.moreInfo) {
@@ -745,7 +748,7 @@ export const useMapStore = defineStore("map", {
 				this.map.setFilter(mapLayerId, null);
 			});
 		},
-		// Remove any layer filters on a map layer.
+		// 4. Remove any layer filters on a map layer.
 		clearByLayerFilter(map_configs) {
 			const dialogStore = useDialogStore();
 			if (!this.map || dialogStore.dialogs.moreInfo) {
@@ -756,9 +759,9 @@ export const useMapStore = defineStore("map", {
 				this.map.setLayoutProperty(mapLayerId, "visibility", "visible");
 			});
 		},
-		/* Clearing the map */
 
-		// Called when the user is switching between maps
+		/* Clearing the map */
+		// 1. Called when the user is switching between maps
 		clearOnlyLayers() {
 			this.currentLayers.forEach((element) => {
 				this.map.removeLayer(element);
@@ -771,7 +774,7 @@ export const useMapStore = defineStore("map", {
 			this.currentVisibleLayers = [];
 			this.removePopup();
 		},
-		// Called when user navigates away from the map
+		// 2. Called when user navigates away from the map
 		clearEntireMap() {
 			this.currentLayers = [];
 			this.mapConfigs = {};

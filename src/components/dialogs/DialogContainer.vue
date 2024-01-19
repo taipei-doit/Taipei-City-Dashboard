@@ -1,22 +1,25 @@
-<!-- Developed by Taipei Urban Intelligence Center 2023 -->
+<!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 
 <!-- This component is the template for most dialogs. It will show a dialog centered in the middle of the screen with the rest of the application blurred out -->
 <!-- The "dialog" prop defines the target dialog to control whether it is shown, the "onClose" emit allows for a closing function to be passed in  -->
 
 <script setup>
-import { useDialogStore } from '../../store/dialogStore';
+import { useDialogStore } from "../../store/dialogStore";
 
 const dialogStore = useDialogStore();
 
 defineProps({ dialog: String });
-defineEmits(['onClose']);
+defineEmits(["onClose"]);
 </script>
 
 <template>
 	<Teleport to="body">
 		<Transition name="dialog">
 			<div class="dialogcontainer" v-if="dialogStore.dialogs[dialog]">
-				<div class="dialogcontainer-background" @click="$emit('onClose')"></div>
+				<div
+					class="dialogcontainer-background"
+					@click="$emit('onClose')"
+				></div>
 				<div class="dialogcontainer-dialog">
 					<slot></slot>
 				</div>

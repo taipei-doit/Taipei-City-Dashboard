@@ -1,23 +1,22 @@
-<!-- Developed by Taipei Urban Intelligence Center 2023 -->
+<!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 
 <script setup>
 import { ref, computed } from "vue";
-import axios from "axios";
-
-import { useDialogStore } from "../../store/dialogStore";
-import { useAdminStore } from "../../store/adminStore";
+import http from "../../../router/axios";
 import { storeToRefs } from "pinia";
 
-import DialogContainer from "./DialogContainer.vue";
-import ComponentDragTags from "../utilities/forms/ComponentDragTags.vue";
+import { useDialogStore } from "../../../store/dialogStore";
+import { useAdminStore } from "../../../store/adminStore";
+import { useContentStore } from "../../../store/contentStore";
 
-import { allIcons } from "../../assets/configs/AllIcons";
+import DialogContainer from "../DialogContainer.vue";
+import ComponentDragTags from "../../utilities/forms/ComponentDragTags.vue";
 import AdminAddComponent from "./AdminAddComponent.vue";
-
-const { VITE_API_URL } = import.meta.env;
+import { allIcons } from "../../../assets/configs/AllIcons";
 
 const dialogStore = useDialogStore();
 const adminStore = useAdminStore();
+const contentStore = useContentStore();
 
 const props = defineProps(["mode"]);
 
@@ -45,14 +44,15 @@ const availableIcons = computed(() => {
 });
 
 async function verifyIndex() {
-	const res = await axios.get(
-		`${VITE_API_URL}/dashboard/check-index/${currentDashboard.value.index}`
+	const res = await http.get(
+		`/dashboard/check-index/${currentDashboard.value.index}`
 	);
 	if (res.data.available) {
 		indexStatus.value = "check_circle";
 	} else {
 		indexStatus.value = "cancel";
 	}
+	contentStore.loading = false;
 }
 
 function handleConfirm() {
@@ -73,7 +73,7 @@ function handleClose() {
 </script>
 
 <template>
-	<DialogContainer :dialog="`adminaddeditdashboards`" @onClose="handleClose">
+	<DialogContainer :dialog="`adminAddEditDashboards`" @onClose="handleClose">
 		<div class="adminaddeditdashboards">
 			<div class="adminaddeditdashboards-header">
 				<h2>{{ mode === "edit" ? "編輯" : "新增" }}公開儀表板</h2>
@@ -155,7 +155,7 @@ function handleClose() {
 							"
 						/>
 						<button
-							@click="dialogStore.showDialog('adminaddcomponent')"
+							@click="dialogStore.showDialog('adminAddComponent')"
 						>
 							+
 						</button>
@@ -182,14 +182,15 @@ function handleClose() {
 	&-header {
 		display: flex;
 		justify-content: space-between;
+
 		button {
 			display: flex;
 			align-items: center;
 			justify-self: baseline;
-			border-radius: 5px;
-			font-size: var(--font-m);
 			padding: 0px 4px;
+			border-radius: 5px;
 			background-color: var(--color-highlight);
+			font-size: var(--font-m);
 		}
 	}
 

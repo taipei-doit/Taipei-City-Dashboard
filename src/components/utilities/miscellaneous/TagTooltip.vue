@@ -1,3 +1,6 @@
+<!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
+
+<!-- The little dialog that pops up when you hover over component tags -->
 <script setup>
 const props = defineProps({
 	position: { type: Object },

@@ -1,18 +1,19 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable indent */
-// Cleaned
 
-/* authStore */
+// Developed by Taipei Urban Intelligence Center 2023-2024
+
+/* contentStore */
 /*
 The contentStore calls APIs to get content info and stores it.
 */
-
-import router from "../router/index";
 import { defineStore } from "pinia";
-import { useDialogStore } from "./dialogStore";
 import axios from "axios";
+import http from "../router/axios";
+import router from "../router/index";
+import { useDialogStore } from "./dialogStore";
 import { getComponentDataTimeframe } from "../assets/utilityFunctions/dataTimeframe";
-const { BASE_URL, VITE_API_URL } = import.meta.env;
+const { BASE_URL } = import.meta.env;
 
 export const useContentStore = defineStore("content", {
 	state: () => ({
@@ -32,7 +33,7 @@ export const useContentStore = defineStore("content", {
 			name: null,
 			components: null,
 		},
-		// Stores information of a new dashboard (/component)
+		// Stores information of a new dashboard or editting dashboard (/component)
 		editDashboard: {
 			index: "",
 			name: "",
@@ -48,11 +49,9 @@ export const useContentStore = defineStore("content", {
 	}),
 	getters: {},
 	actions: {
-		/* Steps in adding content to the application */
-
+		/* Steps in adding content to the application (/dashboard or /mapview) */
 		// 1. Check the current path and execute actions based on the current path
 		setRouteParams(mode, index) {
-			this.error = false;
 			this.currentDashboard.mode = mode;
 			// 1-1. Don't do anything if the path is the same
 			if (this.currentDashboard.index === index) {
@@ -86,37 +85,28 @@ export const useContentStore = defineStore("content", {
 			this.setCurrentDashboardContent();
 		},
 		// 2. Call an API to get all dashboard info and reroute the user to the first dashboard in the list
-		setDashboards() {
-			this.loading = true;
-			axios
-				.get(`${VITE_API_URL}/dashboard/`)
-				.then((rs) => {
-					this.dashboards = rs.data.data;
-					if (!this.currentDashboard.index) {
-						this.currentDashboard.index = this.dashboards[0].index;
-						router.replace({
-							query: {
-								index: this.currentDashboard.index,
-							},
-						});
-					}
-					// Pick out the list of favorite components
-					const favorites = this.dashboards.find(
-						(item) => item.index === "favorites"
-					);
-					this.favorites = [...favorites.components];
-					// After getting dashboard info, call the setCurrentDashboardContent (3.) method to get component info
-					this.setCurrentDashboardContent();
-				})
-				.catch((e) => {
-					this.loading = false;
-					this.error = true;
-					console.error(e);
+		async setDashboards() {
+			const response = await http.get(`/dashboard/`);
+
+			this.dashboards = response.data.data;
+			if (!this.currentDashboard.index) {
+				this.currentDashboard.index = this.dashboards[0].index;
+				router.replace({
+					query: {
+						index: this.currentDashboard.index,
+					},
 				});
+			}
+			// Pick out the list of favorite components
+			const favorites = this.dashboards.find(
+				(item) => item.index === "favorites"
+			);
+			this.favorites = [...favorites.components];
+			// After getting dashboard info, call the setCurrentDashboardContent (3.) method to get component info
+			this.setCurrentDashboardContent();
 		},
 		// 3. Finds the info for the current dashboard based on the index and adds it to "currentDashboard"
-		setCurrentDashboardContent() {
-			this.loading = true;
+		async setCurrentDashboardContent() {
 			const currentDashboardInfo = this.dashboards.find(
 				(item) => item.index === this.currentDashboard.index
 			);
@@ -130,37 +120,34 @@ export const useContentStore = defineStore("content", {
 			}
 			this.currentDashboard.name = currentDashboardInfo.name;
 			this.currentDashboard.icon = currentDashboardInfo.icon;
-			axios
-				.get(`${VITE_API_URL}/dashboard/${this.currentDashboard.index}`)
-				.then((rs) => {
-					if (rs.data.data) {
-						this.currentDashboard.components = rs.data.data;
-					} else {
-						this.currentDashboard.components = [];
-						this.loading = false;
-						return;
-					}
-					this.setCurrentDashboardChartData();
-				})
-				.catch((e) => {
-					this.loading = false;
-					this.error = true;
-					console.error(e);
-				});
+			const response = await http.get(
+				`/dashboard/${this.currentDashboard.index}`
+			);
+
+			if (response.data.data) {
+				this.currentDashboard.components = response.data.data;
+			} else {
+				this.currentDashboard.components = [];
+				this.loading = false;
+				return;
+			}
+			this.setCurrentDashboardChartData();
 		},
 		// 4. Call an API for each component to get its chart data and store it
 		// Will call an additional API if the component has history data
 		async setCurrentDashboardChartData() {
+			// 4-1. Loop through all the components of a dashboard
 			for (
 				let index = 0;
 				index < this.currentDashboard.components.length;
 				index++
 			) {
 				const component = this.currentDashboard.components[index];
-				if (component.chart_data) return;
 
-				await axios
-					.get(`${VITE_API_URL}/component/${component.id}/chart`, {
+				// 4-2. Get chart data
+				const response = await http.get(
+					`/component/${component.id}/chart`,
+					{
 						headers: !["static", "current", "demo"].includes(
 							component.time_from
 						)
@@ -170,43 +157,36 @@ export const useContentStore = defineStore("content", {
 									true
 							  )
 							: {},
-					})
-					.then((rs) => {
-						this.currentDashboard.components[index].chart_data =
-							rs.data.data;
-					})
-					.catch((e) => {
-						console.error(e);
-					});
+					}
+				);
+				this.currentDashboard.components[index].chart_data =
+					response.data.data;
+
+				// 4-3. Get history data if applicable
 				if (
 					component.history_config &&
 					component.history_config.range
 				) {
 					for (let i in component.history_config.range) {
-						await axios
-							.get(
-								`${VITE_API_URL}/component/${component.id}/history`,
-								{
-									headers: getComponentDataTimeframe(
-										component.history_config.range[i],
-										"now",
-										true
-									),
-								}
-							)
-							.then((rs) => {
-								if (i === "0") {
-									this.currentDashboard.components[
-										index
-									].history_data = [];
-								}
-								this.currentDashboard.components[
-									index
-								].history_data.push(rs.data.data);
-							})
-							.catch((e) => {
-								console.error(e);
-							});
+						const response = await http.get(
+							`/component/${component.id}/history`,
+							{
+								headers: getComponentDataTimeframe(
+									component.history_config.range[i],
+									"now",
+									true
+								),
+							}
+						);
+
+						if (i === "0") {
+							this.currentDashboard.components[
+								index
+							].history_data = [];
+						}
+						this.currentDashboard.components[
+							index
+						].history_data.push(response.data.data);
 					}
 				}
 			}
@@ -214,6 +194,7 @@ export const useContentStore = defineStore("content", {
 				this.currentDashboard.mode === "/mapview" &&
 				this.currentDashboard.index !== "map-layers"
 			) {
+				// In /mapview, map layer components are also present and need to be fetched
 				this.setMapLayers();
 			} else {
 				this.loading = false;
@@ -229,35 +210,27 @@ export const useContentStore = defineStore("content", {
 				.catch((e) => console.error(e));
 		},
 		// 6. Call an API to get map layer component info and store it (if in /mapview)
-		setMapLayers() {
-			this.loading = true;
-			axios
-				.get(`${VITE_API_URL}/dashboard/map-layers`)
-				.then((rs) => {
-					this.mapLayers = rs.data.data;
-					this.setMapLayersContent();
-				})
-				.catch((e) => {
-					this.error = true;
-					console.error(e);
-				});
+		async setMapLayers() {
+			const resposne = await http.get(`/dashboard/map-layers`);
+			this.mapLayers = resposne.data.data;
+			this.setMapLayersContent();
 		},
 		// 7. Call an API for each map layer component to get its chart data and store it (if in /mapview)
 		async setMapLayersContent() {
 			for (let index = 0; index < this.mapLayers.length; index++) {
 				const component = this.mapLayers[index];
 
-				await axios
-					.get(`${VITE_API_URL}/component/${component.id}/chart`)
-					.then((rs) => {
-						this.mapLayers[index].chart_data = rs.data.data;
-					})
-					.catch((e) => {
-						console.error(e);
-					});
+				const response = await http.get(
+					`/component/${component.id}/chart`
+				);
+
+				this.mapLayers[index].chart_data = response.data.data;
 			}
 			this.loading = false;
 		},
+
+		/* Route Change Methods */
+		// 1. Called whenever route changes except for between /dashboard and /mapview
 		clearCurrentDashboard() {
 			this.currentDashboard = {
 				mode: null,
@@ -266,101 +239,86 @@ export const useContentStore = defineStore("content", {
 				components: [],
 			};
 		},
-		/* /component methods */
-		async getAllComponents(params) {
-			this.error = false;
-			this.loading = true;
-			try {
-				const response = await axios.get(`${VITE_API_URL}/component/`, {
-					params,
-				});
 
-				this.components = response.data.data;
-				this.loading = false;
-			} catch {
-				this.loading = false;
-				this.error = true;
-			}
+		/* /component methods */
+		// 1. Search through all the components (used in /component)
+		async getAllComponents(params) {
+			const response = await http.get(`/component/`, {
+				params,
+			});
+
+			this.components = response.data.data;
+			this.loading = false;
 		},
+		// 2. Get the info of a single component (used in /component/:index)
 		async getCurrentComponentData(index) {
 			const dialogStore = useDialogStore();
 			if (Object.keys(this.contributors).length === 0) {
 				this.setContributors();
 			}
-			this.error = false;
-			this.loading = true;
 
-			try {
-				const response = await axios.get(`${VITE_API_URL}/component/`, {
-					params: {
-						filtermode: "eq",
-						filterby: "index",
-						filtervalue: index,
-					},
-				});
+			// 2-1. Get the component config
+			const response_1 = await http.get(`/component/`, {
+				params: {
+					filtermode: "eq",
+					filterby: "index",
+					filtervalue: index,
+				},
+			});
 
-				dialogStore.moreInfoContent = response.data.data[0];
-			} catch {
+			if (response_1.data.results === 0) {
 				this.loading = false;
 				this.error = true;
+				return;
 			}
 
-			try {
-				const response = await axios.get(
-					`${VITE_API_URL}/component/${dialogStore.moreInfoContent.id}/chart`,
-					{
-						headers: !["static", "current", "demo"].includes(
-							dialogStore.moreInfoContent.time_from
-						)
-							? getComponentDataTimeframe(
-									dialogStore.moreInfoContent.time_from,
-									dialogStore.moreInfoContent.time_to,
-									true
-							  )
-							: {},
-					}
-				);
+			dialogStore.moreInfoContent = response_1.data.data[0];
 
-				dialogStore.moreInfoContent.chart_data = response.data.data;
-			} catch {
-				this.loading = false;
-				this.error = true;
-			}
+			// 2-2. Get the component chart data
+			const response_2 = await http.get(
+				`/component/${dialogStore.moreInfoContent.id}/chart`,
+				{
+					headers: !["static", "current", "demo"].includes(
+						dialogStore.moreInfoContent.time_from
+					)
+						? getComponentDataTimeframe(
+								dialogStore.moreInfoContent.time_from,
+								dialogStore.moreInfoContent.time_to,
+								true
+						  )
+						: {},
+				}
+			);
 
+			dialogStore.moreInfoContent.chart_data = response_2.data.data;
+
+			// 2-3. Get the component history data if applicable
 			if (dialogStore.moreInfoContent.history_config) {
 				for (let i in dialogStore.moreInfoContent.history_config
 					.range) {
-					try {
-						const response = await axios.get(
-							`${VITE_API_URL}/component/${dialogStore.moreInfoContent.id}/history`,
-							{
-								headers: getComponentDataTimeframe(
-									dialogStore.moreInfoContent.history_config
-										.range[i],
-									"now",
-									true
-								),
-							}
-						);
-
-						if (i === "0") {
-							dialogStore.moreInfoContent.history_data = [];
+					const response = await http.get(
+						`/component/${dialogStore.moreInfoContent.id}/history`,
+						{
+							headers: getComponentDataTimeframe(
+								dialogStore.moreInfoContent.history_config
+									.range[i],
+								"now",
+								true
+							),
 						}
-						dialogStore.moreInfoContent.history_data.push(
-							response.data.data
-						);
-					} catch {
-						this.loading = false;
-						this.error = true;
+					);
+
+					if (i === "0") {
+						dialogStore.moreInfoContent.history_data = [];
 					}
+					dialogStore.moreInfoContent.history_data.push(
+						response.data.data
+					);
 				}
 			}
 			this.loading = false;
 		},
-
-		/* Dummy Functions to demonstrate the logic of some functions that require a backend */
-		// Connect a backend to actually implement the following functions or remove altogether
-
+		/* Common Methods to Edit Dashboards */
 		// Call this function to create a new dashboard. Pass in the new dashboard name and icon.
 		createNewDashboard(name, index, icon) {
 			const dialogStore = useDialogStore();

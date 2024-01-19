@@ -1,4 +1,4 @@
-<!-- Developed by Taipei Urban Intelligence Center 2023 -->
+<!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 
 <!-- This component controls map layers in the mobile version. To preserve state, the dialog is only hidden but not removed when disabled -->
 
@@ -7,7 +7,7 @@ import { computed } from "vue";
 import { useDialogStore } from "../../store/dialogStore";
 import { useContentStore } from "../../store/contentStore";
 
-import MobileLayerTab from "../utilities/MobileLayerTab.vue";
+import MobileLayerTab from "../utilities/miscellaneous/MobileLayerTab.vue";
 
 const dialogStore = useDialogStore();
 const contentStore = useContentStore();

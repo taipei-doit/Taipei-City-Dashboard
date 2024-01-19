@@ -1,4 +1,4 @@
-// Cleaned
+// Developed by Taipei Urban Intelligence Center 2023-2024
 
 /* dialogStore */
 /*
@@ -13,11 +13,13 @@ import { defineStore } from "pinia";
 export const useDialogStore = defineStore("dialog", {
 	state: () => ({
 		dialogs: {
-			admincomponentsettings: false,
-			adminaddeditdashboards: false,
-			admineditissue: false,
-			adminaddcomponent: false,
-			admindeletedashboard: false,
+			// Admin Dialogs: /components/dialogs/admin
+			adminComponentSettings: false,
+			adminAddEditDashboards: false,
+			adminEditIssue: false,
+			adminAddComponent: false,
+			adminDeleteDashboard: false,
+			// Public Dialogs: /components/dialogs
 			addComponent: false,
 			addDashboard: false,
 			dashboardSettings: false,
@@ -67,7 +69,7 @@ export const useDialogStore = defineStore("dialog", {
 		showNotification(status, message) {
 			this.showDialog("notificationBar");
 			this.notification = {
-				status: status,
+				status: status, // success, fail, info
 				message: message,
 			};
 			setTimeout(() => {

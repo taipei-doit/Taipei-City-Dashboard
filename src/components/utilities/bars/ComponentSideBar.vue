@@ -1,12 +1,12 @@
-<!-- Developed by Taipei Urban Intelligence Center 2023 -->
+<!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 
+<!-- Sidebar used in /component and /component/:index -->
 <script setup>
 import { ref, computed } from "vue";
 import { storeToRefs } from "pinia";
-import { useContentStore } from "../store/contentStore";
-
-import { allIcons } from "../assets/configs/AllIcons";
-import ComponentDragTags from "../components/utilities/forms/ComponentDragTags.vue";
+import { useContentStore } from "../../../store/contentStore";
+import ComponentDragTags from "../forms/ComponentDragTags.vue";
+import { allIcons } from "../../../assets/configs/AllIcons";
 
 const contentStore = useContentStore();
 
@@ -102,8 +102,8 @@ const availableIcons = computed(() => {
 	max-height: calc(100vh - 80px);
 	max-height: calc(var(--vh) * 100 - 80px);
 	position: relative;
-	padding: 0 10px 0 var(--font-m);
 	margin-top: 20px;
+	padding: 0 10px 0 var(--font-m);
 	border-right: 1px solid var(--color-border);
 	transition: min-width 0.2s ease-out;
 	overflow-x: hidden;
@@ -171,9 +171,9 @@ const availableIcons = computed(() => {
 			grid-template-rows: 48px;
 			column-gap: 6px;
 			row-gap: 6px;
+			padding: 6px;
 			border: solid 1px var(--color-border);
 			border-radius: 5px;
-			padding: 6px;
 
 			button:last-child {
 				height: 48px;
@@ -195,10 +195,10 @@ const availableIcons = computed(() => {
 		button {
 			display: flex;
 			align-items: center;
-			border-radius: 5px;
-			font-size: var(--font-m);
 			padding: 0px 4px;
+			border-radius: 5px;
 			background-color: var(--color-highlight);
+			font-size: var(--font-m);
 		}
 	}
 }

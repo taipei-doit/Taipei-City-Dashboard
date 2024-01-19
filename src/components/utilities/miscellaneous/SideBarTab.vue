@@ -1,12 +1,11 @@
-<!-- Developed by Taipei Urban Intelligence Center 2023 -->
+<!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 
 <!-- This component has two modes "expanded" and "collapsed" which is controlled by the prop "expanded" -->
 
 <script setup>
 import { computed } from "vue";
 import { useRoute } from "vue-router";
-import { useAuthStore } from "../../store/authStore";
-import { useContentStore } from "../../store/contentStore";
+import { useAuthStore } from "../../../store/authStore";
 
 const route = useRoute();
 
@@ -18,7 +17,6 @@ const props = defineProps({
 });
 
 const authStore = useAuthStore();
-const contentStore = useContentStore();
 
 const tabLink = computed(() => {
 	if (authStore.currentPath === "admin") {
@@ -38,7 +36,6 @@ const linkActiveOrNot = computed(() => {
 	<router-link
 		:to="tabLink"
 		:class="{ sidebartab: true, 'sidebartab-active': linkActiveOrNot }"
-		:style="{ pointerEvents: contentStore.loading ? 'none' : 'auto' }"
 	>
 		<span>{{ icon }}</span>
 		<h3 v-if="expanded">{{ title }}</h3>

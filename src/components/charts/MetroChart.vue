@@ -1,9 +1,9 @@
-<!-- Developed by Taipei Urban Intelligence Center 2023 -->
+<!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 
 <script setup>
 import { ref, computed } from "vue";
 
-import MetroCarDensity from "../utilities/MetroCarDensity.vue";
+import MetroCarDensity from "../utilities/miscellaneous/MetroCarDensity.vue";
 import { lineInfo } from "../../assets/configs/apexcharts/taipeiMetroLines";
 
 const props = defineProps(["chart_config", "activeChart", "series"]);

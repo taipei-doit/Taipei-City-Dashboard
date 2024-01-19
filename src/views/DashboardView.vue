@@ -1,6 +1,6 @@
-<!-- Developed By Taipei Urban Intelligence Center 2023 -->
+<!-- Developed By Taipei Urban Intelligence Center 2023-2024 -->
 <!-- 
-Lead Developer:  Igor Ho (FE Engineer)
+Lead Developer:  Igor Ho (Full Stack Engineer)
 Data Pipelines:  Iima Yu (Data Scientist)
 Design and UX: Roy Lin (Fmr. Consultant), Chu Chen (Researcher)
 Systems: Ann Shih (Systems Engineer)
@@ -21,15 +21,9 @@ const dialogStore = useDialogStore();
 </script>
 
 <template>
-	<!-- if dashboard is still loading -->
-	<div v-if="contentStore.loading" class="dashboard dashboard-nodashboard">
-		<div class="dashboard-nodashboard-content">
-			<div></div>
-		</div>
-	</div>
-	<!-- If the dashboard is map layers -->
+	<!-- 1. If the dashboard is map-layers -->
 	<div
-		v-else-if="contentStore.currentDashboard.index === 'map-layers'"
+		v-if="contentStore.currentDashboard.index === 'map-layers'"
 		class="dashboard"
 	>
 		<ComponentContainer
@@ -40,7 +34,7 @@ const dialogStore = useDialogStore();
 		/>
 		<ReportIssue />
 	</div>
-	<!-- other dashboards that have components -->
+	<!-- 2. Dashboards that have components -->
 	<div
 		v-else-if="contentStore.currentDashboard.components?.length !== 0"
 		class="dashboard"
@@ -53,14 +47,23 @@ const dialogStore = useDialogStore();
 		<MoreInfo />
 		<ReportIssue />
 	</div>
-	<!-- if dashboard failed to load -->
+	<!-- 3. If dashboard is still loading -->
+	<div
+		v-else-if="contentStore.loading"
+		class="dashboard dashboard-nodashboard"
+	>
+		<div class="dashboard-nodashboard-content">
+			<div></div>
+		</div>
+	</div>
+	<!-- 4. If dashboard failed to load -->
 	<div v-else-if="contentStore.error" class="dashboard dashboard-nodashboard">
 		<div class="dashboard-nodashboard-content">
 			<span>sentiment_very_dissatisfied</span>
 			<h2>發生錯誤，無法載入儀表板</h2>
 		</div>
 	</div>
-	<!-- other dashboards that don't have components -->
+	<!-- 5. Dashboards that don't have components -->
 	<div v-else class="dashboard dashboard-nodashboard">
 		<div class="dashboard-nodashboard-content">
 			<span>addchart</span>

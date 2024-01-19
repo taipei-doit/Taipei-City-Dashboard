@@ -1,3 +1,6 @@
+<!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
+
+<!-- Used by admin settings forms to select items from a predetermined list -->
 <script setup>
 import { defineProps, defineEmits, ref, computed } from "vue";
 import { chartTypes } from "../../../assets/configs/apexcharts/chartTypes";

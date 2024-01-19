@@ -1,15 +1,15 @@
-<!-- Developed by Taipei Urban Intelligence Center 2023 -->
+<!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 
 <script setup>
-import { useDialogStore } from '../../store/dialogStore';
-import { useAuthStore } from '../../store/authStore';
+import { useDialogStore } from "../../store/dialogStore";
+import { useAuthStore } from "../../store/authStore";
 
-import DialogContainer from './DialogContainer.vue';
+import DialogContainer from "./DialogContainer.vue";
 
 const dialogStore = useDialogStore();
 const authStore = useAuthStore();
 
-const accountTypes = ['Email用戶', '台北通', '台北on'];
+const accountTypes = ["Email用戶", "台北通", "台北on"];
 
 function handleClose() {
 	dialogStore.hideAllDialogs();
@@ -32,9 +32,11 @@ function handleClose() {
 			</tr>
 			<tr>
 				<th>權限</th>
-				<td>{{ authStore.user.status === 1 ? '管理員' : '一般用戶' }}</td>
+				<td>
+					{{ authStore.user.status === 1 ? "管理員" : "一般用戶" }}
+				</td>
 				<th>帳戶狀態</th>
-				<td>{{ authStore.user.status > 0 ? '啟用' : '停用' }}</td>
+				<td>{{ authStore.user.status > 0 ? "啟用" : "停用" }}</td>
 			</tr>
 		</table>
 	</DialogContainer>
@@ -56,12 +58,12 @@ function handleClose() {
 	}
 
 	th {
-		width: 20%
+		width: 20%;
 	}
 
 	td {
 		width: 30%;
-		padding-left: 0.5rem
+		padding-left: 0.5rem;
 	}
 }
 </style>

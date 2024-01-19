@@ -1,12 +1,12 @@
-<!-- Developed by Taipei Urban Intelligence Center 2023 -->
+<!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 
 <script setup>
 import { computed, ref } from "vue";
 import { useDialogStore } from "../../store/dialogStore";
 import { useContentStore } from "../../store/contentStore";
 
-import ComponentTag from "../utilities/ComponentTag.vue";
-import TagTooltip from "../utilities/TagTooltip.vue";
+import ComponentTag from "../utilities/miscellaneous/ComponentTag.vue";
+import TagTooltip from "../utilities/miscellaneous/TagTooltip.vue";
 import { timeTerms } from "../../assets/configs/allTimes";
 import { getComponentDataTimeframe } from "../../assets/utilityFunctions/dataTimeframe";
 

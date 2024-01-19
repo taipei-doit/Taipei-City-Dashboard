@@ -1,14 +1,19 @@
+<!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 <script setup>
 import { onMounted, ref, computed } from "vue";
 import { useAdminStore } from "../../store/adminStore";
 import { useDialogStore } from "../../store/dialogStore";
+import { useContentStore } from "../../store/contentStore";
 
 import TableHeader from "../../components/utilities/forms/TableHeader.vue";
-import AdminEditIssue from "../../components/dialogs/AdminEditIssue.vue";
+import AdminEditIssue from "../../components/dialogs/admin/AdminEditIssue.vue";
 import CustomCheckBox from "../../components/utilities/forms/CustomCheckBox.vue";
 
 const adminStore = useAdminStore();
 const dialogStore = useDialogStore();
+const contentStore = useContentStore();
+
+const statuses = ["待處理", "處理中", "已處理", "不處理"];
 
 const searchParams = ref({
 	filterbystatus: ["待處理"],
@@ -17,8 +22,6 @@ const searchParams = ref({
 	pagesize: 10,
 	pagenum: 1,
 });
-
-const statuses = ["待處理", "處理中", "已處理", "不處理"];
 
 const pages = computed(() => {
 	// return an array of pages based on results no stored in admin store
@@ -63,7 +66,7 @@ function handleNewPage(page) {
 
 function handleOpenSettings(issue) {
 	adminStore.currentIssue = JSON.parse(JSON.stringify(issue));
-	dialogStore.showDialog("admineditissue");
+	dialogStore.showDialog("adminEditIssue");
 }
 
 onMounted(() => {
@@ -73,6 +76,7 @@ onMounted(() => {
 
 <template>
 	<div class="adminissue">
+		<!-- 1. Checkboxes to filter through different issue types -->
 		<div class="adminissue-filter">
 			<div v-for="status in statuses" :key="status">
 				<input
@@ -86,6 +90,7 @@ onMounted(() => {
 				<CustomCheckBox :for="status">{{ status }}</CustomCheckBox>
 			</div>
 		</div>
+		<!-- 2. The main table displaying various issues -->
 		<table class="adminissue-table">
 			<thead>
 				<tr class="adminissue-table-header">
@@ -127,7 +132,8 @@ onMounted(() => {
 					>
 				</tr>
 			</thead>
-			<tbody v-if="adminStore.issues">
+			<!-- 2-1. Issues are present -->
+			<tbody v-if="adminStore.issues.length !== 0">
 				<tr
 					v-for="issue in adminStore.issues"
 					:key="`issue-${issue.id}`"
@@ -146,13 +152,28 @@ onMounted(() => {
 					<td>{{ parseTime(issue.updated_at) }}</td>
 				</tr>
 			</tbody>
-			<div v-else class="adminissue-nocontent">
+			<!-- 2-2. Issues are still loading -->
+			<div v-else-if="contentStore.loading" class="adminissue-nocontent">
 				<div class="adminissue-nocontent-content">
 					<div></div>
 				</div>
 			</div>
+			<!-- 2-3. An Error occurred -->
+			<div v-else-if="contentStore.error" class="adminissue-nocontent">
+				<div class="adminissue-nocontent-content">
+					<span>sentiment_very_dissatisfied</span>
+					<h2>發生錯誤，無法載入問題列表</h2>
+				</div>
+			</div>
+			<!-- 2-4. Issues are loaded but there are none -->
+			<div v-else class="adminissue-nocontent">
+				<div class="adminissue-nocontent-content">
+					<span>search_off</span>
+					<h2>查無符合篩選條件的問題</h2>
+				</div>
+			</div>
 		</table>
-		<!-- html element to select a results per page -->
+		<!-- 3. Records per page and pagination control -->
 		<div class="adminissue-control" v-if="adminStore.issues.length !== 0">
 			<label for="pagesize">每頁顯示</label>
 			<select v-model="searchParams.pagesize" @change="handleNewQuery">
@@ -177,10 +198,10 @@ onMounted(() => {
 
 <style scoped lang="scss">
 .adminissue {
-	display: flex;
-	flex-direction: column;
 	height: 100%;
 	width: 100%;
+	display: flex;
+	flex-direction: column;
 	margin-top: 20px;
 	padding: 0 20px 20px;
 
@@ -215,8 +236,8 @@ onMounted(() => {
 			height: 8px;
 		}
 		&::-webkit-scrollbar-thumb {
-			background-color: rgba(136, 135, 135, 0.5);
 			border-radius: 4px;
+			background-color: rgba(136, 135, 135, 0.5);
 		}
 		&::-webkit-scrollbar-thumb:hover {
 			background-color: rgba(136, 135, 135, 1);
@@ -268,6 +289,12 @@ onMounted(() => {
 			align-items: center;
 			justify-content: center;
 
+			span {
+				margin-bottom: 1rem;
+				font-family: var(--font-icon);
+				font-size: 2rem;
+			}
+
 			div {
 				width: 2rem;
 				height: 2rem;
@@ -286,8 +313,8 @@ onMounted(() => {
 		height: 2rem;
 
 		label {
-			font-size: var(--font-m);
 			margin-right: 0.5rem;
+			font-size: var(--font-m);
 		}
 		select {
 			width: 100px;

@@ -1,16 +1,16 @@
-<!-- Developed by Taipei Urban Intelligence Center 2024 -->
+<!-- Developed by Taipei Urban Intelligence Center 2023-2024 -->
 
 <script setup>
 import { ref } from "vue";
-import axios from "axios";
+import http from "../../router/axios";
 import { useDialogStore } from "../../store/dialogStore";
 import { useAuthStore } from "../../store/authStore";
-
+import { useContentStore } from "../../store/contentStore";
 import DialogContainer from "./DialogContainer.vue";
-const { VITE_API_URL } = import.meta.env;
 
 const dialogStore = useDialogStore();
 const authStore = useAuthStore();
+const contentStore = useContentStore();
 
 const allInputs = ref({
 	type: "組件基本資訊有誤",
@@ -33,13 +33,10 @@ async function handleSubmit() {
 		context: `類型：${allInputs.value.type} // 來源：${dialogStore.issue.id} - ${dialogStore.issue.index} - ${dialogStore.issue.name}`,
 		status: "待處理",
 	};
-	try {
-		await axios.post(`${VITE_API_URL}/issue/`, submitObject);
-		handleClose();
-		dialogStore.showNotification("success", "回報問題成功，感謝您的建議");
-	} catch {
-		dialogStore.showNotification("fail", "回報問題失敗，請再試一次");
-	}
+	await http.post(`/issue/`, submitObject);
+	dialogStore.showNotification("success", "回報問題成功，感謝您的建議");
+	contentStore.loading = false;
+	handleClose();
 }
 function handleClose() {
 	allInputs.value = {

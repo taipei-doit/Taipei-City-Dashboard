@@ -1,3 +1,13 @@
+<!-- Developed By Taipei Urban Intelligence Center 2023-2024 -->
+<!-- 
+Lead Developer:  Igor Ho (Full Stack Engineer)
+Data Pipelines:  Iima Yu (Data Scientist)
+Design and UX: Roy Lin (Fmr. Consultant), Chu Chen (Researcher)
+Systems: Ann Shih (Systems Engineer)
+Testing: Jack Huang (Data Scientist), Ian Huang (Data Analysis Intern) 
+-->
+<!-- Department of Information Technology, Taipei City Government -->
+
 <script setup>
 import router from "../router";
 import { useContentStore } from "../store/contentStore";
@@ -5,7 +15,7 @@ import { useDialogStore } from "../store/dialogStore";
 import { useAuthStore } from "../store/authStore";
 
 import ComponentContainer from "../components/components/ComponentContainer.vue";
-import HistoryChart from "../components/utilities/HistoryChart.vue";
+import HistoryChart from "../components/charts/HistoryChart.vue";
 import ReportIssue from "../components/dialogs/ReportIssue.vue";
 import DownloadData from "../components/dialogs/DownloadData.vue";
 
@@ -17,6 +27,7 @@ const authStore = useAuthStore();
 </script>
 
 <template>
+	<!-- Button to navigate back to /component -->
 	<div class="componentinfoview-header">
 		<button
 			v-if="authStore.isMobileDevice && authStore.isNarrowDevice"
@@ -30,15 +41,10 @@ const authStore = useAuthStore();
 			<p>返回組件瀏覽平台</p></RouterLink
 		>
 	</div>
-	<div
-		v-if="contentStore.loading"
-		class="componentinfoview componentinfoview-nodashboard"
-	>
-		<div class="componentinfoview-nodashboard-content">
-			<div></div>
-		</div>
-	</div>
-	<div v-else-if="dialogStore.moreInfoContent" class="componentinfoview">
+
+	<!-- 1. If the component is found -->
+	<div v-if="dialogStore.moreInfoContent" class="componentinfoview">
+		<!-- 1-1. View the entire component and its chart data -->
 		<div class="componentinfoview-component">
 			<ComponentContainer
 				:content="dialogStore.moreInfoContent"
@@ -47,6 +53,7 @@ const authStore = useAuthStore();
 				:style="{ height: '350px', width: '400px' }"
 			/>
 		</div>
+		<!-- 1-2. View the component's information -->
 		<div class="componentinfoview-content">
 			<h3>組件 ID | Index</h3>
 			<p>
@@ -81,6 +88,7 @@ const authStore = useAuthStore();
 				</button>
 			</div>
 		</div>
+		<!-- 1-3. View the component's history data -->
 		<div
 			class="componentinfoview-history"
 			v-if="dialogStore.moreInfoContent.history_data"
@@ -92,6 +100,7 @@ const authStore = useAuthStore();
 				:history_config="dialogStore.moreInfoContent.history_config"
 			/>
 		</div>
+		<!-- 1-4. View the component's source links and contributors -->
 		<div
 			class="componentinfoview-source"
 			:style="{
@@ -151,6 +160,16 @@ const authStore = useAuthStore();
 		<ReportIssue />
 		<DownloadData />
 	</div>
+	<!-- 2. If the page is still loading -->
+	<div
+		v-else-if="contentStore.loading"
+		class="componentinfoview componentinfoview-nodashboard"
+	>
+		<div class="componentinfoview-nodashboard-content">
+			<div></div>
+		</div>
+	</div>
+	<!-- 3. If the component is not found or an error happened -->
 	<div v-else class="componentinfoview componentinfoview-nodashboard">
 		<div class="componentinfoview-nodashboard-content">
 			<span>sentiment_very_dissatisfied</span>
@@ -165,9 +184,6 @@ const authStore = useAuthStore();
 	max-width: 1300px;
 	height: calc(100vh - 60px);
 	height: calc(var(--vh) * 100 - 60px);
-	margin-top: 1rem;
-	padding: 0 12px var(--font-m) 10px;
-	overflow-y: scroll;
 	display: grid;
 	grid-template-columns: 400px 1fr;
 	grid-template-rows: 386px max-content max-content;
@@ -177,23 +193,26 @@ const authStore = useAuthStore();
 		"source source";
 	column-gap: var(--font-s);
 	row-gap: var(--font-s);
+	margin-top: 1rem;
+	padding: 0 12px var(--font-m) 10px;
+	overflow-y: scroll;
 
 	h3 {
 		font-size: var(--font-m);
 	}
 
 	p {
-		font-size: 1rem;
-		color: var(--color-complement-text);
 		margin-bottom: 1rem;
+		color: var(--color-complement-text);
+		font-size: 1rem;
 	}
 
 	&::-webkit-scrollbar {
 		width: 4px;
 	}
 	&::-webkit-scrollbar-thumb {
-		background-color: rgba(136, 135, 135, 0.5);
 		border-radius: 4px;
+		background-color: rgba(136, 135, 135, 0.5);
 	}
 	&::-webkit-scrollbar-thumb:hover {
 		background-color: rgba(136, 135, 135, 1);
@@ -204,7 +223,7 @@ const authStore = useAuthStore();
 		padding-right: 10px;
 	}
 
-	@media (max-width: 730px) {
+	@media (max-width: 750px) {
 		grid-template-columns: 1fr;
 		grid-template-rows: 386px max-content max-content max-content;
 		grid-template-areas:
@@ -244,15 +263,15 @@ const authStore = useAuthStore();
 	}
 
 	&-component {
-		background-color: var(--color-component-background);
 		border-radius: 5px;
+		background-color: var(--color-component-background);
 	}
 
 	&-content {
 		grid-area: content;
-		background-color: var(--color-component-background);
-		border-radius: 5px;
 		padding: var(--font-m);
+		border-radius: 5px;
+		background-color: var(--color-component-background);
 		overflow-y: scroll;
 
 		&-control {
@@ -287,20 +306,20 @@ const authStore = useAuthStore();
 		height: 220px;
 		width: calc(100% - var(--font-m) * 2);
 		grid-area: history;
-		background-color: var(--color-component-background);
-		border-radius: 5px;
 		padding: var(--font-m);
+		border-radius: 5px;
+		background-color: var(--color-component-background);
 	}
 
 	&-source {
 		display: grid;
 		grid-template-columns: 1fr 1fr;
 		column-gap: 1rem;
-		background-color: var(--color-component-background);
-		border-radius: 5px;
 		padding: var(--font-m);
+		border-radius: 5px;
+		background-color: var(--color-component-background);
 
-		@media (max-width: 730px) {
+		@media (max-width: 750px) {
 			grid-template-columns: 1fr;
 			row-gap: 1rem;
 		}
@@ -312,11 +331,11 @@ const authStore = useAuthStore();
 				margin-top: 8px;
 
 				div {
+					min-width: var(--font-l);
+					height: var(--font-l);
 					display: flex;
 					align-items: center;
 					justify-content: center;
-					min-width: var(--font-l);
-					height: var(--font-l);
 					border-radius: 50%;
 					background-color: var(--color-complement-text);
 				}

@@ -1,30 +1,24 @@
-<!-- Developed by Taipei Urban Intelligence Center 2023 -->
-
-<!-- This component only serves a functional purpose if a backend is connected -->
-<!-- For static applications, this component could be removed or modified to be a dashboard component overviewer -->
+<!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 
 <script setup>
 import { computed, onMounted, ref } from "vue";
+import http from "../../router/axios";
+
 import { useDialogStore } from "../../store/dialogStore";
 import { useContentStore } from "../../store/contentStore";
 
 import DialogContainer from "./DialogContainer.vue";
-import axios from "axios";
 import ComponentPreview from "../components/ComponentPreview.vue";
-
-const { VITE_API_URL } = import.meta.env;
 
 const dialogStore = useDialogStore();
 const contentStore = useContentStore();
 
-// The following six states store the filters / parameters inputted by the user
+const allComponents = ref(null);
+const componentsSelected = ref([]);
 const searchName = ref("");
 const searchIndex = ref("");
 
-const allComponents = ref(null);
-const componentsSelected = ref([]);
-
-// Filters out components already in the dashboard / maplayer components
+// Filters out components already in the dashboard
 const availableComponents = computed(() => {
 	const taken = contentStore.editDashboard.components.map((item) => item.id);
 	const available = allComponents.value.filter(
@@ -33,18 +27,16 @@ const availableComponents = computed(() => {
 	return available;
 });
 
-function handleSearch() {
-	axios
-		.get(`${VITE_API_URL}/component/`, {
-			params: {
-				pagesize: 100,
-				searchbyindex: searchIndex.value,
-				searchbyname: searchName.value,
-			},
-		})
-		.then((res) => {
-			allComponents.value = res.data.data;
-		});
+async function handleSearch() {
+	const response = await http.get(`/component/`, {
+		params: {
+			pagesize: 100,
+			searchbyindex: searchIndex.value,
+			searchbyname: searchName.value,
+		},
+	});
+	allComponents.value = response.data.data;
+	contentStore.loading = false;
 }
 function handleSubmit() {
 	contentStore.editDashboard.components =
@@ -218,11 +210,11 @@ onMounted(() => {
 	}
 
 	&-list {
+		max-height: calc(100% - 7rem);
 		display: grid;
 		grid-template-columns: 1fr 1fr;
 		row-gap: 1rem;
 		column-gap: 1rem;
-		max-height: calc(100% - 7rem);
 		overflow-y: scroll;
 
 		&-item {

@@ -1,3 +1,13 @@
+<!-- Developed By Taipei Urban Intelligence Center 2023-2024 -->
+<!-- 
+Lead Developer:  Igor Ho (Full Stack Engineer)
+Data Pipelines:  Iima Yu (Data Scientist)
+Design and UX: Roy Lin (Fmr. Consultant), Chu Chen (Researcher)
+Systems: Ann Shih (Systems Engineer)
+Testing: Jack Huang (Data Scientist), Ian Huang (Data Analysis Intern) 
+-->
+<!-- Department of Information Technology, Taipei City Government -->
+
 <script setup>
 import { ref, onMounted } from "vue";
 import { useContentStore } from "../store/contentStore";
@@ -24,6 +34,7 @@ onMounted(() => {
 </script>
 
 <template>
+	<!-- Search Bar that is always present -->
 	<div class="componentview-search">
 		<div>
 			<input
@@ -44,22 +55,24 @@ onMounted(() => {
 		</div>
 		<button @click="handleNewQuery">搜尋</button>
 	</div>
-	<!-- if dashboard is still loading -->
-	<div
-		v-if="contentStore.loading"
-		class="componentview componentview-nodashboard"
-	>
-		<div class="componentview-nodashboard-content">
-			<div></div>
-		</div>
-	</div>
-	<div v-else-if="contentStore.components.length !== 0" class="componentview">
+	<!-- 1. If the components are loaded -->
+	<div v-if="contentStore.components.length !== 0" class="componentview">
 		<ComponentPreview
 			v-for="item in contentStore.components"
 			:content="item"
 			:key="item.index"
 		/>
 	</div>
+	<!-- 2. If the components are still loading -->
+	<div
+		v-else-if="contentStore.loading"
+		class="componentview componentview-nodashboard"
+	>
+		<div class="componentview-nodashboard-content">
+			<div></div>
+		</div>
+	</div>
+	<!-- 3. If there is an error during loading -->
 	<div
 		v-else-if="contentStore.error"
 		class="componentview componentview-nodashboard"
@@ -69,6 +82,7 @@ onMounted(() => {
 			<h2>發生錯誤，無法載入</h2>
 		</div>
 	</div>
+	<!-- 4. If there are no components -->
 	<div v-else class="componentview componentview-nodashboard">
 		<div class="componentview-nodashboard-content">
 			<span>search_off</span>
@@ -178,12 +192,6 @@ onMounted(() => {
 				color: var(--color-complement-text);
 			}
 		}
-	}
-}
-
-@keyframes spin {
-	to {
-		transform: rotate(360deg);
 	}
 }
 </style>

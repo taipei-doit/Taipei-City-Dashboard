@@ -1,4 +1,4 @@
-<!-- Developed by Taipei Urban Intelligence Center 2023 -->
+<!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 
 <script setup>
 import { useDialogStore } from "../../store/dialogStore";
@@ -6,7 +6,7 @@ import { useContentStore } from "../../store/contentStore";
 
 import DialogContainer from "./DialogContainer.vue";
 import ComponentContainer from "../components/ComponentContainer.vue";
-import HistoryChart from "../utilities/HistoryChart.vue";
+import HistoryChart from "../charts/HistoryChart.vue";
 import DownloadData from "./DownloadData.vue";
 
 const { BASE_URL } = import.meta.env;

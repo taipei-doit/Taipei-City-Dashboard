@@ -1,4 +1,4 @@
-// Cleaned
+// Developed by Taipei Urban Intelligence Center 2023-2024
 
 /* authStore */
 /*
@@ -22,7 +22,7 @@ export const useAuthStore = defineStore("auth", {
 			status: 1,
 			type: 0,
 		},
-		tokens: {},
+		token: null,
 		errorMessage: "",
 		isMobileDevice: false,
 		isNarrowDevice: false,
@@ -53,6 +53,10 @@ export const useAuthStore = defineStore("auth", {
 
 		// Call this function to clear the entire store
 		executeClearStore() {},
+
+		/* Other Utility Functions */
+		// 1. Check if the user is using a mobile device.
+		// This is used to determine whether to show the mobile version of the dashboard.
 		checkIfMobile() {
 			if (navigator.maxTouchPoints > 2) {
 				this.isMobileDevice = true;
@@ -64,6 +68,7 @@ export const useAuthStore = defineStore("auth", {
 				this.isNarrowDevice = true;
 			}
 		},
+		// 2. Set the current path of the user
 		setCurrentPath(path) {
 			this.currentPath = path;
 		},

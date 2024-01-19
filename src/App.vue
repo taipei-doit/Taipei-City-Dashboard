@@ -1,6 +1,6 @@
-<!-- Developed By Taipei Urban Intelligence Center 2023 -->
+<!-- Developed By Taipei Urban Intelligence Center 2023-2024 -->
 <!-- 
-Lead Developer:  Igor Ho (FE Engineer)
+Lead Developer:  Igor Ho (Full Stack Engineer)
 Data Pipelines:  Iima Yu (Data Scientist)
 Design and UX: Roy Lin (Fmr. Consultant), Chu Chen (Researcher)
 Systems: Ann Shih (Systems Engineer)
@@ -13,13 +13,13 @@ import { onBeforeMount, onMounted } from "vue";
 import { useAuthStore } from "./store/authStore";
 import { useDialogStore } from "./store/dialogStore";
 
-import NavBar from "./components/NavBar.vue";
-import SideBar from "./components/SideBar.vue";
-import AdminSideBar from "./components/admin/AdminSideBar.vue";
-import SettingsBar from "./components/SettingsBar.vue";
+import NavBar from "./components/utilities/bars/NavBar.vue";
+import SideBar from "./components/utilities/bars/SideBar.vue";
+import AdminSideBar from "./components/utilities/bars/AdminSideBar.vue";
+import SettingsBar from "./components/utilities/bars/SettingsBar.vue";
 import NotificationBar from "./components/dialogs/NotificationBar.vue";
 import InitialWarning from "./components/dialogs/InitialWarning.vue";
-import ComponentSideBar from "./components/ComponentSideBar.vue";
+import ComponentSideBar from "./components/utilities/bars/ComponentSideBar.vue";
 
 const authStore = useAuthStore();
 const dialogStore = useDialogStore();
@@ -48,6 +48,7 @@ onMounted(() => {
 	<div class="app-container">
 		<NotificationBar />
 		<NavBar />
+		<!-- /mapview, /dashboard layouts -->
 		<div
 			class="app-content"
 			v-if="
@@ -61,12 +62,14 @@ onMounted(() => {
 				<RouterView></RouterView>
 			</div>
 		</div>
+		<!-- /admin layouts -->
 		<div class="app-content" v-else-if="authStore.currentPath === 'admin'">
 			<AdminSideBar />
 			<div class="app-content-main">
 				<RouterView></RouterView>
 			</div>
 		</div>
+		<!-- /component, /component/:index layouts -->
 		<div
 			class="app-content"
 			v-else-if="authStore.currentPath.includes('component')"
