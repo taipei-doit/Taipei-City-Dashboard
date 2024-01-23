@@ -12,6 +12,7 @@
 	--font-xl: 1.5rem;
 	--font-l: 1.25rem;
 	--font-m: 18px;
+	--font-ms: 1rem;
 	--font-s: 0.75rem;
 	--font-icon: "Material Icons Round";
 	--vh: 1vh;
@@ -54,7 +55,7 @@ input {
 	border-radius: 5px;
 	border: solid 1px var(--color-border);
 	background-color: transparent;
-	font-size: 1rem;
+	font-size: var(--font-ms);
 }
 
 input:focus {
@@ -77,7 +78,7 @@ select {
 	border-radius: 5px;
 	border: solid 1px var(--color-border);
 	background-color: transparent;
-	font-size: 1rem;
+	font-size: var(--font-ms);
 	outline: none;
 }
 select:focus {
@@ -92,7 +93,7 @@ textarea {
 	border: solid 1px var(--color-border);
 	border-radius: 5px;
 	background-color: transparent;
-	font-size: 1rem;
+	font-size: var(--font-ms);
 }
 textarea:focus {
 	outline: none;

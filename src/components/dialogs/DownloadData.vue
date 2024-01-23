@@ -123,7 +123,7 @@ function handleClose() {
 	&-input {
 		display: flex;
 		flex-direction: column;
-		margin: 1rem 0 0.5rem;
+		margin: var(--font-ms) 0 0.5rem;
 
 		p {
 			color: rgb(216, 52, 52);

@@ -119,7 +119,7 @@ const dialogStore = useDialogStore();
 			justify-content: center;
 
 			span {
-				margin-bottom: 1rem;
+				margin-bottom: var(--font-ms);
 				font-family: var(--font-icon);
 				font-size: 2rem;
 			}

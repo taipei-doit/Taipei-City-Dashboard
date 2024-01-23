@@ -53,7 +53,7 @@ const statusToIcon = {
 	z-index: 100;
 	display: flex;
 	align-items: center;
-	padding: 0 1rem;
+	padding: 0 var(--font-ms);
 	border: solid 1px var(--color-border);
 	border-radius: 5px;
 	box-shadow: 0px 5px 10px black;

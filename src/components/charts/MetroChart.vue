@@ -148,7 +148,7 @@ const parsedSeries = computed(() => {
 		grid-template-columns: 5rem 20px 1fr 1fr;
 
 		&-tag {
-			min-width: 1rem;
+			min-width: var(--font-ms);
 			min-height: 1.4rem;
 			display: flex;
 			flex-direction: column;
@@ -162,7 +162,7 @@ const parsedSeries = computed(() => {
 
 		&-line {
 			width: 8px;
-			height: 1rem;
+			height: var(--font-ms);
 			margin: 0px 6px;
 		}
 	}

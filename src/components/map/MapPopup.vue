@@ -87,7 +87,7 @@
 	top: 10px !important;
 	color: var(--color-complement-text);
 	font-size: 1.2rem;
-	line-height: 1rem;
+	line-height: var(--font-ms);
 }
 
 .mappopup {

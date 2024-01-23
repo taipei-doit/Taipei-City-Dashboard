@@ -168,7 +168,7 @@ function getLinkTag(link, index) {
 	&-info {
 		display: flex;
 		flex-direction: column;
-		padding: 1rem;
+		padding: var(--font-ms);
 		border-top: solid 1px var(--color-border);
 
 		p {
@@ -267,7 +267,7 @@ function getLinkTag(link, index) {
 				padding: 2px 4px;
 				border-radius: 5px;
 				background-color: var(--color-highlight);
-				font-size: 1rem;
+				font-size: var(--font-ms);
 				transition: opacity 0.2s;
 
 				&:hover {

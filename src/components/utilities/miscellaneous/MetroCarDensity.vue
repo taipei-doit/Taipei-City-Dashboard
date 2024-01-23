@@ -47,12 +47,12 @@ const numToColor = {
 	}
 
 	&-item {
-		width: 1rem;
-		height: 1rem;
+		width: var(--font-ms);
+		height: var(--font-ms);
 		border-radius: 2px;
 		color: black;
 		font-size: 0.8rem;
-		line-height: 1rem;
+		line-height: var(--font-ms);
 		text-align: center;
 		pointer-events: none;
 		user-select: none;

@@ -151,7 +151,7 @@ onMounted(() => {
 		&-search {
 			display: flex;
 			justify-content: space-between;
-			margin-top: 1rem;
+			margin-top: var(--font-ms);
 
 			> div {
 				display: flex;
@@ -188,7 +188,7 @@ onMounted(() => {
 					span {
 						margin-right: 4px;
 						font-family: var(--font-icon);
-						font-size: calc(var(--font-m) * var(--font-to-icon));
+						font-size: calc(var(--font-ms) * var(--font-to-icon));
 					}
 
 					button {
@@ -197,7 +197,7 @@ onMounted(() => {
 						justify-self: baseline;
 						margin-right: 0.4rem;
 						border-radius: 5px;
-						font-size: var(--font-m);
+						font-size: var(--font-ms);
 
 						&:nth-child(2) {
 							padding: 2px 4px;
@@ -213,8 +213,8 @@ onMounted(() => {
 		max-height: calc(100% - 7rem);
 		display: grid;
 		grid-template-columns: 1fr 1fr;
-		row-gap: 1rem;
-		column-gap: 1rem;
+		row-gap: var(--font-ms);
+		column-gap: var(--font-ms);
 		overflow-y: scroll;
 
 		&-item {

@@ -88,7 +88,7 @@ export const useContentStore = defineStore("content", {
 		async setDashboards() {
 			const response = await http.get(`/dashboard/`);
 
-			this.dashboards = response.data.data;
+			this.dashboards = response.data.data.public;
 			if (!this.currentDashboard.index) {
 				this.currentDashboard.index = this.dashboards[0].index;
 				router.replace({
@@ -98,10 +98,10 @@ export const useContentStore = defineStore("content", {
 				});
 			}
 			// Pick out the list of favorite components
-			const favorites = this.dashboards.find(
-				(item) => item.index === "favorites"
-			);
-			this.favorites = [...favorites.components];
+			// const favorites = this.dashboards.find(
+			// 	(item) => item.index === "favorites"
+			// );
+			this.favorites = [];
 			// After getting dashboard info, call the setCurrentDashboardContent (3.) method to get component info
 			this.setCurrentDashboardContent();
 		},

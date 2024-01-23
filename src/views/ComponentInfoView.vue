@@ -193,7 +193,7 @@ const authStore = useAuthStore();
 		"source source";
 	column-gap: var(--font-s);
 	row-gap: var(--font-s);
-	margin-top: 1rem;
+	margin-top: var(--font-ms);
 	padding: 0 12px var(--font-m) 10px;
 	overflow-y: scroll;
 
@@ -202,9 +202,9 @@ const authStore = useAuthStore();
 	}
 
 	p {
-		margin-bottom: 1rem;
+		margin-bottom: var(--font-ms);
 		color: var(--color-complement-text);
-		font-size: 1rem;
+		font-size: var(--font-ms);
 	}
 
 	&::-webkit-scrollbar {
@@ -256,7 +256,7 @@ const authStore = useAuthStore();
 
 			p {
 				color: var(--color-highlight);
-				font-size: 1rem;
+				font-size: var(--font-ms);
 				user-select: none;
 			}
 		}
@@ -277,7 +277,7 @@ const authStore = useAuthStore();
 		&-control {
 			display: flex;
 			flex: 1;
-			margin-top: 1rem;
+			margin-top: var(--font-ms);
 
 			span {
 				margin-right: 4px;
@@ -292,7 +292,7 @@ const authStore = useAuthStore();
 				padding: 2px 4px;
 				border-radius: 5px;
 				background-color: var(--color-highlight);
-				font-size: 1rem;
+				font-size: var(--font-ms);
 				transition: opacity 0.2s;
 
 				&:hover {
@@ -314,14 +314,14 @@ const authStore = useAuthStore();
 	&-source {
 		display: grid;
 		grid-template-columns: 1fr 1fr;
-		column-gap: 1rem;
+		column-gap: var(--font-ms);
 		padding: var(--font-m);
 		border-radius: 5px;
 		background-color: var(--color-component-background);
 
 		@media (max-width: 750px) {
 			grid-template-columns: 1fr;
-			row-gap: 1rem;
+			row-gap: var(--font-ms);
 		}
 
 		&-links {
@@ -394,7 +394,7 @@ const authStore = useAuthStore();
 			justify-content: center;
 
 			span {
-				margin-bottom: 1rem;
+				margin-bottom: var(--font-ms);
 				font-family: var(--font-icon);
 				font-size: 2rem;
 			}

@@ -207,8 +207,8 @@ onMounted(() => {
 
 	&-filter {
 		display: flex;
-		column-gap: 1rem;
-		margin-bottom: 1rem;
+		column-gap: var(--font-ms);
+		margin-bottom: var(--font-ms);
 
 		input {
 			display: none;
@@ -290,7 +290,7 @@ onMounted(() => {
 			justify-content: center;
 
 			span {
-				margin-bottom: 1rem;
+				margin-bottom: var(--font-ms);
 				font-family: var(--font-icon);
 				font-size: 2rem;
 			}

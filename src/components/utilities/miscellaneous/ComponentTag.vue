@@ -48,7 +48,7 @@ defineProps({
 	}
 
 	p {
-		max-height: 1rem;
+		max-height: var(--font-ms);
 		color: var(--color-complement-text);
 	}
 
@@ -62,8 +62,8 @@ defineProps({
 	}
 
 	&-small {
-		min-height: 1.1rem;
-		max-height: 1.1rem;
+		min-height: 1var (--font-ms);
+		max-height: 1var (--font-ms);
 		padding: 0 2px;
 		margin-left: 8px;
 

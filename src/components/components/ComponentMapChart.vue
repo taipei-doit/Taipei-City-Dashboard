@@ -255,7 +255,7 @@ function changeShowTagTooltipState(state) {
 		}
 
 		&-toggle {
-			min-height: 1rem;
+			min-height: var(--font-ms);
 			min-width: 2rem;
 			margin-top: 4px;
 		}

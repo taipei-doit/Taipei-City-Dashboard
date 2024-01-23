@@ -560,10 +560,10 @@ function handleClose() {
 			display: flex;
 			align-items: center;
 			justify-self: baseline;
-			padding: 0px 4px;
+			padding: 2px 4px;
 			border-radius: 5px;
 			background-color: var(--color-highlight);
-			font-size: var(--font-m);
+			font-size: var(--font-ms);
 		}
 	}
 
@@ -600,7 +600,7 @@ function handleClose() {
 
 	&-settings {
 		padding: 0 0.5rem 0.5rem 0.5rem;
-		margin-right: 1rem;
+		margin-right: var(--font-ms);
 		border-radius: 0px 5px 5px 5px;
 		border: solid 1px var(--color-border);
 		overflow-y: scroll;
@@ -627,7 +627,7 @@ function handleClose() {
 			flex-direction: column;
 
 			hr {
-				margin: 1rem 0 0.5rem;
+				margin: var(--font-ms) 0 0.5rem;
 				border: none;
 				border-bottom: dashed 1px var(--color-complement-text);
 			}
@@ -656,7 +656,7 @@ function handleClose() {
 				position: absolute;
 				display: block;
 				border-radius: 5px;
-				font-size: 1rem;
+				font-size: var(--font-ms);
 				color: var(--color-complement-text);
 			}
 			&:focus:before {

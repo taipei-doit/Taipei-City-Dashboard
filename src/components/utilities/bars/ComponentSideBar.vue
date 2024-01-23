@@ -133,7 +133,7 @@ const availableIcons = computed(() => {
 			column-gap: 4px;
 			row-gap: 4px;
 			margin: 0.5rem 0;
-			padding-bottom: 1rem;
+			padding-bottom: var(--font-ms);
 			border-bottom: solid 1px var(--color-border);
 
 			input {
@@ -195,10 +195,10 @@ const availableIcons = computed(() => {
 		button {
 			display: flex;
 			align-items: center;
-			padding: 0px 4px;
+			padding: 2px 4px;
 			border-radius: 5px;
 			background-color: var(--color-highlight);
-			font-size: var(--font-m);
+			font-size: var(--font-ms);
 		}
 	}
 }

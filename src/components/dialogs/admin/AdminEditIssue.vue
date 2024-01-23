@@ -103,17 +103,17 @@ function handleClose() {
 			display: flex;
 			align-items: center;
 			justify-self: baseline;
-			padding: 0px 4px;
+			padding: 2px 4px;
 			border-radius: 5px;
 			background-color: var(--color-highlight);
-			font-size: var(--font-m);
+			font-size: var(--font-ms);
 		}
 	}
 
 	&-settings {
 		height: calc(100% - 55px);
 		padding: 0 0.5rem 0.5rem 0.5rem;
-		margin-top: 1rem;
+		margin-top: var(--font-ms);
 		border-radius: 5px;
 		border: solid 1px var(--color-border);
 		overflow-y: scroll;
@@ -135,7 +135,7 @@ function handleClose() {
 			flex-direction: column;
 
 			hr {
-				margin: 1rem 0 0.5rem;
+				margin: var(--font-ms) 0 0.5rem;
 				border: none;
 				border-bottom: dashed 1px var(--color-complement-text);
 			}

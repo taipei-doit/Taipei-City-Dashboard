@@ -43,7 +43,7 @@ export const useAdminStore = defineStore("admin", {
 		// 1. Get all public dashboards
 		async getDashboards() {
 			const response = await http.get(`/dashboard/`);
-			this.dashboards = response.data.data;
+			this.dashboards = response.data.data.public;
 			this.setLoading(false);
 		},
 		// 2. Get current dashboard components

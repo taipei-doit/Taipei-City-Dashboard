@@ -136,6 +136,7 @@ onMounted(() => {
 			right: 10px;
 			padding: 5px;
 			border-radius: 5px;
+			font-size: var(--font-ms);
 			transition: background-color 0.2s;
 
 			&:hover {

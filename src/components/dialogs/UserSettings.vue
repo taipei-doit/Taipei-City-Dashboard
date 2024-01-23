@@ -45,7 +45,7 @@ function handleClose() {
 <style scoped lang="scss">
 .usersettings {
 	width: 500px;
-	margin: 1rem 0 0.5rem;
+	margin: var(--font-ms) 0 0.5rem;
 	border-spacing: 0;
 	border: solid 1px var(--color-border);
 	border-radius: 5px;

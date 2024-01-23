@@ -94,7 +94,7 @@ function handleDataSelection(index) {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	margin-top: -1rem;
+	margin-top: -var(--font-ms);
 	overflow: visible;
 
 	&-legend {
@@ -116,7 +116,7 @@ function handleDataSelection(index) {
 
 			div:first-child,
 			img {
-				width: 1rem;
+				width: var(--font-ms);
 				margin-right: 0.75rem;
 			}
 
@@ -127,7 +127,7 @@ function handleDataSelection(index) {
 			}
 
 			h6 {
-				font-size: 1rem;
+				font-size: var(--font-ms);
 				font-weight: 400;
 				text-align: left;
 			}

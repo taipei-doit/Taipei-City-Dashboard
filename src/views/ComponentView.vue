@@ -152,7 +152,7 @@ onMounted(() => {
 			padding: 0px 4px;
 			border-radius: 5px;
 			background-color: var(--color-highlight);
-			font-size: var(--font-m);
+			font-size: var(--font-ms);
 			transition: opacity 0.2s;
 
 			&:hover {
@@ -174,7 +174,7 @@ onMounted(() => {
 			justify-content: center;
 
 			span {
-				margin-bottom: 1rem;
+				margin-bottom: var(--font-ms);
 				font-family: var(--font-icon);
 				font-size: 2rem;
 			}

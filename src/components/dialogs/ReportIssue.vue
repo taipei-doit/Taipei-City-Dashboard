@@ -153,7 +153,7 @@ function handleClose() {
 	&-control {
 		display: flex;
 		justify-content: flex-end;
-		margin-top: 1rem;
+		margin-top: var(--font-ms);
 
 		&-cancel {
 			margin: 0 2px;

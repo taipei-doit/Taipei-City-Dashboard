@@ -92,11 +92,11 @@ function handleClose() {
 	&-message {
 		display: flex;
 		flex-direction: column;
-		margin: 1rem 0;
+		margin: var(--font-ms) 0;
 	}
 
 	&-dontshow {
-		margin: 1rem 0 0.5rem;
+		margin: var(--font-ms) 0 0.5rem;
 
 		input {
 			display: none;

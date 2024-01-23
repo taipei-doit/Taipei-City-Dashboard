@@ -187,10 +187,10 @@ function handleClose() {
 			display: flex;
 			align-items: center;
 			justify-self: baseline;
-			padding: 0px 4px;
+			padding: 2px 4px;
 			border-radius: 5px;
 			background-color: var(--color-highlight);
-			font-size: var(--font-m);
+			font-size: var(--font-ms);
 		}
 	}
 
@@ -198,8 +198,8 @@ function handleClose() {
 		height: calc(100% - 45px);
 		display: grid;
 		grid-template-columns: 1fr 1fr;
-		margin-top: 1rem;
-		column-gap: 1rem;
+		margin-top: var(--font-ms);
+		column-gap: var(--font-ms);
 	}
 
 	&-settings {

@@ -21,10 +21,6 @@ export default defineConfig({
 		},
 		chunkSizeWarningLimit: 1600,
 	},
-	test: {
-		globals: true,
-		environment: "happy-dom",
-	},
 	base: "/dashboard-demo",
 	server: {
 		host: "0.0.0.0",
