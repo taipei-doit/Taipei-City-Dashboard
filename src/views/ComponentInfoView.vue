@@ -30,7 +30,11 @@ const authStore = useAuthStore();
 	<!-- Button to navigate back to /component -->
 	<div class="componentinfoview-header">
 		<button
-			v-if="authStore.isMobileDevice && authStore.isNarrowDevice"
+			v-if="
+				authStore.isMobileDevice ||
+				authStore.isNarrowDevice ||
+				!authStore.token
+			"
 			@click="router.back()"
 		>
 			<span>arrow_circle_left</span>
@@ -67,6 +71,7 @@ const authStore = useAuthStore();
 			<p>{{ dialogStore.moreInfoContent.use_case }}</p>
 			<div class="componentinfoview-content-control">
 				<button
+					v-if="authStore.token"
 					@click="
 						dialogStore.showReportIssue(
 							dialogStore.moreInfoContent.id,

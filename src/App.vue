@@ -20,13 +20,13 @@ import SettingsBar from "./components/utilities/bars/SettingsBar.vue";
 import NotificationBar from "./components/dialogs/NotificationBar.vue";
 import InitialWarning from "./components/dialogs/InitialWarning.vue";
 import ComponentSideBar from "./components/utilities/bars/ComponentSideBar.vue";
+import LogIn from "./components/dialogs/LogIn.vue";
 
 const authStore = useAuthStore();
 const dialogStore = useDialogStore();
 
 onBeforeMount(() => {
-	authStore.setUser();
-	authStore.checkIfMobile();
+	authStore.initialChecks();
 
 	let vh = window.innerHeight * 0.01;
 	document.documentElement.style.setProperty("--vh", `${vh}px`);
@@ -80,6 +80,7 @@ onMounted(() => {
 			</div>
 		</div>
 		<InitialWarning />
+		<LogIn />
 	</div>
 </template>
 

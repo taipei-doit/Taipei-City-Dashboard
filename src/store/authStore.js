@@ -9,18 +9,23 @@ or design a new system from scratch that tailors to your needs.
 */
 
 import { defineStore } from "pinia";
+import http from "../router/axios";
 import { useDialogStore } from "./dialogStore";
+import { useContentStore } from "./contentStore";
+import router from "../router/index";
 
 export const useAuthStore = defineStore("auth", {
 	state: () => ({
 		// This is a shortened version of the user object Taipei City Dashboard's backend will return once authenticated
 		user: {
-			email: "tuic-admin@gov.taipei",
-			gid: 1,
-			id: 1,
-			name: "儀表板測試者",
-			status: 1,
-			type: 0,
+			user_id: null,
+			account: "",
+			name: "",
+			is_active: null,
+			is_whitelist: null,
+			is_blacked: null,
+			login_at: null,
+			isAdmin: false,
 		},
 		token: null,
 		errorMessage: "",
@@ -30,29 +35,73 @@ export const useAuthStore = defineStore("auth", {
 	}),
 	getters: {},
 	actions: {
-		// Call this function to log in
-		handleLogin() {},
+		/* Authentication Functions */
+		// Initial Checks
+		async initialChecks() {
+			// Check if the user is using a mobile device
+			this.checkIfMobile();
 
-		// Call this function to log out (Currently just shows a 'cannot log out' notification)
+			// Check if the user is logged in
+			if (localStorage.getItem("token")) {
+				this.token = localStorage.getItem("token");
+				this.user = JSON.parse(localStorage.getItem("user"));
+			}
+		},
+		// Email Login
+		async loginByEmail(email, password) {
+			const dialogStore = useDialogStore();
+			const contentStore = useContentStore();
+
+			const response = await http.post(
+				"/auth/login",
+				{},
+				{
+					auth: {
+						username: email,
+						password: password,
+					},
+				}
+			);
+			this.token = response.data.token;
+			localStorage.setItem("token", this.token);
+			this.user = {
+				user_id: response.data.user.user_id,
+				account: response.data.user.account,
+				name: response.data.user.name,
+				is_active: response.data.user.is_active.Bool,
+				is_whitelist: response.data.user.is_whitelist.Bool,
+				is_blacked: response.data.user.is_blacked.Bool,
+				login_at: response.data.user.login_at,
+				isAdmin: response.data.user.roles
+					.map((el) => el.role_name)
+					.includes("admin"),
+			};
+			localStorage.setItem("user", JSON.stringify(this.user));
+
+			contentStore.publicDashboards = [];
+			router.go();
+			dialogStore.showNotification("success", "登入成功");
+
+			return true;
+		},
+
+		// Logout
 		handleLogout() {
 			const dialogStore = useDialogStore();
-			dialogStore.showNotification(
-				"fail",
-				"尚未新增用戶管理功能，無法登出"
-			);
+			const contentStore = useContentStore();
+
+			localStorage.removeItem("token");
+			localStorage.removeItem("user");
+			this.user = {};
+			this.token = null;
+
+			contentStore.publicDashboards = [];
+			router.go();
+			dialogStore.showNotification("success", "登出成功");
 		},
 
 		// If your authentication system supports refresh tokens, call this function to refresh existing tokens
 		executeRefreshTokens() {},
-
-		// Call this function to store tokens in the store as well as in localstorage/cookies/etc.
-		setTokens() {},
-
-		// Call this function to store user info in the store
-		setUser() {},
-
-		// Call this function to clear the entire store
-		executeClearStore() {},
 
 		/* Other Utility Functions */
 		// 1. Check if the user is using a mobile device.

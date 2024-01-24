@@ -77,7 +77,7 @@ function changeActiveChart(chartName) {
 	activeChart.value = chartName;
 }
 function toggleFavorite() {
-	if (contentStore.favorites.includes(`${props.content.id}`)) {
+	if (contentStore.favorites.components.includes(props.content.id)) {
 		contentStore.unfavoriteComponent(props.content.id);
 	} else {
 		contentStore.favoriteComponent(props.content.id);
@@ -121,15 +121,12 @@ function changeShowTagTooltipState(state) {
 				</h3>
 				<h4>{{ `${content.source} | ${dataTime}` }}</h4>
 			</div>
-			<div v-if="notMoreInfo">
+			<div v-if="notMoreInfo && authStore.token">
 				<button
-					v-if="
-						!isMapLayer ||
-						contentStore.currentDashboard.index !== 'favorites'
-					"
+					v-if="contentStore.currentDashboard.icon !== 'favorite'"
 					:class="{
-						isfavorite: contentStore.favorites.includes(
-							`${content.id}`
+						isfavorite: contentStore.favorites.components.includes(
+							content.id
 						),
 					}"
 					@click="toggleFavorite"
@@ -150,22 +147,14 @@ function changeShowTagTooltipState(state) {
 				>
 					<span>flag</span>
 				</button>
-				<!-- deleteComponent is currently a dummy function to demonstrate what adding components may look like
-                     Connect a backend to actually implement the function or remove altogether -->
-				<button
-					v-if="!isMapLayer"
-					@click="contentStore.deleteComponent(content.id)"
-					class="isDelete"
-				>
-					<span>delete</span>
-				</button>
 				<button
 					v-if="
-						!isMapLayer &&
-						contentStore.currentDashboard.index === 'favorites'
+						contentStore.personalDashboards
+							.map((item) => item.index)
+							.includes(contentStore.currentDashboard.index)
 					"
 					@click="contentStore.deleteComponent(content.id)"
-					class="isUnfavorite"
+					class="isDelete"
 				>
 					<span>delete</span>
 				</button>
@@ -189,8 +178,8 @@ function changeShowTagTooltipState(state) {
 				</button>
 				<button
 					:class="{
-						isfavorite: contentStore.favorites.includes(
-							`${content.id}`
+						isfavorite: contentStore.favorites.components.includes(
+							content.id
 						),
 					}"
 					@click="toggleFavorite"

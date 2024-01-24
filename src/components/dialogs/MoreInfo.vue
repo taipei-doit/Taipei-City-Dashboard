@@ -3,6 +3,7 @@
 <script setup>
 import { useDialogStore } from "../../store/dialogStore";
 import { useContentStore } from "../../store/contentStore";
+import { useAuthStore } from "../../store/authStore";
 
 import DialogContainer from "./DialogContainer.vue";
 import ComponentContainer from "../components/ComponentContainer.vue";
@@ -13,6 +14,7 @@ const { BASE_URL } = import.meta.env;
 
 const dialogStore = useDialogStore();
 const contentStore = useContentStore();
+const authStore = useAuthStore();
 
 function getLinkTag(link, index) {
 	if (link.includes("data.taipei")) {
@@ -117,6 +119,7 @@ function getLinkTag(link, index) {
 				</div>
 				<div class="moreinfo-info-control">
 					<button
+						v-if="authStore.token"
 						@click="
 							dialogStore.showReportIssue(
 								dialogStore.moreInfoContent.id,

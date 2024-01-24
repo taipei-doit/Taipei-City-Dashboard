@@ -41,6 +41,7 @@ const linkQuery = computed(() => {
 					'router-link-active':
 						authStore.currentPath.includes('component'),
 				}"
+				v-if="authStore.token"
 				>組件瀏覽平台</router-link
 			>
 			<router-link
@@ -68,7 +69,7 @@ const linkQuery = computed(() => {
 					isFullscreen ? "fullscreen_exit" : "fullscreen"
 				}}</span>
 			</button>
-			<div class="navbar-user-user">
+			<div class="navbar-user-user" v-if="authStore.token">
 				<button>{{ authStore.user.name }}</button>
 				<ul>
 					<li>
@@ -77,12 +78,15 @@ const linkQuery = computed(() => {
 						</button>
 					</li>
 					<li
-						v-if="authStore.currentPath !== 'admin'"
+						v-if="
+							authStore.currentPath !== 'admin' &&
+							authStore.user.isAdmin
+						"
 						class="hide-if-mobile"
 					>
 						<router-link to="/admin">管理員後臺</router-link>
 					</li>
-					<li v-else>
+					<li v-else-if="authStore.user.isAdmin">
 						<router-link to="/dashboard" class="hide-if-mobile"
 							>返回儀表板</router-link
 						>
@@ -94,6 +98,9 @@ const linkQuery = computed(() => {
 				<teleport to="body">
 					<user-settings />
 				</teleport>
+			</div>
+			<div class="navbar-user-user" v-else>
+				<button @click="dialogStore.showDialog('login')">登入</button>
 			</div>
 		</div>
 	</div>
@@ -211,10 +218,15 @@ const linkQuery = computed(() => {
 				z-index: 10;
 
 				li {
-					padding: 8px 4px;
 					border-radius: 5px;
 					transition: background-color 0.25s;
-					cursor: pointer;
+
+					a,
+					button {
+						padding: 8px 6px;
+						width: 100%;
+						height: 100%;
+					}
 				}
 
 				li:hover {

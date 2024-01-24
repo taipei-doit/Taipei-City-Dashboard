@@ -42,11 +42,16 @@ const availableIcons = computed(() => {
 });
 
 function handleConfirm() {
-	// if (dialogStore.addEdit === "add") {
-	// 	.addDashboard(editDashboard.value);
-	// } else if (dialogStore.addEdit === "edit") {
-	// 	.editDashboard(editDashboard.value);
-	// }
+	if (dialogStore.addEdit === "add") {
+		contentStore.createDashboard();
+	} else if (dialogStore.addEdit === "edit") {
+		contentStore.editCurrentDashboard();
+	}
+	handleClose();
+}
+
+function handleDelete() {
+	contentStore.deleteCurrentDashboard();
 	handleClose();
 }
 
@@ -78,6 +83,7 @@ function handleClose() {
 							deleteConfirm === true
 						"
 						:style="{ backgroundColor: 'rgb(192, 67, 67)' }"
+						@click="handleDelete"
 					>
 						刪除儀表板
 					</button>

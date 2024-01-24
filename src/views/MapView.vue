@@ -34,6 +34,14 @@ const parseMapLayers = computed(() => {
 
 	return { hasMap: hasMap, noMap: noMap };
 });
+
+function handleOpenSettings() {
+	contentStore.editDashboard = JSON.parse(
+		JSON.stringify(contentStore.currentDashboard)
+	);
+	dialogStore.addEdit = "edit";
+	dialogStore.showDialog("addEditDashboards");
+}
 </script>
 
 <template>
@@ -94,7 +102,7 @@ const parseMapLayers = computed(() => {
 				<span>addchart</span>
 				<h2>尚未加入組件</h2>
 				<button
-					@click="dialogStore.showDialog('addComponent')"
+					@click="handleOpenSettings"
 					class="hide-if-mobile"
 					v-if="contentStore.currentDashboard.index !== 'favorites'"
 				>

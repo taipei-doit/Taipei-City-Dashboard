@@ -100,6 +100,24 @@ router.beforeEach((to) => {
 	}
 });
 
+// Redirects unauthenticated routes
+router.beforeEach((to) => {
+	const authStore = useAuthStore();
+	if (to.name.includes("admin")) {
+		if (!authStore.user.isAdmin || !authStore.token) {
+			router.push("/dashboard");
+		}
+	} else if (to.name === "component") {
+		if (!authStore.token) {
+			router.push("/dashboard");
+		}
+	} else if (to.name === "component-info") {
+		if (!authStore.token && !authStore.isNarrowDevice) {
+			router.push("/dashboard");
+		}
+	}
+});
+
 // Handles content related tasks (gets content for each route)
 router.beforeEach((to) => {
 	const contentStore = useContentStore();
@@ -110,6 +128,8 @@ router.beforeEach((to) => {
 		to.path.toLowerCase() === "/mapview"
 	) {
 		contentStore.setRouteParams(to.path, to.query.index);
+	} else if (to.path.toLowerCase() === "/component") {
+		contentStore.setDashboards(true);
 	} else {
 		contentStore.clearCurrentDashboard();
 	}

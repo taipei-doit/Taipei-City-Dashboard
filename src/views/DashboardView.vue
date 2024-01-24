@@ -18,6 +18,14 @@ import ReportIssue from "../components/dialogs/ReportIssue.vue";
 
 const contentStore = useContentStore();
 const dialogStore = useDialogStore();
+
+function handleOpenSettings() {
+	contentStore.editDashboard = JSON.parse(
+		JSON.stringify(contentStore.currentDashboard)
+	);
+	dialogStore.addEdit = "edit";
+	dialogStore.showDialog("addEditDashboards");
+}
 </script>
 
 <template>
@@ -69,7 +77,7 @@ const dialogStore = useDialogStore();
 			<span>addchart</span>
 			<h2>尚未加入組件</h2>
 			<button
-				@click="dialogStore.showDialog('addComponent')"
+				@click="handleOpenSettings"
 				class="hide-if-mobile"
 				v-if="contentStore.currentDashboard.index !== 'favorites'"
 			>

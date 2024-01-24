@@ -5,12 +5,14 @@ import { onMounted, ref } from "vue";
 import { useContentStore } from "../../../store/contentStore";
 import { useDialogStore } from "../../../store/dialogStore";
 import { useMapStore } from "../../../store/mapStore";
+import { useAuthStore } from "../../../store/authStore";
 
 import SideBarTab from "../miscellaneous/SideBarTab.vue";
 
 const contentStore = useContentStore();
 const dialogStore = useDialogStore();
 const mapStore = useMapStore();
+const authStore = useAuthStore();
 
 // The expanded state is also stored in localstorage to retain the setting after refresh
 const isExpanded = ref(true);
@@ -46,23 +48,35 @@ onMounted(() => {
 			'hide-if-mobile': true,
 		}"
 	>
-		<h2>{{ isExpanded ? `我的最愛` : `最愛` }}</h2>
-		<SideBarTab
-			icon="favorite"
-			title="收藏組件"
-			:expanded="isExpanded"
-			index="favorites"
-		/>
-		<div class="sidebar-sub-add">
-			<h2>{{ isExpanded ? `公共儀表板 ` : `公共` }}</h2>
-			<button v-if="isExpanded" @click="handleOpenAddDashboard">
-				<span>add_circle_outline</span>新增
-			</button>
+		<div v-if="authStore.token">
+			<h2>{{ isExpanded ? `我的最愛` : `最愛` }}</h2>
+			<SideBarTab
+				icon="favorite"
+				title="收藏組件"
+				:expanded="isExpanded"
+				:index="contentStore.favorites?.index"
+			/>
+			<div class="sidebar-sub-add">
+				<h2>{{ isExpanded ? `個人儀表板 ` : `個人` }}</h2>
+				<button v-if="isExpanded" @click="handleOpenAddDashboard">
+					<span>add_circle_outline</span>新增
+				</button>
+			</div>
+			<SideBarTab
+				v-for="item in contentStore.personalDashboards.filter(
+					(item) => item.icon !== 'favorite'
+				)"
+				:icon="item.icon"
+				:title="item.name"
+				:index="item.index"
+				:key="item.index"
+				:expanded="isExpanded"
+			/>
 		</div>
+		<h2>{{ isExpanded ? `公共儀表板 ` : `公共` }}</h2>
 		<SideBarTab
-			v-for="item in contentStore.dashboards.filter(
-				(item) =>
-					item.index !== 'map-layers' && item.index !== 'favorites'
+			v-for="item in contentStore.publicDashboards.filter(
+				(item) => item.index !== 'map-layers'
 			)"
 			:icon="item.icon"
 			:title="item.name"

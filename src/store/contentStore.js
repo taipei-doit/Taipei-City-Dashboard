@@ -12,19 +12,21 @@ import axios from "axios";
 import http from "../router/axios";
 import router from "../router/index";
 import { useDialogStore } from "./dialogStore";
+import { useAuthStore } from "./authStore";
 import { getComponentDataTimeframe } from "../assets/utilityFunctions/dataTimeframe";
 const { BASE_URL } = import.meta.env;
 
 export const useContentStore = defineStore("content", {
 	state: () => ({
 		// Stores all dashboards data. (used in /dashboard, /mapview)
-		dashboards: [],
+		publicDashboards: [],
+		personalDashboards: [],
 		// Stores all components data. (used in /component)
 		components: [],
 		// Picks out the components that are map layers and stores them here
 		mapLayers: [],
-		// Picks out the components that are favorites and stores them here
-		favorites: [],
+		// Picks out the favorites dashboard
+		favorites: null,
 		// Stores information of the current dashboard
 		currentDashboard: {
 			// /mapview or /dashboard
@@ -32,8 +34,9 @@ export const useContentStore = defineStore("content", {
 			index: null,
 			name: null,
 			components: null,
+			icon: null,
 		},
-		// Stores information of a new dashboard or editting dashboard (/component)
+		// Stores information of a new dashboard or editing dashboard (/component)
 		editDashboard: {
 			index: "",
 			name: "",
@@ -70,7 +73,7 @@ export const useContentStore = defineStore("content", {
 				this.setContributors();
 			}
 			// 1-3. If there is no dashboards info, call the setDashboards method (2.)
-			if (this.dashboards.length === 0) {
+			if (this.publicDashboards.length === 0) {
 				this.setDashboards();
 				return;
 			}
@@ -85,35 +88,43 @@ export const useContentStore = defineStore("content", {
 			this.setCurrentDashboardContent();
 		},
 		// 2. Call an API to get all dashboard info and reroute the user to the first dashboard in the list
-		async setDashboards() {
+		async setDashboards(onlyDashboard = false) {
 			const response = await http.get(`/dashboard/`);
 
-			this.dashboards = response.data.data.public;
+			this.personalDashboards = response.data.data.personal;
+			this.publicDashboards = response.data.data.public;
+
+			if (this.personalDashboards.length !== 0) {
+				this.favorites = this.personalDashboards.find(
+					(el) => el.icon === "favorite"
+				);
+			}
+
+			if (onlyDashboard) return;
+
 			if (!this.currentDashboard.index) {
-				this.currentDashboard.index = this.dashboards[0].index;
+				this.currentDashboard.index = this.publicDashboards[0].index;
 				router.replace({
 					query: {
 						index: this.currentDashboard.index,
 					},
 				});
 			}
-			// Pick out the list of favorite components
-			// const favorites = this.dashboards.find(
-			// 	(item) => item.index === "favorites"
-			// );
-			this.favorites = [];
 			// After getting dashboard info, call the setCurrentDashboardContent (3.) method to get component info
 			this.setCurrentDashboardContent();
 		},
 		// 3. Finds the info for the current dashboard based on the index and adds it to "currentDashboard"
 		async setCurrentDashboardContent() {
-			const currentDashboardInfo = this.dashboards.find(
+			const allDashboards = this.publicDashboards.concat(
+				this.personalDashboards
+			);
+			const currentDashboardInfo = allDashboards.find(
 				(item) => item.index === this.currentDashboard.index
 			);
 			if (!currentDashboardInfo) {
 				router.replace({
 					query: {
-						index: this.dashboards[0].index,
+						index: this.publicDashboards[0].index,
 					},
 				});
 				return;
@@ -318,145 +329,101 @@ export const useContentStore = defineStore("content", {
 			}
 			this.loading = false;
 		},
+
 		/* Common Methods to Edit Dashboards */
-		// Call this function to create a new dashboard. Pass in the new dashboard name and icon.
-		createNewDashboard(name, index, icon) {
+		// 1. Call this function to create a new dashboard. Pass in the new dashboard name and icon.
+		async createDashboard() {
 			const dialogStore = useDialogStore();
 
-			this.dashboards.push({
-				name: name,
-				index: index,
-				components: [],
-				icon: icon,
-			});
-
-			router.replace({
-				query: {
-					index: index,
-				},
-			});
-
-			dialogStore.showNotification(
-				"success",
-				`成功加入${name}儀表板（因爲是展示版，僅暫存）`
+			this.editDashboard.components = this.editDashboard.components.map(
+				(item) => item.id
 			);
+			this.editDashboard.index = "";
+
+			await http.post(`/dashboard/`, this.editDashboard);
+
+			dialogStore.showNotification("success", "成功新增儀表板");
+
+			this.setDashboards();
 		},
-		// Call this function to change the dashboard name. Pass in the new dashboard name.
-		changeCurrentDashboardName(name) {
+		// 2. Call this function to edit the current dashboard (only personal dashboards)
+		async editCurrentDashboard() {
 			const dialogStore = useDialogStore();
 
-			this.currentDashboard.name = name;
-			this.dashboards.forEach((item) => {
-				if (item.index === this.currentDashboard.index) {
-					item.name = name;
-				}
-			});
-
-			dialogStore.showNotification(
-				"success",
-				`成功更改儀表板名稱至${name}（因爲是展示版，僅暫存）`
+			this.editDashboard.components = this.editDashboard.components.map(
+				(item) => item.id
 			);
+
+			await http.patch(
+				`/dashboard/${this.editDashboard.index}`,
+				this.editDashboard
+			);
+
+			dialogStore.showNotification("success", `成功更新儀表板`);
+
+			this.setDashboards();
 		},
-		// Call this function to delete the current active dashboard.
-		deleteCurrentDashboard() {
+		// 3. Call this function to delete the current active dashboard.
+		async deleteCurrentDashboard() {
 			const dialogStore = useDialogStore();
 
-			if (this.dashboards.length <= 3) {
-				dialogStore.showNotification("fail", `應至少保有一個儀表板`);
-				return;
-			}
+			await http.delete(`/dashboard/${this.currentDashboard.index}`);
 
-			this.dashboards = this.dashboards.filter(
-				(item) => item.index !== this.currentDashboard.index
-			);
-			router.replace({
-				query: {
-					index: this.dashboards[0].index,
-				},
-			});
-
-			dialogStore.showNotification(
-				"success",
-				`成功刪除儀表板（因爲是展示版，僅暫存）`
-			);
+			dialogStore.showNotification("success", `成功刪除儀表板`);
+			this.setDashboards();
 		},
-		// Call this function to delete a component. Pass in related info.
-		deleteComponent(component_id) {
+		// 4. Call this function to delete a component in a dashboard.
+		async deleteComponent(component_id) {
 			const dialogStore = useDialogStore();
 
-			this.dashboards.forEach((item) => {
-				if (item.index === this.currentDashboard.index) {
-					item.components = item.components.filter(
-						(element) => +element !== component_id
-					);
-				}
+			const newComponents = this.currentDashboard.components
+				.map((item) => item.id)
+				.filter((item) => item !== component_id);
+
+			await http.patch(`/dashboard/${this.currentDashboard.index}`, {
+				components: newComponents,
 			});
+			dialogStore.showNotification("success", `成功刪除組件`);
+			this.setDashboards();
+		},
+		// 5. Call this function to favorite a component.
+		async favoriteComponent(component_id) {
+			const dialogStore = useDialogStore();
+			const authStore = useAuthStore();
 
-			this.setCurrentDashboardContent();
+			this.favorites.components.push(component_id);
 
-			if (this.currentDashboard.index === "favorites") {
-				this.favorites = this.favorites.filter(
-					(item) => +item !== component_id
-				);
-				dialogStore.showNotification(
-					"success",
-					`成功從收藏移除（因爲是展示版，僅暫存）`
-				);
-			} else {
-				dialogStore.showNotification(
-					"success",
-					`成功刪除組件（因爲是展示版，僅暫存）`
-				);
+			await http.patch(`/dashboard/${this.favorites.index}`, {
+				components: this.favorites.components,
+			});
+			dialogStore.showNotification("success", `成功加入收藏組件`);
+
+			if (
+				authStore.currentPath === "dashboard" ||
+				authStore.currentPath === "mapview"
+			) {
+				this.setDashboards();
 			}
 		},
-		// Call this function to add components to the current dashboard. Pass in an array of component ids.
-		addComponents(component_ids) {
+		// 6. Call this function to unfavorite a component.
+		async unfavoriteComponent(component_id) {
 			const dialogStore = useDialogStore();
+			const authStore = useAuthStore();
 
-			this.dashboards.forEach((item) => {
-				if (item.index === this.currentDashboard.index) {
-					item.components = item.components.concat(component_ids);
-				}
+			this.favorites.components = this.favorites.components.filter(
+				(item) => item !== component_id
+			);
+
+			await http.patch(`/dashboard/${this.favorites.index}`, {
+				components: this.favorites.components,
 			});
-			this.setCurrentDashboardContent();
-
-			dialogStore.showNotification(
-				"success",
-				`成功加入組件（因爲是展示版，僅暫存）`
-			);
-		},
-		favoriteComponent(component_id) {
-			const dialogStore = useDialogStore();
-
-			this.favorites.push(component_id.toString());
-			this.dashboards.forEach((item) => {
-				if (item.index === "favorites") {
-					item.components.push(component_id.toString());
-				}
-			});
-
-			dialogStore.showNotification(
-				"success",
-				`成功加入收藏（因爲是展示版，僅暫存）`
-			);
-		},
-		unfavoriteComponent(component_id) {
-			const dialogStore = useDialogStore();
-
-			this.favorites = this.favorites.filter(
-				(item) => +item !== component_id
-			);
-			this.dashboards.forEach((item) => {
-				if (item.index === "favorites") {
-					item.components = item.components.filter(
-						(item) => +item !== component_id
-					);
-				}
-			});
-			dialogStore.showNotification(
-				"success",
-				`成功從收藏移除（因爲是展示版，僅暫存）`
-			);
+			dialogStore.showNotification("success", `成功從收藏組件移除`);
+			if (
+				authStore.currentPath === "dashboard" ||
+				authStore.currentPath === "mapview"
+			) {
+				this.setDashboards();
+			}
 		},
 	},
 });

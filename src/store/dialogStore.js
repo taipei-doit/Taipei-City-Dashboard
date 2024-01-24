@@ -25,6 +25,7 @@ export const useDialogStore = defineStore("dialog", {
 			dashboardSettings: false,
 			addEditDashboards: false,
 			initialWarning: false,
+			login: false,
 			mobileLayers: false,
 			mobileNavigation: false,
 			moreInfo: false,

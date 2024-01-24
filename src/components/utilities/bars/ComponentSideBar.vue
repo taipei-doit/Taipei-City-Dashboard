@@ -33,6 +33,44 @@ const availableIcons = computed(() => {
 	filteredIcons = filteredIcons.slice(0, 54);
 	return filteredIcons;
 });
+
+function switchDashboard() {
+	if (selectedDashboard.value === "new") {
+		editDashboard.value = {
+			name: "",
+			icon: "dashboard",
+			components: [],
+		};
+	} else {
+		editDashboard.value = JSON.parse(
+			JSON.stringify(
+				contentStore.personalDashboards.find(
+					(el) => el.index === selectedDashboard.value
+				)
+			)
+		);
+		editDashboard.value.components = editDashboard.value.components.map(
+			(component) => {
+				return {
+					id: component,
+					name: contentStore.components.find(
+						(el) => el.id === component
+					).name,
+				};
+			}
+		);
+	}
+}
+
+function handleConfirm() {
+	if (selectedDashboard.value === "new") {
+		contentStore.createDashboard();
+	} else {
+		contentStore.editCurrentDashboard();
+	}
+	selectedDashboard.value = "new";
+	switchDashboard();
+}
 </script>
 
 <template>
@@ -41,9 +79,17 @@ const availableIcons = computed(() => {
 		<div class="componentsidebar-settings">
 			<label>選擇儀表板</label>
 			<!-- 之後要在contentStore寫處理的東西 -->
-			<select v-model="selectedDashboard">
+			<select v-model="selectedDashboard" @change="switchDashboard">
 				<option value="new">新增儀表板</option>
-				<option value="已經好的儀表板">已經好的儀表板</option>
+				<option
+					v-for="dashboard in contentStore.personalDashboards.filter(
+						(el) => el.index !== contentStore.favorites.index
+					)"
+					:value="dashboard.index"
+					:key="dashboard.index"
+				>
+					{{ dashboard.name }}
+				</option>
 			</select>
 		</div>
 		<div
@@ -85,10 +131,18 @@ const availableIcons = computed(() => {
 			</div>
 		</div>
 		<div class="componentsidebar-footer">
-			<button v-if="selectedDashboard === 'new' && editDashboard.name">
+			<button
+				v-if="selectedDashboard === 'new' && editDashboard.name"
+				@click="handleConfirm"
+			>
 				新增組件至儀表板
 			</button>
-			<button v-if="selectedDashboard !== 'new'">更新儀表板</button>
+			<button
+				v-else-if="selectedDashboard !== 'new'"
+				@click="handleConfirm"
+			>
+				更新儀表板
+			</button>
 		</div>
 	</div>
 </template>

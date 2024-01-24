@@ -34,30 +34,22 @@ function handleOpenSettings() {
 					>arrow_drop_down_circle</span
 				>
 			</button>
-			<button
-				@click="handleOpenSettings"
-				class="show-if-mobile"
-				v-if="
-					contentStore.currentDashboard.index !== 'map-layers' &&
-					contentStore.currentDashboard.index !== 'favorites'
-				"
-			>
-				<span class="settingsbar-title-navigation">settings</span>
-			</button>
 			<MobileNavigation />
 			<div
 				class="settingsbar-settings hide-if-mobile"
 				v-if="
-					contentStore.currentDashboard.index !== 'map-layers' &&
-					contentStore.currentDashboard.index !== 'favorites'
+					contentStore.personalDashboards
+						.map((el) => el.index)
+						.includes(contentStore.currentDashboard.index) &&
+					contentStore.currentDashboard.icon !== 'favorite'
 				"
 			>
 				<button @click="handleOpenSettings">
 					<span>settings</span>
 					<p>設定</p>
 				</button>
-				<AddEditDashboards />
 			</div>
+			<AddEditDashboards />
 		</div>
 	</div>
 </template>

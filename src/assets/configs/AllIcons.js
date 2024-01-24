@@ -728,7 +728,6 @@ export const allIcons = [
 	"fast_forward",
 	"fast_rewind",
 	"fastfood",
-	"favorite",
 	"favorite_border",
 	"favorite_outline",
 	"fax",

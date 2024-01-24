@@ -65,7 +65,7 @@ const tooltipPosition = computed(() => {
 });
 
 function toggleFavorite() {
-	if (contentStore.favorites.includes(`${props.content.id}`)) {
+	if (contentStore.favorites.components.includes(props.content.id)) {
 		contentStore.unfavoriteComponent(props.content.id);
 	} else {
 		contentStore.favoriteComponent(props.content.id);
@@ -122,8 +122,8 @@ function changeShowTagTooltipState(state) {
 				</button>
 				<button
 					:class="{
-						isfavorite: contentStore.favorites.includes(
-							`${content.id}`
+						isfavorite: contentStore.favorites.components.includes(
+							content.id
 						),
 					}"
 					@click="toggleFavorite"

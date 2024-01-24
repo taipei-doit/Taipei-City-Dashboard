@@ -37,6 +37,11 @@ http.interceptors.request.use((request) => {
 http.interceptors.response.use(
 	(response) => {
 		// handle loading directly in request since sometimes requests are stringed together
+		const authStore = useAuthStore();
+		if (response.data.token) {
+			authStore.token = response.data.token;
+			localStorage.setItem("token", response.data.token);
+		}
 		return response;
 	},
 	(error) => {
@@ -55,6 +60,11 @@ http.interceptors.response.use(
 						"401，登入逾時，請重新登入"
 					);
 					authStore.executeClearStore();
+				} else {
+					dialogStore.showNotification(
+						"fail",
+						"登入錯誤，請確認帳號密碼是否正確"
+					);
 				}
 				break;
 			case 403:
