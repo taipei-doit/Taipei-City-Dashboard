@@ -1,3 +1,4 @@
+<!-- !Depreciated! Mobile version no longer supports maps -->
 <!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 
 <script setup>

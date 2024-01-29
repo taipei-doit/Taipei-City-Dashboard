@@ -86,10 +86,11 @@ const linkQuery = computed(() => {
 					>
 						<router-link to="/admin">管理員後臺</router-link>
 					</li>
-					<li v-else-if="authStore.user.isAdmin">
-						<router-link to="/dashboard" class="hide-if-mobile"
-							>返回儀表板</router-link
-						>
+					<li
+						v-else-if="authStore.user.isAdmin"
+						class="hide-if-mobile"
+					>
+						<router-link to="/dashboard">返回儀表板</router-link>
 					</li>
 					<li>
 						<button @click="authStore.handleLogout">登出</button>

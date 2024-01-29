@@ -107,23 +107,16 @@ function changeShowTagTooltipState(state) {
 			<div>
 				<h3>
 					{{ content.name }}
-					<ComponentTag
-						icon=""
-						:text="updateFreq"
-						mode="small"
-						@click="
-							dialogStore.showNotification(
-								'info',
-								'為內部版本更新頻率，本展示站台均為靜態資料'
-							)
-						"
-					/>
+					<ComponentTag icon="" :text="updateFreq" mode="small" />
 				</h3>
 				<h4>{{ `${content.source} | ${dataTime}` }}</h4>
 			</div>
 			<div v-if="notMoreInfo && authStore.token">
 				<button
-					v-if="contentStore.currentDashboard.icon !== 'favorite'"
+					v-if="
+						contentStore.currentDashboard.icon !== 'favorite' &&
+						contentStore.favorites
+					"
 					:class="{
 						isfavorite: contentStore.favorites.components.includes(
 							content.id

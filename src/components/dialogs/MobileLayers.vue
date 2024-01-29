@@ -1,6 +1,5 @@
+<!-- !Depreciated! Mobile version no longer supports maps -->
 <!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
-
-<!-- This component controls map layers in the mobile version. To preserve state, the dialog is only hidden but not removed when disabled -->
 
 <script setup>
 import { computed } from "vue";

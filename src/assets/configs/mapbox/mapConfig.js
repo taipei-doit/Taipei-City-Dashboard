@@ -301,9 +301,9 @@ export const maplayerCommonLayout = {
 	"symbol-youbike": {
 		"icon-image": [
 			"case",
-			["==", ["get", "left_bikes"], ["get", "total_bikes"]],
+			["==", ["get", "available_return_bikes"], 0],
 			"bike_red",
-			["==", ["get", "left_bikes"], 0],
+			["==", ["get", "available_rent_general_bikes"], 0],
 			"bike_orange",
 			"bike_green",
 		],

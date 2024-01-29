@@ -127,6 +127,7 @@ router.beforeEach((to) => {
 		to.path.toLowerCase() === "/dashboard" ||
 		to.path.toLowerCase() === "/mapview"
 	) {
+		contentStore.clearEditDashboard();
 		contentStore.setRouteParams(to.path, to.query.index);
 	} else if (to.path.toLowerCase() === "/component") {
 		contentStore.setDashboards(true);

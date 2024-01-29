@@ -31,6 +31,11 @@ export default defineConfig({
 				changeOrigin: true,
 				rewrite: (path) => path.replace("/dev", "/v1"),
 			},
+			"/geo_server": {
+				target: "https://geoserver.tuic.gov.taipei/geoserver/",
+				changeOrigin: true,
+				rewrite: (path) => path.replace(/^\/geo_server/, ""),
+			},
 		},
 	},
 });

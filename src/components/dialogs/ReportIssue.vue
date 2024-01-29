@@ -29,7 +29,7 @@ async function handleSubmit() {
 		title: allInputs.value.title,
 		description: allInputs.value.description,
 		user_name: authStore.user.name,
-		user_id: `${authStore.user.id}`,
+		user_id: `${authStore.user.user_id}`,
 		context: `類型：${allInputs.value.type} // 來源：${dialogStore.issue.id} - ${dialogStore.issue.index} - ${dialogStore.issue.name}`,
 		status: "待處理",
 	};

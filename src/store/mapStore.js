@@ -71,7 +71,7 @@ export const useMapStore = defineStore("map", {
 			this.map.addControl(new mapboxGl.NavigationControl());
 			this.map.doubleClickZoom.disable();
 			this.map
-				.on("style.load", () => {
+				.on("load", () => {
 					this.initializeBasicLayers();
 				})
 				.on("click", (event) => {
@@ -163,11 +163,15 @@ export const useMapStore = defineStore("map", {
 					}
 					return;
 				}
-				let appendLayerId = { ...element };
-				appendLayerId.layerId = mapLayerId;
+				let appendLayer = { ...element };
+				appendLayer.layerId = mapLayerId;
 				// 1-2. If the layer doesn't exist, call an API to get the layer data
-				this.loadingLayers.push(appendLayerId.layerId);
-				this.fetchLocalGeoJson(appendLayerId);
+				this.loadingLayers.push(appendLayer.layerId);
+				if (element.source === "geojson") {
+					this.fetchLocalGeoJson(appendLayer);
+				} else if (element.source === "raster") {
+					this.addRasterSource(appendLayer);
+				}
 			});
 		},
 		// 2. Call an API to get the layer data
@@ -175,12 +179,12 @@ export const useMapStore = defineStore("map", {
 			axios
 				.get(`${BASE_URL}/mapData/${map_config.index}.geojson`)
 				.then((rs) => {
-					this.addMapLayerSource(map_config, rs.data);
+					this.addGeojsonSource(map_config, rs.data);
 				})
 				.catch((e) => console.error(e));
 		},
-		// 3. Add the layer data as a source in mapbox
-		addMapLayerSource(map_config, data) {
+		// 3-1. Add a local geojson as a source in mapbox
+		addGeojsonSource(map_config, data) {
 			if (!["voronoi", "isoline"].includes(map_config.type)) {
 				this.map.addSource(`${map_config.layerId}-source`, {
 					type: "geojson",
@@ -196,6 +200,18 @@ export const useMapStore = defineStore("map", {
 			} else {
 				this.addMapLayer(map_config);
 			}
+		},
+		// 3-2. Add a raster map as a source in mapbox
+		addRasterSource(map_config) {
+			this.map.addSource(`${map_config.layerId}-source`, {
+				type: "vector",
+				scheme: "tms",
+				tolerance: 0,
+				tiles: [
+					`${location.origin}/geo_server/gwc/service/tms/1.0.0/taipei_vioc:${map_config.index}@EPSG:900913@pbf/{z}/{x}/{y}.pbf`,
+				],
+			});
+			this.addMapLayer(map_config);
 		},
 		// 4-1. Using the mapbox source and map config, create a new layer
 		// The styles and configs can be edited in /assets/configs/mapbox/mapConfig.js
@@ -232,6 +248,8 @@ export const useMapStore = defineStore("map", {
 			this.map.addLayer({
 				id: map_config.layerId,
 				type: map_config.type,
+				"source-layer":
+					map_config.source === "raster" ? map_config.index : "",
 				paint: {
 					...maplayerCommonPaint[`${map_config.type}`],
 					...extra_paint_configs,

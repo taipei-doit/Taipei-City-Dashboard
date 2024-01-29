@@ -88,17 +88,7 @@ function changeShowTagTooltipState(state) {
 			<div>
 				<h3>
 					{{ content.name }}
-					<ComponentTag
-						icon=""
-						:text="updateFreq"
-						mode="small"
-						@click="
-							dialogStore.showNotification(
-								'info',
-								'為內部版本更新頻率，本展示站台均為靜態資料'
-							)
-						"
-					/>
+					<ComponentTag icon="" :text="updateFreq" mode="small" />
 				</h3>
 				<p>{{ props.content.short_desc }}</p>
 				<h4>{{ `${content.source} | ${dataTime}` }}</h4>

@@ -63,9 +63,9 @@ export const useAdminStore = defineStore("admin", {
 
 			const dashboard = JSON.parse(JSON.stringify(this.currentDashboard));
 
-			await http.post(`/dashboard/`, dashboard);
+			await http.post(`/dashboard/public`, dashboard);
 			this.getDashboards();
-			dialogStore.showNotification("success", "儀表板新增成功");
+			dialogStore.showNotification("success", "公開儀表板新增成功");
 		},
 		// 4. Edit a public dashboard
 		async editDashboard() {

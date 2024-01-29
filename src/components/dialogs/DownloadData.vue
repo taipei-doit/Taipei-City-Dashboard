@@ -1,3 +1,5 @@
+<!-- eslint-disable indent -->
+<!-- eslint-disable no-mixed-spaces-and-tabs -->
 <!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 
 <script setup>
@@ -27,10 +29,12 @@ const parsedJson = computed(() => {
 });
 
 const parsedCsv = computed(() => {
-	const csvString = jsonToCsv(
-		dialogStore.moreInfoContent.chart_data,
-		dialogStore.moreInfoContent.chart_config
-	);
+	const csvString = dialogStore.moreInfoContent.chart_data
+		? jsonToCsv(
+				dialogStore.moreInfoContent.chart_data,
+				dialogStore.moreInfoContent.chart_config
+		  )
+		: "";
 	return encodeURI(csvString);
 });
 
@@ -49,7 +53,7 @@ function handleClose() {
 			<h2>下載資料</h2>
 			<div class="downloaddata-input">
 				<h3>請輸入檔名</h3>
-				<input type="text" v-model="name" />
+				<input type="text" v-model="name" :minlength="1" required />
 			</div>
 			<h3>請選擇檔案格式</h3>
 			<div>
@@ -118,29 +122,13 @@ function handleClose() {
 		margin-bottom: 0.5rem;
 		font-size: var(--font-s);
 		font-weight: 400;
+		color: var(--color-complement-text);
 	}
 
 	&-input {
 		display: flex;
 		flex-direction: column;
-		margin: var(--font-ms) 0 0.5rem;
-
-		p {
-			color: rgb(216, 52, 52);
-		}
-
-		input {
-			padding: 4px 6px;
-			border: solid 1px var(--color-border);
-			border-radius: 5px;
-			background-color: transparent;
-			font-size: var(--font-m);
-
-			&:focus {
-				outline: none;
-				border: solid 1px var(--color-highlight);
-			}
-		}
+		margin: 0.5rem 0;
 	}
 
 	&-radio {

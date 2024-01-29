@@ -331,6 +331,15 @@ export const useContentStore = defineStore("content", {
 		},
 
 		/* Common Methods to Edit Dashboards */
+		// 0. Call this function to clear the edit dashboard object
+		clearEditDashboard() {
+			this.editDashboard = {
+				index: "",
+				name: "",
+				icon: "star",
+				components: [],
+			};
+		},
 		// 1. Call this function to create a new dashboard. Pass in the new dashboard name and icon.
 		async createDashboard() {
 			const dialogStore = useDialogStore();
