@@ -1,4 +1,4 @@
-<!-- Developed by Taipei Urban Intelligence Center 2023 -->
+<!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 
 <!-- This component has three modes 'normal dashboard' / 'more info' / 'basic map layers' -->
 <!-- The different modes are controlled by the props "notMoreInfo" (default true) and "isMapLayer" (default false) -->
@@ -7,19 +7,25 @@
 import { computed, ref } from "vue";
 import { useDialogStore } from "../../store/dialogStore";
 import { useContentStore } from "../../store/contentStore";
+import { useAuthStore } from "../../store/authStore";
 
-import ComponentTag from "../utilities/ComponentTag.vue";
-import TagTooltip from "../utilities/TagTooltip.vue";
+import ComponentTag from "../utilities/miscellaneous/ComponentTag.vue";
+import TagTooltip from "../utilities/miscellaneous/TagTooltip.vue";
 import { chartTypes } from "../../assets/configs/apexcharts/chartTypes";
+import { timeTerms } from "../../assets/configs/AllTimes";
+import { getComponentDataTimeframe } from "../../assets/utilityFunctions/dataTimeframe";
 
 const dialogStore = useDialogStore();
 const contentStore = useContentStore();
+const authStore = useAuthStore();
 
 const props = defineProps({
 	// The complete config (incl. chart data) of a dashboard component will be passed in
 	content: { type: Object },
 	notMoreInfo: { type: Boolean, default: true },
 	isMapLayer: { type: Boolean, default: false },
+	isComponentView: { type: Boolean, default: false },
+	style: { type: Object, default: () => ({}) },
 });
 
 // The default active chart is the first one in the list defined in the dashboard component
@@ -30,32 +36,32 @@ const showTagTooltip = ref(false);
 
 // Parses time data into display format
 const dataTime = computed(() => {
-	if (!props.content.time_from) {
+	if (props.content.time_from === "static") {
 		return "固定資料";
+	} else if (props.content.time_from === "current") {
+		return "即時資料";
+	} else if (props.content.time_from === "demo") {
+		return "示範靜態資料";
 	}
-	if (!props.content.time_to) {
-		return props.content.time_from.slice(0, 10);
+	const { parsedTimeFrom, parsedTimeTo } = getComponentDataTimeframe(
+		props.content.time_from,
+		props.content.time_to
+	);
+	if (props.content.time_from === "day_start") {
+		return `${parsedTimeFrom.slice(0, 16)} ~ ${parsedTimeTo.slice(
+			11,
+			14
+		)}00`;
 	}
-	return `${props.content.time_from.slice(
-		0,
-		10
-	)} ~ ${props.content.time_to.slice(0, 10)}`;
+	return `${parsedTimeFrom.slice(0, 10)} ~ ${parsedTimeTo.slice(0, 10)}`;
 });
 // Parses update frequency data into display format
 const updateFreq = computed(() => {
-	const unitRef = {
-		minute: "分",
-		hour: "時",
-		day: "天",
-		week: "週",
-		month: "月",
-		year: "年",
-	};
 	if (!props.content.update_freq) {
 		return "不定期更新";
 	}
 	return `每${props.content.update_freq}${
-		unitRef[props.content.update_freq_unit]
+		timeTerms[props.content.update_freq_unit]
 	}更新`;
 });
 // The style for the tag tooltip
@@ -71,7 +77,7 @@ function changeActiveChart(chartName) {
 	activeChart.value = chartName;
 }
 function toggleFavorite() {
-	if (contentStore.favorites.includes(`${props.content.id}`)) {
+	if (contentStore.favorites.components.includes(props.content.id)) {
 		contentStore.unfavoriteComponent(props.content.id);
 	} else {
 		contentStore.favoriteComponent(props.content.id);
@@ -95,34 +101,25 @@ function changeShowTagTooltipState(state) {
 			moreinfostyle: !notMoreInfo,
 			maplayer: isMapLayer,
 		}"
+		:style="style"
 	>
 		<div class="componentcontainer-header">
 			<div>
 				<h3>
 					{{ content.name }}
-					<ComponentTag
-						icon=""
-						:text="updateFreq"
-						mode="small"
-						@click="
-							dialogStore.showNotification(
-								'info',
-								'為內部版本更新頻率，本展示站台均為靜態資料'
-							)
-						"
-					/>
+					<ComponentTag icon="" :text="updateFreq" mode="small" />
 				</h3>
 				<h4>{{ `${content.source} | ${dataTime}` }}</h4>
 			</div>
-			<div v-if="notMoreInfo">
+			<div v-if="notMoreInfo && authStore.token">
 				<button
 					v-if="
-						!isMapLayer &&
-						contentStore.currentDashboard.index !== 'favorites'
+						contentStore.currentDashboard.icon !== 'favorite' &&
+						contentStore.favorites
 					"
 					:class="{
-						isfavorite: contentStore.favorites.includes(
-							`${content.id}`
+						isfavorite: contentStore.favorites.components.includes(
+							content.id
 						),
 					}"
 					@click="toggleFavorite"
@@ -132,31 +129,55 @@ function changeShowTagTooltipState(state) {
 				<!-- Change @click to a report issue function to implement functionality -->
 				<button
 					title="回報問題"
-					class="show-if-mobile"
+					class="isFlag"
 					@click="
-						dialogStore.showReportIssue(content.id, content.name)
+						dialogStore.showReportIssue(
+							content.id,
+							content.index,
+							content.name
+						)
 					"
 				>
 					<span>flag</span>
 				</button>
-				<!-- deleteComponent is currently a dummy function to demonstrate what adding components may look like
-                     Connect a backend to actually implement the function or remove altogether -->
 				<button
-					v-if="!isMapLayer"
+					v-if="
+						contentStore.personalDashboards
+							.map((item) => item.index)
+							.includes(contentStore.currentDashboard.index)
+					"
 					@click="contentStore.deleteComponent(content.id)"
 					class="isDelete"
 				>
 					<span>delete</span>
 				</button>
+			</div>
+			<div v-else-if="isComponentView">
 				<button
 					v-if="
-						!isMapLayer &&
-						contentStore.currentDashboard.index === 'favorites'
+						!contentStore.editDashboard.components
+							.map((item) => item.id)
+							.includes(props.content.id)
 					"
-					@click="contentStore.deleteComponent(content.id)"
-					class="isUnfavorite"
+					@click="
+						contentStore.editDashboard.components.push({
+							id: props.content.id,
+							name: props.content.name,
+						})
+					"
+					class="hide-if-mobile"
 				>
-					<span>delete</span>
+					<span>add_circle</span>
+				</button>
+				<button
+					:class="{
+						isfavorite: contentStore.favorites.components.includes(
+							content.id
+						),
+					}"
+					@click="toggleFavorite"
+				>
+					<span>favorite</span>
 				</button>
 			</div>
 		</div>
@@ -197,6 +218,16 @@ function changeShowTagTooltipState(state) {
 			</component>
 		</div>
 		<div
+			v-else-if="content.chart_data === null"
+			:class="{
+				'componentcontainer-error': true,
+				'maplayer-loading': isMapLayer,
+			}"
+		>
+			<span>error</span>
+			<p>組件資料異常</p>
+		</div>
+		<div
 			v-else
 			:class="{
 				'componentcontainer-loading': true,
@@ -218,12 +249,12 @@ function changeShowTagTooltipState(state) {
 					class="hide-if-mobile"
 				/>
 				<ComponentTag
-					v-if="content.map_config"
+					v-if="content.map_config && content.map_config[0] !== null"
 					icon="map"
 					text="空間資料"
 				/>
 				<ComponentTag
-					v-if="content.history_data"
+					v-if="content.history_data || content.history_config"
 					icon="insights"
 					text="歷史資料"
 					class="history-tag"
@@ -237,6 +268,13 @@ function changeShowTagTooltipState(state) {
 				<p>組件資訊</p>
 				<span>arrow_circle_right</span>
 			</button>
+			<RouterLink
+				:to="`/component/${content.index}`"
+				v-if="authStore.isMobileDevice && authStore.isNarrowDevice"
+			>
+				<p>資訊頁面</p>
+				<span>arrow_circle_right</span>
+			</RouterLink>
 		</div>
 		<Teleport to="body">
 			<!-- The class "chart-tooltip" could be edited in /assets/styles/chartStyles.css -->
@@ -244,8 +282,8 @@ function changeShowTagTooltipState(state) {
 				v-if="showTagTooltip"
 				:position="tooltipPosition"
 				:hasFilter="content.map_filter ? true : false"
-				:hasMapLayer="content.map_config ? true : false"
-				:hasHistory="content.history_data ? true : false"
+				:hasMapLayer="content.map_config[0] ? true : false"
+				:hasHistory="content.history_config ? true : false"
 			/>
 		</Teleport>
 	</div>
@@ -321,6 +359,12 @@ function changeShowTagTooltipState(state) {
 			}
 		}
 
+		@media (min-width: 760px) {
+			button.isFlag {
+				display: none !important;
+			}
+		}
+
 		@media (min-width: 759px) {
 			button.isUnfavorite {
 				display: none !important;
@@ -363,7 +407,8 @@ function changeShowTagTooltipState(state) {
 	}
 
 	&-chart,
-	&-loading {
+	&-loading,
+	&-error {
 		height: 75%;
 		position: relative;
 		padding-top: 5%;
@@ -389,6 +434,24 @@ function changeShowTagTooltipState(state) {
 		}
 	}
 
+	&-error {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+
+		span {
+			color: var(--color-complement-text);
+			margin-bottom: 0.5rem;
+			font-family: var(--font-icon);
+			font-size: 2rem;
+		}
+
+		p {
+			color: var(--color-complement-text);
+		}
+	}
+
 	&-footer {
 		display: flex;
 		align-items: center;
@@ -406,17 +469,14 @@ function changeShowTagTooltipState(state) {
 			align-items: center;
 		}
 
-		button {
+		button,
+		a {
 			display: flex;
 			align-items: center;
 			transition: opacity 0.2s;
 
 			&:hover {
 				opacity: 0.8;
-			}
-
-			@media (max-width: 760px) {
-				display: none !important;
 			}
 
 			span {
@@ -430,6 +490,12 @@ function changeShowTagTooltipState(state) {
 				max-height: 1.2rem;
 				color: var(--color-highlight);
 				user-select: none;
+			}
+		}
+
+		button {
+			@media (max-width: 760px) {
+				display: none !important;
 			}
 		}
 	}

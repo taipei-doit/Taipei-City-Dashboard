@@ -1,18 +1,20 @@
-<!-- Developed by Taipei Urban Intelligence Center 2023 -->
+<!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 
 <script setup>
 import { useDialogStore } from "../../store/dialogStore";
 import { useContentStore } from "../../store/contentStore";
+import { useAuthStore } from "../../store/authStore";
 
 import DialogContainer from "./DialogContainer.vue";
 import ComponentContainer from "../components/ComponentContainer.vue";
-import HistoryChart from "../utilities/HistoryChart.vue";
+import HistoryChart from "../charts/HistoryChart.vue";
 import DownloadData from "./DownloadData.vue";
 
 const { BASE_URL } = import.meta.env;
 
 const dialogStore = useDialogStore();
 const contentStore = useContentStore();
+const authStore = useAuthStore();
 
 function getLinkTag(link, index) {
 	if (link.includes("data.taipei")) {
@@ -48,7 +50,7 @@ function getLinkTag(link, index) {
 					<p>{{ dialogStore.moreInfoContent.long_desc }}</p>
 					<h3>範例情境</h3>
 					<p>{{ dialogStore.moreInfoContent.use_case }}</p>
-					<div v-if="dialogStore.moreInfoContent.history_data">
+					<div v-if="dialogStore.moreInfoContent.history_config">
 						<h3>歷史軸</h3>
 						<h4>*點擊並拉動以檢視細部區間資料</h4>
 						<HistoryChart
@@ -56,12 +58,12 @@ function getLinkTag(link, index) {
 								dialogStore.moreInfoContent.chart_config
 							"
 							:series="dialogStore.moreInfoContent.history_data"
-							:history_data_color="
-								dialogStore.moreInfoContent.history_data_color
+							:history_config="
+								dialogStore.moreInfoContent.history_config
 							"
 						/>
 					</div>
-					<div v-if="dialogStore.moreInfoContent.links">
+					<div v-if="dialogStore.moreInfoContent.links[0]">
 						<h3>相關資料</h3>
 						<div class="moreinfo-info-links">
 							<a
@@ -117,9 +119,11 @@ function getLinkTag(link, index) {
 				</div>
 				<div class="moreinfo-info-control">
 					<button
+						v-if="authStore.token"
 						@click="
 							dialogStore.showReportIssue(
 								dialogStore.moreInfoContent.id,
+								dialogStore.moreInfoContent.index,
 								dialogStore.moreInfoContent.name
 							)
 						"
@@ -167,7 +171,7 @@ function getLinkTag(link, index) {
 	&-info {
 		display: flex;
 		flex-direction: column;
-		padding: 1rem;
+		padding: var(--font-ms);
 		border-top: solid 1px var(--color-border);
 
 		p {
@@ -256,7 +260,7 @@ function getLinkTag(link, index) {
 			span {
 				margin-right: 4px;
 				font-family: var(--font-icon);
-				font-size: calc(var(--font-m) * var(--font-to-icon));
+				font-size: var(--font-m);
 			}
 
 			button {
@@ -266,7 +270,7 @@ function getLinkTag(link, index) {
 				padding: 2px 4px;
 				border-radius: 5px;
 				background-color: var(--color-highlight);
-				font-size: var(--font-m);
+				font-size: var(--font-ms);
 				transition: opacity 0.2s;
 
 				&:hover {

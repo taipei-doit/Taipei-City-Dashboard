@@ -1,33 +1,47 @@
-// Cleaned
+/* eslint-disable no-mixed-spaces-and-tabs */
+/* eslint-disable indent */
 
-/* authStore */
+// Developed by Taipei Urban Intelligence Center 2023-2024
+
+/* contentStore */
 /*
 The contentStore calls APIs to get content info and stores it.
 */
-
-import router from "../router/index";
 import { defineStore } from "pinia";
-import { useDialogStore } from "./dialogStore";
 import axios from "axios";
+import http from "../router/axios";
+import router from "../router/index";
+import { useDialogStore } from "./dialogStore";
+import { useAuthStore } from "./authStore";
+import { getComponentDataTimeframe } from "../assets/utilityFunctions/dataTimeframe";
 const { BASE_URL } = import.meta.env;
 
 export const useContentStore = defineStore("content", {
 	state: () => ({
-		// Stores all dashboards data. Reference the structure in /public/dashboards/all_dashboards.json
-		dashboards: [],
-		// Stores all components data. Reference the structure in /public/dashboards/all_components.json
-		components: {},
+		// Stores all dashboards data. (used in /dashboard, /mapview)
+		publicDashboards: [],
+		personalDashboards: [],
+		// Stores all components data. (used in /component)
+		components: [],
 		// Picks out the components that are map layers and stores them here
 		mapLayers: [],
-		// Picks out the components that are favorites and stores them here
-		favorites: [],
+		// Picks out the favorites dashboard
+		favorites: null,
 		// Stores information of the current dashboard
 		currentDashboard: {
 			// /mapview or /dashboard
 			mode: null,
 			index: null,
 			name: null,
-			content: [],
+			components: null,
+			icon: null,
+		},
+		// Stores information of a new dashboard or editing dashboard (/component)
+		editDashboard: {
+			index: "",
+			name: "",
+			icon: "star",
+			components: [],
 		},
 		// Stores all contributors data. Reference the structure in /public/dashboards/all_contributors.json
 		contributors: {},
@@ -38,23 +52,28 @@ export const useContentStore = defineStore("content", {
 	}),
 	getters: {},
 	actions: {
-		/* Steps in adding content to the application */
-
+		/* Steps in adding content to the application (/dashboard or /mapview) */
 		// 1. Check the current path and execute actions based on the current path
 		setRouteParams(mode, index) {
-			this.error = false;
 			this.currentDashboard.mode = mode;
 			// 1-1. Don't do anything if the path is the same
 			if (this.currentDashboard.index === index) {
-				return;
+				if (
+					this.currentDashboard.mode === "/mapview" &&
+					index !== "map-layers"
+				) {
+					this.setMapLayers();
+				} else {
+					return;
+				}
 			}
 			this.currentDashboard.index = index;
-			// 1-2. If there is no contributor info, call the setContributors method (7.)
+			// 1-2. If there is no contributor info, call the setContributors method (5.)
 			if (Object.keys(this.contributors).length === 0) {
 				this.setContributors();
 			}
 			// 1-3. If there is no dashboards info, call the setDashboards method (2.)
-			if (this.dashboards.length === 0) {
+			if (this.publicDashboards.length === 0) {
 				this.setDashboards();
 				return;
 			}
@@ -63,115 +82,136 @@ export const useContentStore = defineStore("content", {
 				this.setDashboards();
 				return;
 			}
-			// 1-5. If all info is present, skip steps 2, 3, 4, 7 and call the setCurrentDashboardContent method (5.)
+			// 1-5. If all info is present, skip steps 2, 3, 5 and call the setCurrentDashboardContent method (4.)
+			this.currentDashboard.components = [];
+			this.mapLayers = [];
 			this.setCurrentDashboardContent();
 		},
 		// 2. Call an API to get all dashboard info and reroute the user to the first dashboard in the list
-		setDashboards() {
-			this.loading = true;
-			axios
-				.get(`${BASE_URL}/dashboards/all_dashboards.json`)
-				.then((rs) => {
-					this.dashboards = rs.data.data;
-					if (!this.currentDashboard.index) {
-						this.currentDashboard.index = this.dashboards[0].index;
-						router.replace({
-							query: {
-								index: this.currentDashboard.index,
-							},
-						});
-					}
-					// Pick out the list of favorite components
-					const favorites = this.dashboards.find(
-						(item) => item.index === "favorites"
-					);
-					this.favorites = [...favorites.components];
-					// After getting dashboard info, call the setComponents (3.) method to get component info
-					this.setComponents();
-				})
-				.catch((e) => {
-					this.loading = false;
-					this.error = true;
-					console.error(e);
+		async setDashboards(onlyDashboard = false) {
+			const response = await http.get(`/dashboard/`);
+
+			this.personalDashboards = response.data.data.personal;
+			this.publicDashboards = response.data.data.public;
+
+			if (this.personalDashboards.length !== 0) {
+				this.favorites = this.personalDashboards.find(
+					(el) => el.icon === "favorite"
+				);
+			}
+
+			if (onlyDashboard) return;
+
+			if (!this.currentDashboard.index) {
+				this.currentDashboard.index = this.publicDashboards[0].index;
+				router.replace({
+					query: {
+						index: this.currentDashboard.index,
+					},
 				});
+			}
+			// After getting dashboard info, call the setCurrentDashboardContent (3.) method to get component info
+			this.setCurrentDashboardContent();
 		},
-		// 3. Call and API to get all components info
-		setComponents() {
-			axios
-				.get(`${BASE_URL}/dashboards/all_components.json`)
-				.then((rs) => {
-					this.components = rs.data.data;
-					// Step 4.
-					this.setMapLayers();
-					// Step 5.
-					this.setCurrentDashboardContent();
-					this.loading = false;
-				})
-				.catch((e) => console.error(e));
-		},
-		// 4. Adds components that are map layers into a separate store to be used in mapview
-		setMapLayers() {
-			const mapLayerInfo = this.dashboards.find(
-				(item) => item.index === "map-layers"
+		// 3. Finds the info for the current dashboard based on the index and adds it to "currentDashboard"
+		async setCurrentDashboardContent() {
+			const allDashboards = this.publicDashboards.concat(
+				this.personalDashboards
 			);
-			mapLayerInfo.components.forEach((component) => {
-				this.mapLayers.push(this.components[component]);
-			});
-		},
-		// 5. Finds the info for the current dashboard based on the index and adds it to "currentDashboard"
-		setCurrentDashboardContent() {
-			const currentDashboardInfo = this.dashboards.find(
+			const currentDashboardInfo = allDashboards.find(
 				(item) => item.index === this.currentDashboard.index
 			);
 			if (!currentDashboardInfo) {
 				router.replace({
 					query: {
-						index: this.dashboards[0].index,
+						index: this.publicDashboards[0].index,
 					},
 				});
 				return;
 			}
 			this.currentDashboard.name = currentDashboardInfo.name;
 			this.currentDashboard.icon = currentDashboardInfo.icon;
-			this.currentDashboard.content = currentDashboardInfo.components.map(
-				(item) => {
-					return this.components[item];
-				}
+			const response = await http.get(
+				`/dashboard/${this.currentDashboard.index}`
 			);
-			// no need to call additional chart data APIs for the map layers dashboard
-			if (this.currentDashboard.index === "map-layers") {
+
+			if (response.data.data) {
+				this.currentDashboard.components = response.data.data;
+			} else {
+				this.currentDashboard.components = [];
+				this.loading = false;
 				return;
 			}
 			this.setCurrentDashboardChartData();
 		},
-		// 6. Call an API for each component to get its chart data and store it
+		// 4. Call an API for each component to get its chart data and store it
 		// Will call an additional API if the component has history data
-		setCurrentDashboardChartData() {
-			this.currentDashboard.content.forEach((component, index) => {
-				if (this.currentDashboard.content[index].chart_data) return;
-				axios
-					.get(`${BASE_URL}/chartData/${component.id}.json`)
-					.then((rs) => {
-						this.currentDashboard.content[index].chart_data =
-							rs.data.data;
-					})
-					.catch((e) => {
-						console.error(e);
-					});
-				if (this.currentDashboard.content[index].history_data) {
-					axios
-						.get(`${BASE_URL}/historyData/${component.id}.json`)
-						.then((rs) => {
-							this.currentDashboard.content[index].history_data =
-								rs.data.data;
-						})
-						.catch((e) => {
-							console.error(e);
-						});
+		async setCurrentDashboardChartData() {
+			// 4-1. Loop through all the components of a dashboard
+			for (
+				let index = 0;
+				index < this.currentDashboard.components.length;
+				index++
+			) {
+				const component = this.currentDashboard.components[index];
+
+				// 4-2. Get chart data
+				const response = await http.get(
+					`/component/${component.id}/chart`,
+					{
+						headers: !["static", "current", "demo"].includes(
+							component.time_from
+						)
+							? getComponentDataTimeframe(
+									component.time_from,
+									component.time_to,
+									true
+							  )
+							: {},
+					}
+				);
+				this.currentDashboard.components[index].chart_data =
+					response.data.data;
+
+				// 4-3. Get history data if applicable
+				if (
+					component.history_config &&
+					component.history_config.range
+				) {
+					for (let i in component.history_config.range) {
+						const response = await http.get(
+							`/component/${component.id}/history`,
+							{
+								headers: getComponentDataTimeframe(
+									component.history_config.range[i],
+									"now",
+									true
+								),
+							}
+						);
+
+						if (i === "0") {
+							this.currentDashboard.components[
+								index
+							].history_data = [];
+						}
+						this.currentDashboard.components[
+							index
+						].history_data.push(response.data.data);
+					}
 				}
-			});
+			}
+			if (
+				this.currentDashboard.mode === "/mapview" &&
+				this.currentDashboard.index !== "map-layers"
+			) {
+				// In /mapview, map layer components are also present and need to be fetched
+				this.setMapLayers();
+			} else {
+				this.loading = false;
+			}
 		},
-		// 7. Call an API to get contributor data (result consists of id, name, link)
+		// 5. Call an API to get contributor data (result consists of id, name, link)
 		setContributors() {
 			axios
 				.get(`${BASE_URL}/dashboards/all_contributors.json`)
@@ -180,148 +220,219 @@ export const useContentStore = defineStore("content", {
 				})
 				.catch((e) => console.error(e));
 		},
+		// 6. Call an API to get map layer component info and store it (if in /mapview)
+		async setMapLayers() {
+			const resposne = await http.get(`/dashboard/map-layers`);
+			this.mapLayers = resposne.data.data;
+			this.setMapLayersContent();
+		},
+		// 7. Call an API for each map layer component to get its chart data and store it (if in /mapview)
+		async setMapLayersContent() {
+			for (let index = 0; index < this.mapLayers.length; index++) {
+				const component = this.mapLayers[index];
 
-		/* Dummy Functions to demonstrate the logic of some functions that require a backend */
-		// Connect a backend to actually implement the following functions or remove altogether
+				const response = await http.get(
+					`/component/${component.id}/chart`
+				);
 
-		// Call this function to create a new dashboard. Pass in the new dashboard name and icon.
-		createNewDashboard(name, index, icon) {
-			const dialogStore = useDialogStore();
+				this.mapLayers[index].chart_data = response.data.data;
+			}
+			this.loading = false;
+		},
 
-			this.dashboards.push({
-				name: name,
-				index: index,
+		/* Route Change Methods */
+		// 1. Called whenever route changes except for between /dashboard and /mapview
+		clearCurrentDashboard() {
+			this.currentDashboard = {
+				mode: null,
+				index: null,
+				name: null,
 				components: [],
-				icon: icon,
+			};
+		},
+
+		/* /component methods */
+		// 1. Search through all the components (used in /component)
+		async getAllComponents(params) {
+			const response = await http.get(`/component/`, {
+				params,
 			});
 
-			router.replace({
-				query: {
-					index: index,
+			this.components = response.data.data;
+			this.loading = false;
+		},
+		// 2. Get the info of a single component (used in /component/:index)
+		async getCurrentComponentData(index) {
+			const dialogStore = useDialogStore();
+			if (Object.keys(this.contributors).length === 0) {
+				this.setContributors();
+			}
+
+			// 2-1. Get the component config
+			const response_1 = await http.get(`/component/`, {
+				params: {
+					filtermode: "eq",
+					filterby: "index",
+					filtervalue: index,
 				},
 			});
 
-			dialogStore.showNotification(
-				"success",
-				`成功加入${name}儀表板（因爲是展示版，僅暫存）`
-			);
-		},
-		// Call this function to change the dashboard name. Pass in the new dashboard name.
-		changeCurrentDashboardName(name) {
-			const dialogStore = useDialogStore();
-
-			this.currentDashboard.name = name;
-			this.dashboards.forEach((item) => {
-				if (item.index === this.currentDashboard.index) {
-					item.name = name;
-				}
-			});
-
-			dialogStore.showNotification(
-				"success",
-				`成功更改儀表板名稱至${name}（因爲是展示版，僅暫存）`
-			);
-		},
-		// Call this function to delete the current active dashboard.
-		deleteCurrentDashboard() {
-			const dialogStore = useDialogStore();
-
-			if (this.dashboards.length <= 3) {
-				dialogStore.showNotification("fail", `應至少保有一個儀表板`);
+			if (response_1.data.results === 0) {
+				this.loading = false;
+				this.error = true;
 				return;
 			}
 
-			this.dashboards = this.dashboards.filter(
-				(item) => item.index !== this.currentDashboard.index
-			);
-			router.replace({
-				query: {
-					index: this.dashboards[0].index,
-				},
-			});
+			dialogStore.moreInfoContent = response_1.data.data[0];
 
-			dialogStore.showNotification(
-				"success",
-				`成功刪除儀表板（因爲是展示版，僅暫存）`
+			// 2-2. Get the component chart data
+			const response_2 = await http.get(
+				`/component/${dialogStore.moreInfoContent.id}/chart`,
+				{
+					headers: !["static", "current", "demo"].includes(
+						dialogStore.moreInfoContent.time_from
+					)
+						? getComponentDataTimeframe(
+								dialogStore.moreInfoContent.time_from,
+								dialogStore.moreInfoContent.time_to,
+								true
+						  )
+						: {},
+				}
 			);
-		},
-		// Call this function to delete a component. Pass in related info.
-		deleteComponent(component_id) {
-			const dialogStore = useDialogStore();
 
-			this.dashboards.forEach((item) => {
-				if (item.index === this.currentDashboard.index) {
-					item.components = item.components.filter(
-						(element) => +element !== component_id
+			dialogStore.moreInfoContent.chart_data = response_2.data.data;
+
+			// 2-3. Get the component history data if applicable
+			if (dialogStore.moreInfoContent.history_config) {
+				for (let i in dialogStore.moreInfoContent.history_config
+					.range) {
+					const response = await http.get(
+						`/component/${dialogStore.moreInfoContent.id}/history`,
+						{
+							headers: getComponentDataTimeframe(
+								dialogStore.moreInfoContent.history_config
+									.range[i],
+								"now",
+								true
+							),
+						}
+					);
+
+					if (i === "0") {
+						dialogStore.moreInfoContent.history_data = [];
+					}
+					dialogStore.moreInfoContent.history_data.push(
+						response.data.data
 					);
 				}
+			}
+			this.loading = false;
+		},
+
+		/* Common Methods to Edit Dashboards */
+		// 0. Call this function to clear the edit dashboard object
+		clearEditDashboard() {
+			this.editDashboard = {
+				index: "",
+				name: "",
+				icon: "star",
+				components: [],
+			};
+		},
+		// 1. Call this function to create a new dashboard. Pass in the new dashboard name and icon.
+		async createDashboard() {
+			const dialogStore = useDialogStore();
+
+			this.editDashboard.components = this.editDashboard.components.map(
+				(item) => item.id
+			);
+			this.editDashboard.index = "";
+
+			await http.post(`/dashboard/`, this.editDashboard);
+
+			dialogStore.showNotification("success", "成功新增儀表板");
+
+			this.setDashboards();
+		},
+		// 2. Call this function to edit the current dashboard (only personal dashboards)
+		async editCurrentDashboard() {
+			const dialogStore = useDialogStore();
+
+			this.editDashboard.components = this.editDashboard.components.map(
+				(item) => item.id
+			);
+
+			await http.patch(
+				`/dashboard/${this.editDashboard.index}`,
+				this.editDashboard
+			);
+
+			dialogStore.showNotification("success", `成功更新儀表板`);
+
+			this.setDashboards();
+		},
+		// 3. Call this function to delete the current active dashboard.
+		async deleteCurrentDashboard() {
+			const dialogStore = useDialogStore();
+
+			await http.delete(`/dashboard/${this.currentDashboard.index}`);
+
+			dialogStore.showNotification("success", `成功刪除儀表板`);
+			this.setDashboards();
+		},
+		// 4. Call this function to delete a component in a dashboard.
+		async deleteComponent(component_id) {
+			const dialogStore = useDialogStore();
+
+			const newComponents = this.currentDashboard.components
+				.map((item) => item.id)
+				.filter((item) => item !== component_id);
+
+			await http.patch(`/dashboard/${this.currentDashboard.index}`, {
+				components: newComponents,
 			});
+			dialogStore.showNotification("success", `成功刪除組件`);
+			this.setDashboards();
+		},
+		// 5. Call this function to favorite a component.
+		async favoriteComponent(component_id) {
+			const dialogStore = useDialogStore();
+			const authStore = useAuthStore();
 
-			this.setCurrentDashboardContent();
+			this.favorites.components.push(component_id);
 
-			if (this.currentDashboard.index === "favorites") {
-				this.favorites = this.favorites.filter(
-					(item) => +item !== component_id
-				);
-				dialogStore.showNotification(
-					"success",
-					`成功從收藏移除（因爲是展示版，僅暫存）`
-				);
-			} else {
-				dialogStore.showNotification(
-					"success",
-					`成功刪除組件（因爲是展示版，僅暫存）`
-				);
+			await http.patch(`/dashboard/${this.favorites.index}`, {
+				components: this.favorites.components,
+			});
+			dialogStore.showNotification("success", `成功加入收藏組件`);
+
+			if (
+				authStore.currentPath === "dashboard" ||
+				authStore.currentPath === "mapview"
+			) {
+				this.setDashboards();
 			}
 		},
-		// Call this function to add components to the current dashboard. Pass in an array of component ids.
-		addComponents(component_ids) {
+		// 6. Call this function to unfavorite a component.
+		async unfavoriteComponent(component_id) {
 			const dialogStore = useDialogStore();
+			const authStore = useAuthStore();
 
-			this.dashboards.forEach((item) => {
-				if (item.index === this.currentDashboard.index) {
-					item.components = item.components.concat(component_ids);
-				}
+			this.favorites.components = this.favorites.components.filter(
+				(item) => item !== component_id
+			);
+
+			await http.patch(`/dashboard/${this.favorites.index}`, {
+				components: this.favorites.components,
 			});
-			this.setCurrentDashboardContent();
-
-			dialogStore.showNotification(
-				"success",
-				`成功加入組件（因爲是展示版，僅暫存）`
-			);
-		},
-		favoriteComponent(component_id) {
-			const dialogStore = useDialogStore();
-
-			this.favorites.push(component_id.toString());
-			this.dashboards.forEach((item) => {
-				if (item.index === "favorites") {
-					item.components.push(component_id.toString());
-				}
-			});
-
-			dialogStore.showNotification(
-				"success",
-				`成功加入收藏（因爲是展示版，僅暫存）`
-			);
-		},
-		unfavoriteComponent(component_id) {
-			const dialogStore = useDialogStore();
-
-			this.favorites = this.favorites.filter(
-				(item) => +item !== component_id
-			);
-			this.dashboards.forEach((item) => {
-				if (item.index === "favorites") {
-					item.components = item.components.filter(
-						(item) => +item !== component_id
-					);
-				}
-			});
-			dialogStore.showNotification(
-				"success",
-				`成功從收藏移除（因爲是展示版，僅暫存）`
-			);
+			dialogStore.showNotification("success", `成功從收藏組件移除`);
+			if (
+				authStore.currentPath === "dashboard" ||
+				authStore.currentPath === "mapview"
+			) {
+				this.setDashboards();
+			}
 		},
 	},
 });

@@ -1,4 +1,4 @@
-<!-- Developed by Taipei Urban Intelligence Center 2023 -->
+<!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 
 <script setup>
 import { ref, computed } from "vue";
@@ -20,7 +20,7 @@ const chartOptions = ref({
 			show: false,
 		},
 	},
-	colors: props.chart_config.color,
+	colors: [...props.chart_config.color],
 	dataLabels: {
 		formatter: function (val, { dataPointIndex }) {
 			return dataPointIndex > 5 ? "" : val;

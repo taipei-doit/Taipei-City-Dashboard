@@ -1,4 +1,4 @@
-<!-- Developed by Taipei Urban Intelligence Center 2023 -->
+<!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 
 <!-- This component has two modes "outline" and "fill" which is controlled via the prop "mode" -->
 
@@ -48,7 +48,7 @@ defineProps({
 	}
 
 	p {
-		max-height: 1rem;
+		max-height: var(--font-ms);
 		color: var(--color-complement-text);
 	}
 
@@ -62,8 +62,8 @@ defineProps({
 	}
 
 	&-small {
-		min-height: 1.1rem;
-		max-height: 1.1rem;
+		min-height: var(--font-ms);
+		max-height: var(--font-ms);
 		padding: 0 2px;
 		margin-left: 8px;
 

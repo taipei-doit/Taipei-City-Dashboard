@@ -1,6 +1,6 @@
-<!-- Developed By Taipei Urban Intelligence Center 2023 -->
+<!-- Developed By Taipei Urban Intelligence Center 2023-2024 -->
 <!-- 
-Lead Developer:  Igor Ho (FE Engineer)
+Lead Developer:  Igor Ho (Full Stack Engineer)
 Data Pipelines:  Iima Yu (Data Scientist)
 Design and UX: Roy Lin (Fmr. Consultant), Chu Chen (Researcher)
 Systems: Ann Shih (Systems Engineer)
@@ -25,35 +25,45 @@ const dialogStore = useDialogStore();
 
 // Separate components with maps from those without
 const parseMapLayers = computed(() => {
-	const hasMap = contentStore.currentDashboard.content.filter(
-		(item) => item.map_config
+	const hasMap = contentStore.currentDashboard.components.filter(
+		(item) => item.map_config[0]
 	);
-	const noMap = contentStore.currentDashboard.content.filter(
-		(item) => !item.map_config
+	const noMap = contentStore.currentDashboard.components.filter(
+		(item) => !item.map_config[0]
 	);
 
 	return { hasMap: hasMap, noMap: noMap };
 });
+
+function handleOpenSettings() {
+	contentStore.editDashboard = JSON.parse(
+		JSON.stringify(contentStore.currentDashboard)
+	);
+	dialogStore.addEdit = "edit";
+	dialogStore.showDialog("addEditDashboards");
+}
 </script>
 
 <template>
 	<div class="map">
 		<div class="hide-if-mobile">
-			<!-- If the dashboard is map layers -->
+			<!-- 1. If the dashboard is map-layers -->
 			<div
 				class="map-charts"
 				v-if="contentStore.currentDashboard.index === 'map-layers'"
 			>
 				<ComponentMapChart
-					v-for="item in contentStore.currentDashboard.content"
+					v-for="item in contentStore.currentDashboard.components"
 					:content="item"
 					:key="`map-layer-${item.index}-${contentStore.currentDashboard.index}`"
 					:is-map-layer="true"
 				/>
 			</div>
-			<!-- other dashboards that have components -->
+			<!-- 2. Dashboards that have components -->
 			<div
-				v-else-if="contentStore.currentDashboard.content.length !== 0"
+				v-else-if="
+					contentStore.currentDashboard.components.length !== 0
+				"
 				class="map-charts"
 			>
 				<ComponentMapChart
@@ -75,24 +85,24 @@ const parseMapLayers = computed(() => {
 					:key="`map-layer-${item.index}-${contentStore.currentDashboard.index}`"
 				/>
 			</div>
-			<!-- if dashboard is still loading -->
+			<!-- 3. If dashboard is still loading -->
 			<div
 				v-else-if="contentStore.loading"
 				class="map-charts-nodashboard"
 			>
 				<div></div>
 			</div>
-			<!-- if dashboard failed to load -->
+			<!-- 4. If dashboard failed to load -->
 			<div v-else-if="contentStore.error" class="map-charts-nodashboard">
 				<span>sentiment_very_dissatisfied</span>
 				<h2>發生錯誤，無法載入儀表板</h2>
 			</div>
-			<!-- other dashboards that don't have components -->
+			<!-- 5. Dashboards that don't have components -->
 			<div v-else class="map-charts-nodashboard">
 				<span>addchart</span>
 				<h2>尚未加入組件</h2>
 				<button
-					@click="dialogStore.showDialog('addComponent')"
+					@click="handleOpenSettings"
 					class="hide-if-mobile"
 					v-if="contentStore.currentDashboard.index !== 'favorites'"
 				>
@@ -140,6 +150,7 @@ const parseMapLayers = computed(() => {
 			flex-direction: column;
 			align-items: center;
 			justify-content: center;
+			margin-right: var(--font-s);
 
 			@media (min-width: 1000px) {
 				width: 370px;
@@ -150,7 +161,7 @@ const parseMapLayers = computed(() => {
 			}
 
 			span {
-				margin-bottom: 1rem;
+				margin-bottom: var(--font-ms);
 				font-family: var(--font-icon);
 				font-size: 2rem;
 			}

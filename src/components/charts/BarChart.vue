@@ -1,4 +1,4 @@
-<!-- Developed by Taipei Urban Intelligence Center 2023 -->
+<!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 
 <script setup>
 import { ref, computed } from "vue";
@@ -21,7 +21,7 @@ const chartOptions = ref({
 			show: false,
 		},
 	},
-	colors: props.chart_config.color,
+	colors: [...props.chart_config.color],
 	dataLabels: {
 		offsetX: 20,
 		textAnchor: "start",

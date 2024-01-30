@@ -1,4 +1,4 @@
-<!-- Developed by Taipei Urban Intelligence Center 2023 -->
+<!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 
 <!-- This component has two modes 'normal mapview charts' / 'basic map layers' -->
 <!-- The different modes are controlled by the prop "isMapLayer" (default false) -->
@@ -8,8 +8,9 @@ import { computed, ref } from "vue";
 import { useDialogStore } from "../../store/dialogStore";
 import { useMapStore } from "../../store/mapStore";
 
+import TagTooltip from "../utilities/miscellaneous/TagTooltip.vue";
 import { chartTypes } from "../../assets/configs/apexcharts/chartTypes";
-import TagTooltip from "../utilities/TagTooltip.vue";
+import { getComponentDataTimeframe } from "../../assets/utilityFunctions/dataTimeframe";
 
 const mapStore = useMapStore();
 const dialogStore = useDialogStore();
@@ -30,21 +31,29 @@ const showTagTooltip = ref(false);
 
 // Parses time data into display format
 const dataTime = computed(() => {
-	if (!props.content.time_from) {
+	if (props.content.time_from === "static") {
 		return "固定資料";
+	} else if (props.content.time_from === "current") {
+		return "即時資料";
+	} else if (props.content.time_from === "demo") {
+		return "示範靜態資料";
 	}
-	if (!props.content.time_to) {
-		return props.content.time_from.slice(0, 10);
+	const { parsedTimeFrom, parsedTimeTo } = getComponentDataTimeframe(
+		props.content.time_from,
+		props.content.time_to
+	);
+	if (props.content.time_from === "day_start") {
+		return `${parsedTimeFrom.slice(0, 16)} ~ ${parsedTimeTo.slice(
+			11,
+			14
+		)}00`;
 	}
-	return `${props.content.time_from.slice(
-		0,
-		10
-	)} ~ ${props.content.time_to.slice(0, 10)}`;
+	return `${parsedTimeFrom.slice(0, 10)} ~ ${parsedTimeTo.slice(0, 10)}`;
 });
 
 // If any map layers are loading, disable the toggle
 const shouldDisable = computed(() => {
-	if (!props.content.map_config) return false;
+	if (!props.content.map_config[0]) return false;
 
 	const allMapLayerIds = props.content.map_config.map(
 		(el) => `${el.index}-${el.type}`
@@ -123,7 +132,7 @@ function changeShowTagTooltipState(state) {
 						<span v-if="content.map_filter && content.map_config"
 							>tune</span
 						>
-						<span v-if="content.map_config">map</span>
+						<span v-if="content.map_config[0]">map</span>
 						<span v-if="content.history_data">insights</span>
 					</div>
 				</div>
@@ -175,6 +184,13 @@ function changeShowTagTooltipState(state) {
 			>
 			</component>
 		</div>
+		<div
+			v-else-if="checked && content.chart_data === null"
+			class="componentmapchart-error"
+		>
+			<span>error</span>
+			<p>組件資料異常</p>
+		</div>
 		<div v-else-if="checked" class="componentmapchart-loading">
 			<div></div>
 		</div>
@@ -190,8 +206,8 @@ function changeShowTagTooltipState(state) {
 				v-if="showTagTooltip"
 				:position="tooltipPosition"
 				:hasFilter="content.map_filter ? true : false"
-				:hasMapLayer="content.map_config ? true : false"
-				:hasHistory="content.history_data ? true : false"
+				:hasMapLayer="content.map_config[0] ? true : false"
+				:hasHistory="content.history_config ? true : false"
 			/>
 		</Teleport>
 	</div>
@@ -239,7 +255,7 @@ function changeShowTagTooltipState(state) {
 		}
 
 		&-toggle {
-			min-height: 1rem;
+			min-height: var(--font-ms);
 			min-width: 2rem;
 			margin-top: 4px;
 		}
@@ -302,6 +318,24 @@ function changeShowTagTooltipState(state) {
 			border: solid 4px var(--color-border);
 			border-top: solid 4px var(--color-highlight);
 			animation: spin 0.7s ease-in-out infinite;
+		}
+	}
+
+	&-error {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+
+		span {
+			color: var(--color-complement-text);
+			margin-bottom: 0.5rem;
+			font-family: var(--font-icon);
+			font-size: 2rem;
+		}
+
+		p {
+			color: var(--color-complement-text);
 		}
 	}
 

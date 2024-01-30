@@ -1,4 +1,4 @@
-<!-- Developed by Taipei Urban Intelligence Center 2023 -->
+<!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 
 <script setup>
 import { ref } from "vue";
@@ -68,7 +68,7 @@ function handleDataSelection(index) {
 				<div
 					v-if="item.type !== 'symbol'"
 					:style="{
-						backgroundColor: `${item.color}`,
+						backgroundColor: `${chart_config.color[index]}`,
 						height: item.type === 'line' ? '0.4rem' : '1rem',
 						borderRadius: item.type === 'circle' ? '50%' : '2px',
 					}"
@@ -94,7 +94,7 @@ function handleDataSelection(index) {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	margin-top: -1rem;
+	margin-top: -var(--font-ms);
 	overflow: visible;
 
 	&-legend {
@@ -116,7 +116,7 @@ function handleDataSelection(index) {
 
 			div:first-child,
 			img {
-				width: 1rem;
+				width: var(--font-ms);
 				margin-right: 0.75rem;
 			}
 
@@ -127,7 +127,7 @@ function handleDataSelection(index) {
 			}
 
 			h6 {
-				font-size: 1rem;
+				font-size: var(--font-ms);
 				font-weight: 400;
 				text-align: left;
 			}

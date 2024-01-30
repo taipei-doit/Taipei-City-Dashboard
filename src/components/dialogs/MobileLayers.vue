@@ -1,49 +1,77 @@
-<!-- Developed by Taipei Urban Intelligence Center 2023 -->
-
-<!-- This component controls map layers in the mobile version. To preserve state, the dialog is only hidden but not removed when disabled -->
+<!-- !Depreciated! Mobile version no longer supports maps -->
+<!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 
 <script setup>
-import { computed } from 'vue';
-import { useDialogStore } from '../../store/dialogStore';
-import { useContentStore } from '../../store/contentStore';
+import { computed } from "vue";
+import { useDialogStore } from "../../store/dialogStore";
+import { useContentStore } from "../../store/contentStore";
 
-import MobileLayerTab from '../utilities/MobileLayerTab.vue';
+import MobileLayerTab from "../utilities/miscellaneous/MobileLayerTab.vue";
 
 const dialogStore = useDialogStore();
 const contentStore = useContentStore();
 
 // Filter out components without maps
 const filteredMapLayers = computed(() => {
-	if (!contentStore.currentDashboard.content) {
+	if (!contentStore.currentDashboard.components) {
 		return [];
 	}
-	return contentStore.currentDashboard.content.filter((element) => element.map_config);
+	return contentStore.currentDashboard.components.filter(
+		(element) => element.map_config
+	);
 });
 </script>
 
 <template>
 	<Teleport to="body">
-		<div :class="{ dialogcontainer: true, 'show-dialog-animation': dialogStore.dialogs.mobileLayers === true }">
-			<div class="dialogcontainer-background" @click="dialogStore.hideAllDialogs"></div>
+		<div
+			:class="{
+				dialogcontainer: true,
+				'show-dialog-animation':
+					dialogStore.dialogs.mobileLayers === true,
+			}"
+		>
+			<div
+				class="dialogcontainer-background"
+				@click="dialogStore.hideAllDialogs"
+			></div>
 			<div class="dialogcontainer-dialog">
 				<div class="mobilelayers">
 					<!-- Map Layers Dashboard -->
-					<div v-if="contentStore.currentDashboard.index === 'map-layers'">
-						<MobileLayerTab v-for="item in contentStore.currentDashboard.content" :content="item"
-							:key="`map-layer-${item.index}`" />
+					<div
+						v-if="
+							contentStore.currentDashboard.index === 'map-layers'
+						"
+					>
+						<MobileLayerTab
+							v-for="item in contentStore.currentDashboard
+								.components"
+							:content="item"
+							:key="`map-layer-${item.index}`"
+						/>
 					</div>
 					<!-- other dashboards with components -->
 					<div v-else-if="filteredMapLayers.length !== 0">
-						<MobileLayerTab v-for="item in filteredMapLayers" :content="item" :key="item.index" />
+						<MobileLayerTab
+							v-for="item in filteredMapLayers"
+							:content="item"
+							:key="item.index"
+						/>
 						<h2>基本圖層</h2>
-						<MobileLayerTab v-for="item in contentStore.mapLayers" :content="item"
-							:key="`map-layer-${item.index}`" />
+						<MobileLayerTab
+							v-for="item in contentStore.mapLayers"
+							:content="item"
+							:key="`map-layer-${item.index}`"
+						/>
 					</div>
 					<!-- Other dashboards without components -->
 					<div v-else>
 						<h2>基本圖層</h2>
-						<MobileLayerTab v-for="item in contentStore.mapLayers" :content="item"
-							:key="`map-layer-${item.index}`" />
+						<MobileLayerTab
+							v-for="item in contentStore.mapLayers"
+							:content="item"
+							:key="`map-layer-${item.index}`"
+						/>
 					</div>
 				</div>
 			</div>
@@ -84,7 +112,6 @@ const filteredMapLayers = computed(() => {
 		left: 0;
 		background-color: rgba(0, 0, 0, 0.5);
 	}
-
 }
 
 .mobilelayers {
@@ -104,11 +131,11 @@ const filteredMapLayers = computed(() => {
 
 @keyframes opacity-transition {
 	0% {
-		opacity: 0
+		opacity: 0;
 	}
 
 	100% {
-		opacity: 1
+		opacity: 1;
 	}
 }
 

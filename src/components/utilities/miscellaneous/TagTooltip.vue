@@ -1,10 +1,17 @@
+<!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
+
+<!-- The little dialog that pops up when you hover over component tags -->
 <script setup>
+import { useAuthStore } from "../../../store/authStore";
+
 const props = defineProps({
 	position: { type: Object },
 	hasFilter: { type: Boolean, default: false },
 	hasMapLayer: { type: Boolean, default: false },
 	hasHistory: { type: Boolean, default: false },
 });
+
+const authStore = useAuthStore();
 </script>
 
 <template>
@@ -16,11 +23,15 @@ const props = defineProps({
 		</p>
 		<p>
 			<span>{{ props.hasMapLayer ? "check" : "clear" }}</span
-			>具備空間資料(地圖交叉比對)
+			>具備空間資料({{
+				authStore.isMobileDevice ? "手機版不支援" : "地圖交叉比對"
+			}})
 		</p>
 		<p>
 			<span>{{ props.hasHistory ? "check" : "clear" }}</span
-			>具備歷史資料(組件資訊)
+			>具備歷史資料({{
+				authStore.isMobileDevice ? "資訊頁面" : "組件資訊"
+			}})
 		</p>
 	</div>
 </template>

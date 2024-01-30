@@ -1,4 +1,4 @@
-<!-- Developed by Taipei Urban Intelligence Center 2023 -->
+<!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 
 <script setup>
 import { ref } from "vue";
@@ -14,7 +14,7 @@ const chartOptions = ref({
 			},
 		},
 	},
-	colors: props.chart_config.color,
+	colors: [...props.chart_config.color],
 	dataLabels: {
 		enabled: false,
 	},
@@ -32,7 +32,7 @@ const chartOptions = ref({
 		strokeWidth: 0,
 	},
 	stroke: {
-		colors: props.chart_config.color,
+		colors: [...props.chart_config.color],
 		curve: "smooth",
 		show: true,
 		width: 2,

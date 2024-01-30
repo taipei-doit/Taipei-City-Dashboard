@@ -1,4 +1,4 @@
-// Cleaned
+// Developed by Taipei Urban Intelligence Center 2023-2024
 
 /* dialogStore */
 /*
@@ -13,10 +13,19 @@ import { defineStore } from "pinia";
 export const useDialogStore = defineStore("dialog", {
 	state: () => ({
 		dialogs: {
+			// Admin Dialogs: /components/dialogs/admin
+			adminComponentSettings: false,
+			adminAddEditDashboards: false,
+			adminEditIssue: false,
+			adminAddComponent: false,
+			adminDeleteDashboard: false,
+			// Public Dialogs: /components/dialogs
 			addComponent: false,
 			addDashboard: false,
 			dashboardSettings: false,
+			addEditDashboards: false,
 			initialWarning: false,
+			login: false,
 			mobileLayers: false,
 			mobileNavigation: false,
 			moreInfo: false,
@@ -32,10 +41,13 @@ export const useDialogStore = defineStore("dialog", {
 		// Stores the content for report issue dialogs
 		issue: {
 			id: null,
+			index: null,
 			name: "",
 		},
 		// Stores the content for more info dialogs
 		moreInfoContent: null,
+		// Stores Edit or Add mode for addeditdashboards dialog
+		addEdit: "",
 	}),
 	getters: {},
 	actions: {
@@ -58,7 +70,7 @@ export const useDialogStore = defineStore("dialog", {
 		showNotification(status, message) {
 			this.showDialog("notificationBar");
 			this.notification = {
-				status: status,
+				status: status, // success, fail, info
 				message: message,
 			};
 			setTimeout(() => {
@@ -71,10 +83,11 @@ export const useDialogStore = defineStore("dialog", {
 			this.moreInfoContent = content;
 		},
 		// Show the report issue dialog and enter the id and name of the component of origin
-		showReportIssue(id, name) {
+		showReportIssue(id, index, name) {
 			this.showDialog("reportIssue");
 			this.issue = {
 				id: id,
+				index: index,
 				name: name,
 			};
 		},

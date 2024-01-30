@@ -21,13 +21,21 @@ export default defineConfig({
 		},
 		chunkSizeWarningLimit: 1600,
 	},
-	test: {
-		globals: true,
-		environment: "happy-dom",
-	},
-	base: "/dashboard-demo",
+	base: "/",
 	server: {
 		host: "0.0.0.0",
 		port: 80,
+		proxy: {
+			"/api/dev": {
+				target: "http://localhost:8888",
+				changeOrigin: true,
+				rewrite: (path) => path.replace("/dev", "/v1"),
+			},
+			"/geo_server": {
+				target: "https://geoserver.tuic.gov.taipei/geoserver/",
+				changeOrigin: true,
+				rewrite: (path) => path.replace(/^\/geo_server/, ""),
+			},
+		},
 	},
 });

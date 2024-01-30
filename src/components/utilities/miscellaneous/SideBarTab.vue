@@ -1,10 +1,11 @@
-<!-- Developed by Taipei Urban Intelligence Center 2023 -->
+<!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 
 <!-- This component has two modes "expanded" and "collapsed" which is controlled by the prop "expanded" -->
 
 <script setup>
-import { computed } from 'vue';
-import { useRoute } from 'vue-router';
+import { computed } from "vue";
+import { useRoute } from "vue-router";
+import { useAuthStore } from "../../../store/authStore";
 
 const route = useRoute();
 
@@ -12,19 +13,30 @@ const props = defineProps({
 	icon: { type: String },
 	title: { type: String },
 	index: { type: String },
-	expanded: { type: Boolean }
+	expanded: { type: Boolean },
 });
 
+const authStore = useAuthStore();
+
 const tabLink = computed(() => {
+	if (authStore.currentPath === "admin") {
+		return `/admin/${props.index}`;
+	}
 	return `${route.path}?index=${props.index}`;
 });
 const linkActiveOrNot = computed(() => {
+	if (authStore.currentPath === "admin") {
+		return route.path === `/admin/${props.index}` ? true : false;
+	}
 	return route.query.index === props.index ? true : false;
 });
 </script>
 
 <template>
-	<router-link :to="tabLink" :class="{ sidebartab: true, 'sidebartab-active': linkActiveOrNot }">
+	<router-link
+		:to="tabLink"
+		:class="{ sidebartab: true, 'sidebartab-active': linkActiveOrNot }"
+	>
 		<span>{{ icon }}</span>
 		<h3 v-if="expanded">{{ title }}</h3>
 	</router-link>
@@ -40,6 +52,7 @@ const linkActiveOrNot = computed(() => {
 	border-radius: 0 5px 5px 0;
 	transition: background-color 0.2s;
 	white-space: nowrap;
+	text-wrap: nowrap;
 
 	&:hover {
 		background-color: var(--color-component-background);

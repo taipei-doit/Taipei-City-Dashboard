@@ -176,7 +176,7 @@ function updateMouseLocation(e) {
 	&__title {
 		display: flex;
 		justify-content: space-around;
-		margin: 1rem 1rem;
+		margin: var(--font-ms) var(--font-ms);
 	}
 	&__percentage {
 		padding: 0 0.3em;

@@ -1,4 +1,4 @@
-<!-- Developed by Taipei Urban Intelligence Center 2023 -->
+<!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 
 <!-- Navigation will be hidden from the navbar in mobile mode and moved to the settingsbar -->
 
@@ -6,11 +6,11 @@
 const { VITE_APP_TITLE } = import.meta.env;
 import { computed } from "vue";
 import { useRoute } from "vue-router";
-import { useAuthStore } from "../store/authStore";
-import { useDialogStore } from "../store/dialogStore";
 import { useFullscreen } from "@vueuse/core";
+import { useAuthStore } from "../../../store/authStore";
+import { useDialogStore } from "../../../store/dialogStore";
 
-import UserSettings from "./dialogs/UserSettings.vue";
+import UserSettings from "../../dialogs/UserSettings.vue";
 
 const route = useRoute();
 const authStore = useAuthStore();
@@ -27,16 +27,35 @@ const linkQuery = computed(() => {
 	<div class="navbar">
 		<div class="navbar-logo">
 			<div class="navbar-logo-image">
-				<img src="../assets/images/TUIC.svg" alt="tuic logo" />
+				<img src="../../../assets/images/TUIC.svg" alt="tuic logo" />
 			</div>
 			<div>
 				<h1>{{ VITE_APP_TITLE }}</h1>
-				<h2>Taipei City Dashboard Open Source</h2>
+				<h2>Taipei City Dashboard</h2>
 			</div>
 		</div>
-		<div class="navbar-tabs hide-if-mobile">
-			<router-link :to="`/dashboard${linkQuery}`">儀表板總覽</router-link>
-			<router-link :to="`/mapview${linkQuery}`">地圖交叉比對</router-link>
+		<div class="navbar-tabs" v-if="authStore.currentPath !== 'admin'">
+			<router-link
+				:to="`/component`"
+				:class="{
+					'router-link-active':
+						authStore.currentPath.includes('component'),
+				}"
+				v-if="authStore.token"
+				>組件瀏覽平台</router-link
+			>
+			<router-link
+				:to="`/dashboard${
+					linkQuery.includes('undefined') ? '' : linkQuery
+				}`"
+				>儀表板總覽</router-link
+			>
+			<router-link
+				:to="`/mapview${
+					linkQuery.includes('undefined') ? '' : linkQuery
+				}`"
+				>地圖交叉比對</router-link
+			>
 		</div>
 		<div class="navbar-user">
 			<a
@@ -50,13 +69,28 @@ const linkQuery = computed(() => {
 					isFullscreen ? "fullscreen_exit" : "fullscreen"
 				}}</span>
 			</button>
-			<div class="navbar-user-user hide-if-mobile">
+			<div class="navbar-user-user" v-if="authStore.token">
 				<button>{{ authStore.user.name }}</button>
 				<ul>
 					<li>
 						<button @click="dialogStore.showDialog('userSettings')">
 							用戶設定
 						</button>
+					</li>
+					<li
+						v-if="
+							authStore.currentPath !== 'admin' &&
+							authStore.user.isAdmin
+						"
+						class="hide-if-mobile"
+					>
+						<router-link to="/admin">管理員後臺</router-link>
+					</li>
+					<li
+						v-else-if="authStore.user.isAdmin"
+						class="hide-if-mobile"
+					>
+						<router-link to="/dashboard">返回儀表板</router-link>
 					</li>
 					<li>
 						<button @click="authStore.handleLogout">登出</button>
@@ -65,6 +99,9 @@ const linkQuery = computed(() => {
 				<teleport to="body">
 					<user-settings />
 				</teleport>
+			</div>
+			<div class="navbar-user-user" v-else>
+				<button @click="dialogStore.showDialog('login')">登入</button>
 			</div>
 		</div>
 	</div>
@@ -129,12 +166,17 @@ const linkQuery = computed(() => {
 				opacity: 1;
 			}
 		}
+
+		@media screen and (max-width: 750px) {
+			display: none;
+		}
 	}
 
 	&-user {
 		display: flex;
 		align-items: center;
 
+		li a,
 		button {
 			display: flex;
 			align-items: center;
@@ -143,10 +185,6 @@ const linkQuery = computed(() => {
 			border-radius: 4px;
 			font-size: var(--font-m);
 			transition: background-color 0.25s;
-		}
-
-		button:hover {
-			background-color: var(--color-complement-text);
 		}
 
 		span {
@@ -163,6 +201,9 @@ const linkQuery = computed(() => {
 			height: 60px;
 			display: flex;
 			align-items: center;
+			@media screen and (max-width: 750px) {
+				display: none;
+			}
 
 			ul {
 				min-width: 100px;
@@ -178,10 +219,15 @@ const linkQuery = computed(() => {
 				z-index: 10;
 
 				li {
-					padding: 8px 4px;
 					border-radius: 5px;
 					transition: background-color 0.25s;
-					cursor: pointer;
+
+					a,
+					button {
+						padding: 8px 6px;
+						width: 100%;
+						height: 100%;
+					}
 				}
 
 				li:hover {
