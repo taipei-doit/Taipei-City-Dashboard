@@ -1,6 +1,7 @@
 <!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 
 <script setup>
+import { storeToRefs } from "pinia";
 import { useDialogStore } from "../../store/dialogStore";
 import { useAuthStore } from "../../store/authStore";
 
@@ -9,61 +10,53 @@ import DialogContainer from "./DialogContainer.vue";
 const dialogStore = useDialogStore();
 const authStore = useAuthStore();
 
-const accountTypes = ["Email用戶", "台北通", "台北on"];
+const { editUser } = storeToRefs(authStore);
 
 function handleClose() {
 	dialogStore.hideAllDialogs();
+	authStore.editUser = authStore.user;
+}
+
+function parseTime(time) {
+	return time.slice(0, 19).replace("T", " ");
 }
 </script>
 
 <template>
 	<DialogContainer @onClose="handleClose" :dialog="`userSettings`">
-		<h2>用戶設定</h2>
-		<table class="usersettings">
-			<tr>
-				<th>名稱</th>
-				<td colspan="3">{{ authStore.user.name }}</td>
-			</tr>
-			<tr>
-				<th>類型</th>
-				<td>{{ accountTypes[authStore.user.type] }}</td>
-				<th>用戶代碼</th>
-				<td>{{ authStore.user.id }}</td>
-			</tr>
-			<tr>
-				<th>權限</th>
-				<td>
-					{{ authStore.user.status === 1 ? "管理員" : "一般用戶" }}
-				</td>
-				<th>帳戶狀態</th>
-				<td>{{ authStore.user.status > 0 ? "啟用" : "停用" }}</td>
-			</tr>
-		</table>
+		<div class="usersettings">
+			<h2>用戶設定</h2>
+			<label> 用戶名稱 </label>
+			<input
+				v-model="editUser.name"
+				:minlength="1"
+				:maxlength="10"
+				required
+			/>
+			<label> 用戶帳號 </label>
+			<input :value="editUser.account" :minlength="1" disabled />
+			<label> 用戶類型 </label>
+			<input
+				:value="editUser.isAdmin ? '管理員' : '一般用戶'"
+				disabled="true"
+				required
+			/>
+			<label> 最近登入時間 </label>
+			<input :value="parseTime(editUser.login_at)" disabled />
+		</div>
 	</DialogContainer>
 </template>
 
 <style scoped lang="scss">
 .usersettings {
-	width: 500px;
-	margin: var(--font-ms) 0 0.5rem;
-	border-spacing: 0;
-	border: solid 1px var(--color-border);
-	border-radius: 5px;
+	width: 300px;
+	display: flex;
+	flex-direction: column;
 
-	td,
-	th {
-		height: 2rem;
-		border: solid 1px var(--color-border);
+	label {
+		margin: 8px 0 4px;
+		font-size: var(--font-s);
 		color: var(--color-complement-text);
-	}
-
-	th {
-		width: 20%;
-	}
-
-	td {
-		width: 30%;
-		padding-left: 0.5rem;
 	}
 }
 </style>

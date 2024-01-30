@@ -23,6 +23,11 @@ const routes = [
 		redirect: "/dashboard",
 	},
 	{
+		path: "/callback",
+		name: "callback",
+		component: () => import("../views/Callback.vue"),
+	},
+	{
 		path: "/dashboard",
 		name: "dashboard",
 		component: DashboardView,

@@ -21,7 +21,7 @@ export default defineConfig({
 		},
 		chunkSizeWarningLimit: 1600,
 	},
-	base: "/dashboard-demo",
+	base: "/",
 	server: {
 		host: "0.0.0.0",
 		port: 80,

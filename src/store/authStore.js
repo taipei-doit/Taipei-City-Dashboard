@@ -27,6 +27,7 @@ export const useAuthStore = defineStore("auth", {
 			login_at: null,
 			isAdmin: false,
 		},
+		editUser: {},
 		token: null,
 		errorMessage: "",
 		isMobileDevice: false,
@@ -45,6 +46,7 @@ export const useAuthStore = defineStore("auth", {
 			if (localStorage.getItem("token")) {
 				this.token = localStorage.getItem("token");
 				this.user = JSON.parse(localStorage.getItem("user"));
+				this.editUser = JSON.parse(localStorage.getItem("user"));
 			}
 		},
 		// Email Login
@@ -76,6 +78,7 @@ export const useAuthStore = defineStore("auth", {
 					.map((el) => el.role_name)
 					.includes("admin"),
 			};
+			this.editUser = this.user;
 			localStorage.setItem("user", JSON.stringify(this.user));
 
 			contentStore.publicDashboards = [];
@@ -93,6 +96,7 @@ export const useAuthStore = defineStore("auth", {
 			localStorage.removeItem("token");
 			localStorage.removeItem("user");
 			this.user = {};
+			this.editUser = {};
 			this.token = null;
 
 			contentStore.publicDashboards = [];

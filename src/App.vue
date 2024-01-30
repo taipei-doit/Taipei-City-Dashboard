@@ -79,6 +79,9 @@ onMounted(() => {
 				<RouterView></RouterView>
 			</div>
 		</div>
+		<div v-else-if="authStore.currentPath === 'callback'">
+			<router-view></router-view>
+		</div>
 		<InitialWarning />
 		<LogIn />
 	</div>

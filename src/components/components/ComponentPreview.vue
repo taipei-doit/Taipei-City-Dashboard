@@ -2,7 +2,6 @@
 
 <script setup>
 import { computed, ref } from "vue";
-import { useDialogStore } from "../../store/dialogStore";
 import { useContentStore } from "../../store/contentStore";
 
 import ComponentTag from "../utilities/miscellaneous/ComponentTag.vue";
@@ -12,7 +11,6 @@ import { getComponentDataTimeframe } from "../../assets/utilityFunctions/dataTim
 
 const { BASE_URL } = import.meta.env;
 
-const dialogStore = useDialogStore();
 const contentStore = useContentStore();
 
 const props = defineProps({

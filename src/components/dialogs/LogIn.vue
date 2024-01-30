@@ -1,13 +1,19 @@
 <!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 
 <script setup>
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { useDialogStore } from "../../store/dialogStore";
 import { useAuthStore } from "../../store/authStore";
 
 import DialogContainer from "./DialogContainer.vue";
 
-const { VITE_APP_TITLE, NODE_ENV } = import.meta.env;
+const {
+	VITE_APP_TITLE,
+	NODE_ENV,
+	VITE_TAIPEIPASS_URL,
+	VITE_TAIPEIPASS_CLIENT_ID,
+	VITE_TAIPEIPASS_SCOPE,
+} = import.meta.env;
 
 const dialogStore = useDialogStore();
 const authStore = useAuthStore();
@@ -15,6 +21,10 @@ const authStore = useAuthStore();
 const loginMode = ref("tp");
 const email = ref("");
 const password = ref("");
+
+const taipeiPassUrl = computed(() => {
+	return `${VITE_TAIPEIPASS_URL}/authorize?response_type=code&client_id=${VITE_TAIPEIPASS_CLIENT_ID}&scope=${VITE_TAIPEIPASS_SCOPE}`;
+});
 
 function handleSwitchMode() {
 	if (NODE_ENV === "production") {
@@ -25,7 +35,9 @@ function handleSwitchMode() {
 		password.value = "";
 	}
 }
-
+function handleTaipeiPassLogin() {
+	window.open(taipeiPassUrl.value, "_self");
+}
 async function handleEmailLogin() {
 	const loggedIn = await authStore.loginByEmail(email.value, password.value);
 	if (loggedIn) {
@@ -55,7 +67,7 @@ function handleClose() {
 				</div>
 			</div>
 			<div class="login-form" v-if="loginMode === 'tp'">
-				<button>
+				<button @click="handleTaipeiPassLogin">
 					<img src="../../assets/images/taipeipass.png" />台北通登入
 				</button>
 			</div>
