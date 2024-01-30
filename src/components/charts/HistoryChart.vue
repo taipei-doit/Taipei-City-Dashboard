@@ -2,7 +2,7 @@
 
 <script setup>
 import { ref } from "vue";
-import { timeTerms } from "../../assets/configs/allTimes";
+import { timeTerms } from "../../assets/configs/AllTimes";
 
 const props = defineProps(["chart_config", "series", "history_config"]);
 

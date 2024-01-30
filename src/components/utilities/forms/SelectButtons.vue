@@ -4,7 +4,7 @@
 <script setup>
 import { defineProps, defineEmits, ref, computed } from "vue";
 import { chartTypes } from "../../../assets/configs/apexcharts/chartTypes";
-import { timeTerms } from "../../../assets/configs/allTimes";
+import { timeTerms } from "../../../assets/configs/AllTimes";
 
 const props = defineProps(["tags", "selected", "limit", "disable"]);
 

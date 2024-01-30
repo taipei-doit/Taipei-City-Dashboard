@@ -6,7 +6,7 @@ import { useContentStore } from "../../store/contentStore";
 
 import ComponentTag from "../utilities/miscellaneous/ComponentTag.vue";
 import TagTooltip from "../utilities/miscellaneous/TagTooltip.vue";
-import { timeTerms } from "../../assets/configs/allTimes";
+import { timeTerms } from "../../assets/configs/AllTimes";
 import { getComponentDataTimeframe } from "../../assets/utilityFunctions/dataTimeframe";
 
 const { BASE_URL } = import.meta.env;

@@ -12,7 +12,7 @@ import { useAuthStore } from "../../store/authStore";
 import ComponentTag from "../utilities/miscellaneous/ComponentTag.vue";
 import TagTooltip from "../utilities/miscellaneous/TagTooltip.vue";
 import { chartTypes } from "../../assets/configs/apexcharts/chartTypes";
-import { timeTerms } from "../../assets/configs/allTimes";
+import { timeTerms } from "../../assets/configs/AllTimes";
 import { getComponentDataTimeframe } from "../../assets/utilityFunctions/dataTimeframe";
 
 const dialogStore = useDialogStore();

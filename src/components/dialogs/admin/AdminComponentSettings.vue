@@ -13,7 +13,7 @@ import SelectButtons from "../../utilities/forms/SelectButtons.vue";
 import HistoryChart from "../../charts/HistoryChart.vue";
 
 import { chartsPerDataType } from "../../../assets/configs/apexcharts/chartTypes";
-import { timeTerms } from "../../../assets/configs/allTimes";
+import { timeTerms } from "../../../assets/configs/AllTimes";
 import { mapTypes } from "../../../assets/configs/mapbox/mapConfig";
 
 const dialogStore = useDialogStore();
