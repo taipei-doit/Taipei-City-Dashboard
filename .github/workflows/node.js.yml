@@ -24,7 +24,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-          cache: "npm"
+          cache-dependency-path: ./Taipei-City-Dashboard-FE/package-lock.json
       - run: npm ci
         working-directory: Taipei-City-Dashboard-FE
       - run: npm run build --if-present
