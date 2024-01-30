@@ -1,4 +1,4 @@
-# <img src='src/assets/images/TUIC.svg' height='28'> Taipei City Dashboard
+# <img src='Taipei-City-Dashboard-FE/src/assets/images/TUIC.svg' height='28'> Taipei City Dashboard
 
 ## Important Notice
 
