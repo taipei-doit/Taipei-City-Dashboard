@@ -1,0 +1,77 @@
+version: "3.7"
+services:
+  nginx:
+    restart: always
+    container_name: nginx
+    image: nginx
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./nginx/ssl:/etc/nginx/ssl
+      - /Users/tuic/Documents/work/projects/Taipei-City-Dashboard-FE/dist:/usr/share/nginx/html
+    ports:
+      - 80:80
+      - 443:443
+    extra_hosts:
+      - "citydashboard.taipei:210.69.108.220"
+  dashboard-be:
+    image: golang:1.21.3-alpine3.18
+    container_name: dashboard-be
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - ../Taipei-City-Dashboard-BE:/opt
+    ports:
+      - "8888:8888"
+    working_dir: /opt
+    command: ["go", "run", "main.go"]
+  redis:
+    restart: always
+    container_name: redis
+    image: redis:7.2.3-alpine
+    ports:
+      - 6379:6379
+    volumes:
+      - ./db-data/redis-data:/data
+  postgres:
+    image: postgis/postgis:16-3.4
+    container_name: postgres
+    restart: always
+    env_file:
+      - .env.pg
+    volumes:
+      - ./db-data/postgres-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+  postgres-manager:
+    image: postgis/postgis:16-3.4
+    container_name: postgres-manager
+    restart: always
+    env_file:
+      - .env.pgmanager
+    volumes:
+      - ./db-data/postgres-manager-data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin
+    restart: always
+    env_file:
+      - .env.pg
+    ports:
+      - "8080:80"
+    volumes:
+      - ./db-data/pgadmin-data:/var/lib/pgadmin
+    links:
+      - "postgres:pgsql-server"
+
+networks:
+  default:
+    external:
+      name: br_dashboard
+###########################################
+## Create docker network command sample: ##
+## ------------------------------------- ##################################################################
+## docker network create --driver=bridge --subnet=192.168.128.0/24 --gateway=192.168.128.1  br_dashboard ##
+###########################################################################################################

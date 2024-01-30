@@ -1,6 +1,6 @@
 .DS_Store
 /node_modules
-/dist
+Taipei-City-Dashboard-FE/dist
 
 # local env files
 .env.production
@@ -31,3 +31,34 @@ firebase.json
 
 dist.tar.gz
 *.sh
+
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binary, built with `go test -c`
+*.test
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
+
+# Dependency directories (remove the comment below to include it)
+# vendor/
+
+# Go workspace file
+go.work
+
+# .env files except for template
+.env
+.env.development
+.env.production
+docker/.env*
+
+# docker-compose
+# db data
+docker/db-data
+# nginx ssl
+docker/nginx/ssl

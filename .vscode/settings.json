@@ -6,5 +6,32 @@
 	"editor.tabSize": 4,
 	"[vue]": {
 		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"[go]": {
+		// "editor.snippetSuggestions": "none",
+		"editor.formatOnSave": true
+		// "editor.codeActionsOnSave": {
+		//     "source.organizeImports": true,
+		//     "source.sortMembers": true
+		// }
+	},
+	"gopls": {
+		// "analyses": {
+		// 	"ST1003": true,
+		// 	"ST1016": true,
+		// 	"ST1020": true,
+		// 	"ST1021": true,
+		// 	"ST1022": true,
+		// 	"U1000": true
+		// },
+		"formatting.gofumpt": true,
+		// "staticcheck": true,
+		"ui.completion.usePlaceholders": true,
+		"ui.diagnostic.analyses": {
+			"unusedparams": true
+		},
+		"ui.semanticTokens": true,
+		"completionDocumentation": true
 	}
+	// "go.useLanguageServer": false
 }
