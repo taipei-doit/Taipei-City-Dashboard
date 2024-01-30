@@ -1,4 +1,4 @@
-# <img src='src/assets/images/TUIC.svg' height='28'>   Taipei City Dashboard Open Source FE
+# <img src='src/assets/images/TUIC.svg' height='28'> Taipei City Dashboard
 
 ## Important Notice
 
@@ -20,41 +20,15 @@ We have since completed the initial layouts and basic functionalities of Taipei 
 
 Please refer to the docs for the [Chinese Version](https://tuic.gov.taipei/documentation/front-end/introduction) (and click on the "switch languages" icon in the top right corner).
 
-[Demo](https://tuic.gov.taipei/dashboard-demo) | [License](https://github.com/tpe-doit/Taipei-City-Dashboard-FE/blob/main/LICENSE) | [Code of Conduct](https://github.com/tpe-doit/Taipei-City-Dashboard-FE/blob/main/.github/CODE_OF_CONDUCT.md) | [Contribution Guide](https://tuic.gov.taipei/documentation/front-end/contribution-overview)
+[Demo](https://tuic.gov.taipei/dashboard-demo) | [License](https://github.com/tpe-doit/Taipei-City-Dashboard-FE/blob/main/LICENSE) | [Code of Conduct](https://github.com/tpe-doit/Taipei-City-Dashboard/blob/main/.github/CODE_OF_CONDUCT.md) | [Contribution Guide](https://tuic.gov.taipei/documentation/front-end/contribution-overview)
 
 ## Quick Start
 
-### Docker
-
-1. Install [Docker](https://www.docker.com/products/docker-desktop/) on your computer and start running it.
-2. Fork this repository then clone the project to your computer. Execute `pwd` (mac) or `cd` in the repository terminal to get the complete path.
-3. Execute the following command in the system terminal and replace "<repository path>" with the path you got in step 2.
-
-```bash
-docker run -v <repository path>:/opt/Taipei-City-Dashboard-FE -p 80:80 -it node:18.18.1-alpine3.18  sh
-```
-
-4. Execute the following commands to enter the project folder and install packages.
-
-```bash
-cd /opt/Taipei-City-Dashboard-FE
-npm install
-```
-
-5. You should now be able to locally host this project by executing `npm run dev` in the respository terminal.
-6. Refer to the [Docs](https://tuic.gov.taipei/documentation/front-end/project-setup) to complete further configurations.
-
-### Local Environment
-
-1. Download [Node.js](https://nodejs.org/en) on your computer.
-2. Fork this repository then clone the project to your computer.
-3. Execute `npm install` in the respository terminal
-4. You should now be able to locally host this project by executing `npm run dev` in the respository terminal.
-5. Refer to the [Docs](https://tuic.gov.taipei/documentation/front-end/project-setup) to complete further configurations.
+Updated version for the full-stack application coming soon.
 
 ## Documentation
 
-Check out the complete documentation for Taipei City Dashboard FE [here](https://tuic.gov.taipei/documentation).
+Check out the complete documentation for Taipei City Dashboard [here](https://tuic.gov.taipei/documentation).
 
 ## Contributors
 

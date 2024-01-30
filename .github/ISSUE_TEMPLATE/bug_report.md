@@ -3,10 +3,12 @@ name: Bug Report
 about: Create a bug report to help us improve
 title: "[Bug]"
 labels: bug
-assignees: igorho2000
+assignees: ["igorho2000", "ann125697"]
 ---
 
 > Please submit all issues in English.
+
+> This repository is still under internal development. All outside issues will be closed immediately.
 
 ## Describe the bug
 
@@ -33,14 +35,10 @@ If applicable, add screenshots to help explain your problem.
 
 ## Environment Info
 
--   Device: [e.g. MacBook Pro / iPhone 12]
--   OS: [e.g. iOS]
--   Browser [e.g. chrome, safari]
+- Device: [e.g. MacBook Pro / iPhone 12]
+- OS: [e.g. iOS]
+- Browser [e.g. chrome, safari]
 
 ## Additional context
 
 Add any other context about the problem here.
-
-(Fill in "x" to check)
-
--   [ ] I would like to work on this issue myself if approved.
