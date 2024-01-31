@@ -9,8 +9,6 @@ import TagTooltip from "../utilities/miscellaneous/TagTooltip.vue";
 import { timeTerms } from "../../assets/configs/AllTimes";
 import { getComponentDataTimeframe } from "../../assets/utilityFunctions/dataTimeframe";
 
-const { BASE_URL } = import.meta.env;
-
 const contentStore = useContentStore();
 
 const props = defineProps({
@@ -129,7 +127,7 @@ function changeShowTagTooltipState(state) {
 				<img
 					v-for="chart in props.content.chart_config.types"
 					:key="`${props.content.index} - ${chart}`"
-					:src="`${BASE_URL}/images/thumbnails/${chart}.svg`"
+					:src="`/images/thumbnails/${chart}.svg`"
 				/>
 			</div>
 		</div>

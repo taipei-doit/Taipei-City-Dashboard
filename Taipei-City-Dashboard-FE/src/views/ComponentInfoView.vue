@@ -19,8 +19,6 @@ import HistoryChart from "../components/charts/HistoryChart.vue";
 import ReportIssue from "../components/dialogs/ReportIssue.vue";
 import DownloadData from "../components/dialogs/DownloadData.vue";
 
-const { BASE_URL } = import.meta.env;
-
 const contentStore = useContentStore();
 const dialogStore = useDialogStore();
 const authStore = useAuthStore();
@@ -47,7 +45,13 @@ const authStore = useAuthStore();
 	</div>
 
 	<!-- 1. If the component is found -->
-	<div v-if="dialogStore.moreInfoContent" class="componentinfoview">
+	<div
+		v-if="dialogStore.moreInfoContent"
+		:class="{
+			componentinfoview: true,
+			'no-history': !dialogStore.moreInfoContent.history_data,
+		}"
+	>
 		<!-- 1-1. View the entire component and its chart data -->
 		<div class="componentinfoview-component">
 			<ComponentContainer
@@ -55,20 +59,23 @@ const authStore = useAuthStore();
 				:notMoreInfo="false"
 				:isComponentView="true"
 				:style="{ height: '350px', width: '400px' }"
+				:key="dialogStore.moreInfoContent.index"
 			/>
 		</div>
 		<!-- 1-2. View the component's information -->
 		<div class="componentinfoview-content">
-			<h3>組件 ID | Index</h3>
-			<p>
-				{{
-					` ID: ${dialogStore.moreInfoContent.id}｜Index: ${dialogStore.moreInfoContent.index} `
-				}}
-			</p>
-			<h3>組件說明</h3>
-			<p>{{ dialogStore.moreInfoContent.long_desc }}</p>
-			<h3>範例情境</h3>
-			<p>{{ dialogStore.moreInfoContent.use_case }}</p>
+			<div :style="{ overflowY: 'scroll' }">
+				<h3>組件 ID | Index</h3>
+				<p>
+					{{
+						` ID: ${dialogStore.moreInfoContent.id}｜Index: ${dialogStore.moreInfoContent.index} `
+					}}
+				</p>
+				<h3>組件說明</h3>
+				<p>{{ dialogStore.moreInfoContent.long_desc }}</p>
+				<h3>範例情境</h3>
+				<p>{{ dialogStore.moreInfoContent.use_case }}</p>
+			</div>
 			<div class="componentinfoview-content-control">
 				<button
 					v-if="authStore.token"
@@ -107,31 +114,32 @@ const authStore = useAuthStore();
 		</div>
 		<!-- 1-4. View the component's source links and contributors -->
 		<div
-			class="componentinfoview-source"
-			:style="{
-				gridArea: dialogStore.moreInfoContent.history_data
-					? 'source'
-					: 'history',
+			:class="{
+				'componentinfoview-source': true,
+				'no-links': !dialogStore.moreInfoContent.links[0],
 			}"
 		>
-			<div v-if="dialogStore.moreInfoContent.links[0]">
+			<div
+				class="componentinfoview-source-links"
+				v-if="dialogStore.moreInfoContent.links[0]"
+			>
 				<h3>相關資料</h3>
-				<div class="componentinfoview-source-links">
-					<a
-						v-for="(link, index) in dialogStore.moreInfoContent
-							.links"
-						:href="link"
-						:key="link"
-						target="_blank"
-						rel="noreferrer"
-						><div>{{ index + 1 }}</div>
-						<p>{{ link }}</p></a
-					>
-				</div>
+				<a
+					v-for="(link, index) in dialogStore.moreInfoContent.links"
+					:href="link"
+					:key="link"
+					target="_blank"
+					rel="noreferrer"
+					><div>{{ index + 1 }}</div>
+					<p>{{ link }}</p></a
+				>
 			</div>
-			<div v-if="dialogStore.moreInfoContent.contributors">
+			<div
+				class="componentinfoview-source-contributors"
+				v-if="dialogStore.moreInfoContent.contributors"
+			>
 				<h3>協作者</h3>
-				<div class="componentinfoview-source-contributors">
+				<div>
 					<div
 						v-for="contributor in dialogStore.moreInfoContent
 							.contributors"
@@ -142,7 +150,7 @@ const authStore = useAuthStore();
 							target="_blank"
 							rel="noreferrer"
 							><img
-								:src="`${BASE_URL}/images/contributors/${
+								:src="`/images/contributors/${
 									contentStore.contributors[contributor].image
 										? contentStore.contributors[
 												contributor
@@ -190,12 +198,11 @@ const authStore = useAuthStore();
 	height: calc(100vh - 60px);
 	height: calc(var(--vh) * 100 - 60px);
 	display: grid;
-	grid-template-columns: 400px 1fr;
+	grid-template-columns: 400px 400px 400px;
 	grid-template-rows: 386px max-content max-content;
 	grid-template-areas:
-		"info content"
-		"history history"
-		"source source";
+		"info content source"
+		"history history history";
 	column-gap: var(--font-s);
 	row-gap: var(--font-s);
 	margin-top: var(--font-ms);
@@ -223,12 +230,24 @@ const authStore = useAuthStore();
 		background-color: rgba(136, 135, 135, 1);
 	}
 
+	@media (max-width: 1550px) {
+		grid-template-columns: 1fr 1fr 1fr;
+	}
+
+	@media (max-width: 1300px) {
+		grid-template-columns: 1fr 1fr;
+		grid-template-areas:
+			"info content"
+			"history history"
+			"source source";
+	}
+
 	@media (max-width: 1000px) {
 		width: calc(100% - 20px);
 		padding-right: 10px;
 	}
 
-	@media (max-width: 750px) {
+	@media (max-width: 600px) {
 		grid-template-columns: 1fr;
 		grid-template-rows: 386px max-content max-content max-content;
 		grid-template-areas:
@@ -274,15 +293,21 @@ const authStore = useAuthStore();
 
 	&-content {
 		grid-area: content;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
 		padding: var(--font-m);
 		border-radius: 5px;
 		background-color: var(--color-component-background);
 		overflow-y: scroll;
 
 		&-control {
+			align-self: flex-end;
+			max-height: 26px;
+			min-height: 26px;
 			display: flex;
 			flex: 1;
-			margin-top: var(--font-ms);
+			margin-top: var(--font-s);
 
 			span {
 				margin-right: 4px;
@@ -317,19 +342,40 @@ const authStore = useAuthStore();
 	}
 
 	&-source {
+		grid-area: source;
 		display: grid;
-		grid-template-columns: 1fr 1fr;
-		column-gap: var(--font-ms);
-		padding: var(--font-m);
+		grid-template-rows: 1fr 1fr;
+		grid-template-areas:
+			"links"
+			"contributors";
+		row-gap: var(--font-s);
+		column-gap: var(--font-s);
 		border-radius: 5px;
-		background-color: var(--color-component-background);
 
-		@media (max-width: 750px) {
+		@media (max-width: 1300px) {
+			grid-template-rows: 200px;
+			grid-template-columns: 1fr 1fr;
+			grid-template-areas: "links contributors";
+		}
+
+		@media (max-width: 600px) {
 			grid-template-columns: 1fr;
-			row-gap: var(--font-ms);
+			grid-template-rows: 1fr 1fr;
+			grid-template-areas:
+				"links"
+				"contributors";
 		}
 
 		&-links {
+			height: calc(100% - 36px);
+			grid-area: links;
+			display: flex;
+			flex-direction: column;
+			padding: var(--font-m);
+			border-radius: 5px;
+			background-color: var(--color-component-background);
+			overflow-y: scroll;
+
 			a {
 				display: flex;
 				column-gap: 4px;
@@ -356,11 +402,22 @@ const authStore = useAuthStore();
 		}
 
 		&-contributors {
+			height: calc(100% - 36px);
+			grid-area: contributors;
 			display: flex;
-			column-gap: 8px;
-			row-gap: 4px;
-			flex-wrap: wrap;
-			margin: 8px 0 0;
+			flex-direction: column;
+			padding: var(--font-m);
+			border-radius: 5px;
+			background-color: var(--color-component-background);
+
+			& > div {
+				overflow-y: scroll;
+				display: flex;
+				column-gap: 8px;
+				row-gap: 4px;
+				flex-wrap: wrap;
+				margin: 8px 0 0;
+			}
 
 			a {
 				min-width: 100px;
@@ -417,6 +474,38 @@ const authStore = useAuthStore();
 				color: var(--color-complement-text);
 			}
 		}
+	}
+}
+
+.no-history {
+	grid-template-areas: "info content source";
+
+	@media (max-width: 1300px) {
+		grid-template-columns: 1fr 1fr;
+		grid-template-areas:
+			"info content"
+			"source source";
+	}
+
+	@media (max-width: 600px) {
+		grid-template-columns: 1fr;
+		grid-template-areas:
+			"info"
+			"content"
+			"source";
+	}
+}
+
+.no-links {
+	grid-template-areas:
+		"contributors"
+		"contributors";
+
+	@media (max-width: 1300px) {
+		grid-template-areas: "contributors contributors";
+	}
+	@media (max-width: 600px) {
+		grid-template-areas: "contributors";
 	}
 }
 </style>

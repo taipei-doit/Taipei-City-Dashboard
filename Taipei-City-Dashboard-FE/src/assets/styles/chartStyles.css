@@ -9,6 +9,7 @@
 	border: solid 1px var(--color-border) !important;
 	border-radius: 5px !important;
 	background: var(--color-component-background) !important;
+	box-shadow: 0px 0px 5px black !important;
 }
 .apexcharts-tooltip {
 	border: solid 1px var(--color-border) !important;

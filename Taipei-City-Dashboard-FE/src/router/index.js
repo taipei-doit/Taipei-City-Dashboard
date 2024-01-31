@@ -134,7 +134,7 @@ router.beforeEach((to) => {
 	) {
 		contentStore.clearEditDashboard();
 		contentStore.setRouteParams(to.path, to.query.index);
-	} else if (to.path.toLowerCase() === "/component") {
+	} else if (to.path.toLowerCase() === "/component" || to.name === "component-info") {
 		contentStore.setDashboards(true);
 	} else {
 		contentStore.clearCurrentDashboard();

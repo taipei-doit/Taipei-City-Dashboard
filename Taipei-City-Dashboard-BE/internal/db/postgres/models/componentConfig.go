@@ -80,11 +80,10 @@ type UpdateMapConfig struct {
 
 // ComponentChart is the model for the component_charts table.
 type ComponentChart struct {
-	Index      string         `json:"index"      gorm:"column:index;type:varchar;primaryKey"     `
-	Color      pq.StringArray `json:"color" gorm:"column:color;type:varchar[]"`
-	Types      pq.StringArray `json:"types" gorm:"column:types;type:varchar[]"`
-	Categories pq.StringArray `json:"categories" gorm:"column:categories;type:varchar[]"`
-	Unit       string         `json:"unit" gorm:"column:unit;type:varchar"`
+	Index string         `json:"index"      gorm:"column:index;type:varchar;primaryKey"     `
+	Color pq.StringArray `json:"color" gorm:"column:color;type:varchar[]"`
+	Types pq.StringArray `json:"types" gorm:"column:types;type:varchar[]"`
+	Unit  string         `json:"unit" gorm:"column:unit;type:varchar"`
 }
 
 // UpdateChartConfig is the model for the component_charts table.

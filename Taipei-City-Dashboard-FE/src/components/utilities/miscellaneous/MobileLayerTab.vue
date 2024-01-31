@@ -5,8 +5,6 @@
 import { ref } from "vue";
 import { useMapStore } from "../../../store/mapStore";
 
-const { BASE_URL } = import.meta.env;
-
 const mapStore = useMapStore();
 
 const props = defineProps(["content"]);
@@ -36,7 +34,7 @@ function handleToggle() {
 		/>
 		<label :for="content.index" :class="{ checked: checked }">
 			<img
-				:src="`${BASE_URL}/images/thumbnails/${content.chart_config.types[0]}.svg`"
+				:src="`/images/thumbnails/${content.chart_config.types[0]}.svg`"
 			/>
 		</label>
 		<p>
