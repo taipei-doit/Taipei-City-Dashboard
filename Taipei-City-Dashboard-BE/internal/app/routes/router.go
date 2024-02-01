@@ -20,7 +20,7 @@ var (
 // ConfigureRoutes configures all routes for the API and sets version router groups.
 func ConfigureRoutes() {
 	// taipeipass login callback
-	Router.GET("/callback", auth.ExecIssoAuth) // will move to configureAuthRoutes function
+	// Router.GET("/callback", auth.ExecIssoAuth) // will move to configureAuthRoutes function
 
 	Router.Use(auth.ValidateJWT)
 	// API routers
@@ -38,7 +38,7 @@ func configureAuthRoutes() {
 	authRoutes.Use(middleware.LimitTotalRequests(global.AuthLimitTotalRequestsTimes, global.TokenExpirationDuration))
 	authRoutes.POST("/login", auth.Login)
 	// // taipeipass login callback
-	// authRoutes.GET("/callback", auth.ExecIssoAuth)
+	authRoutes.GET("/callback", auth.ExecIssoAuth)
 }
 
 // configureComponentRoutes configures all component routes.

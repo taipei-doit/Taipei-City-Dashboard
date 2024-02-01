@@ -5,8 +5,6 @@ import { ref } from "vue";
 import { useMapStore } from "../../store/mapStore";
 import { useContentStore } from "../../store/contentStore";
 
-const { BASE_URL } = import.meta.env;
-
 const props = defineProps([
 	"chart_config",
 	"series",
@@ -73,7 +71,7 @@ function handleDataSelection(index) {
 						borderRadius: item.type === 'circle' ? '50%' : '2px',
 					}"
 				></div>
-				<img v-else :src="`${BASE_URL}/images/map/${item.icon}.png`" />
+				<img v-else :src="`/images/map/${item.icon}.png`" />
 				<!-- If there is a value attached, show the value -->
 				<div v-if="item.value">
 					<h5>{{ item.name }}</h5>

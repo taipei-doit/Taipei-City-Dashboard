@@ -121,6 +121,10 @@ export const useAdminStore = defineStore("admin", {
 				}
 			);
 			this.currentComponent.chart_data = response.data.data;
+			if (response.data.categories) {
+				this.currentComponent.chart_config.categories =
+					response.data.categories;
+			}
 
 			// 2.2 Get component history data if applicable
 			if (component.history_config && component.history_config.range) {

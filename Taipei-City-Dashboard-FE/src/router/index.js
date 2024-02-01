@@ -99,7 +99,11 @@ router.beforeEach((to) => {
 router.beforeEach((to) => {
 	const authStore = useAuthStore();
 	if (authStore.isMobileDevice && authStore.isNarrowDevice) {
-		if (!["dashboard", "component-info"].includes(to.name)) {
+		if (!["dashboard", "component-info", "callback"].includes(to.name)) {
+			router.push("/dashboard");
+		}
+	} else if (authStore.token) {
+		if (to.name === "callback") {
 			router.push("/dashboard");
 		}
 	}
@@ -134,7 +138,10 @@ router.beforeEach((to) => {
 	) {
 		contentStore.clearEditDashboard();
 		contentStore.setRouteParams(to.path, to.query.index);
-	} else if (to.path.toLowerCase() === "/component") {
+	} else if (
+		to.path.toLowerCase() === "/component" ||
+		to.name === "component-info"
+	) {
 		contentStore.setDashboards(true);
 	} else {
 		contentStore.clearCurrentDashboard();

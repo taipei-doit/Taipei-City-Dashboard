@@ -10,8 +10,6 @@ import ComponentContainer from "../components/ComponentContainer.vue";
 import HistoryChart from "../charts/HistoryChart.vue";
 import DownloadData from "./DownloadData.vue";
 
-const { BASE_URL } = import.meta.env;
-
 const dialogStore = useDialogStore();
 const contentStore = useContentStore();
 const authStore = useAuthStore();
@@ -93,7 +91,7 @@ function getLinkTag(link, index) {
 									target="_blank"
 									rel="noreferrer"
 									><img
-										:src="`${BASE_URL}/images/contributors/${
+										:src="`/images/contributors/${
 											contentStore.contributors[
 												contributor
 											].image

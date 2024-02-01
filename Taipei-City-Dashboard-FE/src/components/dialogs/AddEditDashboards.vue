@@ -61,7 +61,7 @@ function handleClose() {
 	deleteConfirm.value = false;
 	contentStore.editDashboard = {
 		index: "",
-		name: "",
+		name: "我的新儀表板",
 		icon: "star",
 		components: [],
 	};

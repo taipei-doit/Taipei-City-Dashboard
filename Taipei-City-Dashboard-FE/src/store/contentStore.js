@@ -14,7 +14,6 @@ import router from "../router/index";
 import { useDialogStore } from "./dialogStore";
 import { useAuthStore } from "./authStore";
 import { getComponentDataTimeframe } from "../assets/utilityFunctions/dataTimeframe";
-const { BASE_URL } = import.meta.env;
 
 export const useContentStore = defineStore("content", {
 	state: () => ({
@@ -39,7 +38,7 @@ export const useContentStore = defineStore("content", {
 		// Stores information of a new dashboard or editing dashboard (/component)
 		editDashboard: {
 			index: "",
-			name: "",
+			name: "我的新儀表板",
 			icon: "star",
 			components: [],
 		},
@@ -173,6 +172,12 @@ export const useContentStore = defineStore("content", {
 				this.currentDashboard.components[index].chart_data =
 					response.data.data;
 
+				if (response.data.categories) {
+					this.currentDashboard.components[
+						index
+					].chart_config.categories = response.data.categories;
+				}
+
 				// 4-3. Get history data if applicable
 				if (
 					component.history_config &&
@@ -214,7 +219,7 @@ export const useContentStore = defineStore("content", {
 		// 5. Call an API to get contributor data (result consists of id, name, link)
 		setContributors() {
 			axios
-				.get(`${BASE_URL}/dashboards/all_contributors.json`)
+				.get(`/dashboards/all_contributors.json`)
 				.then((rs) => {
 					this.contributors = rs.data.data;
 				})
@@ -335,7 +340,7 @@ export const useContentStore = defineStore("content", {
 		clearEditDashboard() {
 			this.editDashboard = {
 				index: "",
-				name: "",
+				name: "我的新儀表板",
 				icon: "star",
 				components: [],
 			};

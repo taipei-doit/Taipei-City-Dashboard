@@ -51,9 +51,6 @@ export const useAuthStore = defineStore("auth", {
 		},
 		// Email Login
 		async loginByEmail(email, password) {
-			const dialogStore = useDialogStore();
-			const contentStore = useContentStore();
-
 			const response = await http.post(
 				"/auth/login",
 				{},
@@ -64,6 +61,25 @@ export const useAuthStore = defineStore("auth", {
 					},
 				}
 			);
+			this.handleSuccessfullLogin(response);
+		},
+		async loginByTaipeiPass(code) {
+			try {
+				const response = await http.get("/auth/callback", {
+					params: {
+						code: code,
+					},
+				});
+				router.replace("/dashboard");
+				this.handleSuccessfullLogin(response);
+			} catch {
+				router.replace("/dashboard");
+			}
+		},
+		handleSuccessfullLogin(response) {
+			const dialogStore = useDialogStore();
+			const contentStore = useContentStore();
+
 			this.token = response.data.token;
 			localStorage.setItem("token", this.token);
 			this.user = {
@@ -84,8 +100,6 @@ export const useAuthStore = defineStore("auth", {
 			contentStore.publicDashboards = [];
 			router.go();
 			dialogStore.showNotification("success", "登入成功");
-
-			return true;
 		},
 
 		// Logout

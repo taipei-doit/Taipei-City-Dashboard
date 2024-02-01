@@ -37,8 +37,6 @@ import { voronoi } from "../assets/utilityFunctions/voronoi.js";
 import { interpolation } from "../assets/utilityFunctions/interpolation.js";
 import { marchingSquare } from "../assets/utilityFunctions/marchingSquare.js";
 
-const { BASE_URL } = import.meta.env;
-
 export const useMapStore = defineStore("map", {
 	state: () => ({
 		// Array of layer IDs that are in the map
@@ -91,7 +89,7 @@ export const useMapStore = defineStore("map", {
 		initializeBasicLayers() {
 			const authStore = useAuthStore();
 			if (!this.map) return;
-			fetch(`${BASE_URL}/mapData/taipei_town.geojson`)
+			fetch(`/mapData/taipei_town.geojson`)
 				.then((response) => response.json())
 				.then((data) => {
 					this.map
@@ -101,7 +99,7 @@ export const useMapStore = defineStore("map", {
 						})
 						.addLayer(TaipeiTown);
 				});
-			fetch(`${BASE_URL}/mapData/taipei_village.geojson`)
+			fetch(`/mapData/taipei_village.geojson`)
 				.then((response) => response.json())
 				.then((data) => {
 					this.map
@@ -134,7 +132,7 @@ export const useMapStore = defineStore("map", {
 			];
 			images.forEach((element) => {
 				this.map.loadImage(
-					`${BASE_URL}/images/map/${element}.png`,
+					`/images/map/${element}.png`,
 					(error, image) => {
 						if (error) throw error;
 						this.map.addImage(element, image);
@@ -177,7 +175,7 @@ export const useMapStore = defineStore("map", {
 		// 2. Call an API to get the layer data
 		fetchLocalGeoJson(map_config) {
 			axios
-				.get(`${BASE_URL}/mapData/${map_config.index}.geojson`)
+				.get(`/mapData/${map_config.index}.geojson`)
 				.then((rs) => {
 					this.addGeojsonSource(map_config, rs.data);
 				})
