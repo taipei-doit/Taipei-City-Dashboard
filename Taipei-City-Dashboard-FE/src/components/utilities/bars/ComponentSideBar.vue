@@ -37,7 +37,7 @@ const availableIcons = computed(() => {
 function switchDashboard() {
 	if (selectedDashboard.value === "new") {
 		editDashboard.value = {
-			name: "",
+			name: "我的新儀表板",
 			icon: "dashboard",
 			components: [],
 		};

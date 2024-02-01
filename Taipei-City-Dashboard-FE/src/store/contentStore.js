@@ -38,7 +38,7 @@ export const useContentStore = defineStore("content", {
 		// Stores information of a new dashboard or editing dashboard (/component)
 		editDashboard: {
 			index: "",
-			name: "",
+			name: "我的新儀表板",
 			icon: "star",
 			components: [],
 		},
@@ -340,7 +340,7 @@ export const useContentStore = defineStore("content", {
 		clearEditDashboard() {
 			this.editDashboard = {
 				index: "",
-				name: "",
+				name: "我的新儀表板",
 				icon: "star",
 				components: [],
 			};
