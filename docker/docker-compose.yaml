@@ -4,7 +4,7 @@ services:
   nginx:
     restart: always
     container_name: nginx
-    image: nginx:${NGINX_IMAGE_tag:-latest}
+    image: nginx:${NGINX_IMAGE_TAG:-latest}
     volumes:
       - ./nginx/conf.d:/etc/nginx/conf.d
       - ./nginx/ssl:/etc/nginx/ssl
@@ -13,7 +13,7 @@ services:
       - 443:443
 
   dashboard-fe:
-    image: node:${NODE_IMAGE_tag:-latest}
+    image: node:${NODE_IMAGE_TAG:-latest}
     container_name: dashboard-fe
     restart: always
     volumes:
