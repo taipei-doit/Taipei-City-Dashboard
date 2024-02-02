@@ -29,7 +29,11 @@ Please refer to the docs for the [Chinese Version](https://tuic.gov.taipei/docum
 1. Install [Docker](https://www.docker.com/products/docker-desktop/) on your computer and start running it.
 2. Install [Docker-compose](https://docs.docker.com/compose/install/).
 3. Fork this repository then clone the project to your computer. Execute `cd docker` in the repository terminal to change to the docker folder.
-4. Execute the following command in the system terminal to start and check 1 Redis and 2 PostgreSQL database servers.
+4. Execute the following command to create a Docker network..
+```bash
+docker network create --driver=bridge --subnet=192.168.128.0/24 --gateway=192.168.128.1  br_dashboard
+```
+5. Execute the following command in the system terminal to start and check 1 Redis and 2 PostgreSQL database servers.
 ```bash
 docker-compose -f docker-compose-db.yaml up -d
 ```
@@ -37,17 +41,17 @@ docker-compose -f docker-compose-db.yaml up -d
 
 >**i02** Use `docker logs -f [container id or name]` to check container status
 
-5. Execute the following command to initialize the dashboard frontend and backend.
+6. Execute the following command to initialize the dashboard frontend and backend.
 ```bash
 docker-compose -f docker-compose-init.yaml up -d
 ```
 
-6. Execute the following commands to start Nginx, the dashboard frontend, and backend.
+7. Execute the following commands to start Nginx, the dashboard frontend, and backend.
 ```bash
 docker-compose up -d
 ```
 
-7. Refer to the [Docs](https://tuic.gov.taipei/documentation/back-end/project-setup) to complete further configurations.
+8. Refer to the [Docs](https://tuic.gov.taipei/documentation/back-end/project-setup) to complete further configurations.
 
 ## Documentation
 
