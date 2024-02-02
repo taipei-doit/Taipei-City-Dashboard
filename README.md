@@ -24,7 +24,30 @@ Please refer to the docs for the [Chinese Version](https://tuic.gov.taipei/docum
 
 ## Quick Start
 
-Updated version for the full-stack application coming soon.
+### Docker-compose
+
+1. Install [Docker](https://www.docker.com/products/docker-desktop/) on your computer and start running it.
+2. Install [Docker-compose](https://docs.docker.com/compose/install/).
+3. Fork this repository then clone the project to your computer. Execute `cd docker` in the repository terminal to change to the docker folder.
+4. Execute the following command in the system terminal to start and check 1 Redis and 2 PostgreSQL database servers.
+```bash
+docker-compose -f docker-compose-db.yaml up -d
+```
+>**i01** Use `docker-compose -f [yaml_file] ps` to check the container status specified in the YAML file.
+
+>**i02** Use `docker logs -f [container id or name]` to check container status
+
+5. Execute the following command to initialize the dashboard frontend and backend.
+```bash
+docker-compose -f docker-compose-init.yaml up -d
+```
+
+6. Execute the following commands to start Nginx, the dashboard frontend, and backend.
+```bash
+docker-compose up -d
+```
+
+7. Refer to the [Docs](https://tuic.gov.taipei/documentation/back-end/project-setup) to complete further configurations.
 
 ## Documentation
 
