@@ -1,0 +1,50 @@
+version: "3.7"
+services:
+  redis:
+    restart: always
+    container_name: redis
+    image: redis:7.2.3-alpine
+    volumes:
+      - ./db-data/redis-data:/data
+      
+  postgres-data:
+    image: postgis/postgis:16-3.4
+    container_name: postgres-data
+    restart: always
+    environment:
+      POSTGRES_DB: ${DB_DASHBOARD_DBNAME}
+      POSTGRES_USER: ${DB_DASHBOARD_USER}
+      POSTGRES_PASSWORD: ${DB_DASHBOARD_PASSWORD}
+    volumes:
+      - ./db-data/postgres-data:/var/lib/postgresql/data
+
+  postgres-manager:
+    image: postgis/postgis:16-3.4
+    container_name: postgres-manager
+    restart: always
+    environment:
+      POSTGRES_DB: ${DB_MANAGER_DBNAME}
+      POSTGRES_USER: ${DB_MANAGER_USER}
+      POSTGRES_PASSWORD: ${DB_MANAGER_PASSWORD}
+    volumes:
+      - ./db-data/postgres-manager-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+      PGADMIN_LISTEN_PORT: ${PGADMIN_LISTEN_PORT}
+    ports:
+      - "8889:80"
+    volumes:
+      - ./db-data/pgadmin-data:/var/lib/pgadmin
+
+networks:
+  default:
+    name: br_dashboard
+    external: true
