@@ -2,11 +2,6 @@
 /node_modules
 Taipei-City-Dashboard-FE/dist
 
-# local env files
-.env.production
-.env.local
-.env
-
 # Log files
 npm-debug.log*
 yarn-debug.log*
@@ -52,10 +47,7 @@ dist.tar.gz
 go.work
 
 # .env files except for template
-.env
-.env.development
-.env.production
-docker/.env*
+docker/.env
 
 # docker-compose
 # db data

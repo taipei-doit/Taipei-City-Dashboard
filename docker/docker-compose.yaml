@@ -16,6 +16,15 @@ services:
     image: node:${NODE_IMAGE_TAG:-latest}
     container_name: dashboard-fe
     restart: always
+    environment:
+      NODE_ENV: ${NODE_ENV}
+      VITE_APP_TITLE: ${VITE_APP_TITLE}
+      VITE_APP_VERSION: ${VITE_APP_VERSION}
+      VITE_MAPBOXTOKEN: ${VITE_MAPBOXTOKEN}
+      VITE_MAPBOXTILE: ${VITE_MAPBOXTILE}
+      VITE_TAIPEIPASS_URL: ${VITE_TAIPEIPASS_URL}
+      VITE_TAIPEIPASS_CLIENT_ID: ${ISS_OCLIENT_ID}
+      VITE_TAIPEIPASS_SCOPE: ${VITE_TAIPEIPASS_SCOPE}
     volumes:
       - ../Taipei-City-Dashboard-FE:/opt/Taipei-City-Dashboard-FE
     ports:
