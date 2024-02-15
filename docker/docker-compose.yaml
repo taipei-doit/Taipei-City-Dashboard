@@ -1,5 +1,5 @@
 version: "3.7"
-    
+
 services:
   nginx:
     restart: always
@@ -42,7 +42,11 @@ services:
       DOMAIN: ${DOMAIN}
       PORT: ${PORT:-8888}
       JWT_SECRET: ${JWT_SECRET}
+<<<<<<< Updated upstream
       ISSO_CLIENT_ID: ${ISSO_CLIENT_ID}
+=======
+      ISS_OCLIENT_ID: ${ISSO_CLIENT_ID}
+>>>>>>> Stashed changes
       ISSO_CLIENT_SECRET: ${ISSO_CLIENT_SECRET}
       DASHBOARD_DEFAULT_Email: ${DASHBOARD_DEFAULT_Email}
       DASHBOARD_DEFAULT_PASSWORD: ${DASHBOARD_DEFAULT_PASSWORD}
@@ -70,7 +74,6 @@ networks:
   default:
     name: br_dashboard
     external: true
-    
 ###########################################
 ## Create docker network command sample: ##
 ## ------------------------------------- ##################################################################

@@ -39,8 +39,8 @@ var rootCmd = &cobra.Command{
 // checkExpiredCmd represents the command to check and disable expired accounts.
 var migrateDBCmd = &cobra.Command{
 	Use:   "migrateDB",
-	Short: "updateDBSchema",
-	Long:  "Use models paclage to Update manager DB table Schema.",
+	Short: "create or update DB Schema",
+	Long:  "Use models paclage to Create or Update manager DB table Schema.",
 	Run: func(cmd *cobra.Command, args []string) {
 		logs.Info("Start the process of migrate manager database schema.")
 		app.MigrateManagerSchema()

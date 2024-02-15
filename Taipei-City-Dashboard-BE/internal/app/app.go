@@ -4,6 +4,7 @@ package app
 import (
 	"os"
 
+	"TaipeiCityDashboardBE/internal/app/initial"
 	"TaipeiCityDashboardBE/internal/app/middleware"
 	"TaipeiCityDashboardBE/internal/app/routes"
 	"TaipeiCityDashboardBE/internal/db/cache"
@@ -49,11 +50,12 @@ func StartApplication() {
 func MigrateManagerSchema() {
 	postgres.ConnectToDatabases("MANAGER")
 	postgres.MigrateManagerSchema()
-	// create update_time trigger
-	// CREATE TRIGGER before_update_user
-	// BEFORE UPDATE ON users
-	// FOR EACH ROW
-	// SET NEW.update_time = IF(NEW.last_login_time <=> OLD.last_login_time, NOW(), OLD.update_time);
-
+	initial.InitDashboardManager()
 	postgres.CloseConnects("MANAGER")
+}
+
+func InsertDashbaordSampleData() {
+	postgres.ConnectToDatabases("DATA")
+	initial.InitSampleCityData()
+	postgres.CloseConnects("DATA")
 }

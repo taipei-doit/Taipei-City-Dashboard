@@ -2,10 +2,8 @@
 package postgres
 
 import (
-	"crypto/sha256"
 	"fmt"
 	"os"
-	"time"
 
 	"TaipeiCityDashboardBE/internal/db/postgres/models"
 	"TaipeiCityDashboardBE/logs"
@@ -107,71 +105,68 @@ func CloseConnect(dbName string, DB *gorm.DB) {
 func MigrateManagerSchema() {
 	// Retrieve the underlying SQL database connection.
 	if DBManager != nil {
-		DBManager.AutoMigrate(&models.EmailUser{}, &models.IssoUser{}, &models.Role{}, &models.Group{})
-		DBManager.AutoMigrate(&models.EmailUserRole{}, &models.EmailUserGroup{})
-		DBManager.AutoMigrate(&models.IssoUserRole{}, &models.IssoUserGroup{})
+		DBManager.AutoMigrate(&models.AuthUser{}, &models.Role{}, &models.Group{})
+		DBManager.AutoMigrate(&models.AuthUserGroupRole{})
 		DBManager.AutoMigrate(&models.Component{}, &models.ComponentChart{}, &models.ComponentMap{})
 		DBManager.AutoMigrate(&models.Dashboard{}, &models.DashboardGroup{}, &models.Issue{})
 
 		// All users beneath the public group do not need to be added to the public group
-		DBManager.Exec("ALTER TABLE email_user_groups ADD CONSTRAINT check_group_id CHECK (group_id > 1);")
-		DBManager.Exec("ALTER TABLE isso_user_groups ADD CONSTRAINT check_group_id CHECK (group_id > 1);")
-		// create user is temp
-		createUser()
+		// DBManager.Exec("ALTER TABLE auth_user_group_roles ADD CONSTRAINT check_group_id CHECK (group_id > 1);")
+		// DBManager.Exec("ALTER TABLE isso_user_groups ADD CONSTRAINT check_group_id CHECK (group_id > 1);")
 	} else {
 		panic("failed to get Manager database connection")
 	}
 }
 
-func createUser() {
-	h := sha256.New()
-	h.Write([]byte("TUIC"))
-	pass := fmt.Sprintf("%x", h.Sum(nil))
-	userToAdd := models.EmailUser{
-		Email:    "tuic@gov.taipei",
-		Name:     "Taipei",
-		Password: pass,
-		// ... 其他欄位
-		CreatedAt: time.Now(),
-		// LoginAt:   time.Now(),
-	}
-	resultU := DBManager.Create(&userToAdd)
-	if resultU.Error != nil {
-		logs.FError("發生錯誤：%v", resultU.Error)
-	}
+// func createUser() {
+// 	h := sha256.New()
+// 	h.Write([]byte("TUIC"))
+// 	pass := fmt.Sprintf("%x", h.Sum(nil))
+// 	userToAdd := models.EmailUser{
+// 		Email:    "tuic@gov.taipei",
+// 		Name:     "Taipei",
+// 		Password: pass,
+// 		// ... 其他欄位
+// 		CreatedAt: time.Now(),
+// 		// LoginAt:   time.Now(),
+// 	}
+// 	resultU := DBManager.Create(&userToAdd)
+// 	if resultU.Error != nil {
+// 		logs.FError("發生錯誤：%v", resultU.Error)
+// 	}
 
-	rolesToAdd := []models.Role{
-		{Name: "admin"},
-		{Name: "editor"},
-		{Name: "viewer"},
-	}
-	resultR := DBManager.Create(&rolesToAdd)
-	if resultR.Error != nil {
-		logs.FError("發生錯誤：%v", resultR.Error)
-	}
+// 	rolesToAdd := []models.Role{
+// 		{Name: "admin"},
+// 		{Name: "editor"},
+// 		{Name: "viewer"},
+// 	}
+// 	resultR := DBManager.Create(&rolesToAdd)
+// 	if resultR.Error != nil {
+// 		logs.FError("發生錯誤：%v", resultR.Error)
+// 	}
 
-	groupsToAdd := []models.Group{
-		{Name: "public"}, // all user beline public group
-		{Name: "employee"},
-	}
-	resultG := DBManager.Create(&groupsToAdd)
-	if resultG.Error != nil {
-		logs.FError("發生錯誤：%v", resultG.Error)
-	}
-	emailUserRolesToAdd := []models.EmailUserRole{
-		{UserID: 1, RoleID: 1},
-		{UserID: 1, RoleID: 2},
-	}
-	resultER := DBManager.Create(&emailUserRolesToAdd)
-	if resultER.Error != nil {
-		logs.FError("發生錯誤：%v", resultER.Error)
-	}
+// 	groupsToAdd := []models.Group{
+// 		{Name: "public"}, // all user beline public group
+// 		{Name: "employee"},
+// 	}
+// 	resultG := DBManager.Create(&groupsToAdd)
+// 	if resultG.Error != nil {
+// 		logs.FError("發生錯誤：%v", resultG.Error)
+// 	}
+// 	emailUserRolesToAdd := []models.EmailUserRole{
+// 		{UserID: 1, RoleID: 1},
+// 		{UserID: 1, RoleID: 2},
+// 	}
+// 	resultER := DBManager.Create(&emailUserRolesToAdd)
+// 	if resultER.Error != nil {
+// 		logs.FError("發生錯誤：%v", resultER.Error)
+// 	}
 
-	emailUserGroupsToAdd := []models.EmailUserGroup{
-		{UserID: 1, GroupID: 2},
-	}
-	resultEG := DBManager.Create(&emailUserGroupsToAdd)
-	if resultEG.Error != nil {
-		logs.FError("發生錯誤：%v", resultEG.Error)
-	}
-}
+// 	emailUserGroupsToAdd := []models.EmailUserGroup{
+// 		{UserID: 1, GroupID: 2},
+// 	}
+// 	resultEG := DBManager.Create(&emailUserGroupsToAdd)
+// 	if resultEG.Error != nil {
+// 		logs.FError("發生錯誤：%v", resultEG.Error)
+// 	}
+// }

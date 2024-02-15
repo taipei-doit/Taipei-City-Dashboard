@@ -12,11 +12,12 @@ services:
     image: golang:${GOLANG_IMAGE_TAG:-latest}
     container_name: dashboard-be-init
     environment:
+      ENV: ${ENV}
       GIN_MODE: ${GIN_MODE}
       DOMAIN: ${DOMAIN}
       PORT: ${PORT:-8888}
       JWT_SECRET: ${JWT_SECRET}
-      ISS_OCLIENT_ID: ${ISS_OCLIENT_ID}
+      ISS_OCLIENT_ID: ${ISSO_CLIENT_ID}
       ISSO_CLIENT_SECRET: ${ISSO_CLIENT_SECRET}
       DASHBOARD_DEFAULT_Email: ${DASHBOARD_DEFAULT_Email}
       DASHBOARD_DEFAULT_PASSWORD: ${DASHBOARD_DEFAULT_PASSWORD}
@@ -37,7 +38,7 @@ services:
       - ../Taipei-City-Dashboard-BE:/opt
     working_dir: /opt
     command: ["go", "run", "main.go", "migrateDB"]
-    
+
 networks:
   default:
     name: br_dashboard
