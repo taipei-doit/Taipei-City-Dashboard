@@ -142,8 +142,8 @@ func createUser() {
 
 	rolesToAdd := []models.Role{
 		{Name: "admin"},
-		{Name: "user"},
-		{Name: "guest"},
+		{Name: "editor"},
+		{Name: "viewer"},
 	}
 	resultR := DBManager.Create(&rolesToAdd)
 	if resultR.Error != nil {
