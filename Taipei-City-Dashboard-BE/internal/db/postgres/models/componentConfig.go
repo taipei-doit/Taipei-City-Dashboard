@@ -11,8 +11,8 @@ import (
 // Component is the model for the components table.
 type Component struct {
 	ID             int64           `json:"id" gorm:"column:id;autoincrement;primaryKey"`
-	Index          string          `json:"index"      gorm:"column:index;type:varchar;unique;not null"     `
-	Name           string          `json:"name"       gorm:"column:name;type:varchar;not null"`
+	Index          string          `json:"index" gorm:"column:index;type:varchar;unique;not null"     `
+	Name           string          `json:"name" gorm:"column:name;type:varchar;not null"`
 	HistoryConfig  json.RawMessage `json:"history_config" gorm:"column:history_config;type:json"`
 	MapConfigIDs   pq.Int64Array   `json:"-" gorm:"column:map_config_ids;type:integer[]"`
 	MapConfig      json.RawMessage `json:"map_config" gorm:"type:json"`
@@ -49,7 +49,6 @@ type UpdateComponent struct {
 	UseCase        string          `json:"use_case" `
 	Links          pq.StringArray  `json:"links" gorm:"type:text[]"`
 	Contributors   pq.StringArray  `json:"contributors" gorm:"type:text[]"`
-	QueryType      string          `json:"query_type" `
 	UpdatedAt      time.Time       `json:"updated_at" gorm:"autoUpdateTime"`
 }
 

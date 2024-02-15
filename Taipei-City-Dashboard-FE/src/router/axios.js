@@ -8,10 +8,8 @@ import { useAuthStore } from "../store/authStore";
 import { useDialogStore } from "../store/dialogStore";
 import { useContentStore } from "../store/contentStore";
 
-const { VITE_API_URL } = import.meta.env;
-
 const http = axios.create({
-	baseURL: VITE_API_URL,
+	baseURL: import.meta.env.VITE_API_URL,
 	headers: {
 		"Content-Type": "application/json",
 	},

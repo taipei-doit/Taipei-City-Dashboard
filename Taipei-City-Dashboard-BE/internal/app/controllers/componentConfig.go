@@ -173,10 +173,7 @@ func UpdateComponent(c *gin.Context) {
 	component.UpdatedAt = time.Now()
 
 	// 3.1 不能改變 index
-	if (component.Index != componentIndex) && (component.Index != "") {
-		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": "index cannot be altered"})
-		return
-	}
+	component.Index = componentIndex
 
 	// 4. Update the component
 	err = postgres.DBManager.Table("components").Where("id = ?", componentID).Updates(&component).Error
