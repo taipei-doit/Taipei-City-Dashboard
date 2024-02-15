@@ -8,8 +8,8 @@ import (
 
 // utilGetTime is a utility function to get the time from the header and set default values.
 func utilGetTime(c *gin.Context) (string, string) {
-	timeFrom := c.GetHeader("time_from")
-	timeTo := c.GetHeader("time_to")
+	timeFrom := c.GetHeader("Time_from")
+	timeTo := c.GetHeader("Time_to")
 
 	// timeFrom defaults to 1990-01-01 (essentially, all data)
 	if timeFrom == "" {

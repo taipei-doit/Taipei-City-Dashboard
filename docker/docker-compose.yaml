@@ -18,6 +18,7 @@ services:
     restart: always
     environment:
       NODE_ENV: ${NODE_ENV}
+      VITE_API_URL: ${VITE_API_URL}
       VITE_APP_TITLE: ${VITE_APP_TITLE}
       VITE_APP_VERSION: ${VITE_APP_VERSION}
       VITE_MAPBOXTOKEN: ${VITE_MAPBOXTOKEN}
