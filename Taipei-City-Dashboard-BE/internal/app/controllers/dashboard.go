@@ -10,6 +10,7 @@ import (
 	"TaipeiCityDashboardBE/internal/auth"
 	"TaipeiCityDashboardBE/internal/db/postgres"
 	"TaipeiCityDashboardBE/internal/db/postgres/models"
+	"TaipeiCityDashboardBE/logs"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
@@ -29,13 +30,33 @@ func GetAllDashboards(c *gin.Context) {
 	}
 	var dashboards allDashboards
 
-	// 1. Get the user info from the context
+	// Get the user info from the context
 	_, _, _, _, permissions := auth.GetUserInfoFromContext(c)
-
+	logs.FInfo("permissions: %v", permissions)
 	groups := auth.GetPermissionAllGroupIDs(permissions)
-	// 3. Get all the personal dashboards
+
+	// Get all the public group dashboards
 	err := postgres.DBManager.
-		Joins("JOIN dashboard_groups ON dashboards.id = dashboard_groups.dashboard_id AND dashboard_groups.group_id IN (?)", groups).
+		Joins("JOIN dashboard_groups ON dashboards.id = dashboard_groups.dashboard_id AND dashboard_groups.group_id = ?", 1).
+		Order("dashboards.id").
+		Find(&dashboards.Public).
+		Error
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": err.Error()})
+		return
+	}
+
+	// Remove public group(id=1) from groups if exist
+	var groupsWithoutPublic []int
+	for _, groupID := range groups {
+		if groupID != 1 { // Assuming public group id is 1
+			groupsWithoutPublic = append(groupsWithoutPublic, groupID)
+		}
+	}
+
+	// Get all the Personal dashboards
+	err = postgres.DBManager.
+		Joins("JOIN dashboard_groups ON dashboards.id = dashboard_groups.dashboard_id AND dashboard_groups.group_id IN (?)", groupsWithoutPublic).
 		Order("dashboards.id").
 		Find(&dashboards.Personal).
 		Error
@@ -61,7 +82,7 @@ func GetDashboardByIndex(c *gin.Context) {
 	var componentIds componentArray
 	var components []models.Component
 
-	_, _, _, _, permissions := auth.GetUserInfoFromContext(c) // accountType, accountID, isAdmin, expiresAt, permissions
+	_, _, _, _, permissions := auth.GetUserInfoFromContext(c) // loginType, accountID, isAdmin, expiresAt, permissions
 	groups := auth.GetPermissionAllGroupIDs(permissions)
 
 	// 1. Get the dashboard index from the context

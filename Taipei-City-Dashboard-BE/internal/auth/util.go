@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"crypto/sha256"
 	"encoding/base64"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"strings"
@@ -36,20 +35,17 @@ func getAuthFromRequest(c *gin.Context, basicPrefix string) (string, error) {
 }
 
 // GetUserInfoFromContext retrieves the user info from the Gin context.
-func GetUserInfoFromContext(c *gin.Context) (accountType string, accountID int, isAdmin bool, expiresAt time.Time, permissions []Permission) {
+func GetUserInfoFromContext(c *gin.Context) (loginType string, accountID int, isAdmin bool, expiresAt time.Time, permissions []Permission) {
 	// get context keys
-	accountType = c.GetString("accountType")
+	loginType = c.GetString("loginType")
 	accountID = c.GetInt("accountID")
 	isAdmin = c.GetBool("isAdmin")
 	expiresAt = c.GetTime("expiresAt")
-	// Retrieve permissions as a string slice
-	permissionsStringSlice := c.GetStringSlice("permissions")
-
-	// Convert permissions from string slice to Permission struct slice
-	for _, permissionStr := range permissionsStringSlice {
-		var permission Permission
-		if err := json.Unmarshal([]byte(permissionStr), &permission); err == nil {
-			permissions = append(permissions, permission)
+	// Retrieve permissions from the context
+	if perms, exists := c.Get("permissions"); exists {
+		// Check if the value exists
+		if permsList, ok := perms.([]Permission); ok {
+			permissions = permsList
 		}
 	}
 	return

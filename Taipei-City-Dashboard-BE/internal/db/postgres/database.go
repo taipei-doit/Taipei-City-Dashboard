@@ -2,8 +2,11 @@
 package postgres
 
 import (
+	"bufio"
+	"database/sql"
 	"fmt"
 	"os"
+	"strings"
 
 	"TaipeiCityDashboardBE/internal/db/postgres/models"
 	"TaipeiCityDashboardBE/logs"
@@ -118,55 +121,47 @@ func MigrateManagerSchema() {
 	}
 }
 
-// func createUser() {
-// 	h := sha256.New()
-// 	h.Write([]byte("TUIC"))
-// 	pass := fmt.Sprintf("%x", h.Sum(nil))
-// 	userToAdd := models.EmailUser{
-// 		Email:    "tuic@gov.taipei",
-// 		Name:     "Taipei",
-// 		Password: pass,
-// 		// ... 其他欄位
-// 		CreatedAt: time.Now(),
-// 		// LoginAt:   time.Now(),
-// 	}
-// 	resultU := DBManager.Create(&userToAdd)
-// 	if resultU.Error != nil {
-// 		logs.FError("發生錯誤：%v", resultU.Error)
-// 	}
+// ExecuteSQLFromFile executes SQL statements from a given file.
+func ExecuteSQLFile(db *sql.DB, filename string) error {
+	// Open the SQL file
+	file, err := os.Open(filename)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
 
-// 	rolesToAdd := []models.Role{
-// 		{Name: "admin"},
-// 		{Name: "editor"},
-// 		{Name: "viewer"},
-// 	}
-// 	resultR := DBManager.Create(&rolesToAdd)
-// 	if resultR.Error != nil {
-// 		logs.FError("發生錯誤：%v", resultR.Error)
-// 	}
+	// Create a scanner to read the file line by line
+	scanner := bufio.NewScanner(file)
 
-// 	groupsToAdd := []models.Group{
-// 		{Name: "public"}, // all user beline public group
-// 		{Name: "employee"},
-// 	}
-// 	resultG := DBManager.Create(&groupsToAdd)
-// 	if resultG.Error != nil {
-// 		logs.FError("發生錯誤：%v", resultG.Error)
-// 	}
-// 	emailUserRolesToAdd := []models.EmailUserRole{
-// 		{UserID: 1, RoleID: 1},
-// 		{UserID: 1, RoleID: 2},
-// 	}
-// 	resultER := DBManager.Create(&emailUserRolesToAdd)
-// 	if resultER.Error != nil {
-// 		logs.FError("發生錯誤：%v", resultER.Error)
-// 	}
+	// Start a transaction
+	tx, err := db.Begin()
+	if err != nil {
+		return err
+	}
 
-// 	emailUserGroupsToAdd := []models.EmailUserGroup{
-// 		{UserID: 1, GroupID: 2},
-// 	}
-// 	resultEG := DBManager.Create(&emailUserGroupsToAdd)
-// 	if resultEG.Error != nil {
-// 		logs.FError("發生錯誤：%v", resultEG.Error)
-// 	}
-// }
+	// Iterate through the file line by line
+	for scanner.Scan() {
+		// Get the current line
+		line := scanner.Text()
+
+		// Skip comments and empty lines
+		if strings.HasPrefix(line, "--") || line == "" {
+			continue
+		}
+
+		// Execute the SQL statement
+		_, err := tx.Exec(line)
+		if err != nil {
+			// Rollback the transaction if an error occurs
+			tx.Rollback()
+			logs.FError(err.Error())
+		}
+	}
+
+	// Commit the transaction if all statements executed successfully
+	if err := tx.Commit(); err != nil {
+		return err
+	}
+
+	return nil
+}

@@ -8,36 +8,39 @@ services:
     working_dir: /opt/Taipei-City-Dashboard-FE
     command: ["npm", "install"]
 
-  dashboard-be-init:
+  dashboard-be-init-manager:
     image: golang:${GOLANG_IMAGE_TAG:-latest}
-    container_name: dashboard-be-init
+    container_name: dashboard-be-init-manager
     environment:
-      ENV: ${ENV}
-      GIN_MODE: ${GIN_MODE}
-      DOMAIN: ${DOMAIN}
-      PORT: ${PORT:-8888}
-      JWT_SECRET: ${JWT_SECRET}
-      ISS_OCLIENT_ID: ${ISSO_CLIENT_ID}
-      ISSO_CLIENT_SECRET: ${ISSO_CLIENT_SECRET}
-      DASHBOARD_DEFAULT_Email: ${DASHBOARD_DEFAULT_Email}
-      DASHBOARD_DEFAULT_PASSWORD: ${DASHBOARD_DEFAULT_PASSWORD}
-      DB_DASHBOARD_HOST: ${DB_DASHBOARD_HOST:-postgres-data}
-      DB_DASHBOARD_USER: ${DB_DASHBOARD_USER}
-      DB_DASHBOARD_PASSWORD: ${DB_DASHBOARD_PASSWORD}
-      DB_DASHBOARD_DBNAME: ${DB_DASHBOARD_DBNAME}
-      DB_DASHBOARD_PORT: ${DB_DASHBOARD_PORT:-5432}
+      DASHBOARD_DEFAULT_USERNAME: ${DASHBOARD_DEFAULT_USERNAME:-default}
+      DASHBOARD_DEFAULT_Email: ${DASHBOARD_DEFAULT_Email:-default@gov.taipei}
+      DASHBOARD_DEFAULT_PASSWORD: ${DASHBOARD_DEFAULT_PASSWORD:-password}
       DB_MANAGER_HOST: ${DB_MANAGER_HOST:-postgres-manager}
       DB_MANAGER_USER: ${DB_MANAGER_USER}
       DB_MANAGER_PASSWORD: ${DB_MANAGER_PASSWORD}
       DB_MANAGER_DBNAME: ${DB_MANAGER_DBNAME}
       DB_MANAGER_PORT: ${DB_MANAGER_PORT:-5432}
-      REDIS_ADDR: ${REDIS_HOST:-redis}:${REDIS_PORT:-6379}
-      REDIS_PASSWORD: ${REDIS_PASSWORD:-}
-      REDIS_DB: ${REDIS_DB}
     volumes:
-      - ../Taipei-City-Dashboard-BE:/opt
-    working_dir: /opt
+      - ../Taipei-City-Dashboard-BE:/opt/Taipei-City-Dashboard-BE
+      - ../db-sample-data:/opt/db-sample-data
+    working_dir: /opt/Taipei-City-Dashboard-BE
     command: ["go", "run", "main.go", "migrateDB"]
+
+  dashboard-be-init-dashboard:
+    image: golang:${GOLANG_IMAGE_TAG:-latest}
+    container_name: dashboard-be-init-dashboard
+    environment:
+      DB_DASHBOARD_HOST: ${DB_DASHBOARD_HOST:-postgres-data}
+      DB_DASHBOARD_USER: ${DB_DASHBOARD_USER}
+      DB_DASHBOARD_PASSWORD: ${DB_DASHBOARD_PASSWORD}
+      DB_DASHBOARD_DBNAME: ${DB_DASHBOARD_DBNAME}
+      DB_DASHBOARD_PORT: ${DB_DASHBOARD_PORT:-5432}
+    volumes:
+      - ../Taipei-City-Dashboard-BE:/opt/Taipei-City-Dashboard-BE
+      - ../db-sample-data:/opt/db-sample-data
+    working_dir: /opt/Taipei-City-Dashboard-BE
+    command: ["go", "run", "main.go", "initDashboard"]
+    # command: ["sleep","600000"]
 
 networks:
   default:

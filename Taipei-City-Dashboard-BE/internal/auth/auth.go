@@ -112,8 +112,9 @@ func Login(c *gin.Context) {
 
 	// return JWT token
 	c.JSON(http.StatusOK, gin.H{
-		"user":  user,
-		"token": token,
+		"user":       user,
+		"permission": permissions,
+		"token":      token,
 	})
 }
 
@@ -138,16 +139,23 @@ func CreateUser(name string, email, password *string, isAdmin, isActive, isWhite
 		// If an error occurs during creation, return the error and userID as 0.
 		return 0, err
 	}
+	logs.FInfo("create user %d success", user.Id)
 
 	// create personal group
 	groupId, err := CreateGroup("user: "+strconv.Itoa(user.Id)+"'s personal group", true, user.Id)
 	if err != nil {
 		return 0, fmt.Errorf("create user personal group failed %v", err)
 	}
+
+	// set user own group permission
+	if err := CreateUserGroupRole(user.Id, groupId, 1); err != nil {
+		logs.FError("Failed to set admin permission:%s", err)
+	}
+
 	// create favorite dashboard
 	tmpIndex := uuid.New().String()
 	dashboardIndex := strings.Split(tmpIndex, "-")[0] + strings.Split(tmpIndex, "-")[1]
-	dashboardName := "user " + strconv.Itoa(userID) + "'s favorite"
+	dashboardName := "user " + strconv.Itoa(user.Id) + "'s favorite"
 	_, err = CreateDashboard(dashboardIndex, dashboardName, "favorite", groupId)
 	if err != nil {
 		return 0, fmt.Errorf("create user favorite dashboard failed %v", err)
@@ -246,6 +254,20 @@ func CreateGroup(groupName string, isPersonal bool, createBy int) (groupID int, 
 	return group.Id, nil
 }
 
+// GetGroupIDByName queries and returns the group ID based on the group name.
+func GetGroupIDByName(groupName string) (int, error) {
+	var group models.Group
+
+	// Find the group in the database with the given group name.
+	if err := postgres.DBManager.Where("name = ?", groupName).First(&group).Error; err != nil {
+		// Return an error if any error occurs during the lookup.
+		return 0, err
+	}
+
+	// Return the group ID if the group is found.
+	return group.Id, nil
+}
+
 // DeleteGroup deletes a group from the database based on its ID.
 func DeleteGroup(groupID int) error {
 	// Start a transaction to ensure data integrity.
@@ -295,6 +317,20 @@ func CreateRole(roleName string, accessControl, modify, read bool) (roleID int, 
 	}
 
 	// Return the ID of the new role and nil error.
+	return role.Id, nil
+}
+
+// GetRoleIDByName queries and returns the role ID based on the role name.
+func GetRoleIDByName(roleName string) (int, error) {
+	var role models.Role
+
+	// Find the role in the database with the given role name.
+	if err := postgres.DBManager.Where("name = ?", roleName).First(&role).Error; err != nil {
+		// Return an error if any error occurs during the lookup.
+		return 0, err
+	}
+
+	// Return the role ID if the role is found.
 	return role.Id, nil
 }
 

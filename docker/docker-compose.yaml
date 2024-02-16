@@ -42,14 +42,11 @@ services:
       DOMAIN: ${DOMAIN}
       PORT: ${PORT:-8888}
       JWT_SECRET: ${JWT_SECRET}
-<<<<<<< Updated upstream
       ISSO_CLIENT_ID: ${ISSO_CLIENT_ID}
-=======
-      ISS_OCLIENT_ID: ${ISSO_CLIENT_ID}
->>>>>>> Stashed changes
       ISSO_CLIENT_SECRET: ${ISSO_CLIENT_SECRET}
-      DASHBOARD_DEFAULT_Email: ${DASHBOARD_DEFAULT_Email}
-      DASHBOARD_DEFAULT_PASSWORD: ${DASHBOARD_DEFAULT_PASSWORD}
+      DASHBOARD_DEFAULT_USERNAME: ${DASHBOARD_DEFAULT_USERNAME:-default}
+      DASHBOARD_DEFAULT_Email: ${DASHBOARD_DEFAULT_Email:-default@gov.taipei}
+      DASHBOARD_DEFAULT_PASSWORD: ${DASHBOARD_DEFAULT_PASSWORD:-password}
       DB_DASHBOARD_HOST: ${DB_DASHBOARD_HOST:-postgres-data}
       DB_DASHBOARD_USER: ${DB_DASHBOARD_USER}
       DB_DASHBOARD_PASSWORD: ${DB_DASHBOARD_PASSWORD}
@@ -64,8 +61,8 @@ services:
       REDIS_PASSWORD: ${REDIS_PASSWORD:-}
       REDIS_DB: ${REDIS_DB}
     volumes:
-      - ../Taipei-City-Dashboard-BE:/opt
-    working_dir: /opt
+      - ../Taipei-City-Dashboard-BE:/opt/Taipei-City-Dashboard-BE
+    working_dir: /opt/Taipei-City-Dashboard-BE
     ports:
       - "8888:${PORT:-8888}"
     command: ["go", "run", "main.go"]

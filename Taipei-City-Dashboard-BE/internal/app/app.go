@@ -55,7 +55,7 @@ func MigrateManagerSchema() {
 }
 
 func InsertDashbaordSampleData() {
-	postgres.ConnectToDatabases("DATA")
+	postgres.ConnectToDatabases("DASHBOARD")
 	initial.InitSampleCityData()
-	postgres.CloseConnects("DATA")
+	postgres.CloseConnects("DASHBOARD")
 }

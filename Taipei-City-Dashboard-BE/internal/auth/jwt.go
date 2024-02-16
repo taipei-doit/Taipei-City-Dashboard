@@ -27,12 +27,19 @@ var jwtSecret = []byte(global.JwtSecret)
 func ValidateJWT(c *gin.Context) {
 	const authPrefix = "Bearer "
 	token, err := getAuthFromRequest(c, authPrefix)
+	// logs.FError(err.Error())
 	if err != nil {
 		// c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 		// c.Abort()
 		// If there is an error in extracting the token from the request,
-		// set roles to "Guest" and proceed to the next middleware.
-		c.Set("roles", []string{"Guest"})
+		// set group:public role:viewer permission and proceed to the next middleware.
+		c.Set("loginType", "no login")
+		c.Set("accountID", 0)
+		c.Set("isAdmin", false)
+		permissions := []Permission{
+			{GroupID: 1, RoleID: 3},
+		}
+		c.Set("permissions", permissions)
 		c.Next()
 		return
 	}
