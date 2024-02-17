@@ -37,7 +37,7 @@ func configureAuthRoutes() {
 	authRoutes.Use(middleware.LimitAPIRequests(global.AuthLimitAPIRequestsTimes, global.LimitRequestsDuration))
 	authRoutes.Use(middleware.LimitTotalRequests(global.AuthLimitTotalRequestsTimes, global.TokenExpirationDuration))
 	authRoutes.POST("/login", auth.Login)
-	// // taipeipass login callback
+	// taipeipass login callback
 	authRoutes.GET("/callback", auth.ExecIssoAuth)
 }
 
@@ -55,7 +55,7 @@ func configureComponentRoutes() {
 			GET("/:id/chart", controllers.GetComponentChartData)
 		componentRoutes.GET("/:id/history", controllers.GetComponentHistoryData)
 	}
-	componentRoutes.Use(middleware.LimitRequestTo([]int{1}))
+	componentRoutes.Use(middleware.IsSysAdm())
 	{
 		componentRoutes.
 			PATCH("/:id", controllers.UpdateComponent).
@@ -68,7 +68,6 @@ func configureComponentRoutes() {
 
 func configureDashboardRoutes() {
 	dashboardRoutes := RouterGroup.Group("/dashboard")
-	// dashboardRoutes.Use(auth.ValidateJWT)
 	dashboardRoutes.Use(middleware.LimitAPIRequests(global.DashboardLimitAPIRequestsTimes, global.LimitRequestsDuration))
 	dashboardRoutes.Use(middleware.LimitTotalRequests(global.DashboardLimitTotalRequestsTimes, global.LimitRequestsDuration))
 	{
@@ -77,14 +76,14 @@ func configureDashboardRoutes() {
 		dashboardRoutes.
 			GET("/:index", controllers.GetDashboardByIndex)
 	}
-	dashboardRoutes.Use(middleware.LimitRequestTo([]int{1, 2}))
+	// dashboardRoutes.Use(middleware.LimitRequestTo([]int{1, 2}))
 	{
 		dashboardRoutes.POST("/", controllers.CreatePersonalDashboard)
 		dashboardRoutes.
 			PATCH("/:index", controllers.UpdateDashboard).
 			DELETE("/:index", controllers.DeleteDashboard)
 	}
-	dashboardRoutes.Use(middleware.LimitRequestTo([]int{1}))
+	dashboardRoutes.Use(middleware.IsSysAdm())
 	{
 		dashboardRoutes.POST("/public", controllers.CreatePublicDashboard)
 		dashboardRoutes.GET("/check-index/:index", controllers.CheckDashboardIndex)
@@ -93,14 +92,13 @@ func configureDashboardRoutes() {
 
 func configureIssueRoutes() {
 	issueRoutes := RouterGroup.Group("/issue")
-	// issueRoutes.Use(auth.ValidateJWT)
 	issueRoutes.Use(middleware.LimitAPIRequests(global.IssueLimitAPIRequestsTimes, global.LimitRequestsDuration))
 	issueRoutes.Use(middleware.LimitTotalRequests(global.IssueLimitTotalRequestsTimes, global.LimitRequestsDuration))
 	{
 		issueRoutes.
 			POST("/", controllers.CreateIssue)
 	}
-	issueRoutes.Use(middleware.LimitRequestTo([]int{1}))
+	issueRoutes.Use(middleware.IsSysAdm())
 	{
 		issueRoutes.
 			GET("/", controllers.GetAllIssues)

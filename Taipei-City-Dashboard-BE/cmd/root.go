@@ -36,20 +36,32 @@ var rootCmd = &cobra.Command{
 //	}
 //
 
-// checkExpiredCmd represents the command to check and disable expired accounts.
+// migrateDBCmd
 var migrateDBCmd = &cobra.Command{
 	Use:   "migrateDB",
-	Short: "updateDBSchema",
-	Long:  "Use models paclage to Update manager DB table Schema.",
+	Short: "create or update DB Schema",
+	Long:  "Use models paclage to Create or Update manager DB table Schema.",
 	Run: func(cmd *cobra.Command, args []string) {
 		logs.Info("Start the process of migrate manager database schema.")
 		app.MigrateManagerSchema()
 	},
 }
 
+// initDashboardDBCmd
+var initDashboardDBCmd = &cobra.Command{
+	Use:   "initDashboard",
+	Short: "init Dashboatd data",
+	Long:  "init Dashboatd data.",
+	Run: func(cmd *cobra.Command, args []string) {
+		logs.Info("Start the process of insert dashboard database data.")
+		app.InsertDashbaordSampleData()
+	},
+}
+
 // Execute initializes Cobra and adds the checkExpiredCmd to the root command.
 func Execute() {
 	rootCmd.AddCommand(migrateDBCmd)
+	rootCmd.AddCommand(initDashboardDBCmd)
 	// Execute the root command and handle any errors.
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)

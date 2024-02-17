@@ -14,10 +14,10 @@ import (
 
 // custom claims
 type Claims struct {
-	AccountType string `json:"accountType"`
-	AccountID   int    `json:"accountID"`
-	Roles       []int  `json:"roles"`
-	Groups      []int  `json:"groups"`
+	LoginType   string       `json:"login_type"`
+	AccountID   int          `json:"account_id"`
+	IsAdmin     bool         `json:"is_admin"`
+	Permissions []Permission `json:"permissions"`
 	jwt.StandardClaims
 }
 
@@ -27,12 +27,19 @@ var jwtSecret = []byte(global.JwtSecret)
 func ValidateJWT(c *gin.Context) {
 	const authPrefix = "Bearer "
 	token, err := getAuthFromRequest(c, authPrefix)
+	// logs.FError(err.Error())
 	if err != nil {
 		// c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 		// c.Abort()
 		// If there is an error in extracting the token from the request,
-		// set roles to "Guest" and proceed to the next middleware.
-		c.Set("roles", []string{"Guest"})
+		// set group:public role:viewer permission and proceed to the next middleware.
+		c.Set("loginType", "no login")
+		c.Set("accountID", 0)
+		c.Set("isAdmin", false)
+		permissions := []Permission{
+			{GroupID: 1, RoleID: 3},
+		}
+		c.Set("permissions", permissions)
 		c.Next()
 		return
 	}
@@ -75,10 +82,10 @@ func ValidateJWT(c *gin.Context) {
 
 	// If the token is valid, extract claims and set them in the context.
 	if claims, ok := tokenClaims.Claims.(*Claims); ok && tokenClaims.Valid {
-		c.Set("accountType", claims.AccountType)
+		c.Set("loginType", claims.LoginType)
 		c.Set("accountID", claims.AccountID)
-		c.Set("roles", claims.Roles)
-		c.Set("groups", claims.Groups)
+		c.Set("isAdmin", claims.IsAdmin)
+		c.Set("permissions", claims.Permissions)
 		c.Set("expiresAt", claims.ExpiresAt)
 		c.Next()
 	} else {
@@ -91,18 +98,18 @@ func ValidateJWT(c *gin.Context) {
 // GenerateJWT generates a JWT token using the provided information.
 // It includes user type, user ID, role list, group list, and expiration details in the JWT claims.
 // The token is signed using HS256 and returned as a string.
-func GenerateJWT(ExpiresAt time.Time, userType string, userId int, roleList, groupList []int) (string, error) {
+func GenerateJWT(ExpiresAt time.Time, loginType string, userId int, isAdmin bool, permissions []Permission) (string, error) {
 	// Create a unique user ID for JWT
 	now := time.Now()
-	uid := userType + strconv.FormatInt(int64(userId), 10)
+	uid := loginType + strconv.FormatInt(int64(userId), 10)
 	jwtId := uid + strconv.FormatInt(now.Unix(), 10)
 
 	// Set JWT claims and sign
 	claims := Claims{
-		AccountType: userType,
+		LoginType:   loginType,
 		AccountID:   userId,
-		Roles:       roleList,
-		Groups:      groupList,
+		IsAdmin:     isAdmin,
+		Permissions: permissions,
 		StandardClaims: jwt.StandardClaims{
 			Audience:  uid,
 			ExpiresAt: ExpiresAt.Unix(),

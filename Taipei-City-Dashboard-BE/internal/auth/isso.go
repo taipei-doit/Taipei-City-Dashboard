@@ -55,15 +55,12 @@ func ExecIssoAuth(c *gin.Context) {
 	var (
 		accessToken   respAccessTokenWError
 		userInfo      respUserInfo
-		user          models.IssoUser
+		user          models.AuthUser
 		respUserToken []byte
 		respUserInfo  []byte
-		roleList      []int
-		groupList     []int
 	)
 	code := c.Query("code")
-	logs.FInfo("code = %s", code)
-	logs.FInfo("len(code): %d", len(code))
+	logs.FInfo("isso login from %s code = %s", c.ClientIP(), code)
 
 	if len(code) == 0 {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "code not exist"})
@@ -109,7 +106,7 @@ func ExecIssoAuth(c *gin.Context) {
 		// get user info
 		respUserInfo = HTTPClientRequest("GET", urlGetUserInfo, "", headers)
 		json.Unmarshal([]byte(respUserInfo), &userInfo)
-		idNoSHA := hashString(userInfo.Data.IDNo)
+		idNoSHA := HashString(userInfo.Data.IDNo)
 
 		// if isso user not Verifyed
 		if userInfo.Data.VerifyLevel == "0" {
@@ -120,23 +117,31 @@ func ExecIssoAuth(c *gin.Context) {
 		// create user if not exist
 		if err := postgres.DBManager.Where("idno = ?", idNoSHA).First(&user).Error; err != nil {
 			if errors.Is(err, gorm.ErrRecordNotFound) {
-				user = models.IssoUser{
-					Uuid:        userInfo.Data.ID,
-					TpAccount:   userInfo.Data.Account,
-					IdNo:        idNoSHA,
-					VerifyLevel: userInfo.Data.VerifyLevel,
-					LoginAt:     time.Now(),
+
+				user = models.AuthUser{
+					TpUuid:        &userInfo.Data.ID,
+					TpAccount:     &userInfo.Data.Account,
+					IdNo:          &idNoSHA,
+					TpVerifyLevel: &userInfo.Data.VerifyLevel,
+					LoginAt:       time.Now(),
 				}
-				resultAddUser := postgres.DBManager.Create(&user)
-				if resultAddUser.Error != nil {
-					logs.FError("發生錯誤：%v", resultAddUser.Error)
+				// Attempt to create the new user in the database
+				if err := postgres.DBManager.Create(&user).Error; err != nil {
+					logs.FError("Failed to create user: %v", err)
 					c.JSON(http.StatusUnauthorized, gin.H{"error": "unexpected database error"})
 					return
 				}
+				// create user personal group
+				personalGroupID, err := CreateGroup(userInfo.Data.Account+"'s group", true, user.Id)
+				if err != nil {
+					logs.FError("Failed to create user[%s] personal group:%s", userInfo.Data.Account, err)
+				}
+				// set user personal group permission
+				// admin role id=1
+				if err := CreateUserGroupRole(user.Id, personalGroupID, 1); err != nil {
+					logs.FError("Failed to set userp[%s] personal group permission:%s", userInfo.Data.Account, err)
+				}
 				logs.FInfo("create user success %d from IP[%s]", user.Id, c.ClientIP())
-				// if err := postgres.DBManager.Create(&user); err != nil {
-				// 	logs.FError("發生錯誤：%v", resultAddUser.Error)
-				// }
 			} else {
 				logs.FError("Login failed: unexpected database error: %v", err)
 				c.JSON(http.StatusUnauthorized, gin.H{"error": "unexpected database error"})
@@ -146,25 +151,17 @@ func ExecIssoAuth(c *gin.Context) {
 
 		// if user exist
 		// check user is active
-		if !user.IsActive.Bool {
-			logs.FInfo("isso_login_fail IP[%s] Err: User not activated %s", c.ClientIP(), user.TpAccount)
+		if !user.IsActive {
+			logs.FInfo("isso_login_fail IP[%s] Err: User not activated %d", c.ClientIP(), user.Id)
 			c.JSON(http.StatusForbidden, gin.H{"error": "User not activated"})
 			return
 		}
 
-		// combine Roles into an array
-		for _, role := range user.Roles {
-			roleList = append(roleList, role.Id)
-		}
-
-		// combine Groups into an array
-		for _, group := range user.Groups {
-			groupList = append(groupList, group.Id)
-		}
+		permissions, err := GetUserPermission(user.Id)
 
 		// generate JWT token
 		user.LoginAt = time.Now()
-		token, err := GenerateJWT(user.LoginAt, "Isso", user.Id, roleList, groupList)
+		token, err := GenerateJWT(user.LoginAt, "Isso", user.Id, user.IsAdmin, permissions)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{
 				"error": err.Error(),

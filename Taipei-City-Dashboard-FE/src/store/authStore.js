@@ -90,9 +90,7 @@ export const useAuthStore = defineStore("auth", {
 				is_whitelist: response.data.user.is_whitelist.Bool,
 				is_blacked: response.data.user.is_blacked.Bool,
 				login_at: response.data.user.login_at,
-				isAdmin: response.data.user.roles
-					.map((el) => el.role_name)
-					.includes("admin"),
+				isAdmin: response.data.user.is_admin
 			};
 			this.editUser = this.user;
 			localStorage.setItem("user", JSON.stringify(this.user));
