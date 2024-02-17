@@ -75,7 +75,7 @@ const tooltipPosition = computed(() => {
 
 // Open and closes the component as well as communicates to the mapStore to turn on and off map layers
 function handleToggle() {
-	if (!props.content.map_config) {
+	if (!props.content.map_config[0]) {
 		if (checked.value) {
 			dialogStore.showNotification(
 				"info",

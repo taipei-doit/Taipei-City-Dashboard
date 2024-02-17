@@ -36,13 +36,6 @@ onMounted(() => {
 			'adminsidebar-collapse': !isExpanded,
 		}"
 	>
-		<h2>{{ isExpanded ? `系統總覽` : `系統` }}</h2>
-		<SideBarTab
-			icon="person"
-			title="使用者資訊"
-			:expanded="isExpanded"
-			index="overview"
-		/>
 		<button class="adminsidebar-collapse-button" @click="toggleExpand">
 			<span>{{
 				isExpanded
@@ -50,7 +43,7 @@ onMounted(() => {
 					: "keyboard_double_arrow_right"
 			}}</span>
 		</button>
-		<h2>{{ isExpanded ? `用戶設定` : `用戶` }}</h2>
+		<!-- <h2>{{ isExpanded ? `用戶設定` : `用戶` }}</h2> -->
 		<h2>{{ isExpanded ? `儀表板設定` : `表板` }}</h2>
 		<SideBarTab
 			icon="dashboard"
@@ -71,6 +64,13 @@ onMounted(() => {
 			title="待回覆問題"
 			:expanded="isExpanded"
 			index="issue"
+		/>
+		<h2>{{ isExpanded ? `系統總覽` : `系統` }}</h2>
+		<SideBarTab
+			icon="person"
+			title="使用者資訊"
+			:expanded="isExpanded"
+			index="overview"
 		/>
 	</div>
 </template>
