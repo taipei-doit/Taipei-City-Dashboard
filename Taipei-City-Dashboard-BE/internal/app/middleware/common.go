@@ -3,7 +3,6 @@ package middleware
 
 import (
 	"net/http"
-	"slices"
 
 	"TaipeiCityDashboardBE/internal/auth"
 
@@ -25,17 +24,44 @@ func AddCommonHeaders(c *gin.Context) {
 	c.Next()
 }
 
-func LimitRequestTo(approved []int) gin.HandlerFunc {
-	return func(c *gin.Context) {
-		_, _, _, roles, _ := auth.GetUserInfoFromContext(c)
+// 不確定想做什麼
+// func LimitRequestTo(approved []int) gin.HandlerFunc {
+// 	return func(c *gin.Context) {
+// 		_, _, _, permissions := auth.GetUserInfoFromContext(c)
 
-		for _, role := range roles {
-			if slices.Contains(approved, role) {
+// 		for _, permission := range permissions {
+// 			if slices.Contains(approved, role) {
+// 				c.Next()
+// 				return
+// 			}
+// 		}
+
+// 		c.AbortWithStatusJSON(http.StatusForbidden, gin.H{"status": "error", "message": "Unauthorized"})
+// 	}
+// }
+
+// IsAdmin checks if user is system admin.
+func IsSysAdm() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		_, _, isAdmin, _, _ := auth.GetUserInfoFromContext(c)
+		if isAdmin {
+			c.Next()
+			return
+		}
+		c.AbortWithStatusJSON(http.StatusForbidden, gin.H{"status": "error", "message": "Unauthorized"})
+	}
+}
+
+// CheckPermission checks if the permissions contain a specific permission.
+func LimitRequestTo(permission auth.Permission) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		_, _, _, _, permissions := auth.GetUserInfoFromContext(c)
+		for _, perm := range permissions {
+			if perm.GroupID == permission.GroupID && perm.RoleID == permission.RoleID {
 				c.Next()
 				return
 			}
 		}
-
 		c.AbortWithStatusJSON(http.StatusForbidden, gin.H{"status": "error", "message": "Unauthorized"})
 	}
 }

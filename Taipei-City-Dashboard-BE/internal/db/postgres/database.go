@@ -2,10 +2,11 @@
 package postgres
 
 import (
-	"crypto/sha256"
+	"bufio"
+	"database/sql"
 	"fmt"
 	"os"
-	"time"
+	"strings"
 
 	"TaipeiCityDashboardBE/internal/db/postgres/models"
 	"TaipeiCityDashboardBE/logs"
@@ -107,71 +108,60 @@ func CloseConnect(dbName string, DB *gorm.DB) {
 func MigrateManagerSchema() {
 	// Retrieve the underlying SQL database connection.
 	if DBManager != nil {
-		DBManager.AutoMigrate(&models.EmailUser{}, &models.IssoUser{}, &models.Role{}, &models.Group{})
-		DBManager.AutoMigrate(&models.EmailUserRole{}, &models.EmailUserGroup{})
-		DBManager.AutoMigrate(&models.IssoUserRole{}, &models.IssoUserGroup{})
+		DBManager.AutoMigrate(&models.AuthUser{}, &models.Role{}, &models.Group{})
+		DBManager.AutoMigrate(&models.AuthUserGroupRole{})
 		DBManager.AutoMigrate(&models.Component{}, &models.ComponentChart{}, &models.ComponentMap{})
 		DBManager.AutoMigrate(&models.Dashboard{}, &models.DashboardGroup{}, &models.Issue{})
 
 		// All users beneath the public group do not need to be added to the public group
-		DBManager.Exec("ALTER TABLE email_user_groups ADD CONSTRAINT check_group_id CHECK (group_id > 1);")
-		DBManager.Exec("ALTER TABLE isso_user_groups ADD CONSTRAINT check_group_id CHECK (group_id > 1);")
-		// create user is temp
-		createUser()
+		// DBManager.Exec("ALTER TABLE auth_user_group_roles ADD CONSTRAINT check_group_id CHECK (group_id > 1);")
+		// DBManager.Exec("ALTER TABLE isso_user_groups ADD CONSTRAINT check_group_id CHECK (group_id > 1);")
 	} else {
 		panic("failed to get Manager database connection")
 	}
 }
 
-func createUser() {
-	h := sha256.New()
-	h.Write([]byte("TUIC"))
-	pass := fmt.Sprintf("%x", h.Sum(nil))
-	userToAdd := models.EmailUser{
-		Email:    "tuic@gov.taipei",
-		Name:     "Taipei",
-		Password: pass,
-		// ... 其他欄位
-		CreatedAt: time.Now(),
-		// LoginAt:   time.Now(),
+// ExecuteSQLFromFile executes SQL statements from a given file.
+func ExecuteSQLFile(db *sql.DB, filename string) error {
+	// Open the SQL file
+	file, err := os.Open(filename)
+	if err != nil {
+		return err
 	}
-	resultU := DBManager.Create(&userToAdd)
-	if resultU.Error != nil {
-		logs.FError("發生錯誤：%v", resultU.Error)
+	defer file.Close()
+
+	// Create a scanner to read the file line by line
+	scanner := bufio.NewScanner(file)
+
+	// Start a transaction
+	tx, err := db.Begin()
+	if err != nil {
+		return err
 	}
 
-	rolesToAdd := []models.Role{
-		{Name: "admin"},
-		{Name: "user"},
-		{Name: "guest"},
-	}
-	resultR := DBManager.Create(&rolesToAdd)
-	if resultR.Error != nil {
-		logs.FError("發生錯誤：%v", resultR.Error)
+	// Iterate through the file line by line
+	for scanner.Scan() {
+		// Get the current line
+		line := scanner.Text()
+
+		// Skip comments and empty lines
+		if strings.HasPrefix(line, "--") || line == "" {
+			continue
+		}
+
+		// Execute the SQL statement
+		_, err := tx.Exec(line)
+		if err != nil {
+			// Rollback the transaction if an error occurs
+			tx.Rollback()
+			logs.FError(err.Error())
+		}
 	}
 
-	groupsToAdd := []models.Group{
-		{Name: "public"}, // all user beline public group
-		{Name: "employee"},
-	}
-	resultG := DBManager.Create(&groupsToAdd)
-	if resultG.Error != nil {
-		logs.FError("發生錯誤：%v", resultG.Error)
-	}
-	emailUserRolesToAdd := []models.EmailUserRole{
-		{UserID: 1, RoleID: 1},
-		{UserID: 1, RoleID: 2},
-	}
-	resultER := DBManager.Create(&emailUserRolesToAdd)
-	if resultER.Error != nil {
-		logs.FError("發生錯誤：%v", resultER.Error)
+	// Commit the transaction if all statements executed successfully
+	if err := tx.Commit(); err != nil {
+		return err
 	}
 
-	emailUserGroupsToAdd := []models.EmailUserGroup{
-		{UserID: 1, GroupID: 2},
-	}
-	resultEG := DBManager.Create(&emailUserGroupsToAdd)
-	if resultEG.Error != nil {
-		logs.FError("發生錯誤：%v", resultEG.Error)
-	}
+	return nil
 }

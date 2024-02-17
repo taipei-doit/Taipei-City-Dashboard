@@ -9,8 +9,8 @@ const (
 	VERSION = "v1"
 
 	// Request api limit times and duration
-	AuthLimitAPIRequestsTimes        = 60
-	AuthLimitTotalRequestsTimes      = 300
+	AuthLimitAPIRequestsTimes        = 300
+	AuthLimitTotalRequestsTimes      = 600
 	ComponentLimitAPIRequestsTimes   = 200
 	ComponentLimitTotalRequestsTimes = 1000
 	DashboardLimitAPIRequestsTimes   = 80

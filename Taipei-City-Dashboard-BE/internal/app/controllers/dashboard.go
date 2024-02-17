@@ -4,13 +4,13 @@ package controllers
 import (
 	"fmt"
 	"net/http"
-	"slices"
 	"strings"
 	"time"
 
 	"TaipeiCityDashboardBE/internal/auth"
 	"TaipeiCityDashboardBE/internal/db/postgres"
 	"TaipeiCityDashboardBE/internal/db/postgres/models"
+	"TaipeiCityDashboardBE/logs"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
@@ -30,11 +30,12 @@ func GetAllDashboards(c *gin.Context) {
 	}
 	var dashboards allDashboards
 
-	// 1. Get the user info from the context
-	_, _, _, roles, groups := auth.GetUserInfoFromContext(c)
+	// Get the user info from the context
+	_, _, _, _, permissions := auth.GetUserInfoFromContext(c)
+	logs.FInfo("permissions: %v", permissions)
+	groups := auth.GetPermissionAllGroupIDs(permissions)
 
-	// 2. Get all the public dashboards
-
+	// Get all the public group dashboards
 	err := postgres.DBManager.
 		Joins("JOIN dashboard_groups ON dashboards.id = dashboard_groups.dashboard_id AND dashboard_groups.group_id = ?", 1).
 		Order("dashboards.id").
@@ -44,15 +45,18 @@ func GetAllDashboards(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": err.Error()})
 		return
 	}
-	// if roles contains guest (id=3)
-	if slices.Contains(roles, 3) {
-		c.JSON(http.StatusOK, gin.H{"status": "success", "data": dashboards})
-		return
+
+	// Remove public group(id=1) from groups if exist
+	var groupsWithoutPublic []int
+	for _, groupID := range groups {
+		if groupID != 1 { // Assuming public group id is 1
+			groupsWithoutPublic = append(groupsWithoutPublic, groupID)
+		}
 	}
 
-	// 3. Get all the personal dashboards
+	// Get all the Personal dashboards
 	err = postgres.DBManager.
-		Joins("JOIN dashboard_groups ON dashboards.id = dashboard_groups.dashboard_id AND dashboard_groups.group_id IN (?)", groups).
+		Joins("JOIN dashboard_groups ON dashboards.id = dashboard_groups.dashboard_id AND dashboard_groups.group_id IN (?)", groupsWithoutPublic).
 		Order("dashboards.id").
 		Find(&dashboards.Personal).
 		Error
@@ -78,12 +82,8 @@ func GetDashboardByIndex(c *gin.Context) {
 	var componentIds componentArray
 	var components []models.Component
 
-	_, _, _, _, groups := auth.GetUserInfoFromContext(c)
-	if groups != nil {
-		groups = append(groups, 1)
-	} else {
-		groups = []int{1}
-	}
+	_, _, _, _, permissions := auth.GetUserInfoFromContext(c) // loginType, accountID, isAdmin, expiresAt, permissions
+	groups := auth.GetPermissionAllGroupIDs(permissions)
 
 	// 1. Get the dashboard index from the context
 	dashboardIndex := c.Param("index")
@@ -167,6 +167,19 @@ func CheckDashboardIndex(c *gin.Context) {
 	c.JSON(http.StatusAccepted, gin.H{"status": "success", "available": false})
 }
 
+// func IsAdmin(userID int) bool {
+// 	// Here you would typically query the database to check if the user with the given userID is an admin.
+// 	// For instance, you might have a query like this:
+// 	var user models.AuthUser
+// 	if err := postgres.DBManager.Where("id = ? AND is_admin = ?", userID, true).First(&user).Error; err != nil {
+// 		// Handle the error, such as log it or return false if the user is not found or there's an error during the query.
+// 		return false
+// 	}
+
+// 	// If the user is found and is an admin, return true.
+// 	return user.IsAdmin
+// }
+
 /*
 CreatePersonalDashboard creates a new dashboard in the database.
 POST /api/v1/dashboard
@@ -175,61 +188,46 @@ User, Admin: Allowed
 */
 func CreatePersonalDashboard(c *gin.Context) {
 	var dashboard models.Dashboard
-	var dashboardGroup models.DashboardGroup
 
-	accountType, accountID, expiresAt, roles, groups := auth.GetUserInfoFromContext(c)
+	_, accountID, _, _, permissions := auth.GetUserInfoFromContext(c)
 
-	// 1. Bind the JSON body to the dashboard struct
-	err := c.ShouldBindJSON(&dashboard)
+	// Get Group ID
+	// groupId := c.GetInt("group_id")
+	groupId, err := auth.GetUserPersonalGroup(accountID)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": err.Error()})
 		return
 	}
-	dashboard.CreatedAt = time.Now()
-	dashboard.UpdatedAt = time.Now()
 
-	// 2. Check for invalid fields
+	// check has permission, role admin(id=1) editor(id=2)
+	if !auth.HasPermission(permissions, groupId, 1) && !auth.HasPermission(permissions, groupId, 2) {
+		c.JSON(http.StatusUnauthorized, gin.H{"message": "permission denied"})
+		return
+	}
+
+	// Bind the JSON body to the dashboard struct
+	err = c.ShouldBindJSON(&dashboard)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": err.Error()})
+		return
+	}
+
+	// Check for invalid fields
 	if dashboard.Name == "" || dashboard.Icon == "" || dashboard.Components == nil {
 		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": "Missing required fields. Please provide a name, icon, and components array."})
 		return
 	}
 
-	// 3. Create a new auth group for the user and update jwt token
-	newGroupID, newGroup := auth.CreateGroup(c)
-	if newGroupID == 0 || newGroup == "" {
-		c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": "Failed to create new group."})
-		return
-	}
-
-	if groups != nil {
-		groups = append(groups, newGroupID)
-	} else {
-		groups = []int{newGroupID}
-	}
-
-	// 4. Create the dashboard
+	// Create the dashboard
 	index := uuid.New().String()
 	dashboard.Index = strings.Split(index, "-")[0] + strings.Split(index, "-")[1]
-
-	err = postgres.DBManager.Table("dashboards").Create(&dashboard).Error
+	dashboard, err = auth.CreateDashboard(dashboard.Index, dashboard.Name, dashboard.Icon, groupId)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": err.Error()})
 		return
 	}
 
-	// 5. Create a new dashboard group
-	dashboardGroup.DashboardID = dashboard.ID
-	dashboardGroup.GroupID = newGroupID
-	err = postgres.DBManager.Table("dashboard_groups").Create(&dashboardGroup).Error
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": err.Error()})
-		return
-	}
-
-	// Update the jwt token
-	jwt, _ := auth.GenerateJWT(expiresAt, accountType, accountID, roles, groups)
-
-	c.JSON(http.StatusOK, gin.H{"status": "success", "data": dashboard, "token": jwt})
+	c.JSON(http.StatusOK, gin.H{"status": "success", "data": dashboard})
 }
 
 /*
@@ -240,34 +238,33 @@ Admin: Allowed
 */
 func CreatePublicDashboard(c *gin.Context) {
 	var dashboard models.Dashboard
-	var dashboardGroup models.DashboardGroup
 
-	// 1. Bind the JSON body to the dashboard struct
+	_, _, _, _, permissions := auth.GetUserInfoFromContext(c)
+
+	// Get Group public(id=1)
+	groupId := 1
+
+	// check has permission, role admin(id=1) editor(id=2)
+	if !auth.HasPermission(permissions, groupId, 1) && !auth.HasPermission(permissions, groupId, 2) {
+		c.JSON(http.StatusUnauthorized, gin.H{"message": "permission denied"})
+		return
+	}
+
+	// Bind the JSON body to the dashboard struct
 	err := c.ShouldBindJSON(&dashboard)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": err.Error()})
 		return
 	}
-	dashboard.CreatedAt = time.Now()
-	dashboard.UpdatedAt = time.Now()
 
-	// 2. Check for invalid fields
+	// Check for invalid fields
 	if dashboard.Name == "" || dashboard.Icon == "" || dashboard.Index == "" || dashboard.Components == nil {
 		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": "Missing required fields. Please provide an index, name, icon, and components array."})
 		return
 	}
 
-	// 3. Create the dashboard
-	err = postgres.DBManager.Table("dashboards").Create(&dashboard).Error
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": err.Error()})
-		return
-	}
-
-	// 4. Create a new dashboard group
-	dashboardGroup.DashboardID = dashboard.ID
-	dashboardGroup.GroupID = 1
-	err = postgres.DBManager.Table("dashboard_groups").Create(&dashboardGroup).Error
+	// Create the dashboard
+	dashboard, err = auth.CreateDashboard(dashboard.Index, dashboard.Name, dashboard.Icon, groupId)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": err.Error()})
 		return
@@ -286,11 +283,21 @@ Admin: Public and personal dashboards
 func UpdateDashboard(c *gin.Context) {
 	var dashboard models.UpdateDashboard
 
-	_, _, _, roles, groups := auth.GetUserInfoFromContext(c)
-	// if roles contains admin (id=1)
-	if slices.Contains(roles, 1) {
-		groups = append(groups, 1)
-	}
+	_, _, _, _, permissions := auth.GetUserInfoFromContext(c)
+	adminGroups := auth.GetPermissionGroupIDs(permissions, 1)  // role=admin
+	editorGroups := auth.GetPermissionGroupIDs(permissions, 2) // role=editor
+	// Merge and remove duplicates from the two groups
+	groups := auth.MergeAndRemoveDuplicates(adminGroups, editorGroups)
+	// // if roles contains admin (id=1)
+	// if slices.Contains(roles, 1) {
+	// 	groups = append(groups, 1)
+	// }
+
+	// // check has permission, role admin(id=1) editor(id=2)
+	// if !auth.HasPermission(permissions, groupId, 1) && !auth.HasPermission(permissions, groupId, 2) {
+	// 	c.JSON(http.StatusUnauthorized, gin.H{"message": "permission denied"})
+	// 	return
+	// }
 
 	// 1. Get the dashboard index from the context
 	dashboardIndex := c.Param("index")
@@ -344,12 +351,16 @@ func DeleteDashboard(c *gin.Context) {
 	var deletedGroup models.DashboardGroup
 
 	// GetUserInfoFromContext
-	_, _, _, roles, groups := auth.GetUserInfoFromContext(c)
+	_, _, _, _, permissions := auth.GetUserInfoFromContext(c)
+	adminGroups := auth.GetPermissionGroupIDs(permissions, 1)  // role=admin
+	editorGroups := auth.GetPermissionGroupIDs(permissions, 2) // role=editor
+	// Merge and remove duplicates from the two groups
+	groups := auth.MergeAndRemoveDuplicates(adminGroups, editorGroups)
 
-	// if user role contains admin add group public
-	if slices.Contains(roles, 1) {
-		groups = append(groups, 1)
-	}
+	// // if user role contains admin add group public
+	// if slices.Contains(roles, 1) {
+	// 	groups = append(groups, 1)
+	// }
 
 	// 1. Get the dashboard index from the context
 	dashboardIndex := c.Param("index")
@@ -379,8 +390,8 @@ func DeleteDashboard(c *gin.Context) {
 	}
 
 	if deletedGroup.GroupID != 1 {
-		ok := auth.DeleteGroup(c, deletedGroup.GroupID)
-		if !ok {
+		err := auth.DeleteGroup(deletedGroup.GroupID)
+		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": "Dashboard is deleted but Failed to delete auth group."})
 			return
 		}
