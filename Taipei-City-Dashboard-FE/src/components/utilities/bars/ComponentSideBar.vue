@@ -49,7 +49,6 @@ function switchDashboard() {
 				)
 			)
 		);
-		console.log(editDashboard.value);
 		editDashboard.value.components = editDashboard.value.components.map(
 			(component) => {
 				return {

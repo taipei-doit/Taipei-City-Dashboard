@@ -221,7 +221,7 @@ func CreatePersonalDashboard(c *gin.Context) {
 	// Create the dashboard
 	index := uuid.New().String()
 	dashboard.Index = strings.Split(index, "-")[0] + strings.Split(index, "-")[1]
-	dashboard, err = auth.CreateDashboard(dashboard.Index, dashboard.Name, dashboard.Icon, groupId)
+	dashboard, err = auth.CreateDashboard(dashboard.Index, dashboard.Name, dashboard.Icon, dashboard.Components, groupId)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": err.Error()})
 		return
@@ -264,7 +264,7 @@ func CreatePublicDashboard(c *gin.Context) {
 	}
 
 	// Create the dashboard
-	dashboard, err = auth.CreateDashboard(dashboard.Index, dashboard.Name, dashboard.Icon, groupId)
+	dashboard, err = auth.CreateDashboard(dashboard.Index, dashboard.Name, dashboard.Icon, dashboard.Components, groupId)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": err.Error()})
 		return
@@ -329,7 +329,7 @@ func UpdateDashboard(c *gin.Context) {
 	dashboard.Index = dashboardIndex
 
 	// 4. Update the dashboard
-	err = postgres.DBManager.Table("dashboards").Where("index = ?", dashboardIndex).Updates(&dashboard).Error
+	err = auth.UpdateDashboard(dashboard.Index, dashboard.Name, dashboard.Icon, dashboard.Components)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": err.Error()})
 		return
@@ -389,16 +389,8 @@ func DeleteDashboard(c *gin.Context) {
 		return
 	}
 
-	if deletedGroup.GroupID != 1 {
-		err := auth.DeleteGroup(deletedGroup.GroupID)
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": "Dashboard is deleted but Failed to delete auth group."})
-			return
-		}
-	}
-
 	// 4. Delete the dashboard
-	err = postgres.DBManager.Table("dashboards").Where("index = ?", dashboardIndex).Delete(&dashboard).Error
+	err = auth.DeleteDashboard(dashboard.ID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": err.Error()})
 		return
