@@ -188,6 +188,7 @@ export const useAdminStore = defineStore("admin", {
 			// 3.1 Format component config to ensure compatibility with backend
 			delete this.currentComponent.chart_data;
 			delete this.currentComponent.history_data;
+			delete this.currentComponent.chart_config.categories;
 
 			const chart_config = JSON.parse(
 				JSON.stringify(this.currentComponent.chart_config)
