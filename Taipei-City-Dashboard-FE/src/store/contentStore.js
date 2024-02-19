@@ -97,6 +97,9 @@ export const useContentStore = defineStore("content", {
 				this.favorites = this.personalDashboards.find(
 					(el) => el.icon === "favorite"
 				);
+				if (!this.favorites.components) {
+					this.favorites.components = [];
+				}
 			}
 
 			if (onlyDashboard) return;
@@ -307,6 +310,11 @@ export const useContentStore = defineStore("content", {
 			);
 
 			dialogStore.moreInfoContent.chart_data = response_2.data.data;
+
+			if (response_2.data.categories) {
+				dialogStore.moreInfoContent.chart_config.categories =
+					response_2.data.categories;
+			}
 
 			// 2-3. Get the component history data if applicable
 			if (dialogStore.moreInfoContent.history_config) {

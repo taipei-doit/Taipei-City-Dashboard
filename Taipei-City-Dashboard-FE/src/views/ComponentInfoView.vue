@@ -9,6 +9,7 @@ Testing: Jack Huang (Data Scientist), Ian Huang (Data Analysis Intern)
 <!-- Department of Information Technology, Taipei City Government -->
 
 <script setup>
+import { ref, onMounted } from "vue";
 import router from "../router";
 import { useContentStore } from "../store/contentStore";
 import { useDialogStore } from "../store/dialogStore";
@@ -22,6 +23,19 @@ import DownloadData from "../components/dialogs/DownloadData.vue";
 const contentStore = useContentStore();
 const dialogStore = useDialogStore();
 const authStore = useAuthStore();
+
+const searchParams = ref({
+	searchbyindex: "",
+	searchbyname: "",
+	sort: "",
+	order: "",
+	pagesize: 200,
+	pagenum: 1,
+});
+
+onMounted(() => {
+	contentStore.getAllComponents(searchParams.value);
+});
 </script>
 
 <template>

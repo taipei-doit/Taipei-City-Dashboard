@@ -49,7 +49,7 @@ const routes = [
 	},
 	{
 		path: "/admin",
-		redirect: "/admin/overview",
+		redirect: "/admin/dashboard",
 	},
 	{
 		path: "/admin/overview",

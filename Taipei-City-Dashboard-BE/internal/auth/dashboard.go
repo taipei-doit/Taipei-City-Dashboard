@@ -11,12 +11,12 @@ import (
 )
 
 // CreateDashboard creates a new dashboard in the database.
-func CreateDashboard(index, name, icon string, belongGroup int) (dashboard models.Dashboard, err error) {
+func CreateDashboard(index, name, icon string, components pq.Int64Array, belongGroup int) (dashboard models.Dashboard, err error) {
 	dashboard = models.Dashboard{
 		Index: index,
 		Name:  name,
 		Icon:  icon,
-		// Components: components,
+		Components: components,
 		CreatedAt: time.Now(),
 		UpdatedAt: time.Now(),
 	}
@@ -54,6 +54,7 @@ func DeleteDashboard(dashboardID int) error {
 	tx := postgres.DBManager.Begin()
 
 	var dashboard models.Dashboard
+
 	if err := tx.Where("id = ?", dashboardID).First(&dashboard).Error; err != nil {
 		tx.Rollback()
 		return err
@@ -69,11 +70,11 @@ func DeleteDashboard(dashboardID int) error {
 }
 
 // UpdateDashboard updates an existing dashboard in the database.
-func UpdateDashboard(dashboardID int, newName, newIcon string, newComponents pq.Int64Array) error {
+func UpdateDashboard(dashboardIndex string, newName, newIcon string, newComponents pq.Int64Array) error {
 	tx := postgres.DBManager.Begin()
 
 	var dashboard models.Dashboard
-	if err := tx.Where("id = ?", dashboardID).First(&dashboard).Error; err != nil {
+	if err := tx.Where("index = ?", dashboardIndex).First(&dashboard).Error; err != nil {
 		tx.Rollback()
 		return err
 	}

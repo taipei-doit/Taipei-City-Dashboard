@@ -17,6 +17,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	"github.com/lib/pq"
 	"gorm.io/gorm"
 )
 
@@ -155,8 +156,9 @@ func CreateUser(name string, email, password *string, isAdmin, isActive, isWhite
 	// create favorite dashboard
 	tmpIndex := uuid.New().String()
 	dashboardIndex := strings.Split(tmpIndex, "-")[0] + strings.Split(tmpIndex, "-")[1]
-	dashboardName := "user " + strconv.Itoa(user.Id) + "'s favorite"
-	_, err = CreateDashboard(dashboardIndex, dashboardName, "favorite", groupId)
+	dashboardName := "收藏組件"
+	var dashboardComponents pq.Int64Array
+	_, err = CreateDashboard(dashboardIndex, dashboardName, "favorite", dashboardComponents, groupId)
 	if err != nil {
 		return 0, fmt.Errorf("create user favorite dashboard failed %v", err)
 	}
