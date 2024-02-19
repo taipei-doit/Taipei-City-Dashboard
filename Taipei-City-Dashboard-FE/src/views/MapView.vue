@@ -25,10 +25,10 @@ const dialogStore = useDialogStore();
 
 // Separate components with maps from those without
 const parseMapLayers = computed(() => {
-	const hasMap = contentStore.currentDashboard.components.filter(
+	const hasMap = contentStore.currentDashboard.components?.filter(
 		(item) => item.map_config[0]
 	);
-	const noMap = contentStore.currentDashboard.components.filter(
+	const noMap = contentStore.currentDashboard.components?.filter(
 		(item) => !item.map_config[0]
 	);
 
@@ -62,7 +62,7 @@ function handleOpenSettings() {
 			<!-- 2. Dashboards that have components -->
 			<div
 				v-else-if="
-					contentStore.currentDashboard.components.length !== 0
+					contentStore.currentDashboard.components?.length !== 0
 				"
 				class="map-charts"
 			>
@@ -78,7 +78,7 @@ function handleOpenSettings() {
 					:key="`map-layer-${item.index}-${contentStore.currentDashboard.index}`"
 					:is-map-layer="true"
 				/>
-				<h2 v-if="parseMapLayers.noMap.length > 0">無空間資料組件</h2>
+				<h2 v-if="parseMapLayers.noMap?.length > 0">無空間資料組件</h2>
 				<ComponentMapChart
 					v-for="item in parseMapLayers.noMap"
 					:content="item"

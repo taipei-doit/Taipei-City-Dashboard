@@ -3,9 +3,6 @@
 /* authStore */
 /*
 The authStore stores authentication and user information.
-Since this template doesn't implement user authentication, only dummy user info is stored.
-If you wish to implement authentication, you can reference the logic below (based on the authentication system of Taipei City Dashboard)
-or design a new system from scratch that tailors to your needs. 
 */
 
 import { defineStore } from "pinia";
