@@ -80,14 +80,14 @@ const linkQuery = computed(() => {
 					<li
 						v-if="
 							authStore.currentPath !== 'admin' &&
-							authStore.user.isAdmin
+							authStore.user.is_admin
 						"
 						class="hide-if-mobile"
 					>
 						<router-link to="/admin">管理員後臺</router-link>
 					</li>
 					<li
-						v-else-if="authStore.user.isAdmin"
+						v-else-if="authStore.user.is_admin"
 						class="hide-if-mobile"
 					>
 						<router-link to="/dashboard">返回儀表板</router-link>

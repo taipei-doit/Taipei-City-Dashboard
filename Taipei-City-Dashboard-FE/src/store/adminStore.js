@@ -27,6 +27,10 @@ export const useAdminStore = defineStore("admin", {
 		issues: [],
 		issueResults: 0,
 		currentIssue: null,
+		// Edit User (for /admin/user)
+		users: [],
+		userResults: 0,
+		currentUser: null,
 	}),
 	actions: {
 		/* Utility functions to access loading and error states in contentStore */
@@ -262,6 +266,36 @@ export const useAdminStore = defineStore("admin", {
 			dialogStore.showNotification("success", "問題更新成功");
 			this.getIssues(params);
 			this.currentIssue = null;
+		},
+
+		/* User */
+		// 1. Get all users
+		async getUsers(params) {
+			const apiParams = JSON.parse(JSON.stringify(params));
+
+			const response = await http.get(`/user/`, {
+				params: apiParams,
+			});
+			this.users = response.data.data;
+			this.userResults = response.data.results;
+			this.setLoading(false);
+		},
+		// 2. Update a user
+		async updateUser(params) {
+			const authStore = useAuthStore();
+			const dialogStore = useDialogStore();
+
+			const editedUser = JSON.parse(JSON.stringify(this.currentUser));
+
+			await http.patch(`/user/${this.currentUser.user_id}`, editedUser);
+			dialogStore.showNotification("success", "使用者更新成功");
+			this.getUsers(params);
+
+			// If the current user updates their own info, refresh the authStore
+			if (authStore.user.user_id === this.currentUser.user_id)
+				authStore.initialChecks();
+
+			this.currentUser = null;
 		},
 	},
 });

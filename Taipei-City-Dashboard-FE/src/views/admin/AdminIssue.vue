@@ -16,7 +16,7 @@ const contentStore = useContentStore();
 const statuses = ["待處理", "處理中", "已處理", "不處理"];
 
 const searchParams = ref({
-	filterbystatus: ["待處理"],
+	filterbystatus: [],
 	sort: "created_at",
 	order: "desc",
 	pagesize: 10,

@@ -70,7 +70,7 @@ onMounted(() => {
 			icon="person"
 			title="使用者資訊"
 			:expanded="isExpanded"
-			index="overview"
+			index="user"
 		/>
 	</div>
 </template>

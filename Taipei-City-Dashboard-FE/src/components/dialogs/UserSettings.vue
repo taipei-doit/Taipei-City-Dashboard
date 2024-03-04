@@ -43,10 +43,10 @@ async function handleSubmit() {
 				required
 			/>
 			<label> 用戶帳號 </label>
-			<input :value="editUser.account" :minlength="1" disabled />
+			<input :value="editUser.account ? editUser.account : editUser.TpAccount" :minlength="1" disabled />
 			<label> 用戶類型 </label>
 			<input
-				:value="editUser.isAdmin ? '管理員' : '一般用戶'"
+				:value="editUser.is_admin ? '管理員' : '一般用戶'"
 				disabled="true"
 				required
 			/>

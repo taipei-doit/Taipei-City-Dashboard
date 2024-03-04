@@ -43,16 +43,7 @@ export const useAuthStore = defineStore("auth", {
 			if (localStorage.getItem("token")) {
 				this.token = localStorage.getItem("token");
 				const response = await http.get("/user/me");
-				this.user = {
-					user_id: response.data.user.user_id,
-					account: response.data.user.account,
-					name: response.data.user.name,
-					is_active: response.data.user.is_active.Bool,
-					is_whitelist: response.data.user.is_whitelist.Bool,
-					is_blacked: response.data.user.is_blacked.Bool,
-					login_at: response.data.user.login_at,
-					isAdmin: response.data.user.is_admin,
-				};
+				this.user = response.data.user;
 				this.editUser = JSON.parse(JSON.stringify(this.user));
 			}
 		},
@@ -89,16 +80,7 @@ export const useAuthStore = defineStore("auth", {
 
 			this.token = response.data.token;
 			localStorage.setItem("token", this.token);
-			this.user = {
-				user_id: response.data.user.user_id,
-				account: response.data.user.account,
-				name: response.data.user.name,
-				is_active: response.data.user.is_active.Bool,
-				is_whitelist: response.data.user.is_whitelist.Bool,
-				is_blacked: response.data.user.is_blacked.Bool,
-				login_at: response.data.user.login_at,
-				isAdmin: response.data.user.is_admin,
-			};
+			this.user = response.data.user;
 			this.editUser = this.user;
 
 			contentStore.publicDashboards = [];
@@ -129,16 +111,7 @@ export const useAuthStore = defineStore("auth", {
 		async updateUserInfo() {
 			await http.patch("/user/me", this.editUser);
 			const response = await http.get("/user/me");
-			this.user = {
-				user_id: response.data.user.user_id,
-				account: response.data.user.account,
-				name: response.data.user.name,
-				is_active: response.data.user.is_active.Bool,
-				is_whitelist: response.data.user.is_whitelist.Bool,
-				is_blacked: response.data.user.is_blacked.Bool,
-				login_at: response.data.user.login_at,
-				isAdmin: response.data.user.is_admin,
-			};
+			this.user = response.data.user;
 			this.editUser = JSON.parse(JSON.stringify(this.user));
 		},
 

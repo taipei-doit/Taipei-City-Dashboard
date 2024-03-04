@@ -51,6 +51,11 @@ func configureUserRoutes() {
 		userRoutes.GET("/me", controllers.GetUserInfo)
 		userRoutes.PATCH("/me", controllers.EditUserInfo)
 	}
+	userRoutes.Use(middleware.IsSysAdm())
+	{
+		userRoutes.GET("/", controllers.GetAllUsers)
+		userRoutes.PATCH("/:id", controllers.UpdateUserByID)
+	}
 }
 
 // configureComponentRoutes configures all component routes.

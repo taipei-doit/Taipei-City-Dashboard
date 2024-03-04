@@ -52,9 +52,9 @@ const routes = [
 		redirect: "/admin/dashboard",
 	},
 	{
-		path: "/admin/overview",
-		name: "admin-overview",
-		component: () => import("../views/admin/AdminOverview.vue"),
+		path: "/admin/user",
+		name: "admin-user",
+		component: () => import("../views/admin/AdminUser.vue"),
 	},
 	{
 		path: "/admin/dashboard",
@@ -113,8 +113,16 @@ router.beforeEach((to) => {
 router.beforeEach((to) => {
 	const authStore = useAuthStore();
 	if (to.name.includes("admin")) {
-		if (!authStore.user.isAdmin || !authStore.token) {
-			router.push("/dashboard");
+		if (!authStore.user.is_admin || !authStore.token) {
+			if (authStore.user.is_admin === false) {
+				router.push("/dashboard");
+			} else {
+				setTimeout(() => {
+					if (!authStore.user.is_admin) {
+						router.push("/dashboard");
+					}
+				}, 200);
+			}
 		}
 	} else if (to.name === "component") {
 		if (!authStore.token) {
