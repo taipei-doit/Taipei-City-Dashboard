@@ -57,7 +57,7 @@ http.interceptors.response.use(
 						"fail",
 						"401，登入逾時，請重新登入"
 					);
-					// authStore.handleLogout();
+					authStore.handleLogout();
 				} else {
 					dialogStore.showNotification(
 						"fail",

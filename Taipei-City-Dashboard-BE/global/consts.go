@@ -1,3 +1,4 @@
+// Package global stores all global variables and constants.
 package global
 
 import (
@@ -11,10 +12,12 @@ const (
 	// Request api limit times and duration
 	AuthLimitAPIRequestsTimes        = 300
 	AuthLimitTotalRequestsTimes      = 600
+	UserLimitAPIRequestsTimes        = 100
+	UserLimitTotalRequestsTimes      = 500
 	ComponentLimitAPIRequestsTimes   = 200
 	ComponentLimitTotalRequestsTimes = 1000
-	DashboardLimitAPIRequestsTimes   = 80
-	DashboardLimitTotalRequestsTimes = 400
+	DashboardLimitAPIRequestsTimes   = 200
+	DashboardLimitTotalRequestsTimes = 1000
 	IssueLimitAPIRequestsTimes       = 20
 	IssueLimitTotalRequestsTimes     = 200
 	LimitRequestsDuration            = 60 * time.Second

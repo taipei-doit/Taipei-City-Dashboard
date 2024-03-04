@@ -193,14 +193,14 @@ func CreatePersonalDashboard(c *gin.Context) {
 
 	// Get Group ID
 	// groupId := c.GetInt("group_id")
-	groupId, err := auth.GetUserPersonalGroup(accountID)
+	groupID, err := auth.GetUserPersonalGroup(accountID)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": err.Error()})
 		return
 	}
 
 	// check has permission, role admin(id=1) editor(id=2)
-	if !auth.HasPermission(permissions, groupId, 1) && !auth.HasPermission(permissions, groupId, 2) {
+	if !auth.HasPermission(permissions, groupID, 1) && !auth.HasPermission(permissions, groupID, 2) {
 		c.JSON(http.StatusUnauthorized, gin.H{"message": "permission denied"})
 		return
 	}
@@ -221,7 +221,7 @@ func CreatePersonalDashboard(c *gin.Context) {
 	// Create the dashboard
 	index := uuid.New().String()
 	dashboard.Index = strings.Split(index, "-")[0] + strings.Split(index, "-")[1]
-	dashboard, err = auth.CreateDashboard(dashboard.Index, dashboard.Name, dashboard.Icon, dashboard.Components, groupId)
+	dashboard, err = auth.CreateDashboard(dashboard.Index, dashboard.Name, dashboard.Icon, dashboard.Components, groupID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": err.Error()})
 		return
@@ -242,10 +242,10 @@ func CreatePublicDashboard(c *gin.Context) {
 	_, _, _, _, permissions := auth.GetUserInfoFromContext(c)
 
 	// Get Group public(id=1)
-	groupId := 1
+	groupID := 1
 
 	// check has permission, role admin(id=1) editor(id=2)
-	if !auth.HasPermission(permissions, groupId, 1) && !auth.HasPermission(permissions, groupId, 2) {
+	if !auth.HasPermission(permissions, groupID, 1) && !auth.HasPermission(permissions, groupID, 2) {
 		c.JSON(http.StatusUnauthorized, gin.H{"message": "permission denied"})
 		return
 	}
@@ -264,7 +264,7 @@ func CreatePublicDashboard(c *gin.Context) {
 	}
 
 	// Create the dashboard
-	dashboard, err = auth.CreateDashboard(dashboard.Index, dashboard.Name, dashboard.Icon, dashboard.Components, groupId)
+	dashboard, err = auth.CreateDashboard(dashboard.Index, dashboard.Name, dashboard.Icon, dashboard.Components, groupID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": err.Error()})
 		return

@@ -20,6 +20,15 @@ function handleClose() {
 function parseTime(time) {
 	return time.slice(0, 19).replace("T", " ");
 }
+
+async function handleSubmit() {
+	if (editUser.value.name === authStore.user.name || !editUser.value.name) {
+		return;
+	}
+	await authStore.updateUserInfo();
+	dialogStore.showNotification("success", "用戶資訊已更新");
+	dialogStore.hideAllDialogs();
+}
 </script>
 
 <template>
@@ -43,6 +52,14 @@ function parseTime(time) {
 			/>
 			<label> 最近登入時間 </label>
 			<input :value="parseTime(editUser.login_at)" disabled />
+			<div class="usersettings-control">
+				<button
+					class="usersettings-control-confirm"
+					@click="handleSubmit"
+				>
+					更改用戶資訊
+				</button>
+			</div>
 		</div>
 	</DialogContainer>
 </template>
@@ -57,6 +74,24 @@ function parseTime(time) {
 		margin: 8px 0 4px;
 		font-size: var(--font-s);
 		color: var(--color-complement-text);
+	}
+
+	&-control {
+		display: flex;
+		justify-content: flex-end;
+		margin-top: var(--font-ms);
+
+		&-confirm {
+			margin: 0 2px;
+			padding: 4px 10px;
+			border-radius: 5px;
+			background-color: var(--color-highlight);
+			transition: opacity 0.2s;
+
+			&:hover {
+				opacity: 0.8;
+			}
+		}
 	}
 }
 </style>
