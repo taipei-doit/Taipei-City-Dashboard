@@ -24,23 +24,19 @@ func AddCommonHeaders(c *gin.Context) {
 	c.Next()
 }
 
-// 不確定想做什麼
-// func LimitRequestTo(approved []int) gin.HandlerFunc {
-// 	return func(c *gin.Context) {
-// 		_, _, _, permissions := auth.GetUserInfoFromContext(c)
+// IsLoggedIn checks if user is logged in.
+func IsLoggedIn() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		loginType := c.GetString("loginType")
+		if loginType != "no login" {
+			c.Next()
+			return
+		}
+		c.AbortWithStatusJSON(http.StatusForbidden, gin.H{"status": "error", "message": "Unauthorized"})
+	}
+}
 
-// 		for _, permission := range permissions {
-// 			if slices.Contains(approved, role) {
-// 				c.Next()
-// 				return
-// 			}
-// 		}
-
-// 		c.AbortWithStatusJSON(http.StatusForbidden, gin.H{"status": "error", "message": "Unauthorized"})
-// 	}
-// }
-
-// IsAdmin checks if user is system admin.
+// IsSysAdm checks if user is system admin.
 func IsSysAdm() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		_, _, isAdmin, _, _ := auth.GetUserInfoFromContext(c)
@@ -52,7 +48,7 @@ func IsSysAdm() gin.HandlerFunc {
 	}
 }
 
-// CheckPermission checks if the permissions contain a specific permission.
+// LimitRequestTo checks if the permissions contain a specific permission.
 func LimitRequestTo(permission auth.Permission) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		_, _, _, _, permissions := auth.GetUserInfoFromContext(c)

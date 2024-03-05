@@ -95,7 +95,7 @@ function handleClose() {
 					userSelect: 'none',
 				}"
 			>
-				本產品由何紹宇Igor於2023-2024開發建置
+				TUIC Igor Ann Iima Chu Jack 2023-2024
 			</p>
 			<p>《讓城市儀表板成為您的儀表板》</p>
 		</div>

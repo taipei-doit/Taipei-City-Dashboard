@@ -42,8 +42,9 @@ export const useAuthStore = defineStore("auth", {
 			// Check if the user is logged in
 			if (localStorage.getItem("token")) {
 				this.token = localStorage.getItem("token");
-				this.user = JSON.parse(localStorage.getItem("user"));
-				this.editUser = JSON.parse(localStorage.getItem("user"));
+				const response = await http.get("/user/me");
+				this.user = response.data.user;
+				this.editUser = JSON.parse(JSON.stringify(this.user));
 			}
 		},
 		// Email Login
@@ -79,18 +80,8 @@ export const useAuthStore = defineStore("auth", {
 
 			this.token = response.data.token;
 			localStorage.setItem("token", this.token);
-			this.user = {
-				user_id: response.data.user.user_id,
-				account: response.data.user.account,
-				name: response.data.user.name,
-				is_active: response.data.user.is_active.Bool,
-				is_whitelist: response.data.user.is_whitelist.Bool,
-				is_blacked: response.data.user.is_blacked.Bool,
-				login_at: response.data.user.login_at,
-				isAdmin: response.data.user.is_admin
-			};
+			this.user = response.data.user;
 			this.editUser = this.user;
-			localStorage.setItem("user", JSON.stringify(this.user));
 
 			contentStore.publicDashboards = [];
 			router.go();
@@ -103,7 +94,6 @@ export const useAuthStore = defineStore("auth", {
 			const contentStore = useContentStore();
 
 			localStorage.removeItem("token");
-			localStorage.removeItem("user");
 			this.user = {};
 			this.editUser = {};
 			this.token = null;
@@ -115,6 +105,15 @@ export const useAuthStore = defineStore("auth", {
 
 		// If your authentication system supports refresh tokens, call this function to refresh existing tokens
 		executeRefreshTokens() {},
+
+		/* User Info Functions */
+		// Update User Info
+		async updateUserInfo() {
+			await http.patch("/user/me", this.editUser);
+			const response = await http.get("/user/me");
+			this.user = response.data.user;
+			this.editUser = JSON.parse(JSON.stringify(this.user));
+		},
 
 		/* Other Utility Functions */
 		// 1. Check if the user is using a mobile device.

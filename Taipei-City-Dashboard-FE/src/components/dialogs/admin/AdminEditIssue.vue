@@ -34,7 +34,10 @@ function handleClose() {
 			</div>
 			<div class="admineditissue-settings">
 				<div class="admineditissue-settings-items">
-					<label>回報用戶 (名字/ID)</label>
+					<div class="two-block">
+						<label>回報用戶名稱</label>
+						<label>回報用戶 ID</label>
+					</div>
 					<div class="two-block">
 						<input
 							type="text"

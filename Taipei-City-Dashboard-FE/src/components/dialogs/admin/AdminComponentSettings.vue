@@ -95,7 +95,10 @@ function handleClose() {
 							:maxlength="20"
 							required
 						/>
-						<label>組件ID / Index</label>
+						<div class="two-block">
+							<label>組件 ID</label>
+							<label>組件 Index</label>
+						</div>
 						<div class="two-block">
 							<input
 								type="text"

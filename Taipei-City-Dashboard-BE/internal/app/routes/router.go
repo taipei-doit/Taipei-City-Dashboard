@@ -26,6 +26,7 @@ func ConfigureRoutes() {
 	// API routers
 	RouterGroup = Router.Group("/api/" + global.VERSION)
 	configureAuthRoutes()
+	configureUserRoutes()
 	configureComponentRoutes()
 	configureDashboardRoutes()
 	configureIssueRoutes()
@@ -39,6 +40,22 @@ func configureAuthRoutes() {
 	authRoutes.POST("/login", auth.Login)
 	// taipeipass login callback
 	authRoutes.GET("/callback", auth.ExecIssoAuth)
+}
+
+func configureUserRoutes() {
+	userRoutes := RouterGroup.Group("/user")
+	userRoutes.Use(middleware.LimitAPIRequests(global.UserLimitAPIRequestsTimes, global.LimitRequestsDuration))
+	userRoutes.Use(middleware.LimitTotalRequests(global.UserLimitTotalRequestsTimes, global.TokenExpirationDuration))
+	userRoutes.Use(middleware.IsLoggedIn())
+	{
+		userRoutes.GET("/me", controllers.GetUserInfo)
+		userRoutes.PATCH("/me", controllers.EditUserInfo)
+	}
+	userRoutes.Use(middleware.IsSysAdm())
+	{
+		userRoutes.GET("/", controllers.GetAllUsers)
+		userRoutes.PATCH("/:id", controllers.UpdateUserByID)
+	}
 }
 
 // configureComponentRoutes configures all component routes.
@@ -76,7 +93,7 @@ func configureDashboardRoutes() {
 		dashboardRoutes.
 			GET("/:index", controllers.GetDashboardByIndex)
 	}
-	// dashboardRoutes.Use(middleware.LimitRequestTo([]int{1, 2}))
+	dashboardRoutes.Use(middleware.IsLoggedIn())
 	{
 		dashboardRoutes.POST("/", controllers.CreatePersonalDashboard)
 		dashboardRoutes.
@@ -94,6 +111,7 @@ func configureIssueRoutes() {
 	issueRoutes := RouterGroup.Group("/issue")
 	issueRoutes.Use(middleware.LimitAPIRequests(global.IssueLimitAPIRequestsTimes, global.LimitRequestsDuration))
 	issueRoutes.Use(middleware.LimitTotalRequests(global.IssueLimitTotalRequestsTimes, global.LimitRequestsDuration))
+	issueRoutes.Use(middleware.IsLoggedIn())
 	{
 		issueRoutes.
 			POST("/", controllers.CreateIssue)
