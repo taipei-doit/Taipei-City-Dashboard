@@ -9,9 +9,9 @@ import (
 	"strings"
 	"time"
 
+	"TaipeiCityDashboardBE/app/database"
+	"TaipeiCityDashboardBE/app/database/models"
 	"TaipeiCityDashboardBE/global"
-	"TaipeiCityDashboardBE/internal/db/postgres"
-	"TaipeiCityDashboardBE/internal/db/postgres/models"
 	"TaipeiCityDashboardBE/logs"
 
 	"github.com/gin-gonic/gin"
@@ -115,7 +115,7 @@ func ExecIssoAuth(c *gin.Context) {
 		}
 
 		// create user if not exist
-		if err := postgres.DBManager.Where("idno = ?", idNoSHA).First(&user).Error; err != nil {
+		if err := database.DBManager.Where("idno = ?", idNoSHA).First(&user).Error; err != nil {
 			if errors.Is(err, gorm.ErrRecordNotFound) {
 
 				user = models.AuthUser{
@@ -126,7 +126,7 @@ func ExecIssoAuth(c *gin.Context) {
 					LoginAt:       time.Now(),
 				}
 				// Attempt to create the new user in the database
-				if err := postgres.DBManager.Create(&user).Error; err != nil {
+				if err := database.DBManager.Create(&user).Error; err != nil {
 					logs.FError("Failed to create user: %v", err)
 					c.JSON(http.StatusUnauthorized, gin.H{"error": "unexpected database error"})
 					return
@@ -170,7 +170,7 @@ func ExecIssoAuth(c *gin.Context) {
 		}
 
 		// update last login time
-		if err := postgres.DBManager.Save(&user).Error; err != nil {
+		if err := database.DBManager.Save(&user).Error; err != nil {
 			logs.FError("Failed to update login time: %v", err)
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "unexpected database error"})
 			return

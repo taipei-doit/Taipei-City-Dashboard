@@ -5,8 +5,8 @@ import (
 	"strings"
 	"time"
 
-	"TaipeiCityDashboardBE/internal/db/postgres"
-	"TaipeiCityDashboardBE/internal/db/postgres/models"
+	"TaipeiCityDashboardBE/app/database"
+	"TaipeiCityDashboardBE/app/database/models"
 
 	"github.com/gin-gonic/gin"
 )
@@ -42,7 +42,7 @@ func GetAllIssues(c *gin.Context) {
 	c.ShouldBindQuery(&query)
 
 	// Create Temp DB
-	tempDB := postgres.DBManager.Table("issues")
+	tempDB := database.DBManager.Table("issues")
 
 	// Count the total amount of issues
 	tempDB.Count(&totalIssues)
@@ -102,7 +102,7 @@ func CreateIssue(c *gin.Context) {
 	}
 
 	// Create the issue
-	err := postgres.DBManager.Create(&issue).Error
+	err := database.DBManager.Create(&issue).Error
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": err.Error()})
 		return
@@ -134,7 +134,7 @@ func UpdateIssueByID(c *gin.Context) {
 	}
 
 	// Update the issue
-	err := postgres.DBManager.Table("issues").Where("id = ?", issueID).Updates(issue).Error
+	err := database.DBManager.Table("issues").Where("id = ?", issueID).Updates(issue).Error
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": err.Error()})
 		return

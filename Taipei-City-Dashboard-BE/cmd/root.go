@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"TaipeiCityDashboardBE/internal/app"
+	"TaipeiCityDashboardBE/app"
 	"TaipeiCityDashboardBE/logs"
 
 	"github.com/spf13/cobra"

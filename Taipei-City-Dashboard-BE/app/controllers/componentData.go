@@ -8,8 +8,8 @@ import (
 	"strings"
 	"time"
 
-	"TaipeiCityDashboardBE/internal/db/postgres"
-	"TaipeiCityDashboardBE/internal/db/postgres/models"
+	"TaipeiCityDashboardBE/app/database"
+	"TaipeiCityDashboardBE/app/database/models"
 
 	"github.com/gin-gonic/gin"
 )
@@ -31,7 +31,7 @@ func GetComponentChartData(c *gin.Context) {
 	}
 
 	// 2. Get the chart data query and chart data type from the database
-	err = postgres.DBManager.
+	err = database.DBManager.
 		Table("components").
 		Select("query_type, query_chart").
 		Where("components.id = ?", id).
@@ -85,7 +85,7 @@ func GetComponentHistoryData(c *gin.Context) {
 	}
 
 	// 2. Get the history data query from the database
-	err = postgres.DBManager.
+	err = database.DBManager.
 		Table("components").
 		Select("query_history").
 		Where("components.id = ?", id).
@@ -165,7 +165,7 @@ func getTwoDimensionalData(query *string, c *gin.Context) {
 	}
 
 	// 2. Get the data from the database
-	err := postgres.DBDashboard.Raw(queryString).Scan(&chartData).Error
+	err := database.DBDashboard.Raw(queryString).Scan(&chartData).Error
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": err.Error()})
 		return
@@ -198,7 +198,7 @@ func getThreeDimensionalData(query *string, c *gin.Context) {
 	}
 
 	// 2. Get the data from the database
-	err := postgres.DBDashboard.Raw(queryString).Scan(&chartData).Error
+	err := database.DBDashboard.Raw(queryString).Scan(&chartData).Error
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": err.Error()})
 		return
@@ -261,7 +261,7 @@ func getTimeSeriesData(query *string, c *gin.Context) {
 	}
 
 	// 2. Get the data from the database
-	err := postgres.DBDashboard.Raw(queryString).Scan(&chartData).Error
+	err := database.DBDashboard.Raw(queryString).Scan(&chartData).Error
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": err.Error()})
 		return
@@ -310,7 +310,7 @@ func getMapLegendData(query *string, c *gin.Context) {
 	}
 
 	// 2. Get the data from the database
-	err := postgres.DBDashboard.Raw(queryString).Scan(&chartData).Error
+	err := database.DBDashboard.Raw(queryString).Scan(&chartData).Error
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": err.Error()})
 		return

@@ -10,9 +10,9 @@ import (
 	"strings"
 	"time"
 
+	"TaipeiCityDashboardBE/app/database"
+	"TaipeiCityDashboardBE/app/database/models"
 	"TaipeiCityDashboardBE/global"
-	"TaipeiCityDashboardBE/internal/db/postgres"
-	"TaipeiCityDashboardBE/internal/db/postgres/models"
 	"TaipeiCityDashboardBE/logs"
 
 	"github.com/gin-gonic/gin"
@@ -66,7 +66,7 @@ func Login(c *gin.Context) {
 
 	// search DB to validate user password
 	passwordSHA := HashString(password)
-	if err := postgres.DBManager.
+	if err := database.DBManager.
 		Where("LOWER(email) = LOWER(?)", email).
 		Where("password = ?", passwordSHA).
 		First(&user).Error; err != nil {
@@ -105,7 +105,7 @@ func Login(c *gin.Context) {
 	}
 
 	// update last login time
-	if err := postgres.DBManager.Save(&user).Error; err != nil {
+	if err := database.DBManager.Save(&user).Error; err != nil {
 		logs.FError("Failed to update login time: %v", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "unexpected database error"})
 		return
@@ -136,7 +136,7 @@ func CreateUser(name string, email, password *string, isAdmin, isActive, isWhite
 	}
 
 	// Attempt to save the user to the database.
-	if err := postgres.DBManager.Create(&user).Error; err != nil {
+	if err := database.DBManager.Create(&user).Error; err != nil {
 		// If an error occurs during creation, return the error and userID as 0.
 		return 0, err
 	}
@@ -170,7 +170,7 @@ func CreateUser(name string, email, password *string, isAdmin, isActive, isWhite
 // DeleteUser deletes an AuthUser from the database based on the provided userID.
 func DeleteUser(userID int) error {
 	// Start a transaction to ensure data integrity.
-	tx := postgres.DBManager.Begin()
+	tx := database.DBManager.Begin()
 
 	// Find the provided userID.
 	var user models.AuthUser
@@ -203,7 +203,7 @@ func DeleteUser(userID int) error {
 func UpdateUser(userID int, updatedUser models.AuthUser) error {
 	// Find the user with the provided userID.
 	var user models.AuthUser
-	result := postgres.DBManager.Where("user_id = ?", userID).First(&user)
+	result := database.DBManager.Where("user_id = ?", userID).First(&user)
 	if result.Error != nil {
 		// If the user is not found, return the error.
 		return result.Error
@@ -226,7 +226,7 @@ func UpdateUser(userID int, updatedUser models.AuthUser) error {
 	user.LoginAt = updatedUser.LoginAt
 
 	// Save the updated user to the database.
-	if err := postgres.DBManager.Save(&user).Error; err != nil {
+	if err := database.DBManager.Save(&user).Error; err != nil {
 		// If an error occurs during update, return the error.
 		return err
 	}
@@ -247,7 +247,7 @@ func CreateGroup(groupName string, isPersonal bool, createBy int) (groupID int, 
 		CreateBy:   createBy,
 	}
 	// Attempt to create the group in the database.
-	if err := postgres.DBManager.Create(&group).Error; err != nil {
+	if err := database.DBManager.Create(&group).Error; err != nil {
 		// If an error occurs during creation, return 0 indicating failure.
 		return 0, err
 	}
@@ -261,7 +261,7 @@ func GetGroupIDByName(groupName string) (int, error) {
 	var group models.Group
 
 	// Find the group in the database with the given group name.
-	if err := postgres.DBManager.Where("name = ?", groupName).First(&group).Error; err != nil {
+	if err := database.DBManager.Where("name = ?", groupName).First(&group).Error; err != nil {
 		// Return an error if any error occurs during the lookup.
 		return 0, err
 	}
@@ -273,7 +273,7 @@ func GetGroupIDByName(groupName string) (int, error) {
 // DeleteGroup deletes a group from the database based on its ID.
 func DeleteGroup(groupID int) error {
 	// Start a transaction to ensure data integrity.
-	tx := postgres.DBManager.Begin()
+	tx := database.DBManager.Begin()
 
 	// Find the group with the provided ID.
 	var group models.Group
@@ -313,7 +313,7 @@ func CreateRole(roleName string, accessControl, modify, read bool) (roleID int, 
 	}
 
 	// Attempt to save the role to the database.
-	if err := postgres.DBManager.Create(&role).Error; err != nil {
+	if err := database.DBManager.Create(&role).Error; err != nil {
 		// If an error occurs during creation, return the error and roleID as 0.
 		return 0, err
 	}
@@ -327,7 +327,7 @@ func GetRoleIDByName(roleName string) (int, error) {
 	var role models.Role
 
 	// Find the role in the database with the given role name.
-	if err := postgres.DBManager.Where("name = ?", roleName).First(&role).Error; err != nil {
+	if err := database.DBManager.Where("name = ?", roleName).First(&role).Error; err != nil {
 		// Return an error if any error occurs during the lookup.
 		return 0, err
 	}
@@ -344,7 +344,7 @@ func DeleteRole(roleID int) error {
 	}
 
 	// Start a transaction to ensure data integrity.
-	tx := postgres.DBManager.Begin()
+	tx := database.DBManager.Begin()
 
 	// Find the provided roleID.
 	var role models.Role
@@ -382,7 +382,7 @@ func UpdateRole(roleID int, updatedRole models.Role) error {
 
 	// Find the role with the provided roleID.
 	var role models.Role
-	result := postgres.DBManager.Where("role_id = ?", roleID).First(&role)
+	result := database.DBManager.Where("role_id = ?", roleID).First(&role)
 	if result.Error != nil {
 		// If the role is not found, return the error.
 		return result.Error
@@ -395,7 +395,7 @@ func UpdateRole(roleID int, updatedRole models.Role) error {
 	role.Read = updatedRole.Read
 
 	// Save the updated role to the database.
-	if err := postgres.DBManager.Save(&role).Error; err != nil {
+	if err := database.DBManager.Save(&role).Error; err != nil {
 		// If an error occurs during update, return the error.
 		return err
 	}
@@ -414,7 +414,7 @@ func CreateUserGroupRole(authUserID, groupID, roleID int) error {
 	}
 
 	// Attempt to create the association in the database.
-	if err := postgres.DBManager.Create(&authUserGroupRole).Error; err != nil {
+	if err := database.DBManager.Create(&authUserGroupRole).Error; err != nil {
 		// If an error occurs during creation, return the error.
 		return err
 	}
@@ -427,14 +427,14 @@ func CreateUserGroupRole(authUserID, groupID, roleID int) error {
 func DeleteUserGroupRole(authUserID, groupID, roleID int) error {
 	// Find the association with the provided IDs.
 	var authUserGroupRole models.AuthUserGroupRole
-	result := postgres.DBManager.Where("auth_user_id = ? AND group_id = ? AND role_id = ?", authUserID, groupID, roleID).First(&authUserGroupRole)
+	result := database.DBManager.Where("auth_user_id = ? AND group_id = ? AND role_id = ?", authUserID, groupID, roleID).First(&authUserGroupRole)
 	if result.Error != nil {
 		// If the association is not found, return the error.
 		return result.Error
 	}
 
 	// Delete the association from the database.
-	if err := postgres.DBManager.Delete(&authUserGroupRole).Error; err != nil {
+	if err := database.DBManager.Delete(&authUserGroupRole).Error; err != nil {
 		// If an error occurs during deletion, return the error.
 		return err
 	}
@@ -446,7 +446,7 @@ func DeleteUserGroupRole(authUserID, groupID, roleID int) error {
 // GetUserPermission retrieves permissions associated with a specific user from the database.
 func GetUserPermission(authUserID int) (permissions []Permission, err error) {
 	// Query the database to find permissions associated with the provided authUserID.
-	result := postgres.DBManager.
+	result := database.DBManager.
 		Model(&models.AuthUserGroupRole{}).
 		Select("group_id, role_id").
 		Where("auth_user_id = ?", authUserID).
@@ -478,7 +478,7 @@ func GetUserPermission(authUserID int) (permissions []Permission, err error) {
 // GetGroupUsers retrieves user IDs and their corresponding role IDs associated with a specific group from the database.
 func GetGroupUsers(groupID int) (groupUsers []GroupUser, err error) {
 	// Query the database to find all users and their role IDs associated with the provided groupID.
-	result := postgres.DBManager.
+	result := database.DBManager.
 		Model(&models.AuthUserGroupRole{}).
 		Select("auth_user_id as user_id, role_id").
 		Where("group_id = ?", groupID).
@@ -497,7 +497,7 @@ func GetGroupUsers(groupID int) (groupUsers []GroupUser, err error) {
 func GetUserPersonalGroup(userID int) (groupID int, err error) {
 	var group models.Group
 	// Find the personal group associated with the user.
-	if err := postgres.DBManager.Where("create_by = ? AND is_personal = ?", userID, true).First(&group).Error; err != nil {
+	if err := database.DBManager.Where("create_by = ? AND is_personal = ?", userID, true).First(&group).Error; err != nil {
 		// If an error occurs or the group is not found, return an error.
 		return 0, err
 	}
@@ -519,7 +519,7 @@ func IsAdmin(userID int) bool {
 	// Here you would typically query the database to check if the user with the given userID is an admin.
 	// For instance, you might have a query like this:
 	var user models.AuthUser
-	if err := postgres.DBManager.Where("id = ? AND is_admin = ?", userID, true).First(&user).Error; err != nil {
+	if err := database.DBManager.Where("id = ? AND is_admin = ?", userID, true).First(&user).Error; err != nil {
 		// Handle the error, such as log it or return false if the user is not found or there's an error during the query.
 		return false
 	}

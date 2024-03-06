@@ -7,9 +7,9 @@ import (
 	"strings"
 	"time"
 
-	"TaipeiCityDashboardBE/internal/auth"
-	"TaipeiCityDashboardBE/internal/db/postgres"
-	"TaipeiCityDashboardBE/internal/db/postgres/models"
+	"TaipeiCityDashboardBE/app/database"
+	"TaipeiCityDashboardBE/app/database/models"
+	"TaipeiCityDashboardBE/auth"
 	"TaipeiCityDashboardBE/logs"
 
 	"github.com/gin-gonic/gin"
@@ -36,7 +36,7 @@ func GetAllDashboards(c *gin.Context) {
 	groups := auth.GetPermissionAllGroupIDs(permissions)
 
 	// Get all the public group dashboards
-	err := postgres.DBManager.
+	err := database.DBManager.
 		Joins("JOIN dashboard_groups ON dashboards.id = dashboard_groups.dashboard_id AND dashboard_groups.group_id = ?", 1).
 		Order("dashboards.id").
 		Find(&dashboards.Public).
@@ -55,7 +55,7 @@ func GetAllDashboards(c *gin.Context) {
 	}
 
 	// Get all the Personal dashboards
-	err = postgres.DBManager.
+	err = database.DBManager.
 		Joins("JOIN dashboard_groups ON dashboards.id = dashboard_groups.dashboard_id AND dashboard_groups.group_id IN (?)", groupsWithoutPublic).
 		Order("dashboards.id").
 		Find(&dashboards.Personal).
@@ -89,12 +89,12 @@ func GetDashboardByIndex(c *gin.Context) {
 	dashboardIndex := c.Param("index")
 
 	// 2. Find the dashboard and component ids
-	err := postgres.DBManager.Table("dashboards").Select("components").Where("index = ?", dashboardIndex).First(&componentIds).Error
+	err := database.DBManager.Table("dashboards").Select("components").Where("index = ?", dashboardIndex).First(&componentIds).Error
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"status": "error", "message": err.Error()})
 		return
 	}
-	err = postgres.DBManager.
+	err = database.DBManager.
 		Table("dashboards").Select("components").
 		Joins("JOIN dashboard_groups ON dashboards.id = dashboard_groups.dashboard_id AND dashboard_groups.group_id IN (?)", groups).
 		Where("index = ?", dashboardIndex).
@@ -152,7 +152,7 @@ func CheckDashboardIndex(c *gin.Context) {
 	dashboardIndex := c.Param("index")
 
 	// 2. If no dashboards exist with the index, return true
-	err := postgres.DBManager.Table("dashboards").Where("index = ?", dashboardIndex).First(&dashboard).Error
+	err := database.DBManager.Table("dashboards").Where("index = ?", dashboardIndex).First(&dashboard).Error
 	if err != nil {
 		if (err.Error() == "record not found") || strings.Contains(err.Error(), "no rows in result set") {
 			c.JSON(http.StatusOK, gin.H{"status": "success", "available": true})
@@ -171,7 +171,7 @@ func CheckDashboardIndex(c *gin.Context) {
 // 	// Here you would typically query the database to check if the user with the given userID is an admin.
 // 	// For instance, you might have a query like this:
 // 	var user models.AuthUser
-// 	if err := postgres.DBManager.Where("id = ? AND is_admin = ?", userID, true).First(&user).Error; err != nil {
+// 	if err := database.DBManager.Where("id = ? AND is_admin = ?", userID, true).First(&user).Error; err != nil {
 // 		// Handle the error, such as log it or return false if the user is not found or there's an error during the query.
 // 		return false
 // 	}
@@ -303,12 +303,12 @@ func UpdateDashboard(c *gin.Context) {
 	dashboardIndex := c.Param("index")
 
 	// 2. Find the dashboard
-	err := postgres.DBManager.Table("dashboards").Where("index = ?", dashboardIndex).First(&dashboard).Error
+	err := database.DBManager.Table("dashboards").Where("index = ?", dashboardIndex).First(&dashboard).Error
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"status": "error", "message": err.Error()})
 		return
 	}
-	err = postgres.DBManager.
+	err = database.DBManager.
 		Table("dashboards").
 		Joins("JOIN dashboard_groups ON dashboards.id = dashboard_groups.dashboard_id AND dashboard_groups.group_id IN (?)", groups).
 		Where("index = ?", dashboardIndex).
@@ -366,12 +366,12 @@ func DeleteDashboard(c *gin.Context) {
 	dashboardIndex := c.Param("index")
 
 	// 2. Check if the dashboard exists
-	err := postgres.DBManager.Table("dashboards").Where("index = ?", dashboardIndex).First(&dashboard).Error
+	err := database.DBManager.Table("dashboards").Where("index = ?", dashboardIndex).First(&dashboard).Error
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"status": "error", "message": err.Error()})
 		return
 	}
-	err = postgres.DBManager.
+	err = database.DBManager.
 		Select("dashboard_groups.group_id").
 		Joins("JOIN dashboards ON dashboard_groups.dashboard_id = dashboards.id AND dashboard_groups.group_id IN (?)", groups).
 		Where("index = ?", dashboardIndex).
@@ -383,7 +383,7 @@ func DeleteDashboard(c *gin.Context) {
 	}
 
 	// 3. Delete the dashboard group
-	err = postgres.DBManager.Table("dashboard_groups").Where("dashboard_id = ?", dashboard.ID).Delete(&dashboardGroup).Error
+	err = database.DBManager.Table("dashboard_groups").Where("dashboard_id = ?", dashboard.ID).Delete(&dashboardGroup).Error
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": err.Error()})
 		return

@@ -3,8 +3,8 @@ package auth
 import (
 	"time"
 
-	"TaipeiCityDashboardBE/internal/db/postgres"
-	"TaipeiCityDashboardBE/internal/db/postgres/models"
+	"TaipeiCityDashboardBE/app/database"
+	"TaipeiCityDashboardBE/app/database/models"
 	"TaipeiCityDashboardBE/logs"
 
 	"github.com/lib/pq"
@@ -21,7 +21,7 @@ func CreateDashboard(index, name, icon string, components pq.Int64Array, belongG
 		UpdatedAt: time.Now(),
 	}
 
-	tx := postgres.DBManager.Begin()
+	tx := database.DBManager.Begin()
 
 	// Create the dashboard
 	if err := tx.Create(&dashboard).Error; err != nil {
@@ -51,7 +51,7 @@ func CreateDashboard(index, name, icon string, components pq.Int64Array, belongG
 
 // DeleteDashboard deletes a dashboard from the database based on its ID.
 func DeleteDashboard(dashboardID int) error {
-	tx := postgres.DBManager.Begin()
+	tx := database.DBManager.Begin()
 
 	var dashboard models.Dashboard
 
@@ -71,7 +71,7 @@ func DeleteDashboard(dashboardID int) error {
 
 // UpdateDashboard updates an existing dashboard in the database.
 func UpdateDashboard(dashboardIndex string, newName, newIcon string, newComponents pq.Int64Array) error {
-	tx := postgres.DBManager.Begin()
+	tx := database.DBManager.Begin()
 
 	var dashboard models.Dashboard
 	if err := tx.Where("index = ?", dashboardIndex).First(&dashboard).Error; err != nil {

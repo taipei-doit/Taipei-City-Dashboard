@@ -1,10 +1,11 @@
+// Package initial contains the functions to initialize the databases for the first time.
 package initial
 
 import (
 	"os"
 	"os/exec"
 
-	"TaipeiCityDashboardBE/internal/auth"
+	"TaipeiCityDashboardBE/auth"
 	"TaipeiCityDashboardBE/logs"
 )
 

@@ -4,8 +4,8 @@ import (
 	"net/http"
 	"time"
 
-	"TaipeiCityDashboardBE/internal/db/postgres"
-	"TaipeiCityDashboardBE/internal/db/postgres/models"
+	"TaipeiCityDashboardBE/app/database"
+	"TaipeiCityDashboardBE/app/database/models"
 
 	"github.com/gin-gonic/gin"
 )
@@ -18,7 +18,7 @@ func GetUserInfo(c *gin.Context) {
 	var user models.AuthUser
 
 	userID := c.GetInt("accountID")
-	err := postgres.DBManager.Table("auth_users").Where("id = ?", userID).First(&user).Error
+	err := database.DBManager.Table("auth_users").Where("id = ?", userID).First(&user).Error
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "No user found"})
 		return
@@ -44,7 +44,7 @@ func EditUserInfo(c *gin.Context) {
 		return
 	}
 
-	err = postgres.DBManager.Table("auth_users").Where("id = ?", userID).Updates(&user).Error
+	err = database.DBManager.Table("auth_users").Where("id = ?", userID).Updates(&user).Error
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update user"})
 		return
@@ -76,7 +76,7 @@ func GetAllUsers(c *gin.Context) {
 	c.ShouldBindQuery(&query)
 
 	// Create a temporary database
-	tempDB := postgres.DBManager.Table("auth_users")
+	tempDB := database.DBManager.Table("auth_users")
 
 	// Count the total amount of users
 	tempDB.Count(&totalUsers)
@@ -130,7 +130,7 @@ func UpdateUserByID(c *gin.Context) {
 	userID := c.Param("id")
 
 	// 1. Check if the user exists
-	err := postgres.DBManager.Table("auth_users").Where("id = ?", userID).First(&user).Error
+	err := database.DBManager.Table("auth_users").Where("id = ?", userID).First(&user).Error
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "No user found"})
 		return
@@ -150,7 +150,7 @@ func UpdateUserByID(c *gin.Context) {
 	}
 
 	// 3. Update the user
-	err = postgres.DBManager.Table("auth_users").Where("id = ?", userID).Updates(&user).Error
+	err = database.DBManager.Table("auth_users").Where("id = ?", userID).Updates(&user).Error
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update user"})
 		return

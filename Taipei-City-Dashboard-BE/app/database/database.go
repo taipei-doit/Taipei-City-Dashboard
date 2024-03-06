@@ -1,5 +1,5 @@
-// Package postgres initiates the connections to the two postgreSQL databases of this application.
-package postgres
+// Package database initiates the connections to the two postgreSQL databases of this application.
+package database
 
 import (
 	"bufio"
@@ -8,7 +8,7 @@ import (
 	"os"
 	"strings"
 
-	"TaipeiCityDashboardBE/internal/db/postgres/models"
+	"TaipeiCityDashboardBE/app/database/models"
 	"TaipeiCityDashboardBE/logs"
 
 	"gorm.io/driver/postgres"
@@ -121,7 +121,7 @@ func MigrateManagerSchema() {
 	}
 }
 
-// ExecuteSQLFromFile executes SQL statements from a given file.
+// ExecuteSQLFile executes SQL statements from a given file.
 func ExecuteSQLFile(db *sql.DB, filename string) error {
 	// Open the SQL file
 	file, err := os.Open(filename)

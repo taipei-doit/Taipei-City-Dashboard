@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"time"
 
-	"TaipeiCityDashboardBE/internal/db/postgres"
-	"TaipeiCityDashboardBE/internal/db/postgres/models"
+	"TaipeiCityDashboardBE/app/database"
+	"TaipeiCityDashboardBE/app/database/models"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -22,7 +22,7 @@ func createTempComponentDB() *gorm.DB {
 		selectString += "components." + column + ", "
 	}
 
-	return postgres.DBManager.
+	return database.DBManager.
 		Table("components").
 		Select(fmt.Sprint(selectString, "json_agg(row_to_json(component_maps.*)) AS map_config, row_to_json(component_charts.*) AS chart_config")).
 		Joins("LEFT JOIN unnest(components.map_config_ids) AS id_value ON true").
@@ -157,7 +157,7 @@ func UpdateComponent(c *gin.Context) {
 	componentID := c.Param("id")
 
 	// 2. Find the component
-	err := postgres.DBManager.Table("components").Where("id = ?", componentID).First(&component).Error
+	err := database.DBManager.Table("components").Where("id = ?", componentID).First(&component).Error
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"status": "error", "message": "component not found"})
 		return
@@ -176,7 +176,7 @@ func UpdateComponent(c *gin.Context) {
 	component.Index = componentIndex
 
 	// 4. Update the component
-	err = postgres.DBManager.Table("components").Where("id = ?", componentID).Updates(&component).Error
+	err = database.DBManager.Table("components").Where("id = ?", componentID).Updates(&component).Error
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": err.Error()})
 		return
@@ -198,12 +198,12 @@ func UpdateComponentChartConfig(c *gin.Context) {
 	componentID := c.Param("id")
 
 	// 2. Find the component and chart config
-	err := postgres.DBManager.Table("components").Where("id = ?", componentID).First(&component).Error
+	err := database.DBManager.Table("components").Where("id = ?", componentID).First(&component).Error
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"status": "error", "message": "component not found"})
 		return
 	}
-	err = postgres.DBManager.Table("component_charts").Where("index = ?", component.Index).First(&chartConfig).Error
+	err = database.DBManager.Table("component_charts").Where("index = ?", component.Index).First(&chartConfig).Error
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"status": "error", "message": "chart config not found"})
 		return
@@ -218,12 +218,12 @@ func UpdateComponentChartConfig(c *gin.Context) {
 	component.UpdatedAt = time.Now()
 
 	// 4. Update the chart config. Then update the update_time in components table.
-	err = postgres.DBManager.Table("component_charts").Where("index = ?", component.Index).Updates(&chartConfig).Error
+	err = database.DBManager.Table("component_charts").Where("index = ?", component.Index).Updates(&chartConfig).Error
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": err.Error()})
 		return
 	}
-	err = postgres.DBManager.Table("components").Where("id = ?", componentID).Updates(&component).Error
+	err = database.DBManager.Table("components").Where("id = ?", componentID).Updates(&component).Error
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": err.Error()})
 		return
@@ -244,7 +244,7 @@ func UpdateComponentMapConfig(c *gin.Context) {
 	mapConfigID := c.Param("id")
 
 	// 2. Find the map config
-	err := postgres.DBManager.Table("component_maps").Where("id = ?", mapConfigID).First(&mapConfig).Error
+	err := database.DBManager.Table("component_maps").Where("id = ?", mapConfigID).First(&mapConfig).Error
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"status": "error", "message": "map config not found"})
 		return
@@ -258,7 +258,7 @@ func UpdateComponentMapConfig(c *gin.Context) {
 	}
 
 	// 4. Update the map config
-	err = postgres.DBManager.Table("component_maps").Where("id = ?", mapConfigID).Updates(&mapConfig).Error
+	err = database.DBManager.Table("component_maps").Where("id = ?", mapConfigID).Updates(&mapConfig).Error
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": err.Error()})
 		return
@@ -283,14 +283,14 @@ func DeleteComponent(c *gin.Context) {
 	componentID := c.Param("id")
 
 	// 2. Find the component
-	err := postgres.DBManager.Table("components").Where("id = ?", componentID).First(&component).Error
+	err := database.DBManager.Table("components").Where("id = ?", componentID).First(&component).Error
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"status": "error", "message": "component not found"})
 		return
 	}
 
 	// 3. Delete the component
-	err = postgres.DBManager.Table("components").Where("id = ?", componentID).Delete(&component).Error
+	err = database.DBManager.Table("components").Where("id = ?", componentID).Delete(&component).Error
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": err.Error()})
 		return
@@ -298,7 +298,7 @@ func DeleteComponent(c *gin.Context) {
 
 	// 4. Delete the chart config
 	deleteChartStatus := true
-	err = postgres.DBManager.Table("component_charts").Where("index = ?", component.Index).Delete(&chartConfig).Error
+	err = database.DBManager.Table("component_charts").Where("index = ?", component.Index).Delete(&chartConfig).Error
 	if err != nil {
 		deleteChartStatus = false
 	}
@@ -308,9 +308,9 @@ func DeleteComponent(c *gin.Context) {
 	if len(component.MapConfigIds) > 0 {
 		for _, mapConfigID := range component.MapConfigIds {
 			var mapConfigCount int64
-			postgres.DBManager.Table("components").Where("map_config_ids @> ARRAY[?]::integer[]", mapConfigID).Count(&mapConfigCount)
+			database.DBManager.Table("components").Where("map_config_ids @> ARRAY[?]::integer[]", mapConfigID).Count(&mapConfigCount)
 			if mapConfigCount == 0 {
-				err = postgres.DBManager.Table("component_maps").Where("id = ?", mapConfigID).Delete(&mapConfig).Error
+				err = database.DBManager.Table("component_maps").Where("id = ?", mapConfigID).Delete(&mapConfig).Error
 				if err != nil {
 					deleteMapStatus = false
 				}

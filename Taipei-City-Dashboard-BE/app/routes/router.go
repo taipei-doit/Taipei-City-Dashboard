@@ -2,10 +2,10 @@
 package routes
 
 import (
+	"TaipeiCityDashboardBE/app/controllers"
+	"TaipeiCityDashboardBE/app/middleware"
+	"TaipeiCityDashboardBE/auth"
 	"TaipeiCityDashboardBE/global"
-	"TaipeiCityDashboardBE/internal/app/controllers"
-	"TaipeiCityDashboardBE/internal/app/middleware"
-	"TaipeiCityDashboardBE/internal/auth"
 
 	"github.com/gin-gonic/gin"
 )

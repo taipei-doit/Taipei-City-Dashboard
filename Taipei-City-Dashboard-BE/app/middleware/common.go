@@ -4,7 +4,7 @@ package middleware
 import (
 	"net/http"
 
-	"TaipeiCityDashboardBE/internal/auth"
+	"TaipeiCityDashboardBE/auth"
 
 	"github.com/gin-gonic/gin"
 )
