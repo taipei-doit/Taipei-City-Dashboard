@@ -59,22 +59,22 @@ var jwtSecret = []byte(global.JwtSecret)
 // GenerateJWT generates a JWT token using the provided information.
 // It includes user type, user ID, role list, group list, and expiration details in the JWT claims.
 // The token is signed using HS256 and returned as a string.
-func GenerateJWT(ExpiresAt time.Time, loginType string, userId int, isAdmin bool, permissions []models.Permission) (string, error) {
+func GenerateJWT(ExpiresAt time.Time, loginType string, userID int, isAdmin bool, permissions []models.Permission) (string, error) {
 	// Create a unique user ID for JWT
 	now := time.Now()
-	uid := loginType + strconv.FormatInt(int64(userId), 10)
-	jwtId := uid + strconv.FormatInt(now.Unix(), 10)
+	uid := loginType + strconv.FormatInt(int64(userID), 10)
+	jwtID := uid + strconv.FormatInt(now.Unix(), 10)
 
 	// Set JWT claims and sign
 	claims := models.Claims{
 		LoginType:   loginType,
-		AccountID:   userId,
+		AccountID:   userID,
 		IsAdmin:     isAdmin,
 		Permissions: permissions,
 		StandardClaims: jwt.StandardClaims{
 			Audience:  uid,
 			ExpiresAt: ExpiresAt.Unix(),
-			Id:        jwtId,
+			Id:        jwtID,
 			IssuedAt:  now.Unix(),
 			Issuer:    "Taipei citydashboard",
 			NotBefore: now.Add(global.NotBeforeDuration).Unix(),
@@ -90,4 +90,52 @@ func GenerateJWT(ExpiresAt time.Time, loginType string, userId int, isAdmin bool
 	}
 
 	return token, nil
+}
+
+// HasPermission checks if the permissions contain a specific groupid and roleid.
+func HasPermission(permissions []models.Permission, targetGroupID, targetRoleID int) bool {
+	for _, perm := range permissions {
+		if perm.GroupID == targetGroupID && perm.RoleID == targetRoleID {
+			return true
+		}
+	}
+	return false
+}
+
+// GetPermissionAllGroupIDs extracts unique group IDs from a list of permissions.
+func GetPermissionAllGroupIDs(permissions []models.Permission) []int {
+	uniqueGroupIDs := make(map[int]struct{})
+
+	// Extract unique group IDs from permissions
+	for _, perm := range permissions {
+		uniqueGroupIDs[perm.GroupID] = struct{}{}
+	}
+
+	// Convert unique group IDs to a slice
+	groupIDs := make([]int, 0, len(uniqueGroupIDs))
+	for groupID := range uniqueGroupIDs {
+		groupIDs = append(groupIDs, groupID)
+	}
+
+	return groupIDs
+}
+
+// GetPermissionGroupIDs extracts unique group IDs from permissions based on a specific role.
+func GetPermissionGroupIDs(permissions []models.Permission, role int) []int {
+	uniqueGroupIDs := make(map[int]struct{})
+
+	// Extract unique group IDs from permissions for the specified role
+	for _, perm := range permissions {
+		if perm.RoleID == role {
+			uniqueGroupIDs[perm.GroupID] = struct{}{}
+		}
+	}
+
+	// Convert unique group IDs to a slice
+	groupIDs := make([]int, 0, len(uniqueGroupIDs))
+	for groupID := range uniqueGroupIDs {
+		groupIDs = append(groupIDs, groupID)
+	}
+
+	return groupIDs
 }

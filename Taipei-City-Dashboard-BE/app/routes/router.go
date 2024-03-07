@@ -4,7 +4,6 @@ package routes
 import (
 	"TaipeiCityDashboardBE/app/controllers"
 	"TaipeiCityDashboardBE/app/middleware"
-	"TaipeiCityDashboardBE/auth"
 	"TaipeiCityDashboardBE/global"
 
 	"github.com/gin-gonic/gin"
@@ -19,9 +18,6 @@ var (
 
 // ConfigureRoutes configures all routes for the API and sets version router groups.
 func ConfigureRoutes() {
-	// taipeipass login callback
-	// Router.GET("/callback", auth.ExecIssoAuth) // will move to configureAuthRoutes function
-
 	Router.Use(middleware.ValidateJWT)
 	// API routers
 	RouterGroup = Router.Group("/api/" + global.VERSION)
@@ -39,7 +35,7 @@ func configureAuthRoutes() {
 	authRoutes.Use(middleware.LimitTotalRequests(global.AuthLimitTotalRequestsTimes, global.TokenExpirationDuration))
 	authRoutes.POST("/login", controllers.Login)
 	// taipeipass login callback
-	authRoutes.GET("/callback", auth.ExecIssoAuth)
+	authRoutes.GET("/callback", controllers.ExecIssoAuth)
 }
 
 func configureUserRoutes() {

@@ -7,7 +7,6 @@ import (
 
 	"TaipeiCityDashboardBE/app/models"
 	"TaipeiCityDashboardBE/app/util"
-	"TaipeiCityDashboardBE/auth"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
@@ -22,7 +21,7 @@ User, Admin: Public and personal dashboards
 func GetAllDashboards(c *gin.Context) {
 	// Get the user info from the context
 	_, _, _, _, permissions := util.GetUserInfoFromContext(c)
-	groups := auth.GetPermissionAllGroupIDs(permissions)
+	groups := util.GetPermissionAllGroupIDs(permissions)
 
 	// Remove public group(id=1) from groups if exist
 	var personalGroups []int
@@ -49,7 +48,7 @@ User, Admin: Public and personal dashboards
 */
 func GetDashboardByIndex(c *gin.Context) {
 	_, _, _, _, permissions := util.GetUserInfoFromContext(c)
-	groups := auth.GetPermissionAllGroupIDs(permissions)
+	groups := util.GetPermissionAllGroupIDs(permissions)
 
 	dashboardIndex := c.Param("index")
 
@@ -92,14 +91,14 @@ func CreatePersonalDashboard(c *gin.Context) {
 	_, accountID, _, _, permissions := util.GetUserInfoFromContext(c)
 
 	// Get Group ID
-	groupID, err := auth.GetUserPersonalGroup(accountID)
+	groupID, err := models.GetUserPersonalGroup(accountID)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": err.Error()})
 		return
 	}
 
 	// check has permission, role admin(id=1) editor(id=2)
-	if !auth.HasPermission(permissions, groupID, 1) && !auth.HasPermission(permissions, groupID, 2) {
+	if !util.HasPermission(permissions, groupID, 1) && !util.HasPermission(permissions, groupID, 2) {
 		c.JSON(http.StatusUnauthorized, gin.H{"message": "permission denied"})
 		return
 	}
@@ -144,7 +143,7 @@ func CreatePublicDashboard(c *gin.Context) {
 	groupID := 1
 
 	// check has permission, role admin(id=1) editor(id=2)
-	if !auth.HasPermission(permissions, groupID, 1) && !auth.HasPermission(permissions, groupID, 2) {
+	if !util.HasPermission(permissions, groupID, 1) && !util.HasPermission(permissions, groupID, 2) {
 		c.JSON(http.StatusUnauthorized, gin.H{"message": "permission denied"})
 		return
 	}
@@ -183,8 +182,8 @@ func UpdateDashboard(c *gin.Context) {
 	var dashboard models.Dashboard
 
 	_, _, _, _, permissions := util.GetUserInfoFromContext(c)
-	adminGroups := auth.GetPermissionGroupIDs(permissions, 1)  // role=admin
-	editorGroups := auth.GetPermissionGroupIDs(permissions, 2) // role=editor
+	adminGroups := util.GetPermissionGroupIDs(permissions, 1)  // role=admin
+	editorGroups := util.GetPermissionGroupIDs(permissions, 2) // role=editor
 	groups := util.MergeAndRemoveDuplicates(adminGroups, editorGroups)
 
 	dashboardIndex := c.Param("index")
@@ -214,8 +213,8 @@ Admin: Public and personal dashboards
 */
 func DeleteDashboard(c *gin.Context) {
 	_, _, _, _, permissions := util.GetUserInfoFromContext(c)
-	adminGroups := auth.GetPermissionGroupIDs(permissions, 1)  // role=admin
-	editorGroups := auth.GetPermissionGroupIDs(permissions, 2) // role=editor
+	adminGroups := util.GetPermissionGroupIDs(permissions, 1)  // role=admin
+	editorGroups := util.GetPermissionGroupIDs(permissions, 2) // role=editor
 	groups := util.MergeAndRemoveDuplicates(adminGroups, editorGroups)
 
 	dashboardIndex := c.Param("index")

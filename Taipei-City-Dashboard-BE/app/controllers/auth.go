@@ -9,7 +9,6 @@ import (
 
 	"TaipeiCityDashboardBE/app/models"
 	"TaipeiCityDashboardBE/app/util"
-	"TaipeiCityDashboardBE/auth"
 	"TaipeiCityDashboardBE/global"
 	"TaipeiCityDashboardBE/logs"
 
@@ -67,12 +66,12 @@ func Login(c *gin.Context) {
 	}
 
 	// check user is active
-	if !user.IsActive {
+	if !*user.IsActive {
 		c.JSON(http.StatusForbidden, gin.H{"error": "User not activated"})
 		return
 	}
 
-	permissions, err := auth.GetUserPermission(user.Id)
+	permissions, err := models.GetUserPermission(user.ID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": err.Error(),
@@ -82,7 +81,7 @@ func Login(c *gin.Context) {
 
 	// generate JWT token
 	user.LoginAt = time.Now()
-	token, err := util.GenerateJWT(user.LoginAt.Add(global.TokenExpirationDuration), "Email", user.Id, user.IsAdmin, permissions)
+	token, err := util.GenerateJWT(user.LoginAt.Add(global.TokenExpirationDuration), "Email", user.ID, *user.IsAdmin, permissions)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": err.Error(),

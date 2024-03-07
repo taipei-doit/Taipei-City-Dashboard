@@ -5,8 +5,8 @@ import (
 	"os"
 	"os/exec"
 
+	"TaipeiCityDashboardBE/app/models"
 	"TaipeiCityDashboardBE/app/util"
-	"TaipeiCityDashboardBE/auth"
 	"TaipeiCityDashboardBE/logs"
 )
 
@@ -62,15 +62,15 @@ func initDashboards() {
 
 func addRoles() {
 	// create init roles[admin/editor/viewer]
-	_, err := auth.CreateRole("admin", true, true, true)
+	_, err := models.CreateRole("admin", true, true, true)
 	if err != nil {
 		logs.FError("Failed to create admin role:%s", err)
 	}
-	_, err = auth.CreateRole("editor", false, true, true)
+	_, err = models.CreateRole("editor", false, true, true)
 	if err != nil {
 		logs.FError("Failed to create editor role:%s", err)
 	}
-	_, err = auth.CreateRole("viewer", false, false, true)
+	_, err = models.CreateRole("viewer", false, false, true)
 	if err != nil {
 		logs.FError("Failed to create viewer role:%s", err)
 	}
@@ -84,28 +84,33 @@ func createAdmin() {
 	logs.FInfo("user email: %s", email)
 
 	// get public groupID
-	publicGroupID, err := auth.GetGroupIDByName("public")
+	publicGroupID, err := models.GetGroupIDByName("public")
 	if err != nil {
 		logs.FError("Failed to get public group:%s", err)
 	}
 	logs.FInfo("get public group id:%d", publicGroupID)
 
 	// get admin roleID
-	adminRoleID, err := auth.GetRoleIDByName("admin")
+	adminRoleID, err := models.GetRoleIDByName("admin")
 	if err != nil {
 		logs.FError("Failed to get admin role:%s", err)
 	}
 	logs.FInfo("get admin role id:%d", adminRoleID)
 
 	// create admin user
-	adminUserID, err := auth.CreateUser(userName, &email, &password, true, true, true, false, nil)
+	isAdmin := true
+	isActive := true
+	isWhitelist := true
+	isBlacked := false
+
+	adminUserID, err := models.CreateUser(userName, &email, &password, &isAdmin, &isActive, &isWhitelist, &isBlacked, nil)
 	if err != nil {
 		logs.FError("Failed to create user:%s", err)
 	}
 	logs.FInfo("create admin: %s success", userName)
 
 	// set admin user permission(group:public, role:admin)
-	if err := auth.CreateUserGroupRole(adminUserID, publicGroupID, adminRoleID); err != nil {
+	if err := models.CreateUserGroupRole(adminUserID, publicGroupID, adminRoleID); err != nil {
 		logs.FError("Failed to set admin permission:%s", err)
 	}
 }

@@ -1,4 +1,4 @@
-package auth
+package controllers
 
 import (
 	"encoding/json"
@@ -17,6 +17,13 @@ import (
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
+
+/*
+*** Note to External Developers ***
+
+This file contains the controller functions for the Taipei Pass and Isso authentication methods.
+We currently do not allow external developers to modify these methods, but you can use them as a reference.
+*/
 
 // AccessTokenResp ....
 type respAccessToken struct {
@@ -119,9 +126,9 @@ func ExecIssoAuth(c *gin.Context) {
 			if errors.Is(err, gorm.ErrRecordNotFound) {
 
 				user = models.AuthUser{
-					TpUuid:        &userInfo.Data.ID,
+					TpUuID:        &userInfo.Data.ID,
 					TpAccount:     &userInfo.Data.Account,
-					IdNo:          &idNoSHA,
+					IDNo:          &idNoSHA,
 					TpVerifyLevel: &userInfo.Data.VerifyLevel,
 					LoginAt:       time.Now(),
 				}
@@ -132,16 +139,16 @@ func ExecIssoAuth(c *gin.Context) {
 					return
 				}
 				// create user personal group
-				personalGroupID, err := CreateGroup(userInfo.Data.Account+"'s group", true, user.Id)
+				personalGroupID, err := models.CreateGroup(userInfo.Data.Account+"'s group", true, user.ID)
 				if err != nil {
 					logs.FError("Failed to create user[%s] personal group:%s", userInfo.Data.Account, err)
 				}
 				// set user personal group permission
 				// admin role id=1
-				if err := CreateUserGroupRole(user.Id, personalGroupID, 1); err != nil {
+				if err := models.CreateUserGroupRole(user.ID, personalGroupID, 1); err != nil {
 					logs.FError("Failed to set userp[%s] personal group permission:%s", userInfo.Data.Account, err)
 				}
-				logs.FInfo("create user success %d from IP[%s]", user.Id, c.ClientIP())
+				logs.FInfo("create user success %d from IP[%s]", user.ID, c.ClientIP())
 			} else {
 				logs.FError("Login failed: unexpected database error: %v", err)
 				c.JSON(http.StatusUnauthorized, gin.H{"error": "unexpected database error"})
@@ -151,17 +158,22 @@ func ExecIssoAuth(c *gin.Context) {
 
 		// if user exist
 		// check user is active
-		if !user.IsActive {
-			logs.FInfo("isso_login_fail IP[%s] Err: User not activated %d", c.ClientIP(), user.Id)
+		if !*user.IsActive {
+			logs.FInfo("isso_login_fail IP[%s] Err: User not activated %d", c.ClientIP(), user.ID)
 			c.JSON(http.StatusForbidden, gin.H{"error": "User not activated"})
 			return
 		}
 
-		permissions, err := GetUserPermission(user.Id)
+		permissions, err := models.GetUserPermission(user.ID)
+		if err != nil {
+			logs.FError("Failed to get user[%d] permission: %v", user.ID, err)
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "unexpected database error"})
+			return
+		}
 
 		// generate JWT token
 		user.LoginAt = time.Now()
-		token, err := util.GenerateJWT(user.LoginAt, "Isso", user.Id, user.IsAdmin, permissions)
+		token, err := util.GenerateJWT(user.LoginAt, "Isso", user.ID, *user.IsAdmin, permissions)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{
 				"error": err.Error(),

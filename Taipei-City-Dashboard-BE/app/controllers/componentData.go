@@ -6,6 +6,7 @@ import (
 	"strconv"
 
 	"TaipeiCityDashboardBE/app/models"
+	"TaipeiCityDashboardBE/app/util"
 
 	"github.com/gin-gonic/gin"
 )
@@ -35,7 +36,7 @@ func GetComponentChartData(c *gin.Context) {
 		return
 	}
 
-	timeFrom, timeTo := utilGetTime(c)
+	timeFrom, timeTo := util.GetTime(c)
 
 	// 3. Get and parse the chart data based on chart data type
 	if queryType == "two_d" {
@@ -89,7 +90,7 @@ func GetComponentHistoryData(c *gin.Context) {
 		return
 	}
 
-	timeFrom, timeTo := utilGetTime(c)
+	timeFrom, timeTo := util.GetTime(c)
 
 	// 2. Get the history data query from the database
 	queryHistory, err := models.GetComponentHistoryDataQuery(id, timeFrom, timeTo)
