@@ -2,17 +2,14 @@ package controllers
 
 import (
 	"net/http"
-	"strings"
-	"time"
 
-	"TaipeiCityDashboardBE/app/database"
-	"TaipeiCityDashboardBE/app/database/models"
+	"TaipeiCityDashboardBE/app/models"
 
 	"github.com/gin-gonic/gin"
 )
 
 /*
-GetAllIssues retrieves all issues from the database.
+GetAllIssues retrieves all issues from the database
 GET /api/v1/issue
 
 | Param          | Description                                     | Value         | Default |
@@ -24,52 +21,20 @@ GET /api/v1/issue
 | order          | Ascending or descending.                        | `asc`, `desc` | `asc`   |
 */
 
-type issueQuery struct {
-	PageSize       int    `form:"pagesize"`
-	PageNum        int    `form:"pagenum"`
-	FilterByStatus string `form:"filterbystatus"`
-	Sort           string `form:"sort"`
-	Order          string `form:"order"`
-}
-
 func GetAllIssues(c *gin.Context) {
-	var issues []models.Issue
-	var totalIssues int64
-	var resultNum int64
+	type issueQuery struct {
+		PageSize       int    `form:"pagesize"`
+		PageNum        int    `form:"pagenum"`
+		FilterByStatus string `form:"filterbystatus"`
+		Sort           string `form:"sort"`
+		Order          string `form:"order"`
+	}
 
 	// Get query parameters
 	var query issueQuery
 	c.ShouldBindQuery(&query)
 
-	// Create Temp DB
-	tempDB := database.DBManager.Table("issues")
-
-	// Count the total amount of issues
-	tempDB.Count(&totalIssues)
-
-	// Filter by status
-	if query.FilterByStatus != "" {
-		statuses := strings.Split(query.FilterByStatus, ",")
-		tempDB = tempDB.Where("issues.status IN (?)", statuses)
-	}
-
-	tempDB.Count(&resultNum)
-
-	// Sort the issues
-	if query.Sort != "" {
-		tempDB = tempDB.Order("issues." + query.Sort + " " + query.Order)
-	}
-
-	// Paginate the issues
-	if query.PageSize > 0 {
-		tempDB = tempDB.Limit(query.PageSize)
-		if query.PageNum > 0 {
-			tempDB = tempDB.Offset((query.PageNum - 1) * query.PageSize)
-		}
-	}
-
-	// Get the issues
-	err := tempDB.Find(&issues).Error
+	issues, totalIssues, resultNum, err := models.GetAllIssues(query.PageSize, query.PageNum, query.FilterByStatus, query.Sort, query.Order)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": err.Error()})
 		return
@@ -79,7 +44,7 @@ func GetAllIssues(c *gin.Context) {
 }
 
 /*
-CreateIssue creates a new issue.
+CreateIssue creates a new issue
 POST /api/v1/issue
 */
 
@@ -92,17 +57,12 @@ func CreateIssue(c *gin.Context) {
 		return
 	}
 
-	issue.CreatedAt = time.Now()
-	issue.UpdatedAt = time.Now()
-	issue.Status = "待處理"
-
 	if issue.Title == "" || issue.Description == "" || issue.UserName == "" || issue.UserID == "" {
 		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": "title, description, user info is required"})
 		return
 	}
 
-	// Create the issue
-	err := database.DBManager.Create(&issue).Error
+	issue, err := models.CreateIssue(issue.Title, issue.UserName, issue.UserID, issue.Context, issue.Description)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": err.Error()})
 		return
@@ -116,7 +76,7 @@ UpdateIssueByID modifies an issue by its ID.
 PATCH /api/v1/issue/:id
 */
 func UpdateIssueByID(c *gin.Context) {
-	var issue models.UpdateIssue
+	var issue models.Issue
 
 	issueID := c.Param("id")
 
@@ -126,15 +86,12 @@ func UpdateIssueByID(c *gin.Context) {
 		return
 	}
 
-	issue.UpdatedAt = time.Now()
-
 	if issue.UpdatedBy == "" {
 		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": "updated_by is required"})
 		return
 	}
 
-	// Update the issue
-	err := database.DBManager.Table("issues").Where("id = ?", issueID).Updates(issue).Error
+	issue, err := models.UpdateIssueByID(issueID, issue.Status, issue.DecisionDesc, issue.UpdatedBy)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": err.Error()})
 		return

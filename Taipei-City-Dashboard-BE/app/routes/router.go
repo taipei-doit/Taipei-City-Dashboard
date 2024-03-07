@@ -22,7 +22,7 @@ func ConfigureRoutes() {
 	// taipeipass login callback
 	// Router.GET("/callback", auth.ExecIssoAuth) // will move to configureAuthRoutes function
 
-	Router.Use(auth.ValidateJWT)
+	Router.Use(middleware.ValidateJWT)
 	// API routers
 	RouterGroup = Router.Group("/api/" + global.VERSION)
 	configureAuthRoutes()
@@ -37,7 +37,7 @@ func configureAuthRoutes() {
 	authRoutes := RouterGroup.Group("/auth")
 	authRoutes.Use(middleware.LimitAPIRequests(global.AuthLimitAPIRequestsTimes, global.LimitRequestsDuration))
 	authRoutes.Use(middleware.LimitTotalRequests(global.AuthLimitTotalRequestsTimes, global.TokenExpirationDuration))
-	authRoutes.POST("/login", auth.Login)
+	authRoutes.POST("/login", controllers.Login)
 	// taipeipass login callback
 	authRoutes.GET("/callback", auth.ExecIssoAuth)
 }

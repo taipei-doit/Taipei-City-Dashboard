@@ -9,8 +9,8 @@ import (
 	"strings"
 	"time"
 
-	"TaipeiCityDashboardBE/app/database"
-	"TaipeiCityDashboardBE/app/database/models"
+	"TaipeiCityDashboardBE/app/models"
+	"TaipeiCityDashboardBE/app/util"
 	"TaipeiCityDashboardBE/global"
 	"TaipeiCityDashboardBE/logs"
 
@@ -106,7 +106,7 @@ func ExecIssoAuth(c *gin.Context) {
 		// get user info
 		respUserInfo = HTTPClientRequest("GET", urlGetUserInfo, "", headers)
 		json.Unmarshal([]byte(respUserInfo), &userInfo)
-		idNoSHA := HashString(userInfo.Data.IDNo)
+		idNoSHA := util.HashString(userInfo.Data.IDNo)
 
 		// if isso user not Verifyed
 		if userInfo.Data.VerifyLevel == "0" {
@@ -115,7 +115,7 @@ func ExecIssoAuth(c *gin.Context) {
 		}
 
 		// create user if not exist
-		if err := database.DBManager.Where("idno = ?", idNoSHA).First(&user).Error; err != nil {
+		if err := models.DBManager.Where("idno = ?", idNoSHA).First(&user).Error; err != nil {
 			if errors.Is(err, gorm.ErrRecordNotFound) {
 
 				user = models.AuthUser{
@@ -126,7 +126,7 @@ func ExecIssoAuth(c *gin.Context) {
 					LoginAt:       time.Now(),
 				}
 				// Attempt to create the new user in the database
-				if err := database.DBManager.Create(&user).Error; err != nil {
+				if err := models.DBManager.Create(&user).Error; err != nil {
 					logs.FError("Failed to create user: %v", err)
 					c.JSON(http.StatusUnauthorized, gin.H{"error": "unexpected database error"})
 					return
@@ -161,7 +161,7 @@ func ExecIssoAuth(c *gin.Context) {
 
 		// generate JWT token
 		user.LoginAt = time.Now()
-		token, err := GenerateJWT(user.LoginAt, "Isso", user.Id, user.IsAdmin, permissions)
+		token, err := util.GenerateJWT(user.LoginAt, "Isso", user.Id, user.IsAdmin, permissions)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{
 				"error": err.Error(),
@@ -170,7 +170,7 @@ func ExecIssoAuth(c *gin.Context) {
 		}
 
 		// update last login time
-		if err := database.DBManager.Save(&user).Error; err != nil {
+		if err := models.DBManager.Save(&user).Error; err != nil {
 			logs.FError("Failed to update login time: %v", err)
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "unexpected database error"})
 			return

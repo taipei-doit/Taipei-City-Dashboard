@@ -455,7 +455,7 @@ function handleClose() {
 										currentComponent.map_config[index].size
 									"
 								>
-									<option :value="null">無</option>
+									<option :value="''">無</option>
 									<option value="small">small (點圖)</option>
 									<option value="big">big (點圖)</option>
 									<option value="wide">wide (線圖)</option>
@@ -465,7 +465,7 @@ function handleClose() {
 										currentComponent.map_config[index].icon
 									"
 								>
-									<option :value="null">無</option>
+									<option :value="''">無</option>
 									<option value="heatmap">
 										heatmap (點圖)
 									</option>

@@ -2,124 +2,24 @@
 package auth
 
 import (
-	"errors"
 	"fmt"
-	"net/http"
-	"regexp"
 	"strconv"
 	"strings"
 	"time"
 
-	"TaipeiCityDashboardBE/app/database"
-	"TaipeiCityDashboardBE/app/database/models"
-	"TaipeiCityDashboardBE/global"
+	"TaipeiCityDashboardBE/app/models"
 	"TaipeiCityDashboardBE/logs"
 
-	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"github.com/lib/pq"
-	"gorm.io/gorm"
 )
-
-type Permission struct {
-	GroupID int `json:"group_id"`
-	RoleID  int `json:"role_id"`
-}
 
 type GroupUser struct {
 	UserID int `json:"user_id"`
 	RoleID int `json:"role_id"`
 }
 
-const (
-	emailRegex = "^\\w+((-\\w+)|(\\.\\w+))*\\@[A-Za-z0-9]+((\\.|-)[A-Za-z0-9]+)*\\.[A-Za-z]+$"
-)
-
-func Login(c *gin.Context) {
-	var user models.AuthUser
-
-	const authPrefix = "Basic "
-
-	credentials, err := getAuthFromRequest(c, authPrefix)
-	if err != nil {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
-		return
-	}
-
-	email, password, err := decodedCredentials(credentials)
-	if err != nil {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
-		return
-	}
-
-	// check parameters
-	emailRegexp, err := regexp.MatchString(emailRegex, email)
-	if err != nil || !emailRegexp {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": fmt.Errorf("invalid email format: %v", err)})
-		return
-	}
-
-	if password == "" {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "password is required"})
-		return
-	}
-
-	// search DB to validate user password
-	passwordSHA := HashString(password)
-	if err := database.DBManager.
-		Where("LOWER(email) = LOWER(?)", email).
-		Where("password = ?", passwordSHA).
-		First(&user).Error; err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Incorrect username or password"})
-			return
-		} else {
-			logs.FError("Login failed: unexpected database error: %v", err)
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "unexpected database error"})
-			return
-		}
-	}
-
-	// check user is active
-	if !user.IsActive {
-		c.JSON(http.StatusForbidden, gin.H{"error": "User not activated"})
-		return
-	}
-
-	permissions, err := GetUserPermission(user.Id)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": err.Error(),
-		})
-		return
-	}
-
-	// generate JWT token
-	user.LoginAt = time.Now()
-	token, err := GenerateJWT(user.LoginAt.Add(global.TokenExpirationDuration), "Email", user.Id, user.IsAdmin, permissions)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": err.Error(),
-		})
-		return
-	}
-
-	// update last login time
-	if err := database.DBManager.Save(&user).Error; err != nil {
-		logs.FError("Failed to update login time: %v", err)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "unexpected database error"})
-		return
-	}
-
-	// return JWT token
-	c.JSON(http.StatusOK, gin.H{
-		"user":       user,
-		"permission": permissions,
-		"token":      token,
-	})
-}
-
-// CreateUser creates a new AuthUser and stores it in the database.
+// CreateUser creates a new AuthUser and stores it in the database
 func CreateUser(name string, email, password *string, isAdmin, isActive, isWhitelist, isBlacked bool, expiredAt *time.Time) (userID int, err error) {
 	// Initialize a new AuthUser instance and set its properties.
 	user := models.AuthUser{
@@ -135,8 +35,8 @@ func CreateUser(name string, email, password *string, isAdmin, isActive, isWhite
 		LoginAt:     time.Now(),
 	}
 
-	// Attempt to save the user to the database.
-	if err := database.DBManager.Create(&user).Error; err != nil {
+	// Attempt to save the user to the models.
+	if err := models.DBManager.Create(&user).Error; err != nil {
 		// If an error occurs during creation, return the error and userID as 0.
 		return 0, err
 	}
@@ -158,7 +58,7 @@ func CreateUser(name string, email, password *string, isAdmin, isActive, isWhite
 	dashboardIndex := strings.Split(tmpIndex, "-")[0] + strings.Split(tmpIndex, "-")[1]
 	dashboardName := "收藏組件"
 	var dashboardComponents pq.Int64Array
-	_, err = CreateDashboard(dashboardIndex, dashboardName, "favorite", dashboardComponents, groupId)
+	_, err = models.CreateDashboard(dashboardIndex, dashboardName, "favorite", dashboardComponents, groupId)
 	if err != nil {
 		return 0, fmt.Errorf("create user favorite dashboard failed %v", err)
 	}
@@ -170,7 +70,7 @@ func CreateUser(name string, email, password *string, isAdmin, isActive, isWhite
 // DeleteUser deletes an AuthUser from the database based on the provided userID.
 func DeleteUser(userID int) error {
 	// Start a transaction to ensure data integrity.
-	tx := database.DBManager.Begin()
+	tx := models.DBManager.Begin()
 
 	// Find the provided userID.
 	var user models.AuthUser
@@ -188,7 +88,7 @@ func DeleteUser(userID int) error {
 		return err
 	}
 
-	// Delete the user from the database.
+	// Delete the user from the models.
 	if err := tx.Delete(&user).Error; err != nil {
 		// If an error occurs during deletion, rollback the transaction and return the error.
 		tx.Rollback()
@@ -199,11 +99,11 @@ func DeleteUser(userID int) error {
 	return tx.Commit().Error
 }
 
-// UpdateUser updates an existing AuthUser in the database.
+// UpdateUser updates an existing AuthUser in the database
 func UpdateUser(userID int, updatedUser models.AuthUser) error {
 	// Find the user with the provided userID.
 	var user models.AuthUser
-	result := database.DBManager.Where("user_id = ?", userID).First(&user)
+	result := models.DBManager.Where("user_id = ?", userID).First(&user)
 	if result.Error != nil {
 		// If the user is not found, return the error.
 		return result.Error
@@ -225,8 +125,8 @@ func UpdateUser(userID int, updatedUser models.AuthUser) error {
 	user.CreatedAt = updatedUser.CreatedAt
 	user.LoginAt = updatedUser.LoginAt
 
-	// Save the updated user to the database.
-	if err := database.DBManager.Save(&user).Error; err != nil {
+	// Save the updated user to the models.
+	if err := models.DBManager.Save(&user).Error; err != nil {
 		// If an error occurs during update, return the error.
 		return err
 	}
@@ -235,7 +135,7 @@ func UpdateUser(userID int, updatedUser models.AuthUser) error {
 	return nil
 }
 
-// CreateGroup optimizes the creation of a group in the database.
+// CreateGroup optimizes the creation of a group in the database
 // It takes the group name, a boolean flag indicating if it's personal,
 // and the ID of the creator as input parameters.
 // It returns the ID of the created group.
@@ -246,8 +146,8 @@ func CreateGroup(groupName string, isPersonal bool, createBy int) (groupID int, 
 		IsPersonal: isPersonal,
 		CreateBy:   createBy,
 	}
-	// Attempt to create the group in the database.
-	if err := database.DBManager.Create(&group).Error; err != nil {
+	// Attempt to create the group in the models.
+	if err := models.DBManager.Create(&group).Error; err != nil {
 		// If an error occurs during creation, return 0 indicating failure.
 		return 0, err
 	}
@@ -261,7 +161,7 @@ func GetGroupIDByName(groupName string) (int, error) {
 	var group models.Group
 
 	// Find the group in the database with the given group name.
-	if err := database.DBManager.Where("name = ?", groupName).First(&group).Error; err != nil {
+	if err := models.DBManager.Where("name = ?", groupName).First(&group).Error; err != nil {
 		// Return an error if any error occurs during the lookup.
 		return 0, err
 	}
@@ -273,7 +173,7 @@ func GetGroupIDByName(groupName string) (int, error) {
 // DeleteGroup deletes a group from the database based on its ID.
 func DeleteGroup(groupID int) error {
 	// Start a transaction to ensure data integrity.
-	tx := database.DBManager.Begin()
+	tx := models.DBManager.Begin()
 
 	// Find the group with the provided ID.
 	var group models.Group
@@ -291,7 +191,7 @@ func DeleteGroup(groupID int) error {
 		return err
 	}
 
-	// Delete the group from the database.
+	// Delete the group from the models.
 	if err := tx.Delete(&group).Error; err != nil {
 		// If an error occurs during deletion, rollback the transaction and return the error.
 		tx.Rollback()
@@ -302,7 +202,7 @@ func DeleteGroup(groupID int) error {
 	return tx.Commit().Error
 }
 
-// createRole creates a new role and stores it in the database.
+// createRole creates a new role and stores it in the database
 func CreateRole(roleName string, accessControl, modify, read bool) (roleID int, err error) {
 	// Initialize a new Role instance and set its properties.
 	role := models.Role{
@@ -312,8 +212,8 @@ func CreateRole(roleName string, accessControl, modify, read bool) (roleID int, 
 		Read:          read,
 	}
 
-	// Attempt to save the role to the database.
-	if err := database.DBManager.Create(&role).Error; err != nil {
+	// Attempt to save the role to the models.
+	if err := models.DBManager.Create(&role).Error; err != nil {
 		// If an error occurs during creation, return the error and roleID as 0.
 		return 0, err
 	}
@@ -327,7 +227,7 @@ func GetRoleIDByName(roleName string) (int, error) {
 	var role models.Role
 
 	// Find the role in the database with the given role name.
-	if err := database.DBManager.Where("name = ?", roleName).First(&role).Error; err != nil {
+	if err := models.DBManager.Where("name = ?", roleName).First(&role).Error; err != nil {
 		// Return an error if any error occurs during the lookup.
 		return 0, err
 	}
@@ -344,7 +244,7 @@ func DeleteRole(roleID int) error {
 	}
 
 	// Start a transaction to ensure data integrity.
-	tx := database.DBManager.Begin()
+	tx := models.DBManager.Begin()
 
 	// Find the provided roleID.
 	var role models.Role
@@ -362,7 +262,7 @@ func DeleteRole(roleID int) error {
 		return err
 	}
 
-	// Delete the role from the database.
+	// Delete the role from the models.
 	if err := tx.Delete(&role).Error; err != nil {
 		// If an error occurs during deletion, rollback the transaction and return the error.
 		tx.Rollback()
@@ -373,7 +273,7 @@ func DeleteRole(roleID int) error {
 	return tx.Commit().Error
 }
 
-// UpdateRole updates an existing role in the database.
+// UpdateRole updates an existing role in the database
 func UpdateRole(roleID int, updatedRole models.Role) error {
 	// Check if the roleID is one of the default roles that cannot be updated.
 	if roleID <= 3 {
@@ -382,7 +282,7 @@ func UpdateRole(roleID int, updatedRole models.Role) error {
 
 	// Find the role with the provided roleID.
 	var role models.Role
-	result := database.DBManager.Where("role_id = ?", roleID).First(&role)
+	result := models.DBManager.Where("role_id = ?", roleID).First(&role)
 	if result.Error != nil {
 		// If the role is not found, return the error.
 		return result.Error
@@ -394,8 +294,8 @@ func UpdateRole(roleID int, updatedRole models.Role) error {
 	role.Modify = updatedRole.Modify
 	role.Read = updatedRole.Read
 
-	// Save the updated role to the database.
-	if err := database.DBManager.Save(&role).Error; err != nil {
+	// Save the updated role to the models.
+	if err := models.DBManager.Save(&role).Error; err != nil {
 		// If an error occurs during update, return the error.
 		return err
 	}
@@ -404,7 +304,7 @@ func UpdateRole(roleID int, updatedRole models.Role) error {
 	return nil
 }
 
-// CreateUserGroupRole creates a new association between an AuthUser, Group, and Role in the database.
+// CreateUserGroupRole creates a new association between an AuthUser, Group, and Role in the database
 func CreateUserGroupRole(authUserID, groupID, roleID int) error {
 	// Initialize a new AuthUserGroupRole instance with the provided IDs.
 	authUserGroupRole := models.AuthUserGroupRole{
@@ -413,8 +313,8 @@ func CreateUserGroupRole(authUserID, groupID, roleID int) error {
 		RoleID:     roleID,
 	}
 
-	// Attempt to create the association in the database.
-	if err := database.DBManager.Create(&authUserGroupRole).Error; err != nil {
+	// Attempt to create the association in the models.
+	if err := models.DBManager.Create(&authUserGroupRole).Error; err != nil {
 		// If an error occurs during creation, return the error.
 		return err
 	}
@@ -423,18 +323,18 @@ func CreateUserGroupRole(authUserID, groupID, roleID int) error {
 	return nil
 }
 
-// DeleteUserGroupRole deletes an association between an AuthUser, Group, and Role from the database.
+// DeleteUserGroupRole deletes an association between an AuthUser, Group, and Role from the database
 func DeleteUserGroupRole(authUserID, groupID, roleID int) error {
 	// Find the association with the provided IDs.
 	var authUserGroupRole models.AuthUserGroupRole
-	result := database.DBManager.Where("auth_user_id = ? AND group_id = ? AND role_id = ?", authUserID, groupID, roleID).First(&authUserGroupRole)
+	result := models.DBManager.Where("auth_user_id = ? AND group_id = ? AND role_id = ?", authUserID, groupID, roleID).First(&authUserGroupRole)
 	if result.Error != nil {
 		// If the association is not found, return the error.
 		return result.Error
 	}
 
-	// Delete the association from the database.
-	if err := database.DBManager.Delete(&authUserGroupRole).Error; err != nil {
+	// Delete the association from the models.
+	if err := models.DBManager.Delete(&authUserGroupRole).Error; err != nil {
 		// If an error occurs during deletion, return the error.
 		return err
 	}
@@ -443,10 +343,10 @@ func DeleteUserGroupRole(authUserID, groupID, roleID int) error {
 	return nil
 }
 
-// GetUserPermission retrieves permissions associated with a specific user from the database.
-func GetUserPermission(authUserID int) (permissions []Permission, err error) {
+// GetUserPermission retrieves permissions associated with a specific user from the database
+func GetUserPermission(authUserID int) (permissions []models.Permission, err error) {
 	// Query the database to find permissions associated with the provided authUserID.
-	result := database.DBManager.
+	result := models.DBManager.
 		Model(&models.AuthUserGroupRole{}).
 		Select("group_id, role_id").
 		Where("auth_user_id = ?", authUserID).
@@ -468,17 +368,17 @@ func GetUserPermission(authUserID int) (permissions []Permission, err error) {
 
 	// If public group is not found in permissions, add it.
 	if !hasPublicGroup {
-		permissions = append(permissions, Permission{GroupID: 1, RoleID: 3})
+		permissions = append(permissions, models.Permission{GroupID: 1, RoleID: 3})
 	}
 
 	// Return the found permissions and nil error.
 	return permissions, nil
 }
 
-// GetGroupUsers retrieves user IDs and their corresponding role IDs associated with a specific group from the database.
+// GetGroupUsers retrieves user IDs and their corresponding role IDs associated with a specific group from the database
 func GetGroupUsers(groupID int) (groupUsers []GroupUser, err error) {
 	// Query the database to find all users and their role IDs associated with the provided groupID.
-	result := database.DBManager.
+	result := models.DBManager.
 		Model(&models.AuthUserGroupRole{}).
 		Select("auth_user_id as user_id, role_id").
 		Where("group_id = ?", groupID).
@@ -497,7 +397,7 @@ func GetGroupUsers(groupID int) (groupUsers []GroupUser, err error) {
 func GetUserPersonalGroup(userID int) (groupID int, err error) {
 	var group models.Group
 	// Find the personal group associated with the user.
-	if err := database.DBManager.Where("create_by = ? AND is_personal = ?", userID, true).First(&group).Error; err != nil {
+	if err := models.DBManager.Where("create_by = ? AND is_personal = ?", userID, true).First(&group).Error; err != nil {
 		// If an error occurs or the group is not found, return an error.
 		return 0, err
 	}
@@ -506,7 +406,7 @@ func GetUserPersonalGroup(userID int) (groupID int, err error) {
 }
 
 // HasPermission checks if the permissions contain a specific groupid and roleid.
-func HasPermission(permissions []Permission, targetGroupID, targetRoleID int) bool {
+func HasPermission(permissions []models.Permission, targetGroupID, targetRoleID int) bool {
 	for _, perm := range permissions {
 		if perm.GroupID == targetGroupID && perm.RoleID == targetRoleID {
 			return true
@@ -519,7 +419,7 @@ func IsAdmin(userID int) bool {
 	// Here you would typically query the database to check if the user with the given userID is an admin.
 	// For instance, you might have a query like this:
 	var user models.AuthUser
-	if err := database.DBManager.Where("id = ? AND is_admin = ?", userID, true).First(&user).Error; err != nil {
+	if err := models.DBManager.Where("id = ? AND is_admin = ?", userID, true).First(&user).Error; err != nil {
 		// Handle the error, such as log it or return false if the user is not found or there's an error during the query.
 		return false
 	}
@@ -529,7 +429,7 @@ func IsAdmin(userID int) bool {
 }
 
 // ConvertPermissionsToGroupIDs extracts unique group IDs from a list of permissions.
-func GetPermissionAllGroupIDs(permissions []Permission) []int {
+func GetPermissionAllGroupIDs(permissions []models.Permission) []int {
 	uniqueGroupIDs := make(map[int]struct{})
 
 	// Extract unique group IDs from permissions
@@ -547,7 +447,7 @@ func GetPermissionAllGroupIDs(permissions []Permission) []int {
 }
 
 // GetPermissionGroupIDs extracts unique group IDs from permissions based on a specific role.
-func GetPermissionGroupIDs(permissions []Permission, role int) []int {
+func GetPermissionGroupIDs(permissions []models.Permission, role int) []int {
 	uniqueGroupIDs := make(map[int]struct{})
 
 	// Extract unique group IDs from permissions for the specified role

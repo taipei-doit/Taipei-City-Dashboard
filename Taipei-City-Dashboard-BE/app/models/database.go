@@ -1,5 +1,5 @@
-// Package database initiates the connections to the two postgreSQL databases of this application.
-package database
+// Package models initiates the connections to the two postgreSQL databases of this application and stores models and handlers.
+package models
 
 import (
 	"bufio"
@@ -8,7 +8,6 @@ import (
 	"os"
 	"strings"
 
-	"TaipeiCityDashboardBE/app/database/models"
 	"TaipeiCityDashboardBE/logs"
 
 	"gorm.io/driver/postgres"
@@ -108,10 +107,10 @@ func CloseConnect(dbName string, DB *gorm.DB) {
 func MigrateManagerSchema() {
 	// Retrieve the underlying SQL database connection.
 	if DBManager != nil {
-		DBManager.AutoMigrate(&models.AuthUser{}, &models.Role{}, &models.Group{})
-		DBManager.AutoMigrate(&models.AuthUserGroupRole{})
-		DBManager.AutoMigrate(&models.Component{}, &models.ComponentChart{}, &models.ComponentMap{})
-		DBManager.AutoMigrate(&models.Dashboard{}, &models.DashboardGroup{}, &models.Issue{})
+		DBManager.AutoMigrate(&AuthUser{}, &Role{}, &Group{})
+		DBManager.AutoMigrate(&AuthUserGroupRole{})
+		DBManager.AutoMigrate(&Component{}, &ComponentChart{}, &ComponentMap{})
+		DBManager.AutoMigrate(&Dashboard{}, &DashboardGroup{}, &Issue{})
 
 		// All users beneath the public group do not need to be added to the public group
 		// DBManager.Exec("ALTER TABLE auth_user_group_roles ADD CONSTRAINT check_group_id CHECK (group_id > 1);")

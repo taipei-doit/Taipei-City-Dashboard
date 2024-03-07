@@ -5,9 +5,9 @@ import (
 	"os"
 
 	"TaipeiCityDashboardBE/app/cache"
-	"TaipeiCityDashboardBE/app/database"
 	"TaipeiCityDashboardBE/app/initial"
 	"TaipeiCityDashboardBE/app/middleware"
+	"TaipeiCityDashboardBE/app/models"
 	"TaipeiCityDashboardBE/app/routes"
 	"TaipeiCityDashboardBE/logs"
 
@@ -21,7 +21,7 @@ import (
 // StartApplication initiates the main backend application, including the Gin router, postgreSQL, and Redis.
 func StartApplication() {
 	// 1. Connect to postgreSQL and Redis
-	database.ConnectToDatabases("MANAGER", "DASHBOARD")
+	models.ConnectToDatabases("MANAGER", "DASHBOARD")
 	cache.ConnectToRedis()
 
 	// 2. Initiate default Gin router with logger and recovery middleware
@@ -43,19 +43,19 @@ func StartApplication() {
 	logs.FInfo("Server on %v stopped", addr)
 
 	// If the server stops, close the database connections
-	database.CloseConnects("MANAGER", "DASHBOARD")
+	models.CloseConnects("MANAGER", "DASHBOARD")
 	cache.CloseConnect()
 }
 
 func MigrateManagerSchema() {
-	database.ConnectToDatabases("MANAGER")
-	database.MigrateManagerSchema()
+	models.ConnectToDatabases("MANAGER")
+	models.MigrateManagerSchema()
 	initial.InitDashboardManager()
-	database.CloseConnects("MANAGER")
+	models.CloseConnects("MANAGER")
 }
 
 func InsertDashbaordSampleData() {
-	database.ConnectToDatabases("DASHBOARD")
+	models.ConnectToDatabases("DASHBOARD")
 	initial.InitSampleCityData()
-	database.CloseConnects("DASHBOARD")
+	models.CloseConnects("DASHBOARD")
 }

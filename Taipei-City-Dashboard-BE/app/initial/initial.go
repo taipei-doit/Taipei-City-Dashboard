@@ -5,6 +5,7 @@ import (
 	"os"
 	"os/exec"
 
+	"TaipeiCityDashboardBE/app/util"
 	"TaipeiCityDashboardBE/auth"
 	"TaipeiCityDashboardBE/logs"
 )
@@ -78,7 +79,7 @@ func addRoles() {
 func createAdmin() {
 	userName := os.Getenv("DASHBOARD_DEFAULT_USERNAME")
 	email := os.Getenv("DASHBOARD_DEFAULT_Email")
-	password := auth.HashString(os.Getenv("DASHBOARD_DEFAULT_PASSWORD"))
+	password := util.HashString(os.Getenv("DASHBOARD_DEFAULT_PASSWORD"))
 	logs.FInfo("userName: %s", userName)
 	logs.FInfo("user email: %s", email)
 
