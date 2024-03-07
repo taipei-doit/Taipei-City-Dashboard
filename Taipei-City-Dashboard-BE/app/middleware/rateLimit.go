@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"time"
 
-	"TaipeiCityDashboardBE/internal/db/cache"
+	"TaipeiCityDashboardBE/app/cache"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis"

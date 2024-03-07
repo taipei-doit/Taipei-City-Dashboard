@@ -2,10 +2,9 @@ package controllers
 
 import (
 	"net/http"
-	"time"
+	"strconv"
 
-	"TaipeiCityDashboardBE/internal/db/postgres"
-	"TaipeiCityDashboardBE/internal/db/postgres/models"
+	"TaipeiCityDashboardBE/app/models"
 
 	"github.com/gin-gonic/gin"
 )
@@ -15,10 +14,8 @@ GetUserInfo returns the user information of the current user
 GET /api/v1/user/me
 */
 func GetUserInfo(c *gin.Context) {
-	var user models.AuthUser
-
 	userID := c.GetInt("accountID")
-	err := postgres.DBManager.Table("auth_users").Where("id = ?", userID).First(&user).Error
+	user, err := models.GetUserByID(userID)
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "No user found"})
 		return
@@ -32,10 +29,7 @@ EditUserInfo updates the user information of the current user
 PATCH /api/v1/user/me
 */
 func EditUserInfo(c *gin.Context) {
-	type UpdateUser struct {
-		Name string `json:"name"`
-	}
-	var user UpdateUser
+	var user models.AuthUser
 	userID := c.GetInt("accountID")
 
 	err := c.ShouldBindJSON(&user)
@@ -44,7 +38,7 @@ func EditUserInfo(c *gin.Context) {
 		return
 	}
 
-	err = postgres.DBManager.Table("auth_users").Where("id = ?", userID).Updates(&user).Error
+	user, err = models.UpdateSelf(userID, user.Name)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update user"})
 		return
@@ -75,38 +69,10 @@ func GetAllUsers(c *gin.Context) {
 	var query userQuery
 	c.ShouldBindQuery(&query)
 
-	// Create a temporary database
-	tempDB := postgres.DBManager.Table("auth_users")
-
-	// Count the total amount of users
-	tempDB.Count(&totalUsers)
-
-	// Search the users
-	if query.SearchByID != "" {
-		tempDB = tempDB.Where("id = ?", query.SearchByID)
-	}
-	if query.SearchByName != "" {
-		tempDB = tempDB.Where("name LIKE ?", "%"+query.SearchByName+"%")
-	}
-
-	tempDB.Count(&resultNum)
-
-	// Sort the issues
-	if query.Sort != "" {
-		tempDB = tempDB.Order(query.Sort + " " + query.Order)
-	}
-
-	// Paginate the issues
-	if query.PageSize > 0 {
-		tempDB = tempDB.Limit(query.PageSize)
-		if query.PageNum > 0 {
-			tempDB = tempDB.Offset((query.PageNum - 1) * query.PageSize)
-		}
-	}
-
-	err := tempDB.Find(&users).Error
+	// Get all users
+	users, totalUsers, resultNum, err := models.GetAllUsers(query.PageSize, query.PageNum, query.Sort, query.Order, query.SearchByID, query.SearchByName)
 	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "No user found"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get users"})
 		return
 	}
 
@@ -118,19 +84,14 @@ UpdateUserByID updates the user information by ID
 GET /api/v1/user/:id
 */
 func UpdateUserByID(c *gin.Context) {
-	type UpdateUser struct {
-		Name        string    `json:"name" gorm:"column:name;type:varchar"`
-		IsAdmin     *bool     `json:"is_admin"   gorm:"column:is_admin;type:boolean;default:false"`       // 系統管理者
-		IsActive    *bool     `json:"is_active" gorm:"column:is_active;type:boolean;default:true"`        // 啟用
-		IsWhitelist *bool     `json:"is_whitelist" gorm:"column:is_whitelist;type:boolean;default:false"` // 白名單
-		IsBlacked   *bool     `json:"is_blacked" gorm:"column:is_blacked;type:boolean;default:false"`     // 黑名單
-		ExpiredAt   time.Time `json:"expired_at" gorm:"column:expired_at;type:timestamp with time zone;"` // 停用時間
+	userID, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": "Invalid user ID"})
+		return
 	}
-	var user UpdateUser
-	userID := c.Param("id")
 
 	// 1. Check if the user exists
-	err := postgres.DBManager.Table("auth_users").Where("id = ?", userID).First(&user).Error
+	user, err := models.GetUserByID(userID)
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "No user found"})
 		return
@@ -143,14 +104,8 @@ func UpdateUserByID(c *gin.Context) {
 		return
 	}
 
-	if !*user.IsActive {
-		user.ExpiredAt = time.Now()
-	} else {
-		user.ExpiredAt = time.Time{}
-	}
-
 	// 3. Update the user
-	err = postgres.DBManager.Table("auth_users").Where("id = ?", userID).Updates(&user).Error
+	user, err = models.UpdateUser(userID, user.Name, user.IsAdmin, user.IsActive, user.IsWhitelist, user.IsBlacked)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update user"})
 		return

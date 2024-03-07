@@ -4,7 +4,8 @@ package middleware
 import (
 	"net/http"
 
-	"TaipeiCityDashboardBE/internal/auth"
+	"TaipeiCityDashboardBE/app/models"
+	"TaipeiCityDashboardBE/app/util"
 
 	"github.com/gin-gonic/gin"
 )
@@ -39,7 +40,7 @@ func IsLoggedIn() gin.HandlerFunc {
 // IsSysAdm checks if user is system admin.
 func IsSysAdm() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		_, _, isAdmin, _, _ := auth.GetUserInfoFromContext(c)
+		_, _, isAdmin, _, _ := util.GetUserInfoFromContext(c)
 		if isAdmin {
 			c.Next()
 			return
@@ -49,9 +50,9 @@ func IsSysAdm() gin.HandlerFunc {
 }
 
 // LimitRequestTo checks if the permissions contain a specific permission.
-func LimitRequestTo(permission auth.Permission) gin.HandlerFunc {
+func LimitRequestTo(permission models.Permission) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		_, _, _, _, permissions := auth.GetUserInfoFromContext(c)
+		_, _, _, _, permissions := util.GetUserInfoFromContext(c)
 		for _, perm := range permissions {
 			if perm.GroupID == permission.GroupID && perm.RoleID == permission.RoleID {
 				c.Next()

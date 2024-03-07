@@ -45,7 +45,7 @@ function updateFreq(update_freq, update_freq_unit) {
 		month: "月",
 		year: "年",
 	};
-	if (update_freq == 0) {
+	if (update_freq == 0 || !update_freq) {
 		return "不定期更新";
 	}
 	return `每${update_freq}${unitRef[update_freq_unit]}更新`;

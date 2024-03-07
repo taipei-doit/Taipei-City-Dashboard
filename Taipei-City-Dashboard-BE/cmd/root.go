@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"TaipeiCityDashboardBE/internal/app"
+	"TaipeiCityDashboardBE/app"
 	"TaipeiCityDashboardBE/logs"
 
 	"github.com/spf13/cobra"
@@ -22,19 +22,6 @@ var rootCmd = &cobra.Command{
 		app.StartApplication()
 	},
 }
-
-// // checkExpiredCmd represents the command to check and disable expired accounts.
-//
-//	var checkExpiredCmd = &cobra.Command{
-//		Use:   "checkExpired",
-//		Short: "disable expired account",
-//		Long:  "Check expired account and disable it.",
-//		Run: func(cmd *cobra.Command, args []string) {
-//			// Start the process of checking and disabling expired accounts.
-//			auth.CheckExpired()
-//		},
-//	}
-//
 
 // migrateDBCmd
 var migrateDBCmd = &cobra.Command{

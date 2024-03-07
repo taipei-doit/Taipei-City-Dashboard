@@ -4,11 +4,11 @@ package app
 import (
 	"os"
 
-	"TaipeiCityDashboardBE/internal/app/initial"
-	"TaipeiCityDashboardBE/internal/app/middleware"
-	"TaipeiCityDashboardBE/internal/app/routes"
-	"TaipeiCityDashboardBE/internal/db/cache"
-	"TaipeiCityDashboardBE/internal/db/postgres"
+	"TaipeiCityDashboardBE/app/cache"
+	"TaipeiCityDashboardBE/app/initial"
+	"TaipeiCityDashboardBE/app/middleware"
+	"TaipeiCityDashboardBE/app/models"
+	"TaipeiCityDashboardBE/app/routes"
 	"TaipeiCityDashboardBE/logs"
 
 	"github.com/fvbock/endless"
@@ -21,7 +21,7 @@ import (
 // StartApplication initiates the main backend application, including the Gin router, postgreSQL, and Redis.
 func StartApplication() {
 	// 1. Connect to postgreSQL and Redis
-	postgres.ConnectToDatabases("MANAGER", "DASHBOARD")
+	models.ConnectToDatabases("MANAGER", "DASHBOARD")
 	cache.ConnectToRedis()
 
 	// 2. Initiate default Gin router with logger and recovery middleware
@@ -43,19 +43,19 @@ func StartApplication() {
 	logs.FInfo("Server on %v stopped", addr)
 
 	// If the server stops, close the database connections
-	postgres.CloseConnects("MANAGER", "DASHBOARD")
+	models.CloseConnects("MANAGER", "DASHBOARD")
 	cache.CloseConnect()
 }
 
 func MigrateManagerSchema() {
-	postgres.ConnectToDatabases("MANAGER")
-	postgres.MigrateManagerSchema()
+	models.ConnectToDatabases("MANAGER")
+	models.MigrateManagerSchema()
 	initial.InitDashboardManager()
-	postgres.CloseConnects("MANAGER")
+	models.CloseConnects("MANAGER")
 }
 
 func InsertDashbaordSampleData() {
-	postgres.ConnectToDatabases("DASHBOARD")
+	models.ConnectToDatabases("DASHBOARD")
 	initial.InitSampleCityData()
-	postgres.CloseConnects("DASHBOARD")
+	models.CloseConnects("DASHBOARD")
 }
