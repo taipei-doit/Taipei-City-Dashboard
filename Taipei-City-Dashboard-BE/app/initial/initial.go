@@ -18,12 +18,16 @@ func InitDashboardManager() {
 
 // and executing an SQL file.
 func initDashboards() {
-	// Set the command and parameters to install the PostgreSQL client
-	cmdInstallPsql := exec.Command("apk", "add", "postgresql-client")
-	// Execute the command to install the PostgreSQL client
-	if err := cmdInstallPsql.Run(); err != nil {
-		logs.FError("Error installing PostgreSQL client:%s", err)
-		return
+	// Check if the "psql" command not exists
+	_, err := exec.LookPath("psql")
+	if err != nil {
+		// Set the command and parameters to install the PostgreSQL client
+	    cmdInstallPsql := exec.Command("apk", "add", "postgresql-client")
+	    // Execute the command to install the PostgreSQL client
+	    if err := cmdInstallPsql.Run(); err != nil {
+	    	logs.FError("Error installing PostgreSQL client:%s", err)
+	    	return
+	    }
 	}
 
 	// Set the command and parameters to execute the SQL file using psql
