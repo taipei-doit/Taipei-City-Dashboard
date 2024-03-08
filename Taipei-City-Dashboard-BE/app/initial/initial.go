@@ -18,16 +18,21 @@ func InitDashboardManager() {
 
 // and executing an SQL file.
 func initDashboards() {
-	// Set the command and parameters to install the PostgreSQL client
-	cmdInstallPsql := exec.Command("apk", "add", "postgresql-client")
-	// Execute the command to install the PostgreSQL client
-	if err := cmdInstallPsql.Run(); err != nil {
-		logs.FError("Error installing PostgreSQL client:%s", err)
-		return
+	// Check if the "psql" command not exists
+	_, err := exec.LookPath("psql")
+	if err != nil {
+		// Set the command and parameters to install the PostgreSQL client
+	    cmdInstallPsql := exec.Command("apk", "add", "postgresql-client")
+	    // Execute the command to install the PostgreSQL client
+	    if err := cmdInstallPsql.Run(); err != nil {
+	    	logs.FError("Error installing PostgreSQL client:%s", err)
+	    	return
+	    }
 	}
 
 	// Set the command and parameters to execute the SQL file using psql
-	cmdPsql := exec.Command("psql", "-h", os.Getenv("DB_MANAGER_HOST"), "-U", os.Getenv("DB_MANAGER_USER"), "-d", os.Getenv("DB_MANAGER_DBNAME"), "-f", "/opt/db-sample-data/dashboardmanager-demo.sql")
+	// cmdPsql := exec.Command("psql", "-h", os.Getenv("DB_MANAGER_HOST"), "-U", os.Getenv("DB_MANAGER_USER"), "-d", os.Getenv("DB_MANAGER_DBNAME"), "-f", "/opt/db-sample-data/dashboardmanager-demo.sql")
+	cmdPsql := exec.Command("psql", "-h", os.Getenv("DB_MANAGER_HOST"), "-U", os.Getenv("DB_MANAGER_USER"), "-d", os.Getenv("DB_MANAGER_DBNAME"), "-f", "/Users/shih/Documents/GitHub/Taipei-City-Dashboard/docker/db-data/pgadmin-data/storage/bd2456_mail.taipei/dashboardmanager.sql-data")
 
 	// Create a pipe to pass the password to psql command
 	cmdStdin, err := cmdPsql.StdinPipe()

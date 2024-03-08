@@ -1,6 +1,7 @@
 .DS_Store
 /node_modules
 Taipei-City-Dashboard-FE/dist
+Taipei-City-Dashboard-BE/TaipeiCityDashboardBE
 
 # Log files
 npm-debug.log*
@@ -48,6 +49,7 @@ go.work
 
 # .env files except for template
 docker/.env
+Taipei-City-Dashboard-FE/.env
 
 # docker-compose
 # db data
