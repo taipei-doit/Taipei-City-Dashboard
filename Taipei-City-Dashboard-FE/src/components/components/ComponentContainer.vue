@@ -170,9 +170,9 @@ function changeShowTagTooltipState(state) {
 					<span>add_circle</span>
 				</button>
 				<button
-				    v-if="
-      					!authStore.isNarrowDevice || !authStore.isMobileDevice
-     				"
+					v-if="
+						!authStore.isNarrowDevice || !authStore.isMobileDevice
+						"
 					:class="{
 						isfavorite: contentStore.favorites.components.includes(
 							content.id
