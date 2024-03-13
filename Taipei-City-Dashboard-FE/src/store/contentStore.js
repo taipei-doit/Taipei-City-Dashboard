@@ -161,7 +161,7 @@ export const useContentStore = defineStore("content", {
 				const response = await http.get(
 					`/component/${component.id}/chart`,
 					{
-						headers: !["static", "current", "demo"].includes(
+						params: !["static", "current", "demo"].includes(
 							component.time_from
 						)
 							? getComponentDataTimeframe(
@@ -190,7 +190,7 @@ export const useContentStore = defineStore("content", {
 						const response = await http.get(
 							`/component/${component.id}/history`,
 							{
-								headers: getComponentDataTimeframe(
+								params: getComponentDataTimeframe(
 									component.history_config.range[i],
 									"now",
 									true
@@ -297,7 +297,7 @@ export const useContentStore = defineStore("content", {
 			const response_2 = await http.get(
 				`/component/${dialogStore.moreInfoContent.id}/chart`,
 				{
-					headers: !["static", "current", "demo"].includes(
+					params: !["static", "current", "demo"].includes(
 						dialogStore.moreInfoContent.time_from
 					)
 						? getComponentDataTimeframe(
@@ -323,7 +323,7 @@ export const useContentStore = defineStore("content", {
 					const response = await http.get(
 						`/component/${dialogStore.moreInfoContent.id}/history`,
 						{
-							headers: getComponentDataTimeframe(
+							params: getComponentDataTimeframe(
 								dialogStore.moreInfoContent.history_config
 									.range[i],
 								"now",

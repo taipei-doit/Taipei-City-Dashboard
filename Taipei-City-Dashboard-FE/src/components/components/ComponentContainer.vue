@@ -172,7 +172,7 @@ function changeShowTagTooltipState(state) {
 				<button
 					v-if="
 						!authStore.isNarrowDevice || !authStore.isMobileDevice
-						"
+					"
 					:class="{
 						isfavorite: contentStore.favorites.components.includes(
 							content.id

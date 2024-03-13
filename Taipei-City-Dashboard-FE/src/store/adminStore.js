@@ -113,7 +113,7 @@ export const useAdminStore = defineStore("admin", {
 			const response = await http.get(
 				`/component/${component.id}/chart`,
 				{
-					headers: !["static", "current", "demo"].includes(
+					params: !["static", "current", "demo"].includes(
 						component.time_from
 					)
 						? getComponentDataTimeframe(
@@ -136,7 +136,7 @@ export const useAdminStore = defineStore("admin", {
 					const response = await http.get(
 						`/component/${component.id}/history`,
 						{
-							headers: getComponentDataTimeframe(
+							params: getComponentDataTimeframe(
 								component.history_config.range[i],
 								"now",
 								true
