@@ -3,9 +3,8 @@ package cache
 
 import (
 	"fmt"
-	"os"
-	"strconv"
 
+	"TaipeiCityDashboardBE/global"
 	"TaipeiCityDashboardBE/logs"
 
 	"github.com/go-redis/redis"
@@ -16,12 +15,10 @@ var Redis *redis.Client
 
 // ConnectToRedis connects to the redis database of this application.
 func ConnectToRedis() {
-	db, _ := strconv.Atoi(os.Getenv("REDIS_DB"))
-
 	Redis = redis.NewClient(&redis.Options{
-		Addr:     os.Getenv("REDIS_ADDR"),
-		Password: os.Getenv("REDIS_PASSWORD"),
-		DB:       db,
+		Addr:     global.Redis.Addr + ":" + global.Redis.Port,
+		Password: global.Redis.Password,
+		DB:       global.Redis.DB,
 	})
 
 	// Check if connection is successful

@@ -32,6 +32,9 @@
 		},
 		"ui.semanticTokens": true,
 		"completionDocumentation": true
+	},
+	"[dotenv]": {
+		"editor.defaultFormatter": "foxundermoon.shell-format"
 	}
 	// "go.useLanguageServer": false
 }
