@@ -22,21 +22,13 @@ const (
 	IssueLimitTotalRequestsTimes     = 200
 	LimitRequestsDuration            = 60 * time.Second
 
-	// JWT secret
 	// JWT Issuer
 	JwtIssuer = "Taipei citydashboard"
 	// JWT Expires Duration
 	TokenExpirationDuration = 8 * time.Hour
 	NotBeforeDuration       = 0 * time.Second
 
-	// TaipeipassURLProd ...
-	TaipeipassURLProd = "https://id.taipei/tpcd"
-	// TaipeipassURLDev ...
-	TaipeipassURLDev = "https://demo.jrsys.com.tw/tpcd"
-	// IssoURLProd ...
-	IssoURLProd = "https://id.taipei/isso"
-	// IssoURLDev ...
-	IssoURLDev = "https://demo.jrsys.com.tw/isso"
-
 	TaipeipassAPIVersion = "v1.0.9"
+
+	SampleDataDir = "/opt/db-sample-data/"
 )

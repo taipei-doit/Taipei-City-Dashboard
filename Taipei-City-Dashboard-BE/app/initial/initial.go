@@ -2,61 +2,42 @@
 package initial
 
 import (
+	"fmt"
 	"os"
 	"os/exec"
 
 	"TaipeiCityDashboardBE/app/models"
 	"TaipeiCityDashboardBE/app/util"
+	"TaipeiCityDashboardBE/global"
 	"TaipeiCityDashboardBE/logs"
 )
 
 func InitDashboardManager() {
-	initDashboards()
+	initDashboardConfigs()
 	addRoles()
 	createAdmin()
 }
 
 // and executing an SQL file.
-func initDashboards() {
-	// Set the command and parameters to install the PostgreSQL client
-	cmdInstallPsql := exec.Command("apk", "add", "postgresql-client")
-	// Execute the command to install the PostgreSQL client
-	if err := cmdInstallPsql.Run(); err != nil {
-		logs.FError("Error installing PostgreSQL client:%s", err)
+func initDashboardConfigs() {
+	// Check if the "psql" command not exists
+	err := checkPostgreSQLClient()
+	if err != nil {
+		logs.FError("Error checking PostgreSQL client: %s", err)
 		return
 	}
 
-	// Set the command and parameters to execute the SQL file using psql
-	cmdPsql := exec.Command("psql", "-h", os.Getenv("DB_MANAGER_HOST"), "-U", os.Getenv("DB_MANAGER_USER"), "-d", os.Getenv("DB_MANAGER_DBNAME"), "-f", "/opt/db-sample-data/dashboardmanager-demo.sql")
-
-	// Create a pipe to pass the password to psql command
-	cmdStdin, err := cmdPsql.StdinPipe()
-	if err != nil {
-		logs.FError("Error creating pipe to psql command: %s", err)
+	// get import file path
+	filePath := global.SampleDataDir + global.PostgresManagerSampleDataFile
+	logs.FInfo("import file name: %s", filePath)
+	if _, err := os.Stat(filePath); os.IsNotExist(err) {
+		logs.FError("file %s not exist", filePath)
+		return
 	}
 
-	// Start the command
-	err = cmdPsql.Start()
+	err = executeSQLFile(global.PostgresManager,filePath)
 	if err != nil {
-		logs.FError("Error starting psql command: %s", err)
-	}
-
-	// Write the password to the psql command's standard input
-	_, err = cmdStdin.Write([]byte(os.Getenv("DB_MANAGER_PASSWORD") + "\n"))
-	if err != nil {
-		logs.FError("Error writing password to psql command: %s", err)
-	}
-
-	// Close the standard input of the psql command
-	err = cmdStdin.Close()
-	if err != nil {
-		logs.FError("Error closing standard input of psql command: %s", err)
-	}
-
-	// Wait for the command to finish
-	err = cmdPsql.Wait()
-	if err != nil {
-		logs.FError("Error executing psql command: %s", err)
+		logs.FError("error executing SQL file: %s", err)
 	}
 }
 
@@ -77,9 +58,9 @@ func addRoles() {
 }
 
 func createAdmin() {
-	userName := os.Getenv("DASHBOARD_DEFAULT_USERNAME")
-	email := os.Getenv("DASHBOARD_DEFAULT_Email")
-	password := util.HashString(os.Getenv("DASHBOARD_DEFAULT_PASSWORD"))
+	userName := global.DashboardDefaultUserName
+	email := global.DashboardDefaultUserEmail
+	password := util.HashString(global.DashboardDefaultUserPassword)
 	logs.FInfo("userName: %s", userName)
 	logs.FInfo("user email: %s", email)
 
@@ -116,44 +97,48 @@ func createAdmin() {
 }
 
 func InitSampleCityData() {
-	// Set the command and parameters to install the PostgreSQL client
-	cmdInstallPsql := exec.Command("apk", "add", "postgresql-client")
-	// Execute the command to install the PostgreSQL client
-	if err := cmdInstallPsql.Run(); err != nil {
-		logs.FError("Error installing PostgreSQL client:%s", err)
+	// Check if the "psql" command not exists
+	err := checkPostgreSQLClient()
+	if err != nil {
+		logs.FError("Error checking PostgreSQL client: %s", err)
 		return
 	}
 
-	// Set the command and parameters to execute the SQL file using psql
-	cmdPsql := exec.Command("psql", "-h", os.Getenv("DB_DASHBOARD_HOST"), "-U", os.Getenv("DB_DASHBOARD_USER"), "-d", os.Getenv("DB_DASHBOARD_DBNAME"), "-f", "/opt/db-sample-data/dashboard-demo.sql")
-
-	// Create a pipe to pass the password to psql command
-	cmdStdin, err := cmdPsql.StdinPipe()
-	if err != nil {
-		logs.FError("Error creating pipe to psql command: %s", err)
+	// get import file path
+	filePath := global.SampleDataDir + global.PostgresDashboardSampleDataFile
+	if _, err := os.Stat(filePath); os.IsNotExist(err) {
+		panic(fmt.Sprintf("file %s not exist", filePath))
 	}
+	logs.FInfo("import file name: %s", filePath)
 
-	// Start the command
-	err = cmdPsql.Start()
+	err = executeSQLFile(global.PostgresDashboard,filePath)
 	if err != nil {
-		logs.FError("Error starting psql command: %s", err)
+		logs.FError("error executing SQL file: %s", err)
 	}
+}
 
-	// Write the password to the psql command's standard input
-	_, err = cmdStdin.Write([]byte(os.Getenv("DB_DASHBOARD_PASSWORD") + "\n"))
+// Check if PostgreSQL client is installed
+func checkPostgreSQLClient() error {
+	_, err := exec.LookPath("psql")
 	if err != nil {
-		logs.FError("Error writing password to psql command: %s", err)
+		// Install PostgreSQL client
+		cmd := exec.Command("apk", "add", "postgresql-client")
+		err := cmd.Run()
+		if err != nil {
+			return fmt.Errorf("error installing PostgreSQL client: %s", err)
+		}
 	}
+	return nil
+}
 
-	// Close the standard input of the psql command
-	err = cmdStdin.Close()
-	if err != nil {
-		logs.FError("Error closing standard input of psql command: %s", err)
-	}
+// ExecuteSQLFile executes SQL file using psql
+func executeSQLFile(dbConfig global.DatabaseConfig, filePath string) error {
+	cmd := exec.Command("psql", "-h", dbConfig.Host, "-p", dbConfig.Port, "-U", dbConfig.User, "-d", dbConfig.DBName, "-f", filePath)
+	// cmd.Stdin = strings.NewReader(dbConfig.Password + "\n")
 
-	// Wait for the command to finish
-	err = cmdPsql.Wait()
+	err := cmd.Run()
 	if err != nil {
-		logs.FError("Error executing psql command: %s", err)
+		return fmt.Errorf("error executing psql command: %s", err)
 	}
+	return nil
 }
