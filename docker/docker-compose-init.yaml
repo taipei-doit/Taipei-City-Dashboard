@@ -12,19 +12,22 @@ services:
     image: golang:${GOLANG_IMAGE_TAG:-latest}
     container_name: dashboard-be-init-manager
     environment:
-      DASHBOARD_DEFAULT_USERNAME: ${DASHBOARD_DEFAULT_USERNAME:-default}
-      DASHBOARD_DEFAULT_Email: ${DASHBOARD_DEFAULT_Email:-default@gov.taipei}
-      DASHBOARD_DEFAULT_PASSWORD: ${DASHBOARD_DEFAULT_PASSWORD:-password}
-      DB_MANAGER_HOST: ${DB_MANAGER_HOST:-postgres-manager}
+      DASHBOARD_DEFAULT_USERNAME: ${DASHBOARD_DEFAULT_USERNAME}
+      DASHBOARD_DEFAULT_Email: ${DASHBOARD_DEFAULT_Email}
+      DASHBOARD_DEFAULT_PASSWORD: ${DASHBOARD_DEFAULT_PASSWORD}
+      DB_MANAGER_HOST: ${DB_MANAGER_HOST}
       DB_MANAGER_USER: ${DB_MANAGER_USER}
       DB_MANAGER_PASSWORD: ${DB_MANAGER_PASSWORD}
+      PGPASSWORD: ${DB_MANAGER_PASSWORD}
       DB_MANAGER_DBNAME: ${DB_MANAGER_DBNAME}
-      DB_MANAGER_PORT: ${DB_MANAGER_PORT:-5432}
+      DB_MANAGER_PORT: ${DB_MANAGER_PORT}
+      MANAGER_SAMPLE_FILE: ${MANAGER_SAMPLE_FILE}
     volumes:
       - ../Taipei-City-Dashboard-BE:/opt/Taipei-City-Dashboard-BE
       - ../db-sample-data:/opt/db-sample-data
     working_dir: /opt/Taipei-City-Dashboard-BE
     command: ["go", "run", "main.go", "migrateDB"]
+    # command: ["sleep","600000"]
 
   dashboard-be-init-dashboard:
     image: golang:${GOLANG_IMAGE_TAG:-latest}
@@ -33,8 +36,10 @@ services:
       DB_DASHBOARD_HOST: ${DB_DASHBOARD_HOST:-postgres-data}
       DB_DASHBOARD_USER: ${DB_DASHBOARD_USER}
       DB_DASHBOARD_PASSWORD: ${DB_DASHBOARD_PASSWORD}
+      PGPASSWORD: ${DB_DASHBOARD_PASSWORD}
       DB_DASHBOARD_DBNAME: ${DB_DASHBOARD_DBNAME}
       DB_DASHBOARD_PORT: ${DB_DASHBOARD_PORT:-5432}
+      DASHBOARD_SAMPLE_FILE: ${DASHBOARD_SAMPLE_FILE}
     volumes:
       - ../Taipei-City-Dashboard-BE:/opt/Taipei-City-Dashboard-BE
       - ../db-sample-data:/opt/db-sample-data

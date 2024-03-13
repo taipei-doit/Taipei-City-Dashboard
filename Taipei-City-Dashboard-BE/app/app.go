@@ -2,13 +2,12 @@
 package app
 
 import (
-	"os"
-
 	"TaipeiCityDashboardBE/app/cache"
 	"TaipeiCityDashboardBE/app/initial"
 	"TaipeiCityDashboardBE/app/middleware"
 	"TaipeiCityDashboardBE/app/models"
 	"TaipeiCityDashboardBE/app/routes"
+	"TaipeiCityDashboardBE/global"
 	"TaipeiCityDashboardBE/logs"
 
 	"github.com/fvbock/endless"
@@ -34,7 +33,7 @@ func StartApplication() {
 	routes.ConfigureRoutes()
 
 	// 5. Configure http server
-	addr := os.Getenv("DOMAIN") + ":" + os.Getenv("PORT")
+    addr := global.GinAddr
 
 	err := endless.ListenAndServe(addr, routes.Router)
 	if err != nil {

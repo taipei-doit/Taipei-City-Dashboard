@@ -50,6 +50,9 @@ go.work
 # .env files except for template
 docker/.env
 Taipei-City-Dashboard-FE/.env
+Taipei-City-Dashboard-FE/.env.development
+Taipei-City-Dashboard-FE/.env.production
+Taipei-City-Dashboard-FE/.env.test
 
 # docker-compose
 # db data

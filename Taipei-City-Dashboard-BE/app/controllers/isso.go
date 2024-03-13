@@ -92,8 +92,8 @@ func ExecIssoAuth(c *gin.Context) {
 		// 	"error": "invalid_grant",
 		// 	"error_description": "Invalid authorization code: YTwPr5"
 		// }
-		urlGetToken := global.TaipeipassURL + "/oauth/token"
-		body := "grant_type=authorization_code&client_id=" + global.IssoClientID + "&client_secret=" + global.IssoClientSecret + "&code=" + code
+		urlGetToken := global.Isso.TaipeipassURL + "/oauth/token"
+		body := "grant_type=authorization_code&client_id=" + global.Isso.ClientID + "&client_secret=" + global.Isso.ClientSecret + "&code=" + code
 		// header
 		headers := make(http.Header)
 		headers.Add("Content-Type", "application/x-www-form-urlencoded")
@@ -107,7 +107,7 @@ func ExecIssoAuth(c *gin.Context) {
 		// GET https://{taipeipass_url}/api/{version}/user/my
 		// ## Header ##
 		// Authorization Bearer {access token}
-		urlGetUserInfo := global.TaipeipassURL + "/api/" + global.TaipeipassAPIVersion + "/user/my"
+		urlGetUserInfo := global.Isso.TaipeipassURL + "/api/" + global.TaipeipassAPIVersion + "/user/my"
 		// header
 		headers.Add("Authorization", "Bearer "+accessToken.AccessToken)
 		// get user info

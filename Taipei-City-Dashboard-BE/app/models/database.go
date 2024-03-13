@@ -8,6 +8,7 @@ import (
 	"os"
 	"strings"
 
+	"TaipeiCityDashboardBE/global"
 	"TaipeiCityDashboardBE/logs"
 
 	"gorm.io/driver/postgres"
@@ -23,51 +24,55 @@ var (
 	DBManager   *gorm.DB
 )
 
-// ConnectToDatabases connects to the two postgreSQL databases of this application.
+// ConnectToDatabases connects to the two PostgreSQL databases used by this application.
+// It accepts a variable number of database names as arguments and establishes connections to each specified database.
+// The function iterates over the provided database names and connects to the corresponding databases.
+// It uses a switch statement to handle different database names and assigns the database connections accordingly.
 func ConnectToDatabases(dbNames ...interface{}) {
 	for _, dbName := range dbNames {
 		if dbString, ok := dbName.(string); ok {
-			conn := ConnectToDatabase(dbString)
 			// Switch statement to handle different database names.
 			switch dbString {
 			case "DASHBOARD":
-				DBDashboard = conn
+				logs.FInfo("DASHBOARD Hostname: %s", global.PostgresDashboard.Host)
+				DBDashboard = ConnectToDatabase(global.PostgresDashboard)
 			case "MANAGER":
-				DBManager = conn
+				logs.FInfo("MANAGER Hostname: %s", global.PostgresManager.Host)
+				DBManager = ConnectToDatabase(global.PostgresManager)
 			default:
-				panic("DB does not in connection list.")
+				panic("Database not in connection list.")
 			}
 		}
 	}
 }
 
-// ConnectToDatabase establishes a connection to the specified database using the provided dbName.
-// It constructs the database connection string by fetching environment variables for host, port, user, dbname, and password.
-// The connection string is formatted as "host=... port=... user=... dbname=... password=... sslmode=disable".
+// ConnectToDatabase establishes a connection to the specified database using the provided DatabaseConfig.
+// It constructs the database connection string using the provided database configuration and establishes a connection using gorm.Open.
 // The function returns a pointer to a gorm.DB (database connection) and logs success or failure messages accordingly.
-func ConnectToDatabase(dbName string) *gorm.DB {
-	// Constructing the database connection string using environment variables
+func ConnectToDatabase(dbConfig global.DatabaseConfig) *gorm.DB {
+	// Constructing the database connection string using database configuration
 	dbargs := fmt.Sprintf(
 		"host=%s port=%s user=%s dbname=%s password=%s sslmode=disable",
-		os.Getenv(fmt.Sprintf("DB_%s_HOST", dbName)),
-		os.Getenv(fmt.Sprintf("DB_%s_PORT", dbName)),
-		os.Getenv(fmt.Sprintf("DB_%s_USER", dbName)),
-		os.Getenv(fmt.Sprintf("DB_%s_DBNAME", dbName)),
-		os.Getenv(fmt.Sprintf("DB_%s_PASSWORD", dbName)),
+		dbConfig.Host,
+		dbConfig.Port,
+		dbConfig.User,
+		dbConfig.DBName,
+		dbConfig.Password,
 	)
 
 	// Establish a connection to the database using gorm.Open and the constructed connection string
 	dbConn, err := gorm.Open(postgres.Open(dbargs), &gorm.Config{})
 	if err != nil {
 		// Log an error and panic if there is an issue connecting to the database
-		logs.FError("Error connecting to %s database", dbName)
+		logs.FError("Error connecting to %s database", dbConfig.Host)
 		panic("Connecting to database error")
 	}
 
 	// Log a success message if the connection is established successfully
-	logs.FInfo("%s database connecting", dbName)
+	logs.FInfo("%s database connected", dbConfig.Host)
 	return dbConn
 }
+
 
 // CloseConnects closes the connections to the specified databases.
 // It takes a variable number of database names and closes the corresponding connections.

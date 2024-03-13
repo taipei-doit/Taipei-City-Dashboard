@@ -24,10 +24,10 @@ export default defineConfig({
 	base: "/",
 	server: {
 		host: "0.0.0.0",
-		port: 80,
+		port: 8080,
 		proxy: {
 			"/api/dev": {
-				target: "http://dashboard-be:8888",
+				target: "http://dashboard-be:8080",
 				changeOrigin: true,
 				rewrite: (path) => path.replace("/dev", "/v1"),
 			},

@@ -23,7 +23,7 @@ const email = ref("");
 const password = ref("");
 
 const taipeiPassUrl = computed(() => {
-	return `${VITE_TAIPEIPASS_URL}/authorize?response_type=code&client_id=${VITE_TAIPEIPASS_CLIENT_ID}&scope=${VITE_TAIPEIPASS_SCOPE}`;
+	return `${VITE_TAIPEIPASS_URL}/oauth2/authorize?response_type=code&client_id=${VITE_TAIPEIPASS_CLIENT_ID}&scope=${VITE_TAIPEIPASS_SCOPE}`;
 });
 
 function handleSwitchMode() {
