@@ -15,6 +15,8 @@ import (
 	"TaipeiCityDashboardBE/logs"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
+	"github.com/lib/pq"
 	"gorm.io/gorm"
 )
 
@@ -126,6 +128,7 @@ func ExecIssoAuth(c *gin.Context) {
 			if errors.Is(err, gorm.ErrRecordNotFound) {
 
 				user = models.AuthUser{
+					Name:          userInfo.Data.Account,
 					TpUuID:        &userInfo.Data.ID,
 					TpAccount:     &userInfo.Data.Account,
 					IDNo:          &idNoSHA,
@@ -148,6 +151,16 @@ func ExecIssoAuth(c *gin.Context) {
 				if err := models.CreateUserGroupRole(user.ID, personalGroupID, 1); err != nil {
 					logs.FError("Failed to set userp[%s] personal group permission:%s", userInfo.Data.Account, err)
 				}
+				// create favorite dashboard
+				tmpIndex := uuid.New().String()
+				dashboardIndex := strings.Split(tmpIndex, "-")[0] + strings.Split(tmpIndex, "-")[1]
+				dashboardName := "收藏組件"
+				var dashboardComponents pq.Int64Array
+				_, err = models.CreateDashboard(dashboardIndex, dashboardName, "favorite", dashboardComponents, personalGroupID)
+				if err != nil {
+					logs.FError("create user favorite dashboard failed %v", err)
+				}
+
 				logs.FInfo("create user success %d from IP[%s]", user.ID, c.ClientIP())
 			} else {
 				logs.FError("Login failed: unexpected database error: %v", err)
@@ -173,7 +186,7 @@ func ExecIssoAuth(c *gin.Context) {
 
 		// generate JWT token
 		user.LoginAt = time.Now()
-		token, err := util.GenerateJWT(user.LoginAt, "Isso", user.ID, *user.IsAdmin, permissions)
+		token, err := util.GenerateJWT(user.LoginAt.Add(global.TokenExpirationDuration), "Isso", user.ID, *user.IsAdmin, permissions)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{
 				"error": err.Error(),
