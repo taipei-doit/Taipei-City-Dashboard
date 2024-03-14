@@ -37,6 +37,8 @@ const dataTime = computed(() => {
 		return "即時資料";
 	} else if (props.content.time_from === "demo") {
 		return "示範靜態資料";
+	} else if (props.content.time_from === "maintain") {
+		return "維護修復中";
 	}
 	const { parsedTimeFrom, parsedTimeTo } = getComponentDataTimeframe(
 		props.content.time_from,
@@ -136,7 +138,14 @@ function changeShowTagTooltipState(state) {
 						<span v-if="content.history_data">insights</span>
 					</div>
 				</div>
-				<h4 v-if="checked">{{ `${content.source} | ${dataTime}` }}</h4>
+				<h4 v-if="checked && dataTime === '維護修復中'">
+					{{ `${content.source} | ` }}<span>warning</span>
+					<h4>{{ `${dataTime}` }}</h4>
+					<span>warning</span>
+				</h4>
+				<h4 v-else-if="checked">
+					{{ `${content.source} | ${dataTime}` }}
+				</h4>
 			</div>
 			<div class="componentmapchart-header-toggle">
 				<!-- The class "toggleswitch" could be edited in /assets/styles/toggleswitch.css -->
@@ -235,9 +244,24 @@ function changeShowTagTooltipState(state) {
 		}
 
 		h4 {
+			display: flex;
+			align-items: center;
 			color: var(--color-complement-text);
 			font-size: var(--font-s);
 			font-weight: 400;
+
+			span {
+				margin-left: 4px !important;
+				margin: 0 4px;
+				color: rgb(237, 90, 90) !important;
+				font-size: 1rem;
+				font-family: var(--font-icon);
+				user-select: none;
+			}
+
+			h4 {
+				color: rgb(237, 90, 90);
+			}
 		}
 
 		div:first-child {

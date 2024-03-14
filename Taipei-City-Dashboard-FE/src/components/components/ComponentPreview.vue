@@ -30,6 +30,8 @@ const dataTime = computed(() => {
 		return "即時資料";
 	} else if (props.content.time_from === "demo") {
 		return "示範靜態資料";
+	} else if (props.content.time_from === "maintain") {
+		return "維護修復中";
 	}
 	const { parsedTimeFrom, parsedTimeTo } = getComponentDataTimeframe(
 		props.content.time_from,
@@ -87,7 +89,12 @@ function changeShowTagTooltipState(state) {
 					<ComponentTag icon="" :text="updateFreq" mode="small" />
 				</h3>
 				<p>{{ props.content.short_desc }}</p>
-				<h4>{{ `${content.source} | ${dataTime}` }}</h4>
+				<h4 v-if="dataTime === '維護修復中'">
+					{{ `${content.source} | ` }}<span>warning</span>
+					<h4>{{ `${dataTime}` }}</h4>
+					<span>warning</span>
+				</h4>
+				<h4 v-else>{{ `${content.source} | ${dataTime}` }}</h4>
 			</div>
 			<div class="componentpreview-header-buttons" v-if="!isStatic">
 				<button
@@ -196,9 +203,23 @@ function changeShowTagTooltipState(state) {
 		}
 
 		h4 {
+			display: flex;
+			align-items: center;
 			color: var(--color-complement-text);
 			font-size: var(--font-s);
 			font-weight: 400;
+
+			span {
+				margin: 0 4px;
+				color: rgb(237, 90, 90);
+				font-size: 1rem;
+				font-family: var(--font-icon);
+				user-select: none;
+			}
+
+			h4 {
+				color: rgb(237, 90, 90);
+			}
 		}
 
 		p {

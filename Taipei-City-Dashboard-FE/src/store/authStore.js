@@ -68,8 +68,8 @@ export const useAuthStore = defineStore("auth", {
 						code: code,
 					},
 				});
-				router.replace("/dashboard");
 				this.handleSuccessfullLogin(response);
+				router.replace("/dashboard");
 			} catch {
 				router.replace("/dashboard");
 			}

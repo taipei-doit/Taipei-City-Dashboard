@@ -53,12 +53,12 @@ const chartOptions = ref({
 					color: "#888787",
 					fontSize: "0.8rem",
 				},
-				total: {
-					color: "#888787",
-					fontSize: "0.8rem",
-					label: "平均",
-					show: true,
-				},
+				// total: {
+				// 	color: "#888787",
+				// 	fontSize: "0.8rem",
+				// 	label: "平均",
+				// 	show: true,
+				// },
 				value: {
 					color: "#888787",
 					fontSize: "16px",

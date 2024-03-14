@@ -21,6 +21,9 @@ const chartOptions = ref({
 	grid: {
 		show: false,
 	},
+	labels: {
+		datetimeUTC: false,
+	},
 	legend: {
 		show: props.series.length > 1 ? true : false,
 	},

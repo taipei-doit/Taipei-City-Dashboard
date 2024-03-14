@@ -42,6 +42,8 @@ const dataTime = computed(() => {
 		return "即時資料";
 	} else if (props.content.time_from === "demo") {
 		return "示範靜態資料";
+	} else if (props.content.time_from === "maintain") {
+		return "維護修復中";
 	}
 	const { parsedTimeFrom, parsedTimeTo } = getComponentDataTimeframe(
 		props.content.time_from,
@@ -109,7 +111,12 @@ function changeShowTagTooltipState(state) {
 					{{ content.name }}
 					<ComponentTag icon="" :text="updateFreq" mode="small" />
 				</h3>
-				<h4>{{ `${content.source} | ${dataTime}` }}</h4>
+				<h4 v-if="dataTime === '維護修復中'">
+					{{ `${content.source} | ` }}<span>warning</span>
+					<h4>{{ `${dataTime}` }}</h4>
+					<span>warning</span>
+				</h4>
+				<h4 v-else>{{ `${content.source} | ${dataTime}` }}</h4>
 			</div>
 			<div v-if="notMoreInfo && authStore.token">
 				<button
@@ -273,7 +280,11 @@ function changeShowTagTooltipState(state) {
 			</button>
 			<RouterLink
 				:to="`/component/${content.index}`"
-				v-if="authStore.isMobileDevice && authStore.isNarrowDevice"
+				v-if="
+					authStore.isMobileDevice &&
+					authStore.isNarrowDevice &&
+					authStore.currentPath !== 'component-info'
+				"
 			>
 				<p>資訊頁面</p>
 				<span>arrow_circle_right</span>
@@ -332,9 +343,23 @@ function changeShowTagTooltipState(state) {
 		}
 
 		h4 {
+			display: flex;
+			align-items: center;
 			color: var(--color-complement-text);
 			font-size: var(--font-s);
 			font-weight: 400;
+
+			span {
+				margin: 0 4px;
+				color: rgb(237, 90, 90);
+				font-size: 1rem;
+				font-family: var(--font-icon);
+				user-select: none;
+			}
+
+			h4 {
+				color: rgb(237, 90, 90);
+			}
 		}
 
 		button span {

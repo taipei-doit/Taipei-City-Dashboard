@@ -42,6 +42,9 @@ const chartOptions = ref({
 	grid: {
 		show: false,
 	},
+	labels: {
+		datetimeUTC: false,
+	},
 	legend: {
 		show: true,
 		markers: {
