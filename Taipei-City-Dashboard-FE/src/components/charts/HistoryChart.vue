@@ -32,6 +32,9 @@ const chartOptions = ref({
 	legend: {
 		show: true,
 	},
+	labels: {
+		datetimeUTC: false,
+	},
 	markers: {
 		hover: {
 			size: 5,
