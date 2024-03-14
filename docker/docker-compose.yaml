@@ -25,7 +25,7 @@ services:
       VITE_MAPBOXTILE: ${VITE_MAPBOXTILE}
       VITE_TAIPEIPASS_URL: ${TAIPEIPASS_URL}
       VITE_TAIPEIPASS_CLIENT_ID: ${ISSO_CLIENT_ID}
-      VITE_TAIPEIPASS_SCOPE: ${ISSO_CLIENT_SECRET}
+      VITE_TAIPEIPASS_SCOPE: ${ISSO_CLIENT_SCOPE}
     volumes:
       - ../Taipei-City-Dashboard-FE:/opt/Taipei-City-Dashboard-FE
     ports:

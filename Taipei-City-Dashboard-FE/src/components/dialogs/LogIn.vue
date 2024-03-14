@@ -9,7 +9,7 @@ import DialogContainer from "./DialogContainer.vue";
 
 const {
 	VITE_APP_TITLE,
-	NODE_ENV,
+	PROD,
 	VITE_TAIPEIPASS_URL,
 	VITE_TAIPEIPASS_CLIENT_ID,
 	VITE_TAIPEIPASS_SCOPE,
@@ -27,7 +27,7 @@ const taipeiPassUrl = computed(() => {
 });
 
 function handleSwitchMode() {
-	if (NODE_ENV === "production") {
+	if (PROD) {
 		return;
 	} else {
 		loginMode.value = loginMode.value === "tp" ? "email" : "tp";
