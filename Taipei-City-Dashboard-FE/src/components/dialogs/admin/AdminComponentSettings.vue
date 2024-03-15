@@ -86,13 +86,13 @@ function handleClose() {
 						<label
 							>組件名稱* ({{
 								currentComponent.name.length
-							}}/20)</label
+							}}/10)</label
 						>
 						<input
 							type="text"
 							v-model="currentComponent.name"
 							:minlength="1"
-							:maxlength="20"
+							:maxlength="15"
 							required
 						/>
 						<div class="two-block">

@@ -356,17 +356,29 @@ export const useContentStore = defineStore("content", {
 		// 1. Call this function to create a new dashboard. Pass in the new dashboard name and icon.
 		async createDashboard() {
 			const dialogStore = useDialogStore();
+			const authStore = useAuthStore();
 
 			this.editDashboard.components = this.editDashboard.components.map(
 				(item) => item.id
 			);
 			this.editDashboard.index = "";
 
-			await http.post(`/dashboard/`, this.editDashboard);
+			const response = await http.post(`/dashboard/`, this.editDashboard);
+			await this.setDashboards(true);
+
+			if (
+				authStore.currentPath === "dashboard" ||
+				authStore.currentPath === "mapview"
+			) {
+				router.push({
+					name: `${authStore.currentPath}`,
+					query: {
+						index: response.data.data.index,
+					},
+				});
+			}
 
 			dialogStore.showNotification("success", "成功新增儀表板");
-
-			this.setDashboards();
 		},
 		// 2. Call this function to edit the current dashboard (only personal dashboards)
 		async editCurrentDashboard() {
@@ -447,5 +459,9 @@ export const useContentStore = defineStore("content", {
 				this.setDashboards();
 			}
 		},
+	},
+	debounce: {
+		favoriteComponent: 500,
+		unfavoriteComponent: 500,
 	},
 });

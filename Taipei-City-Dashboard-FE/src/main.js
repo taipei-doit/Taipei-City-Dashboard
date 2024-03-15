@@ -19,6 +19,7 @@ import App from "./App.vue";
 import router from "./router";
 import { createPinia } from "pinia";
 import VueApexCharts from "vue3-apexcharts";
+import debounce from "lodash/debounce";
 
 // Import Global Components
 import DistrictChart from "./components/charts/DistrictChart.vue";
@@ -44,6 +45,21 @@ const app = createApp(App);
 // Add Core Packages: Vue-Router, Pinia, Apexcharts
 app.use(router);
 const pinia = createPinia();
+pinia.use(({ options, store }) => {
+	if (options.debounce) {
+		return Object.keys(options.debounce).reduce(
+			(debouncedActions, action) => {
+				debouncedActions[action] = debounce(
+					store[action],
+					options.debounce[action]
+				);
+				return debouncedActions;
+			},
+			{}
+		);
+	}
+});
+
 app.use(pinia);
 app.use(VueApexCharts);
 

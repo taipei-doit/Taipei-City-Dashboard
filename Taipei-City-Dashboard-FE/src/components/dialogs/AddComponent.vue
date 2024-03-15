@@ -48,6 +48,7 @@ function handleClose() {
 	searchIndex.value = "";
 	componentsSelected.value = [];
 	dialogStore.dialogs.addComponent = false;
+	handleSearch();
 }
 
 onMounted(() => {

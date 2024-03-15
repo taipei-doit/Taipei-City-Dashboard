@@ -57,8 +57,8 @@ function handleClose() {
 				class="reportissue-input"
 				type="text"
 				v-model="allInputs.title"
-				:min="1"
-				:max="25"
+				:minLength="1"
+				:maxLength="20"
 				required
 			/>
 			<h3>問題種類*</h3>
@@ -78,8 +78,8 @@ function handleClose() {
 			<h3>問題簡述* ({{ allInputs.description.length }}/200)</h3>
 			<textarea
 				v-model="allInputs.description"
-				:min="1"
-				:max="200"
+				:minLength="1"
+				:maxLength="200"
 				required
 			></textarea>
 			<div class="reportissue-control">
