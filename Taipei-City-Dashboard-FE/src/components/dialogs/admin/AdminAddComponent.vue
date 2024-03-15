@@ -53,6 +53,7 @@ function handleClose() {
 	searchIndex.value = "";
 	componentsSelected.value = [];
 	dialogStore.dialogs.adminAddComponent = false;
+	handleSearch();
 }
 
 onMounted(() => {

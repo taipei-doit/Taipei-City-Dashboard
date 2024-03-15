@@ -435,6 +435,9 @@ onMounted(() => {
 		select {
 			width: 100px;
 		}
+		option {
+			background-color: var(--color-background);
+		}
 
 		&-page {
 			button {

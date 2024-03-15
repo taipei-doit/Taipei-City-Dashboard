@@ -16,6 +16,7 @@
 		"apexcharts": "^3.45.2",
 		"axios": "^1.6.5",
 		"dayjs": "^1.11.10",
+		"lodash.debounce": "^4.0.8",
 		"mapbox-gl": "^3.1.0",
 		"pinia": "^2.1.7",
 		"threebox-plugin": "^2.2.7",

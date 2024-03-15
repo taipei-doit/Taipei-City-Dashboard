@@ -70,7 +70,9 @@ const linkQuery = computed(() => {
 				}}</span>
 			</button>
 			<div class="navbar-user-user" v-if="authStore.token">
-				<button>{{ authStore.user.name }}</button>
+				<button>
+					{{ authStore.user.name }}
+				</button>
 				<ul>
 					<li>
 						<button @click="dialogStore.showDialog('userSettings')">
@@ -199,8 +201,11 @@ const linkQuery = computed(() => {
 
 		&-user {
 			height: 60px;
+			min-width: 100px;
 			display: flex;
 			align-items: center;
+			justify-content: center;
+
 			@media screen and (max-width: 750px) {
 				display: none;
 			}
