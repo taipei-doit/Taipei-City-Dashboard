@@ -9,9 +9,10 @@ Testing: Jack Huang (Data Scientist), Ian Huang (Data Analysis Intern)
 <!-- Department of Information Technology, Taipei City Government -->
 
 <script setup>
-import { onBeforeMount, onMounted } from "vue";
+import { onBeforeMount, onMounted, onBeforeUnmount, ref, computed } from "vue";
 import { useAuthStore } from "./store/authStore";
 import { useDialogStore } from "./store/dialogStore";
+import { useContentStore } from "./store/contentStore";
 
 import NavBar from "./components/utilities/bars/NavBar.vue";
 import SideBar from "./components/utilities/bars/SideBar.vue";
@@ -24,6 +25,29 @@ import LogIn from "./components/dialogs/LogIn.vue";
 
 const authStore = useAuthStore();
 const dialogStore = useDialogStore();
+const contentStore = useContentStore();
+
+const timeToUpdate = ref(600);
+
+const formattedTimeToUpdate = computed(() => {
+	const minutes = Math.floor(timeToUpdate.value / 60);
+	const seconds = timeToUpdate.value % 60;
+	return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+});
+
+function reloadChartData() {
+	if (!["dashboard", "mapview"].includes(authStore.currentPath)) return;
+	contentStore.setCurrentDashboardChartData();
+	timeToUpdate.value = 600;
+}
+function updateTimeToUpdate() {
+	if (!["dashboard", "mapview"].includes(authStore.currentPath)) return;
+	if (timeToUpdate.value <= 0) {
+		timeToUpdate.value = 0;
+		return;
+	}
+	timeToUpdate.value -= 5;
+}
 
 onBeforeMount(() => {
 	authStore.initialChecks();
@@ -41,6 +65,13 @@ onMounted(() => {
 	if (!showInitialWarning) {
 		dialogStore.showDialog("initialWarning");
 	}
+
+	setInterval(reloadChartData, 1000 * 600);
+	setInterval(updateTimeToUpdate, 1000 * 5);
+});
+onBeforeUnmount(() => {
+	clearInterval(reloadChartData);
+	clearInterval(updateTimeToUpdate);
 });
 </script>
 
@@ -84,6 +115,16 @@ onMounted(() => {
 		</div>
 		<InitialWarning />
 		<LogIn />
+		<div
+			class="app-update"
+			v-if="
+				['dashboard', 'mapview'].includes(authStore.currentPath) &&
+				!authStore.isMobile &&
+				!authStore.isNarrowDevice
+			"
+		>
+			<p>下次更新：{{ formattedTimeToUpdate }}</p>
+		</div>
 	</div>
 </template>
 
@@ -106,6 +147,24 @@ onMounted(() => {
 			width: 100%;
 			display: flex;
 			flex-direction: column;
+		}
+	}
+
+	&-update {
+		position: fixed;
+		bottom: 0;
+		right: 20px;
+		color: white;
+		opacity: 0.3;
+		transition: opacity 0.3s;
+		user-select: none;
+
+		p {
+			color: var(--color-complement-text);
+		}
+
+		&:hover {
+			opacity: 1;
 		}
 	}
 }
