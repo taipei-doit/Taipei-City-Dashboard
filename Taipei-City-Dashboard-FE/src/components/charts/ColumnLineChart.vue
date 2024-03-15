@@ -42,9 +42,6 @@ const chartOptions = ref({
 	grid: {
 		show: false,
 	},
-	labels: {
-		datetimeUTC: false,
-	},
 	legend: {
 		show: true,
 		markers: {
@@ -103,6 +100,9 @@ const chartOptions = ref({
 			stroke: {
 				color: "var(--color-complement-text)",
 			},
+		},
+		labels: {
+			datetimeUTC: false,
 		},
 		tooltip: {
 			enabled: false,

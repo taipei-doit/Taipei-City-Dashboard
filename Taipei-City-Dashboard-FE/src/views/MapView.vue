@@ -104,7 +104,7 @@ function handleOpenSettings() {
 				<button
 					@click="handleOpenSettings"
 					class="hide-if-mobile"
-					v-if="contentStore.currentDashboard.index !== 'favorites'"
+					v-if="contentStore.currentDashboard.icon !== 'favorite'"
 				>
 					加入您的第一個組件
 				</button>
