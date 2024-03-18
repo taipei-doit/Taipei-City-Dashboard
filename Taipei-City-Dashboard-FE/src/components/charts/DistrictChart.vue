@@ -37,7 +37,20 @@ const districts = [
 
 // Parse District Data (to support 2D or 3D data)
 const districtData = computed(() => {
-	let output = {};
+	let output = {
+		北投區: 0,
+		士林區: 0,
+		內湖區: 0,
+		南港區: 0,
+		松山區: 0,
+		信義區: 0,
+		中山區: 0,
+		大同區: 0,
+		中正區: 0,
+		萬華區: 0,
+		大安區: 0,
+		文山區: 0,
+	};
 	let highest = 0;
 	let sum = 0;
 	if (props.series.length === 1) {
@@ -50,7 +63,7 @@ const districtData = computed(() => {
 		});
 	} else {
 		props.series.forEach((serie) => {
-			for (let i = 0; i < 12; i++) {
+			for (let i = 0; i < props.chart_config.categories.length; i++) {
 				if (!output[props.chart_config.categories[i]]) {
 					output[props.chart_config.categories[i]] = 0;
 				}

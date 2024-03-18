@@ -262,6 +262,7 @@ function changeShowTagTooltipState(state) {
 					v-if="content.map_config && content.map_config[0] !== null"
 					icon="map"
 					text="空間資料"
+					class="hide-if-mobile"
 				/>
 				<ComponentTag
 					v-if="content.history_data || content.history_config"
@@ -272,7 +273,7 @@ function changeShowTagTooltipState(state) {
 			</div>
 			<!-- The content in the target component should be passed into the "showMoreInfo" function of the mapStore to show more info -->
 			<button
-				v-if="notMoreInfo && !isMapLayer"
+				v-if="notMoreInfo"
 				@click="dialogStore.showMoreInfo(content)"
 			>
 				<p>組件資訊</p>
@@ -485,12 +486,6 @@ function changeShowTagTooltipState(state) {
 		align-items: center;
 		justify-content: space-between;
 		overflow: visible;
-
-		@media (max-width: 760px) {
-			.history-tag {
-				display: none !important;
-			}
-		}
 
 		div {
 			display: flex;

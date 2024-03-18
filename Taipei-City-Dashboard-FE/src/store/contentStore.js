@@ -83,7 +83,6 @@ export const useContentStore = defineStore("content", {
 			}
 			// 1-5. If all info is present, skip steps 2, 3, 5 and call the setCurrentDashboardContent method (4.)
 			this.currentDashboard.components = [];
-			this.mapLayers = [];
 			this.setCurrentDashboardContent();
 		},
 		// 2. Call an API to get all dashboard info and reroute the user to the first dashboard in the list
@@ -180,7 +179,13 @@ export const useContentStore = defineStore("content", {
 						index
 					].chart_config.categories = response.data.categories;
 				}
-
+			}
+			for (
+				let index = 0;
+				index < this.currentDashboard.components.length;
+				index++
+			) {
+				const component = this.currentDashboard.components[index];
 				// 4-3. Get history data if applicable
 				if (
 					component.history_config &&
@@ -230,8 +235,11 @@ export const useContentStore = defineStore("content", {
 		},
 		// 6. Call an API to get map layer component info and store it (if in /mapview)
 		async setMapLayers() {
-			const resposne = await http.get(`/dashboard/map-layers`);
-			this.mapLayers = resposne.data.data;
+			if (this.mapLayers.length !== 0) {
+				return;
+			}
+			const response = await http.get(`/dashboard/map-layers`);
+			this.mapLayers = response.data.data;
 			this.setMapLayersContent();
 		},
 		// 7. Call an API for each map layer component to get its chart data and store it (if in /mapview)

@@ -8,6 +8,13 @@ export function jsonToCsv(data, chart_config) {
 			csv += `${element.x},${element.y}\n`;
 		});
 	}
+	// Map Legend Data
+	else if (chart_config.types.includes("MapLegend")) {
+		csv += "name,type,icon,value\n";
+		data.forEach((element) => {
+			csv += `${element.name},${element.type},${element.icon},${element.value}\n`;
+		});
+	}
 	// Time Data
 	else if (!chart_config.categories) {
 		csv += " ,";
@@ -31,7 +38,8 @@ export function jsonToCsv(data, chart_config) {
 				}
 			}
 		}
-	} // 3D Data / Guage Data
+	}
+	// 3D Data / Guage Data
 	else {
 		csv += " ,";
 		for (let j = -1; j < data[0].data.length; j++) {

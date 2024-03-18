@@ -23,6 +23,8 @@ function parseTime(time) {
 
 async function handleSubmit() {
 	if (editUser.value.name === authStore.user.name || !editUser.value.name) {
+		dialogStore.showNotification("info", "用戶名稱不變");
+		dialogStore.hideAllDialogs();
 		return;
 	}
 	await authStore.updateUserInfo();
@@ -43,7 +45,13 @@ async function handleSubmit() {
 				required
 			/>
 			<label> 用戶帳號 </label>
-			<input :value="editUser.account ? editUser.account : editUser.TpAccount" :minlength="1" disabled />
+			<input
+				:value="
+					editUser.account ? editUser.account : editUser.TpAccount
+				"
+				:minlength="1"
+				disabled
+			/>
 			<label> 用戶類型 </label>
 			<input
 				:value="editUser.is_admin ? '管理員' : '一般用戶'"
@@ -54,6 +62,7 @@ async function handleSubmit() {
 			<input :value="parseTime(editUser.login_at)" disabled />
 			<div class="usersettings-control">
 				<button
+					v-if="editUser.name"
 					class="usersettings-control-confirm"
 					@click="handleSubmit"
 				>
@@ -77,6 +86,7 @@ async function handleSubmit() {
 	}
 
 	&-control {
+		height: 27px;
 		display: flex;
 		justify-content: flex-end;
 		margin-top: var(--font-ms);

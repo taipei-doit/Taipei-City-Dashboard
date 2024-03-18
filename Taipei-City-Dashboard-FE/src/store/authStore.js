@@ -81,7 +81,7 @@ export const useAuthStore = defineStore("auth", {
 			this.token = response.data.token;
 			localStorage.setItem("token", this.token);
 			this.user = response.data.user;
-			this.editUser = this.user;
+			this.editUser = JSON.parse(JSON.stringify(this.user));
 
 			contentStore.publicDashboards = [];
 			router.go();
