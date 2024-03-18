@@ -203,7 +203,7 @@ function changeShowTagTooltipState(state) {
 		<div v-else-if="checked" class="componentmapchart-loading">
 			<div></div>
 		</div>
-		<div v-if="checked && !isMapLayer" class="componentmapchart-footer">
+		<div v-if="checked" class="componentmapchart-footer">
 			<button @click="dialogStore.showMoreInfo(content)">
 				<p>組件資訊</p>
 				<span>arrow_circle_right</span>
@@ -406,6 +406,5 @@ function changeShowTagTooltipState(state) {
 .maplayer {
 	height: 200px;
 	max-height: 200px;
-	padding-bottom: 0;
 }
 </style>

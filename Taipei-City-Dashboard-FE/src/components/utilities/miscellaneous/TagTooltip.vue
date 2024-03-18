@@ -19,7 +19,9 @@ const authStore = useAuthStore();
 		<h6>組件資訊與功能</h6>
 		<p>
 			<span>{{ props.hasFilter ? "check" : "clear" }}</span
-			>用圖表篩選地圖
+			>用圖表篩選地圖({{
+				authStore.isMobileDevice ? "手機版不支援" : "地圖交叉比對"
+			}})
 		</p>
 		<p>
 			<span>{{ props.hasMapLayer ? "check" : "clear" }}</span

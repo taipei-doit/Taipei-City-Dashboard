@@ -40,6 +40,7 @@ function handleOpenSettings() {
 			:is-map-layer="true"
 			:key="item.index"
 		/>
+		<MoreInfo />
 		<ReportIssue />
 	</div>
 	<!-- 2. Dashboards that have components -->
