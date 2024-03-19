@@ -14,6 +14,10 @@ const line = computed(() => {
 		return "R";
 	} else if (props.series[0].data[0].x.includes("BL")) {
 		return "BL";
+	} else if (props.series[0].data[0].x.includes("G")) {
+		return "G";
+	} else if (props.series[0].data[0].x.includes("O")) {
+		return "O";
 	}
 	return null;
 });
@@ -50,15 +54,23 @@ const parsedSeries = computed(() => {
 			:key="`${line}-${index}`"
 		>
 			<!-- Shows station name / station label / density level of each train car -->
-			<div class="metrochart-block">
-				<h5>{{ item.name }}</h5>
+			<div class="metrochart-block" v-if="item.id !== 0">
+				<h5>
+					{{
+						item.name.length < 6
+							? item.name
+							: `${item.name.slice(0, 4)}...`
+					}}
+				</h5>
 				<!-- Will show a different style if the station is a terminal station -->
 				<div
 					class="metrochart-block-tag"
 					:style="{
 						borderColor: color,
 						backgroundColor:
-							index === lineInfo[line].length - 1 || index === 0
+							index === lineInfo[line].length - 1 ||
+							index === 0 ||
+							item.id === 'O21'
 								? color
 								: 'white',
 					}"
@@ -67,7 +79,8 @@ const parsedSeries = computed(() => {
 						:style="{
 							color:
 								index === lineInfo[line].length - 1 ||
-								index === 0
+								index === 0 ||
+								item.id === 'O21'
 									? 'white'
 									: 'black',
 						}"
@@ -78,7 +91,8 @@ const parsedSeries = computed(() => {
 						:style="{
 							color:
 								index === lineInfo[line].length - 1 ||
-								index === 0
+								index === 0 ||
+								item.id === 'O21'
 									? 'white'
 									: 'black',
 						}"
@@ -88,23 +102,26 @@ const parsedSeries = computed(() => {
 				</div>
 				<MetroCarDensity
 					:weight="
-						parsedSeries[1].data.find(
-							(element) => element.x === item.id
-						)
-					"
-					direction="desc"
-				/>
-				<MetroCarDensity
-					:weight="
 						parsedSeries[0].data.find(
 							(element) => element.x === item.id
 						)
 					"
 					direction="asc"
 				/>
+				<MetroCarDensity
+					:weight="
+						parsedSeries[1].data.find(
+							(element) => element.x === item.id
+						)
+					"
+					direction="desc"
+				/>
 			</div>
 			<!-- Just shows the line connecting stations -->
-			<div class="metrochart-block">
+			<div
+				class="metrochart-block"
+				v-if="item.id !== 0 && item.id !== 'O21'"
+			>
 				<div></div>
 				<div
 					class="metrochart-block-line"
@@ -115,6 +132,13 @@ const parsedSeries = computed(() => {
 								: color,
 					}"
 				></div>
+			</div>
+			<div class="metrochart-block" v-if="item.id === 0">
+				<div class="metrochart-block-break">
+					<div></div>
+					<p>{{ item.name }}</p>
+					<div></div>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -145,7 +169,7 @@ const parsedSeries = computed(() => {
 
 	&-block {
 		display: grid;
-		grid-template-columns: 5rem 20px 1fr 1fr;
+		grid-template-columns: 3.9rem 20px 1fr 1fr;
 
 		&-tag {
 			min-width: var(--font-ms);
@@ -164,6 +188,29 @@ const parsedSeries = computed(() => {
 			width: 8px;
 			height: var(--font-ms);
 			margin: 0px 6px;
+		}
+
+		&-break {
+			height: 2rem;
+			grid-column: 1 / -1;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			column-gap: var(--font-ms);
+			margin: 0.5rem 0;
+
+			p {
+				display: flex;
+				align-items: center;
+				height: var(--font-ms);
+				color: var(--color-complement-text);
+				font-size: var(--font-ms);
+				overflow: visible;
+			}
+			div {
+				flex: 1;
+				border-bottom: dashed 1px var(--color-complement-text);
+			}
 		}
 	}
 }

@@ -23,7 +23,7 @@ const numToColor = {
 				{{ index + 1 }}
 			</div>
 		</div>
-		<span v-else>{{ direction === "asc" ? "north" : "south" }}</span>
+		<span v-else>{{ direction === "desc" ? "north" : "south" }}</span>
 	</div>
 </template>
 

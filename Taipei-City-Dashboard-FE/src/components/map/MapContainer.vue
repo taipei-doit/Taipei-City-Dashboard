@@ -1,7 +1,7 @@
 <!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted } from "vue";
 import { useMapStore } from "../../store/mapStore";
 import { useDialogStore } from "../../store/dialogStore";
 import { useContentStore } from "../../store/contentStore";
@@ -12,12 +12,12 @@ const mapStore = useMapStore();
 const dialogStore = useDialogStore();
 const contentStore = useContentStore();
 
-const newSavedLocation = ref("");
+// const newSavedLocation = ref("");
 
-function handleSubmitNewLocation() {
-	mapStore.addNewSavedLocation(newSavedLocation.value);
-	newSavedLocation.value = "";
-}
+// function handleSubmitNewLocation() {
+// 	mapStore.addNewSavedLocation(newSavedLocation.value);
+// 	newSavedLocation.value = "";
+// }
 
 onMounted(() => {
 	mapStore.initializeMapBox();
@@ -65,14 +65,14 @@ onMounted(() => {
 				<button @click="mapStore.easeToLocation(item)">
 					{{ item[4] }}
 				</button>
-				<div
+				<!-- <div
 					class="mapcontainer-controls-delete"
 					@click="mapStore.removeSavedLocation(index)"
 				>
 					<span>delete</span>
-				</div>
+				</div> -->
 			</div>
-			<input
+			<!-- <input
 				v-if="mapStore.savedLocations.length < 10"
 				type="text"
 				placeholder="新增後按Enter"
@@ -80,7 +80,7 @@ onMounted(() => {
 				maxlength="6"
 				@focusout="newSavedLocation = ''"
 				@keypress.enter="handleSubmitNewLocation"
-			/>
+			/> -->
 		</div>
 	</div>
 </template>
@@ -136,6 +136,7 @@ onMounted(() => {
 			border-radius: 5px;
 			background-color: var(--color-component-background);
 			color: var(--color-complement-text);
+			cursor: pointer;
 
 			&:focus {
 				animation-name: colorfade;

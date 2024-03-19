@@ -103,13 +103,6 @@ function getLinkTag(link, index) {
 										}.png`"
 										:alt="`協作者-${contentStore.contributors[contributor].name}`"
 									/>
-									<p>
-										{{
-											contentStore.contributors[
-												contributor
-											].name
-										}}
-									</p>
 								</a>
 							</div>
 						</div>
@@ -207,9 +200,10 @@ function getLinkTag(link, index) {
 		}
 
 		&-contributors {
-			display: grid;
-			grid-template-columns: 1fr 1fr;
+			display: flex;
+			flex-wrap: wrap;
 			row-gap: 4px;
+			column-gap: 4px;
 			margin: 4px 0 var(--font-s);
 
 			a {
