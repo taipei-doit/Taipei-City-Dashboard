@@ -149,6 +149,11 @@ td:last-child {
 		display: none !important;
 	}
 }
+@media (max-height: 500px) {
+	.hide-if-mobile {
+		display: none !important;
+	}
+}
 @keyframes spin {
 	to {
 		transform: rotate(360deg);

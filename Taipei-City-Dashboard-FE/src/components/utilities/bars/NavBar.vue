@@ -34,7 +34,13 @@ const linkQuery = computed(() => {
 				<h2>Taipei City Dashboard</h2>
 			</div>
 		</div>
-		<div class="navbar-tabs" v-if="authStore.currentPath !== 'admin'">
+		<div
+			class="navbar-tabs"
+			v-if="
+				authStore.currentPath !== 'admin' &&
+				!(authStore.isMobileDevice && authStore.isNarrowDevice)
+			"
+		>
 			<router-link
 				:to="`/component`"
 				:class="{
@@ -64,12 +70,22 @@ const linkQuery = computed(() => {
 				rel="noreferrer"
 				><button><span>help</span></button></a
 			>
-			<button class="hide-if-mobile" @click="toggle">
+			<button
+				class="hide-if-mobile"
+				@click="toggle"
+				v-if="!(authStore.isMobileDevice && authStore.isNarrowDevice)"
+			>
 				<span>{{
 					isFullscreen ? "fullscreen_exit" : "fullscreen"
 				}}</span>
 			</button>
-			<div class="navbar-user-user" v-if="authStore.token">
+			<div
+				class="navbar-user-user"
+				v-if="
+					authStore.token &&
+					!(authStore.isMobileDevice && authStore.isNarrowDevice)
+				"
+			>
 				<button>
 					{{ authStore.user.name }}
 				</button>
@@ -102,7 +118,12 @@ const linkQuery = computed(() => {
 					<user-settings />
 				</teleport>
 			</div>
-			<div class="navbar-user-user" v-else>
+			<div
+				class="navbar-user-user"
+				v-else-if="
+					!(authStore.isMobileDevice && authStore.isNarrowDevice)
+				"
+			>
 				<button @click="dialogStore.showDialog('login')">登入</button>
 			</div>
 		</div>
@@ -172,6 +193,9 @@ const linkQuery = computed(() => {
 		@media screen and (max-width: 750px) {
 			display: none;
 		}
+		@media screen and (max-height: 500px) {
+			display: none;
+		}
 	}
 
 	&-user {
@@ -207,6 +231,9 @@ const linkQuery = computed(() => {
 			justify-content: center;
 
 			@media screen and (max-width: 750px) {
+				display: none;
+			}
+			@media screen and (max-height: 500px) {
 				display: none;
 			}
 
