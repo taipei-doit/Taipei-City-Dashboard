@@ -73,10 +73,6 @@ export const lineInfo = {
 		{ name: "台北小巨蛋", id: "G17" },
 		{ name: "南京三民", id: "G18" },
 		{ name: "松山", id: "G19" },
-		{ name: "南京復興", id: "G20" },
-		{ name: "台北小巨蛋", id: "G21" },
-		{ name: "南京三民", id: "G22" },
-		{ name: "松山", id: "G23" },
 	],
 	O: [
 		{ name: "南勢角", id: "O01" },

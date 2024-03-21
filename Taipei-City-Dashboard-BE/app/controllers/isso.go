@@ -203,8 +203,9 @@ func ExecIssoAuth(c *gin.Context) {
 
 		// return JWT token
 		c.JSON(http.StatusOK, gin.H{
-			"user":  user,
-			"token": token,
+			"user":       user,
+			"token":      token,
+			"isso_token": accessToken.AccessToken,
 		})
 
 	} else if len(code) > 6 {
@@ -240,6 +241,17 @@ func ExecIssoAuth(c *gin.Context) {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "get access token faile"})
 		return
 	}
+}
+
+func IssoLogOut(c *gin.Context) {
+	issoToken := c.Query("isso_token")
+
+	headers := make(http.Header)
+	headers.Add("Authorization", "Bearer "+issoToken)
+	url := global.Isso.TaipeipassURL + "/oauth/logout"
+
+	HTTPClientRequest("POST", url, "", headers)
+	c.JSON(http.StatusOK, gin.H{"status": "success"})
 }
 
 func HTTPClientRequest(method, url, payload string, headers http.Header) []byte {

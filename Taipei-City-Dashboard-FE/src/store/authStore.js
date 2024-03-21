@@ -26,6 +26,7 @@ export const useAuthStore = defineStore("auth", {
 		},
 		editUser: {},
 		token: null,
+		isso_token: null,
 		errorMessage: "",
 		isMobileDevice: false,
 		isNarrowDevice: false,
@@ -42,6 +43,9 @@ export const useAuthStore = defineStore("auth", {
 			// Check if the user is logged in
 			if (localStorage.getItem("token")) {
 				this.token = localStorage.getItem("token");
+				if (localStorage.getItem("isso_token")) {
+					this.isso_token = localStorage.getItem("isso_token");
+				}
 				const response = await http.get("/user/me");
 				this.user = response.data.user;
 				this.editUser = JSON.parse(JSON.stringify(this.user));
@@ -80,6 +84,10 @@ export const useAuthStore = defineStore("auth", {
 
 			this.token = response.data.token;
 			localStorage.setItem("token", this.token);
+			if (response.data.isso_token) {
+				this.isso_token = response.data.isso_token;
+				localStorage.setItem("isso_token", this.isso_token);
+			}
 			this.user = response.data.user;
 			this.editUser = JSON.parse(JSON.stringify(this.user));
 
@@ -89,7 +97,7 @@ export const useAuthStore = defineStore("auth", {
 		},
 
 		// Logout
-		handleLogout() {
+		async handleLogout() {
 			const dialogStore = useDialogStore();
 			const contentStore = useContentStore();
 
@@ -99,6 +107,21 @@ export const useAuthStore = defineStore("auth", {
 			this.token = null;
 
 			contentStore.publicDashboards = [];
+
+			if (this.isso_token) {
+				await http.post(
+					"/auth/logout",
+					{},
+					{
+						query: {
+							isso_token: this.isso_token,
+						},
+					}
+				);
+				localStorage.removeItem("isso_token");
+				this.isso_token = null;
+			}
+
 			router.go();
 			dialogStore.showNotification("success", "登出成功");
 		},

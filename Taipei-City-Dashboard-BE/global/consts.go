@@ -26,7 +26,7 @@ const (
 	JwtIssuer = "Taipei citydashboard"
 	// JWT Expires Duration
 	TokenExpirationDuration = 8 * time.Hour
-	NotBeforeDuration       = 0 * time.Second
+	NotBeforeDuration       = -5 * time.Second
 
 	TaipeipassAPIVersion = "v1.0.9"
 
