@@ -115,7 +115,7 @@ func ExecIssoAuth(c *gin.Context) {
 		// get user info
 		respUserInfo = HTTPClientRequest("GET", urlGetUserInfo, "", headers)
 		json.Unmarshal([]byte(respUserInfo), &userInfo)
-		idNoSHA := util.HashString(userInfo.Data.IDNo)
+		idNoSHA := util.HashString(userInfo.Data.IDNo + global.IDNoSalt)
 
 		// if isso user not Verifyed
 		if userInfo.Data.VerifyLevel == "0" {
