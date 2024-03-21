@@ -32,7 +32,8 @@ type RedisConfig struct {
 }
 
 var (
-	JwtSecret = getEnv("JwtSecret","CityDashboardJwtSecret")
+	JwtSecret = getEnv("JWT_SECRET","")
+	IDNoSalt = getEnv("IDNO_SALT","")
 	// gin addr
     GinAddr = getEnv("GIN_DOMAIN","") + ":" + getEnv("GIN_PORT", "8080")
 
