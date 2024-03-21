@@ -250,7 +250,8 @@ func IssoLogOut(c *gin.Context) {
 	headers.Add("Authorization", "Bearer "+issoToken)
 	url := global.Isso.TaipeipassURL + "/oauth/logout"
 
-	HTTPClientRequest("POST", url, "", headers)
+	resp := HTTPClientRequest("POST", url, "", headers)
+	logs.FInfo("isso logout. Response: %s", resp)
 	c.JSON(http.StatusOK, gin.H{"status": "success"})
 }
 

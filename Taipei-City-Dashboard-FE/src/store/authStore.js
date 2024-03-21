@@ -113,7 +113,7 @@ export const useAuthStore = defineStore("auth", {
 					"/auth/logout",
 					{},
 					{
-						query: {
+						params: {
 							isso_token: this.isso_token,
 						},
 					}
