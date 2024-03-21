@@ -36,6 +36,7 @@ func configureAuthRoutes() {
 	authRoutes.POST("/login", controllers.Login)
 	// taipeipass login callback
 	authRoutes.GET("/callback", controllers.ExecIssoAuth)
+	authRoutes.POST("/logout", controllers.IssoLogOut)
 }
 
 func configureUserRoutes() {
