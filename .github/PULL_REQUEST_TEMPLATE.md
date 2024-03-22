@@ -1,7 +1,5 @@
 **IMPORTANT: Please do not create a Pull Request without creating an issue first.**
 
-This repository is still under internal development. All outside pull requests will be closed immediately.
-
 ## Summary
 
 **Issue:** Enter the issue(s) this pull request resolves.
