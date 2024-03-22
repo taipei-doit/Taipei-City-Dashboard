@@ -52,7 +52,7 @@ function handleClose() {
 	<DialogContainer dialog="reportIssue" @on-close="handleClose">
 		<div class="reportissue">
 			<h2>回報問題</h2>
-			<h3>問題標題* ({{ allInputs.title.length }}/25)</h3>
+			<h3>問題標題* ({{ allInputs.title.length }}/20)</h3>
 			<input
 				class="reportissue-input"
 				type="text"

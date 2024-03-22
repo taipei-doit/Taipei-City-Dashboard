@@ -65,7 +65,7 @@ const linkQuery = computed(() => {
 		</div>
 		<div class="navbar-user">
 			<a
-				href="https://tuic.gov.taipei/documentation/front-end"
+				href="https://tuic.gov.taipei/documentation"
 				target="_blank"
 				rel="noreferrer"
 				><button><span>help</span></button></a

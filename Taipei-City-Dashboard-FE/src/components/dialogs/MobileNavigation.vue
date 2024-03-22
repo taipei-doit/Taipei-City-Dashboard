@@ -3,11 +3,13 @@
 <script setup>
 import { useDialogStore } from "../../store/dialogStore";
 import { useContentStore } from "../../store/contentStore";
+import { useAuthStore } from "../../store/authStore";
 
 import SideBarTab from "../utilities/miscellaneous/SideBarTab.vue";
 
 const dialogStore = useDialogStore();
 const contentStore = useContentStore();
+const authStore = useAuthStore();
 </script>
 
 <template>
@@ -23,12 +25,31 @@ const contentStore = useContentStore();
 				></div>
 				<div class="dialogcontainer-dialog">
 					<div class="mobilenavigation">
-						<h2>儀表板列表</h2>
+						<div v-if="authStore.token">
+							<h2>我的最愛</h2>
+							<SideBarTab
+								icon="favorite"
+								title="收藏組件"
+								:expanded="true"
+								:index="contentStore.favorites?.index"
+							/>
+							<h2>個人儀表板</h2>
+							<SideBarTab
+								v-for="item in contentStore.personalDashboards.filter(
+									(item) => item.icon !== 'favorite'
+								)"
+								:icon="item.icon"
+								:title="item.name"
+								:index="item.index"
+								:key="item.index"
+								:expanded="true"
+								@click="dialogStore.hideAllDialogs"
+							/>
+						</div>
+						<h2>公共儀表板</h2>
 						<SideBarTab
 							v-for="item in contentStore.publicDashboards.filter(
-								(item) =>
-									item.index !== 'map-layers' &&
-									item.index !== 'favorites'
+								(item) => item.index !== 'map-layers'
 							)"
 							:icon="item.icon"
 							:title="item.name"
