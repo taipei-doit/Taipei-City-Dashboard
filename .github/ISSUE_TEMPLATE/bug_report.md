@@ -8,8 +8,6 @@ assignees: ["igorho2000", "ann125697"]
 
 > Please submit all issues in English.
 
-> This repository is still under internal development. All outside issues will be closed immediately.
-
 ## Describe the bug
 
 A clear and concise description of what the bug is.

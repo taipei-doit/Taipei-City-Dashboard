@@ -224,6 +224,7 @@ onMounted(() => {
 	overflow-y: scroll;
 
 	h3 {
+		flex-shrink: 0;
 		font-size: var(--font-m);
 	}
 
@@ -392,6 +393,7 @@ onMounted(() => {
 
 			a {
 				display: flex;
+				flex-shrink: 0;
 				column-gap: 4px;
 				margin-top: 8px;
 

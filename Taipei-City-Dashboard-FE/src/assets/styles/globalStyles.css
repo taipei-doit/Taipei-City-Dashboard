@@ -84,6 +84,9 @@ select {
 select:focus {
 	border-color: var(--color-highlight);
 }
+option {
+	background-color: var(--color-component-background);
+}
 
 textarea {
 	min-width: calc(100% - 14px);

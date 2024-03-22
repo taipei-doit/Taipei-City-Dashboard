@@ -62,6 +62,16 @@ onMounted(() => {
 					<span>add_circle_outline</span>新增
 				</button>
 			</div>
+			<div
+				class="sidebar-sub-no"
+				v-if="
+					contentStore.personalDashboards.filter(
+						(item) => item.icon !== 'favorite'
+					).length === 0
+				"
+			>
+				<p>{{ isExpanded ? `尚無個人儀表板 ` : `尚無` }}</p>
+			</div>
 			<SideBarTab
 				v-for="item in contentStore.personalDashboards.filter(
 					(item) => item.icon !== 'favorite'
@@ -149,6 +159,12 @@ onMounted(() => {
 					font-family: var(--font-icon);
 				}
 			}
+		}
+
+		&-no p {
+			margin: 0.5rem 0 0.5rem 10px;
+			font-size: var(--font-s);
+			font-style: italic;
 		}
 	}
 

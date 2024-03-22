@@ -8,8 +8,6 @@ assignees: ["igorho2000", "ann125697"]
 
 > Please submit all issues in English.
 
-> This repository is still under internal development. All outside issues will be closed immediately.
-
 ## Please describe your feature request
 
 A clear and concise description.
