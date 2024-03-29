@@ -113,6 +113,35 @@ export const TaipeiBuilding = {
 	},
 };
 
+export const TpDistrict = {
+	id: "tp_district",
+	source: "tp_district",
+	"source-layer": "tp_district",
+	type: "line",
+	paint: {
+		"line-color": "white",
+		"line-dasharray": [2, 3], // dash line
+		"line-width": 3,
+	},
+	layout: {
+		visibility: "none",
+	},
+};
+
+export const TpVillage = {
+	id: "tp_village",
+	source: "tp_village",
+	"source-layer": "tp_village",
+	type: "line",
+	paint: {
+		"line-color": "#aaaaaa",
+		"line-width": 1,
+	},
+	layout: {
+		visibility: "none",
+	},
+};
+
 // Map base styles and preset variations
 
 // Paint Properties

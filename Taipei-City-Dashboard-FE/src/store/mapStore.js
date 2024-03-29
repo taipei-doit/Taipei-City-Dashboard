@@ -28,6 +28,8 @@ import {
 	TaipeiTown,
 	TaipeiVillage,
 	TaipeiBuilding,
+	TpDistrict,
+	TpVillage,
 	maplayerCommonPaint,
 	maplayerCommonLayout,
 } from "../assets/configs/mapbox/mapConfig.js";
@@ -89,6 +91,7 @@ export const useMapStore = defineStore("map", {
 		initializeBasicLayers() {
 			const authStore = useAuthStore();
 			if (!this.map) return;
+			// Taipei District Labels
 			fetch(`/mapData/taipei_town.geojson`)
 				.then((response) => response.json())
 				.then((data) => {
@@ -99,6 +102,7 @@ export const useMapStore = defineStore("map", {
 						})
 						.addLayer(TaipeiTown);
 				});
+			// Taipei Village Labels
 			fetch(`/mapData/taipei_village.geojson`)
 				.then((response) => response.json())
 				.then((data) => {
@@ -109,6 +113,7 @@ export const useMapStore = defineStore("map", {
 						})
 						.addLayer(TaipeiVillage);
 				});
+			// Taipei 3D Buildings
 			if (!authStore.isMobileDevice) {
 				this.map
 					.addSource("taipei_building_3d_source", {
@@ -117,6 +122,28 @@ export const useMapStore = defineStore("map", {
 					})
 					.addLayer(TaipeiBuilding);
 			}
+			// Taipei Village Boundaries
+			this.map
+				.addSource(`tp_village`, {
+					type: "vector",
+					scheme: "tms",
+					tolerance: 0,
+					tiles: [
+						`${location.origin}/geo_server/gwc/service/tms/1.0.0/taipei_vioc:tp_village@EPSG:900913@pbf/{z}/{x}/{y}.pbf`,
+					],
+				})
+				.addLayer(TpVillage);
+			// Taipei District Boundaries
+			this.map
+				.addSource(`tp_district`, {
+					type: "vector",
+					scheme: "tms",
+					tolerance: 0,
+					tiles: [
+						`${location.origin}/geo_server/gwc/service/tms/1.0.0/taipei_vioc:tp_district@EPSG:900913@pbf/{z}/{x}/{y}.pbf`,
+					],
+				})
+				.addLayer(TpDistrict);
 
 			this.addSymbolSources();
 		},
@@ -139,6 +166,31 @@ export const useMapStore = defineStore("map", {
 					}
 				);
 			});
+		},
+		// 4. Toggle district boundaries
+		toggleDistrictBoundaries(status) {
+			if (status) {
+				this.map.setLayoutProperty(
+					"tp_district",
+					"visibility",
+					"visible"
+				);
+			} else {
+				this.map.setLayoutProperty("tp_district", "visibility", "none");
+			}
+		},
+
+		// 5. Toggle village boundaries
+		toggleVillageBoundaries(status) {
+			if (status) {
+				this.map.setLayoutProperty(
+					"tp_village",
+					"visibility",
+					"visible"
+				);
+			} else {
+				this.map.setLayoutProperty("tp_village", "visibility", "none");
+			}
 		},
 
 		/* Adding Map Layers */
