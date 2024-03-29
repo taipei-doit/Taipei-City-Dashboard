@@ -1,7 +1,7 @@
 <!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 
 <script setup>
-import { onMounted } from "vue";
+import { onMounted, ref } from "vue";
 import { useMapStore } from "../../store/mapStore";
 import { useDialogStore } from "../../store/dialogStore";
 import { useContentStore } from "../../store/contentStore";
@@ -12,12 +12,25 @@ const mapStore = useMapStore();
 const dialogStore = useDialogStore();
 const contentStore = useContentStore();
 
+const districtLayer = ref(false);
+const villageLayer = ref(false);
+
 // const newSavedLocation = ref("");
 
 // function handleSubmitNewLocation() {
 // 	mapStore.addNewSavedLocation(newSavedLocation.value);
 // 	newSavedLocation.value = "";
 // }
+
+function toggleDistrictLayer() {
+	districtLayer.value = !districtLayer.value;
+	mapStore.toggleDistrictBoundaries(districtLayer.value);
+}
+
+function toggleVillageLayer() {
+	villageLayer.value = !villageLayer.value;
+	mapStore.toggleVillageBoundaries(villageLayer.value);
+}
 
 onMounted(() => {
 	mapStore.initializeMapBox();
@@ -35,12 +48,34 @@ onMounted(() => {
 			>
 				<div></div>
 			</div>
-			<button
-				class="mapcontainer-layers show-if-mobile"
-				@click="dialogStore.showDialog('mobileLayers')"
-			>
-				<span>layers</span>
-			</button>
+			<div class="mapcontainer-layers">
+				<button
+					@click="toggleDistrictLayer"
+					:style="{
+						color: districtLayer
+							? 'var(--color-highlight)'
+							: 'var(--color-component-background)',
+					}"
+				>
+					區
+				</button>
+				<button
+					@click="toggleVillageLayer"
+					:style="{
+						color: villageLayer
+							? 'var(--color-highlight)'
+							: 'var(--color-component-background)',
+					}"
+				>
+					里
+				</button>
+				<button
+					class="show-if-mobile"
+					@click="dialogStore.showDialog('mobileLayers')"
+				>
+					<span>layers</span>
+				</button>
+			</div>
 			<!-- The key prop informs vue that the component should be updated when switching dashboards -->
 			<MobileLayers :key="contentStore.currentDashboard.index" />
 		</div>
@@ -202,17 +237,24 @@ onMounted(() => {
 	}
 
 	&-layers {
-		width: 1.75rem;
-		height: 1.75rem;
 		position: absolute;
 		right: 10px;
-		top: 108px;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		border-radius: 50%;
-		background-color: white;
+		top: 104px;
 		z-index: 1;
+		display: flex;
+		flex-direction: column;
+		row-gap: 4px;
+
+		button {
+			width: 1.75rem;
+			height: 1.75rem;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			border-radius: 50%;
+			background-color: white;
+			transition: color 0.2s;
+		}
 
 		span {
 			color: var(--color-component-background);
