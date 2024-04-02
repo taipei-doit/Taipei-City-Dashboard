@@ -3,7 +3,8 @@ steps:
       env:
           - "BAR=$PROJECT_ID"
           - "VITE_API_URL=$_VITE_API_URL"
-      script: "echo BAR: $BAR, VITE_API_URL: $VITE_API_URL"
+          - "VITE_APP_TITLE=$_VITE_APP_TITLE"
+      script: "echo BAR: $BAR, VITE_APP_TITLE: $VITE_APP_TITLE"
 
     - name: "gcr.io/cloud-builders/docker"
       args:
