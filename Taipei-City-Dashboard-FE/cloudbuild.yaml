@@ -10,11 +10,11 @@ steps:
               ".",
           ]
       env:
-          - "NODE_ENV=${_NODE_ENV}"
-          - "VITE_API_URL=${_VITE_API_URL}"
-          - "VITE_APP_TITLE=${_VITE_APP_TITLE}"
-          - "VITE_APP_VERSION=${_VITE_APP_VERSION}"
-          - "VITE_MAPBOXTILE=${_VITE_MAPBOXTILE}"
+          - "NODE_ENV=$_NODE_ENV"
+          - "VITE_API_URL=$_VITE_API_URL"
+          - "VITE_APP_TITLE=$_VITE_APP_TITLE"
+          - "VITE_APP_VERSION=$_VITE_APP_VERSION"
+          - "VITE_MAPBOXTILE=$_VITE_MAPBOXTILE"
       dir: "Taipei-City-Dashboard-FE"
     # - name: "gcr.io/cloud-builders/kubectl"
     #   args:
