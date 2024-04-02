@@ -1,4 +1,9 @@
 steps:
+    - name: "ubuntu"
+      env:
+          - "BAR=$PROJECT_ID"
+      script: "echo $BAR"
+
     - name: "gcr.io/cloud-builders/docker"
       args:
           [
