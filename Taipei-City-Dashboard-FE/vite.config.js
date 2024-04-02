@@ -27,7 +27,7 @@ export default defineConfig({
 		port: 80,
 		proxy: {
 			"/api/dev": {
-				target: "http://dashboard-be:8080",
+				target: "http://dashboard-be:80",
 				changeOrigin: true,
 				rewrite: (path) => path.replace("/dev", "/v1"),
 			},
