@@ -34,14 +34,18 @@ steps:
               "push",
               "asia-east1-docker.pkg.dev/tuic-bd2456/tuic/dashboard-fe:$COMMIT_SHA",
           ]
-    # - name: "gcr.io/cloud-builders/kubectl"
-    #   args:
-    #       [
-    #           "set",
-    #           "image",
-    #           "deployment/myimage",
-    #           "frontend=gcr.io/myproject/myimage",
-    #       ]
-    #   env:
-    #       - "CLOUDSDK_COMPUTE_ZONE=us-east1-b"
-    #       - "CLOUDSDK_CONTAINER_CLUSTER=node-example-cluster"
+    # 部署到 Cloud Run
+    - name: "gcr.io/cloud-builders/gcloud"
+      args:
+          [
+              "run",
+              "deploy",
+              "dashboard-fe",
+              "--image",
+              "asia-east1-docker.pkg.dev/tuic-bd2456/tuic/dashboard-fe:$COMMIT_SHA",
+              "--platform",
+              "managed",
+              "--region",
+              "us-central1",
+              "--allow-unauthenticated",
+          ]
