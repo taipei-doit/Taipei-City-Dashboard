@@ -19,7 +19,7 @@ steps:
               "--build-arg",
               "NODE_ENV=test",
               "-t",
-              "tuic-bd2456/tuic/dashboard-fe:$COMMIT_SHA",
+              "asia-east1-docker.pkg.dev/tuic-bd2456/tuic/dashboard-fe:$COMMIT_SHA",
               ".",
           ]
       env:
@@ -29,7 +29,11 @@ steps:
           - "VITE_APP_VERSION=$_VITE_APP_VERSION"
           - "VITE_MAPBOXTILE=$_VITE_MAPBOXTILE"
     - name: "gcr.io/cloud-builders/docker"
-      args: ["push", "tuic-bd2456/tuic/dashboard-fe:$COMMIT_SHA"]
+      args:
+          [
+              "push",
+              "asia-east1-docker.pkg.dev/tuic-bd2456/tuic/dashboard-fe:$COMMIT_SHA",
+          ]
     # - name: "gcr.io/cloud-builders/kubectl"
     #   args:
     #       [
