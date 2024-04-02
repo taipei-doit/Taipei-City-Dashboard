@@ -2,8 +2,8 @@ steps:
     - name: "ubuntu"
       env:
           - "BAR=$PROJECT_ID"
-          - "TEST=$_TEST"
-      script: "echo $BAR $TEST"
+          - "VITE_API_URL=$_VITE_API_URL"
+      script: "echo BAR: $BAR, VITE_API_URL: $VITE_API_URL"
 
     - name: "gcr.io/cloud-builders/docker"
       args:
