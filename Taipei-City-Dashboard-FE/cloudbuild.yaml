@@ -6,9 +6,9 @@ steps:
       args:
           - "-c"
           - |
-              echo "VITE_API_URL=$VITE_API_URL" >> .env
+              echo "VITE_API_URL=$_VITE_API_URL" >> .env
               echo "VITE_APP_TITLE=$_VITE_APP_TITLE" >> .env
-              echo "VITE_APP_VERSION=$VITE_APP_VERSION" >> .env
+              echo "VITE_APP_VERSION=$_VITE_APP_VERSION" >> .env
               echo "VITE_MAPBOXTILE=$VITE_MAPBOXTILE" >> .env
 
     - name: "gcr.io/cloud-builders/docker"
