@@ -1,0 +1,29 @@
+steps:
+    - name: "gcr.io/cloud-builders/docker"
+      args:
+          [
+              "build",
+              "--build-arg",
+              "NODE_ENV=test",
+              "-t",
+              "tuic-bd2456/tuic/dashboard-fe:$COMMIT_SHA",
+              ".",
+          ]
+      env:
+          - "NODE_ENV=$_NODE_ENV"
+          - "VITE_API_URL=$_VITE_API_URL"
+          - "VITE_APP_TITLE=$_VITE_APP_TITLE"
+          - "VITE_APP_VERSION=$_VITE_APP_VERSION"
+          - "VITE_MAPBOXTILE=$_VITE_MAPBOXTILE"
+      dir: "Taipei-City-Dashboard-FE"
+    # - name: "gcr.io/cloud-builders/kubectl"
+    #   args:
+    #       [
+    #           "set",
+    #           "image",
+    #           "deployment/myimage",
+    #           "frontend=gcr.io/myproject/myimage",
+    #       ]
+    #   env:
+    #       - "CLOUDSDK_COMPUTE_ZONE=us-east1-b"
+    #       - "CLOUDSDK_CONTAINER_CLUSTER=node-example-cluster"
