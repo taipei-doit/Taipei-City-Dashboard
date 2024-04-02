@@ -1,10 +1,5 @@
 # Start with a base image
 FROM node:21-slim as builder
-ENV VITE_API_URL=$VITE_API_URL
-ENV VITE_APP_TITLE=$VITE_APP_TITLE
-ENV VITE_APP_VERSION=$VITE_APP_VERSION
-ENV VITE_MAPBOXTILE=$VITE_MAPBOXTILE
-
 
 # Set the working directory inside the container
 WORKDIR /app

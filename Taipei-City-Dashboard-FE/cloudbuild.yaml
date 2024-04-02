@@ -1,12 +1,18 @@
 steps:
     - name: "ubuntu"
-      env:
-          - "BAR=$PROJECT_ID"
-          - "VITE_API_URL=$_VITE_API_URL"
-          - "VITE_APP_TITLE=$_VITE_APP_TITLE"
-      script: "echo BAR: $BAR, VITE_APP_TITLE: $VITE_APP_TITLE"
+      id: "echo_env_variables"
+      entrypoint: "bash"
+      dir: "Taipei-City-Dashboard-FE"
+      args:
+          - "-c"
+          - |
+              echo "VITE_API_URL=$VITE_API_URL" >> .env
+              echo "VITE_APP_TITLE=$_VITE_APP_TITLE" >> .env
+              echo "VITE_APP_VERSION=$VITE_APP_VERSION" >> .env
+              echo "VITE_MAPBOXTILE=$VITE_MAPBOXTILE" >> .env
 
     - name: "gcr.io/cloud-builders/docker"
+      dir: "Taipei-City-Dashboard-FE"
       args:
           [
               "build",
@@ -22,7 +28,6 @@ steps:
           - "VITE_APP_TITLE=$_VITE_APP_TITLE"
           - "VITE_APP_VERSION=$_VITE_APP_VERSION"
           - "VITE_MAPBOXTILE=$_VITE_MAPBOXTILE"
-      dir: "Taipei-City-Dashboard-FE"
     # - name: "gcr.io/cloud-builders/kubectl"
     #   args:
     #       [
