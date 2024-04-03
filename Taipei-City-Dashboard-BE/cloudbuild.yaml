@@ -54,7 +54,7 @@ steps:
         "--set-env-vars",
         "DB_MANAGER_PASSWORD=$_DB_MANAGER_PASSWORD",
         "--set-env-vars",
-        "REDIS_HOST=$_REDIS_HOST",
+        "REDIS_ADDR=$_REDIS_HOST",
         # "--set-env-vars",
         # "DB_DASHBOARD_USER=$_DB_DASHBOARD_USER",
         # "--set-env-vars",
