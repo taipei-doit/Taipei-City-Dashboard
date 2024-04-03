@@ -24,12 +24,12 @@ steps:
               "asia-east1-docker.pkg.dev/tuic-bd2456/tuic/dashboard-fe:$COMMIT_SHA",
               ".",
           ]
-      env:
-          - "NODE_ENV=$_NODE_ENV"
-          - "VITE_API_URL=$_VITE_API_URL"
-          - "VITE_APP_TITLE=$_VITE_APP_TITLE"
-          - "VITE_APP_VERSION=$_VITE_APP_VERSION"
-          - "VITE_MAPBOXTILE=$_VITE_MAPBOXTILE"
+      # env:
+      #     - "NODE_ENV=$_NODE_ENV"
+      #     - "VITE_API_URL=$_VITE_API_URL"
+      #     - "VITE_APP_TITLE=$_VITE_APP_TITLE"
+      #     - "VITE_APP_VERSION=$_VITE_APP_VERSION"
+      #     - "VITE_MAPBOXTILE=$_VITE_MAPBOXTILE"
 
     # push image to Artifact Registry
     - name: "gcr.io/cloud-builders/docker"
