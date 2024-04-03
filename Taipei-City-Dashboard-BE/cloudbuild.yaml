@@ -59,6 +59,8 @@ steps:
         # "DB_DASHBOARD_USER=$_DB_DASHBOARD_USER",
         # "--set-env-vars",
         # "DB_DASHBOARD_USER=$_DB_DASHBOARD_USER",
+        "--network",
+        "default",
         "--platform",
         "managed",
         "--region",
