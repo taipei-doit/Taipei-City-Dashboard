@@ -3,7 +3,7 @@
 <!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 
 <script setup>
-import { ref, computed } from "vue";
+import { computed } from "vue";
 import { useDialogStore } from "../../store/dialogStore";
 
 import DialogContainer from "./DialogContainer.vue";
