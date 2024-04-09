@@ -62,7 +62,7 @@ onBeforeMount(() => {
 });
 onMounted(() => {
 	const showInitialWarning = localStorage.getItem("initialWarning");
-	if (!showInitialWarning) {
+	if (!showInitialWarning && authStore.currentPath !== "embed") {
 		dialogStore.showDialog("initialWarning");
 	}
 
@@ -78,7 +78,7 @@ onBeforeUnmount(() => {
 <template>
 	<div class="app-container">
 		<NotificationBar />
-		<NavBar />
+		<NavBar v-if="authStore.currentPath !== 'embed'" />
 		<!-- /mapview, /dashboard layouts -->
 		<div
 			class="app-content"
@@ -110,7 +110,7 @@ onBeforeUnmount(() => {
 				<RouterView></RouterView>
 			</div>
 		</div>
-		<div v-else-if="authStore.currentPath === 'callback'">
+		<div v-else>
 			<router-view></router-view>
 		</div>
 		<InitialWarning />
