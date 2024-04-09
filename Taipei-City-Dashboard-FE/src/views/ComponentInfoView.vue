@@ -19,6 +19,7 @@ import ComponentContainer from "../components/components/ComponentContainer.vue"
 import HistoryChart from "../components/charts/HistoryChart.vue";
 import ReportIssue from "../components/dialogs/ReportIssue.vue";
 import DownloadData from "../components/dialogs/DownloadData.vue";
+import EmbedComponent from "../components/dialogs/EmbedComponent.vue";
 
 const contentStore = useContentStore();
 const dialogStore = useDialogStore();
@@ -101,7 +102,7 @@ onMounted(() => {
 						)
 					"
 				>
-					<span>flag</span>回報問題
+					<span>flag</span>回報
 				</button>
 				<button
 					v-if="
@@ -110,7 +111,10 @@ onMounted(() => {
 					"
 					@click="dialogStore.showDialog('downloadData')"
 				>
-					<span>download</span>下載資料
+					<span>download</span>下載
+				</button>
+				<button @click="dialogStore.showDialog('embedComponent')">
+					<span>code</span>內嵌
 				</button>
 			</div>
 		</div>
@@ -186,6 +190,7 @@ onMounted(() => {
 		</div>
 		<ReportIssue />
 		<DownloadData />
+		<EmbedComponent />
 	</div>
 	<!-- 2. If the page is still loading -->
 	<div

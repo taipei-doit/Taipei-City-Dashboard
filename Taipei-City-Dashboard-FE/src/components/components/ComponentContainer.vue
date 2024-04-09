@@ -25,6 +25,7 @@ const props = defineProps({
 	notMoreInfo: { type: Boolean, default: true },
 	isMapLayer: { type: Boolean, default: false },
 	isComponentView: { type: Boolean, default: false },
+	embed: { type: Boolean, default: false },
 	style: { type: Object, default: () => ({}) },
 });
 
@@ -118,7 +119,7 @@ function changeShowTagTooltipState(state) {
 				</h4>
 				<h4 v-else>{{ `${content.source} | ${dataTime}` }}</h4>
 			</div>
-			<div v-if="notMoreInfo && authStore.token">
+			<div v-if="notMoreInfo && authStore.token && !embed">
 				<button
 					v-if="
 						contentStore.currentDashboard.icon !== 'favorite' &&
@@ -246,7 +247,7 @@ function changeShowTagTooltipState(state) {
 		>
 			<div></div>
 		</div>
-		<div class="componentcontainer-footer">
+		<div class="componentcontainer-footer" v-if="!embed">
 			<div
 				@mouseenter="changeShowTagTooltipState(true)"
 				@mousemove="updateMouseLocation"
@@ -291,6 +292,7 @@ function changeShowTagTooltipState(state) {
 				<span>arrow_circle_right</span>
 			</RouterLink>
 		</div>
+		<div v-else class="componentcontainer-footer"></div>
 		<Teleport to="body">
 			<!-- The class "chart-tooltip" could be edited in /assets/styles/chartStyles.css -->
 			<TagTooltip
@@ -482,6 +484,7 @@ function changeShowTagTooltipState(state) {
 	}
 
 	&-footer {
+		height: 26px;
 		display: flex;
 		align-items: center;
 		justify-content: space-between;

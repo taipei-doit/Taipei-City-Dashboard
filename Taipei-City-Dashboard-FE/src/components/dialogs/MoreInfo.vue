@@ -9,6 +9,7 @@ import DialogContainer from "./DialogContainer.vue";
 import ComponentContainer from "../components/ComponentContainer.vue";
 import HistoryChart from "../charts/HistoryChart.vue";
 import DownloadData from "./DownloadData.vue";
+import EmbedComponent from "./EmbedComponent.vue";
 
 const dialogStore = useDialogStore();
 const contentStore = useContentStore();
@@ -119,7 +120,7 @@ function getLinkTag(link, index) {
 							)
 						"
 					>
-						<span>flag</span>回報問題
+						<span>flag</span>回報
 					</button>
 					<button
 						v-if="
@@ -128,10 +129,14 @@ function getLinkTag(link, index) {
 						"
 						@click="dialogStore.showDialog('downloadData')"
 					>
-						<span>download</span>下載資料
+						<span>download</span>下載
+					</button>
+					<button @click="dialogStore.showDialog('embedComponent')">
+						<span>code</span>內嵌
 					</button>
 				</div>
 				<DownloadData />
+				<EmbedComponent />
 			</div>
 		</div>
 	</DialogContainer>
