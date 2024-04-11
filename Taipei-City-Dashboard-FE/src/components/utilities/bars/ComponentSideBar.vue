@@ -222,12 +222,13 @@ function handleConfirm() {
 			height: 280px;
 			display: grid;
 			grid-template-columns: 85px 85px 85px;
-			grid-template-rows: 48px;
+			grid-auto-rows: 48px;
 			column-gap: 6px;
 			row-gap: 6px;
 			padding: 6px;
 			border: solid 1px var(--color-border);
 			border-radius: 5px;
+			overflow-y: scroll;
 
 			button:last-child {
 				height: 48px;
