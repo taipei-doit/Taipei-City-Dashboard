@@ -1,12 +1,12 @@
 <!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 
 <script setup>
+import { DashboardComponent } from "city-dashboard-component";
 import { useDialogStore } from "../../store/dialogStore";
 import { useContentStore } from "../../store/contentStore";
 import { useAuthStore } from "../../store/authStore";
 
 import DialogContainer from "./DialogContainer.vue";
-import ComponentContainer from "../components/ComponentContainer.vue";
 import HistoryChart from "../charts/HistoryChart.vue";
 import DownloadData from "./DownloadData.vue";
 import EmbedComponent from "./EmbedComponent.vue";
@@ -34,9 +34,9 @@ function getLinkTag(link, index) {
 		@on-close="dialogStore.hideAllDialogs"
 	>
 		<div class="moreinfo">
-			<ComponentContainer
-				:content="dialogStore.moreInfoContent"
-				:not-more-info="false"
+			<DashboardComponent
+				:config="dialogStore.moreInfoContent"
+				mode="large"
 			/>
 			<div class="moreinfo-info">
 				<div class="moreinfo-info-data">

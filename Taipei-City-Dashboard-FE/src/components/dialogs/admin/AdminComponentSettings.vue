@@ -3,11 +3,11 @@
 <script setup>
 import { ref, defineProps } from "vue";
 import { storeToRefs } from "pinia";
+import { DashboardComponent } from "city-dashboard-component";
 import { useDialogStore } from "../../../store/dialogStore";
 import { useAdminStore } from "../../../store/adminStore";
 
 import DialogContainer from "../DialogContainer.vue";
-import ComponentContainer from "../../components/ComponentContainer.vue";
 import InputTags from "../../utilities/forms/InputTags.vue";
 import SelectButtons from "../../utilities/forms/SelectButtons.vue";
 import HistoryChart from "../../charts/HistoryChart.vue";
@@ -504,15 +504,14 @@ function handleClose() {
 					</div>
 				</div>
 				<div class="admincomponentsettings-preview">
-					<ComponentContainer
+					<DashboardComponent
 						:key="`${currentComponent.index}-${currentComponent.chart_config.color}-${currentComponent.chart_config.types}`"
 						v-if="
 							currentSettings === 'all' ||
 							currentSettings === 'chart'
 						"
-						:notMoreInfo="false"
-						:content="JSON.parse(JSON.stringify(currentComponent))"
-						:style="{ width: '100%', height: 'calc(100% - 35px)' }"
+						:config="JSON.parse(JSON.stringify(currentComponent))"
+						mode="large"
 					/>
 					<div
 						v-else-if="currentSettings === 'history'"

@@ -11,11 +11,11 @@ Testing: Jack Huang (Data Scientist), Ian Huang (Data Analysis Intern)
 <script setup>
 import { ref, onMounted } from "vue";
 import router from "../router";
+import { DashboardComponent } from "city-dashboard-component";
 import { useContentStore } from "../store/contentStore";
 import { useDialogStore } from "../store/dialogStore";
 import { useAuthStore } from "../store/authStore";
 
-import ComponentContainer from "../components/components/ComponentContainer.vue";
 import HistoryChart from "../components/charts/HistoryChart.vue";
 import ReportIssue from "../components/dialogs/ReportIssue.vue";
 import DownloadData from "../components/dialogs/DownloadData.vue";
@@ -33,6 +33,14 @@ const searchParams = ref({
 	pagesize: 200,
 	pagenum: 1,
 });
+
+function toggleFavorite(id) {
+	if (contentStore.favorites.components.includes(id)) {
+		contentStore.unfavoriteComponent(id);
+	} else {
+		contentStore.favoriteComponent(id);
+	}
+}
 
 onMounted(() => {
 	contentStore.getAllComponents(searchParams.value);
@@ -69,12 +77,34 @@ onMounted(() => {
 	>
 		<!-- 1-1. View the entire component and its chart data -->
 		<div class="componentinfoview-component">
-			<ComponentContainer
-				:content="dialogStore.moreInfoContent"
-				:notMoreInfo="false"
-				:isComponentView="true"
+			<DashboardComponent
+				:config="dialogStore.moreInfoContent"
 				:style="{ height: '350px', width: '400px' }"
 				:key="dialogStore.moreInfoContent.index"
+				:add-btn="
+					!contentStore.editDashboard.components
+						.map((item) => item.id)
+						.includes(dialogStore.moreInfoContent.id)
+				"
+				:favorite-btn="true"
+				:is-favorite="
+					contentStore.favorites?.components.includes(
+						dialogStore.moreInfoContent.id
+					)
+				"
+				@add="
+					(id, name) => {
+						contentStore.editDashboard.components.push({
+							id,
+							name,
+						});
+					}
+				"
+				@favorite="
+					(id) => {
+						toggleFavorite(id);
+					}
+				"
 			/>
 		</div>
 		<!-- 1-2. View the component's information -->
@@ -145,7 +175,7 @@ onMounted(() => {
 				<a
 					v-for="(link, index) in dialogStore.moreInfoContent.links"
 					:href="link"
-					:key="link"
+					:key="`${link}-${index}`"
 					target="_blank"
 					rel="noreferrer"
 					><div>{{ index + 1 }}</div>

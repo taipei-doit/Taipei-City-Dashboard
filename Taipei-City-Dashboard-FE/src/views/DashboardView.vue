@@ -9,15 +9,17 @@ Testing: Jack Huang (Data Scientist), Ian Huang (Data Analysis Intern)
 <!-- Department of Information Technology, Taipei City Government -->
 
 <script setup>
+import { DashboardComponent } from "city-dashboard-component";
 import { useContentStore } from "../store/contentStore";
 import { useDialogStore } from "../store/dialogStore";
+import { useAuthStore } from "../store/authStore";
 
-import ComponentContainer from "../components/components/ComponentContainer.vue";
 import MoreInfo from "../components/dialogs/MoreInfo.vue";
 import ReportIssue from "../components/dialogs/ReportIssue.vue";
 
 const contentStore = useContentStore();
 const dialogStore = useDialogStore();
+const authStore = useAuthStore();
 
 function handleOpenSettings() {
 	contentStore.editDashboard = JSON.parse(
@@ -25,6 +27,14 @@ function handleOpenSettings() {
 	);
 	dialogStore.addEdit = "edit";
 	dialogStore.showDialog("addEditDashboards");
+}
+
+function toggleFavorite(id) {
+	if (contentStore.favorites.components.includes(id)) {
+		contentStore.unfavoriteComponent(id);
+	} else {
+		contentStore.favoriteComponent(id);
+	}
 }
 </script>
 
@@ -34,11 +44,24 @@ function handleOpenSettings() {
 		v-if="contentStore.currentDashboard.index === 'map-layers'"
 		class="dashboard"
 	>
-		<ComponentContainer
+		<DashboardComponent
 			v-for="item in contentStore.currentDashboard.components"
-			:content="item"
-			:is-map-layer="true"
+			:config="item"
+			mode="half"
 			:key="item.index"
+			:info-btn="true"
+			:favorite-btn="authStore.token ? true : false"
+			:is-favorite="contentStore.favorites?.components.includes(item.id)"
+			@favorite="
+				(id) => {
+					toggleFavorite(id);
+				}
+			"
+			@info="
+				(item) => {
+					dialogStore.showMoreInfo(item);
+				}
+			"
 		/>
 		<MoreInfo />
 		<ReportIssue />
@@ -48,10 +71,36 @@ function handleOpenSettings() {
 		v-else-if="contentStore.currentDashboard.components?.length !== 0"
 		class="dashboard"
 	>
-		<ComponentContainer
+		<DashboardComponent
 			v-for="item in contentStore.currentDashboard.components"
-			:content="item"
+			:config="item"
 			:key="item.index"
+			:info-btn="true"
+			:delete-btn="
+				contentStore.personalDashboards
+					.map((item) => item.index)
+					.includes(contentStore.currentDashboard.index)
+			"
+			:favorite-btn="
+				authStore.token &&
+				contentStore.currentDashboard.icon !== 'favorite'
+			"
+			:is-favorite="contentStore.favorites?.components.includes(item.id)"
+			@favorite="
+				(id) => {
+					toggleFavorite(id);
+				}
+			"
+			@info="
+				(item) => {
+					dialogStore.showMoreInfo(item);
+				}
+			"
+			@delete="
+				(id) => {
+					contentStore.deleteComponent(id);
+				}
+			"
 		/>
 		<MoreInfo />
 		<ReportIssue />
