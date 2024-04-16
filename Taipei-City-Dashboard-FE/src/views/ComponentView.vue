@@ -10,8 +10,10 @@ Testing: Jack Huang (Data Scientist), Ian Huang (Data Analysis Intern)
 
 <script setup>
 import { ref, onMounted } from "vue";
+import { DashboardComponent } from "city-dashboard-component";
+
 import { useContentStore } from "../store/contentStore";
-import ComponentPreview from "../components/components/ComponentPreview.vue";
+import router from "../router/index";
 
 const contentStore = useContentStore();
 
@@ -26,6 +28,14 @@ const searchParams = ref({
 
 function handleNewQuery() {
 	contentStore.getAllComponents(searchParams.value);
+}
+
+function toggleFavorite(id) {
+	if (contentStore.favorites.components.includes(id)) {
+		contentStore.unfavoriteComponent(id);
+	} else {
+		contentStore.favoriteComponent(id);
+	}
 }
 
 onMounted(() => {
@@ -57,10 +67,41 @@ onMounted(() => {
 	</div>
 	<!-- 1. If the components are loaded -->
 	<div v-if="contentStore.components.length !== 0" class="componentview">
-		<ComponentPreview
+		<DashboardComponent
 			v-for="item in contentStore.components"
-			:content="item"
+			:config="item"
 			:key="item.index"
+			mode="preview"
+			:info-btn="true"
+			:add-btn="
+				!contentStore.editDashboard.components
+					.map((item) => item.id)
+					.includes(item.id)
+			"
+			:favorite-btn="true"
+			:is-favorite="contentStore.favorites?.components.includes(item.id)"
+			info-btn-text="資訊頁面"
+			@info="
+				(item) => {
+					router.push({
+						name: 'component-info',
+						params: { index: item.index },
+					});
+				}
+			"
+			@add="
+				(id, name) => {
+					contentStore.editDashboard.components.push({
+						id,
+						name,
+					});
+				}
+			"
+			@favorite="
+				(id) => {
+					toggleFavorite(id);
+				}
+			"
 		/>
 	</div>
 	<!-- 2. If the components are still loading -->
