@@ -3,12 +3,12 @@
 <script setup>
 import { computed, onMounted, ref } from "vue";
 import http from "../../router/axios";
+import { DashboardComponent } from "city-dashboard-component";
 
 import { useDialogStore } from "../../store/dialogStore";
 import { useContentStore } from "../../store/contentStore";
 
 import DialogContainer from "./DialogContainer.vue";
-import ComponentPreview from "../components/ComponentPreview.vue";
 
 const dialogStore = useDialogStore();
 const contentStore = useContentStore();
@@ -126,10 +126,7 @@ onMounted(() => {
 					/>
 					<label :for="item.name">
 						<div class="addcomponent-list-item">
-							<ComponentPreview
-								:content="item"
-								:isStatic="true"
-							/>
+							<DashboardComponent :config="item" mode="preview" />
 						</div>
 					</label>
 				</div>

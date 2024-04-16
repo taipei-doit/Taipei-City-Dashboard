@@ -13,6 +13,7 @@ import { createApp } from "vue";
 import "./assets/styles/globalStyles.css";
 import "./assets/styles/chartStyles.css";
 import "./assets/styles/toggleswitch.css";
+import "city-dashboard-component/style.css";
 import App from "./App.vue";
 
 // Import Core Packages: Vue-Router, Pinia, Apexcharts
