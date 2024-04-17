@@ -116,19 +116,22 @@ function handleDataSelection(e, chartContext, config) {
 </script>
 
 <template>
-	<div v-if="activeChart === 'TreemapChart'" class="treemapchart">
-		<div class="treemapchart-title">
-			<h5>總合</h5>
-			<h6>{{ sum }} {{ chart_config.unit }}</h6>
-		</div>
-		<apexchart
-			width="100%"
-			type="treemap"
-			:options="chartOptions"
-			:series="series"
-			@dataPointSelection="handleDataSelection"
-		></apexchart>
-	</div>
+  <div
+    v-if="activeChart === 'TreemapChart'"
+    class="treemapchart"
+  >
+    <div class="treemapchart-title">
+      <h5>總合</h5>
+      <h6>{{ sum }} {{ chart_config.unit }}</h6>
+    </div>
+    <apexchart
+      width="100%"
+      type="treemap"
+      :options="chartOptions"
+      :series="series"
+      @data-point-selection="handleDataSelection"
+    />
+  </div>
 </template>
 
 <style scoped lang="scss">

@@ -117,14 +117,14 @@ function handleDataSelection(e, chartContext, config) {
 </script>
 
 <template>
-	<div v-if="activeChart === 'ColumnChart'">
-		<apexchart
-			width="100%"
-			height="270px"
-			type="bar"
-			:options="chartOptions"
-			:series="series"
-			@dataPointSelection="handleDataSelection"
-		></apexchart>
-	</div>
+  <div v-if="activeChart === 'ColumnChart'">
+    <apexchart
+      width="100%"
+      height="270px"
+      type="bar"
+      :options="chartOptions"
+      :series="series"
+      @data-point-selection="handleDataSelection"
+    />
+  </div>
 </template>

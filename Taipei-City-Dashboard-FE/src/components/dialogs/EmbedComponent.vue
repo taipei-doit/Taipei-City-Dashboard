@@ -35,27 +35,30 @@ function handleClose() {
 </script>
 
 <template>
-	<DialogContainer dialog="embedComponent" @onClose="handleClose">
-		<div class="embedcomponent">
-			<h2>內嵌組件</h2>
-			<div class="embedcomponent-input">
-				<h3>複製以下內嵌碼至您的網頁即可內嵌本組件</h3>
-				<textarea
-					type="text"
-					disabled
-					:value="embedTemplate"
-				></textarea>
-			</div>
-			<div class="embedcomponent-control">
-				<button
-					class="embedcomponent-control-confirm"
-					@click="handleCopy"
-				>
-					複製內嵌碼
-				</button>
-			</div>
-		</div>
-	</DialogContainer>
+  <DialogContainer
+    dialog="embedComponent"
+    @on-close="handleClose"
+  >
+    <div class="embedcomponent">
+      <h2>內嵌組件</h2>
+      <div class="embedcomponent-input">
+        <h3>複製以下內嵌碼至您的網頁即可內嵌本組件</h3>
+        <textarea
+          type="text"
+          disabled
+          :value="embedTemplate"
+        />
+      </div>
+      <div class="embedcomponent-control">
+        <button
+          class="embedcomponent-control-confirm"
+          @click="handleCopy"
+        >
+          複製內嵌碼
+        </button>
+      </div>
+    </div>
+  </DialogContainer>
 </template>
 
 <style scoped lang="scss">

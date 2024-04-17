@@ -13,64 +13,64 @@ const authStore = useAuthStore();
 </script>
 
 <template>
-	<Teleport to="body">
-		<Transition name="dialog">
-			<div
-				class="dialogcontainer"
-				v-if="dialogStore.dialogs.mobileNavigation"
-			>
-				<div
-					class="dialogcontainer-background"
-					@click="dialogStore.hideAllDialogs"
-				></div>
-				<div class="dialogcontainer-dialog">
-					<div class="mobilenavigation">
-						<div v-if="authStore.token">
-							<h2>我的最愛</h2>
-							<SideBarTab
-								icon="favorite"
-								title="收藏組件"
-								:expanded="true"
-								:index="contentStore.favorites?.index"
-							/>
-							<h2>個人儀表板</h2>
-							<SideBarTab
-								v-for="item in contentStore.personalDashboards.filter(
-									(item) => item.icon !== 'favorite'
-								)"
-								:icon="item.icon"
-								:title="item.name"
-								:index="item.index"
-								:key="item.index"
-								:expanded="true"
-								@click="dialogStore.hideAllDialogs"
-							/>
-						</div>
-						<h2>公共儀表板</h2>
-						<SideBarTab
-							v-for="item in contentStore.publicDashboards.filter(
-								(item) => item.index !== 'map-layers'
-							)"
-							:icon="item.icon"
-							:title="item.name"
-							:index="item.index"
-							:key="item.index"
-							:expanded="true"
-							@click="dialogStore.hideAllDialogs"
-						/>
-						<h2>基本地圖圖層</h2>
-						<SideBarTab
-							:icon="`public`"
-							:title="`圖資資訊`"
-							index="map-layers"
-							:expanded="true"
-							@click="dialogStore.hideAllDialogs"
-						/>
-					</div>
-				</div>
-			</div>
-		</Transition>
-	</Teleport>
+  <Teleport to="body">
+    <Transition name="dialog">
+      <div
+        v-if="dialogStore.dialogs.mobileNavigation"
+        class="dialogcontainer"
+      >
+        <div
+          class="dialogcontainer-background"
+          @click="dialogStore.hideAllDialogs"
+        />
+        <div class="dialogcontainer-dialog">
+          <div class="mobilenavigation">
+            <div v-if="authStore.token">
+              <h2>我的最愛</h2>
+              <SideBarTab
+                icon="favorite"
+                title="收藏組件"
+                :expanded="true"
+                :index="contentStore.favorites?.index"
+              />
+              <h2>個人儀表板</h2>
+              <SideBarTab
+                v-for="item in contentStore.personalDashboards.filter(
+                  (item) => item.icon !== 'favorite'
+                )"
+                :key="item.index"
+                :icon="item.icon"
+                :title="item.name"
+                :index="item.index"
+                :expanded="true"
+                @click="dialogStore.hideAllDialogs"
+              />
+            </div>
+            <h2>公共儀表板</h2>
+            <SideBarTab
+              v-for="item in contentStore.publicDashboards.filter(
+                (item) => item.index !== 'map-layers'
+              )"
+              :key="item.index"
+              :icon="item.icon"
+              :title="item.name"
+              :index="item.index"
+              :expanded="true"
+              @click="dialogStore.hideAllDialogs"
+            />
+            <h2>基本地圖圖層</h2>
+            <SideBarTab
+              :icon="`public`"
+              :title="`圖資資訊`"
+              index="map-layers"
+              :expanded="true"
+              @click="dialogStore.hideAllDialogs"
+            />
+          </div>
+        </div>
+      </div>
+    </Transition>
+  </Teleport>
 </template>
 
 <style scoped lang="scss">

@@ -81,101 +81,116 @@ function changeShowTagTooltipState(state) {
 </script>
 
 <template>
-	<div class="componentpreview" :style="style">
-		<div class="componentpreview-header">
-			<div>
-				<h3>
-					{{ content.name }}
-					<ComponentTag icon="" :text="updateFreq" mode="small" />
-				</h3>
-				<p>{{ props.content.short_desc }}</p>
-				<h4 v-if="dataTime === '維護修復中'">
-					{{ `${content.source} | ` }}<span>warning</span>
-					<h4>{{ `${dataTime}` }}</h4>
-					<span>warning</span>
-				</h4>
-				<h4 v-else>{{ `${content.source} | ${dataTime}` }}</h4>
-			</div>
-			<div class="componentpreview-header-buttons" v-if="!isStatic">
-				<button
-					v-if="
-						!contentStore.editDashboard.components
-							.map((item) => item.id)
-							.includes(props.content.id)
-					"
-					@click="
-						contentStore.editDashboard.components.push({
-							id: props.content.id,
-							name: props.content.name,
-						})
-					"
-					class="hide-if-mobile"
-				>
-					<span>add_circle</span>
-				</button>
-				<button
-					:class="{
-						isfavorite: contentStore.favorites.components.includes(
-							content.id
-						),
-					}"
-					@click="toggleFavorite"
-				>
-					<span>favorite</span>
-				</button>
-			</div>
-		</div>
-		<div class="componentpreview-content">
-			<div class="componentpreview-content-id">
-				<p>ID: {{ props.content.id }}</p>
-				<p>Index: {{ props.content.index }}</p>
-			</div>
-			<div class="componentpreview-content-charts">
-				<img
-					v-for="chart in props.content.chart_config.types"
-					:key="`${props.content.index} - ${chart}`"
-					:src="`/images/thumbnails/${chart}.svg`"
-				/>
-			</div>
-		</div>
-		<div class="componentpreview-footer">
-			<div
-				@mouseenter="changeShowTagTooltipState(true)"
-				@mousemove="updateMouseLocation"
-				@mouseleave="changeShowTagTooltipState(false)"
-			>
-				<ComponentTag
-					v-if="content.map_filter && content.map_config"
-					text="篩選地圖"
-					class="hide-if-mobile"
-				/>
-				<ComponentTag
-					v-if="content.map_config && content.map_config[0] !== null"
-					text="空間資料"
-				/>
-				<ComponentTag
-					v-if="content.history_data || content.history_config"
-					text="歷史資料"
-					class="history-tag"
-				/>
-			</div>
-			<!-- The content in the target component should be passed into the "showMoreInfo" function of the mapStore to show more info -->
-			<RouterLink :to="`/component/${content.index}`" v-if="!isStatic">
-				<p>資訊頁面</p>
-				<span>arrow_circle_right</span>
-			</RouterLink>
-		</div>
-		<Teleport to="body">
-			<!-- The class "chart-tooltip" could be edited in /assets/styles/chartStyles.css -->
-			<TagTooltip
-				v-if="showTagTooltip"
-				:position="tooltipPosition"
-				:hasFilter="content.map_filter ? true : false"
-				:hasMapLayer="content.map_config[0] ? true : false"
-				:hasHistory="content.history_config ? true : false"
-			/>
-		</Teleport>
-	</div>
+  <div
+    class="componentpreview"
+    :style="style"
+  >
+    <div class="componentpreview-header">
+      <div>
+        <h3>
+          {{ content.name }}
+          <ComponentTag
+            icon=""
+            :text="updateFreq"
+            mode="small"
+          />
+        </h3>
+        <p>{{ props.content.short_desc }}</p>
+        <h4 v-if="dataTime === '維護修復中'">
+          {{ `${content.source} | ` }}<span>warning</span>
+          <h4>{{ `${dataTime}` }}</h4>
+          <span>warning</span>
+        </h4>
+        <h4 v-else>
+          {{ `${content.source} | ${dataTime}` }}
+        </h4>
+      </div>
+      <div
+        v-if="!isStatic"
+        class="componentpreview-header-buttons"
+      >
+        <button
+          v-if="
+            !contentStore.editDashboard.components
+              .map((item) => item.id)
+              .includes(props.content.id)
+          "
+          class="hide-if-mobile"
+          @click="
+            contentStore.editDashboard.components.push({
+              id: props.content.id,
+              name: props.content.name,
+            })
+          "
+        >
+          <span>add_circle</span>
+        </button>
+        <button
+          :class="{
+            isfavorite: contentStore.favorites.components.includes(
+              content.id
+            ),
+          }"
+          @click="toggleFavorite"
+        >
+          <span>favorite</span>
+        </button>
+      </div>
+    </div>
+    <div class="componentpreview-content">
+      <div class="componentpreview-content-id">
+        <p>ID: {{ props.content.id }}</p>
+        <p>Index: {{ props.content.index }}</p>
+      </div>
+      <div class="componentpreview-content-charts">
+        <img
+          v-for="chart in props.content.chart_config.types"
+          :key="`${props.content.index} - ${chart}`"
+          :src="`/images/thumbnails/${chart}.svg`"
+        >
+      </div>
+    </div>
+    <div class="componentpreview-footer">
+      <div
+        @mouseenter="changeShowTagTooltipState(true)"
+        @mousemove="updateMouseLocation"
+        @mouseleave="changeShowTagTooltipState(false)"
+      >
+        <ComponentTag
+          v-if="content.map_filter && content.map_config"
+          text="篩選地圖"
+          class="hide-if-mobile"
+        />
+        <ComponentTag
+          v-if="content.map_config && content.map_config[0] !== null"
+          text="空間資料"
+        />
+        <ComponentTag
+          v-if="content.history_data || content.history_config"
+          text="歷史資料"
+          class="history-tag"
+        />
+      </div>
+      <!-- The content in the target component should be passed into the "showMoreInfo" function of the mapStore to show more info -->
+      <RouterLink
+        v-if="!isStatic"
+        :to="`/component/${content.index}`"
+      >
+        <p>資訊頁面</p>
+        <span>arrow_circle_right</span>
+      </RouterLink>
+    </div>
+    <Teleport to="body">
+      <!-- The class "chart-tooltip" could be edited in /assets/styles/chartStyles.css -->
+      <TagTooltip
+        v-if="showTagTooltip"
+        :position="tooltipPosition"
+        :has-filter="content.map_filter ? true : false"
+        :has-map-layer="content.map_config[0] ? true : false"
+        :has-history="content.history_config ? true : false"
+      />
+    </Teleport>
+  </div>
 </template>
 
 <style scoped lang="scss">

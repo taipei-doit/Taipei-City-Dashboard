@@ -46,43 +46,46 @@ function handleDataSelection(index) {
 </script>
 
 <template>
-	<div class="maplegend">
-		<div class="maplegend-legend">
-			<button
-				v-for="(item, index) in series"
-				:key="item.name"
-				@click="handleDataSelection(index)"
-				:class="{
-					'maplegend-legend-item': true,
-					'maplegend-filter':
-						contentStore.currentDashboard.mode === '/mapview' &&
-						props.map_filter,
-					'maplegend-selected':
-						contentStore.currentDashboard.mode === '/mapview' &&
-						selectedIndex === index,
-				}"
-			>
-				<!-- Show different icons for different map types -->
-				<div
-					v-if="item.type !== 'symbol'"
-					:style="{
-						backgroundColor: `${chart_config.color[index]}`,
-						height: item.type === 'line' ? '0.4rem' : '1rem',
-						borderRadius: item.type === 'circle' ? '50%' : '2px',
-					}"
-				></div>
-				<img v-else :src="`/images/map/${item.icon}.png`" />
-				<!-- If there is a value attached, show the value -->
-				<div v-if="item.value">
-					<h5>{{ item.name }}</h5>
-					<h6>{{ item.value }} {{ chart_config.unit }}</h6>
-				</div>
-				<div v-else>
-					<h6>{{ item.name }}</h6>
-				</div>
-			</button>
-		</div>
-	</div>
+  <div class="maplegend">
+    <div class="maplegend-legend">
+      <button
+        v-for="(item, index) in series"
+        :key="item.name"
+        :class="{
+          'maplegend-legend-item': true,
+          'maplegend-filter':
+            contentStore.currentDashboard.mode === '/mapview' &&
+            props.map_filter,
+          'maplegend-selected':
+            contentStore.currentDashboard.mode === '/mapview' &&
+            selectedIndex === index,
+        }"
+        @click="handleDataSelection(index)"
+      >
+        <!-- Show different icons for different map types -->
+        <div
+          v-if="item.type !== 'symbol'"
+          :style="{
+            backgroundColor: `${chart_config.color[index]}`,
+            height: item.type === 'line' ? '0.4rem' : '1rem',
+            borderRadius: item.type === 'circle' ? '50%' : '2px',
+          }"
+        />
+        <img
+          v-else
+          :src="`/images/map/${item.icon}.png`"
+        >
+        <!-- If there is a value attached, show the value -->
+        <div v-if="item.value">
+          <h5>{{ item.name }}</h5>
+          <h6>{{ item.value }} {{ chart_config.unit }}</h6>
+        </div>
+        <div v-else>
+          <h6>{{ item.name }}</h6>
+        </div>
+      </button>
+    </div>
+  </div>
 </template>
 
 <style scoped lang="scss">

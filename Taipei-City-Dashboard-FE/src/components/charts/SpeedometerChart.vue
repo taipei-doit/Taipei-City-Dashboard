@@ -175,117 +175,120 @@ function handleTable(list) {
 }
 </script>
 <template>
-	<div v-if="activeChart === 'SpeedometerChart'" class="speedometer">
-		<g>
-			<svg
-				viewBox="0 0 550 260"
-				xmlns="http://www.w3.org/2000/svg"
-				class="initial-animation-1"
-			>
-				<!-- Color Gradient -->
-				<defs>
-					<linearGradient
-						:id="'grad1-' + chart_config.name"
-						x1="0%"
-						y1="0%"
-						x2="100%"
-						y2="0%"
-					>
-						<stop
-							v-for="grad in calGradComp()"
-							:key="grad"
-							:offset="grad[1]"
-							:style="{
-								'stop-color': grad[0],
-								'stop-opacity': 1,
-							}"
-						/>
-					</linearGradient>
-				</defs>
-				<!-- Render Speedometer arc -->
-				<path
-					:fill="'url(#grad1-' + chart_config.name + ')'"
-					:d="CheckpathD(0, 100)"
-				/>
-				<!-- Render pointer -->
-				<path
-					fill="#ddd"
-					stroke="#ddd"
-					:d="calTri(series[0].data[targetvalue])"
-				/>
-				<text
-					:x="Rx"
-					:y="Ry"
-					dominant-baseline="start"
-					text-anchor="middle"
-					class="small"
-				>
-					<!-- Render the name of the dataset and the specific data title -->
-					<tspan>
-						{{
-							chart_config.name +
-							" (" +
-							(series[0].data[targetvalue].x ??
-								chart_config.categories[targetvalue]) +
-							")"
-						}}
-					</tspan>
-				</text>
-				<!-- Render the value -->
-				<text
-					:x="Rx - 10"
-					:y="Ry - 35"
-					dominant-baseline="start"
-					text-anchor="middle"
-					class="heavy"
-				>
-					{{
-						series[0].data[targetvalue].y ??
-						series[0].data[targetvalue]
-					}}
-				</text>
-				<!-- Render the unit of the data type -->
-				<text
-					:x="Rx + 90"
-					:y="Ry - 30"
-					dominant-baseline="start"
-					text-anchor="middle"
-					class="small"
-				>
-					<tspan>{{ chart_config.unit }}</tspan>
-				</text>
-			</svg>
-			<div class="tablediv">
-				<table>
-					<tbody>
-						<!-- Table size: 2 * ceil(N/2) -->
-						<tr
-							v-for="(subTable, i) in handleTable(
-								series[0].data[0].x
-									? series[0].data
-									: chart_config.categories
-							)"
-							:key="i"
-						>
-							<td
-								v-for="(submatter, i) in subTable"
-								:key="i"
-								:data-name="submatter[0].toString()"
-								@mouseenter="toggleActive"
-								@mouseleave="toggleActiveToNull"
-								:class="'initial-animation-' + submatter[0]"
-							>
-								<!-- Value of the data title -->
-								<div class="mattertable">
-									{{ submatter[1] }}
-								</div>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-		</g>
-	</div>
+  <div
+    v-if="activeChart === 'SpeedometerChart'"
+    class="speedometer"
+  >
+    <g>
+      <svg
+        viewBox="0 0 550 260"
+        xmlns="http://www.w3.org/2000/svg"
+        class="initial-animation-1"
+      >
+        <!-- Color Gradient -->
+        <defs>
+          <linearGradient
+            :id="'grad1-' + chart_config.name"
+            x1="0%"
+            y1="0%"
+            x2="100%"
+            y2="0%"
+          >
+            <stop
+              v-for="grad in calGradComp()"
+              :key="grad"
+              :offset="grad[1]"
+              :style="{
+                'stop-color': grad[0],
+                'stop-opacity': 1,
+              }"
+            />
+          </linearGradient>
+        </defs>
+        <!-- Render Speedometer arc -->
+        <path
+          :fill="'url(#grad1-' + chart_config.name + ')'"
+          :d="CheckpathD(0, 100)"
+        />
+        <!-- Render pointer -->
+        <path
+          fill="#ddd"
+          stroke="#ddd"
+          :d="calTri(series[0].data[targetvalue])"
+        />
+        <text
+          :x="Rx"
+          :y="Ry"
+          dominant-baseline="start"
+          text-anchor="middle"
+          class="small"
+        >
+          <!-- Render the name of the dataset and the specific data title -->
+          <tspan>
+            {{
+              chart_config.name +
+                " (" +
+                (series[0].data[targetvalue].x ??
+                  chart_config.categories[targetvalue]) +
+                ")"
+            }}
+          </tspan>
+        </text>
+        <!-- Render the value -->
+        <text
+          :x="Rx - 10"
+          :y="Ry - 35"
+          dominant-baseline="start"
+          text-anchor="middle"
+          class="heavy"
+        >
+          {{
+            series[0].data[targetvalue].y ??
+              series[0].data[targetvalue]
+          }}
+        </text>
+        <!-- Render the unit of the data type -->
+        <text
+          :x="Rx + 90"
+          :y="Ry - 30"
+          dominant-baseline="start"
+          text-anchor="middle"
+          class="small"
+        >
+          <tspan>{{ chart_config.unit }}</tspan>
+        </text>
+      </svg>
+      <div class="tablediv">
+        <table>
+          <tbody>
+            <!-- Table size: 2 * ceil(N/2) -->
+            <tr
+              v-for="(subTable, i) in handleTable(
+                series[0].data[0].x
+                  ? series[0].data
+                  : chart_config.categories
+              )"
+              :key="i"
+            >
+              <td
+                v-for="(submatter, i) in subTable"
+                :key="i"
+                :data-name="submatter[0].toString()"
+                :class="'initial-animation-' + submatter[0]"
+                @mouseenter="toggleActive"
+                @mouseleave="toggleActiveToNull"
+              >
+                <!-- Value of the data title -->
+                <div class="mattertable">
+                  {{ submatter[1] }}
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </g>
+  </div>
 </template>
 <style scoped lang="scss">
 .speedometer {

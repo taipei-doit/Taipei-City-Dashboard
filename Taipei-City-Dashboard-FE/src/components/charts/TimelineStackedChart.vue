@@ -84,13 +84,13 @@ function parseTime(time) {
 </script>
 
 <template>
-	<div v-if="activeChart === 'TimelineStackedChart'">
-		<apexchart
-			width="100%"
-			height="260px"
-			type="area"
-			:options="chartOptions"
-			:series="series"
-		></apexchart>
-	</div>
+  <div v-if="activeChart === 'TimelineStackedChart'">
+    <apexchart
+      width="100%"
+      height="260px"
+      type="area"
+      :options="chartOptions"
+      :series="series"
+    />
+  </div>
 </template>

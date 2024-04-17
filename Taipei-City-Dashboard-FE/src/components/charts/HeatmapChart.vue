@@ -192,20 +192,23 @@ function handleDataSelection(e, chartContext, config) {
 </script>
 
 <template>
-	<div v-if="activeChart === 'HeatmapChart'" class="heatmapchart">
-		<div class="heatmapchart-title">
-			<h5>總合</h5>
-			<h6>{{ heatmapData.sum }} {{ chart_config.unit }}</h6>
-		</div>
-		<apexchart
-			width="100%"
-			height="360px"
-			type="heatmap"
-			:options="chartOptions"
-			:series="series"
-			@dataPointSelection="handleDataSelection"
-		></apexchart>
-	</div>
+  <div
+    v-if="activeChart === 'HeatmapChart'"
+    class="heatmapchart"
+  >
+    <div class="heatmapchart-title">
+      <h5>總合</h5>
+      <h6>{{ heatmapData.sum }} {{ chart_config.unit }}</h6>
+    </div>
+    <apexchart
+      width="100%"
+      height="360px"
+      type="heatmap"
+      :options="chartOptions"
+      :series="series"
+      @data-point-selection="handleDataSelection"
+    />
+  </div>
 </template>
 
 <style scoped lang="scss">

@@ -6,15 +6,16 @@
 	"scripts": {
 		"start": "vite",
 		"dev": "vite",
-		"build": "eslint --fix --ext .js,.vue . && vite build",
-		"build:test": "eslint --fix --ext .js,.vue . && vite build --mode test",
-		"lint": "eslint --fix --ext .js,.vue .",
+		"build": "eslint . --fix && vite build",
+		"build:test": "eslint . --fix && vite build --mode test",
+		"lint": "eslint . --fix",
 		"preview": "vite preview"
 	},
 	"dependencies": {
 		"@vueuse/core": "^10.7.2",
 		"apexcharts": "^3.45.2",
 		"axios": "^1.6.5",
+		"city-dashboard-component": "^0.2.0",
 		"dayjs": "^1.11.10",
 		"lodash.debounce": "^4.0.8",
 		"mapbox-gl": "^3.1.0",
@@ -26,6 +27,7 @@
 		"vue3-apexcharts": "^1.4.4"
 	},
 	"devDependencies": {
+		"@eslint/js": "^9.0.0",
 		"@vitejs/plugin-vue": "^5.0.3",
 		"eslint-plugin-vue": "^9.20.1",
 		"sass": "^1.70.0",

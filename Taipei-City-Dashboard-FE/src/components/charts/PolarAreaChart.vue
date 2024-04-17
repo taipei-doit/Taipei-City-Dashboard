@@ -266,83 +266,101 @@ function handleLegendSelection(index) {
 </script>
 
 <template>
-	<!-- conditionally render the chart -->
-	<div v-if="activeChart === 'PolarAreaChart'" class="polarareachart">
-		<!-- The layout of the chart Vue component -->
-		<!-- Utilize the @click event listener to enable map filtering by data selection -->
-		<svg class="polarareachart-chart" xmlns="http://www.w3.org/2000/svg">
-			<g v-for="(sector, index) in sectors" :key="index">
-				<path
-					:class="{
-						[`initial-animation-sector-${sector.a}-${sector.r}`]: true,
-						sector: true,
-					}"
-					v-if="sector.show"
-					:d="sectorD(index)"
-					:fill="sector.fill"
-					:stroke-width="sector.stroke_width"
-					@mouseenter="toggleActive(index)"
-					@mousemove="updateMouseLocation"
-					@mouseleave="toggleActiveToNull"
-					@click="
-						handleDataSelection(
-							chart_config.categories[aHovered],
-							showedData[aHovered].data[rHovered].r
-						)
-					"
-				/>
-			</g>
-			<g v-for="(label, index) in labels" :key="index">
-				<text
-					:x="label.x"
-					:y="label.y"
-					text-anchor="middle"
-					alignment-baseline="middle"
-					fill="#888787"
-					font-size="12"
-				>
-					{{ label.name }}
-				</text>
-			</g>
-			<circle :cx="cx" :cy="cy" :r="10" :stroke="null" />
-		</svg>
-		<div class="polarareachart-legend" v-if="chart_config.categories">
-			<div
-				:class="{
-					'polarareachart-legend-item': true,
-					selected: !rShow[index],
-				}"
-				v-for="(serie, index) in props.series"
-				:key="serie.name"
-				@click="handleLegendSelection(index)"
-			>
-				<div
-					:style="{
-						backgroundColor: props.chart_config.color[index],
-					}"
-				></div>
-				<p>{{ serie.name }}</p>
-			</div>
-		</div>
-		<Teleport to="body">
-			<!-- The class "chart-tooltip" could be edited in /assets/styles/chartStyles.css -->
-			<div
-				v-if="aHovered !== -1"
-				class="polarareachart-tooltip chart-tooltip"
-				:style="tooltipPosition"
-			>
-				<h6>
-					{{ showedData[aHovered].a
-					}}{{ props.chart_config.categories && "-"
-					}}{{ showedData[aHovered].data[rHovered].r }}
-				</h6>
-				<span
-					>{{ showedData[aHovered].data[rHovered].value
-					}}{{ chart_config.unit }}</span
-				>
-			</div>
-		</Teleport>
-	</div>
+  <!-- conditionally render the chart -->
+  <div
+    v-if="activeChart === 'PolarAreaChart'"
+    class="polarareachart"
+  >
+    <!-- The layout of the chart Vue component -->
+    <!-- Utilize the @click event listener to enable map filtering by data selection -->
+    <svg
+      class="polarareachart-chart"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <g
+        v-for="(sector, index) in sectors"
+        :key="index"
+      >
+        <path
+          v-if="sector.show"
+          :class="{
+            [`initial-animation-sector-${sector.a}-${sector.r}`]: true,
+            sector: true,
+          }"
+          :d="sectorD(index)"
+          :fill="sector.fill"
+          :stroke-width="sector.stroke_width"
+          @mouseenter="toggleActive(index)"
+          @mousemove="updateMouseLocation"
+          @mouseleave="toggleActiveToNull"
+          @click="
+            handleDataSelection(
+              chart_config.categories[aHovered],
+              showedData[aHovered].data[rHovered].r
+            )
+          "
+        />
+      </g>
+      <g
+        v-for="(label, index) in labels"
+        :key="index"
+      >
+        <text
+          :x="label.x"
+          :y="label.y"
+          text-anchor="middle"
+          alignment-baseline="middle"
+          fill="#888787"
+          font-size="12"
+        >
+          {{ label.name }}
+        </text>
+      </g>
+      <circle
+        :cx="cx"
+        :cy="cy"
+        :r="10"
+        :stroke="null"
+      />
+    </svg>
+    <div
+      v-if="chart_config.categories"
+      class="polarareachart-legend"
+    >
+      <div
+        v-for="(serie, index) in props.series"
+        :key="serie.name"
+        :class="{
+          'polarareachart-legend-item': true,
+          selected: !rShow[index],
+        }"
+        @click="handleLegendSelection(index)"
+      >
+        <div
+          :style="{
+            backgroundColor: props.chart_config.color[index],
+          }"
+        />
+        <p>{{ serie.name }}</p>
+      </div>
+    </div>
+    <Teleport to="body">
+      <!-- The class "chart-tooltip" could be edited in /assets/styles/chartStyles.css -->
+      <div
+        v-if="aHovered !== -1"
+        class="polarareachart-tooltip chart-tooltip"
+        :style="tooltipPosition"
+      >
+        <h6>
+          {{ showedData[aHovered].a
+          }}{{ props.chart_config.categories && "-"
+          }}{{ showedData[aHovered].data[rHovered].r }}
+        </h6>
+        <span>{{ showedData[aHovered].data[rHovered].value
+        }}{{ chart_config.unit }}</span>
+      </div>
+    </Teleport>
+  </div>
 </template>
 
 <style scoped lang="scss">

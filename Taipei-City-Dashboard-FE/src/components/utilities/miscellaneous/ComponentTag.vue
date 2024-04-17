@@ -14,16 +14,16 @@ defineProps({
 </script>
 
 <template>
-	<div
-		:class="{
-			componenttag: true,
-			'componenttag-fill': mode === 'fill',
-			'componenttag-small': mode === 'small',
-		}"
-	>
-		<span v-if="icon">{{ icon }}</span>
-		<p>{{ text }}</p>
-	</div>
+  <div
+    :class="{
+      componenttag: true,
+      'componenttag-fill': mode === 'fill',
+      'componenttag-small': mode === 'small',
+    }"
+  >
+    <span v-if="icon">{{ icon }}</span>
+    <p>{{ text }}</p>
+  </div>
 </template>
 
 <style scoped lang="scss">

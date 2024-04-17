@@ -12,19 +12,22 @@ const numToColor = {
 </script>
 
 <template>
-	<div class="metrocardensity">
-		<div v-if="weight" class="metrocardensity-container">
-			<div
-				class="metrocardensity-item"
-				v-for="(item, index) in weight.y"
-				:style="{ backgroundColor: numToColor[item] }"
-				:key="`${item}-${index}`"
-			>
-				{{ index + 1 }}
-			</div>
-		</div>
-		<span v-else>{{ direction === "desc" ? "north" : "south" }}</span>
-	</div>
+  <div class="metrocardensity">
+    <div
+      v-if="weight"
+      class="metrocardensity-container"
+    >
+      <div
+        v-for="(item, index) in weight.y"
+        :key="`${item}-${index}`"
+        class="metrocardensity-item"
+        :style="{ backgroundColor: numToColor[item] }"
+      >
+        {{ index + 1 }}
+      </div>
+    </div>
+    <span v-else>{{ direction === "desc" ? "north" : "south" }}</span>
+  </div>
 </template>
 
 <style scoped lang="scss">

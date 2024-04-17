@@ -49,53 +49,62 @@ function handleClose() {
 </script>
 
 <template>
-	<DialogContainer dialog="reportIssue" @on-close="handleClose">
-		<div class="reportissue">
-			<h2>回報問題</h2>
-			<h3>問題標題* ({{ allInputs.title.length }}/20)</h3>
-			<input
-				class="reportissue-input"
-				type="text"
-				v-model="allInputs.title"
-				:minLength="1"
-				:maxLength="20"
-				required
-			/>
-			<h3>問題種類*</h3>
-			<div v-for="item in issueTypes" :key="item">
-				<input
-					class="reportissue-radio"
-					type="radio"
-					v-model="allInputs.type"
-					:value="item"
-					:id="item"
-				/>
-				<label :for="item">
-					<div></div>
-					{{ item }}
-				</label>
-			</div>
-			<h3>問題簡述* ({{ allInputs.description.length }}/200)</h3>
-			<textarea
-				v-model="allInputs.description"
-				:minLength="1"
-				:maxLength="200"
-				required
-			></textarea>
-			<div class="reportissue-control">
-				<button class="reportissue-control-cancel" @click="handleClose">
-					取消
-				</button>
-				<button
-					v-if="allInputs.description && allInputs.title"
-					class="reportissue-control-confirm"
-					@click="handleSubmit"
-				>
-					回報問題
-				</button>
-			</div>
-		</div>
-	</DialogContainer>
+  <DialogContainer
+    dialog="reportIssue"
+    @on-close="handleClose"
+  >
+    <div class="reportissue">
+      <h2>回報問題</h2>
+      <h3>問題標題* ({{ allInputs.title.length }}/20)</h3>
+      <input
+        v-model="allInputs.title"
+        class="reportissue-input"
+        type="text"
+        :minLength="1"
+        :maxLength="20"
+        required
+      >
+      <h3>問題種類*</h3>
+      <div
+        v-for="item in issueTypes"
+        :key="item"
+      >
+        <input
+          :id="item"
+          v-model="allInputs.type"
+          class="reportissue-radio"
+          type="radio"
+          :value="item"
+        >
+        <label :for="item">
+          <div />
+          {{ item }}
+        </label>
+      </div>
+      <h3>問題簡述* ({{ allInputs.description.length }}/200)</h3>
+      <textarea
+        v-model="allInputs.description"
+        :minLength="1"
+        :maxLength="200"
+        required
+      />
+      <div class="reportissue-control">
+        <button
+          class="reportissue-control-cancel"
+          @click="handleClose"
+        >
+          取消
+        </button>
+        <button
+          v-if="allInputs.description && allInputs.title"
+          class="reportissue-control-confirm"
+          @click="handleSubmit"
+        >
+          回報問題
+        </button>
+      </div>
+    </div>
+  </DialogContainer>
 </template>
 
 <style scoped lang="scss">

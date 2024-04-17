@@ -41,75 +41,81 @@ onMounted(() => {
 </script>
 
 <template>
-	<div
-		:class="{
-			sidebar: true,
-			'sidebar-collapse': !isExpanded,
-			'hide-if-mobile': true,
-		}"
-	>
-		<div v-if="authStore.token">
-			<h2>{{ isExpanded ? `我的最愛` : `最愛` }}</h2>
-			<SideBarTab
-				icon="favorite"
-				title="收藏組件"
-				:expanded="isExpanded"
-				:index="contentStore.favorites?.index"
-			/>
-			<div class="sidebar-sub-add">
-				<h2>{{ isExpanded ? `個人儀表板 ` : `個人` }}</h2>
-				<button v-if="isExpanded" @click="handleOpenAddDashboard">
-					<span>add_circle_outline</span>新增
-				</button>
-			</div>
-			<div
-				class="sidebar-sub-no"
-				v-if="
-					contentStore.personalDashboards.filter(
-						(item) => item.icon !== 'favorite'
-					).length === 0
-				"
-			>
-				<p>{{ isExpanded ? `尚無個人儀表板 ` : `尚無` }}</p>
-			</div>
-			<SideBarTab
-				v-for="item in contentStore.personalDashboards.filter(
-					(item) => item.icon !== 'favorite'
-				)"
-				:icon="item.icon"
-				:title="item.name"
-				:index="item.index"
-				:key="item.index"
-				:expanded="isExpanded"
-			/>
-		</div>
-		<h2>{{ isExpanded ? `公共儀表板 ` : `公共` }}</h2>
-		<SideBarTab
-			v-for="item in contentStore.publicDashboards.filter(
-				(item) => item.index !== 'map-layers'
-			)"
-			:icon="item.icon"
-			:title="item.name"
-			:index="item.index"
-			:key="item.index"
-			:expanded="isExpanded"
-		/>
-		<h2>{{ isExpanded ? `基本地圖圖層` : `圖層` }}</h2>
-		<SideBarTab
-			icon="public"
-			title="圖資資訊"
-			:expanded="isExpanded"
-			index="map-layers"
-		/>
+  <div
+    :class="{
+      sidebar: true,
+      'sidebar-collapse': !isExpanded,
+      'hide-if-mobile': true,
+    }"
+  >
+    <div v-if="authStore.token">
+      <h2>{{ isExpanded ? `我的最愛` : `最愛` }}</h2>
+      <SideBarTab
+        icon="favorite"
+        title="收藏組件"
+        :expanded="isExpanded"
+        :index="contentStore.favorites?.index"
+      />
+      <div class="sidebar-sub-add">
+        <h2>{{ isExpanded ? `個人儀表板 ` : `個人` }}</h2>
+        <button
+          v-if="isExpanded"
+          @click="handleOpenAddDashboard"
+        >
+          <span>add_circle_outline</span>新增
+        </button>
+      </div>
+      <div
+        v-if="
+          contentStore.personalDashboards.filter(
+            (item) => item.icon !== 'favorite'
+          ).length === 0
+        "
+        class="sidebar-sub-no"
+      >
+        <p>{{ isExpanded ? `尚無個人儀表板 ` : `尚無` }}</p>
+      </div>
+      <SideBarTab
+        v-for="item in contentStore.personalDashboards.filter(
+          (item) => item.icon !== 'favorite'
+        )"
+        :key="item.index"
+        :icon="item.icon"
+        :title="item.name"
+        :index="item.index"
+        :expanded="isExpanded"
+      />
+    </div>
+    <h2>{{ isExpanded ? `公共儀表板 ` : `公共` }}</h2>
+    <SideBarTab
+      v-for="item in contentStore.publicDashboards.filter(
+        (item) => item.index !== 'map-layers'
+      )"
+      :key="item.index"
+      :icon="item.icon"
+      :title="item.name"
+      :index="item.index"
+      :expanded="isExpanded"
+    />
+    <h2>{{ isExpanded ? `基本地圖圖層` : `圖層` }}</h2>
+    <SideBarTab
+      icon="public"
+      title="圖資資訊"
+      :expanded="isExpanded"
+      index="map-layers"
+    />
 
-		<button class="sidebar-collapse-button" @click="toggleExpand">
-			<span>{{
-				isExpanded
-					? "keyboard_double_arrow_left"
-					: "keyboard_double_arrow_right"
-			}}</span>
-		</button>
-	</div>
+    <button
+      class="sidebar-collapse-button"
+      @click="toggleExpand"
+    >
+      <span>{{
+        isExpanded
+          ? "keyboard_double_arrow_left"
+          : "keyboard_double_arrow_right"
+      }}</span>
+    </button>
+  </div>
 </template>
 
 <style scoped lang="scss">

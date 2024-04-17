@@ -125,15 +125,14 @@ function handleDataSelection(e, chartContext, config) {
 </script>
 
 <template>
-	<div v-if="activeChart === 'GuageChart'">
-		<apexchart
-			width="80%"
-			height="300px"
-			type="radialBar"
-			:options="chartOptions"
-			:series="parseSeries.series"
-			@dataPointSelection="handleDataSelection"
-		>
-		</apexchart>
-	</div>
+  <div v-if="activeChart === 'GuageChart'">
+    <apexchart
+      width="80%"
+      height="300px"
+      type="radialBar"
+      :options="chartOptions"
+      :series="parseSeries.series"
+      @data-point-selection="handleDataSelection"
+    />
+  </div>
 </template>

@@ -123,14 +123,14 @@ function handleDataSelection(e, chartContext, config) {
 </script>
 
 <template>
-	<div v-if="activeChart === 'BarChart'">
-		<apexchart
-			width="100%"
-			:height="chartHeight"
-			type="bar"
-			:options="chartOptions"
-			:series="series"
-			@dataPointSelection="handleDataSelection"
-		></apexchart>
-	</div>
+  <div v-if="activeChart === 'BarChart'">
+    <apexchart
+      width="100%"
+      :height="chartHeight"
+      type="bar"
+      :options="chartOptions"
+      :series="series"
+      @data-point-selection="handleDataSelection"
+    />
+  </div>
 </template>

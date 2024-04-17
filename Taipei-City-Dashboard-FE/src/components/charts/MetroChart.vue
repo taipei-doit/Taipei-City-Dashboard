@@ -47,101 +47,110 @@ const parsedSeries = computed(() => {
 </script>
 
 <template>
-	<div v-if="activeChart === 'MetroChart'" class="metrochart">
-		<div
-			v-for="(item, index) in lineInfo[line]"
-			:class="`initial-animation-${index + 1}`"
-			:key="`${line}-${index}`"
-		>
-			<!-- Shows station name / station label / density level of each train car -->
-			<div class="metrochart-block" v-if="item.id !== 0">
-				<h5>
-					{{
-						item.name.length < 6
-							? item.name
-							: `${item.name.slice(0, 4)}...`
-					}}
-				</h5>
-				<!-- Will show a different style if the station is a terminal station -->
-				<div
-					class="metrochart-block-tag"
-					:style="{
-						borderColor: color,
-						backgroundColor:
-							index === lineInfo[line].length - 1 ||
-							index === 0 ||
-							item.id === 'O21'
-								? color
-								: 'white',
-					}"
-				>
-					<p
-						:style="{
-							color:
-								index === lineInfo[line].length - 1 ||
-								index === 0 ||
-								item.id === 'O21'
-									? 'white'
-									: 'black',
-						}"
-					>
-						{{ line }}
-					</p>
-					<p
-						:style="{
-							color:
-								index === lineInfo[line].length - 1 ||
-								index === 0 ||
-								item.id === 'O21'
-									? 'white'
-									: 'black',
-						}"
-					>
-						{{ item.id.slice(-2) }}
-					</p>
-				</div>
-				<MetroCarDensity
-					:weight="
-						parsedSeries[0].data.find(
-							(element) => element.x === item.id
-						)
-					"
-					direction="asc"
-				/>
-				<MetroCarDensity
-					:weight="
-						parsedSeries[1].data.find(
-							(element) => element.x === item.id
-						)
-					"
-					direction="desc"
-				/>
-			</div>
-			<!-- Just shows the line connecting stations -->
-			<div
-				class="metrochart-block"
-				v-if="item.id !== 0 && item.id !== 'O21'"
-			>
-				<div></div>
-				<div
-					class="metrochart-block-line"
-					:style="{
-						backgroundColor:
-							index === lineInfo[line].length - 1
-								? 'transparent'
-								: color,
-					}"
-				></div>
-			</div>
-			<div class="metrochart-block" v-if="item.id === 0">
-				<div class="metrochart-block-break">
-					<div></div>
-					<p>{{ item.name }}</p>
-					<div></div>
-				</div>
-			</div>
-		</div>
-	</div>
+  <div
+    v-if="activeChart === 'MetroChart'"
+    class="metrochart"
+  >
+    <div
+      v-for="(item, index) in lineInfo[line]"
+      :key="`${line}-${index}`"
+      :class="`initial-animation-${index + 1}`"
+    >
+      <!-- Shows station name / station label / density level of each train car -->
+      <div
+        v-if="item.id !== 0"
+        class="metrochart-block"
+      >
+        <h5>
+          {{
+            item.name.length < 6
+              ? item.name
+              : `${item.name.slice(0, 4)}...`
+          }}
+        </h5>
+        <!-- Will show a different style if the station is a terminal station -->
+        <div
+          class="metrochart-block-tag"
+          :style="{
+            borderColor: color,
+            backgroundColor:
+              index === lineInfo[line].length - 1 ||
+              index === 0 ||
+              item.id === 'O21'
+                ? color
+                : 'white',
+          }"
+        >
+          <p
+            :style="{
+              color:
+                index === lineInfo[line].length - 1 ||
+                index === 0 ||
+                item.id === 'O21'
+                  ? 'white'
+                  : 'black',
+            }"
+          >
+            {{ line }}
+          </p>
+          <p
+            :style="{
+              color:
+                index === lineInfo[line].length - 1 ||
+                index === 0 ||
+                item.id === 'O21'
+                  ? 'white'
+                  : 'black',
+            }"
+          >
+            {{ item.id.slice(-2) }}
+          </p>
+        </div>
+        <MetroCarDensity
+          :weight="
+            parsedSeries[0].data.find(
+              (element) => element.x === item.id
+            )
+          "
+          direction="asc"
+        />
+        <MetroCarDensity
+          :weight="
+            parsedSeries[1].data.find(
+              (element) => element.x === item.id
+            )
+          "
+          direction="desc"
+        />
+      </div>
+      <!-- Just shows the line connecting stations -->
+      <div
+        v-if="item.id !== 0 && item.id !== 'O21'"
+        class="metrochart-block"
+      >
+        <div />
+        <div
+          class="metrochart-block-line"
+          :style="{
+            backgroundColor:
+              index === lineInfo[line].length - 1
+                ? 'transparent'
+                : color,
+          }"
+        />
+      </div>
+      <div
+        v-if="item.id === 0"
+        class="metrochart-block"
+      >
+        <div class="metrochart-block-break">
+          <div />
+          <p>{{ item.name }}</p>
+          <div />
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <style scoped lang="scss">

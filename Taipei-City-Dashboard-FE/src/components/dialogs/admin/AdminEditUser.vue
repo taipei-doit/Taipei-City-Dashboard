@@ -30,98 +30,106 @@ function handleClose() {
 </script>
 
 <template>
-	<DialogContainer :dialog="`adminEditUser`" @on-close="handleClose">
-		<div class="adminedituser">
-			<div class="adminedituser-header">
-				<h2>設定用戶</h2>
-				<button @click="handleConfirm">確定更改</button>
-			</div>
-			<div class="adminedituser-settings">
-				<div class="adminedituser-settings-items">
-					<div class="two-block">
-						<label>用戶名稱</label>
-						<label>用戶 ID</label>
-					</div>
-					<div class="two-block">
-						<input
-							type="text"
-							v-model="currentUser.name"
-							required
-						/>
-						<input
-							type="text"
-							v-model="currentUser.user_id"
-							disabled
-						/>
-					</div>
-					<label>用戶帳號</label>
-					<input
-						type="text"
-						:value="
-							currentUser.account
-								? currentUser.account
-								: currentUser.TpAccount
-						"
-						disabled
-					/>
-					<label>用戶身份</label>
-					<div class="toggle">
-						<p>一般用戶</p>
-						<label class="toggleswitch">
-							<input
-								type="checkbox"
-								@change="handleToggle"
-								v-model="currentUser.is_admin"
-								:disabled="shouldDisable"
-							/>
-							<span class="toggleswitch-slider"></span>
-						</label>
-						<p>管理員</p>
-					</div>
-					<div class="two-block">
-						<label>API白名單</label><label>API黑名單</label>
-					</div>
-					<div class="two-block">
-						<label class="toggleswitch">
-							<input
-								type="checkbox"
-								@change="handleToggle"
-								v-model="currentUser.is_whitelist"
-								:disabled="shouldDisable"
-							/>
-							<span class="toggleswitch-slider"></span>
-						</label>
-						<label class="toggleswitch">
-							<input
-								type="checkbox"
-								@change="handleToggle"
-								v-model="currentUser.is_blacked"
-								:disabled="shouldDisable"
-							/>
-							<span class="toggleswitch-slider"></span>
-						</label>
-					</div>
-					<label>啟用狀態</label>
-					<div class="toggle">
-						<p>停用</p>
-						<label class="toggleswitch">
-							<input
-								type="checkbox"
-								@change="handleToggle"
-								v-model="currentUser.is_active"
-								:disabled="shouldDisable"
-							/>
-							<span class="toggleswitch-slider"></span>
-						</label>
-						<p>啟用</p>
-					</div>
+  <DialogContainer
+    :dialog="`adminEditUser`"
+    @on-close="handleClose"
+  >
+    <div class="adminedituser">
+      <div class="adminedituser-header">
+        <h2>設定用戶</h2>
+        <button @click="handleConfirm">
+          確定更改
+        </button>
+      </div>
+      <div class="adminedituser-settings">
+        <div class="adminedituser-settings-items">
+          <div class="two-block">
+            <label>用戶名稱</label>
+            <label>用戶 ID</label>
+          </div>
+          <div class="two-block">
+            <input
+              v-model="currentUser.name"
+              type="text"
+              required
+            >
+            <input
+              v-model="currentUser.user_id"
+              type="text"
+              disabled
+            >
+          </div>
+          <label>用戶帳號</label>
+          <input
+            type="text"
+            :value="
+              currentUser.account
+                ? currentUser.account
+                : currentUser.TpAccount
+            "
+            disabled
+          >
+          <label>用戶身份</label>
+          <div class="toggle">
+            <p>一般用戶</p>
+            <label class="toggleswitch">
+              <input
+                v-model="currentUser.is_admin"
+                type="checkbox"
+                :disabled="shouldDisable"
+                @change="handleToggle"
+              >
+              <span class="toggleswitch-slider" />
+            </label>
+            <p>管理員</p>
+          </div>
+          <div class="two-block">
+            <label>API白名單</label><label>API黑名單</label>
+          </div>
+          <div class="two-block">
+            <label class="toggleswitch">
+              <input
+                v-model="currentUser.is_whitelist"
+                type="checkbox"
+                :disabled="shouldDisable"
+                @change="handleToggle"
+              >
+              <span class="toggleswitch-slider" />
+            </label>
+            <label class="toggleswitch">
+              <input
+                v-model="currentUser.is_blacked"
+                type="checkbox"
+                :disabled="shouldDisable"
+                @change="handleToggle"
+              >
+              <span class="toggleswitch-slider" />
+            </label>
+          </div>
+          <label>啟用狀態</label>
+          <div class="toggle">
+            <p>停用</p>
+            <label class="toggleswitch">
+              <input
+                v-model="currentUser.is_active"
+                type="checkbox"
+                :disabled="shouldDisable"
+                @change="handleToggle"
+              >
+              <span class="toggleswitch-slider" />
+            </label>
+            <p>啟用</p>
+          </div>
 
-					<label> 最近登入時間 </label>
-					<input :value="parseTime(currentUser.login_at)" disabled />
-				</div>
-			</div>
-		</div>
-	</DialogContainer>
+          <label> 最近登入時間 </label>
+          <input
+            :value="parseTime(currentUser.login_at)"
+            disabled
+          >
+        </div>
+      </div>
+    </div>
+  </DialogContainer>
 </template>
 
 <style scoped lang="scss">

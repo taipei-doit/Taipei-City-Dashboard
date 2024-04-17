@@ -97,13 +97,13 @@ const chartOptions = ref({
 </script>
 
 <template>
-	<div v-if="activeChart === 'RadarChart'">
-		<apexchart
-			width="100%"
-			height="270px"
-			type="radar"
-			:options="chartOptions"
-			:series="series"
-		></apexchart>
-	</div>
+  <div v-if="activeChart === 'RadarChart'">
+    <apexchart
+      width="100%"
+      height="270px"
+      type="radar"
+      :options="chartOptions"
+      :series="series"
+    />
+  </div>
 </template>

@@ -158,13 +158,13 @@ function parseTime(time) {
 </script>
 
 <template>
-	<div v-if="activeChart === 'ColumnLineChart'">
-		<apexchart
-			width="100%"
-			height="260px"
-			type="line"
-			:options="chartOptions"
-			:series="parseSeries"
-		></apexchart>
-	</div>
+  <div v-if="activeChart === 'ColumnLineChart'">
+    <apexchart
+      width="100%"
+      height="260px"
+      type="line"
+      :options="chartOptions"
+      :series="parseSeries"
+    />
+  </div>
 </template>

@@ -24,110 +24,123 @@ const linkQuery = computed(() => {
 </script>
 
 <template>
-	<div class="navbar">
-		<div class="navbar-logo">
-			<div class="navbar-logo-image">
-				<img src="../../../assets/images/TUIC.svg" alt="tuic logo" />
-			</div>
-			<div>
-				<h1>{{ VITE_APP_TITLE }}</h1>
-				<h2>Taipei City Dashboard</h2>
-			</div>
-		</div>
-		<div
-			class="navbar-tabs"
-			v-if="
-				authStore.currentPath !== 'admin' &&
-				!(authStore.isMobileDevice && authStore.isNarrowDevice)
-			"
-		>
-			<router-link
-				:to="`/component`"
-				:class="{
-					'router-link-active':
-						authStore.currentPath.includes('component'),
-				}"
-				v-if="authStore.token"
-				>組件瀏覽平台</router-link
-			>
-			<router-link
-				:to="`/dashboard${
-					linkQuery.includes('undefined') ? '' : linkQuery
-				}`"
-				>儀表板總覽</router-link
-			>
-			<router-link
-				:to="`/mapview${
-					linkQuery.includes('undefined') ? '' : linkQuery
-				}`"
-				>地圖交叉比對</router-link
-			>
-		</div>
-		<div class="navbar-user">
-			<a
-				href="https://tuic.gov.taipei/documentation"
-				target="_blank"
-				rel="noreferrer"
-				><button><span>help</span></button></a
-			>
-			<button
-				class="hide-if-mobile"
-				@click="toggle"
-				v-if="!(authStore.isMobileDevice && authStore.isNarrowDevice)"
-			>
-				<span>{{
-					isFullscreen ? "fullscreen_exit" : "fullscreen"
-				}}</span>
-			</button>
-			<div
-				class="navbar-user-user"
-				v-if="
-					authStore.token &&
-					!(authStore.isMobileDevice && authStore.isNarrowDevice)
-				"
-			>
-				<button>
-					{{ authStore.user.name }}
-				</button>
-				<ul>
-					<li>
-						<button @click="dialogStore.showDialog('userSettings')">
-							用戶設定
-						</button>
-					</li>
-					<li
-						v-if="
-							authStore.currentPath !== 'admin' &&
-							authStore.user.is_admin
-						"
-						class="hide-if-mobile"
-					>
-						<router-link to="/admin">管理員後臺</router-link>
-					</li>
-					<li
-						v-else-if="authStore.user.is_admin"
-						class="hide-if-mobile"
-					>
-						<router-link to="/dashboard">返回儀表板</router-link>
-					</li>
-					<li>
-						<button @click="authStore.handleLogout">登出</button>
-					</li>
-				</ul>
-				<teleport to="body">
-					<user-settings />
-				</teleport>
-			</div>
-			<div
-				class="navbar-user-user"
-				v-else-if="
-					!(authStore.isMobileDevice && authStore.isNarrowDevice)
-				"
-			>
-				<button @click="dialogStore.showDialog('login')">登入</button>
-			</div>
-		</div>
-	</div>
+  <div class="navbar">
+    <div class="navbar-logo">
+      <div class="navbar-logo-image">
+        <img
+          src="../../../assets/images/TUIC.svg"
+          alt="tuic logo"
+        >
+      </div>
+      <div>
+        <h1>{{ VITE_APP_TITLE }}</h1>
+        <h2>Taipei City Dashboard</h2>
+      </div>
+    </div>
+    <div
+      v-if="
+        authStore.currentPath !== 'admin' &&
+          !(authStore.isMobileDevice && authStore.isNarrowDevice)
+      "
+      class="navbar-tabs"
+    >
+      <router-link
+        v-if="authStore.token"
+        :to="`/component`"
+        :class="{
+          'router-link-active':
+            authStore.currentPath.includes('component'),
+        }"
+      >
+        組件瀏覽平台
+      </router-link>
+      <router-link
+        :to="`/dashboard${
+          linkQuery.includes('undefined') ? '' : linkQuery
+        }`"
+      >
+        儀表板總覽
+      </router-link>
+      <router-link
+        :to="`/mapview${
+          linkQuery.includes('undefined') ? '' : linkQuery
+        }`"
+      >
+        地圖交叉比對
+      </router-link>
+    </div>
+    <div class="navbar-user">
+      <a
+        href="https://tuic.gov.taipei/documentation"
+        target="_blank"
+        rel="noreferrer"
+      ><button><span>help</span></button></a>
+      <button
+        v-if="!(authStore.isMobileDevice && authStore.isNarrowDevice)"
+        class="hide-if-mobile"
+        @click="toggle"
+      >
+        <span>{{
+          isFullscreen ? "fullscreen_exit" : "fullscreen"
+        }}</span>
+      </button>
+      <div
+        v-if="
+          authStore.token &&
+            !(authStore.isMobileDevice && authStore.isNarrowDevice)
+        "
+        class="navbar-user-user"
+      >
+        <button>
+          {{ authStore.user.name }}
+        </button>
+        <ul>
+          <li>
+            <button @click="dialogStore.showDialog('userSettings')">
+              用戶設定
+            </button>
+          </li>
+          <li
+            v-if="
+              authStore.currentPath !== 'admin' &&
+                authStore.user.is_admin
+            "
+            class="hide-if-mobile"
+          >
+            <router-link to="/admin">
+              管理員後臺
+            </router-link>
+          </li>
+          <li
+            v-else-if="authStore.user.is_admin"
+            class="hide-if-mobile"
+          >
+            <router-link to="/dashboard">
+              返回儀表板
+            </router-link>
+          </li>
+          <li>
+            <button @click="authStore.handleLogout">
+              登出
+            </button>
+          </li>
+        </ul>
+        <teleport to="body">
+          <user-settings />
+        </teleport>
+      </div>
+      <div
+        v-else-if="
+          !(authStore.isMobileDevice && authStore.isNarrowDevice)
+        "
+        class="navbar-user-user"
+      >
+        <button @click="dialogStore.showDialog('login')">
+          登入
+        </button>
+      </div>
+    </div>
+  </div>
 </template>
 
 <style scoped lang="scss">

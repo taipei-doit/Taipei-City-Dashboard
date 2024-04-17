@@ -152,23 +152,23 @@ function handleDataSelection(e, chartContext, config) {
 </script>
 
 <template>
-	<div
-		v-if="activeChart === 'BarChartWithGoal'"
-		:style="{
-			marginTop: `${
-				chart_config.categories.length < 3
-					? 90 - chart_config.categories.length * 30
-					: 0
-			}px`,
-		}"
-	>
-		<apexchart
-			type="bar"
-			width="100%"
-			:height="chartHeight"
-			:options="chartOptions"
-			:series="parseSeries"
-			@dataPointSelection="handleDataSelection"
-		></apexchart>
-	</div>
+  <div
+    v-if="activeChart === 'BarChartWithGoal'"
+    :style="{
+      marginTop: `${
+        chart_config.categories.length < 3
+          ? 90 - chart_config.categories.length * 30
+          : 0
+      }px`,
+    }"
+  >
+    <apexchart
+      type="bar"
+      width="100%"
+      :height="chartHeight"
+      :options="chartOptions"
+      :series="parseSeries"
+      @data-point-selection="handleDataSelection"
+    />
+  </div>
 </template>

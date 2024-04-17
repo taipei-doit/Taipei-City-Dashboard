@@ -33,13 +33,15 @@ const linkActiveOrNot = computed(() => {
 </script>
 
 <template>
-	<router-link
-		:to="tabLink"
-		:class="{ sidebartab: true, 'sidebartab-active': linkActiveOrNot }"
-	>
-		<span>{{ icon }}</span>
-		<h3 v-if="expanded">{{ title }}</h3>
-	</router-link>
+  <router-link
+    :to="tabLink"
+    :class="{ sidebartab: true, 'sidebartab-active': linkActiveOrNot }"
+  >
+    <span>{{ icon }}</span>
+    <h3 v-if="expanded">
+      {{ title }}
+    </h3>
+  </router-link>
 </template>
 
 <style scoped lang="scss">

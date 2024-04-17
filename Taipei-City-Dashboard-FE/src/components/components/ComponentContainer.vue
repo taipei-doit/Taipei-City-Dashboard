@@ -98,212 +98,223 @@ function changeShowTagTooltipState(state) {
 </script>
 
 <template>
-	<div
-		:class="{
-			componentcontainer: true,
-			moreinfostyle: !notMoreInfo,
-			maplayer: isMapLayer,
-		}"
-		:style="style"
-	>
-		<div class="componentcontainer-header">
-			<div>
-				<h3>
-					{{ content.name }}
-					<ComponentTag icon="" :text="updateFreq" mode="small" />
-				</h3>
-				<h4 v-if="dataTime === '維護修復中'">
-					{{ `${content.source} | ` }}<span>warning</span>
-					<h4>{{ `${dataTime}` }}</h4>
-					<span>warning</span>
-				</h4>
-				<h4 v-else>{{ `${content.source} | ${dataTime}` }}</h4>
-			</div>
-			<div v-if="notMoreInfo && authStore.token && !embed">
-				<button
-					v-if="
-						contentStore.currentDashboard.icon !== 'favorite' &&
-						contentStore.favorites
-					"
-					:class="{
-						isfavorite: contentStore.favorites.components.includes(
-							content.id
-						),
-					}"
-					@click="toggleFavorite"
-				>
-					<span>favorite</span>
-				</button>
-				<!-- Change @click to a report issue function to implement functionality -->
-				<button
-					title="回報問題"
-					class="isFlag"
-					@click="
-						dialogStore.showReportIssue(
-							content.id,
-							content.index,
-							content.name
-						)
-					"
-				>
-					<span>flag</span>
-				</button>
-				<button
-					v-if="
-						contentStore.personalDashboards
-							.map((item) => item.index)
-							.includes(contentStore.currentDashboard.index)
-					"
-					@click="contentStore.deleteComponent(content.id)"
-					class="isDelete"
-				>
-					<span>delete</span>
-				</button>
-			</div>
-			<div v-else-if="isComponentView">
-				<button
-					v-if="
-						!contentStore.editDashboard.components
-							.map((item) => item.id)
-							.includes(props.content.id)
-					"
-					@click="
-						contentStore.editDashboard.components.push({
-							id: props.content.id,
-							name: props.content.name,
-						})
-					"
-					class="hide-if-mobile"
-				>
-					<span>add_circle</span>
-				</button>
-				<button
-					v-if="
-						!authStore.isNarrowDevice || !authStore.isMobileDevice
-					"
-					:class="{
-						isfavorite: contentStore.favorites.components.includes(
-							content.id
-						),
-					}"
-					@click="toggleFavorite"
-				>
-					<span>favorite</span>
-				</button>
-			</div>
-		</div>
-		<div
-			class="componentcontainer-control"
-			v-if="props.content.chart_config.types.length > 1"
-		>
-			<button
-				:class="{
-					'componentcontainer-control-button': true,
-					'componentcontainer-control-active': activeChart === item,
-				}"
-				v-for="item in props.content.chart_config.types"
-				@click="changeActiveChart(item)"
-				:key="`${props.content.index}-${item}-button`"
-			>
-				{{ chartTypes[item] }}
-			</button>
-		</div>
-		<div
-			:class="{
-				'componentcontainer-chart': true,
-				'maplayer-chart': isMapLayer,
-			}"
-			v-if="content.chart_data"
-		>
-			<!-- The components referenced here can be edited in /components/charts -->
-			<component
-				v-for="item in content.chart_config.types"
-				:activeChart="activeChart"
-				:is="item"
-				:chart_config="content.chart_config"
-				:series="content.chart_data"
-				:map_config="content.map_config"
-				:map_filter="content.map_filter"
-				:key="`${props.content.index}-${item}-chart`"
-			>
-			</component>
-		</div>
-		<div
-			v-else-if="content.chart_data === null"
-			:class="{
-				'componentcontainer-error': true,
-				'maplayer-loading': isMapLayer,
-			}"
-		>
-			<span>error</span>
-			<p>組件資料異常</p>
-		</div>
-		<div
-			v-else
-			:class="{
-				'componentcontainer-loading': true,
-				'maplayer-loading': isMapLayer,
-			}"
-		>
-			<div></div>
-		</div>
-		<div class="componentcontainer-footer" v-if="!embed">
-			<div
-				@mouseenter="changeShowTagTooltipState(true)"
-				@mousemove="updateMouseLocation"
-				@mouseleave="changeShowTagTooltipState(false)"
-			>
-				<ComponentTag
-					v-if="content.map_filter && content.map_config"
-					icon="tune"
-					text="篩選地圖"
-					class="hide-if-mobile"
-				/>
-				<ComponentTag
-					v-if="content.map_config && content.map_config[0] !== null"
-					icon="map"
-					text="空間資料"
-					class="hide-if-mobile"
-				/>
-				<ComponentTag
-					v-if="content.history_data || content.history_config"
-					icon="insights"
-					text="歷史資料"
-					class="history-tag"
-				/>
-			</div>
-			<!-- The content in the target component should be passed into the "showMoreInfo" function of the mapStore to show more info -->
-			<button
-				v-if="notMoreInfo"
-				@click="dialogStore.showMoreInfo(content)"
-			>
-				<p>組件資訊</p>
-				<span>arrow_circle_right</span>
-			</button>
-			<RouterLink
-				:to="`/component/${content.index}`"
-				v-if="
-					authStore.isMobileDevice &&
-					authStore.isNarrowDevice &&
-					authStore.currentPath !== 'component-info'
-				"
-			>
-				<p>資訊頁面</p>
-				<span>arrow_circle_right</span>
-			</RouterLink>
-		</div>
-		<div v-else class="componentcontainer-footer"></div>
-		<Teleport to="body">
-			<!-- The class "chart-tooltip" could be edited in /assets/styles/chartStyles.css -->
-			<TagTooltip
-				v-if="showTagTooltip"
-				:position="tooltipPosition"
-				:hasFilter="content.map_filter ? true : false"
-				:hasMapLayer="content.map_config[0] ? true : false"
-				:hasHistory="content.history_config ? true : false"
-			/>
-		</Teleport>
-	</div>
+  <div
+    :class="{
+      componentcontainer: true,
+      moreinfostyle: !notMoreInfo,
+      maplayer: isMapLayer,
+    }"
+    :style="style"
+  >
+    <div class="componentcontainer-header">
+      <div>
+        <h3>
+          {{ content.name }}
+          <ComponentTag
+            icon=""
+            :text="updateFreq"
+            mode="small"
+          />
+        </h3>
+        <h4 v-if="dataTime === '維護修復中'">
+          {{ `${content.source} | ` }}<span>warning</span>
+          <h4>{{ `${dataTime}` }}</h4>
+          <span>warning</span>
+        </h4>
+        <h4 v-else>
+          {{ `${content.source} | ${dataTime}` }}
+        </h4>
+      </div>
+      <div v-if="notMoreInfo && authStore.token && !embed">
+        <button
+          v-if="
+            contentStore.currentDashboard.icon !== 'favorite' &&
+              contentStore.favorites
+          "
+          :class="{
+            isfavorite: contentStore.favorites.components.includes(
+              content.id
+            ),
+          }"
+          @click="toggleFavorite"
+        >
+          <span>favorite</span>
+        </button>
+        <!-- Change @click to a report issue function to implement functionality -->
+        <button
+          title="回報問題"
+          class="isFlag"
+          @click="
+            dialogStore.showReportIssue(
+              content.id,
+              content.index,
+              content.name
+            )
+          "
+        >
+          <span>flag</span>
+        </button>
+        <button
+          v-if="
+            contentStore.personalDashboards
+              .map((item) => item.index)
+              .includes(contentStore.currentDashboard.index)
+          "
+          class="isDelete"
+          @click="contentStore.deleteComponent(content.id)"
+        >
+          <span>delete</span>
+        </button>
+      </div>
+      <div v-else-if="isComponentView">
+        <button
+          v-if="
+            !contentStore.editDashboard.components
+              .map((item) => item.id)
+              .includes(props.content.id)
+          "
+          class="hide-if-mobile"
+          @click="
+            contentStore.editDashboard.components.push({
+              id: props.content.id,
+              name: props.content.name,
+            })
+          "
+        >
+          <span>add_circle</span>
+        </button>
+        <button
+          v-if="
+            !authStore.isNarrowDevice || !authStore.isMobileDevice
+          "
+          :class="{
+            isfavorite: contentStore.favorites.components.includes(
+              content.id
+            ),
+          }"
+          @click="toggleFavorite"
+        >
+          <span>favorite</span>
+        </button>
+      </div>
+    </div>
+    <div
+      v-if="props.content.chart_config.types.length > 1"
+      class="componentcontainer-control"
+    >
+      <button
+        v-for="item in props.content.chart_config.types"
+        :key="`${props.content.index}-${item}-button`"
+        :class="{
+          'componentcontainer-control-button': true,
+          'componentcontainer-control-active': activeChart === item,
+        }"
+        @click="changeActiveChart(item)"
+      >
+        {{ chartTypes[item] }}
+      </button>
+    </div>
+    <div
+      v-if="content.chart_data"
+      :class="{
+        'componentcontainer-chart': true,
+        'maplayer-chart': isMapLayer,
+      }"
+    >
+      <!-- The components referenced here can be edited in /components/charts -->
+      <component
+        :is="item"
+        v-for="item in content.chart_config.types"
+        :key="`${props.content.index}-${item}-chart`"
+        :active-chart="activeChart"
+        :chart_config="content.chart_config"
+        :series="content.chart_data"
+        :map_config="content.map_config"
+        :map_filter="content.map_filter"
+      />
+    </div>
+    <div
+      v-else-if="content.chart_data === null"
+      :class="{
+        'componentcontainer-error': true,
+        'maplayer-loading': isMapLayer,
+      }"
+    >
+      <span>error</span>
+      <p>組件資料異常</p>
+    </div>
+    <div
+      v-else
+      :class="{
+        'componentcontainer-loading': true,
+        'maplayer-loading': isMapLayer,
+      }"
+    >
+      <div />
+    </div>
+    <div
+      v-if="!embed"
+      class="componentcontainer-footer"
+    >
+      <div
+        @mouseenter="changeShowTagTooltipState(true)"
+        @mousemove="updateMouseLocation"
+        @mouseleave="changeShowTagTooltipState(false)"
+      >
+        <ComponentTag
+          v-if="content.map_filter && content.map_config"
+          icon="tune"
+          text="篩選地圖"
+          class="hide-if-mobile"
+        />
+        <ComponentTag
+          v-if="content.map_config && content.map_config[0] !== null"
+          icon="map"
+          text="空間資料"
+          class="hide-if-mobile"
+        />
+        <ComponentTag
+          v-if="content.history_data || content.history_config"
+          icon="insights"
+          text="歷史資料"
+          class="history-tag"
+        />
+      </div>
+      <!-- The content in the target component should be passed into the "showMoreInfo" function of the mapStore to show more info -->
+      <button
+        v-if="notMoreInfo"
+        @click="dialogStore.showMoreInfo(content)"
+      >
+        <p>組件資訊</p>
+        <span>arrow_circle_right</span>
+      </button>
+      <RouterLink
+        v-if="
+          authStore.isMobileDevice &&
+            authStore.isNarrowDevice &&
+            authStore.currentPath !== 'component-info'
+        "
+        :to="`/component/${content.index}`"
+      >
+        <p>資訊頁面</p>
+        <span>arrow_circle_right</span>
+      </RouterLink>
+    </div>
+    <div
+      v-else
+      class="componentcontainer-footer"
+    />
+    <Teleport to="body">
+      <!-- The class "chart-tooltip" could be edited in /assets/styles/chartStyles.css -->
+      <TagTooltip
+        v-if="showTagTooltip"
+        :position="tooltipPosition"
+        :has-filter="content.map_filter ? true : false"
+        :has-map-layer="content.map_config[0] ? true : false"
+        :has-history="content.history_config ? true : false"
+      />
+    </Teleport>
+  </div>
 </template>
 
 <style scoped lang="scss">

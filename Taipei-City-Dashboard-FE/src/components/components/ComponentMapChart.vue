@@ -115,111 +115,114 @@ function changeShowTagTooltipState(state) {
 </script>
 
 <template>
-	<div
-		:class="{
-			componentmapchart: true,
-			checked: checked,
-			maplayer: isMapLayer && checked,
-		}"
-	>
-		<div class="componentmapchart-header">
-			<div>
-				<div>
-					<h3>{{ content.name }}</h3>
-					<div
-						@mouseenter="changeShowTagTooltipState(true)"
-						@mousemove="updateMouseLocation"
-						@mouseleave="changeShowTagTooltipState(false)"
-					>
-						<span v-if="content.map_filter && content.map_config"
-							>tune</span
-						>
-						<span v-if="content.map_config[0]">map</span>
-						<span v-if="content.history_data">insights</span>
-					</div>
-				</div>
-				<h4 v-if="checked && dataTime === '維護修復中'">
-					{{ `${content.source} | ` }}<span>warning</span>
-					<h4>{{ `${dataTime}` }}</h4>
-					<span>warning</span>
-				</h4>
-				<h4 v-else-if="checked">
-					{{ `${content.source} | ${dataTime}` }}
-				</h4>
-			</div>
-			<div class="componentmapchart-header-toggle">
-				<!-- The class "toggleswitch" could be edited in /assets/styles/toggleswitch.css -->
-				<label class="toggleswitch">
-					<input
-						type="checkbox"
-						@change="handleToggle"
-						v-model="checked"
-						:disabled="shouldDisable"
-					/>
-					<span class="toggleswitch-slider"></span>
-				</label>
-			</div>
-		</div>
-		<div
-			class="componentmapchart-control"
-			v-if="props.content.chart_config.types.length > 1 && checked"
-		>
-			<button
-				:class="{
-					'componentmapchart-control-button': true,
-					'componentmapchart-control-active': activeChart === item,
-				}"
-				v-for="item in props.content.chart_config.types"
-				@click="changeActiveChart(item)"
-				:key="`${props.content.index}-${item}-mapbutton`"
-			>
-				{{ chartTypes[item] }}
-			</button>
-		</div>
-		<div
-			class="componentmapchart-chart"
-			v-if="checked && content.chart_data"
-		>
-			<!-- The components referenced here can be edited in /components/charts -->
-			<component
-				v-for="item in content.chart_config.types"
-				:activeChart="activeChart"
-				:is="item"
-				:key="`${props.content.index}-${item}-mapchart`"
-				:chart_config="content.chart_config"
-				:series="content.chart_data"
-				:map_config="content.map_config"
-				:map_filter="content.map_filter"
-			>
-			</component>
-		</div>
-		<div
-			v-else-if="checked && content.chart_data === null"
-			class="componentmapchart-error"
-		>
-			<span>error</span>
-			<p>組件資料異常</p>
-		</div>
-		<div v-else-if="checked" class="componentmapchart-loading">
-			<div></div>
-		</div>
-		<div v-if="checked" class="componentmapchart-footer">
-			<button @click="dialogStore.showMoreInfo(content)">
-				<p>組件資訊</p>
-				<span>arrow_circle_right</span>
-			</button>
-		</div>
-		<Teleport to="body">
-			<!-- The class "chart-tooltip" could be edited in /assets/styles/chartStyles.css -->
-			<TagTooltip
-				v-if="showTagTooltip"
-				:position="tooltipPosition"
-				:hasFilter="content.map_filter ? true : false"
-				:hasMapLayer="content.map_config[0] ? true : false"
-				:hasHistory="content.history_config ? true : false"
-			/>
-		</Teleport>
-	</div>
+  <div
+    :class="{
+      componentmapchart: true,
+      checked: checked,
+      maplayer: isMapLayer && checked,
+    }"
+  >
+    <div class="componentmapchart-header">
+      <div>
+        <div>
+          <h3>{{ content.name }}</h3>
+          <div
+            @mouseenter="changeShowTagTooltipState(true)"
+            @mousemove="updateMouseLocation"
+            @mouseleave="changeShowTagTooltipState(false)"
+          >
+            <span v-if="content.map_filter && content.map_config">tune</span>
+            <span v-if="content.map_config[0]">map</span>
+            <span v-if="content.history_data">insights</span>
+          </div>
+        </div>
+        <h4 v-if="checked && dataTime === '維護修復中'">
+          {{ `${content.source} | ` }}<span>warning</span>
+          <h4>{{ `${dataTime}` }}</h4>
+          <span>warning</span>
+        </h4>
+        <h4 v-else-if="checked">
+          {{ `${content.source} | ${dataTime}` }}
+        </h4>
+      </div>
+      <div class="componentmapchart-header-toggle">
+        <!-- The class "toggleswitch" could be edited in /assets/styles/toggleswitch.css -->
+        <label class="toggleswitch">
+          <input
+            v-model="checked"
+            type="checkbox"
+            :disabled="shouldDisable"
+            @change="handleToggle"
+          >
+          <span class="toggleswitch-slider" />
+        </label>
+      </div>
+    </div>
+    <div
+      v-if="props.content.chart_config.types.length > 1 && checked"
+      class="componentmapchart-control"
+    >
+      <button
+        v-for="item in props.content.chart_config.types"
+        :key="`${props.content.index}-${item}-mapbutton`"
+        :class="{
+          'componentmapchart-control-button': true,
+          'componentmapchart-control-active': activeChart === item,
+        }"
+        @click="changeActiveChart(item)"
+      >
+        {{ chartTypes[item] }}
+      </button>
+    </div>
+    <div
+      v-if="checked && content.chart_data"
+      class="componentmapchart-chart"
+    >
+      <!-- The components referenced here can be edited in /components/charts -->
+      <component
+        :is="item"
+        v-for="item in content.chart_config.types"
+        :key="`${props.content.index}-${item}-mapchart`"
+        :active-chart="activeChart"
+        :chart_config="content.chart_config"
+        :series="content.chart_data"
+        :map_config="content.map_config"
+        :map_filter="content.map_filter"
+      />
+    </div>
+    <div
+      v-else-if="checked && content.chart_data === null"
+      class="componentmapchart-error"
+    >
+      <span>error</span>
+      <p>組件資料異常</p>
+    </div>
+    <div
+      v-else-if="checked"
+      class="componentmapchart-loading"
+    >
+      <div />
+    </div>
+    <div
+      v-if="checked"
+      class="componentmapchart-footer"
+    >
+      <button @click="dialogStore.showMoreInfo(content)">
+        <p>組件資訊</p>
+        <span>arrow_circle_right</span>
+      </button>
+    </div>
+    <Teleport to="body">
+      <!-- The class "chart-tooltip" could be edited in /assets/styles/chartStyles.css -->
+      <TagTooltip
+        v-if="showTagTooltip"
+        :position="tooltipPosition"
+        :has-filter="content.map_filter ? true : false"
+        :has-map-layer="content.map_config[0] ? true : false"
+        :has-history="content.history_config ? true : false"
+      />
+    </Teleport>
+  </div>
 </template>
 
 <style scoped lang="scss">

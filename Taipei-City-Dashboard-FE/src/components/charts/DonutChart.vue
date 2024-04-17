@@ -139,20 +139,22 @@ function handleDataSelection(e, chartContext, config) {
 </script>
 
 <template>
-	<div v-if="activeChart === 'DonutChart'" class="donutchart">
-		<apexchart
-			width="100%"
-			type="donut"
-			:options="chartOptions"
-			:series="parsedSeries"
-			@dataPointSelection="handleDataSelection"
-		>
-		</apexchart>
-		<div class="donutchart-title">
-			<h5>總合</h5>
-			<h6>{{ sum }}</h6>
-		</div>
-	</div>
+  <div
+    v-if="activeChart === 'DonutChart'"
+    class="donutchart"
+  >
+    <apexchart
+      width="100%"
+      type="donut"
+      :options="chartOptions"
+      :series="parsedSeries"
+      @data-point-selection="handleDataSelection"
+    />
+    <div class="donutchart-title">
+      <h5>總合</h5>
+      <h6>{{ sum }}</h6>
+    </div>
+  </div>
 </template>
 
 <style scoped lang="scss">

@@ -51,55 +51,74 @@ function handleClose() {
 </script>
 
 <template>
-	<DialogContainer dialog="login" @on-close="handleClose">
-		<div class="login">
-			<div class="login-logo">
-				<div class="login-logo-image">
-					<img
-						src="../../assets/images/TUIC.svg"
-						alt="tuic logo"
-						@click.shift="handleSwitchMode"
-					/>
-				</div>
-				<div>
-					<h1>{{ VITE_APP_TITLE }}</h1>
-					<h2>Taipei City Dashboard</h2>
-				</div>
-			</div>
-			<div class="login-form" v-if="loginMode === 'tp'">
-				<button @click="handleTaipeiPassLogin">
-					<img src="../../assets/images/taipeipass.png" />台北通登入
-				</button>
-			</div>
-			<div class="login-form" v-if="loginMode === 'email'">
-				<label>電子郵件</label>
-				<input required v-model="email" type="email" />
-				<label>密碼</label>
-				<input required v-model="password" type="password" />
-				<button @click="handleEmailLogin">登入</button>
-			</div>
-			<p>點擊「台北通登入」即表示您已閱讀並同意</p>
-			<p>
-				<a
-					href="https://tuic.gov.taipei/zh/works/dashboard"
-					target="_blank"
-					>臺北城市儀表板</a
-				>的<a href="https://tuic.gov.taipei/zh/privacy" target="_blank"
-					>隱私權政策</a
-				>
-			</p>
-			<p
-				:style="{
-					color: '#302C2E',
-					cursor: 'default',
-					userSelect: 'none',
-				}"
-			>
-				TUIC Igor Ann Iima Chu Jack 2023-2024
-			</p>
-			<p>《讓城市儀表板成為您的儀表板》</p>
-		</div>
-	</DialogContainer>
+  <DialogContainer
+    dialog="login"
+    @on-close="handleClose"
+  >
+    <div class="login">
+      <div class="login-logo">
+        <div class="login-logo-image">
+          <img
+            src="../../assets/images/TUIC.svg"
+            alt="tuic logo"
+            @click.shift="handleSwitchMode"
+          >
+        </div>
+        <div>
+          <h1>{{ VITE_APP_TITLE }}</h1>
+          <h2>Taipei City Dashboard</h2>
+        </div>
+      </div>
+      <div
+        v-if="loginMode === 'tp'"
+        class="login-form"
+      >
+        <button @click="handleTaipeiPassLogin">
+          <img src="../../assets/images/taipeipass.png">台北通登入
+        </button>
+      </div>
+      <div
+        v-if="loginMode === 'email'"
+        class="login-form"
+      >
+        <label>電子郵件</label>
+        <input
+          v-model="email"
+          required
+          type="email"
+        >
+        <label>密碼</label>
+        <input
+          v-model="password"
+          required
+          type="password"
+        >
+        <button @click="handleEmailLogin">
+          登入
+        </button>
+      </div>
+      <p>點擊「台北通登入」即表示您已閱讀並同意</p>
+      <p>
+        <a
+          href="https://tuic.gov.taipei/zh/works/dashboard"
+          target="_blank"
+        >臺北城市儀表板</a>的<a
+          href="https://tuic.gov.taipei/zh/privacy"
+          target="_blank"
+        >隱私權政策</a>
+      </p>
+      <p
+        :style="{
+          color: '#302C2E',
+          cursor: 'default',
+          userSelect: 'none',
+        }"
+      >
+        TUIC Igor Ann Iima Chu Jack 2023-2024
+      </p>
+      <p>《讓城市儀表板成為您的儀表板》</p>
+    </div>
+  </DialogContainer>
 </template>
 
 <style scoped lang="scss">
