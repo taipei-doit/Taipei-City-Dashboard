@@ -15,7 +15,6 @@
 		"@vueuse/core": "^10.7.2",
 		"apexcharts": "^3.45.2",
 		"axios": "^1.6.5",
-		"city-dashboard-component": "^0.1.1",
 		"dayjs": "^1.11.10",
 		"lodash.debounce": "^4.0.8",
 		"mapbox-gl": "^3.1.0",

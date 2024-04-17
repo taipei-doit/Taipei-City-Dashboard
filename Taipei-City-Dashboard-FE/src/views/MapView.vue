@@ -12,16 +12,18 @@ Testing: Jack Huang (Data Scientist), Ian Huang (Data Analysis Intern)
 
 <script setup>
 import { computed } from "vue";
+import { DashboardComponent } from "city-dashboard-component";
 import { useContentStore } from "../store/contentStore";
 import { useDialogStore } from "../store/dialogStore";
+import { useMapStore } from "../store/mapStore";
 
-import ComponentMapChart from "../components/components/ComponentMapChart.vue";
 import MapContainer from "../components/map/MapContainer.vue";
 import MoreInfo from "../components/dialogs/MoreInfo.vue";
 import ReportIssue from "../components/dialogs/ReportIssue.vue";
 
 const contentStore = useContentStore();
 const dialogStore = useDialogStore();
+const mapStore = useMapStore();
 
 // Separate components with maps from those without
 const parseMapLayers = computed(() => {
@@ -42,6 +44,25 @@ function handleOpenSettings() {
 	dialogStore.addEdit = "edit";
 	dialogStore.showDialog("addEditDashboards");
 }
+
+// Open and closes the component as well as communicates to the mapStore to turn on and off map layers
+function handleToggle(value, map_config) {
+	if (!map_config[0]) {
+		if (value) {
+			dialogStore.showNotification(
+				"info",
+				"本組件沒有空間資料，不會渲染地圖"
+			);
+		}
+		return;
+	}
+	if (value) {
+		mapStore.addToMapLayerList(map_config);
+	} else {
+		mapStore.clearByParamFilter(map_config);
+		mapStore.turnOffMapLayerVisibility(map_config);
+	}
+}
 </script>
 
 <template>
@@ -52,11 +73,47 @@ function handleOpenSettings() {
 				class="map-charts"
 				v-if="contentStore.currentDashboard.index === 'map-layers'"
 			>
-				<ComponentMapChart
+				<DashboardComponent
 					v-for="item in contentStore.currentDashboard.components"
-					:content="item"
+					:config="item"
 					:key="`map-layer-${item.index}-${contentStore.currentDashboard.index}`"
-					:is-map-layer="true"
+					mode="halfmap"
+					:info-btn="true"
+					@info="
+						(item) => {
+							dialogStore.showMoreInfo(item);
+						}
+					"
+					@toggle="
+						(value, map_config) => {
+							handleToggle(value, map_config);
+						}
+					"
+					@filterByParam="
+						(map_filter, map_config, x, y) => {
+							mapStore.filterByParam(
+								map_filter,
+								map_config,
+								x,
+								y
+							);
+						}
+					"
+					@filterByLayer="
+						(map_config, layer) => {
+							mapStore.filterByLayer(map_config, layer);
+						}
+					"
+					@clearByParamFilter="
+						(map_config) => {
+							mapStore.clearByParamFilter(map_config);
+						}
+					"
+					@clearByLayerFilter="
+						(map_config) => {
+							mapStore.clearByLayerFilter(map_config);
+						}
+					"
 				/>
 			</div>
 			<!-- 2. Dashboards that have components -->
@@ -67,23 +124,109 @@ function handleOpenSettings() {
 				"
 				class="map-charts"
 			>
-				<ComponentMapChart
+				<DashboardComponent
 					v-for="item in parseMapLayers.hasMap"
-					:content="item"
+					:config="item"
 					:key="`map-layer-${item.index}-${contentStore.currentDashboard.index}`"
+					mode="map"
+					:info-btn="true"
+					@info="
+						(item) => {
+							dialogStore.showMoreInfo(item);
+						}
+					"
+					@toggle="
+						(value, map_config) => {
+							handleToggle(value, map_config);
+						}
+					"
+					@filterByParam="
+						(map_filter, map_config, x, y) => {
+							mapStore.filterByParam(
+								map_filter,
+								map_config,
+								x,
+								y
+							);
+						}
+					"
+					@filterByLayer="
+						(map_config, layer) => {
+							mapStore.filterByLayer(map_config, layer);
+						}
+					"
+					@clearByParamFilter="
+						(map_config) => {
+							mapStore.clearByParamFilter(map_config);
+						}
+					"
+					@clearByLayerFilter="
+						(map_config) => {
+							mapStore.clearByLayerFilter(map_config);
+						}
+					"
+					@fly="
+						(location) => {
+							mapStore.flyToLocation(location);
+						}
+					"
 				/>
 				<h2>基本圖層</h2>
-				<ComponentMapChart
+				<DashboardComponent
 					v-for="item in contentStore.mapLayers"
-					:content="item"
+					:config="item"
 					:key="`map-layer-${item.index}-${contentStore.currentDashboard.index}`"
-					:is-map-layer="true"
+					mode="halfmap"
+					:info-btn="true"
+					@info="
+						(item) => {
+							dialogStore.showMoreInfo(item);
+						}
+					"
+					@toggle="
+						(value, map_config) => {
+							handleToggle(value, map_config);
+						}
+					"
+					@filterByParam="
+						(map_filter, map_config, x, y) => {
+							mapStore.filterByParam(
+								map_filter,
+								map_config,
+								x,
+								y
+							);
+						}
+					"
+					@filterByLayer="
+						(map_config, layer) => {
+							mapStore.filterByLayer(map_config, layer);
+						}
+					"
+					@clearByParamFilter="
+						(map_config) => {
+							mapStore.clearByParamFilter(map_config);
+						}
+					"
+					@clearByLayerFilter="
+						(map_config) => {
+							mapStore.clearByLayerFilter(map_config);
+						}
+					"
 				/>
 				<h2 v-if="parseMapLayers.noMap?.length > 0">無空間資料組件</h2>
-				<ComponentMapChart
+				<DashboardComponent
 					v-for="item in parseMapLayers.noMap"
-					:content="item"
+					:config="item"
 					:key="`map-layer-${item.index}-${contentStore.currentDashboard.index}`"
+					mode="map"
+					:info-btn="true"
+					@info="
+						(item) => {
+							dialogStore.showMoreInfo(item);
+						}
+					"
+					@toggle="handleToggle"
 				/>
 			</div>
 			<!-- 3. If dashboard is still loading -->
