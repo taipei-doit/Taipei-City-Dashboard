@@ -92,204 +92,226 @@ onMounted(() => {
 </script>
 
 <template>
-	<div class="admineditcomponent">
-		<!-- 1. Search bar to search components by name or index -->
-		<div class="admineditcomponent-search">
-			<div>
-				<input
-					type="text"
-					v-model="searchParams.searchbyname"
-					placeholder="以組件名稱搜尋"
-				/>
-				<span
-					v-if="searchParams.searchbyname !== ''"
-					@click="searchParams.searchbyname = ''"
-					>cancel</span
-				>
-			</div>
-			<div>
-				<input
-					type="text"
-					v-model="searchParams.searchbyindex"
-					placeholder="以組件Index搜尋"
-				/>
-				<span
-					v-if="searchParams.searchbyindex !== ''"
-					@click="searchParams.searchbyindex = ''"
-					>cancel</span
-				>
-			</div>
-			<button @click="handleNewQuery">搜尋</button>
-		</div>
-		<!-- 2. The main table displaying all public components -->
-		<table class="admineditcomponent-table">
-			<thead>
-				<tr class="admineditcomponent-table-header">
-					<TableHeader minWidth="60px"></TableHeader>
-					<TableHeader
-						@sort="handleSort('id')"
-						:sort="true"
-						:mode="
-							searchParams.sort === 'id' ? searchParams.order : ''
-						"
-						minWidth="40px"
-						>ID</TableHeader
-					>
-					<TableHeader
-						@sort="handleSort('index')"
-						:sort="true"
-						:mode="
-							searchParams.sort === 'index'
-								? searchParams.order
-								: ''
-						"
-						minWidth="200px"
-						>Index</TableHeader
-					>
-					<TableHeader minWidth="200px">名稱</TableHeader>
-					<TableHeader>狀態</TableHeader>
-					<TableHeader
-						@sort="handleSort('source')"
-						:sort="true"
-						:mode="
-							searchParams.sort === 'source'
-								? searchParams.order
-								: ''
-						"
-						minWidth="150px"
-						>資料來源</TableHeader
-					>
-					<TableHeader minWidth="165px">圖表類型</TableHeader>
-					<TableHeader minWidth="165px">地圖類型</TableHeader>
-					<TableHeader>歷史資料</TableHeader>
-					<TableHeader>更新頻率</TableHeader>
-					<TableHeader
-						@sort="handleSort('updated_at')"
-						:sort="true"
-						:mode="
-							searchParams.sort === 'updated_at'
-								? searchParams.order
-								: ''
-						"
-						minWidth="200px"
-						>上次編輯</TableHeader
-					>
-				</tr>
-			</thead>
-			<!-- 2-1. Components are present -->
-			<tbody v-if="adminStore.components.length !== 0">
-				<tr
-					v-for="component in adminStore.components"
-					:key="component.index"
-				>
-					<td class="admineditcomponent-table-settings">
-						<button @click="handleOpenSettings(component)">
-							<span>settings</span>
-						</button>
-					</td>
-					<td>{{ component.id }}</td>
-					<td>{{ component.index }}</td>
-					<td>{{ component.name }}</td>
-					<td>啟動</td>
-					<td>{{ component.source }}</td>
-					<td>
-						<div class="admineditcomponent-table-charts">
-							<ComponentTag
-								v-for="(chart, index) in component.chart_config
-									.types"
-								:text="chartTypes[chart]"
-								:key="`${component.index}-chart-${index}`"
-								mode="fill"
-							/>
-						</div>
-					</td>
-					<td>
-						<div
-							class="admineditcomponent-table-maps"
-							v-if="component.map_config[0] !== null"
-						>
-							<ComponentTag
-								v-for="(map, index) in component.map_config"
-								:text="mapTypes[map?.type]"
-								:key="`${component.index}-map-${index}`"
-								mode="fill"
-							/>
-						</div>
-					</td>
-					<td>
-						<span>{{
-							component.history_config !== null
-								? "check_circle"
-								: ""
-						}}</span>
-					</td>
-					<td>
-						<div class="admineditcomponent-table-update">
-							<ComponentTag
-								:text="
-									updateFreq(
-										component.update_freq,
-										component.update_freq_unit
-									)
-								"
-								mode="small"
-							/>
-						</div>
-					</td>
-					<td>{{ parseTime(component.updated_at) }}</td>
-				</tr>
-			</tbody>
-			<!-- 2-2. Components are still loading -->
-			<div
-				v-else-if="contentStore.loading"
-				class="admineditcomponent-nocontent"
-			>
-				<div class="admineditcomponent-nocontent-content">
-					<div></div>
-				</div>
-			</div>
-			<!-- 2-3. An Error occurred -->
-			<div
-				v-else-if="contentStore.error"
-				class="admineditcomponent-nocontent"
-			>
-				<div class="admineditcomponent-nocontent-content">
-					<span>sentiment_very_dissatisfied</span>
-					<h2>發生錯誤，無法載入組件列表</h2>
-				</div>
-			</div>
-			<!-- 2-4. Components are loaded but there are none -->
-			<div v-else class="admineditcomponent-nocontent">
-				<div class="admineditcomponent-nocontent-content">
-					<span>search_off</span>
-					<h2>查無符合篩選條件的公開組件</h2>
-				</div>
-			</div>
-		</table>
-		<!-- 3. Records per page and pagination control -->
-		<div
-			class="admineditcomponent-control"
-			v-if="adminStore.components.length !== 0"
-		>
-			<label for="pagesize">每頁顯示</label>
-			<select v-model="searchParams.pagesize" @change="handleNewQuery">
-				<option value="10">10</option>
-				<option value="20">20</option>
-				<option value="30">30</option>
-			</select>
-			<div class="admineditcomponent-control-page">
-				<button
-					v-for="page in pages"
-					:key="`component-page-${page}`"
-					:class="{ active: page === searchParams.pagenum }"
-					@click="handleNewPage(page)"
-				>
-					{{ page }}
-				</button>
-			</div>
-		</div>
-		<AdminComponentSettings :searchParams="searchParams" />
-	</div>
+  <div class="admineditcomponent">
+    <!-- 1. Search bar to search components by name or index -->
+    <div class="admineditcomponent-search">
+      <div>
+        <input
+          v-model="searchParams.searchbyname"
+          type="text"
+          placeholder="以組件名稱搜尋"
+        >
+        <span
+          v-if="searchParams.searchbyname !== ''"
+          @click="searchParams.searchbyname = ''"
+        >cancel</span>
+      </div>
+      <div>
+        <input
+          v-model="searchParams.searchbyindex"
+          type="text"
+          placeholder="以組件Index搜尋"
+        >
+        <span
+          v-if="searchParams.searchbyindex !== ''"
+          @click="searchParams.searchbyindex = ''"
+        >cancel</span>
+      </div>
+      <button @click="handleNewQuery">
+        搜尋
+      </button>
+    </div>
+    <!-- 2. The main table displaying all public components -->
+    <table class="admineditcomponent-table">
+      <thead>
+        <tr class="admineditcomponent-table-header">
+          <TableHeader min-width="60px" />
+          <TableHeader
+            :sort="true"
+            :mode="
+              searchParams.sort === 'id' ? searchParams.order : ''
+            "
+            min-width="40px"
+            @sort="handleSort('id')"
+          >
+            ID
+          </TableHeader>
+          <TableHeader
+            :sort="true"
+            :mode="
+              searchParams.sort === 'index'
+                ? searchParams.order
+                : ''
+            "
+            min-width="200px"
+            @sort="handleSort('index')"
+          >
+            Index
+          </TableHeader>
+          <TableHeader min-width="200px">
+            名稱
+          </TableHeader>
+          <TableHeader>狀態</TableHeader>
+          <TableHeader
+            :sort="true"
+            :mode="
+              searchParams.sort === 'source'
+                ? searchParams.order
+                : ''
+            "
+            min-width="150px"
+            @sort="handleSort('source')"
+          >
+            資料來源
+          </TableHeader>
+          <TableHeader min-width="165px">
+            圖表類型
+          </TableHeader>
+          <TableHeader min-width="165px">
+            地圖類型
+          </TableHeader>
+          <TableHeader>歷史資料</TableHeader>
+          <TableHeader>更新頻率</TableHeader>
+          <TableHeader
+            :sort="true"
+            :mode="
+              searchParams.sort === 'updated_at'
+                ? searchParams.order
+                : ''
+            "
+            min-width="200px"
+            @sort="handleSort('updated_at')"
+          >
+            上次編輯
+          </TableHeader>
+        </tr>
+      </thead>
+      <!-- 2-1. Components are present -->
+      <tbody v-if="adminStore.components.length !== 0">
+        <tr
+          v-for="component in adminStore.components"
+          :key="component.index"
+        >
+          <td class="admineditcomponent-table-settings">
+            <button @click="handleOpenSettings(component)">
+              <span>settings</span>
+            </button>
+          </td>
+          <td>{{ component.id }}</td>
+          <td>{{ component.index }}</td>
+          <td>{{ component.name }}</td>
+          <td>啟動</td>
+          <td>{{ component.source }}</td>
+          <td>
+            <div class="admineditcomponent-table-charts">
+              <ComponentTag
+                v-for="(chart, index) in component.chart_config
+                  .types"
+                :key="`${component.index}-chart-${index}`"
+                :text="chartTypes[chart]"
+                mode="fill"
+              />
+            </div>
+          </td>
+          <td>
+            <div
+              v-if="component.map_config[0] !== null"
+              class="admineditcomponent-table-maps"
+            >
+              <ComponentTag
+                v-for="(map, index) in component.map_config"
+                :key="`${component.index}-map-${index}`"
+                :text="mapTypes[map?.type]"
+                mode="fill"
+              />
+            </div>
+          </td>
+          <td>
+            <span>{{
+              component.history_config !== null
+                ? "check_circle"
+                : ""
+            }}</span>
+          </td>
+          <td>
+            <div class="admineditcomponent-table-update">
+              <ComponentTag
+                :text="
+                  updateFreq(
+                    component.update_freq,
+                    component.update_freq_unit
+                  )
+                "
+                mode="small"
+              />
+            </div>
+          </td>
+          <td>{{ parseTime(component.updated_at) }}</td>
+        </tr>
+      </tbody>
+      <!-- 2-2. Components are still loading -->
+      <div
+        v-else-if="contentStore.loading"
+        class="admineditcomponent-nocontent"
+      >
+        <div class="admineditcomponent-nocontent-content">
+          <div />
+        </div>
+      </div>
+      <!-- 2-3. An Error occurred -->
+      <div
+        v-else-if="contentStore.error"
+        class="admineditcomponent-nocontent"
+      >
+        <div class="admineditcomponent-nocontent-content">
+          <span>sentiment_very_dissatisfied</span>
+          <h2>發生錯誤，無法載入組件列表</h2>
+        </div>
+      </div>
+      <!-- 2-4. Components are loaded but there are none -->
+      <div
+        v-else
+        class="admineditcomponent-nocontent"
+      >
+        <div class="admineditcomponent-nocontent-content">
+          <span>search_off</span>
+          <h2>查無符合篩選條件的公開組件</h2>
+        </div>
+      </div>
+    </table>
+    <!-- 3. Records per page and pagination control -->
+    <div
+      v-if="adminStore.components.length !== 0"
+      class="admineditcomponent-control"
+    >
+      <label for="pagesize">每頁顯示</label>
+      <select
+        v-model="searchParams.pagesize"
+        @change="handleNewQuery"
+      >
+        <option value="10">
+          10
+        </option>
+        <option value="20">
+          20
+        </option>
+        <option value="30">
+          30
+        </option>
+      </select>
+      <div class="admineditcomponent-control-page">
+        <button
+          v-for="page in pages"
+          :key="`component-page-${page}`"
+          :class="{ active: page === searchParams.pagenum }"
+          @click="handleNewPage(page)"
+        >
+          {{ page }}
+        </button>
+      </div>
+    </div>
+    <AdminComponentSettings :search-params="searchParams" />
+  </div>
 </template>
 
 <style scoped lang="scss">

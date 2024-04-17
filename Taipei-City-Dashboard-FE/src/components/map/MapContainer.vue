@@ -41,31 +41,31 @@ onMounted(() => {
 	<div class="mapcontainer">
 		<div class="mapcontainer-map">
 			<!-- #mapboxBox needs to be empty to ensure Mapbox performance -->
-			<div id="mapboxBox"></div>
+			<div id="mapboxBox" />
 			<div
-				class="mapcontainer-loading"
 				v-if="mapStore.loadingLayers.length > 0"
+				class="mapcontainer-loading"
 			>
-				<div></div>
+				<div />
 			</div>
 			<div class="mapcontainer-layers">
 				<button
-					@click="toggleDistrictLayer"
 					:style="{
 						color: districtLayer
 							? 'var(--color-highlight)'
 							: 'var(--color-component-background)',
 					}"
+					@click="toggleDistrictLayer"
 				>
 					區
 				</button>
 				<button
-					@click="toggleVillageLayer"
 					:style="{
 						color: villageLayer
 							? 'var(--color-highlight)'
 							: 'var(--color-component-background)',
 					}"
+					@click="toggleVillageLayer"
 				>
 					里
 				</button>
@@ -137,7 +137,7 @@ onMounted(() => {
 
 	&-loading {
 		position: absolute;
-		top: 110px;
+		top: 170px;
 		right: 10px;
 		display: flex;
 		align-items: center;

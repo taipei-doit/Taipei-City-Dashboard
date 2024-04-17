@@ -13,19 +13,22 @@ defineEmits(["onClose"]);
 </script>
 
 <template>
-	<Teleport to="body">
-		<Transition name="dialog">
-			<div class="dialogcontainer" v-if="dialogStore.dialogs[dialog]">
-				<div
-					class="dialogcontainer-background"
-					@click="$emit('onClose')"
-				></div>
-				<div class="dialogcontainer-dialog">
-					<slot></slot>
-				</div>
-			</div>
-		</Transition>
-	</Teleport>
+  <Teleport to="body">
+    <Transition name="dialog">
+      <div
+        v-if="dialogStore.dialogs[dialog]"
+        class="dialogcontainer"
+      >
+        <div
+          class="dialogcontainer-background"
+          @click="$emit('onClose')"
+        />
+        <div class="dialogcontainer-dialog">
+          <slot />
+        </div>
+      </div>
+    </Transition>
+  </Teleport>
 </template>
 
 <style scoped lang="scss">

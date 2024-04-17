@@ -22,36 +22,34 @@ function handleOpenSettings() {
 </script>
 
 <template>
-	<div class="settingsbar">
-		<div class="settingsbar-title">
-			<span>{{ contentStore.currentDashboard.icon }}</span>
-			<h2>{{ contentStore.currentDashboard.name }}</h2>
-			<button
-				@click="dialogStore.showDialog('mobileNavigation')"
-				class="show-if-mobile"
-			>
-				<span class="settingsbar-title-navigation"
-					>arrow_drop_down_circle</span
-				>
-			</button>
-			<MobileNavigation />
-			<div
-				class="settingsbar-settings hide-if-mobile"
-				v-if="
-					contentStore.personalDashboards
-						.map((el) => el.index)
-						.includes(contentStore.currentDashboard.index) &&
-					contentStore.currentDashboard.icon !== 'favorite'
-				"
-			>
-				<button @click="handleOpenSettings">
-					<span>settings</span>
-					<p>設定</p>
-				</button>
-			</div>
-			<AddEditDashboards />
-		</div>
-	</div>
+  <div class="settingsbar">
+    <div class="settingsbar-title">
+      <span>{{ contentStore.currentDashboard.icon }}</span>
+      <h2>{{ contentStore.currentDashboard.name }}</h2>
+      <button
+        class="show-if-mobile"
+        @click="dialogStore.showDialog('mobileNavigation')"
+      >
+        <span class="settingsbar-title-navigation">arrow_drop_down_circle</span>
+      </button>
+      <MobileNavigation />
+      <div
+        v-if="
+          contentStore.personalDashboards
+            .map((el) => el.index)
+            .includes(contentStore.currentDashboard.index) &&
+            contentStore.currentDashboard.icon !== 'favorite'
+        "
+        class="settingsbar-settings hide-if-mobile"
+      >
+        <button @click="handleOpenSettings">
+          <span>settings</span>
+          <p>設定</p>
+        </button>
+      </div>
+      <AddEditDashboards />
+    </div>
+  </div>
 </template>
 
 <style scoped lang="scss">

@@ -4,9 +4,9 @@
 import { onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
 import http from "../router/axios";
+import { DashboardComponent } from "city-dashboard-component";
 import { useContentStore } from "../store/contentStore";
 
-import ComponentContainer from "../components/components/ComponentContainer.vue";
 import { getComponentDataTimeframe } from "../assets/utilityFunctions/dataTimeframe";
 
 const contentStore = useContentStore();
@@ -42,25 +42,31 @@ onMounted(async () => {
 </script>
 
 <template>
-	<div class="embedview">
-		<div v-if="contentStore.loading" class="embedview-loading">
-			<div></div>
-		</div>
-		<ComponentContainer
-			v-else-if="content"
-			:content="content"
-			:embed="true"
-			:style="{
-				height: 'calc(100% - 36px)',
-				maxHeight: 'calc(100% - 36px)',
-			}"
-		/>
-		<div v-else class="embedview-error">
-			<span>warning</span>
-			<p>查無組件，請確認組件ID是否正確</p>
-			<p>Component Not Found</p>
-		</div>
-	</div>
+  <div class="embedview">
+    <div
+      v-if="contentStore.loading"
+      class="embedview-loading"
+    >
+      <div />
+    </div>
+    <DashboardComponent
+      v-else-if="content"
+      :config="content"
+      :footer="false"
+      :style="{
+        height: 'calc(100% - 36px)',
+        maxHeight: 'calc(100% - 36px)',
+      }"
+    />
+    <div
+      v-else
+      class="embedview-error"
+    >
+      <span>warning</span>
+      <p>查無組件，請確認組件ID是否正確</p>
+      <p>Component Not Found</p>
+    </div>
+  </div>
 </template>
 
 <style scoped lang="scss">

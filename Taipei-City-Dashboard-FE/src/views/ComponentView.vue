@@ -10,8 +10,10 @@ Testing: Jack Huang (Data Scientist), Ian Huang (Data Analysis Intern)
 
 <script setup>
 import { ref, onMounted } from "vue";
+import { DashboardComponent } from "city-dashboard-component";
+
 import { useContentStore } from "../store/contentStore";
-import ComponentPreview from "../components/components/ComponentPreview.vue";
+import router from "../router/index";
 
 const contentStore = useContentStore();
 
@@ -28,68 +30,114 @@ function handleNewQuery() {
 	contentStore.getAllComponents(searchParams.value);
 }
 
+function toggleFavorite(id) {
+	if (contentStore.favorites.components.includes(id)) {
+		contentStore.unfavoriteComponent(id);
+	} else {
+		contentStore.favoriteComponent(id);
+	}
+}
+
 onMounted(() => {
 	contentStore.getAllComponents(searchParams.value);
 });
 </script>
 
 <template>
-	<!-- Search Bar that is always present -->
-	<div class="componentview-search">
-		<div>
-			<input
-				placeholder="以名稱搜尋"
-				v-model="searchParams.searchbyname"
-				@keypress.enter="handleNewQuery"
-			/>
-			<span
-				v-if="searchParams.searchbyname !== ''"
-				@click="
-					() => {
-						searchParams.searchbyname = '';
-						handleNewQuery();
-					}
-				"
-				>cancel</span
-			>
-		</div>
-		<button @click="handleNewQuery">搜尋</button>
-	</div>
-	<!-- 1. If the components are loaded -->
-	<div v-if="contentStore.components.length !== 0" class="componentview">
-		<ComponentPreview
-			v-for="item in contentStore.components"
-			:content="item"
-			:key="item.index"
-		/>
-	</div>
-	<!-- 2. If the components are still loading -->
-	<div
-		v-else-if="contentStore.loading"
-		class="componentview componentview-nodashboard"
-	>
-		<div class="componentview-nodashboard-content">
-			<div></div>
-		</div>
-	</div>
-	<!-- 3. If there is an error during loading -->
-	<div
-		v-else-if="contentStore.error"
-		class="componentview componentview-nodashboard"
-	>
-		<div class="componentview-nodashboard-content">
-			<span>sentiment_very_dissatisfied</span>
-			<h2>發生錯誤，無法載入</h2>
-		</div>
-	</div>
-	<!-- 4. If there are no components -->
-	<div v-else class="componentview componentview-nodashboard">
-		<div class="componentview-nodashboard-content">
-			<span>search_off</span>
-			<h2>查無組件</h2>
-			<p>請重新搜尋或更改篩選條件</p>
-		</div>
-	</div>
+  <!-- Search Bar that is always present -->
+  <div class="componentview-search">
+    <div>
+      <input
+        v-model="searchParams.searchbyname"
+        placeholder="以名稱搜尋"
+        @keypress.enter="handleNewQuery"
+      >
+      <span
+        v-if="searchParams.searchbyname !== ''"
+        @click="
+          () => {
+            searchParams.searchbyname = '';
+            handleNewQuery();
+          }
+        "
+      >cancel</span>
+    </div>
+    <button @click="handleNewQuery">
+      搜尋
+    </button>
+  </div>
+  <!-- 1. If the components are loaded -->
+  <div
+    v-if="contentStore.components.length !== 0"
+    class="componentview"
+  >
+    <DashboardComponent
+      v-for="item in contentStore.components"
+      :key="item.index"
+      :config="item"
+      mode="preview"
+      :info-btn="true"
+      :add-btn="
+        !contentStore.editDashboard.components
+          .map((item) => item.id)
+          .includes(item.id)
+      "
+      :favorite-btn="true"
+      :is-favorite="contentStore.favorites?.components.includes(item.id)"
+      info-btn-text="資訊頁面"
+      @info="
+        (item) => {
+          router.push({
+            name: 'component-info',
+            params: { index: item.index },
+          });
+        }
+      "
+      @add="
+        (id, name) => {
+          contentStore.editDashboard.components.push({
+            id,
+            name,
+          });
+        }
+      "
+      @favorite="
+        (id) => {
+          toggleFavorite(id);
+        }
+      "
+    />
+  </div>
+  <!-- 2. If the components are still loading -->
+  <div
+    v-else-if="contentStore.loading"
+    class="componentview componentview-nodashboard"
+  >
+    <div class="componentview-nodashboard-content">
+      <div />
+    </div>
+  </div>
+  <!-- 3. If there is an error during loading -->
+  <div
+    v-else-if="contentStore.error"
+    class="componentview componentview-nodashboard"
+  >
+    <div class="componentview-nodashboard-content">
+      <span>sentiment_very_dissatisfied</span>
+      <h2>發生錯誤，無法載入</h2>
+    </div>
+  </div>
+  <!-- 4. If there are no components -->
+  <div
+    v-else
+    class="componentview componentview-nodashboard"
+  >
+    <div class="componentview-nodashboard-content">
+      <span>search_off</span>
+      <h2>查無組件</h2>
+      <p>請重新搜尋或更改篩選條件</p>
+    </div>
+  </div>
 </template>
 
 <style scoped lang="scss">

@@ -25,26 +25,32 @@ function handleDelete() {
 </script>
 
 <template>
-	<DialogContainer dialog="adminDeleteDashboard" @on-close="handleClose">
-		<div class="admindeletedashboard">
-			<h2>確定刪除儀表板嗎？</h2>
-			<div class="admindeletedashboard-input">
-				<label for="name">
-					輸入「{{ currentDashboard.name }}」以刪除
-				</label>
-				<input name="name" v-model="deleteConfirm" />
-			</div>
-			<div class="admindeletedashboard-control">
-				<button
-					v-if="deleteConfirm === currentDashboard.name"
-					class="admindeletedashboard-control-delete"
-					@click="handleDelete"
-				>
-					刪除儀表板
-				</button>
-			</div>
-		</div>
-	</DialogContainer>
+  <DialogContainer
+    dialog="adminDeleteDashboard"
+    @on-close="handleClose"
+  >
+    <div class="admindeletedashboard">
+      <h2>確定刪除儀表板嗎？</h2>
+      <div class="admindeletedashboard-input">
+        <label for="name">
+          輸入「{{ currentDashboard.name }}」以刪除
+        </label>
+        <input
+          v-model="deleteConfirm"
+          name="name"
+        >
+      </div>
+      <div class="admindeletedashboard-control">
+        <button
+          v-if="deleteConfirm === currentDashboard.name"
+          class="admindeletedashboard-control-delete"
+          @click="handleDelete"
+        >
+          刪除儀表板
+        </button>
+      </div>
+    </div>
+  </DialogContainer>
 </template>
 
 <style scoped lang="scss">

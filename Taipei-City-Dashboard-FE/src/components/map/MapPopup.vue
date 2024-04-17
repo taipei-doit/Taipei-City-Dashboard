@@ -4,37 +4,40 @@
 <script setup></script>
 
 <template>
-	<div class="mappopup">
-		<div class="mappopup-tab">
-			<div
-				v-for="(mapConfig, index) in mapConfigs"
-				:key="mapConfig.id"
-				:class="{ 'mappopup-tab-active': activeTab === index }"
-			>
-				<button
-					@click="
-						() => {
-							activeTab = index;
-						}
-					"
-				>
-					{{
-						activeTab === index
-							? mapConfig.title
-							: mapConfig.title.length > 5
-							? mapConfig.title.slice(0, 4) + "..."
-							: mapConfig.title
-					}}
-				</button>
-			</div>
-		</div>
-		<div class="mappopup-content">
-			<div v-for="item in mapConfigs[activeTab].property" :key="item.key">
-				<h3>{{ item.name }}</h3>
-				<p>{{ popupContent[activeTab].properties[item.key] }}</p>
-			</div>
-		</div>
-	</div>
+  <div class="mappopup">
+    <div class="mappopup-tab">
+      <div
+        v-for="(mapConfig, index) in mapConfigs"
+        :key="mapConfig.id"
+        :class="{ 'mappopup-tab-active': activeTab === index }"
+      >
+        <button
+          @click="
+            () => {
+              activeTab = index;
+            }
+          "
+        >
+          {{
+            activeTab === index
+              ? mapConfig.title
+              : mapConfig.title.length > 5
+                ? mapConfig.title.slice(0, 4) + "..."
+                : mapConfig.title
+          }}
+        </button>
+      </div>
+    </div>
+    <div class="mappopup-content">
+      <div
+        v-for="item in mapConfigs[activeTab].property"
+        :key="item.key"
+      >
+        <h3>{{ item.name }}</h3>
+        <p>{{ popupContent[activeTab].properties[item.key] }}</p>
+      </div>
+    </div>
+  </div>
 </template>
 
 <style lang="scss">
