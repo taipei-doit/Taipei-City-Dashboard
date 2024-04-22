@@ -1,5 +1,7 @@
 # <img src='Taipei-City-Dashboard-FE/src/assets/images/TUIC.svg' height='28'> Taipei City Dashboard
 
+> This branch is for routine maintenance of Taipei City Dashboard from 4/22 - 5/12 due to Taipei Codefest 2024. For the latest released version of Taipei City Dashboard, please visit the `main` branch.
+
 ## Introduction
 
 Taipei City Dashboard is a data visualization platform developed by [Taipei Urban Intelligence Center (TUIC)](https://tuic.gov.taipei/en).
