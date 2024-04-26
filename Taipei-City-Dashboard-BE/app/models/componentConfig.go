@@ -23,7 +23,7 @@ type Component struct {
 	ChartConfig    json.RawMessage `json:"chart_config" gorm:"type:json"`
 	MapFilter      json.RawMessage `json:"map_filter" gorm:"column:map_filter;type:json"`
 	TimeFrom       string          `json:"time_from" gorm:"column:time_from;type:varchar"`
-	TimeTo         string          `json:"time_to" gorm:"column:time_to;type:varchar"`
+	TimeTo         *string         `json:"time_to" gorm:"column:time_to;type:varchar"`
 	UpdateFreq     *int64          `json:"update_freq" gorm:"column:update_freq;type:integer"`
 	UpdateFreqUnit string          `json:"update_freq_unit" gorm:"column:update_freq_unit;type:varchar"`
 	Source         string          `json:"source" gorm:"column:source;type:varchar"`
@@ -145,7 +145,7 @@ func GetComponentByID(id int) (component Component, err error) {
 	return component, nil
 }
 
-func UpdateComponent(id int, name string, historyConfig json.RawMessage, mapFilter json.RawMessage, timeFrom string, timeTo string, updateFreq *int64, updateFreqUnit string, source string, shortDesc string, longDesc string, useCase string, links pq.StringArray, contributors pq.StringArray) (component Component, err error) {
+func UpdateComponent(id int, name string, historyConfig json.RawMessage, mapFilter json.RawMessage, timeFrom string, timeTo *string, updateFreq *int64, updateFreqUnit string, source string, shortDesc string, longDesc string, useCase string, links pq.StringArray, contributors pq.StringArray) (component Component, err error) {
 	component = Component{Name: name, HistoryConfig: historyConfig, MapFilter: mapFilter, TimeFrom: timeFrom, TimeTo: timeTo, UpdateFreq: updateFreq, UpdateFreqUnit: updateFreqUnit, Source: source, ShortDesc: shortDesc, LongDesc: longDesc, UseCase: useCase, Links: links, Contributors: contributors, UpdatedAt: time.Now()}
 
 	err = DBManager.Table("components").Where("id = ?", id).Updates(&component).Error
