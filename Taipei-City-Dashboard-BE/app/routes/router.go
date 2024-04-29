@@ -129,7 +129,7 @@ func configureContributorRoutes() {
 	// contributorRoutes.Use(middleware.LimitTotalRequests(global.UserLimitTotalRequestsTimes, global.TokenExpirationDuration))
 	// contributorRoutes.Use(middleware.IsLoggedIn())
 	contributorRoutes.GET("/", controllers.GetContributorInfo)
-	// contributorRoutes.PUT("/", controllers.EditUserInfo)
+	contributorRoutes.POST("/", controllers.CreateContributor)
 	// contributorRoutes.DELETE("/", controllers.EditUserInfo)
 	// contributorRoutes.Use(middleware.IsSysAdm())
 	// {

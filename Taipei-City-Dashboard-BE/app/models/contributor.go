@@ -50,3 +50,18 @@ func GetAllContributors(pageSize int, pageNum int, filterByStatus int, sort stri
 
 	return contributors, totalContributors, resultNum, err
 }
+
+
+
+func CreateContributor(userName string, userID string, image string, link string) (contributor Contributor, err error) {
+	contributor.UserID = userID
+	contributor.UserName = userName
+	contributor.Image = image
+	contributor.Link = link
+	contributor.Status = 1
+	contributor.CreatedAt = time.Now()
+	contributor.UpdatedAt = time.Now()
+
+	err = DBManager.Create(&contributor).Error
+	return contributor, err
+}
