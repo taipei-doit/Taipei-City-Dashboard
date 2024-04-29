@@ -26,6 +26,7 @@ func ConfigureRoutes() {
 	configureComponentRoutes()
 	configureDashboardRoutes()
 	configureIssueRoutes()
+	configureContributorRoutes()
 }
 
 func configureAuthRoutes() {
@@ -120,4 +121,19 @@ func configureIssueRoutes() {
 		issueRoutes.
 			PATCH("/:id", controllers.UpdateIssueByID)
 	}
+}
+
+func configureContributorRoutes() {
+	contributorRoutes := RouterGroup.Group("/contributor")
+	// contributorRoutes.Use(middleware.LimitAPIRequests(global.UserLimitAPIRequestsTimes, global.LimitRequestsDuration))
+	// contributorRoutes.Use(middleware.LimitTotalRequests(global.UserLimitTotalRequestsTimes, global.TokenExpirationDuration))
+	// contributorRoutes.Use(middleware.IsLoggedIn())
+	contributorRoutes.GET("/", controllers.GetContributorInfo)
+	// contributorRoutes.PUT("/", controllers.EditUserInfo)
+	// contributorRoutes.DELETE("/", controllers.EditUserInfo)
+	// contributorRoutes.Use(middleware.IsSysAdm())
+	// {
+	// 	contributorRoutes.GET("/", controllers.GetAllUsers)
+	// 	contributorRoutes.PATCH("/:id", controllers.UpdateUserByID)
+	// }
 }
