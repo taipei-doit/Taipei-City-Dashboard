@@ -61,3 +61,26 @@ func CreateContributor(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"status": "success", "data": contributor})
 }
+
+/*
+EditContributorInfo updates the contributor information
+PATCH /api/v1/contributor/:id
+*/
+func EditContributorInfo(c *gin.Context) {
+	var contributor models.Contributor
+	ID := c.GetInt("id")
+
+	err := c.ShouldBindJSON(&contributor)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	contributor, err = models.UpdateContributorInfo(int64(ID), contributor.UserName, contributor.Image, contributor.Link)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update user"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"status": "success", "data": contributor})
+}

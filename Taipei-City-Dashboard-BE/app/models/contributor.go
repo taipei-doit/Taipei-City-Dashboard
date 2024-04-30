@@ -65,3 +65,9 @@ func CreateContributor(userName string, userID string, image string, link string
 	err = DBManager.Create(&contributor).Error
 	return contributor, err
 }
+
+
+func UpdateContributorInfo(ID int64, userName string, image string, link string) (contributor Contributor, err error) {
+	err = DBManager.Model(&Contributor{}).Where("id = ?", ID).Updates(map[string]interface{}{"user_name": userName, "image": image, "link": link, "updated_at": time.Now()}).Error
+	return contributor, err
+}

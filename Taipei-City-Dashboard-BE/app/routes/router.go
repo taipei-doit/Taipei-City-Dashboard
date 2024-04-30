@@ -130,6 +130,7 @@ func configureContributorRoutes() {
 	// contributorRoutes.Use(middleware.IsLoggedIn())
 	contributorRoutes.GET("/", controllers.GetContributorInfo)
 	contributorRoutes.POST("/", controllers.CreateContributor)
+	contributorRoutes.PUT("/:id", controllers.EditContributorInfo)
 	// contributorRoutes.DELETE("/", controllers.EditUserInfo)
 	// contributorRoutes.Use(middleware.IsSysAdm())
 	// {
