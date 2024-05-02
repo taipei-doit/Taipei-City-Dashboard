@@ -44,15 +44,15 @@ func configureUserRoutes() {
 	userRoutes := RouterGroup.Group("/user")
 	userRoutes.Use(middleware.LimitAPIRequests(global.UserLimitAPIRequestsTimes, global.LimitRequestsDuration))
 	userRoutes.Use(middleware.LimitTotalRequests(global.UserLimitTotalRequestsTimes, global.TokenExpirationDuration))
-	userRoutes.GET("/me", controllers.GetUserInfo)
-	userRoutes.PATCH("/me", controllers.EditUserInfo)
-	userRoutes.GET("/", controllers.GetAllUsers)
-	userRoutes.PATCH("/:id", controllers.UpdateUserByID)
 	userRoutes.Use(middleware.IsLoggedIn())
 	{
+		userRoutes.GET("/me", controllers.GetUserInfo)
+		userRoutes.PATCH("/me", controllers.EditUserInfo)
 	}
 	userRoutes.Use(middleware.IsSysAdm())
 	{
+		userRoutes.GET("/", controllers.GetAllUsers)
+		userRoutes.PATCH("/:id", controllers.UpdateUserByID)
 	}
 }
 
@@ -125,8 +125,8 @@ func configureIssueRoutes() {
 
 func configureContributorRoutes() {
 	contributorRoutes := RouterGroup.Group("/contributor")
-	contributorRoutes.Use(middleware.LimitAPIRequests(global.UserLimitAPIRequestsTimes, global.LimitRequestsDuration))
-	contributorRoutes.Use(middleware.LimitTotalRequests(global.UserLimitTotalRequestsTimes, global.TokenExpirationDuration))
+	contributorRoutes.Use(middleware.LimitAPIRequests(global.ContributorLimitAPIRequestsTimes, global.LimitRequestsDuration))
+	contributorRoutes.Use(middleware.LimitTotalRequests(global.ContributorLimitTotalRequestsTimes, global.TokenExpirationDuration))
 	contributorRoutes.Use(middleware.IsLoggedIn())
 	{
 		contributorRoutes.GET("/", controllers.GetAllContributors)

@@ -55,7 +55,6 @@ func CreateContributor(userName string, userID string, image string, link string
 	contributor.Link = link
 	contributor.CreatedAt = time.Now()
 	contributor.UpdatedAt = time.Now()
-
 	err = DBManager.Create(&contributor).Error
 	return contributor, err
 }

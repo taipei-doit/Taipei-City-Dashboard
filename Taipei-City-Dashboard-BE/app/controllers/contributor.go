@@ -17,7 +17,6 @@ func GetAllContributors(c *gin.Context) {
 	type contributorQuery struct {
 		PageSize       int    `form:"pagesize"`
 		PageNum        int    `form:"pagenum"`
-		FilterByStatus int    `form:"filterbystatus"`
 		Sort           string `form:"sort"`
 		Order          string `form:"order"`
 	}
@@ -49,7 +48,7 @@ func CreateContributor(c *gin.Context) {
 	}
 
 	if contributor.UserID == "" || contributor.UserName == "" || contributor.Image == "" || contributor.Link == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": "user_id, user_name, image link info is required"})
+		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": "user_id, user_name, image and link info is required"})
 		return
 	}
 
@@ -98,7 +97,7 @@ func UpdateContributor(c *gin.Context) {
 }
 
 /*
-DeleteContributor soft deletes a contributor from the database.
+DeleteContributor deletes a contributor from the database.
 DELETE /api/v1/contributor/:id
 */
 func DeleteContributor(c *gin.Context) {
@@ -109,7 +108,7 @@ func DeleteContributor(c *gin.Context) {
 		return
 	}
 
-	// 2. Delete the component
+	// 2. Delete the contributor
 	contributorStatus, err := models.DeleteContributorByID(ID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": err.Error()})
