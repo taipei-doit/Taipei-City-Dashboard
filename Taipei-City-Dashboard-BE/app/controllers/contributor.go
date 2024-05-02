@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"net/http"
+	"strconv"
 
 	"TaipeiCityDashboardBE/app/models"
 
@@ -9,10 +10,10 @@ import (
 )
 
 /*
-GetContributorInfo returns the contributor information
+GetAllContributors returns the contributor information
 GET /api/v1/contributor
 */
-func GetContributorInfo(c *gin.Context) {
+func GetAllContributors(c *gin.Context) {
 	type contributorQuery struct {
 		PageSize       int    `form:"pagesize"`
 		PageNum        int    `form:"pagenum"`
@@ -25,20 +26,19 @@ func GetContributorInfo(c *gin.Context) {
 	var query contributorQuery
 	c.ShouldBindQuery(&query)
 
-	contributors, totalContributors, resultNum, err := models.GetAllContributors(query.PageSize, query.PageNum, query.FilterByStatus, query.Sort, query.Order)
+	contributors, totalContributors, err := models.GetAllContributors(query.PageSize, query.PageNum, query.Sort, query.Order)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"status": "success", "total": totalContributors, "results": resultNum, "data": contributors})
+	c.JSON(http.StatusOK, gin.H{"status": "success", "total": totalContributors, "data": contributors})
 }
 
 /*
 CreateContributor creates a new contributor
 POST /api/v1/contributor
 */
-
 func CreateContributor(c *gin.Context) {
 	var contributor models.Contributor
 
@@ -48,7 +48,7 @@ func CreateContributor(c *gin.Context) {
 		return
 	}
 
-	if contributor.UserID == "" ||  contributor.UserName == ""|| contributor.Image == "" || contributor.Link == ""{
+	if contributor.UserID == "" || contributor.UserName == "" || contributor.Image == "" || contributor.Link == "" {
 		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": "user_id, user_name, image link info is required"})
 		return
 	}
@@ -63,24 +63,58 @@ func CreateContributor(c *gin.Context) {
 }
 
 /*
-EditContributorInfo updates the contributor information
+UpdateContributor updates the contributor information
 PATCH /api/v1/contributor/:id
 */
-func EditContributorInfo(c *gin.Context) {
-	var contributor models.Contributor
-	ID := c.GetInt("id")
+func UpdateContributor(c *gin.Context) {
+	ID, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": "Invalid contributor ID"})
+		return
+	}
 
-	err := c.ShouldBindJSON(&contributor)
+	// 1. Check if the contributor exists
+	contributor, err := models.GetContributorByID(ID)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "No contributor found"})
+		return
+	}
+
+	// 2. Bind the JSON body to the contributor struct
+	err = c.ShouldBindJSON(&contributor)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	contributor, err = models.UpdateContributorInfo(int64(ID), contributor.UserName, contributor.Image, contributor.Link)
+	// 3. Update the contributor
+	contributor, err = models.UpdateContributor(ID, contributor.UserID, contributor.UserName, contributor.Image, contributor.Link)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update user"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update contributor"})
 		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{"status": "success", "data": contributor})
+}
+
+/*
+DeleteContributor soft deletes a contributor from the database.
+DELETE /api/v1/contributor/:id
+*/
+func DeleteContributor(c *gin.Context) {
+	// 1. Get the contributor ID from the context
+	ID, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": "Invalid contributor ID"})
+		return
+	}
+
+	// 2. Delete the component
+	contributorStatus, err := models.DeleteContributorByID(ID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"status": "success", "contributor_deleted": contributorStatus})
 }

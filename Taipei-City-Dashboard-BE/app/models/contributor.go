@@ -7,30 +7,22 @@ import (
 /* ----- Models ----- */
 
 type Contributor struct {
-	ID           int64     `json:"id" gorm:"column:id;autoincrement;primaryKey"`
-	UserID       string    `json:"user_id" gorm:"column:user_id;type:varchar;not null"`
-	UserName     string    `json:"user_name" gorm:"column:user_name;type:varchar;not null"`
-	Image        string    `json:"image" gorm:"column:image;type:text"`
-	Link         string    `json:"link" gorm:"column:link;type:text;not null"`
-	Status       int64     `json:"status" gorm:"column:status;type:int;not null"`
-	CreatedAt    time.Time `json:"created_at" gorm:"column:created_at;type:timestamp with time zone;not null"`
-	UpdatedAt    time.Time `json:"updated_at" gorm:"column:updated_at;type:timestamp with time zone;not null"`
+	ID        int64     `json:"id" gorm:"column:id;autoincrement;primaryKey"`
+	UserID    string    `json:"user_id" gorm:"column:user_id;type:varchar;not null"`
+	UserName  string    `json:"user_name" gorm:"column:user_name;type:varchar;not null"`
+	Image     string    `json:"image" gorm:"column:image;type:text"`
+	Link      string    `json:"link" gorm:"column:link;type:text;not null"`
+	CreatedAt time.Time `json:"created_at" gorm:"column:created_at;type:timestamp with time zone;not null"`
+	UpdatedAt time.Time `json:"updated_at" gorm:"column:updated_at;type:timestamp with time zone;not null"`
 }
 
 /* ----- Handlers ----- */
 
-func GetAllContributors(pageSize int, pageNum int, filterByStatus int, sort string, order string) (contributors []Contributor, totalContributors int64, resultNum int64, err error) {
+func GetAllContributors(pageSize int, pageNum int, sort string, order string) (contributors []Contributor, totalContributors int64, err error) {
 	tempDB := DBManager.Table("contributors")
 
 	// Count the total amount of contributors
 	tempDB.Count(&totalContributors)
-
-	// Filter by status if filterByStatus is either 0 or 1
-	if filterByStatus == 0 || filterByStatus == 1 {
-		tempDB = tempDB.Where("status = ?", filterByStatus)
-	}
-
-	tempDB.Count(&resultNum)
 
 	// Sort the contributors
 	if sort != "" {
@@ -48,17 +40,19 @@ func GetAllContributors(pageSize int, pageNum int, filterByStatus int, sort stri
 	// Get the contributors
 	err = tempDB.Find(&contributors).Error
 
-	return contributors, totalContributors, resultNum, err
+	return contributors, totalContributors, err
 }
 
-
+func GetContributorByID(ID int) (contributor Contributor, err error) {
+	err = DBManager.Table("contributors").Where("id = ?", ID).First(&contributor).Error
+	return contributor, err
+}
 
 func CreateContributor(userName string, userID string, image string, link string) (contributor Contributor, err error) {
 	contributor.UserID = userID
 	contributor.UserName = userName
 	contributor.Image = image
 	contributor.Link = link
-	contributor.Status = 1
 	contributor.CreatedAt = time.Now()
 	contributor.UpdatedAt = time.Now()
 
@@ -66,8 +60,25 @@ func CreateContributor(userName string, userID string, image string, link string
 	return contributor, err
 }
 
+func UpdateContributor(ID int, userID string, userName string, image string, link string) (contributor Contributor, err error) {
+	err = DBManager.Model(&Contributor{}).Where("id = ?", ID).Updates(map[string]interface{}{"user_id": userID, "user_name": userName, "image": image, "link": link, "updated_at": time.Now()}).Error
+	if err != nil {
+		return contributor, err
+	}
 
-func UpdateContributorInfo(ID int64, userName string, image string, link string) (contributor Contributor, err error) {
-	err = DBManager.Model(&Contributor{}).Where("id = ?", ID).Updates(map[string]interface{}{"user_name": userName, "image": image, "link": link, "updated_at": time.Now()}).Error
+	err = DBManager.Table("contributors").Where("id = ?", ID).First(&contributor).Error
+	if err != nil {
+		return contributor, err
+	}
+
 	return contributor, err
+}
+
+func DeleteContributorByID(ID int) (contributorStatus bool, err error) {
+	err = DBManager.Model(&Contributor{}).Where("id = ?", ID).Delete(&Contributor{}).Error
+	if err != nil {
+		return false, err
+	}
+
+	return true, err
 }
