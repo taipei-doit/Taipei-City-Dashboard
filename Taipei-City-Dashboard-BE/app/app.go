@@ -11,7 +11,6 @@ import (
 	"TaipeiCityDashboardBE/logs"
 
 	"github.com/fvbock/endless"
-	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
@@ -29,13 +28,13 @@ func StartApplication() {
 
 	// 3. Add common middlewares that need to run on all routes
 	routes.Router.Use(middleware.AddCommonHeaders)
-	routes.Router.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"https://tuic.gov.taipei/documentation"},
-		AllowMethods:     []string{"GET"},
-		AllowHeaders:     []string{"Origin"},
-		ExposeHeaders:    []string{"Content-Length"},
-		AllowCredentials: true,
-	}))
+	// routes.Router.Use(cors.New(cors.Config{
+	// 	AllowOrigins:     []string{"https://tuic.gov.taipei"},
+	// 	AllowMethods:     []string{"GET"},
+	// 	AllowHeaders:     []string{"Origin"},
+	// 	ExposeHeaders:    []string{"Content-Length"},
+	// 	AllowCredentials: true,
+	// }))
 
 	// 4. Configure routes and routing groups (./router.go)
 	routes.ConfigureRoutes()
