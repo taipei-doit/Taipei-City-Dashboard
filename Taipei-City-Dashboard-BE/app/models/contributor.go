@@ -48,7 +48,7 @@ func GetContributorByID(ID int) (contributor Contributor, err error) {
 	return contributor, err
 }
 
-func CreateContributor(userName string, userID string, image string, link string) (contributor Contributor, err error) {
+func CreateContributor(userID string, userName string, image string, link string) (contributor Contributor, err error) {
 	contributor.UserID = userID
 	contributor.UserName = userName
 	contributor.Image = image
