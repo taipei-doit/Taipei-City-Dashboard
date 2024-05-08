@@ -30,52 +30,55 @@ onMounted(() => {
 </script>
 
 <template>
-  <div
-    :class="{
-      adminsidebar: true,
-      'adminsidebar-collapse': !isExpanded,
-    }"
-  >
-    <button
-      class="adminsidebar-collapse-button"
-      @click="toggleExpand"
-    >
-      <span>{{
-        isExpanded
-          ? "keyboard_double_arrow_left"
-          : "keyboard_double_arrow_right"
-      }}</span>
-    </button>
-    <!-- <h2>{{ isExpanded ? `用戶設定` : `用戶` }}</h2> -->
-    <h2>{{ isExpanded ? `儀表板設定` : `表板` }}</h2>
-    <SideBarTab
-      icon="dashboard"
-      title="公開儀表板"
-      :expanded="isExpanded"
-      index="dashboard"
-    />
-    <h2>{{ isExpanded ? `組件設定` : `組件` }}</h2>
-    <SideBarTab
-      icon="edit_note"
-      title="編輯公開組件"
-      :expanded="isExpanded"
-      index="edit-component"
-    />
-    <h2>{{ isExpanded ? `問題回報` : `問題` }}</h2>
-    <SideBarTab
-      icon="bug_report"
-      title="待回覆問題"
-      :expanded="isExpanded"
-      index="issue"
-    />
-    <h2>{{ isExpanded ? `系統總覽` : `系統` }}</h2>
-    <SideBarTab
-      icon="person"
-      title="使用者資訊"
-      :expanded="isExpanded"
-      index="user"
-    />
-  </div>
+	<div
+		:class="{
+			adminsidebar: true,
+			'adminsidebar-collapse': !isExpanded,
+		}"
+	>
+		<button class="adminsidebar-collapse-button" @click="toggleExpand">
+			<span>{{
+				isExpanded
+					? "keyboard_double_arrow_left"
+					: "keyboard_double_arrow_right"
+			}}</span>
+		</button>
+		<!-- <h2>{{ isExpanded ? `用戶設定` : `用戶` }}</h2> -->
+		<h2>{{ isExpanded ? `儀表板設定` : `表板` }}</h2>
+		<SideBarTab
+			icon="dashboard"
+			title="公開儀表板"
+			:expanded="isExpanded"
+			index="dashboard"
+		/>
+		<h2>{{ isExpanded ? `組件設定` : `組件` }}</h2>
+		<SideBarTab
+			icon="edit_note"
+			title="編輯公開組件"
+			:expanded="isExpanded"
+			index="edit-component"
+		/>
+		<h2>{{ isExpanded ? `問題回報` : `問題` }}</h2>
+		<SideBarTab
+			icon="bug_report"
+			title="待回覆問題"
+			:expanded="isExpanded"
+			index="issue"
+		/>
+		<h2>{{ isExpanded ? `系統總覽` : `系統` }}</h2>
+		<SideBarTab
+			icon="person"
+			title="使用者資訊"
+			:expanded="isExpanded"
+			index="user"
+		/>
+		<SideBarTab
+			icon="person"
+			title="貢獻者資訊"
+			:expanded="isExpanded"
+			index="contributor"
+		/>
+	</div>
 </template>
 
 <style scoped lang="scss">
