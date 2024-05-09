@@ -20,6 +20,8 @@ export const useDialogStore = defineStore("dialog", {
 			adminAddComponent: false,
 			adminDeleteDashboard: false,
 			adminEditUser: false,
+			adminAddEditContributor: false,
+			adminDeleteContributor: false,
 			// Public Dialogs: /components/dialogs
 			addComponent: false,
 			addDashboard: false,

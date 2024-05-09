@@ -115,6 +115,7 @@ func MigrateManagerSchema() {
 		DBManager.AutoMigrate(&AuthUser{}, &Role{}, &Group{})
 		DBManager.AutoMigrate(&AuthUserGroupRole{})
 		DBManager.AutoMigrate(&Component{}, &ComponentChart{}, &ComponentMap{})
+		DBManager.AutoMigrate(&Contributor{})
 		DBManager.AutoMigrate(&Dashboard{}, &DashboardGroup{}, &Issue{})
 
 		// All users beneath the public group do not need to be added to the public group
