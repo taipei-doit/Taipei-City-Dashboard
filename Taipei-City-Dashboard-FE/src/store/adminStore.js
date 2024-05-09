@@ -309,7 +309,6 @@ export const useAdminStore = defineStore("admin", {
 			const response = await http.get(`/contributor/`, {
 				params: apiParams,
 			});
-			console.log(response);
 			this.contributors = response.data.data;
 			this.contributorResults = response.data.total;
 			this.setLoading(false);
@@ -317,13 +316,12 @@ export const useAdminStore = defineStore("admin", {
 		// 2. Update a contributor
 		async updateContributor(params) {
 			const dialogStore = useDialogStore();
+			const contentStore = useContentStore();
 			const editedContributor = JSON.parse(
 				JSON.stringify(this.currentContributor)
 			);
-			console.log("updateContributor");
-			console.log(editedContributor);
 
-			await http.put(
+			await http.patch(
 				`/contributor/${this.currentContributor.id}`,
 				editedContributor
 			);
@@ -331,21 +329,22 @@ export const useAdminStore = defineStore("admin", {
 			this.getContributors(params);
 
 			this.currentContributor = null;
+			contentStore.setContributors();
 		},
 		// 3. Add a contributor
 		async addContributor(params) {
 			const dialogStore = useDialogStore();
+			const contentStore = useContentStore();
 			const contributor = JSON.parse(
 				JSON.stringify(this.currentContributor)
 			);
-			console.log("addContributor");
-			console.log(contributor);
 
 			await http.post(`/contributor/`, contributor);
 			dialogStore.showNotification("success", "貢獻者新增成功");
 			this.getContributors(params);
 
 			this.currentContributor = null;
+			contentStore.setContributors();
 		},
 
 		// 4. Delete a contributor

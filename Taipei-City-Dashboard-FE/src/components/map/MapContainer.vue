@@ -38,76 +38,76 @@ onMounted(() => {
 </script>
 
 <template>
-	<div class="mapcontainer">
-		<div class="mapcontainer-map">
-			<!-- #mapboxBox needs to be empty to ensure Mapbox performance -->
-			<div id="mapboxBox" />
-			<div
-				v-if="mapStore.loadingLayers.length > 0"
-				class="mapcontainer-loading"
-			>
-				<div />
-			</div>
-			<div class="mapcontainer-layers">
-				<button
-					:style="{
-						color: districtLayer
-							? 'var(--color-highlight)'
-							: 'var(--color-component-background)',
-					}"
-					@click="toggleDistrictLayer"
-				>
-					區
-				</button>
-				<button
-					:style="{
-						color: villageLayer
-							? 'var(--color-highlight)'
-							: 'var(--color-component-background)',
-					}"
-					@click="toggleVillageLayer"
-				>
-					里
-				</button>
-				<button
-					class="show-if-mobile"
-					@click="dialogStore.showDialog('mobileLayers')"
-				>
-					<span>layers</span>
-				</button>
-			</div>
-			<!-- The key prop informs vue that the component should be updated when switching dashboards -->
-			<MobileLayers :key="contentStore.currentDashboard.index" />
-		</div>
+  <div class="mapcontainer">
+    <div class="mapcontainer-map">
+      <!-- #mapboxBox needs to be empty to ensure Mapbox performance -->
+      <div id="mapboxBox" />
+      <div
+        v-if="mapStore.loadingLayers.length > 0"
+        class="mapcontainer-loading"
+      >
+        <div />
+      </div>
+      <div class="mapcontainer-layers">
+        <button
+          :style="{
+            color: districtLayer
+              ? 'var(--color-highlight)'
+              : 'var(--color-component-background)',
+          }"
+          @click="toggleDistrictLayer"
+        >
+          區
+        </button>
+        <button
+          :style="{
+            color: villageLayer
+              ? 'var(--color-highlight)'
+              : 'var(--color-component-background)',
+          }"
+          @click="toggleVillageLayer"
+        >
+          里
+        </button>
+        <button
+          class="show-if-mobile"
+          @click="dialogStore.showDialog('mobileLayers')"
+        >
+          <span>layers</span>
+        </button>
+      </div>
+      <!-- The key prop informs vue that the component should be updated when switching dashboards -->
+      <MobileLayers :key="contentStore.currentDashboard.index" />
+    </div>
 
-		<div class="mapcontainer-controls hide-if-mobile">
-			<button
-				@click="
-					mapStore.easeToLocation([
-						[121.536609, 25.044808],
-						12.5,
-						0,
-						0,
-					])
-				"
-			>
-				返回預設
-			</button>
-			<div
-				v-for="(item, index) in mapStore.savedLocations"
-				:key="`${item[4]}-${index}`"
-			>
-				<button @click="mapStore.easeToLocation(item)">
-					{{ item[4] }}
-				</button>
-				<!-- <div
+    <div class="mapcontainer-controls hide-if-mobile">
+      <button
+        @click="
+          mapStore.easeToLocation([
+            [121.536609, 25.044808],
+            12.5,
+            0,
+            0,
+          ])
+        "
+      >
+        返回預設
+      </button>
+      <div
+        v-for="(item, index) in mapStore.savedLocations"
+        :key="`${item[4]}-${index}`"
+      >
+        <button @click="mapStore.easeToLocation(item)">
+          {{ item[4] }}
+        </button>
+        <!-- <div
 					class="mapcontainer-controls-delete"
 					@click="mapStore.removeSavedLocation(index)"
 				>
 					<span>delete</span>
 				</div> -->
-			</div>
-			<!-- <input
+      </div>
+      <!-- <input
 				v-if="mapStore.savedLocations.length < 10"
 				type="text"
 				placeholder="新增後按Enter"
@@ -116,8 +116,8 @@ onMounted(() => {
 				@focusout="newSavedLocation = ''"
 				@keypress.enter="handleSubmitNewLocation"
 			/> -->
-		</div>
-	</div>
+    </div>
+  </div>
 </template>
 
 <style scoped lang="scss">

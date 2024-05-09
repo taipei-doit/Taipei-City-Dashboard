@@ -16,6 +16,9 @@ const contentStore = useContentStore();
 const dialogMode = ref("edit");
 
 function parseTime(time) {
+	time = new Date(time);
+	time.setHours(time.getHours() + 8);
+	time = time.toISOString();
 	return time.slice(0, 19).replace("T", " ");
 }
 
@@ -48,94 +51,78 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="admindashboard">
-    <!-- 1. Button to open a dialog to add a new public dashboard -->
-    <div class="admindashboard-control">
-      <button @click="handleAddDashboard">
-        新增公開儀表板
-      </button>
-    </div>
-    <!-- 2. Table to show all public dashboards -->
-    <table class="admindashboard-table">
-      <thead>
-        <tr class="admindashboard-table-header">
-          <TableHeader min-width="80px" />
-          <TableHeader
-            min-width="150px"
-            @sort="handleSort('id')"
-          >
-            Index
-          </TableHeader>
-          <TableHeader min-width="180px">
-            名稱
-          </TableHeader>
-          <TableHeader min-width="480px">
-            組件
-          </TableHeader>
-          <TableHeader min-width="40px">
-            圖示
-          </TableHeader>
-          <TableHeader min-width="200px">
-            上次編輯
-          </TableHeader>
-        </tr>
-      </thead>
-      <!-- 2-1. Dashboards are present -->
-      <tbody v-if="adminStore.dashboards.length !== 0">
-        <tr
-          v-for="dashboard in adminStore.dashboards"
-          :key="dashboard.index"
-        >
-          <td class="admindashboard-table-settings">
-            <button @click="handleOpenSettings(dashboard)">
-              <span>settings</span>
-            </button>
-            <button @click="handleDeleteDashboard(dashboard)">
-              <span>delete</span>
-            </button>
-          </td>
-          <td>{{ dashboard.index }}</td>
-          <td>{{ dashboard.name }}</td>
-          <td>{{ dashboard.components }}</td>
-          <td>
-            <span>{{ dashboard.icon }}</span>
-          </td>
-          <td>{{ parseTime(dashboard.updated_at) }}</td>
-        </tr>
-      </tbody>
-      <!-- 2-2. Dashboards are still loading -->
-      <div
-        v-else-if="contentStore.loading"
-        class="admindashboard-nocontent"
-      >
-        <div class="admindashboard-nocontent-content">
-          <div />
-        </div>
-      </div>
-      <!-- 2-3. An Error occurred -->
-      <div
-        v-else-if="contentStore.error"
-        class="admindashboard-nocontent"
-      >
-        <div class="admindashboard-nocontent-content">
-          <span>sentiment_very_dissatisfied</span>
-          <h2>發生錯誤，無法載入儀表板列表</h2>
-        </div>
-      </div>
-      <!-- 2-4. Dashboards are loaded but there are none -->
-      <div
-        v-else
-        class="admindashboard-nocontent"
-      >
-        <div class="admindashboard-nocontent-content">
-          <span>search_off</span>
-          <h2>查無公開儀表板</h2>
-        </div>
-      </div>
-    </table>
-  </div>
-  <AdminAddEditDashboards :mode="dialogMode" />
-  <AdminDeleteDashboard />
+	<div class="admindashboard">
+		<!-- 1. Button to open a dialog to add a new public dashboard -->
+		<div class="admindashboard-control">
+			<button @click="handleAddDashboard">新增公開儀表板</button>
+		</div>
+		<!-- 2. Table to show all public dashboards -->
+		<table class="admindashboard-table">
+			<thead>
+				<tr class="admindashboard-table-header">
+					<TableHeader min-width="80px" />
+					<TableHeader min-width="150px" @sort="handleSort('id')">
+						Index
+					</TableHeader>
+					<TableHeader min-width="180px"> 名稱 </TableHeader>
+					<TableHeader min-width="480px"> 組件 </TableHeader>
+					<TableHeader min-width="40px"> 圖示 </TableHeader>
+					<TableHeader min-width="200px"> 上次編輯 </TableHeader>
+				</tr>
+			</thead>
+			<!-- 2-1. Dashboards are present -->
+			<tbody v-if="adminStore.dashboards.length !== 0">
+				<tr
+					v-for="dashboard in adminStore.dashboards"
+					:key="dashboard.index"
+				>
+					<td class="admindashboard-table-settings">
+						<button @click="handleOpenSettings(dashboard)">
+							<span>settings</span>
+						</button>
+						<button @click="handleDeleteDashboard(dashboard)">
+							<span>delete</span>
+						</button>
+					</td>
+					<td>{{ dashboard.index }}</td>
+					<td>{{ dashboard.name }}</td>
+					<td>{{ dashboard.components }}</td>
+					<td>
+						<span>{{ dashboard.icon }}</span>
+					</td>
+					<td>{{ parseTime(dashboard.updated_at) }}</td>
+				</tr>
+			</tbody>
+			<!-- 2-2. Dashboards are still loading -->
+			<div
+				v-else-if="contentStore.loading"
+				class="admindashboard-nocontent"
+			>
+				<div class="admindashboard-nocontent-content">
+					<div />
+				</div>
+			</div>
+			<!-- 2-3. An Error occurred -->
+			<div
+				v-else-if="contentStore.error"
+				class="admindashboard-nocontent"
+			>
+				<div class="admindashboard-nocontent-content">
+					<span>sentiment_very_dissatisfied</span>
+					<h2>發生錯誤，無法載入儀表板列表</h2>
+				</div>
+			</div>
+			<!-- 2-4. Dashboards are loaded but there are none -->
+			<div v-else class="admindashboard-nocontent">
+				<div class="admindashboard-nocontent-content">
+					<span>search_off</span>
+					<h2>查無公開儀表板</h2>
+				</div>
+			</div>
+		</table>
+	</div>
+	<AdminAddEditDashboards :mode="dialogMode" />
+	<AdminDeleteDashboard />
 </template>
 
 <style scoped lang="scss">

@@ -34,66 +34,68 @@ function handleClose() {
 </script>
 
 <template>
-	<DialogContainer
-		:dialog="`adminAddEditContributor`"
-		@on-close="handleClose"
-	>
-		<div class="adminaddeditcontributor">
-			<div class="adminaddeditcontributor-header">
-				<h2>
-					{{ props.mode === "edit" ? "設定貢獻者" : "新增貢獻者" }}
-				</h2>
-				<button @click="handleConfirm">
-					{{ props.mode === "edit" ? "確定更改" : "確定新增" }}
-				</button>
-			</div>
-			<div class="adminaddeditcontributor-settings">
-				<div class="adminaddeditcontributor-settings-items">
-					<div class="two-block">
-						<label>貢獻者 ID</label>
-						<label>貢獻者名稱</label>
-					</div>
-					<div class="two-block">
-						<input
-							v-model="currentContributor.user_id"
-							type="text"
-							required
-						/>
-						<input
-							v-model="currentContributor.user_name"
-							type="text"
-							required
-						/>
-					</div>
-					<label>貢獻者照片</label>
-					<input
-						v-model="currentContributor.image"
-						type="text"
-						required
-					/>
-					<label>貢獻者連結</label>
-					<input
-						v-model="currentContributor.link"
-						type="text"
-						required
-					/>
-					<template v-if="props.mode === 'edit'">
-						<label> 最後更新時間 </label>
-						<input
-							:value="parseTime(currentContributor.created_at)"
-							disabled
-						/>
-					</template>
-				</div>
-			</div>
-		</div>
-	</DialogContainer>
+  <DialogContainer
+    :dialog="`adminAddEditContributor`"
+    @on-close="handleClose"
+  >
+    <div
+      class="adminaddeditcontributor"
+      :style="{ height: props.mode === 'edit' ? '290px' : '230px' }"
+    >
+      <div class="adminaddeditcontributor-header">
+        <h2>
+          {{ props.mode === "edit" ? "設定貢獻者" : "新增貢獻者" }}
+        </h2>
+        <button @click="handleConfirm">
+          {{ props.mode === "edit" ? "確定更改" : "確定新增" }}
+        </button>
+      </div>
+      <div class="adminaddeditcontributor-settings">
+        <div class="adminaddeditcontributor-settings-items">
+          <div class="two-block">
+            <label>貢獻者 ID</label>
+            <label>貢獻者名稱</label>
+          </div>
+          <div class="two-block">
+            <input
+              v-model="currentContributor.user_id"
+              type="text"
+              required
+            >
+            <input
+              v-model="currentContributor.user_name"
+              type="text"
+              required
+            >
+          </div>
+          <label>貢獻者照片</label>
+          <input
+            v-model="currentContributor.image"
+            type="text"
+            required
+          >
+          <label>貢獻者連結</label>
+          <input
+            v-model="currentContributor.link"
+            type="text"
+            required
+          >
+          <template v-if="props.mode === 'edit'">
+            <label> 最後更新時間 </label>
+            <input
+              :value="parseTime(currentContributor.created_at)"
+              disabled
+            >
+          </template>
+        </div>
+      </div>
+    </div>
+  </DialogContainer>
 </template>
 
 <style scoped lang="scss">
 .adminaddeditcontributor {
 	width: 350px;
-	height: 300px;
 
 	@media (max-width: 520px) {
 		display: none;

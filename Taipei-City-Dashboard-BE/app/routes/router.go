@@ -134,7 +134,7 @@ func configureContributorRoutes() {
 	contributorRoutes.Use(middleware.IsSysAdm())
 	{
 		contributorRoutes.POST("/", controllers.CreateContributor)
-		contributorRoutes.PUT("/:id", controllers.UpdateContributor)
+		contributorRoutes.PATCH("/:id", controllers.UpdateContributor)
 		contributorRoutes.DELETE("/:id", controllers.DeleteContributor)
 	}
 }

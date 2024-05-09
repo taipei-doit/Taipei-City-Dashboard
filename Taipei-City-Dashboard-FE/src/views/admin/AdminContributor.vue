@@ -30,6 +30,9 @@ const pages = computed(() => {
 });
 
 function parseTime(time) {
+	time = new Date(time);
+	time.setHours(time.getHours() + 8);
+	time = time.toISOString();
 	return time.slice(0, 19).replace("T", " ");
 }
 
@@ -179,32 +182,12 @@ onMounted(() => {
 		column-gap: 0.5rem;
 		margin-bottom: var(--font-ms);
 
-		div {
-			position: relative;
-
-			span {
-				position: absolute;
-				right: 0;
-				top: 0.3rem;
-				margin-right: 4px;
-				color: var(--color-complement-text);
-				font-family: var(--font-icon);
-				font-size: var(--font-m);
-				transition: color 0.2s;
-				cursor: pointer;
-
-				&:hover {
-					color: var(--color-highlight);
-				}
-			}
-		}
-
 		button {
 			display: flex;
 			align-items: center;
 			justify-self: baseline;
 			margin-right: 0.4rem;
-			padding: 0px 4px;
+			padding: 2px 4px;
 			border-radius: 5px;
 			background-color: var(--color-highlight);
 			font-size: var(--font-ms);

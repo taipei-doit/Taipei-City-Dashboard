@@ -199,19 +199,20 @@ onMounted(() => {
 							target="_blank"
 							rel="noreferrer"
 							><img
-								:src="`/images/contributors/${
-									contentStore.contributors[contributor].image
-										? contentStore.contributors[
-												contributor
-												// eslint-disable-next-line no-mixed-spaces-and-tabs
-										  ].image
-										: contributor
-								}.png`"
-								:alt="`協作者-${contentStore.contributors[contributor].name}`"
+								:src="
+									contentStore.contributors[
+										contributor
+									].image.includes('http')
+										? contentStore.contributors[contributor]
+												.image
+										: `/images/contributors/${contentStore.contributors[contributor].image}`
+								"
+								:alt="`協作者-${contentStore.contributors[contributor].user_name}`"
 							/>
 							<p>
 								{{
-									contentStore.contributors[contributor].name
+									contentStore.contributors[contributor]
+										.user_name
 								}}
 							</p>
 						</a>

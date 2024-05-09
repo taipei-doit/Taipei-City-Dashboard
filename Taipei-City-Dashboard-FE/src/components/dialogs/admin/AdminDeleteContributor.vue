@@ -27,26 +27,32 @@ function handleClose() {
 </script>
 
 <template>
-	<DialogContainer dialog="adminDeleteContributor" @on-close="handleClose">
-		<div class="admindeletecontributor">
-			<h2>確定刪除貢獻者嗎？</h2>
-			<div class="admindeletecontributor-input">
-				<label for="name">
-					輸入「{{ currentContributor.user_name }}」刪除
-				</label>
-				<input v-model="deleteConfirm" name="user_name" />
-			</div>
-			<div class="admindeletecontributor-control">
-				<button
-					v-if="deleteConfirm === currentContributor.user_name"
-					class="admindeletecontributor-control-delete"
-					@click="handleDelete"
-				>
-					刪除貢獻者
-				</button>
-			</div>
-		</div>
-	</DialogContainer>
+  <DialogContainer
+    dialog="adminDeleteContributor"
+    @on-close="handleClose"
+  >
+    <div class="admindeletecontributor">
+      <h2>確定刪除貢獻者嗎？</h2>
+      <div class="admindeletecontributor-input">
+        <label for="name">
+          輸入「{{ currentContributor.user_name }}」刪除
+        </label>
+        <input
+          v-model="deleteConfirm"
+          name="user_name"
+        >
+      </div>
+      <div class="admindeletecontributor-control">
+        <button
+          v-if="deleteConfirm === currentContributor.user_name"
+          class="admindeletecontributor-control-delete"
+          @click="handleDelete"
+        >
+          刪除貢獻者
+        </button>
+      </div>
+    </div>
+  </DialogContainer>
 </template>
 
 <style scoped lang="scss">

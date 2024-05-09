@@ -32,6 +32,9 @@ const pages = computed(() => {
 });
 
 function parseTime(time) {
+	time = new Date(time);
+	time.setHours(time.getHours() + 8);
+	time = time.toISOString();
 	return time.slice(0, 19).replace("T", " ");
 }
 

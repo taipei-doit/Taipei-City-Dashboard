@@ -1,4 +1,3 @@
- 
 /* eslint-disable indent */
 
 // Developed by Taipei Urban Intelligence Center 2023-2024
@@ -226,10 +225,18 @@ export const useContentStore = defineStore("content", {
 		},
 		// 5. Call an API to get contributor data (result consists of id, name, link)
 		setContributors() {
-			axios
-				.get(`/dashboards/all_contributors.json`)
+			http.get(`/contributor/`)
 				.then((rs) => {
-					this.contributors = rs.data.data;
+					const contributors = {};
+					rs.data.data.forEach((item) => {
+						contributors[item.user_id] = {
+							user_id: item.user_id,
+							user_name: item.user_name,
+							link: item.link,
+							image: item.image,
+						};
+					});
+					this.contributors = contributors;
 				})
 				.catch((e) => console.error(e));
 		},
