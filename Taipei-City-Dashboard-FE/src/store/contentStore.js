@@ -7,7 +7,6 @@
 The contentStore calls APIs to get content info and stores it.
 */
 import { defineStore } from "pinia";
-import axios from "axios";
 import http from "../router/axios";
 import router from "../router/index";
 import { useDialogStore } from "./dialogStore";
