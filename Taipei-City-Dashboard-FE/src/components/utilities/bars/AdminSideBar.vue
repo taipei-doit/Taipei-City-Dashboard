@@ -75,6 +75,12 @@ onMounted(() => {
       :expanded="isExpanded"
       index="user"
     />
+    <SideBarTab
+      icon="handshake"
+      title="貢獻者資訊"
+      :expanded="isExpanded"
+      index="contributor"
+    />
   </div>
 </template>
 

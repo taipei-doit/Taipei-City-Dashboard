@@ -37,6 +37,7 @@ export const useAuthStore = defineStore("auth", {
 		/* Authentication Functions */
 		// Initial Checks
 		async initialChecks() {
+			const contentStore = useContentStore();
 			// Check if the user is using a mobile device
 			this.checkIfMobile();
 
@@ -50,6 +51,8 @@ export const useAuthStore = defineStore("auth", {
 				this.user = response.data.user;
 				this.editUser = JSON.parse(JSON.stringify(this.user));
 			}
+
+			contentStore.setContributors();
 		},
 		// Email Login
 		async loginByEmail(email, password) {

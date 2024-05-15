@@ -152,15 +152,70 @@ function handleClose() {
             </div>
             <label>資料區間</label>
             <!-- eslint-disable no-mixed-spaces-and-tabs -->
-            <input
-              :value="`${timeTerms[currentComponent.time_from]}${
-                timeTerms[currentComponent.time_to]
-                  ? ' ~ ' +
-                    timeTerms[currentComponent.time_to]
-                  : ''
-              }`"
-              disabled
-            >
+            <div class="three-block">
+              <select
+                v-model="currentComponent.time_from"
+                @change="
+                  () => {
+                    if (
+                      [
+                        'current',
+                        'static',
+                        'demo',
+                        'maintain',
+                      ].includes(
+                        currentComponent.time_from
+                      )
+                    ) {
+                      currentComponent.time_to = '';
+                    } else {
+                      currentComponent.time_to = 'now';
+                    }
+                  }
+                "
+              >
+                <option
+                  v-for="time in [
+                    'current',
+                    'static',
+                    'demo',
+                    'maintain',
+                    'day_start',
+                    'week_start',
+                    'month_start',
+                    'quarter_start',
+                    'year_start',
+                    'day_ago',
+                    'week_ago',
+                    'month_ago',
+                    'quarter_ago',
+                    'halfyear_ago',
+                    'year_ago',
+                  ]"
+                  :key="time"
+                  :value="time"
+                >
+                  {{ timeTerms[time] }}
+                </option>
+              </select>
+              <div
+                :style="{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }"
+              >
+                至
+              </div>
+              <input
+                :value="
+                  currentComponent.time_to === 'now'
+                    ? '現在'
+                    : 'N/A'
+                "
+                :disabled="true"
+              >
+            </div>
             <label required>組件簡述* ({{
               currentComponent.short_desc.length
             }}/50)</label>
@@ -336,9 +391,7 @@ function handleClose() {
             >
             <div v-if="currentComponent.map_config[0] !== null">
               <label>地圖篩選</label>
-              <textarea
-                v-model="currentComponent.map_filter"
-              />
+              <textarea v-model="currentComponent.map_filter" />
             </div>
           </div>
           <div

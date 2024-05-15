@@ -91,17 +91,16 @@ function getLinkTag(link, index) {
                   target="_blank"
                   rel="noreferrer"
                 ><img
-                  :src="`/images/contributors/${
+                  :src="
                     contentStore.contributors[
                       contributor
-                    ].image
+                    ].image.includes('http')
                       ? contentStore.contributors[
                         contributor
-                        // eslint-disable-next-line no-mixed-spaces-and-tabs
                       ].image
-                      : contributor
-                  }.png`"
-                  :alt="`協作者-${contentStore.contributors[contributor].name}`"
+                      : `/images/contributors/${contentStore.contributors[contributor].image}`
+                  "
+                  :alt="`協作者-${contentStore.contributors[contributor].user_name}`"
                 >
                 </a>
               </div>

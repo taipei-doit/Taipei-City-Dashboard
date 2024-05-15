@@ -10,6 +10,7 @@ Testing: Jack Huang (Data Scientist), Ian Huang (Data Analysis Intern)
 
 <script setup>
 import { DashboardComponent } from "city-dashboard-component";
+import router from "../router";
 import { useContentStore } from "../store/contentStore";
 import { useDialogStore } from "../store/dialogStore";
 import { useAuthStore } from "../store/authStore";
@@ -36,6 +37,16 @@ function toggleFavorite(id) {
 		contentStore.favoriteComponent(id);
 	}
 }
+function handleMoreInfo(item) {
+	if (authStore.isMobileDevice && authStore.isNarrowDevice) {
+		router.push({
+			name: "component-info",
+			params: { index: item.index },
+		});
+	} else {
+		dialogStore.showMoreInfo(item);
+	}
+}
 </script>
 
 <template>
@@ -59,7 +70,7 @@ function toggleFavorite(id) {
       "
       @info="
         (item) => {
-          dialogStore.showMoreInfo(item);
+          handleMoreInfo(item);
         }
       "
     />
@@ -93,7 +104,7 @@ function toggleFavorite(id) {
       "
       @info="
         (item) => {
-          dialogStore.showMoreInfo(item);
+          handleMoreInfo(item);
         }
       "
       @delete="

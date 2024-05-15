@@ -11,9 +11,9 @@ import DialogContainer from "../DialogContainer.vue";
 const dialogStore = useDialogStore();
 const adminStore = useAdminStore();
 
-const props = defineProps(["searchParams"]);
+const props = defineProps(["searchParams", "mode"]);
 
-const { currentUser } = storeToRefs(adminStore);
+const { currentContributor } = storeToRefs(adminStore);
 
 function parseTime(time) {
 	time = new Date(time);
@@ -23,7 +23,11 @@ function parseTime(time) {
 }
 
 function handleConfirm() {
-	adminStore.updateUser(props.searchParams);
+	if (props.mode === "add") {
+		adminStore.addContributor(props.searchParams);
+	} else if (props.mode === "edit") {
+		adminStore.updateContributor(props.searchParams);
+	}
 	handleClose();
 }
 
@@ -34,101 +38,82 @@ function handleClose() {
 
 <template>
   <DialogContainer
-    :dialog="`adminEditUser`"
+    :dialog="`adminAddEditContributor`"
     @on-close="handleClose"
   >
-    <div class="adminedituser">
-      <div class="adminedituser-header">
-        <h2>設定用戶</h2>
+    <div
+      class="adminaddeditcontributor"
+      :style="{ height: props.mode === 'edit' ? '400px' : '340px' }"
+    >
+      <div class="adminaddeditcontributor-header">
+        <h2>
+          {{ props.mode === "edit" ? "設定貢獻者" : "新增貢獻者" }}
+        </h2>
         <button @click="handleConfirm">
-          確定更改
+          {{ props.mode === "edit" ? "確定更改" : "確定新增" }}
         </button>
       </div>
-      <div class="adminedituser-settings">
-        <div class="adminedituser-settings-items">
+      <div class="adminaddeditcontributor-settings">
+        <div class="adminaddeditcontributor-settings-items">
           <div class="two-block">
-            <label>用戶名稱</label>
-            <label>用戶 ID</label>
+            <label>貢獻者 ID</label>
+            <label>貢獻者名稱</label>
           </div>
           <div class="two-block">
             <input
-              v-model="currentUser.name"
+              v-model="currentContributor.user_id"
               type="text"
               required
             >
             <input
-              v-model="currentUser.user_id"
+              v-model="currentContributor.user_name"
               type="text"
-              disabled
+              required
             >
           </div>
-          <label>用戶帳號</label>
+          <div class="small-two-block">
+            <label>貢獻者身份</label>
+            <label>貢獻者清單</label>
+          </div>
+          <div class="small-two-block">
+            <input
+              v-model="currentContributor.identity"
+              type="text"
+            >
+            <label class="toggleswitch">
+              <input
+                v-model="currentContributor.include"
+                type="checkbox"
+                @change="handleToggle"
+              >
+              <span class="toggleswitch-slider" />
+            </label>
+          </div>
+          <label>貢獻者照片</label>
           <input
+            v-model="currentContributor.image"
             type="text"
-            :value="
-              currentUser.account
-                ? currentUser.account
-                : currentUser.TpAccount
-            "
-            disabled
+            required
           >
-          <label>用戶身份</label>
-          <div class="toggle">
-            <p>一般用戶</p>
-            <label class="toggleswitch">
-              <input
-                v-model="currentUser.is_admin"
-                type="checkbox"
-                :disabled="shouldDisable"
-                @change="handleToggle"
-              >
-              <span class="toggleswitch-slider" />
-            </label>
-            <p>管理員</p>
-          </div>
-          <div class="two-block">
-            <label>API白名單</label><label>API黑名單</label>
-          </div>
-          <div class="two-block">
-            <label class="toggleswitch">
-              <input
-                v-model="currentUser.is_whitelist"
-                type="checkbox"
-                :disabled="shouldDisable"
-                @change="handleToggle"
-              >
-              <span class="toggleswitch-slider" />
-            </label>
-            <label class="toggleswitch">
-              <input
-                v-model="currentUser.is_blacked"
-                type="checkbox"
-                :disabled="shouldDisable"
-                @change="handleToggle"
-              >
-              <span class="toggleswitch-slider" />
-            </label>
-          </div>
-          <label>啟用狀態</label>
-          <div class="toggle">
-            <p>停用</p>
-            <label class="toggleswitch">
-              <input
-                v-model="currentUser.is_active"
-                type="checkbox"
-                :disabled="shouldDisable"
-                @change="handleToggle"
-              >
-              <span class="toggleswitch-slider" />
-            </label>
-            <p>啟用</p>
-          </div>
-
-          <label> 最近登入時間 </label>
+          <label>貢獻者簡介</label>
           <input
-            :value="parseTime(currentUser.login_at)"
-            disabled
+            v-model="currentContributor.description"
+            type="text"
           >
+          <label>貢獻者連結</label>
+          <input
+            v-model="currentContributor.link"
+            type="text"
+            required
+          >
+
+          <template v-if="props.mode === 'edit'">
+            <label> 最後更新時間 </label>
+            <input
+              :value="parseTime(currentContributor.created_at)"
+              disabled
+            >
+          </template>
         </div>
       </div>
     </div>
@@ -136,9 +121,8 @@ function handleClose() {
 </template>
 
 <style scoped lang="scss">
-.adminedituser {
+.adminaddeditcontributor {
 	width: 350px;
-	height: 400px;
 
 	@media (max-width: 520px) {
 		display: none;
@@ -178,6 +162,11 @@ function handleClose() {
 		.two-block {
 			display: grid;
 			grid-template-columns: 1fr 1fr;
+			column-gap: 0.5rem;
+		}
+		.small-two-block {
+			display: grid;
+			grid-template-columns: 1fr 4rem;
 			column-gap: 0.5rem;
 		}
 		.toggle {
