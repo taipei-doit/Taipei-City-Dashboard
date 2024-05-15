@@ -37,43 +37,49 @@ async function handleSubmit() {
 </script>
 
 <template>
-	<DialogContainer :dialog="`userSettings`" @on-close="handleClose">
-		<div class="usersettings">
-			<h2>用戶設定</h2>
-			<label> 用戶名稱 </label>
-			<input
-				v-model="editUser.name"
-				:minlength="1"
-				:maxlength="10"
-				required
-			/>
-			<label> 用戶帳號 </label>
-			<input
-				:value="
-					editUser.account ? editUser.account : editUser.TpAccount
-				"
-				:minlength="1"
-				disabled
-			/>
-			<label> 用戶類型 </label>
-			<input
-				:value="editUser.is_admin ? '管理員' : '一般用戶'"
-				disabled="true"
-				required
-			/>
-			<label> 最近登入時間 </label>
-			<input :value="parseTime(editUser.login_at)" disabled />
-			<div class="usersettings-control">
-				<button
-					v-if="editUser.name"
-					class="usersettings-control-confirm"
-					@click="handleSubmit"
-				>
-					更改用戶資訊
-				</button>
-			</div>
-		</div>
-	</DialogContainer>
+  <DialogContainer
+    :dialog="`userSettings`"
+    @on-close="handleClose"
+  >
+    <div class="usersettings">
+      <h2>用戶設定</h2>
+      <label> 用戶名稱 </label>
+      <input
+        v-model="editUser.name"
+        :minlength="1"
+        :maxlength="10"
+        required
+      >
+      <label> 用戶帳號 </label>
+      <input
+        :value="
+          editUser.account ? editUser.account : editUser.TpAccount
+        "
+        :minlength="1"
+        disabled
+      >
+      <label> 用戶類型 </label>
+      <input
+        :value="editUser.is_admin ? '管理員' : '一般用戶'"
+        disabled="true"
+        required
+      >
+      <label> 最近登入時間 </label>
+      <input
+        :value="parseTime(editUser.login_at)"
+        disabled
+      >
+      <div class="usersettings-control">
+        <button
+          v-if="editUser.name"
+          class="usersettings-control-confirm"
+          @click="handleSubmit"
+        >
+          更改用戶資訊
+        </button>
+      </div>
+    </div>
+  </DialogContainer>
 </template>
 
 <style scoped lang="scss">

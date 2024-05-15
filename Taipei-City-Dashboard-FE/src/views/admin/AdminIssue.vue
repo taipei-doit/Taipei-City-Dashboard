@@ -78,130 +78,162 @@ onMounted(() => {
 </script>
 
 <template>
-	<div class="adminissue">
-		<!-- 1. Checkboxes to filter through different issue types -->
-		<div class="adminissue-filter">
-			<div v-for="status in statuses" :key="status">
-				<input
-					:id="status"
-					v-model="searchParams.filterbystatus"
-					type="checkbox"
-					class="custom-check-input"
-					:value="status"
-					@change="handleNewQuery"
-				/>
-				<CustomCheckBox :for="status">
-					{{ status }}
-				</CustomCheckBox>
-			</div>
-		</div>
-		<!-- 2. The main table displaying various issues -->
-		<table class="adminissue-table">
-			<thead>
-				<tr class="adminissue-table-header">
-					<TableHeader min-width="60px" />
-					<TableHeader
-						:sort="true"
-						:mode="
-							searchParams.sort === 'id' ? searchParams.order : ''
-						"
-						min-width="40px"
-						@sort="handleSort('id')"
-					>
-						ID
-					</TableHeader>
-					<TableHeader min-width="300px"> 標題 </TableHeader>
-					<TableHeader min-width="350px"> 系統標籤 </TableHeader>
-					<TableHeader min-width="110px"> 狀態 </TableHeader>
-					<TableHeader
-						:sort="true"
-						:mode="
-							searchParams.sort === 'created_at'
-								? searchParams.order
-								: ''
-						"
-						min-width="200px"
-						@sort="handleSort('created_at')"
-					>
-						開立時間
-					</TableHeader>
-					<TableHeader min-width="110px"> 上次編輯人 </TableHeader>
-					<TableHeader
-						:sort="true"
-						:mode="
-							searchParams.sort === 'updated_at'
-								? searchParams.order
-								: ''
-						"
-						min-width="200px"
-						@sort="handleSort('updated_at')"
-					>
-						上次編輯
-					</TableHeader>
-				</tr>
-			</thead>
-			<!-- 2-1. Issues are present -->
-			<tbody v-if="adminStore.issues.length !== 0">
-				<tr
-					v-for="issue in adminStore.issues"
-					:key="`issue-${issue.id}`"
-				>
-					<td class="adminissue-table-settings">
-						<button @click="handleOpenSettings(issue)">
-							<span>edit_note</span>
-						</button>
-					</td>
-					<td>{{ issue.id }}</td>
-					<td>{{ issue.title }}</td>
-					<td>{{ issue.context ? issue.context : "無" }}</td>
-					<td>{{ issue.status }}</td>
-					<td>{{ parseTime(issue.created_at) }}</td>
-					<td>{{ issue.updated_by }}</td>
-					<td>{{ parseTime(issue.updated_at) }}</td>
-				</tr>
-			</tbody>
-			<!-- 2-2. Issues are still loading -->
-			<div v-else-if="contentStore.loading" class="adminissue-nocontent">
-				<div class="adminissue-nocontent-content">
-					<div />
-				</div>
-			</div>
-			<!-- 2-3. An Error occurred -->
-			<div v-else-if="contentStore.error" class="adminissue-nocontent">
-				<div class="adminissue-nocontent-content">
-					<span>sentiment_very_dissatisfied</span>
-					<h2>發生錯誤，無法載入問題列表</h2>
-				</div>
-			</div>
-			<!-- 2-4. Issues are loaded but there are none -->
-			<div v-else class="adminissue-nocontent">
-				<div class="adminissue-nocontent-content">
-					<span>search_off</span>
-					<h2>查無符合篩選條件的問題</h2>
-				</div>
-			</div>
-		</table>
-		<!-- 3. Records per page and pagination control -->
-		<div v-if="adminStore.issues.length !== 0" class="adminissue-control">
-			<label for="pagesize">每頁顯示</label>
-			<select v-model="searchParams.pagesize" @change="handleNewQuery">
-				<option value="10">10</option>
-				<option value="20">20</option>
-				<option value="30">30</option>
-			</select>
-			<div class="adminissue-control-page">
-				<button
-					v-for="page in pages"
-					:key="`component-page-${page}`"
-					:class="{ active: page === searchParams.pagenum }"
-					@click="handleNewPage(page)"
-				>
-					{{ page }}
-				</button>
-			</div>
-		</div>
-		<AdminEditIssue :search-params="searchParams" />
-	</div>
+  <div class="adminissue">
+    <!-- 1. Checkboxes to filter through different issue types -->
+    <div class="adminissue-filter">
+      <div
+        v-for="status in statuses"
+        :key="status"
+      >
+        <input
+          :id="status"
+          v-model="searchParams.filterbystatus"
+          type="checkbox"
+          class="custom-check-input"
+          :value="status"
+          @change="handleNewQuery"
+        >
+        <CustomCheckBox :for="status">
+          {{ status }}
+        </CustomCheckBox>
+      </div>
+    </div>
+    <!-- 2. The main table displaying various issues -->
+    <table class="adminissue-table">
+      <thead>
+        <tr class="adminissue-table-header">
+          <TableHeader min-width="60px" />
+          <TableHeader
+            :sort="true"
+            :mode="
+              searchParams.sort === 'id' ? searchParams.order : ''
+            "
+            min-width="40px"
+            @sort="handleSort('id')"
+          >
+            ID
+          </TableHeader>
+          <TableHeader min-width="300px">
+            標題
+          </TableHeader>
+          <TableHeader min-width="350px">
+            系統標籤
+          </TableHeader>
+          <TableHeader min-width="110px">
+            狀態
+          </TableHeader>
+          <TableHeader
+            :sort="true"
+            :mode="
+              searchParams.sort === 'created_at'
+                ? searchParams.order
+                : ''
+            "
+            min-width="200px"
+            @sort="handleSort('created_at')"
+          >
+            開立時間
+          </TableHeader>
+          <TableHeader min-width="110px">
+            上次編輯人
+          </TableHeader>
+          <TableHeader
+            :sort="true"
+            :mode="
+              searchParams.sort === 'updated_at'
+                ? searchParams.order
+                : ''
+            "
+            min-width="200px"
+            @sort="handleSort('updated_at')"
+          >
+            上次編輯
+          </TableHeader>
+        </tr>
+      </thead>
+      <!-- 2-1. Issues are present -->
+      <tbody v-if="adminStore.issues.length !== 0">
+        <tr
+          v-for="issue in adminStore.issues"
+          :key="`issue-${issue.id}`"
+        >
+          <td class="adminissue-table-settings">
+            <button @click="handleOpenSettings(issue)">
+              <span>edit_note</span>
+            </button>
+          </td>
+          <td>{{ issue.id }}</td>
+          <td>{{ issue.title }}</td>
+          <td>{{ issue.context ? issue.context : "無" }}</td>
+          <td>{{ issue.status }}</td>
+          <td>{{ parseTime(issue.created_at) }}</td>
+          <td>{{ issue.updated_by }}</td>
+          <td>{{ parseTime(issue.updated_at) }}</td>
+        </tr>
+      </tbody>
+      <!-- 2-2. Issues are still loading -->
+      <div
+        v-else-if="contentStore.loading"
+        class="adminissue-nocontent"
+      >
+        <div class="adminissue-nocontent-content">
+          <div />
+        </div>
+      </div>
+      <!-- 2-3. An Error occurred -->
+      <div
+        v-else-if="contentStore.error"
+        class="adminissue-nocontent"
+      >
+        <div class="adminissue-nocontent-content">
+          <span>sentiment_very_dissatisfied</span>
+          <h2>發生錯誤，無法載入問題列表</h2>
+        </div>
+      </div>
+      <!-- 2-4. Issues are loaded but there are none -->
+      <div
+        v-else
+        class="adminissue-nocontent"
+      >
+        <div class="adminissue-nocontent-content">
+          <span>search_off</span>
+          <h2>查無符合篩選條件的問題</h2>
+        </div>
+      </div>
+    </table>
+    <!-- 3. Records per page and pagination control -->
+    <div
+      v-if="adminStore.issues.length !== 0"
+      class="adminissue-control"
+    >
+      <label for="pagesize">每頁顯示</label>
+      <select
+        v-model="searchParams.pagesize"
+        @change="handleNewQuery"
+      >
+        <option value="10">
+          10
+        </option>
+        <option value="20">
+          20
+        </option>
+        <option value="30">
+          30
+        </option>
+      </select>
+      <div class="adminissue-control-page">
+        <button
+          v-for="page in pages"
+          :key="`component-page-${page}`"
+          :class="{ active: page === searchParams.pagenum }"
+          @click="handleNewPage(page)"
+        >
+          {{ page }}
+        </button>
+      </div>
+    </div>
+    <AdminEditIssue :search-params="searchParams" />
+  </div>
 </template>
 
 <style scoped lang="scss">

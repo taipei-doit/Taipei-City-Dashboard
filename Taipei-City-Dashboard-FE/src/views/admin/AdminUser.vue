@@ -75,193 +75,220 @@ onMounted(() => {
 </script>
 
 <template>
-	<div class="adminuser">
-		<!-- 1. Search bar to search users by name or index -->
-		<div class="adminuser-search">
-			<div>
-				<input
-					v-model="searchParams.searchbyname"
-					type="text"
-					placeholder="以用戶名稱搜尋"
-				/>
-				<span
-					v-if="searchParams.searchbyname !== ''"
-					@click="searchParams.searchbyname = ''"
-					>cancel</span
-				>
-			</div>
-			<div>
-				<input
-					v-model="searchParams.searchbyid"
-					type="text"
-					placeholder="以用戶ID搜尋"
-				/>
-				<span
-					v-if="searchParams.searchbyid !== ''"
-					@click="searchParams.searchbyid = ''"
-					>cancel</span
-				>
-			</div>
-			<button @click="handleNewQuery">搜尋</button>
-		</div>
-		<!-- 2. The main table displaying all public users -->
-		<table class="adminuser-table">
-			<thead>
-				<tr class="adminuser-table-header">
-					<TableHeader min-width="60px" />
-					<TableHeader
-						:sort="true"
-						:mode="
-							searchParams.sort === 'id' ? searchParams.order : ''
-						"
-						min-width="40px"
-						@sort="handleSort('id')"
-					>
-						ID
-					</TableHeader>
-					<TableHeader min-width="150px"> 名稱 </TableHeader>
-					<TableHeader min-width="150px"> 帳號 </TableHeader>
-					<TableHeader
-						min-width="100px"
-						:sort="true"
-						:mode="
-							searchParams.sort === 'is_admin'
-								? searchParams.order
-								: ''
-						"
-						@sort="handleSort('is_admin')"
-					>
-						身份
-					</TableHeader>
-					<TableHeader
-						min-width="120px"
-						:sort="true"
-						:mode="
-							searchParams.sort === 'is_whitelist'
-								? searchParams.order
-								: ''
-						"
-						@sort="handleSort('is_whitelist')"
-					>
-						API白名單
-					</TableHeader>
-					<TableHeader
-						min-width="120px"
-						:sort="true"
-						:mode="
-							searchParams.sort === 'is_blacked'
-								? searchParams.order
-								: ''
-						"
-						@sort="handleSort('is_blacked')"
-					>
-						API黑名單 </TableHeader
-					><TableHeader
-						:sort="true"
-						:mode="
-							searchParams.sort === 'login_at'
-								? searchParams.order
-								: ''
-						"
-						min-width="200px"
-						@sort="handleSort('login_at')"
-					>
-						上次登入
-					</TableHeader>
-					<TableHeader
-						min-width="120px"
-						:sort="true"
-						:mode="
-							searchParams.sort === 'is_active'
-								? searchParams.order
-								: ''
-						"
-						@sort="handleSort('is_active')"
-					>
-						啟用狀態
-					</TableHeader>
-					<TableHeader min-width="200px"> 停用時間 </TableHeader>
-				</tr>
-			</thead>
-			<!-- 2-1. users are present -->
-			<tbody v-if="adminStore.users.length !== 0">
-				<tr v-for="user in adminStore.users" :key="`user-${user.id}`">
-					<td class="adminuser-table-settings">
-						<button @click="handleOpenSettings(user)">
-							<span>settings</span>
-						</button>
-					</td>
-					<td>{{ user.user_id }}</td>
-					<td>{{ user.name }}</td>
-					<td>{{ user.account ? user.account : user.TpAccount }}</td>
-					<td>{{ user.is_admin ? "管理員" : "一般用戶" }}</td>
-					<td>
-						<span>{{
-							user.is_whitelist ? "check_circle" : "cancel"
-						}}</span>
-					</td>
-					<td>
-						<span>{{
-							user.is_blacked ? "check_circle" : "cancel"
-						}}</span>
-					</td>
-					<td>{{ parseTime(user.login_at) }}</td>
-					<td>
-						<span>{{
-							user.is_active ? "check_circle" : "cancel"
-						}}</span>
-					</td>
-					<td>
-						{{
-							user.expired_at && !user.is_active
-								? parseTime(user.expired_at)
-								: "未被停用"
-						}}
-					</td>
-				</tr>
-			</tbody>
-			<!-- 2-2. users are still loading -->
-			<div v-else-if="contentStore.loading" class="adminuser-nocontent">
-				<div class="adminuser-nocontent-content">
-					<div />
-				</div>
-			</div>
-			<!-- 2-3. An Error occurred -->
-			<div v-else-if="contentStore.error" class="adminuser-nocontent">
-				<div class="adminuser-nocontent-content">
-					<span>sentiment_very_dissatisfied</span>
-					<h2>發生錯誤，無法載入用戶列表</h2>
-				</div>
-			</div>
-			<!-- 2-4. users are loaded but there are none -->
-			<div v-else class="adminuser-nocontent">
-				<div class="adminuser-nocontent-content">
-					<span>search_off</span>
-					<h2>查無符合篩選條件的用戶</h2>
-				</div>
-			</div>
-		</table>
-		<!-- 3. Records per page and pagination control -->
-		<div class="adminuser-control">
-			<label for="pagesize">每頁顯示</label>
-			<select v-model="searchParams.pagesize" @change="handleNewQuery">
-				<option value="10">10</option>
-				<option value="20">20</option>
-				<option value="30">30</option>
-			</select>
-			<div class="adminuser-control-page">
-				<button
-					v-for="page in pages"
-					:key="`user-page-${page}`"
-					:class="{ active: page === searchParams.pagenum }"
-					@click="handleNewPage(page)"
-				>
-					{{ page }}
-				</button>
-			</div>
-		</div>
-		<AdminEditUser :search-params="searchParams" />
-	</div>
+  <div class="adminuser">
+    <!-- 1. Search bar to search users by name or index -->
+    <div class="adminuser-search">
+      <div>
+        <input
+          v-model="searchParams.searchbyname"
+          type="text"
+          placeholder="以用戶名稱搜尋"
+        >
+        <span
+          v-if="searchParams.searchbyname !== ''"
+          @click="searchParams.searchbyname = ''"
+        >cancel</span>
+      </div>
+      <div>
+        <input
+          v-model="searchParams.searchbyid"
+          type="text"
+          placeholder="以用戶ID搜尋"
+        >
+        <span
+          v-if="searchParams.searchbyid !== ''"
+          @click="searchParams.searchbyid = ''"
+        >cancel</span>
+      </div>
+      <button @click="handleNewQuery">
+        搜尋
+      </button>
+    </div>
+    <!-- 2. The main table displaying all public users -->
+    <table class="adminuser-table">
+      <thead>
+        <tr class="adminuser-table-header">
+          <TableHeader min-width="60px" />
+          <TableHeader
+            :sort="true"
+            :mode="
+              searchParams.sort === 'id' ? searchParams.order : ''
+            "
+            min-width="40px"
+            @sort="handleSort('id')"
+          >
+            ID
+          </TableHeader>
+          <TableHeader min-width="150px">
+            名稱
+          </TableHeader>
+          <TableHeader min-width="150px">
+            帳號
+          </TableHeader>
+          <TableHeader
+            min-width="100px"
+            :sort="true"
+            :mode="
+              searchParams.sort === 'is_admin'
+                ? searchParams.order
+                : ''
+            "
+            @sort="handleSort('is_admin')"
+          >
+            身份
+          </TableHeader>
+          <TableHeader
+            min-width="120px"
+            :sort="true"
+            :mode="
+              searchParams.sort === 'is_whitelist'
+                ? searchParams.order
+                : ''
+            "
+            @sort="handleSort('is_whitelist')"
+          >
+            API白名單
+          </TableHeader>
+          <TableHeader
+            min-width="120px"
+            :sort="true"
+            :mode="
+              searchParams.sort === 'is_blacked'
+                ? searchParams.order
+                : ''
+            "
+            @sort="handleSort('is_blacked')"
+          >
+            API黑名單
+          </TableHeader><TableHeader
+            :sort="true"
+            :mode="
+              searchParams.sort === 'login_at'
+                ? searchParams.order
+                : ''
+            "
+            min-width="200px"
+            @sort="handleSort('login_at')"
+          >
+            上次登入
+          </TableHeader>
+          <TableHeader
+            min-width="120px"
+            :sort="true"
+            :mode="
+              searchParams.sort === 'is_active'
+                ? searchParams.order
+                : ''
+            "
+            @sort="handleSort('is_active')"
+          >
+            啟用狀態
+          </TableHeader>
+          <TableHeader min-width="200px">
+            停用時間
+          </TableHeader>
+        </tr>
+      </thead>
+      <!-- 2-1. users are present -->
+      <tbody v-if="adminStore.users.length !== 0">
+        <tr
+          v-for="user in adminStore.users"
+          :key="`user-${user.id}`"
+        >
+          <td class="adminuser-table-settings">
+            <button @click="handleOpenSettings(user)">
+              <span>settings</span>
+            </button>
+          </td>
+          <td>{{ user.user_id }}</td>
+          <td>{{ user.name }}</td>
+          <td>{{ user.account ? user.account : user.TpAccount }}</td>
+          <td>{{ user.is_admin ? "管理員" : "一般用戶" }}</td>
+          <td>
+            <span>{{
+              user.is_whitelist ? "check_circle" : "cancel"
+            }}</span>
+          </td>
+          <td>
+            <span>{{
+              user.is_blacked ? "check_circle" : "cancel"
+            }}</span>
+          </td>
+          <td>{{ parseTime(user.login_at) }}</td>
+          <td>
+            <span>{{
+              user.is_active ? "check_circle" : "cancel"
+            }}</span>
+          </td>
+          <td>
+            {{
+              user.expired_at && !user.is_active
+                ? parseTime(user.expired_at)
+                : "未被停用"
+            }}
+          </td>
+        </tr>
+      </tbody>
+      <!-- 2-2. users are still loading -->
+      <div
+        v-else-if="contentStore.loading"
+        class="adminuser-nocontent"
+      >
+        <div class="adminuser-nocontent-content">
+          <div />
+        </div>
+      </div>
+      <!-- 2-3. An Error occurred -->
+      <div
+        v-else-if="contentStore.error"
+        class="adminuser-nocontent"
+      >
+        <div class="adminuser-nocontent-content">
+          <span>sentiment_very_dissatisfied</span>
+          <h2>發生錯誤，無法載入用戶列表</h2>
+        </div>
+      </div>
+      <!-- 2-4. users are loaded but there are none -->
+      <div
+        v-else
+        class="adminuser-nocontent"
+      >
+        <div class="adminuser-nocontent-content">
+          <span>search_off</span>
+          <h2>查無符合篩選條件的用戶</h2>
+        </div>
+      </div>
+    </table>
+    <!-- 3. Records per page and pagination control -->
+    <div class="adminuser-control">
+      <label for="pagesize">每頁顯示</label>
+      <select
+        v-model="searchParams.pagesize"
+        @change="handleNewQuery"
+      >
+        <option value="10">
+          10
+        </option>
+        <option value="20">
+          20
+        </option>
+        <option value="30">
+          30
+        </option>
+      </select>
+      <div class="adminuser-control-page">
+        <button
+          v-for="page in pages"
+          :key="`user-page-${page}`"
+          :class="{ active: page === searchParams.pagenum }"
+          @click="handleNewPage(page)"
+        >
+          {{ page }}
+        </button>
+      </div>
+    </div>
+    <AdminEditUser :search-params="searchParams" />
+  </div>
 </template>
 
 <style scoped lang="scss">

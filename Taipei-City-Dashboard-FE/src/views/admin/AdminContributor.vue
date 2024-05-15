@@ -74,98 +74,124 @@ onMounted(() => {
 </script>
 
 <template>
-	<div class="admincontributor">
-		<!-- 1. Search bar to search contributors by name or index -->
-		<div class="admincontributor-bar">
-			<button @click="handleAddContributor">新增貢獻者</button>
-		</div>
-		<!-- 2. The main table displaying all contributors -->
-		<table class="admincontributor-table">
-			<thead>
-				<tr class="admincontributor-table-header">
-					<TableHeader min-width="60px" />
-					<TableHeader min-width="60px"> ID </TableHeader>
-					<TableHeader min-width="150px"> 名稱 </TableHeader>
-					<TableHeader min-width="150px"> 圖片 </TableHeader>
-					<TableHeader min-width="200px"> 連結 </TableHeader>
-					<TableHeader min-width="200px"> 建立時間 </TableHeader>
-					<TableHeader min-width="200px"> 更新時間 </TableHeader>
-				</tr>
-			</thead>
-			<!-- 2-1. contributors are present -->
-			<tbody v-if="adminStore.contributors.length !== 0">
-				<tr
-					v-for="contributor in adminStore.contributors"
-					:key="`contributor-${contributor.id}`"
-				>
-					<td class="admincontributor-table-settings">
-						<button @click="handleOpenSettings(contributor)">
-							<span>settings</span>
-						</button>
-						<button @click="handleDeleteContributor(contributor)">
-							<span>delete</span>
-						</button>
-					</td>
-					<td>{{ contributor.user_id }}</td>
-					<td>{{ contributor.user_name }}</td>
-					<td>{{ contributor.image }}</td>
-					<td>{{ contributor.link }}</td>
-					<td>{{ parseTime(contributor.created_at) }}</td>
-					<td>{{ parseTime(contributor.updated_at) }}</td>
-				</tr>
-			</tbody>
-			<!-- 2-2. contributors are still loading -->
-			<div
-				v-else-if="contentStore.loading"
-				class="admincontributor-nocontent"
-			>
-				<div class="admincontributor-nocontent-content">
-					<div />
-				</div>
-			</div>
-			<!-- 2-3. An Error occurred -->
-			<div
-				v-else-if="contentStore.error"
-				class="admincontributor-nocontent"
-			>
-				<div class="admincontributor-nocontent-content">
-					<span>sentiment_very_dissatisfied</span>
-					<h2>發生錯誤，無法載入貢獻者列表</h2>
-				</div>
-			</div>
-			<!-- 2-4. contributors are loaded but there are none -->
-			<div v-else class="admincontributor-nocontent">
-				<div class="admincontributor-nocontent-content">
-					<span>search_off</span>
-					<h2>查無符合篩選條件的貢獻者</h2>
-				</div>
-			</div>
-		</table>
-		<!-- 3. Records per page and pagination control -->
-		<div class="admincontributor-control">
-			<label for="pagesize">每頁顯示</label>
-			<select v-model="searchParams.pagesize" @change="handleNewQuery">
-				<option value="10">10</option>
-				<option value="20">20</option>
-				<option value="30">30</option>
-			</select>
-			<div class="admincontributor-control-page">
-				<button
-					v-for="page in pages"
-					:key="`contributor-page-${page}`"
-					:class="{ active: page === searchParams.pagenum }"
-					@click="handleNewPage(page)"
-				>
-					{{ page }}
-				</button>
-			</div>
-		</div>
-		<AdminAddEditContributor
-			:mode="dialogMode"
-			:search-params="searchParams"
-		/>
-		<AdminDeleteContributor :search-params="searchParams" />
-	</div>
+  <div class="admincontributor">
+    <!-- 1. Search bar to search contributors by name or index -->
+    <div class="admincontributor-bar">
+      <button @click="handleAddContributor">
+        新增貢獻者
+      </button>
+    </div>
+    <!-- 2. The main table displaying all contributors -->
+    <table class="admincontributor-table">
+      <thead>
+        <tr class="admincontributor-table-header">
+          <TableHeader min-width="60px" />
+          <TableHeader min-width="60px">
+            ID
+          </TableHeader>
+          <TableHeader min-width="150px">
+            名稱
+          </TableHeader>
+          <TableHeader min-width="150px">
+            圖片
+          </TableHeader>
+          <TableHeader min-width="200px">
+            連結
+          </TableHeader>
+          <TableHeader min-width="200px">
+            建立時間
+          </TableHeader>
+          <TableHeader min-width="200px">
+            更新時間
+          </TableHeader>
+        </tr>
+      </thead>
+      <!-- 2-1. contributors are present -->
+      <tbody v-if="adminStore.contributors.length !== 0">
+        <tr
+          v-for="contributor in adminStore.contributors"
+          :key="`contributor-${contributor.id}`"
+        >
+          <td class="admincontributor-table-settings">
+            <button @click="handleOpenSettings(contributor)">
+              <span>settings</span>
+            </button>
+            <button @click="handleDeleteContributor(contributor)">
+              <span>delete</span>
+            </button>
+          </td>
+          <td>{{ contributor.user_id }}</td>
+          <td>{{ contributor.user_name }}</td>
+          <td>{{ contributor.image }}</td>
+          <td>{{ contributor.link }}</td>
+          <td>{{ parseTime(contributor.created_at) }}</td>
+          <td>{{ parseTime(contributor.updated_at) }}</td>
+        </tr>
+      </tbody>
+      <!-- 2-2. contributors are still loading -->
+      <div
+        v-else-if="contentStore.loading"
+        class="admincontributor-nocontent"
+      >
+        <div class="admincontributor-nocontent-content">
+          <div />
+        </div>
+      </div>
+      <!-- 2-3. An Error occurred -->
+      <div
+        v-else-if="contentStore.error"
+        class="admincontributor-nocontent"
+      >
+        <div class="admincontributor-nocontent-content">
+          <span>sentiment_very_dissatisfied</span>
+          <h2>發生錯誤，無法載入貢獻者列表</h2>
+        </div>
+      </div>
+      <!-- 2-4. contributors are loaded but there are none -->
+      <div
+        v-else
+        class="admincontributor-nocontent"
+      >
+        <div class="admincontributor-nocontent-content">
+          <span>search_off</span>
+          <h2>查無符合篩選條件的貢獻者</h2>
+        </div>
+      </div>
+    </table>
+    <!-- 3. Records per page and pagination control -->
+    <div class="admincontributor-control">
+      <label for="pagesize">每頁顯示</label>
+      <select
+        v-model="searchParams.pagesize"
+        @change="handleNewQuery"
+      >
+        <option value="10">
+          10
+        </option>
+        <option value="20">
+          20
+        </option>
+        <option value="30">
+          30
+        </option>
+      </select>
+      <div class="admincontributor-control-page">
+        <button
+          v-for="page in pages"
+          :key="`contributor-page-${page}`"
+          :class="{ active: page === searchParams.pagenum }"
+          @click="handleNewPage(page)"
+        >
+          {{ page }}
+        </button>
+      </div>
+    </div>
+    <AdminAddEditContributor
+      :mode="dialogMode"
+      :search-params="searchParams"
+    />
+    <AdminDeleteContributor :search-params="searchParams" />
+  </div>
 </template>
 
 <style scoped lang="scss">

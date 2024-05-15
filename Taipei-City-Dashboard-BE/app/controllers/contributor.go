@@ -15,10 +15,10 @@ GET /api/v1/contributor
 */
 func GetAllContributors(c *gin.Context) {
 	type contributorQuery struct {
-		PageSize       int    `form:"pagesize"`
-		PageNum        int    `form:"pagenum"`
-		Sort           string `form:"sort"`
-		Order          string `form:"order"`
+		PageSize int    `form:"pagesize"`
+		PageNum  int    `form:"pagenum"`
+		Sort     string `form:"sort"`
+		Order    string `form:"order"`
 	}
 
 	// Get query parameters
@@ -52,7 +52,7 @@ func CreateContributor(c *gin.Context) {
 		return
 	}
 
-	contributor, err := models.CreateContributor(contributor.UserID, contributor.UserName, contributor.Image, contributor.Link)
+	contributor, err := models.CreateContributor(contributor.UserID, contributor.UserName, contributor.Image, contributor.Link, contributor.Identity, contributor.Description, contributor.Include)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": err.Error()})
 		return
@@ -87,7 +87,7 @@ func UpdateContributor(c *gin.Context) {
 	}
 
 	// 3. Update the contributor
-	contributor, err = models.UpdateContributor(ID, contributor.UserID, contributor.UserName, contributor.Image, contributor.Link)
+	contributor, err = models.UpdateContributor(ID, contributor.UserID, contributor.UserName, contributor.Image, contributor.Link, contributor.Identity, contributor.Description, contributor.Include)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update contributor"})
 		return

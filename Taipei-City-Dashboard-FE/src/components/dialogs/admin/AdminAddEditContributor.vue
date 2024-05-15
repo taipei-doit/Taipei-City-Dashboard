@@ -16,6 +16,9 @@ const props = defineProps(["searchParams", "mode"]);
 const { currentContributor } = storeToRefs(adminStore);
 
 function parseTime(time) {
+	time = new Date(time);
+	time.setHours(time.getHours() + 8);
+	time = time.toISOString();
 	return time.slice(0, 19).replace("T", " ");
 }
 
@@ -40,7 +43,7 @@ function handleClose() {
   >
     <div
       class="adminaddeditcontributor"
-      :style="{ height: props.mode === 'edit' ? '290px' : '230px' }"
+      :style="{ height: props.mode === 'edit' ? '400px' : '340px' }"
     >
       <div class="adminaddeditcontributor-header">
         <h2>
@@ -68,11 +71,34 @@ function handleClose() {
               required
             >
           </div>
+          <div class="small-two-block">
+            <label>貢獻者身份</label>
+            <label>貢獻者清單</label>
+          </div>
+          <div class="small-two-block">
+            <input
+              v-model="currentContributor.identity"
+              type="text"
+            >
+            <label class="toggleswitch">
+              <input
+                v-model="currentContributor.include"
+                type="checkbox"
+                @change="handleToggle"
+              >
+              <span class="toggleswitch-slider" />
+            </label>
+          </div>
           <label>貢獻者照片</label>
           <input
             v-model="currentContributor.image"
             type="text"
             required
+          >
+          <label>貢獻者簡介</label>
+          <input
+            v-model="currentContributor.description"
+            type="text"
           >
           <label>貢獻者連結</label>
           <input
@@ -80,6 +106,7 @@ function handleClose() {
             type="text"
             required
           >
+
           <template v-if="props.mode === 'edit'">
             <label> 最後更新時間 </label>
             <input
@@ -135,6 +162,11 @@ function handleClose() {
 		.two-block {
 			display: grid;
 			grid-template-columns: 1fr 1fr;
+			column-gap: 0.5rem;
+		}
+		.small-two-block {
+			display: grid;
+			grid-template-columns: 1fr 4rem;
 			column-gap: 0.5rem;
 		}
 		.toggle {

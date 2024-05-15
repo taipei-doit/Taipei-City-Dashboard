@@ -229,10 +229,14 @@ export const useContentStore = defineStore("content", {
 					const contributors = {};
 					rs.data.data.forEach((item) => {
 						contributors[item.user_id] = {
+							id: item.id,
 							user_id: item.user_id,
 							user_name: item.user_name,
 							link: item.link,
 							image: item.image,
+							description: item.description,
+							identity: item.identity,
+							include: item.include,
 						};
 					});
 					this.contributors = contributors;
