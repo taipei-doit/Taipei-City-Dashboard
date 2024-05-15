@@ -66,9 +66,9 @@ export const useContentStore = defineStore("content", {
 			}
 			this.currentDashboard.index = index;
 			// 1-2. If there is no contributor info, call the setContributors method (5.)
-			if (Object.keys(this.contributors).length === 0) {
-				this.setContributors();
-			}
+			// if (Object.keys(this.contributors).length === 0) {
+			// 	this.setContributors();
+			// }
 			// 1-3. If there is no dashboards info, call the setDashboards method (2.)
 			if (this.publicDashboards.length === 0) {
 				this.setDashboards();
