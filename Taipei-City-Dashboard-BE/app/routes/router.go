@@ -127,7 +127,6 @@ func configureContributorRoutes() {
 	contributorRoutes := RouterGroup.Group("/contributor")
 	contributorRoutes.Use(middleware.LimitAPIRequests(global.ContributorLimitAPIRequestsTimes, global.LimitRequestsDuration))
 	contributorRoutes.Use(middleware.LimitTotalRequests(global.ContributorLimitTotalRequestsTimes, global.TokenExpirationDuration))
-	contributorRoutes.Use(middleware.IsLoggedIn())
 	{
 		contributorRoutes.GET("/", controllers.GetAllContributors)
 	}
