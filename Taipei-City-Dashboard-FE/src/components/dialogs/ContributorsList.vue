@@ -26,7 +26,7 @@ function handleSelectContributor(contributor) {
 
 function handleClose() {
 	currentContributor.value = null;
-	dialogStore.hideAllDialogs();
+	dialogStore.dialogs.contributorsList = false;
 }
 </script>
 
