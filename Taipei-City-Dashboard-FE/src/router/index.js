@@ -114,7 +114,11 @@ router.beforeEach((to) => {
 router.beforeEach((to) => {
 	const authStore = useAuthStore();
 	if (authStore.isMobileDevice && authStore.isNarrowDevice) {
-		if (!["dashboard", "component-info", "callback"].includes(to.name)) {
+		if (
+			!["dashboard", "component-info", "callback", "embed"].includes(
+				to.name
+			)
+		) {
 			router.push("/dashboard");
 		}
 	} else if (authStore.token) {
