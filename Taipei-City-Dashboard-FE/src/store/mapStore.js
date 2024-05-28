@@ -55,6 +55,8 @@ export const useMapStore = defineStore("map", {
 		savedLocations: savedLocations,
 		// Store currently loading layers,
 		loadingLayers: [],
+		// Store the user's current location,
+		userLocation: { latitude: null, longitude: null },
 	}),
 	getters: {},
 	actions: {
@@ -849,6 +851,25 @@ export const useMapStore = defineStore("map", {
 			this.map = null;
 			this.currentVisibleLayers = [];
 			this.removePopup();
+		},
+
+		// preserve some user's geolocation info
+		setCurrentLocation() {
+			if (navigator.geolocation) {
+				navigator.geolocation.getCurrentPosition(
+					(position) => {
+						this.userLocation = {
+							latitude: position.coords.latitude,
+							longitude: position.coords.longitude,
+						};
+					},
+					(error) => {
+						console.error(error.message);
+					}
+				);
+			} else {
+				console.error("Geolocation is not supported by this browser.");
+			}
 		},
 	},
 });
