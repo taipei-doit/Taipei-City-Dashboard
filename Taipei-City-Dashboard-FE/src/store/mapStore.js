@@ -13,6 +13,7 @@ import mapboxGl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import axios from "axios";
 import { Threebox } from "threebox-plugin";
+import { calculateHaversineDistance } from "../assets/utilityFunctions/calculateHaversineDistance";
 
 // Other Stores
 import { useAuthStore } from "./authStore";
@@ -58,7 +59,13 @@ export const useMapStore = defineStore("map", {
 		// Store the user's current location,
 		userLocation: { latitude: null, longitude: null },
 	}),
-	getters: {},
+	getters: {
+		getSourceByMapConfigId: (state) => {
+			return (mapConfigId) => {
+				return state.map.getSource(`${mapConfigId}-source`)._data;
+			};
+		},
+	},
 	actions: {
 		/* Initialize Mapbox */
 		// 1. Creates the mapbox instance and passes in initial configs
@@ -647,6 +654,16 @@ export const useMapStore = defineStore("map", {
 			}
 			this.popup = null;
 		},
+		// 3. programmatically trigger the popup, instead of user click
+		manualTriggerPopup() {
+			const center = this.map.getCenter();
+			const point = this.map.project(center);
+
+			this.addPopup({
+				point: point,
+				lngLat: center,
+			});
+		},
 
 		/* Functions that change the viewing experience of the map */
 		// 1. Add new saved location that users can quickly zoom to
@@ -870,6 +887,85 @@ export const useMapStore = defineStore("map", {
 			} else {
 				console.error("Geolocation is not supported by this browser.");
 			}
+		},
+		findClosestLocation(userCoords, locations) {
+			// Check if userCoords has valid latitude and longitude
+			if (
+				!userCoords ||
+				typeof userCoords.latitude !== "number" ||
+				typeof userCoords.longitude !== "number"
+			) {
+				throw new Error("Invalid user coordinates");
+			}
+
+			let minDistance = Infinity;
+			let closestLocation = null;
+
+			for (let location of locations) {
+				try {
+					// Check if location, location.geometry, and location.geometry.coordinates are valid
+					if (
+						!location ||
+						!location.geometry ||
+						!Array.isArray(location.geometry.coordinates)
+					) {
+						continue; // Skip this location if any of these are invalid
+					}
+					const [lon, lat] = location.geometry.coordinates;
+
+					// Check if longitude and latitude are valid numbers
+					if (typeof lon !== "number" || typeof lat !== "number") {
+						continue; // Skip this location if coordinates are not numbers
+					}
+
+					// Calculate the Haversine distance
+					const distance = calculateHaversineDistance(
+						{
+							latitude: userCoords.latitude,
+							longitude: userCoords.longitude,
+						},
+						{ latitude: lat, longitude: lon }
+					);
+
+					// Update the closest location if the current distance is smaller
+					if (distance < minDistance) {
+						minDistance = distance;
+						closestLocation = location;
+					}
+				} catch (e) {
+					// Catch and log any errors during processing
+					console.error(
+						`Error processing location: ${JSON.stringify(
+							location
+						)}`,
+						e
+					);
+				}
+			}
+			return closestLocation;
+		},
+		flyToClosestLocationAndTriggerPopup() {
+			// make sure this.userLocation is not null before call findClosestLocation
+			const res = this.findClosestLocation(
+				{
+					longitude: this.userLocation.longitude,
+					latitude: this.userLocation.latitude,
+				},
+
+				{
+					...this.getSourceByMapConfigId(
+						`${
+							this.mapConfigs[this.currentVisibleLayers].index
+						}-circle`
+					),
+				}.features
+			);
+
+			this.map.once("moveend", () => {
+				this.manualTriggerPopup();
+			});
+
+			this.flyToLocation(res.geometry.coordinates);
 		},
 	},
 });

@@ -1,7 +1,9 @@
 <!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, computed } from "vue";
+import { storeToRefs } from "pinia";
+
 import { useMapStore } from "../../store/mapStore";
 import { useDialogStore } from "../../store/dialogStore";
 import { useContentStore } from "../../store/contentStore";
@@ -9,11 +11,20 @@ import { useContentStore } from "../../store/contentStore";
 import MobileLayers from "../dialogs/MobileLayers.vue";
 
 const mapStore = useMapStore();
+const { getSourceByMapConfigId } = storeToRefs(mapStore);
 const dialogStore = useDialogStore();
 const contentStore = useContentStore();
 
 const districtLayer = ref(false);
 const villageLayer = ref(false);
+
+const mapConfigsLength = computed(
+	() => Object.keys(mapStore.currentVisibleLayers).length
+);
+const currentVisibleLayerKey = computed(() => mapStore.currentVisibleLayers);
+const mapConfigs = computed(() => {
+	return mapStore.mapConfigs;
+});
 
 // const newSavedLocation = ref("");
 
@@ -34,6 +45,7 @@ function toggleVillageLayer() {
 
 onMounted(() => {
 	mapStore.initializeMapBox();
+	mapStore.setCurrentLocation();
 });
 </script>
 
@@ -68,6 +80,23 @@ onMounted(() => {
           @click="toggleVillageLayer"
         >
           里
+        </button>
+
+        <button
+          v-if="
+            mapConfigsLength === 1 &&
+              mapConfigs[currentVisibleLayerKey ?? '']?.type ===
+              'circle'
+          "
+          :style="{
+            color: villageLayer
+              ? 'var(--color-highlight)'
+              : 'var(--color-component-background)',
+          }"
+          type="button"
+          @click="mapStore.flyToClosestLocationAndTriggerPopup"
+        >
+          近
         </button>
         <button
           class="show-if-mobile"
