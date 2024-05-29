@@ -10,8 +10,6 @@ import { useContentStore } from "../../store/contentStore";
 
 import MobileLayers from "../dialogs/MobileLayers.vue";
 
-import { calculateHaversineDistance } from "../../assets/utilityFunctions/calculateHaversineDistance";
-
 const mapStore = useMapStore();
 const { getSourceByMapConfigId } = storeToRefs(mapStore);
 const dialogStore = useDialogStore();
@@ -43,61 +41,6 @@ function toggleDistrictLayer() {
 function toggleVillageLayer() {
 	villageLayer.value = !villageLayer.value;
 	mapStore.toggleVillageBoundaries(villageLayer.value);
-}
-
-function findClosestLocation(userCoords, locations) {
-	// Check if userCoords has valid latitude and longitude
-	if (
-		!userCoords ||
-		typeof userCoords.latitude !== "number" ||
-		typeof userCoords.longitude !== "number"
-	) {
-		throw new Error("Invalid user coordinates");
-	}
-
-	let minDistance = Infinity;
-	let closestLocation = null;
-
-	for (let location of locations) {
-		try {
-			// Check if location, location.geometry, and location.geometry.coordinates are valid
-			if (
-				!location ||
-				!location.geometry ||
-				!Array.isArray(location.geometry.coordinates)
-			) {
-				continue; // Skip this location if any of these are invalid
-			}
-			const [lon, lat] = location.geometry.coordinates;
-
-			// Check if longitude and latitude are valid numbers
-			if (typeof lon !== "number" || typeof lat !== "number") {
-				continue; // Skip this location if coordinates are not numbers
-			}
-
-			// Calculate the Haversine distance
-			const distance = calculateHaversineDistance(
-				{
-					latitude: userCoords.latitude,
-					longitude: userCoords.longitude,
-				},
-				{ latitude: lat, longitude: lon }
-			);
-
-			// Update the closest location if the current distance is smaller
-			if (distance < minDistance) {
-				minDistance = distance;
-				closestLocation = location;
-			}
-		} catch (e) {
-			// Catch and log any errors during processing
-			console.error(
-				`Error processing location: ${JSON.stringify(location)}`,
-				e
-			);
-		}
-	}
-	return closestLocation;
 }
 
 onMounted(() => {
@@ -151,28 +94,7 @@ onMounted(() => {
               : 'var(--color-component-background)',
           }"
           type="button"
-          @click="
-            () => {
-              const res = findClosestLocation(
-                {
-                  longitude: mapStore.userLocation.longitude,
-                  latitude: mapStore.userLocation.latitude,
-                },
-
-                {
-                  ...getSourceByMapConfigId(
-                    `${mapConfigs[currentVisibleLayerKey].index}-circle`
-                  ),
-                }.features
-              );
-
-              mapStore.map.once('moveend', () => {
-                mapStore.manualTriggerPopup();
-              });
-
-              mapStore.flyToLocation(res.geometry.coordinates);
-            }
-          "
+          @click="mapStore.flyToClosestLocationAndTriggerPopup"
         >
           近
         </button>
