@@ -58,7 +58,13 @@ export const useMapStore = defineStore("map", {
 		// Store the user's current location,
 		userLocation: { latitude: null, longitude: null },
 	}),
-	getters: {},
+	getters: {
+		getSourceByMapConfigId: (state) => {
+			return (mapConfigId) => {
+				return state.map.getSource(`${mapConfigId}-source`)._data;
+			};
+		},
+	},
 	actions: {
 		/* Initialize Mapbox */
 		// 1. Creates the mapbox instance and passes in initial configs
@@ -646,6 +652,16 @@ export const useMapStore = defineStore("map", {
 				this.popup.remove();
 			}
 			this.popup = null;
+		},
+		// 3. programmatically trigger the popup, instead of user click
+		manualTriggerPopup() {
+			const center = this.map.getCenter();
+			const point = this.map.project(center);
+
+			this.addPopup({
+				point: point,
+				lngLat: center,
+			});
 		},
 
 		/* Functions that change the viewing experience of the map */
