@@ -1,19 +1,32 @@
 <!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, computed } from "vue";
+import { storeToRefs } from "pinia";
+
 import { useMapStore } from "../../store/mapStore";
 import { useDialogStore } from "../../store/dialogStore";
 import { useContentStore } from "../../store/contentStore";
 
 import MobileLayers from "../dialogs/MobileLayers.vue";
 
+import { calculateHaversineDistance } from "../../assets/utilityFunctions/calculateHaversineDistance";
+
 const mapStore = useMapStore();
+const { getSourceByMapConfigId } = storeToRefs(mapStore);
 const dialogStore = useDialogStore();
 const contentStore = useContentStore();
 
 const districtLayer = ref(false);
 const villageLayer = ref(false);
+
+const mapConfigsLength = computed(
+	() => Object.keys(mapStore.currentVisibleLayers).length
+);
+const currentVisibleLayerKey = computed(() => mapStore.currentVisibleLayers);
+const mapConfigs = computed(() => {
+	return mapStore.mapConfigs;
+});
 
 // const newSavedLocation = ref("");
 
@@ -32,8 +45,64 @@ function toggleVillageLayer() {
 	mapStore.toggleVillageBoundaries(villageLayer.value);
 }
 
+function findClosestLocation(userCoords, locations) {
+	// Check if userCoords has valid latitude and longitude
+	if (
+		!userCoords ||
+		typeof userCoords.latitude !== "number" ||
+		typeof userCoords.longitude !== "number"
+	) {
+		throw new Error("Invalid user coordinates");
+	}
+
+	let minDistance = Infinity;
+	let closestLocation = null;
+
+	for (let location of locations) {
+		try {
+			// Check if location, location.geometry, and location.geometry.coordinates are valid
+			if (
+				!location ||
+				!location.geometry ||
+				!Array.isArray(location.geometry.coordinates)
+			) {
+				continue; // Skip this location if any of these are invalid
+			}
+			const [lon, lat] = location.geometry.coordinates;
+
+			// Check if longitude and latitude are valid numbers
+			if (typeof lon !== "number" || typeof lat !== "number") {
+				continue; // Skip this location if coordinates are not numbers
+			}
+
+			// Calculate the Haversine distance
+			const distance = calculateHaversineDistance(
+				{
+					latitude: userCoords.latitude,
+					longitude: userCoords.longitude,
+				},
+				{ latitude: lat, longitude: lon }
+			);
+
+			// Update the closest location if the current distance is smaller
+			if (distance < minDistance) {
+				minDistance = distance;
+				closestLocation = location;
+			}
+		} catch (e) {
+			// Catch and log any errors during processing
+			console.error(
+				`Error processing location: ${JSON.stringify(location)}`,
+				e
+			);
+		}
+	}
+	return closestLocation;
+}
+
 onMounted(() => {
 	mapStore.initializeMapBox();
+	mapStore.setCurrentLocation();
 });
 </script>
 
@@ -68,6 +137,44 @@ onMounted(() => {
           @click="toggleVillageLayer"
         >
           里
+        </button>
+
+        <button
+          v-if="
+            mapConfigsLength === 1 &&
+              mapConfigs[currentVisibleLayerKey ?? '']?.type ===
+              'circle'
+          "
+          :style="{
+            color: villageLayer
+              ? 'var(--color-highlight)'
+              : 'var(--color-component-background)',
+          }"
+          type="button"
+          @click="
+            () => {
+              const res = findClosestLocation(
+                {
+                  longitude: mapStore.userLocation.longitude,
+                  latitude: mapStore.userLocation.latitude,
+                },
+
+                {
+                  ...getSourceByMapConfigId(
+                    `${mapConfigs[currentVisibleLayerKey].index}-circle`
+                  ),
+                }.features
+              );
+
+              mapStore.map.once('moveend', () => {
+                mapStore.manualTriggerPopup();
+              });
+
+              mapStore.flyToLocation(res.geometry.coordinates);
+            }
+          "
+        >
+          近
         </button>
         <button
           class="show-if-mobile"
