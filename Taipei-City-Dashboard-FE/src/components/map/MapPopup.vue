@@ -37,6 +37,17 @@
         <p>{{ popupContent[activeTab].properties[item.key] }}</p>
       </div>
     </div>
+    <div
+      v-if="popupContent[activeTab]?.properties.videoUrl"
+      class="mappopup-content"
+    >
+      <img
+        class="mappopup-video"
+        :src="popupContent[activeTab]?.properties.videoUrl"
+        width="100%"
+        height="100%"
+      >
+    </div>
   </div>
 </template>
 
@@ -116,7 +127,9 @@
 			color: var(--color-complement-text);
 			font-size: var(--font-s);
 			text-align: center;
-			transition: color 0.2s, opacity 0.2s;
+			transition:
+				color 0.2s,
+				opacity 0.2s;
 			user-select: none;
 
 			&:hover {
@@ -145,6 +158,11 @@
 		p {
 			text-align: justify;
 		}
+	}
+
+	&-video {
+		margin-top: 5px;
+		border-radius: 5px;
 	}
 }
 </style>
