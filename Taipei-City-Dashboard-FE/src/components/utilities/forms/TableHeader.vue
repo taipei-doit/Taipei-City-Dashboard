@@ -18,39 +18,40 @@ defineEmits(["sort"]);
 </script>
 
 <template>
-	<th :style="{ minWidth, ...style }">
-		<div
-			class="tableheader"
-			:style="{ cursor: 'pointer' }"
-			@click="$emit('sort')"
-			v-if="sort"
-		>
-			<p>
-				<slot></slot>
-			</p>
-			<div class="tableheader-sort">
-				<span
-					:style="{
-						color:
-							mode === 'asc' ? 'var(--color-highlight)' : 'white',
-					}"
-					>arrow_drop_up</span
-				>
-				<span
-					:style="{
-						color:
-							mode === 'desc'
-								? 'var(--color-highlight)'
-								: 'white',
-					}"
-					>arrow_drop_down</span
-				>
-			</div>
-		</div>
-		<div class="tableheader" v-else>
-			<p><slot></slot></p>
-		</div>
-	</th>
+  <th :style="{ minWidth, ...style }">
+    <div
+      v-if="sort"
+      class="tableheader"
+      :style="{ cursor: 'pointer' }"
+      @click="$emit('sort')"
+    >
+      <p>
+        <slot />
+      </p>
+      <div class="tableheader-sort">
+        <span
+          :style="{
+            color:
+              mode === 'asc' ? 'var(--color-highlight)' : 'white',
+          }"
+        >arrow_drop_up</span>
+        <span
+          :style="{
+            color:
+              mode === 'desc'
+                ? 'var(--color-highlight)'
+                : 'white',
+          }"
+        >arrow_drop_down</span>
+      </div>
+    </div>
+    <div
+      v-else
+      class="tableheader"
+    >
+      <p><slot /></p>
+    </div>
+  </th>
 </template>
 
 <style scoped lang="scss">

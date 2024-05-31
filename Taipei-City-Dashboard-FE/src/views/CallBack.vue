@@ -18,7 +18,7 @@ onMounted(() => {
 </script>
 
 <template>
-	<div>正在為您導向臺北城市儀表板...</div>
+  <div>正在為您導向臺北城市儀表板...</div>
 </template>
 
 <style scoped></style>

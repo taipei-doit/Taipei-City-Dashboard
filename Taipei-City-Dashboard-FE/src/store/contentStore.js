@@ -1,4 +1,3 @@
-/* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable indent */
 
 // Developed by Taipei Urban Intelligence Center 2023-2024
@@ -8,7 +7,6 @@
 The contentStore calls APIs to get content info and stores it.
 */
 import { defineStore } from "pinia";
-import axios from "axios";
 import http from "../router/axios";
 import router from "../router/index";
 import { useDialogStore } from "./dialogStore";
@@ -68,9 +66,9 @@ export const useContentStore = defineStore("content", {
 			}
 			this.currentDashboard.index = index;
 			// 1-2. If there is no contributor info, call the setContributors method (5.)
-			if (Object.keys(this.contributors).length === 0) {
-				this.setContributors();
-			}
+			// if (Object.keys(this.contributors).length === 0) {
+			// 	this.setContributors();
+			// }
 			// 1-3. If there is no dashboards info, call the setDashboards method (2.)
 			if (this.publicDashboards.length === 0) {
 				this.setDashboards();
@@ -226,10 +224,22 @@ export const useContentStore = defineStore("content", {
 		},
 		// 5. Call an API to get contributor data (result consists of id, name, link)
 		setContributors() {
-			axios
-				.get(`/dashboards/all_contributors.json`)
+			http.get(`/contributor/`)
 				.then((rs) => {
-					this.contributors = rs.data.data;
+					const contributors = {};
+					rs.data.data.forEach((item) => {
+						contributors[item.user_id] = {
+							id: item.id,
+							user_id: item.user_id,
+							user_name: item.user_name,
+							link: item.link,
+							image: item.image,
+							description: item.description,
+							identity: item.identity,
+							include: item.include,
+						};
+					});
+					this.contributors = contributors;
 				})
 				.catch((e) => console.error(e));
 		},

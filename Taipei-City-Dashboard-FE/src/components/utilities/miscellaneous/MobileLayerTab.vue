@@ -25,26 +25,29 @@ function handleToggle() {
 </script>
 
 <template>
-	<div class="mobilelayertab">
-		<input
-			:id="content.index"
-			type="checkbox"
-			v-model="checked"
-			@change="handleToggle"
-		/>
-		<label :for="content.index" :class="{ checked: checked }">
-			<img
-				:src="`/images/thumbnails/${content.chart_config.types[0]}.svg`"
-			/>
-		</label>
-		<p>
-			{{
-				content.name.length > 6
-					? `${content.name.slice(0, 5)}...`
-					: content.name
-			}}
-		</p>
-	</div>
+  <div class="mobilelayertab">
+    <input
+      :id="content.index"
+      v-model="checked"
+      type="checkbox"
+      @change="handleToggle"
+    >
+    <label
+      :for="content.index"
+      :class="{ checked: checked }"
+    >
+      <img
+        :src="`/images/thumbnails/${content.chart_config.types[0]}.svg`"
+      >
+    </label>
+    <p>
+      {{
+        content.name.length > 6
+          ? `${content.name.slice(0, 5)}...`
+          : content.name
+      }}
+    </p>
+  </div>
 </template>
 
 <style scoped lang="scss">

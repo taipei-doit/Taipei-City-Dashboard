@@ -66,7 +66,12 @@ http.interceptors.response.use(
 				}
 				break;
 			case 403:
-				dialogStore.showNotification("fail", "403，沒有權限執行此動作");
+				if (authStore.token) {
+					dialogStore.showNotification(
+						"fail",
+						"403，沒有權限執行此動作"
+					);
+				}
 				break;
 			case 429:
 				dialogStore.showNotification(

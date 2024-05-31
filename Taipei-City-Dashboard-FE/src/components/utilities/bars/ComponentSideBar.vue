@@ -74,77 +74,92 @@ function handleConfirm() {
 </script>
 
 <template>
-	<div :class="{ componentsidebar: true, 'hide-if-mobile': true }">
-		<h2>新增組件至儀表板</h2>
-		<div class="componentsidebar-settings">
-			<label>選擇儀表板</label>
-			<!-- 之後要在contentStore寫處理的東西 -->
-			<select v-model="selectedDashboard" @change="switchDashboard">
-				<option value="new">新增儀表板</option>
-				<option
-					v-for="dashboard in contentStore.personalDashboards.filter(
-						(el) => el.index !== contentStore.favorites.index
-					)"
-					:value="dashboard.index"
-					:key="dashboard.index"
-				>
-					{{ dashboard.name }}
-				</option>
-			</select>
-		</div>
-		<div
-			class="componentsidebar-settings"
-			v-if="selectedDashboard === 'new'"
-		>
-			<label>名稱*</label>
-			<input placeholder="" v-model="editDashboard.name" required />
-			<label>圖示*</label>
-			<input placeholder="尋找圖示(英文)" v-model="iconSearch" />
-			<div class="componentsidebar-settings-icon">
-				<div v-for="item in availableIcons" :key="item">
-					<input
-						type="radio"
-						v-model="editDashboard.icon"
-						:id="item"
-						:value="item"
-					/>
-					<label :for="item">{{ item }}</label>
-				</div>
-			</div>
-		</div>
-		<div class="componentsidebar-settings">
-			<label>儀表板組件 (點擊右側組件 [+] 圖示以新增)</label>
-			<div class="componentsidebar-settings-components">
-				<ComponentDragTags
-					:tags="editDashboard.components"
-					@deletetag="
-						(index) => {
-							editDashboard.components.splice(index, 1);
-						}
-					"
-					@updatetagorder="
-						(updatedTags) => {
-							editDashboard.components = updatedTags;
-						}
-					"
-				/>
-			</div>
-		</div>
-		<div class="componentsidebar-footer">
-			<button
-				v-if="selectedDashboard === 'new' && editDashboard.name"
-				@click="handleConfirm"
-			>
-				新增組件至儀表板
-			</button>
-			<button
-				v-else-if="selectedDashboard !== 'new'"
-				@click="handleConfirm"
-			>
-				更新儀表板
-			</button>
-		</div>
-	</div>
+  <div :class="{ componentsidebar: true, 'hide-if-mobile': true }">
+    <h2>新增組件至儀表板</h2>
+    <div class="componentsidebar-settings">
+      <label>選擇儀表板</label>
+      <!-- 之後要在contentStore寫處理的東西 -->
+      <select
+        v-model="selectedDashboard"
+        @change="switchDashboard"
+      >
+        <option value="new">
+          新增儀表板
+        </option>
+        <option
+          v-for="dashboard in contentStore.personalDashboards.filter(
+            (el) => el.index !== contentStore.favorites.index
+          )"
+          :key="dashboard.index"
+          :value="dashboard.index"
+        >
+          {{ dashboard.name }}
+        </option>
+      </select>
+    </div>
+    <div
+      v-if="selectedDashboard === 'new'"
+      class="componentsidebar-settings"
+    >
+      <label>名稱*</label>
+      <input
+        v-model="editDashboard.name"
+        placeholder=""
+        required
+      >
+      <label>圖示*</label>
+      <input
+        v-model="iconSearch"
+        placeholder="尋找圖示(英文)"
+      >
+      <div class="componentsidebar-settings-icon">
+        <div
+          v-for="item in availableIcons"
+          :key="item"
+        >
+          <input
+            :id="item"
+            v-model="editDashboard.icon"
+            type="radio"
+            :value="item"
+          >
+          <label :for="item">{{ item }}</label>
+        </div>
+      </div>
+    </div>
+    <div class="componentsidebar-settings">
+      <label>儀表板組件 (點擊右側組件 [+] 圖示以新增)</label>
+      <div class="componentsidebar-settings-components">
+        <ComponentDragTags
+          :tags="editDashboard.components"
+          @deletetag="
+            (index) => {
+              editDashboard.components.splice(index, 1);
+            }
+          "
+          @updatetagorder="
+            (updatedTags) => {
+              editDashboard.components = updatedTags;
+            }
+          "
+        />
+      </div>
+    </div>
+    <div class="componentsidebar-footer">
+      <button
+        v-if="selectedDashboard === 'new' && editDashboard.name"
+        @click="handleConfirm"
+      >
+        新增組件至儀表板
+      </button>
+      <button
+        v-else-if="selectedDashboard !== 'new'"
+        @click="handleConfirm"
+      >
+        更新儀表板
+      </button>
+    </div>
+  </div>
 </template>
 
 <style scoped lang="scss">
@@ -222,12 +237,13 @@ function handleConfirm() {
 			height: 280px;
 			display: grid;
 			grid-template-columns: 85px 85px 85px;
-			grid-template-rows: 48px;
+			grid-auto-rows: 48px;
 			column-gap: 6px;
 			row-gap: 6px;
 			padding: 6px;
 			border: solid 1px var(--color-border);
 			border-radius: 5px;
+			overflow-y: scroll;
 
 			button:last-child {
 				height: 48px;

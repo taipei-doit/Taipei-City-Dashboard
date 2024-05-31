@@ -16,6 +16,7 @@ import DashboardView from "../views/DashboardView.vue";
 import MapView from "../views/MapView.vue";
 import ComponentView from "../views/ComponentView.vue";
 import ComponentInfoView from "../views/ComponentInfoView.vue";
+import EmbedView from "../views/EmbedView.vue";
 
 const routes = [
 	{
@@ -48,6 +49,15 @@ const routes = [
 		component: ComponentInfoView,
 	},
 	{
+		path: "/embed/:id",
+		name: "embed",
+		component: EmbedView,
+	},
+	{
+		path: "/embed",
+		redirect: "/embed/0",
+	},
+	{
 		path: "/admin",
 		redirect: "/admin/dashboard",
 	},
@@ -55,6 +65,11 @@ const routes = [
 		path: "/admin/user",
 		name: "admin-user",
 		component: () => import("../views/admin/AdminUser.vue"),
+	},
+	{
+		path: "/admin/contributor",
+		name: "admin-contributor",
+		component: () => import("../views/admin/AdminContributor.vue"),
 	},
 	{
 		path: "/admin/dashboard",

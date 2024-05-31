@@ -62,7 +62,7 @@ onBeforeMount(() => {
 });
 onMounted(() => {
 	const showInitialWarning = localStorage.getItem("initialWarning");
-	if (!showInitialWarning) {
+	if (!showInitialWarning && authStore.currentPath !== "embed") {
 		dialogStore.showDialog("initialWarning");
 	}
 
@@ -76,56 +76,59 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-	<div class="app-container">
-		<NotificationBar />
-		<NavBar />
-		<!-- /mapview, /dashboard layouts -->
-		<div
-			class="app-content"
-			v-if="
-				authStore.currentPath === 'mapview' ||
-				authStore.currentPath === 'dashboard'
-			"
-		>
-			<SideBar />
-			<div class="app-content-main">
-				<SettingsBar />
-				<RouterView></RouterView>
-			</div>
-		</div>
-		<!-- /admin layouts -->
-		<div class="app-content" v-else-if="authStore.currentPath === 'admin'">
-			<AdminSideBar />
-			<div class="app-content-main">
-				<RouterView></RouterView>
-			</div>
-		</div>
-		<!-- /component, /component/:index layouts -->
-		<div
-			class="app-content"
-			v-else-if="authStore.currentPath.includes('component')"
-		>
-			<ComponentSideBar />
-			<div class="app-content-main">
-				<RouterView></RouterView>
-			</div>
-		</div>
-		<div v-else-if="authStore.currentPath === 'callback'">
-			<router-view></router-view>
-		</div>
-		<InitialWarning />
-		<LogIn />
-		<div
-			class="app-update"
-			v-if="
-				['dashboard', 'mapview'].includes(authStore.currentPath) &&
-				!authStore.isMobile &&
-				!authStore.isNarrowDevice
-			"
-		>
-			<p>下次更新：{{ formattedTimeToUpdate }}</p>
-		</div>
-	</div>
+  <div class="app-container">
+    <NotificationBar />
+    <NavBar v-if="authStore.currentPath !== 'embed'" />
+    <!-- /mapview, /dashboard layouts -->
+    <div
+      v-if="
+        authStore.currentPath === 'mapview' ||
+          authStore.currentPath === 'dashboard'
+      "
+      class="app-content"
+    >
+      <SideBar />
+      <div class="app-content-main">
+        <SettingsBar />
+        <RouterView />
+      </div>
+    </div>
+    <!-- /admin layouts -->
+    <div
+      v-else-if="authStore.currentPath === 'admin'"
+      class="app-content"
+    >
+      <AdminSideBar />
+      <div class="app-content-main">
+        <RouterView />
+      </div>
+    </div>
+    <!-- /component, /component/:index layouts -->
+    <div
+      v-else-if="authStore.currentPath.includes('component')"
+      class="app-content"
+    >
+      <ComponentSideBar />
+      <div class="app-content-main">
+        <RouterView />
+      </div>
+    </div>
+    <div v-else>
+      <router-view />
+    </div>
+    <InitialWarning />
+    <LogIn />
+    <div
+      v-if="
+        ['dashboard', 'mapview'].includes(authStore.currentPath) &&
+          !authStore.isMobile &&
+          !authStore.isNarrowDevice
+      "
+      class="app-update"
+    >
+      <p>下次更新：{{ formattedTimeToUpdate }}</p>
+    </div>
+  </div>
 </template>
 
 <style scoped lang="scss">

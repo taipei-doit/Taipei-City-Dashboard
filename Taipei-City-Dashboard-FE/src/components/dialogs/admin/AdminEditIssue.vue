@@ -26,65 +26,82 @@ function handleClose() {
 </script>
 
 <template>
-	<DialogContainer :dialog="`adminEditIssue`" @on-close="handleClose">
-		<div class="admineditissue">
-			<div class="admineditissue-header">
-				<h2>用戶問題處理</h2>
-				<button @click="handleConfirm">確定更改</button>
-			</div>
-			<div class="admineditissue-settings">
-				<div class="admineditissue-settings-items">
-					<div class="two-block">
-						<label>回報用戶名稱</label>
-						<label>回報用戶 ID</label>
-					</div>
-					<div class="two-block">
-						<input
-							type="text"
-							v-model="currentIssue.user_name"
-							disabled
-						/>
-						<input
-							type="text"
-							v-model="currentIssue.user_id"
-							disabled
-						/>
-					</div>
-					<label>問題標題</label>
-					<input type="text" v-model="currentIssue.title" disabled />
-					<label>問題簡述</label>
-					<textarea
-						v-model="currentIssue.description"
-						disabled
-					></textarea>
-					<label>系統註記</label>
-					<textarea
-						v-model="currentIssue.context"
-						disabled
-					></textarea>
-					<label>更改處理狀態</label>
-					<select v-model="currentIssue.status">
-						<option value="待處理">待處理</option>
-						<option value="處理中">處理中</option>
-						<option value="已處理">已處理</option>
-						<option value="不處理">不處理</option>
-					</select>
-					<label>完成問題處理說明 (已處理/不處理時填寫)</label>
-					<textarea
-						v-model="currentIssue.decision_desc"
-						:disabled="
-							currentIssue.status !== '已處理' &&
-							currentIssue.status !== '不處理'
-						"
-						:required="
-							currentIssue.status === '已處理' ||
-							currentIssue.status === '不處理'
-						"
-					></textarea>
-				</div>
-			</div>
-		</div>
-	</DialogContainer>
+  <DialogContainer
+    :dialog="`adminEditIssue`"
+    @on-close="handleClose"
+  >
+    <div class="admineditissue">
+      <div class="admineditissue-header">
+        <h2>用戶問題處理</h2>
+        <button @click="handleConfirm">
+          確定更改
+        </button>
+      </div>
+      <div class="admineditissue-settings">
+        <div class="admineditissue-settings-items">
+          <div class="two-block">
+            <label>回報用戶名稱</label>
+            <label>回報用戶 ID</label>
+          </div>
+          <div class="two-block">
+            <input
+              v-model="currentIssue.user_name"
+              type="text"
+              disabled
+            >
+            <input
+              v-model="currentIssue.user_id"
+              type="text"
+              disabled
+            >
+          </div>
+          <label>問題標題</label>
+          <input
+            v-model="currentIssue.title"
+            type="text"
+            disabled
+          >
+          <label>問題簡述</label>
+          <textarea
+            v-model="currentIssue.description"
+            disabled
+          />
+          <label>系統註記</label>
+          <textarea
+            v-model="currentIssue.context"
+            disabled
+          />
+          <label>更改處理狀態</label>
+          <select v-model="currentIssue.status">
+            <option value="待處理">
+              待處理
+            </option>
+            <option value="處理中">
+              處理中
+            </option>
+            <option value="已處理">
+              已處理
+            </option>
+            <option value="不處理">
+              不處理
+            </option>
+          </select>
+          <label>完成問題處理說明 (已處理/不處理時填寫)</label>
+          <textarea
+            v-model="currentIssue.decision_desc"
+            :disabled="
+              currentIssue.status !== '已處理' &&
+                currentIssue.status !== '不處理'
+            "
+            :required="
+              currentIssue.status === '已處理' ||
+                currentIssue.status === '不處理'
+            "
+          />
+        </div>
+      </div>
+    </div>
+  </DialogContainer>
 </template>
 
 <style scoped lang="scss">
