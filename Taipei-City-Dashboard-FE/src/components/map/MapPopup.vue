@@ -32,22 +32,23 @@
       <div
         v-for="item in mapConfigs[activeTab].property"
         :key="item.key"
+        :style="{
+          display: flex,
+          flexDirection: 'column',
+        }"
       >
-        <div v-if="item.mode === 'video'">
-          <div v-if="item.key === 'videoUrl'">
-            <img
-              class="mappopup-video"
-              :src="popupContent[activeTab]?.properties.videoUrl"
-              width="100%"
-              height="100%"
-            >
-          </div>
-          <div v-else>
-            <h3>{{ item.name }}</h3>
-            <p>
-              {{ popupContent[activeTab]?.properties[item.key] }}
-            </p>
-          </div>
+        <div
+          v-if="item.mode === 'video'"
+          class="mappopup-video"
+        >
+          <h3>{{ item.name }}</h3>
+          <p>{{ popupContent[activeTab]?.properties[item.key] }}</p>
+          <p>影像載入中...</p>
+          <img
+            :src="popupContent[activeTab]?.properties[item.key]"
+            width="100%"
+            height="100%"
+          >
         </div>
         <div v-else>
           <h3>{{ item.name }}</h3>
@@ -134,9 +135,7 @@
 			color: var(--color-complement-text);
 			font-size: var(--font-s);
 			text-align: center;
-			transition:
-				color 0.2s,
-				opacity 0.2s;
+			transition: color 0.2s, opacity 0.2s;
 			user-select: none;
 
 			&:hover {
@@ -152,7 +151,7 @@
 	}
 
 	&-content {
-		width: fit-content;
+		width: 100%;
 
 		div {
 			display: flex;
@@ -168,8 +167,26 @@
 	}
 
 	&-video {
+		position: relative;
+		width: min(256px, 100%);
+		min-height: 100px;
+		aspect-ratio: 16 / 9;
+		flex-direction: column;
+		align-items: center;
+		align-self: center;
+		justify-content: center;
+		margin: 0 auto;
 		margin-top: 5px;
 		border-radius: 5px;
+		background-color: var(--color-border);
+
+		img {
+			width: 100%;
+			height: 100%;
+			position: absolute;
+			left: 0;
+			top: 0;
+		}
 	}
 }
 </style>
