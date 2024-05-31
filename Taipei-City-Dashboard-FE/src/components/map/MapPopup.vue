@@ -33,8 +33,26 @@
         v-for="item in mapConfigs[activeTab].property"
         :key="item.key"
       >
-        <h3>{{ item.name }}</h3>
-        <p>{{ popupContent[activeTab].properties[item.key] }}</p>
+        <div v-if="item.mode === 'video'">
+          <div v-if="item.key === 'videoUrl'">
+            <img
+              class="mappopup-video"
+              :src="popupContent[activeTab]?.properties.videoUrl"
+              width="100%"
+              height="100%"
+            >
+          </div>
+          <div v-else>
+            <h3>{{ item.name }}</h3>
+            <p>
+              {{ popupContent[activeTab]?.properties[item.key] }}
+            </p>
+          </div>
+        </div>
+        <div v-else>
+          <h3>{{ item.name }}</h3>
+          <p>{{ popupContent[activeTab]?.properties[item.key] }}</p>
+        </div>
       </div>
     </div>
   </div>
@@ -116,7 +134,9 @@
 			color: var(--color-complement-text);
 			font-size: var(--font-s);
 			text-align: center;
-			transition: color 0.2s, opacity 0.2s;
+			transition:
+				color 0.2s,
+				opacity 0.2s;
 			user-select: none;
 
 			&:hover {
@@ -145,6 +165,11 @@
 		p {
 			text-align: justify;
 		}
+	}
+
+	&-video {
+		margin-top: 5px;
+		border-radius: 5px;
 	}
 }
 </style>

@@ -1,0 +1,5218 @@
+{
+	"type": "FeatureCollection",
+	"features": [
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.516899, 25.048553]
+			},
+			"properties": {
+				"流水號": 1,
+				"攝影機編號": "001-市民快承德",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/001",
+				"攝影機數字編號": 1
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.506042, 25.049253]
+			},
+			"properties": {
+				"流水號": 2,
+				"攝影機編號": "002-環快忠孝橋",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/002",
+				"攝影機數字編號": 2
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.500679, 25.044197]
+			},
+			"properties": {
+				"流水號": 3,
+				"攝影機編號": "003-環快中興橋",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/003",
+				"攝影機數字編號": 3
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.4904247, 25.03527326]
+			},
+			"properties": {
+				"流水號": 4,
+				"攝影機編號": "004-環快華江橋",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/004",
+				"攝影機數字編號": 4
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.4912983, 25.0248362]
+			},
+			"properties": {
+				"流水號": 5,
+				"攝影機編號": "005-環快光復橋",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/005",
+				"攝影機數字編號": 5
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.495305, 25.016719]
+			},
+			"properties": {
+				"流水號": 6,
+				"攝影機編號": "006-環快華中橋",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/006",
+				"攝影機數字編號": 6
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5166651, 25.02218833]
+			},
+			"properties": {
+				"流水號": 7,
+				"攝影機編號": "007-水源快中正橋",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/007",
+				"攝影機數字編號": 7
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.522281, 25.020491]
+			},
+			"properties": {
+				"流水號": 8,
+				"攝影機編號": "008-水源快師大",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/008",
+				"攝影機數字編號": 8
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.526881, 25.018831]
+			},
+			"properties": {
+				"流水號": 9,
+				"攝影機編號": "009-辛亥快汀州",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/009",
+				"攝影機數字編號": 9
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.529495, 25.019934]
+			},
+			"properties": {
+				"流水號": 10,
+				"攝影機編號": "010-辛亥快泰順",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/010",
+				"攝影機數字編號": 10
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.534517, 25.022641]
+			},
+			"properties": {
+				"流水號": 11,
+				"攝影機編號": "011-辛亥快新生南",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/011",
+				"攝影機數字編號": 11
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.536369, 25.022418]
+			},
+			"properties": {
+				"流水號": 12,
+				"攝影機編號": "012-建國快辛亥",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/012",
+				"攝影機數字編號": 12
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.53751, 25.02576]
+			},
+			"properties": {
+				"流水號": 13,
+				"攝影機編號": "013-建國快和平",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/013",
+				"攝影機數字編號": 13
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.537651, 25.033466]
+			},
+			"properties": {
+				"流水號": 14,
+				"攝影機編號": "014-建國快信義",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/014",
+				"攝影機數字編號": 14
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.53798, 25.03807]
+			},
+			"properties": {
+				"流水號": 15,
+				"攝影機編號": "015-建國快仁愛",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/015",
+				"攝影機數字編號": 15
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.53701, 25.0416]
+			},
+			"properties": {
+				"流水號": 16,
+				"攝影機編號": "016-建國快忠孝",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/016",
+				"攝影機數字編號": 16
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.53684, 25.04848]
+			},
+			"properties": {
+				"流水號": 17,
+				"攝影機編號": "017-建國快長安",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/017",
+				"攝影機數字編號": 17
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.53661, 25.05187]
+			},
+			"properties": {
+				"流水號": 18,
+				"攝影機編號": "018-建國快南京",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/018",
+				"攝影機數字編號": 18
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.53703, 25.05801]
+			},
+			"properties": {
+				"流水號": 19,
+				"攝影機編號": "019-建國快民生",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/019",
+				"攝影機數字編號": 19
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.53692, 25.06228]
+			},
+			"properties": {
+				"流水號": 20,
+				"攝影機編號": "020-建國快民權",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/020",
+				"攝影機數字編號": 20
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.53295, 25.06831]
+			},
+			"properties": {
+				"流水號": 21,
+				"攝影機編號": "021-民族松江",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/021",
+				"攝影機數字編號": 21
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5336, 25.07116]
+			},
+			"properties": {
+				"流水號": 22,
+				"攝影機編號": "022-建國快圓山匝道",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/022",
+				"攝影機數字編號": 22
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52814, 25.012011]
+			},
+			"properties": {
+				"流水號": 23,
+				"攝影機編號": "023-水源快永福橋",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/023",
+				"攝影機數字編號": 23
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.532405, 25.008628]
+			},
+			"properties": {
+				"流水號": 24,
+				"攝影機編號": "024-水源快福和橋",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/024",
+				"攝影機數字編號": 24
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.53717, 25.01134]
+			},
+			"properties": {
+				"流水號": 25,
+				"攝影機編號": "025-基隆快羅斯",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/025",
+				"攝影機數字編號": 25
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5468, 25.019]
+			},
+			"properties": {
+				"流水號": 26,
+				"攝影機編號": "026-基隆快辛亥",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/026",
+				"攝影機數字編號": 26
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.506905, 25.050808]
+			},
+			"properties": {
+				"流水號": 27,
+				"攝影機編號": "027-市民快環河",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/027",
+				"攝影機數字編號": 27
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.520889, 25.048124]
+			},
+			"properties": {
+				"流水號": 28,
+				"攝影機編號": "028-市民快中山",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/028",
+				"攝影機數字編號": 28
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.548958, 25.044937]
+			},
+			"properties": {
+				"流水號": 29,
+				"攝影機編號": "029-市民快敦化",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/029",
+				"攝影機數字編號": 29
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.532738, 25.045305]
+			},
+			"properties": {
+				"流水號": 30,
+				"攝影機編號": "030-市民快松江",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/030",
+				"攝影機數字編號": 30
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.56501, 25.044683]
+			},
+			"properties": {
+				"流水號": 31,
+				"攝影機編號": "031-市民快永吉",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/031",
+				"攝影機數字編號": 31
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.512978, 25.049494]
+			},
+			"properties": {
+				"流水號": 32,
+				"攝影機編號": "032-市民快重慶匝道",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/032",
+				"攝影機數字編號": 32
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.530198, 25.046084]
+			},
+			"properties": {
+				"流水號": 33,
+				"攝影機編號": "033-市民快新生匝道",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/033",
+				"攝影機數字編號": 33
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.536842, 25.044715]
+			},
+			"properties": {
+				"流水號": 34,
+				"攝影機編號": "034-市民快建國北匝道",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/034",
+				"攝影機數字編號": 34
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.556938, 25.044897]
+			},
+			"properties": {
+				"流水號": 35,
+				"攝影機編號": "035-市民快光復匝道",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/035",
+				"攝影機數字編號": 35
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.567345, 25.045813]
+			},
+			"properties": {
+				"流水號": 36,
+				"攝影機編號": "036-市民快正氣橋上層",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/036",
+				"攝影機數字編號": 36
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.570717, 25.051216]
+			},
+			"properties": {
+				"流水號": 37,
+				"攝影機編號": "037-市民快麥帥一橋",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/037",
+				"攝影機數字編號": 37
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.566913, 25.045533]
+			},
+			"properties": {
+				"流水號": 38,
+				"攝影機編號": "038-基隆永吉",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/038",
+				"攝影機數字編號": 38
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.508362, 25.056755]
+			},
+			"properties": {
+				"流水號": 39,
+				"攝影機編號": "039-環河民生",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/039",
+				"攝影機數字編號": 39
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.508774, 25.063412]
+			},
+			"properties": {
+				"流水號": 40,
+				"攝影機編號": "040-民權西台北橋",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/040",
+				"攝影機數字編號": 40
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.508559, 25.076133]
+			},
+			"properties": {
+				"流水號": 41,
+				"攝影機編號": "041-環河北敦煌",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/041",
+				"攝影機數字編號": 41
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.515997, 25.090995]
+			},
+			"properties": {
+				"流水號": 42,
+				"攝影機編號": "042-承德中正",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/042",
+				"攝影機數字編號": 42
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.513039, 25.081245]
+			},
+			"properties": {
+				"流水號": 43,
+				"攝影機編號": "043-重慶北交流道",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/043",
+				"攝影機數字編號": 43
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5253088, 25.07627506]
+			},
+			"properties": {
+				"流水號": 44,
+				"攝影機編號": "044-圓山中山橋",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/044",
+				"攝影機數字編號": 44
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.544685, 25.077025]
+			},
+			"properties": {
+				"流水號": 45,
+				"攝影機編號": "045-大直橋",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/045",
+				"攝影機數字編號": 45
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.56593, 25.06331]
+			},
+			"properties": {
+				"流水號": 46,
+				"攝影機編號": "046-民權撫遠",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/046",
+				"攝影機數字編號": 46
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.57016, 25.054733]
+			},
+			"properties": {
+				"流水號": 47,
+				"攝影機編號": "047-麥帥二橋松山抽水站",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/047",
+				"攝影機數字編號": 47
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.505803, 25.085694]
+			},
+			"properties": {
+				"流水號": 48,
+				"攝影機編號": "048-中正重陽橋",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/048",
+				"攝影機數字編號": 48
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.577797, 25.05489]
+			},
+			"properties": {
+				"流水號": 49,
+				"攝影機編號": "049-環東快堤頂匝道",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/049",
+				"攝影機數字編號": 49
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.584259, 25.058504]
+			},
+			"properties": {
+				"流水號": 50,
+				"攝影機編號": "050-環東快舊宗匝道",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/050",
+				"攝影機數字編號": 50
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5910282, 25.06109731]
+			},
+			"properties": {
+				"流水號": 51,
+				"攝影機編號": "051-環東快成功路",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/051",
+				"攝影機數字編號": 51
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.600304, 25.05835]
+			},
+			"properties": {
+				"流水號": 52,
+				"攝影機編號": "052-環東快出城往東",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/052",
+				"攝影機數字編號": 52
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.573631, 25.058311]
+			},
+			"properties": {
+				"流水號": 53,
+				"攝影機編號": "053-環東麥帥二橋往堤頂",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/053",
+				"攝影機數字編號": 53
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.591705, 25.060177]
+			},
+			"properties": {
+				"流水號": 54,
+				"攝影機編號": "054-環東快成功橋",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/054",
+				"攝影機數字編號": 54
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.601273, 25.058428]
+			},
+			"properties": {
+				"流水號": 55,
+				"攝影機編號": "055-環東快進城基河三期國宅",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/055",
+				"攝影機數字編號": 55
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.611183, 25.061342]
+			},
+			"properties": {
+				"流水號": 56,
+				"攝影機編號": "056-環東快進城南湖大橋",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/056",
+				"攝影機數字編號": 56
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.616203, 25.062899]
+			},
+			"properties": {
+				"流水號": 57,
+				"攝影機編號": "057-環東快經貿一路匝道",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/057",
+				"攝影機數字編號": 57
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.614059, 25.054968]
+			},
+			"properties": {
+				"流水號": 58,
+				"攝影機編號": "058-三重南港",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/058",
+				"攝影機數字編號": 58
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.616638, 25.055103]
+			},
+			"properties": {
+				"流水號": 59,
+				"攝影機編號": "059-經貿二南港",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/059",
+				"攝影機數字編號": 59
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.619362, 25.059399]
+			},
+			"properties": {
+				"流水號": 60,
+				"攝影機編號": "060-環東匝道",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/060",
+				"攝影機數字編號": 60
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.614487, 25.060604]
+			},
+			"properties": {
+				"流水號": 61,
+				"攝影機編號": "061-南湖大橋三重路",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/061",
+				"攝影機數字編號": 61
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.499135, 25.101245]
+			},
+			"properties": {
+				"流水號": 62,
+				"攝影機編號": "063-洲美快道福國匝道",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/063",
+				"攝影機數字編號": 63
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.4991137, 25.10613965]
+			},
+			"properties": {
+				"流水號": 63,
+				"攝影機編號": "064-洲美快13號道路匝道前",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/064",
+				"攝影機數字編號": 64
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.4986613, 25.10812087]
+			},
+			"properties": {
+				"流水號": 64,
+				"攝影機編號": "065-洲美快焚化爐前",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/065",
+				"攝影機數字編號": 65
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.498663, 25.112044]
+			},
+			"properties": {
+				"流水號": 65,
+				"攝影機編號": "066-洲美快13號道路",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/066",
+				"攝影機數字編號": 66
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.499687, 25.116961]
+			},
+			"properties": {
+				"流水號": 66,
+				"攝影機編號": "067-洲美快大業路匝道",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/067",
+				"攝影機數字編號": 67
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.499672, 25.121141]
+			},
+			"properties": {
+				"流水號": 67,
+				"攝影機編號": "068-大業大度",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/068",
+				"攝影機數字編號": 68
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.505536, 25.085722]
+			},
+			"properties": {
+				"流水號": 68,
+				"攝影機編號": "069-環河北中正",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/069",
+				"攝影機數字編號": 69
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.501044, 25.090495]
+			},
+			"properties": {
+				"流水號": 69,
+				"攝影機編號": "070-延平社中",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/070",
+				"攝影機數字編號": 70
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.497548, 25.093829]
+			},
+			"properties": {
+				"流水號": 70,
+				"攝影機編號": "071-延平北通河西",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/071",
+				"攝影機數字編號": 71
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.497352, 25.094381]
+			},
+			"properties": {
+				"流水號": 71,
+				"攝影機編號": "072-延平北通河西(堤防)",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/072",
+				"攝影機數字編號": 72
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.580375, 25.004241]
+			},
+			"properties": {
+				"流水號": 72,
+				"攝影機編號": "073-信義快萬芳交流道",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/073",
+				"攝影機數字編號": 73
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5741417, 25.03311944]
+			},
+			"properties": {
+				"流水號": 73,
+				"攝影機編號": "074-信義松德",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/074",
+				"攝影機數字編號": 74
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.568184, 25.032612]
+			},
+			"properties": {
+				"流水號": 74,
+				"攝影機編號": "075-信義松仁",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/075",
+				"攝影機數字編號": 75
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5256463, 25.07434992]
+			},
+			"properties": {
+				"流水號": 75,
+				"攝影機編號": "076-新生高圓山",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/076",
+				"攝影機數字編號": 76
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.514607, 25.02400181]
+			},
+			"properties": {
+				"流水號": 76,
+				"攝影機編號": "077-環河快詔安街",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/077",
+				"攝影機數字編號": 77
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5121763, 25.02408073]
+			},
+			"properties": {
+				"流水號": 77,
+				"攝影機編號": "078-環河快泉州街",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/078",
+				"攝影機數字編號": 78
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.543298, 25.021568]
+			},
+			"properties": {
+				"流水號": 78,
+				"攝影機編號": "079-復興辛亥",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/079",
+				"攝影機數字編號": 79
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.49559, 25.03858]
+			},
+			"properties": {
+				"流水號": 79,
+				"攝影機編號": "080-環河快貴陽匝道",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/080",
+				"攝影機數字編號": 80
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.4882854, 25.03043655]
+			},
+			"properties": {
+				"流水號": 80,
+				"攝影機編號": "081-環河快萬板大橋",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/081",
+				"攝影機數字編號": 81
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.4891298, 25.0275276]
+			},
+			"properties": {
+				"流水號": 81,
+				"攝影機編號": "082-環河快華翠大橋",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/082",
+				"攝影機數字編號": 82
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5042989, 25.01985106]
+			},
+			"properties": {
+				"流水號": 82,
+				"攝影機編號": "083-環河快青年路口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/083",
+				"攝影機數字編號": 83
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5342047, 25.00594153]
+			},
+			"properties": {
+				"流水號": 83,
+				"攝影機編號": "084-水源快溪州街口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/084",
+				"攝影機數字編號": 84
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.535638, 24.997855]
+			},
+			"properties": {
+				"流水號": 84,
+				"攝影機編號": "085-水源快景美出口匝道",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/085",
+				"攝影機數字編號": 85
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5352933, 25.0000574]
+			},
+			"properties": {
+				"流水號": 85,
+				"攝影機編號": "086-水源快景美入口匝道",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/086",
+				"攝影機數字編號": 86
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5502051, 25.02227099]
+			},
+			"properties": {
+				"流水號": 86,
+				"攝影機編號": "087-基隆快樂業街口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/087",
+				"攝影機數字編號": 87
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5486272, 25.02105815]
+			},
+			"properties": {
+				"流水號": 87,
+				"攝影機編號": "088-基隆快敦化南路",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/088",
+				"攝影機數字編號": 88
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.54171, 25.01487]
+			},
+			"properties": {
+				"流水號": 88,
+				"攝影機編號": "089-基隆快辛亥出口匝道",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/089",
+				"攝影機數字編號": 89
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.53398, 25.06733]
+			},
+			"properties": {
+				"流水號": 89,
+				"攝影機編號": "090-建國快松江",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/090",
+				"攝影機數字編號": 90
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5267972, 25.07595899]
+			},
+			"properties": {
+				"流水號": 90,
+				"攝影機編號": "091-中山北安",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/091",
+				"攝影機數字編號": 91
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5443686, 25.06658579]
+			},
+			"properties": {
+				"流水號": 91,
+				"攝影機編號": "092-復北隧道南口-民族復興",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/092",
+				"攝影機數字編號": 92
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.54436, 25.06731]
+			},
+			"properties": {
+				"流水號": 92,
+				"攝影機編號": "093-復北隧道北向0K+500M",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/093",
+				"攝影機數字編號": 93
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.544434, 25.069681]
+			},
+			"properties": {
+				"流水號": 93,
+				"攝影機編號": "094-復北隧道北向0K+623M",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/094",
+				"攝影機數字編號": 94
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.54432, 25.06955]
+			},
+			"properties": {
+				"流水號": 94,
+				"攝影機編號": "095-復北隧道北向0K+750M",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/095",
+				"攝影機數字編號": 95
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.54431, 25.07061]
+			},
+			"properties": {
+				"流水號": 95,
+				"攝影機編號": "096-復北隧道北向0K+876M",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/096",
+				"攝影機數字編號": 96
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.54417, 25.07197]
+			},
+			"properties": {
+				"流水號": 96,
+				"攝影機編號": "097-復北隧道北口-濱江大直橋",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/097",
+				"攝影機數字編號": 97
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.54426, 25.07127]
+			},
+			"properties": {
+				"流水號": 97,
+				"攝影機編號": "098-復北隧道南向0K+955M",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/098",
+				"攝影機數字編號": 98
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.54425, 25.07019]
+			},
+			"properties": {
+				"流水號": 98,
+				"攝影機編號": "099-復北隧道南向0K+830M",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/099",
+				"攝影機數字編號": 99
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.54423, 25.06915]
+			},
+			"properties": {
+				"流水號": 99,
+				"攝影機編號": "100-復北隧道南向0K+705M",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/100",
+				"攝影機數字編號": 100
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.54425, 25.06803]
+			},
+			"properties": {
+				"流水號": 100,
+				"攝影機編號": "101-復北隧道南向0K+580M",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/101",
+				"攝影機數字編號": 101
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.60913, 25.08091]
+			},
+			"properties": {
+				"流水號": 101,
+				"攝影機編號": "102-東湖隧道北向0K+295M",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/102",
+				"攝影機數字編號": 102
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.61074, 25.07939]
+			},
+			"properties": {
+				"流水號": 102,
+				"攝影機編號": "103-東湖隧道南向0K+593M",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/103",
+				"攝影機數字編號": 103
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.61263, 25.07823]
+			},
+			"properties": {
+				"流水號": 103,
+				"攝影機編號": "104-東湖隧道南向0K+770M",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/104",
+				"攝影機數字編號": 104
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.61605, 25.07838]
+			},
+			"properties": {
+				"流水號": 104,
+				"攝影機編號": "105-東湖隧道北向1K+115M",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/105",
+				"攝影機數字編號": 105
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.61745, 25.07861]
+			},
+			"properties": {
+				"流水號": 105,
+				"攝影機編號": "106-東湖隧道南向1K+245M",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/106",
+				"攝影機數字編號": 106
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.61963, 25.07963]
+			},
+			"properties": {
+				"流水號": 106,
+				"攝影機編號": "107-東湖隧道北向1K+500M",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/107",
+				"攝影機數字編號": 107
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.62226, 25.07864]
+			},
+			"properties": {
+				"流水號": 107,
+				"攝影機編號": "108-東湖隧道北向1K+777M",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/108",
+				"攝影機數字編號": 108
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.565307, 25.082148]
+			},
+			"properties": {
+				"流水號": 108,
+				"攝影機編號": "109-內湖環山",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/109",
+				"攝影機數字編號": 109
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.57003, 25.07732]
+			},
+			"properties": {
+				"流水號": 109,
+				"攝影機編號": "110-堤頂樂群一",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/110",
+				"攝影機數字編號": 110
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.564125, 25.078604]
+			},
+			"properties": {
+				"流水號": 110,
+				"攝影機編號": "111-堤頂基湖(東南角)",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/111",
+				"攝影機數字編號": 111
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.563957, 25.078972]
+			},
+			"properties": {
+				"流水號": 111,
+				"攝影機編號": "112-堤頂基湖(西南角)",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/112",
+				"攝影機數字編號": 112
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.574814, 25.076233]
+			},
+			"properties": {
+				"流水號": 112,
+				"攝影機編號": "113-瑞光港墘(台北登峰)",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/113",
+				"攝影機數字編號": 113
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.57355, 25.07532]
+			},
+			"properties": {
+				"流水號": 113,
+				"攝影機編號": "114-港墘路220號(遠傳港墘大樓)",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/114",
+				"攝影機數字編號": 114
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.574409, 25.071665]
+			},
+			"properties": {
+				"流水號": 114,
+				"攝影機編號": "115-舊宗路2段181巷口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/115",
+				"攝影機數字編號": 115
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.574753, 25.067524]
+			},
+			"properties": {
+				"流水號": 115,
+				"攝影機編號": "117- 舊宗路2段與民權東路6段11巷25弄口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/117",
+				"攝影機數字編號": 117
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5752, 25.06558]
+			},
+			"properties": {
+				"流水號": 116,
+				"攝影機編號": "119-民權舊宗路口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/119",
+				"攝影機數字編號": 119
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.572258, 25.06488]
+			},
+			"properties": {
+				"流水號": 117,
+				"攝影機編號": "120-民權東路6段與堤頂大道1段路口號誌桿",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/120",
+				"攝影機數字編號": 120
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.550159, 24.98746]
+			},
+			"properties": {
+				"流水號": 118,
+				"攝影機編號": "121-木柵路1段與木柵路1段76巷口號誌桿",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/121",
+				"攝影機數字編號": 121
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5822339, 25.05563424]
+			},
+			"properties": {
+				"流水號": 119,
+				"攝影機編號": "122-新明路成美橋",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/122",
+				"攝影機數字編號": 122
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.612182, 25.068992]
+			},
+			"properties": {
+				"流水號": 120,
+				"攝影機編號": "124-康寧東湖",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/124",
+				"攝影機數字編號": 124
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5530827, 25.01374605]
+			},
+			"properties": {
+				"流水號": 121,
+				"攝影機編號": "125-二殯西北角(辛亥路三段330號)",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/125",
+				"攝影機數字編號": 125
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5469487, 25.01430573]
+			},
+			"properties": {
+				"流水號": 122,
+				"攝影機編號": "126-芳蘭路-基隆路三段155巷176弄",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/126",
+				"攝影機數字編號": 126
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5490423, 25.01694323]
+			},
+			"properties": {
+				"流水號": 123,
+				"攝影機編號": "127-辛亥路-芳蘭路(門架上)",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/127",
+				"攝影機數字編號": 127
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.565483, 25.032854]
+			},
+			"properties": {
+				"流水號": 124,
+				"攝影機編號": "128-信義松智東南角",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/128",
+				"攝影機數字編號": 128
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.557732, 25.041399]
+			},
+			"properties": {
+				"流水號": 125,
+				"攝影機編號": "129-忠孝光復",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/129",
+				"攝影機數字編號": 129
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.56469, 25.041418]
+			},
+			"properties": {
+				"流水號": 126,
+				"攝影機編號": "130-忠孝基隆",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/130",
+				"攝影機數字編號": 130
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.578094, 25.040913]
+			},
+			"properties": {
+				"流水號": 127,
+				"攝影機編號": "131-忠孝松山",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/131",
+				"攝影機數字編號": 131
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.557777, 25.037724]
+			},
+			"properties": {
+				"流水號": 128,
+				"攝影機編號": "132-仁愛光復",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/132",
+				"攝影機數字編號": 132
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.565567, 25.039202]
+			},
+			"properties": {
+				"流水號": 129,
+				"攝影機編號": "133-松高松智",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/133",
+				"攝影機數字編號": 133
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.568314, 25.03578]
+			},
+			"properties": {
+				"流水號": 130,
+				"攝影機編號": "134-松仁松壽",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/134",
+				"攝影機數字編號": 134
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.559769, 25.033039]
+			},
+			"properties": {
+				"流水號": 131,
+				"攝影機編號": "135-基隆信義",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/135",
+				"攝影機數字編號": 135
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.559769, 25.033039]
+			},
+			"properties": {
+				"流水號": 132,
+				"攝影機編號": "136-基隆光復",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/136",
+				"攝影機數字編號": 136
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.563805, 25.036091]
+			},
+			"properties": {
+				"流水號": 133,
+				"攝影機編號": "137-市府西南(松壽市府)",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/137",
+				"攝影機數字編號": 137
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.565224, 25.036072]
+			},
+			"properties": {
+				"流水號": 134,
+				"攝影機編號": "138-市府東南(松壽松智)",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/138",
+				"攝影機數字編號": 138
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.565269, 25.038872]
+			},
+			"properties": {
+				"流水號": 135,
+				"攝影機編號": "139-市府東北(松高松智)",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/139",
+				"攝影機數字編號": 139
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.563782, 25.038948]
+			},
+			"properties": {
+				"流水號": 136,
+				"攝影機編號": "140-市府西北(松高市府)",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/140",
+				"攝影機數字編號": 140
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.551575, 25.085754]
+			},
+			"properties": {
+				"流水號": 137,
+				"攝影機編號": "141-北安明水(近大直橋)",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/141",
+				"攝影機數字編號": 141
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.552841, 25.085871]
+			},
+			"properties": {
+				"流水號": 138,
+				"攝影機編號": "142-北安明水(近自強隧道)",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/142",
+				"攝影機數字編號": 142
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.56076, 25.0842]
+			},
+			"properties": {
+				"流水號": 139,
+				"攝影機編號": "143-內湖堤頂(西側)",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/143",
+				"攝影機數字編號": 143
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.576591, 25.079613]
+			},
+			"properties": {
+				"流水號": 140,
+				"攝影機編號": "145-內湖港墘",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/145",
+				"攝影機數字編號": 145
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.589599, 25.079314]
+			},
+			"properties": {
+				"流水號": 141,
+				"攝影機編號": "146-成功文德",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/146",
+				"攝影機數字編號": 146
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.550697, 25.077282]
+			},
+			"properties": {
+				"流水號": 142,
+				"攝影機編號": "147-明水樂群一路",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/147",
+				"攝影機數字編號": 147
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.556145, 25.079866]
+			},
+			"properties": {
+				"流水號": 143,
+				"攝影機編號": "148-敬業三路樂群二路",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/148",
+				"攝影機數字編號": 148
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.569426, 25.078963]
+			},
+			"properties": {
+				"流水號": 144,
+				"攝影機編號": "149-瑞光路478巷口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/149",
+				"攝影機數字編號": 149
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.579063, 25.073568]
+			},
+			"properties": {
+				"流水號": 145,
+				"攝影機編號": "150-瑞光陽光(瑞光社宅)",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/150",
+				"攝影機數字編號": 150
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.56855, 25.077263]
+			},
+			"properties": {
+				"流水號": 146,
+				"攝影機編號": "151-堤頂大道樂群一路",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/151",
+				"攝影機數字編號": 151
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5724, 25.07461]
+			},
+			"properties": {
+				"流水號": 147,
+				"攝影機編號": "152-堤頂大道1段與港墘路口往北",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/152",
+				"攝影機數字編號": 152
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.578331, 25.066748]
+			},
+			"properties": {
+				"流水號": 148,
+				"攝影機編號": "153-民權行愛",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/153",
+				"攝影機數字編號": 153
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.583979, 25.068633]
+			},
+			"properties": {
+				"流水號": 149,
+				"攝影機編號": "154-民權瑞光",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/154",
+				"攝影機數字編號": 154
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.590592, 25.069049]
+			},
+			"properties": {
+				"流水號": 150,
+				"攝影機編號": "155-民權成功",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/155",
+				"攝影機數字編號": 155
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.578247, 25.06175]
+			},
+			"properties": {
+				"流水號": 151,
+				"攝影機編號": "156-舊宗新湖二路",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/156",
+				"攝影機數字編號": 156
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.525623, 25.084018]
+			},
+			"properties": {
+				"流水號": 152,
+				"攝影機編號": "157-中山劍潭(東側)",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/157",
+				"攝影機數字編號": 157
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.511231, 25.063051]
+			},
+			"properties": {
+				"流水號": 153,
+				"攝影機編號": "158-延平民權(進城)",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/158",
+				"攝影機數字編號": 158
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.51126, 25.062825]
+			},
+			"properties": {
+				"流水號": 154,
+				"攝影機編號": "159-延平民權(出城)",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/159",
+				"攝影機數字編號": 159
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.518059, 25.062883]
+			},
+			"properties": {
+				"流水號": 155,
+				"攝影機編號": "160-民權承德(西側)",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/160",
+				"攝影機數字編號": 160
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.51798, 25.062911]
+			},
+			"properties": {
+				"流水號": 156,
+				"攝影機編號": "161-民權承德(東側)",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/161",
+				"攝影機數字編號": 161
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.513364, 25.049276]
+			},
+			"properties": {
+				"流水號": 157,
+				"攝影機編號": "162-市民重慶(東側)",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/162",
+				"攝影機數字編號": 162
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.516345, 25.048769]
+			},
+			"properties": {
+				"流水號": 158,
+				"攝影機編號": "163-市民承德(南側)",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/163",
+				"攝影機數字編號": 163
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.516423, 25.048552]
+			},
+			"properties": {
+				"流水號": 159,
+				"攝影機編號": "164-市民承德(西側)",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/164",
+				"攝影機數字編號": 164
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.520593, 25.047942]
+			},
+			"properties": {
+				"流水號": 160,
+				"攝影機編號": "165-市民中山(西南角)",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/165",
+				"攝影機數字編號": 165
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.520594, 25.048132]
+			},
+			"properties": {
+				"流水號": 161,
+				"攝影機編號": "166-市民中山(西北角)",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/166",
+				"攝影機數字編號": 166
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.512255, 25.035305]
+			},
+			"properties": {
+				"流水號": 162,
+				"攝影機編號": "167-重慶愛國(西側)",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/167",
+				"攝影機數字編號": 167
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.525374, 25.020886]
+			},
+			"properties": {
+				"流水號": 163,
+				"攝影機編號": "168-師大汀州(南側)",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/168",
+				"攝影機數字編號": 168
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.54248, 25.01591]
+			},
+			"properties": {
+				"流水號": 164,
+				"攝影機編號": "169-基隆路3段156巷",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/169",
+				"攝影機數字編號": 169
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.531481, 25.017381]
+			},
+			"properties": {
+				"流水號": 165,
+				"攝影機編號": "171-羅斯福路3段244巷口(台電大樓)",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/171",
+				"攝影機數字編號": 171
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.537289, 25.010831]
+			},
+			"properties": {
+				"流水號": 166,
+				"攝影機編號": "172-基隆羅斯(東南角)",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/172",
+				"攝影機數字編號": 172
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.548706, 25.038298]
+			},
+			"properties": {
+				"流水號": 167,
+				"攝影機編號": "173-仁愛敦化(北側)",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/173",
+				"攝影機數字編號": 173
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.548228, 25.037939]
+			},
+			"properties": {
+				"流水號": 168,
+				"攝影機編號": "174-仁愛敦化(西側)",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/174",
+				"攝影機數字編號": 174
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.549397, 25.037853]
+			},
+			"properties": {
+				"流水號": 169,
+				"攝影機編號": "175-仁愛敦化(東側)",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/175",
+				"攝影機數字編號": 175
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.548781, 25.037332]
+			},
+			"properties": {
+				"流水號": 170,
+				"攝影機編號": "176-仁愛敦化(南側)",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/176",
+				"攝影機數字編號": 176
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.564394, 25.041319]
+			},
+			"properties": {
+				"流水號": 171,
+				"攝影機編號": "177-基隆路北往南主車道1(基隆忠孝)",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/177",
+				"攝影機數字編號": 177
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5642727, 25.04104561]
+			},
+			"properties": {
+				"流水號": 172,
+				"攝影機編號": "178-基隆路北往南主車道2(基隆忠孝)",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/178",
+				"攝影機數字編號": 178
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.564265, 25.041097]
+			},
+			"properties": {
+				"流水號": 173,
+				"攝影機編號": "179-基隆路北往南主車道3(基隆忠孝)",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/179",
+				"攝影機數字編號": 179
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.563682, 25.039173]
+			},
+			"properties": {
+				"流水號": 174,
+				"攝影機編號": "180-基隆路北往南主車道4(基隆松高)",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/180",
+				"攝影機數字編號": 180
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.563516, 25.039187]
+			},
+			"properties": {
+				"流水號": 175,
+				"攝影機編號": "181-基隆路北往南主車道5(基隆松高)",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/181",
+				"攝影機數字編號": 181
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.561488, 25.035936]
+			},
+			"properties": {
+				"流水號": 176,
+				"攝影機編號": "182-基隆路北往南主車道6(基隆松壽)",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/182",
+				"攝影機數字編號": 182
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.561413, 25.035858]
+			},
+			"properties": {
+				"流水號": 177,
+				"攝影機編號": "183-基隆路北往南主車道7(基隆松壽)",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/183",
+				"攝影機數字編號": 183
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.561338, 25.035722]
+			},
+			"properties": {
+				"流水號": 178,
+				"攝影機編號": "184-基隆路北往南主車道8(基隆松壽)",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/184",
+				"攝影機數字編號": 184
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.561193, 25.035916]
+			},
+			"properties": {
+				"流水號": 179,
+				"攝影機編號": "185-基隆路南往北主車道1(基隆松壽)",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/185",
+				"攝影機數字編號": 185
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.561134, 25.035824]
+			},
+			"properties": {
+				"流水號": 180,
+				"攝影機編號": "186-基隆路南往北主車道2(基隆松壽)",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/186",
+				"攝影機數字編號": 186
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.561091, 25.035761]
+			},
+			"properties": {
+				"流水號": 181,
+				"攝影機編號": "187-基隆路南往北主車道3(基隆松壽)",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/187",
+				"攝影機數字編號": 187
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.563565, 25.039156]
+			},
+			"properties": {
+				"流水號": 182,
+				"攝影機編號": "188-基隆路南往北主車道4(基隆松高)",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/188",
+				"攝影機數字編號": 188
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.563624, 25.039163]
+			},
+			"properties": {
+				"流水號": 183,
+				"攝影機編號": "189-基隆路南往北主車道5(基隆松高)",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/189",
+				"攝影機數字編號": 189
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.564648, 25.041292]
+			},
+			"properties": {
+				"流水號": 184,
+				"攝影機編號": "190-基隆路南往北主車道6(基隆忠孝)",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/190",
+				"攝影機數字編號": 190
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.564589, 25.041209]
+			},
+			"properties": {
+				"流水號": 185,
+				"攝影機編號": "191-基隆路南往北主車道7(基隆忠孝)",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/191",
+				"攝影機數字編號": 191
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.564541, 25.041112]
+			},
+			"properties": {
+				"流水號": 186,
+				"攝影機編號": "192-基隆路南往北主車道8(基隆忠孝)",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/192",
+				"攝影機數字編號": 192
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.563712, 25.039233]
+			},
+			"properties": {
+				"流水號": 187,
+				"攝影機編號": "193-基隆路北往南混合車道1(基隆松高)",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/193",
+				"攝影機數字編號": 193
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.563696, 25.039182]
+			},
+			"properties": {
+				"流水號": 188,
+				"攝影機編號": "194-基隆路北往南混合車道2(基隆松高)",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/194",
+				"攝影機數字編號": 194
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.561268, 25.03562]
+			},
+			"properties": {
+				"流水號": 189,
+				"攝影機編號": "195-基隆路北往南混合車道3(基隆松壽)",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/195",
+				"攝影機數字編號": 195
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.56122, 25.035537]
+			},
+			"properties": {
+				"流水號": 190,
+				"攝影機編號": "196-基隆路北往南混合車道4(基隆松壽)",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/196",
+				"攝影機數字編號": 196
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.561059, 25.035693]
+			},
+			"properties": {
+				"流水號": 191,
+				"攝影機編號": "197-基隆路南往北混合車道1(基隆松壽)",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/197",
+				"攝影機數字編號": 197
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.561016, 25.035596]
+			},
+			"properties": {
+				"流水號": 192,
+				"攝影機編號": "198-基隆路南往北混合車道2(基隆松壽)",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/198",
+				"攝影機數字編號": 198
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.563648, 25.039314]
+			},
+			"properties": {
+				"流水號": 193,
+				"攝影機編號": "199-基隆路南往北混合車道3(基隆松高)",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/199",
+				"攝影機數字編號": 199
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.564369, 25.041272]
+			},
+			"properties": {
+				"流水號": 194,
+				"攝影機編號": "200-基隆路南往北混合車道4(基隆忠孝)",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/200",
+				"攝影機數字編號": 200
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.549568, 25.087173]
+			},
+			"properties": {
+				"流水號": 195,
+				"攝影機編號": "201-自強隧道往故宮入口0K+16M",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/201",
+				"攝影機數字編號": 201
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.549301, 25.090467]
+			},
+			"properties": {
+				"流水號": 196,
+				"攝影機編號": "202-自強隧道往故宮入口0K+240M",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/202",
+				"攝影機數字編號": 202
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.548965, 25.093479]
+			},
+			"properties": {
+				"流水號": 197,
+				"攝影機編號": "203-自強隧道往故宮入口0K+474M",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/203",
+				"攝影機數字編號": 203
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.548508, 25.09413]
+			},
+			"properties": {
+				"流水號": 198,
+				"攝影機編號": "204-自強隧道往大直入口0K+20M",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/204",
+				"攝影機數字編號": 204
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.548637, 25.0924]
+			},
+			"properties": {
+				"流水號": 199,
+				"攝影機編號": "205-自強隧道往大直入口0K+326M",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/205",
+				"攝影機數字編號": 205
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.548805, 25.089815]
+			},
+			"properties": {
+				"流水號": 200,
+				"攝影機編號": "206-自強隧道往大直入口0K+553M",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/206",
+				"攝影機數字編號": 206
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.554367, 25.012644]
+			},
+			"properties": {
+				"流水號": 201,
+				"攝影機編號": "207-辛亥隧道往木柵入口0K+7M",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/207",
+				"攝影機數字編號": 207
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.555557, 25.011465]
+			},
+			"properties": {
+				"流水號": 202,
+				"攝影機編號": "208-辛亥隧道往木柵入口0K+179M",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/208",
+				"攝影機數字編號": 208
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.557091, 25.00993]
+			},
+			"properties": {
+				"流水號": 203,
+				"攝影機編號": "209-辛亥隧道往木柵入口0K+331M",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/209",
+				"攝影機數字編號": 209
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.557335, 25.010065]
+			},
+			"properties": {
+				"流水號": 204,
+				"攝影機編號": "210-辛亥隧道往市區入口0K+7M",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/210",
+				"攝影機數字編號": 210
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.555817, 25.011669]
+			},
+			"properties": {
+				"流水號": 205,
+				"攝影機編號": "211-辛亥隧道往市區入口0K+160M",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/211",
+				"攝影機數字編號": 211
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.554642, 25.012848]
+			},
+			"properties": {
+				"流水號": 206,
+				"攝影機編號": "212-辛亥隧道往市區入口0K+355M",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/212",
+				"攝影機數字編號": 212
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.6165, 25.058111]
+			},
+			"properties": {
+				"流水號": 207,
+				"攝影機編號": "215-經貿二路105巷口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/215",
+				"攝影機數字編號": 215
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.618722, 25.05475]
+			},
+			"properties": {
+				"流水號": 208,
+				"攝影機編號": "216-南港路經貿一路",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/216",
+				"攝影機數字編號": 216
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.607389, 25.054444]
+			},
+			"properties": {
+				"流水號": 209,
+				"攝影機編號": "217-南港路興中路",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/217",
+				"攝影機數字編號": 217
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.617083, 25.062694]
+			},
+			"properties": {
+				"流水號": 210,
+				"攝影機編號": "218-經貿一路環東大道槽化島",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/218",
+				"攝影機數字編號": 218
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.612889, 25.062778]
+			},
+			"properties": {
+				"流水號": 211,
+				"攝影機編號": "219-環東大道經貿二路出口匝道綠帶",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/219",
+				"攝影機數字編號": 219
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.616226, 25.053165]
+			},
+			"properties": {
+				"流水號": 212,
+				"攝影機編號": "220-忠孝東研究院路(車行往北)",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/220",
+				"攝影機數字編號": 220
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5108646, 25.05041733]
+			},
+			"properties": {
+				"流水號": 213,
+				"攝影機編號": "221-龍門大樓頂樓",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/221",
+				"攝影機數字編號": 221
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.594667, 25.054722]
+			},
+			"properties": {
+				"流水號": 214,
+				"攝影機編號": "222-向陽重陽",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/222",
+				"攝影機數字編號": 222
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.525806, 25.073722]
+			},
+			"properties": {
+				"流水號": 215,
+				"攝影機編號": "223-新生高圓山橋",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/223",
+				"攝影機數字編號": 223
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.527885, 25.068029]
+			},
+			"properties": {
+				"流水號": 216,
+				"攝影機編號": "224-新生高民族",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/224",
+				"攝影機數字編號": 224
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.527528, 25.062639]
+			},
+			"properties": {
+				"流水號": 217,
+				"攝影機編號": "225-新生高民權",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/225",
+				"攝影機數字編號": 225
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.526944, 25.057806]
+			},
+			"properties": {
+				"流水號": 218,
+				"攝影機編號": "226-新生高民生",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/226",
+				"攝影機數字編號": 226
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.528056, 25.052361]
+			},
+			"properties": {
+				"流水號": 219,
+				"攝影機編號": "227-新生高南京",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/227",
+				"攝影機數字編號": 227
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.529806, 25.048222]
+			},
+			"properties": {
+				"流水號": 220,
+				"攝影機編號": "228-新生高長安",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/228",
+				"攝影機數字編號": 228
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.529972, 25.043]
+			},
+			"properties": {
+				"流水號": 221,
+				"攝影機編號": "229-新生高忠孝",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/229",
+				"攝影機數字編號": 229
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.525246, 25.102564]
+			},
+			"properties": {
+				"流水號": 222,
+				"攝影機編號": "231-中山北路6段-福國路口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/231",
+				"攝影機數字編號": 231
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.524197, 25.079989]
+			},
+			"properties": {
+				"流水號": 223,
+				"攝影機編號": "232-中山北路-通河街口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/232",
+				"攝影機數字編號": 232
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.522486, 25.063017]
+			},
+			"properties": {
+				"流水號": 224,
+				"攝影機編號": "233-中山北路3段-民權東西路口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/233",
+				"攝影機數字編號": 233
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.536636, 25.099347]
+			},
+			"properties": {
+				"流水號": 225,
+				"攝影機編號": "234-至善路-福林路口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/234",
+				"攝影機數字編號": 234
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.532342, 25.096714]
+			},
+			"properties": {
+				"流水號": 226,
+				"攝影機編號": "235-福林路-雨農路-中正路口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/235",
+				"攝影機數字編號": 235
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.546461, 25.098308]
+			},
+			"properties": {
+				"流水號": 227,
+				"攝影機編號": "236-故宮路-至善路口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/236",
+				"攝影機數字編號": 236
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.548803, 25.082]
+			},
+			"properties": {
+				"流水號": 228,
+				"攝影機編號": "237-北安路595巷口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/237",
+				"攝影機數字編號": 237
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.544492, 25.072428]
+			},
+			"properties": {
+				"流水號": 229,
+				"攝影機編號": "238-濱江街-大直橋路口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/238",
+				"攝影機數字編號": 238
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.536664, 25.072575]
+			},
+			"properties": {
+				"流水號": 230,
+				"攝影機編號": "239- 濱江街150巷口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/239",
+				"攝影機數字編號": 239
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.535642, 25.073139]
+			},
+			"properties": {
+				"流水號": 231,
+				"攝影機編號": "240-濱江街大佳國小大門右側(號誌桿)",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/240",
+				"攝影機數字編號": 240
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.533161, 25.068272]
+			},
+			"properties": {
+				"流水號": 232,
+				"攝影機編號": "241-民族東路-建國北路口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/241",
+				"攝影機數字編號": 241
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.533247, 25.062322]
+			},
+			"properties": {
+				"流水號": 233,
+				"攝影機編號": "242-松江路-民權東路口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/242",
+				"攝影機數字編號": 242
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.544333, 25.063311]
+			},
+			"properties": {
+				"流水號": 234,
+				"攝影機編號": "243-復興北路427巷(往北)",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/243",
+				"攝影機數字編號": 243
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.510728, 25.068689]
+			},
+			"properties": {
+				"流水號": 235,
+				"攝影機編號": "244-民族西路-延平北路口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/244",
+				"攝影機數字編號": 244
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.544194, 25.063311]
+			},
+			"properties": {
+				"流水號": 236,
+				"攝影機編號": "245-復興北路427巷(往南)",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/245",
+				"攝影機數字編號": 245
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.518578, 25.071995]
+			},
+			"properties": {
+				"流水號": 237,
+				"攝影機編號": "246-承德-庫倫",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/246",
+				"攝影機數字編號": 246
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.54436, 25.07981]
+			},
+			"properties": {
+				"流水號": 238,
+				"攝影機編號": "247-北安路-大直橋頭",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/247",
+				"攝影機數字編號": 247
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52714, 25.076508]
+			},
+			"properties": {
+				"流水號": 239,
+				"攝影機編號": "248-北安路-中山北路口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/248",
+				"攝影機數字編號": 248
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5250251, 25.0767399]
+			},
+			"properties": {
+				"流水號": 240,
+				"攝影機編號": "249-中山北路-圓山隧道口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/249",
+				"攝影機數字編號": 249
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.525359, 25.084214]
+			},
+			"properties": {
+				"流水號": 241,
+				"攝影機編號": "250-劍潭路-中山北路口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/250",
+				"攝影機數字編號": 250
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.523626, 25.084248]
+			},
+			"properties": {
+				"流水號": 242,
+				"攝影機編號": "251-劍潭路-承德路口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/251",
+				"攝影機數字編號": 251
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.518532, 25.068525]
+			},
+			"properties": {
+				"流水號": 243,
+				"攝影機編號": "252-民族西路承德路口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/252",
+				"攝影機數字編號": 252
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.522778, 25.068515]
+			},
+			"properties": {
+				"流水號": 244,
+				"攝影機編號": "253-民族西路-中山北路口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/253",
+				"攝影機數字編號": 253
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.571077, 24.991698]
+			},
+			"properties": {
+				"流水號": 245,
+				"攝影機編號": "255-木柵秀明",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/255",
+				"攝影機數字編號": 255
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5876847, 25.00521658]
+			},
+			"properties": {
+				"流水號": 246,
+				"攝影機編號": "256-木柵焚化廠",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/256",
+				"攝影機數字編號": 256
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5689083, 25.04086944]
+			},
+			"properties": {
+				"流水號": 247,
+				"攝影機編號": "257-忠孝東路-松仁路口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/257",
+				"攝影機數字編號": 257
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5329167, 25.05791111]
+			},
+			"properties": {
+				"流水號": 248,
+				"攝影機編號": "258-民生東路-松江路口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/258",
+				"攝影機數字編號": 258
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5138, 25.06315]
+			},
+			"properties": {
+				"流水號": 249,
+				"攝影機編號": "259-重慶北路-民權西路口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/259",
+				"攝影機數字編號": 259
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5159028, 25.02747778]
+			},
+			"properties": {
+				"流水號": 250,
+				"攝影機編號": "260-重慶南路-和平西路口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/260",
+				"攝影機數字編號": 260
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5081194, 25.050425]
+			},
+			"properties": {
+				"流水號": 251,
+				"攝影機編號": "261-市民高架-西寧北路",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/261",
+				"攝影機數字編號": 261
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.543925, 25.04149722]
+			},
+			"properties": {
+				"流水號": 252,
+				"攝影機編號": "262-忠孝東路-復興南路口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/262",
+				"攝影機數字編號": 262
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5070306, 25.03729722]
+			},
+			"properties": {
+				"流水號": 253,
+				"攝影機編號": "263-中華路-愛國西路口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/263",
+				"攝影機數字編號": 263
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5525944, 25.02440556]
+			},
+			"properties": {
+				"流水號": 254,
+				"攝影機編號": "264-基隆路-和平東路口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/264",
+				"攝影機數字編號": 264
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5696, 25.04958056]
+			},
+			"properties": {
+				"流水號": 255,
+				"攝影機編號": "266-基隆路-八德路口(高架第2層)",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/266",
+				"攝影機數字編號": 266
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5524583, 25.04440833]
+			},
+			"properties": {
+				"流水號": 256,
+				"攝影機編號": "267-市民高架道路(往東延吉街上方)",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/267",
+				"攝影機數字編號": 267
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5693889, 25.04925]
+			},
+			"properties": {
+				"流水號": 257,
+				"攝影機編號": "268-基隆路口-八德路口(高架上層)",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/268",
+				"攝影機數字編號": 268
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5722278, 25.04945833]
+			},
+			"properties": {
+				"流水號": 258,
+				"攝影機編號": "269-市民大道-松信路口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/269",
+				"攝影機數字編號": 269
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5777056, 25.04818333]
+			},
+			"properties": {
+				"流水號": 259,
+				"攝影機編號": "270-市民大道-松山路口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/270",
+				"攝影機數字編號": 270
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5837639, 25.049775]
+			},
+			"properties": {
+				"流水號": 260,
+				"攝影機編號": "271-市民大道-東新街口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/271",
+				"攝影機數字編號": 271
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5828005, 25.05166953]
+			},
+			"properties": {
+				"流水號": 261,
+				"攝影機編號": "272-東新街-八德路口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/272",
+				"攝影機數字編號": 272
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5956639, 25.05134722]
+			},
+			"properties": {
+				"流水號": 262,
+				"攝影機編號": "273-市民大道與向陽路口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/273",
+				"攝影機數字編號": 273
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.509109, 25.068535]
+			},
+			"properties": {
+				"流水號": 263,
+				"攝影機編號": "274-環河北路與民族西路口燈桿上",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/274",
+				"攝影機數字編號": 274
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.6152472, 25.05426944]
+			},
+			"properties": {
+				"流水號": 264,
+				"攝影機編號": "275-市民大道-中南街口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/275",
+				"攝影機數字編號": 275
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.514403, 25.054061]
+			},
+			"properties": {
+				"流水號": 265,
+				"攝影機編號": "278-重慶北路與南京西路",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/278",
+				"攝影機數字編號": 278
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.540069, 25.167569]
+			},
+			"properties": {
+				"流水號": 266,
+				"攝影機編號": "281-竹子湖派出所前",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/281",
+				"攝影機數字編號": 281
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5397027, 25.1019327]
+			},
+			"properties": {
+				"流水號": 267,
+				"攝影機編號": "282-仰德大道二段2巷口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/282",
+				"攝影機數字編號": 282
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5574992, 25.03309573]
+			},
+			"properties": {
+				"流水號": 268,
+				"攝影機編號": "283-信義路四段-光復南路口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/283",
+				"攝影機數字編號": 283
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5613374, 25.03296744]
+			},
+			"properties": {
+				"流水號": 269,
+				"攝影機編號": "284-信義路-莊敬路口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/284",
+				"攝影機數字編號": 284
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.513, 25.066]
+			},
+			"properties": {
+				"流水號": 270,
+				"攝影機編號": "285-昌吉街-重慶北路三段",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/285",
+				"攝影機數字編號": 285
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.511, 25.057]
+			},
+			"properties": {
+				"流水號": 271,
+				"攝影機編號": "286-民生西路-延平北路口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/286",
+				"攝影機數字編號": 286
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5560042, 25.02730626]
+			},
+			"properties": {
+				"流水號": 272,
+				"攝影機編號": "287-基隆路二段-嘉興街",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/287",
+				"攝影機數字編號": 287
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5615771, 25.03918714]
+			},
+			"properties": {
+				"流水號": 273,
+				"攝影機編號": "288-逸仙路-松高路口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/288",
+				"攝影機數字編號": 288
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.509, 25.112]
+			},
+			"properties": {
+				"流水號": 274,
+				"攝影機編號": "289-承德路-石牌路口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/289",
+				"攝影機數字編號": 289
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.522, 25.027]
+			},
+			"properties": {
+				"流水號": 275,
+				"攝影機編號": "290-和平羅斯",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/290",
+				"攝影機數字編號": 290
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.508, 25.042]
+			},
+			"properties": {
+				"流水號": 276,
+				"攝影機編號": "291-衡陽路-中華路一段路口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/291",
+				"攝影機數字編號": 291
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5048269, 25.0430233]
+			},
+			"properties": {
+				"流水號": 277,
+				"攝影機編號": "292-成都路-昆明路口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/292",
+				"攝影機數字編號": 292
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.493, 25.03]
+			},
+			"properties": {
+				"流水號": 278,
+				"攝影機編號": "293-艋舺雙園",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/293",
+				"攝影機數字編號": 293
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.531, 25.015]
+			},
+			"properties": {
+				"流水號": 279,
+				"攝影機編號": "294-汀州路-思源街口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/294",
+				"攝影機數字編號": 294
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.498, 25.021]
+			},
+			"properties": {
+				"流水號": 280,
+				"攝影機編號": "295-萬大路-東園街口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/295",
+				"攝影機數字編號": 295
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5283992, 25.03829891]
+			},
+			"properties": {
+				"流水號": 281,
+				"攝影機編號": "296-仁愛路-金山南路口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/296",
+				"攝影機數字編號": 296
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.53, 25.112]
+			},
+			"properties": {
+				"流水號": 282,
+				"攝影機編號": "297-士東路-忠誠路口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/297",
+				"攝影機數字編號": 297
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.504, 25.116]
+			},
+			"properties": {
+				"流水號": 283,
+				"攝影機編號": "298-承德路-立賢路口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/298",
+				"攝影機數字編號": 298
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5278263, 25.05800639]
+			},
+			"properties": {
+				"流水號": 284,
+				"攝影機編號": "299-民生東路限高器",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/299",
+				"攝影機數字編號": 299
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5604189, 25.0346963]
+			},
+			"properties": {
+				"流水號": 285,
+				"攝影機編號": "300-基隆松壽限高器",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/300",
+				"攝影機數字編號": 300
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5133086, 25.04740352]
+			},
+			"properties": {
+				"流水號": 286,
+				"攝影機編號": "301-忠孝西路一段86號",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/301",
+				"攝影機數字編號": 301
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5097318, 25.04826003]
+			},
+			"properties": {
+				"流水號": 287,
+				"攝影機編號": "303-中華路1段2號西北角（國稅局1號）",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/303",
+				"攝影機數字編號": 303
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5097318, 25.04826003]
+			},
+			"properties": {
+				"流水號": 288,
+				"攝影機編號": "304-中華路1段2號東北角(國稅局2號)",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/304",
+				"攝影機數字編號": 304
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5494028, 25.05175833]
+			},
+			"properties": {
+				"流水號": 289,
+				"攝影機編號": "305-敦化-南京",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/305",
+				"攝影機數字編號": 305
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5489028, 25.04800833]
+			},
+			"properties": {
+				"流水號": 290,
+				"攝影機編號": "306-敦化-八德",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/306",
+				"攝影機數字編號": 306
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5212278, 25.10160833]
+			},
+			"properties": {
+				"流水號": 291,
+				"攝影機編號": "307-福國-文林",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/307",
+				"攝影機數字編號": 307
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.4717451, 25.12298936]
+			},
+			"properties": {
+				"流水號": 292,
+				"攝影機編號": "308-大度路與立德路口(東南角)",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/308",
+				"攝影機數字編號": 308
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.4715334, 25.12318622]
+			},
+			"properties": {
+				"流水號": 293,
+				"攝影機編號": "309-大度路與立德路口(西南角)",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/309",
+				"攝影機數字編號": 309
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5329635, 25.0549123]
+			},
+			"properties": {
+				"流水號": 294,
+				"攝影機編號": "310-松江路與長春路口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/310",
+				"攝影機數字編號": 310
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5329837, 25.0581148]
+			},
+			"properties": {
+				"流水號": 295,
+				"攝影機編號": "311-松江路與民生東路口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/311",
+				"攝影機數字編號": 311
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5329494, 25.05161857]
+			},
+			"properties": {
+				"流水號": 296,
+				"攝影機編號": "312-松江路-南京東二段",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/312",
+				"攝影機數字編號": 312
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5329048, 25.04837561]
+			},
+			"properties": {
+				"流水號": 297,
+				"攝影機編號": "313-松江路與長安東路口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/313",
+				"攝影機數字編號": 313
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5330538, 25.04570815]
+			},
+			"properties": {
+				"流水號": 298,
+				"攝影機編號": "314-松江路市民大道口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/314",
+				"攝影機數字編號": 314
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5440837, 25.05788686]
+			},
+			"properties": {
+				"流水號": 299,
+				"攝影機編號": "315-復興北路與民生東路口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/315",
+				"攝影機數字編號": 315
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5439827, 25.05190533]
+			},
+			"properties": {
+				"流水號": 300,
+				"攝影機編號": "316-復興北路與南京東路口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/316",
+				"攝影機數字編號": 316
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5437534, 25.04438833]
+			},
+			"properties": {
+				"流水號": 301,
+				"攝影機編號": "317-復興南路與市民大道口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/317",
+				"攝影機數字編號": 317
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5459973, 24.98670152]
+			},
+			"properties": {
+				"流水號": 302,
+				"攝影機編號": "318-木柵路1段與和興路口號誌桿",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/318",
+				"攝影機數字編號": 318
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5436311, 25.03782272]
+			},
+			"properties": {
+				"流水號": 303,
+				"攝影機編號": "319-復興南路-仁愛三段",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/319",
+				"攝影機數字編號": 319
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5434377, 25.0331958]
+			},
+			"properties": {
+				"流水號": 304,
+				"攝影機編號": "320-復興南路與信義路口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/320",
+				"攝影機數字編號": 320
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5433892, 25.02850844]
+			},
+			"properties": {
+				"流水號": 305,
+				"攝影機編號": "321-復興南路與復興南路2段148巷口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/321",
+				"攝影機數字編號": 321
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5429469, 25.02493891]
+			},
+			"properties": {
+				"流水號": 306,
+				"攝影機編號": "322-復興南路與和平東路口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/322",
+				"攝影機數字編號": 322
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5758187, 25.07600866]
+			},
+			"properties": {
+				"流水號": 307,
+				"攝影機編號": "323-瑞光路與江南街口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/323",
+				"攝影機數字編號": 323
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5334104, 25.06442183]
+			},
+			"properties": {
+				"流水號": 308,
+				"攝影機編號": "324-松江路367號(中山區公所)",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/324",
+				"攝影機數字編號": 324
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5349488, 25.00484617]
+			},
+			"properties": {
+				"流水號": 309,
+				"攝影機編號": "325-水源快上層往南門架(溪州街與汀州路4段140巷口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/325",
+				"攝影機數字編號": 325
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5255683, 25.08602915]
+			},
+			"properties": {
+				"流水號": 310,
+				"攝影機編號": "326-中山北路5段與文林路口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/326",
+				"攝影機數字編號": 326
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5266917, 25.10088611]
+			},
+			"properties": {
+				"流水號": 311,
+				"攝影機編號": "327-雙溪街與至誠路口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/327",
+				"攝影機數字編號": 327
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5227248, 25.05773305]
+			},
+			"properties": {
+				"流水號": 312,
+				"攝影機編號": "328-民生東路與中山北路口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/328",
+				"攝影機數字編號": 328
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.557685, 25.04492577]
+			},
+			"properties": {
+				"流水號": 313,
+				"攝影機編號": "329-光復南路與市民大道口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/329",
+				"攝影機數字編號": 329
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5524343, 25.03317711]
+			},
+			"properties": {
+				"流水號": 314,
+				"攝影機編號": "330-信義路與安和路口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/330",
+				"攝影機數字編號": 330
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5544587, 25.00079635]
+			},
+			"properties": {
+				"流水號": 315,
+				"攝影機編號": "331-興隆路與辛亥路口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/331",
+				"攝影機數字編號": 331
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5579086, 24.9990456]
+			},
+			"properties": {
+				"流水號": 316,
+				"攝影機編號": "332-興隆路與興隆路3段112巷口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/332",
+				"攝影機數字編號": 332
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.6112466, 25.0638845]
+			},
+			"properties": {
+				"流水號": 317,
+				"攝影機編號": "333-康寧路3段與南湖大橋",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/333",
+				"攝影機數字編號": 333
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.615846, 25.04898]
+			},
+			"properties": {
+				"流水號": 318,
+				"攝影機編號": "334-研究院路2段與大坑街口(南深橋)",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/334",
+				"攝影機數字編號": 334
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.6119127, 25.06653314]
+			},
+			"properties": {
+				"流水號": 319,
+				"攝影機編號": "335-康寧路3段與康寧路3段222巷口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/335",
+				"攝影機數字編號": 335
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5138393, 25.05700219]
+			},
+			"properties": {
+				"流水號": 320,
+				"攝影機編號": "336-民生西路與重慶北路口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/336",
+				"攝影機數字編號": 336
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5095188, 25.04552949]
+			},
+			"properties": {
+				"流水號": 321,
+				"攝影機編號": "337-中華路一段39號1(台糖騰雲大樓頂樓西南角)",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/337",
+				"攝影機數字編號": 337
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5095, 25.04544444]
+			},
+			"properties": {
+				"流水號": 322,
+				"攝影機編號": "338-中華路一段39號2(台糖騰雲大樓頂樓西北角)",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/338",
+				"攝影機數字編號": 338
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5967611, 25.06701389]
+			},
+			"properties": {
+				"流水號": 323,
+				"攝影機編號": "339-民權東路6段與民權東路6段206巷口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/339",
+				"攝影機數字編號": 339
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5517954, 25.05150119]
+			},
+			"properties": {
+				"流水號": 324,
+				"攝影機編號": "341-南京東路4段北寧路口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/341",
+				"攝影機數字編號": 341
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5466159, 25.01873273]
+			},
+			"properties": {
+				"流水號": 325,
+				"攝影機編號": "342-辛亥路3段基隆路3段路口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/342",
+				"攝影機數字編號": 342
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5595583, 25.04521969]
+			},
+			"properties": {
+				"流水號": 326,
+				"攝影機編號": "343-市高(光復) 市高西行既設鋼構",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/343",
+				"攝影機數字編號": 343
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5395597, 25.04459275]
+			},
+			"properties": {
+				"流水號": 327,
+				"攝影機編號": "344-市高(建國) 市高西行既設鋼構",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/344",
+				"攝影機數字編號": 344
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5488551, 25.04145101]
+			},
+			"properties": {
+				"流水號": 328,
+				"攝影機編號": "345-忠孝東-敦化南路口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/345",
+				"攝影機數字編號": 345
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5189188, 25.04331665]
+			},
+			"properties": {
+				"流水號": 329,
+				"攝影機編號": "346-中山北-濟南路口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/346",
+				"攝影機數字編號": 346
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5167006, 25.03486221]
+			},
+			"properties": {
+				"流水號": 330,
+				"攝影機編號": "347-羅斯福-中山南-愛國路口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/347",
+				"攝影機數字編號": 347
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5722722, 25.0499889]
+			},
+			"properties": {
+				"流水號": 331,
+				"攝影機編號": "348-八德-塔悠路口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/348",
+				"攝影機數字編號": 348
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5637797, 25.0514517]
+			},
+			"properties": {
+				"流水號": 332,
+				"攝影機編號": "349-南京東-三民路口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/349",
+				"攝影機數字編號": 349
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5911242, 25.06129171]
+			},
+			"properties": {
+				"流水號": 333,
+				"攝影機編號": "350-成功-內湖交流道路口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/350",
+				"攝影機數字編號": 350
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.557315, 25.05155798]
+			},
+			"properties": {
+				"流水號": 334,
+				"攝影機編號": "351-南京-光復路口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/351",
+				"攝影機數字編號": 351
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5544544, 25.0414112]
+			},
+			"properties": {
+				"流水號": 335,
+				"攝影機編號": "352-忠孝-延吉路口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/352",
+				"攝影機數字編號": 352
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5298689, 25.04363587]
+			},
+			"properties": {
+				"流水號": 336,
+				"攝影機編號": "353-八德-新生北路口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/353",
+				"攝影機數字編號": 353
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5487834, 25.03319875]
+			},
+			"properties": {
+				"流水號": 337,
+				"攝影機編號": "354-信義-敦化路口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/354",
+				"攝影機數字編號": 354
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5487301, 25.02447036]
+			},
+			"properties": {
+				"流水號": 338,
+				"攝影機編號": "355-和平-敦化路口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/355",
+				"攝影機數字編號": 355
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5005, 25.03305]
+			},
+			"properties": {
+				"流水號": 339,
+				"攝影機編號": "356-艋舺-萬大路口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/356",
+				"攝影機數字編號": 356
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5136523, 25.06860855]
+			},
+			"properties": {
+				"流水號": 340,
+				"攝影機編號": "357-民族-重慶路口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/357",
+				"攝影機數字編號": 357
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5523655, 24.98769899]
+			},
+			"properties": {
+				"流水號": 341,
+				"攝影機編號": "358-木柵-辛亥路口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/358",
+				"攝影機數字編號": 358
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5601661, 24.98871072]
+			},
+			"properties": {
+				"流水號": 342,
+				"攝影機編號": "359-木柵-興隆路口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/359",
+				"攝影機數字編號": 359
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5548942, 24.98016743]
+			},
+			"properties": {
+				"流水號": 343,
+				"攝影機編號": "360-木新-樟新路口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/360",
+				"攝影機數字編號": 360
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5389509, 25.00226207]
+			},
+			"properties": {
+				"流水號": 344,
+				"攝影機編號": "361-羅斯福路五段211巷路口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/361",
+				"攝影機數字編號": 361
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5768371, 25.00032514]
+			},
+			"properties": {
+				"流水號": 345,
+				"攝影機編號": "362-木柵-信義快匝道路口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/362",
+				"攝影機數字編號": 362
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.60569, 25.05195]
+			},
+			"properties": {
+				"流水號": 346,
+				"攝影機編號": "363-忠孝東路7段325巷口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/363",
+				"攝影機數字編號": 363
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.6032, 25.05261]
+			},
+			"properties": {
+				"流水號": 347,
+				"攝影機編號": "364-市民大道8段與南港路2段41巷口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/364",
+				"攝影機數字編號": 364
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.60314, 25.05366]
+			},
+			"properties": {
+				"流水號": 348,
+				"攝影機編號": "365-南港路2段23巷口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/365",
+				"攝影機數字編號": 365
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.51233, 25.1013]
+			},
+			"properties": {
+				"流水號": 349,
+				"攝影機編號": "366-承德路6段-福國路口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/366",
+				"攝影機數字編號": 366
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5733889, 25.07910833]
+			},
+			"properties": {
+				"流水號": 350,
+				"攝影機編號": "367-洲子街-瑞光路393巷",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/367",
+				"攝影機數字編號": 367
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.581675, 25.05726111]
+			},
+			"properties": {
+				"流水號": 351,
+				"攝影機編號": "368-南京東路六段-舊宗路一段",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/368",
+				"攝影機數字編號": 368
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5166389, 25.02565]
+			},
+			"properties": {
+				"流水號": 352,
+				"攝影機編號": "369-重慶南路-汀州路2段",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/369",
+				"攝影機數字編號": 369
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5031556, 25.03520833]
+			},
+			"properties": {
+				"流水號": 353,
+				"攝影機編號": "370-和平西路3段-南寧路",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/370",
+				"攝影機數字編號": 370
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5143972, 25.02766389]
+			},
+			"properties": {
+				"流水號": 354,
+				"攝影機編號": "371-和平西路2段-泉州街",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/371",
+				"攝影機數字編號": 371
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5512917, 25.06165833]
+			},
+			"properties": {
+				"流水號": 355,
+				"攝影機編號": "372-民權東路與敦化北路",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/372",
+				"攝影機數字編號": 372
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5463722, 25.13681389]
+			},
+			"properties": {
+				"流水號": 356,
+				"攝影機編號": "373-格致路與凱旋路",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/373",
+				"攝影機數字編號": 373
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5169944, 25.02303056]
+			},
+			"properties": {
+				"流水號": 357,
+				"攝影機編號": "374-重慶南路與廈門街114巷",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/374",
+				"攝影機數字編號": 374
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5140028, 25.05555]
+			},
+			"properties": {
+				"流水號": 358,
+				"攝影機編號": "375-重慶北路2段48號",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/375",
+				"攝影機數字編號": 375
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.558565, 25.006698]
+			},
+			"properties": {
+				"流水號": 359,
+				"攝影機編號": "376-辛亥路4段-101巷",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/376",
+				"攝影機數字編號": 376
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5604497, 25.045062]
+			},
+			"properties": {
+				"流水號": 360,
+				"攝影機編號": "377-菸廠路 市民大道5段14巷",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/377",
+				"攝影機數字編號": 377
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5977722, 25.05168333]
+			},
+			"properties": {
+				"流水號": 361,
+				"攝影機編號": "378-市民大道八段99號(東北角) (臺北流行音樂中心南館頂樓東北角)",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/378",
+				"攝影機數字編號": 378
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5976056, 25.05142222]
+			},
+			"properties": {
+				"流水號": 362,
+				"攝影機編號": "379-市民大道八段99號(西南角) (臺北流行音樂中心南館頂樓西南角)",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/379",
+				"攝影機數字編號": 379
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5989194, 25.05346944]
+			},
+			"properties": {
+				"流水號": 363,
+				"攝影機編號": "380-南港路2段59號(東北角)",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/380",
+				"攝影機數字編號": 380
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5212056, 25.02894722]
+			},
+			"properties": {
+				"流水號": 364,
+				"攝影機編號": "381-羅斯福路2段9號(羅斯福金融廣場大樓)",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/381",
+				"攝影機數字編號": 381
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5583624, 25.0420172]
+			},
+			"properties": {
+				"流水號": 365,
+				"攝影機編號": "382-忠孝東路-光復南路(巨蛋體育館)",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/382",
+				"攝影機數字編號": 382
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5616393, 25.0411849]
+			},
+			"properties": {
+				"流水號": 366,
+				"攝影機編號": "383-忠孝逸仙",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/383",
+				"攝影機數字編號": 383
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5613746, 25.04185723]
+			},
+			"properties": {
+				"流水號": 367,
+				"攝影機編號": "384-忠孝東路-逸仙路(巨蛋辦公樓)",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/384",
+				"攝影機數字編號": 384
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5764, 25.07123]
+			},
+			"properties": {
+				"流水號": 368,
+				"攝影機編號": "385-瑞湖街陽光街321巷",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/385",
+				"攝影機數字編號": 385
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5244972, 25.09496667]
+			},
+			"properties": {
+				"流水號": 369,
+				"攝影機編號": "386-中正路-基河路",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/386",
+				"攝影機數字編號": 386
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52449, 25.09496]
+			},
+			"properties": {
+				"流水號": 370,
+				"攝影機編號": "387-中正路-文林路",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/387",
+				"攝影機數字編號": 387
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5578, 25.04816]
+			},
+			"properties": {
+				"流水號": 371,
+				"攝影機編號": "388-八德路3段-光復北路",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/388",
+				"攝影機數字編號": 388
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52491, 25.10647]
+			},
+			"properties": {
+				"流水號": 372,
+				"攝影機編號": "389-中山北路6段-德行西路",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/389",
+				"攝影機數字編號": 389
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.50933, 25.08666]
+			},
+			"properties": {
+				"流水號": 373,
+				"攝影機編號": "390-中正路-延平北路5段(西南角)",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/390",
+				"攝影機數字編號": 390
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5816271, 25.00916456]
+			},
+			"properties": {
+				"流水號": 374,
+				"攝影機編號": "391-文山北向入口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/391",
+				"攝影機數字編號": 391
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5781427, 25.0209973]
+			},
+			"properties": {
+				"流水號": 375,
+				"攝影機編號": "392-文山北向出口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/392",
+				"攝影機數字編號": 392
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5774561, 25.02130841]
+			},
+			"properties": {
+				"流水號": 376,
+				"攝影機編號": "393-文山南向入口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/393",
+				"攝影機數字編號": 393
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5812802, 25.00992394]
+			},
+			"properties": {
+				"流水號": 377,
+				"攝影機編號": "394-文山南向出口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/394",
+				"攝影機數字編號": 394
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5763657, 25.02374133]
+			},
+			"properties": {
+				"流水號": 378,
+				"攝影機編號": "395-象山北向入口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/395",
+				"攝影機數字編號": 395
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5719446, 25.03128632]
+			},
+			"properties": {
+				"流水號": 379,
+				"攝影機編號": "396-象山北向出口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/396",
+				"攝影機數字編號": 396
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.571553, 25.03133979]
+			},
+			"properties": {
+				"流水號": 380,
+				"攝影機編號": "397-象山南向入口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/397",
+				"攝影機數字編號": 397
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5760372, 25.02371064]
+			},
+			"properties": {
+				"流水號": 381,
+				"攝影機編號": "398-象山南向出口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/398",
+				"攝影機數字編號": 398
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.57443, 24.99803]
+			},
+			"properties": {
+				"流水號": 382,
+				"攝影機編號": "399-木柵路4段-和平東路4段",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/399",
+				"攝影機數字編號": 399
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52414, 25.03556]
+			},
+			"properties": {
+				"流水號": 383,
+				"攝影機編號": "400-信義杭州",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/400",
+				"攝影機數字編號": 400
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.59282, 25.0689]
+			},
+			"properties": {
+				"流水號": 384,
+				"攝影機編號": "401-民權東路6段180巷口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/401",
+				"攝影機數字編號": 401
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.51762, 25.10536]
+			},
+			"properties": {
+				"流水號": 385,
+				"攝影機編號": "402-文林北路(75巷)94巷口",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/402",
+				"攝影機數字編號": 402
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.50518, 25.10119]
+			},
+			"properties": {
+				"流水號": 386,
+				"攝影機編號": "403-北士科1(福國路-洲美社區)",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/403",
+				"攝影機數字編號": 403
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.50813, 25.1013]
+			},
+			"properties": {
+				"流水號": 387,
+				"攝影機編號": "404-北士科2(福國路-承平路)",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/404",
+				"攝影機數字編號": 404
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.50817, 25.09937]
+			},
+			"properties": {
+				"流水號": 388,
+				"攝影機編號": "405-北士科3(福善路-承平路)",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/405",
+				"攝影機數字編號": 405
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.51899, 25.11876]
+			},
+			"properties": {
+				"流水號": 389,
+				"攝影機編號": "406-石牌路-立農街2段",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/406",
+				"攝影機數字編號": 406
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.51527, 25.11528]
+			},
+			"properties": {
+				"流水號": 390,
+				"攝影機編號": "407-石牌路2段-東華街1段(捷運石牌站)",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/407",
+				"攝影機數字編號": 407
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52192, 25.11921]
+			},
+			"properties": {
+				"流水號": 391,
+				"攝影機編號": "408-石牌路2段-天母西路",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/408",
+				"攝影機數字編號": 408
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.51749, 25.11807]
+			},
+			"properties": {
+				"流水號": 392,
+				"攝影機編號": "409-石牌路2段130巷",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/409",
+				"攝影機數字編號": 409
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.57064, 24.98775]
+			},
+			"properties": {
+				"流水號": 393,
+				"攝影機編號": "410-木新路1段-指南路1段",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/410",
+				"攝影機數字編號": 410
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52791, 25.09574]
+			},
+			"properties": {
+				"流水號": 394,
+				"攝影機編號": "411-中山北路5段-中正路",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/411",
+				"攝影機數字編號": 411
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52489, 25.10404]
+			},
+			"properties": {
+				"流水號": 395,
+				"攝影機編號": "412-中山北路6段-忠誠路1段",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/412",
+				"攝影機數字編號": 412
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.54607, 25.15222]
+			},
+			"properties": {
+				"流水號": 396,
+				"攝影機編號": "413-湖山路-陽金公路",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/413",
+				"攝影機數字編號": 413
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.51378, 25.0746]
+			},
+			"properties": {
+				"流水號": 397,
+				"攝影機編號": "414-重慶北路3段-啟聰學校前",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/414",
+				"攝影機數字編號": 414
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.51778, 25.05323]
+			},
+			"properties": {
+				"流水號": 398,
+				"攝影機編號": "415-承德路1段-南京西路",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/415",
+				"攝影機數字編號": 415
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.57173, 24.99488]
+			},
+			"properties": {
+				"流水號": 399,
+				"攝影機編號": "416-木柵路4段-萬芳路",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/416",
+				"攝影機數字編號": 416
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52847, 25.0266]
+			},
+			"properties": {
+				"流水號": 400,
+				"攝影機編號": "417-和平東路1段-師大路",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/417",
+				"攝影機數字編號": 417
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.56578, 25.04828]
+			},
+			"properties": {
+				"流水號": 401,
+				"攝影機編號": "418-市民大道5段-東興路",
+				"videoUrl": "https://cctv.bote.gov.taipei:8501/MJPEG/418",
+				"攝影機數字編號": 418
+			}
+		}
+	]
+}
