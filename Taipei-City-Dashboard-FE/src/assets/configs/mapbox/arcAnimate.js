@@ -2,7 +2,6 @@ import { ArcLayer } from "@deck.gl/layers";
 
 const defaultProps = {
 	coef: { type: "number", value: 0 },
-	opacity: { type: "number", value: 0 },
 };
 
 export class AnimatedArcLayer extends ArcLayer {
@@ -35,7 +34,6 @@ export class AnimatedArcLayer extends ArcLayer {
 	draw(opts) {
 		this.state.model.setUniforms({
 			coef: this.props.coef,
-			opacity: this.props.opacity,
 		});
 		super.draw(opts);
 	}
