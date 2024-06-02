@@ -210,6 +210,8 @@ func DeleteUser(userID int) error {
 		return err
 	}
 
+	// TODO: delete user's view point
+
 	// Delete the user
 	if err := tx.Delete(&user).Error; err != nil {
 		// If an error occurs during deletion, rollback the transaction and return the error.
