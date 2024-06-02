@@ -10,7 +10,6 @@ import http from "../router/axios";
 import { useDialogStore } from "./dialogStore";
 import { useContentStore } from "./contentStore";
 import router from "../router/index";
-import { useMapStore } from "./mapStore";
 
 export const useAuthStore = defineStore("auth", {
 	state: () => ({
@@ -51,10 +50,6 @@ export const useAuthStore = defineStore("auth", {
 				}
 				const response = await http.get("/user/me");
 				this.user = response.data.user;
-
-				if (currentDashboard.value.mode === "/mapview" && this.user.user_id) {
-					useMapStore().fetchViewPoints();
-				}
 
 				this.editUser = JSON.parse(JSON.stringify(this.user));
 			}
