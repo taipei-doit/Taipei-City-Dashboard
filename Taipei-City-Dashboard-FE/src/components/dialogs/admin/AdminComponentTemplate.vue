@@ -115,7 +115,7 @@ const isShowTimeToBlock = (time_to) => {
 </script>
 
 <template>
-	<DialogContainer :dialog="`adminAddComponent`" @on-close="handleClose">
+	<DialogContainer :dialog="`adminAddComponentTemplate`" @on-close="handleClose">
 		<div class="admincomponentsettings">
 			<div class="admincomponentsettings-header">
 				<h2>組件設定</h2>

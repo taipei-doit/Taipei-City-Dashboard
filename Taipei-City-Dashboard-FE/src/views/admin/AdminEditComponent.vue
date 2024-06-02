@@ -11,6 +11,7 @@ import AdminComponentSettings from "../../components/dialogs/admin/AdminComponen
 
 import { chartTypes } from "../../assets/configs/apexcharts/chartTypes";
 import { mapTypes } from "../../assets/configs/mapbox/mapConfig";
+import AdminComponentTemplate from "../../components/dialogs/admin/AdminComponentTemplate.vue";
 
 const adminStore = useAdminStore();
 const dialogStore = useDialogStore();
@@ -89,7 +90,7 @@ function handleOpenSettings(component) {
 	dialogStore.showDialog("adminComponentSettings");
 }
 const showAdminAddComponent = () => {
-	dialogStore.showDialog("adminAddComponent");
+	dialogStore.showDialog("adminAddComponentTemplate");
 };
 
 onMounted(() => {
@@ -300,6 +301,7 @@ onMounted(() => {
 			</div>
 		</div>
 		<AdminComponentSettings :search-params="searchParams" />
+		<AdminComponentTemplate />
 	</div>
 </template>
 
