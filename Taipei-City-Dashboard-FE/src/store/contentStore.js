@@ -52,6 +52,11 @@ export const useContentStore = defineStore("content", {
 		/* Steps in adding content to the application (/dashboard or /mapview) */
 		// 1. Check the current path and execute actions based on the current path
 		setRouteParams(mode, index) {
+			const user = storeToRefs(useAuthStore());
+
+			if (this.currentDashboard.mode === "/mapview" && user?.user_id) {
+				useMapStore().fetchViewPoints();
+			}
 			this.currentDashboard.mode = mode;
 			// 1-1. Don't do anything if the path is the same
 			if (this.currentDashboard.index === index) {
