@@ -672,7 +672,7 @@ export const useMapStore = defineStore("map", {
 		async fetchViewPoints() {
 			const authStore = useAuthStore();
 			const { user } = storeToRefs(authStore);
-			const res = await http.get(`user/${user.value.user_id}/viewpoint/`);
+			const res = await http.get(`user/${user.value.user_id}/viewpoint`);
 			this.viewPoints = res.data;
 			this.viewPoints.forEach((item) => {
 				if (item.point_type === "pin") {

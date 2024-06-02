@@ -74,7 +74,7 @@ function handleOpenSettings() {
 			}"
 		>
 			<template v-if="!tempMarkerCoordinates?.lat"
-				>雙擊已建立地標</template
+				>雙擊以建立地標</template
 			>
 			<template v-else="!tempMarkerCoordinates?.lat">建立地標</template>
 		</button>
