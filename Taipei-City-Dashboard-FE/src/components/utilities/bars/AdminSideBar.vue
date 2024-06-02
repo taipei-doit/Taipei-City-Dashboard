@@ -46,7 +46,7 @@ onMounted(() => {
           : "keyboard_double_arrow_right"
       }}</span>
     </button>
-    <!-- <h2>{{ isExpanded ? `用戶設定` : `用戶` }}</h2> -->
+    <h2>{{ isExpanded ? `用戶設定` : `用戶` }}</h2>
     <h2>{{ isExpanded ? `儀表板設定` : `表板` }}</h2>
     <SideBarTab
       icon="dashboard"
@@ -67,6 +67,13 @@ onMounted(() => {
       title="待回覆問題"
       :expanded="isExpanded"
       index="issue"
+    />
+    <h2>{{ isExpanded ? `災情回報` : `災情` }}</h2>
+    <SideBarTab
+      icon="flood"
+      title="民眾災害通報"
+      :expanded="isExpanded"
+      index="disaster"
     />
     <h2>{{ isExpanded ? `系統總覽` : `系統` }}</h2>
     <SideBarTab

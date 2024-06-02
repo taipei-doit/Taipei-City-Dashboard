@@ -1,0 +1,269 @@
+{
+	"type": "FeatureCollection",
+	"features": [
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5187506, 25.04434314]
+			},
+			"properties": {
+				"hosP_ID": 401180023,
+				"areA_NO_N": 1,
+				"conT_TYPE": 1,
+				"inform": "N",
+				"waiT_SEE_CNT": 0,
+				"waiT_BED_CNT": 0,
+				"waiT_GENERAL_CNT": 0,
+				"waiT_ICU_CNT": 0,
+				"url": "https://reg.ntuh.gov.tw/EmgInfoBoard/NTUHEmgInfo.aspx",
+				"txT_DATE": "2024-05-11T17:30:04",
+				"hosP_NAME": "台大兒醫",
+				"address": "臺北市中正區中山南路8號",
+				"phone": "(02)23123456"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5183428, 25.03553921]
+			},
+			"properties": {
+				"hosP_ID": 401180014,
+				"areA_NO_N": 1,
+				"conT_TYPE": 1,
+				"inform": "N",
+				"waiT_SEE_CNT": 2,
+				"waiT_BED_CNT": 0,
+				"waiT_GENERAL_CNT": 70,
+				"waiT_ICU_CNT": 0,
+				"url": "https://reg.ntuh.gov.tw/EmgInfoBoard/NTUHEmgInfo.aspx",
+				"txT_DATE": "2024-05-11T17:30:03",
+				"hosP_NAME": "台大醫院",
+				"address": "臺北市中正區中山南路7、8號；常德街1號",
+				"phone": "(02)23123456"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5919821, 25.07180042]
+			},
+			"properties": {
+				"hosP_ID": 501110514,
+				"areA_NO_N": 1,
+				"conT_TYPE": 1,
+				"inform": "N",
+				"waiT_SEE_CNT": 1,
+				"waiT_BED_CNT": 0,
+				"waiT_GENERAL_CNT": 1,
+				"waiT_ICU_CNT": 0,
+				"url": "https://www1.ndmctsgh.edu.tw/ErOnlineNews",
+				"txT_DATE": "2024-05-11T17:30:03",
+				"hosP_NAME": "三軍總醫院附設民眾診療服務處",
+				"address": "臺北市松山區健康路131號",
+				"phone": "(02)27462151"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5191658, 25.11918228]
+			},
+			"properties": {
+				"hosP_ID": 601160016,
+				"areA_NO_N": 1,
+				"conT_TYPE": 1,
+				"inform": "N",
+				"waiT_SEE_CNT": 1,
+				"waiT_BED_CNT": 0,
+				"waiT_GENERAL_CNT": 16,
+				"waiT_ICU_CNT": 1,
+				"url": "https://www6.vghtpe.gov.tw/ERREALIFO/ERREALIFO.jsp",
+				"txT_DATE": "2024-05-11T17:30:04",
+				"hosP_NAME": "臺北榮總",
+				"address": "臺北市石牌路2段201號",
+				"phone": "(02)28712151"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5528014, 25.03717848]
+			},
+			"properties": {
+				"hosP_ID": 1101020018,
+				"areA_NO_N": 1,
+				"conT_TYPE": 1,
+				"inform": "N",
+				"waiT_SEE_CNT": 2,
+				"waiT_BED_CNT": 2,
+				"waiT_GENERAL_CNT": 9,
+				"waiT_ICU_CNT": 3,
+				"url": "http://med.cgh.org.tw/unit/branch/Pharmacy/ebl/RealTimeInfoHQ.html",
+				"txT_DATE": "2024-05-11T17:30:03",
+				"hosP_NAME": "國泰醫院",
+				"address": "臺北市大安區仁愛路四段266巷6號、280號",
+				"phone": "(02)27082121"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.522558, 25.05888423]
+			},
+			"properties": {
+				"hosP_ID": 1101100011,
+				"areA_NO_N": 1,
+				"conT_TYPE": 1,
+				"inform": "Y",
+				"waiT_SEE_CNT": 4,
+				"waiT_BED_CNT": 0,
+				"waiT_GENERAL_CNT": 41,
+				"waiT_ICU_CNT": 4,
+				"url": "https://wapps.mmh.org.tw/WebEMR/WebEMR/Default.aspx",
+				"txT_DATE": "2024-05-11T17:30:04",
+				"hosP_NAME": "馬偕台北",
+				"address": "臺北市中山區中山北路二段92號",
+				"phone": "(02)25433535"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.522558, 25.05888423]
+			},
+			"properties": {
+				"hosP_ID": 1101100020,
+				"areA_NO_N": 1,
+				"conT_TYPE": 1,
+				"inform": "N",
+				"waiT_SEE_CNT": 0,
+				"waiT_BED_CNT": 0,
+				"waiT_GENERAL_CNT": 0,
+				"waiT_ICU_CNT": 0,
+				"url": "https://wapps.mmh.org.tw/WebEMR/WebEMR/Default.aspx?a=Childrens",
+				"txT_DATE": "2024-05-11T17:30:04",
+				"hosP_NAME": "馬偕兒醫",
+				"address": "臺北市中山區中山北路2段92號",
+				"phone": "(02)25433535"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5202887, 25.0962409]
+			},
+			"properties": {
+				"hosP_ID": 1101150011,
+				"areA_NO_N": 1,
+				"conT_TYPE": 1,
+				"inform": "N",
+				"waiT_SEE_CNT": 0,
+				"waiT_BED_CNT": 0,
+				"waiT_GENERAL_CNT": 26,
+				"waiT_ICU_CNT": 0,
+				"url": "https://www.skh.org.tw/skh_regis/#/register/info/emergency",
+				"txT_DATE": "2024-05-11T17:30:04",
+				"hosP_NAME": "新光醫院",
+				"address": "台北市士林區文昌路95號",
+				"phone": "(02)28332211"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5583303, 25.00030628]
+			},
+			"properties": {
+				"hosP_ID": 1301200010,
+				"areA_NO_N": 1,
+				"conT_TYPE": 1,
+				"inform": "N",
+				"waiT_SEE_CNT": 1,
+				"waiT_BED_CNT": 0,
+				"waiT_GENERAL_CNT": 3,
+				"waiT_ICU_CNT": 0,
+				"url": "https://old.wanfang.gov.tw/p11_information.aspx",
+				"txT_DATE": "2024-05-11T17:30:04",
+				"hosP_NAME": "萬芳醫院",
+				"address": "台北市文山區興隆路三段111號",
+				"phone": "(02)29307930"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5485556, 25.05023183]
+			},
+			"properties": {
+				"hosP_ID": 1101010012,
+				"areA_NO_N": 1,
+				"conT_TYPE": 1,
+				"inform": "N",
+				"waiT_SEE_CNT": 2,
+				"waiT_BED_CNT": 0,
+				"waiT_GENERAL_CNT": 11,
+				"waiT_ICU_CNT": 0,
+				"url": "https://webapp.cgmh.org.tw/bed/erd/index.asp?loc=1",
+				"txT_DATE": "2024-05-11T17:30:04",
+				"hosP_NAME": "台北長庚醫院",
+				"address": "臺北市松山區敦化北路199號、197號、臺北市松山區敦化北路199巷6號",
+				"phone": "(02)27135211"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5224005, 25.11754255]
+			},
+			"properties": {
+				"hosP_ID": 1101160017,
+				"areA_NO_N": 1,
+				"conT_TYPE": 2,
+				"inform": "N",
+				"waiT_SEE_CNT": 0,
+				"waiT_BED_CNT": 0,
+				"waiT_GENERAL_CNT": 8,
+				"waiT_ICU_CNT": 0,
+				"url": "https://services.chgh.org.tw/er/show_web.aspx",
+				"txT_DATE": "2024-05-11T17:45:04",
+				"hosP_NAME": "振興醫院",
+				"address": "台北市北投區振興街45號",
+				"phone": "(02)28264400"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5636377, 25.02663801]
+			},
+			"properties": {
+				"hosP_ID": 1301170017,
+				"areA_NO_N": 1,
+				"conT_TYPE": 2,
+				"inform": "N",
+				"waiT_SEE_CNT": 1,
+				"waiT_BED_CNT": 0,
+				"waiT_GENERAL_CNT": 4,
+				"waiT_ICU_CNT": 0,
+				"url": "https://www.tmuh.org.tw/guide/realtime",
+				"txT_DATE": "2024-05-11T17:45:04",
+				"hosP_NAME": "台北醫學大",
+				"address": "臺北市信義區吳興街252號",
+				"phone": "(02) 2737-2181"
+			}
+		}
+	]
+}

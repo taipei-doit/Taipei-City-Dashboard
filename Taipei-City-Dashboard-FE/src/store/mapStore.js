@@ -77,6 +77,14 @@ export const useMapStore = defineStore("map", {
 				...MapObjectConfig,
 				style: mapStyle,
 			});
+			const geoLocate = new mapboxGl.GeolocateControl({
+				positionOptions: {
+					enableHighAccuracy: true,
+				},
+				trackUserLocation: true,
+				showUserHeading: true,
+			});
+			this.map.addControl(geoLocate);
 			this.map.addControl(new mapboxGl.NavigationControl());
 			this.map.doubleClickZoom.disable();
 			this.map
@@ -94,6 +102,8 @@ export const useMapStore = defineStore("map", {
 						(el) => el !== "rendering"
 					);
 				});
+
+			return geoLocate;
 		},
 		// 2. Adds three basic layers to the map (Taipei District, Taipei Village labels, and Taipei 3D Buildings)
 		// Due to performance concerns, Taipei 3D Buildings won't be added in the mobile version
@@ -165,6 +175,11 @@ export const useMapStore = defineStore("map", {
 				"bike_green",
 				"bike_orange",
 				"bike_red",
+				"disaster_fire",
+				"disaster_building",
+				"disaster_road",
+				"disaster_flood",
+				"disaster_others",
 			];
 			images.forEach((element) => {
 				this.map.loadImage(
@@ -238,6 +253,24 @@ export const useMapStore = defineStore("map", {
 			axios
 				.get(`/mapData/${map_config.index}.geojson`)
 				.then((rs) => {
+					if (map_config.index === "advanced_life_support_plc") {
+						const arrangedData = {
+							...rs.data,
+							features: rs.data.features.map((row) => ({
+								...row,
+								properties: {
+									...row.properties,
+									inform:
+										row.properties.inform === "Y"
+											? "可能沒有空床"
+											: "尙有空床",
+								},
+							})),
+						};
+						this.addGeojsonSource(map_config, arrangedData);
+						return;
+					}
+
 					this.addGeojsonSource(map_config, rs.data);
 				})
 				.catch((e) => console.error(e));
@@ -690,6 +723,7 @@ export const useMapStore = defineStore("map", {
 			this.map.flyTo({
 				center: location_array,
 				duration: 1000,
+				essential: true,
 			});
 		},
 		// 4. Remove a saved location

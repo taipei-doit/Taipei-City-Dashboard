@@ -1,17 +1,15 @@
 <!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 
 <script setup>
-import { onMounted, ref, computed } from "vue";
-import { storeToRefs } from "pinia";
-
+import { computed, onMounted, ref } from "vue";
 import { useMapStore } from "../../store/mapStore";
 import { useDialogStore } from "../../store/dialogStore";
 import { useContentStore } from "../../store/contentStore";
 
 import MobileLayers from "../dialogs/MobileLayers.vue";
+import IncidentReport from "../dialogs/IncidentReport.vue";
 
 const mapStore = useMapStore();
-const { getSourceByMapConfigId } = storeToRefs(mapStore);
 const dialogStore = useDialogStore();
 const contentStore = useContentStore();
 
@@ -43,10 +41,84 @@ function toggleVillageLayer() {
 	mapStore.toggleVillageBoundaries(villageLayer.value);
 }
 
+/*
+function calculateDistance(lat1, lon1, lat2, lon2) {
+	const R = 6371; // Radius of the Earth in km
+	const dLat = ((lat2 - lat1) * Math.PI) / 180;
+	const dLon = ((lon2 - lon1) * Math.PI) / 180;
+	const a =
+		Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+		Math.cos((lat1 * Math.PI) / 180) *
+			Math.cos((lat2 * Math.PI) / 180) *
+			Math.sin(dLon / 2) *
+			Math.sin(dLon / 2);
+	const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+	const distance = R * c; // Distance in km
+	return distance;
+}
+
+function findClosestHospital(userLat, userLon, hospitals) {
+	let minDistance = Infinity;
+	let closestHospital = null;
+
+	for (let hospital of hospitals) {
+		const { inform } = hospital.properties;
+		const [lon, lat] = hospital.geometry.coordinates;
+
+		if (inform === "N") {
+			const distance = calculateDistance(userLat, userLon, lat, lon);
+
+			if (distance < minDistance) {
+				minDistance = distance;
+				closestHospital = hospital;
+			}
+		}
+	}
+
+	return closestHospital;
+}
+
+function toggleFindNearestAdvancedLifeSupportWithRoomAvailable() {
+	try {
+		axios.get(`/mapData/advanced_life_support_plc.geojson`).then((rs) => {
+			if (navigator.geolocation) {
+				navigator.geolocation.getCurrentPosition(
+					(position) => {
+						const closestHospital = findClosestHospital(
+							location.value.latitude,
+							location.value.longitude,
+							rs.data.features
+						);
+
+						mapStore.flyToLocation(
+							closestHospital.geometry.coordinates
+						);
+
+						setTimeout(() => {
+							mapStore.manualTriggerPopup();
+						}, 1000);
+					},
+					(error) => {
+						errorMessage.value = error.message;
+					}
+				);
+			} else {
+				errorMessage.value =
+					"Geolocation is not supported by this browser.";
+			}
+		});
+	} catch (e) {
+		console.error(e);
+	}
+}
+*/
+
 onMounted(() => {
 	mapStore.initializeMapBox();
 	mapStore.setCurrentLocation();
 });
+
+const showTooltip = ref(false);
 </script>
 
 <template>
@@ -107,6 +179,26 @@ onMounted(() => {
       </div>
       <!-- The key prop informs vue that the component should be updated when switching dashboards -->
       <MobileLayers :key="contentStore.currentDashboard.index" />
+      <button
+        class="input"
+        :style="{
+          // color: villageLayer
+          // 	? 'var(--color-highlight)'
+          // 	: 'var(--color-component-background)'
+        }"
+        title="通報災害"
+        @click="dialogStore.showDialog('incidentReport')"
+        @mouseover="showTooltip = true"
+        @mouseleave="showTooltip = false"
+      >
+        <!-- <span class="material-symbols-outlined icon">e911_emergency</span> -->
+        <span
+          v-if="showTooltip"
+          class="tooltip"
+        >通報災害</span>
+        !
+      </button>
+      <IncidentReport />
     </div>
 
     <div class="mapcontainer-controls hide-if-mobile">
@@ -150,6 +242,51 @@ onMounted(() => {
 </template>
 
 <style scoped lang="scss">
+.input {
+	position: absolute;
+	right: 20px;
+	bottom: 60px;
+	width: 70px;
+	height: 70px;
+	border-radius: 50%;
+	background-color: var(--color-component-background);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: background-color 0.2s, color 0.2s;
+	font-size: 32px;
+	&:hover {
+		background-color: var(--color-highlight);
+	}
+	.icon {
+		color: white;
+		font-family: var(--font-icon);
+	}
+
+	.tooltip {
+		position: absolute;
+		background-color: black;
+		border-radius: 20px;
+		border-width: 0px;
+		color: white;
+		text-align: center;
+		padding: 5px 10px;
+		z-index: 1;
+		bottom: 125%;
+		left: 50%;
+		transform: translateX(-50%);
+		white-space: nowrap;
+	}
+
+	.tooltip::after {
+		content: "";
+		position: absolute;
+		top: 100%;
+		left: 50%;
+		margin-left: -5px;
+		border-color: black transparent transparent transparent;
+	}
+}
 .mapcontainer {
 	position: relative;
 	width: 100%;
@@ -268,7 +405,7 @@ onMounted(() => {
 	&-layers {
 		position: absolute;
 		right: 10px;
-		top: 104px;
+		top: 150px;
 		z-index: 1;
 		display: flex;
 		flex-direction: column;
