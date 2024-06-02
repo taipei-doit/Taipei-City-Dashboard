@@ -36,7 +36,7 @@ export const useDialogStore = defineStore("dialog", {
 			embedComponent: false,
 			contributorsList: false,
 			contributorInfo: false,
-			adminAddComponent: false,
+			adminAddComponentTemplate: false,
 			addMarkToMap: false,
 			addPin: false,
 		},
