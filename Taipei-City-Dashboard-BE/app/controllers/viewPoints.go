@@ -10,14 +10,19 @@ import (
 )
 
 func CreateViewPoint(c *gin.Context) {
-	var viewPoint models.ViewPoints
+	userId, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid user ID"})
+		return
+	}
 
+	var viewPoint models.ViewPoints
 	if err := c.ShouldBindJSON(&viewPoint); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	viewPoint, err := models.CreateViewPoint(viewPoint.UserID, viewPoint.CenterX, viewPoint.CenterY, viewPoint.Zoom, viewPoint.Pitch, viewPoint.Bearing, viewPoint.Name, viewPoint.PointType)
+	viewPoint, err = models.CreateViewPoint(userId, viewPoint.CenterX, viewPoint.CenterY, viewPoint.Zoom, viewPoint.Pitch, viewPoint.Bearing, viewPoint.Name, viewPoint.PointType)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
