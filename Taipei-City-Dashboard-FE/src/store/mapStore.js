@@ -574,7 +574,7 @@ export const useMapStore = defineStore("map", {
 		},
 		//  5. Turn on the visibility for a exisiting map layer
 		turnOnMapLayerVisibility(mapLayerId) {
-			if (mapLayerId.indexOf("-arc") !== 0) {
+			if (mapLayerId.indexOf("-arc") !== -1) {
 				this.deckGlLayer[mapLayerId].config.visible = true;
 				this.step = 1;
 				this.currentVisibleLayers.push(mapLayerId);
@@ -590,7 +590,7 @@ export const useMapStore = defineStore("map", {
 				this.loadingLayers = this.loadingLayers.filter(
 					(el) => el !== mapLayerId
 				);
-				if (mapLayerId.indexOf("-arc") !== 0) {
+				if (mapLayerId.indexOf("-arc") !== -1) {
 					this.deckGlLayer[mapLayerId].config.visible = false;
 					this.renderDeckGLLayer();
 				} else if (this.map.getLayer(mapLayerId)) {
