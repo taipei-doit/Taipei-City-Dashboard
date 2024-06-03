@@ -194,7 +194,6 @@ export const useMapStore = defineStore("map", {
 				this.map.setLayoutProperty("tp_district", "visibility", "none");
 			}
 		},
-
 		// 5. Toggle village boundaries
 		toggleVillageBoundaries(status) {
 			if (status) {
@@ -333,7 +332,8 @@ export const useMapStore = defineStore("map", {
 				(el) => el !== map_config.layerId
 			);
 		},
-		// 4-2. Add Map Layer for Arc Maps
+		// 4-2-1. Add Map Layer for Arc Maps
+		// Developed by Weeee Chill, Taipei Codefest 2024
 		AddArcMapLayer(map_config, data) {
 			// start loading
 			this.loadingLayers.push("rendering");
@@ -341,6 +341,9 @@ export const useMapStore = defineStore("map", {
 			const paintSettings = map_config.paint
 				? map_config.paint
 				: { "arc-color": ["#ffffff"] };
+			paintSettings["arc-color"] = paintSettings["arc-color"]
+				? paintSettings["arc-color"]
+				: ["#ffffff"];
 			// formatted data
 			const layerConfig = {
 				id: map_config.index,
@@ -354,7 +357,7 @@ export const useMapStore = defineStore("map", {
 						parseInt(color.r, 16),
 						parseInt(color.g, 16),
 						parseInt(color.b, 16),
-						255 * paintSettings["arc-opacity"] || 0.5,
+						255 * paintSettings["arc-opacity"] || 255 * 0.5,
 					];
 				},
 				getTargetColor: () => {
@@ -366,7 +369,7 @@ export const useMapStore = defineStore("map", {
 						parseInt(color.r, 16),
 						parseInt(color.g, 16),
 						parseInt(color.b, 16),
-						255 * paintSettings["arc-opacity"] || 0.5,
+						255 * paintSettings["arc-opacity"] || 255 * 0.5,
 					];
 				},
 				getWidth: paintSettings["arc-width"] || 2,
@@ -393,6 +396,8 @@ export const useMapStore = defineStore("map", {
 				(el) => el !== map_config.layerId
 			);
 		},
+		// 4-2-2. Render DeckGL Layer
+		// Developed by Weeee Chill, Taipei Codefest 2024
 		renderDeckGLLayer() {
 			const layers = Object.keys(this.deckGlLayer).map((index) => {
 				const l = this.deckGlLayer[index];
@@ -419,7 +424,36 @@ export const useMapStore = defineStore("map", {
 				) &&
 				this.step < 1000
 			)
-				this.animate();
+				this.animateArcLayer();
+		},
+		// 4-2-3. Animate Arc Layer
+		// Developed by Weeee Chill, Taipei Codefest 2024
+		animateArcLayer() {
+			// 開始時間
+			let startTime = performance.now();
+			// 每個動畫步驟的持續時間（毫秒）
+			const duration = 1000; // 1秒
+			const _this = this;
+
+			const step = (timestamp) => {
+				// 計算已經過的時間
+				const elapsedTime = timestamp - startTime;
+				// 計算進度
+				const progress = (elapsedTime / duration) * 100;
+
+				// 如果時間已經超過一個步驟，則增加步驟數
+				if (progress >= (_this.step / 1000) * 100) {
+					_this.step = _this.step + 1;
+					_this.renderDeckGLLayer();
+				}
+
+				// 如果動畫還未完成，繼續下一個動畫步驟
+				if (_this.step <= 1000) {
+					requestAnimationFrame(step);
+				}
+			};
+			// 啟動動畫
+			requestAnimationFrame(step);
 		},
 		// 4-3. Add Map Layer for Voronoi Maps
 		// Developed by 00:21, Taipei Codefest 2023
@@ -615,7 +649,9 @@ export const useMapStore = defineStore("map", {
 			const clickFeatureDatas = this.map.queryRenderedFeatures(
 				event.point,
 				{
-					layers: this.currentVisibleLayers,
+					layers: this.currentVisibleLayers.filter(
+						(layer) => layer.indexOf("-arc") === -1
+					),
 				}
 			);
 			// Return if there is no info in the click
@@ -854,33 +890,6 @@ export const useMapStore = defineStore("map", {
 			this.map = null;
 			this.currentVisibleLayers = [];
 			this.removePopup();
-		},
-		animate() {
-			// 開始時間
-			let startTime = performance.now();
-			// 每個動畫步驟的持續時間（毫秒）
-			const duration = 1000; // 1秒
-			const _this = this;
-
-			const step = (timestamp) => {
-				// 計算已經過的時間
-				const elapsedTime = timestamp - startTime;
-				// 計算進度
-				const progress = (elapsedTime / duration) * 100;
-
-				// 如果時間已經超過一個步驟，則增加步驟數
-				if (progress >= (_this.step / 1000) * 100) {
-					_this.step = _this.step + 1;
-					_this.renderDeckGLLayer();
-				}
-
-				// 如果動畫還未完成，繼續下一個動畫步驟
-				if (_this.step <= 1000) {
-					requestAnimationFrame(step);
-				}
-			};
-			// 啟動動畫
-			requestAnimationFrame(step);
 		},
 	},
 });
