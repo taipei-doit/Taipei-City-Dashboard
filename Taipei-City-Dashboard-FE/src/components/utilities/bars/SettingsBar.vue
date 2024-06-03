@@ -3,21 +3,23 @@
 <!-- Adding new components and settings is disabled in public dashboards and the mobile version -->
 
 <script setup>
+import { computed } from "vue";
+import { useRoute } from "vue-router";
+import { storeToRefs } from "pinia";
 import { useAuthStore } from "../../../store/authStore";
 import { useContentStore } from "../../../store/contentStore";
 import { useDialogStore } from "../../../store/dialogStore";
-import { storeToRefs } from "pinia";
+import { useMapStore } from "../../../store/mapStore";
+
 import MobileNavigation from "../../dialogs/MobileNavigation.vue";
 import AddEditDashboards from "../../dialogs/AddEditDashboards.vue";
-import { useMapStore } from "../../../store/mapStore";
 import AddPin from "../../dialogs/AddPin.vue";
-import { useRoute } from "vue-router";
-import { computed } from "vue";
+
 const contentStore = useContentStore();
 const dialogStore = useDialogStore();
 const mapStore = useMapStore();
 const authStore = useAuthStore();
-const { tempMarkerCoordinates } = storeToRefs(mapStore);
+
 const { user } = storeToRefs(authStore);
 const route = useRoute();
 const isCurrentPageMapView = computed(() => route.name === "mapview");
@@ -32,63 +34,57 @@ function handleOpenSettings() {
 </script>
 
 <template>
-	<div class="settingsbar">
-		<div class="settingsbar-title">
-			<span>{{ contentStore.currentDashboard.icon }}</span>
-			<h2>{{ contentStore.currentDashboard.name }}</h2>
-			<button
-				class="show-if-mobile"
-				@click="dialogStore.showDialog('mobileNavigation')"
-			>
-				<span class="settingsbar-title-navigation"
-					>arrow_drop_down_circle</span
-				>
-			</button>
-			<MobileNavigation />
-			<div
-				v-if="
-					contentStore.personalDashboards
-						.map((el) => el.index)
-						.includes(contentStore.currentDashboard.index) &&
-					contentStore.currentDashboard.icon !== 'favorite'
-				"
-				class="settingsbar-settings hide-if-mobile"
-			>
-				<button @click="handleOpenSettings">
-					<span>settings</span>
-					<p>設定</p>
-				</button>
-			</div>
-			<AddEditDashboards />
-		</div>
-		<button
-			v-if="user?.user_id && isCurrentPageMapView"
-			class="add-pin"
-			:disabled="!tempMarkerCoordinates?.lat"
-			@click="dialogStore.showDialog('addPin')"
-			:style="{
-				background: !tempMarkerCoordinates?.lat
-					? 'rgb(20, 58, 67)'
-					: 'var(--color-highlight)',
-				cursor: !tempMarkerCoordinates?.lat ? 'not-allowed' : 'pointer',
-			}"
-		>
-			<template v-if="!tempMarkerCoordinates?.lat"
-				>雙擊以建立地標</template
-			>
-			<template v-else="!tempMarkerCoordinates?.lat">建立地標</template>
-		</button>
-	</div>
-	<AddPin />
+  <div class="settingsbar">
+    <div class="settingsbar-title">
+      <span>{{ contentStore.currentDashboard.icon }}</span>
+      <h2>{{ contentStore.currentDashboard.name }}</h2>
+      <button
+        class="show-if-mobile"
+        @click="dialogStore.showDialog('mobileNavigation')"
+      >
+        <span class="settingsbar-title-navigation">arrow_drop_down_circle</span>
+      </button>
+      <MobileNavigation />
+      <div
+        v-if="
+          contentStore.personalDashboards
+            .map((el) => el.index)
+            .includes(contentStore.currentDashboard.index) &&
+            contentStore.currentDashboard.icon !== 'favorite'
+        "
+        class="settingsbar-settings hide-if-mobile"
+      >
+        <button @click="handleOpenSettings">
+          <span>settings</span>
+          <p>設定</p>
+        </button>
+      </div>
+      <AddEditDashboards />
+    </div>
+    <button
+      v-if="user?.user_id && isCurrentPageMapView"
+      class="settingsbar-pin hide-if-mobile"
+      :disabled="!mapStore.tempMarkerCoordinates?.lat"
+      :style="{
+        opacity: !mapStore.tempMarkerCoordinates?.lat ? 0.5 : 1,
+        cursor: !mapStore.tempMarkerCoordinates?.lat
+          ? 'not-allowed'
+          : 'pointer',
+      }"
+      @click="dialogStore.showDialog('addPin')"
+    >
+      {{
+        mapStore.tempMarkerCoordinates?.lat
+          ? "建立地標"
+          : "雙擊地圖以建立地標"
+      }}
+    </button>
+  </div>
+  <AddPin />
 </template>
 
 <style scoped lang="scss">
 .settingsbar {
-	.add-pin {
-		padding: 0px 4px;
-		border-radius: 4px;
-	}
-
 	width: calc(100% - 2 * var(--font-m));
 	min-height: 1.6rem;
 	display: flex;
@@ -160,6 +156,15 @@ function handleOpenSettings() {
 				color: var(--color-highlight);
 			}
 		}
+	}
+
+	&-pin {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 2px 4px;
+		border-radius: 4px;
+		background-color: var(--color-highlight);
 	}
 }
 </style>

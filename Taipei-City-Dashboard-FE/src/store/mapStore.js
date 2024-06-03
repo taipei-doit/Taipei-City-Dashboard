@@ -417,15 +417,15 @@ export const useMapStore = defineStore("map", {
 			const layers = Object.keys(this.deckGlLayer).map((index) => {
 				const l = this.deckGlLayer[index];
 				switch (l.type) {
-					case "ArcLayer":
-						return new ArcLayer(l.config);
-					case "AnimatedArcLayer":
-						return new AnimatedArcLayer({
-							...l.config,
-							coef: this.step / 1000,
-						});
-					default:
-						break;
+				case "ArcLayer":
+					return new ArcLayer(l.config);
+				case "AnimatedArcLayer":
+					return new AnimatedArcLayer({
+						...l.config,
+						coef: this.step / 1000,
+					});
+				default:
+					break;
 				}
 			});
 			this.overlay.setProps({
@@ -683,7 +683,7 @@ export const useMapStore = defineStore("map", {
 					`delete-${res.data.data.id}`
 				);
 				el.addEventListener("click", async () => {
-					await http.delete(`user/viewpoint/${res.data.data.id}`);
+					await http.delete(`user/${res.data.data.id}/viewpoint`);
 					useDialogStore().showNotification(
 						"success",
 						"地標刪除成功"
@@ -741,7 +741,7 @@ export const useMapStore = defineStore("map", {
 						const el = document.getElementById(`delete-${item.id}`);
 						el.addEventListener("click", async () => {
 							const res = await http.delete(
-								`user/viewpoint/${item.id}`
+								`user/${item.id}/viewpoint`
 							);
 							useDialogStore().showNotification(
 								"success",

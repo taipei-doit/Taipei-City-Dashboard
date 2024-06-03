@@ -9,8 +9,7 @@
 	},
 	"[go]": {
 		// "editor.snippetSuggestions": "none",
-		"editor.formatOnSave": true,
-		"editor.defaultFormatter": "golang.go"
+		"editor.formatOnSave": true
 		// "editor.codeActionsOnSave": {
 		//     "source.organizeImports": true,
 		//     "source.sortMembers": true

@@ -9,6 +9,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+/*
+CreateViewPoint creates a new viewpoint for the user
+POST /api/v1/user/:id/viewpoint
+*/
 func CreateViewPoint(c *gin.Context) {
 	userId, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
@@ -31,6 +35,10 @@ func CreateViewPoint(c *gin.Context) {
 	c.JSON(http.StatusCreated, gin.H{"status": "success", "message": "Viewpoint created", "data": viewPoint})
 }
 
+/*
+GetViewPointByUserID retrieves the viewpoint for the user
+GET /api/v1/user/:id/viewpoint
+*/
 func GetViewPointByUserID(c *gin.Context) {
 	userID, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
@@ -46,6 +54,10 @@ func GetViewPointByUserID(c *gin.Context) {
 	c.JSON(http.StatusOK, viewPoint)
 }
 
+/*
+DeleteViewPoint deletes the viewpoint
+DELETE /api/v1/user/:id/viewpoint
+*/
 func DeleteViewPoint(c *gin.Context) {
 	pointId, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
