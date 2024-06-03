@@ -72,6 +72,9 @@ textarea:disabled {
 input:required:invalid {
 	border: solid 1px rgb(237, 90, 90);
 }
+select:required:invalid {
+	border: solid 1px rgb(237, 90, 90);
+}
 
 select {
 	padding: 4px 6px;
@@ -161,4 +164,19 @@ td:last-child {
 	to {
 		transform: rotate(360deg);
 	}
+}
+
+html .mapboxgl-popup {
+	max-width: 260px !important;
+	min-width: 100px !important;
+}
+
+html .mapboxgl-popup .popup-for-pin {
+	margin-top: 4px;
+	margin-left: 4px;
+}
+
+html .mapboxgl-popup .delete-pin {
+	position: absolute;
+	right: 4px;
 }

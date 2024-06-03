@@ -7,8 +7,9 @@ The mapStore controls the map and includes methods to modify it.
 !! PLEASE BE SURE TO REFERENCE THE MAPBOX DOCUMENTATION IF ANYTHING IS UNCLEAR !!
 https://docs.mapbox.com/mapbox-gl-js/guides/
 */
+import http from "../router/axios.js";
 import { createApp, defineComponent, nextTick, ref } from "vue";
-import { defineStore } from "pinia";
+import { defineStore, storeToRefs } from "pinia";
 import mapboxGl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import axios from "axios";
@@ -63,13 +64,21 @@ export const useMapStore = defineStore("map", {
 		savedLocations: savedLocations,
 		// Store currently loading layers,
 		loadingLayers: [],
+		markers: [],
+		viewPoints: [],
+		marker: null,
+		tempMarkerCoordinates: null,
 	}),
 	getters: {},
 	actions: {
+		setTempPin(payload) {
+			this.marker = payload;
+		},
 		/* Initialize Mapbox */
 		// 1. Creates the mapbox instance and passes in initial configs
 		initializeMapBox() {
 			this.map = null;
+			this.marker = null;
 			this.overlay = null;
 			const MAPBOXTOKEN = import.meta.env.VITE_MAPBOXTOKEN;
 			mapboxGl.accessToken = MAPBOXTOKEN;
@@ -77,6 +86,7 @@ export const useMapStore = defineStore("map", {
 				...MapObjectConfig,
 				style: mapStyle,
 			});
+			this.marker = new mapboxGl.Marker();
 			this.map.addControl(new mapboxGl.NavigationControl());
 			this.map.doubleClickZoom.disable();
 			this.map
@@ -93,6 +103,11 @@ export const useMapStore = defineStore("map", {
 						this.popup = null;
 					}
 					this.addPopup(event);
+				})
+				.on("dblclick", (event) => {
+					let coordinates = event.lngLat;
+					this.tempMarkerCoordinates = coordinates;
+					this.marker.setLngLat(coordinates).addTo(this.map);
 				})
 				.on("idle", () => {
 					this.loadingLayers = this.loadingLayers.filter(
@@ -641,7 +656,107 @@ export const useMapStore = defineStore("map", {
 			});
 			this.removePopup();
 		},
+		async addMarker(name) {
+			const marker = new mapboxGl.Marker();
 
+			const authStore = useAuthStore();
+			const { user } = storeToRefs(authStore);
+			const res = await http.post(
+				`user/${user.value.user_id}/viewpoint`,
+				{
+					center_x: this.tempMarkerCoordinates.lat,
+					center_y: this.tempMarkerCoordinates.lng,
+					zoom: 0,
+					pitch: 0,
+					bearing: 0,
+					name: name,
+					point_type: "pin",
+				}
+			);
+			const popup = new mapboxGl.Popup({ closeButton: false })
+				.setHTML(`<div class="popup-for-pin">${name} <button id=delete-${res.data.data.id} class="delete-pin"}">
+			X
+		  </button></div>`);
+
+			popup.on("open", (e) => {
+				const el = document.getElementById(
+					`delete-${res.data.data.id}`
+				);
+				el.addEventListener("click", async () => {
+					await http.delete(`user/viewpoint/${res.data.data.id}`);
+					useDialogStore().showNotification(
+						"success",
+						"地標刪除成功"
+					);
+					marker.remove();
+					this.marker.remove();
+				});
+			});
+			marker
+				.setLngLat(this.tempMarkerCoordinates)
+				.setPopup(popup)
+				.addTo(this.map);
+		},
+		async addViewPoint(viewPointArray) {
+			const authStore = useAuthStore();
+			const { user } = storeToRefs(authStore);
+			const res = await http.post(
+				`user/${user.value.user_id}/viewpoint`,
+				{
+					center_x: viewPointArray[0][0],
+					center_y: viewPointArray[0][1],
+					zoom: viewPointArray[1],
+					pitch: viewPointArray[2],
+					bearing: viewPointArray[3],
+					name: viewPointArray[4],
+					point_type: "view",
+				}
+			);
+			this.viewPoints.push(res.data.data);
+		},
+		async removeViewPoint(item) {
+			const res = await http.delete(`user/viewpoint/${item.id}`);
+			const dialogStore = useDialogStore();
+
+			this.viewPoints = this.viewPoints.filter(
+				(viewPoint) => viewPoint.id !== item.id
+			);
+			dialogStore.showNotification("success", "視角刪除成功");
+		},
+		async fetchViewPoints() {
+			const authStore = useAuthStore();
+			const { user } = storeToRefs(authStore);
+			const res = await http.get(`user/${user.value.user_id}/viewpoint`);
+			this.viewPoints = res.data;
+			this.viewPoints.forEach((item) => {
+				if (item.point_type === "pin") {
+					const marker = new mapboxGl.Marker({ color: "#5a9cf8" });
+					const popup = new mapboxGl.Popup({
+						closeButton: false,
+					})
+						.setHTML(`<div class="popup-for-pin">${item.name} <button id=delete-${item.id} class="delete-pin"}">
+						X
+					  </button></div>`);
+					popup.on("open", (e) => {
+						const el = document.getElementById(`delete-${item.id}`);
+						el.addEventListener("click", async () => {
+							const res = await http.delete(
+								`user/viewpoint/${item.id}`
+							);
+							useDialogStore().showNotification(
+								"success",
+								"地標刪除成功"
+							);
+							marker.remove();
+						});
+					});
+					marker
+						.setLngLat({ lng: item.center_y, lat: item.center_x })
+						.setPopup(popup)
+						.addTo(this.map);
+				}
+			});
+		},
 		/* Popup Related Functions */
 		// 1. Adds a popup when the user clicks on a item. The event will be passed in.
 		addPopup(event) {
@@ -714,13 +829,23 @@ export const useMapStore = defineStore("map", {
 		// 2. Zoom to a location
 		// [[lng, lat], zoom, pitch, bearing, savedLocationName]
 		easeToLocation(location_array) {
-			this.map.easeTo({
-				center: location_array[0],
-				zoom: location_array[1],
-				duration: 4000,
-				pitch: location_array[2],
-				bearing: location_array[3],
-			});
+			if (location_array?.zoom) {
+				this.map.easeTo({
+					center: [location_array.center_x, location_array.center_y],
+					zoom: location_array.zoom,
+					duration: 4000,
+					pitch: location_array.pitch,
+					bearing: location_array.bearing,
+				});
+			} else {
+				this.map.easeTo({
+					center: location_array[0],
+					zoom: location_array[1],
+					duration: 4000,
+					pitch: location_array[2],
+					bearing: location_array[3],
+				});
+			}
 		},
 		// 3. Fly to a location
 		flyToLocation(location_array) {
