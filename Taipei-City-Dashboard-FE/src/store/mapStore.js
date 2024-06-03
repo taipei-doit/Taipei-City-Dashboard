@@ -56,7 +56,7 @@ export const useMapStore = defineStore("map", {
 		// Store deck.gl layer
 		deckGlLayer: {},
 		// Store animate step form 1 to 100
-		step: 0,
+		step: 1,
 		// Stores popup information
 		popup: null,
 		// Stores saved locations
@@ -413,7 +413,9 @@ export const useMapStore = defineStore("map", {
 			});
 			if (
 				this.currentVisibleLayers.some(
-					(l) => l.indexOf("-arc") !== -1
+					(l) =>
+						l.indexOf("-arc") !== -1 &&
+						typeof this.deckGlLayer[l].config.coef === "number"
 				) &&
 				this.step < 1000
 			)
@@ -574,7 +576,7 @@ export const useMapStore = defineStore("map", {
 		turnOnMapLayerVisibility(mapLayerId) {
 			if (mapLayerId.indexOf("-arc") !== 0) {
 				this.deckGlLayer[mapLayerId].config.visible = true;
-				this.step = 0;
+				this.step = 1;
 				this.currentVisibleLayers.push(mapLayerId);
 				this.renderDeckGLLayer();
 			} else {
