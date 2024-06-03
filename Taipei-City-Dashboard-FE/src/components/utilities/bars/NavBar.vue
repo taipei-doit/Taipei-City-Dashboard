@@ -26,18 +26,20 @@ const linkQuery = computed(() => {
 
 <template>
   <div class="navbar">
-    <div class="navbar-logo">
-      <div class="navbar-logo-image">
-        <img
-          src="../../../assets/images/TUIC.svg"
-          alt="tuic logo"
-        >
+    <a href="/">
+      <div class="navbar-logo">
+        <div class="navbar-logo-image">
+          <img
+            src="../../../assets/images/TUIC.svg"
+            alt="tuic logo"
+          >
+        </div>
+        <div>
+          <h1>{{ VITE_APP_TITLE }}</h1>
+          <h2>Taipei City Dashboard</h2>
+        </div>
       </div>
-      <div>
-        <h1>{{ VITE_APP_TITLE }}</h1>
-        <h2>Taipei City Dashboard</h2>
-      </div>
-    </div>
+    </a>
     <div
       v-if="
         authStore.currentPath !== 'admin' &&

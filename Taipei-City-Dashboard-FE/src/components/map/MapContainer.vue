@@ -1,17 +1,15 @@
 <!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 
 <script setup>
-import { onMounted, ref, computed } from "vue";
-import { storeToRefs } from "pinia";
-
+import { computed, onMounted, ref } from "vue";
 import { useMapStore } from "../../store/mapStore";
 import { useDialogStore } from "../../store/dialogStore";
 import { useContentStore } from "../../store/contentStore";
 
 import MobileLayers from "../dialogs/MobileLayers.vue";
+import IncidentReport from "../dialogs/IncidentReport.vue";
 
 const mapStore = useMapStore();
-const { getSourceByMapConfigId } = storeToRefs(mapStore);
 const dialogStore = useDialogStore();
 const contentStore = useContentStore();
 
@@ -47,6 +45,8 @@ onMounted(() => {
 	mapStore.initializeMapBox();
 	mapStore.setCurrentLocation();
 });
+
+const showTooltip = ref(false);
 </script>
 
 <template>
@@ -107,6 +107,26 @@ onMounted(() => {
       </div>
       <!-- The key prop informs vue that the component should be updated when switching dashboards -->
       <MobileLayers :key="contentStore.currentDashboard.index" />
+      <button
+        class="input"
+        :style="{
+          // color: villageLayer
+          // 	? 'var(--color-highlight)'
+          // 	: 'var(--color-component-background)'
+        }"
+        title="通報災害"
+        @click="dialogStore.showDialog('incidentReport')"
+        @mouseover="showTooltip = true"
+        @mouseleave="showTooltip = false"
+      >
+        <!-- <span class="material-symbols-outlined icon">e911_emergency</span> -->
+        <span
+          v-if="showTooltip"
+          class="tooltip"
+        >通報災害</span>
+        !
+      </button>
+      <IncidentReport />
     </div>
 
     <div class="mapcontainer-controls hide-if-mobile">
@@ -150,6 +170,51 @@ onMounted(() => {
 </template>
 
 <style scoped lang="scss">
+.input {
+	position: absolute;
+	right: 20px;
+	bottom: 60px;
+	width: 70px;
+	height: 70px;
+	border-radius: 50%;
+	background-color: var(--color-component-background);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: background-color 0.2s, color 0.2s;
+	font-size: 32px;
+	&:hover {
+		background-color: var(--color-highlight);
+	}
+	.icon {
+		color: white;
+		font-family: var(--font-icon);
+	}
+
+	.tooltip {
+		position: absolute;
+		background-color: black;
+		border-radius: 20px;
+		border-width: 0px;
+		color: white;
+		text-align: center;
+		padding: 5px 10px;
+		z-index: 1;
+		bottom: 125%;
+		left: 50%;
+		transform: translateX(-50%);
+		white-space: nowrap;
+	}
+
+	.tooltip::after {
+		content: "";
+		position: absolute;
+		top: 100%;
+		left: 50%;
+		margin-left: -5px;
+		border-color: black transparent transparent transparent;
+	}
+}
 .mapcontainer {
 	position: relative;
 	width: 100%;
@@ -268,7 +333,7 @@ onMounted(() => {
 	&-layers {
 		position: absolute;
 		right: 10px;
-		top: 104px;
+		top: 150px;
 		z-index: 1;
 		display: flex;
 		flex-direction: column;

@@ -6,7 +6,7 @@ services:
     image: redis:7.2.3-alpine
     volumes:
       - ./db-data/redis-data:/data
-      
+
   postgres-data:
     image: postgis/postgis:16-3.4
     container_name: postgres-data

@@ -117,6 +117,7 @@ func MigrateManagerSchema() {
 		DBManager.AutoMigrate(&Component{}, &ComponentChart{}, &ComponentMap{})
 		DBManager.AutoMigrate(&Contributor{})
 		DBManager.AutoMigrate(&Dashboard{}, &DashboardGroup{}, &Issue{})
+		DBManager.AutoMigrate(&Incident{})
 
 		// All users beneath the public group do not need to be added to the public group
 		// DBManager.Exec("ALTER TABLE auth_user_group_roles ADD CONSTRAINT check_group_id CHECK (group_id > 1);")

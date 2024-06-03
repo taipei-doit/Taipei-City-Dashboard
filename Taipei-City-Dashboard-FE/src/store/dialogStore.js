@@ -17,6 +17,7 @@ export const useDialogStore = defineStore("dialog", {
 			adminComponentSettings: false,
 			adminAddEditDashboards: false,
 			adminEditIssue: false,
+			adminEditDisaster: false,
 			adminAddComponent: false,
 			adminDeleteDashboard: false,
 			adminEditUser: false,
@@ -36,6 +37,8 @@ export const useDialogStore = defineStore("dialog", {
 			reportIssue: false,
 			userSettings: false,
 			embedComponent: false,
+			incidentReport: false,
+			curTimeout: null,
 			contributorsList: false,
 			contributorInfo: false,
 		},
@@ -73,15 +76,19 @@ export const useDialogStore = defineStore("dialog", {
 			this.moreInfoContent = null;
 		},
 		// Show the notification bar and update the notification message
-		showNotification(status, message) {
-			this.showDialog("notificationBar");
+		showNotification(status, message, showtime = 3000) {
+			this.dialogs.notificationBar = false;
+			clearTimeout(this.curTimeout);
+			setTimeout(() => {
+				this.showDialog("notificationBar");
+			}, 20);
 			this.notification = {
 				status: status, // success, fail, info
 				message: message,
 			};
-			setTimeout(() => {
+			this.curTimeout = setTimeout(() => {
 				this.dialogs.notificationBar = false;
-			}, 3000);
+			}, showtime);
 		},
 		// Show the more info dialog and update the content
 		showMoreInfo(content) {
