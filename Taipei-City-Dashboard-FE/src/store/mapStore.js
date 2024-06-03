@@ -12,7 +12,8 @@ import { defineStore } from "pinia";
 import mapboxGl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import axios from "axios";
-import { Threebox } from "threebox-plugin";
+import { MapboxOverlay } from "@deck.gl/mapbox";
+import { ArcLayer } from "@deck.gl/layers";
 import { calculateHaversineDistance } from "../assets/utilityFunctions/calculateHaversineDistance";
 
 // Other Stores
@@ -35,10 +36,11 @@ import {
 	maplayerCommonLayout,
 } from "../assets/configs/mapbox/mapConfig.js";
 import { savedLocations } from "../assets/configs/mapbox/savedLocations.js";
-import { calculateGradientSteps } from "../assets/configs/mapbox/arcGradient";
 import { voronoi } from "../assets/utilityFunctions/voronoi.js";
 import { interpolation } from "../assets/utilityFunctions/interpolation.js";
 import { marchingSquare } from "../assets/utilityFunctions/marchingSquare.js";
+import { AnimatedArcLayer } from "../assets/configs/mapbox/arcAnimate.js";
+import { hexToRGB } from "../assets/utilityFunctions/colorConvert.js";
 
 export const useMapStore = defineStore("map", {
 	state: () => ({
@@ -50,6 +52,12 @@ export const useMapStore = defineStore("map", {
 		mapConfigs: {},
 		// Stores the mapbox map instance
 		map: null,
+		// Store deck.gl layer overlay
+		overlay: null,
+		// Store deck.gl layer
+		deckGlLayer: {},
+		// Store animate step form 1 to 100
+		step: 1,
 		// Stores popup information
 		popup: null,
 		// Stores saved locations
@@ -71,6 +79,7 @@ export const useMapStore = defineStore("map", {
 		// 1. Creates the mapbox instance and passes in initial configs
 		initializeMapBox() {
 			this.map = null;
+			this.overlay = null;
 			const MAPBOXTOKEN = import.meta.env.VITE_MAPBOXTOKEN;
 			mapboxGl.accessToken = MAPBOXTOKEN;
 			this.map = new mapboxGl.Map({
@@ -81,6 +90,11 @@ export const useMapStore = defineStore("map", {
 			this.map.doubleClickZoom.disable();
 			this.map
 				.on("load", () => {
+					this.overlay = new MapboxOverlay({
+						interleaved: true,
+						layers: [],
+					});
+					this.map.addControl(this.overlay);
 					this.initializeBasicLayers();
 				})
 				.on("click", (event) => {
@@ -165,6 +179,7 @@ export const useMapStore = defineStore("map", {
 				"bike_green",
 				"bike_orange",
 				"bike_red",
+				"cctv",
 			];
 			images.forEach((element) => {
 				this.map.loadImage(
@@ -188,7 +203,6 @@ export const useMapStore = defineStore("map", {
 				this.map.setLayoutProperty("tp_district", "visibility", "none");
 			}
 		},
-
 		// 5. Toggle village boundaries
 		toggleVillageBoundaries(status) {
 			if (status) {
@@ -327,97 +341,128 @@ export const useMapStore = defineStore("map", {
 				(el) => el !== map_config.layerId
 			);
 		},
-		// 4-2. Add Map Layer for Arc Maps
+		// 4-2-1. Add Map Layer for Arc Maps
+		// Developed by Weeee Chill, Taipei Codefest 2024
 		AddArcMapLayer(map_config, data) {
-			const authStore = useAuthStore();
-			const lines = [...JSON.parse(JSON.stringify(data.features))];
-			const arcInterval = 20;
-
+			// start loading
 			this.loadingLayers.push("rendering");
+			const mapLayerId = `${map_config.index}-${map_config.type}`;
+			const paintSettings = map_config.paint
+				? map_config.paint
+				: { "arc-color": ["#ffffff"] };
+			paintSettings["arc-color"] = paintSettings["arc-color"]
+				? paintSettings["arc-color"]
+				: ["#ffffff"];
+			// formatted data
+			const layerConfig = {
+				id: map_config.index,
+				data: data.features,
+				getSourcePosition: (d) => d.geometry.coordinates[0],
+				getTargetPosition: (d) => d.geometry.coordinates[1],
+				// color format: [r, g, b, [a]]
+				getSourceColor: () => {
+					const color = hexToRGB(paintSettings["arc-color"][0]);
+					return [
+						parseInt(color.r, 16),
+						parseInt(color.g, 16),
+						parseInt(color.b, 16),
+						255 * paintSettings["arc-opacity"] || 255 * 0.5,
+					];
+				},
+				getTargetColor: () => {
+					const color = hexToRGB(
+						paintSettings["arc-color"][1] ||
+							paintSettings["arc-color"][0]
+					);
+					return [
+						parseInt(color.r, 16),
+						parseInt(color.g, 16),
+						parseInt(color.b, 16),
+						255 * paintSettings["arc-opacity"] || 255 * 0.5,
+					];
+				},
+				getWidth: paintSettings["arc-width"] || 2,
+				pickable: true,
+				...(paintSettings["arc-animate"] && {
+					coef: this.step / 1000,
+				}),
+			};
+			// add deckgl layer to overlay
+			this.deckGlLayer[mapLayerId] = {
+				type: paintSettings["arc-animate"]
+					? "AnimatedArcLayer"
+					: "ArcLayer",
+				config: layerConfig,
+				data: data.features,
+			};
+			// render deckgl layer
+			this.currentVisibleLayers.push(map_config.layerId);
+			this.renderDeckGLLayer();
+			// end loading
+			this.currentLayers.push(map_config.layerId);
+			this.mapConfigs[map_config.layerId] = map_config;
+			this.loadingLayers = this.loadingLayers.filter(
+				(el) => el !== map_config.layerId
+			);
+		},
+		// 4-2-2. Render DeckGL Layer
+		// Developed by Weeee Chill, Taipei Codefest 2024
+		renderDeckGLLayer() {
+			const layers = Object.keys(this.deckGlLayer).map((index) => {
+				const l = this.deckGlLayer[index];
+				switch (l.type) {
+					case "ArcLayer":
+						return new ArcLayer(l.config);
+					case "AnimatedArcLayer":
+						return new AnimatedArcLayer({
+							...l.config,
+							coef: this.step / 1000,
+						});
+					default:
+						break;
+				}
+			});
+			this.overlay.setProps({
+				layers,
+			});
+			if (
+				this.currentVisibleLayers.some(
+					(l) =>
+						l.indexOf("-arc") !== -1 &&
+						typeof this.deckGlLayer[l].config.coef === "number"
+				) &&
+				this.step < 1000
+			)
+				this.animateArcLayer();
+		},
+		// 4-2-3. Animate Arc Layer
+		// Developed by Weeee Chill, Taipei Codefest 2024
+		animateArcLayer() {
+			// 開始時間
+			let startTime = performance.now();
+			// 每個動畫步驟的持續時間（毫秒）
+			const duration = 1000; // 1秒
+			const _this = this;
 
-			for (let i = 0; i < lines.length; i++) {
-				let line = [];
-				let lngDif =
-					lines[i].geometry.coordinates[1][0] -
-					lines[i].geometry.coordinates[0][0];
-				let lngInterval = lngDif / arcInterval;
-				let latDif =
-					lines[i].geometry.coordinates[1][1] -
-					lines[i].geometry.coordinates[0][1];
-				let latInterval = latDif / arcInterval;
+			const step = (timestamp) => {
+				// 計算已經過的時間
+				const elapsedTime = timestamp - startTime;
+				// 計算進度
+				const progress = (elapsedTime / duration) * 100;
 
-				let maxElevation =
-					Math.pow(Math.abs(lngDif * latDif), 0.5) * 80000;
-
-				for (let j = 0; j < arcInterval + 1; j++) {
-					let waypointElevation =
-						Math.sin((Math.PI * j) / arcInterval) * maxElevation;
-					line.push([
-						lines[i].geometry.coordinates[0][0] + lngInterval * j,
-						lines[i].geometry.coordinates[0][1] + latInterval * j,
-						waypointElevation,
-					]);
+				// 如果時間已經超過一個步驟，則增加步驟數
+				if (progress >= (_this.step / 1000) * 100) {
+					_this.step = _this.step + 1;
+					_this.renderDeckGLLayer();
 				}
 
-				lines[i].geometry.coordinates = [...line];
-			}
-
-			const tb = (window.tb = new Threebox(
-				this.map,
-				this.map.getCanvas().getContext("webgl"), //get the context from the map canvas
-				{ defaultLights: true }
-			));
-
-			const delay = authStore.isMobileDevice ? 2000 : 500;
-
-			setTimeout(() => {
-				this.map.addLayer({
-					id: map_config.layerId,
-					type: "custom",
-					renderingMode: "3d",
-					onAdd: function () {
-						const paintSettings = map_config.paint
-							? map_config.paint
-							: { "arc-color": ["#ffffff"] };
-						const gradientSteps = calculateGradientSteps(
-							paintSettings["arc-color"][0],
-							paintSettings["arc-color"][1]
-								? paintSettings["arc-color"][1]
-								: paintSettings["arc-color"][0],
-							arcInterval + 1
-						);
-						for (let line of lines) {
-							let lineOptions = {
-								geometry: line.geometry.coordinates,
-								color: 0xffffff,
-								width: paintSettings["arc-width"]
-									? paintSettings["arc-width"]
-									: 2,
-								opacity:
-									paintSettings["arc-opacity"] ||
-									paintSettings["arc-opacity"] === 0
-										? paintSettings["arc-opacity"]
-										: 0.5,
-							};
-
-							let lineMesh = tb.line(lineOptions);
-							lineMesh.geometry.setColors(gradientSteps);
-							lineMesh.material.vertexColors = true;
-
-							tb.add(lineMesh);
-						}
-					},
-					render: function () {
-						tb.update(); //update Threebox scene
-					},
-				});
-				this.currentLayers.push(map_config.layerId);
-				this.mapConfigs[map_config.layerId] = map_config;
-				this.currentVisibleLayers.push(map_config.layerId);
-				this.loadingLayers = this.loadingLayers.filter(
-					(el) => el !== map_config.layerId
-				);
-			}, delay);
+				// 如果動畫還未完成，繼續下一個動畫步驟
+				if (_this.step <= 1000) {
+					requestAnimationFrame(step);
+				}
+			};
+			// 啟動動畫
+			requestAnimationFrame(step);
 		},
 		// 4-3. Add Map Layer for Voronoi Maps
 		// Developed by 00:21, Taipei Codefest 2023
@@ -572,7 +617,14 @@ export const useMapStore = defineStore("map", {
 		},
 		//  5. Turn on the visibility for a exisiting map layer
 		turnOnMapLayerVisibility(mapLayerId) {
-			this.map.setLayoutProperty(mapLayerId, "visibility", "visible");
+			if (mapLayerId.indexOf("-arc") !== -1) {
+				this.deckGlLayer[mapLayerId].config.visible = true;
+				this.step = 1;
+				this.currentVisibleLayers.push(mapLayerId);
+				this.renderDeckGLLayer();
+			} else {
+				this.map.setLayoutProperty(mapLayerId, "visibility", "visible");
+			}
 		},
 		// 6. Turn off the visibility of an exisiting map layer but don't remove it completely
 		turnOffMapLayerVisibility(map_config) {
@@ -581,8 +633,10 @@ export const useMapStore = defineStore("map", {
 				this.loadingLayers = this.loadingLayers.filter(
 					(el) => el !== mapLayerId
 				);
-
-				if (this.map.getLayer(mapLayerId)) {
+				if (mapLayerId.indexOf("-arc") !== -1) {
+					this.deckGlLayer[mapLayerId].config.visible = false;
+					this.renderDeckGLLayer();
+				} else if (this.map.getLayer(mapLayerId)) {
 					this.map.setFilter(mapLayerId, null);
 					this.map.setLayoutProperty(
 						mapLayerId,
@@ -604,7 +658,9 @@ export const useMapStore = defineStore("map", {
 			const clickFeatureDatas = this.map.queryRenderedFeatures(
 				event.point,
 				{
-					layers: this.currentVisibleLayers,
+					layers: this.currentVisibleLayers.filter(
+						(layer) => layer.indexOf("-arc") === -1
+					),
 				}
 			);
 			// Return if there is no info in the click
@@ -717,37 +773,34 @@ export const useMapStore = defineStore("map", {
 			map_configs.map((map_config) => {
 				let mapLayerId = `${map_config.index}-${map_config.type}`;
 				if (map_config && map_config.type === "arc") {
-					// Only turn off original layer visibility
-					this.map.setLayoutProperty(
-						mapLayerId,
-						"visibility",
-						"none"
-					);
-					// Remove any existing filtered layer
-					if (this.map.getLayer(`${mapLayerId}-filtered`)) {
-						this.map.removeLayer(`${mapLayerId}-filtered`);
-					}
-					// Filter data to render new filtered layer
-					let toBeFiltered = {
-						...this.map.getSource(`${mapLayerId}-source`)._data,
-					};
-					if (xParam) {
-						toBeFiltered.features = toBeFiltered.features.filter(
-							(el) =>
-								el.properties[map_filter.byParam.xParam] ===
-								xParam
-						);
-					}
-					if (yParam) {
-						toBeFiltered.features = toBeFiltered.features.filter(
-							(el) =>
-								el.properties[map_filter.byParam.yParam] ===
+					this.deckGlLayer[mapLayerId].config.data = this.deckGlLayer[
+						mapLayerId
+					].data.filter((d) => {
+						if (
+							map_filter.byParam.xParam &&
+							map_filter.byParam.yParam &&
+							xParam &&
+							yParam
+						) {
+							return (
+								d.properties[map_filter.byParam.xParam] ===
+									xParam &&
+								d.properties[map_filter.byParam.yParam] ===
+									yParam
+							);
+						} else if (map_filter.byParam.yParam && yParam) {
+							return (
+								d.properties[map_filter.byParam.yParam] ===
 								yParam
-						);
-					}
-					map_config.layerId = `${mapLayerId}-filtered`;
-					// Add new filtered layer
-					this.AddArcMapLayer(map_config, toBeFiltered);
+							);
+						} else if (map_filter.byParam.xParam && xParam) {
+							return (
+								d.properties[map_filter.byParam.xParam] ===
+								xParam
+							);
+						}
+					});
+					this.renderDeckGLLayer();
 					return;
 				}
 				// If x and y both exist, filter by both
@@ -815,21 +868,9 @@ export const useMapStore = defineStore("map", {
 			map_configs.map((map_config) => {
 				let mapLayerId = `${map_config.index}-${map_config.type}`;
 				if (map_config && map_config.type === "arc") {
-					if (this.map.getLayer(`${mapLayerId}-filtered`)) {
-						this.map.removeLayer(`${mapLayerId}-filtered`);
-					}
-					this.currentLayers = this.currentLayers.filter(
-						(item) => item !== `${mapLayerId}-filtered`
-					);
-					this.currentVisibleLayers =
-						this.currentVisibleLayers.filter(
-							(item) => item !== `${mapLayerId}-filtered`
-						);
-					this.map.setLayoutProperty(
-						mapLayerId,
-						"visibility",
-						"visible"
-					);
+					this.deckGlLayer[mapLayerId].config.data =
+						this.deckGlLayer[mapLayerId].data;
+					this.renderDeckGLLayer();
 					return;
 				}
 				this.map.setFilter(mapLayerId, null);
