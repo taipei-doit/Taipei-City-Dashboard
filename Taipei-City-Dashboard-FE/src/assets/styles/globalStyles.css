@@ -172,11 +172,27 @@ html .mapboxgl-popup {
 }
 
 html .mapboxgl-popup .popup-for-pin {
-	margin-top: 4px;
-	margin-left: 4px;
-}
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	column-gap: 8px;
+	margin: 8px;
 
-html .mapboxgl-popup .delete-pin {
-	position: absolute;
-	right: 4px;
+	div {
+		padding: 2px 4px;
+		border-radius: 5px;
+		background-color: rgb(77, 77, 77);
+	}
+
+	.delete-pin {
+		span {
+			font-family: var(--font-icon);
+			font-size: var(--font-m);
+			color: var(--color-complement-text);
+			transition: color 0.2s;
+		}
+	}
+	.delete-pin:hover span {
+		color: white;
+	}
 }

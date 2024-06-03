@@ -417,15 +417,15 @@ export const useMapStore = defineStore("map", {
 			const layers = Object.keys(this.deckGlLayer).map((index) => {
 				const l = this.deckGlLayer[index];
 				switch (l.type) {
-				case "ArcLayer":
-					return new ArcLayer(l.config);
-				case "AnimatedArcLayer":
-					return new AnimatedArcLayer({
-						...l.config,
-						coef: this.step / 1000,
-					});
-				default:
-					break;
+					case "ArcLayer":
+						return new ArcLayer(l.config);
+					case "AnimatedArcLayer":
+						return new AnimatedArcLayer({
+							...l.config,
+							coef: this.step / 1000,
+						});
+					default:
+						break;
 				}
 			});
 			this.overlay.setProps({
@@ -674,8 +674,8 @@ export const useMapStore = defineStore("map", {
 				}
 			);
 			const popup = new mapboxGl.Popup({ closeButton: false })
-				.setHTML(`<div class="popup-for-pin">${name} <button id=delete-${res.data.data.id} class="delete-pin"}">
-			X
+				.setHTML(`<div class="popup-for-pin"><div>${name}</div> <button id="delete-${res.data.data.id}" class="delete-pin"}">
+			<span>delete</span>
 		  </button></div>`);
 
 			popup.on("open", (e) => {
@@ -715,7 +715,7 @@ export const useMapStore = defineStore("map", {
 			this.viewPoints.push(res.data.data);
 		},
 		async removeViewPoint(item) {
-			const res = await http.delete(`user/viewpoint/${item.id}`);
+			const res = await http.delete(`user/${item.id}/viewpoint`);
 			const dialogStore = useDialogStore();
 
 			this.viewPoints = this.viewPoints.filter(
@@ -734,8 +734,8 @@ export const useMapStore = defineStore("map", {
 					const popup = new mapboxGl.Popup({
 						closeButton: false,
 					})
-						.setHTML(`<div class="popup-for-pin">${item.name} <button id=delete-${item.id} class="delete-pin"}">
-						X
+						.setHTML(`<div class="popup-for-pin"><div>${item.name}</div> <button id="delete-${item.id}" class="delete-pin"}">
+						<span>delete</span>
 					  </button></div>`);
 					popup.on("open", (e) => {
 						const el = document.getElementById(`delete-${item.id}`);
