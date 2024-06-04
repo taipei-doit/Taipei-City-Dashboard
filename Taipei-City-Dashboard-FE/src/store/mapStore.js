@@ -67,13 +67,6 @@ export const useMapStore = defineStore("map", {
 		// Store the user's current location,
 		userLocation: { latitude: null, longitude: null },
 	}),
-	getters: {
-		getSourceByMapConfigId: (state) => {
-			return (mapConfigId) => {
-				return state.map.getSource(`${mapConfigId}-source`)._data;
-			};
-		},
-	},
 	actions: {
 		/* Initialize Mapbox */
 		// 1. Creates the mapbox instance and passes in initial configs
@@ -729,6 +722,8 @@ export const useMapStore = defineStore("map", {
 				point: point,
 				lngLat: center,
 			});
+
+			this.loadingLayers.pop();
 		},
 
 		/* Functions that change the viewing experience of the map */
@@ -995,25 +990,60 @@ export const useMapStore = defineStore("map", {
 			}
 			return closestLocation;
 		},
-		flyToClosestLocationAndTriggerPopup() {
-			// make sure this.userLocation is not null before call findClosestLocation
+		async flyToClosestLocationAndTriggerPopup() {
+			if (
+				this.currentVisibleLayers.length !== 1 ||
+				this.loadingLayers.length !== 0 ||
+				!["circle", "symbol"].includes(
+					this.mapConfigs[this.currentVisibleLayers[0]].type
+				) ||
+				this.userLocation === null
+			)
+				return;
+			this.loadingLayers.push("rendering");
+			const layerSourceType =
+				this.mapConfigs[this.currentVisibleLayers[0]].source;
+
+			const features = [];
+
+			if (layerSourceType === "geojson") {
+				features.push(
+					...this.map.getSource(
+						`${this.currentVisibleLayers[0]}-source`
+					)._data.features
+				);
+			} else {
+				const res = await axios.get(
+					`${
+						location.origin
+					}/geo_server/taipei_vioc/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=taipei_vioc%3A${
+						this.mapConfigs[this.currentVisibleLayers[0]].index
+					}&maxFeatures=1000000&outputFormat=application%2Fjson`
+				);
+
+				features.push(...res.data.features);
+			}
+
+			if (!features || features.length === 0) {
+				this.loadingLayers.pop();
+				return;
+			}
+
 			const res = this.findClosestLocation(
 				{
 					longitude: this.userLocation.longitude,
 					latitude: this.userLocation.latitude,
 				},
-
-				{
-					...this.getSourceByMapConfigId(
-						`${
-							this.mapConfigs[this.currentVisibleLayers].index
-						}-circle`
-					),
-				}.features
+				features
 			);
 
 			this.map.once("moveend", () => {
-				this.manualTriggerPopup();
+				setTimeout(
+					() => {
+						this.manualTriggerPopup();
+					},
+					layerSourceType === "geojson" ? 0 : 500
+				);
 			});
 
 			this.flyToLocation(res.geometry.coordinates);

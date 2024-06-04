@@ -1,7 +1,7 @@
 <!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 
 <script setup>
-import { computed, onMounted, ref } from "vue";
+import { onMounted, ref } from "vue";
 import { useMapStore } from "../../store/mapStore";
 import { useDialogStore } from "../../store/dialogStore";
 import { useContentStore } from "../../store/contentStore";
@@ -15,14 +15,6 @@ const contentStore = useContentStore();
 
 const districtLayer = ref(false);
 const villageLayer = ref(false);
-
-const mapConfigsLength = computed(
-	() => Object.keys(mapStore.currentVisibleLayers).length
-);
-const currentVisibleLayerKey = computed(() => mapStore.currentVisibleLayers);
-const mapConfigs = computed(() => {
-	return mapStore.mapConfigs;
-});
 
 // const newSavedLocation = ref("");
 
@@ -45,118 +37,109 @@ onMounted(() => {
 	mapStore.initializeMapBox();
 	mapStore.setCurrentLocation();
 });
-
-const showTooltip = ref(false);
 </script>
 
 <template>
-  <div class="mapcontainer">
-    <div class="mapcontainer-map">
-      <!-- #mapboxBox needs to be empty to ensure Mapbox performance -->
-      <div id="mapboxBox" />
-      <div
-        v-if="mapStore.loadingLayers.length > 0"
-        class="mapcontainer-loading"
-      >
-        <div />
-      </div>
-      <div class="mapcontainer-layers">
-        <button
-          :style="{
-            color: districtLayer
-              ? 'var(--color-highlight)'
-              : 'var(--color-component-background)',
-          }"
-          @click="toggleDistrictLayer"
-        >
-          區
-        </button>
-        <button
-          :style="{
-            color: villageLayer
-              ? 'var(--color-highlight)'
-              : 'var(--color-component-background)',
-          }"
-          @click="toggleVillageLayer"
-        >
-          里
-        </button>
+	<div class="mapcontainer">
+		<div class="mapcontainer-map">
+			<!-- #mapboxBox needs to be empty to ensure Mapbox performance -->
+			<div id="mapboxBox" />
+			<div class="mapcontainer-layers">
+				<button
+					:style="{
+						color: districtLayer
+							? 'var(--color-highlight)'
+							: 'var(--color-component-background)',
+					}"
+					@click="toggleDistrictLayer"
+				>
+					區
+				</button>
+				<button
+					:style="{
+						color: villageLayer
+							? 'var(--color-highlight)'
+							: 'var(--color-component-background)',
+					}"
+					@click="toggleVillageLayer"
+				>
+					里
+				</button>
 
-        <button
-          v-if="
-            mapConfigsLength === 1 &&
-              mapConfigs[currentVisibleLayerKey ?? '']?.type ===
-              'circle'
-          "
-          :style="{
-            color: villageLayer
-              ? 'var(--color-highlight)'
-              : 'var(--color-component-background)',
-          }"
-          type="button"
-          @click="mapStore.flyToClosestLocationAndTriggerPopup"
-        >
-          近
-        </button>
-        <button
-          class="show-if-mobile"
-          @click="dialogStore.showDialog('mobileLayers')"
-        >
-          <span>layers</span>
-        </button>
-      </div>
-      <!-- The key prop informs vue that the component should be updated when switching dashboards -->
-      <MobileLayers :key="contentStore.currentDashboard.index" />
-      <button
-        class="input"
-        :style="{
-          // color: villageLayer
-          // 	? 'var(--color-highlight)'
-          // 	: 'var(--color-component-background)'
-        }"
-        title="通報災害"
-        @click="dialogStore.showDialog('incidentReport')"
-        @mouseover="showTooltip = true"
-        @mouseleave="showTooltip = false"
-      >
-        <!-- <span class="material-symbols-outlined icon">e911_emergency</span> -->
-        <span
-          v-if="showTooltip"
-          class="tooltip"
-        >通報災害</span>
-        !
-      </button>
-      <IncidentReport />
-    </div>
+				<button
+					v-if="
+						mapStore.userLocation &&
+						mapStore.currentVisibleLayers.length === 1 &&
+						['circle', 'symbol'].includes(
+							mapStore.mapConfigs[
+								mapStore.currentVisibleLayers[0]
+							]?.type
+						)
+					"
+					:style="{
+						color: villageLayer
+							? 'var(--color-highlight)'
+							: 'var(--color-component-background)',
+					}"
+					class="hide-if-mobile"
+					type="button"
+					@click="mapStore.flyToClosestLocationAndTriggerPopup"
+				>
+					近
+				</button>
+				<button
+					class="show-if-mobile"
+					@click="dialogStore.showDialog('mobileLayers')"
+				>
+					<span>layers</span>
+				</button>
+				<div
+					v-if="mapStore.loadingLayers.length > 0"
+					class="mapcontainer-layers-loading"
+				>
+					<div />
+				</div>
+			</div>
+			<!-- The key prop informs vue that the component should be updated when switching dashboards -->
+			<MobileLayers :key="contentStore.currentDashboard.index" />
+			<button
+				class="input"
+				title="通報災害"
+				@click="dialogStore.showDialog('incidentReport')"
+			>
+				!
+			</button>
+			<IncidentReport />
+		</div>
 
-    <div class="mapcontainer-controls hide-if-mobile">
-      <button
-        @click="
-          mapStore.easeToLocation([
-            [121.536609, 25.044808],
-            12.5,
-            0,
-            0,
-          ])
-        "
-      >
-        返回預設
-      </button>
-      <div
-        v-for="(item, index) in mapStore.savedLocations"
-        :key="`${item[4]}-${index}`"
-      >
-        <button @click="mapStore.easeToLocation(item)">
-          {{ item[4] }}
-        </button>
-        <!-- <div
+		<div class="mapcontainer-controls hide-if-mobile">
+			<button
+				@click="
+					mapStore.easeToLocation([
+						[121.536609, 25.044808],
+						12.5,
+						0,
+						0,
+					])
+				"
+			>
+				返回預設
+			</button>
+			<div
+				v-for="(item, index) in mapStore.savedLocations"
+				:key="`${item[4]}-${index}`"
+			>
+				<button @click="mapStore.easeToLocation(item)">
+					{{ item[4] }}
+				</button>
+				<!-- <div
 					class="mapcontainer-controls-delete"
 					@click="mapStore.removeSavedLocation(index)"
 				>
 					<span>delete</span>
 				</div> -->
-      </div>
-      <!-- <input
+			</div>
+			<!-- <input
 				v-if="mapStore.savedLocations.length < 10"
 				type="text"
 				placeholder="新增後按Enter"
@@ -165,8 +148,8 @@ const showTooltip = ref(false);
 				@focusout="newSavedLocation = ''"
 				@keypress.enter="handleSubmitNewLocation"
 			/> -->
-    </div>
-  </div>
+		</div>
+	</div>
 </template>
 
 <style scoped lang="scss">
@@ -190,30 +173,6 @@ const showTooltip = ref(false);
 		color: white;
 		font-family: var(--font-icon);
 	}
-
-	.tooltip {
-		position: absolute;
-		background-color: black;
-		border-radius: 20px;
-		border-width: 0px;
-		color: white;
-		text-align: center;
-		padding: 5px 10px;
-		z-index: 1;
-		bottom: 125%;
-		left: 50%;
-		transform: translateX(-50%);
-		white-space: nowrap;
-	}
-
-	.tooltip::after {
-		content: "";
-		position: absolute;
-		top: 100%;
-		left: 50%;
-		margin-left: -5px;
-		border-color: black transparent transparent transparent;
-	}
 }
 .mapcontainer {
 	position: relative;
@@ -226,29 +185,6 @@ const showTooltip = ref(false);
 
 		@media (max-width: 1000px) {
 			height: 100%;
-		}
-	}
-
-	&-loading {
-		position: absolute;
-		top: 170px;
-		right: 10px;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		z-index: 20;
-
-		@media (max-width: 1000px) {
-			top: 145px;
-		}
-
-		div {
-			width: 1.3rem;
-			height: 1.3rem;
-			border-radius: 50%;
-			border: solid 4px var(--color-border);
-			border-top: solid 4px var(--color-highlight);
-			animation: spin 0.7s ease-in-out infinite;
 		}
 	}
 
@@ -354,6 +290,27 @@ const showTooltip = ref(false);
 			color: var(--color-component-background);
 			font-size: 1.2rem;
 			font-family: var(--font-icon);
+		}
+
+		&-loading {
+			height: 2rem;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			z-index: 20;
+
+			@media (max-width: 1000px) {
+				top: 145px;
+			}
+
+			div {
+				width: 1.3rem;
+				height: 1.3rem;
+				border-radius: 50%;
+				border: solid 4px var(--color-border);
+				border-top: solid 4px var(--color-highlight);
+				animation: spin 0.7s ease-in-out infinite;
+			}
 		}
 	}
 }
