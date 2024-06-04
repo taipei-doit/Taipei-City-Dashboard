@@ -180,6 +180,8 @@ td:last-child {
 /* MapBox */
 .mapboxgl-user-location-accuracy-circle {
 	background-color: var(--color-highlight) !important;
+	height: 0.75rem !important;
+	width: 0.75rem !important;
 }
 
 .mapboxgl-user-location-dot {
