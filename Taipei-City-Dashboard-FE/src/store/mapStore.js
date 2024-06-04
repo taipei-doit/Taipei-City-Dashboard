@@ -7,14 +7,14 @@ The mapStore controls the map and includes methods to modify it.
 !! PLEASE BE SURE TO REFERENCE THE MAPBOX DOCUMENTATION IF ANYTHING IS UNCLEAR !!
 https://docs.mapbox.com/mapbox-gl-js/guides/
 */
-import http from "../router/axios.js";
-import { createApp, defineComponent, nextTick, ref } from "vue";
-import { defineStore, storeToRefs } from "pinia";
+import { ArcLayer } from "@deck.gl/layers";
+import { MapboxOverlay } from "@deck.gl/mapbox";
+import axios from "axios";
 import mapboxGl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
-import axios from "axios";
-import { MapboxOverlay } from "@deck.gl/mapbox";
-import { ArcLayer } from "@deck.gl/layers";
+import { defineStore, storeToRefs } from "pinia";
+import { createApp, defineComponent, nextTick, ref } from "vue";
+import http from "../router/axios.js";
 
 // Other Stores
 import { useAuthStore } from "./authStore";
@@ -24,23 +24,23 @@ import { useDialogStore } from "./dialogStore";
 import MapPopup from "../components/map/MapPopup.vue";
 
 // Utility Functions or Configs
-import mapStyle from "../assets/configs/mapbox/mapStyle.js";
+import { AnimatedArcLayer } from "../assets/configs/mapbox/arcAnimate.js";
 import {
 	MapObjectConfig,
+	TaipeiBuilding,
 	TaipeiTown,
 	TaipeiVillage,
-	TaipeiBuilding,
 	TpDistrict,
 	TpVillage,
-	maplayerCommonPaint,
 	maplayerCommonLayout,
+	maplayerCommonPaint,
 } from "../assets/configs/mapbox/mapConfig.js";
+import mapStyle from "../assets/configs/mapbox/mapStyle.js";
 import { savedLocations } from "../assets/configs/mapbox/savedLocations.js";
-import { voronoi } from "../assets/utilityFunctions/voronoi.js";
+import { hexToRGB } from "../assets/utilityFunctions/colorConvert.js";
 import { interpolation } from "../assets/utilityFunctions/interpolation.js";
 import { marchingSquare } from "../assets/utilityFunctions/marchingSquare.js";
-import { AnimatedArcLayer } from "../assets/configs/mapbox/arcAnimate.js";
-import { hexToRGB } from "../assets/utilityFunctions/colorConvert.js";
+import { voronoi } from "../assets/utilityFunctions/voronoi.js";
 
 export const useMapStore = defineStore("map", {
 	state: () => ({
@@ -417,15 +417,15 @@ export const useMapStore = defineStore("map", {
 			const layers = Object.keys(this.deckGlLayer).map((index) => {
 				const l = this.deckGlLayer[index];
 				switch (l.type) {
-					case "ArcLayer":
-						return new ArcLayer(l.config);
-					case "AnimatedArcLayer":
-						return new AnimatedArcLayer({
-							...l.config,
-							coef: this.step / 1000,
-						});
-					default:
-						break;
+				case "ArcLayer":
+					return new ArcLayer(l.config);
+				case "AnimatedArcLayer":
+					return new AnimatedArcLayer({
+						...l.config,
+						coef: this.step / 1000,
+					});
+				default:
+					break;
 				}
 			});
 			this.overlay.setProps({
@@ -678,7 +678,7 @@ export const useMapStore = defineStore("map", {
 			X
 		  </button></div>`);
 
-			popup.on("open", (e) => {
+			popup.on("open", () => {
 				const el = document.getElementById(
 					`delete-${res.data.data.id}`
 				);
@@ -715,7 +715,7 @@ export const useMapStore = defineStore("map", {
 			this.viewPoints.push(res.data.data);
 		},
 		async removeViewPoint(item) {
-			const res = await http.delete(`user/viewpoint/${item.id}`);
+			await http.delete(`user/viewpoint/${item.id}`);
 			const dialogStore = useDialogStore();
 
 			this.viewPoints = this.viewPoints.filter(
@@ -737,10 +737,10 @@ export const useMapStore = defineStore("map", {
 						.setHTML(`<div class="popup-for-pin">${item.name} <button id=delete-${item.id} class="delete-pin"}">
 						X
 					  </button></div>`);
-					popup.on("open", (e) => {
+					popup.on("open", () => {
 						const el = document.getElementById(`delete-${item.id}`);
 						el.addEventListener("click", async () => {
-							const res = await http.delete(
+							await http.delete(
 								`user/viewpoint/${item.id}`
 							);
 							useDialogStore().showNotification(

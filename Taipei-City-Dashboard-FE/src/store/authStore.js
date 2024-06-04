@@ -5,11 +5,11 @@
 The authStore stores authentication and user information.
 */
 
-import { defineStore, storeToRefs } from "pinia";
+import { defineStore } from "pinia";
 import http from "../router/axios";
-import { useDialogStore } from "./dialogStore";
-import { useContentStore } from "./contentStore";
 import router from "../router/index";
+import { useContentStore } from "./contentStore";
+import { useDialogStore } from "./dialogStore";
 
 export const useAuthStore = defineStore("auth", {
 	state: () => ({
@@ -38,7 +38,6 @@ export const useAuthStore = defineStore("auth", {
 		// Initial Checks
 		async initialChecks() {
 			const contentStore = useContentStore();
-			const { currentDashboard } = storeToRefs(contentStore);
 			// Check if the user is using a mobile device
 			this.checkIfMobile();
 
