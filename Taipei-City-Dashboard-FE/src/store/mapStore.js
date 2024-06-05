@@ -1001,6 +1001,7 @@ export const useMapStore = defineStore("map", {
 			)
 				return;
 			this.loadingLayers.push("rendering");
+			this.removePopup();
 			const layerSourceType =
 				this.mapConfigs[this.currentVisibleLayers[0]].source;
 
