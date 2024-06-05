@@ -47,13 +47,19 @@ func GetViewPointByUserID(c *gin.Context) {
 }
 
 func DeleteViewPoint(c *gin.Context) {
-	pointId, err := strconv.Atoi(c.Param("id"))
+	userId, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid viewpoint ID"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid user id"})
 		return
 	}
 
-	err = models.DeleteViewPoint(pointId)
+	pointId, err := strconv.Atoi(c.Param("viewpointid"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid viewpoint id"})
+		return
+	}
+
+	err = models.DeleteViewPoint(userId, pointId)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

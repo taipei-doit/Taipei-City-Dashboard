@@ -60,33 +60,26 @@ const handleAddViewPoint = () => {
 </script>
 
 <template>
-  <DialogContainer
-    dialog="addMarkToMap"
-    @on-close="handleClose"
-  >
-    <div class="login add-mark-to-map">
-      <div class="title-box">
-        <h2 class="title">
-          建立視角
-        </h2>
-        <button @click.prevent="handleAddViewPoint">
-          確認
-        </button>
-      </div>
+	<DialogContainer dialog="addMarkToMap" @on-close="handleClose">
+		<div class="login add-mark-to-map">
+			<div class="title-box">
+				<h2 class="title">建立視角</h2>
+				<button @click.prevent="handleAddViewPoint">確認</button>
+			</div>
 
-      <div class="content">
-        <label for="view-point-name">視角名稱：</label>
-        <input
-          id="view-point-name"
-          v-model="viewPoint.name"
-          type="text"
-          name="view-point-name"
-          placeholder="請輸入視角名稱"
-          required
-        >
-      </div>
-    </div>
-  </DialogContainer>
+			<div class="content">
+				<label for="view-point-name">視角名稱：</label>
+				<input
+					id="view-point-name"
+					v-model="viewPoint.name"
+					type="text"
+					name="view-point-name"
+					placeholder="請輸入視角名稱"
+					required
+				/>
+			</div>
+		</div>
+	</DialogContainer>
 </template>
 
 <style scoped lang="scss">

@@ -45,8 +45,8 @@ func GetViewPointByUserID(user_id int) ([]ViewPoints, error) {
 	return viewpoint, nil
 }
 
-func DeleteViewPoint(id int) error {
-	err := DBManager.Delete(&ViewPoints{}, "id = ?", id).Error
+func DeleteViewPoint(userId, pointId int) error {
+	err := DBManager.Delete(&ViewPoints{}, "id = ? AND user_id = ?", pointId, userId).Error
 	if err != nil {
 		return err
 	}

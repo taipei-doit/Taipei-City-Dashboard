@@ -35,32 +35,25 @@ const handleAddPin = () => {
 </script>
 
 <template>
-  <DialogContainer
-    dialog="addPin"
-    @on-close="handleClose"
-  >
-    <div class="login add-mark-to-map">
-      <div class="title-box">
-        <h1 class="title">
-          建立地標
-        </h1>
-        <button @click.prevent="handleAddPin">
-          確認
-        </button>
-      </div>
-      <div class="content">
-        <label for="view-point-name">地標名稱：</label>
-        <input
-          id="view-point-name"
-          v-model="pinName"
-          type="text"
-          name="view-point-name"
-          placeholder="請輸入地標名稱"
-          required
-        >
-      </div>
-    </div>
-  </DialogContainer>
+	<DialogContainer dialog="addPin" @on-close="handleClose">
+		<div class="login add-mark-to-map">
+			<div class="title-box">
+				<h1 class="title">建立地標</h1>
+				<button @click.prevent="handleAddPin">確認</button>
+			</div>
+			<div class="content">
+				<label for="view-point-name">地標名稱：</label>
+				<input
+					id="view-point-name"
+					v-model="pinName"
+					type="text"
+					name="view-point-name"
+					placeholder="請輸入地標名稱"
+					required
+				/>
+			</div>
+		</div>
+	</DialogContainer>
 </template>
 
 <style scoped lang="scss">
