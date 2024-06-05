@@ -12,7 +12,7 @@ import { MapboxOverlay } from "@deck.gl/mapbox";
 import axios from "axios";
 import mapboxGl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
-import { defineStore, storeToRefs } from "pinia";
+import { defineStore } from "pinia";
 import { createApp, defineComponent, nextTick, ref } from "vue";
 import http from "../router/axios.js";
 
@@ -660,9 +660,9 @@ export const useMapStore = defineStore("map", {
 			const marker = new mapboxGl.Marker();
 
 			const authStore = useAuthStore();
-			const { user } = storeToRefs(authStore);
+			const dialogStore = useDialogStore()
 			const res = await http.post(
-				`user/${user.value.user_id}/viewpoint`,
+				`user/${authStore.user.user_id}/viewpoint`,
 				{
 					center_x: this.tempMarkerCoordinates.lat,
 					center_y: this.tempMarkerCoordinates.lng,
@@ -683,8 +683,10 @@ export const useMapStore = defineStore("map", {
 					`delete-${res.data.data.id}`
 				);
 				el.addEventListener("click", async () => {
-					await http.delete(`user/viewpoint/${res.data.data.id}`);
-					useDialogStore().showNotification(
+					await http.delete(
+						`user/${authStore.user.user_id}/viewpoint/${res.data.data.id}`
+					);
+					dialogStore.showNotification(
 						"success",
 						"地標刪除成功"
 					);
@@ -699,9 +701,8 @@ export const useMapStore = defineStore("map", {
 		},
 		async addViewPoint(viewPointArray) {
 			const authStore = useAuthStore();
-			const { user } = storeToRefs(authStore);
 			const res = await http.post(
-				`user/${user.value.user_id}/viewpoint`,
+				`user/${authStore.user.user_id}/viewpoint`,
 				{
 					center_x: viewPointArray[0][0],
 					center_y: viewPointArray[0][1],
@@ -715,7 +716,10 @@ export const useMapStore = defineStore("map", {
 			this.viewPoints.push(res.data.data);
 		},
 		async removeViewPoint(item) {
-			await http.delete(`user/viewpoint/${item.id}`);
+			const authStore = useAuthStore();
+			await http.delete(
+				`user/${authStore.user.user_id}/viewpoint/${item.id}`
+			);
 			const dialogStore = useDialogStore();
 
 			this.viewPoints = this.viewPoints.filter(
@@ -725,8 +729,10 @@ export const useMapStore = defineStore("map", {
 		},
 		async fetchViewPoints() {
 			const authStore = useAuthStore();
-			const { user } = storeToRefs(authStore);
-			const res = await http.get(`user/${user.value.user_id}/viewpoint`);
+			const dialogStore = useDialogStore()
+			const res = await http.get(
+				`user/${authStore.user.user_id}/viewpoint`
+			);
 			this.viewPoints = res.data;
 			this.viewPoints.forEach((item) => {
 				if (item.point_type === "pin") {
@@ -740,8 +746,10 @@ export const useMapStore = defineStore("map", {
 					popup.on("open", () => {
 						const el = document.getElementById(`delete-${item.id}`);
 						el.addEventListener("click", async () => {
-							await http.delete(`user/viewpoint/${item.id}`);
-							useDialogStore().showNotification(
+							await http.delete(
+								`user/${authStore.user.user_id}/viewpoint/${item.id}`
+							);
+							dialogStore.showNotification(
 								"success",
 								"地標刪除成功"
 							);

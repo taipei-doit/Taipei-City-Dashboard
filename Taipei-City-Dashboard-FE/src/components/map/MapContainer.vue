@@ -1,7 +1,6 @@
 <!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 
 <script setup>
-import { storeToRefs } from "pinia";
 import { onMounted, ref } from "vue";
 import { useAuthStore } from "../../store/authStore";
 import { useContentStore } from "../../store/contentStore";
@@ -11,7 +10,6 @@ import AddMarkToMap from "../dialogs/AddViewPoint.vue";
 import MobileLayers from "../dialogs/MobileLayers.vue";
 
 const authStore = useAuthStore();
-const { user } = storeToRefs(authStore);
 const mapStore = useMapStore();
 const dialogStore = useDialogStore();
 const contentStore = useContentStore();
@@ -89,7 +87,7 @@ onMounted(() => {
 			>
 				返回預設
 			</button>
-			<template v-if="!user?.user_id">
+			<template v-if="!authStore.user?.user_id">
 				<div
 					v-for="(item, index) in mapStore.savedLocations"
 					:key="`${item[4]}-${index}`"
@@ -98,7 +96,7 @@ onMounted(() => {
 						{{ item[4] }}
 					</button>
 					<div
-						v-if="user?.user_id"
+						v-if="authStore.user?.user_id"
 						class="mapcontainer-controls-delete"
 						@click="mapStore.removeSavedLocation(index)"
 					>
@@ -114,7 +112,7 @@ onMounted(() => {
 					{{ item["name"] }}
 				</button>
 				<div
-					v-if="user?.user_id"
+					v-if="authStore.user?.user_id"
 					class="mapcontainer-controls-delete"
 					@click="mapStore.removeViewPoint(item)"
 				>
@@ -123,7 +121,7 @@ onMounted(() => {
 			</div>
 
 			<button
-				v-if="user?.user_id"
+				v-if="authStore.user?.user_id"
 				@click="dialogStore.showDialog('addMarkToMap')"
 			>
 				新增

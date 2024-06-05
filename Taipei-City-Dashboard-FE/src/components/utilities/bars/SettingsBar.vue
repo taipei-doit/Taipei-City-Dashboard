@@ -3,7 +3,6 @@
 <!-- Adding new components and settings is disabled in public dashboards and the mobile version -->
 
 <script setup>
-import { storeToRefs } from "pinia";
 import { computed } from "vue";
 import { useRoute } from "vue-router";
 import { useAuthStore } from "../../../store/authStore";
@@ -17,8 +16,6 @@ const contentStore = useContentStore();
 const dialogStore = useDialogStore();
 const mapStore = useMapStore();
 const authStore = useAuthStore();
-const { tempMarkerCoordinates } = storeToRefs(mapStore);
-const { user } = storeToRefs(authStore);
 const route = useRoute();
 const isCurrentPageMapView = computed(() => route.name === "mapview");
 
@@ -62,18 +59,20 @@ function handleOpenSettings() {
 			<AddEditDashboards />
 		</div>
 		<button
-			v-if="user?.user_id && isCurrentPageMapView"
+			v-if="authStore.user?.user_id && isCurrentPageMapView"
 			class="add-pin"
-			:disabled="!tempMarkerCoordinates?.lat"
+			:disabled="!mapStore.tempMarkerCoordinates?.lat"
 			:style="{
-				background: !tempMarkerCoordinates?.lat
+				background: !mapStore.tempMarkerCoordinates?.lat
 					? 'rgb(20, 58, 67)'
 					: 'var(--color-highlight)',
-				cursor: !tempMarkerCoordinates?.lat ? 'not-allowed' : 'pointer',
+				cursor: !mapStore.tempMarkerCoordinates?.lat
+					? 'not-allowed'
+					: 'pointer',
 			}"
 			@click="dialogStore.showDialog('addPin')"
 		>
-			<template v-if="!tempMarkerCoordinates?.lat">
+			<template v-if="!mapStore.tempMarkerCoordinates?.lat">
 				雙擊以建立地標
 			</template>
 			<template v-else> 建立地標 </template>
