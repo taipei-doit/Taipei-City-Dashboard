@@ -11,17 +11,15 @@ Testing: Jack Huang (Data Scientist), Ian Huang (Data Analysis Intern)
 <!-- Map charts will be hidden in mobile mode and be replaced with the mobileLayers dialog -->
 
 <script setup>
-import { computed, onMounted } from "vue";
+import { computed } from "vue";
 import { DashboardComponent } from "city-dashboard-component";
 import { useContentStore } from "../store/contentStore";
 import { useDialogStore } from "../store/dialogStore";
 import { useMapStore } from "../store/mapStore";
-import { useAuthStore } from "../store/authStore";
 import MapContainer from "../components/map/MapContainer.vue";
 import MoreInfo from "../components/dialogs/MoreInfo.vue";
 import ReportIssue from "../components/dialogs/ReportIssue.vue";
 
-const authStore = useAuthStore();
 const contentStore = useContentStore();
 const dialogStore = useDialogStore();
 const mapStore = useMapStore();
@@ -73,15 +71,6 @@ function shouldDisable(map_config) {
 			.length > 0
 	);
 }
-
-onMounted(() => {
-	if (
-		contentStore.currentDashboard.mode === "/mapview" &&
-		authStore.user?.user_id
-	) {
-		useMapStore().fetchViewPoints();
-	}
-});
 </script>
 
 <template>

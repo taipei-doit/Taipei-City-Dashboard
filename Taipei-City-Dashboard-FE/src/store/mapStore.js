@@ -114,6 +114,8 @@ export const useMapStore = defineStore("map", {
 						(el) => el !== "rendering"
 					);
 				});
+
+			this.renderMarkers();
 		},
 		// 2. Adds three basic layers to the map (Taipei District, Taipei Village labels, and Taipei 3D Buildings)
 		// Due to performance concerns, Taipei 3D Buildings won't be added in the mobile version
@@ -657,10 +659,7 @@ export const useMapStore = defineStore("map", {
 			this.removePopup();
 		},
 		async addMarker(name) {
-			const marker = new mapboxGl.Marker();
-
 			const authStore = useAuthStore();
-			const dialogStore = useDialogStore()
 			const res = await http.post(
 				`user/${authStore.user.user_id}/viewpoint`,
 				{
@@ -673,31 +672,14 @@ export const useMapStore = defineStore("map", {
 					point_type: "pin",
 				}
 			);
-			const popup = new mapboxGl.Popup({ closeButton: false })
-				.setHTML(`<div class="popup-for-pin">${name} <button id=delete-${res.data.data.id} class="delete-pin"}">
-			X
-		  </button></div>`);
 
-			popup.on("open", () => {
-				const el = document.getElementById(
-					`delete-${res.data.data.id}`
-				);
-				el.addEventListener("click", async () => {
-					await http.delete(
-						`user/${authStore.user.user_id}/viewpoint/${res.data.data.id}`
-					);
-					dialogStore.showNotification(
-						"success",
-						"地標刪除成功"
-					);
-					marker.remove();
-					this.marker.remove();
-				});
-			});
-			marker
-				.setLngLat(this.tempMarkerCoordinates)
-				.setPopup(popup)
-				.addTo(this.map);
+			const { lng, lat } = this.tempMarkerCoordinates;
+			this.createMarkerAndPopupOnMap(
+				{ color: "#5a9cf8" },
+				name,
+				res.data.data.id,
+				{ lng, lat }
+			);
 		},
 		async addViewPoint(viewPointArray) {
 			const authStore = useAuthStore();
@@ -727,41 +709,56 @@ export const useMapStore = defineStore("map", {
 			);
 			dialogStore.showNotification("success", "視角刪除成功");
 		},
+		createMarkerAndPopupOnMap(
+			colorSetting,
+			markderName,
+			markerId,
+			{ lng, lat }
+		) {
+			const authStore = useAuthStore();
+			const dialogStore = useDialogStore();
+			const marker = new mapboxGl.Marker(colorSetting);
+			const popup = new mapboxGl.Popup({ closeButton: false })
+				.setHTML(`<div class="popup-for-pin">${markderName} <button id=delete-${markerId} class="delete-pin"}">
+			X
+		  </button></div>`);
+
+			popup.on("open", () => {
+				const el = document.getElementById(`delete-${markerId}`);
+				el.addEventListener("click", async () => {
+					await http.delete(
+						`user/${authStore.user.user_id}/viewpoint/${markerId}`
+					);
+					dialogStore.showNotification("success", "地標刪除成功");
+					marker.remove();
+					this.marker.remove();
+				});
+			});
+
+			marker.setLngLat({ lng, lat }).setPopup(popup).addTo(this.map);
+		},
+		renderMarkers() {
+			if (!this.viewPoints.length) return;
+
+			this.viewPoints.forEach((item) => {
+				if (item.point_type === "pin") {
+					this.createMarkerAndPopupOnMap(
+						{ color: "#5a9cf8" },
+						item.name,
+						item.id,
+						{ lng: item.center_y, lat: item.center_x }
+					);
+				}
+			});
+		},
 		async fetchViewPoints() {
 			const authStore = useAuthStore();
-			const dialogStore = useDialogStore()
+
 			const res = await http.get(
 				`user/${authStore.user.user_id}/viewpoint`
 			);
 			this.viewPoints = res.data;
-			this.viewPoints.forEach((item) => {
-				if (item.point_type === "pin") {
-					const marker = new mapboxGl.Marker({ color: "#5a9cf8" });
-					const popup = new mapboxGl.Popup({
-						closeButton: false,
-					})
-						.setHTML(`<div class="popup-for-pin">${item.name} <button id=delete-${item.id} class="delete-pin"}">
-						X
-					  </button></div>`);
-					popup.on("open", () => {
-						const el = document.getElementById(`delete-${item.id}`);
-						el.addEventListener("click", async () => {
-							await http.delete(
-								`user/${authStore.user.user_id}/viewpoint/${item.id}`
-							);
-							dialogStore.showNotification(
-								"success",
-								"地標刪除成功"
-							);
-							marker.remove();
-						});
-					});
-					marker
-						.setLngLat({ lng: item.center_y, lat: item.center_x })
-						.setPopup(popup)
-						.addTo(this.map);
-				}
-			});
+			this.renderMarkers();
 		},
 		/* Popup Related Functions */
 		// 1. Adds a popup when the user clicks on a item. The event will be passed in.
