@@ -39,7 +39,12 @@ const handleAddPin = () => {
 		<div class="login add-mark-to-map">
 			<div class="title-box">
 				<h1 class="title">建立地標</h1>
-				<button @click.prevent="handleAddPin">確認</button>
+				<button
+					v-if="pinName.trim().length"
+					@click.prevent="handleAddPin"
+				>
+					確認
+				</button>
 			</div>
 			<div class="content">
 				<label for="view-point-name">地標名稱：</label>
@@ -49,6 +54,7 @@ const handleAddPin = () => {
 					type="text"
 					name="view-point-name"
 					placeholder="請輸入地標名稱"
+					maxlength="6"
 					required
 				/>
 			</div>
