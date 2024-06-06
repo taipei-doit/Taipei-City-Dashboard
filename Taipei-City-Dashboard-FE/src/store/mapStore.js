@@ -680,6 +680,7 @@ export const useMapStore = defineStore("map", {
 				res.data.data.id,
 				{ lng, lat }
 			);
+			this.tempMarkerCoordinates = null
 		},
 		async addViewPoint(viewPointArray) {
 			const authStore = useAuthStore();

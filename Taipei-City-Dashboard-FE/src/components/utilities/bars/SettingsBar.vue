@@ -61,21 +61,21 @@ function handleOpenSettings() {
 		<button
 			v-if="authStore.user?.user_id && isCurrentPageMapView"
 			class="add-pin"
-			:disabled="!mapStore.tempMarkerCoordinates?.lat"
+			:disabled="!mapStore.tempMarkerCoordinates"
 			:style="{
-				background: !mapStore.tempMarkerCoordinates?.lat
+				background: !mapStore.tempMarkerCoordinates
 					? 'rgb(20, 58, 67)'
 					: 'var(--color-highlight)',
-				cursor: !mapStore.tempMarkerCoordinates?.lat
+				cursor: !mapStore.tempMarkerCoordinates
 					? 'not-allowed'
 					: 'pointer',
 			}"
 			@click="dialogStore.showDialog('addPin')"
 		>
-			<template v-if="!mapStore.tempMarkerCoordinates?.lat">
+			<template v-if="!mapStore.tempMarkerCoordinates">
 				雙擊以建立地標
 			</template>
-			<template v-else> 建立地標 </template>
+			<template v-else>建立地標</template>
 		</button>
 	</div>
 	<AddPin />
