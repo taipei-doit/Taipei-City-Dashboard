@@ -32,9 +32,28 @@
       <div
         v-for="item in mapConfigs[activeTab].property"
         :key="item.key"
+        :style="{
+          display: flex,
+          flexDirection: 'column',
+        }"
       >
-        <h3>{{ item.name }}</h3>
-        <p>{{ popupContent[activeTab].properties[item.key] }}</p>
+        <div
+          v-if="item.mode === 'video'"
+          class="mappopup-video"
+        >
+          <h3>{{ item.name }}</h3>
+          <p>{{ popupContent[activeTab]?.properties[item.key] }}</p>
+          <p>影像載入中...</p>
+          <img
+            :src="popupContent[activeTab]?.properties[item.key]"
+            width="100%"
+            height="100%"
+          >
+        </div>
+        <div v-else>
+          <h3>{{ item.name }}</h3>
+          <p>{{ popupContent[activeTab]?.properties[item.key] }}</p>
+        </div>
       </div>
     </div>
   </div>
@@ -132,7 +151,7 @@
 	}
 
 	&-content {
-		width: fit-content;
+		width: 100%;
 
 		div {
 			display: flex;
@@ -144,6 +163,29 @@
 
 		p {
 			text-align: justify;
+		}
+	}
+
+	&-video {
+		position: relative;
+		width: min(256px, 100%);
+		min-height: 100px;
+		aspect-ratio: 16 / 9;
+		flex-direction: column;
+		align-items: center;
+		align-self: center;
+		justify-content: center;
+		margin: 0 auto;
+		margin-top: 5px;
+		border-radius: 5px;
+		background-color: var(--color-border);
+
+		img {
+			width: 100%;
+			height: 100%;
+			position: absolute;
+			left: 0;
+			top: 0;
 		}
 	}
 }
