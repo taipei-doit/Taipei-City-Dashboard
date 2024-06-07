@@ -31,29 +31,32 @@ function handleClose() {
 </script>
 
 <template>
-	<DialogContainer :dialog="`contributorsList`" @on-close="handleClose">
-		<div class="contributorslist">
-			<h2>專案貢獻者清單</h2>
-			<label> 點擊貢獻者頭貼以了解更多 </label>
-			<div class="contributorslist-list">
-				<button
-					v-for="contributor in parsedContributors"
-					:key="`contributor-${contributor.user_id}`"
-					@click="handleSelectContributor(contributor)"
-				>
-					<img
-						:src="
-							contributor.image.includes('http')
-								? contributor.image
-								: `/images/contributors/${contributor.image}`
-						"
-						:alt="`協作者-${contributor.user_name}`"
-					/>
-				</button>
-			</div>
-			<ContributorInfo :contributor="currentContributor" />
-		</div>
-	</DialogContainer>
+  <DialogContainer
+    :dialog="`contributorsList`"
+    @on-close="handleClose"
+  >
+    <div class="contributorslist">
+      <h2>專案貢獻者清單</h2>
+      <label> 點擊貢獻者頭貼以了解更多 </label>
+      <div class="contributorslist-list">
+        <button
+          v-for="contributor in parsedContributors"
+          :key="`contributor-${contributor.user_id}`"
+          @click="handleSelectContributor(contributor)"
+        >
+          <img
+            :src="
+              contributor.image.includes('http')
+                ? contributor.image
+                : `/images/contributors/${contributor.image}`
+            "
+            :alt="`協作者-${contributor.user_name}`"
+          >
+        </button>
+      </div>
+      <ContributorInfo :contributor="currentContributor" />
+    </div>
+  </DialogContainer>
 </template>
 
 <style scoped lang="scss">

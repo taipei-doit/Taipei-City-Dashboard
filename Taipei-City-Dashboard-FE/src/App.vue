@@ -26,7 +26,6 @@ import LogIn from "./components/dialogs/LogIn.vue";
 const authStore = useAuthStore();
 const dialogStore = useDialogStore();
 const contentStore = useContentStore();
-
 const timeToUpdate = ref(600);
 
 const formattedTimeToUpdate = computed(() => {
@@ -62,7 +61,8 @@ onBeforeMount(() => {
 });
 onMounted(() => {
 	const showInitialWarning = localStorage.getItem("initialWarning");
-	if (!showInitialWarning && authStore.currentPath !== "embed") {
+
+	if (!showInitialWarning && !window.location.pathname.includes("embed")) {
 		dialogStore.showDialog("initialWarning");
 	}
 
