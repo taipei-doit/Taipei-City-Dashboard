@@ -33,31 +33,36 @@ function handleAddPin() {
 </script>
 
 <template>
-	<DialogContainer dialog="addPin" @on-close="handleClose">
-		<div class="login add-mark-to-map">
-			<div class="title-box">
-				<h1 class="title">建立地標</h1>
-				<button
-					v-if="pinName.trim().length"
-					@click.prevent="handleAddPin"
-				>
-					確認
-				</button>
-			</div>
-			<div class="content">
-				<label for="view-point-name">地標名稱：</label>
-				<input
-					id="view-point-name"
-					v-model="pinName"
-					type="text"
-					name="view-point-name"
-					placeholder="請輸入地標名稱"
-					maxlength="6"
-					required
-				/>
-			</div>
-		</div>
-	</DialogContainer>
+  <DialogContainer
+    dialog="addPin"
+    @on-close="handleClose"
+  >
+    <div class="login add-mark-to-map">
+      <div class="title-box">
+        <h1 class="title">
+          建立地標
+        </h1>
+        <button
+          v-if="pinName.trim().length"
+          @click.prevent="handleAddPin"
+        >
+          確認
+        </button>
+      </div>
+      <div class="content">
+        <label for="view-point-name">地標名稱：</label>
+        <input
+          id="view-point-name"
+          v-model="pinName"
+          type="text"
+          name="view-point-name"
+          placeholder="請輸入地標名稱"
+          maxlength="6"
+          required
+        >
+      </div>
+    </div>
+  </DialogContainer>
 </template>
 
 <style scoped lang="scss">
@@ -74,14 +79,12 @@ function handleAddPin() {
 	}
 
 	label {
-		margin-bottom: 4px;
 		color: var(--color-complement-text);
 		font-size: var(--font-s);
 		align-self: flex-start;
 	}
 
 	input {
-		margin-bottom: 8px;
 		width: calc(100% - 14px);
 	}
 
@@ -120,6 +123,8 @@ function handleAddPin() {
 	}
 }
 .add-mark-to-map {
+	display: flex;
+	flex-direction: column;
 	.title-box {
 		display: flex;
 		justify-content: space-between;
@@ -136,29 +141,7 @@ function handleAddPin() {
 	}
 	label {
 		text-align: center;
-	}
-	.content {
-		margin: 30px 0 30px;
-	}
-	h1 {
-		text-align: center;
-	}
-	input {
-		font-size: var(--font-s);
-		margin-bottom: 4px;
-		margin-top: 4px;
-	}
-
-	/* Chrome, Safari, Edge, Opera */
-	input::-webkit-outer-spin-button,
-	input::-webkit-inner-spin-button {
-		-webkit-appearance: none;
-		margin: 0;
-	}
-
-	/* Firefox */
-	input[type="number"] {
-		-moz-appearance: textfield;
+		margin: 1rem 0 4px;
 	}
 }
 </style>

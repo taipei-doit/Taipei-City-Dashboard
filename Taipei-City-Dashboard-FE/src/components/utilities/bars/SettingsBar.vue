@@ -29,65 +29,60 @@ function handleOpenSettings() {
 </script>
 
 <template>
-	<div class="settingsbar">
-		<div class="settingsbar-title">
-			<span>{{ contentStore.currentDashboard.icon }}</span>
-			<h2>{{ contentStore.currentDashboard.name }}</h2>
-			<button
-				class="show-if-mobile"
-				@click="dialogStore.showDialog('mobileNavigation')"
-			>
-				<span class="settingsbar-title-navigation"
-					>arrow_drop_down_circle</span
-				>
-			</button>
-			<MobileNavigation />
-			<div
-				v-if="
-					contentStore.personalDashboards
-						.map((el) => el.index)
-						.includes(contentStore.currentDashboard.index) &&
-					contentStore.currentDashboard.icon !== 'favorite'
-				"
-				class="settingsbar-settings hide-if-mobile"
-			>
-				<button @click="handleOpenSettings">
-					<span>settings</span>
-					<p>設定</p>
-				</button>
-			</div>
-			<AddEditDashboards />
-		</div>
-		<button
-			v-if="authStore.user?.user_id && isCurrentPageMapView"
-			class="add-pin"
-			:disabled="!mapStore.tempMarkerCoordinates"
-			:style="{
-				background: !mapStore.tempMarkerCoordinates
-					? 'rgb(20, 58, 67)'
-					: 'var(--color-highlight)',
-				cursor: !mapStore.tempMarkerCoordinates
-					? 'not-allowed'
-					: 'pointer',
-			}"
-			@click="dialogStore.showDialog('addPin')"
-		>
-			<template v-if="!mapStore.tempMarkerCoordinates">
-				雙擊以建立地標
-			</template>
-			<template v-else>建立地標</template>
-		</button>
-	</div>
-	<AddPin />
+  <div class="settingsbar">
+    <div class="settingsbar-title">
+      <span>{{ contentStore.currentDashboard.icon }}</span>
+      <h2>{{ contentStore.currentDashboard.name }}</h2>
+      <button
+        class="show-if-mobile"
+        @click="dialogStore.showDialog('mobileNavigation')"
+      >
+        <span class="settingsbar-title-navigation">arrow_drop_down_circle</span>
+      </button>
+      <MobileNavigation />
+      <div
+        v-if="
+          contentStore.personalDashboards
+            .map((el) => el.index)
+            .includes(contentStore.currentDashboard.index) &&
+            contentStore.currentDashboard.icon !== 'favorite'
+        "
+        class="settingsbar-settings hide-if-mobile"
+      >
+        <button @click="handleOpenSettings">
+          <span>settings</span>
+          <p>設定</p>
+        </button>
+      </div>
+      <AddEditDashboards />
+    </div>
+    <button
+      v-if="authStore.user?.user_id && isCurrentPageMapView"
+      class="add-pin"
+      :disabled="!mapStore.tempMarkerCoordinates"
+      :style="{
+        background: !mapStore.tempMarkerCoordinates
+          ? 'rgb(20, 58, 67)'
+          : 'var(--color-highlight)',
+        cursor: !mapStore.tempMarkerCoordinates
+          ? 'not-allowed'
+          : 'pointer',
+      }"
+      @click="dialogStore.showDialog('addPin')"
+    >
+      <template v-if="!mapStore.tempMarkerCoordinates">
+        雙擊以建立地標
+      </template>
+      <template v-else>
+        建立地標
+      </template>
+    </button>
+  </div>
+  <AddPin />
 </template>
 
 <style scoped lang="scss">
 .settingsbar {
-	.add-pin {
-		padding: 0px 4px;
-		border-radius: 4px;
-	}
-
 	width: calc(100% - 2 * var(--font-m));
 	min-height: 1.6rem;
 	display: flex;
@@ -159,6 +154,15 @@ function handleOpenSettings() {
 				color: var(--color-highlight);
 			}
 		}
+	}
+
+	&-pin {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 2px 4px;
+		border-radius: 4px;
+		background-color: var(--color-highlight);
 	}
 }
 </style>
