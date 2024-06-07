@@ -12,6 +12,7 @@ const params = ref({
 	longitude: null,
 	latitude: null,
 });
+const pinName = ref("");
 
 function handleClose() {
 	dialogStore.hideAllDialogs();
@@ -20,9 +21,7 @@ function handleClose() {
 	pinName.value = "";
 }
 
-const pinName = ref("");
-
-const handleAddPin = () => {
+function handleAddPin() {
 	if (!pinName.value) {
 		dialogStore.showNotification("fail", "請輸入地標名稱");
 		return;
@@ -31,7 +30,7 @@ const handleAddPin = () => {
 	dialogStore.hideAllDialogs();
 	dialogStore.showNotification("success", "新增地標成功");
 	pinName.value = "";
-};
+}
 </script>
 
 <template>
