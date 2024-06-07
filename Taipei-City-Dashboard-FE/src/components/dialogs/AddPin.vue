@@ -8,7 +8,6 @@ import DialogContainer from "./DialogContainer.vue";
 const dialogStore = useDialogStore();
 const mapStore = useMapStore();
 const params = ref({
-	name: "",
 	longitude: null,
 	latitude: null,
 });
