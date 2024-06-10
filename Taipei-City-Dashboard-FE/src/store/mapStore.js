@@ -991,6 +991,16 @@ export const useMapStore = defineStore("map", {
 			return closestLocation;
 		},
 		async flyToClosestLocationAndTriggerPopup() {
+			const dialogStore = useDialogStore();
+			if (!this.userLocation.longitude || !this.userLocation.latitude) {
+				dialogStore.showNotification(
+					"fail",
+					"請先開啟並授權定位功能（點擊上方定位按鈕）"
+				);
+
+				return;
+			}
+
 			if (
 				this.currentVisibleLayers.length !== 1 ||
 				this.loadingLayers.length !== 0 ||
