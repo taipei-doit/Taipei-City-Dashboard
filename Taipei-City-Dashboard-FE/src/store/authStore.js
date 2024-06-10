@@ -5,11 +5,12 @@
 The authStore stores authentication and user information.
 */
 
-import { defineStore, storeToRefs } from "pinia";
+import { defineStore } from "pinia";
 import http from "../router/axios";
-import { useDialogStore } from "./dialogStore";
-import { useContentStore } from "./contentStore";
 import router from "../router/index";
+import { useContentStore } from "./contentStore";
+import { useDialogStore } from "./dialogStore";
+import { useMapStore } from "./mapStore";
 
 export const useAuthStore = defineStore("auth", {
 	state: () => ({
@@ -38,7 +39,7 @@ export const useAuthStore = defineStore("auth", {
 		// Initial Checks
 		async initialChecks() {
 			const contentStore = useContentStore();
-			const { currentDashboard } = storeToRefs(contentStore);
+			const mapStore = useMapStore();
 			// Check if the user is using a mobile device
 			this.checkIfMobile();
 
@@ -50,7 +51,9 @@ export const useAuthStore = defineStore("auth", {
 				}
 				const response = await http.get("/user/me");
 				this.user = response.data.user;
-
+				if (this.user?.user_id) {
+					mapStore.fetchViewPoints();
+				}
 				this.editUser = JSON.parse(JSON.stringify(this.user));
 			}
 

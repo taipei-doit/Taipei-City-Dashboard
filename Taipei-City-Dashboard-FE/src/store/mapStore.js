@@ -7,14 +7,14 @@ The mapStore controls the map and includes methods to modify it.
 !! PLEASE BE SURE TO REFERENCE THE MAPBOX DOCUMENTATION IF ANYTHING IS UNCLEAR !!
 https://docs.mapbox.com/mapbox-gl-js/guides/
 */
-import http from "../router/axios.js";
-import { createApp, defineComponent, nextTick, ref } from "vue";
-import { defineStore, storeToRefs } from "pinia";
+import { ArcLayer } from "@deck.gl/layers";
+import { MapboxOverlay } from "@deck.gl/mapbox";
+import axios from "axios";
 import mapboxGl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
-import axios from "axios";
-import { MapboxOverlay } from "@deck.gl/mapbox";
-import { ArcLayer } from "@deck.gl/layers";
+import { defineStore } from "pinia";
+import { createApp, defineComponent, nextTick, ref } from "vue";
+import http from "../router/axios.js";
 
 // Other Stores
 import { useAuthStore } from "./authStore";
@@ -24,23 +24,23 @@ import { useDialogStore } from "./dialogStore";
 import MapPopup from "../components/map/MapPopup.vue";
 
 // Utility Functions or Configs
-import mapStyle from "../assets/configs/mapbox/mapStyle.js";
+import { AnimatedArcLayer } from "../assets/configs/mapbox/arcAnimate.js";
 import {
 	MapObjectConfig,
+	TaipeiBuilding,
 	TaipeiTown,
 	TaipeiVillage,
-	TaipeiBuilding,
 	TpDistrict,
 	TpVillage,
-	maplayerCommonPaint,
 	maplayerCommonLayout,
+	maplayerCommonPaint,
 } from "../assets/configs/mapbox/mapConfig.js";
+import mapStyle from "../assets/configs/mapbox/mapStyle.js";
 import { savedLocations } from "../assets/configs/mapbox/savedLocations.js";
-import { voronoi } from "../assets/utilityFunctions/voronoi.js";
+import { hexToRGB } from "../assets/utilityFunctions/colorConvert.js";
 import { interpolation } from "../assets/utilityFunctions/interpolation.js";
 import { marchingSquare } from "../assets/utilityFunctions/marchingSquare.js";
-import { AnimatedArcLayer } from "../assets/configs/mapbox/arcAnimate.js";
-import { hexToRGB } from "../assets/utilityFunctions/colorConvert.js";
+import { voronoi } from "../assets/utilityFunctions/voronoi.js";
 
 export const useMapStore = defineStore("map", {
 	state: () => ({
@@ -64,7 +64,6 @@ export const useMapStore = defineStore("map", {
 		savedLocations: savedLocations,
 		// Store currently loading layers,
 		loadingLayers: [],
-		markers: [],
 		viewPoints: [],
 		marker: null,
 		tempMarkerCoordinates: null,
@@ -114,6 +113,8 @@ export const useMapStore = defineStore("map", {
 						(el) => el !== "rendering"
 					);
 				});
+
+			this.renderMarkers();
 		},
 		// 2. Adds three basic layers to the map (Taipei District, Taipei Village labels, and Taipei 3D Buildings)
 		// Due to performance concerns, Taipei 3D Buildings won't be added in the mobile version
@@ -417,15 +418,15 @@ export const useMapStore = defineStore("map", {
 			const layers = Object.keys(this.deckGlLayer).map((index) => {
 				const l = this.deckGlLayer[index];
 				switch (l.type) {
-					case "ArcLayer":
-						return new ArcLayer(l.config);
-					case "AnimatedArcLayer":
-						return new AnimatedArcLayer({
-							...l.config,
-							coef: this.step / 1000,
-						});
-					default:
-						break;
+				case "ArcLayer":
+					return new ArcLayer(l.config);
+				case "AnimatedArcLayer":
+					return new AnimatedArcLayer({
+						...l.config,
+						coef: this.step / 1000,
+					});
+				default:
+					break;
 				}
 			});
 			this.overlay.setProps({
@@ -657,12 +658,9 @@ export const useMapStore = defineStore("map", {
 			this.removePopup();
 		},
 		async addMarker(name) {
-			const marker = new mapboxGl.Marker();
-
 			const authStore = useAuthStore();
-			const { user } = storeToRefs(authStore);
 			const res = await http.post(
-				`user/${user.value.user_id}/viewpoint`,
+				`user/${authStore.user.user_id}/viewpoint`,
 				{
 					center_x: this.tempMarkerCoordinates.lat,
 					center_y: this.tempMarkerCoordinates.lng,
@@ -673,35 +671,20 @@ export const useMapStore = defineStore("map", {
 					point_type: "pin",
 				}
 			);
-			const popup = new mapboxGl.Popup({ closeButton: false })
-				.setHTML(`<div class="popup-for-pin"><div>${name}</div> <button id="delete-${res.data.data.id}" class="delete-pin"}">
-			<span>delete</span>
-		  </button></div>`);
 
-			popup.on("open", (e) => {
-				const el = document.getElementById(
-					`delete-${res.data.data.id}`
-				);
-				el.addEventListener("click", async () => {
-					await http.delete(`user/${res.data.data.id}/viewpoint`);
-					useDialogStore().showNotification(
-						"success",
-						"地標刪除成功"
-					);
-					marker.remove();
-					this.marker.remove();
-				});
-			});
-			marker
-				.setLngLat(this.tempMarkerCoordinates)
-				.setPopup(popup)
-				.addTo(this.map);
+			const { lng, lat } = this.tempMarkerCoordinates;
+			this.createMarkerAndPopupOnMap(
+				{ color: "#5a9cf8" },
+				name,
+				res.data.data.id,
+				{ lng, lat }
+			);
+			this.tempMarkerCoordinates = null;
 		},
 		async addViewPoint(viewPointArray) {
 			const authStore = useAuthStore();
-			const { user } = storeToRefs(authStore);
 			const res = await http.post(
-				`user/${user.value.user_id}/viewpoint`,
+				`user/${authStore.user.user_id}/viewpoint`,
 				{
 					center_x: viewPointArray[0][0],
 					center_y: viewPointArray[0][1],
@@ -715,7 +698,10 @@ export const useMapStore = defineStore("map", {
 			this.viewPoints.push(res.data.data);
 		},
 		async removeViewPoint(item) {
-			const res = await http.delete(`user/${item.id}/viewpoint`);
+			const authStore = useAuthStore();
+			await http.delete(
+				`user/${authStore.user.user_id}/viewpoint/${item.id}`
+			);
 			const dialogStore = useDialogStore();
 
 			this.viewPoints = this.viewPoints.filter(
@@ -723,39 +709,56 @@ export const useMapStore = defineStore("map", {
 			);
 			dialogStore.showNotification("success", "視角刪除成功");
 		},
-		async fetchViewPoints() {
+		createMarkerAndPopupOnMap(
+			colorSetting,
+			markderName,
+			markerId,
+			{ lng, lat }
+		) {
 			const authStore = useAuthStore();
-			const { user } = storeToRefs(authStore);
-			const res = await http.get(`user/${user.value.user_id}/viewpoint`);
-			this.viewPoints = res.data;
+			const dialogStore = useDialogStore();
+			const marker = new mapboxGl.Marker(colorSetting);
+			const popup = new mapboxGl.Popup({ closeButton: false })
+				.setHTML(`<div class="popup-for-pin">${markderName} <button id=delete-${markerId} class="delete-pin"}">
+			X
+		  </button></div>`);
+
+			popup.on("open", () => {
+				const el = document.getElementById(`delete-${markerId}`);
+				el.addEventListener("click", async () => {
+					await http.delete(
+						`user/${authStore.user.user_id}/viewpoint/${markerId}`
+					);
+					dialogStore.showNotification("success", "地標刪除成功");
+					marker.remove();
+					this.marker.remove();
+				});
+			});
+
+			marker.setLngLat({ lng, lat }).setPopup(popup).addTo(this.map);
+		},
+		renderMarkers() {
+			if (!this.viewPoints.length) return;
+
 			this.viewPoints.forEach((item) => {
 				if (item.point_type === "pin") {
-					const marker = new mapboxGl.Marker({ color: "#5a9cf8" });
-					const popup = new mapboxGl.Popup({
-						closeButton: false,
-					})
-						.setHTML(`<div class="popup-for-pin"><div>${item.name}</div> <button id="delete-${item.id}" class="delete-pin"}">
-						<span>delete</span>
-					  </button></div>`);
-					popup.on("open", (e) => {
-						const el = document.getElementById(`delete-${item.id}`);
-						el.addEventListener("click", async () => {
-							const res = await http.delete(
-								`user/${item.id}/viewpoint`
-							);
-							useDialogStore().showNotification(
-								"success",
-								"地標刪除成功"
-							);
-							marker.remove();
-						});
-					});
-					marker
-						.setLngLat({ lng: item.center_y, lat: item.center_x })
-						.setPopup(popup)
-						.addTo(this.map);
+					this.createMarkerAndPopupOnMap(
+						{ color: "#5a9cf8" },
+						item.name,
+						item.id,
+						{ lng: item.center_y, lat: item.center_x }
+					);
 				}
 			});
+		},
+		async fetchViewPoints() {
+			const authStore = useAuthStore();
+
+			const res = await http.get(
+				`user/${authStore.user.user_id}/viewpoint`
+			);
+			this.viewPoints = res.data;
+			this.renderMarkers();
 		},
 		/* Popup Related Functions */
 		// 1. Adds a popup when the user clicks on a item. The event will be passed in.

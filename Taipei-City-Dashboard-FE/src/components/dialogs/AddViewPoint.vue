@@ -8,7 +8,6 @@ import DialogContainer from "./DialogContainer.vue";
 const dialogStore = useDialogStore();
 const mapStore = useMapStore();
 const params = ref({
-	name: "",
 	longitude: null,
 	latitude: null,
 });
@@ -26,7 +25,7 @@ function handleClose() {
 	params.value.latitude = null;
 }
 
-const handleAddViewPoint = () => {
+function handleAddViewPoint() {
 	if (!viewPoint.value.name) {
 		dialogStore.showNotification("fail", "請輸入視角名稱");
 		return;
@@ -56,7 +55,7 @@ const handleAddViewPoint = () => {
 		pitch: null,
 		bearing: null,
 	};
-};
+}
 </script>
 
 <template>

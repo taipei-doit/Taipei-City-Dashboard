@@ -8,10 +8,10 @@ import DialogContainer from "./DialogContainer.vue";
 const dialogStore = useDialogStore();
 const mapStore = useMapStore();
 const params = ref({
-	name: "",
 	longitude: null,
 	latitude: null,
 });
+const pinName = ref("");
 
 function handleClose() {
 	dialogStore.hideAllDialogs();
@@ -20,9 +20,7 @@ function handleClose() {
 	pinName.value = "";
 }
 
-const pinName = ref("");
-
-const handleAddPin = () => {
+function handleAddPin() {
 	if (!pinName.value) {
 		dialogStore.showNotification("fail", "請輸入地標名稱");
 		return;
@@ -31,27 +29,40 @@ const handleAddPin = () => {
 	dialogStore.hideAllDialogs();
 	dialogStore.showNotification("success", "新增地標成功");
 	pinName.value = "";
-};
+}
 </script>
 
 <template>
-	<DialogContainer dialog="addPin" @on-close="handleClose">
-		<div class="login add-mark-to-map">
-			<div class="title-box">
-				<h2 class="title">建立地標</h2>
-				<button @click.prevent="handleAddPin">確認</button>
-			</div>
-			<label for="view-point-name">請輸入地標名稱</label>
-			<input
-				id="view-point-name"
-				v-model="pinName"
-				type="text"
-				name="view-point-name"
-				placeholder="請輸入地標名稱"
-				required
-			/>
-		</div>
-	</DialogContainer>
+  <DialogContainer
+    dialog="addPin"
+    @on-close="handleClose"
+  >
+    <div class="login add-mark-to-map">
+      <div class="title-box">
+        <h1 class="title">
+          建立地標
+        </h1>
+        <button
+          v-if="pinName.trim().length"
+          @click.prevent="handleAddPin"
+        >
+          確認
+        </button>
+      </div>
+      <div class="content">
+        <label for="view-point-name">地標名稱：</label>
+        <input
+          id="view-point-name"
+          v-model="pinName"
+          type="text"
+          name="view-point-name"
+          placeholder="請輸入地標名稱"
+          maxlength="6"
+          required
+        >
+      </div>
+    </div>
+  </DialogContainer>
 </template>
 
 <style scoped lang="scss">

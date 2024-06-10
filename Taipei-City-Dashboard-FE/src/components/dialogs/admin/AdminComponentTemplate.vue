@@ -1,11 +1,14 @@
 <!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 <script setup>
-import http from "../../../router/axios";
-import { ref, defineProps } from "vue";
-import { useDialogStore } from "../../../store/dialogStore";
+import { ref } from "vue";
 import { useAdminStore } from "../../../store/adminStore";
-import DialogContainer from "../DialogContainer.vue";
+import { useDialogStore } from "../../../store/dialogStore";
+import http from "../../../router/axios";
 import InputTags from "../../utilities/forms/InputTags.vue";
+import DialogContainer from "../DialogContainer.vue";
+
+const dialogStore = useDialogStore();
+const adminStore = useAdminStore();
 
 const currentTab = ref(0);
 const params = ref({
@@ -27,9 +30,6 @@ const params = ref({
 	query_type: "map_legend",
 });
 
-const dialogStore = useDialogStore();
-const adminStore = useAdminStore();
-const props = defineProps(["searchParams"]);
 const tempInputStorage = ref({
 	link: "",
 	contributor: "",
@@ -59,7 +59,7 @@ function handleClose() {
 	};
 }
 
-const handleSubmit = async () => {
+async function handleSubmit() {
 	const {
 		index,
 		name,
@@ -86,12 +86,9 @@ const handleSubmit = async () => {
 		);
 		return;
 	}
-	console.log(params.value);
 	try {
 		const createRes = await http.post(`/component/`, params.value);
-		console.log("createRes: ", createRes);
 		const getRes = await http.get(`/component/${createRes.data.data.id}`);
-		console.log("getRes: ", getRes);
 		adminStore.getComponentData(getRes.data.data);
 		dialogStore.showNotification("success", "新建組建成功");
 		dialogStore.hideAllDialogs();
@@ -99,9 +96,9 @@ const handleSubmit = async () => {
 	} catch (error) {
 		console.error(error);
 	}
-};
+}
 
-const isShowTimeToBlock = (time_to) => {
+function isShowTimeToBlock(time_to) {
 	switch (time_to) {
 	case "now":
 	case "static":
@@ -111,7 +108,7 @@ const isShowTimeToBlock = (time_to) => {
 	default:
 		return true;
 	}
-};
+}
 </script>
 
 <template>
@@ -119,37 +116,23 @@ const isShowTimeToBlock = (time_to) => {
     :dialog="`adminAddComponentTemplate`"
     @on-close="handleClose"
   >
-    <div class="admincomponentsettings">
-      <div class="admincomponentsettings-header">
+    <div class="admincomponenttemplate">
+      <div class="admincomponenttemplate-header">
         <h2>組件設定</h2>
         <button @click="handleSubmit">
           確定新增
         </button>
       </div>
-      <div class="admincomponentsettings-tabs">
+      <div class="admincomponenttemplate-tabs">
         <button @click="currentTab = 0">
           整體
         </button>
-        <!-- <button
-					:class="{ active: currentSettings === 'chart' }"
-					@click="currentSettings = 'chart'"
-				>
-					圖表
-				</button> -->
-        <!-- <button
-					v-if="currentComponent.history_config !== null"
-					:class="{ active: currentSettings === 'history' }"
-					@click="currentSettings = 'history'"
-				>
-					歷史軸
-				</button> -->
-        <!-- <button @click="currentTab = 1">地圖</button> -->
       </div>
-      <div class="admincomponentsettings-content">
-        <div class="admincomponentsettings-settings">
+      <div class="admincomponenttemplate-content">
+        <div class="admincomponenttemplate-settings">
           <div
             v-if="currentTab === 0"
-            class="admincomponentsettings-settings-items"
+            class="admincomponenttemplate-settings-items"
           >
             <label>組件名稱* ({{ params.name.length }}/10)</label>
             <input
@@ -160,11 +143,9 @@ const isShowTimeToBlock = (time_to) => {
               required
             >
             <div class="two-block">
-              <!-- <label>組件 ID</label> -->
               <label>組件 Index*</label>
             </div>
             <div class="two-block">
-              <!-- <input type="text" disabled /> -->
               <input
                 v-model="params.index"
                 type="text"
@@ -210,16 +191,6 @@ const isShowTimeToBlock = (time_to) => {
               </select>
             </div>
             <label>資料區間</label>
-            <!-- eslint-disable no-mixed-spaces-and-tabs -->
-            <!-- <input
-							:value="`${timeTerms[currentComponent.time_from]}${
-								timeTerms[currentComponent.time_to]
-									? ' ~ ' +
-									  timeTerms[currentComponent.time_to]
-									: ''
-							}`"
-							disabled
-						/> -->
             <div class="time-block">
               <select
                 v-model="params.time_from"
@@ -390,28 +361,12 @@ const isShowTimeToBlock = (time_to) => {
 
           <div v-if="currentTab === 1">
             <div
-              v-for="(map_config, index) in 2"
+              v-for="(_map_config, index) in 2"
               :key="index"
-              class="admincomponentsettings-settings-items"
+              class="admincomponenttemplate-settings-items"
             >
               <hr v-if="index > 0">
               <label>地圖{{ index + 1 }} ID / Index</label>
-              <div class="two-block">
-                <!-- <input
-									:value="
-										currentComponent.map_config[index].id
-									"
-									disabled
-								/>
-								<input
-									v-model="
-										currentComponent.map_config[index].index
-									"
-									:maxlength="30"
-									:minlength="1"
-									required
-								/> -->
-              </div>
 
               <label>地圖{{ index + 1 }} 名稱* ({{}}/10)</label>
               <input
@@ -421,15 +376,6 @@ const isShowTimeToBlock = (time_to) => {
                 required
               >
               <label>地圖{{ index + 1 }} 類型*</label>
-              <select>
-                <!-- <option
-									v-for="(value, key) in mapTypes"
-									:key="key"
-									:value="key"
-								>
-									{{ value }}
-								</option> -->
-              </select>
               <label>地圖{{
                 index + 1
               }}
@@ -486,47 +432,13 @@ const isShowTimeToBlock = (time_to) => {
             </div>
           </div>
         </div>
-        <!-- <div class="admincomponentsettings-preview">
-					<DashboardComponent
-						v-if="
-							currentSettings === 'all' ||
-							currentSettings === 'chart'
-						"
-						:key="`${currentComponent.index}-${currentComponent.chart_config.color}-${currentComponent.chart_config.types}`"
-						:config="JSON.parse(JSON.stringify(currentComponent))"
-						mode="large"
-					/>
-					<div
-						v-else-if="currentSettings === 'history'"
-						:style="{ width: '300px' }"
-					>
-						<HistoryChart
-							:key="`${currentComponent.index}-${currentComponent.history_config.color}`"
-							:chart_config="currentComponent.chart_config"
-							:series="currentComponent.history_data"
-							:history_config="
-								JSON.parse(
-									JSON.stringify(
-										currentComponent.history_config
-									)
-								)
-							"
-						/>
-					</div>
-					<div
-						v-else-if="currentSettings === 'map'"
-						index="componentsettings"
-					>
-						預覽功能 Coming Soon
-					</div>
-				</div> -->
       </div>
     </div>
   </DialogContainer>
 </template>
 
 <style scoped lang="scss">
-.admincomponentsettings {
+.admincomponenttemplate {
 	width: 750px;
 	height: 500px;
 

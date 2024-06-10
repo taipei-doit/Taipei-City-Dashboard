@@ -2,16 +2,14 @@
 
 <script setup>
 import { onMounted, ref } from "vue";
-import { useMapStore } from "../../store/mapStore";
-import { useDialogStore } from "../../store/dialogStore";
-import { useContentStore } from "../../store/contentStore";
-import { storeToRefs } from "pinia";
-import MobileLayers from "../dialogs/MobileLayers.vue";
-import AddMarkToMap from "../dialogs/AddViewPoint.vue";
 import { useAuthStore } from "../../store/authStore";
+import { useContentStore } from "../../store/contentStore";
+import { useDialogStore } from "../../store/dialogStore";
+import { useMapStore } from "../../store/mapStore";
+import AddMarkToMap from "../dialogs/AddViewPoint.vue";
+import MobileLayers from "../dialogs/MobileLayers.vue";
 
 const authStore = useAuthStore();
-const { user } = storeToRefs(authStore);
 const mapStore = useMapStore();
 const dialogStore = useDialogStore();
 const contentStore = useContentStore();
@@ -89,7 +87,7 @@ onMounted(() => {
       >
         返回預設
       </button>
-      <template v-if="!user?.user_id">
+      <template v-if="!authStore.user?.user_id">
         <div
           v-for="(item, index) in mapStore.savedLocations"
           :key="`${item[4]}-${index}`"
@@ -98,7 +96,7 @@ onMounted(() => {
             {{ item[4] }}
           </button>
           <div
-            v-if="user?.user_id"
+            v-if="authStore.user?.user_id"
             class="mapcontainer-controls-delete"
             @click="mapStore.removeSavedLocation(index)"
           >
@@ -108,7 +106,7 @@ onMounted(() => {
       </template>
       <div
         v-for="(item, index) in mapStore.viewPoints"
-        :key="`index`"
+        :key="index"
       >
         <button
           v-if="item.point_type === 'view'"
@@ -117,7 +115,7 @@ onMounted(() => {
           {{ item["name"] }}
         </button>
         <div
-          v-if="user?.user_id"
+          v-if="authStore.user?.user_id"
           class="mapcontainer-controls-delete"
           @click="mapStore.removeViewPoint(item)"
         >
@@ -126,7 +124,7 @@ onMounted(() => {
       </div>
 
       <button
-        v-if="user?.user_id"
+        v-if="authStore.user?.user_id"
         @click="dialogStore.showDialog('addMarkToMap')"
       >
         新增

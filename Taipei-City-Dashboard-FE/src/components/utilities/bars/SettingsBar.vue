@@ -5,22 +5,17 @@
 <script setup>
 import { computed } from "vue";
 import { useRoute } from "vue-router";
-import { storeToRefs } from "pinia";
 import { useAuthStore } from "../../../store/authStore";
 import { useContentStore } from "../../../store/contentStore";
 import { useDialogStore } from "../../../store/dialogStore";
 import { useMapStore } from "../../../store/mapStore";
-
-import MobileNavigation from "../../dialogs/MobileNavigation.vue";
 import AddEditDashboards from "../../dialogs/AddEditDashboards.vue";
 import AddPin from "../../dialogs/AddPin.vue";
-
+import MobileNavigation from "../../dialogs/MobileNavigation.vue";
 const contentStore = useContentStore();
 const dialogStore = useDialogStore();
 const mapStore = useMapStore();
 const authStore = useAuthStore();
-
-const { user } = storeToRefs(authStore);
 const route = useRoute();
 const isCurrentPageMapView = computed(() => route.name === "mapview");
 
@@ -62,22 +57,25 @@ function handleOpenSettings() {
       <AddEditDashboards />
     </div>
     <button
-      v-if="user?.user_id && isCurrentPageMapView"
-      class="settingsbar-pin hide-if-mobile"
-      :disabled="!mapStore.tempMarkerCoordinates?.lat"
+      v-if="authStore.user?.user_id && isCurrentPageMapView"
+      class="add-pin"
+      :disabled="!mapStore.tempMarkerCoordinates"
       :style="{
-        opacity: !mapStore.tempMarkerCoordinates?.lat ? 0.5 : 1,
-        cursor: !mapStore.tempMarkerCoordinates?.lat
+        background: !mapStore.tempMarkerCoordinates
+          ? 'rgb(20, 58, 67)'
+          : 'var(--color-highlight)',
+        cursor: !mapStore.tempMarkerCoordinates
           ? 'not-allowed'
           : 'pointer',
       }"
       @click="dialogStore.showDialog('addPin')"
     >
-      {{
-        mapStore.tempMarkerCoordinates?.lat
-          ? "建立地標"
-          : "雙擊地圖以建立地標"
-      }}
+      <template v-if="!mapStore.tempMarkerCoordinates">
+        雙擊以建立地標
+      </template>
+      <template v-else>
+        建立地標
+      </template>
     </button>
   </div>
   <AddPin />
