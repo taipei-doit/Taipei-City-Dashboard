@@ -116,190 +116,156 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="admindisaster">
-    <!-- 1. Checkboxes to filter through different issue types -->
-    <div class="admindisaster-filter">
-      <div
-        v-for="status in statuses"
-        :key="status"
-      >
-        <input
-          :id="status"
-          v-model="searchParams.filterbystatus"
-          type="checkbox"
-          class="custom-check-input"
-          :value="statusName[status]"
-          @change="handleNewQuery"
-        >
-        <CustomCheckBox :for="status">
-          {{ status }}
-        </CustomCheckBox>
-      </div>
-    </div>
-    <!-- 2. The main table displaying various issues -->
-    <table class="admindisaster-table">
-      <thead>
-        <tr class="admindisaster-table-header">
-          <TableHeader min-width="60px" />
-          <TableHeader
-            :sort="true"
-            :mode="
-              searchParams.sort === 'id' ? searchParams.order : ''
-            "
-            min-width="40px"
-            @sort="handleSort('id')"
-          >
-            ID
-          </TableHeader>
-          <TableHeader min-width="150px">
-            種類
-          </TableHeader>
-          <TableHeader min-width="250px">
-            描述
-          </TableHeader>
-          <TableHeader min-width="320px">
-            地點
-          </TableHeader>
-          <TableHeader min-width="180px">
-            時間
-          </TableHeader>
-          <TableHeader min-width="200px">
-            審核
-          </TableHeader>
-        </tr>
-      </thead>
-      <!-- 2-1. Disasters are present -->
-      <tbody v-if="adminStore.disasters.length !== 0">
-        <tr
-          v-for="disaster in adminStore.disasters"
-          :key="`disaster-${disaster.id}`"
-        >
-          <td>
-            <span
-              v-if="disaster.status === 'accepted'"
-              class="material-symbols-rounded"
-              style="color: yellowgreen"
-            >
-              verified
-            </span>
-            <span
-              v-else-if="disaster.status === 'rejected'"
-              class="material-symbols-rounded"
-              style="color: lightcoral"
-            >
-              cancel
-            </span>
-          </td>
-          <td>{{ disaster.ID }}</td>
-          <td>{{ disaster.inctype }}</td>
-          <td class="description">
-            {{ disaster.description }}
-          </td>
-          <td>{{ disaster.place }}</td>
-          <td>{{ parseTime(disaster.reportTime) }}</td>
-          <td class="review">
-            <div
-              v-if="disaster.status !== 'pending'"
-              class="btn"
-            >
-              <button
-                v-if="
-                  disaster.status === 'accepted' ||
-                    disaster.status === 'rejected'
-                "
-                @click="handleDelete(disaster.ID)"
-              >
-                <span>delete</span>
-              </button>
-              <button
-                v-else
-                @click="handleReview(disaster.ID, -1)"
-              >
-                <span>refresh</span>
-              </button>
-            </div>
-            <div
-              v-else
-              class="btn"
-            >
-              <button
-                class="reviewBtn"
-                @click="handleReview(disaster.ID, 1)"
-              >
-                通過
-              </button>
-              <button
-                class="reviewBtn"
-                @click="handleReview(disaster.ID, 0)"
-              >
-                拒絕
-              </button>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-      <!-- 2-2. Disaster are still loading -->
-      <div
-        v-else-if="contentStore.loading"
-        class="admindisaster-nocontent"
-      >
-        <div class="admindisaster-nocontent-content">
-          <h2>載入中...</h2>
-        </div>
-      </div>
-      <!-- 2-3. An Error occurred -->
-      <div
-        v-else-if="contentStore.error"
-        class="admindisaster-nocontent"
-      >
-        <div class="admindisaster-nocontent-content">
-          <span>sentiment_very_dissatisfied</span>
-          <h2>發生錯誤，無法載入問題列表</h2>
-        </div>
-      </div>
-      <!-- 2-4. Disasters are loaded but there are none -->
-      <div
-        v-else
-        class="admindisaster-nocontent"
-      >
-        <div class="admindisaster-nocontent-content">
-          <span>search_off</span>
-          <h2>查無符合篩選條件的災害</h2>
-        </div>
-      </div>
-    </table>
-    <!-- 3. Records per page and pagination control -->
-    <div
-      v-if="adminStore.disasters.length !== 0"
-      class="admindisaster-control"
-    >
-      <label for="pagesize">每頁顯示</label>
-      <select
-        v-model="searchParams.pagesize"
-        @change="handleNewQuery"
-      >
-        <option value="10">
-          10
-        </option>
-        <option value="20">
-          20
-        </option>
-        <option value="30">
-          30
-        </option>
-      </select>
-      <div class="admindisaster-control-page">
-        <button
-          v-for="page in pages"
-          :key="`component-page-${page}`"
-          :class="{ active: page === searchParams.pagenum }"
-          @click="handleNewPage(page)"
-        >
-          {{ page }}
-        </button>
-      </div>
-    </div>
-  </div>
+	<div class="admindisaster">
+		<!-- 1. Checkboxes to filter through different issue types -->
+		<div class="admindisaster-filter">
+			<div v-for="status in statuses" :key="status">
+				<input
+					:id="status"
+					v-model="searchParams.filterbystatus"
+					type="checkbox"
+					class="custom-check-input"
+					:value="statusName[status]"
+					@change="handleNewQuery"
+				/>
+				<CustomCheckBox :for="status">
+					{{ status }}
+				</CustomCheckBox>
+			</div>
+		</div>
+		<!-- 2. The main table displaying various issues -->
+		<table class="admindisaster-table">
+			<thead>
+				<tr class="admindisaster-table-header">
+					<TableHeader min-width="60px" />
+					<TableHeader
+						:sort="true"
+						:mode="
+							searchParams.sort === 'id' ? searchParams.order : ''
+						"
+						min-width="40px"
+						@sort="handleSort('id')"
+					>
+						ID
+					</TableHeader>
+					<TableHeader min-width="150px"> 種類 </TableHeader>
+					<TableHeader min-width="250px"> 描述 </TableHeader>
+					<TableHeader min-width="320px"> 地點 </TableHeader>
+					<TableHeader min-width="180px"> 時間 </TableHeader>
+					<TableHeader min-width="200px"> 審核 </TableHeader>
+				</tr>
+			</thead>
+			<!-- 2-1. Disasters are present -->
+			<tbody v-if="adminStore.disasters.length !== 0">
+				<tr
+					v-for="disaster in adminStore.disasters"
+					:key="`disaster-${disaster.id}`"
+				>
+					<td>
+						<span
+							v-if="disaster.status === 'accepted'"
+							class="material-symbols-rounded"
+							style="color: yellowgreen"
+						>
+							verified
+						</span>
+						<span
+							v-else-if="disaster.status === 'rejected'"
+							class="material-symbols-rounded"
+							style="color: lightcoral"
+						>
+							cancel
+						</span>
+					</td>
+					<td>{{ disaster.ID }}</td>
+					<td>{{ disaster.inctype }}</td>
+					<td class="description">
+						{{ disaster.description }}
+					</td>
+					<td>{{ disaster.place }}</td>
+					<td>{{ parseTime(disaster.reportTime) }}</td>
+					<td class="review">
+						<div v-if="disaster.status !== 'pending'" class="btn">
+							<button
+								v-if="
+									disaster.status === 'accepted' ||
+									disaster.status === 'rejected'
+								"
+								@click="handleDelete(disaster.ID)"
+							>
+								<span>delete</span>
+							</button>
+							<button
+								v-else
+								@click="handleReview(disaster.ID, -1)"
+							>
+								<span>refresh</span>
+							</button>
+						</div>
+						<div v-else class="btn">
+							<button
+								class="reviewBtn"
+								@click="handleReview(disaster.ID, 1)"
+							>
+								通過
+							</button>
+							<button
+								class="reviewBtn"
+								@click="handleReview(disaster.ID, 0)"
+							>
+								拒絕
+							</button>
+						</div>
+					</td>
+				</tr>
+			</tbody>
+			<!-- 2-2. Disaster are still loading -->
+			<div
+				v-else-if="contentStore.loading"
+				class="admindisaster-nocontent"
+			>
+				<div class="admindisaster-nocontent-content">
+					<h2>載入中...</h2>
+				</div>
+			</div>
+			<!-- 2-3. An Error occurred -->
+			<div v-else-if="contentStore.error" class="admindisaster-nocontent">
+				<div class="admindisaster-nocontent-content">
+					<span>sentiment_very_dissatisfied</span>
+					<h2>發生錯誤，無法載入問題列表</h2>
+				</div>
+			</div>
+			<!-- 2-4. Disasters are loaded but there are none -->
+			<div v-else class="admindisaster-nocontent">
+				<div class="admindisaster-nocontent-content">
+					<span>search_off</span>
+					<h2>查無符合篩選條件的災害</h2>
+				</div>
+			</div>
+		</table>
+		<!-- 3. Records per page and pagination control -->
+		<div
+			v-if="adminStore.disasters.length !== 0"
+			class="admindisaster-control"
+		>
+			<label for="pagesize">每頁顯示</label>
+			<select v-model="searchParams.pagesize" @change="handleNewQuery">
+				<option value="10">10</option>
+				<option value="20">20</option>
+				<option value="30">30</option>
+			</select>
+			<div class="admindisaster-control-page">
+				<button
+					v-for="page in pages"
+					:key="`component-page-${page}`"
+					:class="{ active: page === searchParams.pagenum }"
+					@click="handleNewPage(page)"
+				>
+					{{ page }}
+				</button>
+			</div>
+		</div>
+	</div>
 </template>
 
 <style scoped lang="scss">
@@ -468,12 +434,11 @@ onMounted(() => {
 		.reviewBtn {
 			padding: 7px;
 			margin: 5px;
-			font-size: large;
-			color: black;
-			background-color: rgba(136, 135, 135, 1);
+			font-size: var(--font-ms);
+			background-color: var(--color-highlight);
 			border-radius: 10px;
 			&:hover {
-				background-color: rgb(190, 189, 189);
+				opacity: 0.85;
 			}
 		}
 	}
