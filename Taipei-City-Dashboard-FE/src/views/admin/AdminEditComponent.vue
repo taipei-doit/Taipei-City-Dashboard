@@ -89,9 +89,9 @@ function handleOpenSettings(component) {
 	adminStore.getComponentData(component);
 	dialogStore.showDialog("adminComponentSettings");
 }
-const showAdminAddComponent = () => {
-	dialogStore.showDialog("adminAddComponentTemplate");
-};
+// const showAdminAddComponent = () => {
+// 	dialogStore.showDialog("adminAddComponentTemplate");
+// };
 
 onMounted(() => {
 	adminStore.getPublicComponents(searchParams.value);
@@ -127,9 +127,9 @@ onMounted(() => {
       <button @click="handleNewQuery">
         搜尋
       </button>
-      <button @click="showAdminAddComponent">
+      <!-- <button @click="showAdminAddComponent">
         新增組件
-      </button>
+      </button> -->
     </div>
     <!-- 2. The main table displaying all public components -->
     <table class="admineditcomponent-table">

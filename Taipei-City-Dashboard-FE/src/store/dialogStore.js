@@ -39,8 +39,8 @@ export const useDialogStore = defineStore("dialog", {
 			embedComponent: false,
 			contributorsList: false,
 			contributorInfo: false,
-			addMarkToMap: false,
 			addPin: false,
+			addViewPoint: false,
 		},
 		// Stores the content for notifications
 		notification: {

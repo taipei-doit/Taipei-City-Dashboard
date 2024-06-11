@@ -36,7 +36,7 @@ export const useAuthStore = defineStore("auth", {
 	getters: {},
 	actions: {
 		/* Authentication Functions */
-		// Initial Checks
+		// 1. Initial Checks
 		async initialChecks() {
 			const contentStore = useContentStore();
 			const mapStore = useMapStore();
@@ -59,7 +59,7 @@ export const useAuthStore = defineStore("auth", {
 
 			contentStore.setContributors();
 		},
-		// Email Login
+		// 2. Email Login
 		async loginByEmail(email, password) {
 			const response = await http.post(
 				"/auth/login",
@@ -73,6 +73,7 @@ export const useAuthStore = defineStore("auth", {
 			);
 			this.handleSuccessfullLogin(response);
 		},
+		// 3. Taipei Pass Login
 		async loginByTaipeiPass(code) {
 			try {
 				const response = await http.get("/auth/callback", {
@@ -86,6 +87,7 @@ export const useAuthStore = defineStore("auth", {
 				router.replace("/dashboard");
 			}
 		},
+		// 4. Tasks to be completed after login
 		handleSuccessfullLogin(response) {
 			const dialogStore = useDialogStore();
 			const contentStore = useContentStore();
@@ -103,8 +105,7 @@ export const useAuthStore = defineStore("auth", {
 			router.go();
 			dialogStore.showNotification("success", "登入成功");
 		},
-
-		// Logout
+		// 5. Logout
 		async handleLogout() {
 			const dialogStore = useDialogStore();
 			const contentStore = useContentStore();
@@ -133,12 +134,11 @@ export const useAuthStore = defineStore("auth", {
 			router.go();
 			dialogStore.showNotification("success", "登出成功");
 		},
-
-		// If your authentication system supports refresh tokens, call this function to refresh existing tokens
+		// 6. If your authentication system supports refresh tokens, call this function to refresh existing tokens
 		executeRefreshTokens() {},
 
 		/* User Info Functions */
-		// Update User Info
+		// 1. Update User Info
 		async updateUserInfo() {
 			await http.patch("/user/me", this.editUser);
 			const response = await http.get("/user/me");

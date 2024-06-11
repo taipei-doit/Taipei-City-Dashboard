@@ -6,7 +6,7 @@ import { useAuthStore } from "../../store/authStore";
 import { useContentStore } from "../../store/contentStore";
 import { useDialogStore } from "../../store/dialogStore";
 import { useMapStore } from "../../store/mapStore";
-import AddMarkToMap from "../dialogs/AddViewPoint.vue";
+import AddViewPoint from "../dialogs/AddViewPoint.vue";
 import MobileLayers from "../dialogs/MobileLayers.vue";
 
 const authStore = useAuthStore();
@@ -95,13 +95,6 @@ onMounted(() => {
           <button @click="mapStore.easeToLocation(item)">
             {{ item[4] }}
           </button>
-          <div
-            v-if="authStore.user?.user_id"
-            class="mapcontainer-controls-delete"
-            @click="mapStore.removeSavedLocation(index)"
-          >
-            <span>delete</span>
-          </div>
         </div>
       </template>
       <div
@@ -122,16 +115,15 @@ onMounted(() => {
           <span>delete</span>
         </div>
       </div>
-
       <button
         v-if="authStore.user?.user_id"
-        @click="dialogStore.showDialog('addMarkToMap')"
+        @click="dialogStore.showDialog('addViewPoint')"
       >
         新增
       </button>
     </div>
   </div>
-  <AddMarkToMap />
+  <AddViewPoint name="addViewPoint" />
 </template>
 
 <style scoped lang="scss">

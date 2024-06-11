@@ -9,14 +9,17 @@ import { useAuthStore } from "../../../store/authStore";
 import { useContentStore } from "../../../store/contentStore";
 import { useDialogStore } from "../../../store/dialogStore";
 import { useMapStore } from "../../../store/mapStore";
+
 import AddEditDashboards from "../../dialogs/AddEditDashboards.vue";
-import AddPin from "../../dialogs/AddPin.vue";
 import MobileNavigation from "../../dialogs/MobileNavigation.vue";
+import AddViewPoint from "../../dialogs/AddViewPoint.vue";
+
 const contentStore = useContentStore();
 const dialogStore = useDialogStore();
 const mapStore = useMapStore();
 const authStore = useAuthStore();
 const route = useRoute();
+
 const isCurrentPageMapView = computed(() => route.name === "mapview");
 
 function handleOpenSettings() {
@@ -58,27 +61,20 @@ function handleOpenSettings() {
     </div>
     <button
       v-if="authStore.user?.user_id && isCurrentPageMapView"
-      class="add-pin"
+      class="settingsbar-pin"
       :disabled="!mapStore.tempMarkerCoordinates"
       :style="{
-        background: !mapStore.tempMarkerCoordinates
-          ? 'rgb(20, 58, 67)'
-          : 'var(--color-highlight)',
+        opacity: !mapStore.tempMarkerCoordinates ? 0.5 : 1,
         cursor: !mapStore.tempMarkerCoordinates
           ? 'not-allowed'
           : 'pointer',
       }"
       @click="dialogStore.showDialog('addPin')"
     >
-      <template v-if="!mapStore.tempMarkerCoordinates">
-        雙擊以建立地標
-      </template>
-      <template v-else>
-        建立地標
-      </template>
+      {{ mapStore.tempMarkerCoordinates ? "新增地標" : "雙擊以建立地標" }}
     </button>
   </div>
-  <AddPin />
+  <AddViewPoint name="addPin" />
 </template>
 
 <style scoped lang="scss">

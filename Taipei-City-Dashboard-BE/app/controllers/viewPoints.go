@@ -14,7 +14,7 @@ CreateViewPoint creates a new viewpoint for the user
 POST /api/v1/user/:id/viewpoint
 */
 func CreateViewPoint(c *gin.Context) {
-	userId, err := strconv.Atoi(c.Param("id"))
+	userID, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid user ID"})
 		return
@@ -26,7 +26,7 @@ func CreateViewPoint(c *gin.Context) {
 		return
 	}
 
-	viewPoint, err = models.CreateViewPoint(userId, viewPoint.CenterX, viewPoint.CenterY, viewPoint.Zoom, viewPoint.Pitch, viewPoint.Bearing, viewPoint.Name, viewPoint.PointType)
+	viewPoint, err = models.CreateViewPoint(userID, viewPoint.CenterX, viewPoint.CenterY, viewPoint.Zoom, viewPoint.Pitch, viewPoint.Bearing, viewPoint.Name, viewPoint.PointType)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -56,22 +56,22 @@ func GetViewPointByUserID(c *gin.Context) {
 
 /*
 DeleteViewPoint deletes the viewpoint
-DELETE /api/v1/user/:id/viewpoint
+DELETE /api/v1/user/:id/viewpoint/:viewpointid
 */
 func DeleteViewPoint(c *gin.Context) {
-	userId, err := strconv.Atoi(c.Param("id"))
+	userID, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid user id"})
 		return
 	}
 
-	pointId, err := strconv.Atoi(c.Param("viewpointid"))
+	pointID, err := strconv.Atoi(c.Param("viewpointid"))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid viewpoint id"})
 		return
 	}
 
-	err = models.DeleteViewPoint(userId, pointId)
+	err = models.DeleteViewPoint(userID, pointID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

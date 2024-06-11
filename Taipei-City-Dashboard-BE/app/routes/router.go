@@ -48,8 +48,6 @@ func configureUserRoutes() {
 	{
 		userRoutes.GET("/me", controllers.GetUserInfo)
 		userRoutes.PATCH("/me", controllers.EditUserInfo)
-	}
-	{
 		userRoutes.POST("/:id/viewpoint", controllers.CreateViewPoint)
 		userRoutes.GET("/:id/viewpoint", controllers.GetViewPointByUserID)
 		userRoutes.DELETE("/:id/viewpoint/:viewpointid", controllers.DeleteViewPoint)

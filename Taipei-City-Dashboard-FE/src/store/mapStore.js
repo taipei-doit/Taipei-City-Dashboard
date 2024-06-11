@@ -64,15 +64,13 @@ export const useMapStore = defineStore("map", {
 		savedLocations: savedLocations,
 		// Store currently loading layers,
 		loadingLayers: [],
+		// Store all view points
 		viewPoints: [],
 		marker: null,
 		tempMarkerCoordinates: null,
 	}),
 	getters: {},
 	actions: {
-		setTempPin(payload) {
-			this.marker = payload;
-		},
 		/* Initialize Mapbox */
 		// 1. Creates the mapbox instance and passes in initial configs
 		initializeMapBox() {
@@ -657,109 +655,7 @@ export const useMapStore = defineStore("map", {
 			});
 			this.removePopup();
 		},
-		async addMarker(name) {
-			const authStore = useAuthStore();
-			const res = await http.post(
-				`user/${authStore.user.user_id}/viewpoint`,
-				{
-					center_x: this.tempMarkerCoordinates.lat,
-					center_y: this.tempMarkerCoordinates.lng,
-					zoom: 0,
-					pitch: 0,
-					bearing: 0,
-					name: name,
-					point_type: "pin",
-				}
-			);
 
-			const { lng, lat } = this.tempMarkerCoordinates;
-			this.createMarkerAndPopupOnMap(
-				{ color: "#5a9cf8" },
-				name,
-				res.data.data.id,
-				{ lng, lat }
-			);
-			this.tempMarkerCoordinates = null;
-		},
-		async addViewPoint(viewPointArray) {
-			const authStore = useAuthStore();
-			const res = await http.post(
-				`user/${authStore.user.user_id}/viewpoint`,
-				{
-					center_x: viewPointArray[0][0],
-					center_y: viewPointArray[0][1],
-					zoom: viewPointArray[1],
-					pitch: viewPointArray[2],
-					bearing: viewPointArray[3],
-					name: viewPointArray[4],
-					point_type: "view",
-				}
-			);
-			this.viewPoints.push(res.data.data);
-		},
-		async removeViewPoint(item) {
-			const authStore = useAuthStore();
-			await http.delete(
-				`user/${authStore.user.user_id}/viewpoint/${item.id}`
-			);
-			const dialogStore = useDialogStore();
-
-			this.viewPoints = this.viewPoints.filter(
-				(viewPoint) => viewPoint.id !== item.id
-			);
-			dialogStore.showNotification("success", "視角刪除成功");
-		},
-		createMarkerAndPopupOnMap(
-			colorSetting,
-			markderName,
-			markerId,
-			{ lng, lat }
-		) {
-			const authStore = useAuthStore();
-			const dialogStore = useDialogStore();
-			const marker = new mapboxGl.Marker(colorSetting);
-			const popup = new mapboxGl.Popup({ closeButton: false })
-				.setHTML(`<div class="popup-for-pin">${markderName} <button id=delete-${markerId} class="delete-pin"}">
-			X
-		  </button></div>`);
-
-			popup.on("open", () => {
-				const el = document.getElementById(`delete-${markerId}`);
-				el.addEventListener("click", async () => {
-					await http.delete(
-						`user/${authStore.user.user_id}/viewpoint/${markerId}`
-					);
-					dialogStore.showNotification("success", "地標刪除成功");
-					marker.remove();
-					this.marker.remove();
-				});
-			});
-
-			marker.setLngLat({ lng, lat }).setPopup(popup).addTo(this.map);
-		},
-		renderMarkers() {
-			if (!this.viewPoints.length) return;
-
-			this.viewPoints.forEach((item) => {
-				if (item.point_type === "pin") {
-					this.createMarkerAndPopupOnMap(
-						{ color: "#5a9cf8" },
-						item.name,
-						item.id,
-						{ lng: item.center_y, lat: item.center_x }
-					);
-				}
-			});
-		},
-		async fetchViewPoints() {
-			const authStore = useAuthStore();
-
-			const res = await http.get(
-				`user/${authStore.user.user_id}/viewpoint`
-			);
-			this.viewPoints = res.data;
-			this.renderMarkers();
-		},
 		/* Popup Related Functions */
 		// 1. Adds a popup when the user clicks on a item. The event will be passed in.
 		addPopup(event) {
@@ -818,6 +714,123 @@ export const useMapStore = defineStore("map", {
 				this.popup.remove();
 			}
 			this.popup = null;
+		},
+
+		/* Viewpoint / Marker Functions */
+		// 1. Add a viewpoint
+		async addViewPoint(name) {
+			const { lng, lat } = this.map.getCenter();
+			const zoom = this.map.getZoom();
+			const pitch = this.map.getPitch();
+			const bearing = this.map.getBearing();
+
+			const authStore = useAuthStore();
+			const res = await http.post(
+				`user/${authStore.user.user_id}/viewpoint`,
+				{
+					center_x: lng,
+					center_y: lat,
+					zoom,
+					pitch,
+					bearing,
+					name,
+					point_type: "view",
+				}
+			);
+			this.viewPoints.push(res.data.data);
+		},
+		// 2. Add a marker
+		async addMarker(name) {
+			const authStore = useAuthStore();
+			const res = await http.post(
+				`user/${authStore.user.user_id}/viewpoint`,
+				{
+					center_x: this.tempMarkerCoordinates.lat,
+					center_y: this.tempMarkerCoordinates.lng,
+					zoom: 0,
+					pitch: 0,
+					bearing: 0,
+					name: name,
+					point_type: "pin",
+				}
+			);
+
+			const { lng, lat } = this.tempMarkerCoordinates;
+			this.createMarkerAndPopupOnMap(
+				{ color: "#5a9cf8" },
+				name,
+				res.data.data.id,
+				{ lng, lat }
+			);
+			this.tempMarkerCoordinates = null;
+		},
+		// 3. Create a marker and popup on the map
+		createMarkerAndPopupOnMap(
+			colorSetting,
+			markerName,
+			markerId,
+			{ lng, lat }
+		) {
+			const authStore = useAuthStore();
+			const dialogStore = useDialogStore();
+			const marker = new mapboxGl.Marker(colorSetting);
+			const popup = new mapboxGl.Popup({ closeButton: false }).setHTML(
+				`<div class="popup-for-pin"><div>${markerName}</div> <button id="delete-${markerId}" class="delete-pin"}">
+						<span>delete</span>
+					  </button></div>`
+			);
+
+			popup.on("open", () => {
+				const el = document.getElementById(`delete-${markerId}`);
+				el.addEventListener("click", async () => {
+					await http.delete(
+						`user/${authStore.user.user_id}/viewpoint/${markerId}`
+					);
+					dialogStore.showNotification("success", "地標刪除成功");
+					marker.remove();
+					this.marker.remove();
+				});
+			});
+
+			marker.setLngLat({ lng, lat }).setPopup(popup).addTo(this.map);
+		},
+		// 4. Remove a viewpoint / marker
+		async removeViewPoint(item) {
+			const authStore = useAuthStore();
+			await http.delete(
+				`user/${authStore.user.user_id}/viewpoint/${item.id}`
+			);
+			const dialogStore = useDialogStore();
+
+			this.viewPoints = this.viewPoints.filter(
+				(viewPoint) => viewPoint.id !== item.id
+			);
+			dialogStore.showNotification("success", "視角刪除成功");
+		},
+		// 5. Fetch all view points
+		async fetchViewPoints() {
+			const authStore = useAuthStore();
+
+			const res = await http.get(
+				`user/${authStore.user.user_id}/viewpoint`
+			);
+			this.viewPoints = res.data;
+			this.renderMarkers();
+		},
+		// 6. Render all markers
+		renderMarkers() {
+			if (!this.viewPoints.length) return;
+
+			this.viewPoints.forEach((item) => {
+				if (item.point_type === "pin") {
+					this.createMarkerAndPopupOnMap(
+						{ color: "#5a9cf8" },
+						item.name,
+						item.id,
+						{ lng: item.center_y, lat: item.center_x }
+					);
+				}
+			});
 		},
 
 		/* Functions that change the viewing experience of the map */
@@ -1018,6 +1031,7 @@ export const useMapStore = defineStore("map", {
 			this.map = null;
 			this.currentVisibleLayers = [];
 			this.removePopup();
+			this.tempMarkerCoordinates = null;
 		},
 	},
 });
