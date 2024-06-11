@@ -281,16 +281,30 @@ export const useMapStore = defineStore("map", {
 			}
 		},
 		// 3-2. Add a raster map as a source in mapbox
-		addRasterSource(map_config) {
-			this.map.addSource(`${map_config.layerId}-source`, {
-				type: "vector",
-				scheme: "tms",
-				tolerance: 0,
-				tiles: [
-					`${location.origin}/geo_server/gwc/service/tms/1.0.0/taipei_vioc:${map_config.index}@EPSG:900913@pbf/{z}/{x}/{y}.pbf`,
-				],
-			});
-			this.addMapLayer(map_config);
+		async addRasterSource(map_config) {
+			if (["arc", "voronoi", "isoline"].includes(map_config.type)) {
+				const res = await axios.get(
+					`${location.origin}/geo_server/taipei_vioc/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=taipei_vioc%3A${map_config.index}&maxFeatures=1000000&outputFormat=application%2Fjson`
+				);
+
+				if (map_config.type === "arc") {
+					this.AddArcMapLayer(map_config, res.data);
+				} else if (map_config.type === "voronoi") {
+					this.AddVoronoiMapLayer(map_config, res.data);
+				} else if (map_config.type === "isoline") {
+					this.AddIsolineMapLayer(map_config, res.data);
+				}
+			} else {
+				this.map.addSource(`${map_config.layerId}-source`, {
+					type: "vector",
+					scheme: "tms",
+					tolerance: 0,
+					tiles: [
+						`${location.origin}/geo_server/gwc/service/tms/1.0.0/taipei_vioc:${map_config.index}@EPSG:900913@pbf/{z}/{x}/{y}.pbf`,
+					],
+				});
+				this.addMapLayer(map_config);
+			}
 		},
 		// 4-1. Using the mapbox source and map config, create a new layer
 		// The styles and configs can be edited in /assets/configs/mapbox/mapConfig.js
@@ -417,15 +431,15 @@ export const useMapStore = defineStore("map", {
 			const layers = Object.keys(this.deckGlLayer).map((index) => {
 				const l = this.deckGlLayer[index];
 				switch (l.type) {
-				case "ArcLayer":
-					return new ArcLayer(l.config);
-				case "AnimatedArcLayer":
-					return new AnimatedArcLayer({
-						...l.config,
-						coef: this.step / 1000,
-					});
-				default:
-					break;
+					case "ArcLayer":
+						return new ArcLayer(l.config);
+					case "AnimatedArcLayer":
+						return new AnimatedArcLayer({
+							...l.config,
+							coef: this.step / 1000,
+						});
+					default:
+						break;
 				}
 			});
 			this.overlay.setProps({
