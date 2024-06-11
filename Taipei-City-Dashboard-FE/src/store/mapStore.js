@@ -288,6 +288,10 @@ export const useMapStore = defineStore("map", {
 				);
 
 				if (map_config.type === "arc") {
+					this.map.addSource(`${map_config.layerId}-source`, {
+						type: "geojson",
+						data: { ...res.data },
+					});
 					this.AddArcMapLayer(map_config, res.data);
 				} else if (map_config.type === "voronoi") {
 					this.AddVoronoiMapLayer(map_config, res.data);
@@ -539,6 +543,7 @@ export const useMapStore = defineStore("map", {
 
 			let new_map_config = { ...map_config };
 			new_map_config.type = "line";
+			new_map_config.source = "geojson";
 			this.addMapLayer(new_map_config);
 		},
 		// 4-4. Add Map Layer for Isoline Maps
@@ -547,15 +552,17 @@ export const useMapStore = defineStore("map", {
 			this.loadingLayers.push("rendering");
 			// Step 1: Generate a 2D scalar field from known data points
 			// - Turn the original data into the format that can be accepted by interpolation()
-			let dataPoints = data.features.map((item) => {
-				return {
-					x: item.geometry.coordinates[0],
-					y: item.geometry.coordinates[1],
-					value: item.properties[
-						map_config.paint?.["isoline-key"] || "value"
-					],
-				};
-			});
+			let dataPoints = data.features
+				.filter((item) => item.geometry)
+				.map((item) => {
+					return {
+						x: item.geometry.coordinates[0],
+						y: item.geometry.coordinates[1],
+						value: item.properties[
+							map_config.paint?.["isoline-key"] || "value"
+						],
+					};
+				});
 
 			let lngStart = 121.42955;
 			let lngEnd = 121.68351;
@@ -598,8 +605,12 @@ export const useMapStore = defineStore("map", {
 				features: [],
 			};
 
+			const min = map_config.paint?.["isoline-min"] || 0;
+			const max = map_config.paint?.["isoline-max"] || 100;
+			const step = map_config.paint?.["isoline-step"] || 2;
+
 			// - Repeat the marching square algorithm for differnt iso-values (40, 42, 44 ... 74 in this case)
-			for (let isoValue = 40; isoValue <= 75; isoValue += 2) {
+			for (let isoValue = min; isoValue <= max; isoValue += step) {
 				let result = marchingSquare(discreteData, isoValue);
 
 				let transformedResult = result.map((line) => {
@@ -626,13 +637,19 @@ export const useMapStore = defineStore("map", {
 			// Step 3: Add source and layer
 			this.map.addSource(`${map_config.layerId}-source`, {
 				type: "geojson",
-
 				data: { ...isoline_data },
 			});
 
 			delete map_config.paint?.["isoline-key"];
+			delete map_config.paint?.["isoline-min"];
+			delete map_config.paint?.["isoline-max"];
+			delete map_config.paint?.["isoline-step"];
 
-			let new_map_config = { ...map_config, type: "line" };
+			let new_map_config = {
+				...map_config,
+				type: "line",
+				source: "geojson",
+			};
 			this.addMapLayer(new_map_config);
 		},
 		//  5. Turn on the visibility for a exisiting map layer
@@ -770,6 +787,8 @@ export const useMapStore = defineStore("map", {
 				}
 			);
 
+			this.viewPoints.push(res.data.data);
+
 			const { lng, lat } = this.tempMarkerCoordinates;
 			this.createMarkerAndPopupOnMap(
 				{ color: "#5a9cf8" },
@@ -802,6 +821,10 @@ export const useMapStore = defineStore("map", {
 						`user/${authStore.user.user_id}/viewpoint/${markerId}`
 					);
 					dialogStore.showNotification("success", "地標刪除成功");
+					this.viewPoints = this.viewPoints.filter(
+						(viewPoint) => viewPoint.id !== markerId
+					);
+
 					marker.remove();
 					this.marker.remove();
 				});
@@ -809,7 +832,7 @@ export const useMapStore = defineStore("map", {
 
 			marker.setLngLat({ lng, lat }).setPopup(popup).addTo(this.map);
 		},
-		// 4. Remove a viewpoint / marker
+		// 4. Remove a viewpoint
 		async removeViewPoint(item) {
 			const authStore = useAuthStore();
 			await http.delete(
