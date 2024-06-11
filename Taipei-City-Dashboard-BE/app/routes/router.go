@@ -48,6 +48,9 @@ func configureUserRoutes() {
 	{
 		userRoutes.GET("/me", controllers.GetUserInfo)
 		userRoutes.PATCH("/me", controllers.EditUserInfo)
+		userRoutes.POST("/:id/viewpoint", controllers.CreateViewPoint)
+		userRoutes.GET("/:id/viewpoint", controllers.GetViewPointByUserID)
+		userRoutes.DELETE("/:id/viewpoint/:viewpointid", controllers.DeleteViewPoint)
 	}
 	userRoutes.Use(middleware.IsSysAdm())
 	{
@@ -73,6 +76,7 @@ func configureComponentRoutes() {
 	componentRoutes.Use(middleware.IsSysAdm())
 	{
 		componentRoutes.
+			POST("/", controllers.CreateComponent).
 			PATCH("/:id", controllers.UpdateComponent).
 			DELETE("/:id", controllers.DeleteComponent)
 		componentRoutes.

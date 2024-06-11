@@ -7,13 +7,14 @@ The mapStore controls the map and includes methods to modify it.
 !! PLEASE BE SURE TO REFERENCE THE MAPBOX DOCUMENTATION IF ANYTHING IS UNCLEAR !!
 https://docs.mapbox.com/mapbox-gl-js/guides/
 */
-import { createApp, defineComponent, nextTick, ref } from "vue";
-import { defineStore } from "pinia";
+import { ArcLayer } from "@deck.gl/layers";
+import { MapboxOverlay } from "@deck.gl/mapbox";
+import axios from "axios";
 import mapboxGl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
-import axios from "axios";
-import { MapboxOverlay } from "@deck.gl/mapbox";
-import { ArcLayer } from "@deck.gl/layers";
+import { defineStore } from "pinia";
+import { createApp, defineComponent, nextTick, ref } from "vue";
+import http from "../router/axios.js";
 
 // Other Stores
 import { useAuthStore } from "./authStore";
@@ -23,23 +24,23 @@ import { useDialogStore } from "./dialogStore";
 import MapPopup from "../components/map/MapPopup.vue";
 
 // Utility Functions or Configs
-import mapStyle from "../assets/configs/mapbox/mapStyle.js";
+import { AnimatedArcLayer } from "../assets/configs/mapbox/arcAnimate.js";
 import {
 	MapObjectConfig,
+	TaipeiBuilding,
 	TaipeiTown,
 	TaipeiVillage,
-	TaipeiBuilding,
 	TpDistrict,
 	TpVillage,
-	maplayerCommonPaint,
 	maplayerCommonLayout,
+	maplayerCommonPaint,
 } from "../assets/configs/mapbox/mapConfig.js";
+import mapStyle from "../assets/configs/mapbox/mapStyle.js";
 import { savedLocations } from "../assets/configs/mapbox/savedLocations.js";
-import { voronoi } from "../assets/utilityFunctions/voronoi.js";
+import { hexToRGB } from "../assets/utilityFunctions/colorConvert.js";
 import { interpolation } from "../assets/utilityFunctions/interpolation.js";
 import { marchingSquare } from "../assets/utilityFunctions/marchingSquare.js";
-import { AnimatedArcLayer } from "../assets/configs/mapbox/arcAnimate.js";
-import { hexToRGB } from "../assets/utilityFunctions/colorConvert.js";
+import { voronoi } from "../assets/utilityFunctions/voronoi.js";
 
 export const useMapStore = defineStore("map", {
 	state: () => ({
@@ -63,6 +64,10 @@ export const useMapStore = defineStore("map", {
 		savedLocations: savedLocations,
 		// Store currently loading layers,
 		loadingLayers: [],
+		// Store all view points
+		viewPoints: [],
+		marker: null,
+		tempMarkerCoordinates: null,
 	}),
 	getters: {},
 	actions: {
@@ -70,6 +75,7 @@ export const useMapStore = defineStore("map", {
 		// 1. Creates the mapbox instance and passes in initial configs
 		initializeMapBox() {
 			this.map = null;
+			this.marker = null;
 			this.overlay = null;
 			const MAPBOXTOKEN = import.meta.env.VITE_MAPBOXTOKEN;
 			mapboxGl.accessToken = MAPBOXTOKEN;
@@ -77,10 +83,12 @@ export const useMapStore = defineStore("map", {
 				...MapObjectConfig,
 				style: mapStyle,
 			});
+			this.marker = new mapboxGl.Marker();
 			this.map.addControl(new mapboxGl.NavigationControl());
 			this.map.doubleClickZoom.disable();
 			this.map
 				.on("load", () => {
+					if (!this.map) return;
 					this.overlay = new MapboxOverlay({
 						interleaved: true,
 						layers: [],
@@ -94,11 +102,18 @@ export const useMapStore = defineStore("map", {
 					}
 					this.addPopup(event);
 				})
+				.on("dblclick", (event) => {
+					let coordinates = event.lngLat;
+					this.tempMarkerCoordinates = coordinates;
+					this.marker.setLngLat(coordinates).addTo(this.map);
+				})
 				.on("idle", () => {
 					this.loadingLayers = this.loadingLayers.filter(
 						(el) => el !== "rendering"
 					);
 				});
+
+			this.renderMarkers();
 		},
 		// 2. Adds three basic layers to the map (Taipei District, Taipei Village labels, and Taipei 3D Buildings)
 		// Due to performance concerns, Taipei 3D Buildings won't be added in the mobile version
@@ -266,16 +281,34 @@ export const useMapStore = defineStore("map", {
 			}
 		},
 		// 3-2. Add a raster map as a source in mapbox
-		addRasterSource(map_config) {
-			this.map.addSource(`${map_config.layerId}-source`, {
-				type: "vector",
-				scheme: "tms",
-				tolerance: 0,
-				tiles: [
-					`${location.origin}/geo_server/gwc/service/tms/1.0.0/taipei_vioc:${map_config.index}@EPSG:900913@pbf/{z}/{x}/{y}.pbf`,
-				],
-			});
-			this.addMapLayer(map_config);
+		async addRasterSource(map_config) {
+			if (["arc", "voronoi", "isoline"].includes(map_config.type)) {
+				const res = await axios.get(
+					`${location.origin}/geo_server/taipei_vioc/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=taipei_vioc%3A${map_config.index}&maxFeatures=1000000&outputFormat=application%2Fjson`
+				);
+
+				if (map_config.type === "arc") {
+					this.map.addSource(`${map_config.layerId}-source`, {
+						type: "geojson",
+						data: { ...res.data },
+					});
+					this.AddArcMapLayer(map_config, res.data);
+				} else if (map_config.type === "voronoi") {
+					this.AddVoronoiMapLayer(map_config, res.data);
+				} else if (map_config.type === "isoline") {
+					this.AddIsolineMapLayer(map_config, res.data);
+				}
+			} else {
+				this.map.addSource(`${map_config.layerId}-source`, {
+					type: "vector",
+					scheme: "tms",
+					tolerance: 0,
+					tiles: [
+						`${location.origin}/geo_server/gwc/service/tms/1.0.0/taipei_vioc:${map_config.index}@EPSG:900913@pbf/{z}/{x}/{y}.pbf`,
+					],
+				});
+				this.addMapLayer(map_config);
+			}
 		},
 		// 4-1. Using the mapbox source and map config, create a new layer
 		// The styles and configs can be edited in /assets/configs/mapbox/mapConfig.js
@@ -510,6 +543,7 @@ export const useMapStore = defineStore("map", {
 
 			let new_map_config = { ...map_config };
 			new_map_config.type = "line";
+			new_map_config.source = "geojson";
 			this.addMapLayer(new_map_config);
 		},
 		// 4-4. Add Map Layer for Isoline Maps
@@ -518,15 +552,17 @@ export const useMapStore = defineStore("map", {
 			this.loadingLayers.push("rendering");
 			// Step 1: Generate a 2D scalar field from known data points
 			// - Turn the original data into the format that can be accepted by interpolation()
-			let dataPoints = data.features.map((item) => {
-				return {
-					x: item.geometry.coordinates[0],
-					y: item.geometry.coordinates[1],
-					value: item.properties[
-						map_config.paint?.["isoline-key"] || "value"
-					],
-				};
-			});
+			let dataPoints = data.features
+				.filter((item) => item.geometry)
+				.map((item) => {
+					return {
+						x: item.geometry.coordinates[0],
+						y: item.geometry.coordinates[1],
+						value: item.properties[
+							map_config.paint?.["isoline-key"] || "value"
+						],
+					};
+				});
 
 			let lngStart = 121.42955;
 			let lngEnd = 121.68351;
@@ -569,8 +605,12 @@ export const useMapStore = defineStore("map", {
 				features: [],
 			};
 
+			const min = map_config.paint?.["isoline-min"] || 0;
+			const max = map_config.paint?.["isoline-max"] || 100;
+			const step = map_config.paint?.["isoline-step"] || 2;
+
 			// - Repeat the marching square algorithm for differnt iso-values (40, 42, 44 ... 74 in this case)
-			for (let isoValue = 40; isoValue <= 75; isoValue += 2) {
+			for (let isoValue = min; isoValue <= max; isoValue += step) {
 				let result = marchingSquare(discreteData, isoValue);
 
 				let transformedResult = result.map((line) => {
@@ -597,13 +637,19 @@ export const useMapStore = defineStore("map", {
 			// Step 3: Add source and layer
 			this.map.addSource(`${map_config.layerId}-source`, {
 				type: "geojson",
-
 				data: { ...isoline_data },
 			});
 
 			delete map_config.paint?.["isoline-key"];
+			delete map_config.paint?.["isoline-min"];
+			delete map_config.paint?.["isoline-max"];
+			delete map_config.paint?.["isoline-step"];
 
-			let new_map_config = { ...map_config, type: "line" };
+			let new_map_config = {
+				...map_config,
+				type: "line",
+				source: "geojson",
+			};
 			this.addMapLayer(new_map_config);
 		},
 		//  5. Turn on the visibility for a exisiting map layer
@@ -702,6 +748,129 @@ export const useMapStore = defineStore("map", {
 			this.popup = null;
 		},
 
+		/* Viewpoint / Marker Functions */
+		// 1. Add a viewpoint
+		async addViewPoint(name) {
+			const { lng, lat } = this.map.getCenter();
+			const zoom = this.map.getZoom();
+			const pitch = this.map.getPitch();
+			const bearing = this.map.getBearing();
+
+			const authStore = useAuthStore();
+			const res = await http.post(
+				`user/${authStore.user.user_id}/viewpoint`,
+				{
+					center_x: lng,
+					center_y: lat,
+					zoom,
+					pitch,
+					bearing,
+					name,
+					point_type: "view",
+				}
+			);
+			this.viewPoints.push(res.data.data);
+		},
+		// 2. Add a marker
+		async addMarker(name) {
+			const authStore = useAuthStore();
+			const res = await http.post(
+				`user/${authStore.user.user_id}/viewpoint`,
+				{
+					center_x: this.tempMarkerCoordinates.lng,
+					center_y: this.tempMarkerCoordinates.lat,
+					zoom: 0,
+					pitch: 0,
+					bearing: 0,
+					name: name,
+					point_type: "pin",
+				}
+			);
+
+			this.viewPoints.push(res.data.data);
+
+			const { lng, lat } = this.tempMarkerCoordinates;
+			this.createMarkerAndPopupOnMap(
+				{ color: "#5a9cf8" },
+				name,
+				res.data.data.id,
+				{ lng, lat }
+			);
+			this.tempMarkerCoordinates = null;
+		},
+		// 3. Create a marker and popup on the map
+		createMarkerAndPopupOnMap(
+			colorSetting,
+			markerName,
+			markerId,
+			{ lng, lat }
+		) {
+			const authStore = useAuthStore();
+			const dialogStore = useDialogStore();
+			const marker = new mapboxGl.Marker(colorSetting);
+			const popup = new mapboxGl.Popup({ closeButton: false }).setHTML(
+				`<div class="popup-for-pin"><div>${markerName}</div> <button id="delete-${markerId}" class="delete-pin"}">
+						<span>delete</span>
+					  </button></div>`
+			);
+
+			popup.on("open", () => {
+				const el = document.getElementById(`delete-${markerId}`);
+				el.addEventListener("click", async () => {
+					await http.delete(
+						`user/${authStore.user.user_id}/viewpoint/${markerId}`
+					);
+					dialogStore.showNotification("success", "地標刪除成功");
+					this.viewPoints = this.viewPoints.filter(
+						(viewPoint) => viewPoint.id !== markerId
+					);
+
+					marker.remove();
+					this.marker.remove();
+				});
+			});
+
+			marker.setLngLat({ lng, lat }).setPopup(popup).addTo(this.map);
+		},
+		// 4. Remove a viewpoint
+		async removeViewPoint(item) {
+			const authStore = useAuthStore();
+			await http.delete(
+				`user/${authStore.user.user_id}/viewpoint/${item.id}`
+			);
+			const dialogStore = useDialogStore();
+
+			this.viewPoints = this.viewPoints.filter(
+				(viewPoint) => viewPoint.id !== item.id
+			);
+			dialogStore.showNotification("success", "視角刪除成功");
+		},
+		// 5. Fetch all view points
+		async fetchViewPoints() {
+			const authStore = useAuthStore();
+
+			const res = await http.get(
+				`user/${authStore.user.user_id}/viewpoint`
+			);
+			this.viewPoints = res.data;
+			if (this.map) this.renderMarkers();
+		},
+		// 6. Render all markers
+		renderMarkers() {
+			if (!this.viewPoints.length) return;
+
+			this.viewPoints.forEach((item) => {
+				if (item.point_type === "pin") {
+					this.createMarkerAndPopupOnMap(
+						{ color: "#5a9cf8" },
+						item.name,
+						item.id,
+						{ lng: item.center_x, lat: item.center_y }
+					);
+				}
+			});
+		},
+
 		/* Functions that change the viewing experience of the map */
 		// 1. Add new saved location that users can quickly zoom to
 		addNewSavedLocation(name) {
@@ -714,13 +883,23 @@ export const useMapStore = defineStore("map", {
 		// 2. Zoom to a location
 		// [[lng, lat], zoom, pitch, bearing, savedLocationName]
 		easeToLocation(location_array) {
-			this.map.easeTo({
-				center: location_array[0],
-				zoom: location_array[1],
-				duration: 4000,
-				pitch: location_array[2],
-				bearing: location_array[3],
-			});
+			if (location_array?.zoom) {
+				this.map.easeTo({
+					center: [location_array.center_x, location_array.center_y],
+					zoom: location_array.zoom,
+					duration: 4000,
+					pitch: location_array.pitch,
+					bearing: location_array.bearing,
+				});
+			} else {
+				this.map.easeTo({
+					center: location_array[0],
+					zoom: location_array[1],
+					duration: 4000,
+					pitch: location_array[2],
+					bearing: location_array[3],
+				});
+			}
 		},
 		// 3. Fly to a location
 		flyToLocation(location_array) {
@@ -890,6 +1069,7 @@ export const useMapStore = defineStore("map", {
 			this.map = null;
 			this.currentVisibleLayers = [];
 			this.removePopup();
+			this.tempMarkerCoordinates = null;
 		},
 	},
 });

@@ -72,6 +72,9 @@ textarea:disabled {
 input:required:invalid {
 	border: solid 1px rgb(237, 90, 90);
 }
+select:required:invalid {
+	border: solid 1px rgb(237, 90, 90);
+}
 
 select {
 	padding: 4px 6px;
@@ -160,5 +163,36 @@ td:last-child {
 @keyframes spin {
 	to {
 		transform: rotate(360deg);
+	}
+}
+
+html .mapboxgl-popup {
+	max-width: 260px !important;
+	min-width: 100px !important;
+}
+
+html .mapboxgl-popup .popup-for-pin {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	column-gap: 8px;
+	margin: 8px;
+
+	div {
+		padding: 2px 4px;
+		border-radius: 5px;
+		background-color: rgb(77, 77, 77);
+	}
+
+	.delete-pin {
+		span {
+			font-family: var(--font-icon);
+			font-size: var(--font-m);
+			color: var(--color-complement-text);
+			transition: color 0.2s;
+		}
+	}
+	.delete-pin:hover span {
+		color: white;
 	}
 }

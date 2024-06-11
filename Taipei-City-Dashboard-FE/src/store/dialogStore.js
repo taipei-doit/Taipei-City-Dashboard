@@ -22,6 +22,7 @@ export const useDialogStore = defineStore("dialog", {
 			adminEditUser: false,
 			adminAddEditContributor: false,
 			adminDeleteContributor: false,
+			adminAddComponentTemplate: false,
 			// Public Dialogs: /components/dialogs
 			addComponent: false,
 			addDashboard: false,
@@ -38,6 +39,8 @@ export const useDialogStore = defineStore("dialog", {
 			embedComponent: false,
 			contributorsList: false,
 			contributorInfo: false,
+			addPin: false,
+			addViewPoint: false,
 		},
 		// Stores the content for notifications
 		notification: {
