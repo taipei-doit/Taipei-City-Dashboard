@@ -1,4 +1,8 @@
 <!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
+
+<!-- THIS COMPONENT IS UNDER DEVELOPMENT -->
+<!-- NOT PRODUCTION READY -->
+
 <script setup>
 import { ref } from "vue";
 import { useAdminStore } from "../../../store/adminStore";

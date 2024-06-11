@@ -61,7 +61,7 @@ function handleOpenSettings() {
     </div>
     <button
       v-if="authStore.user?.user_id && isCurrentPageMapView"
-      class="settingsbar-pin"
+      class="settingsbar-pin hide-if-mobile"
       :disabled="!mapStore.tempMarkerCoordinates"
       :style="{
         opacity: !mapStore.tempMarkerCoordinates ? 0.5 : 1,

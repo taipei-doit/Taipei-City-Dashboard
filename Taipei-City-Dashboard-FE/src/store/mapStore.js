@@ -88,6 +88,7 @@ export const useMapStore = defineStore("map", {
 			this.map.doubleClickZoom.disable();
 			this.map
 				.on("load", () => {
+					if (!this.map) return;
 					this.overlay = new MapboxOverlay({
 						interleaved: true,
 						layers: [],
@@ -745,8 +746,8 @@ export const useMapStore = defineStore("map", {
 			const res = await http.post(
 				`user/${authStore.user.user_id}/viewpoint`,
 				{
-					center_x: this.tempMarkerCoordinates.lat,
-					center_y: this.tempMarkerCoordinates.lng,
+					center_x: this.tempMarkerCoordinates.lng,
+					center_y: this.tempMarkerCoordinates.lat,
 					zoom: 0,
 					pitch: 0,
 					bearing: 0,
@@ -815,7 +816,7 @@ export const useMapStore = defineStore("map", {
 				`user/${authStore.user.user_id}/viewpoint`
 			);
 			this.viewPoints = res.data;
-			this.renderMarkers();
+			if (this.map) this.renderMarkers();
 		},
 		// 6. Render all markers
 		renderMarkers() {
@@ -827,7 +828,7 @@ export const useMapStore = defineStore("map", {
 						{ color: "#5a9cf8" },
 						item.name,
 						item.id,
-						{ lng: item.center_y, lat: item.center_x }
+						{ lng: item.center_x, lat: item.center_y }
 					);
 				}
 			});
