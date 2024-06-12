@@ -2,26 +2,20 @@
 
 <script setup>
 import { onMounted, ref } from "vue";
-import { useMapStore } from "../../store/mapStore";
-import { useDialogStore } from "../../store/dialogStore";
+import { useAuthStore } from "../../store/authStore";
 import { useContentStore } from "../../store/contentStore";
-
+import { useDialogStore } from "../../store/dialogStore";
+import { useMapStore } from "../../store/mapStore";
+import AddViewPoint from "../dialogs/AddViewPoint.vue";
 import MobileLayers from "../dialogs/MobileLayers.vue";
 import IncidentReport from "../dialogs/IncidentReport.vue";
 
+const authStore = useAuthStore();
 const mapStore = useMapStore();
 const dialogStore = useDialogStore();
 const contentStore = useContentStore();
-
 const districtLayer = ref(false);
 const villageLayer = ref(false);
-
-// const newSavedLocation = ref("");
-
-// function handleSubmitNewLocation() {
-// 	mapStore.addNewSavedLocation(newSavedLocation.value);
-// 	newSavedLocation.value = "";
-// }
 
 function toggleDistrictLayer() {
 	districtLayer.value = !districtLayer.value;
@@ -125,31 +119,40 @@ onMounted(() => {
 			>
 				返回預設
 			</button>
-			<div
-				v-for="(item, index) in mapStore.savedLocations"
-				:key="`${item[4]}-${index}`"
-			>
-				<button @click="mapStore.easeToLocation(item)">
-					{{ item[4] }}
+			<template v-if="!authStore.user?.user_id">
+				<div
+					v-for="(item, index) in mapStore.savedLocations"
+					:key="`${item[4]}-${index}`"
+				>
+					<button @click="mapStore.easeToLocation(item)">
+						{{ item[4] }}
+					</button>
+				</div>
+			</template>
+			<div v-for="(item, index) in mapStore.viewPoints" :key="index">
+				<button
+					v-if="item.point_type === 'view'"
+					@click="mapStore.easeToLocation(item)"
+				>
+					{{ item["name"] }}
 				</button>
-				<!-- <div
+				<div
+					v-if="authStore.user?.user_id"
 					class="mapcontainer-controls-delete"
-					@click="mapStore.removeSavedLocation(index)"
+					@click="mapStore.removeViewPoint(item)"
 				>
 					<span>delete</span>
-				</div> -->
+				</div>
 			</div>
-			<!-- <input
-				v-if="mapStore.savedLocations.length < 10"
-				type="text"
-				placeholder="新增後按Enter"
-				v-model="newSavedLocation"
-				maxlength="6"
-				@focusout="newSavedLocation = ''"
-				@keypress.enter="handleSubmitNewLocation"
-			/> -->
+			<button
+				v-if="authStore.user?.user_id"
+				@click="dialogStore.showDialog('addViewPoint')"
+			>
+				新增
+			</button>
 		</div>
 	</div>
+	<AddViewPoint name="addViewPoint" />
 </template>
 
 <style scoped lang="scss">

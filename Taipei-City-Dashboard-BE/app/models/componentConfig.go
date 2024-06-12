@@ -145,6 +145,32 @@ func GetComponentByID(id int) (component Component, err error) {
 	return component, nil
 }
 
+func CreateComponent(name string, historyConfig json.RawMessage, mapFilter json.RawMessage, timeFrom string, timeTo *string, updateFreq *int64, updateFreqUnit string, source string, shortDesc string, longDesc string, useCase string, links pq.StringArray, contributors pq.StringArray) (component Component, err error) {
+    component = Component{
+        Name:            name,
+        HistoryConfig:   historyConfig,
+        MapFilter:       mapFilter,
+        TimeFrom:        timeFrom,
+        TimeTo:          timeTo,
+        UpdateFreq:      updateFreq,
+        UpdateFreqUnit:  updateFreqUnit,
+        Source:          source,
+        ShortDesc:       shortDesc,
+        LongDesc:        longDesc,
+        UseCase:         useCase,
+        Links:           links,
+        Contributors:    contributors,
+        CreatedAt:       time.Now(),
+        UpdatedAt:       time.Now(),
+    }
+
+    err = DBManager.Table("components").Create(&component).Error
+    if err != nil {
+        return component, err
+    }
+    return component, nil
+}
+
 func UpdateComponent(id int, name string, historyConfig json.RawMessage, mapFilter json.RawMessage, timeFrom string, timeTo *string, updateFreq *int64, updateFreqUnit string, source string, shortDesc string, longDesc string, useCase string, links pq.StringArray, contributors pq.StringArray) (component Component, err error) {
 	component = Component{Name: name, HistoryConfig: historyConfig, MapFilter: mapFilter, TimeFrom: timeFrom, TimeTo: timeTo, UpdateFreq: updateFreq, UpdateFreqUnit: updateFreqUnit, Source: source, ShortDesc: shortDesc, LongDesc: longDesc, UseCase: useCase, Links: links, Contributors: contributors, UpdatedAt: time.Now()}
 

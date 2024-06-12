@@ -39,6 +39,30 @@ type componentQuery struct {
 	SearchByName  string `form:"searchbyname"`
 }
 
+// FIXME:
+// 這邊的 component 是半成品，無法直接使用
+// 缺少 components.index(component_charts.index)，後續需要設計流程補上
+func CreateComponent(c *gin.Context) {
+	var component models.Component
+
+	// 1. Bind the request body to the component and make sure it's valid
+	err := c.ShouldBindJSON(&component)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": err.Error()})
+		return
+	}
+
+	// 2. Create the component
+	component, err = models.CreateComponent(component.Name, component.HistoryConfig, component.MapFilter, component.TimeFrom, component.TimeTo, component.UpdateFreq, component.UpdateFreqUnit, component.Source, component.ShortDesc, component.LongDesc, component.UseCase, component.Links, component.Contributors)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": err.Error()})
+		return
+	}
+
+	// 3. Return the component
+	c.JSON(http.StatusOK, gin.H{"status": "success", "data": component})
+}
+
 func GetAllComponents(c *gin.Context) {
 	// Get all query parameters from context
 	var query componentQuery

@@ -73,7 +73,6 @@ func ConnectToDatabase(dbConfig global.DatabaseConfig) *gorm.DB {
 	return dbConn
 }
 
-
 // CloseConnects closes the connections to the specified databases.
 // It takes a variable number of database names and closes the corresponding connections.
 func CloseConnects(dbNames ...interface{}) {
@@ -117,6 +116,7 @@ func MigrateManagerSchema() {
 		DBManager.AutoMigrate(&Component{}, &ComponentChart{}, &ComponentMap{})
 		DBManager.AutoMigrate(&Contributor{})
 		DBManager.AutoMigrate(&Dashboard{}, &DashboardGroup{}, &Issue{})
+		DBManager.AutoMigrate(&ViewPoints{})
 		DBManager.AutoMigrate(&Incident{})
 
 		// All users beneath the public group do not need to be added to the public group
