@@ -6,6 +6,7 @@ import { useAuthStore } from "../../store/authStore";
 import { useContentStore } from "../../store/contentStore";
 import { useDialogStore } from "../../store/dialogStore";
 import { useMapStore } from "../../store/mapStore";
+
 import AddViewPoint from "../dialogs/AddViewPoint.vue";
 import MobileLayers from "../dialogs/MobileLayers.vue";
 import IncidentReport from "../dialogs/IncidentReport.vue";
@@ -14,6 +15,7 @@ const authStore = useAuthStore();
 const mapStore = useMapStore();
 const dialogStore = useDialogStore();
 const contentStore = useContentStore();
+
 const districtLayer = ref(false);
 const villageLayer = ref(false);
 
@@ -97,6 +99,7 @@ onMounted(() => {
 			<!-- The key prop informs vue that the component should be updated when switching dashboards -->
 			<MobileLayers :key="contentStore.currentDashboard.index" />
 			<button
+        v-if="authStore.user.isAdmin"
 				class="input"
 				title="通報災害"
 				@click="dialogStore.showDialog('incidentReport')"

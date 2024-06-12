@@ -468,12 +468,11 @@ onMounted(() => {
 		.reviewBtn {
 			padding: 7px;
 			margin: 5px;
-			font-size: large;
-			color: black;
-			background-color: rgba(136, 135, 135, 1);
+			font-size: var(--font-ms);
+			background-color: var(--color-highlight);
 			border-radius: 10px;
 			&:hover {
-				background-color: rgb(190, 189, 189);
+				opacity: 0.85;
 			}
 		}
 	}

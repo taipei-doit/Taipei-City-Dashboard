@@ -447,15 +447,15 @@ export const useMapStore = defineStore("map", {
 			const layers = Object.keys(this.deckGlLayer).map((index) => {
 				const l = this.deckGlLayer[index];
 				switch (l.type) {
-					case "ArcLayer":
-						return new ArcLayer(l.config);
-					case "AnimatedArcLayer":
-						return new AnimatedArcLayer({
-							...l.config,
-							coef: this.step / 1000,
-						});
-					default:
-						break;
+				case "ArcLayer":
+					return new ArcLayer(l.config);
+				case "AnimatedArcLayer":
+					return new AnimatedArcLayer({
+						...l.config,
+						coef: this.step / 1000,
+					});
+				default:
+					break;
 				}
 			});
 			this.overlay.setProps({
@@ -1171,6 +1171,16 @@ export const useMapStore = defineStore("map", {
 			return closestLocation;
 		},
 		async flyToClosestLocationAndTriggerPopup() {
+			const dialogStore = useDialogStore();
+			if (!this.userLocation.longitude || !this.userLocation.latitude) {
+				dialogStore.showNotification(
+					"fail",
+					"請先開啟並授權定位功能（點擊上方定位按鈕）"
+				);
+
+				return;
+			}
+
 			if (
 				this.currentVisibleLayers.length !== 1 ||
 				this.loadingLayers.length !== 0 ||
