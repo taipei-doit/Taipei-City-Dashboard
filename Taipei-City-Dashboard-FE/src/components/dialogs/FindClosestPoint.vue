@@ -52,51 +52,54 @@ function handleFind() {
 </script>
 
 <template>
-	<DialogContainer dialog="findClosestPoint" @on-close="handleClose">
-		<div class="findclosestpoint">
-			<h2>尋找最近點</h2>
-			<div class="findclosestpoint-input">
-				<label>
-					請選擇搜尋基準點{{ authStore.token && " (用戶定位與地標)" }}
-				</label>
-				<div
-					v-if="availableLocations.length > 0"
-					class="findclosestpoint-locations"
-				>
-					<div
-						v-for="(location, index) in availableLocations"
-						:key="`findlocation-${location.latitude}-${location.longitude}-${index}`"
-					>
-						<input
-							:id="`${index}`"
-							v-model="selectedLocation"
-							type="radio"
-							:value="`${index}`"
-							class="custom-check-input"
-						/>
-						<CustomCheckBox :for="`${index}`">
-							{{ location.name }}
-						</CustomCheckBox>
-					</div>
-				</div>
-				<div v-else>
-					<p>
-						查無基準點。請點擊地圖右上角按紐，開啟定位功能{{
-							authStore.token && "或加入地標"
-						}}。
-					</p>
-				</div>
-			</div>
-			<div class="findclosestpoint-control">
-				<button
-					@click="handleFind"
-					v-if="availableLocations.length > 0"
-				>
-					搜尋
-				</button>
-			</div>
-		</div>
-	</DialogContainer>
+  <DialogContainer
+    dialog="findClosestPoint"
+    @on-close="handleClose"
+  >
+    <div class="findclosestpoint">
+      <h2>尋找最近點</h2>
+      <div class="findclosestpoint-input">
+        <label>
+          請選擇搜尋基準點{{ authStore.token && " (用戶定位與地標)" }}
+        </label>
+        <div
+          v-if="availableLocations.length > 0"
+          class="findclosestpoint-locations"
+        >
+          <div
+            v-for="(location, index) in availableLocations"
+            :key="`findlocation-${location.latitude}-${location.longitude}-${index}`"
+          >
+            <input
+              :id="`${index}`"
+              v-model="selectedLocation"
+              type="radio"
+              :value="`${index}`"
+              class="custom-check-input"
+            >
+            <CustomCheckBox :for="`${index}`">
+              {{ location.name }}
+            </CustomCheckBox>
+          </div>
+        </div>
+        <div v-else>
+          <p>
+            查無基準點。請點擊地圖右上角按紐，開啟定位功能{{
+              authStore.token && "或加入地標"
+            }}。
+          </p>
+        </div>
+      </div>
+      <div class="findclosestpoint-control">
+        <button
+          v-if="availableLocations.length > 0"
+          @click="handleFind"
+        >
+          搜尋
+        </button>
+      </div>
+    </div>
+  </DialogContainer>
 </template>
 
 <style scoped lang="scss">

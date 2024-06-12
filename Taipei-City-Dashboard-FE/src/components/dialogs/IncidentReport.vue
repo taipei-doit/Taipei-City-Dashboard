@@ -59,61 +59,67 @@ onMounted(() => {
 </script>
 
 <template>
-	<DialogContainer :dialog="`incidentReport`" @on-close="handleClose">
-		<div class="incidentreport">
-			<h2>事件通報</h2>
-			<label> 事件類型 </label>
-			<select v-model="incidentType">
-				<option
-					v-for="(option, index) in typeOptions"
-					:key="index"
-					:value="option.value"
-				>
-					{{ option.label }}
-				</option>
-			</select>
+  <DialogContainer
+    :dialog="`incidentReport`"
+    @on-close="handleClose"
+  >
+    <div class="incidentreport">
+      <h2>事件通報</h2>
+      <label> 事件類型 </label>
+      <select v-model="incidentType">
+        <option
+          v-for="(option, index) in typeOptions"
+          :key="index"
+          :value="option.value"
+        >
+          {{ option.label }}
+        </option>
+      </select>
 
-			<label> 事件描述 ({{ incidentDesc.length }}/30) </label>
-			<input
-				v-model="incidentDesc"
-				type="text"
-				placeholder="(請概述事件過程)"
-				required
-				:maxlength="30"
-			/>
-			<label> 事件發生位置 </label>
-			<select v-model="incidentDis">
-				<option
-					v-for="(option, index) in disOptions"
-					:key="index"
-					:value="option.value"
-				>
-					{{ option.label }}
-				</option>
-			</select>
-			<label> 通報位置 </label>
-			<!-- <input :value="parseTime(editUser.login_at)" disabled /> -->
-			<input
-				:value="
-					mapStore.userLocation.latitude +
-					`, ` +
-					mapStore.userLocation.longitude
-				"
-				disabled
-			/>
-			<label> 通報時間 </label>
-			<input :value="new Date().toLocaleString()" disabled />
-			<div class="incidentreport-control">
-				<button
-					v-if="mapStore.userLocation.latitude && incidentDesc"
-					class="incidentreport-control-confirm"
-					@click="handleSubmit"
-				>
-					提交
-				</button>
-			</div>
-		</div>
-	</DialogContainer>
+      <label> 事件描述 ({{ incidentDesc.length }}/30) </label>
+      <input
+        v-model="incidentDesc"
+        type="text"
+        placeholder="(請概述事件過程)"
+        required
+        :maxlength="30"
+      >
+      <label> 事件發生位置 </label>
+      <select v-model="incidentDis">
+        <option
+          v-for="(option, index) in disOptions"
+          :key="index"
+          :value="option.value"
+        >
+          {{ option.label }}
+        </option>
+      </select>
+      <label> 通報位置 </label>
+      <!-- <input :value="parseTime(editUser.login_at)" disabled /> -->
+      <input
+        :value="
+          mapStore.userLocation.latitude +
+            `, ` +
+            mapStore.userLocation.longitude
+        "
+        disabled
+      >
+      <label> 通報時間 </label>
+      <input
+        :value="new Date().toLocaleString()"
+        disabled
+      >
+      <div class="incidentreport-control">
+        <button
+          v-if="mapStore.userLocation.latitude && incidentDesc"
+          class="incidentreport-control-confirm"
+          @click="handleSubmit"
+        >
+          提交
+        </button>
+      </div>
+    </div>
+  </DialogContainer>
 </template>
 
 <style scoped lang="scss">
