@@ -30,9 +30,11 @@
 h1 {
 	font-size: var(--font-l);
 }
+
 h2 {
 	font-size: var(--font-m);
 }
+
 h3,
 p {
 	font-size: var(--font-s);
@@ -46,6 +48,7 @@ button {
 	border: none;
 	background-color: transparent;
 }
+
 button:hover {
 	cursor: pointer;
 }
@@ -84,9 +87,11 @@ select {
 	font-size: var(--font-ms);
 	outline: none;
 }
+
 select:focus {
 	border-color: var(--color-highlight);
 }
+
 option {
 	background-color: var(--color-component-background);
 }
@@ -101,13 +106,16 @@ textarea {
 	background-color: transparent;
 	font-size: var(--font-ms);
 }
+
 textarea:focus {
 	outline: none;
 	border: solid 1px var(--color-highlight);
 }
+
 textarea:required:invalid {
 	border: solid 1px rgb(237, 90, 90);
 }
+
 body {
 	background-color: var(--color-background);
 }
@@ -127,9 +135,11 @@ th {
 	background-color: var(--color-border);
 	height: 2.5rem;
 }
+
 th:last-child {
 	border-radius: 0 5px 0 0;
 }
+
 td {
 	text-align: center;
 	height: 4rem;
@@ -137,6 +147,7 @@ td {
 	background-color: var(--color-component-background);
 	padding: 4px;
 }
+
 td:last-child {
 	border-radius: 0 0 5px 0;
 }
@@ -150,20 +161,52 @@ td:last-child {
 		display: none !important;
 	}
 }
+
 @media (max-width: 1000px) {
 	.hide-if-mobile {
 		display: none !important;
 	}
 }
+
 @media (max-height: 500px) {
 	.hide-if-mobile {
 		display: none !important;
 	}
 }
+
 @keyframes spin {
 	to {
 		transform: rotate(360deg);
 	}
+}
+
+/* MapBox */
+.mapboxgl-user-location-accuracy-circle {
+	background-color: var(--color-highlight) !important;
+	height: 0.75rem !important;
+	width: 0.75rem !important;
+}
+
+.mapboxgl-user-location-dot {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 2rem !important;
+	width: 2rem !important;
+	background-color: transparent !important;
+}
+
+.mapboxgl-user-location-dot:before {
+	position: inherit !important;
+	background-color: var(--color-highlight) !important;
+}
+
+.mapboxgl-user-location-dot:after {
+	display: none;
+}
+
+.mapboxgl-user-location-heading {
+	display: none;
 }
 
 html .mapboxgl-popup {
