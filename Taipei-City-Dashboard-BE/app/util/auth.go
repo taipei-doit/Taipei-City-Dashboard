@@ -1,4 +1,3 @@
-// Package util stores the utility functions for the application (functions that only handle internal logic)
 package util
 
 import (
