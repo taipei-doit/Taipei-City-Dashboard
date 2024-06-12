@@ -1134,24 +1134,13 @@ export const useMapStore = defineStore("map", {
 			return closestLocation;
 		},
 		// 2. Fly to the closest location and trigger a popup
-		async flyToClosestLocationAndTriggerPopup() {
-			const dialogStore = useDialogStore();
-			if (!this.userLocation.longitude || !this.userLocation.latitude) {
-				dialogStore.showNotification(
-					"fail",
-					"請先開啟並授權定位功能（點擊上方定位按鈕）"
-				);
-
-				return;
-			}
-
+		async flyToClosestLocationAndTriggerPopup(lng, lat) {
 			if (
 				this.currentVisibleLayers.length !== 1 ||
 				this.loadingLayers.length !== 0 ||
 				!["circle", "symbol"].includes(
 					this.mapConfigs[this.currentVisibleLayers[0]].type
-				) ||
-				this.userLocation === null
+				)
 			)
 				return;
 			this.loadingLayers.push("rendering");
@@ -1186,8 +1175,8 @@ export const useMapStore = defineStore("map", {
 
 			const res = this.findClosestLocation(
 				{
-					longitude: this.userLocation.longitude,
-					latitude: this.userLocation.latitude,
+					longitude: lng,
+					latitude: lat,
 				},
 				features
 			);

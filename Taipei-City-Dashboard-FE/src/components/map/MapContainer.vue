@@ -10,6 +10,7 @@ import { useMapStore } from "../../store/mapStore";
 import AddViewPoint from "../dialogs/AddViewPoint.vue";
 import MobileLayers from "../dialogs/MobileLayers.vue";
 import IncidentReport from "../dialogs/IncidentReport.vue";
+import FindClosestPoint from "../dialogs/FindClosestPoint.vue";
 import { savedLocations } from "../../assets/configs/mapbox/savedLocations.js";
 
 const authStore = useAuthStore();
@@ -65,7 +66,6 @@ onMounted(() => {
 
 				<button
 					v-if="
-						mapStore.userLocation &&
 						mapStore.currentVisibleLayers.length === 1 &&
 						['circle', 'symbol'].includes(
 							mapStore.mapConfigs[
@@ -80,7 +80,7 @@ onMounted(() => {
 					}"
 					class="hide-if-mobile"
 					type="button"
-					@click="mapStore.flyToClosestLocationAndTriggerPopup"
+					@click="dialogStore.showDialog('findClosestPoint')"
 				>
 					近
 				</button>
@@ -97,17 +97,18 @@ onMounted(() => {
 					<div />
 				</div>
 			</div>
-			<!-- The key prop informs vue that the component should be updated when switching dashboards -->
-			<MobileLayers :key="contentStore.currentDashboard.index" />
+
 			<button
 				v-if="authStore.user.is_admin"
 				class="mapcontainer-layers-incident"
 				title="通報災害"
 				@click="dialogStore.showDialog('incidentReport')"
 			>
-				!
-			</button>
+				!</button
+			><!-- The key prop informs vue that the component should be updated when switching dashboards -->
+			<MobileLayers :key="contentStore.currentDashboard.index" />
 			<IncidentReport />
+			<FindClosestPoint />
 		</div>
 
 		<div class="mapcontainer-controls hide-if-mobile">

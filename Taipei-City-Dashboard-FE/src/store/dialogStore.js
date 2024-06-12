@@ -43,6 +43,7 @@ export const useDialogStore = defineStore("dialog", {
 			contributorInfo: false,
 			addPin: false,
 			addViewPoint: false,
+			findClosestPoint: false,
 		},
 		// Stores the content for notifications
 		notification: {
