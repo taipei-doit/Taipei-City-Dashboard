@@ -11,6 +11,7 @@ import AdminComponentSettings from "../../components/dialogs/admin/AdminComponen
 
 import { chartTypes } from "../../assets/configs/apexcharts/chartTypes";
 import { mapTypes } from "../../assets/configs/mapbox/mapConfig";
+import AdminComponentTemplate from "../../components/dialogs/admin/AdminComponentTemplate.vue";
 
 const adminStore = useAdminStore();
 const dialogStore = useDialogStore();
@@ -88,6 +89,9 @@ function handleOpenSettings(component) {
 	adminStore.getComponentData(component);
 	dialogStore.showDialog("adminComponentSettings");
 }
+// const showAdminAddComponent = () => {
+// 	dialogStore.showDialog("adminAddComponentTemplate");
+// };
 
 onMounted(() => {
 	adminStore.getPublicComponents(searchParams.value);
@@ -123,6 +127,9 @@ onMounted(() => {
       <button @click="handleNewQuery">
         搜尋
       </button>
+      <!-- <button @click="showAdminAddComponent">
+        新增組件
+      </button> -->
     </div>
     <!-- 2. The main table displaying all public components -->
     <table class="admineditcomponent-table">
@@ -314,6 +321,7 @@ onMounted(() => {
       </div>
     </div>
     <AdminComponentSettings :search-params="searchParams" />
+    <AdminComponentTemplate />
   </div>
 </template>
 
