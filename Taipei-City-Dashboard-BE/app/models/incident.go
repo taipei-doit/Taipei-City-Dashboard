@@ -63,6 +63,7 @@ func GetAllIncident(pageSize int, pageNum int, filterByStatus string, sort strin
 }
 
 func GetLocationData(latitude, longitude float64) (*PlaceResponse, error) {
+	/* This API currently doesn't work in production. Needs fixing. */
 	// Fetch location
 	apiURL := fmt.Sprintf(
 		"https://api.nlsc.gov.tw/other/TownVillagePointQuery/%s/%s",

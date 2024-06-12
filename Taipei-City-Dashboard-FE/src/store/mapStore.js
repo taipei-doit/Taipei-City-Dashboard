@@ -462,15 +462,15 @@ export const useMapStore = defineStore("map", {
 			const layers = Object.keys(this.deckGlLayer).map((index) => {
 				const l = this.deckGlLayer[index];
 				switch (l.type) {
-				case "ArcLayer":
-					return new ArcLayer(l.config);
-				case "AnimatedArcLayer":
-					return new AnimatedArcLayer({
-						...l.config,
-						coef: this.step / 1000,
-					});
-				default:
-					break;
+					case "ArcLayer":
+						return new ArcLayer(l.config);
+					case "AnimatedArcLayer":
+						return new AnimatedArcLayer({
+							...l.config,
+							coef: this.step / 1000,
+						});
+					default:
+						break;
 				}
 			});
 			this.overlay.setProps({
@@ -1135,25 +1135,31 @@ export const useMapStore = defineStore("map", {
 		},
 		// 2. Fly to the closest location and trigger a popup
 		async flyToClosestLocationAndTriggerPopup(lng, lat) {
-			if (
-				this.currentVisibleLayers.length !== 1 ||
-				this.loadingLayers.length !== 0 ||
-				!["circle", "symbol"].includes(
-					this.mapConfigs[this.currentVisibleLayers[0]].type
-				)
-			)
-				return;
+			if (this.loadingLayers.length !== 0) return;
 			this.loadingLayers.push("rendering");
+
+			let targetLayer = -1;
+			this.currentVisibleLayers.forEach((layer, index) => {
+				if (["circle", "symbol"].includes(layer.split("-")[1])) {
+					targetLayer = index;
+				}
+			});
+
+			if (targetLayer === -1) {
+				this.loadingLayers.pop();
+				return;
+			}
+
 			this.removePopup();
 			const layerSourceType =
-				this.mapConfigs[this.currentVisibleLayers[0]].source;
+				this.mapConfigs[this.currentVisibleLayers[targetLayer]].source;
 
 			const features = [];
 
 			if (layerSourceType === "geojson") {
 				features.push(
 					...this.map.getSource(
-						`${this.currentVisibleLayers[0]}-source`
+						`${this.currentVisibleLayers[targetLayer]}-source`
 					)._data.features
 				);
 			} else {
@@ -1161,7 +1167,8 @@ export const useMapStore = defineStore("map", {
 					`${
 						location.origin
 					}/geo_server/taipei_vioc/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=taipei_vioc%3A${
-						this.mapConfigs[this.currentVisibleLayers[0]].index
+						this.mapConfigs[this.currentVisibleLayers[targetLayer]]
+							.index
 					}&maxFeatures=1000000&outputFormat=application%2Fjson`
 				);
 
