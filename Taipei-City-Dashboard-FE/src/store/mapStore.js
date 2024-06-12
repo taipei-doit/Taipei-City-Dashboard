@@ -7,15 +7,14 @@ The mapStore controls the map and includes methods to modify it.
 !! PLEASE BE SURE TO REFERENCE THE MAPBOX DOCUMENTATION IF ANYTHING IS UNCLEAR !!
 https://docs.mapbox.com/mapbox-gl-js/guides/
 */
+import { createApp, defineComponent, nextTick, ref } from "vue";
+import { defineStore } from "pinia";
+import mapboxGl from "mapbox-gl";
+import "mapbox-gl/dist/mapbox-gl.css";
 import { ArcLayer } from "@deck.gl/layers";
 import { MapboxOverlay } from "@deck.gl/mapbox";
 import axios from "axios";
-import mapboxGl from "mapbox-gl";
-import "mapbox-gl/dist/mapbox-gl.css";
-import { defineStore } from "pinia";
-import { createApp, defineComponent, nextTick, ref } from "vue";
 import http from "../router/axios.js";
-import { calculateHaversineDistance } from "../assets/utilityFunctions/calculateHaversineDistance";
 
 // Other Stores
 import { useAuthStore } from "./authStore";
@@ -25,7 +24,6 @@ import { useDialogStore } from "./dialogStore";
 import MapPopup from "../components/map/MapPopup.vue";
 
 // Utility Functions or Configs
-import { AnimatedArcLayer } from "../assets/configs/mapbox/arcAnimate.js";
 import {
 	MapObjectConfig,
 	TaipeiBuilding,
@@ -37,11 +35,12 @@ import {
 	maplayerCommonPaint,
 } from "../assets/configs/mapbox/mapConfig.js";
 import mapStyle from "../assets/configs/mapbox/mapStyle.js";
-import { savedLocations } from "../assets/configs/mapbox/savedLocations.js";
 import { hexToRGB } from "../assets/utilityFunctions/colorConvert.js";
 import { interpolation } from "../assets/utilityFunctions/interpolation.js";
 import { marchingSquare } from "../assets/utilityFunctions/marchingSquare.js";
 import { voronoi } from "../assets/utilityFunctions/voronoi.js";
+import { calculateHaversineDistance } from "../assets/utilityFunctions/calculateHaversineDistance";
+import { AnimatedArcLayer } from "../assets/configs/mapbox/arcAnimate.js";
 
 export const useMapStore = defineStore("map", {
 	state: () => ({
@@ -61,8 +60,6 @@ export const useMapStore = defineStore("map", {
 		step: 1,
 		// Stores popup information
 		popup: null,
-		// Stores saved locations
-		savedLocations: savedLocations,
 		// Store currently loading layers,
 		loadingLayers: [],
 		// Store all view points
@@ -231,6 +228,24 @@ export const useMapStore = defineStore("map", {
 				);
 			} else {
 				this.map.setLayoutProperty("tp_village", "visibility", "none");
+			}
+		},
+		// 6. Set User Location
+		setCurrentLocation() {
+			if (navigator.geolocation) {
+				navigator.geolocation.getCurrentPosition(
+					(position) => {
+						this.userLocation = {
+							latitude: position.coords.latitude,
+							longitude: position.coords.longitude,
+						};
+					},
+					(error) => {
+						console.error(error.message);
+					}
+				);
+			} else {
+				console.error("Geolocation is not supported by this browser.");
 			}
 		},
 
@@ -447,15 +462,15 @@ export const useMapStore = defineStore("map", {
 			const layers = Object.keys(this.deckGlLayer).map((index) => {
 				const l = this.deckGlLayer[index];
 				switch (l.type) {
-				case "ArcLayer":
-					return new ArcLayer(l.config);
-				case "AnimatedArcLayer":
-					return new AnimatedArcLayer({
-						...l.config,
-						coef: this.step / 1000,
-					});
-				default:
-					break;
+					case "ArcLayer":
+						return new ArcLayer(l.config);
+					case "AnimatedArcLayer":
+						return new AnimatedArcLayer({
+							...l.config,
+							coef: this.step / 1000,
+						});
+					default:
+						break;
 				}
 			});
 			this.overlay.setProps({
@@ -896,15 +911,7 @@ export const useMapStore = defineStore("map", {
 		},
 
 		/* Functions that change the viewing experience of the map */
-		// 1. Add new saved location that users can quickly zoom to
-		addNewSavedLocation(name) {
-			const coordinates = this.map.getCenter();
-			const zoom = this.map.getZoom();
-			const pitch = this.map.getPitch();
-			const bearing = this.map.getBearing();
-			this.savedLocations.push([coordinates, zoom, pitch, bearing, name]);
-		},
-		// 2. Zoom to a location
+		// 1. Zoom to a location
 		// [[lng, lat], zoom, pitch, bearing, savedLocationName]
 		easeToLocation(location_array) {
 			if (location_array?.zoom) {
@@ -925,18 +932,14 @@ export const useMapStore = defineStore("map", {
 				});
 			}
 		},
-		// 3. Fly to a location
+		// 2. Fly to a location
 		flyToLocation(location_array) {
 			this.map.flyTo({
 				center: location_array,
 				duration: 1000,
 			});
 		},
-		// 4. Remove a saved location
-		removeSavedLocation(index) {
-			this.savedLocations.splice(index, 1);
-		},
-		// 5. Force map to resize after sidebar collapses
+		// 3. Force map to resize after sidebar collapses
 		resizeMap() {
 			if (this.map) {
 				setTimeout(() => {
@@ -1072,48 +1075,8 @@ export const useMapStore = defineStore("map", {
 			});
 		},
 
-		/* Clearing the map */
-		// 1. Called when the user is switching between maps
-		clearOnlyLayers() {
-			this.currentLayers.forEach((element) => {
-				this.map.removeLayer(element);
-				if (this.map.getSource(`${element}-source`)) {
-					this.map.removeSource(`${element}-source`);
-				}
-			});
-			this.currentLayers = [];
-			this.mapConfigs = {};
-			this.currentVisibleLayers = [];
-			this.removePopup();
-		},
-		// 2. Called when user navigates away from the map
-		clearEntireMap() {
-			this.currentLayers = [];
-			this.mapConfigs = {};
-			this.map = null;
-			this.currentVisibleLayers = [];
-			this.removePopup();
-			this.tempMarkerCoordinates = null;
-		},
-
-		// preserve some user's geolocation info
-		setCurrentLocation() {
-			if (navigator.geolocation) {
-				navigator.geolocation.getCurrentPosition(
-					(position) => {
-						this.userLocation = {
-							latitude: position.coords.latitude,
-							longitude: position.coords.longitude,
-						};
-					},
-					(error) => {
-						console.error(error.message);
-					}
-				);
-			} else {
-				console.error("Geolocation is not supported by this browser.");
-			}
-		},
+		/* Find Closest Data Point */
+		// 1. Calculate the Haversine distance between two points
 		findClosestLocation(userCoords, locations) {
 			// Check if userCoords has valid latitude and longitude
 			if (
@@ -1170,6 +1133,7 @@ export const useMapStore = defineStore("map", {
 			}
 			return closestLocation;
 		},
+		// 2. Fly to the closest location and trigger a popup
 		async flyToClosestLocationAndTriggerPopup() {
 			const dialogStore = useDialogStore();
 			if (!this.userLocation.longitude || !this.userLocation.latitude) {
@@ -1238,6 +1202,30 @@ export const useMapStore = defineStore("map", {
 			});
 
 			this.flyToLocation(res.geometry.coordinates);
+		},
+
+		/* Clearing the map */
+		// 1. Called when the user is switching between maps
+		clearOnlyLayers() {
+			this.currentLayers.forEach((element) => {
+				this.map.removeLayer(element);
+				if (this.map.getSource(`${element}-source`)) {
+					this.map.removeSource(`${element}-source`);
+				}
+			});
+			this.currentLayers = [];
+			this.mapConfigs = {};
+			this.currentVisibleLayers = [];
+			this.removePopup();
+		},
+		// 2. Called when user navigates away from the map
+		clearEntireMap() {
+			this.currentLayers = [];
+			this.mapConfigs = {};
+			this.map = null;
+			this.currentVisibleLayers = [];
+			this.removePopup();
+			this.tempMarkerCoordinates = null;
 		},
 	},
 });

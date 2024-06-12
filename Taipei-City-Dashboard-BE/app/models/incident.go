@@ -1,31 +1,31 @@
 package models
 
 import (
-	"fmt"
-	"strings"
-	"time"
 	"encoding/xml"
+	"fmt"
 	"io"
 	"net/http"
 	"strconv"
+	"strings"
+	"time"
 )
 
 type Incident struct {
-	ID          	int64      	`gorm:"primaryKey"`
-	Type        	string    	`json:"inctype"`
-	Description 	string		`json:"description"`
-	Distance    	float64		`json:"distance"`
-	Latitude    	float64		`json:"latitude"`
-	Longitude   	float64		`json:"longitude"`
-	Place			string		`json:"place"`
-	Time        	time.Time	`json:"reportTime"`
-	Status			string		`json:"status"`
+	ID          int64     `gorm:"primaryKey"`
+	Type        string    `json:"inctype"`
+	Description string    `json:"description"`
+	Distance    float64   `json:"distance"`
+	Latitude    float64   `json:"latitude"`
+	Longitude   float64   `json:"longitude"`
+	Place       string    `json:"place"`
+	Time        time.Time `json:"reportTime"`
+	Status      string    `json:"status"`
 }
 
 type PlaceResponse struct {
-	CtyName    string `xml:"ctyName"`
-	TownName   string `xml:"townName"`
-	SectName   string `xml:"sectName"`
+	CtyName     string `xml:"ctyName"`
+	TownName    string `xml:"townName"`
+	SectName    string `xml:"sectName"`
 	VillageName string `xml:"villageName"`
 }
 
@@ -47,7 +47,7 @@ func GetAllIncident(pageSize int, pageNum int, filterByStatus string, sort strin
 	if sort != "" {
 		tempDB = tempDB.Order(sort + " " + order)
 	}
-	
+
 	// Paginate the issues
 	if pageSize > 0 {
 		tempDB = tempDB.Limit(pageSize)
@@ -63,13 +63,13 @@ func GetAllIncident(pageSize int, pageNum int, filterByStatus string, sort strin
 }
 
 func GetLocationData(latitude, longitude float64) (*PlaceResponse, error) {
-		// Fetch location
-	apiUrl := fmt.Sprintf(
+	// Fetch location
+	apiURL := fmt.Sprintf(
 		"https://api.nlsc.gov.tw/other/TownVillagePointQuery/%s/%s",
 		strconv.FormatFloat(longitude, 'f', -1, 64),
 		strconv.FormatFloat(latitude, 'f', -1, 64),
 	)
-	resp, err := http.Get(apiUrl)
+	resp, err := http.Get(apiURL)
 	if err != nil {
 		return nil, fmt.Errorf("failed to make request: %w", err)
 	}
@@ -81,7 +81,7 @@ func GetLocationData(latitude, longitude float64) (*PlaceResponse, error) {
 	if err != nil {
 		return nil, fmt.Errorf("failed to read response body: %w", err)
 	}
-		
+
 	var locationData PlaceResponse
 	if err := xml.Unmarshal(body, &locationData); err != nil {
 		return nil, fmt.Errorf("failed to parse XML: %w", err)
@@ -91,17 +91,6 @@ func GetLocationData(latitude, longitude float64) (*PlaceResponse, error) {
 }
 
 func CreateIncident(incidentType, description string, distance, latitude, longitude float64, status string) (incident Incident, err error) {
-
-    // Create an example incident
-    // incident = Incident{
-    //     Type:        "Accident",
-    //     Description: "Car crash on the highway",
-    //     Distance:    2.5,
-    //     Latitude:    40.7128,
-    //     Longitude:   -74.0060,
-    //     Time:        time.Now().Unix(),
-    // }
-
 	locationData, err := GetLocationData(latitude, longitude)
 	if err != nil {
 		fmt.Printf("Error fetching location data: %v\n", err)
@@ -109,18 +98,18 @@ func CreateIncident(incidentType, description string, distance, latitude, longit
 	}
 	place := locationData.CtyName + locationData.TownName + locationData.SectName + locationData.VillageName
 
-	incident = Incident {
-		Type:       	incidentType,
-		Description:	description,
-		Distance:    	distance,
-		Latitude:    	latitude,
-		Longitude:   	longitude,
-		Place:		 	place,
-		Time:        	time.Now(),
-		Status: 		status,
+	incident = Incident{
+		Type:        incidentType,
+		Description: description,
+		Distance:    distance,
+		Latitude:    latitude,
+		Longitude:   longitude,
+		Place:       place,
+		Time:        time.Now(),
+		Status:      status,
 	}
-    // Insert the incident into the database
-    err = DBManager.Create(&incident).Error
+	// Insert the incident into the database
+	err = DBManager.Create(&incident).Error
 	return incident, err
 }
 
@@ -133,7 +122,6 @@ func UpdateIncidentByID(id string, status string) (incident Incident, err error)
 }
 
 func DeleteIncident(id int64) (incident Incident, err error) {
-	
 	if err := DBManager.Where("ID = ?", id).First(&incident).Error; err != nil {
 		// Handle error (e.g., incident not found)
 		fmt.Printf("Incident not found")
@@ -144,4 +132,3 @@ func DeleteIncident(id int64) (incident Incident, err error) {
 	err = DBManager.Delete(&incident).Error
 	return incident, err
 }
-

@@ -10,6 +10,7 @@ import { useMapStore } from "../../store/mapStore";
 import AddViewPoint from "../dialogs/AddViewPoint.vue";
 import MobileLayers from "../dialogs/MobileLayers.vue";
 import IncidentReport from "../dialogs/IncidentReport.vue";
+import { savedLocations } from "../../assets/configs/mapbox/savedLocations.js";
 
 const authStore = useAuthStore();
 const mapStore = useMapStore();
@@ -99,8 +100,8 @@ onMounted(() => {
 			<!-- The key prop informs vue that the component should be updated when switching dashboards -->
 			<MobileLayers :key="contentStore.currentDashboard.index" />
 			<button
-        v-if="authStore.user.isAdmin"
-				class="input"
+				v-if="authStore.user.is_admin"
+				class="mapcontainer-layers-incident"
 				title="通報災害"
 				@click="dialogStore.showDialog('incidentReport')"
 			>
@@ -124,7 +125,7 @@ onMounted(() => {
 			</button>
 			<template v-if="!authStore.user?.user_id">
 				<div
-					v-for="(item, index) in mapStore.savedLocations"
+					v-for="(item, index) in savedLocations"
 					:key="`${item[4]}-${index}`"
 				>
 					<button @click="mapStore.easeToLocation(item)">
@@ -159,27 +160,6 @@ onMounted(() => {
 </template>
 
 <style scoped lang="scss">
-.input {
-	position: absolute;
-	right: 20px;
-	bottom: 60px;
-	width: 70px;
-	height: 70px;
-	border-radius: 50%;
-	background-color: var(--color-component-background);
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	transition: background-color 0.2s, color 0.2s;
-	font-size: 32px;
-	&:hover {
-		background-color: var(--color-highlight);
-	}
-	.icon {
-		color: white;
-		font-family: var(--font-icon);
-	}
-}
 .mapcontainer {
 	position: relative;
 	width: 100%;
@@ -316,6 +296,25 @@ onMounted(() => {
 				border: solid 4px var(--color-border);
 				border-top: solid 4px var(--color-highlight);
 				animation: spin 0.7s ease-in-out infinite;
+			}
+		}
+
+		&-incident {
+			position: absolute;
+			right: 10px;
+			bottom: 60px;
+			width: 50px;
+			height: 50px;
+			border-radius: 50%;
+			background-color: var(--color-component-background);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			transition: background-color 0.2s, color 0.2s;
+			font-size: var(--font-xl);
+
+			&:hover {
+				background-color: var(--color-highlight);
 			}
 		}
 	}

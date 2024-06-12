@@ -23,7 +23,7 @@ export const useDialogStore = defineStore("dialog", {
 			adminEditUser: false,
 			adminAddEditContributor: false,
 			adminDeleteContributor: false,
-			adminAddComponentTemplate: false,
+			adminAddComponentTemplate: false, // BETA
 			// Public Dialogs: /components/dialogs
 			addComponent: false,
 			addDashboard: false,
@@ -38,8 +38,7 @@ export const useDialogStore = defineStore("dialog", {
 			reportIssue: false,
 			userSettings: false,
 			embedComponent: false,
-			incidentReport: false,
-			curTimeout: null,
+			incidentReport: false, // BETA
 			contributorsList: false,
 			contributorInfo: false,
 			addPin: false,
@@ -60,6 +59,8 @@ export const useDialogStore = defineStore("dialog", {
 		moreInfoContent: null,
 		// Stores Edit or Add mode for addeditdashboards dialog
 		addEdit: "",
+		// Stores the current timeout for notifications
+		curTimeout: null,
 	}),
 	getters: {},
 	actions: {

@@ -118,6 +118,7 @@ onMounted(() => {
 <template>
   <div class="admindisaster">
     <!-- 1. Checkboxes to filter through different issue types -->
+    <h2>本功能尚測試中，未對一般用戶開放</h2>
     <div class="admindisaster-filter">
       <div
         v-for="status in statuses"
@@ -192,12 +193,12 @@ onMounted(() => {
           </td>
           <td>{{ disaster.ID }}</td>
           <td>{{ disaster.inctype }}</td>
-          <td class="description">
+          <td class="admindisaster-table-description">
             {{ disaster.description }}
           </td>
           <td>{{ disaster.place }}</td>
           <td>{{ parseTime(disaster.reportTime) }}</td>
-          <td class="review">
+          <td class="admindisaster-table-review">
             <div
               v-if="disaster.status !== 'pending'"
               class="btn"
@@ -311,6 +312,10 @@ onMounted(() => {
 	margin-top: 20px;
 	padding: 0 20px 20px;
 
+	h2 {
+		margin-bottom: 1rem;
+	}
+
 	&-filter {
 		display: flex;
 		column-gap: var(--font-ms);
@@ -363,23 +368,35 @@ onMounted(() => {
 			cursor: pointer;
 		}
 
-		&-settings {
-			position: sticky;
-			left: 0;
+		&-description {
+			word-wrap: break-word;
+			overflow-wrap: break-word;
+			white-space: normal;
+			word-break: break-word;
+			max-width: 450px;
 		}
 
-		&-charts,
-		&-maps {
-			max-width: 165px;
-			display: flex;
-			flex-wrap: wrap;
-			justify-content: center;
-			row-gap: 4px;
-		}
-
-		&-update {
+		&-review {
 			display: flex;
 			justify-content: center;
+			align-items: center;
+			// min-height: 120px;
+			.btn {
+				display: flex;
+				flex-direction: row;
+				justify-content: center;
+				align-items: center;
+				.reviewBtn {
+					padding: 7px;
+					margin: 5px;
+					font-size: var(--font-ms);
+					background-color: var(--color-highlight);
+					border-radius: 10px;
+					&:hover {
+						opacity: 0.85;
+					}
+				}
+			}
 		}
 	}
 
@@ -444,35 +461,6 @@ onMounted(() => {
 			}
 			.active {
 				background-color: var(--color-complement-text);
-			}
-		}
-	}
-}
-.description {
-	word-wrap: break-word;
-	overflow-wrap: break-word;
-	white-space: normal;
-	word-break: break-word;
-	max-width: 450px;
-}
-.review {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	// min-height: 120px;
-	.btn {
-		display: flex;
-		flex-direction: row;
-		justify-content: center;
-		align-items: center;
-		.reviewBtn {
-			padding: 7px;
-			margin: 5px;
-			font-size: var(--font-ms);
-			background-color: var(--color-highlight);
-			border-radius: 10px;
-			&:hover {
-				opacity: 0.85;
 			}
 		}
 	}
