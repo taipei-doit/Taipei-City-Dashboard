@@ -1,4 +1,13 @@
 // Package initial contains the functions to initialize the databases for the first time.
+/*
+Developed By Taipei Urban Intelligence Center 2023-2024
+
+// Lead Developer:  Igor Ho (Full Stack Engineer)
+// Systems & Auth: Ann Shih (Systems Engineer)
+// Data Pipelines:  Iima Yu (Data Scientist)
+// Design and UX: Roy Lin (Prev. Consultant), Chu Chen (Researcher)
+// Testing: Jack Huang (Data Scientist), Ian Huang (Data Analysis Intern)
+*/
 package initial
 
 import (
@@ -35,7 +44,7 @@ func initDashboardConfigs() {
 		return
 	}
 
-	err = executeSQLFile(global.PostgresManager,filePath)
+	err = executeSQLFile(global.PostgresManager, filePath)
 	if err != nil {
 		logs.FError("error executing SQL file: %s", err)
 	}
@@ -111,7 +120,7 @@ func InitSampleCityData() {
 	}
 	logs.FInfo("import file name: %s", filePath)
 
-	err = executeSQLFile(global.PostgresDashboard,filePath)
+	err = executeSQLFile(global.PostgresDashboard, filePath)
 	if err != nil {
 		logs.FError("error executing SQL file: %s", err)
 	}

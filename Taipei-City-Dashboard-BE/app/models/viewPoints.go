@@ -13,12 +13,12 @@ type ViewPoints struct {
 	AuthUser  AuthUser `gorm:"foreignKey:UserID"`
 }
 
-func CreateViewPoint(user_id int, center_x float32, center_y float32, zoom float32, pitch float32, bearing float32, name string, pointType string) (ViewPoints, error) {
+func CreateViewPoint(userID int, centerX float32, centerY float32, zoom float32, pitch float32, bearing float32, name string, pointType string) (ViewPoints, error) {
 	// 創建 ViewPoint 對象
 	viewpoint := ViewPoints{
-		UserID:    user_id,
-		CenterX:   center_x,
-		CenterY:   center_y,
+		UserID:    userID,
+		CenterX:   centerX,
+		CenterY:   centerY,
 		Zoom:      zoom,
 		Pitch:     pitch,
 		Bearing:   bearing,
@@ -34,10 +34,10 @@ func CreateViewPoint(user_id int, center_x float32, center_y float32, zoom float
 	return viewpoint, nil
 }
 
-func GetViewPointByUserID(user_id int) ([]ViewPoints, error) {
+func GetViewPointByUserID(userID int) ([]ViewPoints, error) {
 	var viewpoint []ViewPoints
 
-	err := DBManager.Where("user_id = ?", user_id).Find(&viewpoint).Error
+	err := DBManager.Where("user_id = ?", userID).Find(&viewpoint).Error
 	if err != nil {
 		return []ViewPoints{}, err
 	}
@@ -45,8 +45,8 @@ func GetViewPointByUserID(user_id int) ([]ViewPoints, error) {
 	return viewpoint, nil
 }
 
-func DeleteViewPoint(userId, pointId int) error {
-	err := DBManager.Delete(&ViewPoints{}, "id = ? AND user_id = ?", pointId, userId).Error
+func DeleteViewPoint(userID, pointID int) error {
+	err := DBManager.Delete(&ViewPoints{}, "id = ? AND user_id = ?", pointID, userID).Error
 	if err != nil {
 		return err
 	}

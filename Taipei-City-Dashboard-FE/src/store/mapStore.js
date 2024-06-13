@@ -7,13 +7,13 @@ The mapStore controls the map and includes methods to modify it.
 !! PLEASE BE SURE TO REFERENCE THE MAPBOX DOCUMENTATION IF ANYTHING IS UNCLEAR !!
 https://docs.mapbox.com/mapbox-gl-js/guides/
 */
+import { createApp, defineComponent, nextTick, ref } from "vue";
+import { defineStore } from "pinia";
+import mapboxGl from "mapbox-gl";
+import "mapbox-gl/dist/mapbox-gl.css";
 import { ArcLayer } from "@deck.gl/layers";
 import { MapboxOverlay } from "@deck.gl/mapbox";
 import axios from "axios";
-import mapboxGl from "mapbox-gl";
-import "mapbox-gl/dist/mapbox-gl.css";
-import { defineStore } from "pinia";
-import { createApp, defineComponent, nextTick, ref } from "vue";
 import http from "../router/axios.js";
 
 // Other Stores
@@ -24,7 +24,6 @@ import { useDialogStore } from "./dialogStore";
 import MapPopup from "../components/map/MapPopup.vue";
 
 // Utility Functions or Configs
-import { AnimatedArcLayer } from "../assets/configs/mapbox/arcAnimate.js";
 import {
 	MapObjectConfig,
 	TaipeiBuilding,
@@ -36,11 +35,12 @@ import {
 	maplayerCommonPaint,
 } from "../assets/configs/mapbox/mapConfig.js";
 import mapStyle from "../assets/configs/mapbox/mapStyle.js";
-import { savedLocations } from "../assets/configs/mapbox/savedLocations.js";
 import { hexToRGB } from "../assets/utilityFunctions/colorConvert.js";
 import { interpolation } from "../assets/utilityFunctions/interpolation.js";
 import { marchingSquare } from "../assets/utilityFunctions/marchingSquare.js";
 import { voronoi } from "../assets/utilityFunctions/voronoi.js";
+import { calculateHaversineDistance } from "../assets/utilityFunctions/calculateHaversineDistance";
+import { AnimatedArcLayer } from "../assets/configs/mapbox/arcAnimate.js";
 
 export const useMapStore = defineStore("map", {
 	state: () => ({
@@ -60,16 +60,15 @@ export const useMapStore = defineStore("map", {
 		step: 1,
 		// Stores popup information
 		popup: null,
-		// Stores saved locations
-		savedLocations: savedLocations,
 		// Store currently loading layers,
 		loadingLayers: [],
 		// Store all view points
 		viewPoints: [],
 		marker: null,
 		tempMarkerCoordinates: null,
+		// Store the user's current location,
+		userLocation: { latitude: null, longitude: null },
 	}),
-	getters: {},
 	actions: {
 		/* Initialize Mapbox */
 		// 1. Creates the mapbox instance and passes in initial configs
@@ -84,6 +83,14 @@ export const useMapStore = defineStore("map", {
 				style: mapStyle,
 			});
 			this.marker = new mapboxGl.Marker();
+			const geoLocate = new mapboxGl.GeolocateControl({
+				positionOptions: {
+					enableHighAccuracy: true,
+				},
+				trackUserLocation: true,
+				showUserHeading: true,
+			});
+			this.map.addControl(geoLocate);
 			this.map.addControl(new mapboxGl.NavigationControl());
 			this.map.doubleClickZoom.disable();
 			this.map
@@ -114,6 +121,8 @@ export const useMapStore = defineStore("map", {
 				});
 
 			this.renderMarkers();
+
+			return geoLocate;
 		},
 		// 2. Adds three basic layers to the map (Taipei District, Taipei Village labels, and Taipei 3D Buildings)
 		// Due to performance concerns, Taipei 3D Buildings won't be added in the mobile version
@@ -219,6 +228,24 @@ export const useMapStore = defineStore("map", {
 				);
 			} else {
 				this.map.setLayoutProperty("tp_village", "visibility", "none");
+			}
+		},
+		// 6. Set User Location
+		setCurrentLocation() {
+			if (navigator.geolocation) {
+				navigator.geolocation.getCurrentPosition(
+					(position) => {
+						this.userLocation = {
+							latitude: position.coords.latitude,
+							longitude: position.coords.longitude,
+						};
+					},
+					(error) => {
+						console.error(error.message);
+					}
+				);
+			} else {
+				console.error("Geolocation is not supported by this browser.");
 			}
 		},
 
@@ -747,6 +774,18 @@ export const useMapStore = defineStore("map", {
 			}
 			this.popup = null;
 		},
+		// 3. programmatically trigger the popup, instead of user click
+		manualTriggerPopup() {
+			const center = this.map.getCenter();
+			const point = this.map.project(center);
+
+			this.addPopup({
+				point: point,
+				lngLat: center,
+			});
+
+			this.loadingLayers.pop();
+		},
 
 		/* Viewpoint / Marker Functions */
 		// 1. Add a viewpoint
@@ -872,15 +911,7 @@ export const useMapStore = defineStore("map", {
 		},
 
 		/* Functions that change the viewing experience of the map */
-		// 1. Add new saved location that users can quickly zoom to
-		addNewSavedLocation(name) {
-			const coordinates = this.map.getCenter();
-			const zoom = this.map.getZoom();
-			const pitch = this.map.getPitch();
-			const bearing = this.map.getBearing();
-			this.savedLocations.push([coordinates, zoom, pitch, bearing, name]);
-		},
-		// 2. Zoom to a location
+		// 1. Zoom to a location
 		// [[lng, lat], zoom, pitch, bearing, savedLocationName]
 		easeToLocation(location_array) {
 			if (location_array?.zoom) {
@@ -901,18 +932,14 @@ export const useMapStore = defineStore("map", {
 				});
 			}
 		},
-		// 3. Fly to a location
+		// 2. Fly to a location
 		flyToLocation(location_array) {
 			this.map.flyTo({
 				center: location_array,
 				duration: 1000,
 			});
 		},
-		// 4. Remove a saved location
-		removeSavedLocation(index) {
-			this.savedLocations.splice(index, 1);
-		},
-		// 5. Force map to resize after sidebar collapses
+		// 3. Force map to resize after sidebar collapses
 		resizeMap() {
 			if (this.map) {
 				setTimeout(() => {
@@ -1046,6 +1073,131 @@ export const useMapStore = defineStore("map", {
 				let mapLayerId = `${map_config.index}-${map_config.type}`;
 				this.map.setLayoutProperty(mapLayerId, "visibility", "visible");
 			});
+		},
+
+		/* Find Closest Data Point */
+		// 1. Calculate the Haversine distance between two points
+		findClosestLocation(userCoords, locations) {
+			// Check if userCoords has valid latitude and longitude
+			if (
+				!userCoords ||
+				typeof userCoords.latitude !== "number" ||
+				typeof userCoords.longitude !== "number"
+			) {
+				throw new Error("Invalid user coordinates");
+			}
+
+			let minDistance = Infinity;
+			let closestLocation = null;
+
+			for (let location of locations) {
+				try {
+					// Check if location, location.geometry, and location.geometry.coordinates are valid
+					if (
+						!location ||
+						!location.geometry ||
+						!Array.isArray(location.geometry.coordinates)
+					) {
+						continue; // Skip this location if any of these are invalid
+					}
+					const [lon, lat] = location.geometry.coordinates;
+
+					// Check if longitude and latitude are valid numbers
+					if (typeof lon !== "number" || typeof lat !== "number") {
+						continue; // Skip this location if coordinates are not numbers
+					}
+
+					// Calculate the Haversine distance
+					const distance = calculateHaversineDistance(
+						{
+							latitude: userCoords.latitude,
+							longitude: userCoords.longitude,
+						},
+						{ latitude: lat, longitude: lon }
+					);
+
+					// Update the closest location if the current distance is smaller
+					if (distance < minDistance) {
+						minDistance = distance;
+						closestLocation = location;
+					}
+				} catch (e) {
+					// Catch and log any errors during processing
+					console.error(
+						`Error processing location: ${JSON.stringify(
+							location
+						)}`,
+						e
+					);
+				}
+			}
+			return closestLocation;
+		},
+		// 2. Fly to the closest location and trigger a popup
+		async flyToClosestLocationAndTriggerPopup(lng, lat) {
+			if (this.loadingLayers.length !== 0) return;
+			this.loadingLayers.push("rendering");
+
+			let targetLayer = -1;
+			this.currentVisibleLayers.forEach((layer, index) => {
+				if (["circle", "symbol"].includes(layer.split("-")[1])) {
+					targetLayer = index;
+				}
+			});
+
+			if (targetLayer === -1) {
+				this.loadingLayers.pop();
+				return;
+			}
+
+			this.removePopup();
+			const layerSourceType =
+				this.mapConfigs[this.currentVisibleLayers[targetLayer]].source;
+
+			const features = [];
+
+			if (layerSourceType === "geojson") {
+				features.push(
+					...this.map.getSource(
+						`${this.currentVisibleLayers[targetLayer]}-source`
+					)._data.features
+				);
+			} else {
+				const res = await axios.get(
+					`${
+						location.origin
+					}/geo_server/taipei_vioc/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=taipei_vioc%3A${
+						this.mapConfigs[this.currentVisibleLayers[targetLayer]]
+							.index
+					}&maxFeatures=1000000&outputFormat=application%2Fjson`
+				);
+
+				features.push(...res.data.features);
+			}
+
+			if (!features || features.length === 0) {
+				this.loadingLayers.pop();
+				return;
+			}
+
+			const res = this.findClosestLocation(
+				{
+					longitude: lng,
+					latitude: lat,
+				},
+				features
+			);
+
+			this.map.once("moveend", () => {
+				setTimeout(
+					() => {
+						this.manualTriggerPopup();
+					},
+					layerSourceType === "geojson" ? 0 : 500
+				);
+			});
+
+			this.flyToLocation(res.geometry.coordinates);
 		},
 
 		/* Clearing the map */

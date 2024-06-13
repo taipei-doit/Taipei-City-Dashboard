@@ -23,7 +23,7 @@ export const useAuthStore = defineStore("auth", {
 			is_whitelist: null,
 			is_blacked: null,
 			login_at: null,
-			isAdmin: false,
+			is_admin: false,
 		},
 		editUser: {},
 		token: null,

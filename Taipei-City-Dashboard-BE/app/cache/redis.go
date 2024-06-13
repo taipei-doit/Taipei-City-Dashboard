@@ -1,4 +1,13 @@
 // Package cache initiates the connection to the redis database of this application.
+/*
+Developed By Taipei Urban Intelligence Center 2023-2024
+
+// Lead Developer:  Igor Ho (Full Stack Engineer)
+// Systems & Auth: Ann Shih (Systems Engineer)
+// Data Pipelines:  Iima Yu (Data Scientist)
+// Design and UX: Roy Lin (Prev. Consultant), Chu Chen (Researcher)
+// Testing: Jack Huang (Data Scientist), Ian Huang (Data Analysis Intern)
+*/
 package cache
 
 import (
@@ -10,7 +19,7 @@ import (
 	"github.com/go-redis/redis"
 )
 
-// Global Variables that allow access to the Redis anywhere in the application.
+// Redis is a variable that allow access to the Redis anywhere in the application.
 var Redis *redis.Client
 
 // ConnectToRedis connects to the redis database of this application.

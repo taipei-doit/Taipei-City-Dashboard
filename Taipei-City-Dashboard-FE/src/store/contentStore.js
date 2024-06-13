@@ -46,6 +46,7 @@ export const useContentStore = defineStore("content", {
 		loading: false,
 		// Stores whether an error occurred
 		error: false,
+		ws: false,
 	}),
 	getters: {},
 	actions: {
@@ -477,6 +478,28 @@ export const useContentStore = defineStore("content", {
 				this.setDashboards();
 			}
 		},
+		/*
+		wsConnect() {
+			const dialogStore = useDialogStore();
+			this.ws = new WebSocket("ws://192.168.88.193:8088/api/v1/ws");
+			this.ws.onopen = function (event) {
+				console.log("WebSocket connected");
+			};
+
+			this.ws.onmessage = function (event) {
+				var message = event.data;
+				// var messagesDiv = document.getElementById("messages");
+				// messagesDiv.innerHTML += "<p>" + message + "</p>";
+				dialogStore.showNotification("info", message, 10000);
+			};
+		},
+		wsDisconnect() {
+			this.ws.close();
+		},
+		sendMessage(message) {
+			this.ws.send(message.inctype + ": 位於 " + message.place);
+		},
+		*/
 	},
 	debounce: {
 		favoriteComponent: 500,

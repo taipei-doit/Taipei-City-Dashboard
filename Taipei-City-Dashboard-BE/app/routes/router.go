@@ -1,4 +1,13 @@
 // Package routes stores all the routes for the Gin router.
+/*
+Developed By Taipei Urban Intelligence Center 2023-2024
+
+// Lead Developer:  Igor Ho (Full Stack Engineer)
+// Systems & Auth: Ann Shih (Systems Engineer)
+// Data Pipelines:  Iima Yu (Data Scientist)
+// Design and UX: Roy Lin (Prev. Consultant), Chu Chen (Researcher)
+// Testing: Jack Huang (Data Scientist), Ian Huang (Data Analysis Intern)
+*/
 package routes
 
 import (
@@ -26,6 +35,8 @@ func ConfigureRoutes() {
 	configureComponentRoutes()
 	configureDashboardRoutes()
 	configureIssueRoutes()
+	configureIncidentRoutes()
+	// configureWsRoutes()
 	configureContributorRoutes()
 }
 
@@ -127,6 +138,20 @@ func configureIssueRoutes() {
 	}
 }
 
+func configureIncidentRoutes() {
+	incidentRoutes := RouterGroup.Group("/incident")
+	incidentRoutes.Use(middleware.LimitAPIRequests(global.IssueLimitAPIRequestsTimes, global.LimitRequestsDuration))
+	incidentRoutes.Use(middleware.LimitTotalRequests(global.IssueLimitTotalRequestsTimes, global.LimitRequestsDuration))
+	incidentRoutes.Use(middleware.IsLoggedIn())
+	incidentRoutes.Use(middleware.IsSysAdm())
+	{
+		incidentRoutes.GET("/", controllers.GetIncident)
+		incidentRoutes.POST("/", controllers.CreateIncident)
+		incidentRoutes.PATCH("/:id", controllers.UpdateIncidentByID)
+		incidentRoutes.DELETE("/", controllers.DeleteIncident)
+	}
+}
+
 func configureContributorRoutes() {
 	contributorRoutes := RouterGroup.Group("/contributor")
 	contributorRoutes.Use(middleware.LimitAPIRequests(global.ContributorLimitAPIRequestsTimes, global.LimitRequestsDuration))
@@ -141,3 +166,15 @@ func configureContributorRoutes() {
 		contributorRoutes.DELETE("/:id", controllers.DeleteContributor)
 	}
 }
+
+// func configureWsRoutes() {
+// 	wsRoutes := RouterGroup.Group("/ws")
+// 	wsRoutes.Use(middleware.LimitAPIRequests(global.IssueLimitAPIRequestsTimes, global.LimitRequestsDuration))
+// 	wsRoutes.Use(middleware.LimitTotalRequests(global.IssueLimitTotalRequestsTimes, global.LimitRequestsDuration))
+// 	wsRoutes.Use(middleware.IsLoggedIn())
+// 	wsRoutes.Use(middleware.IsSysAdm())
+// 	{
+// 		wsRoutes.GET("/", controllers.ServeWs)
+// 		wsRoutes.PUT("/write/", controllers.WriteMap)
+// 	}
+// }
