@@ -1,0 +1,37 @@
+{
+    "dag_infos": {  
+        "dag_id": "D050101-3",
+        "start_date": "2022-09-28",
+        "schedule_interval": "@hourly",
+        "catchup": false,
+        "tags": ["cwb_now_weather_auto_station", "中央氣象署", "署屬自動氣象站", "現在天氣"],
+        "description": "Current weather that observed by Central Weather Administration auto weather stations.", 
+        "default_args": {
+            "owner": "airflow",
+            "email": ["DEFAULT_EMAIL_LIST"],
+            "email_on_retry": false,
+            "email_on_failure": true,
+            "retries": 1, 
+            "retry_delay" : 60
+        },
+        "ready_data_db": "postgres_default",  
+        "ready_data_default_table": "cwb_now_weather_auto_station",
+        "ready_data_history_table": "cwb_now_weather_auto_station_history",
+        "raw_data_db": "postgres_default",
+        "raw_data_table": "",
+        "load_behavior": "current+history"
+    },
+    "data_infos":{
+        "name_cn": "中央氣象署-自動氣象站-現在天氣觀測報告",
+        "airflow_update_freq": "on the hour, every hour",
+        "source": "https://opendata.cwa.gov.tw/dataset/observation/O-A0001-001",
+        "source_type": "CWA API",
+        "source_dept": "中央氣象署",
+        "gis_format": "Point",
+        "output_coordinate": "EPSG:4326",
+        "is_geometry": 1,
+        "dataset_description": "署屬自動氣象站的現在天氣報告，有人氣象站結果請見D050101-2",
+        "etl_description": "parse JSON, standardize time, standardize geometry",
+        "sensitivity": "public"
+    }
+}

@@ -1,0 +1,37 @@
+{
+    "dag_infos": {  
+        "dag_id": "D030101-1",
+        "start_date": "2022-10-11",
+        "schedule_interval": "0 0 1 * *",
+        "catchup": false,
+        "tags": ["work_sidewalk", "人行道"],
+        "description": "Sidewalk in Taipei City(with polygon)", 
+        "default_args": {
+            "owner": "airflow",
+            "email": ["DEFAULT_EMAIL_LIST"],
+            "email_on_retry": false,
+            "email_on_failure": true,
+            "retries": 1, 
+            "retry_delay" : 60
+        },
+        "ready_data_db": "postgres_default",  
+        "ready_data_default_table": "work_sidewalk",
+        "ready_data_history_table": "work_sidewalk_history",
+        "raw_data_db": "postgres_default",
+        "raw_data_table": "",
+        "load_behavior": "current+history"
+    },
+    "data_infos":{
+        "name_cn": "臺北市人行道固定設施物_人行道範圍圖",
+        "airflow_update_freq": " first day of every month",
+        "source": "https://data.taipei/dataset/detail?id=715d3a83-8445-4496-b6bf-b0900538b7e7",
+        "source_type": "data.taipei GeoJSON",
+        "source_dept": "工務局",
+        "gis_format": "MultiPolygon",
+        "output_coordinate": "EPSG:4326",
+        "is_geometry": 1,
+        "dataset_description": "臺北市人行道固定設施施有關人行道範圍相關圖資，本項資料所採用座標系統為TWD97。",
+        "etl_description": "standardize time, gemetry",
+        "sensitivity": "public"
+    }
+}

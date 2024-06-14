@@ -1,0 +1,37 @@
+{
+    "dag_infos": {
+        "dag_id": "R0031",
+        "start_date": "2021-08-24",
+        "schedule_interval": "0 4 14 * *",
+        "catchup": false,
+        "tags": ["patrol_police_station", "警察局", "警察局名稱及地址"],
+        "description": "Inventory of unutilized municipal buildings in Taipei City.",
+        "default_args": {
+            "owner": "airflow",
+            "email": ["DEFAULT_EMAIL_LIST"],
+            "email_on_retry": false,
+            "email_on_failure": true,
+            "retries": 1,
+            "retry_delay" : 60
+        },
+        "ready_data_db": "postgres_default",  
+        "ready_data_default_table": "patrol_police_station",
+        "ready_data_history_table": "patrol_police_station_history",
+        "raw_data_db": "postgres_default",
+        "raw_data_table": "",
+        "load_behavior": "current+history"
+    },
+    "data_infos":{
+        "name_cn": "臺北市政府警察局名稱及地址",
+        "airflow_update_freq": "04:00 14th every month",
+        "source": "https://data.taipei/dataset/detail?id=6c41536a-3ce2-4102-bdfc-6b5f3d13ef91",
+        "source_type": "data.taipei csv file",
+        "source_dept": "警察局",
+        "gis_format": "Point",
+        "output_coordinate": "EPSG:4326",
+        "is_geometry": 1,
+        "dataset_description": "警察局各分局、派出所地址",
+        "etl_description": "get update time, geocoding, standardize geometry",
+        "sensitivity": "public"
+    }
+}

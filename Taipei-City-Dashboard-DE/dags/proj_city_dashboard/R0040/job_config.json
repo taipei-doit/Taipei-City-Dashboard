@@ -1,0 +1,37 @@
+{
+    "dag_infos": {  
+        "dag_id": "R0040",
+        "start_date": "2021-11-17",
+        "schedule_interval": "*/10 * * * *",
+        "catchup": false,
+        "tags": ["traffic_todayworks", "道路施工"],
+        "description": "Road excavation real-time construction notification from data.taipei.", 
+        "default_args": {
+            "owner": "airflow",
+            "email": ["DEFAULT_EMAIL_LIST"],
+            "email_on_retry": false,
+            "email_on_failure": true,
+            "retries": 1, 
+            "retry_delay" : 60
+        },
+        "ready_data_db": "postgres_default",  
+        "ready_data_default_table": "traffic_todayworks",
+        "ready_data_history_table": "traffic_todayworks_history",
+        "raw_data_db": "postgres_default",
+        "raw_data_table": "",
+        "load_behavior": "current+history"
+    },
+    "data_infos":{
+        "name_cn": "臺北市今日施工資訊",
+        "airflow_update_freq": "10 minutes",
+        "source": "https://data.taipei/dataset/detail?id=c208dabd-2da0-4e6d-8dbd-a004b9782b0a",
+        "source_type": "data.taipei GeoJSON",
+        "source_dept": "工務局",
+        "gis_format": "Point",
+        "output_coordinate": "EPSG:4326",
+        "is_geometry": 1,
+        "dataset_description": "臺北市道路挖掘即時施工通報資訊，有提供LineString但現在僅使用Point。",
+        "etl_description": "manually parse GeoJSON, standardize time, standardize geometry",
+        "sensitivity": "public"
+    }
+}

@@ -1,0 +1,37 @@
+{
+    "dag_infos": {  
+        "dag_id": "R0018",
+        "start_date": "2021-08-24",
+        "schedule_interval": "@monthly",
+        "catchup": false,
+        "tags": ["patrol_debris", "農業部", "土石流潛勢溪流"],
+        "description": "Information of 1732 potential debris flow streams for the year 113 of the Taiwan.", 
+        "default_args": {
+            "owner": "airflow",
+            "email": ["DEFAULT_EMAIL_LIST"],
+            "email_on_retry": false,
+            "email_on_failure": true,
+            "retries": 1, 
+            "retry_delay" : 60
+        },
+        "ready_data_db": "postgres_default",  
+        "ready_data_default_table": "patrol_debris",
+        "ready_data_history_table": "patrol_debris_history",
+        "raw_data_db": "postgres_default",
+        "raw_data_table": "",
+        "load_behavior": "current+history"
+    },
+    "data_infos":{
+        "name_cn": "113年度1732條土石流潛勢溪流圖",
+        "airflow_update_freq": "first day of every month",
+        "source": "https://data.gov.tw/dataset/167440",
+        "source_type": "data.gov.tw zip",
+        "source_dept": "農業部",
+        "gis_format": "MultiLineString",
+        "output_coordinate": "EPSG:4326",
+        "is_geometry": 1,
+        "dataset_description": "113年度1732條土石流潛勢溪流，潛勢溪流影響範圍資料見R0019.",
+        "etl_description": "unzip, load shpfile, standardize time, standardize geometry",
+        "sensitivity": "public"
+    }
+}

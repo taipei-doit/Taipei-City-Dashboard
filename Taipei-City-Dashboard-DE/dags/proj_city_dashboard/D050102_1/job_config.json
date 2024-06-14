@@ -1,0 +1,37 @@
+{
+    "dag_infos": {  
+        "dag_id": "D050102_1",
+        "start_date": "2024-06-11",
+        "schedule_interval": "0 */6 * * *",
+        "catchup": false,
+        "tags": ["cwb_city_weather_forecast", "中央氣象署", "36小時天氣預報"],
+        "description": "Weather forecast for the next 36 hours.", 
+        "default_args": {
+            "owner": "airflow",
+            "email": ["DEFAULT_EMAIL_LIST"],
+            "email_on_retry": false,
+            "email_on_failure": true,
+            "retries": 1, 
+            "retry_delay" : 60
+        },
+        "ready_data_db": "postgres_default",  
+        "ready_data_default_table": "cwb_city_weather_forecast",
+        "ready_data_history_table": "cwb_city_weather_forecast_history",
+        "raw_data_db": "postgres_default",
+        "raw_data_table": "",
+        "load_behavior": "current+history"
+    },
+    "data_infos":{
+        "name_cn": "中央氣象署-一般天氣預報-今明36小時天氣預報",
+        "airflow_update_freq": "every 6 hours",
+        "source": "https://opendata.cwa.gov.tw/dataset/forecast/F-C0032-001",
+        "source_type": "CWA API",
+        "source_dept": "中央氣象署",
+        "gis_format": "",
+        "output_coordinate": "EPSG:4326",
+        "is_geometry": 0,
+        "dataset_description": "一般天氣預報-今明36小時天氣預報",
+        "etl_description": "parse JSON, standardize time",
+        "sensitivity": "public"
+    }
+}

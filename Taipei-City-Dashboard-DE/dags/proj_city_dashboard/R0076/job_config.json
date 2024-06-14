@@ -1,0 +1,38 @@
+{
+    "dag_infos": {  
+        "dag_id": "R0076",
+        "start_date": "2021-11-22",
+        "schedule_interval": "* * 1 * *",
+        "catchup": false,
+        "tags": ["work_nether", "Nether", "data.taipei", "工務局", "人行地下道", "車行地下道"],
+        "description": "Nether infomation of Taipei City from data.taipei.", 
+        "default_args": {
+            "owner": "airflow",
+            "email": ["DEFAULT_EMAIL_LIST"],
+            "email_on_retry": false,
+            "email_on_failure": true,
+            "retries": 1, 
+            "retry_delay" : 60
+        },
+        "ready_data_db": "postgres_default",  
+        "ready_data_default_table": "work_nether",
+        "ready_data_history_table": "work_nether_history",
+        "raw_data_db": "postgres_default",
+        "raw_data_table": "",
+        "load_behavior": "current+history"
+    },
+    "data_infos":{
+        "name_cn": "臺北市地下道資訊",
+        "airflow_update_freq": "first day of every month",
+        "source": "https://data.taipei/dataset/detail?id=03e017d7-674d-4665-b874-5a6a020668e4",
+        "source_type": "data.taipei JSON file",
+        "source_dept": "工務局新工處",
+        "gis_format": "Point",
+        "output_coordinate": "EPSG:4326",
+        "is_geometry": 1,
+        "dataset_description": "臺北市地下道資訊json file格式檔案，內容包含地下道編號、地下道名稱、地下道類型(A：人行、B：車行)等資訊",
+        "etl_description": "standardize time, standardize geometry, count exit number",
+        "sensitivity": "public"
+    }
+}
+

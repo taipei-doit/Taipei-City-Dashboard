@@ -1,0 +1,37 @@
+{
+    "dag_infos": {  
+        "dag_id": "R0046",
+        "start_date": "2024-06-01",
+        "schedule_interval": "5 * * * *",
+        "catchup": false,
+        "tags": ["traffic_metro_unusual", "捷運公司", "捷運列車到站站名"],
+        "description": "Station names of Taipei Metro trains arriving at the station", 
+        "default_args": {
+            "owner": "airflow",
+            "email": ["DEFAULT_EMAIL_LIST"],
+            "email_on_retry": false,
+            "email_on_failure": true,
+            "retries": 1, 
+            "retry_delay" : 60
+        },
+        "ready_data_db": "postgres_default",  
+        "ready_data_default_table": "traffic_metro_unusual",
+        "ready_data_history_table": "traffic_metro_unusual_history",
+        "raw_data_db": "postgres_default",
+        "raw_data_table": "",
+        "load_behavior": "current+history"
+    },
+    "data_infos":{
+        "name_cn": "臺北捷運列車到站站名",
+        "airflow_update_freq": "every 5 minutes",
+        "source": "https://data.taipei/dataset/detail?id=6556e1e8-c908-42d5-b984-b3f7337b139b",
+        "source_type": "data.taipei JSON",
+        "source_dept": "捷運公司",
+        "gis_format": "",
+        "output_coordinate": "EPSG:4326",
+        "is_geometry": 1,
+        "dataset_description": "提供臺北捷運文湖線、淡水信義線、松山新店線、中和新蘆線以及板南線之列車進入月台之車站站名、行駛方向等資料。",
+        "etl_description": "standardize time",
+        "sensitivity": "public"
+    }
+}

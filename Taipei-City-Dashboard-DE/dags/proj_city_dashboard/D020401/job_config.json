@@ -1,0 +1,37 @@
+{
+    "dag_infos": {  
+        "dag_id": "D020401",
+        "start_date": "2024-05-29",
+        "schedule_interval": "* * 1 1 *",
+        "catchup": false,
+        "tags": ["eoc_major_case", "消防局", "近兩年重大案件"],
+        "description": ".", 
+        "default_args": {
+            "owner": "airflow",
+            "email": ["DEFAULT_EMAIL_LIST"],
+            "email_on_retry": false,
+            "email_on_failure": true,
+            "retries": 1, 
+            "retry_delay" : 60
+        },
+        "ready_data_db": "postgres_default",  
+        "ready_data_default_table": "eoc_major_case",
+        "ready_data_history_table": "eoc_major_case_history",
+        "raw_data_db": "postgres_default",
+        "raw_data_table": "",
+        "load_behavior": "current+history"
+    },
+    "data_infos":{
+        "name_cn": "臺北市消防局近兩年重大案件之災情清單(黑客松競賽用資料)",
+        "airflow_update_freq": "manually",
+        "source": "https://data.taipei/dataset/detail?id=faa44d6c-ec2b-4edb-801c-c7f79e586f89",
+        "source_type": "data.taipei api",
+        "source_dept": "消防局",
+        "gis_format": "Point",
+        "output_coordinate": "EPSG:4326",
+        "is_geometry": 1,
+        "dataset_description": "臺北市消防局提供近兩年重大案件之災情清單(2024春季黑客松競賽用資料)",
+        "etl_description": "standardize time, standardize geometry",
+        "sensitivity": "public"
+    }
+}

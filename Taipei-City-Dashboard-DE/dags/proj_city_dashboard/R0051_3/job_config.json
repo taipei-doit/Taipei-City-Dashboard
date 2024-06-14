@@ -1,0 +1,37 @@
+{
+    "dag_infos": {  
+        "dag_id": "R0051-3",
+        "start_date": "2022-11-14",
+        "schedule_interval": "*/10 * * * *",
+        "catchup": false,
+        "tags": ["tran_ubike_realtime", "YouBike即時車位"],
+        "description": "Nearly realtime YouBike stop status from TDX.", 
+        "default_args": {
+            "owner": "airflow",
+            "email": "DEFAULT_EMAIL_LIST",
+            "email_on_retry": false,
+            "email_on_failure": true,
+            "retries": 1, 
+            "retry_delay" : 60
+        },
+        "ready_data_db": "postgres_default",  
+        "ready_data_default_table": "tran_ubike_realtime",
+        "ready_data_history_table": "tran_ubike_realtime_history",
+        "raw_data_db": "postgres_default",
+        "raw_data_table": "",
+        "load_behavior": "current+history"
+    },
+    "data_infos":{
+        "name_cn": "歷年度使用執照摘要",
+        "airflow_update_freq": "every 10 minutes",
+        "source": "TDX>基礎服務>公共運輸-自行車>自行車>取得指定縣市的公共自行車即時車位資料",
+        "source_type": "TDX API",
+        "source_dept": "交通部",
+        "gis_format": null,
+        "output_coordinate": "EPSG:4326",
+        "is_geometry": 0,
+        "dataset_description": "YouBike即時車位，站點最快每分鐘回傳一次資料。",
+        "etl_description": "define column type, re-mapping category, standardize time",
+        "sensitivity": "public"
+    }
+}

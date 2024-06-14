@@ -1,0 +1,37 @@
+{
+    "dag_infos": {  
+        "dag_id": "D050401_1",
+        "start_date": "2024-06-11",
+        "schedule_interval": "0 5 2 5,11 *",
+        "catchup": false,
+        "tags": ["work_soil_liquefaction", "工務局", "土壤液化潛勢"],
+        "description": "Soil liquefaction distribution in Taipei City.", 
+        "default_args": {
+            "owner": "airflow",
+            "email": ["DEFAULT_EMAIL_LIST"],
+            "email_on_retry": false,
+            "email_on_failure": true,
+            "retries": 1, 
+            "retry_delay" : 60
+        },
+        "ready_data_db": "postgres_default",  
+        "ready_data_default_table": "work_soil_liquefaction",
+        "ready_data_history_table": "work_soil_liquefaction_history",
+        "raw_data_db": "postgres_default",
+        "raw_data_table": "",
+        "load_behavior": "current+history"
+    },
+    "data_infos":{
+        "name_cn": "臺北市土壤液化潛勢圖",
+        "airflow_update_freq": "05:00 2nd May and Nov every year",
+        "source": "https://data.taipei/dataset/detail?id=ec40e067-930f-4058-b7dc-71399d5f3147",
+        "source_type": "data.taipei GeoJSON",
+        "source_dept": "工務局",
+        "gis_format": "MultiPolygon",
+        "output_coordinate": "EPSG:4326",
+        "is_geometry": 0,
+        "dataset_description": "臺北市土壤液化潛勢圖層 提供TWD97 及 WGS84座標",
+        "etl_description": "standardize time, standardize geometry",
+        "sensitivity": "public"
+    }
+}

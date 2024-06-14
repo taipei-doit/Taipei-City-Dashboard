@@ -1,0 +1,37 @@
+{
+    "dag_infos": {  
+        "dag_id": "R0067",
+        "start_date": "2021-11-17",
+        "schedule_interval": "0 7 7 3,6,9,12 *",
+        "catchup": false,
+        "tags": ["building_unsued_land", "財政局", "市有尚未利用土地"],
+        "description": "Unused municipal land.", 
+        "default_args": {
+            "owner": "airflow",
+            "email": ["DEFAULT_EMAIL_LIST"],
+            "email_on_retry": false,
+            "email_on_failure": true,
+            "retries": 1, 
+            "retry_delay" : 60
+        },
+        "ready_data_db": "postgres_default",  
+        "ready_data_default_table": "building_unsued_land",
+        "ready_data_history_table": "building_unsued_land_history",
+        "raw_data_db": "postgres_default",
+        "raw_data_table": "",
+        "load_behavior": "current+history"
+    },
+    "data_infos":{
+        "name_cn": "臺北市市有公用未利用土地清冊",
+        "airflow_update_freq": "07:00 7th of March, June, September, December",
+        "source": "https://data.taipei/dataset/detail?id=020bc1fc-34ff-4caa-ab1b-4267bd0bf386",
+        "source_type": "data.taipei API",
+        "source_dept": "財政局",
+        "gis_format": "MultiPolygon",
+        "output_coordinate": "EPSG:4326",
+        "is_geometry": 1,
+        "dataset_description": "臺北市市有尚未利用土地供給資料清冊",
+        "etl_description": "standardize time, standardize geometry",
+        "sensitivity": "public"
+    }
+}

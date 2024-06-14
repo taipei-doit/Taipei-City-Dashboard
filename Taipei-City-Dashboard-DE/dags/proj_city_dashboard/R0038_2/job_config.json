@@ -1,0 +1,37 @@
+{
+    "dag_infos": {  
+        "dag_id": "R0038_2",
+        "start_date": "2022-12-30",
+        "schedule_interval": "*/10 * * * *",
+        "catchup": false,
+        "tags": ["traffic_lives", "交通動態"],
+        "description": "Realtime  from internal API.", 
+        "default_args": {
+            "owner": "airflow",
+            "email": ["DEFAULT_EMAIL_LIST"],
+            "email_on_retry": false,
+            "email_on_failure": true,
+            "retries": 1, 
+            "retry_delay" : 60
+        },
+        "ready_data_db": "postgres_default",  
+        "ready_data_default_table": "traffic_lives",
+        "ready_data_history_table": "traffic_lives_history",
+        "raw_data_db": "postgres_default",
+        "raw_data_table": "",
+        "load_behavior": "current+history"
+    },
+    "data_infos":{
+        "name_cn": "臺北市車輛偵測器(VD)資訊",
+        "airflow_update_freq": "every 10 minutes",
+        "source": "internal",
+        "source_type": "internal KML",
+        "source_dept": "交通局交控中心",
+        "gis_format": "Polygon",
+        "output_coordinate": "EPSG:4326",
+        "is_geometry": 1,
+        "dataset_description": "臺北市車輛偵測器(VD)蒐集之道路資訊，非每條路都有",
+        "etl_description": "convert 3D Polygon to 2D, upsert cuurent table",
+        "sensitivity": "private"
+    }
+}

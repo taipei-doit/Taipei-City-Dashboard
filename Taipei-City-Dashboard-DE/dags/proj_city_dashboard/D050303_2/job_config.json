@@ -1,0 +1,37 @@
+{
+    "dag_infos": {  
+        "dag_id": "D050303_2",
+        "start_date": "2024-06-11",
+        "schedule_interval": "0 2 5 6,12 *",
+        "catchup": false,
+        "tags": ["work_school_greening", "工務局", "校園綠化"],
+        "description": "school greening in Taipei City.", 
+        "default_args": {
+            "owner": "airflow",
+            "email": ["DEFAULT_EMAIL_LIST"],
+            "email_on_retry": false,
+            "email_on_failure": true,
+            "retries": 1, 
+            "retry_delay" : 60
+        },
+        "ready_data_db": "postgres_default",  
+        "ready_data_default_table": "work_school_greening",
+        "ready_data_history_table": "work_school_greening_history",
+        "raw_data_db": "postgres_default",
+        "raw_data_table": "",
+        "load_behavior": "current+history"
+    },
+    "data_infos":{
+        "name_cn": "臺北市水綠地圖集-公園綠地_校園綠化",
+        "airflow_update_freq": "02:00 5th Jun and Dec every year",
+        "source": "https://data.taipei/dataset/detail?id=5b277432-f534-4d09-a24c-d3f6b514e042",
+        "source_type": "data.taipei GeoJSON",
+        "source_dept": "工務局",
+        "gis_format": "MultiPoint",
+        "output_coordinate": "EPSG:4326",
+        "is_geometry": 0,
+        "dataset_description": "公園綠地_校園綠化",
+        "etl_description": "standardize time, standardize geometry, drop all linestring data, buffer 10 meters for point data",
+        "sensitivity": "public"
+    }
+}

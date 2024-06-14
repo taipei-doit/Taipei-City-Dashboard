@@ -1,0 +1,37 @@
+{
+    "dag_infos": {
+        "dag_id": "D050502",
+        "start_date": "2024-04-18",
+        "schedule_interval": "50 * * * *",
+        "catchup": false,
+        "tags": ["moenv_air_quality", "MOENV", "每小時空氣品質指標"],
+        "description": "Information and locations of nursery rooms from data.taipei.",
+        "default_args": {
+            "owner": "airflow",
+            "email": ["DEFAULT_EMAIL_LIST"],
+            "email_on_retry": false,
+            "email_on_failure": true,
+            "retries": 1, 
+            "retry_delay" : 60
+        },
+        "ready_data_db": "postgres_default",
+        "ready_data_default_table": "moenv_air_quality",
+        "ready_data_history_table": "moenv_air_quality_history",
+        "raw_data_db": "postgres_default",
+        "raw_data_table": "",
+        "load_behavior": "current+history"
+    },
+    "data_infos":{
+        "name_cn": "空氣品質-縣市(臺北市)小時值-每小時",
+        "airflow_update_freq": "50th minute every hour",
+        "source": "https://data.moenv.gov.tw/dataset/detail/AQX_P_136",
+        "source_type": "MOENV API",
+        "source_dept": "環境部 監測資訊司",
+        "gis_format": "",
+        "output_coordinate": "EPSG:4326",
+        "is_geometry": 1,
+        "dataset_description": "每小時提供臺北市空品監測資料小時值。",
+        "etl_description": "only request data for the last hour, standardize time",
+        "sensitivity": "public"
+    }
+}

@@ -1,0 +1,37 @@
+{
+    "dag_infos": {
+        "dag_id": "D040401",
+        "start_date": "2024-05-09",
+        "schedule_interval": "0 0 1 * *",
+        "catchup": false,
+        "tags": ["garbage_truck", "環保局", "垃圾車收運點位"],
+        "description": "A DAG only contains location and time of garbage trucks from data.Taipei.",
+        "default_args": {
+            "owner": "airflow",
+            "email": ["DEFAULT_EMAIL_LIST"],
+            "email_on_retry": false,
+            "email_on_failure": true,
+            "retries": 1, 
+            "retry_delay" : 60
+        },
+        "ready_data_db": "postgres_default",
+        "ready_data_default_table": "garbage_truck",
+        "ready_data_history_table": "garbage_truck_history",
+        "raw_data_db": "postgres_default",
+        "raw_data_table": "",
+        "load_behavior": "current+history"
+    },
+    "data_infos":{
+        "name_cn": "垃圾車點位路線資訊",
+        "airflow_update_freq": " first day of every month",
+        "source": "https://data.taipei/dataset/detail?id=6bb3304b-4f46-4bb0-8cd1-60c66dcd1cae",
+        "source_type": "data.taipei API",
+        "source_dept": "環保局",
+        "gis_format": "Point",
+        "output_coordinate": "EPSG:4326",
+        "is_geometry": 1,
+        "dataset_description": "台北市所有垃圾車點位路線，包含座標資訊",
+        "etl_description": "standardize time, geometry",
+        "sensitivity": "public"
+    }
+}

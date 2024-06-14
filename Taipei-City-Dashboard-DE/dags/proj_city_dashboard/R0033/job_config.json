@@ -1,0 +1,37 @@
+{
+    "dag_infos": {  
+        "dag_id": "R0033",
+        "start_date": "2021-08-24",
+        "schedule_interval": "30 18 2 * *",
+        "catchup": false,
+        "tags": ["patrol_fire_rescure", "消防局", "火災搶救困難地區"],
+        "description": "Difficult area for fire rescue.", 
+        "default_args": {
+            "owner": "airflow",
+            "email": ["DEFAULT_EMAIL_LIST"],
+            "email_on_retry": false,
+            "email_on_failure": true,
+            "retries": 1, 
+            "retry_delay" : 60
+        },
+        "ready_data_db": "postgres_default",  
+        "ready_data_default_table": "patrol_fire_rescure",
+        "ready_data_history_table": "patrol_fire_rescure_history",
+        "raw_data_db": "postgres_default",
+        "raw_data_table": "",
+        "load_behavior": "current+history"
+    },
+    "data_infos":{
+        "name_cn": "火災搶救困難地區",
+        "airflow_update_freq": "18:30 2nd every month",
+        "source": "https://data.taipei/dataset/detail?id=0f322478-e09b-46af-8019-caeaa79678d7",
+        "source_type": "data.taipei csv",
+        "source_dept": "消防局",
+        "gis_format": "Point",
+        "output_coordinate": "EPSG:4326",
+        "is_geometry": 1,
+        "dataset_description": "臺北市火災搶救困難地區資料",
+        "etl_description": "mapping district code to name, geocoding, standardize geometry",
+        "sensitivity": "public"
+    }
+}

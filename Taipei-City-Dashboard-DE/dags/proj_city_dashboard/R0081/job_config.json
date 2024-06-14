@@ -1,0 +1,37 @@
+{
+    "dag_infos": {
+        "dag_id": "R0081",
+        "start_date": "2024-04-11",
+        "schedule_interval": "0 4 21 * *",
+        "catchup": false,
+        "tags": ["work_pumping_station_location", "工務局", "抽水站"],
+        "description": "Taiepi city pumping station locations.",
+        "default_args": {
+            "owner": "airflow",
+            "email": ["DEFAULT_EMAIL_LIST"],
+            "email_on_retry": false,
+            "email_on_failure": true,
+            "retries": 1,
+            "retry_delay" : 60
+        },
+        "ready_data_db": "postgres_default",  
+        "ready_data_default_table": "work_pumping_station_location",
+        "ready_data_history_table": "work_pumping_station_location_history",
+        "raw_data_db": "postgres_default",
+        "raw_data_table": "",
+        "load_behavior": "current+history"
+    },
+    "data_infos":{
+        "name_cn": "臺北市水利處抽水站",
+        "airflow_update_freq": "04:00 21st every month",
+        "source": "https://data.taipei/dataset/detail?id=026cc0fa-cecc-4c78-b986-ead3b0c8b95b",
+        "source_type": "data.taipei csv file",
+        "source_dept": "工務局 水利處",
+        "gis_format": "Point",
+        "output_coordinate": "EPSG:4326",
+        "is_geometry": 1,
+        "dataset_description": "市轄抽水站位置及名稱",
+        "etl_description": "standardize time, standardize geometry",
+        "sensitivity": "public"
+    }
+}

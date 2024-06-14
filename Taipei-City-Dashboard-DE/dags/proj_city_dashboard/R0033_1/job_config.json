@@ -1,0 +1,37 @@
+{
+    "dag_infos": {
+        "dag_id": "R0033-1",
+        "start_date": "2021-08-24",
+        "schedule_interval": "30 18 15 * *",
+        "catchup": false,
+        "tags": ["patrol_fire_brigade", "消防局", "消防局各分隊駐地"],
+        "description": "Locations of the Taipei City Fire Department's brigades",
+        "default_args": {
+            "owner": "airflow",
+            "email": ["DEFAULT_EMAIL_LIST"],
+            "email_on_retry": false,
+            "email_on_failure": true,
+            "retries": 1,
+            "retry_delay" : 60
+        },
+        "ready_data_db": "postgres_default",  
+        "ready_data_default_table": "patrol_fire_brigade",
+        "ready_data_history_table": "patrol_fire_brigade_history",
+        "raw_data_db": "postgres_default",
+        "raw_data_table": "",
+        "load_behavior": "current+history"
+    },
+    "data_infos":{
+        "name_cn": "臺北市政府消防局各分隊駐地位置",
+        "airflow_update_freq": "18:30 15th every month",
+        "source": "https://data.taipei/dataset/detail?id=a9fa2045-f7a6-4e16-ad26-577748064cdf",
+        "source_type": "data.taipei csv file",
+        "source_dept": "消防局",
+        "gis_format": "Polygon",
+        "output_coordinate": "EPSG:4326",
+        "is_geometry": 1,
+        "dataset_description": "臺北市政府消防局各分隊駐地座標",
+        "etl_description": "standardize geometry",
+        "sensitivity": "public"
+    }
+}
