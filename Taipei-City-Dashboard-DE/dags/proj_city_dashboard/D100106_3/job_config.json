@@ -1,0 +1,37 @@
+{
+    "dag_infos": {
+        "dag_id": "D100106_3",
+        "start_date": "2024-05-08",
+        "schedule_interval": "0 0 1 * *",
+        "catchup": false,
+        "tags": ["newborn_stats_time", "臺北市各里人口數按年齡分", "民政局"],
+        "description": "Information and locations of newborn stats by village from data.taipei.",
+        "default_args": {
+            "owner": "airflow",
+            "email": ["DEFAULT_EMAIL_LIST"],
+            "email_on_retry": false,
+            "email_on_failure": true,
+            "retries": 1, 
+            "retry_delay" : 60
+        },
+        "ready_data_db": "postgres_default",
+        "ready_data_default_table": "newborn_stats_time",
+        "ready_data_history_table": "",
+        "raw_data_db": "postgres_default",
+        "raw_data_table": "",
+        "load_behavior": "replace"
+    },
+    "data_infos":{
+        "name_cn": "臺北市各里人口數按年齡分_112年迄今-每月各里人口數按年齡分",
+        "airflow_update_freq": " first day of every month",
+        "source": "https://data.taipei/dataset/detail?id=a6394e3f-3514-4542-87bd-de4310a40db3",
+        "source_type": "data.taipei API",
+        "source_dept": "民政局",
+        "gis_format": "",
+        "output_coordinate": "EPSG:4326",
+        "is_geometry": 0,
+        "dataset_description": "臺北市各里人口數按年齡分_112年迄今-每月各里人口數按年齡分",
+        "etl_description": "standardize time, geometry",
+        "sensitivity": "public"
+    }
+}

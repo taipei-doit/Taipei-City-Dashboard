@@ -1,0 +1,37 @@
+{
+    "dag_infos": {
+        "dag_id": "R0038_1",
+        "start_date": "2021-08-24",
+        "schedule_interval": "*/5 * * * *",
+        "catchup": false,
+        "tags": ["traffic_info_histories", "交通局", "VD道路壅塞程度統計"],
+        "description": "Taipei citywide VD road congestion level statistics.",
+        "default_args": {
+            "owner": "airflow",
+            "email": ["DEFAULT_EMAIL_LIST"],
+            "email_on_retry": false,
+            "email_on_failure": true,
+            "retries": 1,
+            "retry_delay" : 60
+        },
+        "ready_data_db": "postgres_default",  
+        "ready_data_default_table": "traffic_info_histories",
+        "ready_data_history_table": "traffic_info_histories_history",
+        "raw_data_db": "postgres_default",
+        "raw_data_table": "",
+        "load_behavior": "append"
+    },
+    "data_infos":{
+        "name_cn": "臺北市全市VD道路壅塞程度統計",
+        "airflow_update_freq": "every 5 minutes",
+        "source": "internal API",
+        "source_type": "internal API",
+        "source_dept": "交通局",
+        "gis_format": "",
+        "output_coordinate": "EPSG:4326",
+        "is_geometry": 0,
+        "dataset_description": "統計臺北市各道路壅塞程度，壅塞程度根據VD即時速率換算。",
+        "etl_description": "standardize time",
+        "sensitivity": "private"
+    }
+}

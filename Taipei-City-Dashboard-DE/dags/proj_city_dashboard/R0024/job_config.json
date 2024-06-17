@@ -1,0 +1,37 @@
+{
+    "dag_infos": {
+        "dag_id": "R0024",
+        "start_date": "2021-08-24",
+        "schedule_interval": "30 23 10 * *",
+        "catchup": false,
+        "tags": ["patrol_car_theft", "警察局", "汽車竊盜點位資訊"],
+        "description": "Car theft in Taipei began in January 2015.",
+        "default_args": {
+            "owner": "airflow",
+            "email": ["DEFAULT_EMAIL_LIST"],
+            "email_on_retry": false,
+            "email_on_failure": true,
+            "retries": 1,
+            "retry_delay" : 60
+        },
+        "ready_data_db": "postgres_default",  
+        "ready_data_default_table": "patrol_car_theft",
+        "ready_data_history_table": "",
+        "raw_data_db": "postgres_default",
+        "raw_data_table": "",
+        "load_behavior": "replace"
+    },
+    "data_infos":{
+        "name_cn": "臺北市汽車竊盜點位資訊",
+        "airflow_update_freq": "23:30 10th every month",
+        "source": "https://data.taipei/dataset/detail?id=f87ad53e-79c7-48c4-aec4-f0fd8f99bfb2",
+        "source_type": "data.taipei csv",
+        "source_dept": "警察局 刑警大隊",
+        "gis_format": "Point",
+        "output_coordinate": "EPSG:4326",
+        "is_geometry": 1,
+        "dataset_description": "臺北市104年1月-113年2月份汽車竊盜點位資訊",
+        "etl_description": "standardize time, standardize geometry",
+        "sensitivity": "public"
+    }
+}

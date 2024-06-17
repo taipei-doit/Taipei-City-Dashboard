@@ -1,0 +1,15 @@
+apache-airflow-providers-mongo==4.0.0
+apache-airflow-providers-microsoft-mssql==3.6.1
+pymongo==4.6.3
+pymssql==2.3.0
+geopandas==0.13.2
+GeoAlchemy2==0.14.7
+pytest==8.1.1
+openpyxl==3.1.2
+wget==3.2
+Rtree==1.2.0
+psycopg2==2.9.9
+geopy==2.4.1
+XlsxWriter==3.2.0
+pyminizip==0.2.6
+minio==7.2.5

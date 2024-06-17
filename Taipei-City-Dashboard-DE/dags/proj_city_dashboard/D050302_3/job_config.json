@@ -1,0 +1,37 @@
+{
+    "dag_infos": {  
+        "dag_id": "D050302_3",
+        "start_date": "2024-06-11",
+        "schedule_interval": "0 2 3 6,12 *",
+        "catchup": false,
+        "tags": ["work_urban_reserve", "工務局", "都市計畫保護區", "都市農業區"],
+        "description": "Urban plan reserve land and agricultural land in Taipei City.", 
+        "default_args": {
+            "owner": "airflow",
+            "email": ["DEFAULT_EMAIL_LIST"],
+            "email_on_retry": false,
+            "email_on_failure": true,
+            "retries": 1, 
+            "retry_delay" : 60
+        },
+        "ready_data_db": "postgres_default",  
+        "ready_data_default_table": "work_urban_reserve",
+        "ready_data_history_table": "work_urban_reserve_history",
+        "raw_data_db": "postgres_default",
+        "raw_data_table": "",
+        "load_behavior": "current+history"
+    },
+    "data_infos":{
+        "name_cn": "臺北市水綠地圖集-都市計畫保護區、農業區",
+        "airflow_update_freq": "02:00 3rd Jun and Dec every year",
+        "source": "https://data.taipei/dataset/detail?id=5b277432-f534-4d09-a24c-d3f6b514e042",
+        "source_type": "data.taipei GeoJSON",
+        "source_dept": "工務局",
+        "gis_format": "MultiPolygon",
+        "output_coordinate": "EPSG:4326",
+        "is_geometry": 0,
+        "dataset_description": "都市綠地_都市計畫保護區、農業區",
+        "etl_description": "standardize time, standardize geometry",
+        "sensitivity": "public"
+    }
+}

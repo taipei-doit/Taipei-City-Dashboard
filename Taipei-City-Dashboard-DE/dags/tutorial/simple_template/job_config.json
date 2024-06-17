@@ -1,0 +1,37 @@
+{
+    "dag_infos": {
+        "dag_id": "template_test",
+        "start_date": "2024-03-14",
+        "schedule_interval": "0 0 1 * *",
+        "catchup": false,
+        "tags": ["test", "template", "衛生局", "醫院", "heal_hospital"],
+        "description": "A DAG only contain neccesary part for tutorial.",
+        "default_args": {
+            "owner": "airflow",
+            "email": ["receiver_1@mail", "receiver_2@mail"],
+            "email_on_retry": false,
+            "email_on_failure": true,
+            "retries": 1, 
+            "retry_delay" : 60
+        },
+        "ready_data_db": "postgres_default",
+        "ready_data_default_table": "heal_hospital",
+        "ready_data_history_table": "heal_hospital_history",
+        "raw_data_db": "postgres_default",
+        "raw_data_table": "",
+        "load_behavior": "current+history"
+    },
+    "data_infos":{
+        "name_cn": "臺北市醫院清冊",
+        "airflow_update_freq": " first day of every month",
+        "source": "https://data.taipei/dataset/detail?id=ffdd5753-30db-4c38-b65f-b77892773d60",
+        "source_type": "data.taipei API",
+        "source_dept": "衛生局",
+        "gis_format": "Point",
+        "output_coordinate": "EPSG:4326",
+        "is_geometry": 1,
+        "dataset_description": "台北市所有醫院的清冊，包含座標資訊",
+        "etl_description": "standardize time, geometry",
+        "sensitivity": "public"
+    }
+}

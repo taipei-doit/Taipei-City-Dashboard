@@ -1,0 +1,37 @@
+{
+    "dag_infos": {
+        "dag_id": "R0058",
+        "start_date": "2021-11-17",
+        "schedule_interval": "0 5 25 * *",
+        "catchup": false,
+        "tags": ["building_permit_history", "都發局", "歷年(除本年度)建造執照"],
+        "description": "Building permits excluding this year from data.taipei.",
+        "default_args": {
+            "owner": "airflow",
+            "email": ["DEFAULT_EMAIL_LIST"],
+            "email_on_retry": false,
+            "email_on_failure": true,
+            "retries": 1,
+            "retry_delay" : 60
+        },
+        "ready_data_db": "postgres_default",  
+        "ready_data_default_table": "building_permit_history",
+        "ready_data_history_table": "",
+        "raw_data_db": "postgres_default",
+        "raw_data_table": "",
+        "load_behavior": "replace"
+    },
+    "data_infos":{
+        "name_cn": "歷年度建造執照摘要",
+        "airflow_update_freq": "05:00 25th every month",
+        "source": "https://data.taipei/dataset/detail?id=e20ea68e-c79d-4882-a2f9-2f3eeb45384b",
+        "source_type": "data.taipei XML",
+        "source_dept": "都發局",
+        "gis_format": "Point",
+        "output_coordinate": "EPSG:4326",
+        "is_geometry": 1,
+        "dataset_description": "本年度以前建造執照摘要，本年使用執照見R0057。",
+        "etl_description": "parse XML, join cadacadastral, standardize time, standardize geometry",
+        "sensitivity": "public"
+    }
+}

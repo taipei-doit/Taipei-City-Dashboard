@@ -1,0 +1,37 @@
+{
+    "dag_infos": {
+        "dag_id": "D100104_2",
+        "start_date": "2024-05-03",
+        "schedule_interval": "0 0 1 3,9 *",
+        "catchup": false,
+        "tags": ["maternity_hospitals_time", "臺北市生育健康篩檢補助及健康服務概況", "主計處"],
+        "description": "Information and locations of maternity hospitals service from data.taipei.",
+        "default_args": {
+            "owner": "airflow",
+            "email": ["DEFAULT_EMAIL_LIST"],
+            "email_on_retry": false,
+            "email_on_failure": true,
+            "retries": 1, 
+            "retry_delay" : 60
+        },
+        "ready_data_db": "postgres_default",
+        "ready_data_default_table": "maternity_hospitals_time",
+        "ready_data_history_table": "",
+        "raw_data_db": "postgres_default",
+        "raw_data_table": "",
+        "load_behavior": "replace"
+    },
+    "data_infos":{
+        "name_cn": "臺北市生育健康篩檢補助及健康服務概況",
+        "airflow_update_freq": " first day of March and September",
+        "source": "https://data.taipei/dataset/detail?id=a14dd58c-ecef-480c-b574-889ecfa631c3",
+        "source_type": "data.taipei API",
+        "source_dept": "主計處",
+        "gis_format": "",
+        "output_coordinate": "",
+        "is_geometry": 0,
+        "dataset_description": "臺北市生育健康篩檢補助及健康服務概況",
+        "etl_description": "standardize time, geometry",
+        "sensitivity": "public"
+    }
+}

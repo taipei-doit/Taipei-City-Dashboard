@@ -1,0 +1,37 @@
+{
+    "dag_infos": {  
+        "dag_id": "R0086",
+        "start_date": "2021-12-20",
+        "schedule_interval": "0 0 1 * *",
+        "catchup": false,
+        "tags": ["cwb_rainfall_station_location", "中央氣象署", "無人自動站"],
+        "description": "Location of auto weather stations.", 
+        "default_args": {
+            "owner": "airflow",
+            "email": ["DEFAULT_EMAIL_LIST"],
+            "email_on_retry": false,
+            "email_on_failure": true,
+            "retries": 1, 
+            "retry_delay" : 60
+        },
+        "ready_data_db": "postgres_default",  
+        "ready_data_default_table": "cwb_rainfall_station_location",
+        "ready_data_history_table": "cwb_rainfall_station_location_history",
+        "raw_data_db": "postgres_default",
+        "raw_data_table": "",
+        "load_behavior": "current+history"
+    },
+    "data_infos":{
+        "name_cn": "中央氣象署-自動雨量站資料-無人自動站雨量資料",
+        "airflow_update_freq": "00:00 1st every month",
+        "source": "https://opendata.cwa.gov.tw/dataset/observation/O-A0002-001",
+        "source_type": "CWA API",
+        "source_dept": "中央氣象署",
+        "gis_format": "Point",
+        "output_coordinate": "EPSG:4326",
+        "is_geometry": 1,
+        "dataset_description": "自動氣象站雨量資料，本DAG僅記錄站點位置，即時雨量資料請見D050101-4",
+        "etl_description": "parse JSON, standardize time, standardize geometry",
+        "sensitivity": "public"
+    }
+}

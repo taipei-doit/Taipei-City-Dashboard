@@ -1,0 +1,37 @@
+{
+    "dag_infos": {  
+        "dag_id": "D050601",
+        "start_date": "2024-05-29",
+        "schedule_interval": "0 1 18 5,11 *",
+        "catchup": false,
+        "tags": ["env_greenhouse_gas_stat", "環保局", "溫室氣體排放統計"],
+        "description": ".", 
+        "default_args": {
+            "owner": "airflow",
+            "email": ["DEFAULT_EMAIL_LIST"],
+            "email_on_retry": false,
+            "email_on_failure": true,
+            "retries": 1, 
+            "retry_delay" : 60
+        },
+        "ready_data_db": "postgres_default",  
+        "ready_data_default_table": "env_greenhouse_gas_stat",
+        "ready_data_history_table": "",
+        "raw_data_db": "postgres_default",
+        "raw_data_table": "",
+        "load_behavior": "replace"
+    },
+    "data_infos":{
+        "name_cn": "臺北市溫室氣體排放統計—本市總排放量及人均排放量",
+        "airflow_update_freq": "01:00 18th May and Nov",
+        "source": "https://data.taipei/dataset/detail?id=493e8019-3de7-47fa-aa9b-cb4076e540a2",
+        "source_type": "data.taipei api",
+        "source_dept": "環保局",
+        "gis_format": "",
+        "output_coordinate": "EPSG:4326",
+        "is_geometry": 1,
+        "dataset_description": "為檢視本市節能減碳方案是否達到目標願景，以及了解經由各局處整合推動之各項減碳成果，本市持續調查溫室氣體總排放量、人均排放量，以及各部門排放比例，並公佈於網站提供市民參考，期與國際減碳策略接軌，將節能減碳觀念深耕於全體市民心中。",
+        "etl_description": "standardize time",
+        "sensitivity": "public"
+    }
+}

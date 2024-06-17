@@ -1,0 +1,37 @@
+{
+    "dag_infos": {
+        "dag_id": "D080102",
+        "start_date": "2024-05-30",
+        "schedule_interval": "10 10 * * 2",
+        "catchup": false,
+        "tags": ["cdc_enterovirus", "疫情中心", "腸病毒"],
+        "description": "The statistical table of visit cases on different area and age.",
+        "default_args": {
+            "owner": "airflow",
+            "email": ["DEFAULT_EMAIL_LIST"],
+            "email_on_retry": false,
+            "email_on_failure": true,
+            "retries": 1, 
+            "retry_delay" : 60
+        },
+        "ready_data_db": "postgres_default",
+        "ready_data_default_table": "cdc_enterovirus",
+        "ready_data_history_table": "",
+        "raw_data_db": "postgres_default",
+        "raw_data_table": "",
+        "load_behavior": "replace"
+    },
+    "data_infos":{
+        "name_cn": "健保門診及住院就診人次統計-腸病毒",
+        "airflow_update_freq": "10:10 every Tuesday",
+        "source": "https://data.cdc.gov.tw/dataset/hi-outpatient-emergency-visit-enteroviral-infection",
+        "source_type": "CDC csv",
+        "source_dept": "衛服部 疫情中心",
+        "gis_format": "",
+        "output_coordinate": "EPSG:4326",
+        "is_geometry": 1,
+        "dataset_description": "各縣市、年齡別、年週之腸病毒門診及住院就診人次統計表",
+        "etl_description": "add SPC support line",
+        "sensitivity": "public"
+    }
+}

@@ -1,0 +1,37 @@
+{
+    "dag_infos": {  
+        "dag_id": "D040302_1",
+        "start_date": "2024-05-27",
+        "schedule_interval": "10 6 * * *",
+        "catchup": false,
+        "tags": ["work_urgent_use_road", "工務局", "臨時使用道路"],
+        "description": "Taipei City's Daily Urgent Road Use Information.", 
+        "default_args": {
+            "owner": "airflow",
+            "email": ["DEFAULT_EMAIL_LIST"],
+            "email_on_retry": false,
+            "email_on_failure": true,
+            "retries": 1, 
+            "retry_delay" : 60
+        },
+        "ready_data_db": "postgres_default",  
+        "ready_data_default_table": "work_urgent_use_road",
+        "ready_data_history_table": "work_urgent_use_road_history",
+        "raw_data_db": "postgres_default",
+        "raw_data_table": "",
+        "load_behavior": "current+history"
+    },
+    "data_infos":{
+        "name_cn": "臺北市今日臨時使用道路路段",
+        "airflow_update_freq": "06:10 every day",
+        "source": "https://data.taipei/dataset/detail?id=7c81e793-a67f-4b44-86df-8788af892368",
+        "source_type": "data.taipei GeoJSON",
+        "source_dept": "工務局 新工處",
+        "gis_format": "Polygon",
+        "output_coordinate": "EPSG:4326",
+        "is_geometry": 1,
+        "dataset_description": "每日已核准臨時使用道路路段資訊(含申請日期與使用道路範圍)",
+        "etl_description": "standardize time, standardize geometry, merge district withy address 1",
+        "sensitivity": "public"
+    }
+}

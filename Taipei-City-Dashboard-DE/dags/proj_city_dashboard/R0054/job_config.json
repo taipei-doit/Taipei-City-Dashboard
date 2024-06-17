@@ -1,0 +1,37 @@
+{
+    "dag_infos": {  
+        "dag_id": "R0054",
+        "start_date": "2024-06-01",
+        "schedule_interval": "40 3 9 6,12 *",
+        "catchup": false,
+        "tags": ["urbn_landuse_master_plan", "都市計畫主要使用分區", "都發局"],
+        "description": "Taipei City Urban Planning Major Plan Land Use Data.", 
+        "default_args": {
+            "owner": "airflow",
+            "email": ["DEFAULT_EMAIL_LIST"],
+            "email_on_retry": false,
+            "email_on_failure": true,
+            "retries": 1, 
+            "retry_delay" : 60
+        },
+        "ready_data_db": "postgres_default",  
+        "ready_data_default_table": "urbn_landuse_master_plan",
+        "ready_data_history_table": "urbn_landuse_master_plan_history",
+        "raw_data_db": "postgres_default",
+        "raw_data_table": "",
+        "load_behavior": "current+history"
+    },
+    "data_infos":{
+        "name_cn": "臺北市都市計畫主要使用分區圖",
+        "airflow_update_freq": "03:40 9th June and December",
+        "source": "https://data.taipei/dataset/detail?id=3bab0a01-7936-4218-8cb5-f74dfcb43dda",
+        "source_type": "data.taipei SHP",
+        "source_dept": "都發局",
+        "gis_format": "Polygon",
+        "output_coordinate": "EPSG:4326",
+        "is_geometry": 1,
+        "dataset_description": "臺北市都市計畫主要計畫暨細部計畫土地使用分區圖SHP檔案格式",
+        "etl_description": "standardize geometry, customer mapping.",
+        "sensitivity": "public"
+    }
+}

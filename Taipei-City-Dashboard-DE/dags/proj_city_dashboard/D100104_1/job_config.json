@@ -1,0 +1,37 @@
+{
+    "dag_infos": {
+        "dag_id": "D100104_1",
+        "start_date": "2024-05-03",
+        "schedule_interval": "0 0 1 3,9 *",
+        "catchup": false,
+        "tags": ["maternity_hospitals", "生育補助合約醫院", "衛生局"],
+        "description": "Information and locations of maternity hospitals service from data.taipei.",
+        "default_args": {
+            "owner": "airflow",
+            "email": ["DEFAULT_EMAIL_LIST"],
+            "email_on_retry": false,
+            "email_on_failure": true,
+            "retries": 1, 
+            "retry_delay" : 60
+        },
+        "ready_data_db": "postgres_default",
+        "ready_data_default_table": "maternity_hospitals",
+        "ready_data_history_table": "maternity_hospitals_history",
+        "raw_data_db": "postgres_default",
+        "raw_data_table": "",
+        "load_behavior": "current+history"
+    },
+    "data_infos":{
+        "name_cn": "臺北市哺集乳室資訊",
+        "airflow_update_freq": " first day of March and September",
+        "source": "https://data.taipei/dataset/detail?id=9ee72240-f9b3-42a7-bcbe-e1bb1a28a2dc",
+        "source_type": "data.taipei API",
+        "source_dept": "衛生局",
+        "gis_format": "Point",
+        "output_coordinate": "EPSG:4326",
+        "is_geometry": 1,
+        "dataset_description": "台北市所有生育補助合約醫院的清冊，包含座標資訊",
+        "etl_description": "standardize time, geometry",
+        "sensitivity": "public"
+    }
+}
