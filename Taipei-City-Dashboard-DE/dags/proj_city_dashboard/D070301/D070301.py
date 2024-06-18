@@ -1,5 +1,5 @@
 from airflow import DAG
-from operators.build_common_dag import BuildCommonDagOperator
+from operators.common_pipeline import CommonDag
 from settings.defaults import IS_PRD
 
 PROJ_FOLDER = "proj_city_dashboard"
@@ -101,6 +101,6 @@ def _transfer_to_db_D070301(**kwargs):
     engine.execute(sql)
 
 
-dag = BuildCommonDagOperator.create_dag(
-    "D070301", IS_PRD, PROJ_FOLDER, _transfer_to_db_D070301
-)
+
+dag = CommonDag(proj_folder="proj_city_dashboard", dag_folder="D070301")
+dag.create_dag(etl_func=_transfer_to_db_D070301)

@@ -32,6 +32,7 @@ def custom_ignore_patterns(directory, files):
     if 'proj_city_dashboard' in directory:
         if '__init__.py' in files:
             ignore.add('__init__.py')
+    ignore.add('*_test.py')
     return ignore
 
 def _create_dags_list(dags_directory: str) -> tuple[str, list[str]]:

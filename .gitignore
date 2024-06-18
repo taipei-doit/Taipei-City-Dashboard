@@ -59,3 +59,9 @@ Taipei-City-Dashboard-FE/.env.test
 docker/db-data
 # nginx ssl
 docker/nginx/ssl
+
+
+# Python ignore
+__pycache__/
+*.py[cod]
+*$py.class
