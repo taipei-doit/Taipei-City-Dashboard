@@ -33,7 +33,7 @@
         v-for="item in mapConfigs[activeTab].property"
         :key="item.key"
         :style="{
-          display: flex,
+          display: 'flex',
           flexDirection: 'column',
         }"
       >

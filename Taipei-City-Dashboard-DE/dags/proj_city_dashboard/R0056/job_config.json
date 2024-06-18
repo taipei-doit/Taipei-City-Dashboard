@@ -1,0 +1,37 @@
+{
+    "dag_infos": {
+        "dag_id": "R0056",
+        "start_date": "2021-11-17",
+        "schedule_interval": "0 3 5 * *",
+        "catchup": false,
+        "tags": ["building_publand", "地政局", "公有土地"],
+        "description": "Locations of public land in Taipei City",
+        "default_args": {
+            "owner": "airflow",
+            "email": ["DEFAULT_EMAIL_LIST"],
+            "email_on_retry": false,
+            "email_on_failure": true,
+            "retries": 1,
+            "retry_delay" : 60
+        },
+        "ready_data_db": "postgres_default",  
+        "ready_data_default_table": "building_publand",
+        "ready_data_history_table": "building_publand_history",
+        "raw_data_db": "postgres_default",
+        "raw_data_table": "",
+        "load_behavior": "current+history"
+    },
+    "data_infos":{
+        "name_cn": "臺北市公有土地資料",
+        "airflow_update_freq": "03:00 5th every month",
+        "source": "https://data.taipei/dataset/detail?id=ca644935-035e-4ecf-bd93-3d8df351bdb7",
+        "source_type": "data.taipei csv file",
+        "source_dept": "地政局",
+        "gis_format": "Polygon",
+        "output_coordinate": "EPSG:4326",
+        "is_geometry": 1,
+        "dataset_description": "提供臺北市轄區公有土地資料(除涉有敏感性資料或有其他特殊情形不宜開放者)",
+        "etl_description": "join cadastralmap data, standardize geometry",
+        "sensitivity": "public"
+    }
+}

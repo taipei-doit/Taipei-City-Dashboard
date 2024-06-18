@@ -1,0 +1,37 @@
+{
+    "dag_infos": {  
+        "dag_id": "D050101-1",
+        "start_date": "2022-09-22",
+        "schedule_interval": "00 23 * * *",
+        "catchup": false,
+        "tags": ["cwb_daily_weather", "cwb_hourly_weather", "中央氣象署", "地面測站", "天氣觀測歷史資料"],
+        "description": "Daily statistics and hourly obserbation weather data.", 
+        "default_args": {
+            "owner": "airflow",
+            "email": ["DEFAULT_EMAIL_LIST"],
+            "email_on_retry": false,
+            "email_on_failure": true,
+            "retries": 1, 
+            "retry_delay" : 60
+        },
+        "ready_data_db": "postgres_default",  
+        "ready_data_default_table": ["cwb_daily_weather", "cwb_hourly_weather"],
+        "ready_data_history_table": "",
+        "raw_data_db": "postgres_default",
+        "raw_data_table": "",
+        "load_behavior": "append"
+    },
+    "data_infos":{
+        "name_cn": "中央氣象署-一年觀測資料-地面測站觀測資料",
+        "airflow_update_freq": "23:00 every day",
+        "source": "https://opendata.cwa.gov.tw/dataset/observation/C-B0024-002",
+        "source_type": "CWA API",
+        "source_dept": "中央氣象署",
+        "gis_format": "",
+        "output_coordinate": "EPSG:4326",
+        "is_geometry": 0,
+        "dataset_description": "資料源為一年的歷史觀測天氣資料，本資料流每天取最後一天的資料，以達到增量累積歷史資料",
+        "etl_description": "parse lots of JSON, standardize time, deal with CWA missing numeric data",
+        "sensitivity": "public"
+    }
+}

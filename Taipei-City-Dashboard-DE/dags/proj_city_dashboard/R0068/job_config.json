@@ -1,0 +1,37 @@
+{
+    "dag_infos": {
+        "dag_id": "R0068",
+        "start_date": "2021-11-17",
+        "schedule_interval": "0 1 16 3,9 *",
+        "catchup": false,
+        "tags": ["building_unsued_public", "財政局", "市有尚未利用建物"],
+        "description": "Inventory of unutilized municipal buildings in Taipei City.",
+        "default_args": {
+            "owner": "airflow",
+            "email": ["DEFAULT_EMAIL_LIST"],
+            "email_on_retry": false,
+            "email_on_failure": true,
+            "retries": 1,
+            "retry_delay" : 60
+        },
+        "ready_data_db": "postgres_default",  
+        "ready_data_default_table": "building_unsued_public",
+        "ready_data_history_table": "building_unsued_public_history",
+        "raw_data_db": "postgres_default",
+        "raw_data_table": "",
+        "load_behavior": "current+history"
+    },
+    "data_infos":{
+        "name_cn": "臺北市市有尚未利用建物供給資料清冊",
+        "airflow_update_freq": "01:00 16th March and September every year",
+        "source": "https://data.taipei/dataset/detail?id=feaa5be3-0c43-4f0b-a46f-8a57cfd75d7a",
+        "source_type": "data.taipei csv file",
+        "source_dept": "財政局",
+        "gis_format": "Polygon",
+        "output_coordinate": "EPSG:4326",
+        "is_geometry": 1,
+        "dataset_description": "臺北市市有尚未利用建物供給資料清冊",
+        "etl_description": "geocoding, standardize geometry",
+        "sensitivity": "public"
+    }
+}

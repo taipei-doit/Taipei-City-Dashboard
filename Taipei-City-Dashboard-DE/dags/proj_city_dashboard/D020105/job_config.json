@@ -1,0 +1,37 @@
+{
+    "dag_infos": {
+        "dag_id": "D020105",
+        "start_date": "2024-05-30",
+        "schedule_interval": "0 3 24 6,12 *",
+        "catchup": false,
+        "tags": ["urbn_air_raid_shelter", "都發局", "防空避難處所"],
+        "description": "Taipei city's air raid shelter list.",
+        "default_args": {
+            "owner": "airflow",
+            "email": ["DEFAULT_EMAIL_LIST"],
+            "email_on_retry": false,
+            "email_on_failure": true,
+            "retries": 1,
+            "retry_delay" : 60
+        },
+        "ready_data_db": "postgres_default",  
+        "ready_data_default_table": "urbn_air_raid_shelter",
+        "ready_data_history_table": "urbn_air_raid_shelter_history",
+        "raw_data_db": "postgres_default",
+        "raw_data_table": "",
+        "load_behavior": "current+history"
+    },
+    "data_infos":{
+        "name_cn": "臺北市防空避難處所清冊",
+        "airflow_update_freq": "03:00 24th Jun and Dec every year",
+        "source": "https://data.taipei/dataset/detail?id=29a13836-028e-430d-bf5d-18ad3850f178",
+        "source_type": "data.taipei api",
+        "source_dept": "都發局 建管處",
+        "gis_format": "Point",
+        "output_coordinate": "EPSG:4326",
+        "is_geometry": 1,
+        "dataset_description": "臺北市建管處盤點防空避難處所清冊",
+        "etl_description": "standardize time, geocoding, standardize geometry",
+        "sensitivity": "public"
+    }
+}

@@ -1,0 +1,37 @@
+{
+    "dag_infos": {  
+        "dag_id": "R0017",
+        "start_date": "2021-08-24",
+        "schedule_interval": "30 3 1 4 *",
+        "catchup": false,
+        "tags": ["patrol_designate_place", "教育局", "可供避難收容處所"],
+        "description": "List of shelter available for evacuation.", 
+        "default_args": {
+            "owner": "airflow",
+            "email": ["DEFAULT_EMAIL_LIST"],
+            "email_on_retry": false,
+            "email_on_failure": true,
+            "retries": 1, 
+            "retry_delay" : 60
+        },
+        "ready_data_db": "postgres_default",  
+        "ready_data_default_table": "patrol_designate_place",
+        "ready_data_history_table": "patrol_designate_place_history",
+        "raw_data_db": "postgres_default",
+        "raw_data_table": "",
+        "load_behavior": "current+history"
+    },
+    "data_infos":{
+        "name_cn": "臺北市可供避難收容處所一覽表",
+        "airflow_update_freq": "03:30 1st of April every year",
+        "source": "https://data.taipei/dataset/detail?id=aaf97773-3631-40e2-b3cc-da87bf2ce1d5",
+        "source_type": "data.taipei ods file",
+        "source_dept": "教育局",
+        "gis_format": "Point",
+        "output_coordinate": "EPSG:4326",
+        "is_geometry": 1,
+        "dataset_description": "臺北市可供避難收容處所一覽表",
+        "etl_description": "read ods, fill missing value, geocoding, standardize geometry",
+        "sensitivity": "public"
+    }
+}

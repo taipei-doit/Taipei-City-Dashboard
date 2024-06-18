@@ -1,0 +1,37 @@
+{
+    "dag_infos": {
+        "dag_id": "R0021",
+        "start_date": "2024-06-04",
+        "schedule_interval": "0 3 2 6,12 *",
+        "catchup": false,
+        "tags": ["patrol_old_settlement", "工務局", "老舊聚落"],
+        "description": "Locations of old settlement in Taipei City from data.taipei.",
+        "default_args": {
+            "owner": "airflow",
+            "email": ["DEFAULT_EMAIL_LIST"],
+            "email_on_retry": false,
+            "email_on_failure": true,
+            "retries": 1, 
+            "retry_delay" : 60
+        },
+        "ready_data_db": "postgres_default",
+        "ready_data_default_table": "patrol_old_settlement",
+        "ready_data_history_table": "patrol_old_settlement_history",
+        "raw_data_db": "postgres_default",
+        "raw_data_table": "",
+        "load_behavior": "current+history"
+    },
+    "data_infos":{
+        "name_cn": "臺北市老舊聚落分布圖",
+        "airflow_update_freq": "03:00 2nd Jun, Dec every year",
+        "source": "https://data.taipei/dataset/detail?id=e51e44ee-ddfd-492e-b936-8d08ece0e3d0",
+        "source_type": "data.taipei shp",
+        "source_dept": "工務局 大地處",
+        "gis_format": "LineStringZ",
+        "output_coordinate": "EPSG:4326",
+        "is_geometry": 1,
+        "dataset_description": "臺北市老舊聚落分布圖",
+        "etl_description": "standardize geometry",
+        "sensitivity": "public"
+    }
+}

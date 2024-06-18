@@ -1,0 +1,37 @@
+{
+    "dag_infos": {  
+        "dag_id": "R0048",
+        "start_date": "2021-12-27",
+        "schedule_interval": "*/2 * * * *",
+        "catchup": false,
+        "tags": ["tdx_bus_live", "市區公車動態"],
+        "description": "Real time bus near stop from TDX.", 
+        "default_args": {
+            "owner": "airflow",
+            "email": ["DEFAULT_EMAIL_LIST"],
+            "email_on_retry": false,
+            "email_on_failure": true,
+            "retries": 1, 
+            "retry_delay" : 60
+        },
+        "ready_data_db": "postgres_default",  
+        "ready_data_default_table": "tdx_bus_live",
+        "ready_data_history_table": "",
+        "raw_data_db": "postgres_default",
+        "raw_data_table": "",
+        "load_behavior": "replace"
+    },
+    "data_infos":{
+        "name_cn": "臺北市市區公車動態資訊",
+        "airflow_update_freq": "every 2 minutes",
+        "source": "https://tdx.transportdata.tw/api-service/swagger/basic/2998e851-81d0-40f5-b26d-77e2f5ac4118#/CityBus/CityBusApi_RealTimeNearStop_2031",
+        "source_type": "TDX API",
+        "source_dept": "交通部",
+        "gis_format": "Point",
+        "output_coordinate": "EPSG:4326",
+        "is_geometry": 1,
+        "dataset_description": "取得指定[縣市]的公車動態定點資料。",
+        "etl_description": "parse TDX JSON, merge existing stop and route and live data, generate linestring from previous point and current point, convert to JSON geometry.",
+        "sensitivity": "public"
+    }
+}

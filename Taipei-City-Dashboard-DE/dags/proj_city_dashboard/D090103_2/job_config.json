@@ -1,0 +1,37 @@
+{
+    "dag_infos": {  
+        "dag_id": "D090103_2",
+        "start_date": "2024-06-05",
+        "schedule_interval": "0 8 21 5,11 *",
+        "catchup": false,
+        "tags": ["edu_jhschool_dist_by_administrative", "教育局", "國中學區里鄰"],
+        "description": "School district for junior high schools in Taipei City.", 
+        "default_args": {
+            "owner": "airflow",
+            "email": ["DEFAULT_EMAIL_LIST"],
+            "email_on_retry": false,
+            "email_on_failure": true,
+            "retries": 1, 
+            "retry_delay" : 60
+        },
+        "ready_data_db": "postgres_default",  
+        "ready_data_default_table": "edu_jhschool_dist_by_administrative",
+        "ready_data_history_table": "edu_jhschool_dist_by_administrative_history",
+        "raw_data_db": "postgres_default",
+        "raw_data_table": "",
+        "load_behavior": "current+history"
+    },
+    "data_infos":{
+        "name_cn": "臺北市國民中學學區里鄰對照表",
+        "airflow_update_freq": "08:00 21st May and Nov every year",
+        "source": "https://data.taipei/dataset/detail?id=678c5215-f14a-47e3-92bd-da43f9d7c7a9",
+        "source_type": "data.taipei API",
+        "source_dept": "教育局",
+        "gis_format": "",
+        "output_coordinate": "EPSG:4326",
+        "is_geometry": 1,
+        "dataset_description": "臺北市中小學校學區中的臺北市110學年度國民中學學區里鄰對照表",
+        "etl_description": "standardize time, repair data error.",
+        "sensitivity": "public"
+    }
+}

@@ -1,0 +1,37 @@
+{
+    "dag_infos": {
+        "dag_id": "R0082",
+        "start_date": "2024-04-11",
+        "schedule_interval": "0 5 21 * *",
+        "catchup": false,
+        "tags": ["work_floodgate_location", "工務局", "閘閥門"],
+        "description": "Taiepi city gate or valve locations.",
+        "default_args": {
+            "owner": "airflow",
+            "email": ["DEFAULT_EMAIL_LIST"],
+            "email_on_retry": false,
+            "email_on_failure": true,
+            "retries": 1,
+            "retry_delay" : 60
+        },
+        "ready_data_db": "postgres_default",  
+        "ready_data_default_table": "work_floodgate_location",
+        "ready_data_history_table": "work_floodgate_location_history",
+        "raw_data_db": "postgres_default",
+        "raw_data_table": "",
+        "load_behavior": "current+history"
+    },
+    "data_infos":{
+        "name_cn": "臺北市水利處閘閥門",
+        "airflow_update_freq": "05:00 21st every month",
+        "source": "https://data.taipei/dataset/detail?id=6b05d331-4eb8-4f0f-a95c-f619511839e7",
+        "source_type": "data.taipei csv file",
+        "source_dept": "工務局 水利處",
+        "gis_format": "Point",
+        "output_coordinate": "EPSG:4326",
+        "is_geometry": 1,
+        "dataset_description": "市轄閘閥門位置及名稱",
+        "etl_description": "simplify type, standardize geometry",
+        "sensitivity": "public"
+    }
+}

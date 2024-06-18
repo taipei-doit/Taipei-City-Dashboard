@@ -1,0 +1,38 @@
+
+{
+    "dag_infos": {  
+        "dag_id": "D030104-2",
+        "start_date": "2022-10-11",
+        "schedule_interval": "10 22 * * 1",
+        "catchup": false,
+        "tags": ["tran_parking", "臺北市停車場資訊", "臺北市停車場資訊V2"],
+        "description": "Parking information from data.taipei.", 
+        "default_args": {
+            "owner": "airflow",
+            "email": ["DEFAULT_EMAIL_LIST"],
+            "email_on_retry": false,
+            "email_on_failure": true,
+            "retries": 1, 
+            "retry_delay" : 60
+        },
+        "ready_data_db": "postgres_default",  
+        "ready_data_default_table": "tran_parking",
+        "ready_data_history_table": "tran_parking_history",
+        "raw_data_db": "postgres_default",
+        "raw_data_table": "",
+        "load_behavior": "current+history"
+    },
+    "data_infos":{
+        "name_cn": "臺北市停車場資訊-停車場資訊V2",
+        "airflow_update_freq": "Mon 22:10 every week",
+        "source": "https://data.taipei/dataset/detail?id=d5c0656b-5250-4179-a491-c94daa56ef2c",
+        "source_type": "data.taipei JSON",
+        "source_dept": "交通局",
+        "gis_format": "Point",
+        "output_coordinate": "EPSG:4326",
+        "is_geometry": 1,
+        "dataset_description": "臺北市停車場資訊的靜態停車資訊",
+        "etl_description": "parse JSON, standardize time, standardize geometry",
+        "sensitivity": "public"
+    }
+}

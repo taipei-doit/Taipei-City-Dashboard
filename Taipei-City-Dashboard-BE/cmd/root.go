@@ -1,4 +1,13 @@
 // Package cmd provides the command line interface for the application.
+/*
+Developed By Taipei Urban Intelligence Center 2023-2024
+
+// Lead Developer:  Igor Ho (Full Stack Engineer)
+// Systems & Auth: Ann Shih (Systems Engineer)
+// Data Pipelines:  Iima Yu (Data Scientist)
+// Design and UX: Roy Lin (Prev. Consultant), Chu Chen (Researcher)
+// Testing: Jack Huang (Data Scientist), Ian Huang (Data Analysis Intern)
+*/
 package cmd
 
 import (
@@ -16,7 +25,7 @@ var rootCmd = &cobra.Command{
 	Use:   "TaipeiCityDashboardBE",
 	Short: "Taipei Dashboard application backend",
 	Long:  "Backend application for APIs and account management.",
-	Run: func(cmd *cobra.Command, args []string) {
+	Run: func(_ *cobra.Command, _ []string) {
 		logs.Info("Welcome to Dashboard Backend!")
 		// Start the application when the root command is executed.
 		app.StartApplication()
@@ -28,7 +37,7 @@ var migrateDBCmd = &cobra.Command{
 	Use:   "migrateDB",
 	Short: "create or update DB Schema",
 	Long:  "Use models paclage to Create or Update manager DB table Schema.",
-	Run: func(cmd *cobra.Command, args []string) {
+	Run: func(_ *cobra.Command, _ []string) {
 		logs.Info("Start the process of migrate manager database schema.")
 		app.MigrateManagerSchema()
 	},
@@ -39,7 +48,7 @@ var initDashboardDBCmd = &cobra.Command{
 	Use:   "initDashboard",
 	Short: "init Dashboatd data",
 	Long:  "init Dashboatd data.",
-	Run: func(cmd *cobra.Command, args []string) {
+	Run: func(_ *cobra.Command, _ []string) {
 		logs.Info("Start the process of insert dashboard database data.")
 		app.InsertDashbaordSampleData()
 	},

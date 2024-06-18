@@ -1,4 +1,13 @@
 // Package models initiates the connections to the two postgreSQL databases of this application and stores models and handlers.
+/*
+Developed By Taipei Urban Intelligence Center 2023-2024
+
+// Lead Developer:  Igor Ho (Full Stack Engineer)
+// Systems & Auth: Ann Shih (Systems Engineer)
+// Data Pipelines:  Iima Yu (Data Scientist)
+// Design and UX: Roy Lin (Prev. Consultant), Chu Chen (Researcher)
+// Testing: Jack Huang (Data Scientist), Ian Huang (Data Analysis Intern)
+*/
 package models
 
 import (
@@ -73,7 +82,6 @@ func ConnectToDatabase(dbConfig global.DatabaseConfig) *gorm.DB {
 	return dbConn
 }
 
-
 // CloseConnects closes the connections to the specified databases.
 // It takes a variable number of database names and closes the corresponding connections.
 func CloseConnects(dbNames ...interface{}) {
@@ -117,6 +125,8 @@ func MigrateManagerSchema() {
 		DBManager.AutoMigrate(&Component{}, &ComponentChart{}, &ComponentMap{})
 		DBManager.AutoMigrate(&Contributor{})
 		DBManager.AutoMigrate(&Dashboard{}, &DashboardGroup{}, &Issue{})
+		DBManager.AutoMigrate(&ViewPoints{})
+		DBManager.AutoMigrate(&Incident{})
 
 		// All users beneath the public group do not need to be added to the public group
 		// DBManager.Exec("ALTER TABLE auth_user_group_roles ADD CONSTRAINT check_group_id CHECK (group_id > 1);")

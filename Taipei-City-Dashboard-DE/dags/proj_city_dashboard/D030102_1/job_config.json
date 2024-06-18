@@ -1,0 +1,37 @@
+{
+    "dag_infos": {  
+        "dag_id": "D030102-1",
+        "start_date": "2022-10-11",
+        "schedule_interval": "0 0 1 * *",
+        "catchup": false,
+        "tags": ["tran_urban_bike_path", "市區自行車道"],
+        "description": "A More completed DAG for tutorial.", 
+        "default_args": {
+            "owner": "airflow",
+            "email": ["DEFAULT_EMAIL_LIST"],
+            "email_on_retry": false,
+            "email_on_failure": true,
+            "retries": 1, 
+            "retry_delay" : 60
+        },
+        "ready_data_db": "postgres_default",  
+        "ready_data_default_table": "tran_urban_bike_path",
+        "ready_data_history_table": "tran_urban_bike_path_history",
+        "raw_data_db": "postgres_default",
+        "raw_data_table": "",
+        "load_behavior": "current+history"
+    },
+    "data_infos":{
+        "name_cn": "臺北市市區自行車道",
+        "airflow_update_freq": " first day of every month",
+        "source": "https://data.taipei/dataset/detail?id=89202d05-0e3e-4781-a04f-45327bf12b30",
+        "source_type": "data.taipei KML",
+        "source_dept": "交通局",
+        "gis_format": "LineStringZ",
+        "output_coordinate": "EPSG:4326",
+        "is_geometry": 1,
+        "dataset_description": "台北市自行車道資訊(LineStringZ)，河濱自行車道見D030102-2",
+        "etl_description": "parse KML, standardize time, standardize geometry",
+        "sensitivity": "public"
+    }
+}
