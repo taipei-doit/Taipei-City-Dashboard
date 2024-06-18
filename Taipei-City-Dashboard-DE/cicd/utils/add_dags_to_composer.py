@@ -41,7 +41,7 @@ def _create_dags_list(dags_directory: str) -> tuple[str, list[str]]:
     copytree(dags_directory, f"{temp_dir}/", ignore=custom_ignore_patterns, dirs_exist_ok=True)
 
     # Recursively find all Python and JSON files in the temp directory
-    dags = glob.glob(f"{temp_dir}/**/*.py", recursive=True) + glob.glob(f"{temp_dir}/**/*.json", recursive=True)
+    dags = glob.glob(f"{temp_dir}/**/*.py", recursive=True) + glob.glob(f"{temp_dir}/**/*.json", recursive=True) + glob.glob(f"{temp_dir}/**/*.csv", recursive=True)
     return (temp_dir, dags)
 
 
