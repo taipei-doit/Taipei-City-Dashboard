@@ -14,11 +14,6 @@
 
 # [START composer_cicd_dagsync_yaml]
 steps:
-  # pwd
-  - name: bash
-    script: pwd;tree
-    dir: "Taipei-City-Dashboard-DE"
-
   # install dependencies
   - name: python
     entrypoint: pip
