@@ -34,9 +34,8 @@ def _create_dags_list(dags_directory: str) -> tuple[str, list[str]]:
     # Copy everything but the ignored files to a temp directory
     copytree(dags_directory, f"{temp_dir}/", ignore=files_to_ignore, dirs_exist_ok=True)
 
-    # The only Python files left in our temp directory are DAG files
-    # so we can exclude all non Python files
-    dags = glob.glob(f"{temp_dir}/*.py")
+    # Recursively find all Python and JSON files in the temp directory
+    dags = glob.glob(f"{temp_dir}/**/*.py", recursive=True) + glob.glob(f"{temp_dir}/**/*.json", recursive=True)
     return (temp_dir, dags)
 
 
