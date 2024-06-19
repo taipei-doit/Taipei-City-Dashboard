@@ -20,7 +20,7 @@ def _R0075(**kwargs):
     default_table = dag_infos.get("ready_data_default_table")
     history_table = dag_infos.get("ready_data_history_table")
     URL = "https://data.taipei/api/frontstage/tpeod/dataset/resource.download?rid=b9f8154d-c627-48a8-b3ef-512ed9cde9e7"
-    ENCODING = "utf-8"
+    ENCODING = "big5"
     FROM_CRS = 4326
     GEOMETRY_TYPE = "Point"
 
