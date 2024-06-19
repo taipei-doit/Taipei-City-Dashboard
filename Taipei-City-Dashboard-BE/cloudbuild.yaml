@@ -1,0 +1,69 @@
+steps:
+  # # echo envs to .env file
+  # - name: "ubuntu"
+  #   id: "echo_env_variables"
+  #   entrypoint: "bash"
+  #   dir: "Taipei-City-Dashboard-BE"
+  #   args:
+  #       - "-c"
+  #       - |
+  #           echo "VITE_API_URL=$_VITE_API_URL" >> .env
+  #           echo "VITE_APP_TITLE=$_VITE_APP_TITLE" >> .env
+  #           echo "VITE_APP_VERSION=$_VITE_APP_VERSION" >> .env
+  #           echo "VITE_MAPBOXTILE=$_VITE_MAPBOXTILE" >> .env
+
+  # build docker image
+  - name: "gcr.io/cloud-builders/docker"
+    dir: "Taipei-City-Dashboard-BE"
+    args:
+      [
+        "build",
+        "-t",
+        "asia-east1-docker.pkg.dev/tuic-bd2456/tuic/dashboard-be:$COMMIT_SHA",
+        ".",
+      ]
+
+  # push image to Artifact Registry
+  - name: "gcr.io/cloud-builders/docker"
+    args:
+      [
+        "push",
+        "asia-east1-docker.pkg.dev/tuic-bd2456/tuic/dashboard-be:$COMMIT_SHA",
+      ]
+
+  # deploy service to Cloud Run
+  - name: "gcr.io/cloud-builders/gcloud"
+    args: [
+        "run",
+        "deploy",
+        "dashboard-be",
+        "--image",
+        "asia-east1-docker.pkg.dev/tuic-bd2456/tuic/dashboard-be:$COMMIT_SHA",
+        "--set-env-vars",
+        "DB_DASHBOARD_HOST=$_DB_DASHBOARD_HOST",
+        "--set-env-vars",
+        "DB_DASHBOARD_USER=$_DB_DASHBOARD_USER",
+        "--set-env-vars",
+        "DB_DASHBOARD_PASSWORD=$_DB_DASHBOARD_PASSWORD",
+        "--set-env-vars",
+        "DB_DASHBOARD_DBNAME=$_DB_DASHBOARD_DBNAME",
+        "--set-env-vars",
+        "DB_MANAGER_HOST=$_DB_MANAGER_HOST",
+        "--set-env-vars",
+        "DB_MANAGER_USER=$_DB_MANAGER_USER",
+        "--set-env-vars",
+        "DB_MANAGER_PASSWORD=$_DB_MANAGER_PASSWORD",
+        "--set-env-vars",
+        "REDIS_HOST=$_REDIS_HOST",
+        # "--set-env-vars",
+        # "DB_DASHBOARD_USER=$_DB_DASHBOARD_USER",
+        # "--set-env-vars",
+        # "DB_DASHBOARD_USER=$_DB_DASHBOARD_USER",
+        "--vpc-connector",
+        "redis-conn",
+        "--platform",
+        "managed",
+        "--region",
+        "us-central1",
+        "--allow-unauthenticated",
+      ]

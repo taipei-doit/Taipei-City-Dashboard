@@ -1,0 +1,58 @@
+steps:
+    # echo envs to .env file
+    - name: "ubuntu"
+      id: "echo_env_variables"
+      entrypoint: "bash"
+      dir: "Taipei-City-Dashboard-FE"
+      args:
+          - "-c"
+          - |
+              echo "VITE_API_URL=$_VITE_API_URL" >> .env
+              echo "VITE_APP_TITLE=$_VITE_APP_TITLE" >> .env
+              echo "VITE_APP_VERSION=$_VITE_APP_VERSION" >> .env
+              echo "VITE_MAPBOXTILE=$_VITE_MAPBOXTILE" >> .env
+
+    # build docker image
+    - name: "gcr.io/cloud-builders/docker"
+      dir: "Taipei-City-Dashboard-FE"
+      args:
+          [
+              "build",
+              "--build-arg",
+              "NODE_ENV=test",
+              "-t",
+              "asia-east1-docker.pkg.dev/tuic-bd2456/tuic/dashboard-fe:$COMMIT_SHA",
+              ".",
+          ]
+      # env:
+      #     - "NODE_ENV=$_NODE_ENV"
+      #     - "VITE_API_URL=$_VITE_API_URL"
+      #     - "VITE_APP_TITLE=$_VITE_APP_TITLE"
+      #     - "VITE_APP_VERSION=$_VITE_APP_VERSION"
+      #     - "VITE_MAPBOXTILE=$_VITE_MAPBOXTILE"
+
+    # push image to Artifact Registry
+    - name: "gcr.io/cloud-builders/docker"
+      args:
+          [
+              "push",
+              "asia-east1-docker.pkg.dev/tuic-bd2456/tuic/dashboard-fe:$COMMIT_SHA",
+          ]
+
+    # deploy service to Cloud Run
+    - name: "gcr.io/cloud-builders/gcloud"
+      args:
+          [
+              "run",
+              "deploy",
+              "dashboard-fe",
+              "--image",
+              "asia-east1-docker.pkg.dev/tuic-bd2456/tuic/dashboard-fe:$COMMIT_SHA",
+              "--port",
+              "80",
+              "--platform",
+              "managed",
+              "--region",
+              "us-central1",
+              "--allow-unauthenticated",
+          ]
