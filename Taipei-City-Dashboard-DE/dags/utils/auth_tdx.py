@@ -66,6 +66,7 @@ class TDXAuth:
             timeout=timeout,
         ) as response:
             res_json = response.json()
+            print(f"Response JSON: {res_json}")
             token = res_json["access_token"]
             expired_time = now_time + timedelta(seconds=res_json["expires_in"])
             res = {"access_token": token, "expired_time": expired_time}
