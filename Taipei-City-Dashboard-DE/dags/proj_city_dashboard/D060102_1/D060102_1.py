@@ -59,7 +59,6 @@ def _D060102_1(**kwargs):
         [
             "data_time",
             "city",
-            "vil_code",
             "name",
             "addr",
             "main_type",
