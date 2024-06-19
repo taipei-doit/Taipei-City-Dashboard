@@ -27,7 +27,6 @@ def _R0046(**kwargs):
         URL,
         dag_id,
         file_name,
-        encoding="UTF-8",
         output_format="dataframe",
         is_proxy=False,
     )
