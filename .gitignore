@@ -59,3 +59,11 @@ Taipei-City-Dashboard-FE/.env.test
 docker/db-data
 # nginx ssl
 docker/nginx/ssl
+
+
+# data end
+Taipei-City-Dashboard-DE/local_env/volume_data
+Taipei-City-Dashboard-DE/logs
+Taipei-City-Dashboard-DE/data
+**/__pycache__/
+*.py[cod]
