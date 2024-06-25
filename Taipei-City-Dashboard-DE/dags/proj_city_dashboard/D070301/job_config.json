@@ -1,0 +1,37 @@
+{   
+    "job_name": "D070301",
+    "db_correspond":["comm_shopping_area_profile","comm_shopping_area_profile","comm_shopping_area_profile_history"],
+    "input_source": "is_custom_api",
+    "input_conn_id":"mongo_default",
+    "output_conn_id":"postgres_default",
+    "output_mongo_conn_id":"mongo_default",
+    "default_dag_args":{    
+        "owner":"airflow",
+        "start_date": "2023-12-29",
+        "schedule_interval": "0 0 2 * *",
+        "email": ["DEFAULT_EMAIL_LIST"],
+        "email_on_failure": true,
+        "retries": 1, 
+        "retry_delay" : 60,
+        "catchup":false,
+        "tags":["comm_shopping_area_profile","is_custom_api"]
+    },
+    "dataset_info":{
+        "id":"D070301",
+        "psql_table_name":"comm_shopping_area_profile",
+        "name_cn":"商圈基本資料",
+        "mongo_collection":"",
+        "airflow_dag_id":"D070301",
+        "maintain_type":"truncate+history",
+        "airflow_update_freq":"Monthly",
+        "source":"https://tcdbbg.gov.taipei/api/businessdistrict/{district_code}",
+        "source_type":"API",
+        "source_department":"商業處",
+        "gis_format":null,
+        "coordinate":"EPSG:4326",
+        "is_geometry":1,
+        "dataset_description":"商圈基本資料",
+        "etl_description":"",
+        "sensitivity":"private"
+    }
+}

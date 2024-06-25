@@ -1,0 +1,37 @@
+{
+    "dag_infos": {  
+        "dag_id": "R0060",
+        "start_date": "2021-11-17",
+        "schedule_interval": "15 19 * * 4",
+        "catchup": false,
+        "tags": ["building_license_history", "歷年(除本年度)使用執照"],
+        "description": "Building licenses excluding this year from data.taipei.", 
+        "default_args": {
+            "owner": "airflow",
+            "email": ["DEFAULT_EMAIL_LIST"],
+            "email_on_retry": false,
+            "email_on_failure": true,
+            "retries": 1, 
+            "retry_delay" : 60
+        },
+        "ready_data_db": "postgres_default",  
+        "ready_data_default_table": "building_license_history",
+        "ready_data_history_table": "",
+        "raw_data_db": "postgres_default",
+        "raw_data_table": "",
+        "load_behavior": "append"
+    },
+    "data_infos":{
+        "name_cn": "歷年度使用執照摘要",
+        "airflow_update_freq": "19:15 every Thursday",
+        "source": "https://data.taipei/dataset/detail?id=c876ff02-af2e-4eb8-bd33-d444f5052733",
+        "source_type": "data.taipei XML",
+        "source_dept": "都發局",
+        "gis_format": "Point",
+        "output_coordinate": "EPSG:4326",
+        "is_geometry": 1,
+        "dataset_description": "本年度以前使用執照摘要，本年使用執照見R0059。",
+        "etl_description": "parse XML, filter out existing data, geocoding, standardize geometry",
+        "sensitivity": "public"
+    }
+}

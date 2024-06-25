@@ -1,0 +1,37 @@
+{
+    "dag_infos": {  
+        "dag_id": "R0042",
+        "start_date": "2021-11-17",
+        "schedule_interval": "0 3 1 4 *",
+        "catchup": false,
+        "tags": ["traffic_accident_location", "警察局", "道路交通事故斑點圖"],
+        "description": "Announced once a year, the time and location of A1, A2 traffic accidents in Taipei City", 
+        "default_args": {
+            "owner": "airflow",
+            "email": ["DEFAULT_EMAIL_LIST"],
+            "email_on_retry": false,
+            "email_on_failure": true,
+            "retries": 1, 
+            "retry_delay" : 60
+        },
+        "ready_data_db": "postgres_default",  
+        "ready_data_default_table": "traffic_accident_location",
+        "ready_data_history_table": "",
+        "raw_data_db": "postgres_default",
+        "raw_data_table": "",
+        "load_behavior": "replace"
+    },
+    "data_infos":{
+        "name_cn": "臺北市道路交通事故斑點圖",
+        "airflow_update_freq": "03:00 1st April every year",
+        "source": "https://data.taipei/dataset/detail?id=0554bac7-cbc2-4ef3-a55e-0aad3dd4ee1d",
+        "source_type": "data.taipei csv",
+        "source_dept": "警察局 交通大隊",
+        "gis_format": "Point",
+        "output_coordinate": "EPSG:4326",
+        "is_geometry": 1,
+        "dataset_description": "一年公佈一次，臺北市道路交通事故發生時間、處理別(1類指造成人員當場或24小時內死亡之交通事故；2類指造成人員受傷或超過24小時死亡之交通事故)、肇事地點、座標點位資料。",
+        "etl_description": "extract multiple files at once, standardize time, standardize geometry",
+        "sensitivity": "public"
+    }
+}

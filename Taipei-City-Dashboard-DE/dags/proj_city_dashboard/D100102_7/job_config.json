@@ -1,0 +1,38 @@
+{
+    "dag_infos": {
+        "dag_id": "D100102_7",
+        "start_date": "2024-05-02",
+        "schedule_interval": "0 0 1 * *",
+        "catchup": false,
+        "tags": ["childcare_private_childcare", "臺北市嬰幼兒照顧服務_私立托嬰中心", 
+            "社會局", "臺北市育兒支持資源"],
+        "description": "Information and locations of childcare gov_priv infant care from data.taipei.",
+        "default_args": {
+            "owner": "airflow",
+            "email": ["DEFAULT_EMAIL_LIST"],
+            "email_on_retry": false,
+            "email_on_failure": true,
+            "retries": 1, 
+            "retry_delay" : 60
+        },
+        "ready_data_db": "postgres_default",
+        "ready_data_default_table": "childcare_private_childcare",
+        "ready_data_history_table": "childcare_private_childcare_history",
+        "raw_data_db": "postgres_default",
+        "raw_data_table": "",
+        "load_behavior": "current+history"
+    },
+    "data_infos":{
+        "name_cn": "臺北市嬰幼兒照顧服務_私立托嬰中心",
+        "airflow_update_freq": " first day of every month",
+        "source": "https://data.taipei/dataset/detail?id=081df75e-85c7-464c-b125-546920911c5c",
+        "source_type": "data.taipei API",
+        "source_dept": "社會局",
+        "gis_format": "Point",
+        "output_coordinate": "EPSG:4326",
+        "is_geometry": 1,
+        "dataset_description": "台北市所有私立托嬰中心，包含座標資訊",
+        "etl_description": "standardize time, geometry",
+        "sensitivity": "public"
+    }
+}

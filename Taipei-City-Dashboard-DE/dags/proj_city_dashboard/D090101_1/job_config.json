@@ -1,0 +1,37 @@
+{
+    "dag_infos": {  
+        "dag_id": "D090101_1",
+        "start_date": "2024-06-11",
+        "schedule_interval": "30 6 21 5,11 *",
+        "catchup": false,
+        "tags": ["edu_elementary_school_district", "教育局", "小學學區"],
+        "description": "Schools district for elementary schools in Taipei City.", 
+        "default_args": {
+            "owner": "airflow",
+            "email": ["DEFAULT_EMAIL_LIST"],
+            "email_on_retry": false,
+            "email_on_failure": true,
+            "retries": 1, 
+            "retry_delay" : 60
+        },
+        "ready_data_db": "postgres_default",  
+        "ready_data_default_table": "edu_elementary_school_district",
+        "ready_data_history_table": "edu_elementary_school_district_history",
+        "raw_data_db": "postgres_default",
+        "raw_data_table": "",
+        "load_behavior": "current+history"
+    },
+    "data_infos":{
+        "name_cn": "臺北市國小學區",
+        "airflow_update_freq": "06:30 21st May and Nov every year",
+        "source": "https://data.taipei/dataset/detail?id=678c5215-f14a-47e3-92bd-da43f9d7c7a9",
+        "source_type": "data.taipei API",
+        "source_dept": "教育局",
+        "gis_format": null,
+        "output_coordinate": "EPSG:4326",
+        "is_geometry": 0,
+        "dataset_description": "台北市國小學區，無地理資訊，僅對應里",
+        "etl_description": "standardize time",
+        "sensitivity": "public"
+    }
+}

@@ -1,0 +1,37 @@
+{
+    "dag_infos": {
+        "dag_id": "R0033-2",
+        "start_date": "2021-08-24",
+        "schedule_interval": "0 19 15 * *",
+        "catchup": false,
+        "tags": ["patrol_fire_disqualified", "消防局", "消防安全檢查重大不合格場所"],
+        "description": "",
+        "default_args": {
+            "owner": "airflow",
+            "email": ["DEFAULT_EMAIL_LIST"],
+            "email_on_retry": false,
+            "email_on_failure": true,
+            "retries": 1,
+            "retry_delay" : 60
+        },
+        "ready_data_db": "postgres_default",  
+        "ready_data_default_table": "patrol_fire_disqualified",
+        "ready_data_history_table": "patrol_fire_disqualified_history",
+        "raw_data_db": "postgres_default",
+        "raw_data_table": "",
+        "load_behavior": "current+history"
+    },
+    "data_infos":{
+        "name_cn": "臺北市消防安全檢查重大不合格場所",
+        "airflow_update_freq": "19:00 15th every month",
+        "source": "https://data.taipei/dataset/detail?id=871874fc-c3b8-4752-aa56-76101395589d",
+        "source_type": "data.taipei csv file",
+        "source_dept": "消防局",
+        "gis_format": "Point",
+        "output_coordinate": "EPSG:4326",
+        "is_geometry": 1,
+        "dataset_description": "臺北市消防安全檢查重大不合格場所",
+        "etl_description": "standardize time, geocoding, standardize geometry",
+        "sensitivity": "public"
+    }
+}

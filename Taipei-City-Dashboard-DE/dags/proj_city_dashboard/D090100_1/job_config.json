@@ -1,0 +1,37 @@
+{
+    "dag_infos": {  
+        "dag_id": "D090100_1",
+        "start_date": "2024-06-11",
+        "schedule_interval": "0 5 21 5,11 *",
+        "catchup": false,
+        "tags": ["edu_school", "教育局", "各級學校分布"],
+        "description": "Schools address in Taipei City.", 
+        "default_args": {
+            "owner": "airflow",
+            "email": ["DEFAULT_EMAIL_LIST"],
+            "email_on_retry": false,
+            "email_on_failure": true,
+            "retries": 1, 
+            "retry_delay" : 60
+        },
+        "ready_data_db": "postgres_default",  
+        "ready_data_default_table": "edu_school",
+        "ready_data_history_table": "edu_school_history",
+        "raw_data_db": "postgres_default",
+        "raw_data_table": "",
+        "load_behavior": "current+history"
+    },
+    "data_infos":{
+        "name_cn": "臺北市各級學校分布圖",
+        "airflow_update_freq": "05:00 21st May and Nov every year",
+        "source": "https://data.taipei/dataset/detail?id=58b4f7b9-d0c5-4de8-aa7f-981fcb625e45",
+        "source_type": "data.taipei API",
+        "source_dept": "教育局",
+        "gis_format": "Point",
+        "output_coordinate": "EPSG:4326",
+        "is_geometry": 0,
+        "dataset_description": "臺北市各級學校(含國小.國中.高中職.特教學校.市立大專院校)地址聯繫方式",
+        "etl_description": "standardize time, geocoding, standardize geometry",
+        "sensitivity": "public"
+    }
+}

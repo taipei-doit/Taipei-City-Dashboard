@@ -1,0 +1,37 @@
+{
+    "dag_infos": {  
+        "dag_id": "R0085",
+        "start_date": "2021-12-21",
+        "schedule_interval": "0 5 25 3,9 *",
+        "catchup": false,
+        "tags": ["work_rainfall_station_location", "工務局", "水利處雨量站點位"],
+        "description": "Rainfall stations location.", 
+        "default_args": {
+            "owner": "airflow",
+            "email": ["DEFAULT_EMAIL_LIST"],
+            "email_on_retry": false,
+            "email_on_failure": true,
+            "retries": 1, 
+            "retry_delay" : 60
+        },
+        "ready_data_db": "postgres_default",  
+        "ready_data_default_table": "work_rainfall_station_location",
+        "ready_data_history_table": "work_rainfall_station_location_history",
+        "raw_data_db": "postgres_default",
+        "raw_data_table": "",
+        "load_behavior": "current+history"
+    },
+    "data_infos":{
+        "name_cn": "臺北市水利處雨量站位置",
+        "airflow_update_freq": "05:00 25th Mar and Sep every year",
+        "source": "https://data.taipei/dataset/detail?id=4192e21d-e513-49d3-949f-6fba38d8fd94",
+        "source_type": "data.taipei API",
+        "source_dept": "工務局 水利處",
+        "gis_format": "Point",
+        "output_coordinate": "EPSG:4326",
+        "is_geometry": 1,
+        "dataset_description": "臺北市水利處雨量站位置",
+        "etl_description": "standardize time, standardize geometry",
+        "sensitivity": "public"
+    }
+}

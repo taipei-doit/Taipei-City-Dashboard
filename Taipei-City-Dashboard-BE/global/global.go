@@ -25,7 +25,7 @@ type DatabaseConfig struct {
 
 // RedisConfig defines the structure for Redis configuration
 type RedisConfig struct {
-	Addr     string
+	Host     string
 	Port     string
 	Password string
 	DB       int
@@ -72,7 +72,7 @@ var (
 	}
 
 	Redis = RedisConfig{
-		Addr:     getEnv("REDIS_ADDR", "redis"),
+		Host:     getEnv("REDIS_HOST", "redis"),
 		Port:     getEnv("REDIS_PORT", "6379"),
 		Password: getEnv("REDIS_PASSWORD", ""),
 		DB:       getIntEnv("REDIS_DB", 0),

@@ -1,0 +1,37 @@
+{
+    "dag_infos": {
+        "dag_id": "R0075",
+        "start_date": "2021-11-19",
+        "schedule_interval": "0 1 20 1,4,7,10 *",
+        "catchup": false,
+        "tags": ["fire_hydrant_location", "北水處", "消防栓點位"],
+        "description": "Locations of fire hydrant distribution points in the Greater Taipei area, including 7 districts: Taipei City, Sanchong District, Zhonghe District, Yonghe District, Xindian District, and Xizhi District of New Taipei City",
+        "default_args": {
+            "owner": "airflow",
+            "email": ["DEFAULT_EMAIL_LIST"],
+            "email_on_retry": false,
+            "email_on_failure": true,
+            "retries": 1,
+            "retry_delay" : 60
+        },
+        "ready_data_db": "postgres_default",  
+        "ready_data_default_table": "fire_hydrant_location",
+        "ready_data_history_table": "fire_hydrant_location_history",
+        "raw_data_db": "postgres_default",
+        "raw_data_table": "",
+        "load_behavior": "current+history"
+    },
+    "data_infos":{
+        "name_cn": "大臺北地區消防栓分布點位圖",
+        "airflow_update_freq": "01:00 on the 20th of January, April, July, and October",
+        "source": "https://data.taipei/dataset/detail?id=679a0801-8cb0-4c64-91ad-952c1b9e5e84",
+        "source_type": "data.taipei csv file",
+        "source_dept": "北水處",
+        "gis_format": "Point",
+        "output_coordinate": "EPSG:4326",
+        "is_geometry": 1,
+        "dataset_description": "大臺北地區(包括臺北市、新北市三重區、中和區、永和區、新店區及汐止區7個里)消防栓分布點位",
+        "etl_description": "check header, standardize geometry",
+        "sensitivity": "public"
+    }
+}

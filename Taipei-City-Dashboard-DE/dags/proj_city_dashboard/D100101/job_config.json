@@ -1,0 +1,37 @@
+{
+    "dag_infos": {
+        "dag_id": "D100101",
+        "start_date": "2024-04-18",
+        "schedule_interval": "0 0 1 * *",
+        "catchup": false,
+        "tags": ["Nursery_Room", "哺集乳室資訊", "衛生局"],
+        "description": "Information and locations of nursery rooms from data.taipei.",
+        "default_args": {
+            "owner": "airflow",
+            "email": ["DEFAULT_EMAIL_LIST"],
+            "email_on_retry": false,
+            "email_on_failure": true,
+            "retries": 1, 
+            "retry_delay" : 60
+        },
+        "ready_data_db": "postgres_default",
+        "ready_data_default_table": "nursery_room_info",
+        "ready_data_history_table": "nursery_room_info_history",
+        "raw_data_db": "postgres_default",
+        "raw_data_table": "",
+        "load_behavior": "current+history"
+    },
+    "data_infos":{
+        "name_cn": "臺北市哺集乳室資訊",
+        "airflow_update_freq": " first day of every month",
+        "source": "https://data.taipei/dataset/detail?id=5d1d34d8-1b81-4162-87b6-05e0896af958",
+        "source_type": "data.taipei API",
+        "source_dept": "衛生局",
+        "gis_format": "Point",
+        "output_coordinate": "EPSG:4326",
+        "is_geometry": 1,
+        "dataset_description": "台北市所有哺集乳室的清冊，包含座標資訊",
+        "etl_description": "standardize time, geometry",
+        "sensitivity": "public"
+    }
+}

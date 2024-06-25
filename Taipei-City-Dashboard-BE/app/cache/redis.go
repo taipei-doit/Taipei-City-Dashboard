@@ -25,7 +25,7 @@ var Redis *redis.Client
 // ConnectToRedis connects to the redis database of this application.
 func ConnectToRedis() {
 	Redis = redis.NewClient(&redis.Options{
-		Addr:     global.Redis.Addr + ":" + global.Redis.Port,
+		Addr:     global.Redis.Host + ":" + global.Redis.Port,
 		Password: global.Redis.Password,
 		DB:       global.Redis.DB,
 	})

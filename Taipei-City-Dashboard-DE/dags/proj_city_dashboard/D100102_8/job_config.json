@@ -1,0 +1,38 @@
+{
+    "dag_infos": {
+        "dag_id": "D100102_8",
+        "start_date": "2024-05-02",
+        "schedule_interval": "0 0 1 * *",
+        "catchup": false,
+        "tags": ["childcare_resource_hub", "臺北市嬰幼兒照顧服務_兒童托育資源中心", 
+            "社會局", "臺北市育兒支持資源"],
+        "description": "Information and locations of childcare resource hub from data.taipei.",
+        "default_args": {
+            "owner": "airflow",
+            "email": ["DEFAULT_EMAIL_LIST"],
+            "email_on_retry": false,
+            "email_on_failure": true,
+            "retries": 1, 
+            "retry_delay" : 60
+        },
+        "ready_data_db": "postgres_default",
+        "ready_data_default_table": "childcare_resource_hub",
+        "ready_data_history_table": "childcare_resource_hub_history",
+        "raw_data_db": "postgres_default",
+        "raw_data_table": "",
+        "load_behavior": "current+history"
+    },
+    "data_infos":{
+        "name_cn": "臺北市嬰幼兒照顧服務_兒童托育資源中心",
+        "airflow_update_freq": " first day of every month",
+        "source": "https://data.taipei/dataset/detail?id=01ac5a1d-dfc3-44c7-84a7-6d76bcb2879b",
+        "source_type": "data.taipei API",
+        "source_dept": "社會局",
+        "gis_format": "Point",
+        "output_coordinate": "EPSG:4326",
+        "is_geometry": 1,
+        "dataset_description": "台北市所有兒童托育資源中心，包含座標資訊",
+        "etl_description": "standardize time, geometry",
+        "sensitivity": "public"
+    }
+}

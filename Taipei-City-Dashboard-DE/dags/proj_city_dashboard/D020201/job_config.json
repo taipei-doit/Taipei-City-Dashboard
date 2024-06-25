@@ -1,0 +1,37 @@
+{
+    "dag_infos": {  
+        "dag_id": "D020201",
+        "start_date": "2024-05-29",
+        "schedule_interval": "20 5 25 * *",
+        "catchup": false,
+        "tags": ["fire_narrow_street", "消防局", "狹小巷道"],
+        "description": "Taipei city's narrow street list.", 
+        "default_args": {
+            "owner": "airflow",
+            "email": ["DEFAULT_EMAIL_LIST"],
+            "email_on_retry": false,
+            "email_on_failure": true,
+            "retries": 1, 
+            "retry_delay" : 60
+        },
+        "ready_data_db": "postgres_default",  
+        "ready_data_default_table": "fire_narrow_street",
+        "ready_data_history_table": "fire_narrow_street_history",
+        "raw_data_db": "postgres_default",
+        "raw_data_table": "",
+        "load_behavior": "current+history"
+    },
+    "data_infos":{
+        "name_cn": "臺北市狹小巷道清冊(紅黃區)",
+        "airflow_update_freq": "05:20 25th every month",
+        "source": "https://data.taipei/dataset/detail?id=95c2eed3-8253-4dce-bf8e-1d6a01517514",
+        "source_type": "data.taipei api",
+        "source_dept": "消防局",
+        "gis_format": "MultiLineString",
+        "output_coordinate": "EPSG:4326",
+        "is_geometry": 1,
+        "dataset_description": "臺北市狹小巷道列管清冊",
+        "etl_description": "standardize time, standardize geometry, merge 238/283 linestring by street name",
+        "sensitivity": "public"
+    }
+}
