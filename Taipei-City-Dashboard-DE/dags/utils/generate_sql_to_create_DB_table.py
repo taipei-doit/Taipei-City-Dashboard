@@ -57,12 +57,7 @@ def generate_sql_to_define_column(
 
 
 def generate_sql_to_create_db_table(
-    table_name,
-    col_map,
-    is_add_mtime=True,
-    is_add_ctime=True,
-    is_add_ogc_fid=True,
-    is_grant_socl_reader=False,
+    table_name, col_map, is_add_mtime=True, is_add_ctime=True, is_add_ogc_fid=True
 ):
     """
     Generate SQL to create a database table based on the table name and column definitions.
@@ -73,7 +68,6 @@ def generate_sql_to_create_db_table(
         is_add_mtime (bool): Whether to add the MTIME column. Default is True.
         is_add_ctime (bool): Whether to add the CTIME column. Default is True.
         is_add_ogc_fid (bool): Whether to add the OGC_FID column. Default is True.
-        is_grant_socl_reader (bool): Whether to grant SELECT permission to socl_reader. Default is False.
 
     Returns:
         str: SQL text to create the database table.
@@ -103,8 +97,8 @@ def generate_sql_to_create_db_table(
     grant_table_sql = f"""
     
     -- grant table
-    ALTER TABLE IF EXISTS public.{table_name} OWNER to postgres;
-    GRANT ALL ON TABLE public.{table_name} TO postgres WITH GRANT OPTION;
+    ALTER TABLE IF EXISTS public.{table_name} OWNER to airflow;
+    GRANT ALL ON TABLE public.{table_name} TO airflow WITH GRANT OPTION;
     """
 
     create_mtime_trigger_sql = f"""
@@ -131,17 +125,11 @@ def generate_sql_to_create_db_table(
     grant_sequnce_sql = f"""
     
     -- grant sequnce
-    ALTER TABLE IF EXISTS public.{table_name}_ogc_fid_seq OWNER to postgres;
-    GRANT ALL ON TABLE public.{table_name}_ogc_fid_seq TO postgres WITH GRANT OPTION;
+    ALTER TABLE IF EXISTS public.{table_name}_ogc_fid_seq OWNER to airflow;
+    GRANT ALL ON TABLE public.{table_name}_ogc_fid_seq TO airflow WITH GRANT OPTION;
     """
 
     sql = ""
-
-    if is_grant_socl_reader:
-        grant_table_sql += f"GRANT SELECT ON TABLE public.{table_name} TO socl_reader;"
-        grant_sequnce_sql += (
-            f"GRANT SELECT ON SEQUENCE public.{table_name} TO socl_reader;"
-        )
 
     if is_add_ogc_fid:
         sql += create_sequnce_sql
@@ -221,22 +209,25 @@ def _show_smaple_column_type():
 
 if __name__ == "__main__":
     # input
-    IS_HISTRORY_TABLE = True
-
-    TANME = "heal_hospital"
+    IS_HISTRORY_TABLE = False
+    TNAME = "fire_to_hospital"
     COLUMN_MAP = {
         "data_time": "timestamp with time zone DEFAULT CURRENT_TIMESTAMP",
-        "name": 'character varying(50) COLLATE pg_catalog."default"',
-        "addr": 'text COLLATE pg_catalog."default"',
-        "lng": "double precision",
-        "lat": "double precision",
-        "wkb_geometry": "geometry(Point,4326)"
+        "file_tag": 'character varying(7) COLLATE pg_catalog."default"',
+        "town": 'character varying(3) COLLATE pg_catalog."default"',
+        "total_case": "double precision",
+        "to_hospital_case": "double precision",
+        "no_contact_case": "double precision",
+        "contact_not_transport_case": "double precision",
+        "on_duty_case": "double precision",
     }
 
     if IS_HISTRORY_TABLE:
-        TANME = [TANME, f"{TANME}_history"]
+        TNAME = [TNAME, f"{TNAME}_history"]
+    else:
+        TNAME = [TNAME]
 
-    for table in TANME:
+    for table in TNAME:
         drop_table_sql = generate_sql_to_delete_db_table(table)
         print(drop_table_sql)
 
