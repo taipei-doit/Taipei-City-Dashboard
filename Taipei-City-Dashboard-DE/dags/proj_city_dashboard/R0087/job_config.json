@@ -1,0 +1,37 @@
+{
+    "dag_infos": {  
+        "dag_id": "R0087",
+        "start_date": "2024-06-26",
+        "schedule_interval": "*/5 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,22,23 * * *",
+        "catchup": false,
+        "tags": ["mrtp_carweight", "臺北捷運公司", "車廂擁擠程度"],
+        "description": "Taipei Metro realtime car weight data.", 
+        "default_args": {
+            "owner": "airflow",
+            "email": ["DEFAULT_EMAIL_LIST"],
+            "email_on_retry": false,
+            "email_on_failure": true,
+            "retries": 1, 
+            "retry_delay" : 60
+        },
+        "ready_data_db": "postgres_default",  
+        "ready_data_default_table": "mrtp_carweight",
+        "ready_data_history_table": "mrtp_carweight_history",
+        "raw_data_db": "postgres_default",
+        "raw_data_table": "",
+        "load_behavior": "current+history"
+    },
+    "data_infos":{
+        "name_cn": "高運量捷運車廂擁擠程度",
+        "airflow_update_freq": "every 5 minutes without 1~5 AM(+8)",
+        "source": "https://api.metro.taipei/metroapi/CarWeight.asmx",
+        "source_type": "MRT API",
+        "source_dept": "臺北捷運公司",
+        "gis_format": "",
+        "output_coordinate": "EPSG:4326",
+        "is_geometry": 0,
+        "dataset_description": "高運量捷運車廂擁擠程度",
+        "etl_description": "post request",
+        "sensitivity": "private"
+    }
+}
