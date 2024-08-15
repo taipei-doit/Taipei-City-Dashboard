@@ -36,7 +36,7 @@ def _R0019(**kwargs):
     FROM_CRS = 3826
     # 取得連結:https://data.gov.tw/dataset/167440
     # 20240815更新連結
-    URL = "https://data.moa.gov.tw/OpenData/GetOpenDataFile.aspx?id=I88&FileType=SHP&RID=32743"
+    URL = "https://data.moa.gov.tw/OpenData/GetOpenDataFile.aspx?id=I89&FileType=SHP&RID=32744"
 
     # Extract shpfile
     zip_file = download_file(filename, URL, is_proxy=True)
