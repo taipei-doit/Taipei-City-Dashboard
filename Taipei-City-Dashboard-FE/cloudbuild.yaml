@@ -1,58 +1,75 @@
 steps:
-    # echo envs to .env file
-    - name: "ubuntu"
-      id: "echo_env_variables"
-      entrypoint: "bash"
-      dir: "Taipei-City-Dashboard-FE"
+    - name: gcr.io/cloud-builders/git
       args:
           - "-c"
-          - |
-              echo "VITE_API_URL=$_VITE_API_URL" >> .env
-              echo "VITE_APP_TITLE=$_VITE_APP_TITLE" >> .env
-              echo "VITE_APP_VERSION=$_VITE_APP_VERSION" >> .env
-              echo "VITE_MAPBOXTILE=$_VITE_MAPBOXTILE" >> .env
+          - >
+              git fetch --tags
 
-    # build docker image
-    - name: "gcr.io/cloud-builders/docker"
-      dir: "Taipei-City-Dashboard-FE"
-      args:
-          [
-              "build",
-              "--build-arg",
-              "NODE_ENV=test",
-              "-t",
-              "asia-east1-docker.pkg.dev/tuic-bd2456/tuic/dashboard-fe:$COMMIT_SHA",
-              ".",
-          ]
-      # env:
-      #     - "NODE_ENV=$_NODE_ENV"
-      #     - "VITE_API_URL=$_VITE_API_URL"
-      #     - "VITE_APP_TITLE=$_VITE_APP_TITLE"
-      #     - "VITE_APP_VERSION=$_VITE_APP_VERSION"
-      #     - "VITE_MAPBOXTILE=$_VITE_MAPBOXTILE"
+              GIT_TAG=$(git describe --tags --abbrev=0 2>/dev/null)
 
-    # push image to Artifact Registry
-    - name: "gcr.io/cloud-builders/docker"
-      args:
-          [
-              "push",
-              "asia-east1-docker.pkg.dev/tuic-bd2456/tuic/dashboard-fe:$COMMIT_SHA",
-          ]
+              if [ -z "$${GIT_TAG}" ]; then
+                COMMIT_SHA=$(git rev-parse --short HEAD)
+                VITE_APP_VERSION=$COMMIT_SHA
+              else
+                VITE_APP_VERSION=$${GIT_TAG}
+              fi
 
-    # deploy service to Cloud Run
-    - name: "gcr.io/cloud-builders/gcloud"
+              echo "VITE_API_URL=$_VITE_API_URL" >> Taipei-City-Dashboard-FE/.env
+
+              echo "VITE_APP_TITLE=$_VITE_APP_TITLE" >> Taipei-City-Dashboard-FE/.env
+
+              echo "VITE_APP_VERSION=$_VITE_APP_VERSION" >>
+              Taipei-City-Dashboard-FE/.env
+
+              echo "VITE_MAPBOXTILE=$_VITE_MAPBOXTILE" >>
+              Taipei-City-Dashboard-FE/.env
+
+              echo "VITE_MAPBOXTOKEN=$$MAPBOX_TOKEN" >> Taipei-City-Dashboard-FE/.env
+
+              echo "VITE_TAIPEIPASS_URL=$_VITE_TAIPEIPASS_URL" >>
+              Taipei-City-Dashboard-FE/.env
+
+              echo "VITE_TAIPEIPASS_CLIENT_ID=$$TAIPEIPASS_CLIENT_ID" >>
+              Taipei-City-Dashboard-FE/.env
+
+              echo "VITE_TAIPEIPASS_SCOPE=$_VITE_TAIPEIPASS_SCOPE" >>
+              Taipei-City-Dashboard-FE/.env
+      entrypoint: bash
+      secretEnv:
+          - MAPBOX_TOKEN
+          - TAIPEIPASS_CLIENT_ID
+    - name: gcr.io/cloud-builders/docker
       args:
-          [
-              "run",
-              "deploy",
-              "dashboard-fe",
-              "--image",
-              "asia-east1-docker.pkg.dev/tuic-bd2456/tuic/dashboard-fe:$COMMIT_SHA",
-              "--port",
-              "80",
-              "--platform",
-              "managed",
-              "--region",
-              "us-central1",
-              "--allow-unauthenticated",
-          ]
+          - build
+          - "--build-arg"
+          - NODE_ENV=$_NODE_ENV
+          - "-t"
+          - "asia-east1-docker.pkg.dev/$PROJECT_ID/tuic/dashboard-fe:$COMMIT_SHA"
+          - .
+      dir: Taipei-City-Dashboard-FE
+    - name: gcr.io/cloud-builders/docker
+      args:
+          - push
+          - "asia-east1-docker.pkg.dev/$PROJECT_ID/tuic/dashboard-fe:$COMMIT_SHA"
+    - name: gcr.io/cloud-builders/gcloud
+      args:
+          - run
+          - deploy
+          - dashboard-fe
+          - "--image"
+          - "asia-east1-docker.pkg.dev/$PROJECT_ID/tuic/dashboard-fe:$COMMIT_SHA"
+          - "--port"
+          - "80"
+          - "--platform"
+          - managed
+          - "--region"
+          - us-central1
+          - "--allow-unauthenticated"
+options:
+    logging: CLOUD_LOGGING_ONLY
+availableSecrets:
+    secretManager:
+        - versionName: projects/$PROJECT_ID/secrets/mapbox_token/versions/latest
+          env: MAPBOX_TOKEN
+        - versionName: projects/$PROJECT_ID/secrets/taipeipass_client_id/versions/latest
+          env: TAIPEIPASS_CLIENT_ID
