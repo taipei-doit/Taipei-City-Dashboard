@@ -1,0 +1,37 @@
+{
+    "dag_infos": {  
+        "dag_id": "D060201",
+        "start_date": "2024-06-25",
+        "schedule_interval": "0 20 19 * *",
+        "catchup": false,
+        "tags": ["fire_to_hospital", "消防局", "緊急救護統計"],
+        "description": "Monthly data of Taipei City Fire Department's emergency medical service statistics.", 
+        "default_args": {
+            "owner": "airflow",
+            "email": ["DEFAULT_EMAIL_LIST"],
+            "email_on_retry": false,
+            "email_on_failure": true,
+            "retries": 1, 
+            "retry_delay" : 60
+        },
+        "ready_data_db": "postgres_default",  
+        "ready_data_default_table": "fire_to_hospital",
+        "ready_data_history_table": "",
+        "raw_data_db": "postgres_default",
+        "raw_data_table": "",
+        "load_behavior": "append"
+    },
+    "data_infos":{
+        "name_cn": "緊急救護服務統計次數",
+        "airflow_update_freq": "04:00+8 20th every month",
+        "source": "https://data.taipei/dataset/detail?id=a4484aa2-533c-45a1-88fd-de0c6276bcfe",
+        "source_type": "data.taipei api",
+        "source_dept": "消防局",
+        "gis_format": null,
+        "output_coordinate": "EPSG:4326",
+        "is_geometry": 0,
+        "dataset_description": "本局各月各類救護勤務統計",
+        "etl_description": "target url, fill data columns, standardize time",
+        "sensitivity": "public"
+    }
+}

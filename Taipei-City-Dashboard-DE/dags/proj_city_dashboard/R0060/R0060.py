@@ -58,7 +58,7 @@ def _R0060(**kwargs):
     dag_id = dag_infos.get("dag_id")
     load_behavior = dag_infos.get("load_behavior")
     default_table = dag_infos.get("ready_data_default_table")
-    URL = "https://data.taipei/api/frontstage/tpeod/dataset/resource.download?rid=07b57a4e-5ac8-471b-a5cd-4cb8bb4e5c59"
+    URL = "https://data.taipei/api/frontstage/tpeod/dataset/resource.download?rid=567ff5c7-0fdb-4e52-9558-8b591f5ee425"
     filename = f"{dag_id}.xml"
     PAGE_ID = "c876ff02-af2e-4eb8-bd33-d444f5052733"
     GEOMETRY_TYPE = "Point"

@@ -1,0 +1,37 @@
+{
+    "dag_infos": {
+        "dag_id": "R0061",
+        "start_date": "2021-11-17",
+        "schedule_interval": "0 20 20 * *",
+        "catchup": false,
+        "tags": ["urbn_social_house", "都發局", "社會住宅興建進度資料"],
+        "description": "Social housing construction progress.",
+        "default_args": {
+            "owner": "airflow",
+            "email": ["DEFAULT_EMAIL_LIST"],
+            "email_on_retry": false,
+            "email_on_failure": true,
+            "retries": 1,
+            "retry_delay" : 60
+        },
+        "ready_data_db": "postgres_default",  
+        "ready_data_default_table": "urbn_social_house",
+        "ready_data_history_table": "urbn_social_house_history",
+        "raw_data_db": "postgres_default",
+        "raw_data_table": "",
+        "load_behavior": "current+history"
+    },
+    "data_infos":{
+        "name_cn": "臺北市社會住宅興建進度資料",
+        "airflow_update_freq": "04:00(+8) 20th every month",
+        "source": "data.taipei API",
+        "source_type": "json",
+        "source_dept": "都發局",
+        "gis_format": "Point",
+        "output_coordinate": "EPSG:4326",
+        "is_geometry": 1,
+        "dataset_description": "臺北市社會住宅興建進度資料",
+        "etl_description": "standardize geometry",
+        "sensitivity": "public"
+    }
+}

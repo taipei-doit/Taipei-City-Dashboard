@@ -2,9 +2,11 @@ from airflow import DAG
 from operators.common_pipeline import CommonDag
 
 
-def _D060102_1(**kwargs):
+def _R0061(**kwargs):
+    import pandas as pd
+    import requests
     from sqlalchemy import create_engine
-    from utils.extract_stage import get_data_taipei_api
+    from utils.get_time import get_tpe_now_time_str
     from utils.load_stage import (
         save_geodataframe_to_postgresql,
         update_lasttime_in_data_to_dataset_info,
@@ -13,57 +15,50 @@ def _D060102_1(**kwargs):
     from utils.transform_time import convert_str_to_time_format
 
     # Config
+    proxies = kwargs.get("proxies")
     ready_data_db_uri = kwargs.get("ready_data_db_uri")
+    data_path = kwargs.get("data_path")
     dag_infos = kwargs.get("dag_infos")
     dag_id = dag_infos.get("dag_id")
     load_behavior = dag_infos.get("load_behavior")
     default_table = dag_infos.get("ready_data_default_table")
     history_table = dag_infos.get("ready_data_history_table")
-    RID = "438c61ad-24f6-4e54-a1cc-e2cfe0e7051e"
-    FROM_CRS = 4326
+    URL = "https://hms.udd.gov.taipei/api/BigData/project"
     GEOMETRY_TYPE = "Point"
+    FROM_CRS = 4326
 
     # Extract
-    raw_data = get_data_taipei_api(RID, output_format="dataframe")
+    res = requests.get(URL, timeout=30)
+    res.raise_for_status()
+    res_json = res.json()
+    raw_data = pd.DataFrame(res_json)
+    raw_data["data_time"] = get_tpe_now_time_str(is_with_tz=True)
 
     # Transform
     data = raw_data.copy()
     # rename
     data.columns = data.columns.str.lower()
-    data = data.rename(
-        columns={
-            "場所名稱": "name",
-            "場所地址": "addr",
-            "區域代碼": "vil_code",
-            "場所分類": "main_type",
-            "場所類型": "sub_type",
-            "aed放置地點": "aed_place",
-            "經度": "lng",
-            "緯度": "lat",
-            "data_time": "data_time",
-        }
-    )
+    data = data.rename(columns={"distict": "town", "address": "addr"})
     # define column type
-    data["vil_code"] = data["vil_code"].astype(float).astype(int).astype(str)
-    
-    # add column
-    data["city"] = "台北市"
+    data["households"] = pd.to_numeric(data["households"], errors="coerce")
+    data["persons"] = pd.to_numeric(data["persons"], errors="coerce")
     # standardize time
     data["data_time"] = convert_str_to_time_format(data["data_time"])
     # standardize geometry
     gdata = add_point_wkbgeometry_column_to_df(
-        data, x=data["lng"], y=data["lat"], from_crs=FROM_CRS
+        data, data["lng"], data["lat"], from_crs=FROM_CRS
     )
-    # select column
+    # select columns
     ready_data = gdata[
         [
             "data_time",
-            "city",
             "name",
+            "town",
             "addr",
-            "main_type",
-            "sub_type",
-            "aed_place",
+            "households",
+            "persons",
+            "floors",
+            "progress",
             "lng",
             "lat",
             "wkb_geometry",
@@ -71,7 +66,6 @@ def _D060102_1(**kwargs):
     ]
 
     # Load
-    # Load data to DB
     engine = create_engine(ready_data_db_uri)
     save_geodataframe_to_postgresql(
         engine,
@@ -81,13 +75,8 @@ def _D060102_1(**kwargs):
         history_table=history_table,
         geometry_type=GEOMETRY_TYPE,
     )
-    # Update lasttime_in_data
-    lasttime_in_data = ready_data["data_time"].max()
-    engine = create_engine(ready_data_db_uri)
-    update_lasttime_in_data_to_dataset_info(
-        engine, airflow_dag_id=dag_id, lasttime_in_data=lasttime_in_data
-    )
+    update_lasttime_in_data_to_dataset_info(engine, dag_id)
 
 
-dag = CommonDag(proj_folder="proj_city_dashboard", dag_folder="D060102_1")
-dag.create_dag(etl_func=_D060102_1)
+dag = CommonDag(proj_folder="proj_city_dashboard", dag_folder="R0061")
+dag.create_dag(etl_func=_R0061)

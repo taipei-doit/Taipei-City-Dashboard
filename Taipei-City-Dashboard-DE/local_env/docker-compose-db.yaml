@@ -1,6 +1,5 @@
 version: "3.7"
 services:
-      
   postgres-data:
     image: postgis/postgis:16-3.4
     container_name: dashboard-data
@@ -9,10 +8,10 @@ services:
       POSTGRES_DB: ${POSTGRES_DB:-dashboard}
       POSTGRES_USER: ${POSTGRES_USER:-airflow}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-airflow}
-    # volumes:
-    #   - ./volume_data/postgres:/var/lib/postgresql/data
     volumes:
-      - postgres-db-volume_data:/var/lib/postgresql/data
+      - ./volume_data/postgres:/var/lib/postgresql/data
+    # volumes:
+    #   - postgres-db-volume_data:/var/lib/postgresql/data
 
   pgadmin:
     image: dpage/pgadmin4:latest
@@ -26,8 +25,8 @@ services:
     volumes:
       - ./volume_data/pgadmin-data:/var/lib/pgadmin
 
-volumes:
-  postgres-db-volume_data:
+# volumes:
+#   postgres-db-volume_data:
 
 networks:
   default:

@@ -21,9 +21,10 @@ def _R0046(**kwargs):
     history_table = dag_infos.get("ready_data_history_table")
     URL = "https://tcgmetro.blob.core.windows.net/stationnames/stations.json"
     file_name = f"{dag_id}.json"
+    encoding = "utf-8"
 
     # Extract
-    raw_data = get_json_file(file_name, URL, is_proxy=True, output_format="dataframe")
+    raw_data = get_json_file(URL, dag_id, encoding, output_format="dataframe")
 
     # Transform
     data = raw_data.copy()

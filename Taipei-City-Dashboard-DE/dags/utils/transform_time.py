@@ -266,7 +266,7 @@ def convert_str_to_time_format(
         time_column = time_column.dt.tz_convert(to_timezone)
     else:
         try:
-            time_column = pd.to_datetime(time_column, utc=is_from_utc, erroe=errors)
+            time_column = pd.to_datetime(time_column, utc=is_from_utc, errors=errors)
             time_column = time_column.dt.tz_localize(from_timezone)
         except TypeError:
             # if the input is not a string, it will raise a TypeError

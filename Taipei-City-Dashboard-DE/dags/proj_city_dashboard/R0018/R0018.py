@@ -33,7 +33,7 @@ def _R0018(**kwargs):
     history_table = dag_infos.get("ready_data_history_table")
     filename = f"{dag_id}.zip"
     unzip_path = f"{data_path}/{dag_id}"
-    URL = r"https://data.moa.gov.tw/OpenData/GetOpenDataFile.aspx?id=I88&FileType=SHP&RID=27237"
+    URL = r"https://data.moa.gov.tw/OpenData/GetOpenDataFile.aspx?id=I88&FileType=SHP&RID=32743"
     FILE_ENCODING = "UTF-8"
     FROM_CRS = 3826
     GEOMETRY_TYPE = "MultiLineString"
