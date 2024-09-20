@@ -4,7 +4,7 @@
         "start_date": "2021-11-17",
         "schedule_interval": "0 20 20 * *",
         "catchup": false,
-        "tags": ["urbn_social_house", "都發局", "社會住宅興建進度資料"],
+        "tags": ["building_social_house", "都發局", "社會住宅興建進度資料"],
         "description": "Social housing construction progress.",
         "default_args": {
             "owner": "airflow",
@@ -15,8 +15,8 @@
             "retry_delay" : 60
         },
         "ready_data_db": "postgres_default",  
-        "ready_data_default_table": "urbn_social_house",
-        "ready_data_history_table": "urbn_social_house_history",
+        "ready_data_default_table": "building_social_house",
+        "ready_data_history_table": "building_social_house_history",
         "raw_data_db": "postgres_default",
         "raw_data_table": "",
         "load_behavior": "current+history"

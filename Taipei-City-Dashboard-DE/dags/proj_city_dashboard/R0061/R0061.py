@@ -38,7 +38,6 @@ def _R0061(**kwargs):
     data = raw_data.copy()
     # rename
     data.columns = data.columns.str.lower()
-    data = data.rename(columns={"distict": "town", "address": "addr"})
     # define column type
     data["households"] = pd.to_numeric(data["households"], errors="coerce")
     data["persons"] = pd.to_numeric(data["persons"], errors="coerce")
@@ -51,16 +50,13 @@ def _R0061(**kwargs):
     # select columns
     ready_data = gdata[
         [
-            "data_time",
             "name",
-            "town",
-            "addr",
+            "distict",
+            "address",
             "households",
             "persons",
             "floors",
             "progress",
-            "lng",
-            "lat",
             "wkb_geometry",
         ]
     ]
