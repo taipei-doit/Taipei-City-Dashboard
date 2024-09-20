@@ -22,9 +22,7 @@ def _R0036(**kwargs):
     default_table = dag_infos.get("ready_data_default_table")
     history_table = dag_infos.get("ready_data_history_table")
     proxies = kwargs.get("proxies")
-    login_id = Variable.get("HEO_ID")
-    data_key = Variable.get("HEO_APIKEY")
-    url = f"https://wic.heo.taipei/OpenData/API/Pump/Get?stationNo=&loginId={login_id}&dataKey={data_key}"
+    url = "https://wic.heo.taipei/OpenData/API/Pump/Get?stationNo=&loginId=pumping&dataKey=3D9A9570"
     GEOMETRY_TYPE = "Point"
     FROM_CRS = 4326
 
