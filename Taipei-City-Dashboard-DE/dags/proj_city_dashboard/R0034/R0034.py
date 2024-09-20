@@ -98,7 +98,7 @@ def _R0034(**kwargs):
         history_table=history_table,
         geometry_type=GEOMETRY_TYPE,
     )
-    lasttime_in_data = data["rec_time"].max()
+    lasttime_in_data = data["data_time"].max()
     update_lasttime_in_data_to_dataset_info(engine, dag_id, lasttime_in_data)
 
 
