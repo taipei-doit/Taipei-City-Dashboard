@@ -1,0 +1,38 @@
+{   
+    "job_name": "R0035_hourly_calculate",
+    "db_correspond":["patrol_rain_rainfall_history","app_calcu_hourly_patrol_rainfall",""],
+    "input_source": "PSQL",
+    "input_conn_id":"postgres_default",
+    "output_conn_id":"postgres_default",
+    "output_mongo_conn_id":"mongo_default",
+    "default_dag_args":{    
+        "owner":"airflow",
+        "start_date": "2021-08-24",
+        "schedule_interval": "@hourly",
+        "email": ["DEFAULT_EMAIL_LIST"],
+        "email_on_failure": true,
+        "retries": 1, 
+        "retry_delay" : 60,
+        "catchup":false,
+        "tags":["patrol_rain_rainfall_history","calculate","app_calcu_hourly_patrol_rainfall"]
+    },
+    "dataset_info":{
+        "id":"R0035_hourly_calculate",
+        "psql_table_name":"app_calcu_hourly_patrol_rainfall",
+        "name_cn":"台北市累積雨量",
+        "mongo_collection":"",
+        "airflow_dag_id":"R0035_hourly_calculate",
+        "maintain_type":"append",
+        "airflow_update_freq":"hourly",
+        "source":"patrol_rain_rainfall_history",
+        "source_type":"PSQL",
+        "source_department":"水利處資料交換平臺",
+        "gis_format":null,
+        "coordinate":null,
+        "is_geometry":0,
+        "dataset_description":"台北市累積雨量",
+        "etl_description":"",
+        "sensitivity":"private"
+    }
+
+}

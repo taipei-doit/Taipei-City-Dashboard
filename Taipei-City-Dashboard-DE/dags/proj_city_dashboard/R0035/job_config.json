@@ -1,0 +1,38 @@
+{   
+    "job_name": "R0035",
+    "db_correspond":["Instant_rainfall","patrol_rain_rainfall","patrol_rain_rainfall_history"],
+    "input_source": "is_custom_api",
+    "input_conn_id":"mongo_default",
+    "output_conn_id":"postgres_default",
+    "output_mongo_conn_id":"mongo_default",
+    "default_dag_args":{    
+        "owner":"airflow",
+        "start_date": "2021-08-24",
+        "schedule_interval": "*/5 * * * *",
+        "email": ["DEFAULT_EMAIL_LIST"],
+        "email_on_failure": true,
+        "retries": 1, 
+        "retry_delay" : 60,
+        "catchup":false,
+        "tags":["水利處資料交換平臺","patrol_rain_rainfall"]
+    },
+    "dataset_info":{
+        "id":"R0035",
+        "psql_table_name":"patrol_rain_rainfall",
+        "name_cn":"即時雨量",
+        "mongo_collection":"",
+        "airflow_dag_id":"R0035",
+        "maintain_type":"truncate+history",
+        "airflow_update_freq":"5 minutes",
+        "source":"https://wic.heo.taipei//OpenData/API/Rain/Get?...",
+        "source_type":"API",
+        "source_department":"水利處資料交換平臺",
+        "gis_format":null,
+        "coordinate":null,
+        "is_geometry":0,
+        "dataset_description":"即時雨量",
+        "etl_description":"1.read rawdata 2.change columns name 3.save to postgresq",
+        "sensitivity":"private"
+    }
+
+}
