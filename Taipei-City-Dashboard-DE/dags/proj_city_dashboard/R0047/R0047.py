@@ -97,7 +97,7 @@ def _R0047(**kwargs):
     drop_duplicated_after_saving(
         engine,
         psql_table=history_table,
-        criterion="AND a.stationid = b.stationid AND a.data_time = b.data_time",
+        criterion="AND a.station_id = b.station_id AND a.data_time = b.data_time",
         comparing_col="ogc_fid",
     )
     update_lasttime_in_data_to_dataset_info(
