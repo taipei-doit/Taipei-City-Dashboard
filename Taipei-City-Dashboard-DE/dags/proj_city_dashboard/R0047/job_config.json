@@ -16,7 +16,7 @@
         },
         "ready_data_db": "postgres_default",  
         "ready_data_default_table": "mrtp_metro_capacity_realtime",
-        "ready_data_history_table": "",
+        "ready_data_history_table": "mrtp_metro_capacity_realtime_history",
         "raw_data_db": "postgres_default",
         "raw_data_table": "",
         "load_behavior": "current+history"
