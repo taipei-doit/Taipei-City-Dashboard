@@ -79,7 +79,7 @@ def _R0087(**kwargs):
     for col in num_cols:
         data[col] = pd.to_numeric(data[col], errors="coerce")
     # time
-    data["data_time"] = convert_str_to_time_format(data["data_time"])
+    data["data_time"] = convert_str_to_time_format(data["updatetime"])
     # select columns
     ready_data = data[
         [
