@@ -40,8 +40,8 @@ def _R0051_4(**kwargs):
         data, data["longitude"], data["latitude"], from_crs=FROM_CRS
     )
 
-    ready_data = gdata[["sno", "sna", "geometry", "data_time"]]
-    ready_data = ready_data.rename(columns={"geometry": "geom"})
+    ready_data = gdata[["sno", "sna", "data_time", "wkb_geometry"]]
+    ready_data = ready_data.rename(columns={"wkb_geometry": "geom"})
 
     # Load
     engine = create_engine(ready_data_db_uri)
