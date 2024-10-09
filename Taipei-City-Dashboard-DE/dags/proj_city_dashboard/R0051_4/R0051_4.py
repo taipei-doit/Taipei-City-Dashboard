@@ -46,7 +46,7 @@ def _R0051_4(**kwargs):
             x=data["longitude"], y=data["latitude"], crs="EPSG:4326"
         ),
     )
-    gdata["geom"] = gdata["geom"].apply(
+    gdata["geom"] = gdata["geometry"].apply(
         lambda x: WKTElement(x.wkt, srid=4326) if x is not None else None
     )
 
