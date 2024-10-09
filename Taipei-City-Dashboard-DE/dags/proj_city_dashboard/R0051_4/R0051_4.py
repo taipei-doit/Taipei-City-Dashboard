@@ -41,7 +41,10 @@ def _R0051_4(**kwargs):
     data["data_time"] = convert_str_to_time_format(data["data_time"])
 
     gdata = gpd.GeoDataFrame(
-        data, geometry=gpd.points_from_xy(x=data["lng"], y=data["lat"], crs="EPSG:4326")
+        data,
+        geometry=gpd.points_from_xy(
+            x=data["longitude"], y=data["latitude"], crs="EPSG:4326"
+        ),
     )
     gdata["geom"] = gdata["geom"].apply(
         lambda x: WKTElement(x.wkt, srid=4326) if x is not None else None
