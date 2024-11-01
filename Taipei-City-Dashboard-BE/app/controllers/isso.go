@@ -97,6 +97,9 @@ func ExecIssoAuth(c *gin.Context) {
 		urlGetToken := global.Isso.TaipeipassURL + "/oauth/token"
 		body := "grant_type=authorization_code&client_id=" + global.Isso.ClientID + "&client_secret=" + global.Isso.ClientSecret + "&code=" + code
 		// header
+		logs.FInfo("code: %s", code)
+		logs.FInfo("client_id: %s", global.Isso.ClientID)
+		logs.FInfo("client_secret: %s", global.Isso.ClientSecret)
 		headers := make(http.Header)
 		headers.Add("Content-Type", "application/x-www-form-urlencoded")
 		// get User Token
