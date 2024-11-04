@@ -266,20 +266,22 @@ func HTTPClientRequest(method, url, payload string, headers http.Header) []byte 
 
 	// 設定自定義頭部
 	req.Header = headers
-
 	res, err := client.Do(req)
-	if err != nil {
-		fmt.Println(err)
-		return nil
-	}
-	defer res.Body.Close()
-
-	body, err := io.ReadAll(res.Body)
-	if err != nil {
-		fmt.Println(err)
-		return nil
-	}
-	logs.FInfo("request_url: %s response_code: %s response_body: %s ", url, res.StatusCode, body)
+	logs.FInfo("request_url: %s response_code: %s ", url, res.StatusCode)
+    if err != nil {
+        logs.FInfo("request_url: %s response_code: %s err1: %s", url, res.StatusCode, err)
+        fmt.Println(err)
+        return nil
+    }
+    defer res.Body.Close()
+ 
+    body, err := io.ReadAll(res.Body)
+    if err != nil {
+        logs.FInfo("request_url: %s response_code: %s err2: %s", url, res.StatusCode, err)
+        fmt.Println(err)
+        return nil
+    }
+    logs.FInfo("request_url: %s response_code: %s response_body: %s ", url, res.StatusCode, body)
 
 	return body
 }
