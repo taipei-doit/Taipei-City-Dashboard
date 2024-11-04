@@ -11,13 +11,11 @@ Developed By Taipei Urban Intelligence Center 2023-2024
 package middleware
 
 import (
-	"net/http"
-	"crypto/sha256"
-	"fmt"
-	"time"
-	"errors"
 	"TaipeiCityDashboardBE/app/models"
 	"TaipeiCityDashboardBE/app/util"
+	"errors"
+	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )

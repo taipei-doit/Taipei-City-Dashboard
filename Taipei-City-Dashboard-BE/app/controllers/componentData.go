@@ -38,9 +38,9 @@ func GetComponentChartData(c *gin.Context) {
 
 	timeFrom, timeTo := util.GetTime(c)
 	if err != nil {
-		 c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": err.Error()})
-		 return
-		}
+		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": err.Error()})
+		return
+	}
 
 	// 3. Get and parse the chart data based on chart data type
 	if queryType == "two_d" {
