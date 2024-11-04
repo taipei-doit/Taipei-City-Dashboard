@@ -37,6 +37,10 @@ func GetComponentChartData(c *gin.Context) {
 	}
 
 	timeFrom, timeTo := util.GetTime(c)
+	if err != nil {
+		 c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": err.Error()})
+		 return
+		}
 
 	// 3. Get and parse the chart data based on chart data type
 	if queryType == "two_d" {
@@ -90,8 +94,11 @@ func GetComponentHistoryData(c *gin.Context) {
 		return
 	}
 
-	timeFrom, timeTo := util.GetTime(c)
-
+	timefrom, timeto, err := util.GetTime(c)
+		if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": err.Error()})
+			return
+	}
 	// 2. Get the history data query from the database
 	queryHistory, err := models.GetComponentHistoryDataQuery(id, timeFrom, timeTo)
 	if err != nil {
