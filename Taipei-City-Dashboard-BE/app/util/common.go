@@ -12,6 +12,7 @@ package util
 
 import (
 	"crypto/sha256"
+	"errors"
 	"fmt"
 	"time"
 
@@ -45,19 +46,32 @@ func MergeAndRemoveDuplicates(slices ...[]int) []int {
 	return result
 }
 
+
 // GetTime is a utility function to get the time from the header and set default values.
-func GetTime(c *gin.Context) (string, string) {
+func GetTime(c *gin.Context) (string, string, error) {
 	timefrom := c.Query("timefrom")
 	timeto := c.Query("timeto")
 
+	layout := "2006-01-02T15:04:05+08:00" // 定義時間格式
+
 	// timeFrom defaults to 1990-01-01 (essentially, all data)
 	if timefrom == "" {
-		timefrom = time.Date(1990, 1, 1, 0, 0, 0, 0, time.FixedZone("UTC+8", 8*60*60)).Format("2006-01-02T15:04:05+08:00")
+		timefrom = time.Date(1990, 1, 1, 0, 0, 0, 0, time.FixedZone("UTC+8", 8*60*60)).Format(layout)
+	} else {
+		// 檢查 timefrom 格式
+		if _, err := time.Parse(layout, timefrom); err != nil {
+			return "", "", errors.New("timefrom 格式無效")
+		}
 	}
 	// timeTo defaults to current time
 	if timeto == "" {
-		timeto = time.Now().Format("2006-01-02T15:04:05+08:00")
+		timeto = time.Now().Format(layout)
+	} else {
+		// 檢查 timeto 格式
+		if _, err := time.Parse(layout, timeto); err != nil {
+			return "", "", errors.New("timeto 格式無效")
+		}
 	}
 
-	return timefrom, timeto
+	return timefrom, timeto, nil
 }

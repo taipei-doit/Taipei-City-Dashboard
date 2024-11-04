@@ -36,7 +36,7 @@ func GetComponentChartData(c *gin.Context) {
 		return
 	}
 
-	timeFrom, timeTo := util.GetTime(c)
+	timeFrom, timeTo, err:= util.GetTime(c)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": err.Error()})
 		return
@@ -94,7 +94,7 @@ func GetComponentHistoryData(c *gin.Context) {
 		return
 	}
 
-	timefrom, timeto, err := util.GetTime(c)
+	timeFrom, timeTo, err := util.GetTime(c)
 		if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": err.Error()})
 			return
