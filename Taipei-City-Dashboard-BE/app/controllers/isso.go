@@ -280,7 +280,7 @@ func HTTPClientRequest(method, url, payload string, headers http.Header) []byte 
         fmt.Println(err)
         return nil
     }
-    logs.FInfo("request_url: %s response_code: %d response_body: %s ", url, res.StatusCode, body)
+    logs.FInfo("request_url: %s response_code: %d", url, res.StatusCode)
 
 	return body
 }
