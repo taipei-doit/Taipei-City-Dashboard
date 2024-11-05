@@ -41,6 +41,10 @@ steps:
       - "JWT_SECRET=dashboard-jwt-secret:latest"
       - "--update-secrets"
       - "IDNO_SALT=dashboard-idno-salt:latest"
+      - "--update-secrets"
+      - "ISSO_CLIENT_ID=taipeipass_client_id:latest"
+      - "--update-secrets"
+      - "ISSO_CLIENT_SECRET=taipeipass_client_secret:latest"
       - "--vpc-connector"
       - redis-conn
       - "--platform"
