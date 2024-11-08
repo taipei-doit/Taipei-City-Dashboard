@@ -718,6 +718,13 @@ export const useMapStore = defineStore("map", {
 		/* Popup Related Functions */
 		// 1. Adds a popup when the user clicks on a item. The event will be passed in.
 		addPopup(event) {
+			const formatValue = (value, key) => {
+				if (key === 'occupied_rate') {
+					return value === -99 ? '-' : value;
+				}
+				return value;
+			};
+
 			// Gets the info that is contained in the coordinates that the user clicked on (only visible layers)
 			const clickFeatureDatas = this.map.queryRenderedFeatures(
 				event.point,
@@ -740,9 +747,17 @@ export const useMapStore = defineStore("map", {
 				if (mapConfigs.length === 3) break;
 				if (previousParsedLayer === clickFeatureDatas[i].layer.id)
 					continue;
+
+				// format properties
+				const feature = {...clickFeatureDatas[i]};
+				feature.properties = {...feature.properties};
+				Object.keys(feature.properties).forEach(key => {
+					feature.properties[key] = formatValue(feature.properties[key], key);
+				});
+
 				previousParsedLayer = clickFeatureDatas[i].layer.id;
 				mapConfigs.push(this.mapConfigs[clickFeatureDatas[i].layer.id]);
-				parsedPopupContent.push(clickFeatureDatas[i]);
+				parsedPopupContent.push(feature);
 			}
 			// Create a new mapbox popup
 			this.popup = new mapboxGl.Popup()
