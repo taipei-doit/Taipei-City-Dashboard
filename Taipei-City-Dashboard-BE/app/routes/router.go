@@ -75,7 +75,7 @@ func configureComponentRoutes() {
 	componentRoutes := RouterGroup.Group("/component")
 
 	componentRoutes.Use(middleware.LimitAPIRequests(global.ComponentLimitAPIRequestsTimes, global.LimitRequestsDuration))
-	componentRoutes.Use(middleware.LimitTotalRequests(global.ComponentLimitTotalRequestsTimes, global.TokenExpirationDuration))
+	componentRoutes.Use(middleware.LimitTotalRequests(global.ComponentLimitTotalRequestsTimes, global.LimitRequestsDuration))
 	{
 		componentRoutes.GET("/", controllers.GetAllComponents)
 		componentRoutes.

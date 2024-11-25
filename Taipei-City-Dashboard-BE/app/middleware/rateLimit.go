@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"TaipeiCityDashboardBE/app/cache"
+	"TaipeiCityDashboardBE/global"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis"
@@ -45,7 +46,7 @@ func LimitAPIRequests(limit int, timeframe time.Duration) gin.HandlerFunc {
 
 		// Add the current request to the list of requests
 		cache.Redis.ZAddNX(redisKey, redis.Z{Score: float64(currentTime), Member: currentTime})
-		cache.Redis.Expire(redisKey, timeframe)
+		cache.Redis.Expire(redisKey, global.LimitRequestsDuration)
 	}
 }
 
@@ -85,6 +86,6 @@ func LimitTotalRequests(limit int, timeframe time.Duration) gin.HandlerFunc {
 
 		// Add the current request to the list of requests
 		cache.Redis.ZAddNX(redisKey, redis.Z{Score: float64(currentTime), Member: currentTime})
-		cache.Redis.Expire(redisKey, timeframe)
+		cache.Redis.Expire(redisKey, global.TokenExpirationDuration)
 	}
 }
