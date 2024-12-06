@@ -95,16 +95,17 @@ def _transfer(**kwargs):
 
     # Load
     engine = create_engine(ready_data_db_uri)
+
     save_dataframe_to_postgresql(
         engine,
-        gdata=ready_data,
+        data=ready_data,
         load_behavior=load_behavior,
         default_table=default_table,
         history_table=history_table,
         # geometry_type=GEOMETRY_TYPE,
     )
-    lasttime_in_data = data["data_time"].max()
-    update_lasttime_in_data_to_dataset_info(engine, dag_id, lasttime_in_data)
+    # lasttime_in_data = data["data_time"].max()
+    # update_lasttime_in_data_to_dataset_info(engine, dag_id, lasttime_in_data)
 
 
 dag = CommonDag(proj_folder="proj_city_dashboard", dag_folder= dag_id)
