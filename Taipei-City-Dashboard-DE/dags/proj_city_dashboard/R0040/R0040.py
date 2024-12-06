@@ -76,7 +76,7 @@ def _R0040(**kwargs):
     )
     # geometry
     gdata = convert_geometry_to_wkbgeometry(gdata, from_crs=FROM_CRS)
-    ready_data = gdata.drop(columns=["geometry"])
+    ready_data = gdata.drop(columns=["geometry","positions_type"])
 
     # Load
     engine = create_engine(ready_data_db_uri)
