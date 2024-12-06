@@ -91,19 +91,7 @@ def _transfer(**kwargs):
 
 
     # select columns
-    ready_data = gdata[
-        [
-            "data_time",
-            "town",
-            "address",
-            "area",
-            "person_capacity",
-            "is_accessible",
-            "lng",
-            "lat",
-            "wkb_geometry",
-        ]
-    ]
+    ready_data = data
 
     # Load
     engine = create_engine(ready_data_db_uri)
