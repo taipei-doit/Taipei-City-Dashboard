@@ -1,0 +1,37 @@
+{
+    "dag_infos": {
+        "dag_id": "env_srv_energy_subsidy",
+        "start_date": "2024-05-30",
+        "schedule_interval": "0 3 24 6,12 *",
+        "catchup": false,
+        "tags": ["env_srv_energy_subsidy", "產業局", "臺北市服務業汰換節能設備補助相關資訊"],
+        "description": "Taipei city's air raid shelter list.",
+        "default_args": {
+            "owner": "airflow",
+            "email": ["DEFAULT_EMAIL_LIST"],
+            "email_on_retry": false,
+            "email_on_failure": true,
+            "retries": 1,
+            "retry_delay" : 60
+        },
+        "ready_data_db": "postgres_default",  
+        "ready_data_default_table": "env_srv_energy_subsidy",
+        "ready_data_history_table": "env_srv_energy_subsidy_history",
+        "raw_data_db": "postgres_default",
+        "raw_data_table": "",
+        "load_behavior": "current+history"
+    },
+    "data_infos":{
+        "name_cn": "臺北市服務業汰換節能設備補助相關資訊",
+        "airflow_update_freq": "03:00 24th Jun and Dec every year",
+        "source": "https://data.taipei/dataset/detail?id=01370301-b843-4b60-ae8c-6a8789880bfe",
+        "source_type": "data.taipei api",
+        "source_dept": "產業局",
+        "gis_format": "Point",
+        "output_coordinate": "EPSG:4326",
+        "is_geometry": 0,
+        "dataset_description": "臺北市服務業汰換節能設備補助相關資訊",
+        "etl_description": "standardize time, geocoding, standardize geometry",
+        "sensitivity": "public"
+    }
+}
