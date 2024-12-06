@@ -5,7 +5,8 @@ from sqlalchemy import create_engine
 from utils.extract_stage import get_data_taipei_api
 from utils.load_stage import (
     save_geodataframe_to_postgresql,
-    update_lasttime_in_data_to_dataset_info,
+    update_lasttime_in_data_to_dataset_info, 
+    save_dataframe_to_postgresql
 )
 from datetime import datetime
 from utils.transform_address import (
