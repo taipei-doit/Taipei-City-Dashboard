@@ -3,18 +3,18 @@
 <script setup>
 import { storeToRefs } from "pinia";
 import { useDialogStore } from "../../store/dialogStore";
-import { useAuthStore } from "../../store/authStore";
+import { usePersonStore } from "../../store/personStore";
 
 import DialogContainer from "./DialogContainer.vue";
 
 const dialogStore = useDialogStore();
-const authStore = useAuthStore();
+const personStore = usePersonStore();
 
-const { editUser } = storeToRefs(authStore);
+const { editUser } = storeToRefs(personStore);
 
 function handleClose() {
 	dialogStore.hideAllDialogs();
-	authStore.editUser = authStore.user;
+	personStore.editUser = personStore.person;
 }
 
 function parseTime(time) {
@@ -25,12 +25,12 @@ function parseTime(time) {
 }
 
 async function handleSubmit() {
-	if (editUser.value.name === authStore.user.name || !editUser.value.name) {
+	if (editUser.value.name === personStore.person.name || !editUser.value.name) {
 		dialogStore.showNotification("info", "用戶名稱不變");
 		dialogStore.hideAllDialogs();
 		return;
 	}
-	await authStore.updateUserInfo();
+	await personStore.updateUserInfo();
 	dialogStore.showNotification("success", "用戶資訊已更新");
 	dialogStore.hideAllDialogs();
 }

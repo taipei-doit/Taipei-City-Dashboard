@@ -2,7 +2,7 @@
 
 <script setup>
 import { onMounted, ref, computed } from "vue";
-import { useAuthStore } from "../../store/authStore";
+import { usePersonStore } from "../../store/personStore.js";
 import { useContentStore } from "../../store/contentStore";
 import { useDialogStore } from "../../store/dialogStore";
 import { useMapStore } from "../../store/mapStore";
@@ -13,7 +13,7 @@ import IncidentReport from "../dialogs/IncidentReport.vue";
 import FindClosestPoint from "../dialogs/FindClosestPoint.vue";
 import { savedLocations } from "../../assets/configs/mapbox/savedLocations.js";
 
-const authStore = useAuthStore();
+const personStore = usePersonStore();
 const mapStore = useMapStore();
 const dialogStore = useDialogStore();
 const contentStore = useContentStore();
@@ -104,7 +104,7 @@ onMounted(() => {
 			</div>
 
 			<button
-				v-if="authStore.user.is_admin"
+				v-if="personStore.person.is_admin"
 				class="mapcontainer-layers-incident"
 				title="通報災害"
 				@click="dialogStore.showDialog('incidentReport')"
@@ -129,7 +129,7 @@ onMounted(() => {
 			>
 				返回預設
 			</button>
-			<template v-if="!authStore.user?.user_id">
+			<template v-if="!personStore.person?.person_id">
 				<div
 					v-for="(item, index) in savedLocations"
 					:key="`${item[4]}-${index}`"
@@ -147,7 +147,7 @@ onMounted(() => {
 					{{ item["name"] }}
 				</button>
 				<div
-					v-if="authStore.user?.user_id"
+					v-if="personStore.person?.person_id"
 					class="mapcontainer-controls-delete"
 					@click="mapStore.removeViewPoint(item)"
 				>
@@ -155,7 +155,7 @@ onMounted(() => {
 				</div>
 			</div>
 			<button
-				v-if="authStore.user?.user_id"
+				v-if="personStore.person?.person_id"
 				@click="dialogStore.showDialog('addViewPoint')"
 			>
 				新增

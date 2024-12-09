@@ -3,7 +3,7 @@
 <script setup>
 import { computed, ref } from "vue";
 import { useDialogStore } from "../../store/dialogStore";
-import { useAuthStore } from "../../store/authStore";
+import { usePersonStore } from "../../store/personStore";
 
 import DialogContainer from "./DialogContainer.vue";
 
@@ -16,7 +16,7 @@ const {
 } = import.meta.env;
 
 const dialogStore = useDialogStore();
-const authStore = useAuthStore();
+const personStore = usePersonStore();
 
 const loginMode = ref("tp");
 const email = ref("");
@@ -39,7 +39,7 @@ function handleTaipeiPassLogin() {
 	window.open(taipeiPassUrl.value, "_self");
 }
 async function handleEmailLogin() {
-	const loggedIn = await authStore.loginByEmail(email.value, password.value);
+	const loggedIn = await personStore.loginByEmail(email.value, password.value);
 	if (loggedIn) {
 		handleClose();
 	}

@@ -13,8 +13,15 @@
 // An array that contains m values, representing the predicted value on each of the target coordinates.
 
 export function interpolation(dataPoints, targetPoints) {
-	const pointCount = dataPoints.length;
 	let answers = [];
+
+	// Early return for invalid inputs
+	if (!Array.isArray(dataPoints) || !Array.isArray(targetPoints)) {
+		return answers;
+	}
+	
+	const pointCount = dataPoints.length;
+
 	for (let k = 0; k < targetPoints.length; k++) {
 		if (dataPoints.includes(targetPoints[k])) {
 			answers.push(dataPoints[dataPoints.indexOf(targetPoints[k])].value);
