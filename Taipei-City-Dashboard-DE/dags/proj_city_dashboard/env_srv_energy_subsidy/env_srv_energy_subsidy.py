@@ -77,6 +77,15 @@ def _transfer(**kwargs):
 
 
     print(data)
+    # 整數轉換
+    data["num_of_approval"] = data["num_of_approval"].apply(lambda x:x.replace(",","")).astype('int')
+    data["acc_num_of_approval"] = data["acc_num_of_approval"].apply(lambda x:x.replace(",","")).astype('int')
+    data["subsidy_amt"] = data["subsidy_amt"].apply(lambda x:x.replace(",","")).astype('int')
+    data["acc_subsidy_amt"] = data["acc_subsidy_amt"].apply(lambda x:x.replace(",","")).astype('int')
+    data["enegry_saving_amt"] = data["enegry_saving_amt"].apply(lambda x:x.replace(",","")).astype('int')
+    data["acc_enegry_saving_amt"] = data["acc_enegry_saving_amt"].apply(lambda x:x.replace(",","")).astype('int')
+
+    
 
     # # standardize time
     # data["etl_dtm"] = convert_str_to_time_format(data["etl_dtm"])
@@ -112,6 +121,9 @@ def _transfer(**kwargs):
              "enegry_saving_amt",
              "acc_enegry_saving_amt"
     ]
+
+
+
 
     # select columns
     ready_data = data[keep_col]
