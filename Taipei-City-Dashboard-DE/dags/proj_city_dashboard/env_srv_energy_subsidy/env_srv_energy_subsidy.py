@@ -68,14 +68,14 @@ def _transfer(**kwargs):
     
 
         
-    raw_data["data_time"] = raw_list['data_year']
+    data["data_time"] = data['data_year']
     # 將民國年份 +1911 並轉換為 datetime 格式
-    raw_data["data_time"] = raw_data["data_time"] + 1911  # 民國轉西元
-    raw_data["data_time"] = pd.to_datetime(raw_data["data_time"], format="%Y")  # 將年份轉為 datetime 格式
+    data["data_time"] = data["data_time"] + 1911  # 民國轉西元
+    data["data_time"] = pd.to_datetime(data["data_time"], format="%Y")  # 將年份轉為 datetime 格式
     # 將 datetime 轉為指定格式，並加上固定的時區偏移 +08:00
-    raw_data["data_time"] = raw_data["data_time"].dt.strftime("%Y-12-31 %H:%M:%S+08")
+    data["data_time"] = data["data_time"].dt.strftime("%Y-12-31 %H:%M:%S+08")
 
-    print(raw_data)
+    print(data)
 
     # # standardize time
     # data["etl_dtm"] = convert_str_to_time_format(data["etl_dtm"])
