@@ -63,6 +63,7 @@ def _transfer(**kwargs):
     # Time
     data['data_time'] = get_data_taipei_file_last_modified_time(page_id)
     data['data_time'] = convert_str_to_time_format(data['data_time'])
+    data = data.drop(columns=['_id','_importdate'])
     # Reshape
     ready_data = data.copy()
 
