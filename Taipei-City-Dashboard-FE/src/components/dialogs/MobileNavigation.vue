@@ -3,13 +3,13 @@
 <script setup>
 import { useDialogStore } from "../../store/dialogStore";
 import { useContentStore } from "../../store/contentStore";
-import { useAuthStore } from "../../store/authStore";
+import { usePersonStore } from "../../store/personStore";
 
 import SideBarTab from "../utilities/miscellaneous/SideBarTab.vue";
 
 const dialogStore = useDialogStore();
 const contentStore = useContentStore();
-const authStore = useAuthStore();
+const personStore = usePersonStore();
 </script>
 
 <template>
@@ -25,7 +25,7 @@ const authStore = useAuthStore();
         />
         <div class="dialogcontainer-dialog">
           <div class="mobilenavigation">
-            <div v-if="authStore.token">
+            <div v-if="personStore.code">
               <h2>我的最愛</h2>
               <SideBarTab
                 icon="favorite"

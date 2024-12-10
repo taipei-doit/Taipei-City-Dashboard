@@ -10,7 +10,7 @@ import { defineStore } from "pinia";
 import http from "../router/axios";
 import router from "../router/index";
 import { useDialogStore } from "./dialogStore";
-import { useAuthStore } from "./authStore";
+import { usePersonStore } from "./personStore";
 import { getComponentDataTimeframe } from "../assets/utilityFunctions/dataTimeframe";
 
 export const useContentStore = defineStore("content", {
@@ -375,7 +375,7 @@ export const useContentStore = defineStore("content", {
 		// 1. Call this function to create a new dashboard. Pass in the new dashboard name and icon.
 		async createDashboard() {
 			const dialogStore = useDialogStore();
-			const authStore = useAuthStore();
+			const personStore = usePersonStore();
 
 			this.editDashboard.components = this.editDashboard.components.map(
 				(item) => item.id
@@ -386,11 +386,11 @@ export const useContentStore = defineStore("content", {
 			await this.setDashboards(true);
 
 			if (
-				authStore.currentPath === "dashboard" ||
-				authStore.currentPath === "mapview"
+				personStore.currentPath === "dashboard" ||
+				personStore.currentPath === "mapview"
 			) {
 				router.push({
-					name: `${authStore.currentPath}`,
+					name: `${personStore.currentPath}`,
 					query: {
 						index: response.data.data.index,
 					},
@@ -442,7 +442,7 @@ export const useContentStore = defineStore("content", {
 		// 5. Call this function to favorite a component.
 		async favoriteComponent(component_id) {
 			const dialogStore = useDialogStore();
-			const authStore = useAuthStore();
+			const personStore = usePersonStore();
 
 			this.favorites.components.push(component_id);
 
@@ -452,8 +452,8 @@ export const useContentStore = defineStore("content", {
 			dialogStore.showNotification("success", `成功加入收藏組件`);
 
 			if (
-				authStore.currentPath === "dashboard" ||
-				authStore.currentPath === "mapview"
+				personStore.currentPath === "dashboard" ||
+				personStore.currentPath === "mapview"
 			) {
 				this.setDashboards();
 			}
@@ -461,7 +461,7 @@ export const useContentStore = defineStore("content", {
 		// 6. Call this function to unfavorite a component.
 		async unfavoriteComponent(component_id) {
 			const dialogStore = useDialogStore();
-			const authStore = useAuthStore();
+			const personStore = usePersonStore();
 
 			this.favorites.components = this.favorites.components.filter(
 				(item) => item !== component_id
@@ -472,8 +472,8 @@ export const useContentStore = defineStore("content", {
 			});
 			dialogStore.showNotification("success", `成功從收藏組件移除`);
 			if (
-				authStore.currentPath === "dashboard" ||
-				authStore.currentPath === "mapview"
+				personStore.currentPath === "dashboard" ||
+				personStore.currentPath === "mapview"
 			) {
 				this.setDashboards();
 			}

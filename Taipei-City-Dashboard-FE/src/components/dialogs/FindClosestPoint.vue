@@ -4,14 +4,14 @@
 import { ref, computed } from "vue";
 import { useMapStore } from "../../store/mapStore";
 import { useDialogStore } from "../../store/dialogStore";
-import { useAuthStore } from "../../store/authStore";
+import { usePersonStore } from "../../store/personStore";
 
 import DialogContainer from "./DialogContainer.vue";
 import CustomCheckBox from "../utilities/forms/CustomCheckBox.vue";
 
 const mapStore = useMapStore();
 const dialogStore = useDialogStore();
-const authStore = useAuthStore();
+const personStore = usePersonStore();
 
 const selectedLocation = ref("0");
 
@@ -60,7 +60,7 @@ function handleFind() {
       <h2>尋找最近點</h2>
       <div class="findclosestpoint-input">
         <label>
-          請選擇搜尋基準點{{ authStore.token && " (用戶定位與地標)" }}
+          請選擇搜尋基準點{{ personStore.code && " (用戶定位與地標)" }}
         </label>
         <div
           v-if="availableLocations.length > 0"
@@ -85,7 +85,7 @@ function handleFind() {
         <div v-else>
           <p>
             查無基準點。請點擊地圖右上角按紐，開啟定位功能{{
-              authStore.token && "或加入地標"
+              personStore.code && "或加入地標"
             }}。
           </p>
         </div>

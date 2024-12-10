@@ -15,9 +15,19 @@
 // ]
 
 export function marchingSquare(discreteData, isoValue) {
-	let columnN = discreteData[0].length;
-	let rowN = discreteData.length;
+	// Input validation and size limits
+	if (!Array.isArray(discreteData) || !discreteData.length || !Array.isArray(discreteData[0])) {
+		console.error("Invalid discrete data format");
+		return [];
+	}
+
+	const MAX_GRID_SIZE = 10000;
+	let columnN = Math.min(discreteData[0].length, MAX_GRID_SIZE);
+	let rowN = Math.min(discreteData.length, MAX_GRID_SIZE);
 	let result = [];
+
+	const maxRow = rowN - 1;
+	const maxCol = columnN - 1;
 
 	//  discreteData:
 	//
@@ -32,8 +42,12 @@ export function marchingSquare(discreteData, isoValue) {
 	//  │ [0][0]-> [0][1]-> [0][2]->
 	//  └────────┴────────┴────────┴─ -> longitude increases
 
-	for (let row = 0; row < rowN - 1; row++) {
-		for (let col = 0; col < columnN - 1; col++) {
+	for (let row = 0; row < maxRow; row++) {
+		if (row >= discreteData.length) break;
+
+		for (let col = 0; col < maxCol; col++) {
+			if (col >= discreteData[0].length) break;
+			
 			// Drawing isoline for the following square surrounded by four discreteData values:
 			//
 			// [row+1][col] ┌────┐ [row+1][col+1]
