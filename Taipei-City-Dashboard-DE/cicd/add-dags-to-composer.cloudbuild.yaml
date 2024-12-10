@@ -28,7 +28,7 @@ steps:
   - name: python
     entrypoint: pip
     dir: "Taipei-City-Dashboard-DE/cicd"
-    args: ["install", "-r", "utils/requirements.txt"]
+    args: ["install", "-r", "utils/requirements.txt", "--user"] #加入 -- user 
 
   # run
   - name: python
@@ -40,8 +40,7 @@ steps:
         "--dags_directory=${_DAGS_DIRECTORY}",
         "--dags_bucket=${_DAGS_BUCKET}",
       ]
-options:
-  logging: CLOUD_LOGGING_ONLY
+
 # [END composer_cicd_dagsync_yaml]
 options:
     logging: CLOUD_LOGGING_ONLY
