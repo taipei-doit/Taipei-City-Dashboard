@@ -19,7 +19,7 @@
         "ready_data_history_table": "",
         "raw_data_db": "postgres_default",
         "raw_data_table": "",
-        "load_behavior": "truncate"
+        "load_behavior": "current+history"
     },
     "data_infos":{
         "name_cn": "海砂屋列管案件",
