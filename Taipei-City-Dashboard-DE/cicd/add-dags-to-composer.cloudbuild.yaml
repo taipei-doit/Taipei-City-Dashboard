@@ -40,7 +40,6 @@ steps:
         "--dags_directory=${_DAGS_DIRECTORY}",
         "--dags_bucket=${_DAGS_BUCKET}",
       ]
-
 # [END composer_cicd_dagsync_yaml]
 options:
     logging: CLOUD_LOGGING_ONLY

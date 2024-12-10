@@ -42,7 +42,9 @@ def _transfer(**kwargs):
     ## Extract
     ##############
     raw_list = get_data_taipei_api(RID)
+    print(raw_list)
     raw_data = pd.DataFrame(raw_list)
+    print(raw)
     # raw_data["data_time"] = raw_data["_importdate"].iloc[0]["date"]
 
 
