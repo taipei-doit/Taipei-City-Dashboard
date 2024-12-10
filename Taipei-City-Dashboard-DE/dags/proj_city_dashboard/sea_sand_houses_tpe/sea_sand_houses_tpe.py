@@ -28,7 +28,7 @@ def _transfer(**kwargs):
     # raw_data_db_uri = kwargs.get('raw_data_db_uri')
     # data_folder = kwargs.get('data_folder')
     ready_data_db_uri = kwargs.get('ready_data_db_uri')
-    # proxies = kwargs.get('proxies')
+    proxies = kwargs.get('proxies')
     # Retrieve some essential args from `job_config.json`.
     dag_infos = kwargs.get('dag_infos')
     dag_id = dag_infos.get('dag_id')
