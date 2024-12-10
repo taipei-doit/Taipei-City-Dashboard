@@ -44,7 +44,7 @@ def _transfer(**kwargs):
     raw_list = get_data_taipei_api(RID)
     print(raw_list)
     raw_data = pd.DataFrame(raw_list)
-    print(raw)
+    print(raw_data)
     # raw_data["data_time"] = raw_data["_importdate"].iloc[0]["date"]
 
 
@@ -64,6 +64,8 @@ def _transfer(**kwargs):
             "累積節電量": "acc_enegry_saving_amt",
         }
     )
+
+    
 
         
     raw_data["data_time"] = raw_list['data_year']
