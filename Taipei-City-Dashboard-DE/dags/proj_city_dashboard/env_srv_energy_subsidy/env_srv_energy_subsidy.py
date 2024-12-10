@@ -5,8 +5,7 @@ from sqlalchemy import create_engine
 from utils.extract_stage import get_data_taipei_api
 from utils.load_stage import (
     save_geodataframe_to_postgresql,
-    update_lasttime_in_data_to_dataset_info, 
-    save_dataframe_to_postgresql
+    update_lasttime_in_data_to_dataset_info, save_dataframe_to_postgresql
 )
 from datetime import datetime
 from utils.transform_address import (
@@ -45,9 +44,7 @@ def _transfer(**kwargs):
     raw_list = get_data_taipei_api(RID)
     raw_data = pd.DataFrame(raw_list)
     # raw_data["data_time"] = raw_data["_importdate"].iloc[0]["date"]
-    
-    raw_data["etl_dtm"] = datetime.now()
-    print(raw_data)
+
 
     ##############
     ## Transform
@@ -65,6 +62,16 @@ def _transfer(**kwargs):
             "累積節電量": "acc_enegry_saving_amt",
         }
     )
+
+        
+    raw_data["data_time"] = raw_list['data_year']
+    # 將民國年份 +1911 並轉換為 datetime 格式
+    raw_data["data_time"] = raw_data["data_time"] + 1911  # 民國轉西元
+    raw_data["data_time"] = pd.to_datetime(raw_data["data_time"], format="%Y")  # 將年份轉為 datetime 格式
+    # 將 datetime 轉為指定格式，並加上固定的時區偏移 +08:00
+    raw_data["data_time"] = raw_data["data_time"].dt.strftime("%Y-12-31 %H:%M:%S+08")
+
+    print(raw_data)
 
     # # standardize time
     # data["etl_dtm"] = convert_str_to_time_format(data["etl_dtm"])
@@ -90,9 +97,19 @@ def _transfer(**kwargs):
     #     data, data["lng"], data["lat"], from_crs=FROM_CRS
     # )
 
+    keep_col = [
+            "data_time",
+            "data_year",
+             "num_of_approval",
+             "acc_num_of_approval",
+             "subsidy_amt",
+             "acc_subsidy_amt",
+             "enegry_saving_amt",
+             "acc_enegry_saving_amt"
+    ]
 
     # select columns
-    ready_data = data
+    ready_data = data[keep_col]
 
     # Load
     engine = create_engine(ready_data_db_uri)
