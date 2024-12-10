@@ -18,7 +18,7 @@ steps:
   - name: python
     entrypoint: pip
     dir: "Taipei-City-Dashboard-DE/cicd"
-    args: ["install", "-r", "utils/requirements.txt", "--user"]
+    args: ["install", "-r", "utils/requirements.txt", "--user"] #加入 -- user 
 
   # run
   - name: python
