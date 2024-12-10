@@ -13,15 +13,29 @@
 // An array that contains m values, representing the predicted value on each of the target coordinates.
 
 export function interpolation(dataPoints, targetPoints) {
-	const pointCount = dataPoints.length;
 	let answers = [];
-	for (let k = 0; k < targetPoints.length; k++) {
+
+	// Early return for invalid inputs
+	if (!Array.isArray(dataPoints) || !Array.isArray(targetPoints)) {
+		return answers;
+	}
+
+	// Set maximum limits for data points to prevent excessive processing
+	const MAX_DATA_POINTS = 10000;
+	const MAX_TARGET_POINTS = 10000;
+
+	const pointCount = Math.min(dataPoints.length, MAX_DATA_POINTS);
+	const targetCount = Math.min(targetPoints.length, MAX_TARGET_POINTS);
+
+	for (let k = 0; k < targetCount; k++) {
+		if(k >= targetPoints.length) break;
 		if (dataPoints.includes(targetPoints[k])) {
 			answers.push(dataPoints[dataPoints.indexOf(targetPoints[k])].value);
 		} else {
 			let weight_sum = 0;
 			let weight_value = 0;
 			for (let i = 0; i < pointCount; i++) {
+				if(i >= dataPoints.length) break;
 				let weight =
 					1 /
 					((dataPoints[i].x - targetPoints[k].x) ** 2 +

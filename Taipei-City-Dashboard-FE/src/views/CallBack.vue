@@ -1,18 +1,18 @@
 <script setup>
 import { onMounted } from "vue";
 import router from "../router";
-import { useAuthStore } from "../store/authStore";
+import { usePersonStore } from "../store/personStore";
 
-const authStore = useAuthStore();
+const personStore = usePersonStore();
 
 onMounted(() => {
 	const urlParams = new URLSearchParams(window.location.search);
 	const code = urlParams.get("code");
 
-	if (!code || code.length !== 6 || authStore.token) {
+	if (!code || code.length !== 6 || personStore.code) {
 		router.replace("/dashboard");
 	} else {
-		authStore.loginByTaipeiPass(code);
+		personStore.loginByTaipei(code);
 	}
 });
 </script>
