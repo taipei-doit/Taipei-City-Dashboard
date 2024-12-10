@@ -58,7 +58,7 @@ def _transfer(**kwargs):
     }
     data = data.rename(columns=col_map)
     # Transfer year from ROC to AD
-    data['year'] = data['year'].replace('年', '', regex=True)
+    data['year'] = data['year'].replace('年底', '', regex=True)
     data['year'] = data['year'].astype(int) + 1911
     # Time
     data['data_time'] = get_data_taipei_file_last_modified_time(page_id)
