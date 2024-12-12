@@ -4,6 +4,7 @@ from datetime import datetime, timedelta, timezone
 import requests
 from airflow.models import Variable
 from settings.global_config import DATA_PATH, PROXIES
+import logging
 
 FILE_NAME = "cht_token.pickle"
 
@@ -19,7 +20,7 @@ class CHTAuth:
         self.password = Variable.get("CHT_PASSWORD")
         self.full_file_path = f"{DATA_PATH}/{FILE_NAME}"
 
-    def get_token(self, now_time ,is_proxy=True, timeout=60):
+    def get_token(self, now_time ,is_proxy=True, timeout=10):
         """
 		Get the access token for authentication.
 		This method retrieves the access token from the specified path.
@@ -27,7 +28,7 @@ class CHTAuth:
 
 		Args:
 			is_proxy (bool): Flag indicating whether to use a proxy. Defaults to True.
-			timeout (int): The timeout for the request. Defaults to 60.
+			timeout (int): The timeout for the request. Defaults to 10.
 
 		Returns:
 			str: The access token.
@@ -63,8 +64,8 @@ class CHTAuth:
             timeout=timeout,
             verify=False
         ) as response:
-            res_json = response.json()
-            print(f"Response JSON: {res_json}")
+            res_json = response.json()    
+            logging.info(f"Response JSON: {res_json}")
             token = res_json["access_token"]
             expired_time = now_time + timedelta(seconds=res_json["expires_in"])
             res = {"access_token": token, "expired_time": expired_time}
