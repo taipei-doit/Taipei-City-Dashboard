@@ -43,7 +43,7 @@ def _cht_g4(**kwargs):
 
     res = resp.json()
     if res['status'] == 1:
-        raw_data = pd.DataFrame(res["data"])
+        raw_data = pd.DataFrame(res["grids"])
         raw_data['time'] = res['time']
         raw_data['data_time'] = get_tpe_now_time_str()
         raw_data['status'] = res['status']
