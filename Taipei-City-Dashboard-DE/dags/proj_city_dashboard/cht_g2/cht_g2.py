@@ -12,6 +12,8 @@ from utils.load_stage import (
 from utils.auth_cht import CHTAuth
 from airflow.models import Variable
 import logging
+import json
+
 
 def _cht_g2(**kwargs):
     # Config
@@ -30,13 +32,12 @@ def _cht_g2(**kwargs):
         'Content-Type': 'application/json'
         }   
 
-    playload = {
+    playload = json.dumps({
         "token": access_token,
         "split": "10",
         "api_id": "31"
-    }
+    })
     resp = requests.post(url, headers=headers, data=playload, proxies=PROXIES,verify=False)
-    print(resp.text)
     if resp.status_code != 200:
         raise ValueError(f"Request failed! status: {resp.status_code}")
 
