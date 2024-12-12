@@ -15,6 +15,7 @@ class CHEAuth:
     """
 
     def __init__(self):
+        self.account = Variable.get("CHE_ACCOUNT")
         self.password = Variable.get("CHE_PASSWORD")
         self.full_file_path = f"{DATA_PATH}/{FILE_NAME}"
 
@@ -49,7 +50,7 @@ class CHEAuth:
         # Get the token
         url = "https://crowds.hinet.net/webapi/api/Login"
         payload = json.dumps({
-            "id": "taipeieventapi",
+            "id": self.account,
             "pass": self.password
         })
         headers = {
