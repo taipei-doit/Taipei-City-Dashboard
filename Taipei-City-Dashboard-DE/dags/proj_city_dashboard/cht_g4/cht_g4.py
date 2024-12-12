@@ -43,12 +43,26 @@ def _cht_g4(**kwargs):
 
     res = resp.json()
     if res['status'] == 1:
-        raw_data = pd.DataFrame(res["grids"])
-        raw_data['time'] = res['time']
-        raw_data['data_time'] = get_tpe_now_time_str()
-        raw_data['status'] = res['status']
-        raw_data['api_id'] =res['api_id']
-        raw_data['msg'] = res['msg']
+        raw_data = []
+        for entry in res["data"]:
+            ev_name = entry["name"]
+            grids = entry["grids"]
+            for grid in grids:
+                raw_data.append({
+                    "ev_name": ev_name,
+                    "gid": grid["gid"],
+                    "population": grid["population"]
+                })
+        
+        # Convert the structured data to a DataFrame
+        raw_data_df = pd.DataFrame(raw_data)
+        
+        # Add additional columns
+        raw_data_df['time'] = res['time']
+        raw_data_df['data_time'] = get_tpe_now_time_str()
+        raw_data_df['status'] = res['status']
+        raw_data_df['api_id'] = res['api_id']
+        raw_data_df['msg'] = res['msg']
     else:
         print(res)
 
@@ -56,16 +70,18 @@ def _cht_g4(**kwargs):
     engine = create_engine(ready_data_db_uri)
     save_dataframe_to_postgresql(
         engine,
-        data=raw_data,
+        data=raw_data_df,
         load_behavior=load_behavior,
         default_table=default_table,
     )
     update_lasttime_in_data_to_dataset_info(
-            engine, dag_id, raw_data["data_time"].max()
+            engine, dag_id, raw_data_df["data_time"].max()
         )
 
 dag = CommonDag(proj_folder="proj_city_dashboard", dag_folder="cht_g4")
 dag.create_dag(etl_func=_cht_g4)
+
+
 
 
 
