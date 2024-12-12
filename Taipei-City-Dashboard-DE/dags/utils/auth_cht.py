@@ -42,6 +42,7 @@ class CHTAuth:
             with open(self.full_file_path, "rb") as handle:
                 res = pickle.load(handle)
                 time_out =  datetime.strptime(res["time_out"], "%Y-%m-%d %H:%M:%S")
+                logging.info(f"time_out: {time_out}")
                 if now_time < time_out:  # If the token is not expired
                     return res["access_token"]
         except (FileNotFoundError, EOFError):
