@@ -19,24 +19,23 @@ class CHEAuth:
         self.password = Variable.get("CHE_PASSWORD")
         self.full_file_path = f"{DATA_PATH}/{FILE_NAME}"
 
-	@staticmethod
- 	def get_token(self, now_time ,is_proxy=True, timeout=60):
+    def get_token(self, now_time ,is_proxy=True, timeout=60):
         """
-        Get the access token for authentication.
-        This method retrieves the access token from the specified path.
-        If the token is not found or has expired, a new token is obtained and saved to the path.
+		Get the access token for authentication.
+		This method retrieves the access token from the specified path.
+		If the token is not found or has expired, a new token is obtained and saved to the path.
 
-        Args:
-            is_proxy (bool): Flag indicating whether to use a proxy. Defaults to True.
-            timeout (int): The timeout for the request. Defaults to 60.
+		Args:
+			is_proxy (bool): Flag indicating whether to use a proxy. Defaults to True.
+			timeout (int): The timeout for the request. Defaults to 60.
 
-        Returns:
-            str: The access token.
+		Returns:
+			str: The access token.
 
-        Raises:
-            FileNotFoundError: If the token file is not found.
-            EOFError: If the token file is empty or corrupted.
-        """
+		Raises:
+			FileNotFoundError: If the token file is not found.
+			EOFError: If the token file is empty or corrupted.
+		"""
         # Check if the token is expired
         try:
             with open(self.full_file_path, "rb") as handle:

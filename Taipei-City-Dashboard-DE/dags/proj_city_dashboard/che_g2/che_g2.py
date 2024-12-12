@@ -1,27 +1,19 @@
 from airflow import DAG
 from operators.common_pipeline import CommonDag
 from datetime import datetime,timedelta,timezone
+import pandas as pd
+import requests
+from settings.global_config import PROXIES
+from sqlalchemy import create_engine
+from utils.get_time import get_tpe_now_time_str
+from utils.load_stage import (
+    save_dataframe_to_postgresql,
+    update_lasttime_in_data_to_dataset_info)
+from utils.auth_che import CHEAuth
+from airflow.models import Variable
+
 
 def _che_g2(**kwargs):
-    import geopandas as gpd
-    import numpy as np
-    import pandas as pd
-    import requests
-    import time
-    from geopandas.tools import sjoin
-    from settings.global_config import PROXIES
-    from shapely import wkt
-    from sqlalchemy import create_engine
-    from utils.get_time import get_tpe_now_time_str
-    from utils.load_stage import (
-        save_dataframe_to_postgresql,
-        update_lasttime_in_data_to_dataset_info,
-    )
-    from utils.transform_geometry import add_point_wkbgeometry_column_to_df
-    from utils.transform_time import convert_str_to_time_format
-    from utils.auth_che import CHEAuth
-	from airflow.models import Variable
-
     # Config
     ready_data_db_uri = kwargs.get("ready_data_db_uri")
     dag_infos = kwargs.get("dag_infos")

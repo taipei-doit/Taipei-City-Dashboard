@@ -1,36 +1,28 @@
 from airflow import DAG
 from operators.common_pipeline import CommonDag
 from datetime import datetime,timedelta,timezone
+import pandas as pd
+import requests
+from settings.global_config import PROXIES
+from sqlalchemy import create_engine
+from utils.get_time import get_tpe_now_time_str
+from utils.load_stage import (
+    save_dataframe_to_postgresql,
+    update_lasttime_in_data_to_dataset_info,
+)
+from utils.auth_che import CHEAuth
+from airflow.models import Variable
 
 def _che_e2(**kwargs):
-    import geopandas as gpd
-    import numpy as np
-    import pandas as pd
-    import requests
-    import time
-    from geopandas.tools import sjoin
-    from settings.global_config import PROXIES
-    from shapely import wkt
-    from sqlalchemy import create_engine
-    from utils.get_time import get_tpe_now_time_str
-    from utils.load_stage import (
-        save_dataframe_to_postgresql,
-        update_lasttime_in_data_to_dataset_info,
-    )
-    from utils.transform_geometry import add_point_wkbgeometry_column_to_df
-    from utils.transform_time import convert_str_to_time_format
-    from utils.auth_che import CHEAuth
-	from airflow.models import Variable
-
     # Config
     ready_data_db_uri = kwargs.get("ready_data_db_uri")
-    data_path = kwargs.get("data_path")
     dag_infos = kwargs.get("dag_infos")
     dag_id = dag_infos.get("dag_id")
     load_behavior = dag_infos.get("load_behavior")
     default_table = dag_infos.get("ready_data_default_table")
     now_time = datetime.now(timezone(timedelta(seconds=28800)))  # Taiwan timezone
-    access_token = CHEAuth.get_token(now_time)
+    che = CHEAuth()
+    access_token = che.get_token(now_time)
     url = Variable.get("E2_API_URL")
     headers = {
         'Content-Type': 'application/json'
@@ -50,16 +42,16 @@ def _che_e2(**kwargs):
     
         res = resp.json()
         if res['status'] == 1:
-			data = res.get("data", [])
-			if data:
-				df = pd.DataFrame(data)
-    			df["status"] = res['status']
-				df["api_id"] = res['api_id']
-				df['data_time'] = get_tpe_now_time_str()
-				df['msg'] = res['msg']
-				df["stay_mins"] = mins  # 添加停留時間作為欄位
-				data_frames.append(df)
-			combined_df = pd.concat(data_frames, ignore_index=True)
+            data = res.get("data", [])
+            if data:
+                df = pd.DataFrame(data)
+                df["status"] = res['status']
+                df["api_id"] = res['api_id']
+                df['data_time'] = get_tpe_now_time_str()
+                df['msg'] = res['msg']
+                df["stay_mins"] = mins  # 添加停留時間作為欄位
+                data_frames.append(df)
+            combined_df = pd.concat(data_frames, ignore_index=True)
             # df = dict()
             # df['status_msg'] = res['msg']
             # df['event'] = res['data'][0]['ev_name']
