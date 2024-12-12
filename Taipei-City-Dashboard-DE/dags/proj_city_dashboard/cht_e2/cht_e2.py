@@ -10,10 +10,10 @@ from utils.load_stage import (
     save_dataframe_to_postgresql,
     update_lasttime_in_data_to_dataset_info,
 )
-from utils.auth_che import CHEAuth
+from utils.auth_che import CHTAuth
 from airflow.models import Variable
 
-def _che_e2(**kwargs):
+def _cht_e2(**kwargs):
     # Config
     ready_data_db_uri = kwargs.get("ready_data_db_uri")
     dag_infos = kwargs.get("dag_infos")
@@ -21,8 +21,8 @@ def _che_e2(**kwargs):
     load_behavior = dag_infos.get("load_behavior")
     default_table = dag_infos.get("ready_data_default_table")
     now_time = datetime.now(timezone(timedelta(seconds=28800)))  # Taiwan timezone
-    che = CHEAuth()
-    access_token = che.get_token(now_time)
+    cht = CHTAuth()
+    access_token = cht.get_token(now_time)
     url = Variable.get("E2_API_URL")
     headers = {
         'Content-Type': 'application/json'
@@ -36,7 +36,7 @@ def _che_e2(**kwargs):
             "stay_mins": mins,
             "api_id": "30"
         }
-        resp = requests.post(url, headers=headers, data=payload, proxies=PROXIES)
+        resp = requests.post(url, headers=headers, data=payload, proxies=PROXIES, verify=False)
         if resp.status_code != 200:
             raise ValueError(f"Request failed! status: {resp.status_code}")
     
@@ -104,5 +104,5 @@ def _che_e2(**kwargs):
             engine, dag_id, combined_df["data_time"].max()
         )
 
-dag = CommonDag(proj_folder="proj_city_dashboard", dag_folder="che_e2")
-dag.create_dag(etl_func=_che_e2)
+dag = CommonDag(proj_folder="proj_city_dashboard", dag_folder="cht_e2")
+dag.create_dag(etl_func=_cht_e2)

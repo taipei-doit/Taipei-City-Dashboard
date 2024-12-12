@@ -5,18 +5,18 @@ import requests
 from airflow.models import Variable
 from settings.global_config import DATA_PATH, PROXIES
 
-FILE_NAME = "che_token.pickle"
+FILE_NAME = "cht_token.pickle"
 
-class CHEAuth:
+class CHTAuth:
     """
-    The class for authenticating with the CHE API.
+    The class for authenticating with the CHT API.
     The class loads the password from the Airflow variables.
     The access token is saved to a file for reuse.
     """
 
     def __init__(self):
-        self.account = Variable.get("CHE_ACCOUNT")
-        self.password = Variable.get("CHE_PASSWORD")
+        self.account = Variable.get("CHT_ACCOUNT")
+        self.password = Variable.get("CHT_PASSWORD")
         self.full_file_path = f"{DATA_PATH}/{FILE_NAME}"
 
     def get_token(self, now_time ,is_proxy=True, timeout=60):
@@ -60,7 +60,8 @@ class CHEAuth:
             headers=headers,
             data=payload,
             proxies=PROXIES if is_proxy else None,
-            timeout=timeout
+            timeout=timeout,
+            verify=False
         ) as response:
             res_json = response.json()
             print(f"Response JSON: {res_json}")
