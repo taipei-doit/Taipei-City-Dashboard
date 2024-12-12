@@ -11,7 +11,7 @@ from utils.load_stage import (
     update_lasttime_in_data_to_dataset_info)
 from utils.auth_cht import CHTAuth
 from airflow.models import Variable
-
+import logging
 
 def _cht_g2(**kwargs):
     # Config
@@ -23,6 +23,10 @@ def _cht_g2(**kwargs):
     now_time = datetime.now(timezone(timedelta(seconds=28800)))  # Taiwan timezone
     cht = CHTAuth()
     access_token = cht.get_token(now_time)
+    logging.info(f"=========={access_token}===============")
+    print(access_token)
+ 
+
     url = Variable.get("G2_G4_API_URL")
     headers = {
         'Content-Type': 'application/json'

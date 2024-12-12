@@ -23,6 +23,7 @@ def _cht_e2(**kwargs):
     now_time = datetime.now(timezone(timedelta(seconds=28800)))  # Taiwan timezone
     cht = CHTAuth()
     access_token = cht.get_token(now_time)
+    logging.info(access_token)
     url = Variable.get("E2_API_URL")
     headers = {
         'Content-Type': 'application/json'
