@@ -13,6 +13,7 @@ from utils.load_stage import (
 from utils.auth_cht import CHTAuth
 from airflow.models import Variable
 import logging
+import json
 
 def _cht_g4(**kwargs):
     ready_data_db_uri = kwargs.get("ready_data_db_uri")
@@ -29,13 +30,13 @@ def _cht_g4(**kwargs):
         'Content-Type': 'application/json'
         }   
 
-    playload = {
+    playload = json.dumps({
         "token": access_token,
         "split": "1",
         "api_id": "33"
-    }
+    })
     resp = requests.post(url, headers=headers, data=playload, proxies=PROXIES,verify=False)
-    print(resp.text)
+    print("=====gogogo=======")
     if resp.status_code != 200:
         raise ValueError(f"Request failed! status: {resp.status_code}")
 

@@ -13,7 +13,7 @@ from utils.load_stage import (
 from utils.auth_cht import CHTAuth
 from airflow.models import Variable
 import logging
-
+import json
 
 def _cht_e2(**kwargs):
     # Config
@@ -33,12 +33,12 @@ def _cht_e2(**kwargs):
     data_frames = []
     stay_mins = [10,30,60]
     for mins in stay_mins:
-        payload = {
+        payload = json.dumps({
             "token": access_token,
             "yyyymmdd": now_time,
             "stay_mins": mins,
             "api_id": "30"
-        }
+        })
         resp = requests.post(url, headers=headers, data=payload, proxies=PROXIES, verify=False)
         print(resp.text)
         if resp.status_code != 200:
