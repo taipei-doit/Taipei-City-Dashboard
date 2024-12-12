@@ -12,6 +12,8 @@ from utils.load_stage import (
 )
 from utils.auth_cht import CHTAuth
 from airflow.models import Variable
+import logging
+
 
 def _cht_e2(**kwargs):
     # Config
