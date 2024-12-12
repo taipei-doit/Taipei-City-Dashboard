@@ -33,10 +33,11 @@ def _cht_e2(**kwargs):
         }   
     data_frames = []
     stay_mins = [10,30,60]
+    today = datetime.strftime(datetime.now(timezone(timedelta(seconds=28800))), "%Y%m%d")
     for mins in stay_mins:
         payload = json.dumps({
             "token": access_token,
-            "yyyymmdd": now_time,
+            "yyyymmdd": today,
             "stay_mins": mins,
             "api_id": "30"
         })
