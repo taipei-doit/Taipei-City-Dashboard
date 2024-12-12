@@ -10,7 +10,7 @@ from utils.load_stage import (
     save_dataframe_to_postgresql,
     update_lasttime_in_data_to_dataset_info,
 )
-from utils.auth_che import CHTAuth
+from utils.auth_cht import CHTAuth
 from airflow.models import Variable
 
 def _cht_e2(**kwargs):
