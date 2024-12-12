@@ -39,11 +39,12 @@ class CHTAuth:
 		"""
         # Check if the token is expired
         try:
+            taiwan_timezone = timezone(timedelta(hours=8))
             with open(self.full_file_path, "rb") as handle:
                 res = pickle.load(handle)
-                time_out =  datetime.strptime(res["time_out"], "%Y-%m-%d %H:%M:%S")
-                logging.info(f"time_out: {time_out}")
+                time_out = datetime.strptime(res['time_out'], "%Y-%m-%d %H:%M:%S").replace(tzinfo=taiwan_timezone)
                 if now_time < time_out:  # If the token is not expired
+                    logging.info(f"time_out: {time_out}")
                     return res["access_token"]
         except (FileNotFoundError, EOFError):
             pass
@@ -68,8 +69,8 @@ class CHTAuth:
             res_json = response.json()    
             logging.info(f"Response JSON: {res_json}")
             token = res_json["access_token"]
-            time_out = now_time + timedelta(seconds=res_json["time_out"])
-            res = {"access_token": token, "time_out": time_out}
+            time_out_plus_30 = time_out + timedelta(minutes=30)
+            res = {"access_token": token, "time_out": time_out_plus_30}
 
         # Save the token
         with open(self.full_file_path, "wb") as handle:
