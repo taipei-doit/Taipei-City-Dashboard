@@ -28,7 +28,8 @@ def _cht_e2(**kwargs):
     url = Variable.get("E2_API_URL")
     print(url)
     headers = {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'User-Agent': 'curl/7.68.0'
         }   
     data_frames = []
     stay_mins = [10,30,60]
