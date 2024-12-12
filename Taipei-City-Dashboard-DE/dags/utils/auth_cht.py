@@ -20,36 +20,27 @@ class CHTAuth:
         self.password = Variable.get("CHT_PASSWORD")
         self.full_file_path = f"{DATA_PATH}/{FILE_NAME}"
 
-    def get_token(self, now_time ,is_proxy=True, timeout=10):
+    def get_token(self, now_time, is_proxy=True, timeout=10):
         """
-		Get the access token for authentication.
-		This method retrieves the access token from the specified path.
-		If the token is not found or has expired, a new token is obtained and saved to the path.
-
-		Args:
-			is_proxy (bool): Flag indicating whether to use a proxy. Defaults to True.
-			timeout (int): The timeout for the request. Defaults to 10.
-
-		Returns:
-			str: The access token.
-
-		Raises:
-			FileNotFoundError: If the token file is not found.
-			EOFError: If the token file is empty or corrupted.
-		"""
-        # Check if the token is expired
+        Get the access token for authentication.
+        """
         try:
             taiwan_timezone = timezone(timedelta(hours=8))
             with open(self.full_file_path, "rb") as handle:
                 res = pickle.load(handle)
-                time_out = datetime.strptime(res['time_out'], "%Y-%m-%d %H:%M:%S").replace(tzinfo=taiwan_timezone)
-                if now_time < time_out:  # If the token is not expired
+                
+                # 確認 time_out 是字串，解析為 datetime
+                if isinstance(res['time_out'], str):
+                    time_out = datetime.strptime(res['time_out'], "%Y-%m-%d %H:%M:%S").replace(tzinfo=taiwan_timezone)
+                else:
+                    time_out = res['time_out']  # 如果是 datetime，直接使用
+                
+                if now_time < time_out:  # 如果 token 未過期
                     logging.info(f"time_out: {time_out}")
                     return res["access_token"]
         except (FileNotFoundError, EOFError):
             pass
 
-        # Get the token
         url = "https://crowds.hinet.net/webapi/api/Login"
         payload = json.dumps({
             "id": self.account,
@@ -66,15 +57,16 @@ class CHTAuth:
             timeout=timeout,
             verify=False
         ) as response:
-            res_json = response.json()    
+            res_json = response.json()
             logging.info(f"Response JSON: {res_json}")
+
             token = res_json["access_token"]
-            logging.info(res_json["time_out"])
             time_out = datetime.strptime(res_json["time_out"], "%Y-%m-%d %H:%M:%S").replace(tzinfo=taiwan_timezone)
             time_out_plus_30 = time_out + timedelta(minutes=30)
-            res = {"access_token": token, "time_out": time_out_plus_30}
+            
+            # 將 time_out_plus_30 存為字串
+            res = {"access_token": token, "time_out": time_out_plus_30.strftime("%Y-%m-%d %H:%M:%S")}
 
-        # Save the token
         with open(self.full_file_path, "wb") as handle:
             pickle.dump(res, handle)
 
