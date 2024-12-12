@@ -31,7 +31,7 @@ def _che_e2(**kwargs):
     default_table = dag_infos.get("ready_data_default_table")
     now_time = datetime.now(timezone(timedelta(seconds=28800)))  # Taiwan timezone
     access_token = CHEAuth.get_token(now_time)
-    url = Variable.get("G2_API_URL")
+    url = Variable.get("E2_API_URL")
     headers = {
         'Content-Type': 'application/json'
         }   
