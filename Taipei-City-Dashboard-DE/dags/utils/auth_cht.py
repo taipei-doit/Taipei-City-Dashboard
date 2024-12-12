@@ -67,7 +67,7 @@ class CHTAuth:
             res_json = response.json()    
             logging.info(f"Response JSON: {res_json}")
             token = res_json["access_token"]
-            expired_time = now_time + timedelta(seconds=res_json["expires_in"])
+            expired_time = now_time + timedelta(seconds=res_json["time_out"])
             res = {"access_token": token, "expired_time": expired_time}
 
         # Save the token
