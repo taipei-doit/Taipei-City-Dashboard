@@ -29,7 +29,8 @@ def _cht_g2(**kwargs):
 
     url = Variable.get("G2_G4_API_URL")
     headers = {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'User-Agent': 'curl/7.68.0'
         }   
 
     playload = json.dumps({
