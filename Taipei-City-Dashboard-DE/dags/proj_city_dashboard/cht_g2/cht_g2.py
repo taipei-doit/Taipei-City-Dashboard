@@ -23,8 +23,6 @@ def _cht_g2(**kwargs):
     now_time = datetime.now(timezone(timedelta(seconds=28800)))  # Taiwan timezone
     cht = CHTAuth()
     access_token = cht.get_token(now_time)
-    logging.info(f"=========={access_token}===============")
-    print(access_token)
  
 
     url = Variable.get("G2_G4_API_URL")
@@ -38,6 +36,7 @@ def _cht_g2(**kwargs):
         "api_id": "31"
     }
     resp = requests.post(url, headers=headers, data=playload, proxies=PROXIES,verify=False)
+    print(resp.text)
     if resp.status_code != 200:
         raise ValueError(f"Request failed! status: {resp.status_code}")
 

@@ -23,9 +23,8 @@ def _cht_g4(**kwargs):
     now_time = datetime.now(timezone(timedelta(seconds=28800)))  # Taiwan timezone
     cht = CHTAuth()
     access_token = cht.get_token(now_time)
-    print(access_token)
-    logging.info(f"=========={access_token}===============")
     url = Variable.get("G2_G4_API_URL")
+    print(url)
     headers = {
         'Content-Type': 'application/json'
         }   
@@ -36,6 +35,7 @@ def _cht_g4(**kwargs):
         "api_id": "33"
     }
     resp = requests.post(url, headers=headers, data=playload, proxies=PROXIES,verify=False)
+    print(resp.text)
     if resp.status_code != 200:
         raise ValueError(f"Request failed! status: {resp.status_code}")
 
@@ -64,3 +64,6 @@ def _cht_g4(**kwargs):
 
 dag = CommonDag(proj_folder="proj_city_dashboard", dag_folder="cht_g4")
 dag.create_dag(etl_func=_cht_g4)
+
+
+

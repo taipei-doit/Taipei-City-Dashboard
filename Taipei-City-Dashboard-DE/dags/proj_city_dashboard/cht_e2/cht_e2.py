@@ -25,8 +25,8 @@ def _cht_e2(**kwargs):
     now_time = datetime.now(timezone(timedelta(seconds=28800)))  # Taiwan timezone
     cht = CHTAuth()
     access_token = cht.get_token(now_time)
-    logging.info(access_token)
     url = Variable.get("E2_API_URL")
+    print(url)
     headers = {
         'Content-Type': 'application/json'
         }   
@@ -40,6 +40,7 @@ def _cht_e2(**kwargs):
             "api_id": "30"
         }
         resp = requests.post(url, headers=headers, data=payload, proxies=PROXIES, verify=False)
+        print(resp.text)
         if resp.status_code != 200:
             raise ValueError(f"Request failed! status: {resp.status_code}")
     
