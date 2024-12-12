@@ -41,8 +41,8 @@ class CHTAuth:
         try:
             with open(self.full_file_path, "rb") as handle:
                 res = pickle.load(handle)
-                expired_time = res["time_out"]
-                if now_time < expired_time:  # If the token is not expired
+                time_out = res["time_out"]
+                if now_time < time_out:  # If the token is not expired
                     return res["access_token"]
         except (FileNotFoundError, EOFError):
             pass
@@ -67,8 +67,8 @@ class CHTAuth:
             res_json = response.json()    
             logging.info(f"Response JSON: {res_json}")
             token = res_json["access_token"]
-            expired_time = now_time + timedelta(seconds=res_json["time_out"])
-            res = {"access_token": token, "expired_time": expired_time}
+            time_out = now_time + timedelta(seconds=res_json["time_out"])
+            res = {"access_token": token, "time_out": time_out}
 
         # Save the token
         with open(self.full_file_path, "wb") as handle:
