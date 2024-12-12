@@ -291,8 +291,9 @@ export const useMapStore = defineStore("map", {
 						return;
 					}
 
-					if (!Array.isArray(rs?.data) || rs?.data == null || rs?.data?.length==0 ) {
-						console.error("Invalid data structure");
+					// 驗證 res.data
+					if (!rs?.data || rs?.data == null || rs?.data == undefined) {
+						console.error('Invalid response data from the server');
 						return;
 					}
 
@@ -302,9 +303,9 @@ export const useMapStore = defineStore("map", {
 		},
 		// 3-1. Add a local geojson as a source in mapbox
 		addGeojsonSource(map_config, data) {
-			// 驗證 data.features
-			if (!Array.isArray(data) ||data == null || data?.length==0 ) {
-				console.error("Invalid data structure");
+			// 驗證 data
+			if (!data ||data == null || data == undefined) {
+				console.error('Invalid response data from the server');
 				return;
 			}
 
@@ -344,6 +345,12 @@ export const useMapStore = defineStore("map", {
 				// 驗證 res
 				if (!res ||res == null || res == undefined) {
 					console.error('Invalid response from the server');
+					return;
+				}
+
+				// 驗證 res.data
+				if (!res?.data || res?.data == null || res?.data == undefined) {
+					console.error('Invalid response data from the server');
 					return;
 				}
 
@@ -559,13 +566,9 @@ export const useMapStore = defineStore("map", {
 		// 4-3. Add Map Layer for Voronoi Maps
 		// Developed by 00:21, Taipei Codefest 2023
 		AddVoronoiMapLayer(map_config, data) {
-			// 驗證 data 和 features
-			if (!Array.isArray(data) ||data == null || data?.length==0 ) {
-				console.error("Invalid data structure");
-				return;
-			}
-
-			if(!Array.isArray(data?.features)){
+			// 驗證 data
+			if (!data ||data == null || data == undefined ) {
+				console.error('Invalid response from the server');
 				return;
 			}
 

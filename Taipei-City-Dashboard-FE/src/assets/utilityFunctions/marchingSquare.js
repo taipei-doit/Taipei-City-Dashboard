@@ -42,11 +42,12 @@ export function marchingSquare(discreteData, isoValue) {
 	//  │ [0][0]-> [0][1]-> [0][2]->
 	//  └────────┴────────┴────────┴─ -> longitude increases
 
-	for (let row = 0; row < maxRow; row++) {
-		if (row >= discreteData.length) break;
 
-		for (let col = 0; col < maxCol; col++) {
-			if (col >= discreteData[0].length) break;
+	for (let row = 0; row < MAX_GRID_SIZE; row++) {
+		if (row >= maxRow ) break;
+
+		for (let col = 0; col < MAX_GRID_SIZE; col++) {
+			if (col >= maxCol ) break;
 			
 			// Drawing isoline for the following square surrounded by four discreteData values:
 			//

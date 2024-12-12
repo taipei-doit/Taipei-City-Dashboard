@@ -24,18 +24,19 @@ export function interpolation(dataPoints, targetPoints) {
 	const MAX_DATA_POINTS = 10000;
 	const MAX_TARGET_POINTS = 10000;
 
-	const pointCount = Math.min(dataPoints.length, MAX_DATA_POINTS);
-	const targetCount = Math.min(targetPoints.length, MAX_TARGET_POINTS);
+	const MAX_DATA_LOOP = Math.min(dataPoints.length, MAX_DATA_POINTS);
+	const MAX_TARGET_LOOP = Math.min(targetPoints.length, MAX_TARGET_POINTS);
 
-	for (let k = 0; k < targetCount; k++) {
-		if(k >= targetPoints.length) break;
+	for (let k = 0; k < MAX_TARGET_POINTS; k++) {
+		if (k >= MAX_TARGET_LOOP) break;
 		if (dataPoints.includes(targetPoints[k])) {
 			answers.push(dataPoints[dataPoints.indexOf(targetPoints[k])].value);
 		} else {
 			let weight_sum = 0;
 			let weight_value = 0;
-			for (let i = 0; i < pointCount; i++) {
-				if(i >= dataPoints.length) break;
+
+			for (let i = 0; i < MAX_DATA_POINTS; i++) {
+				if (i >= MAX_DATA_LOOP ) break;
 				let weight =
 					1 /
 					((dataPoints[i].x - targetPoints[k].x) ** 2 +
