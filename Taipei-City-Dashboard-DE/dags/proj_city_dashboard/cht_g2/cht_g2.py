@@ -77,12 +77,12 @@ def _cht_g2(**kwargs):
     engine = create_engine(ready_data_db_uri)
     save_dataframe_to_postgresql(
         engine,
-        data=raw_data,
+        data=df,
         load_behavior=load_behavior,
         default_table=default_table,
     )
     update_lasttime_in_data_to_dataset_info(
-            engine, dag_id, raw_data["data_time"].max()
+            engine, dag_id, df["data_time"].max()
         )
 
 dag = CommonDag(proj_folder="proj_city_dashboard", dag_folder="cht_g2")
