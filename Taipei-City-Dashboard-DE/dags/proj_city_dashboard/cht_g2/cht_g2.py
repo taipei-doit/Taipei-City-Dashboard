@@ -44,12 +44,32 @@ def _cht_g2(**kwargs):
 
     res = resp.json()
     if res['status'] == 1:
-
         raw_data = pd.DataFrame(res["data"])
-        raw_data['data_time'] = get_tpe_now_time_str()
-        raw_data['status'] = res['status']
-        raw_data['api_id'] =res['api_id']
-        raw_data['msg'] = res['msg']
+
+        # Define county mapping
+        county_mapping = {
+            "台北市": "A", "台中市": "B", "基隆市": "C", "台南市": "D", "高雄市": "E",
+            "新北市": "F", "宜蘭縣": "G", "桃園市": "H", "嘉義市": "I", "新竹縣": "J",
+            "苗栗縣": "K", "南投縣": "M", "彰化縣": "N", "新竹市": "O", "雲林縣": "P",
+            "嘉義縣": "Q", "屏東縣": "T", "花蓮縣": "U", "台東縣": "V", "澎湖縣": "X",
+            "金門縣": "W", "連江縣": "Z"
+        }
+
+        # Split and map counties
+        def split_counties(county_str):
+            county_data = dict(item.split(":") for item in county_str.split(";") if item)
+            mapped_data = {county_mapping[key]: int(value) for key, value in county_data.items() if key in county_mapping}
+            return mapped_data
+
+        df_county_split = raw_data['county'].apply(split_counties)
+
+        # # Expand to separate columns
+        df_expanded = df_county_split.apply(pd.Series).fillna(0).astype(int)
+        df = pd.concat([raw_data, df_expanded], axis=1).drop(columns=['county'])
+        df['data_time'] = get_tpe_now_time_str()
+        df['status'] = res['status']
+        df['api_id'] =res['api_id']
+        df['msg'] = res['msg']
     else:
         return res
 
