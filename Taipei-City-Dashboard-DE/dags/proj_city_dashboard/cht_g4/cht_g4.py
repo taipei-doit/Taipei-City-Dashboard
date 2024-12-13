@@ -25,7 +25,6 @@ def _cht_g4(**kwargs):
     cht = CHTAuth()
     access_token = cht.get_token(now_time)
     url = Variable.get("G2_G4_API_URL")
-    print(url)
     headers = {
         'Content-Type': 'application/json',
         'User-Agent': 'curl/7.68.0'

@@ -26,7 +26,6 @@ def _cht_e2(**kwargs):
     cht = CHTAuth()
     access_token = cht.get_token(now_time)
     url = Variable.get("E2_API_URL")
-    print(url)
     headers = {
         'Content-Type': 'application/json',
         'User-Agent': 'curl/7.68.0'
@@ -42,7 +41,6 @@ def _cht_e2(**kwargs):
             "api_id": "30"
         })
         resp = requests.post(url, headers=headers, data=payload, proxies=PROXIES, verify=False)
-        print(resp.text)
         if resp.status_code != 200:
             raise ValueError(f"Request failed! status: {resp.status_code}")
     
