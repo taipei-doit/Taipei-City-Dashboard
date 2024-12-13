@@ -26,7 +26,6 @@ def _cht_e2(**kwargs):
     cht = CHTAuth()
     access_token = cht.get_token(now_time)
     url = Variable.get("E2_API_URL")
-    print(url)
     headers = {
         'Content-Type': 'application/json',
         'User-Agent': 'curl/7.68.0'
@@ -42,7 +41,6 @@ def _cht_e2(**kwargs):
             "api_id": "30"
         })
         resp = requests.post(url, headers=headers, data=payload, proxies=PROXIES, verify=False)
-        print(resp.text)
         if resp.status_code != 200:
             raise ValueError(f"Request failed! status: {resp.status_code}")
     
@@ -58,45 +56,8 @@ def _cht_e2(**kwargs):
                 df["stay_mins"] = mins  # 添加停留時間作為欄位
                 data_frames.append(df)
             combined_df = pd.concat(data_frames, ignore_index=True)
-            # df = dict()
-            # df['status_msg'] = res['msg']
-            # df['event'] = res['data'][0]['ev_name']
-            # df['allcnt'] = res['data'][0]['allcnt']
-            # df['male'] = res['data'][0]['male']
-            # df['female'] = res['data'][0]['female']
-            # df['age19'] = res['data'][0]['age19']
-            # df['age29'] = res['data'][0]['age29']
-            # df['age39'] = res['data'][0]['age39']
-            # df['age49'] = res['data'][0]['age49']
-            # df['age59'] = res['data'][0]['age59']
-            # df['age60'] = res['data'][0]['age60']
-            # df['A'] = res['data'][0]['A']
-            # df['B'] = res['data'][0]['B']
-            # df['C'] = res['data'][0]['C']
-            # df['D'] = res['data'][0]['D']
-            # df['E'] = res['data'][0]['E']
-            # df['F'] = res['data'][0]['F']
-            # df['G'] = res['data'][0]['G']
-            # df['taoyuan_city'] = res['data'][0]['H']
-            # df['chiayi_city'] = res['data'][0]['I']
-            # df['hsinchu_county'] = res['data'][0]['J']
-            # df['miaoli_county'] = res['data'][0]['K']
-            # df['nantou_county'] = res['data'][0]['M']
-            # df['changhua_county'] = res['data'][0]['N']
-            # df['hsinchu_city'] = res['data'][0]['O']
-            # df['yunlin_county'] = res['data'][0]['P']
-            # df['chiayi_county'] = res['data'][0]['Q']
-            # df['pingtung_county'] = res['data'][0]['T']
-            # df['hualien_county'] = res['data'][0]['U']
-            # df['taitung_county'] = res['data'][0]['V']
-            # df['penghu_county'] = res['data'][0]['X']
-            # df['kinmen_county'] = res['data'][0]['W']
-            # df['lienchiang_county'] = res['data'][0]['Z']
-            # df['data_time'] = get_tpe_now_time_str()
-            # df['stay_mins'] = mins
         else:
-            print(res)
-            break
+            return res
 
     # Load
     engine = create_engine(ready_data_db_uri)

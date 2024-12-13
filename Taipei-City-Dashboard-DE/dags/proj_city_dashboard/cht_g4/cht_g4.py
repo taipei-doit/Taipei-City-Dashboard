@@ -25,7 +25,6 @@ def _cht_g4(**kwargs):
     cht = CHTAuth()
     access_token = cht.get_token(now_time)
     url = Variable.get("G2_G4_API_URL")
-    print(url)
     headers = {
         'Content-Type': 'application/json',
         'User-Agent': 'curl/7.68.0'
@@ -37,7 +36,6 @@ def _cht_g4(**kwargs):
         "api_id": "33"
     })
     resp = requests.post(url, headers=headers, data=playload, proxies=PROXIES,verify=False)
-    print("=====gogogo=======")
     if resp.status_code != 200:
         raise ValueError(f"Request failed! status: {resp.status_code}")
 
@@ -64,7 +62,7 @@ def _cht_g4(**kwargs):
         raw_data_df['api_id'] = res['api_id']
         raw_data_df['msg'] = res['msg']
     else:
-        print(res)
+        return res
 
     # Load
     engine = create_engine(ready_data_db_uri)

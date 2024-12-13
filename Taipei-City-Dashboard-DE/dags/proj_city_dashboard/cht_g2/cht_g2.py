@@ -51,7 +51,7 @@ def _cht_g2(**kwargs):
         raw_data['api_id'] =res['api_id']
         raw_data['msg'] = res['msg']
     else:
-        print(res)
+        return res
 
     # Load
     engine = create_engine(ready_data_db_uri)
