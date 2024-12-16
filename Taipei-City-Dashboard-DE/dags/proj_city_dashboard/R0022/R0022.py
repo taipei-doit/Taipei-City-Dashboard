@@ -33,7 +33,7 @@ def _R0022(**kwargs):
     year = year.str.zfill(3)
     month = month.str.replace("月", "").str.zfill(2)
     data["年月別"] = year + month + "01"
-    data["年月別"] = convert_str_to_time_format(data["年月別"], from_format="%TY%m%d")
+    data["年月別"] = convert_str_to_time_format(time_column=data["年月別"], from_format="%TY%m%d")
     ready_data = data[
         [
             "破獲件數/總計[件]",
