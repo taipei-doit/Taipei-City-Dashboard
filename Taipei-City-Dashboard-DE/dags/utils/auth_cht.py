@@ -58,7 +58,6 @@ class CHTAuth:
             verify=False
         ) as response:
             res_json = response.json()
-            logging.info(f"Response JSON: {res_json}")
 
             token = res_json["access_token"]
             time_out = datetime.strptime(res_json["time_out"], "%Y-%m-%d %H:%M:%S").replace(tzinfo=taiwan_timezone)

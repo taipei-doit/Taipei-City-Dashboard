@@ -11,7 +11,6 @@ from utils.load_stage import (
     update_lasttime_in_data_to_dataset_info)
 from utils.auth_cht import CHTAuth
 from airflow.models import Variable
-import logging
 import json
 
 
