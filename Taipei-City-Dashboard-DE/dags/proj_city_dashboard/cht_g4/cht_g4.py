@@ -54,35 +54,33 @@ def _cht_g4(**kwargs):
                 })
         # Convert the structured data to a DataFrame
         raw_data_df = pd.DataFrame(raw_data)
-        sql = """select ev_name, gid from public.nye_grid"""
-        engine = create_engine(ready_data_db_uri)
-        g4_grids = pd.read_sql(sql, engine)
-        raw_data_df['gid'] = raw_data_df['gid'].astype(str)
-        g4_grids['gid'] = g4_grids['gid'].astype(str)
-        merged_df = raw_data_df.merge(g4_grids, on='gid', how='left', suffixes=('_a', '_b'))
-        # 更新 ev_name，當 gid 相同時使用 df_b 的 ev_name
-        merged_df['ev_name'] = merged_df['ev_name_b'].combine_first(merged_df['ev_name_a'])
-        merged_df = merged_df.drop(columns=['ev_name_b','ev_name_a'])
-        merged_df['gid'] = merged_df['gid'].astype(int)
+        # sql = """select ev_name, gid from public.nye_grid"""
+        # g4_grids = pd.read_sql(sql, engine)
+        # raw_data_df['gid'] = raw_data_df['gid'].astype(str)
+        # g4_grids['gid'] = g4_grids['gid'].astype(str)
+        # merged_df = raw_data_df.merge(g4_grids, on='gid', how='left', suffixes=('_a', '_b'))
+        # # 更新 ev_name，當 gid 相同時使用 df_b 的 ev_name
+        # merged_df['ev_name'] = merged_df['ev_name_b'].combine_first(merged_df['ev_name_a'])
+        # merged_df = merged_df.drop(columns=['ev_name_b','ev_name_a'])
+        # merged_df['gid'] = merged_df['gid'].astype(int)
         # Add additional columns
-        merged_df['time'] = res['time']
-        merged_df['data_time'] = get_tpe_now_time_str()
-        merged_df['status'] = res['status']
-        merged_df['api_id'] = res['api_id']
-        merged_df['msg'] = res['msg']
-        logging.info(merged_df.columns)
-
+        raw_data_df['time'] = res['time']
+        raw_data_df['data_time'] = get_tpe_now_time_str()
+        raw_data_df['status'] = res['status']
+        raw_data_df['api_id'] = res['api_id']
+        raw_data_df['msg'] = res['msg']
+        logging.info(raw_data_df.columns)
     else:
         return res
-
+    engine = create_engine(ready_data_db_uri)
     save_dataframe_to_postgresql(
         engine,
-        data=merged_df,
+        data=raw_data_df,
         load_behavior=load_behavior,
         default_table=default_table,
     )
     update_lasttime_in_data_to_dataset_info(
-            engine, dag_id, merged_df["data_time"].max()
+            engine, dag_id, raw_data_df["data_time"].max()
         )
 
 dag = CommonDag(proj_folder="proj_city_dashboard", dag_folder="cht_g4")
