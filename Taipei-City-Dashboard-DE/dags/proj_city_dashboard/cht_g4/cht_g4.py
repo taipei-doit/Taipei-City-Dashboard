@@ -64,13 +64,14 @@ def _cht_g4(**kwargs):
         merged_df['ev_name'] = merged_df['ev_name_b'].combine_first(merged_df['ev_name_a'])
         merged_df = merged_df.drop(columns=['ev_name_b','ev_name_a'])
         merged_df['gid'] = merged_df['gid'].astype(int)
-        logging.info(merged_df.head)
         # Add additional columns
         merged_df['time'] = res['time']
         merged_df['data_time'] = get_tpe_now_time_str()
         merged_df['status'] = res['status']
         merged_df['api_id'] = res['api_id']
         merged_df['msg'] = res['msg']
+        logging.info(merged_df.columns)
+
     else:
         return res
 
@@ -81,7 +82,7 @@ def _cht_g4(**kwargs):
         default_table=default_table,
     )
     update_lasttime_in_data_to_dataset_info(
-            engine, dag_id, raw_data_df["data_time"].max()
+            engine, dag_id, merged_df["data_time"].max()
         )
 
 dag = CommonDag(proj_folder="proj_city_dashboard", dag_folder="cht_g4")
