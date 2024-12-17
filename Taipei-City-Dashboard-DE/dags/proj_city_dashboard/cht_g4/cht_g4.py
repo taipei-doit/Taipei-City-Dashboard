@@ -4,7 +4,7 @@ from datetime import datetime,timedelta,timezone
 import pandas as pd
 import requests
 from settings.global_config import PROXIES
-from sqlalchemy import create_engine
+from sqlalchemy import Engine, create_engine
 from utils.get_time import get_tpe_now_time_str
 from utils.load_stage import (
     save_dataframe_to_postgresql,
@@ -13,6 +13,8 @@ from utils.load_stage import (
 from utils.auth_cht import CHTAuth
 from airflow.models import Variable
 import json
+import logging
+
 
 def _cht_g4(**kwargs):
     ready_data_db_uri = kwargs.get("ready_data_db_uri")
@@ -50,24 +52,29 @@ def _cht_g4(**kwargs):
                     "gid": grid["gid"],
                     "population": grid["population"]
                 })
-        
         # Convert the structured data to a DataFrame
         raw_data_df = pd.DataFrame(raw_data)
-        
+        sql = """select ev_name, gid from FROM public.nye_grid"""
+        engine: Engine = create_engine(ready_data_db_uri)
+        g4_grids = pd.read_sql(sql, engine)
+
+        merged_df = raw_data_df.merge(g4_grids, on='gid', how='left', suffixes=('_a', '_b'))
+        # 更新 ev_name，當 gid 相同時使用 df_b 的 ev_name
+        merged_df['ev_name'] = merged_df['ev_name_b'].combine_first(merged_df['ev_name_a'])
+        merged_df = merged_df.drop(columns=['ev_name_b','ev_name_b'])
+        logging.info(merged_df.head)
         # Add additional columns
-        raw_data_df['time'] = res['time']
-        raw_data_df['data_time'] = get_tpe_now_time_str()
-        raw_data_df['status'] = res['status']
-        raw_data_df['api_id'] = res['api_id']
-        raw_data_df['msg'] = res['msg']
+        merged_df['time'] = res['time']
+        merged_df['data_time'] = get_tpe_now_time_str()
+        merged_df['status'] = res['status']
+        merged_df['api_id'] = res['api_id']
+        merged_df['msg'] = res['msg']
     else:
         return res
 
-    # Load
-    engine = create_engine(ready_data_db_uri)
     save_dataframe_to_postgresql(
         engine,
-        data=raw_data_df,
+        data=merged_df,
         load_behavior=load_behavior,
         default_table=default_table,
     )
@@ -77,8 +84,3 @@ def _cht_g4(**kwargs):
 
 dag = CommonDag(proj_folder="proj_city_dashboard", dag_folder="cht_g4")
 dag.create_dag(etl_func=_cht_g4)
-
-
-
-
-
