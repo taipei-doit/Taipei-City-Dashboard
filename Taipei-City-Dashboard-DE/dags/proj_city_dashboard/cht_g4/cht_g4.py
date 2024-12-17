@@ -4,7 +4,7 @@ from datetime import datetime,timedelta,timezone
 import pandas as pd
 import requests
 from settings.global_config import PROXIES
-from sqlalchemy import Engine, create_engine
+from sqlalchemy import create_engine
 from utils.get_time import get_tpe_now_time_str
 from utils.load_stage import (
     save_dataframe_to_postgresql,
