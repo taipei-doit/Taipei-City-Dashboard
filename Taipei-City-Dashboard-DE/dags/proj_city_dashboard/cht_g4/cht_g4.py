@@ -62,7 +62,7 @@ def _cht_g4(**kwargs):
         merged_df = raw_data_df.merge(g4_grids, on='gid', how='left', suffixes=('_a', '_b'))
         # 更新 ev_name，當 gid 相同時使用 df_b 的 ev_name
         merged_df['ev_name'] = merged_df['ev_name_b'].combine_first(merged_df['ev_name_a'])
-        merged_df = merged_df.drop(columns=['ev_name_b','ev_name_b'])
+        merged_df = merged_df.drop(columns=['ev_name_b','ev_name_a'])
         merged_df['gid'] = merged_df['gid'].astype(int)
         logging.info(merged_df.head)
         # Add additional columns
