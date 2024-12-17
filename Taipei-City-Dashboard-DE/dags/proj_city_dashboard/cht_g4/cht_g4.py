@@ -54,8 +54,8 @@ def _cht_g4(**kwargs):
                 })
         # Convert the structured data to a DataFrame
         raw_data_df = pd.DataFrame(raw_data)
-        sql = """select ev_name, gid from FROM public.nye_grid"""
-        engine: Engine = create_engine(ready_data_db_uri)
+        sql = """select ev_name, gid from public.nye_grid"""
+        engine = create_engine(ready_data_db_uri)
         g4_grids = pd.read_sql(sql, engine)
 
         merged_df = raw_data_df.merge(g4_grids, on='gid', how='left', suffixes=('_a', '_b'))
