@@ -12,7 +12,7 @@ from utils.load_stage import (
 from utils.auth_cht import CHTAuth
 from airflow.models import Variable
 import json
-
+import logging
 
 def _cht_g2(**kwargs):
     # Config
@@ -69,6 +69,8 @@ def _cht_g2(**kwargs):
         df['status'] = res['status']
         df['api_id'] =res['api_id']
         df['msg'] = res['msg']
+		logging.info(df.head)
+
     else:
         return res
 

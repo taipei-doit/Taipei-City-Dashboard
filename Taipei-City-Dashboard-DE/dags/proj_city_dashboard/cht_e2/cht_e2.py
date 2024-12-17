@@ -13,6 +13,7 @@ from utils.load_stage import (
 from utils.auth_cht import CHTAuth
 from airflow.models import Variable
 import json
+import logging
 
 def _cht_e2(**kwargs):
     # Config
@@ -55,6 +56,8 @@ def _cht_e2(**kwargs):
                 df["stay_mins"] = mins  # 添加停留時間作為欄位
                 data_frames.append(df)
             combined_df = pd.concat(data_frames, ignore_index=True)
+			logging.info(combined_df.head)
+
         else:
             return res
 
