@@ -69,7 +69,7 @@ def _cht_g2(**kwargs):
         df['status'] = res['status']
         df['api_id'] =res['api_id']
         df['msg'] = res['msg']
-		logging.info(df.head)
+        logging.info(df.head)
 
     else:
         return res

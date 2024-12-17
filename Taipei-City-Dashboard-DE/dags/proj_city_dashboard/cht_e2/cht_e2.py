@@ -56,7 +56,7 @@ def _cht_e2(**kwargs):
                 df["stay_mins"] = mins  # 添加停留時間作為欄位
                 data_frames.append(df)
             combined_df = pd.concat(data_frames, ignore_index=True)
-			logging.info(combined_df.head)
+            logging.info(combined_df.head)
 
         else:
             return res
