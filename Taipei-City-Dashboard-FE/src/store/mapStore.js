@@ -167,7 +167,7 @@ export const useMapStore = defineStore("map", {
 					scheme: "tms",
 					tolerance: 0,
 					tiles: [
-						`${location.origin}/geo_server/gwc/service/tms/1.0.0/taipei_vioc:tp_village@EPSG:900913@pbf/{z}/{x}/{y}.pbf`,
+						`https://citydashboard.taipei/geo_server/gwc/service/tms/1.0.0/taipei_vioc:tp_village@EPSG:900913@pbf/{z}/{x}/{y}.pbf`,
 					],
 				})
 				.addLayer(TpVillage);
@@ -178,7 +178,7 @@ export const useMapStore = defineStore("map", {
 					scheme: "tms",
 					tolerance: 0,
 					tiles: [
-						`${location.origin}/geo_server/gwc/service/tms/1.0.0/taipei_vioc:tp_district@EPSG:900913@pbf/{z}/{x}/{y}.pbf`,
+						`https://citydashboard.taipei/geo_server/gwc/service/tms/1.0.0/taipei_vioc:tp_district@EPSG:900913@pbf/{z}/{x}/{y}.pbf`,
 					],
 				})
 				.addLayer(TpDistrict);
@@ -339,7 +339,7 @@ export const useMapStore = defineStore("map", {
 
 			if (["arc", "voronoi", "isoline"].includes(map_config.type)) {
 				const res = await axios.get(
-					`${location.origin}/geo_server/taipei_vioc/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=taipei_vioc%3A${map_config.index}&maxFeatures=1000000&outputFormat=application%2Fjson`
+					`https://citydashboard.taipei/geo_server/taipei_vioc/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=taipei_vioc%3A${map_config.index}&maxFeatures=1000000&outputFormat=application%2Fjson`
 				);
 
 				// 驗證 res
@@ -379,7 +379,7 @@ export const useMapStore = defineStore("map", {
 					scheme: "tms",
 					tolerance: 0,
 					tiles: [
-						`${location.origin}/geo_server/gwc/service/tms/1.0.0/taipei_vioc:${map_config.index}@EPSG:900913@pbf/{z}/{x}/{y}.pbf`,
+						`https://citydashboard.taipei/geo_server/gwc/service/tms/1.0.0/taipei_vioc:${map_config.index}@EPSG:900913@pbf/{z}/{x}/{y}.pbf`,
 					],
 				});
 				this.addMapLayer(map_config);
