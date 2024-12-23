@@ -9,10 +9,12 @@ Testing: Jack Huang (Data Scientist), Ian Huang (Data Analysis Intern)
 <!-- Department of Information Technology, Taipei City Government -->
 
 <script setup>
-import { onBeforeMount, onMounted, onBeforeUnmount, ref, computed } from "vue";
+import { onBeforeMount, onMounted, onBeforeUnmount, ref, computed, watch } from "vue";
+import { useRoute } from "vue-router"
 import { usePersonStore } from "./store/personStore";
 import { useDialogStore } from "./store/dialogStore";
 import { useContentStore } from "./store/contentStore";
+import { useMapStore } from "./store/mapStore";
 
 import NavBar from "./components/utilities/bars/NavBar.vue";
 import SideBar from "./components/utilities/bars/SideBar.vue";
@@ -28,6 +30,24 @@ const dialogStore = useDialogStore();
 const contentStore = useContentStore();
 const timeToUpdate = ref(600);
 
+const mapStore = useMapStore();
+const route = useRoute();
+const updateBoards = import.meta.env.VITE_PERSONAL_BOARD_UPDATE.split(',');
+const boardIndex = ref(null);
+const board =ref(null);
+const frequency = ref(600);
+const isMappedToUpdateBoards =ref(false);
+
+const updateBoardsMap = computed(()=>{
+	let needUpdateBoards = []
+	updateBoards.map((board) => {
+		const id = board.split(':')[0];
+		const updateSeconds = board.split(':')[1];
+		needUpdateBoards.push({ id, frequency: updateSeconds });
+	})
+	return needUpdateBoards
+})
+
 const formattedTimeToUpdate = computed(() => {
 	const minutes = Math.floor(timeToUpdate.value / 60);
 	const seconds = timeToUpdate.value % 60;
@@ -37,16 +57,54 @@ const formattedTimeToUpdate = computed(() => {
 function reloadChartData() {
 	if (!["dashboard", "mapview"].includes(personStore.currentPath)) return;
 	contentStore.setCurrentDashboardChartData();
-	timeToUpdate.value = 600;
+	timeToUpdate.value = frequency.value;
+
+	if (isMappedToUpdateBoards.value) {
+		reloadMapData()
+	}
 }
 function updateTimeToUpdate() {
 	if (!["dashboard", "mapview"].includes(personStore.currentPath)) return;
 	if (timeToUpdate.value <= 0) {
 		timeToUpdate.value = 0;
+		reloadChartData();
 		return;
 	}
 	timeToUpdate.value -= 5;
 }
+
+function reloadMapData() {
+	if (!["mapview"].includes(personStore.currentPath)) return;
+	mapStore.currentVisibleLayers.forEach((layerName) => {
+		mapStore.map.removeLayer(layerName);
+		if (mapStore.map.getSource(`${layerName}-source`)) {
+			mapStore.map.removeSource(`${layerName}-source`);
+		}
+		const layerConfig = mapStore.mapConfigs[layerName];
+
+		// 檢查 source
+		if (layerConfig.source === "geojson") {
+			// 如果 source 是 "geojson"，則使用 fetchLocalGeoJson
+			mapStore.fetchLocalGeoJson(layerConfig);
+		} else if (layerConfig.source === "raster") {
+			// 如果 source 是 "raster"，則使用 addRasterSource
+			mapStore.addRasterSource(layerConfig);
+		}
+	});
+}
+
+watch(() => route.query, (query) => {
+	boardIndex.value = query.index;
+	board.value = updateBoardsMap.value.find(board =>{
+		return board.id === boardIndex.value
+	})
+	frequency.value = board.value ? board.value.frequency : 600;
+	isMappedToUpdateBoards.value = updateBoardsMap.value.some(board =>{
+		return board.id === query.index
+	});
+	timeToUpdate.value = frequency.value;
+
+}), { immediate: true };
 
 onBeforeMount(() => {
 	personStore.initialChecks();
@@ -67,7 +125,7 @@ onMounted(() => {
 		dialogStore.showDialog("initialWarning");
 	}
 
-	setInterval(reloadChartData, 1000 * 600);
+	setInterval(reloadChartData, 1000 * frequency.value);
 	setInterval(updateTimeToUpdate, 1000 * 5);
 });
 onBeforeUnmount(() => {
