@@ -1,0 +1,43 @@
+{
+	"dag_infos": {
+		"dag_id": "sea_sand_houses_tpe",
+		"start_date": "2024-12-10",
+		"schedule_interval": "0 20 19 * *",
+		"catchup": false,
+		"tags": [
+			"sea_sand_houses_tpe",
+			"主計處",
+			"海砂屋列管案件"
+		],
+		"description": "Year data of Taipei City Sea Sand House Registry statistics.",
+		"default_args": {
+			"owner": "airflow",
+			"email": [
+				"DEFAULT_EMAIL_LIST"
+			],
+			"email_on_retry": false,
+			"email_on_failure": true,
+			"retries": 1,
+			"retry_delay": 60
+		},
+		"ready_data_db": "postgres_default",
+		"ready_data_default_table": "sea_sand_houses_tpe",
+		"ready_data_history_table": "sea_sand_houses_tpe_history",
+		"raw_data_db": "postgres_default",
+		"raw_data_table": "",
+		"load_behavior": "current+history"
+	},
+	"data_infos": {
+		"name_cn": "海砂屋列管案件",
+		"airflow_update_freq": "04:00+8 20th every month",
+		"source": "https://data.taipei/dataset/detail?id=9617a04f-dd29-460c-a5ee-e4df2b0b4573",
+		"source_type": "data.taipei api",
+		"source_dept": "主計處",
+		"gis_format": null,
+		"output_coordinate": "",
+		"is_geometry": 0,
+		"dataset_description": "海砂屋列管案件",
+		"etl_description": "target url, fill data columns, standardize time",
+		"sensitivity": "public"
+	}
+}
