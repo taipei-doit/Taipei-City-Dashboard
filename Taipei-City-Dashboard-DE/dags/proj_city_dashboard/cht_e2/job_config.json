@@ -1,43 +1,37 @@
 {
-	"dag_infos": {
-		"dag_id": "cht_e2",
-		"start_date": "2024-12-10",
-		"schedule_interval": "00 18 * * *",
-		"catchup": false,
-		"tags": [
-			"cht_e2",
-			"中華電信信令",
-			"跨年"
-		],
-		"description": ".",
-		"default_args": {
-			"owner": "airflow",
-			"email": [
-				"DEFAULT_EMAIL_LIST"
-			],
-			"email_on_retry": false,
-			"email_on_failure": true,
-			"retries": 1,
-			"retry_delay": 60
-		},
-		"ready_data_db": "postgres_default",
-		"ready_data_default_table": "cht_e2",
-		"ready_data_history_table": "",
-		"raw_data_db": "postgres_default",
-		"raw_data_table": "",
-		"load_behavior": "append"
-	},
-	"data_infos": {
-		"name_cn": "中華電信信令E2",
-		"airflow_update_freq": "every 10 minutes",
-		"source": "",
-		"source_type": "CHE api",
-		"source_dept": "中華電信",
-		"gis_format": "",
-		"output_coordinate": "",
-		"is_geometry": 0,
-		"dataset_description": "指定日期當日不重複遊客輪廓統計數據(無排居民)",
-		"etl_description": "standardize time",
-		"sensitivity": "public"
-	}
+  "dag_infos": {
+    "dag_id": "cht_e2",
+    "start_date": "2024-12-10",
+    "schedule_interval": "*/10 * * * *",
+    "catchup": false,
+    "tags": ["cht_e2", "中華電信信令", "跨年"],
+    "description": ".",
+    "default_args": {
+      "owner": "airflow",
+      "email": ["DEFAULT_EMAIL_LIST"],
+      "email_on_retry": false,
+      "email_on_failure": true,
+      "retries": 1,
+      "retry_delay": 60
+    },
+    "ready_data_db": "postgres_default",
+    "ready_data_default_table": "cht_e2",
+    "ready_data_history_table": "",
+    "raw_data_db": "postgres_default",
+    "raw_data_table": "",
+    "load_behavior": "append"
+  },
+  "data_infos": {
+    "name_cn": "中華電信信令E2",
+    "airflow_update_freq": "every 10 minutes",
+    "source": "",
+    "source_type": "CHE api",
+    "source_dept": "中華電信",
+    "gis_format": "",
+    "output_coordinate": "",
+    "is_geometry": 0,
+    "dataset_description": "指定日期當日不重複遊客輪廓統計數據(無排居民)",
+    "etl_description": "standardize time",
+    "sensitivity": "public"
+  }
 }
