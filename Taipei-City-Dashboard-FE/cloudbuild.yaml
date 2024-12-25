@@ -34,6 +34,9 @@ steps:
 
               echo "VITE_TAIPEIPASS_SCOPE=$_VITE_TAIPEIPASS_SCOPE" >>
               Taipei-City-Dashboard-FE/.env
+
+              echo "VITE_PERSONAL_BOARD_UPDATE=$_VITE_PERSONAL_BOARD_UPDATE" >>
+              Taipei-City-Dashboard-FE/.env
       entrypoint: bash
       secretEnv:
           - MAPBOX_TOKEN
