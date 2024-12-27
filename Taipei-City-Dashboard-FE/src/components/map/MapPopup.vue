@@ -42,13 +42,18 @@
           class="mappopup-video"
         >
           <h3>{{ item.name }}</h3>
-          <p>{{ popupContent[activeTab]?.properties[item.key] }}</p>
-          <p>影像載入中...</p>
-          <img
+          <!-- <p>{{ popupContent[activeTab]?.properties[item.key] }}</p> -->
+          <!-- <p>影像載入中...</p> -->
+          <!-- <img
             :src="popupContent[activeTab]?.properties[item.key]"
             width="100%"
             height="100%"
-          >
+          > -->
+			<iframe
+				width="300"
+				height="200"
+				:src="popupContent[activeTab]?.properties[item.key]">
+			</iframe>
         </div>
         <div v-else>
           <h3>{{ item.name }}</h3>
