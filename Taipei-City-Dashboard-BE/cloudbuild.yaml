@@ -32,9 +32,11 @@ steps:
       - "--set-env-vars"
       - DB_MANAGER_HOST=$_DB_MANAGER_HOST
       - "--set-env-vars"
+      - DB_MANAGER_DBNAME=$DB_MANAGER_DBNAME
+      - "--set-env-vars"
       - DB_MANAGER_USER=$_DB_MANAGER_USER
       - "--update-secrets"
-      - "DB_MANAGER_PASSWORD=dashboard-manager-password:latest"
+      - "DB_MANAGER_PASSWORD=dashboard-refactor-v3:latest"
       - "--set-env-vars"
       - REDIS_HOST=$_REDIS_HOST
       - "--update-secrets"
