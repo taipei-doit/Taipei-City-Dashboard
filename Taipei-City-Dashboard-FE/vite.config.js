@@ -23,6 +23,9 @@ export default defineConfig({
 	},
 	base: "/",
 	server: {
+		headers: {
+			'X-Robots-Tag': 'noindex, nofollow'
+		},
 		host: "0.0.0.0",
 		port: 80,
 		proxy: {
