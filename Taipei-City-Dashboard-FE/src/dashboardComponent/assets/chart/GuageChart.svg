@@ -1,0 +1,14 @@
+<svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+	<title>網站圖表ICON</title>
+	<style>
+		tspan { white-space:pre } 
+		.s0 { opacity: .5;fill: none;stroke: #000000;stroke-linecap: round;stroke-linejoin: round;stroke-width: 100 } 
+		.s1 { fill: none;stroke: #000000;stroke-linecap: round;stroke-linejoin: round;stroke-width: 100 } 
+		.s2 { opacity: .3;fill: none;stroke: #000000;stroke-linecap: round;stroke-linejoin: round;stroke-width: 100 } 
+	</style>
+	<g id="05 量表圖">
+		<path id="Shape 3" class="s0" d="m512 749c-131.1 0-237-105.9-237-237 0-131.1 105.9-237 237-237 131.1 0 237 105.9 237 237 0 131.1-105.9 237-237 237z"/>
+		<path id="Shape 3 copy 2" class="s1" d="m551.2 402.8c60.5 21.6 91.9 87.9 70.4 148.4-21.6 60.5-87.9 91.9-148.4 70.4-60.5-21.6-92-87.9-70.4-148.4 21.6-60.5 87.9-92 148.4-70.4z"/>
+		<path id="Shape 3 copy" class="s2" d="m511.5 871c-198.8 0-359.5-160.7-359.5-359.5 0-198.8 160.7-359.5 359.5-359.5 198.8 0 359.5 160.7 359.5 359.5 0 198.8-160.7 359.5-359.5 359.5z"/>
+	</g>
+</svg>

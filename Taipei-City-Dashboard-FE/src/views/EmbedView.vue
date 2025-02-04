@@ -4,7 +4,7 @@
 import { onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
 import http from "../router/axios";
-import { DashboardComponent } from "city-dashboard-component";
+import DashboardComponent from "../dashboardComponent/DashboardComponent.vue";
 import { useContentStore } from "../store/contentStore";
 
 import { getComponentDataTimeframe } from "../assets/utilityFunctions/dataTimeframe";

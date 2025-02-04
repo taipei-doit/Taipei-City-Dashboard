@@ -2,7 +2,7 @@
 
 <!-- Draggable tags that show component info to be used for dashboard settings -->
 <script setup>
-import { defineProps, ref } from "vue";
+import { ref } from "vue";
 
 const draggedItem = ref(null);
 
