@@ -37,6 +37,7 @@ type DashboardGroup struct {
 // }
 
 type allDashboards struct {
+	Public   []Dashboard `json:"public"`
 	Taipei   []Dashboard `json:"taipei"`
 	MetroTaipei   []Dashboard `json:"metrotaipei"`
 	Personal []Dashboard `json:"personal"`
@@ -48,6 +49,7 @@ func GetAllDashboards(personalGroups []int) (dashboards allDashboards, err error
 		Joins("JOIN dashboard_groups ON dashboards.id = dashboard_groups.dashboard_id AND dashboard_groups.group_id = ?", 1).
 		Order("dashboards.id").
 		Find(&dashboards.Taipei).
+		Find(&dashboards.Public).
 		Error
 
 	if err != nil {
