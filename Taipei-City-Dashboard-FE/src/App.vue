@@ -11,7 +11,7 @@ Testing: Jack Huang (Data Scientist), Ian Huang (Data Analysis Intern)
 <script setup>
 import { onBeforeMount, onMounted, onBeforeUnmount, ref, computed, watch } from "vue";
 import { useRoute } from "vue-router"
-import { useAuthStore } from "./store/authStore";
+import { usePersonStore } from "./store/personStore";
 import { useDialogStore } from "./store/dialogStore";
 import { useContentStore } from "./store/contentStore";
 import { useMapStore } from "./store/mapStore";
@@ -25,7 +25,7 @@ import InitialWarning from "./components/dialogs/InitialWarning.vue";
 import ComponentSideBar from "./components/utilities/bars/ComponentSideBar.vue";
 import LogIn from "./components/dialogs/LogIn.vue";
 
-const authStore = useAuthStore();
+const personStore = usePersonStore();
 const dialogStore = useDialogStore();
 const contentStore = useContentStore();
 const timeToUpdate = ref(600);
@@ -55,7 +55,7 @@ const formattedTimeToUpdate = computed(() => {
 });
 
 function reloadChartData() {
-	if (!["dashboard", "mapview"].includes(authStore.currentPath)) return;
+	if (!["dashboard", "mapview"].includes(personStore.currentPath)) return;
 	contentStore.setCurrentDashboardChartData();
 	timeToUpdate.value = frequency.value;
 
@@ -64,7 +64,7 @@ function reloadChartData() {
 	}
 }
 function updateTimeToUpdate() {
-	if (!["dashboard", "mapview"].includes(authStore.currentPath)) return;
+	if (!["dashboard", "mapview"].includes(personStore.currentPath)) return;
 	if (timeToUpdate.value <= 0) {
 		timeToUpdate.value = 0;
 		reloadChartData();
@@ -74,7 +74,7 @@ function updateTimeToUpdate() {
 }
 
 function reloadMapData() {
-	if (!["mapview"].includes(authStore.currentPath)) return;
+	if (!["mapview"].includes(personStore.currentPath)) return;
 	mapStore.currentVisibleLayers.forEach((layerName) => {
 		mapStore.map.removeLayer(layerName);
 		if (mapStore.map.getSource(`${layerName}-source`)) {
@@ -107,7 +107,7 @@ watch(() => route.query, (query) => {
 }), { immediate: true };
 
 onBeforeMount(() => {
-	authStore.initialChecks();
+	personStore.initialChecks();
 
 	let vh = window.innerHeight * 0.01;
 	document.documentElement.style.setProperty("--vh", `${vh}px`);
@@ -138,12 +138,12 @@ onBeforeUnmount(() => {
 <template>
   <div class="app-container">
     <NotificationBar />
-    <NavBar v-if="authStore.currentPath !== 'embed'" />
+    <NavBar v-if="personStore.currentPath !== 'embed'" />
     <!-- /mapview, /dashboard layouts -->
     <div
       v-if="
-        authStore.currentPath === 'mapview' ||
-          authStore.currentPath === 'dashboard'
+        personStore.currentPath === 'mapview' ||
+          personStore.currentPath === 'dashboard'
       "
       class="app-content"
     >
@@ -155,7 +155,7 @@ onBeforeUnmount(() => {
     </div>
     <!-- /admin layouts -->
     <div
-      v-else-if="authStore.currentPath === 'admin'"
+      v-else-if="personStore.currentPath === 'admin'"
       class="app-content"
     >
       <AdminSideBar />
@@ -165,7 +165,7 @@ onBeforeUnmount(() => {
     </div>
     <!-- /component, /component/:index layouts -->
     <div
-      v-else-if="authStore.currentPath.includes('component')"
+      v-else-if="personStore.currentPath.includes('component')"
       class="app-content"
     >
       <ComponentSideBar />
@@ -180,9 +180,9 @@ onBeforeUnmount(() => {
     <LogIn />
     <div
       v-if="
-        ['dashboard', 'mapview'].includes(authStore.currentPath) &&
-          !authStore.isMobile &&
-          !authStore.isNarrowDevice
+        ['dashboard', 'mapview'].includes(personStore.currentPath) &&
+          !personStore.isMobile &&
+          !personStore.isNarrowDevice
       "
       class="app-update"
     >
