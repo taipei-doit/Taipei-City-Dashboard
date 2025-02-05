@@ -60,6 +60,32 @@ type ComponentChart struct {
 	Unit  string         `json:"unit" gorm:"column:unit;type:varchar"`
 }
 
+// QueryCharts is the model for the query_charts table.
+type QueryCharts struct {
+	Index string                   `json:"index"      gorm:"column:index;type:varchar;primaryKey"     `
+	HistoryConfig  json.RawMessage `json:"history_config" gorm:"column:history_config;type:json"`
+	MapConfigIDs   pq.Int64Array   `json:"-" gorm:"column:map_config_ids;type:integer[]"`
+	MapConfig      json.RawMessage `json:"map_config" gorm:"type:json"`
+	// ChartConfig    json.RawMessage `json:"chart_config" gorm:"type:json"`
+	MapFilter      json.RawMessage `json:"map_filter" gorm:"column:map_filter;type:json"`
+	TimeFrom       string          `json:"time_from" gorm:"column:time_from;type:varchar"`
+	TimeTo         *string         `json:"time_to" gorm:"column:time_to;type:varchar"`
+	UpdateFreq     *int64          `json:"update_freq" gorm:"column:update_freq;type:integer"`
+	UpdateFreqUnit string          `json:"update_freq_unit" gorm:"column:update_freq_unit;type:varchar"`
+	Source         string          `json:"source" gorm:"column:source;type:varchar"`
+	ShortDesc      string          `json:"short_desc" gorm:"column:short_desc;type:text"`
+	LongDesc       string          `json:"long_desc" gorm:"column:long_desc;type:text"`
+	UseCase        string          `json:"use_case" gorm:"column:use_case;type:text"`
+	Links          pq.StringArray  `json:"links" gorm:"column:links;type:text[]"`
+	Contributors   pq.StringArray  `json:"contributors" gorm:"column:contributors;type:text[]"`
+	CreatedAt      time.Time       `json:"-" gorm:"column:created_at;type:timestamp with time zone;not null"`
+	UpdatedAt      time.Time       `json:"updated_at" gorm:"column:updated_at;type:timestamp with time zone;not null"`
+	QueryType      string          `json:"query_type" gorm:"column:query_type;type:varchar"`
+	QueryChart     string          `json:"-" gorm:"column:query_chart;type:text"`
+	QueryHistory   string          `json:"-" gorm:"column:query_history;type:text"`
+	City		   string          `json:"city" gorm:"column:city;type:text"`
+}
+
 /* ----- Handlers ----- */
 
 // createTempComponentDB joins the components, component_maps, and component_charts tables and selects the columns to return.
