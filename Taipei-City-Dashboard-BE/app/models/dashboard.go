@@ -55,7 +55,7 @@ func GetAllDashboards(personalGroups []int) (dashboards allDashboards, err error
 		return dashboards, err
 	}
 
-	err = DBManager.Debug().
+	err = DBManager.
 		Joins("JOIN dashboard_groups ON dashboards.id = dashboard_groups.dashboard_id").
 		Joins("JOIN groups ON dashboard_groups.group_id = groups.id AND groups.is_personal = False AND groups.name = ?", "taipei").
 		Order("dashboards.id").
@@ -66,7 +66,7 @@ func GetAllDashboards(personalGroups []int) (dashboards allDashboards, err error
 		return dashboards, err
 	}
 
-	err = DBManager.Debug().
+	err = DBManager.
 		Joins("JOIN dashboard_groups ON dashboards.id = dashboard_groups.dashboard_id").
 		Joins("JOIN groups ON dashboard_groups.group_id = groups.id AND groups.is_personal = False AND groups.name = ?", "metrotaipei").
 		Order("dashboards.id").
