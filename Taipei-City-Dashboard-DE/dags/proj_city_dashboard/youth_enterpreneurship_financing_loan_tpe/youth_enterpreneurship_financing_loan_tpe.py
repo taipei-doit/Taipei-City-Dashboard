@@ -3,10 +3,9 @@ from operators.common_pipeline import CommonDag
 from utils.extract_stage import get_data_taipei_api
 import pandas as pd
 from utils.transform_time import convert_roc_date
-from utils.extract_stage import get_data_taipei_file_last_modified_time
 from utils.load_stage import save_dataframe_to_postgresql, update_lasttime_in_data_to_dataset_info
 from sqlalchemy import create_engine
-
+from utils.get_time import get_tpe_now_time_str
 
 
 def _transfer(**kwargs):
@@ -40,7 +39,7 @@ def _transfer(**kwargs):
     # Extract
     res = get_data_taipei_api(rid)
     raw_data = pd.DataFrame(res)
-    raw_data["data_time"] = raw_data["_importdate"].iloc[0]["date"]
+    raw_data["data_time"] = get_tpe_now_time_str()
  
     # Transform
     # Rename
