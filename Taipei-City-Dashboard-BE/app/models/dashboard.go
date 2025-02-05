@@ -31,8 +31,14 @@ type DashboardGroup struct {
 
 /* ----- Handlers ----- */
 
+// type allDashboards struct {
+// 	Public   []Dashboard `json:"public"`
+// 	Personal []Dashboard `json:"personal"`
+// }
+
 type allDashboards struct {
-	Public   []Dashboard `json:"public"`
+	Taipei   []Dashboard `json:"taipei"`
+	MetroTaipei   []Dashboard `json:"metrotaipei"`
 	Personal []Dashboard `json:"personal"`
 }
 
@@ -41,7 +47,17 @@ func GetAllDashboards(personalGroups []int) (dashboards allDashboards, err error
 	err = DBManager.
 		Joins("JOIN dashboard_groups ON dashboards.id = dashboard_groups.dashboard_id AND dashboard_groups.group_id = ?", 1).
 		Order("dashboards.id").
-		Find(&dashboards.Public).
+		Find(&dashboards.Taipei).
+		Error
+
+	if err != nil {
+		return dashboards, err
+	}
+
+	err = DBManager.
+		Joins("JOIN dashboard_groups ON dashboards.id = dashboard_groups.dashboard_id AND dashboard_groups.group_id = ?", 2).
+		Order("dashboards.id").
+		Find(&dashboards.MetroTaipei).
 		Error
 
 	if err != nil {
