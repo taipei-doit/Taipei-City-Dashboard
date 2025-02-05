@@ -2,7 +2,7 @@ from airflow import DAG
 from operators.common_pipeline import CommonDag
 from utils.extract_stage import get_data_taipei_api
 import pandas as pd
-from utils.transform_time import convert_str_to_time_format
+from utils.transform_time import convert_roc_date
 from utils.extract_stage import get_data_taipei_file_last_modified_time
 from utils.load_stage import save_dataframe_to_postgresql, update_lasttime_in_data_to_dataset_info
 from sqlalchemy import create_engine
@@ -52,6 +52,8 @@ def _transfer(**kwargs):
         "核准金額－累計－萬元": "total_approved_amount_ten_thousand_ntd"
     }
     data = data.rename(columns=col_map)
+    data['period'] = data['period'].apply(convert_roc_date)
+
     # Time
     # standardize time
     data = data.drop(columns=['_id','_importdate'])
