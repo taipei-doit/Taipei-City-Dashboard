@@ -55,7 +55,7 @@ def _transfer(**kwargs):
     "不合格家數": "non_compliant_households",
     "合格率": "compliance_rate",
     "複查合格率": "reinspection_compliance_rate",
-    "相當於幾座大安森林公園碳匯量": "carbon_sink_equivalent_daan_forest_parks"
+    "相當於幾座大安森林公園碳匯量": "carbon_sink_daan_forest_parks"
 }
 
 
