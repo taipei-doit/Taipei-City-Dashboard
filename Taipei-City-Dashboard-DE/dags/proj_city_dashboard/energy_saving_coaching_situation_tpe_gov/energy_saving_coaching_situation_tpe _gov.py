@@ -8,11 +8,14 @@ def _transfer(**kwargs):
     Explanation:
     -------------
     `年度` as year
-    `輔導家數` as tutor_household
-    `節電度數` as power_saving_degree
-    `節電費用` as electricity_saving_expenses.
-    `減碳量－公噸` as carbon_reduction_metric_tons.
-    `相當於幾座大安森林公園碳匯量` as carbon_sink_daan_forest_parks.
+    `查核家數`as audited_households
+    `節電量－萬度/年`as power_saving_ten_thousand_kWh_per_year
+    `減碳量－公噸`as carbon_reduction_metric_tons
+    `不合格家數`as non_compliant_households
+    `合格率` as compliance_rate
+    `複查合格率` as reinspection_compliance_rate
+    `相當於幾座大安森林公園碳匯量` as  carbon_sink_equivalent_daan_forest_parks
+
     '''
     from utils.extract_stage import get_data_taipei_api
     import pandas as pd
