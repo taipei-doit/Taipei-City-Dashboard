@@ -63,9 +63,9 @@ def _transfer(**kwargs):
     # Transfer year from ROC to AD
     data['year'] = data['year'].astype(int) + 1911
     data['compliance_rate'] = data['compliance_rate'].replace('%', '', regex=True)
-    data['compliance_rate'] = data['compliance_rate'].astype(int)
+    data['compliance_rate'] = data['compliance_rate'].astype(float)
     data['reinspection_compliance_rate'] = data['reinspection_compliance_rate'].replace('%', '', regex=True)
-    data['reinspection_compliance_rate'] = data['reinspection_compliance_rate'].astype(int)
+    data['reinspection_compliance_rate'] = data['reinspection_compliance_rate'].astype(float)
     data['audited_households'] = data['audited_households'].astype(int)
     data['carbon_sink_daan_forest_parks'] = data['carbon_sink_daan_forest_parks'].astype(int)
     data['power_saving_ten_thousand_kWh_per_year'] = data['power_saving_ten_thousand_kWh_per_year'].astype(int)
