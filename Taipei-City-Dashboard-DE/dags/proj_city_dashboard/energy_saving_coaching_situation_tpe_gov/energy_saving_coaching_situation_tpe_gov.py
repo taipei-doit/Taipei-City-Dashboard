@@ -50,7 +50,7 @@ def _transfer(**kwargs):
     col_map = {
     "年度": "year",
     "查核家數": "audited_households",
-    "節電量－萬度/年": "power_saving_ten_thousand_kWh_per_year",
+    "節電量－萬度/年": "power_saving_ten_thousand_kwh_per_year",
     "減碳量－公噸": "carbon_reduction_metric_tons",
     "不合格家數": "non_compliant_households",
     "合格率": "compliance_rate",
@@ -67,7 +67,7 @@ def _transfer(**kwargs):
     data['reinspection_compliance_rate'] = data['reinspection_compliance_rate'].replace('%', '', regex=True)
     data['audited_households'] = data['audited_households'].astype(int)
     data['carbon_sink_daan_forest_parks'] = data['carbon_sink_daan_forest_parks'].astype(int)
-    data['power_saving_ten_thousand_kWh_per_year'] = data['power_saving_ten_thousand_kWh_per_year'].astype(int)
+    data['power_saving_ten_thousand_kwh_per_year'] = data['power_saving_ten_thousand_kwh_per_year'].astype(int)
     data['non_compliant_households'] = data['non_compliant_households'].astype(int)
     # Time
     data['data_time'] = get_data_taipei_file_last_modified_time(page_id)
