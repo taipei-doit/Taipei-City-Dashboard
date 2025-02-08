@@ -79,6 +79,7 @@ func configureComponentRoutes() {
 	{
 		componentRoutes.GET("/", controllers.GetAllComponents)
 		componentRoutes.GET("/:id", controllers.GetComponentByID)
+		componentRoutes.GET("/:id/:city", controllers.GetComponentByID)
 		componentRoutes.GET("/:id/chart", controllers.GetComponentChartData)
 		componentRoutes.GET("/:id/chart/:city", controllers.GetComponentChartData)
 		componentRoutes.GET("/:id/history", controllers.GetComponentHistoryData)
@@ -89,6 +90,7 @@ func configureComponentRoutes() {
 		componentRoutes.
 			POST("/", controllers.CreateComponent).
 			PATCH("/:id", controllers.UpdateComponent).
+			PATCH("/:id/:city", controllers.UpdateComponent).
 			DELETE("/:id", controllers.DeleteComponent)
 		componentRoutes.
 			PATCH("/:id/chart", controllers.UpdateComponentChartConfig)
