@@ -120,7 +120,7 @@ func GetComponentChartDataQuery(id int, city string) (queryType string, queryStr
 	err = DBManager.
 		Table("components").
 		Select("query_charts.query_type, query_charts.query_chart").
-		Joins("RIGHT JOIN query_charts ON components.index = query_charts.index").
+		Joins("LEFT JOIN query_charts ON components.index = query_charts.index").
 		Where("components.id = ?", id).
 		Where("query_charts.city = ?", city).
 		Find(&chartDataQuery).Error
@@ -136,7 +136,7 @@ func GetComponentHistoryDataQuery(id int, city string, timeFrom string, timeTo s
 	err = DBManager.
 		Table("components").
 		Select("query_charts.query_history").
-		Joins("RIGHT JOIN query_charts ON components.index = query_charts.index").
+		Joins("LEFT JOIN query_charts ON components.index = query_charts.index").
 		Where("components.id = ?", id).
 		Where("query_charts.city = ?", city).
 		Find(&historyDataQuery).Error

@@ -28,6 +28,7 @@ GET /api/v1/component
 */
 
 type componentQuery struct {
+	City		  string `form:"city"`
 	PageSize      int    `form:"pagesize"`
 	PageNum       int    `form:"pagenum"`
 	Sort          string `form:"sort"`
@@ -44,6 +45,8 @@ type componentQuery struct {
 // 缺少 components.index(component_charts.index)，後續需要設計流程補上
 func CreateComponent(c *gin.Context) {
 	var component models.Component
+	var queryChart models.QueryCharts
+	var cityComponent models.CityComponent
 
 	// 1. Bind the request body to the component and make sure it's valid
 	err := c.ShouldBindJSON(&component)
@@ -53,14 +56,14 @@ func CreateComponent(c *gin.Context) {
 	}
 
 	// 2. Create the component
-	component, err = models.CreateComponent(component.Name, component.HistoryConfig, component.MapFilter, component.TimeFrom, component.TimeTo, component.UpdateFreq, component.UpdateFreqUnit, component.Source, component.ShortDesc, component.LongDesc, component.UseCase, component.Links, component.Contributors)
+	cityComponent, err = models.CreateComponent(component.Index, component.Name, queryChart.City, queryChart.HistoryConfig, queryChart.MapFilter, queryChart.TimeFrom, queryChart.TimeTo, queryChart.UpdateFreq, queryChart.UpdateFreqUnit, queryChart.Source, queryChart.ShortDesc, queryChart.LongDesc, queryChart.UseCase, queryChart.Links, queryChart.Contributors)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": err.Error()})
 		return
 	}
 
 	// 3. Return the component
-	c.JSON(http.StatusOK, gin.H{"status": "success", "data": component})
+	c.JSON(http.StatusOK, gin.H{"status": "success", "data": cityComponent})
 }
 
 func GetAllComponents(c *gin.Context) {
@@ -68,14 +71,19 @@ func GetAllComponents(c *gin.Context) {
 	var query componentQuery
 	c.ShouldBindQuery(&query)
 
-	components, totalComponents, resultNum, err := models.GetAllComponents(query.PageSize, query.PageNum, query.Sort, query.Order, query.FilterBy, query.FilterMode, query.FilterValue, query.SearchByIndex, query.SearchByName)
+	if !(query.City == "taipei" || query.City == "metrotaipei" || query.City == ""){
+		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": "Invalid City Name"})
+		return
+	}
+
+	cityComponents, totalComponents, resultNum, err := models.GetAllComponents(query.City, query.PageSize, query.PageNum, query.Sort, query.Order, query.FilterBy, query.FilterMode, query.FilterValue, query.SearchByIndex, query.SearchByName)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": err.Error()})
 		return
 	}
 
 	// Return the components
-	c.JSON(http.StatusOK, gin.H{"status": "success", "total": totalComponents, "results": resultNum, "data": components})
+	c.JSON(http.StatusOK, gin.H{"status": "success", "total": totalComponents, "results": resultNum, "data": cityComponents})
 }
 
 /*
@@ -90,15 +98,26 @@ func GetComponentByID(c *gin.Context) {
 		return
 	}
 
+	// 1.1 Get the city name from the URL
+	city := c.Param("city")
+	if !(city == "taipei" || city == "metrotaipei" || city == ""){
+		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": "Invalid City Name"})
+		return
+	}
+
+	if city == ""{
+		city = "taipei"
+	}
+
 	// Find the component
-	component, err := models.GetComponentByID(id)
+	cityComponent, err := models.GetComponentByID(id, city)
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"status": "error", "message": "component not found"})
 		return
 	}
 
 	// Return the component
-	c.JSON(http.StatusOK, gin.H{"status": "success", "data": component})
+	c.JSON(http.StatusOK, gin.H{"status": "success", "data": cityComponent})
 }
 
 /*
@@ -106,7 +125,7 @@ UpdateComponent updates a component's config in the database.
 PATCH /api/v1/component/:id
 */
 func UpdateComponent(c *gin.Context) {
-	var component models.Component
+	var cityComponent models.CityComponent
 
 	// 1. Get the component ID from the context
 	id, err := strconv.Atoi(c.Param("id"))
@@ -115,29 +134,40 @@ func UpdateComponent(c *gin.Context) {
 		return
 	}
 
+	// 1.1 Get the city name from the URL
+	city := c.Param("city")
+	if !(city == "taipei" || city == "metrotaipei" || city == ""){
+		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": "Invalid City Name"})
+		return
+	}
+
+	if city == ""{
+		city = "taipei"
+	}
+
 	// 2. Check if the component exists
-	_, err = models.GetComponentByID(id)
+	_, err = models.GetComponentByID(id, city)
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"status": "error", "message": "component not found"})
 		return
 	}
 
 	// 3. Bind the request body to the component and make sure it's valid
-	err = c.ShouldBindJSON(&component)
+	err = c.ShouldBindJSON(&cityComponent)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": err.Error()})
 		return
 	}
 
 	// 4. Update the component
-	component, err = models.UpdateComponent(id, component.Name, component.HistoryConfig, component.MapFilter, component.TimeFrom, component.TimeTo, component.UpdateFreq, component.UpdateFreqUnit, component.Source, component.ShortDesc, component.LongDesc, component.UseCase, component.Links, component.Contributors)
+	cityComponent, err = models.UpdateComponent(id, city, cityComponent.Name, cityComponent.HistoryConfig, cityComponent.MapFilter, cityComponent.TimeFrom, cityComponent.TimeTo, cityComponent.UpdateFreq, cityComponent.UpdateFreqUnit, cityComponent.Source, cityComponent.ShortDesc, cityComponent.LongDesc, cityComponent.UseCase, cityComponent.Links, cityComponent.Contributors)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": err.Error()})
 		return
 	}
 
 	// 5. Return the component
-	c.JSON(http.StatusOK, gin.H{"status": "success", "data": component})
+	c.JSON(http.StatusOK, gin.H{"status": "success", "data": cityComponent})
 }
 
 /*
@@ -154,8 +184,19 @@ func UpdateComponentChartConfig(c *gin.Context) {
 		return
 	}
 
+	// 1.1 Get the city name from the URL
+	city := c.Param("city")
+	if !(city == "taipei" || city == "metrotaipei" || city == ""){
+		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": "Invalid City Name"})
+		return
+	}
+
+	if city == ""{
+		city = "taipei"
+	}
+
 	// 2. Find the component and chart config
-	component, err := models.GetComponentByID(id)
+	component, err := models.GetComponentByID(id, city)
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"status": "error", "message": "component not found"})
 		return
@@ -218,7 +259,8 @@ DELETE /api/v1/component/:id
 Note: Associated chart config will also be deleted. Associated map config will only be deleted if no other components are using it.
 */
 func DeleteComponent(c *gin.Context) {
-	var component models.Component
+	var component models.CityComponent
+	var queryChart models.QueryCharts
 
 	// 1. Get the component ID from the context
 	id, err := strconv.Atoi(c.Param("id"))
@@ -227,15 +269,26 @@ func DeleteComponent(c *gin.Context) {
 		return
 	}
 
+	// 1.1 Get the city name from the URL
+	city := c.Param("city")
+	if !(city == "taipei" || city == "metrotaipei" || city == ""){
+		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": "Invalid City Name"})
+		return
+	}
+
+	if city == ""{
+		city = "taipei"
+	}
+
 	// 2. Find the component
-	component, err = models.GetComponentByID(id)
+	component, err = models.GetComponentByID(id, city)
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"status": "error", "message": "component not found"})
 		return
 	}
 
 	// 3. Delete the component
-	deleteChartStatus, deleteMapStatus, err := models.DeleteComponent(id, component.Index, component.MapConfigIDs)
+	deleteChartStatus, deleteMapStatus, err := models.DeleteComponent(id, component.Index, queryChart.MapConfigIDs)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": err.Error()})
 		return

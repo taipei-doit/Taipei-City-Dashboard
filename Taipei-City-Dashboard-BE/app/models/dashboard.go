@@ -86,7 +86,7 @@ func GetAllDashboards(personalGroups []int) (dashboards allDashboards, err error
 	return dashboards, err
 }
 
-func GetDashboardByIndex(index string, groups []int) (components []Component, err error) {
+func GetDashboardByIndex(index string, groups []int) (components []CityComponent, err error) {
 	tempDB := createTempComponentDB()
 
 	type componentArray struct {
