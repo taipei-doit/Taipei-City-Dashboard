@@ -48,6 +48,17 @@ onMounted(() => {
       'hide-if-mobile': true,
     }"
   >
+  	<button
+      class="sidebar-collapse-button"
+	  :class="{notExpanded: !isExpanded}"
+      @click="toggleExpand"
+    >
+      <span>{{
+        isExpanded
+          ? "keyboard_double_arrow_left"
+          : "keyboard_double_arrow_right"
+      }}</span>
+    </button>
     <div v-if="authStore.token">
       <h2>{{ isExpanded ? `我的最愛` : `最愛` }}</h2>
       <SideBarTab
@@ -86,9 +97,20 @@ onMounted(() => {
         :expanded="isExpanded"
       />
     </div>
-    <h2>{{ isExpanded ? `公共儀表板 ` : `公共` }}</h2>
+    <h2>{{ isExpanded ? `臺北儀表板 ` : `臺北` }}</h2>
     <SideBarTab
-      v-for="item in contentStore.publicDashboards.filter(
+      v-for="item in contentStore.taipeiDashboards.filter(
+        (item) => item.index !== 'map-layers'
+      )"
+      :key="item.index"
+      :icon="item.icon"
+      :title="item.name"
+      :index="item.index"
+      :expanded="isExpanded"
+    />
+    <h2>{{ isExpanded ? `雙北儀表板 ` : `雙北` }}</h2>
+    <SideBarTab
+      v-for="item in contentStore.metroTaipeiDashboards.filter(
         (item) => item.index !== 'map-layers'
       )"
       :key="item.index"
@@ -105,7 +127,7 @@ onMounted(() => {
       index="map-layers"
     />
 
-    <button
+    <!-- <button
       class="sidebar-collapse-button"
       @click="toggleExpand"
     >
@@ -114,7 +136,7 @@ onMounted(() => {
           ? "keyboard_double_arrow_left"
           : "keyboard_double_arrow_right"
       }}</span>
-    </button>
+    </button> -->
   </div>
 </template>
 
@@ -184,15 +206,23 @@ onMounted(() => {
 
 		&-button {
 			height: fit-content;
-			position: absolute;
-			bottom: 10px;
-			right: 10px;
+			position: fixed;
+			top: 80px;
+			left: calc(170px - 10px);
 			padding: 5px;
 			border-radius: 5px;
 			transition: background-color 0.2s;
 
 			&:hover {
 				background-color: var(--color-component-background);
+			}
+
+			&.notExpanded {
+				position: sticky;
+				background-color: var(--color-background);
+				width: 100%;
+				left: 0;
+				top: 0;
 			}
 
 			span {
