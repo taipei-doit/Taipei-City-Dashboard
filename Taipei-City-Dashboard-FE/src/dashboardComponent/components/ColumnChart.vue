@@ -49,6 +49,9 @@ const chartOptions = ref({
 	plotOptions: {
 		bar: {
 			borderRadius: 5,
+			dataLabels: {
+				hideOverflowingLabels: false
+			},
 		},
 	},
 	stroke: {
