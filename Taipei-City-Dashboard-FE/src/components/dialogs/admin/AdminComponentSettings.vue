@@ -3,7 +3,7 @@
 <script setup>
 import { ref, defineProps } from "vue";
 import { storeToRefs } from "pinia";
-import { DashboardComponent } from "city-dashboard-component";
+import DashboardComponent from "../../../dashboardComponent/DashboardComponent.vue";
 import { useDialogStore } from "../../../store/dialogStore";
 import { useAdminStore } from "../../../store/adminStore";
 

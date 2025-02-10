@@ -17,6 +17,8 @@ export const useContentStore = defineStore("content", {
 	state: () => ({
 		// Stores all dashboards data. (used in /dashboard, /mapview)
 		publicDashboards: [],
+		taipeiDashboards: [],
+		metroTaipeiDashboards: [],
 		personalDashboards: [],
 		// Stores all components data. (used in /component)
 		components: [],
@@ -71,7 +73,7 @@ export const useContentStore = defineStore("content", {
 			// 	this.setContributors();
 			// }
 			// 1-3. If there is no dashboards info, call the setDashboards method (2.)
-			if (this.publicDashboards.length === 0) {
+			if (this.taipeiDashboards.length === 0) {
 				this.setDashboards();
 				return;
 			}
@@ -90,6 +92,8 @@ export const useContentStore = defineStore("content", {
 
 			this.personalDashboards = response.data.data.personal;
 			this.publicDashboards = response.data.data.public;
+			this.taipeiDashboards = response.data.data.taipei;
+			this.metroTaipeiDashboards = response.data.data.metrotaipei;
 
 			if (this.personalDashboards.length !== 0) {
 				this.favorites = this.personalDashboards.find(
@@ -103,7 +107,7 @@ export const useContentStore = defineStore("content", {
 			if (onlyDashboard) return;
 
 			if (!this.currentDashboard.index) {
-				this.currentDashboard.index = this.publicDashboards[0].index;
+				this.currentDashboard.index = this.taipeiDashboards[0].index;
 				router.replace({
 					query: {
 						index: this.currentDashboard.index,
@@ -115,7 +119,8 @@ export const useContentStore = defineStore("content", {
 		},
 		// 3. Finds the info for the current dashboard based on the index and adds it to "currentDashboard"
 		async setCurrentDashboardContent() {
-			const allDashboards = this.publicDashboards.concat(
+			const allDashboards = this.taipeiDashboards.concat(
+				this.metroTaipeiDashboards,
 				this.personalDashboards
 			);
 			const currentDashboardInfo = allDashboards.find(
@@ -124,7 +129,7 @@ export const useContentStore = defineStore("content", {
 			if (!currentDashboardInfo) {
 				router.replace({
 					query: {
-						index: this.publicDashboards[0].index,
+						index: this.taipeiDashboards[0].index,
 					},
 				});
 				return;

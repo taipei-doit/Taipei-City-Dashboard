@@ -46,9 +46,21 @@ const authStore = useAuthStore();
                 @click="dialogStore.hideAllDialogs"
               />
             </div>
-            <h2>公共儀表板</h2>
+            <h2>臺北儀表板</h2>
             <SideBarTab
-              v-for="item in contentStore.publicDashboards.filter(
+              v-for="item in contentStore.taipeiDashboards.filter(
+                (item) => item.index !== 'map-layers'
+              )"
+              :key="item.index"
+              :icon="item.icon"
+              :title="item.name"
+              :index="item.index"
+              :expanded="true"
+              @click="dialogStore.hideAllDialogs"
+            />
+            <h2>新北儀表板</h2>
+            <SideBarTab
+              v-for="item in contentStore.metroTaipeiDashboards.filter(
                 (item) => item.index !== 'map-layers'
               )"
               :key="item.index"

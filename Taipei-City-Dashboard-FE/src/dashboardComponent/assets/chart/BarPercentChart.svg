@@ -1,0 +1,16 @@
+<svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+	<title>網站圖表ICON</title>
+	<style>
+		tspan { white-space:pre } 
+		.s0 { fill: #000000 } 
+		.s1 { opacity: .2;fill: #000000 } 
+		.s2 { opacity: .5;fill: #000000 } 
+		.s3 { opacity: .3;fill: #000000 } 
+	</style>
+	<g id="02 長條圖_比例">
+		<path id="Shape 1 copy" class="s0" d="m409 860c-8.3 0-15-6.7-15-15v-289c0-8.3 6.7-15 15-15h205c8.3 0 15 6.7 15 15v289c0 8.3-6.7 15-15 15z"/>
+		<path id="Shape 1 copy 7" class="s1" d="m409 215c-8.3 0-15-6.7-15-15v-21c0-8.3 6.7-15 15-15h205c8.3 0 15 6.7 15 15v21c0 8.3-6.7 15-15 15z"/>
+		<path id="Shape 1 copy 5" class="s2" d="m409 516c-8.3 0-15-6.7-15-15v-127c0-8.3 6.7-15 15-15h205c8.3 0 15 6.7 15 15v127c0 8.3-6.7 15-15 15z"/>
+		<path id="Shape 1 copy 6" class="s3" d="m409 332c-8.3 0-15-6.7-15-15v-55c0-8.3 6.7-15 15-15h205c8.3 0 15 6.7 15 15v55c0 8.3-6.7 15-15 15z"/>
+	</g>
+</svg>

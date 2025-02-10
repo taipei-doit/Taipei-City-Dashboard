@@ -102,6 +102,8 @@ export const useAuthStore = defineStore("auth", {
 			this.editUser = JSON.parse(JSON.stringify(this.user));
 
 			contentStore.publicDashboards = [];
+			contentStore.taipeiDashboards = [];
+			contentStore.metroTaipeiDashboards = [];
 			router.go();
 			dialogStore.showNotification("success", "登入成功");
 		},
@@ -116,6 +118,8 @@ export const useAuthStore = defineStore("auth", {
 			this.token = null;
 
 			contentStore.publicDashboards = [];
+			contentStore.taipeiDashboards = [];
+			contentStore.metroTaipeiDashboards = [];
 
 			if (this.isso_token) {
 				await http.post(

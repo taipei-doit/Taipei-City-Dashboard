@@ -2,7 +2,7 @@
 
 <!-- Draggable tags to be used in conjunction with an input element -->
 <script setup>
-import { defineProps, ref } from "vue";
+import { ref } from "vue";
 
 const draggedItem = ref(null);
 

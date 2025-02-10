@@ -6,7 +6,7 @@
 <script setup>
 import { computed, onMounted, ref } from "vue";
 import http from "../../../router/axios";
-import { DashboardComponent } from "city-dashboard-component";
+import DashboardComponent from "../../../dashboardComponent/DashboardComponent.vue";
 
 import { useDialogStore } from "../../../store/dialogStore";
 import { useAdminStore } from "../../../store/adminStore";

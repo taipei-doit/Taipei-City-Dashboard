@@ -32,7 +32,7 @@ const timeToUpdate = ref(600);
 
 const mapStore = useMapStore();
 const route = useRoute();
-const updateBoards = import.meta.env.VITE_PERSONAL_BOARD_UPDATE.split(',');
+const updateBoards = import.meta.env.VITE_PERSONAL_BOARD_UPDATE?.split(',') || [];
 const boardIndex = ref(null);
 const board =ref(null);
 const frequency = ref(600);
