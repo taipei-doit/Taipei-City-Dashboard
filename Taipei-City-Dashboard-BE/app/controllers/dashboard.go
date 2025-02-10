@@ -2,6 +2,7 @@
 package controllers
 
 import (
+	"errors"
 	"net/http"
 	"strings"
 
@@ -10,6 +11,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	"gorm.io/gorm"
 )
 
 /*
@@ -54,6 +56,11 @@ func GetDashboardByIndex(c *gin.Context) {
 
 	components, err := models.GetDashboardByIndex(dashboardIndex, groups)
 	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound){
+			c.JSON(http.StatusNotFound, gin.H{"status": "error", "message": err.Error()})
+			return
+		}
+
 		c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": err.Error()})
 		return
 	}
@@ -99,7 +106,8 @@ func CreatePersonalDashboard(c *gin.Context) {
 
 	// check has permission, role admin(id=1) editor(id=2)
 	if !util.HasPermission(permissions, groupID, 1) && !util.HasPermission(permissions, groupID, 2) {
-		c.JSON(http.StatusUnauthorized, gin.H{"message": "permission denied"})
+		// c.JSON(http.StatusUnauthorized, gin.H{"message": "permission denied"})
+		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": "permission denied"})
 		return
 	}
 
