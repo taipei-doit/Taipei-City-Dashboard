@@ -86,6 +86,22 @@ func GetAllDashboards(personalGroups []int) (dashboards allDashboards, err error
 	return dashboards, err
 }
 
+
+func GetAllPublicGroupsID() (ids []int, err error) {
+	// Assume is_personal = false means public group
+	err = DBManager.
+		Table("groups").
+		Where("is_personal = false").
+		Pluck("groups.id", &ids).
+		Error
+
+	if err != nil {
+		return ids, err
+	}
+
+	return ids, err
+}
+
 func GetDashboardByIndex(index string, groups []int) (components []CityComponent, err error) {
 	tempDB := createTempComponentDB()
 
