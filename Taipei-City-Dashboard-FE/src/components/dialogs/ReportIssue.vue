@@ -4,12 +4,12 @@
 import { ref } from "vue";
 import http from "../../router/axios";
 import { useDialogStore } from "../../store/dialogStore";
-import { usePersonStore } from "../../store/personStore";
+import { useAuthStore } from "../../store/authStore";
 import { useContentStore } from "../../store/contentStore";
 import DialogContainer from "./DialogContainer.vue";
 
 const dialogStore = useDialogStore();
-const personStore = usePersonStore();
+const authStore = useAuthStore();
 const contentStore = useContentStore();
 
 const allInputs = ref({
@@ -28,8 +28,8 @@ async function handleSubmit() {
 	const submitObject = {
 		title: allInputs.value.title,
 		description: allInputs.value.description,
-		user_name: personStore.person.name,
-		user_id: `${personStore.person.person_id}`,
+		user_name: authStore.user.name,
+		user_id: `${authStore.user.user_id}`,
 		context: `類型：${allInputs.value.type} // 來源：${dialogStore.issue.id} - ${dialogStore.issue.index} - ${dialogStore.issue.name}`,
 		status: "待處理",
 	};

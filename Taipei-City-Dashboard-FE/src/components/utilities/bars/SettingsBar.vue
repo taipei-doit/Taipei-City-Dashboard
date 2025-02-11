@@ -5,7 +5,7 @@
 <script setup>
 import { computed } from "vue";
 import { useRoute } from "vue-router";
-import { usePersonStore } from "../../../store/personStore";
+import { useAuthStore } from "../../../store/authStore";
 import { useContentStore } from "../../../store/contentStore";
 import { useDialogStore } from "../../../store/dialogStore";
 import { useMapStore } from "../../../store/mapStore";
@@ -17,7 +17,7 @@ import AddViewPoint from "../../dialogs/AddViewPoint.vue";
 const contentStore = useContentStore();
 const dialogStore = useDialogStore();
 const mapStore = useMapStore();
-const personStore = usePersonStore();
+const authStore = useAuthStore();
 const route = useRoute();
 
 const isCurrentPageMapView = computed(() => route.name === "mapview");
@@ -60,7 +60,7 @@ function handleOpenSettings() {
       <AddEditDashboards />
     </div>
     <button
-      v-if="personStore.person?.person_id && isCurrentPageMapView"
+      v-if="authStore.user?.user_id && isCurrentPageMapView"
       class="settingsbar-pin hide-if-mobile"
       :disabled="!mapStore.tempMarkerCoordinates"
       :style="{

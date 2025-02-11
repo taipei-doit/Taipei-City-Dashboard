@@ -3,13 +3,13 @@
 <script setup>
 import { ref } from "vue";
 import { useDialogStore } from "../../store/dialogStore";
-import { usePersonStore } from "../../store/personStore";
+import { useAuthStore } from "../../store/authStore";
 
 import DialogContainer from "./DialogContainer.vue";
 import CustomCheckBox from "../utilities/forms/CustomCheckBox.vue";
 
 const dialogStore = useDialogStore();
-const personStore = usePersonStore();
+const authStore = useAuthStore();
 
 // Stores whether the user doesn't want to see this dialog again
 const dontShowAgain = ref(false);
@@ -32,14 +32,14 @@ function handleClose() {
     @on-close="handleClose"
   >
     <div class="initialwarning">
-      <h2 v-if="personStore.isMbDevice">
+      <h2 v-if="authStore.isMobileDevice">
         臺北城市儀表板行動版注意事項
       </h2>
       <h2 v-else>
         臺北城市儀表板使用說明
       </h2>
       <div
-        v-if="personStore.isMbDevice"
+        v-if="authStore.isMobileDevice"
         class="initialwarning-message"
       >
         <p>

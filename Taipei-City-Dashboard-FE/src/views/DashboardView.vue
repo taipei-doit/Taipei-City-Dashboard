@@ -13,14 +13,14 @@ import { DashboardComponent } from "city-dashboard-component";
 import router from "../router";
 import { useContentStore } from "../store/contentStore";
 import { useDialogStore } from "../store/dialogStore";
-import { usePersonStore } from "../store/personStore";
+import { useAuthStore } from "../store/authStore";
 
 import MoreInfo from "../components/dialogs/MoreInfo.vue";
 import ReportIssue from "../components/dialogs/ReportIssue.vue";
 
 const contentStore = useContentStore();
 const dialogStore = useDialogStore();
-const personStore = usePersonStore();
+const authStore = useAuthStore();
 
 function handleOpenSettings() {
 	contentStore.editDashboard = JSON.parse(
@@ -38,7 +38,7 @@ function toggleFavorite(id) {
 	}
 }
 function handleMoreInfo(item) {
-	if (personStore.isMbDevice && personStore.isNarrowDevice) {
+	if (authStore.isMobileDevice && authStore.isNarrowDevice) {
 		router.push({
 			name: "component-info",
 			params: { index: item.index },
@@ -61,7 +61,7 @@ function handleMoreInfo(item) {
       :config="item"
       mode="half"
       :info-btn="true"
-      :favorite-btn="personStore.code ? true : false"
+      :favorite-btn="authStore.token ? true : false"
       :is-favorite="contentStore.favorites?.components.includes(item.id)"
       @favorite="
         (id) => {
@@ -93,7 +93,7 @@ function handleMoreInfo(item) {
           .includes(contentStore.currentDashboard.index)
       "
       :favorite-btn="
-        personStore.code &&
+        authStore.token &&
           contentStore.currentDashboard.icon !== 'favorite'
       "
       :is-favorite="contentStore.favorites?.components.includes(item.id)"

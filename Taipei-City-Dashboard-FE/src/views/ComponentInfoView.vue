@@ -14,7 +14,7 @@ import router from "../router";
 import { DashboardComponent } from "city-dashboard-component";
 import { useContentStore } from "../store/contentStore";
 import { useDialogStore } from "../store/dialogStore";
-import { usePersonStore } from "../store/personStore";
+import { useAuthStore } from "../store/authStore";
 
 import HistoryChart from "../components/charts/HistoryChart.vue";
 import ReportIssue from "../components/dialogs/ReportIssue.vue";
@@ -23,7 +23,7 @@ import EmbedComponent from "../components/dialogs/EmbedComponent.vue";
 
 const contentStore = useContentStore();
 const dialogStore = useDialogStore();
-const personStore = usePersonStore();
+const authStore = useAuthStore();
 
 const searchParams = ref({
 	searchbyindex: "",
@@ -52,9 +52,9 @@ onMounted(() => {
   <div class="componentinfoview-header">
     <button
       v-if="
-        personStore.isMbDevice ||
-          personStore.isNarrowDevice ||
-          !personStore.code
+        authStore.isMobileDevice ||
+          authStore.isNarrowDevice ||
+          !authStore.token
       "
       @click="router.back()"
     >
@@ -88,9 +88,9 @@ onMounted(() => {
           !contentStore.editDashboard.components
             .map((item) => item.id)
             .includes(dialogStore.moreInfoContent.id) &&
-            !!personStore.code
+            !!authStore.token
         "
-        :favorite-btn="!!personStore.code"
+        :favorite-btn="!!authStore.token"
         :is-favorite="
           contentStore.favorites?.components.includes(
             dialogStore.moreInfoContent.id
@@ -127,7 +127,7 @@ onMounted(() => {
       </div>
       <div class="componentinfoview-content-control">
         <button
-          v-if="personStore.code"
+          v-if="authStore.token"
           @click="
             dialogStore.showReportIssue(
               dialogStore.moreInfoContent.id,
