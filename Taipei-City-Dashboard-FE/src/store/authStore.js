@@ -1,18 +1,23 @@
 // Developed by Taipei Urban Intelligence Center 2023-2024
 
+/* authStore */
+/*
+The authStore stores authentication and user information.
+*/
+
 import { defineStore } from "pinia";
 import http from "../router/axios";
 import router from "../router/index";
 import { useContentStore } from "./contentStore";
 import { useDialogStore } from "./dialogStore";
 import { useMapStore } from "./mapStore";
-import { DataManager } from "../assets/utilityFunctions/dataManager.js";
 
-export const usePersonStore = defineStore("person", {
+export const useAuthStore = defineStore("auth", {
 	state: () => ({
-		person: {
-			person_id: null,
-			login_name: "",
+		// This is a shortened version of the user object Taipei City Dashboard's backend will return once authenticated
+		user: {
+			user_id: null,
+			account: "",
 			name: "",
 			is_active: null,
 			is_whitelist: null,
@@ -21,10 +26,10 @@ export const usePersonStore = defineStore("person", {
 			is_admin: false,
 		},
 		editUser: {},
-		code: null,
-		taipei_code: null,
+		token: null,
+		isso_token: null,
 		errorMessage: "",
-		isMbDevice: false,
+		isMobileDevice: false,
 		isNarrowDevice: false,
 		currentPath: "",
 	}),
@@ -36,52 +41,44 @@ export const usePersonStore = defineStore("person", {
 			const contentStore = useContentStore();
 			const mapStore = useMapStore();
 			// Check if the user is using a mobile device
-			this.checkIfMb();
+			this.checkIfMobile();
 
 			// Check if the user is logged in
-			if (localStorage.getItem("code")) {
-				this.code = localStorage.getItem("code");
-				if (localStorage.getItem("taipei_code")) {
-					this.taipei_code = localStorage.getItem("taipei_code");
+			if (localStorage.getItem("token")) {
+				this.token = localStorage.getItem("token");
+				if (localStorage.getItem("isso_token")) {
+					this.isso_token = localStorage.getItem("isso_token");
 				}
 				const response = await http.get("/user/me");
-				this.person = response.data.user;
-				if (this.person?.person_id) {
+				this.user = response.data.user;
+				if (this.user?.user_id) {
 					mapStore.fetchViewPoints();
 				}
-				this.editUser = JSON.parse(JSON.stringify(this.person));
+				this.editUser = JSON.parse(JSON.stringify(this.user));
 			}
 
 			contentStore.setContributors();
 		},
 		// 2. Email Login
-		async loginByEmail(email, word) {
+		async loginByEmail(email, password) {
 			const response = await http.post(
 				"/auth/login",
 				{},
 				{
-					[atob('YXV0aA==')]: {
-						[atob('dXNlcm5hbWU=')]: email,
-						[atob('cGFzc3dvcmQ=')]: word,
-					}
+					auth: {
+						username: email,
+						password: password,
+					},
 				}
 			);
 			this.handleSuccessfullLogin(response);
 		},
 		// 3. Taipei Pass Login
-		async loginByTaipei(code) {
+		async loginByTaipeiPass(code) {
 			try {
-				// Validate code parameter
-				if (!code || typeof code !== 'string') {
-					throw new Error("Invalid authentication code");
-				}
-				
-				// Sanitize and encode input parameter
-				const sanitizedCode = encodeURIComponent(code.trim());
-
 				const response = await http.get("/auth/callback", {
 					params: {
-						code: sanitizedCode,
+						code: code,
 					},
 				});
 				this.handleSuccessfullLogin(response);
@@ -95,18 +92,14 @@ export const usePersonStore = defineStore("person", {
 			const dialogStore = useDialogStore();
 			const contentStore = useContentStore();
 
-			const dataManager = new DataManager(response.data);
-
-			this.code = dataManager.getData("data");
-			localStorage.setItem("code", this.code);
-
-			if (dataManager.getData("taipei_code")) {
-				this.taipei_code = dataManager.getData("taipei_code");
-				localStorage.setItem("taipei_code", this.taipei_code);
+			this.token = response.data.token;
+			localStorage.setItem("token", this.token);
+			if (response.data.isso_token) {
+				this.isso_token = response.data.isso_token;
+				localStorage.setItem("isso_token", this.isso_token);
 			}
-			
-			this.person = dataManager.getData("person");
-			this.editUser = JSON.parse(JSON.stringify(this.person));
+			this.user = response.data.user;
+			this.editUser = JSON.parse(JSON.stringify(this.user));
 
 			contentStore.publicDashboards = [];
 			router.go();
@@ -117,25 +110,25 @@ export const usePersonStore = defineStore("person", {
 			const dialogStore = useDialogStore();
 			const contentStore = useContentStore();
 
-			localStorage.removeItem("code");
-			this.person = {};
+			localStorage.removeItem("token");
+			this.user = {};
 			this.editUser = {};
-			this.code = null;
+			this.token = null;
 
 			contentStore.publicDashboards = [];
 
-			if (this.taipei_code) {
+			if (this.isso_token) {
 				await http.post(
 					"/auth/logout",
 					{},
 					{
 						params: {
-							isso_token: this.taipei_code,
+							isso_token: this.isso_token,
 						},
 					}
 				);
-				localStorage.removeItem("taipei_code");
-				this.taipei_code = null;
+				localStorage.removeItem("isso_token");
+				this.isso_token = null;
 			}
 
 			router.go();
@@ -149,19 +142,19 @@ export const usePersonStore = defineStore("person", {
 		async updateUserInfo() {
 			await http.patch("/user/me", this.editUser);
 			const response = await http.get("/user/me");
-			this.person = response.data.user;
-			this.editUser = JSON.parse(JSON.stringify(this.person));
+			this.user = response.data.user;
+			this.editUser = JSON.parse(JSON.stringify(this.user));
 		},
 
 		/* Other Utility Functions */
 		// 1. Check if the user is using a mobile device.
 		// This is used to determine whether to show the mobile version of the dashboard.
-		checkIfMb() {
+		checkIfMobile() {
 			if (navigator.maxTouchPoints > 2) {
-				this.isMbDevice = true;
+				this.isMobileDevice = true;
 			}
 			if (window.matchMedia("(pointer:fine)").matches) {
-				this.isMbDevice = false;
+				this.isMobileDevice = false;
 			}
 			if (window.screen.width < 750) {
 				this.isNarrowDevice = true;

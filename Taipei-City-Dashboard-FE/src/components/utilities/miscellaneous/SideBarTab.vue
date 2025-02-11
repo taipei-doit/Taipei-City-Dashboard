@@ -5,7 +5,7 @@
 <script setup>
 import { computed } from "vue";
 import { useRoute } from "vue-router";
-import { usePersonStore } from "../../../store/personStore";
+import { useAuthStore } from "../../../store/authStore";
 
 const route = useRoute();
 
@@ -16,16 +16,16 @@ const props = defineProps({
 	expanded: { type: Boolean },
 });
 
-const personStore = usePersonStore();
+const authStore = useAuthStore();
 
 const tabLink = computed(() => {
-	if (personStore.currentPath === "admin") {
+	if (authStore.currentPath === "admin") {
 		return `/admin/${props.index}`;
 	}
 	return `${route.path}?index=${props.index}`;
 });
 const linkActiveOrNot = computed(() => {
-	if (personStore.currentPath === "admin") {
+	if (authStore.currentPath === "admin") {
 		return route.path === `/admin/${props.index}` ? true : false;
 	}
 	return route.query.index === props.index ? true : false;

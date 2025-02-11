@@ -336,13 +336,7 @@ function findVoronoiCell(point) {
 	//  \   /   \   /
 	//   \ /  4  \ /
 	//    ---------
-	
-	// Input validation
-	if (!point || !point.lastEdgeConnected || !point.lastEdgeConnected.edges) {
-		console.error("Invalid input point");
-		return null;
-	}
-	
+
 	let currentEdge = point.lastEdgeConnected;
 	if (
 		currentEdge === null ||
@@ -361,11 +355,8 @@ function findVoronoiCell(point) {
 
 	// Go through (1) each edge connected to the point and (2) each triangle surrounding the point.
 	while (currentTriangle.center !== firstPoint) {
-		const edgeCount = 3;
 		let i = 0;
-		for (i = 0; i < edgeCount; i++) {
-			if (i >= edgeCount) break;
-
+		for (i = 0; i < 3; i++) {
 			if (
 				currentEdge !== currentTriangle.edges[i] &&
 				(currentTriangle.edges[i].p1 === point ||
@@ -412,10 +403,6 @@ function findVoronoiCell(point) {
 //  [[x1, y1], [x2, y2]...]...]
 
 export function voronoi(data) {
-	if (!Array.isArray(data) || data.length === 0 || !data.every(coord => Array.isArray(coord) && coord.length === 2)) {
-		console.error("Invalid input data for voronoi function");
-		return [];
-	}
 	let points = data.map((coord) => new Point(coord[0], coord[1]));
 
 	BowyerWatson(points);

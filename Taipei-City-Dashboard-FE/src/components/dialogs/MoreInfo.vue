@@ -4,7 +4,7 @@
 import { DashboardComponent } from "city-dashboard-component";
 import { useDialogStore } from "../../store/dialogStore";
 import { useContentStore } from "../../store/contentStore";
-import { usePersonStore } from "../../store/personStore";
+import { useAuthStore } from "../../store/authStore";
 
 import DialogContainer from "./DialogContainer.vue";
 import HistoryChart from "../charts/HistoryChart.vue";
@@ -13,7 +13,7 @@ import EmbedComponent from "./EmbedComponent.vue";
 
 const dialogStore = useDialogStore();
 const contentStore = useContentStore();
-const personStore = usePersonStore();
+const authStore = useAuthStore();
 
 function getLinkTag(link, index) {
 	if (link.includes("data.taipei")) {
@@ -109,7 +109,7 @@ function getLinkTag(link, index) {
         </div>
         <div class="moreinfo-info-control">
           <button
-            v-if="personStore.code"
+            v-if="authStore.token"
             @click="
               dialogStore.showReportIssue(
                 dialogStore.moreInfoContent.id,
