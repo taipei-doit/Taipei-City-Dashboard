@@ -43,7 +43,7 @@ type allDashboards struct {
 	Personal []Dashboard `json:"personal"`
 }
 
-func GetAllDashboards(personalGroups []int) (dashboards allDashboards, err error) {
+func GetAllDashboards(accountID int) (dashboards allDashboards, err error) {
 	// Get all the public group dashboards
 	err = DBManager.
 		Joins("JOIN dashboard_groups ON dashboards.id = dashboard_groups.dashboard_id AND dashboard_groups.group_id = ?", 1).
@@ -77,12 +77,31 @@ func GetAllDashboards(personalGroups []int) (dashboards allDashboards, err error
 		return dashboards, err
 	}
 
+	
 	// Get all the Personal dashboards
-	err = DBManager.
-		Joins("JOIN dashboard_groups ON dashboards.id = dashboard_groups.dashboard_id AND dashboard_groups.group_id IN (?)", personalGroups).
-		Order("dashboards.id").
-		Find(&dashboards.Personal).
-		Error
+	// err = DBManager.
+	// 	Joins("JOIN dashboard_groups ON dashboards.id = dashboard_groups.dashboard_id AND dashboard_groups.group_id IN (?)", personalGroups).
+	// 	Order("dashboards.id").
+	// 	Find(&dashboards.Personal).
+	// 	Error
+
+
+	// Get all the Personal dashboards
+	if accountID > 0{
+		subQuery := DBManager.Table("groups").
+		Select("id").
+		Joins("JOIN auth_user_group_roles as ag ON groups.id = ag.group_id").
+		Where("is_personal = true").
+		Where("auth_user_id = ?", accountID)
+
+		err = DBManager.Debug().
+			Joins("JOIN dashboard_groups as dg ON dashboards.id = dg.dashboard_id AND dg.group_id IN (?)", subQuery).
+			Find(&dashboards.Personal).
+			Error
+	} else {
+		dashboards.Personal =[]Dashboard{}
+	}
+	
 	return dashboards, err
 }
 
@@ -102,7 +121,7 @@ func GetAllPublicGroupsID() (ids []int, err error) {
 	return ids, err
 }
 
-func GetDashboardByIndex(index string, groups []int) (components []CityComponent, err error) {
+func GetDashboardByIndex(index string, groups []int, city string) (components []CityComponent, err error) {
 	tempDB := createTempComponentDB()
 
 	type componentArray struct {
@@ -147,10 +166,13 @@ func GetDashboardByIndex(index string, groups []int) (components []CityComponent
 	}
 
 	// 4. Get components by ids
-	err = tempDB.
+	query := tempDB.
 		Where(componentIdsSlice).
-		Order(fmt.Sprintf("ARRAY_POSITION(ARRAY[%s], components.id)", componentIdsString)).
-		Find(&components).Error
+		Order(fmt.Sprintf("ARRAY_POSITION(ARRAY[%s], components.id)", componentIdsString))
+		if (city != ""){
+			query = query.Where("city = ?", city)
+		}
+	err = query.Find(&components).Error
 
 	return components, err
 }
