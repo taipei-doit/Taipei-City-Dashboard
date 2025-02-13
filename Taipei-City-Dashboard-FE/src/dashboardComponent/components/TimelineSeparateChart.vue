@@ -1,25 +1,19 @@
 <!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 
-<script setup lang="ts">
+<script setup>
 import { ref } from "vue";
-import { MapConfig, MapFilter } from "../utilities/componentConfig";
+// import { MapConfig, MapFilter } from "../utilities/componentConfig";
 import VueApexCharts from "vue3-apexcharts";
 
 const props = defineProps(["chart_config", "activeChart", "series"]);
 
-const emits = defineEmits<{
-	(
-		e: "filterByParam",
-		map_filter: MapFilter,
-		map_config: MapConfig[],
-		x: string | null,
-		y: string | null
-	): void;
-	(e: "filterByLayer", map_config: MapConfig[], x: string): void;
-	(e: "clearByParamFilter", map_config: MapConfig[]): void;
-	(e: "clearByLayerFilter", map_config: MapConfig[]): void;
-	(e: "fly", location: any): void;
-}>();
+// const emits = defineEmits([
+// 	"filterByParam",
+// 	"filterByLayer",
+// 	"clearByParamFilter",
+// 	"clearByLayerFilter",
+// 	"fly"
+// ]);
 
 const chartOptions = ref({
 	chart: {
@@ -59,11 +53,6 @@ const chartOptions = ref({
 			seriesIndex,
 			dataPointIndex,
 			w,
-		}: {
-			series: any;
-			seriesIndex: any;
-			dataPointIndex: any;
-			w: any;
 		}) {
 			// The class "chart-tooltip" could be edited in /assets/styles/chartStyles.css
 			return (
@@ -106,20 +95,20 @@ const chartOptions = ref({
 	},
 });
 
-function parseTime(time: string) {
+function parseTime(time) {
 	return time.replace("T", " ").replace("+08:00", " ");
 }
 </script>
 
 <template>
-	<div v-if="activeChart === 'TimelineSeparateChart'">
-		<VueApexCharts
-			width="100%"
-			height="260px"
-			type="line"
-			:options="chartOptions"
-			:series="series"
-		></VueApexCharts>
-	</div>
+  <div v-if="activeChart === 'TimelineSeparateChart'">
+    <VueApexCharts
+      width="100%"
+      height="260px"
+      type="line"
+      :options="chartOptions"
+      :series="series"
+    />
+  </div>
 </template>
 

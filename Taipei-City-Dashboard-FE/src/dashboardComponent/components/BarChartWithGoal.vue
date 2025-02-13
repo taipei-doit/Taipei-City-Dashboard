@@ -1,9 +1,8 @@
 <!-- Developed by Open Possible (台灣大哥大), Taipei Codefest 2023 -->
 <!-- Refactored and Maintained by Taipei Urban Intelligence Center -->
 
-<script setup lang="ts">
+<script setup>
 import { computed, ref } from "vue";
-import { MapConfig, MapFilter } from "../utilities/componentConfig";
 import VueApexCharts from "vue3-apexcharts";
 
 const props = defineProps([
@@ -15,19 +14,13 @@ const props = defineProps([
 	"map_filter_on",
 ]);
 
-const emits = defineEmits<{
-	(
-		e: "filterByParam",
-		map_filter: MapFilter,
-		map_config: MapConfig[],
-		x: string | null,
-		y: string | null
-	): void;
-	(e: "filterByLayer", map_config: MapConfig[], x: string): void;
-	(e: "clearByParamFilter", map_config: MapConfig[]): void;
-	(e: "clearByLayerFilter", map_config: MapConfig[]): void;
-	(e: "fly", location: any): void;
-}>();
+const emits = defineEmits([
+	"filterByParam",
+	"filterByLayer",
+	"clearByParamFilter",
+	"clearByLayerFilter",
+	"fly"
+]);
 
 const parseSeries = computed(() => {
 	let parsedSeries = [];
@@ -94,11 +87,6 @@ const chartOptions = ref({
 			seriesIndex,
 			dataPointIndex,
 			w,
-		}: {
-			series: any;
-			seriesIndex: any;
-			dataPointIndex: any;
-			w: any;
 		}) {
 			const label = w.globals.labels[dataPointIndex];
 			const value = series[seriesIndex][dataPointIndex];
@@ -129,7 +117,7 @@ const chartOptions = ref({
 	},
 	yaxis: {
 		labels: {
-			formatter: function (value: string) {
+			formatter: function (value) {
 				return value.length > 7 ? value.slice(0, 6) + "..." : value;
 			},
 		},
@@ -140,9 +128,9 @@ const chartHeight = computed(() => {
 	const height = 80 + props.series[0].data.length * 60;
 	return height;
 });
-const selectedIndex = ref<null | string>(null);
+const selectedIndex = ref(null);
 
-function handleDataSelection(_e: any, _chartContext: any, config: any) {
+function handleDataSelection(_e, _chartContext, config) {
 	if (!props.map_filter || !props.map_filter_on) {
 		return;
 	}
@@ -180,23 +168,23 @@ function handleDataSelection(_e: any, _chartContext: any, config: any) {
 </script>
 
 <template>
-	<div
-		v-if="activeChart === 'BarChartWithGoal'"
-		:style="{
-			marginTop: `${
-				chart_config.categories.length < 3
-					? 90 - chart_config.categories.length * 30
-					: 0
-			}px`,
-		}"
-	>
-		<VueApexCharts
-			type="bar"
-			width="100%"
-			:height="chartHeight"
-			:options="chartOptions"
-			:series="parseSeries"
-			@dataPointSelection="handleDataSelection"
-		></VueApexCharts>
-	</div>
+  <div
+    v-if="activeChart === 'BarChartWithGoal'"
+    :style="{
+      marginTop: `${
+        chart_config.categories.length < 3
+          ? 90 - chart_config.categories.length * 30
+          : 0
+      }px`
+    }"
+  >
+    <VueApexCharts
+      type="bar"
+      width="100%"
+      :height="chartHeight"
+      :options="chartOptions"
+      :series="parseSeries"
+      @data-point-selection="handleDataSelection"
+    />
+  </div>
 </template>

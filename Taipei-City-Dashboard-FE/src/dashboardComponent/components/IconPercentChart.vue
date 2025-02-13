@@ -1,25 +1,18 @@
 <!-- Developed by Open Possible (台灣大哥大), Taipei Codefest 2023 -->
 <!-- Refactored and Maintained by Taipei Urban Intelligence Center -->
 
-<script setup lang="ts">
+<script setup>
 import { computed, ref } from "vue";
-import { MapConfig, MapFilter } from "../utilities/componentConfig";
 
 const props = defineProps(["chart_config", "activeChart", "series"]);
 
-const emits = defineEmits<{
-	(
-		e: "filterByParam",
-		map_filter: MapFilter,
-		map_config: MapConfig[],
-		x: string | null,
-		y: string | null
-	): void;
-	(e: "filterByLayer", map_config: MapConfig[], x: string): void;
-	(e: "clearByParamFilter", map_config: MapConfig[]): void;
-	(e: "clearByLayerFilter", map_config: MapConfig[]): void;
-	(e: "fly", location: any): void;
-}>();
+// const emits = defineEmits([
+// 	"filterByParam",
+// 	"filterByLayer",
+// 	"clearByParamFilter",
+// 	"clearByLayerFilter",
+// 	"fly"
+// ]);
 
 const targetItem = ref(null);
 const mousePosition = ref({ x: null, y: null });
@@ -33,7 +26,7 @@ const chartIconTotal = 50;
 // calculate active sum
 const activeSum = computed(() => {
 	return props.series.reduce(
-		(acc: number, entry: { data: number[] }) =>
+		(acc, entry) =>
 			acc + entry.data[activeIndex.value],
 		0
 	);
@@ -64,11 +57,11 @@ const tooltipPosition = computed(() => {
 	};
 });
 
-function updateChartData(index: number) {
+function updateChartData(index) {
 	activeIndex.value = index;
 }
 
-function toggleActive(e: any) {
+function toggleActive(e) {
 	targetItem.value = e.target.dataset.name;
 	targetData.name = e.target.dataset.name;
 	targetData.value = e.target.dataset.value;
@@ -78,97 +71,99 @@ function initActiveToNull() {
 	targetItem.value = null;
 }
 
-function updateMouseLocation(e: any) {
+function updateMouseLocation(e) {
 	mousePosition.value.x = e.pageX;
 	mousePosition.value.y = e.pageY;
 }
 </script>
 
 <template>
-	<div v-if="activeChart === 'IconPercentChart'" class="iconPercentageChart">
-		<!-- chart data -->
-		<div class="iconPercentageChart__title">
-			<div
-				v-for="(item, index) in series"
-				:key="item.name"
-				class="iconPercentageChart__content"
-			>
-				<h2>
-					{{ item.name
-					}}<span
-						class="iconPercentageChart__percentage"
-						:style="{
-							color:
-								index === 0
-									? chart_config.color[0]
-									: chart_config.color[1],
-						}"
-						>{{
-							index === 0
-								? primaryPercentage
-								: 100 - primaryPercentage
-						}}</span
-					>
-					％
-				</h2>
-				<p>總數：{{ item.data[activeIndex] }}{{ chart_config.unit }}</p>
-			</div>
-		</div>
-		<!-- year buttons -->
-		<div class="iconPercentageChart__buttons">
-			<button
-				v-for="(item, index) in chart_config.categories"
-				:key="item"
-				:class="{
-					iconPercentageChart__button: true,
-					active: activeIndex === index,
-				}"
-				@click="updateChartData(index)"
-			>
-				{{ item }}
-			</button>
-		</div>
-		<!-- chart icon -->
-		<div class="iconPercentageChart__chart">
-			<span
-				v-for="(item, index) in chartIconTotal"
-				:key="item"
-				:class="`iconPercentageChart__chart-item initial-animation-${item}`"
-				:style="{
-					color:
-						index < primaryIconNumber
-							? chart_config.color[0]
-							: chart_config.color[1],
-				}"
-				@mouseenter="toggleActive"
-				@mouseleave="initActiveToNull"
-				@mousemove="updateMouseLocation"
-				:data-value="
-					index < primaryIconNumber
-						? primaryPercentage
-						: 100 - primaryPercentage
-				"
-				:data-name="
-					index < primaryIconNumber ? series[0].name : series[1].name
-				"
-			>
-				{{
-					index < primaryIconNumber ? series[0].icon : series[1].icon
-				}}
-			</span>
-			<!-- tooltip -->
-			<Teleport to="body">
-				<div
-					v-if="targetItem"
-					class="iconPercentageChart__chart-info chart-tooltip"
-					:style="tooltipPosition"
-				>
-					<h6>{{ targetData.name }}比例</h6>
-					<span>{{ targetData.value }}％</span>
-				</div>
-			</Teleport>
-		</div>
-	</div>
+  <div
+    v-if="activeChart === 'IconPercentChart'"
+    class="iconPercentageChart"
+  >
+    <!-- chart data -->
+    <div class="iconPercentageChart__title">
+      <div
+        v-for="(item, index) in series"
+        :key="item.name"
+        class="iconPercentageChart__content"
+      >
+        <h2>
+          {{ item.name
+          }}<span
+            class="iconPercentageChart__percentage"
+            :style="{
+              color:
+                index === 0
+                  ? chart_config.color[0]
+                  : chart_config.color[1],
+            }"
+          >{{
+            index === 0
+              ? primaryPercentage
+              : 100 - primaryPercentage
+          }}</span>
+          ％
+        </h2>
+        <p>總數：{{ item.data[activeIndex] }}{{ chart_config.unit }}</p>
+      </div>
+    </div>
+    <!-- year buttons -->
+    <div class="iconPercentageChart__buttons">
+      <button
+        v-for="(item, index) in chart_config.categories"
+        :key="item"
+        :class="{
+          iconPercentageChart__button: true,
+          active: activeIndex === index,
+        }"
+        @click="updateChartData(index)"
+      >
+        {{ item }}
+      </button>
+    </div>
+    <!-- chart icon -->
+    <div class="iconPercentageChart__chart">
+      <span
+        v-for="(item, index) in chartIconTotal"
+        :key="item"
+        :class="`iconPercentageChart__chart-item initial-animation-${item}`"
+        :style="{
+          color:
+            index < primaryIconNumber
+              ? chart_config.color[0]
+              : chart_config.color[1],
+        }"
+        :data-value="
+          index < primaryIconNumber
+            ? primaryPercentage
+            : 100 - primaryPercentage
+        "
+        :data-name="
+          index < primaryIconNumber ? series[0].name : series[1].name
+        "
+        @mouseenter="toggleActive"
+        @mouseleave="initActiveToNull"
+        @mousemove="updateMouseLocation"
+      >
+        {{
+          index < primaryIconNumber ? series[0].icon : series[1].icon
+        }}
+      </span>
+      <!-- tooltip -->
+      <Teleport to="body">
+        <div
+          v-if="targetItem"
+          class="iconPercentageChart__chart-info chart-tooltip"
+          :style="tooltipPosition"
+        >
+          <h6>{{ targetData.name }}比例</h6>
+          <span>{{ targetData.value }}％</span>
+        </div>
+      </Teleport>
+    </div>
+  </div>
 </template>
 
 <style scoped lang="scss">

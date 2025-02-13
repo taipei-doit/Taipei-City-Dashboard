@@ -1,48 +1,55 @@
 
-<script setup lang="ts">
-import { ref } from "vue";
-import { MapConfig, MapFilter } from "../utilities/componentConfig";
+<script setup>
+// import { ref } from "vue";
 
-const props = defineProps([
-	"chart_config",
-	"activeChart",
-	"series",
-	"map_config",
-	"map_filter",
-	"map_filter_on",
-]);
+// const props = defineProps([
+// 	"chart_config",
+// 	"activeChart",
+// 	"series",
+// 	"map_config",
+// 	"map_filter",
+// 	"map_filter_on",
+// ]);
 
-const emits = defineEmits<{
-	(
-		e: "filterByParam",
-		map_filter: MapFilter,
-		map_config: MapConfig[],
-		x: string | null,
-		y: string | null
-	): void;
-	(e: "filterByLayer", map_config: MapConfig[], x: string): void;
-	(e: "clearByParamFilter", map_config: MapConfig[]): void;
-	(e: "clearByLayerFilter", map_config: MapConfig[]): void;
-	(e: "fly", location: any): void;
-}>();
+// const emits = defineEmits([
+// 	"filterByParam",
+// 	"filterByLayer",
+// 	"clearByParamFilter",
+// 	"clearByLayerFilter",
+// 	"fly"
+// ]);
 </script>
 
 <template>
-	<div v-if="activeChart === 'TextUnitChart'" class="TextUnitChart">
-		<div class="TextUnitChart__container">
-			<div
-				v-for="(item, index) in series"
-				:key="item.name"
-				class="TextUnitChart__content"
-			>
-				<div class="TextUnitChart__name" :style="{ color: chart_config.color[0] }">{{ item.name }}</div>
-				<div>
-					<span class="TextUnitChart__value" :style="{ color: chart_config.color[1] }">{{ item.value }}</span>
-					<span class="TextUnitChart__unit" :style="{ color: chart_config.color[2] }">{{ item.unit }}</span>
-				</div>
-			</div>
-		</div>
-	</div>
+  <div
+    v-if="activeChart === 'TextUnitChart'"
+    class="TextUnitChart"
+  >
+    <div class="TextUnitChart__container">
+      <div
+        v-for="(item) in series"
+        :key="item.name"
+        class="TextUnitChart__content"
+      >
+        <div
+          class="TextUnitChart__name"
+          :style="{ color: chart_config.color[0] }"
+        >
+          {{ item.name }}
+        </div>
+        <div>
+          <span
+            class="TextUnitChart__value"
+            :style="{ color: chart_config.color[1] }"
+          >{{ item.value }}</span>
+          <span
+            class="TextUnitChart__unit"
+            :style="{ color: chart_config.color[2] }"
+          >{{ item.unit }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <style scoped lang="scss">
