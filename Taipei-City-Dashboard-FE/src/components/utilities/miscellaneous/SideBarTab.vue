@@ -13,6 +13,7 @@ const props = defineProps({
 	icon: { type: String },
 	title: { type: String },
 	index: { type: String },
+	city: { type: String },
 	expanded: { type: Boolean },
 });
 
@@ -22,13 +23,14 @@ const tabLink = computed(() => {
 	if (authStore.currentPath === "admin") {
 		return `/admin/${props.index}`;
 	}
-	return `${route.path}?index=${props.index}`;
+	const cityParam = props.city ? `&city=${props.city}` : '';
+	return `${route.path}?index=${props.index}${cityParam}`;
 });
 const linkActiveOrNot = computed(() => {
 	if (authStore.currentPath === "admin") {
 		return route.path === `/admin/${props.index}` ? true : false;
 	}
-	return route.query.index === props.index ? true : false;
+	return route.query.index === props.index && route.query.city === props.city ? true : false;
 });
 </script>
 

@@ -169,7 +169,7 @@ router.beforeEach((to) => {
 		to.path.toLowerCase() === "/mapview"
 	) {
 		contentStore.clearEditDashboard();
-		contentStore.setRouteParams(to.path, to.query.index);
+		contentStore.setRouteParams(to.path, to.query.index, to.query.city);
 	} else if (
 		to.path.toLowerCase() === "/component" ||
 		to.name === "component-info"

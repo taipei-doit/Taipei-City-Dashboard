@@ -48,9 +48,9 @@ onMounted(() => {
       'hide-if-mobile': true,
     }"
   >
-  	<button
+    <button
       class="sidebar-collapse-button"
-	  :class="{notExpanded: !isExpanded}"
+      :class="{notExpanded: !isExpanded}"
       @click="toggleExpand"
     >
       <span>{{
@@ -106,19 +106,23 @@ onMounted(() => {
       :icon="item.icon"
       :title="item.name"
       :index="item.index"
+      :city="'taipei'"
       :expanded="isExpanded"
     />
-    <h2>{{ isExpanded ? `雙北儀表板 ` : `雙北` }}</h2>
-    <SideBarTab
-      v-for="item in contentStore.metroTaipeiDashboards.filter(
-        (item) => item.index !== 'map-layers'
-      )"
-      :key="item.index"
-      :icon="item.icon"
-      :title="item.name"
-      :index="item.index"
-      :expanded="isExpanded"
-    />
+    <template v-if="contentStore.metroTaipeiDashboards?.length > 0">
+      <h2>{{ isExpanded ? `雙北儀表板 ` : `雙北` }}</h2>
+      <SideBarTab
+        v-for="item in contentStore.metroTaipeiDashboards.filter(
+          (item) => item.index !== 'map-layers'
+        )"
+        :key="item.index"
+        :icon="item.icon"
+        :title="item.name"
+        :index="item.index"
+        :city="'metrotaipei'"
+        :expanded="isExpanded"
+      />
+    </template>
     <h2>{{ isExpanded ? `基本地圖圖層` : `圖層` }}</h2>
     <SideBarTab
       icon="public"

@@ -16,6 +16,11 @@ import { getComponentDataTimeframe } from "../assets/utilityFunctions/dataTimefr
 export const useContentStore = defineStore("content", {
 	state: () => ({
 		// Stores all dashboards data. (used in /dashboard, /mapview)
+		cityList: [
+			{ name: "台北市", value: "taipei" },
+			// { name: "新北市", value: "newtaipei" },
+			{ name: "雙北市", value: "metrotaipei" },
+		],
 		publicDashboards: [],
 		taipeiDashboards: [],
 		metroTaipeiDashboards: [],
@@ -34,6 +39,11 @@ export const useContentStore = defineStore("content", {
 			name: null,
 			components: null,
 			icon: null,
+			city: null,
+		},
+		// Stores information of the city dashboard
+		cityDashboard: {
+			components: null,
 		},
 		// Stores information of a new dashboard or editing dashboard (/component)
 		editDashboard: {
@@ -52,12 +62,15 @@ export const useContentStore = defineStore("content", {
 	}),
 	getters: {},
 	actions: {
+		setComponentData(index, component) {
+			this.currentDashboard.components[index] = component;
+		},
 		/* Steps in adding content to the application (/dashboard or /mapview) */
 		// 1. Check the current path and execute actions based on the current path
-		setRouteParams(mode, index) {
+		setRouteParams(mode, index, city) {
 			this.currentDashboard.mode = mode;
 			// 1-1. Don't do anything if the path is the same
-			if (this.currentDashboard.index === index) {
+			if (this.currentDashboard.index === index && this.currentDashboard.city === city) {
 				if (
 					this.currentDashboard.mode === "/mapview" &&
 					index !== "map-layers"
@@ -67,6 +80,7 @@ export const useContentStore = defineStore("content", {
 					return;
 				}
 			}
+			this.currentDashboard.city = city;
 			this.currentDashboard.index = index;
 			// 1-2. If there is no contributor info, call the setContributors method (5.)
 			// if (Object.keys(this.contributors).length === 0) {
@@ -90,10 +104,10 @@ export const useContentStore = defineStore("content", {
 		async setDashboards(onlyDashboard = false) {
 			const response = await http.get(`/dashboard/`);
 
-			this.personalDashboards = response.data.data.personal;
-			this.publicDashboards = response.data.data.public;
-			this.taipeiDashboards = response.data.data.taipei;
-			this.metroTaipeiDashboards = response.data.data.metrotaipei;
+			this.personalDashboards = response.data.data?.personal || [];
+			this.publicDashboards = response.data.data?.public  || [];
+			this.taipeiDashboards = response.data.data?.taipei  || [];
+			this.metroTaipeiDashboards = response.data.data?.metrotaipei || [];
 
 			if (this.personalDashboards.length !== 0) {
 				this.favorites = this.personalDashboards.find(
@@ -111,25 +125,107 @@ export const useContentStore = defineStore("content", {
 				router.replace({
 					query: {
 						index: this.currentDashboard.index,
+						city: "taipei",
 					},
 				});
 			}
+			
+			this.storeCityDashboardContentAndChartData();
 			// After getting dashboard info, call the setCurrentDashboardContent (3.) method to get component info
 			this.setCurrentDashboardContent();
 		},
+		async storeCityDashboardContentAndChartData() {
+
+			// 針對目前index 取得不分city的資料
+			const response = await http.get(`/dashboard/${this.currentDashboard.index}`);
+
+			this.cityDashboard.components = response.data.data;
+
+			// get chart data
+			for (
+				let index = 0;
+				index < this.cityDashboard.components.length;
+				index++
+			) {
+				const component = this.cityDashboard.components[index];
+
+				const response = await http.get(
+					`/component/${component.id}/chart/${component.city}`,
+					{
+						params: !["static", "current", "demo"].includes(
+							component.time_from
+						)
+							? getComponentDataTimeframe(
+									component.time_from,
+									component.time_to,
+									true
+							  )
+							: {},
+					}
+				);
+
+				this.cityDashboard.components[index].chart_data =
+					response.data.data;
+				
+				if (response.data.categories) {
+					this.cityDashboard.components[
+						index
+					].chart_config.categories = response.data.categories;
+				}
+			}
+
+			// get history data
+			for (
+				let index = 0;
+				index < this.cityDashboard.components.length;
+				index++
+			) {
+				const component = this.cityDashboard.components[index];
+				// Get history data if applicable
+				if (
+					component.history_config &&
+					component.history_config.range
+				) {
+					for (let i in component.history_config.range) {
+						const response = await http.get(
+							`/component/${component.id}/history/${component.city}`,
+							{
+								params: getComponentDataTimeframe(
+									component.history_config.range[i],
+									"now",
+									true
+								),
+							}
+						);
+
+						if (i === "0") {
+							this.cityDashboard.components[
+								index
+							].history_data = [];
+						}
+						this.cityDashboard.components[
+							index
+						].history_data.push(response.data.data);
+					}
+				}
+			}
+		},
+
 		// 3. Finds the info for the current dashboard based on the index and adds it to "currentDashboard"
 		async setCurrentDashboardContent() {
-			const allDashboards = this.taipeiDashboards.concat(
-				this.metroTaipeiDashboards,
-				this.personalDashboards
-			);
-			const currentDashboardInfo = allDashboards.find(
-				(item) => item.index === this.currentDashboard.index
-			);
+			const dashboardSources = {
+				taipei: this.taipeiDashboards,
+				metrotaipei: this.metroTaipeiDashboards,
+				personal: this.personalDashboards
+			};
+			const dashboard = dashboardSources[this.currentDashboard.city] || dashboardSources.personal;
+			const currentDashboardInfo = dashboard.find(item => item.index === this.currentDashboard.index);
+
 			if (!currentDashboardInfo) {
 				router.replace({
 					query: {
 						index: this.taipeiDashboards[0].index,
+						city: "taipei",
 					},
 				});
 				return;
@@ -137,7 +233,7 @@ export const useContentStore = defineStore("content", {
 			this.currentDashboard.name = currentDashboardInfo.name;
 			this.currentDashboard.icon = currentDashboardInfo.icon;
 			const response = await http.get(
-				`/dashboard/${this.currentDashboard.index}`
+				`/dashboard/${this.currentDashboard.index}${this.currentDashboard.city ? `?city=${this.currentDashboard.city}` : ""}`
 			);
 
 			if (response.data.data) {
@@ -162,7 +258,7 @@ export const useContentStore = defineStore("content", {
 
 				// 4-2. Get chart data
 				const response = await http.get(
-					`/component/${component.id}/chart`,
+					`/component/${component.id}/chart/${this.currentDashboard.city ? `${this.currentDashboard.city}` : `${component.city}`}`,
 					{
 						params: !["static", "current", "demo"].includes(
 							component.time_from
@@ -197,7 +293,7 @@ export const useContentStore = defineStore("content", {
 				) {
 					for (let i in component.history_config.range) {
 						const response = await http.get(
-							`/component/${component.id}/history`,
+							`/component/${component.id}/history/${this.currentDashboard.city ? `${this.currentDashboard.city}` : `${component.city}`}`,
 							{
 								params: getComponentDataTimeframe(
 									component.history_config.range[i],
