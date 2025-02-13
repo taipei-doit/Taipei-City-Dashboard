@@ -27,10 +27,12 @@ import MapPopup from "../components/map/MapPopup.vue";
 import {
 	MapObjectConfig,
 	TaipeiBuilding,
-	TaipeiTown,
-	TaipeiVillage,
-	TpDistrict,
-	TpVillage,
+	// TpDistrict,
+	// TpVillage,
+	metroTaipeiTown,
+	metroTaipeiVillage,
+	metroTpDistrict,
+	metroTpVillage,
 	maplayerCommonLayout,
 	maplayerCommonPaint,
 } from "../assets/configs/mapbox/mapConfig.js";
@@ -129,27 +131,27 @@ export const useMapStore = defineStore("map", {
 		initializeBasicLayers() {
 			const authStore = useAuthStore();
 			if (!this.map) return;
-			// Taipei District Labels
-			fetch(`/mapData/taipei_town.geojson`)
+			// metroTaipei District Labels
+			fetch(`/mapData/metrotaipei_town.geojson`)
 				.then((response) => response.json())
 				.then((data) => {
 					this.map
-						.addSource("taipei_town", {
+						.addSource("metrotaipei_town_label", {
 							type: "geojson",
 							data: data,
 						})
-						.addLayer(TaipeiTown);
+						.addLayer(metroTaipeiTown);
 				});
-			// Taipei Village Labels
-			fetch(`/mapData/taipei_village.geojson`)
+			// metroTaipei Village Labels
+			fetch(`/mapData/metrotaipei_village.geojson`)
 				.then((response) => response.json())
 				.then((data) => {
 					this.map
-						.addSource("taipei_village", {
+						.addSource("metrotaipei_village_label", {
 							type: "geojson",
 							data: data,
 						})
-						.addLayer(TaipeiVillage);
+						.addLayer(metroTaipeiVillage);
 				});
 			// Taipei 3D Buildings
 			if (!authStore.isMobileDevice) {
@@ -162,26 +164,44 @@ export const useMapStore = defineStore("map", {
 			}
 			// Taipei Village Boundaries
 			this.map
-				.addSource(`tp_village`, {
+				.addSource(`metrotaipei_village`, {
 					type: "vector",
 					scheme: "tms",
 					tolerance: 0,
 					tiles: [
-						`${location.origin}/geo_server/gwc/service/tms/1.0.0/taipei_vioc:tp_village@EPSG:900913@pbf/{z}/{x}/{y}.pbf`,
+						`${'https://geoserver-966481184341.us-central1.run.app'}/geo_server/gwc/service/tms/1.0.0/taipei_vioc:metrotaipei_village@EPSG:900913@pbf/{z}/{x}/{y}.pbf`,
 					],
 				})
-				.addLayer(TpVillage);
+				.addLayer(metroTpVillage);
+			// .addSource(`tp_village`, {
+			// 	type: "vector",
+			// 	scheme: "tms",
+			// 	tolerance: 0,
+			// 	tiles: [
+			// 		`${location.origin}/geo_server/gwc/service/tms/1.0.0/taipei_vioc:tp_village@EPSG:900913@pbf/{z}/{x}/{y}.pbf`,
+			// 	],
+			// })
+			// .addLayer(TpVillage);
 			// Taipei District Boundaries
 			this.map
-				.addSource(`tp_district`, {
+				.addSource(`metrotaipei_town`, {
 					type: "vector",
 					scheme: "tms",
 					tolerance: 0,
 					tiles: [
-						`${location.origin}/geo_server/gwc/service/tms/1.0.0/taipei_vioc:tp_district@EPSG:900913@pbf/{z}/{x}/{y}.pbf`,
+						`${'https://geoserver-966481184341.us-central1.run.app'}/geo_server/gwc/service/tms/1.0.0/taipei_vioc:metrotaipei_town@EPSG:900913@pbf/{z}/{x}/{y}.pbf`,
 					],
 				})
-				.addLayer(TpDistrict);
+				.addLayer(metroTpDistrict);
+			// .addSource(`tp_district`, {
+			// 	type: "vector",
+			// 	scheme: "tms",
+			// 	tolerance: 0,
+			// 	tiles: [
+			// 		`${location.origin}/geo_server/gwc/service/tms/1.0.0/taipei_vioc:tp_district@EPSG:900913@pbf/{z}/{x}/{y}.pbf`,
+			// 	],
+			// })
+			// .addLayer(TpDistrict);
 
 			this.addSymbolSources();
 		},
@@ -210,25 +230,43 @@ export const useMapStore = defineStore("map", {
 		toggleDistrictBoundaries(status) {
 			if (status) {
 				this.map.setLayoutProperty(
-					"tp_district",
+					"metrotaipei_town",
 					"visibility",
 					"visible"
 				);
 			} else {
-				this.map.setLayoutProperty("tp_district", "visibility", "none");
+				this.map.setLayoutProperty("metrotaipei_town", "visibility", "none");
 			}
+			// if (status) {
+			// 	this.map.setLayoutProperty(
+			// 		"tp_district",
+			// 		"visibility",
+			// 		"visible"
+			// 	);
+			// } else {
+			// 	this.map.setLayoutProperty("tp_district", "visibility", "none");
+			// }
 		},
 		// 5. Toggle village boundaries
 		toggleVillageBoundaries(status) {
 			if (status) {
 				this.map.setLayoutProperty(
-					"tp_village",
+					"metrotaipei_village",
 					"visibility",
 					"visible"
 				);
 			} else {
-				this.map.setLayoutProperty("tp_village", "visibility", "none");
+				this.map.setLayoutProperty("metrotaipei_village", "visibility", "none");
 			}
+			// if (status) {
+			// 	this.map.setLayoutProperty(
+			// 		"tp_village",
+			// 		"visibility",
+			// 		"visible"
+			// 	);
+			// } else {
+			// 	this.map.setLayoutProperty("tp_village", "visibility", "none");
+			// }
 		},
 		// 6. Set User Location
 		setCurrentLocation() {

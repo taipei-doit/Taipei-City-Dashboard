@@ -9,6 +9,7 @@ Testing: Jack Huang (Data Scientist), Ian Huang (Data Analysis Intern)
 <!-- Department of Information Technology, Taipei City Government -->
 
 <script setup>
+import { computed } from "vue";
 import DashboardComponent from "../dashboardComponent/DashboardComponent.vue";
 import router from "../router";
 import { useContentStore } from "../store/contentStore";
@@ -21,6 +22,8 @@ import ReportIssue from "../components/dialogs/ReportIssue.vue";
 const contentStore = useContentStore();
 const dialogStore = useDialogStore();
 const authStore = useAuthStore();
+
+const activeCity = computed(()=> contentStore.currentDashboard.city);
 
 function handleOpenSettings() {
 	contentStore.editDashboard = JSON.parse(
@@ -83,10 +86,12 @@ function handleMoreInfo(item) {
     class="dashboard"
   >
     <DashboardComponent
-      v-for="item in contentStore.currentDashboard.components"
-      :key="item.index"
+      v-for="(item, arrayIdx) in contentStore.currentDashboard.components"
+      :key="`${item.index}-${item.city}`"
       :config="item"
       :info-btn="true"
+      :active-city="item.city"
+      :select-btn="contentStore.currentDashboard.city === 'metrotaipei'" 
       :delete-btn="
         contentStore.personalDashboards
           .map((item) => item.index)
@@ -111,6 +116,16 @@ function handleMoreInfo(item) {
         (id) => {
           contentStore.deleteComponent(id);
         }
+      "
+      @change-city="(city)=> {
+        const selectedData = contentStore.cityDashboard.components.find((data) => {
+          if (data.index === item.index && data.city === city) {
+            return data
+          }
+        });
+        activeCity = city;
+        contentStore.setComponentData(arrayIdx,selectedData);
+      }
       "
     />
     <MoreInfo />

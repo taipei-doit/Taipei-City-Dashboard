@@ -1,5 +1,6 @@
 <script setup>
 import { computed, ref } from "vue";
+import { useContentStore } from "../store/contentStore";
 import "./styles/chartStyles.css";
 import "./styles/toggleswitch.css";
 import "material-icons/iconfont/material-icons.css";
@@ -54,6 +55,8 @@ import TreemapChartSvg from "./assets/chart/TreemapChart.svg";
 import IndicatorChartSvg from "./assets/chart/IndicatorChart.svg";
 import TextUnitChartSvg from "./assets/chart/TextUnitChart.svg";
 
+const contentStore = useContentStore();
+
 const props = defineProps({
 	style: { type: Object, default: () => ({}) },
 	mode: {
@@ -65,7 +68,7 @@ const props = defineProps({
 			),
 	},
 	config: { type: Object, required: true },
-	selectBtn: { type: Boolean, default: true },
+	selectBtn: { type: Boolean, default: false },
 	favoriteBtn: { type: Boolean, default: false },
 	isFavorite: { type: Boolean, default: false },
 	deleteBtn: { type: Boolean, default: false },
@@ -74,6 +77,7 @@ const props = defineProps({
 	infoBtnText: { type: String, default: "組件資訊" },
 	toggleDisable: { type: Boolean, default: false },
 	footer: { type: Boolean, default: true },
+	activeCity: { type: String, default: '' },
 });
 
 const emits = defineEmits([
@@ -86,29 +90,19 @@ const emits = defineEmits([
 	"filterByLayer",
 	"clearByParamFilter",
 	"clearByLayerFilter",
-	"fly"
+	"fly",
+	"changeCity"
 ]);
 
-// const emits = defineEmits<{
-// 	(e: "favorite", id: number): void;
-// 	(e: "delete", id: number): void;
-// 	(e: "add", id: number, name: string): void;
-// 	(e: "info", config: ComponentConfig): void;
-// 	(e: "toggle", value: boolean, map_config: MapConfig[] | null): void;
-// 	(
-// 		e: "filterByParam",
-// 		map_filter: MapFilter,
-// 		map_config: MapConfig[],
-// 		x: string | null,
-// 		y: string | null
-// 	): void;
-// 	(e: "filterByLayer", map_config: MapConfig[], x: string): void;
-// 	(e: "clearByParamFilter", map_config: MapConfig[]): void;
-// 	(e: "clearByLayerFilter", map_config: MapConfig[]): void;
-// 	(e: "fly", location: any): void;
-// }>();
-
+// let i = ref(0)
 const activeChart = ref(props.config.chart_config.types[0]);
+const activeCity = computed({
+	get: () => props.activeCity,
+	set: (value) => {
+		emits("changeCity", value);
+	},
+});
+
 const toggleOn = ref(false);
 const mousePosition = ref({ x: null, y: null });
 const showTagTooltip = ref(false);
@@ -159,6 +153,9 @@ const tooltipPosition = computed(() => {
 	};
 });
 
+function changeActiveCity(cityName) {
+	activeCity.value = cityName;
+}
 function changeActiveChart(chartName) {
 	if (
 		props.mode === "map" &&
@@ -284,22 +281,6 @@ function returnChartComponent(name, svg) {
         v-if="['default', 'half', 'preview'].includes(mode)"
         class="dashboardcomponent-header-button"
       >
-        <select
-          v-if="selectBtn"
-          id="city"
-          name="city"
-          class="selectBtn"
-        >
-          <option value="taipei">
-            台北市
-          </option>
-          <option value="newTaipei">
-            新北市
-          </option>
-          <option value="metroTaipei">
-            雙北市
-          </option>
-        </select>
         <button
           v-if="addBtn"
           @click="$emit('add', config.id, config.name)"
@@ -341,23 +322,41 @@ function returnChartComponent(name, svg) {
     <!-- Control Buttons -->
     <div
       v-if="
-        props.config.chart_config.types.length > 1 &&
-          (!mode.includes('map') || toggleOn) &&
+        (!mode.includes('map') || toggleOn) &&
           mode !== 'preview'
       "
       class="dashboardcomponent-control"
     >
-      <button
-        v-for="item in props.config.chart_config.types"
-        :key="`${props.config.index}-${item}-button`"
-        :class="{
-          'dashboardcomponent-control-button': true,
-          'dashboardcomponent-control-active': activeChart === item,
-        }"
-        @click="changeActiveChart(item)"
+      <select
+        v-if="selectBtn"
+        id="city"
+        v-model="activeCity"
+        name="city"
+        class="selectBtn"
+        @change="(e)=> changeActiveCity((e.target).value)"
       >
-        {{ chartTypes[item] }}
-      </button>
+        <template
+          v-for="city in contentStore.cityList"
+          :key="city.value"
+        >
+          <option :value="city.value">
+            {{ city.name }}
+          </option>
+        </template>
+      </select>
+      <template v-if="config.chart_config.types.length > 1">
+        <button
+          v-for="item in config.chart_config.types"
+          :key="`${config.index}-${item}-button`"
+          :class="{
+            'dashboardcomponent-control-button': true,
+            'dashboardcomponent-control-active': activeChart === item,
+          }"
+          @click="changeActiveChart(item)"
+        >
+          {{ chartTypes[item] }}
+        </button>
+      </template>
     </div>
     <!-- Main Content -->
     <div
@@ -388,8 +387,9 @@ function returnChartComponent(name, svg) {
       <component
         :is="returnChartComponent(item)"
         v-for="item in config.chart_config.types"
-        :key="`${props.config.index}-${item}-chart`"
+        :key="`${props.config.index}-${item}-chart-${item.city}`"
         :active-chart="activeChart"
+        :active-city="activeCity"
         :chart_config="config.chart_config"
         :series="config.chart_data"
         :map_config="config.map_config"
@@ -655,7 +655,7 @@ button:hover {
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		position: absolute;
+		// position: absolute;
 		top: 4.2rem;
 		left: 0;
 		z-index: 8;
@@ -681,6 +681,10 @@ button:hover {
 		&-active {
 			background-color: var(--dashboardcomponent-color-complement-text);
 			color: white;
+		}
+
+		.selectBtn {
+			background-color: var(--dashboardcomponent-color-component-background);
 		}
 	}
 
