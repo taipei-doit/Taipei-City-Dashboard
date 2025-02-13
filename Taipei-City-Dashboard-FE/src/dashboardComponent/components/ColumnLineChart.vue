@@ -1,32 +1,25 @@
 <!-- Developed by Open Possible (台灣大哥大), Taipei Codefest 2023 -->
 <!-- Refactored and Maintained by Taipei Urban Intelligence Center -->
 
-<script setup lang="ts">
+<script setup>
 import { ref, computed } from "vue";
-import { MapConfig, MapFilter } from "../utilities/componentConfig";
 import VueApexCharts from "vue3-apexcharts";
 
 const props = defineProps(["chart_config", "activeChart", "series"]);
 
-const emits = defineEmits<{
-	(
-		e: "filterByParam",
-		map_filter: MapFilter,
-		map_config: MapConfig[],
-		x: string | null,
-		y: string | null
-	): void;
-	(e: "filterByLayer", map_config: MapConfig[], x: string): void;
-	(e: "clearByParamFilter", map_config: MapConfig[]): void;
-	(e: "clearByLayerFilter", map_config: MapConfig[]): void;
-	(e: "fly", location: any): void;
-}>();
+// const emits = defineEmits([
+// 	"filterByParam",
+// 	"filterByLayer",
+// 	"clearByParamFilter",
+// 	"clearByLayerFilter",
+// 	"fly"
+// ]);
 
 const parseSeries = computed(() => {
 	return props.series.map(
 		(
-			serie: { name: string; data: { x: string; y: number }[] },
-			index: number
+			serie,
+			index
 		) => ({
 			...serie,
 			type: index === 0 ? "column" : "line",
@@ -37,8 +30,8 @@ const parseSeries = computed(() => {
 const totalMax = computed(() => {
 	if (props.series[0].name.slice(-2) === props.series[1].name.slice(-2)) {
 		let max = Math.max(
-			...props.series[0].data.map((d: { x: string; y: number }) => d.y),
-			...props.series[1].data.map((d: { x: string; y: number }) => d.y)
+			...props.series[0].data.map((d) => d.y),
+			...props.series[1].data.map((d) => d.y)
 		);
 
 		// add 10% then round up to the nearest 100
@@ -96,11 +89,6 @@ const chartOptions = ref({
 			seriesIndex,
 			dataPointIndex,
 			w,
-		}: {
-			series: any;
-			seriesIndex: any;
-			dataPointIndex: any;
-			w: any;
 		}) {
 			return (
 				`<div class="chart-tooltip">` +
@@ -143,14 +131,14 @@ const chartOptions = ref({
 	yaxis: [
 		{
 			min: 0,
-			max: function (max: number) {
+			max: function (max) {
 				if (totalMax.value) {
 					return totalMax.value;
 				}
 				return max;
 			},
 			labels: {
-				formatter: function (val: number) {
+				formatter: function (val) {
 					return val.toFixed(0);
 				},
 			},
@@ -163,14 +151,14 @@ const chartOptions = ref({
 		},
 		{
 			min: 0,
-			max: function (max: string) {
+			max: function (max) {
 				if (totalMax.value) {
 					return totalMax.value;
 				}
 				return max;
 			},
 			labels: {
-				formatter: function (val: number) {
+				formatter: function (val) {
 					return val.toFixed(0);
 				},
 			},
@@ -185,19 +173,21 @@ const chartOptions = ref({
 	],
 });
 
-function parseTime(time: string) {
+function parseTime(time) {
 	return time.replace("T00:00:00+08:00", " ");
 }
 </script>
 
 <template>
-	<div v-if="activeChart === 'ColumnLineChart'">
-		<VueApexCharts
-			width="100%"
-			height="260px"
-			type="line"
-			:options="chartOptions"
-			:series="parseSeries"
-		></VueApexCharts>
-	</div>
+  <div
+    v-if="activeChart === 'ColumnLineChart'"
+  >
+    <VueApexCharts
+      type="line"
+      width="100%"
+      height="260px"
+      :options="chartOptions"
+      :series="parseSeries"
+    />
+  </div>
 </template>

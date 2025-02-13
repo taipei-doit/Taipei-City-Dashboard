@@ -1,8 +1,7 @@
 <!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 
-<script setup lang="ts">
+<script setup>
 import { ref, computed } from "vue";
-import { MapConfig, MapFilter } from "../utilities/componentConfig";
 import VueApexCharts from "vue3-apexcharts";
 
 const props = defineProps([
@@ -14,19 +13,13 @@ const props = defineProps([
 	"map_filter_on",
 ]);
 
-const emits = defineEmits<{
-	(
-		e: "filterByParam",
-		map_filter: MapFilter,
-		map_config: MapConfig[],
-		x: string | null,
-		y: string | null
-	): void;
-	(e: "filterByLayer", map_config: MapConfig[], x: string): void;
-	(e: "clearByParamFilter", map_config: MapConfig[]): void;
-	(e: "clearByLayerFilter", map_config: MapConfig[]): void;
-	(e: "fly", location: any): void;
-}>();
+const emits = defineEmits([
+	"filterByParam",
+	"filterByLayer",
+	"clearByParamFilter",
+	"clearByLayerFilter",
+	"fly"
+]);
 
 const chartOptions = ref({
 	chart: {
@@ -68,11 +61,6 @@ const chartOptions = ref({
 			seriesIndex,
 			dataPointIndex,
 			w,
-		}: {
-			series: any;
-			seriesIndex: any;
-			dataPointIndex: any;
-			w: any;
 		}) {
 			return (
 				'<div class="chart-tooltip">' +
@@ -108,9 +96,9 @@ const chartHeight = computed(() => {
 	return `${50 + props.series[0].data.length * 30}`;
 });
 
-const selectedIndex = ref<null | string>(null);
+const selectedIndex = ref(null);
 
-function handleDataSelection(_e: any, _chartContext: any, config: any) {
+function handleDataSelection(_e, _chartContext, config) {
 	if (!props.map_filter || !props.map_filter_on) {
 		return;
 	}
@@ -148,14 +136,16 @@ function handleDataSelection(_e: any, _chartContext: any, config: any) {
 </script>
 
 <template>
-	<div v-if="activeChart === 'BarPercentChart'">
-		<VueApexCharts
-			width="100%"
-			:height="chartHeight"
-			type="bar"
-			:options="chartOptions"
-			:series="series"
-			@dataPointSelection="handleDataSelection"
-		></VueApexCharts>
-	</div>
+  <div
+    v-if="activeChart === 'BarPercentChart'"
+  >
+    <VueApexCharts
+      type="bar"
+      width="100%"
+      :height="chartHeight"
+      :options="chartOptions"
+      :series="series"
+      @data-point-selection="handleDataSelection"
+    />
+  </div>
 </template>

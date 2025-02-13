@@ -1,25 +1,18 @@
 <!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 
-<script setup lang="ts">
+<script setup>
 import { ref } from "vue";
-import { MapConfig, MapFilter } from "../utilities/componentConfig";
 import VueApexCharts from "vue3-apexcharts";
 
 const props = defineProps(["chart_config", "activeChart", "series"]);
 
-const emits = defineEmits<{
-	(
-		e: "filterByParam",
-		map_filter: MapFilter,
-		map_config: MapConfig[],
-		x: string | null,
-		y: string | null
-	): void;
-	(e: "filterByLayer", map_config: MapConfig[], x: string): void;
-	(e: "clearByParamFilter", map_config: MapConfig[]): void;
-	(e: "clearByLayerFilter", map_config: MapConfig[]): void;
-	(e: "fly", location: any): void;
-}>();
+// const emits = defineEmits([
+// 	"filterByParam",
+// 	"filterByLayer",
+// 	"clearByParamFilter",
+// 	"clearByLayerFilter",
+// 	"fly"
+// ]);
 
 const chartOptions = ref({
 	chart: {
@@ -57,11 +50,6 @@ const chartOptions = ref({
 			seriesIndex,
 			dataPointIndex,
 			w,
-		}: {
-			series: any;
-			seriesIndex: any;
-			dataPointIndex: any;
-			w: any;
 		}) {
 			// The class "chart-tooltip" could be edited in /assets/styles/chartStyles.css
 			return (
@@ -88,7 +76,7 @@ const chartOptions = ref({
 			: [],
 		labels: {
 			offsetY: 5,
-			formatter: function (value: string) {
+			formatter: function (value) {
 				return value.length > 7 ? value.slice(0, 6) + "..." : value;
 			},
 		},
@@ -99,18 +87,18 @@ const chartOptions = ref({
 			color: "#000",
 		},
 		labels: {
-			formatter: (_value: string) => {
+			formatter: (_value) => {
 				return "";
 			},
 		},
 		// To fix a bug when there is more than 1 series
 		// Orginal behavior: max will default to the max sum of each series
-		max: function (max: number) {
+		max: function (max) {
 			if (!props.chart_config.categories) {
 				return max;
 			}
 			let adjustedMax = 0;
-			props.series.forEach((element: { data: number[] }) => {
+			props.series.forEach((element) => {
 				const maxOfSeries = Math.max.apply(null, element.data);
 				if (maxOfSeries > adjustedMax) {
 					adjustedMax = maxOfSeries;
@@ -123,13 +111,13 @@ const chartOptions = ref({
 </script>
 
 <template>
-	<div v-if="activeChart === 'RadarChart'">
-		<VueApexCharts
-			width="100%"
-			height="270px"
-			type="radar"
-			:options="chartOptions"
-			:series="series"
-		></VueApexCharts>
-	</div>
+  <div v-if="activeChart === 'RadarChart'">
+    <VueApexCharts
+      width="100%"
+      height="270px"
+      type="radar"
+      :options="chartOptions"
+      :series="series"
+    />
+  </div>
 </template>

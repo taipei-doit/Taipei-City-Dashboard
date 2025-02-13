@@ -1,8 +1,7 @@
 <!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 
-<script setup lang="ts">
+<script setup>
 import { ref, computed } from "vue";
-import { MapConfig, MapFilter } from "../utilities/componentConfig";
 import VueApexCharts from "vue3-apexcharts";
 
 const props = defineProps([
@@ -14,19 +13,13 @@ const props = defineProps([
 	"map_filter_on",
 ]);
 
-const emits = defineEmits<{
-	(
-		e: "filterByParam",
-		map_filter: MapFilter,
-		map_config: MapConfig[],
-		x: string | null,
-		y: string | null
-	): void;
-	(e: "filterByLayer", map_config: MapConfig[], x: string): void;
-	(e: "clearByParamFilter", map_config: MapConfig[]): void;
-	(e: "clearByLayerFilter", map_config: MapConfig[]): void;
-	(e: "fly", location: any): void;
-}>();
+const emits = defineEmits([
+	"filterByParam",
+	"filterByLayer",
+	"clearByParamFilter",
+	"clearByLayerFilter",
+	"fly"
+]);
 
 const parseSeries = computed(() => {
 	const newSeries = [];
@@ -86,10 +79,6 @@ const chartOptions = ref({
 			seriesIndex,
 			dataPointIndex,
 			w,
-		}: {
-			seriesIndex: any;
-			dataPointIndex: any;
-			w: any;
 		}) {
 			return (
 				'<div class="chart-tooltip">' +
@@ -124,9 +113,9 @@ const chartOptions = ref({
 	},
 });
 
-const selectedIndex = ref<null | string>(null);
+const selectedIndex = ref(null);
 
-function handleDataSelection(_e: any, _chartContext: any, config: any) {
+function handleDataSelection(_e, _chartContext, config) {
 	if (!props.map_filter || !props.map_filter_on) {
 		return;
 	}
@@ -164,14 +153,14 @@ function handleDataSelection(_e: any, _chartContext: any, config: any) {
 </script>
 
 <template>
-	<div v-if="activeChart === 'IndicatorChart'">
-		<VueApexCharts
-			width="100%"
-			height="260px"
-			type="bar"
-			:options="chartOptions"
-			:series="parseSeries"
-			@dataPointSelection="handleDataSelection"
-		></VueApexCharts>
-	</div>
+  <div v-if="activeChart === 'IndicatorChart'">
+    <VueApexCharts
+      width="100%"
+      height="260px"
+      type="bar"
+      :options="chartOptions"
+      :series="parseSeries"
+      @data-point-selection="handleDataSelection"
+    />
+  </div>
 </template>

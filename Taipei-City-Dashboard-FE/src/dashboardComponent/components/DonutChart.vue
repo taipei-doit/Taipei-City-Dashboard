@@ -1,8 +1,7 @@
 <!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 
-<script setup lang="ts">
+<script setup>
 import { computed, ref } from "vue";
-import { MapConfig, MapFilter } from "../utilities/componentConfig";
 import VueApexCharts from "vue3-apexcharts";
 
 const props = defineProps([
@@ -14,19 +13,13 @@ const props = defineProps([
 	"map_filter_on",
 ]);
 
-const emits = defineEmits<{
-	(
-		e: "filterByParam",
-		map_filter: MapFilter,
-		map_config: MapConfig[],
-		x: string | null,
-		y: string | null
-	): void;
-	(e: "filterByLayer", map_config: MapConfig[], x: string): void;
-	(e: "clearByParamFilter", map_config: MapConfig[]): void;
-	(e: "clearByLayerFilter", map_config: MapConfig[]): void;
-	(e: "fly", location: any): void;
-}>();
+const emits = defineEmits([
+	"filterByParam",
+	"filterByLayer",
+	"clearByParamFilter",
+	"clearByLayerFilter",
+	"fly"
+]);
 
 // How many data points to show before summing all remaining points into "other"
 const steps = ref(6);
@@ -75,8 +68,8 @@ const chartOptions = ref({
 			: props.chart_config.color,
 	dataLabels: {
 		formatter: function (
-			_val: any,
-			{ seriesIndex, w }: { seriesIndex: any; w: any }
+			_val,
+			{ seriesIndex, w }
 		) {
 			let value = w.globals.labels[seriesIndex];
 			return value.length > 7 ? value.slice(0, 6) + "..." : value;
@@ -107,10 +100,6 @@ const chartOptions = ref({
 			series,
 			seriesIndex,
 			w,
-		}: {
-			series: any;
-			seriesIndex: any;
-			w: any;
 		}) {
 			// The class "chart-tooltip" could be edited in /assets/styles/chartStyles.css
 			return (
@@ -128,9 +117,9 @@ const chartOptions = ref({
 	},
 });
 
-const selectedIndex = ref<null | string>(null);
+const selectedIndex = ref(null);
 
-function handleDataSelection(_e: any, _chartContext: any, config: any) {
+function handleDataSelection(_e, _chartContext, config) {
 	if (!props.map_filter || !props.map_filter_on) {
 		return;
 	}
@@ -168,20 +157,22 @@ function handleDataSelection(_e: any, _chartContext: any, config: any) {
 </script>
 
 <template>
-	<div v-if="activeChart === 'DonutChart'" class="donutchart">
-		<VueApexCharts
-			width="100%"
-			type="donut"
-			:options="chartOptions"
-			:series="parsedSeries"
-			@dataPointSelection="handleDataSelection"
-		>
-		</VueApexCharts>
-		<div class="donutchart-title">
-			<h5>總合</h5>
-			<h6>{{ sum }}</h6>
-		</div>
-	</div>
+  <div
+    v-if="activeChart === 'DonutChart'"
+    class="donutchart"
+  >
+    <VueApexCharts
+      width="100%"
+      type="donut"
+      :options="chartOptions"
+      :series="parsedSeries"
+      @data-point-selection="handleDataSelection"
+    />
+    <div class="donutchart-title">
+      <h5>總合</h5>
+      <h6>{{ sum }}</h6>
+    </div>
+  </div>
 </template>
 
 <style scoped lang="scss">

@@ -2,7 +2,7 @@
 
 <!-- This component has two modes "outline" and "fill" which is controlled via the prop "mode" -->
 
-<script setup lang="ts">
+<script setup>
 defineProps({
 	icon: String,
 	text: String,

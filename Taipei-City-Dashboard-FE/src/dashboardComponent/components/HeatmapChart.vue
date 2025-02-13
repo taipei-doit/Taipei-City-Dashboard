@@ -1,8 +1,7 @@
 <!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 
-<script setup lang="ts">
+<script setup>
 import { computed, ref } from "vue";
-import { MapConfig, MapFilter } from "../utilities/componentConfig";
 import VueApexCharts from "vue3-apexcharts";
 
 const props = defineProps([
@@ -14,26 +13,20 @@ const props = defineProps([
 	"map_filter_on",
 ]);
 
-const emits = defineEmits<{
-	(
-		e: "filterByParam",
-		map_filter: MapFilter,
-		map_config: MapConfig[],
-		x: string | null,
-		y: string | null
-	): void;
-	(e: "filterByLayer", map_config: MapConfig[], x: string): void;
-	(e: "clearByParamFilter", map_config: MapConfig[]): void;
-	(e: "clearByLayerFilter", map_config: MapConfig[]): void;
-	(e: "fly", location: any): void;
-}>();
+const emits = defineEmits([
+	"filterByParam",
+	"filterByLayer",
+	"clearByParamFilter",
+	"clearByLayerFilter",
+	"fly"
+]);
 
 const heatmapData = computed(() => {
-	let output: { [key: string]: number } = {};
+	let output = {};
 	let highest = 0;
 	let sum = 0;
 	if (props.series.length === 1) {
-		props.series[0].data.forEach((item: { x: string; y: number }) => {
+		props.series[0].data.forEach((item) => {
 			output[item.x] = item.y;
 			if (item.y > highest) {
 				highest = item.y;
@@ -41,7 +34,7 @@ const heatmapData = computed(() => {
 			sum += item.y;
 		});
 	} else {
-		props.series.forEach((serie: { data: number[] }) => {
+		props.series.forEach((serie) => {
 			for (let i = 0; i < props.chart_config.categories.length; i++) {
 				if (!output[props.chart_config.categories[i]]) {
 					output[props.chart_config.categories[i]] = 0;
@@ -64,7 +57,7 @@ const heatmapData = computed(() => {
 
 const colorScale = computed(() => {
 	const ranges = props.chart_config.color.map(
-		(el: string, index: number) => ({
+		(el, index) => ({
 			to: Math.floor(
 				(heatmapData.value.highest / props.chart_config.color.length) *
 					(props.chart_config.color.length - index)
@@ -130,11 +123,6 @@ const chartOptions = ref({
 			seriesIndex,
 			dataPointIndex,
 			w,
-		}: {
-			series: any;
-			seriesIndex: any;
-			dataPointIndex: any;
-			w: any;
 		}) {
 			// The class "chart-tooltip" could be edited in /assets/styles/chartStyles.css
 			return (
@@ -162,7 +150,7 @@ const chartOptions = ref({
 			: [],
 		labels: {
 			offsetY: 5,
-			formatter: function (value: string) {
+			formatter: function (value) {
 				return value.length > 7 ? value.slice(0, 6) + "..." : value;
 			},
 		},
@@ -172,7 +160,7 @@ const chartOptions = ref({
 		type: "category",
 	},
 	yaxis: {
-		max: function (max: number) {
+		max: function (max) {
 			if (!props.chart_config.categories) {
 				return max;
 			}
@@ -181,9 +169,9 @@ const chartOptions = ref({
 	},
 });
 
-const selectedIndex = ref<null | string>(null);
+const selectedIndex = ref(null);
 
-function handleDataSelection(_e: any, _chartContext: any, config: any) {
+function handleDataSelection(_e, _chartContext, config) {
 	if (!props.map_filter || !props.map_filter_on) {
 		return;
 	}
@@ -221,20 +209,23 @@ function handleDataSelection(_e: any, _chartContext: any, config: any) {
 </script>
 
 <template>
-	<div v-if="activeChart === 'HeatmapChart'" class="heatmapchart">
-		<div class="heatmapchart-title">
-			<h5>總合</h5>
-			<h6>{{ heatmapData.sum }} {{ chart_config.unit }}</h6>
-		</div>
-		<VueApexCharts
-			width="100%"
-			height="360px"
-			type="heatmap"
-			:options="chartOptions"
-			:series="series"
-			@dataPointSelection="handleDataSelection"
-		></VueApexCharts>
-	</div>
+  <div
+    v-if="activeChart === 'HeatmapChart'"
+    class="heatmapchart"
+  >
+    <div class="heatmapchart-title">
+      <h5>總合</h5>
+      <h6>{{ heatmapData.sum }} {{ chart_config.unit }}</h6>
+    </div>
+    <VueApexCharts
+      width="100%"
+      height="360px"
+      type="heatmap"
+      :options="chartOptions"
+      :series="series"
+      @data-point-selection="handleDataSelection"
+    />
+  </div>
 </template>
 
 <style scoped lang="scss">
