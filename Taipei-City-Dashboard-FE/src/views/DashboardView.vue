@@ -23,7 +23,10 @@ const contentStore = useContentStore();
 const dialogStore = useDialogStore();
 const authStore = useAuthStore();
 
-const activeCity = computed(()=> contentStore.currentDashboard.city);
+const activeCity = computed({
+	get: () => contentStore.currentDashboard.city,
+	set: (city) => {},
+});
 
 function handleOpenSettings() {
 	contentStore.editDashboard = JSON.parse(
