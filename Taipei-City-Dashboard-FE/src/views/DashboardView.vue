@@ -25,7 +25,7 @@ const authStore = useAuthStore();
 
 const activeCity = computed({
 	get: () => contentStore.currentDashboard.city,
-	set: (city) => {},
+	set: () => {},
 });
 
 function handleOpenSettings() {

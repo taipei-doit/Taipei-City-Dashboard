@@ -20,9 +20,9 @@ const { isFullscreen, toggle } = useFullscreen();
 
 const linkQuery = computed(() => {
 	const { query } = route;
-    const indexQuery = `?index=${query.index}`;
-    const cityQuery = query.city ? `&city=${query.city}` : '';
-    return `${indexQuery}${cityQuery}`;
+	const indexQuery = `?index=${query.index}`;
+	const cityQuery = query.city ? `&city=${query.city}` : '';
+	return `${indexQuery}${cityQuery}`;
 });
 </script>
 

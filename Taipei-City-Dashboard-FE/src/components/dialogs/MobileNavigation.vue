@@ -56,7 +56,7 @@ const authStore = useAuthStore();
               :title="item.name"
               :index="item.index"
               :expanded="true"
-			  :city="'taipei'"
+              :city="'taipei'"
               @click="dialogStore.hideAllDialogs"
             />
             <h2>雙北儀表板</h2>
@@ -69,7 +69,7 @@ const authStore = useAuthStore();
               :title="item.name"
               :index="item.index"
               :expanded="true"
-			  :city="'metrotaipei'"
+              :city="'metrotaipei'"
               @click="dialogStore.hideAllDialogs"
             />
             <h2>基本地圖圖層</h2>

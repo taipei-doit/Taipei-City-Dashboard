@@ -26,7 +26,7 @@ const mapStore = useMapStore();
 
 const activeCity = computed({
 	get: () => contentStore.currentDashboard.city,
-	set: (city) => {},
+	set: () => {},
 });
 
 const toggleOn = ref({
@@ -103,9 +103,9 @@ function shouldDisable(map_config) {
           :config="item"
           mode="halfmap"
           :info-btn="true"
-		  :active-city="item.city"
+          :active-city="item.city"
           :toggle-disable="shouldDisable(item.map_config)"
-		  :toggleOn="toggleOn.mapLayer[arrayIdx]"
+          :toggle-on="toggleOn.mapLayer[arrayIdx]"
           @info="
             (item) => {
               dialogStore.showMoreInfo(item);
@@ -113,8 +113,8 @@ function shouldDisable(map_config) {
           "
           @toggle="
             (value, map_config) => {
-			  handleToggle(value, map_config);
-			  toggleSwitchBtn(value, 'mapLayer', arrayIdx);
+              handleToggle(value, map_config);
+              toggleSwitchBtn(value, 'mapLayer', arrayIdx);
             }
           "
           @filter-by-param="
@@ -158,10 +158,10 @@ function shouldDisable(map_config) {
           :config="item"
           mode="map"
           :info-btn="true"
-		  :active-city="item.city"
-		  :select-btn="contentStore.currentDashboard.city === 'metrotaipei'" 
+          :active-city="item.city"
+          :select-btn="contentStore.currentDashboard.city === 'metrotaipei'" 
           :toggle-disable="shouldDisable(item.map_config)"
-		  :toggleOn="toggleOn.hasMap[arrayIdx]"
+          :toggle-on="toggleOn.hasMap[arrayIdx]"
           @info="
             (item) => {
               dialogStore.showMoreInfo(item);
@@ -169,8 +169,8 @@ function shouldDisable(map_config) {
           "
           @toggle="
             (value, map_config) => {
-			  handleToggle(value, map_config);
-			  toggleSwitchBtn(value, 'hasMap', arrayIdx);
+              handleToggle(value, map_config);
+              toggleSwitchBtn(value, 'hasMap', arrayIdx);
             }
           "
           @filter-by-param="
@@ -203,21 +203,21 @@ function shouldDisable(map_config) {
               mapStore.flyToLocation(location);
             }
           "
-		  @change-city="(city)=> {
-				const selectedData = contentStore.cityDashboard.components.find((data) => {
-					if (data.index === item.index && data.city === city) {
-						return data
-					}
-				});
+          @change-city="(city)=> {
+            const selectedData = contentStore.cityDashboard.components.find((data) => {
+              if (data.index === item.index && data.city === city) {
+                return data
+              }
+            });
 
-				activeCity = city;
+            activeCity = city;
 
-				mapStore.clearByParamFilter(item.map_config);
-				mapStore.turnOffMapLayerVisibility(item.map_config);
+            mapStore.clearByParamFilter(item.map_config);
+            mapStore.turnOffMapLayerVisibility(item.map_config);
 				
-				contentStore.setComponentData(arrayIdx,selectedData);
-			}
-		  "
+            contentStore.setComponentData(arrayIdx,selectedData);
+          }
+          "
         />
         <h2>基本圖層</h2>
         <DashboardComponent
@@ -227,7 +227,7 @@ function shouldDisable(map_config) {
           mode="halfmap"
           :info-btn="true"
           :toggle-disable="shouldDisable(item.map_config)"
-		  :toggleOn="toggleOn.basicLayer[arrayIdx]"
+          :toggle-on="toggleOn.basicLayer[arrayIdx]"
           @info="
             (item) => {
               dialogStore.showMoreInfo(item);
@@ -236,7 +236,7 @@ function shouldDisable(map_config) {
           @toggle="
             (value, map_config) => {
               handleToggle(value, map_config);
-			  toggleSwitchBtn(value, 'basicLayer', arrayIdx);
+              toggleSwitchBtn(value, 'basicLayer', arrayIdx);
             }
           "
           @filter-by-param="
@@ -274,7 +274,7 @@ function shouldDisable(map_config) {
           :config="item"
           mode="map"
           :info-btn="true"
-		  :toggleOn="toggleOn.noMap[arrayIdx]"
+          :toggle-on="toggleOn.noMap[arrayIdx]"
           @info="
             (item) => {
               dialogStore.showMoreInfo(item);
@@ -283,7 +283,7 @@ function shouldDisable(map_config) {
           @toggle="
             (value, map_config) => {
               handleToggle(value, map_config);
-			  toggleSwitchBtn(value, 'noMap', arrayIdx);
+              toggleSwitchBtn(value, 'noMap', arrayIdx);
             }
           "
         />
