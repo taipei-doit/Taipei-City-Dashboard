@@ -99,9 +99,7 @@ onMounted(() => {
     </div>
     <h2>{{ isExpanded ? `臺北儀表板 ` : `臺北` }}</h2>
     <SideBarTab
-      v-for="item in contentStore.taipeiDashboards.filter(
-        (item) => item.index !== 'map-layers'
-      )"
+      v-for="item in contentStore.taipeiDashboards"
       :key="item.index"
       :icon="item.icon"
       :title="item.name"
@@ -112,9 +110,7 @@ onMounted(() => {
     <template v-if="contentStore.metroTaipeiDashboards?.length > 0">
       <h2>{{ isExpanded ? `雙北儀表板 ` : `雙北` }}</h2>
       <SideBarTab
-        v-for="item in contentStore.metroTaipeiDashboards.filter(
-          (item) => item.index !== 'map-layers'
-        )"
+        v-for="item in contentStore.metroTaipeiDashboards"
         :key="item.index"
         :icon="item.icon"
         :title="item.name"
@@ -123,13 +119,13 @@ onMounted(() => {
         :expanded="isExpanded"
       />
     </template>
-    <h2>{{ isExpanded ? `基本地圖圖層` : `圖層` }}</h2>
+    <!-- <h2>{{ isExpanded ? `基本地圖圖層` : `圖層` }}</h2>
     <SideBarTab
       icon="public"
       title="圖資資訊"
       :expanded="isExpanded"
       index="map-layers"
-    />
+    /> -->
 
     <!-- <button
       class="sidebar-collapse-button"
