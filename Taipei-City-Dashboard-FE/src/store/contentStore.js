@@ -213,13 +213,16 @@ export const useContentStore = defineStore("content", {
 
 		// 3. Finds the info for the current dashboard based on the index and adds it to "currentDashboard"
 		async setCurrentDashboardContent() {
-			const dashboardSources = {
-				taipei: this.taipeiDashboards,
-				metrotaipei: this.metroTaipeiDashboards,
-				personal: this.personalDashboards
-			};
-			const dashboard = dashboardSources[this.currentDashboard.city] || dashboardSources.personal;
-			const currentDashboardInfo = dashboard.find(item => item.index === this.currentDashboard.index);
+			const allDashboards = this.taipeiDashboards.concat(
+				this.metroTaipeiDashboards,
+				this.personalDashboards
+			)
+			const currentDashboardInfo = allDashboards.find((item)=>{
+				if (this.currentDashboard.city) {
+					return item.index === this.currentDashboard.index && item.city === this.currentDashboard.city;
+				}
+				return item.index === this.currentDashboard.index
+			});
 
 			if (!currentDashboardInfo) {
 				router.replace({
