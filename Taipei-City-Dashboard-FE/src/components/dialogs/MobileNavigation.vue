@@ -56,9 +56,10 @@ const authStore = useAuthStore();
               :title="item.name"
               :index="item.index"
               :expanded="true"
+			  :city="'taipei'"
               @click="dialogStore.hideAllDialogs"
             />
-            <h2>新北儀表板</h2>
+            <h2>雙北儀表板</h2>
             <SideBarTab
               v-for="item in contentStore.metroTaipeiDashboards.filter(
                 (item) => item.index !== 'map-layers'
@@ -68,6 +69,7 @@ const authStore = useAuthStore();
               :title="item.name"
               :index="item.index"
               :expanded="true"
+			  :city="'metrotaipei'"
               @click="dialogStore.hideAllDialogs"
             />
             <h2>基本地圖圖層</h2>
