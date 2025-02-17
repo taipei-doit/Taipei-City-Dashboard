@@ -78,6 +78,7 @@ const props = defineProps({
 	toggleDisable: { type: Boolean, default: false },
 	footer: { type: Boolean, default: true },
 	activeCity: { type: String, default: '' },
+	toggleOn: { type: Boolean, default: false },
 });
 
 const emits = defineEmits([
@@ -94,7 +95,6 @@ const emits = defineEmits([
 	"changeCity"
 ]);
 
-// let i = ref(0)
 const activeChart = ref(props.config.chart_config.types[0]);
 const activeCity = computed({
 	get: () => props.activeCity,
@@ -103,7 +103,13 @@ const activeCity = computed({
 	},
 });
 
-const toggleOn = ref(false);
+const toggleOn = computed({
+	get: () => props.toggleOn,
+	set: (value) => {
+		emits("toggle", value, props.config.map_config);
+	},
+});
+
 const mousePosition = ref({ x: null, y: null });
 const showTagTooltip = ref(false);
 
@@ -155,6 +161,7 @@ const tooltipPosition = computed(() => {
 
 function changeActiveCity(cityName) {
 	activeCity.value = cityName;
+	toggleOn.value = true;
 }
 function changeActiveChart(chartName) {
 	if (
@@ -313,7 +320,6 @@ function returnChartComponent(name, svg) {
             v-model="toggleOn"
             type="checkbox"
             :disabled="toggleDisable"
-            @change="$emit('toggle', toggleOn, config.map_config)"
           >
           <span class="toggleswitch-slider" />
         </label>
