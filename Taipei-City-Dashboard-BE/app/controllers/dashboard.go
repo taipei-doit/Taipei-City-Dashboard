@@ -147,10 +147,28 @@ Admin: Allowed
 func CreatePublicDashboard(c *gin.Context) {
 	var dashboard models.Dashboard
 
+	city := c.Param("city")
+	if !(city == "taipei" || city == "metrotaipei" || city == ""){
+		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": "Invalid City Name"})
+		return
+	}
+
 	_, _, _, _, permissions := util.GetUserInfoFromContext(c)
 
-	// Get Group public(id=1)
-	groupID := 1
+
+	var groupID int
+	if city == ""{
+		// Get Group public(id=1)
+		groupID = 1
+	}else{
+		var errr error
+		groupID, errr = models.GetGroupIDByName(city)
+		if errr != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": errr.Error()})
+			return
+		}
+	}
+
 
 	// check has permission, role admin(id=1) editor(id=2)
 	if !util.HasPermission(permissions, groupID, 1) && !util.HasPermission(permissions, groupID, 2) {

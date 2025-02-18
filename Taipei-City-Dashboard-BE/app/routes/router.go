@@ -118,6 +118,7 @@ func configureDashboardRoutes() {
 	dashboardRoutes.Use(middleware.IsSysAdm())
 	{
 		dashboardRoutes.POST("/public", controllers.CreatePublicDashboard)
+		dashboardRoutes.POST("/public/:city", controllers.CreatePublicDashboard)
 		dashboardRoutes.GET("/check-index/:index", controllers.CheckDashboardIndex)
 	}
 }
