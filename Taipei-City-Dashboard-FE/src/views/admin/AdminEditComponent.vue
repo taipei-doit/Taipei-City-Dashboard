@@ -137,6 +137,11 @@ onMounted(() => {
         <tr class="admineditcomponent-table-header">
           <TableHeader min-width="60px" />
           <TableHeader
+            min-width="40px"
+          >
+            City
+          </TableHeader>
+          <!-- <TableHeader
             :sort="true"
             :mode="
               searchParams.sort === 'id' ? searchParams.order : ''
@@ -145,7 +150,7 @@ onMounted(() => {
             @sort="handleSort('id')"
           >
             ID
-          </TableHeader>
+          </TableHeader> -->
           <TableHeader
             :sort="true"
             :mode="
@@ -200,14 +205,14 @@ onMounted(() => {
       <tbody v-if="adminStore.components.length !== 0">
         <tr
           v-for="component in adminStore.components"
-          :key="component.index"
+          :key="`${component.index}-${component.city}`"
         >
           <td class="admineditcomponent-table-settings">
             <button @click="handleOpenSettings(component)">
               <span>settings</span>
             </button>
           </td>
-          <td>{{ component.id }}</td>
+          <td>{{ component.city }}</td>
           <td>{{ component.index }}</td>
           <td>{{ component.name }}</td>
           <td>啟動</td>

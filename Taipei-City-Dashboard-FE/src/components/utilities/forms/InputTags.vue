@@ -48,7 +48,7 @@ const handleDragEnd = () => {
 <template>
   <div
     class="inputtags"
-    :style="{ marginBottom: props.tags.length > 0 ? '5px' : 0 }"
+    :style="{ marginBottom: props.tags?.length > 0 ? '5px' : 0 }"
   >
     <div
       v-for="(tag, index) in tags"

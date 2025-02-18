@@ -49,9 +49,17 @@ onMounted(() => {
     <h2>{{ isExpanded ? `儀表板設定` : `表板` }}</h2>
     <SideBarTab
       icon="dashboard"
-      title="公開儀表板"
+      title="臺北儀表板"
       :expanded="isExpanded"
       index="dashboard"
+      city="taipei"
+    />
+    <SideBarTab
+      icon="dashboard"
+      title="雙北儀表板"
+      :expanded="isExpanded"
+      index="dashboard"
+      city="metrotaipei"
     />
     <h2>{{ isExpanded ? `組件設定` : `組件` }}</h2>
     <SideBarTab

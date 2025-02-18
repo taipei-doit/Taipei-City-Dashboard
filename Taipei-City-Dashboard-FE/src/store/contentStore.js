@@ -104,10 +104,19 @@ export const useContentStore = defineStore("content", {
 		async setDashboards(onlyDashboard = false) {
 			const response = await http.get(`/dashboard/`);
 
+			// Helper function to move map-layers to end
+			const moveMapLayersToEnd = (array) => {
+				if (!array || !Array.isArray(array)) return array;
+				const mapLayersItem = array.find(item => item.index === 'map-layers');
+				if (!mapLayersItem) return array;
+				const otherItems = array.filter(item => item.index !== 'map-layers');
+				return [...otherItems, mapLayersItem];
+			};
+
 			this.personalDashboards = response.data.data?.personal || [];
 			this.publicDashboards = response.data.data?.public || [];
-			this.taipeiDashboards = response.data.data?.taipei || [];
-			this.metroTaipeiDashboards = response.data.data?.metrotaipei || [];
+			this.taipeiDashboards = moveMapLayersToEnd(response.data.data?.taipei) || [];
+			this.metroTaipeiDashboards = moveMapLayersToEnd(response.data.data?.metrotaipei) || [];
 
 			if (this.personalDashboards.length !== 0) {
 				this.favorites = this.personalDashboards.find(
@@ -122,6 +131,7 @@ export const useContentStore = defineStore("content", {
 
 			if (!this.currentDashboard.index) {
 				this.currentDashboard.index = this.taipeiDashboards[0].index;
+				this.currentDashboard.city = "taipei";
 				router.replace({
 					query: {
 						index: this.currentDashboard.index,
@@ -347,10 +357,11 @@ export const useContentStore = defineStore("content", {
 		},
 		// 6. Call an API to get map layer component info and store it (if in /mapview)
 		async setMapLayers() {
-			if (this.mapLayers.length !== 0) {
-				return;
-			}
-			const response = await http.get(`/dashboard/map-layers`);
+			// if (this.mapLayers.length !== 0) {
+			// 	return;
+			// }
+			this.mapLayers = [];
+			const response = await http.get(`/dashboard/map-layers${this.currentDashboard.city ? `?city=${this.currentDashboard.city}` : ""}`);
 			this.mapLayers = response.data.data;
 			this.setMapLayersContent();
 		},

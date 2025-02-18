@@ -370,7 +370,7 @@ function returnChartComponent(name, svg) {
       class="preview-content"
     >
       <div class="preview-content-id">
-        <p>ID: {{ props.config.id }}</p>
+        <p>City: {{ props.config.city }}</p>
         <p>Index: {{ props.config.index }}</p>
       </div>
       <div class="preview-content-charts">
