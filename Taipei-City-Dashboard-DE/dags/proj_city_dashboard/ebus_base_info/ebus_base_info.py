@@ -3,22 +3,28 @@ from operators.common_pipeline import CommonDag
 
 def _transfer(**kwargs):
     '''
-    Service applicant count per year of Sea Sand House Registry statistics from data.taipei.
-
-    Explanation:
-    -------------
-    `年度` as year
-    `輔導家數` as tutor_household
-    `節電度數` as power_saving_degree
-    `節電費用` as electricity_saving_expenses.
-    `減碳量－公噸` as carbon_reduction_metric_tons.
-    `相當於幾座大安森林公園碳匯量` as carbon_sink_daan_forest_parks.
+    The basic information of electric buses comes from TDX.
+    
+    data example
+    {
+        "PlateNumb": "001-U3",
+        "OperatorID": "800",
+        "OperatorCode": "MetropolitanBus",
+        "OperatorNo": "0303",
+        "VehicleClass": 1,
+        "VehicleType": 1,
+        "CardReaderLayout": 2,
+        "IsElectric": 0,
+        "IsHybrid": 0,
+        "IsLowFloor": 1,
+        "HasLiftOrRamp": 1,
+        "HasWifi": 0,
+        "InBoxID": "104017906",
+        "UpdateTime": "2025-02-18T22:11:04+08:00"
+        }
     '''
-    from utils.extract_stage import get_data_taipei_api
-    import pandas as pd
-    from utils.transform_time import convert_str_to_time_format
-    from utils.extract_stage import get_data_taipei_file_last_modified_time
-    from utils.load_stage import save_dataframe_to_postgresql, update_lasttime_in_data_to_dataset_info
+    from utils.extract_stage import get_tdx_data
+    from utils.load_stage import save_dataframe_to_postgresql,update_lasttime_in_data_to_dataset_info
     from sqlalchemy import create_engine
 
     # Config
@@ -33,42 +39,34 @@ def _transfer(**kwargs):
     load_behavior = dag_infos.get('load_behavior')
     default_table = dag_infos.get('ready_data_default_table')
     history_table = dag_infos.get('ready_data_history_table')
-    # Manually set
-    rid = '5a2c9899-9c34-44ef-8860-1ed773e08dc8'
-    page_id = '687f5170-06e9-46be-80bc-fcae87bcaeba'
- 
-    # Extract
-    res = get_data_taipei_api(rid)
-    raw_data = pd.DataFrame(res)
+    history_table = dag_infos.get('ready_data_history_table')
+    TAIPEI_URL= "https://tdx.transportdata.tw/api/basic/v2/Bus/Vehicle/City/Taipei?%24&%24format=JSON"
 
-    # Transform
-    # Rename
+    raw_data = get_tdx_data(TAIPEI_URL, output_format='dataframe')
+    # Extract
+    
     data = raw_data
-    col_map = {
-        "年度": "year",
-        "輔導家數": "tutor_household",
-        "節電度數": "power_saving_degree",
-        "節電費用": "electricity_saving_expenses",
-        "減碳量－公噸": "carbon_reduction_metric_tons",
-        "相當於幾座大安森林公園碳匯量": "carbon_sink_daan_forest_parks"
-    }
-    data = data.rename(columns=col_map)
-    # Transfer year from ROC to AD
-    data['year'] = data['year'].astype(int) + 1911
-    data['power_saving_degree'] = data['power_saving_degree'].replace('萬', '', regex=True).replace('', '', regex=True).replace(',', '', regex=True)
-    data['power_saving_degree'] = data['power_saving_degree'].astype(int)
-    data['electricity_saving_expenses'] = data['electricity_saving_expenses'].replace('萬元', '', regex=True).replace('', '', regex=True).replace(',', '', regex=True)
-    data['electricity_saving_expenses'] = data['electricity_saving_expenses'].astype(int)
-    data['carbon_reduction_metric_tons'] = data['carbon_reduction_metric_tons'].replace('', '', regex=True).replace(',', '', regex=True)
-    data['carbon_reduction_metric_tons'] = data['carbon_reduction_metric_tons'].astype(int)
-    data['carbon_sink_daan_forest_parks'] = data['carbon_sink_daan_forest_parks'].astype(int)
-    # Time
-    data['data_time'] = get_data_taipei_file_last_modified_time(page_id)
-    data['data_time'] = convert_str_to_time_format(data['data_time'])
-    data = data.drop(columns=['_id','_importdate'])
+
+    data['data_time'] = data['UpdateTime']
     # Reshape
+    data = data.rename(columns={
+        "PlateNumb": "plate_numb",
+        "OperatorID": "operator_id",
+        "OperatorCode": "operator_code",
+        "OperatorNo": "operator_no",
+        "VehicleClass": "vehicle_class",
+        "VehicleType": "vehicle_type",
+        "CardReaderLayout": "card_reader_layout",
+        "IsElectric": "is_electric",
+        "IsHybrid": "is_hybrid",
+        "IsLowFloor": "is_low_floor",
+        "HasLiftOrRamp": "has_lift_or_ramp",
+        "HasWifi": "has_wifi",
+        "InBoxID": "inbox_id"	
+        })
     ready_data = data.copy()
 
+    # Load
     # Load
     # Load data to DB
     engine = create_engine(ready_data_db_uri)
@@ -82,6 +80,5 @@ def _transfer(**kwargs):
     update_lasttime_in_data_to_dataset_info(
         engine, airflow_dag_id=dag_id, lasttime_in_data=lasttime_in_data
     )
-
 dag = CommonDag(proj_folder='proj_city_dashboard', dag_folder='ebus_base_info')
 dag.create_dag(etl_func=_transfer)
