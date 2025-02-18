@@ -170,7 +170,7 @@ func GetDashboardByIndex(index string, groups []int, city string) (components []
 		Where(componentIdsSlice).
 		Order(fmt.Sprintf("ARRAY_POSITION(ARRAY[%s], components.id)", componentIdsString))
 		if (city != ""){
-			query = query.Where("city = ?", city)
+			query = query.Where("query_charts.city = ?", city)
 		}
 	err = query.Find(&components).Error
 
