@@ -3,7 +3,6 @@ package models
 
 import (
 	"encoding/json"
-	"fmt"
 	"slices"
 	"time"
 
@@ -18,26 +17,6 @@ type Component struct {
 	ID             int64           `json:"id" gorm:"column:id;autoincrement;primaryKey"`
 	Index          string          `json:"index" gorm:"column:index;type:varchar;unique;not null"     `
 	Name           string          `json:"name" gorm:"column:name;type:varchar;not null"`
-	// HistoryConfig  json.RawMessage `json:"history_config" gorm:"column:history_config;type:json"`
-	// MapConfigIDs   pq.Int64Array   `json:"-" gorm:"column:map_config_ids;type:integer[]"`
-	// MapConfig      json.RawMessage `json:"map_config" gorm:"type:json"`
-	ChartConfig    json.RawMessage `json:"chart_config" gorm:"type:json"`
-	// MapFilter      json.RawMessage `json:"map_filter" gorm:"column:map_filter;type:json"`
-	// TimeFrom       string          `json:"time_from" gorm:"column:time_from;type:varchar"`
-	// TimeTo         *string         `json:"time_to" gorm:"column:time_to;type:varchar"`
-	// UpdateFreq     *int64          `json:"update_freq" gorm:"column:update_freq;type:integer"`
-	// UpdateFreqUnit string          `json:"update_freq_unit" gorm:"column:update_freq_unit;type:varchar"`
-	// Source         string          `json:"source" gorm:"column:source;type:varchar"`
-	// ShortDesc      string          `json:"short_desc" gorm:"column:short_desc;type:text"`
-	// LongDesc       string          `json:"long_desc" gorm:"column:long_desc;type:text"`
-	// UseCase        string          `json:"use_case" gorm:"column:use_case;type:text"`
-	// Links          pq.StringArray  `json:"links" gorm:"column:links;type:text[]"`
-	// Contributors   pq.StringArray  `json:"contributors" gorm:"column:contributors;type:text[]"`
-	// CreatedAt      time.Time       `json:"-" gorm:"column:created_at;type:timestamp with time zone;not null"`
-	// UpdatedAt      time.Time       `json:"updated_at" gorm:"column:updated_at;type:timestamp with time zone;not null"`
-	// QueryType      string          `json:"query_type" gorm:"column:query_type;type:varchar"`
-	// QueryChart     string          `json:"-" gorm:"column:query_chart;type:text"`
-	// QueryHistory   string          `json:"-" gorm:"column:query_history;type:text"`
 }
 
 // QueryCharts is the model for the query_charts table.
@@ -45,8 +24,6 @@ type QueryCharts struct {
 	Index string                   `json:"index"      gorm:"column:index;type:varchar;primaryKey"     `
 	HistoryConfig  json.RawMessage `json:"history_config" gorm:"column:history_config;type:json"`
 	MapConfigIDs   pq.Int64Array   `json:"-" gorm:"column:map_config_ids;type:integer[]"`
-	MapConfig      json.RawMessage `json:"map_config" gorm:"type:json"`
-	// ChartConfig    json.RawMessage `json:"chart_config" gorm:"type:json"`
 	MapFilter      json.RawMessage `json:"map_filter" gorm:"column:map_filter;type:json"`
 	TimeFrom       string          `json:"time_from" gorm:"column:time_from;type:varchar"`
 	TimeTo         *string         `json:"time_to" gorm:"column:time_to;type:varchar"`
@@ -96,7 +73,7 @@ type CityComponent struct{
 // ComponentMap is the model for the component_maps table.
 type ComponentMap struct {
 	ID       int64            `json:"id" gorm:"column:id;autoincrement;primaryKey"`
-	Index    string           `json:"index"      gorm:"column:index;type:varchar;not null"     `
+	Index    string           `json:"index"      gorm:"column:index;type:varchar;not null"`
 	Title    string           `json:"title"      gorm:"column:title;type:varchar;not null"`
 	Type     string           `json:"type"       gorm:"column:type;type:varchar;not null"`
 	Source   string           `json:"source"     gorm:"column:source;type:varchar;not null"`
@@ -117,20 +94,22 @@ type ComponentChart struct {
 
 // createTempComponentDB joins the components, component_maps, and component_charts tables and selects the columns to return.
 func createTempComponentDB() *gorm.DB {
-	// Columns to select from the components table
-	selectColumns := []string{"id", "index", "name"}
-	selectString := ""
-	for _, column := range selectColumns {
-		selectString += "components." + column + ", "
-	}
+	subQuery1 := DBManager.Table("components").
+	Select("components.id,components.index,components.name,row_to_json(component_charts.*) AS chart_config").
+	Joins("JOIN component_charts ON components.index = component_charts.index")
 
-	subQuery := DBManager.Table("components").
-	Select(fmt.Sprint(selectString, "json_agg(row_to_json(component_maps.*)) AS map_config, row_to_json(component_charts.*) AS chart_config")).
-	Joins("LEFT JOIN unnest(components.map_config_ids) AS id_value ON true").
+	subQuery2 := DBManager.Table("query_charts").
+	Select("query_charts.index,query_charts.city,json_agg(row_to_json(component_maps.*)) as map_config").
+	Joins("LEFT JOIN unnest(query_charts.map_config_ids) AS id_value on true").
 	Joins("LEFT JOIN component_maps ON id_value = component_maps.id").
-	Joins("JOIN component_charts ON components.index = component_charts.index").
-	Group("components.id, component_charts.*")
-	return DBManager.Table("(?) as components", subQuery).Select("*").Joins("LEFT JOIN query_charts ON components.index = query_charts.index")
+	Group("query_charts.index, query_charts.city")
+
+	query := DBManager.Table("(?) as components", subQuery1).
+		Select("*").
+		Joins("LEFT JOIN (?) as qc ON components.index = qc.index", subQuery2).
+		Joins("LEFT JOIN query_charts ON components.index = query_charts.index AND qc.city = query_charts.city")
+
+	return query
 }
 
 func GetAllComponents(city string, pageSize int, pageNum int, sort string, order string, filterBy string, filterMode string, filterValue string, searchByIndex string, searchByName string) (components []CityComponent, totalComponents int64, resultNum int64, err error) {
@@ -185,8 +164,14 @@ func GetAllComponents(city string, pageSize int, pageNum int, sort string, order
 	tempDB.Count(&resultNum)
 
 	// Sort the components
-	if sort != "" {
-		tempDB = tempDB.Order("components." + sort + " " + order)
+	if sort != "" && slices.Contains(allColumns,sort){
+		if slices.Contains(componentsColumn,sort){
+			tempDB = tempDB.Order("components." + sort + " " + order)
+		}
+
+		if slices.Contains(queryChartsColumn,sort){
+			tempDB = tempDB.Order("query_charts." + sort + " " + order)
+		}
 	}
 
 	// Paginate the components
