@@ -4,7 +4,7 @@ import shutil
 import time
 import zipfile
 from pathlib import Path
-
+import io
 import fiona
 import geopandas as gpd
 import pandas as pd
@@ -12,6 +12,7 @@ import requests
 from airflow.models import Variable
 from settings.global_config import DATA_PATH, PROXIES
 from utils.auth_tdx import TDXAuth
+import xml.etree.ElementTree as ET
 
 
 def download_file(
@@ -607,3 +608,68 @@ def get_geojson_file(url, dag_id, from_crs, encoding="UTF-8", **kwargs):
     )
     print(f"Read {local_file} successfully.")
     return gdf
+
+class NewTaipeiAPIClient:
+    """
+    A client for retrieving data from New Taipei City Open Data API with flexible format handling.
+    """
+
+    BASE_URL = "https://data.ntpc.gov.tw/api/datasets"
+
+    def __init__(self, rid, input_format="json", timeout=60):
+        """
+        Args:
+            rid (str): The resource ID of the dataset.
+            input_format (str, optional): The input format. Supported formats: "json", "csv", "xml". Defaults to "json".
+            timeout (int, optional): Timeout for HTTP requests in seconds. Defaults to 60.
+        """
+        self.rid = rid
+        self.input_format = input_format.lower()
+        self.timeout = timeout
+
+        # Mapping of input formats to their corresponding handler functions.
+        self.handlers = {
+            "json": self._handle_json,
+            "csv": self._handle_csv,
+            "xml": self._handle_xml,
+        }
+
+        if self.input_format not in self.handlers:
+            raise ValueError("input_format must be 'json', 'csv', or 'xml'.")
+
+    def _handle_json(self, response):
+        """Handle JSON response."""
+        return response.json()
+
+    def _handle_csv(self, response):
+        """Handle CSV response by converting it to a list of dictionaries."""
+        df = pd.read_csv(io.StringIO(response.text))
+        return df.to_dict(orient="records")
+
+    def _handle_xml(self, response):
+        """Handle XML response by parsing it to a list of dictionaries."""
+        root = ET.fromstring(response.text)
+        data_list = []
+        for item in root.findall(".//row"):
+            data_dict = {child.tag: child.text for child in item}
+            data_list.append(data_dict)
+        return data_list
+
+    def get_data(self):
+        """
+        Retrieve data from the API and convert it into a JSON-like structure (list of dictionaries).
+        
+        Returns:
+            list: Converted data.
+            
+        Example:
+            client = NewTaipeiAPIClient("your-resource-id", input_format="csv")
+            data = client.get_data()
+            print(data)
+        """
+        url = f"{self.BASE_URL}/{self.rid}/{self.input_format}"
+        response = requests.get(url, timeout=self.timeout)
+        response.raise_for_status()  # Ensure the request was successful
+
+        # Use the appropriate handler to convert the response.
+        return self.handlers[self.input_format](response)
