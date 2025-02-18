@@ -59,7 +59,7 @@ const routes = [
 	},
 	{
 		path: "/admin",
-		redirect: "/admin/dashboard",
+		redirect: "/admin/dashboard?city=taipei",
 	},
 	{
 		path: "/admin/user",

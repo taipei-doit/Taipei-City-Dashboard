@@ -131,6 +131,7 @@ export const useContentStore = defineStore("content", {
 
 			if (!this.currentDashboard.index) {
 				this.currentDashboard.index = this.taipeiDashboards[0].index;
+				this.currentDashboard.city = "taipei";
 				router.replace({
 					query: {
 						index: this.currentDashboard.index,

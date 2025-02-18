@@ -17,6 +17,8 @@ export const useAdminStore = defineStore("admin", {
 	state: () => ({
 		// Edit Dashboard (for /admin/dashboard)
 		dashboards: [],
+		taipeiDashboards: [],
+		metroTaipeiDashboards: [],
 		currentDashboard: null,
 		// Edit Component (for /admin/edit-component)
 		components: [],
@@ -55,10 +57,14 @@ export const useAdminStore = defineStore("admin", {
 		async getDashboards() {
 			const response = await http.get(`/dashboard/`);
 			this.dashboards = response.data.data.public;
+			this.taipeiDashboards = response.data.data.taipei;
+			this.metroTaipeiDashboards = response.data.data.metrotaipei;
+
 			this.setLoading(false);
 		},
 		// 2. Get current dashboard components
-		async getCurrentDashboardComponents() {
+		async getCurrentDashboardComponents(city) {
+			this.currentDashboard.city = city;
 			const response = await http.get(
 				`/dashboard/${this.currentDashboard.index}`
 			);
@@ -118,7 +124,7 @@ export const useAdminStore = defineStore("admin", {
 
 			// 2.1 Get component chart data
 			const response = await http.get(
-				`/component/${component.id}/chart`,
+				`/component/${component.id}/chart/${component.city}`,
 				{
 					params: !["static", "current", "demo"].includes(
 						component.time_from
@@ -141,7 +147,7 @@ export const useAdminStore = defineStore("admin", {
 			if (component.history_config && component.history_config.range) {
 				for (let i in component.history_config.range) {
 					const response = await http.get(
-						`/component/${component.id}/history`,
+						`/component/${component.id}/history/${component.city}`,
 						{
 							params: getComponentDataTimeframe(
 								component.history_config.range[i],

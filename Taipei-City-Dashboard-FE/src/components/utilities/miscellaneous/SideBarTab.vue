@@ -20,17 +20,23 @@ const props = defineProps({
 const authStore = useAuthStore();
 
 const tabLink = computed(() => {
-	if (authStore.currentPath === "admin") {
-		return `/admin/${props.index}`;
-	}
-	const cityParam = props.city ? `&city=${props.city}` : '';
-	return `${route.path}?index=${props.index}${cityParam}`;
+	const isAdminPath = authStore.currentPath === "admin";
+	const cityParam = props.city ? `${isAdminPath ? '?' : '&'}city=${props.city}` : '';
+	return isAdminPath
+		? `/admin/${props.index}${cityParam}`
+		: `${route.path}?index=${props.index}${cityParam}`;
 });
+
 const linkActiveOrNot = computed(() => {
-	if (authStore.currentPath === "admin") {
-		return route.path === `/admin/${props.index}` ? true : false;
-	}
-	return route.query.index === props.index && route.query.city === props.city ? true : false;
+	const isAdminPath = authStore.currentPath === "admin";
+	const isPathMatch = isAdminPath
+		? route.path === `/admin/${props.index}`
+		: route.query.index === props.index;
+	const isCityMatch = props.city
+		? route.query.city === props.city
+		: true;
+
+	return isPathMatch && isCityMatch;
 });
 </script>
 
