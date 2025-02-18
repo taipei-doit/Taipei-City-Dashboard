@@ -62,7 +62,7 @@ function getLinkTag(link, index) {
               "
             />
           </div>
-          <div v-if="dialogStore.moreInfoContent.links[0]">
+          <div v-if="dialogStore.moreInfoContent.links?.length > 0">
             <h3>相關資料</h3>
             <div class="moreinfo-info-links">
               <a
