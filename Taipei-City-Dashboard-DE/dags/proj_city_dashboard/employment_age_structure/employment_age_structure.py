@@ -30,10 +30,7 @@ def _transfer(**kwargs):
     print(f"raw data =========== {raw_data.head()}")
     data = raw_data.copy()
     data = data.drop(columns=["_id", "_importdate"])
-    
-    data['year'] = data['year'].replace('年', '', regex=True)
-    data['year'] = data['year'].astype(int) + 1911
-    
+
     data = data.rename(
         columns={
                     "年平均別": "year",
@@ -43,6 +40,9 @@ def _transfer(**kwargs):
                     "百分比[％]": "percentage",
         }
     )
+        
+    data['year'] = data['year'].replace('年', '', regex=True)
+    data['year'] = data['year'].astype(int) + 1911
     
     engine = create_engine(ready_data_db_uri)
     save_dataframe_to_postgresql(
