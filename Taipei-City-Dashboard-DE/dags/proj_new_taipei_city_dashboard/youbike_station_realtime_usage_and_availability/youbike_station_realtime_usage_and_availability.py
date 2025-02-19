@@ -25,7 +25,7 @@ def _transfer(**kwargs):
     FROM_CRS = 4326
     raw_data = get_tdx_data(url, output_format='dataframe')
 
-    print(f"raw data =========== {raw_data.head()}")
+    print(f"raw data =========== {raw_data.columns}")
 
     # Transform
     data = raw_data.copy()
@@ -34,10 +34,10 @@ def _transfer(**kwargs):
                     data['StationPosition'].apply(pd.Series)], axis=1)
 
     # Rename the columns for clarity
-    data.rename(columns={"StationID":"sno", 'Zh_tw': 'sna', "srcUpdateTime": "data_time",
+    data = data.rename(columns={"StationID":"sno", 'Zh_tw': 'sna', "srcUpdateTime": "data_time",
                     'PositionLon': 'longitude', 'PositionLat': 'latitude'}, inplace=True)
 
-
+    data =[["sno","sna","data_time","longitude","latitude"]]
     data["data_time"] = convert_str_to_time_format(data["data_time"])
     # geometry
     gdata = add_point_wkbgeometry_column_to_df(
