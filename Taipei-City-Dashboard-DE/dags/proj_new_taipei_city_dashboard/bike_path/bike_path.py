@@ -68,6 +68,8 @@ def _transfer(**kwargs):
             return None
 
     data["geometry"] = data["Geometry"].apply(lambda x: safe_load_wkt(x) if pd.notnull(x) else None)
+    data = data[data["geometry"].notnull()]
+
     # data["geometry"] = data["Geometry"].apply(wkt.loads)
     gdata = gpd.GeoDataFrame(data, geometry="geometry", crs=f"EPSG:{FROM_CRS}")
     gdata["geometry"] = gdata["geometry"].apply(convert_linestring_to_multilinestring)
@@ -75,7 +77,7 @@ def _transfer(**kwargs):
     
     gdata['data_time'] = gdata['UpdateTime']
     # Reshape
-    gdata.rename(columns={
+    gdata = gdata.rename(columns={
 		"RouteName": "route_name",
 		"AuthorityName": "authority_name",
 		"CityCode": "city_code",
@@ -88,10 +90,10 @@ def _transfer(**kwargs):
 		"CyclingLength": "cycling_length",
 		"FinishedTime": "finished_time",
 		"UpdateTime": "update_time",
-		}, inplace=True)
+		})
     
     ready_data = gdata.copy()
-    print(f"ready_data =========== {ready_data.head()}")
+    print(f"ready_data =========== {ready_data.column()}")
 
     # Load
     engine = create_engine(ready_data_db_uri)

@@ -34,7 +34,7 @@ def _transfer(**kwargs):
                     data['StationPosition'].apply(pd.Series)], axis=1)
 
     # Rename the columns for clarity (不要同時使用 inplace 與賦值)
-    data.rename(columns={"StationID": "sno", "Zh_tw": "sna", "srcUpdateTime": "data_time",
+    data.rename(columns={"StationID": "sno", "Zh_tw": "sna", "SrcUpdateTime": "data_time",
                         "PositionLon": "longitude", "PositionLat": "latitude"}, inplace=True)
 
 # 如果你想重新設定 DataFrame 的欄位順序，可以使用以下方式，而不是覆蓋整個 data：
