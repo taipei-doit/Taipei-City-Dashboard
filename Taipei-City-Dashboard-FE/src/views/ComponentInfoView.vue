@@ -115,10 +115,10 @@ onMounted(() => {
     <!-- 1-2. View the component's information -->
     <div class="componentinfoview-content">
       <div :style="{ overflowY: 'scroll' }">
-        <h3>組件 ID | Index</h3>
+        <h3>組件 ID | Index | City</h3>
         <p>
           {{
-            ` ID: ${dialogStore.moreInfoContent.id}｜Index: ${dialogStore.moreInfoContent.index} `
+            ` ID: ${dialogStore.moreInfoContent.id}｜Index: ${dialogStore.moreInfoContent.index}｜City: ${dialogStore.moreInfoContent.city}`
           }}
         </p>
         <h3>組件說明</h3>

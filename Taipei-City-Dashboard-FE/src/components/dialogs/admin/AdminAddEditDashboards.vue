@@ -125,7 +125,7 @@ function handleClose() {
               required
             >
             <template v-if="city">
-              <label>城市</label>
+              <label>city</label>
               <input
                 v-model="city"
                 :disabled="true"
