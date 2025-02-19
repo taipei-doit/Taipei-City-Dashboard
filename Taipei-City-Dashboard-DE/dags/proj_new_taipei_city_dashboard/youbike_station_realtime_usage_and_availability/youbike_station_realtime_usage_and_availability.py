@@ -31,6 +31,7 @@ def _transfer(**kwargs):
     res.raise_for_status()
     res_json = res.json()
     raw_data = pd.DataFrame(res_json)
+    print(f"raw data =========== {raw_data.head()}")
 
     # Transform
     data = raw_data.copy()
@@ -46,6 +47,7 @@ def _transfer(**kwargs):
     )
 
     ready_data = gdata[["sno", "sna", "data_time", "wkb_geometry"]]
+    print(f"ready_data =========== {ready_data.head()}")
 
     # Load
     engine = create_engine(ready_data_db_uri)

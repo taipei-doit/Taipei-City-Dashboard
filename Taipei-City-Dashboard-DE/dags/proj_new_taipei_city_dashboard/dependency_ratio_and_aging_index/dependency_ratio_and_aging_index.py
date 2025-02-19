@@ -22,7 +22,9 @@ def _transfer(**kwargs):
     history_table = dag_infos.get("ready_data_history_table")
     RID= "8308ab58-62d1-424e-8314-24b65b7ab492"
     client = NewTaipeiAPIClient(RID, input_format="json")
-    raw_data = client.get_data()
+    res = client.get_data()
+    raw_data = pd.DataFrame(res)
+    print(f"raw data =========== {raw_data.head()}")
 
 
     data = raw_data.copy()
@@ -58,7 +60,8 @@ def _transfer(**kwargs):
             "total_dependency_ratio", "aging_index", "data_time"
         ]
     ]
-    
+    print(f"ready_data =========== {data.head()}")
+
     engine = create_engine(ready_data_db_uri)
     save_dataframe_to_postgresql(
         engine,
