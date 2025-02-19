@@ -49,7 +49,8 @@ def _transfer(**kwargs):
 
     raw_data = get_tdx_data(NEW_TAIPEI_URL, output_format='dataframe')
     # Extract
-    
+    print(f"raw data =========== {raw_data.head()}")
+
 
     # Transform
     # Rename
@@ -62,6 +63,7 @@ def _transfer(**kwargs):
     gdata['data_time'] = gdata['UpdateTime']
     # Reshape
     ready_data = gdata.copy()
+    print(f"ready_data =========== {ready_data.head()}")
 
     # Load
     engine = create_engine(ready_data_db_uri)

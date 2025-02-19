@@ -43,6 +43,8 @@ def _transfer(**kwargs):
     NEW_TAIPEI_URL= "https://tdx.transportdata.tw/api/basic/v2/Bus/Vehicle/City/NewTaipei?%24&%24format=JSON",
 
     raw_data = get_tdx_data(NEW_TAIPEI_URL, output_format='dataframe')
+    print(f"raw data =========== {raw_data.head()}")
+
     # Extract
     
 
@@ -69,6 +71,7 @@ def _transfer(**kwargs):
         })
     # Reshape
     ready_data = data.copy()
+    print(f"ready_data =========== {ready_data.head()}")
 
     # Load
     # Load data to DB

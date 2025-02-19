@@ -21,9 +21,9 @@ def _transfer(**kwargs):
     history_table = dag_infos.get("ready_data_history_table")
     RID= "c285509a-7fb2-434f-8542-0b4986c337a8"
     client = NewTaipeiAPIClient(RID, input_format="json")
-    raw_data = client.get_data()
-
-
+    res = client.get_data()
+    raw_data = pd.DataFrame(res)
+    print(f"raw data =========== {raw_data.head()}")
     data = raw_data.copy()
     data = data.rename(
         columns={
@@ -91,6 +91,10 @@ def _transfer(**kwargs):
     # 重新排列欄位順序
     melted_data = melted_data[["year", "gender", "age_structure", "percentage"]]
     melted_data["data_time"] = get_tpe_now_time_str(is_with_tz=True)
+
+    print(f"ready_data =========== {melted_data.head()}")
+
+    
     engine = create_engine(ready_data_db_uri)
     save_dataframe_to_postgresql(
         engine,
