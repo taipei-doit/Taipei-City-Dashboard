@@ -29,6 +29,8 @@ def _transfer(**kwargs):
     import geopandas as gpd
     from shapely import wkt    
     import pandas as pd
+    from geoalchemy2 import WKTElement
+
     
     FROM_CRS = 4326
     GEOMETRY_TYPE = "MultiLineString"
@@ -72,6 +74,9 @@ def _transfer(**kwargs):
     data['geometry'] = gpd.GeoSeries.from_wkt(data['geometry'])
     # data["geometry"] = data["Geometry"].apply(wkt.loads)
     gdata = gpd.GeoDataFrame(data, geometry="geometry", crs=f"EPSG:{FROM_CRS}")
+    gdata["wkb_geometry"] = gdata["geometry"].apply(
+        lambda x: WKTElement(x.wkt, srid=FROM_CRS) if x is not None else None
+    )
     # gdata["geometry"] = gdata["geometry"].apply(convert_linestring_to_multilinestring)
     print(f"gdata =========== {gdata.columns}")
 
