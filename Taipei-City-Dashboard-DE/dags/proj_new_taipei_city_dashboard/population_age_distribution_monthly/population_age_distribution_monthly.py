@@ -47,7 +47,6 @@ def _transfer(**kwargs):
         'year', 'young_population', 'young_population_percentage',
         'working_age_population', 'working_age_population_percentage',
         'elderly_population', 'elderly_population_percentage',
-        'elderly_dependency_ratio', 'youth_dependency_ratio',
         'total_dependency_ratio', 'aging_index'
     ]]
 

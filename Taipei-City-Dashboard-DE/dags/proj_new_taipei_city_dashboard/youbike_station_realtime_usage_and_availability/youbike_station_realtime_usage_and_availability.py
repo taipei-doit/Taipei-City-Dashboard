@@ -23,7 +23,7 @@ def _transfer(**kwargs):
     default_table = dag_infos.get("ready_data_default_table")
     history_table = dag_infos.get("ready_data_history_table")
     proxies = kwargs.get("proxies")
-    url = "https://tdx.transportdata.tw/api/basic/v2/Bike/Station/City/NewTaipei?%24&%24format=JSON"
+    url = '''https://tdx.transportdata.tw/api/basic/v2/Bike/Station/City/NewTaipei?%24&%24format=JSON'''
     GEOMETRY_TYPE = "Point"
     FROM_CRS = 4326
 
