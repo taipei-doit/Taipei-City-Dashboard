@@ -96,9 +96,8 @@ def _transfer(**kwargs):
         "FinishedTime": "finished_time",
         "UpdateTime": "update_time",
         })
-    
+    gdata = gdata.drop(columns=["Geometry"])
     ready_data = gdata.copy()
-    ready_data = gdata.drop(columns=["geometry"]).copy()
     print(f"ready_data =========== {ready_data.columns}")
     # Load
     engine = create_engine(ready_data_db_uri)
