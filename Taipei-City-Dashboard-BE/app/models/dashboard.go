@@ -2,6 +2,7 @@
 package models
 
 import (
+	"encoding/json"
 	"fmt"
 	"time"
 
@@ -174,6 +175,40 @@ func GetDashboardByIndex(index string, groups []int, city string) (components []
 		}
 	err = query.Find(&components).Error
 
+	// Add ComponentMap City field for front-end display purpose
+	type ComponentMap struct {
+		ID       int64            `json:"id" gorm:"column:id;autoincrement;primaryKey"`
+		City     string           `json:"city"       gorm:"column:index;type:varchar;not null"`
+		Index    string           `json:"index"      gorm:"column:index;type:varchar;not null"`
+		Title    string           `json:"title"      gorm:"column:title;type:varchar;not null"`
+		Type     string           `json:"type"       gorm:"column:type;type:varchar;not null"`
+		Source   string           `json:"source"     gorm:"column:source;type:varchar;not null"`
+		Size     *string          `json:"size"       gorm:"column:size;type:varchar"`
+		Icon     *string          `json:"icon"       gorm:"column:icon;type:varchar"`
+		Paint    *json.RawMessage `json:"paint" gorm:"column:paint;type:json"`
+		Property *json.RawMessage `json:"property" gorm:"column:property;type:json"`
+	}
+
+
+	var maps []ComponentMap
+	filteredMaps := make([]ComponentMap, 0)
+	for k,v := range components{
+		if err := json.Unmarshal(v.MapConfig, &maps); err != nil {
+			return components, err
+		}
+
+		for kk,vv := range maps{
+			maps[kk].City = city
+			if vv.ID != 0{
+				maps[kk].City = city
+				filteredMaps = append(filteredMaps, maps[kk])
+			}
+		}
+
+		maps = filteredMaps
+		jsonMaps, _ := json.Marshal(maps)
+		components[k].MapConfig = jsonMaps
+	}
 	return components, err
 }
 
