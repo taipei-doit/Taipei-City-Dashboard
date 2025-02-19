@@ -8,7 +8,6 @@ def _transfer(**kwargs):
         save_geodataframe_to_postgresql,
         update_lasttime_in_data_to_dataset_info,
     )
-    from utils.transform_time import convert_str_to_time_format
     from utils.transform_geometry import add_point_wkbgeometry_column_to_df
     from utils.extract_stage import get_tdx_data
     import pandas as pd
@@ -38,7 +37,7 @@ def _transfer(**kwargs):
                     'PositionLon': 'longitude', 'PositionLat': 'latitude'}, inplace=True)
 
     data =[["sno","sna","data_time","longitude","latitude"]]
-    data["data_time"] = convert_str_to_time_format(data["data_time"])
+    # data["data_time"] = convert_str_to_time_format(data["data_time"])
     # geometry
     gdata = add_point_wkbgeometry_column_to_df(
         data, x=data["longitude"], y=data["latitude"], from_crs=FROM_CRS
