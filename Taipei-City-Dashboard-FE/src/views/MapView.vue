@@ -11,7 +11,8 @@ Testing: Jack Huang (Data Scientist), Ian Huang (Data Analysis Intern)
 <!-- Map charts will be hidden in mobile mode and be replaced with the mobileLayers dialog -->
 
 <script setup>
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
+import { useRoute } from "vue-router";
 import DashboardComponent from "../dashboardComponent/DashboardComponent.vue";
 import { useContentStore } from "../store/contentStore";
 import { useDialogStore } from "../store/dialogStore";
@@ -23,6 +24,7 @@ import ReportIssue from "../components/dialogs/ReportIssue.vue";
 const contentStore = useContentStore();
 const dialogStore = useDialogStore();
 const mapStore = useMapStore();
+const route = useRoute();
 
 const activeCity = computed({
 	get: () => contentStore.currentDashboard.city,
@@ -47,6 +49,18 @@ const parseMapLayers = computed(() => {
 
 	return { hasMap: hasMap, noMap: noMap };
 });
+
+
+watch( () => route.query.index, (newIndex, oldIndex) => {
+	if (newIndex !== oldIndex) {
+		toggleOn.value = {
+			hasMap: new Array(parseMapLayers.value.hasMap?.length).fill(false),
+			noMap: new Array(parseMapLayers.value.noMap?.length).fill(false),
+			mapLayer: new Array(contentStore.currentDashboard.components?.length).fill(false),
+			basicLayer: new Array(contentStore.mapLayers?.length).fill(false)
+		}
+	}
+})
 
 function handleOpenSettings() {
 	contentStore.editDashboard = JSON.parse(
