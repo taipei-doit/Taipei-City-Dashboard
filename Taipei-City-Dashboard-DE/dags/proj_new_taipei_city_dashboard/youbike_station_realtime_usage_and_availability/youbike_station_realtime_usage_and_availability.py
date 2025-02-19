@@ -27,7 +27,7 @@ def _transfer(**kwargs):
     GEOMETRY_TYPE = "Point"
     FROM_CRS = 4326
 
-    res = requests.get(url, proxies=proxies, timeout=60)
+    res = requests.get(url, timeout=60)
     res.raise_for_status()
     res_json = res.json()
     raw_data = pd.DataFrame(res_json)
