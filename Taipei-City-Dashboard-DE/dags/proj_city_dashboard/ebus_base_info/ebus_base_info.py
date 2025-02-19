@@ -44,7 +44,7 @@ def _transfer(**kwargs):
 
     raw_data = get_tdx_data(TAIPEI_URL, output_format='dataframe')
     # Extract
-    
+    print(f"raw data =========== {raw_data.head()}")
     data = raw_data
 
     data['data_time'] = data['UpdateTime']

@@ -25,7 +25,7 @@
     "ready_data_history_table": "",
     "raw_data_db": "postgres_default",
     "raw_data_table": "",
-    "load_behavior": "current"
+    "load_behavior": "replace"
   },
   "data_infos": {
     "name_cn": "臺北市就業人口之年齡結構",

@@ -27,7 +27,7 @@ def _transfer(**kwargs):
     res = get_data_taipei_api(RID)
     raw_data = pd.DataFrame(res)
     raw_data["data_time"] = raw_data["_importdate"].iloc[0]["date"]
-
+    print(f"raw data =========== {raw_data.head()}")
     data = raw_data.copy()
     data = data.drop(columns=["_id", "_importdate"])
     
