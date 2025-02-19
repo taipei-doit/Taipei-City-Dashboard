@@ -58,8 +58,17 @@ def _transfer(**kwargs):
     data = raw_data
     # 轉換 WKT 為 shapely.geometry
     # data["Geometry"] = data["Geometry"].apply(lambda x: loads(x) if pd.notnull(x) else None)
-    
-    data["geometry"] = data["Geometry"].apply(wkt.loads)
+
+
+    def safe_load_wkt(x):
+        try:
+            return wkt.loads(x)
+        except Exception as e:
+            print(f"Error parsing WKT: {x}, error: {e}")
+            return None
+
+    data["geometry"] = data["Geometry"].apply(lambda x: safe_load_wkt(x) if pd.notnull(x) else None)
+    # data["geometry"] = data["Geometry"].apply(wkt.loads)
     gdata = gpd.GeoDataFrame(data, geometry="geometry", crs=f"EPSG:{FROM_CRS}")
     gdata["geometry"] = gdata["geometry"].apply(convert_linestring_to_multilinestring)
     gdata = convert_geometry_to_wkbgeometry(gdata, from_crs=FROM_CRS)

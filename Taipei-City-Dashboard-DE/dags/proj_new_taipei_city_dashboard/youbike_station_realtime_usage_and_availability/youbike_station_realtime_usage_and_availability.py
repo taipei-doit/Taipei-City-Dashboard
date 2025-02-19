@@ -8,6 +8,7 @@ def _transfer(**kwargs):
         save_geodataframe_to_postgresql,
         update_lasttime_in_data_to_dataset_info,
     )
+    from utils.transform_time import convert_str_to_time_format
     from utils.transform_geometry import add_point_wkbgeometry_column_to_df
     from utils.extract_stage import get_tdx_data
     import pandas as pd
@@ -32,12 +33,13 @@ def _transfer(**kwargs):
                     data['StationName'].apply(pd.Series), 
                     data['StationPosition'].apply(pd.Series)], axis=1)
 
-    # Rename the columns for clarity
-    data = data.rename(columns={"StationID":"sno", 'Zh_tw': 'sna', "srcUpdateTime": "data_time",
-                    'PositionLon': 'longitude', 'PositionLat': 'latitude'}, inplace=True)
+    # Rename the columns for clarity (不要同時使用 inplace 與賦值)
+    data.rename(columns={"StationID": "sno", "Zh_tw": "sna", "srcUpdateTime": "data_time",
+                        "PositionLon": "longitude", "PositionLat": "latitude"}, inplace=True)
 
-    data =[["sno","sna","data_time","longitude","latitude"]]
-    # data["data_time"] = convert_str_to_time_format(data["data_time"])
+# 如果你想重新設定 DataFrame 的欄位順序，可以使用以下方式，而不是覆蓋整個 data：
+    data = data[["sno", "sna", "data_time", "longitude", "latitude"]]
+    data["data_time"] = convert_str_to_time_format(data["data_time"])
     # geometry
     gdata = add_point_wkbgeometry_column_to_df(
         data, x=data["longitude"], y=data["latitude"], from_crs=FROM_CRS
