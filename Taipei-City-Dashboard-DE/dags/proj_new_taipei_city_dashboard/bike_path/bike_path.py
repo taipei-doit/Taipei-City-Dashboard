@@ -29,7 +29,6 @@ def _transfer(**kwargs):
     import geopandas as gpd
     from shapely import wkt    
     import pandas as pd
-
     
     FROM_CRS = 4326
     GEOMETRY_TYPE = "MultiLineString"
@@ -71,25 +70,25 @@ def _transfer(**kwargs):
 
     # data["geometry"] = data["Geometry"].apply(wkt.loads)
     gdata = gpd.GeoDataFrame(data, geometry="geometry", crs=f"EPSG:{FROM_CRS}")
-    gdata["geometry"] = gdata["geometry"].apply(convert_linestring_to_multilinestring)
-    gdata = convert_geometry_to_wkbgeometry(gdata, from_crs=FROM_CRS)
-    
+    # gdata["geometry"] = gdata["geometry"].apply(convert_linestring_to_multilinestring)
+    print(f"gdata =========== {gdata.columns}")
+
     gdata['data_time'] = gdata['UpdateTime']
     # Reshape
     gdata = gdata.rename(columns={
-		"RouteName": "route_name",
-		"AuthorityName": "authority_name",
-		"CityCode": "city_code",
-		"City": "city",
-		"Town": "town",
-		"RoadSectionStart": "road_section_start",
-		"RoadSectionEnd": "road_section_end",
-		"Direction": "direction",
-		"CyclingType": "cycling_type",
-		"CyclingLength": "cycling_length",
-		"FinishedTime": "finished_time",
-		"UpdateTime": "update_time",
-		})
+        "RouteName": "route_name",
+        "AuthorityName": "authority_name",
+        "CityCode": "city_code",
+        "City": "city",
+        "Town": "town",
+        "RoadSectionStart": "road_section_start",
+        "RoadSectionEnd": "road_section_end",
+        "Direction": "direction",
+        "CyclingType": "cycling_type",
+        "CyclingLength": "cycling_length",
+        "FinishedTime": "finished_time",
+        "UpdateTime": "update_time",
+        })
     
     ready_data = gdata.copy()
     print(f"ready_data =========== {ready_data.columns}")
