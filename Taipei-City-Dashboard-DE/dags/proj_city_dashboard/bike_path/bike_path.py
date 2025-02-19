@@ -47,7 +47,7 @@ def _transfer(**kwargs):
     FROM_CRS = 4326
     raw_data = get_tdx_data(NEW_TAIPEI_URL, output_format='dataframe')
     # Extract
-    
+    print(f"raw data =========== {raw_data.head()}")
     data = raw_data
 
     gdata = gpd.GeoDataFrame(data, geometry="geometry", crs=f"EPSG:{FROM_CRS}")

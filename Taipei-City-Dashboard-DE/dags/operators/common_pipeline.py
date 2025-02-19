@@ -103,7 +103,7 @@ def _create_or_update_dataset_info(psql_uri, config, proj_folder):
         "id": f"{proj_folder}_{dag_infos.get('dag_id')}",
         "psql_table_name": dag_infos.get("ready_data_default_table", None),
         "name_cn": data_infos.get("name_cn", None),
-        "airflow_dag_id": f"{proj_folder}_{dag_infos.get['dag_id']}",
+        "airflow_dag_id": f"{proj_folder}_{dag_infos.get('dag_id')}",
         "mongo_collection": None,
         "maintain_type": dag_infos.get("maintain_type", None),
         "airflow_update_freq": data_infos.get("airflow_update_freq", None),

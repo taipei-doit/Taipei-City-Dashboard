@@ -26,6 +26,7 @@ def _transfer(**kwargs):
     response = requests.get(URL, verify=False)
     # 讀取 CSV
     raw_data = pd.read_csv(StringIO(response.text))
+    print(f"raw data =========== {raw_data.head()}")
     # Transform
     data = raw_data.copy()
     # ** 只篩選 "12月底"**
