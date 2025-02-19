@@ -190,9 +190,9 @@ func GetDashboardByIndex(index string, groups []int, city string) (components []
 	}
 
 
-	var maps []ComponentMap
-	filteredMaps := make([]ComponentMap, 0)
 	for k,v := range components{
+		var maps []ComponentMap
+		filteredMaps := make([]ComponentMap, 0)
 		if err := json.Unmarshal(v.MapConfig, &maps); err != nil {
 			return components, err
 		}
