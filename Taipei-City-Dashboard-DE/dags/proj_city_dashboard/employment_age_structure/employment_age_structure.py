@@ -43,7 +43,7 @@ def _transfer(**kwargs):
         
     data['year'] = data['year'].replace('年', '', regex=True)
     data['year'] = data['year'].astype(int) + 1911
-    data = [["year","gender","age_structure","percentage","data_time"]]
+    data = data[["year","gender","age_structure","percentage","data_time"]]
     engine = create_engine(ready_data_db_uri)
     save_dataframe_to_postgresql(
         engine,
