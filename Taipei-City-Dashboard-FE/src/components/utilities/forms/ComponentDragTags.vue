@@ -48,7 +48,7 @@ const handleDragEnd = () => {
 <template>
   <div
     v-for="(tag, index) in tags"
-    :key="`${tag.index}`"
+    :key="`${tag.index}-${tag.city}`"
     :class="{
       componentdragtag: true,
       'componentdragtag-dragging': index === draggedItem,
@@ -63,6 +63,7 @@ const handleDragEnd = () => {
     @dragend="handleDragEnd"
   >
     <h3>{{ tag.id }}</h3>
+    <p>{{ tag.city }}</p>
     <p>{{ tag.name }}</p>
     <button
       :style="{ backgroundColor: colorData ? tag : '' }"

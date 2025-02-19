@@ -36,6 +36,7 @@ function getLinkTag(link, index) {
     <div class="moreinfo">
       <DashboardComponent
         :config="dialogStore.moreInfoContent"
+        :active-city="dialogStore.moreInfoContent.city"
         mode="large"
       />
       <div class="moreinfo-info">

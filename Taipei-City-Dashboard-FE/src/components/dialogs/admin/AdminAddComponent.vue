@@ -111,7 +111,7 @@ onMounted(() => {
               取消
             </button>
             <button
-              v-if="componentsSelected.length > 0"
+              v-if="componentsSelected?.length > 0"
               @click="handleSubmit"
             >
               <span>add_chart</span>確認新增
@@ -121,21 +121,21 @@ onMounted(() => {
       </div>
       <p :style="{ margin: '1rem 0 0.5rem' }">
         計 {{ availableComponents?.length }} 個組件符合篩選條件 | 共選取
-        {{ componentsSelected.length }} 個
+        {{ componentsSelected?.length }} 個
       </p>
 
       <div class="addcomponent-list">
         <div
           v-for="item in availableComponents"
-          :key="item.id"
+          :key="`${item.id}-${item.city}`"
         >
           <input
-            :id="item.name"
+            :id="`${item.name}-${item.city}`"
             v-model="componentsSelected"
             type="checkbox"
-            :value="{ id: item.id, name: item.name }"
+            :value="{ id: item.id, name: item.name, city: item.city }"
           >
-          <label :for="item.name">
+          <label :for="`${item.name}-${item.city}`">
             <div class="addcomponent-list-item">
               <DashboardComponent
                 :config="item"
