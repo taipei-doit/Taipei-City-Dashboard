@@ -40,7 +40,7 @@ def _transfer(**kwargs):
     default_table = dag_infos.get('ready_data_default_table')
     history_table = dag_infos.get('ready_data_history_table')
     history_table = dag_infos.get('ready_data_history_table')
-    NEW_TAIPEI_URL= "https://tdx.transportdata.tw/api/basic/v2/Bus/Vehicle/City/NewTaipei?%24&%24format=JSON",
+    NEW_TAIPEI_URL= '''https://tdx.transportdata.tw/api/basic/v2/Bus/Vehicle/City/NewTaipei?%24&%24format=JSON'''
 
     raw_data = get_tdx_data(NEW_TAIPEI_URL, output_format='dataframe')
     print(f"raw data =========== {raw_data.head()}")

@@ -22,10 +22,10 @@
     },
     "ready_data_db": "postgres_default",
     "ready_data_default_table": "dependency_ratio_and_aging_index_new_tpe",
-    "ready_data_history_table": "",
+    "ready_data_history_table": "dependency_ratio_and_aging_index_new_tpe_history",
     "raw_data_db": "postgres_default",
     "raw_data_table": "",
-    "load_behavior": "current"
+    "load_behavior": "current+history"
   },
   "data_infos": {
     "name_cn": "新北市扶養比及老化指數",
