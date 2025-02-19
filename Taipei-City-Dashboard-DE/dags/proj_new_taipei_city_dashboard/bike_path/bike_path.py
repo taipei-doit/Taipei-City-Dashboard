@@ -50,12 +50,11 @@ def _transfer(**kwargs):
 
     raw_data = get_tdx_data(NEW_TAIPEI_URL, output_format='dataframe')
     # Extract
-    print(f"raw data =========== {raw_data.head()}")
 
 
     # Transform
     # Rename
-    data = raw_data
+    data = raw_data.copy()
     # 轉換 WKT 為 shapely.geometry
     # data["Geometry"] = data["Geometry"].apply(lambda x: loads(x) if pd.notnull(x) else None)
 
@@ -93,8 +92,7 @@ def _transfer(**kwargs):
 		})
     
     ready_data = gdata.copy()
-    print(f"ready_data =========== {ready_data.column()}")
-
+    print(f"ready_data =========== {ready_data.columns}")
     # Load
     engine = create_engine(ready_data_db_uri)
     save_geodataframe_to_postgresql(
