@@ -595,6 +595,7 @@ function handleClose() {
             "
             :key="`${currentComponent.index}-${currentComponent.chart_config.color}-${currentComponent.chart_config.types}`"
             :config="JSON.parse(JSON.stringify(currentComponent))"
+            :active-city="currentComponent.city"
             mode="large"
           />
           <div
