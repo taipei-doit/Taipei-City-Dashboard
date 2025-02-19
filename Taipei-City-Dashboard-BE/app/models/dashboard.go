@@ -200,7 +200,7 @@ func GetDashboardByIndex(index string, groups []int, city string) (components []
 		for kk,vv := range maps{
 			maps[kk].City = city
 			if vv.ID != 0{
-				maps[kk].City = city
+				maps[kk].City = v.City
 				filteredMaps = append(filteredMaps, maps[kk])
 			}
 		}
