@@ -693,7 +693,7 @@ class NewTaipeiAPIClient:
             print(all_data)
         """
         all_data = []
-        page = 1
+        page = 0
         while True:
             print(f"Fetching page {page}...")
             data = self.get_data(page=page, size=size)
