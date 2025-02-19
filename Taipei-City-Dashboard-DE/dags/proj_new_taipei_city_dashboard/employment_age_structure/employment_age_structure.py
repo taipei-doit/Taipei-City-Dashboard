@@ -103,7 +103,7 @@ def _transfer(**kwargs):
         default_table=default_table,
     )
     update_lasttime_in_data_to_dataset_info(
-            engine, dag_id, data["data_time"].max()
+            engine, dag_id, melted_data["data_time"].max()
         )
 
 dag = CommonDag(proj_folder="proj_new_taipei_city_dashboard", dag_folder="employment_age_structure")

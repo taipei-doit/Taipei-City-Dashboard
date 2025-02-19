@@ -27,7 +27,8 @@ def _transfer(**kwargs):
     from sqlalchemy import create_engine
     from utils.transform_geometry import convert_geometry_to_wkbgeometry
     import geopandas as gpd
-
+    from shapely.wkt import loads
+    import pandas as pd
 
     
     FROM_CRS = 4326
@@ -55,7 +56,9 @@ def _transfer(**kwargs):
     # Transform
     # Rename
     data = raw_data
-
+# 轉換 WKT 為 shapely.geometry
+    data["Geometry"] = data["Geometry"].apply(lambda x: loads(x) if pd.notnull(x) else None)
+    
     gdata = gpd.GeoDataFrame(data, geometry="Geometry", crs=f"EPSG:{FROM_CRS}")
     gdata = convert_geometry_to_wkbgeometry(gdata, from_crs=FROM_CRS)
 

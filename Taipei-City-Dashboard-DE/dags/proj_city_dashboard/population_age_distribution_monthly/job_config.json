@@ -15,8 +15,8 @@
       "retry_delay": 60
     },
     "ready_data_db": "postgres_default",
-    "ready_data_default_table": "population_age_distribution_monthly_tpe",
-    "ready_data_history_table": "population_age_distribution_monthly_tpe_history",
+    "ready_data_default_table": "population_age_distribution_tpe",
+    "ready_data_history_table": "population_age_distribution_tpe_history",
     "raw_data_db": "postgres_default",
     "raw_data_table": "",
     "load_behavior": "current+history"
