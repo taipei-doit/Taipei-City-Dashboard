@@ -67,7 +67,9 @@ def _transfer(**kwargs):
 
     data["geometry"] = data["Geometry"].apply(lambda x: safe_load_wkt(x) if pd.notnull(x) else None)
     data = data[data["geometry"].notnull()]
-
+    data['geometry'] = data['geometry'].apply(lambda geom: geom.wkt if geom is not None else None)
+    # 如果需要建立 GeoDataFrame，要先轉換回 geometry 物件
+    data['geometry'] = gpd.GeoSeries.from_wkt(data['geometry'])
     # data["geometry"] = data["Geometry"].apply(wkt.loads)
     gdata = gpd.GeoDataFrame(data, geometry="geometry", crs=f"EPSG:{FROM_CRS}")
     # gdata["geometry"] = gdata["geometry"].apply(convert_linestring_to_multilinestring)

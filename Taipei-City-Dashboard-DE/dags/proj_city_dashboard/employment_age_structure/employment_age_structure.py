@@ -7,13 +7,11 @@ def _transfer(**kwargs):
     from sqlalchemy import create_engine
     from utils.extract_stage import (
         get_data_taipei_api,
-        get_data_taipei_file_last_modified_time,
     )
     from utils.load_stage import (
         save_dataframe_to_postgresql,
         update_lasttime_in_data_to_dataset_info,
     )
-    from utils.transform_time import convert_str_to_time_format
 
     # Config
     ready_data_db_uri = kwargs.get("ready_data_db_uri")
@@ -40,7 +38,8 @@ def _transfer(**kwargs):
                     "百分比[％]": "percentage",
         }
     )
-        
+    data['percentage'] = data['percentage'].replace('-', pd.NA).astype(float)      
+ 
     data['year'] = data['year'].replace('年', '', regex=True)
     data['year'] = data['year'].astype(int) + 1911
     data = data[["year","gender","age_structure","percentage","data_time"]]
