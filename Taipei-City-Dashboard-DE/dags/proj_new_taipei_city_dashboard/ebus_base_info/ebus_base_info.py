@@ -26,6 +26,7 @@ def _transfer(**kwargs):
     from utils.extract_stage import get_tdx_data
     from utils.load_stage import save_dataframe_to_postgresql, update_lasttime_in_data_to_dataset_info
     from sqlalchemy import create_engine
+    from utils.transform_time import convert_str_to_time_format
 
     # Config
     # Retrieve all kwargs automatically generated upon DAG initialization
@@ -52,8 +53,9 @@ def _transfer(**kwargs):
     # Rename
     data = raw_data
 
+    data["data_time"] = convert_str_to_time_format(data["UpdateTime"])
 
-    data['data_time'] = data['UpdateTime']
+
     data = data.rename(columns={
         "PlateNumb": "plate_numb",
         "OperatorID": "operator_id",

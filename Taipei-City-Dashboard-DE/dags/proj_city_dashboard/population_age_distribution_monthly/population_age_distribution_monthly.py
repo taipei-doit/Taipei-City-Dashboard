@@ -61,6 +61,7 @@ def _transfer(**kwargs):
         data=data,
         load_behavior=load_behavior,
         default_table=default_table,
+        history_table=history_table
     )
     update_lasttime_in_data_to_dataset_info(
             engine, dag_id, data["data_time"].max()
