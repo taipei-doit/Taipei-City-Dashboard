@@ -25,8 +25,8 @@ const searchIndex = ref("");
 
 // Filters out components already in the dashboard
 const availableComponents = computed(() => {
-	const taken = adminStore.currentDashboard.components.map((item) => item.id);
-	const available = allComponents.value.filter(
+	const taken = adminStore.currentDashboard.components?.map((item) => item.id) || [];
+	const available = allComponents.value?.filter(
 		(item) => !taken.includes(+item.id)
 	);
 	return available;
@@ -45,7 +45,7 @@ async function handleSearch() {
 }
 function handleSubmit() {
 	adminStore.currentDashboard.components =
-		adminStore.currentDashboard.components.concat(componentsSelected.value);
+		adminStore.currentDashboard.components?.concat(componentsSelected.value) ?? componentsSelected.value;
 	handleClose();
 }
 function handleClose() {
@@ -120,7 +120,7 @@ onMounted(() => {
         </div>
       </div>
       <p :style="{ margin: '1rem 0 0.5rem' }">
-        計 {{ availableComponents.length }} 個組件符合篩選條件 | 共選取
+        計 {{ availableComponents?.length }} 個組件符合篩選條件 | 共選取
         {{ componentsSelected.length }} 個
       </p>
 

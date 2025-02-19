@@ -180,7 +180,7 @@ router.beforeEach((to) => {
 	}
 	// Get Component data if the path is component-info
 	if (to.name === "component-info") {
-		contentStore.getCurrentComponentData(to.params.index);
+		contentStore.getCurrentComponentData(to.params.index, to.query.city);
 	}
 	// Clear the entire mapStore if the path doesn't start with /mapview
 	if (to.path.toLowerCase() !== "/mapview") {
