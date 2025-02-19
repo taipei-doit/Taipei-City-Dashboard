@@ -25,11 +25,11 @@ def _transfer(**kwargs):
     from utils.extract_stage import get_tdx_data
     from utils.load_stage import save_geodataframe_to_postgresql,update_lasttime_in_data_to_dataset_info
     from sqlalchemy import create_engine
-    from utils.transform_geometry import convert_geometry_to_wkbgeometry
-    from utils.transform_time import convert_str_to_time_format
+    from utils.transform_geometry import convert_geometry_to_wkbgeometry,convert_linestring_to_multilinestring
     import geopandas as gpd
-    from shapely.wkt import loads
+    from shapely import wkt    
     import pandas as pd
+
     # Config
     # Retrieve all kwargs automatically generated upon DAG initialization
     # raw_data_db_uri = kwargs.get('raw_data_db_uri')
@@ -43,36 +43,46 @@ def _transfer(**kwargs):
     default_table = dag_infos.get('ready_data_default_table')
     history_table = dag_infos.get('ready_data_history_table')
     history_table = dag_infos.get('ready_data_history_table')
-    NEW_TAIPEI_URL= "https://tdx.transportdata.tw/api/basic/v2/Cycling/Shape/City/Taipei?%24&%24format=JSON"
+    TAIPEI_URL= "https://tdx.transportdata.tw/api/basic/v2/Cycling/Shape/City/Taipei?%24&%24format=JSON"
     GEOMETRY_TYPE = "MultiLineString"   
     FROM_CRS = 4326
-    raw_data = get_tdx_data(NEW_TAIPEI_URL, output_format='dataframe')
+    raw_data = get_tdx_data(TAIPEI_URL, output_format='dataframe')
     # Extract
-    print(f"raw data =========== {raw_data.head()}")
-    data = raw_data
-    data["Geometry"] = data["Geometry"].apply(lambda x: loads(x) if pd.notnull(x) else None)
+    def safe_load_wkt(x):
+        try:
+            return wkt.loads(x)
+        except Exception as e:
+            print(f"Error parsing WKT: {x}, error: {e}")
+            return None
 
-    gdata = gpd.GeoDataFrame(data, geometry="Geometry", crs=f"EPSG:{FROM_CRS}")
+    data["geometry"] = data["Geometry"].apply(lambda x: safe_load_wkt(x) if pd.notnull(x) else None)
+    data = data[data["geometry"].notnull()]
+
+    # data["geometry"] = data["Geometry"].apply(wkt.loads)
+    gdata = gpd.GeoDataFrame(data, geometry="geometry", crs=f"EPSG:{FROM_CRS}")
+    gdata["geometry"] = gdata["geometry"].apply(convert_linestring_to_multilinestring)
     gdata = convert_geometry_to_wkbgeometry(gdata, from_crs=FROM_CRS)
-
     
     gdata['data_time'] = gdata['UpdateTime']
     # Reshape
-    gdata.rename(columns={
-        "RouteName": "route_name",
-        "AuthorityName": "authority_name",
-        "CityCode": "city_code",
-        "City": "city",
-        "Town": "town",
-        "RoadSectionStart": "road_section_start",
-        "RoadSectionEnd": "road_section_end",
-        "Direction": "direction",
-        "CyclingType": "cycling_type",
-        "CyclingLength": "cycling_length",
-        "FinishedTime": "finished_time",
-        "UpdateTime": "update_time",
-        }, inplace=True)
+    gdata = gdata.rename(columns={
+		"RouteName": "route_name",
+		"AuthorityName": "authority_name",
+		"CityCode": "city_code",
+		"City": "city",
+		"Town": "town",
+		"RoadSectionStart": "road_section_start",
+		"RoadSectionEnd": "road_section_end",
+		"Direction": "direction",
+		"CyclingType": "cycling_type",
+		"CyclingLength": "cycling_length",
+		"FinishedTime": "finished_time",
+		"UpdateTime": "update_time",
+		})
+    
     ready_data = gdata.copy()
+    print(f"ready_data =========== {ready_data.columns}")
+    # Load
 
     # Load
     engine = create_engine(ready_data_db_uri)
