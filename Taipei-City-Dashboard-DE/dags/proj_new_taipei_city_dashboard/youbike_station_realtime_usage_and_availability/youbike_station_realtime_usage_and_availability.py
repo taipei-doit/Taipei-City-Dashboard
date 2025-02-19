@@ -3,18 +3,14 @@ from operators.common_pipeline import CommonDag
 
 
 def _transfer(**kwargs):
-    import geopandas as gpd
-    import pandas as pd
-    import requests
     from sqlalchemy import create_engine
-    from geoalchemy2 import WKTElement
     from utils.load_stage import (
         save_geodataframe_to_postgresql,
         update_lasttime_in_data_to_dataset_info,
     )
     from utils.transform_time import convert_str_to_time_format
     from utils.transform_geometry import add_point_wkbgeometry_column_to_df
-
+    from utils.extract_stage import get_tdx_data
     # Config
     dag_infos = kwargs.get("dag_infos")
     ready_data_db_uri = kwargs.get("ready_data_db_uri")
@@ -26,11 +22,8 @@ def _transfer(**kwargs):
     url = '''https://tdx.transportdata.tw/api/basic/v2/Bike/Station/City/NewTaipei?%24&%24format=JSON'''
     GEOMETRY_TYPE = "Point"
     FROM_CRS = 4326
+    raw_data = get_tdx_data(url, output_format='dataframe')
 
-    res = requests.get(url, timeout=60)
-    res.raise_for_status()
-    res_json = res.json()
-    raw_data = pd.DataFrame(res_json)
     print(f"raw data =========== {raw_data.head()}")
 
     # Transform
