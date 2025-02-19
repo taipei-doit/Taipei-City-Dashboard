@@ -69,6 +69,7 @@ def _transfer(**kwargs):
         "HasWifi": "has_wifi",
         "InBoxID": "inbox_id"	
         })
+    data = data.drop(columns=["UpdateTime"])
     # Reshape
     ready_data = data.copy()
     print(f"ready_data =========== {ready_data.head()}")

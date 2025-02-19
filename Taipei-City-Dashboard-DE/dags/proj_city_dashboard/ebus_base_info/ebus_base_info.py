@@ -64,6 +64,8 @@ def _transfer(**kwargs):
         "HasWifi": "has_wifi",
         "InBoxID": "inbox_id"	
         })
+    data = data.drop(columns=["UpdateTime"])
+
     ready_data = data.copy()
 
     # Load
