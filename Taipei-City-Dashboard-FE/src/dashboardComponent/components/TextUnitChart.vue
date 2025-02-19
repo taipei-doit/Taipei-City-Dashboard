@@ -1,15 +1,13 @@
 
 <script setup>
-// import { ref } from "vue";
-
-// const props = defineProps([
-// 	"chart_config",
-// 	"activeChart",
-// 	"series",
-// 	"map_config",
-// 	"map_filter",
-// 	"map_filter_on",
-// ]);
+const props = defineProps([
+	"chart_config",
+	"activeChart",
+	"series",
+	"map_config",
+	"map_filter",
+	"map_filter_on",
+]);
 
 // const emits = defineEmits([
 // 	"filterByParam",
@@ -27,25 +25,25 @@
   >
     <div class="TextUnitChart__container">
       <div
-        v-for="(item) in series"
-        :key="item.name"
+        v-for="(item, index) in series"
+        :key="props.chart_config.categories[index]"
         class="TextUnitChart__content"
       >
         <div
           class="TextUnitChart__name"
           :style="{ color: chart_config.color[0] }"
         >
-          {{ item.name }}
+          {{ props.chart_config.categories[index] }}
         </div>
         <div>
           <span
             class="TextUnitChart__value"
             :style="{ color: chart_config.color[1] }"
-          >{{ item.value }}</span>
+          >{{ item.data[0] }}</span>
           <span
             class="TextUnitChart__unit"
             :style="{ color: chart_config.color[2] }"
-          >{{ item.unit }}</span>
+          >{{ item.name }}</span>
         </div>
       </div>
     </div>
