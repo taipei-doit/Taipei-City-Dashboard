@@ -38,7 +38,7 @@ def _transfer(**kwargs):
                     "百分比[％]": "percentage",
         }
     )
-    data['percentage'] = data['percentage'].replace('-', pd.NA).astype(float)      
+    data['percentage'] = data['percentage'].replace('-', None).astype(float)      
  
     data['year'] = data['year'].replace('年', '', regex=True)
     data['year'] = data['year'].astype(int) + 1911
