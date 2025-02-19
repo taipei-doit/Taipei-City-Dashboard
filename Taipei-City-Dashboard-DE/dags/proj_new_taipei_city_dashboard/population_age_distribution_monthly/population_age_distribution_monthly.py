@@ -21,7 +21,8 @@ def _transfer(**kwargs):
     history_table = dag_infos.get("ready_data_history_table")
     RID= "8308ab58-62d1-424e-8314-24b65b7ab492"
     client = NewTaipeiAPIClient(RID, input_format="json")
-    res = client.get_data()
+    res = client.get_all_data(size=1000)
+    
     raw_data = pd.DataFrame(res)
 
     print(f"raw data =========== {raw_data.head()}")
