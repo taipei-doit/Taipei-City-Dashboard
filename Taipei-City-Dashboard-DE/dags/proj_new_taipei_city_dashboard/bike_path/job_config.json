@@ -15,7 +15,7 @@
       "retry_delay": 60
     },
     "ready_data_db": "postgres_default",
-    "ready_data_default_table": "bike_path_new_tpe",
+    "ready_data_default_table": "bike_network_new_tpe",
     "ready_data_history_table": "",
     "raw_data_db": "postgres_default",
     "raw_data_table": "",
