@@ -401,7 +401,7 @@ export const useContentStore = defineStore("content", {
 			this.loading = false;
 		},
 		// 2. Get the info of a single component (used in /component/:index)
-		async getCurrentComponentData(index) {
+		async getCurrentComponentData(index, city) {
 			const dialogStore = useDialogStore();
 			if (Object.keys(this.contributors).length === 0) {
 				this.setContributors();
@@ -413,6 +413,7 @@ export const useContentStore = defineStore("content", {
 					filtermode: "eq",
 					filterby: "index",
 					filtervalue: index,
+					city: city,
 				},
 			});
 
@@ -426,7 +427,7 @@ export const useContentStore = defineStore("content", {
 
 			// 2-2. Get the component chart data
 			const response_2 = await http.get(
-				`/component/${dialogStore.moreInfoContent.id}/chart`,
+				`/component/${dialogStore.moreInfoContent.id}/chart/${dialogStore.moreInfoContent.city}`,
 				{
 					params: !["static", "current", "demo"].includes(
 						dialogStore.moreInfoContent.time_from
@@ -452,7 +453,7 @@ export const useContentStore = defineStore("content", {
 				for (let i in dialogStore.moreInfoContent.history_config
 					.range) {
 					const response = await http.get(
-						`/component/${dialogStore.moreInfoContent.id}/history`,
+						`/component/${dialogStore.moreInfoContent.id}/history/${dialogStore.moreInfoContent.city}`,
 						{
 							params: getComponentDataTimeframe(
 								dialogStore.moreInfoContent.history_config

@@ -81,9 +81,10 @@ onMounted(() => {
     <!-- 1-1. View the entire component and its chart data -->
     <div class="componentinfoview-component">
       <DashboardComponent
-        :key="dialogStore.moreInfoContent.index"
+        :key="`${dialogStore.moreInfoContent.index}-${dialogStore.moreInfoContent.city}-123`"
         :config="dialogStore.moreInfoContent"
         :style="{ height: '350px', width: '400px' }"
+        :active-city="dialogStore.moreInfoContent.city"
         :add-btn="
           !contentStore.editDashboard.components
             .map((item) => item.id)
@@ -168,11 +169,11 @@ onMounted(() => {
     <div
       :class="{
         'componentinfoview-source': true,
-        'no-links': !dialogStore.moreInfoContent.links[0],
+        'no-links': !dialogStore.moreInfoContent.links?.length > 0,
       }"
     >
       <div
-        v-if="dialogStore.moreInfoContent.links[0]"
+        v-if="dialogStore.moreInfoContent.links?.length > 0"
         class="componentinfoview-source-links"
       >
         <h3>相關資料</h3>

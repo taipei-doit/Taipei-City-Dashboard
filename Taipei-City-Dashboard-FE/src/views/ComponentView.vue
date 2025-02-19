@@ -22,7 +22,7 @@ const searchParams = ref({
 	searchbyname: "",
 	sort: "",
 	order: "",
-	pagesize: 200,
+	pagesize: 500,
 	pagenum: 1,
 });
 
@@ -90,6 +90,7 @@ onMounted(() => {
           router.push({
             name: 'component-info',
             params: { index: item.index },
+            query: { city: item.city }
           });
         }
       "
