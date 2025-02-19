@@ -89,7 +89,7 @@ def _etl_func_missing():
     raise RuntimeError(error_message)
 
 
-def _create_or_update_dataset_info(psql_uri, config, proj_folder):
+def _create_or_update_dataset_info(psql_uri, config):
     """
     Create dataset_info table if not exists, or update if exists.
     """
@@ -100,10 +100,10 @@ def _create_or_update_dataset_info(psql_uri, config, proj_folder):
     # Generate info that will be used to create or update dataset_info
     unique_column = "id"
     info = {
-        "id": f"{proj_folder}_{dag_infos.get('dag_id')}",
+        "id": dag_infos.get("dag_id", None),
         "psql_table_name": dag_infos.get("ready_data_default_table", None),
         "name_cn": data_infos.get("name_cn", None),
-        "airflow_dag_id": f"{proj_folder}_{dag_infos.get['dag_id']}",
+        "airflow_dag_id": dag_infos.get("dag_id", None),
         "mongo_collection": None,
         "maintain_type": dag_infos.get("maintain_type", None),
         "airflow_update_freq": data_infos.get("airflow_update_freq", None),
@@ -162,7 +162,6 @@ class CommonDag:
         self.data_path = DATA_PATH
         self.dag_path = os.path.join(DAG_PATH, proj_folder, dag_folder)
         self.config = _read_config(self.dag_path)
-        self.proj_folder = proj_folder 
         _validate_config(self.config)
 
         self.proxies = PROXIES
@@ -198,11 +197,13 @@ class CommonDag:
 
     def create_dag(self, etl_func=_etl_func_missing):
         dag_infos = self.config["dag_infos"]
+        data_infos = self.config["data_infos"]
         default_args = dag_infos["default_args"]
         default_args["email"] = self.fetch_email_list(default_args.get("email", []))
+
         # Create Pipeline
         dag = DAG(
-            dag_id=f"{self.proj_folder}_{dag_infos['dag_id']}",
+            dag_id=dag_infos["dag_id"],
             default_args=default_args,
             start_date=datetime.strptime(dag_infos["start_date"], "%Y-%m-%d"),
             schedule_interval=dag_infos["schedule_interval"],
@@ -230,7 +231,7 @@ class CommonDag:
             update_dataset_info = PythonOperator(
                 task_id="update_dataset_info",
                 python_callable=_create_or_update_dataset_info,
-                op_kwargs={"psql_uri": self.ready_data_db_uri, "config": self.config,"proj_folder":self.proj_folder},
+                op_kwargs={"psql_uri": self.ready_data_db_uri, "config": self.config},
             )
 
             dag_execution_success = DummyOperator(task_id="dag_execution_success")
