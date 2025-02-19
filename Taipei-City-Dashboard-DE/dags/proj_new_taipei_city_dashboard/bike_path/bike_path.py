@@ -33,7 +33,7 @@ def _transfer(**kwargs):
 
     
     FROM_CRS = 4326
-    GEOMETRY_TYPE = "MultiLineString"
+    GEOMETRY_TYPE = "MultiLineStringZ"
     # Config
     # Retrieve all kwargs automatically generated upon DAG initialization
     # raw_data_db_uri = kwargs.get('raw_data_db_uri')
@@ -98,6 +98,7 @@ def _transfer(**kwargs):
         })
     
     ready_data = gdata.copy()
+    ready_data = gdata.drop(columns=["geometry"]).copy()
     print(f"ready_data =========== {ready_data.columns}")
     # Load
     engine = create_engine(ready_data_db_uri)
