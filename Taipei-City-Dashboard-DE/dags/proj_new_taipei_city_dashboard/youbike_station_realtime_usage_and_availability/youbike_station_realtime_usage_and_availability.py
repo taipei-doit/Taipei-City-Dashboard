@@ -11,6 +11,7 @@ def _transfer(**kwargs):
     from utils.transform_time import convert_str_to_time_format
     from utils.transform_geometry import add_point_wkbgeometry_column_to_df
     from utils.extract_stage import get_tdx_data
+    import pandas as pd
     # Config
     dag_infos = kwargs.get("dag_infos")
     ready_data_db_uri = kwargs.get("ready_data_db_uri")
@@ -28,11 +29,15 @@ def _transfer(**kwargs):
 
     # Transform
     data = raw_data.copy()
-    data = data.drop_duplicates(subset=["sno", "mday"], keep="last").reset_index(
-        drop=True
-    )
+    data = pd.concat([data.drop(['StationName', 'StationPosition'], axis=1), 
+                    data['StationName'].apply(pd.Series), 
+                    data['StationPosition'].apply(pd.Series)], axis=1)
 
-    data = data.rename(columns={"srcUpdateTime": "data_time"})
+    # Rename the columns for clarity
+    data.rename(columns={"StationID":"sno", 'Zh_tw': 'sna', "srcUpdateTime": "data_time",
+                    'PositionLon': 'longitude', 'PositionLat': 'latitude'}, inplace=True)
+
+
     data["data_time"] = convert_str_to_time_format(data["data_time"])
     # geometry
     gdata = add_point_wkbgeometry_column_to_df(

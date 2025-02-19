@@ -25,9 +25,9 @@ def _transfer(**kwargs):
     from utils.extract_stage import get_tdx_data
     from utils.load_stage import save_geodataframe_to_postgresql,update_lasttime_in_data_to_dataset_info
     from sqlalchemy import create_engine
-    from utils.transform_geometry import convert_geometry_to_wkbgeometry
+    from utils.transform_geometry import convert_geometry_to_wkbgeometry,convert_linestring_to_multilinestring
     import geopandas as gpd
-    from shapely.wkt import loads
+    from shapely import wkt    
     import pandas as pd
 
     
@@ -56,12 +56,13 @@ def _transfer(**kwargs):
     # Transform
     # Rename
     data = raw_data
-# 轉換 WKT 為 shapely.geometry
-    data["Geometry"] = data["Geometry"].apply(lambda x: loads(x) if pd.notnull(x) else None)
+    # 轉換 WKT 為 shapely.geometry
+    # data["Geometry"] = data["Geometry"].apply(lambda x: loads(x) if pd.notnull(x) else None)
     
-    gdata = gpd.GeoDataFrame(data, geometry="Geometry", crs=f"EPSG:{FROM_CRS}")
+    data["geometry"] = data["Geometry"].apply(wkt.loads)
+    gdata = gpd.GeoDataFrame(data, geometry="geometry", crs=f"EPSG:{FROM_CRS}")
+    gdata["geometry"] = gdata["geometry"].apply(convert_linestring_to_multilinestring)
     gdata = convert_geometry_to_wkbgeometry(gdata, from_crs=FROM_CRS)
-
     
     gdata['data_time'] = gdata['UpdateTime']
     # Reshape
@@ -93,6 +94,8 @@ def _transfer(**kwargs):
         history_table=history_table,
         geometry_type=GEOMETRY_TYPE,
     )
+    lasttime_in_data = ready_data["data_time"].max()
+    update_lasttime_in_data_to_dataset_info(engine, dag_id, lasttime_in_data)
 
 dag = CommonDag(proj_folder='proj_new_taipei_city_dashboard', dag_folder='bike_path')
 dag.create_dag(etl_func=_transfer)
