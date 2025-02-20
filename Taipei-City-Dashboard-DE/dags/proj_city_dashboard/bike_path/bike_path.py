@@ -48,6 +48,7 @@ def _transfer(**kwargs):
     GEOMETRY_TYPE = "MultiLineString"   
     FROM_CRS = 4326
     raw_data = get_tdx_data(TAIPEI_URL, output_format='dataframe')
+    data = raw_data.copy()
     # Extract
     def safe_load_wkt(x):
         try:
@@ -84,7 +85,9 @@ def _transfer(**kwargs):
         "FinishedTime": "finished_time",
         "UpdateTime": "update_time",
         })
-    
+    gdata['finished_time'] = gdata['finished_time'].replace('', None)
+    gdata['update_time'] = gdata['update_time'].replace('', None)
+
     gdata = gdata.drop(columns=["geometry", "Geometry"])
     ready_data = gdata.copy()
     print(f"ready_data =========== {ready_data.columns}")
