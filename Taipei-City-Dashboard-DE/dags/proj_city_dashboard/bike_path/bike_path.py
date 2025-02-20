@@ -44,7 +44,7 @@ def _transfer(**kwargs):
     history_table = dag_infos.get('ready_data_history_table')
     history_table = dag_infos.get('ready_data_history_table')
     TAIPEI_URL= "https://tdx.transportdata.tw/api/basic/v2/Cycling/Shape/City/Taipei?%24&%24format=JSON"
-    GEOMETRY_TYPE = "MultiLineString"   
+    GEOMETRY_TYPE = "MultiLineStringZ"   
     FROM_CRS = 4326
     raw_data = get_tdx_data(TAIPEI_URL, output_format='dataframe')
     data = raw_data.copy()
@@ -100,10 +100,9 @@ def _transfer(**kwargs):
         load_behavior=load_behavior,
         default_table=default_table,
         history_table=history_table,
-        GEOMETRY_TYPE=GEOMETRY_TYPE,
+        geometry_type=GEOMETRY_TYPE,
     )
-    
-    lasttime_in_data = data["data_time"].max()
+    lasttime_in_data = ready_data["data_time"].max()
     update_lasttime_in_data_to_dataset_info(engine, dag_id, lasttime_in_data)
 
 dag = CommonDag(proj_folder='proj_city_dashboard', dag_folder='bike_path')
