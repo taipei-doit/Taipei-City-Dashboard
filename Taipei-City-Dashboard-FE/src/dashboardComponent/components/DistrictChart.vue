@@ -1509,13 +1509,10 @@ function handleDataSelection(index) {
 
 		&-taipei {
 			width: 50%;
-			height: auto;
 		}
 
 		&-metrotaipei {
-			svg {
-				width: 100%;
-			}
+			width: 100%;
 		}
 
 		&-info {
