@@ -97,6 +97,8 @@ def _transfer(**kwargs):
         "UpdateTime": "update_time",
         })
     gdata = gdata.drop(columns=["geometry", "Geometry"])  # 確認把原始幾何欄位都移除
+    gdata['finished_time'] = gdata['finished_time'].replace('', None)
+    gdata['update_time'] = gdata['update_time'].replace('', None)
 
     ready_data = gdata.copy()
     print(f"ready_data =========== {ready_data.columns}")
