@@ -32,24 +32,13 @@ const cities = [
 	{ name: "新北市", value: "newtaipei" },
 	{ name: "雙北市", value: "metrotaipei" },
 ]
-// const cityName = ref("雙北市")
-// const cityName = computed({
-// 	get: () => cities.find(city => city.value === props.activeCity)?.name,
-// 	set: newVal => {
-// 		console.log('newVal', newVal);
-// 		// const city = cities.find(city => city.value === newVal)?.name;
-// 		// if (city) {
-// 		// 	emits('activeCity', city);
-// 		// }
-// 	},
-// });
+
 const cityName = computed(() => {
 	if (!props.activeCity) return "metrotaipei"
 
 	return cities.find(city => city.value === props.activeCity)?.name
 });
 
-// console.log('cityName', cityName.value)
 const districts = [
 	"北投區",
 	"士林區",
@@ -171,7 +160,7 @@ const districtData = computed(() => {
 
 	output.highest = highest;
 	output.sum = sum;
-	// console.log('output',output);
+
 	return output;
 });
 const tooltipPosition = computed(() => {
@@ -250,12 +239,12 @@ function handleDataSelection(index) {
     </div>
     <div class="districtchart-chart">
       <svg
-        class="districtchart-chart-district"
+        v-if="cityName === '新北市' || cityName === '雙北市'"
+        class="districtchart-chart-metrotaipei"
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 970 611"
       >
         <g
-          v-if="cityName === '新北市' || cityName === '雙北市'"
           class="districtchart-chart-district-taipei"
         >
           <path
@@ -265,7 +254,7 @@ function handleDataSelection(index) {
               'active-district':
                 targetDistrict === '新莊區' ||
                 selectedIndex === 12,
-              'initial-animation-12': true,
+              'initial-animation-14': true,
             }"
             :fill-opacity="districtData['新莊區'] / districtData.highest <= 0.1 ? 0.05 : districtData['新莊區'] / districtData.highest"
             :fill="districtColor"
@@ -282,7 +271,7 @@ function handleDataSelection(index) {
               'active-district':
                 targetDistrict === '淡水區' ||
                 selectedIndex === 13,
-              'initial-animation-13': true,
+              'initial-animation-3': true,
             }"
             :fill-opacity="districtData['淡水區'] / districtData.highest <= 0.1 ? 0.05 : districtData['淡水區'] / districtData.highest"
             :fill="districtColor"
@@ -299,7 +288,7 @@ function handleDataSelection(index) {
               'active-district':
                 targetDistrict === '汐止區' ||
                 selectedIndex === 14,
-              'initial-animation-14': true,
+              'initial-animation-20': true,
             }"
             :fill-opacity="districtData['汐止區'] / districtData.highest <= 0.1 ? 0.05 : districtData['汐止區'] / districtData.highest"
             :fill="districtColor"
@@ -316,7 +305,7 @@ function handleDataSelection(index) {
               'active-district':
                 targetDistrict === '板橋區' ||
                 selectedIndex === 15,
-              'initial-animation-15': true,
+              'initial-animation-23': true,
             }"
             :fill-opacity="districtData['板橋區'] / districtData.highest <= 0.1 ? 0.05 : districtData['板橋區'] / districtData.highest"
             :fill="districtColor"
@@ -333,7 +322,7 @@ function handleDataSelection(index) {
               'active-district':
                 targetDistrict === '三重區' ||
                 selectedIndex === 16,
-              'initial-animation-16': true,
+              'initial-animation-15': true,
             }"
             :fill-opacity="districtData['三重區'] / districtData.highest <= 0.1 ? 0.05 : districtData['三重區'] / districtData.highest"
             :fill="districtColor"
@@ -350,7 +339,7 @@ function handleDataSelection(index) {
               'active-district':
                 targetDistrict === '樹林區' ||
                 selectedIndex === 17,
-              'initial-animation-17': true,
+              'initial-animation-22': true,
             }"
             :fill-opacity="districtData['樹林區'] / districtData.highest <= 0.1 ? 0.05 : districtData['樹林區'] / districtData.highest"
             :fill="districtColor"
@@ -367,7 +356,7 @@ function handleDataSelection(index) {
               'active-district':
                 targetDistrict === '土城區' ||
                 selectedIndex === 18,
-              'initial-animation-18': true,
+              'initial-animation-29': true,
             }"
             :fill-opacity="districtData['土城區'] / districtData.highest <= 0.1 ? 0.05 : districtData['土城區'] / districtData.highest"
             :fill="districtColor"
@@ -384,7 +373,7 @@ function handleDataSelection(index) {
               'active-district':
                 targetDistrict === '蘆洲區' ||
                 selectedIndex === 19,
-              'initial-animation-19': true,
+              'initial-animation-11': true,
             }"
             :fill-opacity="districtData['蘆洲區'] / districtData.highest <= 0.1 ? 0.05 : districtData['蘆洲區'] / districtData.highest"
             :fill="districtColor"
@@ -401,7 +390,7 @@ function handleDataSelection(index) {
               'active-district':
                 targetDistrict === '中和區' ||
                 selectedIndex === 20,
-              'initial-animation-20': true,
+              'initial-animation-30': true,
             }"
             :fill-opacity="districtData['中和區'] / districtData.highest <= 0.1 ? 0.05 : districtData['中和區'] / districtData.highest"
             :fill="districtColor"
@@ -418,7 +407,7 @@ function handleDataSelection(index) {
               'active-district':
                 targetDistrict === '永和區' ||
                 selectedIndex === 21,
-              'initial-animation-21': true,
+              'initial-animation-31': true,
             }"
             :fill-opacity="districtData['永和區'] / districtData.highest <= 0.1 ? 0.05 : districtData['永和區'] / districtData.highest"
             :fill="districtColor"
@@ -435,7 +424,7 @@ function handleDataSelection(index) {
               'active-district':
                 targetDistrict === '新店區' ||
                 selectedIndex === 22,
-              'initial-animation-22': true,
+              'initial-animation-33': true,
             }"
             :fill-opacity="districtData['新店區'] / districtData.highest <= 0.1 ? 0.05 : districtData['新店區'] / districtData.highest"
             :fill="districtColor"
@@ -452,7 +441,7 @@ function handleDataSelection(index) {
               'active-district':
                 targetDistrict === '鶯歌區' ||
                 selectedIndex === 23,
-              'initial-animation-23': true,
+              'initial-animation-21': true,
             }"
             :fill-opacity="districtData['鶯歌區'] / districtData.highest <= 0.1 ? 0.05 : districtData['鶯歌區'] / districtData.highest"
             :fill="districtColor"
@@ -469,7 +458,7 @@ function handleDataSelection(index) {
               'active-district':
                 targetDistrict === '三峽區' ||
                 selectedIndex === 24,
-              'initial-animation-24': true,
+              'initial-animation-32': true,
             }"
             :fill-opacity="districtData['三峽區'] / districtData.highest <= 0.1 ? 0.05 : districtData['三峽區'] / districtData.highest"
             :fill="districtColor"
@@ -486,7 +475,7 @@ function handleDataSelection(index) {
               'active-district':
                 targetDistrict === '瑞芳區' ||
                 selectedIndex === 25,
-              'initial-animation-25': true,
+              'initial-animation-38': true,
             }"
             :fill-opacity="districtData['瑞芳區'] / districtData.highest === 0 ? 0 : districtData['瑞芳區'] / districtData.highest"
             :fill="districtColor"
@@ -503,7 +492,7 @@ function handleDataSelection(index) {
               'active-district':
                 targetDistrict === '五股區' ||
                 selectedIndex === 26,
-              'initial-animation-26': true,
+              'initial-animation-10': true,
             }"
             :fill-opacity="districtData['五股區'] / districtData.highest <= 0.1 ? 0.05 : districtData['五股區'] / districtData.highest"
             :fill="districtColor"
@@ -520,7 +509,7 @@ function handleDataSelection(index) {
               'active-district':
                 targetDistrict === '泰山區' ||
                 selectedIndex === 27,
-              'initial-animation-27': true,
+              'initial-animation-13': true,
             }"
             :fill-opacity="districtData['泰山區'] / districtData.highest <= 0.1 ? 0.05 : districtData['泰山區'] / districtData.highest"
             :fill="districtColor"
@@ -537,7 +526,7 @@ function handleDataSelection(index) {
               'active-district':
                 targetDistrict === '林口區' ||
                 selectedIndex === 28,
-              'initial-animation-28': true,
+              'initial-animation-5': true,
             }"
             :fill-opacity="districtData['林口區'] / districtData.highest <= 0.1 ? 0.05 : districtData['林口區'] / districtData.highest"
             :fill="districtColor"
@@ -554,7 +543,7 @@ function handleDataSelection(index) {
               'active-district':
                 targetDistrict === '深坑區' ||
                 selectedIndex === 29,
-              'initial-animation-29': true,
+              'initial-animation-35': true,
             }"
             :fill-opacity="districtData['深坑區'] / districtData.highest <= 0.1 ? 0.05 : districtData['深坑區'] / districtData.highest"
             :fill="districtColor"
@@ -571,7 +560,7 @@ function handleDataSelection(index) {
               'active-district':
                 targetDistrict === '石碇區' ||
                 selectedIndex === 30,
-              'initial-animation-30': true,
+              'initial-animation-36': true,
             }"
             :fill-opacity="districtData['石碇區'] / districtData.highest <= 0.1 ? 0.05 : districtData['石碇區'] / districtData.highest"
             :fill="districtColor"
@@ -588,7 +577,7 @@ function handleDataSelection(index) {
               'active-district':
                 targetDistrict === '坪林區' ||
                 selectedIndex === 31,
-              'initial-animation-31': true,
+              'initial-animation-40': true,
             }"
             :fill-opacity="districtData['坪林區'] / districtData.highest <= 0.1 ? 0.05 : districtData['坪林區'] / districtData.highest"
             :fill="districtColor"
@@ -605,7 +594,7 @@ function handleDataSelection(index) {
               'active-district':
                 targetDistrict === '三芝區' ||
                 selectedIndex === 32,
-              'initial-animation-32': true,
+              'initial-animation-2': true,
             }"
             :fill-opacity="districtData['三芝區'] / districtData.highest <= 0.1 ? 0.05 : districtData['三芝區'] / districtData.highest"
             :fill="districtColor"
@@ -622,7 +611,7 @@ function handleDataSelection(index) {
               'active-district':
                 targetDistrict === '石門區' ||
                 selectedIndex === 33,
-              'initial-animation-33': true,
+              'initial-animation-1': true,
             }"
             :fill-opacity="districtData['石門區'] / districtData.highest <= 0.1 ? 0.05 : districtData['石門區'] / districtData.highest"
             :fill="districtColor"
@@ -639,7 +628,7 @@ function handleDataSelection(index) {
               'active-district':
                 targetDistrict === '八里區' ||
                 selectedIndex === 34,
-              'initial-animation-34': true,
+              'initial-animation-6': true,
             }"
             :fill-opacity="districtData['八里區'] / districtData.highest <= 0.1 ? 0.05 : districtData['八里區'] / districtData.highest"
             :fill="districtColor"
@@ -656,7 +645,7 @@ function handleDataSelection(index) {
               'active-district':
                 targetDistrict === '平溪區' ||
                 selectedIndex === 35,
-              'initial-animation-35': true,
+              'initial-animation-37': true,
             }"
             :fill-opacity="districtData['平溪區'] / districtData.highest <= 0.1 ? 0.05 : districtData['平溪區'] / districtData.highest"
             :fill="districtColor"
@@ -673,7 +662,7 @@ function handleDataSelection(index) {
               'active-district':
                 targetDistrict === '雙溪區' ||
                 selectedIndex === 36,
-              'initial-animation-36': true,
+              'initial-animation-41': true,
             }"
             :fill-opacity="districtData['雙溪區'] / districtData.highest <= 0.1 ? 0.05 : districtData['雙溪區'] / districtData.highest"
             :fill="districtColor"
@@ -690,7 +679,7 @@ function handleDataSelection(index) {
               'active-district':
                 targetDistrict === '貢寮區' ||
                 selectedIndex === 37,
-              'initial-animation-37': true,
+              'initial-animation-42': true,
             }"
             :fill-opacity="districtData['貢寮區'] / districtData.highest <= 0.1 ? 0.05 : districtData['貢寮區'] / districtData.highest"
             :fill="districtColor"
@@ -707,7 +696,7 @@ function handleDataSelection(index) {
               'active-district':
                 targetDistrict === '金山區' ||
                 selectedIndex === 38,
-              'initial-animation-38': true,
+              'initial-animation-3': true,
             }"
             :fill-opacity="districtData['金山區'] / districtData.highest <= 0.1 ? 0.05 : districtData['金山區'] / districtData.highest"
             :fill="districtColor"
@@ -724,7 +713,7 @@ function handleDataSelection(index) {
               'active-district':
                 targetDistrict === '萬里區' ||
                 selectedIndex === 39,
-              'initial-animation-39': true,
+              'initial-animation-9': true,
             }"
             :fill-opacity="districtData['萬里區'] / districtData.highest <= 0.1 ? 0.05 : districtData['萬里區'] / districtData.highest"
             :fill="districtColor"
@@ -741,7 +730,7 @@ function handleDataSelection(index) {
               'active-district':
                 targetDistrict === '烏來區' ||
                 selectedIndex === 40,
-              'initial-animation-40': true,
+              'initial-animation-39': true,
             }"
             :fill-opacity="districtData['烏來區'] / districtData.highest <= 0.1 ? 0.05 : districtData['烏來區'] / districtData.highest"
             :fill="districtColor"
@@ -751,23 +740,8 @@ function handleDataSelection(index) {
             @mouseleave="toggleActiveToNull"
             @click="handleDataSelection(40)"
           />
-
-          <!-- <path data-name="大安區" fill="pink" d="M415.2 285.3 411.5 281.4 410.1 281.5 408.8 282.1 406.4 284.4 405.6 283.8 403.4 283.6 400 285.3 394.4 285 393.7 282.6 392.5 280.5 390.4 278.3 389.8 277.6 386.9 274.5 383.5 271.1 381.9 268.7 380.5 266.7 380.8 265.7 381.3 263.1 382.5 260.6 384.6 261.7 385.1 261.8 387 262.1 389.9 262.2 390.1 253.5 390.1 251.2 391 251.5 392.7 251.7 396.3 251.9 399 251.6 401.4 251.4 403.2 251.6 406.3 251.9 406.7 252 407.5 252.1 407.8 252 409.1 251.7 410.3 251.5 410.3 254.4 410.2 257.8 410.1 262.2 410 265.5 409 267.2 409 267.2 405.7 270.4 409.5 274.3 411.5 276.4 415.1 281 415.5 283.2 416.9 284.4 417.3 285.6 416.8 286 415.2 285.3 Z"/>
-					<path data-name="中山區" fill="pink" d="M392.8 250.7 391.2 250.5 389.8 250 382.3 247.8 379.3 247.5 378.5 247.4 379.3 246.2 379.4 243.8 379.7 239 379.5 236.4 378.6 234 378.7 231.1 379 228.8 379.4 225.7 379.7 224.1 380.8 221.4 381.5 221.9 382.7 224.2 384.2 223 382.8 217.6 383.2 216.7 383.9 217.3 386.5 214.2 388.1 213.5 392.5 208.8 395.8 207.1 398.8 207.4 399.6 208.6 401.3 208.5 403.5 207.9 406.7 206.9 406.5 208.1 403.8 208 408.1 211 409.6 211.5 410.5 214.4 411.9 213.7 413.2 214.3 414.6 217.9 416.2 219.5 420 220.9 420.7 221.1 420.6 221.5 419.5 221.8 415.6 224.4 414.6 224.5 409.8 222.2 405.6 221.3 405.6 223.9 404.9 224.8 403.6 224.8 403.4 225.9 395.5 225.6 393.9 225.3 393.9 228.1 396.3 229.3 398.9 230.6 398.8 234.7 398.8 236.6 398.7 238.9 398.6 244.5 398.6 248.5 398.5 250.6 396.3 250.9 392.8 250.7 Z"/>
-					<path data-name="士林區" fill="pink" d="M382.2 221.2 380.9 220.2 377.3 218.4 375.5 217.1 371.2 218.7 369.3 219.2 365.9 219.4 364.8 216.6 363.1 213.1 360.8 209.6 357.9 206.9 353.8 202.7 350.6 200.2 348.2 199.1 344.5 197.6 336.7 196.9 333.3 196.9 331.2 196.3 328.9 194.8 325.5 191.2 325.4 189.8 327.3 186.9 329.1 184.9 329.8 186.4 332.5 188.5 336.3 189.6 340.5 188.7 345.8 187.6 350.3 185.5 353.1 185.2 356.6 187.3 358.1 189.5 358.5 192.4 358.6 198.8 359 200.9 360.7 202.1 362.3 202.2 369.5 203.5 372 201.4 376.6 200.1 377.8 196.2 378.4 195.8 380 193.1 380.2 190.9 381.4 189.2 383.1 188.9 384.1 187.2 383.7 185.9 383.3 183.6 382.3 182.7 382.5 181.7 384 179.8 384.5 177.5 387.2 176.6 387.4 175.3 388.8 173.4 388.4 168.7 388.7 167.1 388.3 165.3 388.7 164.5 390.2 164.1 391.4 162.7 392.6 162.5 397.3 160.2 397.9 159.6 400.8 160.5 401.4 159.1 402.9 158.6 404.8 151 407.1 148.5 407.5 147.4 407.9 146.1 409.4 142.4 411.7 141.9 414.3 139.6 414.2 138.2 415.9 132.1 414.1 128.8 415.4 126.3 417.4 125.7 418.7 122.2 420.2 120.2 420.1 117.5 419.4 115.6 422.4 113.1 424.7 110.9 426.9 109.6 429.1 110.6 430.9 109.6 432.1 110.1 431.2 110.9 432.4 112.1 432.8 115.2 430.9 117.4 431.8 120.1 430 121.6 432.2 126.3 431.7 127.8 429.8 130.1 427.3 132.5 426.7 136 429.6 137.7 433.4 138.3 436.8 140.2 438.1 139.5 438.5 140.5 438.1 142.2 439.4 145 439.5 146.3 437 149.9 441.1 152.2 441.3 154 443 156.8 442.8 158.2 444.1 159.3 445.2 161.5 447.1 162.4 448.3 163.9 449.9 164.9 449.7 166 450.4 167.5 450.5 170.4 452.6 170.8 453.1 170.5 452.8 171.4 450.2 174.2 448.1 174.1 447.1 178.4 445.4 180 443.9 184.1 443.1 185.1 441.4 184.4 439 185.6 438.9 185 436.3 185.4 434 190.9 431.9 192.2 430 191.8 428.9 193.6 427.2 192.3 424.6 192.2 421.6 193.5 419.7 196.1 418.4 199.4 415 200 414.4 200.6 411.3 200 409.5 203.6 407.8 204.4 406.9 205.7 403.2 206.9 401.1 207.5 400.1 207.6 399.4 206.4 395.6 206.1 391.9 208 387.5 212.7 385.9 213.3 383.8 215.9 382.8 215.2 381.7 217.5 383.1 222.6 383 222.7 382.2 221.2 Z"/>
-					<path data-name="松山區" fill="pink" d="M406.8 251 406.4 251 403.4 250.6 401.5 250.3 399.5 250.5 399.6 248.5 399.6 244.5 399.7 238.9 399.8 236.6 399.8 234.7 399.9 230 396.8 228.4 394.9 227.5 394.9 226.5 395.3 226.6 404.2 227 404.4 225.8 405.4 225.7 406.6 224.3 406.6 222.6 409.4 223.2 414.4 225.6 416 225.4 419.9 222.7 420.8 222.5 421.8 223.8 422.4 225.4 422.4 228 420.3 233.1 421.6 236.9 422.2 242.4 422.8 244.2 425.7 245 429.2 244.1 429.4 246.4 428 246.4 423.7 246.3 420.6 246.5 417.6 247.4 410.4 250.5 410.4 250.5 408.9 250.8 407.6 251 407.4 251.1 406.8 251 Z" />
-					<path data-name="信義區" fill="pink" d="M417.8 283.8 416.4 282.6 416 280.6 412.3 275.7 410.2 273.6 407.1 270.4 409.7 267.9 409.8 267.8 411 265.8 411.1 262.2 411.2 257.8 411.3 254.4 411.4 251.1 417.9 248.3 420.8 247.5 423.7 247.3 428 247.4 429.5 247.4 430 250.8 431.6 252.5 431.6 252.5 431.9 252.8 434 254.4 435.3 254.6 436.6 257.8 437.3 258.9 437.3 261.2 439.6 263.9 439.2 264.6 436.6 266.2 434.2 269.7 432.6 275.3 432.2 275.2 429.6 277 427.7 279.5 426.4 279.2 425.3 280.4 422.6 280.2 422.2 282.2 420.3 283.8 418.1 285 417.8 283.8 Z"/>
-					<path data-name="中正區" fill="pink" d="M387.5 283.6 385.1 282.8 382.7 280.2 379.5 275.5 378.6 274.7 375.6 273.1 372.9 272.5 372.4 270.3 370.3 269.6 369.6 269.4 367.9 267.8 366 265.5 365.6 265 366.5 262 367.6 259.6 367.9 258.3 368.4 256.5 369.1 253.8 369.8 250.9 370.8 248.4 371.9 246.9 372.5 247.1 372.5 247.2 372.8 247.3 379.2 248.5 382.1 248.8 389.1 250.9 389.1 253.5 388.9 261.2 387.1 261.1 385.3 260.8 385 260.8 382.1 259.3 380.3 262.7 379.8 265.4 379.4 266.8 381 269.3 382.8 271.8 386.2 275.2 389.1 278.3 389.6 278.9 391.7 281.1 392.5 282.5 391.9 282.7 388.8 284.6 387.5 283.6 Z"/>
-					<path data-name="大同區" fill="pink" d="M366.3 246.2 367.5 242.5 367.6 239.8 367.3 236.4 367.7 233.3 367.9 231.5 368.1 228.6 367.9 225.1 366.2 220.4 369.5 220.2 371.5 219.7 375.3 218.3 376.8 219.3 380 220.9 378.7 223.8 378.5 225.5 378.1 228.7 377.7 231 377.6 234.2 378.5 236.6 378.7 239 378.4 243.7 378.3 245.9 377.5 247.2 373.2 246.3 373.1 246.3 371.6 245.7 370.2 247.5 366.3 246.2 Z"/>
-					<path data-name="萬華區" fill="pink" d="M354.5 283.3 353.3 281.8 352.5 277.1 352.4 275.1 352.5 272.7 352.4 270.9 351 267.7 349.9 265.8 348.2 262.1 347.8 260.1 348 258.8 351.5 254.4 353.1 254 356.5 253.7 362.1 251.3 362.9 250.3 365.9 247.1 369.7 248.4 368.9 250.6 368.1 253.5 367.4 256.3 366.9 258.1 366.6 259.3 365.6 261.7 364.5 265.2 365.2 266.2 367.2 268.5 369.1 270.2 370 270.6 371.6 271.1 371.9 272.4 370.5 272.4 368.4 273 366.3 275.6 364.5 278.3 361.2 281.4 357.4 284.2 356 284.2 354.5 283.3 Z"/>
-					<path data-name="文山區" fill="pink" d="M442.9 329.3 441.7 326.5 439.3 326.3 436.9 327.5 435 327.6 433.7 326.2 431.8 326.2 428.9 324.3 424.8 324.2 424.6 326 423.6 326.9 422.5 326.5 418.3 326.8 413.5 325.9 411.9 323 411.2 319.5 410 318.3 409.5 315.2 408 314.5 407.4 312.4 407.8 309.2 408 307.5 406.9 305.8 404.3 305 404.6 306.8 403.8 307.8 401 308.5 400.1 308 399.6 304 397.5 304.2 395.6 304.5 393.5 303.9 393.3 303.2 393.5 300 391.7 297.1 389.9 300.6 389 301.6 388.6 299.9 389 297.9 388.3 295.3 388.3 294 388.8 292.7 391.4 291.1 389.7 287.3 389.4 285.5 392.3 283.6 392.9 283.4 393.6 286 400.2 286.3 403.6 284.6 405.3 284.8 406.5 285.7 409.4 282.9 410.3 282.5 411.1 282.5 414.6 286.1 417 287.2 418.1 286.1 420.9 284.6 423.1 282.7 423.4 281.3 425.8 281.5 426.7 280.3 427.5 280.5 427.9 281.3 430.4 282.4 432.7 281.6 436.9 281.1 441.1 280.1 443 279.1 444.3 279.9 444.2 281.1 443.3 282.5 442.6 286.4 443.2 290 444.6 289.7 446 291.1 447 292.7 447 294.6 444.9 297.8 444.9 299.6 445.8 300.3 445.5 301.5 447.7 302.7 447.9 304.5 446.8 304.8 446.2 307.1 446.7 309.6 446.9 312.2 445.7 313.3 446.6 315.5 450.1 317 451.3 318.2 454.4 317.6 458.8 318.7 460.6 320.6 462.4 321.2 463.4 322.2 462.3 323.9 461.5 323.4 459.8 324.5 458.2 324.6 455.5 326 453.8 327.7 451.7 327.6 448 329.6 446.6 329.4 444.5 330.2 442.9 329.3 Z"/>
-					<path data-name="南港區" fill="pink" d="M428.7 280.5 428.5 280.1 430.3 277.7 432.4 276.3 433.3 276.5 435.1 270.2 437.3 266.9 439.9 265.4 440.9 263.8 438.3 260.9 438.3 258.5 437.4 257.3 436 253.7 434.4 253.5 432.6 252 431.6 251.1 430.9 250.4 430.5 247.2 430.4 246.9 430.2 243.8 430.7 243.8 435.4 242.5 438.2 240.5 440.5 238 441.7 237.2 443.8 237.6 446.4 238.2 451.2 237.9 454.5 237 456 236.2 457.5 234.2 458.9 233 460.7 233.5 464 235.4 466.2 239.3 464.5 240.3 464.4 241.5 464.1 242.4 460.6 244.8 460.7 247 461 249 463 252.8 465.1 255.6 467.7 257.6 472 259.4 472.3 260.9 475.1 260.1 475.5 261 479 262.1 480.7 263.7 486.4 266.6 489.9 267.9 494 267.8 499.1 265.2 502.2 266.1 501.8 266.8 502 269.2 501.3 270.9 496 270.8 493 269.9 489.5 270.3 487.1 272.3 485.1 270.3 483.7 269.8 481.6 270.8 479.1 270.1 477.8 270.7 473.8 268.4 472.1 272.8 470.3 274.8 466.4 276.6 464.3 275.4 462 275.5 460.6 274.2 459.4 274.7 456.3 274.1 455.1 274.9 453.8 274.4 450.3 274.7 449.2 278.2 446.6 279.2 445 279.1 443 278 440.7 279.2 436.8 280.1 432.5 280.6 430.5 281.3 428.7 280.5 Z"/>
-					<path data-name="內湖區" fill="pink" d="M423.6 243.4 423.2 242.2 422.6 236.7 421.3 233.2 423.4 228.2 423.4 225.2 422.7 223.3 421.5 221.8 422.1 220.5 420.4 219.9 416.7 218.7 415.5 217.4 414 213.6 412 212.7 411.2 213 410.4 210.7 408.5 210.1 407.2 209.2 407.4 209.2 407.7 206.3 408.5 205.2 410.2 204.4 411.9 201.1 414.7 201.6 415.4 201 419.1 200.3 420.6 196.6 422.3 194.3 424.8 193.2 426.8 193.3 429.1 195.1 430.5 192.9 432.1 193.3 434.8 191.5 437 186.3 438 186.1 438.2 187.1 441.4 185.5 442.8 186.1 444.3 190.4 446.3 191.3 452.1 192.8 453.6 192.8 454.5 194.1 456.8 195.2 459.9 196.1 461.5 198.4 464.8 200.7 466.6 202.5 468.2 202.3 468.7 203.1 467.8 204.9 468.8 207.1 468.3 208 470.6 210.3 470.7 211.7 469.8 213.3 470.3 214.4 468.5 215.6 467.1 217.4 466.2 220.5 466.1 222.6 465.6 222.2 464.1 224.2 464.8 227.3 462.8 229 461.6 229.2 461.6 231.7 460.7 232.5 458.7 231.9 456.8 233.5 455.3 235.4 454.1 236.1 451 236.9 446.5 237.2 444 236.6 441.5 236.2 439.9 237.2 437.5 239.7 434.9 241.6 430.5 242.8 429.6 242.9 425.7 244 423.6 243.4 Z"/>
-					-->
-
         </g>
         <g
-          v-if="cityName === '台北市' || cityName === '雙北市'"
           class="districtchart-chart-district-metrotaipei"
         >
           <path
@@ -777,7 +751,7 @@ function handleDataSelection(index) {
               'active-district':
                 targetDistrict === '北投區' ||
                 selectedIndex === 0,
-              'initial-animation-1': true,
+              'initial-animation-7': true,
             }"
             :fill-opacity="districtData['北投區'] / districtData.highest <= 0.1 ? 0.05 : districtData['北投區'] / districtData.highest"
             :fill="districtColor"
@@ -794,7 +768,7 @@ function handleDataSelection(index) {
               'active-district':
                 targetDistrict === '士林區' ||
                 selectedIndex === 1,
-              'initial-animation-2': true,
+              'initial-animation-12': true,
             }"
             :fill-opacity="districtData['士林區'] / districtData.highest <= 0.1 ? 0.05 : districtData['士林區'] / districtData.highest"
             :fill="districtColor"
@@ -811,7 +785,7 @@ function handleDataSelection(index) {
               'active-district':
                 targetDistrict === '內湖區' ||
                 selectedIndex === 2,
-              'initial-animation-3': true,
+              'initial-animation-19': true,
             }"
             :fill-opacity="districtData['內湖區'] / districtData.highest <= 0.1 ? 0.05 : districtData['內湖區'] / districtData.highest"
             :fill="districtColor"
@@ -828,7 +802,7 @@ function handleDataSelection(index) {
               'active-district':
                 targetDistrict === '中山區' ||
                 selectedIndex === 6,
-              'initial-animation-4': true,
+              'initial-animation-17': true,
             }"
             :fill-opacity="districtData['中山區'] / districtData.highest <= 0.1 ? 0.05 : districtData['中山區'] / districtData.highest"
             :fill="districtColor"
@@ -845,7 +819,7 @@ function handleDataSelection(index) {
               'active-district':
                 targetDistrict === '大同區' ||
                 selectedIndex === 7,
-              'initial-animation-5': true,
+              'initial-animation-16': true,
             }"
             :fill-opacity="districtData['大同區'] / districtData.highest <= 0.1 ? 0.05 : districtData['大同區'] / districtData.highest"
             :fill="districtColor"
@@ -862,7 +836,7 @@ function handleDataSelection(index) {
               'active-district':
                 targetDistrict === '中正區' ||
                 selectedIndex === 8,
-              'initial-animation-6': true,
+              'initial-animation-25': true,
             }"
             :fill-opacity="districtData['中正區'] / districtData.highest <= 0.1 ? 0.05 : districtData['中正區'] / districtData.highest"
             :fill="districtColor"
@@ -879,7 +853,7 @@ function handleDataSelection(index) {
               'active-district':
                 targetDistrict === '萬華區' ||
                 selectedIndex === 9,
-              'initial-animation-7': true,
+              'initial-animation-24': true,
             }"
             :fill-opacity="districtData['萬華區'] / districtData.highest <= 0.1 ? 0.05 : districtData['萬華區'] / districtData.highest"
             :fill="districtColor"
@@ -896,7 +870,7 @@ function handleDataSelection(index) {
               'active-district':
                 targetDistrict === '大安區' ||
                 selectedIndex === 10,
-              'initial-animation-8': true,
+              'initial-animation-26': true,
             }"
             :fill-opacity="districtData['大安區'] / districtData.highest <= 0.1 ? 0.05 : districtData['大安區'] / districtData.highest"
             :fill="districtColor"
@@ -913,7 +887,7 @@ function handleDataSelection(index) {
               'active-district':
                 targetDistrict === '信義區' ||
                 selectedIndex === 5,
-              'initial-animation-9': true,
+              'initial-animation-27': true,
             }"
             :fill-opacity="districtData['信義區'] / districtData.highest <= 0.1 ? 0.05 : districtData['信義區'] / districtData.highest"
             :fill="districtColor"
@@ -930,7 +904,7 @@ function handleDataSelection(index) {
               'active-district':
                 targetDistrict === '松山區' ||
                 selectedIndex === 4,
-              'initial-animation-10': true,
+              'initial-animation-18': true,
             }"
             :fill-opacity="districtData['松山區'] / districtData.highest <= 0.1 ? 0.05 : districtData['松山區'] / districtData.highest"
             :fill="districtColor"
@@ -947,7 +921,7 @@ function handleDataSelection(index) {
               'active-district':
                 targetDistrict === '南港區' ||
                 selectedIndex === 3,
-              'initial-animation-11': true,
+              'initial-animation-28': true,
             }"
             :fill-opacity="districtData['南港區'] / districtData.highest <= 0.1 ? 0.05 : districtData['南港區'] / districtData.highest"
             :fill="districtColor"
@@ -964,11 +938,236 @@ function handleDataSelection(index) {
               'active-district':
                 targetDistrict === '文山區' ||
                 selectedIndex === 11,
-              'initial-animation-12': true,
+              'initial-animation-34': true,
             }"
             :fill-opacity="districtData['文山區'] / districtData.highest <= 0.1 ? 0.05 : districtData['文山區'] / districtData.highest"
             :fill="districtColor"
             d="M442.9 329.3 441.7 326.5 439.3 326.3 436.9 327.5 435 327.6 433.7 326.2 431.8 326.2 428.9 324.3 424.8 324.2 424.6 326 423.6 326.9 422.5 326.5 418.3 326.8 413.5 325.9 411.9 323 411.2 319.5 410 318.3 409.5 315.2 408 314.5 407.4 312.4 407.8 309.2 408 307.5 406.9 305.8 404.3 305 404.6 306.8 403.8 307.8 401 308.5 400.1 308 399.6 304 397.5 304.2 395.6 304.5 393.5 303.9 393.3 303.2 393.5 300 391.7 297.1 389.9 300.6 389 301.6 388.6 299.9 389 297.9 388.3 295.3 388.3 294 388.8 292.7 391.4 291.1 389.7 287.3 389.4 285.5 392.3 283.6 392.9 283.4 393.6 286 400.2 286.3 403.6 284.6 405.3 284.8 406.5 285.7 409.4 282.9 410.3 282.5 411.1 282.5 414.6 286.1 417 287.2 418.1 286.1 420.9 284.6 423.1 282.7 423.4 281.3 425.8 281.5 426.7 280.3 427.5 280.5 427.9 281.3 430.4 282.4 432.7 281.6 436.9 281.1 441.1 280.1 443 279.1 444.3 279.9 444.2 281.1 443.3 282.5 442.6 286.4 443.2 290 444.6 289.7 446 291.1 447 292.7 447 294.6 444.9 297.8 444.9 299.6 445.8 300.3 445.5 301.5 447.7 302.7 447.9 304.5 446.8 304.8 446.2 307.1 446.7 309.6 446.9 312.2 445.7 313.3 446.6 315.5 450.1 317 451.3 318.2 454.4 317.6 458.8 318.7 460.6 320.6 462.4 321.2 463.4 322.2 462.3 323.9 461.5 323.4 459.8 324.5 458.2 324.6 455.5 326 453.8 327.7 451.7 327.6 448 329.6 446.6 329.4 444.5 330.2 442.9 329.3 Z"
+            @mouseenter="toggleActive"
+            @mousemove="updateMouseLocation"
+            @mouseleave="toggleActiveToNull"
+            @click="handleDataSelection(11)"
+          />
+        </g>
+      </svg>
+      <svg
+        v-if="cityName === '台北市'"
+        class="districtchart-chart-taipei"
+        viewBox="0 0 413 550"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <g>
+          <path
+            data-name="北投區"
+            :class="{
+              'active-district':
+                targetDistrict === '北投區' ||
+                selectedIndex === 0,
+              'initial-animation-1': true,
+            }"
+            :fill-opacity="
+              districtData['北投區'] / districtData.highest
+            "
+            :fill="districtColor"
+            d="m94.88095,249.57284c-14.1957,-1.13845 -15.68038,-2.82136 -15.75883,-17.86287c-0.07358,-14.11027 -2.04541,-18.8162 -9.28243,-22.15316c-4.82518,-2.22489 -5.16577,-2.22824 -13.81468,-0.13606c-4.87713,1.17982 -11.85611,3.38716 -15.50881,4.90525c-9.44781,3.92657 -14.35485,4.579 -18.63773,2.47804c-5.19239,-2.54712 -13.07369,-8.67732 -12.20772,-9.49537c0.40554,-0.38307 -0.17773,-1.56086 -1.29605,-2.61731c-1.18816,-1.12239 -2.03333,-3.87056 -2.03333,-6.6113c0,-4.27472 0.33791,-4.75432 3.81225,-5.41074c4.00852,-0.75734 6.59228,-3.8596 6.0592,-7.27516c-0.86533,-5.54445 1.89092,-11.65039 8.44006,-18.6972c3.74333,-4.02781 6.8061,-7.73328 6.8061,-8.23434c0,-1.12665 6.94872,-8.91563 14.29934,-16.02848c3.03443,-2.93632 5.9003,-6.53997 6.36855,-8.00813c0.55205,-1.73101 1.837,-2.66938 3.65524,-2.66938c3.08906,0 5.81801,-2.02917 5.81801,-4.32607c0,-4.75592 16.32824,-25.33368 20.102,-25.33368c0.57926,0 1.69106,-1.82586 2.47069,-4.05746c0.77968,-2.2316 2.17721,-4.65307 3.10574,-5.38102c0.92852,-0.72798 2.05549,-3.1731 2.50442,-5.43366c0.84284,-4.24431 2.34543,-5.20858 4.09367,-2.6271c0.55236,0.81564 3.4755,2.67571 6.49581,4.13348c5.18297,2.50158 5.68533,2.54236 8.94118,0.7255c3.18389,-1.7767 3.91413,-1.77551 9.47807,0.01542c3.31565,1.06721 6.17961,1.79757 6.36444,1.62296c1.93877,-1.8315 5.51741,-12.89401 5.51741,-17.05579c0,-3.8645 0.86996,-6.39702 3.18051,-9.25867c2.84029,-3.51776 4.0477,-4.02687 11.28738,-4.75926c7.04049,-0.71226 8.45062,-1.27612 10.71971,-4.28645c1.90061,-2.52147 3.6472,-3.46632 6.40759,-3.46632c4.7598,0 8.49441,-3.98187 8.5512,-9.11728c0.02297,-2.07819 0.56574,-5.08038 1.20613,-6.67154c1.34999,-3.35431 9.40282,-8.45955 11.91011,-7.55065c0.93927,0.34048 2.96771,-0.21461 4.50764,-1.23354c2.39634,-1.58558 2.70729,-2.62847 2.15755,-7.23596c-0.45066,-3.77701 -0.10046,-5.89525 1.17362,-7.09882c0.99872,-0.9435 2.12574,-3.17861 2.50427,-4.9669c0.46731,-2.20734 2.07446,-3.8758 5.00456,-5.19576c6.19764,-2.79194 7.31487,-2.47598 8.85697,2.50465c0.75767,2.44693 1.98856,6.05059 2.73555,8.00813c0.74688,1.95755 1.65149,4.96741 2.01017,6.6886c0.48175,2.31116 2.00237,3.63972 5.8156,5.08107c2.92169,1.10436 5.4391,2.94779 5.79853,4.2462c0.34925,1.26204 1.69569,2.61257 2.99189,3.00119c2.01807,0.60511 1.43384,1.52938 -4.06667,6.43369c-6.28882,5.60724 -6.40587,5.83664 -5.59194,10.96359c1.02919,6.48384 -3.7709,18.04195 -7.91845,19.06656c-4.20757,1.0394 -5.90666,6.06375 -4.03176,11.92238c1.99183,6.22401 1.99811,6.90198 0.14757,15.90754c-1.39515,6.78992 -1.8528,7.49666 -5.70684,8.81319c-2.97079,1.01481 -5.12613,3.05609 -7.40731,7.01534c-1.76945,3.07121 -3.2172,6.2358 -3.2172,7.03236c0,0.79658 -1.63825,3.40233 -3.64058,5.79058c-2.62203,3.12738 -3.89756,6.2853 -4.55908,11.28698c-1.09367,8.26882 -4.26332,11.56071 -11.49036,11.93337c-2.79573,0.14415 -6.83909,1.57172 -9.68446,3.41923c-2.68666,1.74445 -5.40879,3.17172 -6.04922,3.17172c-0.64039,0 -3.18028,1.4525 -5.64416,3.22778l-4.47974,3.22781l0.71288,10.39417c0.43684,6.36963 0.22874,10.67676 -0.53748,11.1241c-0.68766,0.4015 -1.76661,2.01282 -2.39763,3.58071c-0.68511,1.70225 -2.16214,2.85073 -3.66625,2.85073c-1.72723,0 -2.75678,1.02545 -3.27568,3.26257c-0.41624,1.79441 -1.63795,4.91375 -2.71496,6.93184c-1.79311,3.35993 -1.773,4.12737 0.23866,9.10334c2.22846,5.51222 1.87498,7.98921 -1.14006,7.98921c-2.45555,0 -5.27858,4.6883 -6.31609,10.48942c-0.50155,2.80438 -1.63247,5.36008 -2.51318,5.67933c-0.88067,0.31925 -2.5851,2.64149 -3.78756,5.16051c-1.79011,3.75015 -3.58226,5.18012 -9.89045,7.89179c-9.25247,3.97729 -7.87652,3.66486 -13.98358,3.1751z"
+            @mouseenter="toggleActive"
+            @mousemove="updateMouseLocation"
+            @mouseleave="toggleActiveToNull"
+            @click="handleDataSelection(0)"
+          />
+          <path
+            data-name="士林區"
+            :class="{
+              'active-district':
+                targetDistrict === '士林區' ||
+                selectedIndex === 1,
+              'initial-animation-2': true,
+            }"
+            :fill-opacity="
+              districtData['士林區'] / districtData.highest
+            "
+            :fill="districtColor"
+            d="m130.67355,292.3904c0,-0.5887 -1.55415,-1.67783 -3.45368,-2.4203c-1.89951,-0.74247 -4.94129,-2.12839 -6.75951,-3.07984c-2.83166,-1.48179 -3.91249,-1.49692 -7.53529,-0.10562c-2.32616,0.89334 -7.05516,1.94269 -10.50884,2.33187l-6.2794,0.70759l-5.02352,-9.7204c-3.46765,-6.70982 -7.47802,-12.09274 -12.94847,-17.38008c-4.35876,-4.21284 -9.69914,-9.77585 -11.86761,-12.36226c-6.54152,-7.80231 -16.98514,-11.61879 -36.01762,-13.16208c-17.07093,-1.38422 -18.77023,-2.04314 -25.89346,-10.04019l-3.39462,-3.81101l2.2973,-4.98435c4.42748,-9.60625 4.51493,-9.64575 10.05679,-4.54181c6.40893,5.90252 11.82541,7.65801 18.61141,6.03202c5.26124,-1.26064 10.93347,-3.52615 12.06076,-4.81708c1.40471,-1.60863 19.14964,-5.99322 21.75514,-5.37545c1.54226,0.36566 4.38983,2.22838 6.32792,4.13937c3.78795,3.73502 5.69971,12.50563 5.78463,26.53852c0.03899,6.44634 0.24839,6.89254 4.1227,8.78519c5.43861,2.65684 19.78195,4.13439 22.29188,2.29635c1.0361,-0.75875 4.71253,-2.58468 8.16986,-4.05763c5.43246,-2.31445 6.8367,-3.67588 10.34146,-10.02624c2.23044,-4.04149 4.39404,-8.76351 4.8079,-10.49344c0.79356,-3.31703 4.84537,-8.12538 6.84691,-8.12538c2.39166,0 2.69147,-5.93944 0.56532,-11.19868c-2.00951,-4.97068 -2.01855,-5.57877 -0.12336,-8.31117c1.12463,-1.62142 2.0448,-3.79543 2.0448,-4.83111c0,-1.03567 1.62127,-2.41694 3.60283,-3.0695c5.39002,-1.775 7.45014,-7.85453 6.71681,-19.82158c-0.39156,-6.38976 -0.14097,-9.71466 0.73222,-9.71466c0.73013,0 2.07434,-0.67117 2.98709,-1.49148c3.63746,-3.26906 18.1653,-9.56093 21.58784,-9.34951c5.50698,0.34018 10.2488,-5.02372 11.20858,-12.67903c0.50954,-4.06427 2.08921,-7.95456 4.66727,-11.49433c2.14339,-2.9429 4.47711,-7.07957 5.18592,-9.19258c2.05588,-6.1276 3.90165,-9.18062 5.55063,-9.18062c3.37668,0 7.29088,-4.67905 9.49521,-11.3506c2.77436,-8.39668 2.88161,-11.96566 0.47874,-15.93637c-2.84395,-4.69964 -3.11744,-7.30496 1.56985,-10.72428c3.95607,-2.88592 4.84295,-4.01582 7.32737,-10.1389c2.96184,-7.29972 1.82108,-10.57619 0.28885,-12.9645c-0.40853,-0.63679 0.01483,-0.49047 0.11529,-1.17494c0.11774,-0.80225 0.22889,-0.7003 0.47359,-0.9969c0.3194,-0.38711 2.93568,-1.93076 6.18465,-4.78903c5.58201,-4.91093 13.12307,-7.79163 15.99992,-6.11204c0.63134,0.36857 1.50278,0.12751 1.93657,-0.53565c0.4339,-0.66316 1.75735,-1.20574 2.94102,-1.20574c1.53468,0 2.55132,1.61643 3.54409,5.63535c1.22738,4.9692 1.10216,6.0216 -1.05958,8.90281c-1.34845,1.7971 -2.31899,4.46648 -2.1571,5.93196c0.16201,1.46546 -0.41633,4.05514 -1.28515,5.75484c-1.35786,2.65638 -1.21028,3.77435 1.05055,7.96088c1.44664,2.67878 2.63032,5.50753 2.63032,6.28612c0,0.77859 -2.82574,4.23809 -6.27941,7.68778c-5.06635,5.06054 -6.2794,7.07165 -6.2794,10.4108c0,2.27626 0.88728,4.97678 1.9716,6.00119c2.39233,2.2599 7.3714,3.56156 9.99116,2.61191c1.09175,-0.39574 2.84017,0.31736 4.04947,1.65165c1.29958,1.43375 3.69655,2.3481 6.15569,2.3481c3.80482,0 4.13926,0.36349 6.05083,6.57531c1.96521,6.38656 1.94411,6.70856 -0.73882,11.2181c-2.98373,5.01507 -2.23359,7.43276 2.77172,8.93348c1.31742,0.39502 2.76872,2.1508 3.22498,3.90172c0.45614,1.75093 1.49851,4.25125 2.31635,5.55628c0.81782,1.30503 2.24438,4.67806 3.17021,7.49564c1.30085,3.95907 3.27182,6.26163 8.6755,10.13545c6.76392,4.84901 7.00455,5.21589 7.37377,11.24453c0.32402,5.29383 0.8471,6.43237 3.47427,7.56316l3.09286,1.33117l-2.75138,2.76665c-1.51334,1.52165 -3.74277,2.76663 -4.95457,2.76663c-3.04074,0 -6.15017,3.20267 -6.15017,6.33447c0,1.43321 -1.37419,4.51625 -3.05381,6.85118c-1.67949,2.33492 -3.53317,5.99317 -4.11916,8.1294c-0.91366,3.33109 -1.68577,3.93815 -5.4234,4.26396c-2.39697,0.20894 -5.48832,0.63788 -6.86979,0.95316c-1.38146,0.31527 -3.22585,0.6141 -4.09869,0.66402c-0.87284,0.04993 -2.95031,2.9067 -4.61674,6.34838c-2.55395,5.27468 -3.97574,6.66861 -9.05051,8.8741c-3.93153,1.70856 -6.44769,2.21308 -7.25132,1.45393c-1.8366,-1.73485 -7.08732,-1.30719 -11.91705,0.97059c-4.41241,2.08098 -4.78441,2.53348 -8.21409,9.99209c-1.64746,3.58273 -2.99942,4.66042 -7.1805,5.72399c-2.83301,0.72063 -6.39155,1.01611 -7.9079,0.6566c-2.9144,-0.69101 -5.76349,2.05907 -9.83078,9.48939c-1.5956,2.91493 -3.67589,4.2054 -10.06582,6.24438c-7.38051,2.35507 -8.3582,2.4205 -11.684,0.78202c-8.03334,-3.95767 -12.58527,-1.81168 -27.70996,13.06371c-4.95546,4.87374 -9.55743,8.86137 -10.22666,8.86137c-1.8827,0 -2.75051,3.21946 -1.92231,7.13132c0.4777,2.25619 0.23681,3.54619 -0.66209,3.54619c-0.77708,0 -1.41286,-0.48165 -1.41286,-1.07032l0,0.00001z"
+            @mouseenter="toggleActive"
+            @mousemove="updateMouseLocation"
+            @mouseleave="toggleActiveToNull"
+            @click="handleDataSelection(1)"
+          />
+          <path
+            data-name="內湖區"
+            :class="{
+              'active-district':
+                targetDistrict === '內湖區' ||
+                selectedIndex === 2,
+              'initial-animation-3': true,
+            }"
+            :fill-opacity="
+              districtData['內湖區'] / districtData.highest
+            "
+            :fill="districtColor"
+            d="m228.52059,347.73805c-0.06129,-0.81564 -0.03466,-3.88543 0.0594,-6.82175c0.09406,-2.9363 -0.89758,-8.27506 -2.2037,-11.86389l-2.37461,-6.52514l2.92707,-5.93195c3.46184,-7.01564 3.66705,-10.73815 0.94656,-17.16131c-1.55515,-3.67154 -3.57436,-5.59621 -8.87958,-8.46358c-4.8507,-2.6217 -7.47148,-4.97799 -8.92653,-8.02547c-2.80878,-5.88306 -5.25147,-8.46648 -8.00512,-8.46648c-1.43108,0 -2.3171,-0.85343 -2.3171,-2.23197c0,-1.22757 -1.97801,-3.65719 -4.39558,-5.39913c-5.0035,-3.60521 -5.2672,-4.5257 -2.19779,-7.67214c1.20879,-1.23914 3.61066,-4.16074 5.33749,-6.49249c1.72684,-2.33175 4.08563,-4.25423 5.24167,-4.27219c1.15616,-0.01795 5.00444,-0.66556 8.55192,-1.4391c6.58345,-1.43555 7.94759,-2.95817 11.70054,-13.06042c0.41054,-1.10536 3.07339,-2.66833 5.91733,-3.47325c4.41442,-1.2494 5.67708,-1.18098 8.63179,0.46789c3.26115,1.81979 3.58227,1.79767 5.5584,-0.38252c1.15341,-1.27263 2.87421,-2.31388 3.82403,-2.31388c3.07063,0 8.31494,-4.8142 10.76906,-9.88556c1.9647,-4.06022 3.33699,-5.21871 7.6743,-6.47878c4.90133,-1.42396 6.69825,-1.23206 6.9611,0.74354c0.05802,0.43499 0.76433,2.29383 1.56986,4.13073c0.80564,1.83689 1.46461,4.04111 1.46461,4.89827c0,0.89103 4.70615,3.11698 10.98895,5.19757c6.04392,2.00149 14.03936,4.68027 17.76769,5.9528c3.72833,1.27255 8.6171,4.10416 10.86412,6.2925c9.27731,9.03521 12.76514,11.69033 15.35679,11.69033c2.35489,0 2.5748,0.38753 1.59785,2.81502c-1.20176,2.98626 0.8854,10.43441 4.30654,15.36674c1.54398,2.2261 1.56609,3.31069 0.14669,7.21086c-0.91893,2.52488 -2.56865,5.06541 -3.66617,5.64566c-1.09752,0.58026 -2.99314,4.11113 -4.21222,7.84637c-1.21884,3.73526 -2.93876,7.21829 -3.82165,7.7401c-0.94894,0.56094 -1.60514,3.33236 -1.60514,6.78001c0,4.57686 -0.52935,6.09889 -2.4609,7.0754c-1.35346,0.68428 -3.35647,3.02697 -4.45096,5.20598c-1.59045,3.16596 -2.57895,3.85547 -4.92117,3.4325c-2.22655,-0.40206 -3.73813,0.47035 -6.28883,3.6294c-3.83068,4.74438 -9.61188,7.26188 -19.55456,8.51528c-3.79903,0.47893 -7.8176,1.32212 -8.93006,1.87378c-1.69632,0.84113 -2.00024,0.29266 -1.88382,-3.39918c0.1232,-3.9031 -0.23285,-4.44291 -3.14007,-4.76164c-2.72138,-0.29832 -3.66329,0.40803 -5.53832,4.15236c-4.78603,9.5576 -9.34902,12.48797 -26.27704,16.87513c-11.12836,2.88409 -11.96465,2.95199 -12.11284,0.9836z"
+            @mouseenter="toggleActive"
+            @mousemove="updateMouseLocation"
+            @mouseleave="toggleActiveToNull"
+            @click="handleDataSelection(2)"
+          />
+          <path
+            data-name="中山區"
+            :class="{
+              'active-district':
+                targetDistrict === '中山區' ||
+                selectedIndex === 6,
+              'initial-animation-4': true,
+            }"
+            :fill-opacity="
+              districtData['中山區'] / districtData.highest
+            "
+            :fill="districtColor"
+            d="m145.96327,360.53769c-5.05996,-1.54766 -11.95892,-3.17236 -15.33103,-3.61048c-6.1177,-0.79485 -6.12916,-0.80478 -5.24269,-4.54798c0.48863,-2.06326 0.74248,-8.55627 0.56413,-14.4289c-0.87758,-28.89693 -0.66975,-34.36909 1.48718,-39.15086c2.03427,-4.50979 2.23013,-4.63115 3.94252,-2.44262c0.99109,1.26661 1.80193,2.73477 1.80193,3.26256c0,0.52781 0.92454,0.95964 2.05452,0.95964c1.69798,0 1.92621,-0.88432 1.31516,-5.09579c-0.40663,-2.8027 -1.09011,-5.95925 -1.5188,-7.01458c-0.45522,-1.12071 -0.0775,-2.08529 0.90823,-2.31915c0.9282,-0.22019 6.51741,-5.46236 12.42047,-11.64925c12.21697,-12.8044 15.72305,-14.53099 22.93896,-11.29629c4.50736,2.02055 5.55032,1.9318 13.60165,-1.15742c1.53421,-0.58867 2.64006,0.15233 4.03777,2.70563c1.05865,1.93395 3.28538,3.83888 4.94817,4.23313c2.05073,0.4862 3.25574,1.81503 3.74604,4.13071c0.5571,2.63107 1.60175,3.57997 4.55584,4.13809c3.02101,0.57078 3.83306,1.33957 3.83306,3.6288c0,3.73506 5.10654,9.45823 10.22702,11.46183l3.99847,1.56458l-4.81015,3.92804c-2.64564,2.16044 -5.49272,3.92806 -6.32674,3.92806c-0.83391,0 -3.98944,-1.27125 -7.01197,-2.82499c-3.02265,-1.55376 -7.07048,-3.17043 -8.99512,-3.59261c-3.05357,-0.66982 -3.70705,-0.30117 -5.12885,2.89319c-2.32686,5.22783 -7.02368,7.08358 -17.92822,7.08358c-7.46541,0 -9.47152,0.38538 -10.10336,1.94084c-1.01571,2.50047 1.0995,5.65643 4.14153,6.17922c3.07054,0.52769 17.86016,9.8254 18.63109,11.71273c0.32435,0.79406 -0.22236,4.02708 -1.21493,7.18448c-1.46184,4.65025 -2.64417,6.11892 -6.22405,7.7316c-4.22555,1.90353 -4.41998,2.2648 -4.4332,8.23857c-0.00763,3.43625 -0.36412,8.24978 -0.79227,10.6967l-0.7784,4.44896l-7.05704,-0.05308c-3.88133,-0.02919 -11.19694,-1.31932 -16.25691,-2.86695l-0.00001,0.00001z"
+            @mouseenter="toggleActive"
+            @mousemove="updateMouseLocation"
+            @mouseleave="toggleActiveToNull"
+            @click="handleDataSelection(6)"
+          />
+          <path
+            data-name="大同區"
+            :class="{
+              'active-district':
+                targetDistrict === '大同區' ||
+                selectedIndex === 7,
+              'initial-animation-5': true,
+            }"
+            :fill-opacity="
+              districtData['大同區'] / districtData.highest
+            "
+            :fill="districtColor"
+            d="m97.03006,356.57153c-1.29449,-0.81758 -1.31213,-1.71502 -0.0881,-4.48295c0.84171,-1.9034 1.68908,-8.26562 1.88302,-14.13825c0.19395,-5.87262 0.70148,-14.68157 1.12788,-19.57542c0.51691,-5.93249 0.15948,-11.66569 -1.0724,-17.20266c-1.01622,-4.5676 -1.67798,-8.47751 -1.47058,-8.68868c0.20739,-0.21117 3.39668,-0.77868 7.0873,-1.26111c3.69059,-0.48245 7.97908,-1.52829 9.52994,-2.32412c2.38615,-1.2245 3.59296,-1.03062 7.84926,1.26111c3.41883,1.84081 4.79379,3.27798 4.29333,4.48766c-2.57854,6.23259 -4.38137,19.15541 -3.64127,26.10057c1.56452,14.6817 1.35721,31.80498 -0.40502,33.45775c-0.90906,0.85262 -4.83536,1.61392 -8.79117,1.70458c-3.93157,0.09009 -8.84381,0.50581 -10.91602,0.92379c-2.0722,0.41798 -4.49597,0.29997 -5.38615,-0.26225l-0.00002,-0.00002z"
+            @mouseenter="toggleActive"
+            @mousemove="updateMouseLocation"
+            @mouseleave="toggleActiveToNull"
+            @click="handleDataSelection(7)"
+          />
+          <path
+            data-name="中正區"
+            :class="{
+              'active-district':
+                targetDistrict === '中正區' ||
+                selectedIndex === 8,
+              'initial-animation-6': true,
+            }"
+            :fill-opacity="
+              districtData['中正區'] / districtData.highest
+            "
+            :fill="districtColor"
+            d="m143.23236,439.51584c-3.38679,-1.1326 -6.0509,-3.76661 -11.6082,-11.47705c-6.32482,-8.77532 -8.01682,-10.32286 -13.74603,-12.57198c-3.81605,-1.49809 -6.93112,-3.58043 -7.48962,-5.00664c-0.52591,-1.34304 -2.30688,-2.76211 -3.95773,-3.15352c-1.65082,-0.39136 -5.10152,-3.08492 -7.66818,-5.98552l-4.66665,-5.27392l3.21827,-7.59915c1.76998,-4.17954 3.21819,-9.13106 3.21819,-11.00335c0,-5.38452 3.66235,-17.41135 5.75773,-18.90792c3.13362,-2.23811 22.27165,-0.75703 35.37236,2.73741l6.59338,1.75868l0,12.50494l0,12.50496l-4.70956,-0.82563c-2.59025,-0.45409 -5.60176,-1.58123 -6.69225,-2.50479c-1.0905,-0.9236 -2.38808,-1.67921 -2.88352,-1.67921c-1.62947,0 -7.03984,12.37811 -7.05237,16.13485c-0.01345,4.03191 4.56251,10.82258 13.11126,19.45682c2.90726,2.93633 7.96454,8.37581 11.23844,12.08768l5.95255,6.74895l-3.79195,1.85237c-4.38544,2.14232 -4.39333,2.1425 -10.19612,0.20198l0,0.00004z"
+            @mouseenter="toggleActive"
+            @mousemove="updateMouseLocation"
+            @mouseleave="toggleActiveToNull"
+            @click="handleDataSelection(8)"
+          />
+          <path
+            data-name="萬華區"
+            :class="{
+              'active-district':
+                targetDistrict === '萬華區' ||
+                selectedIndex === 9,
+              'initial-animation-7': true,
+            }"
+            :fill-opacity="
+              districtData['萬華區'] / districtData.highest
+            "
+            :fill="districtColor"
+            d="m69.35654,439.01584c-3.99535,-4.01755 -6.85931,-14.20691 -5.88131,-20.92438c0.71146,-4.8865 0.16193,-6.94596 -4.4707,-16.75562c-7.32389,-15.50848 -6.86423,-20.35735 2.21244,-23.34024c6.24697,-2.05295 25.82218,-13.2498 28.85199,-16.50311c2.29756,-2.46708 3.42474,-2.79986 7.21066,-2.12891c3.77363,0.66879 4.38912,1.19912 3.86957,3.33449c-3.97174,16.32418 -5.63624,22.22573 -7.36552,26.11531c-1.12335,2.5266 -2.04241,5.91194 -2.04241,7.52294c0,3.65896 7.55479,12.16471 12.57613,14.1592c4.53702,1.80213 4.9051,3.97696 0.67311,3.97696c-3.08587,0 -6.22744,3.01637 -16.02781,15.38922c-4.06656,5.13403 -12.76559,11.77778 -15.52676,11.85831c-0.74302,0.02168 -2.57875,-1.19519 -4.07941,-2.70417l0.00002,0z"
+            @mouseenter="toggleActive"
+            @mousemove="updateMouseLocation"
+            @mouseleave="toggleActiveToNull"
+            @click="handleDataSelection(9)"
+          />
+          <path
+            data-name="大安區"
+            :class="{
+              'active-district':
+                targetDistrict === '大安區' ||
+                selectedIndex === 10,
+              'initial-animation-8': true,
+            }"
+            :fill-opacity="
+              districtData['大安區'] / districtData.highest
+            "
+            :fill="districtColor"
+            d="m168.45407,444.15313c-4.80503,-0.53193 -5.89736,-1.20309 -8.16321,-5.01571c-2.8876,-4.85886 -9.81587,-13.18737 -21.79228,-26.19671c-4.33042,-4.70388 -8.21258,-9.77692 -8.62702,-11.27338c-0.41442,-1.49643 0.22251,-5.13516 1.41546,-8.08599c1.68409,-4.16567 2.63009,-5.18192 4.23143,-4.54548c4.57665,1.81898 12.15917,2.64938 13.63672,1.49349c0.96374,-0.75392 1.65879,-5.56891 1.88381,-13.05049l0.3566,-11.85575l17.58232,0.16651c9.67029,0.09158 20.30806,0.21585 23.63944,0.27617l6.05725,0.10967l-0.40578,16.38332l-0.40565,16.38323l-4.70955,4.55267c-5.20203,5.02876 -5.85305,7.68326 -2.45762,10.02073c3.10704,2.13897 16.02616,18.61792 17.97942,22.93376c0.87887,1.94189 2.71886,4.73189 4.08903,6.20007c4.20959,4.51108 -0.1374,2.99795 -5.96468,-2.0762c-2.99741,-2.61002 -6.43149,-4.74554 -7.63123,-4.74554c-1.19975,0 -3.72168,1.55766 -5.60438,3.46145c-2.43785,2.46538 -3.93806,3.15339 -5.21335,2.39094c-2.67142,-1.59711 -6.94168,-1.32626 -8.58527,0.54454c-1.93425,2.20169 -4.65503,2.66565 -11.31144,1.9287l-0.00002,0z"
+            @mouseenter="toggleActive"
+            @mousemove="updateMouseLocation"
+            @mouseleave="toggleActiveToNull"
+            @click="handleDataSelection(10)"
+          />
+          <path
+            data-name="信義區"
+            :class="{
+              'active-district':
+                targetDistrict === '信義區' ||
+                selectedIndex === 5,
+              'initial-animation-9': true,
+            }"
+            :fill-opacity="
+              districtData['信義區'] / districtData.highest
+            "
+            :fill="districtColor"
+            d="m215.28285,440.86964c-1.38524,-1.7944 -2.86881,-4.15278 -3.29669,-5.24081c-0.69475,-1.76696 -4.74132,-7.08608 -16.38786,-21.5417l-3.65596,-4.5377l4.15266,-4.88161l4.15283,-4.88163l0.23347,-15.49482c0.12834,-8.52222 0.29827,-16.35265 0.37751,-17.40101c0.0893,-1.18195 4.00124,-3.54828 10.29697,-6.22855c9.07851,-3.86504 11.26613,-4.32244 20.67356,-4.32244l10.52076,0l1.32169,4.6372c1.13506,3.98177 7.04436,10.55989 10.89828,12.13168c1.45568,0.59369 6.72172,10.6906 6.72322,12.89087c0.00063,0.97877 1.09526,3.47445 2.43227,5.54596l2.43113,3.76637l-3.37769,2.07076c-5.46371,3.34964 -10.28503,10.62703 -10.28503,15.52429c0,3.93759 -1.64232,6.56431 -7.8902,12.62008c-3.52513,3.41675 -7.29164,5.68758 -11.26198,6.78992c-3.28099,0.91094 -5.96543,2.11806 -5.96543,2.6825c0,0.91369 -8.2848,9.13322 -9.20574,9.13322c-0.20294,0 -1.5024,-1.46815 -2.88777,-3.26258z"
+            @mouseenter="toggleActive"
+            @mousemove="updateMouseLocation"
+            @mouseleave="toggleActiveToNull"
+            @click="handleDataSelection(5)"
+          />
+          <path
+            data-name="松山區"
+            :class="{
+              'active-district':
+                targetDistrict === '松山區' ||
+                selectedIndex === 4,
+              'initial-animation-10': true,
+            }"
+            :fill-opacity="
+              districtData['松山區'] / districtData.highest
+            "
+            :fill="districtColor"
+            d="m179.82896,364.76431l-7.98715,-1.28245l0.76585,-5.27829c0.42121,-2.90306 0.76582,-7.06518 0.76582,-9.24915c0,-3.3757 0.62493,-4.21752 4.16951,-5.61658c3.46477,-1.36757 4.65142,-2.89434 7.02097,-9.03348l2.8515,-7.38774l-3.40983,-3.36216c-3.68831,-3.63673 -17.05002,-11.82166 -19.29863,-11.82166c-0.75928,0 -1.38055,-0.53386 -1.38055,-1.18638c0,-0.67951 3.80903,-1.18639 8.91533,-1.18639c9.8254,0 16.88427,-2.35487 18.12457,-6.04643c1.01612,-3.02443 3.75466,-2.83866 11.26445,0.76415c7.47225,3.58477 10.10193,3.19325 16.4322,-2.44658c2.57166,-2.29123 4.79972,-4.02548 4.95106,-3.85387c1.5927,1.80567 4.36229,8.46276 4.36229,10.48566c0,1.41898 -1.42906,5.58826 -3.17587,9.26509l-3.17574,6.68513l2.54781,6.99582c1.4111,3.87457 2.54793,10.05324 2.54793,13.8485c0,5.96327 0.34938,6.95741 2.69147,7.65965c1.48043,0.44384 4.87407,0.12655 7.54156,-0.70507c5.21932,-1.6272 6.83902,-1.11599 5.66001,1.7864c-0.58964,1.45168 -2.95735,1.83075 -11.4353,1.83075c-9.84773,0 -11.56089,0.37949 -21.70337,4.80755c-12.38575,5.40747 -17.53862,6.17518 -29.0459,4.32753l0.00001,0z"
+            @mouseenter="toggleActive"
+            @mousemove="updateMouseLocation"
+            @mouseleave="toggleActiveToNull"
+            @click="handleDataSelection(4)"
+          />
+          <path
+            data-name="南港區"
+            :class="{
+              'active-district':
+                targetDistrict === '南港區' ||
+                selectedIndex === 3,
+              'initial-animation-11': true,
+            }"
+            :fill-opacity="
+              districtData['南港區'] / districtData.highest
+            "
+            :fill="districtColor"
+            d="m243.35694,435.10525c-1.9745,-1.86522 -0.67078,-4.50767 4.68505,-9.49557c3.87691,-3.61055 5.84964,-6.57613 6.42396,-9.65696c1.02467,-5.49769 7.44762,-15.36892 10.61885,-16.31971c3.22409,-0.96672 4.38566,-5.03692 2.13738,-7.49036c-1.00357,-1.09514 -2.18749,-3.85973 -2.63094,-6.14353c-1.12917,-5.81569 -6.09919,-15.42307 -7.97836,-15.42307c-2.89757,0 -9.39549,-6.5789 -11.08604,-11.22403c-2.56953,-7.06084 -1.19207,-11.06281 4.29713,-12.48485c7.84284,-2.03178 14.1186,-6.46724 17.59538,-12.43569c4.18384,-7.18234 6.85259,-7.12763 4.52004,0.09267c-1.11334,3.44608 1.99811,4.35706 7.48493,2.19139c2.41229,-0.95213 6.36605,-1.73119 8.78613,-1.73119c6.05661,0 17.2931,-4.91633 19.93209,-8.72102c2.50172,-3.60688 4.62491,-4.0936 4.65291,-1.06669c0.01545,1.6604 0.24137,1.74489 1.12815,0.42184c1.6633,-2.48134 9.51845,2.5056 11.53264,7.3216c0.87936,2.10312 1.82428,4.22427 2.09958,4.71366c0.27516,0.48938 -0.73834,0.88979 -2.25231,0.88979c-2.3034,0 -2.62491,0.48033 -1.97034,2.94389c0.64904,2.44308 0.0339,3.40172 -3.61594,5.63534c-3.74278,2.29032 -4.40047,3.36046 -4.41366,7.17987c-0.01369,3.91359 3.12839,11.02396 8.18119,18.51439c3.18967,4.72868 9.19392,9.24778 14.09512,10.60878c2.93562,0.81517 5.33749,1.99463 5.33749,2.62094c0,0.62629 1.27158,1.15048 2.82574,1.16482c3.29467,0.03037 10.52729,3.25616 18.52423,8.26186c3.1083,1.94564 6.49918,3.91352 7.53528,4.37304c1.0361,0.45954 2.44897,1.5366 3.1397,2.39351c0.81243,1.00783 4.80387,1.66225 11.30293,1.85312c8.87405,0.26063 10.50694,-0.03102 13.98637,-2.49808c5.25384,-3.72515 11.75918,-2.74094 11.75918,1.77902c0,1.62233 -0.57783,3.9697 -1.28413,5.21635c-1.35397,2.39003 -1.17778,2.38682 -19.84329,0.35818c-5.64657,-0.61368 -7.26126,-0.32396 -10.39618,1.86553l-3.71126,2.59205l-3.26403,-2.42549c-2.71961,-2.02084 -4.36896,-2.30276 -9.88767,-1.69004c-5.03873,0.5594 -7.32116,0.27381 -9.53905,-1.19374c-5.46547,-3.61634 -8.4988,-2.55762 -11.36974,3.96856c-1.42995,3.25055 -3.6536,6.21521 -4.95395,6.6051c-1.29769,0.38906 -2.35942,1.1196 -2.35942,1.62341c0,3.4568 -15.81052,3.94748 -17.19714,0.53373c-0.37752,-0.92963 -2.50486,-1.60964 -5.03533,-1.60964c-2.40966,0 -6.06076,-0.93428 -8.11337,-2.07618c-3.55414,-1.97733 -3.79063,-1.97733 -4.96575,0c-0.71334,1.20029 -2.7073,2.07618 -4.72676,2.07618c-3.51771,0 -5.28123,1.99957 -7.06282,8.00814c-0.54317,1.83177 -1.75019,2.66937 -3.84663,2.66937c-1.68025,0 -3.05507,-0.59924 -3.05507,-1.33165c0,-0.92875 -0.47497,-0.96046 -1.56985,-0.10474c-0.86342,0.67481 -2.98271,1.22425 -4.70954,1.22101c-4.08011,-0.00766 -9.32743,0.84163 -10.91046,1.76585c-0.68823,0.40183 -4.30768,1.24055 -8.0433,1.86382c-3.73549,0.62329 -7.93641,1.47563 -9.33545,1.89414c-1.39906,0.41851 -2.95321,0.37406 -3.45367,-0.09873l0,0.00001z"
+            @mouseenter="toggleActive"
+            @mousemove="updateMouseLocation"
+            @mouseleave="toggleActiveToNull"
+            @click="handleDataSelection(3)"
+          />
+          <path
+            data-name="文山區"
+            :class="{
+              'active-district':
+                targetDistrict === '文山區' ||
+                selectedIndex === 11,
+              'initial-animation-12': true,
+            }"
+            :fill-opacity="
+              districtData['文山區'] / districtData.highest
+            "
+            :fill="districtColor"
+            d="m273.73329,544.82851c-2.66761,-3.53892 -3.09436,-3.67667 -9.46544,-3.0555c-5.44537,0.53092 -8.4257,0.0126 -16.21028,-2.81912c-11.22179,-4.08199 -16.34755,-4.45609 -17.23294,-1.25762c-1.15956,4.18857 -16.49035,4.64589 -23.10456,0.68922c-1.48608,-0.88898 -3.68878,-4.17441 -4.8948,-7.30096c-1.20602,-3.12651 -4.03627,-9.26332 -6.28933,-13.63732c-3.62459,-7.03621 -4.01957,-8.75667 -3.42692,-14.92986c0.82888,-8.63635 -0.83904,-12.11591 -5.80804,-12.11591c-2.92325,0 -3.69666,0.6149 -4.28829,3.40936c-1.36845,6.46378 -8.38332,5.58925 -8.38332,-1.04518c0,-3.07925 -0.41373,-3.32601 -6.84909,-4.08557c-7.28516,-0.85987 -7.29944,-0.87495 -8.80904,-9.31511c-0.44381,-2.48122 -1.61257,-4.80335 -2.59725,-5.16032c-1.84369,-0.66834 -6.75838,4.08343 -11.13665,10.76759c-3.04779,4.65283 -4.18177,2.05389 -1.37782,-3.15772c4.37214,-8.12651 6.87571,-18.10421 6.89192,-27.46718c0.01297,-7.51126 0.45036,-9.67165 2.21399,-10.93637c2.88265,-2.06714 5.33749,-2.06662 5.33749,0.00117c0,2.07889 1.65756,2.67309 10.30296,3.69353c5.12909,0.60532 7.89276,0.34704 10.63883,-0.99444c2.44872,-1.19625 5.48635,-1.58716 8.93608,-1.15004c4.717,0.59764 5.3423,0.3741 6.41621,-2.29436c1.91496,-4.7581 4.67275,-4.83831 9.50199,-0.27631c3.66692,3.46411 5.24016,4.11452 9.95235,4.11452c5.55576,0 11.29364,-3.13079 15.49354,-8.45381c2.41469,-3.06055 7.52097,-3.74377 11.47775,-1.53579c3.23917,1.80755 4.1964,1.80138 13.44483,-0.08629c17.87734,-3.64889 21.04039,-4.17084 21.66984,-3.57617c0.3416,0.32251 -0.03491,2.65388 -0.83629,5.18073c-1.7777,5.60529 -1.92363,16.77605 -0.21903,16.77605c0.68095,0 2.73519,2.13703 4.56488,4.74895c3.28262,4.68585 3.29945,4.81637 1.27372,9.82739c-2.94793,7.29175 -2.62341,12.00709 1.08658,15.78872c3.71377,3.78552 3.69531,3.68482 1.11913,6.11849c-1.5401,1.45495 -1.88107,3.47986 -1.43384,8.51658c0.32275,3.63433 0.03001,7.76967 -0.65056,9.18971c-3.16984,6.61434 4.47721,12.22514 19.16286,14.0602c7.12561,0.89036 19.36392,6.51175 20.55375,9.44085c0.48966,1.2057 -1.16132,2.01536 -6.07471,2.97896c-3.71112,0.72779 -9.0191,2.8778 -11.79561,4.77777c-2.77649,1.90001 -6.59487,3.82128 -8.48535,4.26948c-1.89034,0.44821 -4.88764,1.53003 -6.66043,2.40401c-5.72707,2.82328 -10.87919,2.05011 -14.0091,-2.10233l-0.00001,0z"
             @mouseenter="toggleActive"
             @mousemove="updateMouseLocation"
             @mouseleave="toggleActiveToNull"
@@ -1300,13 +1499,20 @@ function handleDataSelection(index) {
 		justify-content: center;
 
 		svg {
-			width: 100%;
 			height: auto;
 
 			path {
 				transition: transform 0.2s;
 				// opacity: 0;
 			}
+		}
+
+		&-taipei {
+			width: 50%;
+		}
+
+		&-metrotaipei {
+			width: 100%;
 		}
 
 		&-info {
@@ -1330,7 +1536,7 @@ function handleDataSelection(index) {
 	}
 }
 
-@for $i from 1 through 41 {
+@for $i from 1 through 42 {
 	.initial-animation-#{$i} {
 		animation-name: ease-in;
 		animation-duration: 0.2s;
