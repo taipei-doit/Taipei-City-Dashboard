@@ -85,7 +85,7 @@ def _transfer(**kwargs):
         "UpdateTime": "update_time",
         })
     
-    gdata = gdata.drop(columns=["Geometry"])
+    gdata = gdata.drop(columns=["geometry", "Geometry"])
     ready_data = gdata.copy()
     print(f"ready_data =========== {ready_data.columns}")
     # Load
