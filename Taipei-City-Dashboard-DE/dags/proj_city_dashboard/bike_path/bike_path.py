@@ -25,7 +25,6 @@ def _transfer(**kwargs):
     from utils.extract_stage import get_tdx_data
     from utils.load_stage import save_geodataframe_to_postgresql,update_lasttime_in_data_to_dataset_info
     from sqlalchemy import create_engine
-    from utils.transform_geometry import convert_geometry_to_wkbgeometry,convert_linestring_to_multilinestring
     import geopandas as gpd
     from shapely import wkt    
     import pandas as pd
