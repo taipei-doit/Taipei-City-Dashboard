@@ -63,7 +63,6 @@ const handleDragEnd = () => {
     @dragend="handleDragEnd"
   >
     <h3>{{ tag.id }}</h3>
-    <p>{{ tag.city }}</p>
     <p>{{ tag.name }}</p>
     <button
       :style="{ backgroundColor: colorData ? tag : '' }"

@@ -19,6 +19,7 @@ export const useAdminStore = defineStore("admin", {
 		dashboards: [],
 		taipeiDashboards: [],
 		metroTaipeiDashboards: [],
+		currentCity: "",
 		currentDashboard: null,
 		// Edit Component (for /admin/edit-component)
 		components: [],
@@ -51,22 +52,23 @@ export const useAdminStore = defineStore("admin", {
 			const contentStore = useContentStore();
 			contentStore.error = state ? true : false;
 		},
+		setRouteParams(city) {
+			this.currentCity = city;
+		},
 
 		/* Dashboard */
 		// 1. Get all public dashboards
 		async getDashboards() {
 			const response = await http.get(`/dashboard/`);
 			this.dashboards = response.data.data.public;
-			this.taipeiDashboards = response.data.data.taipei;
-			this.metroTaipeiDashboards = response.data.data.metrotaipei;
-
+			this.taipeiDashboards = response.data.data?.taipei || [];
+			this.metroTaipeiDashboards = response.data.data?.metrotaipei || [];
 			this.setLoading(false);
 		},
 		// 2. Get current dashboard components
-		async getCurrentDashboardComponents(city) {
-			this.currentDashboard.city = city;
+		async getCurrentDashboardComponents() {
 			const response = await http.get(
-				`/dashboard/${this.currentDashboard.index}`
+				`/dashboard/${this.currentDashboard.index}${this.currentCity ? `?city=${this.currentCity}` : ""}`
 			);
 			this.currentDashboard.components = response.data.data;
 			this.setLoading(false);
@@ -80,7 +82,7 @@ export const useAdminStore = defineStore("admin", {
 
 			const dashboard = JSON.parse(JSON.stringify(this.currentDashboard));
 
-			await http.post(`/dashboard/public`, dashboard);
+			await http.post(`/dashboard/public${this.currentCity ? `/${this.currentCity}` : ""}`, dashboard);
 			this.getDashboards();
 			dialogStore.showNotification("success", "公開儀表板新增成功");
 		},

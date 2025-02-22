@@ -60,7 +60,6 @@ async function verifyIndex() {
 
 function handleConfirm() {
 	if (props.mode === "add") {
-		currentDashboard.value.city = city.value;
 		adminStore.addDashboard(currentDashboard.value);
 	} else if (props.mode === "edit") {
 		adminStore.editDashboard(currentDashboard.value);

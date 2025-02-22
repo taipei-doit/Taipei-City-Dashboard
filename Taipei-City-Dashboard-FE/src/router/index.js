@@ -12,6 +12,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import { useContentStore } from "../store/contentStore";
 import { useMapStore } from "../store/mapStore";
 import { useAuthStore } from "../store/authStore";
+import { useAdminStore } from "../store/adminStore";
 import DashboardView from "../views/DashboardView.vue";
 import MapView from "../views/MapView.vue";
 import ComponentView from "../views/ComponentView.vue";
@@ -189,6 +190,16 @@ router.beforeEach((to) => {
 	// Clear only map layers if the path starts with /mapview
 	else if (to.path.toLowerCase() === "/mapview") {
 		mapStore.clearOnlyLayers();
+	}
+});
+
+// Handles admin related tasks (gets content for each route)
+router.beforeEach((to) => {
+	const adminStore = useAdminStore();
+	if (
+		to.path.toLowerCase() === "/admin/dashboard"
+	) {
+		adminStore.setRouteParams(to.query.city);
 	}
 });
 

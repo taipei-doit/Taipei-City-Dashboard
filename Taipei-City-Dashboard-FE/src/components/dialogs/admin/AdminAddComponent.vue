@@ -35,9 +35,10 @@ const availableComponents = computed(() => {
 async function handleSearch() {
 	const res = await http.get(`/component/`, {
 		params: {
-			pagesize: 100,
+			pagesize: 200,
 			searchbyindex: searchIndex.value,
 			searchbyname: searchName.value,
+			city: adminStore.currentCity,
 		},
 	});
 	allComponents.value = res.data.data;

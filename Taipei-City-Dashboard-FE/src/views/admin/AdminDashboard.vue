@@ -13,9 +13,8 @@ import AdminDeleteDashboard from "../../components/dialogs/admin/AdminDeleteDash
 const adminStore = useAdminStore();
 const dialogStore = useDialogStore();
 const contentStore = useContentStore();
-const route = useRoute();
 
-const dashboards = computed(()=> route.query.city === "taipei" ? adminStore.taipeiDashboards : adminStore.metroTaipeiDashboards);
+const dashboards = computed(()=> adminStore.currentCity === "taipei" ? adminStore.taipeiDashboards : adminStore.metroTaipeiDashboards);
 const dialogMode = ref("edit");
 
 function parseTime(time) {
@@ -27,7 +26,7 @@ function parseTime(time) {
 
 function handleOpenSettings(dashboard) {
 	adminStore.currentDashboard = JSON.parse(JSON.stringify(dashboard));
-	adminStore.getCurrentDashboardComponents(route.query.city);
+	adminStore.getCurrentDashboardComponents();
 	dialogMode.value = "edit";
 	dialogStore.showDialog("adminAddEditDashboards");
 }
