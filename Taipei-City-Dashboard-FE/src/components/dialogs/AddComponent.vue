@@ -33,6 +33,7 @@ async function handleSearch() {
 			pagesize: 100,
 			searchbyindex: searchIndex.value,
 			searchbyname: searchName.value,
+			city: contentStore.currentDashboard.city
 		},
 	});
 	allComponents.value = response.data.data;
