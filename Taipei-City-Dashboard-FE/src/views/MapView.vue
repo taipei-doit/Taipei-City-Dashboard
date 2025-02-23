@@ -113,11 +113,12 @@ function shouldDisable(map_config) {
       >
         <DashboardComponent
           v-for="(item, arrayIdx) in contentStore.currentDashboard.components"
-          :key="`map-layer-${item.index}-${contentStore.currentDashboard.index}`"
+          :key="`map-layer-${item.index}-${item.city}`"
           :config="item"
           mode="halfmap"
           :info-btn="true"
           :active-city="item.city"
+		  select-btn-disabled="true"
           :toggle-disable="shouldDisable(item.map_config)"
           :toggle-on="toggleOn.mapLayer[arrayIdx]"
           @info="
@@ -173,7 +174,7 @@ function shouldDisable(map_config) {
           mode="map"
           :info-btn="true"
           :active-city="item.city"
-          :select-btn="contentStore.currentDashboard.city !== 'taipei' && contentStore.currentDashboardExcluded.components.filter((data) => data.index === item.index).length > 0"
+		  :select-btn-disabled="contentStore.currentDashboard.city === 'taipei' || contentStore.currentDashboardExcluded.components.filter((data) => data.index === item.index).length === 0"
           :toggle-disable="shouldDisable(item.map_config)"
           :toggle-on="toggleOn.hasMap[arrayIdx]"
           @info="
@@ -238,10 +239,12 @@ function shouldDisable(map_config) {
         <h2>基本圖層</h2>
         <DashboardComponent
           v-for="(item, arrayIdx) in contentStore.mapLayers"
-          :key="`map-layer-${item.index}-${contentStore.currentDashboard.index}`"
+          :key="`map-layer-${item.index}-${item.city}`"
           :config="item"
           mode="halfmap"
           :info-btn="true"
+		  :active-city="item.city"
+		  :select-btn-disabled="true"
           :toggle-disable="shouldDisable(item.map_config)"
           :toggle-on="toggleOn.basicLayer[arrayIdx]"
           @info="
@@ -291,7 +294,7 @@ function shouldDisable(map_config) {
           mode="map"
           :info-btn="true"
           :active-city="item.city"
-          :select-btn="contentStore.currentDashboard.city !== 'taipei' && contentStore.currentDashboardExcluded.components.filter((data) => data.index === item.index).length > 0"
+          :select-btn-disabled="contentStore.currentDashboard.city === 'taipei' || contentStore.currentDashboardExcluded.components.filter((data) => data.index === item.index).length === 0"
           :toggle-on="toggleOn.noMap[arrayIdx]"
           @info="
             (item) => {
