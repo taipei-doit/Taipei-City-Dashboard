@@ -63,10 +63,12 @@ function handleMoreInfo(item) {
   >
     <DashboardComponent
       v-for="item in contentStore.currentDashboard.components"
-      :key="item.index"
+      :key="`${item.index}-${item.city}`"
       :config="item"
       mode="half"
       :info-btn="true"
+	  :active-city="item.city"
+	  :select-btn-disabled="true"
       :favorite-btn="authStore.token ? true : false"
       :is-favorite="contentStore.favorites?.components.includes(item.id)"
       @favorite="
