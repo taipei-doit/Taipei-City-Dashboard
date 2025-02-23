@@ -68,7 +68,8 @@ const props = defineProps({
 			),
 	},
 	config: { type: Object, required: true },
-	selectBtn: { type: Boolean, default: false },
+	selectBtn: { type: Boolean, default: true },
+	selectBtnDisabled: { type: Boolean, default: false },
 	favoriteBtn: { type: Boolean, default: false },
 	isFavorite: { type: Boolean, default: false },
 	deleteBtn: { type: Boolean, default: false },
@@ -335,10 +336,11 @@ function returnChartComponent(name, svg) {
     >
       <select
         v-if="selectBtn"
-        id="city"
         v-model="activeCity"
         name="city"
         class="selectBtn"
+        :class="{'selectBtn-disabled': selectBtnDisabled}"
+        :disabled="selectBtnDisabled"
         @change="(e)=> changeActiveCity((e.target).value)"
       >
         <template
@@ -370,7 +372,6 @@ function returnChartComponent(name, svg) {
       class="preview-content"
     >
       <div class="preview-content-id">
-        <p>City: {{ props.config.city }}</p>
         <p>Index: {{ props.config.index }}</p>
       </div>
       <div class="preview-content-charts">
@@ -691,6 +692,10 @@ button:hover {
 
 		.selectBtn {
 			background-color: var(--dashboardcomponent-color-component-background);
+
+			&-disabled {
+				cursor: not-allowed;
+			}
 		}
 	}
 

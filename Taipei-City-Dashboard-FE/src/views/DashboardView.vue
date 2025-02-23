@@ -94,7 +94,7 @@ function handleMoreInfo(item) {
       :config="item"
       :info-btn="true"
       :active-city="item.city"
-      :select-btn="contentStore.currentDashboard.city === 'metrotaipei'" 
+      :select-btn-disabled="contentStore.currentDashboard.city === 'taipei' || contentStore.currentDashboardExcluded.components.filter((data) => data.index === item.index).length === 0"
       :delete-btn="
         contentStore.personalDashboards
           .map((item) => item.index)
@@ -126,8 +126,11 @@ function handleMoreInfo(item) {
             return data
           }
         });
-        activeCity = city;
-        contentStore.setComponentData(arrayIdx,selectedData);
+
+        if (selectedData) {
+          activeCity = city;
+          contentStore.setComponentData(arrayIdx,selectedData);
+        }
       }
       "
     />

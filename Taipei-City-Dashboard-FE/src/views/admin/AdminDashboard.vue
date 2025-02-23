@@ -1,7 +1,6 @@
 <!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 <script setup>
 import { onMounted, ref, computed } from "vue";
-import { useRoute } from "vue-router";
 import { useAdminStore } from "../../store/adminStore";
 import { useDialogStore } from "../../store/dialogStore";
 import { useContentStore } from "../../store/contentStore";

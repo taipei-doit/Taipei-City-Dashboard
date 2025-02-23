@@ -168,12 +168,12 @@ function shouldDisable(map_config) {
       >
         <DashboardComponent
           v-for="(item, arrayIdx) in parseMapLayers.hasMap"
-          :key="`map-layer-${item.index}-${contentStore.currentDashboard.index}`"
+          :key="`map-layer-${item.index}-${item.city}`"
           :config="item"
           mode="map"
           :info-btn="true"
           :active-city="item.city"
-          :select-btn="contentStore.currentDashboard.city === 'metrotaipei'" 
+          :select-btn="contentStore.currentDashboard.city !== 'taipei' && contentStore.currentDashboardExcluded.components.filter((data) => data.index === item.index).length > 0"
           :toggle-disable="shouldDisable(item.map_config)"
           :toggle-on="toggleOn.hasMap[arrayIdx]"
           @info="
@@ -224,12 +224,14 @@ function shouldDisable(map_config) {
               }
             });
 
-            activeCity = city;
+            if (selectedData) {
+              activeCity = city;
 
-            mapStore.clearByParamFilter(item.map_config);
-            mapStore.turnOffMapLayerVisibility(item.map_config);
-				
-            contentStore.setComponentData(arrayIdx,selectedData);
+              mapStore.clearByParamFilter(item.map_config);
+              mapStore.turnOffMapLayerVisibility(item.map_config);
+					
+              contentStore.setComponentData(arrayIdx,selectedData);
+            }
           }
           "
         />
@@ -284,10 +286,12 @@ function shouldDisable(map_config) {
         </h2>
         <DashboardComponent
           v-for="(item, arrayIdx) in parseMapLayers.noMap"
-          :key="`map-layer-${item.index}-${contentStore.currentDashboard.index}`"
+          :key="`map-layer-${item.index}`"
           :config="item"
           mode="map"
           :info-btn="true"
+          :active-city="item.city"
+          :select-btn="contentStore.currentDashboard.city !== 'taipei' && contentStore.currentDashboardExcluded.components.filter((data) => data.index === item.index).length > 0"
           :toggle-on="toggleOn.noMap[arrayIdx]"
           @info="
             (item) => {
@@ -299,6 +303,19 @@ function shouldDisable(map_config) {
               handleToggle(value, map_config);
               toggleSwitchBtn(value, 'noMap', arrayIdx);
             }
+          "
+          @change-city="(city)=> {
+            const selectedData = contentStore.cityDashboard.components.find((data) => {
+              if (data.index === item.index && data.city === city) {
+                return data
+              }
+            });
+            const componentIndex = contentStore.currentDashboard.components.findIndex((data) => data.index === item.index && data.city === item.city);
+            if (selectedData && componentIndex !== -1) {
+              activeCity = city;
+              contentStore.setComponentData(componentIndex, selectedData);
+            }
+          }
           "
         />
       </div>

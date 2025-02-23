@@ -90,7 +90,6 @@ onMounted(() => {
           router.push({
             name: 'component-info',
             params: { index: item.index },
-            query: { city: item.city }
           });
         }
       "
