@@ -118,7 +118,7 @@ function shouldDisable(map_config) {
           mode="halfmap"
           :info-btn="true"
           :active-city="item.city"
-		  select-btn-disabled="true"
+          select-btn-disabled="true"
           :toggle-disable="shouldDisable(item.map_config)"
           :toggle-on="toggleOn.mapLayer[arrayIdx]"
           @info="
@@ -174,7 +174,7 @@ function shouldDisable(map_config) {
           mode="map"
           :info-btn="true"
           :active-city="item.city"
-		  :select-btn-disabled="contentStore.currentDashboard.city === 'taipei' || contentStore.currentDashboardExcluded.components.filter((data) => data.index === item.index).length === 0"
+          :select-btn-disabled="contentStore.currentDashboard.city === 'taipei' || contentStore.currentDashboardExcluded.components.filter((data) => data.index === item.index).length === 0"
           :toggle-disable="shouldDisable(item.map_config)"
           :toggle-on="toggleOn.hasMap[arrayIdx]"
           @info="
@@ -230,7 +230,8 @@ function shouldDisable(map_config) {
 
               mapStore.clearByParamFilter(item.map_config);
               mapStore.turnOffMapLayerVisibility(item.map_config);
-					
+              mapStore.addToMapLayerList(selectedData.map_config);
+
               contentStore.setComponentData(arrayIdx,selectedData);
             }
           }
@@ -243,8 +244,8 @@ function shouldDisable(map_config) {
           :config="item"
           mode="halfmap"
           :info-btn="true"
-		  :active-city="item.city"
-		  :select-btn-disabled="true"
+          :active-city="item.city"
+          :select-btn-disabled="true"
           :toggle-disable="shouldDisable(item.map_config)"
           :toggle-on="toggleOn.basicLayer[arrayIdx]"
           @info="
