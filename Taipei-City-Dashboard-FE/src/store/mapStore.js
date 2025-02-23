@@ -169,7 +169,7 @@ export const useMapStore = defineStore("map", {
 					scheme: "tms",
 					tolerance: 0,
 					tiles: [
-						`${'https://geoserver-966481184341.us-central1.run.app'}/geo_server/gwc/service/tms/1.0.0/taipei_vioc:metrotaipei_village@EPSG:900913@pbf/{z}/{x}/{y}.pbf`,
+						`${location.origin}/geo_server/gwc/service/tms/1.0.0/taipei_vioc:metrotaipei_village@EPSG:900913@pbf/{z}/{x}/{y}.pbf`,
 					],
 				})
 				.addLayer(metroTpVillage);
@@ -189,7 +189,7 @@ export const useMapStore = defineStore("map", {
 					scheme: "tms",
 					tolerance: 0,
 					tiles: [
-						`${'https://geoserver-966481184341.us-central1.run.app'}/geo_server/gwc/service/tms/1.0.0/taipei_vioc:metrotaipei_town@EPSG:900913@pbf/{z}/{x}/{y}.pbf`,
+						`${location.origin}/geo_server/gwc/service/tms/1.0.0/taipei_vioc:metrotaipei_town@EPSG:900913@pbf/{z}/{x}/{y}.pbf`,
 					],
 				})
 				.addLayer(metroTpDistrict);
@@ -573,15 +573,15 @@ export const useMapStore = defineStore("map", {
 			const layers = Object.keys(this.deckGlLayer).map((index) => {
 				const l = this.deckGlLayer[index];
 				switch (l.type) {
-					case "ArcLayer":
-						return new ArcLayer(l.config);
-					case "AnimatedArcLayer":
-						return new AnimatedArcLayer({
-							...l.config,
-							coef: this.step / 1000,
-						});
-					default:
-						break;
+				case "ArcLayer":
+					return new ArcLayer(l.config);
+				case "AnimatedArcLayer":
+					return new AnimatedArcLayer({
+						...l.config,
+						coef: this.step / 1000,
+					});
+				default:
+					break;
 				}
 			});
 			this.overlay.setProps({
