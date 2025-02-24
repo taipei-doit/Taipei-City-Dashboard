@@ -50,7 +50,7 @@ const routes = [
 		component: ComponentInfoView,
 	},
 	{
-		path: "/embed/:id",
+		path: "/embed/:id/:city",
 		name: "embed",
 		component: EmbedView,
 	},
