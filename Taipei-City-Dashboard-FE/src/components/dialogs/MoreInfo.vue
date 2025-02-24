@@ -44,8 +44,7 @@ function getLinkTag(link, index) {
         <div class="moreinfo-info-data">
           <h3>
             組件說明（{{
-              ` ID: ${dialogStore.moreInfoContent.id}｜Index:
-											${dialogStore.moreInfoContent.index} `
+              ` ID: ${dialogStore.moreInfoContent.id}｜Index: ${dialogStore.moreInfoContent.index}｜City: ${dialogStore.moreInfoContent.city}`
             }}）
           </h3>
           <p>{{ dialogStore.moreInfoContent.long_desc }}</p>

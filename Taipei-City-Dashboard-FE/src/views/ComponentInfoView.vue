@@ -229,8 +229,8 @@ onMounted(() => {
         </div>
       </div>
       <ReportIssue />
-      <DownloadData />
-      <EmbedComponent />
+      <DownloadData :content="item" />
+      <EmbedComponent :content="item" />
     </div>
 
     <!-- 2. If the page is still loading -->

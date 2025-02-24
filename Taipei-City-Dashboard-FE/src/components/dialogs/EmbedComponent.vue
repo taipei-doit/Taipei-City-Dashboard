@@ -8,13 +8,15 @@ import { useDialogStore } from "../../store/dialogStore";
 
 import DialogContainer from "./DialogContainer.vue";
 
+const props = defineProps(["content"]);
 const dialogStore = useDialogStore();
+const content = computed(() => props.content || dialogStore.moreInfoContent);
 
 const embedTemplate = computed(() => {
 	return `<iframe
-	id="Taipei-City-Dashboard-Component-${dialogStore.moreInfoContent.id}"
-	title="${dialogStore.moreInfoContent.name}"
-	src="https://citydashboard.taipei/embed/${dialogStore.moreInfoContent.id}"
+	id="Taipei-City-Dashboard-Component-${content.value.id}"
+	title="${content.value.name}"
+	src="https://citydashboard.taipei/embed/${content.value.id}/${content.value.city}"
 	width="450"
 	height="400"
 	style="border-radius: 5px"
