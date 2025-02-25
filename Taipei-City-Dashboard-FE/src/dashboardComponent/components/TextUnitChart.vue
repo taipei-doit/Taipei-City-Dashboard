@@ -25,24 +25,24 @@ const props = defineProps([
   >
     <div class="TextUnitChart__container">
       <div
-        v-for="(item, index) in series"
+        v-for="item in series"
         :key="item.name"
         class="TextUnitChart__content"
       >
         <div
           class="TextUnitChart__name"
-          :style="{ color: chart_config.color[0] }"
+          :style="{ color: props.chart_config.color[0] }"
         >
           {{ item.name }}
         </div>
         <div>
           <span
             class="TextUnitChart__value"
-            :style="{ color: chart_config.color[1] }"
+            :style="{ color: props.chart_config.color[1] }"
           >{{ item.data[0] }}</span>
           <span
             class="TextUnitChart__unit"
-            :style="{ color: chart_config.color[2] }"
+            :style="{ color: props.chart_config.color[2] }"
           >{{ item.icon }}</span>
         </div>
       </div>
