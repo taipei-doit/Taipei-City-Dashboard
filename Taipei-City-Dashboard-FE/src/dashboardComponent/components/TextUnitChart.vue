@@ -26,14 +26,14 @@ const props = defineProps([
     <div class="TextUnitChart__container">
       <div
         v-for="(item, index) in series"
-        :key="props.chart_config.categories[index]"
+        :key="item.name"
         class="TextUnitChart__content"
       >
         <div
           class="TextUnitChart__name"
           :style="{ color: chart_config.color[0] }"
         >
-          {{ props.chart_config.categories[index] }}
+          {{ item.name }}
         </div>
         <div>
           <span
@@ -43,7 +43,7 @@ const props = defineProps([
           <span
             class="TextUnitChart__unit"
             :style="{ color: chart_config.color[2] }"
-          >{{ item.name }}</span>
+          >{{ item.icon }}</span>
         </div>
       </div>
     </div>
