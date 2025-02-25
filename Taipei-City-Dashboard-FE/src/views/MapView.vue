@@ -118,7 +118,7 @@ function shouldDisable(map_config) {
           mode="halfmap"
           :info-btn="true"
           :active-city="item.city"
-          select-btn-disabled="true"
+          :select-btn-disabled="true"
           :toggle-disable="shouldDisable(item.map_config)"
           :toggle-on="toggleOn.mapLayer[arrayIdx]"
           @info="
