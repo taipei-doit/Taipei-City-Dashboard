@@ -353,7 +353,8 @@ export const useContentStore = defineStore("content", {
 				this.currentDashboard.index !== "map-layers"
 			) {
 				// In /mapview, map layer components are also present and need to be fetched
-				const hasMetroTaipeiComponent = this.currentDashboard.components.some((data) => { return data.city === 'metrotaipei'});
+				const hasMetroTaipeiComponent = this.currentDashboard.components.some((data) => data.city === 'metrotaipei') ||
+												this.currentDashboardExcluded.components.some((data) => data.city === 'metrotaipei');
 				const city = hasMetroTaipeiComponent ? 'metrotaipei' : 'taipei';
 				this.setMapLayers(city);
 			} else {
