@@ -26,6 +26,7 @@ import MapPopup from "../components/map/MapPopup.vue";
 // Utility Functions or Configs
 import {
 	MapObjectConfig,
+	CityMapView,
 	TaipeiBuilding,
 	// TpDistrict,
 	// TpVillage,
@@ -1072,6 +1073,11 @@ export const useMapStore = defineStore("map", {
 					this.map.resize();
 				}, 200);
 			}
+		},
+		// 4. Update the zoom and center of the map
+		updateMapViewForCity(city) {
+			this.map.setZoom(CityMapView[city].zoom);
+			this.map.setCenter(CityMapView[city].center);
 		},
 
 		/* Map Filtering */

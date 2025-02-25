@@ -1,7 +1,7 @@
 <!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 
 <script setup>
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import VueApexCharts from "vue3-apexcharts";
 
 const props = defineProps([
@@ -21,12 +21,26 @@ const emits = defineEmits([
 	"fly"
 ]);
 
+const isLargeDataSet = computed(() => {
+	return props.series[0].data.length > 20
+})
+
+
 const chartOptions = ref({
 	chart: {
 		stacked: true,
-		toolbar: {
-			show: false,
-		},
+		toolbar: isLargeDataSet.value 
+			? {
+				show: true,
+				tools: {
+					download: false,
+					pan: false,
+					reset: "<p>" + "重置" + "</p>",
+				}
+			  }
+			: {
+				show: false,
+			}
 	},
 	colors: [...props.chart_config.color],
 	dataLabels: {
@@ -60,25 +74,46 @@ const chartOptions = ref({
 			dataPointIndex,
 			w,
 		}) {
-			return (
-				'<div class="chart-tooltip">' +
-				"<h6>" +
-				w.globals.labels[dataPointIndex] +
-				`${
-					props.chart_config.categories
-						? "-" + w.globals.seriesNames[seriesIndex]
-						: ""
-				}` +
-				"</h6>" +
-				"<span>" +
-				series[seriesIndex][dataPointIndex] +
-				` ${props.chart_config.unit}` +
-				"</span>" +
-				"</div>"
-			);
+			if (isLargeDataSet.value) {
+				return (
+					'<div class="chart-tooltip">' +
+						"<h6>" +
+							w.globals.categoryLabels[dataPointIndex] +
+							`${
+								props.chart_config.categories
+									? "-" + w.globals.seriesNames[seriesIndex]
+									: ""
+							}` +
+						"</h6>" +
+						"<span>" +
+							series[seriesIndex][dataPointIndex] +
+							` ${props.chart_config.unit}` +
+						"</span>" +
+					"</div>"
+				);
+			} else {
+				return (
+					'<div class="chart-tooltip">' +
+						"<h6>" +
+							w.globals.labels[dataPointIndex] +
+							`${
+								props.chart_config.categories
+									? "-" + w.globals.seriesNames[seriesIndex]
+									: ""
+							}` +
+						"</h6>" +
+						"<span>" +
+							series[seriesIndex][dataPointIndex] +
+							` ${props.chart_config.unit}` +
+						"</span>" +
+					"</div>"
+				);
+			}
 		},
 	},
 	xaxis: {
+		...(isLargeDataSet.value && { tickPlacement: 'on' }),
+		...(isLargeDataSet.value && { tickAmount: 12 }),
 		axisBorder: {
 			show: false,
 		},

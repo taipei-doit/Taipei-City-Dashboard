@@ -4,14 +4,30 @@ export const MapObjectConfig = {
 	container: "mapboxBox",
 	center: [121.536609, 25.044808],
 	maxBounds: [
-		[121.3870596781498, 24.95733863075891], // Southwest coordinates
-		[121.6998231749096, 25.21179993640203], // Northeast coordinates
+		[121.2825, 24.6961], // Southwest coordinates
+		[122.0073, 25.2979]  // Northeast coordinates
 	],
-	zoom: 12.5,
-	minZoom: 11,
+	zoom: 9,
+	minZoom: 9,
 	maxZoom: 22,
 	projection: "globe", // display the map as a 3D globe
 };
+
+// City Map View Settings
+export const CityMapView = {
+	taipei: {
+		center: [121.56376521148917, 25.086495621435404],
+		zoom: 10,
+	},
+	metrotaipei:{
+		center: [121.64080359050314, 24.980598540245936],
+		zoom: 9,
+	},
+	default: {
+		center: [121.56376521148917, 25.086495621435404],
+		zoom: 10,
+	}
+}
 
 // All map types
 export const mapTypes = {
