@@ -352,19 +352,22 @@ function returnChartComponent(name, svg) {
           </option>
         </template>
       </select>
-      <template v-if="config.chart_config.types.length > 1">
+      <div
+        v-if="config.chart_config.types.length > 1"
+        class="dashboardcomponent-control-group"
+      >
         <button
           v-for="item in config.chart_config.types"
           :key="`${config.index}-${item}-button`"
           :class="{
-            'dashboardcomponent-control-button': true,
-            'dashboardcomponent-control-active': activeChart === item,
+            'dashboardcomponent-control-group-button': true,
+            'dashboardcomponent-control-group-active': activeChart === item,
           }"
           @click="changeActiveChart(item)"
         >
           {{ chartTypes[item] }}
         </button>
-      </template>
+      </div>
     </div>
     <!-- Main Content -->
     <div
@@ -660,38 +663,48 @@ button:hover {
 	&-control {
 		width: 100%;
 		display: flex;
-		justify-content: center;
+		// justify-content: center;
 		align-items: center;
 		// position: absolute;
 		top: 4.2rem;
 		left: 0;
 		z-index: 8;
+		padding: 8px 0;
 
-		&-button {
-			margin: 0 2px;
-			padding: 4px 4px;
-			border-radius: 5px;
-			background-color: rgb(77, 77, 77);
-			opacity: 0.6;
-			color: var(--dashboardcomponent-color-complement-text);
-			font-size: var(--dashboardcomponent-font-s);
-			text-align: center;
-			transition: color 0.2s, opacity 0.2s;
-			user-select: none;
+		&-group {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			margin: 0 auto;
+			transform: translateX(-15%);
 
-			&:hover {
-				opacity: 1;
+			&-button {
+				margin: 0 2px;
+				padding: 4px 4px;
+				border-radius: 5px;
+				background-color: rgb(77, 77, 77);
+				opacity: 0.6;
+				color: var(--dashboardcomponent-color-complement-text);
+				font-size: var(--dashboardcomponent-font-s);
+				text-align: center;
+				transition: color 0.2s, opacity 0.2s;
+				user-select: none;
+	
+				&:hover {
+					opacity: 1;
+					color: white;
+				}
+			}
+	
+			&-active {
+				background-color: var(--dashboardcomponent-color-complement-text);
 				color: white;
 			}
 		}
 
-		&-active {
-			background-color: var(--dashboardcomponent-color-complement-text);
-			color: white;
-		}
-
 		.selectBtn {
 			background-color: var(--dashboardcomponent-color-component-background);
+			padding: 3px;
 
 			&-disabled {
 				cursor: not-allowed;
@@ -704,7 +717,7 @@ button:hover {
 	&-error {
 		height: 75%;
 		position: relative;
-		padding-top: 5%;
+		padding-top: 1%;
 		overflow-y: scroll;
 
 		p {
