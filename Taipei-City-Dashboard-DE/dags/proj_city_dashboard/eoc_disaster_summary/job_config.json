@@ -1,0 +1,37 @@
+{
+  "dag_infos": {
+    "dag_id": "eoc_disaster_summary",
+    "start_date": "2025-02-26",
+    "schedule_interval": "*/5 * * * *",
+    "catchup": false,
+    "tags": ["EOC", "TDX", "台北市", "Taipei-City", "最新災害專案災情資料"],
+    "description": "This dataset contains the latest disaster situation data in Taipei City, including the disaster type, location, time, and severity, for emergency response and disaster management.",
+    "default_args": {
+      "owner": "airflow",
+      "email": ["DEFAULT_EMAIL_LIST"],
+      "email_on_retry": false,
+      "email_on_failure": true,
+      "retries": 1,
+      "retry_delay": 60
+    },
+    "ready_data_db": "postgres_default",
+    "ready_data_default_table": "eoc_disaster_summary_tpe",
+    "ready_data_history_table": "eoc_disaster_summary_tpe_history",
+    "raw_data_db": "postgres_default",
+    "raw_data_table": "",
+    "load_behavior": "replace"
+  },
+  "data_infos": {
+    "name_cn": "EOC最新災害專案災情資料",
+    "airflow_update_freq": "every 5 minutes",
+    "source": "https://www.eocmap.gov.taipei/DisasterOperationSystemWebAPIUnite/api/DoItTaipeiApi/GetDisasterDecisionSummary",
+    "source_type": "消防局 API",
+    "source_dept": "消防局",
+	"gis_format": "Point",
+	"output_coordinate": "EPSG:4326",
+	"is_geometry": 1,
+    "dataset_description": "EOC最新災害專案災情資料",
+    "etl_description": "target url, fill data columns, standardize time",
+    "sensitivity": "public"
+  }
+}
