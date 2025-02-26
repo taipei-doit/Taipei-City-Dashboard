@@ -232,6 +232,7 @@ export const useAdminStore = defineStore("admin", {
 			delete this.currentComponent.map_config;
 
 			const componentId = this.currentComponent.id;
+			const componentCity = this.currentComponent.city;
 			const component_config = JSON.parse(
 				JSON.stringify(this.currentComponent)
 			);
@@ -239,7 +240,7 @@ export const useAdminStore = defineStore("admin", {
 			await http.patch(`/component/${componentId}/chart`, chart_config);
 
 			// 3.3 Update component component config (incl. history config)
-			await http.patch(`/component/${componentId}`, component_config);
+			await http.patch(`/component/${componentId}/${componentCity}`, component_config);
 
 			// 3.4 Update component map config
 			if (map_config[0] !== null) {
