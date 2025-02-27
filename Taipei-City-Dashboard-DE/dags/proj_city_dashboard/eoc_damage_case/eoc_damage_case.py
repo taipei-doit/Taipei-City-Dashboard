@@ -42,10 +42,7 @@ def _transfer(**kwargs):
     default_table = dag_infos.get('ready_data_default_table')
     history_table = dag_infos.get('ready_data_history_table')
     history_table = dag_infos.get('ready_data_history_table')
-    data_infos = kwargs.get('data_infos')
-    URL = data_infos.get('source')
-    GEOMETRY_TYPE = "Point"   
-    FROM_CRS = 4326
+    URL = '''https://www.eocmap.gov.taipei/DisasterOperationSystemWebAPIUnite/api/DoItTaipeiApi/GetDamageCaseData'''
     raw_data = requests.get(URL, proxies=proxies)
     raw_data_json = raw_data.json()
     df = pd.DataFrame(raw_data_json)
