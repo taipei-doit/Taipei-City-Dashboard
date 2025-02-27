@@ -24,12 +24,12 @@
   "data_infos": {
     "name_cn": "EOC最新災害專案災情資料",
     "airflow_update_freq": "every 5 minutes",
-    "source": "https://www.eocmap.gov.taipei/DisasterOperationSystemWebAPIUnite/api/DoItTaipeiApi/GetDisasterDecisionSummary",
+    "source": "https://www.eocmap.gov.taipei/DisasterOperationSystemWebAPIUnite/api/DisasterServiceApi/GetDisasterSummary",
     "source_type": "消防局 API",
     "source_dept": "消防局",
-	"gis_format": "Point",
-	"output_coordinate": "EPSG:4326",
-	"is_geometry": 1,
+    "gis_format": "Point",
+    "output_coordinate": "EPSG:4326",
+    "is_geometry": 1,
     "dataset_description": "EOC最新災害專案災情資料",
     "etl_description": "target url, fill data columns, standardize time",
     "sensitivity": "public"

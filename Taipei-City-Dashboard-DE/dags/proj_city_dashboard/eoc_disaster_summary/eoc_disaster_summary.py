@@ -38,7 +38,7 @@ def _transfer(**kwargs):
     default_table = dag_infos.get('ready_data_default_table')
     history_table = dag_infos.get('ready_data_history_table')
     history_table = dag_infos.get('ready_data_history_table')
-    URL = '''https://www.eocmap.gov.taipei/DisasterOperationSystemWebAPIUnite/api/DoItTaipeiApi/GetDisasterDecisionSummary'''
+    URL = '''https://www.eocmap.gov.taipei/DisasterOperationSystemWebAPIUnite/api/DisasterServiceApi/GetDisasterSummary'''
     GEOMETRY_TYPE = "Point"   
     FROM_CRS = 4326
     raw_data = requests.get(URL, proxies=proxies)
