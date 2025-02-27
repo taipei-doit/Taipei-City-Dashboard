@@ -68,8 +68,7 @@ def _transfer(**kwargs):
     # sele
     gdata['data_time'] = get_tpe_now_time_str()
     # Reshape
-
-    ready_data = gdata.copy()
+    ready_data = gdata.drop(columns=["geometry"])
     print(f"ready_data =========== {ready_data.columns}")
     # Load
 
