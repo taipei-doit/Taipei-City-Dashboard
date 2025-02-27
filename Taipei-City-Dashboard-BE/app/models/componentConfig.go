@@ -49,7 +49,7 @@ type CityComponent struct{
 	Name           string          `json:"name"`
 	ChartConfig    json.RawMessage `json:"chart_config"`
 	HistoryConfig  json.RawMessage `json:"history_config"`
-	MapConfigIDs   pq.Int64Array   `json:"-"`
+	MapConfigIDs   pq.Int64Array   `json:"-"  gorm:"type:integer[]"`
 	MapConfig      json.RawMessage `json:"map_config"`
 	MapFilter      json.RawMessage `json:"map_filter"`
 	TimeFrom       string          `json:"time_from"`
@@ -60,8 +60,8 @@ type CityComponent struct{
 	ShortDesc      string          `json:"short_desc"`
 	LongDesc       string          `json:"long_desc"`
 	UseCase        string          `json:"use_case"`
-	Links          pq.StringArray  `json:"links"`
-	Contributors   pq.StringArray  `json:"contributors"`
+	Links          pq.StringArray  `json:"links" gorm:"type:text[]"`
+	Contributors   pq.StringArray  `json:"contributors" gorm:"type:text[]"`
 	CreatedAt      time.Time       `json:"-"`
 	UpdatedAt      time.Time       `json:"updated_at"`
 	QueryType      string          `json:"query_type"`
