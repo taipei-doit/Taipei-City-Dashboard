@@ -16,7 +16,8 @@ def _transfer(**kwargs):
         "CaseDescription": "路燈上之纜線垂落，請清除以免掉落造成危險。",
         "CaseComplete": true,
         "Wgs84X": 121.566231,
-        "Wgs84Y": 25.0503178
+        "Wgs84Y": 25.0503178,
+        "CaseSerious":false
     }
     '''
     from utils.load_stage import save_geodataframe_to_postgresql,update_lasttime_in_data_to_dataset_info
@@ -61,6 +62,7 @@ def _transfer(**kwargs):
         "CaseComplete": "case_complete",
         "Wgs84X": "lng",
         "Wgs84Y": "lat",
+        "CaseSerious":"case_serious"
         })
     gdata = add_point_wkbgeometry_column_to_df(
         data, x=data["lng"], y=data["lat"], from_crs=FROM_CRS
