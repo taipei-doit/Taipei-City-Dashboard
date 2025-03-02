@@ -15,12 +15,13 @@ import { getComponentDataTimeframe } from "../assets/utilityFunctions/dataTimefr
 
 export const useContentStore = defineStore("content", {
 	state: () => ({
-		// Stores all dashboards data. (used in /dashboard, /mapview)
+		// stores select options for city
 		cityList: [
 			{ name: "台北市", value: "taipei" },
 			// { name: "新北市", value: "newtaipei" },
-			{ name: "雙北市", value: "metrotaipei" },
+			{ name: "雙北", value: "metrotaipei" },
 		],
+		// Stores all dashboards data. (used in /dashboard, /mapview)
 		publicDashboards: [],
 		taipeiDashboards: [],
 		metroTaipeiDashboards: [],
@@ -31,6 +32,7 @@ export const useContentStore = defineStore("content", {
 		mapLayers: [],
 		taipeiMapLayers: [],
 		metroTaipeiMapLayers: [],
+		allMapLayers: [],
 		// Picks out the favorites dashboard
 		favorites: null,
 		// Stores information of the current dashboard
@@ -70,6 +72,9 @@ export const useContentStore = defineStore("content", {
 	actions: {
 		setComponentData(index, component) {
 			this.currentDashboard.components[index] = component;
+		},
+		setMapLayerData(index, component) {
+			this.mapLayers[index] = component;
 		},
 		/* Steps in adding content to the application (/dashboard or /mapview) */
 		// 1. Check the current path and execute actions based on the current path
@@ -282,85 +287,105 @@ export const useContentStore = defineStore("content", {
 		// 4. Call an API for each component to get its chart data and store it
 		// Will call an additional API if the component has history data
 		async setCurrentDashboardChartData() {
-			// 4-1. Loop through all the components of a dashboard
-			for (
+			try {
+			  // 4-1. Loop through all the components of a dashboard
+			  for (
 				let index = 0;
 				index < this.currentDashboard.components?.length;
 				index++
-			) {
+			  ) {
 				const component = this.currentDashboard.components[index];
-
-				// 4-2. Get chart data
-				const response = await http.get(
+		  
+				try {
+				  // 4-2. Get chart data
+				  const response = await http.get(
 					`/component/${component.id}/chart/${this.currentDashboard.city ? `${this.currentDashboard.city}` : `${component.city}`}`,
 					{
-						params: !["static", "current", "demo"].includes(
-							component.time_from
-						)
-							? getComponentDataTimeframe(
-									component.time_from,
-									component.time_to,
-									true
-							  )
-							: {},
+					  params: !["static", "current", "demo"].includes(
+						component.time_from
+					  )
+						? getComponentDataTimeframe(
+							component.time_from,
+							component.time_to,
+							true
+						  )
+						: {},
 					}
-				);
-				this.currentDashboard.components[index].chart_data =
+				  );
+				  
+				  this.currentDashboard.components[index].chart_data =
 					response.data.data;
-
-				if (response.data.categories) {
+		  
+				  if (response.data.categories) {
 					this.currentDashboard.components[
-						index
+					  index
 					].chart_config.categories = response.data.categories;
+				  }
+				} catch (error) {
+				  console.error(`Failed to fetch chart data for component ${component.id}:`, error);
+				  // Set empty chart data to avoid errors in subsequent operations
+				  this.currentDashboard.components[index].chart_data = [];
 				}
-			}
-			for (
+			  }
+			  for (
 				let index = 0;
 				index < this.currentDashboard.components?.length;
 				index++
-			) {
+			  ) {
 				const component = this.currentDashboard.components[index];
+				
 				// 4-3. Get history data if applicable
 				if (
-					component.history_config &&
-					component.history_config.range
+				  component.history_config &&
+				  component.history_config.range
 				) {
-					for (let i in component.history_config.range) {
-						const response = await http.get(
-							`/component/${component.id}/history/${this.currentDashboard.city ? `${this.currentDashboard.city}` : `${component.city}`}`,
-							{
-								params: getComponentDataTimeframe(
-									component.history_config.range[i],
-									"now",
-									true
-								),
-							}
-						);
-
-						if (i === "0") {
-							this.currentDashboard.components[
-								index
-							].history_data = [];
+				  for (let i in component.history_config.range) {
+					try {
+					  const response = await http.get(
+						`/component/${component.id}/history/${this.currentDashboard.city ? `${this.currentDashboard.city}` : `${component.city}`}`,
+						{
+						  params: getComponentDataTimeframe(
+							component.history_config.range[i],
+							"now",
+							true
+						  ),
 						}
+					  );
+					  if (i === "0") {
 						this.currentDashboard.components[
 							index
-						].history_data.push(response.data.data);
+						].history_data = [];
 					}
+					  this.currentDashboard.components[index].history_data.push(
+						response.data.data
+					  );
+					} catch (error) {
+					  console.error(`Failed to fetch history data for component ${component.id} (range ${i}):`, error);
+					  // Add empty data to maintain data structure consistency
+					  this.currentDashboard.components[index].history_data.push([]);
+					}
+				  }
 				}
-			}
-			if (
+			  }
+			  if (
 				this.currentDashboard.mode === "/mapview" &&
 				this.currentDashboard.index !== "map-layers"
-			) {
+			  ) {
 				// In /mapview, map layer components are also present and need to be fetched
-				const hasMetroTaipeiComponent = this.currentDashboard.components.some((data) => data.city === 'metrotaipei') ||
-												this.currentDashboardExcluded.components.some((data) => data.city === 'metrotaipei');
-				const city = hasMetroTaipeiComponent ? 'metrotaipei' : 'taipei';
-				this.setMapLayers(city);
-			} else {
+				try {
+				  await this.setMapLayers(this.currentDashboard.city || "metrotaipei");
+				} catch (error) {
+				  console.error("Failed to fetch map layers:", error);
+				  this.loading = false;
+				}
+			  } else {
 				this.loading = false;
+			  }
+			} catch (error) {
+			  console.error("Error setting dashboard chart data:", error);
+			  this.loading = false;
 			}
-		},
+		  },
 		// 5. Call an API to get contributor data (result consists of id, name, link)
 		setContributors() {
 			http.get(`/contributor/`)
@@ -384,45 +409,67 @@ export const useContentStore = defineStore("content", {
 		},
 		// 6. Call an API to get map layer component info and store it (if in /mapview)
 		async setMapLayers(city) {
-			const CITY_MAP = {
-				taipei: 'taipeiMapLayers',
-				metrotaipei: 'metroTaipeiMapLayers',
-			};
-
 			const cityValue = this.currentDashboard.city || city;
-
-			if (!CITY_MAP[cityValue]) {
+    
+			// If not a valid city value, set empty mapLayers
+			if (!['taipei', 'metrotaipei'].includes(cityValue)) {
 				this.mapLayers = [];
+				this.loading = false;
 				return;
 			}
-			
-			if (this[CITY_MAP[cityValue]].length > 0) {
-				this.mapLayers = this[CITY_MAP[cityValue]];
-			} else {
+
+			try {
+				if (this.allMapLayers.length === 0) {
+					// No layer data yet, fetch from API
+					const response = await http.get(`/dashboard/map-layers`);
+					this.allMapLayers = response.data.data || [];
+					console.warn('allMapLayers', this.allMapLayers);
+					
+					// Get chart_data for all layers
+					await this.setMapLayersContent(cityValue);
+				} else {
+					// Layer data already exists, filter directly by city
+					this.filterMapLayersByCity(cityValue);
+					console.warn('filterMapLayersByCity');
+					this.loading = false;
+				}
+			} catch (error) {
+				console.error("Error in setMapLayers:", error);
 				this.mapLayers = [];
-				const response = await http.get(`/dashboard/map-layers`);
-				
-				this.taipeiMapLayers = response.data.data.filter(item => item.city === "taipei");
-				this.metroTaipeiMapLayers = response.data.data.filter(item => item.city === "metrotaipei");
-				
-				this.mapLayers = this[CITY_MAP[cityValue]];
+				this.loading = false;
 			}
-		
-			this.setMapLayersContent();
+		},
+		// Filter layers by city
+		filterMapLayersByCity(city) {
+			// Filter layers of the specified city from allMapLayers
+			this.mapLayers = this.allMapLayers.filter(item => item.city === city);
 		},
 		// 7. Call an API for each map layer component to get its chart data and store it (if in /mapview)
-		async setMapLayersContent() {
-			for (let index = 0; index < this.mapLayers.length; index++) {
-				const component = this.mapLayers[index];
-
-				const response = await http.get(
-					`/component/${component.id}/chart`
-				);
-
-				this.mapLayers[index].chart_data = response.data.data;
+		async setMapLayersContent(city) {
+			try {
+			  for (let index = 0; index < this.allMapLayers.length; index++) {
+				const component = this.allMapLayers[index];
+				
+				try {
+				  const response = await http.get(
+					`/component/${component.id}/chart/${component.city}`
+				  );
+				  
+				  this.allMapLayers[index].chart_data = response.data.data;
+				} catch (error) {
+				  console.error(`Failed to fetch data for component ${component.id}:`, error);
+				  // Continue processing the next layer when an error occurs
+				}
+			  }
+			  
+			  // Filter layers by the specified city
+			  this.filterMapLayersByCity(city);
+			} catch (error) {
+			  console.error("Error occurred during layer data processing:", error);
+			} finally {
+			  this.loading = false;
 			}
-			this.loading = false;
-		},
+		  },
 
 		/* Route Change Methods */
 		// 1. Called whenever route changes except for between /dashboard and /mapview

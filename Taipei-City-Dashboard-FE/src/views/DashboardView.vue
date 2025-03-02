@@ -9,7 +9,6 @@ Testing: Jack Huang (Data Scientist), Ian Huang (Data Analysis Intern)
 <!-- Department of Information Technology, Taipei City Government -->
 
 <script setup>
-import { computed } from "vue";
 import DashboardComponent from "../dashboardComponent/DashboardComponent.vue";
 import router from "../router";
 import { useContentStore } from "../store/contentStore";
@@ -22,11 +21,6 @@ import ReportIssue from "../components/dialogs/ReportIssue.vue";
 const contentStore = useContentStore();
 const dialogStore = useDialogStore();
 const authStore = useAuthStore();
-
-const activeCity = computed({
-	get: () => contentStore.currentDashboard.city,
-	set: () => {},
-});
 
 function handleOpenSettings() {
 	contentStore.editDashboard = JSON.parse(
@@ -68,7 +62,7 @@ function handleMoreInfo(item) {
       mode="half"
       :info-btn="true"
       :active-city="item.city"
-      :select-btn-disabled="true"
+      :select-btn-disabled="contentStore.currentDashboard.city === 'taipei'"
       :favorite-btn="authStore.token ? true : false"
       :is-favorite="contentStore.favorites?.components.includes(item.id)"
       @favorite="
@@ -130,7 +124,6 @@ function handleMoreInfo(item) {
         });
 
         if (selectedData) {
-          activeCity = city;
           contentStore.setComponentData(arrayIdx,selectedData);
         }
       }
