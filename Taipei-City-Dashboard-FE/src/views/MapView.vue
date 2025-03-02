@@ -26,11 +26,6 @@ const dialogStore = useDialogStore();
 const mapStore = useMapStore();
 const route = useRoute();
 
-const activeCity = computed({
-	get: () => contentStore.currentDashboard.city,
-	set: () => {},
-});
-
 const toggleOn = ref({
 	hasMap: [],
 	noMap: [],
@@ -49,7 +44,6 @@ const parseMapLayers = computed(() => {
 
 	return { hasMap: hasMap, noMap: noMap };
 });
-
 
 watch( () => route.query.index, (newIndex, oldIndex) => {
 	if (newIndex !== oldIndex) {
@@ -118,7 +112,7 @@ function shouldDisable(map_config) {
           mode="halfmap"
           :info-btn="true"
           :active-city="item.city"
-          :select-btn-disabled="true"
+          :select-btn-disabled="contentStore.currentDashboard.city === 'taipei'"
           :toggle-disable="shouldDisable(item.map_config)"
           :toggle-on="toggleOn.mapLayer[arrayIdx]"
           @info="
@@ -156,6 +150,23 @@ function shouldDisable(map_config) {
             (map_config) => {
               mapStore.clearByLayerFilter(map_config);
             }
+          "
+          @change-city="(city)=> {
+            const selectedData = contentStore.cityDashboard.components.find((data) => {
+              if (data.index === item.index && data.city === city) {
+                return data
+              }
+            });
+
+            if (selectedData) {
+
+              mapStore.clearByParamFilter(item.map_config);
+              mapStore.turnOffMapLayerVisibility(item.map_config);
+              mapStore.addToMapLayerList(selectedData.map_config);
+
+              contentStore.setComponentData(arrayIdx,selectedData);
+            }
+          }
           "
         />
       </div>
@@ -226,7 +237,6 @@ function shouldDisable(map_config) {
             });
 
             if (selectedData) {
-              activeCity = city;
 
               mapStore.clearByParamFilter(item.map_config);
               mapStore.turnOffMapLayerVisibility(item.map_config);
@@ -245,7 +255,7 @@ function shouldDisable(map_config) {
           mode="halfmap"
           :info-btn="true"
           :active-city="item.city"
-          :select-btn-disabled="true"
+          :select-btn-disabled="contentStore.currentDashboard.city === 'taipei'"
           :toggle-disable="shouldDisable(item.map_config)"
           :toggle-on="toggleOn.basicLayer[arrayIdx]"
           @info="
@@ -284,6 +294,22 @@ function shouldDisable(map_config) {
               mapStore.clearByLayerFilter(map_config);
             }
           "
+          @change-city="(city)=> {
+            const selectedData = contentStore.allMapLayers.find((data) => {
+              if (data.index === item.index && data.city === city) {
+                return data
+              }
+            });
+
+            if (selectedData) {
+              mapStore.clearByParamFilter(item.map_config);
+              mapStore.turnOffMapLayerVisibility(item.map_config);
+              mapStore.addToMapLayerList(selectedData.map_config);
+
+              contentStore.setMapLayerData(arrayIdx,selectedData);
+            }
+          }
+          "
         />
         <h2 v-if="parseMapLayers.noMap?.length > 0">
           無空間資料組件
@@ -316,7 +342,7 @@ function shouldDisable(map_config) {
             });
             const componentIndex = contentStore.currentDashboard.components.findIndex((data) => data.index === item.index && data.city === item.city);
             if (selectedData && componentIndex !== -1) {
-              activeCity = city;
+
               contentStore.setComponentData(componentIndex, selectedData);
             }
           }

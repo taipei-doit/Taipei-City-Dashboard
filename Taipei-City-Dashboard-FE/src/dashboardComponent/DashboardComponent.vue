@@ -100,6 +100,7 @@ const activeChart = ref(props.config.chart_config.types[0]);
 const activeCity = computed({
 	get: () => props.activeCity,
 	set: (value) => {
+		toggleOn.value = true;
 		emits("changeCity", value);
 	},
 });
@@ -160,10 +161,6 @@ const tooltipPosition = computed(() => {
 	};
 });
 
-function changeActiveCity(cityName) {
-	activeCity.value = cityName;
-	toggleOn.value = true;
-}
 function changeActiveChart(chartName) {
 	if (
 		props.mode === "map" &&
@@ -341,7 +338,6 @@ function returnChartComponent(name, svg) {
         class="selectBtn"
         :class="{'selectBtn-disabled': selectBtnDisabled}"
         :disabled="selectBtnDisabled"
-        @change="(e)=> changeActiveCity((e.target).value)"
       >
         <template
           v-for="city in contentStore.cityList"
