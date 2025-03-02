@@ -29,6 +29,9 @@ const isLargeDataSet = computed(() => {
 const chartOptions = ref({
 	chart: {
 		stacked: true,
+		zoom: {
+			allowMouseWheelZoom: false,
+		},
 		toolbar: isLargeDataSet.value 
 			? {
 				show: true,
@@ -36,6 +39,8 @@ const chartOptions = ref({
 					download: false,
 					pan: false,
 					reset: "<p>" + "重置" + "</p>",
+					zoomin: false,
+					zoomout: false,
 				}
 			  }
 			: {
@@ -176,7 +181,7 @@ function handleDataSelection(_e, _chartContext, config) {
     <VueApexCharts
       type="bar"
       width="100%"
-      height="270px"
+      height="250px"
       :options="chartOptions"
       :series="series"
       @data-point-selection="handleDataSelection"
