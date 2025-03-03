@@ -30,8 +30,7 @@ export const useContentStore = defineStore("content", {
 		components: [],
 		// Picks out the components that are map layers and stores them here
 		mapLayers: [],
-		taipeiMapLayers: [],
-		metroTaipeiMapLayers: [],
+		// Stores all map layer components data for cityList change
 		allMapLayers: [],
 		// Picks out the favorites dashboard
 		favorites: null,
@@ -107,10 +106,9 @@ export const useContentStore = defineStore("content", {
 				this.setDashboards();
 				return;
 			}
-			// 1-5. If all info is present, skip steps 2, 3, 5 and call the setCurrentDashboardContent method (4.)
+			// 1-5. If all info is present, skip steps 2, 3, 5 and call the setCurrentDashboardAllContent method (3.)
 			this.currentDashboard.components = [];
-			this.storeCurrentDashboardAllContentAndChartData();
-			this.setCurrentDashboardContent();
+			this.setCurrentDashboardAllContent();
 		},
 		// 2. Call an API to get all dashboard info and reroute the user to the first dashboard in the list
 		async setDashboards(onlyDashboard = false) {
@@ -152,89 +150,11 @@ export const useContentStore = defineStore("content", {
 				});
 			}
 			
-			this.storeCurrentDashboardAllContentAndChartData();
-			// After getting dashboard info, call the setCurrentDashboardContent (3.) method to get component info
-			this.setCurrentDashboardContent();
+			// After getting dashboard info, call the setCurrentDashboardAllContent (3.) method to get component info
+			this.setCurrentDashboardAllContent();
 		},
-		async storeCurrentDashboardAllContentAndChartData() {
-
-			// 針對目前index 取得不分city的資料
-			const response = await http.get(`/dashboard/${this.currentDashboard.index}`);
-
-			this.cityDashboard.components = response.data.data;
-
-			// get chart data
-			for (
-				let index = 0;
-				index < this.cityDashboard.components?.length;
-				index++
-			) {
-				const component = this.cityDashboard.components[index];
-
-				const response = await http.get(
-					`/component/${component.id}/chart/${component.city}`,
-					{
-						params: !["static", "current", "demo"].includes(
-							component.time_from
-						)
-							? getComponentDataTimeframe(
-									component.time_from,
-									component.time_to,
-									true
-							  )
-							: {},
-					}
-				);
-
-				this.cityDashboard.components[index].chart_data =
-					response.data.data;
-				
-				if (response.data.categories) {
-					this.cityDashboard.components[
-						index
-					].chart_config.categories = response.data.categories;
-				}
-			}
-
-			// get history data
-			for (
-				let index = 0;
-				index < this.cityDashboard.components?.length;
-				index++
-			) {
-				const component = this.cityDashboard.components[index];
-				// Get history data if applicable
-				if (
-					component.history_config &&
-					component.history_config.range
-				) {
-					for (let i in component.history_config.range) {
-						const response = await http.get(
-							`/component/${component.id}/history/${component.city}`,
-							{
-								params: getComponentDataTimeframe(
-									component.history_config.range[i],
-									"now",
-									true
-								),
-							}
-						);
-
-						if (i === "0") {
-							this.cityDashboard.components[
-								index
-							].history_data = [];
-						}
-						this.cityDashboard.components[
-							index
-						].history_data.push(response.data.data);
-					}
-				}
-			}
-		},
-
-		// 3. Finds the info for the current dashboard based on the index and adds it to "currentDashboard"
-		async setCurrentDashboardContent() {
+		// 3. Call an API to get all component info of the current index dashboard not filtered by city and store it
+		async setCurrentDashboardAllContent() {
 			const dashboardSources = {
 				taipei: this.taipeiDashboards,
 				metrotaipei: this.metroTaipeiDashboards,
@@ -252,25 +172,131 @@ export const useContentStore = defineStore("content", {
 				});
 				return;
 			}
+
 			this.currentDashboard.name = currentDashboardInfo.name;
 			this.currentDashboard.icon = currentDashboardInfo.icon;
 
-			const response = await http.get(
-				`/dashboard/${this.currentDashboard.index}`
-			);
+			// get dashboard index data
+			try {
+				// 針對目前index 取得不分city的資料
+				const response = await http.get(`/dashboard/${this.currentDashboard.index}`);
+				this.cityDashboard.components = response.data.data || [];
+			} catch (error) {
+				console.error("Error getting dashboard index data:",error);
+			}
+			this.setCurrentDashboardAllChartData()
+		},
+		// 4. Call an API for each component to get its chart data and store it
+		// Will call an additional API if the component has history data
+		async setCurrentDashboardAllChartData() {
+					
+			try {
+				// 4-1. Loop through all the components of a dashboard
+				for (
+					let index = 0;
+					index < this.cityDashboard.components?.length;
+					index++
+				) {
+					const component = this.cityDashboard.components[index];
+					try {
+						// 4-2. Get chart data
+						const response = await http.get(
+							`/component/${component.id}/chart/${component.city}`,
+							{
+								params: !["static", "current", "demo"].includes(
+									component.time_from
+								)
+									? getComponentDataTimeframe(
+											component.time_from,
+											component.time_to,
+											true
+									)
+									: {},
+							}
+						);
 
-			if (response.data.data) {
-				const currentCityData = response.data.data.filter(item => item.city === this.currentDashboard.city);
-				const notCurrentCityData = response.data.data.filter(item => item.city !== this.currentDashboard.city);
+						this.cityDashboard.components[index].chart_data =
+							response.data.data;
+						
+						if (response.data.categories) {
+							this.cityDashboard.components[
+								index
+							].chart_config.categories = response.data.categories;
+						}
+					} catch (error) {
+						console.error(`Failed to fetch chart data for component ${component.id}:`, error);
+						// Set empty chart data to avoid errors in subsequent operations
+						this.cityDashboard.components[index].chart_data = [];
+						
+						this.loading = false;
+					}
+					
+				}
+				for (
+					let index = 0;
+					index < this.cityDashboard.components?.length;
+					index++
+				) {
+					const component = this.cityDashboard.components[index];
+					// Get history data if applicable
+					if (
+						component.history_config &&
+						component.history_config.range
+					) {
+						for (let i in component.history_config.range) {
+							try {
+								const response = await http.get(
+									`/component/${component.id}/history/${component.city}`,
+									{
+										params: getComponentDataTimeframe(
+											component.history_config.range[i],
+											"now",
+											true
+										),
+									}
+								);
+	
+								if (i === "0") {
+									this.cityDashboard.components[
+										index
+									].history_data = [];
+								}
+								this.cityDashboard.components[
+									index
+								].history_data.push(response.data.data);
+							} catch (error) {
+								console.error(`Failed to fetch history data for component ${component.id} (range ${i}):`, error);
+								// Add empty data to maintain data structure consistency
+								this.cityDashboard.components[index].history_data.push([]);
+							}
+						}
+					}
+				}
+			} catch (error) {
+				console.error("Error setting dashboard chart data:", error);
+				this.loading = false;
+			}
+			this.filterCurrentDashboardContent();
+		},
+		// 5. filter the info for the current dashboard based on the index and city and adds it to "currentDashboard"
+		async filterCurrentDashboardContent() {
+			const {components} = this.cityDashboard
 
+			if (components.length > 0) {
+				const currentCityData = components.filter(item => item.city === this.currentDashboard.city);
+				const notCurrentCityData = components.filter(item => item.city !== this.currentDashboard.city);
+
+				// If city is defined, filter components by city
 				if (this.currentDashboard.city) {
 					this.currentDashboard.components = currentCityData;
 					this.currentDashboardExcluded.components = notCurrentCityData;
 				} else {
-					const uniqueData = [...new Map(response.data.data.map(item => [item.id, item])).values()];
+					// Is personal dashboard
+
+					const uniqueData = [...new Map(components.map(item => [item.id, item])).values()];
 
 					// 找出被排除的重複資料（city 不同的資料）
-					const excludedData = response.data.data.filter(item => {
+					const excludedData = components.filter(item => {
 						const uniqueItem = uniqueData.find(u => u.id === item.id);
 						return uniqueItem && uniqueItem.city !== item.city;
 					});
@@ -282,111 +308,22 @@ export const useContentStore = defineStore("content", {
 				this.loading = false;
 				return;
 			}
-			this.setCurrentDashboardChartData();
-		},
-		// 4. Call an API for each component to get its chart data and store it
-		// Will call an additional API if the component has history data
-		async setCurrentDashboardChartData() {
-			try {
-			  // 4-1. Loop through all the components of a dashboard
-			  for (
-				let index = 0;
-				index < this.currentDashboard.components?.length;
-				index++
-			  ) {
-				const component = this.currentDashboard.components[index];
-		  
-				try {
-				  // 4-2. Get chart data
-				  const response = await http.get(
-					`/component/${component.id}/chart/${this.currentDashboard.city ? `${this.currentDashboard.city}` : `${component.city}`}`,
-					{
-					  params: !["static", "current", "demo"].includes(
-						component.time_from
-					  )
-						? getComponentDataTimeframe(
-							component.time_from,
-							component.time_to,
-							true
-						  )
-						: {},
-					}
-				  );
-				  
-				  this.currentDashboard.components[index].chart_data =
-					response.data.data;
-		  
-				  if (response.data.categories) {
-					this.currentDashboard.components[
-					  index
-					].chart_config.categories = response.data.categories;
-				  }
-				} catch (error) {
-				  console.error(`Failed to fetch chart data for component ${component.id}:`, error);
-				  // Set empty chart data to avoid errors in subsequent operations
-				  this.currentDashboard.components[index].chart_data = [];
-				}
-			  }
-			  for (
-				let index = 0;
-				index < this.currentDashboard.components?.length;
-				index++
-			  ) {
-				const component = this.currentDashboard.components[index];
-				
-				// 4-3. Get history data if applicable
-				if (
-				  component.history_config &&
-				  component.history_config.range
-				) {
-				  for (let i in component.history_config.range) {
-					try {
-					  const response = await http.get(
-						`/component/${component.id}/history/${this.currentDashboard.city ? `${this.currentDashboard.city}` : `${component.city}`}`,
-						{
-						  params: getComponentDataTimeframe(
-							component.history_config.range[i],
-							"now",
-							true
-						  ),
-						}
-					  );
-					  if (i === "0") {
-						this.currentDashboard.components[
-							index
-						].history_data = [];
-					}
-					  this.currentDashboard.components[index].history_data.push(
-						response.data.data
-					  );
-					} catch (error) {
-					  console.error(`Failed to fetch history data for component ${component.id} (range ${i}):`, error);
-					  // Add empty data to maintain data structure consistency
-					  this.currentDashboard.components[index].history_data.push([]);
-					}
-				  }
-				}
-			  }
-			  if (
+			if (
 				this.currentDashboard.mode === "/mapview" &&
 				this.currentDashboard.index !== "map-layers"
-			  ) {
+			) {
 				// In /mapview, map layer components are also present and need to be fetched
 				try {
-				  await this.setMapLayers(this.currentDashboard.city || "metrotaipei");
+					await this.setMapLayers(this.currentDashboard.city || "metrotaipei");
 				} catch (error) {
-				  console.error("Failed to fetch map layers:", error);
-				  this.loading = false;
+					console.error("Failed to fetch map layers:", error);
+					this.loading = false;
 				}
-			  } else {
+			} else {
 				this.loading = false;
-			  }
-			} catch (error) {
-			  console.error("Error setting dashboard chart data:", error);
-			  this.loading = false;
 			}
-		  },
-		// 5. Call an API to get contributor data (result consists of id, name, link)
+		},
+		// 6. Call an API to get contributor data (result consists of id, name, link)
 		setContributors() {
 			http.get(`/contributor/`)
 				.then((rs) => {
@@ -407,7 +344,7 @@ export const useContentStore = defineStore("content", {
 				})
 				.catch((e) => console.error(e));
 		},
-		// 6. Call an API to get map layer component info and store it (if in /mapview)
+		// 7. Call an API to get map layer component info and store it (if in /mapview)
 		async setMapLayers(city) {
 			const cityValue = this.currentDashboard.city || city;
     
@@ -423,14 +360,12 @@ export const useContentStore = defineStore("content", {
 					// No layer data yet, fetch from API
 					const response = await http.get(`/dashboard/map-layers`);
 					this.allMapLayers = response.data.data || [];
-					console.warn('allMapLayers', this.allMapLayers);
 					
 					// Get chart_data for all layers
 					await this.setMapLayersContent(cityValue);
 				} else {
 					// Layer data already exists, filter directly by city
 					this.filterMapLayersByCity(cityValue);
-					console.warn('filterMapLayersByCity');
 					this.loading = false;
 				}
 			} catch (error) {
@@ -444,7 +379,7 @@ export const useContentStore = defineStore("content", {
 			// Filter layers of the specified city from allMapLayers
 			this.mapLayers = this.allMapLayers.filter(item => item.city === city);
 		},
-		// 7. Call an API for each map layer component to get its chart data and store it (if in /mapview)
+		// 8. Call an API for each map layer component to get its chart data and store it (if in /mapview)
 		async setMapLayersContent(city) {
 			try {
 			  for (let index = 0; index < this.allMapLayers.length; index++) {
@@ -469,7 +404,7 @@ export const useContentStore = defineStore("content", {
 			} finally {
 			  this.loading = false;
 			}
-		  },
+		},
 
 		/* Route Change Methods */
 		// 1. Called whenever route changes except for between /dashboard and /mapview
