@@ -30,13 +30,14 @@ const availableComponents = computed(() => {
 async function handleSearch() {
 	const response = await http.get(`/component/`, {
 		params: {
-			pagesize: 100,
+			pagesize: 200,
 			searchbyindex: searchIndex.value,
 			searchbyname: searchName.value,
-			city: contentStore.currentDashboard.city
 		},
 	});
-	allComponents.value = response.data.data;
+	const data = response.data.data || [];
+	const uniqueData = [...new Map(data.map(item => [item.id, item])).values()];
+	allComponents.value = uniqueData;
 	contentStore.loading = false;
 }
 function handleSubmit() {
