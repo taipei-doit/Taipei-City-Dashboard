@@ -233,15 +233,18 @@ function returnChartComponent(name, svg) {
 
 <template>
   <div
-    :class="{
-      dashboardcomponent: true,
-      mapclosed: mode.includes('map') && !toggleOn,
-      mapopen: mode === 'map' && toggleOn,
-      halfmapopen: mode === 'halfmap' && toggleOn,
-      half: mode === 'half',
-      large: mode === 'large',
-      preview: mode === 'preview',
-    }"
+    :class="[
+      {
+        dashboardcomponent: true,
+        mapclosed: mode.includes('map') && !toggleOn,
+        mapopen: mode === 'map' && toggleOn,
+        halfmapopen: mode === 'halfmap' && toggleOn,
+        half: mode === 'half',
+        large: mode === 'large',
+        preview: mode === 'preview',
+      },
+      mode === 'preview' ? `city-${config.city}` : ''
+    ]"
     :style="style"
   >
     <!-- Header -->
@@ -370,8 +373,14 @@ function returnChartComponent(name, svg) {
       v-if="mode === 'preview'"
       class="preview-content"
     >
-      <div class="preview-content-id">
-        <p>Index: {{ props.config.index }}</p>
+      <div
+        class="preview-content-id"
+        :class="`city-${config.city}`"
+      >
+        <p>City: {{ props.config.city }}</p>
+        <p :title="props.config.index">
+          Index: {{ props.config.index }}
+        </p>
       </div>
       <div class="preview-content-charts">
         <img
@@ -895,10 +904,13 @@ button:hover {
 			padding: 0 4px;
 			border-radius: 5px;
 			border: 1px dashed var(--dashboardcomponent-color-complement-text);
+			white-space: nowrap;
+			margin-right: 4px;
 
 			p {
 				font-size: var(--dashboardcomponent-font-s);
 				color: var(--dashboardcomponent-color-complement-text);
+				text-overflow: ellipsis;
 			}
 		}
 
@@ -914,6 +926,12 @@ button:hover {
 				);
 			}
 		}
+	}
+}
+
+.city {
+	&-metrotaipei {
+		background-color: #3c3f43;
 	}
 }
 </style>
