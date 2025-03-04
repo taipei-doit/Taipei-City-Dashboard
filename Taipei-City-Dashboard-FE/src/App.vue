@@ -56,7 +56,7 @@ const formattedTimeToUpdate = computed(() => {
 
 function reloadChartData() {
 	if (!["dashboard", "mapview"].includes(authStore.currentPath)) return;
-	contentStore.setCurrentDashboardChartData();
+	contentStore.setCurrentDashboardAllChartData();
 	timeToUpdate.value = frequency.value;
 
 	if (isMappedToUpdateBoards.value) {

@@ -88,8 +88,7 @@ function toggleSwitchBtn(value, Btn, BtnIndex) {
 }
 
 function shouldDisable(map_config) {
-	const allMapLayerIds = map_config.map((el) => `${el.index}-${el.type}`);
-
+	const allMapLayerIds = map_config.map((el) => `${el.index}-${el.type}-${el.city}`);
 	return (
 		mapStore.loadingLayers.filter((el) => allMapLayerIds.includes(el))
 			.length > 0
