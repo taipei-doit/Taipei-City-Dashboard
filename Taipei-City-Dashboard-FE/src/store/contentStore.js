@@ -424,8 +424,14 @@ export const useContentStore = defineStore("content", {
 				params,
 			});
 
-			// Remove duplicates using Map, keeping the last occurrence of each id
-			const uniqueData = [...new Map(response.data.data.map(item => [item.id, item])).values()];
+			const uniqueData = [...new Map(response.data.data
+				// Sort the data to ensure that items with city 'metrotaipei' are at the end
+				.sort((a) => a.city === 'metrotaipei' ? 1 : -1)
+				// Create a map with item.id as the key to remove duplicates
+				.map(item => [item.id, item]))
+				// Convert the map values back to an array
+				.values()
+			]; 
 
 			this.components = uniqueData;
 			this.loading = false;
