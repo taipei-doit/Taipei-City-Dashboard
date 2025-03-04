@@ -559,6 +559,10 @@ button:hover {
 			align-items: center;
 			font-size: var(--dashboardcomponent-font-m);
 			color: var(--dashboardcomponent-color-normal-text);
+
+			.componenttag {
+				flex-shrink: 0;
+			}
 		}
 
 		h4 {

@@ -22,7 +22,7 @@ const emits = defineEmits([
 ]);
 
 const isLargeDataSet = computed(() => {
-	return props.series[0].data.length > 20
+	return props.series[0].data.length > 12
 })
 
 
