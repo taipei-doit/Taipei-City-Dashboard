@@ -21,7 +21,7 @@ const authStore = useAuthStore();
 
 const tabLink = computed(() => {
 	const isAdminPath = authStore.currentPath === "admin";
-	const cityParam = props.city ? `${isAdminPath ? '?' : '&'}city=${props.city}` : '';
+	const cityParam = props.city ? `${isAdminPath ? "?" : "&"}city=${props.city}` : "";
 	return isAdminPath
 		? `/admin/${props.index}${cityParam}`
 		: `${route.path}?index=${props.index}${cityParam}`;
@@ -45,7 +45,7 @@ const linkActiveOrNot = computed(() => {
     :to="tabLink"
     :class="{ sidebartab: true, 'sidebartab-active': linkActiveOrNot }"
   >
-    <span>{{ icon }}</span>
+    <span :title="!expanded ? title : ''">{{ icon }}</span>
     <h3 v-if="expanded">
       {{ title }}
     </h3>

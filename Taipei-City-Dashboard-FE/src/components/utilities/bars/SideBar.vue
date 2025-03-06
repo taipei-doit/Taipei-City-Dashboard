@@ -17,6 +17,14 @@ const authStore = useAuthStore();
 // The expanded state is also stored in localstorage to retain the setting after refresh
 const isExpanded = ref(true);
 
+// The collapsed states are for each dashboard
+const collapsedStates = ref({
+	favorites: false,
+	personal: false,
+	taipei: false,
+	metroTaipei: false,
+});
+
 function handleOpenAddDashboard() {
 	dialogStore.addEdit = "add";
 	dialogStore.showDialog("addEditDashboards");
@@ -28,6 +36,15 @@ function toggleExpand() {
 	if (!isExpanded.value) {
 		mapStore.resizeMap();
 	}
+}
+
+function toggleCollapse(cities) {
+	cities = [cities].flat();
+	const allCollapsed = cities.every((city) => collapsedStates.value[city]);
+
+	cities.forEach((city) => {
+		collapsedStates.value[city] = !allCollapsed;
+	});
 }
 
 onMounted(() => {
@@ -50,7 +67,7 @@ onMounted(() => {
   >
     <button
       class="sidebar-collapse-button"
-      :class="{notExpanded: !isExpanded}"
+      :class="{ notExpanded: !isExpanded }"
       @click="toggleExpand"
     >
       <span>{{
@@ -60,17 +77,28 @@ onMounted(() => {
       }}</span>
     </button>
     <div v-if="authStore.token">
-      <h2>{{ isExpanded ? `我的最愛` : `最愛` }}</h2>
-      <SideBarTab
-        icon="favorite"
-        title="收藏組件"
-        :expanded="isExpanded"
-        :index="contentStore.favorites?.index"
-      />
+      <h1 @click="toggleCollapse(['favorites', 'personal'])">
+        {{ isExpanded ? `私人儀表板 ` : `私人` }}
+      </h1>
+      <h2 @click="toggleCollapse('favorites')">
+        {{ isExpanded ? `我的最愛` : `最愛` }}
+      </h2>
+      <transition name="collapse">
+        <template v-if="!collapsedStates.favorites">
+          <SideBarTab
+            icon="favorite"
+            title="收藏組件"
+            :expanded="isExpanded"
+            :index="contentStore.favorites?.index"
+          />
+        </template>
+      </transition>
       <div class="sidebar-sub-add">
-        <h2>{{ isExpanded ? `個人儀表板 ` : `個人` }}</h2>
+        <h2 @click="toggleCollapse('personal')">
+          {{ isExpanded ? `個人儀表板 ` : `個人` }}
+        </h2>
         <button
-          v-if="isExpanded"
+          v-if="isExpanded && !collapsedStates.personal"
           @click="handleOpenAddDashboard"
         >
           <span>add_circle_outline</span>新增
@@ -86,57 +114,71 @@ onMounted(() => {
       >
         <p>{{ isExpanded ? `尚無個人儀表板 ` : `尚無` }}</p>
       </div>
-      <SideBarTab
-        v-for="item in contentStore.personalDashboards.filter(
-          (item) => item.icon !== 'favorite'
-        )"
-        :key="item.index"
-        :icon="item.icon"
-        :title="item.name"
-        :index="item.index"
-        :expanded="isExpanded"
-      />
+      <transition name="collapse">
+        <div
+          v-if="
+            !collapsedStates.personal &&
+              contentStore.personalDashboards?.length > 0
+          "
+        >
+          <SideBarTab
+            v-for="item in contentStore.personalDashboards.filter(
+              (item) => item.icon !== 'favorite'
+            )"
+            :key="item.index"
+            :icon="item.icon"
+            :title="item.name"
+            :index="item.index"
+            :expanded="isExpanded"
+          />
+        </div>
+      </transition>
     </div>
-    <h2>{{ isExpanded ? `臺北儀表板 ` : `臺北` }}</h2>
-    <SideBarTab
-      v-for="item in contentStore.taipeiDashboards"
-      :key="item.index"
-      :icon="item.icon"
-      :title="item.name"
-      :index="item.index"
-      :city="'taipei'"
-      :expanded="isExpanded"
-    />
-    <template v-if="contentStore.metroTaipeiDashboards?.length > 0">
-      <h2>{{ isExpanded ? `雙北儀表板 ` : `雙北` }}</h2>
-      <SideBarTab
-        v-for="item in contentStore.metroTaipeiDashboards"
-        :key="item.index"
-        :icon="item.icon"
-        :title="item.name"
-        :index="item.index"
-        :city="'metrotaipei'"
-        :expanded="isExpanded"
-      />
-    </template>
-    <!-- <h2>{{ isExpanded ? `基本地圖圖層` : `圖層` }}</h2>
-    <SideBarTab
-      icon="public"
-      title="圖資資訊"
-      :expanded="isExpanded"
-      index="map-layers"
-    /> -->
-
-    <!-- <button
-      class="sidebar-collapse-button"
-      @click="toggleExpand"
-    >
-      <span>{{
-        isExpanded
-          ? "keyboard_double_arrow_left"
-          : "keyboard_double_arrow_right"
-      }}</span>
-    </button> -->
+    <h1 @click="toggleCollapse(['taipei', 'metroTaipei'])">
+      {{ isExpanded ? `公共儀表板 ` : `公共` }}
+    </h1>
+    <h2 @click="toggleCollapse('taipei')">
+      {{ isExpanded ? `臺北儀表板 ` : `臺北` }}
+    </h2>
+    <transition name="collapse">
+      <div
+        v-if="
+          !collapsedStates.taipei &&
+            contentStore.taipeiDashboards?.length > 0
+        "
+      >
+        <SideBarTab
+          v-for="item in contentStore.taipeiDashboards"
+          :key="item.index"
+          :icon="item.icon"
+          :title="item.name"
+          :index="item.index"
+          :city="'taipei'"
+          :expanded="isExpanded"
+        />
+      </div>
+    </transition>
+    <h2 @click="toggleCollapse('metroTaipei')">
+      {{ isExpanded ? `雙北儀表板 ` : `雙北` }}
+    </h2>
+    <transition name="collapse">
+      <div
+        v-if="
+          !collapsedStates.metroTaipei &&
+            contentStore.metroTaipeiDashboards?.length > 0
+        "
+      >
+        <SideBarTab
+          v-for="item in contentStore.metroTaipeiDashboards"
+          :key="item.index"
+          :icon="item.icon"
+          :title="item.name"
+          :index="item.index"
+          :city="'metrotaipei'"
+          :expanded="isExpanded"
+        />
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -157,10 +199,21 @@ onMounted(() => {
 	overflow-y: scroll;
 	user-select: none;
 
+	h1 {
+		cursor: pointer;
+		margin: 12px 0;
+
+		&:first-child {
+			margin-top: 0;
+		}
+	}
+
 	h2 {
 		color: var(--color-complement-text);
 		font-weight: 400;
 		text-wrap: nowrap;
+		cursor: pointer;
+		margin-left: 1em;
 	}
 
 	&-sub {
@@ -230,6 +283,36 @@ onMounted(() => {
 				font-size: var(--font-l);
 			}
 		}
+	}
+
+	@keyframes collapse-enter {
+		0% {
+			opacity: 0;
+			transform: translateY(-20px);
+		}
+		100% {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
+	@keyframes collapse-leave {
+		0% {
+			opacity: 1;
+			transform: translateY(0);
+		}
+		100% {
+			opacity: 0;
+			transform: translateY(-20px);
+		}
+	}
+
+	.collapse-enter-active {
+		animation: collapse-enter 0.2s ease forwards;
+	}
+
+	.collapse-leave-active {
+		animation: collapse-leave 0.2s ease forwards;
 	}
 }
 </style>
