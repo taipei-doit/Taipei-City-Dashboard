@@ -80,7 +80,7 @@ onMounted(() => {
         }}</span>
       </button>
     </div>
-    <div v-if="authStore.token">
+    <template v-if="authStore.token">
       <h1 @click="toggleCollapse(['favorites', 'personal'])">
         {{ isExpanded ? `私人儀表板 ` : `私人` }}
       </h1>
@@ -137,7 +137,7 @@ onMounted(() => {
           />
         </div>
       </transition>
-    </div>
+    </template>
     <h1 @click="toggleCollapse(['taipei', 'metroTaipei'])">
       {{ isExpanded ? `公共儀表板 ` : `公共` }}
     </h1>
@@ -299,34 +299,17 @@ onMounted(() => {
 		}
 	}
 
-	@keyframes collapse-enter {
-		0% {
-			opacity: 0;
-			transform: translateY(-20px);
-		}
-		100% {
-			opacity: 1;
-			transform: translateY(0);
-		}
+	// Classes that are provided by vue transitions. Read the official docs for more instructions.
+	// https://vuejs.org/guide/built-ins/transition.html
+	.collapse-enter-from,
+	.collapse-leave-to {
+		opacity: 0;
+		transform: translateY(-20px);
 	}
 
-	@keyframes collapse-leave {
-		0% {
-			opacity: 1;
-			transform: translateY(0);
-		}
-		100% {
-			opacity: 0;
-			transform: translateY(-20px);
-		}
-	}
-
-	.collapse-enter-active {
-		animation: collapse-enter 0.2s ease forwards;
-	}
-
+	.collapse-enter-active,
 	.collapse-leave-active {
-		animation: collapse-leave 0.2s ease forwards;
+		transition: opacity 0.2s ease, transform 0.2s ease;
 	}
 }
 </style>
