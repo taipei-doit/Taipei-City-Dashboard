@@ -97,6 +97,7 @@ function handleClose() {
               :minlength="1"
               :maxlength="15"
               required
+              disabled
             >
             <div class="two-block">
               <label>組件 ID</label>

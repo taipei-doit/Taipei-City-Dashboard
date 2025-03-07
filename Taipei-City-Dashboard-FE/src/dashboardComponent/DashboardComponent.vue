@@ -104,6 +104,9 @@ const activeCity = computed({
 		emits("changeCity", value);
 	},
 });
+const cityName = activeCity.value 
+	? contentStore.cityList.find((city) => activeCity.value === city.value).name
+	: "";
 
 const toggleOn = computed({
 	get: () => props.toggleOn,
@@ -335,12 +338,11 @@ function returnChartComponent(name, svg) {
       class="dashboardcomponent-control"
     >
       <select
-        v-if="selectBtn"
+        v-if="selectBtn && !selectBtnDisabled"
         v-model="activeCity"
         name="city"
         class="selectBtn"
         :class="{'selectBtn-disabled': selectBtnDisabled}"
-        :disabled="selectBtnDisabled"
       >
         <template
           v-for="city in contentStore.cityList"
@@ -351,6 +353,12 @@ function returnChartComponent(name, svg) {
           </option>
         </template>
       </select>
+      <div
+        v-if="selectBtnDisabled"
+        class="cityName"
+      >
+        {{ cityName }}
+      </div>
       <div
         v-if="config.chart_config.types.length > 1"
         class="dashboardcomponent-control-group"
@@ -565,12 +573,12 @@ button:hover {
 
 		h3 {
 			display: flex;
-			align-items: center;
 			font-size: var(--dashboardcomponent-font-m);
 			color: var(--dashboardcomponent-color-normal-text);
 
 			.componenttag {
 				flex-shrink: 0;
+				margin-top: 4px;
 			}
 		}
 
@@ -718,6 +726,13 @@ button:hover {
 			&-disabled {
 				cursor: not-allowed;
 			}
+		}
+
+		.cityName {
+			padding: 2px 6px;
+			border: 1px solid var(--dashboardcomponent-color-border);
+			border-radius: 5px;
+			color: var(--dashboardcomponent-color-complement-text);
 		}
 	}
 
