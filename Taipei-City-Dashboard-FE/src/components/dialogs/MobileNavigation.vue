@@ -65,16 +65,16 @@ function toggleCollapse(cities) {
               <h2 @click="toggleCollapse('personal')">
                 個人儀表板
               </h2>
-			  <div
-				v-if="
-				contentStore.personalDashboards.filter(
-					(item) => item.icon !== 'favorite'
-				).length === 0
-				"
-				class="mobilenavigation-sub-no"
-			  >
-				<p>尚無個人儀表板</p>
-			  </div>
+              <div
+                v-if="
+                  contentStore.personalDashboards.filter(
+                    (item) => item.icon !== 'favorite'
+                  ).length === 0
+                "
+                class="mobilenavigation-sub-no"
+              >
+                <p>尚無個人儀表板</p>
+              </div>
               <transition name="collapse">
                 <div v-if="!collapsedStates.personal">
                   <SideBarTab
@@ -235,6 +235,7 @@ function toggleCollapse(cities) {
 	}
 }
 
+// same as the sidebar in the SideBar.vue
 .collapse-enter-from,
 .collapse-leave-to {
 	opacity: 0;
