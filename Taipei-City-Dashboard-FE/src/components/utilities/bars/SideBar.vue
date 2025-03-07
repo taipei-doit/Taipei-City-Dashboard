@@ -247,7 +247,7 @@ onMounted(() => {
 		}
 
 		&-no p {
-			margin: 0.5rem 0 0.5rem 10px;
+			margin: 0.5rem 0 0.5rem 18px;
 			font-size: var(--font-s);
 			font-style: italic;
 		}

@@ -61,9 +61,20 @@ function toggleCollapse(cities) {
                   />
                 </template>
               </transition>
+
               <h2 @click="toggleCollapse('personal')">
                 個人儀表板
               </h2>
+			  <div
+				v-if="
+				contentStore.personalDashboards.filter(
+					(item) => item.icon !== 'favorite'
+				).length === 0
+				"
+				class="mobilenavigation-sub-no"
+			  >
+				<p>尚無個人儀表板</p>
+			  </div>
               <transition name="collapse">
                 <div v-if="!collapsedStates.personal">
                   <SideBarTab
@@ -195,6 +206,12 @@ function toggleCollapse(cities) {
 		text-wrap: nowrap;
 		cursor: pointer;
 		margin-left: 1em;
+	}
+
+	&-sub-no {
+		margin: 0.5rem 0 0.5rem 18px;
+		font-size: var(--font-s);
+		font-style: italic;
 	}
 }
 
