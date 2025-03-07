@@ -1,6 +1,7 @@
 <!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 
 <script setup>
+import { ref } from "vue";
 import { useDialogStore } from "../../store/dialogStore";
 import { useContentStore } from "../../store/contentStore";
 import { useAuthStore } from "../../store/authStore";
@@ -10,6 +11,23 @@ import SideBarTab from "../utilities/miscellaneous/SideBarTab.vue";
 const dialogStore = useDialogStore();
 const contentStore = useContentStore();
 const authStore = useAuthStore();
+
+// The collapsed states are for each dashboard
+const collapsedStates = ref({
+	favorites: false,
+	personal: false,
+	taipei: false,
+	metroTaipei: false,
+});
+
+function toggleCollapse(cities) {
+	cities = [cities].flat();
+	const allCollapsed = cities.every((city) => collapsedStates.value[city]);
+
+	cities.forEach((city) => {
+		collapsedStates.value[city] = !allCollapsed;
+	});
+}
 </script>
 
 <template>
@@ -25,57 +43,90 @@ const authStore = useAuthStore();
         />
         <div class="dialogcontainer-dialog">
           <div class="mobilenavigation">
-            <div v-if="authStore.token">
-              <h2>我的最愛</h2>
-              <SideBarTab
-                icon="favorite"
-                title="收藏組件"
-                :expanded="true"
-                :index="contentStore.favorites?.index"
-              />
-              <h2>個人儀表板</h2>
-              <SideBarTab
-                v-for="item in contentStore.personalDashboards.filter(
-                  (item) => item.icon !== 'favorite'
-                )"
-                :key="item.index"
-                :icon="item.icon"
-                :title="item.name"
-                :index="item.index"
-                :expanded="true"
-                @click="dialogStore.hideAllDialogs"
-              />
-            </div>
-            <h2>臺北儀表板</h2>
-            <SideBarTab
-              v-for="item in contentStore.taipeiDashboards"
-              :key="item.index"
-              :icon="item.icon"
-              :title="item.name"
-              :index="item.index"
-              :expanded="true"
-              :city="'taipei'"
-              @click="dialogStore.hideAllDialogs"
-            />
-            <h2>雙北儀表板</h2>
-            <SideBarTab
-              v-for="item in contentStore.metroTaipeiDashboards"
-              :key="item.index"
-              :icon="item.icon"
-              :title="item.name"
-              :index="item.index"
-              :expanded="true"
-              :city="'metrotaipei'"
-              @click="dialogStore.hideAllDialogs"
-            />
-            <!-- <h2>基本地圖圖層</h2>
-            <SideBarTab
-              :icon="`public`"
-              :title="`圖資資訊`"
-              index="map-layers"
-              :expanded="true"
-              @click="dialogStore.hideAllDialogs"
-            /> -->
+            <template v-if="authStore.token">
+              <h1 @click="toggleCollapse(['favorites', 'personal'])">
+                私人儀表板
+              </h1>
+              <h2 @click="toggleCollapse('favorites')">
+                我的最愛
+              </h2>
+              <transition name="collapse">
+                <template v-if="!collapsedStates.favorites">
+                  <SideBarTab
+                    icon="favorite"
+                    title="收藏組件"
+                    :expanded="true"
+                    :index="contentStore.favorites?.index"
+                    @click="dialogStore.hideAllDialogs"
+                  />
+                </template>
+              </transition>
+              <h2 @click="toggleCollapse('personal')">
+                個人儀表板
+              </h2>
+              <transition name="collapse">
+                <div v-if="!collapsedStates.personal">
+                  <SideBarTab
+                    v-for="item in contentStore.personalDashboards.filter(
+                      (item) => item.icon !== 'favorite'
+                    )"
+                    :key="item.index"
+                    :icon="item.icon"
+                    :title="item.name"
+                    :index="item.index"
+                    :expanded="true"
+                    @click="dialogStore.hideAllDialogs"
+                  />
+                </div>
+              </transition>
+            </template>
+            <h1 @click="toggleCollapse(['taipei', 'metroTaipei'])">
+              公共儀表板
+            </h1>
+            <h2 @click="toggleCollapse('taipei')">
+              臺北儀表板
+            </h2>
+            <transition name="collapse">
+              <div
+                v-if="
+                  !collapsedStates.taipei &&
+                    contentStore.taipeiDashboards?.length > 0
+                "
+              >
+                <SideBarTab
+                  v-for="item in contentStore.taipeiDashboards"
+                  :key="item.index"
+                  :icon="item.icon"
+                  :title="item.name"
+                  :index="item.index"
+                  :expanded="true"
+                  :city="'taipei'"
+                  @click="dialogStore.hideAllDialogs"
+                />
+              </div>
+            </transition>
+            <h2 @click="toggleCollapse('metroTaipei')">
+              雙北儀表板
+            </h2>
+            <transition name="collapse">
+              <div
+                v-if="
+                  !collapsedStates.metroTaipei &&
+                    contentStore.metroTaipeiDashboards?.length > 0
+                "
+              >
+                <SideBarTab
+                  v-for="item in contentStore.metroTaipeiDashboards"
+                  :key="item.index"
+                  :icon="item.icon"
+                  :title="item.name"
+                  :index="item.index"
+                  :expanded="true"
+                  :city="'metrotaipei'"
+                  @click="dialogStore.hideAllDialogs"
+                />
+              </div>
+            </transition>
           </div>
         </div>
       </div>
@@ -126,6 +177,25 @@ const authStore = useAuthStore();
 	width: 170px;
 	max-height: 350px;
 	overflow-y: scroll;
+
+	// same as the sidebar in the SideBar.vue
+	h1 {
+		cursor: pointer;
+		margin: 12px 0;
+
+		&:first-of-type {
+			margin-top: 0;
+		}
+	}
+
+	// same as the sidebar in the SideBar.vue
+	h2 {
+		color: var(--color-complement-text);
+		font-weight: 400;
+		text-wrap: nowrap;
+		cursor: pointer;
+		margin-left: 1em;
+	}
 }
 
 // Classes that are provided by vue transitions. Read the official docs for more instructions.
@@ -146,5 +216,16 @@ const authStore = useAuthStore();
 	.dialogcontainer-dialog {
 		transition: transform 0.3s ease;
 	}
+}
+
+.collapse-enter-from,
+.collapse-leave-to {
+	opacity: 0;
+	transform: translateY(-20px);
+}
+
+.collapse-enter-active,
+.collapse-leave-active {
+	transition: opacity 0.2s ease, transform 0.2s ease;
 }
 </style>
