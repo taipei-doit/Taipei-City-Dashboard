@@ -65,17 +65,21 @@ onMounted(() => {
       'hide-if-mobile': true,
     }"
   >
-    <button
-      class="sidebar-collapse-button"
+    <div
+      class="sidebar-collapse-btnContainer"
       :class="{ notExpanded: !isExpanded }"
-      @click="toggleExpand"
     >
-      <span>{{
-        isExpanded
-          ? "keyboard_double_arrow_left"
-          : "keyboard_double_arrow_right"
-      }}</span>
-    </button>
+      <button
+        class="sidebar-collapse-btnContainer-button"
+        @click="toggleExpand"
+      >
+        <span>{{
+          isExpanded
+            ? "keyboard_double_arrow_left"
+            : "keyboard_double_arrow_right"
+        }}</span>
+      </button>
+    </div>
     <div v-if="authStore.token">
       <h1 @click="toggleCollapse(['favorites', 'personal'])">
         {{ isExpanded ? `私人儀表板 ` : `私人` }}
@@ -203,7 +207,7 @@ onMounted(() => {
 		cursor: pointer;
 		margin: 12px 0;
 
-		&:first-child {
+		&:first-of-type {
 			margin-top: 0;
 		}
 	}
@@ -257,30 +261,40 @@ onMounted(() => {
 			margin-left: 5px;
 		}
 
-		&-button {
+		&-btnContainer {
 			height: fit-content;
 			position: fixed;
-			top: 80px;
-			left: calc(170px - 10px);
-			padding: 5px;
-			border-radius: 5px;
-			transition: background-color 0.2s;
-
-			&:hover {
-				background-color: var(--color-component-background);
-			}
+			top: 78px;
+			left: calc(170px - 14px);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			width: fit-content;
+			padding: 2px;
 
 			&.notExpanded {
 				position: sticky;
+				left: 0;
+				top: -2px;
 				background-color: var(--color-background);
 				width: 100%;
-				left: 0;
-				top: 0;
+				padding-bottom: 8px;
 			}
 
-			span {
-				font-family: var(--font-icon);
-				font-size: var(--font-l);
+			&-button {
+				background-color: var(--color-background);
+				padding: 5px;
+				border-radius: 5px;
+				transition: background-color 0.2s;
+
+				&:hover {
+					background-color: var(--color-component-background);
+				}
+
+				span {
+					font-family: var(--font-icon);
+					font-size: var(--font-l);
+				}
 			}
 		}
 	}
