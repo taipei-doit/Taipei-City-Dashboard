@@ -71,6 +71,21 @@ defineProps({
 		p {
 			font-weight: 400;
 		}
+
+		&.city-tag-item {
+			margin: 0;
+
+			p {
+				color: white;
+			}
+
+			&.taipei {
+				background-color: #1411AC;
+			}
+			&.metrotaipei {
+				background-color: #11AC33;
+			}
+		}
 	}
 }
 </style>

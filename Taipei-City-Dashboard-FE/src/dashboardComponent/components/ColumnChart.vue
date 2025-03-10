@@ -25,6 +25,20 @@ const isLargeDataSet = computed(() => {
 	return props.series[0].data.length > 12
 })
 
+// Calculate initial width for large datasets only
+const initialWidth = computed(() => {
+	const WIDTH_PER_ITEM = 32
+	const itemCount = props.series[0].data.length;
+	return itemCount * WIDTH_PER_ITEM;
+});
+
+const widthValue = ref(initialWidth.value);
+
+// Convert to a string with unit for ApexCharts
+const chartWidth = computed(() => {
+	return isLargeDataSet.value ? `${widthValue.value}px` : "100%";
+});
+
 
 const chartOptions = ref({
 	chart: {
@@ -79,46 +93,25 @@ const chartOptions = ref({
 			dataPointIndex,
 			w,
 		}) {
-			if (isLargeDataSet.value) {
-				return (
-					'<div class="chart-tooltip">' +
-						"<h6>" +
-							w.globals.categoryLabels[dataPointIndex] +
-							`${
-								props.chart_config.categories
-									? "-" + w.globals.seriesNames[seriesIndex]
-									: ""
-							}` +
-						"</h6>" +
-						"<span>" +
-							series[seriesIndex][dataPointIndex] +
-							` ${props.chart_config.unit}` +
-						"</span>" +
-					"</div>"
-				);
-			} else {
-				return (
-					'<div class="chart-tooltip">' +
-						"<h6>" +
-							w.globals.labels[dataPointIndex] +
-							`${
-								props.chart_config.categories
-									? "-" + w.globals.seriesNames[seriesIndex]
-									: ""
-							}` +
-						"</h6>" +
-						"<span>" +
-							series[seriesIndex][dataPointIndex] +
-							` ${props.chart_config.unit}` +
-						"</span>" +
-					"</div>"
-				);
-			}
+			return (
+				'<div class="chart-tooltip">' +
+					"<h6>" +
+						w.globals.labels[dataPointIndex] +
+						`${
+							props.chart_config.categories
+								? "-" + w.globals.seriesNames[seriesIndex]
+								: ""
+						}` +
+					"</h6>" +
+					"<span>" +
+						series[seriesIndex][dataPointIndex] +
+						` ${props.chart_config.unit}` +
+					"</span>" +
+				"</div>"
+			);
 		},
 	},
 	xaxis: {
-		...(isLargeDataSet.value && { tickPlacement: 'on' }),
-		...(isLargeDataSet.value && { tickAmount: 12 }),
 		axisBorder: {
 			show: false,
 		},
@@ -172,15 +165,54 @@ function handleDataSelection(_e, _chartContext, config) {
 		selectedIndex.value = null;
 	}
 }
+
+function increaseWidth() {
+	widthValue.value += 50;
+}
+
+function decreaseWidth() {
+	if (widthValue.value > 150) {
+		widthValue.value -= 50;
+	}
+}
+
+function resetWidth() {
+	widthValue.value = initialWidth.value;
+}
 </script>
 
 <template>
   <div
     v-if="activeChart === 'ColumnChart'"
+    class="columnChart"
   >
+    <div
+      v-if="isLargeDataSet"
+      class="columnChart-toolbar"
+    >
+      <p
+        class="columnChart-toolbar-item"
+        @click="increaseWidth"
+      >
+        <span>add</span>
+      </p>
+      <p
+        class="columnChart-toolbar-item"
+        @click="decreaseWidth"
+      >
+        <span>remove</span>
+      </p>
+      <p
+        class="columnChart-toolbar-item reset"
+        @click="resetWidth"
+      >
+        重置
+      </p>
+    </div>
     <VueApexCharts
+      :key="chartWidth"
       type="bar"
-      width="100%"
+      :width="chartWidth"
       height="250px"
       :options="chartOptions"
       :series="series"
@@ -188,4 +220,43 @@ function handleDataSelection(_e, _chartContext, config) {
     />
   </div>
 </template>
+
+<style lang="scss" scoped>
+.columnChart {
+	overflow: auto;
+	position: relative;
+	height: 100%;
+
+	&-toolbar {
+		position: sticky;
+		top: 0;
+		left: 0;
+		z-index: 1;
+		background-color: var(--color-component-background);
+		display: flex;
+		justify-content: flex-end;
+		align-items: center;
+		gap: 4px;
+
+		&-item {
+			cursor: pointer;
+			font-size: var(--font-s);
+			display: flex;
+			justify-content: center;
+			align-items: center;
+
+			span {
+				text-align: center;
+				font-family: var(--font-icon);
+				font-size: var(--font-ms);
+				padding: 2px;
+			}
+
+			&.reset {
+				color: var(--color-highlight)
+			}
+		}
+	}
+}
+</style>
 

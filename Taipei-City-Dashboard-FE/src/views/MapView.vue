@@ -173,7 +173,7 @@ function shouldDisable(map_config) {
       <div
         v-else-if="
           contentStore.currentDashboard.components?.length !== 0 &&
-            contentStore.mapLayers.length >= 0
+            contentStore.mapLayers.length > 0
         "
         class="map-charts"
       >
