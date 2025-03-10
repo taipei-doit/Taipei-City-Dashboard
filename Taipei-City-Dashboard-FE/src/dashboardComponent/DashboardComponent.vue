@@ -104,9 +104,19 @@ const activeCity = computed({
 		emits("changeCity", value);
 	},
 });
-const cityName = activeCity.value 
-	? contentStore.cityList.find((city) => activeCity.value === city.value).name
-	: "";
+const cityName = computed(() => contentStore.getCityListName(activeCity.value));
+const configCity = computed(() =>{
+	const cityVal = props.config?.city;
+	let cities = [];
+	
+	if (cityVal === 'metrotaipei') {
+		cities = ['taipei', 'metrotaipei'];
+	} else {
+		cities = [cityVal];
+	}
+	const cityListFullObj = contentStore.getCityListName(cities, true);
+	return cityListFullObj
+});
 
 const toggleOn = computed({
 	get: () => props.toggleOn,
@@ -385,7 +395,19 @@ function returnChartComponent(name, svg) {
         class="preview-content-id"
         :class="`city-${config.city}`"
       >
-        <p>City: {{ props.config.city }}</p>
+        <div
+          v-if="mode === 'preview'"
+          class="city-tag"
+        >
+          <ComponentTag
+            v-for="city in configCity"
+            :key="city.value"
+            :icon="''"
+            :text="city.name"
+            :mode="'small'"
+            :class="`city-tag-item ${city.value}`"
+          />
+        </div>
         <p :title="props.config.index">
           Index: {{ props.config.index }}
         </p>
@@ -946,7 +968,12 @@ button:hover {
 
 .city {
 	&-metrotaipei {
-		background-color: #3c3f43;
+		// background-color: #3c3f43;
+	}
+
+	&-tag {
+		display: flex;
+		gap: 4px;
 	}
 }
 </style>

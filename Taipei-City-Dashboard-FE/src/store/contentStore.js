@@ -405,6 +405,29 @@ export const useContentStore = defineStore("content", {
 			  this.loading = false;
 			}
 		},
+		// 9. Call this function to get the name of a city from the cityList.
+		getCityListName(city, returnFullObject = false) {
+			// If no city value provided, return empty array or empty string based on format
+			if (!city) return returnFullObject ? [] : "";
+
+			// Function: Find the complete city object based on city value
+			const findCity = (cityValue) => {
+				const cityItem = this.cityList.find(item => item.value === cityValue);
+				if (!cityItem) return returnFullObject ? { name: "", value: cityValue } : "";
+				
+				return returnFullObject
+				? { name: cityItem.name, value: cityValue }
+				: cityItem.name;
+			};
+			
+			// If input is an array, process multiple cities
+			if (Array.isArray(city)) {
+				return city.map(c => findCity(c));
+			}
+			
+			// Process single city
+			return findCity(city);
+		},
 
 		/* Route Change Methods */
 		// 1. Called whenever route changes except for between /dashboard and /mapview
