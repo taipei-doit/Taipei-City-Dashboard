@@ -33,6 +33,7 @@
 }
 .vue-apexcharts {
 	display: flex;
+	width: 100%;
 	/* justify-content: center; */
 }
 .apexcharts-zoom-icon {
