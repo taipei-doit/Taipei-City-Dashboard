@@ -396,7 +396,7 @@ function handleLegendSelection(index) {
 }
 h3,
 p {
-	font-size: var(--dashboardcomponent-font-s);
+	font-size: var(--font-s);
 }
 .polarareachart {
 	/* styles for the chart Vue component */
@@ -413,10 +413,10 @@ p {
 		margin-top: 1.5rem;
 
 		circle {
-			fill: var(--dashboardcomponent-color-component-background);
+			fill: var(--color-component-background);
 		}
 		.sector {
-			stroke: var(--dashboardcomponent-color-component-background);
+			stroke: var(--color-component-background);
 			transition: all 0.3s ease;
 			cursor: pointer;
 		}
@@ -426,9 +426,9 @@ p {
 		flex-direction: row;
 		flex-wrap: wrap;
 		justify-content: center;
-		column-gap: var(--dashboardcomponent-font-s);
+		column-gap: var(--font-s);
 		row-gap: 4px;
-		margin-top: var(--dashboardcomponent-font-s);
+		margin-top: var(--font-s);
 
 		&-item {
 			display: flex;
@@ -445,7 +445,7 @@ p {
 				border-radius: 2px;
 			}
 			& > p {
-				color: var(--dashboardcomponent-color-complement-text);
+				color: var(--color-complement-text);
 			}
 		}
 		.selected {

@@ -177,7 +177,7 @@ const parsedSeries = computed(() => {
 		font-weight: 400;
 		pointer-events: none;
 		user-select: none;
-		color: var(--dashboardcomponent-color-normal-text);
+		color: var(--color-normal-text);
 	}
 
 	p {
@@ -194,7 +194,7 @@ const parsedSeries = computed(() => {
 		grid-template-columns: 3.9rem 20px 1fr 1fr;
 
 		&-tag {
-			min-width: var(--dashboardcomponent-font-ms);
+			min-width: var(--font-ms);
 			min-height: 1.4rem;
 			display: flex;
 			flex-direction: column;
@@ -208,7 +208,7 @@ const parsedSeries = computed(() => {
 
 		&-line {
 			width: 8px;
-			height: var(--dashboardcomponent-font-ms);
+			height: var(--font-ms);
 			margin: 0px 6px;
 		}
 
@@ -218,21 +218,21 @@ const parsedSeries = computed(() => {
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			column-gap: var(--dashboardcomponent-font-ms);
+			column-gap: var(--font-ms);
 			margin: 0.5rem 0;
 
 			p {
 				display: flex;
 				align-items: center;
-				height: var(--dashboardcomponent-font-ms);
-				color: var(--dashboardcomponent-color-complement-text);
-				font-size: var(--dashboardcomponent-font-ms);
+				height: var(--font-ms);
+				color: var(--color-complement-text);
+				font-size: var(--font-ms);
 				overflow: visible;
 			}
 			div {
 				flex: 1;
 				border-bottom: dashed 1px
-					var(--dashboardcomponent-color-complement-text);
+					var(--color-complement-text);
 			}
 		}
 	}

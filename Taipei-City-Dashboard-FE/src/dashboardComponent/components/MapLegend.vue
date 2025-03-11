@@ -147,7 +147,7 @@ button {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	margin-top: -var(--dashboardcomponent-font-ms);
+	margin-top: -var(--font-ms);
 	overflow: visible;
 
 	&-legend {
@@ -169,19 +169,19 @@ button {
 
 			div:first-child,
 			img {
-				width: var(--dashboardcomponent-font-ms);
+				width: var(--font-ms);
 				margin-right: 0.75rem;
 			}
 
 			h5 {
-				color: var(--dashboardcomponent-color-complement-text);
+				color: var(--color-complement-text);
 				font-size: 0.75rem;
 				text-align: left;
 			}
 
 			h6 {
-				color: var(--dashboardcomponent-color-normal-text);
-				font-size: var(--dashboardcomponent-font-ms);
+				color: var(--color-normal-text);
+				font-size: var(--font-ms);
 				font-weight: 400;
 				text-align: left;
 			}
@@ -189,7 +189,7 @@ button {
 	}
 
 	&-filter {
-		border: 1px solid var(--dashboardcomponent-color-border);
+		border: 1px solid var(--color-border);
 		cursor: pointer;
 
 		&:hover {

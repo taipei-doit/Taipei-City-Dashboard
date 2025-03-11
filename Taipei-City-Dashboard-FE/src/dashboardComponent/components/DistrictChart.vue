@@ -1215,12 +1215,12 @@ function handleDataSelection(index) {
 		margin: 0.5rem 0 -0.5rem;
 
 		h5 {
-			color: var(--dashboardcomponent-color-complement-text);
+			color: var(--color-complement-text);
 		}
 
 		h6 {
-			color: var(--dashboardcomponent-color-complement-text);
-			font-size: var(--dashboardcomponent-font-m);
+			color: var(--color-complement-text);
+			font-size: var(--font-m);
 			font-weight: 400;
 		}
 
@@ -1238,7 +1238,7 @@ function handleDataSelection(index) {
 			div:before {
 				content: "";
 				width: 3rem;
-				height: var(--dashboardcomponent-font-l);
+				height: var(--font-l);
 				position: absolute;
 				top: 0;
 				left: 0;
@@ -1250,8 +1250,8 @@ function handleDataSelection(index) {
 			}
 
 			p {
-				font-size: var(--dashboardcomponent-font-s);
-				color: var(--dashboardcomponent-color-complement-text);
+				font-size: var(--font-s);
+				color: var(--color-complement-text);
 			}
 		}
 	}

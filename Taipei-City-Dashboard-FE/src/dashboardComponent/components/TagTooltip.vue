@@ -42,13 +42,13 @@ const props = defineProps({
 		display: flex;
 		align-items: center;
 		font-size: 16px;
-		color: var(--dashboardcomponent-color-normal-text);
+		color: var(--color-normal-text);
 		margin: 0;
 
 		span {
-			font-family: var(--dashboardcomponent-font-icon);
-			color: var(--dashboardcomponent-color-highlight);
-			font-size: var(--dashboardcomponent-font-m);
+			font-family: var(--font-icon);
+			color: var(--color-highlight);
+			font-size: var(--font-m);
 		}
 	}
 }

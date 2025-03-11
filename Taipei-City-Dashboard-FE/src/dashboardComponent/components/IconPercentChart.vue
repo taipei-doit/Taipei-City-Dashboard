@@ -175,11 +175,11 @@ function updateMouseLocation(e) {
 	overflow: hidden;
 }
 h2 {
-	font-size: var(--dashboardcomponent-font-m);
+	font-size: var(--font-m);
 }
 h3,
 p {
-	font-size: var(--dashboardcomponent-font-s);
+	font-size: var(--font-s);
 }
 button {
 	border: none;
@@ -191,7 +191,7 @@ button:hover {
 .iconPercentageChart {
 	position: relative;
 	max-height: 100%;
-	color: var(--dashboardcomponent-color-normal-text);
+	color: var(--color-normal-text);
 	overflow-y: scroll;
 
 	&__chart {
@@ -202,7 +202,7 @@ button:hover {
 	}
 	&__chart-item {
 		opacity: 0;
-		font-family: var(--dashboardcomponent-font-icon);
+		font-family: var(--font-icon);
 		font-size: 2rem;
 		user-select: none;
 		cursor: default;
@@ -214,8 +214,8 @@ button:hover {
 	&__title {
 		display: flex;
 		justify-content: space-around;
-		margin: var(--dashboardcomponent-font-ms)
-			var(--dashboardcomponent-font-ms);
+		margin: var(--font-ms)
+			var(--font-ms);
 	}
 	&__percentage {
 		padding: 0 0.3em;
@@ -228,7 +228,7 @@ button:hover {
 		align-items: center;
 		p {
 			margin-top: 0.2 rem;
-			color: var(--dashboardcomponent-color-complement-text);
+			color: var(--color-complement-text);
 		}
 	}
 	&__buttons {
@@ -236,18 +236,18 @@ button:hover {
 		justify-content: space-around;
 		margin: 0 2rem;
 		margin-bottom: 0.5rem;
-		color: var(--dashboardcomponent-color-complement-text);
+		color: var(--color-complement-text);
 	}
 	&__button {
 		padding: 2px 6px;
-		border: solid 1px var(--dashboardcomponent-color-complement-text);
+		border: solid 1px var(--color-complement-text);
 		border-radius: 5px;
 		color: var(--color-complement-text);
 		transition: all 0.2s ease;
 	}
 	&__button.active {
-		color: var(--dashboardcomponent-color-normal-text);
-		background-color: var(--dashboardcomponent-color-border);
+		color: var(--color-normal-text);
+		background-color: var(--color-border);
 	}
 }
 

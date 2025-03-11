@@ -5,7 +5,7 @@
 }
 .apexcharts-tooltip .chart-tooltip,
 .chart-tooltip {
-	padding: 5px 10px 5px 5px;
+	padding: 5px 10px 5px 5px !important;
 	border: solid 1px var(--color-border) !important;
 	border-radius: 5px !important;
 	background: var(--color-component-background) !important;
@@ -17,8 +17,10 @@
 .chart-tooltip h6 {
 	color: var(--color-complement-text);
 	font-size: 0.75rem;
+	margin: 0;
 }
 .chart-tooltip span {
+	color: var(--color-normal-text);
 	font-size: var(--font-ms);
 }
 .apexcharts-canvas,

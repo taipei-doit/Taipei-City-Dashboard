@@ -56,7 +56,7 @@ const props = defineProps([
 	max-height: 100%;
 	height: 100%;
 	flex: 1;
-	color: var(--dashboardcomponent-color-normal-text);
+	color: var(--color-normal-text);
 	overflow-y: auto;
 
 	&__container {
@@ -70,11 +70,11 @@ const props = defineProps([
 		align-items: center;
 		justify-content: center;
 		padding: 1rem;
-		border-bottom: 1px solid var(--dashboardcomponent-color-border);
+		border-bottom: 1px solid var(--color-border);
 
 		// 右邊框（不包括每行最後一個）
 		&:not(:nth-child(2n)) {
-			border-right: 1px solid var(--dashboardcomponent-color-border);
+			border-right: 1px solid var(--color-border);
 		}
     
 		// 移除最後一個項目的底部邊框

@@ -117,7 +117,7 @@ const chartOptions = ref({
 		crosshairs: {
 			show: false,
 			stroke: {
-				color: "var(--dashboardcomponent-color-complement-text)",
+				color: "var(--color-complement-text)",
 			},
 		},
 		labels: {
@@ -145,7 +145,7 @@ const chartOptions = ref({
 			title: {
 				text: props.series[0].name,
 				style: {
-					color: "var(--dashboardcomponent-color-complement-text)",
+					color: "var(--color-complement-text)",
 				},
 			},
 		},
@@ -166,7 +166,7 @@ const chartOptions = ref({
 			title: {
 				text: props.series?.[1]?.name ?? "",
 				style: {
-					color: "var(--dashboardcomponent-color-complement-text)",
+					color: "var(--color-complement-text)",
 				},
 			},
 		},
