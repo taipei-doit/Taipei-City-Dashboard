@@ -14,7 +14,7 @@ steps:
     args:
       - run
       - deploy
-      - dashboard-be-refact-v3
+      - dashboard-be
       - "--image"
       - "asia-east1-docker.pkg.dev/$PROJECT_ID/tuic/dashboard-be:$COMMIT_SHA"
       - "--service-account"
