@@ -66,7 +66,7 @@ function handleClose() {
         </div>
         <div>
           <h1>{{ VITE_APP_TITLE }}</h1>
-          <h2>Taipei City Dashboard</h2>
+          <h2>City Dashboard</h2>
         </div>
       </div>
       <div
@@ -102,7 +102,7 @@ function handleClose() {
         <a
           href="https://tuic.gov.taipei/zh/works/dashboard"
           target="_blank"
-        >臺北城市儀表板</a>的<a
+        >城市儀表板</a>的<a
           href="https://tuic.gov.taipei/zh/privacy"
           target="_blank"
         >隱私權政策</a>

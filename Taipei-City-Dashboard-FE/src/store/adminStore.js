@@ -17,6 +17,9 @@ export const useAdminStore = defineStore("admin", {
 	state: () => ({
 		// Edit Dashboard (for /admin/dashboard)
 		dashboards: [],
+		taipeiDashboards: [],
+		metroTaipeiDashboards: [],
+		currentCity: "",
 		currentDashboard: null,
 		// Edit Component (for /admin/edit-component)
 		components: [],
@@ -49,18 +52,23 @@ export const useAdminStore = defineStore("admin", {
 			const contentStore = useContentStore();
 			contentStore.error = state ? true : false;
 		},
+		setRouteParams(city) {
+			this.currentCity = city;
+		},
 
 		/* Dashboard */
 		// 1. Get all public dashboards
 		async getDashboards() {
 			const response = await http.get(`/dashboard/`);
 			this.dashboards = response.data.data.public;
+			this.taipeiDashboards = response.data.data?.taipei || [];
+			this.metroTaipeiDashboards = response.data.data?.metrotaipei || [];
 			this.setLoading(false);
 		},
 		// 2. Get current dashboard components
 		async getCurrentDashboardComponents() {
 			const response = await http.get(
-				`/dashboard/${this.currentDashboard.index}`
+				`/dashboard/${this.currentDashboard.index}${this.currentCity ? `?city=${this.currentCity}` : ""}`
 			);
 			this.currentDashboard.components = response.data.data;
 			this.setLoading(false);
@@ -74,7 +82,7 @@ export const useAdminStore = defineStore("admin", {
 
 			const dashboard = JSON.parse(JSON.stringify(this.currentDashboard));
 
-			await http.post(`/dashboard/public`, dashboard);
+			await http.post(`/dashboard/public${this.currentCity ? `/${this.currentCity}` : ""}`, dashboard);
 			this.getDashboards();
 			dialogStore.showNotification("success", "公開儀表板新增成功");
 		},
@@ -118,7 +126,7 @@ export const useAdminStore = defineStore("admin", {
 
 			// 2.1 Get component chart data
 			const response = await http.get(
-				`/component/${component.id}/chart`,
+				`/component/${component.id}/chart/${component.city}`,
 				{
 					params: !["static", "current", "demo"].includes(
 						component.time_from
@@ -141,7 +149,7 @@ export const useAdminStore = defineStore("admin", {
 			if (component.history_config && component.history_config.range) {
 				for (let i in component.history_config.range) {
 					const response = await http.get(
-						`/component/${component.id}/history`,
+						`/component/${component.id}/history/${component.city}`,
 						{
 							params: getComponentDataTimeframe(
 								component.history_config.range[i],
@@ -224,6 +232,7 @@ export const useAdminStore = defineStore("admin", {
 			delete this.currentComponent.map_config;
 
 			const componentId = this.currentComponent.id;
+			const componentCity = this.currentComponent.city;
 			const component_config = JSON.parse(
 				JSON.stringify(this.currentComponent)
 			);
@@ -231,7 +240,7 @@ export const useAdminStore = defineStore("admin", {
 			await http.patch(`/component/${componentId}/chart`, chart_config);
 
 			// 3.3 Update component component config (incl. history config)
-			await http.patch(`/component/${componentId}`, component_config);
+			await http.patch(`/component/${componentId}/${componentCity}`, component_config);
 
 			// 3.4 Update component map config
 			if (map_config[0] !== null) {

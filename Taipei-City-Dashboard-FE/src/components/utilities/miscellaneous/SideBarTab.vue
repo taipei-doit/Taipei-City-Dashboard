@@ -13,22 +13,30 @@ const props = defineProps({
 	icon: { type: String },
 	title: { type: String },
 	index: { type: String },
+	city: { type: String },
 	expanded: { type: Boolean },
 });
 
 const authStore = useAuthStore();
 
 const tabLink = computed(() => {
-	if (authStore.currentPath === "admin") {
-		return `/admin/${props.index}`;
-	}
-	return `${route.path}?index=${props.index}`;
+	const isAdminPath = authStore.currentPath === "admin";
+	const cityParam = props.city ? `${isAdminPath ? "?" : "&"}city=${props.city}` : "";
+	return isAdminPath
+		? `/admin/${props.index}${cityParam}`
+		: `${route.path}?index=${props.index}${cityParam}`;
 });
+
 const linkActiveOrNot = computed(() => {
-	if (authStore.currentPath === "admin") {
-		return route.path === `/admin/${props.index}` ? true : false;
-	}
-	return route.query.index === props.index ? true : false;
+	const isAdminPath = authStore.currentPath === "admin";
+	const isPathMatch = isAdminPath
+		? route.path === `/admin/${props.index}`
+		: route.query.index === props.index;
+	const isCityMatch = props.city
+		? route.query.city === props.city
+		: true;
+
+	return isPathMatch && isCityMatch;
 });
 </script>
 
@@ -37,7 +45,7 @@ const linkActiveOrNot = computed(() => {
     :to="tabLink"
     :class="{ sidebartab: true, 'sidebartab-active': linkActiveOrNot }"
   >
-    <span>{{ icon }}</span>
+    <span :title="!expanded ? title : ''">{{ icon }}</span>
     <h3 v-if="expanded">
       {{ title }}
     </h3>

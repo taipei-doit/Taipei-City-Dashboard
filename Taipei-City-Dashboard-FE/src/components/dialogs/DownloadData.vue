@@ -9,18 +9,21 @@ import { useDialogStore } from "../../store/dialogStore";
 import { jsonToCsv } from "../../assets/utilityFunctions/jsonToCsv";
 import DialogContainer from "./DialogContainer.vue";
 
+const props = defineProps(["content"]);
+
 const dialogStore = useDialogStore();
+const content = computed(() => props.content || dialogStore.moreInfoContent);
 
 // Stores the inputted dashboard name
-const name = ref(dialogStore.moreInfoContent.name);
+const name = ref(content.value.name);
 // Stores the file type
 const fileType = ref("JSON");
 
 const parsedJson = computed(() => {
 	let json = {};
-	json.data = dialogStore.moreInfoContent.chart_data;
-	if (dialogStore.moreInfoContent.chart_config.categories) {
-		json.categories = dialogStore.moreInfoContent.chart_config.categories;
+	json.data = content.value.chart_data;
+	if (content.value.chart_config.categories) {
+		json.categories = content.value.chart_config.categories;
 	}
 
 	const jsonString = encodeURIComponent(JSON.stringify(json));
@@ -29,10 +32,10 @@ const parsedJson = computed(() => {
 });
 
 const parsedCsv = computed(() => {
-	const csvString = dialogStore.moreInfoContent.chart_data
+	const csvString = content.value.chart_data
 		? jsonToCsv(
-				dialogStore.moreInfoContent.chart_data,
-				dialogStore.moreInfoContent.chart_config
+				content.value.chart_data,
+				content.value.chart_config
 		  )
 		: "";
 	return encodeURI(csvString);
@@ -42,7 +45,7 @@ function handleSubmit() {
 	handleClose();
 }
 function handleClose() {
-	name.value = dialogStore.moreInfoContent.name;
+	name.value = content.value.name;
 	dialogStore.dialogs.downloadData = false;
 }
 </script>

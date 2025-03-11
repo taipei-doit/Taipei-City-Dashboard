@@ -20,7 +20,9 @@ const { isFullscreen, toggle } = useFullscreen();
 
 const linkQuery = computed(() => {
 	const { query } = route;
-	return `?index=${query.index}`;
+	const indexQuery = `?index=${query.index}`;
+	const cityQuery = query.city ? `&city=${query.city}` : '';
+	return `${indexQuery}${cityQuery}`;
 });
 </script>
 
@@ -36,7 +38,7 @@ const linkQuery = computed(() => {
         </div>
         <div>
           <h1>{{ VITE_APP_TITLE }}</h1>
-          <h2>Taipei City Dashboard</h2>
+          <h2>City Dashboard</h2>
         </div>
       </div>
     </a>

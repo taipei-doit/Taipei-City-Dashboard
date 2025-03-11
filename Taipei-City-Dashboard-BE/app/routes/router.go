@@ -78,17 +78,19 @@ func configureComponentRoutes() {
 	componentRoutes.Use(middleware.LimitTotalRequests(global.ComponentLimitTotalRequestsTimes, global.LimitRequestsDuration))
 	{
 		componentRoutes.GET("/", controllers.GetAllComponents)
-		componentRoutes.
-			GET("/:id", controllers.GetComponentByID)
-		componentRoutes.
-			GET("/:id/chart", controllers.GetComponentChartData)
+		componentRoutes.GET("/:id", controllers.GetComponentByID)
+		componentRoutes.GET("/:id/:city", controllers.GetComponentByID)
+		componentRoutes.GET("/:id/chart", controllers.GetComponentChartData)
+		componentRoutes.GET("/:id/chart/:city", controllers.GetComponentChartData)
 		componentRoutes.GET("/:id/history", controllers.GetComponentHistoryData)
+		componentRoutes.GET("/:id/history/:city", controllers.GetComponentHistoryData)
 	}
 	componentRoutes.Use(middleware.IsSysAdm())
 	{
 		componentRoutes.
 			POST("/", controllers.CreateComponent).
 			PATCH("/:id", controllers.UpdateComponent).
+			PATCH("/:id/:city", controllers.UpdateComponent).
 			DELETE("/:id", controllers.DeleteComponent)
 		componentRoutes.
 			PATCH("/:id/chart", controllers.UpdateComponentChartConfig)
@@ -116,6 +118,7 @@ func configureDashboardRoutes() {
 	dashboardRoutes.Use(middleware.IsSysAdm())
 	{
 		dashboardRoutes.POST("/public", controllers.CreatePublicDashboard)
+		dashboardRoutes.POST("/public/:city", controllers.CreatePublicDashboard)
 		dashboardRoutes.GET("/check-index/:index", controllers.CheckDashboardIndex)
 	}
 }

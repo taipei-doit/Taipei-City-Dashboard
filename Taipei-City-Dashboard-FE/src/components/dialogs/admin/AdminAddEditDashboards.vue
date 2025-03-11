@@ -2,6 +2,7 @@
 
 <script setup>
 import { ref, computed } from "vue";
+import { useRoute } from "vue-router";
 import http from "../../../router/axios";
 import { storeToRefs } from "pinia";
 
@@ -17,12 +18,14 @@ import { allIcons } from "../../../assets/configs/AllIcons";
 const dialogStore = useDialogStore();
 const adminStore = useAdminStore();
 const contentStore = useContentStore();
+const route = useRoute();
 
 const props = defineProps(["mode"]);
 
 const { currentDashboard } = storeToRefs(adminStore);
 const indexStatus = ref("");
 const iconSearch = ref("");
+const city = computed(() => route.query.city || '');
 
 const availableIcons = computed(() => {
 	let filteredIcons = [...allIcons];
@@ -86,56 +89,65 @@ function handleClose() {
       </div>
       <div class="adminaddeditdashboards-content">
         <div class="adminaddeditdashboards-settings">
-          <label>Index*</label>
-          <input
-            v-if="mode === 'edit'"
-            :value="currentDashboard.index"
-            disabled="true"
-          >
-          <div
-            v-else-if="mode === 'add'"
-            class="adminaddeditdashboards-settings-index"
-          >
+          <div class="adminaddeditdashboards-settings-container">
+            <label>Index*</label>
             <input
-              v-model="currentDashboard.index"
-              :minlength="1"
-              :maxlength="30"
-              required
-              @focusout="verifyIndex"
+              v-if="mode === 'edit'"
+              :value="currentDashboard.index"
+              disabled="true"
             >
-            <span
-              :style="{
-                color:
-                  indexStatus === 'cancel'
-                    ? 'rgb(237, 90, 90)'
-                    : 'greenyellow',
-              }"
-            >{{ indexStatus }}</span>
-          </div>
-          <label>名稱* ({{ currentDashboard.name.length }}/10)</label>
-          <input
-            v-model="currentDashboard.name"
-            :minlength="1"
-            :maxlength="10"
-            required
-          >
-          <label>圖示*</label>
-          <input
-            v-model="iconSearch"
-            placeholder="尋找圖示(英文)"
-          >
-          <div class="adminaddeditdashboards-settings-icon">
             <div
-              v-for="item in availableIcons"
-              :key="item"
+              v-else-if="mode === 'add'"
+              class="adminaddeditdashboards-settings-index"
             >
               <input
-                :id="item"
-                v-model="currentDashboard.icon"
-                type="radio"
-                :value="item"
+                v-model="currentDashboard.index"
+                :minlength="1"
+                :maxlength="30"
+                required
+                @focusout="verifyIndex"
               >
-              <label :for="item">{{ item }}</label>
+              <span
+                :style="{
+                  color:
+                    indexStatus === 'cancel'
+                      ? 'rgb(237, 90, 90)'
+                      : 'greenyellow',
+                }"
+              >{{ indexStatus }}</span>
+            </div>
+            <label>名稱* ({{ currentDashboard.name.length }}/10)</label>
+            <input
+              v-model="currentDashboard.name"
+              :minlength="1"
+              :maxlength="10"
+              required
+            >
+            <template v-if="city">
+              <label>city</label>
+              <input
+                v-model="city"
+                :disabled="true"
+              >
+            </template>
+            <label>圖示*</label>
+            <input
+              v-model="iconSearch"
+              placeholder="尋找圖示(英文)"
+            >
+            <div class="adminaddeditdashboards-settings-icon">
+              <div
+                v-for="item in availableIcons"
+                :key="item"
+              >
+                <input
+                  :id="item"
+                  v-model="currentDashboard.icon"
+                  type="radio"
+                  :value="item"
+                >
+                <label :for="item">{{ item }}</label>
+              </div>
             </div>
           </div>
         </div>
@@ -209,12 +221,15 @@ function handleClose() {
 	}
 
 	&-settings {
-		display: flex;
-		flex-direction: column;
 		padding: 0 0.5rem 0.5rem 0.5rem;
 		border-radius: 5px;
 		border: solid 1px var(--color-border);
 		overflow-y: scroll;
+
+		&-container {
+			display: flex;
+			flex-direction: column;
+		}
 
 		label {
 			margin: 8px 0 4px;

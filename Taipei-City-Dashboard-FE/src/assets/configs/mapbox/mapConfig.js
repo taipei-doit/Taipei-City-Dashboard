@@ -4,14 +4,30 @@ export const MapObjectConfig = {
 	container: "mapboxBox",
 	center: [121.536609, 25.044808],
 	maxBounds: [
-		[121.3870596781498, 24.95733863075891], // Southwest coordinates
-		[121.6998231749096, 25.21179993640203], // Northeast coordinates
+		[121.2825, 24.6961], // Southwest coordinates
+		[122.0073, 25.2979]  // Northeast coordinates
 	],
-	zoom: 12.5,
-	minZoom: 11,
+	zoom: 9,
+	minZoom: 9,
 	maxZoom: 22,
 	projection: "globe", // display the map as a 3D globe
 };
+
+// City Map View Settings
+export const CityMapView = {
+	taipei: {
+		center: [121.56376521148917, 25.086495621435404],
+		zoom: 10,
+	},
+	metrotaipei:{
+		center: [121.64080359050314, 24.980598540245936],
+		zoom: 9,
+	},
+	default: {
+		center: [121.56376521148917, 25.086495621435404],
+		zoom: 10,
+	}
+}
 
 // All map types
 export const mapTypes = {
@@ -60,7 +76,61 @@ export const TaipeiTown = {
 		"text-opacity": ["interpolate", ["linear"], ["zoom"], 15.99, 1, 16, 0],
 	},
 };
-
+export const metroTaipeiTown = {
+	id: "metrotaipei_town_label",
+	source: "metrotaipei_town_label",
+	type: "symbol",
+	layout: {
+		"text-field": ["to-string", ["get", "TNAME"]],
+		"text-size": [
+			"interpolate",
+			["linear"],
+			["zoom"],
+			11,
+			10,
+			13,
+			12,
+			15.5,
+			14,
+		],
+		"text-allow-overlap": true,
+	},
+	paint: {
+		"text-color": [
+			"interpolate",
+			["linear"],
+			["zoom"],
+			15,
+			"#aaa",
+			16,
+			"#fff",
+		],
+		"text-halo-color": "#888",
+		"text-halo-width": ["interpolate", ["linear"], ["zoom"], 15, 0, 16, 1],
+		"text-opacity": ["interpolate", ["linear"], ["zoom"], 15.99, 1, 16, 0],
+	},
+};
+export const metroTaipeiVillage = {
+	id: "metrotaipei_village_label",
+	source: "metrotaipei_village_label",
+	type: "symbol",
+	layout: {
+		"text-field": ["to-string", ["get", "VNAME"]],
+		"text-size": 14,
+	},
+	paint: {
+		"text-color": "#85bdbd",
+		"text-opacity": [
+			"interpolate",
+			["linear"],
+			["zoom"],
+			15.49,
+			0,
+			15.5,
+			1,
+		],
+	},
+};
 // Styles for Base Layer "Taipei Village"
 export const TaipeiVillage = {
 	id: "taipei_village",
@@ -132,6 +202,33 @@ export const TpVillage = {
 	id: "tp_village",
 	source: "tp_village",
 	"source-layer": "tp_village",
+	type: "line",
+	paint: {
+		"line-color": "#aaaaaa",
+		"line-width": 1,
+	},
+	layout: {
+		visibility: "none",
+	},
+};
+export const metroTpDistrict = {
+	id: "metrotaipei_town",
+	source: "metrotaipei_town",
+	"source-layer": "metrotaipei_town",
+	type: "line",
+	paint: {
+		"line-color": "white",
+		"line-dasharray": [2, 3], // dash line
+		"line-width": 3,
+	},
+	layout: {
+		visibility: "none",
+	},
+};
+export const metroTpVillage = {
+	id: "metrotaipei_village",
+	source: "metrotaipei_village",
+	"source-layer": "metrotaipei_village",
 	type: "line",
 	paint: {
 		"line-color": "#aaaaaa",

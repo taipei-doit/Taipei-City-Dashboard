@@ -30,6 +30,8 @@ steps:
       - "--set-env-vars"
       - DB_DASHBOARD_DBNAME=$_DB_DASHBOARD_DBNAME
       - "--set-env-vars"
+      - DB_MANAGER_DBNAME=$_DB_MANAGER_DBNAME
+      - "--set-env-vars"
       - DB_MANAGER_HOST=$_DB_MANAGER_HOST
       - "--set-env-vars"
       - DB_MANAGER_USER=$_DB_MANAGER_USER
@@ -53,4 +55,8 @@ steps:
       - us-central1
       - "--allow-unauthenticated"
 options:
+<<<<<<< HEAD
+  logging: CLOUD_LOGGING_ONLY
+=======
   logging: "CLOUD_LOGGING_ONLY"
+>>>>>>> sit

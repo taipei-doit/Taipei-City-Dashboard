@@ -9,7 +9,7 @@ Testing: Jack Huang (Data Scientist), Ian Huang (Data Analysis Intern)
 <!-- Department of Information Technology, Taipei City Government -->
 
 <script setup>
-import { DashboardComponent } from "city-dashboard-component";
+import DashboardComponent from "../dashboardComponent/DashboardComponent.vue";
 import router from "../router";
 import { useContentStore } from "../store/contentStore";
 import { useDialogStore } from "../store/dialogStore";
@@ -57,10 +57,12 @@ function handleMoreInfo(item) {
   >
     <DashboardComponent
       v-for="item in contentStore.currentDashboard.components"
-      :key="item.index"
+      :key="`${item.index}-${item.city}`"
       :config="item"
       mode="half"
       :info-btn="true"
+      :active-city="item.city"
+      :select-btn-disabled="contentStore.currentDashboard.city === 'taipei'"
       :favorite-btn="authStore.token ? true : false"
       :is-favorite="contentStore.favorites?.components.includes(item.id)"
       @favorite="
@@ -83,10 +85,12 @@ function handleMoreInfo(item) {
     class="dashboard"
   >
     <DashboardComponent
-      v-for="item in contentStore.currentDashboard.components"
-      :key="item.index"
+      v-for="(item, arrayIdx) in contentStore.currentDashboard.components"
+      :key="`${item.index}-${item.city}`"
       :config="item"
       :info-btn="true"
+      :active-city="item.city"
+      :select-btn-disabled="contentStore.currentDashboard.city === 'taipei' || contentStore.currentDashboardExcluded.components.filter((data) => data.index === item.index).length === 0"
       :delete-btn="
         contentStore.personalDashboards
           .map((item) => item.index)
@@ -111,6 +115,18 @@ function handleMoreInfo(item) {
         (id) => {
           contentStore.deleteComponent(id);
         }
+      "
+      @change-city="(city)=> {
+        const selectedData = contentStore.cityDashboard.components.find((data) => {
+          if (data.index === item.index && data.city === city) {
+            return data
+          }
+        });
+
+        if (selectedData) {
+          contentStore.setComponentData(arrayIdx,selectedData);
+        }
+      }
       "
     />
     <MoreInfo />

@@ -12,6 +12,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import { useContentStore } from "../store/contentStore";
 import { useMapStore } from "../store/mapStore";
 import { useAuthStore } from "../store/authStore";
+import { useAdminStore } from "../store/adminStore";
 import DashboardView from "../views/DashboardView.vue";
 import MapView from "../views/MapView.vue";
 import ComponentView from "../views/ComponentView.vue";
@@ -49,7 +50,7 @@ const routes = [
 		component: ComponentInfoView,
 	},
 	{
-		path: "/embed/:id",
+		path: "/embed/:id/:city",
 		name: "embed",
 		component: EmbedView,
 	},
@@ -59,7 +60,7 @@ const routes = [
 	},
 	{
 		path: "/admin",
-		redirect: "/admin/dashboard",
+		redirect: "/admin/dashboard?city=taipei",
 	},
 	{
 		path: "/admin/user",
@@ -169,7 +170,7 @@ router.beforeEach((to) => {
 		to.path.toLowerCase() === "/mapview"
 	) {
 		contentStore.clearEditDashboard();
-		contentStore.setRouteParams(to.path, to.query.index);
+		contentStore.setRouteParams(to.path, to.query.index, to.query.city);
 	} else if (
 		to.path.toLowerCase() === "/component" ||
 		to.name === "component-info"
@@ -180,7 +181,7 @@ router.beforeEach((to) => {
 	}
 	// Get Component data if the path is component-info
 	if (to.name === "component-info") {
-		contentStore.getCurrentComponentData(to.params.index);
+		contentStore.getCurrentComponentData(to.params.index, to.query.city);
 	}
 	// Clear the entire mapStore if the path doesn't start with /mapview
 	if (to.path.toLowerCase() !== "/mapview") {
@@ -189,6 +190,16 @@ router.beforeEach((to) => {
 	// Clear only map layers if the path starts with /mapview
 	else if (to.path.toLowerCase() === "/mapview") {
 		mapStore.clearOnlyLayers();
+	}
+});
+
+// Handles admin related tasks (gets content for each route)
+router.beforeEach((to) => {
+	const adminStore = useAdminStore();
+	if (
+		to.path.toLowerCase() === "/admin/dashboard"
+	) {
+		adminStore.setRouteParams(to.query.city);
 	}
 });
 

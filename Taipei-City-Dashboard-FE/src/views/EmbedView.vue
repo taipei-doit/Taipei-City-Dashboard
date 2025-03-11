@@ -4,7 +4,7 @@
 import { onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
 import http from "../router/axios";
-import { DashboardComponent } from "city-dashboard-component";
+import DashboardComponent from "../dashboardComponent/DashboardComponent.vue";
 import { useContentStore } from "../store/contentStore";
 
 import { getComponentDataTimeframe } from "../assets/utilityFunctions/dataTimeframe";
@@ -16,8 +16,8 @@ const content = ref(null);
 
 onMounted(async () => {
 	try {
-		const res = await http.get(`/component/${route.params.id}`);
-		const resChart = await http.get(`/component/${route.params.id}/chart`, {
+		const res = await http.get(`/component/${route.params.id}?city=${route.params.city}`);
+		const resChart = await http.get(`/component/${route.params.id}/chart/${route.params.city}`, {
 			params: !["static", "current", "demo"].includes(
 				res.data.data.time_from
 			)
@@ -53,6 +53,8 @@ onMounted(async () => {
       v-else-if="content"
       :config="content"
       :footer="false"
+      :active-city="content.city"
+      :select-btn="false"
       :style="{
         height: 'calc(100% - 36px)',
         maxHeight: 'calc(100% - 36px)',

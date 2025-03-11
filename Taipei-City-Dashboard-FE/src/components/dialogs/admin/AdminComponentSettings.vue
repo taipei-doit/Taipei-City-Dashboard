@@ -3,7 +3,7 @@
 <script setup>
 import { ref, defineProps } from "vue";
 import { storeToRefs } from "pinia";
-import { DashboardComponent } from "city-dashboard-component";
+import DashboardComponent from "../../../dashboardComponent/DashboardComponent.vue";
 import { useDialogStore } from "../../../store/dialogStore";
 import { useAdminStore } from "../../../store/adminStore";
 
@@ -97,6 +97,7 @@ function handleClose() {
               :minlength="1"
               :maxlength="15"
               required
+              disabled
             >
             <div class="two-block">
               <label>組件 ID</label>
@@ -595,6 +596,8 @@ function handleClose() {
             "
             :key="`${currentComponent.index}-${currentComponent.chart_config.color}-${currentComponent.chart_config.types}`"
             :config="JSON.parse(JSON.stringify(currentComponent))"
+            :active-city="currentComponent.city"
+            :select-btn-disabled="true"
             mode="large"
           />
           <div

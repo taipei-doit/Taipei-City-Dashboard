@@ -2,7 +2,7 @@
 
 <!-- Draggable tags that show component info to be used for dashboard settings -->
 <script setup>
-import { defineProps, ref } from "vue";
+import { ref } from "vue";
 
 const draggedItem = ref(null);
 
@@ -48,7 +48,7 @@ const handleDragEnd = () => {
 <template>
   <div
     v-for="(tag, index) in tags"
-    :key="`${tag.index}`"
+    :key="`${tag.index}-${tag.city}`"
     :class="{
       componentdragtag: true,
       'componentdragtag-dragging': index === draggedItem,

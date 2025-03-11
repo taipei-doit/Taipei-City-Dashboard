@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="100mm"
+   height="100mm"
+   viewBox="0 0 100 100"
+   version="1.1"
+   id="svg5"
+   xml:space="preserve"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"><sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     showgrid="false" /><defs
+     id="defs2" /><g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"><g
+       id="01 橫向長條圖"
+       transform="matrix(0.25374825,0,0,0.25374825,-28.911483,-0.73548116)"><path
+         id="Shape 1"
+         class="s0"
+         d="m 156.51735,54.018207 c 0,-3.560243 2.17399,-6.434164 4.86713,-6.434164 h 244.65456 c 2.69314,0 4.86713,2.873921 4.86713,6.434164 v 44.610227 c 0,3.560236 -2.17399,6.434166 -4.86713,6.434166 H 161.38448 c -2.69314,0 -4.86713,-2.87393 -4.86713,-6.434166 z"
+         style="stroke-width:0.373071"
+         inkscape:export-filename="BarChartWithGoal.svg"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96" /><path
+         id="Shape 1 copy"
+         class="s0"
+         d="m 156.51735,179.26999 c 0,-3.56024 3.36035,-6.43417 7.52318,-6.43417 h 300.92704 c 4.16282,0 7.52318,2.87393 7.52318,6.43417 v 44.61022 c 0,3.56025 -3.36036,6.43417 -7.52318,6.43417 H 164.04053 c -4.16283,0 -7.52318,-2.87392 -7.52318,-6.43417 z"
+         style="stroke-width:0.463826" /><path
+         id="Shape 1 copy 2"
+         class="s0"
+         d="m 156.51735,304.52177 c 0,-3.56024 2.28382,-6.43416 5.11303,-6.43416 H 311.9535 c 2.82921,0 5.11303,2.87392 5.11303,6.43416 v 44.61022 c 0,3.56024 -2.28382,6.43417 -5.11303,6.43417 H 161.63038 c -2.82921,0 -5.11303,-2.87393 -5.11303,-6.43417 z"
+         style="stroke-width:0.382379" /><path
+         id="Shape 1 copy 3"
+         class="s1"
+         d="m 156.51735,241.89588 c 0,-3.56024 4.2473,-6.43417 9.50888,-6.43417 h 224.4095 c 5.26158,0 9.50888,2.87393 9.50888,6.43417 v 44.61023 c 0,3.56023 -4.2473,6.43416 -9.50888,6.43416 h -224.4095 c -5.26158,0 -9.50888,-2.87393 -9.50888,-6.43416 z"
+         style="stroke-width:0.52146" /><path
+         id="Shape 1 copy 4"
+         class="s1"
+         d="m 156.51735,116.6441 c 0,-3.56024 2.47066,-6.43418 5.53132,-6.43418 h 187.69607 c 3.06067,0 5.53133,2.87394 5.53133,6.43418 v 44.61022 c 0,3.56024 -2.47066,6.43416 -5.53133,6.43416 H 162.04867 c -3.06066,0 -5.53132,-2.87392 -5.53132,-6.43416 z"
+         style="stroke-width:0.397712" /><rect
+         style="fill:#333333;stroke-width:0.562144"
+         id="rect483"
+         width="7.9776268"
+         height="57.970757"
+         x="425.44763"
+         y="47.534317" /><rect
+         style="fill:#333333;stroke-width:0.562144"
+         id="rect483-2"
+         width="7.9776268"
+         height="57.970757"
+         x="408.35986"
+         y="110.55756" /><rect
+         style="fill:#333333;stroke-width:0.562144"
+         id="rect483-2-8"
+         width="7.9776268"
+         height="57.970757"
+         x="363.97003"
+         y="235.00856" /><rect
+         style="fill:#333333;stroke-width:0.562144"
+         id="rect483-2-8-5"
+         width="7.9776268"
+         height="57.970757"
+         x="434.85818"
+         y="297.93503" /><rect
+         style="fill:#333333;stroke-width:0.562144"
+         id="rect483-3"
+         width="7.9776268"
+         height="57.970757"
+         x="465.06982"
+         y="172.78307" /></g></g><style
+     id="style134">
+		tspan { white-space:pre } 
+		.s0 { fill: #000000 } 
+		.s1 { opacity: .5;fill: #000000 } 
+	</style><style
+     id="style1251">
+		tspan { white-space:pre } 
+		.s0 { fill: #000000 } 
+		.s1 { opacity: .5;fill: #000000 } 
+	</style></svg>

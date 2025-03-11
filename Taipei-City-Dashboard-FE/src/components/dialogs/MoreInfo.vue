@@ -1,7 +1,7 @@
 <!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 
 <script setup>
-import { DashboardComponent } from "city-dashboard-component";
+import DashboardComponent from "../../dashboardComponent/DashboardComponent.vue";
 import { useDialogStore } from "../../store/dialogStore";
 import { useContentStore } from "../../store/contentStore";
 import { useAuthStore } from "../../store/authStore";
@@ -36,14 +36,15 @@ function getLinkTag(link, index) {
     <div class="moreinfo">
       <DashboardComponent
         :config="dialogStore.moreInfoContent"
+        :active-city="dialogStore.moreInfoContent.city"
+        :select-btn="false"
         mode="large"
       />
       <div class="moreinfo-info">
         <div class="moreinfo-info-data">
           <h3>
             組件說明（{{
-              ` ID: ${dialogStore.moreInfoContent.id}｜Index:
-											${dialogStore.moreInfoContent.index} `
+              ` ID: ${dialogStore.moreInfoContent.id}｜Index: ${dialogStore.moreInfoContent.index}｜City: ${dialogStore.moreInfoContent.city}`
             }}）
           </h3>
           <p>{{ dialogStore.moreInfoContent.long_desc }}</p>
@@ -62,7 +63,7 @@ function getLinkTag(link, index) {
               "
             />
           </div>
-          <div v-if="dialogStore.moreInfoContent.links[0]">
+          <div v-if="dialogStore.moreInfoContent.links?.length > 0">
             <h3>相關資料</h3>
             <div class="moreinfo-info-links">
               <a
