@@ -42,8 +42,8 @@ const numToColor = {
 	justify-content: center;
 
 	span {
-		color: var(--dashboardcomponent-color-complement-text);
-		font-family: var(--dashboardcomponent-font-icon);
+		color: var(--color-complement-text);
+		font-family: var(--font-icon);
 		pointer-events: none;
 		user-select: none;
 	}
@@ -55,12 +55,12 @@ const numToColor = {
 	}
 
 	&-item {
-		width: var(--dashboardcomponent-font-ms);
-		height: var(--dashboardcomponent-font-ms);
+		width: var(--font-ms);
+		height: var(--font-ms);
 		border-radius: 2px;
 		color: black;
 		font-size: 0.8rem;
-		line-height: var(--dashboardcomponent-font-ms);
+		line-height: var(--font-ms);
 		text-align: center;
 		pointer-events: none;
 		user-select: none;

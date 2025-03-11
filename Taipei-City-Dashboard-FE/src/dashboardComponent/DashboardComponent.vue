@@ -1,8 +1,6 @@
 <script setup>
 import { computed, ref } from "vue";
 import { useContentStore } from "../store/contentStore";
-import "./styles/chartStyles.css";
-import "./styles/toggleswitch.css";
 import "material-icons/iconfont/material-icons.css";
 import { getComponentDataTimeframe } from "./utilities/dataTimeframe";
 import { timeTerms } from "./utilities/AllTimes";
@@ -563,15 +561,15 @@ button:hover {
 .dashboardcomponent {
 	height: 330px;
 	max-height: 330px;
-	width: calc(100% - var(--dashboardcomponent-font-m) * 2);
-	max-width: calc(100% - var(--dashboardcomponent-font-m) * 2);
+	width: calc(100% - var(--font-m) * 2);
+	max-width: calc(100% - var(--font-m) * 2);
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
 	position: relative;
-	padding: var(--dashboardcomponent-font-m);
+	padding: var(--font-m);
 	border-radius: 5px;
-	background-color: var(--dashboardcomponent-color-component-background);
+	background-color: var(--color-component-background);
 
 	@media (min-width: 1050px) {
 		height: 370px;
@@ -595,8 +593,8 @@ button:hover {
 
 		h3 {
 			display: flex;
-			font-size: var(--dashboardcomponent-font-m);
-			color: var(--dashboardcomponent-color-normal-text);
+			font-size: var(--font-m);
+			color: var(--color-normal-text);
 
 			.componenttag {
 				flex-shrink: 0;
@@ -607,8 +605,8 @@ button:hover {
 		h4 {
 			display: flex;
 			align-items: center;
-			color: var(--dashboardcomponent-color-complement-text);
-			font-size: var(--dashboardcomponent-font-s);
+			color: var(--color-complement-text);
+			font-size: var(--font-s);
 			font-weight: 400;
 			overflow: visible;
 
@@ -617,7 +615,7 @@ button:hover {
 				margin: 0 4px;
 				color: rgb(237, 90, 90) !important;
 				font-size: 1rem;
-				font-family: var(--dashboardcomponent-font-icon);
+				font-family: var(--font-icon);
 				user-select: none;
 			}
 
@@ -627,8 +625,8 @@ button:hover {
 		}
 
 		p {
-			color: var(--dashboardcomponent-color-normal-text);
-			font-size: var(--dashboardcomponent-font-s);
+			color: var(--color-normal-text);
+			font-size: var(--font-s);
 			font-weight: 400;
 		}
 
@@ -640,8 +638,8 @@ button:hover {
 
 			span {
 				margin-left: 8px;
-				color: var(--dashboardcomponent-color-complement-text);
-				font-family: var(--dashboardcomponent-font-icon);
+				color: var(--color-complement-text);
+				font-family: var(--font-icon);
 				user-select: none;
 			}
 		}
@@ -652,11 +650,11 @@ button:hover {
 			align-items: flex-start;
 
 			button span {
-				color: var(--dashboardcomponent-color-complement-text);
-				font-family: var(--dashboardcomponent-font-icon);
+				color: var(--color-complement-text);
+				font-family: var(--font-icon);
 				font-size: calc(
-					var(--dashboardcomponent-font-l) *
-						var(--dashboardcomponent-font-to-icon)
+					var(--font-l) *
+						var(--font-to-icon)
 				);
 				transition: color 0.2s;
 
@@ -723,8 +721,8 @@ button:hover {
 				border-radius: 5px;
 				background-color: rgb(77, 77, 77);
 				opacity: 0.6;
-				color: var(--dashboardcomponent-color-complement-text);
-				font-size: var(--dashboardcomponent-font-s);
+				color: var(--color-complement-text);
+				font-size: var(--font-s);
 				text-align: center;
 				transition: color 0.2s, opacity 0.2s;
 				user-select: none;
@@ -736,13 +734,13 @@ button:hover {
 			}
 	
 			&-active {
-				background-color: var(--dashboardcomponent-color-complement-text);
+				background-color: var(--color-complement-text);
 				color: white;
 			}
 		}
 
 		.selectBtn {
-			background-color: var(--dashboardcomponent-color-component-background);
+			background-color: var(--color-component-background);
 			padding: 3px;
 
 			&-disabled {
@@ -752,9 +750,9 @@ button:hover {
 
 		.cityName {
 			padding: 2px 6px;
-			border: 1px solid var(--dashboardcomponent-color-border);
+			border: 1px solid var(--color-complement-text);
 			border-radius: 5px;
-			color: var(--dashboardcomponent-color-complement-text);
+			color: var(--color-complement-text);
 		}
 	}
 
@@ -767,7 +765,7 @@ button:hover {
 		overflow-y: scroll;
 
 		p {
-			color: var(--dashboardcomponent-color-border);
+			color: var(--color-border);
 		}
 	}
 
@@ -780,8 +778,8 @@ button:hover {
 			width: 2rem;
 			height: 2rem;
 			border-radius: 50%;
-			border: solid 4px var(--dashboardcomponent-color-border);
-			border-top: solid 4px var(--dashboardcomponent-color-highlight);
+			border: solid 4px var(--color-border);
+			border-top: solid 4px var(--color-highlight);
 			animation: spin 0.7s ease-in-out infinite;
 		}
 	}
@@ -793,14 +791,14 @@ button:hover {
 		justify-content: center;
 
 		span {
-			color: var(--dashboardcomponent-color-complement-text);
+			color: var(--color-complement-text);
 			margin-bottom: 0.5rem;
-			font-family: var(--dashboardcomponent-font-icon);
+			font-family: var(--font-icon);
 			font-size: 2rem;
 		}
 
 		p {
-			color: var(--dashboardcomponent-color-complement-text);
+			color: var(--color-complement-text);
 		}
 	}
 
@@ -828,14 +826,14 @@ button:hover {
 
 			span {
 				margin-left: 4px;
-				color: var(--dashboardcomponent-color-highlight);
-				font-family: var(--dashboardcomponent-font-icon);
+				color: var(--color-highlight);
+				font-family: var(--font-icon);
 				user-select: none;
 			}
 
 			p {
 				max-height: 1.2rem;
-				color: var(--dashboardcomponent-color-highlight);
+				color: var(--color-highlight);
 				user-select: none;
 			}
 		}
@@ -940,13 +938,13 @@ button:hover {
 			justify-content: center;
 			padding: 0 4px;
 			border-radius: 5px;
-			border: 1px dashed var(--dashboardcomponent-color-complement-text);
+			border: 1px dashed var(--color-complement-text);
 			white-space: nowrap;
 			margin-right: 4px;
 
 			p {
-				font-size: var(--dashboardcomponent-font-s);
-				color: var(--dashboardcomponent-color-complement-text);
+				font-size: var(--font-s);
+				color: var(--color-complement-text);
 				text-overflow: ellipsis;
 			}
 		}
@@ -959,7 +957,7 @@ button:hover {
 				height: 40px;
 				border-radius: 5px;
 				background-color: var(
-					--dashboardcomponent-color-complement-text
+					--color-complement-text
 				);
 			}
 		}

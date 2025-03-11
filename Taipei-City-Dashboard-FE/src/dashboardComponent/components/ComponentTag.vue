@@ -36,25 +36,25 @@ defineProps({
 	align-items: center;
 	margin-right: 4px;
 	padding: 0 4px;
-	border: solid 1px var(--dashboardcomponent-color-complement-text);
+	border: solid 1px var(--color-complement-text);
 	border-radius: 5px;
 	overflow-x: hidden;
 	user-select: none;
 
 	span {
 		margin-right: 4px;
-		color: var(--dashboardcomponent-color-complement-text);
-		font-family: var(--dashboardcomponent-font-icon);
+		color: var(--color-complement-text);
+		font-family: var(--font-icon);
 	}
 
 	p {
-		max-height: var(--dashboardcomponent-font-ms);
-		color: var(--dashboardcomponent-color-complement-text);
-		font-size: var(--dashboardcomponent-font-s);
+		max-height: var(--font-ms);
+		color: var(--color-complement-text);
+		font-size: var(--font-s);
 	}
 
 	&-fill {
-		background-color: var(--dashboardcomponent-color-complement-text);
+		background-color: var(--color-complement-text);
 
 		span,
 		p {
@@ -63,8 +63,8 @@ defineProps({
 	}
 
 	&-small {
-		min-height: var(--dashboardcomponent-font-ms);
-		max-height: var(--dashboardcomponent-font-ms);
+		min-height: var(--font-ms);
+		max-height: var(--font-ms);
 		padding: 0 2px;
 		margin-left: 8px;
 

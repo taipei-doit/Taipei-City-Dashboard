@@ -194,13 +194,13 @@ function handleDataSelection(_e, _chartContext, config) {
 
 		h5 {
 			margin: 0;
-			color: var(--dashboardcomponent-color-complement-text);
+			color: var(--color-complement-text);
 		}
 
 		h6 {
 			margin: 0;
-			color: var(--dashboardcomponent-color-complement-text);
-			font-size: var(--dashboardcomponent-font-m);
+			color: var(--color-complement-text);
+			font-size: var(--font-m);
 			font-weight: 400;
 		}
 	}
