@@ -2,19 +2,16 @@ from airflow import DAG
 from operators.common_pipeline import CommonDag
 
 
-def _R0051_4(**kwargs):
-    import geopandas as gpd
-    import pandas as pd
-    import requests
+def _transfer(**kwargs):
     from sqlalchemy import create_engine
-    from geoalchemy2 import WKTElement
     from utils.load_stage import (
         save_geodataframe_to_postgresql,
         update_lasttime_in_data_to_dataset_info,
     )
     from utils.transform_time import convert_str_to_time_format
     from utils.transform_geometry import add_point_wkbgeometry_column_to_df
-
+    from utils.extract_stage import get_tdx_data
+    import pandas as pd
     # Config
     dag_infos = kwargs.get("dag_infos")
     ready_data_db_uri = kwargs.get("ready_data_db_uri")
@@ -23,22 +20,25 @@ def _R0051_4(**kwargs):
     default_table = dag_infos.get("ready_data_default_table")
     history_table = dag_infos.get("ready_data_history_table")
     proxies = kwargs.get("proxies")
-    url = "https://tcgbusfs.blob.core.windows.net/dotapp/youbike/v2/youbike_immediate.json"
+    url = '''https://tdx.transportdata.tw/api/basic/v2/Bike/Station/City/NewTaipei?%24&%24format=JSON'''
     GEOMETRY_TYPE = "Point"
     FROM_CRS = 4326
+    raw_data = get_tdx_data(url, output_format='dataframe')
 
-    res = requests.get(url, timeout=60)
-    res.raise_for_status()
-    res_json = res.json()
-    raw_data = pd.DataFrame(res_json)
+    print(f"raw data =========== {raw_data.columns}")
 
     # Transform
     data = raw_data.copy()
-    data = data.drop_duplicates(subset=["sno", "mday"], keep="last").reset_index(
-        drop=True
-    )
+    data = pd.concat([data.drop(['StationName', 'StationPosition'], axis=1), 
+                    data['StationName'].apply(pd.Series), 
+                    data['StationPosition'].apply(pd.Series)], axis=1)
 
-    data = data.rename(columns={"srcUpdateTime": "data_time"})
+    # Rename the columns for clarity (不要同時使用 inplace 與賦值)
+    data.rename(columns={"StationID": "sno", "Zh_tw": "sna", "SrcUpdateTime": "data_time",
+                        "PositionLon": "longitude", "PositionLat": "latitude"}, inplace=True)
+
+# 如果你想重新設定 DataFrame 的欄位順序，可以使用以下方式，而不是覆蓋整個 data：
+    data = data[["sno", "sna", "data_time", "longitude", "latitude"]]
     data["data_time"] = convert_str_to_time_format(data["data_time"])
     # geometry
     gdata = add_point_wkbgeometry_column_to_df(
@@ -46,6 +46,7 @@ def _R0051_4(**kwargs):
     )
 
     ready_data = gdata[["sno", "sna", "data_time", "wkb_geometry"]]
+    print(f"ready_data =========== {ready_data.head()}")
 
     # Load
     engine = create_engine(ready_data_db_uri)
@@ -62,5 +63,5 @@ def _R0051_4(**kwargs):
     update_lasttime_in_data_to_dataset_info(engine, dag_id, lasttime_in_data)
 
 
-dag = CommonDag(proj_folder="proj_city_dashboard", dag_folder="R0051_4")
-dag.create_dag(etl_func=_R0051_4)
+dag = CommonDag(proj_folder="proj_new_taipei_city_dashboard", dag_folder="youbike_station_realtime_usage_and_availability")
+dag.create_dag(etl_func=_transfer)

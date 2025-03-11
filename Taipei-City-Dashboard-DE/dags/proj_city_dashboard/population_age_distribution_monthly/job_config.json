@@ -1,0 +1,37 @@
+{
+  "dag_infos": {
+    "dag_id": "population_age_distribution_monthly",
+    "start_date": "2025-02-17",
+    "schedule_interval": "0 4 14 * *",
+    "catchup": false,
+    "tags": ["population_age_distribution_monthly_tpe", "主計處"],
+    "description": "This dataset provides monthly statistics on Taipei City's population age distribution, including young, working-age, and elderly populations, their proportions, dependency ratios, and aging index.",
+    "default_args": {
+      "owner": "airflow",
+      "email": ["DEFAULT_EMAIL_LIST"],
+      "email_on_retry": false,
+      "email_on_failure": true,
+      "retries": 1,
+      "retry_delay": 60
+    },
+    "ready_data_db": "postgres_default",
+    "ready_data_default_table": "population_age_distribution_tpe",
+    "ready_data_history_table": "population_age_distribution_tpe_history",
+    "raw_data_db": "postgres_default",
+    "raw_data_table": "",
+    "load_behavior": "current+history"
+  },
+  "data_infos": {
+    "name_cn": "臺北市人口年齡分配按月別時間數列統計資料",
+    "airflow_update_freq": "04:00 14th every month",
+    "source": "https://data.taipei/dataset/detail?id=1e0c58e9-6aa5-4acb-a5a1-f60bacad60f3",
+    "source_type": "data.taipei csv file",
+    "source_dept": "主計處",
+    "gis_format": "Point",
+    "output_coordinate": "EPSG:4326",
+    "is_geometry": 1,
+    "dataset_description": "臺北市人口年齡分配按月別時間數列統計資料",
+    "etl_description": "get update time, geocoding, standardize geometry",
+    "sensitivity": "public"
+  }
+}

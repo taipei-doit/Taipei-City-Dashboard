@@ -1,0 +1,37 @@
+{
+  "dag_infos": {
+    "dag_id": "population_age_distribution_monthly",
+    "start_date": "2025-02-17",
+    "schedule_interval": "0 4 14 * *",
+    "catchup": false,
+    "tags": ["population_age_distribution_monthly_new_tpe", "主計處"],
+    "description": "This dataset provides monthly statistics on New Taipei City's population age distribution, including young, working-age, and elderly populations, their proportions, dependency ratios, and aging index.",
+    "default_args": {
+      "owner": "airflow",
+      "email": ["DEFAULT_EMAIL_LIST"],
+      "email_on_retry": false,
+      "email_on_failure": true,
+      "retries": 1,
+      "retry_delay": 60
+    },
+    "ready_data_db": "postgres_default",
+    "ready_data_default_table": "population_age_distribution_new_tpe",
+    "ready_data_history_table": "population_age_distribution_new_tpe_history",
+    "raw_data_db": "postgres_default",
+    "raw_data_table": "",
+    "load_behavior": "current+history"
+  },
+  "data_infos": {
+    "name_cn": "新北市現住人口之年齡分配",
+    "airflow_update_freq": "04:00 14th every month",
+    "source": "https://data.ntpc.gov.tw/api/datasets/8308ab58-62d1-424e-8314-24b65b7ab492/json?page=0&size=10",
+    "source_type": "data.ntpc.gov.tw",
+    "source_dept": "主計處",
+    "gis_format": null,
+    "output_coordinate": "",
+    "is_geometry": 0,
+    "dataset_description": "新北市現住人口之年齡分配",
+    "etl_description": "get update time, geocoding, standardize geometry",
+    "sensitivity": "public"
+  }
+}

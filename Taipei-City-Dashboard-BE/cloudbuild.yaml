@@ -55,4 +55,8 @@ steps:
       - us-central1
       - "--allow-unauthenticated"
 options:
+<<<<<<< HEAD
   logging: CLOUD_LOGGING_ONLY
+=======
+  logging: "CLOUD_LOGGING_ONLY"
+>>>>>>> sit

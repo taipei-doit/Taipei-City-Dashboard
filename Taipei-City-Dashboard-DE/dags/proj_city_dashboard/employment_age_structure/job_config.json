@@ -1,0 +1,43 @@
+{
+  "dag_infos": {
+    "dag_id": "employment_age_structure",
+    "start_date": "2025-02-11",
+    "schedule_interval": "0 3 25 12 *",
+    "catchup": false,
+    "tags": [
+      "employment_age_structure",
+      "data.taipei",
+      "臺北市",
+      "Taipei-City",
+      "就業人口之年齡結構"
+    ],
+    "description": "The dataset provides annual statistics on the age structure of Taipei City’s employed population from 1978, including gender distribution, actual numbers (in thousands), and percentages.",
+    "default_args": {
+      "owner": "airflow",
+      "email": ["DEFAULT_EMAIL_LIST"],
+      "email_on_retry": false,
+      "email_on_failure": true,
+      "retries": 1,
+      "retry_delay": 60
+    },
+    "ready_data_db": "postgres_default",
+    "ready_data_default_table": "employment_age_structure_tpe",
+    "ready_data_history_table": "",
+    "raw_data_db": "postgres_default",
+    "raw_data_table": "",
+    "load_behavior": "replace"
+  },
+  "data_infos": {
+    "name_cn": "臺北市就業人口之年齡結構",
+    "airflow_update_freq": "03:00 12-25 every year",
+    "source": "https://data.taipei/api/v1/dataset/71185df2-d7a2-48f2-9bb5-192b59737610?scope=resourceAquire",
+    "source_type": "data.taipei",
+    "source_dept": "主計處",
+    "gis_format": null,
+    "output_coordinate": "",
+    "is_geometry": 0,
+    "dataset_description": "臺北市就業人口之年齡結構",
+    "etl_description": "target url, fill data columns, standardize time",
+    "sensitivity": "public"
+  }
+}
