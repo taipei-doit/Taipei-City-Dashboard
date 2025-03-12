@@ -99,18 +99,19 @@ func GetComponentByID(c *gin.Context) {
 	}
 
 	// 1.1 Get the city name from the URL
-	city := c.Param("city")
-	if !(city == "taipei" || city == "metrotaipei" || city == ""){
+	var query componentQuery
+	c.ShouldBindQuery(&query)
+	if !(query.City == "taipei" || query.City == "metrotaipei" || query.City == ""){
 		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": "Invalid City Name"})
 		return
 	}
 
-	if city == ""{
-		city = "taipei"
+	if query.City == ""{
+		query.City = "taipei"
 	}
 
 	// Find the component
-	cityComponent, err := models.GetComponentByID(id, city)
+	cityComponent, err := models.GetComponentByID(id, query.City)
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"status": "error", "message": "component not found"})
 		return
@@ -135,18 +136,19 @@ func UpdateComponent(c *gin.Context) {
 	}
 
 	// 1.1 Get the city name from the URL
-	city := c.Param("city")
-	if !(city == "taipei" || city == "metrotaipei" || city == ""){
+	var query componentQuery
+	c.ShouldBindQuery(&query)
+	if !(query.City == "taipei" || query.City == "metrotaipei" || query.City == ""){
 		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": "Invalid City Name"})
 		return
 	}
 
-	if city == ""{
-		city = "taipei"
+	if query.City == ""{
+		query.City = "taipei"
 	}
 
 	// 2. Check if the component exists
-	_, err = models.GetComponentByID(id, city)
+	_, err = models.GetComponentByID(id, query.City)
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"status": "error", "message": "component not found"})
 		return
@@ -160,7 +162,7 @@ func UpdateComponent(c *gin.Context) {
 	}
 
 	// 4. Update the component
-	cityComponent, err = models.UpdateComponent(id, city, cityComponent.Name, cityComponent.HistoryConfig, cityComponent.MapFilter, cityComponent.TimeFrom, cityComponent.TimeTo, cityComponent.UpdateFreq, cityComponent.UpdateFreqUnit, cityComponent.Source, cityComponent.ShortDesc, cityComponent.LongDesc, cityComponent.UseCase, cityComponent.Links, cityComponent.Contributors)
+	cityComponent, err = models.UpdateComponent(id, query.City, cityComponent.Name, cityComponent.HistoryConfig, cityComponent.MapFilter, cityComponent.TimeFrom, cityComponent.TimeTo, cityComponent.UpdateFreq, cityComponent.UpdateFreqUnit, cityComponent.Source, cityComponent.ShortDesc, cityComponent.LongDesc, cityComponent.UseCase, cityComponent.Links, cityComponent.Contributors)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": err.Error()})
 		return
