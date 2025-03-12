@@ -4,11 +4,6 @@ import { useContentStore } from "../store/contentStore";
 import "material-icons/iconfont/material-icons.css";
 import { getComponentDataTimeframe } from "./utilities/dataTimeframe";
 import { timeTerms } from "./utilities/AllTimes";
-// import {
-// 	ComponentConfig,
-// 	MapConfig,
-// 	MapFilter,
-// } from "./utilities/componentConfig";
 import { chartTypes } from "./utilities/chartTypes";
 
 import ComponentTag from "./components/ComponentTag.vue";
@@ -102,8 +97,8 @@ const activeCity = computed({
 		emits("changeCity", value);
 	},
 });
-const cityName = computed(() => contentStore.getCityListName(activeCity.value));
-const configCity = computed(() =>{
+const cityTag = computed(() => contentStore.getCityListName([activeCity.value], true));
+const configCity = computed(() => {
 	const cityVal = props.config?.city;
 	let cities = [];
 	
@@ -285,6 +280,19 @@ function returnChartComponent(name, svg) {
           {{ props.config.short_desc }}
         </p>
         <div v-if="!mode.includes('map') || toggleOn">
+          <div
+            v-if="mode !== 'preview'"
+            class="city-tag-container"
+          >
+            <ComponentTag
+              v-for=" city in cityTag"
+              :key="city"
+              :icon="''"
+              :text="city.name"
+              :mode="'small'"
+              :class="`city-tag-item ${city.value}`"
+            />
+          </div>
           <h4 v-if="dataTime === '維護修復中'">
             {{ `${config.source} | ` }}<span>warning</span>
             <h4>{{ `${dataTime}` }}</h4>
@@ -361,12 +369,12 @@ function returnChartComponent(name, svg) {
           </option>
         </template>
       </select>
-      <div
+      <!-- <div
         v-if="selectBtnDisabled"
         class="cityName"
       >
         {{ cityName }}
-      </div>
+      </div> -->
       <div
         v-if="config.chart_config.types.length > 1"
         class="dashboardcomponent-control-group"
@@ -748,11 +756,19 @@ button:hover {
 			}
 		}
 
-		.cityName {
+		.cityTag {
 			padding: 2px 6px;
 			border: 1px solid var(--color-complement-text);
 			border-radius: 5px;
 			color: var(--color-complement-text);
+			// color: var(--color-normal-text);
+
+			// &.taipei {
+			// 	background-color: var(--color-taipei);
+			// }
+			// &.metrotaipei {
+			// 	background-color: var(--color-metrotaipei);
+			// }
 		}
 	}
 
@@ -972,6 +988,16 @@ button:hover {
 	&-tag {
 		display: flex;
 		gap: 4px;
+
+		&-container {
+			margin: 4px 0;
+			display: flex;
+			gap: 5px;
+
+			div:last-child {
+				margin-right: 5px;
+			}
+		}
 	}
 }
 </style>
