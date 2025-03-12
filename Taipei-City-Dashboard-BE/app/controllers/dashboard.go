@@ -147,22 +147,27 @@ Admin: Allowed
 func CreatePublicDashboard(c *gin.Context) {
 	var dashboard models.Dashboard
 
-	city := c.Param("city")
-	if !(city == "taipei" || city == "metrotaipei" || city == ""){
+	var query componentQuery
+	c.ShouldBindQuery(&query)
+	if !(query.City == "taipei" || query.City == "metrotaipei" || query.City == ""){
 		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": "Invalid City Name"})
 		return
+	}
+
+	if query.City == ""{
+		query.City = "taipei"
 	}
 
 	_, _, _, _, permissions := util.GetUserInfoFromContext(c)
 
 
 	var groupID int
-	if city == ""{
+	if query.City == ""{
 		// Get Group public(id=1)
 		groupID = 1
 	}else{
 		var errr error
-		groupID, errr = models.GetGroupIDByName(city)
+		groupID, errr = models.GetGroupIDByName(query.City)
 		if errr != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": errr.Error()})
 			return
