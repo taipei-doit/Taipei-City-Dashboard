@@ -141,7 +141,7 @@ function handleDataSelection(_e, _chartContext, config) {
 <template>
   <div v-if="activeChart === 'GuageChart'">
     <VueApexCharts
-      width="100%"
+      width="80%"
       height="300px"
       type="radialBar"
       :options="chartOptions"
