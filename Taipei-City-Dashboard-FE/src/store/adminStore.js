@@ -126,17 +126,19 @@ export const useAdminStore = defineStore("admin", {
 
 			// 2.1 Get component chart data
 			const response = await http.get(
-				`/component/${component.id}/chart/${component.city}`,
+				`/component/${component.id}/chart/`,
 				{
-					params: !["static", "current", "demo"].includes(
-						component.time_from
-					)
-						? getComponentDataTimeframe(
+					params: {
+						city: component.city,
+						...(!["static", "current", "demo"].includes(component.time_from)
+							? getComponentDataTimeframe(
 								component.time_from,
 								component.time_to,
 								true
-						  )
-						: {},
+							  )
+							: {}
+						)
+					}
 				}
 			);
 			this.currentComponent.chart_data = response.data.data;
@@ -149,13 +151,16 @@ export const useAdminStore = defineStore("admin", {
 			if (component.history_config && component.history_config.range) {
 				for (let i in component.history_config.range) {
 					const response = await http.get(
-						`/component/${component.id}/history/${component.city}`,
+						`/component/${component.id}/history/`,
 						{
-							params: getComponentDataTimeframe(
-								component.history_config.range[i],
-								"now",
-								true
-							),
+							params: {
+								city: component.city,
+								...getComponentDataTimeframe(
+									component.history_config.range[i],
+									"now",
+									true
+								)
+							},
 						}
 					);
 					if (i === "0") {
@@ -240,7 +245,11 @@ export const useAdminStore = defineStore("admin", {
 			await http.patch(`/component/${componentId}/chart`, chart_config);
 
 			// 3.3 Update component component config (incl. history config)
-			await http.patch(`/component/${componentId}/${componentCity}`, component_config);
+			await http.patch(`/component/${componentId}`, component_config, {
+				params: {
+					city: componentCity
+				}
+			});
 
 			// 3.4 Update component map config
 			if (map_config[0] !== null) {

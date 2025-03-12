@@ -202,17 +202,20 @@ export const useContentStore = defineStore("content", {
 					try {
 						// 4-2. Get chart data
 						const response = await http.get(
-							`/component/${component.id}/chart/${component.city}`,
+							`/component/${component.id}/chart`,
 							{
-								params: !["static", "current", "demo"].includes(
-									component.time_from
-								)
-									? getComponentDataTimeframe(
-											component.time_from,
-											component.time_to,
-											true
+								params: {
+									city: component.city,
+									...!["static", "current", "demo"].includes(
+										component.time_from
 									)
-									: {},
+									? getComponentDataTimeframe(
+										component.time_from,
+										component.time_to,
+										true
+									)
+									: {}
+								},
 							}
 						);
 
@@ -247,13 +250,16 @@ export const useContentStore = defineStore("content", {
 						for (let i in component.history_config.range) {
 							try {
 								const response = await http.get(
-									`/component/${component.id}/history/${component.city}`,
+									`/component/${component.id}/history`,
 									{
-										params: getComponentDataTimeframe(
-											component.history_config.range[i],
-											"now",
-											true
-										),
+										params: {
+											city: component.city,
+											...getComponentDataTimeframe(
+												component.history_config.range[i],
+												"now",
+												true
+											)
+										},
 									}
 								);
 	
@@ -388,7 +394,12 @@ export const useContentStore = defineStore("content", {
 				
 				try {
 				  const response = await http.get(
-					`/component/${component.id}/chart/${component.city}`
+					`/component/${component.id}/chart`,
+					{
+						params: {
+							city: component.city
+						}
+					}
 				  );
 				  
 				  this.allMapLayers[index].chart_data = response.data.data;
@@ -488,17 +499,19 @@ export const useContentStore = defineStore("content", {
 			for (let index = 0; index < dialogStore.moreInfoContent.length; index++) {
 
 				const response_2 = await http.get(
-					`/component/${dialogStore.moreInfoContent[index].id}/chart/${dialogStore.moreInfoContent[index].city}`,
+					`/component/${dialogStore.moreInfoContent[index].id}/chart`,
 					{
-						params: !["static", "current", "demo"].includes(
-							dialogStore.moreInfoContent[index].time_from
-						)
+						params: {
+							city: dialogStore.moreInfoContent[index].city,
+							...!["static", "current", "demo"].includes(
+								dialogStore.moreInfoContent[index].time_from
+							)
 							? getComponentDataTimeframe(
-									dialogStore.moreInfoContent[index].time_from,
-									dialogStore.moreInfoContent[index].time_to,
-									true
+								dialogStore.moreInfoContent[index].time_from,
+								dialogStore.moreInfoContent[index].time_to,
+								true
 							  )
-							: {},
+							: {}},
 					}
 				);
 
@@ -516,12 +529,15 @@ export const useContentStore = defineStore("content", {
 						const response = await http.get(
 							`/component/${dialogStore.moreInfoContent[index].id}/history/${dialogStore.moreInfoContent[index].city}`,
 							{
-								params: getComponentDataTimeframe(
-									dialogStore.moreInfoContent[index].history_config
-										.range[i],
-									"now",
-									true
-								),
+								params: {
+									city: dialogStore.moreInfoContent[index].city,
+									...getComponentDataTimeframe(
+										dialogStore.moreInfoContent[index].history_config
+											.range[i],
+										"now",
+										true
+									)
+								},
 							}
 						);
 	
