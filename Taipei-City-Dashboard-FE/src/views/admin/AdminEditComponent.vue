@@ -6,7 +6,8 @@ import { useDialogStore } from "../../store/dialogStore";
 import { useContentStore } from "../../store/contentStore";
 
 import TableHeader from "../../components/utilities/forms/TableHeader.vue";
-import ComponentTag from "../../components/utilities/miscellaneous/ComponentTag.vue";
+// import ComponentTag from "../../components/utilities/miscellaneous/ComponentTag.vue";
+import ComponentTag from "../../dashboardComponent/components/ComponentTag.vue";
 import AdminComponentSettings from "../../components/dialogs/admin/AdminComponentSettings.vue";
 
 import { chartTypes } from "../../assets/configs/apexcharts/chartTypes";
