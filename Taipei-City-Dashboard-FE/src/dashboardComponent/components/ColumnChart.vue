@@ -227,6 +227,10 @@ function resetWidth() {
 	position: relative;
 	height: 100%;
 
+	.vue-apexcharts {
+		justify-content: unset !important;
+	}
+
 	&-toolbar {
 		position: sticky;
 		top: 0;
