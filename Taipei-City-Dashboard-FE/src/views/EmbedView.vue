@@ -17,16 +17,19 @@ const content = ref(null);
 onMounted(async () => {
 	try {
 		const res = await http.get(`/component/${route.params.id}?city=${route.params.city}`);
-		const resChart = await http.get(`/component/${route.params.id}/chart/${route.params.city}`, {
-			params: !["static", "current", "demo"].includes(
-				res.data.data.time_from
-			)
+		const resChart = await http.get(`/component/${route.params.id}/chart`, {
+			params: {
+				city: route.params.city,
+				...!["static", "current", "demo"].includes(
+					res.data.data.time_from
+				)
 				? getComponentDataTimeframe(
 						res.data.data.time_from,
 						res.data.data.time_to,
 						true
 				  )
 				: {},
+			}
 		});
 		content.value = res.data.data;
 		content.value.chart_data = resChart.data.data;
