@@ -4,11 +4,6 @@ import { useContentStore } from "../store/contentStore";
 import "material-icons/iconfont/material-icons.css";
 import { getComponentDataTimeframe } from "./utilities/dataTimeframe";
 import { timeTerms } from "./utilities/AllTimes";
-// import {
-// 	ComponentConfig,
-// 	MapConfig,
-// 	MapFilter,
-// } from "./utilities/componentConfig";
 import { chartTypes } from "./utilities/chartTypes";
 
 import ComponentTag from "./components/ComponentTag.vue";
@@ -102,13 +97,17 @@ const activeCity = computed({
 		emits("changeCity", value);
 	},
 });
-const cityName = computed(() => contentStore.getCityListName(activeCity.value));
-const configCity = computed(() =>{
+
+const cityTag = props.selectBtn && !props.selectBtnDisabled 
+	? contentStore.getCityListName(["metrotaipei", "taipei"], true) 
+	: contentStore.getCityListName(["taipei"], true);
+
+const configCity = computed(() => {
 	const cityVal = props.config?.city;
 	let cities = [];
 	
-	if (cityVal === 'metrotaipei') {
-		cities = ['taipei', 'metrotaipei'];
+	if (cityVal === "metrotaipei") {
+		cities = ["taipei", "metrotaipei"];
 	} else {
 		cities = [cityVal];
 	}
@@ -293,6 +292,19 @@ function returnChartComponent(name, svg) {
           <h4 v-else>
             {{ `${config.source} | ${dataTime}` }}
           </h4>
+          <div
+            v-if="mode !== 'preview'"
+            class="city-tag-container"
+          >
+            <ComponentTag
+              v-for=" city in cityTag"
+              :key="city"
+              :icon="''"
+              :text="city.name"
+              :mode="'small'"
+              :class="`city-tag-item ${city.value}`"
+            />
+          </div>
         </div>
       </div>
       <!-- Upper Right Corner -->
@@ -361,12 +373,12 @@ function returnChartComponent(name, svg) {
           </option>
         </template>
       </select>
-      <div
+      <!-- <div
         v-if="selectBtnDisabled"
         class="cityName"
       >
         {{ cityName }}
-      </div>
+      </div> -->
       <div
         v-if="config.chart_config.types.length > 1"
         class="dashboardcomponent-control-group"
@@ -748,11 +760,19 @@ button:hover {
 			}
 		}
 
-		.cityName {
+		.cityTag {
 			padding: 2px 6px;
 			border: 1px solid var(--color-complement-text);
 			border-radius: 5px;
 			color: var(--color-complement-text);
+			// color: var(--color-normal-text);
+
+			// &.taipei {
+			// 	background-color: var(--color-taipei);
+			// }
+			// &.metrotaipei {
+			// 	background-color: var(--color-metrotaipei);
+			// }
 		}
 	}
 
@@ -972,6 +992,20 @@ button:hover {
 	&-tag {
 		display: flex;
 		gap: 4px;
+
+		&-container {
+			margin: 4px 0;
+			display: flex;
+			gap: 5px;
+
+			// div:last-child {
+			// 	margin-right: 5px;
+			// }
+			
+			div:first-child {
+				margin-left: 5px;
+			}
+		}
 	}
 }
 </style>

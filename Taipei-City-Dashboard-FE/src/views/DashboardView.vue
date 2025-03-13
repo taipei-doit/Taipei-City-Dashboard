@@ -81,7 +81,7 @@ function handleMoreInfo(item) {
   </div>
   <!-- 2. Dashboards that have components -->
   <div
-    v-else-if="contentStore.currentDashboard.components?.length !== 0"
+    v-else-if="contentStore.currentDashboard.components?.length !== 0 || contentStore.cityDashboard.components?.length !== 0"
     class="dashboard"
   >
     <DashboardComponent

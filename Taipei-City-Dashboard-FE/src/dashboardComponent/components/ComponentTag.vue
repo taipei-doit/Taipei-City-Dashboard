@@ -80,10 +80,10 @@ defineProps({
 			}
 
 			&.taipei {
-				background-color: #1411AC;
+				background-color: var(--color-taipei);
 			}
 			&.metrotaipei {
-				background-color: #11AC33;
+				background-color: var(--color-metrotaipei);
 			}
 		}
 	}
