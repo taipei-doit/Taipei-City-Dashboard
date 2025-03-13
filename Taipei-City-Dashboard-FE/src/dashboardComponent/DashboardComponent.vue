@@ -97,13 +97,17 @@ const activeCity = computed({
 		emits("changeCity", value);
 	},
 });
-const cityTag = computed(() => contentStore.getCityListName([activeCity.value], true));
+
+const cityTag = props.selectBtn && !props.selectBtnDisabled 
+	? contentStore.getCityListName(["metrotaipei", "taipei"], true) 
+	: contentStore.getCityListName(["taipei"], true);
+
 const configCity = computed(() => {
 	const cityVal = props.config?.city;
 	let cities = [];
 	
-	if (cityVal === 'metrotaipei') {
-		cities = ['taipei', 'metrotaipei'];
+	if (cityVal === "metrotaipei") {
+		cities = ["taipei", "metrotaipei"];
 	} else {
 		cities = [cityVal];
 	}
@@ -280,6 +284,14 @@ function returnChartComponent(name, svg) {
           {{ props.config.short_desc }}
         </p>
         <div v-if="!mode.includes('map') || toggleOn">
+          <h4 v-if="dataTime === '維護修復中'">
+            {{ `${config.source} | ` }}<span>warning</span>
+            <h4>{{ `${dataTime}` }}</h4>
+            <span>warning</span>
+          </h4>
+          <h4 v-else>
+            {{ `${config.source} | ${dataTime}` }}
+          </h4>
           <div
             v-if="mode !== 'preview'"
             class="city-tag-container"
@@ -293,14 +305,6 @@ function returnChartComponent(name, svg) {
               :class="`city-tag-item ${city.value}`"
             />
           </div>
-          <h4 v-if="dataTime === '維護修復中'">
-            {{ `${config.source} | ` }}<span>warning</span>
-            <h4>{{ `${dataTime}` }}</h4>
-            <span>warning</span>
-          </h4>
-          <h4 v-else>
-            {{ `${config.source} | ${dataTime}` }}
-          </h4>
         </div>
       </div>
       <!-- Upper Right Corner -->
@@ -994,8 +998,12 @@ button:hover {
 			display: flex;
 			gap: 5px;
 
-			div:last-child {
-				margin-right: 5px;
+			// div:last-child {
+			// 	margin-right: 5px;
+			// }
+			
+			div:first-child {
+				margin-left: 5px;
 			}
 		}
 	}
