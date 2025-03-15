@@ -1,14 +1,33 @@
 version: "3.7"
+
 services:
+  # Volume cleanup service with Docker socket access
+  db-cleanup:
+    image: docker:cli
+    command: >
+      sh -c "
+        docker volume rm -f redis_data postgres_data postgres_manager_data || true &&
+        docker volume create --name=redis_data &&
+        docker volume create --name=postgres_data &&
+        docker volume create --name=postgres_manager_data
+      "
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    deploy:
+      restart_policy:
+        condition: none 
+
   redis:
     restart: always
     container_name: redis
     image: redis:7.2.3-alpine
     volumes:
-      - ./db-data/redis-data:/data
+      - redis-data:/data
+    depends_on:
+      - db-cleanup
 
   postgres-data:
-    image: postgis/postgis:16-3.4
+    image: postgis/postgis:16-3.4-alpine
     container_name: postgres-data
     restart: always
     environment:
@@ -16,10 +35,12 @@ services:
       POSTGRES_USER: ${DB_DASHBOARD_USER}
       POSTGRES_PASSWORD: ${DB_DASHBOARD_PASSWORD}
     volumes:
-      - ./db-data/postgres-data:/var/lib/postgresql/data
+      - postgres-data:/var/lib/postgresql/data
+    depends_on:
+      - db-cleanup
 
   postgres-manager:
-    image: postgis/postgis:16-3.4
+    image: postgis/postgis:16-3.4-alpine
     container_name: postgres-manager
     restart: always
     environment:
@@ -27,9 +48,11 @@ services:
       POSTGRES_USER: ${DB_MANAGER_USER}
       POSTGRES_PASSWORD: ${DB_MANAGER_PASSWORD}
     volumes:
-      - ./db-data/postgres-manager-data:/var/lib/postgresql/data
+      - postgres-manager-data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
+    depends_on:
+      - db-cleanup
 
   pgadmin:
     image: dpage/pgadmin4:latest
@@ -48,3 +71,11 @@ networks:
   default:
     name: br_dashboard
     external: true
+
+volumes:
+  redis-data:
+    name: redis_data
+  postgres-data:
+    name: postgres_data
+  postgres-manager-data:
+    name: postgres_manager_data
