@@ -38,7 +38,7 @@ def _R0022(**kwargs):
     year = data["年月別"].str.split("年").str[0]
     month = data["年月別"].str.split("年").str[1]
     year = year.str.zfill(3)
-    month = month.str.replace("月", "").str.zfill(2)
+    month = month.str.replace("月", "").str.strip().str.zfill(2)
     data["年月別"] = year + month + "01"
     data["年月別"] = convert_str_to_time_format(time_column=data["年月別"], from_format="%TY%m%d")
     ready_data = data[
