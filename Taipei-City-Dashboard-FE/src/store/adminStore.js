@@ -126,7 +126,7 @@ export const useAdminStore = defineStore("admin", {
 
 			// 2.1 Get component chart data
 			const response = await http.get(
-				`/component/${component.id}/chart/`,
+				`/component/${component.id}/chart`,
 				{
 					params: {
 						city: component.city,
