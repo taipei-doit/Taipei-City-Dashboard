@@ -98,21 +98,25 @@ const activeCity = computed({
 	},
 });
 
-const cityTag = props.selectBtn && !props.selectBtnDisabled 
-	? contentStore.getCityListName(["metrotaipei", "taipei"], true) 
-	: contentStore.getCityListName(["taipei"], true);
-
-const configCity = computed(() => {
+const cityTag = computed(() => {
 	const cityVal = props.config?.city;
-	let cities = [];
-	
-	if (cityVal === "metrotaipei") {
-		cities = ["taipei", "metrotaipei"];
-	} else {
-		cities = [cityVal];
+
+	// Case 1: Mode is preview OR select button is enabled and not disabled
+	if (props.mode === "preview" || (props.selectBtn && !props.selectBtnDisabled)) {
+		const cities = cityVal === "metrotaipei" 
+			? ["metrotaipei", "taipei"] 
+			: [cityVal];
+      
+		return contentStore.getCityListName(cities, true);
 	}
-	const cityListFullObj = contentStore.getCityListName(cities, true);
-	return cityListFullObj
+
+	// Case 2: No select button and not disabled
+	if (!props.selectBtn && !props.selectBtnDisabled) {
+		return contentStore.getCityListName([cityVal], true);
+	}
+
+	// Case 3: All other cases
+	return contentStore.getCityListName(["taipei"], true);
 });
 
 const toggleOn = computed({
@@ -410,7 +414,7 @@ function returnChartComponent(name, svg) {
           class="city-tag"
         >
           <ComponentTag
-            v-for="city in configCity"
+            v-for="city in cityTag"
             :key="city.value"
             :icon="''"
             :text="city.name"
