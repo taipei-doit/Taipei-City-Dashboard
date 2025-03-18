@@ -1,28 +1,23 @@
 version: "3.7"
 
 services:
-  # Volume cleanup service with Docker socket access
+  # Folder cleanup service instead of volume cleanup
   db-cleanup:
     image: docker:cli
     command: >
       sh -c "
-        docker volume rm -f redis_data postgres_data postgres_manager_data || true &&
-        docker volume create --name=redis_data &&
-        docker volume create --name=postgres_data &&
-        docker volume create --name=postgres_manager_data
+        rm -rf /data/redis /data/postgres /data/postgres_manager || true &&
+        mkdir -p /data/redis /data/postgres /data/postgres_manager
       "
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-    deploy:
-      restart_policy:
-        condition: none 
+      - ./db-data:/data
 
   redis:
     restart: always
     container_name: redis
     image: redis:7.2.3-alpine
     volumes:
-      - redis-data:/data
+      - ./db-data/redis:/data
     depends_on:
       - db-cleanup
 
@@ -35,7 +30,7 @@ services:
       POSTGRES_USER: ${DB_DASHBOARD_USER}
       POSTGRES_PASSWORD: ${DB_DASHBOARD_PASSWORD}
     volumes:
-      - postgres-data:/var/lib/postgresql/data
+      - ./db-data/postgres:/var/lib/postgresql/data
     depends_on:
       - db-cleanup
 
@@ -48,7 +43,7 @@ services:
       POSTGRES_USER: ${DB_MANAGER_USER}
       POSTGRES_PASSWORD: ${DB_MANAGER_PASSWORD}
     volumes:
-      - postgres-manager-data:/var/lib/postgresql/data
+      - ./db-data/postgres_manager:/var/lib/postgresql/data
     ports:
       - "5432:5432"
     depends_on:
@@ -71,11 +66,3 @@ networks:
   default:
     name: br_dashboard
     external: true
-
-volumes:
-  redis-data:
-    name: redis_data
-  postgres-data:
-    name: postgres_data
-  postgres-manager-data:
-    name: postgres_manager_data
