@@ -101,7 +101,7 @@ function shouldDisable(map_config) {
     <div class="hide-if-mobile">
       <!-- 1. If the dashboard is map-layers -->
       <div
-        v-if="contentStore.currentDashboard.index === 'map-layers'"
+        v-if="contentStore.currentDashboard.index.includes('map-layers')"
         class="map-charts"
       >
         <DashboardComponent
@@ -111,6 +111,7 @@ function shouldDisable(map_config) {
           mode="halfmap"
           :info-btn="true"
           :active-city="item.city"
+          :select-btn="true"
           :select-btn-disabled="contentStore.currentDashboard.city === 'taipei'"
           :toggle-disable="shouldDisable(item.map_config)"
           :toggle-on="toggleOn.mapLayer[arrayIdx]"
@@ -184,6 +185,7 @@ function shouldDisable(map_config) {
           mode="map"
           :info-btn="true"
           :active-city="item.city"
+          :select-btn="true"
           :select-btn-disabled="contentStore.currentDashboard.city === 'taipei' || contentStore.currentDashboardExcluded.components.filter((data) => data.index === item.index).length === 0"
           :toggle-disable="shouldDisable(item.map_config)"
           :toggle-on="toggleOn.hasMap[arrayIdx]"
@@ -254,6 +256,7 @@ function shouldDisable(map_config) {
           mode="halfmap"
           :info-btn="true"
           :active-city="item.city"
+          :select-btn="true"
           :select-btn-disabled="contentStore.currentDashboard.city === 'taipei'"
           :toggle-disable="shouldDisable(item.map_config)"
           :toggle-on="toggleOn.basicLayer[arrayIdx]"
@@ -320,6 +323,7 @@ function shouldDisable(map_config) {
           mode="map"
           :info-btn="true"
           :active-city="item.city"
+          :select-btn="true"
           :select-btn-disabled="contentStore.currentDashboard.city === 'taipei' || contentStore.currentDashboardExcluded.components.filter((data) => data.index === item.index).length === 0"
           :toggle-on="toggleOn.noMap[arrayIdx]"
           @info="

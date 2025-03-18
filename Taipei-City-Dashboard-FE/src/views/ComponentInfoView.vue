@@ -89,7 +89,6 @@ onMounted(() => {
           :config="item"
           :style="{ height: '350px', width: '400px' }"
           :active-city="item.city"
-          :select-btn-disabled="true"
           :add-btn="
             !contentStore.editDashboard.components
               .map((item) => item.id)

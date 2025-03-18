@@ -57,7 +57,6 @@ onMounted(async () => {
       :config="content"
       :footer="false"
       :active-city="content.city"
-      :select-btn="false"
       :style="{
         height: 'calc(100% - 36px)',
         maxHeight: 'calc(100% - 36px)',
