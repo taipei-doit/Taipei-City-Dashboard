@@ -202,14 +202,14 @@ onMounted(() => {
               :key="contributor"
             >
               <a
-                :href="contentStore.contributors[contributor].link"
+                :href="contentStore.contributors[contributor]?.link"
                 target="_blank"
                 rel="noreferrer"
               ><img
                  :src="
                    contentStore.contributors[
                      contributor
-                   ].image.includes('http')
+                   ]?.image.includes('http')
                      ? contentStore.contributors[contributor]
                        .image
                      : `/images/contributors/${contentStore.contributors[contributor].image}`

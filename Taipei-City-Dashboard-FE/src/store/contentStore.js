@@ -509,7 +509,7 @@ export const useContentStore = defineStore("content", {
 					for (let i in dialogStore.moreInfoContent[index].history_config
 						.range) {
 						const response = await http.get(
-							`/component/${dialogStore.moreInfoContent[index].id}/history/${dialogStore.moreInfoContent[index].city}`,
+							`/component/${dialogStore.moreInfoContent[index].id}/history`,
 							{
 								params: {
 									city: dialogStore.moreInfoContent[index].city,

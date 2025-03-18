@@ -151,7 +151,7 @@ export const useAdminStore = defineStore("admin", {
 			if (component.history_config && component.history_config.range) {
 				for (let i in component.history_config.range) {
 					const response = await http.get(
-						`/component/${component.id}/history/`,
+						`/component/${component.id}/history`,
 						{
 							params: {
 								city: component.city,
