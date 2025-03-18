@@ -314,20 +314,6 @@ ALTER SEQUENCE public.contributors_id_seq OWNER TO postgres;
 --
 
 ALTER SEQUENCE public.contributors_id_seq OWNED BY public.contributors.id;
-
-
---
--- Name: dashboard_groups; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public.dashboard_groups (
-    dashboard_id bigint NOT NULL,
-    group_id bigint NOT NULL
-);
-
-
-ALTER TABLE public.dashboard_groups OWNER TO postgres;
-
 --
 -- Name: dashboards; Type: TABLE; Schema: public; Owner: postgres
 --
@@ -404,6 +390,20 @@ ALTER SEQUENCE public.groups_id_seq OWNED BY public.groups.id;
 --
 -- Name: incidents; Type: TABLE; Schema: public; Owner: postgres
 --
+
+
+--
+-- Name: dashboard_groups; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.dashboard_groups (
+    dashboard_id bigint NOT NULL,
+    group_id bigint NOT NULL
+);
+
+
+ALTER TABLE public.dashboard_groups OWNER TO postgres;
+
 
 CREATE TABLE public.incidents (
     id bigint NOT NULL,
@@ -697,10 +697,10 @@ bike_network	{#a0b8e8,#b7ff98}	{DonutChart,BarChart}	公里
 --
 
 COPY public.component_maps (id, index, title, type, source, size, icon, paint, property) FROM stdin;
-70	youbike_realtime	youbike站點	symbol	raster	\N	youbike	{}	[{"key":"sna","name":"場站名稱"},{"key":"sno","name":"場站ID"},{"key":"available_return_bikes","name":"可還車位"},{"key":"available_rent_general_bikes","name":"剩餘車輛"}]
-99	youbike_realtime_metrotaipei	youbike站點	symbol	raster	\N	youbike	{}	[{"key":"sna","name":"場站名稱"},{"key":"sno","name":"場站ID"},{"key":"available_return_bikes","name":"可還車位"},{"key":"available_rent_general_bikes","name":"剩餘車輛"}]
-100	bike_network_tpe	自行車路網	line	raster	\N	\N	{"line-color":["match",["get","direction"],"雙向","#097138","單向","#007BFF","#808080"]}	[\r\n  {"key": "data_time", "name": "數據時間"},\r\n  {"key": "route_name", "name": "路線名稱"},\r\n  {"key": "city_code", "name": "城市代碼"},\r\n  {"key": "city", "name": "城市"},\r\n  {"key": "road_section_start", "name": "起點路段"},\r\n  {"key": "road_section_end", "name": "終點路段"},\r\n  {"key": "direction", "name": "方向"},\r\n  {"key": "cycling_length", "name": "自行車道長度"},\r\n  {"key": "finished_time", "name": "完工時間"},\r\n  {"key": "update_time", "name": "更新時間"}\r\n]
-101	bike_network_metrotaipei	自行車路網	line	raster	\N	\N	{"line-color":["match",["get","direction"],"雙向","#097138","單向","#007BFF","#808080"]}	[\r\n  {"key": "data_time", "name": "數據時間"},\r\n  {"key": "route_name", "name": "路線名稱"},\r\n  {"key": "city_code", "name": "城市代碼"},\r\n  {"key": "city", "name": "城市"},\r\n  {"key": "road_section_start", "name": "起點路段"},\r\n  {"key": "road_section_end", "name": "終點路段"},\r\n  {"key": "direction", "name": "方向"},\r\n  {"key": "cycling_length", "name": "自行車道長度"},\r\n  {"key": "finished_time", "name": "完工時間"},\r\n  {"key": "update_time", "name": "更新時間"}\r\n]
+70	youbike_realtime	youbike站點	symbol	geojson	\N	youbike	{}	[{"key":"sna","name":"場站名稱"},{"key":"sno","name":"場站ID"},{"key":"available_return_bikes","name":"可還車位"},{"key":"available_rent_general_bikes","name":"剩餘車輛"}]
+99	youbike_realtime_metrotaipei	youbike站點	symbol	geojson	\N	youbike	{}	[{"key":"sna","name":"場站名稱"},{"key":"sno","name":"場站ID"},{"key":"available_return_bikes","name":"可還車位"},{"key":"available_rent_general_bikes","name":"剩餘車輛"}]
+100	bike_network_tpe	自行車路網	line	geojson	\N	\N	{"line-color":["match",["get","direction"],"雙向","#097138","單向","#007BFF","#808080"]}	[\r\n  {"key": "data_time", "name": "數據時間"},\r\n  {"key": "route_name", "name": "路線名稱"},\r\n  {"key": "city_code", "name": "城市代碼"},\r\n  {"key": "city", "name": "城市"},\r\n  {"key": "road_section_start", "name": "起點路段"},\r\n  {"key": "road_section_end", "name": "終點路段"},\r\n  {"key": "direction", "name": "方向"},\r\n  {"key": "cycling_length", "name": "自行車道長度"},\r\n  {"key": "finished_time", "name": "完工時間"},\r\n  {"key": "update_time", "name": "更新時間"}\r\n]
+101	bike_network_metrotaipei	自行車路網	line	geojson	\N	\N	{"line-color":["match",["get","direction"],"雙向","#097138","單向","#007BFF","#808080"]}	[\r\n  {"key": "data_time", "name": "數據時間"},\r\n  {"key": "route_name", "name": "路線名稱"},\r\n  {"key": "city_code", "name": "城市代碼"},\r\n  {"key": "city", "name": "城市"},\r\n  {"key": "road_section_start", "name": "起點路段"},\r\n  {"key": "road_section_end", "name": "終點路段"},\r\n  {"key": "direction", "name": "方向"},\r\n  {"key": "cycling_length", "name": "自行車道長度"},\r\n  {"key": "finished_time", "name": "完工時間"},\r\n  {"key": "update_time", "name": "更新時間"}\r\n]
 \.
 
 
@@ -732,15 +732,6 @@ COPY public.contributors (id, user_id, user_name, image, link, identity, descrip
 --
 -- Data for Name: dashboard_groups; Type: TABLE DATA; Schema: public; Owner: postgres
 --
-
-COPY public.dashboard_groups (dashboard_id, group_id) FROM stdin;
-106	3
-356	3
-357	3
-355	4
-359	4
-358	4
-\.
 
 
 --
@@ -810,22 +801,14 @@ bike_network	\N	{101}	{"mode":"byParam","byParam":{"xParam":"direction"}}	static
 \.
 
 
---
--- Data for Name: roles; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.roles (id, name, access_control, modify, read) FROM stdin;
-1	admin	t	t	t
-2	editor	f	t	t
-3	viewer	f	f	t
-10	admin	t	t	t
-11	editor	f	t	t
-12	viewer	f	f	t
-13	admin	t	t	t
-14	editor	f	t	t
-15	viewer	f	f	t
+COPY public.dashboard_groups (dashboard_id, group_id) FROM stdin;
+106	3
+356	3
+357	3
+355	4
+359	4
+358	4
 \.
-
 
 --
 -- Data for Name: spatial_ref_sys; Type: TABLE DATA; Schema: public; Owner: postgres
