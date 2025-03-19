@@ -31,6 +31,7 @@ dependency_aging	{#67baca,#fbf3ac}	{ColumnLineChart,TimelineSeparateChart}	%
 aging_kpi	{#F65658,#F49F36,#F5C860,#9AC17C,#4CB495,#569C9A,#60819C,#2F8AB1}	{TextUnitChart}	欄
 aging_workforce_trend	{#24B0DD,#56B96D,#F8CF58,#F5AD4A,#E170A6,#ED6A45,#AF4137,#10294A}	{BarPercentChart,RadarChart,ColumnChart}	%
 bike_network	{#a0b8e8,#b7ff98}	{DonutChart,BarChart}	公里
+bike_map	{#a0b8e8,#b7ff98}	{MapLegend}	條
 \.
 
 
@@ -53,12 +54,13 @@ COPY public.component_maps (id, index, title, type, source, size, icon, paint, p
 COPY public.components (id, index, name) FROM stdin;
 146	youbike_grid	YouBike設站狀態
 60	youbike_availability	YouBike使用情況
-213	bike_network	自行車道路網圖資
+213	bike_network	自行車道路統計資料
 212	ebus_percent	電動巴士比例
 214	dependency_aging	扶養比及老化指數
 216	city_age_distribution	全市年齡分區
 218	aging_kpi	長照指標
 215	aging_workforce_trend	高齡就業人口之年增結構
+217	bike_map	自行車道路網圖資
 \.
 
 
@@ -75,10 +77,10 @@ COPY public.contributors (id, user_id, user_name, image, link, identity, descrip
 --
 
 COPY public.dashboards (id, index, name, components, icon, updated_at, created_at) FROM stdin;
-106	map-layers	圖資資訊	{213}	public	2025-03-12 01:59:00.512775+00	2024-03-21 10:04:24.928533+00
+106	map-layers	圖資資訊	{217}	public	2025-03-12 01:59:00.512775+00	2024-03-21 10:04:24.928533+00
 356	ltc_care_tpe	長照關懷	{214,215,216,218}	elderly	2025-02-26 08:43:42.86017+00	2024-03-21 09:38:37.66+00
 355	ltc_care_newtpe	長照關懷	{214,215,216,218}	elderly	2025-02-27 06:42:21.705931+00	2024-03-21 09:38:37.66+00
-359	map-layers-metrotaipei	圖資資訊雙北	{213}	public	2024-05-16 03:56:12.76016+00	2024-03-21 10:04:24.928533+00
+359	map-layers-metrotaipei	圖資資訊雙北	{217}	public	2024-05-16 03:56:12.76016+00	2024-03-21 10:04:24.928533+00
 357	practical_transportation_tpe	務實交通	{60,212,213}	directions_car	2025-03-12 07:58:16.071745+00	2024-03-21 09:38:37.66+00
 358	practical_transportation_newtpe	務實交通	{60,212,213}	directions_car	2025-03-12 08:00:38.75842+00	2024-03-21 09:38:37.66+00
 1	09a25cd9cb7d	收藏組件	\N	favorite	2025-03-14 07:34:22.247753+00	2025-03-14 07:34:22.247753+00
@@ -151,6 +153,8 @@ bike_network	\N	{100}	{"mode":"byParam","byParam":{"xParam":"direction"}}	static
 youbike_grid	\N	{10}	{"mode": "byParam", "byParam": {"xParam": "class"}}	static	\N	\N	\N	臺北大數據中心	顯示台北市各網格設站狀態。	將全市用250見方的網格表示，依據各網格條件分為可設站及無法設站。可設站網格包含已設站、未設站及鄰近已設站。無法設站網格的類型包含山區、土地限制及特殊條件。土地限制為根據國土利用現況調查結果不適合開發之區域，特殊條件為軍方用地或無設站空間。資料來源為大數據中心研究，更新頻率不定期。	本組件可讓您快速查看各區域的YouBike設站情況。了解哪些區域已提供YouBike服務?哪些因為土地或地形限制無法設站?哪些地區目前未設站但具有設站潛能。	{https://tuic.gov.taipei/youbike,https://github.com/tpe-doit/YouBike-Optimization}	{tuic}	2023-12-20 05:56:00+00	2023-12-20 05:56:00+00	two_d	SELECT unnest(ARRAY['無法設站-山區且土地限制', '已設站', '無法設站-山區','鄰近已設站','未設站','無法設站-土地限制','無法設站-特殊條件限制']) as x_axis, unnest(ARRAY[1549,932,689,463,318,315,43]) as data	\N	taipei
 youbike_availability	null	{70}	null	current	\N	10	minute	交通局	顯示當前全市共享單車YouBike的使用情況。	顯示當前全市共享單車YouBike的使用情況，格式為可借車輛數/全市車位數。資料來源為交通局公開資料，每5分鐘更新。	藉由YouBike使用情況的顯示，以及全市車輛約為柱數一半，可掌握全市目前停在站上與被使用中的車輛大約數字，並可在地圖模式查詢各站點詳細資訊。	{https://tdx.transportdata.tw/api-service/swagger/basic/2cc9b888-a592-496f-99de-9ab35b7fb70d#/Bike/BikeApi_Availability_2181}	{tuic}	2023-12-20 05:56:00+00	2024-03-19 06:08:17.99+00	percent	select '在站車輛' as x_axis, \r\nunnest(ARRAY['可借車輛', '空位']) as y_axis, \r\nunnest(ARRAY[SUM(available_rent_general_bikes), SUM(available_return_bikes)]) as data\r\nfrom tran_ubike_realtime	\N	taipei
 bike_network	\N	{101}	{"mode":"byParam","byParam":{"xParam":"direction"}}	static	\N	\N	\N	交通局交工處	顯示雙北當前自行車路網分布。	顯示雙北當前自行車路網分布。雙北擁有完善的自行車路網，主要包括河濱自行車道和市區自行車道。河濱自行車道沿淡水河、基隆河、新店溪和景美溪等河岸建設，提供連續且風景優美的騎行路線。市區自行車道則遍布於主要道路，如敦化南北路、成功路、承德路、松隆路、松德路、和平西路、民生東路、北安路、金湖路、八德路、大道路、光復南路和永吉路等，方便市民在城市中安全騎行。此外，雙北政府持續推動「自行車道願景計畫」，以串聯既有路網、銜接跨市及河濱自行車道，並優化現有自行車道，提升騎行環境的便利性與安全性。	使用於地圖分析、交通規劃與旅遊建議，雙北的自行車路網可與其他圖資套疊，提供更深入的洞察。透過將自行車道與人口密度、交通流量或公車捷運路線交叉比對，可優化城市規劃，提高自行車友善程度。對於旅遊應用，可將自行車道與景點、商圈、飯店位置結合，推薦最佳騎行路線，提升遊憩體驗。此外，政府與企業可藉由數據分析發掘需求熱點，進一步優化自行車基礎設施與共享單車系統。	{https://tdx.transportdata.tw/api/basic/v2/Cycling/Shape/City/Taipei?%24top=30&%24format=JSON,https://tdx.transportdata.tw/api/basic/v2/Cycling/Shape/City/NewTaipei?%24top=30&%24format=JSON}	{tuic}	2023-12-20 05:56:00+00	2024-01-11 06:26:02.069+00	two_d	select x_axis,sum(data)data from (select  direction as x_axis ,round(sum(cycling_length)/1000) as data\r\nfrom public.bike_network_tpe  \r\ngroup by direction\r\nunion all\r\nselect  direction as x_axis ,round(sum(cycling_length)/1000) as data\r\nfrom public.bike_network_new_tpe  \r\ngroup by direction\r\n)d\r\nwhere x_axis !=''\r\ngroup by x_axis	\N	metrotaipei
+bike_map	\N	{100}	{"mode":"byParam","byParam":{"xParam":"direction"}}	static	\N	\N	\N	交通局交工處	顯示臺北市當前自行車路網分布。	顯示臺北市當前自行車路網分布。臺北市擁有完善的自行車路網，主要包括河濱自行車道和市區自行車道。河濱自行車道沿淡水河、基隆河、新店溪和景美溪等河岸建設，提供連續且風景優美的騎行路線。市區自行車道則遍布於主要道路，如敦化南北路、成功路、承德路、松隆路、松德路、和平西路、民生東路、北安路、金湖路、八德路、大道路、光復南路和永吉路等，方便市民在城市中安全騎行。此外，臺北市政府持續推動「自行車道願景計畫」，以串聯既有路網、銜接跨市及河濱自行車道，並優化現有自行車道，提升騎行環境的便利性與安全性。	使用於地圖分析、交通規劃與旅遊建議，臺北市的自行車路網可與其他圖資套疊，提供更深入的洞察。透過將自行車道與人口密度、交通流量或公車捷運路線交叉比對，可優化城市規劃，提高自行車友善程度。對於旅遊應用，可將自行車道與景點、商圈、飯店位置結合，推薦最佳騎行路線，提升遊憩體驗。此外，政府與企業可藉由數據分析發掘需求熱點，進一步優化自行車基礎設施與共享單車系統。	{https://tdx.transportdata.tw/api/basic/v2/Cycling/Shape/City/Taipei?%24top=30&%24format=JSON}	{tuic}	2023-12-20 05:56:00+00	2024-01-11 06:26:02.069+00	two_d	SELECT unnest(array['自行車路網']) as name, 'line' as type	\N	taipei
+bike_map	\N	{101}	{"mode":"byParam","byParam":{"xParam":"direction"}}	static	\N	\N	\N	交通局交工處	顯示雙北當前自行車路網分布。	顯示雙北當前自行車路網分布。雙北擁有完善的自行車路網，主要包括河濱自行車道和市區自行車道。河濱自行車道沿淡水河、基隆河、新店溪和景美溪等河岸建設，提供連續且風景優美的騎行路線。市區自行車道則遍布於主要道路，如敦化南北路、成功路、承德路、松隆路、松德路、和平西路、民生東路、北安路、金湖路、八德路、大道路、光復南路和永吉路等，方便市民在城市中安全騎行。此外，雙北政府持續推動「自行車道願景計畫」，以串聯既有路網、銜接跨市及河濱自行車道，並優化現有自行車道，提升騎行環境的便利性與安全性。	使用於地圖分析、交通規劃與旅遊建議，雙北的自行車路網可與其他圖資套疊，提供更深入的洞察。透過將自行車道與人口密度、交通流量或公車捷運路線交叉比對，可優化城市規劃，提高自行車友善程度。對於旅遊應用，可將自行車道與景點、商圈、飯店位置結合，推薦最佳騎行路線，提升遊憩體驗。此外，政府與企業可藉由數據分析發掘需求熱點，進一步優化自行車基礎設施與共享單車系統。	{https://tdx.transportdata.tw/api/basic/v2/Cycling/Shape/City/Taipei?%24top=30&%24format=JSON}	{tuic}	2023-12-20 05:56:00+00	2024-01-11 06:26:02.069+00	two_d	SELECT unnest(array['自行車路網']) as name, 'line' as type	\N	metrotaipei
 \.
 
 
