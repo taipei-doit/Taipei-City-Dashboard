@@ -2,15 +2,7 @@ version: "3.7"
 
 services:
   # Folder cleanup service instead of volume cleanup
-  db-cleanup:
-    image: docker:cli
-    command: >
-      sh -c "
-        rm -rf /data/redis /data/postgres /data/postgres_manager || true &&
-        mkdir -p /data/redis /data/postgres /data/postgres_manager
-      "
-    volumes:
-      - ./db-data:/data
+
 
   redis:
     restart: always
@@ -18,8 +10,7 @@ services:
     image: redis:7.2.3-alpine
     volumes:
       - ./db-data/redis:/data
-    depends_on:
-      - db-cleanup
+
 
   postgres-data:
     image: postgis/postgis:16-3.4-alpine
@@ -31,8 +22,7 @@ services:
       POSTGRES_PASSWORD: ${DB_DASHBOARD_PASSWORD}
     volumes:
       - ./db-data/postgres:/var/lib/postgresql/data
-    depends_on:
-      - db-cleanup
+
 
   postgres-manager:
     image: postgis/postgis:16-3.4-alpine
@@ -46,8 +36,7 @@ services:
       - ./db-data/postgres_manager:/var/lib/postgresql/data
     ports:
       - "5432:5432"
-    depends_on:
-      - db-cleanup
+
 
   pgadmin:
     image: dpage/pgadmin4:latest
@@ -59,8 +48,7 @@ services:
       PGADMIN_LISTEN_PORT: ${PGADMIN_LISTEN_PORT}
     ports:
       - "8889:80"
-    volumes:
-      - ./db-data/pgadmin-data:/var/lib/pgadmin
+
 
 networks:
   default:
