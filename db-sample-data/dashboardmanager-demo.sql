@@ -88,8 +88,8 @@ COPY public.dashboards (id, index, name, components, icon, updated_at, created_a
 
 COPY public.groups (id, name, is_personal, create_by) FROM stdin;
 1	public	f	\N
-3	taipei	f	\N
-4	metrotaipei	f	\N
+2	taipei	f	\N
+3	metrotaipei	f	\N
 \.
 
 
@@ -155,10 +155,33 @@ bike_network	\N	{101}	{"mode":"byParam","byParam":{"xParam":"direction"}}	static
 
 
 COPY public.dashboard_groups (dashboard_id, group_id) FROM stdin;
-106	3
-356	3
-357	3
-355	4
-359	4
-358	4
+106	2
+356	2
+357	2
+355	3
+359	3
+358	3
 \.
+
+--
+-- TOC entry 3377 (class 0 OID 0)
+-- Dependencies: 222
+-- Name: dashboards_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.dashboards_id_seq', 101, true);
+
+
+--
+-- TOC entry 3378 (class 0 OID 0)
+-- Dependencies: 224
+-- Name: groups_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.groups_id_seq', 91, true);
+
+
+-- Completed on 2024-02-16 10:38:44 UTC
+
+--
+-- PostgreSQL database dump complete
