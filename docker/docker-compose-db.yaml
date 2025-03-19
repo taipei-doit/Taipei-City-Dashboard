@@ -1,13 +1,25 @@
 version: "3.7"
 
 services:
+<<<<<<< HEAD
+=======
+  # Folder cleanup service instead of volume cleanup
+
+
+>>>>>>> refs/remotes/origin/refactor-dockercompose
   redis:
     restart: always
     container_name: redis
     image: redis:7.2.3-alpine
     volumes:
+<<<<<<< HEAD
       - redis-data:/data
       
+=======
+      - ./db-data/redis:/data
+
+
+>>>>>>> refs/remotes/origin/refactor-dockercompose
   postgres-data:
     image: postgis/postgis:16-3.4-alpine
     container_name: postgres-data
@@ -17,7 +29,12 @@ services:
       POSTGRES_USER: ${DB_DASHBOARD_USER}
       POSTGRES_PASSWORD: ${DB_DASHBOARD_PASSWORD}
     volumes:
+<<<<<<< HEAD
       - postgres-data:/var/lib/postgresql/data
+=======
+      - ./db-data/postgres:/var/lib/postgresql/data
+
+>>>>>>> refs/remotes/origin/refactor-dockercompose
 
   postgres-manager:
     image: postgis/postgis:16-3.4-alpine
@@ -31,6 +48,10 @@ services:
       - postgres-manager-data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
+<<<<<<< HEAD
+=======
+
+>>>>>>> refs/remotes/origin/refactor-dockercompose
 
   pgadmin:
     image: dpage/pgadmin4:latest
@@ -42,8 +63,12 @@ services:
       PGADMIN_LISTEN_PORT: ${PGADMIN_LISTEN_PORT}
     ports:
       - "8889:80"
+<<<<<<< HEAD
     volumes:
       - pgadmin-data:/var/lib/pgadmin
+=======
+
+>>>>>>> refs/remotes/origin/refactor-dockercompose
 
 networks:
   default:
