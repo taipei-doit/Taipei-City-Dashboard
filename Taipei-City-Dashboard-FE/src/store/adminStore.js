@@ -82,7 +82,11 @@ export const useAdminStore = defineStore("admin", {
 
 			const dashboard = JSON.parse(JSON.stringify(this.currentDashboard));
 
-			await http.post(`/dashboard/public${this.currentCity ? `/${this.currentCity}` : ""}`, dashboard);
+			await http.post(`/dashboard/public`, dashboard, {
+				params: {
+					city: this.currentCity,
+				}
+			});
 			this.getDashboards();
 			dialogStore.showNotification("success", "公開儀表板新增成功");
 		},
