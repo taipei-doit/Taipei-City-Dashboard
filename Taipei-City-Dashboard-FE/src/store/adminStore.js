@@ -95,7 +95,7 @@ export const useAdminStore = defineStore("admin", {
 			const dialogStore = useDialogStore();
 
 			this.currentDashboard.components =
-				this.currentDashboard.components.map((el) => el.id);
+				this.currentDashboard.components?.map((el) => el.id);
 
 			const dashboard = JSON.parse(JSON.stringify(this.currentDashboard));
 
@@ -130,7 +130,7 @@ export const useAdminStore = defineStore("admin", {
 
 			// 2.1 Get component chart data
 			const response = await http.get(
-				`/component/${component.id}/chart/`,
+				`/component/${component.id}/chart`,
 				{
 					params: {
 						city: component.city,
