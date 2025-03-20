@@ -103,6 +103,30 @@ func createAdmin() {
 	if err := models.CreateUserGroupRole(adminUserID, publicGroupID, adminRoleID); err != nil {
 		logs.FError("Failed to set admin permission:%s", err)
 	}
+
+	// get taipei groupID
+	taipeiGroupID, err := models.GetGroupIDByName("taipei")
+	if err != nil {
+		logs.FError("Failed to get public group:%s", err)
+	}
+	logs.FInfo("get taipei group id:%d", taipeiGroupID)
+
+	// set admin user permission(group:public, role:admin)
+	if err := models.CreateUserGroupRole(adminUserID, taipeiGroupID, adminRoleID); err != nil {
+		logs.FError("Failed to set admin permission:%s", err)
+	}
+
+	// get metrotaipei groupID
+	metrotaipeiGroupID, err := models.GetGroupIDByName("metrotaipei")
+	if err != nil {
+		logs.FError("Failed to get public group:%s", err)
+	}
+	logs.FInfo("get metrotaipei group id:%d", metrotaipeiGroupID)
+
+	// set admin user permission(group:public, role:admin)
+	if err := models.CreateUserGroupRole(adminUserID, metrotaipeiGroupID, adminRoleID); err != nil {
+		logs.FError("Failed to set admin permission:%s", err)
+	}
 }
 
 func InitSampleCityData() {
