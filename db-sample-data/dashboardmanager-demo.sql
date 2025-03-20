@@ -152,7 +152,7 @@ SELECT pg_catalog.setval('public.dashboards_id_seq', (SELECT COALESCE(MAX(id), 0
 -- Name: groups_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.groups_id_seq', (SELECT COALESCE(MAX(id), 0) FROM public.groups_id), true);
+SELECT pg_catalog.setval('public.groups_id_seq', (SELECT COALESCE(MAX(id), 4) FROM public.groups), true);
 
 
 -- Completed on 2024-02-16 10:38:44 UTC
