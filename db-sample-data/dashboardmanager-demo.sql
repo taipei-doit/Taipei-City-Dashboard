@@ -104,36 +104,6 @@ COPY public.issues (id, title, user_name, user_id, context, description, decisio
 \.
 
 
---
--- Data for Name: query_charts; Type: TABLE DATA; Schema: public; Owner: postgres
---
---- Name: query_charts; Type: TABLE; Schema: public; Owner: postgres
----
-
-CREATE TABLE public.query_charts (
-    index character varying,
-    history_config json,
-    map_config_ids integer[],
-    map_filter json,
-    time_from character varying,
-    time_to character varying,
-    update_freq integer,
-    update_freq_unit character varying,
-    source character varying,
-    short_desc text,
-    long_desc text,
-    use_case text,
-    links text[],
-    contributors text[],
-    created_at timestamp with time zone,
-    updated_at timestamp with time zone,
-    query_type character varying,
-    query_chart text,
-    query_history text,
-    city text
-);
-\.
-
 ALTER TABLE public.query_charts OWNER TO postgres;
 \.
 
