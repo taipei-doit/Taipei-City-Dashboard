@@ -192,6 +192,10 @@ onMounted(() => {
 			background-color: transparent;
 		}
 
+		th {
+			z-index: 3;
+		}
+
 		span {
 			font-family: var(--font-icon);
 			font-size: var(--font-l);
@@ -206,6 +210,7 @@ onMounted(() => {
 		&-settings {
 			position: sticky;
 			left: 0;
+			z-index: 2;
 		}
 
 		&-update {

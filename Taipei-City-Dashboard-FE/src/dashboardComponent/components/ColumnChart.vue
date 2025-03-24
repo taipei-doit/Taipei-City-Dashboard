@@ -69,9 +69,16 @@ const chartOptions = ref({
 	grid: {
 		show: false,
 	},
-	legend: {
-		show: props.chart_config.categories ? true : false,
-	},
+	legend: isLargeDataSet.value
+		? {
+			show: props.chart_config.categories ? true : false,
+			horizontalAlign: "left",
+			offsetX: 20,
+			floating: true,
+		  }
+		: {
+			show: props.chart_config.categories ? true : false,
+		  },
 	plotOptions: {
 		bar: {
 			borderRadius: 5,
