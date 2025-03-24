@@ -16,7 +16,7 @@ const embedTemplate = computed(() => {
 	return `<iframe
 	id="Taipei-City-Dashboard-Component-${content.value.id}"
 	title="${content.value.name}"
-	src="https://citydashboard.taipei/embed/${content.value.id}/${content.value.city}"
+	src="${location.origin}/embed/${content.value.id}/${content.value.city}"
 	width="450"
 	height="400"
 	style="border-radius: 5px"
