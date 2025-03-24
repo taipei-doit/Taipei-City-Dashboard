@@ -190,7 +190,7 @@ const tooltipPosition = computed(() => {
 
 // Select options for the city selector
 const cityList = ref([
-	{ name: "台北市", value: "taipei" },
+	{ name: "臺北市", value: "taipei" },
 	// { name: "新北市", value: "newtaipei" },
 	{ name: "雙北", value: "metrotaipei" },
 ],);
