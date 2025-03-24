@@ -28,7 +28,7 @@ const mousePosition = ref({ x: null, y: null });
 const selectedIndex = ref(null);
 
 const cities = [
-	{ name: "台北市", value: "taipei" },
+	{ name: "臺北市", value: "taipei" },
 	{ name: "新北市", value: "newtaipei" },
 	{ name: "雙北市", value: "metrotaipei" },
 ]
@@ -745,7 +745,7 @@ function handleDataSelection(index) {
           class="districtchart-chart-district-metrotaipei"
         >
           <path
-            data-city="台北市"
+            data-city="臺北市"
             data-name="北投區"
             :class="{
               'active-district':
@@ -762,7 +762,7 @@ function handleDataSelection(index) {
             @click="handleDataSelection(0)"
           />
           <path
-            data-city="台北市"
+            data-city="臺北市"
             data-name="士林區"
             :class="{
               'active-district':
@@ -779,7 +779,7 @@ function handleDataSelection(index) {
             @click="handleDataSelection(1)"
           />
           <path
-            data-city="台北市"
+            data-city="臺北市"
             data-name="內湖區"
             :class="{
               'active-district':
@@ -796,7 +796,7 @@ function handleDataSelection(index) {
             @click="handleDataSelection(2)"
           />
           <path
-            data-city="台北市"
+            data-city="臺北市"
             data-name="中山區"
             :class="{
               'active-district':
@@ -813,7 +813,7 @@ function handleDataSelection(index) {
             @click="handleDataSelection(6)"
           />
           <path
-            data-city="台北市"
+            data-city="臺北市"
             data-name="大同區"
             :class="{
               'active-district':
@@ -830,7 +830,7 @@ function handleDataSelection(index) {
             @click="handleDataSelection(7)"
           />
           <path
-            data-city="台北市"
+            data-city="臺北市"
             data-name="中正區"
             :class="{
               'active-district':
@@ -847,7 +847,7 @@ function handleDataSelection(index) {
             @click="handleDataSelection(8)"
           />
           <path
-            data-city="台北市"
+            data-city="臺北市"
             data-name="萬華區"
             :class="{
               'active-district':
@@ -864,7 +864,7 @@ function handleDataSelection(index) {
             @click="handleDataSelection(9)"
           />
           <path
-            data-city="台北市"
+            data-city="臺北市"
             data-name="大安區"
             :class="{
               'active-district':
@@ -881,7 +881,7 @@ function handleDataSelection(index) {
             @click="handleDataSelection(10)"
           />
           <path
-            data-city="台北市"
+            data-city="臺北市"
             data-name="信義區"
             :class="{
               'active-district':
@@ -898,7 +898,7 @@ function handleDataSelection(index) {
             @click="handleDataSelection(5)"
           />
           <path
-            data-city="台北市"
+            data-city="臺北市"
             data-name="松山區"
             :class="{
               'active-district':
@@ -915,7 +915,7 @@ function handleDataSelection(index) {
             @click="handleDataSelection(4)"
           />
           <path
-            data-city="台北市"
+            data-city="臺北市"
             data-name="南港區"
             :class="{
               'active-district':
@@ -932,7 +932,7 @@ function handleDataSelection(index) {
             @click="handleDataSelection(3)"
           />
           <path
-            data-city="台北市"
+            data-city="臺北市"
             data-name="文山區"
             :class="{
               'active-district':
@@ -951,7 +951,7 @@ function handleDataSelection(index) {
         </g>
       </svg>
       <svg
-        v-if="cityName === '台北市'"
+        v-if="cityName === '臺北市'"
         class="districtchart-chart-taipei"
         viewBox="0 0 413 550"
         xmlns="http://www.w3.org/2000/svg"
