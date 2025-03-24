@@ -1,0 +1,72 @@
+/* Cleaned */
+
+:root {
+	--color-background: #090909;
+	--color-border: #494b4e;
+	--color-highlight: #5a9cf8;
+	--color-normal-text: white;
+	--color-complement-text: #888787;
+	--color-component-background: #282a2c;
+	--color-overlay: rgba(0, 0, 0, 0.65);
+	--img-filter: invert(1);
+	--font-to-icon: 1.2;
+	--font-xl: 1.5rem;
+	--font-l: 1.25rem;
+	--font-m: 18px;
+	--font-ms: 1rem;
+	--font-s: 0.75rem;
+	--font-icon: "Material Icons Round";
+	--vh: 1vh;
+	
+	--color-taipei: #1411AC;
+	--color-taipei-background: #081936;
+	--color-metrotaipei: #ac7811;
+	--color-metrotaipei-background: #342b17;
+}
+
+.apexcharts-tooltip {
+	box-shadow: 0px 0px 5px black !important;
+}
+.apexcharts-tooltip .chart-tooltip,
+.chart-tooltip {
+	padding: 5px 10px 5px 5px !important;
+	border: solid 1px var(--color-border) !important;
+	border-radius: 5px !important;
+	background: var(--color-component-background) !important;
+	box-shadow: 0px 0px 5px black !important;
+}
+.apexcharts-tooltip {
+	border: solid 1px var(--color-border) !important;
+}
+.chart-tooltip h6 {
+	color: var(--color-complement-text);
+	font-size: 0.75rem;
+	margin: 0;
+}
+.chart-tooltip span {
+	color: var(--color-normal-text);
+	font-size: var(--font-ms);
+}
+.apexcharts-canvas,
+.vue-apexcharts {
+	overflow: visible !important;
+}
+.apexcharts-yaxis-label,
+.apexcharts-xaxis-label,
+.apexcharts-legend-text {
+	fill: var(--color-complement-text) !important;
+	color: var(--color-complement-text) !important;
+}
+.vue-apexcharts {
+	display: flex;
+	justify-content: center;
+}
+.apexcharts-zoom-icon {
+	display: none;
+}
+.apexcharts-reset-icon {
+	width: fit-content !important;
+}
+.apexcharts-reset-icon p {
+	color: var(--color-highlight) !important;
+}

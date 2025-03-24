@@ -52,7 +52,7 @@ function handleMoreInfo(item) {
 <template>
   <!-- 1. If the dashboard is map-layers -->
   <div
-    v-if="contentStore.currentDashboard.index === 'map-layers'"
+    v-if="contentStore.currentDashboard.index.includes('map-layers')"
     class="dashboard"
   >
     <DashboardComponent
@@ -62,6 +62,7 @@ function handleMoreInfo(item) {
       mode="half"
       :info-btn="true"
       :active-city="item.city"
+      :select-btn="true"
       :select-btn-disabled="contentStore.currentDashboard.city === 'taipei'"
       :favorite-btn="authStore.token ? true : false"
       :is-favorite="contentStore.favorites?.components.includes(item.id)"
@@ -90,6 +91,7 @@ function handleMoreInfo(item) {
       :config="item"
       :info-btn="true"
       :active-city="item.city"
+      :select-btn="true"
       :select-btn-disabled="contentStore.currentDashboard.city === 'taipei' || contentStore.currentDashboardExcluded.components.filter((data) => data.index === item.index).length === 0"
       :delete-btn="
         contentStore.personalDashboards

@@ -1,0 +1,63 @@
+/* Cleaned */
+
+.toggleswitch {
+	height: var(--font-ms);
+	width: 2rem;
+	display: inline-block;
+	position: relative;
+	overflow: visible;
+}
+.toggleswitch input {
+	width: 0;
+	height: 0;
+	opacity: 0;
+}
+
+.toggleswitch-slider {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	border-radius: var(--font-m);
+	background-color: var(--color-complement-text);
+	-webkit-transition: 0.4s;
+	transition: 0.4s;
+	cursor: pointer;
+}
+
+.toggleswitch-slider::before {
+	height: 0.7rem;
+	width: 0.7rem;
+	position: absolute;
+	left: 0.15rem;
+	bottom: 0.15rem;
+	border-radius: 50%;
+	background-color: var(--color-border);
+	-webkit-transition: 0.4s;
+	transition: 0.4s;
+	content: "";
+}
+
+.toggleswitch input:checked + .toggleswitch-slider {
+	background-color: var(--color-highlight);
+}
+
+.toggleswitch input:focus + .toggleswitch-slider {
+	box-shadow: 0 0 1px var(--color-highlight);
+}
+
+.toggleswitch input:disabled + .toggleswitch-slider {
+	opacity: 0.6;
+}
+
+.toggleswitch input:checked + .toggleswitch-slider:before {
+	background-color: white;
+	-webkit-transform: translateX(1rem);
+	-ms-transform: translateX(1rem);
+	transform: translateX(1rem);
+}
+
+.toggleswitch input:disabled + .toggleswitch-slider:before {
+	opacity: 0.6;
+}

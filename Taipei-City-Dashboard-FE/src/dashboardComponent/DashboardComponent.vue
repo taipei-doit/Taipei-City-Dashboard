@@ -1,6 +1,7 @@
 <script setup>
 import { computed, ref } from "vue";
-import { useContentStore } from "../store/contentStore";
+// import "./styles/chartStyles.css";
+// import "./styles/toggleswitch.css";
 import "material-icons/iconfont/material-icons.css";
 import { getComponentDataTimeframe } from "./utilities/dataTimeframe";
 import { timeTerms } from "./utilities/AllTimes";
@@ -48,7 +49,6 @@ import TreemapChartSvg from "./assets/chart/TreemapChart.svg";
 import IndicatorChartSvg from "./assets/chart/IndicatorChart.svg";
 import TextUnitChartSvg from "./assets/chart/TextUnitChart.svg";
 
-const contentStore = useContentStore();
 
 const props = defineProps({
 	style: { type: Object, default: () => ({}) },
@@ -61,7 +61,7 @@ const props = defineProps({
 			),
 	},
 	config: { type: Object, required: true },
-	selectBtn: { type: Boolean, default: true },
+	selectBtn: { type: Boolean, default: false },
 	selectBtnDisabled: { type: Boolean, default: false },
 	favoriteBtn: { type: Boolean, default: false },
 	isFavorite: { type: Boolean, default: false },
@@ -98,21 +98,38 @@ const activeCity = computed({
 	},
 });
 
-const cityTag = props.selectBtn && !props.selectBtnDisabled 
-	? contentStore.getCityListName(["metrotaipei", "taipei"], true) 
-	: contentStore.getCityListName(["taipei"], true);
+const cityTag = computed(() => {
+	const cityVal = props.config?.city
+	const metroTaipeiCities = ["metrotaipei", "taipei"];
 
-const configCity = computed(() => {
-	const cityVal = props.config?.city;
-	let cities = [];
-	
-	if (cityVal === "metrotaipei") {
-		cities = ["taipei", "metrotaipei"];
-	} else {
-		cities = [cityVal];
+	const isPreviewMode = props.mode === "preview";
+	const isSelectBtnActive = props.selectBtn && !props.selectBtnDisabled;
+	const isNormalSelectDisabled = !props.selectBtn && !props.selectBtnDisabled;
+
+	// Case 1: Preview mode - handle metrotaipei specially
+	if (isPreviewMode) {
+		const cities = cityVal === "metrotaipei" 
+			? metroTaipeiCities
+			: [cityVal];
+
+		return getCityListName(cities, true);
 	}
-	const cityListFullObj = contentStore.getCityListName(cities, true);
-	return cityListFullObj
+
+	// Case 2: Select button is active - always show metro Taipei
+	if (isSelectBtnActive) {
+		return getCityListName(metroTaipeiCities, true) 
+	}
+
+	// Case 3: Normal mode with selection not disabled - use current city value
+	if (isNormalSelectDisabled) {
+		const cities = cityVal === "metrotaipei" 
+			? metroTaipeiCities
+			: [cityVal];
+
+		return getCityListName(cities, true);
+	}
+
+	return getCityListName(["taipei"], true);
 });
 
 const toggleOn = computed({
@@ -170,6 +187,37 @@ const tooltipPosition = computed(() => {
 		top: `${mousePosition.value.y - 110}px`,
 	};
 });
+
+// Select options for the city selector
+const cityList = ref([
+	{ name: "臺北市", value: "taipei" },
+	// { name: "新北市", value: "newtaipei" },
+	{ name: "雙北", value: "metrotaipei" },
+],);
+
+// Call this function to get the name of a city from the cityList
+function getCityListName(city, returnFullObject = false) {
+	// If no city value provided, return empty array or empty string based on format
+	if (!city) return returnFullObject ? [] : "";
+
+	// Function: Find the complete city object based on city value
+	const findCity = (cityValue) => {
+		const cityItem = cityList.value.find(item => item.value === cityValue);
+		if (!cityItem) return returnFullObject ? { name: "", value: cityValue } : "";
+		
+		return returnFullObject
+			? { name: cityItem.name, value: cityValue }
+			: cityItem.name;
+	};
+	
+	// If input is an array, process multiple cities
+	if (Array.isArray(city)) {
+		return city.map(c => findCity(c));
+	}
+	
+	// Process single city
+	return findCity(city);
+}
 
 function changeActiveChart(chartName) {
 	if (
@@ -253,7 +301,6 @@ function returnChartComponent(name, svg) {
         large: mode === 'large',
         preview: mode === 'preview',
       },
-      mode === 'preview' ? `city-${config.city}` : ''
     ]"
     :style="style"
   >
@@ -365,7 +412,7 @@ function returnChartComponent(name, svg) {
         :class="{'selectBtn-disabled': selectBtnDisabled}"
       >
         <template
-          v-for="city in contentStore.cityList"
+          v-for="city in cityList"
           :key="city.value"
         >
           <option :value="city.value">
@@ -373,12 +420,6 @@ function returnChartComponent(name, svg) {
           </option>
         </template>
       </select>
-      <!-- <div
-        v-if="selectBtnDisabled"
-        class="cityName"
-      >
-        {{ cityName }}
-      </div> -->
       <div
         v-if="config.chart_config.types.length > 1"
         class="dashboardcomponent-control-group"
@@ -403,14 +444,13 @@ function returnChartComponent(name, svg) {
     >
       <div
         class="preview-content-id"
-        :class="`city-${config.city}`"
       >
         <div
           v-if="mode === 'preview'"
-          class="city-tag"
+          class="city-tag-container-preview"
         >
           <ComponentTag
-            v-for="city in configCity"
+            v-for="city in cityTag"
             :key="city.value"
             :icon="''"
             :text="city.name"
@@ -759,21 +799,6 @@ button:hover {
 				cursor: not-allowed;
 			}
 		}
-
-		.cityTag {
-			padding: 2px 6px;
-			border: 1px solid var(--color-complement-text);
-			border-radius: 5px;
-			color: var(--color-complement-text);
-			// color: var(--color-normal-text);
-
-			// &.taipei {
-			// 	background-color: var(--color-taipei);
-			// }
-			// &.metrotaipei {
-			// 	background-color: var(--color-metrotaipei);
-			// }
-		}
 	}
 
 	&-chart,
@@ -985,25 +1010,19 @@ button:hover {
 }
 
 .city {
-	&-metrotaipei {
-		// background-color: #3c3f43;
-	}
-
 	&-tag {
-		display: flex;
-		gap: 4px;
-
 		&-container {
 			margin: 4px 0;
 			display: flex;
 			gap: 5px;
-
-			// div:last-child {
-			// 	margin-right: 5px;
-			// }
-			
+	
 			div:first-child {
 				margin-left: 5px;
+			}
+
+			&-preview {
+				display: flex;
+				gap: 4px;
 			}
 		}
 	}
