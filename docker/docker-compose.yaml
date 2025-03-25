@@ -17,6 +17,7 @@ services:
     container_name: dashboard-fe
     restart: always
     environment:
+      DOCKER_COMPOSE: "true"
       NODE_ENV: ${NODE_ENV}
       VITE_API_URL: ${VITE_API_URL}
       VITE_APP_TITLE: ${VITE_APP_TITLE}

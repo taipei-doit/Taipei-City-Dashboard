@@ -21,7 +21,7 @@ type Component struct {
 
 // QueryCharts is the model for the query_charts table.
 type QueryCharts struct {
-	Index string                   `json:"index"      gorm:"column:index;type:varchar;primaryKey"     `
+	Index string                   `json:"index"      gorm:"column:index;type:varchar"`
 	HistoryConfig  json.RawMessage `json:"history_config" gorm:"column:history_config;type:json"`
 	MapConfigIDs   pq.Int64Array   `json:"-" gorm:"column:map_config_ids;type:integer[]"`
 	MapFilter      json.RawMessage `json:"map_filter" gorm:"column:map_filter;type:json"`
