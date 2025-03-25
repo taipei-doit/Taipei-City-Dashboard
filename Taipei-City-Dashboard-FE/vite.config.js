@@ -21,11 +21,6 @@ const serverConfig = isDockerCompose
           target: "http://dashboard-be:8080",
           changeOrigin: true,
           rewrite: (path) => path.replace("/dev", "/v1")
-        },
-        "/geo_server": {
-          target: "https://geoserver-966481184341.us-central1.run.app/geo_server/",
-          changeOrigin: true,
-          rewrite: (path) => path.replace(/^\/geo_server/, "")
         }
       }
     }
