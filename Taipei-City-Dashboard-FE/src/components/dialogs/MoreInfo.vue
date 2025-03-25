@@ -20,8 +20,6 @@ function getLinkTag(link, index) {
 		return `資料集 - ${index + 1} (data.taipei)`;
 	} else if (link.includes("data.ntpc")) {
 		return `資料集 - ${index + 1} (data.ntpc)`;
-	} else if (link.includes("tdx.transportdata")) {
-		return `資料集 - ${index + 1} (TDX)`;
 	} else if (link.includes("tuic.gov.taipei")) {
 		return `大數據中心專案網頁`;
 	} else if (link.includes("github.com")) {
