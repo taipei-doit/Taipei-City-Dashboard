@@ -122,6 +122,29 @@ func GetComponentByID(c *gin.Context) {
 }
 
 /*
+GetComponentByIDAll retrieves public components from the database by ID.
+GET /api/v1/component/:id/all
+*/
+func GetComponentByIDAll(c *gin.Context) {
+	// Get the component ID from the context
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": "Invalid component ID"})
+		return
+	}
+
+	// Find the component
+	cityComponent, err := models.GetComponentByIDAll(id)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"status": "error", "message": "component not found"})
+		return
+	}
+
+	// Return the component
+	c.JSON(http.StatusOK, gin.H{"status": "success", "data": cityComponent})
+}
+
+/*
 UpdateComponent updates a component's config in the database.
 PATCH /api/v1/component/:id
 */
