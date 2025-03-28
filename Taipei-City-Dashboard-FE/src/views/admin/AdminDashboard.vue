@@ -13,7 +13,7 @@ const adminStore = useAdminStore();
 const dialogStore = useDialogStore();
 const contentStore = useContentStore();
 
-const dashboards = computed(()=> adminStore.currentCity === "taipei" ? adminStore.taipeiDashboards : adminStore.metroTaipeiDashboards);
+const dashboards = computed(() => adminStore.getDashboardsByCity(adminStore.currentCity));
 const dialogMode = ref("edit");
 
 function parseTime(time) {
@@ -85,10 +85,10 @@ onMounted(() => {
         </tr>
       </thead>
       <!-- 2-1. Dashboards are present -->
-      <tbody v-if="dashboards.length !== 0 ">
+      <tbody v-if="dashboards.length !== 0">
         <tr
           v-for="dashboard in dashboards"
-          :key="`${dashboard.index}-${dashboard.city}`"
+          :key="`${dashboard.index}-${adminStore.currentCity}`"
         >
           <td class="admindashboard-table-settings">
             <button @click="handleOpenSettings(dashboard)">

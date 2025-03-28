@@ -63,6 +63,8 @@ const props = defineProps({
 	config: { type: Object, required: true },
 	selectBtn: { type: Boolean, default: false },
 	selectBtnDisabled: { type: Boolean, default: false },
+	selectBtnList: { type: Array, default: () => ([])  },
+	cityTag: { type: Array, default: () => ([]) },
 	favoriteBtn: { type: Boolean, default: false },
 	isFavorite: { type: Boolean, default: false },
 	deleteBtn: { type: Boolean, default: false },
@@ -96,40 +98,6 @@ const activeCity = computed({
 		toggleOn.value = true;
 		emits("changeCity", value);
 	},
-});
-
-const cityTag = computed(() => {
-	const cityVal = props.config?.city
-	const metroTaipeiCities = ["metrotaipei", "taipei"];
-
-	const isPreviewMode = props.mode === "preview";
-	const isSelectBtnActive = props.selectBtn && !props.selectBtnDisabled;
-	const isNormalSelectDisabled = !props.selectBtn && !props.selectBtnDisabled;
-
-	// Case 1: Preview mode - handle metrotaipei specially
-	if (isPreviewMode) {
-		const cities = cityVal === "metrotaipei" 
-			? metroTaipeiCities
-			: [cityVal];
-
-		return getCityListName(cities, true);
-	}
-
-	// Case 2: Select button is active - always show metro Taipei
-	if (isSelectBtnActive) {
-		return getCityListName(metroTaipeiCities, true) 
-	}
-
-	// Case 3: Normal mode with selection not disabled - use current city value
-	if (isNormalSelectDisabled) {
-		const cities = cityVal === "metrotaipei" 
-			? metroTaipeiCities
-			: [cityVal];
-
-		return getCityListName(cities, true);
-	}
-
-	return getCityListName(["taipei"], true);
 });
 
 const toggleOn = computed({
@@ -187,37 +155,6 @@ const tooltipPosition = computed(() => {
 		top: `${mousePosition.value.y - 110}px`,
 	};
 });
-
-// Select options for the city selector
-const cityList = ref([
-	{ name: "臺北市", value: "taipei" },
-	// { name: "新北市", value: "newtaipei" },
-	{ name: "雙北", value: "metrotaipei" },
-],);
-
-// Call this function to get the name of a city from the cityList
-function getCityListName(city, returnFullObject = false) {
-	// If no city value provided, return empty array or empty string based on format
-	if (!city) return returnFullObject ? [] : "";
-
-	// Function: Find the complete city object based on city value
-	const findCity = (cityValue) => {
-		const cityItem = cityList.value.find(item => item.value === cityValue);
-		if (!cityItem) return returnFullObject ? { name: "", value: cityValue } : "";
-		
-		return returnFullObject
-			? { name: cityItem.name, value: cityValue }
-			: cityItem.name;
-	};
-	
-	// If input is an array, process multiple cities
-	if (Array.isArray(city)) {
-		return city.map(c => findCity(c));
-	}
-	
-	// Process single city
-	return findCity(city);
-}
 
 function changeActiveChart(chartName) {
 	if (
@@ -344,7 +281,7 @@ function returnChartComponent(name, svg) {
             class="city-tag-container"
           >
             <ComponentTag
-              v-for=" city in cityTag"
+              v-for=" city in props.cityTag"
               :key="city"
               :icon="''"
               :text="city.name"
@@ -412,7 +349,7 @@ function returnChartComponent(name, svg) {
         :class="{'selectBtn-disabled': selectBtnDisabled}"
       >
         <template
-          v-for="city in cityList"
+          v-for="city in props.selectBtnList"
           :key="city.value"
         >
           <option :value="city.value">
@@ -450,7 +387,7 @@ function returnChartComponent(name, svg) {
           class="city-tag-container-preview"
         >
           <ComponentTag
-            v-for="city in cityTag"
+            v-for="city in props.cityTag"
             :key="city.value"
             :icon="''"
             :text="city.name"

@@ -39,6 +39,7 @@ function getLinkTag(link, index) {
       <DashboardComponent
         :config="dialogStore.moreInfoContent"
         :active-city="dialogStore.moreInfoContent.city"
+        :city-tag="contentStore.cityManager.getTagList(dialogStore.moreInfoContent.city)"
         mode="large"
       />
       <div class="moreinfo-info">

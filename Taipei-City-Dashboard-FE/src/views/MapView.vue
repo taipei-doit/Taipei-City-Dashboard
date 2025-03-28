@@ -101,7 +101,7 @@ function shouldDisable(map_config) {
     <div class="hide-if-mobile">
       <!-- 1. If the dashboard is map-layers -->
       <div
-        v-if="contentStore.currentDashboard.index.includes('map-layers')"
+        v-if="contentStore.currentDashboard.index?.includes('map-layers')"
         class="map-charts"
       >
         <DashboardComponent
@@ -112,7 +112,9 @@ function shouldDisable(map_config) {
           :info-btn="true"
           :active-city="item.city"
           :select-btn="true"
-          :select-btn-disabled="contentStore.currentDashboard.city === 'taipei'"
+          :select-btn-disabled="contentStore.cityManager.getSelectList(contentStore.currentDashboard?.city).length === 1"
+          :select-btn-list="contentStore.cityManager.getSelectList(contentStore.currentDashboard?.city)"
+          :city-tag="contentStore.cityManager.getTagList(contentStore.currentDashboard?.city)"
           :toggle-disable="shouldDisable(item.map_config)"
           :toggle-on="toggleOn.mapLayer[arrayIdx]"
           @info="
@@ -186,7 +188,9 @@ function shouldDisable(map_config) {
           :info-btn="true"
           :active-city="item.city"
           :select-btn="true"
-          :select-btn-disabled="contentStore.currentDashboard.city === 'taipei' || contentStore.currentDashboardExcluded.components.filter((data) => data.index === item.index).length === 0"
+          :select-btn-disabled="contentStore.cityManager.getSelectList(contentStore.currentDashboard?.city).length === 1"
+          :select-btn-list="contentStore.cityManager.getSelectList(contentStore.currentDashboard?.city)"
+          :city-tag="contentStore.cityManager.getTagList(contentStore.currentDashboard?.city)"
           :toggle-disable="shouldDisable(item.map_config)"
           :toggle-on="toggleOn.hasMap[arrayIdx]"
           @info="
@@ -257,7 +261,9 @@ function shouldDisable(map_config) {
           :info-btn="true"
           :active-city="item.city"
           :select-btn="true"
-          :select-btn-disabled="contentStore.currentDashboard.city === 'taipei'"
+          :select-btn-disabled="contentStore.cityManager.getSelectList(contentStore.currentDashboard?.city).length === 1"
+          :select-btn-list="contentStore.cityManager.getSelectList(contentStore.currentDashboard?.city)"
+          :city-tag="contentStore.cityManager.getTagList(contentStore.currentDashboard?.city)"
           :toggle-disable="shouldDisable(item.map_config)"
           :toggle-on="toggleOn.basicLayer[arrayIdx]"
           @info="
@@ -324,7 +330,9 @@ function shouldDisable(map_config) {
           :info-btn="true"
           :active-city="item.city"
           :select-btn="true"
-          :select-btn-disabled="contentStore.currentDashboard.city === 'taipei' || contentStore.currentDashboardExcluded.components.filter((data) => data.index === item.index).length === 0"
+          :select-btn-disabled="contentStore.cityManager.getSelectList(contentStore.currentDashboard?.city).length === 1"
+          :select-btn-list="contentStore.cityManager.getSelectList(contentStore.currentDashboard?.city)"
+          :city-tag="contentStore.cityManager.getTagList(contentStore.currentDashboard?.city)"
           :toggle-on="toggleOn.noMap[arrayIdx]"
           @info="
             (item) => {

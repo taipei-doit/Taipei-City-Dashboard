@@ -14,28 +14,47 @@ const route = useRoute();
 
 const content = ref(null);
 
+function changeCity(city) {
+	const selectedComponent = contentStore.embedComponents.find(
+		(data) => data.city === city
+	);
+	if (selectedComponent) {
+		content.value = selectedComponent;
+	}
+};
+
 onMounted(async () => {
 	try {
-		const res = await http.get(`/component/${route.params.id}?city=${route.params.city}`);
-		const resChart = await http.get(`/component/${route.params.id}/chart`, {
-			params: {
-				city: route.params.city,
-				...!["static", "current", "demo"].includes(
-					res.data.data.time_from
-				)
-				? getComponentDataTimeframe(
-						res.data.data.time_from,
-						res.data.data.time_to,
-						true
-				  )
-				: {},
+		const res = await http.get(`/component/${route.params.id}/all`);
+		const resData = res.data.data;
+
+		for (const component of resData) {
+			const response = await http.get(
+				`/component/${component.id}/chart`,
+				{
+					params: {
+						city: component.city,
+						...!["static", "current", "demo"].includes(
+							component.time_from
+						)
+						? getComponentDataTimeframe(
+							component.time_from,
+							component.time_to,
+							true
+						)
+						: {}
+					},
+				}
+			);
+			component.chart_data = response.data.data;
+			if (response.data.categories) {
+				component.chart_config.categories = response.data.categories;
 			}
-		});
-		content.value = res.data.data;
-		content.value.chart_data = resChart.data.data;
-		if (resChart.data.categories) {
-			content.value.chart_config.categories = resChart.data.categories;
 		}
+		contentStore.embedComponents = res.data.data;
+		content.value = resData.find(
+			(data) => data.city === route.params.city
+		);
 		contentStore.loading = false;
 	} catch (error) {
 		console.error(error);
@@ -57,10 +76,15 @@ onMounted(async () => {
       :config="content"
       :footer="false"
       :active-city="content.city"
+      :select-btn="true"
+      :select-btn-disabled="contentStore.cityManager.getSelectList(contentStore.currentDashboard?.city).length === 1"
+      :select-btn-list="contentStore.cityManager.getSelectList(contentStore.currentDashboard?.city)"
+      :city-tag="contentStore.cityManager.getTagList(contentStore.currentDashboard?.city)"
       :style="{
         height: 'calc(100% - 36px)',
         maxHeight: 'calc(100% - 36px)',
       }"
+      @change-city="changeCity"
     />
     <div
       v-else

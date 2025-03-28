@@ -12,14 +12,18 @@ import router from "../router/index";
 import { useDialogStore } from "./dialogStore";
 import { useAuthStore } from "./authStore";
 import { getComponentDataTimeframe } from "../assets/utilityFunctions/dataTimeframe";
+import { CityManager } from "../dashboardComponent/utilities/cityManager";
 
 export const useContentStore = defineStore("content", {
 	state: () => ({
+		// cityManager is used to manage city settings. (tag, select, sidebar, mobileNavigation etc.)
+		cityManager: new CityManager(),
 		// Stores all dashboards data. (used in /dashboard, /mapview)
+		dashboards: new Map(),
 		publicDashboards: [],
-		taipeiDashboards: [],
-		metroTaipeiDashboards: [],
 		personalDashboards: [],
+		// stores all components data. (used in /embed)
+		embedComponents: [],
 		// Stores all components data. (used in /component)
 		components: [],
 		// Picks out the components that are map layers and stores them here
@@ -32,7 +36,7 @@ export const useContentStore = defineStore("content", {
 		currentDashboard: {
 			// /mapview or /dashboard
 			mode: null,
-			index: null,
+			index: "",
 			name: null,
 			components: null,
 			icon: null,
@@ -91,7 +95,7 @@ export const useContentStore = defineStore("content", {
 			// 	this.setContributors();
 			// }
 			// 1-3. If there is no dashboards info, call the setDashboards method (2.)
-			if (this.taipeiDashboards.length === 0) {
+			if (this.dashboards.size === 0) {
 				this.setDashboards();
 				return;
 			}
@@ -107,84 +111,140 @@ export const useContentStore = defineStore("content", {
 		// 2. Call an API to get all dashboard info and reroute the user to the first dashboard in the list
 		async setDashboards(onlyDashboard = false) {
 			const response = await http.get(`/dashboard/`);
+			const data = response.data.data || {};
 
-			// Helper function to move map-layers to end
-			const moveMapLayersToEnd = (array) => {
-				if (!array || !Array.isArray(array)) return array;
-				const mapLayersItem = array.find(item => item.index === 'map-layers');
-				if (!mapLayersItem) return array;
-				const otherItems = array.filter(item => item.index !== 'map-layers');
-				return [...otherItems, mapLayersItem];
-			};
-
-			this.personalDashboards = response.data.data?.personal || [];
-			this.publicDashboards = response.data.data?.public || [];
-			this.taipeiDashboards = moveMapLayersToEnd(response.data.data?.taipei) || [];
-			this.metroTaipeiDashboards = moveMapLayersToEnd(response.data.data?.metrotaipei) || [];
-
-			if (this.personalDashboards.length !== 0) {
-				this.favorites = this.personalDashboards.find(
-					(el) => el.icon === "favorite"
-				);
-				if (!this.favorites.components) {
-					this.favorites.components = [];
+			this.dashboards.clear();
+			
+			Object.entries(data).forEach(([key, dashboardArray]) => {
+				// deal with personal dashboard
+				if (key === 'personal') {
+					this.personalDashboards = Array.isArray(dashboardArray) ? dashboardArray : [];
+					
+					if (this.personalDashboards.length !== 0) {
+						this.favorites = this.personalDashboards.find(
+							(el) => el.icon === "favorite"
+						);
+						if (!this.favorites.components) {
+							this.favorites.components = [];
+						}
+					}
+				} else if (this.cityManager.isCityEnabled(key)) {
+					// deal with other city dashboard
+					if (Array.isArray(dashboardArray)) {
+						// move map-layers to the end
+						this.dashboards.set(key, this.moveMapLayersToEnd(dashboardArray));
+					} else {
+						this.dashboards.set(key, []);
+					}
 				}
-			}
+			});
 
 			if (onlyDashboard) return;
 
+			// 2-1. If the current path is /dashboard or /mapview, redirect to the first dashboard
 			if (!this.currentDashboard.index) {
-				this.currentDashboard.index = this.taipeiDashboards[0].index;
-				this.currentDashboard.city = "taipei";
-				router.replace({
-					query: {
-						index: this.currentDashboard.index,
-						city: "taipei",
-					},
-				});
+				// Find the first available dashboard
+				let firstCity = null;
+				let firstDashboard = null;
+
+				for (const [city, dashboards] of this.dashboards.entries()) {
+					if (dashboards && dashboards.length > 0) {
+						firstCity = city;
+						firstDashboard = dashboards[0];
+						break;
+					}
+				}
+			
+				if (firstCity && firstDashboard) {
+					this.currentDashboard.index = firstDashboard.index;
+					this.currentDashboard.city = firstCity;
+					
+					router.replace({
+						query: {
+							index: this.currentDashboard.index,
+							city: firstCity,
+						},
+					});
+				}
 			}
 			
 			// After getting dashboard info, call the setCurrentDashboardAllContent (3.) method to get component info
 			this.setCurrentDashboardAllContent();
 		},
+		// 2-2. Move map-layers to the end of the array
+		moveMapLayersToEnd(dashboards) {
+			if (!Array.isArray(dashboards)) return [];
+			
+			// Find the map-layers item
+			const mapLayersItem = dashboards.find(item => 
+				item.index === 'map-layers' || item.index.includes('map-layers')
+			);
+			
+			if (mapLayersItem) {
+				const otherItems = dashboards.filter(item => 
+				item.index !== mapLayersItem.index
+				);
+				return [...otherItems, mapLayersItem];
+			}
+			
+			return dashboards;
+		},
+		// 2-3. Get all dashboards of a city
+		getDashboardsByCity(city) {
+			return this.dashboards.get(city) || [];
+		},
 		// 3. Call an API to get all component info of the current index dashboard not filtered by city and store it
 		async setCurrentDashboardAllContent() {
-			const dashboardSources = {
-				taipei: this.taipeiDashboards,
-				metrotaipei: this.metroTaipeiDashboards,
-				personal: this.personalDashboards
-			};
-			const dashboard = dashboardSources[this.currentDashboard.city] || dashboardSources.personal;
-			const currentDashboardInfo = dashboard.find(item => item.index === this.currentDashboard.index);
-
+			const currentCityDashboards = this.currentDashboard.city 
+				? this.getDashboardsByCity(this.currentDashboard.city)
+				: this.personalDashboards;
+			const currentDashboardInfo = currentCityDashboards.find(item => item.index === this.currentDashboard.index);
+			
+			// If the current dashboard is not found, redirect to the first available dashboard
 			if (!currentDashboardInfo) {
-				router.replace({
-					query: {
-						index: this.taipeiDashboards[0].index,
-						city: "taipei",
-					},
-				});
+				// Find the first available dashboard
+				let firstCity = null;
+				let firstDashboard = null;
+				
+				for (const [city, dashboards] of this.dashboards.entries()) {
+					if (dashboards && dashboards.length > 0) {
+						firstCity = city;
+						firstDashboard = dashboards[0];
+						break;
+					}
+				}
+				
+				if (firstCity && firstDashboard) {
+					router.replace({
+						query: {
+							index: firstDashboard.index,
+							city: firstCity,
+						},
+					});
+				}
 				return;
 			}
-
+			
+			// Set the current dashboard info
 			this.currentDashboard.name = currentDashboardInfo.name;
 			this.currentDashboard.icon = currentDashboardInfo.icon;
-
-			// get dashboard index data
+			
+			// Get the dashboard index data
 			try {
 				// 針對目前index 取得不分city的資料
 				const response = await http.get(`/dashboard/${this.currentDashboard.index}`);
 				this.cityDashboard.components = response.data.data || [];
-				this.filterCurrentDashboardContent()
+				this.filterCurrentDashboardContent();
 			} catch (error) {
-				console.error("Error getting dashboard index data:",error);
+				console.error("Error getting dashboard index data:", error);
 			}
-			this.setCurrentDashboardAllChartData()
+			
+			// Get the dashboard components data
+			this.setCurrentDashboardAllChartData();
 		},
 		// 4. Call an API for each component to get its chart data and store it
 		// Will call an additional API if the component has history data
 		async setCurrentDashboardAllChartData() {
-					
 			try {
 				// 4-1. Loop through all the components of a dashboard
 				for (
@@ -281,9 +341,9 @@ export const useContentStore = defineStore("content", {
 		},
 		// 5. filter the info for the current dashboard based on the index and city and adds it to "currentDashboard"
 		async filterCurrentDashboardContent() {
-			const {components} = this.cityDashboard
+			const { components } = this.cityDashboard;
 
-			if (components.length > 0) {
+			if (components && components.length > 0) {
 				const currentCityData = components.filter(item => item.city === this.currentDashboard.city);
 				const notCurrentCityData = components.filter(item => item.city !== this.currentDashboard.city);
 
@@ -317,6 +377,7 @@ export const useContentStore = defineStore("content", {
 				}
 			} else {
 				this.currentDashboard.components = [];
+				this.currentDashboardExcluded.components = [];
 				this.loading = false;
 				return;
 			}
