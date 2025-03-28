@@ -23,7 +23,6 @@ SET row_security = off;
 --
 
 COPY public.component_charts (index, color, types, unit) FROM stdin;
-youbike_grid	{#7FBF7B,#8E8E8E,#40A461,#BEBEBE,#3D56FF,#BFDAB8,#ACCFFF}	{TreemapChart,BarChart}	個網格
 youbike_availability	{#9DC56E,#356340,#9DC56E}	{GuageChart,BarPercentChart}	輛
 ebus_percent	{#9DC56E,#356340,#9DC56E}	{IconPercentChart,BarPercentChart}	輛
 city_age_distribution	{#24B0DD,#56B96D,#F8CF58,#F5AD4A,#E170A6,#ED6A45,#AF4137,#10294A}	{DistrictChart,ColumnChart}	仟人
@@ -52,7 +51,6 @@ COPY public.component_maps (id, index, title, type, source, size, icon, paint, p
 --
 
 COPY public.components (id, index, name) FROM stdin;
-146	youbike_grid	YouBike設站狀態
 60	youbike_availability	YouBike使用情況
 213	bike_network	自行車道路統計資料
 212	ebus_percent	電動巴士比例
