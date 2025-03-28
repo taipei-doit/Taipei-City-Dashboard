@@ -1,7 +1,7 @@
 <!-- eslint-disable no-mixed-spaces-and-tabs -->
 <!-- eslint-disable indent -->
 <script setup>
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
 import http from "../router/axios";
 import DashboardComponent from "../dashboardComponent/DashboardComponent.vue";
@@ -13,6 +13,10 @@ const contentStore = useContentStore();
 const route = useRoute();
 
 const content = ref(null);
+const cities = computed(() => {
+	const cities = contentStore.embedComponents.map((data) => data.city)
+	return contentStore.cityManager.getCities(cities)
+});
 
 function changeCity(city) {
 	const selectedComponent = contentStore.embedComponents.find(
@@ -77,9 +81,9 @@ onMounted(async () => {
       :footer="false"
       :active-city="content.city"
       :select-btn="true"
-      :select-btn-disabled="contentStore.cityManager.getSelectList(contentStore.currentDashboard?.city).length === 1"
-      :select-btn-list="contentStore.cityManager.getSelectList(contentStore.currentDashboard?.city)"
-      :city-tag="contentStore.cityManager.getTagList(contentStore.currentDashboard?.city)"
+      :select-btn-disabled="cities.length === 1"
+      :select-btn-list="cities"
+      :city-tag="cities"
       :style="{
         height: 'calc(100% - 36px)',
         maxHeight: 'calc(100% - 36px)',
