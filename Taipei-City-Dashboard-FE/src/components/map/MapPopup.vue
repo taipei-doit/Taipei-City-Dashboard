@@ -51,7 +51,7 @@
           > -->
           <template v-if="popupContent[activeTab]?.properties[item.key].includes('freeway.gov.tw')">
             <img
-			  width="100%"
+              width="100%"
               height="100%"
               :src="popupContent[activeTab]?.properties[item.key]"
             >

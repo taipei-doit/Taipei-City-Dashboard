@@ -3,10 +3,12 @@
 <script setup>
 import { onMounted, ref } from "vue";
 import { useMapStore } from "../../../store/mapStore";
+import { useContentStore } from "../../../store/contentStore";
 
 import SideBarTab from "../miscellaneous/SideBarTab.vue";
 
 const mapStore = useMapStore();
+const contentStore = useContentStore();
 
 // The expanded state is also stored in localstorage to retain the setting after refresh
 const isExpanded = ref(true);
@@ -47,20 +49,18 @@ onMounted(() => {
       }}</span>
     </button>
     <h2>{{ isExpanded ? `儀表板設定` : `表板` }}</h2>
-    <SideBarTab
-      icon="dashboard"
-      title="臺北儀表板"
-      :expanded="isExpanded"
-      index="dashboard"
-      city="taipei"
-    />
-    <SideBarTab
-      icon="dashboard"
-      title="雙北儀表板"
-      :expanded="isExpanded"
-      index="dashboard"
-      city="metrotaipei"
-    />
+    <template
+      v-for="city in contentStore.cityManager.activeCities"
+      :key="city"
+    >
+      <SideBarTab
+        icon="dashboard"
+        :title="`${contentStore.cityManager.getDisplayName(city)}儀表板`"
+        index="dashboard"
+        :expanded="isExpanded"
+        :city="city"
+      />
+    </template>
     <h2>{{ isExpanded ? `組件設定` : `組件` }}</h2>
     <SideBarTab
       icon="edit_note"

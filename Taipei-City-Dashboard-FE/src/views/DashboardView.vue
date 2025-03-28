@@ -52,7 +52,7 @@ function handleMoreInfo(item) {
 <template>
   <!-- 1. If the dashboard is map-layers -->
   <div
-    v-if="contentStore.currentDashboard.index.includes('map-layers')"
+    v-if="contentStore.currentDashboard.index?.includes('map-layers')"
     class="dashboard"
   >
     <DashboardComponent
@@ -63,7 +63,9 @@ function handleMoreInfo(item) {
       :info-btn="true"
       :active-city="item.city"
       :select-btn="true"
-      :select-btn-disabled="contentStore.currentDashboard.city === 'taipei'"
+      :select-btn-disabled="contentStore.cityManager.getSelectList(contentStore.currentDashboard?.city).length === 1"
+      :select-btn-list="contentStore.cityManager.getSelectList(contentStore.currentDashboard?.city)"
+      :city-tag="contentStore.cityManager.getTagList(contentStore.currentDashboard?.city)"
       :favorite-btn="authStore.token ? true : false"
       :is-favorite="contentStore.favorites?.components.includes(item.id)"
       @favorite="
@@ -92,7 +94,15 @@ function handleMoreInfo(item) {
       :info-btn="true"
       :active-city="item.city"
       :select-btn="true"
-      :select-btn-disabled="contentStore.currentDashboard.city === 'taipei' || contentStore.currentDashboardExcluded.components.filter((data) => data.index === item.index).length === 0"
+      :select-btn-disabled="contentStore.cityManager.getSelectList(contentStore.currentDashboard?.city).length === 1 || contentStore.currentDashboardExcluded.components.filter((data) => data.index === item.index).length === 0"
+      :select-btn-list="contentStore.currentDashboard?.city
+        ? contentStore.cityManager.getSelectList(contentStore.currentDashboard?.city)
+        : contentStore.cityManager.getCities(contentStore.cityManager.activeCities)
+      "
+      :city-tag="contentStore.currentDashboard?.city
+        ? contentStore.cityManager.getTagList(contentStore.currentDashboard?.city)
+        : contentStore.cityManager.getTagList(item.city)
+      "
       :delete-btn="
         contentStore.personalDashboards
           .map((item) => item.index)
