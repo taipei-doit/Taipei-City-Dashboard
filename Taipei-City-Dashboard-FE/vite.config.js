@@ -3,7 +3,7 @@ import vue from "@vitejs/plugin-vue";
 import viteCompression from "vite-plugin-compression";
 
 // 嘗試讀取環境變數，若不存在則回傳 false
-let isDockerCompose = import.meta.env?.DOCKER_COMPOSE === "true";
+let isDockerCompose = process?.env.DOCKER_COMPOSE === "true"; // eslint-disable-line no-undef
 
 const serverConfig = isDockerCompose
   ? {
