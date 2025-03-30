@@ -1,7 +1,7 @@
 <!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { useContentStore } from "../../../store/contentStore";
 import { useDialogStore } from "../../../store/dialogStore";
 import { useMapStore } from "../../../store/mapStore";
@@ -21,9 +21,15 @@ const isExpanded = ref(true);
 const collapsedStates = ref({
 	favorites: false,
 	personal: false,
-	taipei: false,
-	metroTaipei: false,
 });
+
+function initializeCollapsedStates() {
+	contentStore.cityManager.activeCities.forEach((city) => {
+		if (!(city in collapsedStates.value)) {
+			collapsedStates.value[city] = false;
+		}
+	});
+}
 
 function handleOpenAddDashboard() {
 	dialogStore.addEdit = "add";
@@ -47,7 +53,16 @@ function toggleCollapse(cities) {
 	});
 }
 
+watch(
+	() => contentStore.cityManager.activeCities,
+	() => {
+		initializeCollapsedStates();
+	},
+	{ immediate: true }
+);
+
 onMounted(() => {
+	initializeCollapsedStates();
 	const storedExpandedState = localStorage.getItem("isExpanded");
 	if (storedExpandedState === "false") {
 		isExpanded.value = false;
