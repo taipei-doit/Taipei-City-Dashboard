@@ -89,6 +89,7 @@ onMounted(() => {
           :config="item"
           :style="{ height: '350px', width: '400px' }"
           :active-city="item.city"
+		  :city-tag="contentStore.cityManager.getTagList(item.city)"
           :add-btn="
             !contentStore.editDashboard.components
               .map((item) => item.id)
