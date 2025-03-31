@@ -55,7 +55,7 @@ onMounted(() => {
     >
       <SideBarTab
         icon="dashboard"
-        :title="`${contentStore.cityManager.getDisplayName(city)}儀表板`"
+        :title="`${contentStore.cityManager.getExpandedNameName(city)}`"
         index="dashboard"
         :expanded="isExpanded"
         :city="city"
@@ -99,8 +99,8 @@ onMounted(() => {
 
 <style scoped lang="scss">
 .adminsidebar {
-	width: 170px;
-	min-width: 170px;
+	width: 180px;
+	min-width: 180px;
 	height: calc(100vh - 80px);
 	height: calc(var(--vh) * 100 - 80px);
 	max-height: calc(100vh - 80px);

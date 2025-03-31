@@ -4,7 +4,8 @@ interface City {
 }
 
 interface CityConfig {
-    displayName: string;
+    expandedName: string;
+	collapsedName?: string;
     enabled: boolean;
     selectList: string[];
     tagList: string[];
@@ -22,7 +23,8 @@ export class CityManager {
         [
             "taipei",
             {
-                displayName: "臺北",
+                expandedName: "臺北儀表板",
+				collapsedName: "臺北",
                 enabled: true,
                 selectList: ["taipei"],
                 tagList: ["taipei"],
@@ -31,7 +33,8 @@ export class CityManager {
         [
             "metrotaipei",
             {
-                displayName: "雙北",
+                expandedName: "雙北儀表板示範",
+				collapsedName: "雙北",
                 enabled: true,
                 selectList: ["metrotaipei", "taipei"],
                 tagList: ["metrotaipei", "taipei"],
@@ -40,7 +43,8 @@ export class CityManager {
         [
             "newtaipei",
             {
-                displayName: "新北",
+                expandedName: "新北",
+				collapsedName: "新北",
                 enabled: false,
                 selectList: ["newtaipei"],
                 tagList: ["newtaipei"],
@@ -49,7 +53,8 @@ export class CityManager {
         [
             "taoyuan",
             {
-                displayName: "桃園",
+                expandedName: "桃園",
+				collapsedName: "新北",
                 enabled: false,
                 selectList: ["taoyuan"],
                 tagList: ["taoyuan"],
@@ -103,9 +108,13 @@ export class CityManager {
         return result ? [result] : [];
     }
 
-	// Get the display name of the city
-	getDisplayName(key: string): string {
-        return this.configs.get(key)?.displayName || key;
+	// Get expanded name of the city
+	getExpandedNameName(key: string): string {
+        return this.configs.get(key)?.expandedName || key;
+    }
+	// Get collapsed name of the city
+	getCollapsedName(key: string): string {
+        return this.configs.get(key)?.collapsedName || key;
     }
 
 	// Get specific city's select list

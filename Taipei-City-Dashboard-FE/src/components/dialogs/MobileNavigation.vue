@@ -117,7 +117,7 @@ onMounted(() => {
               :key="city"
             >
               <h2 @click="toggleCollapse(city)">
-                {{ `${contentStore.cityManager.getDisplayName(city)}儀表板` }}
+                {{ `${contentStore.cityManager.getExpandedNameName(city)}` }}
               </h2>
               <transition name="collapse">
                 <div
