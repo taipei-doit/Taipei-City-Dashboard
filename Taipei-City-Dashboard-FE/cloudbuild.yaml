@@ -58,7 +58,7 @@ steps:
     args:
       - run
       - deploy
-      - dashboard-fe
+      - dashboard-fe-v3
       - "--image"
       - "asia-east1-docker.pkg.dev/$PROJECT_ID/tuic/dashboard-fe:$COMMIT_SHA"
       - "--port"
