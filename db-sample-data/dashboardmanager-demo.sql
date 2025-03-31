@@ -80,7 +80,6 @@ COPY public.dashboards (id, index, name, components, icon, updated_at, created_a
 356	ltc_care_tpe	長照關懷	{214,215,216,218}	elderly	2025-02-26 08:43:42.86017+00	2024-03-21 09:38:37.66+00
 355	ltc_care_newtpe	長照關懷	{214,215,216,218}	elderly	2025-02-27 06:42:21.705931+00	2024-03-21 09:38:37.66+00
 359	map-layers-metrotaipei	圖資資訊	{217}	public	2024-05-16 03:56:12.76016+00	2024-03-21 10:04:24.928533+00
-357	practical_transportation_tpe	務實交通	{60,212,213}	directions_car	2025-03-12 07:58:16.071745+00	2024-03-21 09:38:37.66+00
 358	practical_transportation_newtpe	務實交通	{60,212,213}	directions_car	2025-03-12 08:00:38.75842+00	2024-03-21 09:38:37.66+00
 1	09a25cd9cb7d	收藏組件	\N	favorite	2025-03-14 07:34:22.247753+00	2025-03-14 07:34:22.247753+00
 2	3245d9eace5f	我的新儀表板	{215,218,216,213,212,214,60,146}	star	2025-03-14 14:55:11.732116+00	2025-03-14 14:55:11.732116+00
@@ -129,7 +128,6 @@ youbike_availability	\N	{70}	\N	current	\N	10	minute	交通局	顯示當前臺�
 COPY public.dashboard_groups (dashboard_id, group_id) FROM stdin;
 106	2
 356	2
-357	2
 355	3
 359	3
 358	3
