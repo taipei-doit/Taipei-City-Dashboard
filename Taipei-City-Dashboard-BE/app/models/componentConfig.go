@@ -199,6 +199,15 @@ func GetComponentByID(id int, city string) (component CityComponent, err error) 
 	return component, nil
 }
 
+func GetComponentByIDAll(id int) (component []CityComponent, err error) {
+	tempDB := createTempComponentDB()
+	err = tempDB.Where("components.id = ?", id).Find(&component).Error
+	if err != nil {
+		return component, err
+	}
+	return component, nil
+}
+
 
 func CreateComponent(index string, name string, city string, historyConfig json.RawMessage, mapFilter json.RawMessage, timeFrom string, timeTo *string, updateFreq *int64, updateFreqUnit string, source string, shortDesc string, longDesc string, useCase string, links pq.StringArray, contributors pq.StringArray) (cityComponent CityComponent, err error) {
     // component := Component{

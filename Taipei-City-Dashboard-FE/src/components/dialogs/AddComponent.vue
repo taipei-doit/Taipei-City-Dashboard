@@ -143,6 +143,7 @@ onMounted(() => {
             <div class="addcomponent-list-item">
               <DashboardComponent
                 :config="item"
+                :city-tag="contentStore.cityManager.getTagList(item.city)"
                 mode="preview"
               />
             </div>

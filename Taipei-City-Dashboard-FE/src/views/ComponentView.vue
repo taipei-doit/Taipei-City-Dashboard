@@ -82,6 +82,7 @@ onMounted(() => {
           .map((item) => item.id)
           .includes(item.id)
       "
+      :city-tag="contentStore.cityManager.getTagList(item.city)"
       :favorite-btn="true"
       :is-favorite="contentStore.favorites?.components.includes(item.id)"
       info-btn-text="資訊頁面"

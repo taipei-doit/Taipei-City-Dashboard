@@ -79,6 +79,7 @@ func configureComponentRoutes() {
 	{
 		componentRoutes.GET("/", controllers.GetAllComponents)
 		componentRoutes.GET("/:id", controllers.GetComponentByID)
+		componentRoutes.GET("/:id/all", controllers.GetComponentByIDAll)
 		componentRoutes.GET("/:id/chart", controllers.GetComponentChartData)
 		componentRoutes.GET("/:id/history", controllers.GetComponentHistoryData)
 	}

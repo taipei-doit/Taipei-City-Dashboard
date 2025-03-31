@@ -16,11 +16,13 @@ import { getComponentDataTimeframe } from "../assets/utilityFunctions/dataTimefr
 export const useAdminStore = defineStore("admin", {
 	state: () => ({
 		// Edit Dashboard (for /admin/dashboard)
-		dashboards: [],
-		taipeiDashboards: [],
-		metroTaipeiDashboards: [],
+		dashboards: new Map(),
+		publicDashboards: [],
 		currentCity: "",
-		currentDashboard: null,
+		currentDashboard: {
+			index: "",
+			components: [],
+		},
 		// Edit Component (for /admin/edit-component)
 		components: [],
 		componentResults: 0,
@@ -60,15 +62,27 @@ export const useAdminStore = defineStore("admin", {
 		// 1. Get all public dashboards
 		async getDashboards() {
 			const response = await http.get(`/dashboard/`);
-			this.dashboards = response.data.data.public;
-			this.taipeiDashboards = response.data.data?.taipei || [];
-			this.metroTaipeiDashboards = response.data.data?.metrotaipei || [];
+			const data = response.data.data || {};
+
+			this.dashboards.clear();
+			Object.entries(data).forEach(([key, dashboardArray]) => {
+				this.dashboards.set(key, dashboardArray);
+			});
+
 			this.setLoading(false);
+		},
+		// 1-2. Get specific city's public dashboards
+		getDashboardsByCity(city) {
+			return this.dashboards.get(city) || [];
 		},
 		// 2. Get current dashboard components
 		async getCurrentDashboardComponents() {
 			const response = await http.get(
-				`/dashboard/${this.currentDashboard.index}${this.currentCity ? `?city=${this.currentCity}` : ""}`
+				`/dashboard/${this.currentDashboard.index}`, {
+					params: {
+						city: this.currentCity,
+					}
+				}
 			);
 			this.currentDashboard.components = response.data.data;
 			this.setLoading(false);

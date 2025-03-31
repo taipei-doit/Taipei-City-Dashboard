@@ -138,51 +138,35 @@ onMounted(() => {
         </div>
       </transition>
     </template>
-    <h1 @click="toggleCollapse(['taipei', 'metroTaipei'])">
-      {{ isExpanded ? `公共儀表板 ` : `公共` }}
+    <h1 @click="toggleCollapse(contentStore.cityManager.activeCities)">
+      {{ isExpanded ? `公共儀表板` : `公共` }}
     </h1>
-    <h2 @click="toggleCollapse('taipei')">
-      {{ isExpanded ? `臺北儀表板 ` : `臺北` }}
-    </h2>
-    <transition name="collapse">
-      <div
-        v-if="
-          !collapsedStates.taipei &&
-            contentStore.taipeiDashboards?.length > 0
-        "
-      >
-        <SideBarTab
-          v-for="item in contentStore.taipeiDashboards"
-          :key="item.index"
-          :icon="item.icon"
-          :title="item.name"
-          :index="item.index"
-          :city="'taipei'"
-          :expanded="isExpanded"
-        />
-      </div>
-    </transition>
-    <h2 @click="toggleCollapse('metroTaipei')">
-      {{ isExpanded ? `雙北儀表板 ` : `雙北` }}
-    </h2>
-    <transition name="collapse">
-      <div
-        v-if="
-          !collapsedStates.metroTaipei &&
-            contentStore.metroTaipeiDashboards?.length > 0
-        "
-      >
-        <SideBarTab
-          v-for="item in contentStore.metroTaipeiDashboards"
-          :key="item.index"
-          :icon="item.icon"
-          :title="item.name"
-          :index="item.index"
-          :city="'metrotaipei'"
-          :expanded="isExpanded"
-        />
-      </div>
-    </transition>
+    <template
+      v-for="city in contentStore.cityManager.activeCities"
+      :key="city"
+    >
+      <h2 @click="toggleCollapse(city)">
+        {{ isExpanded ? `${contentStore.cityManager.getDisplayName(city)}儀表板 ` : contentStore.cityManager.getDisplayName(city) }}
+      </h2>
+      <transition name="collapse">
+        <div
+          v-if="
+            !collapsedStates[city] &&
+              contentStore.getDashboardsByCity(city)?.length > 0
+          "
+        >
+          <SideBarTab
+            v-for="item in contentStore.getDashboardsByCity(city)"
+            :key="item.index"
+            :icon="item.icon"
+            :title="item.name"
+            :index="item.index"
+            :city="city"
+            :expanded="isExpanded"
+          />
+        </div>
+      </transition>
+    </template>
   </div>
 </template>
 
