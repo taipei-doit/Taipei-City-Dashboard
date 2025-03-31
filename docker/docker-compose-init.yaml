@@ -6,6 +6,8 @@ services:
     volumes:
       - ../Taipei-City-Dashboard-FE:/opt/Taipei-City-Dashboard-FE
     working_dir: /opt/Taipei-City-Dashboard-FE
+    environment:
+      DOCKER_COMPOSE: "true"
     command: ["npm", "install"]
 
   dashboard-be-init-manager:

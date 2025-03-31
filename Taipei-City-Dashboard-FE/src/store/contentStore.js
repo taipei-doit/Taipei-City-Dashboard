@@ -15,12 +15,6 @@ import { getComponentDataTimeframe } from "../assets/utilityFunctions/dataTimefr
 
 export const useContentStore = defineStore("content", {
 	state: () => ({
-		// stores select options for city
-		cityList: [
-			{ name: "台北市", value: "taipei" },
-			// { name: "新北市", value: "newtaipei" },
-			{ name: "雙北", value: "metrotaipei" },
-		],
 		// Stores all dashboards data. (used in /dashboard, /mapview)
 		publicDashboards: [],
 		taipeiDashboards: [],
@@ -300,7 +294,18 @@ export const useContentStore = defineStore("content", {
 				} else {
 					// Is personal dashboard
 
-					const uniqueData = [...new Map(components.map(item => [item.id, item])).values()];
+					const sortedData = [...components].sort((a, b) => {
+						// 如果id不同，保持原有順序
+						if (a.id !== b.id) return 0;
+						
+						// 如果id相同，將taipei排在前面，其他排在後面
+						if (a.city === 'taipei' && b.city !== 'taipei') return -1;
+						if (a.city !== 'taipei' && b.city === 'taipei') return 1;
+						
+						return 0;
+					});
+
+					const uniqueData = [...new Map(sortedData.map(item => [item.id, item])).values()];
 
 					// 找出被排除的重複資料（city 不同的資料）
 					const excludedData = components.filter(item => {
@@ -417,29 +422,6 @@ export const useContentStore = defineStore("content", {
 			  this.loading = false;
 			}
 		},
-		// 9. Call this function to get the name of a city from the cityList.
-		getCityListName(city, returnFullObject = false) {
-			// If no city value provided, return empty array or empty string based on format
-			if (!city) return returnFullObject ? [] : "";
-
-			// Function: Find the complete city object based on city value
-			const findCity = (cityValue) => {
-				const cityItem = this.cityList.find(item => item.value === cityValue);
-				if (!cityItem) return returnFullObject ? { name: "", value: cityValue } : "";
-				
-				return returnFullObject
-				? { name: cityItem.name, value: cityValue }
-				: cityItem.name;
-			};
-			
-			// If input is an array, process multiple cities
-			if (Array.isArray(city)) {
-				return city.map(c => findCity(c));
-			}
-			
-			// Process single city
-			return findCity(city);
-		},
 
 		/* Route Change Methods */
 		// 1. Called whenever route changes except for between /dashboard and /mapview
@@ -527,7 +509,7 @@ export const useContentStore = defineStore("content", {
 					for (let i in dialogStore.moreInfoContent[index].history_config
 						.range) {
 						const response = await http.get(
-							`/component/${dialogStore.moreInfoContent[index].id}/history/${dialogStore.moreInfoContent[index].city}`,
+							`/component/${dialogStore.moreInfoContent[index].id}/history`,
 							{
 								params: {
 									city: dialogStore.moreInfoContent[index].city,

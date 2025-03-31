@@ -33,17 +33,17 @@ function handleClose() {
   >
     <div class="initialwarning">
       <h2 v-if="authStore.isMobileDevice">
-        城市儀表板行動版注意事項
+        臺北城市儀表板行動版注意事項
       </h2>
       <h2 v-else>
-        城市儀表板使用說明
+        臺北城市儀表板使用說明
       </h2>
       <div
         v-if="authStore.isMobileDevice"
         class="initialwarning-message"
       >
         <p>
-          城市儀表板主要為給平板與電腦使用的平台，手機版僅為概覽使用，因此許多功能在行動版無法使用。
+          臺北城市儀表板主要為給平板與電腦使用的平台，手機版僅為概覽使用，因此許多功能在行動版無法使用。
         </p>
         <br>
         <p>
@@ -57,7 +57,7 @@ function handleClose() {
         class="initialwarning-message"
       >
         <p>
-          歡迎使用城市儀表板，本產品的目的為 1.
+          歡迎使用臺北城市儀表板，本產品的目的為 1.
           分享府內重要決策工具與成果 2. 促進府內與民間開發者的交流互動
           3. 推廣臺北開放資料應用。
         </p>

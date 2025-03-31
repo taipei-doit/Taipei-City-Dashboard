@@ -1,0 +1,43 @@
+{
+  "dag_infos": {
+    "dag_id": "ebus_base_info",
+    "start_date": "2025-02-11",
+    "schedule_interval": "00 20 * * *",
+    "catchup": false,
+    "tags": [
+      "ebus_base_info",
+      "TDX",
+      "新北市",
+      "New-Taipei-City",
+      "電動巴士基本資料"
+    ],
+    "description": "Basic information of electric buses in New Taipei City.",
+    "default_args": {
+      "owner": "airflow",
+      "email": ["DEFAULT_EMAIL_LIST"],
+      "email_on_retry": false,
+      "email_on_failure": true,
+      "retries": 1,
+      "retry_delay": 60
+    },
+    "ready_data_db": "postgres_default",
+    "ready_data_default_table": "bus_info_new_tpe",
+    "ready_data_history_table": "",
+    "raw_data_db": "postgres_default",
+    "raw_data_table": "",
+    "load_behavior": "replace"
+  },
+  "data_infos": {
+    "name_cn": "新北市電動巴士基本資料",
+    "airflow_update_freq": "20:00 every day",
+    "source": "https://tdx.transportdata.tw/api/basic/v2/Bus/Vehicle/City/NewTaipei?%24top=30&%24format=JSON",
+    "source_type": "TDX API",
+    "source_dept": "交通部 TDX",
+    "gis_format": null,
+    "output_coordinate": "",
+    "is_geometry": 0,
+    "dataset_description": "新北市電動巴士基本資料",
+    "etl_description": "target url, fill data columns, standardize time",
+    "sensitivity": "public"
+  }
+}

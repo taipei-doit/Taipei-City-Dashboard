@@ -82,7 +82,11 @@ export const useAdminStore = defineStore("admin", {
 
 			const dashboard = JSON.parse(JSON.stringify(this.currentDashboard));
 
-			await http.post(`/dashboard/public${this.currentCity ? `/${this.currentCity}` : ""}`, dashboard);
+			await http.post(`/dashboard/public`, dashboard, {
+				params: {
+					city: this.currentCity,
+				}
+			});
 			this.getDashboards();
 			dialogStore.showNotification("success", "公開儀表板新增成功");
 		},
@@ -91,7 +95,7 @@ export const useAdminStore = defineStore("admin", {
 			const dialogStore = useDialogStore();
 
 			this.currentDashboard.components =
-				this.currentDashboard.components.map((el) => el.id);
+				this.currentDashboard.components?.map((el) => el.id);
 
 			const dashboard = JSON.parse(JSON.stringify(this.currentDashboard));
 
@@ -126,7 +130,7 @@ export const useAdminStore = defineStore("admin", {
 
 			// 2.1 Get component chart data
 			const response = await http.get(
-				`/component/${component.id}/chart/`,
+				`/component/${component.id}/chart`,
 				{
 					params: {
 						city: component.city,
@@ -151,7 +155,7 @@ export const useAdminStore = defineStore("admin", {
 			if (component.history_config && component.history_config.range) {
 				for (let i in component.history_config.range) {
 					const response = await http.get(
-						`/component/${component.id}/history/`,
+						`/component/${component.id}/history`,
 						{
 							params: {
 								city: component.city,

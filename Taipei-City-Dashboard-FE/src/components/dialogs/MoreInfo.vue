@@ -18,6 +18,8 @@ const authStore = useAuthStore();
 function getLinkTag(link, index) {
 	if (link.includes("data.taipei")) {
 		return `資料集 - ${index + 1} (data.taipei)`;
+	} else if (link.includes("data.ntpc")) {
+		return `資料集 - ${index + 1} (data.ntpc)`;
 	} else if (link.includes("tuic.gov.taipei")) {
 		return `大數據中心專案網頁`;
 	} else if (link.includes("github.com")) {
@@ -37,7 +39,6 @@ function getLinkTag(link, index) {
       <DashboardComponent
         :config="dialogStore.moreInfoContent"
         :active-city="dialogStore.moreInfoContent.city"
-        :select-btn="false"
         mode="large"
       />
       <div class="moreinfo-info">
