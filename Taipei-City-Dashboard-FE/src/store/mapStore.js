@@ -192,7 +192,7 @@ export const useMapStore = defineStore("map", {
 					scheme: "tms",
 					tolerance: 0,
 					tiles: [
-						`${location.origin}/geo_server/gwc/service/tms/1.0.0/taipei_vioc:metrotaipei_town@EPSG:900913@pbf/{z}/{x}/{y}.pbf`,
+						`https://citydashboard.taipei/geo_server/gwc/service/tms/1.0.0/taipei_vioc:metrotaipei_town@EPSG:900913@pbf/{z}/{x}/{y}.pbf`,
 					],
 				})
 				.addLayer(metroTpDistrict);
@@ -352,7 +352,7 @@ export const useMapStore = defineStore("map", {
 		async addRasterSource(map_config) {
 			if (["arc", "voronoi", "isoline"].includes(map_config.type)) {
 				const res = await axios.get(
-					`${location.origin}/geo_server/taipei_vioc/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=taipei_vioc%3A${map_config.index}&maxFeatures=1000000&outputFormat=application%2Fjson`
+					`https://citydashboard.taipei/geo_server/taipei_vioc/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=taipei_vioc%3A${map_config.index}&maxFeatures=1000000&outputFormat=application%2Fjson`
 				);
 
 				if (map_config.type === "arc") {
@@ -387,7 +387,7 @@ export const useMapStore = defineStore("map", {
 						// minzoom: Math.floor(this.map.getZoom() - 1),
 						// maxzoom: Math.ceil(this.map.getZoom() + 1),
 						tiles: [
-							`${location.origin}/geo_server/gwc/service/tms/1.0.0/taipei_vioc:${map_config.index}@EPSG:900913@pbf/{z}/{x}/{y}.pbf`,
+							`https://citydashboard.taipei/geo_server/gwc/service/tms/1.0.0/taipei_vioc:${map_config.index}@EPSG:900913@pbf/{z}/{x}/{y}.pbf`,
 						],
 					});
 		
