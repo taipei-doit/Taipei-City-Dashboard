@@ -1,7 +1,7 @@
 <!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 
 <script setup>
-import { ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { useDialogStore } from "../../store/dialogStore";
 import { useContentStore } from "../../store/contentStore";
 import { useAuthStore } from "../../store/authStore";
@@ -16,9 +16,15 @@ const authStore = useAuthStore();
 const collapsedStates = ref({
 	favorites: false,
 	personal: false,
-	taipei: false,
-	metroTaipei: false,
 });
+
+function initializeCollapsedStates() {
+	contentStore.cityManager.activeCities.forEach((city) => {
+		if (!(city in collapsedStates.value)) {
+			collapsedStates.value[city] = false;
+		}
+	});
+}
 
 function toggleCollapse(cities) {
 	cities = [cities].flat();
@@ -28,6 +34,18 @@ function toggleCollapse(cities) {
 		collapsedStates.value[city] = !allCollapsed;
 	});
 }
+
+watch(
+	() => contentStore.cityManager.activeCities,
+	() => {
+		initializeCollapsedStates();
+	},
+	{ immediate: true }
+);
+
+onMounted(() => {
+	initializeCollapsedStates();
+});
 </script>
 
 <template>
@@ -99,7 +117,7 @@ function toggleCollapse(cities) {
               :key="city"
             >
               <h2 @click="toggleCollapse(city)">
-                {{ `${contentStore.cityManager.getDisplayName(city)}儀表板` }}
+                {{ `${contentStore.cityManager.getExpandedNameName(city)}` }}
               </h2>
               <transition name="collapse">
                 <div
