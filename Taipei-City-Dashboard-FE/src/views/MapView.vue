@@ -175,8 +175,7 @@ function shouldDisable(map_config) {
       <!-- 2. Dashboards that have components -->
       <div
         v-else-if="
-          contentStore.currentDashboard.components?.length !== 0 &&
-            contentStore.mapLayers.length > 0
+          contentStore.currentDashboard.components?.length !== 0
         "
         class="map-charts"
       >
@@ -252,7 +251,9 @@ function shouldDisable(map_config) {
           }
           "
         />
-        <h2>基本圖層</h2>
+        <h2 v-if="contentStore.mapLayers.length > 0">
+          基本圖層
+        </h2>
         <DashboardComponent
           v-for="(item, arrayIdx) in contentStore.mapLayers"
           :key="`map-layer-${item.index}-${item.city}`"

@@ -81,7 +81,7 @@ export const useContentStore = defineStore("content", {
 			if (this.currentDashboard.index === index && this.currentDashboard.city === city) {
 				if (
 					this.currentDashboard.mode === "/mapview" &&
-					index !== "map-layers"
+					!index.includes("map-layers")
 				) {
 					this.setMapLayers(city);
 				} else {
@@ -383,11 +383,11 @@ export const useContentStore = defineStore("content", {
 			}
 			if (
 				this.currentDashboard.mode === "/mapview" &&
-				this.currentDashboard.index !== "map-layers"
+				!this.currentDashboard.index?.includes("map-layers")
 			) {
 				// In /mapview, map layer components are also present and need to be fetched
 				try {
-					await this.setMapLayers(this.currentDashboard.city || "metrotaipei");
+					await this.setMapLayers(this.currentDashboard.city);
 				} catch (error) {
 					console.error("Failed to fetch map layers:", error);
 					this.loading = false;
@@ -420,9 +420,9 @@ export const useContentStore = defineStore("content", {
 		// 7. Call an API to get map layer component info and store it (if in /mapview)
 		async setMapLayers(city) {
 			const cityValue = this.currentDashboard.city || city;
-    
+
 			// If not a valid city value, set empty mapLayers
-			if (!['taipei', 'metrotaipei'].includes(cityValue)) {
+			if (!this.cityManager.activeCities.includes(cityValue)) {
 				this.mapLayers = [];
 				this.loading = false;
 				return;
@@ -431,14 +431,33 @@ export const useContentStore = defineStore("content", {
 			try {
 				if (this.allMapLayers.length === 0) {
 					// No layer data yet, fetch from API
-					const response = await http.get(`/dashboard/map-layers`);
-					this.allMapLayers = response.data.data || [];
-					
+
+					// Get all map layer data for all active cities
+					const responses = await Promise.all(
+						this.cityManager.activeCities.map(city =>
+							http.get(`/dashboard/map-layers-${city}`)
+						)
+					);
+					const uniqueMap = new Map();
+					const mapLayersData = responses.flatMap(response => response.data.data || []);
+
+					// Filter out duplicate map layers based on id and city
+					const filteredMapLayersData = mapLayersData.filter(item => {
+						const key = `${item.id}_${item.city}`;
+						if (!uniqueMap.has(key)) {
+							uniqueMap.set(key, true);
+							return true;
+						}
+						return false;
+					});
+
+					this.allMapLayers = filteredMapLayersData
 					// Get chart_data for all layers
 					await this.setMapLayersContent(cityValue);
 				} else {
 					// Layer data already exists, filter directly by city
-					this.filterMapLayersByCity(cityValue);
+					const isPersonalDashboard = !cityValue
+					isPersonalDashboard ? this.mapLayers = [] : this.filterMapLayersByCity(cityValue);
 					this.loading = false;
 				}
 			} catch (error) {
