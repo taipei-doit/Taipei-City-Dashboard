@@ -170,7 +170,9 @@ export const useMapStore = defineStore("map", {
 					scheme: "tms",
 					tolerance: 0,
 					tiles: [
-						`${location.origin}/geo_server/gwc/service/tms/1.0.0/taipei_vioc:metrotaipei_village@EPSG:900913@pbf/{z}/{x}/{y}.pbf`,
+						`https://citydashboard.taipei/geo_server/gwc/service/tms/1.0.0/taipei_vioc:metrotaipei_village@EPSG:900913@pbf/{z}/{x}/{y}.pbf`,
+						// `${location.origin}/geo_server/gwc/service/tms/1.0.0/taipei_vioc:metrotaipei_village@EPSG:900913@pbf/{z}/{x}/{y}.pbf`,
+
 					],
 				})
 				.addLayer(metroTpVillage);
