@@ -1,11 +1,12 @@
 from airflow import DAG
 from operators.common_pipeline import CommonDag
-
+from io import StringIO
+import requests
 
 def _R0022(**kwargs):
     import pandas as pd
     from sqlalchemy import create_engine
-    from utils.extract_stage import get_data_taipei_api
+    # from utils.extract_stage import get_data_taipei_api
     from utils.load_stage import (
         save_dataframe_to_postgresql,
         update_lasttime_in_data_to_dataset_info,
@@ -19,19 +20,25 @@ def _R0022(**kwargs):
     load_behavior = dag_infos.get("load_behavior")
     default_table = dag_infos.get("ready_data_default_table")
     history_table = dag_infos.get("ready_data_history_table")
-    RID = "aef3466c-6383-4664-b341-6376d1ef9107"
+    # RID = "aef3466c-6383-4664-b341-6376d1ef9107"
 
-    # Extract
-    res = get_data_taipei_api(RID)
-    raw_data = pd.DataFrame(res)
+    # # Extract
+    # res = get_data_taipei_api(RID)
+    # raw_data = pd.DataFrame(res)
+    
+    # 20250315 發現來源api 改為csv檔案
+    url = 'https://tsis.dbas.gov.taipei/statis/webMain.aspx?sys=220&ymf=8701&kind=21&type=0&funid=a04003101&cycle=1&outmode=12&compmode=0&outkind=3&deflst=2&nzo=1'
+    response = requests.get(url)
+    response.encoding = 'utf-8'
+    raw_data = pd.read_csv(StringIO(response.text))
 
-    # Transform
+        # Transform
     data = raw_data.copy()
-    data = data.rename(columns={"破獲率[％]": "破獲率[%]"})
+    data = data.rename(columns={"破獲率[％]": "破獲率[%]","統計期": "年月別"})
     year = data["年月別"].str.split("年").str[0]
     month = data["年月別"].str.split("年").str[1]
     year = year.str.zfill(3)
-    month = month.str.replace("月", "").str.zfill(2)
+    month = month.str.replace("月", "").str.strip().str.zfill(2)
     data["年月別"] = year + month + "01"
     data["年月別"] = convert_str_to_time_format(time_column=data["年月別"], from_format="%TY%m%d")
     ready_data = data[
@@ -43,7 +50,6 @@ def _R0022(**kwargs):
             "發生件數[件]",
             "破獲件數/他轄[件]",
             "破獲件數/積案[件]",
-            "_id",
             "破獲件數/當期[件]",
             "發生率[件/十萬人]",
             "實際員警人數[人]",

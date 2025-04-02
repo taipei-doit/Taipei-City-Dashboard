@@ -4,7 +4,7 @@ import shutil
 import time
 import zipfile
 from pathlib import Path
-import io
+
 import fiona
 import geopandas as gpd
 import pandas as pd
@@ -12,7 +12,6 @@ import requests
 from airflow.models import Variable
 from settings.global_config import DATA_PATH, PROXIES
 from utils.auth_tdx import TDXAuth
-import xml.etree.ElementTree as ET
 
 
 def download_file(
