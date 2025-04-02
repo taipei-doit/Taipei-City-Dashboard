@@ -54,6 +54,7 @@ def _D020201(**kwargs):
 
     # Transform
     data = raw_data.copy()
+    
     # rename
     data = data.rename(
         columns={
@@ -61,13 +62,16 @@ def _D020201(**kwargs):
             "行政區代碼": "dist_code",
             "分隊名稱": "fire_brigade",
             "巷道名稱": "street",
-            "寬度（公尺）": "width_meter",
+            "寬度": "width_meter",
             "備註": "note",
             "data_time": "data_time",
         }
     )
     # define columns type
-    data["width_meter"] = data["width_meter"].astype(float)
+    if 'width_meter' in df.columns:
+        data["width_meter"] = data["width_meter"].astype(float)
+    else:
+        print("欄位 'width_meter' 不存在")
     # standardize time
     data["data_time"] = convert_str_to_time_format(data["data_time"])
     # truncate street to vally level
