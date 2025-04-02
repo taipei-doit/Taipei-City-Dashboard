@@ -509,7 +509,7 @@ export const useMapStore = defineStore("map", {
 		AddArcMapLayer(map_config, data) {
 			// start loading
 			this.loadingLayers.push("rendering");
-			const mapLayerId = `${map_config.index}-${map_config.type}`;
+			const mapLayerId = `${map_config.index}-${map_config.type}-${map_config.city}`;
 			const paintSettings = map_config.paint
 				? map_config.paint
 				: { "arc-color": ["#ffffff"] };
