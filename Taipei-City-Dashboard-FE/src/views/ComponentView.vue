@@ -10,7 +10,7 @@ Testing: Jack Huang (Data Scientist), Ian Huang (Data Analysis Intern)
 
 <script setup>
 import { ref, onMounted } from "vue";
-import { DashboardComponent } from "city-dashboard-component";
+import DashboardComponent from "../dashboardComponent/DashboardComponent.vue";
 
 import { useContentStore } from "../store/contentStore";
 import router from "../router/index";
@@ -22,7 +22,7 @@ const searchParams = ref({
 	searchbyname: "",
 	sort: "",
 	order: "",
-	pagesize: 200,
+	pagesize: 500,
 	pagenum: 1,
 });
 
@@ -82,6 +82,7 @@ onMounted(() => {
           .map((item) => item.id)
           .includes(item.id)
       "
+      :city-tag="contentStore.cityManager.getTagList(item.city)"
       :favorite-btn="true"
       :is-favorite="contentStore.favorites?.components.includes(item.id)"
       info-btn-text="資訊頁面"

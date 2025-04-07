@@ -41,7 +41,7 @@
           v-if="item.mode === 'video'"
           class="mappopup-video"
         >
-          <h3>{{ item.name }}</h3>
+          <!-- <h3>{{ item.name }}</h3> -->
           <!-- <p>{{ popupContent[activeTab]?.properties[item.key] }}</p>
           <p>影像載入中...</p>
           <img
@@ -49,11 +49,20 @@
             width="100%"
             height="100%"
           > -->
-		  <iframe
-			width="300"
-			height="200"
-			:src="popupContent[activeTab]?.properties[item.key]">
-		  </iframe>
+          <template v-if="popupContent[activeTab]?.properties[item.key].includes('freeway.gov.tw')">
+            <img
+              width="100%"
+              height="100%"
+              :src="popupContent[activeTab]?.properties[item.key]"
+            >
+          </template>
+          <template v-else>
+            <iframe
+              width="300"
+              height="200"
+              :src="popupContent[activeTab]?.properties[item.key]"
+            />
+          </template>
         </div>
         <div v-else>
           <h3>{{ item.name }}</h3>
@@ -188,9 +197,9 @@
 		img {
 			width: 100%;
 			height: 100%;
-			position: absolute;
-			left: 0;
-			top: 0;
+			// position: absolute;
+			// left: 0;
+			// top: 0;
 		}
 	}
 }

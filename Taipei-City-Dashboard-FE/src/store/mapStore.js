@@ -26,11 +26,14 @@ import MapPopup from "../components/map/MapPopup.vue";
 // Utility Functions or Configs
 import {
 	MapObjectConfig,
+	CityMapView,
 	TaipeiBuilding,
-	TaipeiTown,
-	TaipeiVillage,
-	TpDistrict,
-	TpVillage,
+	// TpDistrict,
+	// TpVillage,
+	metroTaipeiTown,
+	metroTaipeiVillage,
+	metroTpDistrict,
+	metroTpVillage,
 	maplayerCommonLayout,
 	maplayerCommonPaint,
 } from "../assets/configs/mapbox/mapConfig.js";
@@ -129,27 +132,27 @@ export const useMapStore = defineStore("map", {
 		initializeBasicLayers() {
 			const authStore = useAuthStore();
 			if (!this.map) return;
-			// Taipei District Labels
-			fetch(`/mapData/taipei_town.geojson`)
+			// metroTaipei District Labels
+			fetch(`/mapData/metrotaipei_town.geojson`)
 				.then((response) => response.json())
 				.then((data) => {
 					this.map
-						.addSource("taipei_town", {
+						.addSource("metrotaipei_town_label", {
 							type: "geojson",
 							data: data,
 						})
-						.addLayer(TaipeiTown);
+						.addLayer(metroTaipeiTown);
 				});
-			// Taipei Village Labels
-			fetch(`/mapData/taipei_village.geojson`)
+			// metroTaipei Village Labels
+			fetch(`/mapData/metrotaipei_village.geojson`)
 				.then((response) => response.json())
 				.then((data) => {
 					this.map
-						.addSource("taipei_village", {
+						.addSource("metrotaipei_village_label", {
 							type: "geojson",
 							data: data,
 						})
-						.addLayer(TaipeiVillage);
+						.addLayer(metroTaipeiVillage);
 				});
 			// Taipei 3D Buildings
 			if (!authStore.isMobileDevice) {
@@ -162,26 +165,46 @@ export const useMapStore = defineStore("map", {
 			}
 			// Taipei Village Boundaries
 			this.map
-				.addSource(`tp_village`, {
+				.addSource(`metrotaipei_village`, {
 					type: "vector",
 					scheme: "tms",
 					tolerance: 0,
 					tiles: [
-						`${location.origin}/geo_server/gwc/service/tms/1.0.0/taipei_vioc:tp_village@EPSG:900913@pbf/{z}/{x}/{y}.pbf`,
+						`https://citydashboard.taipei/geo_server/gwc/service/tms/1.0.0/taipei_vioc:metrotaipei_village@EPSG:900913@pbf/{z}/{x}/{y}.pbf`,
+						// `${location.origin}/geo_server/gwc/service/tms/1.0.0/taipei_vioc:metrotaipei_village@EPSG:900913@pbf/{z}/{x}/{y}.pbf`,
+
 					],
 				})
-				.addLayer(TpVillage);
+				.addLayer(metroTpVillage);
+			// .addSource(`tp_village`, {
+			// 	type: "vector",
+			// 	scheme: "tms",
+			// 	tolerance: 0,
+			// 	tiles: [
+			// 		`${location.origin}/geo_server/gwc/service/tms/1.0.0/taipei_vioc:tp_village@EPSG:900913@pbf/{z}/{x}/{y}.pbf`,
+			// 	],
+			// })
+			// .addLayer(TpVillage);
 			// Taipei District Boundaries
 			this.map
-				.addSource(`tp_district`, {
+				.addSource(`metrotaipei_town`, {
 					type: "vector",
 					scheme: "tms",
 					tolerance: 0,
 					tiles: [
-						`${location.origin}/geo_server/gwc/service/tms/1.0.0/taipei_vioc:tp_district@EPSG:900913@pbf/{z}/{x}/{y}.pbf`,
+						`https://citydashboard.taipei/geo_server/gwc/service/tms/1.0.0/taipei_vioc:metrotaipei_town@EPSG:900913@pbf/{z}/{x}/{y}.pbf`,
 					],
 				})
-				.addLayer(TpDistrict);
+				.addLayer(metroTpDistrict);
+			// .addSource(`tp_district`, {
+			// 	type: "vector",
+			// 	scheme: "tms",
+			// 	tolerance: 0,
+			// 	tiles: [
+			// 		`${location.origin}/geo_server/gwc/service/tms/1.0.0/taipei_vioc:tp_district@EPSG:900913@pbf/{z}/{x}/{y}.pbf`,
+			// 	],
+			// })
+			// .addLayer(TpDistrict);
 
 			this.addSymbolSources();
 		},
@@ -210,25 +233,43 @@ export const useMapStore = defineStore("map", {
 		toggleDistrictBoundaries(status) {
 			if (status) {
 				this.map.setLayoutProperty(
-					"tp_district",
+					"metrotaipei_town",
 					"visibility",
 					"visible"
 				);
 			} else {
-				this.map.setLayoutProperty("tp_district", "visibility", "none");
+				this.map.setLayoutProperty("metrotaipei_town", "visibility", "none");
 			}
+			// if (status) {
+			// 	this.map.setLayoutProperty(
+			// 		"tp_district",
+			// 		"visibility",
+			// 		"visible"
+			// 	);
+			// } else {
+			// 	this.map.setLayoutProperty("tp_district", "visibility", "none");
+			// }
 		},
 		// 5. Toggle village boundaries
 		toggleVillageBoundaries(status) {
 			if (status) {
 				this.map.setLayoutProperty(
-					"tp_village",
+					"metrotaipei_village",
 					"visibility",
 					"visible"
 				);
 			} else {
-				this.map.setLayoutProperty("tp_village", "visibility", "none");
+				this.map.setLayoutProperty("metrotaipei_village", "visibility", "none");
 			}
+			// if (status) {
+			// 	this.map.setLayoutProperty(
+			// 		"tp_village",
+			// 		"visibility",
+			// 		"visible"
+			// 	);
+			// } else {
+			// 	this.map.setLayoutProperty("tp_village", "visibility", "none");
+			// }
 		},
 		// 6. Set User Location
 		setCurrentLocation() {
@@ -253,7 +294,7 @@ export const useMapStore = defineStore("map", {
 		// 1. Passes in the map_config (an Array of Objects) of a component and adds all layers to the map layer list
 		addToMapLayerList(map_config) {
 			map_config.forEach((element) => {
-				let mapLayerId = `${element.index}-${element.type}`;
+				let mapLayerId = `${element.index}-${element.type}-${element.city}`;
 				// 1-1. If the layer exists, simply turn on the visibility and add it to the visible layers list
 				if (
 					this.currentLayers.find((element) => element === mapLayerId)
@@ -311,7 +352,7 @@ export const useMapStore = defineStore("map", {
 		async addRasterSource(map_config) {
 			if (["arc", "voronoi", "isoline"].includes(map_config.type)) {
 				const res = await axios.get(
-					`${location.origin}/geo_server/taipei_vioc/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=taipei_vioc%3A${map_config.index}&maxFeatures=1000000&outputFormat=application%2Fjson`
+					`https://citydashboard.taipei/geo_server/taipei_vioc/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=taipei_vioc%3A${map_config.index}&maxFeatures=1000000&outputFormat=application%2Fjson`
 				);
 
 				if (map_config.type === "arc") {
@@ -346,7 +387,7 @@ export const useMapStore = defineStore("map", {
 						// minzoom: Math.floor(this.map.getZoom() - 1),
 						// maxzoom: Math.ceil(this.map.getZoom() + 1),
 						tiles: [
-							`${location.origin}/geo_server/gwc/service/tms/1.0.0/taipei_vioc:${map_config.index}@EPSG:900913@pbf/{z}/{x}/{y}.pbf`,
+							`https://citydashboard.taipei/geo_server/gwc/service/tms/1.0.0/taipei_vioc:${map_config.index}@EPSG:900913@pbf/{z}/{x}/{y}.pbf`,
 						],
 					});
 		
@@ -470,7 +511,7 @@ export const useMapStore = defineStore("map", {
 		AddArcMapLayer(map_config, data) {
 			// start loading
 			this.loadingLayers.push("rendering");
-			const mapLayerId = `${map_config.index}-${map_config.type}`;
+			const mapLayerId = `${map_config.index}-${map_config.type}-${map_config.city}`;
 			const paintSettings = map_config.paint
 				? map_config.paint
 				: { "arc-color": ["#ffffff"] };
@@ -535,15 +576,15 @@ export const useMapStore = defineStore("map", {
 			const layers = Object.keys(this.deckGlLayer).map((index) => {
 				const l = this.deckGlLayer[index];
 				switch (l.type) {
-					case "ArcLayer":
-						return new ArcLayer(l.config);
-					case "AnimatedArcLayer":
-						return new AnimatedArcLayer({
-							...l.config,
-							coef: this.step / 1000,
-						});
-					default:
-						break;
+				case "ArcLayer":
+					return new ArcLayer(l.config);
+				case "AnimatedArcLayer":
+					return new AnimatedArcLayer({
+						...l.config,
+						coef: this.step / 1000,
+					});
+				default:
+					break;
 				}
 			});
 			this.overlay.setProps({
@@ -766,7 +807,7 @@ export const useMapStore = defineStore("map", {
 		// 6. Turn off the visibility of an exisiting map layer but don't remove it completely
 		turnOffMapLayerVisibility(map_config) {
 			map_config.forEach((element) => {
-				let mapLayerId = `${element.index}-${element.type}`;
+				let mapLayerId = `${element.index}-${element.type}-${element.city}`;
 				this.loadingLayers = this.loadingLayers.filter(
 					(el) => el !== mapLayerId
 				);
@@ -1035,6 +1076,11 @@ export const useMapStore = defineStore("map", {
 				}, 200);
 			}
 		},
+		// 4. Update the zoom and center of the map
+		updateMapViewForCity(city) {
+			this.map.setZoom(CityMapView[city].zoom);
+			this.map.setCenter(CityMapView[city].center);
+		},
 
 		/* Map Filtering */
 		// 1. Add a filter based on a each map layer's properties (byParam)
@@ -1046,7 +1092,7 @@ export const useMapStore = defineStore("map", {
 				return;
 			}
 			map_configs.map((map_config) => {
-				let mapLayerId = `${map_config.index}-${map_config.type}`;
+				let mapLayerId = `${map_config.index}-${map_config.type}-${map_config.city}`;
 				if (map_config && map_config.type === "arc") {
 					this.deckGlLayer[mapLayerId].config.data = this.deckGlLayer[
 						mapLayerId
@@ -1118,7 +1164,7 @@ export const useMapStore = defineStore("map", {
 				return;
 			}
 			map_configs.map((map_config) => {
-				let mapLayerId = `${map_config.index}-${map_config.type}`;
+				let mapLayerId = `${map_config.index}-${map_config.type}-${map_config.city}`;
 				if (map_config.title !== xParam) {
 					this.map.setLayoutProperty(
 						mapLayerId,
@@ -1141,7 +1187,7 @@ export const useMapStore = defineStore("map", {
 				return;
 			}
 			map_configs.map((map_config) => {
-				let mapLayerId = `${map_config.index}-${map_config.type}`;
+				let mapLayerId = `${map_config.index}-${map_config.type}-${map_config.city}`;
 				if (map_config && map_config.type === "arc") {
 					this.deckGlLayer[mapLayerId].config.data =
 						this.deckGlLayer[mapLayerId].data;
@@ -1158,7 +1204,7 @@ export const useMapStore = defineStore("map", {
 				return;
 			}
 			map_configs.map((map_config) => {
-				let mapLayerId = `${map_config.index}-${map_config.type}`;
+				let mapLayerId = `${map_config.index}-${map_config.type}-${map_config.city}`;
 				this.map.setLayoutProperty(mapLayerId, "visibility", "visible");
 			});
 		},

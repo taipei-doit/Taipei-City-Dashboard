@@ -9,7 +9,7 @@ Testing: Jack Huang (Data Scientist), Ian Huang (Data Analysis Intern)
 <!-- Department of Information Technology, Taipei City Government -->
 
 <script setup>
-import { DashboardComponent } from "city-dashboard-component";
+import DashboardComponent from "../dashboardComponent/DashboardComponent.vue";
 import router from "../router";
 import { useContentStore } from "../store/contentStore";
 import { useDialogStore } from "../store/dialogStore";
@@ -52,15 +52,20 @@ function handleMoreInfo(item) {
 <template>
   <!-- 1. If the dashboard is map-layers -->
   <div
-    v-if="contentStore.currentDashboard.index === 'map-layers'"
+    v-if="contentStore.currentDashboard.index?.includes('map-layers')"
     class="dashboard"
   >
     <DashboardComponent
       v-for="item in contentStore.currentDashboard.components"
-      :key="item.index"
+      :key="`${item.index}-${item.city}`"
       :config="item"
       mode="half"
       :info-btn="true"
+      :active-city="item.city"
+      :select-btn="true"
+      :select-btn-disabled="contentStore.cityManager.getSelectList(contentStore.currentDashboard?.city).length === 1"
+      :select-btn-list="contentStore.cityManager.getSelectList(contentStore.currentDashboard?.city)"
+      :city-tag="contentStore.cityManager.getTagList(contentStore.currentDashboard?.city)"
       :favorite-btn="authStore.token ? true : false"
       :is-favorite="contentStore.favorites?.components.includes(item.id)"
       @favorite="
@@ -79,14 +84,25 @@ function handleMoreInfo(item) {
   </div>
   <!-- 2. Dashboards that have components -->
   <div
-    v-else-if="contentStore.currentDashboard.components?.length !== 0"
+    v-else-if="contentStore.currentDashboard.components?.length !== 0 || contentStore.cityDashboard.components?.length !== 0"
     class="dashboard"
   >
     <DashboardComponent
-      v-for="item in contentStore.currentDashboard.components"
-      :key="item.index"
+      v-for="(item, arrayIdx) in contentStore.currentDashboard.components"
+      :key="`${item.index}-${item.city}`"
       :config="item"
       :info-btn="true"
+      :active-city="item.city"
+      :select-btn="true"
+      :select-btn-disabled="contentStore.cityManager.getSelectList(contentStore.currentDashboard?.city).length === 1 || contentStore.currentDashboardExcluded.components.filter((data) => data.index === item.index).length === 0"
+      :select-btn-list="contentStore.currentDashboard?.city
+        ? contentStore.cityManager.getSelectList(contentStore.currentDashboard?.city)
+        : contentStore.cityManager.getCities(contentStore.cityManager.activeCities)
+      "
+      :city-tag="contentStore.currentDashboard?.city
+        ? contentStore.cityManager.getTagList(contentStore.currentDashboard?.city)
+        : contentStore.cityManager.getTagList(item.city)
+      "
       :delete-btn="
         contentStore.personalDashboards
           .map((item) => item.index)
@@ -111,6 +127,18 @@ function handleMoreInfo(item) {
         (id) => {
           contentStore.deleteComponent(id);
         }
+      "
+      @change-city="(city)=> {
+        const selectedData = contentStore.cityDashboard.components.find((data) => {
+          if (data.index === item.index && data.city === city) {
+            return data
+          }
+        });
+
+        if (selectedData) {
+          contentStore.setComponentData(arrayIdx,selectedData);
+        }
+      }
       "
     />
     <MoreInfo />

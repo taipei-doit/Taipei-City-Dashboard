@@ -1,7 +1,7 @@
 <!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 
 <script setup>
-import { DashboardComponent } from "city-dashboard-component";
+import DashboardComponent from "../../dashboardComponent/DashboardComponent.vue";
 import { useDialogStore } from "../../store/dialogStore";
 import { useContentStore } from "../../store/contentStore";
 import { useAuthStore } from "../../store/authStore";
@@ -18,6 +18,8 @@ const authStore = useAuthStore();
 function getLinkTag(link, index) {
 	if (link.includes("data.taipei")) {
 		return `資料集 - ${index + 1} (data.taipei)`;
+	} else if (link.includes("data.ntpc")) {
+		return `資料集 - ${index + 1} (data.ntpc)`;
 	} else if (link.includes("tuic.gov.taipei")) {
 		return `大數據中心專案網頁`;
 	} else if (link.includes("github.com")) {
@@ -36,14 +38,15 @@ function getLinkTag(link, index) {
     <div class="moreinfo">
       <DashboardComponent
         :config="dialogStore.moreInfoContent"
+        :active-city="dialogStore.moreInfoContent.city"
+        :city-tag="contentStore.cityManager.getTagList(dialogStore.moreInfoContent.city)"
         mode="large"
       />
       <div class="moreinfo-info">
         <div class="moreinfo-info-data">
           <h3>
             組件說明（{{
-              ` ID: ${dialogStore.moreInfoContent.id}｜Index:
-											${dialogStore.moreInfoContent.index} `
+              ` ID: ${dialogStore.moreInfoContent.id}｜Index: ${dialogStore.moreInfoContent.index}｜City: ${dialogStore.moreInfoContent.city}`
             }}）
           </h3>
           <p>{{ dialogStore.moreInfoContent.long_desc }}</p>
@@ -62,7 +65,7 @@ function getLinkTag(link, index) {
               "
             />
           </div>
-          <div v-if="dialogStore.moreInfoContent.links[0]">
+          <div v-if="dialogStore.moreInfoContent.links?.length > 0">
             <h3>相關資料</h3>
             <div class="moreinfo-info-links">
               <a

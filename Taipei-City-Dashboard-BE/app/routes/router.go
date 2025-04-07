@@ -78,10 +78,9 @@ func configureComponentRoutes() {
 	componentRoutes.Use(middleware.LimitTotalRequests(global.ComponentLimitTotalRequestsTimes, global.LimitRequestsDuration))
 	{
 		componentRoutes.GET("/", controllers.GetAllComponents)
-		componentRoutes.
-			GET("/:id", controllers.GetComponentByID)
-		componentRoutes.
-			GET("/:id/chart", controllers.GetComponentChartData)
+		componentRoutes.GET("/:id", controllers.GetComponentByID)
+		componentRoutes.GET("/:id/all", controllers.GetComponentByIDAll)
+		componentRoutes.GET("/:id/chart", controllers.GetComponentChartData)
 		componentRoutes.GET("/:id/history", controllers.GetComponentHistoryData)
 	}
 	componentRoutes.Use(middleware.IsSysAdm())

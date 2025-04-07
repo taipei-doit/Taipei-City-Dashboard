@@ -2,7 +2,7 @@
 
 <!-- Draggable tags to be used in conjunction with an input element -->
 <script setup>
-import { defineProps, ref } from "vue";
+import { ref } from "vue";
 
 const draggedItem = ref(null);
 
@@ -48,7 +48,7 @@ const handleDragEnd = () => {
 <template>
   <div
     class="inputtags"
-    :style="{ marginBottom: props.tags.length > 0 ? '5px' : 0 }"
+    :style="{ marginBottom: props.tags?.length > 0 ? '5px' : 0 }"
   >
     <div
       v-for="(tag, index) in tags"

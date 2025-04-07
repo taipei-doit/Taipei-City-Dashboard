@@ -16,6 +16,9 @@
 	--font-s: 0.75rem;
 	--font-icon: "Material Icons Round";
 	--vh: 1vh;
+	
+	--color-taipei: #1411AC;
+	--color-metrotaipei: #ac7811;
 }
 
 * {

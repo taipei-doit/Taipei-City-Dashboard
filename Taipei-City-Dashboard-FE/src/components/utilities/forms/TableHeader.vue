@@ -1,6 +1,5 @@
 <!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 <script setup>
-import { defineProps, defineEmits } from "vue";
 
 defineProps({
 	sort: {

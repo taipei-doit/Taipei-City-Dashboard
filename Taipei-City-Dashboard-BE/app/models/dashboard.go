@@ -2,6 +2,7 @@
 package models
 
 import (
+	"encoding/json"
 	"fmt"
 	"time"
 
@@ -31,12 +32,19 @@ type DashboardGroup struct {
 
 /* ----- Handlers ----- */
 
+// type allDashboards struct {
+// 	Public   []Dashboard `json:"public"`
+// 	Personal []Dashboard `json:"personal"`
+// }
+
 type allDashboards struct {
 	Public   []Dashboard `json:"public"`
+	Taipei   []Dashboard `json:"taipei"`
+	MetroTaipei   []Dashboard `json:"metrotaipei"`
 	Personal []Dashboard `json:"personal"`
 }
 
-func GetAllDashboards(personalGroups []int) (dashboards allDashboards, err error) {
+func GetAllDashboards(accountID int) (dashboards allDashboards, err error) {
 	// Get all the public group dashboards
 	err = DBManager.
 		Joins("JOIN dashboard_groups ON dashboards.id = dashboard_groups.dashboard_id AND dashboard_groups.group_id = ?", 1).
@@ -48,16 +56,73 @@ func GetAllDashboards(personalGroups []int) (dashboards allDashboards, err error
 		return dashboards, err
 	}
 
-	// Get all the Personal dashboards
 	err = DBManager.
-		Joins("JOIN dashboard_groups ON dashboards.id = dashboard_groups.dashboard_id AND dashboard_groups.group_id IN (?)", personalGroups).
+		Joins("JOIN dashboard_groups ON dashboards.id = dashboard_groups.dashboard_id").
+		Joins("JOIN groups ON dashboard_groups.group_id = groups.id AND groups.is_personal = False AND groups.name = ?", "taipei").
 		Order("dashboards.id").
-		Find(&dashboards.Personal).
+		Find(&dashboards.Taipei).
 		Error
+
+	if err != nil {
+		return dashboards, err
+	}
+
+	err = DBManager.
+		Joins("JOIN dashboard_groups ON dashboards.id = dashboard_groups.dashboard_id").
+		Joins("JOIN groups ON dashboard_groups.group_id = groups.id AND groups.is_personal = False AND groups.name = ?", "metrotaipei").
+		Order("dashboards.id").
+		Find(&dashboards.MetroTaipei).
+		Error
+
+	if err != nil {
+		return dashboards, err
+	}
+
+	
+	// Get all the Personal dashboards
+	// err = DBManager.
+	// 	Joins("JOIN dashboard_groups ON dashboards.id = dashboard_groups.dashboard_id AND dashboard_groups.group_id IN (?)", personalGroups).
+	// 	Order("dashboards.id").
+	// 	Find(&dashboards.Personal).
+	// 	Error
+
+
+	// Get all the Personal dashboards
+	if accountID > 0{
+		subQuery := DBManager.Table("groups").
+		Select("id").
+		Joins("JOIN auth_user_group_roles as ag ON groups.id = ag.group_id").
+		Where("is_personal = true").
+		Where("auth_user_id = ?", accountID)
+
+		err = DBManager.Debug().
+			Joins("JOIN dashboard_groups as dg ON dashboards.id = dg.dashboard_id AND dg.group_id IN (?)", subQuery).
+			Find(&dashboards.Personal).
+			Error
+	} else {
+		dashboards.Personal =[]Dashboard{}
+	}
+	
 	return dashboards, err
 }
 
-func GetDashboardByIndex(index string, groups []int) (components []Component, err error) {
+
+func GetAllPublicGroupsID() (ids []int, err error) {
+	// Assume is_personal = false means public group
+	err = DBManager.
+		Table("groups").
+		Where("is_personal = false").
+		Pluck("groups.id", &ids).
+		Error
+
+	if err != nil {
+		return ids, err
+	}
+
+	return ids, err
+}
+
+func GetDashboardByIndex(index string, groups []int, city string) (components []CityComponent, err error) {
 	tempDB := createTempComponentDB()
 
 	type componentArray struct {
@@ -102,11 +167,47 @@ func GetDashboardByIndex(index string, groups []int) (components []Component, er
 	}
 
 	// 4. Get components by ids
-	err = tempDB.
+	query := tempDB.
 		Where(componentIdsSlice).
-		Order(fmt.Sprintf("ARRAY_POSITION(ARRAY[%s], components.id)", componentIdsString)).
-		Find(&components).Error
+		Order(fmt.Sprintf("ARRAY_POSITION(ARRAY[%s], components.id)", componentIdsString))
+		if (city != ""){
+			query = query.Where("query_charts.city = ?", city)
+		}
+	err = query.Find(&components).Error
 
+	// Add ComponentMap City field for front-end display purpose
+	type ComponentMap struct {
+		ID       int64            `json:"id" gorm:"column:id;autoincrement;primaryKey"`
+		City     string           `json:"city"       gorm:"column:index;type:varchar;not null"`
+		Index    string           `json:"index"      gorm:"column:index;type:varchar;not null"`
+		Title    string           `json:"title"      gorm:"column:title;type:varchar;not null"`
+		Type     string           `json:"type"       gorm:"column:type;type:varchar;not null"`
+		Source   string           `json:"source"     gorm:"column:source;type:varchar;not null"`
+		Size     *string          `json:"size"       gorm:"column:size;type:varchar"`
+		Icon     *string          `json:"icon"       gorm:"column:icon;type:varchar"`
+		Paint    *json.RawMessage `json:"paint" gorm:"column:paint;type:json"`
+		Property *json.RawMessage `json:"property" gorm:"column:property;type:json"`
+	}
+
+
+	for k,v := range components{
+		var maps []ComponentMap
+		filteredMaps := make([]ComponentMap, 0)
+		if err := json.Unmarshal(v.MapConfig, &maps); err != nil {
+			return components, err
+		}
+
+		for kk,vv := range maps{
+			maps[kk].City = v.City
+			if vv.ID != 0{
+				filteredMaps = append(filteredMaps, maps[kk])
+			}
+		}
+
+		maps = filteredMaps
+		jsonMaps, _ := json.Marshal(maps)
+		components[k].MapConfig = jsonMaps
+	}
 	return components, err
 }
 

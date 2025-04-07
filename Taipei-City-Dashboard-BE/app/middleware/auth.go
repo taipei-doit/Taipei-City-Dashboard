@@ -25,8 +25,12 @@ func ValidateJWT(c *gin.Context) {
 		c.Set("loginType", "no login")
 		c.Set("accountID", 0)
 		c.Set("isAdmin", false)
-		permissions := []models.Permission{
-			{GroupID: 1, RoleID: 3},
+		// Non auth user can read public group
+		publicGroupids, _ := models.GetAllPublicGroupsID()
+		permissions := []models.Permission{}
+		for _, v := range publicGroupids{
+			// RoleID 3 = Viewer
+			permissions = append(permissions, models.Permission{GroupID: v, RoleID: 3})
 		}
 		c.Set("permissions", permissions)
 		c.Next()

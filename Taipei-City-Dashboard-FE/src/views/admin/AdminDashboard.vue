@@ -1,6 +1,6 @@
 <!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, computed } from "vue";
 import { useAdminStore } from "../../store/adminStore";
 import { useDialogStore } from "../../store/dialogStore";
 import { useContentStore } from "../../store/contentStore";
@@ -13,6 +13,7 @@ const adminStore = useAdminStore();
 const dialogStore = useDialogStore();
 const contentStore = useContentStore();
 
+const dashboards = computed(() => adminStore.getDashboardsByCity(adminStore.currentCity));
 const dialogMode = ref("edit");
 
 function parseTime(time) {
@@ -84,10 +85,10 @@ onMounted(() => {
         </tr>
       </thead>
       <!-- 2-1. Dashboards are present -->
-      <tbody v-if="adminStore.dashboards.length !== 0">
+      <tbody v-if="dashboards.length !== 0">
         <tr
-          v-for="dashboard in adminStore.dashboards"
-          :key="dashboard.index"
+          v-for="dashboard in dashboards"
+          :key="`${dashboard.index}-${adminStore.currentCity}`"
         >
           <td class="admindashboard-table-settings">
             <button @click="handleOpenSettings(dashboard)">
@@ -191,6 +192,10 @@ onMounted(() => {
 			background-color: transparent;
 		}
 
+		th {
+			z-index: 3;
+		}
+
 		span {
 			font-family: var(--font-icon);
 			font-size: var(--font-l);
@@ -205,6 +210,7 @@ onMounted(() => {
 		&-settings {
 			position: sticky;
 			left: 0;
+			z-index: 2;
 		}
 
 		&-update {

@@ -114,13 +114,15 @@ type MapLegendData struct {
 
 /* ----- Handlers ----- */
 
-func GetComponentChartDataQuery(id int) (queryType string, queryString string, err error) {
+func GetComponentChartDataQuery(id int, city string) (queryType string, queryString string, err error) {
 	var chartDataQuery ChartDataQuery
 
 	err = DBManager.
 		Table("components").
-		Select("query_type, query_chart").
+		Select("query_charts.query_type, query_charts.query_chart").
+		Joins("LEFT JOIN query_charts ON components.index = query_charts.index").
 		Where("components.id = ?", id).
+		Where("query_charts.city = ?", city).
 		Find(&chartDataQuery).Error
 	if err != nil {
 		return queryType, queryString, err
@@ -128,13 +130,15 @@ func GetComponentChartDataQuery(id int) (queryType string, queryString string, e
 	return chartDataQuery.QueryType, chartDataQuery.QueryChart, nil
 }
 
-func GetComponentHistoryDataQuery(id int, timeFrom string, timeTo string) (queryHistory string, err error) {
+func GetComponentHistoryDataQuery(id int, city string, timeFrom string, timeTo string) (queryHistory string, err error) {
 	var historyDataQuery HistoryDataQuery
 
 	err = DBManager.
 		Table("components").
-		Select("query_history").
+		Select("query_charts.query_history").
+		Joins("LEFT JOIN query_charts ON components.index = query_charts.index").
 		Where("components.id = ?", id).
+		Where("query_charts.city = ?", city).
 		Find(&historyDataQuery).Error
 	if err != nil {
 		return queryHistory, err

@@ -6,7 +6,7 @@
 <script setup>
 import { computed, onMounted, ref } from "vue";
 import http from "../../../router/axios";
-import { DashboardComponent } from "city-dashboard-component";
+import DashboardComponent from "../../../dashboardComponent/DashboardComponent.vue";
 
 import { useDialogStore } from "../../../store/dialogStore";
 import { useAdminStore } from "../../../store/adminStore";
@@ -25,8 +25,8 @@ const searchIndex = ref("");
 
 // Filters out components already in the dashboard
 const availableComponents = computed(() => {
-	const taken = adminStore.currentDashboard.components.map((item) => item.id);
-	const available = allComponents.value.filter(
+	const taken = adminStore.currentDashboard.components?.map((item) => item.id) || [];
+	const available = allComponents.value?.filter(
 		(item) => !taken.includes(+item.id)
 	);
 	return available;
@@ -35,9 +35,10 @@ const availableComponents = computed(() => {
 async function handleSearch() {
 	const res = await http.get(`/component/`, {
 		params: {
-			pagesize: 100,
+			pagesize: 200,
 			searchbyindex: searchIndex.value,
 			searchbyname: searchName.value,
+			city: adminStore.currentCity,
 		},
 	});
 	allComponents.value = res.data.data;
@@ -45,7 +46,7 @@ async function handleSearch() {
 }
 function handleSubmit() {
 	adminStore.currentDashboard.components =
-		adminStore.currentDashboard.components.concat(componentsSelected.value);
+		adminStore.currentDashboard.components?.concat(componentsSelected.value) ?? componentsSelected.value;
 	handleClose();
 }
 function handleClose() {
@@ -111,7 +112,7 @@ onMounted(() => {
               取消
             </button>
             <button
-              v-if="componentsSelected.length > 0"
+              v-if="componentsSelected?.length > 0"
               @click="handleSubmit"
             >
               <span>add_chart</span>確認新增
@@ -120,25 +121,26 @@ onMounted(() => {
         </div>
       </div>
       <p :style="{ margin: '1rem 0 0.5rem' }">
-        計 {{ availableComponents.length }} 個組件符合篩選條件 | 共選取
-        {{ componentsSelected.length }} 個
+        計 {{ availableComponents?.length }} 個組件符合篩選條件 | 共選取
+        {{ componentsSelected?.length }} 個
       </p>
 
       <div class="addcomponent-list">
         <div
           v-for="item in availableComponents"
-          :key="item.id"
+          :key="`${item.id}-${item.city}`"
         >
           <input
-            :id="item.name"
+            :id="`${item.name}-${item.city}`"
             v-model="componentsSelected"
             type="checkbox"
-            :value="{ id: item.id, name: item.name }"
+            :value="{ id: item.id, name: item.name, city: item.city }"
           >
-          <label :for="item.name">
+          <label :for="`${item.name}-${item.city}`">
             <div class="addcomponent-list-item">
               <DashboardComponent
                 :config="item"
+                :city-tag="contentStore.cityManager.getTagList(item.city)"
                 mode="preview"
               />
             </div>

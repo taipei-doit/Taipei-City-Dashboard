@@ -14,7 +14,7 @@ steps:
     args:
       - run
       - deploy
-      - dashboard-be
+      - dashboard-be-v3
       - "--image"
       - "asia-east1-docker.pkg.dev/$PROJECT_ID/tuic/dashboard-be:$COMMIT_SHA"
       - "--service-account"
@@ -29,6 +29,8 @@ steps:
       - "DB_DASHBOARD_PASSWORD=dashboard-password:latest"
       - "--set-env-vars"
       - DB_DASHBOARD_DBNAME=$_DB_DASHBOARD_DBNAME
+      - "--set-env-vars"
+      - DB_MANAGER_DBNAME=$_DB_MANAGER_DBNAME
       - "--set-env-vars"
       - DB_MANAGER_HOST=$_DB_MANAGER_HOST
       - "--set-env-vars"
@@ -52,3 +54,5 @@ steps:
       - "--region"
       - us-central1
       - "--allow-unauthenticated"
+options:
+  logging: CLOUD_LOGGING_ONLY

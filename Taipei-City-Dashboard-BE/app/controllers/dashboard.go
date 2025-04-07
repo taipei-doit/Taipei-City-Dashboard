@@ -2,6 +2,7 @@
 package controllers
 
 import (
+	"errors"
 	"net/http"
 	"strings"
 
@@ -10,6 +11,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	"gorm.io/gorm"
 )
 
 /*
@@ -20,18 +22,19 @@ User, Admin: Public and personal dashboards
 */
 func GetAllDashboards(c *gin.Context) {
 	// Get the user info from the context
-	_, _, _, _, permissions := util.GetUserInfoFromContext(c)
-	groups := util.GetPermissionAllGroupIDs(permissions)
+	_, accountID, _, _, _ := util.GetUserInfoFromContext(c)
+	// _, _, _, _, permissions := util.GetUserInfoFromContext(c)
+	// groups := util.GetPermissionAllGroupIDs(permissions)
 
 	// Remove public group(id=1) from groups if exist
-	var personalGroups []int
-	for _, groupID := range groups {
-		if groupID != 1 { // Assuming public group id is 1
-			personalGroups = append(personalGroups, groupID)
-		}
-	}
-
-	dashboards, err := models.GetAllDashboards(personalGroups)
+	// var personalGroups []int
+	// for _, groupID := range groups {
+	// 	if groupID != 1 { // Assuming public group id is 1
+	// 		personalGroups = append(personalGroups, groupID)
+	// 	}
+	// }
+	
+	dashboards, err := models.GetAllDashboards(accountID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": err.Error()})
 		return
@@ -51,9 +54,15 @@ func GetDashboardByIndex(c *gin.Context) {
 	groups := util.GetPermissionAllGroupIDs(permissions)
 
 	dashboardIndex := c.Param("index")
+	city := c.Query("city")
 
-	components, err := models.GetDashboardByIndex(dashboardIndex, groups)
+	components, err := models.GetDashboardByIndex(dashboardIndex, groups, city)
 	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound){
+			c.JSON(http.StatusNotFound, gin.H{"status": "error", "message": err.Error()})
+			return
+		}
+
 		c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": err.Error()})
 		return
 	}
@@ -99,7 +108,8 @@ func CreatePersonalDashboard(c *gin.Context) {
 
 	// check has permission, role admin(id=1) editor(id=2)
 	if !util.HasPermission(permissions, groupID, 1) && !util.HasPermission(permissions, groupID, 2) {
-		c.JSON(http.StatusUnauthorized, gin.H{"message": "permission denied"})
+		// c.JSON(http.StatusUnauthorized, gin.H{"message": "permission denied"})
+		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": "permission denied"})
 		return
 	}
 
@@ -137,10 +147,33 @@ Admin: Allowed
 func CreatePublicDashboard(c *gin.Context) {
 	var dashboard models.Dashboard
 
+	var query componentQuery
+	c.ShouldBindQuery(&query)
+	if !(query.City == "taipei" || query.City == "metrotaipei" || query.City == ""){
+		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": "Invalid City Name"})
+		return
+	}
+
+	if query.City == ""{
+		query.City = "taipei"
+	}
+
 	_, _, _, _, permissions := util.GetUserInfoFromContext(c)
 
-	// Get Group public(id=1)
-	groupID := 1
+
+	var groupID int
+	if query.City == ""{
+		// Get Group public(id=1)
+		groupID = 1
+	}else{
+		var errr error
+		groupID, errr = models.GetGroupIDByName(query.City)
+		if errr != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": errr.Error()})
+			return
+		}
+	}
+
 
 	// check has permission, role admin(id=1) editor(id=2)
 	if !util.HasPermission(permissions, groupID, 1) && !util.HasPermission(permissions, groupID, 2) {

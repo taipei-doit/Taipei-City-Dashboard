@@ -16,8 +16,13 @@ import { getComponentDataTimeframe } from "../assets/utilityFunctions/dataTimefr
 export const useAdminStore = defineStore("admin", {
 	state: () => ({
 		// Edit Dashboard (for /admin/dashboard)
-		dashboards: [],
-		currentDashboard: null,
+		dashboards: new Map(),
+		publicDashboards: [],
+		currentCity: "",
+		currentDashboard: {
+			index: "",
+			components: [],
+		},
 		// Edit Component (for /admin/edit-component)
 		components: [],
 		componentResults: 0,
@@ -49,18 +54,35 @@ export const useAdminStore = defineStore("admin", {
 			const contentStore = useContentStore();
 			contentStore.error = state ? true : false;
 		},
+		setRouteParams(city) {
+			this.currentCity = city;
+		},
 
 		/* Dashboard */
 		// 1. Get all public dashboards
 		async getDashboards() {
 			const response = await http.get(`/dashboard/`);
-			this.dashboards = response.data.data.public;
+			const data = response.data.data || {};
+
+			this.dashboards.clear();
+			Object.entries(data).forEach(([key, dashboardArray]) => {
+				this.dashboards.set(key, dashboardArray);
+			});
+
 			this.setLoading(false);
+		},
+		// 1-2. Get specific city's public dashboards
+		getDashboardsByCity(city) {
+			return this.dashboards.get(city) || [];
 		},
 		// 2. Get current dashboard components
 		async getCurrentDashboardComponents() {
 			const response = await http.get(
-				`/dashboard/${this.currentDashboard.index}`
+				`/dashboard/${this.currentDashboard.index}`, {
+					params: {
+						city: this.currentCity,
+					}
+				}
 			);
 			this.currentDashboard.components = response.data.data;
 			this.setLoading(false);
@@ -74,7 +96,11 @@ export const useAdminStore = defineStore("admin", {
 
 			const dashboard = JSON.parse(JSON.stringify(this.currentDashboard));
 
-			await http.post(`/dashboard/public`, dashboard);
+			await http.post(`/dashboard/public`, dashboard, {
+				params: {
+					city: this.currentCity,
+				}
+			});
 			this.getDashboards();
 			dialogStore.showNotification("success", "公開儀表板新增成功");
 		},
@@ -83,7 +109,7 @@ export const useAdminStore = defineStore("admin", {
 			const dialogStore = useDialogStore();
 
 			this.currentDashboard.components =
-				this.currentDashboard.components.map((el) => el.id);
+				this.currentDashboard.components?.map((el) => el.id);
 
 			const dashboard = JSON.parse(JSON.stringify(this.currentDashboard));
 
@@ -120,15 +146,17 @@ export const useAdminStore = defineStore("admin", {
 			const response = await http.get(
 				`/component/${component.id}/chart`,
 				{
-					params: !["static", "current", "demo"].includes(
-						component.time_from
-					)
-						? getComponentDataTimeframe(
+					params: {
+						city: component.city,
+						...(!["static", "current", "demo"].includes(component.time_from)
+							? getComponentDataTimeframe(
 								component.time_from,
 								component.time_to,
 								true
-						  )
-						: {},
+							  )
+							: {}
+						)
+					}
 				}
 			);
 			this.currentComponent.chart_data = response.data.data;
@@ -143,11 +171,14 @@ export const useAdminStore = defineStore("admin", {
 					const response = await http.get(
 						`/component/${component.id}/history`,
 						{
-							params: getComponentDataTimeframe(
-								component.history_config.range[i],
-								"now",
-								true
-							),
+							params: {
+								city: component.city,
+								...getComponentDataTimeframe(
+									component.history_config.range[i],
+									"now",
+									true
+								)
+							},
 						}
 					);
 					if (i === "0") {
@@ -224,6 +255,7 @@ export const useAdminStore = defineStore("admin", {
 			delete this.currentComponent.map_config;
 
 			const componentId = this.currentComponent.id;
+			const componentCity = this.currentComponent.city;
 			const component_config = JSON.parse(
 				JSON.stringify(this.currentComponent)
 			);
@@ -231,7 +263,11 @@ export const useAdminStore = defineStore("admin", {
 			await http.patch(`/component/${componentId}/chart`, chart_config);
 
 			// 3.3 Update component component config (incl. history config)
-			await http.patch(`/component/${componentId}`, component_config);
+			await http.patch(`/component/${componentId}`, component_config, {
+				params: {
+					city: componentCity
+				}
+			});
 
 			// 3.4 Update component map config
 			if (map_config[0] !== null) {

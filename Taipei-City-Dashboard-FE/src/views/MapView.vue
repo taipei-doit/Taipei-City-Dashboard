@@ -11,8 +11,9 @@ Testing: Jack Huang (Data Scientist), Ian Huang (Data Analysis Intern)
 <!-- Map charts will be hidden in mobile mode and be replaced with the mobileLayers dialog -->
 
 <script setup>
-import { computed } from "vue";
-import { DashboardComponent } from "city-dashboard-component";
+import { computed, ref, watch } from "vue";
+import { useRoute } from "vue-router";
+import DashboardComponent from "../dashboardComponent/DashboardComponent.vue";
 import { useContentStore } from "../store/contentStore";
 import { useDialogStore } from "../store/dialogStore";
 import { useMapStore } from "../store/mapStore";
@@ -23,6 +24,14 @@ import ReportIssue from "../components/dialogs/ReportIssue.vue";
 const contentStore = useContentStore();
 const dialogStore = useDialogStore();
 const mapStore = useMapStore();
+const route = useRoute();
+
+const toggleOn = ref({
+	hasMap: [],
+	noMap: [],
+	mapLayer: [],
+	basicLayer: [],
+})
 
 // Separate components with maps from those without
 const parseMapLayers = computed(() => {
@@ -35,6 +44,17 @@ const parseMapLayers = computed(() => {
 
 	return { hasMap: hasMap, noMap: noMap };
 });
+
+watch( () => route.query.index, (newIndex, oldIndex) => {
+	if (newIndex !== oldIndex) {
+		toggleOn.value = {
+			hasMap: new Array(parseMapLayers.value.hasMap?.length).fill(false),
+			noMap: new Array(parseMapLayers.value.noMap?.length).fill(false),
+			mapLayer: new Array(contentStore.currentDashboard.components?.length).fill(false),
+			basicLayer: new Array(contentStore.mapLayers?.length).fill(false)
+		}
+	}
+})
 
 function handleOpenSettings() {
 	contentStore.editDashboard = JSON.parse(
@@ -63,9 +83,12 @@ function handleToggle(value, map_config) {
 	}
 }
 
-function shouldDisable(map_config) {
-	const allMapLayerIds = map_config.map((el) => `${el.index}-${el.type}`);
+function toggleSwitchBtn(value, Btn, BtnIndex) {
+	toggleOn.value[Btn][BtnIndex] = value;
+}
 
+function shouldDisable(map_config) {
+	const allMapLayerIds = map_config.map((el) => `${el.index}-${el.type}-${el.city}`);
 	return (
 		mapStore.loadingLayers.filter((el) => allMapLayerIds.includes(el))
 			.length > 0
@@ -78,16 +101,22 @@ function shouldDisable(map_config) {
     <div class="hide-if-mobile">
       <!-- 1. If the dashboard is map-layers -->
       <div
-        v-if="contentStore.currentDashboard.index === 'map-layers'"
+        v-if="contentStore.currentDashboard.index?.includes('map-layers')"
         class="map-charts"
       >
         <DashboardComponent
-          v-for="item in contentStore.currentDashboard.components"
-          :key="`map-layer-${item.index}-${contentStore.currentDashboard.index}`"
+          v-for="(item, arrayIdx) in contentStore.currentDashboard.components"
+          :key="`map-layer-${item.index}-${item.city}`"
           :config="item"
           mode="halfmap"
           :info-btn="true"
+          :active-city="item.city"
+          :select-btn="true"
+          :select-btn-disabled="contentStore.cityManager.getSelectList(contentStore.currentDashboard?.city).length === 1"
+          :select-btn-list="contentStore.cityManager.getSelectList(contentStore.currentDashboard?.city)"
+          :city-tag="contentStore.cityManager.getTagList(contentStore.currentDashboard?.city)"
           :toggle-disable="shouldDisable(item.map_config)"
+          :toggle-on="toggleOn.mapLayer[arrayIdx]"
           @info="
             (item) => {
               dialogStore.showMoreInfo(item);
@@ -96,6 +125,7 @@ function shouldDisable(map_config) {
           @toggle="
             (value, map_config) => {
               handleToggle(value, map_config);
+              toggleSwitchBtn(value, 'mapLayer', arrayIdx);
             }
           "
           @filter-by-param="
@@ -123,23 +153,49 @@ function shouldDisable(map_config) {
               mapStore.clearByLayerFilter(map_config);
             }
           "
+          @change-city="(city)=> {
+            const selectedData = contentStore.cityDashboard.components.find((data) => {
+              if (data.index === item.index && data.city === city) {
+                return data
+              }
+            });
+
+            const componentIndex = contentStore.currentDashboard.components.findIndex(
+              (item) => item.id === selectedData.id
+            );
+
+            if (selectedData) {
+
+              mapStore.clearByParamFilter(item.map_config);
+              mapStore.turnOffMapLayerVisibility(item.map_config);
+              mapStore.addToMapLayerList(selectedData.map_config);
+
+              contentStore.setComponentData(componentIndex, selectedData);
+            }
+          }
+          "
         />
       </div>
       <!-- 2. Dashboards that have components -->
       <div
         v-else-if="
-          contentStore.currentDashboard.components?.length !== 0 &&
-            contentStore.mapLayers.length > 0
+          contentStore.currentDashboard.components?.length !== 0
         "
         class="map-charts"
       >
         <DashboardComponent
-          v-for="item in parseMapLayers.hasMap"
-          :key="`map-layer-${item.index}-${contentStore.currentDashboard.index}`"
+          v-for="(item, arrayIdx) in parseMapLayers.hasMap"
+          :key="`map-layer-${item.index}-${item.city}`"
           :config="item"
           mode="map"
           :info-btn="true"
+          :active-city="item.city"
+          :select-btn="true"
+          :select-btn-disabled="contentStore.cityManager.getSelectList(contentStore.currentDashboard?.city).length === 1"
+          :select-btn-list="contentStore.cityManager.getSelectList(contentStore.currentDashboard?.city)"
+          :city-tag="contentStore.cityManager.getTagList(contentStore.currentDashboard?.city)"
           :toggle-disable="shouldDisable(item.map_config)"
+          :toggle-on="toggleOn.hasMap[arrayIdx]"
           @info="
             (item) => {
               dialogStore.showMoreInfo(item);
@@ -148,6 +204,7 @@ function shouldDisable(map_config) {
           @toggle="
             (value, map_config) => {
               handleToggle(value, map_config);
+              toggleSwitchBtn(value, 'hasMap', arrayIdx);
             }
           "
           @filter-by-param="
@@ -180,15 +237,44 @@ function shouldDisable(map_config) {
               mapStore.flyToLocation(location);
             }
           "
+          @change-city="(city)=> {
+            const selectedData = contentStore.cityDashboard.components.find((data) => {
+              if (data.index === item.index && data.city === city) {
+                return data
+              }
+            });
+
+            const componentIndex = contentStore.currentDashboard.components.findIndex(
+              (item) => item.id === selectedData.id
+            );
+			
+            if (selectedData) {
+
+              mapStore.clearByParamFilter(item.map_config);
+              mapStore.turnOffMapLayerVisibility(item.map_config);
+              mapStore.addToMapLayerList(selectedData.map_config);
+
+              contentStore.setComponentData(componentIndex, selectedData);
+            }
+          }
+          "
         />
-        <h2>基本圖層</h2>
+        <h2 v-if="contentStore.mapLayers.length > 0">
+          基本圖層
+        </h2>
         <DashboardComponent
-          v-for="item in contentStore.mapLayers"
-          :key="`map-layer-${item.index}-${contentStore.currentDashboard.index}`"
+          v-for="(item, arrayIdx) in contentStore.mapLayers"
+          :key="`map-layer-${item.index}-${item.city}`"
           :config="item"
           mode="halfmap"
           :info-btn="true"
+          :active-city="item.city"
+          :select-btn="true"
+          :select-btn-disabled="contentStore.cityManager.getSelectList(contentStore.currentDashboard?.city).length === 1"
+          :select-btn-list="contentStore.cityManager.getSelectList(contentStore.currentDashboard?.city)"
+          :city-tag="contentStore.cityManager.getTagList(contentStore.currentDashboard?.city)"
           :toggle-disable="shouldDisable(item.map_config)"
+          :toggle-on="toggleOn.basicLayer[arrayIdx]"
           @info="
             (item) => {
               dialogStore.showMoreInfo(item);
@@ -197,6 +283,7 @@ function shouldDisable(map_config) {
           @toggle="
             (value, map_config) => {
               handleToggle(value, map_config);
+              toggleSwitchBtn(value, 'basicLayer', arrayIdx);
             }
           "
           @filter-by-param="
@@ -224,22 +311,62 @@ function shouldDisable(map_config) {
               mapStore.clearByLayerFilter(map_config);
             }
           "
+          @change-city="(city)=> {
+            const selectedData = contentStore.allMapLayers.find((data) => {
+              if (data.index === item.index && data.city === city) {
+                return data
+              }
+            });
+
+            if (selectedData) {
+              mapStore.clearByParamFilter(item.map_config);
+              mapStore.turnOffMapLayerVisibility(item.map_config);
+              mapStore.addToMapLayerList(selectedData.map_config);
+
+              contentStore.setMapLayerData(arrayIdx,selectedData);
+            }
+          }
+          "
         />
         <h2 v-if="parseMapLayers.noMap?.length > 0">
           無空間資料組件
         </h2>
         <DashboardComponent
-          v-for="item in parseMapLayers.noMap"
-          :key="`map-layer-${item.index}-${contentStore.currentDashboard.index}`"
+          v-for="(item, arrayIdx) in parseMapLayers.noMap"
+          :key="`map-layer-${item.index}`"
           :config="item"
           mode="map"
           :info-btn="true"
+          :active-city="item.city"
+          :select-btn="true"
+          :select-btn-disabled="contentStore.cityManager.getSelectList(contentStore.currentDashboard?.city).length === 1"
+          :select-btn-list="contentStore.cityManager.getSelectList(contentStore.currentDashboard?.city)"
+          :city-tag="contentStore.cityManager.getTagList(contentStore.currentDashboard?.city)"
+          :toggle-on="toggleOn.noMap[arrayIdx]"
           @info="
             (item) => {
               dialogStore.showMoreInfo(item);
             }
           "
-          @toggle="handleToggle"
+          @toggle="
+            (value, map_config) => {
+              handleToggle(value, map_config);
+              toggleSwitchBtn(value, 'noMap', arrayIdx);
+            }
+          "
+          @change-city="(city)=> {
+            const selectedData = contentStore.cityDashboard.components.find((data) => {
+              if (data.index === item.index && data.city === city) {
+                return data
+              }
+            });
+            const componentIndex = contentStore.currentDashboard.components.findIndex((data) => data.index === item.index && data.city === item.city);
+            if (selectedData && componentIndex !== -1) {
+
+              contentStore.setComponentData(componentIndex, selectedData);
+            }
+          }
+          "
         />
       </div>
       <!-- 3. If dashboard is still loading -->

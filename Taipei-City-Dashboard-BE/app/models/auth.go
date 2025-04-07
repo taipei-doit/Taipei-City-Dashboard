@@ -242,18 +242,20 @@ func GetUserPermission(authUserID int) (permissions []Permission, err error) {
 		return nil, result.Error
 	}
 
-	// Check if the permissions include public group.
-	hasPublicGroup := false
-	for _, perm := range permissions {
-		if perm.GroupID == 1 { // Assuming 1 is the ID of the public group
-			hasPublicGroup = true
-			break
+	// Add all public group with viewer permission
+	publicGroupIDs, _ := GetAllPublicGroupsID()
+	for _, publicGroudID := range publicGroupIDs{
+		has_priv := false
+		for _, perm := range permissions{
+			if publicGroudID == perm.GroupID{
+				has_priv = true
+				break
+			}
 		}
-	}
 
-	// If public group is not found in permissions, add it.
-	if !hasPublicGroup {
-		permissions = append(permissions, Permission{GroupID: 1, RoleID: 3})
+		if !has_priv{
+			permissions = append(permissions, Permission{GroupID: publicGroudID, RoleID: 3})
+		}
 	}
 
 	// Return the found permissions and nil error.

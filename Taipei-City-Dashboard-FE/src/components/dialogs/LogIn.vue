@@ -116,7 +116,7 @@ function handleClose() {
       >
         TUIC Igor Ann Iima Chu Jack 2023-2024
       </p>
-      <p>《讓城市儀表板成為您的儀表板》</p>
+      <p>《讓臺北城市儀表板成為您的儀表板》</p>
     </div>
   </DialogContainer>
 </template>

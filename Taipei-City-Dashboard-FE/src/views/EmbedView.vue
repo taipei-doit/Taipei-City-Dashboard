@@ -1,10 +1,10 @@
 <!-- eslint-disable no-mixed-spaces-and-tabs -->
 <!-- eslint-disable indent -->
 <script setup>
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
 import http from "../router/axios";
-import { DashboardComponent } from "city-dashboard-component";
+import DashboardComponent from "../dashboardComponent/DashboardComponent.vue";
 import { useContentStore } from "../store/contentStore";
 
 import { getComponentDataTimeframe } from "../assets/utilityFunctions/dataTimeframe";
@@ -13,26 +13,52 @@ const contentStore = useContentStore();
 const route = useRoute();
 
 const content = ref(null);
+const cities = computed(() => {
+	const cities = contentStore.embedComponents.map((data) => data.city)
+	return contentStore.cityManager.getCities(cities)
+});
+
+function changeCity(city) {
+	const selectedComponent = contentStore.embedComponents.find(
+		(data) => data.city === city
+	);
+	if (selectedComponent) {
+		content.value = selectedComponent;
+	}
+};
 
 onMounted(async () => {
 	try {
-		const res = await http.get(`/component/${route.params.id}`);
-		const resChart = await http.get(`/component/${route.params.id}/chart`, {
-			params: !["static", "current", "demo"].includes(
-				res.data.data.time_from
-			)
-				? getComponentDataTimeframe(
-						res.data.data.time_from,
-						res.data.data.time_to,
-						true
-				  )
-				: {},
-		});
-		content.value = res.data.data;
-		content.value.chart_data = resChart.data.data;
-		if (resChart.data.categories) {
-			content.value.chart_config.categories = resChart.data.categories;
+		const res = await http.get(`/component/${route.params.id}/all`);
+		const resData = res.data.data;
+
+		for (const component of resData) {
+			const response = await http.get(
+				`/component/${component.id}/chart`,
+				{
+					params: {
+						city: component.city,
+						...!["static", "current", "demo"].includes(
+							component.time_from
+						)
+						? getComponentDataTimeframe(
+							component.time_from,
+							component.time_to,
+							true
+						)
+						: {}
+					},
+				}
+			);
+			component.chart_data = response.data.data;
+			if (response.data.categories) {
+				component.chart_config.categories = response.data.categories;
+			}
 		}
+		contentStore.embedComponents = res.data.data;
+		content.value = resData.find(
+			(data) => data.city === route.params.city
+		);
 		contentStore.loading = false;
 	} catch (error) {
 		console.error(error);
@@ -53,10 +79,16 @@ onMounted(async () => {
       v-else-if="content"
       :config="content"
       :footer="false"
+      :active-city="content.city"
+      :select-btn="true"
+      :select-btn-disabled="cities.length === 1"
+      :select-btn-list="cities"
+      :city-tag="cities"
       :style="{
         height: 'calc(100% - 36px)',
         maxHeight: 'calc(100% - 36px)',
       }"
+      @change-city="changeCity"
     />
     <div
       v-else
