@@ -160,13 +160,17 @@ function shouldDisable(map_config) {
               }
             });
 
+            const componentIndex = contentStore.currentDashboard.components.findIndex(
+              (item) => item.id === selectedData.id
+            );
+
             if (selectedData) {
 
               mapStore.clearByParamFilter(item.map_config);
               mapStore.turnOffMapLayerVisibility(item.map_config);
               mapStore.addToMapLayerList(selectedData.map_config);
 
-              contentStore.setComponentData(arrayIdx,selectedData);
+              contentStore.setComponentData(componentIndex, selectedData);
             }
           }
           "
@@ -240,13 +244,17 @@ function shouldDisable(map_config) {
               }
             });
 
+            const componentIndex = contentStore.currentDashboard.components.findIndex(
+              (item) => item.id === selectedData.id
+            );
+			
             if (selectedData) {
 
               mapStore.clearByParamFilter(item.map_config);
               mapStore.turnOffMapLayerVisibility(item.map_config);
               mapStore.addToMapLayerList(selectedData.map_config);
 
-              contentStore.setComponentData(arrayIdx,selectedData);
+              contentStore.setComponentData(componentIndex, selectedData);
             }
           }
           "
