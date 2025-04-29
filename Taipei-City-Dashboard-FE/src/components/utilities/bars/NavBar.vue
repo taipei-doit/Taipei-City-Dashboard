@@ -44,8 +44,7 @@ const linkQuery = computed(() => {
     </a>
     <div
       v-if="
-        authStore.currentPath !== 'admin' &&
-          !(authStore.isMobileDevice && authStore.isNarrowDevice)
+        authStore.currentPath !== 'admin'
       "
       class="navbar-tabs"
     >
@@ -181,11 +180,19 @@ const linkQuery = computed(() => {
 
 		h1 {
 			font-weight: 500;
+			
+			@media screen and (max-width: 500px) {
+				display: none;
+			}
 		}
 
 		h2 {
 			font-size: var(--font-s);
 			font-weight: 400;
+
+			@media screen and (max-width: 500px) {
+				display: none;
+			}
 		}
 
 		&-image {
@@ -267,12 +274,12 @@ const linkQuery = computed(() => {
 			align-items: center;
 			justify-content: center;
 
-			@media screen and (max-width: 750px) {
-				display: none;
-			}
-			@media screen and (max-height: 500px) {
-				display: none;
-			}
+			// @media screen and (max-width: 750px) {
+			// 	display: none;
+			// }
+			// @media screen and (max-height: 500px) {
+			// 	display: none;
+			// }
 
 			ul {
 				min-width: 100px;
