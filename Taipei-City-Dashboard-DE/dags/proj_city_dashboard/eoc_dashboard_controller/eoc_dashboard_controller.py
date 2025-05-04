@@ -37,14 +37,32 @@ def _transfer(**kwargs):
                    ) t
             """)
             unique_names = [row[0] for row in connection.execute(names_sql).fetchall()]
+            dashboard_hook = PostgresHook(postgres_conn_id="dashboad-postgre")
 
             # 無資料：刪除關聯並結束
             if not unique_names:
-
+                # 查詢所有 disaster_sus_*_% 結尾的 component，並刪除相關 dashboard、groups、components、charts
+                dashboard_hook = PostgresHook(postgres_conn_id="dashboad-postgre")
+                status_keys = ["disaster_sus_water", "disaster_sus_power", "disaster_sus_tel", "disaster_sus_gas"]
+                # 1. 刪除所有 disaster_sus_*_% 的 component_charts, query_charts, components
+                for status_key in status_keys:
+                    like_pattern = f"{status_key}_%"
+                    dashboard_hook.run('DELETE FROM public.component_charts WHERE "index" LIKE %(like)s;', parameters={'like': like_pattern})
+                    dashboard_hook.run('DELETE FROM public.query_charts WHERE "index" LIKE %(like)s;', parameters={'like': like_pattern})
+                    dashboard_hook.run('DELETE FROM public.components WHERE "index" LIKE %(like)s;', parameters={'like': like_pattern})
+                # 2. 刪除所有 dashboard name 結尾為 _pname 的 dashboard 及其 group 關聯
+                dashboard_hook.run(
+                    'DELETE FROM public.dashboard_groups WHERE dashboard_id IN (SELECT id FROM public.dashboards WHERE name ~ %s);',
+                    parameters={"0": r'.*_.*$'}
+                )
+                dashboard_hook.run(
+                    'DELETE FROM public.dashboards WHERE name ~ %s;',
+                    parameters={"0": r'.*_.*$'}
+                )
+                print("已清除所有 disaster_sus_*_% 相關 dashboard、groups、components、charts")
                 return
 
             # 有資料：依照不同 dp name 建立或關聯 dashboards & dashboard_groups
-            dashboard_hook = PostgresHook(postgres_conn_id="dashboad-postgre")
             group_id = 171
             dashboard_ids = []
             status_mapping = {
@@ -280,10 +298,14 @@ def _transfer(**kwargs):
                     dashboard_id = dash_id_records[0][0]
                     dashboard_hook.run(
                         'INSERT INTO public.dashboard_groups (dashboard_id, group_id) '
-                        'VALUES (%(dashboard_id)s, %(group_id)s) ON CONFLICT DO NOTHING;',
-                        parameters={'dashboard_id': dashboard_id, 'group_id': group_id}
+                        'VALUES (%(dashboard_id)s, 171) ON CONFLICT DO NOTHING;',
+                        parameters={'dashboard_id': dashboard_id}
                     )
                     print(f"已建立 dashboard_groups 關聯: dashboard_id={dashboard_id}, group_id={group_id}")
+
+
+
+
 
     except Exception as e:
         print(f"執行過程中發生錯誤: {e}")
