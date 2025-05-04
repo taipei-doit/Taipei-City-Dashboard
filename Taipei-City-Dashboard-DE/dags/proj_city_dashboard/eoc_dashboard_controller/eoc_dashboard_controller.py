@@ -219,7 +219,7 @@ def _transfer(**kwargs):
                     # 統一使用 status_mapping 的 sql 作為 query_chart，並帶入 pname
                     new_query_chart = status_val['sql'].format(pname=pname)
                     now_ts = datetime.now(timezone.utc)
-                    # 插入或更新 query_charts
+                    # 插入或更新 query_charts，將 dict/list 欄位轉為 json 字串
                     dashboard_hook.run(
                         '''INSERT INTO public.query_charts
                             ("index", history_config, map_config_ids, map_filter, time_from,
@@ -239,8 +239,8 @@ def _transfer(**kwargs):
                         parameters={
                             'index': comp_index,
                             'history_config': history_config,
-                            'map_config_ids': map_config_ids,
-                            'map_filter': map_filter,
+                            'map_config_ids': json.dumps(map_config_ids) if map_config_ids is not None else None,
+                            'map_filter': json.dumps(map_filter) if map_filter is not None else None,
                             'time_from': time_from,
                             'time_to': time_to,
                             'update_freq': update_freq,
@@ -249,8 +249,8 @@ def _transfer(**kwargs):
                             'short_desc': short_desc,
                             'long_desc': long_desc,
                             'use_case': use_case,
-                            'links': links,
-                            'contributors': contributors,
+                            'links': json.dumps(links) if links is not None else None,
+                            'contributors': json.dumps(contributors) if contributors is not None else None,
                             'created_at': created_at_orig,
                             'updated_at': now_ts,
                             'query_type': query_type,
