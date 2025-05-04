@@ -41,16 +41,15 @@ def _transfer(**kwargs):
 
             # 無資料：刪除關聯並結束
             if not unique_names:
-                # 查詢所有 disaster_sus_*_% 結尾的 component，並刪除相關 dashboard、groups、components、charts
+                # 刪除所有 disaster_sus_*_% 結尾的 component、query_charts、component_charts、dashboard、dashboard_groups
                 dashboard_hook = PostgresHook(postgres_conn_id="dashboad-postgre")
                 status_keys = ["disaster_sus_water", "disaster_sus_power", "disaster_sus_tel", "disaster_sus_gas"]
-                # 1. 刪除所有 disaster_sus_*_% 的 component_charts, query_charts, components
                 for status_key in status_keys:
                     like_pattern = f"{status_key}_%"
                     dashboard_hook.run('DELETE FROM public.component_charts WHERE "index" LIKE %(like)s;', parameters={'like': like_pattern})
                     dashboard_hook.run('DELETE FROM public.query_charts WHERE "index" LIKE %(like)s;', parameters={'like': like_pattern})
                     dashboard_hook.run('DELETE FROM public.components WHERE "index" LIKE %(like)s;', parameters={'like': like_pattern})
-                # 2. 刪除所有 dashboard name 結尾為 _pname 的 dashboard 及其 group 關聯
+                # 刪除所有 dashboard name 含底線（即 _pname 結尾）及其 group 關聯
                 dashboard_hook.run(
                     'DELETE FROM public.dashboard_groups WHERE dashboard_id IN (SELECT id FROM public.dashboards WHERE name ~ %s);',
                     parameters={"0": r'.*_.*$'}
