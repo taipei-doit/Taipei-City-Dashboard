@@ -213,13 +213,15 @@ def _transfer(**kwargs):
                 if chart_records:
                     # 取得欄位名稱
                     colnames = [desc[0] for desc in dashboard_hook.get_cursor().description]
-                    import pandas as pd
                     df = pd.DataFrame([dict(zip(colnames, row)) for row in chart_records])
                     # 修改 index 與 query_chart 欄位
                     df["index"] = f"{status_key}_{pname}"
                     df["query_chart"] = status_val['sql'].format(pname=pname)
+                    # 將所有 dict 或 list 欄位轉成 json 字串
+                    for col in df.columns:
+                        if df[col].apply(lambda x: isinstance(x, (dict, list))).any():
+                            df[col] = df[col].apply(lambda x: json.dumps(x) if isinstance(x, (dict, list)) else x)
                     # upsert 回資料庫
-                    from sqlalchemy import create_engine
                     pg_engine = create_engine(dashboard_hook.get_uri())
                     # 先刪除舊的 index
                     with pg_engine.begin() as conn:
