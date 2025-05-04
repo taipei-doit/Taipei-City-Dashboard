@@ -190,13 +190,17 @@ def _transfer(**kwargs):
             for status_key, status_val in status_mapping.items():
                 comp_index = f"{status_key}_{pname}"
                 comp_name = f"{status_val['label']}_{pname}"
-                dashboard_hook.run(
-                    "INSERT INTO public.components (\"index\", name) "
-                    "VALUES (%(index)s, %(name)s) ON CONFLICT (\"index\") DO NOTHING;",
-                    parameters={'index': comp_index, 'name': comp_name}
-                )
                 recs = dashboard_hook.get_records(
-                    "SELECT id FROM public.components WHERE \"index\" = %(index)s;",
+                    'SELECT id FROM public.components WHERE "index" = %(index)s;',
+                    parameters={'index': comp_index}
+                )
+                if not recs:
+                    dashboard_hook.run(
+                        'INSERT INTO public.components ("index", name) VALUES (%(index)s, %(name)s);',
+                        parameters={'index': comp_index, 'name': comp_name}
+                    )
+                recs = dashboard_hook.get_records(
+                    'SELECT id FROM public.components WHERE "index" = %(index)s;',
                     parameters={'index': comp_index}
                 )
                 comp_id = recs[0][0]
