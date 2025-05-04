@@ -211,55 +211,22 @@ def _transfer(**kwargs):
                     parameters={'status_key': status_key}
                 )
                 if chart_records:
-                    (orig_idx, history_config, map_config_ids, map_filter,
-                        time_from, time_to, update_freq, update_freq_unit, source,
-                        short_desc, long_desc, use_case, links, contributors,
-                        created_at_orig, updated_at_orig, query_type, _query_chart_tpl,
-                        query_history, city_val) = chart_records[0]
-                    # 統一使用 status_mapping 的 sql 作為 query_chart，並帶入 pname
-                    new_query_chart = status_val['sql'].format(pname=pname)
-                    now_ts = datetime.now(timezone.utc)
-                    # 插入或更新 query_charts，將 dict/list 欄位轉為 json 字串
-                    dashboard_hook.run(
-                        '''INSERT INTO public.query_charts
-                            ("index", history_config, map_config_ids, map_filter, time_from,
-                            time_to, update_freq, update_freq_unit, "source", short_desc,
-                            long_desc, use_case, links, contributors, created_at,
-                            updated_at, query_type, query_chart, query_history, city)
-                            VALUES
-                            (%(index)s, %(history_config)s, %(map_config_ids)s, %(map_filter)s,
-                            %(time_from)s, %(time_to)s, %(update_freq)s, %(update_freq_unit)s,
-                            %(source)s, %(short_desc)s, %(long_desc)s, %(use_case)s,
-                            %(links)s, %(contributors)s, %(created_at)s,
-                            %(updated_at)s, %(query_type)s, %(query_chart)s,
-                            %(query_history)s, %(city)s)
-                            ON CONFLICT ("index")
-                            DO UPDATE SET query_chart = EXCLUDED.query_chart,
-                                        updated_at = EXCLUDED.updated_at;''',
-                        parameters={
-                            'index': comp_index,
-                            'history_config': json.dumps(history_config) if history_config is not None else None,
-                            'map_config_ids': '{' + ','.join(str(i) for i in map_config_ids) + '}' if isinstance(map_config_ids, (list, tuple)) else map_config_ids,
-                            'map_filter': json.dumps(map_filter) if map_filter is not None else None,
-                            'time_from': time_from,
-                            'time_to': time_to,
-                            'update_freq': update_freq,
-                            'update_freq_unit': update_freq_unit,
-                            'source': source,
-                            'short_desc': short_desc,
-                            'long_desc': long_desc,
-                            'use_case': use_case,
-                            'links': '{' + ','.join(links) + '}' if isinstance(links, (list, tuple)) else links,
-                            'contributors': '{' + ','.join(contributors) + '}' if isinstance(contributors, (list, tuple)) else contributors,
-                            'created_at': created_at_orig,
-                            'updated_at': now_ts,
-                            'query_type': query_type,
-                            'query_chart': new_query_chart,
-                            'query_history': query_history,
-                            'city': city_val
-                        }
-                    )
-                    print(f"已插入或更新 query_charts index={comp_index}")
+                    # 取得欄位名稱
+                    colnames = [desc[0] for desc in dashboard_hook.get_cursor().description]
+                    import pandas as pd
+                    df = pd.DataFrame([dict(zip(colnames, row)) for row in chart_records])
+                    # 修改 index 與 query_chart 欄位
+                    df["index"] = f"{status_key}_{pname}"
+                    df["query_chart"] = status_val['sql'].format(pname=pname)
+                    # upsert 回資料庫
+                    from sqlalchemy import create_engine
+                    pg_engine = create_engine(dashboard_hook.get_uri())
+                    # 先刪除舊的 index
+                    with pg_engine.begin() as conn:
+                        conn.execute(text('DELETE FROM public.query_charts WHERE "index" = :idx'), {"idx": f"{status_key}_{pname}"})
+                    # append 新資料
+                    df.to_sql('query_charts', pg_engine, if_exists='append', index=False, method='multi')
+                    print(f"已用 DataFrame upsert query_charts index={status_key}_{pname}")
                 # 依照 status_mapping 的key 取得 component_charts 的資料後, 寫入一筆新的資料, 僅需修改"index"為 status_key_{pname}
                 chart_template = dashboard_hook.get_records(
                     'SELECT color, "types", unit FROM public.component_charts WHERE "index" = %(index)s;',
