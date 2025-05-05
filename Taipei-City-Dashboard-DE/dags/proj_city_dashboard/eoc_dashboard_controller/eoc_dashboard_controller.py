@@ -188,6 +188,15 @@ def _transfer(**kwargs):
         }
         for pname in unique_names:
             print(f"處理 pname: {pname}")
+            # 若 dashboard 已存在，直接結束排程
+            exists = dashboard_hook.get_records(
+                'SELECT 1 FROM public.dashboards WHERE name = %(name)s;',
+                parameters={'name': pname}
+            )
+            if exists:
+                print(f"dashboard {pname} 已存在，跳出並結束排程")
+                continue
+
             # 建立 component，status_mapping key + _pname 為 component index, status_mapping['label'] + _pname 為 component name
             for status_key, status_val in status_mapping.items():
                 comp_index = f"{status_key}_{pname}"
