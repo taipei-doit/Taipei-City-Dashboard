@@ -332,7 +332,7 @@ def _transfer(**kwargs):
                 'ON CONFLICT ("name") DO UPDATE SET components = EXCLUDED.components, updated_at = EXCLUDED.updated_at;',
                 parameters={
                     'name': pname,
-                    'components': json.dumps(comp_ids), # comp_ids 來自上面的 DataFrame 查詢
+                    'components': comp_ids,            # 改後：直接傳 list，讓 psycopg2 轉為 array
                     'icon': icon_val,
                     'created_at': datetime.now(timezone.utc),
                     'updated_at': datetime.now(timezone.utc)
