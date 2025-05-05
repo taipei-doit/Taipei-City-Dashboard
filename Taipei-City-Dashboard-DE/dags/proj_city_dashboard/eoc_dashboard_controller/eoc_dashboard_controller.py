@@ -330,14 +330,13 @@ def _transfer(**kwargs):
                 comp_ids = []
             # --- component id 取得修改結束 ---
 
-            # 建立 dashboard (維持使用 run, 因為需要 ON CONFLICT)
+
             dashboard_hook.run(
                 'INSERT INTO public.dashboards ("name", components, icon, created_at, updated_at) '
-                'VALUES (%(name)s, %(components)s, %(icon)s, %(created_at)s, %(updated_at)s) '
-                'ON CONFLICT ("name") DO UPDATE SET components = EXCLUDED.components, updated_at = EXCLUDED.updated_at;',
+                'VALUES (%(name)s, %(components)s, %(icon)s, %(created_at)s, %(updated_at)s);',
                 parameters={
                     'name': pname,
-                    'components': comp_ids,            # 改後：直接傳 list，讓 psycopg2 轉為 array
+                    'components': comp_ids,            # 直接傳 list，讓 psycopg2 轉為 array
                     'icon': icon_val,
                     'created_at': datetime.now(timezone.utc),
                     'updated_at': datetime.now(timezone.utc)
