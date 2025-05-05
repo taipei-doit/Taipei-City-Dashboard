@@ -330,19 +330,23 @@ def _transfer(**kwargs):
                 comp_ids = []
             # --- component id 取得修改結束 ---
 
+            # 每次用隨機 12 位 hex 當作 dashboard.index
+            rand_idx = ''.join(random.choices('0123456789abcdef', k=12))
 
+            # 新增 dashboard 並帶上隨機 index, name=pname, components 會轉成 {x,y,z} 格式
             dashboard_hook.run(
-                'INSERT INTO public.dashboards ("name", components, icon, created_at, updated_at) '
-                'VALUES (%(name)s, %(components)s, %(icon)s, %(created_at)s, %(updated_at)s);',
+                'INSERT INTO public.dashboards ("index", "name", components, icon, created_at, updated_at) '
+                'VALUES (%(idx)s, %(name)s, %(components)s, %(icon)s, %(created_at)s, %(updated_at)s);',
                 parameters={
+                    'idx': rand_idx,
                     'name': pname,
-                    'components': comp_ids,            # 直接傳 list，讓 psycopg2 轉為 array
+                    'components': comp_ids,  
                     'icon': icon_val,
                     'created_at': datetime.now(timezone.utc),
                     'updated_at': datetime.now(timezone.utc)
                 }
             )
-            print(f"已建立/更新 dashboard: {pname}, components: {comp_ids}")
+            print(f"已建立/更新 dashboard: idx={rand_idx}, name={pname}, components={comp_ids}")
             
             # 新建立好的dashboard,取得id,然後配上group_id= 171 寫入dashboard_groups (維持 get_records + run)
             dash_id_records = dashboard_hook.get_records(
