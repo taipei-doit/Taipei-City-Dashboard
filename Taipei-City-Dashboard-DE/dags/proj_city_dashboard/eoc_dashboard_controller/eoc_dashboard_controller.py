@@ -220,75 +220,117 @@ def _transfer(**kwargs):
                     # Modify index 與 query_chart 欄位
                     df["index"] = f"{status_key}_{pname}"
                     df["query_chart"] = status_val['sql'].format(pname=pname)
-                    # 將所有 dict 或 list 欄位轉成 json 字串
-                    for col in df.columns:
-                        if df[col].apply(lambda x: isinstance(x, (dict, list))).any():
-                            df[col] = df[col].apply(lambda x: json.dumps(x) if isinstance(x, (dict, list)) else x)
+
+                    # --- Enhanced cleaning for JSON-like columns ---
+                    json_like_cols = ['map_config_ids', 'links', 'contributors', 'history_config', 'map_filter']
+                    for col in json_like_cols:
+                        if col in df.columns:
+                            def clean_json_col(val):
+                                if isinstance(val, (dict, list)):
+                                    # Already correct type, just dump to valid JSON string
+                                    return json.dumps(val)
+                                elif isinstance(val, str):
+                                    val_stripped = val.strip()
+                                    # Check if string looks like a JSON array or object
+                                    if (val_stripped.startswith('[') and val_stripped.endswith(']')) or \
+                                       (val_stripped.startswith('{') and val_stripped.endswith('}')):
+                                        try:
+                                            # Try parsing the string
+                                            parsed = json.loads(val_stripped)
+                                            # Re-dump to ensure correct JSON format for DB
+                                            return json.dumps(parsed)
+                                        except json.JSONDecodeError:
+                                            # If parsing fails, it's likely not valid JSON.
+                                            # Return None or keep original? Let's return None for safety.
+                                            # Or keep original if the column allows plain text: return val
+                                            # Assuming these columns expect JSON, None is safer.
+                                            print(f"Warning: Failed to parse potential JSON string in column '{col}': {val}")
+                                            return None 
+                                # Keep other types (like None, numbers) as is
+                                return val
+                            df[col] = df[col].apply(clean_json_col)
+                    # --- End enhanced cleaning ---
+                    
+                    # # Original conversion loop (now potentially redundant or complementary)
+                    # for col in df.columns:
+                    #     if df[col].apply(lambda x: isinstance(x, (dict, list))).any():
+                    #         df[col] = df[col].apply(lambda x: json.dumps(x) if isinstance(x, (dict, list)) else x)
+
                     # upsert 回資料庫
                     pg_engine = create_engine(dashboard_hook.get_uri())
                     # 先刪除舊的 index
                     with pg_engine.begin() as conn:
                         conn.execute(text('DELETE FROM public.query_charts WHERE "index" = :idx'), {"idx": f"{status_key}_{pname}"})
-                    # append 新資料
-                    df.to_sql('query_charts', pg_engine, if_exists='append', index=False, method='multi')
+                        # append 新資料
+                        # Ensure connection is passed to to_sql within the transaction
+                        df.to_sql('query_charts', conn, if_exists='append', index=False, method='multi') 
                     print(f"已用 DataFrame upsert query_charts index={status_key}_{pname}")
-                # 依照 status_mapping 的key 取得 component_charts 的資料後, 寫入一筆新的資料, 僅需修改"index"為 status_key_{pname}
-                chart_template = dashboard_hook.get_records(
-                    'SELECT color, "types", unit FROM public.component_charts WHERE "index" = %(index)s;',
+                
+                # --- 修改 component_charts ---
+                # 使用 get_pandas_df 取得 component_charts 的範本資料
+                df_chart_template = dashboard_hook.get_pandas_df(
+                    sql='SELECT "index", color, "types", unit FROM public.component_charts WHERE "index" = %(index)s;',
                     parameters={'index': status_key}
                 )
-                if chart_template:
-                    color, types, unit = chart_template[0]
-                    new_chart_index = f"{status_key}_{pname}"
-                    # Convert types to JSON string if it's a list or dict
-                    if isinstance(types, (dict, list)):
-                        types_param = json.dumps(types)
-                    else:
-                        types_param = types # Keep original if not list/dict
 
-                    dashboard_hook.run(
-                        'INSERT INTO public.component_charts ("index", color, "types", unit) '
-                        'VALUES (%(index)s, %(color)s, %(types)s, %(unit)s) '
-                        'ON CONFLICT ("index") DO NOTHING;',
-                        parameters={
-                            'index': new_chart_index,
-                            'color': color,
-                            'types': types_param, # Use the potentially converted value
-                            'unit': unit
-                        }
-                    )
-                    print(f"已建立/確認 component_charts: {new_chart_index}")
+                if not df_chart_template.empty:
+                    new_chart_index = f"{status_key}_{pname}"
+                    # 修改 index
+                    df_chart_template["index"] = new_chart_index
+                    # 將 types 欄位轉成 json 字串 (如果需要)
+                    if 'types' in df_chart_template.columns:
+                         # 檢查是否真的需要轉換 (get_pandas_df 可能已處理好 JSON)
+                         # 如果 types 欄位讀取後已是 list/dict，則轉換
+                         needs_conversion = df_chart_template['types'].apply(lambda x: isinstance(x, (dict, list))).any()
+                         if needs_conversion:
+                            df_chart_template['types'] = df_chart_template['types'].apply(lambda x: json.dumps(x) if isinstance(x, (dict, list)) else x)
+
+                    # upsert 回資料庫 (先刪後寫入)
+                    pg_engine = create_engine(dashboard_hook.get_uri())
+                    with pg_engine.begin() as conn:
+                        # 先刪除舊的 index
+                        conn.execute(text('DELETE FROM public.component_charts WHERE "index" = :idx'), {"idx": new_chart_index})
+                        # append 新資料
+                        df_chart_template.to_sql('component_charts', conn, if_exists='append', index=False, method='multi')
+                    print(f"已用 DataFrame upsert component_charts index={new_chart_index}")
+                # --- component_charts 修改結束 ---
+
 
             # 取得 dashboard id=16 的範本資料
             dashboard_template = dashboard_hook.get_records(
                 'SELECT icon FROM public.dashboards WHERE id = 16;'
             )
             icon_val = dashboard_template[0][0] if dashboard_template else None
-            # 取得本次所有 component id
-            comp_ids = []
-            for status_key in status_mapping.keys():
-                comp_index = f"{status_key}_{pname}"
-                recs = dashboard_hook.get_records(
-                    'SELECT id FROM public.components WHERE "index" = %(index)s;',
-                    parameters={'index': comp_index}
-                )
-                if recs:
-                    comp_ids.append(recs[0][0])
-            # 建立 dashboard
+
+            # --- 修改取得 component id 的方式 ---
+            # 產生所有需要的 component index
+            comp_indices_to_fetch = [f"{status_key}_{pname}" for status_key in status_mapping.keys()]
+            
+            # 使用 get_pandas_df 一次取得所有 component id
+            if comp_indices_to_fetch:
+                sql_get_ids = 'SELECT id FROM public.components WHERE "index" = ANY(%(indices)s);'
+                df_comp_ids = dashboard_hook.get_pandas_df(sql=sql_get_ids, parameters={'indices': comp_indices_to_fetch})
+                comp_ids = df_comp_ids['id'].tolist() if not df_comp_ids.empty else []
+            else:
+                comp_ids = []
+            # --- component id 取得修改結束 ---
+
+            # 建立 dashboard (維持使用 run, 因為需要 ON CONFLICT)
             dashboard_hook.run(
                 'INSERT INTO public.dashboards ("name", components, icon, created_at, updated_at) '
                 'VALUES (%(name)s, %(components)s, %(icon)s, %(created_at)s, %(updated_at)s) '
                 'ON CONFLICT ("name") DO UPDATE SET components = EXCLUDED.components, updated_at = EXCLUDED.updated_at;',
                 parameters={
                     'name': pname,
-                    'components': json.dumps(comp_ids),
+                    'components': json.dumps(comp_ids), # comp_ids 來自上面的 DataFrame 查詢
                     'icon': icon_val,
                     'created_at': datetime.now(timezone.utc),
                     'updated_at': datetime.now(timezone.utc)
                 }
             )
             print(f"已建立/更新 dashboard: {pname}, components: {comp_ids}")
-            # 新建立好的dashboard,取得id,然後配上group_id= 171 寫入dashboard_groups
+            
+            # 新建立好的dashboard,取得id,然後配上group_id= 171 寫入dashboard_groups (維持 get_records + run)
             dash_id_records = dashboard_hook.get_records(
                 'SELECT id FROM public.dashboards WHERE name = %(name)s;',
                 parameters={'name': pname}
