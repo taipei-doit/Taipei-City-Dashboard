@@ -283,8 +283,13 @@ def _transfer(**kwargs):
                     # 將 types 欄位轉成 Python list (符合 Postgres 陣列)
                     if 'types' in df_chart_template.columns:
                         def to_py_list(val):
-                            if isinstance(val, (list, dict)):
+                            # Convert numpy arrays to Python lists
+                            if isinstance(val, np.ndarray):
+                                return val.tolist()
+                            # Already a Python list
+                            if isinstance(val, list):
                                 return val
+                            # Parse JSON string into Python list
                             if isinstance(val, str):
                                 try:
                                     parsed = json.loads(val)
