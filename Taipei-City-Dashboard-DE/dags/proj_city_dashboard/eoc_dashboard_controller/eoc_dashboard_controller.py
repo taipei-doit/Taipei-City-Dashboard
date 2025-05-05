@@ -240,6 +240,12 @@ def _transfer(**kwargs):
                 if chart_template:
                     color, types, unit = chart_template[0]
                     new_chart_index = f"{status_key}_{pname}"
+                    # Convert types to JSON string if it's a list or dict
+                    if isinstance(types, (dict, list)):
+                        types_param = json.dumps(types)
+                    else:
+                        types_param = types # Keep original if not list/dict
+
                     dashboard_hook.run(
                         'INSERT INTO public.component_charts ("index", color, "types", unit) '
                         'VALUES (%(index)s, %(color)s, %(types)s, %(unit)s) '
@@ -247,7 +253,7 @@ def _transfer(**kwargs):
                         parameters={
                             'index': new_chart_index,
                             'color': color,
-                            'types': types,
+                            'types': types_param, # Use the potentially converted value
                             'unit': unit
                         }
                     )
