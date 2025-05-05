@@ -206,15 +206,18 @@ def _transfer(**kwargs):
                 comp_id = recs[0][0]
                 print(f"已建立或確認 component id={comp_id}, index={comp_index}, name={comp_name}")
 
-                chart_records = dashboard_hook.get_records(
-                    '''SELECT * FROM public.query_charts WHERE "index" = %(status_key)s;''',
+                # Use get_pandas_df to directly get the DataFrame
+                df = dashboard_hook.get_pandas_df(
+                    sql='SELECT * FROM public.query_charts WHERE "index" = %(status_key)s;',
                     parameters={'status_key': status_key}
                 )
-                if chart_records:
-                    # 取得欄位名稱
-                    colnames = [desc[0] for desc in dashboard_hook.get_cursor().description]
-                    df = pd.DataFrame([dict(zip(colnames, row)) for row in chart_records])
-                    # 修改 index 與 query_chart 欄位
+
+                # Check if the DataFrame is not empty
+                if not df.empty:
+                    # No need to get colnames or create df manually anymore
+                    # df = pd.DataFrame([dict(zip(colnames, row)) for row in chart_records]) # Removed
+
+                    # Modify index 與 query_chart 欄位
                     df["index"] = f"{status_key}_{pname}"
                     df["query_chart"] = status_val['sql'].format(pname=pname)
                     # 將所有 dict 或 list 欄位轉成 json 字串
