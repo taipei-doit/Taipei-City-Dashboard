@@ -1,4 +1,5 @@
 import re
+from sqlalchemy.dialects import postgresql
 from airflow import DAG
 from operators.common_pipeline import CommonDag
 from utils.load_stage import save_dataframe_to_postgresql,update_lasttime_in_data_to_dataset_info
@@ -9,6 +10,7 @@ from utils.get_time import get_tpe_now_time_str
 from airflow.providers.postgres.hooks.postgres import PostgresHook
 from datetime import datetime, timedelta, timezone # Import datetime components
 import json # Import json for components
+import numpy as np
 import random, string  # 新增：用於產生亂碼
 
 
@@ -221,49 +223,39 @@ def _transfer(**kwargs):
                     df["index"] = f"{status_key}_{pname}"
                     df["query_chart"] = status_val['sql'].format(pname=pname)
 
-                    # --- Enhanced cleaning for JSON-like columns ---
-                    json_like_cols = ['map_config_ids', 'links', 'contributors', 'history_config', 'map_filter']
+
+                    # Enhanced cleaning for other JSON-like columns
+                    json_like_cols = ['links', 'contributors', 'history_config', 'map_filter']
                     for col in json_like_cols:
                         if col in df.columns:
                             def clean_json_col(val):
                                 if isinstance(val, (dict, list)):
-                                    # Already correct type, just dump to valid JSON string
                                     return json.dumps(val)
                                 elif isinstance(val, str):
                                     val_stripped = val.strip()
-                                    # Check if string looks like a JSON array or object
                                     if (val_stripped.startswith('[') and val_stripped.endswith(']')) or \
                                        (val_stripped.startswith('{') and val_stripped.endswith('}')):
                                         try:
-                                            # Try parsing the string
                                             parsed = json.loads(val_stripped)
-                                            # Re-dump to ensure correct JSON format for DB
                                             return json.dumps(parsed)
                                         except json.JSONDecodeError:
-                                            # If parsing fails, it's likely not valid JSON.
-                                            # Return None or keep original? Let's return None for safety.
-                                            # Or keep original if the column allows plain text: return val
-                                            # Assuming these columns expect JSON, None is safer.
-                                            print(f"Warning: Failed to parse potential JSON string in column '{col}': {val}")
-                                            return None 
-                                # Keep other types (like None, numbers) as is
+                                            print(f"Warning: Failed to parse column '{col}': {val}")
+                                            return None
                                 return val
                             df[col] = df[col].apply(clean_json_col)
-                    # --- End enhanced cleaning ---
-                    
-                    # # Original conversion loop (now potentially redundant or complementary)
-                    # for col in df.columns:
-                    #     if df[col].apply(lambda x: isinstance(x, (dict, list))).any():
-                    #         df[col] = df[col].apply(lambda x: json.dumps(x) if isinstance(x, (dict, list)) else x)
 
-                    # upsert 回資料庫
+                    # Upsert back to query_charts
                     pg_engine = create_engine(dashboard_hook.get_uri())
-                    # 先刪除舊的 index
                     with pg_engine.begin() as conn:
                         conn.execute(text('DELETE FROM public.query_charts WHERE "index" = :idx'), {"idx": f"{status_key}_{pname}"})
-                        # append 新資料
-                        # Ensure connection is passed to to_sql within the transaction
-                        df.to_sql('query_charts', conn, if_exists='append', index=False, method='multi') 
+                        df.to_sql(
+                            'query_charts',
+                            conn,
+                            if_exists='append',
+                            index=False,
+                            method='multi',
+                            dtype={'map_config_ids': postgresql.ARRAY(postgresql.INTEGER)}
+                        )
                     print(f"已用 DataFrame upsert query_charts index={status_key}_{pname}")
                 
                 # --- 修改 component_charts ---
