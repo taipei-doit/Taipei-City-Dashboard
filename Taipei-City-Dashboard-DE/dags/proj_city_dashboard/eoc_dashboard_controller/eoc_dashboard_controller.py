@@ -330,17 +330,23 @@ def _transfer(**kwargs):
                 comp_ids = []
             # --- component id 取得修改結束 ---
 
-            # 每次用隨機 12 位 hex 當作 dashboard.index
+            # 刪除舊的同名 dashboard（確保不重複）
+            dashboard_hook.run(
+                'DELETE FROM public.dashboards WHERE name = %(name)s;',
+                parameters={'name': pname}
+            )
+
+            # 隨機 12 位 hex 作為 dashboards."index"
             rand_idx = ''.join(random.choices('0123456789abcdef', k=12))
 
-            # 新增 dashboard 並帶上隨機 index, name=pname, components 會轉成 {x,y,z} 格式
+            # 插入 dashboard 並帶上隨機 index、name=pname、components 會轉成 {x,y,z} 格式
             dashboard_hook.run(
-                'INSERT INTO public.dashboards ("index", "name", components, icon, created_at, updated_at) '
-                'VALUES (%(idx)s, %(name)s, %(components)s, %(icon)s, %(created_at)s, %(updated_at)s);',
+                'INSERT INTO public.dashboards ("index","name",components,icon,created_at,updated_at) '
+                'VALUES (%(idx)s,%(name)s,%(components)s,%(icon)s,%(created_at)s,%(updated_at)s);',
                 parameters={
                     'idx': rand_idx,
                     'name': pname,
-                    'components': comp_ids,  
+                    'components': comp_ids,
                     'icon': icon_val,
                     'created_at': datetime.now(timezone.utc),
                     'updated_at': datetime.now(timezone.utc)
