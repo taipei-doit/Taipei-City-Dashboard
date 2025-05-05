@@ -280,13 +280,20 @@ def _transfer(**kwargs):
                     new_chart_index = f"{status_key}_{pname}"
                     # 修改 index
                     df_chart_template["index"] = new_chart_index
-                    # 將 types 欄位轉成 json 字串 (如果需要)
+                    # 將 types 欄位轉成 Python list (符合 Postgres 陣列)
                     if 'types' in df_chart_template.columns:
-                         # 檢查是否真的需要轉換 (get_pandas_df 可能已處理好 JSON)
-                         # 如果 types 欄位讀取後已是 list/dict，則轉換
-                         needs_conversion = df_chart_template['types'].apply(lambda x: isinstance(x, (dict, list))).any()
-                         if needs_conversion:
-                            df_chart_template['types'] = df_chart_template['types'].apply(lambda x: json.dumps(x) if isinstance(x, (dict, list)) else x)
+                        def to_py_list(val):
+                            if isinstance(val, (list, dict)):
+                                return val
+                            if isinstance(val, str):
+                                try:
+                                    parsed = json.loads(val)
+                                    if isinstance(parsed, list):
+                                        return parsed
+                                except json.JSONDecodeError:
+                                    pass
+                            return val
+                        df_chart_template['types'] = df_chart_template['types'].apply(to_py_list)
 
                     # upsert 回資料庫 (先刪後寫入)
                     pg_engine = create_engine(dashboard_hook.get_uri())
