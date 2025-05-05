@@ -223,7 +223,6 @@ def _transfer(**kwargs):
                     df["index"] = f"{status_key}_{pname}"
                     df["query_chart"] = status_val['sql'].format(pname=pname)
 
-
                     # Enhanced cleaning for other JSON-like columns
                     json_like_cols = ['links', 'contributors', 'history_config', 'map_filter']
                     for col in json_like_cols:
@@ -248,13 +247,25 @@ def _transfer(**kwargs):
                     pg_engine = create_engine(dashboard_hook.get_uri())
                     with pg_engine.begin() as conn:
                         conn.execute(text('DELETE FROM public.query_charts WHERE "index" = :idx'), {"idx": f"{status_key}_{pname}"})
+                        # Convert links and contributors JSON strings to Python lists for Postgres array columns
+                        for arr_col in ['links', 'contributors']:
+                            if arr_col in df.columns:
+                                def to_py_list(val):
+                                    if isinstance(val, str):
+                                        try:
+                                            arr = json.loads(val)
+                                            if isinstance(arr, list):
+                                                return arr
+                                        except json.JSONDecodeError:
+                                            pass
+                                    return val
+                                df[arr_col] = df[arr_col].apply(to_py_list)
                         df.to_sql(
                             'query_charts',
                             conn,
                             if_exists='append',
                             index=False,
-                            method='multi',
-                            dtype={'map_config_ids': postgresql.ARRAY(postgresql.INTEGER)}
+                            method='multi'
                         )
                     print(f"已用 DataFrame upsert query_charts index={status_key}_{pname}")
                 
