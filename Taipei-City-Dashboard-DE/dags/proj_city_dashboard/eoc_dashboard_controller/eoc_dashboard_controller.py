@@ -44,19 +44,61 @@ def _transfer(**kwargs):
         # 無資料：刪除關聯並結束
         if not unique_names:
             try:
-                # 刪除所有 disaster_sus_*_% 結尾的 component、query_charts、component_charts、dashboard、dashboard_groups
+                # 刪除所有 disaster_sus_*_% 相關的 component、query_charts、component_charts、dashboard、dashboard_groups
                 dashboard_hook = PostgresHook(postgres_conn_id="dashboad-postgre")
                 status_keys = ["disaster_sus_water", "disaster_sus_power", "disaster_sus_tel", "disaster_sus_gas"]
                 for status_key in status_keys:
                     like_pattern = f"{status_key}_%"
-                    for tbl in ["component_charts", "query_charts", "components"]:
+
+                    # 1) 先處理 components：查出 id，再檢查是否仍被 dashboard 使用
+                    recs = dashboard_hook.get_records(
+                        'SELECT id FROM public.components WHERE "index" LIKE %(pattern)s;',
+                        parameters={'pattern': like_pattern}
+                    )
+                    for rec in recs:
+                        comp_id = rec[0]
+                        dash_recs = dashboard_hook.get_records(
+                            'SELECT id, "index", name, components, icon, updated_at, created_at '
+                            'FROM public.dashboards WHERE %(comp_id)s = ANY(components);',
+                            parameters={'comp_id': comp_id}
+                        )
+                        if dash_recs:
+                            for dash in dash_recs:
+                                dash_id = dash[0]
+                                # 刪除該 dashboard 的群組關聯
+                                dashboard_hook.run(
+                                    'DELETE FROM public.dashboard_groups WHERE dashboard_id = %(dash_id)s;',
+                                    parameters={'dash_id': dash_id}
+                                )
+                                # 刪除該 dashboard
+                                dashboard_hook.run(
+                                    'DELETE FROM public.dashboards WHERE id = %(dash_id)s;',
+                                    parameters={'dash_id': dash_id}
+                                )
+                                print(f"Deleted dashboard id={dash_id} for component {comp_id}")
+                            # 刪除 component
+                            dashboard_hook.run(
+                                'DELETE FROM public.components WHERE id = %(id)s;',
+                                parameters={'id': comp_id}
+                            )
+                            print(f"Deleted component id={comp_id}")
+                            # 直接刪除未被使用的 component
+                            dashboard_hook.run(
+                                'DELETE FROM public.components WHERE id = %(id)s;',
+                                parameters={'id': comp_id}
+                            )
+                            print(f"Deleted unused component id={comp_id}")
+
+                    # 2) 再刪除 component_charts 與 query_charts
+                    for tbl in ["component_charts", "query_charts"]:
                         try:
                             dashboard_hook.run(
                                 f'DELETE FROM public.{tbl} WHERE "index" LIKE %(pattern)s;',
-                                parameters={"pattern": like_pattern}
+                                parameters={'pattern': like_pattern}
                             )
                         except Exception:
                             pass
+
                 # 刪除所有 dashboard name 含底線（即 _pname 結尾）及其 group 關聯
                 try:
                     dashboard_hook.run(
