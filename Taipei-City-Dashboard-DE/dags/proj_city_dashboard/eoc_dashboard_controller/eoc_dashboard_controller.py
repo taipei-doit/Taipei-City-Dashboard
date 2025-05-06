@@ -49,18 +49,14 @@ def _transfer(**kwargs):
                 status_keys = ["disaster_sus_water", "disaster_sus_power", "disaster_sus_tel", "disaster_sus_gas"]
                 for status_key in status_keys:
                     like_pattern = f"{status_key}_%"
-                    try:
-                        dashboard_hook.run('DELETE FROM public.component_charts WHERE "index" LIKE %(like)s;', parameters={'like': like_pattern})
-                    except Exception:
-                        pass
-                    try:
-                        dashboard_hook.run('DELETE FROM public.query_charts WHERE "index" LIKE %(like)s;', parameters={'like': like_pattern})
-                    except Exception:
-                        pass
-                    try:
-                        dashboard_hook.run('DELETE FROM public.components WHERE "index" LIKE %(like)s;', parameters={'like': like_pattern})
-                    except Exception:
-                        pass
+                    for tbl in ["component_charts", "query_charts", "components"]:
+                        try:
+                            dashboard_hook.run(
+                                f'DELETE FROM public.{tbl} WHERE "index" LIKE %(pattern)s;',
+                                parameters={"pattern": like_pattern}
+                            )
+                        except Exception:
+                            pass
                 # 刪除所有 dashboard name 含底線（即 _pname 結尾）及其 group 關聯
                 try:
                     dashboard_hook.run(
