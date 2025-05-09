@@ -375,8 +375,17 @@ def _transfer(**kwargs):
                 comp_ids = df_comp_ids['id'].tolist() if not df_comp_ids.empty else []
             else:
                 comp_ids = []
-            # 加入 251
-            comp_ids.append(251)
+
+            # 另外查詢 'eoc_disaster_summary' 的 id 並加入 comp_ids
+            df_summary_id = dashboard_hook.get_pandas_df(
+                sql='SELECT id FROM public.components WHERE "index" = %(index)s;',
+                parameters={'index': 'eoc_disaster_summary'}
+            )
+            if not df_summary_id.empty:
+                summary_id = df_summary_id['id'].iloc[0]
+                if summary_id not in comp_ids:
+                    comp_ids.append(summary_id)
+
             # --- component id 取得修改結束 ---
 
             # 刪除舊的同名 dashboard（確保不重複）
