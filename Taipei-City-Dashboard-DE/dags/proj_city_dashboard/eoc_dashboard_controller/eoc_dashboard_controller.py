@@ -375,6 +375,8 @@ def _transfer(**kwargs):
                 comp_ids = df_comp_ids['id'].tolist() if not df_comp_ids.empty else []
             else:
                 comp_ids = []
+            # 加入 251
+            comp_ids.append(251)
             # --- component id 取得修改結束 ---
 
             # 刪除舊的同名 dashboard（確保不重複）
