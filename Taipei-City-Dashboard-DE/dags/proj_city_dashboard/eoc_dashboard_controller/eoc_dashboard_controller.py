@@ -372,7 +372,7 @@ def _transfer(**kwargs):
             if comp_indices_to_fetch:
                 sql_get_ids = 'SELECT id FROM public.components WHERE "index" = ANY(%(indices)s);'
                 df_comp_ids = dashboard_hook.get_pandas_df(sql=sql_get_ids, parameters={'indices': comp_indices_to_fetch})
-                comp_ids = df_comp_ids['id'].tolist() if not df_comp_ids.empty else []
+                comp_ids = df_comp_ids['id'].tolist() if not df_comp_ids.empty : []
             else:
                 comp_ids = []
 
@@ -396,6 +396,9 @@ def _transfer(**kwargs):
 
             # 隨機 12 位 hex 作為 dashboards."index"
             rand_idx = ''.join(random.choices('0123456789abcdef', k=12))
+
+            # 將 comp_ids 轉為 Python int，避免 numpy.int64 導致 psycopg2 can't adapt type
+            comp_ids = [int(x) for x in comp_ids]
 
             # 插入 dashboard 並帶上隨機 index、name=pname、components 會轉成 {x,y,z} 格式
             dashboard_hook.run(
