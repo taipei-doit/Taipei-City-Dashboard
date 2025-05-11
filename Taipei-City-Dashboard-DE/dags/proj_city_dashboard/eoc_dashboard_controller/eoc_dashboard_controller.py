@@ -372,7 +372,7 @@ def _transfer(**kwargs):
             if comp_indices_to_fetch:
                 sql_get_ids = 'SELECT id FROM public.components WHERE "index" = ANY(%(indices)s);'
                 df_comp_ids = dashboard_hook.get_pandas_df(sql=sql_get_ids, parameters={'indices': comp_indices_to_fetch})
-                comp_ids = df_comp_ids['id'].tolist() if not df_comp_ids.empty : []
+                comp_ids = df_comp_ids['id'].tolist() if not df_comp_ids.empty else []
             else:
                 comp_ids = []
 
