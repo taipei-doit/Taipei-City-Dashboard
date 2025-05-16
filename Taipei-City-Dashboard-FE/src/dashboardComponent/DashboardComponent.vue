@@ -479,13 +479,13 @@ function returnChartComponent(name, svg) {
         @mouseleave="changeShowTagTooltipState(false)"
       >
         <ComponentTag
-          v-if="config.map_filter && config.map_config"
+          v-if="config.map_filter && config.map_config?.length > 0"
           :icon="mode === 'preview' ? '' : 'tune'"
           text="篩選地圖"
           class="hide-if-mobile"
         />
         <ComponentTag
-          v-if="config.map_config && config.map_config[0] !== null"
+          v-if="config.map_config && config.map_config[0] !== null && config.map_config?.length > 0"
           :icon="mode === 'preview' ? '' : 'map'"
           text="空間資料"
           class="hide-if-mobile"

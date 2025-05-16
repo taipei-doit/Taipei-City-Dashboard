@@ -5,7 +5,7 @@
 	width: 2rem;
 	display: inline-block;
 	position: relative;
-	overflow: visible;
+	overflow: visible !important;
 }
 .toggleswitch input {
 	width: 0;
