@@ -19,7 +19,7 @@
     "ready_data_history_table": "eoc_disaster_summary_tpe_history",
     "raw_data_db": "postgres_default",
     "raw_data_table": "",
-    "load_behavior": "replace"
+    "load_behavior": "append"
   },
   "data_infos": {
     "name_cn": "EOC最新災害專案災情資料",
