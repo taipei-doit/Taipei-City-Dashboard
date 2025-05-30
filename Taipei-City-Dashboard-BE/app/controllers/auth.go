@@ -37,7 +37,7 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	// check 
+	// check
 	emailRegexp, err := regexp.MatchString(emailRegex, email)
 	if err != nil || !emailRegexp {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": fmt.Errorf("invalid email format: %v", err)})
@@ -103,3 +103,5 @@ func Login(c *gin.Context) {
 		"token":      token,
 	})
 }
+
+//45646584984
