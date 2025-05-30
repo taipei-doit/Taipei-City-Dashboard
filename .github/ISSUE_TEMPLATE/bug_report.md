@@ -3,8 +3,7 @@ name: Bug Report
 about: Create a bug report to help us improve
 title: "[Bug]"
 labels: bug
-assignees: power80203, ttom525tw, freetime007, govtpe
-
+assignees: ["igorho2000", "ann125697"]
 ---
 
 > Please submit all issues in English.

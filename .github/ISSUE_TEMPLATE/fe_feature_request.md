@@ -2,9 +2,8 @@
 name: FE Feature request
 about: Suggest an idea for Taipei City Dashboard FE
 title: "[Enhancement]"
-labels: enhancement
-assignees: freetime007, lopthick3, ttom525tw
-
+labels: "enhancement"
+assignees: igorho2000
 ---
 
 > Please submit all issues in English.
