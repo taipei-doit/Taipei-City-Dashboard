@@ -9,6 +9,7 @@ services:
       - redis-data:/data
       
   postgres-data:
+    platform: linux/amd64
     image: postgis/postgis:16-3.4-alpine
     container_name: postgres-data
     restart: always
@@ -20,6 +21,7 @@ services:
       - postgres-data:/var/lib/postgresql/data
 
   postgres-manager:
+    platform: linux/amd64
     image: postgis/postgis:16-3.4-alpine
     container_name: postgres-manager
     restart: always
