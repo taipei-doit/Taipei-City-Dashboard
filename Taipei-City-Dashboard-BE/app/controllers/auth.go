@@ -1,35 +1,3 @@
-//
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// Taipei City test test test test test test test test test
-
 package controllers
 
 import (
@@ -135,6 +103,3 @@ func Login(c *gin.Context) {
 		"token":      token,
 	})
 }
-
-// testing conflict
-
