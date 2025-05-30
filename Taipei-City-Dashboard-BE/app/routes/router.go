@@ -38,6 +38,7 @@ func ConfigureRoutes() {
 	configureIncidentRoutes()
 	// configureWsRoutes()
 	configureContributorRoutes()
+	configureHelloRoutes()
 }
 
 func configureAuthRoutes() {
@@ -177,3 +178,10 @@ func configureContributorRoutes() {
 // 		wsRoutes.PUT("/write/", controllers.WriteMap)
 // 	}
 // }
+
+func configureHelloRoutes() {
+	helloRoutes := RouterGroup.Group("/hello")
+	{
+		helloRoutes.GET("/", controllers.HelloHandler)
+	}
+}
