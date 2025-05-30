@@ -1,35 +1,3 @@
-//
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// Taipei City test test test test test test test test test
-
 package controllers
 
 import (
@@ -121,7 +89,7 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	// update last login time
+	// update last login tim
 	if err := models.DBManager.Save(&user).Error; err != nil {
 		logs.FError("Failed to update login time: %v", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "unexpected database error"})
@@ -135,7 +103,3 @@ func Login(c *gin.Context) {
 		"token":      token,
 	})
 }
-
-//testing 2
-//fjlsdkjflkjflksdjfds
-//dsjlkfjsalkdfjklsdjfksjdlkf

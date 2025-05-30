@@ -13,7 +13,7 @@ import (
 
 /*
 GetAllComponents retrieves all public components from the database.
-GET /api/v1/component
+GET /api/v1/componen
 
 | Param         | Description                                         | Value                        | Default |
 | ------------- | --------------------------------------------------- | ---------------------------- | ------- |
