@@ -47,7 +47,7 @@ func ConfigureRoutes() {
 
 func scopeRoutes() {
 	scopeRoutes := RouterGroup.Group("/scope")
-	scopeRoutes.GET("/info", controllers.Info)
+	scopeRoutes.GET("/info", controllers.GetInfos)
 }
 
 func configureAuthRoutes() {
@@ -203,7 +203,7 @@ func configureGetScopeInfo() {
 	scopeRoutes.Use(middleware.IsLoggedIn())
 
 	{
-		scopeRoutes.POST("/info", controllers.GetScopeInfoHandler)
+		scopeRoutes.POST("/info", controllers.GetInfos)
 	}
 }
 
