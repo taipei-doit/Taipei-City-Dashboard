@@ -756,7 +756,7 @@ export const useContentStore = defineStore("content", {
 		// 7. 搜尋Components並更新"搜尋"Dashboard
 		async searchComponentsAndUpdateDashboard(query) {
 			const dialogStore = useDialogStore();
-			const searchDashboardIndex = 'caf2a5f40cf3';
+			const searchDashboardIndex = 'd1aa88b26082';
 			
 			try {
 				// 步驟1: 搜尋符合條件的components
