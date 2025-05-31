@@ -176,7 +176,7 @@ func GetInfos(c *gin.Context) {
 	}
 	for _, d := range t_libraries {
 		dist := p.DistanceFrom(geo.NewPoint(d.X, d.Y))
-		fmt.Printf("距離: %f, 閾值: %f\n", dist, distance)
+		// fmt.Printf("距離: %f, 閾值: %f\n", dist, distance)
 		if dist <= distance {
 			lib_data = append(lib_data, d.AddressInfo)
 		}
