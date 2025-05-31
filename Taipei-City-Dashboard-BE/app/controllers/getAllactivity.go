@@ -1,4 +1,4 @@
-package controller
+package controllers
 
 import (
 	"encoding/json"
@@ -85,9 +85,6 @@ func GetAllActivityHandler(c *gin.Context) {
 	if err != nil {
 		log.Fatal("failed to marshal JSON:", err)
 	}
-
-	// Output JSON
-	fmt.Println(string(jsonData))
 
 	if err := c.ShouldBindJSON(&jsonData); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
