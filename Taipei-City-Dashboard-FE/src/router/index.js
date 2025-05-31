@@ -18,6 +18,7 @@ import MapView from "../views/MapView.vue";
 import ComponentView from "../views/ComponentView.vue";
 import ComponentInfoView from "../views/ComponentInfoView.vue";
 import EmbedView from "../views/EmbedView.vue";
+import PopularDashboardView from "../views/PopularDashboardView.vue";
 
 const routes = [
 	{
@@ -57,6 +58,12 @@ const routes = [
 	{
 		path: "/embed",
 		redirect: "/embed/0",
+	},
+	  // ★ 新增「熱門儀表板」路由
+ 	{
+        path: "/popular",
+    	name: "popular-dashboard",
+    	component: PopularDashboardView,
 	},
 	{
 		path: "/admin",
