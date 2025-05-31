@@ -63,13 +63,13 @@ func GetAllActivityHandler(c *gin.Context) {
 
 	// Fetch from t_activity
 	var tActivities []Activity
-	if err := db.Table("t_activity").Find(&tActivities).Error; err != nil {
+	if err := db.Table("t_activity").Distinct("title", "address").Select("id, title, address, x, y").Find(&tActivities).Error; err != nil {
 		log.Fatal("error querying t_activity:", err)
 	}
 
 	// Fetch from nt_activity
 	var ntActivities []Activity
-	if err := db.Table("nt_activity").Find(&ntActivities).Error; err != nil {
+	if err := db.Table("nt_activity").Distinct("title", "address").Select("id, title, address, x, y").Find(&ntActivities).Error; err != nil {
 		log.Fatal("error querying nt_activity:", err)
 	}
 
