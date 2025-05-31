@@ -190,6 +190,7 @@ export const useMapStore = defineStore("map", {
 			const images = [
 				"metro",
 				"old_man",
+				"artist",
 				"triangle_green",
 				"triangle_white",
 				"bike_green",

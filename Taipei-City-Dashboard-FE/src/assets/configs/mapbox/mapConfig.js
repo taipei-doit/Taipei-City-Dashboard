@@ -432,6 +432,20 @@ export const maplayerCommonLayout = {
 			0.9,
 		],
 	},
+	"symbol-artist": {
+		"icon-image": "artist",
+		"icon-size": [
+			"interpolate",
+			["linear"],
+			["zoom"],
+			11.99,
+			0.3,
+			14,
+			0.4,
+			22,
+			0.9,
+		],
+	},
 	"symbol-triangle_green": {
 		"icon-image": "triangle_green",
 	},
