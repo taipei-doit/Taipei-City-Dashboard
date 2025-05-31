@@ -42,7 +42,7 @@ func ConfigureRoutes() {
 
 	// configure the GetScopeInfo function routing
 	configureTestRoutes()
-
+	configureGetScopeInfo()
 }
 
 func scopeRoutes() {
