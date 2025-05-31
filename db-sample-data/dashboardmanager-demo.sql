@@ -660,7 +660,7 @@ COPY public.auth_user_group_roles (auth_user_id, group_id, role_id) FROM stdin;
 --
 
 COPY public.auth_users (id, name, email, password, idno, uuid, tp_account, member_type, verify_level, is_admin, is_active, is_whitelist, is_blacked, expired_at, created_at, login_at) FROM stdin;
-1	June	df41022@gmail.com	ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f	\N	\N	\N	\N	\N	t	t	t	f	\N	2025-05-30 19:59:09.188916+00	2025-05-31 07:24:54.353569+00
+1	June	df41022@gmail.com	ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f	\N	\N	\N	\N	\N	t	t	t	f	\N	2025-05-31 14:09:10.352337+00	2025-05-31 14:09:10.352337+00
 \.
 
 
@@ -677,8 +677,6 @@ aging_kpi	{#F65658,#F49F36,#F5C860,#9AC17C,#4CB495,#569C9A,#60819C,#2F8AB1}	{Tex
 aging_workforce_trend	{#24B0DD,#56B96D,#F8CF58,#F5AD4A,#E170A6,#ED6A45,#AF4137,#10294A}	{BarPercentChart,RadarChart,ColumnChart}	%
 bike_network	{#a0b8e8,#b7ff98}	{DonutChart,BarChart}	公里
 bike_map	{#a0b8e8,#b7ff98}	{MapLegend}	條
-hotel	{#ff3f66}	{MapLegend}	間
-ecofriendly_restaurant	{#358452}	{MapLegend}	間
 \.
 
 
@@ -691,10 +689,6 @@ COPY public.component_maps (id, index, title, type, source, size, icon, paint, p
 99	youbike_realtime_metrotaipei	youbike站點	symbol	geojson	\N	youbike	{}	[{"key":"sna","name":"場站名稱"},{"key":"sno","name":"場站ID"},{"key":"available_return_bikes","name":"可還車位"},{"key":"available_rent_general_bikes","name":"剩餘車輛"}]
 100	bike_network_tpe	自行車路網	line	geojson	\N	\N	{"line-color":["match",["get","direction"],"雙向","#097138","單向","#007BFF","#808080"]}	[\r\n  {"key": "data_time", "name": "數據時間"},\r\n  {"key": "route_name", "name": "路線名稱"},\r\n  {"key": "city_code", "name": "城市代碼"},\r\n  {"key": "city", "name": "城市"},\r\n  {"key": "road_section_start", "name": "起點路段"},\r\n  {"key": "road_section_end", "name": "終點路段"},\r\n  {"key": "direction", "name": "方向"},\r\n  {"key": "cycling_length", "name": "自行車道長度"},\r\n  {"key": "finished_time", "name": "完工時間"},\r\n  {"key": "update_time", "name": "更新時間"}\r\n]
 101	bike_network_metrotaipei	自行車路網	line	geojson	\N	\N	{"line-color":["match",["get","direction"],"雙向","#097138","單向","#007BFF","#808080"]}	[\r\n  {"key": "data_time", "name": "數據時間"},\r\n  {"key": "route_name", "name": "路線名稱"},\r\n  {"key": "city_code", "name": "城市代碼"},\r\n  {"key": "city", "name": "城市"},\r\n  {"key": "road_section_start", "name": "起點路段"},\r\n  {"key": "road_section_end", "name": "終點路段"},\r\n  {"key": "direction", "name": "方向"},\r\n  {"key": "cycling_length", "name": "自行車道長度"},\r\n  {"key": "finished_time", "name": "完工時間"},\r\n  {"key": "update_time", "name": "更新時間"}\r\n]
-8	hotel_tpe	旅館	circle	geojson	small	heatmap	{"circle-color": "#ff3f66"}	[{"key": "name", "name": "名稱"}, {"key": "address", "name": "地址"}, {"key": "tel", "name": "電話"}, {"key": "room_count", "name": "房間數"}, {"key": "price_min", "name": "最低價"}, {"key": "price_max", "name": "最高價"}]
-9	hotel_new_tpe	旅館	circle	geojson	small	heatmap	{"circle-color": "#ff3f66"}	[{"key": "name", "name": "名稱"}, {"key": "address", "name": "地址"}, {"key": "tel", "name": "電話"}, {"key": "room_count", "name": "房間數"}, {"key": "price_min", "name": "最低價"}, {"key": "price_max", "name": "最高價"}]
-10	ecofriendly_restaurant_tpe	環保餐廳	circle	geojson	small	heatmap	{"circle-color": "#358452"}	[{"key": "name", "name": "名稱"}, {"key": "address", "name": "地址"}, {"key": "tel", "name": "電話"}]
-11	ecofriendly_restaurant_new_tpe	環保餐廳	circle	geojson	small	heatmap	{"circle-color": "#358452"}	[{"key": "name", "name": "名稱"}, {"key": "address", "name": "地址"}, {"key": "tel", "name": "電話"}]
 \.
 
 
@@ -711,8 +705,6 @@ COPY public.components (id, index, name) FROM stdin;
 218	aging_kpi	長照指標
 215	aging_workforce_trend	高齡就業人口之年增結構
 217	bike_map	自行車道路網圖資
-3	ecofriendly_restaurant	環保餐廳
-4	hotel	旅館
 \.
 
 
@@ -737,7 +729,6 @@ COPY public.dashboard_groups (dashboard_id, group_id) FROM stdin;
 359	3
 358	3
 360	4
-361	3
 \.
 
 
@@ -749,12 +740,11 @@ COPY public.dashboards (id, index, name, components, icon, updated_at, created_a
 106	map-layers-taipei	圖資資訊	{217}	public	2025-03-12 01:59:00.512775+00	2024-03-21 10:04:24.928533+00
 356	ltc_care_tpe	長照關懷	{214,215,216,218}	elderly	2025-02-26 08:43:42.86017+00	2024-03-21 09:38:37.66+00
 355	ltc_care_newtpe	長照關懷	{214,215,216,218}	elderly	2025-02-27 06:42:21.705931+00	2024-03-21 09:38:37.66+00
+359	map-layers-metrotaipei	圖資資訊	{217}	public	2024-05-16 03:56:12.76016+00	2024-03-21 10:04:24.928533+00
 358	practical_transportation_newtpe	務實交通	{60,212,213}	directions_car	2025-03-12 08:00:38.75842+00	2024-03-21 09:38:37.66+00
 1	09a25cd9cb7d	收藏組件	\N	favorite	2025-03-14 07:34:22.247753+00	2025-03-14 07:34:22.247753+00
 2	3245d9eace5f	我的新儀表板	{215,218,216,213,212,214,60,146}	star	2025-03-14 14:55:11.732116+00	2025-03-14 14:55:11.732116+00
-360	bfe748037f69	收藏組件	\N	favorite	2025-05-30 19:59:09.195745+00	2025-05-30 19:59:09.195744+00
-361	energetic_city	商圈活化	{3,4}	house	2025-05-31 10:29:41.020089+00	2025-05-31 07:13:46.836366+00
-359	map-layers-metrotaipei	圖資資訊	{3,217,4}	public	2025-05-31 10:30:44.969138+00	2024-03-21 10:04:24.928533+00
+360	85ee84723bfe	收藏組件	\N	favorite	2025-05-31 14:09:10.358644+00	2025-05-31 14:09:10.358644+00
 \.
 
 
@@ -808,10 +798,6 @@ ebus_percent	\N	\N	\N	static	\N	\N	\N	交通局	顯示雙北電動公車比例	�
 ebus_percent	\N	\N	\N	static	\N	\N	\N	交通局	顯示臺北電動公車比例	此圖顯示臺北市電動公車的比例，呈現全市公車車隊中電動車所占比重，以及近年來電動公車數量的成長情形。圖表比較傳統燃油公車與電動公車的比例變化，並標示臺北市政府推動電動化政策、補助措施及其帶來的環保效益。透過這些數據，可評估臺北市電動公車的普及程度，及其在減碳與空氣品質改善上的貢獻，有助於進一步規劃更完善的公共運輸電動化策略，推動城市交通朝向低碳永續目標邁進。	可用於評估臺北市公共運輸電動化的進程，透過此圖顯示電動公車在市區公車總數中的占比及其成長趨勢。圖表呈現傳統燃油公車與電動公車的比例變化，並標示臺北市政府推動的政策措施、補助方案及相關環保效益等影響因素。透過這些數據，可分析臺北市電動公車的普及程度及其在減碳排放與空氣品質改善方面的貢獻，有助於進一步規劃更完善的公共運輸電動化策略，推動臺北朝向低碳與永續發展的城市目標邁進。	{https://tdx.transportdata.tw/api/basic/v2/Bus/Vehicle/City/Taipei?%24top=30&%24format=JSON}	{doit}	2025-02-15 05:56:00+00	2025-02-20 09:11:21.620625+00	percent	select '電動公車數量' as x_axis,y_axis,sum(data) data from \r\n(\r\nselect '電動巴士' as y_axis,count(*) as  data\r\nfrom public.bus_info_tpe\r\nwhere plate_numb like 'E%'\r\nunion all\r\nselect '非電動巴士' as y_axis,count(*) as  data\r\nfrom public.bus_info_tpe)d\r\ngroup by \r\ny_axis	\N	taipei
 youbike_availability	\N	{99}	\N	current	\N	10	minute	交通局	顯示當前雙北共享單車YouBike的使用情況。	顯示雙北地區（臺北市與新北市）當前共享單車 YouBike 的使用情況，格式為可借車輛數／全區車位數。資料來源為兩市交通局公開資料，每5分鐘更新一次，提供即時的車輛可用資訊與站點使用狀況，有助於掌握整體運行效率與民眾使用情形，亦可作為交通管理與營運調度的參考依據。	藉由顯示雙北地區 YouBike 的使用情況，以及觀察可借車輛數約為車柱總數的一半，可大致掌握目前停放於站點與使用中車輛的整體分布情形。使用者亦可透過地圖模式查詢雙北各站點的即時資訊，包括可借車輛數、可還空位數及站點位置，方便規劃路線與掌握使用狀況，提升共享單車的便利性與使用效率。	{https://tdx.transportdata.tw/api-service/swagger/basic/2cc9b888-a592-496f-99de-9ab35b7fb70d#/Bike/BikeApi_Availability_2181,https://tdx.transportdata.tw/api/basic/v2/Bike/Availability/City/NewTaipei?%24top=30&%24format=JSON}	{doit,ntpc}	2023-12-20 05:56:00+00	2024-03-19 06:08:17.99+00	percent	select x_axis,y_axis,sum(data)data\r\nfrom (select '在站車輛' as x_axis, \r\nunnest(ARRAY['可借車輛', '空位']) as y_axis, \r\nunnest(ARRAY[SUM(available_rent_general_bikes), SUM(available_return_bikes)]) as data\r\nfrom tran_ubike_realtime_new_tpe\r\nunion all \r\nselect '在站車輛' as x_axis, \r\nunnest(ARRAY['可借車輛', '空位']) as y_axis, \r\nunnest(ARRAY[SUM(available_rent_general_bikes), SUM(available_return_bikes)]) as data\r\nfrom tran_ubike_realtime)d\r\ngroup by x_axis,y_axis	\N	metrotaipei
 youbike_availability	\N	{70}	\N	current	\N	10	minute	交通局	顯示當前臺北市共享單車YouBike的使用情況。	顯示臺北市當前共享單車 YouBike 的使用情況，格式為可借車輛數／全市車位數。資料來源為臺北市政府交通局公開資料，每5分鐘更新一次，反映即時的使用狀況與車輛調度情形，可作為交通監測與市民使用參考依據。	藉由臺北市 YouBike 使用情況的顯示，以及全市可借車輛數約為車柱總數的一半，可大致掌握目前停放於站點與正在使用中的車輛數量。使用者可透過地圖模式查詢臺北市各站點的即時資訊，包括可借車輛數、可還空位數及站點位置，方便即時掌握使用狀況，提升共享單車的使用效率與便利性。	{https://tdx.transportdata.tw/api-service/swagger/basic/2cc9b888-a592-496f-99de-9ab35b7fb70d#/Bike/BikeApi_Availability_2181}	{doit}	2023-12-20 05:56:00+00	2024-03-19 06:08:17.99+00	percent	select '在站車輛' as x_axis, \r\nunnest(ARRAY['可借車輛', '空位']) as y_axis, \r\nunnest(ARRAY[SUM(available_rent_general_bikes), SUM(available_return_bikes)]) as data\r\nfrom tran_ubike_realtime	\N	taipei
-hotel	\N	{8,9}	{}	static	\N	\N	\N	觀傳局,新北市政府觀光旅遊局	雙北旅館業者的基本營業資訊	雙北旅館分佈資料是一個實用的住宿業基礎資訊資料集，收錄了臺北市與新北市各行政區內旅宿業者的核心營業資料。資料內容包含六個主要欄位：旅宿名稱、營業地址、聯絡電話、房間數量、最低住宿價格及最高住宿價格	這份資料集的特色在於其資訊的實用性與完整性。透過地址資訊可了解各旅宿的地理分佈狀況，房間數量反映了各業者的營運規模，而價格區間則提供了市場定位與消費水準的重要指標。消費者可以根據預算需求快速篩選合適的住宿選項，業者則能透過價格比較了解市場競爭態勢。\n此資料集適合進行住宿市場分析、價格趨勢研究、區域發展評估等應用。研究者可以透過分析房間數分佈了解各區域的住宿供給能力，透過價格資料探討不同區域的住宿成本差異，並結合地址資訊進行空間分析，了解臺北市住宿業的整體發展格局與區域特色。	{https://data.taipei/dataset/detail?id=4d7d0b46-2e90-4ee7-b000-c0f2f3a37651,https://data.ntpc.gov.tw/datasets/8565597e-a174-4907-99c7-adb5ddee1326}	\N	2025-05-31 10:28:39.91405+00	2025-05-31 10:28:39.91405+00	map_legend	SELECT unnest(array['旅館']) as name, 'circle' as type	\N	metrotaipei
-hotel	\N	{8}	{}	static	\N	\N	\N	觀傳局	臺北旅館業者的基本營業資訊	臺北市旅館分佈資料是一個實用的住宿業基礎資訊資料集，收錄了臺北市各行政區內旅宿業者的核心營業資料。資料內容包含六個主要欄位：旅宿名稱、營業地址、聯絡電話、房間數量、最低住宿價格及最高住宿價格	這份資料集的特色在於其資訊的實用性與完整性。透過地址資訊可了解各旅宿的地理分佈狀況，房間數量反映了各業者的營運規模，而價格區間則提供了市場定位與消費水準的重要指標。消費者可以根據預算需求快速篩選合適的住宿選項，業者則能透過價格比較了解市場競爭態勢。\n此資料集適合進行住宿市場分析、價格趨勢研究、區域發展評估等應用。研究者可以透過分析房間數分佈了解各區域的住宿供給能力，透過價格資料探討不同區域的住宿成本差異，並結合地址資訊進行空間分析，了解臺北市住宿業的整體發展格局與區域特色。	{https://data.taipei/dataset/detail?id=4d7d0b46-2e90-4ee7-b000-c0f2f3a37651}	\N	2025-05-31 10:28:39.91405+00	2025-05-31 10:28:39.91405+00	map_legend	SELECT unnest(array['旅館']) as name, 'circle' as type	\N	taipei
-ecofriendly_restaurant	\N	{10}	{}	static	\N	\N	\N	環保局	具環保理念的臺北餐廳基本資訊	環保餐廳資料是一個專門蒐集具有環保意識餐飲業者的基礎資訊資料集(包含餐廳名稱、營業地址及聯絡電話)。這些餐廳通常具備減塑、使用在地食材、節能減碳、廢棄物減量等環境友善特色，代表了餐飲業朝向永續經營發展的重要趨勢。	資料內容包含三個核心欄位：餐廳名稱、營業地址及聯絡電話。透過餐廳名稱可識別各環保餐廳的品牌特色，地址資訊有助於了解環保餐廳的地理分佈情況，而聯絡電話則提供消費者直接聯繫的管道。	{https://data.taipei/dataset/detail?id=845818d9-c432-44b4-85dd-03d71bd867b2}	\N	2025-05-31 10:28:48.492083+00	2025-05-31 10:28:48.492083+00	map_legend	SELECT unnest(array['環保餐廳']) as name, 'circle' as type	\N	taipei
-ecofriendly_restaurant	\N	{10,11}	{}	static	\N	\N	\N	環保局,新北市政府環境保護局	具環保理念的雙北餐廳基本資訊	環保餐廳資料是一個專門蒐集具有環保意識餐飲業者的基礎資訊資料集(包含餐廳名稱、營業地址及聯絡電話)。這些餐廳通常具備減塑、使用在地食材、節能減碳、廢棄物減量等環境友善特色，代表了餐飲業朝向永續經營發展的重要趨勢。	資料內容包含三個核心欄位：餐廳名稱、營業地址及聯絡電話。透過餐廳名稱可識別各環保餐廳的品牌特色，地址資訊有助於了解環保餐廳的地理分佈情況，而聯絡電話則提供消費者直接聯繫的管道。	{https://data.taipei/dataset/detail?id=845818d9-c432-44b4-85dd-03d71bd867b2,https://data.ntpc.gov.tw/datasets/e90d14f8-5995-4ebb-af19-8f8fd7d396c8}	\N	2025-05-31 10:28:48.492083+00	2025-05-31 10:28:48.492083+00	map_legend	SELECT unnest(array['環保餐廳']) as name, 'circle' as type	\N	metrotaipei
 \.
 
 
@@ -901,14 +887,14 @@ SELECT pg_catalog.setval('public.auth_users_id_seq', 1, true);
 -- Name: component_maps_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.component_maps_id_seq', 11, true);
+SELECT pg_catalog.setval('public.component_maps_id_seq', 1, false);
 
 
 --
 -- Name: components_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.components_id_seq', 4, true);
+SELECT pg_catalog.setval('public.components_id_seq', 1, false);
 
 
 --
@@ -922,7 +908,7 @@ SELECT pg_catalog.setval('public.contributors_id_seq', 1, false);
 -- Name: dashboards_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.dashboards_id_seq', 361, true);
+SELECT pg_catalog.setval('public.dashboards_id_seq', 360, true);
 
 
 --
