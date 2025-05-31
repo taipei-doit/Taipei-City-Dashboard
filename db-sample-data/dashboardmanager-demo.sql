@@ -36,7 +36,7 @@ ecofriendly_restaurant	{#358452}	{MapLegend}	間
 parking_grid	{#090974,#033E6B,#0C60A4,#4F2981,#7373D8,#66A2D2}	{ColumnChart,PolarAreaChart}	格
 tourist_spot	{#8AD2FE}	{DistrictChart,BarChart}	人次
 business_district_directory	{#9b6817}	{DistrictChart,ColumnChart}	位
-street_performer_place	{#5A9BF8}	{DistrictChart,ColumnChart,TreemapChart}	處
+street_performer_place	{#9b6817}	{DistrictChart,ColumnChart,TreemapChart}	處
 \.
 
 
@@ -59,8 +59,8 @@ COPY public.component_maps (id, index, title, type, source, size, icon, paint, p
 31	tourist_spot_metrotaipei	商圈景點遊客	symbol	geojson	\N	camera	{"icon-color": "#8AD2FE"}	[{"key": "scenicspot", "name": "景點名稱"}, {"key": "visits", "name": "訪客人次"}, {"key": "行政區", "name": "行政區"}, {"key": "地址", "name": "地址"}]
 40	business_district_directory_tpe	商圈理事長聯絡網絡	circle	geojson	small	\N	{"circle-color": "#9b6817"}	[{"key": "商圈名稱", "name": "商圈名稱"}, {"key": "分區", "name": "行政區"}, {"key": "組織或里辦公處", "name": "組織或里辦公處"}, {"key": "組織代表", "name": "組織代表"}, {"key": "職稱", "name": "職稱"}, {"key": "聯絡電話", "name": "聯絡電話"}, {"key": "商圈通訊地址", "name": "通訊地址"}]
 41	business_district_directory_metrotaipei	商圈理事長聯絡網絡	circle	geojson	small	\N	{"circle-color": "#9b6817"}	[{"key": "商圈名稱", "name": "商圈名稱"}, {"key": "分區", "name": "行政區"}, {"key": "組織或里辦公處", "name": "組織或里辦公處"}, {"key": "組織代表", "name": "組織代表"}, {"key": "職稱", "name": "職稱"}, {"key": "聯絡電話", "name": "聯絡電話"}, {"key": "商圈通訊地址", "name": "通訊地址"}]
-50	street_performer_place_tpe	街頭藝人展演場地	circle	geojson	small	\N	{"circle-color": "#5A9BF8"}	[{"key": "展演地", "name": "展演場地"}, {"key": "主管機關", "name": "主管機關"}, {"key": "開放表演類型", "name": "開放表演類型"}, {"key": "district", "name": "行政區"}, {"key": "address", "name": "地址"}]
-51	street_performer_place_metrotaipei	街頭藝人展演場地	circle	geojson	\N	small	{"circle-color": "#5A9BF8"}	[{"key": "展演地", "name": "展演場地"}, {"key": "主管機關", "name": "主管機關"}, {"key": "開放表演類型", "name": "開放表演類型"}, {"key": "district", "name": "行政區"}, {"key": "address", "name": "地址"}]
+50	street_performer_place_tpe	街頭藝人展演場地	symbol	geojson	\N	artist	{"circle-color": "#9b6817"}	[{"key": "展演地", "name": "展演場地"}, {"key": "主管機關", "name": "主管機關"}, {"key": "開放表演類型", "name": "開放表演類型"}, {"key": "district", "name": "行政區"}, {"key": "address", "name": "地址"}]
+51	street_performer_place_metrotaipei	街頭藝人展演場地	symbol	geojson	\N	artist	{"circle-color": "#9b6817"}	[{"key": "展演地", "name": "展演場地"}, {"key": "主管機關", "name": "主管機關"}, {"key": "開放表演類型", "name": "開放表演類型"}, {"key": "district", "name": "行政區"}, {"key": "address", "name": "地址"}]
 \.
 
 
