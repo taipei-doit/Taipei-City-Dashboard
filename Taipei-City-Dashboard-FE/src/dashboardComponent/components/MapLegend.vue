@@ -25,33 +25,35 @@ const emits = defineEmits([
 	"filterByLayer",
 	"clearByParamFilter",
 	"clearByLayerFilter",
-	"fly"
+	"fly",
 ]);
 
 function returnIcon(name) {
 	switch (name) {
-	case "bus":
-		return bus;
-	case "metro":
-		return metro;
-	case "triangle_green":
-		return triangle_green;
-	case "triangle_white":
-		return triangle_white;
-	case "bike_green":
-		return bike_green;
-	case "bike_orange":
-		return bike_orange;
-	case "bike_red":
-		return bike_red;
-	case "cross_bold":
-		return cross_bold;
-	case "cross_normal":
-		return cross_normal;
-	case "cctv":
-		return cctv;
-	default:
-		return "";
+		case "bus":
+			return bus;
+		case "metro":
+			return metro;
+		case "triangle_green":
+			return triangle_green;
+		case "triangle_white":
+			return triangle_white;
+		case "bike_green":
+			return bike_green;
+		case "bike_orange":
+			return bike_orange;
+		case "bike_red":
+			return bike_red;
+		case "cross_bold":
+			return cross_bold;
+		case "cross_normal":
+			return cross_normal;
+		case "cctv":
+			return cctv;
+		case "uv_station":
+			return uv_station;
+		default:
+			return "";
 	}
 }
 
@@ -89,43 +91,40 @@ function handleDataSelection(index) {
 </script>
 
 <template>
-  <div class="maplegend">
-    <div class="maplegend-legend">
-      <button
-        v-for="(item, index) in series"
-        :key="item.name"
-        :class="{
-          'maplegend-legend-item': true,
-          'maplegend-filter': map_filter_on && map_filter,
-          'maplegend-selected':
-            map_filter_on && selectedIndex === index,
-        }"
-        @click="handleDataSelection(index)"
-      >
-        <!-- Show different icons for different map types -->
-        <div
-          v-if="item.type !== 'symbol'"
-          :style="{
-            backgroundColor: `${chart_config.color[index]}`,
-            height: item.type === 'line' ? '0.4rem' : '1rem',
-            borderRadius: item.type === 'circle' ? '50%' : '2px',
-          }"
-        />
-        <img
-          v-else
-          :src="returnIcon(item.icon)"
-        >
-        <!-- If there is a value attached, show the value -->
-        <div v-if="item.value">
-          <h5>{{ item.name }}</h5>
-          <h6>{{ item.value }} {{ chart_config.unit }}</h6>
-        </div>
-        <div v-else>
-          <h6>{{ item.name }}</h6>
-        </div>
-      </button>
-    </div>
-  </div>
+	<div class="maplegend">
+		<div class="maplegend-legend">
+			<button
+				v-for="(item, index) in series"
+				:key="item.name"
+				:class="{
+					'maplegend-legend-item': true,
+					'maplegend-filter': map_filter_on && map_filter,
+					'maplegend-selected':
+						map_filter_on && selectedIndex === index,
+				}"
+				@click="handleDataSelection(index)"
+			>
+				<!-- Show different icons for different map types -->
+				<div
+					v-if="item.type !== 'symbol'"
+					:style="{
+						backgroundColor: `${chart_config.color[index]}`,
+						height: item.type === 'line' ? '0.4rem' : '1rem',
+						borderRadius: item.type === 'circle' ? '50%' : '2px',
+					}"
+				/>
+				<img v-else :src="returnIcon(item.icon)" />
+				<!-- If there is a value attached, show the value -->
+				<div v-if="item.value">
+					<h5>{{ item.name }}</h5>
+					<h6>{{ item.value }} {{ chart_config.unit }}</h6>
+				</div>
+				<div v-else>
+					<h6>{{ item.name }}</h6>
+				</div>
+			</button>
+		</div>
+	</div>
 </template>
 
 <style scoped lang="scss">

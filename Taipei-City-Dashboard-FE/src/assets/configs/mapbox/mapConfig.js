@@ -474,6 +474,20 @@ export const maplayerCommonLayout = {
 			1.4,
 		],
 	},
+	"symbol-uv_station": {
+		"icon-image": "uv_station",
+		"icon-size": [
+			"interpolate",
+			["linear"],
+			["zoom"],
+			11.99,
+			0.7,
+			14,
+			1.1,
+			22,
+			1.4,
+		],
+	},
 	"symbol-metro-density": {
 		"icon-image": "metro",
 		"icon-size": [
