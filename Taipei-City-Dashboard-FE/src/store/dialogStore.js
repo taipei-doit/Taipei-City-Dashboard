@@ -1,4 +1,4 @@
-// Developed by Taipei Urban Intelligence Center 2023-2024
+// Developed by Taipei Urban Intelligence Center 2023-2024//
 
 /* dialogStore */
 /*

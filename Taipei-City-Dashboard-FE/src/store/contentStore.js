@@ -753,6 +753,56 @@ export const useContentStore = defineStore("content", {
 			this.ws.send(message.inctype + ": 位於 " + message.place);
 		},
 		*/
+		// 7. 搜尋Components並更新"搜尋"Dashboard
+		async searchComponentsAndUpdateDashboard(query) {
+			const dialogStore = useDialogStore();
+			const searchDashboardIndex = 'caf2a5f40cf3';
+			
+			try {
+				// 步驟1: 搜尋符合條件的components
+				const response = await http.get('/component/', {
+					params: {
+						searchbyname: query,
+						pagesize: 500  // 確保獲取所有符合的results
+					}
+				});
+
+				const matchingComponents = response.data.data || [];
+
+				const componentIds = matchingComponents.map(component => component.id);
+
+				const updateResponse = await http.patch(`/dashboard/${searchDashboardIndex}`, {
+					components: componentIds
+				});
+
+				if (this.currentDashboard.index === searchDashboardIndex) {
+					await this.setCurrentDashboardAllContent();
+				}
+
+				dialogStore.showNotification('success', 
+					`搜尋完成：找到 ${matchingComponents.length} 個相關組件`
+				);
+
+				return {
+					success: true,
+					componentsFound: matchingComponents.length,
+					components: matchingComponents
+				};
+
+			} catch (error) {
+
+				dialogStore.showNotification('error', 
+					'搜尋功能暫時無法使用，請稍後再試'
+				);
+
+				throw error;
+			}
+		},
+
+		async searchContent(query) {
+			// 現在直接調用新的搜尋和更新方法
+			return await this.searchComponentsAndUpdateDashboard(query);
+		}
 	},
 	debounce: {
 		favoriteComponent: 500,
