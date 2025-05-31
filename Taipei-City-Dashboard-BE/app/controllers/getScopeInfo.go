@@ -56,15 +56,6 @@ func GetScopeInfoHandler(c *gin.Context){
 		Lng float64 `json:"lng"`
 	}
 
-	// fake info
-	data := []Location{
-		{"台北101", 25.033964, 121.564468},
-		{"中正紀念堂", 25.0340, 121.5210},
-		{"台大", 25.0173, 121.5395},
-		{"士林夜市", 25.088, 121.525},
-		{"淡水老街", 25.1696, 121.4459},
-	}
-	
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
 		return
@@ -77,12 +68,6 @@ func GetScopeInfoHandler(c *gin.Context){
 	// 經度的偏移需考慮緯度的餘弦值
 	lngOffset := distanceKm / (111.0 * math.Cos(req.Lat*math.Pi/180.0))
 
-	// 各方向座標
-	// north := gin.H{"lat": req.Lat + latOffset, "lng": req.Lng}
-	// south := gin.H{"lat": req.Lat - latOffset, "lng": req.Lng}
-	// east := gin.H{"lat": req.Lat, "lng": req.Lng + lngOffset}
-	// west := gin.H{"lat": req.Lat, "lng": req.Lng - lngOffset} 
-	
 	// take data from postgresql
 	// setting the connection information
 	host := "codefest2025.rm-rf.uk"
@@ -137,7 +122,7 @@ func GetScopeInfoHandler(c *gin.Context){
             continue
         }
 		hospitals = append(hospitals, h)
-		fmt.Print(hospitals)
+		// fmt.Print(hospitals)
         // fmt.Printf("ID: %d, 名稱: %s, 種類: %s, 地址: %s, 緯度: %.6f, 經度: %.6f\n", h.id, h.name, h.level, h.address, h.x, h.y)
     }
 
@@ -152,8 +137,7 @@ func GetScopeInfoHandler(c *gin.Context){
     }
     defer libraryRows.Close()
 
-	var 
-	libraries []Library
+	var libraries []Library
 	for libraryRows.Next() {
         var lib Library
         errLibrary := libraryRows.Scan(&lib.Id, &lib.Name, &lib.Address, &lib.X, &lib.Y)
@@ -186,28 +170,72 @@ func GetScopeInfoHandler(c *gin.Context){
 	}
 
 	// select hospital information in taipei city
-	// hospitalInTaipeiRows, errHospitalIntaipei:=db.Query(
-    // "SELECT id, name, address, type, x, y FROM t_hospital WHERE y BETWEEN  $1 AND $2 AND x BETWEEN $3 AND $4",
-    // southLat, northLat, westLng, eastLng,
-	// )
+	hospitalInTaipeiRows, errHospitalIntaipei:=db.Query(
+    "SELECT id, name, address, type, x, y FROM t_hospital WHERE y BETWEEN  $1 AND $2 AND x BETWEEN $3 AND $4",
+    southLat, northLat, westLng, eastLng,
+	)
+	if errHospitalIntaipei != nil {
+        log.Fatal("查詢失敗:", err)
+    }
+    defer hospitalInTaipeiRows.Close()
+	var hospitalsInTaipei []Hospital
+	for hospitalInTaipeiRows.Next(){
+		var hospitalInTaipei Hospital
+        errHospitalIntaipei := hospitalInTaipeiRows.Scan(&hospitalInTaipei.Id, &hospitalInTaipei.Name, &hospitalInTaipei.Level, &hospitalInTaipei.Address, &hospitalInTaipei.X, &hospitalInTaipei.Y)
+        if errHospitalIntaipei != nil {
+            log.Println("資料轉換錯誤hospital:", hospitalErr)
+            continue
+        }
+		hospitalsInTaipei = append(hospitalsInTaipei, hospitalInTaipei)
+		// fmt.Print(hospitals)
+	}
 
 	// select library information in taipei city
+// 	libraryInTaipeiRows, errLibraryInTaipei:= db.Query(
+//     "SELECT id, name, address, x, y FROM t_library WHERE y BETWEEN  $1 AND $2 AND x BETWEEN $3 AND $4",
+//     southLat, northLat, westLng, eastLng,
+// 	)
 
-	// select shopping information in taipei city
-	
+// 	if errLibraryInTaipei != nil {
+//         log.Fatal("查詢失敗:", err)
+//     }
+//     defer libraryInTaipeiRows.Close()
 
+// 	var librariesInTaipei []Library
+// 	for libraryInTaipeiRows.Next() {
+//         var libraryInTaipei Library
+//         errLibraryInTaipei := libraryRows.Scan(&libraryInTaipei.Id, &libraryInTaipei.Name, &libraryInTaipei.Address, &libraryInTaipei.X, &libraryInTaipei.Y)
+//         if errLibraryInTaipei != nil {
+//             log.Println("lib資料轉換錯誤:", errLibraryInTaipei)
+//             continue
+//         }
+// 		librariesInTaipei = append(librariesInTaipei, libraryInTaipei)
+//  // fmt.Printf("ID: %d, 名稱: %s, 種類: %s, 地址: %s, 緯度: %.6f, 經度: %.6f\n", h.id, h.name, h.level, h.address, h.x, h.y)
+//     }
 
-
-	
-	var inScope []Location
-	for _, loc := range data {
-		if haversine(req.Lat, req.Lng, loc.Lat, loc.Lng) <= 1.6 {
-			inScope = append(inScope, loc)
-		}
+// 	// select shopping information in taipei city
+	shoppingInTaipeiRows, errshopInTaipei:=(
+    "SELECT id, name, address, x, y FROM t_shopping WHERE y BETWEEN  $1 AND $2 AND x BETWEEN $3 AND $4",
+    southLat, northLat, westLng, eastLng,
+	)
+	if errshopInTaipei != nil {
+        log.Fatal("查詢失敗 Taipei Shop:", err)
+    }
+	defer shoppingInTaipeiRows.Close()
+	var shoppingMallsInTaipei []Shopping
+	for shoppingInTaipeiRows.Next(){
+		var shoppingMallInTaipei Shopping
+        errshopInTaipei := shoppingInTaipeiRows.Scan(&shoppingMallInTaipei.Id, &shoppingMallInTaipei.Name, &shoppingMallInTaipei.Address, &shshoppingMallInTaipeiop.X, &shoppingMallInTaipei.Y)
+        if errshopInTaipei != nil {
+            log.Println("shop資料轉換錯誤:", errshopInTaipei)
+            continue
+        }
+		shoppingMallsInTaipei = append(shoppingMallsInTaipei, shoppingMallInTaipei)
 	}
 
 
 
+	
 
 	// TODO: 根據經緯度查資料庫，回傳 1.6 公里範圍內資料
 	c.JSON(http.StatusOK, gin.H{
@@ -215,6 +243,9 @@ func GetScopeInfoHandler(c *gin.Context){
 			"hospital": hospitals,
 			"library": libraries,
 			"shopping": shoppingMalls,
+			"hospitalInTaipei": hospitalsInTaipei,
+			// "libraryInTaipei":librariesInTaipei,
+			"shoppingInTaipei": shoppingMallsIntaipei,
 		},
 	})
 }
