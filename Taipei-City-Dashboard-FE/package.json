@@ -24,6 +24,7 @@
 		"mapbox-gl": "^3.1.0",
 		"material-icons": "^1.13.12",
 		"pinia": "^2.1.7",
+		"taipei-city-dashboard": "file:",
 		"three": "^0.163.0",
 		"threebox-plugin": "^2.2.7",
 		"uuid": "^9.0.1",
