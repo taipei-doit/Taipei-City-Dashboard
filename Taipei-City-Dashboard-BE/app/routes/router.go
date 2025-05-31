@@ -41,7 +41,6 @@ func ConfigureRoutes() {
 	configureHelloRoutes()
 
 	// configure the GetScopeInfo function routing
-	configureGetScopeInfo()
 	configureTestRoutes()
 }
 
@@ -190,18 +189,6 @@ func configureHelloRoutes() {
 	}
 }
 
-// set the router for getScopeInfo function
-func configureGetScopeInfo(){
-	scopeRoutes := RouterGroup.Group("/scope")
-	scopeRoutes.Use(middleware.LimitAPIRequests(global.ComponentLimitAPIRequestsTimes, global.LimitRequestsDuration))
-	scopeRoutes.Use(middleware.LimitTotalRequests(global.ComponentLimitTotalRequestsTimes, global.LimitRequestsDuration))
-	scopeRoutes.Use(middleware.IsLoggedIn())
-
-	{
-		scopeRoutes.POST("/info", controllers.GetScopeInfoHandler)
-	}
-}
-
 func configureTestRoutes() {
 	testRoutes := RouterGroup.Group("/test")
 	testRoutes.Use(middleware.LimitAPIRequests(10, global.LimitRequestsDuration)) // 自訂限制
@@ -209,5 +196,6 @@ func configureTestRoutes() {
 	testRoutes.Use(middleware.IsLoggedIn())
 	{
 		testRoutes.POST("/", controllers.TestHandler)
+		testRoutes.GET("/activity", controllers.GetAllActivityHandler)
 	}
 }
