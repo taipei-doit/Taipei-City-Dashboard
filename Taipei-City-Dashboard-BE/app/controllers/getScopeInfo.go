@@ -185,6 +185,17 @@ func GetScopeInfoHandler(c *gin.Context){
 		shoppingMalls = append(shoppingMalls, shop)
 	}
 
+	// select hospital information in taipei city
+	// hospitalInTaipeiRows, errHospitalIntaipei:=db.Query(
+    // "SELECT id, name, address, type, x, y FROM t_hospital WHERE y BETWEEN  $1 AND $2 AND x BETWEEN $3 AND $4",
+    // southLat, northLat, westLng, eastLng,
+	// )
+
+	// select library information in taipei city
+
+	// select shopping information in taipei city
+	
+
 
 
 	
@@ -201,15 +212,9 @@ func GetScopeInfoHandler(c *gin.Context){
 	// TODO: 根據經緯度查資料庫，回傳 1.6 公里範圍內資料
 	c.JSON(http.StatusOK, gin.H{
 		"data": gin.H{
-			"hospital": gin.H{
-				"list": hospitals,
-			},
-			"library": gin.H{
-				"list": libraries,
-			},
-			"shopping": gin.H{
-				"list": shoppingMalls,
-			},
+			"hospital": hospitals,
+			"library": libraries,
+			"shopping": shoppingMalls,
 		},
 	})
 }
