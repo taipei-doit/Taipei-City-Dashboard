@@ -1,0 +1,1697 @@
+{
+   "type": "FeatureCollection",
+   "features": [
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.58442,25.00148 ]
+    },
+    "properties": {
+    "id":1,
+    "name":"捷運木柵機廠停車場 (僅假日開放)",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.57971,24.9983 ]
+    },
+    "properties": {
+    "id":2,
+    "name":"捷運動物園站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.57296,24.9981 ]
+    },
+    "properties": {
+    "id":3,
+    "name":"捷運木柵站轉乘停車場",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5728,24.99825 ]
+    },
+    "properties": {
+    "id":4,
+    "name":"捷運木柵站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5675,24.99871 ]
+    },
+    "properties": {
+    "id":5,
+    "name":"捷運萬芳社區站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.55814,24.99912 ]
+    },
+    "properties": {
+    "id":6,
+    "name":"捷運萬芳醫院站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.55674,25.00478 ]
+    },
+    "properties": {
+    "id":7,
+    "name":"捷運辛亥站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.55877,25.0185 ]
+    },
+    "properties": {
+    "id":8,
+    "name":"捷運麟光站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.55223,25.02395 ]
+    },
+    "properties": {
+    "id":9,
+    "name":"捷運六張犁站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.54356,25.04014 ]
+    },
+    "properties": {
+    "id":10,
+    "name":"捷運忠孝復興站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.54699,25.08041 ]
+    },
+    "properties": {
+    "id":11,
+    "name":"捷運大直站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.54674,25.07952 ]
+    },
+    "properties": {
+    "id":12,
+    "name":"捷運大直站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5552,25.0842 ]
+    },
+    "properties": {
+    "id":13,
+    "name":"捷運劍南路站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.56712,25.08201 ]
+    },
+    "properties": {
+    "id":14,
+    "name":"捷運西湖站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.57585,25.08012 ]
+    },
+    "properties": {
+    "id":15,
+    "name":"捷運港墘站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.57566,25.07998 ]
+    },
+    "properties": {
+    "id":16,
+    "name":"捷運港墘站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.58495,25.07845 ]
+    },
+    "properties": {
+    "id":17,
+    "name":"捷運文德站轉乘停車場",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.58575,25.07862 ]
+    },
+    "properties": {
+    "id":18,
+    "name":"捷運文德站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.58472,25.07844 ]
+    },
+    "properties": {
+    "id":19,
+    "name":"捷運文德站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.59458,25.08343 ]
+    },
+    "properties": {
+    "id":20,
+    "name":"捷運內湖站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.59384,25.08418 ]
+    },
+    "properties": {
+    "id":21,
+    "name":"捷運內湖站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.60229,25.08396 ]
+    },
+    "properties": {
+    "id":22,
+    "name":"捷運大湖公園站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.60693,25.07262 ]
+    },
+    "properties": {
+    "id":23,
+    "name":"捷運葫洲站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.61167,25.06698 ]
+    },
+    "properties": {
+    "id":24,
+    "name":"捷運東湖站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.61108,25.06614 ]
+    },
+    "properties": {
+    "id":25,
+    "name":"捷運東湖站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.61569,25.06017 ]
+    },
+    "properties": {
+    "id":26,
+    "name":"捷運南港軟體園區站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.61637,25.05981 ]
+    },
+    "properties": {
+    "id":27,
+    "name":"捷運南港軟體園區站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.61848,25.0555 ]
+    },
+    "properties": {
+    "id":28,
+    "name":"捷運南港展覽館站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.61842,25.05468 ]
+    },
+    "properties": {
+    "id":29,
+    "name":"捷運南港展覽館站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.61674,25.05466 ]
+    },
+    "properties": {
+    "id":30,
+    "name":"捷運南港展覽館站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.61776,25.06156 ]
+    },
+    "properties": {
+    "id":31,
+    "name":"捷運內湖機廠轉乘停車場",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.41973,24.95897 ]
+    },
+    "properties": {
+    "id":32,
+    "name":"捷運頂埔站轉乘停車場",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.43631,24.96569 ]
+    },
+    "properties": {
+    "id":33,
+    "name":"捷運永寧站轉乘停車場",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.43562,24.96601 ]
+    },
+    "properties": {
+    "id":34,
+    "name":"捷運永寧站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.43562,24.96664 ]
+    },
+    "properties": {
+    "id":35,
+    "name":"捷運永寧站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.44405,24.97311 ]
+    },
+    "properties": {
+    "id":36,
+    "name":"捷運土城站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.44344,24.97233 ]
+    },
+    "properties": {
+    "id":37,
+    "name":"捷運土城站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.44924,24.98695 ]
+    },
+    "properties": {
+    "id":38,
+    "name":"捷運海山站轉乘停車場",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.45263,24.99892 ]
+    },
+    "properties": {
+    "id":39,
+    "name":"捷運亞東醫院站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.45221,24.99807 ]
+    },
+    "properties": {
+    "id":40,
+    "name":"捷運亞東醫院站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.45847,25.00809 ]
+    },
+    "properties": {
+    "id":41,
+    "name":"捷運府中站轉乘停車場",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.45842,25.00793 ]
+    },
+    "properties": {
+    "id":42,
+    "name":"捷運府中站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.45945,25.00911 ]
+    },
+    "properties": {
+    "id":43,
+    "name":"捷運府中站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.462,25.01367 ]
+    },
+    "properties": {
+    "id":44,
+    "name":"捷運板橋站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.46835,25.02406 ]
+    },
+    "properties": {
+    "id":45,
+    "name":"捷運新埔站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.46857,25.0231 ]
+    },
+    "properties": {
+    "id":46,
+    "name":"捷運新埔站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4681,25.02232 ]
+    },
+    "properties": {
+    "id":47,
+    "name":"捷運新埔站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4724,25.0297 ]
+    },
+    "properties": {
+    "id":48,
+    "name":"捷運江子翠站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.47214,25.03016 ]
+    },
+    "properties": {
+    "id":49,
+    "name":"捷運江子翠站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.50785,25.04211 ]
+    },
+    "properties": {
+    "id":50,
+    "name":"捷運西門站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.50773,25.04244 ]
+    },
+    "properties": {
+    "id":51,
+    "name":"捷運西門站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.52432,25.04443 ]
+    },
+    "properties": {
+    "id":52,
+    "name":"捷運善導寺站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.52367,25.04449 ]
+    },
+    "properties": {
+    "id":53,
+    "name":"捷運善導寺站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.53378,25.04177 ]
+    },
+    "properties": {
+    "id":54,
+    "name":"捷運忠孝新生站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.53339,25.04243 ]
+    },
+    "properties": {
+    "id":55,
+    "name":"捷運忠孝新生站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.53255,25.04097 ]
+    },
+    "properties": {
+    "id":56,
+    "name":"捷運忠孝新生站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.55813,25.04117 ]
+    },
+    "properties": {
+    "id":57,
+    "name":"捷運國父紀念館站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5585,25.04117 ]
+    },
+    "properties": {
+    "id":58,
+    "name":"捷運國父紀念館站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.56537,25.0413 ]
+    },
+    "properties": {
+    "id":59,
+    "name":"捷運市政府站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.56712,25.04126 ]
+    },
+    "properties": {
+    "id":60,
+    "name":"捷運市政府站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5765,25.04073 ]
+    },
+    "properties": {
+    "id":61,
+    "name":"捷運永春站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.58179,25.04423 ]
+    },
+    "properties": {
+    "id":62,
+    "name":"捷運後山埤站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.58299,25.04541 ]
+    },
+    "properties": {
+    "id":63,
+    "name":"捷運後山埤站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5942,25.05069 ]
+    },
+    "properties": {
+    "id":64,
+    "name":"捷運昆陽站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5924,25.05026 ]
+    },
+    "properties": {
+    "id":65,
+    "name":"捷運昆陽站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.60788,25.05194 ]
+    },
+    "properties": {
+    "id":66,
+    "name":"捷運南港站機踏車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.60645,25.05192708 ]
+    },
+    "properties": {
+    "id":67,
+    "name":"捷運南港站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5099352,25.03638903 ]
+    },
+    "properties": {
+    "id":68,
+    "name":"捷運小南門站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5398311,25.00120878 ]
+    },
+    "properties": {
+    "id":69,
+    "name":"捷運萬隆站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5412259,24.99316987 ]
+    },
+    "properties": {
+    "id":70,
+    "name":"捷運景美站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.53025,24.97296 ]
+    },
+    "properties": {
+    "id":71,
+    "name":"捷運小碧潭站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5306,24.9716 ]
+    },
+    "properties": {
+    "id":72,
+    "name":"捷運小碧潭站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5375396,24.95695 ]
+    },
+    "properties": {
+    "id":73,
+    "name":"捷運新店站轉乘停車場",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.53778,24.95871 ]
+    },
+    "properties": {
+    "id":74,
+    "name":"捷運新店站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5084,24.9907 ]
+    },
+    "properties": {
+    "id":75,
+    "name":"捷運南勢角站轉乘停車場",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.50526,24.99494 ]
+    },
+    "properties": {
+    "id":76,
+    "name":"捷運景安站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.50521,24.99513 ]
+    },
+    "properties": {
+    "id":77,
+    "name":"捷運景安站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.51091,25.0023 ]
+    },
+    "properties": {
+    "id":78,
+    "name":"捷運永安市場站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.53001,25.0341 ]
+    },
+    "properties": {
+    "id":79,
+    "name":"捷運東門站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.43521,25.03231 ]
+    },
+    "properties": {
+    "id":80,
+    "name":"捷運輔大站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.43651,25.03276 ]
+    },
+    "properties": {
+    "id":81,
+    "name":"捷運輔大站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4365,25.03325 ]
+    },
+    "properties": {
+    "id":82,
+    "name":"捷運輔大站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.42257,25.02905 ]
+    },
+    "properties": {
+    "id":83,
+    "name":"捷運丹鳳站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4227,25.02854 ]
+    },
+    "properties": {
+    "id":84,
+    "name":"捷運丹鳳站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.41308,25.02276 ]
+    },
+    "properties": {
+    "id":85,
+    "name":"捷運迴龍站轉乘停車場",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.41087,25.02106 ]
+    },
+    "properties": {
+    "id":86,
+    "name":"捷運迴龍站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.41274,25.02268 ]
+    },
+    "properties": {
+    "id":87,
+    "name":"捷運迴龍站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.49654,25.07073 ]
+    },
+    "properties": {
+    "id":88,
+    "name":"捷運三重國小站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4799,25.08044 ]
+    },
+    "properties": {
+    "id":89,
+    "name":"捷運徐匯中學站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.47272,25.08553 ]
+    },
+    "properties": {
+    "id":90,
+    "name":"捷運三民高中站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.47372,25.08577 ]
+    },
+    "properties": {
+    "id":91,
+    "name":"捷運三民高中站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4652595,25.09106873 ]
+    },
+    "properties": {
+    "id":92,
+    "name":"捷運蘆洲站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.44544,25.16768 ]
+    },
+    "properties": {
+    "id":93,
+    "name":"捷運淡水站轉乘停車場",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.44704,25.16737 ]
+    },
+    "properties": {
+    "id":94,
+    "name":"捷運淡水站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.45914,25.15398 ]
+    },
+    "properties": {
+    "id":95,
+    "name":"捷運紅樹林站轉乘停車場",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4591,25.15347 ]
+    },
+    "properties": {
+    "id":96,
+    "name":"捷運紅樹林站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.45963,25.13746 ]
+    },
+    "properties": {
+    "id":97,
+    "name":"捷運竹圍站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.46681,25.12482 ]
+    },
+    "properties": {
+    "id":98,
+    "name":"捷運關渡站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.46666,25.12476 ]
+    },
+    "properties": {
+    "id":99,
+    "name":"捷運關渡站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.46654,25.12502 ]
+    },
+    "properties": {
+    "id":100,
+    "name":"捷運關渡站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.47163,25.12989 ]
+    },
+    "properties": {
+    "id":101,
+    "name":"捷運忠義站轉乘停車場",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4729,25.13096 ]
+    },
+    "properties": {
+    "id":102,
+    "name":"捷運忠義站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4843116,25.13741011 ]
+    },
+    "properties": {
+    "id":103,
+    "name":"捷運復興崗站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.50152,25.13678 ]
+    },
+    "properties": {
+    "id":104,
+    "name":"捷運新北投站轉乘停車場",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.50211,25.13686 ]
+    },
+    "properties": {
+    "id":105,
+    "name":"捷運新北投站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4979,25.133 ]
+    },
+    "properties": {
+    "id":106,
+    "name":"捷運北投站轉乘停車場",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.499,25.13179 ]
+    },
+    "properties": {
+    "id":107,
+    "name":"捷運北投站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.498,25.13251 ]
+    },
+    "properties": {
+    "id":108,
+    "name":"捷運北投站機踏車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.50089,25.12596 ]
+    },
+    "properties": {
+    "id":109,
+    "name":"捷運奇岩站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.50107,25.12633 ]
+    },
+    "properties": {
+    "id":110,
+    "name":"捷運奇岩站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.50785,25.12065 ]
+    },
+    "properties": {
+    "id":111,
+    "name":"捷運唭哩岸站轉乘停車場",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5072,25.12079 ]
+    },
+    "properties": {
+    "id":112,
+    "name":"捷運唭哩岸站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.50711,25.12049 ]
+    },
+    "properties": {
+    "id":113,
+    "name":"捷運唭哩岸站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.51465,25.11601 ]
+    },
+    "properties": {
+    "id":114,
+    "name":"捷運石牌站轉乘停車場",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5151,25.11482 ]
+    },
+    "properties": {
+    "id":115,
+    "name":"捷運石牌站機踏車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5164,25.11373 ]
+    },
+    "properties": {
+    "id":116,
+    "name":"捷運石牌站機踏車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.51532,25.11512 ]
+    },
+    "properties": {
+    "id":117,
+    "name":"捷運石牌站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.51597,25.11366 ]
+    },
+    "properties": {
+    "id":118,
+    "name":"捷運石牌站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.51891,25.10938 ]
+    },
+    "properties": {
+    "id":119,
+    "name":"捷運明德站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5185901,25.11030583 ]
+    },
+    "properties": {
+    "id":120,
+    "name":"捷運明德站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5186324,25.10976555 ]
+    },
+    "properties": {
+    "id":121,
+    "name":"捷運明德站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.52309,25.10119 ]
+    },
+    "properties": {
+    "id":122,
+    "name":"捷運芝山站轉乘停車場",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5222815,25.10463 ]
+    },
+    "properties": {
+    "id":123,
+    "name":"捷運芝山站轉乘停車場",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.52281,25.10149 ]
+    },
+    "properties": {
+    "id":124,
+    "name":"捷運芝山站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.52277,25.10256 ]
+    },
+    "properties": {
+    "id":125,
+    "name":"捷運芝山站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.52251,25.10385 ]
+    },
+    "properties": {
+    "id":126,
+    "name":"捷運芝山站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.52229,25.10319 ]
+    },
+    "properties": {
+    "id":127,
+    "name":"捷運芝山站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.52662,25.0927 ]
+    },
+    "properties": {
+    "id":128,
+    "name":"捷運士林站轉乘停車場",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.52621,25.09401 ]
+    },
+    "properties": {
+    "id":129,
+    "name":"捷運士林站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.525755,25.094225 ]
+    },
+    "properties": {
+    "id":130,
+    "name":"捷運士林站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.52655,25.09298 ]
+    },
+    "properties": {
+    "id":131,
+    "name":"捷運士林站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.52532,25.08587 ]
+    },
+    "properties": {
+    "id":132,
+    "name":"捷運劍潭站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5247,25.08361 ]
+    },
+    "properties": {
+    "id":133,
+    "name":"捷運劍潭站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.52014,25.07195 ]
+    },
+    "properties": {
+    "id":134,
+    "name":"捷運圓山站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.52038,25.07205 ]
+    },
+    "properties": {
+    "id":135,
+    "name":"捷運圓山站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.51979,25.06213 ]
+    },
+    "properties": {
+    "id":136,
+    "name":"捷運民權西路站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.51864,25.06316 ]
+    },
+    "properties": {
+    "id":137,
+    "name":"捷運民權西路站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.51574,25.0406 ]
+    },
+    "properties": {
+    "id":138,
+    "name":"捷運臺大醫院站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.51877,25.03239 ]
+    },
+    "properties": {
+    "id":139,
+    "name":"捷運中正紀念堂站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.53629,25.03329 ]
+    },
+    "properties": {
+    "id":140,
+    "name":"捷運大安森林公園站自行車停車區",
+    "update_date":"20250529"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.53425,25.03341 ]
+    },
+    "properties": {
+    "id":141,
+    "name":"捷運大安森林公園站自行車停車區",
+    "update_date":"20250529"
+    }
+  }
+]
+}
