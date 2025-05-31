@@ -1,6 +1,6 @@
 DELETE FROM query_charts WHERE index = 'hotel';
 
-INSERT INTO query_charts (index, map_config_ids, map_filter, time_from, source, short_desc, long_desc, use_case, links, contributors, created_at, updated_at, query_type, query_chart, city)
+INSERT INTO query_charts (index, map_config_ids, map_filter, time_from, source, short_desc, long_desc, use_case, links, created_at, updated_at, query_type, query_chart, city)
 VALUES (
     'hotel', 
 	ARRAY[8],
@@ -12,7 +12,6 @@ VALUES (
     '這份資料集的特色在於其資訊的實用性與完整性。透過地址資訊可了解各旅宿的地理分佈狀況，房間數量反映了各業者的營運規模，而價格區間則提供了市場定位與消費水準的重要指標。消費者可以根據預算需求快速篩選合適的住宿選項，業者則能透過價格比較了解市場競爭態勢。
 此資料集適合進行住宿市場分析、價格趨勢研究、區域發展評估等應用。研究者可以透過分析房間數分佈了解各區域的住宿供給能力，透過價格資料探討不同區域的住宿成本差異，並結合地址資訊進行空間分析，了解臺北市住宿業的整體發展格局與區域特色。', 
     ARRAY['https://data.taipei/dataset/detail?id=4d7d0b46-2e90-4ee7-b000-c0f2f3a37651'], 
-    ARRAY['doit'], 
     CURRENT_TIMESTAMP, 
     CURRENT_TIMESTAMP, 
     'map_legend', 
@@ -22,7 +21,7 @@ VALUES (
 
 SELECT * FROM query_charts ORDER BY index ASC;
 
-INSERT INTO query_charts (index, map_config_ids, map_filter, time_from, source, short_desc, long_desc, use_case, links, contributors, created_at, updated_at, query_type, query_chart, city)
+INSERT INTO query_charts (index, map_config_ids, map_filter, time_from, source, short_desc, long_desc, use_case, links, created_at, updated_at, query_type, query_chart, city)
 VALUES (
     'hotel', 
 	ARRAY[8,9],
@@ -34,7 +33,6 @@ VALUES (
     '這份資料集的特色在於其資訊的實用性與完整性。透過地址資訊可了解各旅宿的地理分佈狀況，房間數量反映了各業者的營運規模，而價格區間則提供了市場定位與消費水準的重要指標。消費者可以根據預算需求快速篩選合適的住宿選項，業者則能透過價格比較了解市場競爭態勢。
 此資料集適合進行住宿市場分析、價格趨勢研究、區域發展評估等應用。研究者可以透過分析房間數分佈了解各區域的住宿供給能力，透過價格資料探討不同區域的住宿成本差異，並結合地址資訊進行空間分析，了解臺北市住宿業的整體發展格局與區域特色。', 
     ARRAY['https://data.taipei/dataset/detail?id=4d7d0b46-2e90-4ee7-b000-c0f2f3a37651','https://data.ntpc.gov.tw/datasets/8565597e-a174-4907-99c7-adb5ddee1326'], 
-    ARRAY['doit','ntpc'], 
     CURRENT_TIMESTAMP, 
     CURRENT_TIMESTAMP, 
     'map_legend', 

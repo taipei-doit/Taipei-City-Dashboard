@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 16.4
--- Dumped by pg_dump version 16.4
+-- Dumped from database version 15.10
+-- Dumped by pg_dump version 15.12 (Ubuntu 15.12-1.pgdg22.04+1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -16,102 +16,12 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
---
--- Name: tiger; Type: SCHEMA; Schema: -; Owner: postgres
---
-
-CREATE SCHEMA tiger;
-
-
-ALTER SCHEMA tiger OWNER TO postgres;
-
---
--- Name: tiger_data; Type: SCHEMA; Schema: -; Owner: postgres
---
-
-CREATE SCHEMA tiger_data;
-
-
-ALTER SCHEMA tiger_data OWNER TO postgres;
-
---
--- Name: topology; Type: SCHEMA; Schema: -; Owner: postgres
---
-
-CREATE SCHEMA topology;
-
-
-ALTER SCHEMA topology OWNER TO postgres;
-
---
--- Name: SCHEMA topology; Type: COMMENT; Schema: -; Owner: postgres
---
-
-COMMENT ON SCHEMA topology IS 'PostGIS Topology schema';
-
-
---
--- Name: fuzzystrmatch; Type: EXTENSION; Schema: -; Owner: -
---
-
-CREATE EXTENSION IF NOT EXISTS fuzzystrmatch WITH SCHEMA public;
-
-
---
--- Name: EXTENSION fuzzystrmatch; Type: COMMENT; Schema: -; Owner: 
---
-
-COMMENT ON EXTENSION fuzzystrmatch IS 'determine similarities and distance between strings';
-
-
---
--- Name: postgis; Type: EXTENSION; Schema: -; Owner: -
---
-
-CREATE EXTENSION IF NOT EXISTS postgis WITH SCHEMA public;
-
-
---
--- Name: EXTENSION postgis; Type: COMMENT; Schema: -; Owner: 
---
-
-COMMENT ON EXTENSION postgis IS 'PostGIS geometry and geography spatial types and functions';
-
-
---
--- Name: postgis_tiger_geocoder; Type: EXTENSION; Schema: -; Owner: -
---
-
-CREATE EXTENSION IF NOT EXISTS postgis_tiger_geocoder WITH SCHEMA tiger;
-
-
---
--- Name: EXTENSION postgis_tiger_geocoder; Type: COMMENT; Schema: -; Owner: 
---
-
-COMMENT ON EXTENSION postgis_tiger_geocoder IS 'PostGIS tiger geocoder and reverse geocoder';
-
-
---
--- Name: postgis_topology; Type: EXTENSION; Schema: -; Owner: -
---
-
-CREATE EXTENSION IF NOT EXISTS postgis_topology WITH SCHEMA topology;
-
-
---
--- Name: EXTENSION postgis_topology; Type: COMMENT; Schema: -; Owner: 
---
-
-COMMENT ON EXTENSION postgis_topology IS 'PostGIS topology spatial types and functions';
-
-
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
 
 --
--- Name: bike_network_new_tpe; Type: TABLE; Schema: public; Owner: postgres
+-- Name: bike_network_new_tpe; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.bike_network_new_tpe (
@@ -134,10 +44,8 @@ CREATE TABLE public.bike_network_new_tpe (
 );
 
 
-ALTER TABLE public.bike_network_new_tpe OWNER TO postgres;
-
 --
--- Name: bike_network_new_tpe_ogc_fid_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: bike_network_new_tpe_ogc_fid_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE public.bike_network_new_tpe_ogc_fid_seq
@@ -149,17 +57,15 @@ CREATE SEQUENCE public.bike_network_new_tpe_ogc_fid_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.bike_network_new_tpe_ogc_fid_seq OWNER TO postgres;
-
 --
--- Name: bike_network_new_tpe_ogc_fid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+-- Name: bike_network_new_tpe_ogc_fid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE public.bike_network_new_tpe_ogc_fid_seq OWNED BY public.bike_network_new_tpe.ogc_fid;
 
 
 --
--- Name: bike_network_tpe; Type: TABLE; Schema: public; Owner: postgres
+-- Name: bike_network_tpe; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.bike_network_tpe (
@@ -182,10 +88,8 @@ CREATE TABLE public.bike_network_tpe (
 );
 
 
-ALTER TABLE public.bike_network_tpe OWNER TO postgres;
-
 --
--- Name: bike_network_tpe_ogc_fid_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: bike_network_tpe_ogc_fid_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE public.bike_network_tpe_ogc_fid_seq
@@ -197,17 +101,15 @@ CREATE SEQUENCE public.bike_network_tpe_ogc_fid_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.bike_network_tpe_ogc_fid_seq OWNER TO postgres;
-
 --
--- Name: bike_network_tpe_ogc_fid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+-- Name: bike_network_tpe_ogc_fid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE public.bike_network_tpe_ogc_fid_seq OWNED BY public.bike_network_tpe.ogc_fid;
 
 
 --
--- Name: bus_info_new_tpe; Type: TABLE; Schema: public; Owner: postgres
+-- Name: bus_info_new_tpe; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.bus_info_new_tpe (
@@ -231,10 +133,8 @@ CREATE TABLE public.bus_info_new_tpe (
 );
 
 
-ALTER TABLE public.bus_info_new_tpe OWNER TO postgres;
-
 --
--- Name: bus_info_new_tpe_ogc_fid_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: bus_info_new_tpe_ogc_fid_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE public.bus_info_new_tpe_ogc_fid_seq
@@ -246,17 +146,15 @@ CREATE SEQUENCE public.bus_info_new_tpe_ogc_fid_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.bus_info_new_tpe_ogc_fid_seq OWNER TO postgres;
-
 --
--- Name: bus_info_new_tpe_ogc_fid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+-- Name: bus_info_new_tpe_ogc_fid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE public.bus_info_new_tpe_ogc_fid_seq OWNED BY public.bus_info_new_tpe.ogc_fid;
 
 
 --
--- Name: bus_info_tpe; Type: TABLE; Schema: public; Owner: postgres
+-- Name: bus_info_tpe; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.bus_info_tpe (
@@ -280,10 +178,8 @@ CREATE TABLE public.bus_info_tpe (
 );
 
 
-ALTER TABLE public.bus_info_tpe OWNER TO postgres;
-
 --
--- Name: bus_info_tpe_ogc_fid_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: bus_info_tpe_ogc_fid_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE public.bus_info_tpe_ogc_fid_seq
@@ -295,17 +191,15 @@ CREATE SEQUENCE public.bus_info_tpe_ogc_fid_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.bus_info_tpe_ogc_fid_seq OWNER TO postgres;
-
 --
--- Name: bus_info_tpe_ogc_fid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+-- Name: bus_info_tpe_ogc_fid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE public.bus_info_tpe_ogc_fid_seq OWNED BY public.bus_info_tpe.ogc_fid;
 
 
 --
--- Name: city_age_distribution_newtaipei; Type: TABLE; Schema: public; Owner: postgres
+-- Name: city_age_distribution_newtaipei; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.city_age_distribution_newtaipei (
@@ -347,10 +241,8 @@ CREATE TABLE public.city_age_distribution_newtaipei (
 );
 
 
-ALTER TABLE public.city_age_distribution_newtaipei OWNER TO postgres;
-
 --
--- Name: city_age_distribution_taipei; Type: TABLE; Schema: public; Owner: postgres
+-- Name: city_age_distribution_taipei; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.city_age_distribution_taipei (
@@ -392,10 +284,8 @@ CREATE TABLE public.city_age_distribution_taipei (
 );
 
 
-ALTER TABLE public.city_age_distribution_taipei OWNER TO postgres;
-
 --
--- Name: dependency_ratio_and_aging_index_new_tpe; Type: TABLE; Schema: public; Owner: postgres
+-- Name: dependency_ratio_and_aging_index_new_tpe; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.dependency_ratio_and_aging_index_new_tpe (
@@ -417,10 +307,8 @@ CREATE TABLE public.dependency_ratio_and_aging_index_new_tpe (
 );
 
 
-ALTER TABLE public.dependency_ratio_and_aging_index_new_tpe OWNER TO postgres;
-
 --
--- Name: dependency_ratio_and_aging_index_new_tpe_ogc_fid_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: dependency_ratio_and_aging_index_new_tpe_ogc_fid_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE public.dependency_ratio_and_aging_index_new_tpe_ogc_fid_seq
@@ -432,17 +320,15 @@ CREATE SEQUENCE public.dependency_ratio_and_aging_index_new_tpe_ogc_fid_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.dependency_ratio_and_aging_index_new_tpe_ogc_fid_seq OWNER TO postgres;
-
 --
--- Name: dependency_ratio_and_aging_index_new_tpe_ogc_fid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+-- Name: dependency_ratio_and_aging_index_new_tpe_ogc_fid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE public.dependency_ratio_and_aging_index_new_tpe_ogc_fid_seq OWNED BY public.dependency_ratio_and_aging_index_new_tpe.ogc_fid;
 
 
 --
--- Name: dependency_ratio_and_aging_index_tpe; Type: TABLE; Schema: public; Owner: postgres
+-- Name: dependency_ratio_and_aging_index_tpe; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.dependency_ratio_and_aging_index_tpe (
@@ -464,10 +350,8 @@ CREATE TABLE public.dependency_ratio_and_aging_index_tpe (
 );
 
 
-ALTER TABLE public.dependency_ratio_and_aging_index_tpe OWNER TO postgres;
-
 --
--- Name: dependency_ratio_and_aging_index_tpe_ogc_fid_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: dependency_ratio_and_aging_index_tpe_ogc_fid_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE public.dependency_ratio_and_aging_index_tpe_ogc_fid_seq
@@ -479,47 +363,15 @@ CREATE SEQUENCE public.dependency_ratio_and_aging_index_tpe_ogc_fid_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.dependency_ratio_and_aging_index_tpe_ogc_fid_seq OWNER TO postgres;
-
 --
--- Name: dependency_ratio_and_aging_index_tpe_ogc_fid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+-- Name: dependency_ratio_and_aging_index_tpe_ogc_fid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE public.dependency_ratio_and_aging_index_tpe_ogc_fid_seq OWNED BY public.dependency_ratio_and_aging_index_tpe.ogc_fid;
 
 
 --
--- Name: ecofriendly_restaurant_new_tpe; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public.ecofriendly_restaurant_new_tpe (
-    name text NOT NULL,
-    address text NOT NULL,
-    tel text,
-    latitude numeric NOT NULL,
-    longitude numeric NOT NULL
-);
-
-
-ALTER TABLE public.ecofriendly_restaurant_new_tpe OWNER TO postgres;
-
---
--- Name: ecofriendly_restaurant_tpe; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public.ecofriendly_restaurant_tpe (
-    name text NOT NULL,
-    address text NOT NULL,
-    tel text,
-    latitude numeric NOT NULL,
-    longitude numeric NOT NULL
-);
-
-
-ALTER TABLE public.ecofriendly_restaurant_tpe OWNER TO postgres;
-
---
--- Name: employment_age_structure_new_tpe; Type: TABLE; Schema: public; Owner: postgres
+-- Name: employment_age_structure_new_tpe; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.employment_age_structure_new_tpe (
@@ -534,10 +386,8 @@ CREATE TABLE public.employment_age_structure_new_tpe (
 );
 
 
-ALTER TABLE public.employment_age_structure_new_tpe OWNER TO postgres;
-
 --
--- Name: employment_age_structure_new_tpe_ogc_fid_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: employment_age_structure_new_tpe_ogc_fid_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE public.employment_age_structure_new_tpe_ogc_fid_seq
@@ -549,17 +399,15 @@ CREATE SEQUENCE public.employment_age_structure_new_tpe_ogc_fid_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.employment_age_structure_new_tpe_ogc_fid_seq OWNER TO postgres;
-
 --
--- Name: employment_age_structure_new_tpe_ogc_fid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+-- Name: employment_age_structure_new_tpe_ogc_fid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE public.employment_age_structure_new_tpe_ogc_fid_seq OWNED BY public.employment_age_structure_new_tpe.ogc_fid;
 
 
 --
--- Name: employment_age_structure_tpe; Type: TABLE; Schema: public; Owner: postgres
+-- Name: employment_age_structure_tpe; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.employment_age_structure_tpe (
@@ -574,10 +422,8 @@ CREATE TABLE public.employment_age_structure_tpe (
 );
 
 
-ALTER TABLE public.employment_age_structure_tpe OWNER TO postgres;
-
 --
--- Name: employment_age_structure_tpe_ogc_fid_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: employment_age_structure_tpe_ogc_fid_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE public.employment_age_structure_tpe_ogc_fid_seq
@@ -589,53 +435,15 @@ CREATE SEQUENCE public.employment_age_structure_tpe_ogc_fid_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.employment_age_structure_tpe_ogc_fid_seq OWNER TO postgres;
-
 --
--- Name: employment_age_structure_tpe_ogc_fid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+-- Name: employment_age_structure_tpe_ogc_fid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE public.employment_age_structure_tpe_ogc_fid_seq OWNED BY public.employment_age_structure_tpe.ogc_fid;
 
 
 --
--- Name: hotel_new_tpe; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public.hotel_new_tpe (
-    name text NOT NULL,
-    address text NOT NULL,
-    tel text,
-    latitude numeric NOT NULL,
-    longitude numeric NOT NULL,
-    room_count integer,
-    price_min integer,
-    price_max integer
-);
-
-
-ALTER TABLE public.hotel_new_tpe OWNER TO postgres;
-
---
--- Name: hotel_tpe; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public.hotel_tpe (
-    name text NOT NULL,
-    address text,
-    tel text,
-    latitude numeric NOT NULL,
-    longitude numeric NOT NULL,
-    room_count integer,
-    price_min integer,
-    price_max integer
-);
-
-
-ALTER TABLE public.hotel_tpe OWNER TO postgres;
-
---
--- Name: population_age_distribution_new_tpe; Type: TABLE; Schema: public; Owner: postgres
+-- Name: population_age_distribution_new_tpe; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.population_age_distribution_new_tpe (
@@ -655,10 +463,8 @@ CREATE TABLE public.population_age_distribution_new_tpe (
 );
 
 
-ALTER TABLE public.population_age_distribution_new_tpe OWNER TO postgres;
-
 --
--- Name: population_age_distribution_new_tpe_ogc_fid_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: population_age_distribution_new_tpe_ogc_fid_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE public.population_age_distribution_new_tpe_ogc_fid_seq
@@ -670,17 +476,15 @@ CREATE SEQUENCE public.population_age_distribution_new_tpe_ogc_fid_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.population_age_distribution_new_tpe_ogc_fid_seq OWNER TO postgres;
-
 --
--- Name: population_age_distribution_new_tpe_ogc_fid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+-- Name: population_age_distribution_new_tpe_ogc_fid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE public.population_age_distribution_new_tpe_ogc_fid_seq OWNED BY public.population_age_distribution_new_tpe.ogc_fid;
 
 
 --
--- Name: population_age_distribution_tpe; Type: TABLE; Schema: public; Owner: postgres
+-- Name: population_age_distribution_tpe; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.population_age_distribution_tpe (
@@ -700,10 +504,8 @@ CREATE TABLE public.population_age_distribution_tpe (
 );
 
 
-ALTER TABLE public.population_age_distribution_tpe OWNER TO postgres;
-
 --
--- Name: population_age_distribution_tpe_ogc_fid_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: population_age_distribution_tpe_ogc_fid_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE public.population_age_distribution_tpe_ogc_fid_seq
@@ -715,17 +517,16 @@ CREATE SEQUENCE public.population_age_distribution_tpe_ogc_fid_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.population_age_distribution_tpe_ogc_fid_seq OWNER TO postgres;
-
 --
--- Name: population_age_distribution_tpe_ogc_fid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+-- Name: population_age_distribution_tpe_ogc_fid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE public.population_age_distribution_tpe_ogc_fid_seq OWNED BY public.population_age_distribution_tpe.ogc_fid;
 
 
+
 --
--- Name: tran_ubike_realtime_ogc_fid_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: tran_ubike_realtime_ogc_fid_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE public.tran_ubike_realtime_ogc_fid_seq
@@ -737,10 +538,17 @@ CREATE SEQUENCE public.tran_ubike_realtime_ogc_fid_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.tran_ubike_realtime_ogc_fid_seq OWNER TO postgres;
+--
+-- Name: tran_ubike_realtime_ogc_fid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.tran_ubike_realtime_ogc_fid_seq OWNED BY public.tran_ubike_realtime.ogc_fid;
+
+
+
 
 --
--- Name: tran_ubike_realtime; Type: TABLE; Schema: public; Owner: postgres
+-- Name: tran_ubike_realtime; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.tran_ubike_realtime (
@@ -759,10 +567,8 @@ CREATE TABLE public.tran_ubike_realtime (
 );
 
 
-ALTER TABLE public.tran_ubike_realtime OWNER TO postgres;
-
 --
--- Name: tran_ubike_realtime_new_tpe; Type: TABLE; Schema: public; Owner: postgres
+-- Name: tran_ubike_realtime_new_tpe; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.tran_ubike_realtime_new_tpe (
@@ -781,10 +587,8 @@ CREATE TABLE public.tran_ubike_realtime_new_tpe (
 );
 
 
-ALTER TABLE public.tran_ubike_realtime_new_tpe OWNER TO postgres;
-
 --
--- Name: tran_ubike_realtime_new_tpe_ogc_fid_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: tran_ubike_realtime_new_tpe_ogc_fid_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE public.tran_ubike_realtime_new_tpe_ogc_fid_seq
@@ -796,94 +600,92 @@ CREATE SEQUENCE public.tran_ubike_realtime_new_tpe_ogc_fid_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.tran_ubike_realtime_new_tpe_ogc_fid_seq OWNER TO postgres;
-
 --
--- Name: tran_ubike_realtime_new_tpe_ogc_fid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+-- Name: tran_ubike_realtime_new_tpe_ogc_fid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE public.tran_ubike_realtime_new_tpe_ogc_fid_seq OWNED BY public.tran_ubike_realtime_new_tpe.ogc_fid;
 
 
 --
--- Name: bike_network_new_tpe ogc_fid; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: bike_network_new_tpe ogc_fid; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.bike_network_new_tpe ALTER COLUMN ogc_fid SET DEFAULT nextval('public.bike_network_new_tpe_ogc_fid_seq'::regclass);
 
 
 --
--- Name: bike_network_tpe ogc_fid; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: bike_network_tpe ogc_fid; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.bike_network_tpe ALTER COLUMN ogc_fid SET DEFAULT nextval('public.bike_network_tpe_ogc_fid_seq'::regclass);
 
 
 --
--- Name: bus_info_new_tpe ogc_fid; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: bus_info_new_tpe ogc_fid; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.bus_info_new_tpe ALTER COLUMN ogc_fid SET DEFAULT nextval('public.bus_info_new_tpe_ogc_fid_seq'::regclass);
 
 
 --
--- Name: bus_info_tpe ogc_fid; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: bus_info_tpe ogc_fid; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.bus_info_tpe ALTER COLUMN ogc_fid SET DEFAULT nextval('public.bus_info_tpe_ogc_fid_seq'::regclass);
 
 
 --
--- Name: dependency_ratio_and_aging_index_new_tpe ogc_fid; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: dependency_ratio_and_aging_index_new_tpe ogc_fid; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.dependency_ratio_and_aging_index_new_tpe ALTER COLUMN ogc_fid SET DEFAULT nextval('public.dependency_ratio_and_aging_index_new_tpe_ogc_fid_seq'::regclass);
 
 
 --
--- Name: dependency_ratio_and_aging_index_tpe ogc_fid; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: dependency_ratio_and_aging_index_tpe ogc_fid; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.dependency_ratio_and_aging_index_tpe ALTER COLUMN ogc_fid SET DEFAULT nextval('public.dependency_ratio_and_aging_index_tpe_ogc_fid_seq'::regclass);
 
 
 --
--- Name: employment_age_structure_new_tpe ogc_fid; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: employment_age_structure_new_tpe ogc_fid; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.employment_age_structure_new_tpe ALTER COLUMN ogc_fid SET DEFAULT nextval('public.employment_age_structure_new_tpe_ogc_fid_seq'::regclass);
 
 
 --
--- Name: employment_age_structure_tpe ogc_fid; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: employment_age_structure_tpe ogc_fid; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.employment_age_structure_tpe ALTER COLUMN ogc_fid SET DEFAULT nextval('public.employment_age_structure_tpe_ogc_fid_seq'::regclass);
 
 
 --
--- Name: population_age_distribution_new_tpe ogc_fid; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: population_age_distribution_new_tpe ogc_fid; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.population_age_distribution_new_tpe ALTER COLUMN ogc_fid SET DEFAULT nextval('public.population_age_distribution_new_tpe_ogc_fid_seq'::regclass);
 
 
 --
--- Name: population_age_distribution_tpe ogc_fid; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: population_age_distribution_tpe ogc_fid; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.population_age_distribution_tpe ALTER COLUMN ogc_fid SET DEFAULT nextval('public.population_age_distribution_tpe_ogc_fid_seq'::regclass);
 
 
 --
--- Name: tran_ubike_realtime_new_tpe ogc_fid; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: tran_ubike_realtime_new_tpe ogc_fid; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.tran_ubike_realtime_new_tpe ALTER COLUMN ogc_fid SET DEFAULT nextval('public.tran_ubike_realtime_new_tpe_ogc_fid_seq'::regclass);
 
 
 --
--- Data for Name: bike_network_new_tpe; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: bike_network_new_tpe; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 COPY public.bike_network_new_tpe (data_time, route_name, authority_name, city_code, city, town, road_section_start, road_section_end, direction, cycling_type, cycling_length, finished_time, update_time, _ctime, _mtime, ogc_fid) FROM stdin;
@@ -1102,7 +904,7 @@ COPY public.bike_network_new_tpe (data_time, route_name, authority_name, city_co
 
 
 --
--- Data for Name: bike_network_tpe; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: bike_network_tpe; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 COPY public.bike_network_tpe (data_time, route_name, authority_name, city_code, city, town, road_section_start, road_section_end, direction, cycling_type, cycling_length, finished_time, update_time, _ctime, _mtime, ogc_fid) FROM stdin;
@@ -1598,7 +1400,7 @@ COPY public.bike_network_tpe (data_time, route_name, authority_name, city_code, 
 
 
 --
--- Data for Name: bus_info_new_tpe; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: bus_info_new_tpe; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 COPY public.bus_info_new_tpe (data_time, plate_numb, operator_id, operator_code, operator_no, vehicle_class, vehicle_type, card_reader_layout, is_electric, is_hybrid, is_low_floor, has_lift_or_ramp, has_wifi, inbox_id, _ctime, _mtime, ogc_fid) FROM stdin;
@@ -4442,7 +4244,7 @@ COPY public.bus_info_new_tpe (data_time, plate_numb, operator_id, operator_code,
 
 
 --
--- Data for Name: bus_info_tpe; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: bus_info_tpe; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 COPY public.bus_info_tpe (data_time, plate_numb, operator_id, operator_code, operator_no, vehicle_class, vehicle_type, card_reader_layout, is_electric, is_hybrid, is_low_floor, has_lift_or_ramp, has_wifi, inbox_id, _ctime, _mtime, ogc_fid) FROM stdin;
@@ -5221,7 +5023,6 @@ COPY public.bus_info_tpe (data_time, plate_numb, operator_id, operator_code, ope
 2025-03-17 19:11:07+00	340-U3	800	MetropolitanBus	0303	1	1	2	0	0	1	1	0	104022513	2025-03-17 20:00:40.179013+00	2025-03-17 20:00:40.179013+00	105702
 2025-03-17 19:11:07+00	341-FU	5100	ZhinanBus	0907	1	1	2	0	0	1	1	1	104023322	2025-03-17 20:00:40.179013+00	2025-03-17 20:00:40.179013+00	105703
 2025-03-17 19:11:07+00	341-FY	800	MetropolitanBus	0303	1	1	2	0	0	1	1	0	104027507	2025-03-17 20:00:40.179013+00	2025-03-17 20:00:40.179013+00	105704
-2025-03-17 19:11:07+00	850-FX	700	ShinShinBus	0813	1	1	2	0	0	1	1	0	104021346	2025-03-17 20:00:40.179013+00	2025-03-17 20:00:40.179013+00	106840
 2025-03-17 19:11:07+00	341-U3	800	MetropolitanBus	0303	1	1	2	0	0	1	1	0	104019200	2025-03-17 20:00:40.179013+00	2025-03-17 20:00:40.179013+00	105705
 2025-03-17 19:11:07+00	342-FP	1100	DananBus	0307	1	1	2	0	0	1	1	0	104027820	2025-03-17 20:00:40.179013+00	2025-03-17 20:00:40.179013+00	105706
 2025-03-17 19:11:07+00	342-FU	5100	ZhinanBus	0907	1	1	2	0	0	1	1	1	104021676	2025-03-17 20:00:40.179013+00	2025-03-17 20:00:40.179013+00	105707
@@ -6357,6 +6158,7 @@ COPY public.bus_info_tpe (data_time, plate_numb, operator_id, operator_code, ope
 2025-03-17 19:11:07+00	849-U3	800	MetropolitanBus	0303	1	1	2	0	0	1	1	0	104026233	2025-03-17 20:00:40.179013+00	2025-03-17 20:00:40.179013+00	106837
 2025-03-17 19:11:07+00	850-FR	100	TaipeiBus	1407	1	1	0	0	0	1	0	0	104023607	2025-03-17 20:00:40.179013+00	2025-03-17 20:00:40.179013+00	106838
 2025-03-17 19:11:07+00	850-FT	5300	KuangHuaBus	0601	1	1	2	0	0	1	1	0	104027303	2025-03-17 20:00:40.179013+00	2025-03-17 20:00:40.179013+00	106839
+2025-03-17 19:11:07+00	850-FX	700	ShinShinBus	0813	1	1	2	0	0	1	1	0	104021346	2025-03-17 20:00:40.179013+00	2025-03-17 20:00:40.179013+00	106840
 2025-03-17 19:11:07+00	850-U3	800	MetropolitanBus	0303	1	1	2	0	0	1	1	0	104020830	2025-03-17 20:00:40.179013+00	2025-03-17 20:00:40.179013+00	106841
 2025-03-17 19:11:07+00	851-U3	800	MetropolitanBus	0303	1	1	2	0	0	1	1	0	104024263	2025-03-17 20:00:40.179013+00	2025-03-17 20:00:40.179013+00	106842
 2025-03-17 19:11:07+00	852-U3	800	MetropolitanBus	0303	1	1	2	0	0	1	1	0	104017941	2025-03-17 20:00:40.179013+00	2025-03-17 20:00:40.179013+00	106843
@@ -8338,7 +8140,7 @@ COPY public.bus_info_tpe (data_time, plate_numb, operator_id, operator_code, ope
 
 
 --
--- Data for Name: city_age_distribution_newtaipei; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: city_age_distribution_newtaipei; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 COPY public.city_age_distribution_newtaipei (percent2, percent3, percent4, percent5, percent6, percent7, percent8, percent9, percent10, percent11, percent12, percent13, percent14, percent15, percent16, percent17, percent18, percent19, percent20, percent21, percent22, percent23, percent24, percent25, percent26, percent27, percent28, percent29, percent30, percent31, percent32, percent33, "年份", "區域別", "統計類型") FROM stdin;
@@ -10506,7 +10308,7 @@ COPY public.city_age_distribution_newtaipei (percent2, percent3, percent4, perce
 
 
 --
--- Data for Name: city_age_distribution_taipei; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: city_age_distribution_taipei; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 COPY public.city_age_distribution_taipei ("年份", "區域別", "統計類型", percent2, percent3, percent4, percent5, percent6, percent7, percent8, percent9, percent10, percent11, percent12, percent13, percent14, percent15, percent16, percent17, percent18, percent19, percent20, percent21, percent22, percent23, percent24, percent25, percent26, percent27, percent28, percent29, percent30, percent31, percent32, percent33) FROM stdin;
@@ -10787,7 +10589,7 @@ COPY public.city_age_distribution_taipei ("年份", "區域別", "統計類型",
 
 
 --
--- Data for Name: dependency_ratio_and_aging_index_new_tpe; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: dependency_ratio_and_aging_index_new_tpe; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 COPY public.dependency_ratio_and_aging_index_new_tpe (ogc_fid, end_of_year, young_population, young_population_percentage, working_age_population, working_age_population_percentage, elderly_population, elderly_population_percentage, elderly_dependency_ratio, youth_dependency_ratio, total_dependency_ratio, aging_index, _ctime, _mtime, data_time) FROM stdin;
@@ -10807,7 +10609,7 @@ COPY public.dependency_ratio_and_aging_index_new_tpe (ogc_fid, end_of_year, youn
 
 
 --
--- Data for Name: dependency_ratio_and_aging_index_tpe; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: dependency_ratio_and_aging_index_tpe; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 COPY public.dependency_ratio_and_aging_index_tpe (ogc_fid, end_of_year, young_population, young_population_percentage, working_age_population, working_age_population_percentage, elderly_population, elderly_population_percentage, elderly_dependency_ratio, youth_dependency_ratio, total_dependency_ratio, aging_index, _ctime, _mtime, data_time) FROM stdin;
@@ -10870,1193 +10672,7 @@ COPY public.dependency_ratio_and_aging_index_tpe (ogc_fid, end_of_year, young_po
 
 
 --
--- Data for Name: ecofriendly_restaurant_new_tpe; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.ecofriendly_restaurant_new_tpe (name, address, tel, latitude, longitude) FROM stdin;
-31早午餐	新北市蘆洲區和平路171號	02-82861790	25.0809969	121.466503
-57黃燜雞(板橋大遠百)	新北市板橋區新站路28號B1	0988754052	25.0138151	121.4670443
-Alessi Cafe 	新北市板橋區新站路28號	02-29566768	25.0136061	121.4669037
-Apple203早午餐店-中和遠東	新北市中和區中正路738號	02-82261077	24.9981631	121.4854958
-B & G德國農莊複合式茶館	新北市板橋區新站路28號	02-77054168	25.0136061	121.4669037
-BarAku	新北市板橋區縣民大道一段269號2樓	02-29698058	25.0098794	121.4603242
-BinB書? Bar in Book	新北市板橋區民生路三段140號	02-82510325	25.0271619	121.4663723
-Dear 40 Cafe	新北市新店區寶興路40號	02-29177171	24.9740132	121.5487287
-DRIP CAFE好滴咖啡-環球板橋車站店	新北市板橋區縣民大道二段七號2F	02-29609288	25.0205687	121.4625315
-House.好食早餐店	新北市三重區福德里成功路106之1號	02-29703375	25.0515071	121.4874032
-Kali Chimaek 韓式炸雞	新北市板橋區中山路一段158巷21號	02-29647777	25.0113609	121.4665152
-Mrs. Mapo麻婆豆腐 新店家樂福店	新北市新店區中興路三段1號1F	02-29115569	24.9764468	121.5463471
-Party創作美食茶房	新北市永和區竹林路222號2樓	02-89211103	25.007961	121.5206992
-petit doux 微兜  小碧潭店	新北市新店區新北市新店區中央路157號5樓	02-29115998	24.9723936	121.530427
-Psyaq  Cikay Ma食坊	新北市烏來區福山里卡拉模基26號	0916127010	24.7803466	121.5032963
-Q Burger（總店）	新北市新莊區頭前路24號	02-89913667	25.0525754	121.4678267
-Q Burger八里中山店	新北市八里區中山路二段363號	02-26194767	25.147029	121.3987997
-Q Burger三重力行店	新北市三重區力行路一段160號一樓及地下一樓	02-29879488	25.0710608	121.4822063
-Q Burger三重三民店	新北市三重區三民街298號	02-29869285	25.0688558	121.4779434
-Q Burger三重大智店	新北市三重區大智街55號	02-29883200	25.067759	121.4927387
-Q Burger三重中正店	新北市三重區中正北路180號	02-29856668	25.0668295	121.4831837
-Q Burger三重中正南店	新北市三重區中正南路49號	02-29746343	25.0595651	121.4937611
-Q Burger三重仁政店	新北市三重區溪美里仁愛街349號	02-29886667	25.0798375	121.4925747
-Q Burger三重仁愛店	新北市三重區溪尾街269號	02-29860322	25.0823834	121.4876573
-Q Burger三重永福店	新北市三重區永福街172號	02-82878666	25.0745652	121.4809315
-Q Burger三重田安店	新北市三重區三民街71號1樓	02-29840181	25.0628502	121.4859212
-Q Burger三重光復店	新北市三重區光復路一段68巷22號	02-29990935	25.0490327	121.4710522
-Q Burger三重光興店	新北市三重區正義南路103號	02-29740006	25.0591346	121.4982811
-Q Burger三重自強店	新北市三重區自強路二段7號	02-29882918	25.0690457	121.4903192
-Q Burger三重忠孝店	新北市三重區忠孝路二段46號	02-29846788	25.0704327	121.4851797
-Q Burger三重長安店	新北市三重區長安街73號1樓	02-29762393	25.0673211	121.5014259
-Q Burger三重重陽店	新北市三重區重陽路43巷31號1樓	02-89881667	25.057945	121.486927
-Q Burger三重頂崁店	新北市三重區頂崁街188號	02-29843557	25.0663728	121.4774189
-Q Burger三重菜寮店	新北市三重區重新路三段93號1樓	02-29880901	25.0601476	121.4915858
-Q Burger三重集成店	新北市三重區集成路42號	02-29776785	25.0527341	121.4889469
-Q Burger三重慈愛店	新北市三重區慈愛街46號	02-22808853	25.0790923	121.4856566
-Q Burger三重福德南店	新北市三重區福德南路40號	02-29755550	25.0625535	121.5030274
-Q Burger三重龍門店	新北市三重區龍門路40號	02-29772611	25.0724487	121.4959823
-Q Burger三峽大同店	新北市三峽區介壽里大同路1-4號1樓	02-26740031	24.9295773	121.3782605
-Q Burger三峽中華店	新北市三峽區安溪里中華路46-2號	02-86719007	24.9303866	121.3718598
-Q Burger三峽文化店	新北市三峽區文化路266之13號1樓	02-26738182	24.935866	121.366647
-Q Burger三峽北大店	新北市三峽區國際二街37號	02-26737288	24.9429171	121.3721358
-Q Burger三峽復興店	新北市三峽區復興路30號1樓	02-86717069	24.936062	121.3745911
-Q Burger土城永豐店	新北市土城區永豐路135巷10號1樓	02-22707050	24.9833542	121.467265
-Q Burger土城立德店	新北市土城區延和路54號	02-22632929	24.9888252	121.465537
-Q Burger土城延吉店	新北市土城區延吉街312號	02-82610582	24.9841117	121.463872
-Q Burger土城延和店	新北市土城區延和路115號1樓	02-22631515	24.9904488	121.4679628
-Q Burger土城青雲店	新北市土城區青雲路238號1樓	02-22730363	24.9806044	121.4589918
-Q Burger土城員林店	新北市土城區員林街10之2號一樓	02-82610003	24.977846	121.442945
-Q Burger土城廣興店	新北市土城區廣興街33號1樓	02-89661116	24.9914426	121.4553322
-Q Burger土城學成店	新北市土城區學成路47號	02-82731862	24.9873641	121.4522755
-Q Burger中和大仁店	新北市中和區大仁街19巷6號1樓	02-86680138	24.9933711	121.5174817
-Q Burger中和中山店	新北市中和區員山路454號	02-82211126	25.0062121	121.4800117
-Q Burger中和中興店	新北市中和區中興街163號1樓+地下室	02-22429011	24.9906902	121.5002078
-Q Burger中和仁愛店	新北市中和區仁愛街102號	02-29436889	24.9870628	121.5115512
-Q Burger中和民生店	新北市中和區民生街85巷1弄2號	02-29550810	25.0045846	121.4690971
-Q Burger中和民享店	新北市中和區民享街86巷3號1樓	02-82282005	25.0007982	121.4743408
-Q Burger中和自立店	新北市中和區自立路76號一樓	02-29488588	24.9912175	121.5240892
-Q Burger中和秀朗店	新北市中和區秀朗路三段48號1樓	 02-29222380	24.995544	121.5263512
-Q Burger中和秀福店	新北市中和區更生街7號1樓	02-29430512	24.9963878	121.5217341
-Q Burger中和宜安店	新北市中和區宜安路25號	02-29470125	24.9959149	121.512837
-Q Burger中和板南店	新北市中和區連城路219巷1號	02-22466351	24.9972636	121.4943613
-Q Burger中和保健店	新北市中和區景安路22號1樓	02-22460690	24.9987279	121.507347
-Q Burger中和南山店	新北市中和區南山路161號1樓	02-22439007	24.9954225	121.5028888
-Q Burger中和南勢角店	新北市中和區南山路174-2號	02-29470520	24.9912257	121.504897
-Q Burger中和建一店	新北市中和區建一路157號1樓	02-82282132	24.9992619	121.4883202
-Q Burger中和員山店	新北市中和區員山路395號	02-82286062	25.0029667	121.4810805
-Q Burger中和泰和店	新北市中和區泰和街22號	02-22466060	25.0006735	121.4995867
-Q Burger中和連城店	新北市中和區連城路469巷17號	02-22219606	24.9952272	121.4837022
-Q Burger中和復興店	新北市中和區復興路54號	02-29462197	24.9903215	121.5040143
-Q Burger中和景安店	新北市中和區景新街175號1樓	02-86682175	24.9955243	121.5068204
-Q Burger中和景新店	新北市中和區景平路111巷61弄21號	02-86689008	24.9899344	121.514972
-Q Burger中和景德店	新北市中和區景德街43號1樓	02-29402661	24.9912792	121.5180742
-Q Burger中和華順店	新北市中和區華順街120號1樓	02-29620685	24.9965713	121.4651126
-Q Burger中和圓通店	新北市中和區圓通路112號1樓	02-22427298	24.996526	121.4991466
-Q Burger中和福美店	新北市中和區福善里福美路313號	02-22490131	25.0046726	121.4967886
-Q Burger中和廣福店	新北市中和區廣福路82號	02-82458286	25.0015434	121.502842
-Q Burger中和興南店	新北市中和區興南路二段69號	02-86683877	24.984897	121.506902
-Q Burger中和環球店	新北市中和區民享街6號	02-82215555	25.0043203	121.4739352
-Q Burger五股工商店	新北市五股區工商路193號1樓	02-22941002	25.087078	121.4336317
-Q Burger五股成洲店	新北市五股區成泰路三段577巷43號1樓	02-22918228	25.1029877	121.4509344
-Q Burger五股成泰店	新北市五股區成泰路一段47號	02-29096663	25.0673561	121.4341499
-Q Burger五股西雲店	新北市五股區西雲路241號1樓	02-22935777	25.0977517	121.449069
-Q Burger五股洲子洋店	新北市五股區成泰路三段201號	02-22921599	25.0926986	121.4457217
-Q Burger五股國小店	新北市五股區成泰路二段108號	02-82922183	25.0831931	121.4378854
-Q Burger永和永元店	新北市永和區永元路124號	02-29265857	25.0027647	121.5229825
-Q Burger永和永平店	新北市永和區永平路250號	02-29295009	25.0111548	121.5086504
-Q Burger永和永亨店	新北市永和區永亨路107號	02-29202227	25.0047749	121.5234152
-Q Burger永和永利店	新北市永和區永利路3號1樓	02-22320310	25.0060552	121.5174408
-Q Burger永和永貞店	新北市永和區永貞路355巷2號	02-29262971	25.007577	121.508902
-Q Burger永和信義店	新北市永和區信義路93號1樓	02-29214352	25.0139264	121.5122857
-Q Burger永和得和店	新北市永和區得和路172號1樓	02-86681921	25.0000551	121.5196729
-Q Burger汐止秀峰店	新北市汐止區仁愛路26號1樓	02-26430098	25.062886	121.6599478
-Q Burger汐止明峰店	新北市汐止區明峰街125-3號1樓	02-26932023	25.070936	121.6305846
-Q Burger汐止連興店	新北市汐止區連興街73號1樓	02-26919516	25.0628509	121.6541098
-Q Burger汐止福德店	新北市汐止區福德二路140號	02-26957300	25.0652331	121.6307065
-Q Burger汐止綠多店	新北市汐止區仁愛路162號1樓	02-26430058	25.0650509	121.6642258
-Q Burger汐止樟樹店	新北市汐止區樟樹一路130號	02-86916631	25.064562	121.642213
-Q Burger林口中山店	新北市林口區中山路3號1樓	02-26026033	25.0780375	121.3966045
-Q Burger林口仁愛店	新北市林口區西林里仁愛路二段150號	02-26016558	25.07442	121.3819308
-Q Burger林口國小店	新北市林口區中山路156-1號一樓	02-26012712	25.078907	121.3908528
-Q Burger板橋大仁店	新北市板橋區大仁街26號1樓	02-29666587	25.0169431	121.4554997
-Q Burger板橋中山店	新北市板橋區東丘里中山路２段９０巷１２號	02-29552958	25.0158881	121.4753988
-Q Burger板橋介壽店	新北市板橋區介壽街17號1樓	02-22553597	25.0202419	121.4677252
-Q Burger板橋文聖店	新北市板橋區文聖街142號	02-22500123	25.0278931	121.4784519
-Q Burger板橋四維店	新北市板橋區四維路308號	02-22551055	25.0298666	121.4627171
-Q Burger板橋民治店	新北市板橋區民治街63號1樓	02-22502901	25.0331047	121.4797314
-Q Burger板橋永豐店	新北市板橋區永豐街115號	02-29580337	25.0196844	121.4743074
-Q Burger板橋吳鳳店	新北市板橋區吳鳳路68號	02-22572358	25.0308537	121.4674637
-Q Burger板橋金園店	新北市板橋區金門街171號	02-26818787	24.9902753	121.4326747
-Q Burger板橋長安店	新北市板橋區長安街210之1號	02-29590700	25.0120232	121.4745567
-Q Burger板橋英士店	新北市板橋區英士路70號	02-22580533	25.02465	121.460453
-Q Burger板橋重慶店	新北市板橋區重慶路108號	02-89523866	25.0054453	121.4619508
-Q Burger板橋海山店	新北市板橋區漢生東路193巷7號1樓	02-29546666	25.0119314	121.4702746
-Q Burger板橋國光店	新北市板橋區國光路183號	02-29684685	25.018534	121.4609793
-Q Burger板橋國慶店	新北市板橋區國慶路161之5號	02-29511321	24.9962319	121.4617791
-Q Burger板橋莊敬店	新北市板橋區莊敬路134號	02-22555663	25.023541	121.4708801
-Q Burger板橋華興店	新北市板橋區華興街40號	02-29522710	25.0047574	121.4584822
-Q Burger板橋僑中店	新北市板橋區僑中一街90號1樓	02-82752908	25.0117443	121.4470731
-Q Burger板橋廣和店	新北市板橋區廣和街73號1樓	02-29646679	24.9926671	121.4627085
-Q Burger板橋龍泉店	新北市板橋區龍泉街83號	02-22570118	25.0249936	121.4567543
-Q Burger板橋懷德店	新北市板橋區懷德街160號	02-22563030	25.0307091	121.478767
-Q Burger泰山全興店	新北市泰山區全興路105號	02-22970930	25.0569602	121.4337007
-Q Burger泰山明志店	新北市泰山區明志路2段353號	02-29081667	25.044383	121.4255007
-Q Burger泰山泰林店	新北市泰山區泰林路二段475號1樓	02-29090097	25.0638817	121.4251933
-Q Burger泰山泰高店	新北市泰山區明志路一段433號一樓	02-22960737	25.0565022	121.4308961
-Q Burger泰山義學店	新北市泰山區明志路2段101號	02-29002131	25.0518288	121.4283788
-Q Burger國隆總店店	新北市三重區國隆路26號	02-89837007	25.0642189	121.492524
-Q Burger淡水中山北店	新北市淡水區中山北路一段149巷28號	02-26201186	25.1782098	121.4428054
-Q Burger淡水新民店	新北市淡水區新民街65號	02-26262060	25.1763849	121.4384293
-Q Burger淡水學府店	新北市淡水區學府路85號	02-86315056	25.1701926	121.4485528
-Q Burger創英店	新北市三重區中興北街236號	02-29999589	25.0607731	121.4687488
-Q Burger新北五工店	新北市新莊區五工二路95號	02-22981080	25.066677	121.459052
-Q Burger新店三民店	新北市新店區三民路121號1樓	02-89110352	24.972179	121.534708
-Q Burger新店大豐店	新北市新店區大豐路16巷2號	02-89146488	24.9803953	121.5409366
-Q Burger新店中正店	新北市新店區中正路546號1樓	02-86673625	24.9864914	121.5337029
-Q Burger新店中華店	新北市新店區中華路39號	02-29120298	24.9676174	121.5402377
-Q Burger新店安民店	新北市新店區安民街300號一樓	02-22120652	24.9763752	121.5165092
-Q Burger新店安康店	新北市新店區安康路二段107巷1號	02-86663040	24.9622022	121.5127499
-Q Burger新店玫瑰店	新北市新店區安康路三段30號一樓	02-22126673	24.9532535	121.4931148
-Q Burger新店建國店	新北市新店區建國路189號1樓	02-22188372	24.9796744	121.5379471
-Q Burger新店建興店	新北市新店區建國路72號	02-29115618	24.9762021	121.5406484
-Q Burger新莊中平店	新北市新莊區中平路82巷10號	02-29979188	25.0447215	121.4451653
-Q Burger新莊中信店	新北市新莊區中信街18號	02-29902295	25.0509815	121.4508688
-Q Burger新莊中美店	新北市新莊區中港路179號	02-29961570	25.0415945	121.454873
-Q Burger新莊中港店	新北市新莊區中港路419號	02-22791117	25.0475758	121.4521566
-Q Burger新莊中華店	新北市新莊區中華路一段45巷2號	02-29963313	25.038289	121.4519317
-Q Burger新莊中榮店	新北市新莊區中榮街58號1樓	02-29918006	25.0528833	121.448988
-Q Burger新莊化成店	新北市新莊區化成路31號	02-29906004	25.0440709	121.4650435
-Q Burger新莊民本店	新北市新莊區民本街22號	02-22081229	25.0196811	121.428217
-Q Burger新莊民安店	新北市新莊區民安路35號	02-22020252	25.0267755	121.4236427
-Q Burger新莊立信店	新北市新莊區立信三街12巷12號 1樓	02-22777909	25.051025	121.4441963
-Q Burger新莊光明店	新北市新莊區民安西路256號1樓	02-22035686	25.013526	121.425836
-Q Burger新莊成德店	新北市新莊區成德街8號	02-22080936	25.0194393	121.4227448
-Q Burger新莊自立店	新北市新莊區自立街190號	02-29927886	25.0452826	121.4563935
-Q Burger新莊昌明店	新北市新莊區昌明街28號	02-89921802	25.0524133	121.4568623
-Q Burger新莊建中店	新北市新莊區建中街86號	02-29922626	25.0368906	121.4471262
-Q Burger新莊建安店	新北市新莊區建安街45號1樓	02-22012300	25.0254536	121.4288439
-Q Burger新莊國小店	新北市新莊區中港路50號	02-22771516	25.038391	121.4555609
-Q Burger新莊新豐店	新北市新莊區新豐街25號1樓	02-22010220	25.0340288	121.4481573
-Q Burger新莊裕民店	新北市新莊區裕民街128號	02-29015532	25.0224323	121.4178794
-Q Burger新莊輔大店	新北市新莊區福營路93號	02-29015291	25.032229	121.434549
-Q Burger新莊頭前店	新北市新莊區頭前里化成路319號	02-85213381	25.0557827	121.4657945
-Q Burger新莊雙鳳店	新北市新莊區雙鳳路23號1樓	02-29081680	25.0267849	121.416634
-Q Burger樹林三福店	新北市樹林區三福街144號	02-26880015	25.0162217	121.4055228
-Q Burger樹林千歲店	新北市樹林區千歲街12號	02-26851910	24.9956768	121.4251366
-Q Burger樹林大有店	新北市樹林區大有路118號	02-26800083	24.9494883	121.3838291
-Q Burger樹林太順店	新北市樹林區太順街47號	02-86860151	24.9792385	121.4180172
-Q Burger樹林日新店	新北市樹林區日新街67號	02-26852697	24.9910236	121.4221825
-Q Burger樹林育英店	新北市樹林區育英街146號	02-26851719	24.9895288	121.4192001
-Q Burger樹林保安店	新北市樹林區保安街二段115號1樓	02-26889990	25.0015541	121.4154428
-Q Burger蘆洲三民店	新北市蘆洲區民族路429號	02-28480213	25.0890606	121.4680258
-Q Burger蘆洲中山店	新北市蘆洲區中山二路179號1樓	02-22885811	25.0809427	121.4711147
-Q Burger蘆洲中原店	新北市蘆洲區中原路24號	02-22831717	25.0829404	121.4602128
-Q Burger蘆洲中興店	新北市蘆洲區中興街181號	02-82857757	25.0901303	121.481717
-Q Burger蘆洲民族店	新北市蘆洲區民族路357號	02-22888383	25.0916722	121.4718805
-Q Burger蘆洲永平店	新北市蘆洲區永平街32巷15號一樓	02-82828616	25.0915092	121.458944
-Q Burger蘆洲光華店	新北市蘆洲區中正路185巷31弄1號	02-22853131	25.0842847	121.4664561
-Q Burger蘆洲成功店	新北市蘆洲區長安街268號	02-22880695	25.0867344	121.4574898
-Q Burger蘆洲長安店	新北市蘆洲區長安街53號	02-22882985	25.0796056	121.46315
-Q Burger蘆洲長興店	新北市蘆洲區長興路265號	02-22882835	25.0880061	121.4602138
-Q Burger蘆洲信義店	新北市蘆洲區信義路245號	02-28487578	25.0842764	121.4790118
-Q Burger蘆洲復興店	新北市蘆洲區復興路83號	02-82859155	25.0874958	121.4763816
-Q Burger蘆洲鷺江店	新北市蘆洲區鷺江街95號	02-22880500	25.0838105	121.4768235
-Q Burger鶯歌南雅店	新北市鶯歌區南雅路447號1樓	02-86776886	24.9541981	121.3466248
-SKYLARK加州風洋食館-新店家樂福店	新北市新店區中興路3段1號7樓	-	24.9761049	121.5465953
-TGI FRIDAYS星期五美式餐廳中和環球	新北市中和區中山路三段122號	02-22253578	25.0066731	121.4747785
-TINA廚房－鶯歌店	新北市鶯歌區尖山路5號	02-26772859	24.9502659	121.3514479
-YAYOI彌生軒-環球板橋車站店	新北市板橋區縣民大道二段7號2樓	02-89693056	25.0141259	121.4637592
-一幻拉麵/胡同居酒屋-環球板橋車站店	新北市板橋區縣民大道二段7號2F	02-89693132	25.0146569	121.4635253
-九如-中和環球	新北市中和區中山路三段122號	02-22218223	25.0066731	121.4747785
-八方雲集三重三民店	新北市三重區三民街285號1樓	02-29887158	25.0685559	121.4787903
-八町目燒肉丼定食-板橋大遠百	新北市板橋區新站路28號B1	0910409716	25.0138151	121.4670443
-八番赤野中和環球	新北市中和區中山路三段122號3F	03-3609292	25.0071472	121.4747988
-三才靈芝生態農場民宿	新北市石碇區中民村十八重溪52-1號	02-26633995	25.0133538	121.6752742
-三合院。早午餐	新北市新店區安康路一段227號	02-86666087	24.9630091	121.5255889
-下港老麵攤	新北市新莊區中港路457號1樓	02-29919292	25.0486543	121.4524047
-上環茶餐廳	新北市永和區中山路一段126號	02-29202088	25.0101664	121.510476
-丸龜製麵 中和環球	新北市中和區中山路三段122號3F	02-77317999#7017	25.0071472	121.4747988
-于記杏仁 中和環球	新北市中和區中山路三段122號3F	0982329898	25.0071472	121.4747988
-土司工坊	新北市板橋區新站路28號	02-29589671	25.0136061	121.4669037
-大心新泰式麵食 中和環球	新北市中和區中山路三段122號4F	02-22216389	25.0070984	121.4748275
-大戶屋中和環球店	新北市中和區中山路三段122號B2	02-22216266	25.0066732	121.4747785
-大戶屋板橋愛買店	新北市板橋區貴興路101號3樓	02-29513303	25.0017697	121.4569554
-大戶屋板橋遠百中山店	新北市板橋區中山路一段152號12樓	02-29561238	25.0110158	121.4645712
-大戶屋新店家樂福店	新北市新店區中興路三段1號6樓	02-29113199	24.9767393	121.5463059
-大戶屋新莊佳瑪店	新北市新莊區幸福路736號B1	02-29920355	25.049311	121.4484388
-大戶屋蘆洲家樂福店	新北市三重區五華街282號4樓	02-77134030	25.0879576	121.4865522
-大吃一斤活蝦餐廳	新北市三重區自強路一段222號	0975147848	25.0666637	121.4938473
-小南門 中和環球	新北市中和區中山路三段122號3F	02-77313631	25.0071472	121.4747988
-小食聊聊 Brunch 	新北市蘆洲區中山二路147號	02-82851231	25.0814222	121.4716915
-小倆口麵線王(新店店)	新北市新店區中正路189巷8號	02-29134839	24.9720129	121.540253
-山野居蔬食-板橋大遠百	新北市板橋區新站路28號	0916970870	25.0136061	121.4669037
-山間倉房	新北市中和區興南路二段399巷124號	02-29406696	24.975321	121.5008455
-山頭火板橋大遠百店	新北市板橋區新站路28號	02-77054168	25.0136061	121.4669037
-中華電信學院員工餐廳	新北市板橋區民族路168號	02-29639318	25.0077991	121.46621
-中環茶餐廳	新北市林口區文化三路二段185號	02-26095308	25.0825823	121.3758717
-六堆文山新客家料理	新北市新店區湖子內路100號	02-26669369	24.9333687	121.5394045
-友信海鮮餐廳	新北市瑞芳區深澳路189之7號	02-24977777	25.1342685	121.8205249
-天空小品	新北市淡水區忠寮里竹圍子8-17號	02-26257366	25.1941221	121.4799758
-天然茶莊	新北市汐止區汐碇路380巷30號	02-26603762	25.0331241	121.6387612
-心心精緻早午餐	新北市新莊區瓊泰路158號1樓	02-22049135	25.032502	121.443252
-文昌小老弟糟粕醋火鍋	新北市永和區中山路一段13號2樓	02-29276999	25.0055994	121.5054365
-文林早餐店	新北市樹林區千歲街61巷40弄2號	02-26873339	24.9986804	121.425865
-日出茶太	新北市中和區中山路三段122號3F	02-82213316	25.0071472	121.4747988
-日出茶太 中和環球	新北市中和區中山路三段122號3F	02-82213316	25.0071472	121.4747988
-牛丼快餐 	新北市中和區中山路二段40號	02-22482482	25.0051325	121.5042961
-主悅海鮮料理	新北市石門區崁子腳41之2號	02-26381749	25.287761	121.532157
-兄弟食堂	新北市金山區金包里街2號	02-24986458	25.2205667	121.6405643
-加納富魚食坊	新北市烏來區信賢里信福路12號之3	02-26616560	24.8372989	121.5260563
-北投國華高爾夫俱樂部餐廳	新北市淡水區坪頂里小坪頂23-1號	02-86261281	25.159494	121.483954
-可口188複合式早午餐	新北市蘆洲區永平街18巷8號1F	02-22833342	25.0911037	121.4589781
-古拉爵 義式屋-林口三井店	新北市林口區文化三路1段356號2樓	02-26069130	25.0621345	121.3617238
-古拉爵 義式屋-板橋大遠百新站店	新北市板橋區新站路28號9樓	02-29511606	25.0136085	121.4667853
-古拉爵 義式屋-板橋愛買店	新北市板橋區貴興路101號3樓	02-29644886	25.0017697	121.4569554
-古拉爵 義式屋-家樂福重新店	新北市三重區重新路5段654號B1	02-85124712	25.0432808	121.4675151
-古拉爵 義式屋-新店家樂福店	新北市新店區中興路3段1號7樓	02-29144822	24.9761049	121.5465953
-古都餐廳	新北市土城區中華路2段257號	02-22709535	24.9714024	121.4377891
-台灣G湯 中和環球	新北市中和區中山路三段122號3F	0983696613	25.0071472	121.4747988
-四姊妹海鮮餐廳	新北市萬里區野柳村港東路160號	02-24921602	25.2048884	121.6898828
-巧滋小廚早午餐	新北市板橋區莒光路8號1樓	0965731905	25.0248169	121.4695887
-布拉德施維根廚房 Brother Su Vegan Kitchen	新北市中和區南華路29號	-	24.9962217	121.5030011
-弘爺漢堡-新莊信義店	新北市新莊區公園一路98號	02-29908418	25.0374156	121.4436012
-本田食堂	新北市板橋區新站路28號	02-77054168	25.0136061	121.4669037
-玉山銀行(希望大樓)員工餐廳	新北市三重區中興北街42巷17弄10號	02-21751313#8181	25.0498487	121.46898
-瓦城泰國料理板橋遠百店	新北市板橋區中山路一段152號13樓	02-29589133	25.0109769	121.4644504
-瓦城-環球中和	新北市中和區中山路三段122號	0988803433	25.0066731	121.4747785
-甘樂食堂	新北市三峽區清水街317號	02-26731857	24.9344764	121.3724146
-田中芳園養生食坊	新北市金山區清水路53號	02-24982385	25.2350666	121.6291304
-白日夢Tea & Cafe	新北市石門區阿里荖47-2號	02-26380045	25.2802951	121.6079409
-仨食三餐	新北市樹林區千歲街61巷36-1號1樓	02-26823823	24.9986001	121.4257868
-伊莎貝拉海灘咖啡館	新北市石門區15號	02-86352262	25.2908277	121.5671383
-全 壽司丼飯煮物(永和店)	新北市永和區中興街55號	02-89215959	25.0118553	121.5166394
-再一塊吧ing永和店	新北市永和區得和路20號	0936931262	25.0003504	121.5152801
-吉可堡早餐店	新北市樹林區俊英街113-1號	02-26763998	25.0099287	121.4247923
-吉得堡早餐店-和平店	新北市板橋區和平路66號	0920388655	24.99444	121.4611548
-吉得堡東興店	新北市樹林區東興街12之1號	02-86845389	24.9786918	121.4098229
-吉得堡-錦秀店	新北市新店區錦秀路22號1樓	02-22154682	24.9443041	121.4791994
-合歡茶宴風味餐廳	新北市坪林區水聳淒坑28號	02-26656424	24.930807	121.714931
-在哪裡Cafe?Deli	新北市永和區秀朗路一段233號	02-89210023	25.0031619	121.5201222
-多米葉漢堡	新北市樹林區佳園路2段104號	02-26802008	24.9575311	121.3899016
-好好時光公益咖啡館	新北市林口區文化一路一段207之1號	02-26012485	25.0758215	121.3785119
-好味道 排骨大王(永和店)	新北市永和區中正路548之2號	02-29226166	25.0055608	121.5172909
-好餓早餐	新北市中和區連城路403號	02-82217996	24.9960993	121.4860451
-宇禾田宴會館 	新北市中和區中山路二段311號3~5樓	02-22433339	25.0019534	121.4950238
-宇禾田鐵板燒 	新北市中和區中山路二段311號	02-22433339	25.0019534	121.4950238
-早上好早午餐	新北市永和區竹林路101號1樓	0937513435	25.0120589	121.5198073
-早安公雞農場晨食(土城店)	新北市土城區明德路二段106號	02-82616068	24.984263	121.445242
-早安公雞農場晨食(新莊民安店)	新北市新莊區民安西路277號	02-22042606	25.0126864	121.4263142
-早到甜早午餐	新北市蘆洲區長安街108巷5弄2號	02-28472461	25.0819372	121.4612458
-早饗食	新北市三重區中正北路272號	02-29800660	25.0683236	121.480902
-有汁牛麵食	新北市板橋區三民路二段153巷4號一樓	02-29622221	25.0148932	121.4796888
-朴庶韓國銅盤烤肉 樹林秀泰店	新北市樹林區樹新路40-6號七樓	02-26863377	24.9954547	121.4284421
-朱記餡餅粥(中和環球店)	新北市中和區中山路三段122號3F	02-82211233	25.0071472	121.4747988
-米可廚房	新北市新莊區新樹路625號一樓	02-22076010	25.0033584	121.4334749
-米炭火燒肉小酒館 迴龍店	新北市新莊區新北市新莊區中正路891-17號	02-29088787	25.0223036	121.4129442
-米勒卡早午餐	新北市新莊區建安街9巷12號	02-22084480	25.0266472	121.4293995
-老乾杯板橋大遠百店	新北市板橋區新北市板橋區新站路28號11樓	02-29526466	25.013651	121.466765
-老礦工食堂	新北市瑞芳區金瓜石祈堂路72-1號	02-29314996	25.1099309	121.8588962
-肉劇場大食代板橋店	新北市板橋區新站路28號	02-29626262	25.0136061	121.4669037
-妞蛋吐司早午餐	新北市新莊區民安東路176號1樓	02-22027707	25.0202973	121.432982
-沙巴家 新北板橋店	新北市板橋區懷德街65號	0926656376	25.0324074	121.4775087
-汪汪地瓜園產業故事館	新北市萬里區大鵬里加投197-6號	02-24986763	25.1676024	121.6397184
-私嚐吃飯-北大店	新北市樹林區學勤路322號1樓	02-26689700	24.9473531	121.3793371
-豆司苑咖啡	新北市中和區南山路320巷3號	02-29497910	24.9863955	121.5076938
-豆韻	新北市中和區安平路218號	0968297838	24.9999247	121.5139152
-邑朵早午餐	新北市板橋區中山路二段89巷12號	02-29578182	25.0163835	121.4740823
-享健康食坊	新北市淡水區民生路45號	02-28094661#3014	25.1391203	121.4615903
-京都勝牛-環球板橋車站店	新北市板橋區縣民大道二段7號2樓	02-29665589	25.0141259	121.4637592
-咖哩樹-板橋環球店	新北市板橋區縣民大道二段七號B1	02-29602727	25.0205687	121.4625315
-呷尚寶-華順店	新北市中和區華順街133號	021-29535252	24.9963124	121.4652548
-和王日式炭火燒肉	新北市永和區中山路一段13號	02-29276999	25.0055994	121.5054365
-坪感覺	新北市坪林區坪林街12號	02-26657210	24.9361456	121.7119814
-岩手鯛魚燒 中和環球	新北市中和區中山路三段122號3F	02-77317999#7017	25.0071472	121.4747988
-帕彼手作早餐坊	新北市三重區三和路三段188號	02-29881313	25.0735005	121.491983
-幸福時光-蘆洲店	新北市蘆洲區信義路222巷20號	0952176277	25.0853012	121.4800398
-幸福讚精品飯店	新北市新莊區思源路332巷9號	02-29976688	25.0511294	121.4611032
-府城台南美食	新北市板橋區新站路28號	02-29596739	25.0136061	121.4669037
-明志科大第二餐廳	新北市泰山區工專路84號	02-26890808	25.042568	121.4220666
-明志科技大學學生餐廳	新北市泰山區工專路84號	02-29083309	25.042568	121.4220666
-明緯員工餐廳	新北市五股區五權三路28號	02-22996100#118	25.0650673	121.4543193
-東道飲食亭	新北市三峽區仁愛街7號	0928350605	24.9340731	121.3685168
-果然匯-板橋遠百店	新北市板橋區中山路一段152號11樓 (遠百中山店)	02-29562888	25.01104	121.464423
-果滴滴FutiFudi  中和環球	新北市中和區中山路三段122號3F	02-22230383	25.0071472	121.4747988
-林口康橋學生餐廳	新北市林口區興林路55號	02-26015442	25.0740524	121.3899708
-板大八番小雞	新北市板橋區新站路28號	02-77054168	25.0136061	121.4669037
-板大八番赤野	新北市板橋區新站路28號	02-77054168	25.0136061	121.4669037
-板橋凱撒大飯店(大廳酒吧)	新北市板橋區縣民大道二段8號	02-89539777	25.0117403	121.4627243
-板橋凱撒大飯店(卡拉拉餐廳)	新北市板橋區縣民大道二段8號	02-89539777	25.0117403	121.4627243
-板橋凱撒大飯店(家宴中餐廳)	新北市板橋區縣民大道二段8號	02-89539777	25.0117403	121.4627243
-欣葉小聚-中和環球	新北市中和區中山路三段122號	02-77317999	25.0066731	121.4747785
-欣葉小聚中和環球店	新北市中和區中山路三段122號4樓	02-32345858	25.0066731	121.4747785
-河內老街河粉	新北市板橋區新站路28號	02-77054168	25.0136061	121.4669037
-法華素食餐廳	新北市三重區仁美街24號	02-22860768	25.077242	121.48817
-炎螺王 中和環球	新北市中和區中山路三段122號3F	0979112170	25.0071472	121.4747988
-肥熊早早午餐	新北市板橋區廣和街33之6號	02-29551057	24.9936077	121.4629872
-肥熊早早午餐(中和店)	新北市中和區中山路三段118之3號	02 -22289997	25.0096403	121.4750427
-芭達桑原住民主題餐廳	新北市八里區觀海大道111號	02-26105300	25.1617969	121.4256894
-金色三麥	新北市板橋區新站路28號	02-77054168	25.0136061	121.4669037
-金色三麥 板橋大遠百店	新北市板橋區新北市板橋區新站路28號9樓	02-77385911	25.0136085	121.4667853
-金色三麥 新莊晶冠店	新北市新莊區新北市新莊區五工路66號1樓	02-85228989	25.0638243	121.4585994
-金煲銀煲仔飯	新北市板橋區新站路28號	02-77054168	25.0136061	121.4669037
-金寶電子深坑廠員工餐廳	新北市深坑區北深路3段147號	02-26622660	25.0028039	121.6029418
-非常泰	新北市板橋區新站路28號	02-77054168	25.0136061	121.4669037
-芡芳石頭火鍋 新北永和店	新北市永和區永和路二段116號5樓	02-29218889	25.011953	121.5152491
-芡芳石頭火鍋 樹林秀泰店	新北市樹林區樹新路40-6號7樓	02-26862999	24.9954963	121.4284145
-侯黑鍋物 冠軍酸菜個人鍋物 (新莊民安店)	新北市新莊區民安東路6號	02-22068977	25.020805	121.4277742
-南亞光電員工餐廳	新北市樹林區味王街55號	02-26806311#5582	24.9734285	121.4044056
-威剛科技(股)公司員工餐廳	新北市中和區258號2樓	02-82280886#12952	25.0010915	121.4724134
-客家美食主藝餐廳	新北市三峽區隆恩街239號1樓	02-86722255	24.9413225	121.3583721
-春水堂 中和環球	新北市中和區新北市中和區中山路122號	02-22217037	25.0057564	121.5061052
-星馬快餐 新北新店裕隆城百貨門市	新北市新店區中興路三段70號6F20櫃	0926656376	24.978061	121.546478
-星馬快餐 新北新莊門市	新北市新莊區中平路138號1F	0926656376	25.046919	121.44494
-星誼美而美	新北市土城區日新街9巷1號	02-82616104	24.987092	121.445329
-皇品珍	新北市中和區中山路三段122號3F	02-22239885	25.0071472	121.4747988
-皇廚一品牛排 中和環球	新北市中和區中山路三段122號3F	02-77312719	25.0071472	121.4747988
-美津素食漢堡	新北市新莊區中和街63號	02-29907859	25.0472943	121.4474577
-美香早餐店	新北市新莊區後港一路28巷4弄8號	02-22019802	25.025523	121.4255248
-美觀園	新北市萬里區港東路156號	0932262403	25.205214	121.689696
-食在森林	新北市烏來區福山里3鄰卡拉模基21號	0955658845	24.7803466	121.5032963
-食家安飲食文化股份有限公司	新北市汐止區福德一路328巷1號	02-27925757	25.0629889	121.630055
-原粹蔬食作	新北市新店區北新路三段206巷1弄7號一樓	02-89147185	24.9846762	121.5415581
-哩賀涼麵	新北市永和區秀朗路一段169號	0985177944	25.0039546	121.5170331
-哪次不吃早午餐店	新北市三重區大同南路152號1樓	02-29750970	25.0578043	121.4966324
-娜?泰式燒烤	新北市三重區河邊北街100巷35號	02-29766633	25.0702315	121.5024702
-峰精緻鍋物餐酒	新北市新莊區新泰路322號	02-29940898	25.0417846	121.4451026
-恩典早午餐	新北市永和區安樂路294號	02-29288688	25.0047738	121.5144408
-時時香-中和環球	新北市中和區中山路三段122號	0930582822	25.0066731	121.4747785
-桃樂絲森林餐廳	新北市八里區荖阡村荖阡坑路34之5號	02-86303356	25.1302176	121.4045109
-泰雅田泰式小館(永和店)	新北市永和區民有街21巷2號1樓	02-86689228	24.9965612	121.5167477
-海角阿鄉海產店	新北市淡水區觀海路26號	02-28053411	25.1816834	121.4181069
-海底撈	新北市新莊區新北市新北市新莊區新北大道四段3號9樓	02-85219292	25.0596783	121.4495726
-海底撈火鍋板橋店	新北市板橋區新站路28號5樓	02-29641328	25.0136294	121.4668636
-海宴日式和風涮涮屋	新北市三峽區中正路一段75號	02-26712348	24.9298711	121.3748978
-海釣族海鮮小館	新北市板橋區文化路二段126號	02-22529999	25.0262958	121.4701814
-海霸王餐廳股份有限公司海山分公司	新北市土城區中央路一段22號	02-22664835	24.9912123	121.4482604
-留香園	新北市永和區永貞路283號	02-29228998	25.0051668	121.5111913
-馬克廚房 Rocky Pizza	新北市新店區新店區碧潭風景區A01-03	02-29127765	24.9559849	121.5365043
-馬岸泰雅美食	新北市烏來區福山村大羅蘭25號	02-26616105	24.77474027231017	121.5011341945765
-馬蹄圈圈	新北市永和區秀朗路一段114號	02-23611999#894	25.0037736	121.5168091
-高益發茶行	新北市坪林區北宜路8段217號	02-26656268	24.9349992	121.7087369
-鬼匠拉麵2（板橋永豐店）	新北市板橋區永豐街77號	02-29551196	25.0188134	121.4734633
-乾杯列車 板橋站	新北市板橋區新北市板橋區縣民大道2段7號2樓	02-89693333	25.0141259	121.4637592
-乾杯燒肉居酒屋 林口店	新北市林口區新北市林口區文化三路一段356號2樓	02-26068522	25.0704313	121.3650009
-乾杯燒肉居酒屋 新莊宏匯店	新北市新莊區新北市新莊區新北大道四段3號7樓	02-85216277	25.0597532	121.449286
-將捷金鬱金香酒店	新北市淡水區中正路一段2-1號	02-26210333	25.1771061	121.429607
-悠樂間 Shalom Cafe	新北市三重區自強路五段39號	0925595853	25.0812346	121.493895
-教堂小廚	新北市板橋區仁愛路12號	0900111444	24.9992984	121.4583869
-望海亭海鮮餐廳	新北市萬里區野柳村港東路162之15號	02-24921605	25.2041292	121.6901861
-添好運	新北市中和區新北市中和區中山路三段122號	02-22267678	25.0066731	121.4747785
-添好運板橋遠百店	新北市板橋區新站路28號Ｂ1	02-29557978	25.0138151	121.4670443
-涮乃葉-汐止遠雄店	新北市汐止區新台五路一段99號B1	-	25.0620717	121.6493654
-涮乃葉-板橋遠百中山店	新北市板橋區中山路1段152號10樓	-	24.9607949	121.412267
-深坑大團園餐廳	新北市深坑區阿柔里阿柔洋25之1號	02-26625328	24.998691	121.607145
-猛港海鮮餐廳	新北市永和區永和路一段62號	02-29286383	25.0059372	121.5130586
-覓糖Mi Tang(永和中正店)	新北市永和區中正路39之1號	02-86681249	24.9960255	121.5142773
-豚將拉麵重陽店	新北市三重區重陽路四段8號1樓	02-89832058	25.0690026	121.4905542
-速芝堡早餐店	新北市板橋區大觀路2段174巷102弄32號	02-29601462	25.0011574	121.4419004
-雪嶽山 中和環球	新北市中和區中山路三段122號3F	02-77313499	25.0071472	121.4747988
-魚佳餚餐廳	新北市貢寮區東興街36號	02-24992265	25.0181519	121.9492214
-魚缸珈琲館	新北市蘆洲區三民路78號	02-82828350	25.084151	121.475191
-鹿兒島燒肉專賣店-板橋新板店	新北市板橋區中山路一段164-1號	02-29625099	25.0121015	121.4666688
-鹿兒島燒肉專賣店-新莊中華店	新北市新莊區中華路二段65號1樓	02-29909950	25.0471581	121.4529507
-麥味登八里小麥	新北市八里區中山路二段542號	02-26195768	25.1464983	121.3973798
-麥味登八里禾渼	新北市八里區頂寮五街7號	02-26188007	25.1263368	121.4518804
-麥味登三芝公正	新北市三芝區公正街9號	02-26369969	25.2576183	121.4998209
-麥味登三重三和	新北市三重區三和路四段145巷153號	02-22800682	25.0790313	121.4876726
-麥味登三重三賢101	新北市三重區三賢街101號	02-28579101	25.0887851	121.4880589
-麥味登三重大同	新北市三重區大同北路97號	02-89855749	25.0638439	121.4945417
-麥味登三重中興橋	新北市三重區成功路38號	02-29768838	25.050383	121.4889063
-麥味登三重木澄找餐	新北市三重區永福街179號	02-22870179	25.0751762	121.4789466
-麥味登三重正義	新北市三重區正義南路79號	02-89762827	25.0598319	121.498182
-麥味登三重車路頭	新北市三重區車路頭街87號	02-22860136	25.0741467	121.4845887
-麥味登三重佳德	新北市三重區三民街305號	02-89825825	25.0689366	121.478184
-麥味登三重忠孝	新北市三重區忠孝路三段25號	02-89850138	25.0673445	121.4813875
-麥味登三重忠孝橋	新北市三重區中正南路131號	02-29749888	25.0570626	121.493698
-麥味登三重美福	新北市三重區重陽路三段162號	02-29801388	25.0678364	121.4897007
-麥味登三重國小	新北市三重區仁愛街23號	02-89762738	25.07108	121.497008
-麥味登三重國隆	新北市三重區國隆路29號	02-29818809	25.0643761	121.4925465
-麥味登三重捷運	新北市三重區捷運路37巷14號	02-29877007	25.0566716	121.4841924
-麥味登三重善解	新北市三重區力行路一段176號	02-29850176	25.0714218	121.4819935
-麥味登三重進安	新北市三重區自強路五段100號	02-82879992	25.0836525	121.4966797
-麥味登三重感恩	新北市三重區三陽路61號	02-29896559	25.0589149	121.4844281
-麥味登三峽大同	新北市三峽區大同路196-2號	02-86741909	24.927137	121.3710409
-麥味登三峽北大	新北市三峽區大德路190號	02-26724567	24.9453994	121.3758692
-麥味登三峽恩主公	新北市三峽區中山路234號	02-86723234	24.937461	121.362726
-麥味登土城日月光	新北市土城區中央路二段61巷42號	02-22707168	24.978263	121.443861
-麥味登土城光明	新北市土城區光明街63號	02-22706879	24.973318	121.442426
-麥味登土城延平	新北市土城區延平街七號	02-82610041	24.9918612	121.4680513
-麥味登土城明德	新北市土城區明德路一段240巷2號	02-82620030	24.9775566	121.4601706
-麥味登土城青雲	新北市土城區青雲路215號	02-22660768	24.9819173	121.4593819
-麥味登土城海山	新北市土城區明德路二段199號	02-82621058	24.9834204	121.4468642
-麥味登土城清高	新北市土城區明德路一段73號	02-22602220	24.9835131	121.4656689
-麥味登土城裕民	新北市土城區裕民路259巷24號	02-82601899	24.9829758	121.4558187
-麥味登土城學成	新北市土城區學成路9號	02-82732522	24.986487	121.4532209
-麥味登中和民德	新北市中和區民德路155號	02-29628388	24.9999074	121.4687492
-麥味登中和吉仁	新北市中和區大仁街19巷1號	02-86680256	24.9931304	121.517655
-麥味登中和秀朗	新北市中和區秀朗路３段128巷2號	02-29435788	24.9929073	121.5245649
-麥味登中和和平	新北市中和區和平街15-1號	02-86680428	24.9904649	121.5088215
-麥味登中和泉日青	新北市中和區連城路89巷7-2號	02-82458368	24.9992528	121.4973835
-麥味登中和英雄	新北市中和區興南路二段79號	02-89434686	24.9848762	121.5065617
-麥味登中和復興	新北市中和區復興路50號	02-29488698	24.9902807	121.5042552
-麥味登中和景安	新北市中和區景安路13號	02-89432800	24.9992265	121.508198
-麥味登中和景新	新北市中和區景新街35號	02-22450559	24.999171	121.503992
-麥味登中和華新	新北市中和區華新街150號	02-86680570	24.9825129	121.5077128
-麥味登中和陽光	新北市中和區中山路二段2巷45弄12號	02-82453053	25.0069094	121.5019721
-麥味登中和新生	新北市中和區民樂路54號	02-22229635	25.0011213	121.4833073
-麥味登中和壽德	新北市中和區壽德街21號	02-29526863	24.9953283	121.4658654
-麥味登中和福澤	新北市中和區保健路47號	02-89419688	24.9975543	121.5092823
-麥味登中和遠東世紀	新北市中和區建一路188號1樓	02-82271800	24.9968907	121.4875282
-麥味登中和德光	新北市中和區德光路14號	02-29620233	25.0046247	121.4712742
-麥味登五股中興	新北市五股區中興路四段48巷1號	02-22951720	25.0831103	121.4382039
-麥味登五股四維	新北市五股區四維路116-1號	02-29889279	25.0744378	121.4679209
-麥味登五股自強	新北市五股區自強路72號	02-22935789	25.0732461	121.4329765
-麥味登五股洲子洋	新北市五股區成泰路三段165號	02-22930223	25.0919689	121.4450624
-麥味登五股福臨	新北市五股區五福路93號	02-22916863	25.0904618	121.4322642
-麥味登仁愛旗艦	新北市三重區仁愛街660號	02-22862203	25.0803486	121.4822822
-麥味登北大大成	新北市樹林區大成路11號	02-26689550	24.9452355	121.3823322
-麥味登北大學林	新北市樹林區學林路85號	02-26684881	24.9493365	121.378873
-麥味登永和仁愛	新北市永和區仁愛路145號	02-29250236	25.0129159	121.5114616
-麥味登永和仁愛公園	新北市永和區永平路320號	02-89213076	25.0132654	121.506583
-麥味登永和保平	新北市永和區保平路266號	02-29225899	25.005189	121.508775
-麥味登永和得和	新北市永和區得和路328號	02-29439796	24.9992412	121.5231111
-麥味登永和福和	新北市永和區福和路343號	02-29219297	25.0071019	121.51549
-麥味登永和選手	新北市永和區永貞路152號	02-29229929	25.0045452	121.5177867
-麥味登永和環河	新北市永和區環河西路2段213號	02-29233833	25.0103271	121.5016722
-麥味登汐止仁愛	新北市汐止區仁愛路23號	02-26492558	25.063891	121.659453
-麥味登汐止名城店	新北市汐止區新昌路37-1號	02-86910234	25.068118	121.662422
-麥味登汐止玖達	新北市汐止區樟樹二路296號	02-26427171	25.0691825	121.6412293
-麥味登汐止長江	新北市汐止區長江街65號	02-26482088	25.0718399	121.6566387
-麥味登汐止建成	新北市汐止區建成路59巷49號	02-86422575	25.0724517	121.6611892
-麥味登汐止皇家	新北市汐止區仁愛路166號	02-26433078	25.0650601	121.6645007
-麥味登汐止茄苳	新北市汐止區茄苳路42-1號	02-86477766	25.070649	121.665977
-麥味登汐止福氣	新北市汐止區福德一路201巷6號	02-26925177	25.0654564	121.6354522
-麥味登汐止福德	新北市汐止區福德一路20號	02-26922316	25.0693531	121.6386265
-麥味登竹圍米路	新北市淡水區民族路43號	02-28081276	25.1355224	121.4628092
-麥味登林口中山	新北市林口區中山路526號-1	02-26020858	25.0836423	121.3786767
-麥味登林口仁愛	新北市林口區仁愛路一段384號	02-26011390	25.0768451	121.3878135
-麥味登林口公園	新北市林口區公園路69號	02-26080267	25.0688359	121.3675759
-麥味登林口文化	新北市林口區文化三路二段36-1號	02-26018032	25.0792995	121.3738663
-麥味登林口民有	新北市林口區民有街68號	02-26081872	25.0770384	121.3729436
-麥味登林口民族	新北市林口區民族路22號	0986811956	25.0740158	121.3644082
-麥味登林口民視	新北市林口區信義路154號	02-26019062	25.0799484	121.3796713
-麥味登林口名巧園	新北市林口區仁愛路二段121號	02-26015862	25.0748521	121.3837139
-麥味登林口南勢	新北市林口區南勢一街17巷51號	02-26000275	25.0759166	121.3608558
-麥味登林口香悅	新北市林口區文化三路一段555巷50號	02-26082729	25.0768239	121.3696033
-麥味登林口貳貳五	新北市林口區文化三路一段225巷13號	02-26099585	25.0712707	121.3620026
-麥味登林口感恩	新北市林口區文化二路一段20巷23號	02-26006228	25.0675626	121.3655515
-麥味登林口源泉	新北市林口區源泉街36號	02-26092339	25.0725389	121.3575484
-麥味登林口歐園	新北市林口區麗園二街2-4號	02-26009889	25.0692827	121.3773839
-麥味登板橋三民	新北市板橋區三民路二段202-13號	02-29630916	25.0138591	121.4788757
-麥味登板橋大崙	新北市板橋區長安街331巷89號	02-29581685	25.0126682	121.4721088
-麥味登板橋中正	新北市板橋區中正路216巷57號	02-22720613	25.0191	121.457572
-麥味登板橋文聖	新北市板橋區文聖街182號	02-22542777	25.026734	121.4792161
-麥味登板橋永豐	新北市板橋區永豐街171號	02-29512885	25.0205948	121.475779
-麥味登板橋光武	新北市板橋區光武街63號	02-22541266	25.0257447	121.4674017
-麥味登板橋光環	新北市板橋區光環路二段76號	02-29627677	25.0144256	121.4816939
-麥味登板橋合安	新北市板橋區合宜路115號	02-29691688	24.9985828	121.447981
-麥味登板橋松江	新北市板橋區松江街86號	02-22507050	25.0281414	121.4686857
-麥味登板橋金世紀錄	新北市板橋區長江路二段47號	02-22541831	25.0315288	121.4641454
-麥味登板橋金門	新北市板橋區金門街147號	02-86871568	24.9907555	121.4328506
-麥味登板橋金鑽	新北市板橋區金門街324巷7號	02-26860901	24.9852545	121.4280147
-麥味登板橋長安	新北市板橋區長安街349號	02-29519353	25.0124701	121.4749108
-麥味登板橋長江	新北市板橋區長江路一段150號	02-22597039	25.0302163	121.4609483
-麥味登板橋致理	新北市板橋區文化路一段311-2號	02-22566222	25.0205923	121.4657649
-麥味登板橋重慶	新北市板橋區重慶路308巷14號	02-29558858	24.9977394	121.4636854
-麥味登板橋校前	新北市板橋區校前街76號	02-29615889	25.0032558	121.4620592
-麥味登板橋國光	新北市板橋區國光路187號	02-29682628	25.0186496	121.46106
-麥味登板橋莒光	新北市板橋區莒光路188號	02-22566826	25.0225817	121.4740286
-麥味登板橋莊敬	新北市板橋區莊敬路162號	02-22581447	25.0225405	121.4713256
-麥味登板橋貴興	新北市板橋區貴興路109號	02-29649695	25.002512	121.455884
-麥味登板橋實踐	新北市板橋區實踐路38號	02-29597877	25.0073404	121.4634138
-麥味登板橋廣和	新北市板橋區廣和街52號	02-29555560	24.9942116	121.4622434
-麥味登板橋龍泉	新北市板橋區龍泉街120號	02-22542268	25.0243549	121.4569611
-麥味登板橋懷德	新北市板橋區懷德街181巷23號	02-22500350	25.0304125	121.4801569
-麥味登板橋藝文	新北市板橋區莊敬路99號	02-82570520	25.0261474	121.472585
-麥味登板橋體育館	新北市板橋區中正路17號	02-22727177	25.0124164	121.4560161
-麥味登板橋體育館2	新北市板橋區南雅西路二段143號	02-22727977	25.0116067	121.4522076
-麥味登泰山仁義	新北市泰山區仁義路143號	02-22962828	25.0546909	121.4326731
-麥味登泰山全興	新北市泰山區福興二街30號	02-29000283	25.0578888	121.4332093
-麥味登泰山信華	新北市泰山區信華三街171號	02-29009091	25.0459677	121.4403446
-麥味登泰山泰林	新北市泰山區泰林路二段513號	02-29000565	25.063799	121.4242518
-麥味登貢寮福隆	新北市貢寮區興隆街20號	02-24991035	25.0168207	121.944793
-麥味登淡水水源	新北市淡水區水源街一段78號	02-26234139	25.1722484	121.4455924
-麥味登淡水北新	新北市淡水區北新路153號	02-26235211	25.1793258	121.450073
-麥味登淡水台北灣	新北市淡水區新市一路一段99巷17號	02-26292238	25.1874647	121.4309142
-麥味登淡水宇峰	新北市淡水區學府路45號	02-26235201	25.1692035	121.4478844
-麥味登淡水紅樹林	新北市淡水區坪頂路51-1號	02-86263339	25.1626574	121.4581693
-麥味登淡水真理	新北市淡水區新民街180巷2號	02-26205135	25.178988	121.4371569
-麥味登淡水淡大	新北市淡水區水源街二段56號	02-26295836	25.1739076	121.4509158
-麥味登淡水淡江	新北市淡水區北新路182巷37號	02-26250018	25.1773981	121.4484929
-麥味登淡水淡海	新北市淡水區淡海路72巷1號	02-28050511	25.181114	121.423451
-麥味登淡水新市	新北市淡水區新市一路三段108號	02-86315511	25.1827694	121.4469616
-麥味登淡水新春	新北市淡水區新春街97號	02-26212553	25.1824102	121.4400305
-麥味登新北新海	新北市板橋區新海路117號	02-22568688	25.0228456	121.4610281
-麥味登新店大坪林	新北市新店區北新路三段70號	02-29129555	24.9804358	121.5421331
-麥味登新店光華	新北市新店區光華街10號	02-22119009	24.969076	121.517778
-麥味登新店安康	新北市新店區安康路三段25號	02-22156557	24.9531606	121.493323
-麥味登新店安德	新北市新店區安德街34號	02-22124693	24.9628293	121.511564
-麥味登新店佳燁	新北市新店區安和路3段134號	02-86683580	24.98603	121.516382
-麥味登新店建國	新北市新店區建國路236號	02-29118958	24.9817897	121.5379164
-麥味登新店順聯	新北市新店區復興路16號	02-29141418	24.9869019	121.5396271
-麥味登新店綠野香坡	新北市新店區安祥路139號	02-22001700	24.9559178	121.4747531
-麥味登新店寶興	新北市新店區寶興路47-1號	02-89193100	24.9733453	121.5494433
-麥味登新莊中平	新北市新莊區中平路121號	02-22771508	25.046748	121.444635
-麥味登新莊中信	新北市新莊區中信街2號	02-89927177	25.0509198	121.4516349
-麥味登新莊中原	新北市新莊區中原路138號	02-85212006	25.0545703	121.4553479
-麥味登新莊中華	新北市新莊區中華路二段172號	02-29900759	25.051736	121.4533016
-麥味登新莊五工	新北市新莊區五工二路86巷2號	02-22993799	25.066473	121.4598634
-麥味登新莊五工二	新北市新莊區建中街85號	02-29922522	25.0365779	121.4470889
-麥味登新莊天祥	新北市新莊區天祥街26-1號	02-29084674	25.0278075	121.4175311
-麥味登新莊民安	新北市新莊區民安路45號1樓	02-22025530	25.0264753	121.4238294
-麥味登新莊米娜	新北市新莊區中原東路30號	02-85229700	25.054685	121.4647192
-麥味登新莊自立	新北市新莊區自立街115號	02-29980115	25.0455706	121.455663
-麥味登新莊西盛	新北市新莊區西盛街196號	02-22010970	25.0183601	121.428096
-麥味登新莊幸福	新北市新莊區幸福路834號	02-22771234	25.0491413	121.445279
-麥味登新莊昌明	新北市新莊區昌明街22號	02-29905398	25.0524164	121.4569958
-麥味登新莊玥萱	新北市新莊區雙鳳路88號	02-29015928	25.02792	121.414874
-麥味登新莊建安	新北市新莊區建安街46號	02-22044018	25.0249189	121.4275471
-麥味登新莊星品	新北市新莊區中和街12號	02-89910985	25.0431368	121.4484941
-麥味登新莊星誠	新北市新莊區中誠街15號	02-29931989	25.0479308	121.4517652
-麥味登新莊星榮	新北市新莊區中榮街60號	02-29960669	25.052876	121.4489807
-麥味登新莊福興	新北市新莊區公園路238號	02-22761918	25.0406571	121.4575494
-麥味登新莊歐洲村	新北市新莊區立信三街7巷1號	02-29966927	25.0503544	121.444267
-麥味登新莊頭前公園	新北市新莊區頭成街163號	02-29909163	25.052023	121.461815
-麥味登新莊龍安	新北市新莊區中正路新建巷55號	02-29017665	25.0214603	121.4146934
-麥味登瑞芳明燈	新北市瑞芳區明燈路三段81號	02-24976263	25.1083113	121.8051859
-麥味登樹林中華	新北市樹林區中華路39號	02-86868651	24.9834202	121.423834
-麥味登樹林日新	新北市樹林區日新街185號	02-26862525	24.9875511	121.4200263
-麥味登樹林光榮	新北市樹林區光榮街53號1樓	02-26888936	25.0034764	121.4121584
-麥味登樹林秀泰	新北市板橋區大觀路三段160巷46號	02-26860822	24.9941843	121.4297676
-麥味登樹林東榮	新北市樹林區東榮街121號	02-86860063	24.9820393	121.415217
-麥味登樹林國凱	新北市樹林區國凱街19號之1	02-86853291	24.9784881	121.4193157
-麥味登樹林復興	新北市樹林區復興路37號	02-26851566	24.9936758	121.4221288
-麥味登樹林會贏	新北市樹林區國凱街102號	02-86868732	24.9797144	121.4222944
-麥味登雙和圓通	新北市中和區圓通路242號	02-22421165	24.992224	121.4945844
-麥味登蘆洲中心	新北市蘆洲區民權路188-7號	02-82866513	25.0909954	121.4715653
-麥味登蘆洲正和	新北市蘆洲區正和街79號	02-82867980	25.0807694	121.4683841
-麥味登蘆洲長興	新北市蘆洲區長興路50巷3號	02-22829933	25.0840096	121.4637507
-麥味登蘆洲康佑	新北市蘆洲區長安街343號	02-82868137	25.0869188	121.4571687
-麥味登蘆洲復興	新北市蘆洲區復興路181號	02-82827200	25.0894586	121.479001
-麥味登蘆洲鷺江99	新北市蘆洲區鷺江街99號	02-22859299	25.0839163	121.4768202
-麥味登鶯歌天囍	新北市鶯歌區尖山路136號	02-86776850	24.9488741	121.3469382
-荳荳早午餐店	新北市三重區文化南路31之1號	02-89731966	25.0618167	121.5001128
-凱林鐵板燒 中和環球	新北市中和區中山路三段122號3F	02-22221985	25.0071472	121.4747988
-勝博殿Exprsss中和環球	新北市中和區中山路三段122號3F	02-66377718	25.0071472	121.4747988
-勝勢豬排(板橋大遠百)	新北市板橋區新站路28號	02-29506628	25.0136061	121.4669037
-喜徠珍古井餐廳	新北市三峽區中山路40號	02-86711798#894	24.9345548	121.3685916
-喔嗨呦早餐屋	新北市新店區北宜路2段36號	02-22178530	24.9512893	121.5486364
-喬MAMA	新北市中和區興南路二段6號	02-29400048	24.9861947	121.5078174
-富士海鮮餐廳	新北市貢寮區東興街8號	02-24991001	25.0207342	121.9511369
-富群休閒農園	新北市淡水區北新路一段129-1號	02-26282899	25.1822155	121.4577923
-彭園婚宴會館(新板店)	新北市板橋區中山路一段161號	02-29527666	25.0123694	121.4655415
-惠比壽烏龍麵	新北市板橋區新站路28號	02-77054168	25.0136061	121.4669037
-棉 早+午餐廳	新北市板橋區大觀路二段93號	02-29660282	25.0018462	121.4464983
-港都熱炒	新北市中和區大勇街10號	02-29406751	24.9926425	121.5172718
-粥太郎 粥品·麵食	新北市中和區南山路49號	02-22426628	24.9985263	121.5021537
-紫緹麵食館	新北市新莊區民安東路37號	02-22029635	25.0210411	121.4287689
-開丼-中和環球	新北市中和區中山路三段122號	02-82281266	25.0066731	121.4747785
-開飯川食堂 新北中和	新北市中和區中山路三段122 4F	02-22238218	25.0070984	121.4748275
-閑恬Mydeli手作美味坊	新北市淡水區坪頂路22號	02-86263159	25.1615587	121.456703
-雲山水小築民宿	新北市瑞芳區金瓜石石山里山尖路72-1號	02-24962201	25.110491	121.8550034
-雲仙大飯店	新北市烏來區烏來里瀑布路1-1號	02-26616383	24.8488755	121.5511445
-雲仙樂園中餐廳	新北市烏來區瀑布路1-1	02-26616510	24.8488755	121.5511445
-順哥?坊早餐店	新北市新莊區新北大道7段630號	02-29088861	25.0283302	121.411948
-黃到即食鍋燒麵(中和店)	新北市中和區國光街107巷4弄30號	0909670810	24.9990065	121.4697033
-黑毛屋 新莊宏匯店	新北市新莊區新北市新莊區新北大道四段 3 號 7 樓	02-85222611	25.0597532	121.449286
-黑毛屋本家 板橋大遠百店	新北市板橋區新北市板橋區新站路 28 號	02-29524088	25.0136061	121.4669037
-黑沃咖啡-三峽大學店	新北市三峽區新北市三峽區大學路120號	04-22624040	24.9439922	121.3747071
-黑沃咖啡-永和竹林店	新北市永和區新北市永和區竹林路178號	04-22624040	25.009836	121.520265
-黑沃咖啡-汐止白天鵝店	新北市汐止區新北市汐止區康寧街169巷8之1號1樓	04-22624040	25.0678719	121.6231943
-黑沃咖啡-林口文化店	新北市林口區新北市林口區文化三路一段225巷6號	04-22624040	25.0710391	121.3625869
-黑沃咖啡-板橋南門店	新北市板橋區新北市板橋區南門街73號	04-22624040	25.0079738	121.4569656
-黑沃咖啡-淡水新市店	新北市淡水區新北市淡水區中山北路二段163號	04-22624040	25.1843421	121.4441353
-黑沃咖啡-新北輔大店	新北市新莊區新北市新莊區中正路595號	04-22624040	25.0320349	121.4329125
-勤誠興業-員工餐廳	新北市新莊區中原路558號18樓	02-82265500	25.0546808	121.4451269
-嗑厚班早午餐	新北市板橋區龍興街11號	02-89699525	24.9996649	121.4426469
-微星員工餐廳	新北市中和區立德街69號	02-32345599#1088	25.0076333	121.4874171
-意芳飯店	新北市萬里區港東路155號	0932500750	25.205091	121.6897791
-新店活蝦大王	新北市新店區建國路200號	02-29110986	24.9807024	121.5378671
-新馬辣經典麻辣鍋板橋遠百店	新北市板橋區中山路一段152號、遠東百貨11F櫃號-1103號	02-29512456	25.0109757	121.4644519
-新葡苑(板橋遠百店)	新北市板橋區新站路28號9樓	02-89510388	25.0136085	121.4667853
-楚門咖啡．餐館	新北市板橋區新海路5號	0906381747	25.0205607	121.4625496
-楊記運滷熬鮮小館	新北市新店區中正路183巷6號1樓	02-23611999#894	24.9719384	121.5404778
-萬佳鄉-新展店	新北市新莊區龍安路66-42號	02-29063230	25.0209547	121.4141413
-義利不窯-碳烤牛排-窯烤披薩-義式料理	新北市淡水區淡金路二段608之2號	02-26206699	25.1931354	121.4466039
-義饗屋板橋大遠百店	新北市板橋區新站路28號	02-77054168	25.0136061	121.4669037
-肆六巷	新北市新莊區中誠街46巷5號	0918309905	25.0483938	121.4510883
-跳舞香水板橋大遠百	新北市板橋區新站路28號	02-29612323	25.0136061	121.4669037
-達客魷魚 中和環球	新北市中和區中山路三段122號3F	02-82584326	25.0071472	121.4747988
-零居Zero Living	新北市板橋區文化路一段188巷7弄27號	02-22565109	25.0196861	121.4680017
-頑童茶館	新北市新莊區四維路97巷16號1樓	02-82015788	25.0233929	121.423829
-鼎泰豐板橋店	新北市板橋區新站路28號B1	02-22267890#5105	25.0138151	121.4670443
-鉦富咖哩屋	新北市蘆洲區永平街32巷22弄4號	02-82853047	25.0921337	121.4598398
-熊賀呷早午餐	新北市永和區竹林路52號	02-29266942	25.0139871	121.5177974
-福華海鮮餐廳	新北市金山區民生路51巷1號	02-24986259	25.2201183	121.6420596
-福園中餐廳	新北市深坑區北深路三段236號	02-26620088#122	25.0042053	121.6003505
-蒔朵日式舒芙蕾厚鬆餅	新北市板橋區南雅西路二段124號	02-89697605	25.0125647	121.4521683
-億長御坊	新北市板橋區新站路28號	02-77054168	25.0136061	121.4669037
-慕谷慕魚蔬食原住民人文餐廳	新北市林口區仁愛路一段338號	0912537590	25.0766636	121.3909688
-樂玩精品咖啡新北新莊店	新北市新莊區中平路439號	02-85214396	25.0566646	121.4435645
-樂檸漢堡（新北新莊棒球場門市）	新北市新莊區新泰路232號	02-29946215	25.0393371	121.4466081
-樂?牛排(中和店)	新北市中和區中和路350巷1號	02-29220089	25.0014029	121.510263
-豬豬的拉麵屋	新北市板橋區溪北路41號1樓	0937528511	24.9902473	121.4274724
-勳牛肉麵(永和店)	新北市永和區安樂路194巷3號	02-29290588	25.0013852	121.5152914
-橙易食堂-板橋大遠百	新北市板橋區新站路28號B1	0983379801	25.0138151	121.4670443
-燒肉LIKE中和環球	新北市中和區中山路三段122號B2F	02-77317999	25.0066724	121.4747789
-燒肉Smile林口文化店	新北市林口區新北市林口區文化二路一段76號2樓	02-26087728	25.069162	121.3660814
-燒肉Smile新北三重	新北市三重區重新路二段100號1樓	02-89721118	25.0616548	121.4968455
-燒肉Smile樹林秀泰	新北市樹林區樹新路40-6號7樓	02-26878522	24.9954963	121.4284145
-燒肉哦爺-日韓燒肉吃到飽(板橋府中店)	新北市板橋區館前東路48號2.3樓	02-89538153	25.0071599	121.4608963
-築間幸福鍋物三峽大學	新北市三峽區237新北市三峽區大學路198號	02-26722226	24.9468498	121.3725991
-築間幸福鍋物土城中央	新北市土城區236新北市土城區中央路二段21巷128號1樓	02-22601555	24.979913	121.4443631
-築間幸福鍋物土城裕民店	新北市土城區學士路23號	02-22645577	24.9823349	121.4534257
-築間幸福鍋物林口文化店	新北市林口區新北市文化二路一段72號2樓	02-26085533	25.0690536	121.3661005
-築間幸福鍋物板橋雙十店	新北市板橋區新北市板橋區雙十路三段8號	02-82595577	25.0303246	121.4719943
-築間幸福鍋物淡水新市	新北市淡水區251新北市淡水區新市一路一段8號1樓	02-26229933	25.1868551	121.4298778
-築間幸福鍋物新北三重	新北市三重區241新北市三重區重新路2段92號	02-29785222	25.0617233	121.4971419
-築間幸福鍋物新北永和店	新北市永和區永和路二段116號5樓	02-29217588	25.011953	121.5152491
-築間幸福鍋物新北汐止	新北市汐止區221新北市汐止區新台五路二段12號1、2樓	02-26487779	25.0650118	121.660402
-築間幸福鍋物新店京站	新北市新店區231新北市新店區中央路157號5樓	02-89136177	24.9723936	121.530427
-築間幸福鍋物新莊中正	新北市新莊區242新北市新莊區中正路72號2樓	02-22767522	25.0380829	121.4588218
-築間幸福鍋物新莊中悅廣場	新北市新莊區242新北市新莊區中原里中平路402號	02-89956561	25.0545985	121.4448536
-築間幸福鍋物新莊福海店	新北市新莊區新北市新莊區中正路340巷1號2樓	02-29938068	25.0350618	121.4445136
-築間幸福鍋物樹林秀泰	新北市樹林區238新北市樹林區樹新路40-6號	02-26860667	24.9954547	121.4284421
-築間幸福鍋物雙和中和	新北市中和區235新北市中和區中和路262號1樓	02-29262255	24.9995347	121.5085242
-築間幸福鍋物蘆洲三民	新北市蘆洲區247新北市蘆洲區三民路248號	02-22887337	25.0899109	121.468102
-築間酸菜魚 中和環球店	新北市中和區中山路三段122號4樓	02-22221555	25.0066731	121.4747785
-築間燒肉本命 食放題 新北永和店	新北市永和區永和路二段116號5樓	02-29218255	25.011953	121.5152491
-貓樂貓咖啡-環球中和	新北市中和區中山路三段122號	02-22217108	25.0066731	121.4747785
-錦園魚夫海鮮	新北市萬里區野柳村港東路159號	02-24924950	25.2049158	121.6898723
-鴨香飽 當歸豬腳當歸鴨(板橋店)	新北市板橋區新海路385巷28弄12號	02-82570080	25.0265625	121.457424
-嚐嚐丼飯 中和環球	新北市中和區中山路三段122號3F	0930430916	25.0071472	121.4747988
-鍋賣局(板橋新板店)	新北市板橋區中山路一段130號	-	25.0106797	121.4634829
-韓本家	新北市板橋區新站路28號	02-27512588	25.0136061	121.4669037
-韓國旬彩料理	新北市板橋區新站路28號	02-77054168	25.0136061	121.4669037
-鮮滿樓海鮮餐廳	新北市萬里區港東153號	02-24926180	25.203601	121.687446
-鴻心堡早午餐	新北市土城區清水路256號	02-22655106	24.9829835	121.4616022
-鴻海精密虎躍廠員工餐廳	新北市土城區自由街2號	02-22683466#501011040	24.966259	121.4214111
-璐璐早餐店	新北市中和區泰和街23號	02-22460928	25.000084	121.499643
-薆悅酒店野柳渡假館-FISHERMAN’S KITCHEN漁人廚房	新北市萬里區野柳里港東路162之2號2樓	02-77035700	25.2040985	121.6902052
-藏壽司 三重捷運路店	新北市三重區重明里18鄰捷運路1號	02-29886680	25.0567663	121.486285
-藏壽司 三重集賢路店	新北市三重區集賢路99號	02-82877177	25.0889262	121.490885
-藏壽司 三峽學成店	新北市三峽區學成路398號4樓	02-26717262	24.9442116	121.3782395
-藏壽司 土城金城路店	新北市土城區金城路二段80號	02-22607775	24.9803951	121.4533512
-藏壽司 中和橋和店	新北市中和區橋和路5號	02-82266313	25.0052783	121.488465
-藏壽司 永和比漾店	新北市永和區中山路一段238號4樓	02-22311881	25.0077276	121.5071861
-藏壽司 林口三井Outlet店	新北市林口區文化三路一段356號B1	02-26069852	25.0707347	121.3639607
-藏壽司 板橋中山遠百店	新北市板橋區中山路一段152號5樓	02-29582868	25.0109769	121.4644504
-藏壽司 板橋遠科店	新北市板橋區遠東路62之3號	02-29640432	24.9992921	121.4564032
-藏壽司 淡水站前店	新北市淡水區中山路8號5樓	02-26263577	25.1690545	121.4450476
-藏壽司 新店威秀裕隆店	新北市新店區中興路三段70號6樓	02-89147904	24.978061	121.546478
-藏壽司 新莊宏匯店	新北市新莊區新北大道四段3號7樓	02-85213102	25.0597532	121.449286
-藏壽司 新莊思源路店	新北市新莊區思源路168號	02-29901755	25.0492381	121.4601813
-藍屋-板橋大遠百新站店	新北市板橋區新站路28號9樓	-	25.0136085	121.4667853
-雙和醫院員工餐廳	新北市中和區中正路291號	02-22490088#8837	24.9927442	121.4936559
-雙溪平林休閒農場	新北市雙溪區平林里外平林35號	02-4934016	25.0344366	121.8413791
-雙翼食品	新北市樹林區忠愛街三號4樓	02-26895506	25.0157956	121.4089522
-雙醬咖哩(新莊中港店)	新北市新莊區中港路503號1樓	02-2770051	25.0503308	121.4520201
-寶島冰果室	新北市板橋區新站路28號	02-77054168	25.0136061	121.4669037
-繼光香香雞 中和環球	新北市中和區中山路三段122號3F	02-22233417	25.0071472	121.4747988
-蘇義興餐廳	新北市雙溪區中華路77號	02-24931027	25.0372511	121.8663456
-麵食主義 Kirin pasta新板店	新北市板橋區縣民大道1段310號	02-29643968	25.0120155	121.4616901
-麵家三士 中和環球	新北市中和區中山路三段122號3F	02-32343699	25.0071472	121.4747988
-響燒鐵板燒	新北市板橋區新站路28號	02-77054168	25.0136061	121.4669037
-饗爍早午餐	新北市新莊區建中街125號1樓	02-29909839	25.0363249	121.4455272
-魔法咖哩	新北市淡水區中山路8號8樓	02-26206123	25.1691218	121.445484
-蘿蔔蹲 Farmers Tasty	新北市永和區安樂路136號	02-29427711	25.00021	121.514173
-鑫丼	新北市蘆洲區中山二路42號	0983102512	25.0821901	121.4741977
-?鳥食趣義大利洋食 X 烤泡芙專賣	新北市三峽區大觀路7號	02-86710208	24.9437575	121.3755596
-?泰泰泰式料理	新北市板橋區四川路2段47巷4弄6號	02-89660308	24.9946181	121.453893
-\.
-
-
---
--- Data for Name: ecofriendly_restaurant_tpe; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.ecofriendly_restaurant_tpe (name, address, tel, latitude, longitude) FROM stdin;
-《扶風堂》披薩。義麵。吉拉朵	臺北市松山區敦化北路165巷5號1樓	(02)27153377	25.0548617	121.5503147
-6：35 Brunch & Dinner(大安旗艦店)	臺北市大安區復興南路二段288號	(02)23770100	25.0240436	121.5432347
-88號樂章-88 La Plaza	臺北市內湖區民善街88號5樓	(02)27943800	25.0604224	121.5752559
-Aunt Stella 詩特莉	臺北市大安區忠孝東路三段300號B3	(02)87721638	25.0410522	121.543247
-AW Cafe Wine Bistro	臺北市信義區信義路四段115-2號	(02)27012498	25.0334674	121.5481958
-BaganHood 蔬食餐酒館	臺北市信義區忠孝東路四段553巷46弄11號	(02)37622557	25.0443206	121.5634869
-Bar. Tender 八天餐酒館	臺北市大安區復興南路一段107巷5弄2號	(02)27782105	25.0438587	121.5446401
-Bea's Bistro 美式餐館	臺北市大安區潮州街133號	(02)23918827	25.0285577	121.5289153
-Blooming 花漾蒔光	臺北市松山區復興北路313巷38號	(02)25460909	25.0588286	121.5468261
-Blue磚塊義法廚房	臺北市萬華區武昌街二段83之8號	(02)23110070	25.0457659	121.5048409
-Camo咖啡	臺北市大安區和平東路一段129號	(02)33433931	25.0274561	121.5285368
-Capricciosa卡布里喬莎(天母SOGO店)	臺北市士林區中山北路六段77號8F	(02)28332558	25.105306	121.5245943
-Chao?炒炒蔬食熱炒	臺北市大安區大安路一段52巷21號	(02)27753005	25.0432384	121.5451606
-Chinese Whispers 悄悄話餐酒館	臺北市大安區仁愛路四段345巷2弄11號	(02)27783988	25.0385685	121.5534808
-COFFEE LOVER's PLANET	臺北市大安區敦化南路一段246號B1	(02)27524157	25.0402749	121.5483016
-Coming Bistro	臺北市松山區光復南路55號1樓	(02)27479225	25.0459027	121.5580269
-CYCLO 洛城 忠孝門市	臺北市大安區大安路一段75巷9號	(02)27782569	25.0423395	121.5467253
-EN和食(復興SOGO店)	臺北市大安區忠孝東路三段300號11樓	(02)77450796	25.0408977	121.5431893
-EN壽司．和食	臺北市大安區敦化南路一段246號B2	(02)27730246	25.0404437	121.5483542
-Fun 心 caf?	臺北市松山區敦化北路244巷29號1樓	(02)27125565	25.0610276	121.5480424
-GUSTOSO	臺北市大安區敦化南路一段331號	(02)77269099	25.0339868	121.5494185
-inn cafe x 台北師大店	臺北市大安區龍泉街7號	(02)23690055	25.0258172	121.5294135
-JeeWoo吉屋	臺北市大安區金華街145號	(02)23918563	25.030559	121.5252655
-KANPAI CLASSIC 天母店	臺北市士林區台北市士林區忠誠路二段 200 號 2 樓	(02)28771550	25.1173343	121.5338781
-Lady nara台北忠孝SOGO店	臺北市大安區忠孝東路四段45號12樓	(02)27712585	25.041913	121.5449599
-LIFE KITCHEN	臺北市內湖區新湖三路134號	(02)27931818	25.0641599	121.577635
-Los TOAST 洛城吐司	臺北市北投區實踐街82巷6號	(02)28208206	25.1150272	121.5106691
-Machikaka 智允餐飲	臺北市中山區南京東路三段216巷4號一樓	(02)27772777	25.0513893	121.5433664
-Mama Inca印加媽媽 秘魯餐館	臺北市大安區瑞安街31巷1-1號	(02)27092832	25.0308577	121.5439556
-Maya Bistro 瑪亞餐酒	臺北市中山區雙城街46巷1號1樓	(02)25850305	25.0676896	121.5241987
-meet蘋果咖啡館	臺北市中正區博愛路86號	(02)23820025	25.0444137	121.511384
-Mentari萌太利(微風台大醫院商場)	臺北市中正區中山南路77號B1F	(02)23952298	25.0360978	121.5168171
-Miso微笑韓國料理	臺北市大安區金山南路二段6號	(02)23670281	25.0337234	121.5270256
-mister donut	臺北市萬華區台北市萬華區桂林路1號	(02)23816949	25.0378901	121.5058635
-Mos摩斯漢堡(北榮美食街)	臺北市北投區石牌路二段201號生活廣場	(02)28710185	25.1208483	121.5227627
-Mos摩斯漢堡(微風台大醫院商場)	臺北市中正區中山南路77號B1F	(02)23952298	25.0360978	121.5168171
-N° 168 PRIME	臺北市大安區敦化南路一段246號7F	(02)66176168	25.0399224	121.5481944
-Nara Thai Cuisine 台北忠孝SOGO 店	臺北市大安區忠孝東路四段45號11樓	(02)27718939	25.0419878	121.5448197
-OEC蚌麵	臺北市中正區台北市中正區中山南路8號B1	(02)23117819	25.0442304	121.5188189
-omo cafe （天母SOGO店）	臺北市士林區中山北路六段77號5樓	(02)28341668	25.105306	121.5245943
-Oohchacha自然食(古亭店)	臺北市中正區南昌路二段207號	(02)23677133	25.025076	121.523427
-PAI CAF? & LIFE	臺北市松山區八德路二段366巷11號	\N	25.0475889	121.5460631
-PAI Coffee	臺北市中山區民生東路二段147巷6弄1號	(02)25179787	25.0592984	121.5347223
-PARADE 和巴黎人吃一樣的日常	臺北市大安區忠孝東路四段170巷11號	(02)27110800	25.0405549	121.5508995
-pd by petit doux 忠孝SOGO店	臺北市大安區台北市大安區忠孝東路四段45號 11樓(忠孝SOGO百貨)	(02)27213008	25.0421775	121.5449653
-petit doux 微兜  永康店	臺北市大安區台北市大安區信義路二段 198 巷 7-3 號1樓	(02)23951336	25.0326634	121.5306426
-petit doux 微兜  京站店	臺北市大同區台北市大同區承德路一段1號1樓	(02)77290009	25.0492915	121.5172486
-PINK SALT｜披薩｜義麵 	臺北市信義區忠孝東路五段423巷28號	(02)27564233	25.0424048	121.5754615
-Plants	臺北市大安區復興南路1段253巷10號1樓	(02)27845677	25.034036	121.544113
-PRIME ONE 牛排館	臺北市中正區中華路二段1號	(02)23143300	25.0363607	121.5068635
-Q Burger士林大南店	臺北市士林區大南路315號1樓	(02)28820058	25.0888242	121.5180822
-Q Burger士林延平店	臺北市士林區延平北路五段179號	(02)28110658	25.0830742	121.5099903
-Q Burger士林忠義店	臺北市士林區忠義街113-1號一樓	(02)28343148	25.1070771	121.532715
-Q Burger士林社子店	臺北市士林區社子街36號	(02)28168058	25.0874157	121.5075724
-Q Burger士林通河店	臺北市士林區通河街125號	(02)28853848	25.0807664	121.5212767
-Q Burger大同大龍店	臺北市信義區大龍街150號	(02)25996128	25.0677675	121.5158123
-Q Burger大安樂業店	臺北市大安區樂業街153號	(02)27360209	25.0196685	121.5536548
-Q Burger大橋頭店	臺北市信義區民權西路226號	(02)25500147	25.0627721	121.5132289
-Q Burger中山中原店	臺北市中山區中原街41號1樓	(02)25232521	25.0570579	121.5289427
-Q Burger中山天祥店	臺北市中山區天祥路22號1樓	(02)25311238	25.0611519	121.520959
-Q Burger中山吉林店	臺北市士林區吉林路397號	(02)25910182	25.0658122	121.5304992
-Q Burger中山復興店	臺北市中山區復興北路514巷34號一樓	(02)25090565	25.0658765	121.5427591
-Q Burger中山農安店	臺北市中山區農安街170號1樓、地下室	(02)25150024	25.064565	121.5344714
-Q Burger中山榮星店	臺北市中山區行仁里五常街63號	(02)25016190	25.0644072	121.5400235
-Q Burger中山錦州店	臺北市中山區吉林路205號	(02)25222997	25.0601262	121.5303598
-Q Burger中正寧波店	臺北市中正區寧波西街100號1樓	(02)23325085	25.0295261	121.5145349
-Q Burger內湖金龍店	臺北市內湖區金龍路74號	(02)27928292	25.084947	121.592348
-Q Burger內湖星雲店	臺北市內湖區星雲街14號	(02)27922009	25.0777841	121.5905174
-Q Burger內湖達人店	臺北市內湖區內湖路二段326號	(02)27909865	25.0814849	121.588719
-Q Burger內湖麗山店	臺北市內湖區內湖路一段629巷41號1樓	(02)26276424	25.081185	121.5747381
-Q Burger文山木新店	臺北市文山區木新路二段229號	(02)29396817	24.9833099	121.567331
-Q Burger文山世新店	臺北市文山區木柵路一段101號1樓及地下室	(02)22369201	24.9871619	121.547621
-Q Burger文山景福店	臺北市文山區景福街234號	(02)89351881	24.993631	121.539334
-Q Burger文山景興店	臺北市文山區景興路99號	(02)29320217	24.9953491	121.5448642
-Q Burger文山萬隆店	臺北市文山區萬隆里景福街4號1樓	(02)29331380	24.9996245	121.5394727
-Q Burger文山福興店	臺北市文山區福興路45號	(02)29308228	25.0031009	121.5505955
-Q Burger文山興隆店	臺北市文山區興隆路四段112號	(02)29371568	24.9830229	121.5620296
-Q Burger文山興德店	臺北市文山區興隆路二段215之2號1樓	(02)29343805	25.0011381	121.550182
-Q Burger北投大興店	臺北市北投區大興街48號	(02)28941027	25.1301436	121.4995506
-Q Burger北投中和店	臺北市北投區中和街402號	(02)28915262	25.1435761	121.4981691
-Q Burger北投立農店	臺北市北投區立農街二段259號1樓	(02)28236017	25.1189597	121.5144748
-Q Burger北投知行店	臺北市北投區知行路249號	(02)28585885	25.1208948	121.4670754
-Q Burger北投致遠店	臺北市北投區致遠一路一段95號	(02)28250606	25.1093362	121.5151913
-Q Burger北投實踐店	臺北市北投區實踐街61號	(02)28250909	25.1153574	121.5097836
-Q Burger北投懷德店	臺北市北投區建民路161-5號1樓	(02)28202320	25.111239	121.519484
-Q Burger松山民生店	臺北市松山區民生東路四段103號1樓	(02)25471072	25.0582061	121.5524769
-Q Burger松山南京五店	臺北市松山區南京東路五段250巷18弄2-1號	(02)27565258	25.0498546	121.5661649
-Q Burger松山撫遠店	臺北市松山區撫遠街352號	(02)27533262	25.06274	121.5659501
-Q Burger信義永吉店	臺北市信義區永吉路120巷1號1樓	(02)27653337	25.0453366	121.5703993
-Q Burger信義吳興店	臺北市信義區吳興街281巷59號	(02)27200965	25.026644	121.5657673
-Q Burger信義松山店	臺北市信義區松山路465巷2號	(02)27279620	25.0394579	121.578496
-Q Burger信義松仁店	臺北市信義區松仁路227號1樓	(02)27208119	25.0262625	121.5687418
-Q Burger信義虎林店	臺北市信義區信義路六段106號1樓	(02)27279868	25.035876	121.5777955
-Q Burger信義信安店	臺北市信義區信安街127號	(02)87321008	25.0241946	121.5559657
-Q Burger南港福德店	臺北市南港區福德街312號1樓	(02)26519876	25.039384	121.5876474
-Q Burger萬華青年店	臺北市萬華區青年路140號1樓	(02)23070701	25.0218258	121.5024379
-Q Burger萬華國興店	臺北市萬華區國興路98號	(02)23056683	25.0272015	121.505644
-Q Burger萬華雙園店	臺北市萬華區雙園街15號	(02)23087655	25.0291935	121.4950984
-Q Burger萬華寶興店	臺北市萬華區寶興街149號1樓	(02)23010052	25.0244721	121.4952677
-SAISON du SOLEIL	臺北市大安區敦化南路一段246號B2	(02)27310258	25.0404437	121.5483542
-Sarabeth's	臺北市大安區敦化南路一段246號B1	(02)27526998	25.0402749	121.5483016
-Sarabeth's 天母店	臺北市士林區中山北路六段77號2樓	(02)28335669	25.105306	121.5245943
-SKYLARK加州風洋食館-士林中山北店	臺北市士林區台北市士林區中山北路5段565號	(02)28837742	25.0951836	121.5278003
-SKYLARK加州風洋食館-內湖大潤發2店	臺北市內湖區台北市內湖區舊宗路188號1樓	(02)27966280	25.0628906	121.575749
-SKYLARK加州風洋食館-和平公園店	臺北市中正區台北市中正區懷寧街90號	(02)23756364	25.042781	121.513943
-SKYLARK加州風洋食館-東湖康寧店	臺北市內湖區台北市內湖區康寧路3段72號	(02)26332850	25.0696916	121.6114623
-SKYLARK加州風洋食館-寶慶遠百店	臺北市中正區台北市中正區寶慶路32號1樓(遠東百貨1樓)	(02)23754730	25.0418654	121.5087784
-Twinkle Twinkle Cafe & Brunch 小星星 早午餐&輕食	臺北市萬華區中華路二段416巷84號	(02)23039889	25.0270276	121.5033895
-UCC Caf? Mercado (天母SOGO店)	臺北市士林區中山北路六段77號B1樓	(02)28350652	25.105306	121.5245943
-UCC Caf? Mercado (忠孝SOGO店)	臺北市大安區忠孝東路四段45號B2	(02)27416800	25.0417855	121.5449392
-一雙牛肉麵	臺北市中正區台北市中正區中山南路8號B1	(02)23117819	25.0442304	121.5188189
-九湯屋日本拉麵(台北南京店)	臺北市中山區南京東路一段132巷33號	(02)25813100	25.050578	121.5269515
-二本餐廳	臺北市大安區忠孝東路四段101巷27號	(02)87737033	25.0429766	121.5482607
-十八廚	臺北市松山區興安街212號1樓	(02)27547890	25.055948	121.5459666
-十六饗雀-泰式酸辣湯	臺北市大安區師大路106號	(02)33651606	25.022075	121.528171
-十里安?手麵 瑞光旗艦店	臺北市內湖區台北市內湖區瑞光路413號	(02)87975398	25.0776861	121.5724536
-十勝石燒(北榮美食街)	臺北市北投區石牌路二段201號生活廣場	\N	25.1208483	121.5227627
-三友拉麵(龍江店)	臺北市中山區龍江路93號	(02)8772997	25.0513592	121.5405732
-三合院 (忠孝SOGO店)	臺北市大安區忠孝東路四段45號11F	(02)27816667	25.0419132	121.544963
-下港老麵攤(台師大店)	臺北市大安區和平東路一段162號	\N	25.026522	121.5275199
-大井屋(微風．三總商店街)	臺北市內湖區成功路二段325號B1樓	(02)87923311	25.0728868	121.5910904
-大心新泰式麵食（天母SOGO店）	臺北市士林區中山北路六段77號8樓	(02)28325366	25.105306	121.5245943
-大戶屋大安店	臺北市大安區復興南路一段323號B1	(02)89782668	25.0337141	121.5438053
-大戶屋大葉?島屋店	臺北市士林區忠誠路二段55號B1F	(02)28326050	25.1118523	121.5314695
-大戶屋台北凱撒店	臺北市中正區忠孝西路一段38號B1	(02)23612377	25.0462341	121.5164145
-大戶屋民權東路一段店	臺北市中山區民權東路一段9號B1	(02)25958663	25.0629726	121.5233404
-大戶屋行天宮站店	臺北市中山區松江路276號2樓	(02)25625811	25.0598098	121.5329541
-大戶屋京站店	臺北市大同區承德路一段1號B3	(02)25553255	25.0493539	121.5172458
-大戶屋忠孝復興店	臺北市大安區忠孝東路四段52號2樓	(02)27785077	25.0414146	121.5450238
-大戶屋東湖店	臺北市內湖區康寧路三段187號2樓	(02)26338839	25.0700709	121.6118711
-大戶屋松山車站店	臺北市信義區松山路11號1樓	(02)25287775	25.0493066	121.5791866
-大戶屋南京復興店	臺北市松山區南京東路三段258號2樓	(02)27715337	25.05159	121.5448299
-大戶屋南港車站店	臺北市南港區忠孝東路7段369號7樓	(02)26512778	25.0526211	121.6047161
-大戶屋美麗華店	臺北市中山區敬業三路20號B1	(02)85012772	25.0832325	121.5579941
-大戶屋統一時代店	臺北市信義區忠孝東路五段8號B2	(02)89780886	25.0404655	121.565466
-大戶屋微風台北車站店	臺北市中正區北平西路3號2樓(東3門)	(02)23319337	25.0475224	121.5159013
-大戶屋微風廣場店	臺北市松山區復興南路一段39號GF	(02)87720835	25.0459159	121.5452192
-大戶屋新北投店	臺北市北投區中心里泉源路１２號２樓之１	(02)28951255	25.137063	121.504345
-大戶屋誠品南西店	臺北市中山區南京西路14號B1	(02)25311808	25.0520942	121.5207243
-大地酒店-月兒彎彎	臺北市北投區奇岩路1號	(02)55518888	25.1350426	121.5069956
-大地酒店-奇岩一號	臺北市北投區奇岩路1號	(02)55518888	25.1350426	121.5069956
-大地酒店-喜歡廳	臺北市北投區奇岩路一號	(02)55518888	25.1347904	121.5072708
-大根日本料亭	臺北市中山區中山北路二段39巷14-1號	(02)25817776	25.053837	121.5240479
-大衛小小羊	臺北市士林區國泰街9號	(02)28619668	25.1366721	121.5425382
-小小蔬房	臺北市萬華區漢口街二段125號	(02)23111168	25.0464845	121.5040002
-小南門(微風台大醫院商場)	臺北市中正區中山南路77號B1F	(02)23952298	25.0360978	121.5168171
-小南門/小南門點心世界(北榮美食街)	臺北市北投區石牌路二段201號生活廣場	(02)28751220	25.1208483	121.5227627
-小南門傳統豆花(微風．三總商店街)	臺北市內湖區成功路二段325號B1樓	(02)87923311	25.0728868	121.5910904
-小拾聚 餐食館	臺北市大安區復興南路二段325號	(02)27388980	25.0238555	121.5435692
-小醉好(信義店)|法式下午茶Day Drink & 小餐酒館	臺北市信義區忠孝東路五段61號	(02)27566629	25.0413307	121.5667175
-山?咖啡	臺北市北投區溫泉路110-1號1樓	(02)28939325	25.1362325	121.5109918
-中東人的私房菜	臺北市士林區忠義街117-3號1樓	(02)28330117	25.1075241	121.5327683
-中國人壽總部員工餐廳(自有)	臺北市松山區敦化北路135號B2	(02)27196678	25.053066	121.5498627
-中國信託內湖行政大樓員工餐廳	臺北市內湖區安康路22巷33號4樓	(02)81787777	25.0612289	121.5940817
-中國信託金融園區員工餐廳	臺北市南港區經貿二路168號4樓	(02)33277777	25.0585084	121.6159507
-中崙涼麵	臺北市松山區八德路三段12巷5弄30號	(02)27188177	25.0475629	121.5516913
-天下奇冰	臺北市大同區重慶北路三段232號1樓	(02)25867867	25.0704668	121.5135855
-天下食堂	臺北市中山區安東街4之5號	(02)27771163	25.0463684	121.5417596
-日本橋海鮮丼?半Tsujihan( SOGO復興店)	臺北市大安區忠孝東路3段300號B2	(02)77553346	25.0408932	121.5432417
-王品餐飲股份有限公禾七台北家樂福桂林店	臺北市萬華區桂林路1號4樓	(02)77074941	25.037703	121.5061818
-王鍋屋逸仙創始總店	臺北市信義區逸仙路50巷20號1樓	(02)27588380	25.0404376	121.5626318
-功夫肉圓(微風台大醫院商場)	臺北市中正區中山南路77號B1F	(02)23952298	25.0360978	121.5168171
-包家小鎮(微風台大醫院商場)	臺北市中正區中山南路77號B1F	(02)23952298	25.0360978	121.5168171
-古拉爵 義式屋-欣欣百貨店	臺北市中山區台北市中山區林森北路247號2樓	(02)25427680	25.0541679	121.5257142
-古拉爵 義式屋-南港中信店	臺北市南港區台北市南港區經貿二路166號2樓(中信總部A棟)	(02)27892688	25.0587228	121.6156959
-台北花園大酒店-花園thai thai	臺北市中正區中華路二段1號	(02)23121000	25.0363607	121.5068635
-永和樓中華料理店	臺北市大安區和平東路二段118巷52弄3號	(02)23772077	25.0224472	121.5426486
-玉山銀行(第二總部大樓)員工餐廳	臺北市松山區敦化北路315號	(02)21751313	25.0591113	121.5502599
-玉山銀行員工餐廳	臺北市松山區民生東路三段117號	(02)21751313	25.0582253	121.5463658
-甘物家 x 甘物日飲(桂林家樂福店)	臺北市萬華區萬華區桂林路1號	(02)23816607	25.0378901	121.5058635
-甲大鴻港式燒臘(北榮美食街)	臺北市北投區石牌路二段201號生活廣場	\N	25.1208483	121.5227627
-立馬吃一鍋。有機水產火鍋專賣	臺北市大安區仁愛路四段27巷9號B1	(02)27417668	25.0395623	121.5454145
-丼賞和食??物vs刺身丼丼專門店	臺北市中山區南京東路二段140號B1	(02)25175526	25.0517795	121.5338937
-伊勢路勝勢日式豬排(復興 SOGO店)	臺北市大安區忠孝東路三段300號10樓	(02)87729822	25.0411128	121.5432167
-再見 麵	臺北市大安區忠孝東路三段205之1號	(02)87730086	25.0418737	121.5391995
-吉 天婦羅 (忠孝SOGO店)	臺北市大安區忠孝東路四段45號11F	(02)27312518	25.0419132	121.544963
-向樂達工房(Caf? Chat Leopard 豹紋喵喵)	臺北市大同區蘭州街蘭州街14號1樓	(02)26256499	25.0620343	121.5142198
-在她家	臺北市大同區貴德街47－2號	\N	25.0546858	121.5083329
-好好吃大餛飩(微風．三總商店街)	臺北市內湖區成功路二段325號B1樓	(02)87923311#1	25.0728868	121.5910904
-好好吃大餛飩(微風台大醫院商場)	臺北市中正區中山南路77號B1F	(02)23952298#8	25.0360978	121.5168171
-安永鮮食(北榮美食街)	臺北市北投區石牌路二段201號生活廣場	\N	25.1208483	121.5227627
-安永鮮食(微風台大醫院商場)	臺北市中正區中山南路77號B1F	(02)23952298#8	25.0360978	121.5168171
-成家小館	臺北市文山區木新路三段154號	(02)29374611	24.9819461	121.5612443
-成家小館(天母店)	臺北市士林區忠義街84號	(02)28366668	25.1062629	121.5319025
-成真咖啡（天母SOGO店）	臺北市士林區士林區中山北路六段77號1樓	(02)28368881	25.1049953	121.5243331
-成真咖啡台北sogo復興店	臺北市大安區忠孝東路三段300號9樓	(02)87723722	25.0408932	121.5432417
-有之和牛台北忠孝	臺北市信義區110臺北市信義區忠孝東路五段497號1樓	(02)87851117	25.041398	121.578408
-有點辣正宗麻辣串串鍋	臺北市萬華區西寧南路285號1樓	(02)23111085	25.0388306	121.5063479
-朱記餡餅粥(天母SOGO店)	臺北市士林區中山北路6段77號8樓	(02)28353619	25.105306	121.5245943
-朱記餡餅粥(微風台大醫院商場)	臺北市中正區中山南路77號B1F	(02)23952298#8	25.0360978	121.5168171
-朱記餡餅粥店	臺北市南港區忠孝東路七段371號B1	(02)26510264	25.0528955	121.6072597
-老乾杯 信義店	臺北市信義區台北市信義區松壽路9號8樓	(02)27253311	25.0363104	121.5668588
-老乾杯 慶城店	臺北市松山區台北市松山區慶城街29號1樓	(02)27139000	25.0535557	121.5452114
-老乾杯(復興SOGO店)	臺北市大安區忠孝東路三段300號11樓	(02)27316555	25.0408977	121.5431893
-老乾杯大直忠泰店	臺北市中山區樂群三路200號5樓	(02)85025551	25.082727	121.5572333
-老乾杯南西店	臺北市中山區台北市中山區南京西路12號號7樓	(02)25215255	25.0518449	121.5210481
-老莫派咖哩	臺北市信義區忠孝東路四段553巷2弄7號	(02)66039032	25.0419937	121.5631674
-老舅的家鄉味	臺北市松山區復興北路307號	(02)27181122	25.0585947	121.5445063
-老董(微風．三總商店街)	臺北市內湖區成功路二段325號B1樓	(02)87923311#1	25.0728868	121.5910904
-老董牛肉麵(微風台大醫院商場)	臺北市中正區中山南路77號B1F	(02)23952298#8	25.0360978	121.5168171
-西雅圖極品咖啡(北榮美食街)	臺北市北投區石牌路二段201號生活廣場	(02)28760276	25.1208483	121.5227627
-西雅圖極品咖啡(微風．三總商店街)	臺北市內湖區成功路二段325號B1樓	(02)87923311#1	25.0728868	121.5910904
-吾家可歸朝食販賣部	臺北市信義區大道路42巷21號	(02)27599075	25.041234	121.5810503
-李記中式餐廳(微風．三總商店街)	臺北市內湖區成功路二段325號B1樓	(02)87923311#1	25.0728868	121.5910904
-李記港式燒臘	臺北市中正區台北市中正區中山南路8號B1	(02)82872296	25.0442304	121.5188189
-沙渡垂陽碳烤(錦州店)	臺北市中山區錦州街241巷1弄20號	\N	25.0605922	121.5347396
-芋品苑．先森吃麵	臺北市信義區吳興街26號一樓	(02)87333373	25.0313875	121.5596868
-谷炭燒肉(市民店)	臺北市大安區市民大道四段12之2號	(02)27119500	25.0446591	121.5444707
-味?屋	臺北市北投區實踐街67號	(02)28283230	25.1153459	121.5100089
-咖食堂	臺北市中正區八德路1段82巷9弄13號	(02)23965252	25.049842	121.5643605
-咖啡弄(士林店)	臺北市士林區台北市士林區中正路253號2樓	(02)28883322	25.0949519	121.5250049
-咖啡弄(站前店)	臺北市中正區館前路18號2樓	(02)23883000	25.045466	121.5148084
-咖啡弄(敦化店)	臺北市大安區台北市大安區敦化南路一段187巷42號2樓	(02)27111910	25.0424491	121.5514325
-呷米蔬食 / 素食餐廳 Rice revolution vegetarian restaurant	臺北市中正區衡陽路9號	(02)23319662	25.0424141	121.5136974
-幸福時光廚房	臺北市中正區台北市中正區濟南路一段321號	(02)23930255	25.0423998	121.5254698
-幸福道小籠包(微風台大醫院商場)	臺北市中正區中山南路77號B1F	(02)23952298#8	25.0360978	121.5168171
-府宴餐廳	臺北市信義區市府路1號B1	(02)27588950	25.037525	121.564395
-怡來養生食舖(微風．三總商店街)	臺北市內湖區成功路二段325號B1樓	(02)87923311#1	25.0728868	121.5910904
-房間餐酒 The Room Bistro	臺北市大安區敦化南路一段160巷56號	(02)27731665	25.0435009	121.5467382
-明德素食園(北榮美食街)	臺北市北投區石牌路二段201號生活廣場	(02)28739465	25.1208483	121.5227627
-明德素食園(微風．三總商店街)	臺北市內湖區成功路二段325號B1樓	(02)87923311#1	25.0728868	121.5910904
-明德素食園(微風台大醫院商場)	臺北市中正區中山南路77號B1F	(02)23952298#8	25.0360978	121.5168171
-杭州小籠湯包-民生店	臺北市松山區民生東路三段118號	(02)66130666	25.0573001	121.5452517
-東方饌黔天下(迪化)	臺北市大同區迪化街一段358-2號	(02)25577872	25.0626947	121.5091924
-欣豐自助餐(微風台大醫院商場)	臺北市中正區中山南路77號B1F	(02)23952298#8	25.0360978	121.5168171
-爭鮮迴轉壽司	臺北市萬華區台北市萬華區桂林路1號1樓	(02)23812806	25.0378901	121.5058635
-芽米早午餐(木柵店)	臺北市文山區秀明路二段16號	(02)29393166	24.991606	121.574356
-花蓮扁食(微風．三總商店街)	臺北市內湖區成功路二段325號B1樓	(02)87923311#1	25.0728868	121.5910904
-花蓮扁食(微風台大醫院商場)	臺北市中正區中山南路77號B1F	(02)23952298#8	25.0360978	121.5168171
-初點良食 Dim sum shop	臺北市中山區龍江路394巷2號	\N	25.0671	121.540876
-金色三麥 UMAMI微風南山店	臺北市信義區台北市信義區松智路17號7樓	(02)27291229	25.0342834	121.5659843
-金色三麥 台北京站店	臺北市大同區台北市大同區承德路1段1號4樓	(02)77370909	25.0521949	121.5202958
-金色三麥 台北美麗華店	臺北市中山區台北市中山區敬業3路20號5樓	(02)21753739	25.0833016	121.557274
-金色三麥 信義誠品店	臺北市信義區台北市信義區松高路11號B1	(02)87895911	25.0395856	121.5658456
-金色三麥南港CITYLINK店	臺北市南港區台北市南港區忠孝東路七段299號C棟1樓	(02)27827000	25.0526288	121.6047509
-金春發牛肉店(昆陽店)	臺北市南港區忠孝東路六段372號	(02)26538189	25.0496953	121.5917584
-金春發牛肉店(復北店)	臺北市中山區復興北路202號	(02)25026806	25.0556012	121.5438585
-金澤美味壽司 (忠孝SOGO店)	臺北市大安區忠孝東路四段45號11F	(02)87717770	25.0419132	121.544963
-阿瑪迪斯咖啡館	臺北市大安區忠孝東路三段300號10樓	(02)87728679	25.0411128	121.5432167
-青青食尚花園會館	臺北市士林區至善路二段266巷32號	(02)28411996#3	25.0980271	121.5507371
-非常泰（天母sogo 店）	臺北市士林區中山北路六段77號8樓	(02)28310188	25.105306	121.5245943
-侯黑鍋物 酸菜小火鍋 Ho Hey Hot Pot	臺北市中山區四平街19號	(02)25677889	25.0537138	121.5310849
-恬園餐廳	臺北市大安區新生南路三段30號	(02)77122323#2	25.0236484	121.5343264
-星巴克	臺北市萬華區台北市萬華區桂林路1號	(02)23616931	25.0378901	121.5058635
-星辰牛排	臺北市大安區光復南路180巷16號	(02)27217512	25.0426455	121.556729
-洪祖師擔仔麵(北榮美食街)	臺北市北投區石牌路二段201號生活廣場	\N	25.1208483	121.5227627
-洗心壽司割烹	臺北市大安區敦化南路一段295巷9號	\N	25.0356477	121.5498781
-炸雞大獅	臺北市萬華區台北市萬華區桂林路1號	(02)23813607	25.0378901	121.5058635
-珍珠?子喫茶屋	臺北市內湖區內湖路二段103巷38號	(02)27973972	25.0817534	121.5809923
-皇家哥本哈根咖啡輕食複合店 (忠孝SOGO店)	臺北市大安區忠孝東路四段45號4F	(02)27113362	25.0418699	121.544633
-皇家傳承(北榮美食街)	臺北市北投區石牌路二段201號生活廣場	(02)28747328	25.1208483	121.5227627
-紅瓦厝懷舊風味餐坊	臺北市士林區天母東路8巷67號	(02)28767407	25.1153435	121.5310088
-紅豆食府	臺北市大安區敦化南路一段246號B2	(02)87715511	25.0404437	121.5483542
-紅豆食府(天母SOGO店)	臺北市士林區中山北路六段77號8F	(02)28332208	25.105306	121.5245943
-紅豆食府(北榮美食街)	臺北市北投區石牌路二段201號生活廣場	(02)28713068	25.1208483	121.5227627
-紅花鐵板燒(復興SOGO店)	臺北市大安區忠孝東路三段300號10樓	(02)27316555	25.0411128	121.5432167
-美術系壽司(台北大安店)	臺北市大安區仁愛路四段300巷9弄4號	(02)27017989	25.0369053	121.5549737
-美華閣湯包麵食館	臺北市北投區大興街58號	(02)28977288	25.1304417	121.5004978
-美樂家速食坊	臺北市中正區常德街1號B1	(02)23111298	25.0443093	121.5170835
-風尚咖啡廳	臺北市大安區新生南路3段30號B1	(02)88122323#2	25.0236484	121.5343264
-食光/此拾此客	臺北市萬華區昆明街214號	(02)23147302	25.040733	121.5042947
-宮保王食品有限公司	臺北市南港區南港路三段149巷49弄12號	(02)26519947	25.0521215	121.5853416
-島津和牛咖哩 (民生店)	臺北市松山區民生東路四段97巷1弄2號	(02)27171007	25.0585182	121.5519345
-徐州路2號庭園會館	臺北市中正區徐州路2號	(02)23928888	25.0414335	121.5195223
-捌伍添第	臺北市信義區信義路五段7號85號樓B側	(02)81010085	25.033976	121.5645389
-書屋花甲(台大店)	臺北市大安區羅斯福路三段283巷20號1樓	(02)23680824	25.0186079	121.531716
-泰迪農園咖哩	臺北市大安區忠孝東路三段300號7樓	(02)87726099	25.0411149	121.543058
-海底撈	臺北市萬華區台北市萬華區桂林路1號4樓	(02)23146868	25.037703	121.5061818
-海底撈火鍋	臺北市信義區松智路17號2B	(02)87801855	25.0345019	121.5661991
-烤肉工廠	臺北市大安區忠孝東路四段216巷27弄2號	(02)87717345	25.0397665	121.5534098
-真飽餐盒	臺北市大安區延吉街70巷6弄3號	(02)27720506	25.0426381	121.5534984
-神樂家（忠孝SOGO店）	臺北市大安區忠孝東路四段45號11樓	(02)89785666	25.0419878	121.5448197
-秘徑小食光	臺北市大安區羅斯福路三段283巷3號	(02)33651995	25.0182077	121.5315075
-財團法人福祿文化基金會北投文物館	臺北市北投區幽雅路32號	(02)28912318#1	25.1380054	121.5144965
-鬥牛士(長安店)	臺北市中山區長安東路二段169之12號2樓	(02)27406660	25.0484864	121.5407643
-乾杯列車台北總站	臺北市中正區北平西路3號2樓	(02)23618000	25.0477467	121.5169983
-乾杯燒肉居酒屋 中山店	臺北市大同區台北市大同區南京西路25巷2-1號	(02)25556110	25.0530943	121.5201964
-乾杯燒肉居酒屋 本店	臺北市大安區台北市大安區敦化南路一段236巷17號	(02)87731150	25.0406471	121.5469919
-乾杯燒肉居酒屋 信義 ATT 店	臺北市信義區台北市信義區松壽路12號3樓	(02)87860808	25.035488	121.5660108
-乾杯燒肉居酒屋 南港中信店	臺北市南港區台北市南港區經貿二路186-1號2樓	(02)27866066	25.0588333	121.6149583
-基督復臨安息日會醫療財團法人臺安醫院 嗎哪天然之味餐廳	臺北市松山區八德路二段424號B1	(02)27718151#3	25.0480381	121.5473381
-敘日全日餐廳	臺北市南港區忠孝東路七段359號7樓	(02)66156526	25.0526213	121.6064554
-梅居休閒農場	臺北市士林區平菁街43巷99號	\N	25.1427814	121.5748083
-涮乃葉-欣欣百貨店	臺北市中山區台北市中山區林森北路247號2樓	(02)25416320	25.0541679	121.5257142
-涮乃葉-信義遠百店	臺北市信義區台北市信義區松仁路58號7樓	(02)27230698	25.0368823	121.5681356
-涮乃葉-南港中信店	臺北市南港區台北市南港區經貿二路188-1號2樓(中信總部C棟)	(02)26530155	25.0588739	121.614672
-涮乃葉-統一時代市府店	臺北市信義區台北市信義區忠孝東路5段8號3樓	(02)27230646	25.0406521	121.5652968
-涮乃葉-寶慶遠百店	臺北市中正區台北市中正區寶慶路32號6樓(遠東百貨6樓)	(02)23611258	25.0415675	121.5090355
-深紅鍋物	臺北市大安區敦化南路一段246號B2	(02)87730035	25.0404437	121.5483542
-第一佳(微風台大醫院商場)	臺北市中正區中山南路77號B1F	(02)23952298#8	25.0360978	121.5168171
-第一銀行總行大樓員工餐廳	臺北市中正區重慶南路一段30號21樓	(02)23481520	25.0455659	121.5130548
-荷李活茶街 (忠孝SOGO店)	臺北市大安區忠孝東路四段45號2F	(02)27780369	25.0418698	121.5446329
-莆田 (忠孝SOGO店)	臺北市大安區忠孝東路四段45號12F	(02)87710767	25.0421475	121.544839
-野橙咖啡	臺北市大安區羅斯福路三段269巷6之1號	(02)27025522	25.0192877	121.5304715
-魚君 ????? 天母SOGO店	臺北市士林區中山北路六段77號8樓	(02)88661170	25.105306	121.5245943
-鳥作洋食	臺北市信義區忠孝東路四段553巷16弄2號1樓	(02)27567966	25.0430116	121.5631092
-麥味登士林葫東	臺北市士林區葫東街28-1號	(02)28112112	25.0835435	121.5110787
-麥味登大直北安羅伯	臺北市中山區北安路595巷19號	(02)85092968	25.0822321	121.5474966
-麥味登內湖文湖	臺北市內湖區文湖街49號	(02)87516996	25.0867965	121.5622178
-麥味登內湖光寶	臺北市內湖區瑞光路392號	\N	25.0778958	121.5711203
-麥味登內湖波士店	臺北市內湖區內湖路一段411巷9弄4號	(02)26277311	25.0821319	121.57139
-麥味登內湖星雲	臺北市內湖區星雲街10號1F	(02)87920660	25.0776788	121.5904197
-麥味登內湖園區	臺北市內湖區內湖路一段323巷30號	(02)26275822	25.084282	121.5678929
-麥味登內湖新明	臺北市內湖區新明路198號	(02)27960603	25.0572851	121.5849385
-麥味登內湖新湖	臺北市內湖區新湖三路118號	(02)27956995	25.0640868	121.5774468
-麥味登內湖葫洲	臺北市內湖區民權東路六段296巷67號	(02)26333323	25.0709393	121.6076821
-麥味登內湖旗艦	臺北市內湖區文德路90巷43號	(02)26272227	25.0773072	121.5832438
-麥味登內湖碧湖	臺北市內湖區金龍路107號	(02)87916778	25.085668	121.591069
-麥味登天母士東	臺北市士林區士東路71號	(02)28712828	25.1121516	121.5282897
-麥味登文山木星好運	臺北市文山區木新路三段315號	(02)29360988	24.9805708	121.5567808
-麥味登文山木新	臺北市文山區木新路二段277號	(02)29398080	24.9828512	121.5659902
-麥味登文山世新	臺北市文山區景興路288號	(02)29350818	24.9892698	121.5421668
-麥味登文山辛亥	臺北市文山區辛亥路五段5號	(02)29315015	25.0006072	121.5545828
-麥味登文山政大	臺北市文山區萬壽路25巷3號	(02)29381314	24.988556	121.5760303
-麥味登文山滬江	臺北市文山區羅斯福路六段455巷21號1樓	(02)29351157	24.9901639	121.540521
-麥味登文山興隆	臺北市文山區興隆路四段119號	(02)29392619	24.9857321	121.5614362
-麥味登文山饗食大亨	臺北市文山區羅斯福路五段218巷25號	(02)29301098	25.0020364	121.5375967
-麥味登北市大安	臺北市大安區大安路二段134號	(02)27017080	25.0298242	121.5458685
-麥味登北市大道	臺北市信義區大道路50號	(02)27598668	25.041349	121.582126
-麥味登北市仁愛	臺北市大安區仁愛路三段24巷1-6號	(02)27037182	25.0367632	121.5356852
-麥味登北市六張犁店	臺北市信義區基隆路二段183號1樓	(02)27323011	25.0248843	121.5533861
-麥味登北市天秤獅	臺北市信義區光復南路473巷29號	(02)27589477	25.033782	121.5588746
-麥味登北市文山木柵店	臺北市文山區木柵路三段55號	(02)86617903	24.9886388	121.5664296
-麥味登北市世貿莊敬店	臺北市信義區莊敬路203號	(02)87861811	25.0306362	121.5615427
-麥味登北市台大	臺北市中正區羅斯福路四段118號	(02)23657279	25.0132493	121.5355537
-麥味登北市台視店	臺北市松山區八德路三段12巷5弄6號	(02)25795877	25.0474712	121.5508357
-麥味登北市民生	臺北市松山區民生東路五段153-5號	(02)27607148	25.059357	121.5624689
-麥味登北市民生延壽店	臺北市松山區延壽街173號	(02)27476967	25.0568858	121.5620214
-麥味登北市民權	臺北市大同區民權西路234號	(02)25506676	25.0627817	121.5129743
-麥味登北市永春	臺北市信義區忠孝東路五段372巷27弄77-1號	(02)27220602	25.0398303	121.5766184
-麥味登北市同德	臺北市南港區同德路54號	(02)27855330	25.0454443	121.5847771
-麥味登北市成功	臺北市萬華區萬大路177號	(02)23075752	25.0282275	121.5007431
-麥味登北市百勝	臺北市信義區吳興街281巷14號	(02)27584827	25.0264119	121.564411
-麥味登北市西松	臺北市松山區健康路325巷6弄2號	(02)85095201	25.0548238	121.5674264
-麥味登北市西門	臺北市萬華區西寧南路24號	(02)23717288	25.0479314	121.5072371
-麥味登北市和平	臺北市中正區廈門街75號	(02)23652299	25.0248168	121.5175271
-麥味登北市府捷運店	臺北市信義區基隆路1段147巷12號	(02)27491801	25.0419415	121.5653136
-麥味登北市忠孝店	臺北市信義區忠孝東路5段524巷6號	(02)23463923	25.0406521	121.5652968
-麥味登北市忠順	臺北市文山區忠順街2段25號	(02)29399358	24.9848594	121.5631421
-麥味登北市昌吉	臺北市大同區昌吉街27號	(02)25996761	25.0659562	121.5170502
-麥味登北市昆陽	臺北市南港區昆陽街94號	(02)27883965	25.0517005	121.5934512
-麥味登北市松山	臺北市信義區松山路241號	(02)27682899	25.044465	121.5779883
-麥味登北市松仁	臺北市信義區松仁路232號	(02)27585197	25.0252129	121.569051
-麥味登北市松德	臺北市信義區松德路193號	(02)27260169	25.035552	121.574784
-麥味登北市長安東	臺北市中山區長安東路二段72號	(02)25065763	25.0483232	121.5336666
-麥味登北市長春	臺北市中山區長春路238號	(02)25071770	25.0545479	121.538196
-麥味登北市信義基隆店	臺北市信義區基隆路二段131-2號	(02)27327880	25.0280818	121.5568266
-麥味登北市南京三民(togo外賣專門店)	臺北市松山區南京東路五段186號	(02)27489768	25.0512988	121.5635769
-麥味登北市重慶	臺北市大同區重慶北路一段61號1F	(02)25593866	25.0513729	121.514129
-麥味登北市神通	臺北市中山區新生北路三段69-1號	(02)25866260	25.066501	121.5281052
-麥味登北市健康店	臺北市松山區健康路15巷13號	(02)25148117	25.0546367	121.5525518
-麥味登北市參食	臺北市松山區光復北路60巷19-4號	(02)25782800	25.0496797	121.5568815
-麥味登北市國王	臺北市中山區民生東路一段5號	(02)25115091	25.0581199	121.5234909
-麥味登北市國王二	臺北市中山區長春路147-2號	(02)25312636	25.054992	121.53235
-麥味登北市通化	臺北市大安區通安街54號	(02)27065066	25.0311876	121.5531705
-麥味登北市敦北	臺北市松山區敦化北路222巷11號	(02)27120158	25.0593265	121.5483354
-麥味登北市敦南遠企店	臺北市大安區敦化南路二段63巷5號	(02)27035003	25.0310916	121.5494309
-麥味登北市新生店	臺北市中正區忠孝東路二段116號	(02)23919493	25.042527	121.5313124
-麥味登北市新東興	臺北市松山區八德路四段245巷36號	(02)27476080	25.0500654	121.5644189
-麥味登北市瑞安	臺北市大安區瑞安街208巷26號	(02)27077551	25.0288552	121.540407
-麥味登北市實踐	臺北市中山區大直街70號	(02)25336934	25.0837391	121.546091
-麥味登北市榮星花園	臺北市中山區五常街85號	(02)25082251	25.0644354	121.5407221
-麥味登北市龍江1店	臺北市中山區龍江路244號	(02)77292550	25.0591671	121.5406571
-麥味登北投奇岩	臺北市北投區三合街二段463號	(02)28985212	25.1263407	121.501864
-麥味登北投陽明	臺北市北投區立農街二段275號	(02)28220198	25.1188809	121.5151727
-麥味登北投實踐	臺北市北投區實踐街62號	(02)28201888	25.115199	121.5098272
-麥味登北門塔城	臺北市大同區塔城街48號	(02)25522215	25.0524305	121.5102846
-麥味登台北科大to-go 專門店	臺北市大安區新生南路一段1號	(02)87729001	25.0442036	121.5331907
-麥味登台北陽光店	臺北市信義區信安街155號	(02)27339595	25.0227778	121.5552778
-麥味登台北萬隆	臺北市文山區羅斯福路五段233號	(02)29356080	25.0017189	121.5393063
-麥味登信義福德	臺北市信義區福德街246號	(02)27271825	25.038746	121.585223
-麥味登南軟園區	臺北市南港區新民街81號	(02)27833313	25.055618	121.611137
-麥味登景興饗食大亨	臺北市文山區景興路40號	(02)29325657	24.9971174	121.5445208
-麥味登萬華雙園	臺北市萬華區雙園街148號	(02)22123484	25.0316068	121.4919004
-麥味登萬華寶興	臺北市萬華區寶興街109號	(02)23395976	25.0254744	121.4946857
-麻辣45 本店	臺北市信義區台北市信義區忠孝東路五段 68 號 45 樓	(02)27253358	25.0403792	121.5670164
-凱林鐵板燒	臺北市大安區忠孝東路三段300號B2	(02)87728551	25.0408932	121.5432417
-凱基證券總公司員工餐廳(自有)	臺北市中山區成功里明水路700號4樓	(02)21818888	25.0850766	121.5515143
-勝利廚房	臺北市中山區八德路二段174巷28號1-2樓	(02)27766603	25.0453282	121.5381728
-博多天麩羅山海	臺北市信義區忠孝東路五段8號B2	(02)27231885	25.0404655	121.565466
-喜陽鮮食(微風．三總商店街)	臺北市內湖區成功路二段325號B1樓	(02)87923311#1	25.0728868	121.5910904
-帽哥海味	臺北市信義區忠孝東路四段559巷16弄8號1樓	\N	25.0422519	121.5641242
-晶湯匙泰式主題餐廳	臺北市大安區忠孝東路四段300號10樓	(02)87725006	25.0411575	121.5562763
-港都熱炒 中山旗艦店	臺北市中山區民生東路一段52號	(02)25221918	25.0579253	121.524896
-無二會所	臺北市大安區杭州南路二段61巷12號	(02)23917599	25.0301296	121.522979
-發肉燒肉餐酒(敦化本店)	臺北市松山區敦化北路4巷56號	(02)27113331	25.0502922	121.5448312
-華南銀行員工餐廳	臺北市信義區松仁路123號3樓	(02)23713111#3	25.0345192	121.5687809
-貴陽柳州螺螄粉	臺北市萬華區貴陽街二段36號	(02)23612627	25.0394622	121.5050945
-開飯川食堂	臺北市大安區敦化南路一段246號B2	(02)27515618	25.0404437	121.5483542
-陽明山春天書食創作料理士林店	臺北市士林區?山路119-1號	(02)28620178	25.0950492	121.5246077
-雲泰小鎮泰式料理	臺北市中正區羅斯福路四段90巷2-2號	(02)23675625	25.0138485	121.5346965
-黑毛屋 信義 ATT 店	臺北市信義區台北市信義區松壽路 12 號 4 樓	(02)77362698	25.03531	121.5660665
-黑毛屋 南港中信店	臺北市南港區台北市南港區經貿二路 186-1 號 2 樓	(02)27865669	25.0588333	121.6149583
-黑毛屋大直忠泰店	臺北市中正區樂群三路200號5樓	(02)85025991	25.082727	121.5572333
-黑毛屋天母SOGO店	臺北市士林區中山北路6段77號8樓	(02)28366018	25.105306	121.5245943
-黑毛屋本家 信義店	臺北市信義區台北市信義區松高路 19 號 6 樓	(02)27237722	25.0395325	121.5667147
-黑毛屋本家(復興SOGO店)	臺北市大安區忠孝東路三段300號11樓	(02)27315199	25.0408977	121.5431893
-黑毛屋微風台北車站店	臺北市中正區北平西路 3 號 2 樓	(02)23751511	25.0477467	121.5169983
-愛加倍餐廳	臺北市文山區萬美街一段19巷5之1	(02)22303518	25.0015562	121.5690534
-新盛員工餐廳	臺北市中正區忠孝東路一段12號B3	\N	25.0448687	121.5222703
-新葡苑（天母SOGO店）	臺北市士林區中山北路6段77號8樓	(02)28366628	25.105306	121.5245943
-新葡苑(復興SOGO店)	臺北市大安區忠孝東路三段300號10樓	(02)87720177	25.0411128	121.5432167
-楊記(微風．三總商店街)	臺北市內湖區成功路二段325號B1樓	(02)87923311#1	25.0728868	121.5910904
-萬芳冰室-南京店	臺北市松山區台北市松山區南京東路五段66巷16號	(02)27494069	25.0502581	121.5606895
-義美見學餐廳(北榮美食街)	臺北市北投區石牌路二段201號生活廣場	(02)28749302	25.1208483	121.5227627
-蜂蜜窩桌遊咖啡館	臺北市松山區光復北路103巷38號	(02)27425922	25.0507962	121.5597365
-詩特莉 Aunt Stella (忠孝SOGO店)	臺北市大安區忠孝東路四段45號B1	(02)27403072	25.0420339	121.5447843
-頌丹樂泰式伊善料理	臺北市中正區北平西路3號2樓	(02)23882968	25.0477467	121.5169983
-彰化商業銀行員工餐廳	臺北市中山區中山北路二段57號13樓	\N	25.0553636	121.5229833
-漢來名人坊	臺北市大安區敦化南路一段246號4樓	(02)87732111	25.0399224	121.5481944
-漢來海港-天母店	臺北市士林區中山北路六段77號7F	(07)4128068	25.1051037	121.524426
-漢來海港-敦化店	臺北市大安區敦化南路一段246號6樓	(07)4128068	25.040247	121.5483374
-漢來蔬食 (忠孝SOGO店)	臺北市大安區忠孝東路四段45號11F	(02)27311128	25.0419132	121.544963
-綠帶純植物烘焙	臺北市松山區民生東路五段36巷8弄64號1樓	(02)27477668	25.057179	121.5605242
-翟記牛肉麵食館	臺北市大安區通安街80號	(02)87717195	25.0303244	121.5531003
-聚 北海道鍋物 (忠孝SOGO店)	臺北市大安區忠孝東路四段45號11F	(02)27218787	25.0419132	121.544963
-聚寶員工餐廳	臺北市松山區敦化北路158號	(02)27156888	25.055594	121.5483468
-臺灣企銀總行大樓員工餐廳	臺北市大同區塔城街30號18樓	(02)25597171	25.0512172	121.5103705
-蓋子普拉斯小餐館	臺北市大安區忠孝東路三段10巷22號	(02)27118571	25.0407582	121.5333229
-遠東SOGO忠孝店員工餐廳	臺北市大安區忠孝東路四段45號	(02)27765555	25.0421775	121.5449653
-廟口蚵仔煎(微風台大醫院商場)	臺北市中正區中山南路77號B1F	(02)23952298	25.0360978	121.5168171
-摩斯漢堡(天母SOGO店)	臺北市士林區中山北路六段77號	(02)28343204	25.1049953	121.5243331
-樂檸漢堡（忠孝敦化門市）	臺北市大安區忠孝東路四段223巷47號	(02)87720607	25.0428925	121.552845
-樂檸漢堡（信義遠百門市）	臺北市信義區松仁路58號B3（A13 信義遠百 B3）	(02)27255260	25.0367511	121.5679552
-樂檸漢堡（南京三民門市）	臺北市松山區光復北路11巷99-1號	(02)27620398	25.0504299	121.5623778
-蔬店手作鍋物復興店	臺北市大安區復興南路一段107巷2號	(02)27311008	25.043562	121.5443146
-蔬漫小姐Miss Shumaan.house	臺北市信義區永吉路120巷82號1F	(02)27662386	25.0425878	121.5701179
-醉美餐酒水煙館 Drunk Night	臺北市大安區文昌街128號	\N	25.0325599	121.552617
-養心茶樓	臺北市中山區松江路128號2樓	(02)25428828	25.0527859	121.5327926
-曉鹿鳴樓上海菜	臺北市大安區羅斯福路四段85號	(02)23688994	25.0130027	121.5367066
-橫濱牛排-微風南京店	臺北市松山區南京東路3段337號3樓	(02)87125575	25.0519961	121.5482156
-燒肉Smile大安忠孝店	臺北市大安區台北市大安區忠孝東路四段104號號2樓之1	(02)27522000	25.041369	121.546653
-燒肉Smile台北內湖店	臺北市內湖區台北市內湖區內湖路一段320號	(02)26599555	25.0815289	121.5697476
-燒肉Smile台北忠孝	臺北市信義區忠孝東路五段497號2樓	(02)87852227	25.041398	121.578408
-築間幸福鍋物內湖成功	臺北市內湖區114臺北市內湖區成功路4段34號1樓	(02)27952275	25.0818139	121.59167
-築間幸福鍋物北投石牌	臺北市北投區112臺北市北投區石牌路一段160號	(02)28289366	25.1143471	121.5133335
-築間幸福鍋物台北三民	臺北市松山區105臺北市松山區三民路25號	(02)25289191	25.0545691	121.5636198
-築間幸福鍋物台北內湖	臺北市內湖區114台北市內湖區內湖路一段318號	(02)26561277	25.0816378	121.5697729
-築間幸福鍋物台北西門町	臺北市萬華區108臺北市萬華區昆明街92-1號2樓	(02)23310003	25.0450004	121.5052356
-築間幸福鍋物台北忠孝一	臺北市信義區110臺北市信義區忠孝東路五段695號	(02)87852222	25.0423306	121.5800003
-築間幸福鍋物台北忠孝二	臺北市大安區106臺北市大安區忠孝東路四段120號2樓	(02)27732727	25.0412849	121.54732
-築間幸福鍋物台北松江	臺北市中山區104臺北市中山區松江路27號	(02)25068633	25.0472323	121.5332259
-築間幸福鍋物台北南京一	臺北市中山區104臺北市中山區南京東路一段138號1樓	(02)25429099	25.051807	121.5273834
-築間幸福鍋物台北南京二	臺北市中山區104臺北市中山區南京東路一段138號2樓	(02)25429199	25.0519018	121.5274034
-築間幸福鍋物台北南港	臺北市南港區115臺北市南港區興中路56巷3號	(02)26516268	25.0565743	121.606695
-築間幸福鍋物台北復興南	臺北市松山區105臺北市松山區復興南路一段1之1號	(02)27525568	25.0472563	121.5441305
-築間幸福鍋物台北農安	臺北市中山區104臺北市中山區農安街57號	(02)25911717	25.0650612	121.5270267
-築間幸福鍋物台北雙城	臺北市中山區104臺北市中山區雙城街34號1樓	(02)25960707	25.0663889	121.5241667
-築間幸福鍋物信義世貿店	臺北市信義區台北市信義區基隆路一段426號	(02)27201555	25.033879	121.5597969
-隨意吧(公企店)	臺北市大安區金華街187號1樓	(02)23416777	25.0305711	121.5277226
-靜岡勝政日式豬排	臺北市士林區中山北路六段77號8F	(02)28363899	25.105306	121.5245943
-靜岡勝政豬排 南港環球店	臺北市南港區忠孝東路七段371號B1	(02)27865589	25.0528955	121.6072597
-餡老滿(台北吉林店)	臺北市中山區松江路90巷23號	(02)25672028	25.0506088	121.5303547
-餡老滿(南港旗艦店)	臺北市南港區經貿二路66號2樓	(02)27893423	25.0571699	121.6161065
-默爾Pasta Pizza(信義誠品店)	臺北市信義區松高路11號5樓	(02)27224660	25.0397197	121.5658739
-龍江涼麵	臺北市中山區龍江路356巷5號(近濱江市場)	(02)25062623	25.0661129	121.5407182
-龍凰號(微風．三總商店街)	臺北市內湖區成功路二段325號B1樓	(02)87923311	25.0728868	121.5910904
-優米自助餐(微風．三總商店街)	臺北市內湖區成功路二段325號B1樓	(02)87923311	25.0728868	121.5910904
-優喜-鍋物專門店	臺北市信義區基隆路一段147巷5弄5號	(02)27493636	25.0427032	121.5660819
-戲台酒館 Theater Trattoria	臺北市中正區中山南路21-1號	(02)23971920	25.035244	121.5182125
-禪風茶樓 Zen Tea Restaurant	臺北市中山區松江路182號2樓	(02)25678977	25.0563116	121.5329008
-韓宮韓式料理	臺北市中山區長安東路二段49之1號	(02)25235380	25.0485926	121.5323787
-點水樓(復興SOGO店)	臺北市大安區忠孝東路三段300號11樓	(02)87725089	25.0408977	121.5431893
-薆悅精品inn cafe x 台北成都會館	臺北市萬華區成都路27巷8號	(02)23751212	25.0430379	121.506779
-藏粵閣	臺北市士林區格致路237號2樓	(02)28616661	25.1433212	121.5488227
-藏壽司 大直ATT店	臺北市中山區敬業三路123號2樓	(02)77520835	25.0812115	121.5557198
-藏壽司 中山南西店	臺北市大同區南京西路57號2樓	(02)25565289	25.0531069	121.5193384
-藏壽司 台北館前店	臺北市中正區館前路12號5樓	(02)23316029	25.0456618	121.5147282
-藏壽司 松江南京店	臺北市中山區南京東路二段101號B1	(02)25681519	25.0522185	121.5324727
-藏壽司 信義ATT店	臺北市信義區松壽路12號4樓	(02)77340800	25.03531	121.5660665
-藏壽司 南港CITYLINK店	臺北市南港區忠孝東路七段369號3樓	(02)26510266	25.0524417	121.6035521
-藏壽司 微風松高店	臺北市信義區松高路16號B1	(02)27206900	25.0387015	121.5672818
-藝食知選	臺北市士林區臺北市士林區天玉街81巷2號	(02)28762882	25.1229278	121.5309857
-麵工坊大安店	臺北市大安區和平東路二段118巷2弄1號1樓	(02)23776186	25.0245418	121.5428109
-魔法咖哩	臺北市中正區許昌街30號2樓	(02)23886298	25.0454168	121.5158349
-鰻將劍持屋	臺北市大安區忠孝東路三段300號B2	(02)87728551	25.0408932	121.5432417
-靈感咖啡	臺北市大安區新生南路三段84-6號3樓	(02)23631371	25.0188775	121.5334191
-讚豆工坊	臺北市大同區大龍街60號	\N	25.0651459	121.5159914
-?陸伍貳懷舊港式冰室	臺北市萬華區昆明街99號	\N	25.0423903	121.50486
-\.
-
-
---
--- Data for Name: employment_age_structure_new_tpe; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: employment_age_structure_new_tpe; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 COPY public.employment_age_structure_new_tpe (ogc_fid, year, gender, age_structure, percentage, data_time, _ctime, _mtime) FROM stdin;
@@ -12424,7 +11040,7 @@ COPY public.employment_age_structure_new_tpe (ogc_fid, year, gender, age_structu
 
 
 --
--- Data for Name: employment_age_structure_tpe; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: employment_age_structure_tpe; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 COPY public.employment_age_structure_tpe (ogc_fid, year, gender, age_structure, percentage, data_time, _ctime, _mtime) FROM stdin;
@@ -14052,819 +12668,7 @@ COPY public.employment_age_structure_tpe (ogc_fid, year, gender, age_structure, 
 
 
 --
--- Data for Name: hotel_new_tpe; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.hotel_new_tpe (name, address, tel, latitude, longitude, room_count, price_min, price_max) FROM stdin;
-香香雙博士大旅社	234新北市永和區竹林路73號5樓及8樓	(02)89285168  	25.013517	121.519031	46	880	1350
-香奈爾汽車旅館	247新北市蘆洲區長樂路56號	(02)82855555  	25.0864029	121.463024	31	2580	5000
-碧潭飯店	231新北市新店區碧潭路121號	(02)22116055  	24.958425	121.534224	69	4280	6280
-沐舍溫泉渡假酒店	207新北市萬里區萬里加投166之1號	(02)24082559  	25.215392	121.643493	50	16500	45000
-柯達大飯店(永和店)	234新北市永和區永和路1段103號	(02)29239999  	25.007732	121.513578	66	1200	15000
-綠映旅舍	241新北市三重區正義北路68號11樓之3及12樓	(02)29850719  	25.064316	121.4971153	26	2600	6500
-長緹海景飯店	251新北市淡水區淡海路176號1至6樓	(02)28057228  	25.184061	121.420539	45	3000	8000
-宮賓大旅社	220新北市板橋區南雅南路1段1巷25號2至4樓	(02)29660889  	25.006801	121.457363	20	450	800
-金龍湖旅館	221新北市汐止區湖前街103及105號1至5樓	(02)26959339  	25.071439	121.630955	31	2500	2500
-馨記旅館	247新北市蘆洲區九芎街95號	(02)28480296  	25.079361	121.466075	26	1480	1480
-陽明山天籟渡假酒店	208新北市金山區名流路1之7號	(02)24080400  	25.201883	121.594999	77	14500	60000
-冠君大飯店	220新北市板橋區重慶路91之1號3至7樓(1樓門廳)	(02)89521111  	25.0061414	121.4620706	70	3800	9000
-享來大旅社	251新北市淡水區中山路129巷22,23號3至7樓(1樓門廳）	(02)26228661  	25.170461	121.441707	25	1200	1500
-薇星旅館	221新北市汐止區勤進路416號1-10樓,418號2-10樓,420號2-8樓及422號2-7樓	(02)26435566  	25.0533748	121.6636462	32	4230	4230
-富逸旅趣-板橋府中館	220新北市板橋區東門街30之2號11樓之1及12樓之1	(02)89658288  	25.0085737	121.4580935	46	20000	30000
-盟園旅社	220新北市板橋區南雅南路1段1巷15號1至4樓	(02)89698016  	25.0068729	121.457297	12	700	700
-喬太商務旅館	220新北市板橋區中山路2段359及361號10至12樓	(02)29645353  	25.019176	121.47965	22	1100	1100
-富康精彩旅店	220新北市板橋區文化路2段171號2至5樓	(02)22556336  	25.027489	121.470317	24	5600	5600
-漁人碼頭休閒旅館	251新北市淡水區中正路2段22巷8號2至7樓	(02)28058886  	25.181656	121.420552	36	3690	5720
-青青汽車旅館	237新北市三峽區長泰街30號及30號之1至27	(02)26743333  	24.931984	121.378745	48	2680	4800
-薇薇精品旅館	247新北市蘆洲區永安北路2段42之1號	(02)82856633  	25.082416	121.482333	56	3080	3600
-觀海樓旅店	251新北市淡水區中正東路1段129號3至12樓(1樓門廳)	(02)26291117  	25.159308	121.455955	60	5000	28000
-菁鳥旅館	220新北市板橋區南雅南路1段113及115號	(02)29669621  	25.0048938	121.4553962	33	2500	2800
-三重旅社	241新北市三重區正義北路291號2至4樓	(02)29832588  	25.070647	121.49513	20	600	600
-名爵汽車旅館	241新北市三重區正義北路73號1,4至7樓	(02)29826145  	25.064789	121.49728	49	3620	4200
-皇品時尚旅店	220新北市板橋區民族路34巷13號1至5樓	(02)89648787  	25.009211	121.462457	20	4700	4700
-億苑賓館	220新北市板橋區後菜園街35號	(02)29654252  	25.009997	121.456428	24	4200	7200
-悅榕汽車旅館	220新北市板橋區縣民大道1段146號2至3樓(1樓門廳)	(02)89516333  	25.00625	121.457836	40	580	7980
-印象賓館	238新北市樹林區鎮前街3號4樓	(02)26834727  	24.993166	121.426365	17	1000	2000
-昇園賓館	238新北市樹林區鎮前街3之4號5樓	(02)26810868  	24.993166	121.426365	20	1000	2000
-佳賓旅社	238新北市樹林區博愛街2巷24,26,28號	(02)26812329  	24.992846	121.426859	16	800	800
-龍海大飯店	238新北市樹林區博愛街6號5樓	(02)26813333  	24.993063	121.427613	35	1000	2600
-板橋旅居文旅	220新北市板橋區公園街16號1至6樓	(02)29565888  	25.00927183	121.4628644	47	12000	12000
-香寧旅店	251新北市淡水區民權路105至111號7至8樓	(02)28097777  	25.137578	121.460202	29	1480	1480
-新五福旅社	251新北市淡水區中山路95巷18號2至4樓	(02)26211719  	25.170223	121.442042	13	1200	15000
-新加州景觀旅館	231新北市新店區北新路1段1號	(02)29161717  	24.958785	121.537422	34	3800	7500
-蘭竹大飯店	220新北市板橋區東門街13及15號	(02)29680186  	25.008614	121.458429	40	1250	1550
-丰居旅店微風館	241新北市三重區三和路4段282號3至12樓(1樓門廳)	(02)22862288  	25.0773284	121.4851339	98	15000	30000
-相見歡旅館	234新北市永和區永和路1段23號1至3樓	(02)29276188  	25.005893	121.512874	20	3380	5680
-華倫大旅社	220新北市板橋區館前西路265巷3號	(02)29689578  	25.0082139	121.454042	17	1200	1200
-美錦樂賓館	220新北市板橋區南雅東路118號	(02)29609933  	25.008369	121.453421	19	650	650
-愛莉亞汽車旅館	237新北市三峽區中山路169巷10號(代表號)	(02)26741133  	24.935946	121.363821	49	1580	3080
-龍山旅社	231新北市新店區光明街52號	(02)29111800  	24.959475	121.538625	24	1000	1000
-南國旅社	220新北市板橋區館前西路265巷1號1至5樓	(02)29682121  	25.008293	121.454078	25	500	700
-美莊旅社	220新北市板橋區東門街3,5號	(02)29698225  	25.0088007	121.4561113	29	1000	1600
-愛家旅館	231新北市新店區北新路2段108號7樓	(02)29129111  	24.974164	121.543257	31	2200	2500
-旅居文旅-板橋驛站2館	220新北市板橋區南雅南路2段28號	(02)29559199  	25.003215	121.454328	27	12000	12000
-黎明旅館	231新北市新店區北新路3段51之1號4樓	(02)29119188  	24.981013	121.541418	37	1800	3000
-名華大旅社	241新北市三重區福德北路53巷1號	(02)29754816  	25.065202	121.502479	28	300	1000
-慶都大旅社	241新北市三重區重新路2段69號2樓及71號2樓	(02)29712263  	25.061991	121.496643	30	700	1200
-庭有名旅居文旅	236新北市土城區中正路30號1至9樓	(02)22619191  	24.974949	121.443392	48	12000	18000
-名流賓館	241新北市三重區正義北路6之1號8樓	(02)29857515  	25.062712	121.497482	30	800	2000
-千嘉旅店	220新北市板橋區館前西路139號8樓	(02)29695066  	25.007824	121.456291	20	1400	1400
-玉山旅店	239新北市鶯歌區文化路228號	(02)86776060  	24.948658	121.352599	11	2000	3000
-中信旅店	234新北市永和區竹林路41號7至9樓	(02)89250688  	25.014253	121.517933	27	1380	1880
-明園賓館	238新北市樹林區博愛街6號4樓	(02)26835057  	24.993065	121.427613	34	900	2000
-豪華旅社	238新北市樹林區鎮前街77之10號	(02)26861477  	24.990515	121.425571	17	800	1200
-凱帝賓館	235新北市中和區景平路669號3樓-13至-27,4樓-5,-7,-8	(02)22481998  	25.002629	121.496533	31	1500	1500
-福泰翡翠灣渡假飯店	207新北市萬里區翡翠路17號1至2樓,14至18樓	(02)24926565  	25.18628	121.68372	240	8000	25000
-土城飯店	236新北市土城區中央路2段223之4號1至2樓,223之5號3至5樓	(02)82612928  	24.9734909	121.440843	19	1380	2280
-沃客伽洲旅社	241新北市三重區成功路97號8至9樓	(02)29737000  	25.051515	121.488095	53	16800	31800
-馥俐商旅	220新北市板橋區東門街36之5號	(02)29679008  	25.007901	121.458116	42	9900	16000
-新莊客旅	242新北市新莊區中華路1段103號3樓	(02)22776599  	24.987039	121.44481	39	4500	10000
-嘉家旅店	234新北市永和區福和路292號5樓(含5樓之1)至6樓及294號5至6樓	(02)29297029  	25.0073466	121.5172134	20	800	1380
-極品旅館	242新北市新莊區新莊路757號	(02)22085518  	25.03261	121.442574	10	4980	4980
-華園旅社	241新北市三重區正義北路8號2至4樓	(02)29714231  	25.062783	121.497469	22	800	800
-仲信商務會館	231新北市新店區中興路3段219之2號1至10樓	(02)29106600  	24.9826349	121.543171	71	4400	6600
-首府大旅社	220新北市板橋區館前東路96號7樓	(02)29598911  	25.007451	121.462419	42	3000	9600
-華春林賓館	241新北市三重區重新路3段180號1至5樓	(02)29769825  	25.059037	121.490602	22	700	2180
-秀山大飯店	233新北市烏來區烏來街83號	(02)26616789  	24.864253	121.551769	10	2500	4500
-烏來輕井澤溫泉旅館	233新北市烏來區烏來街6號	(02)26616425  	24.864752	121.551659	16	8800	11000
-三和旅舍	241新北市三重區三和路2段49號	(02)29735264  	25.067675	121.500698	40	1050	1750
-喜客商旅-三重館	241新北市三重區龍門路1號10至12樓及10樓之1至12樓之1	(02)29870660  	25.070982	121.494895	31	14800	16800
-百麗旅店	220新北市板橋區南門街1巷2號	(02)22727398  	25.008538	121.45756	48	9880	12800
-宏仁旅店	235新北市中和區景新街391號2至5樓	(02)29449985  	24.990141	121.512463	27	1980	2580
-嘉年華汽車旅館	247新北市蘆洲區集賢路385號(代表號)	(02)28475211  	25.0825719	121.480634	31	2900	2900
-台北薇米商旅	241新北市三重區重新路2段78號16至17樓	(02)29746636  	25.061757	121.497167	51	4800	17800
-怡美賓館	208新北市金山區民生路206號	(02)24982212  	25.2208319	121.640948	32	1400	2000
-雲仙大飯店	233新北市烏來區烏來里瀑布路1之1號	(02)26616510  	24.84898	121.552134	60	4400	8500
-友愛金色商旅	220新北市板橋區重慶路66號11至13樓	(02)29647599  	25.0064229	121.461666	47	3300	12800
-香格里拉汽車旅館	235新北市中和區中正路637巷52弄12號	(02)82213666  	24.994595	121.484617	49	2600	3200
-香格里拉汽車旅館中和館	235新北市中和區連城路469巷79弄25號	(02)82213666  	24.994105	121.484381	31	2600	2600
-馥俐旅店	220新北市板橋區東門街10號2至5樓,12號1至5樓	(02)22722625  	25.0090009	121.457892	28	9900	9900
-君祥酒店	243新北市泰山區中港西路456號	(02)28345102  	25.053278	121.433046	133	3600	5200
-雅都旅社	220新北市板橋區中興路5號2至3樓	(02)29682345  	25.03261	121.442574	14	6980	6980
-旅居文旅-板橋驛站1館	220新北市板橋區南雅東路46號	(02)89682228  	25.00683152	121.4543127	24	12000	12000
-柜富旅店	241新北市三重區正義北路6之1號10至11樓	(02)29836801  	25.062712	121.497481	58	12000	18000
-夢綺旅店	220新北市板橋區西門街20號1至4樓	(02)29600888  	25.010996	121.453753	27	12000	15000
-台麗精品旅店	243新北市泰山區台麗街11巷1號1至5樓	(02)29025161  	25.0384089	121.424413	34	4500	8000
-愛摩兒時尚旅?	234新北市永和區仁愛路316,318號	(02)89217721  	25.0078468	121.5034069	73	3500	6800
-上格大飯店	241新北市三重區集成路11號	(02)29775678  	25.051896	121.488743	60	18800	18800
-大東旅社	228新北市貢寮區福隆里興隆街4之1號	(02)24991362  	25.01949324	121.9412014	15	1200	2800
-花蝶晶漾商旅（HOTEL）	242新北市新莊區中港路572號1樓	(02)22779601  	25.053349	121.451488	36	3980	4980
-群策翡翠灣溫泉飯店	207新北市萬里區海景路1號1樓、2樓之1至之8、3樓之1至之8、4樓之1至之11、5樓之1至之11、6樓之1至之11、7樓之1至之11、8樓之1至之11	(02)24925511  	25.1908987	121.6831496	62	6600	20460
-河灣渡假村	226新北市平溪區靜安路三段385號2樓	(02)24958325  	25.048758	121.780458	12	4000	7200
-儷閣經典旅館	235新北市中和區員山路8之6及8之7號	(02)82286686  	24.982353	121.484415	40	6960	6960
-北國之春和風汽車旅館	239新北市鶯歌區鶯桃路362之1號	(02)26780899  	24.963037	121.333863	24	1680	20000
-馥都飯店	220新北市板橋區縣民大道1段189號	(02)29658008  	25.0076129	121.4582219	111	11600	36000
-安盛商務旅館	231新北市新店區二十張路31號	(02)29101477  	24.981689	121.538401	21	3400	3400
-帝苑旅店	220新北市板橋區文化路1段218號1樓及3至7樓	(02)22572525  	25.020321	121.4667039	45	8880	8888
-探索汽車旅館永和館	234新北市永和區保順路27及31號	(02)22323103  	25.0098812	121.5041684	65	4980	9980
-日暉商務旅館	235新北市中和區景平路381號 	(02)22479997  	24.9933862	121.5035418	20	1980	2780
-福格大飯店	251新北市淡水區學府路89號5至16樓	(02)26262929  	25.17041	121.445757	168	5000	12500
-萬里仙境溫泉會館	207新北市萬里區萬里加投197-3號1-4樓	(02)24082669  	25.215917	121.642884	35	5280	5280
-藏愛旅店	241新北市三重區成功路73巷6號	(02)29788880  	25.051607	121.489257	24	12000	15000
-全家旅店	235新北市中和區中和路59之1號、59號5.6樓及9至11樓	(02)82455151  	25.001258	121.5005038	50	6600	12000
-大觀商旅	242新北市新莊區大觀街60號	(02)89911278  	25.036103	121.453804	53	12000	12000
-璞石麗緻溫泉會館	233新北市烏來區忠治里新烏路五段88號	(02)26618000  	24.871593	121.548002	30	7920	28600
-正點旅店	220新北市板橋區文化路1段55號1至4樓,57號3樓,59號3樓	(02)29684152  	25.013618	121.460759	23	2980	2980
-景安精品旅館	235新北市中和區明禮街32號2至9樓	(02)22438989  	24.9961865	121.5044463	39	3250	6000
-沃客新舍旅社	241新北市三重區成功路97號6至7樓	(02)29737000  	25.051517	121.488093	54	16800	31800
-挪威森林森森休閒旅館	251新北市淡水區八勢一街83號	(02)88096789  	25.1548826	121.4613146	65	1980	20000
-福容大飯店 福隆貝悅	228新北市貢寮區福隆里福隆街40號	(02)24992381  	25.018408	121.943978	54	14080	62480
-紫虹汽車旅館	247新北市蘆洲區中正路367號	(02)22887000  	25.0902313	121.4649854	50	980	8880
-香奈爾汽車旅館 (新莊店)	242新北市新莊區後港一路187號	(02)29065555  	25.0284124	121.4336972	55	13800	17080
-月圓汽車旅館	238新北市樹林區八德街208巷12號	(02)86862828  	24.9734399	121.417222	4	1380	2580
-新八里汽車旅館	249新北市八里區頂寮一街12號	(02)26188866  	25.124454	121.451993	47	3440	3440
-金莎旗艦汽車旅館	238新北市樹林區學成路468號及大義路36號	(02)89700189  	24.944468	121.378884	48	6980	9080
-莫瑞納海灣會館	228新北市貢寮區仁愛路106巷36號	(02)24903955  	25.053531	121.929664	70	6500	12000
-雅緹汽車旅館	242新北市新莊區復興路3段8號	(02)22761818  	25.0443789	121.460677	40	5900	5900
-美芙精品旅館	235新北市中和區中正路1184號	(02)22232399  	25.0101816	121.4809741	57	3980	4980
-Q汽車旅館	236新北市土城區中華路1段56巷38號	(02)22629999  	24.98979	121.444601	37	5500	12000
-海灣假日酒店	222新北市深坑區北深路3段265號	(02)26628000  	25.0044941	121.5990502	252	8000	20000
-艾蔓精緻旅館-土城館	236新北市土城區城林路6巷18號	(02)22673399  	24.9769637	121.4375887	69	4300	12000
-薇城精緻旅店	241新北市三重區重新路2段21號7樓	(02)89882868  	25.062548	121.498171	8	1380	2880
-唯愛汽車旅館	231新北市新店區永業路46號	(02)86661699  	24.954004	121.531446	17	4980	11980
-美麗殿精品汽車旅館	235新北市中和區板南路487號	(02)22226868  	25.006308	121.487976	51	8888	22000
-慕朵微風時尚休閒汽車旅館	238新北市樹林區中正路349號	(02)26870033  	25.0061048	121.4171343	36	3280	3280
-挪威森林頂級汽車旅館	220新北市板橋區和平路14巷3號	(02)89513311  	24.993067	121.460704	59	20000	20000
-貝爾頌精緻汽車旅館	238新北市樹林區中正路226號	(02)26751199  	25.0066047	121.4187769	61	2900	7200
-金湧泉溫泉會館	207新北市萬里區萬里加投213之3號	(02)24983588  	25.216053	121.643152	21	6200	32000
-悅池精品旅館	235新北市中和區立德街299號	(02)22211234  	25.009619	121.4833081	49	3980	14800
-君迪商旅	235新北市中和區和城路1段230、232號	(02)82213666  	24.9939553	121.4847931	93	4600	6200
-大板根太子會館	237新北市三峽區插角里插角76號1-5樓	(02)26749228  	24.870591	121.407251	36	8140	11880
-有馬溫泉MOTEL	236新北市土城區中央路2段392號	(02)22606666  	24.97144	121.439199	80	2580	5000
-芬多精加香汽車旅館	221新北市汐止區工建路206號	(02)26476858  	25.0622109	121.6363737	25	3580	3580
-慾望精緻汽車旅館	221新北市汐止區大同路1段118號	(02)26419955  	25.054608	121.630749	27	10000	10000
-挪威森林精品SPA汽車旅館	231新北市新店區寶橋路235巷15號	(02)89116866  	24.9808276	121.5507933	76	20000	20000
-雪?花園汽車旅館	236新北市土城區中華路2段194號	(02)22677899  	24.971006	121.436956	34	1580	2880
-富悅渡假休閒旅館	251新北市淡水區淡海路171號	(02)28051010  	25.183911	121.420339	40	7000	8800
-金國旅社	241新北市三重區正義北路4號6樓	(02)29828158  	25.062499	121.497388	17	900	900
-九閣商旅	231新北市新店區中央路238號	(02)22182118  	24.9725868	121.5291849	57	6000	15000
-福容大飯店 台北二館	222新北市深坑區萬福里北深路3段236號	(02)26620088  	25.004084	121.600619	317	6050	16500
-翰品酒店	242新北市新莊區中正路82號	(02)29987699  	25.037679	121.458087	145	5800	36000
-歐悅精品汽車旅館-林口館	244新北市林口區文化三路二段115巷163號	(02)26086611  	25.081484	121.374467	65	15800	30880
-白宮行館	207新北市萬里區瑪鋉路264號1樓及262號	(02)24926768  	25.180397	121.690402	79	12000	14600
-金湯溫泉會館	207新北市萬里區萬里區大鵬里萬里加投路197之5號2樓	(02)24988788  	25.2149574	121.6442351	10	3420	7700
-府中棧精品商旅	220新北市板橋區府中路9號及9號2至7樓	(02)89698989  	25.009502	121.459856	47	5500	9000
-美麗海精品汽車旅館	242新北市新莊區新北大道二段231號	(02)85225050  	25.060504	121.4620831	46	11180	11180
-遠東金山海灣溫泉HOTEL	208新北市金山區磺港路326號	(02)24980007  	25.229704	121.646519	64	5200	13200
-矽谷溫泉會館	231新北市新店區中正路491之1號	(02)22180101  	24.982458	121.5335311	132	3000	20000
-成旅晶贊飯店台北蘆洲	247新北市蘆洲區中山一路8號6,8-15樓	(02)22855799  	25.080429	121.480455	140	7200	12000
-集璦飯店	235新北市中和區中正路776號	(02)66202888  	25.000404	121.485301	77	10000	12000
-台北集賢商旅	247新北市蘆洲區集賢路372號	(02)82813888  	25.0831617	121.4806581	45	6000	10400
-藍色水岸海景旅店	251新北市淡水區文化路63號10樓之1,11樓之1	(02)86316188  	25.172761	121.43819	1	8000	8000
-承億文旅 淡水吹風	251新北市淡水區沙崙路27號	(02)28051212  	25.180962	121.420512	106	6000	8500
-沃客商旅-正義館	241新北市三重區正義南路55號5樓,5樓-1,5樓-2,6樓,6樓-1至-8	(02)29706005  	25.060405	121.498227	98	14800	21800
-歐朋侖旅店	251新北市淡水區中山路93號9樓及93-1號9樓	0976-926158  	25.170475	121.442302	6	2500	3300
-清翼居旅店	220新北市板橋區館前東路26號6樓及6樓之1	(02)29541808  	25.007125	121.460461	30	7000	8500
-美麗心精品汽車旅館	242新北市新莊區新樹路242號	(02)22051111  	25.018673	121.432931	41	1280	13980
-富士大飯店	221新北市汐止區大同路1段128號	(02)26918999  	25.0544102	121.6286358	214	13200	13200
-雅歌會館	251新北市淡水區學府路36號5至7樓	(02)26260806  	25.169145	121.447946	39	5000	14000
-薆悅酒店野柳渡假館二館	207新北市萬里區野柳里港東路162-3號	(02)77035777  	25.204291	121.690128	141	9680	33880
-悅客商務飯店	220新北市板橋區三民路一段107號1-9樓	(02)29648889  	25.021378	121.479499	69	6000	10000
-探索汽車旅館中和館	235新北市中和區建八路3號	(02)82217070  	24.999059	121.485894	56	3580	9980
-薆悅酒店野柳渡假館一館	207新北市萬里區野柳里港東路162-2號	(02)77035777  	25.204077	121.690337	118	14080	33880
-美麗殿商旅	220新北市板橋區府中路67號2樓、5至10樓	(02)29698588  	25.0092954	121.4580337	66	3600	6600
-清翼居旅店海洋館	220新北市板橋區成都街65號	(02)29596996  	25.005156	121.461804	31	6500	8500
-葛瑞絲商旅	235新北市中和區中山路二段228號5樓	(02)22483666  	25.003007	121.499102	22	4800	7600
-SINGLEINN 單人房-台北館	220新北市板橋區府後街6號3至6樓	(02)29691777  	25.010383	121.458935	151	2800	12900
-麗京棧酒店	243新北市泰山區新北大道7段36號	(02)29010909  	25.032065	121.41914	168	6600	11000
-熊旅溫泉飯店	237新北市三峽區大德路213號	(02)26739456  	24.9467525	121.3725414	88	9000	15000
-白金花園酒店	231新北市新店區安興路77號	(02)86665888  	24.975192	121.515578	225	6000	12000
-紅浮浮逸旅館	234新北市永和區中山路1段331號B1-6樓	(02)32330100  	25.0063031	121.5060771	37	1680	12000
-黑熊好眠站	241新北市三重區重新路2段1號8至9樓	(02)89880000  	25.005939	121.4565846	19	20000	60000
-幸福讚精品飯店	242新北市新莊區思源路332巷9號1至8樓及11號2至5樓	(02)29975186  	25.0509884	121.4611437	44	3990	48800
-板橋王旅館	220新北市板橋區南門街61號13樓	(02)29662670  	25.008131	121.457245	31	2500	4500
-台北輕旅複合式旅店	220新北市板橋區館前東路13號4樓之2	(02)29515121  	25.007172	121.459878	18	780	5980
-樂頤飯店	247新北市蘆洲區集賢路402號3樓至12樓	(02)82811234  	25.0820839	121.4799862	49	5600	12880
-歐遊國際連鎖精品旅館	242新北市新莊區思源路746號	(02)85221100  	25.059801	121.460103	80	6600	36800
-晶贊都會旅店台北永和	234新北市永和區永和路2段168號3樓	(02)29206789  	25.0128522	121.5154175	41	4200	8000
-富信大飯店	221新北市汐止區大同路1段152號	(02)26416333  	25.0554328	121.6298303	202	5000	8500
-蘊泉庄(鴻寬)	251新北市淡水區淡金路79巷16號(代表號)	(02)26227888  	25.161639	121.454358	78	22800	38800
-睡台北複合式旅店	220新北市板橋區南雅南路一段8號5樓、5樓之1至5樓之24	(02)29655480  	25.006623	121.455904	24	15000	35000
-TS MOTEL（鼎帥?泉汽車旅館)	208新北市金山區金美街9號及11號	(02)24988866  	25.219365	121.638557	45	5000	9800
-台北旅人國際青年旅館	251新北市淡水區三民街22號	(02)26258222  	25.171674	121.438965	16	3800	15200
-慶城商旅 Urbanone Hotel	241新北市三重區正義南路55號4樓、4樓之1、4樓之2	(02)29701229  	25.06068	121.497863	46	4980	5280
-大埔硫磺溫泉商務旅?	207新北市萬里區萬里加投205-5號2樓	(02)24986333  	25.21591	121.64323	11	2980	9130
-趣淘漫旅-台北 Hotel Cham Cham Taipei	220新北市板橋區中山路一段139號	(02)89516686  	25.011262	121.463462	337	10000	15000
-丹鳳大旅館	242新北市新莊區中正路740之4號1至5樓	(02)29071188  	25.023197	121.414588	40	3800	5800
-少爺時尚旅館	221新北市汐止區勤進路83巷1之1號	(02)26410599  	25.062104	121.660383	66	4800	6000
-品川商旅	220新北市板橋區重慶路37之1號、37之1號2至6樓	(02)29548166  	25.006011	121.460825	62	18000	28000
-富裕自由旅店正義館	241新北市三重區重新路2段68號9樓、70號9樓	(02)27522125  	25.042385	121.533012	15	20000	25000
-亞昕福朋喜來登酒店	244新北市林口區文化三路一段1號，1號2樓，1號3樓	(02)77276988  	25.06618	121.36098	165	18000	200000
-驛德世紀酒店	242新北市新莊區後港一路169號	(02)29086888  	25.028475	121.432168	160	5200	6800
-台北新板希爾頓酒店	220新北市板橋區民權路88號、88號(2至31樓)、90號	(02)29583000  	25.0120576	121.460801	400	4500	29500
-三重江月行館	241新北市三重區重新路5段598號	(02)85110998  	25.04517	121.469293	37	6000	18800
-雀客快捷	251新北市淡水區長庚里中山路8號7樓	(02)26238111  	25.1692679	121.4446987	22	22000	29480
-捷絲旅台北三重館	241新北市三重區三和路4段107-1號	(02)22806111  	25.077409	121.487504	95	7700	11000
-雀客旅館新北蘆洲	247新北市蘆洲區集賢路409號2樓(1層)、3樓至9樓	(02)22892299  	25.081309	121.480537	82	7600	20800
-將捷金鬱金香酒店	251新北市淡水區中正路一段2號	(02)26210333  	25.1756671	121.4288468	175	10560	28380
-私客創旅	239新北市鶯歌區尖山埔路89號及89號3樓	(02)26798789  	24.9509759	121.347625	22	2560	9680
-帝景飯店	231新北市新店區新店區碧潭路77巷2號	(02)82121100  	24.9574561	121.5343286	28	7650	10800
-傑仕堡有氧酒店	220新北市板橋區縣民大道2段275號、275號2至17樓、277號2樓	(02)77273000  	25.01808	121.46958	204	9900	19800
-東暘旅店	241新北市三重區成功路97號3至5樓	(02)29737000  	24.459312	118.363273	64	16800	31800
-淡水淶滬文旅	251新北市淡水區中正東路1段3巷1號	(02)26222023  	25.1652276	121.4511082	183	7000	18000
-雀客藏居新北三重水漾	241新北市三重區新北市三重區捷運路77號2至17樓	(02)29846680  	25.0556913	121.4832322	128	25080	50600
-富碧酒店公寓	244新北市林口區文化二路一段390號	(02)66319700  	25.0770812	121.375381	80	18800	18800
-新北新莊凱悅嘉軒酒店	242新北市新莊區新北大道三段79號	(02)85229980  	25.060113	121.454218	280	8800	26400
-新北林口爵怡溫德姆酒店	244新北市林口區新北市林口區八德路339號	(02)26095500  	25.0655261	121.3604842	85	11800	28800
-新城九八精緻旅館	248新北市五股區新城六路135號	(02)22953499  	25.0913756	121.4461377	50	4680	5980
-陽明山家新休閒君鈺會館	208新北市金山區新北市金山區中信北路16巷38號1至3樓	(02)24080028	25.2059	121.5973	6	12800	14800
-\.
-
-
---
--- Data for Name: hotel_tpe; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.hotel_tpe (name, address, tel, latitude, longitude, room_count, price_min, price_max) FROM stdin;
-旅居文旅西門驛站昆明館	108臺北市萬華區昆明街142號7-8樓	02-23818131	25.0426126	121.5046471	37	10000	15000
-慕居行旅	110臺北市信義區基隆路二段22號5樓	02-27295828	25.0319086	121.5585986	25	600	70000
-承攜行旅台北八德館	105臺北市松山區八德路四段213號1-7樓	02-27425575	25.0490466	121.5641848	76	12000	16000
-丹迪旅店-大安森林公園店	106臺北市大安區信義路三段33號3-10樓	02-27076899	25.0337884	121.5347045	73	12000	15000
-雀客快捷台北車站	103臺北市大同區太原路64號1至8樓	02-25590577	25.0516582	121.515466	58	10780	28600
-大來商旅	105臺北市松山區長春路432號1-7樓	02-27160011	25.0544472	121.5448882	62	2000	12000
-漾館溫泉商旅	112臺北市北投區溫泉路63號1-4樓	02-28911118	25.1351979	121.5046063	31	5888	15800
-和怡商務旅館	115臺北市南港區重陽路122號	02-27890505	25.0567056	121.6001111	43	3380	6140
-皇后旅社	103臺北市大同區長安西路226號1至4樓	02-25590489	25.0513641	121.5145551	20	6800	20000
-華麗大飯店	108臺北市萬華區康定路41號	02-23818111	25.0415087	121.5023715	88	1900	12000
-新凱飯店	104臺北市中山區新生北路3段76之1號1至10樓	02-25855000	25.0667575	121.5273969	42	3000	15000
-麗雅精品旅館	104臺北市中山區長春路62號8樓之1	02-25411133	25.0548084	121.526107	12	1980	1980
-國際大旅館	112臺北市北投區湖山路一段7號	02-28617100	25.1520372	121.5479606	44	2310	3190
-漫慢米窩旅店	104臺北市中山區中山北路二段183巷30、32號3樓 	02-25910183	25.0636787	121.5242396	13	5600	7200
-麗都大飯店	106臺北市大安區信義路三段11號1-11樓	02-27065600	25.0338625	121.5337443	73	2700	9000
-黛芬旅館	108臺北市萬華區昆明街76號3樓	02-23719751	25.0457169	121.5054839	15	1000	2500
-首都唯客樂飯店	104臺北市中山區長春路187號1-9樓	02-25070168	25.0549654	121.5377586	80	5800	13000
-力歐時尚旅館	100臺北市中正區延平南路9號1-9樓	02-23145296	25.0462986	121.5109354	37	3000	5000
-悅來旅館	100臺北市中正區中華路一段21號6-7樓	02-23110066	25.046357	121.509936	26	5000	12000
-金財神旅館	100臺北市中正區中華路一段21號3樓	02-23110066	25.046471	121.509877	12	5000	12000
-小雅旅店	105臺北市松山區八德路四段616號5樓	02-27631122	25.0497839	121.573628	17	1100	6400
-艾捷天麗大飯店	105臺北市松山區南京東路四段156號1-11樓	02-25796162	25.0513579	121.5561555	78	30000	46000
-承攜行旅台北大稻埕	103臺北市大同區西寧北路49號1-5樓,43-47號2-5樓	02-25552268	25.0540342	121.5088925	24	10780	11880
-迪樂商旅	103臺北市大同區延平北路一段121號1至6樓	02-25551130	25.0528711	121.5119505	28	1580	15800
-紫園旅社	103臺北市大同區南京西路18巷30號	02-25557178	25.050496	121.5200087	27	5200	6200
-富菾荌旅店	108臺北市萬華區康定路6,8號2-5樓	02-23711247、 0968-321777	25.045971	121.50312	28	1680	8880
-長虹大飯店	108臺北市萬華區漢中街36號1,3-8樓	02-23119193	25.0447304	121.507472	68	2380	7200
-東皇大飯店	112臺北市北投區溫泉路108號1-6樓	02-28913027	25.136046	121.5107603	39	5000	8000
-梅樓商務驛站	103臺北市大同區鄭州路29巷1-1號2-4樓	02-25552587	25.0497449	121.514315	18	1490	5830
-旅居文旅-松山驛站	105臺北市松山區八德路四段626號3樓	02-27635889	25.0498056	121.574203	18	3000	18000
-南港安樂旅社	115臺北市南港區南港路一段229號2-3樓	02-26511797	25.054863	121.610733	10	1400	1400
-凱統大飯店	106臺北市大安區忠孝東路三段8號3-9樓	02-27211162	25.0419446	121.5335659	56	2580	3280
-薇閣精品旅館	104臺北市中山區錦州街27、29號,31號2-4樓	02-25318000	25.0604941	121.5261069	87	3800	9000
-華宮旅社	108臺北市萬華區西昌街157號	02-23142627	25.0392956	121.5007486	14	700	700
-洛痐j飯店花華分館	100臺北市中正區漢口街一段36號1-8樓及地下室	02-23123811	25.0450813	121.5138179	56	3000	18000
-京都商務旅館	104臺北市中山區長春路38號3-10樓  	02-25673366	25.0547616	121.5249793	40	4300	9000
-美觀園旅社	108臺北市萬華區西寧南路90巷13號	02-23314123	25.0421374	121.5055049	15	1800	2800
-北門文旅	103臺北市大同區長安西路145巷3號	02-25567797	25.051705	121.51497	15	1400	8000
-台北商旅（大安館）	106臺北市大安區大安路一段135號	02-77119933	25.03869	121.546225	42	9200	11500
-福來旅社	103臺北市大同區南京西路344巷13號1-4樓	02-25550857	25.0534978	121.5124338	37	500	1000
-葳皇時尚飯店	103臺北市大同區延平北路二段197號3, 4,11樓	02-25575379	25.0593626	121.5115462	48	18880	20880
-一加一旅館	108臺北市萬華區萬華區昆明街34號3樓	02-23892886	25.0470428	121.5058499	13	1200	2200
-台北世聯商旅	104臺北市中山區松江路90巷5號1至7樓	02-25626161	25.0507279	121.5319229	44	4600	6800
-帥客旅店	100臺北市中正區羅斯福路一段90巷2號1-5樓	02-23223887	25.0301167	121.5196617	32	1500	5400
-客來思樂行旅	106臺北市大安區羅斯福路3段241號4-6樓,4-6樓之1	02-23626555	25.0193603	121.5299957	20	1280	5000
-承攜行旅台北台大館	100臺北市中正區羅斯福路三段98號1-8樓	02-23657367	25.0215147	121.526936	35	13800	18800
-璞樂米窩	110臺北市信義區松山路153號2-7樓	02-27565659	25.0465445	121.5779588	33	25000	25000
-台北碧瑤飯店	105臺北市松山區八德路二段367號1-10樓	02-27813121	25.0479948	121.544563	84	4300	7800
-蒲園飯店	105臺北市松山區八德路四段176號地下2樓、地下1樓、1樓、3樓至5樓、7樓	02-27530772	25.0486362	121.5634139	32	2800	32000
-香城大飯店松山分店	105臺北市松山區市民大道六段67號1-9樓	02-27693969	25.0495953	121.5742409	56	1800	10000
-家賓大旅社	116臺北市文山區景文街42號6-7樓	02-29325915	24.9917496	121.5412001	32	4000	6000
-景美大旅社	116臺北市文山區景文街104號2-4樓	02-29313788	24.9901189	121.540905	12	1000	1500
-城美行旅	100臺北市中正區漢口街一段88,90號1-7樓	02-23147305	25.045084	121.511916	59	1820	12000
-璞漣商務旅館西門店	108臺北市萬華區成都路27巷6號	02-23718616	25.0429202	121.5066587	57	3300	4500
-大榮大旅社	108臺北市萬華區西寧南路185號2-4樓	02-23316527	25.0414729	121.5060842	17	900	1300
-雲沐行旅	106臺北市大安區忠孝東路四段197號13樓及13樓之4、5、6、7、8、9	02-27735177	25.0417049	121.5516539	42	16000	25000
-嘉賓閣旅館	112臺北市北投區光明路230號B1-7樓	02-28930055	25.1358102	121.505998	47	9800	12000
-晶樺商務旅店	108臺北市萬華區西園路一段168號10樓	02-23048788	25.036838	121.4992039	10	2000	2000
-紅菱閣賓館	108臺北市萬華區峨嵋街80,82號	02-23619696	25.044105	121.5041129	27	1130	2380
-乃晶旅社	108臺北市萬華區西園路一段168號12樓	02-23043795	25.0368678	121.4992195	10	2000	2000
-台北商旅慶城館	105臺北市松山區慶城街12號	02-87127589	25.0528077	121.5451623	84	8000	16500
-皇家大飯店	100臺北市中正區懷寧街5-1號1-6樓	02-23111668	25.0463572	121.5143144	40	4280	6680
-千慧旅館	103臺北市大同區南京西路22號7樓	02-25552451	25.0525722	121.5200944	20	2200	3200
-柯達大飯店台北一店	104臺北市中山區中山北路二段11巷1號及３號	02-25422222	25.0529091	121.5232915	53	1000	22000
-富玉莊旅社	111臺北市士林區福港街149巷15弄8,10號2-3樓	02-28822308	25.0873734	121.5189661	20	1900	2500
-東姿商務旅館	104臺北市中山區一江街33號1-4樓	02-25638866	25.0535373	121.5317262	29	5400	7500
-東龍大飯店	108臺北市萬華區漢口街二段23號1-7樓	02-23116969	25.0456478	121.5079769	70	1920	3200
-銀河旅館	108臺北市萬華區漢中街147巷6號1至4樓	02-23116606	25.0414075	121.5075867	18	2000	3000
-內江賓?	108臺北市萬華區西寧南路112號2-6樓	02-23812147	25.0415948	121.5058735	17	6800	9500
-西門大飯店	108臺北市萬華區中華路一段78號2-6樓	02-23819922	25.045532	121.508824	78	2180	24880
-泉都溫泉會館	112臺北市北投區光明路220號	02-28960077	25.1362525	121.5046756	64	1800	7200
-洛痐j飯店山水閣	104臺北市中山區中山北路二段181號1-5樓	02-25971281	25.0633195	121.5228376	32	3000	17000
-洛痐j飯店慶天閣	104臺北市中山區中山北路二段181號7-9樓	02-25971281	25.0633195	121.5228376	24	3000	17000
-洛痐j飯店協美	104臺北市中山區中山北路二段181號10-12樓	02-25971281	25.0633195	121.5228376	24	3000	17000
-老爺商務會館	104臺北市中山區南京西路1號8-11樓	02-25316171	25.0525227	121.5218121	76	3000	15000
-友華賓館	105臺北市松山區八德路四段656,656-1號6樓	02-27630505	25.0498729	121.5754952	30	1400	6600
-享住旅店 Just Live Inn	100臺北市中正區漢口街一段4,6號2-4樓	02-23713151	25.0450947	121.5147356	18	3450	4650
-香城大飯店	106臺北市大安區信義路四段295號1至11樓	02-27049546	25.0333604	121.5553016	60	15000	16000
-喬合大飯店	106臺北市大安區復興南路一段136號1至4樓；復興南路一段126巷10弄1號等、3號2樓至2樓之8、3號3樓至3樓之8、3號4樓至4樓之10、3號5至5樓之10、3號6樓至6樓之9	02-27765877	25.0429771	121.5431776	69	10000	14000
-璞漣商務旅館臺北車站店	103臺北市大同區華陰街46號3樓	02-25592662	25.05015	121.515562	43	6000	15000
-一等好旅店	105臺北市松山區八德路四段624巷2號B1-1樓,4號2-6樓	02-27609255	25.049666	121.5739699	32	1500	6000
-承攜行旅台北重慶館	103臺北市大同區重慶北路一段62號1、4至10樓	02-25580551	25.052007	121.5138097	168	7200	18000
-賓王大飯店	103臺北市大同區南京西路163號3至4樓	02-25555182	25.0541893	121.5132449	53	5500	15000
-雲富大飯店	104臺北市中山區長春路24號2樓至8樓	02-25316767	25.0548201	121.5241609	55	10000	36000
-柯達大飯店台北二店	104臺北市中山區中山北路二段139號	02-25255555	25.0618697	121.5232173	87	1000	20000
-凱微精品旅館	104臺北市中山區林森北路381號9-10樓	02-25426879	25.0584818	121.52567	28	3980	5000
-香都大飯店（香城長安）	104臺北市中山區長安東路一段52號	02-25312121	25.0482254	121.5279032	35	6500	8600
-國州大旅社	116臺北市文山區羅斯福路四段208號1-2樓	02-23652284	25.0106629	121.5370328	13	1000	3600
-欣和大旅社	106臺北市大安區羅斯福路2段75-1號2-6樓	02-23660105	25.0264577	121.5231794	38	1100	2400
-幸福大旅社	108臺北市萬華區內江街55巷26號1-4樓	02-23716808	25.0426357	121.5052803	22	3500	4500
-夜光商旅	108臺北市萬華區內江街55巷11號1至4樓、13號2至4樓	02-23815059	25.04218	121.505334	16	2000	4200
-瑾旅南西	103臺北市大同區南京西路151號6至12樓	02-25593232	25.0541228	121.5136051	45	8280	11160
-囍閱文創旅店	108臺北市萬華區長沙街二段11號10樓	02-23886235	25.040772	121.506922	20	6200	9000
-馥悅溫泉酒店	112臺北市北投區中山路26號1-5樓	02-28969798	25.1375886	121.5103695	44	11000	11000
-苓旅站前	100臺北市中正區忠孝西路一段72號4樓	02-23814755、 0907-551203	25.0467057	121.5137929	35	1280	11180
-欣欣時尚旅店松山站	105臺北市松山區八德路四段453巷12號8-9樓	02-27688832	25.050354	121.5703353	32	7000	12000
-宏洲旅社	108臺北市萬華區漢中街4號1-7樓	02-23319841	25.0458786	121.5078162	28	12000	12000
-欣欣時尚旅店	108臺北市萬華區昆明街34號4樓	02-23112898	25.0470643	121.5058136	13	7000	12000
-水都溫泉會館	112臺北市北投區光明路283號	02-28979060	25.1369831	121.5110788	33	3300	6000
-新秀閣大飯店	112臺北市北投區光明路238號1-5樓	02-28912166	25.1360559	121.5071372	17	1500	3000
-台北國際飯店	104臺北市中山區南京東路一段66號B1-10樓	02-66085999	25.0518759	121.5250793	85	6600	11800
-長榮桂冠酒店 (台北)	104臺北市中山區松江路63號	02-25019988	25.0488724	121.5333295	95	11500	68000
-瑞華旅社	106臺北市大安區忠孝東路四段235號4-5樓	02-27413147	25.0417005	121.5537606	20	4300	4300
-樂爾公寓	103臺北市大同區延平北路三段4號6樓、6樓之1	02-25850006	25.0634463	121.5110533	20	8000	15000
-台北馥敦飯店復南館	106臺北市大安區復興南路二段41號	02-27031234	25.03148	121.5438905	95	2800	30000
-金弘旅社	103臺北市大同區南京西路316號4樓	02-25554038	25.0538636	121.512946	19	14800	14800
-大欣大飯店	104臺北市中山區中山北路二段27巷2-2號1-5樓 	02-25652155	25.0531355	121.5233127	32	5500	6500
-新榮大旅社	111臺北市士林區文林路116號	02-28812531	25.0882182	121.5264153	18	1200	1700
-旅居文旅中山館	104臺北市中山區錦西街6號	02-25117111	25.060393	121.5222722	70	3000	18000
-吉緻行旅天津館	104臺北市中山區天津街57號2至8樓 	02-25365678	25.0510298	121.523379	55	8800	12000
-東京國際飯店	104臺北市中山區長春路39號2-6樓	02-25643733	25.0550443	121.5258894	43	3600	9000
-上賓大飯店	104臺北市中山區錦州街23巷4號	02-25113232	25.0606582	121.5250245	50	1680	18800
-士林町旅店	111臺北市士林區安平街26號1至4樓	02-28813133	25.0885168	121.5253933	10	1680	4200
-帝華旅社	108臺北市萬華區桂林路89號11-12樓	02-23118411	25.038545	121.5015622	32	1680	3080
-明日大飯店	108臺北市萬華區成都路23號、27巷1號6至8樓	02-23755500	25.042696	121.5072143	40	12880	16880
-立建賓館	105臺北市松山區八德路四段656,656-1號7-8樓	02-27691135	25.0498562	121.5755806	66	1100	9500
-華大HOTEL	110臺北市信義區永吉路30巷150號1-7樓	02-27635313	25.0426432	121.5686596	24	1200	12000
-新驛旅店	100臺北市中正區懷寧街7號	02-23148008	25.0461689	121.5143005	51	6000	11000
-台北星辰旅館	100臺北市中正區金山南路一段80號1至7樓	02-23971377	25.0364671	121.5275968	52	2580	15000
-華冠商旅HOTEL	108臺北市萬華區西昌街137\t、139號1-6樓	02-23616076	25.0398186	121.5007885	46	1100	1500
-嘉榮旅社	103臺北市大同區太原路28巷11號2至4樓	02-25585887	25.0501229	121.5147874	15	1800	1800
-建山大旅社	103臺北市大同區歸綏街182號2-4樓	02-25520680	25.058066	121.512221	13	3000	6000
-新驛旅店台北車站二館	103臺北市大同區長安西路83號	02-25555577	25.0511027	121.5165941	50	9500	12500
-儷萊飯店(普亨萊大飯店)	100臺北市中正區中華路一段21號12樓	02-23111440	25.046444	121.509915	13	5000	12000
-台北馥敦飯店	105臺北市松山區復興北路315號1-7樓	02-27138181	25.059058	121.544441	71	10000	70000
-仙渡莊旅社	112臺北市北投區大度路三段304號	02-28913537	25.1236941	121.4658499	14	2000	3000
-美代溫泉飯店	112臺北市北投區光明路281號1-3樓	02-28912174	25.1370715	121.5109249	20	2000	5600
-儷萊旅館	100臺北市中正區中華路一段21號4-5樓,8-11樓	02-23111440	25.0463902	121.5099134	78	3960	12000
-真珠賓館	111臺北市士林區延平北路五段67號3樓	02-28127971	25.0806101	121.5106333	6	700	700
-在家行旅 	104臺北市中山區中山北路二段65巷2弄3號1-4樓     	02-25413959	25.0567521	121.523828	15	1000	6200
-葫蘆商旅	111臺北市士林區重慶北路四段202號1-4樓、204號1樓	02-28119395	25.085342	121.5117293	19	1000	9000
-上華旅館	104臺北市中山區雙城街5號2樓至6樓	02-25911190	25.0631656	121.5242436	40	4000	22000
-背包棧旅店西門店	108臺北市萬華區康定路25巷13號	02-89783666	25.0439934	121.5033017	19	4000	12000
-松林旅社	108臺北市萬華區桂林路174號3至5樓及夾層、176號1至5樓及夾層	02-23067122	25.0384168	121.4972678	31	850	2600
-龍山旅社	108臺北市萬華區西園路一段125巷13-1號1-3樓	02-23064990	25.0379303	121.499739	14	2600	2600
-曲水會館	112臺北市北投區溫泉路105號1-3樓	02-28912151	25.136498	121.5120096	19	8000	19800
-玩行旅 大安分館	106臺北市大安區大安路1段81號1-7樓、81之1號、81號2樓之1、3樓之1至之5、4樓之1至之5、5樓之1至之5、6樓之1至之5、7樓之1至之5	02-87727862	25.0005655	121.4252204	65	7380	10880
-美上美旅館	108臺北市萬華區西園路一段168號11樓	02-23088105	25.0368678	121.4992195	9	1500	2000
-唐門客棧	100臺北市中正區信義路二段33號2樓	02-23963322	25.0350132	121.5257489	28	2000	3000
-水美溫泉會館	112臺北市北投區光明路224號	02-28983838	25.1361741	121.5050374	78	9000	50000
-力歐時尚旅館西門館	108臺北市萬華區康定路25巷36弄4,6號2-4樓	02-23889855	25.043652	121.504065	17	800	3000
-古山園旅社	108臺北市萬華區華西街40巷16號	02-23067408	25.0370501	121.4978989	20	1000	2600
-銀座飯店	104臺北市中山區林森北路289號4樓之1∼3	02-25627733	25.0555836	121.5256289	15	1680	5680
-星美飯店	111臺北市士林區前港街38-1	02-28828080	25.0846506	121.521306	48	1900	20000
-瑪奇商務旅店	116臺北市文山區景中街30巷6號3-4樓	02-29321000	24.9926576	121.54187	26	2380	3280
-新仕商務旅店　　	104臺北市中山區民生西路8號及附2-12樓	02-25627466	25.0577335	121.5223361	44	3000	15000
-富順大飯店	103臺北市大同區南京西路177號	02-25551016	25.0540474	121.5126502	88	1600	3900
-豪贊旅店	108臺北市萬華區昆明街34號2樓	02-23702199	25.0470643	121.5058135	14	10000	20000
-新月商旅	104臺北市中山區新生北路一段122號1-7樓	02-25213301	25.0507642	121.5277003	42	2000	8000
-北城大飯店	104臺北市中山區長春路279號B1-12樓	02-25017601	25.0548114	121.5413055	55	3200	3600
-洛痐j飯店新仕界	108臺北市萬華區昆明街139號2樓、141號3至9樓、7樓之1至13、8樓之1至8	02-23118863	25.041049	121.504575	107	3000	18000
-雅莊旅館	104臺北市中山區民族東路438號B1至4樓,440號B1至5樓	02-25075999	25.0678633	121.539565	37	2880	3080
-丹迪旅店-天津店	104臺北市中山區中山北路一段135巷13號	02-25415788	25.0516198	121.5232949	30	10000	12000
-大新飯店	104臺北市中山區長春路246號11-12樓	02-25068866	25.054569	121.538343	11	9800	11800
-密都大飯店	104臺北市中山區長春路246號2-9樓	02-25068866	25.054569	121.538343	48	10800	16800
-麗之湯別館	112臺北市北投區溫泉路銀光巷4-2號	02-28910033	25.1362146	121.513955	40	6000	14000
-鴨川旅館	104臺北市中山區中山北路二段65巷2弄60號1-6樓 	02-25603965	25.056591	121.524859	20	2000	2000
-山樂溫泉	112臺北市北投區泉源路1巷17號1-2樓	02-28913388	25.137711	121.5041457	9	4600	15000
-山水樂會館	112臺北市北投區中和街20巷6號	02-28922665	25.1382	121.504	18	8600	15000
-雅柏精緻旅館	105臺北市松山區南京東路五段319、321、323、325、327、329、331號	02-27645858	25.0515881	121.5669008	36	9200	11000
-燦路都飯店	104臺北市中山區民權東路1段9號地下1樓、2-10樓	02-25973610	25.0628576	121.539393	125	6000	10000
-瑞沂國際飯店	104臺北市中山區松江路95-1號5樓 	0911-141111	25.050886	121.5333481	10	1650	1650
-君帥旅館	108臺北市萬華區成都路68號8-10樓	02-23718812	25.042842	121.5052405	35	5000	8000
-函舍旅館	108臺北市萬華區成都路68號4-5樓	02-23718812	25.042842	121.5052405	20	5000	8000
-百悅旅社	108臺北市萬華區開封街2段42巷2號1-5樓,44-1號6-7樓	02-23881792	25.0461903	121.5074866	26	1380	2580
-長春精品旅館	105臺北市松山區慶城街29號	02-27188268	25.0540516	121.54561	86	3600	5200
-緒遠旅館	104臺北市中山區錦州街20號3樓	02-25682005	25.0602329	121.5241468	8	980	1580
-貴族商務旅館	111臺北市士林區忠誠路二段21巷10,12號1至6樓	02-28323388	25.1091923	121.531149	49	2280	5560
-悠趣旅店	105臺北市松山區長安東路2段219號12樓	02-27752277	25.0483776	121.5274187	27	10000	15000
-台北馥華商旅	104臺北市中山區一江街3號、3號2樓、2樓之1至之14、3號3樓、3樓之1至之14、3號4樓、4樓之1至之14、3號5樓、5樓之1至之14、3號6樓、6樓之1至之14、3號7樓、7樓之1至之14	02-25118896	25.0507533	121.5316042	90	9000	18000
-城市商旅-台北南西館	103臺北市大同區南京西路169號	02-25507722	25.0541114	121.5128865	80	7500	20000
-芝山璞旅	111臺北市士林區福國路106號1樓,2-6樓之1至7	02-28332323	25.1024364	121.5215024	41	5800	15000
-香榭峇里賓館	106臺北市大安區忠孝東路三段305號7樓	02-27114159	25.041874	121.5435049	9	880	1890
-晴悅旅店	104臺北市中山區新生北路三段10號2、3樓	02-25992211	25.0632501	121.5273732	19	3500	12000
-春天酒店	112臺北市北投區幽雅路18號1-6樓	02-28924546	25.1377474	121.5136573	81	11000	25000
-高雅賓館	106臺北市大安區和平東路三段139號及139號2樓至7樓、141號及141號2樓至5樓	02-27388947	25.0242545	121.5530759	30	1680	5300
-富園國際商務飯店	108臺北市萬華區中華路一段178號	02-23887890	25.0391494	121.5069589	45	4800	10000
-太平洋商旅	110臺北市信義區光復南路495號11樓之2及13,16,17,19樓	02-87808000	25.0324706	121.5577127	48	18000	30000
-情覓汽車旅館 	104臺北市中山區植福路189號2樓 	02-85020689、 0930-849622	25.0838096	121.559996	16	2200	7200
-百樂匯大飯店	112臺北市北投區溫泉路99號1-4樓	02-28928288	25.1364551	121.5099847	33	2500	32800
-印石時尚旅館	116臺北市文山區秀明路二段15號	02-86617070	24.9923011	121.5754952	50	4500	12000
-天閣酒店(台北林森)	104臺北市中山區中山北路一段83巷15號1樓至6樓	02-25319999	25.0500489	121.524289	65	12000	20000
-喜瑞飯店	104臺北市中山區長安東路一段64號B1-10樓	02-25410077	25.0478936	121.5293759	61	10500	19000
-貴都飯店	108臺北市萬華區西藏路192-1號	02-23029345	25.0300336	121.5028887	69	10800	22800
-鳳凰閣旅社	112臺北市北投區溫泉路106之1號	02-28912827	25.1360977	121.5104095	25	6000	12000
-萬事達旅店(中華店)	108臺北市萬華區中華路一段82號1-9樓	02-23820889	25.0453719	121.5087382	56	4800	10800
-皇家季節酒店1館	103臺北市大同區南京西路326號1樓、2樓、3樓、4樓、5樓，及8樓、9樓	02-25554288、 0982-995803	25.0538334	121.51279	48	3300	4300
-丹迪旅店-天母店	111臺北市士林區中山北路六段728巷2號1-7樓	02-28732222	25.1148802	121.5280041	54	8000	10000
-馥麗精品旅館	114臺北市內湖區內湖路1段325號1-5樓	02-26586167	25.0823089	121.5683655	28	2180	5700
-天閣酒店台北信義	110臺北市信義區忠孝東路五段297號1-6樓	02-25288000	25.0411921	121.5733931	105	15000	15000
-伊倫商務旅館	104臺北市中山區松江路123巷10號1-4樓	02-25076666	25.0527962	121.5341346	31	6000	8000
-茹曦酒店	105臺北市松山區敦化北路100號	02-27198399	25.053227	121.5485558	312	20790	41580
-太豪大飯店	105臺北市松山區興安街137號1-6樓	02-27195152	25.0562069	121.5446784	38	8000	10000
-香城大飯店豪悅分店	104臺北市中山區松江路93巷9號1至8樓及9號2、3、4、5樓之1至之7、6樓之1至之3、7樓之1、8樓之1及97巷18號	02-25177272	25.0507819	121.5344422	32	6400	8000
-溫拿旅館	112臺北市北投區承德路7段380號1-5樓	02-28213191	25.1188521	121.5026589	28	1980	2500
-金來商旅	100臺北市中正區金山南路1段71號B1-7樓,71之1號2-7樓	02-23979399	25.0421407	121.5198716	48	15000	19000
-維多麗亞酒店	104臺北市中山區敬業四路168號	02-85020007、 0983-033100	25.0842145	121.5590479	96	11550	23100
-友徠精品旅館	115臺北市南港區重陽路57巷15號	02-26510101	25.0561861	121.596762	26	2280	8200
-寶格利時尚旅館	108臺北市萬華區中華路一段168號1-15樓	02-23821314	25.0409607	121.507501	46	10800	11800
-多郎明哥旅館	106臺北市大安區信義路三段73號	02-27001200	25.0336359	121.536433	30	2580	12000
-大地酒店	112臺北市北投區奇岩路1號	02-55518888	25.1350426	121.5069956	48	13800	60000
-華弘怡亨酒店	106臺北市大安區敦化南路一段370號	02-27848888	25.0337229	121.5483537	68	12000	38000
-台北青年國際旅館	100臺北市中正區許昌街19號1樓及4-10樓	02-23113201	25.0456755	121.5165906	99	2200	7200
-三二行館	112臺北市北投區中山路32號	02-66117888	25.1378054	121.5107461	5	29800	29800
-神旺商務酒店	104臺北市中山區南京東路一段128號2至13樓	02-25115185	25.0519036	121.5271212	81	13600	13600
-宏都金殿大飯店	106臺北市大安區安和路2段100號2-9樓	02-27556599	25.0285149	121.5499515	32	5000	16000
-富逸旅趣-北車開封館	100臺北市中正區開封街1段41號2-9樓	02-23881788	25.0460573	121.5146126	42	3800	25000
-采舍精品旅館	104臺北市中山區農安街34號3樓及7樓	02-25963969	25.0647701	121.5268633	35	4800	6800
-東鑫商務旅館	106臺北市大安區忠孝東路四段209號11樓,11樓-1,-2,211號11樓,11樓-1	02-87736638	25.0417422	121.5520304	25	1780	9800
-小王子甜蜜旅店	108臺北市萬華區漢中街42號9樓	02-23820225	25.0442179	121.50734	9	10000	20000
-柔美商旅	104臺北市中山區建國北路二段64巷9號	02-25031133	25.0544248	121.5359505	47	22000	28000
-皇家季節酒店2館	103臺北市大同區南京西路330號1至11樓	02-25556488、 0982-995803	25.0538139	121.5126133	46	3500	9000
-新舍商旅-林森館	104臺北市中山區林森北路477號	02-77431000	25.0609862	121.5257012	79	9900	16500
-宜津美侖大飯店	106臺北市大安區復興南路1段315號,317號,317號2樓	02-55793888	25.034036	121.544113	143	14000	56000
-璽愛旅店	100臺北市中正區忠孝西路一段72號3樓,3樓之1	02-23880808	25.0468249	121.5140451	39	10000	30000
-薇閣精品旅館	104臺北市中山區敬業三路11號	02-85026000	25.0837152	121.5560341	96	4700	16800
-正二旅館	100臺北市中正區漢口街一段2號3-9樓	02-23708008	25.0452469	121.514629	55	2000	20000
-同一大飯店	104臺北市中山區農安街36號3-10樓　	02-25923977	25.064778	121.5269898	95	9800	11800
-旅居文旅-西門驛站	108臺北市萬華區台北市萬華區西寧南路67號5-9樓	02-23880050	25.0455614	121.5066353	38	8000	18000
-沐蘭精品旅館	104臺北市中山區堤頂大道2段460號	02-85023397	25.0812213	121.5619578	46	14500	14500
-捷絲旅西門町店	100臺北市中正區中華路一段41號5-9樓	02-23709000	25.044987	121.5095037	143	3200	10120
-探索汽車旅館南港館	115臺北市南港區重陽路66號1至4樓	02-26537727	25.055528	121.5972893	61	3980	19980
-家美瑞品 台北	100臺北市中正區北平東路12號2至9樓	02-23581234	25.0460291	121.5242783	68	7500	24000
-台北桃禧大飯店	103臺北市大同區重慶北路一段73號1樓至7樓	02-25505799	25.0522901	121.514254	152	8800	12000
-豪爵旅館	104臺北市中山區吉林路379巷20號1至7樓及20之1號2樓至7樓、德惠街170巷24號1樓	02-25942977	25.0651918	121.5315447	53	1780	6200
-福泰桔子商務旅館（林森店）	104臺北市中山區林森北路139號1樓至8樓及地下室	02-25632688	25.0512531	121.5253585	84	5280	7480
-安庭台北商務旅館	106臺北市大安區忠孝東路四段197號12樓、12樓之1、12樓之4、12樓之5、12樓之9	02-27780920	25.0420256	121.5512167	41	1000	8800
-愛活商旅	108臺北市萬華區西寧南路36號10樓之3	02-23615205	25.0450439	121.5062379	22	11000	20000
-雀客藏居台北南港	115臺北市南港區重陽路59號	02-26512251	25.055903	121.5967075	105	22880	36080
-金都精緻溫泉飯店	112臺北市北投區光明路240號1-6樓	02-28911228	25.1360263	121.5081088	31	10500	12800
-新驛旅店台北車站三館	103臺北市大同區長安西路77,79號1-7樓	02-77327777	25.051078	121.5167032	66	9500	12500
-新驛旅店西門捷運店	100臺北市中正區衡陽路124號1、2、4、6、7樓,寶慶路63號	02-77252288	25.0420686	121.5093894	44	2200	13000
-立德北投溫泉飯店	112臺北市北投區幽雅路11號B1-3樓	02-28973611	25.1368806	121.5134343	25	8500	14500
-雀客旅館台北信義	110臺北市信義區信義路四段468號3-13樓	02-23459777、 0908-715217	25.0328911	121.5591635	88	22800	33800
-台北馥華商旅南港館	115臺北市南港區三重路23號1-4樓	02-27852655	25.0592137	121.6139138	66	13000	13000
-東門大旅社	100臺北市中正區臨沂街78號2-4樓	02-23560210	25.0344537	121.5277915	26	650	2200
-天閣酒店(台北南西)	104臺北市中山區南京西路3號1至9樓	02-25679999	25.0525311	121.5222205	52	11800	11800
-城市商旅南東館	105臺北市松山區南京東路五段411號地下三樓至7樓	02-27425888	25.0515103	121.5700091	127	3000	20000
-雀客旅館台北內湖	114臺北市內湖區民權東路6段123巷34弄1號1-12樓	02-87925319	25.070284	121.592788	87	18480	39600
-洛痐j飯店林森館	104臺北市中山區林森北路617號1至10樓	02-25955225	25.066767	121.525882	80	3000	17000
-探索汽車旅館延平館	111臺北市士林區延平北路五段23號2至5樓及23之1號2至5樓	02-88112588	25.0795291	121.5109607	40	3380	12880
-意寬精品旅館 HOME HOTEL	110臺北市信義區松仁路90號3至12樓	02-87890111	25.0351042	121.5679889	113	5900	50000
-柯達大飯店敦南店	106臺北市大安區敦化南路二段238號B1-14樓	02-27323333	25.0210886	121.5482908	77	15000	22000
-二十輪旅店	108臺北市萬華區武昌街二段72號5樓、6樓、10樓	02-23810500	25.044807	121.5062111	48	4900	5400
-富驛時尚酒店　	104臺北市中山區南京東路三段131號10-13樓	02-55720777	25.0522472	121.5406666	180	6600	16800
-台北西門町意舍酒店	108臺北市萬華區武昌街二段77號5-10樓	02-23755111	25.0451649	121.5057266	162	3927	18249
-西門航棧旅館	108臺北市萬華區中華路一段144號7-8樓,7樓之1,8樓之1	02-23880777	25.0432145	121.5080642	38	2280	22880
-香樹花園酒店	104臺北市中山區堤頂大道二段566號1樓、2樓、4 樓（四層至六層）、7樓（七層至十一層）	02-85023955	25.0839901	121.5603664	84	18000	67500
-薆悅酒店	108臺北市萬華區西寧南路107號1至10樓	02-23753388	25.0450589	121.5066945	53	8000	12000
-洛痐j飯店舞衣南京館	104臺北市中山區南京東路二段163號1-8樓	02-25035511	25.0522764	121.5359459	40	3000	18000
-鵲絲旅店豪麗旺館	110臺北市信義區基隆路二段15-2號	02-23453511	25.0322001	121.5592868	20	15000	31680
-大倉久和大飯店	104臺北市中山區南京東路1段9號	02-25231111	25.0523164	121.5281004	208	50000	160000
-西門星辰精典大飯店	108臺北市萬華區峨眉街72號1至8樓	02-23831123	25.0440111	121.50438	25	3380	5380
-西門星辰大飯店	108臺北市萬華區峨眉街94號2至9樓	02-23898898	25.0442246	121.5035869	65	4880	9380
-六福居	104臺北市中山區南京東路一段38號	02-77010165	25.0519574	121.5242203	49	12000	17000
-橙舍背包客國際青年旅館	108臺北市萬華區漢口街二段41號1-3樓	02-23119559	25.0456637	121.5072347	5	3600	9000
- Happ& Tomorrow 本來	104臺北市中山區華陰街28號1-3樓	02-77552005	25.0491786	121.5196576	12	800	8000
-洛痐j飯店建北館	104臺北市中山區建國北路一段138巷1號、140號、140號2至11樓、142號、144號	02-25095151	25.0510111	121.5361784	59	3000	28000
-尚印旅店	104臺北市中山區中山北路二段71號8樓	02-25682270	25.0573612	121.5230844	23	8800	11800
-俞美飯店	108臺北市萬華區武昌街二段106號2-8樓	02-23883008	25.0450433	121.5050856	42	1500	12000
-長弘時尚旅店	104臺北市中山區長春路56號3至5樓　	02-25420101	25.0548164	121.5259876	24	7000	10000
-西門邑居自由旅行會館	108臺北市萬華區西寧南路67號10樓	02-23616167	25.0455614	121.5066353	8	2300	3800
-新麗旅店	108臺北市萬華區開封街二段53號3-5,7-9樓	02-23817899	25.047029	121.505495	22	5200	6800
-東棧商務旅店	106臺北市大安區忠孝東路四段209號8樓,8樓-1,-2,211號8樓,8樓-1	02-27117721	25.0417422	121.5520304	23	10000	20000
-世方旅居文旅	104臺北市中山區松江路485號1至5樓,5樓之1-3,6-7樓,7樓之1-5 	02-25025000	25.0672047	121.5336575	121	3000	18000
-北投天玥泉溫泉會館	112臺北市北投區中山路3號3樓	02-28988661	25.1372659	121.5049591	21	12800	12800
-WESTGATE HOTEL 永安棧	108臺北市萬華區中華路一段148號1樓、148之1號1樓及150號1至10樓	02-23313161	25.04294	121.50808	121	4000	50000
-儷夏商旅	108臺北市萬華區中華路一段90號4樓、5樓、6樓、8樓	02-23116168	25.0447107	121.5083965	85	15000	20000
-台糖台北會館	100臺北市中正區中華路一段39號	02-23885522	25.0453715	121.5098341	68	5000	7200
-台北馥華商旅敦北館	105臺北市松山區敦化北路4巷52號1至7樓	02-66131300	25.0503049	121.5450436	73	10200	12800
-福泰桔子商務旅館西門店	108臺北市萬華區中華路一段166之2號1至11樓	02-23115556	25.0412846	121.5076194	60	5800	6800
-富裕自由商旅	106臺北市大安區忠孝東路四段235號2樓、2樓之1、3樓、3樓之1、4樓之1、5樓之1、6樓之1、7樓、7樓之1及9樓	02-27413147	25.0417005	121.5537606	67	10000	25000
-天閣酒店(台北長安) 	104臺北市中山區林森北路80號1至14樓  	02-25317777	25.0497687	121.5245332	80	8200	20000
-東驛商務旅館	108臺北市萬華區昆明街76號8-9樓	02-23831999	25.0457939	121.5054518	34	8000	12000
-西悠巢旅台北館	103臺北市大同區民生西路198號之2 (代表號)	02-25585500	25.0569344	121.5164351	87	3400	5280
-柯達大飯店台北松江 	104臺北市中山區松江路251號 	02-25159999	25.0593923	121.5335013	85	2000	22000
-三隻老虎青年旅館	108臺北市萬華區康定路25巷39號4樓	02-23755299	25.0437047	121.5046254	7	1700	5200
-意芙旅店	103臺北市大同區延平北路二段197號2樓	02-25532133	25.0593626	121.5115462	20	5980	9900
-老爺會館台北林森	104臺北市中山區林森北路83號4至10樓、11樓、11樓之1、11樓之2、12樓、12樓之1、12樓之2	02-25676336	25.0497041	121.5249145	81	3000	15000
-大師會館國際酒店	103臺北市大同區市民大道1段211號16樓等25室	02-25597722	25.0447598	121.537509	24	6000	15500
-和逸．台北民生館	104臺北市中山區民生東路二段178號1至12樓	02-77063399	25.057654	121.5362374	135	13000	85000
-謙商旅-東門館	100臺北市中正區信義路二段163號	02-23582520	25.0340997	121.5289234	85	7880	20880
-華泰瑞舍	104臺北市中山區林森北路357及359號2樓,-1,-2,-3,-5,-6至7樓,-1,-2,-3,-5,-6、2樓-7,-8,-9至5樓-7,-8,-9	02-25310699	25.0571137	121.5257622	48	21000	28000
-尚印旅店-二?	104臺北市中山區中山北路二段71號10樓	02-25682810	25.0573631	121.5230488	20	8800	11800
-品格子旅店	100臺北市中正區公園路13號10樓	02-23114511	25.045556	121.5174338	34	6000	6000
-路境行旅-府前館	100臺北市中正區重慶南路一段86號	02-23899595	25.0431277	121.5130411	158	6880	22880
-和逸 台北忠孝館	100臺北市中正區忠孝東路一段31號1至12樓	02-77253399	25.0446765	121.5253682	123	15000	85000
-皇家玫瑰旅館中山館	104臺北市中山區林森北路133巷8號3樓、4樓、7樓	02-25317333	25.0509515	121.5255624	16	18000	18000
-明星大飯店	108臺北市萬華區成都路21號2至3樓、23號2至3樓、27巷1號2至3樓	02-23755227	25.0426	121.507011	34	12880	16880
-橙舍青年旅館（臺北二館）	108臺北市萬華區漢口街二段56號2-3樓,58號3樓	02-23119559	25.0458925	121.5055312	22	3600	16000
-酩月大飯店	108臺北市萬華區成都路21號4至5樓，23號4至5樓，27巷1號4至5樓	02-23755218	25.0426	121.507011	31	12880	16880
-方舟旅店	100臺北市中正區信義路二段255號1至4樓	02-23912600	25.0338339	121.531491	12	5500	5500
-丰居旅店雙連館	104臺北市中山區民生東路一段42號2,3樓,-1至-5	02-23112555	25.0579194	121.5244916	47	7000	10000
-蜂巢 Bee House	103臺北市大同區太原路55, 57號2至5樓	02-25599000	25.0510122	121.5154941	31	5200	7200
-旅樂序精品旅館	100臺北市中正區館前路8號10樓、11樓	02-23832727	25.0458481	121.5147815	34	5800	7800
-龍蝦先生的秘密巢穴	103臺北市大同區重慶北路一段22號9樓	02-25558752	25.050507	121.513411	33	640	4400
-途中•台北國際青年旅舍	112臺北市北投區光明路82號1至5樓	02-28910230	25.1329588	121.500614	10	2000	5600
-台北慕軒	106臺北市大安區敦化南路一段331號1-13樓	02-77266699	25.0339868	121.5494185	124	19000	130000
-復新文旅 	104臺北市中山區復興北路282號3,6樓 	02-77337959、 0933-336618	25.0587921	121.5439488	19	5000	6500
-洛痐j飯店中華館	100臺北市中正區中華路一段41號2樓、3樓、10樓至14樓	02-23705158	25.044987	121.5095037	197	3000	28000
-台北漫步旅店	108臺北市萬華區成都路163號2至6樓	02-23831334	25.0438763	121.5023696	27	18000	28000
-儷夏旅館-西寧館	108臺北市萬華區西寧南路30號3樓、9樓	02-23616999	25.0480013	121.5072344	31	3000	21000
-皇家玫瑰旅館站前館	104臺北市中山區華陰街3號1-4樓	02-25217222	25.0491077	121.5206825	12	15000	15000
-昌亞旅館	104臺北市中山區林森北路673號1至7樓	02-25863161	25.0682153	121.5259445	29	8000	8000
-台北文華東方酒店	105臺北市松山區敦化北路158號B3-14樓	02-27156888	25.0496452	121.5524318	303	39850	693000
-大地清旅	104臺北市中山區長安東路二段246號4至5樓	02-27110102	25.0481405	121.543227	36	5500	5500
-雀客旅館　	104臺北市中山區松江路253號1至13樓	02-77266277	25.0594491	121.5334123	65	9800	12000
-安庭澔思青年旅舍	103臺北市大同區承德路一段66號12樓	02-25526176	25.052048	121.517135	4	2500	8000
-卡樂町旅店	108臺北市萬華區內江街55巷22號	02-23826000	25.042587	121.5052656	20	2288	2288
-信星旅館	103臺北市大同區華陰街48號至48之11號4樓、50號至50之11號5樓	02-25562015	25.0499676	121.5153699	57	3200	4200
-昇美精旅	104臺北市中山區新生北路二段25號1至6樓	02-25111399	25.053656	121.5278	42	18000	28800
-千彩格精品旅店　	104臺北市中山區林森北路286號2至3樓	02-25637555	25.0557281	121.5253331	19	6880	14000
-有誠商旅	111臺北市士林區至善路二段55號4樓至10樓	02-88615599	25.0977604	121.5450231	64	11000	18000
-拾光行旅	103臺北市大同區延平北路二段255號2樓	02-25574999	25.0625186	121.5115013	49	8000	10000
-首都大飯店松山館	105臺北市松山區八德路四段658號1至12樓	02-77375577	25.0498597	121.5756927	123	13200	19800
-皇家玫瑰旅館西門館	108臺北市萬華區西寧南路63之1號	02-23819333	25.0463355	121.5070604	7	15000	15000
-洛痐j飯店驛	100臺北市中正區重慶南路1段21號1至10樓及15號2至10樓	02-23819199	25.0468814	121.5134147	103	6000	36000
-思泊客	110臺北市信義區信義路五段16號B1,18號B1,B1-1	02-27230999	25.0328448	121.566087	45	11800	11800
-誠品行旅	110臺北市信義區菸廠路98號、2樓、3樓	02-66262888	25.0445119	121.5619394	104	26000	200000
-松哖酒店	106臺北市大安區仁愛路三段6號及8號1至12樓	02-27070101	25.0377588	121.5335094	89	8500	18000
-台北西門窩青年旅館	108臺北市萬華區漢中街42號8樓	02-23315100	25.044284	121.5073527	6	1400	1400
-凡登商旅●二館	106臺北市大安區忠孝東路4段197號14樓之2、6、8	02-87710852	25.0420032	121.5334554	32	20000	20000
-沃田旅店	111臺北市士林區中山北路七段127號1至13樓	02-28752288	25.1228636	121.5316925	172	2400	7500
-承攜行旅台北復北館	105臺北市松山區復興北路307號1至7樓	02-27122155	25.0585947	121.5445063	65	18000	22000
-瘋台北青旅	100臺北市中正區延平南路21號2樓及6樓	02-23821818	25.0457242	121.5107249	17	1000	4800
-豪景大酒店新館	108臺北市萬華區成都路173之1號B2及1至7樓	02-23113130	25.0443136	121.5016697	48	6600	11000
-天閣酒店台北復興	105臺北市松山區復興北路147號1至12樓	02-87128000	25.0536857	121.5443372	70	10200	30000
-互舍商旅台北館	103臺北市大同區重慶北路二段172號1至14樓、5樓之1至14樓之1及174號、保安街13、11號4樓	02-25533919	25.0593921	121.5133139	148	3600	36000
-品格子旅店西門館	108臺北市萬華區西寧南路30號8樓	02-23618008	25.0480013	121.5072344	35	750	7600
-台北中山意舍酒店	104臺北市中山區中山北路二段57之1號1至8樓	02-25652828	25.0557323	121.5230059	90	5100	15500
-小公館人文旅舍	105臺北市松山區南京東路五段399號5,8,14樓	02-27690200	25.051537	121.5696388	20	6000	25200
-?美精旅	100臺北市中正區重慶南路1段111號	02-23832088	25.0468814	121.5134147	38	8000	16000
-綺樂文旅 康定館	108臺北市萬華區康定路32號1至6樓	02-23615868	25.0439859	121.5026462	23	8800	8800
-北門臥客青年旅舍	103臺北市大同區甘谷街26號2樓之1	02-25557177	25.0527506	121.5109385	5	4000	8000
-新驛旅店復興北路店	104臺北市中山區復興北路338號	02-25158777	25.059574	121.5439205	120	9600	15500
-朵兒旅館	104臺北市中山區新生北路1段66號2樓 	02-25232699	25.0613138	121.5276414	7	2000	29000
-東楓商旅	106臺北市大安區忠孝東路四段209號7樓、7樓之1、7樓之2、211號7樓	02-27211511	25.0417422	121.5520304	22	2000	20000
-璞邸旅店	100臺北市中正區重慶南路1段7號1至4樓	02-23815566	25.0468814	121.5134147	13	2790	6300
-浩室物業1館	108臺北市萬華區昆明街316號、318號	02-77553617	25.0358182	121.5032868	11	2400	9600
-艾特文旅	108臺北市萬華區武昌街二段124之2號4樓	02-23885558	25.0453457	121.5038373	29	13920	17520
-賦樂旅居	106臺北市大安區大安路一段56號、56號4樓	02-27111118	25.0429694	121.5459812	42	16170	24255
-清翼居旅店童話館	100臺北市中正區開封街1段36號3-7樓	02-23117168	25.0460573	121.5146126	39	3700	4900
-城市商旅德立莊分館	100臺北市中正區秀山街4號5-12樓、15樓；衡陽路99號5-12樓、15樓；延平南路110號5-11樓、15樓	02-23757777	25.0425228	121.5094326	535	18000	20000
-町記憶旅店	108臺北市萬華區昆明街117號、117之1至之6號及119號、119之1至之6號1至7樓	02-23709830	25.0419316	121.5047805	42	16800	28800
-鉑泊客	100臺北市中正區漢口街1段50號1-5樓	02-23755555	25.0452642	121.5146888	58	3080	3680
-約克旅店	100臺北市中正區南陽街13號4樓	02-23705528	25.0449919	121.5162658	17	2280	5690
-台北發現青年旅舍	104臺北市中山區民權東路二段21號5、6樓	02-25980209	25.0628437	121.529092	7	6000	14000
-二十輪旅店大安店	106臺北市大安區大安路一段183號，185號，185號2樓至7樓	02-27032220	25.0361939	121.5461665	30	4500	26000
-福爾摩莎壹零壹旅館	110臺北市信義區基隆路二段115號5樓、5樓之1及9樓	02-23771579	25.0286434	121.5571172	34	1650	4400
-台北六福萬怡酒店	115臺北市南港區忠孝東路七段359號7-30樓	02-21716565	25.0525124	121.6060558	465	12000	100000
-番茄行旅	103臺北市大同區太原路156-2號5樓	02-25555930	25.0548771	121.5163779	5	4000	6500
-壹零壹艾美琪旅店	106臺北市大安區復興南路一段126巷1號4樓	02-27728101	25.0431842	121.5432038	36	18000	28800
-沃客商旅-西門館	108臺北市萬華區中華路一段144號10樓	02-23812633	25.043161	121.5080755	23	980	19800
-甄美精品商旅	104臺北市中山區林森北路259巷9號2樓	02-25639696	25.054422	121.5262701	41	18000	22000
-天使青旅	100臺北市中正區衡陽路51號2樓之2	02-23131319	25.042464	121.5122953	8	399	1320
-能量旅店	108臺北市萬華區康定路25巷38號	02-23121211	25.0435219	121.5044795	4	4800	6400
-洛痐j飯店南京館	104臺北市中山區南京東路三段8號1樓至14樓	02-25098882	25.0517779	121.5373463	116	3000	30000
-藝宿商旅	103臺北市大同區重慶北路一段116號2樓至11樓及11樓夾層	02-25506655	25.0533112	121.514016	69	6160	8800
-方舟旅店 長安復興	104臺北市中山區長安東路二段246號3樓、10樓及11樓	02-27727750	25.0481405	121.543227	82	4300	18880
-峻美精旅	104臺北市中山區長春路62號6樓 	02-25312338	25.0548084	121.526107	15	13000	22000
-天雲旅棧台北基河	111臺北市士林區基河路18號	02-28856666	25.0829719	121.5242433	31	20000	20000
-台北天晴旅店	100臺北市中正區懷寧街92-2號1至6樓	02-23319391	25.0425829	121.5139605	15	5000	20000
-丰居旅店忠孝館	106臺北市大安區復興南路1段126巷1號3樓(含3樓、3樓夾層、4樓)	02-77116368	25.034036	121.544113	21	2420	20000
-怡品商旅	106臺北市大安區忠孝東路四段87號13､14樓	02-27766136	25.0417889	121.5477856	81	1000	25000
-姆提文創旅店	106臺北市大安區信義路三段147巷5弄4號1樓	02-23897563	25.0341723	121.5420275	11	2380	16000
-禾順行旅	108臺北市萬華區廣州街247號及247號2至6樓	02-23081000	25.0368989	121.4973343	98	10000	20000
-清翼居旅店采風館	100臺北市中正區南陽街8號2至5樓	02-23123661	25.0452407	121.5159599	50	6500	8000
-丰居旅店北車館	100臺北市中正區重慶南路一段60號	02-23142121	25.0436733	121.5130016	23	10000	12000
-米尼旅店	100臺北市中正區忠孝西路一段23號5至6樓	02-23881516	25.046091	121.5190007	8	1000	3260
-寧夏2號旅店	103臺北市大同區寧夏路2號	02-25507619	25.0544206	121.5146961	19	14880	16880
-台北松山意舍酒店	115臺北市南港區市民大道七段8號17樓至21樓	02-26532828	25.0491863	121.580629	190	3465	135135
-趣旅館•林森館	104臺北市中山區林森北路487號1樓至2樓	02-25683242	25.0613953	121.5261441	123	3650	11700
-綺樂文旅 開封館	100臺北市中正區開封街一段35號1至8樓	02-23615889	25.0462907	121.5127116	63	2300	12000
-洛痐j飯店松山館	115臺北市南港區玉成街149號	02-27837088	25.0453935	121.5836011	97	3000	30000
-獅城旅館	103臺北市大同區華陰街179號3-5樓	02-25591231	25.0502963	121.5154644	67	600	2480
-日日吉旅店	103臺北市大同區昌吉街1號 1樓至3樓	02-25991787	25.0659679	121.517868	21	980	2380
-路徒行旅-中華館	100臺北市中正區延平南路68號	02-23120589	25.0450497	121.5103364	68	8880	35880
-旅樂序精品旅館三館	100臺北市中正區懷寧街34號1至8樓	02-23758333	25.0450709	121.514047	41	3988	5188
-漫旅時光	104臺北市中山區林森北路282號3樓	02-25617711	25.0556075	121.5253376	20	6600	9600
-洛痐j飯店忠孝館	106臺北市大安區忠孝東路四段180號1樓、4樓至14樓	02-27116869	25.0411234	121.5515646	150	3000	28000
-靜好文旅by墾趣	104臺北市中山區南京東路2段11號11樓	02-25718875	25.051898	121.5281835	10	2780	12700
-背包棧旅店-台北長春店	104臺北市中山區長春路258巷6號2樓	02-25180188	25.0540886	121.5389021	43	2500	24000
-台北北門窩泊旅	103臺北市大同區太原路92巷2之1、2之2、2之3、2之4號(1樓至4樓)	02-25525068	25.0522833	121.5154089	19	540	4500
-斯格加旅店	104臺北市中山區林森北路72號1樓至4樓	02-25629117	25.0495244	121.5244564	7	1500	7000
-詩漫精品旅館	100臺北市中正區館前路8號6樓	02-23820111	25.0460588	121.5148618	33	9770	11530
-城市商旅昆明館（HOTEL PAPA WHALE）	108臺北市萬華區昆明街46號地下1樓、46號及46號2至4樓、4樓之2、4樓之3	02-23311177	25.0463952	121.5056213	335	12020	22000
-碩美精品飯店	104臺北市中山區中山北路2段71號3樓	02-25621598	25.0573612	121.5230844	25	15000	26800
-卡夫人背包客棧	100臺北市中正區館前路34號7樓	02-23881666	25.0446517	121.514883	14	300	6000
-福爾摩沙正旅館	100臺北市中正區重慶南路一段1號3樓	02-23718230	25.043632	121.513067	23	1600	3600
-大安公園旅店	100臺北市中正區信義路2段271號8樓	02-23965222	25.0339033	121.5319755	13	650	18000
-帛堯初見輕旅	108臺北市萬華區忠孝西路2段38號	02-23886813	25.0483329	121.5078437	4	1600	8000
-進綵商旅	103臺北市大同區迪化街一段334號1至3樓	02-25536711	25.0621912	121.5091613	6	5750	12000
-在家行旅西門館	108臺北市萬華區昆明街96巷8號1樓	02-23619000	25.044777	121.504567	5	5000	20000
-涪美飯店	100臺北市中正區重慶南路一段94號	02-23810086	25.0428438	121.5129692	49	5600	20000
-台灣青旅	100臺北市中正區青島西路11號地下1樓	02-23613000	25.0449603	121.5177709	12	4000	5000
-夾腳拖的家長安122	103臺北市大同區長安西路 122 號、124號 1至4樓	02-25585050	25.0505398	121.518145	31	1000	5000
-仲信大湖商旅	114臺北市內湖區成功路四段351、353號1至4樓	02-27932122	25.084543	121.59974	27	6000	6000
-華山文旅	100臺北市中正區金山北路1號4樓、4樓之1至之3、4樓之5至之8、7樓、7樓之1至之3、7樓之5至之8、8樓、8樓之1至之3、8樓之5	02-23963388	25.0441326	121.5304059	23	6000	10000
-朗司旅館	106臺北市大安區信義路3段147巷18號、2樓至7樓、2樓之1及6樓之1	02-27018110	25.0361314	121.5418793	25	5500	18000
-皇后旅店二館	103臺北市大同區南京西路163號四樓之2	02-25555877	25.0541893	121.5132449	30	6800	6800
-旅樂序精品旅館二館	100臺北市中正區漢口街一段15號1至8樓	02-23757555	25.0452302	121.5144039	58	2488	9800
-東門3號膠囊旅店	106臺北市大安區信義路2段110號	02-23583299	25.03373	121.5277003	4	650	80000
-台北北投雅樂軒酒店	112臺北市北投區中央里大業路302號、300巷1號，2樓	02-77011788	25.1285516	121.4980515	292	11000	28000
-柯達大飯店台北天津 	104臺北市中山區中山北路1段53巷22號、22號4樓至8樓 	02-25812222	25.0526041	121.5226127	57	1500	15000
-東驛 E-HOUSE	108臺北市萬華區西寧南路155號3F	02-23615161	25.0435287	121.5062825	13	7000	7000
-錦棧商旅	104臺北市中山區林森北路413號2樓、7樓、7樓之14及錦州街46號7樓、48號7樓、46號13樓、48號13樓	02-77012121	25.0597725	121.5257106	92	14800	29800
-東旅	105臺北市松山區南京東路五段97號地下1樓、1樓夾層、1至10樓	02-27663889	25.0517528	121.5603784	35	5800	6900
-樂山水靜旅館 OrigInn	103臺北市大同區南京西路247號	02-25588843	25.053621	121.5100773	5	8880	8880
-洛痐j飯店南港館	115臺北市南港區忠孝東路七段526號1-14樓、528號2-14樓	02-27893009	25.0523442	121.6113545	120	3000	30000
-快意旅店	106臺北市大安區市民大道4段168號、168號2樓至10樓、170號、172號、176號、178號	02-27711188	25.0439988	121.5532541	39	8000	15000
-陽光士林珮柏旅館	111臺北市士林區福德路48巷6、8、10、12號1至7樓	02-28817588	25.0925438	121.5232244	56	6000	9500
-侘侘行旅	100臺北市中正區公園路13號8樓、9樓	02-89782345	25.045556	121.5174338	49	15000	15000
-愛玩客旅店	108臺北市萬華區西寧南路30號12樓	02-23316008	25.0458998	121.5067394	1	500	2000
-柯達大飯店 台北長安	104臺北市中山區松江路61之1號1樓、4樓至11樓	02-25169999	25.0486508	121.5331744	103	1000	30000
-尚美精旅	104臺北市中山區民生西路16號4樓	02-25230188	25.0577164	121.522148	14	15000	22000
-慕誠行旅	110臺北市信義區基隆路二段48號1樓至3樓	02-27252168	25.0317721	121.5585253	33	100	50000
-町記憶旅店2館	108臺北市萬華區昆明街113號2-4樓，115號1-4樓	02-23709830	25.0419709	121.504815	27	16800	38800
-旅晨行旅	100臺北市中正區重慶南路一段1號2樓	02-23116388	25.0468581	121.5133962	23	1300	7200
-世民酒店台北北門	100臺北市中正區中華路一段3號(1樓至26樓)	07-10161061	25.0471477	121.5105138	267	6000	20000
-皇家玫瑰旅館 雙城館	104臺北市中山區雙城街28巷8號、8號2樓至4樓、8之1號(1樓)、8之3號(2樓)、8之5號(3樓)、8之7號(4樓)	02-25958077	25.0657776	121.5236543	17	3000	17000
-瑞桑德旅店 北車館	100臺北市中正區重慶南路一段1號5樓	02-23710811	25.0468814	121.5134147	14	12800	16800
-亞太飯店 北投館	112臺北市北投區幽雅路31號	02-28983088	25.137021	121.5147201	140	10000	38390
-旅樂序精品旅館五館	100臺北市中正區重慶南路一段20號B1樓至10樓	02-23756777	25.04613	121.5131303	57	5200	6400
-凱達大飯店	108臺北市萬華區艋舺大道167號	02-23066777	25.0332541	121.4998939	745	9800	68800
-台北臥客旅店	103臺北市大同區甘谷街26號7樓	02-25557177	25.0527506	121.5109385	13	3000	3000
-台灣柒天精品旅店	108臺北市萬華區環河南路二段282號1至4樓	02-23085222	25.0321372	121.4909897	36	2000	3000
-謙商旅(谷墨商旅-師大館)	106臺北市大安區和平東路一段145號2至4樓、147 號5至6樓、6樓之1、6樓之2	02-23955535	25.026663	121.530728	92	15880	20880
-台北這地方微旅店	104臺北市中山區吉林路294號(1樓)及294之1號(2樓)	02-25637522	25.0611114	121.5302091	3	1500	6000
-阿樹國際旅店	105臺北市松山區八德路三段76號1樓、4樓至14樓	02-25787728	25.0478728	121.5527439	141	10400	36000
-文舺行旅	108臺北市萬華區西園路一段139號1-4樓	02-23064990	25.0375647	121.4997211	9	2600	4800
-儷客旅店-站前店	100臺北市中正區忠孝西路一段72號5樓及5樓之1	02-23118081	25.0466457	121.5141252	30	3000	21000
-富裕自由旅店林森館	104臺北市中山區林森北路85巷23號1至2樓	02-25671333	25.0493974	121.5247707	11	10000	15000
-南陽街壹號旅店	100臺北市中正區南陽街1號3樓至4樓	02-23888377	25.0458746	121.5162868	79	3000	4800
-漫映旅舍	104臺北市中山區吉林路32號1-5樓	02-25222111	25.05159	121.5298641	14	1500	20000
-和昌商務旅館台北西門館	108臺北市萬華區桂林路24號1-5樓	02-23088828	25.0375777	121.5055096	16	3500	4800
-合星旅館	106臺北市大安區忠孝東路四段147巷5號3樓	02-27218225	25.0420137	121.5497336	18	1000	5000
-好駐旅館	104臺北市中山區新生北路一段106號6樓、7樓、7樓之1-9	02-25213131	25.0494459	121.5283427	29	4360	7360
-智慧環境會館-菁山遊憩區	111臺北市士林區菁山路101巷71弄16號	02-28625116	25.1532772	121.5580062	17	3500	10000
-城市商旅 北門館	103臺北市大同區長安西路265號1至6樓及267號1至6樓	02-25525777	25.0521438	121.5107958	65	9000	12000
-慶爾喜旅館長沙一館	108臺北市萬華區長沙街二段11號2樓	02-77309920	25.0407719	121.506922	15	2200	3000
-慶爾喜旅館長沙二館	108臺北市萬華區長沙街二段11號3樓之1	02-77309920	25.0407719	121.506922	6	10000	10000
-泊居旅店二館 	104臺北市中山區林森北路96號3樓、3樓之1 	02-25417766	25.0500239	121.5246806	14	1500	3900
-睡覺盒子旅館	100臺北市中正區衡陽路34號1樓及36號地下之1、地下之2	02-55713713	25.0421994	121.512566	41	1300	6000
-台北五號商旅	100臺北市中正區延平南路160之5號(1樓至4樓)	02-23883067	25.0380248	121.5083199	6	12000	12000
-謙匯普樂室行旅	110臺北市信義區信義路5段109號地下1樓	02-87864188	25.0333348	121.5730253	40	580	9900
-木文陶喜時尚旅館	110臺北市信義區基隆路一段155號2樓之2、2樓之3	02-27494698	25.0421864	121.5654128	15	6800	12800
-吉泰旅店	111臺北市士林區大東路93號1至4樓	02-28822278	25.0910749	121.5256095	19	6000	6000
-米窩飯店-大安	106臺北市大安區忠孝東路四段107號7樓、7樓之2	02-27520006	25.0418265	121.5483288	20	2000	18000
-台北宿之酒店．臻品之選	108臺北市萬華區環河南路一段51號2至14樓	02-23755511	25.045451	121.5026414	87	30000	80000
-美寓旅店	105臺北市松山區八德路三段2號14樓 	02-25775170	25.0480943	121.5496444	34	4000	15000
-福爾摩莎北驛旅館	100臺北市中正區漢口街1段45號2、4樓及47號2樓	02-23816089	25.0452642	121.5146888	41	2000	15000
-果芒驛站旅店	100臺北市中正區忠孝西路一段50號23樓之18 	02-23706808	25.0457716	121.5158208	2	3000	6000
-台北士林萬麗酒店	111臺北市士林區中山北路五段470巷8號	02-88612389	25.0931135	121.5290463	104	6000	180000
-天成文旅 華山町	100臺北市中正區忠孝東路二段79號（1-3樓）	02-23515188	25.0433856	121.5303125	72	6000	9500
-城鄉旅坊台北	104臺北市中山區松江路95之1號4樓	02-25029955	25.0508646	121.5333244	11	3880	9880
-宜家居商旅	112臺北市北投區中和街40號3樓及3樓之1	02-28910502	25.138513	121.502906	39	4900	4900
-陽明山美國渡假村	111臺北市士林區凱旋路69號、71號及61巷2弄6至10號	02-28623232	25.1360587	121.5407425	28	2880	7980
-五月家青旅 北車館	100臺北市中正區忠孝西路一段122號6樓	02-23822929	25.0473842	121.5109629	5	600	4000
-懷特豪斯青年旅舍	105臺北市松山區南京東路五段123巷1號1至4樓、1之1號2至4樓、1之2號2至4樓	02-37656578	25.0519612	121.5606759	38	7500	26000
-沃客汽車旅館	112臺北市北投區承德路七段236號	02-28226666	25.1156725	121.506264	63	22999	22999
-拉開門輕旅	100臺北市中正區紹興北街8號4樓之1至4樓之3	02-66044400、 0909-009294	25.0453032	121.5252541	6	700	3000
-正是旅館	110臺北市信義區基隆路一段182號1樓至7樓	02-23718230	25.0422343	121.5648066	18	25000	25000
-九昱晴美 	104臺北市中山區林森北路568號2至13樓，3樓之1、2、3、5、6至12樓之1、2、3、5、6，13樓之1	02-66080807	25.0647222	121.5255369	62	10800	21800
-皇家玫瑰旅館新生館	106臺北市大安區新生南路一段103巷37號(1至5樓)	02-27522077	25.0407976	121.5359744	21	3000	19000
-門埕青旅	103臺北市大同區鄭州路21巷10號(1至3樓)	02-25585676	25.0496725	121.5145267	2	12600	12600
-漫步1948	103臺北市大同區太原路40、42、44號(1至4樓)	02-25588812	25.0504262	121.5150495	24	20000	25000
-台北國泰萬怡酒店 	104臺北市中山區民生東路三段6號地下1樓、1、2、14至20樓	02-77503377	25.0574672	121.5376409	227	15000	100000
-凱旋酒店	114臺北市內湖區江南街55號3樓、9樓	02-87527888	25.0775343	121.5780231	88	8800	38800
-天閣酒店台北劍潭	111臺北市士林區基河路16之6號1樓至12樓	02-28862999	25.0823496	121.5241199	72	10500	30000
-台北中山九昱希爾頓逸林酒店	104臺北市中山區中山北路一段121巷1之1號,121巷1號1樓至14樓	02-66199999	25.051442	121.5225725	105	12000	18000
-艾爾行旅	106臺北市大安區忠孝東路四段87號7樓、7樓之2、7樓之3、7樓之4及7樓之8	02-27418080	25.0417889	121.5477856	40	4800	26000
-美侖商旅	104臺北市中山區吉林路49號1至8樓	02-25313535	25.0531374	121.5303435	70	16000	18000
-雅璞文旅	100臺北市中正區黎明里10鄰館前路8號5樓及8樓	02-23709966	25.046063	121.5146948	64	12800	16800
-109 Hostel Taipei 台北109青旅	100臺北市中正區博愛路36號3樓	0905-972109	25.0460836	121.5112024	6	3500	30000
-幸福蘋果旅店	108臺北市萬華區峨眉街109、109-2號(1樓部分、2至7樓)	02-23117877	25.0442615	121.5041377	49	4000	8000
-松河璞旅	105臺北市松山區松河街112號1樓至8樓	02-25281567	25.0509098	121.575086	42	2600	13000
-金普頓大安酒店	106臺北市大安區仁愛路四段27巷23號3樓至11樓、25號、25號3樓至11樓、27號2樓至14樓	02-27792000	25.0403396	121.5453764	129	16000	30000
-碩城文旅	104臺北市中山區中山北路一段105巷12-6號2至8樓	02-21001023	25.050545	121.5238602	32	1280	9800
-南港老爺行旅	115臺北市南港區經貿二路196號.196號10樓至20樓	02-77500588	25.0598044	121.6147949	179	4500	19800
-玩行旅 台北館	100臺北市中正區金山南路1段8號1樓至8樓	02-23212680	25.0421407	121.5198716	49	12880	13880
-野趣旅舍 T.O.HOTEL	103臺北市大同區承德路二段28號1至5樓	02-25521300	25.0557295	121.5179676	16	2680	9800
-門草行旅	103臺北市大同區安西街23號1至4樓（不含安西街25號1樓）	02-25577045	25.0598688	121.5101015	4	8800	8800
-小角落旅店	103臺北市大同區民族西路33號(1至4樓)	02-25991699	25.0686787	121.5194941	5	600	48000
-丹居青旅	108臺北市萬華區漢中街154號	0977-066154	25.0413738	121.5067384	11	1500	4000
-甲山林湯旅JSL hotel	104臺北市中山區興安街56、58、60號1樓，62號1至9樓	02-25012222	25.0560101	121.540359	157	15000	30000
-日光拾玖	100臺北市中正區忠孝西路一段50號19樓、19樓之1、之2、之5、之17、之27、之29、之31、之43及19樓等共同使用	02-23889998	25.0462219	121.51583	40	16000	16000
-洛痐T貝茲	105臺北市松山區八德路四段16號1-7樓	02-27630555	25.0481	121.5585063	54	3000	30000
-城市商旅站前館	103臺北市大同區延平北路一段51號1至3樓及53號1樓	02-25507000	25.0509237	121.5121264	92	13200	19800
-華達大飯店 	100臺北市中正區重慶南路一段1號6樓	02-23110212	25.0468814	121.5134147	14	2000	4200
-豪城商旅民生館	105臺北市松山區民生東路三段113巷7弄11號1樓至6樓	02-27137078	25.058588	121.5469077	38	3200	4000
-天雲旅棧台北中山	104臺北市中山區中山北路一段83巷7,7之1號至7之18號	02-25216666	25.050384	121.5232961	56	7000	9800
-MVSA 慕舍酒店	104臺北市中山區建國北路一段61號	02-25006772	25.0506709	121.5371316	38	18800	36800
-瀚寓酒店	110臺北市信義區基隆路一段206號1至12樓	02-87583777	25.0398115	121.5633113	120	16000	60000
-台北大直英迪格酒店	104臺北市中山區植福路200號（地上1樓部分）、200號5樓（地上5層至10層）	02-35187777	25.0829233	121.5602782	149	5000	309600
-配普特行旅	103臺北市大同區鄭州路21巷4號(1樓至3樓)	02-25583669	25.049523	121.5144476	9	5000	12000
-町記憶旅店3館	108臺北市萬華區昆明街142號2、3樓	02-23709930	25.0426126	121.5046471	44	18800	28800
-苓旅旅館中山館	104臺北市中山區建國北路2段91號1樓,93號1至7樓,2樓-1至7樓-1,95巷2號1樓,4號1樓	02-25084588	25.0587151	121.5374182	42	3280	15000
-和旅瓏旅館西門館	108臺北市萬華區西寧南路105號2至5樓、2樓之1至5樓之1	02-23616569	25.0451473	121.5067514	42	3150	26000
-野趣光延旅館	100臺北市中正區開封街一段2號2樓	02-23140202	25.0458705	121.5144395	44	1480	6800
-藝築文旅開封館	108臺北市萬華區開封街二段63號	02-23312986	25.0471039	121.5052681	12	4280	17800
-日好青旅	103臺北市大同區甘谷街26號6樓	02-25558667	25.0527477	121.5109153	11	3000	6000
-盤古捷旅	104臺北市中山區中山北路1段135巷39號(地上層至7層)	02-25671001	25.0526041	121.5226127	50	4400	8800
-天閣酒店台北士林	111臺北市士林區基河路16-8號1樓至11樓	02-28866888	25.0827962	121.5241094	51	20000	20000
-大昌旺商旅	104臺北市中山區天津街43號1至4樓	02-21001118、 0908-609351	25.0500566	121.5230698	21	1000	3000
-美亞商旅	100臺北市中正區忠孝西路一段50號3樓至5樓及3樓之1至5樓之1	02-23313001	25.0457716	121.5158208	264	12000	24000
-和苑三井花園飯店  台北忠孝	106臺北市大安區忠孝東路三段30號	02-27811131	25.0418375	121.5343789	297	12500	40000
-所在行旅	100臺北市中正區忠孝西路一段50號 24樓之6	02-77552077	25.0462353	121.5160533	2	800	12000
-旅家雅舍	100臺北市中正區南昌路二段222號11樓	0926-657353	25.0237493	121.5246296	7	8000	16000
-路徒PLUS行旅-主題館	100臺北市中正區忠孝西路一段80號5至12樓	02-23311788	25.0469881	121.5137254	109	18880	43880
-台北時代寓所	100臺北市中正區林森南路7號1至14樓、7-1號1樓	02-77521888	25.0439639	121.5235742	175	15800	20000
-白色空間設計旅店	100臺北市中正區許昌街40號4樓、4樓之1、4樓之2	02-23822200	25.0454465	121.5156812	13	6800	8800
-雀客旅館台北站前	100臺北市中正區襄陽路4號(1至10樓)	02-23120522	25.0433113	121.513884	100	10560	22800
-玉璽精品飯店	111臺北市士林區中山北路七段14巷2之3號2至10樓、11樓（11層及12層）	02-28766579	25.1186703	121.5313065	85	4950	6600
-大湖璞旅	114臺北市內湖區成功路五段462號1樓、3樓至14樓、3樓之1至3樓之6、4樓之1至4樓之13、5樓之2至5樓之13、6樓之2至6樓之13、7樓之2至7樓之12、8樓之1至8樓之13、 9樓之1至9樓之13、10樓之	02-26338555	25.073339	121.6064188	148	5000	30000
-瑞絲逸旅店	104臺北市中山區林森北路96號2樓之1、之2	02-25641372	25.04999	121.5246706	9	1580	1580
-旅城驛鎮	104臺北市中山區松江路95-1號6樓 	02-25081848	25.0508403	121.5332679	10	10000	12000
-柯達大飯店台北林森	104臺北市中山區林森北路74號、76號(1樓至8樓 ) 	02-25712222	25.0495943	121.5244759	49	1000	15000
-森浩文旅-STEP INN	105臺北市松山區饒河街131、133號2至3樓	02-27609090	25.0504345	121.5746039	28	6800	12800
-趣西門旅店	108臺北市萬華區武昌街二段72號7樓	02-23618266	25.044807	121.5062111	27	10000	20000
-慶爾喜旅館	108臺北市萬華區武昌街二段72號11樓	02-77309920	25.044807	121.5062111	6	25000	25000
-悅心旅	103臺北市大同區重慶北路1段61號1樓 至3樓	02-25591525	25.0495802	121.5136357	14	3800	6800
-路徒PLUS行旅-站前館 	100臺北市中正區忠孝西路一段80號4樓、24至35樓	02-23886366	25.0469881	121.5137254	127	33888	48888
-米窩飯店-西門	108臺北市萬華區成都路101、103號1-6樓	02-23759951	25.0432589	121.50437	34	20000	20000
-藝築文旅台北站前館	100臺北市中正區襄陽路8號3至11樓	02-23820150	25.0433089	121.513438	90	28800	39800
-格拉斯麗台北飯店	100臺北市中正區忠孝東路2段89號3至19樓	02-23220111	25.041243	121.547351	248	13000	13000
-見潭璞旅	111臺北市士林區承德路四段250號	02-28831777	25.0891047	121.5205772	240	12000	20000
-時尚居商旅	104臺北市中山區民生東路三段9巷1之1號2樓, 1之1號 3樓,1之1號4樓, 1之2號2樓, 1之2號3樓, 1之2號4樓, 1之3號2樓, 1之3號3樓, 1之3號4樓	02-25090102	25.058299	121.5375884	8	6000	10000
-雅齊旅館	100臺北市中正區重慶南路1段86號3樓、3樓之1、4樓、4樓之1、5樓及3樓、4樓等共同使用、5樓共同使用	02-23709988	25.0468814	121.5134147	93	6800	19880
-城市商旅德立莊二館	100臺北市中正區衡陽路97號2樓、97之1號2樓、99號2樓、101號2樓、101號2樓之1、103號2樓、103號2樓之1、105號2樓、延平南路110號2-4樓	02-23703258	25.0422706	121.5093556	199	14000	16000
-日野苑	100臺北市中正區重慶南路1段18號2樓至7樓	02-23889998	25.0468814	121.5134147	35	8000	9800
-寒居酒店 Humble Boutique Hotel	104臺北市中山區松江路116號1樓至9樓	02-66008000	25.0516406	121.5326451	111	15000	38000
-星西門行旅	108臺北市萬華區西寧南路36號9樓、9樓之1、9樓之31至43、9樓之45至51、10樓之1	02-23313188	25.0453915	121.5063989	54	10000	20000
-陸號行旅萬年館	108臺北市萬華區西寧南路70號6樓	02-23619069	25.043508	121.5058859	39	1880	5580
-台北捷運-北投會館(捷之旅)	112臺北市北投區大業路527巷88號(2至3樓)	02-28930105	25.1345931	121.483615	42	5500	12000
-喜園旅館	108臺北市萬華區中華路一段90號3樓、3樓之1、3樓之2	02-77309920	25.0447107	121.5083965	35	25000	25000
-安捷國際公寓酒店	103臺北市大同區市民大道1段201號15樓、15樓之1至之3、之5至之10	02-25592900	25.0447598	121.537509	9	9800	15800
-城市商旅北門二館	103臺北市大同區長安西路271號2樓至4樓、275號1樓至4樓	02-25525777	25.0521523	121.5106535	19	9000	12000
-西門希爾商旅	108臺北市萬華區峨眉街28號4樓之1、4樓之2、4樓之3	02-23810081	25.0433355	121.5067272	15	600	4800
-米窩飯店-站前	100臺北市中正區忠孝西路1段50號7樓、7樓之1、之2、之3、8樓	02-23810028	25.0421407	121.5198716	200	8000	13200
-雀客快捷台北永康	100臺北市中正區信義路二段73號(1至7樓、1樓夾層、公共使用)	02-23212721	25.0346607	121.5264559	43	16500	20000
-希爾商旅台北館	104臺北市中山區南京東路二段11號4至5樓	02-25678858	25.0523055	121.5284519	32	2000	8000
-陸號行旅中華館	108臺北市萬華區中華路一段90號9樓、11樓	02-23112522	25.0447107	121.5083965	72	12880	20880
-苓旅旅館萬年館	108臺北市萬華區西寧南路70號7樓	02-23814188	25.0435135	121.5058942	29	1280	11180
-葛瑞絲商旅敦北館 	105臺北市松山區敦化北路216號1樓至5樓	02-27886682	25.0583989	121.54872	34	4180	14080
-珂曼旅館	108臺北市萬華區西寧南路77號1-15樓、2樓之1-15樓之1、3樓之2-14樓之2、12樓之3-13樓之3、12樓之5	02-23886000	25.0451533	121.506396	61	12000	22000
-台北棧	100臺北市中正區許昌街40號5樓、5樓之1、5樓之2、6樓、6樓之1、6樓之2、7樓、7樓之1、7樓之2、7樓之3	02-23313381	25.0454465	121.5156812	34	6000	15000
-天母之星商務會館	112臺北市北投區石牌路一段166巷46號,2樓至7樓、2樓之1至5樓之1、2樓之2至5樓之2	02-28231896	25.1136068	121.514047	17	6000	12000
-慶爾喜旅館西門捷運館	108臺北市萬華區中華路一段152號7樓、11樓及成都路1號7樓、11樓	02-77309920	25.0427289	121.5080086	21	18000	35000
-陸號行旅西門館	108臺北市萬華區中華路一段152號5樓、5樓之1、9樓、10樓；成都路1號9樓、10樓	02-23144003	25.0427289	121.5080086	27	12800	14800
-立和商務旅館-漢口館	108臺北市萬華區漢口街二段54號10樓	02-23613350	25.0457688	121.5060531	59	20000	40000
-摩莎曼拉商務旅館-西門館	108臺北市萬華區漢口街二段54號8樓、8樓之1、8樓之6、8樓之7、8樓 之8、9樓、9樓之1	02-23613350	25.0457688	121.5060531	88	20000	40000
-成都壹壹壹商旅	108臺北市萬華區成都路111號1樓-6樓	02-23751022	25.0433326	121.5041572	11	12880	29800
-優美飯店	104臺北市中山區民生東路一段28號1-8樓	02-25255678	25.0578847	121.5240369	63	5250	7650
-台灣西鐵國際旅館	108臺北市萬華區中華路一段88號1樓、6樓至28樓	02-23143939	25.0450249	121.5086021	298	11700	18000
-西門雲町旅店	108臺北市萬華區漢中街52號12樓至13樓	02-23112555	25.0438011	121.5071905	32	12000	20000
-福華國際文教會館	106臺北市大安區新生南路3段30號(住宿棟1 樓及5樓至14樓)	02-77122323	25.0236484	121.5343264	279	32000	120000
-聖雄商旅	105臺北市松山區基隆路一段8號、10號17至18樓	02-27600920	25.0505906	121.5696512	37	6600	15000
-柯達大飯店台北南京	105臺北市松山區南京東路三段333號2至11樓	02-27196666	25.0520388	121.5474591	64	9200	20000
-晶城青年旅館	103臺北市大同區南京西路288號4樓（本號1戶）	02-25507220	25.053927	121.513958	3	3600	50400
-相鐵飯店台北西門	100臺北市中正區中華路一段57號	02-23316203	25.0415948	121.5085496	200	12000	25000
-客憩旅宿	100臺北市中正區重慶南路一段63號2樓	02-23116118、 0975-721686	25.044507	121.5133576	11	1000	8000
-日光樂居	108臺北市萬華區西寧南路72之1號5樓	02-23889978	25.043239	121.5059649	27	12000	12000
-瀚寓夏天	100臺北市中正區汀州路三段62號、3樓、6樓	02-87583777	25.0155608	121.5314174	69	8000	12700
-福泰桔子商務旅館西門漢中店	108臺北市萬華區漢中街170號1-14樓	02-23811155	25.0410399	121.506419	66	10800	10800
-美好境界旅店	108臺北市萬華區西寧南路36號9樓之2、9樓之3、9樓之4	02-23617608	25.0453915	121.5063989	42	16000	16000
-歐法行旅	108臺北市萬華區中華路一段90號5樓	02-23711333	25.0447107	121.5083965	33	12000	22000
-豐宿創新壹旅	103臺北市大同區南京西路165號6樓	02-77557937、 0958-089188	25.054078	121.512899	28	2500	12000
-藝築文旅昆明館	108臺北市萬華區昆明街79號10樓	02-23610330、 0987-227100	25.042855	121.504849	14	45800	49800
-日初青旅	100臺北市中正區重慶南路一段49號9樓	02-23615222	25.04475	121.5133542	12	1000	5500
-金通商旅	103臺北市大同區重慶北路一段1號10樓之1	02-25921919、 0977-306059	25.0496273	121.5137774	9	2000	40000
-美好行旅	100臺北市中正區開封街一段2號12樓、12樓之1	02-23617608	25.0458207	121.5145591	5	800	4500
-台北大安伊普索酒店	106臺北市大安區復興南路一段219之2號1樓、4-12樓	02-27117268	25.0390844	121.5440965	136	13000	35000
-雀客旅館台北杭州	100臺北市中正區杭州南路一段12號	02-23933598	25.0400452	121.5254907	73	9800	23800
-頭等艙飯店西門館	100臺北市中正區中華路一段59號4樓、4樓之1、8樓之1、9樓之1、11樓至13樓	02-23114567	25.0413445	121.5085332	115	1200	16000
-日光樂居成都館	108臺北市萬華區成都路99號2樓至4樓	02-23886898	25.043242	121.504438	14	2800	20000
-大光瀛商旅	100臺北市中正區忠孝西路1段50號地下3層	02-23705590	25.0421407	121.5198716	49	3280	3680
-享住青旅	100臺北市中正區館前路8號地下1層	0970-939898	25.0458481	121.5147815	7	600	3600
-北投晶泉丰旅	112臺北市北投區泉源路19號、19之1號（地上1層至地上14層）	02-66108000	25.1382859	121.504675	100	22000	66000
-貓尾口袋（西門館）	108臺北市萬華區康定路25巷1號2至4樓	02-25586002	25.0441216	121.5030258	10	18000	18000
-天雲旅棧台北開封	100臺北市中正區開封街1段33號1至8樓	02-23811111	25.0460573	121.5146126	158	8000	18000
-捷絲旅臺大尊賢館	106臺北市大安區羅斯福路4段83號1-10樓	02-77355088	25.0133643	121.5362346	76	12100	17600
-臺北嘉佩樂酒店 Capella	105臺北市松山區敦化北路131、133、137、139號、 139號地下二層、135號二樓、135號等共有部分(一、二、十四、十五、十六、十七層)	02-77096868	25.0525244	121.5497703	86	34650	369600
-古奈堡精品旅館	108臺北市萬華區峨眉街28號5樓之1	02-23816808	25.0435762	121.5078544	8	2000	24000
-美好行旅北車漢口館	100臺北市中正區漢口街1段45號6樓	02-23818008、 0983-385565	25.0452642	121.5146888	21	350	28000
-\.
-
-
---
--- Data for Name: population_age_distribution_new_tpe; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: population_age_distribution_new_tpe; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 COPY public.population_age_distribution_new_tpe (ogc_fid, year, young_population, young_population_percentage, working_age_population, working_age_population_percentage, elderly_population, elderly_population_percentage, total_dependency_ratio, aging_index, _ctime, _mtime, data_time) FROM stdin;
@@ -14884,7 +12688,7 @@ COPY public.population_age_distribution_new_tpe (ogc_fid, year, young_population
 
 
 --
--- Data for Name: population_age_distribution_tpe; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: population_age_distribution_tpe; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 COPY public.population_age_distribution_tpe (ogc_fid, year, young_population, young_population_percentage, working_age_population, working_age_population_percentage, elderly_population, elderly_population_percentage, total_dependency_ratio, aging_index, _ctime, _mtime, data_time) FROM stdin;
@@ -14917,15 +12721,7 @@ COPY public.population_age_distribution_tpe (ogc_fid, year, young_population, yo
 
 
 --
--- Data for Name: spatial_ref_sys; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.spatial_ref_sys (srid, auth_name, auth_srid, srtext, proj4text) FROM stdin;
-\.
-
-
---
--- Data for Name: tran_ubike_realtime; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: tran_ubike_realtime; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 COPY public.tran_ubike_realtime (data_time, station_uid, station_id, service_status, service_type, available_rent_general_bikes, available_return_bikes, available_rent_electric_bikes, tdx_update_time, _ctime, _mtime, ogc_fid) FROM stdin;
@@ -16461,7 +14257,7 @@ COPY public.tran_ubike_realtime (data_time, station_uid, station_id, service_sta
 
 
 --
--- Data for Name: tran_ubike_realtime_new_tpe; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: tran_ubike_realtime_new_tpe; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 COPY public.tran_ubike_realtime_new_tpe (data_time, station_uid, station_id, service_status, service_type, available_rent_general_bikes, available_return_bikes, available_rent_electric_bikes, tdx_update_time, _ctime, _mtime, ogc_fid) FROM stdin;
@@ -17863,146 +15659,84 @@ COPY public.tran_ubike_realtime_new_tpe (data_time, station_uid, station_id, ser
 
 
 --
--- Data for Name: geocode_settings; Type: TABLE DATA; Schema: tiger; Owner: postgres
---
-
-COPY tiger.geocode_settings (name, setting, unit, category, short_desc) FROM stdin;
-\.
-
-
---
--- Data for Name: pagc_gaz; Type: TABLE DATA; Schema: tiger; Owner: postgres
---
-
-COPY tiger.pagc_gaz (id, seq, word, stdword, token, is_custom) FROM stdin;
-\.
-
-
---
--- Data for Name: pagc_lex; Type: TABLE DATA; Schema: tiger; Owner: postgres
---
-
-COPY tiger.pagc_lex (id, seq, word, stdword, token, is_custom) FROM stdin;
-\.
-
-
---
--- Data for Name: pagc_rules; Type: TABLE DATA; Schema: tiger; Owner: postgres
---
-
-COPY tiger.pagc_rules (id, rule, is_custom) FROM stdin;
-\.
-
-
---
--- Data for Name: topology; Type: TABLE DATA; Schema: topology; Owner: postgres
---
-
-COPY topology.topology (id, name, srid, "precision", hasz) FROM stdin;
-\.
-
-
---
--- Data for Name: layer; Type: TABLE DATA; Schema: topology; Owner: postgres
---
-
-COPY topology.layer (topology_id, layer_id, schema_name, table_name, feature_column, feature_type, level, child_id) FROM stdin;
-\.
-
-
---
--- Name: bike_network_new_tpe_ogc_fid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: bike_network_new_tpe_ogc_fid_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
 SELECT pg_catalog.setval('public.bike_network_new_tpe_ogc_fid_seq', 1, false);
 
 
 --
--- Name: bike_network_tpe_ogc_fid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: bike_network_tpe_ogc_fid_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
 SELECT pg_catalog.setval('public.bike_network_tpe_ogc_fid_seq', 1, false);
 
 
 --
--- Name: bus_info_new_tpe_ogc_fid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: bus_info_new_tpe_ogc_fid_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
 SELECT pg_catalog.setval('public.bus_info_new_tpe_ogc_fid_seq', 82420, true);
 
 
 --
--- Name: bus_info_tpe_ogc_fid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: bus_info_tpe_ogc_fid_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
 SELECT pg_catalog.setval('public.bus_info_tpe_ogc_fid_seq', 108817, true);
 
 
 --
--- Name: dependency_ratio_and_aging_index_new_tpe_ogc_fid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: dependency_ratio_and_aging_index_new_tpe_ogc_fid_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
 SELECT pg_catalog.setval('public.dependency_ratio_and_aging_index_new_tpe_ogc_fid_seq', 13, true);
 
 
 --
--- Name: dependency_ratio_and_aging_index_tpe_ogc_fid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: dependency_ratio_and_aging_index_tpe_ogc_fid_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
 SELECT pg_catalog.setval('public.dependency_ratio_and_aging_index_tpe_ogc_fid_seq', 55, true);
 
 
 --
--- Name: employment_age_structure_new_tpe_ogc_fid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: employment_age_structure_new_tpe_ogc_fid_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
 SELECT pg_catalog.setval('public.employment_age_structure_new_tpe_ogc_fid_seq', 1080, true);
 
 
 --
--- Name: employment_age_structure_tpe_ogc_fid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: employment_age_structure_tpe_ogc_fid_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
 SELECT pg_catalog.setval('public.employment_age_structure_tpe_ogc_fid_seq', 1620, true);
 
 
 --
--- Name: population_age_distribution_new_tpe_ogc_fid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: population_age_distribution_new_tpe_ogc_fid_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
 SELECT pg_catalog.setval('public.population_age_distribution_new_tpe_ogc_fid_seq', 13, true);
 
 
 --
--- Name: population_age_distribution_tpe_ogc_fid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: population_age_distribution_tpe_ogc_fid_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
 SELECT pg_catalog.setval('public.population_age_distribution_tpe_ogc_fid_seq', 25, true);
 
 
 --
--- Name: tran_ubike_realtime_new_tpe_ogc_fid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: tran_ubike_realtime_new_tpe_ogc_fid_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
 SELECT pg_catalog.setval('public.tran_ubike_realtime_new_tpe_ogc_fid_seq', 69700, true);
 
 
 --
--- Name: tran_ubike_realtime_ogc_fid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.tran_ubike_realtime_ogc_fid_seq', 1, false);
-
-
---
--- Name: topology_id_seq; Type: SEQUENCE SET; Schema: topology; Owner: postgres
---
-
-SELECT pg_catalog.setval('topology.topology_id_seq', 1, false);
-
-
---
--- Name: bike_network_new_tpe bike_network_new_tpe_pkey_1; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: bike_network_new_tpe bike_network_new_tpe_pkey_1; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.bike_network_new_tpe
@@ -18010,7 +15744,7 @@ ALTER TABLE ONLY public.bike_network_new_tpe
 
 
 --
--- Name: bike_network_tpe bike_network_tpe_pkey_1; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: bike_network_tpe bike_network_tpe_pkey_1; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.bike_network_tpe
@@ -18018,7 +15752,7 @@ ALTER TABLE ONLY public.bike_network_tpe
 
 
 --
--- Name: bus_info_new_tpe bus_info_new_tpe_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: bus_info_new_tpe bus_info_new_tpe_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.bus_info_new_tpe
@@ -18026,7 +15760,7 @@ ALTER TABLE ONLY public.bus_info_new_tpe
 
 
 --
--- Name: bus_info_tpe bus_info_tpe_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: bus_info_tpe bus_info_tpe_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.bus_info_tpe
@@ -18034,7 +15768,7 @@ ALTER TABLE ONLY public.bus_info_tpe
 
 
 --
--- Name: dependency_ratio_and_aging_index_new_tpe dependency_ratio_and_aging_index_new_tpe_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: dependency_ratio_and_aging_index_new_tpe dependency_ratio_and_aging_index_new_tpe_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.dependency_ratio_and_aging_index_new_tpe
@@ -18042,7 +15776,7 @@ ALTER TABLE ONLY public.dependency_ratio_and_aging_index_new_tpe
 
 
 --
--- Name: dependency_ratio_and_aging_index_tpe dependency_ratio_and_aging_index_tpe_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: dependency_ratio_and_aging_index_tpe dependency_ratio_and_aging_index_tpe_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.dependency_ratio_and_aging_index_tpe
@@ -18050,7 +15784,7 @@ ALTER TABLE ONLY public.dependency_ratio_and_aging_index_tpe
 
 
 --
--- Name: employment_age_structure_new_tpe employment_age_structure_new_tpe_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: employment_age_structure_new_tpe employment_age_structure_new_tpe_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.employment_age_structure_new_tpe
@@ -18058,7 +15792,7 @@ ALTER TABLE ONLY public.employment_age_structure_new_tpe
 
 
 --
--- Name: employment_age_structure_tpe employment_age_structure_tpe_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: employment_age_structure_tpe employment_age_structure_tpe_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.employment_age_structure_tpe
@@ -18066,7 +15800,7 @@ ALTER TABLE ONLY public.employment_age_structure_tpe
 
 
 --
--- Name: population_age_distribution_new_tpe population_age_distribution_new_tpe_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: population_age_distribution_new_tpe population_age_distribution_new_tpe_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.population_age_distribution_new_tpe
@@ -18074,7 +15808,7 @@ ALTER TABLE ONLY public.population_age_distribution_new_tpe
 
 
 --
--- Name: population_age_distribution_tpe population_age_distribution_tpe_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: population_age_distribution_tpe population_age_distribution_tpe_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.population_age_distribution_tpe
@@ -18082,7 +15816,7 @@ ALTER TABLE ONLY public.population_age_distribution_tpe
 
 
 --
--- Name: tran_ubike_realtime_new_tpe tran_ubike_realtime_new_tpe_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: tran_ubike_realtime_new_tpe tran_ubike_realtime_new_tpe_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.tran_ubike_realtime_new_tpe
@@ -18090,11 +15824,81 @@ ALTER TABLE ONLY public.tran_ubike_realtime_new_tpe
 
 
 --
--- Name: tran_ubike_realtime tran_ubike_realtime_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: tran_ubike_realtime tran_ubike_realtime_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.tran_ubike_realtime
     ADD CONSTRAINT tran_ubike_realtime_pkey PRIMARY KEY (ogc_fid);
+
+
+--
+-- Name: bus_info_new_tpe bus_info_new_tpe_mtime; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER bus_info_new_tpe_mtime BEFORE INSERT OR UPDATE ON public.bus_info_new_tpe FOR EACH ROW EXECUTE FUNCTION public.trigger_set_timestamp();
+
+
+--
+-- Name: bus_info_tpe bus_info_tpe_mtime; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER bus_info_tpe_mtime BEFORE INSERT OR UPDATE ON public.bus_info_tpe FOR EACH ROW EXECUTE FUNCTION public.trigger_set_timestamp();
+
+
+--
+-- Name: dependency_ratio_and_aging_index_new_tpe dependency_ratio_and_aging_index_new_tpe_mtime; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER dependency_ratio_and_aging_index_new_tpe_mtime BEFORE INSERT OR UPDATE ON public.dependency_ratio_and_aging_index_new_tpe FOR EACH ROW EXECUTE FUNCTION public.trigger_set_timestamp();
+
+
+--
+-- Name: dependency_ratio_and_aging_index_tpe dependency_ratio_and_aging_index_tpe_mtime; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER dependency_ratio_and_aging_index_tpe_mtime BEFORE INSERT OR UPDATE ON public.dependency_ratio_and_aging_index_tpe FOR EACH ROW EXECUTE FUNCTION public.trigger_set_timestamp();
+
+
+--
+-- Name: employment_age_structure_new_tpe employment_age_structure_new_tpe_mtime; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER employment_age_structure_new_tpe_mtime BEFORE INSERT OR UPDATE ON public.employment_age_structure_new_tpe FOR EACH ROW EXECUTE FUNCTION public.trigger_set_timestamp();
+
+
+--
+-- Name: employment_age_structure_tpe employment_age_structure_tpe_mtime; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER employment_age_structure_tpe_mtime BEFORE INSERT OR UPDATE ON public.employment_age_structure_tpe FOR EACH ROW EXECUTE FUNCTION public.trigger_set_timestamp();
+
+
+--
+-- Name: population_age_distribution_new_tpe population_age_distribution_new_tpe_mtime; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER population_age_distribution_new_tpe_mtime BEFORE INSERT OR UPDATE ON public.population_age_distribution_new_tpe FOR EACH ROW EXECUTE FUNCTION public.trigger_set_timestamp();
+
+
+--
+-- Name: population_age_distribution_tpe population_age_distribution_tpe_mtime; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER population_age_distribution_tpe_mtime BEFORE INSERT OR UPDATE ON public.population_age_distribution_tpe FOR EACH ROW EXECUTE FUNCTION public.trigger_set_timestamp();
+
+
+--
+-- Name: tran_ubike_realtime tran_ubike_realtime_mtime; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER tran_ubike_realtime_mtime BEFORE INSERT OR UPDATE ON public.tran_ubike_realtime FOR EACH ROW EXECUTE FUNCTION public.trigger_set_timestamp();
+
+
+--
+-- Name: tran_ubike_realtime_new_tpe tran_ubike_realtime_new_tpe_mtime; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER tran_ubike_realtime_new_tpe_mtime BEFORE INSERT OR UPDATE ON public.tran_ubike_realtime_new_tpe FOR EACH ROW EXECUTE FUNCTION public.trigger_set_timestamp();
 
 
 --

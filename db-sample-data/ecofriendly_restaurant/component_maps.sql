@@ -11,7 +11,7 @@ VALUES(
 	'small',
 	'heatmap',
 	JSONB_BUILD_OBJECT(
-		'circle-color', '#75373b'
+		'circle-color', '#358452'
 	),
 	JSONB_BUILD_ARRAY(
 		JSONB_BUILD_OBJECT('key', 'name', 'name', '名稱'),
@@ -32,7 +32,7 @@ VALUES(
 	'small',
 	'heatmap',
 	JSONB_BUILD_OBJECT(
-		'circle-color', '#181a80'
+		'circle-color', '#358452'
 	),
 	JSONB_BUILD_ARRAY(
 		JSONB_BUILD_OBJECT('key', 'name', 'name', '名稱'),
