@@ -20,6 +20,14 @@ type AddressInfo struct {
 	Y       float64 `gorm:"column:y" json:"Y"`
 }
 
+// AddressInfo 定義共用欄位
+type RentInfo struct {
+	ID        int     `gorm:"column:id" json:"Id"`
+	UnitPrice float64 `gorm:"column:unit_price" json:"Unit_price"`
+	X         float64 `gorm:"column:x" json:"X"`
+	Y         float64 `gorm:"column:y" json:"Y"`
+}
+
 // Library 對應 library 表
 type NTLibrary struct {
 	 //gorm.Model
@@ -80,11 +88,11 @@ func (NTshopping) TableName() string {
 // Rental 對應 rental 表
 type Rental struct {
 	//gorm.Model
-	AddressInfo
+	RentInfo
 }
 
 func (Rental) TableName() string {
-	return "rental_data"
+	return "real_estate"
 }
 
 // Market 對應 market 表
@@ -111,7 +119,7 @@ type Data struct {
 	Library  []AddressInfo `json:"library"`
 	Hospital []AddressInfo `json:"hospital"`
 	Shopping []AddressInfo `json:"shopping"`
-	Rental   []AddressInfo `json:"rental"`
+	Rental   []RentInfo `json:"rental"`
 	Market   []AddressInfo `json:"market"`
 }
 
@@ -149,13 +157,13 @@ func GetInfos(c *gin.Context) {
 	}
 
 	// 計算 1.6 公里範圍
-	distance := 1.6 * 1000
+	distance := 1.6
 	xLower, xHigher, yLower, yHigher := calculateSquareBounds(point.Y, point.X, distance)
 
 	lib_data := make([]AddressInfo, 0)
 	hospital_data := make([]AddressInfo, 0)
 	shopping_data := make([]AddressInfo, 0)
-	rental_data := make([]AddressInfo, 0)
+	rental_data := make([]RentInfo, 0)
 	market_data := make([]AddressInfo, 0)
 	p := geo.NewPoint(point.X, point.Y)
 	// 查詢各表
@@ -167,7 +175,9 @@ func GetInfos(c *gin.Context) {
 		return
 	}
 	for _, d := range t_libraries {
-		if p.DistanceFrom(geo.NewPoint(d.X, d.Y)) <= distance {
+		dist := p.DistanceFrom(geo.NewPoint(d.X, d.Y))
+		fmt.Printf("距離: %f, 閾值: %f\n", dist, distance)
+		if dist <= distance {
 			lib_data = append(lib_data, d.AddressInfo)
 		}
 	}
@@ -236,7 +246,7 @@ func GetInfos(c *gin.Context) {
 	}
 
 	var rentals []Rental
-	result = db.Select("DISTINCT x, y").Where("x between ? AND ? AND y between ? AND ?",
+	result = db.Select("DISTINCT x, y, unit_price").Where("x between ? AND ? AND y between ? AND ?",
 		xLower, xHigher, yLower, yHigher).Find(&rentals)
 	if result.Error != nil {
 		c.JSON(500, gin.H{"error": "Query failed for library: " + err.Error()})
@@ -244,7 +254,11 @@ func GetInfos(c *gin.Context) {
 	}
 	for _, d := range rentals {
 		if p.DistanceFrom(geo.NewPoint(d.X, d.Y)) <= distance {
-			rental_data = append(rental_data, d.AddressInfo)
+			// 過濾 NaN
+			if math.IsNaN(d.X) || math.IsNaN(d.Y) || math.IsNaN(d.UnitPrice) {
+				continue
+			}
+			rental_data = append(rental_data, d.RentInfo)
 		}
 	}
 
