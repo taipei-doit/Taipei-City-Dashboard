@@ -193,7 +193,7 @@ CREATE SEQUENCE public.bus_info_tpe_ogc_fid_seq
 --
 -- Name: emergency_agg_villa; Type: TABLE; Schema: public; Owner: -
 --
-CREATE TABLE public.emergency_agg_villay_agg_villa (
+CREATE TABLE public.emergency_agg_villa (
   county TEXT,
   town TEXT,
   village TEXT,
