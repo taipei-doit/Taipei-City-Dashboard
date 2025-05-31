@@ -1,0 +1,27 @@
+{
+	"isoline-key": "UVIndex",
+	"isoline-min": 0,
+	"isoline-max": 11,
+	"isoline-step": 1,
+	"line-color": [
+		"interpolate",
+		[
+			"linear"
+		],
+		[
+			"get",
+			"value"
+		],
+		0,
+		"#00ffff",
+		3,
+		"#00ff00",
+		6,
+		"#ffff00",
+		8,
+		"#ff8000",
+		11,
+		"#ff0000"
+	],
+	"line-width": 2
+}

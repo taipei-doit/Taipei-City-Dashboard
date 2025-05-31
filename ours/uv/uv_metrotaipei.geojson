@@ -1,0 +1,1065 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "StationName": "基隆",
+        "StationId": "466940",
+        "ObsTime": "2025-05-31T19:00:00+08:00",
+        "District": "仁愛區",
+        "City": "基隆市",
+        "DistrictCode": "10017040",
+        "CityCode": "10017",
+        "UVIndex": "4"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.740475,
+          25.133314
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "StationName": "淡水",
+        "StationId": "466900",
+        "ObsTime": "2025-05-31T19:00:00+08:00",
+        "District": "淡水區",
+        "City": "新北市",
+        "DistrictCode": "65000100",
+        "CityCode": "65000",
+        "UVIndex": "10"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.448906,
+          25.164889
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "StationName": "新北",
+        "StationId": "466881",
+        "ObsTime": "2025-05-31T19:00:00+08:00",
+        "District": "新店區",
+        "City": "新北市",
+        "DistrictCode": "65000060",
+        "CityCode": "65000",
+        "UVIndex": "4"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.525196,
+          24.959207
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "StationName": "陽明山",
+        "StationId": "466930",
+        "ObsTime": "2025-05-31T19:00:00+08:00",
+        "District": "北投區",
+        "City": "臺北市",
+        "DistrictCode": "63000120",
+        "CityCode": "63000",
+        "UVIndex": "6"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.544547,
+          25.162078
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "StationName": "鞍部",
+        "StationId": "466910",
+        "ObsTime": "2025-05-31T19:00:00+08:00",
+        "District": "北投區",
+        "City": "臺北市",
+        "DistrictCode": "63000120",
+        "CityCode": "63000",
+        "UVIndex": "6"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.529731,
+          25.182586
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "StationName": "彭佳嶼",
+        "StationId": "466950",
+        "ObsTime": "2025-05-31T19:00:00+08:00",
+        "District": "中正區",
+        "City": "基隆市",
+        "DistrictCode": "10017010",
+        "CityCode": "10017",
+        "UVIndex": "11"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          122.079744,
+          25.627975
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "StationName": "臺北",
+        "StationId": "466920",
+        "ObsTime": "2025-05-31T19:00:00+08:00",
+        "District": "中正區",
+        "City": "臺北市",
+        "DistrictCode": "63000050",
+        "CityCode": "63000",
+        "UVIndex": "11"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.514853,
+          25.037658
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "StationName": "新屋",
+        "StationId": "467050",
+        "ObsTime": "2025-05-31T19:00:00+08:00",
+        "District": "新屋區",
+        "City": "桃園市",
+        "DistrictCode": "68000110",
+        "CityCode": "68000",
+        "UVIndex": "2"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.047492,
+          25.006725
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "StationName": "大安森林",
+        "StationId": "CAAH60",
+        "ObsTime": "2025-05-31T19:00:00+08:00",
+        "District": "大安區",
+        "City": "臺北市",
+        "DistrictCode": "63000030",
+        "CityCode": "63000",
+        "UVIndex": "2"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.53628,
+          25.02955
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "StationName": "拉拉山",
+        "StationId": "CAC040",
+        "ObsTime": "2025-05-31T19:00:00+08:00",
+        "District": "復興區",
+        "City": "桃園市",
+        "DistrictCode": "68000130",
+        "CityCode": "68000",
+        "UVIndex": "7"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.427133,
+          24.699317
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "StationName": "中央大學",
+        "StationId": "C2C410",
+        "ObsTime": "2025-05-31T19:00:00+08:00",
+        "District": "中壢區",
+        "City": "桃園市",
+        "DistrictCode": "68000020",
+        "CityCode": "68000",
+        "UVIndex": "3"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.185165,
+          24.967652
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "StationName": "文化大學",
+        "StationId": "A0A460",
+        "ObsTime": "2025-05-31T19:00:00+08:00",
+        "District": "士林區",
+        "City": "臺北市",
+        "DistrictCode": "63000110",
+        "CityCode": "63000",
+        "UVIndex": "9"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.53987,
+          25.13605
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "StationName": "臺灣大學",
+        "StationId": "A0A010",
+        "ObsTime": "2025-05-31T19:00:00+08:00",
+        "District": "大安區",
+        "City": "臺北市",
+        "DistrictCode": "63000030",
+        "CityCode": "63000",
+        "UVIndex": "6"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.539416,
+          25.014278
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "StationName": "桃園農改",
+        "StationId": "72C440",
+        "ObsTime": "2025-05-31T19:00:00+08:00",
+        "District": "新屋區",
+        "City": "桃園市",
+        "DistrictCode": "68000110",
+        "CityCode": "68000",
+        "UVIndex": "0"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.030583,
+          24.950944
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "StationName": "茶改場",
+        "StationId": "82C160",
+        "ObsTime": "2025-05-31T19:00:00+08:00",
+        "District": "楊梅區",
+        "City": "桃園市",
+        "DistrictCode": "68000040",
+        "CityCode": "68000",
+        "UVIndex": "6"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.185333,
+          24.908472
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "StationName": "農工中心",
+        "StationId": "A2C560",
+        "ObsTime": "2025-05-31T19:00:00+08:00",
+        "District": "中壢區",
+        "City": "桃園市",
+        "DistrictCode": "68000020",
+        "CityCode": "68000",
+        "UVIndex": "1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.239833,
+          24.985917
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "StationName": "文山茶改",
+        "StationId": "82A750",
+        "ObsTime": "2025-05-31T19:00:00+08:00",
+        "District": "石碇區",
+        "City": "新北市",
+        "DistrictCode": "65000190",
+        "CityCode": "65000",
+        "UVIndex": "5"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.631222,
+          24.955778
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "StationName": "桃改臺北",
+        "StationId": "72AI40",
+        "ObsTime": "2025-05-31T19:00:00+08:00",
+        "District": "樹林區",
+        "City": "新北市",
+        "DistrictCode": "65000070",
+        "CityCode": "65000",
+        "UVIndex": "9"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.386972,
+          24.944503
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "StationName": "八德合作社",
+        "StationId": "V2C250",
+        "ObsTime": "2025-05-31T19:00:00+08:00",
+        "District": "八德區",
+        "City": "桃園市",
+        "DistrictCode": "68000080",
+        "CityCode": "68000",
+        "UVIndex": "11"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.266389,
+          24.93775
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "StationName": "八德蔬果",
+        "StationId": "V2C260",
+        "ObsTime": "2025-05-31T19:00:00+08:00",
+        "District": "八德區",
+        "City": "桃園市",
+        "DistrictCode": "68000080",
+        "CityCode": "68000",
+        "UVIndex": "0"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.281819,
+          24.978508
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "StationName": "台農院關渡站",
+        "StationId": "G2AI50",
+        "ObsTime": "2025-05-31T19:00:00+08:00",
+        "District": "北投區",
+        "City": "臺北市",
+        "DistrictCode": "63000120",
+        "CityCode": "63000",
+        "UVIndex": "2"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.492,
+          25.11575
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "StationName": "富貴角",
+        "StationId": "C2A920",
+        "ObsTime": "2025-05-31T19:00:00+08:00",
+        "District": "石門區",
+        "City": "新北市",
+        "DistrictCode": "65000220",
+        "CityCode": "65000",
+        "UVIndex": "3"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.565258,
+          25.263783
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "StationName": "福隆",
+        "StationId": "C2A880",
+        "ObsTime": "2025-05-31T19:00:00+08:00",
+        "District": "貢寮區",
+        "City": "新北市",
+        "DistrictCode": "65000260",
+        "CityCode": "65000",
+        "UVIndex": "10"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.942083,
+          25.017842
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "StationName": "四堵",
+        "StationId": "C2A540",
+        "ObsTime": "2025-05-31T19:00:00+08:00",
+        "District": "坪林區",
+        "City": "新北市",
+        "DistrictCode": "65000200",
+        "CityCode": "65000",
+        "UVIndex": "7"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.745736,
+          24.8926
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "StationName": "福山",
+        "StationId": "C2A560",
+        "ObsTime": "2025-05-31T19:00:00+08:00",
+        "District": "烏來區",
+        "City": "新北市",
+        "DistrictCode": "65000290",
+        "CityCode": "65000",
+        "UVIndex": "5"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.502811,
+          24.776203
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "StationName": "瑞芳",
+        "StationId": "C2A660",
+        "ObsTime": "2025-05-31T19:00:00+08:00",
+        "District": "瑞芳區",
+        "City": "新北市",
+        "DistrictCode": "65000120",
+        "CityCode": "65000",
+        "UVIndex": "4"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.801147,
+          25.113169
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "StationName": "火燒寮",
+        "StationId": "C2A650",
+        "ObsTime": "2025-05-31T19:00:00+08:00",
+        "District": "平溪區",
+        "City": "新北市",
+        "DistrictCode": "65000240",
+        "CityCode": "65000",
+        "UVIndex": "8"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.742892,
+          25.002719
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "StationName": "國三甲005K",
+        "StationId": "CAA090",
+        "ObsTime": "2025-05-31T19:00:00+08:00",
+        "District": "文山區",
+        "City": "臺北市",
+        "DistrictCode": "63000080",
+        "CityCode": "63000",
+        "UVIndex": "6"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5975,
+          25.00194
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "StationName": "國二E009K",
+        "StationId": "CAC020",
+        "ObsTime": "2025-05-31T19:00:00+08:00",
+        "District": "桃園區",
+        "City": "桃園市",
+        "DistrictCode": "68000010",
+        "CityCode": "68000",
+        "UVIndex": "9"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.273697,
+          25.018244
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "StationName": "國三N002K",
+        "StationId": "CAB050",
+        "ObsTime": "2025-05-31T19:00:00+08:00",
+        "District": "中山區",
+        "City": "基隆市",
+        "DistrictCode": "10017050",
+        "CityCode": "10017",
+        "UVIndex": "3"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.7217,
+          25.14583
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "StationName": "國三S004K",
+        "StationId": "CAB030",
+        "ObsTime": "2025-05-31T19:00:00+08:00",
+        "District": "七堵區",
+        "City": "基隆市",
+        "DistrictCode": "10017020",
+        "CityCode": "10017",
+        "UVIndex": "11"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.6886,
+          25.11444
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "StationName": "國三S007K",
+        "StationId": "CAB040",
+        "ObsTime": "2025-05-31T19:00:00+08:00",
+        "District": "七堵區",
+        "City": "基隆市",
+        "DistrictCode": "10017020",
+        "CityCode": "10017",
+        "UVIndex": "2"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.6678,
+          25.09694
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "StationName": "國三S010K",
+        "StationId": "CAA030",
+        "ObsTime": "2025-05-31T19:00:00+08:00",
+        "District": "汐止區",
+        "City": "新北市",
+        "DistrictCode": "65000110",
+        "CityCode": "65000",
+        "UVIndex": "2"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.6475,
+          25.08
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "StationName": "國三S016K",
+        "StationId": "CAA040",
+        "ObsTime": "2025-05-31T19:00:00+08:00",
+        "District": "南港區",
+        "City": "臺北市",
+        "DistrictCode": "63000090",
+        "CityCode": "63000",
+        "UVIndex": "11"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.6158,
+          25.03306
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "StationName": "國三S037K",
+        "StationId": "CAA050",
+        "ObsTime": "2025-05-31T19:00:00+08:00",
+        "District": "土城區",
+        "City": "新北市",
+        "DistrictCode": "65000130",
+        "CityCode": "65000",
+        "UVIndex": "11"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.471042,
+          24.982361
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "StationName": "國三S042K",
+        "StationId": "CAA060",
+        "ObsTime": "2025-05-31T19:00:00+08:00",
+        "District": "土城區",
+        "City": "新北市",
+        "DistrictCode": "65000130",
+        "CityCode": "65000",
+        "UVIndex": "1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.4306,
+          24.96
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "StationName": "國三N046K",
+        "StationId": "CAA070",
+        "ObsTime": "2025-05-31T19:00:00+08:00",
+        "District": "樹林區",
+        "City": "新北市",
+        "DistrictCode": "65000070",
+        "CityCode": "65000",
+        "UVIndex": "11"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.3958,
+          24.95083
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "StationName": "國一N039K",
+        "StationId": "CAA990",
+        "ObsTime": "2025-05-31T19:00:00+08:00",
+        "District": "泰山區",
+        "City": "新北市",
+        "DistrictCode": "65000160",
+        "CityCode": "65000",
+        "UVIndex": "0"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.381972,
+          25.064433
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "StationName": "國一高架N063K",
+        "StationId": "CAC760",
+        "ObsTime": "2025-05-31T19:00:00+08:00",
+        "District": "平鎮區",
+        "City": "桃園市",
+        "DistrictCode": "68000100",
+        "CityCode": "68000",
+        "UVIndex": "1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.196314,
+          24.950281
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "StationName": "國三N072K",
+        "StationId": "CAC770",
+        "ObsTime": "2025-05-31T19:00:00+08:00",
+        "District": "龍潭區",
+        "City": "桃園市",
+        "DistrictCode": "68000090",
+        "CityCode": "68000",
+        "UVIndex": "5"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.199371,
+          24.836391
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "StationName": "國五S005K",
+        "StationId": "CAAD60",
+        "ObsTime": "2025-05-31T19:00:00+08:00",
+        "District": "石碇區",
+        "City": "新北市",
+        "DistrictCode": "65000190",
+        "CityCode": "65000",
+        "UVIndex": "0"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.651931,
+          24.996414
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "StationName": "國五S006K",
+        "StationId": "CAAD70",
+        "ObsTime": "2025-05-31T19:00:00+08:00",
+        "District": "石碇區",
+        "City": "新北市",
+        "DistrictCode": "65000190",
+        "CityCode": "65000",
+        "UVIndex": "4"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.656972,
+          24.989964
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "StationName": "國五N008K",
+        "StationId": "CAAD80",
+        "ObsTime": "2025-05-31T19:00:00+08:00",
+        "District": "石碇區",
+        "City": "新北市",
+        "DistrictCode": "65000190",
+        "CityCode": "65000",
+        "UVIndex": "3"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.668089,
+          24.982411
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "StationName": "國五N013K",
+        "StationId": "CAAD90",
+        "ObsTime": "2025-05-31T19:00:00+08:00",
+        "District": "坪林區",
+        "City": "新北市",
+        "DistrictCode": "65000200",
+        "CityCode": "65000",
+        "UVIndex": "5"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.705508,
+          24.947603
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "StationName": "國三S054K",
+        "StationId": "CAA080",
+        "ObsTime": "2025-05-31T19:00:00+08:00",
+        "District": "鶯歌區",
+        "City": "新北市",
+        "DistrictCode": "65000080",
+        "CityCode": "65000",
+        "UVIndex": "9"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.3239,
+          24.93917
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "StationName": "國三N063K",
+        "StationId": "CAC030",
+        "ObsTime": "2025-05-31T19:00:00+08:00",
+        "District": "大溪區",
+        "City": "桃園市",
+        "DistrictCode": "68000030",
+        "CityCode": "68000",
+        "UVIndex": "7"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.2636,
+          24.889514
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "StationName": "國一S001K",
+        "StationId": "CAB010",
+        "ObsTime": "2025-05-31T19:00:00+08:00",
+        "District": "安樂區",
+        "City": "基隆市",
+        "DistrictCode": "10017060",
+        "CityCode": "10017",
+        "UVIndex": "9"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.7286,
+          25.11583
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "StationName": "國一S006K",
+        "StationId": "CAB020",
+        "ObsTime": "2025-05-31T19:00:00+08:00",
+        "District": "七堵區",
+        "City": "基隆市",
+        "DistrictCode": "10017020",
+        "CityCode": "10017",
+        "UVIndex": "5"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.6869,
+          25.08694
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "StationName": "國一N013K",
+        "StationId": "CAA010",
+        "ObsTime": "2025-05-31T19:00:00+08:00",
+        "District": "汐止區",
+        "City": "新北市",
+        "DistrictCode": "65000110",
+        "CityCode": "65000",
+        "UVIndex": "10"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.628153,
+          25.066739
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "StationName": "國一S026K",
+        "StationId": "CAA020",
+        "ObsTime": "2025-05-31T19:00:00+08:00",
+        "District": "三重區",
+        "City": "新北市",
+        "DistrictCode": "65000020",
+        "CityCode": "65000",
+        "UVIndex": "8"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.4964,
+          25.07639
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "StationName": "國一S072K",
+        "StationId": "CAC010",
+        "ObsTime": "2025-05-31T19:00:00+08:00",
+        "District": "楊梅區",
+        "City": "桃園市",
+        "DistrictCode": "68000040",
+        "CityCode": "68000",
+        "UVIndex": "10"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.1342,
+          24.89583
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "StationName": "西濱S023K",
+        "StationId": "CAC050",
+        "ObsTime": "2025-05-31T19:00:00+08:00",
+        "District": "蘆竹區",
+        "City": "桃園市",
+        "DistrictCode": "68000050",
+        "CityCode": "68000",
+        "UVIndex": "5"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.27551,
+          25.11649
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "StationName": "西濱S032K",
+        "StationId": "CAC060",
+        "ObsTime": "2025-05-31T19:00:00+08:00",
+        "District": "大園區",
+        "City": "桃園市",
+        "DistrictCode": "68000060",
+        "CityCode": "68000",
+        "UVIndex": "3"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.192505,
+          25.091966
+        ]
+      }
+    }
+  ]
+}

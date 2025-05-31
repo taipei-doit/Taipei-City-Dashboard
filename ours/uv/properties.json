@@ -1,0 +1,22 @@
+[
+	{
+		"key": "StationName",
+		"name": "測站名稱"
+	},
+	{
+		"key": "City",
+		"name": "城市"
+	},
+	{
+		"key": "District",
+		"name": "行政區"
+	},
+	{
+		"key": "UVIndex",
+		"name": "UV指數"
+	},
+	{
+		"key": "ObsTime",
+		"name": "觀測時間"
+	}
+]
