@@ -39,6 +39,8 @@ func ConfigureRoutes() {
 	// configureWsRoutes()
 	configureContributorRoutes()
 	configureHelloRoutes()
+
+	// configure the GetScopeInfo function routing
 	configureGetScopeInfo()
 	configureTestRoutes()
 }

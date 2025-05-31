@@ -1,8 +1,13 @@
 package controllers
 
 import (
+	"database/sql"
 	"math"
 	"net/http"
+
+	// "github.com/lib/pq"
+	"fmt"
+	"log"
 
 	"github.com/gin-gonic/gin"
 )
@@ -17,6 +22,16 @@ type Location struct {
 	Name string  `json:"name"`
 	Lat  float64 `json:"lat"`
 	Lng  float64 `json:"lng"`
+}
+
+
+type Hospital struct {
+    id      int
+    name    string
+	level    string
+	address string
+    x       float64
+    y       float64
 }
 
 func GetScopeInfoHandler(c *gin.Context){
@@ -52,13 +67,72 @@ func GetScopeInfoHandler(c *gin.Context){
 	east := gin.H{"lat": req.Lat, "lng": req.Lng + lngOffset}
 	west := gin.H{"lat": req.Lat, "lng": req.Lng - lngOffset} 
 	
+	// take data from postgresql
+	// setting the connection information
+	host := "codefest2025.rm-rf.uk"
+    port := 5433
+    user := "postgres"
+    password := "mGPuAE2JTDDmdui8"
+    dbname := "dashboard"
 
+	// combine the information
+	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",host, port, user, password, dbname)
+	
+	// begin connection
+	db, err := sql.Open("postgres", psqlInfo)
+    if err != nil {
+        log.Fatalf("連線錯誤: %v\n", err)
+    }
+    defer db.Close()
+
+	// test connection
+	err = db.Ping()
+    if err != nil {
+        log.Fatalf("無法連線到資料庫: %v\n", err)
+    }
+
+    fmt.Println("成功連上資料庫！")
+
+	// select hospital information
+	rows, err := db.Query("SELECT id, name, address, type, x, y FROM nt_hospital")
+    if err != nil {
+        log.Fatal("查詢失敗:", err)
+    }
+    defer rows.Close()
+
+	var hospitals []Hospital
+	
+	// outputtest
+	for rows.Next() {
+        var h Hospital
+        err := rows.Scan(&h.id, &h.name, &h.level, &h.address, &h.x, &h.y)
+        if err != nil {
+            log.Println("資料轉換錯誤:", err)
+            continue
+        }
+		if haversine(req.Lat, req.Lng, h.x, h.y)< distanceKm{
+				hospitals = append(hospitals, h)	
+		}
+		
+
+        // fmt.Printf("ID: %d, 名稱: %s, 種類: %s, 地址: %s, 緯度: %.6f, 經度: %.6f\n", h.id, h.name, h.level, h.address, h.x, h.y)
+    }
+
+	// fmt.Println(hospitals)
+
+	// deal with the hospital is in the scope or not
+	
+
+	
 	var inScope []Location
 	for _, loc := range data {
 		if haversine(req.Lat, req.Lng, loc.Lat, loc.Lng) <= 1.6 {
 			inScope = append(inScope, loc)
 		}
 	}
+
+	
+
 
 	// TODO: 根據經緯度查資料庫，回傳 1.6 公里範圍內資料
 	c.JSON(http.StatusOK, gin.H{
@@ -68,6 +142,9 @@ func GetScopeInfoHandler(c *gin.Context){
 			"south": south,
 			"east":  east,
 			"west":  west,
+		},
+		"hospital":gin.H{
+			"list":hospitals,
 		},
 	})
 }
