@@ -209,7 +209,7 @@ CREATE TABLE public.emergency_agg_villay_agg_villa (
 --
 -- Name: emergency_agg_villa_tp; Type: TABLE; Schema: public; Owner: -
 --
-CREATE TABLE public.emergency_agg_villay_agg_villa_tp (
+CREATE TABLE public.emergency_agg_villa_tp (
   county TEXT,
   town TEXT,
   village TEXT,
