@@ -193,7 +193,7 @@ CREATE SEQUENCE public.bus_info_tpe_ogc_fid_seq
 --
 -- Name: emegerncy_agg_villa; Type: TABLE; Schema: public; Owner: -
 --
-CREATE TABLE emegerncy_agg_villa (
+CREATE TABLE public.emegerncy_agg_villa (
   county TEXT,
   town TEXT,
   village TEXT,
@@ -209,7 +209,7 @@ CREATE TABLE emegerncy_agg_villa (
 --
 -- Name: narrow_alley_agg_villa; Type: TABLE; Schema: public; Owner: -
 --
-CREATE TABLE narrow_alley_agg_villa (
+CREATE TABLE public.narrow_alley_agg_villa (
     county TEXT,
     town TEXT,
     village TEXT,
@@ -713,8 +713,7 @@ ALTER TABLE ONLY public.tran_ubike_realtime_new_tpe ALTER COLUMN ogc_fid SET DEF
 --
 -- Data for Name: narrow_alley_agg_villa; Type: COPY; Schema: public; Owner: -
 --
-COPY narrow_alley_agg_villa (county, town, village, geo_iid, size_counts) FROM stdin;
-COUNTY	TOWN	VILLAGE	geo_iid	size_counts
+COPY public.narrow_alley_agg_villa (county, town, village, geo_iid, size_counts) FROM stdin;
 新北市	中和區	安穗里	新北市中和區安穗里	1
 新北市	永和區	得和里	新北市永和區得和里	2
 新北市	中和區	平河里	新北市中和區平河里	1
@@ -1204,7 +1203,7 @@ COUNTY	TOWN	VILLAGE	geo_iid	size_counts
 --
 -- Data for Name: emegerncy_agg_villa; Type: COPY; Schema: public; Owner: -
 --
-COPY emegerncy_agg_villa (county, town, village, a0a14_cnt, a15a64_cnt, a65up_cnt, geo_iid, pop_cnt, capacity, capacity_diff) FROM stdin;
+COPY public.emegerncy_agg_villa (county, town, village, a0a14_cnt, a15a64_cnt, a65up_cnt, geo_iid, pop_cnt, capacity, capacity_diff) FROM stdin;
 臺北市	南港區	西新里	544	2966	890	臺北市南港區西新里	6476	34600	28124
 臺北市	南港區	重陽里	794	4540	945	臺北市南港區重陽里	9874	60383	50509
 臺北市	內湖區	蘆洲里	174	863	206	臺北市內湖區蘆洲里	1900	30452	28552
