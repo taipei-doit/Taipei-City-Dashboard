@@ -38,6 +38,16 @@ func ConfigureRoutes() {
 	configureIncidentRoutes()
 	// configureWsRoutes()
 	configureContributorRoutes()
+	configureHelloRoutes()
+
+	// configure the GetScopeInfo function routing
+	configureTestRoutes()
+	configureGetScopeInfo()
+}
+
+func scopeRoutes() {
+	scopeRoutes := RouterGroup.Group("/scope")
+	scopeRoutes.GET("/info", controllers.GetInfos)
 }
 
 func configureAuthRoutes() {
@@ -177,3 +187,33 @@ func configureContributorRoutes() {
 // 		wsRoutes.PUT("/write/", controllers.WriteMap)
 // 	}
 // }
+
+func configureHelloRoutes() {
+	helloRoutes := RouterGroup.Group("/hello")
+	{
+		helloRoutes.GET("/", controllers.HelloHandler)
+	}
+}
+
+// set the router for getScopeInfo function
+func configureGetScopeInfo() {
+	scopeRoutes := RouterGroup.Group("/scope")
+	scopeRoutes.Use(middleware.LimitAPIRequests(global.ComponentLimitAPIRequestsTimes, global.LimitRequestsDuration))
+	scopeRoutes.Use(middleware.LimitTotalRequests(global.ComponentLimitTotalRequestsTimes, global.LimitRequestsDuration))
+	scopeRoutes.Use(middleware.IsLoggedIn())
+
+	{
+		scopeRoutes.POST("/info", controllers.GetInfos)
+	}
+}
+
+func configureTestRoutes() {
+	testRoutes := RouterGroup.Group("/test")
+	testRoutes.Use(middleware.LimitAPIRequests(10, global.LimitRequestsDuration)) // 自訂限制
+	testRoutes.Use(middleware.LimitTotalRequests(100, global.TokenExpirationDuration))
+	testRoutes.Use(middleware.IsLoggedIn())
+	{
+		testRoutes.POST("/", controllers.TestHandler)
+		testRoutes.GET("/activity", controllers.GetAllActivityHandler)
+	}
+}
