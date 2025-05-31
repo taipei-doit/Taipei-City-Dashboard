@@ -1,7 +1,5 @@
-<!--
-  檔案：src/components/utilities/bars/SideBar.vue
-  功能：原本的 SideBar，加了一個「🔥 熱門儀表板」連結，指向 /popular。
--->
+<!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
+
 <script setup>
 import { onMounted, ref, watch } from "vue";
 import { useContentStore } from "../../../store/contentStore";
@@ -16,61 +14,61 @@ const dialogStore = useDialogStore();
 const mapStore = useMapStore();
 const authStore = useAuthStore();
 
-// The expanded state is also stored in localstorage
+// The expanded state is also stored in localstorage to retain the setting after refresh
 const isExpanded = ref(true);
 
 // The collapsed states are for each dashboard
 const collapsedStates = ref({
-  favorites: false,
-  personal: false,
+	favorites: false,
+	personal: false,
 });
 
-// 初始化每個 city 的 collapse 狀態
 function initializeCollapsedStates() {
-  contentStore.cityManager.activeCities.forEach((city) => {
-    if (!(city in collapsedStates.value)) {
-      collapsedStates.value[city] = false;
-    }
-  });
+	contentStore.cityManager.activeCities.forEach((city) => {
+		if (!(city in collapsedStates.value)) {
+			collapsedStates.value[city] = false;
+		}
+	});
 }
 
 function handleOpenAddDashboard() {
-  dialogStore.addEdit = "add";
-  dialogStore.showDialog("addEditDashboards");
+	dialogStore.addEdit = "add";
+	dialogStore.showDialog("addEditDashboards");
 }
 
 function toggleExpand() {
-  isExpanded.value = isExpanded.value ? false : true;
-  localStorage.setItem("isExpanded", isExpanded.value);
-  if (!isExpanded.value) {
-    mapStore.resizeMap();
-  }
+	isExpanded.value = isExpanded.value ? false : true;
+	localStorage.setItem("isExpanded", isExpanded.value);
+	if (!isExpanded.value) {
+		mapStore.resizeMap();
+	}
 }
 
 function toggleCollapse(cities) {
-  cities = [cities].flat();
-  const allCollapsed = cities.every((city) => collapsedStates.value[city]);
-  cities.forEach((city) => {
-    collapsedStates.value[city] = !allCollapsed;
-  });
+	cities = [cities].flat();
+	const allCollapsed = cities.every((city) => collapsedStates.value[city]);
+
+	cities.forEach((city) => {
+		collapsedStates.value[city] = !allCollapsed;
+	});
 }
 
 watch(
-  () => contentStore.cityManager.activeCities,
-  () => {
-    initializeCollapsedStates();
-  },
-  { immediate: true }
+	() => contentStore.cityManager.activeCities,
+	() => {
+		initializeCollapsedStates();
+	},
+	{ immediate: true }
 );
 
 onMounted(() => {
-  initializeCollapsedStates();
-  const storedExpandedState = localStorage.getItem("isExpanded");
-  if (storedExpandedState === "false") {
-    isExpanded.value = false;
-  } else {
-    isExpanded.value = true;
-  }
+	initializeCollapsedStates();
+	const storedExpandedState = localStorage.getItem("isExpanded");
+	if (storedExpandedState === "false") {
+		isExpanded.value = false;
+	} else {
+		isExpanded.value = true;
+	}
 });
 </script>
 
@@ -82,7 +80,6 @@ onMounted(() => {
       'hide-if-mobile': true,
     }"
   >
-    <!-- 收合按鈕 -->
     <div
       class="sidebar-collapse-btnContainer"
       :class="{ notExpanded: !isExpanded }"
@@ -93,13 +90,11 @@ onMounted(() => {
       >
         <span>{{
           isExpanded
-            ? 'keyboard_double_arrow_left'
-            : 'keyboard_double_arrow_right'
+            ? "keyboard_double_arrow_left"
+            : "keyboard_double_arrow_right"
         }}</span>
       </button>
     </div>
-
-    <!-- 如果已登入才顯示「私人儀表板」區塊 -->
     <template v-if="authStore.token">
       <h1 @click="toggleCollapse(['favorites', 'personal'])">
         {{ isExpanded ? `私人儀表板 ` : `私人` }}
@@ -158,35 +153,15 @@ onMounted(() => {
         </div>
       </transition>
     </template>
-
-    <!-- 公共儀表板 區塊 -->
     <h1 @click="toggleCollapse(contentStore.cityManager.activeCities)">
       {{ isExpanded ? `公共儀表板` : `公共` }}
     </h1>
-
-    <!-- ☆ 在 city 迴圈之前插入：熱門儀表板 -->
-    <!-- 當 isExpanded 為 true（未收合）時，顯示以下這一行 -->
-    <transition name="collapse">
-      <template v-if="isExpanded">
-        <div class="sidebar-hot-item">
-          <router-link to="/popular" class="sidebar-hot-link">
-            <span class="sidebar-icon">🔥</span>
-            <span class="sidebar-text">熱門儀表板</span>
-          </router-link>
-        </div>
-      </template>
-    </transition>
-    <!-- ──────────────────────────────────────────────── -->
-
-    <!-- 依照每個 city 來產生「臺北儀表板」「長照關懷」等等 -->
     <template
       v-for="city in contentStore.cityManager.activeCities"
       :key="city"
     >
       <h2 @click="toggleCollapse(city)">
-        {{ isExpanded
-          ? `${contentStore.cityManager.getExpandedNameName(city)} `
-          : contentStore.cityManager.getCollapsedName(city) }}
+        {{ isExpanded ? `${contentStore.cityManager.getExpandedNameName(city)} ` : contentStore.cityManager.getCollapsedName(city) }}
       </h2>
       <transition name="collapse">
         <div
@@ -211,158 +186,129 @@ onMounted(() => {
 </template>
 
 <style scoped lang="scss">
-/* --------------- */
-/* SideBar.vue 佈局 */
-/* --------------- */
 .sidebar {
-  width: 170px;
-  min-width: 170px;
-  height: calc(100vh - 80px);
-  height: calc(var(--vh) * 100 - 80px);
-  max-height: calc(100vh - 80px);
-  max-height: calc(var(--vh) * 100 - 80px);
-  position: relative;
-  padding: 0 10px 0 var(--font-m);
-  margin-top: 20px;
-  border-right: 1px solid var(--color-border);
-  transition: min-width 0.2s ease-out;
-  overflow-x: hidden;
-  overflow-y: scroll;
-  user-select: none;
+	width: 170px;
+	min-width: 170px;
+	height: calc(100vh - 80px);
+	height: calc(var(--vh) * 100 - 80px);
+	max-height: calc(100vh - 80px);
+	max-height: calc(var(--vh) * 100 - 80px);
+	position: relative;
+	padding: 0 10px 0 var(--font-m);
+	margin-top: 20px;
+	border-right: 1px solid var(--color-border);
+	transition: min-width 0.2s ease-out;
+	overflow-x: hidden;
+	overflow-y: scroll;
+	user-select: none;
 
-  h1 {
-    cursor: pointer;
-    margin: 12px 0;
+	h1 {
+		cursor: pointer;
+		margin: 12px 0;
 
-    &:first-of-type {
-      margin-top: 0;
-    }
-  }
+		&:first-of-type {
+			margin-top: 0;
+		}
+	}
 
-  h2 {
-    color: var(--color-complement-text);
-    font-weight: 400;
-    text-wrap: nowrap;
-    cursor: pointer;
-    margin-left: 1em;
-  }
+	h2 {
+		color: var(--color-complement-text);
+		font-weight: 400;
+		text-wrap: nowrap;
+		cursor: pointer;
+		margin-left: 1em;
+	}
 
-  &-sub {
-    margin-bottom: var(--font-s);
+	&-sub {
+		margin-bottom: var(--font-s);
 
-    &-add {
-      width: 100%;
-      display: flex;
-      text-wrap: nowrap;
+		&-add {
+			width: 100%;
+			display: flex;
+			text-wrap: nowrap;
 
-      button {
-        display: flex;
-        align-items: center;
-        flex-wrap: nowrap;
-        margin-left: 0.5rem;
-        padding: 2px 6px;
-        border-radius: 5px;
-        background-color: var(--color-highlight);
-        color: var(--color-normal-text);
-        text-wrap: nowrap;
+			button {
+				display: flex;
+				align-items: center;
+				flex-wrap: nowrap;
+				margin-left: 0.5rem;
+				padding: 2px 6px;
+				border-radius: 5px;
+				background-color: var(--color-highlight);
+				color: var(--color-normal-text);
+				text-wrap: nowrap;
 
-        span {
-          margin-right: 4px;
-          font-family: var(--font-icon);
-        }
-      }
-    }
+				span {
+					margin-right: 4px;
+					font-family: var(--font-icon);
+				}
+			}
+		}
 
-    &-no p {
-      margin: 0.5rem 0 0.5rem 18px;
-      font-size: var(--font-s);
-      font-style: italic;
-    }
-  }
+		&-no p {
+			margin: 0.5rem 0 0.5rem 18px;
+			font-size: var(--font-s);
+			font-style: italic;
+		}
+	}
 
-  &-collapse {
-    width: 45px;
-    min-width: 45px;
+	&-collapse {
+		width: 45px;
+		min-width: 45px;
 
-    h2 {
-      margin-left: 5px;
-    }
+		h2 {
+			margin-left: 5px;
+		}
 
-    &-btnContainer {
-      height: fit-content;
-      position: fixed;
-      top: 78px;
-      left: calc(170px - 14px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: fit-content;
-      padding: 2px;
+		&-btnContainer {
+			height: fit-content;
+			position: fixed;
+			top: 78px;
+			left: calc(170px - 14px);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			width: fit-content;
+			padding: 2px;
 
-      &.notExpanded {
-        position: sticky;
-        left: 0;
-        top: -2px;
-        background-color: var(--color-background);
-        width: 100%;
-        padding-bottom: 8px;
-      }
+			&.notExpanded {
+				position: sticky;
+				left: 0;
+				top: -2px;
+				background-color: var(--color-background);
+				width: 100%;
+				padding-bottom: 8px;
+			}
 
-      &-button {
-        background-color: var(--color-background);
-        padding: 5px;
-        border-radius: 5px;
-        transition: background-color 0.2s;
+			&-button {
+				background-color: var(--color-background);
+				padding: 5px;
+				border-radius: 5px;
+				transition: background-color 0.2s;
 
-        &:hover {
-          background-color: var(--color-component-background);
-        }
+				&:hover {
+					background-color: var(--color-component-background);
+				}
 
-        span {
-          font-family: var(--font-icon);
-          font-size: var(--font-l);
-        }
-      }
-    }
-  }
+				span {
+					font-family: var(--font-icon);
+					font-size: var(--font-l);
+				}
+			}
+		}
+	}
 
-  /* --------------- */
-  /* 新增：熱門儀表板連結的樣式 */
-  /* --------------- */
-  .sidebar-hot-item {
-    margin: 0.5rem 0;
-    padding-left: 1em;
-  }
-  .sidebar-hot-link {
-    display: flex;
-    align-items: center;
-    text-decoration: none;
-    color: var(--color-sidebar-link, #eee);
-    font-weight: bold;
-    transition: background-color 0.2s;
-  }
-  .sidebar-hot-link:hover {
-    background-color: var(--color-sidebar-hover-bg, #222);
-  }
-  .sidebar-hot-link.router-link-active {
-    background-color: var(--color-sidebar-active-bg, #222);
-    color: var(--color-highlight, #ffd54f);
-  }
-  .sidebar-hot-link .sidebar-icon {
-    margin-right: 0.5rem;
-    font-size: 1.1rem;
-  }
-  /* --------------- */
+	// Classes that are provided by vue transitions. Read the official docs for more instructions.
+	// https://vuejs.org/guide/built-ins/transition.html
+	.collapse-enter-from,
+	.collapse-leave-to {
+		opacity: 0;
+		transform: translateY(-20px);
+	}
 
-  // Collapse 動畫
-  .collapse-enter-from,
-  .collapse-leave-to {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  .collapse-enter-active,
-  .collapse-leave-active {
-    transition: opacity 0.2s ease, transform 0.2s ease;
-  }
+	.collapse-enter-active,
+	.collapse-leave-active {
+		transition: opacity 0.2s ease, transform 0.2s ease;
+	}
 }
 </style>

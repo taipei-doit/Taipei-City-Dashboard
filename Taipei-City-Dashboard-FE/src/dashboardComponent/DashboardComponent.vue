@@ -7,7 +7,6 @@ import { getComponentDataTimeframe } from "./utilities/dataTimeframe";
 import { timeTerms } from "./utilities/AllTimes";
 import { chartTypes } from "./utilities/chartTypes";
 
-// import PopularDashboard from "./components/PopularDashboard.vue";
 import ComponentTag from "./components/ComponentTag.vue";
 import TagTooltip from "./components/TagTooltip.vue";
 import DistrictChart from "./components/DistrictChart.vue";
@@ -242,9 +241,6 @@ function returnChartComponent(name, svg) {
     ]"
     :style="style"
   >
-
-  <PopularDashboard />
-
     <!-- Header -->
     <div class="dashboardcomponent-header">
       <!-- Upper Left Corner -->
@@ -535,7 +531,7 @@ function returnChartComponent(name, svg) {
 	padding: 0;
 	font-family: "微軟正黑體", "Microsoft JhengHei", "Droid Sans", "Open Sans",
 		"Helvetica";
-	overflow: hidden; //
+	overflow: hidden;
 }
 
 button {
