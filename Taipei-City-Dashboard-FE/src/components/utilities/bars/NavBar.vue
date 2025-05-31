@@ -10,6 +10,7 @@ import { useFullscreen } from "@vueuse/core";
 import { useAuthStore } from "../../../store/authStore";
 import { useDialogStore } from "../../../store/dialogStore";
 
+import SearchBox from "./SearchBox.vue";
 import UserSettings from "../../dialogs/UserSettings.vue";
 import ContributorsList from "../../dialogs/ContributorsList.vue";
 
@@ -74,92 +75,98 @@ const linkQuery = computed(() => {
         地圖交叉比對
       </router-link>
     </div>
-    <div class="navbar-user">
-      <button
+    <div class="navbar-right">
+      <SearchBox 
         v-if="!(authStore.isMobileDevice && authStore.isNarrowDevice)"
-        class="hide-if-mobile"
-        @click="toggle"
-      >
-        <span>{{
-          isFullscreen ? "fullscreen_exit" : "fullscreen"
-        }}</span>
-      </button>
-      <div class="navbar-user-info">
-        <button><span>info</span></button>
-        <ul>
-          <li>
-            <a
-              href="https://tuic.gov.taipei/documentation"
-              target="_blank"
-              rel="noreferrer"
-            >技術文件</a>
-          </li>
-          <li>
-            <button
-              @click="dialogStore.showDialog('contributorsList')"
+        class="navbar-search"
+      />
+      <div class="navbar-user">
+        <button
+          v-if="!(authStore.isMobileDevice && authStore.isNarrowDevice)"
+          class="hide-if-mobile"
+          @click="toggle"
+        >
+          <span>{{
+            isFullscreen ? "fullscreen_exit" : "fullscreen"
+          }}</span>
+        </button>
+        <div class="navbar-user-info">
+          <button><span>info</span></button>
+          <ul>
+            <li>
+              <a
+                href="https://tuic.gov.taipei/documentation"
+                target="_blank"
+                rel="noreferrer"
+              >技術文件</a>
+            </li>
+            <li>
+              <button
+                @click="dialogStore.showDialog('contributorsList')"
+              >
+                專案貢獻者
+              </button>
+            </li>
+          </ul>
+          <teleport to="body">
+            <ContributorsList />
+          </teleport>
+        </div>
+        <div
+          v-if="
+            authStore.token &&
+              !(authStore.isMobileDevice && authStore.isNarrowDevice)
+          "
+          class="navbar-user-user"
+        >
+          <button>
+            {{ authStore.user.name }}
+          </button>
+          <ul>
+            <li>
+              <button @click="dialogStore.showDialog('userSettings')">
+                用戶設定
+              </button>
+            </li>
+            <li
+              v-if="
+                authStore.currentPath !== 'admin' &&
+                  authStore.user.is_admin
+              "
+              class="hide-if-mobile"
             >
-              專案貢獻者
-            </button>
-          </li>
-        </ul>
-        <teleport to="body">
-          <ContributorsList />
-        </teleport>
-      </div>
-      <div
-        v-if="
-          authStore.token &&
+              <router-link to="/admin">
+                管理員後臺
+              </router-link>
+            </li>
+            <li
+              v-else-if="authStore.user.is_admin"
+              class="hide-if-mobile"
+            >
+              <router-link to="/dashboard">
+                返回儀表板
+              </router-link>
+            </li>
+            <li>
+              <button @click="authStore.handleLogout">
+                登出
+              </button>
+            </li>
+          </ul>
+          <teleport to="body">
+            <user-settings />
+          </teleport>
+        </div>
+        <div
+          v-else-if="
             !(authStore.isMobileDevice && authStore.isNarrowDevice)
-        "
-        class="navbar-user-user"
-      >
-        <button>
-          {{ authStore.user.name }}
-        </button>
-        <ul>
-          <li>
-            <button @click="dialogStore.showDialog('userSettings')">
-              用戶設定
-            </button>
-          </li>
-          <li
-            v-if="
-              authStore.currentPath !== 'admin' &&
-                authStore.user.is_admin
-            "
-            class="hide-if-mobile"
-          >
-            <router-link to="/admin">
-              管理員後臺
-            </router-link>
-          </li>
-          <li
-            v-else-if="authStore.user.is_admin"
-            class="hide-if-mobile"
-          >
-            <router-link to="/dashboard">
-              返回儀表板
-            </router-link>
-          </li>
-          <li>
-            <button @click="authStore.handleLogout">
-              登出
-            </button>
-          </li>
-        </ul>
-        <teleport to="body">
-          <user-settings />
-        </teleport>
-      </div>
-      <div
-        v-else-if="
-          !(authStore.isMobileDevice && authStore.isNarrowDevice)
-        "
-        class="navbar-user-user"
-      >
-        <button @click="dialogStore.showDialog('login')">
-          登入
-        </button>
+          "
+          class="navbar-user-user"
+        >
+          <button @click="dialogStore.showDialog('login')">
+            登入
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -233,9 +240,20 @@ const linkQuery = computed(() => {
 		}
 	}
 
+	&-right {
+		display: flex;
+		align-items: center;
+		gap: 16px;
+	}
+
+	&-search {
+		// 搜尋框特定樣式可以在這裡調整
+	}
+
 	&-user {
 		display: flex;
 		align-items: center;
+		gap: var(--font-s);
 
 		li a,
 		button {
