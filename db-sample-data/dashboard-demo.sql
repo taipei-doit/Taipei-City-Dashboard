@@ -191,9 +191,9 @@ CREATE SEQUENCE public.bus_info_tpe_ogc_fid_seq
     CACHE 1;
 
 --
--- Name: emegerncy_agg_villa; Type: TABLE; Schema: public; Owner: -
+-- Name: emergency_agg_villa; Type: TABLE; Schema: public; Owner: -
 --
-CREATE TABLE public.emegerncy_agg_villa (
+CREATE TABLE public.emergency_agg_villay_agg_villa (
   county TEXT,
   town TEXT,
   village TEXT,
@@ -1201,9 +1201,9 @@ COPY public.narrow_alley_agg_villa (county, town, village, geo_iid, size_counts)
 \.
 
 --
--- Data for Name: emegerncy_agg_villa; Type: COPY; Schema: public; Owner: -
+-- Data for Name: emergency_agg_villa; Type: COPY; Schema: public; Owner: -
 --
-COPY public.emegerncy_agg_villa (county, town, village, a0a14_cnt, a15a64_cnt, a65up_cnt, geo_iid, pop_cnt, capacity, capacity_diff) FROM stdin;
+COPY public.emergency_agg_villa (county, town, village, a0a14_cnt, a15a64_cnt, a65up_cnt, geo_iid, pop_cnt, capacity, capacity_diff) FROM stdin;
 臺北市	南港區	西新里	544	2966	890	臺北市南港區西新里	6476	34600	28124
 臺北市	南港區	重陽里	794	4540	945	臺北市南港區重陽里	9874	60383	50509
 臺北市	內湖區	蘆洲里	174	863	206	臺北市內湖區蘆洲里	1900	30452	28552
