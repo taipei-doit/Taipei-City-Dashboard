@@ -13,11 +13,11 @@ import (
 
 // AddressInfo 定義共用欄位
 type AddressInfo struct {
-	ID      int     `gorm:"column:Id" json:"Id"`
-	Name    string  `gorm:"column:Name" json:"Name"`
-	Address string  `gorm:"column:Address" json:"Address"`
-	X       float64 `gorm:"column:X" json:"X"`
-	Y       float64 `gorm:"column:Y" json:"Y"`
+	ID      int     `gorm:"column:Id" json:"id"`
+	Name    string  `gorm:"column:Name" json:"name"`
+	Address string  `gorm:"column:Address" json:"address"`
+	X       float64 `gorm:"column:X" json:"x"`
+	Y       float64 `gorm:"column:Y" json:"y"`
 }
 
 // Library 對應 library 表
