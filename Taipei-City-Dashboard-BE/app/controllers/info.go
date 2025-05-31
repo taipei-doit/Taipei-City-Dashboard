@@ -13,35 +13,35 @@ import (
 
 // AddressInfo 定義共用欄位
 type AddressInfo struct {
-	ID      int     `gorm:"column:Id" json:"id"`
-	Name    string  `gorm:"column:Name" json:"name"`
-	Address string  `gorm:"column:Address" json:"address"`
-	X       float64 `gorm:"column:X" json:"x"`
-	Y       float64 `gorm:"column:Y" json:"y"`
+	ID      int     `gorm:"column:id" json:"Id"`
+	Name    string  `gorm:"column:name" json:"Name"`
+	Address string  `gorm:"column:address" json:"Address"`
+	X       float64 `gorm:"column:x" json:"X"`
+	Y       float64 `gorm:"column:y" json:"Y"`
 }
 
 // Library 對應 library 表
 type NTLibrary struct {
-	gorm.Model
+	 //gorm.Model
 	AddressInfo
 }
 
 func (NTLibrary) TableName() string {
-	return "nt_libnary"
+	return "nt_library"
 }
 
 type TLibrary struct {
-	gorm.Model
+	//gorm.Model
 	AddressInfo
 }
 
 func (TLibrary) TableName() string {
-	return "t_libnary"
+	return "t_library"
 }
 
 // Hospital 對應 hospital 表
 type THospital struct {
-	gorm.Model
+	//gorm.Model
 	AddressInfo
 }
 
@@ -50,7 +50,7 @@ func (THospital) TableName() string {
 }
 
 type NTHospital struct {
-	gorm.Model
+	//gorm.Model
 	AddressInfo
 }
 
@@ -60,7 +60,7 @@ func (NTHospital) TableName() string {
 
 // Shopping 對應 shopping 表
 type Tshopping struct {
-	gorm.Model
+	//gorm.Model
 	AddressInfo
 }
 
@@ -69,7 +69,7 @@ func (Tshopping) TableName() string {
 }
 
 type NTshopping struct {
-	gorm.Model
+	//gorm.Model
 	AddressInfo
 }
 
@@ -79,7 +79,7 @@ func (NTshopping) TableName() string {
 
 // Rental 對應 rental 表
 type Rental struct {
-	gorm.Model
+	//gorm.Model
 	AddressInfo
 }
 
@@ -89,7 +89,7 @@ func (Rental) TableName() string {
 
 // Market 對應 market 表
 type TMarket struct {
-	gorm.Model
+	//gorm.Model
 	AddressInfo
 }
 
@@ -98,7 +98,7 @@ func (TMarket) TableName() string {
 }
 
 type NTMarket struct {
-	gorm.Model
+	//gorm.Model
 	AddressInfo
 }
 
@@ -160,7 +160,7 @@ func GetInfos(c *gin.Context) {
 	p := geo.NewPoint(point.X, point.Y)
 	// 查詢各表
 	var t_libraries []TLibrary
-	result := db.Select("DISTINCT x, y").Where("X > ? AND X < ? AND Y > ? AND Y < ?",
+	result := db.Select("DISTINCT x, y, name, address").Where("x between ? AND ? AND y between ? AND ?",
 		xLower, xHigher, yLower, yHigher).Find(&t_libraries)
 	if result.Error != nil {
 		c.JSON(500, gin.H{"error": "Query failed for t_library: " + err.Error()})
@@ -173,7 +173,7 @@ func GetInfos(c *gin.Context) {
 	}
 
 	var nt_libraries []NTLibrary
-	result = db.Select("DISTINCT x, y").Where("X > ? AND X < ? AND Y > ? AND Y < ?",
+	result = db.Select("DISTINCT x, y, name, address").Where("x between ? AND ? AND y between ? AND ?",
 		xLower, xHigher, yLower, yHigher).Find(&nt_libraries)
 	if result.Error != nil {
 		c.JSON(500, gin.H{"error": "Query failed for nt_library: " + err.Error()})
@@ -187,7 +187,7 @@ func GetInfos(c *gin.Context) {
 
 	var t_hospitals []THospital
 	var nt_hospitals []NTHospital
-	result = db.Select("DISTINCT x, y").Where("X > ? AND X < ? AND Y > ? AND Y < ?",
+	result = db.Select("DISTINCT x, y, name, address").Where("x between ? AND ? AND y between ? AND ?",
 		xLower, xHigher, yLower, yHigher).Find(&t_hospitals)
 	if result.Error != nil {
 		c.JSON(500, gin.H{"error": "Query failed for library: " + err.Error()})
@@ -198,7 +198,7 @@ func GetInfos(c *gin.Context) {
 			hospital_data = append(hospital_data, d.AddressInfo)
 		}
 	}
-	result = db.Select("DISTINCT x, y").Where("X > ? AND X < ? AND Y > ? AND Y < ?",
+	result = db.Select("DISTINCT x, y, name, address").Where("x between ? AND ? AND y between ? AND ?",
 		xLower, xHigher, yLower, yHigher).Find(&nt_hospitals)
 	if result.Error != nil {
 		c.JSON(500, gin.H{"error": "Query failed for library: " + err.Error()})
@@ -212,7 +212,7 @@ func GetInfos(c *gin.Context) {
 
 	var t_shoppings []Tshopping
 	var nt_shoppings []NTshopping
-	result = db.Select("DISTINCT x, y").Where("X > ? AND X < ? AND Y > ? AND Y < ?",
+	result = db.Select("DISTINCT x, y, name, address").Where("x between ? AND ? AND y between ? AND ?",
 		xLower, xHigher, yLower, yHigher).Find(&t_shoppings)
 	if result.Error != nil {
 		c.JSON(500, gin.H{"error": "Query failed for library: " + err.Error()})
@@ -223,7 +223,7 @@ func GetInfos(c *gin.Context) {
 			shopping_data = append(shopping_data, d.AddressInfo)
 		}
 	}
-	result = db.Select("DISTINCT x, y").Where("X > ? AND X < ? AND Y > ? AND Y < ?",
+	result = db.Select("DISTINCT x, y, name, address").Where("x between ? AND ? AND y between ? AND ?",
 		xLower, xHigher, yLower, yHigher).Find(&nt_shoppings)
 	if result.Error != nil {
 		c.JSON(500, gin.H{"error": "Query failed for library: " + err.Error()})
@@ -236,7 +236,7 @@ func GetInfos(c *gin.Context) {
 	}
 
 	var rentals []Rental
-	result = db.Select("DISTINCT x, y").Where("X > ? AND X < ? AND Y > ? AND Y < ?",
+	result = db.Select("DISTINCT x, y").Where("x between ? AND ? AND y between ? AND ?",
 		xLower, xHigher, yLower, yHigher).Find(&rentals)
 	if result.Error != nil {
 		c.JSON(500, gin.H{"error": "Query failed for library: " + err.Error()})
@@ -250,7 +250,7 @@ func GetInfos(c *gin.Context) {
 
 	var t_markets []TMarket
 	var nt_markets []NTMarket
-	result = db.Select("DISTINCT x, y").Where("X > ? AND X < ? AND Y > ? AND Y < ?",
+	result = db.Select("DISTINCT x, y, name, address").Where("x between ? AND ? AND y between ? AND ?",
 		xLower, xHigher, yLower, yHigher).Find(&t_markets)
 	if result.Error != nil {
 		c.JSON(500, gin.H{"error": "Query failed for library: " + err.Error()})
@@ -261,7 +261,7 @@ func GetInfos(c *gin.Context) {
 			market_data = append(market_data, d.AddressInfo)
 		}
 	}
-	result = db.Select("DISTINCT x, y").Where("X > ? AND X < ? AND Y > ? AND Y < ?",
+	result = db.Select("DISTINCT x, y, name, address").Where("x between ? AND ? AND y between ? AND ?",
 		xLower, xHigher, yLower, yHigher).Find(&nt_markets)
 	if result.Error != nil {
 		c.JSON(500, gin.H{"error": "Query failed for library: " + err.Error()})
