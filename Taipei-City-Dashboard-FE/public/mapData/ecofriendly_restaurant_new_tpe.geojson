@@ -1,0 +1,8297 @@
+{
+   "type": "FeatureCollection",
+   "features": [
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.466503,25.0809969 ]
+    },
+    "properties": {
+    "name":"31早午餐",
+    "address":"新北市蘆洲區和平路171號",
+    "tel":"02-82861790"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4670443,25.0138151 ]
+    },
+    "properties": {
+    "name":"57黃燜雞(板橋大遠百)",
+    "address":"新北市板橋區新站路28號B1",
+    "tel":"0988754052"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4669037,25.0136061 ]
+    },
+    "properties": {
+    "name":"Alessi Cafe ",
+    "address":"新北市板橋區新站路28號",
+    "tel":"02-29566768"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4854958,24.9981631 ]
+    },
+    "properties": {
+    "name":"Apple203早午餐店-中和遠東",
+    "address":"新北市中和區中正路738號",
+    "tel":"02-82261077"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4669037,25.0136061 ]
+    },
+    "properties": {
+    "name":"B & G德國農莊複合式茶館",
+    "address":"新北市板橋區新站路28號",
+    "tel":"02-77054168"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4603242,25.0098794 ]
+    },
+    "properties": {
+    "name":"BarAku",
+    "address":"新北市板橋區縣民大道一段269號2樓",
+    "tel":"02-29698058"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4663723,25.0271619 ]
+    },
+    "properties": {
+    "name":"BinB書? Bar in Book",
+    "address":"新北市板橋區民生路三段140號",
+    "tel":"02-82510325"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5487287,24.9740132 ]
+    },
+    "properties": {
+    "name":"Dear 40 Cafe",
+    "address":"新北市新店區寶興路40號",
+    "tel":"02-29177171"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4625315,25.0205687 ]
+    },
+    "properties": {
+    "name":"DRIP CAFE好滴咖啡-環球板橋車站店",
+    "address":"新北市板橋區縣民大道二段七號2F",
+    "tel":"02-29609288"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4874032,25.0515071 ]
+    },
+    "properties": {
+    "name":"House.好食早餐店",
+    "address":"新北市三重區福德里成功路106之1號",
+    "tel":"02-29703375"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4665152,25.0113609 ]
+    },
+    "properties": {
+    "name":"Kali Chimaek 韓式炸雞",
+    "address":"新北市板橋區中山路一段158巷21號",
+    "tel":"02-29647777"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5463471,24.9764468 ]
+    },
+    "properties": {
+    "name":"Mrs. Mapo麻婆豆腐 新店家樂福店",
+    "address":"新北市新店區中興路三段1號1F",
+    "tel":"02-29115569"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5206992,25.007961 ]
+    },
+    "properties": {
+    "name":"Party創作美食茶房",
+    "address":"新北市永和區竹林路222號2樓",
+    "tel":"02-89211103"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.530427,24.9723936 ]
+    },
+    "properties": {
+    "name":"petit doux 微兜  小碧潭店",
+    "address":"新北市新店區新北市新店區中央路157號5樓",
+    "tel":"02-29115998"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5032963,24.7803466 ]
+    },
+    "properties": {
+    "name":"Psyaq  Cikay Ma食坊",
+    "address":"新北市烏來區福山里卡拉模基26號",
+    "tel":"0916127010"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4678267,25.0525754 ]
+    },
+    "properties": {
+    "name":"Q Burger（總店）",
+    "address":"新北市新莊區頭前路24號",
+    "tel":"02-89913667"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.3987997,25.147029 ]
+    },
+    "properties": {
+    "name":"Q Burger八里中山店",
+    "address":"新北市八里區中山路二段363號",
+    "tel":"02-26194767"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4822063,25.0710608 ]
+    },
+    "properties": {
+    "name":"Q Burger三重力行店",
+    "address":"新北市三重區力行路一段160號一樓及地下一樓",
+    "tel":"02-29879488"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4779434,25.0688558 ]
+    },
+    "properties": {
+    "name":"Q Burger三重三民店",
+    "address":"新北市三重區三民街298號",
+    "tel":"02-29869285"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4927387,25.067759 ]
+    },
+    "properties": {
+    "name":"Q Burger三重大智店",
+    "address":"新北市三重區大智街55號",
+    "tel":"02-29883200"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4831837,25.0668295 ]
+    },
+    "properties": {
+    "name":"Q Burger三重中正店",
+    "address":"新北市三重區中正北路180號",
+    "tel":"02-29856668"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4937611,25.0595651 ]
+    },
+    "properties": {
+    "name":"Q Burger三重中正南店",
+    "address":"新北市三重區中正南路49號",
+    "tel":"02-29746343"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4925747,25.0798375 ]
+    },
+    "properties": {
+    "name":"Q Burger三重仁政店",
+    "address":"新北市三重區溪美里仁愛街349號",
+    "tel":"02-29886667"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4876573,25.0823834 ]
+    },
+    "properties": {
+    "name":"Q Burger三重仁愛店",
+    "address":"新北市三重區溪尾街269號",
+    "tel":"02-29860322"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4809315,25.0745652 ]
+    },
+    "properties": {
+    "name":"Q Burger三重永福店",
+    "address":"新北市三重區永福街172號",
+    "tel":"02-82878666"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4859212,25.0628502 ]
+    },
+    "properties": {
+    "name":"Q Burger三重田安店",
+    "address":"新北市三重區三民街71號1樓",
+    "tel":"02-29840181"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4710522,25.0490327 ]
+    },
+    "properties": {
+    "name":"Q Burger三重光復店",
+    "address":"新北市三重區光復路一段68巷22號",
+    "tel":"02-29990935"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4982811,25.0591346 ]
+    },
+    "properties": {
+    "name":"Q Burger三重光興店",
+    "address":"新北市三重區正義南路103號",
+    "tel":"02-29740006"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4903192,25.0690457 ]
+    },
+    "properties": {
+    "name":"Q Burger三重自強店",
+    "address":"新北市三重區自強路二段7號",
+    "tel":"02-29882918"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4851797,25.0704327 ]
+    },
+    "properties": {
+    "name":"Q Burger三重忠孝店",
+    "address":"新北市三重區忠孝路二段46號",
+    "tel":"02-29846788"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5014259,25.0673211 ]
+    },
+    "properties": {
+    "name":"Q Burger三重長安店",
+    "address":"新北市三重區長安街73號1樓",
+    "tel":"02-29762393"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.486927,25.057945 ]
+    },
+    "properties": {
+    "name":"Q Burger三重重陽店",
+    "address":"新北市三重區重陽路43巷31號1樓",
+    "tel":"02-89881667"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4774189,25.0663728 ]
+    },
+    "properties": {
+    "name":"Q Burger三重頂崁店",
+    "address":"新北市三重區頂崁街188號",
+    "tel":"02-29843557"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4915858,25.0601476 ]
+    },
+    "properties": {
+    "name":"Q Burger三重菜寮店",
+    "address":"新北市三重區重新路三段93號1樓",
+    "tel":"02-29880901"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4889469,25.0527341 ]
+    },
+    "properties": {
+    "name":"Q Burger三重集成店",
+    "address":"新北市三重區集成路42號",
+    "tel":"02-29776785"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4856566,25.0790923 ]
+    },
+    "properties": {
+    "name":"Q Burger三重慈愛店",
+    "address":"新北市三重區慈愛街46號",
+    "tel":"02-22808853"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5030274,25.0625535 ]
+    },
+    "properties": {
+    "name":"Q Burger三重福德南店",
+    "address":"新北市三重區福德南路40號",
+    "tel":"02-29755550"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4959823,25.0724487 ]
+    },
+    "properties": {
+    "name":"Q Burger三重龍門店",
+    "address":"新北市三重區龍門路40號",
+    "tel":"02-29772611"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.3782605,24.9295773 ]
+    },
+    "properties": {
+    "name":"Q Burger三峽大同店",
+    "address":"新北市三峽區介壽里大同路1-4號1樓",
+    "tel":"02-26740031"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.3718598,24.9303866 ]
+    },
+    "properties": {
+    "name":"Q Burger三峽中華店",
+    "address":"新北市三峽區安溪里中華路46-2號",
+    "tel":"02-86719007"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.366647,24.935866 ]
+    },
+    "properties": {
+    "name":"Q Burger三峽文化店",
+    "address":"新北市三峽區文化路266之13號1樓",
+    "tel":"02-26738182"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.3721358,24.9429171 ]
+    },
+    "properties": {
+    "name":"Q Burger三峽北大店",
+    "address":"新北市三峽區國際二街37號",
+    "tel":"02-26737288"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.3745911,24.936062 ]
+    },
+    "properties": {
+    "name":"Q Burger三峽復興店",
+    "address":"新北市三峽區復興路30號1樓",
+    "tel":"02-86717069"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.467265,24.9833542 ]
+    },
+    "properties": {
+    "name":"Q Burger土城永豐店",
+    "address":"新北市土城區永豐路135巷10號1樓",
+    "tel":"02-22707050"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.465537,24.9888252 ]
+    },
+    "properties": {
+    "name":"Q Burger土城立德店",
+    "address":"新北市土城區延和路54號",
+    "tel":"02-22632929"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.463872,24.9841117 ]
+    },
+    "properties": {
+    "name":"Q Burger土城延吉店",
+    "address":"新北市土城區延吉街312號",
+    "tel":"02-82610582"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4679628,24.9904488 ]
+    },
+    "properties": {
+    "name":"Q Burger土城延和店",
+    "address":"新北市土城區延和路115號1樓",
+    "tel":"02-22631515"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4589918,24.9806044 ]
+    },
+    "properties": {
+    "name":"Q Burger土城青雲店",
+    "address":"新北市土城區青雲路238號1樓",
+    "tel":"02-22730363"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.442945,24.977846 ]
+    },
+    "properties": {
+    "name":"Q Burger土城員林店",
+    "address":"新北市土城區員林街10之2號一樓",
+    "tel":"02-82610003"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4553322,24.9914426 ]
+    },
+    "properties": {
+    "name":"Q Burger土城廣興店",
+    "address":"新北市土城區廣興街33號1樓",
+    "tel":"02-89661116"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4522755,24.9873641 ]
+    },
+    "properties": {
+    "name":"Q Burger土城學成店",
+    "address":"新北市土城區學成路47號",
+    "tel":"02-82731862"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5174817,24.9933711 ]
+    },
+    "properties": {
+    "name":"Q Burger中和大仁店",
+    "address":"新北市中和區大仁街19巷6號1樓",
+    "tel":"02-86680138"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4800117,25.0062121 ]
+    },
+    "properties": {
+    "name":"Q Burger中和中山店",
+    "address":"新北市中和區員山路454號",
+    "tel":"02-82211126"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5002078,24.9906902 ]
+    },
+    "properties": {
+    "name":"Q Burger中和中興店",
+    "address":"新北市中和區中興街163號1樓+地下室",
+    "tel":"02-22429011"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5115512,24.9870628 ]
+    },
+    "properties": {
+    "name":"Q Burger中和仁愛店",
+    "address":"新北市中和區仁愛街102號",
+    "tel":"02-29436889"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4690971,25.0045846 ]
+    },
+    "properties": {
+    "name":"Q Burger中和民生店",
+    "address":"新北市中和區民生街85巷1弄2號",
+    "tel":"02-29550810"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4743408,25.0007982 ]
+    },
+    "properties": {
+    "name":"Q Burger中和民享店",
+    "address":"新北市中和區民享街86巷3號1樓",
+    "tel":"02-82282005"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5240892,24.9912175 ]
+    },
+    "properties": {
+    "name":"Q Burger中和自立店",
+    "address":"新北市中和區自立路76號一樓",
+    "tel":"02-29488588"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5263512,24.995544 ]
+    },
+    "properties": {
+    "name":"Q Burger中和秀朗店",
+    "address":"新北市中和區秀朗路三段48號1樓",
+    "tel":" 02-29222380"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5217341,24.9963878 ]
+    },
+    "properties": {
+    "name":"Q Burger中和秀福店",
+    "address":"新北市中和區更生街7號1樓",
+    "tel":"02-29430512"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.512837,24.9959149 ]
+    },
+    "properties": {
+    "name":"Q Burger中和宜安店",
+    "address":"新北市中和區宜安路25號",
+    "tel":"02-29470125"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4943613,24.9972636 ]
+    },
+    "properties": {
+    "name":"Q Burger中和板南店",
+    "address":"新北市中和區連城路219巷1號",
+    "tel":"02-22466351"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.507347,24.9987279 ]
+    },
+    "properties": {
+    "name":"Q Burger中和保健店",
+    "address":"新北市中和區景安路22號1樓",
+    "tel":"02-22460690"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5028888,24.9954225 ]
+    },
+    "properties": {
+    "name":"Q Burger中和南山店",
+    "address":"新北市中和區南山路161號1樓",
+    "tel":"02-22439007"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.504897,24.9912257 ]
+    },
+    "properties": {
+    "name":"Q Burger中和南勢角店",
+    "address":"新北市中和區南山路174-2號",
+    "tel":"02-29470520"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4883202,24.9992619 ]
+    },
+    "properties": {
+    "name":"Q Burger中和建一店",
+    "address":"新北市中和區建一路157號1樓",
+    "tel":"02-82282132"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4810805,25.0029667 ]
+    },
+    "properties": {
+    "name":"Q Burger中和員山店",
+    "address":"新北市中和區員山路395號",
+    "tel":"02-82286062"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4995867,25.0006735 ]
+    },
+    "properties": {
+    "name":"Q Burger中和泰和店",
+    "address":"新北市中和區泰和街22號",
+    "tel":"02-22466060"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4837022,24.9952272 ]
+    },
+    "properties": {
+    "name":"Q Burger中和連城店",
+    "address":"新北市中和區連城路469巷17號",
+    "tel":"02-22219606"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5040143,24.9903215 ]
+    },
+    "properties": {
+    "name":"Q Burger中和復興店",
+    "address":"新北市中和區復興路54號",
+    "tel":"02-29462197"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5068204,24.9955243 ]
+    },
+    "properties": {
+    "name":"Q Burger中和景安店",
+    "address":"新北市中和區景新街175號1樓",
+    "tel":"02-86682175"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.514972,24.9899344 ]
+    },
+    "properties": {
+    "name":"Q Burger中和景新店",
+    "address":"新北市中和區景平路111巷61弄21號",
+    "tel":"02-86689008"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5180742,24.9912792 ]
+    },
+    "properties": {
+    "name":"Q Burger中和景德店",
+    "address":"新北市中和區景德街43號1樓",
+    "tel":"02-29402661"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4651126,24.9965713 ]
+    },
+    "properties": {
+    "name":"Q Burger中和華順店",
+    "address":"新北市中和區華順街120號1樓",
+    "tel":"02-29620685"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4991466,24.996526 ]
+    },
+    "properties": {
+    "name":"Q Burger中和圓通店",
+    "address":"新北市中和區圓通路112號1樓",
+    "tel":"02-22427298"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4967886,25.0046726 ]
+    },
+    "properties": {
+    "name":"Q Burger中和福美店",
+    "address":"新北市中和區福善里福美路313號",
+    "tel":"02-22490131"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.502842,25.0015434 ]
+    },
+    "properties": {
+    "name":"Q Burger中和廣福店",
+    "address":"新北市中和區廣福路82號",
+    "tel":"02-82458286"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.506902,24.984897 ]
+    },
+    "properties": {
+    "name":"Q Burger中和興南店",
+    "address":"新北市中和區興南路二段69號",
+    "tel":"02-86683877"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4739352,25.0043203 ]
+    },
+    "properties": {
+    "name":"Q Burger中和環球店",
+    "address":"新北市中和區民享街6號",
+    "tel":"02-82215555"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4336317,25.087078 ]
+    },
+    "properties": {
+    "name":"Q Burger五股工商店",
+    "address":"新北市五股區工商路193號1樓",
+    "tel":"02-22941002"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4509344,25.1029877 ]
+    },
+    "properties": {
+    "name":"Q Burger五股成洲店",
+    "address":"新北市五股區成泰路三段577巷43號1樓",
+    "tel":"02-22918228"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4341499,25.0673561 ]
+    },
+    "properties": {
+    "name":"Q Burger五股成泰店",
+    "address":"新北市五股區成泰路一段47號",
+    "tel":"02-29096663"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.449069,25.0977517 ]
+    },
+    "properties": {
+    "name":"Q Burger五股西雲店",
+    "address":"新北市五股區西雲路241號1樓",
+    "tel":"02-22935777"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4457217,25.0926986 ]
+    },
+    "properties": {
+    "name":"Q Burger五股洲子洋店",
+    "address":"新北市五股區成泰路三段201號",
+    "tel":"02-22921599"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4378854,25.0831931 ]
+    },
+    "properties": {
+    "name":"Q Burger五股國小店",
+    "address":"新北市五股區成泰路二段108號",
+    "tel":"02-82922183"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5229825,25.0027647 ]
+    },
+    "properties": {
+    "name":"Q Burger永和永元店",
+    "address":"新北市永和區永元路124號",
+    "tel":"02-29265857"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5086504,25.0111548 ]
+    },
+    "properties": {
+    "name":"Q Burger永和永平店",
+    "address":"新北市永和區永平路250號",
+    "tel":"02-29295009"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5234152,25.0047749 ]
+    },
+    "properties": {
+    "name":"Q Burger永和永亨店",
+    "address":"新北市永和區永亨路107號",
+    "tel":"02-29202227"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5174408,25.0060552 ]
+    },
+    "properties": {
+    "name":"Q Burger永和永利店",
+    "address":"新北市永和區永利路3號1樓",
+    "tel":"02-22320310"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.508902,25.007577 ]
+    },
+    "properties": {
+    "name":"Q Burger永和永貞店",
+    "address":"新北市永和區永貞路355巷2號",
+    "tel":"02-29262971"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5122857,25.0139264 ]
+    },
+    "properties": {
+    "name":"Q Burger永和信義店",
+    "address":"新北市永和區信義路93號1樓",
+    "tel":"02-29214352"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5196729,25.0000551 ]
+    },
+    "properties": {
+    "name":"Q Burger永和得和店",
+    "address":"新北市永和區得和路172號1樓",
+    "tel":"02-86681921"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.6599478,25.062886 ]
+    },
+    "properties": {
+    "name":"Q Burger汐止秀峰店",
+    "address":"新北市汐止區仁愛路26號1樓",
+    "tel":"02-26430098"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.6305846,25.070936 ]
+    },
+    "properties": {
+    "name":"Q Burger汐止明峰店",
+    "address":"新北市汐止區明峰街125-3號1樓",
+    "tel":"02-26932023"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.6541098,25.0628509 ]
+    },
+    "properties": {
+    "name":"Q Burger汐止連興店",
+    "address":"新北市汐止區連興街73號1樓",
+    "tel":"02-26919516"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.6307065,25.0652331 ]
+    },
+    "properties": {
+    "name":"Q Burger汐止福德店",
+    "address":"新北市汐止區福德二路140號",
+    "tel":"02-26957300"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.6642258,25.0650509 ]
+    },
+    "properties": {
+    "name":"Q Burger汐止綠多店",
+    "address":"新北市汐止區仁愛路162號1樓",
+    "tel":"02-26430058"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.642213,25.064562 ]
+    },
+    "properties": {
+    "name":"Q Burger汐止樟樹店",
+    "address":"新北市汐止區樟樹一路130號",
+    "tel":"02-86916631"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.3966045,25.0780375 ]
+    },
+    "properties": {
+    "name":"Q Burger林口中山店",
+    "address":"新北市林口區中山路3號1樓",
+    "tel":"02-26026033"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.3819308,25.07442 ]
+    },
+    "properties": {
+    "name":"Q Burger林口仁愛店",
+    "address":"新北市林口區西林里仁愛路二段150號",
+    "tel":"02-26016558"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.3908528,25.078907 ]
+    },
+    "properties": {
+    "name":"Q Burger林口國小店",
+    "address":"新北市林口區中山路156-1號一樓",
+    "tel":"02-26012712"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4554997,25.0169431 ]
+    },
+    "properties": {
+    "name":"Q Burger板橋大仁店",
+    "address":"新北市板橋區大仁街26號1樓",
+    "tel":"02-29666587"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4753988,25.0158881 ]
+    },
+    "properties": {
+    "name":"Q Burger板橋中山店",
+    "address":"新北市板橋區東丘里中山路２段９０巷１２號",
+    "tel":"02-29552958"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4677252,25.0202419 ]
+    },
+    "properties": {
+    "name":"Q Burger板橋介壽店",
+    "address":"新北市板橋區介壽街17號1樓",
+    "tel":"02-22553597"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4784519,25.0278931 ]
+    },
+    "properties": {
+    "name":"Q Burger板橋文聖店",
+    "address":"新北市板橋區文聖街142號",
+    "tel":"02-22500123"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4627171,25.0298666 ]
+    },
+    "properties": {
+    "name":"Q Burger板橋四維店",
+    "address":"新北市板橋區四維路308號",
+    "tel":"02-22551055"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4797314,25.0331047 ]
+    },
+    "properties": {
+    "name":"Q Burger板橋民治店",
+    "address":"新北市板橋區民治街63號1樓",
+    "tel":"02-22502901"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4743074,25.0196844 ]
+    },
+    "properties": {
+    "name":"Q Burger板橋永豐店",
+    "address":"新北市板橋區永豐街115號",
+    "tel":"02-29580337"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4674637,25.0308537 ]
+    },
+    "properties": {
+    "name":"Q Burger板橋吳鳳店",
+    "address":"新北市板橋區吳鳳路68號",
+    "tel":"02-22572358"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4326747,24.9902753 ]
+    },
+    "properties": {
+    "name":"Q Burger板橋金園店",
+    "address":"新北市板橋區金門街171號",
+    "tel":"02-26818787"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4745567,25.0120232 ]
+    },
+    "properties": {
+    "name":"Q Burger板橋長安店",
+    "address":"新北市板橋區長安街210之1號",
+    "tel":"02-29590700"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.460453,25.02465 ]
+    },
+    "properties": {
+    "name":"Q Burger板橋英士店",
+    "address":"新北市板橋區英士路70號",
+    "tel":"02-22580533"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4619508,25.0054453 ]
+    },
+    "properties": {
+    "name":"Q Burger板橋重慶店",
+    "address":"新北市板橋區重慶路108號",
+    "tel":"02-89523866"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4702746,25.0119314 ]
+    },
+    "properties": {
+    "name":"Q Burger板橋海山店",
+    "address":"新北市板橋區漢生東路193巷7號1樓",
+    "tel":"02-29546666"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4609793,25.018534 ]
+    },
+    "properties": {
+    "name":"Q Burger板橋國光店",
+    "address":"新北市板橋區國光路183號",
+    "tel":"02-29684685"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4617791,24.9962319 ]
+    },
+    "properties": {
+    "name":"Q Burger板橋國慶店",
+    "address":"新北市板橋區國慶路161之5號",
+    "tel":"02-29511321"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4708801,25.023541 ]
+    },
+    "properties": {
+    "name":"Q Burger板橋莊敬店",
+    "address":"新北市板橋區莊敬路134號",
+    "tel":"02-22555663"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4584822,25.0047574 ]
+    },
+    "properties": {
+    "name":"Q Burger板橋華興店",
+    "address":"新北市板橋區華興街40號",
+    "tel":"02-29522710"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4470731,25.0117443 ]
+    },
+    "properties": {
+    "name":"Q Burger板橋僑中店",
+    "address":"新北市板橋區僑中一街90號1樓",
+    "tel":"02-82752908"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4627085,24.9926671 ]
+    },
+    "properties": {
+    "name":"Q Burger板橋廣和店",
+    "address":"新北市板橋區廣和街73號1樓",
+    "tel":"02-29646679"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4567543,25.0249936 ]
+    },
+    "properties": {
+    "name":"Q Burger板橋龍泉店",
+    "address":"新北市板橋區龍泉街83號",
+    "tel":"02-22570118"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.478767,25.0307091 ]
+    },
+    "properties": {
+    "name":"Q Burger板橋懷德店",
+    "address":"新北市板橋區懷德街160號",
+    "tel":"02-22563030"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4337007,25.0569602 ]
+    },
+    "properties": {
+    "name":"Q Burger泰山全興店",
+    "address":"新北市泰山區全興路105號",
+    "tel":"02-22970930"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4255007,25.044383 ]
+    },
+    "properties": {
+    "name":"Q Burger泰山明志店",
+    "address":"新北市泰山區明志路2段353號",
+    "tel":"02-29081667"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4251933,25.0638817 ]
+    },
+    "properties": {
+    "name":"Q Burger泰山泰林店",
+    "address":"新北市泰山區泰林路二段475號1樓",
+    "tel":"02-29090097"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4308961,25.0565022 ]
+    },
+    "properties": {
+    "name":"Q Burger泰山泰高店",
+    "address":"新北市泰山區明志路一段433號一樓",
+    "tel":"02-22960737"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4283788,25.0518288 ]
+    },
+    "properties": {
+    "name":"Q Burger泰山義學店",
+    "address":"新北市泰山區明志路2段101號",
+    "tel":"02-29002131"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.492524,25.0642189 ]
+    },
+    "properties": {
+    "name":"Q Burger國隆總店店",
+    "address":"新北市三重區國隆路26號",
+    "tel":"02-89837007"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4428054,25.1782098 ]
+    },
+    "properties": {
+    "name":"Q Burger淡水中山北店",
+    "address":"新北市淡水區中山北路一段149巷28號",
+    "tel":"02-26201186"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4384293,25.1763849 ]
+    },
+    "properties": {
+    "name":"Q Burger淡水新民店",
+    "address":"新北市淡水區新民街65號",
+    "tel":"02-26262060"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4485528,25.1701926 ]
+    },
+    "properties": {
+    "name":"Q Burger淡水學府店",
+    "address":"新北市淡水區學府路85號",
+    "tel":"02-86315056"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4687488,25.0607731 ]
+    },
+    "properties": {
+    "name":"Q Burger創英店",
+    "address":"新北市三重區中興北街236號",
+    "tel":"02-29999589"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.459052,25.066677 ]
+    },
+    "properties": {
+    "name":"Q Burger新北五工店",
+    "address":"新北市新莊區五工二路95號",
+    "tel":"02-22981080"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.534708,24.972179 ]
+    },
+    "properties": {
+    "name":"Q Burger新店三民店",
+    "address":"新北市新店區三民路121號1樓",
+    "tel":"02-89110352"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5409366,24.9803953 ]
+    },
+    "properties": {
+    "name":"Q Burger新店大豐店",
+    "address":"新北市新店區大豐路16巷2號",
+    "tel":"02-89146488"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5337029,24.9864914 ]
+    },
+    "properties": {
+    "name":"Q Burger新店中正店",
+    "address":"新北市新店區中正路546號1樓",
+    "tel":"02-86673625"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5402377,24.9676174 ]
+    },
+    "properties": {
+    "name":"Q Burger新店中華店",
+    "address":"新北市新店區中華路39號",
+    "tel":"02-29120298"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5165092,24.9763752 ]
+    },
+    "properties": {
+    "name":"Q Burger新店安民店",
+    "address":"新北市新店區安民街300號一樓",
+    "tel":"02-22120652"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5127499,24.9622022 ]
+    },
+    "properties": {
+    "name":"Q Burger新店安康店",
+    "address":"新北市新店區安康路二段107巷1號",
+    "tel":"02-86663040"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4931148,24.9532535 ]
+    },
+    "properties": {
+    "name":"Q Burger新店玫瑰店",
+    "address":"新北市新店區安康路三段30號一樓",
+    "tel":"02-22126673"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5379471,24.9796744 ]
+    },
+    "properties": {
+    "name":"Q Burger新店建國店",
+    "address":"新北市新店區建國路189號1樓",
+    "tel":"02-22188372"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5406484,24.9762021 ]
+    },
+    "properties": {
+    "name":"Q Burger新店建興店",
+    "address":"新北市新店區建國路72號",
+    "tel":"02-29115618"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4451653,25.0447215 ]
+    },
+    "properties": {
+    "name":"Q Burger新莊中平店",
+    "address":"新北市新莊區中平路82巷10號",
+    "tel":"02-29979188"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4508688,25.0509815 ]
+    },
+    "properties": {
+    "name":"Q Burger新莊中信店",
+    "address":"新北市新莊區中信街18號",
+    "tel":"02-29902295"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.454873,25.0415945 ]
+    },
+    "properties": {
+    "name":"Q Burger新莊中美店",
+    "address":"新北市新莊區中港路179號",
+    "tel":"02-29961570"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4521566,25.0475758 ]
+    },
+    "properties": {
+    "name":"Q Burger新莊中港店",
+    "address":"新北市新莊區中港路419號",
+    "tel":"02-22791117"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4519317,25.038289 ]
+    },
+    "properties": {
+    "name":"Q Burger新莊中華店",
+    "address":"新北市新莊區中華路一段45巷2號",
+    "tel":"02-29963313"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.448988,25.0528833 ]
+    },
+    "properties": {
+    "name":"Q Burger新莊中榮店",
+    "address":"新北市新莊區中榮街58號1樓",
+    "tel":"02-29918006"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4650435,25.0440709 ]
+    },
+    "properties": {
+    "name":"Q Burger新莊化成店",
+    "address":"新北市新莊區化成路31號",
+    "tel":"02-29906004"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.428217,25.0196811 ]
+    },
+    "properties": {
+    "name":"Q Burger新莊民本店",
+    "address":"新北市新莊區民本街22號",
+    "tel":"02-22081229"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4236427,25.0267755 ]
+    },
+    "properties": {
+    "name":"Q Burger新莊民安店",
+    "address":"新北市新莊區民安路35號",
+    "tel":"02-22020252"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4441963,25.051025 ]
+    },
+    "properties": {
+    "name":"Q Burger新莊立信店",
+    "address":"新北市新莊區立信三街12巷12號 1樓",
+    "tel":"02-22777909"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.425836,25.013526 ]
+    },
+    "properties": {
+    "name":"Q Burger新莊光明店",
+    "address":"新北市新莊區民安西路256號1樓",
+    "tel":"02-22035686"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4227448,25.0194393 ]
+    },
+    "properties": {
+    "name":"Q Burger新莊成德店",
+    "address":"新北市新莊區成德街8號",
+    "tel":"02-22080936"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4563935,25.0452826 ]
+    },
+    "properties": {
+    "name":"Q Burger新莊自立店",
+    "address":"新北市新莊區自立街190號",
+    "tel":"02-29927886"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4568623,25.0524133 ]
+    },
+    "properties": {
+    "name":"Q Burger新莊昌明店",
+    "address":"新北市新莊區昌明街28號",
+    "tel":"02-89921802"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4471262,25.0368906 ]
+    },
+    "properties": {
+    "name":"Q Burger新莊建中店",
+    "address":"新北市新莊區建中街86號",
+    "tel":"02-29922626"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4288439,25.0254536 ]
+    },
+    "properties": {
+    "name":"Q Burger新莊建安店",
+    "address":"新北市新莊區建安街45號1樓",
+    "tel":"02-22012300"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4555609,25.038391 ]
+    },
+    "properties": {
+    "name":"Q Burger新莊國小店",
+    "address":"新北市新莊區中港路50號",
+    "tel":"02-22771516"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4481573,25.0340288 ]
+    },
+    "properties": {
+    "name":"Q Burger新莊新豐店",
+    "address":"新北市新莊區新豐街25號1樓",
+    "tel":"02-22010220"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4178794,25.0224323 ]
+    },
+    "properties": {
+    "name":"Q Burger新莊裕民店",
+    "address":"新北市新莊區裕民街128號",
+    "tel":"02-29015532"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.434549,25.032229 ]
+    },
+    "properties": {
+    "name":"Q Burger新莊輔大店",
+    "address":"新北市新莊區福營路93號",
+    "tel":"02-29015291"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4657945,25.0557827 ]
+    },
+    "properties": {
+    "name":"Q Burger新莊頭前店",
+    "address":"新北市新莊區頭前里化成路319號",
+    "tel":"02-85213381"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.416634,25.0267849 ]
+    },
+    "properties": {
+    "name":"Q Burger新莊雙鳳店",
+    "address":"新北市新莊區雙鳳路23號1樓",
+    "tel":"02-29081680"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4055228,25.0162217 ]
+    },
+    "properties": {
+    "name":"Q Burger樹林三福店",
+    "address":"新北市樹林區三福街144號",
+    "tel":"02-26880015"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4251366,24.9956768 ]
+    },
+    "properties": {
+    "name":"Q Burger樹林千歲店",
+    "address":"新北市樹林區千歲街12號",
+    "tel":"02-26851910"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.3838291,24.9494883 ]
+    },
+    "properties": {
+    "name":"Q Burger樹林大有店",
+    "address":"新北市樹林區大有路118號",
+    "tel":"02-26800083"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4180172,24.9792385 ]
+    },
+    "properties": {
+    "name":"Q Burger樹林太順店",
+    "address":"新北市樹林區太順街47號",
+    "tel":"02-86860151"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4221825,24.9910236 ]
+    },
+    "properties": {
+    "name":"Q Burger樹林日新店",
+    "address":"新北市樹林區日新街67號",
+    "tel":"02-26852697"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4192001,24.9895288 ]
+    },
+    "properties": {
+    "name":"Q Burger樹林育英店",
+    "address":"新北市樹林區育英街146號",
+    "tel":"02-26851719"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4154428,25.0015541 ]
+    },
+    "properties": {
+    "name":"Q Burger樹林保安店",
+    "address":"新北市樹林區保安街二段115號1樓",
+    "tel":"02-26889990"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4680258,25.0890606 ]
+    },
+    "properties": {
+    "name":"Q Burger蘆洲三民店",
+    "address":"新北市蘆洲區民族路429號",
+    "tel":"02-28480213"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4711147,25.0809427 ]
+    },
+    "properties": {
+    "name":"Q Burger蘆洲中山店",
+    "address":"新北市蘆洲區中山二路179號1樓",
+    "tel":"02-22885811"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4602128,25.0829404 ]
+    },
+    "properties": {
+    "name":"Q Burger蘆洲中原店",
+    "address":"新北市蘆洲區中原路24號",
+    "tel":"02-22831717"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.481717,25.0901303 ]
+    },
+    "properties": {
+    "name":"Q Burger蘆洲中興店",
+    "address":"新北市蘆洲區中興街181號",
+    "tel":"02-82857757"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4718805,25.0916722 ]
+    },
+    "properties": {
+    "name":"Q Burger蘆洲民族店",
+    "address":"新北市蘆洲區民族路357號",
+    "tel":"02-22888383"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.458944,25.0915092 ]
+    },
+    "properties": {
+    "name":"Q Burger蘆洲永平店",
+    "address":"新北市蘆洲區永平街32巷15號一樓",
+    "tel":"02-82828616"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4664561,25.0842847 ]
+    },
+    "properties": {
+    "name":"Q Burger蘆洲光華店",
+    "address":"新北市蘆洲區中正路185巷31弄1號",
+    "tel":"02-22853131"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4574898,25.0867344 ]
+    },
+    "properties": {
+    "name":"Q Burger蘆洲成功店",
+    "address":"新北市蘆洲區長安街268號",
+    "tel":"02-22880695"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.46315,25.0796056 ]
+    },
+    "properties": {
+    "name":"Q Burger蘆洲長安店",
+    "address":"新北市蘆洲區長安街53號",
+    "tel":"02-22882985"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4602138,25.0880061 ]
+    },
+    "properties": {
+    "name":"Q Burger蘆洲長興店",
+    "address":"新北市蘆洲區長興路265號",
+    "tel":"02-22882835"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4790118,25.0842764 ]
+    },
+    "properties": {
+    "name":"Q Burger蘆洲信義店",
+    "address":"新北市蘆洲區信義路245號",
+    "tel":"02-28487578"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4763816,25.0874958 ]
+    },
+    "properties": {
+    "name":"Q Burger蘆洲復興店",
+    "address":"新北市蘆洲區復興路83號",
+    "tel":"02-82859155"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4768235,25.0838105 ]
+    },
+    "properties": {
+    "name":"Q Burger蘆洲鷺江店",
+    "address":"新北市蘆洲區鷺江街95號",
+    "tel":"02-22880500"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.3466248,24.9541981 ]
+    },
+    "properties": {
+    "name":"Q Burger鶯歌南雅店",
+    "address":"新北市鶯歌區南雅路447號1樓",
+    "tel":"02-86776886"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5465953,24.9761049 ]
+    },
+    "properties": {
+    "name":"SKYLARK加州風洋食館-新店家樂福店",
+    "address":"新北市新店區中興路3段1號7樓",
+    "tel":"-"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4747785,25.0066731 ]
+    },
+    "properties": {
+    "name":"TGI FRIDAYS星期五美式餐廳中和環球",
+    "address":"新北市中和區中山路三段122號",
+    "tel":"02-22253578"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.3514479,24.9502659 ]
+    },
+    "properties": {
+    "name":"TINA廚房－鶯歌店",
+    "address":"新北市鶯歌區尖山路5號",
+    "tel":"02-26772859"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4637592,25.0141259 ]
+    },
+    "properties": {
+    "name":"YAYOI彌生軒-環球板橋車站店",
+    "address":"新北市板橋區縣民大道二段7號2樓",
+    "tel":"02-89693056"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4635253,25.0146569 ]
+    },
+    "properties": {
+    "name":"一幻拉麵/胡同居酒屋-環球板橋車站店",
+    "address":"新北市板橋區縣民大道二段7號2F",
+    "tel":"02-89693132"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4747785,25.0066731 ]
+    },
+    "properties": {
+    "name":"九如-中和環球",
+    "address":"新北市中和區中山路三段122號",
+    "tel":"02-22218223"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4787903,25.0685559 ]
+    },
+    "properties": {
+    "name":"八方雲集三重三民店",
+    "address":"新北市三重區三民街285號1樓",
+    "tel":"02-29887158"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4670443,25.0138151 ]
+    },
+    "properties": {
+    "name":"八町目燒肉丼定食-板橋大遠百",
+    "address":"新北市板橋區新站路28號B1",
+    "tel":"0910409716"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4747988,25.0071472 ]
+    },
+    "properties": {
+    "name":"八番赤野中和環球",
+    "address":"新北市中和區中山路三段122號3F",
+    "tel":"03-3609292"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.6752742,25.0133538 ]
+    },
+    "properties": {
+    "name":"三才靈芝生態農場民宿",
+    "address":"新北市石碇區中民村十八重溪52-1號",
+    "tel":"02-26633995"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5255889,24.9630091 ]
+    },
+    "properties": {
+    "name":"三合院。早午餐",
+    "address":"新北市新店區安康路一段227號",
+    "tel":"02-86666087"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4524047,25.0486543 ]
+    },
+    "properties": {
+    "name":"下港老麵攤",
+    "address":"新北市新莊區中港路457號1樓",
+    "tel":"02-29919292"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.510476,25.0101664 ]
+    },
+    "properties": {
+    "name":"上環茶餐廳",
+    "address":"新北市永和區中山路一段126號",
+    "tel":"02-29202088"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4747988,25.0071472 ]
+    },
+    "properties": {
+    "name":"丸龜製麵 中和環球",
+    "address":"新北市中和區中山路三段122號3F",
+    "tel":"02-77317999#7017"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4747988,25.0071472 ]
+    },
+    "properties": {
+    "name":"于記杏仁 中和環球",
+    "address":"新北市中和區中山路三段122號3F",
+    "tel":"0982329898"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4669037,25.0136061 ]
+    },
+    "properties": {
+    "name":"土司工坊",
+    "address":"新北市板橋區新站路28號",
+    "tel":"02-29589671"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4748275,25.0070984 ]
+    },
+    "properties": {
+    "name":"大心新泰式麵食 中和環球",
+    "address":"新北市中和區中山路三段122號4F",
+    "tel":"02-22216389"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4747785,25.0066732 ]
+    },
+    "properties": {
+    "name":"大戶屋中和環球店",
+    "address":"新北市中和區中山路三段122號B2",
+    "tel":"02-22216266"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4569554,25.0017697 ]
+    },
+    "properties": {
+    "name":"大戶屋板橋愛買店",
+    "address":"新北市板橋區貴興路101號3樓",
+    "tel":"02-29513303"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4645712,25.0110158 ]
+    },
+    "properties": {
+    "name":"大戶屋板橋遠百中山店",
+    "address":"新北市板橋區中山路一段152號12樓",
+    "tel":"02-29561238"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5463059,24.9767393 ]
+    },
+    "properties": {
+    "name":"大戶屋新店家樂福店",
+    "address":"新北市新店區中興路三段1號6樓",
+    "tel":"02-29113199"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4484388,25.049311 ]
+    },
+    "properties": {
+    "name":"大戶屋新莊佳瑪店",
+    "address":"新北市新莊區幸福路736號B1",
+    "tel":"02-29920355"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4865522,25.0879576 ]
+    },
+    "properties": {
+    "name":"大戶屋蘆洲家樂福店",
+    "address":"新北市三重區五華街282號4樓",
+    "tel":"02-77134030"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4938473,25.0666637 ]
+    },
+    "properties": {
+    "name":"大吃一斤活蝦餐廳",
+    "address":"新北市三重區自強路一段222號",
+    "tel":"0975147848"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4747988,25.0071472 ]
+    },
+    "properties": {
+    "name":"小南門 中和環球",
+    "address":"新北市中和區中山路三段122號3F",
+    "tel":"02-77313631"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4716915,25.0814222 ]
+    },
+    "properties": {
+    "name":"小食聊聊 Brunch ",
+    "address":"新北市蘆洲區中山二路147號",
+    "tel":"02-82851231"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.540253,24.9720129 ]
+    },
+    "properties": {
+    "name":"小倆口麵線王(新店店)",
+    "address":"新北市新店區中正路189巷8號",
+    "tel":"02-29134839"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4669037,25.0136061 ]
+    },
+    "properties": {
+    "name":"山野居蔬食-板橋大遠百",
+    "address":"新北市板橋區新站路28號",
+    "tel":"0916970870"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5008455,24.975321 ]
+    },
+    "properties": {
+    "name":"山間倉房",
+    "address":"新北市中和區興南路二段399巷124號",
+    "tel":"02-29406696"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4669037,25.0136061 ]
+    },
+    "properties": {
+    "name":"山頭火板橋大遠百店",
+    "address":"新北市板橋區新站路28號",
+    "tel":"02-77054168"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.46621,25.0077991 ]
+    },
+    "properties": {
+    "name":"中華電信學院員工餐廳",
+    "address":"新北市板橋區民族路168號",
+    "tel":"02-29639318"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.3758717,25.0825823 ]
+    },
+    "properties": {
+    "name":"中環茶餐廳",
+    "address":"新北市林口區文化三路二段185號",
+    "tel":"02-26095308"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5394045,24.9333687 ]
+    },
+    "properties": {
+    "name":"六堆文山新客家料理",
+    "address":"新北市新店區湖子內路100號",
+    "tel":"02-26669369"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.8205249,25.1342685 ]
+    },
+    "properties": {
+    "name":"友信海鮮餐廳",
+    "address":"新北市瑞芳區深澳路189之7號",
+    "tel":"02-24977777"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4799758,25.1941221 ]
+    },
+    "properties": {
+    "name":"天空小品",
+    "address":"新北市淡水區忠寮里竹圍子8-17號",
+    "tel":"02-26257366"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.6387612,25.0331241 ]
+    },
+    "properties": {
+    "name":"天然茶莊",
+    "address":"新北市汐止區汐碇路380巷30號",
+    "tel":"02-26603762"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.443252,25.032502 ]
+    },
+    "properties": {
+    "name":"心心精緻早午餐",
+    "address":"新北市新莊區瓊泰路158號1樓",
+    "tel":"02-22049135"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5054365,25.0055994 ]
+    },
+    "properties": {
+    "name":"文昌小老弟糟粕醋火鍋",
+    "address":"新北市永和區中山路一段13號2樓",
+    "tel":"02-29276999"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.425865,24.9986804 ]
+    },
+    "properties": {
+    "name":"文林早餐店",
+    "address":"新北市樹林區千歲街61巷40弄2號",
+    "tel":"02-26873339"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4747988,25.0071472 ]
+    },
+    "properties": {
+    "name":"日出茶太",
+    "address":"新北市中和區中山路三段122號3F",
+    "tel":"02-82213316"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4747988,25.0071472 ]
+    },
+    "properties": {
+    "name":"日出茶太 中和環球",
+    "address":"新北市中和區中山路三段122號3F",
+    "tel":"02-82213316"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5042961,25.0051325 ]
+    },
+    "properties": {
+    "name":"牛丼快餐 ",
+    "address":"新北市中和區中山路二段40號",
+    "tel":"02-22482482"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.532157,25.287761 ]
+    },
+    "properties": {
+    "name":"主悅海鮮料理",
+    "address":"新北市石門區崁子腳41之2號",
+    "tel":"02-26381749"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.6405643,25.2205667 ]
+    },
+    "properties": {
+    "name":"兄弟食堂",
+    "address":"新北市金山區金包里街2號",
+    "tel":"02-24986458"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5260563,24.8372989 ]
+    },
+    "properties": {
+    "name":"加納富魚食坊",
+    "address":"新北市烏來區信賢里信福路12號之3",
+    "tel":"02-26616560"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.483954,25.159494 ]
+    },
+    "properties": {
+    "name":"北投國華高爾夫俱樂部餐廳",
+    "address":"新北市淡水區坪頂里小坪頂23-1號",
+    "tel":"02-86261281"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4589781,25.0911037 ]
+    },
+    "properties": {
+    "name":"可口188複合式早午餐",
+    "address":"新北市蘆洲區永平街18巷8號1F",
+    "tel":"02-22833342"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.3617238,25.0621345 ]
+    },
+    "properties": {
+    "name":"古拉爵 義式屋-林口三井店",
+    "address":"新北市林口區文化三路1段356號2樓",
+    "tel":"02-26069130"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4667853,25.0136085 ]
+    },
+    "properties": {
+    "name":"古拉爵 義式屋-板橋大遠百新站店",
+    "address":"新北市板橋區新站路28號9樓",
+    "tel":"02-29511606"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4569554,25.0017697 ]
+    },
+    "properties": {
+    "name":"古拉爵 義式屋-板橋愛買店",
+    "address":"新北市板橋區貴興路101號3樓",
+    "tel":"02-29644886"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4675151,25.0432808 ]
+    },
+    "properties": {
+    "name":"古拉爵 義式屋-家樂福重新店",
+    "address":"新北市三重區重新路5段654號B1",
+    "tel":"02-85124712"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5465953,24.9761049 ]
+    },
+    "properties": {
+    "name":"古拉爵 義式屋-新店家樂福店",
+    "address":"新北市新店區中興路3段1號7樓",
+    "tel":"02-29144822"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4377891,24.9714024 ]
+    },
+    "properties": {
+    "name":"古都餐廳",
+    "address":"新北市土城區中華路2段257號",
+    "tel":"02-22709535"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4747988,25.0071472 ]
+    },
+    "properties": {
+    "name":"台灣G湯 中和環球",
+    "address":"新北市中和區中山路三段122號3F",
+    "tel":"0983696613"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.6898828,25.2048884 ]
+    },
+    "properties": {
+    "name":"四姊妹海鮮餐廳",
+    "address":"新北市萬里區野柳村港東路160號",
+    "tel":"02-24921602"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4695887,25.0248169 ]
+    },
+    "properties": {
+    "name":"巧滋小廚早午餐",
+    "address":"新北市板橋區莒光路8號1樓",
+    "tel":"0965731905"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5030011,24.9962217 ]
+    },
+    "properties": {
+    "name":"布拉德施維根廚房 Brother Su Vegan Kitchen",
+    "address":"新北市中和區南華路29號",
+    "tel":"-"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4436012,25.0374156 ]
+    },
+    "properties": {
+    "name":"弘爺漢堡-新莊信義店",
+    "address":"新北市新莊區公園一路98號",
+    "tel":"02-29908418"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4669037,25.0136061 ]
+    },
+    "properties": {
+    "name":"本田食堂",
+    "address":"新北市板橋區新站路28號",
+    "tel":"02-77054168"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.46898,25.0498487 ]
+    },
+    "properties": {
+    "name":"玉山銀行(希望大樓)員工餐廳",
+    "address":"新北市三重區中興北街42巷17弄10號",
+    "tel":"02-21751313#8181"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4644504,25.0109769 ]
+    },
+    "properties": {
+    "name":"瓦城泰國料理板橋遠百店",
+    "address":"新北市板橋區中山路一段152號13樓",
+    "tel":"02-29589133"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4747785,25.0066731 ]
+    },
+    "properties": {
+    "name":"瓦城-環球中和",
+    "address":"新北市中和區中山路三段122號",
+    "tel":"0988803433"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.3724146,24.9344764 ]
+    },
+    "properties": {
+    "name":"甘樂食堂",
+    "address":"新北市三峽區清水街317號",
+    "tel":"02-26731857"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.6291304,25.2350666 ]
+    },
+    "properties": {
+    "name":"田中芳園養生食坊",
+    "address":"新北市金山區清水路53號",
+    "tel":"02-24982385"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.6079409,25.2802951 ]
+    },
+    "properties": {
+    "name":"白日夢Tea & Cafe",
+    "address":"新北市石門區阿里荖47-2號",
+    "tel":"02-26380045"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4257868,24.9986001 ]
+    },
+    "properties": {
+    "name":"仨食三餐",
+    "address":"新北市樹林區千歲街61巷36-1號1樓",
+    "tel":"02-26823823"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5671383,25.2908277 ]
+    },
+    "properties": {
+    "name":"伊莎貝拉海灘咖啡館",
+    "address":"新北市石門區15號",
+    "tel":"02-86352262"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5166394,25.0118553 ]
+    },
+    "properties": {
+    "name":"全 壽司丼飯煮物(永和店)",
+    "address":"新北市永和區中興街55號",
+    "tel":"02-89215959"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5152801,25.0003504 ]
+    },
+    "properties": {
+    "name":"再一塊吧ing永和店",
+    "address":"新北市永和區得和路20號",
+    "tel":"0936931262"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4247923,25.0099287 ]
+    },
+    "properties": {
+    "name":"吉可堡早餐店",
+    "address":"新北市樹林區俊英街113-1號",
+    "tel":"02-26763998"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4611548,24.99444 ]
+    },
+    "properties": {
+    "name":"吉得堡早餐店-和平店",
+    "address":"新北市板橋區和平路66號",
+    "tel":"0920388655"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4098229,24.9786918 ]
+    },
+    "properties": {
+    "name":"吉得堡東興店",
+    "address":"新北市樹林區東興街12之1號",
+    "tel":"02-86845389"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4791994,24.9443041 ]
+    },
+    "properties": {
+    "name":"吉得堡-錦秀店",
+    "address":"新北市新店區錦秀路22號1樓",
+    "tel":"02-22154682"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.714931,24.930807 ]
+    },
+    "properties": {
+    "name":"合歡茶宴風味餐廳",
+    "address":"新北市坪林區水聳淒坑28號",
+    "tel":"02-26656424"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5201222,25.0031619 ]
+    },
+    "properties": {
+    "name":"在哪裡Cafe?Deli",
+    "address":"新北市永和區秀朗路一段233號",
+    "tel":"02-89210023"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.3899016,24.9575311 ]
+    },
+    "properties": {
+    "name":"多米葉漢堡",
+    "address":"新北市樹林區佳園路2段104號",
+    "tel":"02-26802008"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.3785119,25.0758215 ]
+    },
+    "properties": {
+    "name":"好好時光公益咖啡館",
+    "address":"新北市林口區文化一路一段207之1號",
+    "tel":"02-26012485"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5172909,25.0055608 ]
+    },
+    "properties": {
+    "name":"好味道 排骨大王(永和店)",
+    "address":"新北市永和區中正路548之2號",
+    "tel":"02-29226166"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4860451,24.9960993 ]
+    },
+    "properties": {
+    "name":"好餓早餐",
+    "address":"新北市中和區連城路403號",
+    "tel":"02-82217996"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4950238,25.0019534 ]
+    },
+    "properties": {
+    "name":"宇禾田宴會館 ",
+    "address":"新北市中和區中山路二段311號3~5樓",
+    "tel":"02-22433339"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4950238,25.0019534 ]
+    },
+    "properties": {
+    "name":"宇禾田鐵板燒 ",
+    "address":"新北市中和區中山路二段311號",
+    "tel":"02-22433339"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5198073,25.0120589 ]
+    },
+    "properties": {
+    "name":"早上好早午餐",
+    "address":"新北市永和區竹林路101號1樓",
+    "tel":"0937513435"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.445242,24.984263 ]
+    },
+    "properties": {
+    "name":"早安公雞農場晨食(土城店)",
+    "address":"新北市土城區明德路二段106號",
+    "tel":"02-82616068"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4263142,25.0126864 ]
+    },
+    "properties": {
+    "name":"早安公雞農場晨食(新莊民安店)",
+    "address":"新北市新莊區民安西路277號",
+    "tel":"02-22042606"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4612458,25.0819372 ]
+    },
+    "properties": {
+    "name":"早到甜早午餐",
+    "address":"新北市蘆洲區長安街108巷5弄2號",
+    "tel":"02-28472461"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.480902,25.0683236 ]
+    },
+    "properties": {
+    "name":"早饗食",
+    "address":"新北市三重區中正北路272號",
+    "tel":"02-29800660"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4796888,25.0148932 ]
+    },
+    "properties": {
+    "name":"有汁牛麵食",
+    "address":"新北市板橋區三民路二段153巷4號一樓",
+    "tel":"02-29622221"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4284421,24.9954547 ]
+    },
+    "properties": {
+    "name":"朴庶韓國銅盤烤肉 樹林秀泰店",
+    "address":"新北市樹林區樹新路40-6號七樓",
+    "tel":"02-26863377"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4747988,25.0071472 ]
+    },
+    "properties": {
+    "name":"朱記餡餅粥(中和環球店)",
+    "address":"新北市中和區中山路三段122號3F",
+    "tel":"02-82211233"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4334749,25.0033584 ]
+    },
+    "properties": {
+    "name":"米可廚房",
+    "address":"新北市新莊區新樹路625號一樓",
+    "tel":"02-22076010"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4129442,25.0223036 ]
+    },
+    "properties": {
+    "name":"米炭火燒肉小酒館 迴龍店",
+    "address":"新北市新莊區新北市新莊區中正路891-17號",
+    "tel":"02-29088787"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4293995,25.0266472 ]
+    },
+    "properties": {
+    "name":"米勒卡早午餐",
+    "address":"新北市新莊區建安街9巷12號",
+    "tel":"02-22084480"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.466765,25.013651 ]
+    },
+    "properties": {
+    "name":"老乾杯板橋大遠百店",
+    "address":"新北市板橋區新北市板橋區新站路28號11樓",
+    "tel":"02-29526466"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.8588962,25.1099309 ]
+    },
+    "properties": {
+    "name":"老礦工食堂",
+    "address":"新北市瑞芳區金瓜石祈堂路72-1號",
+    "tel":"02-29314996"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4669037,25.0136061 ]
+    },
+    "properties": {
+    "name":"肉劇場大食代板橋店",
+    "address":"新北市板橋區新站路28號",
+    "tel":"02-29626262"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.432982,25.0202973 ]
+    },
+    "properties": {
+    "name":"妞蛋吐司早午餐",
+    "address":"新北市新莊區民安東路176號1樓",
+    "tel":"02-22027707"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4775087,25.0324074 ]
+    },
+    "properties": {
+    "name":"沙巴家 新北板橋店",
+    "address":"新北市板橋區懷德街65號",
+    "tel":"0926656376"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.6397184,25.1676024 ]
+    },
+    "properties": {
+    "name":"汪汪地瓜園產業故事館",
+    "address":"新北市萬里區大鵬里加投197-6號",
+    "tel":"02-24986763"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.3793371,24.9473531 ]
+    },
+    "properties": {
+    "name":"私嚐吃飯-北大店",
+    "address":"新北市樹林區學勤路322號1樓",
+    "tel":"02-26689700"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5076938,24.9863955 ]
+    },
+    "properties": {
+    "name":"豆司苑咖啡",
+    "address":"新北市中和區南山路320巷3號",
+    "tel":"02-29497910"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5139152,24.9999247 ]
+    },
+    "properties": {
+    "name":"豆韻",
+    "address":"新北市中和區安平路218號",
+    "tel":"0968297838"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4740823,25.0163835 ]
+    },
+    "properties": {
+    "name":"邑朵早午餐",
+    "address":"新北市板橋區中山路二段89巷12號",
+    "tel":"02-29578182"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4615903,25.1391203 ]
+    },
+    "properties": {
+    "name":"享健康食坊",
+    "address":"新北市淡水區民生路45號",
+    "tel":"02-28094661#3014"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4637592,25.0141259 ]
+    },
+    "properties": {
+    "name":"京都勝牛-環球板橋車站店",
+    "address":"新北市板橋區縣民大道二段7號2樓",
+    "tel":"02-29665589"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4625315,25.0205687 ]
+    },
+    "properties": {
+    "name":"咖哩樹-板橋環球店",
+    "address":"新北市板橋區縣民大道二段七號B1",
+    "tel":"02-29602727"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4652548,24.9963124 ]
+    },
+    "properties": {
+    "name":"呷尚寶-華順店",
+    "address":"新北市中和區華順街133號",
+    "tel":"021-29535252"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5054365,25.0055994 ]
+    },
+    "properties": {
+    "name":"和王日式炭火燒肉",
+    "address":"新北市永和區中山路一段13號",
+    "tel":"02-29276999"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.7119814,24.9361456 ]
+    },
+    "properties": {
+    "name":"坪感覺",
+    "address":"新北市坪林區坪林街12號",
+    "tel":"02-26657210"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4747988,25.0071472 ]
+    },
+    "properties": {
+    "name":"岩手鯛魚燒 中和環球",
+    "address":"新北市中和區中山路三段122號3F",
+    "tel":"02-77317999#7017"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.491983,25.0735005 ]
+    },
+    "properties": {
+    "name":"帕彼手作早餐坊",
+    "address":"新北市三重區三和路三段188號",
+    "tel":"02-29881313"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4800398,25.0853012 ]
+    },
+    "properties": {
+    "name":"幸福時光-蘆洲店",
+    "address":"新北市蘆洲區信義路222巷20號",
+    "tel":"0952176277"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4611032,25.0511294 ]
+    },
+    "properties": {
+    "name":"幸福讚精品飯店",
+    "address":"新北市新莊區思源路332巷9號",
+    "tel":"02-29976688"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4669037,25.0136061 ]
+    },
+    "properties": {
+    "name":"府城台南美食",
+    "address":"新北市板橋區新站路28號",
+    "tel":"02-29596739"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4220666,25.042568 ]
+    },
+    "properties": {
+    "name":"明志科大第二餐廳",
+    "address":"新北市泰山區工專路84號",
+    "tel":"02-26890808"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4220666,25.042568 ]
+    },
+    "properties": {
+    "name":"明志科技大學學生餐廳",
+    "address":"新北市泰山區工專路84號",
+    "tel":"02-29083309"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4543193,25.0650673 ]
+    },
+    "properties": {
+    "name":"明緯員工餐廳",
+    "address":"新北市五股區五權三路28號",
+    "tel":"02-22996100#118"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.3685168,24.9340731 ]
+    },
+    "properties": {
+    "name":"東道飲食亭",
+    "address":"新北市三峽區仁愛街7號",
+    "tel":"0928350605"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.464423,25.01104 ]
+    },
+    "properties": {
+    "name":"果然匯-板橋遠百店",
+    "address":"新北市板橋區中山路一段152號11樓 (遠百中山店)",
+    "tel":"02-29562888"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4747988,25.0071472 ]
+    },
+    "properties": {
+    "name":"果滴滴FutiFudi  中和環球",
+    "address":"新北市中和區中山路三段122號3F",
+    "tel":"02-22230383"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.3899708,25.0740524 ]
+    },
+    "properties": {
+    "name":"林口康橋學生餐廳",
+    "address":"新北市林口區興林路55號",
+    "tel":"02-26015442"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4669037,25.0136061 ]
+    },
+    "properties": {
+    "name":"板大八番小雞",
+    "address":"新北市板橋區新站路28號",
+    "tel":"02-77054168"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4669037,25.0136061 ]
+    },
+    "properties": {
+    "name":"板大八番赤野",
+    "address":"新北市板橋區新站路28號",
+    "tel":"02-77054168"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4627243,25.0117403 ]
+    },
+    "properties": {
+    "name":"板橋凱撒大飯店(大廳酒吧)",
+    "address":"新北市板橋區縣民大道二段8號",
+    "tel":"02-89539777"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4627243,25.0117403 ]
+    },
+    "properties": {
+    "name":"板橋凱撒大飯店(卡拉拉餐廳)",
+    "address":"新北市板橋區縣民大道二段8號",
+    "tel":"02-89539777"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4627243,25.0117403 ]
+    },
+    "properties": {
+    "name":"板橋凱撒大飯店(家宴中餐廳)",
+    "address":"新北市板橋區縣民大道二段8號",
+    "tel":"02-89539777"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4747785,25.0066731 ]
+    },
+    "properties": {
+    "name":"欣葉小聚-中和環球",
+    "address":"新北市中和區中山路三段122號",
+    "tel":"02-77317999"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4747785,25.0066731 ]
+    },
+    "properties": {
+    "name":"欣葉小聚中和環球店",
+    "address":"新北市中和區中山路三段122號4樓",
+    "tel":"02-32345858"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4669037,25.0136061 ]
+    },
+    "properties": {
+    "name":"河內老街河粉",
+    "address":"新北市板橋區新站路28號",
+    "tel":"02-77054168"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.48817,25.077242 ]
+    },
+    "properties": {
+    "name":"法華素食餐廳",
+    "address":"新北市三重區仁美街24號",
+    "tel":"02-22860768"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4747988,25.0071472 ]
+    },
+    "properties": {
+    "name":"炎螺王 中和環球",
+    "address":"新北市中和區中山路三段122號3F",
+    "tel":"0979112170"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4629872,24.9936077 ]
+    },
+    "properties": {
+    "name":"肥熊早早午餐",
+    "address":"新北市板橋區廣和街33之6號",
+    "tel":"02-29551057"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4750427,25.0096403 ]
+    },
+    "properties": {
+    "name":"肥熊早早午餐(中和店)",
+    "address":"新北市中和區中山路三段118之3號",
+    "tel":"02 -22289997"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4256894,25.1617969 ]
+    },
+    "properties": {
+    "name":"芭達桑原住民主題餐廳",
+    "address":"新北市八里區觀海大道111號",
+    "tel":"02-26105300"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4669037,25.0136061 ]
+    },
+    "properties": {
+    "name":"金色三麥",
+    "address":"新北市板橋區新站路28號",
+    "tel":"02-77054168"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4667853,25.0136085 ]
+    },
+    "properties": {
+    "name":"金色三麥 板橋大遠百店",
+    "address":"新北市板橋區新北市板橋區新站路28號9樓",
+    "tel":"02-77385911"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4585994,25.0638243 ]
+    },
+    "properties": {
+    "name":"金色三麥 新莊晶冠店",
+    "address":"新北市新莊區新北市新莊區五工路66號1樓",
+    "tel":"02-85228989"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4669037,25.0136061 ]
+    },
+    "properties": {
+    "name":"金煲銀煲仔飯",
+    "address":"新北市板橋區新站路28號",
+    "tel":"02-77054168"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.6029418,25.0028039 ]
+    },
+    "properties": {
+    "name":"金寶電子深坑廠員工餐廳",
+    "address":"新北市深坑區北深路3段147號",
+    "tel":"02-26622660"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4669037,25.0136061 ]
+    },
+    "properties": {
+    "name":"非常泰",
+    "address":"新北市板橋區新站路28號",
+    "tel":"02-77054168"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5152491,25.011953 ]
+    },
+    "properties": {
+    "name":"芡芳石頭火鍋 新北永和店",
+    "address":"新北市永和區永和路二段116號5樓",
+    "tel":"02-29218889"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4284145,24.9954963 ]
+    },
+    "properties": {
+    "name":"芡芳石頭火鍋 樹林秀泰店",
+    "address":"新北市樹林區樹新路40-6號7樓",
+    "tel":"02-26862999"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4277742,25.020805 ]
+    },
+    "properties": {
+    "name":"侯黑鍋物 冠軍酸菜個人鍋物 (新莊民安店)",
+    "address":"新北市新莊區民安東路6號",
+    "tel":"02-22068977"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4044056,24.9734285 ]
+    },
+    "properties": {
+    "name":"南亞光電員工餐廳",
+    "address":"新北市樹林區味王街55號",
+    "tel":"02-26806311#5582"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4724134,25.0010915 ]
+    },
+    "properties": {
+    "name":"威剛科技(股)公司員工餐廳",
+    "address":"新北市中和區258號2樓",
+    "tel":"02-82280886#12952"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.3583721,24.9413225 ]
+    },
+    "properties": {
+    "name":"客家美食主藝餐廳",
+    "address":"新北市三峽區隆恩街239號1樓",
+    "tel":"02-86722255"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5061052,25.0057564 ]
+    },
+    "properties": {
+    "name":"春水堂 中和環球",
+    "address":"新北市中和區新北市中和區中山路122號",
+    "tel":"02-22217037"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.546478,24.978061 ]
+    },
+    "properties": {
+    "name":"星馬快餐 新北新店裕隆城百貨門市",
+    "address":"新北市新店區中興路三段70號6F20櫃",
+    "tel":"0926656376"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.44494,25.046919 ]
+    },
+    "properties": {
+    "name":"星馬快餐 新北新莊門市",
+    "address":"新北市新莊區中平路138號1F",
+    "tel":"0926656376"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.445329,24.987092 ]
+    },
+    "properties": {
+    "name":"星誼美而美",
+    "address":"新北市土城區日新街9巷1號",
+    "tel":"02-82616104"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4747988,25.0071472 ]
+    },
+    "properties": {
+    "name":"皇品珍",
+    "address":"新北市中和區中山路三段122號3F",
+    "tel":"02-22239885"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4747988,25.0071472 ]
+    },
+    "properties": {
+    "name":"皇廚一品牛排 中和環球",
+    "address":"新北市中和區中山路三段122號3F",
+    "tel":"02-77312719"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4474577,25.0472943 ]
+    },
+    "properties": {
+    "name":"美津素食漢堡",
+    "address":"新北市新莊區中和街63號",
+    "tel":"02-29907859"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4255248,25.025523 ]
+    },
+    "properties": {
+    "name":"美香早餐店",
+    "address":"新北市新莊區後港一路28巷4弄8號",
+    "tel":"02-22019802"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.689696,25.205214 ]
+    },
+    "properties": {
+    "name":"美觀園",
+    "address":"新北市萬里區港東路156號",
+    "tel":"0932262403"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5032963,24.7803466 ]
+    },
+    "properties": {
+    "name":"食在森林",
+    "address":"新北市烏來區福山里3鄰卡拉模基21號",
+    "tel":"0955658845"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.630055,25.0629889 ]
+    },
+    "properties": {
+    "name":"食家安飲食文化股份有限公司",
+    "address":"新北市汐止區福德一路328巷1號",
+    "tel":"02-27925757"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5415581,24.9846762 ]
+    },
+    "properties": {
+    "name":"原粹蔬食作",
+    "address":"新北市新店區北新路三段206巷1弄7號一樓",
+    "tel":"02-89147185"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5170331,25.0039546 ]
+    },
+    "properties": {
+    "name":"哩賀涼麵",
+    "address":"新北市永和區秀朗路一段169號",
+    "tel":"0985177944"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4966324,25.0578043 ]
+    },
+    "properties": {
+    "name":"哪次不吃早午餐店",
+    "address":"新北市三重區大同南路152號1樓",
+    "tel":"02-29750970"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5024702,25.0702315 ]
+    },
+    "properties": {
+    "name":"娜?泰式燒烤",
+    "address":"新北市三重區河邊北街100巷35號",
+    "tel":"02-29766633"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4451026,25.0417846 ]
+    },
+    "properties": {
+    "name":"峰精緻鍋物餐酒",
+    "address":"新北市新莊區新泰路322號",
+    "tel":"02-29940898"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5144408,25.0047738 ]
+    },
+    "properties": {
+    "name":"恩典早午餐",
+    "address":"新北市永和區安樂路294號",
+    "tel":"02-29288688"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4747785,25.0066731 ]
+    },
+    "properties": {
+    "name":"時時香-中和環球",
+    "address":"新北市中和區中山路三段122號",
+    "tel":"0930582822"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4045109,25.1302176 ]
+    },
+    "properties": {
+    "name":"桃樂絲森林餐廳",
+    "address":"新北市八里區荖阡村荖阡坑路34之5號",
+    "tel":"02-86303356"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5167477,24.9965612 ]
+    },
+    "properties": {
+    "name":"泰雅田泰式小館(永和店)",
+    "address":"新北市永和區民有街21巷2號1樓",
+    "tel":"02-86689228"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4181069,25.1816834 ]
+    },
+    "properties": {
+    "name":"海角阿鄉海產店",
+    "address":"新北市淡水區觀海路26號",
+    "tel":"02-28053411"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4495726,25.0596783 ]
+    },
+    "properties": {
+    "name":"海底撈",
+    "address":"新北市新莊區新北市新北市新莊區新北大道四段3號9樓",
+    "tel":"02-85219292"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4668636,25.0136294 ]
+    },
+    "properties": {
+    "name":"海底撈火鍋板橋店",
+    "address":"新北市板橋區新站路28號5樓",
+    "tel":"02-29641328"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.3748978,24.9298711 ]
+    },
+    "properties": {
+    "name":"海宴日式和風涮涮屋",
+    "address":"新北市三峽區中正路一段75號",
+    "tel":"02-26712348"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4701814,25.0262958 ]
+    },
+    "properties": {
+    "name":"海釣族海鮮小館",
+    "address":"新北市板橋區文化路二段126號",
+    "tel":"02-22529999"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4482604,24.9912123 ]
+    },
+    "properties": {
+    "name":"海霸王餐廳股份有限公司海山分公司",
+    "address":"新北市土城區中央路一段22號",
+    "tel":"02-22664835"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5111913,25.0051668 ]
+    },
+    "properties": {
+    "name":"留香園",
+    "address":"新北市永和區永貞路283號",
+    "tel":"02-29228998"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5365043,24.9559849 ]
+    },
+    "properties": {
+    "name":"馬克廚房 Rocky Pizza",
+    "address":"新北市新店區新店區碧潭風景區A01-03",
+    "tel":"02-29127765"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5011341945765,24.77474027231017 ]
+    },
+    "properties": {
+    "name":"馬岸泰雅美食",
+    "address":"新北市烏來區福山村大羅蘭25號",
+    "tel":"02-26616105"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5168091,25.0037736 ]
+    },
+    "properties": {
+    "name":"馬蹄圈圈",
+    "address":"新北市永和區秀朗路一段114號",
+    "tel":"02-23611999#894"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.7087369,24.9349992 ]
+    },
+    "properties": {
+    "name":"高益發茶行",
+    "address":"新北市坪林區北宜路8段217號",
+    "tel":"02-26656268"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4734633,25.0188134 ]
+    },
+    "properties": {
+    "name":"鬼匠拉麵2（板橋永豐店）",
+    "address":"新北市板橋區永豐街77號",
+    "tel":"02-29551196"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4637592,25.0141259 ]
+    },
+    "properties": {
+    "name":"乾杯列車 板橋站",
+    "address":"新北市板橋區新北市板橋區縣民大道2段7號2樓",
+    "tel":"02-89693333"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.3650009,25.0704313 ]
+    },
+    "properties": {
+    "name":"乾杯燒肉居酒屋 林口店",
+    "address":"新北市林口區新北市林口區文化三路一段356號2樓",
+    "tel":"02-26068522"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.449286,25.0597532 ]
+    },
+    "properties": {
+    "name":"乾杯燒肉居酒屋 新莊宏匯店",
+    "address":"新北市新莊區新北市新莊區新北大道四段3號7樓",
+    "tel":"02-85216277"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.429607,25.1771061 ]
+    },
+    "properties": {
+    "name":"將捷金鬱金香酒店",
+    "address":"新北市淡水區中正路一段2-1號",
+    "tel":"02-26210333"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.493895,25.0812346 ]
+    },
+    "properties": {
+    "name":"悠樂間 Shalom Cafe",
+    "address":"新北市三重區自強路五段39號",
+    "tel":"0925595853"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4583869,24.9992984 ]
+    },
+    "properties": {
+    "name":"教堂小廚",
+    "address":"新北市板橋區仁愛路12號",
+    "tel":"0900111444"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.6901861,25.2041292 ]
+    },
+    "properties": {
+    "name":"望海亭海鮮餐廳",
+    "address":"新北市萬里區野柳村港東路162之15號",
+    "tel":"02-24921605"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4747785,25.0066731 ]
+    },
+    "properties": {
+    "name":"添好運",
+    "address":"新北市中和區新北市中和區中山路三段122號",
+    "tel":"02-22267678"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4670443,25.0138151 ]
+    },
+    "properties": {
+    "name":"添好運板橋遠百店",
+    "address":"新北市板橋區新站路28號Ｂ1",
+    "tel":"02-29557978"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.6493654,25.0620717 ]
+    },
+    "properties": {
+    "name":"涮乃葉-汐止遠雄店",
+    "address":"新北市汐止區新台五路一段99號B1",
+    "tel":"-"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.412267,24.9607949 ]
+    },
+    "properties": {
+    "name":"涮乃葉-板橋遠百中山店",
+    "address":"新北市板橋區中山路1段152號10樓",
+    "tel":"-"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.607145,24.998691 ]
+    },
+    "properties": {
+    "name":"深坑大團園餐廳",
+    "address":"新北市深坑區阿柔里阿柔洋25之1號",
+    "tel":"02-26625328"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5130586,25.0059372 ]
+    },
+    "properties": {
+    "name":"猛港海鮮餐廳",
+    "address":"新北市永和區永和路一段62號",
+    "tel":"02-29286383"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5142773,24.9960255 ]
+    },
+    "properties": {
+    "name":"覓糖Mi Tang(永和中正店)",
+    "address":"新北市永和區中正路39之1號",
+    "tel":"02-86681249"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4905542,25.0690026 ]
+    },
+    "properties": {
+    "name":"豚將拉麵重陽店",
+    "address":"新北市三重區重陽路四段8號1樓",
+    "tel":"02-89832058"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4419004,25.0011574 ]
+    },
+    "properties": {
+    "name":"速芝堡早餐店",
+    "address":"新北市板橋區大觀路2段174巷102弄32號",
+    "tel":"02-29601462"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4747988,25.0071472 ]
+    },
+    "properties": {
+    "name":"雪嶽山 中和環球",
+    "address":"新北市中和區中山路三段122號3F",
+    "tel":"02-77313499"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.9492214,25.0181519 ]
+    },
+    "properties": {
+    "name":"魚佳餚餐廳",
+    "address":"新北市貢寮區東興街36號",
+    "tel":"02-24992265"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.475191,25.084151 ]
+    },
+    "properties": {
+    "name":"魚缸珈琲館",
+    "address":"新北市蘆洲區三民路78號",
+    "tel":"02-82828350"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4666688,25.0121015 ]
+    },
+    "properties": {
+    "name":"鹿兒島燒肉專賣店-板橋新板店",
+    "address":"新北市板橋區中山路一段164-1號",
+    "tel":"02-29625099"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4529507,25.0471581 ]
+    },
+    "properties": {
+    "name":"鹿兒島燒肉專賣店-新莊中華店",
+    "address":"新北市新莊區中華路二段65號1樓",
+    "tel":"02-29909950"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.3973798,25.1464983 ]
+    },
+    "properties": {
+    "name":"麥味登八里小麥",
+    "address":"新北市八里區中山路二段542號",
+    "tel":"02-26195768"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4518804,25.1263368 ]
+    },
+    "properties": {
+    "name":"麥味登八里禾渼",
+    "address":"新北市八里區頂寮五街7號",
+    "tel":"02-26188007"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4998209,25.2576183 ]
+    },
+    "properties": {
+    "name":"麥味登三芝公正",
+    "address":"新北市三芝區公正街9號",
+    "tel":"02-26369969"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4876726,25.0790313 ]
+    },
+    "properties": {
+    "name":"麥味登三重三和",
+    "address":"新北市三重區三和路四段145巷153號",
+    "tel":"02-22800682"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4880589,25.0887851 ]
+    },
+    "properties": {
+    "name":"麥味登三重三賢101",
+    "address":"新北市三重區三賢街101號",
+    "tel":"02-28579101"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4945417,25.0638439 ]
+    },
+    "properties": {
+    "name":"麥味登三重大同",
+    "address":"新北市三重區大同北路97號",
+    "tel":"02-89855749"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4889063,25.050383 ]
+    },
+    "properties": {
+    "name":"麥味登三重中興橋",
+    "address":"新北市三重區成功路38號",
+    "tel":"02-29768838"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4789466,25.0751762 ]
+    },
+    "properties": {
+    "name":"麥味登三重木澄找餐",
+    "address":"新北市三重區永福街179號",
+    "tel":"02-22870179"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.498182,25.0598319 ]
+    },
+    "properties": {
+    "name":"麥味登三重正義",
+    "address":"新北市三重區正義南路79號",
+    "tel":"02-89762827"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4845887,25.0741467 ]
+    },
+    "properties": {
+    "name":"麥味登三重車路頭",
+    "address":"新北市三重區車路頭街87號",
+    "tel":"02-22860136"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.478184,25.0689366 ]
+    },
+    "properties": {
+    "name":"麥味登三重佳德",
+    "address":"新北市三重區三民街305號",
+    "tel":"02-89825825"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4813875,25.0673445 ]
+    },
+    "properties": {
+    "name":"麥味登三重忠孝",
+    "address":"新北市三重區忠孝路三段25號",
+    "tel":"02-89850138"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.493698,25.0570626 ]
+    },
+    "properties": {
+    "name":"麥味登三重忠孝橋",
+    "address":"新北市三重區中正南路131號",
+    "tel":"02-29749888"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4897007,25.0678364 ]
+    },
+    "properties": {
+    "name":"麥味登三重美福",
+    "address":"新北市三重區重陽路三段162號",
+    "tel":"02-29801388"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.497008,25.07108 ]
+    },
+    "properties": {
+    "name":"麥味登三重國小",
+    "address":"新北市三重區仁愛街23號",
+    "tel":"02-89762738"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4925465,25.0643761 ]
+    },
+    "properties": {
+    "name":"麥味登三重國隆",
+    "address":"新北市三重區國隆路29號",
+    "tel":"02-29818809"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4841924,25.0566716 ]
+    },
+    "properties": {
+    "name":"麥味登三重捷運",
+    "address":"新北市三重區捷運路37巷14號",
+    "tel":"02-29877007"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4819935,25.0714218 ]
+    },
+    "properties": {
+    "name":"麥味登三重善解",
+    "address":"新北市三重區力行路一段176號",
+    "tel":"02-29850176"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4966797,25.0836525 ]
+    },
+    "properties": {
+    "name":"麥味登三重進安",
+    "address":"新北市三重區自強路五段100號",
+    "tel":"02-82879992"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4844281,25.0589149 ]
+    },
+    "properties": {
+    "name":"麥味登三重感恩",
+    "address":"新北市三重區三陽路61號",
+    "tel":"02-29896559"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.3710409,24.927137 ]
+    },
+    "properties": {
+    "name":"麥味登三峽大同",
+    "address":"新北市三峽區大同路196-2號",
+    "tel":"02-86741909"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.3758692,24.9453994 ]
+    },
+    "properties": {
+    "name":"麥味登三峽北大",
+    "address":"新北市三峽區大德路190號",
+    "tel":"02-26724567"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.362726,24.937461 ]
+    },
+    "properties": {
+    "name":"麥味登三峽恩主公",
+    "address":"新北市三峽區中山路234號",
+    "tel":"02-86723234"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.443861,24.978263 ]
+    },
+    "properties": {
+    "name":"麥味登土城日月光",
+    "address":"新北市土城區中央路二段61巷42號",
+    "tel":"02-22707168"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.442426,24.973318 ]
+    },
+    "properties": {
+    "name":"麥味登土城光明",
+    "address":"新北市土城區光明街63號",
+    "tel":"02-22706879"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4680513,24.9918612 ]
+    },
+    "properties": {
+    "name":"麥味登土城延平",
+    "address":"新北市土城區延平街七號",
+    "tel":"02-82610041"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4601706,24.9775566 ]
+    },
+    "properties": {
+    "name":"麥味登土城明德",
+    "address":"新北市土城區明德路一段240巷2號",
+    "tel":"02-82620030"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4593819,24.9819173 ]
+    },
+    "properties": {
+    "name":"麥味登土城青雲",
+    "address":"新北市土城區青雲路215號",
+    "tel":"02-22660768"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4468642,24.9834204 ]
+    },
+    "properties": {
+    "name":"麥味登土城海山",
+    "address":"新北市土城區明德路二段199號",
+    "tel":"02-82621058"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4656689,24.9835131 ]
+    },
+    "properties": {
+    "name":"麥味登土城清高",
+    "address":"新北市土城區明德路一段73號",
+    "tel":"02-22602220"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4558187,24.9829758 ]
+    },
+    "properties": {
+    "name":"麥味登土城裕民",
+    "address":"新北市土城區裕民路259巷24號",
+    "tel":"02-82601899"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4532209,24.986487 ]
+    },
+    "properties": {
+    "name":"麥味登土城學成",
+    "address":"新北市土城區學成路9號",
+    "tel":"02-82732522"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4687492,24.9999074 ]
+    },
+    "properties": {
+    "name":"麥味登中和民德",
+    "address":"新北市中和區民德路155號",
+    "tel":"02-29628388"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.517655,24.9931304 ]
+    },
+    "properties": {
+    "name":"麥味登中和吉仁",
+    "address":"新北市中和區大仁街19巷1號",
+    "tel":"02-86680256"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5245649,24.9929073 ]
+    },
+    "properties": {
+    "name":"麥味登中和秀朗",
+    "address":"新北市中和區秀朗路３段128巷2號",
+    "tel":"02-29435788"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5088215,24.9904649 ]
+    },
+    "properties": {
+    "name":"麥味登中和和平",
+    "address":"新北市中和區和平街15-1號",
+    "tel":"02-86680428"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4973835,24.9992528 ]
+    },
+    "properties": {
+    "name":"麥味登中和泉日青",
+    "address":"新北市中和區連城路89巷7-2號",
+    "tel":"02-82458368"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5065617,24.9848762 ]
+    },
+    "properties": {
+    "name":"麥味登中和英雄",
+    "address":"新北市中和區興南路二段79號",
+    "tel":"02-89434686"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5042552,24.9902807 ]
+    },
+    "properties": {
+    "name":"麥味登中和復興",
+    "address":"新北市中和區復興路50號",
+    "tel":"02-29488698"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.508198,24.9992265 ]
+    },
+    "properties": {
+    "name":"麥味登中和景安",
+    "address":"新北市中和區景安路13號",
+    "tel":"02-89432800"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.503992,24.999171 ]
+    },
+    "properties": {
+    "name":"麥味登中和景新",
+    "address":"新北市中和區景新街35號",
+    "tel":"02-22450559"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5077128,24.9825129 ]
+    },
+    "properties": {
+    "name":"麥味登中和華新",
+    "address":"新北市中和區華新街150號",
+    "tel":"02-86680570"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5019721,25.0069094 ]
+    },
+    "properties": {
+    "name":"麥味登中和陽光",
+    "address":"新北市中和區中山路二段2巷45弄12號",
+    "tel":"02-82453053"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4833073,25.0011213 ]
+    },
+    "properties": {
+    "name":"麥味登中和新生",
+    "address":"新北市中和區民樂路54號",
+    "tel":"02-22229635"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4658654,24.9953283 ]
+    },
+    "properties": {
+    "name":"麥味登中和壽德",
+    "address":"新北市中和區壽德街21號",
+    "tel":"02-29526863"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5092823,24.9975543 ]
+    },
+    "properties": {
+    "name":"麥味登中和福澤",
+    "address":"新北市中和區保健路47號",
+    "tel":"02-89419688"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4875282,24.9968907 ]
+    },
+    "properties": {
+    "name":"麥味登中和遠東世紀",
+    "address":"新北市中和區建一路188號1樓",
+    "tel":"02-82271800"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4712742,25.0046247 ]
+    },
+    "properties": {
+    "name":"麥味登中和德光",
+    "address":"新北市中和區德光路14號",
+    "tel":"02-29620233"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4382039,25.0831103 ]
+    },
+    "properties": {
+    "name":"麥味登五股中興",
+    "address":"新北市五股區中興路四段48巷1號",
+    "tel":"02-22951720"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4679209,25.0744378 ]
+    },
+    "properties": {
+    "name":"麥味登五股四維",
+    "address":"新北市五股區四維路116-1號",
+    "tel":"02-29889279"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4329765,25.0732461 ]
+    },
+    "properties": {
+    "name":"麥味登五股自強",
+    "address":"新北市五股區自強路72號",
+    "tel":"02-22935789"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4450624,25.0919689 ]
+    },
+    "properties": {
+    "name":"麥味登五股洲子洋",
+    "address":"新北市五股區成泰路三段165號",
+    "tel":"02-22930223"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4322642,25.0904618 ]
+    },
+    "properties": {
+    "name":"麥味登五股福臨",
+    "address":"新北市五股區五福路93號",
+    "tel":"02-22916863"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4822822,25.0803486 ]
+    },
+    "properties": {
+    "name":"麥味登仁愛旗艦",
+    "address":"新北市三重區仁愛街660號",
+    "tel":"02-22862203"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.3823322,24.9452355 ]
+    },
+    "properties": {
+    "name":"麥味登北大大成",
+    "address":"新北市樹林區大成路11號",
+    "tel":"02-26689550"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.378873,24.9493365 ]
+    },
+    "properties": {
+    "name":"麥味登北大學林",
+    "address":"新北市樹林區學林路85號",
+    "tel":"02-26684881"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5114616,25.0129159 ]
+    },
+    "properties": {
+    "name":"麥味登永和仁愛",
+    "address":"新北市永和區仁愛路145號",
+    "tel":"02-29250236"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.506583,25.0132654 ]
+    },
+    "properties": {
+    "name":"麥味登永和仁愛公園",
+    "address":"新北市永和區永平路320號",
+    "tel":"02-89213076"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.508775,25.005189 ]
+    },
+    "properties": {
+    "name":"麥味登永和保平",
+    "address":"新北市永和區保平路266號",
+    "tel":"02-29225899"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5231111,24.9992412 ]
+    },
+    "properties": {
+    "name":"麥味登永和得和",
+    "address":"新北市永和區得和路328號",
+    "tel":"02-29439796"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.51549,25.0071019 ]
+    },
+    "properties": {
+    "name":"麥味登永和福和",
+    "address":"新北市永和區福和路343號",
+    "tel":"02-29219297"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5177867,25.0045452 ]
+    },
+    "properties": {
+    "name":"麥味登永和選手",
+    "address":"新北市永和區永貞路152號",
+    "tel":"02-29229929"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5016722,25.0103271 ]
+    },
+    "properties": {
+    "name":"麥味登永和環河",
+    "address":"新北市永和區環河西路2段213號",
+    "tel":"02-29233833"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.659453,25.063891 ]
+    },
+    "properties": {
+    "name":"麥味登汐止仁愛",
+    "address":"新北市汐止區仁愛路23號",
+    "tel":"02-26492558"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.662422,25.068118 ]
+    },
+    "properties": {
+    "name":"麥味登汐止名城店",
+    "address":"新北市汐止區新昌路37-1號",
+    "tel":"02-86910234"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.6412293,25.0691825 ]
+    },
+    "properties": {
+    "name":"麥味登汐止玖達",
+    "address":"新北市汐止區樟樹二路296號",
+    "tel":"02-26427171"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.6566387,25.0718399 ]
+    },
+    "properties": {
+    "name":"麥味登汐止長江",
+    "address":"新北市汐止區長江街65號",
+    "tel":"02-26482088"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.6611892,25.0724517 ]
+    },
+    "properties": {
+    "name":"麥味登汐止建成",
+    "address":"新北市汐止區建成路59巷49號",
+    "tel":"02-86422575"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.6645007,25.0650601 ]
+    },
+    "properties": {
+    "name":"麥味登汐止皇家",
+    "address":"新北市汐止區仁愛路166號",
+    "tel":"02-26433078"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.665977,25.070649 ]
+    },
+    "properties": {
+    "name":"麥味登汐止茄苳",
+    "address":"新北市汐止區茄苳路42-1號",
+    "tel":"02-86477766"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.6354522,25.0654564 ]
+    },
+    "properties": {
+    "name":"麥味登汐止福氣",
+    "address":"新北市汐止區福德一路201巷6號",
+    "tel":"02-26925177"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.6386265,25.0693531 ]
+    },
+    "properties": {
+    "name":"麥味登汐止福德",
+    "address":"新北市汐止區福德一路20號",
+    "tel":"02-26922316"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4628092,25.1355224 ]
+    },
+    "properties": {
+    "name":"麥味登竹圍米路",
+    "address":"新北市淡水區民族路43號",
+    "tel":"02-28081276"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.3786767,25.0836423 ]
+    },
+    "properties": {
+    "name":"麥味登林口中山",
+    "address":"新北市林口區中山路526號-1",
+    "tel":"02-26020858"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.3878135,25.0768451 ]
+    },
+    "properties": {
+    "name":"麥味登林口仁愛",
+    "address":"新北市林口區仁愛路一段384號",
+    "tel":"02-26011390"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.3675759,25.0688359 ]
+    },
+    "properties": {
+    "name":"麥味登林口公園",
+    "address":"新北市林口區公園路69號",
+    "tel":"02-26080267"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.3738663,25.0792995 ]
+    },
+    "properties": {
+    "name":"麥味登林口文化",
+    "address":"新北市林口區文化三路二段36-1號",
+    "tel":"02-26018032"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.3729436,25.0770384 ]
+    },
+    "properties": {
+    "name":"麥味登林口民有",
+    "address":"新北市林口區民有街68號",
+    "tel":"02-26081872"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.3644082,25.0740158 ]
+    },
+    "properties": {
+    "name":"麥味登林口民族",
+    "address":"新北市林口區民族路22號",
+    "tel":"0986811956"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.3796713,25.0799484 ]
+    },
+    "properties": {
+    "name":"麥味登林口民視",
+    "address":"新北市林口區信義路154號",
+    "tel":"02-26019062"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.3837139,25.0748521 ]
+    },
+    "properties": {
+    "name":"麥味登林口名巧園",
+    "address":"新北市林口區仁愛路二段121號",
+    "tel":"02-26015862"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.3608558,25.0759166 ]
+    },
+    "properties": {
+    "name":"麥味登林口南勢",
+    "address":"新北市林口區南勢一街17巷51號",
+    "tel":"02-26000275"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.3696033,25.0768239 ]
+    },
+    "properties": {
+    "name":"麥味登林口香悅",
+    "address":"新北市林口區文化三路一段555巷50號",
+    "tel":"02-26082729"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.3620026,25.0712707 ]
+    },
+    "properties": {
+    "name":"麥味登林口貳貳五",
+    "address":"新北市林口區文化三路一段225巷13號",
+    "tel":"02-26099585"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.3655515,25.0675626 ]
+    },
+    "properties": {
+    "name":"麥味登林口感恩",
+    "address":"新北市林口區文化二路一段20巷23號",
+    "tel":"02-26006228"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.3575484,25.0725389 ]
+    },
+    "properties": {
+    "name":"麥味登林口源泉",
+    "address":"新北市林口區源泉街36號",
+    "tel":"02-26092339"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.3773839,25.0692827 ]
+    },
+    "properties": {
+    "name":"麥味登林口歐園",
+    "address":"新北市林口區麗園二街2-4號",
+    "tel":"02-26009889"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4788757,25.0138591 ]
+    },
+    "properties": {
+    "name":"麥味登板橋三民",
+    "address":"新北市板橋區三民路二段202-13號",
+    "tel":"02-29630916"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4721088,25.0126682 ]
+    },
+    "properties": {
+    "name":"麥味登板橋大崙",
+    "address":"新北市板橋區長安街331巷89號",
+    "tel":"02-29581685"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.457572,25.0191 ]
+    },
+    "properties": {
+    "name":"麥味登板橋中正",
+    "address":"新北市板橋區中正路216巷57號",
+    "tel":"02-22720613"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4792161,25.026734 ]
+    },
+    "properties": {
+    "name":"麥味登板橋文聖",
+    "address":"新北市板橋區文聖街182號",
+    "tel":"02-22542777"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.475779,25.0205948 ]
+    },
+    "properties": {
+    "name":"麥味登板橋永豐",
+    "address":"新北市板橋區永豐街171號",
+    "tel":"02-29512885"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4674017,25.0257447 ]
+    },
+    "properties": {
+    "name":"麥味登板橋光武",
+    "address":"新北市板橋區光武街63號",
+    "tel":"02-22541266"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4816939,25.0144256 ]
+    },
+    "properties": {
+    "name":"麥味登板橋光環",
+    "address":"新北市板橋區光環路二段76號",
+    "tel":"02-29627677"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.447981,24.9985828 ]
+    },
+    "properties": {
+    "name":"麥味登板橋合安",
+    "address":"新北市板橋區合宜路115號",
+    "tel":"02-29691688"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4686857,25.0281414 ]
+    },
+    "properties": {
+    "name":"麥味登板橋松江",
+    "address":"新北市板橋區松江街86號",
+    "tel":"02-22507050"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4641454,25.0315288 ]
+    },
+    "properties": {
+    "name":"麥味登板橋金世紀錄",
+    "address":"新北市板橋區長江路二段47號",
+    "tel":"02-22541831"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4328506,24.9907555 ]
+    },
+    "properties": {
+    "name":"麥味登板橋金門",
+    "address":"新北市板橋區金門街147號",
+    "tel":"02-86871568"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4280147,24.9852545 ]
+    },
+    "properties": {
+    "name":"麥味登板橋金鑽",
+    "address":"新北市板橋區金門街324巷7號",
+    "tel":"02-26860901"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4749108,25.0124701 ]
+    },
+    "properties": {
+    "name":"麥味登板橋長安",
+    "address":"新北市板橋區長安街349號",
+    "tel":"02-29519353"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4609483,25.0302163 ]
+    },
+    "properties": {
+    "name":"麥味登板橋長江",
+    "address":"新北市板橋區長江路一段150號",
+    "tel":"02-22597039"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4657649,25.0205923 ]
+    },
+    "properties": {
+    "name":"麥味登板橋致理",
+    "address":"新北市板橋區文化路一段311-2號",
+    "tel":"02-22566222"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4636854,24.9977394 ]
+    },
+    "properties": {
+    "name":"麥味登板橋重慶",
+    "address":"新北市板橋區重慶路308巷14號",
+    "tel":"02-29558858"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4620592,25.0032558 ]
+    },
+    "properties": {
+    "name":"麥味登板橋校前",
+    "address":"新北市板橋區校前街76號",
+    "tel":"02-29615889"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.46106,25.0186496 ]
+    },
+    "properties": {
+    "name":"麥味登板橋國光",
+    "address":"新北市板橋區國光路187號",
+    "tel":"02-29682628"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4740286,25.0225817 ]
+    },
+    "properties": {
+    "name":"麥味登板橋莒光",
+    "address":"新北市板橋區莒光路188號",
+    "tel":"02-22566826"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4713256,25.0225405 ]
+    },
+    "properties": {
+    "name":"麥味登板橋莊敬",
+    "address":"新北市板橋區莊敬路162號",
+    "tel":"02-22581447"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.455884,25.002512 ]
+    },
+    "properties": {
+    "name":"麥味登板橋貴興",
+    "address":"新北市板橋區貴興路109號",
+    "tel":"02-29649695"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4634138,25.0073404 ]
+    },
+    "properties": {
+    "name":"麥味登板橋實踐",
+    "address":"新北市板橋區實踐路38號",
+    "tel":"02-29597877"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4622434,24.9942116 ]
+    },
+    "properties": {
+    "name":"麥味登板橋廣和",
+    "address":"新北市板橋區廣和街52號",
+    "tel":"02-29555560"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4569611,25.0243549 ]
+    },
+    "properties": {
+    "name":"麥味登板橋龍泉",
+    "address":"新北市板橋區龍泉街120號",
+    "tel":"02-22542268"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4801569,25.0304125 ]
+    },
+    "properties": {
+    "name":"麥味登板橋懷德",
+    "address":"新北市板橋區懷德街181巷23號",
+    "tel":"02-22500350"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.472585,25.0261474 ]
+    },
+    "properties": {
+    "name":"麥味登板橋藝文",
+    "address":"新北市板橋區莊敬路99號",
+    "tel":"02-82570520"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4560161,25.0124164 ]
+    },
+    "properties": {
+    "name":"麥味登板橋體育館",
+    "address":"新北市板橋區中正路17號",
+    "tel":"02-22727177"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4522076,25.0116067 ]
+    },
+    "properties": {
+    "name":"麥味登板橋體育館2",
+    "address":"新北市板橋區南雅西路二段143號",
+    "tel":"02-22727977"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4326731,25.0546909 ]
+    },
+    "properties": {
+    "name":"麥味登泰山仁義",
+    "address":"新北市泰山區仁義路143號",
+    "tel":"02-22962828"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4332093,25.0578888 ]
+    },
+    "properties": {
+    "name":"麥味登泰山全興",
+    "address":"新北市泰山區福興二街30號",
+    "tel":"02-29000283"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4403446,25.0459677 ]
+    },
+    "properties": {
+    "name":"麥味登泰山信華",
+    "address":"新北市泰山區信華三街171號",
+    "tel":"02-29009091"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4242518,25.063799 ]
+    },
+    "properties": {
+    "name":"麥味登泰山泰林",
+    "address":"新北市泰山區泰林路二段513號",
+    "tel":"02-29000565"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.944793,25.0168207 ]
+    },
+    "properties": {
+    "name":"麥味登貢寮福隆",
+    "address":"新北市貢寮區興隆街20號",
+    "tel":"02-24991035"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4455924,25.1722484 ]
+    },
+    "properties": {
+    "name":"麥味登淡水水源",
+    "address":"新北市淡水區水源街一段78號",
+    "tel":"02-26234139"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.450073,25.1793258 ]
+    },
+    "properties": {
+    "name":"麥味登淡水北新",
+    "address":"新北市淡水區北新路153號",
+    "tel":"02-26235211"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4309142,25.1874647 ]
+    },
+    "properties": {
+    "name":"麥味登淡水台北灣",
+    "address":"新北市淡水區新市一路一段99巷17號",
+    "tel":"02-26292238"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4478844,25.1692035 ]
+    },
+    "properties": {
+    "name":"麥味登淡水宇峰",
+    "address":"新北市淡水區學府路45號",
+    "tel":"02-26235201"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4581693,25.1626574 ]
+    },
+    "properties": {
+    "name":"麥味登淡水紅樹林",
+    "address":"新北市淡水區坪頂路51-1號",
+    "tel":"02-86263339"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4371569,25.178988 ]
+    },
+    "properties": {
+    "name":"麥味登淡水真理",
+    "address":"新北市淡水區新民街180巷2號",
+    "tel":"02-26205135"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4509158,25.1739076 ]
+    },
+    "properties": {
+    "name":"麥味登淡水淡大",
+    "address":"新北市淡水區水源街二段56號",
+    "tel":"02-26295836"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4484929,25.1773981 ]
+    },
+    "properties": {
+    "name":"麥味登淡水淡江",
+    "address":"新北市淡水區北新路182巷37號",
+    "tel":"02-26250018"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.423451,25.181114 ]
+    },
+    "properties": {
+    "name":"麥味登淡水淡海",
+    "address":"新北市淡水區淡海路72巷1號",
+    "tel":"02-28050511"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4469616,25.1827694 ]
+    },
+    "properties": {
+    "name":"麥味登淡水新市",
+    "address":"新北市淡水區新市一路三段108號",
+    "tel":"02-86315511"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4400305,25.1824102 ]
+    },
+    "properties": {
+    "name":"麥味登淡水新春",
+    "address":"新北市淡水區新春街97號",
+    "tel":"02-26212553"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4610281,25.0228456 ]
+    },
+    "properties": {
+    "name":"麥味登新北新海",
+    "address":"新北市板橋區新海路117號",
+    "tel":"02-22568688"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5421331,24.9804358 ]
+    },
+    "properties": {
+    "name":"麥味登新店大坪林",
+    "address":"新北市新店區北新路三段70號",
+    "tel":"02-29129555"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.517778,24.969076 ]
+    },
+    "properties": {
+    "name":"麥味登新店光華",
+    "address":"新北市新店區光華街10號",
+    "tel":"02-22119009"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.493323,24.9531606 ]
+    },
+    "properties": {
+    "name":"麥味登新店安康",
+    "address":"新北市新店區安康路三段25號",
+    "tel":"02-22156557"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.511564,24.9628293 ]
+    },
+    "properties": {
+    "name":"麥味登新店安德",
+    "address":"新北市新店區安德街34號",
+    "tel":"02-22124693"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.516382,24.98603 ]
+    },
+    "properties": {
+    "name":"麥味登新店佳燁",
+    "address":"新北市新店區安和路3段134號",
+    "tel":"02-86683580"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5379164,24.9817897 ]
+    },
+    "properties": {
+    "name":"麥味登新店建國",
+    "address":"新北市新店區建國路236號",
+    "tel":"02-29118958"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5396271,24.9869019 ]
+    },
+    "properties": {
+    "name":"麥味登新店順聯",
+    "address":"新北市新店區復興路16號",
+    "tel":"02-29141418"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4747531,24.9559178 ]
+    },
+    "properties": {
+    "name":"麥味登新店綠野香坡",
+    "address":"新北市新店區安祥路139號",
+    "tel":"02-22001700"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5494433,24.9733453 ]
+    },
+    "properties": {
+    "name":"麥味登新店寶興",
+    "address":"新北市新店區寶興路47-1號",
+    "tel":"02-89193100"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.444635,25.046748 ]
+    },
+    "properties": {
+    "name":"麥味登新莊中平",
+    "address":"新北市新莊區中平路121號",
+    "tel":"02-22771508"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4516349,25.0509198 ]
+    },
+    "properties": {
+    "name":"麥味登新莊中信",
+    "address":"新北市新莊區中信街2號",
+    "tel":"02-89927177"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4553479,25.0545703 ]
+    },
+    "properties": {
+    "name":"麥味登新莊中原",
+    "address":"新北市新莊區中原路138號",
+    "tel":"02-85212006"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4533016,25.051736 ]
+    },
+    "properties": {
+    "name":"麥味登新莊中華",
+    "address":"新北市新莊區中華路二段172號",
+    "tel":"02-29900759"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4598634,25.066473 ]
+    },
+    "properties": {
+    "name":"麥味登新莊五工",
+    "address":"新北市新莊區五工二路86巷2號",
+    "tel":"02-22993799"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4470889,25.0365779 ]
+    },
+    "properties": {
+    "name":"麥味登新莊五工二",
+    "address":"新北市新莊區建中街85號",
+    "tel":"02-29922522"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4175311,25.0278075 ]
+    },
+    "properties": {
+    "name":"麥味登新莊天祥",
+    "address":"新北市新莊區天祥街26-1號",
+    "tel":"02-29084674"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4238294,25.0264753 ]
+    },
+    "properties": {
+    "name":"麥味登新莊民安",
+    "address":"新北市新莊區民安路45號1樓",
+    "tel":"02-22025530"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4647192,25.054685 ]
+    },
+    "properties": {
+    "name":"麥味登新莊米娜",
+    "address":"新北市新莊區中原東路30號",
+    "tel":"02-85229700"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.455663,25.0455706 ]
+    },
+    "properties": {
+    "name":"麥味登新莊自立",
+    "address":"新北市新莊區自立街115號",
+    "tel":"02-29980115"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.428096,25.0183601 ]
+    },
+    "properties": {
+    "name":"麥味登新莊西盛",
+    "address":"新北市新莊區西盛街196號",
+    "tel":"02-22010970"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.445279,25.0491413 ]
+    },
+    "properties": {
+    "name":"麥味登新莊幸福",
+    "address":"新北市新莊區幸福路834號",
+    "tel":"02-22771234"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4569958,25.0524164 ]
+    },
+    "properties": {
+    "name":"麥味登新莊昌明",
+    "address":"新北市新莊區昌明街22號",
+    "tel":"02-29905398"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.414874,25.02792 ]
+    },
+    "properties": {
+    "name":"麥味登新莊玥萱",
+    "address":"新北市新莊區雙鳳路88號",
+    "tel":"02-29015928"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4275471,25.0249189 ]
+    },
+    "properties": {
+    "name":"麥味登新莊建安",
+    "address":"新北市新莊區建安街46號",
+    "tel":"02-22044018"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4484941,25.0431368 ]
+    },
+    "properties": {
+    "name":"麥味登新莊星品",
+    "address":"新北市新莊區中和街12號",
+    "tel":"02-89910985"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4517652,25.0479308 ]
+    },
+    "properties": {
+    "name":"麥味登新莊星誠",
+    "address":"新北市新莊區中誠街15號",
+    "tel":"02-29931989"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4489807,25.052876 ]
+    },
+    "properties": {
+    "name":"麥味登新莊星榮",
+    "address":"新北市新莊區中榮街60號",
+    "tel":"02-29960669"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4575494,25.0406571 ]
+    },
+    "properties": {
+    "name":"麥味登新莊福興",
+    "address":"新北市新莊區公園路238號",
+    "tel":"02-22761918"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.444267,25.0503544 ]
+    },
+    "properties": {
+    "name":"麥味登新莊歐洲村",
+    "address":"新北市新莊區立信三街7巷1號",
+    "tel":"02-29966927"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.461815,25.052023 ]
+    },
+    "properties": {
+    "name":"麥味登新莊頭前公園",
+    "address":"新北市新莊區頭成街163號",
+    "tel":"02-29909163"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4146934,25.0214603 ]
+    },
+    "properties": {
+    "name":"麥味登新莊龍安",
+    "address":"新北市新莊區中正路新建巷55號",
+    "tel":"02-29017665"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.8051859,25.1083113 ]
+    },
+    "properties": {
+    "name":"麥味登瑞芳明燈",
+    "address":"新北市瑞芳區明燈路三段81號",
+    "tel":"02-24976263"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.423834,24.9834202 ]
+    },
+    "properties": {
+    "name":"麥味登樹林中華",
+    "address":"新北市樹林區中華路39號",
+    "tel":"02-86868651"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4200263,24.9875511 ]
+    },
+    "properties": {
+    "name":"麥味登樹林日新",
+    "address":"新北市樹林區日新街185號",
+    "tel":"02-26862525"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4121584,25.0034764 ]
+    },
+    "properties": {
+    "name":"麥味登樹林光榮",
+    "address":"新北市樹林區光榮街53號1樓",
+    "tel":"02-26888936"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4297676,24.9941843 ]
+    },
+    "properties": {
+    "name":"麥味登樹林秀泰",
+    "address":"新北市板橋區大觀路三段160巷46號",
+    "tel":"02-26860822"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.415217,24.9820393 ]
+    },
+    "properties": {
+    "name":"麥味登樹林東榮",
+    "address":"新北市樹林區東榮街121號",
+    "tel":"02-86860063"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4193157,24.9784881 ]
+    },
+    "properties": {
+    "name":"麥味登樹林國凱",
+    "address":"新北市樹林區國凱街19號之1",
+    "tel":"02-86853291"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4221288,24.9936758 ]
+    },
+    "properties": {
+    "name":"麥味登樹林復興",
+    "address":"新北市樹林區復興路37號",
+    "tel":"02-26851566"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4222944,24.9797144 ]
+    },
+    "properties": {
+    "name":"麥味登樹林會贏",
+    "address":"新北市樹林區國凱街102號",
+    "tel":"02-86868732"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4945844,24.992224 ]
+    },
+    "properties": {
+    "name":"麥味登雙和圓通",
+    "address":"新北市中和區圓通路242號",
+    "tel":"02-22421165"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4715653,25.0909954 ]
+    },
+    "properties": {
+    "name":"麥味登蘆洲中心",
+    "address":"新北市蘆洲區民權路188-7號",
+    "tel":"02-82866513"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4683841,25.0807694 ]
+    },
+    "properties": {
+    "name":"麥味登蘆洲正和",
+    "address":"新北市蘆洲區正和街79號",
+    "tel":"02-82867980"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4637507,25.0840096 ]
+    },
+    "properties": {
+    "name":"麥味登蘆洲長興",
+    "address":"新北市蘆洲區長興路50巷3號",
+    "tel":"02-22829933"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4571687,25.0869188 ]
+    },
+    "properties": {
+    "name":"麥味登蘆洲康佑",
+    "address":"新北市蘆洲區長安街343號",
+    "tel":"02-82868137"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.479001,25.0894586 ]
+    },
+    "properties": {
+    "name":"麥味登蘆洲復興",
+    "address":"新北市蘆洲區復興路181號",
+    "tel":"02-82827200"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4768202,25.0839163 ]
+    },
+    "properties": {
+    "name":"麥味登蘆洲鷺江99",
+    "address":"新北市蘆洲區鷺江街99號",
+    "tel":"02-22859299"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.3469382,24.9488741 ]
+    },
+    "properties": {
+    "name":"麥味登鶯歌天囍",
+    "address":"新北市鶯歌區尖山路136號",
+    "tel":"02-86776850"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5001128,25.0618167 ]
+    },
+    "properties": {
+    "name":"荳荳早午餐店",
+    "address":"新北市三重區文化南路31之1號",
+    "tel":"02-89731966"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4747988,25.0071472 ]
+    },
+    "properties": {
+    "name":"凱林鐵板燒 中和環球",
+    "address":"新北市中和區中山路三段122號3F",
+    "tel":"02-22221985"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4747988,25.0071472 ]
+    },
+    "properties": {
+    "name":"勝博殿Exprsss中和環球",
+    "address":"新北市中和區中山路三段122號3F",
+    "tel":"02-66377718"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4669037,25.0136061 ]
+    },
+    "properties": {
+    "name":"勝勢豬排(板橋大遠百)",
+    "address":"新北市板橋區新站路28號",
+    "tel":"02-29506628"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.3685916,24.9345548 ]
+    },
+    "properties": {
+    "name":"喜徠珍古井餐廳",
+    "address":"新北市三峽區中山路40號",
+    "tel":"02-86711798#894"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5486364,24.9512893 ]
+    },
+    "properties": {
+    "name":"喔嗨呦早餐屋",
+    "address":"新北市新店區北宜路2段36號",
+    "tel":"02-22178530"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5078174,24.9861947 ]
+    },
+    "properties": {
+    "name":"喬MAMA",
+    "address":"新北市中和區興南路二段6號",
+    "tel":"02-29400048"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.9511369,25.0207342 ]
+    },
+    "properties": {
+    "name":"富士海鮮餐廳",
+    "address":"新北市貢寮區東興街8號",
+    "tel":"02-24991001"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4577923,25.1822155 ]
+    },
+    "properties": {
+    "name":"富群休閒農園",
+    "address":"新北市淡水區北新路一段129-1號",
+    "tel":"02-26282899"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4655415,25.0123694 ]
+    },
+    "properties": {
+    "name":"彭園婚宴會館(新板店)",
+    "address":"新北市板橋區中山路一段161號",
+    "tel":"02-29527666"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4669037,25.0136061 ]
+    },
+    "properties": {
+    "name":"惠比壽烏龍麵",
+    "address":"新北市板橋區新站路28號",
+    "tel":"02-77054168"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4464983,25.0018462 ]
+    },
+    "properties": {
+    "name":"棉 早+午餐廳",
+    "address":"新北市板橋區大觀路二段93號",
+    "tel":"02-29660282"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5172718,24.9926425 ]
+    },
+    "properties": {
+    "name":"港都熱炒",
+    "address":"新北市中和區大勇街10號",
+    "tel":"02-29406751"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5021537,24.9985263 ]
+    },
+    "properties": {
+    "name":"粥太郎 粥品·麵食",
+    "address":"新北市中和區南山路49號",
+    "tel":"02-22426628"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4287689,25.0210411 ]
+    },
+    "properties": {
+    "name":"紫緹麵食館",
+    "address":"新北市新莊區民安東路37號",
+    "tel":"02-22029635"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4747785,25.0066731 ]
+    },
+    "properties": {
+    "name":"開丼-中和環球",
+    "address":"新北市中和區中山路三段122號",
+    "tel":"02-82281266"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4748275,25.0070984 ]
+    },
+    "properties": {
+    "name":"開飯川食堂 新北中和",
+    "address":"新北市中和區中山路三段122 4F",
+    "tel":"02-22238218"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.456703,25.1615587 ]
+    },
+    "properties": {
+    "name":"閑恬Mydeli手作美味坊",
+    "address":"新北市淡水區坪頂路22號",
+    "tel":"02-86263159"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.8550034,25.110491 ]
+    },
+    "properties": {
+    "name":"雲山水小築民宿",
+    "address":"新北市瑞芳區金瓜石石山里山尖路72-1號",
+    "tel":"02-24962201"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5511445,24.8488755 ]
+    },
+    "properties": {
+    "name":"雲仙大飯店",
+    "address":"新北市烏來區烏來里瀑布路1-1號",
+    "tel":"02-26616383"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5511445,24.8488755 ]
+    },
+    "properties": {
+    "name":"雲仙樂園中餐廳",
+    "address":"新北市烏來區瀑布路1-1",
+    "tel":"02-26616510"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.411948,25.0283302 ]
+    },
+    "properties": {
+    "name":"順哥?坊早餐店",
+    "address":"新北市新莊區新北大道7段630號",
+    "tel":"02-29088861"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4697033,24.9990065 ]
+    },
+    "properties": {
+    "name":"黃到即食鍋燒麵(中和店)",
+    "address":"新北市中和區國光街107巷4弄30號",
+    "tel":"0909670810"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.449286,25.0597532 ]
+    },
+    "properties": {
+    "name":"黑毛屋 新莊宏匯店",
+    "address":"新北市新莊區新北市新莊區新北大道四段 3 號 7 樓",
+    "tel":"02-85222611"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4669037,25.0136061 ]
+    },
+    "properties": {
+    "name":"黑毛屋本家 板橋大遠百店",
+    "address":"新北市板橋區新北市板橋區新站路 28 號",
+    "tel":"02-29524088"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.3747071,24.9439922 ]
+    },
+    "properties": {
+    "name":"黑沃咖啡-三峽大學店",
+    "address":"新北市三峽區新北市三峽區大學路120號",
+    "tel":"04-22624040"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.520265,25.009836 ]
+    },
+    "properties": {
+    "name":"黑沃咖啡-永和竹林店",
+    "address":"新北市永和區新北市永和區竹林路178號",
+    "tel":"04-22624040"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.6231943,25.0678719 ]
+    },
+    "properties": {
+    "name":"黑沃咖啡-汐止白天鵝店",
+    "address":"新北市汐止區新北市汐止區康寧街169巷8之1號1樓",
+    "tel":"04-22624040"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.3625869,25.0710391 ]
+    },
+    "properties": {
+    "name":"黑沃咖啡-林口文化店",
+    "address":"新北市林口區新北市林口區文化三路一段225巷6號",
+    "tel":"04-22624040"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4569656,25.0079738 ]
+    },
+    "properties": {
+    "name":"黑沃咖啡-板橋南門店",
+    "address":"新北市板橋區新北市板橋區南門街73號",
+    "tel":"04-22624040"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4441353,25.1843421 ]
+    },
+    "properties": {
+    "name":"黑沃咖啡-淡水新市店",
+    "address":"新北市淡水區新北市淡水區中山北路二段163號",
+    "tel":"04-22624040"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4329125,25.0320349 ]
+    },
+    "properties": {
+    "name":"黑沃咖啡-新北輔大店",
+    "address":"新北市新莊區新北市新莊區中正路595號",
+    "tel":"04-22624040"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4451269,25.0546808 ]
+    },
+    "properties": {
+    "name":"勤誠興業-員工餐廳",
+    "address":"新北市新莊區中原路558號18樓",
+    "tel":"02-82265500"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4426469,24.9996649 ]
+    },
+    "properties": {
+    "name":"嗑厚班早午餐",
+    "address":"新北市板橋區龍興街11號",
+    "tel":"02-89699525"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4874171,25.0076333 ]
+    },
+    "properties": {
+    "name":"微星員工餐廳",
+    "address":"新北市中和區立德街69號",
+    "tel":"02-32345599#1088"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.6897791,25.205091 ]
+    },
+    "properties": {
+    "name":"意芳飯店",
+    "address":"新北市萬里區港東路155號",
+    "tel":"0932500750"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5378671,24.9807024 ]
+    },
+    "properties": {
+    "name":"新店活蝦大王",
+    "address":"新北市新店區建國路200號",
+    "tel":"02-29110986"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4644519,25.0109757 ]
+    },
+    "properties": {
+    "name":"新馬辣經典麻辣鍋板橋遠百店",
+    "address":"新北市板橋區中山路一段152號、遠東百貨11F櫃號-1103號",
+    "tel":"02-29512456"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4667853,25.0136085 ]
+    },
+    "properties": {
+    "name":"新葡苑(板橋遠百店)",
+    "address":"新北市板橋區新站路28號9樓",
+    "tel":"02-89510388"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4625496,25.0205607 ]
+    },
+    "properties": {
+    "name":"楚門咖啡．餐館",
+    "address":"新北市板橋區新海路5號",
+    "tel":"0906381747"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5404778,24.9719384 ]
+    },
+    "properties": {
+    "name":"楊記運滷熬鮮小館",
+    "address":"新北市新店區中正路183巷6號1樓",
+    "tel":"02-23611999#894"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4141413,25.0209547 ]
+    },
+    "properties": {
+    "name":"萬佳鄉-新展店",
+    "address":"新北市新莊區龍安路66-42號",
+    "tel":"02-29063230"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4466039,25.1931354 ]
+    },
+    "properties": {
+    "name":"義利不窯-碳烤牛排-窯烤披薩-義式料理",
+    "address":"新北市淡水區淡金路二段608之2號",
+    "tel":"02-26206699"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4669037,25.0136061 ]
+    },
+    "properties": {
+    "name":"義饗屋板橋大遠百店",
+    "address":"新北市板橋區新站路28號",
+    "tel":"02-77054168"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4510883,25.0483938 ]
+    },
+    "properties": {
+    "name":"肆六巷",
+    "address":"新北市新莊區中誠街46巷5號",
+    "tel":"0918309905"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4669037,25.0136061 ]
+    },
+    "properties": {
+    "name":"跳舞香水板橋大遠百",
+    "address":"新北市板橋區新站路28號",
+    "tel":"02-29612323"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4747988,25.0071472 ]
+    },
+    "properties": {
+    "name":"達客魷魚 中和環球",
+    "address":"新北市中和區中山路三段122號3F",
+    "tel":"02-82584326"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4680017,25.0196861 ]
+    },
+    "properties": {
+    "name":"零居Zero Living",
+    "address":"新北市板橋區文化路一段188巷7弄27號",
+    "tel":"02-22565109"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.423829,25.0233929 ]
+    },
+    "properties": {
+    "name":"頑童茶館",
+    "address":"新北市新莊區四維路97巷16號1樓",
+    "tel":"02-82015788"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4670443,25.0138151 ]
+    },
+    "properties": {
+    "name":"鼎泰豐板橋店",
+    "address":"新北市板橋區新站路28號B1",
+    "tel":"02-22267890#5105"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4598398,25.0921337 ]
+    },
+    "properties": {
+    "name":"鉦富咖哩屋",
+    "address":"新北市蘆洲區永平街32巷22弄4號",
+    "tel":"02-82853047"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5177974,25.0139871 ]
+    },
+    "properties": {
+    "name":"熊賀呷早午餐",
+    "address":"新北市永和區竹林路52號",
+    "tel":"02-29266942"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.6420596,25.2201183 ]
+    },
+    "properties": {
+    "name":"福華海鮮餐廳",
+    "address":"新北市金山區民生路51巷1號",
+    "tel":"02-24986259"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.6003505,25.0042053 ]
+    },
+    "properties": {
+    "name":"福園中餐廳",
+    "address":"新北市深坑區北深路三段236號",
+    "tel":"02-26620088#122"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4521683,25.0125647 ]
+    },
+    "properties": {
+    "name":"蒔朵日式舒芙蕾厚鬆餅",
+    "address":"新北市板橋區南雅西路二段124號",
+    "tel":"02-89697605"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4669037,25.0136061 ]
+    },
+    "properties": {
+    "name":"億長御坊",
+    "address":"新北市板橋區新站路28號",
+    "tel":"02-77054168"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.3909688,25.0766636 ]
+    },
+    "properties": {
+    "name":"慕谷慕魚蔬食原住民人文餐廳",
+    "address":"新北市林口區仁愛路一段338號",
+    "tel":"0912537590"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4435645,25.0566646 ]
+    },
+    "properties": {
+    "name":"樂玩精品咖啡新北新莊店",
+    "address":"新北市新莊區中平路439號",
+    "tel":"02-85214396"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4466081,25.0393371 ]
+    },
+    "properties": {
+    "name":"樂檸漢堡（新北新莊棒球場門市）",
+    "address":"新北市新莊區新泰路232號",
+    "tel":"02-29946215"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.510263,25.0014029 ]
+    },
+    "properties": {
+    "name":"樂?牛排(中和店)",
+    "address":"新北市中和區中和路350巷1號",
+    "tel":"02-29220089"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4274724,24.9902473 ]
+    },
+    "properties": {
+    "name":"豬豬的拉麵屋",
+    "address":"新北市板橋區溪北路41號1樓",
+    "tel":"0937528511"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5152914,25.0013852 ]
+    },
+    "properties": {
+    "name":"勳牛肉麵(永和店)",
+    "address":"新北市永和區安樂路194巷3號",
+    "tel":"02-29290588"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4670443,25.0138151 ]
+    },
+    "properties": {
+    "name":"橙易食堂-板橋大遠百",
+    "address":"新北市板橋區新站路28號B1",
+    "tel":"0983379801"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4747789,25.0066724 ]
+    },
+    "properties": {
+    "name":"燒肉LIKE中和環球",
+    "address":"新北市中和區中山路三段122號B2F",
+    "tel":"02-77317999"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.3660814,25.069162 ]
+    },
+    "properties": {
+    "name":"燒肉Smile林口文化店",
+    "address":"新北市林口區新北市林口區文化二路一段76號2樓",
+    "tel":"02-26087728"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4968455,25.0616548 ]
+    },
+    "properties": {
+    "name":"燒肉Smile新北三重",
+    "address":"新北市三重區重新路二段100號1樓",
+    "tel":"02-89721118"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4284145,24.9954963 ]
+    },
+    "properties": {
+    "name":"燒肉Smile樹林秀泰",
+    "address":"新北市樹林區樹新路40-6號7樓",
+    "tel":"02-26878522"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4608963,25.0071599 ]
+    },
+    "properties": {
+    "name":"燒肉哦爺-日韓燒肉吃到飽(板橋府中店)",
+    "address":"新北市板橋區館前東路48號2.3樓",
+    "tel":"02-89538153"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.3725991,24.9468498 ]
+    },
+    "properties": {
+    "name":"築間幸福鍋物三峽大學",
+    "address":"新北市三峽區237新北市三峽區大學路198號",
+    "tel":"02-26722226"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4443631,24.979913 ]
+    },
+    "properties": {
+    "name":"築間幸福鍋物土城中央",
+    "address":"新北市土城區236新北市土城區中央路二段21巷128號1樓",
+    "tel":"02-22601555"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4534257,24.9823349 ]
+    },
+    "properties": {
+    "name":"築間幸福鍋物土城裕民店",
+    "address":"新北市土城區學士路23號",
+    "tel":"02-22645577"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.3661005,25.0690536 ]
+    },
+    "properties": {
+    "name":"築間幸福鍋物林口文化店",
+    "address":"新北市林口區新北市文化二路一段72號2樓",
+    "tel":"02-26085533"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4719943,25.0303246 ]
+    },
+    "properties": {
+    "name":"築間幸福鍋物板橋雙十店",
+    "address":"新北市板橋區新北市板橋區雙十路三段8號",
+    "tel":"02-82595577"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4298778,25.1868551 ]
+    },
+    "properties": {
+    "name":"築間幸福鍋物淡水新市",
+    "address":"新北市淡水區251新北市淡水區新市一路一段8號1樓",
+    "tel":"02-26229933"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4971419,25.0617233 ]
+    },
+    "properties": {
+    "name":"築間幸福鍋物新北三重",
+    "address":"新北市三重區241新北市三重區重新路2段92號",
+    "tel":"02-29785222"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5152491,25.011953 ]
+    },
+    "properties": {
+    "name":"築間幸福鍋物新北永和店",
+    "address":"新北市永和區永和路二段116號5樓",
+    "tel":"02-29217588"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.660402,25.0650118 ]
+    },
+    "properties": {
+    "name":"築間幸福鍋物新北汐止",
+    "address":"新北市汐止區221新北市汐止區新台五路二段12號1、2樓",
+    "tel":"02-26487779"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.530427,24.9723936 ]
+    },
+    "properties": {
+    "name":"築間幸福鍋物新店京站",
+    "address":"新北市新店區231新北市新店區中央路157號5樓",
+    "tel":"02-89136177"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4588218,25.0380829 ]
+    },
+    "properties": {
+    "name":"築間幸福鍋物新莊中正",
+    "address":"新北市新莊區242新北市新莊區中正路72號2樓",
+    "tel":"02-22767522"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4448536,25.0545985 ]
+    },
+    "properties": {
+    "name":"築間幸福鍋物新莊中悅廣場",
+    "address":"新北市新莊區242新北市新莊區中原里中平路402號",
+    "tel":"02-89956561"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4445136,25.0350618 ]
+    },
+    "properties": {
+    "name":"築間幸福鍋物新莊福海店",
+    "address":"新北市新莊區新北市新莊區中正路340巷1號2樓",
+    "tel":"02-29938068"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4284421,24.9954547 ]
+    },
+    "properties": {
+    "name":"築間幸福鍋物樹林秀泰",
+    "address":"新北市樹林區238新北市樹林區樹新路40-6號",
+    "tel":"02-26860667"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5085242,24.9995347 ]
+    },
+    "properties": {
+    "name":"築間幸福鍋物雙和中和",
+    "address":"新北市中和區235新北市中和區中和路262號1樓",
+    "tel":"02-29262255"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.468102,25.0899109 ]
+    },
+    "properties": {
+    "name":"築間幸福鍋物蘆洲三民",
+    "address":"新北市蘆洲區247新北市蘆洲區三民路248號",
+    "tel":"02-22887337"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4747785,25.0066731 ]
+    },
+    "properties": {
+    "name":"築間酸菜魚 中和環球店",
+    "address":"新北市中和區中山路三段122號4樓",
+    "tel":"02-22221555"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5152491,25.011953 ]
+    },
+    "properties": {
+    "name":"築間燒肉本命 食放題 新北永和店",
+    "address":"新北市永和區永和路二段116號5樓",
+    "tel":"02-29218255"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4747785,25.0066731 ]
+    },
+    "properties": {
+    "name":"貓樂貓咖啡-環球中和",
+    "address":"新北市中和區中山路三段122號",
+    "tel":"02-22217108"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.6898723,25.2049158 ]
+    },
+    "properties": {
+    "name":"錦園魚夫海鮮",
+    "address":"新北市萬里區野柳村港東路159號",
+    "tel":"02-24924950"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.457424,25.0265625 ]
+    },
+    "properties": {
+    "name":"鴨香飽 當歸豬腳當歸鴨(板橋店)",
+    "address":"新北市板橋區新海路385巷28弄12號",
+    "tel":"02-82570080"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4747988,25.0071472 ]
+    },
+    "properties": {
+    "name":"嚐嚐丼飯 中和環球",
+    "address":"新北市中和區中山路三段122號3F",
+    "tel":"0930430916"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4634829,25.0106797 ]
+    },
+    "properties": {
+    "name":"鍋賣局(板橋新板店)",
+    "address":"新北市板橋區中山路一段130號",
+    "tel":"-"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4669037,25.0136061 ]
+    },
+    "properties": {
+    "name":"韓本家",
+    "address":"新北市板橋區新站路28號",
+    "tel":"02-27512588"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4669037,25.0136061 ]
+    },
+    "properties": {
+    "name":"韓國旬彩料理",
+    "address":"新北市板橋區新站路28號",
+    "tel":"02-77054168"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.687446,25.203601 ]
+    },
+    "properties": {
+    "name":"鮮滿樓海鮮餐廳",
+    "address":"新北市萬里區港東153號",
+    "tel":"02-24926180"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4616022,24.9829835 ]
+    },
+    "properties": {
+    "name":"鴻心堡早午餐",
+    "address":"新北市土城區清水路256號",
+    "tel":"02-22655106"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4214111,24.966259 ]
+    },
+    "properties": {
+    "name":"鴻海精密虎躍廠員工餐廳",
+    "address":"新北市土城區自由街2號",
+    "tel":"02-22683466#501011040"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.499643,25.000084 ]
+    },
+    "properties": {
+    "name":"璐璐早餐店",
+    "address":"新北市中和區泰和街23號",
+    "tel":"02-22460928"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.6902052,25.2040985 ]
+    },
+    "properties": {
+    "name":"薆悅酒店野柳渡假館-FISHERMAN’S KITCHEN漁人廚房",
+    "address":"新北市萬里區野柳里港東路162之2號2樓",
+    "tel":"02-77035700"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.486285,25.0567663 ]
+    },
+    "properties": {
+    "name":"藏壽司 三重捷運路店",
+    "address":"新北市三重區重明里18鄰捷運路1號",
+    "tel":"02-29886680"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.490885,25.0889262 ]
+    },
+    "properties": {
+    "name":"藏壽司 三重集賢路店",
+    "address":"新北市三重區集賢路99號",
+    "tel":"02-82877177"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.3782395,24.9442116 ]
+    },
+    "properties": {
+    "name":"藏壽司 三峽學成店",
+    "address":"新北市三峽區學成路398號4樓",
+    "tel":"02-26717262"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4533512,24.9803951 ]
+    },
+    "properties": {
+    "name":"藏壽司 土城金城路店",
+    "address":"新北市土城區金城路二段80號",
+    "tel":"02-22607775"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.488465,25.0052783 ]
+    },
+    "properties": {
+    "name":"藏壽司 中和橋和店",
+    "address":"新北市中和區橋和路5號",
+    "tel":"02-82266313"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5071861,25.0077276 ]
+    },
+    "properties": {
+    "name":"藏壽司 永和比漾店",
+    "address":"新北市永和區中山路一段238號4樓",
+    "tel":"02-22311881"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.3639607,25.0707347 ]
+    },
+    "properties": {
+    "name":"藏壽司 林口三井Outlet店",
+    "address":"新北市林口區文化三路一段356號B1",
+    "tel":"02-26069852"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4644504,25.0109769 ]
+    },
+    "properties": {
+    "name":"藏壽司 板橋中山遠百店",
+    "address":"新北市板橋區中山路一段152號5樓",
+    "tel":"02-29582868"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4564032,24.9992921 ]
+    },
+    "properties": {
+    "name":"藏壽司 板橋遠科店",
+    "address":"新北市板橋區遠東路62之3號",
+    "tel":"02-29640432"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4450476,25.1690545 ]
+    },
+    "properties": {
+    "name":"藏壽司 淡水站前店",
+    "address":"新北市淡水區中山路8號5樓",
+    "tel":"02-26263577"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.546478,24.978061 ]
+    },
+    "properties": {
+    "name":"藏壽司 新店威秀裕隆店",
+    "address":"新北市新店區中興路三段70號6樓",
+    "tel":"02-89147904"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.449286,25.0597532 ]
+    },
+    "properties": {
+    "name":"藏壽司 新莊宏匯店",
+    "address":"新北市新莊區新北大道四段3號7樓",
+    "tel":"02-85213102"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4601813,25.0492381 ]
+    },
+    "properties": {
+    "name":"藏壽司 新莊思源路店",
+    "address":"新北市新莊區思源路168號",
+    "tel":"02-29901755"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4667853,25.0136085 ]
+    },
+    "properties": {
+    "name":"藍屋-板橋大遠百新站店",
+    "address":"新北市板橋區新站路28號9樓",
+    "tel":"-"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4936559,24.9927442 ]
+    },
+    "properties": {
+    "name":"雙和醫院員工餐廳",
+    "address":"新北市中和區中正路291號",
+    "tel":"02-22490088#8837"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.8413791,25.0344366 ]
+    },
+    "properties": {
+    "name":"雙溪平林休閒農場",
+    "address":"新北市雙溪區平林里外平林35號",
+    "tel":"02-4934016"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4089522,25.0157956 ]
+    },
+    "properties": {
+    "name":"雙翼食品",
+    "address":"新北市樹林區忠愛街三號4樓",
+    "tel":"02-26895506"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4520201,25.0503308 ]
+    },
+    "properties": {
+    "name":"雙醬咖哩(新莊中港店)",
+    "address":"新北市新莊區中港路503號1樓",
+    "tel":"02-2770051"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4669037,25.0136061 ]
+    },
+    "properties": {
+    "name":"寶島冰果室",
+    "address":"新北市板橋區新站路28號",
+    "tel":"02-77054168"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4747988,25.0071472 ]
+    },
+    "properties": {
+    "name":"繼光香香雞 中和環球",
+    "address":"新北市中和區中山路三段122號3F",
+    "tel":"02-22233417"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.8663456,25.0372511 ]
+    },
+    "properties": {
+    "name":"蘇義興餐廳",
+    "address":"新北市雙溪區中華路77號",
+    "tel":"02-24931027"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4616901,25.0120155 ]
+    },
+    "properties": {
+    "name":"麵食主義 Kirin pasta新板店",
+    "address":"新北市板橋區縣民大道1段310號",
+    "tel":"02-29643968"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4747988,25.0071472 ]
+    },
+    "properties": {
+    "name":"麵家三士 中和環球",
+    "address":"新北市中和區中山路三段122號3F",
+    "tel":"02-32343699"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4669037,25.0136061 ]
+    },
+    "properties": {
+    "name":"響燒鐵板燒",
+    "address":"新北市板橋區新站路28號",
+    "tel":"02-77054168"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4455272,25.0363249 ]
+    },
+    "properties": {
+    "name":"饗爍早午餐",
+    "address":"新北市新莊區建中街125號1樓",
+    "tel":"02-29909839"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.445484,25.1691218 ]
+    },
+    "properties": {
+    "name":"魔法咖哩",
+    "address":"新北市淡水區中山路8號8樓",
+    "tel":"02-26206123"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.514173,25.00021 ]
+    },
+    "properties": {
+    "name":"蘿蔔蹲 Farmers Tasty",
+    "address":"新北市永和區安樂路136號",
+    "tel":"02-29427711"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4741977,25.0821901 ]
+    },
+    "properties": {
+    "name":"鑫丼",
+    "address":"新北市蘆洲區中山二路42號",
+    "tel":"0983102512"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.3755596,24.9437575 ]
+    },
+    "properties": {
+    "name":"?鳥食趣義大利洋食 X 烤泡芙專賣",
+    "address":"新北市三峽區大觀路7號",
+    "tel":"02-86710208"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.453893,24.9946181 ]
+    },
+    "properties": {
+    "name":"?泰泰泰式料理",
+    "address":"新北市板橋區四川路2段47巷4弄6號",
+    "tel":"02-89660308"
+    }
+  }
+]
+}
