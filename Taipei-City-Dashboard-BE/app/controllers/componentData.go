@@ -346,6 +346,104 @@ func CompareRank(c *gin.Context) {
 	})
 }
 
+/*
+PlusOne increments the 'times' counter for a component by one
+POST /api/v1/plusOne
+Request body: {"index": "component_index"}
+This API increments the 'times' field for the component with the specified index.
+
+Response:
+- status = "success" with updated component info if successful
+- status = "error" if an error occurs
+*/
+func PlusOne(c *gin.Context) {
+	logs.FInfo("PlusOne API 被呼叫 - 開始增加組件訪問次數")
+	
+	// 解析請求體參數
+	type RequestBody struct {
+		Index string `json:"index" binding:"required"`
+	}
+	
+	var reqBody RequestBody
+	if err := c.ShouldBindJSON(&reqBody); err != nil {
+		logs.FError("解析請求參數失敗: %v", err)
+		c.JSON(http.StatusBadRequest, gin.H{
+			"status":  "error",
+			"message": "無效的請求參數: " + err.Error(),
+		})
+		return
+	}
+	
+	// 檢查 index 參數
+	if reqBody.Index == "" {
+		logs.FError("Index 參數不能為空")
+		c.JSON(http.StatusBadRequest, gin.H{
+			"status":  "error",
+			"message": "Index 參數不能為空",
+		})
+		return
+	}
+	
+	logs.FInfo("嘗試增加組件 [%s] 的訪問次數", reqBody.Index)
+	
+	// 更新 components 表中指定 index 的 times 欄位 (+1)
+	result := models.DBManager.Exec(`
+		UPDATE components 
+		SET times = times + 1 
+		WHERE index = ?`, 
+		reqBody.Index)
+		
+	if result.Error != nil {
+		logs.FError("更新組件訪問次數失敗: %v", result.Error)
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"status":  "error",
+			"message": "更新組件訪問次數失敗: " + result.Error.Error(),
+		})
+		return
+	}
+	
+	// 檢查是否有更新任何記錄
+	if result.RowsAffected == 0 {
+		logs.FWarn("沒有找到 index 為 [%s] 的組件", reqBody.Index)
+		c.JSON(http.StatusNotFound, gin.H{
+			"status":  "error",
+			"message": "找不到指定的組件",
+		})
+		return
+	}
+	
+	// 查詢更新後的組件資料
+	type Component struct {
+		ID    int64  `json:"id" gorm:"column:id"`
+		Index string `json:"index" gorm:"column:index"`
+		Name  string `json:"name" gorm:"column:name"`
+		Times int    `json:"times" gorm:"column:times"`
+	}
+	
+	var component Component
+	err := models.DBManager.Table("components").
+		Where("index = ?", reqBody.Index).
+		First(&component).Error
+		
+	if err != nil {
+		logs.FError("獲取更新後的組件資料失敗: %v", err)
+		// 即使無法獲取更新後的資料，我們仍返回成功，因為更新操作已經成功
+		c.JSON(http.StatusOK, gin.H{
+			"status":  "success",
+			"message": "組件訪問次數已增加，但無法獲取更新後的資料",
+		})
+		return
+	}
+	
+	logs.FInfo("成功增加組件 [%s] 的訪問次數，當前次數: %d", component.Index, component.Times)
+	
+	// 返回成功和更新後的組件資料
+	c.JSON(http.StatusOK, gin.H{
+		"status":    "success",
+		"component": component,
+	})
+}
+
 // CheckRank API is a RESTful endpoint that retrieves component data from the dashboardmanager database
 // It supports pagination, sorting, filtering by city, and searching by component name or index
 // The endpoint is accessible at /api/v1/checkRank and returns data in JSON format

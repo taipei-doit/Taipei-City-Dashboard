@@ -174,6 +174,7 @@ func configureRankRoutes() {
 	{
 		rankRoutes.GET("/checkRank", controllers.CheckRank)
 		rankRoutes.GET("/compareRank", controllers.CompareRank)
+		rankRoutes.POST("/plusOne", controllers.PlusOne)
 	}
 }
 
