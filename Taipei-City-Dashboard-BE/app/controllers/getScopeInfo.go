@@ -26,12 +26,12 @@ type Location struct {
 
 
 type Hospital struct {
-    id      int
-    name    string
-	level    string
-	address string
-    x       float64
-    y       float64
+    Id      int
+    Name    string
+	Level    string
+	Address string
+    X       float64
+    Y       float64
 }
 
 func GetScopeInfoHandler(c *gin.Context){
@@ -94,7 +94,17 @@ func GetScopeInfoHandler(c *gin.Context){
     fmt.Println("成功連上資料庫！")
 
 	// select hospital information
-	rows, err := db.Query("SELECT id, name, address, type, x, y FROM nt_hospital")
+	northLat := req.Lat + latOffset
+	southLat := req.Lat - latOffset
+	eastLng := req.Lng + lngOffset
+	westLng := req.Lng - lngOffset
+
+	rows, err := db.Query(
+    "SELECT id, name, address, type, x, y FROM nt_hospital WHERE y BETWEEN  $1 AND $2 AND x BETWEEN $3 AND $4",
+    southLat, northLat, westLng, eastLng,
+)
+
+	fmt.Println(rows)
     if err != nil {
         log.Fatal("查詢失敗:", err)
     }
@@ -105,14 +115,13 @@ func GetScopeInfoHandler(c *gin.Context){
 	// outputtest
 	for rows.Next() {
         var h Hospital
-        err := rows.Scan(&h.id, &h.name, &h.level, &h.address, &h.x, &h.y)
+        err := rows.Scan(&h.Id, &h.Name, &h.Level, &h.Address, &h.X, &h.Y)
         if err != nil {
             log.Println("資料轉換錯誤:", err)
             continue
         }
-		if haversine(req.Lat, req.Lng, h.x, h.y)< distanceKm{
-				hospitals = append(hospitals, h)	
-		}
+		hospitals = append(hospitals, h)
+		fmt.Print(hospitals)
 		
 
         // fmt.Printf("ID: %d, 名稱: %s, 種類: %s, 地址: %s, 緯度: %.6f, 經度: %.6f\n", h.id, h.name, h.level, h.address, h.x, h.y)
@@ -131,7 +140,7 @@ func GetScopeInfoHandler(c *gin.Context){
 		}
 	}
 
-	
+
 
 
 	// TODO: 根據經緯度查資料庫，回傳 1.6 公里範圍內資料
