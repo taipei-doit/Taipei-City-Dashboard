@@ -1,4 +1,3 @@
-
 dashboard:
 	docker exec postgres-data pg_dump -U postgres -d dashboard > dashboard-demo.sql
 
