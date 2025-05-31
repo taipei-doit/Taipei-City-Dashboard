@@ -191,7 +191,7 @@ func configureHelloRoutes() {
 }
 
 // set the router for getScopeInfo function
-func configureGetScopeInfo(){
+func configureGetScopeInfo() {
 	scopeRoutes := RouterGroup.Group("/scope")
 	scopeRoutes.Use(middleware.LimitAPIRequests(global.ComponentLimitAPIRequestsTimes, global.LimitRequestsDuration))
 	scopeRoutes.Use(middleware.LimitTotalRequests(global.ComponentLimitTotalRequestsTimes, global.LimitRequestsDuration))
@@ -209,5 +209,6 @@ func configureTestRoutes() {
 	testRoutes.Use(middleware.IsLoggedIn())
 	{
 		testRoutes.POST("/", controllers.TestHandler)
+		testRoutes.GET("/activity", controllers.GetAllActivityHandler)
 	}
 }
