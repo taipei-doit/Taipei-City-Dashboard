@@ -78,10 +78,10 @@ func GetScopeInfoHandler(c *gin.Context){
 	lngOffset := distanceKm / (111.0 * math.Cos(req.Lat*math.Pi/180.0))
 
 	// 各方向座標
-	north := gin.H{"lat": req.Lat + latOffset, "lng": req.Lng}
-	south := gin.H{"lat": req.Lat - latOffset, "lng": req.Lng}
-	east := gin.H{"lat": req.Lat, "lng": req.Lng + lngOffset}
-	west := gin.H{"lat": req.Lat, "lng": req.Lng - lngOffset} 
+	// north := gin.H{"lat": req.Lat + latOffset, "lng": req.Lng}
+	// south := gin.H{"lat": req.Lat - latOffset, "lng": req.Lng}
+	// east := gin.H{"lat": req.Lat, "lng": req.Lng + lngOffset}
+	// west := gin.H{"lat": req.Lat, "lng": req.Lng - lngOffset} 
 	
 	// take data from postgresql
 	// setting the connection information
@@ -152,7 +152,8 @@ func GetScopeInfoHandler(c *gin.Context){
     }
     defer libraryRows.Close()
 
-	var Libraries []Library
+	var 
+	libraries []Library
 	for libraryRows.Next() {
         var lib Library
         errLibrary := libraryRows.Scan(&lib.Id, &lib.Name, &lib.Address, &lib.X, &lib.Y)
@@ -160,7 +161,7 @@ func GetScopeInfoHandler(c *gin.Context){
             log.Println("lib資料轉換錯誤:", errLibrary)
             continue
         }
-		Libraries = append(Libraries, lib)
+		libraries = append(libraries, lib)
  // fmt.Printf("ID: %d, 名稱: %s, 種類: %s, 地址: %s, 緯度: %.6f, 經度: %.6f\n", h.id, h.name, h.level, h.address, h.x, h.y)
     }
 
@@ -199,21 +200,16 @@ func GetScopeInfoHandler(c *gin.Context){
 
 	// TODO: 根據經緯度查資料庫，回傳 1.6 公里範圍內資料
 	c.JSON(http.StatusOK, gin.H{
-		"center": gin.H{"lat": req.Lat, "lng": req.Lng},
-		"scope": gin.H{
-			"north": north,
-			"south": south,
-			"east":  east,
-			"west":  west,
-		},
-		"hospital":gin.H{
-			"list":hospitals,
-		},
-		"Library":gin.H{
-			"list":Libraries,
-		},
-		"Shopping":gin.H{
-			"list":shoppingMalls,
+		"data": gin.H{
+			"hospital": gin.H{
+				"list": hospitals,
+			},
+			"library": gin.H{
+				"list": libraries,
+			},
+			"shopping": gin.H{
+				"list": shoppingMalls,
+			},
 		},
 	})
 }
