@@ -244,6 +244,17 @@ CREATE TABLE public.narrow_alley_agg_villa_tp (
     size_counts INTEGER
 );
 
+--
+-- Name: hazard_water_tp; Type: TABLE; Schema: public; Owner: -
+--
+CREATE TABLE public.hazard_water_tp (
+    gridcode INTEGER,
+    category DOUBLE PRECISION,
+    hazard_class TEXT,
+    county TEXT,
+    area DOUBLE PRECISION
+);
+
 
 --
 -- Name: bus_info_tpe_ogc_fid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
@@ -736,6 +747,56 @@ ALTER TABLE ONLY public.population_age_distribution_tpe ALTER COLUMN ogc_fid SET
 --
 
 ALTER TABLE ONLY public.tran_ubike_realtime_new_tpe ALTER COLUMN ogc_fid SET DEFAULT nextval('public.tran_ubike_realtime_new_tpe_ogc_fid_seq'::regclass);
+
+--
+-- Data for hazard_water_tp; Type: COPY; Schema: public; Owner: -
+--
+1	0.3-0.5	24h500r	臺北市	262.5558
+2	0.5-1	24h500r	臺北市	229.6561
+3	1-2	24h500r	臺北市	274.6944
+4	2-3	24h500r	臺北市	335.5416
+5	>3	24h500r	臺北市	3.259
+1	0.3-0.5	12h300r	臺北市	88.2184
+2	0.5-1	12h300r	臺北市	40.3829
+3	1-2	12h300r	臺北市	2.0086
+4	2-3	12h300r	臺北市	0.049
+1	0.3-0.5	6h250r	臺北市	94.5933
+2	0.5-1	6h250r	臺北市	39.683
+3	1-2	6h250r	臺北市	2.817
+4	2-3	6h250r	臺北市	0.049
+1	0.3-0.5	24h350r	臺北市	95.5989
+2	0.5-1	24h350r	臺北市	34.0654
+3	1-2	24h350r	臺北市	1.6043
+4	2-3	24h350r	臺北市	0.0367
+1	0.3-0.5	24h650r	臺北市	480.5304
+2	0.5-1	24h650r	臺北市	507.1791
+3	1-2	24h650r	臺北市	436.4304
+4	2-3	24h650r	臺北市	328.8527
+5	>3	24h650r	臺北市	442.8154
+1	0.3-0.5	12h200r	臺北市	19.4513
+2	0.5-1	12h200r	臺北市	4.1873
+3	1-2	12h200r	臺北市	0.3551
+4	2-3	12h200r	臺北市	0.0122
+1	0.3-0.5	24h200r	臺北市	10.5756
+2	0.5-1	24h200r	臺北市	2.5588
+3	1-2	24h200r	臺北市	0.2082
+4	2-3	24h200r	臺北市	0.0122
+1	0.3-0.5	6h350r	臺北市	226.8905
+2	0.5-1	6h350r	臺北市	216.0568
+3	1-2	6h350r	臺北市	28.2003
+4	2-3	6h350r	臺北市	6.3099
+5	>3	6h350r	臺北市	0.049
+1	0.3-0.5	12h400r	臺北市	315.2336
+2	0.5-1	12h400r	臺北市	205.9769
+3	1-2	12h400r	臺北市	195.9765
+4	2-3	12h400r	臺北市	35.9996
+5	>3	12h400r	臺北市	1.703
+1	0.3-0.5	6h150r	臺北市	13.4169
+2	0.5-1	6h150r	臺北市	2.6935
+3	1-2	6h150r	臺北市	0.1592
+4	2-3	6h150r	臺北市	0.0122
+/.
+
 
 --
 -- Data for Name: emergency_agg_villa_tp; Type: COPY; Schema: public; Owner: -
