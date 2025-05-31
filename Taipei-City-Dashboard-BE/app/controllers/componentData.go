@@ -4,6 +4,7 @@ package controllers
 import (
 	"net/http"
 	"strconv"
+	"time"
 
 	"TaipeiCityDashboardBE/app/models"
 	"TaipeiCityDashboardBE/app/util"
@@ -142,3 +143,79 @@ func GetComponentHistoryData(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, gin.H{"status": "success", "data": chartData})
 }
+
+/*
+CheckRank retrieves component information from the database
+GET /api/v1/checkRank
+Query parameters:
+- city: Filter by city (default: "taipei")
+- pageSize: Number of components per page
+- pageNum: Page number (starts from 1)
+- sort: Field to sort by
+- order: Sort order ("asc" or "desc", default: "asc")
+- searchByName: Search by component name
+- searchByIndex: Search by component index
+*/
+func CheckRank(c *gin.Context) {
+	// 不需要獲取用戶信息，因為這個端點不需要用戶認證
+
+	// Parse query parameters
+	var query componentQuery
+	if err := c.ShouldBindQuery(&query); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"status":  "error",
+			"message": "Invalid query parameters: " + err.Error(),
+		})
+		return
+	}
+
+	// Set default values
+	if query.City == "" {
+		query.City = "taipei"
+	}
+	if query.PageNum <= 0 {
+		query.PageNum = 1
+	}
+	if query.Order == "" {
+		query.Order = "asc"
+	}
+
+	// Get all components with detailed info by joining tables
+	components, totalComponents, resultNum, err := models.GetAllComponents(
+		query.City,
+		query.PageSize,
+		query.PageNum,
+		query.Sort,
+		query.Order,
+		query.FilterBy,
+		query.FilterMode,
+		query.FilterValue,
+		query.SearchByIndex,
+		query.SearchByName,
+	)
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"status":  "error",
+			"message": "Failed to retrieve components: " + err.Error(),
+		})
+		return
+	}
+
+	// Build the response
+	response := gin.H{
+		"status":     "success",
+		"timestamp":  time.Now().Format(time.RFC3339),
+		"total":      totalComponents,
+		"count":      resultNum,
+		"page":       query.PageNum,
+		"pageSize":   query.PageSize,
+		"components": components,
+	}
+
+	c.JSON(http.StatusOK, response)
+}
+
+// CheckRank API is a RESTful endpoint that retrieves component data from the dashboardmanager database
+// It supports pagination, sorting, filtering by city, and searching by component name or index
+// The endpoint is accessible at /api/v1/checkRank and returns data in JSON format
