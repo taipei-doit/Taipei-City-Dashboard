@@ -418,7 +418,7 @@ export const maplayerCommonLayout = {
 			0.9,
 		],
 	},
-	"symbol-old-man": {
+	"symbol-old_man": {
 		"icon-image": "old_man",
 		"icon-size": [
 			"interpolate",
