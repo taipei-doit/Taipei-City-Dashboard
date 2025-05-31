@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 15.10
--- Dumped by pg_dump version 15.12 (Ubuntu 15.12-1.pgdg22.04+1)
+-- Dumped from database version 16.4
+-- Dumped by pg_dump version 16.4
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -16,12 +16,126 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
+--
+-- Name: tiger; Type: SCHEMA; Schema: -; Owner: postgres
+--
+
+CREATE SCHEMA tiger;
+
+
+ALTER SCHEMA tiger OWNER TO postgres;
+
+--
+-- Name: tiger_data; Type: SCHEMA; Schema: -; Owner: postgres
+--
+
+CREATE SCHEMA tiger_data;
+
+
+ALTER SCHEMA tiger_data OWNER TO postgres;
+
+--
+-- Name: topology; Type: SCHEMA; Schema: -; Owner: postgres
+--
+
+CREATE SCHEMA topology;
+
+
+ALTER SCHEMA topology OWNER TO postgres;
+
+--
+-- Name: SCHEMA topology; Type: COMMENT; Schema: -; Owner: postgres
+--
+
+COMMENT ON SCHEMA topology IS 'PostGIS Topology schema';
+
+
+--
+-- Name: fuzzystrmatch; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS fuzzystrmatch WITH SCHEMA public;
+
+
+--
+-- Name: EXTENSION fuzzystrmatch; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION fuzzystrmatch IS 'determine similarities and distance between strings';
+
+
+--
+-- Name: postgis; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS postgis WITH SCHEMA public;
+
+
+--
+-- Name: EXTENSION postgis; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION postgis IS 'PostGIS geometry and geography spatial types and functions';
+
+
+--
+-- Name: postgis_tiger_geocoder; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS postgis_tiger_geocoder WITH SCHEMA tiger;
+
+
+--
+-- Name: EXTENSION postgis_tiger_geocoder; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION postgis_tiger_geocoder IS 'PostGIS tiger geocoder and reverse geocoder';
+
+
+--
+-- Name: postgis_topology; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS postgis_topology WITH SCHEMA topology;
+
+
+--
+-- Name: EXTENSION postgis_topology; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION postgis_topology IS 'PostGIS topology spatial types and functions';
+
+
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
 
 --
--- Name: bike_network_new_tpe; Type: TABLE; Schema: public; Owner: -
+-- Name: New_Taipei_tourists; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public."New_Taipei_tourists" (
+    address character(30),
+    counts double precision
+);
+
+
+ALTER TABLE public."New_Taipei_tourists" OWNER TO postgres;
+
+--
+-- Name: Taipei_tourists; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public."Taipei_tourists" (
+    address character(30),
+    counts double precision
+);
+
+
+ALTER TABLE public."Taipei_tourists" OWNER TO postgres;
+
+--
+-- Name: bike_network_new_tpe; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public.bike_network_new_tpe (
@@ -44,8 +158,10 @@ CREATE TABLE public.bike_network_new_tpe (
 );
 
 
+ALTER TABLE public.bike_network_new_tpe OWNER TO postgres;
+
 --
--- Name: bike_network_new_tpe_ogc_fid_seq; Type: SEQUENCE; Schema: public; Owner: -
+-- Name: bike_network_new_tpe_ogc_fid_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
 CREATE SEQUENCE public.bike_network_new_tpe_ogc_fid_seq
@@ -57,15 +173,17 @@ CREATE SEQUENCE public.bike_network_new_tpe_ogc_fid_seq
     CACHE 1;
 
 
+ALTER SEQUENCE public.bike_network_new_tpe_ogc_fid_seq OWNER TO postgres;
+
 --
--- Name: bike_network_new_tpe_ogc_fid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+-- Name: bike_network_new_tpe_ogc_fid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
 ALTER SEQUENCE public.bike_network_new_tpe_ogc_fid_seq OWNED BY public.bike_network_new_tpe.ogc_fid;
 
 
 --
--- Name: bike_network_tpe; Type: TABLE; Schema: public; Owner: -
+-- Name: bike_network_tpe; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public.bike_network_tpe (
@@ -88,8 +206,10 @@ CREATE TABLE public.bike_network_tpe (
 );
 
 
+ALTER TABLE public.bike_network_tpe OWNER TO postgres;
+
 --
--- Name: bike_network_tpe_ogc_fid_seq; Type: SEQUENCE; Schema: public; Owner: -
+-- Name: bike_network_tpe_ogc_fid_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
 CREATE SEQUENCE public.bike_network_tpe_ogc_fid_seq
@@ -101,15 +221,17 @@ CREATE SEQUENCE public.bike_network_tpe_ogc_fid_seq
     CACHE 1;
 
 
+ALTER SEQUENCE public.bike_network_tpe_ogc_fid_seq OWNER TO postgres;
+
 --
--- Name: bike_network_tpe_ogc_fid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+-- Name: bike_network_tpe_ogc_fid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
 ALTER SEQUENCE public.bike_network_tpe_ogc_fid_seq OWNED BY public.bike_network_tpe.ogc_fid;
 
 
 --
--- Name: bus_info_new_tpe; Type: TABLE; Schema: public; Owner: -
+-- Name: bus_info_new_tpe; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public.bus_info_new_tpe (
@@ -133,8 +255,10 @@ CREATE TABLE public.bus_info_new_tpe (
 );
 
 
+ALTER TABLE public.bus_info_new_tpe OWNER TO postgres;
+
 --
--- Name: bus_info_new_tpe_ogc_fid_seq; Type: SEQUENCE; Schema: public; Owner: -
+-- Name: bus_info_new_tpe_ogc_fid_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
 CREATE SEQUENCE public.bus_info_new_tpe_ogc_fid_seq
@@ -146,15 +270,17 @@ CREATE SEQUENCE public.bus_info_new_tpe_ogc_fid_seq
     CACHE 1;
 
 
+ALTER SEQUENCE public.bus_info_new_tpe_ogc_fid_seq OWNER TO postgres;
+
 --
--- Name: bus_info_new_tpe_ogc_fid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+-- Name: bus_info_new_tpe_ogc_fid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
 ALTER SEQUENCE public.bus_info_new_tpe_ogc_fid_seq OWNED BY public.bus_info_new_tpe.ogc_fid;
 
 
 --
--- Name: bus_info_tpe; Type: TABLE; Schema: public; Owner: -
+-- Name: bus_info_tpe; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public.bus_info_tpe (
@@ -178,8 +304,10 @@ CREATE TABLE public.bus_info_tpe (
 );
 
 
+ALTER TABLE public.bus_info_tpe OWNER TO postgres;
+
 --
--- Name: bus_info_tpe_ogc_fid_seq; Type: SEQUENCE; Schema: public; Owner: -
+-- Name: bus_info_tpe_ogc_fid_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
 CREATE SEQUENCE public.bus_info_tpe_ogc_fid_seq
@@ -191,15 +319,17 @@ CREATE SEQUENCE public.bus_info_tpe_ogc_fid_seq
     CACHE 1;
 
 
+ALTER SEQUENCE public.bus_info_tpe_ogc_fid_seq OWNER TO postgres;
+
 --
--- Name: bus_info_tpe_ogc_fid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+-- Name: bus_info_tpe_ogc_fid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
 ALTER SEQUENCE public.bus_info_tpe_ogc_fid_seq OWNED BY public.bus_info_tpe.ogc_fid;
 
 
 --
--- Name: city_age_distribution_newtaipei; Type: TABLE; Schema: public; Owner: -
+-- Name: city_age_distribution_newtaipei; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public.city_age_distribution_newtaipei (
@@ -241,8 +371,10 @@ CREATE TABLE public.city_age_distribution_newtaipei (
 );
 
 
+ALTER TABLE public.city_age_distribution_newtaipei OWNER TO postgres;
+
 --
--- Name: city_age_distribution_taipei; Type: TABLE; Schema: public; Owner: -
+-- Name: city_age_distribution_taipei; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public.city_age_distribution_taipei (
@@ -284,8 +416,10 @@ CREATE TABLE public.city_age_distribution_taipei (
 );
 
 
+ALTER TABLE public.city_age_distribution_taipei OWNER TO postgres;
+
 --
--- Name: dependency_ratio_and_aging_index_new_tpe; Type: TABLE; Schema: public; Owner: -
+-- Name: dependency_ratio_and_aging_index_new_tpe; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public.dependency_ratio_and_aging_index_new_tpe (
@@ -307,8 +441,10 @@ CREATE TABLE public.dependency_ratio_and_aging_index_new_tpe (
 );
 
 
+ALTER TABLE public.dependency_ratio_and_aging_index_new_tpe OWNER TO postgres;
+
 --
--- Name: dependency_ratio_and_aging_index_new_tpe_ogc_fid_seq; Type: SEQUENCE; Schema: public; Owner: -
+-- Name: dependency_ratio_and_aging_index_new_tpe_ogc_fid_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
 CREATE SEQUENCE public.dependency_ratio_and_aging_index_new_tpe_ogc_fid_seq
@@ -320,15 +456,17 @@ CREATE SEQUENCE public.dependency_ratio_and_aging_index_new_tpe_ogc_fid_seq
     CACHE 1;
 
 
+ALTER SEQUENCE public.dependency_ratio_and_aging_index_new_tpe_ogc_fid_seq OWNER TO postgres;
+
 --
--- Name: dependency_ratio_and_aging_index_new_tpe_ogc_fid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+-- Name: dependency_ratio_and_aging_index_new_tpe_ogc_fid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
 ALTER SEQUENCE public.dependency_ratio_and_aging_index_new_tpe_ogc_fid_seq OWNED BY public.dependency_ratio_and_aging_index_new_tpe.ogc_fid;
 
 
 --
--- Name: dependency_ratio_and_aging_index_tpe; Type: TABLE; Schema: public; Owner: -
+-- Name: dependency_ratio_and_aging_index_tpe; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public.dependency_ratio_and_aging_index_tpe (
@@ -350,8 +488,10 @@ CREATE TABLE public.dependency_ratio_and_aging_index_tpe (
 );
 
 
+ALTER TABLE public.dependency_ratio_and_aging_index_tpe OWNER TO postgres;
+
 --
--- Name: dependency_ratio_and_aging_index_tpe_ogc_fid_seq; Type: SEQUENCE; Schema: public; Owner: -
+-- Name: dependency_ratio_and_aging_index_tpe_ogc_fid_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
 CREATE SEQUENCE public.dependency_ratio_and_aging_index_tpe_ogc_fid_seq
@@ -363,15 +503,17 @@ CREATE SEQUENCE public.dependency_ratio_and_aging_index_tpe_ogc_fid_seq
     CACHE 1;
 
 
+ALTER SEQUENCE public.dependency_ratio_and_aging_index_tpe_ogc_fid_seq OWNER TO postgres;
+
 --
--- Name: dependency_ratio_and_aging_index_tpe_ogc_fid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+-- Name: dependency_ratio_and_aging_index_tpe_ogc_fid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
 ALTER SEQUENCE public.dependency_ratio_and_aging_index_tpe_ogc_fid_seq OWNED BY public.dependency_ratio_and_aging_index_tpe.ogc_fid;
 
 
 --
--- Name: employment_age_structure_new_tpe; Type: TABLE; Schema: public; Owner: -
+-- Name: employment_age_structure_new_tpe; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public.employment_age_structure_new_tpe (
@@ -386,8 +528,10 @@ CREATE TABLE public.employment_age_structure_new_tpe (
 );
 
 
+ALTER TABLE public.employment_age_structure_new_tpe OWNER TO postgres;
+
 --
--- Name: employment_age_structure_new_tpe_ogc_fid_seq; Type: SEQUENCE; Schema: public; Owner: -
+-- Name: employment_age_structure_new_tpe_ogc_fid_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
 CREATE SEQUENCE public.employment_age_structure_new_tpe_ogc_fid_seq
@@ -399,15 +543,17 @@ CREATE SEQUENCE public.employment_age_structure_new_tpe_ogc_fid_seq
     CACHE 1;
 
 
+ALTER SEQUENCE public.employment_age_structure_new_tpe_ogc_fid_seq OWNER TO postgres;
+
 --
--- Name: employment_age_structure_new_tpe_ogc_fid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+-- Name: employment_age_structure_new_tpe_ogc_fid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
 ALTER SEQUENCE public.employment_age_structure_new_tpe_ogc_fid_seq OWNED BY public.employment_age_structure_new_tpe.ogc_fid;
 
 
 --
--- Name: employment_age_structure_tpe; Type: TABLE; Schema: public; Owner: -
+-- Name: employment_age_structure_tpe; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public.employment_age_structure_tpe (
@@ -422,8 +568,10 @@ CREATE TABLE public.employment_age_structure_tpe (
 );
 
 
+ALTER TABLE public.employment_age_structure_tpe OWNER TO postgres;
+
 --
--- Name: employment_age_structure_tpe_ogc_fid_seq; Type: SEQUENCE; Schema: public; Owner: -
+-- Name: employment_age_structure_tpe_ogc_fid_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
 CREATE SEQUENCE public.employment_age_structure_tpe_ogc_fid_seq
@@ -435,15 +583,17 @@ CREATE SEQUENCE public.employment_age_structure_tpe_ogc_fid_seq
     CACHE 1;
 
 
+ALTER SEQUENCE public.employment_age_structure_tpe_ogc_fid_seq OWNER TO postgres;
+
 --
--- Name: employment_age_structure_tpe_ogc_fid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+-- Name: employment_age_structure_tpe_ogc_fid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
 ALTER SEQUENCE public.employment_age_structure_tpe_ogc_fid_seq OWNED BY public.employment_age_structure_tpe.ogc_fid;
 
 
 --
--- Name: population_age_distribution_new_tpe; Type: TABLE; Schema: public; Owner: -
+-- Name: population_age_distribution_new_tpe; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public.population_age_distribution_new_tpe (
@@ -463,8 +613,10 @@ CREATE TABLE public.population_age_distribution_new_tpe (
 );
 
 
+ALTER TABLE public.population_age_distribution_new_tpe OWNER TO postgres;
+
 --
--- Name: population_age_distribution_new_tpe_ogc_fid_seq; Type: SEQUENCE; Schema: public; Owner: -
+-- Name: population_age_distribution_new_tpe_ogc_fid_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
 CREATE SEQUENCE public.population_age_distribution_new_tpe_ogc_fid_seq
@@ -476,15 +628,17 @@ CREATE SEQUENCE public.population_age_distribution_new_tpe_ogc_fid_seq
     CACHE 1;
 
 
+ALTER SEQUENCE public.population_age_distribution_new_tpe_ogc_fid_seq OWNER TO postgres;
+
 --
--- Name: population_age_distribution_new_tpe_ogc_fid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+-- Name: population_age_distribution_new_tpe_ogc_fid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
 ALTER SEQUENCE public.population_age_distribution_new_tpe_ogc_fid_seq OWNED BY public.population_age_distribution_new_tpe.ogc_fid;
 
 
 --
--- Name: population_age_distribution_tpe; Type: TABLE; Schema: public; Owner: -
+-- Name: population_age_distribution_tpe; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public.population_age_distribution_tpe (
@@ -504,8 +658,10 @@ CREATE TABLE public.population_age_distribution_tpe (
 );
 
 
+ALTER TABLE public.population_age_distribution_tpe OWNER TO postgres;
+
 --
--- Name: population_age_distribution_tpe_ogc_fid_seq; Type: SEQUENCE; Schema: public; Owner: -
+-- Name: population_age_distribution_tpe_ogc_fid_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
 CREATE SEQUENCE public.population_age_distribution_tpe_ogc_fid_seq
@@ -517,16 +673,17 @@ CREATE SEQUENCE public.population_age_distribution_tpe_ogc_fid_seq
     CACHE 1;
 
 
+ALTER SEQUENCE public.population_age_distribution_tpe_ogc_fid_seq OWNER TO postgres;
+
 --
--- Name: population_age_distribution_tpe_ogc_fid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+-- Name: population_age_distribution_tpe_ogc_fid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
 ALTER SEQUENCE public.population_age_distribution_tpe_ogc_fid_seq OWNED BY public.population_age_distribution_tpe.ogc_fid;
 
 
-
 --
--- Name: tran_ubike_realtime_ogc_fid_seq; Type: SEQUENCE; Schema: public; Owner: -
+-- Name: tran_ubike_realtime_ogc_fid_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
 CREATE SEQUENCE public.tran_ubike_realtime_ogc_fid_seq
@@ -538,17 +695,10 @@ CREATE SEQUENCE public.tran_ubike_realtime_ogc_fid_seq
     CACHE 1;
 
 
---
--- Name: tran_ubike_realtime_ogc_fid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.tran_ubike_realtime_ogc_fid_seq OWNED BY public.tran_ubike_realtime.ogc_fid;
-
-
-
+ALTER SEQUENCE public.tran_ubike_realtime_ogc_fid_seq OWNER TO postgres;
 
 --
--- Name: tran_ubike_realtime; Type: TABLE; Schema: public; Owner: -
+-- Name: tran_ubike_realtime; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public.tran_ubike_realtime (
@@ -567,8 +717,10 @@ CREATE TABLE public.tran_ubike_realtime (
 );
 
 
+ALTER TABLE public.tran_ubike_realtime OWNER TO postgres;
+
 --
--- Name: tran_ubike_realtime_new_tpe; Type: TABLE; Schema: public; Owner: -
+-- Name: tran_ubike_realtime_new_tpe; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public.tran_ubike_realtime_new_tpe (
@@ -587,8 +739,10 @@ CREATE TABLE public.tran_ubike_realtime_new_tpe (
 );
 
 
+ALTER TABLE public.tran_ubike_realtime_new_tpe OWNER TO postgres;
+
 --
--- Name: tran_ubike_realtime_new_tpe_ogc_fid_seq; Type: SEQUENCE; Schema: public; Owner: -
+-- Name: tran_ubike_realtime_new_tpe_ogc_fid_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
 CREATE SEQUENCE public.tran_ubike_realtime_new_tpe_ogc_fid_seq
@@ -600,92 +754,184 @@ CREATE SEQUENCE public.tran_ubike_realtime_new_tpe_ogc_fid_seq
     CACHE 1;
 
 
+ALTER SEQUENCE public.tran_ubike_realtime_new_tpe_ogc_fid_seq OWNER TO postgres;
+
 --
--- Name: tran_ubike_realtime_new_tpe_ogc_fid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+-- Name: tran_ubike_realtime_new_tpe_ogc_fid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
 ALTER SEQUENCE public.tran_ubike_realtime_new_tpe_ogc_fid_seq OWNED BY public.tran_ubike_realtime_new_tpe.ogc_fid;
 
 
 --
--- Name: bike_network_new_tpe ogc_fid; Type: DEFAULT; Schema: public; Owner: -
+-- Name: bike_network_new_tpe ogc_fid; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.bike_network_new_tpe ALTER COLUMN ogc_fid SET DEFAULT nextval('public.bike_network_new_tpe_ogc_fid_seq'::regclass);
 
 
 --
--- Name: bike_network_tpe ogc_fid; Type: DEFAULT; Schema: public; Owner: -
+-- Name: bike_network_tpe ogc_fid; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.bike_network_tpe ALTER COLUMN ogc_fid SET DEFAULT nextval('public.bike_network_tpe_ogc_fid_seq'::regclass);
 
 
 --
--- Name: bus_info_new_tpe ogc_fid; Type: DEFAULT; Schema: public; Owner: -
+-- Name: bus_info_new_tpe ogc_fid; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.bus_info_new_tpe ALTER COLUMN ogc_fid SET DEFAULT nextval('public.bus_info_new_tpe_ogc_fid_seq'::regclass);
 
 
 --
--- Name: bus_info_tpe ogc_fid; Type: DEFAULT; Schema: public; Owner: -
+-- Name: bus_info_tpe ogc_fid; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.bus_info_tpe ALTER COLUMN ogc_fid SET DEFAULT nextval('public.bus_info_tpe_ogc_fid_seq'::regclass);
 
 
 --
--- Name: dependency_ratio_and_aging_index_new_tpe ogc_fid; Type: DEFAULT; Schema: public; Owner: -
+-- Name: dependency_ratio_and_aging_index_new_tpe ogc_fid; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.dependency_ratio_and_aging_index_new_tpe ALTER COLUMN ogc_fid SET DEFAULT nextval('public.dependency_ratio_and_aging_index_new_tpe_ogc_fid_seq'::regclass);
 
 
 --
--- Name: dependency_ratio_and_aging_index_tpe ogc_fid; Type: DEFAULT; Schema: public; Owner: -
+-- Name: dependency_ratio_and_aging_index_tpe ogc_fid; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.dependency_ratio_and_aging_index_tpe ALTER COLUMN ogc_fid SET DEFAULT nextval('public.dependency_ratio_and_aging_index_tpe_ogc_fid_seq'::regclass);
 
 
 --
--- Name: employment_age_structure_new_tpe ogc_fid; Type: DEFAULT; Schema: public; Owner: -
+-- Name: employment_age_structure_new_tpe ogc_fid; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.employment_age_structure_new_tpe ALTER COLUMN ogc_fid SET DEFAULT nextval('public.employment_age_structure_new_tpe_ogc_fid_seq'::regclass);
 
 
 --
--- Name: employment_age_structure_tpe ogc_fid; Type: DEFAULT; Schema: public; Owner: -
+-- Name: employment_age_structure_tpe ogc_fid; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.employment_age_structure_tpe ALTER COLUMN ogc_fid SET DEFAULT nextval('public.employment_age_structure_tpe_ogc_fid_seq'::regclass);
 
 
 --
--- Name: population_age_distribution_new_tpe ogc_fid; Type: DEFAULT; Schema: public; Owner: -
+-- Name: population_age_distribution_new_tpe ogc_fid; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.population_age_distribution_new_tpe ALTER COLUMN ogc_fid SET DEFAULT nextval('public.population_age_distribution_new_tpe_ogc_fid_seq'::regclass);
 
 
 --
--- Name: population_age_distribution_tpe ogc_fid; Type: DEFAULT; Schema: public; Owner: -
+-- Name: population_age_distribution_tpe ogc_fid; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.population_age_distribution_tpe ALTER COLUMN ogc_fid SET DEFAULT nextval('public.population_age_distribution_tpe_ogc_fid_seq'::regclass);
 
 
 --
--- Name: tran_ubike_realtime_new_tpe ogc_fid; Type: DEFAULT; Schema: public; Owner: -
+-- Name: tran_ubike_realtime_new_tpe ogc_fid; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.tran_ubike_realtime_new_tpe ALTER COLUMN ogc_fid SET DEFAULT nextval('public.tran_ubike_realtime_new_tpe_ogc_fid_seq'::regclass);
 
 
 --
--- Data for Name: bike_network_new_tpe; Type: TABLE DATA; Schema: public; Owner: -
+-- Data for Name: New_Taipei_tourists; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."New_Taipei_tourists" (address, counts) FROM stdin;
+﻿碧潭風景特定區                      	2252458
+新北市立鶯歌陶瓷博物館                   	523055
+鶯歌老街                          	524989
+清水祖師廟                         	639480
+新北市客家文化園區                     	554003
+三峽老街                          	886469
+三峽區大板根森林溫泉度假村                 	156795
+三峽區歷史文物館                      	56962
+淡水漁人碼頭                        	1584334
+淡水紅毛城                         	421692
+滬尾炮臺                          	46629
+前清淡水關稅務司官邸                    	59262
+淡水金色水岸                        	3802200
+瑞芳風景特定區                       	3545080
+猴硐煤礦園區                        	1014952
+新北市立黃金博物園區                    	942799
+新北市立鶯歌陶瓷博物館                   	523055
+水湳洞遊客中心                       	521500
+坪林茶業博物館                       	195711
+八仙海岸                          	0
+新北市立十三行博物館                    	549083
+八里左岸公園                        	2837700
+十分旅遊服務中心                      	2353563
+十分瀑布                          	1617890
+朱銘美術館                         	51300
+法鼓山世界佛教教育園區                   	123608
+烏來風景特定區                       	2026679
+雲仙樂園                          	130560
+林本源園邸                         	2733374
+\.
+
+
+--
+-- Data for Name: Taipei_tourists; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."Taipei_tourists" (address, counts) FROM stdin;
+﻿國立故宮博物院遊客人次                  	1874994
+市立美術館遊客人次                     	571315
+國民革命忠烈祠遊客人次                   	548470
+國立歷史博物館遊客人次                   	307359
+國立臺灣科學教育館遊客人次                 	2980381
+國立臺灣藝術教育館遊客人次                 	395709
+市立動物園遊客人次                     	2624973
+市立兒童新樂園遊客人次                   	1977642
+市立天文科學教育館遊客人次                 	1156493
+兒童交通博物館遊客人次                   	0
+客家文化主題公園遊客人次                  	1435451
+小巨蛋遊客人次                       	1136022
+青年局場館遊客人次                     	439184
+國立國父紀念館遊客人次                   	1286710
+士林官邸公園遊客人次                    	2950477
+林安泰古厝民俗文物館遊客人次                	230213
+順益臺灣原住民博物館遊客人次                	0
+陽明公園[陽明山]遊客人次                 	6436602
+二二八紀念館遊客人次                    	0
+國立中正紀念堂遊客人次                   	4040564
+臺北自來水園區遊客人次                   	597640
+龍山寺遊客人次                       	1247984
+關渡自然公園遊客人次                    	98729
+台北當代藝術館遊客人次                   	205933
+北投溫泉博物館遊客人次                   	378560
+林語堂故居遊客人次                     	0
+圓山別莊遊客人次                      	26349
+台北探索館遊客人次                     	244420
+凱達格蘭文化館遊客人次                   	177833
+台北101遊客人次                     	12748808
+美麗華百樂園摩天輪遊客人次                 	164403
+臺北市孔廟遊客人次                     	390131
+梅庭遊客人次                        	122678
+大龍峒保安宮遊客人次                    	1353563
+台北霞海城隍廟遊客人次                   	0
+臺北流行音樂中心遊客人次                  	572251
+臺北表演藝術中心遊客人次                  	1803975
+西門紅樓遊客人次                      	4631214
+草山行館遊客人次                      	35550
+寶藏巖遊客人次                       	445855
+芝山文化生態綠園遊客人次                  	90675
+西門町商圈遊客人次                     	28769832
+松山文創園區遊客人次                    	9804846
+華山1914文化創意產業園區遊客人次            	4199213
+台北植物園遊客人次                     	1567335
+\.
+
+
+--
+-- Data for Name: bike_network_new_tpe; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public.bike_network_new_tpe (data_time, route_name, authority_name, city_code, city, town, road_section_start, road_section_end, direction, cycling_type, cycling_length, finished_time, update_time, _ctime, _mtime, ogc_fid) FROM stdin;
@@ -904,7 +1150,7 @@ COPY public.bike_network_new_tpe (data_time, route_name, authority_name, city_co
 
 
 --
--- Data for Name: bike_network_tpe; Type: TABLE DATA; Schema: public; Owner: -
+-- Data for Name: bike_network_tpe; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public.bike_network_tpe (data_time, route_name, authority_name, city_code, city, town, road_section_start, road_section_end, direction, cycling_type, cycling_length, finished_time, update_time, _ctime, _mtime, ogc_fid) FROM stdin;
@@ -1400,7 +1646,7 @@ COPY public.bike_network_tpe (data_time, route_name, authority_name, city_code, 
 
 
 --
--- Data for Name: bus_info_new_tpe; Type: TABLE DATA; Schema: public; Owner: -
+-- Data for Name: bus_info_new_tpe; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public.bus_info_new_tpe (data_time, plate_numb, operator_id, operator_code, operator_no, vehicle_class, vehicle_type, card_reader_layout, is_electric, is_hybrid, is_low_floor, has_lift_or_ramp, has_wifi, inbox_id, _ctime, _mtime, ogc_fid) FROM stdin;
@@ -4244,7 +4490,7 @@ COPY public.bus_info_new_tpe (data_time, plate_numb, operator_id, operator_code,
 
 
 --
--- Data for Name: bus_info_tpe; Type: TABLE DATA; Schema: public; Owner: -
+-- Data for Name: bus_info_tpe; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public.bus_info_tpe (data_time, plate_numb, operator_id, operator_code, operator_no, vehicle_class, vehicle_type, card_reader_layout, is_electric, is_hybrid, is_low_floor, has_lift_or_ramp, has_wifi, inbox_id, _ctime, _mtime, ogc_fid) FROM stdin;
@@ -5023,6 +5269,7 @@ COPY public.bus_info_tpe (data_time, plate_numb, operator_id, operator_code, ope
 2025-03-17 19:11:07+00	340-U3	800	MetropolitanBus	0303	1	1	2	0	0	1	1	0	104022513	2025-03-17 20:00:40.179013+00	2025-03-17 20:00:40.179013+00	105702
 2025-03-17 19:11:07+00	341-FU	5100	ZhinanBus	0907	1	1	2	0	0	1	1	1	104023322	2025-03-17 20:00:40.179013+00	2025-03-17 20:00:40.179013+00	105703
 2025-03-17 19:11:07+00	341-FY	800	MetropolitanBus	0303	1	1	2	0	0	1	1	0	104027507	2025-03-17 20:00:40.179013+00	2025-03-17 20:00:40.179013+00	105704
+2025-03-17 19:11:07+00	850-FX	700	ShinShinBus	0813	1	1	2	0	0	1	1	0	104021346	2025-03-17 20:00:40.179013+00	2025-03-17 20:00:40.179013+00	106840
 2025-03-17 19:11:07+00	341-U3	800	MetropolitanBus	0303	1	1	2	0	0	1	1	0	104019200	2025-03-17 20:00:40.179013+00	2025-03-17 20:00:40.179013+00	105705
 2025-03-17 19:11:07+00	342-FP	1100	DananBus	0307	1	1	2	0	0	1	1	0	104027820	2025-03-17 20:00:40.179013+00	2025-03-17 20:00:40.179013+00	105706
 2025-03-17 19:11:07+00	342-FU	5100	ZhinanBus	0907	1	1	2	0	0	1	1	1	104021676	2025-03-17 20:00:40.179013+00	2025-03-17 20:00:40.179013+00	105707
@@ -6158,7 +6405,6 @@ COPY public.bus_info_tpe (data_time, plate_numb, operator_id, operator_code, ope
 2025-03-17 19:11:07+00	849-U3	800	MetropolitanBus	0303	1	1	2	0	0	1	1	0	104026233	2025-03-17 20:00:40.179013+00	2025-03-17 20:00:40.179013+00	106837
 2025-03-17 19:11:07+00	850-FR	100	TaipeiBus	1407	1	1	0	0	0	1	0	0	104023607	2025-03-17 20:00:40.179013+00	2025-03-17 20:00:40.179013+00	106838
 2025-03-17 19:11:07+00	850-FT	5300	KuangHuaBus	0601	1	1	2	0	0	1	1	0	104027303	2025-03-17 20:00:40.179013+00	2025-03-17 20:00:40.179013+00	106839
-2025-03-17 19:11:07+00	850-FX	700	ShinShinBus	0813	1	1	2	0	0	1	1	0	104021346	2025-03-17 20:00:40.179013+00	2025-03-17 20:00:40.179013+00	106840
 2025-03-17 19:11:07+00	850-U3	800	MetropolitanBus	0303	1	1	2	0	0	1	1	0	104020830	2025-03-17 20:00:40.179013+00	2025-03-17 20:00:40.179013+00	106841
 2025-03-17 19:11:07+00	851-U3	800	MetropolitanBus	0303	1	1	2	0	0	1	1	0	104024263	2025-03-17 20:00:40.179013+00	2025-03-17 20:00:40.179013+00	106842
 2025-03-17 19:11:07+00	852-U3	800	MetropolitanBus	0303	1	1	2	0	0	1	1	0	104017941	2025-03-17 20:00:40.179013+00	2025-03-17 20:00:40.179013+00	106843
@@ -8140,7 +8386,7 @@ COPY public.bus_info_tpe (data_time, plate_numb, operator_id, operator_code, ope
 
 
 --
--- Data for Name: city_age_distribution_newtaipei; Type: TABLE DATA; Schema: public; Owner: -
+-- Data for Name: city_age_distribution_newtaipei; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public.city_age_distribution_newtaipei (percent2, percent3, percent4, percent5, percent6, percent7, percent8, percent9, percent10, percent11, percent12, percent13, percent14, percent15, percent16, percent17, percent18, percent19, percent20, percent21, percent22, percent23, percent24, percent25, percent26, percent27, percent28, percent29, percent30, percent31, percent32, percent33, "年份", "區域別", "統計類型") FROM stdin;
@@ -10308,7 +10554,7 @@ COPY public.city_age_distribution_newtaipei (percent2, percent3, percent4, perce
 
 
 --
--- Data for Name: city_age_distribution_taipei; Type: TABLE DATA; Schema: public; Owner: -
+-- Data for Name: city_age_distribution_taipei; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public.city_age_distribution_taipei ("年份", "區域別", "統計類型", percent2, percent3, percent4, percent5, percent6, percent7, percent8, percent9, percent10, percent11, percent12, percent13, percent14, percent15, percent16, percent17, percent18, percent19, percent20, percent21, percent22, percent23, percent24, percent25, percent26, percent27, percent28, percent29, percent30, percent31, percent32, percent33) FROM stdin;
@@ -10589,7 +10835,7 @@ COPY public.city_age_distribution_taipei ("年份", "區域別", "統計類型",
 
 
 --
--- Data for Name: dependency_ratio_and_aging_index_new_tpe; Type: TABLE DATA; Schema: public; Owner: -
+-- Data for Name: dependency_ratio_and_aging_index_new_tpe; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public.dependency_ratio_and_aging_index_new_tpe (ogc_fid, end_of_year, young_population, young_population_percentage, working_age_population, working_age_population_percentage, elderly_population, elderly_population_percentage, elderly_dependency_ratio, youth_dependency_ratio, total_dependency_ratio, aging_index, _ctime, _mtime, data_time) FROM stdin;
@@ -10609,7 +10855,7 @@ COPY public.dependency_ratio_and_aging_index_new_tpe (ogc_fid, end_of_year, youn
 
 
 --
--- Data for Name: dependency_ratio_and_aging_index_tpe; Type: TABLE DATA; Schema: public; Owner: -
+-- Data for Name: dependency_ratio_and_aging_index_tpe; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public.dependency_ratio_and_aging_index_tpe (ogc_fid, end_of_year, young_population, young_population_percentage, working_age_population, working_age_population_percentage, elderly_population, elderly_population_percentage, elderly_dependency_ratio, youth_dependency_ratio, total_dependency_ratio, aging_index, _ctime, _mtime, data_time) FROM stdin;
@@ -10672,7 +10918,7 @@ COPY public.dependency_ratio_and_aging_index_tpe (ogc_fid, end_of_year, young_po
 
 
 --
--- Data for Name: employment_age_structure_new_tpe; Type: TABLE DATA; Schema: public; Owner: -
+-- Data for Name: employment_age_structure_new_tpe; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public.employment_age_structure_new_tpe (ogc_fid, year, gender, age_structure, percentage, data_time, _ctime, _mtime) FROM stdin;
@@ -11040,7 +11286,7 @@ COPY public.employment_age_structure_new_tpe (ogc_fid, year, gender, age_structu
 
 
 --
--- Data for Name: employment_age_structure_tpe; Type: TABLE DATA; Schema: public; Owner: -
+-- Data for Name: employment_age_structure_tpe; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public.employment_age_structure_tpe (ogc_fid, year, gender, age_structure, percentage, data_time, _ctime, _mtime) FROM stdin;
@@ -12668,7 +12914,7 @@ COPY public.employment_age_structure_tpe (ogc_fid, year, gender, age_structure, 
 
 
 --
--- Data for Name: population_age_distribution_new_tpe; Type: TABLE DATA; Schema: public; Owner: -
+-- Data for Name: population_age_distribution_new_tpe; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public.population_age_distribution_new_tpe (ogc_fid, year, young_population, young_population_percentage, working_age_population, working_age_population_percentage, elderly_population, elderly_population_percentage, total_dependency_ratio, aging_index, _ctime, _mtime, data_time) FROM stdin;
@@ -12688,7 +12934,7 @@ COPY public.population_age_distribution_new_tpe (ogc_fid, year, young_population
 
 
 --
--- Data for Name: population_age_distribution_tpe; Type: TABLE DATA; Schema: public; Owner: -
+-- Data for Name: population_age_distribution_tpe; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public.population_age_distribution_tpe (ogc_fid, year, young_population, young_population_percentage, working_age_population, working_age_population_percentage, elderly_population, elderly_population_percentage, total_dependency_ratio, aging_index, _ctime, _mtime, data_time) FROM stdin;
@@ -12721,7 +12967,15 @@ COPY public.population_age_distribution_tpe (ogc_fid, year, young_population, yo
 
 
 --
--- Data for Name: tran_ubike_realtime; Type: TABLE DATA; Schema: public; Owner: -
+-- Data for Name: spatial_ref_sys; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.spatial_ref_sys (srid, auth_name, auth_srid, srtext, proj4text) FROM stdin;
+\.
+
+
+--
+-- Data for Name: tran_ubike_realtime; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public.tran_ubike_realtime (data_time, station_uid, station_id, service_status, service_type, available_rent_general_bikes, available_return_bikes, available_rent_electric_bikes, tdx_update_time, _ctime, _mtime, ogc_fid) FROM stdin;
@@ -14257,7 +14511,7 @@ COPY public.tran_ubike_realtime (data_time, station_uid, station_id, service_sta
 
 
 --
--- Data for Name: tran_ubike_realtime_new_tpe; Type: TABLE DATA; Schema: public; Owner: -
+-- Data for Name: tran_ubike_realtime_new_tpe; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public.tran_ubike_realtime_new_tpe (data_time, station_uid, station_id, service_status, service_type, available_rent_general_bikes, available_return_bikes, available_rent_electric_bikes, tdx_update_time, _ctime, _mtime, ogc_fid) FROM stdin;
@@ -15659,84 +15913,146 @@ COPY public.tran_ubike_realtime_new_tpe (data_time, station_uid, station_id, ser
 
 
 --
--- Name: bike_network_new_tpe_ogc_fid_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+-- Data for Name: geocode_settings; Type: TABLE DATA; Schema: tiger; Owner: postgres
+--
+
+COPY tiger.geocode_settings (name, setting, unit, category, short_desc) FROM stdin;
+\.
+
+
+--
+-- Data for Name: pagc_gaz; Type: TABLE DATA; Schema: tiger; Owner: postgres
+--
+
+COPY tiger.pagc_gaz (id, seq, word, stdword, token, is_custom) FROM stdin;
+\.
+
+
+--
+-- Data for Name: pagc_lex; Type: TABLE DATA; Schema: tiger; Owner: postgres
+--
+
+COPY tiger.pagc_lex (id, seq, word, stdword, token, is_custom) FROM stdin;
+\.
+
+
+--
+-- Data for Name: pagc_rules; Type: TABLE DATA; Schema: tiger; Owner: postgres
+--
+
+COPY tiger.pagc_rules (id, rule, is_custom) FROM stdin;
+\.
+
+
+--
+-- Data for Name: topology; Type: TABLE DATA; Schema: topology; Owner: postgres
+--
+
+COPY topology.topology (id, name, srid, "precision", hasz) FROM stdin;
+\.
+
+
+--
+-- Data for Name: layer; Type: TABLE DATA; Schema: topology; Owner: postgres
+--
+
+COPY topology.layer (topology_id, layer_id, schema_name, table_name, feature_column, feature_type, level, child_id) FROM stdin;
+\.
+
+
+--
+-- Name: bike_network_new_tpe_ogc_fid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
 SELECT pg_catalog.setval('public.bike_network_new_tpe_ogc_fid_seq', 1, false);
 
 
 --
--- Name: bike_network_tpe_ogc_fid_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+-- Name: bike_network_tpe_ogc_fid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
 SELECT pg_catalog.setval('public.bike_network_tpe_ogc_fid_seq', 1, false);
 
 
 --
--- Name: bus_info_new_tpe_ogc_fid_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+-- Name: bus_info_new_tpe_ogc_fid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
 SELECT pg_catalog.setval('public.bus_info_new_tpe_ogc_fid_seq', 82420, true);
 
 
 --
--- Name: bus_info_tpe_ogc_fid_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+-- Name: bus_info_tpe_ogc_fid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
 SELECT pg_catalog.setval('public.bus_info_tpe_ogc_fid_seq', 108817, true);
 
 
 --
--- Name: dependency_ratio_and_aging_index_new_tpe_ogc_fid_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+-- Name: dependency_ratio_and_aging_index_new_tpe_ogc_fid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
 SELECT pg_catalog.setval('public.dependency_ratio_and_aging_index_new_tpe_ogc_fid_seq', 13, true);
 
 
 --
--- Name: dependency_ratio_and_aging_index_tpe_ogc_fid_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+-- Name: dependency_ratio_and_aging_index_tpe_ogc_fid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
 SELECT pg_catalog.setval('public.dependency_ratio_and_aging_index_tpe_ogc_fid_seq', 55, true);
 
 
 --
--- Name: employment_age_structure_new_tpe_ogc_fid_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+-- Name: employment_age_structure_new_tpe_ogc_fid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
 SELECT pg_catalog.setval('public.employment_age_structure_new_tpe_ogc_fid_seq', 1080, true);
 
 
 --
--- Name: employment_age_structure_tpe_ogc_fid_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+-- Name: employment_age_structure_tpe_ogc_fid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
 SELECT pg_catalog.setval('public.employment_age_structure_tpe_ogc_fid_seq', 1620, true);
 
 
 --
--- Name: population_age_distribution_new_tpe_ogc_fid_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+-- Name: population_age_distribution_new_tpe_ogc_fid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
 SELECT pg_catalog.setval('public.population_age_distribution_new_tpe_ogc_fid_seq', 13, true);
 
 
 --
--- Name: population_age_distribution_tpe_ogc_fid_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+-- Name: population_age_distribution_tpe_ogc_fid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
 SELECT pg_catalog.setval('public.population_age_distribution_tpe_ogc_fid_seq', 25, true);
 
 
 --
--- Name: tran_ubike_realtime_new_tpe_ogc_fid_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+-- Name: tran_ubike_realtime_new_tpe_ogc_fid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
 SELECT pg_catalog.setval('public.tran_ubike_realtime_new_tpe_ogc_fid_seq', 69700, true);
 
 
 --
--- Name: bike_network_new_tpe bike_network_new_tpe_pkey_1; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: tran_ubike_realtime_ogc_fid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.tran_ubike_realtime_ogc_fid_seq', 1, false);
+
+
+--
+-- Name: topology_id_seq; Type: SEQUENCE SET; Schema: topology; Owner: postgres
+--
+
+SELECT pg_catalog.setval('topology.topology_id_seq', 1, false);
+
+
+--
+-- Name: bike_network_new_tpe bike_network_new_tpe_pkey_1; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.bike_network_new_tpe
@@ -15744,7 +16060,7 @@ ALTER TABLE ONLY public.bike_network_new_tpe
 
 
 --
--- Name: bike_network_tpe bike_network_tpe_pkey_1; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: bike_network_tpe bike_network_tpe_pkey_1; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.bike_network_tpe
@@ -15752,7 +16068,7 @@ ALTER TABLE ONLY public.bike_network_tpe
 
 
 --
--- Name: bus_info_new_tpe bus_info_new_tpe_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: bus_info_new_tpe bus_info_new_tpe_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.bus_info_new_tpe
@@ -15760,7 +16076,7 @@ ALTER TABLE ONLY public.bus_info_new_tpe
 
 
 --
--- Name: bus_info_tpe bus_info_tpe_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: bus_info_tpe bus_info_tpe_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.bus_info_tpe
@@ -15768,7 +16084,7 @@ ALTER TABLE ONLY public.bus_info_tpe
 
 
 --
--- Name: dependency_ratio_and_aging_index_new_tpe dependency_ratio_and_aging_index_new_tpe_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: dependency_ratio_and_aging_index_new_tpe dependency_ratio_and_aging_index_new_tpe_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.dependency_ratio_and_aging_index_new_tpe
@@ -15776,7 +16092,7 @@ ALTER TABLE ONLY public.dependency_ratio_and_aging_index_new_tpe
 
 
 --
--- Name: dependency_ratio_and_aging_index_tpe dependency_ratio_and_aging_index_tpe_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: dependency_ratio_and_aging_index_tpe dependency_ratio_and_aging_index_tpe_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.dependency_ratio_and_aging_index_tpe
@@ -15784,7 +16100,7 @@ ALTER TABLE ONLY public.dependency_ratio_and_aging_index_tpe
 
 
 --
--- Name: employment_age_structure_new_tpe employment_age_structure_new_tpe_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: employment_age_structure_new_tpe employment_age_structure_new_tpe_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.employment_age_structure_new_tpe
@@ -15792,7 +16108,7 @@ ALTER TABLE ONLY public.employment_age_structure_new_tpe
 
 
 --
--- Name: employment_age_structure_tpe employment_age_structure_tpe_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: employment_age_structure_tpe employment_age_structure_tpe_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.employment_age_structure_tpe
@@ -15800,7 +16116,7 @@ ALTER TABLE ONLY public.employment_age_structure_tpe
 
 
 --
--- Name: population_age_distribution_new_tpe population_age_distribution_new_tpe_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: population_age_distribution_new_tpe population_age_distribution_new_tpe_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.population_age_distribution_new_tpe
@@ -15808,7 +16124,7 @@ ALTER TABLE ONLY public.population_age_distribution_new_tpe
 
 
 --
--- Name: population_age_distribution_tpe population_age_distribution_tpe_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: population_age_distribution_tpe population_age_distribution_tpe_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.population_age_distribution_tpe
@@ -15816,7 +16132,7 @@ ALTER TABLE ONLY public.population_age_distribution_tpe
 
 
 --
--- Name: tran_ubike_realtime_new_tpe tran_ubike_realtime_new_tpe_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: tran_ubike_realtime_new_tpe tran_ubike_realtime_new_tpe_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.tran_ubike_realtime_new_tpe
@@ -15824,81 +16140,11 @@ ALTER TABLE ONLY public.tran_ubike_realtime_new_tpe
 
 
 --
--- Name: tran_ubike_realtime tran_ubike_realtime_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: tran_ubike_realtime tran_ubike_realtime_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.tran_ubike_realtime
     ADD CONSTRAINT tran_ubike_realtime_pkey PRIMARY KEY (ogc_fid);
-
-
---
--- Name: bus_info_new_tpe bus_info_new_tpe_mtime; Type: TRIGGER; Schema: public; Owner: -
---
-
-CREATE TRIGGER bus_info_new_tpe_mtime BEFORE INSERT OR UPDATE ON public.bus_info_new_tpe FOR EACH ROW EXECUTE FUNCTION public.trigger_set_timestamp();
-
-
---
--- Name: bus_info_tpe bus_info_tpe_mtime; Type: TRIGGER; Schema: public; Owner: -
---
-
-CREATE TRIGGER bus_info_tpe_mtime BEFORE INSERT OR UPDATE ON public.bus_info_tpe FOR EACH ROW EXECUTE FUNCTION public.trigger_set_timestamp();
-
-
---
--- Name: dependency_ratio_and_aging_index_new_tpe dependency_ratio_and_aging_index_new_tpe_mtime; Type: TRIGGER; Schema: public; Owner: -
---
-
-CREATE TRIGGER dependency_ratio_and_aging_index_new_tpe_mtime BEFORE INSERT OR UPDATE ON public.dependency_ratio_and_aging_index_new_tpe FOR EACH ROW EXECUTE FUNCTION public.trigger_set_timestamp();
-
-
---
--- Name: dependency_ratio_and_aging_index_tpe dependency_ratio_and_aging_index_tpe_mtime; Type: TRIGGER; Schema: public; Owner: -
---
-
-CREATE TRIGGER dependency_ratio_and_aging_index_tpe_mtime BEFORE INSERT OR UPDATE ON public.dependency_ratio_and_aging_index_tpe FOR EACH ROW EXECUTE FUNCTION public.trigger_set_timestamp();
-
-
---
--- Name: employment_age_structure_new_tpe employment_age_structure_new_tpe_mtime; Type: TRIGGER; Schema: public; Owner: -
---
-
-CREATE TRIGGER employment_age_structure_new_tpe_mtime BEFORE INSERT OR UPDATE ON public.employment_age_structure_new_tpe FOR EACH ROW EXECUTE FUNCTION public.trigger_set_timestamp();
-
-
---
--- Name: employment_age_structure_tpe employment_age_structure_tpe_mtime; Type: TRIGGER; Schema: public; Owner: -
---
-
-CREATE TRIGGER employment_age_structure_tpe_mtime BEFORE INSERT OR UPDATE ON public.employment_age_structure_tpe FOR EACH ROW EXECUTE FUNCTION public.trigger_set_timestamp();
-
-
---
--- Name: population_age_distribution_new_tpe population_age_distribution_new_tpe_mtime; Type: TRIGGER; Schema: public; Owner: -
---
-
-CREATE TRIGGER population_age_distribution_new_tpe_mtime BEFORE INSERT OR UPDATE ON public.population_age_distribution_new_tpe FOR EACH ROW EXECUTE FUNCTION public.trigger_set_timestamp();
-
-
---
--- Name: population_age_distribution_tpe population_age_distribution_tpe_mtime; Type: TRIGGER; Schema: public; Owner: -
---
-
-CREATE TRIGGER population_age_distribution_tpe_mtime BEFORE INSERT OR UPDATE ON public.population_age_distribution_tpe FOR EACH ROW EXECUTE FUNCTION public.trigger_set_timestamp();
-
-
---
--- Name: tran_ubike_realtime tran_ubike_realtime_mtime; Type: TRIGGER; Schema: public; Owner: -
---
-
-CREATE TRIGGER tran_ubike_realtime_mtime BEFORE INSERT OR UPDATE ON public.tran_ubike_realtime FOR EACH ROW EXECUTE FUNCTION public.trigger_set_timestamp();
-
-
---
--- Name: tran_ubike_realtime_new_tpe tran_ubike_realtime_new_tpe_mtime; Type: TRIGGER; Schema: public; Owner: -
---
-
-CREATE TRIGGER tran_ubike_realtime_new_tpe_mtime BEFORE INSERT OR UPDATE ON public.tran_ubike_realtime_new_tpe FOR EACH ROW EXECUTE FUNCTION public.trigger_set_timestamp();
 
 
 --
