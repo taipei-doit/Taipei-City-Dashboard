@@ -42,6 +42,14 @@ type Library struct{
     Y       float64
 }
 
+type Shopping struct{
+	Id      int
+    Name    string
+	Address string
+    X       float64
+    Y       float64
+}
+
 func GetScopeInfoHandler(c *gin.Context){
 	var req struct {
 		Lat float64 `json:"lat"`
@@ -101,7 +109,7 @@ func GetScopeInfoHandler(c *gin.Context){
 
     fmt.Println("成功連上資料庫！")
 
-	// select hospital information
+	// select hospital information in new taipei city
 	northLat := req.Lat + latOffset
 	southLat := req.Lat - latOffset
 	eastLng := req.Lng + lngOffset
@@ -133,6 +141,7 @@ func GetScopeInfoHandler(c *gin.Context){
         // fmt.Printf("ID: %d, 名稱: %s, 種類: %s, 地址: %s, 緯度: %.6f, 經度: %.6f\n", h.id, h.name, h.level, h.address, h.x, h.y)
     }
 
+	// select library information
 	libraryRows, errLibrary:= db.Query(
     "SELECT id, name, address, x, y FROM nt_library WHERE y BETWEEN  $1 AND $2 AND x BETWEEN $3 AND $4",
     southLat, northLat, westLng, eastLng,
@@ -154,6 +163,28 @@ func GetScopeInfoHandler(c *gin.Context){
 		Libraries = append(Libraries, lib)
  // fmt.Printf("ID: %d, 名稱: %s, 種類: %s, 地址: %s, 緯度: %.6f, 經度: %.6f\n", h.id, h.name, h.level, h.address, h.x, h.y)
     }
+
+	// select shopping mall information in new taipei city
+	shoppingRows, errShopping:= db.Query(
+    "SELECT id, name, address, x, y FROM nt_shopping WHERE y BETWEEN  $1 AND $2 AND x BETWEEN $3 AND $4",
+    southLat, northLat, westLng, eastLng,
+	)
+	if errShopping != nil {
+        log.Fatal("查詢失敗:", err)
+    }
+    defer shoppingRows.Close()
+	var shoppingMalls []Shopping
+	for shoppingRows.Next(){
+		var shop Shopping
+        errShopping := shoppingRows.Scan(&shop.Id, &shop.Name, &shop.Address, &shop.X, &shop.Y)
+        if errShopping != nil {
+            log.Println("shop資料轉換錯誤:", errShopping)
+            continue
+        }
+		shoppingMalls = append(shoppingMalls, shop)
+	}
+
+
 
 	
 	var inScope []Location
@@ -180,6 +211,9 @@ func GetScopeInfoHandler(c *gin.Context){
 		},
 		"Library":gin.H{
 			"list":Libraries,
+		},
+		"Shopping":gin.H{
+			"list":shoppingMalls,
 		},
 	})
 }
