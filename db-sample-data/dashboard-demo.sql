@@ -266,6 +266,15 @@ CREATE TABLE public.hazard_water_tp (
     area DOUBLE PRECISION
 );
 
+--
+-- Name: narrow_alley_agg_town_tp; Type: TABLE; Schema: public; Owner: -
+--
+CREATE TABLE narrow_alley_agg_town_tp (
+    county TEXT,
+    town TEXT,
+    size_counts INTEGER
+);
+
 
 --
 -- Name: bus_info_tpe_ogc_fid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
@@ -758,6 +767,22 @@ ALTER TABLE ONLY public.population_age_distribution_tpe ALTER COLUMN ogc_fid SET
 --
 
 ALTER TABLE ONLY public.tran_ubike_realtime_new_tpe ALTER COLUMN ogc_fid SET DEFAULT nextval('public.tran_ubike_realtime_new_tpe_ogc_fid_seq'::regclass);
+
+--
+-- Data for narrow_alley_agg_town_tp; Type: COPY; Schema: public; Owner: -
+臺北市	中山區	18
+臺北市	中正區	37
+臺北市	信義區	8
+臺北市	內湖區	10
+臺北市	北投區	18
+臺北市	南港區	2
+臺北市	士林區	25
+臺北市	大同區	25
+臺北市	大安區	45
+臺北市	文山區	35
+臺北市	松山區	14
+臺北市	萬華區	36
+\.
 
 --
 -- Data for hazard_water; Type: COPY; Schema: public; Owner: -
