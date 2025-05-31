@@ -802,6 +802,45 @@ export const useContentStore = defineStore("content", {
 		async searchContent(query) {
 			// 現在直接調用新的搜尋和更新方法
 			return await this.searchComponentsAndUpdateDashboard(query);
+		},
+
+		/* Hot Components APIs */
+		// 檢查當前排名狀態
+		async checkRank() {
+			try {
+				const response = await http.get('/checkRank');
+				console.log('checkRank API 原始回傳:', response);
+				return response.data;
+			} catch (error) {
+				console.error('checkRank API error:', error);
+				throw error;
+			}
+		},
+
+		// 增加組件點擊次數
+		async plusOne(componentIndex) {
+			try {
+				const response = await http.post('/plusOne', {
+					index: componentIndex
+				});
+				console.log('plusOne API 原始回傳:', response);
+				return response.data;
+			} catch (error) {
+				console.error('plusOne API error:', error);
+				throw error;
+			}
+		},
+
+		// 比較排名是否變動
+		async compareRank() {
+			try {
+				const response = await http.get('/compareRank');
+				console.log('compareRank API 原始回傳:', response);
+				return response.data;
+			} catch (error) {
+				console.error('compareRank API error:', error);
+				throw error;
+			}
 		}
 	},
 	debounce: {
