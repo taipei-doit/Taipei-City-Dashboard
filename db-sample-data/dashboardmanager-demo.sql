@@ -33,6 +33,8 @@ bike_network	{#a0b8e8,#b7ff98}	{DonutChart,BarChart}	公里
 bike_map	{#a0b8e8,#b7ff98}	{MapLegend}	條
 hotel	{#ff3f66}	{MapLegend}	間
 ecofriendly_restaurant	{#358452}	{MapLegend}	間
+parking_grid	{#090974,#033E6B,#0C60A4,#4F2981,#7373D8,#66A2D2}	{ColumnChart,PolarAreaChart}	格
+tourist_spot	{#abcd00}	{DistrictChart,BarChart}	人次
 \.
 
 
@@ -49,6 +51,10 @@ COPY public.component_maps (id, index, title, type, source, size, icon, paint, p
 9	hotel_new_tpe	旅館	circle	geojson	small	heatmap	{"circle-color": "#ff3f66"}	[{"key": "name", "name": "名稱"}, {"key": "address", "name": "地址"}, {"key": "tel", "name": "電話"}, {"key": "room_count", "name": "房間數"}, {"key": "price_min", "name": "最低價"}, {"key": "price_max", "name": "最高價"}]
 10	ecofriendly_restaurant_tpe	環保餐廳	circle	geojson	small	heatmap	{"circle-color": "#358452"}	[{"key": "name", "name": "名稱"}, {"key": "address", "name": "地址"}, {"key": "tel", "name": "電話"}]
 11	ecofriendly_restaurant_new_tpe	環保餐廳	circle	geojson	small	heatmap	{"circle-color": "#358452"}	[{"key": "name", "name": "名稱"}, {"key": "address", "name": "地址"}, {"key": "tel", "name": "電話"}]
+6	parking_grid_tpe	停車格	circle	geojson	small	heatmap	{"circle-color": ["match", ["get", "pktype"], "大型車停車位", "#090974", "汽車身心障礙專用", "#033E6B", "機車停車位", "#0C60A4", "時段性禁停停車位", "#4F2981", "汽車停車位", "#7373D8", "裝卸貨專用停車位", "#66A2D2", "#1D7370"]}	[{"key": "pktype", "name": "類型"}, {"key": "district", "name": "行政區"}]
+7	parking_grid_new_tpe	停車格	circle	geojson	small	heatmap	{"circle-color": ["match", ["get", "pktype"], "大型車停車位", "#090974", "汽車身心障礙專用", "#033E6B", "機車停車位", "#0C60A4", "時段性禁停停車位", "#4F2981", "汽車停車位", "#7373D8", "裝卸貨專用停車位", "#66A2D2", "#1D7370"]}	[{"key": "pktype", "name": "類型"}, {"key": "district", "name": "行政區"}]
+30	tourist_spot_tpe	商圈景點遊客	circle	geojson	big	heatmap	{"circle-color": "#abcd00"}	[{"key": "scenicspot", "name": "景點名稱"}, {"key": "visits", "name": "訪客人次"}, {"key": "行政區", "name": "行政區"}, {"key": "地址", "name": "地址"}]
+31	tourist_spot_metrotaipei	商圈景點遊客	circle	geojson	big	heatmap	{"circle-color": "#abcd00"}	[{"key": "scenicspot", "name": "景點名稱"}, {"key": "visits", "name": "訪客人次"}, {"key": "行政區", "name": "行政區"}, {"key": "地址", "name": "地址"}]
 \.
 
 
@@ -67,6 +73,8 @@ COPY public.components (id, index, name) FROM stdin;
 217	bike_map	自行車道路網圖資
 1	hotel	旅館
 2	ecofriendly_restaurant	環保餐廳
+3	parking_grid	停車格
+30	tourist_spot	商圈景點遊客
 \.
 
 
@@ -90,8 +98,8 @@ COPY public.dashboards (id, index, name, components, icon, updated_at, created_a
 358	practical_transportation_newtpe	務實交通	{60,212,213}	directions_car	2025-03-12 08:00:38.75842+00	2024-03-21 09:38:37.66+00
 1	09a25cd9cb7d	收藏組件	\N	favorite	2025-03-14 07:34:22.247753+00	2025-03-14 07:34:22.247753+00
 2	3245d9eace5f	我的新儀表板	{215,218,216,213,212,214,60,146}	star	2025-03-14 14:55:11.732116+00	2025-03-14 14:55:11.732116+00
-359	map-layers-metrotaipei	圖資資訊	{217,1,2}	public	2025-05-31 14:34:41.648128+00	2024-03-21 10:04:24.928533+00
-361	energetic-city-metrotaipei	商圈活化	{2,1}	location_city	2025-05-31 14:35:01.6363+00	2025-05-31 14:34:32.876528+00
+361	energetic-city-metrotaipei	商圈活化	{2,1,3,30}	location_city	2025-05-31 18:50:37.25507+00	2025-05-31 14:34:32.876528+00
+359	map-layers-metrotaipei	圖資資訊	{217,1,2}	public	2025-05-31 19:11:48.182214+00	2024-03-21 10:04:24.928533+00
 \.
 
 
@@ -135,6 +143,10 @@ hotel	\N	{8}	{}	static	\N	\N	\N	觀傳局	臺北旅館業者的基本營業資�
 hotel	\N	{8,9}	{}	static	\N	\N	\N	觀傳局,新北市政府觀光旅遊局	雙北旅館業者的基本營業資訊	雙北旅館分佈資料是一個實用的住宿業基礎資訊資料集，收錄了臺北市與新北市各行政區內旅宿業者的核心營業資料。資料內容包含六個主要欄位：旅宿名稱、營業地址、聯絡電話、房間數量、最低住宿價格及最高住宿價格	這份資料集的特色在於其資訊的實用性與完整性。透過地址資訊可了解各旅宿的地理分佈狀況，房間數量反映了各業者的營運規模，而價格區間則提供了市場定位與消費水準的重要指標。消費者可以根據預算需求快速篩選合適的住宿選項，業者則能透過價格比較了解市場競爭態勢。\n此資料集適合進行住宿市場分析、價格趨勢研究、區域發展評估等應用。研究者可以透過分析房間數分佈了解各區域的住宿供給能力，透過價格資料探討不同區域的住宿成本差異，並結合地址資訊進行空間分析，了解臺北市住宿業的整體發展格局與區域特色。	{https://data.taipei/dataset/detail?id=4d7d0b46-2e90-4ee7-b000-c0f2f3a37651,https://data.ntpc.gov.tw/datasets/8565597e-a174-4907-99c7-adb5ddee1326}	\N	2025-05-31 14:25:35.109502+00	2025-05-31 14:25:35.109502+00	map_legend	SELECT unnest(array['旅館']) as name, 'circle' as type	\N	metrotaipei
 ecofriendly_restaurant	\N	{10}	{}	static	\N	\N	\N	環保局	具環保理念的臺北餐廳基本資訊	環保餐廳資料是一個專門蒐集具有環保意識餐飲業者的基礎資訊資料集(包含餐廳名稱、營業地址及聯絡電話)。這些餐廳通常具備減塑、使用在地食材、節能減碳、廢棄物減量等環境友善特色，代表了餐飲業朝向永續經營發展的重要趨勢。	資料內容包含三個核心欄位：餐廳名稱、營業地址及聯絡電話。透過餐廳名稱可識別各環保餐廳的品牌特色，地址資訊有助於了解環保餐廳的地理分佈情況，而聯絡電話則提供消費者直接聯繫的管道。	{https://data.taipei/dataset/detail?id=845818d9-c432-44b4-85dd-03d71bd867b2}	\N	2025-05-31 14:25:35.720783+00	2025-05-31 14:25:35.720783+00	map_legend	SELECT unnest(array['環保餐廳']) as name, 'circle' as type	\N	taipei
 ecofriendly_restaurant	\N	{10,11}	{}	static	\N	\N	\N	環保局,新北市政府環境保護局	具環保理念的雙北餐廳基本資訊	環保餐廳資料是一個專門蒐集具有環保意識餐飲業者的基礎資訊資料集(包含餐廳名稱、營業地址及聯絡電話)。這些餐廳通常具備減塑、使用在地食材、節能減碳、廢棄物減量等環境友善特色，代表了餐飲業朝向永續經營發展的重要趨勢。	資料內容包含三個核心欄位：餐廳名稱、營業地址及聯絡電話。透過餐廳名稱可識別各環保餐廳的品牌特色，地址資訊有助於了解環保餐廳的地理分佈情況，而聯絡電話則提供消費者直接聯繫的管道。	{https://data.taipei/dataset/detail?id=845818d9-c432-44b4-85dd-03d71bd867b2,https://data.ntpc.gov.tw/datasets/e90d14f8-5995-4ebb-af19-8f8fd7d396c8}	\N	2025-05-31 14:25:35.739237+00	2025-05-31 14:25:35.739237+00	map_legend	SELECT unnest(array['環保餐廳']) as name, 'circle' as type	\N	metrotaipei
+parking_grid	\N	{6}	{"mode": "byParam", "byParam": {"xParam": "district", "yParam": "pktype"}}	static	\N	\N	\N	交通局停管處	臺北市各行政區停車格	臺北市停車格分佈資料涵蓋停車格類型、行政區等欄位，停車格類型包含機車停車位、汽車停車位、時段性禁停停車位、身心障礙專用停車位等多元類別，反映了都市交通管理的複雜需求與精細化程度。透過精確的經緯度座標資訊，每個停車格都能在地圖上準確定位，便於進行空間分析與視覺化呈現。	以信義區為例，假設該區域因為新開幕的大型購物中心而帶動龐大人潮。週末時分，大量民眾開車前往購物，但對於停車資訊一無所知。此時，停車格分佈資料就發揮了關鍵作用。商場管理業者可以利用這份資料，在官網上建置「購物停車指南」，清楚標示周邊500公尺內有多少個汽車停車格、機車停車格的分佈位置。民眾出發前就能透過地圖篩選功能，預先了解目的地附近的停車選擇，避免在商圈內繞圈找車位的困擾。同時，當地區公所也能運用統計分析功能，發現信義區因為商圈發達，停車需求遠超過現有供給。透過比較信義區與其他行政區的停車格密度差異，可以向市政府提出增設停車格或建置立體停車場的政策建議，有效紓解商圈停車壓力，提升民眾購物體驗，進而促進商圈持續發展。	{https://data.taipei/dataset/detail?id=5a911ea5-1694-4301-808e-e1780d971611}	\N	2025-05-31 17:56:37.893438+00	2025-05-31 17:56:37.893438+00	three_d	\n\tSELECT\n\t\tx_axis, y_axis, data\n\tFROM\n\t(\n\t\tSELECT\n\t\t\tdistrict AS x_axis,\n\t\t\tpktype AS y_axis,\n\t\t\tCOUNT(*)::numeric AS data\n\t\tFROM parking_grid_tpe\n\t\tGROUP BY\n\t\t\tdistrict, pktype\n\t) AS d\n\tORDER BY \n\tARRAY_POSITION(ARRAY['北投區', '士林區', '內湖區', '南港區', '松山區', '信義區', '中山區', '大同區', '中正區', '萬華區', '大安區', '文山區'], d.x_axis);\n\t	\N	taipei
+parking_grid	\N	{6,7}	{"mode": "byParam", "byParam": {"xParam": "district", "yParam": "pktype"}}	static	\N	\N	\N	交通局停管處,新北市政府交通局	雙北各行政區停車格	雙北停車格分佈資料涵蓋停車格類型、行政區等欄位，停車格類型包含機車停車位、汽車停車位、時段性禁停停車位、身心障礙專用停車位等多元類別，反映了都市交通管理的複雜需求與精細化程度。透過精確的經緯度座標資訊，每個停車格都能在地圖上準確定位，便於進行空間分析與視覺化呈現。	以信義區為例，假設該區域因為新開幕的大型購物中心而帶動龐大人潮。週末時分，大量民眾開車前往購物，但對於停車資訊一無所知。此時，停車格分佈資料就發揮了關鍵作用。商場管理業者可以利用這份資料，在官網上建置「購物停車指南」，清楚標示周邊500公尺內有多少個汽車停車格、機車停車格的分佈位置。民眾出發前就能透過地圖篩選功能，預先了解目的地附近的停車選擇，避免在商圈內繞圈找車位的困擾。同時，當地區公所也能運用統計分析功能，發現信義區因為商圈發達，停車需求遠超過現有供給。透過比較信義區與其他行政區的停車格密度差異，可以向市政府提出增設停車格或建置立體停車場的政策建議，有效紓解商圈停車壓力，提升民眾購物體驗，進而促進商圈持續發展。	{https://data.taipei/dataset/detail?id=5a911ea5-1694-4301-808e-e1780d971611,https://data.ntpc.gov.tw/datasets/54a507c4-c038-41b5-bf60-bbecb9d052c6}	\N	2025-05-31 17:56:37.911109+00	2025-05-31 17:56:37.911109+00	three_d	\n\tSELECT\n\t\tx_axis, y_axis, data\n\tFROM\n\t(\n\t\tSELECT\n\t\t\tdistrict AS x_axis,\n\t\t\tpktype AS y_axis,\n\t\t\tCOUNT(*)::numeric AS data\n\t\tFROM parking_grid_tpe\n\t\tGROUP BY\n\t\t\tdistrict, pktype\n\t\tUNION\n\t\tSELECT\n\t\t\tdistrict AS x_axis,\n\t\t\tpktype AS y_axis,\n\t\t\tCOUNT(*)::numeric AS data\n\t\tFROM parking_grid_new_tpe\n\t\tGROUP BY\n\t\t\tdistrict, pktype\n\t) AS d\n\tORDER BY \n\tARRAY_POSITION(ARRAY['北投區', '士林區', '內湖區', '南港區', '松山區', '信義區', '中山區', '大同區', '中正區', '萬華區', '大安區', '文山區', '新莊區', '淡水區', '汐止區', '板橋區', '三重區', '樹林區', '土城區', '蘆洲區', '中和區', '永和區', '新店區', '鶯歌區', '三峽區', '瑞芳區', '五股區', '泰山區', '林口區', '深坑區', '石碇區', '坪林區', '三芝區', '石門區', '八里區', '平溪區', '雙溪區', '貢寮區', '金山區', '萬里區', '烏來區'], d.x_axis);\n\t	\N	metrotaipei
+tourist_spot	\N	{30}	{"mode": "byParam", "byParam": {"xParam": "行政區"}}	static	\N	\N	\N	主計處	臺北市觀光遊憩統計資料	呈現臺北市觀光最新一年度遊憩資料，原始資料包括統計期、國立故宮博物院遊客人次、市立美術館遊客人次、國民革命忠烈祠遊客人次、國立歷史博物館遊客人次、國立臺灣科學教育館遊客人次、國立臺灣藝術教育館遊客人次、市立動物園遊客人次、市立兒童新樂園遊客人次、市立天文科學教育館遊客人次、兒童交通博物館遊客人次、客家文化主題公園遊客人次、小巨蛋遊客人次、青年局場館遊客人次、國立國父紀念館遊客人次、士林官邸公園遊客人次、林安泰古厝民俗文物館遊客人次、順益臺灣原住民博物館遊客人次、陽明公園[陽明山]遊客人次、二二八紀念館遊客人次、國立中正紀念堂遊客人次、臺北自來水園區遊客人次、龍山寺遊客人次、關渡自然公園遊客人次、台北當代藝術館遊客人次、北投溫泉博物館遊客人次、林語堂故居遊客人次、圓山別莊遊客人次、台北探索館遊客人次、凱達格蘭文化館遊客人次、台北101遊客人次、美麗華百樂園摩天輪遊客人次、臺北市孔廟遊客人次、梅庭遊客人次、大龍峒保安宮遊客人次、台北霞海城隍廟遊客人次、臺北流行音樂中心遊客人次、臺北表演藝術中心遊客人次、西門紅樓遊客人次、草山行館遊客人次、寶藏巖遊客人次、芝山文化生態綠園遊客人次、西門町商圈遊客人次、松山文創園區遊客人次、華山1914文化創意產業園區遊客人次、台北植物園遊客人次	可用於評估觀光熱點，以利政府官員調整觀光資源分配和基礎設施建置；另外也方便民眾根據本圖資訊發掘觀光熱點安排旅遊景點	{https://data.taipei/dataset/detail?id=1ddeff62-8872-441c-aaf2-10fd0515ddb1}	{""}	2025-05-31 18:50:11.614011+00	2025-05-31 18:50:11.614011+00	two_d	\nSELECT\n\tx_axis, data\nFROM\n(\n\tSELECT\n\t\t行政區 AS x_axis,\n\t\tSUM(visits)::numeric AS data\n\tFROM tourist_spot_tpe\n\tGROUP BY\n\t\t行政區\n) AS d\nORDER BY \n\tARRAY_POSITION(ARRAY['北投區', '士林區', '內湖區', '南港區', '松山區', '信義區', '中山區', '大同區', '中正區', '萬華區', '大安區', '文山區'], d.x_axis);\n\t	\N	taipei
+tourist_spot	null	{30,31}	{"mode":"byParam","byParam":{"xParam":"行政區"}}	static	\N	\N	\N	主計處、新北市政府觀光旅遊局	雙北觀光遊憩統計資料	呈現雙北觀光最新一年度遊憩資料，原始資料包含景點和時間序列資料	可用於評估觀光熱點，以利政府調整觀光資源分配和基礎設施建置；另外也方便民眾根據本圖資訊發掘觀光熱點安排旅遊景點	{https://data.taipei/dataset/detail?id=a835f3ba-7f50-4b0d-91a6-9df128632d1c}	{""}	2025-05-31 18:50:11.636074+00	2025-05-31 18:52:23.262378+00	two_d	\n\tSELECT\n\t\tx_axis, data\n\tFROM\n\t(\n\t\tSELECT\n\t\t\t行政區 AS x_axis,\n\t\t\tSUM(visits)::numeric AS data\n\t\tFROM tourist_spot_metrotaipei\n\t\tGROUP BY\n\t\t\t行政區\n\t) AS d\nORDER BY \n\tARRAY_POSITION(ARRAY[ '北投區', '士林區', '內湖區', '南港區', '松山區', '信義區', '中山區', '大同區', '中正區', '萬華區', '大安區', '文山區', '新莊區', '淡水區', '汐止區', '板橋區', '三重區', '樹林區', '土城區', '蘆洲區', '中和區', '永和區', '新店區', '鶯歌區', '三峽區', '瑞芳區', '五股區', '泰山區', '林口區', '深坑區', '石碇區', '坪林區', '三芝區', '石門區', '八里區', '平溪區', '雙溪區', '貢寮區', '金山區', '萬里區', '烏來區'], d.x_axis);\n\t	\N	metrotaipei
 \.
 
 
