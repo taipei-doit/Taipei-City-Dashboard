@@ -173,6 +173,7 @@ func configureRankRoutes() {
 	rankRoutes.Use(middleware.LimitTotalRequests(global.DashboardLimitTotalRequestsTimes, global.LimitRequestsDuration))
 	{
 		rankRoutes.GET("/checkRank", controllers.CheckRank)
+		rankRoutes.GET("/compareRank", controllers.CompareRank)
 	}
 }
 
