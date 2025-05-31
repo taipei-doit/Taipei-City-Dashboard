@@ -770,6 +770,8 @@ ALTER TABLE ONLY public.tran_ubike_realtime_new_tpe ALTER COLUMN ogc_fid SET DEF
 
 --
 -- Data for narrow_alley_agg_town_tp; Type: COPY; Schema: public; Owner: -
+--
+COPY narrow_alley_agg_town_tp (county, town, size_counts) FROM stdin;
 臺北市	中山區	18
 臺北市	中正區	37
 臺北市	信義區	8
@@ -787,6 +789,7 @@ ALTER TABLE ONLY public.tran_ubike_realtime_new_tpe ALTER COLUMN ogc_fid SET DEF
 --
 -- Data for hazard_water; Type: COPY; Schema: public; Owner: -
 --
+COPY hazard_water (gridcode, category, hazard_class, county, area) FROM stdin;
 1	0.3-0.5	24h500r	臺北市	262.5558
 2	0.5-1	24h500r	臺北市	229.6561
 3	1-2	24h500r	臺北市	274.6944
@@ -886,6 +889,7 @@ ALTER TABLE ONLY public.tran_ubike_realtime_new_tpe ALTER COLUMN ogc_fid SET DEF
 --
 -- Data for hazard_water_tp; Type: COPY; Schema: public; Owner: -
 --
+COPY hazard_water_tp (gridcode, category, hazard_class, county, area) FROM stdin;
 1	0.3-0.5	24h500r	臺北市	262.5558
 2	0.5-1	24h500r	臺北市	229.6561
 3	1-2	24h500r	臺北市	274.6944
