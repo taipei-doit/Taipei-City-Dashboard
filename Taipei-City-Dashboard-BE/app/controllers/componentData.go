@@ -1,4 +1,4 @@
-// Package controllers stores all the controllers for the Gin router.
+// Package controllers stores all the controllers for the Gin router.//yy
 package controllers
 
 import (
