@@ -9,7 +9,7 @@ const searchQuery = ref('');
 const isLoading = ref(false);
 const searchResults = ref([]);
 const showResults = ref(false);
-const searchDashboardIndex = 'caf2a5f40cf3';
+const searchDashboardIndex = 'd1aa88b26082';
 
 // 搜尋Components並更新Dashboard
 async function performSearch(query) {
