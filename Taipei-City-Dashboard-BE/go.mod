@@ -11,6 +11,7 @@ require (
 	github.com/gin-gonic/gin v1.9.1
 	github.com/go-redis/redis v6.15.9+incompatible
 	github.com/google/uuid v1.5.0
+	github.com/paulmach/go.geo v0.0.0-20180829195134-22b514266d33
 	github.com/spf13/cobra v1.8.0
 	gorm.io/driver/postgres v1.5.4
 	gorm.io/gorm v1.25.5
@@ -22,6 +23,7 @@ require (
 	github.com/kr/text v0.1.0 // indirect
 	github.com/onsi/ginkgo v1.16.5 // indirect
 	github.com/onsi/gomega v1.37.0 // indirect
+	github.com/paulmach/go.geojson v1.5.0 // indirect
 	github.com/rogpeppe/go-internal v1.8.0 // indirect
 )
 

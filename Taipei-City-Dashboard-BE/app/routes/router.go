@@ -42,6 +42,12 @@ func ConfigureRoutes() {
 
 	// configure the GetScopeInfo function routing
 	configureTestRoutes()
+
+}
+
+func scopeRoutes() {
+	scopeRoutes := scopeGroup.Group("/scope")
+	scopeRoutes.GET("/info", controller.Info)
 }
 
 func configureAuthRoutes() {
@@ -186,6 +192,18 @@ func configureHelloRoutes() {
 	helloRoutes := RouterGroup.Group("/hello")
 	{
 		helloRoutes.GET("/", controllers.HelloHandler)
+	}
+}
+
+// set the router for getScopeInfo function
+func configureGetScopeInfo() {
+	scopeRoutes := RouterGroup.Group("/scope")
+	scopeRoutes.Use(middleware.LimitAPIRequests(global.ComponentLimitAPIRequestsTimes, global.LimitRequestsDuration))
+	scopeRoutes.Use(middleware.LimitTotalRequests(global.ComponentLimitTotalRequestsTimes, global.LimitRequestsDuration))
+	scopeRoutes.Use(middleware.IsLoggedIn())
+
+	{
+		scopeRoutes.POST("/info", controllers.GetScopeInfoHandler)
 	}
 }
 
