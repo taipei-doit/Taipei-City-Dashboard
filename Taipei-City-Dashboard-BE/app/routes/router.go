@@ -46,8 +46,8 @@ func ConfigureRoutes() {
 }
 
 func scopeRoutes() {
-	scopeRoutes := scopeGroup.Group("/scope")
-	scopeRoutes.GET("/info", controller.Info)
+	scopeRoutes := RouterGroup.Group("/scope")
+	scopeRoutes.GET("/info", controllers.Info)
 }
 
 func configureAuthRoutes() {
