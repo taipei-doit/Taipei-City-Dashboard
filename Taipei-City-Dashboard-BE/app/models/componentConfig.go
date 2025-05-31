@@ -17,6 +17,7 @@ type Component struct {
 	ID             int64           `json:"id" gorm:"column:id;autoincrement;primaryKey"`
 	Index          string          `json:"index" gorm:"column:index;type:varchar;unique;not null"     `
 	Name           string          `json:"name" gorm:"column:name;type:varchar;not null"`
+	// NameEng        string          `json:"name_eng" gorm:"column:name_eng;type:varchar;not null"`
 }
 
 // QueryCharts is the model for the query_charts table.
@@ -41,6 +42,8 @@ type QueryCharts struct {
 	QueryChart     string          `json:"-" gorm:"column:query_chart;type:text"`
 	QueryHistory   string          `json:"-" gorm:"column:query_history;type:text"`
 	City		   string          `json:"city" gorm:"column:city;type:text"`
+	QueryChartsId int64 `json:"-" gorm:"column:query_charts_id;type:integer"`
+	SourceEng string `json:"-" gorm:"column:source_eng;type:text"`
 }
 
 type CityComponent struct{
