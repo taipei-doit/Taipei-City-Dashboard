@@ -34,6 +34,14 @@ type Hospital struct {
     Y       float64
 }
 
+type Library struct{
+	Id      int
+    Name    string
+	Address string
+    X       float64
+    Y       float64
+}
+
 func GetScopeInfoHandler(c *gin.Context){
 	var req struct {
 		Lat float64 `json:"lat"`
@@ -99,38 +107,53 @@ func GetScopeInfoHandler(c *gin.Context){
 	eastLng := req.Lng + lngOffset
 	westLng := req.Lng - lngOffset
 
-	rows, err := db.Query(
+	hospitalRows, hospitalErr := db.Query(
     "SELECT id, name, address, type, x, y FROM nt_hospital WHERE y BETWEEN  $1 AND $2 AND x BETWEEN $3 AND $4",
     southLat, northLat, westLng, eastLng,
 )
 
-	fmt.Println(rows)
-    if err != nil {
-        log.Fatal("查詢失敗:", err)
+	// fmt.Println(rows)
+    if hospitalErr != nil {
+        log.Fatal("查詢失敗:", hospitalErr)
     }
-    defer rows.Close()
+    defer hospitalRows.Close()
 
 	var hospitals []Hospital
 	
 	// outputtest
-	for rows.Next() {
+	for hospitalRows.Next() {
         var h Hospital
-        err := rows.Scan(&h.Id, &h.Name, &h.Level, &h.Address, &h.X, &h.Y)
-        if err != nil {
-            log.Println("資料轉換錯誤:", err)
+        hospitalErr := hospitalRows.Scan(&h.Id, &h.Name, &h.Level, &h.Address, &h.X, &h.Y)
+        if hospitalErr != nil {
+            log.Println("資料轉換錯誤hospital:", hospitalErr)
             continue
         }
 		hospitals = append(hospitals, h)
 		fmt.Print(hospitals)
-		
-
         // fmt.Printf("ID: %d, 名稱: %s, 種類: %s, 地址: %s, 緯度: %.6f, 經度: %.6f\n", h.id, h.name, h.level, h.address, h.x, h.y)
     }
 
-	// fmt.Println(hospitals)
+	libraryRows, errLibrary:= db.Query(
+    "SELECT id, name, address, x, y FROM nt_library WHERE y BETWEEN  $1 AND $2 AND x BETWEEN $3 AND $4",
+    southLat, northLat, westLng, eastLng,
+	)
 
-	// deal with the hospital is in the scope or not
-	
+	if errLibrary != nil {
+        log.Fatal("查詢失敗:", err)
+    }
+    defer libraryRows.Close()
+
+	var Libraries []Library
+	for libraryRows.Next() {
+        var lib Library
+        errLibrary := libraryRows.Scan(&lib.Id, &lib.Name, &lib.Address, &lib.X, &lib.Y)
+        if errLibrary != nil {
+            log.Println("lib資料轉換錯誤:", errLibrary)
+            continue
+        }
+		Libraries = append(Libraries, lib)
+ // fmt.Printf("ID: %d, 名稱: %s, 種類: %s, 地址: %s, 緯度: %.6f, 經度: %.6f\n", h.id, h.name, h.level, h.address, h.x, h.y)
+    }
 
 	
 	var inScope []Location
@@ -154,6 +177,9 @@ func GetScopeInfoHandler(c *gin.Context){
 		},
 		"hospital":gin.H{
 			"list":hospitals,
+		},
+		"Library":gin.H{
+			"list":Libraries,
 		},
 	})
 }
