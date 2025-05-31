@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -81,11 +80,11 @@ func GetAllActivityHandler(c *gin.Context) {
 	response.Data.Activity = allActivities
 
 	// Marshal to JSON
-	jsonData, err := json.MarshalIndent(response, "", "  ")
-	if err != nil {
-		log.Fatal("failed to marshal JSON:", err)
-	}
+	// jsonData, err := json.MarshalIndent(response, "", "  ")
+	// if err != nil {
+	// 	log.Fatal("failed to marshal JSON:", err)
+	// }
 
-	c.JSON(http.StatusOK, string(jsonData)) 
+	c.JSON(http.StatusOK, response) 
 
 }
