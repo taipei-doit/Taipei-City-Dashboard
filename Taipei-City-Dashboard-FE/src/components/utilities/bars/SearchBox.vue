@@ -9,9 +9,9 @@ const searchQuery = ref('');
 const isLoading = ref(false);
 const searchResults = ref([]);
 const showResults = ref(false);
-const searchDashBoardIndex = 'caf2a5f40cf3'
+const searchDashboardIndex = 'caf2a5f40cf3';
 
-// 直接的搜尋函數 - 立即發送請求
+// 搜尋Components並更新Dashboard
 async function performSearch(query) {
   if (!query.trim()) {
     searchResults.value = [];
@@ -21,42 +21,47 @@ async function performSearch(query) {
 
   isLoading.value = true;
   try {
-    // 調用搜尋API
-    const results = await contentStore.searchContent(query);
-    searchResults.value = results;
+    
+    // 調用新的搜尋和更新Dashboard方法
+    const result = await contentStore.searchComponentsAndUpdateDashboard(query);
+    
+    // 設置搜尋結果供UI顯示
+    searchResults.value = result.components.map(component => ({
+      id: component.id,
+      name: component.name,
+      type: '組件',
+      city: component.city,
+      icon: 'widgets'
+    }));
+    
     showResults.value = true;
   } catch (error) {
-    console.error('搜尋錯誤:', error);
     searchResults.value = [];
+    showResults.value = false;
   } finally {
     isLoading.value = false;
   }
 }
 
-// 監聽搜尋輸入 - 偵測到文字更動就切換到"尋找"dashboard
+// 監聽搜尋輸入
 watch(searchQuery, (newValue) => {
-  // 如果有輸入文字，切換到"尋找"dashboard
+  // 如果有輸入文字，切換到"搜尋"dashboard
   if (newValue.trim()) {
-    console.log('🔍 偵測到搜尋輸入，切換到尋找dashboard:', {
-      query: newValue,
-      targetIndex: 'caf2a5f40cf3'
-    });
     
-    // 切換到"尋找"dashboard
+    // 切換到"搜尋"dashboard
     router.push({
       query: {
-        index: searchDashBoardIndex
+        index: searchDashboardIndex
       }
     });
   }
   
-  // 執行原本的搜尋功能
+  // 執行搜尋和更新功能
   performSearch(newValue);
 });
 
 // 處理搜尋結果點擊
 function handleResultClick(result) {
-  // 根據搜尋結果類型進行導航
   console.log('點擊搜尋結果:', result);
   showResults.value = false;
   searchQuery.value = '';
@@ -64,7 +69,6 @@ function handleResultClick(result) {
 
 // 處理輸入框失去焦點
 function handleBlur() {
-  // 延遲隱藏結果，讓用戶有時間點擊
   setTimeout(() => {
     showResults.value = false;
   }, 200);
@@ -101,16 +105,19 @@ function handleFocus() {
       v-if="showResults && searchResults.length > 0"
       class="search-results"
     >
+      <div class="search-status">
+        找到 {{ searchResults.length }} 個相關組件
+      </div>
       <div
         v-for="result in searchResults"
         :key="result.id"
         class="search-result-item"
         @click="handleResultClick(result)"
       >
-        <span class="result-icon">{{ result.icon || 'dashboard' }}</span>
+        <span class="result-icon">{{ result.icon || 'widgets' }}</span>
         <div class="result-content">
           <div class="result-title">{{ result.name }}</div>
-          <div class="result-subtitle">{{ result.type }}</div>
+          <div class="result-subtitle">{{ result.type }} • {{ result.city }}</div>
         </div>
       </div>
     </div>
@@ -121,7 +128,7 @@ function handleFocus() {
       class="search-results"
     >
       <div class="no-results">
-        找不到相關結果
+        沒有找到符合「{{ searchQuery }}」的組件
       </div>
     </div>
   </div>
@@ -185,10 +192,19 @@ function handleFocus() {
     border: 1px solid var(--color-border);
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    max-height: 300px;
+    max-height: 400px;
     overflow-y: auto;
     z-index: 1000;
     margin-top: 4px;
+    
+    .search-status {
+      padding: 8px 12px;
+      font-size: 12px;
+      color: var(--color-complement-text);
+      background-color: var(--color-highlight);
+      border-bottom: 1px solid var(--color-border);
+      font-weight: 500;
+    }
     
     .search-result-item {
       display: flex;
@@ -248,7 +264,6 @@ function handleFocus() {
   }
 }
 
-// 響應式設計
 @media (max-width: 768px) {
   .search-box {
     width: 200px;
