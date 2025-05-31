@@ -1,0 +1,9289 @@
+{
+	"type": "FeatureCollection",
+	"crs": {
+		"type": "name",
+		"properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" }
+	},
+	"features": [
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "旅居文旅西門驛站昆明館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 2060,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50565455, 25.0889083],
+					[121.514944521496119, 25.092856325951935]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "慕居行旅",
+				"biz_area": "士林觀光夜市商圈",
+				"min_price": 4972,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5374406, 25.08378805],
+					[121.527368, 25.088202]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "承攜行旅台北八德館",
+				"biz_area": "天母商圈",
+				"min_price": 4292,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5401376, 25.09230555],
+					[121.5337008, 25.1010561]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "丹迪旅店-大安森林公園店",
+				"biz_area": "士林觀光夜市商圈",
+				"min_price": 1666,
+				"price_color": "#1a9850"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.525388099999986, 25.08470205],
+					[121.525587, 25.085588]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "雀客快捷台北車站",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 5626,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.515809600000011, 25.09364455],
+					[121.515556153710079, 25.093535790788721]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "大來商旅",
+				"biz_area": "士林捷運站周邊",
+				"min_price": 4644,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5305181, 25.09504055],
+					[121.5284692, 25.0950609]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "漾館溫泉商旅",
+				"biz_area": "新北投溫泉商圈",
+				"min_price": 4371,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.504707027157636, 25.135310788057907],
+					[121.504754054315271, 25.13545257611581]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "和怡商務旅館",
+				"biz_area": "西湖商圈",
+				"min_price": 4119,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.55804710000001, 25.09625505],
+					[121.5612709, 25.0866178]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "皇后旅社",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 1330,
+				"price_color": "#1a9850"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.510657549999976, 25.0932968],
+					[121.514130157653213, 25.094772579031353]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "華麗大飯店",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 2885,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.504065185491626, 25.088363324922724],
+					[121.5148975573196, 25.092966835828626]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "新凱飯店",
+				"biz_area": "天母商圈",
+				"min_price": 1969,
+				"price_color": "#1a9850"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.521774599999986, 25.10119905],
+					[121.521718810996305, 25.101128799978841]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "麗雅精品旅館",
+				"biz_area": "士林捷運站周邊",
+				"min_price": 3591,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.521206099999986, 25.09523055],
+					[121.52432413432598, 25.096073137709102]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "國際大旅館",
+				"biz_area": "行義路溫泉美食商圈",
+				"min_price": 3633,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.531887749999981, 25.1468997],
+					[121.528661, 25.144568]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "漫慢米窩旅店",
+				"biz_area": "天母商圈",
+				"min_price": 2384,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5201751, 25.09965805],
+					[121.521488405548709, 25.101311776299021]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "麗都大飯店",
+				"biz_area": "士林觀光夜市商圈",
+				"min_price": 5755,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5249526, 25.08471155],
+					[121.525587, 25.085588]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "黛芬旅館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 4585,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50609505, 25.0905088],
+					[121.514435783258847, 25.094053421356257]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "首都唯客樂飯店",
+				"biz_area": "士林捷運站周邊",
+				"min_price": 5317,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5269526, 25.09524305],
+					[121.528355829665074, 25.095561095120189]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "力歐時尚旅館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 4104,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50877555, 25.0907773],
+					[121.514749187632134, 25.093315959715913]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "悅來旅館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 1674,
+				"price_color": "#1a9850"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50828555, 25.0908203],
+					[121.51465875034576, 25.093528764753898]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "金財神旅館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 2282,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50828555, 25.0908203],
+					[121.51465875034576, 25.093528764753898]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "小雅旅店",
+				"biz_area": "大直商圈",
+				"min_price": 3758,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5448791, 25.09272905],
+					[121.549527, 25.084809]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "艾捷天麗大飯店",
+				"biz_area": "士林捷運站周邊",
+				"min_price": 3247,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.536207100000013, 25.09349755],
+					[121.528408543419999, 25.093907765669158]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "承攜行旅台北大稻埕",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 3947,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50777055, 25.0946583],
+					[121.513198419886393, 25.096965020874674]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "迪樂商旅",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 2175,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50928955, 25.0940588],
+					[121.513646591350138, 25.095910443175782]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "紫園旅社",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 3006,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5180976, 25.09312555],
+					[121.517229134067946, 25.091199280117962]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "富粧商務旅店",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 1389,
+				"price_color": "#1a9850"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.504783639700406, 25.090568170166542],
+					[121.514213796322224, 25.094575771598834]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "長虹大飯店",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 3934,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50703755, 25.0898628],
+					[121.514812501822561, 25.093166977153111]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "東皇大飯店",
+				"biz_area": "新北投溫泉商圈",
+				"min_price": 4205,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.510623987641893, 25.135990755443128],
+					[121.510625975283816, 25.135979510886248]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "梅樓商務驛站",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 5858,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.510480050000012, 25.0924828],
+					[121.51439601606684, 25.094146996242713]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "旅居文旅-松山驛站",
+				"biz_area": "大直商圈",
+				"min_price": 3099,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.545165600000018, 25.09273005],
+					[121.549527, 25.084809]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "南港安樂旅社",
+				"biz_area": "西湖商圈",
+				"min_price": 2467,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.563438600000012, 25.09529305],
+					[121.5625798, 25.0869093]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "凱統大飯店",
+				"biz_area": "士林觀光夜市商圈",
+				"min_price": 2728,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5248391, 25.08882505],
+					[121.523838564023336, 25.0881393969516]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "薇閣精品旅館",
+				"biz_area": "天母商圈",
+				"min_price": 4402,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5213576, 25.09802155],
+					[121.523164610382352, 25.099839719870058]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "華宮旅社",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 4756,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.502959, 25.0872925],
+					[121.515113796219779, 25.092458011103698]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "洛碁大飯店花華分館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 5090,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.51024705, 25.0901743],
+					[121.515191352563107, 25.092275515793993]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "京都商務旅館",
+				"biz_area": "士林捷運站周邊",
+				"min_price": 1846,
+				"price_color": "#1a9850"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5205551, 25.09524105],
+					[121.524277186325278, 25.096246870931388]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "美觀園旅社",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 4088,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.506044050000014, 25.0887018],
+					[121.515078438930232, 25.092541209192085]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "北門文旅",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 3635,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.515560599999986, 25.09367905],
+					[121.515504929564699, 25.093655160628273]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "台北商旅（大安館）",
+				"biz_area": "士林觀光夜市商圈",
+				"min_price": 1800,
+				"price_color": "#1a9850"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5311596, 25.08715955],
+					[121.527368, 25.088202]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "福來旅社",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 3563,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50943655, 25.0943333],
+					[121.513570268476101, 25.096090036049027]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "葳皇時尚飯店",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 3261,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.509104549999989, 25.0972898],
+					[121.512455242336372, 25.098713767802973]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "一加一旅館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 1441,
+				"price_color": "#1a9850"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.506271550000022, 25.0911278],
+					[121.514239965123849, 25.094514194642635]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "台北世聯商旅",
+				"biz_area": "士林捷運站周邊",
+				"min_price": 3241,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.524049600000026, 25.09311605],
+					[121.525051147964845, 25.093634047058394]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "帥客旅店",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 4024,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5179076, 25.08287855],
+					[121.521906730254472, 25.081639717708484]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "客來思樂行旅",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 3812,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5230241, 25.07750955],
+					[121.521784, 25.078548]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "承攜行旅台北台大館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 2563,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5215366, 25.07857605],
+					[121.521586566215689, 25.078662333123681]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "璞樂米窩",
+				"biz_area": "大直商圈",
+				"min_price": 2678,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5470581, 25.09108705],
+					[121.550042126316185, 25.085064220660772]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "台北碧瑤飯店",
+				"biz_area": "士林捷運站周邊",
+				"min_price": 3756,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5304061, 25.09175405],
+					[121.5283458, 25.0934577]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "蒲園飯店",
+				"biz_area": "天母商圈",
+				"min_price": 1975,
+				"price_color": "#1a9850"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.539788100000024, 25.09210805],
+					[121.5337008, 25.1010561]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "香城大飯店松山分店",
+				"biz_area": "大直商圈",
+				"min_price": 5214,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5451551, 25.09262805],
+					[121.549527, 25.084809]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "家賓大旅社",
+				"biz_area": "中山商圈",
+				"min_price": 1234,
+				"price_color": "#1a9850"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5286916, 25.06367805],
+					[121.528028183808672, 25.06368677990978]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "景美大旅社",
+				"biz_area": "中山商圈",
+				"min_price": 4352,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5285336, 25.06284905],
+					[121.528017249511649, 25.062855844668622]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "城美行旅",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 3155,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.509304050000011, 25.0901758],
+					[121.51504655522011, 25.092616233713663]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "璞漣商務旅館西門店",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 2785,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50670605, 25.0890783],
+					[121.515044182784777, 25.092621816214105]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "大榮大旅社",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 5143,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50636805, 25.0883713],
+					[121.515246972076341, 25.092144639325888]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "雲沐行旅",
+				"biz_area": "士林觀光夜市商圈",
+				"min_price": 4273,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5338871, 25.08865905],
+					[121.527378564879101, 25.088778354789312]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "嘉賓閣旅館",
+				"biz_area": "新北投溫泉商圈",
+				"min_price": 2221,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.505977128958392, 25.135573959984661],
+					[121.505966257916782, 25.135276919969325]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "晶樺商務旅店",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 4661,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5022305, 25.0860605],
+					[121.515445829800413, 25.091676713681309]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "紅菱閣賓館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 3813,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50538255, 25.0897013],
+					[121.514617459154692, 25.093625925712978]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "乃晶旅社",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 5043,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5022305, 25.0860605],
+					[121.515445829800413, 25.091676713681309]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "台北商旅慶城館",
+				"biz_area": "士林捷運站周邊",
+				"min_price": 2700,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.530611599999986, 25.09429355],
+					[121.528434859109339, 25.094408049806709]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "皇家大飯店",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 5998,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.51047055, 25.0907753],
+					[121.515009203728738, 25.092704124293526]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "千慧旅館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 1361,
+				"price_color": "#1a9850"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5180731, 25.09410905],
+					[121.51573981838159, 25.093107789067851]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "柯達大飯店台北一店",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 5497,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.519681600000013, 25.09423905],
+					[121.518128329778705, 25.090793874391419]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "富玉莊旅社",
+				"biz_area": "石牌捷運商圈",
+				"min_price": 3181,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.517637600000015, 25.11163305],
+					[121.516956, 25.112927]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "東姿商務旅館",
+				"biz_area": "士林捷運站周邊",
+				"min_price": 2195,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5238851, 25.09459155],
+					[121.524671123540998, 25.094808594584027]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "東龍大飯店",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 4542,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50730605, 25.0903728],
+					[121.514669993809846, 25.093502308124119]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "銀河旅館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 5751,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.507094550000019, 25.0883453],
+					[121.515367469032228, 25.091861101856992]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "內江商旅",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 4998,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.506286050000014, 25.0884048],
+					[121.515222369113687, 25.092202531757337]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "西門大飯店",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 2475,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50775205, 25.0904108],
+					[121.514724542905796, 25.093373950420141]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "泉都溫泉會館",
+				"biz_area": "新北投溫泉商圈",
+				"min_price": 2216,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.504246590549059, 25.136096673585556],
+					[121.503967181098105, 25.13595334717111]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "洛碁大飯店",
+				"biz_area": "天母商圈",
+				"min_price": 1537,
+				"price_color": "#1a9850"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.519441599999979, 25.09944905],
+					[121.521140375763778, 25.101588163901937]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "老爺商務會館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 2078,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.519119100000012, 25.09405555],
+					[121.517729609031662, 25.090973639121394]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "友華賓館",
+				"biz_area": "大直商圈",
+				"min_price": 2276,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5457916, 25.09274705],
+					[121.549685596201812, 25.084887576896872]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "享住旅店 Just Live Inn",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 5193,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.51069055, 25.0901673],
+					[121.515261717659953, 25.092109941972552]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "香城大飯店",
+				"biz_area": "士林觀光夜市商圈",
+				"min_price": 1579,
+				"price_color": "#1a9850"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.535706599999983, 25.08448455],
+					[121.527368, 25.088202]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "喬合大飯店",
+				"biz_area": "士林觀光夜市商圈",
+				"min_price": 1692,
+				"price_color": "#1a9850"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5298561, 25.08919155],
+					[121.527386968606592, 25.08923681044574]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "璞漣商務旅館臺北車站店",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 3262,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5159291, 25.09285005],
+					[121.515862655201161, 25.092821537118958]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "一等好旅店",
+				"biz_area": "大直商圈",
+				"min_price": 5084,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5450826, 25.09262505],
+					[121.549527, 25.084809]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "承攜行旅台北重慶館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 1264,
+				"price_color": "#1a9850"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.510255049999984, 25.0936698],
+					[121.513934317275528, 25.095233404656273]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "賓王大飯店",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 3768,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50989355, 25.0946668],
+					[121.513520130540215, 25.096208013995707]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "雲富大飯店",
+				"biz_area": "士林捷運站周邊",
+				"min_price": 3227,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5201786, 25.09524655],
+					[121.524250178569616, 25.096346814365525]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "柯達大飯店台北二店",
+				"biz_area": "天母商圈",
+				"min_price": 3895,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5196086, 25.09873505],
+					[121.521590510493681, 25.101230689730549]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "凱微精品旅館",
+				"biz_area": "士林捷運站周邊",
+				"min_price": 2695,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5209046, 25.09706355],
+					[121.5239846, 25.0973296]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "香都大飯店（香城長安）",
+				"biz_area": "士林觀光夜市商圈",
+				"min_price": 1591,
+				"price_color": "#1a9850"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5220181, 25.09196005],
+					[121.523364723883503, 25.090441412116768]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "國州大旅社",
+				"biz_area": "至聖花博商圈",
+				"min_price": 5714,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5265996, 25.07307005],
+					[121.5257161, 25.0714465]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "欣和大旅社",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 5674,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5196716, 25.08103155],
+					[121.521539125563365, 25.080453036466828]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "幸福大旅社",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 4761,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50596555, 25.0889398],
+					[121.51498075846024, 25.092771057929912]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "夜光商旅",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 3478,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50597605, 25.0887238],
+					[121.515060117249078, 25.09258432134428]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "瑾旅南西",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 4299,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.51012505, 25.0946808],
+					[121.513550505220508, 25.096136540323151]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "囍閱文創旅店",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 1400,
+				"price_color": "#1a9850"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.506797049999989, 25.0879793],
+					[121.515453705689751, 25.091658181182193]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "馥悅溫泉酒店",
+				"biz_area": "新北投溫泉商圈",
+				"min_price": 4304,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.506484191045388, 25.135991472927266],
+					[121.506457382090773, 25.135258945854535]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "苓旅站前",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 5798,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.51036005, 25.0910393],
+					[121.514897268891133, 25.092967514520282]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "欣欣時尚旅店松山站",
+				"biz_area": "大直商圈",
+				"min_price": 3654,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.543246600000018, 25.09301305],
+					[121.549527, 25.084809]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "宏洲旅社",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 4845,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50724105, 25.0905868],
+					[121.514583017700502, 25.093706968778985]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "欣欣時尚旅店",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 2004,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.506271550000022, 25.0911278],
+					[121.514239965123849, 25.094514194642635]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "水都溫泉會館",
+				"biz_area": "新北投溫泉商圈",
+				"min_price": 3931,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.511028, 25.13650005],
+					[121.511014, 25.1360481]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "新秀閣大飯店",
+				"biz_area": "新北投溫泉商圈",
+				"min_price": 3973,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.507287931274206, 25.135727988279577],
+					[121.507352862548402, 25.135381976559152]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "台北國際飯店",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 2770,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.520616600000011, 25.09378605],
+					[121.519075114466489, 25.090367012997802]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "長榮桂冠酒店 (台北)",
+				"biz_area": "士林觀光夜市商圈",
+				"min_price": 3890,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5246646, 25.09225155],
+					[121.524821566582631, 25.091311808118586]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "瑞華旅社",
+				"biz_area": "士林觀光夜市商圈",
+				"min_price": 5040,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5349651, 25.08863005],
+					[121.527378395567425, 25.088769118186171]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "樂爾公寓",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 2228,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50885405, 25.0993443],
+					[121.512182906265636, 25.099905703195116]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "台北馥敦飯店復南館",
+				"biz_area": "士林觀光夜市商圈",
+				"min_price": 1702,
+				"price_color": "#1a9850"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5299611, 25.08354955],
+					[121.526025222905687, 25.086231186229906]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "金弘旅社",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 5693,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50980205, 25.0945583],
+					[121.513545189383976, 25.096149048845238]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "大欣大飯店",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 2070,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.519679599999989, 25.09438755],
+					[121.518071026073102, 25.090819709979964]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "新榮大旅社",
+				"biz_area": "天母商圈",
+				"min_price": 5688,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.521275099999983, 25.11193355],
+					[121.5228668, 25.1106253]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "旅居文旅中山館",
+				"biz_area": "天母商圈",
+				"min_price": 1406,
+				"price_color": "#1a9850"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.519060100000019, 25.09793205],
+					[121.521645212979791, 25.101187247790627]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "吉緻行旅天津館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 2684,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.51975010000001, 25.09333705],
+					[121.518523229025888, 25.09061583259885]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "東京國際飯店",
+				"biz_area": "士林捷運站周邊",
+				"min_price": 2063,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5210351, 25.09533655],
+					[121.524285801920328, 25.096214988528136]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "上賓大飯店",
+				"biz_area": "天母商圈",
+				"min_price": 3990,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.520622099999983, 25.09814705],
+					[121.522731847484039, 25.100269826574177]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "士林町旅店",
+				"biz_area": "天母商圈",
+				"min_price": 1763,
+				"price_color": "#1a9850"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5207716, 25.11207255],
+					[121.5228668, 25.1106253]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "帝華旅社",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 5391,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.503365, 25.086907],
+					[121.51531467158496, 25.091985337813441]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "明日大飯店",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 2957,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50681805, 25.0889283],
+					[121.515115311030826, 25.092454446651086]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "立建賓館",
+				"biz_area": "大直商圈",
+				"min_price": 2878,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5457916, 25.09274705],
+					[121.549685596201812, 25.084887576896872]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "華大HOTEL",
+				"biz_area": "大直商圈",
+				"min_price": 4442,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5424051, 25.08912855],
+					[121.549527, 25.084809]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "新驛旅店",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 5836,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.51046955000001, 25.0907423],
+					[121.515020929610301, 25.092676532502875]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "台北星辰旅館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 2259,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5218816, 25.08603905],
+					[121.522363257741333, 25.086265615077167]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "華冠商旅HOTEL",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 2922,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5029745, 25.0875515],
+					[121.515022936322467, 25.092671810573744]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "嘉榮旅社",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 4514,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.510693050000015, 25.0926693],
+					[121.514361466637098, 25.094228293382464]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "建山大旅社",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 4357,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.509443549999986, 25.0966713],
+					[121.512729740178017, 25.098067855857177]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "新驛旅店台北車站二館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 3825,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.516359599999987, 25.09336455],
+					[121.515743152574004, 25.093100019255193]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "儷萊飯店(普亨萊大飯店)",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 3929,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50828555, 25.0908203],
+					[121.51465875034576, 25.093528764753898]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "台北馥敦飯店",
+				"biz_area": "士林捷運站周邊",
+				"min_price": 2797,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5302846, 25.09737705],
+					[121.528044387089338, 25.096727356813499]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "仙渡莊旅社",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 4260,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.4848192, 25.12991515],
+					[121.500112, 25.121253]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "美代溫泉飯店",
+				"biz_area": "新北投溫泉商圈",
+				"min_price": 3893,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5109195, 25.13659205],
+					[121.511014, 25.1360481]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "儷萊旅館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 4827,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50828555, 25.0908203],
+					[121.51465875034576, 25.093528764753898]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "真珠賓館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 2563,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50863655, 25.1079228],
+					[121.510770159107565, 25.108282627783037]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "在家行旅 ",
+				"biz_area": "士林捷運站周邊",
+				"min_price": 3181,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.519994100000019, 25.09620205],
+					[121.52399698939908, 25.097283752462484]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "葫蘆商旅",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 2863,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.509168050000014, 25.1102608],
+					[121.510401464621651, 25.110468812258336]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "上華旅館",
+				"biz_area": "天母商圈",
+				"min_price": 2729,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5203046, 25.09959705],
+					[121.521597528038342, 25.101225116752513]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "背包棧旅店西門店",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 3238,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.504962630383091, 25.089604254531935],
+					[121.514588154086184, 25.093694882516825]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "松林旅社",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 4502,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.501236, 25.0868635],
+					[121.515004641858084, 25.092714858683003]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "龍山旅社",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 3437,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.502511500000011, 25.086451],
+					[121.515348249868282, 25.091906325846765]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "曲水會館",
+				"biz_area": "新北投溫泉商圈",
+				"min_price": 2506,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.511858341477563, 25.136163387896371],
+					[121.511761682955111, 25.13587477579274]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "玩行旅 大安分館",
+				"biz_area": "士林觀光夜市商圈",
+				"min_price": 5229,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5311886, 25.08835355],
+					[121.527372060376038, 25.08842350913017]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "美上美旅館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 3875,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5022305, 25.0860605],
+					[121.515445829800413, 25.091676713681309]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "唐門客棧",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 2482,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5210016, 25.08528255],
+					[121.522495199487281, 25.085985118346876]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "水美溫泉會館",
+				"biz_area": "新北投溫泉商圈",
+				"min_price": 1909,
+				"price_color": "#1a9850"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50491665065266, 25.135808113653958],
+					[121.504794301305338, 25.135439227307923]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "力歐時尚旅館西門館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 5944,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50535905000001, 25.0894168],
+					[121.514716274353361, 25.093393406882015]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "古山園旅社",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 5613,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.501589, 25.086278],
+					[121.515269402520332, 25.092091858977479]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "銀座飯店",
+				"biz_area": "士林捷運站周邊",
+				"min_price": 4948,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5208656, 25.09561455],
+					[121.524204255128026, 25.096516756159932]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "星美飯店",
+				"biz_area": "天母商圈",
+				"min_price": 5979,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.51871460000001, 25.11016455],
+					[121.5214506, 25.1087212]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "瑪奇商務旅店",
+				"biz_area": "中山商圈",
+				"min_price": 1863,
+				"price_color": "#1a9850"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5290646, 25.06407055],
+					[121.528033412408973, 25.064084119422564]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "新仕商務旅店",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 3198,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5192161, 25.09667655],
+					[121.514987130941691, 25.094861809135487]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "富順大飯店",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 4645,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50965205, 25.0946498],
+					[121.513489305985274, 25.096280546253681]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "豪贊旅店",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 4943,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.506271550000022, 25.0911278],
+					[121.514239965123849, 25.094514194642635]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "新月商旅",
+				"biz_area": "士林觀光夜市商圈",
+				"min_price": 2695,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.521946100000022, 25.09321955],
+					[121.523949643851623, 25.09096007901406]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "北城大飯店",
+				"biz_area": "士林捷運站周邊",
+				"min_price": 4504,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5287131, 25.09520005],
+					[121.528451119598714, 25.095140671560191]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "洛碁大飯店新仕界",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 4963,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50559055, 25.0881403],
+					[121.5152111844003, 25.092228850142732]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "雅莊旅館",
+				"biz_area": "天母商圈",
+				"min_price": 3053,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5278181, 25.10179555],
+					[121.5275425, 25.1006481]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "丹迪旅店-天津店",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 5859,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5197286, 25.09365255],
+					[121.518387146124056, 25.090677186080665]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "大新飯店",
+				"biz_area": "士林捷運站周邊",
+				"min_price": 2491,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5272661, 25.09512005],
+					[121.528397663702705, 25.095376521426438]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "密都大飯店",
+				"biz_area": "士林捷運站周邊",
+				"min_price": 4781,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5272661, 25.09512005],
+					[121.528397663702705, 25.095376521426438]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "麗之湯別館",
+				"biz_area": "新北投溫泉商圈",
+				"min_price": 4657,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.513758866477048, 25.135954803790685],
+					[121.513765732954099, 25.135848607581369]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "鴨川旅館",
+				"biz_area": "士林捷運站周邊",
+				"min_price": 2836,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5204996, 25.09611755],
+					[121.524052671580122, 25.097077698006718]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "山樂溫泉",
+				"biz_area": "新北投溫泉商圈",
+				"min_price": 4896,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50418585468789, 25.137887953874621],
+					[121.50434370937576, 25.137737907749244]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "山水樂會館",
+				"biz_area": "新北投溫泉商圈",
+				"min_price": 4199,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.503977417174795, 25.137813980819971],
+					[121.504207834349629, 25.13759496163993]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "雅柏精緻旅館",
+				"biz_area": "天母商圈",
+				"min_price": 4352,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5415356, 25.09359455],
+					[121.5337008, 25.1010561]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "燦路都飯店",
+				"biz_area": "天母商圈",
+				"min_price": 1898,
+				"price_color": "#1a9850"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5197396, 25.09929155],
+					[121.521399825997705, 25.101382121685631]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "瑞沂國際飯店",
+				"biz_area": "士林捷運站周邊",
+				"min_price": 3360,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5246826, 25.09327655],
+					[121.525090273159748, 25.093558727458955]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "君帥旅館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 5297,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50591355, 25.0890558],
+					[121.514931047663595, 25.092888030789116]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "函舍旅館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 5937,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50591355, 25.0890558],
+					[121.514931047663595, 25.092888030789116]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "百悅旅社",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 2054,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50705705, 25.0907358],
+					[121.51450123506946, 25.093899408828889]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "長春精品旅館",
+				"biz_area": "士林捷運站周邊",
+				"min_price": 4674,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.53087859999998, 25.09482155],
+					[121.528463292787308, 25.094948598749891]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "緒遠旅館",
+				"biz_area": "天母商圈",
+				"min_price": 2907,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5201381, 25.09794755],
+					[121.522298741084555, 25.100668248917152]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "貴族商務旅館",
+				"biz_area": "行義路溫泉美食商圈",
+				"min_price": 3977,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5236496, 25.12241155],
+					[121.523281964258757, 25.122668430776507]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "悠趣旅店",
+				"biz_area": "士林捷運站周邊",
+				"min_price": 2933,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5305126, 25.09200105],
+					[121.5283458, 25.0934577]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "台北馥華商旅",
+				"biz_area": "士林捷運站周邊",
+				"min_price": 4710,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5238646, 25.09319505],
+					[121.524979869755654, 25.093771863565642]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "城市商旅-台北南西館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 1402,
+				"price_color": "#1a9850"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50969305, 25.0946513],
+					[121.513495038097801, 25.096267058206077]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "芝山璞旅",
+				"biz_area": "石牌捷運商圈",
+				"min_price": 4455,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.518802599999987, 25.11904805],
+					[121.518790513392744, 25.118776383357879]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "香榭峇里賓館",
+				"biz_area": "士林觀光夜市商圈",
+				"min_price": 5418,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.529847600000025, 25.08876305],
+					[121.52737911376488, 25.088808298619657]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "晴悅旅店",
+				"biz_area": "天母商圈",
+				"min_price": 5696,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5217756, 25.09944005],
+					[121.522665660552249, 25.100335607266551]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "春天酒店",
+				"biz_area": "新北投溫泉商圈",
+				"min_price": 1966,
+				"price_color": "#1a9850"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.51382085, 25.1381509],
+					[121.5139537, 25.1386268]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "高雅賓館",
+				"biz_area": "士林觀光夜市商圈",
+				"min_price": 5589,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5343371, 25.08023705],
+					[121.525871203749077, 25.08600513003935]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "富園國際商務飯店",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 3527,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.506830549999989, 25.0872078],
+					[121.515597, 25.091321]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "太平洋商旅",
+				"biz_area": "士林觀光夜市商圈",
+				"min_price": 4131,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5370191, 25.08405005],
+					[121.527368, 25.088202]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "情覓汽車旅館 ",
+				"biz_area": "天母商圈",
+				"min_price": 1397,
+				"price_color": "#1a9850"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.538031600000011, 25.10969255],
+					[121.537896010143413, 25.11040654026322]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "百樂匯大飯店",
+				"biz_area": "新北投溫泉商圈",
+				"min_price": 3130,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.508949897141008, 25.136105682451301],
+					[121.509012794282015, 25.135957364902602]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "印石時尚旅館",
+				"biz_area": "中山國中捷運站周邊",
+				"min_price": 4782,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.545785599999988, 25.06386105],
+					[121.544134, 25.062112]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "天閣酒店(台北林森)",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 1808,
+				"price_color": "#1a9850"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5202521, 25.09283205],
+					[121.519129644617252, 25.090342427876763]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "喜瑞飯店",
+				"biz_area": "士林觀光夜市商圈",
+				"min_price": 4472,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.522766600000011, 25.09178555],
+					[121.523697124849178, 25.090736162487616]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "貴都飯店",
+				"biz_area": "大龍峒商圈",
+				"min_price": 2347,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50478705, 25.0826588],
+					[121.5139037, 25.072995]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "鳳凰閣旅社",
+				"biz_area": "新北投溫泉商圈",
+				"min_price": 5482,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.51041961537959, 25.136016631836455],
+					[121.510432230759193, 25.135945263672902]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "萬事達旅店(中華店)",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 4597,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50767905, 25.0902838],
+					[121.514759091185866, 25.093292655985646]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "皇家季節酒店1館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 3711,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50972305, 25.0945538],
+					[121.513534724038323, 25.096173674509835]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "丹迪旅店-天母店",
+				"biz_area": "行義路溫泉美食商圈",
+				"min_price": 2994,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5221246, 25.12524655],
+					[121.524112723311703, 25.123857374240412]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "馥麗精品旅館",
+				"biz_area": "天母商圈",
+				"min_price": 1859,
+				"price_color": "#1a9850"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5421116, 25.10896405],
+					[121.5400532, 25.1108162]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "天閣酒店台北信義",
+				"biz_area": "大直商圈",
+				"min_price": 4011,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.544501100000019, 25.08839305],
+					[121.549527, 25.084809]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "伊倫商務旅館",
+				"biz_area": "士林捷運站周邊",
+				"min_price": 2569,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.525150599999989, 25.09424055],
+					[121.524836638263224, 25.094162457763407]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "茹曦酒店",
+				"biz_area": "士林捷運站周邊",
+				"min_price": 3186,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5323411, 25.09420205],
+					[121.528434831531513, 25.094407525528357]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "太豪大飯店",
+				"biz_area": "士林捷運站周邊",
+				"min_price": 1346,
+				"price_color": "#1a9850"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5304286, 25.09592305],
+					[121.528379078239922, 25.095458521341055]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "香城大飯店豪悅分店",
+				"biz_area": "士林捷運站周邊",
+				"min_price": 4419,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5252906, 25.09318855],
+					[121.525328391639476, 25.093214708084101]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "溫拿旅館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 4111,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.503904, 25.1271115],
+					[121.500112, 25.121253]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "金來商旅",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 2934,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5221796, 25.08647355],
+					[121.522249894485938, 25.08650661554481]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "維多麗亞酒店",
+				"biz_area": "天母商圈",
+				"min_price": 3043,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.537449100000018, 25.10996255],
+					[121.537383275409965, 25.110309169707119]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "友徠精品旅館",
+				"biz_area": "西湖商圈",
+				"min_price": 1688,
+				"price_color": "#1a9850"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5563101, 25.09593405],
+					[121.5612709, 25.0866178]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "寶格利時尚旅館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 4176,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.507123549999974, 25.0882298],
+					[121.515413481373102, 25.09175283171378]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "多郎明哥旅館",
+				"biz_area": "士林觀光夜市商圈",
+				"min_price": 3159,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5265501, 25.08468055],
+					[121.525587, 25.085588]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "大地酒店",
+				"biz_area": "新北投溫泉商圈",
+				"min_price": 3585,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.507210844946755, 25.13498486199785],
+					[121.50714368989351, 25.135342723995702]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "華弘怡亨酒店",
+				"biz_area": "士林觀光夜市商圈",
+				"min_price": 4119,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5322991, 25.08465855],
+					[121.527282502874399, 25.088076514606229]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "台北青年國際旅館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 5936,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5163466, 25.09064605],
+					[121.516472675532441, 25.090924464720334]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "三二行館",
+				"biz_area": "新北投溫泉商圈",
+				"min_price": 3002,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.51087, 25.13692655],
+					[121.511014, 25.1360481]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "神旺商務酒店",
+				"biz_area": "士林捷運站周邊",
+				"min_price": 5261,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5215956, 25.09376705],
+					[121.524740426297413, 25.094549267991948]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "宏都金殿大飯店",
+				"biz_area": "士林觀光夜市商圈",
+				"min_price": 4569,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5329486, 25.08198705],
+					[121.526245309969767, 25.086554211263891]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "富逸旅趣-北車開封館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 1462,
+				"price_color": "#1a9850"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.509592550000022, 25.0906563],
+					[121.514917725728893, 25.092919378200513]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "采舍精品旅館",
+				"biz_area": "天母商圈",
+				"min_price": 1823,
+				"price_color": "#1a9850"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5214846, 25.10022655],
+					[121.522014584674523, 25.100893911525418]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "東鑫商務旅館",
+				"biz_area": "士林觀光夜市商圈",
+				"min_price": 2216,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.534085099999984, 25.08865555],
+					[121.527378567251034, 25.088778484187458]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "小王子甜蜜旅店",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 4843,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50700205, 25.0897383],
+					[121.514851886829931, 25.093074301572884]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "柔美商旅",
+				"biz_area": "士林捷運站周邊",
+				"min_price": 3249,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.525995600000016, 25.09502205],
+					[121.524710191571231, 25.094667110328125]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "皇家季節酒店2館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 4923,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50961405, 25.0945458],
+					[121.513520929258931, 25.09620613455666]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "新舍商旅-林森館",
+				"biz_area": "天母商圈",
+				"min_price": 5748,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5209611, 25.09830005],
+					[121.522825892476604, 25.100176358807076]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "宜津美侖大飯店",
+				"biz_area": "士林觀光夜市商圈",
+				"min_price": 4308,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5300241, 25.08498555],
+					[121.52671339981309, 25.087241233639205]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "璽愛旅店",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 5290,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.51036005, 25.0910393],
+					[121.514897268891133, 25.092967514520282]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "正二旅館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 3256,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.510742550000018, 25.0901668],
+					[121.515269852451283, 25.092090800259566]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "同一大飯店",
+				"biz_area": "天母商圈",
+				"min_price": 4370,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.521585100000024, 25.10022655],
+					[121.522076215666885, 25.100844967317244]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "旅居文旅-西門驛站",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 2882,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50684155, 25.0907268],
+					[121.514471508195513, 25.093969358169385]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "沐蘭精品旅館",
+				"biz_area": "天母商圈",
+				"min_price": 3455,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.53908509999998, 25.10832205],
+					[121.538661634996274, 25.110551935752973]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "捷絲旅西門町店",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 2354,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.508067549999978, 25.0900583],
+					[121.514899694985758, 25.092961805755916]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "探索汽車旅館南港館",
+				"biz_area": "西湖商圈",
+				"min_price": 5699,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5567536, 25.09565555],
+					[121.5612709, 25.0866178]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "家美瑞品 台北",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 4391,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.520312600000011, 25.09084005],
+					[121.519926308158347, 25.0899832491598]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "台北桃禧大飯店",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 2896,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.51043705, 25.0937468],
+					[121.513934441768853, 25.095233111715082]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "豪爵旅館",
+				"biz_area": "天母商圈",
+				"min_price": 5191,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5238401, 25.10041355],
+					[121.523970560691566, 25.099801039571641]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "福泰桔子商務旅館（林森店）",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 5923,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5207161, 25.09345805],
+					[121.519280704408231, 25.090274322008838]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "安庭台北商務旅館",
+				"biz_area": "士林觀光夜市商圈",
+				"min_price": 5882,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5338871, 25.08865905],
+					[121.527378564879101, 25.088778354789312]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "愛活商旅",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 2848,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50664905, 25.0904213],
+					[121.514552029539843, 25.093779886012243]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "雀客藏居台北南港",
+				"biz_area": "西湖商圈",
+				"min_price": 2645,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.55647759999998, 25.09574005],
+					[121.5612709, 25.0866178]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "金都精緻溫泉飯店",
+				"biz_area": "新北投溫泉商圈",
+				"min_price": 5399,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5078809345124, 25.135926320795612],
+					[121.507995869024796, 25.135560641591223]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "新驛旅店台北車站三館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 5123,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5167586, 25.09327155],
+					[121.515838902821628, 25.092876888315423]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "新驛旅店西門捷運店",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 1453,
+				"price_color": "#1a9850"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50804305, 25.0886708],
+					[121.51539539905886, 25.091795380619466]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "立德北投溫泉飯店",
+				"biz_area": "新北投溫泉商圈",
+				"min_price": 4383,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.513556067007016, 25.136395191475778],
+					[121.513592134014033, 25.135837382951561]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "雀客旅館台北信義",
+				"biz_area": "士林觀光夜市商圈",
+				"min_price": 3757,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5376286, 25.08424405],
+					[121.527368, 25.088202]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "台北馥華商旅南港館",
+				"biz_area": "西湖商圈",
+				"min_price": 1298,
+				"price_color": "#1a9850"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.56511660000001, 25.09746205],
+					[121.56431504800149, 25.086712412572947]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "東門大旅社",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 3400,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.521971600000015, 25.08504955],
+					[121.522760682905115, 25.085420723582278]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "天閣酒店(台北南西)",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 4161,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5188576, 25.09410955],
+					[121.515861633930939, 25.092823917029108]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "城市商旅南東館",
+				"biz_area": "大直商圈",
+				"min_price": 5633,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5430986, 25.09356605],
+					[121.549527, 25.084809]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "雀客旅館台北內湖",
+				"biz_area": "天母商圈",
+				"min_price": 4977,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.554504100000017, 25.10306205],
+					[121.5400532, 25.1108162]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "洛碁大飯店林森館",
+				"biz_area": "天母商圈",
+				"min_price": 4069,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5210016, 25.10123055],
+					[121.521229432890379, 25.101517439249019]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "探索汽車旅館延平館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 4434,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50876105, 25.1074248],
+					[121.510855265967322, 25.107777984229507]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "意寬精品旅館 HOME HOTEL",
+				"biz_area": "大直商圈",
+				"min_price": 4991,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5420891, 25.08535155],
+					[121.548994793254181, 25.083144081140901]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "柯達大飯店敦南店",
+				"biz_area": "至聖花博商圈",
+				"min_price": 2156,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.532222600000011, 25.07829005],
+					[121.5257161, 25.0714465]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "二十輪旅店",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 5267,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50642905, 25.0900323],
+					[121.514658401126283, 25.093529586490895]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "富驛時尚酒店",
+				"biz_area": "士林捷運站周邊",
+				"min_price": 1360,
+				"price_color": "#1a9850"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5284076, 25.09388405],
+					[121.528407296779534, 25.093884065949847]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "台北西門町意舍酒店",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 5693,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50618355, 25.0901638],
+					[121.514573509799021, 25.093729341512809]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "西門航棧旅館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 2500,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50740505, 25.0892003],
+					[121.515107197989451, 25.092473537184933]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "香樹花園酒店",
+				"biz_area": "天母商圈",
+				"min_price": 5187,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5382831, 25.10985555],
+					[121.538168632781719, 25.110458312488042]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "薆悅酒店",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 2727,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.506684549999989, 25.0901753],
+					[121.514646011718312, 25.093558739603928]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "洛碁大飯店舞衣南京館",
+				"biz_area": "士林捷運站周邊",
+				"min_price": 2418,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5260156, 25.09393505],
+					[121.52521388978704, 25.093380133530033]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "鵲絲旅店豪麗旺館",
+				"biz_area": "大直商圈",
+				"min_price": 5696,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5378096, 25.08386755],
+					[121.548167650013227, 25.080556503302219]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "大倉久和大飯店",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 5935,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5197506, 25.09408505],
+					[121.518243375926957, 25.090742005408099]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "西門星辰精典大飯店",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 4304,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50552155, 25.0896483],
+					[121.514657801136991, 25.093530998306168]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "西門星辰大飯店",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 3935,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50514805, 25.0897318],
+					[121.51457060708222, 25.093736171801332]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "六福居",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 5755,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.52015560000001, 25.09380855],
+					[121.518683560973187, 25.090543546344804]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "橙舍背包客國際青年旅館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 2154,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50694755, 25.0904558],
+					[121.514585274394108, 25.093701658626618]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": " Happ& Tomorrow 本來",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 5765,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5179131, 25.09241105],
+					[121.517343518275453, 25.091147709573086]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "洛碁大飯店建北館",
+				"biz_area": "士林捷運站周邊",
+				"min_price": 4646,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5262276, 25.09334255],
+					[121.525587923154532, 25.092847086218899]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "尚印旅店",
+				"biz_area": "士林捷運站周邊",
+				"min_price": 2245,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.519603100000012, 25.09646305],
+					[121.5239846, 25.0973296]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "俞美飯店",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 2893,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.505879550000017, 25.0901583],
+					[121.514528984573758, 25.093834112372615]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "長弘時尚旅店",
+				"biz_area": "士林捷運站周邊",
+				"min_price": 4636,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5210776, 25.09523205],
+					[121.524315011522987, 25.096106897058551]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "西門邑居自由旅行會館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 1762,
+				"price_color": "#1a9850"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50684155, 25.0907268],
+					[121.514471508195513, 25.093969358169385]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "新麗旅店",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 3685,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50607255, 25.0911298],
+					[121.514208802752307, 25.094587521805831]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "東棧商務旅店",
+				"biz_area": "士林觀光夜市商圈",
+				"min_price": 4554,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.534085099999984, 25.08865555],
+					[121.527378567251034, 25.088778484187458]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "世方旅居文旅",
+				"biz_area": "天母商圈",
+				"min_price": 1425,
+				"price_color": "#1a9850"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.524848600000013, 25.10141905],
+					[121.525304901897414, 25.100349274891421]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "北投天玥泉溫泉會館",
+				"biz_area": "新北投溫泉商圈",
+				"min_price": 2159,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.504780381302282, 25.137405048716204],
+					[121.504384762604545, 25.137781097432416]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "WESTGATE HOTEL 永安棧",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 5748,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50737405, 25.0890938],
+					[121.515140792016282, 25.092394488172737]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "儷夏商旅",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 4267,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50762805, 25.0899753],
+					[121.514862338684523, 25.093049707653698]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "台糖台北會館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 2015,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50816405, 25.0902943],
+					[121.514829505437163, 25.093126966500471]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "台北馥華商旅敦北館",
+				"biz_area": "士林捷運站周邊",
+				"min_price": 5954,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5305971, 25.09296005],
+					[121.5283458, 25.0934577]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "福泰桔子商務旅館西門店",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 5842,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.507138550000022, 25.0882678],
+					[121.51540209734371, 25.091779619103175]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "富裕自由商旅",
+				"biz_area": "士林觀光夜市商圈",
+				"min_price": 4320,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5349651, 25.08863005],
+					[121.527378395567425, 25.088769118186171]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "天閣酒店(台北長安) ",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 1216,
+				"price_color": "#1a9850"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5203786, 25.09270055],
+					[121.519284046710524, 25.090272815119437]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "東驛商務旅館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 2443,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50609505, 25.0905088],
+					[121.514435783258847, 25.094053421356257]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "西悠巢旅台北館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 3405,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.516328100000024, 25.09631955],
+					[121.514667394119584, 25.095606905669051]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "柯達大飯店台北松江 ",
+				"biz_area": "士林捷運站周邊",
+				"min_price": 3724,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5247731, 25.09750805],
+					[121.524772353220101, 25.097442387259662]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "三隻老虎青年旅館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 2269,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50561405, 25.0894508],
+					[121.514743044686966, 25.093330414480452]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "意芙旅店",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 4644,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.509104549999989, 25.0972898],
+					[121.512455242336372, 25.098713767802973]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "老爺會館台北林森",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 3765,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5205026, 25.09268905],
+					[121.519391408248111, 25.090224410771388]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "大師會館國際酒店",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 2260,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.517282600000016, 25.09238655],
+					[121.516828708996044, 25.09137981324913]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "和逸．台北民生館",
+				"biz_area": "士林捷運站周邊",
+				"min_price": 3527,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5261826, 25.09666955],
+					[121.525965674251736, 25.097433254108157]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "謙商旅-東門館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 4620,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.52250810000001, 25.08485255],
+					[121.52286749857609, 25.084741217151798]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "華泰瑞舍",
+				"biz_area": "士林捷運站周邊",
+				"min_price": 1501,
+				"price_color": "#1a9850"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.52088710000001, 25.09644155],
+					[121.523997446680056, 25.097282060273347]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "尚印旅店-二館",
+				"biz_area": "士林捷運站周邊",
+				"min_price": 5476,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.519603100000012, 25.09646305],
+					[121.5239846, 25.0973296]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "品格子旅店",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 1806,
+				"price_color": "#1a9850"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.51677810000001, 25.09056505],
+					[121.516861187474973, 25.090748533469458]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "路境行旅-府前館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 4370,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50987705, 25.0891633],
+					[121.515498676073648, 25.091552362834065]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "和逸 台北忠孝館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 1899,
+				"price_color": "#1a9850"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5207446, 25.09008805],
+					[121.520567097497462, 25.089694346905848]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "皇家玫瑰旅館中山館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 2339,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5208616, 25.09330755],
+					[121.519458015941467, 25.0901943804454]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "明星大飯店",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 1390,
+				"price_color": "#1a9850"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50683555, 25.0889248],
+					[121.51511924800883, 25.092445182676158]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "橙舍青年旅館（臺北二館）",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 3500,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.506066050000015, 25.0905783],
+					[121.514406329327002, 25.094122728445566]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "酩月大飯店",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 2180,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50683555, 25.0889248],
+					[121.51511924800883, 25.092445182676158]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "方舟旅店",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 4175,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5238106, 25.08473155],
+					[121.523715126337407, 25.084714742402962]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "丰居旅店雙連館",
+				"biz_area": "士林捷運站周邊",
+				"min_price": 2384,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5202951, 25.09678455],
+					[121.5239846, 25.0973296]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "蜂巢 Bee House",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 4527,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5158176, 25.09332805],
+					[121.515672093945795, 25.093265610247201]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "旅樂序精品旅館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 4594,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.51077655, 25.0905328],
+					[121.515143306330827, 25.092388571820941]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "龍蝦先生的秘密巢穴",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 1327,
+				"price_color": "#1a9850"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.51005255, 25.0928613],
+					[121.514194371452149, 25.094621479628998]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "途中‧台北國際青年旅舍",
+				"biz_area": "新北投溫泉商圈",
+				"min_price": 3265,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.502372699999981, 25.1343417],
+					[121.5041154, 25.1356644]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "台北慕軒",
+				"biz_area": "士林觀光夜市商圈",
+				"min_price": 3016,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5326911, 25.08485055],
+					[121.527368, 25.088202]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "復新文旅 ",
+				"biz_area": "士林捷運站周邊",
+				"min_price": 1769,
+				"price_color": "#1a9850"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5300421, 25.09721255],
+					[121.528069579303718, 25.096640491312854]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "洛碁大飯店中華館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 3095,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.508067549999978, 25.0900583],
+					[121.514899694985758, 25.092961805755916]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "台北漫步旅店",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 3933,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.504042708981487, 25.089581050092786],
+					[121.514455779983649, 25.094006367713309]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "儷夏旅館-西寧館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 5063,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50669505, 25.0905708],
+					[121.514505251656558, 25.093889957528404]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "皇家玫瑰旅館站前館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 5921,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5184426, 25.09234155],
+					[121.517809610478892, 25.090937570171718]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "昌亞旅館",
+				"biz_area": "天母商圈",
+				"min_price": 5214,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5210241, 25.10190605],
+					[121.520914113463135, 25.101784589704245]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "台北文華東方酒店",
+				"biz_area": "士林捷運站周邊",
+				"min_price": 4101,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5322736, 25.09549205],
+					[121.5284692, 25.0950609]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "大地清旅",
+				"biz_area": "士林捷運站周邊",
+				"min_price": 2886,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.529632099999986, 25.09190805],
+					[121.5283458, 25.0934577]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "雀客旅館",
+				"biz_area": "士林捷運站周邊",
+				"min_price": 4209,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.524774600000015, 25.09755705],
+					[121.52477329582301, 25.097442376539473]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "安庭澔思青年旅舍",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 1354,
+				"price_color": "#1a9850"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.516651100000018, 25.09384455],
+					[121.515614536633151, 25.093399738540139]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "卡樂町旅店",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 3737,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50595805, 25.0888988],
+					[121.514994369714046, 25.092739029731163]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "信星旅館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 2609,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5158391, 25.09284255],
+					[121.515851377317389, 25.092847818458875]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "昇美精旅",
+				"biz_area": "士林捷運站周邊",
+				"min_price": 5257,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5219726, 25.09464605],
+					[121.524521647894446, 25.09534991828264]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "千彩格精品旅店",
+				"biz_area": "士林捷運站周邊",
+				"min_price": 1984,
+				"price_color": "#1a9850"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5207556, 25.09567605],
+					[121.524181280942898, 25.09660177318198]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "有誠商旅",
+				"biz_area": "天母商圈",
+				"min_price": 4375,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5305946, 25.11668055],
+					[121.5335623, 25.1197438]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "拾光行旅",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 5541,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50899855, 25.0987978],
+					[121.512276519431111, 25.099350621259099]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "首都大飯店松山館",
+				"biz_area": "大直商圈",
+				"min_price": 4006,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5459211, 25.09274455],
+					[121.549788578235308, 25.084938599610741]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "皇家玫瑰旅館西門館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 1737,
+				"price_color": "#1a9850"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50685905, 25.0907938],
+					[121.514450067611847, 25.094019809309682]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "洛碁大飯店驛",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 3041,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.51003055, 25.0905058],
+					[121.515038904488634, 25.092634236401118]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "思泊客",
+				"biz_area": "大直商圈",
+				"min_price": 3655,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5395551, 25.08416805],
+					[121.548416625557948, 25.081335381215968]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "誠品行旅",
+				"biz_area": "士林捷運站周邊",
+				"min_price": 1724,
+				"price_color": "#1a9850"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.53894360000001, 25.09014705],
+					[121.5283458, 25.0934577]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "松哖酒店",
+				"biz_area": "士林觀光夜市商圈",
+				"min_price": 4150,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5248076, 25.08673955],
+					[121.524800971871898, 25.086735007838254]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "台北西門窩青年旅館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 5331,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50700205, 25.0897383],
+					[121.514851886829931, 25.093074301572884]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "凡登商旅-二館",
+				"biz_area": "士林觀光夜市商圈",
+				"min_price": 5980,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5338871, 25.08865905],
+					[121.527378564879101, 25.088778354789312]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "沃田旅店",
+				"biz_area": "行義路溫泉美食商圈",
+				"min_price": 5315,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5239521, 25.12918805],
+					[121.526562822273675, 25.12736384117137]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "承攜行旅台北復北館",
+				"biz_area": "士林捷運站周邊",
+				"min_price": 3568,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5302786, 25.09711205],
+					[121.528114812785518, 25.096484521338059]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "瘋台北青旅",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 5047,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50869355, 25.0904918],
+					[121.514839413636508, 25.093103651838746]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "豪景大酒店新館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 5695,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.503412, 25.089791],
+					[121.514283721254444, 25.09441123351446]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "天閣酒店台北復興",
+				"biz_area": "士林捷運站周邊",
+				"min_price": 3901,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5302241, 25.09468155],
+					[121.528454142949244, 25.094774652372021]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "互舍商旅台北館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 2171,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.51005605, 25.0973208],
+					[121.512589641108676, 25.098397518421883]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "品格子旅店西門館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 2366,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50669505, 25.0905708],
+					[121.514505251656558, 25.093889957528404]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "台北中山意舍酒店",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 3974,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5195556, 25.09568705],
+					[121.515398510277393, 25.093903154092263]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "小公館人文旅舍",
+				"biz_area": "大直商圈",
+				"min_price": 3182,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5429111, 25.09356855],
+					[121.549527, 25.084809]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "台北叙美精品旅店",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 2053,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50998955, 25.0889933],
+					[121.515577080116515, 25.091367872830116]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "綺樂文旅 康定館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 5346,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.504285041520689, 25.089645164473165],
+					[121.514469772350594, 25.093973442729645]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "北門臥客青年旅舍",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 4936,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.508767049999989, 25.0940118],
+					[121.513583579195625, 25.096058715027734]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "新驛旅店復興北路店",
+				"biz_area": "士林捷運站周邊",
+				"min_price": 4969,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5300521, 25.09758805],
+					[121.527969903648824, 25.096984183833587]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "朵兒旅館",
+				"biz_area": "士林觀光夜市商圈",
+				"min_price": 1774,
+				"price_color": "#1a9850"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5232781, 25.09133555],
+					[121.523760088148833, 25.090791994021938]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "東楓商旅",
+				"biz_area": "士林觀光夜市商圈",
+				"min_price": 4461,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.534085099999984, 25.08865555],
+					[121.527378567251034, 25.088778484187458]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "璞邸旅店",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 2348,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.51001755, 25.0908153],
+					[121.514925506490883, 25.092901069542471]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "浩室物業1館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 2915,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50497305, 25.0855213],
+					[121.515597, 25.091321]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "艾特文旅",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 5977,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50517055, 25.0903173],
+					[121.514363289316876, 25.094224004493938]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "賦樂旅居",
+				"biz_area": "士林觀光夜市商圈",
+				"min_price": 5054,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5311026, 25.08933305],
+					[121.52738998019592, 25.089401104226535]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "清翼居旅店童話館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 3691,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50952255, 25.0905848],
+					[121.514932754859757, 25.092884013641353]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "城市商旅德立莊分館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 3860,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50798455, 25.0890213],
+					[121.515260282021586, 25.092113320126497]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "町記憶旅店",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 4324,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50567555, 25.0885913],
+					[121.515061843051186, 25.092580260415438]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "鉑泊客",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 4251,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.51007205, 25.0901773],
+					[121.515163501676298, 25.092341050810163]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "約克旅店",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 1204,
+				"price_color": "#1a9850"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5161541, 25.09033855],
+					[121.516428483746083, 25.090944476244825]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "台北發現青年旅舍",
+				"biz_area": "天母商圈",
+				"min_price": 2076,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5226216, 25.09921705],
+					[121.52320276267848, 25.099801801743503]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "二十輪旅店大安店",
+				"biz_area": "士林觀光夜市商圈",
+				"min_price": 2191,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5311321, 25.08589205],
+					[121.527368, 25.088202]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "福爾摩莎壹零壹旅館",
+				"biz_area": "士林觀光夜市商圈",
+				"min_price": 5342,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5366336, 25.08213705],
+					[121.527368, 25.088202]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "台北六福萬怡酒店",
+				"biz_area": "西湖商圈",
+				"min_price": 5564,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5611046, 25.09407605],
+					[121.5625798, 25.0869093]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "番茄行旅",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 5665,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5162571, 25.09525355],
+					[121.515042659815222, 25.094732407801885]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "壹零壹艾美琪旅店",
+				"biz_area": "士林觀光夜市商圈",
+				"min_price": 1835,
+				"price_color": "#1a9850"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.529576600000013, 25.08947505],
+					[121.527392069678939, 25.089515093562007]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "沃客商旅-西門館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 2893,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50740505, 25.0892003],
+					[121.515107197989451, 25.092473537184933]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "甄美精品商旅",
+				"biz_area": "士林捷運站周邊",
+				"min_price": 2882,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5211071, 25.09501155],
+					[121.52437254984558, 25.095893973866097]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "天使青旅",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 5952,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50942105, 25.0888158],
+					[121.515554006502413, 25.091422166601209]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "能量旅店",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 1319,
+				"price_color": "#1a9850"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50559805, 25.0894153],
+					[121.514753375825734, 25.093306104613728]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "洛碁大飯店南京館",
+				"biz_area": "士林捷運站周邊",
+				"min_price": 2030,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5267026, 25.09371405],
+					[121.527196972557491, 25.092821429062418]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "藝宿商旅",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 4875,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.51033555, 25.0942763],
+					[121.513728312907659, 25.095718146835999]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "方舟旅店 長安復興",
+				"biz_area": "士林捷運站周邊",
+				"min_price": 2569,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.529632099999986, 25.09190805],
+					[121.5283458, 25.0934577]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "峻美精旅",
+				"biz_area": "士林捷運站周邊",
+				"min_price": 1940,
+				"price_color": "#1a9850"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.521206099999986, 25.09523055],
+					[121.52432413432598, 25.096073137709102]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "天雲旅棧台北基河",
+				"biz_area": "天母商圈",
+				"min_price": 1316,
+				"price_color": "#1a9850"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5202316, 25.10928205],
+					[121.5214506, 25.1087212]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "台北天晴旅店",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 4038,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.51031755, 25.0889538],
+					[121.515597, 25.091321]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "丰居旅店忠孝館",
+				"biz_area": "士林觀光夜市商圈",
+				"min_price": 2350,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.529576600000013, 25.08947505],
+					[121.527392069678939, 25.089515093562007]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "怡品商旅",
+				"biz_area": "士林觀光夜市商圈",
+				"min_price": 3131,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5318886, 25.08869905],
+					[121.527378626567483, 25.088781720127788]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "姆提文創旅店",
+				"biz_area": "士林觀光夜市商圈",
+				"min_price": 2212,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5292336, 25.08474105],
+					[121.526349009118206, 25.086706412035369]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "禾順行旅",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 2864,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5012515, 25.0860725],
+					[121.515291745645371, 25.092039284096444]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "清翼居旅店采風館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 2281,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.516105100000019, 25.09042455],
+					[121.516355504960515, 25.090977523489006]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "丰居旅店北車館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 5929,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50988105, 25.0895378],
+					[121.515364480934494, 25.0918681330526]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "米尼旅店",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 1712,
+				"price_color": "#1a9850"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5175571, 25.09083055],
+					[121.517639856230545, 25.091014104505195]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "寧夏2號旅店",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 4049,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.510682049999986, 25.0948208],
+					[121.513585318301111, 25.096054622795155]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "台北松山意舍酒店",
+				"biz_area": "大直商圈",
+				"min_price": 1759,
+				"price_color": "#1a9850"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5483896, 25.09240855],
+					[121.551636894064828, 25.085854352451349]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "趣旅館‧林森館",
+				"biz_area": "天母商圈",
+				"min_price": 4872,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5209631, 25.09850205],
+					[121.522725900547343, 25.100275737010005]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "綺樂文旅 開封館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 5783,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50969955, 25.0906573],
+					[121.514933734311995, 25.092881708924146]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "洛碁大飯店松山館",
+				"biz_area": "大直商圈",
+				"min_price": 4543,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5499216, 25.09048255],
+					[121.551836, 25.085953]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "獅城旅館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 5270,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.515771599999979, 25.09296905],
+					[121.515795038238764, 25.092979107848411]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "日日吉旅店",
+				"biz_area": "天母商圈",
+				"min_price": 5999,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.517025100000012, 25.10079355],
+					[121.519270375452891, 25.103273051840251]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "路徒行旅-中華館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 2670,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50849355, 25.0900893],
+					[121.51495370429781, 25.092834718199832]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "旅樂序精品旅館三館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 1780,
+				"price_color": "#1a9850"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.51037005000002, 25.0901343],
+					[121.515224567361599, 25.092197359131635]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "漫旅時光",
+				"biz_area": "士林捷運站周邊",
+				"min_price": 3494,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5207531, 25.09559405],
+					[121.524201761680558, 25.096525983276251]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "洛碁大飯店忠孝館",
+				"biz_area": "士林觀光夜市商圈",
+				"min_price": 4347,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5338431, 25.08845105],
+					[121.527374738633654, 25.088569618383776]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "靜好文旅",
+				"biz_area": "士林捷運站周邊",
+				"min_price": 5449,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.522288099999983, 25.09398805],
+					[121.5247290063311, 25.094595180781891]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "背包棧旅店-台北長春店",
+				"biz_area": "士林捷運站周邊",
+				"min_price": 2879,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5275356, 25.09489755],
+					[121.528458055190782, 25.094849027485676]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "台北北門窩泊旅",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 4706,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5157716, 25.09393855],
+					[121.515443701962653, 25.09379784195519]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "斯格加旅店",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 3944,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5203491, 25.09256305],
+					[121.519311050135215, 25.090260640525102]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "詩漫精品旅館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 4556,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.51077655, 25.0905328],
+					[121.515143306330827, 25.092388571820941]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "城市商旅昆明館（HOTEL PAPA WHALE）",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 5245,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.506187549999979, 25.0908423],
+					[121.514329885174035, 25.09430260669631]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "碩美精品飯店",
+				"biz_area": "士林捷運站周邊",
+				"min_price": 2443,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.519603100000012, 25.09646305],
+					[121.5239846, 25.0973296]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "卡夫人背包客棧",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 4318,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.51078305, 25.0899583],
+					[121.515351100812182, 25.091899617383355]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "福爾摩沙正旅館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 3341,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.51002055, 25.0910223],
+					[121.514851452581468, 25.09307532338881]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "大安公園旅店",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 4259,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5240706, 25.08472555],
+					[121.523723966451726, 25.084664527128968]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "帛堯初見輕旅",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 5748,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.507269549999975, 25.0917898],
+					[121.514154339154601, 25.094715678326693]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "進綵商旅",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 4159,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50791305, 25.0987173],
+					[121.512259700167263, 25.09945035156403]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "在家行旅西門館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 3465,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.505610050000016, 25.0900178],
+					[121.514538332388938, 25.093812116332661]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "涪美飯店",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 3679,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50987855, 25.0890733],
+					[121.515531302426538, 25.091475590823951]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "台灣青旅",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 5846,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5169601, 25.09031405],
+					[121.517106537629672, 25.090637430682399]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "仲信大湖商旅",
+				"biz_area": "天母商圈",
+				"min_price": 2835,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.55804185, 25.11019805],
+					[121.5400532, 25.1108162]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "華山文旅",
+				"biz_area": "士林觀光夜市商圈",
+				"min_price": 2957,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.523250600000026, 25.08978755],
+					[121.522976252272855, 25.090096942144868]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "朗司旅館",
+				"biz_area": "士林觀光夜市商圈",
+				"min_price": 5652,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5290151, 25.08588055],
+					[121.526809971370668, 25.087382973140336]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "皇后旅店二館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 3270,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50989355, 25.0946668],
+					[121.513520130540215, 25.096208013995707]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "旅樂序精品旅館二館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 4049,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.51052955, 25.0902358],
+					[121.515212430717781, 25.092225917473598]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "東門3號膠囊旅店",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 4451,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5219301, 25.08471955],
+					[121.522779296988361, 25.084456489638345]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "台北北投雅樂軒酒店",
+				"biz_area": "新北投溫泉商圈",
+				"min_price": 4930,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5010732, 25.1320712],
+					[121.5041154, 25.1356644]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "柯達大飯店台北天津 ",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 3689,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5196506, 25.09224255],
+					[121.518850636585825, 25.090468219684194]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "東驛 E-HOUSE",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 2831,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50646105, 25.0893963],
+					[121.51489223439637, 25.09297936102622]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "錦棧商旅",
+				"biz_area": "士林捷運站周邊",
+				"min_price": 4016,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5209331, 25.09770705],
+					[121.5239846, 25.0973296]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "東旅",
+				"biz_area": "天母商圈",
+				"min_price": 2215,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5382206, 25.09366855],
+					[121.5337008, 25.1010561]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "樂山水靜旅館 OrigInn",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 2548,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.508411550000019, 25.0943923],
+					[121.513392229000516, 25.096508974950027]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "洛碁大飯店南港館",
+				"biz_area": "西湖商圈",
+				"min_price": 5811,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5637186, 25.09401355],
+					[121.562779103093121, 25.086883040356735]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "快意旅店",
+				"biz_area": "士林觀光夜市商圈",
+				"min_price": 4287,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5346401, 25.08986205],
+					[121.527400862008349, 25.089994748947973]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "陽光士林珮柏旅館",
+				"biz_area": "石牌捷運商圈",
+				"min_price": 4039,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.519687600000012, 25.11408705],
+					[121.51778168334927, 25.11488909324877]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "侘侘行旅",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 1535,
+				"price_color": "#1a9850"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.51677810000001, 25.09056505],
+					[121.516861187474973, 25.090748533469458]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "愛玩客旅店",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 5792,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50669505, 25.0905708],
+					[121.514505251656558, 25.093889957528404]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "柯達大飯店 台北長安",
+				"biz_area": "士林觀光夜市商圈",
+				"min_price": 2095,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.524663599999982, 25.09214555],
+					[121.524803368939942, 25.091308768537356]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "尚美精旅",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 4746,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.519112100000015, 25.09666355],
+					[121.514975669073408, 25.094888519222465]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "慕誠行旅",
+				"biz_area": "士林觀光夜市商圈",
+				"min_price": 2051,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5373096, 25.08357355],
+					[121.527368, 25.088202]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "町記憶旅店2館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 2887,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50568355, 25.0886353],
+					[121.51504722838969, 25.092614649700216]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "旅晨行旅",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 3131,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.51002055, 25.0910223],
+					[121.514851452581468, 25.09307532338881]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "世民酒店台北北門",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 4946,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.508620549999975, 25.0913058],
+					[121.514535234462102, 25.093819405963568]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "皇家玫瑰旅館 雙城館",
+				"biz_area": "天母商圈",
+				"min_price": 3627,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.519929100000013, 25.10070905],
+					[121.520908028428195, 25.10179009991575]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "瑞桑德旅店 北車館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 2768,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.51002055, 25.0910223],
+					[121.514851452581468, 25.09307532338881]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "亞太飯店 北投館",
+				"biz_area": "新北投溫泉商圈",
+				"min_price": 5200,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.51477135, 25.13652905],
+					[121.5147477, 25.1359121]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "旅樂序精品旅館五館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 3938,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50989505, 25.0906813],
+					[121.514955002162949, 25.09283166423559]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "凱達大飯店",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 4698,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.502521, 25.0843055],
+					[121.515597, 25.091321]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "台北臥客旅店",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 5113,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.508767049999989, 25.0940118],
+					[121.513583579195625, 25.096058715027734]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "台灣柒天精品旅店",
+				"biz_area": "臺北大橋頭延三商圈",
+				"min_price": 2266,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.4981085, 25.0837085],
+					[121.509182, 25.068713]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "謙商旅(谷墨商旅-師大館)",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 5580,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5234096, 25.08112955],
+					[121.522884327573422, 25.08133679764174]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "台北這地方微旅店",
+				"biz_area": "天母商圈",
+				"min_price": 3644,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5231516, 25.09839105],
+					[121.5233389, 25.0996665]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "阿樹國際旅店",
+				"biz_area": "士林捷運站周邊",
+				"min_price": 5307,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5344426, 25.09185055],
+					[121.5283458, 25.0934577]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "文舺行旅",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 4573,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.502441500000018, 25.0864485],
+					[121.51533844138558, 25.091929405868456]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "儷客旅店-站前店",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 5169,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.51036005, 25.0910393],
+					[121.514897268891133, 25.092967514520282]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "富裕自由旅店林森館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 3746,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5209576, 25.09266805],
+					[121.519777413289503, 25.090050378964538]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "南陽街壹號旅店",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 1953,
+				"price_color": "#1a9850"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.516191100000015, 25.09067755],
+					[121.516331799140517, 25.090988258280166]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "漫映旅舍",
+				"biz_area": "士林捷運站周邊",
+				"min_price": 3282,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5230551, 25.09361505],
+					[121.524861065434976, 25.094064250853233]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "和昌商務旅館台北西門館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 3974,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50607905, 25.0864258],
+					[121.515597, 25.091321]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "合星旅館",
+				"biz_area": "士林觀光夜市商圈",
+				"min_price": 4096,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5329466, 25.08884255],
+					[121.527381611489346, 25.088944559095669]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "好駐旅館",
+				"biz_area": "士林觀光夜市商圈",
+				"min_price": 5385,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5222466, 25.09253805],
+					[121.523779566760084, 25.090809266318004]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "智慧環境會館-菁山遊憩區",
+				"biz_area": "行義路溫泉美食商圈",
+				"min_price": 1975,
+				"price_color": "#1a9850"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.53814675, 25.1457008],
+					[121.528661, 25.144568]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "城市商旅 北門館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 2825,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50873805, 25.0936873],
+					[121.513695951636848, 25.095794295090098]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "慶爾喜旅館長沙一館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 4269,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.506797049999989, 25.0879793],
+					[121.515453705689751, 25.091658181182193]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "慶爾喜旅館長沙二館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 1617,
+				"price_color": "#1a9850"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.506797049999989, 25.0879793],
+					[121.515453705689751, 25.091658181182193]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "泊居旅店二館 ",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 1314,
+				"price_color": "#1a9850"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5204091, 25.09277905],
+					[121.519279981105626, 25.090274648112505]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "睡覺盒子旅館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 1816,
+				"price_color": "#1a9850"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50960955, 25.0887258],
+					[121.515597, 25.091321]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "台北五號商旅",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 5174,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50746305, 25.0865483],
+					[121.515597, 25.091321]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "謙匯普樂室行旅",
+				"biz_area": "大直商圈",
+				"min_price": 4467,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5446381, 25.08446505],
+					[121.548974001860572, 25.083079038779829]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "木文陶喜時尚旅館",
+				"biz_area": "大直商圈",
+				"min_price": 2025,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.540744600000011, 25.08892805],
+					[121.549527, 25.084809]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "吉泰旅店",
+				"biz_area": "天母商圈",
+				"min_price": 2716,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5208796, 25.11335255],
+					[121.5228668, 25.1106253]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "米窩飯店-大安",
+				"biz_area": "士林觀光夜市商圈",
+				"min_price": 4346,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5322211, 25.08869355],
+					[121.527378637468559, 25.088782314823629]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "台北宿之酒店．臻品之選",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 1612,
+				"price_color": "#1a9850"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.504214183431372, 25.090409970875722],
+					[121.514183628833109, 25.09464675773658]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "美寓旅店",
+				"biz_area": "士林捷運站周邊",
+				"min_price": 1928,
+				"price_color": "#1a9850"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5327241, 25.09175005],
+					[121.5283458, 25.0934577]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "福爾摩莎北驛旅館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 4548,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.509622549999989, 25.0902463],
+					[121.515069900861249, 25.092561299844572]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "果芒驛站旅店",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 4008,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.515988099999987, 25.09097155],
+					[121.516052864016913, 25.091114569468669]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "台北士林萬麗酒店",
+				"biz_area": "天母商圈",
+				"min_price": 1875,
+				"price_color": "#1a9850"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.522679100000019, 25.11440455],
+					[121.5252559, 25.1149693]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "天成文旅 華山町",
+				"biz_area": "士林觀光夜市商圈",
+				"min_price": 4665,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5232036, 25.08946205],
+					[121.523018904704799, 25.089335480945874]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "城鄉旅坊台北",
+				"biz_area": "士林捷運站周邊",
+				"min_price": 3704,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5246826, 25.09327655],
+					[121.525090273159748, 25.093558727458955]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "宜家居商旅",
+				"biz_area": "新北投溫泉商圈",
+				"min_price": 4167,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50327495, 25.1377112],
+					[121.5038499, 25.1372184]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "陽明山美國渡假村",
+				"biz_area": "行義路溫泉美食商圈",
+				"min_price": 3986,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.52888425, 25.1369898],
+					[121.528897869589642, 25.136990225727466]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "五月家青旅 北車館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 2322,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.508823049999975, 25.0913113],
+					[121.514564232512839, 25.093751171593262]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "懷特豪斯青年旅舍",
+				"biz_area": "天母商圈",
+				"min_price": 5279,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5384151, 25.09376905],
+					[121.5337008, 25.1010561]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "沃客汽車旅館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 2771,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50649555, 25.1254328],
+					[121.501537058000935, 25.119961506691638]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "拉開門輕旅",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 3343,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5207106, 25.09043005],
+					[121.520410696926035, 25.089764860684472]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "正是旅館",
+				"biz_area": "大直商圈",
+				"min_price": 2887,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5405036, 25.08892355],
+					[121.549527, 25.084809]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "九昱晴美 ",
+				"biz_area": "天母商圈",
+				"min_price": 5332,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5208541, 25.10018305],
+					[121.521649119325033, 25.101184145569359]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "皇家玫瑰旅館新生館",
+				"biz_area": "士林觀光夜市商圈",
+				"min_price": 5051,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5260516, 25.08819105],
+					[121.526945554650382, 25.087581970722134]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "門埕青旅",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 4640,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.51059505, 25.0924353],
+					[121.514430706789227, 25.094065366631838]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "漫步1948",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 4966,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5156336, 25.09301055],
+					[121.515758538858961, 25.093064163930443]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "台北國泰萬怡酒店 ",
+				"biz_area": "士林捷運站周邊",
+				"min_price": 3526,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5269571, 25.09666005],
+					[121.52665239764795, 25.097630610223554]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "凱旋酒店",
+				"biz_area": "天母商圈",
+				"min_price": 4114,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5470461, 25.10660605],
+					[121.5400532, 25.1108162]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "天閣酒店台北劍潭",
+				"biz_area": "天母商圈",
+				"min_price": 5152,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5201686, 25.10912955],
+					[121.5214506, 25.1087212]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "台北中山九昱希爾頓逸林酒店",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 1795,
+				"price_color": "#1a9850"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5193506, 25.09353755],
+					[121.51811609135305, 25.090799392131089]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "艾爾行旅",
+				"biz_area": "士林觀光夜市商圈",
+				"min_price": 1928,
+				"price_color": "#1a9850"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5318886, 25.08869905],
+					[121.527378626567483, 25.088781720127788]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "美侖商旅",
+				"biz_area": "士林捷運站周邊",
+				"min_price": 2565,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.523205600000011, 25.09438905],
+					[121.524674938630895, 25.094794778296041]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "雅璞文旅",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 5692,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.51077655, 25.0905328],
+					[121.515143306330827, 25.092388571820941]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "109 Hostel Taipei 台北109青旅",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 1898,
+				"price_color": "#1a9850"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50892955, 25.0906933],
+					[121.514802983198607, 25.093189375117639]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "幸福蘋果旅店",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 1595,
+				"price_color": "#1a9850"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50542505, 25.0897463],
+					[121.514607762237347, 25.09364874321389]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "松河璞旅",
+				"biz_area": "大直商圈",
+				"min_price": 5371,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5456286, 25.09331105],
+					[121.549779082956988, 25.08493389515063]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "金普頓大安酒店",
+				"biz_area": "士林觀光夜市商圈",
+				"min_price": 5560,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5307516, 25.08798505],
+					[121.527368, 25.088202]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "碩城文旅",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 3702,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5200291, 25.09308155],
+					[121.518850830834367, 25.090468132106515]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "南港老爺行旅",
+				"biz_area": "西湖商圈",
+				"min_price": 3019,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5655396, 25.09776605],
+					[121.564713166547946, 25.086682726667842]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "玩行旅 台北館",
+				"biz_area": "士林觀光夜市商圈",
+				"min_price": 1917,
+				"price_color": "#1a9850"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5227721, 25.08895955],
+					[121.523115335670369, 25.089194764514218]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "野趣旅舍 T.O.HOTEL",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 3982,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.517059100000012, 25.09568005],
+					[121.515012818994805, 25.094801947155254]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "門草行旅",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 4777,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50836055, 25.0975608],
+					[121.512337, 25.098992]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "小角落旅店",
+				"biz_area": "天母商圈",
+				"min_price": 1343,
+				"price_color": "#1a9850"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5178281, 25.10213905],
+					[121.51913339546401, 25.103399856293922]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "丹居青旅",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 4340,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50667805, 25.0882813],
+					[121.51532679186117, 25.091956817985576]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "甲山林湯旅JSL hotel",
+				"biz_area": "士林捷運站周邊",
+				"min_price": 5691,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5278026, 25.09583355],
+					[121.52827006301186, 25.095939501529884]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "日光拾玖",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 4138,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.515988099999987, 25.09097155],
+					[121.516052864016913, 25.091114569468669]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "洛碁三貝茲",
+				"biz_area": "士林捷運站周邊",
+				"min_price": 4836,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.537322100000011, 25.09189605],
+					[121.5283458, 25.0934577]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "城市商旅站前館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 4422,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.509365549999984, 25.0930893],
+					[121.514007204077672, 25.095061897092076]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "華達大飯店 ",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 2367,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.51002055, 25.0910223],
+					[121.514851452581468, 25.09307532338881]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "豪城商旅民生館",
+				"biz_area": "天母商圈",
+				"min_price": 3816,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.531536100000011, 25.09710055],
+					[121.530406565861341, 25.100260507010528]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "天雲旅棧台北中山",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 2262,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.519671100000011, 25.09296155],
+					[121.518598270903055, 25.090581999689761]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "MVSA 慕舍酒店",
+				"biz_area": "士林捷運站周邊",
+				"min_price": 3356,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5266426, 25.09315555],
+					[121.526904464216685, 25.092662655106334]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "瀚寓酒店",
+				"biz_area": "大直商圈",
+				"min_price": 4182,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5397466, 25.08773305],
+					[121.549468314939674, 25.084625413706807]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "台北大直英迪格酒店",
+				"biz_area": "天母商圈",
+				"min_price": 4494,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5381151, 25.10944155],
+					[121.537930596829099, 25.11041310842527]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "配普特行旅",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 5929,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.51057055, 25.0923598],
+					[121.514454136239294, 25.094010235554702]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "町記憶旅店3館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 2356,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50565455, 25.0889083],
+					[121.514944521496119, 25.092856325951935]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "苓旅旅館中山館",
+				"biz_area": "士林捷運站周邊",
+				"min_price": 1932,
+				"price_color": "#1a9850"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.526734099999985, 25.09717305],
+					[121.52659600907316, 25.097612907322745]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "和旅瓏旅館西門館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 5530,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50668955, 25.0901893],
+					[121.51464173708797, 25.093568798097607]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "野趣光延旅館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 2153,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.51052405, 25.0905828],
+					[121.515086681345167, 25.092521814233507]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "藝築文旅開封館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 3739,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50595755, 25.0911573],
+					[121.514181311338206, 25.094652210958479]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "日好青旅",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 4524,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.508767049999989, 25.0940118],
+					[121.513583579195625, 25.096058715027734]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "盤古捷旅",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 4501,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5204756, 25.09344605],
+					[121.519085328526913, 25.090362407950714]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "天閣酒店台北士林",
+				"biz_area": "天母商圈",
+				"min_price": 2742,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.520188100000013, 25.10921255],
+					[121.5214506, 25.1087212]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "大昌旺商旅",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 2391,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5196026, 25.09281455],
+					[121.518596422186107, 25.090582833190666]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "美亞商旅",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 4193,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.515988099999987, 25.09097155],
+					[121.516052864016913, 25.091114569468669]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "和苑三井花園飯店  台北忠孝",
+				"biz_area": "士林觀光夜市商圈",
+				"min_price": 3881,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.525212100000019, 25.08876555],
+					[121.523985501316474, 25.087924979399691]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "所在行旅",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 2417,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.515988099999987, 25.09097155],
+					[121.516052864016913, 25.091114569468669]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "旅家雅舍",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 2740,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5203271, 25.07972505],
+					[121.521227235504938, 25.079446210137505]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "路徒PLUS行旅-主題館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 4436,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.510212050000021, 25.0910588],
+					[121.514867608956408, 25.093037306348297]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "台北時代寓所",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 3586,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5197566, 25.08985655],
+					[121.519832741911117, 25.090025433849949]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "白色空間設計旅店",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 4919,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.515915100000015, 25.09053855],
+					[121.516154997617079, 25.091068319945638]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "雀客旅館台北站前",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 2588,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.51026405, 25.0892868],
+					[121.515513422478449, 25.091517663548398]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "玉璽精品飯店",
+				"biz_area": "行義路溫泉美食商圈",
+				"min_price": 3056,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5237301, 25.12715505],
+					[121.525535483187568, 25.125893561567068]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "大湖璞旅",
+				"biz_area": "西湖商圈",
+				"min_price": 2565,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5612706, 25.10451405],
+					[121.5625798, 25.0869093]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "瑞絲逸旅店",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 1699,
+				"price_color": "#1a9850"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5204091, 25.09277905],
+					[121.519279981105626, 25.090274648112505]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "旅城驛鎮",
+				"biz_area": "士林捷運站周邊",
+				"min_price": 2880,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5246826, 25.09327655],
+					[121.525090273159748, 25.093558727458955]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "柯達大飯店台北林森",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 1710,
+				"price_color": "#1a9850"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5203591, 25.09259905],
+					[121.519305871963624, 25.090262975122997]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "森浩文旅-STEP INN",
+				"biz_area": "大直商圈",
+				"min_price": 5512,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.545405100000011, 25.09305205],
+					[121.549527, 25.084809]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "趣西門旅店",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 2524,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50642905, 25.0900323],
+					[121.514658401126283, 25.093529586490895]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "慶爾喜旅館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 2355,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50642905, 25.0900323],
+					[121.514658401126283, 25.093529586490895]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "悅心旅",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 3027,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.510331549999989, 25.0932533],
+					[121.514095945617726, 25.094853082259657]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "路徒PLUS行旅-站前館 ",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 4341,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.510212050000021, 25.0910588],
+					[121.514867608956408, 25.093037306348297]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "米窩飯店-西門",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 4686,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50550405, 25.0892443],
+					[121.514800550065161, 25.093195100444845]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "藝築文旅台北站前館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 3010,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.51005855, 25.0892923],
+					[121.515480005876896, 25.091596295066964]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "格拉斯麗台北飯店",
+				"biz_area": "士林觀光夜市商圈",
+				"min_price": 4123,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5234126, 25.08939155],
+					[121.52311856505878, 25.089190052044415]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "見潭璞旅",
+				"biz_area": "石牌捷運商圈",
+				"min_price": 3414,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5182676, 25.11240955],
+					[121.516968331988465, 25.112956304831378]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "時尚居商旅",
+				"biz_area": "士林捷運站周邊",
+				"min_price": 5386,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5268721, 25.09695555],
+					[121.526659471165985, 25.097632830917881]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "雅齊旅館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 1913,
+				"price_color": "#1a9850"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50987705, 25.0891633],
+					[121.515498676073648, 25.091552362834065]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "城市商旅德立莊二館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 4802,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.508013549999987, 25.0887553],
+					[121.515360469157258, 25.091877573035163]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "日野苑",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 5334,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50989505, 25.0907478],
+					[121.514931064462928, 25.092887991259179]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "寒居酒店 Humble Boutique Hotel",
+				"biz_area": "士林捷運站周邊",
+				"min_price": 4722,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5244706, 25.09365655],
+					[121.524919446576405, 25.093888691858822]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "星西門行旅",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 5468,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50664905, 25.0904213],
+					[121.514552029539843, 25.093779886012243]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "陸號行旅萬年館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 5948,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.506352549999988, 25.0893688],
+					[121.514885535431091, 25.092995124143581]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "台北捷運-北投會館(捷之旅)",
+				"biz_area": "新北投溫泉商圈",
+				"min_price": 2443,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.4938982, 25.13556865],
+					[121.5038364, 25.1362083]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "喜園旅館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 4909,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50762805, 25.0899753],
+					[121.514862338684523, 25.093049707653698]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "安捷國際公寓酒店",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 2281,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5168426, 25.09230505],
+					[121.516202214679183, 25.092030246993708]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "城市商旅北門二館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 1655,
+				"price_color": "#1a9850"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50867355, 25.0936933],
+					[121.513683924822132, 25.095822594996758]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "西門希爾商旅",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 2094,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50675705, 25.0893448],
+					[121.514956053833515, 25.092829189583785]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "米窩飯店-站前",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 2584,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.515988099999987, 25.09097155],
+					[121.516052864016913, 25.091114569468669]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "雀客快捷台北永康",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 3158,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5212991, 25.08514105],
+					[121.522603599866173, 25.085754668525098]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "希爾商旅台北館",
+				"biz_area": "士林捷運站周邊",
+				"min_price": 4272,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.522288099999983, 25.09398805],
+					[121.5247290063311, 25.094595180781891]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "陸號行旅中華館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 3196,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50762805, 25.0899753],
+					[121.514862338684523, 25.093049707653698]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "苓旅旅館萬年館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 5485,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.506352549999988, 25.0893688],
+					[121.514885535431091, 25.092995124143581]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "葛瑞絲商旅敦北館 ",
+				"biz_area": "天母商圈",
+				"min_price": 1704,
+				"price_color": "#1a9850"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5324716, 25.09700005],
+					[121.531204223434315, 25.100545631604515]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "珂曼旅館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 2414,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.506816550000011, 25.0906198],
+					[121.514506200067586, 25.093887725853246]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "台北棧",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 2731,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.515915100000015, 25.09053855],
+					[121.516154997617079, 25.091068319945638]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "天母之星商務會館",
+				"biz_area": "石牌捷運商圈",
+				"min_price": 4640,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5132532, 25.12461805],
+					[121.513004753249248, 25.11903379519876]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "慶爾喜旅館西門捷運館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 2023,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50734705, 25.0889843],
+					[121.515176077847698, 25.092311458230157]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "陸號行旅西門館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 2128,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50734705, 25.0889843],
+					[121.515176077847698, 25.092311458230157]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "立和商務旅館-漢口館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 1333,
+				"price_color": "#1a9850"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50629855, 25.0905193],
+					[121.514463134459604, 25.093989062135098]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "摩莎曼拉商務旅館-西門館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 3305,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50629855, 25.0905193],
+					[121.514463134459604, 25.093989062135098]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "成都壹壹壹商旅",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 4827,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50539555, 25.0892683],
+					[121.514775312881071, 25.09325448524212]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "優美飯店",
+				"biz_area": "士林捷運站周邊",
+				"min_price": 5980,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5201021, 25.09678105],
+					[121.5239846, 25.0973296]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "台灣西鐵國際旅館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 3052,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50765155, 25.0901323],
+					[121.51480941907613, 25.093174231063504]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "西門雲町旅店",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 5375,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50693405, 25.0895908],
+					[121.514894579286434, 25.092973843341646]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "福華國際文教會館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 4133,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5252246, 25.07940355],
+					[121.52253954666655, 25.08046294497893]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "聖雄商旅",
+				"biz_area": "大直商圈",
+				"min_price": 4484,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5430431, 25.09320205],
+					[121.549527, 25.084809]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "柯達大飯店台北南京",
+				"biz_area": "士林捷運站周邊",
+				"min_price": 5498,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5317926, 25.09380705],
+					[121.528412597809535, 25.093984843139808]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "晶城青年旅館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 4011,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.510323549999981, 25.0945803],
+					[121.513617047696769, 25.095979961385936]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "相鐵飯店台北西門",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 2450,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50761555, 25.0884248],
+					[121.515418552845162, 25.091740898197784]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "客憩旅宿",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 4712,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.51000105, 25.0898493],
+					[121.515270708958738, 25.092088784839724]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "日光樂居",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 2456,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50631205, 25.0892338],
+					[121.514927935189874, 25.092895354649851]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "瀚寓夏天",
+				"biz_area": "至聖花博商圈",
+				"min_price": 4576,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.523835600000027, 25.07555205],
+					[121.5232378, 25.0728216]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "福泰桔子商務旅館西門漢中店",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 4686,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50654455, 25.0881348],
+					[121.515359104352925, 25.091880784511865]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "美好境界旅店",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 4784,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50664905, 25.0904213],
+					[121.514552029539843, 25.093779886012243]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "歐法行旅",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 2596,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50762805, 25.0899753],
+					[121.514862338684523, 25.093049707653698]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "豐宿創新壹旅",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 4837,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50977855, 25.0946648],
+					[121.513503258105814, 25.096247715972485]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "藝築文旅昆明館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 4530,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50576405, 25.0890573],
+					[121.514907637640675, 25.092943116152863]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "日初青旅",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 3903,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.51000505, 25.0900283],
+					[121.515206887058014, 25.092238962079147]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "金通商旅",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 1670,
+				"price_color": "#1a9850"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.51017855, 25.0924013],
+					[121.514379230655763, 25.094186493447754]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "美好行旅",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 2553,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.51052405, 25.0905828],
+					[121.515086681345167, 25.092521814233507]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "台北大安伊普索酒店",
+				"biz_area": "士林觀光夜市商圈",
+				"min_price": 3983,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.530038100000013, 25.08721655],
+					[121.527368, 25.088202]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "雀客旅館台北杭州",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 4031,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.520807100000013, 25.08782455],
+					[121.521480875018426, 25.088141484362179]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "頭等艙飯店西門館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 1557,
+				"price_color": "#1a9850"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50759355, 25.0882933],
+					[121.51546252280113, 25.091637433924092]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "日光樂居成都館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 4219,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50555605, 25.0892283],
+					[121.514814264320407, 25.093162829876743]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "大光瀛商旅",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 1867,
+				"price_color": "#1a9850"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.515988099999987, 25.09097155],
+					[121.516052864016913, 25.091114569468669]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "享住青旅",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 5668,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.51077655, 25.0905328],
+					[121.515143306330827, 25.092388571820941]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "北投晶泉丰旅",
+				"biz_area": "新北投溫泉商圈",
+				"min_price": 2345,
+				"price_color": "#91cf60"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.504518015160386, 25.138063497730659],
+					[121.504589030320773, 25.13799599546131]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "貓尾口袋（西門館）",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 5385,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.504658517269576, 25.08964583985183],
+					[121.514526662470487, 25.093839576438317]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "天雲旅棧台北開封",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 4919,
+				"price_color": "#fc8d59"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.509786549999987, 25.0906563],
+					[121.51494740328414, 25.092849544910226]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "捷絲旅臺大尊賢館",
+				"biz_area": "至聖花博商圈",
+				"min_price": 3945,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.5262486, 25.07440955],
+					[121.5241873, 25.0725495]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "臺北嘉佩樂酒店 Capella Taipei",
+				"biz_area": "士林捷運站周邊",
+				"min_price": 1739,
+				"price_color": "#1a9850"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.532961599999979, 25.09408155],
+					[121.52843022267632, 25.094319907183401]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "古奈堡精品旅館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 3979,
+				"price_color": "#fee08b"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.50675705, 25.0893448],
+					[121.514956053833515, 25.092829189583785]
+				]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"hotel_name": "美好行旅北車漢口館",
+				"biz_area": "承德路中古汽車商圈",
+				"min_price": 5336,
+				"price_color": "#d73027"
+			},
+			"geometry": {
+				"type": "LineString",
+				"coordinates": [
+					[121.509622549999989, 25.0902463],
+					[121.515069900861249, 25.092561299844572]
+				]
+			}
+		}
+	]
+}
