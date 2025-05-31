@@ -86,9 +86,6 @@ func GetAllActivityHandler(c *gin.Context) {
 		log.Fatal("failed to marshal JSON:", err)
 	}
 
-	if err := c.ShouldBindJSON(&jsonData); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
-		return
-	}
+	c.JSON(http.StatusOK, string(jsonData)) 
 
 }
