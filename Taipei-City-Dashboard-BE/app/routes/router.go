@@ -38,6 +38,7 @@ func ConfigureRoutes() {
 	configureIncidentRoutes()
 	// configureWsRoutes()
 	configureContributorRoutes()
+	configureRankRoutes()
 }
 
 func configureAuthRoutes() {
@@ -163,6 +164,15 @@ func configureContributorRoutes() {
 		contributorRoutes.POST("/", controllers.CreateContributor)
 		contributorRoutes.PATCH("/:id", controllers.UpdateContributor)
 		contributorRoutes.DELETE("/:id", controllers.DeleteContributor)
+	}
+}
+
+func configureRankRoutes() {
+	rankRoutes := RouterGroup.Group("/")
+	rankRoutes.Use(middleware.LimitAPIRequests(global.DashboardLimitAPIRequestsTimes, global.LimitRequestsDuration))
+	rankRoutes.Use(middleware.LimitTotalRequests(global.DashboardLimitTotalRequestsTimes, global.LimitRequestsDuration))
+	{
+		rankRoutes.GET("/checkRank", controllers.CheckRank)
 	}
 }
 
