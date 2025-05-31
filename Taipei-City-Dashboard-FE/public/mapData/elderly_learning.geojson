@@ -1,0 +1,693 @@
+{
+	"type": "FeatureCollection",
+	"features": [
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.538199289487, 25.029137285905]
+			},
+			"properties": {
+				"city": "臺北市",
+				"district": "大安區",
+				"origanizer": "臺北市立圖書館諮詢服務課",
+				"name": "臺北市樂齡學習示範中心",
+				"tel": "02-27552823#2301",
+				"fax": "02-27010721",
+				"address": "10659臺北市大安區建國南路2段125號11樓"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.562838983518, 25.059272993849]
+			},
+			"properties": {
+				"city": "臺北市",
+				"district": "松山區",
+				"origanizer": "臺北市立圖書館三民分館",
+				"name": "臺北市松山區樂齡學習中心",
+				"tel": "02-27600408#12",
+				"fax": "02-27564843",
+				"address": "10573臺北市松山區民生東路5段163-1號6樓"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.511115547767, 25.082254946443]
+			},
+			"properties": {
+				"city": "臺北市",
+				"district": "士林區",
+				"origanizer": "臺北市立圖書館葫蘆堵分館",
+				"name": "臺北市士林區樂齡學習中心",
+				"tel": "02-28126513#9",
+				"fax": "02-28127945",
+				"address": "11165臺北市延平北路5段136巷1號3-9樓"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.513554985408, 25.074303003528]
+			},
+			"properties": {
+				"city": "臺北市",
+				"district": "大同區",
+				"origanizer": "臺北市立圖書館大同分館",
+				"name": "臺北市大同區樂齡學習中心",
+				"tel": "02-25943236#9",
+				"fax": "02-25991423",
+				"address": "10371臺北市大同區重慶北路3段318號"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.54198899937, 24.990058003454]
+			},
+			"properties": {
+				"city": "臺北市",
+				"district": "文山區",
+				"origanizer": "臺北市立圖書館景新分館",
+				"name": "臺北市文山區樂齡學習中心",
+				"tel": "02-29331244#11",
+				"fax": "02-29335340",
+				"address": "11669臺北市文山區景後街151號1樓"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.61261198186, 25.067414001127]
+			},
+			"properties": {
+				"city": "臺北市",
+				"district": "內湖區",
+				"origanizer": "臺北市立圖書館東湖分館",
+				"name": "臺北市內湖區樂齡學習中心",
+				"tel": "02-26323378#1500",
+				"fax": "02-26332654",
+				"address": "11480臺北市內湖區五分街6號"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.467357623143, 25.119894018918]
+			},
+			"properties": {
+				"city": "臺北市",
+				"district": "北投區",
+				"origanizer": "臺北市立關渡國民中學",
+				"name": "臺北市北投區樂齡學習中心",
+				"tel": "02-28582002",
+				"fax": "無",
+				"address": "11260臺北市北投區知行路212號"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.530019725454, 25.05377069351]
+			},
+			"properties": {
+				"city": "臺北市",
+				"district": "中山區",
+				"origanizer": "臺北市中山區吉林國民小學",
+				"name": "臺北市中山區樂齡學習中心",
+				"tel": "02-25219196#700、710",
+				"fax": "無",
+				"address": "10491臺北市中山區吉林路110號2樓、4樓"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.502762195423, 25.038063216507]
+			},
+			"properties": {
+				"city": "臺北市",
+				"district": "萬華區",
+				"origanizer": "臺北市萬華區老松國民小學",
+				"name": "臺北市萬華區樂齡學習中心",
+				"tel": "02-23361266#148",
+				"fax": "無",
+				"address": "10852臺北市萬華區桂林路64號"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.502762195423, 25.038063216507]
+			},
+			"properties": {
+				"city": "臺北市",
+				"district": "中正區",
+				"origanizer": "社團法人臺北市歐伊寇斯OIKOS社區關懷協會",
+				"name": "臺北市中正區樂齡學習中心",
+				"tel": "02-2341-4322分機617",
+				"fax": "02-23956885",
+				"address": "10050台北市杭州南路一段15-1號B1"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.568598021552, 25.025907990069]
+			},
+			"properties": {
+				"city": "臺北市",
+				"district": "信義區",
+				"origanizer": "臺北市信義區吳興國民小學",
+				"name": "臺北市信義區樂齡學習中心",
+				"tel": "02-27200226#60#67",
+				"fax": "02-87883044",
+				"address": "11046臺北市信義區松仁路226號"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.586874174693, 25.046892503764]
+			},
+			"properties": {
+				"city": "臺北市",
+				"district": "南港區",
+				"origanizer": "臺北市南港區成德國民小學",
+				"name": "臺北市南港區樂齡學習中心",
+				"tel": "02-27851376#165",
+				"fax": "02-27855253",
+				"address": "11556臺北市南港區東新街65號"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.487923460774, 25.056467109852]
+			},
+			"properties": {
+				"city": "新北市",
+				"district": "三重區",
+				"origanizer": "新北市三重區集美國民小學",
+				"name": "新北市三重區樂齡學習中心",
+				"tel": "02-89725390",
+				"fax": "02-29748170",
+				"address": "24144新北市三重區集美街10號"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.462698709901, 25.003346211744]
+			},
+			"properties": {
+				"city": "新北市",
+				"district": "板橋區",
+				"origanizer": "新北市板橋區後埔國民小學",
+				"name": "新北市樂齡學習示範中心",
+				"tel": "02-29614142#853",
+				"fax": "02-29611318",
+				"address": "22063新北市板橋區重慶路157號"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.441934807897, 24.972382581314]
+			},
+			"properties": {
+				"city": "新北市",
+				"district": "土城區",
+				"origanizer": "新北市土城區土城國民小學",
+				"name": "新北市土城區樂齡學習中心",
+				"tel": "02-22700177#843",
+				"fax": "02-22606748",
+				"address": "23670新北市土城區興城路17號"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.443331568243, 25.030931390371]
+			},
+			"properties": {
+				"city": "新北市",
+				"district": "新莊區",
+				"origanizer": "新北市新莊區豐年國民小學",
+				"name": "新北市新莊區樂齡學習優質中心",
+				"tel": "02-22017102#59",
+				"fax": "02-22018113",
+				"address": "24241新北市新莊區瓊泰路116號"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.443331568243, 25.030931390371]
+			},
+			"properties": {
+				"city": "新北市",
+				"district": "新莊區",
+				"origanizer": "新北市新莊區新泰國民小學",
+				"name": "新北市新莊區新泰樂齡學習中心(優先區)",
+				"tel": "02-29971005#128",
+				"fax": "02-29914564",
+				"address": "24244新北市新莊區公園一路91號"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.501930040075, 24.989638992115]
+			},
+			"properties": {
+				"city": "新北市",
+				"district": "中和區",
+				"origanizer": "新北市中和區復興國民小學",
+				"name": "新北市中和區樂齡學習中心",
+				"tel": "02-22472993#224",
+				"fax": "02-22452802",
+				"address": "23561新北市中和區復興路301巷6號"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.519339001514, 25.012938000733]
+			},
+			"properties": {
+				"city": "新北市",
+				"district": "永和區",
+				"origanizer": "新北市永和區網溪國民小學",
+				"name": "新北市永和區樂齡學習中心",
+				"tel": "02-89264470#843",
+				"fax": "02-89255782",
+				"address": "23441新北市永和區竹林路79號"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.514157308971, 24.96130141195]
+			},
+			"properties": {
+				"city": "新北市",
+				"district": "新店區",
+				"origanizer": "新北市新店區安坑國民小學",
+				"name": "新北市新店區安坑樂齡學習中心",
+				"tel": "02-22127008#10",
+				"fax": "02-22126607",
+				"address": "23154新北市新店區安忠路36號"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.631521974519, 25.063037013199]
+			},
+			"properties": {
+				"city": "新北市",
+				"district": "汐止區",
+				"origanizer": "新北市汐止區北峰國民小學",
+				"name": "新北市汐止區樂齡學習中心",
+				"tel": "02-26941817#220",
+				"fax": "02-26948541",
+				"address": "22154新北市汐止區環河街一號"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.392246969693, 24.972448002069]
+			},
+			"properties": {
+				"city": "新北市",
+				"district": "樹林區",
+				"origanizer": "新北市樹林區山佳國民小學",
+				"name": "新北市樹林區樂齡學習中心",
+				"tel": "02-26806673#844",
+				"fax": "02-26806884",
+				"address": "23852新北市樹林區中山路3段5號"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.392246969693, 24.972448002069]
+			},
+			"properties": {
+				"city": "新北市",
+				"district": "三峽區",
+				"origanizer": "新北市三峽區中園國民小學",
+				"name": "新北市三峽區樂齡學習中心",
+				"tel": "02-86712590",
+				"fax": "02-86712591",
+				"address": "23700新北市三峽區弘園街22號"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.367193964015, 24.927836998798]
+			},
+			"properties": {
+				"city": "新北市",
+				"district": "鶯歌區",
+				"origanizer": "新北市鶯歌區建國國民小學",
+				"name": "新北市鶯歌區樂齡學習中心",
+				"tel": "02-26709228#140",
+				"fax": "02-26703644",
+				"address": "23909新北市鶯歌區育英街2號"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.346579762803, 24.954965405611]
+			},
+			"properties": {
+				"city": "新北市",
+				"district": "蘆洲區",
+				"origanizer": "新北市蘆洲區鷺江國民小學",
+				"name": "新北市蘆洲區樂齡學習中心",
+				"tel": "02-22819980#9403",
+				"fax": "02-22831766",
+				"address": "24741新北市蘆洲區民族路7號"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.346579762803, 24.954965405611]
+			},
+			"properties": {
+				"city": "新北市",
+				"district": "林口區",
+				"origanizer": "新北市林口區瑞平國民小學",
+				"name": "新北市林口區樂齡學習中心",
+				"tel": "02-26052779#20",
+				"fax": "02-26051561",
+				"address": "24451新北市林口區後坑34-1號"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.777733965673, 25.043399010339]
+			},
+			"properties": {
+				"city": "新北市",
+				"district": "淡水區",
+				"origanizer": "新北市淡水區淡水國民小學",
+				"name": "新北市淡水區樂齡學習中心",
+				"tel": "02-26212755#115",
+				"fax": "02-26298694",
+				"address": "25151新北市淡水區中山路160號"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.441362575368, 25.173375799867]
+			},
+			"properties": {
+				"city": "新北市",
+				"district": "三芝區",
+				"origanizer": "新北市三芝區三芝國民小學",
+				"name": "新北市三芝區樂齡學習中心",
+				"tel": "02-26362005#142",
+				"fax": "02-26368891",
+				"address": "25241新北市三芝區育英街22號"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.689486774471, 25.205606899786]
+			},
+			"properties": {
+				"city": "新北市",
+				"district": "萬里區",
+				"origanizer": "新北市萬里區野柳國民小學",
+				"name": "新北市萬里區樂齡學習中心",
+				"tel": "02-24922512",
+				"fax": "02-24922541",
+				"address": "20744新北市萬里區野柳里港東路167號"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.804422867393, 25.10804879717]
+			},
+			"properties": {
+				"city": "新北市",
+				"district": "瑞芳區",
+				"origanizer": "新北市瑞芳區瑞芳國民小學",
+				"name": "新北市瑞芳區樂齡學習中心",
+				"tel": "02-24972058#121",
+				"fax": "02-24960228",
+				"address": "22441新北市瑞芳區中山路2號"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.777733965673, 25.043399010339]
+			},
+			"properties": {
+				"city": "新北市",
+				"district": "平溪區",
+				"origanizer": "新北市平溪區十分國民小學",
+				"name": "新北市平溪區樂齡學習中心",
+				"tel": "02-24958305#16",
+				"fax": "02-24958424",
+				"address": "22600新北市平溪區十分街157號"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.711391037838, 24.935604924421]
+			},
+			"properties": {
+				"city": "新北市",
+				"district": "坪林區",
+				"origanizer": "新北市坪林區坪林國民小學",
+				"name": "新北市坪林區樂齡學習中心",
+				"tel": "02-26656213#16",
+				"fax": "02-26657115",
+				"address": "23241新北市坪林區坪林街114號"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.61685900838, 25.001789985691]
+			},
+			"properties": {
+				"city": "新北市",
+				"district": "深坑區",
+				"origanizer": "新北市深坑區深坑國民小學",
+				"name": "新北市深坑區樂齡學習中心",
+				"tel": "02-26624675",
+				"fax": "02-26625808",
+				"address": "22242新北市深坑區文化街45號"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.445395779538, 25.146848585059]
+			},
+			"properties": {
+				"city": "新北市",
+				"district": "八里區",
+				"origanizer": "新北市八里區米倉國民小學",
+				"name": "新北市八里區樂齡學習中心",
+				"tel": "02-26182202#241",
+				"fax": "02-26181318",
+				"address": "24945新北市八里區龍米路二段129巷1號(新北市八里區米倉國小)"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.658955524517, 24.990263192444]
+			},
+			"properties": {
+				"city": "新北市",
+				"district": "石碇區",
+				"origanizer": "新北市石碇區石碇國民小學",
+				"name": "新北市石碇區樂齡學習中心",
+				"tel": "02-26631244#13",
+				"fax": "02-26632348",
+				"address": "22342新北市石碇區石碇西街15號(石碇國小)"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.866973909487, 25.033524918851]
+			},
+			"properties": {
+				"city": "新北市",
+				"district": "雙溪區",
+				"origanizer": "新北市雙溪區雙溪國民小學",
+				"name": "新北市雙溪區樂齡學習中心",
+				"tel": "02-24931005#20",
+				"fax": "02-24933951",
+				"address": "22744新北市雙溪區共和里東榮街54號"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.427420033807, 25.0452419813]
+			},
+			"properties": {
+				"city": "新北市",
+				"district": "泰山區",
+				"origanizer": "新北市泰山區明志國民小學",
+				"name": "新北市泰山區樂齡學習中心",
+				"tel": "02-29061133#54",
+				"fax": "02-29061136",
+				"address": "24351新北市泰山區新生路2號"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.427420033807, 25.0452419813]
+			},
+			"properties": {
+				"city": "新北市",
+				"district": "金山區",
+				"origanizer": "新北市金山區金山國民小學",
+				"name": "新北市金山區樂齡學習中心",
+				"tel": "02-24981125#210",
+				"fax": "02-24985372",
+				"address": "20845新北市金山區中山路234號"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.427420033807, 25.0452419813]
+			},
+			"properties": {
+				"city": "新北市",
+				"district": "五股區",
+				"origanizer": "新北市五股區德音國民小學",
+				"name": "新北市五股區樂齡學習中心",
+				"tel": "02-22924152#854",
+				"fax": "02-22925350",
+				"address": "24855新北市五股區明德路2號"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.636519265192, 25.222962594229]
+			},
+			"properties": {
+				"city": "新北市",
+				"district": "貢寮區",
+				"origanizer": "新北市貢寮區澳底國民小學",
+				"name": "新北市貢寮區樂齡學習中心",
+				"tel": "02-24901432#220",
+				"fax": "02-24902287",
+				"address": "22808新北市貢寮區真理里延平街10號"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.92469203003, 25.054852000929]
+			},
+			"properties": {
+				"city": "新北市",
+				"district": "石門區",
+				"origanizer": "新北市石門區石門國民小學",
+				"name": "新北市石門區樂齡學習中心",
+				"tel": "02-26381263#31",
+				"fax": "02-26383180",
+				"address": "25304新北市石門區尖鹿里中央路9號"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.92469203003, 25.054852000929]
+			},
+			"properties": {
+				"city": "新北市",
+				"district": "烏來區",
+				"origanizer": "新北市立烏來區烏來國民中小學",
+				"name": "新北市烏來區樂齡學習中心",
+				"tel": "02-26616482#10",
+				"fax": "02-26616225",
+				"address": "23341新北市烏來區烏來里啦卡路5號"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.518178107924, 24.984615507994]
+			},
+			"properties": {
+				"city": "新北市",
+				"district": "新店區",
+				"origanizer": "新北市新店區新和國民小學",
+				"name": "新北市新店區新和樂齡學習中心(優先區)",
+				"tel": "02-29400170#850、857",
+				"fax": "02-29400160",
+				"address": "23105新北市新店區安和路三段100號"
+			}
+		}
+	]
+}

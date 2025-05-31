@@ -1,0 +1,197 @@
+{
+	"type": "FeatureCollection",
+	"features": [
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.538199289487, 25.029137285905]
+			},
+			"properties": {
+				"city": "臺北市",
+				"district": "大安區",
+				"organizer": "臺北市立圖書館諮詢服務課",
+				"name": "臺北市樂齡學習示範中心",
+				"tel": "02-27552823#2301",
+				"fax": "02-27010721",
+				"address": "10659臺北市大安區建國南路2段125號11樓"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.562838983518, 25.059272993849]
+			},
+			"properties": {
+				"city": "臺北市",
+				"district": "松山區",
+				"organizer": "臺北市立圖書館三民分館",
+				"name": "臺北市松山區樂齡學習中心",
+				"tel": "02-27600408#12",
+				"fax": "02-27564843",
+				"address": "10573臺北市松山區民生東路5段163-1號6樓"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.511115547767, 25.082254946443]
+			},
+			"properties": {
+				"city": "臺北市",
+				"district": "士林區",
+				"organizer": "臺北市立圖書館葫蘆堵分館",
+				"name": "臺北市士林區樂齡學習中心",
+				"tel": "02-28126513#9",
+				"fax": "02-28127945",
+				"address": "11165臺北市延平北路5段136巷1號3-9樓"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.513554985408, 25.074303003528]
+			},
+			"properties": {
+				"city": "臺北市",
+				"district": "大同區",
+				"organizer": "臺北市立圖書館大同分館",
+				"name": "臺北市大同區樂齡學習中心",
+				"tel": "02-25943236#9",
+				"fax": "02-25991423",
+				"address": "10371臺北市大同區重慶北路3段318號"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.54198899937, 24.990058003454]
+			},
+			"properties": {
+				"city": "臺北市",
+				"district": "文山區",
+				"organizer": "臺北市立圖書館景新分館",
+				"name": "臺北市文山區樂齡學習中心",
+				"tel": "02-29331244#11",
+				"fax": "02-29335340",
+				"address": "11669臺北市文山區景後街151號1樓"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.61261198186, 25.067414001127]
+			},
+			"properties": {
+				"city": "臺北市",
+				"district": "內湖區",
+				"organizer": "臺北市立圖書館東湖分館",
+				"name": "臺北市內湖區樂齡學習中心",
+				"tel": "02-26323378#1500",
+				"fax": "02-26332654",
+				"address": "11480臺北市內湖區五分街6號"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.467357623143, 25.119894018918]
+			},
+			"properties": {
+				"city": "臺北市",
+				"district": "北投區",
+				"organizer": "臺北市立關渡國民中學",
+				"name": "臺北市北投區樂齡學習中心",
+				"tel": "02-28582002",
+				"fax": "無",
+				"address": "11260臺北市北投區知行路212號"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.530019725454, 25.05377069351]
+			},
+			"properties": {
+				"city": "臺北市",
+				"district": "中山區",
+				"organizer": "臺北市中山區吉林國民小學",
+				"name": "臺北市中山區樂齡學習中心",
+				"tel": "02-25219196#700、710",
+				"fax": "無",
+				"address": "10491臺北市中山區吉林路110號2樓、4樓"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.502762195423, 25.038063216507]
+			},
+			"properties": {
+				"city": "臺北市",
+				"district": "萬華區",
+				"organizer": "臺北市萬華區老松國民小學",
+				"name": "臺北市萬華區樂齡學習中心",
+				"tel": "02-23361266#148",
+				"fax": "無",
+				"address": "10852臺北市萬華區桂林路64號"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.502762195423, 25.038063216507]
+			},
+			"properties": {
+				"city": "臺北市",
+				"district": "中正區",
+				"organizer": "社團法人臺北市歐伊寇斯OIKOS社區關懷協會",
+				"name": "臺北市中正區樂齡學習中心",
+				"tel": "02-2341-4322分機617",
+				"fax": "02-23956885",
+				"address": "10050台北市杭州南路一段15-1號B1"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.568598021552, 25.025907990069]
+			},
+			"properties": {
+				"city": "臺北市",
+				"district": "信義區",
+				"organizer": "臺北市信義區吳興國民小學",
+				"name": "臺北市信義區樂齡學習中心",
+				"tel": "02-27200226#60#67",
+				"fax": "02-87883044",
+				"address": "11046臺北市信義區松仁路226號"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.586874174693, 25.046892503764]
+			},
+			"properties": {
+				"city": "臺北市",
+				"district": "南港區",
+				"organizer": "臺北市南港區成德國民小學",
+				"name": "臺北市南港區樂齡學習中心",
+				"tel": "02-27851376#165",
+				"fax": "02-27855253",
+				"address": "11556臺北市南港區東新街65號"
+			}
+		}
+	]
+}
