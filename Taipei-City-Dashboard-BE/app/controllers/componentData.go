@@ -144,55 +144,38 @@ func GetComponentHistoryData(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"status": "success", "data": chartData})
 }
 
+// SortedComponentIndices 存儲按照訪問次數(times)從高到低排序的組件索引
+// 這個變數可以在其他函數中使用，例如推薦系統或數據分析
+var SortedComponentIndices []string
+
+// ComponentsRankMap 存儲組件索引到排名的映射
+var ComponentsRankMap map[string]int
+
 /*
 CheckRank retrieves component information from the database
 GET /api/v1/checkRank
-Query parameters:
-- city: Filter by city (default: "taipei")
-- pageSize: Number of components per page
-- pageNum: Page number (starts from 1)
-- sort: Field to sort by
-- order: Sort order ("asc" or "desc", default: "asc")
-- searchByName: Search by component name
-- searchByIndex: Search by component index
+This API fetches components from the dashboardmanager database, 
+sorts them by the 'times' field in descending order, and 
+stores the sorted indices in a global variable for later use.
+
+Response includes:
+- All components sorted by times (descending)
+- A list of component indices ranked by popularity
 */
 func CheckRank(c *gin.Context) {
-	// 不需要獲取用戶信息，因為這個端點不需要用戶認證
-
-	// Parse query parameters
-	var query componentQuery
-	if err := c.ShouldBindQuery(&query); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"status":  "error",
-			"message": "Invalid query parameters: " + err.Error(),
-		})
-		return
+	// 定義 Component 結構來匹配資料庫結構
+	type ComponentWithTimes struct {
+		ID    int64  `json:"id" gorm:"column:id"`
+		Index string `json:"index" gorm:"column:index"`
+		Name  string `json:"name" gorm:"column:name"`
+		Times int    `json:"times" gorm:"column:times"`
 	}
 
-	// Set default values
-	if query.City == "" {
-		query.City = "taipei"
-	}
-	if query.PageNum <= 0 {
-		query.PageNum = 1
-	}
-	if query.Order == "" {
-		query.Order = "asc"
-	}
-
-	// Get all components with detailed info by joining tables
-	components, totalComponents, resultNum, err := models.GetAllComponents(
-		query.City,
-		query.PageSize,
-		query.PageNum,
-		query.Sort,
-		query.Order,
-		query.FilterBy,
-		query.FilterMode,
-		query.FilterValue,
-		query.SearchByIndex,
-		query.SearchByName,
-	)
+	// 查詢 components 表格並按 times 欄位降序排序
+	var components []ComponentWithTimes
+	err := models.DBManager.Table("components").
+		Order("times DESC").
+		Find(&components).Error
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
@@ -202,15 +185,23 @@ func CheckRank(c *gin.Context) {
 		return
 	}
 
-	// Build the response
+	// 清空並重新填充全局暫存的排序索引陣列
+	SortedComponentIndices = make([]string, 0, len(components))
+	ComponentsRankMap = make(map[string]int, len(components))
+	
+	for i, comp := range components {
+		SortedComponentIndices = append(SortedComponentIndices, comp.Index)
+		ComponentsRankMap[comp.Index] = i + 1 // 排名從1開始
+	}
+
+	// 構建回應
 	response := gin.H{
 		"status":     "success",
 		"timestamp":  time.Now().Format(time.RFC3339),
-		"total":      totalComponents,
-		"count":      resultNum,
-		"page":       query.PageNum,
-		"pageSize":   query.PageSize,
+		"total":      len(components),
 		"components": components,
+		"ranks":      SortedComponentIndices,
+		"rankMap":    ComponentsRankMap,
 	}
 
 	c.JSON(http.StatusOK, response)
