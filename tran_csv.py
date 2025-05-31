@@ -19,6 +19,7 @@ def clean_address(addr):
 df = pd.read_csv(r'C:\Users\how08\Desktop\黑克松\blood.csv', encoding='utf-8')
 
 # 檢查必要欄位
+
 required_fields = ['地點']
 for field in required_fields:
     if field not in df.columns:
