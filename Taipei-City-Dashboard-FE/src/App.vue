@@ -21,6 +21,7 @@ import SideBar from "./components/utilities/bars/SideBar.vue";
 import AdminSideBar from "./components/utilities/bars/AdminSideBar.vue";
 import SettingsBar from "./components/utilities/bars/SettingsBar.vue";
 import NotificationBar from "./components/dialogs/NotificationBar.vue";
+import TrafficCamInfo from './components/dialogs/TrafficCamInfo.vue';
 import InitialWarning from "./components/dialogs/InitialWarning.vue";
 import ComponentSideBar from "./components/utilities/bars/ComponentSideBar.vue";
 import LogIn from "./components/dialogs/LogIn.vue";
@@ -177,6 +178,7 @@ onBeforeUnmount(() => {
       <router-view />
     </div>
     <InitialWarning />
+    <TrafficCamInfo />
     <LogIn />
     <div
       v-if="

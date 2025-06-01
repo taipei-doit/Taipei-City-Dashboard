@@ -44,6 +44,7 @@ export const useDialogStore = defineStore("dialog", {
 			addPin: false,
 			addViewPoint: false,
 			findClosestPoint: false,
+			trafficCamInfo: false,
 		},
 		// Stores the content for notifications
 		notification: {
@@ -62,6 +63,11 @@ export const useDialogStore = defineStore("dialog", {
 		addEdit: "",
 		// Stores the current timeout for notifications
 		curTimeout: null,
+
+		trafficCamCoordinates: {
+			lat: 25.0533,
+			lon: 121.5461,
+		}
 	}),
 	getters: {},
 	actions: {
@@ -107,6 +113,13 @@ export const useDialogStore = defineStore("dialog", {
 				id: id,
 				index: index,
 				name: name,
+			};
+		},
+		showTrafficCamInfo(lat, lon) {
+			this.showDialog("trafficCamInfo");
+			this.trafficCamCoordinates = {
+				lat: lat,
+				lon: lon,
 			};
 		},
 	},
