@@ -923,6 +923,7 @@ export const useMapStore = defineStore("map", {
 		/* Popup Related Functions */
 		// 1. Adds a popup when the user clicks on a item. The event will be passed in.
 		addPopup(event, actions = 'click') {
+			const dialogStore = useDialogStore();
 			
 			const formatValue = (value, key) => {
 				if (key === 'occupied_rate') {
@@ -956,7 +957,6 @@ export const useMapStore = defineStore("map", {
 					|| clickFeatureDatas[0].layer.id === 'wee_emergency_tp-circle-taipei'
 					|| clickFeatureDatas[0].layer.id === 'wee_narrow_alley-circle-metrotaipei'
 					|| clickFeatureDatas[0].layer.id === 'wee_narrow_alley_tp-circle-taipei'
-					|| clickFeatureDatas[0].layer.id === 'wee_cctv-circle-metrotaipei'
 				)) {
 				if (clickFeatureDatas[0].properties.url_gmap) {
 					// "https://www.google.com/maps/@25.03422,121.52768,19.5z?entry=ttu"
@@ -966,6 +966,11 @@ export const useMapStore = defineStore("map", {
 					);
 					return;
 				}
+			} else if (actions === 'dblclick'  
+				&& clickFeatureDatas.length > 0 
+				&& clickFeatureDatas[0].layer.id === 'wee_cctv-circle-metrotaipei'
+			) {
+				dialogStore.showTrafficCamInfo(clickFeatureDatas[0].properties.url_link)
 			} else {
 				for (let i = 0; i < clickFeatureDatas.length; i++) {
 					if (mapConfigs.length === 3) break;

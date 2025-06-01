@@ -7,8 +7,8 @@ const dialogStore = useDialogStore();
 
 // 計算 API URL
 const apiUrl = computed(() => {
-	const { lat, lon } = dialogStore.trafficCamCoordinates;
-	return `https://www.twipcam.com/api/v1/query-cam-list-by-coordinate?lat=${lat}&lon=${lon}`;
+	const { url } = dialogStore.trafficCamCoordinates;
+	return url;
 });
 
 const handleClose = () => {
@@ -25,9 +25,9 @@ const handleClose = () => {
       <div class="traffic-cam-info-header">
         <h2>
           雙北道路監控資訊
-          <small v-if="dialogStore.trafficCamCoordinates.lat">
+          <!-- <small v-if="dialogStore.trafficCamCoordinates.lat">
             ({{ dialogStore.trafficCamCoordinates.lat }}, {{ dialogStore.trafficCamCoordinates.lon }})
-          </small>
+          </small> -->
         </h2>
         <a 
           :href="apiUrl" 
@@ -39,7 +39,7 @@ const handleClose = () => {
       </div>
       
       <div 
-        v-if="dialogStore.trafficCamCoordinates.lat"
+        v-if="dialogStore.trafficCamCoordinates.url"
         class="traffic-cam-content"
       >
         <iframe 

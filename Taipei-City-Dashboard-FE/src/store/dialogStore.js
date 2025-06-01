@@ -67,7 +67,7 @@ export const useDialogStore = defineStore("dialog", {
 		trafficCamCoordinates: {
 			lat: 25.0533,
 			lon: 121.5461,
-		}
+		},
 	}),
 	getters: {},
 	actions: {
@@ -115,11 +115,10 @@ export const useDialogStore = defineStore("dialog", {
 				name: name,
 			};
 		},
-		showTrafficCamInfo(lat, lon) {
+		showTrafficCamInfo(url) {
 			this.showDialog("trafficCamInfo");
 			this.trafficCamCoordinates = {
-				lat: lat,
-				lon: lon,
+				url: url
 			};
 		},
 	},
