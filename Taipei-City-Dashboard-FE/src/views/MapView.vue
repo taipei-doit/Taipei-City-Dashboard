@@ -345,9 +345,15 @@ function shouldDisable(map_config) {
           :info-btn="true"
           :active-city="item.city"
           :select-btn="true"
-          :select-btn-disabled="contentStore.currentDashboard?.city ? contentStore.cityManager.getSelectList(contentStore.currentDashboard?.city).length === 1 : false"
-          :select-btn-list="contentStore.currentDashboard?.city ? contentStore.cityManager.getSelectList(contentStore.currentDashboard?.city) : contentStore.cityManager.getSelectList('metrotaipei')"
-          :city-tag="contentStore.currentDashboard?.city ? contentStore.cityManager.getTagList(contentStore.currentDashboard?.city) : contentStore.cityManager.getTagList(item.city)"
+          :select-btn-disabled="contentStore.cityManager.getSelectList(contentStore.currentDashboard?.city).length === 1 || contentStore.currentDashboardExcluded.components.filter((data) => data.index === item.index).length === 0"
+		  :select-btn-list="contentStore.currentDashboard?.city
+		   ? contentStore.cityManager.getSelectList(contentStore.currentDashboard?.city)
+		   : contentStore.cityManager.getCities(contentStore.cityManager.activeCities)
+		  "
+		  :city-tag="contentStore.currentDashboard?.city
+		   ? contentStore.cityManager.getTagList(contentStore.currentDashboard?.city)
+		   : contentStore.cityManager.getTagList(item.city)
+		  "
           :toggle-on="toggleOn.noMap[arrayIdx]"
           @info="
             (item) => {
