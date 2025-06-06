@@ -1,0 +1,43 @@
+{
+  "dag_infos": {
+    "dag_id": "district_population_household_tpe",
+    "start_date": "2024-12-10",
+    "schedule_interval": "0 20 19 * *",
+    "catchup": false,
+    "tags": [
+      "district_population_household_tpe",
+      "民政局",
+      "臺北市各行政區人口數戶數"
+    ],
+    "description": "Monthly statistics of population and household count by district in Taipei City.",
+    "default_args": {
+      "owner": "airflow",
+      "email": [
+        "DEFAULT_EMAIL_LIST"
+      ],
+      "email_on_retry": false,
+      "email_on_failure": true,
+      "retries": 1,
+      "retry_delay": 60
+    },
+    "ready_data_db": "postgres_default",
+    "ready_data_default_table": "district_population_household_tpe",
+    "ready_data_history_table": "",
+    "raw_data_db": "",
+    "raw_data_table": "",
+    "load_behavior": "replace"
+  },
+  "data_infos": {
+    "name_cn": "臺北市各行政區最新月份人口數及戶數",
+    "airflow_update_freq": "04:00+8 20th every month",
+    "source": "https://data.taipei/dataset/detail?id=6a1dbb4e-e99c-4e67-ab09-f6d83852dc99",
+    "source_type": "data.taipei api",
+    "source_dept": "民政局",
+    "gis_format": null,
+    "output_coordinate": "",
+    "is_geometry": 0,
+    "dataset_description": "臺北市各行政區每月戶數與人口數統計資料，包含總人口、男女人口、戶數等欄位。",
+    "etl_description": "透過 API 擷取資料，轉換欄位名稱、組合年份與月份為 period，並加上擷取時間。",
+    "sensitivity": "public"
+  }
+}
