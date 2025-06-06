@@ -23,7 +23,7 @@ def _transfer(**kwargs):
     '''
 
     # Config
-    ready_data_db_uri = kwargs.get('ready_data_db_uri')
+    ready_data_db_uri = kwargs.get('ready_data_db_uri')  # 已是完整 URI，不是 conn_id
     proxies = kwargs.get('proxies')
     dag_infos = kwargs.get('dag_infos')
     dag_id = dag_infos.get('dag_id')
@@ -31,8 +31,8 @@ def _transfer(**kwargs):
     default_table = dag_infos.get('ready_data_default_table')
 
     # Manual
-    rid = '9681db4c-fb1b-4a23-9013-e74483b6b046'
-    page_id = '6a1dbb4e-e99c-4e67-ab09-f6d83852dc99'
+    rid = '9681db4c-fb1b-4a23-9013-e74483b6b046'  # 對應資料資源 ID
+    page_id = '6a1dbb4e-e99c-4e67-ab09-f6d83852dc99'  # 對應資料頁面 ID（用於 log 或追蹤）
 
     # Extract
     res = get_data_taipei_api(rid)
@@ -56,7 +56,7 @@ def _transfer(**kwargs):
     data['month'] = data['month'].astype(int).astype(str).str.zfill(2)
     data['period'] = data['year'].astype(str) + '-' + data['month']
 
-    # 清除欄位
+    # 清除不必要欄位
     data = data.drop(columns=['_id', '_importdate', 'year', 'month'], errors='ignore')
 
     ready_data = data.copy()
@@ -73,6 +73,7 @@ def _transfer(**kwargs):
     update_lasttime_in_data_to_dataset_info(
         engine, airflow_dag_id=dag_id, lasttime_in_data=lasttime_in_data
     )
+
 
 dag = CommonDag(proj_folder='proj_city_dashboard', dag_folder='district_population_household_tpe')
 dag.create_dag(etl_func=_transfer)
