@@ -41,13 +41,13 @@ def _transfer(**kwargs):
 
     # Transform
     col_map = {
-        '年份': 'year',
-        '月份': 'month',
-        '行政區': 'district',
-        '戶數': 'household_count',
-        '人口數_合計數量': 'total_population',
-        '人口數_男數量': 'male_population',
-        '人口數_女數量': 'female_population'
+        'year': 'year',
+        'month': 'month',
+        'district': 'district',
+        'household_count': 'household_count',
+        'total_population': 'total_population',
+        'male_population': 'male_population',
+        'female_population': 'female_population'
     }
     data = raw_data.rename(columns=col_map)
 
