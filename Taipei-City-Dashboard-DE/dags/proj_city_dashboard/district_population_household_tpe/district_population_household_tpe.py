@@ -41,14 +41,19 @@ def _transfer(**kwargs):
 
     # Transform
     col_map = {
-        'year': 'year',
-        'month': 'month',
-        'district': 'district',
-        'household_count': 'household_count',
-        'total_population': 'total_population',
-        'male_population': 'male_population',
-        'female_population': 'female_population'
+        '年份': 'year',
+        '月份': 'month',
+        '行政區': 'district',
+        '戶數': 'household_count',
+        '人口數_合計數量': 'total_population',
+        '人口數_男數量': 'male_population',
+        '人口數_女數量': 'female_population',
+        '里數_現有門牌數值': 'li_doorplate_present',
+        '里數_戶籍登記': 'li_household_register',
+        '鄰數_現有門牌': 'lin_doorplate_present',
+        '鄰數_戶籍登記': 'lin_household_register'
     }
+
     data = raw_data.rename(columns=col_map)
 
     # 合併年與月為 period，轉西元年
