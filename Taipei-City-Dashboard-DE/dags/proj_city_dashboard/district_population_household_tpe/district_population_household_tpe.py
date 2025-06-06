@@ -31,7 +31,7 @@ def _transfer(**kwargs):
     default_table = dag_infos.get('ready_data_default_table')
 
     # Manual
-    rid = '6a1dbb4e-e99c-4e67-ab09-f6d83852dc99'
+    rid = '9681db4c-fb1b-4a23-9013-e74483b6b046'
     page_id = '6a1dbb4e-e99c-4e67-ab09-f6d83852dc99'
 
     # Extract
