@@ -69,6 +69,7 @@ def _transfer(**kwargs):
     )
 
     lasttime_in_data = ready_data['data_time'].max()
+    engine = create_engine(ready_data_db_uri)
     update_lasttime_in_data_to_dataset_info(
         engine, airflow_dag_id=dag_id, lasttime_in_data=lasttime_in_data
     )
