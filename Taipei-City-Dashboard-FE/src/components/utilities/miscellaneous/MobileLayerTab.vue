@@ -42,11 +42,6 @@ function handleToggle() {
     </label>
     <p>
       {{ content.name }}
-      <!-- {{
-        content.name.length > 6
-          ? `${content.name.slice(0, 5)}...`
-          : content.name
-      }} -->
     </p>
   </div>
 </template>
@@ -76,6 +71,10 @@ function handleToggle() {
 
 	input:checked + label {
 		border: solid 1px var(--color-highlight);
+		background-color: var(--color-highlight);
+		img {
+			filter: invert(1);
+		}
 	}
 
 	p {
