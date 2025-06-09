@@ -1,0 +1,43 @@
+{
+  "dag_infos": {
+    "dag_id": "li_age_population_tpe",
+    "start_date": "2024-12-10",
+    "schedule_interval": "0 20 19 * *",
+    "catchup": false,
+    "tags": [
+      "li_age_population_tpe",
+      "民政局",
+      "臺北市各里人口數按年齡分"
+    ],
+    "description": "Monthly population statistics by age in each li (里) of Taipei City (gender: total only).",
+    "default_args": {
+      "owner": "airflow",
+      "email": [
+        "DEFAULT_EMAIL_LIST"
+      ],
+      "email_on_retry": false,
+      "email_on_failure": true,
+      "retries": 1,
+      "retry_delay": 60
+    },
+    "ready_data_db": "postgres_default",
+    "ready_data_default_table": "li_age_population_tpe",
+    "ready_data_history_table": "",
+    "raw_data_db": "postgres_default",
+    "raw_data_table": "",
+    "load_behavior": "replace"
+  },
+  "data_infos": {
+    "name_cn": "臺北市各里人口數按年齡分（僅性別總計）",
+    "airflow_update_freq": "04:00+8 20th every month",
+    "source": "https://data.taipei/dataset/detail?id=a6394e3f-3514-4542-87bd-de4310a40db3",
+    "source_type": "data.taipei api",
+    "source_dept": "民政局",
+    "gis_format": null,
+    "output_coordinate": "",
+    "is_geometry": 0,
+    "dataset_description": "臺北市各里按年齡分的每月人口數統計資料。已過濾僅保留性別為總計（計）者，統計欄位包含總人口。",
+    "etl_description": "透過 API 擷取資料，轉換欄位名稱，僅保留性別為總計者，組合年份與月份為 period，並加上擷取時間。",
+    "sensitivity": "public"
+  }
+}
