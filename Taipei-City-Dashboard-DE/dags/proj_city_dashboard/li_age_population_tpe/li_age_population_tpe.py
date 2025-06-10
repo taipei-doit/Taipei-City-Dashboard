@@ -98,3 +98,9 @@ def _transfer(**kwargs):
     update_lasttime_in_data_to_dataset_info(
         engine, airflow_dag_id=dag_id, lasttime_in_data=lasttime_in_data
     )
+
+
+
+# Create DAG
+dag = CommonDag(proj_folder='proj_city_dashboard', dag_folder='li_age_population_tpe')
+dag.create_dag(etl_func=_transfer)
