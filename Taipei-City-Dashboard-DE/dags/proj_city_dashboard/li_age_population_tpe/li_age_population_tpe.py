@@ -28,9 +28,6 @@ def _transfer(**kwargs):
     raw_data = pd.DataFrame(res)
     raw_data["data_time"] = get_tpe_now_time_str()
 
-    # Filter only gender = '計'
-    raw_data = raw_data[raw_data['性別'] == '計'].copy()
-
     # Rename columns
     col_map = {
         '年份': 'year',
