@@ -9,7 +9,7 @@ import pandas as pd
 
 def _transfer(**kwargs):
     '''
-    Monthly population by 10-year age group in each li of Taipei City (with gender, includes 100+, with district_area).
+    Monthly population by 10-year age group in each li of Taipei City (all genders, includes 100+, with district_area).
     '''
 
     # Config
@@ -78,7 +78,7 @@ def _transfer(**kwargs):
         value_name='population'
     )
 
-    melt_df = melt_df[[
+    melt_df = melt_df[[  # 調整欄位順序
         'district_code', 'district_area', 'district', 'gender',
         'total_population', 'data_period', 'period', 'data_time', 'population'
     ]]
