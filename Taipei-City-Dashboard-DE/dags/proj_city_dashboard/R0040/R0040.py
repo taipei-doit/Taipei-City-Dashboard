@@ -77,11 +77,12 @@ def _R0040(**kwargs):
     # geometry
     gdata = convert_geometry_to_wkbgeometry(gdata, from_crs=FROM_CRS)
     ready_data = gdata.drop(columns=["geometry","positions_type"])
-    selected_columns = [ "ac_no", "st_no", "sno", "appmode", "x", "y", "apptime", "app_name",
-                        "c_name", "addr", "cb_da", "ce_da", "co_ti", "tc_na", "tc_ma", "tc_tl",
-                        "tc_ma3", "tc_tl3", "npurp", "dtype", "dlen", "positions", "wkb_geometry",
-                          "cb_ad", "cd_ad", "apptime_ad", "_ctime", "_mtime", "isblock", "isstay", "planb"]
-    ready_data = gdata[selected_columns]
+    ready_data['st_no'] = None
+    ready_data = ready_data[['ac_no', 'st_no', 'sno', 'appmode', 'x', 'y', 'apptime', 'app_name', 'c_name',
+        'addr', 'cb_da', 'ce_da', 'co_ti', 'tc_na', 'tc_ma', 'tc_tl', 'tc_ma3',
+        'tc_tl3', 'npurp', 'dtype', 'dlen', 'positions', 'wkb_geometry',
+        'cb_ad', 'cd_ad', 'apptime_ad', 'isblock', 'isstay', 'planb']]
+
     # Load
     engine = create_engine(ready_data_db_uri)
     save_geodataframe_to_postgresql(
