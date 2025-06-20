@@ -13,6 +13,7 @@ import MobileLayers from "../dialogs/MobileLayers.vue";
 import IncidentReport from "../dialogs/IncidentReport.vue";
 import FindClosestPoint from "../dialogs/FindClosestPoint.vue";
 import { savedLocations } from "../../assets/configs/mapbox/savedLocations.js";
+import TrafficCamInfo from "../dialogs/TrafficCamInfo.vue"; // 新增
 
 const authStore = useAuthStore();
 const mapStore = useMapStore();
@@ -45,6 +46,18 @@ function toggleVillageLayer() {
 	mapStore.toggleVillageBoundaries(villageLayer.value);
 }
 
+
+// 新增測試函數
+const testTrafficCam = () => {
+	// 使用台北車站座標測試
+	dialogStore.showTrafficCamInfo(25.0478, 121.5175);
+};
+
+const testTrafficCamAtMapCenter = () => {
+	const center = mapStore.map.getCenter();
+	dialogStore.showTrafficCamInfo(center.lat, center.lng);
+};
+
 watch(
 	() => route.query?.city,
 	(newValue) => {
@@ -68,6 +81,16 @@ onMounted(() => {
     <div class="mapcontainer-map">
       <!-- #mapboxBox needs to be empty to ensure Mapbox performance -->
       <div id="mapboxBox" />
+
+      <!-- 新增測試按鈕 -->
+      <div class="test-buttons">
+        <button @click="testTrafficCam">
+          測試交通攝影機 (台北車站)
+        </button>
+        <button @click="testTrafficCamAtMapCenter">
+          查看地圖中心點攝影機
+        </button>
+      </div>
       <div class="mapcontainer-layers">
         <button
           :style="{
@@ -180,6 +203,9 @@ onMounted(() => {
     </div>
   </div>
   <AddViewPoint name="addViewPoint" />
+
+  <!-- 新增 TrafficCamInfo 組件 -->
+  <TrafficCamInfo />
 </template>
 
 <style scoped lang="scss">
@@ -360,6 +386,31 @@ onMounted(() => {
 
 	100% {
 		color: var(--color-complement-text);
+	}
+
+}
+
+.test-buttons {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	z-index: 10;
+	
+	button {
+		padding: 8px 12px;
+		background-color: var(--color-highlight);
+		color: white;
+		border: none;
+		border-radius: 4px;
+		cursor: pointer;
+		font-size: 12px;
+		
+		&:hover {
+			opacity: 0.8;
+		}
 	}
 }
 </style>

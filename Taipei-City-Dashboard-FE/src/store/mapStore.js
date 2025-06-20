@@ -15,6 +15,8 @@ import { ArcLayer } from "@deck.gl/layers";
 import { MapboxOverlay } from "@deck.gl/mapbox";
 import axios from "axios";
 import http from "../router/axios.js";
+import { VectorTile } from '@mapbox/vector-tile';
+import Pbf from 'pbf';
 
 // Other Stores
 import { useAuthStore } from "./authStore";
@@ -111,9 +113,10 @@ export const useMapStore = defineStore("map", {
 					this.addPopup(event);
 				})
 				.on("dblclick", (event) => {
-					let coordinates = event.lngLat;
-					this.tempMarkerCoordinates = coordinates;
-					this.marker.setLngLat(coordinates).addTo(this.map);
+					this.addPopup(event, 'dblclick');
+					// let coordinates = event.lngLat;
+					// this.tempMarkerCoordinates = coordinates;
+					// this.marker.setLngLat(coordinates).addTo(this.map);
 				})
 				.on("idle", () => {
 					this.loadingLayers = this.loadingLayers.filter(
@@ -327,6 +330,9 @@ export const useMapStore = defineStore("map", {
 		},
 		// 3-2. Add a raster map as a source in mapbox
 		async addRasterSource(map_config) {
+			// if (map_config.type === "terrain") {
+			// 	// this.AddTerrainLayer(map_config);
+			// } else 
 			if (["arc", "voronoi", "isoline"].includes(map_config.type)) {
 				const res = await axios.get(
 					`https://citydashboard.taipei/geo_server/taipei_vioc/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=taipei_vioc%3A${map_config.index}&maxFeatures=1000000&outputFormat=application%2Fjson`
@@ -447,7 +453,19 @@ export const useMapStore = defineStore("map", {
 				};
 			}
 			this.loadingLayers.push("rendering");
-			this.map.addLayer({
+			const filterClass = [
+				["6h150r", "6h250r", "6h350r"],
+				["12h200r", "12h300r", "12h400r"],
+				["24h200r", "24h350r", "24h500r", "24h650r"]
+			  ];
+			  
+			  // 初始 filter 設定為第一組 (6 小時降雨)
+			  const initialFilter = [
+				"in",
+				"hazard_class",
+				...filterClass[0]
+			  ];
+			  const config = {
 				id: map_config.layerId,
 				type: map_config.type,
 				"source-layer":
@@ -461,14 +479,58 @@ export const useMapStore = defineStore("map", {
 					...maplayerCommonLayout[`${map_config.type}`],
 					...extra_layout_configs,
 				},
-				source: `${map_config.layerId}-source`,
-			});
+				source: `${map_config.layerId}-source`
+			}
+			if (map_config.layerId === 'wee_hazard_water-fill-extrusion-metrotaipei' || map_config.layerId === 'wee_hazard_water_tp-fill-extrusion-taipei') {
+				config.filter = initialFilter
+			}
+			this.map.addLayer(config);
+			if (map_config.layerId === 'wee_hazard_water-fill-extrusion-metrotaipei' || map_config.layerId === 'wee_hazard_water_tp-fill-extrusion-taipei') this.animateFilter(map_config.layerId);
 			this.currentLayers.push(map_config.layerId);
 			this.mapConfigs[map_config.layerId] = map_config;
 			this.currentVisibleLayers.push(map_config.layerId);
 			this.loadingLayers = this.loadingLayers.filter(
 				(el) => el !== map_config.layerId
 			);
+		},
+		animateFilter(mapLayerId) {
+			this.stopAnimation();
+			const filterClass = [
+				["6h150r", "6h250r", "6h350r"],
+				["12h200r", "12h300r", "12h400r"],
+				["24h200r", "24h350r", "24h500r", "24h650r"]
+			];
+		
+			let index = 1;
+		
+			this.waitUntilReady = setInterval(() => {
+				if (this.loadingLayers.length !== 0) return;
+		
+				clearInterval(this.waitUntilReady); // 停止等待
+				this.waitUntilReady = null;
+		
+				// 啟動動畫
+				this.filterInterval = setInterval(() => {
+					const currentFilter = [
+						"in",
+						"hazard_class",
+						...filterClass[index]
+					];
+		
+					this.map.setFilter(mapLayerId, currentFilter);
+					index = (index + 1) % filterClass.length;
+				}, 1000);
+			}, 200);
+		},
+		stopAnimation() {
+			if (this.filterInterval) {
+				clearInterval(this.filterInterval);
+				this.filterInterval = null;
+			}
+			if (this.waitUntilReady) {
+				clearInterval(this.waitUntilReady);
+				this.waitUntilReady = null;
+			}
 		},
 		// 4-2-1. Add Map Layer for Arc Maps
 		// Developed by Weeee Chill, Taipei Codefest 2024
@@ -547,6 +609,8 @@ export const useMapStore = defineStore("map", {
 						...l.config,
 						coef: this.step / 1000,
 					});
+				case "TerrainLayer":
+					return new TerrainLayer(l.config);
 				default:
 					break;
 				}
@@ -593,6 +657,48 @@ export const useMapStore = defineStore("map", {
 			// 啟動動畫
 			requestAnimationFrame(step);
 		},
+		// AddTerrainLayer(map_config) {
+		// 	this.loadingLayers.push("rendering");
+		// 	const url = 'https://citydashboard.taipei/geo_server/gwc/service/tms/1.0.0/taipei_vioc:work_sidewalk@EPSG:900913@pbf/10/857/585.pbf';
+
+		// 	fetch(url)
+		// 		.then(res => {
+		// 			if (!res.ok) throw new Error("CORS 或網路錯誤");
+		// 			return res.arrayBuffer();
+		// 		})
+		// 		.then(buffer => {
+		// 			const tile = new VectorTile(new Pbf(buffer));
+
+		// 			for (let layerName in tile.layers) {
+		// 				console.log(`🔍 找到圖層：${layerName}`);
+		// 				const layer = tile.layers[layerName];
+						
+		// 				console.log(`  ➤ 該圖層共 ${layer.length} 筆 feature`);
+
+		// 				for (let i = 0; i < layer.length; i++) {
+		// 					const feature = layer.feature(i);
+		// 					console.log(`📌 Feature ${i + 1}`);
+		// 					console.log('  屬性:', feature);
+		// 					console.log('  幾何:', feature.loadGeometry());
+		// 					console.log('  bbox:', feature.bbox());
+		// 					console.log('  toGeoJSON', feature.toGeoJSON(857, 585, 10))
+							
+		// 				}
+		// 			}
+		// 		})
+		// 		.catch(err => {
+		// 			console.error('⚠️ 錯誤：', err);
+		// 		});
+		// 	this.currentVisibleLayers.push(map_config.layerId);
+		// 	this.renderDeckGLLayer();
+		// 	this.currentLayers.push(map_config.layerId);
+		// 	this.mapConfigs[map_config.layerId] = map_config;
+		// 	this.loadingLayers = this.loadingLayers.filter(
+		// 		(el) => el !== map_config.layerId
+		// 	);
+		// },
+
+
 		// 4-3. Add Map Layer for Voronoi Maps
 		// Developed by 00:21, Taipei Codefest 2023
 		AddVoronoiMapLayer(map_config, data) {
@@ -669,10 +775,10 @@ export const useMapStore = defineStore("map", {
 					};
 				});
 
-			let lngStart = 121.42955;
-			let lngEnd = 121.68351;
-			let latStart = 24.94679;
-			let latEnd = 25.21811;
+			let lngStart = 121.3;
+			let lngEnd = 122;
+			let latStart = 24.8;
+			let latEnd = 25.3;
 
 			let targetPoints = [];
 			let gridSize = 0.001;
@@ -765,11 +871,32 @@ export const useMapStore = defineStore("map", {
 				this.currentVisibleLayers.push(mapLayerId);
 				this.renderDeckGLLayer();
 			} else {
-				this.map.setLayoutProperty(mapLayerId, "visibility", "visible");
+				
+				if (mapLayerId === 'wee_hazard_water-fill-extrusion-metrotaipei' || mapLayerId === 'wee_hazard_water_tp-fill-extrusion-taipei') {
+					const filterClass = [
+						["6h150r", "6h250r", "6h350r"],
+						["12h200r", "12h300r", "12h400r"],
+						["24h200r", "24h350r", "24h500r", "24h650r"]
+					  ];
+					  
+					  // 初始 filter 設定為第一組 (6 小時降雨)
+					  const initialFilter = [
+						"in",
+						"hazard_class",
+						...filterClass[0]
+					  ];
+					  this.map.setFilter(mapLayerId, initialFilter);
+					this.map.setLayoutProperty(mapLayerId, "visibility", "visible");
+					this.animateFilter(mapLayerId);
+
+				} else {
+					this.map.setLayoutProperty(mapLayerId, "visibility", "visible");
+				}
 			}
 		},
 		// 6. Turn off the visibility of an exisiting map layer but don't remove it completely
 		turnOffMapLayerVisibility(map_config) {
+			this.stopAnimation();
 			map_config.forEach((element) => {
 				let mapLayerId = `${element.index}-${element.type}-${element.city}`;
 				this.loadingLayers = this.loadingLayers.filter(
@@ -795,7 +922,9 @@ export const useMapStore = defineStore("map", {
 
 		/* Popup Related Functions */
 		// 1. Adds a popup when the user clicks on a item. The event will be passed in.
-		addPopup(event) {
+		addPopup(event, actions = 'click') {
+			const dialogStore = useDialogStore();
+			
 			const formatValue = (value, key) => {
 				if (key === 'occupied_rate') {
 					return value === -99 ? '-' : value;
@@ -820,23 +949,47 @@ export const useMapStore = defineStore("map", {
 			const mapConfigs = [];
 			const parsedPopupContent = [];
 			let previousParsedLayer = "";
-
-			for (let i = 0; i < clickFeatureDatas.length; i++) {
-				if (mapConfigs.length === 3) break;
-				if (previousParsedLayer === clickFeatureDatas[i].layer.id)
-					continue;
-
-				// format properties
-				const feature = {...clickFeatureDatas[i]};
-				feature.properties = {...feature.properties};
-				Object.keys(feature.properties).forEach(key => {
-					feature.properties[key] = formatValue(feature.properties[key], key);
-				});
-
-				previousParsedLayer = clickFeatureDatas[i].layer.id;
-				mapConfigs.push(this.mapConfigs[clickFeatureDatas[i].layer.id]);
-				parsedPopupContent.push(feature);
+			console.log('click', event, clickFeatureDatas);
+			if (actions === 'dblclick'  
+				&& clickFeatureDatas.length > 0 
+				&& (
+					clickFeatureDatas[0].layer.id === 'wee_emergency-circle-metrotaipei'
+					|| clickFeatureDatas[0].layer.id === 'wee_emergency_tp-circle-taipei'
+					|| clickFeatureDatas[0].layer.id === 'wee_narrow_alley-circle-metrotaipei'
+					|| clickFeatureDatas[0].layer.id === 'wee_narrow_alley_tp-circle-taipei'
+				)) {
+				if (clickFeatureDatas[0].properties.url_gmap) {
+					// "https://www.google.com/maps/@25.03422,121.52768,19.5z?entry=ttu"
+					window.open(
+						clickFeatureDatas[0].properties.url_gmap,
+						'_blank'
+					);
+					return;
+				}
+			} else if (actions === 'dblclick'  
+				&& clickFeatureDatas.length > 0 
+				&& clickFeatureDatas[0].layer.id === 'wee_cctv-circle-metrotaipei'
+			) {
+				dialogStore.showTrafficCamInfo(clickFeatureDatas[0].properties.url_link)
+			} else {
+				for (let i = 0; i < clickFeatureDatas.length; i++) {
+					if (mapConfigs.length === 3) break;
+					if (previousParsedLayer === clickFeatureDatas[i].layer.id)
+						continue;
+	
+					// format properties
+					const feature = {...clickFeatureDatas[i]};
+					feature.properties = {...feature.properties};
+					Object.keys(feature.properties).forEach(key => {
+						feature.properties[key] = formatValue(feature.properties[key], key);
+					});
+	
+					previousParsedLayer = clickFeatureDatas[i].layer.id;
+					mapConfigs.push(this.mapConfigs[clickFeatureDatas[i].layer.id]);
+					parsedPopupContent.push(feature);
+				}
 			}
+			
 			// Create a new mapbox popup
 			this.popup = new mapboxGl.Popup()
 				.setLngLat(event.lngLat)
