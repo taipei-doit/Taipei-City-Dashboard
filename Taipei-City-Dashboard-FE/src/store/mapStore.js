@@ -725,10 +725,10 @@ export const useMapStore = defineStore("map", {
 					};
 				});
 
-			let lngStart = 121.42955;
-			let lngEnd = 121.68351;
-			let latStart = 24.94679;
-			let latEnd = 25.21811;
+			let lngStart = 121.3;
+			let lngEnd = 122;
+			let latStart = 24.8;
+			let latEnd = 25.3;
 
 			let targetPoints = [];
 			let gridSize = 0.001;
