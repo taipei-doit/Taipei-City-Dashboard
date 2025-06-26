@@ -192,6 +192,16 @@ function shouldDisable(map_config) {
           :active-city="item.city"
           :select-btn="true"
           :select-btn-disabled="contentStore.cityManager.getSelectList(contentStore.currentDashboard?.city).length === 1 || contentStore.currentDashboardExcluded.components.filter((data) => data.index === item.index).length === 0"
+<<<<<<< feature/bug_team_reward
+          :select-btn-list="contentStore.currentDashboard?.city
+            ? contentStore.cityManager.getSelectList(contentStore.currentDashboard?.city)
+            : contentStore.cityManager.getCities(contentStore.cityManager.activeCities)
+          "
+          :city-tag="contentStore.currentDashboard?.city
+            ? contentStore.cityManager.getTagList(contentStore.currentDashboard?.city)
+            : contentStore.cityManager.getTagList(item.city)
+          "
+=======
 		  :select-btn-list="contentStore.currentDashboard?.city
 		   ? contentStore.cityManager.getSelectList(contentStore.currentDashboard?.city)
 		   : contentStore.cityManager.getCities(contentStore.cityManager.activeCities)
@@ -200,6 +210,7 @@ function shouldDisable(map_config) {
 		   ? contentStore.cityManager.getTagList(contentStore.currentDashboard?.city)
 		   : contentStore.cityManager.getTagList(item.city)
 		  "
+>>>>>>> sit
           :toggle-disable="shouldDisable(item.map_config)"
           :toggle-on="toggleOn.hasMap[arrayIdx]"
           @info="
@@ -346,6 +357,16 @@ function shouldDisable(map_config) {
           :active-city="item.city"
           :select-btn="true"
           :select-btn-disabled="contentStore.cityManager.getSelectList(contentStore.currentDashboard?.city).length === 1 || contentStore.currentDashboardExcluded.components.filter((data) => data.index === item.index).length === 0"
+<<<<<<< feature/bug_team_reward
+          :select-btn-list="contentStore.currentDashboard?.city
+            ? contentStore.cityManager.getSelectList(contentStore.currentDashboard?.city)
+            : contentStore.cityManager.getCities(contentStore.cityManager.activeCities)
+          "
+          :city-tag="contentStore.currentDashboard?.city
+            ? contentStore.cityManager.getTagList(contentStore.currentDashboard?.city)
+            : contentStore.cityManager.getTagList(item.city)
+          "
+=======
 		  :select-btn-list="contentStore.currentDashboard?.city
 		   ? contentStore.cityManager.getSelectList(contentStore.currentDashboard?.city)
 		   : contentStore.cityManager.getCities(contentStore.cityManager.activeCities)
@@ -354,6 +375,7 @@ function shouldDisable(map_config) {
 		   ? contentStore.cityManager.getTagList(contentStore.currentDashboard?.city)
 		   : contentStore.cityManager.getTagList(item.city)
 		  "
+>>>>>>> sit
           :toggle-on="toggleOn.noMap[arrayIdx]"
           @info="
             (item) => {
