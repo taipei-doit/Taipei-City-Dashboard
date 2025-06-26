@@ -169,6 +169,11 @@ export const useMapStore = defineStore("map", {
 					tolerance: 0,
 					tiles: [
 						`${location.origin}/geo_server/gwc/service/tms/1.0.0/taipei_vioc:metrotaipei_village@EPSG:900913@pbf/{z}/{x}/{y}.pbf`,
+<<<<<<< feature/bug_team_reward
+=======
+						// `${location.origin}/geo_server/gwc/service/tms/1.0.0/taipei_vioc:metrotaipei_village@EPSG:900913@pbf/{z}/{x}/{y}.pbf`,
+
+>>>>>>> sit
 					],
 				})
 				.addLayer(metroTpVillage);
@@ -329,7 +334,7 @@ export const useMapStore = defineStore("map", {
 		async addRasterSource(map_config) {
 			if (["arc", "voronoi", "isoline"].includes(map_config.type)) {
 				const res = await axios.get(
-					`https://citydashboard.taipei/geo_server/taipei_vioc/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=taipei_vioc%3A${map_config.index}&maxFeatures=1000000&outputFormat=application%2Fjson`
+					`${location.origin}/geo_server/taipei_vioc/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=taipei_vioc%3A${map_config.index}&maxFeatures=1000000&outputFormat=application%2Fjson`
 				);
 
 				if (map_config.type === "arc") {
@@ -351,7 +356,7 @@ export const useMapStore = defineStore("map", {
 						scheme: "tms",
 						tolerance: 0,
 						tiles: [
-							`https://citydashboard.taipei/geo_server/gwc/service/tms/1.0.0/taipei_vioc:${map_config.index}@EPSG:900913@pbf/{z}/{x}/{y}.pbf`,
+							`${location.origin}/geo_server/gwc/service/tms/1.0.0/taipei_vioc:${map_config.index}@EPSG:900913@pbf/{z}/{x}/{y}.pbf`,
 						],
 					});
 		
