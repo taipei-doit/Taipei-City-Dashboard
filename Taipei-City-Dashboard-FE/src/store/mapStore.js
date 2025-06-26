@@ -169,11 +169,6 @@ export const useMapStore = defineStore("map", {
 					tolerance: 0,
 					tiles: [
 						`${location.origin}/geo_server/gwc/service/tms/1.0.0/taipei_vioc:metrotaipei_village@EPSG:900913@pbf/{z}/{x}/{y}.pbf`,
-<<<<<<< feature/bug_team_reward
-=======
-						// `${location.origin}/geo_server/gwc/service/tms/1.0.0/taipei_vioc:metrotaipei_village@EPSG:900913@pbf/{z}/{x}/{y}.pbf`,
-
->>>>>>> sit
 					],
 				})
 				.addLayer(metroTpVillage);
