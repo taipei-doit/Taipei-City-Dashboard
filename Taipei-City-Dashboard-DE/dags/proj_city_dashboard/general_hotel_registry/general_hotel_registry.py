@@ -3,23 +3,23 @@ from operators.common_pipeline import CommonDag
 
 
 def _general_hotel_registry(**kwargs):
-    import os
-
-    import geopandas as gpd
+    import requests
+    import pandas as pd
+    from io import StringIO
     from sqlalchemy import create_engine
-    from utils.extract_stage import (
-        download_file,
-        unzip_file_to_target_folder,
-    )
+
     from utils.load_stage import (
         save_geodataframe_to_postgresql,
         update_lasttime_in_data_to_dataset_info,
     )
-    from utils.transform_geometry import (
-        convert_geometry_to_wkbgeometry,
-        convert_polygon_to_multipolygon,
-    )
     from utils.get_time import get_tpe_now_time_str
+    from utils.transform_address import (
+        clean_data,
+        get_addr_xy_parallel,
+        main_process,
+        save_data,
+    )
+    from utils.transform_geometry import add_point_wkbgeometry_column_to_df
 
     # Config
     ready_data_db_uri = kwargs.get("ready_data_db_uri")
@@ -29,68 +29,42 @@ def _general_hotel_registry(**kwargs):
     load_behavior = dag_infos.get("load_behavior")
     default_table = dag_infos.get("ready_data_default_table")
     history_table = dag_infos.get("ready_data_history_table")
-    geometry_type = "MultiPolygon"
-    filename = f"{dag_id}.zip"
-    unzip_path = f"{data_path}/{dag_id}"
-    ENCODING = "UTF-8"
-    FROM_CRS = 3826
-    # 取得連結:https://data.gov.tw/dataset/167440
-    # 20240815更新連結
-    URL = "https://data.moa.gov.tw/OpenData/GetOpenDataFile.aspx?id=I89&FileType=SHP&RID=32744"
-
-    # Extract shpfile
-    zip_file = download_file(filename, URL, is_proxy=True)
-    unzip_file_to_target_folder(zip_file, unzip_path)
-    target_shp_file = [f for f in os.listdir(unzip_path) if f.endswith("shp")][0]
-    raw_data = gpd.read_file(
-        f"{unzip_path}/{target_shp_file}", encoding=ENCODING, from_crs=FROM_CRS
-    )
-
+    geometry_type = "Point"
+    FROM_CRS = 4326
+    URL = 'https://data.taipei/api/dataset/4d7d0b46-2e90-4ee7-b000-c0f2f3a37651/resource/3cea29db-66b1-4ab5-886c-4cafd3e1dcbc/download'
+    response = requests.get(URL, verify=False)
+    # 讀取 CSV
+    df = pd.read_csv(StringIO(response.text))
+    print(f"raw data =========== {df.head()}")
     # Transform
-    gdata = raw_data.copy()
-    # rename
-    gdata.columns = gdata.columns.str.lower()
-    gdata = gdata.rename(
-        columns={
-            "id": "id",
-            "debrisno": "debrisno",  # 土石流潛勢溪流編號
-            "county": "county",  # 縣市
-            "town": "town",  # 鄉鎮市區
-            "vill": "vill",  # 村里
-            "overflowno": "overflowno",  # 溢流點編號
-            "overflow_x": "overflow_x",
-            "overflow_y": "overflow_y",
-            "address": "address",  # 保全住戶地址
-            "total_res": "total_res",  # 影響範圍內保全住戶總數
-            "res_class": "res_class",  # 影響範圍內保全住戶戶數級距
-            "risk": "risk",  # 風險等級
-            "dbno_old": "dbno_old",  # 土石流潛勢溪流前次編號
-        }
+    
+    data = df.rename(columns={
+        "專用標識編號": "license_number",
+        "旅館名稱": "name",
+        "營業地址": "address",
+        "電話或手機": "localcall",
+        "客房最低定價": "button_price",
+        "客房最高定價": "higher_price",
+        "房間數": "room"
+    })
+    data["data_time"] = get_tpe_now_time_str(is_with_tz=True)
+
+    addr = data["address"]
+    addr_cleaned = clean_data(addr)
+    standard_addr_list = main_process(addr_cleaned)
+    result, output = save_data(addr, addr_cleaned, standard_addr_list)
+    data["address"] = output
+
+    # 資料格式為"108臺北市萬華區昆明街142號7-8樓", 只取區
+    data['area'] = data['address'].str.findall(r'[\u4e00-\u9fa5]+區').str[-1]
+    # get gis xy
+    data["longitude"], data["latitude"] = get_addr_xy_parallel(output)
+    # standardize geometry
+    gdata = add_point_wkbgeometry_column_to_df(
+        data, x=data["longitude"], y=data["latitude"], from_crs=FROM_CRS
     )
-    # geometry
-    # there some polygon and multipolygon in geometry column, convert them all to multipolygon
-    gdata["geometry"] = gdata["geometry"].apply(convert_polygon_to_multipolygon)
-    gdata = convert_geometry_to_wkbgeometry(gdata, from_crs=FROM_CRS)
-    gdata.drop(columns=["geometry"], inplace=True)
-    # secelt columns
-    ready_data = gdata[
-        [
-            "id",
-            "debrisno",
-            "county",
-            "town",
-            "vill",
-            "overflowno",
-            "overflow_x",
-            "overflow_y",
-            "address",
-            "total_res",
-            "res_class",
-            "risk",
-            "dbno_old",
-            "wkb_geometry",
-        ]
-    ]
+    # select column
+    ready_data = gdata[["data_time", "license_number", "name", "address", "localcall", "button_price", "higher_price", "room", "area", "longitude", "latitude", "wkb_geometry"]]
 
     # Load
     engine = create_engine(ready_data_db_uri)

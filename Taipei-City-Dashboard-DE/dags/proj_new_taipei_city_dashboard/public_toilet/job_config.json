@@ -5,7 +5,7 @@
 		"schedule_interval": "@monthly",
 		"catchup": false,
 		"tags": [
-			"moenv_public_toilet",
+			"moenv_public_toilet_ntpe",
 			"MOENV"
 		],
 		"description": "public toilet data from moenv.",
@@ -20,11 +20,11 @@
 			"retry_delay": 60
 		},
 		"ready_data_db": "postgres_default",
-		"ready_data_default_table": "moenv_public_toilet",
-		"ready_data_history_table": "moenv_public_toilet_history",
+		"ready_data_default_table": "moenv_public_toilet_ntpe",
+		"ready_data_history_table": "moenv_public_toilet_ntpe_history",
 		"raw_data_db": "postgres_default",
 		"raw_data_table": "",
-		"load_behavior": "current+history"
+		"load_behavior": "replace"
 	},
 	"data_infos": {
 		"name_cn": "公共廁所-縣市(新北市)資料",
