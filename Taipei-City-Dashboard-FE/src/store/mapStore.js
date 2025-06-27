@@ -475,11 +475,11 @@ export const useMapStore = defineStore("map", {
 				},
 				source: `${map_config.layerId}-source`
 			}
-			if (map_config.layerId === 'wee_hazard_water-fill-extrusion-metrotaipei' || map_config.layerId === 'wee_hazard_water_tp-fill-extrusion-taipei') {
+			if (map_config.layerId === 'flood_water-fill-extrusion-metrotaipei' || map_config.layerId === 'wee_hazard_water_tp-fill-extrusion-taipei') {
 				config.filter = initialFilter
 			}
 			this.map.addLayer(config);
-			if (map_config.layerId === 'wee_hazard_water-fill-extrusion-metrotaipei' || map_config.layerId === 'wee_hazard_water_tp-fill-extrusion-taipei') this.animateFilter(map_config.layerId);
+			if (map_config.layerId === 'flood_water-fill-extrusion-metrotaipei' || map_config.layerId === 'wee_hazard_water_tp-fill-extrusion-taipei') this.animateFilter(map_config.layerId);
 			this.currentLayers.push(map_config.layerId);
 			this.mapConfigs[map_config.layerId] = map_config;
 			this.currentVisibleLayers.push(map_config.layerId);
@@ -821,7 +821,7 @@ export const useMapStore = defineStore("map", {
 				this.currentVisibleLayers.push(mapLayerId);
 				this.renderDeckGLLayer();
 			} else {
-				if (mapLayerId === 'wee_hazard_water-fill-extrusion-metrotaipei' || mapLayerId === 'wee_hazard_water_tp-fill-extrusion-taipei') {
+				if (mapLayerId === 'flood_water-fill-extrusion-metrotaipei' || mapLayerId === 'wee_hazard_water_tp-fill-extrusion-taipei') {
 					const filterClass = [
 						["6h150r", "6h250r", "6h350r"],
 						["12h200r", "12h300r", "12h400r"],
