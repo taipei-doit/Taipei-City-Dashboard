@@ -1,28 +1,27 @@
 from shapely.geometry import Point
-from shapely import wkb
 from airflow import DAG
 from operators.common_pipeline import CommonDag
 from utils.extract_stage import get_data_taipei_api
-from utils.load_stage import save_dataframe_to_postgresql, update_lasttime_in_data_to_dataset_info
+from utils.load_stage import save_geodataframe_to_postgresql, update_lasttime_in_data_to_dataset_info
 from utils.get_time import get_tpe_now_time_str
+from utils.transform_geometry import add_point_wkbgeometry_column_to_df
 from sqlalchemy import create_engine
 import pandas as pd
 
 
 def _transfer(**kwargs):
-    '''
-    Extract AED location data from Taipei Open Data platform and load into PostgreSQL.
-    '''
-
     # Config
     ready_data_db_uri = kwargs.get('ready_data_db_uri')
-    proxies = kwargs.get('proxies')
+    proxies = kwargs.get('proxies')  # 若有用 proxy 可啟用
     dag_infos = kwargs.get('dag_infos')
     dag_id = dag_infos.get('dag_id')
     load_behavior = dag_infos.get('load_behavior')
     default_table = dag_infos.get('ready_data_default_table')
+    history_table = dag_infos.get('ready_data_history_table')
+    GEOMETRY_TYPE = "Point"
+    FROM_CRS = 4326
 
-    # Resource ID (AED 自動體外心臟去顫器設置地點)
+    # Resource ID
     rid = '438c61ad-24f6-4e54-a1cc-e2cfe0e7051e'
 
     # Extract
@@ -30,59 +29,56 @@ def _transfer(**kwargs):
     raw_data = pd.DataFrame(res)
     raw_data["data_time"] = get_tpe_now_time_str()
 
-    # Clean coordinates
-    raw_data['lat'] = pd.to_numeric(raw_data['緯度'], errors='coerce')
-    raw_data['lng'] = pd.to_numeric(raw_data['經度'], errors='coerce')
-
-    # Derive city & district from address
-    raw_data['city'] = raw_data['設置地點地址'].str[:3]
-    raw_data['district'] = raw_data['設置地點地址'].str[3:6]
-
-    # Create WKB geometry
-    raw_data['wkb_geometry'] = raw_data.apply(
-        lambda row: wkb.dumps(Point(row['lng'], row['lat'])) if pd.notnull(row['lng']) and pd.notnull(row['lat']) else None,
-        axis=1
-    )
-
-    # Final dataframe
-    df = pd.DataFrame({
-        'place_id': pd.to_numeric(raw_data['場所代碼'], errors='coerce'),
-        'place_name': raw_data['場所名稱'],
-        'city': raw_data['city'],
-        'district': raw_data['district'],
-        'address': raw_data['設置地點地址'],
-        'category': raw_data['場所類別'],
-        'type': raw_data['場所型態'],
-        'description': raw_data['場所描述'],
-        'aed_id': pd.to_numeric(raw_data['AED編號'], errors='coerce'),
-        'aed_location': raw_data['AED放置地點'],
-        'aed_description': raw_data['AED描述'],
-        'lat': raw_data['lat'],
-        'lng': raw_data['lng'],
-        'wkb_geometry': raw_data['wkb_geometry'],
-        'weekday_open': pd.to_datetime(raw_data['平日啟用開始時間'], errors='coerce').dt.time,
-        'weekday_close': pd.to_datetime(raw_data['平日啟用結束時間'], errors='coerce').dt.time,
-        'saturday_open': pd.to_datetime(raw_data['星期六啟用開始時間'], errors='coerce').dt.time,
-        'saturday_close': pd.to_datetime(raw_data['星期六啟用結束時間'], errors='coerce').dt.time,
-        'sunday_open': pd.to_datetime(raw_data['星期日啟用開始時間'], errors='coerce').dt.time,
-        'sunday_close': pd.to_datetime(raw_data['星期日啟用結束時間'], errors='coerce').dt.time,
-        'open_note': raw_data['啟用備註'],
-        'emergency_phone': raw_data['緊急聯絡電話'],
-        'data_time': raw_data['data_time']
+    # Rename columns to match provided structure
+    raw_data = raw_data.rename(columns={
+        "_id": "place_id",
+        "縣市別代碼": "city_code",
+        "場所名稱": "place_name",
+        "場所地址": "address",
+        "行政區域代碼": "district_code",
+        "緯度": "lat",
+        "經度": "lng",
+        "場所分類": "category",
+        "場所類型": "type",
+        "aed放置地點": "aed_location"
     })
 
-    # Load
+    # Clean and select
+    df = raw_data[[
+        "place_id", "city_code", "place_name", "address", "district_code",
+        "lat", "lng", "category", "type", "aed_location", "data_time"
+    ]].copy()
+
+    # 補上 city / district 欄位（若未來需要地圖篩選用）
+    df["city"] = df["city_code"].astype(str).str[:2] + "000"
+    df["district"] = df["district_code"].astype(str)
+
+    # 經緯度轉為 WKB 幾何
+    df["lat"] = pd.to_numeric(df["lat"], errors="coerce")
+    df["lng"] = pd.to_numeric(df["lng"], errors="coerce")
+    gdf = add_point_wkbgeometry_column_to_df(df, df["lng"], df["lat"], from_crs=FROM_CRS)
+
+    # 最終欄位
+    final_df = gdf[[
+        "place_id", "place_name", "address", "city", "district",
+        "category", "type", "aed_location",
+        "lat", "lng", "wkb_geometry", "data_time"
+    ]]
+
+    # Load to PostgreSQL
     engine = create_engine(ready_data_db_uri)
-    save_dataframe_to_postgresql(
-        engine, data=df, load_behavior=load_behavior,
-        default_table=default_table
+    save_geodataframe_to_postgresql(
+        engine,
+        gdata=final_df,
+        load_behavior=load_behavior,
+        default_table=default_table,
+        history_table=history_table,
+        geometry_type=GEOMETRY_TYPE,
     )
 
-    # Update last update time
-    lasttime_in_data = raw_data['data_time'].max()
-    update_lasttime_in_data_to_dataset_info(
-        engine, airflow_dag_id=dag_id, lasttime_in_data=lasttime_in_data
-    )
+    # Update dataset info
+    lasttime_in_data = final_df["data_time"].max()
+    update_lasttime_in_data_to_dataset_info(engine, airflow_dag_id=dag_id, lasttime_in_data=lasttime_in_data)
 
 
 # Create DAG
