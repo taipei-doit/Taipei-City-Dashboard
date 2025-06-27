@@ -3,10 +3,11 @@ from shapely import wkb
 from airflow import DAG
 from operators.common_pipeline import CommonDag
 from utils.extract_stage import get_data_taipei_api
-from utils.load_stage import save_dataframe_to_postgresql, update_lasttime_in_data_to_dataset_info
+from utils.load_stage import save_geodataframe_to_postgresql, update_lasttime_in_data_to_dataset_info
 from utils.get_time import get_tpe_now_time_str
 from sqlalchemy import create_engine
 import pandas as pd
+import geopandas as gpd
 
 
 def _transfer(**kwargs):
@@ -51,7 +52,7 @@ def _transfer(**kwargs):
         axis=1
     )
 
-    # Final DataFrame
+    # Create DataFrame
     df = pd.DataFrame({
         'store_name': raw_data['友善店家名稱'],
         'address': raw_data['地址'],
@@ -79,10 +80,17 @@ def _transfer(**kwargs):
         'f_sum': safe_int('友善項目總計').astype(int)
     })
 
+    # Convert to GeoDataFrame
+    gdf = gpd.GeoDataFrame(
+        df.drop(columns=['wkb_geometry']),
+        geometry=gpd.GeoSeries.from_wkb(df['wkb_geometry']),
+        crs="EPSG:4326"
+    )
+
     # Load
     engine = create_engine(ready_data_db_uri)
-    save_dataframe_to_postgresql(
-        engine, data=df, load_behavior=load_behavior,
+    save_geodataframe_to_postgresql(
+        engine, data=gdf, load_behavior=load_behavior,
         default_table=default_table
     )
 
