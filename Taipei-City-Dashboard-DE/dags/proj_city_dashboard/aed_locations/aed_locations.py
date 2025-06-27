@@ -38,6 +38,12 @@ def _transfer(**kwargs):
     raw_data['city'] = raw_data['設置地點地址'].str[:3]
     raw_data['district'] = raw_data['設置地點地址'].str[3:6]
 
+    # Create WKB geometry
+    raw_data['wkb_geometry'] = raw_data.apply(
+        lambda row: wkb.dumps(Point(row['lng'], row['lat'])) if pd.notnull(row['lng']) and pd.notnull(row['lat']) else None,
+        axis=1
+    )
+
     # Final dataframe
     df = pd.DataFrame({
         'place_id': pd.to_numeric(raw_data['場所代碼'], errors='coerce'),
@@ -53,6 +59,7 @@ def _transfer(**kwargs):
         'aed_description': raw_data['AED描述'],
         'lat': raw_data['lat'],
         'lng': raw_data['lng'],
+        'wkb_geometry': raw_data['wkb_geometry'],
         'weekday_open': pd.to_datetime(raw_data['平日啟用開始時間'], errors='coerce').dt.time,
         'weekday_close': pd.to_datetime(raw_data['平日啟用結束時間'], errors='coerce').dt.time,
         'saturday_open': pd.to_datetime(raw_data['星期六啟用開始時間'], errors='coerce').dt.time,
@@ -60,7 +67,8 @@ def _transfer(**kwargs):
         'sunday_open': pd.to_datetime(raw_data['星期日啟用開始時間'], errors='coerce').dt.time,
         'sunday_close': pd.to_datetime(raw_data['星期日啟用結束時間'], errors='coerce').dt.time,
         'open_note': raw_data['啟用備註'],
-        'emergency_phone': raw_data['緊急聯絡電話']
+        'emergency_phone': raw_data['緊急聯絡電話'],
+        'data_time': raw_data['data_time']
     })
 
     # Load
