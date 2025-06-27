@@ -26,7 +26,6 @@ def _transfer(**kwargs):
     # raw_data_db_uri = kwargs.get('raw_data_db_uri')
     # data_folder = kwargs.get('data_folder')
     ready_data_db_uri = kwargs.get('ready_data_db_uri')
-    proxies = kwargs.get('proxies')
     # Retrieve some essential args from `job_config.json`.
     dag_infos = kwargs.get('dag_infos')
     dag_id = dag_infos.get('dag_id')
@@ -34,7 +33,6 @@ def _transfer(**kwargs):
     default_table = dag_infos.get('ready_data_default_table')
     # Manually set
     rid = '6e66d5ea-250e-4078-ac99-6247973a0ddd'
-    page_id = '8d7527ee-1998-4101-9f96-6fe60137c266'
 
     # Extract
     res = get_data_taipei_api(rid)
@@ -56,6 +54,7 @@ def _transfer(**kwargs):
     # Time
     # standardize time
     data = data.drop(columns=['_id','_importdate'])
+    data = data[['period', 'total_cases', 'total_approvals', 'total_approved_amount_ten_thousand_ntd', 'data_time']]
     # Reshape
     ready_data = data.copy()
 
