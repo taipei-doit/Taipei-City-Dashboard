@@ -1,5 +1,5 @@
 from shapely.geometry import Point
-from shapely import wkb
+import geopandas as gpd
 from airflow import DAG
 from operators.common_pipeline import CommonDag
 from utils.extract_stage import get_data_taipei_api
@@ -7,25 +7,24 @@ from utils.load_stage import save_geodataframe_to_postgresql, update_lasttime_in
 from utils.get_time import get_tpe_now_time_str
 from sqlalchemy import create_engine
 import pandas as pd
-import geopandas as gpd
 
 
 def _transfer(**kwargs):
     '''
-    Extract friendly store data, convert to GeoDataFrame with WKB Point geometry,
-    and load into PostgreSQL using save_geodataframe_to_postgresql().
+    Extract friendly store data, convert to WKB geometry point, and load into PostgreSQL.
     '''
 
     # Config
     ready_data_db_uri = kwargs.get('ready_data_db_uri')
+    proxies = kwargs.get('proxies')
     dag_infos = kwargs.get('dag_infos')
     dag_id = dag_infos.get('dag_id')
     load_behavior = dag_infos.get('load_behavior')
     default_table = dag_infos.get('ready_data_default_table')
-    history_table = dag_infos.get('ready_data_history_table') or ""
+    history_table = dag_infos.get('ready_data_history_table')
 
-    # Geometry type
-    GEOMETRY_TYPE = "Point"
+    # Geometry type must match allowed list
+    GEOMETRY_TYPE = 'Point'
 
     # Resource ID
     rid = '5a5b36e0-f870-4b7f-8378-c91ac5f57941'
@@ -42,21 +41,14 @@ def _transfer(**kwargs):
     raw_data['city'] = raw_data['地址'].str[:3]
     raw_data['zone'] = raw_data['地址'].str[3:6]
 
-    # Convert coordinates
+    # Clean and convert coordinates
     raw_data['lon'] = pd.to_numeric(raw_data['經度'], errors='coerce')
     raw_data['lat'] = pd.to_numeric(raw_data['緯度'], errors='coerce')
 
-    # Safe conversion helper
     def safe_int(col):
         return pd.to_numeric(raw_data[col], errors='coerce').fillna(0)
 
-    # Build WKB geometry
-    raw_data['wkb_geometry'] = raw_data.apply(
-        lambda row: wkb.dumps(Point(row['lon'], row['lat'])) if pd.notnull(row['lon']) and pd.notnull(row['lat']) else None,
-        axis=1
-    )
-
-    # Build DataFrame
+    # Final DataFrame
     df = pd.DataFrame({
         'store_name': raw_data['友善店家名稱'],
         'address': raw_data['地址'],
@@ -67,7 +59,6 @@ def _transfer(**kwargs):
         'lat': raw_data['lat'],
         'call_num': raw_data['電話'],
         'store_summary': raw_data['簡介'],
-        'wkb_geometry': raw_data['wkb_geometry'],
 
         'f_lang': (safe_int('英文友善（count）') + safe_int('日文友善（count）') + safe_int('韓文友善（count）')) > 0,
         'f_moblie': safe_int('行動裝置充電（count）') > 0,
@@ -81,15 +72,12 @@ def _transfer(**kwargs):
         'f_lactation': safe_int('親子友善（count）') > 0,
         'f_muslim': safe_int('穆斯林友善（count）') > 0,
         'f_mc': safe_int('月經友善（count）') > 0,
-        'f_sum': safe_int('友善項目總計').astype(int)
+        'f_sum': safe_int('友善項目總計').astype(int),
+        'data_time': raw_data['data_time']
     })
 
-    # Convert to GeoDataFrame
-    gdf = gpd.GeoDataFrame(
-        df.drop(columns=['wkb_geometry']),
-        geometry=gpd.GeoSeries.from_wkb(df['wkb_geometry']),
-        crs="EPSG:4326"
-    )
+    # 建立 GeoDataFrame，轉換為 geometry 點位
+    gdf = gpd.GeoDataFrame(df, geometry=gpd.points_from_xy(df.lon, df.lat), crs="EPSG:4326")
 
     # Load to PostgreSQL
     engine = create_engine(ready_data_db_uri)
@@ -102,7 +90,7 @@ def _transfer(**kwargs):
         geometry_type=GEOMETRY_TYPE
     )
 
-    # Update dataset info
+    # 更新最後資料時間
     lasttime_in_data = raw_data['data_time'].max()
     update_lasttime_in_data_to_dataset_info(
         engine, airflow_dag_id=dag_id, lasttime_in_data=lasttime_in_data
