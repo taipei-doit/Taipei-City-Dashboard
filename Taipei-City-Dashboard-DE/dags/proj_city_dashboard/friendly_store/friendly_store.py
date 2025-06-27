@@ -12,16 +12,20 @@ import geopandas as gpd
 
 def _transfer(**kwargs):
     '''
-    Extract friendly store data, convert to WKB geometry point, and load into PostgreSQL.
+    Extract friendly store data, convert to GeoDataFrame with WKB Point geometry,
+    and load into PostgreSQL using save_geodataframe_to_postgresql().
     '''
 
     # Config
     ready_data_db_uri = kwargs.get('ready_data_db_uri')
-    proxies = kwargs.get('proxies')
     dag_infos = kwargs.get('dag_infos')
     dag_id = dag_infos.get('dag_id')
     load_behavior = dag_infos.get('load_behavior')
     default_table = dag_infos.get('ready_data_default_table')
+    history_table = dag_infos.get('ready_data_history_table') or ""
+
+    # Geometry type
+    GEOMETRY_TYPE = 'POINT'
 
     # Resource ID
     rid = '5a5b36e0-f870-4b7f-8378-c91ac5f57941'
@@ -38,11 +42,11 @@ def _transfer(**kwargs):
     raw_data['city'] = raw_data['地址'].str[:3]
     raw_data['zone'] = raw_data['地址'].str[3:6]
 
-    # Clean and convert coordinates
+    # Convert coordinates
     raw_data['lon'] = pd.to_numeric(raw_data['經度'], errors='coerce')
     raw_data['lat'] = pd.to_numeric(raw_data['緯度'], errors='coerce')
 
-    # Convert all count columns to numeric
+    # Safe conversion helper
     def safe_int(col):
         return pd.to_numeric(raw_data[col], errors='coerce').fillna(0)
 
@@ -52,7 +56,7 @@ def _transfer(**kwargs):
         axis=1
     )
 
-    # Create DataFrame
+    # Build DataFrame
     df = pd.DataFrame({
         'store_name': raw_data['友善店家名稱'],
         'address': raw_data['地址'],
@@ -87,14 +91,18 @@ def _transfer(**kwargs):
         crs="EPSG:4326"
     )
 
-    # Load
+    # Load to PostgreSQL
     engine = create_engine(ready_data_db_uri)
     save_geodataframe_to_postgresql(
-        engine, data=gdf, load_behavior=load_behavior,
-        default_table=default_table
+        engine,
+        gdata=gdf,
+        load_behavior=load_behavior,
+        default_table=default_table,
+        history_table=history_table,
+        geometry_type=GEOMETRY_TYPE
     )
 
-    # Update last update time
+    # Update dataset info
     lasttime_in_data = raw_data['data_time'].max()
     update_lasttime_in_data_to_dataset_info(
         engine, airflow_dag_id=dag_id, lasttime_in_data=lasttime_in_data
