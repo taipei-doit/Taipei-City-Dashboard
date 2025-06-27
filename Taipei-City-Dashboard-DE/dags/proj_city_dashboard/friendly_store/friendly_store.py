@@ -25,7 +25,7 @@ def _transfer(**kwargs):
     history_table = dag_infos.get('ready_data_history_table') or ""
 
     # Geometry type
-    GEOMETRY_TYPE = 'POINT'
+    GEOMETRY_TYPE = "Point"
 
     # Resource ID
     rid = '5a5b36e0-f870-4b7f-8378-c91ac5f57941'
