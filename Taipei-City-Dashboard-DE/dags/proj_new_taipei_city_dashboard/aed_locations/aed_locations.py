@@ -100,6 +100,6 @@ def _transfer(**kwargs):
 
 dag = CommonDag(
     proj_folder="proj_new_taipei_city_dashboard",
-    dag_folder="aed_locations_metrotaipei"
+    dag_folder="aed_locations"
 )
 dag.create_dag(etl_func=_transfer)
