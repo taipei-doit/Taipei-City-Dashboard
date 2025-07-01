@@ -3,7 +3,7 @@ import json
 import re
 import time
 import warnings
-
+from ast import literal_eval
 import numpy as np
 import pandas as pd
 import requests
@@ -990,7 +990,7 @@ def get_addr_xy(addrs):
     """
     Input multiple addresses, return multiple coordinates.
     """
-    proxies = Variable.get("PROXY_URL")
+    proxies = literal_eval(Variable.get("PROXY_URL"))
 
     url = "https://map.tpgos.gov.taipei/embed/webapi.cfm"
     params = {
@@ -1048,7 +1048,7 @@ def get_single_addr_xy(addr):
     s = requests.Session()
     s.mount("http://", HTTPAdapter(max_retries=5))
     s.mount("https://", HTTPAdapter(max_retries=5))
-    proxies = Variable.get("PROXY_URL")
+    proxies = literal_eval(Variable.get("PROXY_URL"))
 
     response = s.get(url, params=params, proxies=proxies)
     try:
