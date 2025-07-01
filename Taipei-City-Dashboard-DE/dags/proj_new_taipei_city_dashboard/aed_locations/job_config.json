@@ -1,0 +1,43 @@
+{
+  "dag_infos": {
+    "dag_id": "aed_locations_metrotaipei",
+    "start_date": "2024-12-10",
+    "schedule_interval": "0 20 19 * *",
+    "catchup": false,
+    "tags": [
+      "aed",
+      "衛生局",
+      "新北市AED"
+    ],
+    "description": "Monthly update of New Taipei AED location data with address geocoding and WKB geometry generation.",
+    "default_args": {
+      "owner": "airflow",
+      "email": [
+        "DEFAULT_EMAIL_LIST"
+      ],
+      "email_on_retry": false,
+      "email_on_failure": true,
+      "retries": 1,
+      "retry_delay": 60
+    },
+    "ready_data_db": "postgres_default",
+    "ready_data_default_table": "aed_locations_metrotaipei",
+    "ready_data_history_table": "",
+    "raw_data_db": "postgres_default",
+    "raw_data_table": "",
+    "load_behavior": "replace"
+  },
+  "data_infos": {
+    "name_cn": "新北市AED設置地點資料",
+    "airflow_update_freq": "20:00+8 每月19日",
+    "source": "https://data.ntpc.gov.tw/datasets/61b29f27-219a-4394-9722-af97a5707598",
+    "source_type": "data.ntpc.gov.tw json",
+    "source_dept": "衛生局",
+    "gis_format": null,
+    "output_coordinate": "WGS84",
+    "is_geometry": 1,
+    "dataset_description": "每月更新新北市自動體外心臟去顫器（AED）設置資訊，涵蓋主管單位、放置地點、地址、分類、使用時段、電池與貼片效期等欄位。",
+    "etl_description": "透過 JSON API 擷取資料，進行地址標準化與經緯度轉換，並加入 WKB 點位欄位，寫入 PostgreSQL aed_locations_metrotaipei 資料表。",
+    "sensitivity": "public"
+  }
+}
