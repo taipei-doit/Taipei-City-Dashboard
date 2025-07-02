@@ -4,7 +4,7 @@
         "start_date": "2025-06-25",
         "schedule_interval": "@monthly",
         "catchup": false,
-        "tags": ["general_hotel_registry_tpe", "觀光旅遊局", "新北市合法一般旅館名冊"],
+        "tags": ["general_hotel_registry_ntpe", "觀光旅遊局", "新北市合法一般旅館名冊"],
         "description": "", 
         "default_args": {
             "owner": "airflow",
@@ -15,8 +15,8 @@
             "retry_delay" : 60
         },
         "ready_data_db": "postgres_default",  
-        "ready_data_default_table": "general_hotel_registry_tpe",
-        "ready_data_history_table": "general_hotel_registry_tpe_history",
+        "ready_data_default_table": "general_hotel_registry_ntpe",
+        "ready_data_history_table": "general_hotel_registry_ntpe_history",
         "raw_data_db": "postgres_default",
         "raw_data_table": "",
         "load_behavior": "replace"
