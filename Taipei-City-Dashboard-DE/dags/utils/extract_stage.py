@@ -776,10 +776,10 @@ class TaipeiTravelAPIClient:
         url = f"{self.BASE_URL}{self.path}"
         params['page'] = page
         headers = {
-			"Accept": f"application/json",
-			"User-Agent": "TaipeiTravelAPIClient/1.0"
-		}
-        response = requests.get(url, params=params, headers=headers, timeout=self.timeout)
+            "Accept": f"application/json",
+            "User-Agent": "TaipeiTravelAPIClient/1.0"
+        }
+        response = requests.get(url, params=params, headers=headers, timeout=self.timeout, proxies=PROXIES)
         response.raise_for_status()  # Ensure the request was successful
 
         # Use the appropriate handler to convert the response.
@@ -804,11 +804,14 @@ class TaipeiTravelAPIClient:
         page = 1
         while True:
             print(f"Fetching page {page}...")
-            raw_data = self.get_a_data(page=page)
-            # 每頁30筆
+            try:
+                raw_data = self.get_a_data(page=page)
+            except requests.exceptions.HTTPError as e:
+                print(f"Error fetching page {page}: {e}")
+                break
+                # 每頁30筆
             total_page = math.ceil(raw_data.get('total') / 30) 
             all_data.extend(raw_data.get('data', []))  # Assuming 'data' is the key for the actual records
-            page += 1
             page += 1
             if page == total_page:
                 break
