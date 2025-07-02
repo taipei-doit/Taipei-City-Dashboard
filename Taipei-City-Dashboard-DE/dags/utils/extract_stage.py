@@ -1,3 +1,4 @@
+import io
 import json
 import os
 import shutil
@@ -9,10 +10,11 @@ import fiona
 import geopandas as gpd
 import pandas as pd
 import requests
+import xml.etree.ElementTree as ET
 from airflow.models import Variable
 from settings.global_config import DATA_PATH, PROXIES
 from utils.auth_tdx import TDXAuth
-
+import math
 
 def download_file(
     file_name,
@@ -56,7 +58,6 @@ def download_file(
         output:
         Id     名稱            面積    類型  集水區  物理型  水文HY  濱水植  水質WQ  生物BI  MIWC2017                                           geometry
         0   3  雁鴨保護區  1.799444e+06  重要濕地  NaN  NaN   NaN  NaN   NaN   NaN       NaN  MULTIPOLYGON (((121.51075 25.02214, 121.51083 ...
-    ```
     """
     full_file_path = f"{file_folder}/{file_name}"
     # download file
@@ -705,4 +706,110 @@ class NewTaipeiAPIClient:
                 break
             page += 1
 
+        return all_data
+
+
+
+
+class TaipeiTravelAPIClient:
+    """
+    A client for retrieving data from New Taipei City Open Data API with flexible format handling.
+    """
+
+    BASE_URL = "https://www.travel.taipei/open-api/"
+
+    def __init__(self, path, input_format="json", timeout=60):
+        """
+        Args:
+            path (str): The API endpoint path.
+            input_format (str, optional): The input format. Supported formats: "json", "csv", "xml". Defaults to "json".
+            timeout (int, optional): Timeout for HTTP requests in seconds. Defaults to 60.
+        """
+        self.path = path
+        self.input_format = input_format.lower()
+        self.timeout = timeout
+
+        # Mapping of input formats to their corresponding handler functions.
+        self.handlers = {
+            "json": self._handle_json,
+            "csv": self._handle_csv,
+            "xml": self._handle_xml,
+        }
+
+        if self.input_format not in self.handlers:
+            raise ValueError("input_format must be 'json', 'csv', or 'xml'.")
+
+    def _handle_json(self, response):
+        """Handle JSON response."""
+        return response.json()
+
+    def _handle_csv(self, response):
+        """Handle CSV response by converting it to a list of dictionaries."""
+        df = pd.read_csv(io.StringIO(response.text))
+        return df.to_dict(orient="records")
+
+    def _handle_xml(self, response):
+        """Handle XML response by parsing it to a list of dictionaries."""
+        root = ET.fromstring(response.text)
+        data_list = []
+        for item in root.findall(".//row"):
+            data_dict = {child.tag: child.text for child in item}
+            data_list.append(data_dict)
+        return data_list
+
+    def get_a_data(self, page=1, **params):
+        """
+        Retrieve data from the API with optional query parameters.
+        
+        Args:
+            page (int, optional): Page number. Defaults to 0.
+            **params: Additional query parameters.
+            
+        Returns:
+            list: Converted data.
+            
+        Example:
+            client = TaipeiTravelAPIClient("your-path", input_format="json")
+            data = client.get_a_data(page=2)
+            print(data)
+        """
+        url = f"{self.BASE_URL}{self.path}"
+        params['page'] = page
+        headers = {
+			"Accept": f"application/json",
+			"User-Agent": "TaipeiTravelAPIClient/1.0"
+		}
+        response = requests.get(url, params=params, headers=headers, timeout=self.timeout)
+        response.raise_for_status()  # Ensure the request was successful
+
+        # Use the appropriate handler to convert the response.
+        return self.handlers[self.input_format](response)
+
+    def get_all_data(self):
+        """
+        Retrieve all data by iterating through all available pages.
+        
+        Args:
+            size (int, optional): Number of records per page. Defaults to 1000.
+            
+        Returns:
+            list: All data aggregated from all pages.
+            
+        Example:
+            client = TaipeiTravelAPIClient("your-path", input_format="json")
+            all_data = client.get_all_data(size=1000)
+            print(all_data)
+        """
+        all_data = []
+        page = 1
+        while True:
+            print(f"Fetching page {page}...")
+            raw_data = self.get_a_data(page=page)
+            # 每頁30筆
+            total_page = math.ceil(raw_data.get('total') / 30) 
+            all_data.extend(raw_data.get('data', []))  # Assuming 'data' is the key for the actual records
+            page += 1
+            page += 1
+            if page == total_page:
+                break
         return all_data

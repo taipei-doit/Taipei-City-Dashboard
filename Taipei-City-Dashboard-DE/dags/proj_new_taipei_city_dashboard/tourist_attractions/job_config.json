@@ -1,0 +1,42 @@
+{
+  "dag_infos": {
+    "dag_id": "tourist_attractions",
+    "start_date": "2025-06-25",
+    "schedule_interval": "@monthly",
+    "catchup": false,
+    "tags": [
+      "tourist_attractions",
+      "新北市",
+      "New-Taipei-City",
+      "觀光景點"
+    ],
+    "description": "",
+    "default_args": {
+      "owner": "airflow",
+      "email": ["DEFAULT_EMAIL_LIST"],
+      "email_on_retry": false,
+      "email_on_failure": true,
+      "retries": 1,
+      "retry_delay": 60
+    },
+    "ready_data_db": "postgres_default",
+    "ready_data_default_table": "tourist_attractions_ntpe",
+    "ready_data_history_table": "",
+    "raw_data_db": "postgres_default",
+    "raw_data_table": "",
+    "load_behavior": "replace"
+  },
+  "data_infos": {
+    "name_cn": "新北旅遊網景點資料",
+    "airflow_update_freq": "@monthly",
+    "source": "https://data.ntpc.gov.tw/api/datasets/b3a30a19-4b89-4da2-8d99-18200dc5dfde/json",
+    "source_type": "data.ntpc.gov.tw",
+    "source_dept": "觀光局",
+    "gis_format": null,
+    "output_coordinate": "",
+    "is_geometry": 0,
+    "dataset_description": "新北旅遊網景點資料",
+    "etl_description": "target url, fill data columns, standardize time",
+    "sensitivity": "public"
+  }
+}
