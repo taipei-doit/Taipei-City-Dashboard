@@ -32,8 +32,6 @@ def pubilc_toilet(**kwargs):
     )
     raw_data = pd.DataFrame(res)
 
-
-
     # Transform
     data = raw_data.copy()
     data["data_time"] = convert_str_to_time_format(now_time)

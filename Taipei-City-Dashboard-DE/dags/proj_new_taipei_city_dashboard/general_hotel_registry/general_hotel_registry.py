@@ -77,5 +77,5 @@ def _general_hotel_registry(**kwargs):
     update_lasttime_in_data_to_dataset_info(engine, dag_id, lasttime_in_data)
 
 
-dag = CommonDag(proj_folder="proj_city_dashboard", dag_folder="general_hotel_registry")
+dag = CommonDag(proj_folder="proj_new_taipei_city_dashboard", dag_folder="general_hotel_registry")
 dag.create_dag(etl_func=_general_hotel_registry)

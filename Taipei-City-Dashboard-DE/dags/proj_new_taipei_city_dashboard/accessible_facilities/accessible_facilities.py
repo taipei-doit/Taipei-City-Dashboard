@@ -54,5 +54,5 @@ def _transfer(**kwargs):
             engine, dag_id, data["data_time"].max()
         )
 
-dag = CommonDag(proj_folder="proj_city_dashboard", dag_folder="accessible_facilities")
+dag = CommonDag(proj_folder="proj_new_taipei_city_dashboard", dag_folder="accessible_facilities")
 dag.create_dag(etl_func=_transfer)
