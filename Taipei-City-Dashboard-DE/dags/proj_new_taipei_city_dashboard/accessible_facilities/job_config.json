@@ -27,7 +27,7 @@
     "load_behavior": "replace"
   },
   "data_infos": {
-    "name_cn": "臺北旅遊網景點資料",
+    "name_cn": "無障礙設施場所",
     "airflow_update_freq": "@monthly",
     "source": "https://www.travel.taipei/open-api/zh-tw/Attractions/All?page=1",
     "source_type": "data.taipei",
@@ -35,7 +35,7 @@
     "gis_format": null,
     "output_coordinate": "",
     "is_geometry": 0,
-    "dataset_description": "臺北旅遊網景點資料",
+    "dataset_description": "無障礙設施場所",
     "etl_description": "target url, fill data columns, standardize time",
     "sensitivity": "public"
   }
