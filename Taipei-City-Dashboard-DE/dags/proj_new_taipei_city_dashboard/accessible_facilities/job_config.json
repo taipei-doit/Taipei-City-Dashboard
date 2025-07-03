@@ -1,0 +1,42 @@
+{
+  "dag_infos": {
+    "dag_id": "accessible_facilities",
+    "start_date": "2025-06-25",
+    "schedule_interval": "@monthly",
+    "catchup": false,
+    "tags": [
+      "accessible_facilities",
+      "data.taipei",
+      "臺北市",
+      "Taipei-City"
+    ],
+    "description": "",
+    "default_args": {
+      "owner": "airflow",
+      "email": ["DEFAULT_EMAIL_LIST"],
+      "email_on_retry": false,
+      "email_on_failure": true,
+      "retries": 1,
+      "retry_delay": 60
+    },
+    "ready_data_db": "postgres_default",
+    "ready_data_default_table": "accessible_facilities_ntpe",
+    "ready_data_history_table": "",
+    "raw_data_db": "postgres_default",
+    "raw_data_table": "",
+    "load_behavior": "replace"
+  },
+  "data_infos": {
+    "name_cn": "無障礙設施場所",
+    "airflow_update_freq": "@monthly",
+    "source": "https://www.travel.taipei/open-api/zh-tw/Attractions/All?page=1",
+    "source_type": "data.taipei",
+    "source_dept": "觀光局",
+    "gis_format": null,
+    "output_coordinate": "",
+    "is_geometry": 0,
+    "dataset_description": "無障礙設施場所",
+    "etl_description": "target url, fill data columns, standardize time",
+    "sensitivity": "public"
+  }
+}

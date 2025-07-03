@@ -1,0 +1,37 @@
+{
+    "dag_infos": {  
+        "dag_id": "general_hotel_registry",
+        "start_date": "2025-06-25",
+        "schedule_interval": "@monthly",
+        "catchup": false,
+        "tags": ["general_hotel_registry_ntpe", "觀光旅遊局", "新北市合法一般旅館名冊"],
+        "description": "", 
+        "default_args": {
+            "owner": "airflow",
+            "email": ["DEFAULT_EMAIL_LIST"],
+            "email_on_retry": false,
+            "email_on_failure": true,
+            "retries": 1, 
+            "retry_delay" : 60
+        },
+        "ready_data_db": "postgres_default",  
+        "ready_data_default_table": "general_hotel_registry_ntpe",
+        "ready_data_history_table": "general_hotel_registry_ntpe_history",
+        "raw_data_db": "postgres_default",
+        "raw_data_table": "",
+        "load_behavior": "replace"
+    },
+    "data_infos":{
+        "name_cn": "新北市合法一般旅館名冊",
+        "airflow_update_freq": "first day of every month",
+        "source": "https://data.gov.tw/dataset/123627",
+        "source_type": "data.gov.tw",
+        "source_dept": "觀光旅遊局",
+        "gis_format": "Point",
+        "output_coordinate": "EPSG:4326",
+        "is_geometry": 1,
+        "dataset_description": "新北市合法一般旅館名冊",
+        "etl_description": "",
+        "sensitivity": "public"
+    }
+}
