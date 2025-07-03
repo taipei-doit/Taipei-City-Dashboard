@@ -33,11 +33,12 @@ def _transfer(**kwargs):
     # Transform
     data = raw_data.copy()
     data["data_time"] = get_tpe_now_time_str(is_with_tz=True)
-
+    # 資料格式為"108臺北市萬華區昆明街142號7-8樓", 只取區
+    data['area'] = data['address'].str.findall(r'[\u4e00-\u9fa5]+區').str[-1]
     gdata = add_point_wkbgeometry_column_to_df(
         data, data["longitude"], data["latitude"], from_crs=FROM_CRS
     )
-    data = gdata[["country", "city", "village", "number", "name", "address", "administration", "latitude", "longitude", "grade", "type2", "type", "exec", "diaper", "data_time", "wkb_geometry"]]
+    data = gdata[["country", "city", "village", "number", "name", "address", "administration", "latitude", "longitude", "grade", "type2", "type", "exec", "diaper", "area", "data_time", "wkb_geometry"]]
 
     # Load data to DB
     engine = create_engine(ready_data_db_uri)
