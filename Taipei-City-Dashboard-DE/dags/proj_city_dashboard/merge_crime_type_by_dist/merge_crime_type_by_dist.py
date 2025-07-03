@@ -20,7 +20,7 @@ def _transfer(**kwargs):
     load_behavior = dag_infos.get("load_behavior")
     default_table = dag_infos.get("ready_data_default_table")
     history_table = dag_infos.get("ready_data_history_table")
-    GEOMETRY_TYPE = 4326
+    GEOMETRY_TYPE = "Point"
     # Extract
     sql = """
             select * FROM public.patrol_motorcycle_theft
