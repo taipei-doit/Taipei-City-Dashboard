@@ -6,13 +6,12 @@ def _transfer(**kwargs):
     import pandas as pd
     from sqlalchemy import create_engine
     from utils.extract_stage import get_moenv_json_data
-    from utils.get_time import get_tpe_now_time
+    from utils.get_time import get_tpe_now_time_str
     from utils.transform_geometry import add_point_wkbgeometry_column_to_df
     from utils.load_stage import (
         save_geodataframe_to_postgresql,
         update_lasttime_in_data_to_dataset_info,
     )
-    from utils.transform_time import convert_str_to_time_format
 
     # Config
     ready_data_db_uri = kwargs.get("ready_data_db_uri")
@@ -22,7 +21,6 @@ def _transfer(**kwargs):
     default_table = dag_infos.get("ready_data_default_table")
     history_table = dag_infos.get("ready_data_history_table")
     DATASET_CODE = "fac_p_21"
-    now_time = get_tpe_now_time(is_with_tz=True)
     FROM_CRS = 4326
     GEOMETRY_TYPE = "Point"
 
@@ -34,7 +32,7 @@ def _transfer(**kwargs):
 
     # Transform
     data = raw_data.copy()
-    data["data_time"] = convert_str_to_time_format(now_time)
+    data["data_time"] = get_tpe_now_time_str(is_with_tz=True)
     # standardize geomettry
     data["lng"] = data["longitude"]
     data["lat"] = data["latitude"]
