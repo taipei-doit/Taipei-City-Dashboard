@@ -33,25 +33,24 @@ def _transfer(**kwargs):
     # Transform
     data = raw_data.copy()
     data["data_time"] = get_tpe_now_time_str(is_with_tz=True)
-    # standardize geomettry
-    data["lng"] = data["longitude"]
-    data["lat"] = data["latitude"]
+
     gdata = add_point_wkbgeometry_column_to_df(
         data, data["longitude"], data["latitude"], from_crs=FROM_CRS
     )
-    # Load
+    data = gdata[["country", "city", "village", "number", "name", "address", "administration", "latitude", "longitude", "grade", "type2", "type", "exec", "diaper", "data_time", "wkb_geometry"]]
+
     # Load data to DB
     engine = create_engine(ready_data_db_uri)
     save_geodataframe_to_postgresql(
         engine,
-        gdata=gdata,
+        gdata=data,
         load_behavior=load_behavior,
         default_table=default_table,
         history_table=history_table,
         geometry_type=GEOMETRY_TYPE,
     )
     # Update lasttime_in_data
-    lasttime_in_data = gdata["data_time"].max()
+    lasttime_in_data = data["data_time"].max()
     engine = create_engine(ready_data_db_uri)
     update_lasttime_in_data_to_dataset_info(engine, dag_id, lasttime_in_data)
 
