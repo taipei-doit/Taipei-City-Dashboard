@@ -26,6 +26,7 @@ def _transfer(**kwargs):
     res = client.get_all_data()
     raw_data = pd.DataFrame(res)
     df = raw_data.copy() 
+    print(df.head(5))
     # 取得第一個類別的名稱
     df['type'] = df['category'].apply(lambda x: x[0]['name'] if isinstance(x, list) and len(x) > 0 else None)
 

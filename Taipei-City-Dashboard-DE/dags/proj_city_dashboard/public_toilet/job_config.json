@@ -27,7 +27,7 @@
 		"load_behavior": "replace"
 	},
 	"data_infos": {
-		"name_cn": "公共廁所-縣市(臺北市)資料",
+		"name_cn": "公共廁所-臺北市資料",
 		"airflow_update_freq": "1 month",
 		"source": "https://data.moenv.gov.tw/api/v2/fac_p_28",
 		"source_type": "MOENV API",
