@@ -53,7 +53,9 @@ def _general_hotel_registry(**kwargs):
     data["address"] = output
 
     # 資料格式為"108臺北市萬華區昆明街142號7-8樓", 只取區
-    data['area'] = data['address'].str.findall(r'[\u4e00-\u9fa5]+區').str[-1]
+
+    area_candidates = data['address'].str.slice(3, 6)
+    data['area'] = area_candidates.apply(lambda x: x if x.endswith('區') else None)
     # get gis xy
     data["longitude"], data["latitude"] = get_addr_xy_parallel(output)
     # standardize geometry

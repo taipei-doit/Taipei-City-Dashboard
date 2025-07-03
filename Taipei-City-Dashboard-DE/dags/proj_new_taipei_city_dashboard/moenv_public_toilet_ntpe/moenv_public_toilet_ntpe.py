@@ -34,7 +34,9 @@ def _transfer(**kwargs):
     data = raw_data.copy()
     data["data_time"] = get_tpe_now_time_str(is_with_tz=True)
     # 資料格式為"108臺北市萬華區昆明街142號7-8樓", 只取區
-    data['area'] = data['address'].str.findall(r'[\u4e00-\u9fa5]+區').str[-1]
+
+    area_candidates = data['address'].str.slice(3, 6)
+    data['area'] = area_candidates.apply(lambda x: x if x.endswith('區') else None)
     gdata = add_point_wkbgeometry_column_to_df(
         data, data["longitude"], data["latitude"], from_crs=FROM_CRS
     )
