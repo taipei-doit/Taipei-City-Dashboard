@@ -1,11 +1,11 @@
 {
 	"dag_infos": {
-		"dag_id": "public_toilet",
+		"dag_id": "moenv_public_toilet_ntpe",
 		"start_date": "2025-06-25",
 		"schedule_interval": "@monthly",
 		"catchup": false,
 		"tags": [
-			"moenv_public_toilet_tpe",
+			"moenv_public_toilet_ntpe",
 			"MOENV"
 		],
 		"description": "public toilet data from moenv.",
@@ -20,22 +20,22 @@
 			"retry_delay": 60
 		},
 		"ready_data_db": "postgres_default",
-		"ready_data_default_table": "moenv_public_toilet_tpe",
-		"ready_data_history_table": "moenv_public_toilet_tpe_history",
+		"ready_data_default_table": "moenv_public_toilet_ntpe",
+		"ready_data_history_table": "moenv_public_toilet_ntpe_history",
 		"raw_data_db": "postgres_default",
 		"raw_data_table": "",
 		"load_behavior": "replace"
 	},
 	"data_infos": {
-		"name_cn": "公共廁所-臺北市資料",
+		"name_cn": "公共廁所-新北市資料",
 		"airflow_update_freq": "1 month",
-		"source": "https://data.moenv.gov.tw/api/v2/fac_p_28",
+		"source": "https://data.moenv.gov.tw/api/v2/fac_p_21",
 		"source_type": "MOENV API",
 		"source_dept": "環境部 環境管理署",
 		"gis_format": "",
 		"output_coordinate": "EPSG:4326",
 		"is_geometry": 1,
-		"dataset_description": "臺北市公共廁所資料",
+		"dataset_description": "新北市公共廁所資料",
 		"etl_description": "only request data for the month, standardize time",
 		"sensitivity": "public"
 	}
