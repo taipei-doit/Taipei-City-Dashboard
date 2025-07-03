@@ -42,7 +42,7 @@ def _general_hotel_registry(**kwargs):
         "專用標識編號": "license_number",
         "旅館名稱": "name",
         "營業地址": "address",
-        "電話或手機": "localcall",
+        "電話或手機號碼": "localcall",
         "客房最低定價": "button_price",
         "客房最高定價": "higher_price",
         "房間數": "room"
