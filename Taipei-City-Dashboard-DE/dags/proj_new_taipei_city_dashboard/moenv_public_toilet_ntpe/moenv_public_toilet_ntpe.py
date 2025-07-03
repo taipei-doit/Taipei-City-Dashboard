@@ -2,7 +2,7 @@ from airflow import DAG
 from operators.common_pipeline import CommonDag
 
 
-def pubilc_toilet(**kwargs):
+def _transfer(**kwargs):
     import pandas as pd
     from sqlalchemy import create_engine
     from utils.extract_stage import get_moenv_json_data
@@ -21,7 +21,7 @@ def pubilc_toilet(**kwargs):
     load_behavior = dag_infos.get("load_behavior")
     default_table = dag_infos.get("ready_data_default_table")
     history_table = dag_infos.get("ready_data_history_table")
-    DATASET_CODE = "fac_p_28"
+    DATASET_CODE = "fac_p_21"
     now_time = get_tpe_now_time(is_with_tz=True)
     FROM_CRS = 4326
     GEOMETRY_TYPE = "Point"
@@ -58,6 +58,5 @@ def pubilc_toilet(**kwargs):
     update_lasttime_in_data_to_dataset_info(engine, dag_id, lasttime_in_data)
 
 
-
-dag = CommonDag(proj_folder="proj_city_dashboard", dag_folder="pubilc_toilet")
-dag.create_dag(etl_func=pubilc_toilet)
+dag = CommonDag(proj_folder="proj_new_taipei_city_dashboard", dag_folder="moenv_public_toilet_ntpe")
+dag.create_dag(etl_func=_transfer)
