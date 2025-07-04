@@ -7,7 +7,7 @@
     "tags": [
       "accessible_facilities",
       "data.taipei",
-      "臺北市",
+      "新北市",
       "Taipei-City"
     ],
     "description": "",
@@ -31,7 +31,7 @@
     "airflow_update_freq": "@monthly",
     "source": "https://www.travel.taipei/open-api/zh-tw/Attractions/All?page=1",
     "source_type": "data.taipei",
-    "source_dept": "觀光局",
+    "source_dept": "",
     "gis_format": null,
     "output_coordinate": "",
     "is_geometry": 0,
