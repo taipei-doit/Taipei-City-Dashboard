@@ -777,7 +777,7 @@ class TaipeiTravelAPIClient:
         params['page'] = page
         headers = {
             "Accept": f"application/json",
-            "User-Agent": "TaipeiTravelAPIClient/1.0"
+            "User-Agent": "Mozilla/5.0"
         }
         response = requests.get(url, params=params, headers=headers, timeout=self.timeout, proxies=PROXIES)
         response.raise_for_status()  # Ensure the request was successful
