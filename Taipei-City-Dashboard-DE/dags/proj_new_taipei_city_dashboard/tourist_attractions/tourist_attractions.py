@@ -25,7 +25,6 @@ def _transfer(**kwargs):
     client = NewTaipeiAPIClient(RID, input_format="json")
     res = client.get_all_data(size=1000)
     raw_data = pd.DataFrame(res)
-    print(f"raw data =========== {raw_data.head()}")
     data = raw_data.copy()
     
     # 資料格式為"108臺北市萬華區昆明街142號7-8樓", 只取區
@@ -41,6 +40,8 @@ def _transfer(**kwargs):
             "Py": "latitude",
             "Add": "address",
             "Description": "introduction",
+            "Tel": "tel",
+            "Name": "name",
         }
     )
     # 資料來源:交通部觀光資訊標準格式 v1.0
@@ -67,11 +68,11 @@ def _transfer(**kwargs):
     }
 
     # 將數字代碼轉換為分類名稱
-    data["type"] = data["Class1"].astype(str).str.zfill(2).map(category_mapping).fillna('其他')
+    gdata["type"] = gdata["Class1"].astype(str).str.zfill(2).map(category_mapping).fillna('其他')
+    gdata["data_time"] = get_tpe_now_time_str(is_with_tz=True)
 
-    data = gdata[["name", "type", "introduction", "address", "distric", "tel", "longitude", "latitude", "wkb_geometry"]]
+    data = gdata[["name", "type", "introduction", "address", "distric", "tel", "longitude", "latitude","data_time", "wkb_geometry"]]
     # 重新排列欄位順序
-    data["data_time"] = get_tpe_now_time_str(is_with_tz=True)
 
     engine = create_engine(ready_data_db_uri)
     save_geodataframe_to_postgresql(
