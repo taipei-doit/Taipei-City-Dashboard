@@ -7,7 +7,7 @@ def _transfer(**kwargs):
     from sqlalchemy import create_engine
     from utils.extract_stage import NewTaipeiAPIClient
     from utils.load_stage import (
-        save_dataframe_to_postgresql,
+        save_geodataframe_to_postgresql,
         update_lasttime_in_data_to_dataset_info,
     )
     from utils.get_time import get_tpe_now_time_str
@@ -21,14 +21,13 @@ def _transfer(**kwargs):
     default_table = dag_infos.get("ready_data_default_table")
     history_table = dag_infos.get("ready_data_history_table")
     RID= "b3a30a19-4b89-4da2-8d99-18200dc5dfde"
+    GEOMETRY_TYPE = "Point"
     client = NewTaipeiAPIClient(RID, input_format="json")
     res = client.get_all_data(size=1000)
     raw_data = pd.DataFrame(res)
     print(f"raw data =========== {raw_data.head()}")
     data = raw_data.copy()
     
-    data = data[["name", "Description", "Add", "distric", "tel", "Px", "Py"]]
-
     # 資料格式為"108臺北市萬華區昆明街142號7-8樓", 只取區
     data['distric'] = data['Add'].str.findall(r'[\u4e00-\u9fa5]+區').str[-1]
 
@@ -73,15 +72,15 @@ def _transfer(**kwargs):
     data = gdata[["name", "type", "introduction", "address", "distric", "tel", "longitude", "latitude", "wkb_geometry"]]
     # 重新排列欄位順序
     data["data_time"] = get_tpe_now_time_str(is_with_tz=True)
-    print(f"data =========== {data.head()}")
 
     engine = create_engine(ready_data_db_uri)
-    save_dataframe_to_postgresql(
+    save_geodataframe_to_postgresql(
         engine,
-        data=data,
+        gdata=data,
         load_behavior=load_behavior,
         default_table=default_table,
         history_table=history_table,
+        geometry_type=GEOMETRY_TYPE,
     )
     update_lasttime_in_data_to_dataset_info(
             engine, dag_id, data["data_time"].max()

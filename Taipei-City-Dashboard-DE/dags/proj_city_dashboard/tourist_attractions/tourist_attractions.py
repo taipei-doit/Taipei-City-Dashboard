@@ -12,7 +12,7 @@ def _transfer(**kwargs):
     from sqlalchemy import create_engine
     from utils.extract_stage import TaipeiTravelAPIClient
     from utils.load_stage import (
-        save_dataframe_to_postgresql,
+        save_geodataframe_to_postgresql,
         update_lasttime_in_data_to_dataset_info,
     )
     from utils.transform_geometry import add_point_wkbgeometry_column_to_df
@@ -26,6 +26,7 @@ def _transfer(**kwargs):
     default_table = dag_infos.get("ready_data_default_table")
     history_table = dag_infos.get("ready_data_history_table")
     # Load
+    GEOMETRY_TYPE = "Point"
     PATH = "zh-tw/Attractions/All"
     client = TaipeiTravelAPIClient(PATH, input_format="json")
     res = client.get_all_data()
@@ -49,12 +50,13 @@ def _transfer(**kwargs):
     data["data_time"] = pd.to_datetime("now").strftime("%Y-%m-%d %H:%M:%S")
 
     engine = create_engine(ready_data_db_uri)
-    save_dataframe_to_postgresql(
+    save_geodataframe_to_postgresql(
         engine,
-        data=data,
+        gdata=data,
         load_behavior=load_behavior,
         default_table=default_table,
         history_table=history_table,
+        geometry_type=GEOMETRY_TYPE,
     )
     update_lasttime_in_data_to_dataset_info(
             engine, dag_id, data["data_time"].max()
