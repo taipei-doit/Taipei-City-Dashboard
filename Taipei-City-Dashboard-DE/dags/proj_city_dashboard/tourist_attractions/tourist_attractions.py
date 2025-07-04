@@ -56,6 +56,8 @@ def _transfer(**kwargs):
         )
 
     df = gdata[["name", "type", "introduction", "city", "distric", "tel", "longitude", "latitude", "wkb_geometry"]]
+    df["data_time"] = pd.to_datetime("now").strftime("%Y-%m-%d %H:%M:%S")
+
     engine = create_engine(ready_data_db_uri)
     save_geodataframe_to_postgresql(
         engine,
