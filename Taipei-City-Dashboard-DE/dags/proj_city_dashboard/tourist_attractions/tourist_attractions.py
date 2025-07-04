@@ -2,6 +2,11 @@ from airflow import DAG
 from operators.common_pipeline import CommonDag
 
 
+'''
+TaipeiTravelAPIClient 有擋從GCP或其他雲平臺進行呼叫的問題,需申請開立白名單
+'''
+
+
 def _transfer(**kwargs):
     import pandas as pd
     from sqlalchemy import create_engine
