@@ -85,7 +85,7 @@ def _transfer(**kwargs):
     # define columns type
     float_cols = ['lng', 'lat']
     for col in float_cols:
-        data[col] = data[col].astype(float)
+        data[col] = pd.to_numeric(data[col], errors='coerce')
     # standardize time
     data["data_time"] = convert_str_to_time_format(data["data_time"])
     # standardize geometry
@@ -143,7 +143,7 @@ def _transfer(**kwargs):
     # define columns type
     float_cols = ['lng', 'lat']
     for col in float_cols:
-        data[col] = data[col].astype(float)
+        data[col] = pd.to_numeric(data[col], errors='coerce')
     # standardize time
     data["data_time"] = convert_str_to_time_format(data["data_time"])
     # standardize geometry
