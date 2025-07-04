@@ -28,7 +28,8 @@ def _transfer(**kwargs):
     data = raw_data.copy()
     
     # 資料格式為"108臺北市萬華區昆明街142號7-8樓", 只取區
-    data['distric'] = data['Add'].str.findall(r'[\u4e00-\u9fa5]+區').str[-1]
+    area_candidates = data['address'].str.slice(3, 6)
+    data['distric'] = area_candidates.apply(lambda x: x if x.endswith('區') else None)
 
     gdata = add_point_wkbgeometry_column_to_df(
         data, x=data["Px"], y=data["Py"], from_crs=4326
