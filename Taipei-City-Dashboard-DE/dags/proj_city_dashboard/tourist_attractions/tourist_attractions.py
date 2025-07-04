@@ -24,13 +24,13 @@ def _transfer(**kwargs):
     TPE_URL = "https://tdx.transportdata.tw/api/basic/v2/Tourism/ScenicSpot/Taipei?%24format=JSON"
     res = get_tdx_data(TPE_URL, output_format='dataframe')
     df = res.copy()
+    df["longitude"] = df["Position"].apply(lambda pos: pos.get("PositionLon") if isinstance(pos, dict) else None)
+    df["latitude"] = df["Position"].apply(lambda pos: pos.get("PositionLat") if isinstance(pos, dict) else None)
 
     df = df.rename(columns={
         "ScenicSpotName": "name",
         "DescriptionDetail": "introduction",
         "Phone": "tel",
-        "Position.PositionLon": "longitude",
-        "Position.PositionLat": "latitude",
         "Class1": "type"
     })
 
