@@ -1,13 +1,13 @@
 {
 	"dag_infos": {
 		"dag_id": "elderly_club",
-		"start_date": "2025-7-07",
+		"start_date": "2025-07-07",
 		"schedule_interval": "0 20 19 * *",
 		"catchup": false,
 		"tags": [
 			"elderly_club",
-			"主計處",
-			"銀髮族俱樂部"
+			"銀髮族俱樂部",
+			"社會局"
 		],
 		"description": "",
 		"default_args": {
@@ -21,8 +21,8 @@
 			"retry_delay": 60
 		},
 		"ready_data_db": "postgres_default",
-		"ready_data_default_table": "elderly_club",
-		"ready_data_history_table": "elderly_club_history",
+		"ready_data_default_table": "elderly_club_tpe",
+		"ready_data_history_table": "elderly_club_tpe_history",
 		"raw_data_db": "postgres_default",
 		"raw_data_table": "",
 		"load_behavior": "current+history"
@@ -32,7 +32,7 @@
 		"airflow_update_freq": "04:00+8 20th every month",
 		"source": "https://data.taipei/api/frontstage/tpeod/dataset/resource.download?rid=ffab5e5f-4a0f-4759-8531-5302379509cd",
 		"source_type": "data.taipei api",
-		"source_dept": "主計處",
+		"source_dept": "",
 		"gis_format": null,
 		"output_coordinate": "",
 		"is_geometry": 0,

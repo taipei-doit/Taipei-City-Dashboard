@@ -2,20 +2,6 @@ from airflow import DAG
 from operators.common_pipeline import CommonDag
 
 def _transfer(**kwargs):
-    '''
-    Service applicant count per year of Sea Sand House Registry statistics from data.taipei.
-
-    Explanation:
-    -------------
-    `年底別` as year
-    `列管件數/總計[件]` as total_cases
-    `列管件數/須拆除重建[件]` as cases_need_reconstruction
-    `列管件數/可加勁補強[件]` as cases_can_be_reinforced.
-    `列管戶數/總計[戶]` as total_households.
-    `列管戶數/須拆除重建[戶]` as households_need_reconstruction.
-    `列管戶數/可加勁補強[戶]` as households_can_be_reinforced.
-    
-    '''
     from utils.extract_stage import get_data_taipei_api
     import pandas as pd
     from utils.load_stage import save_geodataframe_to_postgresql, update_lasttime_in_data_to_dataset_info
