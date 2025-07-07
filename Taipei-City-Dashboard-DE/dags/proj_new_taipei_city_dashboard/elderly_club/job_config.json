@@ -16,10 +16,10 @@
     },
     "ready_data_db": "postgres_default",
     "ready_data_default_table": "elderly_club_ntpe",
-    "ready_data_history_table": "",
+    "ready_data_history_table": "elderly_club_ntpe_history",
     "raw_data_db": "postgres_default",
     "raw_data_table": "",
-    "load_behavior": "replace"
+    "load_behavior": "current+history"
   },
   "data_infos": {
     "name_cn": "新北市銀髮俱樂部",
