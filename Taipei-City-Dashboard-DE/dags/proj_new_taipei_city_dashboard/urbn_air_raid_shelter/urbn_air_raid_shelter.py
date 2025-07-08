@@ -70,8 +70,6 @@ def _transfer(**kwargs):
             "address",
             "lng",
             "lat",
-            "longitude",
-            "latitude",
             "wkb_geometry",
         ]
     ]
