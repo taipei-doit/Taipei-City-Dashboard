@@ -1,0 +1,42 @@
+{
+  "dag_infos": {
+    "dag_id": "rainfall_flood_simulation_etl",
+    "start_date": "2025-06-25",
+    "schedule_interval": "@manually",
+    "catchup": false,
+    "tags": [
+      "rainfall_flood_simulation_etl",
+      "臺北市",
+      "Taipei-City",
+      "降雨淹水模擬圖"
+    ],
+    "description": "",
+    "default_args": {
+      "owner": "airflow",
+      "email": ["DEFAULT_EMAIL_LIST"],
+      "email_on_retry": false,
+      "email_on_failure": true,
+      "retries": 1,
+      "retry_delay": 60
+    },
+    "ready_data_db": "postgres_default",
+    "ready_data_default_table": "rainfall_flood_simulation_etl_tpe",
+    "ready_data_history_table": "",
+    "raw_data_db": "postgres_default",
+    "raw_data_table": "",
+    "load_behavior": "replace"
+  },
+  "data_infos": {
+    "name_cn": "降雨淹水模擬圖",
+    "airflow_update_freq": "@manually",
+    "source": "https://fhy.wra.gov.tw/disaster/Uploads/Download/%E6%B7%B9%E6%B0%B4%E6%BD%9B%E5%8B%A2%E5%9C%96%E5%9C%96%E7%81%BD%E8%B3%87%E6%96%99/SHP/TaipeiCity-SHP.zip",
+    "source_type": "",
+    "source_dept": "",
+    "gis_format": null,
+    "output_coordinate": "",
+    "is_geometry": 0,
+    "dataset_description": "降雨淹水模擬圖",
+    "etl_description": "target url, fill data columns, standardize time",
+    "sensitivity": "public"
+  }
+}

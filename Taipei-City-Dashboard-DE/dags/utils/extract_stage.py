@@ -5,7 +5,7 @@ import shutil
 import time
 import zipfile
 from pathlib import Path
-
+import glob
 import fiona
 import geopandas as gpd
 import pandas as pd
@@ -408,6 +408,33 @@ def get_moenv_json_data(
         time.sleep(0.1)
 
     return results
+
+def get_shp_files_merge(
+    url, dag_id, encoding="UTF-8", file_ends_with=".shp", **kwargs
+):
+    """
+    下載 ZIP 並解壓縮，讀取所有 SHP 檔案，加入 category 欄位（檔名），然後合併。
+    回傳合併後的 GeoDataFrame。
+    """
+    filename = f"{dag_id}.zip"
+    unzip_path = f"{DATA_PATH}/{dag_id}"
+    zip_file = download_file(filename, url, **kwargs)
+    unzip_file_to_target_folder(zip_file, unzip_path, encoding=encoding)
+
+    # 找到所有 SHP 檔案
+    all_shp_files = glob.glob(os.path.join(unzip_path, f"*{file_ends_with}"))
+    if not all_shp_files:
+        raise ValueError(f"No .shp files found in {unzip_path}")
+
+    dfs = []
+    for shp_path in all_shp_files:
+        category = os.path.splitext(os.path.basename(shp_path))[0]
+        gdf = gpd.read_file(shp_path, encoding=encoding)
+        gdf["category"] = category
+        dfs.append(gdf)
+    # 合併
+    gdf_merged = gpd.GeoDataFrame(pd.concat(dfs, ignore_index=True))
+    return gdf_merged
 
 
 def get_shp_file(
