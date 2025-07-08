@@ -1,0 +1,37 @@
+{
+  "dag_infos": {
+    "dag_id": "urbn_air_raid_shelter",
+    "start_date": "2025-07-07",
+    "schedule_interval": "@monthly",
+    "catchup": false,
+    "tags": ["urbn_air_raid_shelter", "新北市", "New-Taipei-City", "防空避難處所"],
+    "description": "",
+    "default_args": {
+      "owner": "airflow",
+      "email": ["DEFAULT_EMAIL_LIST"],
+      "email_on_retry": false,
+      "email_on_failure": true,
+      "retries": 1,
+      "retry_delay": 60
+    },
+    "ready_data_db": "postgres_default",
+    "ready_data_default_table": "urbn_air_raid_shelter_ntpe",
+    "ready_data_history_table": "urbn_air_raid_shelter_ntpe_history",
+    "raw_data_db": "postgres_default",
+    "raw_data_table": "",
+    "load_behavior": "current+history"
+  },
+  "data_infos": {
+    "name_cn": "防空避難處所",
+    "airflow_update_freq": "@monthly",
+    "source": "https://data.gov.tw/dataset/124643",
+    "source_type": "data.ntpc.gov.tw",
+    "source_dept": "",
+    "gis_format": "point",
+    "output_coordinate": "EPSG:4326",
+    "is_geometry": 1,
+    "dataset_description": "防空避難處所",
+    "etl_description": "target url, fill data columns, standardize time",
+    "sensitivity": "public"
+  }
+}
