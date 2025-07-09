@@ -11,6 +11,7 @@ def _transfer(**kwargs):
     )
     from utils.transform_geometry import add_point_wkbgeometry_column_to_df
     from utils.get_time import get_tpe_now_time_str
+    import re
 
     # Config
     ready_data_db_uri = kwargs.get("ready_data_db_uri")
@@ -21,13 +22,13 @@ def _transfer(**kwargs):
     history_table = dag_infos.get("ready_data_history_table")
 
     # Extract
-    RID = "a0323809-1c7b-42f3-8dea-2b14f40118f7"  
+    RID = "5a4a7e3b-3578-4f83-9516-7cd2ba0cf135"  # ✅ 請替換為實際 RID
     client = NewTaipeiAPIClient(RID, input_format="json")
     res = client.get_all_data(size=1000)
     raw_data = pd.DataFrame(res)
     raw_data["data_time"] = get_tpe_now_time_str(is_with_tz=True)
 
-    # Transform
+    # Transform - 欄位重命名
     raw_data = raw_data.rename(columns={
         "seqno": "place_id",
         "hosp_name": "place_name",
@@ -42,9 +43,23 @@ def _transfer(**kwargs):
         "wgs84ay": "lat"
     })
 
-    raw_data["lng"] = raw_data["lng"].astype(float)
-    raw_data["lat"] = raw_data["lat"].astype(float)
+    # 將空字串轉換為 NaN，再轉為 float
+    raw_data["lng"] = pd.to_numeric(raw_data["lng"], errors="coerce")
+    raw_data["lat"] = pd.to_numeric(raw_data["lat"], errors="coerce")
 
+    # 過濾無經緯度者
+    raw_data = raw_data.dropna(subset=["lng", "lat"])
+
+    # 擷取 city 與 zone
+    def extract_city_zone(addr: str):
+        match = re.match(r"(..[市縣])(..區)", addr)
+        if match:
+            return match.group(1), match.group(2)
+        return None, None
+
+    raw_data["city"], raw_data["zone"] = zip(*raw_data["address"].map(extract_city_zone))
+
+    # 加入 wkb_geometry 欄位
     gdata = add_point_wkbgeometry_column_to_df(
         raw_data,
         raw_data["lng"],
@@ -54,7 +69,7 @@ def _transfer(**kwargs):
 
     ready_data = gdata[[
         "place_id", "place_name", "tel", "extension", "mobile_phone",
-        "address", "service_area", "service_item", "contact_person",
+        "address", "city", "zone", "service_area", "service_item", "contact_person",
         "lng", "lat", "wkb_geometry", "data_time"
     ]]
 
@@ -70,6 +85,7 @@ def _transfer(**kwargs):
     )
     update_lasttime_in_data_to_dataset_info(engine, dag_id, ready_data["data_time"].max())
 
+# 建立 DAG
 dag = CommonDag(
     proj_folder="proj_new_taipei_city_dashboard",
     dag_folder="long_term"
