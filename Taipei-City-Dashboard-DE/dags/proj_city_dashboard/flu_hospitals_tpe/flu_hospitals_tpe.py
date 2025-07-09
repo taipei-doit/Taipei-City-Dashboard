@@ -41,6 +41,7 @@ def _transfer(**kwargs):
     load_behavior = dag_infos.get("load_behavior")
     default_table = dag_infos.get("ready_data_default_table")
     history_table = dag_infos.get("ready_data_history_table")
+    GEOMETRY_TYPE = "Point"
 
     RID = "47b02c29-efa2-4614-ac7e-1b0b9499e6ea"
     PAGE_ID = "ec201f0a-2efa-4426-9439-a8daea7b33c7"
@@ -99,7 +100,7 @@ def _transfer(**kwargs):
         load_behavior=load_behavior,
         default_table=default_table,
         history_table=history_table,
-        geometry_type="POINT",
+        geometry_type=GEOMETRY_TYPE,
     )
     update_lasttime_in_data_to_dataset_info(
             engine, dag_id, df["data_time"].max()

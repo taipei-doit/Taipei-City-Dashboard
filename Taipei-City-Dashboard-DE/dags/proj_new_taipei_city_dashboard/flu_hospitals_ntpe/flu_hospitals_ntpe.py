@@ -21,7 +21,7 @@ def _transfer(**kwargs):
     load_behavior = dag_infos.get("load_behavior")
     default_table = dag_infos.get("ready_data_default_table")
     history_table = dag_infos.get("ready_data_history_table")
-    # 死亡率
+    GEOMETRY_TYPE = "Point"
     RATE_RID= "551cd3f4-534a-45cf-976a-359090fb7df6"
     client = NewTaipeiAPIClient(RATE_RID, input_format="json")
     res = client.get_all_data(size=1000)
@@ -51,7 +51,7 @@ def _transfer(**kwargs):
         load_behavior=load_behavior,
         default_table=default_table,
         history_table=history_table,
-        geometry_type="POINT",
+        geometry_type=GEOMETRY_TYPE,
     )
     update_lasttime_in_data_to_dataset_info(
             engine, dag_id, df["data_time"].max()
