@@ -1,23 +1,21 @@
 from airflow import DAG
 from operators.common_pipeline import CommonDag
-
+import pandas as pd
+from sqlalchemy import create_engine
+from utils.extract_stage import get_data_taipei_api
+from utils.load_stage import (
+    save_geodataframe_to_postgresql,
+    update_lasttime_in_data_to_dataset_info,
+)
+from utils.transform_address import (
+    clean_data,
+    main_process,
+    save_data,
+    get_addr_xy_parallel,
+)
+from utils.transform_geometry import add_point_wkbgeometry_column_to_df
+from utils.get_time import get_tpe_now_time_str
 def _transfer(**kwargs):
-    import pandas as pd
-    from sqlalchemy import create_engine
-    from utils.extract_stage import get_data_taipei_api
-    from utils.load_stage import (
-        save_geodataframe_to_postgresql,
-        update_lasttime_in_data_to_dataset_info,
-    )
-    from utils.transform_address import (
-        clean_data,
-        main_process,
-        save_data,
-        get_addr_xy_parallel,
-    )
-    from utils.transform_geometry import add_point_wkbgeometry_column_to_df
-    from utils.get_time import get_tpe_now_time_str
-
     # Config
     ready_data_db_uri = kwargs.get("ready_data_db_uri")
     dag_infos = kwargs.get("dag_infos")
@@ -32,8 +30,10 @@ def _transfer(**kwargs):
 
     df_private = pd.DataFrame(get_data_taipei_api(rid_private))
     df_public = pd.DataFrame(get_data_taipei_api(rid_public))
+    df_private["place_id"] = "private_" + df_private.index.astype(str)
+    df_public["place_id"] = "public_" + df_public.index.astype(str)
 
-    # Combine data
+    # Merge sources
     raw_data = pd.concat([df_private, df_public], ignore_index=True)
     raw_data["data_time"] = get_tpe_now_time_str(is_with_tz=True)
 
