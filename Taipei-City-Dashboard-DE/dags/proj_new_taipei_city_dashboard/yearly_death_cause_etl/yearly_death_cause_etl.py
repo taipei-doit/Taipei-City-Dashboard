@@ -64,7 +64,8 @@ def _transfer(**kwargs):
             })
 
     result_df = pd.DataFrame(rows)
-    
+    result_df['data_time'] = pd.to_datetime("now").strftime("%Y-%m-%d %H:%M:%S")
+
     engine = create_engine(ready_data_db_uri)
     save_dataframe_to_postgresql(
         engine,
@@ -74,7 +75,7 @@ def _transfer(**kwargs):
         history_table=history_table,
     )
     update_lasttime_in_data_to_dataset_info(
-            engine, dag_id, data["data_time"].max()
+            engine, dag_id, result_df["data_time"].max()
         )
 
 dag = CommonDag(proj_folder="proj_new_taipei_city_dashboard", dag_folder="yearly_death_cause_etl")
