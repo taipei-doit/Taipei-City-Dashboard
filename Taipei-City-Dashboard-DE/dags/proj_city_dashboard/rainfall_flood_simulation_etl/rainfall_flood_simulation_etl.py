@@ -20,7 +20,7 @@ def _transfer(**kwargs):
     default_table = dag_infos.get("ready_data_default_table")
     history_table = dag_infos.get("ready_data_history_table")
     # Load
-    GEOMETRY_TYPE = "MultiPolygonZ"
+    GEOMETRY_TYPE = "MultiPolygon"
     URL = "https://fhy.wra.gov.tw/disaster/Uploads/Download/%E6%B7%B9%E6%B0%B4%E6%BD%9B%E5%8B%A2%E5%9C%96%E5%9C%96%E7%81%BD%E8%B3%87%E6%96%99/SHP/NewTaipeiCity-SHP.zip"
     raw_data = get_shp_files_merge(URL,dag_id)
     gdata = raw_data.copy()
@@ -29,12 +29,6 @@ def _transfer(**kwargs):
     gdata["area"] = gdata["geometry"].apply(lambda x: x.area).round()
     gdata['city'] = "臺北市"
     gdata = convert_geometry_to_wkbgeometry(gdata, from_crs=4326)
-
-    gdata = gdata.rename(
-        columns={
-            "geometry": "wkb_geometry",
-        }
-    )
 
     df = gdata[["gridcode","category", "type", "area", "city", "wkb_geometry"]]
     df["data_time"] = pd.to_datetime("now").strftime("%Y-%m-%d %H:%M:%S")
