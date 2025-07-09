@@ -1,0 +1,43 @@
+{
+  "dag_infos": {
+    "dag_id": "long_term",
+    "start_date": "2025-06-25",
+    "schedule_interval": "@monthly",
+    "catchup": false,
+    "tags": [
+      "long_term",
+      "data.taipei",
+      "臺北市",
+      "Taipei-City",
+      "高齡照護"
+    ],
+    "description": "臺北市長期照顧機構基本資料自動更新，每月執行一次。",
+    "default_args": {
+      "owner": "airflow",
+      "email": ["DEFAULT_EMAIL_LIST"],
+      "email_on_retry": false,
+      "email_on_failure": true,
+      "retries": 1,
+      "retry_delay": 60
+    },
+    "ready_data_db": "postgres_default",
+    "ready_data_default_table": "long_term_tpe",
+    "ready_data_history_table": "",
+    "raw_data_db": "postgres_default",
+    "raw_data_table": "",
+    "load_behavior": "replace"
+  },
+  "data_infos": {
+    "name_cn": "臺北市長期照顧機構基本資料",
+    "airflow_update_freq": "@monthly",
+    "source": "https://data.taipei/dataset/detail?id=9a3e0440-87ea-4793-9240-5c8dc02b5129",
+    "source_type": "data.taipei",
+    "source_dept": "社會局",
+    "gis_format": null,
+    "output_coordinate": "WGS84",
+    "is_geometry": 1,
+    "dataset_description": "收錄臺北市長照機構基本資料，包括名稱、地址、收容對象與各類床位數量等資訊。",
+    "etl_description": "取得原始 JSON 資料，清理與標準化地址、轉換經緯度、產出地理點位 (WKB)，並寫入資料庫。",
+    "sensitivity": "public"
+  }
+}
