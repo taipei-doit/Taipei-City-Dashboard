@@ -22,7 +22,7 @@ def _transfer(**kwargs):
     history_table = dag_infos.get("ready_data_history_table")
 
     # Extract
-    RID = "5a4a7e3b-3578-4f83-9516-7cd2ba0cf135"  # ✅ 請替換為實際 RID
+    RID = "a0323809-1c7b-42f3-8dea-2b14f40118f7"  
     client = NewTaipeiAPIClient(RID, input_format="json")
     res = client.get_all_data(size=1000)
     raw_data = pd.DataFrame(res)
