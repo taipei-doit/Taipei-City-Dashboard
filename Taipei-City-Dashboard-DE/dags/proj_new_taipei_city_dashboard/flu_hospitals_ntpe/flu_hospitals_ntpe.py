@@ -42,7 +42,7 @@ def _transfer(**kwargs):
     gdata = add_point_wkbgeometry_column_to_df(
         df, x=df["lon"], y=df["lat"], from_crs=4326
     )
-    df = gdata[["name", "tel", "address", "type", 'district', "lon", "lat", "data_time"]]
+    df = gdata[["name", "tel", "address", "type", 'district', "lon", "lat", "wkb_geometry", "data_time"]]
 
     engine = create_engine(ready_data_db_uri)
     save_geodataframe_to_postgresql(
