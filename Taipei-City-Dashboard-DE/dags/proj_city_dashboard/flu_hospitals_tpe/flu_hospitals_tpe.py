@@ -88,7 +88,8 @@ def _transfer(**kwargs):
         df_filtered, x=df_filtered["lon"], y=df_filtered["lat"], from_crs=4326
     )
 
-    df = gdata[["name", "tel", "address", "type", "lon", "lat", "district"]]
+    df = gdata[["name", "tel", "address", "lon", "lat", "district"]]
+    df['type'] = "診所"
     df["data_time"] = get_data_taipei_file_last_modified_time(PAGE_ID)
 
     engine = create_engine(ready_data_db_uri)
