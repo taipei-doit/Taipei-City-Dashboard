@@ -10,6 +10,7 @@ def _transfer(**kwargs):
         save_geodataframe_to_postgresql,
         update_lasttime_in_data_to_dataset_info,
     )
+    from utils.transform_geometry import convert_geometry_to_wkbgeometry
 
     # Config
     ready_data_db_uri = kwargs.get("ready_data_db_uri")
@@ -27,6 +28,8 @@ def _transfer(**kwargs):
     gdata.columns = gdata.columns.str.lower()
     gdata["area"] = gdata["geometry"].apply(lambda x: x.area).round()
     gdata['city'] = "臺北市"
+    gdata = convert_geometry_to_wkbgeometry(gdata, from_crs=4326)
+
     gdata = gdata.rename(
         columns={
             "geometry": "wkb_geometry",
