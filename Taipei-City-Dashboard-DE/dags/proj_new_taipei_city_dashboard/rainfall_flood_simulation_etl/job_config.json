@@ -2,7 +2,7 @@
   "dag_infos": {
     "dag_id": "rainfall_flood_simulation_etl",
     "start_date": "2025-06-25",
-    "schedule_interval": "@manually",
+    "schedule_interval": "@once",
     "catchup": false,
     "tags": [
       "rainfall_flood_simulation_etl",
@@ -28,8 +28,8 @@
   },
   "data_infos": {
     "name_cn": "降雨淹水模擬圖",
-    "airflow_update_freq": "@manually",
-    "source": "https://fhy.wra.gov.tw/disaster/Uploads/Download/%E6%B7%B9%E6%B0%B4%E6%BD%9B%E5%8B%A2%E5%9C%96%E5%9C%96%E7%81%BD%E8%B3%87%E6%96%99/SHP/NewTaipeiCity-SHP.zip",
+    "airflow_update_freq": "@once",
+    "source": "",
     "source_type": "",
     "source_dept": "",
     "gis_format": null,
