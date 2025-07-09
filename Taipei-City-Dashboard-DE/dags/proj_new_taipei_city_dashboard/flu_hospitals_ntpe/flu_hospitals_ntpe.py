@@ -47,11 +47,11 @@ def _transfer(**kwargs):
     engine = create_engine(ready_data_db_uri)
     save_geodataframe_to_postgresql(
         engine,
-        gdata=ready_data,
+        gdata=df,
         load_behavior=load_behavior,
         default_table=default_table,
         history_table=history_table,
-        geometry_type=geometry_type,
+        geometry_type="POINT",
     )
     update_lasttime_in_data_to_dataset_info(
             engine, dag_id, df["data_time"].max()
