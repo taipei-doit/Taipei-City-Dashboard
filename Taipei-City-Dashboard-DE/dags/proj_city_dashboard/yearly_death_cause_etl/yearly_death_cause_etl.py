@@ -39,6 +39,7 @@ def _transfer(**kwargs):
     # 轉西元年
     data["year"] = data["year"].str.replace("年", "", regex=False).astype(int) + 1911
     # Load
+    data = data[["year", "death_cause", "death_count", "mortality_rate", "data_time"]]
     
     engine = create_engine(ready_data_db_uri)
     save_dataframe_to_postgresql(
