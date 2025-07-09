@@ -30,14 +30,14 @@ def _transfer(**kwargs):
 
     # rename
     # 重命名欄位
-    df = df.rename(columns={
+    data = data.rename(columns={
         '統計期': 'year',
         '死因別': 'death_cause',
         '死亡人數/合計[人]': 'death_count',
         '死亡率/合計[人/十萬人口]': 'mortality_rate'
     })
     # 轉西元年
-    df["year"] = df["year"].str.replace("年", "", regex=False).astype(int) + 1911
+    data["year"] = data["year"].str.replace("年", "", regex=False).astype(int) + 1911
     # Load
     
     engine = create_engine(ready_data_db_uri)
