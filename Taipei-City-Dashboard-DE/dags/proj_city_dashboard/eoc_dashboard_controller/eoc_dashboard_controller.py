@@ -238,6 +238,9 @@ def _transfer(**kwargs):
                 
 
             # 建立 component，status_mapping key + _pname 為 component index, status_mapping['label'] + _pname 為 component name
+            last_id_tuple = dashboard_hook.get_records('SELECT id FROM public.components order by id desc limit 1;')
+            last_id = last_id_tuple[0][0] if last_id_tuple else 9995
+            print(last_id)
             for status_key, status_val in status_mapping.items():
                 comp_index = f"{status_key}_{pname}"
                 comp_name = f"{status_val['label']}_{pname}"
@@ -246,9 +249,10 @@ def _transfer(**kwargs):
                     parameters={'index': comp_index}
                 )
                 if not recs:
+                    last_id+= 1
                     dashboard_hook.run(
-                        'INSERT INTO public.components ("index", name) VALUES (%(index)s, %(name)s);',
-                        parameters={'index': comp_index, 'name': comp_name}
+                        'INSERT INTO public.components ("id", "index", name) VALUES (%(id)s, %(index)s, %(name)s);',
+                        parameters={'id': last_id, 'index': comp_index, 'name': comp_name}
                     )
                 recs = dashboard_hook.get_records(
                     'SELECT id FROM public.components WHERE "index" = %(index)s;',
