@@ -41,7 +41,7 @@ def _transfer(**kwargs):
     data["data_time"] = get_tpe_now_time_str(is_with_tz=True)
     # get geometry
     # clean addr
-    data["address"] = data["county"].astype(str) + data["town"].astype(str) + data["address"].astype(str)
+    data["address"] = data["county"].astype(str) + data["district"].astype(str) + data["address"].astype(str)
     addr = data["address"]
     addr_cleaned = clean_data(addr)
     standard_addr_list = main_process(addr_cleaned)
