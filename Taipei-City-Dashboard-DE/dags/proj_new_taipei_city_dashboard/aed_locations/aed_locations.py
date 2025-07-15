@@ -81,6 +81,9 @@ def _transfer(**kwargs):
     lng, lat = get_addr_xy_parallel(output)
     raw_data["lng"] = lng
     raw_data["lat"] = lat
+    raw_data["lng"] = pd.to_numeric(raw_data["lng"], errors="coerce")
+    raw_data["lat"] = pd.to_numeric(raw_data["lat"], errors="coerce")
+    raw_data = raw_data[raw_data["lng"].notna() & raw_data["lat"].notna()]
 
     # 幾何欄位轉換
     gdata = add_point_wkbgeometry_column_to_df(
