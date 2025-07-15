@@ -37,8 +37,7 @@ def _general_hotel_registry(**kwargs):
     URL = 'https://data.ntpc.gov.tw/api/datasets/8565597e-a174-4907-99c7-adb5ddee1326/csv/file'
     response = requests.get(URL, verify=False)
     # 讀取 CSV
-    df = pd.read_csv(StringIO(response.text))
-    df = df.head(10)    
+    df = pd.read_csv(StringIO(response.text))    
     # Transform
     
     data = df.rename(columns={
