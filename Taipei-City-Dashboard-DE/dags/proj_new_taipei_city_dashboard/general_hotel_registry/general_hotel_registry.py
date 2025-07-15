@@ -45,16 +45,19 @@ def _general_hotel_registry(**kwargs):
         "localcall service": "localcall",
     })
     data["data_time"] = get_tpe_now_time_str(is_with_tz=True)
-
+    
+    # 資料格式為"108臺北市萬華區昆明街142號7-8樓", 只取區
+    area_candidates = data['address'].str.slice(3, 6)
+    data['area'] = area_candidates.apply(lambda x: x if x.endswith('區') else None)
+    
+    data["address"] = data["address"].str[3:]
     addr = data["address"]
     addr_cleaned = clean_data(addr)
     standard_addr_list = main_process(addr_cleaned)
     result, output = save_data(addr, addr_cleaned, standard_addr_list)
     data["address"] = output
 
-    # 資料格式為"108臺北市萬華區昆明街142號7-8樓", 只取區
-    area_candidates = data['address'].str.slice(3, 6)
-    data['area'] = area_candidates.apply(lambda x: x if x.endswith('區') else None)
+
     # get gis xy
     data["longitude"], data["latitude"] = get_addr_xy_parallel(output)
     # standardize geometry
