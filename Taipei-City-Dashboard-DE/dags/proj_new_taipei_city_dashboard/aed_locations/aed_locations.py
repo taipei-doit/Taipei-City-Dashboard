@@ -65,17 +65,29 @@ def _transfer(**kwargs):
         "electrical pads expiration date": "pads_expiration"
     })
 
+    # 日期欄位處理：替換 "0000-00-00" 為 NaT 並轉為 datetime
+    for col in ["install_date", "battery_expiration", "pads_expiration"]:
+        raw_data[col] = raw_data[col].replace("0000-00-00", pd.NaT)
+        raw_data[col] = pd.to_datetime(raw_data[col], errors="coerce")
+
+    # 地址標準化
     addr = raw_data["address"]
     addr_cleaned = clean_data(addr)
     standard_addr_list = main_process(addr_cleaned)
     _, output = save_data(addr, addr_cleaned, standard_addr_list)
     raw_data["address"] = output
+
+    # 座標轉換
     lng, lat = get_addr_xy_parallel(output)
     raw_data["lng"] = lng
     raw_data["lat"] = lat
 
-    gdata = add_point_wkbgeometry_column_to_df(raw_data, raw_data["lng"], raw_data["lat"], from_crs=4326)
+    # 幾何欄位轉換
+    gdata = add_point_wkbgeometry_column_to_df(
+        raw_data, raw_data["lng"], raw_data["lat"], from_crs=4326
+    )
 
+    # 欄位篩選
     ready_data = gdata[[
         "seqno", "organizer", "tel", "extension", "mobile_phone",
         "zipcode", "district", "address", "type", "aed_location",
@@ -97,6 +109,7 @@ def _transfer(**kwargs):
         geometry_type="Point"
     )
     update_lasttime_in_data_to_dataset_info(engine, dag_id, ready_data["data_time"].max())
+
 
 dag = CommonDag(
     proj_folder="proj_new_taipei_city_dashboard",
