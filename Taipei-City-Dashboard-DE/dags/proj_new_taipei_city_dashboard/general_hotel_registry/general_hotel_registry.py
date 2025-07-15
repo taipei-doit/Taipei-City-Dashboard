@@ -38,7 +38,7 @@ def _general_hotel_registry(**kwargs):
     response = requests.get(URL, verify=False)
     # 讀取 CSV
     df = pd.read_csv(StringIO(response.text))
-    print(f"raw data =========== {df.head()}")
+    df = df.head(10)    
     # Transform
     
     data = df.rename(columns={
@@ -67,8 +67,6 @@ def _general_hotel_registry(**kwargs):
     )
     # select column
     ready_data = gdata[["data_time", "license_number", "name", "address", "localcall", "button_price", "higher_price", "room", "area", "longitude", "latitude", "wkb_geometry"]]
-    local_filename = f"{DATA_PATH}/{dag_id}/cleandata.csv"
-    ready_data.to_csv(local_filename, index=False)
     
     # Load
     engine = create_engine(ready_data_db_uri)
