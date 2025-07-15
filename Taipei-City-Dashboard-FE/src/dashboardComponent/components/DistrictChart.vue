@@ -1,7 +1,7 @@
 <!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 
 <script setup>
-import { computed, ref } from "vue";
+import { computed, ref, nextTick } from "vue";
 import { districtCoordinates } from "../utilities/districtCoordinates";
 
 const props = defineProps([
@@ -163,6 +163,23 @@ const districtData = computed(() => {
 
 	return output;
 });
+const tooltipData = computed(() => {
+	const categories = props.chart_config?.categories;
+	const series = props?.series;
+
+	return categories?.map((district, districtIndex) => {
+		const seriesGroups = series?.map(item => ({
+			name: item.name,
+			value: item.data[districtIndex],
+		}));
+
+		return {
+			[district]: {
+				seriesGroups,
+			}
+		};
+	})
+});
 const tooltipPosition = computed(() => {
 	if (!mousePosition.value.x || !mousePosition.value.y) {
 		return {
@@ -170,9 +187,48 @@ const tooltipPosition = computed(() => {
 			top: "-1000px",
 		};
 	}
+	// 等 tooltip 元素渲染完成後再計算位置
+	nextTick(() => {
+		const tooltipEl = document.querySelector('.districtchart-chart-info');
+
+		if (!tooltipEl) return;
+
+		const rect = tooltipEl.getBoundingClientRect();
+		const viewportWidth = window.innerWidth;
+		const viewportHeight = window.innerHeight;
+
+		let left = mousePosition.value.x;
+		let top = mousePosition.value.y - rect.height - 10;
+
+		// 右邊界檢查
+		if (left + rect.width > viewportWidth) {
+			left = mousePosition.value.x - rect.width;
+		}
+
+		// 左邊界檢查
+		if (left < 0) {
+			left = 10;
+		}
+
+		// 上邊界檢查
+		if (top < 0) {
+			top = mousePosition.value.y + 10;
+		}
+
+		// 下邊界檢查
+		if (top + rect.height > viewportHeight) {
+			top = viewportHeight - rect.height - 10;
+		}
+
+		// 更新位置
+		tooltipEl.style.left = `${left}px`;
+		tooltipEl.style.top = `${top}px`;
+	});
+
+	// 初始位置
 	return {
-		left: `${mousePosition.value.x - 10}px`,
-		top: `${mousePosition.value.y - 54}px`,
+		left: `${mousePosition.value.x}px`,
+		top: `${mousePosition.value.y - 45}px`,
 	};
 });
 
@@ -1158,8 +1214,24 @@ function handleDataSelection(index) {
           :style="tooltipPosition"
         >
           <h6>{{ targetDistrict }}</h6>
-          <span>{{ districtData[targetDistrict] }}
-            {{ chart_config.unit }}</span>
+          <span>
+            {{ districtData[targetDistrict] }}
+			{{ chart_config.unit }}
+          </span>
+
+          <template v-if="tooltipData">
+            <div
+              v-for="item in tooltipData"
+              :key="item"
+            >
+              <template
+                v-for="series in item[targetDistrict]?.seriesGroups"
+                :key="series?.name"
+              >
+                <div>{{ series.name }}: {{ series.value }} {{ chart_config.unit }}</div>
+              </template>
+            </div>
+          </template>
         </div>
       </Teleport>
     </div>
@@ -1233,7 +1305,7 @@ function handleDataSelection(index) {
 	}
 
 	&-chart {
-		// height: 100%;
+		height: 100%;
 		display: flex;
 		justify-content: center;
 
@@ -1252,12 +1324,15 @@ function handleDataSelection(index) {
 
 		&-metrotaipei {
 			width: 100%;
-			transform: translateX(40px);
+			transform: translateX(50px);
 		}
 
 		&-info {
 			position: fixed;
 			z-index: 20;
+			pointer-events: none;
+			min-width: min-content;
+			white-space: nowrap;
 		}
 	}
 }

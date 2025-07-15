@@ -48,10 +48,8 @@ def _transfer(**kwargs):
         # 若刪完括號後結尾還有多餘空格或頓號、逗號，順便去掉
         .str.strip(" 、，")
     )
-    data["merge_address"] = data["county"] + data["district"] + data["address"] 
-
-
-    addr = data["merge_address"]
+    data["address"] = data["county"].astype(str) + data["town"].astype(str) + data["address"].astype(str)
+    addr = data["address"]
     addr_cleaned = clean_data(addr)
     standard_addr_list = main_process(addr_cleaned)
     result, output = save_data(addr, addr_cleaned, standard_addr_list)
