@@ -24,21 +24,38 @@ def _transfer(**kwargs):
     TPE_URL = "https://tdx.transportdata.tw/api/basic/v2/Tourism/ScenicSpot/Taipei?%24format=JSON"
     res = get_tdx_data(TPE_URL, output_format='dataframe')
     df = res.copy()
+    df["longitude"] = df["Position"].apply(lambda pos: pos.get("PositionLon") if isinstance(pos, dict) else None)
+    df["latitude"] = df["Position"].apply(lambda pos: pos.get("PositionLat") if isinstance(pos, dict) else None)
+    zipcode_to_area = {
+        "100": "中正區",
+        "103": "大同區",
+        "104": "中山區",
+        "105": "松山區",
+        "106": "大安區",
+        "108": "萬華區",
+        "110": "信義區",
+        "111": "士林區",
+        "112": "北投區",
+        "114": "內湖區",
+        "115": "南港區",
+        "116": "文山區"
+    }
+    df['distric'] = df['ZipCode'].astype(str).map(zipcode_to_area)
+
 
     df = df.rename(columns={
         "ScenicSpotName": "name",
         "DescriptionDetail": "introduction",
         "Phone": "tel",
-        "Position.PositionLon": "longitude",
-        "Position.PositionLat": "latitude",
-        "Class1": "type"
+        "Class1": "type",
+        "City": "city"
     })
 
     gdata = add_point_wkbgeometry_column_to_df(
             df, x=df["longitude"], y=df["latitude"], from_crs=4326
         )
 
-    df = gdata[["name", "type", "introduction", "address", "distric", "tel", "longitude", "latitude", "wkb_geometry"]]
+    df = gdata[["name", "type", "introduction", "city", "distric", "tel", "longitude", "latitude", "wkb_geometry"]]
     df["data_time"] = pd.to_datetime("now").strftime("%Y-%m-%d %H:%M:%S")
 
     engine = create_engine(ready_data_db_uri)

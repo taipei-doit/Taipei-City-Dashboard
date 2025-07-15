@@ -329,7 +329,7 @@ export const useMapStore = defineStore("map", {
 		async addRasterSource(map_config) {
 			if (["arc", "voronoi", "isoline"].includes(map_config.type)) {
 				const res = await axios.get(
-					`https://citydashboard.taipei/geo_server/taipei_vioc/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=taipei_vioc%3A${map_config.index}&maxFeatures=1000000&outputFormat=application%2Fjson`
+					`${location.origin}/geo_server/taipei_vioc/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=taipei_vioc%3A${map_config.index}&maxFeatures=1000000&outputFormat=application%2Fjson`
 				);
 
 				if (map_config.type === "arc") {
@@ -351,7 +351,7 @@ export const useMapStore = defineStore("map", {
 						scheme: "tms",
 						tolerance: 0,
 						tiles: [
-							`https://citydashboard.taipei/geo_server/gwc/service/tms/1.0.0/taipei_vioc:${map_config.index}@EPSG:900913@pbf/{z}/{x}/{y}.pbf`,
+							`${location.origin}/geo_server/gwc/service/tms/1.0.0/taipei_vioc:${map_config.index}@EPSG:900913@pbf/{z}/{x}/{y}.pbf`,
 						],
 					});
 		
@@ -447,7 +447,19 @@ export const useMapStore = defineStore("map", {
 				};
 			}
 			this.loadingLayers.push("rendering");
-			this.map.addLayer({
+			const filterClass = [
+				["6h150r", "6h250r", "6h350r"],
+				["12h200r", "12h300r", "12h400r"],
+				["24h200r", "24h350r", "24h500r", "24h650r"]
+			  ];
+			  
+			  // 初始 filter 設定為第一組 (6 小時降雨)
+			  const initialFilter = [
+				"in",
+				"hazard_class",
+				...filterClass[0]
+			  ];
+			  const config = {
 				id: map_config.layerId,
 				type: map_config.type,
 				"source-layer":
@@ -461,14 +473,58 @@ export const useMapStore = defineStore("map", {
 					...maplayerCommonLayout[`${map_config.type}`],
 					...extra_layout_configs,
 				},
-				source: `${map_config.layerId}-source`,
-			});
+				source: `${map_config.layerId}-source`
+			}
+			if (map_config.layerId === 'wee_hazard_water-fill-extrusion-metrotaipei' || map_config.layerId === 'wee_hazard_water_tp-fill-extrusion-taipei') {
+				config.filter = initialFilter
+			}
+			this.map.addLayer(config);
+			if (map_config.layerId === 'wee_hazard_water-fill-extrusion-metrotaipei' || map_config.layerId === 'wee_hazard_water_tp-fill-extrusion-taipei') this.animateFilter(map_config.layerId);
 			this.currentLayers.push(map_config.layerId);
 			this.mapConfigs[map_config.layerId] = map_config;
 			this.currentVisibleLayers.push(map_config.layerId);
 			this.loadingLayers = this.loadingLayers.filter(
 				(el) => el !== map_config.layerId
 			);
+		},
+		animateFilter(mapLayerId) {
+			this.stopAnimation();
+			const filterClass = [
+				["6h150r", "6h250r", "6h350r"],
+				["12h200r", "12h300r", "12h400r"],
+				["24h200r", "24h350r", "24h500r", "24h650r"]
+			];
+		
+			let index = 1;
+		
+			this.waitUntilReady = setInterval(() => {
+				if (this.loadingLayers.length !== 0) return;
+		
+				clearInterval(this.waitUntilReady); // 停止等待
+				this.waitUntilReady = null;
+		
+				// 啟動動畫
+				this.filterInterval = setInterval(() => {
+					const currentFilter = [
+						"in",
+						"hazard_class",
+						...filterClass[index]
+					];
+		
+					this.map.setFilter(mapLayerId, currentFilter);
+					index = (index + 1) % filterClass.length;
+				}, 1000);
+			}, 200);
+		},
+		stopAnimation() {
+			if (this.filterInterval) {
+				clearInterval(this.filterInterval);
+				this.filterInterval = null;
+			}
+			if (this.waitUntilReady) {
+				clearInterval(this.waitUntilReady);
+				this.waitUntilReady = null;
+			}
 		},
 		// 4-2-1. Add Map Layer for Arc Maps
 		// Developed by Weeee Chill, Taipei Codefest 2024
@@ -669,10 +725,10 @@ export const useMapStore = defineStore("map", {
 					};
 				});
 
-			let lngStart = 121.42955;
-			let lngEnd = 121.68351;
-			let latStart = 24.94679;
-			let latEnd = 25.21811;
+			let lngStart = 121.3;
+			let lngEnd = 122;
+			let latStart = 24.8;
+			let latEnd = 25.3;
 
 			let targetPoints = [];
 			let gridSize = 0.001;
@@ -765,11 +821,31 @@ export const useMapStore = defineStore("map", {
 				this.currentVisibleLayers.push(mapLayerId);
 				this.renderDeckGLLayer();
 			} else {
-				this.map.setLayoutProperty(mapLayerId, "visibility", "visible");
+				if (mapLayerId === 'wee_hazard_water-fill-extrusion-metrotaipei' || mapLayerId === 'wee_hazard_water_tp-fill-extrusion-taipei') {
+					const filterClass = [
+						["6h150r", "6h250r", "6h350r"],
+						["12h200r", "12h300r", "12h400r"],
+						["24h200r", "24h350r", "24h500r", "24h650r"]
+					  ];
+					  
+					  // 初始 filter 設定為第一組 (6 小時降雨)
+					  const initialFilter = [
+						"in",
+						"hazard_class",
+						...filterClass[0]
+					  ];
+					  this.map.setFilter(mapLayerId, initialFilter);
+					this.map.setLayoutProperty(mapLayerId, "visibility", "visible");
+					this.animateFilter(mapLayerId);
+
+				} else {
+					this.map.setLayoutProperty(mapLayerId, "visibility", "visible");
+				}
 			}
 		},
 		// 6. Turn off the visibility of an exisiting map layer but don't remove it completely
 		turnOffMapLayerVisibility(map_config) {
+			this.stopAnimation();
 			map_config.forEach((element) => {
 				let mapLayerId = `${element.index}-${element.type}-${element.city}`;
 				this.loadingLayers = this.loadingLayers.filter(
