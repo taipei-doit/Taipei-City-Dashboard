@@ -42,7 +42,7 @@ def _general_hotel_registry(**kwargs):
     
     data = df.rename(columns={
         "no": "license_number",
-        "localcall service": "localcall",
+        "localcallservice": "localcall",
     })
     data["data_time"] = get_tpe_now_time_str(is_with_tz=True)
     
