@@ -33,7 +33,6 @@ def _transfer(**kwargs):
     res = client.get_all_data(size=1000)
     raw_data = pd.DataFrame(res)
     raw_data["data_time"] = get_tpe_now_time_str(is_with_tz=True)
-    raw_data = raw_data.head(10)
     # Transform
 
 
