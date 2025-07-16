@@ -108,23 +108,21 @@ def _transfer(**kwargs):
     _, output = save_data(addr, addr_cleaned, standard_addr_list)
     raw_data["address"] = output
 
-    # # 座標轉換
-    # lng, lat = get_addr_xy_parallel(output)
-    # raw_data["lng"] = lng
-    # raw_data["lat"] = lat
-    # raw_data["lng"] = pd.to_numeric(raw_data["lng"], errors="coerce")
-    # raw_data["lat"] = pd.to_numeric(raw_data["lat"], errors="coerce")
-    # raw_data = raw_data[raw_data["lng"].notna() & raw_data["lat"].notna()]
+    # 座標轉換
+    lng, lat = get_addr_xy_parallel(output)
+    raw_data["lng"] = lng
+    raw_data["lat"] = lat
+    raw_data["lng"] = pd.to_numeric(raw_data["lng"], errors="coerce")
+    raw_data["lat"] = pd.to_numeric(raw_data["lat"], errors="coerce")
+    raw_data = raw_data[raw_data["lng"].notna() & raw_data["lat"].notna()]
 
-    # # 幾何欄位轉換
-    # gdata = add_point_wkbgeometry_column_to_df(
-    #     raw_data, raw_data["lng"], raw_data["lat"], from_crs=4326
-    # )
-    raw_data["lat"] = None
-    raw_data["lng"] = None
-    raw_data["wkb_geometry"] = None
+    # 幾何欄位轉換
+    gdata = add_point_wkbgeometry_column_to_df(
+        raw_data, raw_data["lng"], raw_data["lat"], from_crs=4326
+    )
+ 
     # 欄位篩選
-    ready_data = raw_data[[
+    ready_data = gdata[[
         "seqno", "organizer", "tel", "extension", "mobile_phone",
         "zipcode", "district", "address", "type", "aed_location",
         "mon_start", "mon_end", "tue_start", "tue_end",
