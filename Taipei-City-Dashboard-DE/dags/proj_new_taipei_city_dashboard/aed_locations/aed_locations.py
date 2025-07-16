@@ -1,5 +1,6 @@
 from airflow import DAG
 from operators.common_pipeline import CommonDag
+from datetime import datetime, timedelta
 
 def _transfer(**kwargs):
     import pandas as pd
@@ -32,8 +33,10 @@ def _transfer(**kwargs):
     res = client.get_all_data(size=1000)
     raw_data = pd.DataFrame(res)
     raw_data["data_time"] = get_tpe_now_time_str(is_with_tz=True)
-
+    raw_data = raw_data.head(10)
     # Transform
+
+
     raw_data = raw_data.rename(columns={
         "seqno": "seqno",
         "organizer": "organizer",
@@ -65,10 +68,25 @@ def _transfer(**kwargs):
         "electrical pads expiration date": "pads_expiration"
     })
 
+
+
+    # 設定時間上限（現在 + 10 年）
+    max_valid_date = datetime.now() + timedelta(days=365*10)
+
+
     # 日期欄位處理：替換 "0000-00-00" 為 NaT 並轉為 datetime
     for col in ["install_date", "battery_expiration", "pads_expiration"]:
         raw_data[col] = raw_data[col].replace("0000-00-00", pd.NaT)
         raw_data[col] = pd.to_datetime(raw_data[col], errors="coerce")
+        # 將超過現在 +10 年的日期設為 NaT
+        mask = raw_data[col] > max_valid_date
+        if mask.any():
+            count = mask.sum()
+            print(f"⚠️ 欄位 {col} 有 {count} 筆超過 10 年的日期")
+            # 只列前 10 筆以避免 Airflow 卡住
+            print(raw_data.loc[mask].head(10).to_string(index=False))
+        raw_data.loc[raw_data[col] > max_valid_date, col] = pd.NaT
+
 
     # 地址標準化
     addr = raw_data["address"]
@@ -77,21 +95,23 @@ def _transfer(**kwargs):
     _, output = save_data(addr, addr_cleaned, standard_addr_list)
     raw_data["address"] = output
 
-    # 座標轉換
-    lng, lat = get_addr_xy_parallel(output)
-    raw_data["lng"] = lng
-    raw_data["lat"] = lat
-    raw_data["lng"] = pd.to_numeric(raw_data["lng"], errors="coerce")
-    raw_data["lat"] = pd.to_numeric(raw_data["lat"], errors="coerce")
-    raw_data = raw_data[raw_data["lng"].notna() & raw_data["lat"].notna()]
+    # # 座標轉換
+    # lng, lat = get_addr_xy_parallel(output)
+    # raw_data["lng"] = lng
+    # raw_data["lat"] = lat
+    # raw_data["lng"] = pd.to_numeric(raw_data["lng"], errors="coerce")
+    # raw_data["lat"] = pd.to_numeric(raw_data["lat"], errors="coerce")
+    # raw_data = raw_data[raw_data["lng"].notna() & raw_data["lat"].notna()]
 
-    # 幾何欄位轉換
-    gdata = add_point_wkbgeometry_column_to_df(
-        raw_data, raw_data["lng"], raw_data["lat"], from_crs=4326
-    )
-
+    # # 幾何欄位轉換
+    # gdata = add_point_wkbgeometry_column_to_df(
+    #     raw_data, raw_data["lng"], raw_data["lat"], from_crs=4326
+    # )
+    raw_data["lat"] = None
+    raw_data["lng"] = None
+    raw_data["wkb_geometry"] = None
     # 欄位篩選
-    ready_data = gdata[[
+    ready_data = raw_data[[
         "seqno", "organizer", "tel", "extension", "mobile_phone",
         "zipcode", "district", "address", "type", "aed_location",
         "mon_start", "mon_end", "tue_start", "tue_end",
