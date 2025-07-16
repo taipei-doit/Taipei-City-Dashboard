@@ -1,6 +1,8 @@
 from airflow import DAG
 from operators.common_pipeline import CommonDag
 from datetime import datetime, timedelta
+import numpy as np
+import re
 
 def _transfer(**kwargs):
     import pandas as pd
@@ -67,24 +69,36 @@ def _transfer(**kwargs):
         "electrical pads expiration date": "pads_expiration"
     })
 
+    time_cols = [
+        "mon_start", "mon_end",
+        "tue_start", "tue_end",
+        "wed_start", "wed_end",
+        "thu_start", "thu_end",
+        "fri_start", "fri_end",
+        "sat_start", "sat_end",
+        "sun_start", "sun_end"
+    ]
 
+    # 只允許合法時間格式 HH:MM:SS，且 HH < 24
+    def validate_time_format(val):
+        if isinstance(val, str):
+            match = re.match(r"^(\d{1,2}):(\d{2}):(\d{2})$", val)
+            if match and int(match.group(1)) < 24:
+                return val
+            else:
+                return np.nan
+        return val
 
-    # 設定時間上限（現在 + 10 年）
-    max_valid_date = datetime.now() + timedelta(days=365*10)
-
+    # 套用於每個時間欄位
+    for col in time_cols:
+        raw_data[col] = raw_data[col].apply(validate_time_format)
 
     # 日期欄位處理：替換 "0000-00-00" 為 NaT 並轉為 datetime
     for col in ["install_date", "battery_expiration", "pads_expiration"]:
         raw_data[col] = raw_data[col].replace("0000-00-00", pd.NaT)
         raw_data[col] = pd.to_datetime(raw_data[col], errors="coerce")
-        # 將超過現在 +10 年的日期設為 NaT
-        mask = raw_data[col] > max_valid_date
-        if mask.any():
-            count = mask.sum()
-            print(f"⚠️ 欄位 {col} 有 {count} 筆超過 10 年的日期")
-            # 只列前 10 筆以避免 Airflow 卡住
-            print(raw_data.loc[mask].head(10).to_string(index=False))
-        raw_data.loc[raw_data[col] > max_valid_date, col] = pd.NaT
+
+
 
 
     # 地址標準化
