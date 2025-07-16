@@ -126,103 +126,171 @@ def _transfer(**kwargs):
         status_mapping = {
             "disaster_sus_water": {
                 "label": "災害累計停水處理概況",
-                "sql": '''select * from (
-                        SELECT  
-                            district AS x_axis,
-                            '已完成戶數' AS y_axis,
-                            GREATEST(SUM(suspended_water_supply_count - un_without_water),0) AS data
-                        FROM public.eoc_damage_case_tpe
-                        WHERE dp_name = '{pname}'
-                        GROUP BY district
-                        UNION ALL
-                        SELECT  
-                            district AS x_axis,
-                            '處理中戶數' AS y_axis,
-                            SUM(un_without_water) AS data
-                        FROM public.eoc_damage_case_tpe
-                        WHERE dp_name = '{pname}'
-                        GROUP BY district
-                        ) d
-                        ORDER BY ARRAY_POSITION(ARRAY[
-                        '北投區', '士林區', '內湖區', '南港區', '松山區',
-                        '信義區', '中山區', '大同區', '中正區', '萬華區',
-                        '大安區', '文山區'
-                        ], x_axis);
+                "sql": '''WITH districts AS (
+								SELECT unnest(ARRAY[
+									'北投區','士林區','內湖區','南港區','松山區',
+									'信義區','中山區','大同區','中正區','萬華區',
+									'大安區','文山區'
+								]) AS x_axis
+							),
+							series AS (
+								SELECT unnest(ARRAY['已完成戶數','處理中戶數']) AS y_axis
+							),
+							agg AS (
+								SELECT
+									t.district,
+									SUM(COALESCE(t.suspended_water_supply_count, 0)) AS suspended_sum,
+									SUM(COALESCE(t.un_without_water, 0))            AS un_without_sum
+								FROM public.eoc_damage_case_tpe t
+								WHERE t.dp_name = '{pname}'
+								GROUP BY t.district
+							)
+							SELECT
+								d.x_axis,
+								s.y_axis,
+								CASE s.y_axis
+									WHEN '已完成戶數' THEN GREATEST(COALESCE(a.suspended_sum,0) - COALESCE(a.un_without_sum,0), 0)
+									WHEN '處理中戶數' THEN COALESCE(a.un_without_sum,0)
+								END AS data
+							FROM districts d
+							CROSS JOIN series s
+							LEFT JOIN agg a
+							ON a.district = d.x_axis
+							ORDER BY ARRAY_POSITION(ARRAY[
+								'北投區','士林區','內湖區','南港區','松山區',
+								'信義區','中山區','大同區','中正區','萬華區',
+								'大安區','文山區'
+							], d.x_axis),
+							CASE s.y_axis
+								WHEN '已完成戶數' THEN 1
+								WHEN '處理中戶數' THEN 2
+							END;
                         '''
-                                        },
+		},
                 "disaster_sus_power": {
                     "label": "災害累計停電處理概況",
-                    "sql": '''select * from (
-                        SELECT  
-                            district AS x_axis,
-                            '處理中戶數' AS y_axis,
-                            SUM(un_power_outage) AS data
-                        FROM public.eoc_damage_case_tpe
-                        WHERE dp_name = '{pname}'
-                        GROUP BY district
-                        UNION ALL
-                        SELECT  
-                            district AS x_axis,
-                            '已完成戶數' AS y_axis,
-                            GREATEST(SUM(suspended_electricity_supply_count - un_power_outage),0) AS data
-                        FROM public.eoc_damage_case_tpe
-                        WHERE dp_name = '{pname}'
-                        GROUP BY district
-                        )d
-                        ORDER BY ARRAY_POSITION(ARRAY[
-                        '北投區', '士林區', '內湖區', '南港區', '松山區',
-                        '信義區', '中山區', '大同區', '中正區', '萬華區',
-                        '大安區', '文山區'
-                        ], x_axis),2 desc
+                    "sql": '''WITH districts AS (
+								SELECT unnest(ARRAY[
+									'北投區','士林區','內湖區','南港區','松山區',
+									'信義區','中山區','大同區','中正區','萬華區',
+									'大安區','文山區'
+								]) AS x_axis
+							),
+							series AS (
+								SELECT unnest(ARRAY['已完成戶數','處理中戶數']) AS y_axis
+							),
+							agg AS (
+								SELECT
+									t.district,
+									SUM(COALESCE(t.suspended_electricity_supply_count, 0)) AS suspended_sum,
+									SUM(COALESCE(t.un_power_outage, 0))                     AS un_without_sum
+								FROM public.eoc_damage_case_tpe t
+								WHERE t.dp_name = '{pname}'
+								GROUP BY t.district
+							)
+							SELECT
+								d.x_axis,
+								s.y_axis,
+								CASE s.y_axis
+									WHEN '已完成戶數' THEN GREATEST(COALESCE(a.suspended_sum,0) - COALESCE(a.un_without_sum,0), 0)
+									WHEN '處理中戶數' THEN COALESCE(a.un_without_sum,0)
+								END AS data
+							FROM districts d
+							CROSS JOIN series s
+							LEFT JOIN agg a
+							ON a.district = d.x_axis
+							ORDER BY ARRAY_POSITION(ARRAY[
+								'北投區','士林區','內湖區','南港區','松山區',
+								'信義區','中山區','大同區','中正區','萬華區',
+								'大安區','文山區'
+							], d.x_axis),
+							CASE s.y_axis
+								WHEN '已完成戶數' THEN 1
+								WHEN '處理中戶數' THEN 2
+							END;
                     '''
             },
             "disaster_sus_tel":  {"label": "災害累計停話處理概況",
-                                    "sql": '''select * from (
-                            SELECT  
-                            district AS x_axis,
-                            '已完成戶數' AS y_axis,
-                            GREATEST(SUM(suspended_tel_supply_count - un_tel_temp_discon),0) AS data
-                        FROM public.eoc_damage_case_tpe
-                        WHERE dp_name = '{pname}'
-                        GROUP BY district
-                        UNION ALL
-                        SELECT  
-                            district AS x_axis,
-                            '處理中戶數' AS y_axis,
-                            SUM(un_tel_temp_discon) AS data
-                        FROM public.eoc_damage_case_tpe
-                        WHERE dp_name = '{pname}'
-                        GROUP BY district
-                        ) d
-                        ORDER BY ARRAY_POSITION(ARRAY[
-                        '北投區', '士林區', '內湖區', '南港區', '松山區',
-                        '信義區', '中山區', '大同區', '中正區', '萬華區',
-                        '大安區', '文山區'
-                        ], x_axis);
+                                    "sql": '''WITH districts AS (
+								SELECT unnest(ARRAY[
+									'北投區','士林區','內湖區','南港區','松山區',
+									'信義區','中山區','大同區','中正區','萬華區',
+									'大安區','文山區'
+								]) AS x_axis
+							),
+							series AS (
+								SELECT unnest(ARRAY['已完成戶數','處理中戶數']) AS y_axis
+							),
+							agg AS (
+								SELECT
+									t.district,
+									SUM(COALESCE(t.suspended_tel_supply_count, 0)) AS suspended_sum,
+									SUM(COALESCE(t.un_tel_temp_discon, 0))            AS un_without_sum
+								FROM public.eoc_damage_case_tpe t
+								WHERE t.dp_name = '{pname}'
+								GROUP BY t.district
+							)
+							SELECT
+								d.x_axis,
+								s.y_axis,
+								CASE s.y_axis
+									WHEN '已完成戶數' THEN GREATEST(COALESCE(a.suspended_sum,0) - COALESCE(a.un_without_sum,0), 0)
+									WHEN '處理中戶數' THEN COALESCE(a.un_without_sum,0)
+								END AS data
+							FROM districts d
+							CROSS JOIN series s
+							LEFT JOIN agg a
+							ON a.district = d.x_axis
+							ORDER BY ARRAY_POSITION(ARRAY[
+								'北投區','士林區','內湖區','南港區','松山區',
+								'信義區','中山區','大同區','中正區','萬華區',
+								'大安區','文山區'
+							], d.x_axis),
+							CASE s.y_axis
+								WHEN '已完成戶數' THEN 1
+								WHEN '處理中戶數' THEN 2
+							END;  
                         '''},
             "disaster_sus_gas":   {"label":"災害累計停氣處理概況",
-                                    "sql":'''select * from (
-                        SELECT  
-                            district AS x_axis,
-                            '已完成戶數' AS y_axis,
-                            GREATEST(SUM(suspended_gas_supply_count - un_gas),0) AS data
-                        FROM public.eoc_damage_case_tpe
-                        WHERE dp_name = '{pname}'
-                        GROUP BY district
-                        UNION ALL
-                        SELECT  
-                            district AS x_axis,
-                            '處理中戶數' AS y_axis,
-                            SUM(un_gas) AS data
-                        FROM public.eoc_damage_case_tpe
-                        WHERE dp_name = '{pname}'
-                        GROUP BY district
-                        )d
-                        ORDER BY ARRAY_POSITION(ARRAY[
-                        '北投區', '士林區', '內湖區', '南港區', '松山區',
-                        '信義區', '中山區', '大同區', '中正區', '萬華區',
-                        '大安區', '文山區'
-                        ], x_axis);
+                                    "sql":'''WITH districts AS (
+								SELECT unnest(ARRAY[
+									'北投區','士林區','內湖區','南港區','松山區',
+									'信義區','中山區','大同區','中正區','萬華區',
+									'大安區','文山區'
+								]) AS x_axis
+							),
+							series AS (
+								SELECT unnest(ARRAY['已完成戶數','處理中戶數']) AS y_axis
+							),
+							agg AS (
+								SELECT
+									t.district,
+									SUM(COALESCE(t.suspended_gas_supply_count, 0)) AS suspended_sum,
+									SUM(COALESCE(t.un_gas, 0))            AS un_without_sum
+								FROM public.eoc_damage_case_tpe t
+								WHERE t.dp_name = '{pname}'
+								GROUP BY t.district
+							)
+							SELECT
+								d.x_axis,
+								s.y_axis,
+								CASE s.y_axis
+									WHEN '已完成戶數' THEN GREATEST(COALESCE(a.suspended_sum,0) - COALESCE(a.un_without_sum,0), 0)
+									WHEN '處理中戶數' THEN COALESCE(a.un_without_sum,0)
+								END AS data
+							FROM districts d
+							CROSS JOIN series s
+							LEFT JOIN agg a
+							ON a.district = d.x_axis
+							ORDER BY ARRAY_POSITION(ARRAY[
+								'北投區','士林區','內湖區','南港區','松山區',
+								'信義區','中山區','大同區','中正區','萬華區',
+								'大安區','文山區'
+							], d.x_axis),
+							CASE s.y_axis
+								WHEN '已完成戶數' THEN 1
+								WHEN '處理中戶數' THEN 2
+							END;  
                         '''}
         }
         for pname in unique_names:
