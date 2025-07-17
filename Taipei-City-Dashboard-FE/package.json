@@ -20,6 +20,7 @@
 		"apexcharts": "^3.45.2",
 		"axios": "^1.6.5",
 		"dayjs": "^1.11.10",
+		"hls.js": "^1.6.7",
 		"lodash.debounce": "^4.0.8",
 		"mapbox-gl": "^3.1.0",
 		"material-icons": "^1.13.12",

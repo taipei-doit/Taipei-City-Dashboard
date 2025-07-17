@@ -11,6 +11,7 @@ import { createApp, defineComponent, nextTick, ref } from "vue";
 import { defineStore } from "pinia";
 import mapboxGl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
+import Hls from 'hls.js';
 import { ArcLayer } from "@deck.gl/layers";
 import { MapboxOverlay } from "@deck.gl/mapbox";
 import axios from "axios";
@@ -846,11 +847,89 @@ export const useMapStore = defineStore("map", {
 			const PopupComponent = defineComponent({
 				extends: MapPopup,
 				setup() {
+					const hls = ref(null)
+					const activeTab = ref(0)
+					const videoRef = ref(null)
+
+					const isHlsUrl = (url) => {
+						return url && (url.includes('.m3u8') || url.includes('hls'))
+					}
+
+					const initHlsPlayer = (videoElement, src) => {
+						console.log('initHlsPlayer called with:', videoElement, src);
+						
+						if (Hls.isSupported()) {
+							const hlsInstance = new Hls()
+							
+							// 添加錯誤監聽
+							hlsInstance.on(Hls.Events.ERROR, (event, data) => {
+								console.error('HLS error:', event,data)
+								if (data.fatal) {
+									hlsInstance.destroy();
+								}
+							})
+							
+							hlsInstance.loadSource(src)
+							hlsInstance.attachMedia(videoElement)
+							return hlsInstance
+						} else if (videoElement.canPlayType('application/vnd.apple.mpegurl')) {
+							videoElement.src = src
+							return null
+						}
+						
+						console.warn('HLS not supported');
+						return null
+					}
+
+					const handleVideoLoad = () => {
+						const activeTabValue = activeTab.value
+						let videoElement = videoRef.value
+						
+						// 如果 videoRef 是數組，取第一個元素
+						if (Array.isArray(videoElement)) {
+							videoElement = videoElement[0]
+						}
+						
+						if (!videoElement || !parsedPopupContent[activeTabValue]) {
+							console.log('No video element or popup content');
+							return;
+						}
+						
+						// 找到 video 模式的 property
+						const videoProperty = mapConfigs[activeTabValue].property.find(item => item.mode === 'video')
+						if (!videoProperty) {
+							console.log('No video property found');
+							return;
+						}
+						
+						const videoUrl = parsedPopupContent[activeTabValue].properties[videoProperty.key]
+						if (!videoUrl) {
+							console.log('No video URL found');
+							return;
+						}
+						
+						// 如果是 HLS URL，使用 HLS 播放器
+						if (isHlsUrl(videoUrl)) {
+							if (hls.value) {
+								hls.value.destroy()
+							}
+							hls.value = initHlsPlayer(videoElement, videoUrl)
+						} else {
+							videoElement.src = videoUrl
+						}
+					}
+
+					// 初始化影像
+					nextTick(() => {
+						handleVideoLoad()
+					})
+
 					// Only show the data of the topmost layer
 					return {
 						popupContent: parsedPopupContent,
 						mapConfigs: mapConfigs,
-						activeTab: ref(0),
+						activeTab,
+						videoRef,
 					};
 				},
 			});
