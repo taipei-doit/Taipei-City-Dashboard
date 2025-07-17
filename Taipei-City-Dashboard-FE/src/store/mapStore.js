@@ -856,14 +856,12 @@ export const useMapStore = defineStore("map", {
 					}
 
 					const initHlsPlayer = (videoElement, src) => {
-						console.log('initHlsPlayer called with:', videoElement, src);
 						
 						if (Hls.isSupported()) {
 							const hlsInstance = new Hls()
 							
 							// 添加錯誤監聽
 							hlsInstance.on(Hls.Events.ERROR, (event, data) => {
-								console.error('HLS error:', event,data)
 								if (data.fatal) {
 									hlsInstance.destroy();
 								}
@@ -877,7 +875,6 @@ export const useMapStore = defineStore("map", {
 							return null
 						}
 						
-						console.warn('HLS not supported');
 						return null
 					}
 
@@ -891,20 +888,17 @@ export const useMapStore = defineStore("map", {
 						}
 						
 						if (!videoElement || !parsedPopupContent[activeTabValue]) {
-							console.log('No video element or popup content');
 							return;
 						}
 						
 						// 找到 video 模式的 property
 						const videoProperty = mapConfigs[activeTabValue].property.find(item => item.mode === 'video')
 						if (!videoProperty) {
-							console.log('No video property found');
 							return;
 						}
 						
 						const videoUrl = parsedPopupContent[activeTabValue].properties[videoProperty.key]
 						if (!videoUrl) {
-							console.log('No video URL found');
 							return;
 						}
 						
