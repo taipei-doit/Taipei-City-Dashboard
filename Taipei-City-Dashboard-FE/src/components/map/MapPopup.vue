@@ -64,6 +64,7 @@
               controls
               autoplay
               muted
+              crossorigin="anonymous"
             />
           </template>
         </div>
