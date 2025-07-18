@@ -935,8 +935,12 @@ export const useMapStore = defineStore("map", {
 						
 						if (Hls.isSupported()) {
 							const hlsInstance = new Hls({
-								xhrSetup: (xhr) => {
-									xhr.withCredentials = false;
+								fetchSetup: (context, initParams) => {
+									return new Request(context.url, {
+										...initParams,
+										mode: 'cors',
+										credentials: 'omit'
+									});
 								}
 							})
 							
