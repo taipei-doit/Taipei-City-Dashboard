@@ -38,7 +38,7 @@ const parsedCsv = computed(() => {
 				content.value.chart_config
 		  )
 		: "";
-	return encodeURI(csvString);
+	return encodeURIComponent(csvString);
 });
 
 function handleSubmit() {
@@ -114,7 +114,7 @@ function handleClose() {
           @click="handleSubmit"
         >
           <a
-            :href="`data:text/csv;charset=utf-8,${parsedCsv}`"
+            :href="`data:text/csv;charset=utf-8,%EF%BB%BF${parsedCsv}`"
             :download="`${name}.csv`"
           >下載CSV</a>
         </button>
