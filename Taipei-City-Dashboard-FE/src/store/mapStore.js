@@ -934,15 +934,7 @@ export const useMapStore = defineStore("map", {
 					const initHlsPlayer = (videoElement, src) => {
 						
 						if (Hls.isSupported()) {
-							const hlsInstance = new Hls({
-								fetchSetup: (context, initParams) => {
-									return new Request(context.url, {
-										...initParams,
-										mode: 'cors',
-										credentials: 'omit'
-									});
-								}
-							})
+							const hlsInstance = new Hls()
 							
 							// 添加錯誤監聽
 							hlsInstance.on(Hls.Events.ERROR, (event, data) => {
