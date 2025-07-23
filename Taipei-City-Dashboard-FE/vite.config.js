@@ -40,6 +40,7 @@ const serverConfig = isDockerCompose
 export default defineConfig({
   plugins: [vue(), viteCompression()],
   build: {
+	sourcemap: true,
     rollupOptions: {
       output: {
         manualChunks(id) {
