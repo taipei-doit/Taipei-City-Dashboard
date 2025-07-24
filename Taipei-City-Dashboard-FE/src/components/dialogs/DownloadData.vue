@@ -41,10 +41,12 @@ const parsedCsv = computed(() => {
 	// Create blob with BOM for better UTF-8 support
 	const bom = '\uFEFF';
 	// Debug: check if csvString contains proper Chinese characters
-	console.error('CSV String sample:', csvString.substring(0, 200));
+	alert('原始資料: ' + JSON.stringify(content.value.chart_data).substring(0, 100));
+	alert('CSV 轉換後: ' + csvString.substring(0, 200));
 	// Use TextEncoder to ensure proper UTF-8 encoding
 	const encoder = new TextEncoder();
 	const csvBytes = encoder.encode(bom + csvString);
+	alert('編碼後長度: ' + csvBytes.length);
 	const blob = new Blob([csvBytes], { type: 'text/csv;charset=utf-8;' });
 	return URL.createObjectURL(blob);
 });
