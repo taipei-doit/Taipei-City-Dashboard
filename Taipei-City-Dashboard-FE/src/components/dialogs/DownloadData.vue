@@ -41,8 +41,11 @@ const parsedCsv = computed(() => {
 	// Create blob with BOM for better UTF-8 support
 	const bom = '\uFEFF';
 	// Debug: check if csvString contains proper Chinese characters
-	console.warn('CSV String sample:', csvString.substring(0, 200));
-	const blob = new Blob([bom + csvString], { type: 'text/csv;charset=utf-8;' });
+	console.error('CSV String sample:', csvString.substring(0, 200));
+	// Use TextEncoder to ensure proper UTF-8 encoding
+	const encoder = new TextEncoder();
+	const csvBytes = encoder.encode(bom + csvString);
+	const blob = new Blob([csvBytes], { type: 'text/csv;charset=utf-8;' });
 	return URL.createObjectURL(blob);
 });
 
