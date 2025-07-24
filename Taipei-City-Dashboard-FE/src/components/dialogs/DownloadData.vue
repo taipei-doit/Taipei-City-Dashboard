@@ -52,6 +52,13 @@ const parsedCsv = computed(() => {
 });
 
 function handleSubmit() {
+	// 直接在這裡測試
+	alert('原始資料: ' + JSON.stringify(content.value.chart_data).substring(0, 100));
+	const csvString = content.value.chart_data ? jsonToCsv(content.value.chart_data, content.value.chart_config) : "";
+	alert('CSV 轉換後: ' + csvString.substring(0, 200));
+	const encoder = new TextEncoder();
+	const csvBytes = encoder.encode('\uFEFF' + csvString);
+	alert('編碼後長度: ' + csvBytes.length);
 	handleClose();
 }
 function handleClose() {
