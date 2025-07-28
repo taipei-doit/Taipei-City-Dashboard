@@ -35,7 +35,7 @@ def _transfer(**kwargs):
     data = raw_data.copy()
     data = data.rename(
         columns={
-            "areacode": "district"
+            "areacode": "district",
             "vehicle_classification": "name"
         }
     )
