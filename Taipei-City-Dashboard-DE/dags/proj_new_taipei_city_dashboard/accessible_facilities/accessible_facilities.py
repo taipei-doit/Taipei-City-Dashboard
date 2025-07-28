@@ -36,6 +36,7 @@ def _transfer(**kwargs):
     data = data.rename(
         columns={
             "areacode": "district"
+            "vehicle_classification": "name"
         }
     )
     data['type'] = 'parking'
