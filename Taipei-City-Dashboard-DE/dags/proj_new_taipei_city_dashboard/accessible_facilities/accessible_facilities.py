@@ -35,13 +35,12 @@ def _transfer(**kwargs):
     data = raw_data.copy()
     data = data.rename(
         columns={
-            "areacode": "district",
-            "quantity": "name",
+            "areacode": "district"
         }
     )
     data['type'] = 'parking'
-    data['disabled_parking_car_count'] = data['charged'].apply(lambda x: parse_charged(x, '身汽'))
-    data['disabled_parking_motorcycle_count'] = data['charged'].apply(lambda x: parse_charged(x, '身機'))
+    data['disabled_parking_car_count'] = data['quantity']
+    data['disabled_parking_motorcycle_count'] = data['quantity'
     data["data_time"] = pd.to_datetime("now").strftime("%Y-%m-%d %H:%M:%S")
     data = data[[
         "name", "district", "type", "address", "disabled_parking_car_count", "disabled_parking_motorcycle_count", 'data_time']]
