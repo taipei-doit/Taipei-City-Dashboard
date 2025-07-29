@@ -55,6 +55,11 @@ def _transfer(**kwargs):
     )
     data['end_of_year'] = data['end_of_year'].replace('年底', '', regex=True)
     data['end_of_year'] = data['end_of_year'].astype(int) + 1911
+    data = data[['end_of_year', 'young_population', 'young_population_percentage',
+                 'working_age_population', 'working_age_population_percentage',
+                 'elderly_population', 'elderly_population_percentage',
+                 'elderly_dependency_ratio', 'youth_dependency_ratio',
+                 'total_dependency_ratio', 'aging_index', 'data_time']]
     engine = create_engine(ready_data_db_uri)
     save_dataframe_to_postgresql(
         engine,
