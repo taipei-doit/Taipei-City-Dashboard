@@ -37,8 +37,7 @@ def _transfer(**kwargs):
     raw_data["data_time"] = get_tpe_now_time_str()
     print(f"raw data =========== {raw_data.head()}")
     data = raw_data.copy()
-    data = data.drop(columns=["_id", "_importdate"])
-    
+
     data = data.rename(
         columns={
             "統計期": "end_of_year",
