@@ -42,7 +42,9 @@ def _cht_e2(**kwargs):
         })
         resp = requests.post(url, headers=headers, data=payload, proxies=PROXIES, verify=False)
         if resp.status_code != 200:
-            raise ValueError(f"Request failed! status: {resp.status_code}")
+            logging.error(f"Request failed for stay_mins={mins} with status code {resp.status_code}. Response: {resp.text}")
+            continue
+            
     
         res = resp.json()
         if res['status'] == 1:
