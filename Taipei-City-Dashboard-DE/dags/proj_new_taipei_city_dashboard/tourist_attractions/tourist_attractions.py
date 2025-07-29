@@ -24,21 +24,57 @@ def _transfer(**kwargs):
     TPE_URL = "https://tdx.transportdata.tw/api/basic/v2/Tourism/ScenicSpot/NewTaipei?%24format=JSON"
     res = get_tdx_data(TPE_URL, output_format='dataframe')
     df = res.copy()
+    df["longitude"] = df["Position"].apply(lambda pos: pos.get("PositionLon") if isinstance(pos, dict) else None)
+    df["latitude"] = df["Position"].apply(lambda pos: pos.get("PositionLat") if isinstance(pos, dict) else None)
+    # zip code 對應區
+    zipcode_to_area = {
+    "207": "萬里區",
+    "208": "金山區",
+    "220": "板橋區",
+    "221": "汐止區",
+    "222": "深坑區",
+    "223": "石碇區",
+    "224": "瑞芳區",
+    "226": "平溪區",
+    "227": "雙溪區",
+    "228": "貢寮區",
+    "231": "新店區",
+    "232": "坪林區",
+    "233": "烏來區",
+    "234": "永和區",
+    "235": "中和區",
+    "236": "土城區",
+    "237": "三峽區",
+    "238": "樹林區",
+    "239": "鶯歌區",
+    "241": "三重區",
+    "242": "新莊區",
+    "243": "泰山區",
+    "244": "林口區",
+    "247": "蘆洲區",
+    "248": "五股區",
+    "249": "八里區",
+    "251": "淡水區",
+    "252": "三芝區",
+    "253": "石門區"
+    }   
+
+    df['distric'] = df['ZipCode'].astype(str).map(zipcode_to_area)
+
 
     df = df.rename(columns={
         "ScenicSpotName": "name",
         "DescriptionDetail": "introduction",
         "Phone": "tel",
-        "Position.PositionLon": "longitude",
-        "Position.PositionLat": "latitude",
-        "Class1": "type"
+        "Class1": "type",
+        "City": "city"
     })
 
     gdata = add_point_wkbgeometry_column_to_df(
             df, x=df["longitude"], y=df["latitude"], from_crs=4326
         )
 
-    df = gdata[["name", "type", "introduction", "address", "distric", "tel", "longitude", "latitude", "wkb_geometry"]]
+    df = gdata[["name", "type", "introduction", "city", "distric", "tel", "longitude", "latitude", "wkb_geometry"]]
     df["data_time"] = pd.to_datetime("now").strftime("%Y-%m-%d %H:%M:%S")
 
     engine = create_engine(ready_data_db_uri)

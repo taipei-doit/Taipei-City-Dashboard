@@ -997,7 +997,7 @@ def get_addr_xy(addrs):
         "SERVICE": "KEYWORDSEARCH",
         "KEYWORD": "",
         "APIKEY": Variable.get("TPGOS_GET_ADDR_XY"),
-        "ITEM_LIST": "TPGOS_CA_ADDR:30",
+        "ITEM_LIST": "TPGOS_CA_ADDR:30,TGOS_V2_ADDR,GMAPI_ADDR",
         "SRS_T": "WGS84",
     }
     x = []
@@ -1040,7 +1040,7 @@ def get_single_addr_xy(addr):
         # 'SERVICE':'ADDRESS',
         "KEYWORD": addr,
         "APIKEY": Variable.get("TPGOS_GET_ADDR_XY"),
-        "ITEM_LIST": "TPGOS_CA_ADDR:30",
+        "ITEM_LIST": "TPGOS_CA_ADDR:30,TGOS_V2_ADDR,GMAPI_ADDR",
         "SRS_T": "WGS84",
     }
     x = None
