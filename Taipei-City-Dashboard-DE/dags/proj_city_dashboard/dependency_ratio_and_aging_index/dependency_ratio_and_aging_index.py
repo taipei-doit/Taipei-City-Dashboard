@@ -35,22 +35,22 @@ def _transfer(**kwargs):
     # 讀取 CSV
     raw_data = pd.read_csv(StringIO(response.text))
     raw_data["data_time"] = get_tpe_now_time_str()
-    print(f"raw data =========== {raw_data.head()}")
+    print(f"raw data =========== {raw_data.columns}")
     data = raw_data.copy()
 
     data = data.rename(
         columns={
             "統計期": "end_of_year",
             "幼年人口數[人]": "young_population",
-            "幼年人口占全市人口比率[％]": "young_population_percentage",
+            "幼年人口占全市人口比率[%]": "young_population_percentage",
             "青壯年人口數[人]": "working_age_population",
-            "青壯年人口占全市人口比率[％]": "working_age_population_percentage",
+            "青壯年人口占全市人口比率[%]": "working_age_population_percentage",
             "老年人口數[人]": "elderly_population",
-            "老年人口占全市人口比率[％]": "elderly_population_percentage",
-            "扶老比[％]": "elderly_dependency_ratio",
-            "扶幼比[％]": "youth_dependency_ratio",
-            "扶養比[％]": "total_dependency_ratio",
-            "老化指數[％]": "aging_index",
+            "老年人口占全市人口比率[%]": "elderly_population_percentage",
+            "扶老比": "elderly_dependency_ratio",
+            "扶幼比": "youth_dependency_ratio",
+            "扶養比": "total_dependency_ratio",
+            "老化指數": "aging_index",
         }
     )
     data['end_of_year'] = data['end_of_year'].replace('年底', '', regex=True)
