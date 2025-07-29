@@ -1,0 +1,18 @@
+{{- if .Values.postgresql.enabled }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "taipei-city-dashboard.fullname" . }}-postgresql-data
+  labels:
+    {{- include "taipei-city-dashboard.labels" . | nindent 4 }}
+    app.kubernetes.io/component: database
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.postgresql.primary.persistence.size }}
+  {{- if .Values.postgresql.primary.persistence.storageClass }}
+  storageClassName: {{ .Values.postgresql.primary.persistence.storageClass }}
+  {{- end }}
+{{- end }}
