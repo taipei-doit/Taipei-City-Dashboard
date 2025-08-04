@@ -7,7 +7,7 @@ The mapStore controls the map and includes methods to modify it.
 !! PLEASE BE SURE TO REFERENCE THE MAPBOX DOCUMENTATION IF ANYTHING IS UNCLEAR !!
 https://docs.mapbox.com/mapbox-gl-js/guides/
 */
-import { createApp, defineComponent, nextTick, ref } from "vue";
+import { createApp, defineComponent, nextTick, ref, watch } from "vue";
 import { defineStore } from "pinia";
 import mapboxGl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
@@ -992,6 +992,13 @@ export const useMapStore = defineStore("map", {
 					// 初始化影像
 					nextTick(() => {
 						handleVideoLoad()
+					})
+
+					// 監聽 activeTab 變化，重新載入影片
+					watch(activeTab, () => {
+						nextTick(() => {
+							handleVideoLoad()
+						})
 					})
 
 					// Only show the data of the topmost layer
