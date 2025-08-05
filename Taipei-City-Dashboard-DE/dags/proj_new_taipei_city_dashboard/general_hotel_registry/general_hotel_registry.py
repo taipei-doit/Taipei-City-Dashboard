@@ -1,5 +1,6 @@
 from airflow import DAG
 from operators.common_pipeline import CommonDag
+from settings.global_config import DATA_PATH
 
 
 def _general_hotel_registry(**kwargs):
@@ -36,25 +37,27 @@ def _general_hotel_registry(**kwargs):
     URL = 'https://data.ntpc.gov.tw/api/datasets/8565597e-a174-4907-99c7-adb5ddee1326/csv/file'
     response = requests.get(URL, verify=False)
     # 讀取 CSV
-    df = pd.read_csv(StringIO(response.text))
-    print(f"raw data =========== {df.head()}")
+    df = pd.read_csv(StringIO(response.text))    
     # Transform
     
     data = df.rename(columns={
-        "no": "license_number",
-        "localcall service": "localcall",
+        "seqno": "license_number",
+        "localcallservice": "localcall",
     })
     data["data_time"] = get_tpe_now_time_str(is_with_tz=True)
-
+    
+    # 資料格式為"108臺北市萬華區昆明街142號7-8樓", 只取區
+    area_candidates = data['address'].str.slice(3, 6)
+    data['area'] = area_candidates.apply(lambda x: x if x.endswith('區') else None)
+    
+    data["address"] = data["address"].str[3:]
     addr = data["address"]
     addr_cleaned = clean_data(addr)
     standard_addr_list = main_process(addr_cleaned)
     result, output = save_data(addr, addr_cleaned, standard_addr_list)
     data["address"] = output
 
-    # 資料格式為"108臺北市萬華區昆明街142號7-8樓", 只取區
-    area_candidates = data['address'].str.slice(3, 6)
-    data['area'] = area_candidates.apply(lambda x: x if x.endswith('區') else None)
+
     # get gis xy
     data["longitude"], data["latitude"] = get_addr_xy_parallel(output)
     # standardize geometry
@@ -63,7 +66,7 @@ def _general_hotel_registry(**kwargs):
     )
     # select column
     ready_data = gdata[["data_time", "license_number", "name", "address", "localcall", "button_price", "higher_price", "room", "area", "longitude", "latitude", "wkb_geometry"]]
-
+    
     # Load
     engine = create_engine(ready_data_db_uri)
     save_geodataframe_to_postgresql(
