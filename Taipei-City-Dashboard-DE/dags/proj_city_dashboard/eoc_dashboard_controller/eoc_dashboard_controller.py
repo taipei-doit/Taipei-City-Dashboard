@@ -429,12 +429,6 @@ def _transfer(**kwargs):
                 # --- component_charts 修改結束 ---
 
 
-            # 取得 dashboard id=16 的範本資料
-            dashboard_template = dashboard_hook.get_records(
-                'SELECT icon FROM public.dashboards WHERE id = 16;'
-            )
-            icon_val = 'Cyclone'
-
             # --- 修改取得 component id 的方式 ---
             # 產生所有需要的 component index
             comp_indices_to_fetch = [f"{status_key}_{pname}" for status_key in status_mapping.keys()]
@@ -474,13 +468,12 @@ def _transfer(**kwargs):
             # 插入 dashboard 並帶上隨機 index、name=pname、components 會轉成 {x,y,z} 格式
             dashboard_hook.run(
                 'INSERT INTO public.dashboards ("id", "index","name",components,icon,created_at,updated_at) '
-                'VALUES (%(dashboard_id)s,%(idx)s,%(name)s,%(components)s,%(icon)s,%(created_at)s,%(updated_at)s);',
+                'VALUES (%(dashboard_id)s,%(idx)s,%(name)s,%(components)s,Crisis Alert,%(created_at)s,%(updated_at)s);',
                 parameters={
                     'dashboard_id': dashboard_id,
                     'idx': rand_idx,
                     'name': pname,
                     'components': comp_ids,
-                    'icon': icon_val,
                     'created_at': datetime.now(timezone.utc),
                     'updated_at': datetime.now(timezone.utc)
                 }
