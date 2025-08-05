@@ -468,12 +468,13 @@ def _transfer(**kwargs):
             # 插入 dashboard 並帶上隨機 index、name=pname、components 會轉成 {x,y,z} 格式
             dashboard_hook.run(
                 'INSERT INTO public.dashboards ("id", "index","name",components,icon,created_at,updated_at) '
-                'VALUES (%(dashboard_id)s,%(idx)s,%(name)s,%(components)s,crisis_alert,%(created_at)s,%(updated_at)s);',
+                'VALUES (%(dashboard_id)s,%(idx)s,%(name)s,%(components)s,%(icon)s,,%(created_at)s,%(updated_at)s);',
                 parameters={
                     'dashboard_id': dashboard_id,
                     'idx': rand_idx,
                     'name': pname,
                     'components': comp_ids,
+                    'icon': 'crisis_alert',
                     'created_at': datetime.now(timezone.utc),
                     'updated_at': datetime.now(timezone.utc)
                 }
