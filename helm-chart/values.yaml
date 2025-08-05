@@ -4,13 +4,13 @@
 
 # Global configuration
 global:
-  imageRegistry: ""
+  imageRegistry: ""  # Don't set global registry to avoid affecting subchart dependencies
   imagePullSecrets: []
   storageClass: ""
 
 # Image configuration
 image:
-  registry: ""
+  registry: "ghcr.io/taipei-doit"
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""
@@ -41,7 +41,7 @@ frontend:
   replicaCount: 2
   
   image:
-    repository: taipei-city-dashboard-fe
+    repository: ghcr.io/taipei-doit/taipei-city-dashboard-fe
     tag: "2.2.0"
     pullPolicy: IfNotPresent
   
@@ -85,7 +85,7 @@ backend:
   replicaCount: 2
   
   image:
-    repository: taipei-city-dashboard-be
+    repository: ghcr.io/taipei-doit/taipei-city-dashboard-be
     tag: "2.2.0"
     pullPolicy: IfNotPresent
   

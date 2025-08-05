@@ -3,7 +3,7 @@
 
 # Global configuration
 global:
-  imageRegistry: "your-acr-name.azurecr.io"
+  imageRegistry: ""
 
 # Azure Key Vault configuration
 azureKeyVault:
@@ -20,7 +20,7 @@ frontend:
   replicaCount: 3
   
   image:
-    repository: taipei-city-dashboard-fe
+    repository: ghcr.io/taipei-doit/taipei-city-dashboard-fe
     tag: "2.2.0"
   
   resources:
@@ -37,7 +37,7 @@ backend:
   replicaCount: 3
   
   image:
-    repository: taipei-city-dashboard-be
+    repository: ghcr.io/taipei-doit/taipei-city-dashboard-be
     tag: "2.2.0"
   
   resources:

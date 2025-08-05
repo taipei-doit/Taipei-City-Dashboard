@@ -97,14 +97,9 @@ Create the name of the service account to use
 Create image name
 */}}
 {{- define "taipei-city-dashboard.image" -}}
-{{- $registryName := .Values.global.imageRegistry | default .Values.image.registry -}}
 {{- $repositoryName := .repository -}}
 {{- $tag := .tag | default .Chart.AppVersion | toString -}}
-{{- if $registryName }}
-{{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
-{{- else }}
 {{- printf "%s:%s" $repositoryName $tag -}}
-{{- end }}
 {{- end }}
 
 {{/*
