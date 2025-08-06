@@ -40,8 +40,13 @@ def _transfer(**kwargs):
         }
     )
     data['type'] = 'parking'
-    data['disabled_parking_car_count'] = data['quantity']
-    data['disabled_parking_motorcycle_count'] = data['quantity']
+    data['disabled_parking_car_count'] = data['quantity'] \
+        .apply(lambda x: int(x) if isinstance(x, str) and x.isdigit() else None) \
+        .astype('Int64')  # pandas 的 nullable integer dtype
+
+    data['disabled_parking_motorcycle_count'] = data['quantity'] \
+        .apply(lambda x: int(x) if isinstance(x, str) and x.isdigit() else None) \
+        .astype('Int64')
     data["data_time"] = pd.to_datetime("now").strftime("%Y-%m-%d %H:%M:%S")
     data = data[[
         "name", "district", "type", "address", "disabled_parking_car_count", "disabled_parking_motorcycle_count", 'data_time']]
