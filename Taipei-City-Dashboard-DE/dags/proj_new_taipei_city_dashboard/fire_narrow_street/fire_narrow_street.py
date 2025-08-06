@@ -86,6 +86,25 @@ def _transfer(**kwargs):
     gdata = add_point_wkbgeometry_column_to_df(
         data, x=data["longitude"], y=data["latitude"], from_crs=FROM_CRS
     )
+    
+    # Filter out records with empty fire_brigade or invalid wkb_geometry
+    print(f"Before filtering: {len(gdata)} records")
+    
+    # Filter out empty fire_brigade
+    gdata = gdata[gdata['fire_brigade'].notna()]
+    gdata = gdata[gdata['fire_brigade'].str.strip() != '']
+    
+    # Filter out invalid wkb_geometry (None, Null, or empty)
+    gdata = gdata[gdata['wkb_geometry'].notna()]
+    gdata = gdata[gdata['wkb_geometry'].astype(str) != 'None']
+    gdata = gdata[gdata['wkb_geometry'].astype(str) != '']
+    
+    # Filter out non-Point geometries
+    gdata = gdata[gdata['wkb_geometry'].astype(str).str.contains('POINT', case=False, na=False)]
+    gdata = gdata[~gdata['wkb_geometry'].astype(str).str.contains('POINT \\(NaN NaN\\)', case=False, na=False)]
+    
+    print(f"After filtering: {len(gdata)} records")
+    
     # select column
     ready_data = gdata[
         [
