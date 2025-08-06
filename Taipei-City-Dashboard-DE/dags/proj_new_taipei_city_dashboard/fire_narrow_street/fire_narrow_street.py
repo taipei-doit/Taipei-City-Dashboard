@@ -72,7 +72,7 @@ def _transfer(**kwargs):
     data['width_meter'] = data['width_meter'].str.extract(r'寬度約:([0-9.]+)')
     data['width_meter'] = data['width_meter'].astype(float)    
     data["data_time"] = get_tpe_now_time_str(is_with_tz=True)
-    data['address'] = '新北市' + data['town'] + data['street'].fillna('')
+    data['address'] = '新北市' + data['town'] + data['street'].fillna('') + '1號'
         # get geometry
 
     addr = data["address"]
