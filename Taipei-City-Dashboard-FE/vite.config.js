@@ -8,7 +8,6 @@ let isDockerCompose = process?.env.DOCKER_COMPOSE === "true"; // eslint-disable-
 const serverConfig = isDockerCompose
   ? {
       // Docker Compose override config
-      headers: { 'X-Robots-Tag': 'noindex, nofollow' },
       host: "0.0.0.0",
       port: 80, // 如有需要可變更 port
       proxy: {
@@ -20,7 +19,6 @@ const serverConfig = isDockerCompose
       }
     }
   : {
-      headers: { 'X-Robots-Tag': 'noindex, nofollow' },
       host: "0.0.0.0",
       port: 80,
       proxy: {
