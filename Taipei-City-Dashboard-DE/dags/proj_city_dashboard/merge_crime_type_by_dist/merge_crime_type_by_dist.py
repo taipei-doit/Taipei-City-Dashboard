@@ -32,6 +32,8 @@ def _transfer(**kwargs):
             select * FROM public.patrol_random_robber
             union all
             select * FROM public.patrol_random_snatch
+            union all
+			select * FROM public.patrol_bike_theft
     """
     engine = create_engine(ready_data_db_uri)
     conn = engine.connect()
