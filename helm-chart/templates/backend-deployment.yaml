@@ -1,0 +1,376 @@
+{{- if .Values.backend.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "taipei-city-dashboard.fullname" . }}-backend
+  labels:
+    {{- include "taipei-city-dashboard.backend.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.backend.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "taipei-city-dashboard.backend.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/secret-provider-class.yaml") . | sha256sum }}
+      labels:
+        {{- include "taipei-city-dashboard.backend.selectorLabels" . | nindent 8 }}
+        azure.workload.identity/use: "true"
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "taipei-city-dashboard.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: backend
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: {{ include "taipei-city-dashboard.image" (merge (dict "repository" .Values.backend.image.repository "tag" .Values.backend.image.tag) .) }}
+          imagePullPolicy: {{ .Values.backend.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.backend.service.targetPort }}
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          resources:
+            {{- toYaml .Values.backend.resources | nindent 12 }}
+          env:
+            {{- range $key, $value := .Values.backend.env }}
+            - name: {{ $key }}
+              value: {{ $value | quote }}
+            {{- end }}
+            {{- /* Database Environment Variables */}}
+            {{- if .Values.externalDatabase.enabled }}
+            {{- /* External Database Configuration */}}
+            - name: DB_DASHBOARD_HOST
+              {{- if .Values.azureKeyVault.enabled }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "taipei-city-dashboard.fullname" $ }}-secrets
+                  key: DB_DASHBOARD_HOST
+              {{- else }}
+              value: {{ .Values.externalDatabase.dashboard.host | quote }}
+              {{- end }}
+            - name: DB_DASHBOARD_PORT
+              {{- if .Values.azureKeyVault.enabled }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "taipei-city-dashboard.fullname" $ }}-secrets
+                  key: DB_DASHBOARD_PORT
+              {{- else }}
+              value: {{ .Values.externalDatabase.dashboard.port | quote }}
+              {{- end }}
+            - name: DB_DASHBOARD_DBNAME
+              {{- if .Values.azureKeyVault.enabled }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "taipei-city-dashboard.fullname" $ }}-secrets
+                  key: DB_DASHBOARD_DBNAME
+              {{- else }}
+              value: {{ .Values.externalDatabase.dashboard.database | quote }}
+              {{- end }}
+            - name: DB_DASHBOARD_USER
+              {{- if .Values.azureKeyVault.enabled }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "taipei-city-dashboard.fullname" $ }}-secrets
+                  key: DB_DASHBOARD_USER
+              {{- else }}
+              value: {{ .Values.externalDatabase.dashboard.username | quote }}
+              {{- end }}
+            {{- if not .Values.externalDatabase.dashboard.azure.useAAD }}
+            - name: DB_DASHBOARD_PASSWORD
+              {{- if .Values.azureKeyVault.enabled }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "taipei-city-dashboard.fullname" $ }}-secrets
+                  key: DB_DASHBOARD_PASSWORD
+              {{- else }}
+              value: {{ .Values.externalDatabase.dashboard.password | quote }}
+              {{- end }}
+            {{- end }}
+            - name: DB_DASHBOARD_SSLMODE
+              value: {{ .Values.externalDatabase.dashboard.sslMode | quote }}
+            {{- if .Values.externalDatabase.manager.enabled }}
+            - name: DB_MANAGER_HOST
+              {{- if .Values.azureKeyVault.enabled }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "taipei-city-dashboard.fullname" $ }}-secrets
+                  key: DB_MANAGER_HOST
+              {{- else }}
+              value: {{ .Values.externalDatabase.manager.host | quote }}
+              {{- end }}
+            - name: DB_MANAGER_PORT
+              {{- if .Values.azureKeyVault.enabled }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "taipei-city-dashboard.fullname" $ }}-secrets
+                  key: DB_MANAGER_PORT
+              {{- else }}
+              value: {{ .Values.externalDatabase.manager.port | quote }}
+              {{- end }}
+            - name: DB_MANAGER_DBNAME
+              {{- if .Values.azureKeyVault.enabled }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "taipei-city-dashboard.fullname" $ }}-secrets
+                  key: DB_MANAGER_DBNAME
+              {{- else }}
+              value: {{ .Values.externalDatabase.manager.database | quote }}
+              {{- end }}
+            - name: DB_MANAGER_USER
+              {{- if .Values.azureKeyVault.enabled }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "taipei-city-dashboard.fullname" $ }}-secrets
+                  key: DB_MANAGER_USER
+              {{- else }}
+              value: {{ .Values.externalDatabase.manager.username | quote }}
+              {{- end }}
+            - name: DB_MANAGER_PASSWORD
+              {{- if .Values.azureKeyVault.enabled }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "taipei-city-dashboard.fullname" $ }}-secrets
+                  key: DB_MANAGER_PASSWORD
+              {{- else }}
+              value: {{ .Values.externalDatabase.manager.password | quote }}
+              {{- end }}
+            - name: DB_MANAGER_SSLMODE
+              value: {{ .Values.externalDatabase.manager.sslMode | quote }}
+            {{- else }}
+            {{- /* Use same database for manager */}}
+            - name: DB_MANAGER_HOST
+              {{- if .Values.azureKeyVault.enabled }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "taipei-city-dashboard.fullname" $ }}-secrets
+                  key: DB_MANAGER_HOST
+              {{- else }}
+              value: {{ .Values.externalDatabase.dashboard.host | quote }}
+              {{- end }}
+            - name: DB_MANAGER_PORT
+              {{- if .Values.azureKeyVault.enabled }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "taipei-city-dashboard.fullname" $ }}-secrets
+                  key: DB_MANAGER_PORT
+              {{- else }}
+              value: {{ .Values.externalDatabase.dashboard.port | quote }}
+              {{- end }}
+            - name: DB_MANAGER_DBNAME
+              {{- if .Values.azureKeyVault.enabled }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "taipei-city-dashboard.fullname" $ }}-secrets
+                  key: DB_MANAGER_DBNAME
+              {{- else }}
+              value: {{ .Values.externalDatabase.dashboard.database | quote }}
+              {{- end }}
+            - name: DB_MANAGER_USER
+              {{- if .Values.azureKeyVault.enabled }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "taipei-city-dashboard.fullname" $ }}-secrets
+                  key: DB_MANAGER_USER
+              {{- else }}
+              value: {{ .Values.externalDatabase.dashboard.username | quote }}
+              {{- end }}
+            {{- if not .Values.externalDatabase.dashboard.azure.useAAD }}
+            - name: DB_MANAGER_PASSWORD
+              {{- if .Values.azureKeyVault.enabled }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "taipei-city-dashboard.fullname" $ }}-secrets
+                  key: DB_DASHBOARD_PASSWORD
+              {{- else }}
+              value: {{ .Values.externalDatabase.dashboard.password | quote }}
+              {{- end }}
+            {{- end }}
+            - name: DB_MANAGER_SSLMODE
+              value: {{ .Values.externalDatabase.dashboard.sslMode | quote }}
+            {{- end }}
+            {{- else }}
+            {{- /* In-cluster PostgreSQL Configuration */}}
+            - name: DB_DASHBOARD_HOST
+              value: {{ include "taipei-city-dashboard.fullname" . }}-postgresql
+            - name: DB_DASHBOARD_PORT
+              value: "5432"
+            - name: DB_DASHBOARD_DBNAME
+              value: {{ .Values.postgresql.auth.database | quote }}
+            - name: DB_DASHBOARD_USER
+              value: {{ .Values.postgresql.auth.username | quote }}
+            - name: DB_DASHBOARD_PASSWORD
+              {{- if .Values.azureKeyVault.enabled }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "taipei-city-dashboard.fullname" $ }}-secrets
+                  key: DB_DASHBOARD_PASSWORD
+              {{- else }}
+              value: {{ .Values.postgresql.auth.password | quote }}
+              {{- end }}
+            - name: DB_DASHBOARD_SSLMODE
+              value: "disable"
+            {{- /* Use same database for manager in cluster deployment */}}
+            - name: DB_MANAGER_HOST
+              value: {{ include "taipei-city-dashboard.fullname" . }}-postgresql
+            - name: DB_MANAGER_PORT
+              value: "5432"
+            - name: DB_MANAGER_DBNAME
+              value: {{ .Values.postgresql.auth.database | quote }}
+            - name: DB_MANAGER_USER
+              value: {{ .Values.postgresql.auth.username | quote }}
+            - name: DB_MANAGER_PASSWORD
+              {{- if .Values.azureKeyVault.enabled }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "taipei-city-dashboard.fullname" $ }}-secrets
+                  key: DB_DASHBOARD_PASSWORD
+              {{- else }}
+              value: {{ .Values.postgresql.auth.password | quote }}
+              {{- end }}
+            - name: DB_MANAGER_SSLMODE
+              value: "disable"
+            {{- end }}
+            {{- /* Redis Environment Variables */}}
+            {{- if .Values.externalRedis.enabled }}
+            {{- /* External Redis Configuration */}}
+            - name: REDIS_HOST
+              {{- if .Values.azureKeyVault.enabled }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "taipei-city-dashboard.fullname" $ }}-secrets
+                  key: REDIS_HOST
+              {{- else }}
+              value: {{ .Values.externalRedis.host | quote }}
+              {{- end }}
+            - name: REDIS_PORT
+              {{- if .Values.azureKeyVault.enabled }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "taipei-city-dashboard.fullname" $ }}-secrets
+                  key: REDIS_PORT
+              {{- else }}
+              value: {{ .Values.externalRedis.port | quote }}
+              {{- end }}
+            - name: REDIS_DB
+              {{- if .Values.azureKeyVault.enabled }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "taipei-city-dashboard.fullname" $ }}-secrets
+                  key: REDIS_DB
+              {{- else }}
+              value: {{ .Values.externalRedis.database | quote }}
+              {{- end }}
+            {{- if .Values.externalRedis.password }}
+            - name: REDIS_PASSWORD
+              {{- if .Values.azureKeyVault.enabled }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "taipei-city-dashboard.fullname" $ }}-secrets
+                  key: REDIS_PASSWORD
+              {{- else }}
+              value: {{ .Values.externalRedis.password | quote }}
+              {{- end }}
+            {{- else }}
+            - name: REDIS_PASSWORD
+              value: ""
+            {{- end }}
+            {{- if .Values.externalRedis.tls.enabled }}
+            - name: REDIS_TLS_ENABLED
+              value: "true"
+            - name: REDIS_TLS_INSECURE_SKIP_VERIFY
+              value: {{ .Values.externalRedis.tls.insecureSkipVerify | quote }}
+            {{- end }}
+            {{- else }}
+            {{- /* In-cluster Redis Configuration */}}
+            - name: REDIS_HOST
+              value: {{ include "taipei-city-dashboard.fullname" . }}-redis-master
+            - name: REDIS_PORT
+              value: "6379"
+            - name: REDIS_DB
+              value: "0"
+            {{- if .Values.redis.auth.enabled }}
+            - name: REDIS_PASSWORD
+              {{- if .Values.azureKeyVault.enabled }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "taipei-city-dashboard.fullname" $ }}-secrets
+                  key: REDIS_PASSWORD
+              {{- else }}
+              value: {{ .Values.redis.auth.password | quote }}
+              {{- end }}
+            {{- else }}
+            - name: REDIS_PASSWORD
+              value: ""
+            {{- end }}
+            {{- end }}
+            {{- /* Azure Key Vault or other secret environment variables */}}
+            {{- if .Values.azureKeyVault.enabled }}
+            {{- range .Values.backend.secretEnv }}
+            {{- if not (has .name (list "DB_DASHBOARD_HOST" "DB_DASHBOARD_USER" "DB_DASHBOARD_PASSWORD" "DB_DASHBOARD_DBNAME" "DB_DASHBOARD_PORT" "DB_MANAGER_HOST" "DB_MANAGER_USER" "DB_MANAGER_PASSWORD" "DB_MANAGER_DBNAME" "DB_MANAGER_PORT" "REDIS_HOST" "REDIS_PORT" "REDIS_PASSWORD" "REDIS_DB")) }}
+            - name: {{ .name }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "taipei-city-dashboard.fullname" $ }}-secrets
+                  key: {{ .name }}
+            {{- end }}
+            {{- end }}
+            {{- else }}
+            {{- range .Values.backend.secretEnv }}
+            {{- if not (has .name (list "DB_DASHBOARD_HOST" "DB_DASHBOARD_USER" "DB_DASHBOARD_PASSWORD" "DB_DASHBOARD_DBNAME" "DB_DASHBOARD_PORT" "DB_MANAGER_HOST" "DB_MANAGER_USER" "DB_MANAGER_PASSWORD" "DB_MANAGER_DBNAME" "DB_MANAGER_PORT" "REDIS_HOST" "REDIS_PORT" "REDIS_PASSWORD" "REDIS_DB")) }}
+            - name: {{ .name }}
+              value: {{ .defaultValue | default "not-set" | quote }}
+            {{- end }}
+            {{- end }}
+            {{- end }}
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+            {{- if .Values.azureKeyVault.enabled }}
+            - name: secrets-store
+              mountPath: /mnt/secrets-store
+              readOnly: true
+            {{- end }}
+      volumes:
+        - name: tmp
+          emptyDir: {}
+        {{- if .Values.azureKeyVault.enabled }}
+        - name: secrets-store
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: {{ include "taipei-city-dashboard.secretProviderClassName" . }}
+        {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{- end }}
