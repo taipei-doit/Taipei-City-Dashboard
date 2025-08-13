@@ -34,6 +34,10 @@ azureKeyVault:
   clientId: ""
   # Secret provider class name
   secretProviderClassName: "taipei-dashboard-secrets"
+  # Docker pull secret configuration
+  dockerPullSecret:
+    enabled: false
+    keyVaultSecretName: ""
 
 # Frontend service configuration
 frontend:
