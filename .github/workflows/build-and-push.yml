@@ -4,9 +4,8 @@ on:
   pull_request:
     branches: ["main", "sit"]
     types: [closed]
-    paths:
-      - 'Taipei-City-Dashboard-BE/**'
-      - 'Taipei-City-Dashboard-FE/**'
+  push:
+    branches: ["main", "sit"]
   workflow_dispatch:
 
 env:
@@ -17,25 +16,18 @@ env:
 
 jobs:
   detect-changes:
-    if: github.event.pull_request.merged == true
+    if: github.event_name == 'workflow_dispatch' || github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.pull_request.merged == true)
     runs-on: ubuntu-latest
     outputs:
-      backend: ${{ steps.filter.outputs.backend }}
-      frontend: ${{ steps.filter.outputs.frontend }}
+      backend: true
+      frontend: true
     steps:
-      - uses: actions/checkout@v4
-      - uses: dorny/paths-filter@v2
-        id: filter
-        with:
-          filters: |
-            backend:
-              - 'Taipei-City-Dashboard-BE/**'
-            frontend:
-              - 'Taipei-City-Dashboard-FE/**'
+      - name: Force deploy both services
+        run: echo "Deploying both backend and frontend"
 
   backend:
     needs: detect-changes
-    if: github.event.pull_request.merged == true && needs.detect-changes.outputs.backend == 'true'
+    if: (github.event_name == 'workflow_dispatch' || github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.pull_request.merged == true)) && needs.detect-changes.outputs.backend == 'true'
     runs-on: ubuntu-latest
     concurrency:
       group: deploy-${{ github.ref }}
@@ -131,7 +123,7 @@ jobs:
 
   frontend:
     needs: detect-changes
-    if: github.event.pull_request.merged == true && needs.detect-changes.outputs.frontend == 'true'
+    if: (github.event_name == 'workflow_dispatch' || github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.pull_request.merged == true)) && needs.detect-changes.outputs.frontend == 'true'
     runs-on: ubuntu-latest
     concurrency:
       group: deploy-${{ github.ref }}
