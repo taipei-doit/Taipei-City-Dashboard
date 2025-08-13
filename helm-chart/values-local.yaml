@@ -5,6 +5,9 @@
 global:
   imageRegistry: ""
 
+# Override to ensure consistent naming with PostgreSQL service
+fullnameOverride: "taipei-dashboard"
+
 # Azure Key Vault - disabled for local development
 azureKeyVault:
   enabled: false
@@ -15,7 +18,7 @@ frontend:
   replicaCount: 1
   
   image:
-    repository: ghcr.io/taipei-doit/taipei-city-dashboard-fe
+    repository: buggatti/docker-dashboard-fe
     tag: "latest"
     pullPolicy: Always
   
@@ -32,17 +35,20 @@ frontend:
       cpu: 100m
       memory: 128Mi
   
+  # Frontend-specific security context for nginx
+  securityContext:
+    runAsNonRoot: false
+    runAsUser: 0
+    readOnlyRootFilesystem: false
+  
   # Development environment variables (non-sensitive)
   env:
-    NODE_ENV: "development"
-    VITE_API_URL: "http://localhost:30088"
-    VITE_APP_TITLE: "Taipei Dashboard (Local)"
-    VITE_APP_VERSION: "2.2.0-dev"
-    VITE_MAPBOXTOKEN: "your-dev-mapbox-token"
-    VITE_MAPBOXTILE: "mapbox://styles/mapbox/light-v10"
-    VITE_TAIPEIPASS_URL: "https://id-dev.taipei.gov.tw"
-    VITE_TAIPEIPASS_CLIENT_ID: "dev-client-id"
-    VITE_TAIPEIPASS_SCOPE: "openid profile"
+    NODE_ENV: "test"
+    VITE_API_URL: "/api/dev"
+    VITE_APP_TITLE: "城市儀表板"
+    VITE_APP_VERSION: "3.0.0"
+    VITE_MAPBOXTOKEN: ""
+    VITE_MAPBOXTILE: ""
 
 # Backend configuration
 backend:
@@ -50,7 +56,7 @@ backend:
   replicaCount: 1
   
   image:
-    repository: ghcr.io/taipei-doit/taipei-city-dashboard-be
+    repository: buggatti/docker-dashboard-be
     tag: "latest"
     pullPolicy: Always
   
@@ -70,12 +76,31 @@ backend:
   # Development environment variables (non-sensitive)
   env:
     GIN_MODE: "debug"
-    GIN_DOMAIN: "localhost"
     GIN_PORT: "8080"
-    JWT_SECRET: "dev-jwt-secret-key"
-    IDNO_SALT: "dev-salt"
-    ISSO_CLIENT_ID: "dev-client-id"
-    ISSO_CLIENT_SECRET: "dev-client-secret"
+    DASHBOARD_DEFAULT_USERNAME: "admin"
+    DASHBOARD_DEFAULT_EMAIL: "admin@taipei.gov"
+    DASHBOARD_DEFAULT_PASSWORD: "admin"
+    DASHBOARD_SAMPLE_FILE: "dashboard-demo.sql"
+    MANAGER_SAMPLE_FILE: "dashboardmanager-demo.sql"
+    
+  # Secret environment variables that will be set by template logic
+  secretEnv:
+    - name: GIN_DOMAIN
+      defaultValue: "0.0.0.0"
+    - name: JWT_SECRET
+      defaultValue: "secret"
+    - name: IDNO_SALT
+      defaultValue: "salt"
+    - name: ISSO_URL
+      defaultValue: ""
+    - name: TAIPEIPASS_URL
+      defaultValue: ""
+    - name: ISSO_CLIENT_ID
+      defaultValue: ""
+    - name: ISSO_CLIENT_SECRET
+      defaultValue: ""
+    - name: ISSO_CLIENT_SCOPE
+      defaultValue: ""
 
 # Service Account
 serviceAccount:
@@ -90,61 +115,63 @@ ingress:
 autoscaling:
   enabled: false
 
-# Security - relaxed for development
+# Security - different settings for frontend and backend
 securityContext:
   runAsNonRoot: false
-  runAsUser: 0
+  runAsUser: 1000
 
-# Database Configuration - Use in-cluster databases for local development
+# External Database Configuration - disabled for local development
 externalDatabase:
   enabled: false
 
+# External Redis Configuration - disabled for local development  
 externalRedis:
   enabled: false
 
-# PostgreSQL for local development
+# Enable in-cluster databases for local development
 postgresql:
   enabled: true
   auth:
-    postgresPassword: "password"
-    username: "postgres"
-    password: "password"
+    postgresPassword: "admin"
+    username: "dashboard"
+    password: "dashboard-password"
     database: "dashboard"
   primary:
     persistence:
-      enabled: false  # Disable persistence for easy cleanup
+      enabled: true
+      size: 1Gi
     service:
-      type: NodePort
-      nodePorts:
-        postgresql: 30432
-    resources:
-      requests:
-        cpu: 100m
-        memory: 128Mi
-      limits:
-        cpu: 200m
-        memory: 256Mi
+      type: ClusterIP
+      ports:
+        postgresql: 5432
+  metrics:
+    enabled: false
 
-# Redis for local development
 redis:
   enabled: true
   auth:
-    enabled: false  # Disabled for easier local development
+    enabled: false
   master:
     persistence:
-      enabled: false  # Disable persistence for easy cleanup
+      enabled: true
+      size: 1Gi
     service:
-      type: NodePort
-      nodePorts:
-        redis: 30379
-    resources:
-      requests:
-        cpu: 50m
-        memory: 64Mi
-      limits:
-        cpu: 100m
-        memory: 128Mi
+      type: ClusterIP
+      ports:
+        redis: 6379
+  metrics:
+    enabled: false
 
-# Monitoring - disabled for development
-monitoring:
-  enabled: false
+# PgAdmin configuration for local development
+pgadmin:
+  enabled: true
+  env:
+    PGADMIN_DEFAULT_EMAIL: "admin@taipei.gov"
+    PGADMIN_DEFAULT_PASSWORD: "admin"
+    PGADMIN_LISTEN_PORT: "80"
+  service:
+    type: NodePort
+    port: 80
+    nodePort: 30081
+
+

@@ -98,7 +98,7 @@ Create image name
 */}}
 {{- define "taipei-city-dashboard.image" -}}
 {{- $repositoryName := .repository -}}
-{{- $tag := .tag | default .Chart.AppVersion | toString -}}
+{{- $tag := (or .tag .Values.image.tag .Chart.AppVersion) | toString -}}
 {{- printf "%s:%s" $repositoryName $tag -}}
 {{- end }}
 

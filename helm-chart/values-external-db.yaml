@@ -6,18 +6,21 @@
 global:
   imageRegistry: ""  # Use Docker Hub or your registry
 
-# Disable Azure Key Vault (not available to community users)
-azureKeyVault:
-  enabled: false
+# GitHub Secrets 配置 (不使用 Azure Key Vault)
+# 所有 secrets 都通過 GitHub Actions 從 GitHub Repository Secrets 注入
+
+# Image pull secrets (for private registries like ACR)
+imagePullSecrets:
+  - name: acr-secret
 
 # Frontend configuration
 frontend:
   enabled: true
-  replicaCount: 2
+  replicaCount: 1
   
   image:
-    repository: taipei-city-dashboard-fe
-    tag: "2.2.0"
+    repository: citydashboard-dhc2gtetgcfqeqhv.azurecr.io/taipei-city-dashboard-fe
+    tag: ""
   
   resources:
     limits:
@@ -29,15 +32,23 @@ frontend:
   
   # Frontend environment variables (update these values)
   env:
-    NODE_ENV: "production"
-    VITE_API_URL: "https://your-api-domain.com"
+    NODE_ENV: "sit"
     VITE_APP_TITLE: "Taipei City Dashboard"
     VITE_APP_VERSION: "2.2.0"
-    VITE_MAPBOXTOKEN: "your-mapbox-token"
-    VITE_MAPBOXTILE: "mapbox://styles/mapbox/light-v10"
-    VITE_TAIPEIPASS_URL: "https://your-auth-service.com"
-    VITE_TAIPEIPASS_CLIENT_ID: "your-oauth-client-id"
-    VITE_TAIPEIPASS_SCOPE: "openid profile email"
+  # Disable secretEnv to avoid duplicate env vars when Azure Key Vault is disabled
+  secretEnv:
+    - name: VITE_MAPBOXTOKEN
+      secretKey: "vite-mapbox-token"
+    - name: VITE_API_URL
+      secretKey: "vite-api-url"
+    - name: VITE_MAPBOXTILE
+      secretKey: "vite-mapbox-tile"
+    - name: VITE_TAIPEIPASS_URL
+      secretKey: "taipeipass-url"
+    - name: VITE_TAIPEIPASS_CLIENT_ID
+      secretKey: "taipeipass-client-id"
+    - name: VITE_TAIPEIPASS_SCOPE
+      secretKey: "taipeipass-scope"
 
 # Backend configuration  
 backend:
@@ -45,8 +56,8 @@ backend:
   replicaCount: 2
   
   image:
-    repository: taipei-city-dashboard-be
-    tag: "2.2.0"
+    repository: citydashboard-dhc2gtetgcfqeqhv.azurecr.io/taipei-city-dashboard-be
+    tag: ""
   
   resources:
     limits:
@@ -59,50 +70,55 @@ backend:
   # Backend environment variables (update these values)
   env:
     GIN_MODE: "release"
-    GIN_DOMAIN: "your-api-domain.com"
     GIN_PORT: "8080"
-    JWT_SECRET: "your-jwt-secret-key"
-    IDNO_SALT: "your-salt-value"
-    ISSO_CLIENT_ID: "your-oauth-client-id"
-    ISSO_CLIENT_SECRET: "your-oauth-client-secret"
+  # Disable secretEnv to avoid duplicate env vars when Azure Key Vault is disabled
+  secretEnv:
+    - name: GIN_DOMAIN
+      secretKey: "gin-domain"
+    - name: JWT_SECRET
+      secretKey: "jwt-secret"
+    - name: IDNO_SALT
+      secretKey: "idno-salt"
+    - name: ISSO_CLIENT_ID
+      secretKey: "isso-client-id"
+    - name: ISSO_CLIENT_SECRET
+      secretKey: "isso-client-secret"
+    - name: DB_DASHBOARD_PASSWORD
+      secretKey: "db-dashboard-password"
+    - name: DB_DASHBOARD_HOST
+      secretKey: "db-dashboard-host"
+    - name: DB_DASHBOARD_USER
+      secretKey: "db-dashboard-user"
+    - name: DB_DASHBOARD_DBNAME
+      secretKey: "db-dashboard-dbname"
+    - name: DB_DASHBOARD_PORT
+      secretKey: "db-dashboard-port"
+    - name: DB_MANAGER_PASSWORD
+      secretKey: "db-manager-password"
+    - name: DB_MANAGER_HOST
+      secretKey: "db-manager-host"
+    - name: DB_MANAGER_USER
+      secretKey: "db-manager-user"
+    - name: DB_MANAGER_DBNAME
+      secretKey: "db-manager-dbname"
+    - name: DB_MANAGER_PORT
+      secretKey: "db-manager-port"
+    - name: REDIS_PASSWORD
+      secretKey: "redis-password"
+    - name: REDIS_HOST
+      secretKey: "redis-host"
+    - name: REDIS_PORT
+      secretKey: "redis-port"
+    - name: REDIS_DB
+      secretKey: "redis-db"
 
-# External Database Configuration
-# Configure these settings for your external PostgreSQL database
+# External Database Configuration (停用 - 由後端環境變數直接連接)
 externalDatabase:
-  enabled: true
-  
-  dashboard:
-    host: "your-postgres-host.example.com"      # Replace with your PostgreSQL host
-    port: 5432
-    database: "dashboard"                        # Database name
-    username: "dashboard_user"                   # Database username
-    password: "your-secure-password"             # Database password (consider using Kubernetes secrets)
-    sslMode: "require"                          # SSL mode: disable, require, verify-ca, verify-full
-    
-    # Connection pool settings
-    maxOpenConns: 25
-    maxIdleConns: 5
-    connMaxLifetime: "5m"
-  
-  # Optional: Use separate manager database
-  manager:
-    enabled: false  # Set to true if you want a separate manager database
-    # If enabled, configure the same settings as dashboard above
+  enabled: false                               # 停用 Helm 的資料庫配置
 
-# External Redis Configuration
-# Configure these settings for your external Redis instance
+# External Redis Configuration (停用 - 由後端環境變數直接連接)  
 externalRedis:
-  enabled: true
-  
-  host: "your-redis-host.example.com"          # Replace with your Redis host
-  port: 6379
-  password: "your-redis-password"               # Redis password (if required)
-  database: 0                                   # Redis database number
-  
-  # SSL/TLS configuration (if your Redis supports SSL)
-  tls:
-    enabled: false                              # Set to true if using SSL
-    insecureSkipVerify: false
+  enabled: false                               # 停用 Helm 的 Redis 配置
 
 # Disable in-cluster databases
 postgresql:
@@ -118,7 +134,7 @@ serviceAccount:
 
 # Ingress configuration
 ingress:
-  enabled: true
+  enabled: false  # Disable ingress for local development
   className: "nginx"
   annotations:
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
@@ -141,8 +157,8 @@ ingress:
 # Autoscaling
 autoscaling:
   enabled: true
-  minReplicas: 2
-  maxReplicas: 10
+  minReplicas: 1
+  maxReplicas: 2
   targetCPUUtilizationPercentage: 80
   targetMemoryUtilizationPercentage: 80
 
@@ -159,16 +175,16 @@ securityContext:
   runAsNonRoot: true
   runAsUser: 65534
 
-# Node affinity (optional - for multi-zone deployment)
-affinity:
-  podAntiAffinity:
-    preferredDuringSchedulingIgnoredDuringExecution:
-    - weight: 100
-      podAffinityTerm:
-        labelSelector:
-          matchExpressions:
-          - key: app.kubernetes.io/name
-            operator: In
-            values:
-            - taipei-city-dashboard
-        topologyKey: kubernetes.io/hostname
+# # Node affinity (optional - for multi-zone deployment)
+# affinity:
+#   podAntiAffinity:
+#     preferredDuringSchedulingIgnoredDuringExecution:
+#     - weight: 100
+#       podAffinityTerm:
+#         labelSelector:
+#           matchExpressions:
+#           - key: app.kubernetes.io/name
+#             operator: In
+#             values:
+#             - taipei-city-dashboard
+#         topologyKey: kubernetes.io/hostname

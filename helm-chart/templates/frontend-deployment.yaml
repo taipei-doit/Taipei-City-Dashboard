@@ -30,7 +30,11 @@ spec:
       containers:
         - name: frontend
           securityContext:
+            {{- if .Values.frontend.securityContext }}
+            {{- toYaml .Values.frontend.securityContext | nindent 12 }}
+            {{- else }}
             {{- toYaml .Values.securityContext | nindent 12 }}
+            {{- end }}
           image: {{ include "taipei-city-dashboard.image" (merge (dict "repository" .Values.frontend.image.repository "tag" .Values.frontend.image.tag) .) }}
           imagePullPolicy: {{ .Values.frontend.image.pullPolicy }}
           ports:
