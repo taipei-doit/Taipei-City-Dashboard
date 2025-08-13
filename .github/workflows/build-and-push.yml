@@ -4,8 +4,6 @@ on:
   pull_request:
     branches: ["main", "sit"]
     types: [closed]
-  push:
-    branches: ["main", "sit"]
   workflow_dispatch:
 
 env:
@@ -16,19 +14,20 @@ env:
 
 jobs:
   detect-changes:
-    if: github.event_name == 'workflow_dispatch' || github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.pull_request.merged == true)
+    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'pull_request' && github.event.pull_request.merged == true)
     runs-on: ubuntu-latest
     outputs:
-      backend: true
-      frontend: true
+      backend: "true"
+      frontend: "true"
     steps:
       - name: Force deploy both services
         run: echo "Deploying both backend and frontend"
 
   backend:
     needs: detect-changes
-    if: (github.event_name == 'workflow_dispatch' || github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.pull_request.merged == true)) && needs.detect-changes.outputs.backend == 'true'
+    if: (github.event_name == 'workflow_dispatch' || (github.event_name == 'pull_request' && github.event.pull_request.merged == true)) && needs.detect-changes.outputs.backend == 'true'
     runs-on: ubuntu-latest
+    environment: sit
     concurrency:
       group: deploy-${{ github.ref }}
       cancel-in-progress: false
@@ -107,6 +106,7 @@ jobs:
             --from-literal=GIN_DOMAIN="${{ secrets.GIN_DOMAIN }}" \
             --from-literal=VITE_API_URL="${{ secrets.VITE_API_URL }}" \
             --from-literal=VITE_MAPBOXTOKEN="${{ secrets.VITE_MAPBOX_TOKEN }}" \
+            --namespace=dashboard \
             --dry-run=client -o yaml | kubectl apply -f -
 
       - name: Deploy Backend only
@@ -119,12 +119,14 @@ jobs:
           helm upgrade --install ${{ env.RELEASE }} ./helm-chart \
             $VALUES_FLAG \
             --set backend.image.tag="${{ steps.tag.outputs.value }}" \
+            --namespace=dashboard \
             --wait --timeout=10m
 
   frontend:
     needs: detect-changes
-    if: (github.event_name == 'workflow_dispatch' || github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.pull_request.merged == true)) && needs.detect-changes.outputs.frontend == 'true'
+    if: (github.event_name == 'workflow_dispatch' || (github.event_name == 'pull_request' && github.event.pull_request.merged == true)) && needs.detect-changes.outputs.frontend == 'true'
     runs-on: ubuntu-latest
+    environment: sit
     concurrency:
       group: deploy-${{ github.ref }}
       cancel-in-progress: false
@@ -191,6 +193,7 @@ jobs:
             --from-literal=VITE_TAIPEIPASS_URL="${{ secrets.VITE_TAIPEIPASS_URL }}" \
             --from-literal=VITE_TAIPEIPASS_CLIENT_ID="${{ secrets.VITE_TAIPEIPASS_CLIENT_ID }}" \
             --from-literal=VITE_TAIPEIPASS_SCOPE="${{ secrets.VITE_TAIPEIPASS_SCOPE }}" \
+            --namespace=dashboard \
             --dry-run=client -o yaml | kubectl apply -f -
 
       - name: Deploy Frontend only
@@ -203,4 +206,5 @@ jobs:
           helm upgrade --install ${{ env.RELEASE }} ./helm-chart \
             $VALUES_FLAG \
             --set frontend.image.tag="${{ steps.tag.outputs.value }}" \
+            --namespace=dashboard \
             --wait --timeout=10m
