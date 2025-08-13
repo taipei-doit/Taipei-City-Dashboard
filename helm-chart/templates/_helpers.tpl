@@ -102,9 +102,4 @@ Create image name
 {{- printf "%s:%s" $repositoryName $tag -}}
 {{- end }}
 
-{{/*
-Azure Key Vault Secret Provider Class name
-*/}}
-{{- define "taipei-city-dashboard.secretProviderClassName" -}}
-{{- .Values.azureKeyVault.secretProviderClassName | default (printf "%s-secrets" (include "taipei-city-dashboard.fullname" .)) }}
-{{- end }}
+

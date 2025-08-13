@@ -5,15 +5,6 @@
 global:
   imageRegistry: ""
 
-# Azure Key Vault configuration
-azureKeyVault:
-  enabled: true
-  vaultName: "taipei-dashboard-kv"
-  tenantId: "your-tenant-id"
-  subscriptionId: "your-subscription-id"
-  resourceGroup: "taipei-dashboard-rg"
-  clientId: "your-managed-identity-client-id"
-
 # Frontend configuration
 frontend:
   enabled: true

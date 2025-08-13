@@ -19,26 +19,6 @@ imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
-# Azure Key Vault configuration
-azureKeyVault:
-  enabled: true
-  # The name of the Azure Key Vault
-  vaultName: "taipei-dashboard-kv"
-  # Azure tenant ID
-  tenantId: ""
-  # Azure subscription ID  
-  subscriptionId: ""
-  # Resource group where Key Vault is located
-  resourceGroup: ""
-  # Managed identity client ID for accessing Key Vault
-  clientId: ""
-  # Secret provider class name
-  secretProviderClassName: "taipei-dashboard-secrets"
-  # Docker pull secret configuration
-  dockerPullSecret:
-    enabled: false
-    keyVaultSecretName: ""
-
 # Frontend service configuration
 frontend:
   enabled: true
