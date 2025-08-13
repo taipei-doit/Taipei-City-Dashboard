@@ -5,10 +5,7 @@
 # Global configuration
 global:
   imageRegistry: ""
-
-# Disable Azure Key Vault
-azureKeyVault:
-  enabled: false
+  storageClass: "default"  # Change to your preferred storage class
 
 # Frontend configuration
 frontend:
@@ -180,11 +177,6 @@ securityContext:
   readOnlyRootFilesystem: true
   runAsNonRoot: true
   runAsUser: 1000
-
-# Storage class for persistent volumes
-# Adjust based on your Kubernetes cluster
-global:
-  storageClass: "default"  # Change to your preferred storage class
 
 # Resource quotas (optional)
 resourceQuota:
