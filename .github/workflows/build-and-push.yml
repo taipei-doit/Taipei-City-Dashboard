@@ -27,7 +27,7 @@ jobs:
     needs: detect-changes
     if: (github.event_name == 'workflow_dispatch' || (github.event_name == 'pull_request' && github.event.pull_request.merged == true)) && needs.detect-changes.outputs.backend == 'true'
     runs-on: ubuntu-latest
-    # environment: sit  # 暫時移除，避免環境保護規則阻擋
+    environment: sit  # 暫時移除，避免環境保護規則阻擋
     concurrency:
       group: deploy-${{ github.ref }}
       cancel-in-progress: false
@@ -127,7 +127,7 @@ jobs:
     needs: detect-changes
     if: (github.event_name == 'workflow_dispatch' || (github.event_name == 'pull_request' && github.event.pull_request.merged == true)) && needs.detect-changes.outputs.frontend == 'true'
     runs-on: ubuntu-latest
-    # environment: sit  # 暫時移除，避免環境保護規則阻擋
+    environment: sit  # 暫時移除，避免環境保護規則阻擋
     concurrency:
       group: deploy-${{ github.ref }}
       cancel-in-progress: false
