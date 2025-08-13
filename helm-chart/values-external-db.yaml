@@ -6,15 +6,8 @@
 global:
   imageRegistry: ""  # Use Docker Hub or your registry
 
-# GitHub Secrets 配置 (不使用 Azure Key Vault)
+# GitHub Secrets 配置
 # 所有 secrets 都通過 GitHub Actions 從 GitHub Repository Secrets 注入
-
-# Azure Key Vault 配置 (停用)
-azureKeyVault:
-  enabled: false
-  dockerPullSecret:
-    enabled: false
-    keyVaultSecretName: ""
 
 # Image pull secrets (for private registries like ACR)
 imagePullSecrets:

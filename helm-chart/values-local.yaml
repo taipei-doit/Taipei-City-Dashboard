@@ -8,10 +8,6 @@ global:
 # Override to ensure consistent naming with PostgreSQL service
 fullnameOverride: "taipei-dashboard"
 
-# Azure Key Vault - disabled for local development
-azureKeyVault:
-  enabled: false
-
 # Frontend configuration
 frontend:
   enabled: true
