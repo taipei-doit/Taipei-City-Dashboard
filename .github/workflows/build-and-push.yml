@@ -74,8 +74,17 @@ jobs:
       - name: Configure kubeconfig
         run: |
           mkdir -p ~/.kube
+          if [ -z "${{ secrets.KUBE_CONFIG_DATA }}" ]; then
+            echo "ERROR: KUBE_CONFIG_DATA secret is not set!"
+            exit 1
+          fi
+          echo "KUBE_CONFIG_DATA is set, length check..."
+          echo "${{ secrets.KUBE_CONFIG_DATA }}" | wc -c
+          echo "Decoding kubeconfig..."
           echo "${{ secrets.KUBE_CONFIG_DATA }}" | base64 -d > ~/.kube/config
           chmod 600 ~/.kube/config
+          echo "Kubeconfig created successfully"
+          kubectl cluster-info
 
       - name: Create/Update ACR imagePullSecret
         run: |
@@ -101,8 +110,8 @@ jobs:
             --from-literal=DB_MANAGER_PORT="${{ secrets.DB_DASHBOARD_PORT }}" \
             --from-literal=REDIS_HOST="${{ secrets.REDIS_HOST }}" \
             --from-literal=REDIS_PASSWORD="${{ secrets.REDIS_PASSWORD }}" \
-            --from-literal=REDIS_PORT="${{ secrets.REDIS_PORT }}" \
-            --from-literal=REDIS_DB="${{ secrets.REDIS_DB }}" \
+            --from-literal=REDIS_PORT="6379" \
+            --from-literal=REDIS_DB="0" \
             --from-literal=JWT_SECRET="${{ secrets.JWT_SECRET }}" \
             --from-literal=GIN_DOMAIN="${{ secrets.GIN_DOMAIN }}" \
             --from-literal=VITE_API_URL="${{ secrets.VITE_API_URL }}" \
@@ -174,8 +183,17 @@ jobs:
       - name: Configure kubeconfig
         run: |
           mkdir -p ~/.kube
+          if [ -z "${{ secrets.KUBE_CONFIG_DATA }}" ]; then
+            echo "ERROR: KUBE_CONFIG_DATA secret is not set!"
+            exit 1
+          fi
+          echo "KUBE_CONFIG_DATA is set, length check..."
+          echo "${{ secrets.KUBE_CONFIG_DATA }}" | wc -c
+          echo "Decoding kubeconfig..."
           echo "${{ secrets.KUBE_CONFIG_DATA }}" | base64 -d > ~/.kube/config
           chmod 600 ~/.kube/config
+          echo "Kubeconfig created successfully"
+          kubectl cluster-info
 
       - name: Create/Update ACR imagePullSecret
         run: |
