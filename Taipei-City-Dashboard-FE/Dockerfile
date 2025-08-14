@@ -12,10 +12,12 @@ RUN npm install
 
 # Copy the rest of the application code
 COPY . .
+RUN pwd
 
 # Build the application with different modes based on environment variable
 ARG NODE_ENV=production
 RUN if [ "$NODE_ENV" = "test" ]; then npm run build:test; else npm run build; fi
+
 
 # Use a lightweight node image
 FROM nginx:alpine

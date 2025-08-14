@@ -82,6 +82,7 @@ def _transfer(**kwargs):
     # 資料格式為"108臺北市萬華區昆明街142號7-8樓", 只取區
     area_candidates = data['address'].str.slice(3, 6)
     data['district'] = area_candidates.apply(lambda x: x if x.endswith('區') else None)
+    data['type'] = 'market'
     # define columns type
     float_cols = ['lng', 'lat']
     for col in float_cols:
@@ -99,6 +100,7 @@ def _transfer(**kwargs):
             'district',
             'lng',
             'lat', 
+            'type',
             'disabled_parking_car_count',
             'disabled_parking_motorcycle_count',
             'accessible_elevator_flag',
@@ -138,7 +140,7 @@ def _transfer(**kwargs):
     data['accessible_elevator_flag'] = data['accessible_elevator_flag'].map(lambda x: True if x == 'v' else False)
     data['accessible_restroom_flag'] = data['accessible_restroom_flag'].map(lambda x: True if x == 'v' else False)
     data['accessible_stair_handrail_flag'] = data['accessible_stair_handrail_flag'].map(lambda x: True if x == 'v' else False)
-
+    data['type'] = 'parking'
     # define columns type
     float_cols = ['lng', 'lat']
     for col in float_cols:
@@ -156,6 +158,7 @@ def _transfer(**kwargs):
             'district',
             'lng',
             'lat', 
+            'type',
             'disabled_parking_car_count',
             'disabled_parking_motorcycle_count',
             'accessible_elevator_flag',
