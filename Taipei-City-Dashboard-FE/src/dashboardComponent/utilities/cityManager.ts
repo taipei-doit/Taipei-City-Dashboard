@@ -33,7 +33,7 @@ export class CityManager {
         [
             "metrotaipei",
             {
-                expandedName: "雙北儀表板示範",
+                expandedName: "雙北儀表板",
 				collapsedName: "雙北",
                 enabled: true,
                 selectList: ["metrotaipei", "taipei"],
