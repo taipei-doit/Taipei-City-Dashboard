@@ -1,0 +1,43 @@
+{
+  "dag_infos": {
+    "dag_id": "friendly_store",
+    "start_date": "2024-12-10",
+    "schedule_interval": "0 20 19 * *",
+    "catchup": false,
+    "tags": [
+      "friendly_store",
+      "民政局",
+      "臺北市友善店家"
+    ],
+    "description": "Monthly update of Taipei/New Taipei friendly store data with filtering and transformation.",
+    "default_args": {
+      "owner": "airflow",
+      "email": [
+        "DEFAULT_EMAIL_LIST"
+      ],
+      "email_on_retry": false,
+      "email_on_failure": true,
+      "retries": 1,
+      "retry_delay": 60
+    },
+    "ready_data_db": "postgres_default",
+    "ready_data_default_table": "friendly_store",
+    "ready_data_history_table": "",
+    "raw_data_db": "postgres_default",
+    "raw_data_table": "",
+    "load_behavior": "replace"
+  },
+  "data_infos": {
+    "name_cn": "臺北市與新北市友善店家列表",
+    "airflow_update_freq": "20:00+8 每月19日",
+    "source": "https://data.taipei/dataset/detail?id=d807396c-e41f-4005-be42-0160280783a1",
+    "source_type": "data.taipei csv",
+    "source_dept": "民政局",
+    "gis_format": null,
+    "output_coordinate": "",
+    "is_geometry": 0,
+    "dataset_description": "每月更新臺北與新北地區之友善店家清單，內容涵蓋地址、簡介、經緯度與多項友善指標，如語言友善、無障礙設施、性別友善、便利支付等。",
+    "etl_description": "透過 CSV 擷取並過濾臺北市與新北市資料，解析城市與行政區資訊，轉換友善指標為布林值格式，並寫入 PostgreSQL friendly_store 表。",
+    "sensitivity": "public"
+  }
+}

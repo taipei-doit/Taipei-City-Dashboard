@@ -41,17 +41,8 @@ def _transfer(**kwargs):
     data["data_time"] = get_tpe_now_time_str(is_with_tz=True)
     # get geometry
     # clean addr
-    data["address"] = (
-        data["address"]
-        # 移除「( … )」或「（ … ）」之間的任何字元
-        .str.replace(r"[\(\（][^\)\）]*[\)\）]", "", regex=True)
-        # 若刪完括號後結尾還有多餘空格或頓號、逗號，順便去掉
-        .str.strip(" 、，")
-    )
-    data["merge_address"] = data["county"] + data["district"] + data["address"] 
-
-
-    addr = data["merge_address"]
+    data["address"] = data["county"].astype(str) + data["district"].astype(str) + data["address"].astype(str)
+    addr = data["address"]
     addr_cleaned = clean_data(addr)
     standard_addr_list = main_process(addr_cleaned)
     result, output = save_data(addr, addr_cleaned, standard_addr_list)
