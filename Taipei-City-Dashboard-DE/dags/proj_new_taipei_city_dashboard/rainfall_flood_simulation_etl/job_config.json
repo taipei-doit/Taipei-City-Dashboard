@@ -1,14 +1,14 @@
 {
   "dag_infos": {
-    "dag_id": "merge_crime_type_by_dist",
+    "dag_id": "rainfall_flood_simulation_etl",
     "start_date": "2025-06-25",
-    "schedule_interval": "@monthly",
+    "schedule_interval": "@once",
     "catchup": false,
     "tags": [
-      "merge_crime_type_by_dist",
-      "data.taipei",
-      "臺北市",
-      "Taipei-City"
+      "rainfall_flood_simulation_etl",
+      "新北市",
+      "New-Taipei-City",
+      "降雨淹水模擬圖"
     ],
     "description": "",
     "default_args": {
@@ -20,22 +20,22 @@
       "retry_delay": 60
     },
     "ready_data_db": "postgres_default",
-    "ready_data_default_table": "merge_crime_type_by_dist_tpe",
+    "ready_data_default_table": "rainfall_flood_simulation_etl_ntpe",
     "ready_data_history_table": "",
     "raw_data_db": "postgres_default",
     "raw_data_table": "",
     "load_behavior": "replace"
   },
   "data_infos": {
-    "name_cn": "偷竊統計總和",
-    "airflow_update_freq": "@monthly",
-    "source": "postgres_default",
-    "source_type": "data.taipei",
-    "source_dept": "警察局",
+    "name_cn": "降雨淹水模擬圖",
+    "airflow_update_freq": "@once",
+    "source": "",
+    "source_type": "",
+    "source_dept": "",
     "gis_format": null,
     "output_coordinate": "",
     "is_geometry": 0,
-    "dataset_description": "臺北市犯罪資訊",
+    "dataset_description": "降雨淹水模擬圖",
     "etl_description": "target url, fill data columns, standardize time",
     "sensitivity": "public"
   }

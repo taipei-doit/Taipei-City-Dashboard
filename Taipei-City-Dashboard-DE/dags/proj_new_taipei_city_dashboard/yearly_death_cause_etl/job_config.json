@@ -1,13 +1,13 @@
 {
   "dag_infos": {
-    "dag_id": "merge_crime_type_by_dist",
+    "dag_id": "yearly_death_cause_etl",
     "start_date": "2025-06-25",
-    "schedule_interval": "@monthly",
+    "schedule_interval": "@yearly",
     "catchup": false,
     "tags": [
-      "merge_crime_type_by_dist",
+      "yearly_death_cause_etl",
       "data.taipei",
-      "臺北市",
+      "新北市",
       "Taipei-City"
     ],
     "description": "",
@@ -20,22 +20,22 @@
       "retry_delay": 60
     },
     "ready_data_db": "postgres_default",
-    "ready_data_default_table": "merge_crime_type_by_dist_tpe",
+    "ready_data_default_table": "yearly_death_cause_etl_ntpe",
     "ready_data_history_table": "",
     "raw_data_db": "postgres_default",
     "raw_data_table": "",
     "load_behavior": "replace"
   },
   "data_infos": {
-    "name_cn": "偷竊統計總和",
-    "airflow_update_freq": "@monthly",
-    "source": "postgres_default",
+    "name_cn": "",
+    "airflow_update_freq": "@yearly",
+    "source": "https://www.travel.taipei/open-api/zh-tw/Attractions/All?page=1",
     "source_type": "data.taipei",
-    "source_dept": "警察局",
+    "source_dept": "",
     "gis_format": null,
     "output_coordinate": "",
     "is_geometry": 0,
-    "dataset_description": "臺北市犯罪資訊",
+    "dataset_description": "年度主要死亡原因",
     "etl_description": "target url, fill data columns, standardize time",
     "sensitivity": "public"
   }

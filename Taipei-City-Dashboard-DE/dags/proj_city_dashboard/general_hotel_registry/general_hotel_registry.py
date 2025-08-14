@@ -35,7 +35,6 @@ def _general_hotel_registry(**kwargs):
     response = requests.get(URL, verify=False)
     # 讀取 CSV
     df = pd.read_csv(StringIO(response.text))
-    print(f"raw data =========== {df.head()}")
     # Transform
     
     data = df.rename(columns={
@@ -48,6 +47,10 @@ def _general_hotel_registry(**kwargs):
         "房間數": "room"
     })
     data["data_time"] = get_tpe_now_time_str(is_with_tz=True)
+    # 資料格式為"108臺北市萬華區昆明街142號7-8樓", 只取區
+    area_candidates = data['address'].str.slice(3, 6)
+    data['area'] = area_candidates.apply(lambda x: x if x.endswith('區') else None)
+
 
     addr = data["address"]
     addr_cleaned = clean_data(addr)
@@ -55,10 +58,7 @@ def _general_hotel_registry(**kwargs):
     result, output = save_data(addr, addr_cleaned, standard_addr_list)
     data["address"] = output
 
-    # 資料格式為"108臺北市萬華區昆明街142號7-8樓", 只取區
 
-    area_candidates = data['address'].str.slice(3, 6)
-    data['area'] = area_candidates.apply(lambda x: x if x.endswith('區') else None)
     # get gis xy
     data["longitude"], data["latitude"] = get_addr_xy_parallel(output)
     # standardize geometry

@@ -1,0 +1,37 @@
+{
+  "dag_infos": {
+    "dag_id": "yearly_death_cause_etl",
+    "start_date": "2025-02-17",
+    "schedule_interval": "@yearly",
+    "catchup": false,
+    "tags": ["yearly_death_cause_etl_tpe", "主計處"],
+    "description": "This dataset provides annual statistics on Taipei City's death causes, including major causes of death, their proportions, and trends over the years.",
+    "default_args": {
+      "owner": "airflow",
+      "email": ["DEFAULT_EMAIL_LIST"],
+      "email_on_retry": false,
+      "email_on_failure": true,
+      "retries": 1,
+      "retry_delay": 60
+    },
+    "ready_data_db": "postgres_default",
+    "ready_data_default_table": "yearly_death_cause_etl_tpe",
+    "ready_data_history_table": "yearly_death_cause_etl_tpe_history",
+    "raw_data_db": "postgres_default",
+    "raw_data_table": "",
+    "load_behavior": "current+history"
+  },
+  "data_infos": {
+    "name_cn": "年度主要死亡原因",
+    "airflow_update_freq": "@yearly",
+    "source": "https://data.taipei/dataset/detail?id=1e0c58e9-6aa5-4acb-a5a1-f60bacad60f3",
+    "source_type": "data.taipei csv file",
+    "source_dept": "主計處",
+    "gis_format": "Point",
+    "output_coordinate": "EPSG:4326",
+    "is_geometry": 1,
+    "dataset_description": "年度主要死亡原因",
+    "etl_description": "get update time, geocoding, standardize geometry",
+    "sensitivity": "public"
+  }
+}

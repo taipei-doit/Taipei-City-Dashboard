@@ -1,14 +1,14 @@
 {
   "dag_infos": {
-    "dag_id": "merge_crime_type_by_dist",
+    "dag_id": "flu_hospitals_ntpe",
     "start_date": "2025-06-25",
     "schedule_interval": "@monthly",
     "catchup": false,
     "tags": [
-      "merge_crime_type_by_dist",
-      "data.taipei",
-      "臺北市",
-      "Taipei-City"
+      "flu_hospitals_ntpe",
+      "data.ntpc",
+      "新北市",
+      "衛生局"
     ],
     "description": "",
     "default_args": {
@@ -20,22 +20,22 @@
       "retry_delay": 60
     },
     "ready_data_db": "postgres_default",
-    "ready_data_default_table": "merge_crime_type_by_dist_tpe",
+    "ready_data_default_table": "flu_hospitals_ntpe",
     "ready_data_history_table": "",
     "raw_data_db": "postgres_default",
     "raw_data_table": "",
     "load_behavior": "replace"
   },
   "data_infos": {
-    "name_cn": "偷竊統計總和",
+    "name_cn": "",
     "airflow_update_freq": "@monthly",
-    "source": "postgres_default",
-    "source_type": "data.taipei",
-    "source_dept": "警察局",
+    "source": "https://data.ntpc.gov.tw/datasets/551cd3f4-534a-45cf-976a-359090fb7df6",
+    "source_type": "data.ntpc",
+    "source_dept": "衛生局",
     "gis_format": null,
     "output_coordinate": "",
     "is_geometry": 0,
-    "dataset_description": "臺北市犯罪資訊",
+    "dataset_description": "各項預防接種合約醫療院所",
     "etl_description": "target url, fill data columns, standardize time",
     "sensitivity": "public"
   }
