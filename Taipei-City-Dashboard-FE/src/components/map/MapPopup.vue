@@ -57,10 +57,13 @@
             >
           </template>
           <template v-else>
-            <iframe
+            <video
+              ref="videoRef"
               width="300"
-              height="200"
-              :src="popupContent[activeTab]?.properties[item.key]"
+              height="180"
+              controls
+              autoplay
+              muted
             />
           </template>
         </div>

@@ -73,6 +73,21 @@ function handleMoreInfo(item) {
           handleMoreInfo(item);
         }
       "
+      @change-city="(city)=> {
+        const selectedData = contentStore.cityDashboard.components.find((data) => {
+          if (data.index === item.index && data.city === city) {
+            return data
+          }
+        });
+
+        const componentIndex = contentStore.currentDashboard.components.findIndex(
+          (item) => item.id === selectedData.id
+        );
+
+        if (selectedData) {
+          contentStore.setComponentData(componentIndex, selectedData);
+        }
+      }"
     />
     <MoreInfo />
     <ReportIssue />
@@ -83,7 +98,7 @@ function handleMoreInfo(item) {
     class="dashboard"
   >
     <DashboardComponent
-      v-for="(item, arrayIdx) in contentStore.currentDashboard.components"
+      v-for="item in contentStore.currentDashboard.components"
       :key="`${item.index}-${item.city}`"
       :config="item"
       :info-btn="true"
@@ -130,8 +145,12 @@ function handleMoreInfo(item) {
           }
         });
 
+        const componentIndex = contentStore.currentDashboard.components.findIndex(
+          (item) => item.id === selectedData.id
+        );
+
         if (selectedData) {
-          contentStore.setComponentData(arrayIdx,selectedData);
+          contentStore.setComponentData(componentIndex, selectedData);
         }
       }
       "

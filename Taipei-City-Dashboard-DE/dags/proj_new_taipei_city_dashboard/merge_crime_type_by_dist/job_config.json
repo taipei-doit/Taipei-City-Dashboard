@@ -1,0 +1,37 @@
+{
+  "dag_infos": {
+    "dag_id": "merge_crime_type_by_dist",
+    "start_date": "2025-06-30",
+    "schedule_interval": "@monthly",
+    "catchup": false,
+    "tags": ["merge_crime_type_by_dist", "新北市", "New-Taipei-City", "犯罪資料"],
+    "description": "",
+    "default_args": {
+      "owner": "airflow",
+      "email": ["DEFAULT_EMAIL_LIST"],
+      "email_on_retry": false,
+      "email_on_failure": true,
+      "retries": 1,
+      "retry_delay": 60
+    },
+    "ready_data_db": "postgres_default",
+    "ready_data_default_table": "merge_crime_type_by_dist_new_tpe",
+    "ready_data_history_table": "",
+    "raw_data_db": "postgres_default",
+    "raw_data_table": "",
+    "load_behavior": "replace"
+  },
+  "data_infos": {
+    "name_cn": "犯罪資料",
+    "airflow_update_freq": "@monthly",
+    "source": "https://data.ntpc.gov.tw/datasets/8a32c6b5-46fc-4fac-b3a4-317b9998bfd7?fbclid=IwY2xjawKocsNleHRuA2FlbQIxMQABHp3TZ5lDdRJyLrW5cV01z2hWFGUa-n4WbqYqoH1FTwZvwLf9LcBC8hE_pED7_aem_RZW54exUIWP4Chd0q-yVDA",
+    "source_type": "data.ntpc.gov.tw",
+    "source_dept": "新北市政府警察局",
+    "gis_format": "point",
+    "output_coordinate": "EPSG:4326",
+    "is_geometry": 1,
+    "dataset_description": "犯罪資料",
+    "etl_description": "target url, fill data columns, standardize time",
+    "sensitivity": "public"
+  }
+}

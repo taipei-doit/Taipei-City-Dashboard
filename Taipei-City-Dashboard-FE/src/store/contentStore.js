@@ -124,7 +124,7 @@ export const useContentStore = defineStore("content", {
 						this.favorites = this.personalDashboards.find(
 							(el) => el.icon === "favorite"
 						);
-						if (!this.favorites.components) {
+						if (!this.favorites?.components) {
 							this.favorites.components = [];
 						}
 					}

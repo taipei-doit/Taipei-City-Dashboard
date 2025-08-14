@@ -7,14 +7,14 @@ const { VITE_APP_TITLE } = import.meta.env;
 import { computed } from "vue";
 import { useRoute } from "vue-router";
 import { useFullscreen } from "@vueuse/core";
-import { usePersonStore } from "../../../store/personStore";
+import { useAuthStore } from "../../../store/authStore";
 import { useDialogStore } from "../../../store/dialogStore";
 
 import UserSettings from "../../dialogs/UserSettings.vue";
 import ContributorsList from "../../dialogs/ContributorsList.vue";
 
 const route = useRoute();
-const personStore = usePersonStore();
+const authStore = useAuthStore();
 const dialogStore = useDialogStore();
 const { isFullscreen, toggle } = useFullscreen();
 
@@ -44,17 +44,16 @@ const linkQuery = computed(() => {
     </a>
     <div
       v-if="
-        personStore.currentPath !== 'admin' &&
-          !(personStore.isMbDevice && personStore.isNarrowDevice)
+        authStore.currentPath !== 'admin'
       "
       class="navbar-tabs"
     >
       <router-link
-        v-if="personStore.token"
+        v-if="authStore.token"
         :to="`/component`"
         :class="{
           'router-link-active':
-            personStore.currentPath.includes('component'),
+            authStore.currentPath.includes('component'),
         }"
       >
         組件瀏覽平台
@@ -76,7 +75,7 @@ const linkQuery = computed(() => {
     </div>
     <div class="navbar-user">
       <button
-        v-if="!(personStore.isMbDevice && personStore.isNarrowDevice)"
+        v-if="!(authStore.isMobileDevice && authStore.isNarrowDevice)"
         class="hide-if-mobile"
         @click="toggle"
       >
@@ -108,13 +107,13 @@ const linkQuery = computed(() => {
       </div>
       <div
         v-if="
-          personStore.token &&
-            !(personStore.isMbDevice && personStore.isNarrowDevice)
+          authStore.token &&
+            !(authStore.isMobileDevice && authStore.isNarrowDevice)
         "
         class="navbar-user-user"
       >
         <button>
-          {{ personStore.user.name }}
+          {{ authStore.user.name }}
         </button>
         <ul>
           <li>
@@ -124,8 +123,8 @@ const linkQuery = computed(() => {
           </li>
           <li
             v-if="
-              personStore.currentPath !== 'admin' &&
-                personStore.user.is_admin
+              authStore.currentPath !== 'admin' &&
+                authStore.user.is_admin
             "
             class="hide-if-mobile"
           >
@@ -134,7 +133,7 @@ const linkQuery = computed(() => {
             </router-link>
           </li>
           <li
-            v-else-if="personStore.user.is_admin"
+            v-else-if="authStore.user.is_admin"
             class="hide-if-mobile"
           >
             <router-link to="/dashboard">
@@ -142,7 +141,7 @@ const linkQuery = computed(() => {
             </router-link>
           </li>
           <li>
-            <button @click="personStore.handleLogout">
+            <button @click="authStore.handleLogout">
               登出
             </button>
           </li>
@@ -153,7 +152,7 @@ const linkQuery = computed(() => {
       </div>
       <div
         v-else-if="
-          !(personStore.isMbDevice && personStore.isNarrowDevice)
+          !(authStore.isMobileDevice && authStore.isNarrowDevice)
         "
         class="navbar-user-user"
       >
@@ -181,11 +180,19 @@ const linkQuery = computed(() => {
 
 		h1 {
 			font-weight: 500;
+			
+			@media screen and (max-width: 500px) {
+				display: none;
+			}
 		}
 
 		h2 {
 			font-size: var(--font-s);
 			font-weight: 400;
+
+			@media screen and (max-width: 500px) {
+				display: none;
+			}
 		}
 
 		&-image {
@@ -225,12 +232,12 @@ const linkQuery = computed(() => {
 			}
 		}
 
-		@media screen and (max-width: 750px) {
-			display: none;
-		}
-		@media screen and (max-height: 500px) {
-			display: none;
-		}
+		// @media screen and (max-width: 750px) {
+		// 	display: none;
+		// }
+		// @media screen and (max-height: 500px) {
+		// 	display: none;
+		// }
 	}
 
 	&-user {

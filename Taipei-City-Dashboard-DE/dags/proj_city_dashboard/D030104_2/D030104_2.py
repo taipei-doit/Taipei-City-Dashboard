@@ -106,6 +106,11 @@ def D030104_2(**kwargs):
     data["data_time"] = update_time
     data["data_time"] = convert_str_to_time_format(data["data_time"])
     # geometry
+    data["x_97"] = pd.to_numeric(data["x_97"], errors="coerce")
+    data["y_97"] = pd.to_numeric(data["y_97"], errors="coerce")
+    data = data[(data["x_97"] != 0) & (data["y_97"] != 0)]
+    data = data.dropna(subset=["x_97", "y_97"])
+
     gdata = add_point_wkbgeometry_column_to_df(
         data, data["x_97"], data["y_97"], from_crs=FROM_CRS
     )

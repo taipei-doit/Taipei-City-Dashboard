@@ -69,7 +69,7 @@ def _transfer(**kwargs):
         "UnGas": "un_gas"
     })
     data['data_time'] = get_tpe_now_time_str()
-
+    data = data[data["disaster_id"] != "f804b5b3-3526-4692-87d1-6e6dc785966f"]
     ready_data = data.copy()
     print(f"ready_data =========== {ready_data.columns}")
     # Load

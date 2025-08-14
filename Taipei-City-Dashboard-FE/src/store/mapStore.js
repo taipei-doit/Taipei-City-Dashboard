@@ -11,13 +11,14 @@ import { createApp, defineComponent, nextTick, ref } from "vue";
 import { defineStore } from "pinia";
 import mapboxGl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
+import Hls from 'hls.js';
 import { ArcLayer } from "@deck.gl/layers";
 import { MapboxOverlay } from "@deck.gl/mapbox";
 import axios from "axios";
 import http from "../router/axios.js";
 
 // Other Stores
-import { usePersonStore } from "./personStore.js";
+import { useAuthStore } from "./authStore";
 import { useDialogStore } from "./dialogStore";
 
 // Vue Components
@@ -28,8 +29,6 @@ import {
 	MapObjectConfig,
 	CityMapView,
 	TaipeiBuilding,
-	// TpDistrict,
-	// TpVillage,
 	metroTaipeiTown,
 	metroTaipeiVillage,
 	metroTpDistrict,
@@ -44,10 +43,6 @@ import { marchingSquare } from "../assets/utilityFunctions/marchingSquare.js";
 import { voronoi } from "../assets/utilityFunctions/voronoi.js";
 import { calculateHaversineDistance } from "../assets/utilityFunctions/calculateHaversineDistance";
 import { AnimatedArcLayer } from "../assets/configs/mapbox/arcAnimate.js";
-
-// public map data
-import taipeiTownData from '/mapData/taipei_town.geojson?url';
-import taipeiVillageData from '/mapData/taipei_village.geojson?url';
 
 export const useMapStore = defineStore("map", {
 	state: () => ({
@@ -134,24 +129,32 @@ export const useMapStore = defineStore("map", {
 		// 2. Adds three basic layers to the map (Taipei District, Taipei Village labels, and Taipei 3D Buildings)
 		// Due to performance concerns, Taipei 3D Buildings won't be added in the mobile version
 		initializeBasicLayers() {
-			const personStore = usePersonStore();
+			const authStore = useAuthStore();
 			if (!this.map) return;
-			// Taipei District Labels
-			this.map
-				.addSource("taipei_town", {
-					type: "geojson",
-					data: taipeiTownData,
-				})
-				.addLayer(TaipeiTown);
-			// Taipei Village Labels
-			this.map
-				.addSource("taipei_village", {
-					type: "geojson",
-					data: taipeiVillageData,
-				})
-				.addLayer(TaipeiVillage);
+			// metroTaipei District Labels
+			fetch(`/mapData/metrotaipei_town.geojson`)
+				.then((response) => response.json())
+				.then((data) => {
+					this.map
+						.addSource("metrotaipei_town_label", {
+							type: "geojson",
+							data: data,
+						})
+						.addLayer(metroTaipeiTown);
+				});
+			// metroTaipei Village Labels
+			fetch(`/mapData/metrotaipei_village.geojson`)
+				.then((response) => response.json())
+				.then((data) => {
+					this.map
+						.addSource("metrotaipei_village_label", {
+							type: "geojson",
+							data: data,
+						})
+						.addLayer(metroTaipeiVillage);
+				});
 			// Taipei 3D Buildings
-			if (!personStore.isMbDevice) {
+			if (!authStore.isMobileDevice) {
 				this.map
 					.addSource("taipei_building_3d_source", {
 						type: "vector",
@@ -166,41 +169,20 @@ export const useMapStore = defineStore("map", {
 					scheme: "tms",
 					tolerance: 0,
 					tiles: [
-						`https://citydashboard.taipei/geo_server/gwc/service/tms/1.0.0/taipei_vioc:metrotaipei_village@EPSG:900913@pbf/{z}/{x}/{y}.pbf`,
-						// `${location.origin}/geo_server/gwc/service/tms/1.0.0/taipei_vioc:metrotaipei_village@EPSG:900913@pbf/{z}/{x}/{y}.pbf`,
-
+						`${location.origin}/geo_server/gwc/service/tms/1.0.0/taipei_vioc:metrotaipei_village@EPSG:900913@pbf/{z}/{x}/{y}.pbf`,
 					],
 				})
 				.addLayer(metroTpVillage);
-			// .addSource(`tp_village`, {
-			// 	type: "vector",
-			// 	scheme: "tms",
-			// 	tolerance: 0,
-			// 	tiles: [
-			// 		`${location.origin}/geo_server/gwc/service/tms/1.0.0/taipei_vioc:tp_village@EPSG:900913@pbf/{z}/{x}/{y}.pbf`,
-			// 	],
-			// })
-			// .addLayer(TpVillage);
-			// Taipei District Boundaries
 			this.map
 				.addSource(`metrotaipei_town`, {
 					type: "vector",
 					scheme: "tms",
 					tolerance: 0,
 					tiles: [
-						`https://citydashboard.taipei/geo_server/gwc/service/tms/1.0.0/taipei_vioc:metrotaipei_town@EPSG:900913@pbf/{z}/{x}/{y}.pbf`,
+						`${location.origin}/geo_server/gwc/service/tms/1.0.0/taipei_vioc:metrotaipei_town@EPSG:900913@pbf/{z}/{x}/{y}.pbf`,
 					],
 				})
 				.addLayer(metroTpDistrict);
-			// .addSource(`tp_district`, {
-			// 	type: "vector",
-			// 	scheme: "tms",
-			// 	tolerance: 0,
-			// 	tiles: [
-			// 		`${location.origin}/geo_server/gwc/service/tms/1.0.0/taipei_vioc:tp_district@EPSG:900913@pbf/{z}/{x}/{y}.pbf`,
-			// 	],
-			// })
-			// .addLayer(TpDistrict);
 
 			this.addSymbolSources();
 		},
@@ -322,34 +304,12 @@ export const useMapStore = defineStore("map", {
 			axios
 				.get(`/mapData/${map_config.index}.geojson`)
 				.then((rs) => {
-					// 驗證 res
-					if (!rs ||rs == null || rs == undefined) {
-						console.error('Invalid response from the server');
-						return;
-					}
-
-					// 驗證 res.data
-					if (!rs?.data || rs?.data == null || rs?.data == undefined) {
-						console.error('Invalid response data from the server');
-						return;
-					}
-
-					this.addGeojsonSource(map_config, rs?.data);
+					this.addGeojsonSource(map_config, rs.data);
 				})
 				.catch((e) => console.error(e));
 		},
 		// 3-1. Add a local geojson as a source in mapbox
 		addGeojsonSource(map_config, data) {
-			// 驗證 data
-			if (!data ||data == null || data == undefined) {
-				console.error('Invalid response data from the server');
-				return;
-			}
-
-			if (!Array.isArray(data.features)||data.features == null || data.features?.length==0 ) {
-				return;
-			}
-
 			if (!["voronoi", "isoline"].includes(map_config.type)) {
 				this.map.addSource(`${map_config.layerId}-source`, {
 					type: "geojson",
@@ -368,58 +328,92 @@ export const useMapStore = defineStore("map", {
 		},
 		// 3-2. Add a raster map as a source in mapbox
 		async addRasterSource(map_config) {
-			// 驗證 map_config
-			if (!map_config || typeof map_config !== 'object') {
-				console.error("Invalid map_config in addRasterSource");
-				return;
-			}
-
 			if (["arc", "voronoi", "isoline"].includes(map_config.type)) {
 				const res = await axios.get(
 					`https://citydashboard.taipei/geo_server/taipei_vioc/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=taipei_vioc%3A${map_config.index}&maxFeatures=1000000&outputFormat=application%2Fjson`
 				);
 
-				// 驗證 res
-				if (!res ||res == null || res == undefined) {
-					console.error('Invalid response from the server');
-					return;
-				}
-
-				// 驗證 res.data
-				if (!res?.data || res?.data == null || res?.data == undefined) {
-					console.error('Invalid response data from the server');
-					return;
-				}
-
-				const mapData = res?.data;
-
-				// 驗證 mapData
-				if (!mapData || !mapData.features || !Array.isArray(mapData.features)) {
-					console.error('Invalid data received from the server');
-					return;
-				}
-
 				if (map_config.type === "arc") {
 					this.map.addSource(`${map_config.layerId}-source`, {
 						type: "geojson",
-						data: { ...mapData },
+						data: { ...res.data },
 					});
-					this.AddArcMapLayer(map_config, mapData);
+					this.AddArcMapLayer(map_config, res.data);
 				} else if (map_config.type === "voronoi") {
-					this.AddVoronoiMapLayer(map_config, mapData);
+					this.AddVoronoiMapLayer(map_config, res.data);
 				} else if (map_config.type === "isoline") {
-					this.AddIsolineMapLayer(map_config, mapData);
+					this.AddIsolineMapLayer(map_config, res.data);
 				}
 			} else {
-				this.map.addSource(`${map_config.layerId}-source`, {
-					type: "vector",
-					scheme: "tms",
-					tolerance: 0,
-					tiles: [
-						`${location.origin}/geo_server/gwc/service/tms/1.0.0/taipei_vioc:${map_config.index}@EPSG:900913@pbf/{z}/{x}/{y}.pbf`,
-					],
-				});
-				this.addMapLayer(map_config);
+				try {
+					// 添加源
+					this.map.addSource(`${map_config.layerId}-source`, {
+						type: "vector",
+						scheme: "tms",
+						tolerance: 0,
+						tiles: [
+							`https://citydashboard.taipei/geo_server/gwc/service/tms/1.0.0/taipei_vioc:${map_config.index}@EPSG:900913@pbf/{z}/{x}/{y}.pbf`,
+						],
+					});
+		
+					// 監聽錯誤
+					this.map.on('error', (e) => {
+						if (e.sourceId === `${map_config.layerId}-source`) {
+							console.error('Source error:', e);
+
+							// 清理已添加的源（如果存在）
+							if (this.map.getSource(`${map_config.layerId}-source`)) {
+								this.map.removeSource(`${map_config.layerId}-source`);
+							}
+							// 從 loadingLayers 中移除
+							this.loadingLayers = this.loadingLayers.filter(
+								(el) => el !== map_config.layerId
+							);
+						}
+					});
+		
+					// 監聽源加載完成
+					const sourceLoaded = new Promise((resolve, reject) => {
+						const checkSource = (e) => {
+							if (e.sourceId === `${map_config.layerId}-source`) {
+								if (e.isSourceLoaded) {
+									this.map.off('sourcedata', checkSource);
+									resolve();
+								}
+								// 如果有錯誤也需要處理
+								if (e.error) {
+									this.map.off('sourcedata', checkSource);
+									reject(e.error);
+								}
+							}
+						};
+						
+						this.map.on('sourcedata', checkSource);
+						
+						// 設置超時
+						setTimeout(() => {
+							this.map.off('sourcedata', checkSource);
+							reject(new Error('Source load timeout'));
+						}, 10000);
+					});
+		
+					// 等待源加載完成後添加圖層
+					await sourceLoaded;
+					this.addMapLayer(map_config);
+
+
+		
+				} catch (error) {
+					console.error('Failed to add source:', error);
+					// 清理已添加的源（如果存在）
+					if (this.map.getSource(`${map_config.layerId}-source`)) {
+						this.map.removeSource(`${map_config.layerId}-source`);
+					}
+					// 從 loadingLayers 中移除
+					this.loadingLayers = this.loadingLayers.filter(
+						(el) => el !== map_config.layerId
+					);
+				}
 			}
 		},
 		// 4-1. Using the mapbox source and map config, create a new layer
@@ -603,12 +597,6 @@ export const useMapStore = defineStore("map", {
 		// 4-3. Add Map Layer for Voronoi Maps
 		// Developed by 00:21, Taipei Codefest 2023
 		AddVoronoiMapLayer(map_config, data) {
-			// 驗證 data
-			if (!data ||data == null || data == undefined ) {
-				console.error('Invalid response from the server');
-				return;
-			}
-
 			this.loadingLayers.push("rendering");
 
 			let voronoi_source = {
@@ -620,22 +608,10 @@ export const useMapStore = defineStore("map", {
 			// Get features alone
 			let { features } = data;
 
-			// 驗證 features 是否為有效的數組
-			if (!Array.isArray(features)) {
-				console.error("Invalid features data");
-				return;
-			}
-
 			// Get coordnates alone
 			let coords = features.map(
-				(location) => location.geometry?.coordinates
+				(location) => location.geometry.coordinates
 			);
-
-			// 驗證 coords 是否為有效的數組
-			if (!Array.isArray(coords)) {
-				console.error("Invalid coordinates data");
-				return;
-			}
 
 			// Remove duplicate coordinates (so that they wont't cause problems in the Voronoi algorithm...)
 			let shouldBeRemoved = coords.map((coord1, ind) => {
@@ -653,20 +629,9 @@ export const useMapStore = defineStore("map", {
 
 			// Calculate cell for each coordinate
 			let cells = voronoi(coords);
-			
-			// Limit the number of iterations
-			const MAX_ITERATIONS = 100000;
-			const LOOP_COUNT = Math.min(cells.length, MAX_ITERATIONS);
-
-			// 驗證 cells 是否為有效的數組
-			if (!Array.isArray(cells)) {
-				console.error("Invalid cells data");
-				return;
-			}
 
 			// Push cell outlines to source data
-			for (let i = 0; i < MAX_ITERATIONS; i++) {
-				if (i >= LOOP_COUNT ) break;
+			for (let i = 0; i < cells.length; i++) {
 				voronoi_source.features.push({
 					...features[i],
 					geometry: {
@@ -690,11 +655,6 @@ export const useMapStore = defineStore("map", {
 		// 4-4. Add Map Layer for Isoline Maps
 		// Developed by 00:21, Taipei Codefest 2023
 		AddIsolineMapLayer(map_config, data) {
-			// 驗證輸入資料
-			if (!data || !Array.isArray(data.features)) {
-				console.error("Invalid data structure");
-				return;
-			}
 			this.loadingLayers.push("rendering");
 			// Step 1: Generate a 2D scalar field from known data points
 			// - Turn the original data into the format that can be accepted by interpolation()
@@ -887,11 +847,83 @@ export const useMapStore = defineStore("map", {
 			const PopupComponent = defineComponent({
 				extends: MapPopup,
 				setup() {
+					const hls = ref(null)
+					const activeTab = ref(0)
+					const videoRef = ref(null)
+
+					const isHlsUrl = (url) => {
+						return url && (url.includes('.m3u8') || url.includes('hls'))
+					}
+
+					const initHlsPlayer = (videoElement, src) => {
+						
+						if (Hls.isSupported()) {
+							const hlsInstance = new Hls()
+							
+							// 添加錯誤監聽
+							hlsInstance.on(Hls.Events.ERROR, (event, data) => {
+								if (data.fatal) {
+									hlsInstance.destroy();
+								}
+							})
+							
+							hlsInstance.loadSource(src)
+							hlsInstance.attachMedia(videoElement)
+							return hlsInstance
+						} else if (videoElement.canPlayType('application/vnd.apple.mpegurl')) {
+							videoElement.src = src
+							return null
+						}
+						
+						return null
+					}
+
+					const handleVideoLoad = () => {
+						const activeTabValue = activeTab.value
+						let videoElement = videoRef.value
+						
+						// 如果 videoRef 是數組，取第一個元素
+						if (Array.isArray(videoElement)) {
+							videoElement = videoElement[0]
+						}
+						
+						if (!videoElement || !parsedPopupContent[activeTabValue]) {
+							return;
+						}
+						
+						// 找到 video 模式的 property
+						const videoProperty = mapConfigs[activeTabValue].property.find(item => item.mode === 'video')
+						if (!videoProperty) {
+							return;
+						}
+						
+						const videoUrl = parsedPopupContent[activeTabValue].properties[videoProperty.key]
+						if (!videoUrl) {
+							return;
+						}
+						
+						// 如果是 HLS URL，使用 HLS 播放器
+						if (isHlsUrl(videoUrl)) {
+							if (hls.value) {
+								hls.value.destroy()
+							}
+							hls.value = initHlsPlayer(videoElement, videoUrl)
+						} else {
+							videoElement.src = videoUrl
+						}
+					}
+
+					// 初始化影像
+					nextTick(() => {
+						handleVideoLoad()
+					})
+
 					// Only show the data of the topmost layer
 					return {
 						popupContent: parsedPopupContent,
 						mapConfigs: mapConfigs,
-						activeTab: ref(0),
+						activeTab,
+						videoRef,
 					};
 				},
 			});
@@ -929,13 +961,9 @@ export const useMapStore = defineStore("map", {
 			const pitch = this.map.getPitch();
 			const bearing = this.map.getBearing();
 
-			const personStore = usePersonStore();
-			const baseUrl = "user";
-			const midUrl = "viewpoint";
-			const userId = personStore.person.person_id;
-			
+			const authStore = useAuthStore();
 			const res = await http.post(
-				`${baseUrl}/${userId}/${midUrl}`,
+				`user/${authStore.user.user_id}/viewpoint`,
 				{
 					center_x: lng,
 					center_y: lat,
@@ -950,13 +978,9 @@ export const useMapStore = defineStore("map", {
 		},
 		// 2. Add a marker
 		async addMarker(name) {
-			const personStore = usePersonStore();
-			const baseUrl = "user";
-			const midUrl = "viewpoint";
-			const userId = personStore.person.person_id;
-
+			const authStore = useAuthStore();
 			const res = await http.post(
-				`${baseUrl}/${userId}/${midUrl}`,
+				`user/${authStore.user.user_id}/viewpoint`,
 				{
 					center_x: this.tempMarkerCoordinates.lng,
 					center_y: this.tempMarkerCoordinates.lat,
@@ -986,7 +1010,7 @@ export const useMapStore = defineStore("map", {
 			markerId,
 			{ lng, lat }
 		) {
-			const personStore = usePersonStore();
+			const authStore = useAuthStore();
 			const dialogStore = useDialogStore();
 			const marker = new mapboxGl.Marker(colorSetting);
 			const popup = new mapboxGl.Popup({ closeButton: false }).setHTML(
@@ -998,12 +1022,8 @@ export const useMapStore = defineStore("map", {
 			popup.on("open", () => {
 				const el = document.getElementById(`delete-${markerId}`);
 				el.addEventListener("click", async () => {
-					const baseUrl = "user";
-					const midUrl = "viewpoint";
-					const userId = personStore.person.person_id;
-
 					await http.delete(
-						`${baseUrl}/${userId}/${midUrl}/${markerId}`
+						`user/${authStore.user.user_id}/viewpoint/${markerId}`
 					);
 					dialogStore.showNotification("success", "地標刪除成功");
 					this.viewPoints = this.viewPoints.filter(
@@ -1019,13 +1039,9 @@ export const useMapStore = defineStore("map", {
 		},
 		// 4. Remove a viewpoint
 		async removeViewPoint(item) {
-			const personStore = usePersonStore();
-			const baseUrl = "user";
-			const midUrl = "viewpoint";
-			const userId = personStore.person.person_id;
-
+			const authStore = useAuthStore();
 			await http.delete(
-				`${baseUrl}/${userId}/${midUrl}/${item.id}`
+				`user/${authStore.user.user_id}/viewpoint/${item.id}`
 			);
 			const dialogStore = useDialogStore();
 
@@ -1036,13 +1052,10 @@ export const useMapStore = defineStore("map", {
 		},
 		// 5. Fetch all view points
 		async fetchViewPoints() {
-			const personStore = usePersonStore();
-			const baseUrl = "user";
-			const midUrl = "viewpoint";
-			const userId = personStore.person.person_id;
+			const authStore = useAuthStore();
 
 			const res = await http.get(
-				`${baseUrl}/${userId}/${midUrl}`
+				`user/${authStore.user.user_id}/viewpoint`
 			);
 			this.viewPoints = res.data;
 			if (this.map) this.renderMarkers();

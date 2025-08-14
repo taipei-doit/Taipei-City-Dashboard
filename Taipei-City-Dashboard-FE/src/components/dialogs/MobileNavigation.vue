@@ -144,6 +144,7 @@ const personStore = usePersonStore();
                     :index="item.index"
                     :expanded="true"
                     :city="city"
+                    @click="dialogStore.hideAllDialogs"
                   />
                 </div>
               </transition>

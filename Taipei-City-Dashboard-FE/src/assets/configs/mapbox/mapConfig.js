@@ -16,8 +16,8 @@ export const MapObjectConfig = {
 // City Map View Settings
 export const CityMapView = {
 	taipei: {
-		center: [121.56376521148917, 25.086495621435404],
-		zoom: 10,
+		center: [121.536609, 25.044808],
+		zoom: 12,
 	},
 	metrotaipei:{
 		center: [121.64080359050314, 24.980598540245936],

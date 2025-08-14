@@ -3,7 +3,7 @@ import json
 import re
 import time
 import warnings
-
+from ast import literal_eval
 import numpy as np
 import pandas as pd
 import requests
@@ -990,12 +990,14 @@ def get_addr_xy(addrs):
     """
     Input multiple addresses, return multiple coordinates.
     """
+    proxies = literal_eval(Variable.get("PROXY_URL"))
+
     url = "https://map.tpgos.gov.taipei/embed/webapi.cfm"
     params = {
         "SERVICE": "KEYWORDSEARCH",
         "KEYWORD": "",
         "APIKEY": Variable.get("TPGOS_GET_ADDR_XY"),
-        "ITEM_LIST": "TPGOS_CA_ADDR:30",
+        "ITEM_LIST": "TPGOS_CA_ADDR:30,TGOS_V2_ADDR,GMAPI_ADDR",
         "SRS_T": "WGS84",
     }
     x = []
@@ -1004,7 +1006,7 @@ def get_addr_xy(addrs):
         try:
             # !!! add retry process
             params["KEYWORD"] = addr
-            response = requests.get(url, params).json()
+            response = requests.get(url, params=params, proxies=proxies).json()
 
             if len(response) > 0:
                 if response[0]["QUERYTYPE"] == "完全比對":
@@ -1038,7 +1040,7 @@ def get_single_addr_xy(addr):
         # 'SERVICE':'ADDRESS',
         "KEYWORD": addr,
         "APIKEY": Variable.get("TPGOS_GET_ADDR_XY"),
-        "ITEM_LIST": "TPGOS_CA_ADDR:30",
+        "ITEM_LIST": "TPGOS_CA_ADDR:30,TGOS_V2_ADDR,GMAPI_ADDR",
         "SRS_T": "WGS84",
     }
     x = None
@@ -1046,7 +1048,9 @@ def get_single_addr_xy(addr):
     s = requests.Session()
     s.mount("http://", HTTPAdapter(max_retries=5))
     s.mount("https://", HTTPAdapter(max_retries=5))
-    response = s.get(url, params=params)
+    proxies = literal_eval(Variable.get("PROXY_URL"))
+
+    response = s.get(url, params=params, proxies=proxies)
     try:
         res_json = response.json()
         if len(res_json) > 0:

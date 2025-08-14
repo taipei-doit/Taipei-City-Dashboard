@@ -129,7 +129,7 @@ router.beforeEach((to) => {
 	const personStore = usePersonStore();
 	if (personStore.isMbDevice && personStore.isNarrowDevice) {
 		if (
-			!["dashboard", "component-info", "callback", "embed"].includes(
+			!["dashboard", "component-info", "callback", "embed", "mapview"].includes(
 				to.name
 			)
 		) {

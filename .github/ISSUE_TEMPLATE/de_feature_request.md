@@ -2,8 +2,9 @@
 name: DE Feature request
 about: Suggest an idea for Taipei City Dashboard DE
 title: "[Enhancement]"
-labels: "enhancement"
-assignees: ["iimahao", "ann125697"]
+labels: enhancement
+assignees: freetime007, power80203
+
 ---
 
 ## Type

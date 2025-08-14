@@ -191,9 +191,15 @@ function shouldDisable(map_config) {
           :info-btn="true"
           :active-city="item.city"
           :select-btn="true"
-          :select-btn-disabled="contentStore.cityManager.getSelectList(contentStore.currentDashboard?.city).length === 1"
-          :select-btn-list="contentStore.cityManager.getSelectList(contentStore.currentDashboard?.city)"
-          :city-tag="contentStore.cityManager.getTagList(contentStore.currentDashboard?.city)"
+          :select-btn-disabled="contentStore.cityManager.getSelectList(contentStore.currentDashboard?.city).length === 1 || contentStore.currentDashboardExcluded.components.filter((data) => data.index === item.index).length === 0"
+          :select-btn-list="contentStore.currentDashboard?.city
+            ? contentStore.cityManager.getSelectList(contentStore.currentDashboard?.city)
+            : contentStore.cityManager.getCities(contentStore.cityManager.activeCities)
+          "
+          :city-tag="contentStore.currentDashboard?.city
+            ? contentStore.cityManager.getTagList(contentStore.currentDashboard?.city)
+            : contentStore.cityManager.getTagList(item.city)
+          "
           :toggle-disable="shouldDisable(item.map_config)"
           :toggle-on="toggleOn.hasMap[arrayIdx]"
           @info="
@@ -333,15 +339,21 @@ function shouldDisable(map_config) {
         </h2>
         <DashboardComponent
           v-for="(item, arrayIdx) in parseMapLayers.noMap"
-          :key="`map-layer-${item.index}`"
+          :key="`map-layer-${item.index}-${item.city}`"
           :config="item"
           mode="map"
           :info-btn="true"
           :active-city="item.city"
           :select-btn="true"
-          :select-btn-disabled="contentStore.cityManager.getSelectList(contentStore.currentDashboard?.city).length === 1"
-          :select-btn-list="contentStore.cityManager.getSelectList(contentStore.currentDashboard?.city)"
-          :city-tag="contentStore.cityManager.getTagList(contentStore.currentDashboard?.city)"
+          :select-btn-disabled="contentStore.cityManager.getSelectList(contentStore.currentDashboard?.city).length === 1 || contentStore.currentDashboardExcluded.components.filter((data) => data.index === item.index).length === 0"
+          :select-btn-list="contentStore.currentDashboard?.city
+            ? contentStore.cityManager.getSelectList(contentStore.currentDashboard?.city)
+            : contentStore.cityManager.getCities(contentStore.cityManager.activeCities)
+          "
+          :city-tag="contentStore.currentDashboard?.city
+            ? contentStore.cityManager.getTagList(contentStore.currentDashboard?.city)
+            : contentStore.cityManager.getTagList(item.city)
+          "
           :toggle-on="toggleOn.noMap[arrayIdx]"
           @info="
             (item) => {

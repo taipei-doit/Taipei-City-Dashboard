@@ -1,0 +1,37 @@
+{
+  "dag_infos": {
+    "dag_id": "eoc_dashboard_controller",
+    "start_date": "2025-04-27",
+    "schedule_interval": "*/5 * * * *",
+    "catchup": false,
+    "tags": ["EOC", "TDX", "台北市", "Taipei-City", "EOC儀表板控制器"],
+    "description": "透過資料決定儀表板的顯示內容",
+    "default_args": {
+      "owner": "airflow",
+      "email": ["DEFAULT_EMAIL_LIST"],
+      "email_on_retry": false,
+      "email_on_failure": true,
+      "retries": 1,
+      "retry_delay": 60
+    },
+    "ready_data_db": "postgres_default",
+    "ready_data_default_table": "",
+    "ready_data_history_table": "",
+    "raw_data_db": "postgres_default",
+    "raw_data_table": "",
+    "load_behavior": "replace"
+  },
+  "data_infos": {
+    "name_cn": "EOC儀表板控制器",
+    "airflow_update_freq": "every 5 minutes",
+    "source": "",
+    "source_type": "",
+    "source_dept": "",
+    "gis_format": "",
+    "output_coordinate": "",
+    "is_geometry": 0,
+    "dataset_description": "EOC儀表板控制器",
+    "etl_description": "",
+    "sensitivity": "public"
+  }
+}

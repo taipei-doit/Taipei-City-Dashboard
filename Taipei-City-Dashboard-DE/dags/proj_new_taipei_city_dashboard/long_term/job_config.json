@@ -1,0 +1,43 @@
+{
+  "dag_infos": {
+    "dag_id": "long_term",
+    "start_date": "2024-12-10",
+    "schedule_interval": "0 20 19 * *",
+    "catchup": false,
+    "tags": [
+      "long_term",
+      "社會局",
+      "新北市長照"
+    ],
+    "description": "Monthly update of New Taipei long-term care facility data with address parsing, city/zone extraction and WKB geometry generation.",
+    "default_args": {
+      "owner": "airflow",
+      "email": [
+        "DEFAULT_EMAIL_LIST"
+      ],
+      "email_on_retry": false,
+      "email_on_failure": true,
+      "retries": 1,
+      "retry_delay": 60
+    },
+    "ready_data_db": "postgres_default",
+    "ready_data_default_table": "long_term_nwtpe",
+    "ready_data_history_table": "",
+    "raw_data_db": "postgres_default",
+    "raw_data_table": "",
+    "load_behavior": "replace"
+  },
+  "data_infos": {
+    "name_cn": "新北市長照機構名單",
+    "airflow_update_freq": "20:00+8 每月19日",
+    "source": "https://data.ntpc.gov.tw/datasets/5a4a7e3b-3578-4f83-9516-7cd2ba0cf135",
+    "source_type": "data.ntpc.gov.tw json",
+    "source_dept": "社會局",
+    "gis_format": null,
+    "output_coordinate": "WGS84",
+    "is_geometry": 1,
+    "dataset_description": "每月更新新北市長照機構設置資訊，涵蓋機構名稱、聯絡電話、地址、服務範圍與項目、聯絡人與座標等欄位。",
+    "etl_description": "透過 JSON API 擷取資料，進行欄位轉換與地址解析，解析縣市與區，轉換經緯度為 WKB 點位，寫入 PostgreSQL long_term_nwtpe 資料表。",
+    "sensitivity": "public"
+  }
+}
