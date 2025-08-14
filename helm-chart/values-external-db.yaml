@@ -118,7 +118,13 @@ externalDatabase:
 
 # External Redis Configuration (停用 - 由後端環境變數直接連接)  
 externalRedis:
-  enabled: false                               # 停用 Helm 的 Redis 配置
+  enabled: true                                # 使用外部 Redis
+  host: ""                                     # 通過 secrets 設定
+  port: "6379"
+  password: true                               # 有密碼
+  tls:
+    enabled: false
+    insecureSkipVerify: true
 
 # Disable in-cluster databases
 postgresql:

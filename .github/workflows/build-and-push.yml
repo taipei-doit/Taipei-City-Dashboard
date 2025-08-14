@@ -116,6 +116,13 @@ jobs:
             --from-literal=GIN_DOMAIN="${{ secrets.GIN_DOMAIN }}" \
             --from-literal=VITE_API_URL="${{ secrets.VITE_API_URL }}" \
             --from-literal=VITE_MAPBOXTOKEN="${{ secrets.VITE_MAPBOX_TOKEN }}" \
+            --from-literal=IDNO_SALT="${{ secrets.IDNO_SALT }}" \
+            --from-literal=ISSO_CLIENT_ID="${{ secrets.ISSO_CLIENT_ID }}" \
+            --from-literal=ISSO_CLIENT_SECRET="${{ secrets.ISSO_CLIENT_SECRET }}" \
+            --from-literal=VITE_MAPBOXTILE="${{ secrets.VITE_MAPBOXTILE }}" \
+            --from-literal=VITE_TAIPEIPASS_URL="${{ secrets.VITE_TAIPEIPASS_URL }}" \
+            --from-literal=VITE_TAIPEIPASS_CLIENT_ID="${{ secrets.VITE_TAIPEIPASS_CLIENT_ID }}" \
+            --from-literal=VITE_TAIPEIPASS_SCOPE="${{ secrets.VITE_TAIPEIPASS_SCOPE }}" \
             --namespace=dashboard \
             --dry-run=client -o yaml | kubectl apply -f -
 
@@ -130,7 +137,8 @@ jobs:
             $VALUES_FLAG \
             --set backend.image.tag="${{ steps.tag.outputs.value }}" \
             --namespace=dashboard \
-            --wait --timeout=10m
+            --wait --timeout=20m \
+            --debug
 
   frontend:
     needs: detect-changes
@@ -227,4 +235,5 @@ jobs:
             $VALUES_FLAG \
             --set frontend.image.tag="${{ steps.tag.outputs.value }}" \
             --namespace=dashboard \
-            --wait --timeout=10m
+            --wait --timeout=20m \
+            --debug
