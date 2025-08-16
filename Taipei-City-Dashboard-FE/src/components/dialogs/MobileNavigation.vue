@@ -4,12 +4,14 @@
 import { onMounted, ref, watch } from "vue";
 import { useDialogStore } from "../../store/dialogStore";
 import { useContentStore } from "../../store/contentStore";
-import { useAuthStore } from "../../store/authStore";
+import { usePersonStore } from "../../store/personStore";
 
 import SideBarTab from "../utilities/miscellaneous/SideBarTab.vue";
 
 const dialogStore = useDialogStore();
 const contentStore = useContentStore();
+<<<<<<< HEAD
+<<<<<<< HEAD
 const authStore = useAuthStore();
 
 // The collapsed states are for each dashboard
@@ -46,6 +48,12 @@ watch(
 onMounted(() => {
 	initializeCollapsedStates();
 });
+=======
+const personStore = usePersonStore();
+>>>>>>> main
+=======
+const personStore = usePersonStore();
+>>>>>>> main
 </script>
 
 <template>
@@ -61,6 +69,8 @@ onMounted(() => {
         />
         <div class="dialogcontainer-dialog">
           <div class="mobilenavigation">
+<<<<<<< HEAD
+<<<<<<< HEAD
             <template v-if="authStore.token">
               <h1 @click="toggleCollapse(['favorites', 'personal'])">
                 私人儀表板
@@ -139,6 +149,51 @@ onMounted(() => {
                 </div>
               </transition>
             </template>
+=======
+=======
+>>>>>>> main
+            <div v-if="personStore.token">
+              <h2>我的最愛</h2>
+              <SideBarTab
+                icon="favorite"
+                title="收藏組件"
+                :expanded="true"
+                :index="contentStore.favorites?.index"
+              />
+              <h2>個人儀表板</h2>
+              <SideBarTab
+                v-for="item in contentStore.personalDashboards.filter(
+                  (item) => item.icon !== 'favorite'
+                )"
+                :key="item.index"
+                :icon="item.icon"
+                :title="item.name"
+                :index="item.index"
+                :expanded="true"
+                @click="dialogStore.hideAllDialogs"
+              />
+            </div>
+            <h2>公共儀表板</h2>
+            <SideBarTab
+              v-for="item in contentStore.publicDashboards.filter(
+                (item) => item.index !== 'map-layers'
+              )"
+              :key="item.index"
+              :icon="item.icon"
+              :title="item.name"
+              :index="item.index"
+              :expanded="true"
+              @click="dialogStore.hideAllDialogs"
+            />
+            <h2>基本地圖圖層</h2>
+            <SideBarTab
+              :icon="`public`"
+              :title="`圖資資訊`"
+              index="map-layers"
+              :expanded="true"
+              @click="dialogStore.hideAllDialogs"
+            />
+>>>>>>> main
           </div>
         </div>
       </div>

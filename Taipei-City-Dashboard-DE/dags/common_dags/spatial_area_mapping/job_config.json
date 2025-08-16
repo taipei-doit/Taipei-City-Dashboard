@@ -1,10 +1,10 @@
 {
   "dag_infos": {
-    "dag_id": "cht_e2",
-    "start_date": "2024-12-10",
-    "schedule_interval": "*/10 * * * *",
+    "dag_id": "spatial_area_mapping",
+    "start_date": "2025-08-06",
+    "schedule_interval": "00 18 * * *",
     "catchup": false,
-    "tags": ["cht_e2", "中華電信信令", "跨年"],
+    "tags": ["spatial_area_mapping", "指定table透過空間join更新area欄位", ""],
     "description": ".",
     "default_args": {
       "owner": "airflow",
@@ -15,22 +15,22 @@
       "retry_delay": 60
     },
     "ready_data_db": "postgres_default",
-    "ready_data_default_table": "cht_e2",
+    "ready_data_default_table": "",
     "ready_data_history_table": "",
     "raw_data_db": "postgres_default",
     "raw_data_table": "",
-    "load_behavior": "append"
+    "load_behavior": ""
   },
   "data_infos": {
-    "name_cn": "中華電信信令E2",
-    "airflow_update_freq": "every 10 minutes",
+    "name_cn": "指定table透過空間join更新area欄位",
+    "airflow_update_freq": "",
     "source": "",
     "source_type": "CHE api",
-    "source_dept": "中華電信",
+    "source_dept": "",
     "gis_format": "",
     "output_coordinate": "",
     "is_geometry": 0,
-    "dataset_description": "指定日期當日不重複遊客輪廓統計數據(無排居民)",
+    "dataset_description": "",
     "etl_description": "standardize time",
     "sensitivity": "public"
   }

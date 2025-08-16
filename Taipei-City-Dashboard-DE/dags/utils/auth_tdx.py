@@ -1,4 +1,4 @@
-import pickle
+import json
 from datetime import datetime, timedelta
 
 import requests
@@ -9,8 +9,7 @@ TOKEN_URL = (
     "https://tdx.transportdata.tw/auth/realms/TDXConnect/protocol/openid-connect/token"
 )
 HEADERS = {"content-type": "application/x-www-form-urlencoded"}
-FILE_NAME = "tdx_token.pickle"
-
+FILE_NAME = "tdx_token.json"
 
 class TDXAuth:
     """
@@ -45,8 +44,12 @@ class TDXAuth:
         now_time = datetime.now()
         try:
             with open(self.full_file_path, "rb") as handle:
-                res = pickle.load(handle)
-                expired_time = res["expired_time"]
+                res = json.load(handle)
+                # 確保 JSON 格式正確
+                if not isinstance(res, dict) or "access_token" not in res or "expired_time" not in res:
+                    raise ValueError("Invalid JSON format: Missing required keys.")
+                # 解析時間格式
+                expired_time = datetime.fromisoformat(res["expired_time"])
                 if now_time < expired_time:  # If the token is not expired
                     return res["access_token"]
         except (FileNotFoundError, EOFError):
@@ -58,21 +61,23 @@ class TDXAuth:
             "client_id": self.client_id,
             "client_secret": self.client_secret,
         }
-        with requests.post(
-            TOKEN_URL,
-            headers=HEADERS,
-            data=data,
-            proxies=PROXIES if is_proxy else None,
-            timeout=timeout,
-        ) as response:
-            res_json = response.json()
-            print(f"Response JSON: {res_json}")
-            token = res_json["access_token"]
-            expired_time = now_time + timedelta(seconds=res_json["expires_in"])
-            res = {"access_token": token, "expired_time": expired_time}
-
-        # save the token
-        with open(self.full_file_path, "wb") as handle:
-            pickle.dump(res, handle)
-
-        return token
+        try:
+            with requests.post(
+                TOKEN_URL,
+                headers=HEADERS,
+                data=data,
+                proxies=PROXIES if is_proxy else None,
+                timeout=timeout,
+            ) as response:
+                res_json = response.json()
+                token = res_json["access_token"]
+                expired_time = now_time + timedelta(seconds=res_json["expires_in"])            
+                res = {"access_token": token, "expired_time": expired_time.isoformat()}
+                if not isinstance(res_json, dict) or "access_token" not in res_json or "expires_in" not in res_json:
+                    raise ValueError("Invalid response format from TDX API.")
+                with open(self.full_file_path, "wb") as handle:
+                    json.dump(res, handle)
+                return token
+        except (requests.RequestException, KeyError, ValueError) as e:
+            print(e)
+            return None
