@@ -20,7 +20,16 @@ frontend:
   
   image:
     repository: citydashboard-dhc2gtetgcfqeqhv.azurecr.io/taipei-city-dashboard-fe
-    tag: ""
+    tag: ""  # 動態設置，由 GitHub Actions 在部署時覆蓋
+  
+  # Frontend specific security context to allow Nginx to work
+  securityContext:
+    capabilities:
+      drop:
+      - ALL
+    readOnlyRootFilesystem: false  # Allow Nginx to write temp files
+    runAsNonRoot: true
+    runAsUser: 65534
   
   resources:
     limits:
@@ -57,7 +66,7 @@ backend:
   
   image:
     repository: citydashboard-dhc2gtetgcfqeqhv.azurecr.io/taipei-city-dashboard-be
-    tag: ""
+    tag: ""  # 動態設置，由 GitHub Actions 在部署時覆蓋
   
   resources:
     limits:
@@ -119,6 +128,7 @@ externalDatabase:
 # External Redis Configuration (停用 - 由後端環境變數直接連接)  
 externalRedis:
   enabled: true                                # 使用外部 Redis
+  host: ""                                     # 通過 secrets 設定
   host: ""                                     # 通過 secrets 設定
   port: "6379"
   password: true                               # 有密碼
