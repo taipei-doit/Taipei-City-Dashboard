@@ -1,5 +1,8 @@
 from airflow import DAG
 from operators.common_pipeline import CommonDag
+from datetime import datetime, timedelta
+import numpy as np
+import re
 
 def _transfer(**kwargs):
     import pandas as pd
@@ -32,8 +35,9 @@ def _transfer(**kwargs):
     res = client.get_all_data(size=1000)
     raw_data = pd.DataFrame(res)
     raw_data["data_time"] = get_tpe_now_time_str(is_with_tz=True)
-
     # Transform
+
+
     raw_data = raw_data.rename(columns={
         "seqno": "seqno",
         "organizer": "organizer",
@@ -65,10 +69,37 @@ def _transfer(**kwargs):
         "electrical pads expiration date": "pads_expiration"
     })
 
+    time_cols = [
+        "mon_start", "mon_end",
+        "tue_start", "tue_end",
+        "wed_start", "wed_end",
+        "thu_start", "thu_end",
+        "fri_start", "fri_end",
+        "sat_start", "sat_end",
+        "sun_start", "sun_end"
+    ]
+
+    # 只允許合法時間格式 HH:MM:SS，且 HH < 24
+    def validate_time_format(val):
+        if isinstance(val, str):
+            match = re.match(r"^(\d{1,2}):(\d{2}):(\d{2})$", val)
+            if match and int(match.group(1)) < 24:
+                return val
+            else:
+                return np.nan
+        return val
+
+    # 套用於每個時間欄位
+    for col in time_cols:
+        raw_data[col] = raw_data[col].apply(validate_time_format)
+
     # 日期欄位處理：替換 "0000-00-00" 為 NaT 並轉為 datetime
     for col in ["install_date", "battery_expiration", "pads_expiration"]:
         raw_data[col] = raw_data[col].replace("0000-00-00", pd.NaT)
         raw_data[col] = pd.to_datetime(raw_data[col], errors="coerce")
+
+
+
 
     # 地址標準化
     addr = raw_data["address"]
@@ -81,12 +112,15 @@ def _transfer(**kwargs):
     lng, lat = get_addr_xy_parallel(output)
     raw_data["lng"] = lng
     raw_data["lat"] = lat
+    raw_data["lng"] = pd.to_numeric(raw_data["lng"], errors="coerce")
+    raw_data["lat"] = pd.to_numeric(raw_data["lat"], errors="coerce")
+    raw_data = raw_data[raw_data["lng"].notna() & raw_data["lat"].notna()]
 
     # 幾何欄位轉換
     gdata = add_point_wkbgeometry_column_to_df(
         raw_data, raw_data["lng"], raw_data["lat"], from_crs=4326
     )
-
+ 
     # 欄位篩選
     ready_data = gdata[[
         "seqno", "organizer", "tel", "extension", "mobile_phone",

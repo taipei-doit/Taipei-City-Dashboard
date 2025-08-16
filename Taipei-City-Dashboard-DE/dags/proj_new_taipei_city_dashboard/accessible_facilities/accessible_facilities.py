@@ -8,9 +8,6 @@ def parse_charged(val, prefix):
         return 0
     match = re.search(rf'{prefix}(\d+)', val)
     return int(match.group(1)) if match else 0
-
-
-
 # pending 資料來源不全
 def _transfer(**kwargs):
     from sqlalchemy import create_engine
@@ -36,12 +33,17 @@ def _transfer(**kwargs):
     data = data.rename(
         columns={
             "areacode": "district",
-            "quantity": "name",
+            "vehicle_classification": "name"
         }
     )
     data['type'] = 'parking'
-    data['disabled_parking_car_count'] = data['charged'].apply(lambda x: parse_charged(x, '身汽'))
-    data['disabled_parking_motorcycle_count'] = data['charged'].apply(lambda x: parse_charged(x, '身機'))
+    data['disabled_parking_car_count'] = data['quantity'] \
+        .apply(lambda x: int(x) if isinstance(x, str) and x.isdigit() else None) \
+        .astype('Int64')  # pandas 的 nullable integer dtype
+
+    data['disabled_parking_motorcycle_count'] = data['quantity'] \
+        .apply(lambda x: int(x) if isinstance(x, str) and x.isdigit() else None) \
+        .astype('Int64')
     data["data_time"] = pd.to_datetime("now").strftime("%Y-%m-%d %H:%M:%S")
     data = data[[
         "name", "district", "type", "address", "disabled_parking_car_count", "disabled_parking_motorcycle_count", 'data_time']]
