@@ -433,7 +433,6 @@ def _transfer(**kwargs):
                         df_chart_template.to_sql('component_charts', conn, if_exists='append', index=False, method='multi')
                     print(f"已用 DataFrame upsert component_charts index={new_chart_index}")
                 # --- component_charts 修改結束 ---
-
             # --- 修改取得 component id 的方式 ---
             # 產生所有需要的 component index
             comp_indices_to_fetch = [f"{status_key}_{pname}" for status_key in status_mapping.keys()]

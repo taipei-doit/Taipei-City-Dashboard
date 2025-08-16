@@ -27,7 +27,7 @@
     "load_behavior": "replace"
   },
   "data_infos": {
-    "name_cn": "無障礙設施場所",
+    "name_cn": "偷竊統計總和",
     "airflow_update_freq": "@monthly",
     "source": "postgres_default",
     "source_type": "data.taipei",

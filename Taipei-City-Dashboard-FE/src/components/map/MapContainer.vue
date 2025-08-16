@@ -1,9 +1,19 @@
 <!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 
 <script setup>
+<<<<<<< HEAD
+<<<<<<< HEAD
 import { onMounted, ref, computed, watch } from "vue";
 import { useRoute } from "vue-router";
 import { useAuthStore } from "../../store/authStore";
+=======
+import { onMounted, ref, computed } from "vue";
+import { usePersonStore } from "../../store/personStore.js";
+>>>>>>> main
+=======
+import { onMounted, ref, computed } from "vue";
+import { usePersonStore } from "../../store/personStore.js";
+>>>>>>> main
 import { useContentStore } from "../../store/contentStore";
 import { useDialogStore } from "../../store/dialogStore";
 import { useMapStore } from "../../store/mapStore";
@@ -14,7 +24,7 @@ import IncidentReport from "../dialogs/IncidentReport.vue";
 import FindClosestPoint from "../dialogs/FindClosestPoint.vue";
 import { savedLocations } from "../../assets/configs/mapbox/savedLocations.js";
 
-const authStore = useAuthStore();
+const personStore = usePersonStore();
 const mapStore = useMapStore();
 const dialogStore = useDialogStore();
 const contentStore = useContentStore();
@@ -117,6 +127,7 @@ onMounted(() => {
         </div>
       </div>
 
+<<<<<<< HEAD
       <button
         v-if="authStore.user.is_admin"
         class="mapcontainer-layers-incident"
@@ -180,6 +191,68 @@ onMounted(() => {
     </div>
   </div>
   <AddViewPoint name="addViewPoint" />
+=======
+			<button
+				v-if="personStore.user.is_admin"
+				class="mapcontainer-layers-incident"
+				title="通報災害"
+				@click="dialogStore.showDialog('incidentReport')"
+			>
+				!</button
+			><!-- The key prop informs vue that the component should be updated when switching dashboards -->
+			<MobileLayers :key="contentStore.currentDashboard.index" />
+			<IncidentReport />
+			<FindClosestPoint />
+		</div>
+
+		<div class="mapcontainer-controls hide-if-mobile">
+			<button
+				@click="
+					mapStore.easeToLocation([
+						[121.536609, 25.044808],
+						12.5,
+						0,
+						0,
+					])
+				"
+			>
+				返回預設
+			</button>
+			<template v-if="!personStore.user?.user_id">
+				<div
+					v-for="(item, index) in savedLocations"
+					:key="`${item[4]}-${index}`"
+				>
+					<button @click="mapStore.easeToLocation(item)">
+						{{ item[4] }}
+					</button>
+				</div>
+			</template>
+			<div v-for="(item, index) in mapStore.viewPoints" :key="index">
+				<button
+					v-if="item.point_type === 'view'"
+					@click="mapStore.easeToLocation(item)"
+				>
+					{{ item["name"] }}
+				</button>
+				<div
+					v-if="personStore.user?.user_id"
+					class="mapcontainer-controls-delete"
+					@click="mapStore.removeViewPoint(item)"
+				>
+					<span>delete</span>
+				</div>
+			</div>
+			<button
+				v-if="personStore.user?.user_id"
+				@click="dialogStore.showDialog('addViewPoint')"
+			>
+				新增
+			</button>
+		</div>
+	</div>
+	<AddViewPoint name="addViewPoint" />
+>>>>>>> main
 </template>
 
 <style scoped lang="scss">

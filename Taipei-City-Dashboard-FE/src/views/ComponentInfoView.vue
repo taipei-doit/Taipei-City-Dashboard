@@ -14,7 +14,7 @@ import router from "../router";
 import DashboardComponent from "../dashboardComponent/DashboardComponent.vue";
 import { useContentStore } from "../store/contentStore";
 import { useDialogStore } from "../store/dialogStore";
-import { useAuthStore } from "../store/authStore";
+import { usePersonStore } from "../store/personStore";
 
 import HistoryChart from "../components/charts/HistoryChart.vue";
 import ReportIssue from "../components/dialogs/ReportIssue.vue";
@@ -23,7 +23,7 @@ import EmbedComponent from "../components/dialogs/EmbedComponent.vue";
 
 const contentStore = useContentStore();
 const dialogStore = useDialogStore();
-const authStore = useAuthStore();
+const personStore = usePersonStore();
 
 const searchParams = ref({
 	searchbyindex: "",
@@ -52,9 +52,9 @@ onMounted(() => {
   <div class="componentinfoview-header">
     <button
       v-if="
-        authStore.isMobileDevice ||
-          authStore.isNarrowDevice ||
-          !authStore.token
+        personStore.isMbDevice ||
+          personStore.isNarrowDevice ||
+          !personStore.token
       "
       @click="router.back()"
     >
@@ -70,10 +70,112 @@ onMounted(() => {
     </RouterLink>
   </div>
   <!-- 1. If the component is found -->
+<<<<<<< HEAD
   <div class="componentinfoview-container">
     <template
       v-for="item in dialogStore?.moreInfoContent"
       :key="`${item.index}-${item.city}`"
+=======
+  <div
+    v-if="dialogStore.moreInfoContent"
+    :class="{
+      componentinfoview: true,
+      'no-history': !dialogStore.moreInfoContent.history_data,
+    }"
+  >
+    <!-- 1-1. View the entire component and its chart data -->
+    <div class="componentinfoview-component">
+      <DashboardComponent
+        :key="dialogStore.moreInfoContent.index"
+        :config="dialogStore.moreInfoContent"
+        :style="{ height: '350px', width: '400px' }"
+        :add-btn="
+          !contentStore.editDashboard.components
+            .map((item) => item.id)
+            .includes(dialogStore.moreInfoContent.id) &&
+            !!personStore.token
+        "
+        :favorite-btn="!!personStore.token"
+        :is-favorite="
+          contentStore.favorites?.components.includes(
+            dialogStore.moreInfoContent.id
+          )
+        "
+        @add="
+          (id, name) => {
+            contentStore.editDashboard.components.push({
+              id,
+              name,
+            });
+          }
+        "
+        @favorite="
+          (id) => {
+            toggleFavorite(id);
+          }
+        "
+      />
+    </div>
+    <!-- 1-2. View the component's information -->
+    <div class="componentinfoview-content">
+      <div :style="{ overflowY: 'scroll' }">
+        <h3>組件 ID | Index</h3>
+        <p>
+          {{
+            ` ID: ${dialogStore.moreInfoContent.id}｜Index: ${dialogStore.moreInfoContent.index} `
+          }}
+        </p>
+        <h3>組件說明</h3>
+        <p>{{ dialogStore.moreInfoContent.long_desc }}</p>
+        <h3>範例情境</h3>
+        <p>{{ dialogStore.moreInfoContent.use_case }}</p>
+      </div>
+      <div class="componentinfoview-content-control">
+        <button
+          v-if="personStore.token"
+          @click="
+            dialogStore.showReportIssue(
+              dialogStore.moreInfoContent.id,
+              dialogStore.moreInfoContent.index,
+              dialogStore.moreInfoContent.name
+            )
+          "
+        >
+          <span>flag</span>回報
+        </button>
+        <button
+          v-if="
+            dialogStore.moreInfoContent.chart_config.types[0] !==
+              'MetroChart'
+          "
+          @click="dialogStore.showDialog('downloadData')"
+        >
+          <span>download</span>下載
+        </button>
+        <button @click="dialogStore.showDialog('embedComponent')">
+          <span>code</span>內嵌
+        </button>
+      </div>
+    </div>
+    <!-- 1-3. View the component's history data -->
+    <div
+      v-if="dialogStore.moreInfoContent.history_data"
+      class="componentinfoview-history"
+    >
+      <h3>歷史資料</h3>
+      <HistoryChart
+        :chart_config="dialogStore.moreInfoContent.chart_config"
+        :series="dialogStore.moreInfoContent.history_data"
+        :history_config="dialogStore.moreInfoContent.history_config"
+      />
+    </div>
+    <!-- 1-4. View the component's source links and contributors -->
+    <div
+      :class="{
+        'componentinfoview-source': true,
+        'no-links': !dialogStore.moreInfoContent.links[0],
+      }"
+>>>>>>> main
     >
       <div
         v-if="dialogStore.moreInfoContent?.length > 0"

@@ -10,7 +10,7 @@ import http from "../router/axios";
 import { defineStore } from "pinia";
 import { useDialogStore } from "./dialogStore";
 import { useContentStore } from "./contentStore";
-import { useAuthStore } from "./authStore";
+import { usePersonStore } from "./personStore";
 import { getComponentDataTimeframe } from "../assets/utilityFunctions/dataTimeframe";
 
 export const useAdminStore = defineStore("admin", {
@@ -299,12 +299,12 @@ export const useAdminStore = defineStore("admin", {
 		// 2. Update an issue
 		async updateIssue(params) {
 			const dialogStore = useDialogStore();
-			const authStore = useAuthStore();
+			const personStore = usePersonStore();
 
 			await http.patch(`/issue/${this.currentIssue.id}`, {
 				status: this.currentIssue.status,
 				decision_desc: this.currentIssue.decision_desc,
-				updated_by: authStore.user.name,
+				updated_by: personStore.user.name,
 			});
 			dialogStore.showNotification("success", "問題更新成功");
 			this.getIssues(params);
@@ -360,7 +360,7 @@ export const useAdminStore = defineStore("admin", {
 		},
 		// 2. Update a user
 		async updateUser(params) {
-			const authStore = useAuthStore();
+			const personStore = usePersonStore();
 			const dialogStore = useDialogStore();
 
 			const editedUser = JSON.parse(JSON.stringify(this.currentUser));
@@ -369,9 +369,9 @@ export const useAdminStore = defineStore("admin", {
 			dialogStore.showNotification("success", "使用者更新成功");
 			this.getUsers(params);
 
-			// If the current user updates their own info, refresh the authStore
-			if (authStore.user.user_id === this.currentUser.user_id)
-				authStore.initialChecks();
+			// If the current user updates their own info, refresh the personStore
+			if (personStore.user.user_id === this.currentUser.user_id)
+				personStore.initialChecks();
 
 			this.currentUser = null;
 		},

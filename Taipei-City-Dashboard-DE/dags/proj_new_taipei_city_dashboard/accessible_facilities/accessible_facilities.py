@@ -8,9 +8,6 @@ def parse_charged(val, prefix):
         return 0
     match = re.search(rf'{prefix}(\d+)', val)
     return int(match.group(1)) if match else 0
-
-
-
 # pending 資料來源不全
 def _transfer(**kwargs):
     from sqlalchemy import create_engine
