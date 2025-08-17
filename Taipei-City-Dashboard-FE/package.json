@@ -8,6 +8,8 @@
 		"dev": "vite",
 		"build": "eslint . --fix && vite build",
 		"build:test": "eslint . --fix && vite build --mode test",
+		"build:ci": "vite build",
+		"build:test:ci": "vite build --mode test",
 		"lint": "eslint . --fix",
 		"preview": "vite preview"
 	},
