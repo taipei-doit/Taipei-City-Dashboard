@@ -1,7 +1,5 @@
 from airflow import DAG
 from operators.common_pipeline import CommonDag
-from io import StringIO
-import requests
 
 def D070202(**kwargs):
     import pandas as pd
@@ -22,9 +20,8 @@ def D070202(**kwargs):
 
     # 20250818 來源api 改為csv檔案
     url = 'https://tsis.dbas.gov.taipei/statis/webMain.aspx?sys=220&ymf=5700&kind=21&type=0&funid=A05035701&cycle=4&outmode=12&compmode=0&outkind=1&deflst=2&nzo=1'
-    response = requests.get(url)
-    response.encoding = 'utf-8'
-    raw_data = pd.read_csv(StringIO(response.text))
+    ENCODING = 'utf-8-sig'
+    raw_data = pd.read_csv(url, encoding=ENCODING)
 
     # Extract
     
