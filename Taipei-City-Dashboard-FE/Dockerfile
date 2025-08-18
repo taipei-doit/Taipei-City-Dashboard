@@ -12,10 +12,6 @@ RUN npm install
 
 # Copy the rest of the application code
 COPY . .
-RUN pwd
-RUN ls -al /app/public/mapData/
-RUN ls -al /app/public/mapData/flood_water.geojson
-
 
 # Build the application with different modes based on environment variable
 ARG NODE_ENV=production
