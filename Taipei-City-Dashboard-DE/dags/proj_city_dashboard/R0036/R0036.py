@@ -27,11 +27,29 @@ def _R0036(**kwargs):
     FROM_CRS = 4326
 
     # Extract
-    res = requests.get(url, proxies=proxies, timeout=60)
+    res = requests.post(url, proxies=proxies, timeout=60)
     if res.status_code != 200:
         raise ValueError(f"Request failed! status: {res.status_code}")
     res_json = res.json()
-    raw_data = pd.DataFrame(res_json["data"])
+    
+    # Debug: Check the structure of the response
+    print(f"Response type: {type(res_json)}")
+    if isinstance(res_json, dict):
+        print(f"Available keys: {list(res_json.keys())}")
+    elif isinstance(res_json, list):
+        print(f"Response is a list with {len(res_json)} items")
+        if len(res_json) > 0:
+            print(f"First item type: {type(res_json[0])}")
+            if isinstance(res_json[0], dict):
+                print(f"First item keys: {list(res_json[0].keys())}")
+    
+    # Handle different response structures
+    if isinstance(res_json, list):
+        raw_data = pd.DataFrame(res_json)
+    elif isinstance(res_json, dict) and "data" in res_json:
+        raw_data = pd.DataFrame(res_json["data"])
+    else:
+        raise ValueError(f"Unexpected response structure: {type(res_json)}")
 
     # Transform
     data = raw_data.copy()

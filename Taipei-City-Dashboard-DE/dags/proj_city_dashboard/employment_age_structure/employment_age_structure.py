@@ -31,6 +31,10 @@ def _transfer(**kwargs):
     data = pd.DataFrame(res_json["data"])
 
     data["data_time"] = get_tpe_now_time_str(is_with_tz=True)
+    
+    # Debug: Print available columns
+    print("Available columns:", list(data.columns))
+    
     data = data.rename(
         columns={
                     "年平均別": "year",
@@ -40,11 +44,25 @@ def _transfer(**kwargs):
                     "百分比[％]": "percentage",
         }
     )
-    data['percentage'] = data['percentage'].replace('-', None).astype(float)      
+    
+    # Check if percentage column exists after rename and handle conversion safely
+    if 'percentage' in data.columns:
+        # Replace '-' with None and handle conversion to float safely
+        data['percentage'] = data['percentage'].replace('-', None)
+        data['percentage'] = pd.to_numeric(data['percentage'], errors='coerce')
+    else:
+        print("Warning: 'percentage' column not found after rename operation")
+        print("Available columns after rename:", list(data.columns))
  
     data['year'] = data['year'].replace('年', '', regex=True)
     data['year'] = data['year'].astype(int) + 1911
-    data = data[["year","gender","age_structure","percentage","data_time"]]
+    
+    # Select only existing columns
+    available_columns = ["year", "gender", "age_structure", "data_time"]
+    if 'percentage' in data.columns:
+        available_columns.insert(-1, "percentage")  # Insert before data_time
+    
+    data = data[available_columns]
     engine = create_engine(ready_data_db_uri)
     save_dataframe_to_postgresql(
         engine,
