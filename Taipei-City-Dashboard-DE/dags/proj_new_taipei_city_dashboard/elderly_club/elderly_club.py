@@ -42,6 +42,13 @@ def _transfer(**kwargs):
     # get geometry
     # clean addr
     data["address"] = data["county"].astype(str) + data["district"].astype(str) + data["address"].astype(str)
+    data["address"] = (
+        data["address"]
+        # 移除「( … )」或「（ … ）」之間的任何字元
+        .str.replace(r"[\(\（][^\)\）]*[\)\）]", "", regex=True)
+        # 若刪完括號後結尾還有多餘空格或頓號、逗號，順便去掉
+        .str.strip(" 、，")
+    )
     addr = data["address"]
     addr_cleaned = clean_data(addr)
     standard_addr_list = main_process(addr_cleaned)

@@ -1,0 +1,26 @@
+apiVersion: v2
+name: taipei-city-dashboard
+description: A Helm chart for Taipei City Dashboard application
+type: application
+version: 2.2.0
+appVersion: "2.2.0"
+keywords:
+  - dashboard
+  - taipei
+  - smart-city
+  - government
+home: https://github.com/taipei-doit/Taipei-City-Dashboard
+sources:
+  - https://github.com/taipei-doit/Taipei-City-Dashboard
+maintainers:
+  - name: Taipei DOIT
+    email: doit@gov.taipei
+dependencies:
+  - name: postgresql
+    version: 15.x.x
+    repository: https://charts.bitnami.com/bitnami
+    condition: postgresql.enabled
+  - name: redis
+    version: 19.x.x
+    repository: https://charts.bitnami.com/bitnami
+    condition: redis.enabled
