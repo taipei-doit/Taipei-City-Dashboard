@@ -1,0 +1,173 @@
+# Local development values for in-cluster deployment
+# Use this for local development with in-cluster PostgreSQL and Redis
+
+# Global configuration
+global:
+  imageRegistry: ""
+
+# Override to ensure consistent naming with PostgreSQL service
+fullnameOverride: "taipei-dashboard"
+
+# Frontend configuration
+frontend:
+  enabled: true
+  replicaCount: 1
+  
+  image:
+    repository: buggatti/docker-dashboard-fe
+    tag: "latest"
+    pullPolicy: Always
+  
+  service:
+    type: NodePort
+    port: 80
+    nodePort: 30080
+  
+  resources:
+    limits:
+      cpu: 200m
+      memory: 256Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+  
+  # Frontend-specific security context for nginx
+  securityContext:
+    runAsNonRoot: false
+    runAsUser: 0
+    readOnlyRootFilesystem: false
+  
+  # Development environment variables (non-sensitive)
+  env:
+    NODE_ENV: "test"
+    VITE_API_URL: "/api/dev"
+    VITE_APP_TITLE: "城市儀表板"
+    VITE_APP_VERSION: "3.0.0"
+    VITE_MAPBOXTOKEN: ""
+    VITE_MAPBOXTILE: ""
+
+# Backend configuration
+backend:
+  enabled: true
+  replicaCount: 1
+  
+  image:
+    repository: buggatti/docker-dashboard-be
+    tag: "latest"
+    pullPolicy: Always
+  
+  service:
+    type: NodePort
+    port: 8080
+    nodePort: 30088
+  
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 200m
+      memory: 256Mi
+  
+  # Development environment variables (non-sensitive)
+  env:
+    GIN_MODE: "debug"
+    GIN_PORT: "8080"
+    DASHBOARD_DEFAULT_USERNAME: "admin"
+    DASHBOARD_DEFAULT_EMAIL: "admin@taipei.gov"
+    DASHBOARD_DEFAULT_PASSWORD: "admin"
+    DASHBOARD_SAMPLE_FILE: "dashboard-demo.sql"
+    MANAGER_SAMPLE_FILE: "dashboardmanager-demo.sql"
+    
+  # Secret environment variables that will be set by template logic
+  secretEnv:
+    - name: GIN_DOMAIN
+      defaultValue: "0.0.0.0"
+    - name: JWT_SECRET
+      defaultValue: "secret"
+    - name: IDNO_SALT
+      defaultValue: "salt"
+    - name: ISSO_URL
+      defaultValue: ""
+    - name: TAIPEIPASS_URL
+      defaultValue: ""
+    - name: ISSO_CLIENT_ID
+      defaultValue: ""
+    - name: ISSO_CLIENT_SECRET
+      defaultValue: ""
+    - name: ISSO_CLIENT_SCOPE
+      defaultValue: ""
+
+# Service Account
+serviceAccount:
+  create: true
+  annotations: {}
+
+# Ingress - disabled for local development
+ingress:
+  enabled: false
+
+# Autoscaling - disabled for development
+autoscaling:
+  enabled: false
+
+# Security - different settings for frontend and backend
+securityContext:
+  runAsNonRoot: false
+  runAsUser: 1000
+
+# External Database Configuration - disabled for local development
+externalDatabase:
+  enabled: false
+
+# External Redis Configuration - disabled for local development  
+externalRedis:
+  enabled: false
+
+# Enable in-cluster databases for local development
+postgresql:
+  enabled: true
+  auth:
+    postgresPassword: "admin"
+    username: "dashboard"
+    password: "dashboard-password"
+    database: "dashboard"
+  primary:
+    persistence:
+      enabled: true
+      size: 1Gi
+    service:
+      type: ClusterIP
+      ports:
+        postgresql: 5432
+  metrics:
+    enabled: false
+
+redis:
+  enabled: true
+  auth:
+    enabled: false
+  master:
+    persistence:
+      enabled: true
+      size: 1Gi
+    service:
+      type: ClusterIP
+      ports:
+        redis: 6379
+  metrics:
+    enabled: false
+
+# PgAdmin configuration for local development
+pgadmin:
+  enabled: true
+  env:
+    PGADMIN_DEFAULT_EMAIL: "admin@taipei.gov"
+    PGADMIN_DEFAULT_PASSWORD: "admin"
+    PGADMIN_LISTEN_PORT: "80"
+  service:
+    type: NodePort
+    port: 80
+    nodePort: 30081
+
+

@@ -1,0 +1,17 @@
+{{- if .Values.frontend.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "taipei-city-dashboard.fullname" . }}-frontend
+  labels:
+    {{- include "taipei-city-dashboard.frontend.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.frontend.service.type }}
+  ports:
+    - port: {{ .Values.frontend.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "taipei-city-dashboard.frontend.selectorLabels" . | nindent 4 }}
+{{- end }}
