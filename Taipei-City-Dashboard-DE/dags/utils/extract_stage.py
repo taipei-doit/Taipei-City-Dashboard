@@ -1,18 +1,20 @@
+import io
 import json
 import os
 import shutil
 import time
 import zipfile
 from pathlib import Path
-
+import glob
 import fiona
 import geopandas as gpd
 import pandas as pd
 import requests
+import xml.etree.ElementTree as ET
 from airflow.models import Variable
 from settings.global_config import DATA_PATH, PROXIES
 from utils.auth_tdx import TDXAuth
-
+import math
 
 def download_file(
     file_name,
@@ -56,7 +58,6 @@ def download_file(
         output:
         Id     名稱            面積    類型  集水區  物理型  水文HY  濱水植  水質WQ  生物BI  MIWC2017                                           geometry
         0   3  雁鴨保護區  1.799444e+06  重要濕地  NaN  NaN   NaN  NaN   NaN   NaN       NaN  MULTIPOLYGON (((121.51075 25.02214, 121.51083 ...
-    ```
     """
     full_file_path = f"{file_folder}/{file_name}"
     # download file
@@ -408,6 +409,33 @@ def get_moenv_json_data(
 
     return results
 
+def get_shp_files_merge(
+    url, dag_id, encoding="UTF-8", file_ends_with=".shp", **kwargs
+):
+    """
+    下載 ZIP 並解壓縮，讀取所有 SHP 檔案，加入 category 欄位（檔名），然後合併。
+    回傳合併後的 GeoDataFrame。
+    """
+    filename = f"{dag_id}.zip"
+    unzip_path = f"{DATA_PATH}/{dag_id}"
+    zip_file = download_file(filename, url, **kwargs)
+    unzip_file_to_target_folder(zip_file, unzip_path, encoding=encoding)
+
+    # 找到所有 SHP 檔案
+    all_shp_files = glob.glob(os.path.join(unzip_path, f"*{file_ends_with}"))
+    if not all_shp_files:
+        raise ValueError(f"No .shp files found in {unzip_path}")
+
+    dfs = []
+    for shp_path in all_shp_files:
+        category = os.path.splitext(os.path.basename(shp_path))[0]
+        gdf = gpd.read_file(shp_path, encoding=encoding)
+        gdf["category"] = category
+        dfs.append(gdf)
+    # 合併
+    gdf_merged = gpd.GeoDataFrame(pd.concat(dfs, ignore_index=True))
+    return gdf_merged
+
 
 def get_shp_file(
     url, dag_id, from_crs, encoding="UTF-8", file_ends_with=".shp", **kwargs
@@ -705,4 +733,113 @@ class NewTaipeiAPIClient:
                 break
             page += 1
 
+        return all_data
+
+
+
+
+class TaipeiTravelAPIClient:
+    """
+    A client for retrieving data from New Taipei City Open Data API with flexible format handling.
+    """
+
+    BASE_URL = "https://www.travel.taipei/open-api/"
+
+    def __init__(self, path, input_format="json", timeout=60):
+        """
+        Args:
+            path (str): The API endpoint path.
+            input_format (str, optional): The input format. Supported formats: "json", "csv", "xml". Defaults to "json".
+            timeout (int, optional): Timeout for HTTP requests in seconds. Defaults to 60.
+        """
+        self.path = path
+        self.input_format = input_format.lower()
+        self.timeout = timeout
+
+        # Mapping of input formats to their corresponding handler functions.
+        self.handlers = {
+            "json": self._handle_json,
+            "csv": self._handle_csv,
+            "xml": self._handle_xml,
+        }
+
+        if self.input_format not in self.handlers:
+            raise ValueError("input_format must be 'json', 'csv', or 'xml'.")
+
+    def _handle_json(self, response):
+        """Handle JSON response."""
+        return response.json()
+
+    def _handle_csv(self, response):
+        """Handle CSV response by converting it to a list of dictionaries."""
+        df = pd.read_csv(io.StringIO(response.text))
+        return df.to_dict(orient="records")
+
+    def _handle_xml(self, response):
+        """Handle XML response by parsing it to a list of dictionaries."""
+        root = ET.fromstring(response.text)
+        data_list = []
+        for item in root.findall(".//row"):
+            data_dict = {child.tag: child.text for child in item}
+            data_list.append(data_dict)
+        return data_list
+
+    def get_a_data(self, page=1, **params):
+        """
+        Retrieve data from the API with optional query parameters.
+        
+        Args:
+            page (int, optional): Page number. Defaults to 0.
+            **params: Additional query parameters.
+            
+        Returns:
+            list: Converted data.
+            
+        Example:
+            client = TaipeiTravelAPIClient("your-path", input_format="json")
+            data = client.get_a_data(page=2)
+            print(data)
+        """
+        url = f"{self.BASE_URL}{self.path}"
+        params['page'] = page
+        headers = {
+            "Accept": f"application/json",
+            "User-Agent": "Mozilla/5.0"
+        }
+        response = requests.get(url, params=params, headers=headers, timeout=self.timeout, proxies=PROXIES)
+        response.raise_for_status()  # Ensure the request was successful
+
+        # Use the appropriate handler to convert the response.
+        return self.handlers[self.input_format](response)
+
+    def get_all_data(self):
+        """
+        Retrieve all data by iterating through all available pages.
+        
+        Args:
+            size (int, optional): Number of records per page. Defaults to 1000.
+            
+        Returns:
+            list: All data aggregated from all pages.
+            
+        Example:
+            client = TaipeiTravelAPIClient("your-path", input_format="json")
+            all_data = client.get_all_data(size=1000)
+            print(all_data)
+        """
+        all_data = []
+        page = 1
+        while True:
+            print(f"Fetching page {page}...")
+            try:
+                raw_data = self.get_a_data(page=page)
+            except requests.exceptions.HTTPError as e:
+                print(f"Error fetching page {page}: {e}")
+                break
+                # 每頁30筆
+            total_page = math.ceil(raw_data.get('total') / 30) 
+            all_data.extend(raw_data.get('data', []))  # Assuming 'data' is the key for the actual records
+            page += 1
+            if page == total_page:
+                break
         return all_data

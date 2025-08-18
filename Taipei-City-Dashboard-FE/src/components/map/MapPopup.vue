@@ -66,6 +66,7 @@
 			  allowfullscreen
             ></iframe>
           </template>
+
           <template v-else>
             <video
               ref="videoRef"
