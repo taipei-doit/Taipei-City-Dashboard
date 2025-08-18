@@ -46,7 +46,7 @@ def _transfer(**kwargs):
     # Rename
     data = raw_data.copy()
     col_map = {
-        "年底別": "year",
+        "統計期": "year",
 		"列管件數/總計[件]": "total_cases",
 		"列管件數/須拆除重建[件]": "cases_need_reconstruction",
 		"列管件數/可加勁補強[件]": "cases_can_be_reinforced",
@@ -57,7 +57,7 @@ def _transfer(**kwargs):
     }
     data = data.rename(columns=col_map)
     # Transfer year from ROC to AD
-    data['year'] = data['year'].replace('年底', '', regex=True)
+    data['year'] = data['year'].replace('年', '', regex=True)
     data['year'] = data['year'].astype(int) + 1911
     # Time
 
