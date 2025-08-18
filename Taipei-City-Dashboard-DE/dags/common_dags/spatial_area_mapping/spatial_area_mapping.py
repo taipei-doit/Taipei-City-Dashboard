@@ -1,11 +1,12 @@
 from airflow import DAG
 from operators.common_pipeline import CommonDag
-from sqlalchemy import create_engine
 from airflow.models import Variable
 import logging
+from sqlalchemy import create_engine, text
+import ast
 
-
-MAPPINGS = Variable.get("SPATIAL_MAPPINGS", deserialize_json=True)
+raw_value = Variable.get("SPATIAL_MAPPINGS")  # 讀到的會是字串，例如 "['a','b','c']"
+MAPPINGS = ast.literal_eval(raw_value)  
 
 def build_update_sql(cfg: dict) -> str:
     if cfg["src_table"].endswith("_ntpe"):
