@@ -23,7 +23,7 @@ def D100103(**kwargs):
     url = 'https://tsis.dbas.gov.taipei/statis/webMain.aspx?sys=220&ymf=9800&kind=21&type=0&funid=a05900201&cycle=4&outmode=12&compmode=0&outkind=1&deflst=2&nzo=1'
     ENCODING = 'utf-8-sig'
     raw_data = pd.read_csv(url, encoding=ENCODING)
-
+    data = raw_data.copy()
     # Transform
     # Rename
     data["年別"] = data["年別"].apply(lambda x: x.replace("年", ""))
