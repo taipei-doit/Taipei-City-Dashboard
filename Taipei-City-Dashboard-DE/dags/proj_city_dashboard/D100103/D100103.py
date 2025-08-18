@@ -26,7 +26,7 @@ def D100103(**kwargs):
     data = raw_data.copy()
     # Transform
     # Rename
-    data["年別"] = data["年別"].apply(lambda x: x.replace("年", ""))
+    data['年別'] = data['統計期'].str.replace(r'[^\d]', '', regex=True)
     data["年別"] = data["年別"].apply(lambda x: int(x) + 1911)
     data["年別"] = pd.to_datetime(data["年別"], format="%Y").dt.year
     name_dict = {
