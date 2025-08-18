@@ -26,7 +26,7 @@ def _transfer(**kwargs):
     
     data = data.rename(
         columns={
-            "年底別": "end_of_year",
+            "統計期": "end_of_year",
             "幼年人口數[人]": "young_population",
             "幼年人口占全市人口比率[％]": "young_population_percentage",
             "青壯年人口數[人]": "working_age_population",

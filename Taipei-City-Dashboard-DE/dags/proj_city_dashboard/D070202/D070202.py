@@ -24,11 +24,11 @@ def D070202(**kwargs):
     raw_data = pd.read_csv(url, encoding=ENCODING)
 
     # Extract
-    
+    data = raw_data.copy()
+
     data["data_time"] = get_tpe_now_time_str(is_with_tz=True)
 
     # Transform
-    data = raw_data.copy()
     # rename
     data = data.rename(
         columns={
