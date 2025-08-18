@@ -11,7 +11,8 @@ def D070202(**kwargs):
         update_lasttime_in_data_to_dataset_info,
     )
     from utils.transform_time import convert_str_to_time_format
-
+    from utils.get_time import get_tpe_now_time_str
+    
     # Config
     ready_data_db_uri = kwargs.get("ready_data_db_uri")
     dag_infos = kwargs.get("dag_infos")
@@ -26,7 +27,8 @@ def D070202(**kwargs):
     raw_data = pd.read_csv(StringIO(response.text))
 
     # Extract
-    raw_data["data_time"] = raw_data["年別"]
+    
+    data["data_time"] = get_tpe_now_time_str(is_with_tz=True)
 
     # Transform
     data = raw_data.copy()

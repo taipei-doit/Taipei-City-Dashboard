@@ -1,18 +1,17 @@
 from airflow import DAG
 from operators.common_pipeline import CommonDag
-
+from io import StringIO
+import requests
 
 def _transfer(**kwargs):
     import pandas as pd
     from sqlalchemy import create_engine
-    from utils.extract_stage import (
-        get_data_taipei_api,
-    )
+
     from utils.load_stage import (
         save_dataframe_to_postgresql,
         update_lasttime_in_data_to_dataset_info,
     )
-
+    from utils.get_time import get_tpe_now_time_str
     # Config
     ready_data_db_uri = kwargs.get("ready_data_db_uri")
     dag_infos = kwargs.get("dag_infos")
@@ -20,15 +19,14 @@ def _transfer(**kwargs):
     load_behavior = dag_infos.get("load_behavior")
     default_table = dag_infos.get("ready_data_default_table")
     history_table = dag_infos.get("ready_data_history_table")
-    RID= "71185df2-d7a2-48f2-9bb5-192b59737610"
-    # Load
-    res = get_data_taipei_api(RID)
-    raw_data = pd.DataFrame(res)
-    raw_data["data_time"] = raw_data["_importdate"].iloc[0]["date"]
-    print(f"raw data =========== {raw_data.head()}")
-    data = raw_data.copy()
-    data = data.drop(columns=["_id", "_importdate"])
+    url = 'https://tsis.dbas.gov.taipei/statis/webMain.aspx?sys=220&ymf=6700&kind=21&type=0&funid=a05005301&cycle=4&outmode=12&compmode=0&outkind=3&deflst=2&nzo=1'
+    response = requests.get(url)
+    response.encoding = 'utf-8'
+    raw_data = pd.read_csv(StringIO(response.text))
 
+    data = raw_data.copy()
+    
+    data["data_time"] = get_tpe_now_time_str(is_with_tz=True)
     data = data.rename(
         columns={
                     "年平均別": "year",
