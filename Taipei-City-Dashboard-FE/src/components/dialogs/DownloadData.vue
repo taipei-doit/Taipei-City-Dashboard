@@ -38,7 +38,10 @@ const parsedCsv = computed(() => {
 				content.value.chart_config
 		  )
 		: "";
-	return encodeURI(csvString);
+	// Create blob with BOM for better UTF-8 support
+	const bom = '\uFEFF';
+	const blob = new Blob([bom + csvString], { type: 'text/csv;charset=utf-8;' });
+	return URL.createObjectURL(blob);
 });
 
 function handleSubmit() {
@@ -114,7 +117,7 @@ function handleClose() {
           @click="handleSubmit"
         >
           <a
-            :href="`data:text/csv;charset=utf-8,${parsedCsv}`"
+            :href="parsedCsv"
             :download="`${name}.csv`"
           >下載CSV</a>
         </button>
