@@ -39,7 +39,8 @@ def _transfer(**kwargs):
             "老化指數[％]": "aging_index",
         }
     )
-    data['end_of_year'] = data['end_of_year'].replace('年', '', regex=True)
+    # Clean up end_of_year column by removing non-numeric characters
+    data['end_of_year'] = data['end_of_year'].str.replace(r'[^\d]', '', regex=True)
     data['end_of_year'] = data['end_of_year'].astype(int) + 1911
     engine = create_engine(ready_data_db_uri)
     save_dataframe_to_postgresql(

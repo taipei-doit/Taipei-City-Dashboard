@@ -32,7 +32,7 @@ def D070202(**kwargs):
     # rename
     data = data.rename(
         columns={
-            "年別": "year",
+            "統計期": "year",
             "總用戶數[戶]": "total_household",
             "總用電量[千度]": "total_power_usage_mwh",
             "每用戶用電量[度]": "power_usage_kwh_per_household",
