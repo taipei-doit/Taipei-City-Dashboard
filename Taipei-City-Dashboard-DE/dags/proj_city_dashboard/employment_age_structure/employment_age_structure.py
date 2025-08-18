@@ -28,12 +28,22 @@ def _transfer(**kwargs):
 
     data = raw_data.copy()
     
-    # Debug: Print available columns
+    # Debug: Print available columns and data sample
     print("Available columns:", list(data.columns))
+    print("Data shape:", data.shape)
+    print("First few rows of raw data:")
+    print(data.head(10))
+    print("\nUnique values in '統計期' column:")
+    print(data['統計期'].unique())
     
     # Clean up year column
     data['year'] = data['統計期'].str.replace(r'[^\d]', '', regex=True)
+    print("\nAfter year extraction:")
+    print("Unique years:", data['year'].unique())
+    
     data['year'] = data['year'].astype(int) + 1911
+    print("After conversion to Western calendar:")
+    print("Unique years:", data['year'].unique())
     
     # Rename basic columns
     data = data.rename(columns={
@@ -44,27 +54,27 @@ def _transfer(**kwargs):
     # Create records for each age group and metric type
     records = []
     
-    # Define age groups and their corresponding column patterns
+    # Define age groups - keep Chinese names as they appear in the database
     age_groups = [
-        ("就業人口", "employment_total"),
-        ("就業人口按年齡別/15至未滿20歲", "age_15_20"),
-        ("就業人口按年齡別/20至未滿25歲", "age_20_25"),
-        ("就業人口按年齡別/25至未滿30歲", "age_25_30"),
-        ("就業人口按年齡別/30至未滿35歲", "age_30_35"),
-        ("就業人口按年齡別/35至未滿40歲", "age_35_40"),
-        ("就業人口按年齡別/40至未滿45歲", "age_40_45"),
-        ("就業人口按年齡別/45至未滿50歲", "age_45_50"),
-        ("就業人口按年齡別/50至未滿55歲", "age_50_55"),
-        ("就業人口按年齡別/55至未滿60歲", "age_55_60"),
-        ("就業人口按年齡別/60至未滿65歲", "age_60_65"),
-        ("就業人口按年齡別/65歲以上", "age_65_plus")
+        ("就業人口", "就業人口"),
+        ("就業人口按年齡別/15至未滿20歲", "就業人口按年齡別/15-19歲"),
+        ("就業人口按年齡別/20至未滿25歲", "就業人口按年齡別/20-24歲"),
+        ("就業人口按年齡別/25至未滿30歲", "就業人口按年齡別/25-29歲"),
+        ("就業人口按年齡別/30至未滿35歲", "就業人口按年齡別/30-34歲"),
+        ("就業人口按年齡別/35至未滿40歲", "就業人口按年齡別/35-39歲"),
+        ("就業人口按年齡別/40至未滿45歲", "就業人口按年齡別/40-44歲"),
+        ("就業人口按年齡別/45至未滿50歲", "就業人口按年齡別/45-49歲"),
+        ("就業人口按年齡別/50至未滿55歲", "就業人口按年齡別/50-54歲"),
+        ("就業人口按年齡別/55至未滿60歲", "就業人口按年齡別/55-59歲"),
+        ("就業人口按年齡別/60至未滿65歲", "就業人口按年齡別/60-64歲"),
+        ("就業人口按年齡別/65歲以上", "就業人口按年齡別/65歲以上")
     ]
     
     for _, row in data.iterrows():
         year = row['year']
         gender = row['gender']
         
-        for age_pattern, age_code in age_groups:
+        for age_pattern, age_structure_name in age_groups:
             # Find columns for this age group
             actual_col = None
             percentage_col = None
@@ -85,7 +95,7 @@ def _transfer(**kwargs):
                 records.append({
                     'year': year,
                     'gender': gender,
-                    'age_structure': age_code,
+                    'age_structure': age_structure_name,
                     'percentage': percentage_value if pd.notna(percentage_value) and percentage_value != '-' else None
                 })
     
