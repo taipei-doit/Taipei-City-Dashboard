@@ -54,7 +54,8 @@ def _R0036(**kwargs):
         "stn_name": "station_name",
         "obs_time": "recTime",
         "max_allowable_water_level":"warning_level",
-        "pumb_status":"all_pumb_lights"
+        "pumb_status":"all_pumb_lights",
+        "lon":"lng"
     }
     data = data.rename(columns=col_map)
     # time
