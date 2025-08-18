@@ -1,6 +1,8 @@
 from airflow import DAG
 from operators.common_pipeline import CommonDag
 
+
+
 def _transfer(**kwargs):
     '''
     Service applicant count per year of Sea Sand House Registry statistics from data.taipei.
@@ -16,12 +18,10 @@ def _transfer(**kwargs):
     `列管戶數/可加勁補強[戶]` as households_can_be_reinforced.
     
     '''
-    from utils.extract_stage import get_data_taipei_api
     import pandas as pd
-    from utils.transform_time import convert_str_to_time_format
-    from utils.extract_stage import get_data_taipei_file_last_modified_time
     from utils.load_stage import save_dataframe_to_postgresql, update_lasttime_in_data_to_dataset_info
     from sqlalchemy import create_engine
+    from utils.get_time import get_tpe_now_time_str
 
     # Config
     # Retrieve all kwargs automatically generated upon DAG initialization
@@ -35,19 +35,18 @@ def _transfer(**kwargs):
     load_behavior = dag_infos.get('load_behavior')
     default_table = dag_infos.get('ready_data_default_table')
     history_table = dag_infos.get('ready_data_history_table')
-    # Manually set
-    rid = '7360e4e5-7ee6-4c17-97e7-9c208bcfa2d9'
-    page_id = '9617a04f-dd29-460c-a5ee-e4df2b0b4573'
+    
+    # 20250818 來源api 改為csv檔案
+    url = 'https://tsis.dbas.gov.taipei/statis/webMain.aspx?sys=220&ymf=10600&kind=21&type=0&funid=a05042701&cycle=4&outmode=12&compmode=0&outkind=1&deflst=2&nzo=1'
+    ENCODING = 'utf-8-sig'
+    raw_data = pd.read_csv(url, encoding=ENCODING)
 
-    # Extract
-    res = get_data_taipei_api(rid)
-    raw_data = pd.DataFrame(res)
 
     # Transform
     # Rename
-    data = raw_data
+    data = raw_data.copy()
     col_map = {
-        "年底別": "year",
+        "統計期": "year",
 		"列管件數/總計[件]": "total_cases",
 		"列管件數/須拆除重建[件]": "cases_need_reconstruction",
 		"列管件數/可加勁補強[件]": "cases_can_be_reinforced",
@@ -58,12 +57,12 @@ def _transfer(**kwargs):
     }
     data = data.rename(columns=col_map)
     # Transfer year from ROC to AD
-    data['year'] = data['year'].replace('年底', '', regex=True)
+    data['year'] = data['year'].replace('年', '', regex=True)
     data['year'] = data['year'].astype(int) + 1911
     # Time
-    data['data_time'] = get_data_taipei_file_last_modified_time(page_id)
-    data['data_time'] = convert_str_to_time_format(data['data_time'])
-    data = data.drop(columns=['_id','_importdate'])
+
+    data["data_time"] = get_tpe_now_time_str(is_with_tz=True)
+
     # Reshape
     ready_data = data.copy()
 

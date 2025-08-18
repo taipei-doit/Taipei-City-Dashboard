@@ -1,38 +1,38 @@
 from airflow import DAG
 from operators.common_pipeline import CommonDag
 
-
 def D070202(**kwargs):
     import pandas as pd
     from sqlalchemy import create_engine
-    from utils.extract_stage import get_data_taipei_api
     from utils.load_stage import (
         save_dataframe_to_postgresql,
         update_lasttime_in_data_to_dataset_info,
     )
     from utils.transform_time import convert_str_to_time_format
-
+    from utils.get_time import get_tpe_now_time_str
+    
     # Config
-    raw_data_db_uri = kwargs.get("raw_data_db_uri")
     ready_data_db_uri = kwargs.get("ready_data_db_uri")
     dag_infos = kwargs.get("dag_infos")
     dag_id = dag_infos.get("dag_id")
     load_behavior = dag_infos.get("load_behavior")
     default_table = dag_infos.get("ready_data_default_table")
-    history_table = dag_infos.get("ready_data_history_table")
-    RID = "438e8937-40f9-41f2-ac64-0bafab856122"
+
+    # 20250818 來源api 改為csv檔案
+    url = 'https://tsis.dbas.gov.taipei/statis/webMain.aspx?sys=220&ymf=5700&kind=21&type=0&funid=A05035701&cycle=4&outmode=12&compmode=0&outkind=1&deflst=2&nzo=1'
+    ENCODING = 'utf-8-sig'
+    raw_data = pd.read_csv(url, encoding=ENCODING)
 
     # Extract
-    res = get_data_taipei_api(RID)
-    raw_data = pd.DataFrame(res)
-    raw_data["data_time"] = raw_data["年別"]
+    data = raw_data.copy()
+
+    data["data_time"] = get_tpe_now_time_str(is_with_tz=True)
 
     # Transform
-    data = raw_data.copy()
     # rename
     data = data.rename(
         columns={
-            "年別": "year",
+            "統計期": "year",
             "總用戶數[戶]": "total_household",
             "總用電量[千度]": "total_power_usage_mwh",
             "每用戶用電量[度]": "power_usage_kwh_per_household",
