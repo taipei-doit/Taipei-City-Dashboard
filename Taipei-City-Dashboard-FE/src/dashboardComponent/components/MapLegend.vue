@@ -50,6 +50,8 @@ function returnIcon(name) {
 		return cross_normal;
 	case "cctv":
 		return cctv;
+	case "live":
+		return live;
 	default:
 		return "";
 	}
