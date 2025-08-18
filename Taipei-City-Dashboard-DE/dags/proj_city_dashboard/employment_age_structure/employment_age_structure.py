@@ -12,6 +12,8 @@ def _transfer(**kwargs):
         update_lasttime_in_data_to_dataset_info,
     )
     from utils.get_time import get_tpe_now_time_str
+    proxies = kwargs.get("proxies")
+
     # Config
     ready_data_db_uri = kwargs.get("ready_data_db_uri")
     dag_infos = kwargs.get("dag_infos")
@@ -19,12 +21,15 @@ def _transfer(**kwargs):
     load_behavior = dag_infos.get("load_behavior")
     default_table = dag_infos.get("ready_data_default_table")
     history_table = dag_infos.get("ready_data_history_table")
-    url = 'https://tsis.dbas.gov.taipei/statis/webMain.aspx?sys=220&ymf=6700&kind=21&type=0&funid=a05005301&cycle=4&outmode=12&compmode=0&outkind=3&deflst=2&nzo=1'
-    ENCODING = 'utf-8-sig'
-    raw_data = pd.read_csv(url, encoding=ENCODING)
-
-    data = raw_data.copy()
+    url = 'https://data.taipei/api/v1/dataset/71185df2-d7a2-48f2-9bb5-192b59737610?scope=resourceAquire'
+    res = requests.get(url, proxies=proxies, timeout=60)
+    if res.status_code != 200:
+        raise ValueError(f"Request failed! status: {res.status_code}")
+    res_json = res.json()
     
+
+    data = pd.DataFrame(res_json["data"])
+
     data["data_time"] = get_tpe_now_time_str(is_with_tz=True)
     data = data.rename(
         columns={

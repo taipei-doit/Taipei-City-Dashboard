@@ -22,7 +22,7 @@ def _R0036(**kwargs):
     default_table = dag_infos.get("ready_data_default_table")
     history_table = dag_infos.get("ready_data_history_table")
     proxies = kwargs.get("proxies")
-    url = "https://wic.heo.taipei/OpenData/API/Pump/Get?stationNo=&loginId=pumping&dataKey=3D9A9570"
+    url = "https://heopublic.gov.taipei/taipei-heo-api/openapi/pumb/latest"
     GEOMETRY_TYPE = "Point"
     FROM_CRS = 4326
 
@@ -36,12 +36,25 @@ def _R0036(**kwargs):
     # Transform
     data = raw_data.copy()
     # rename
+    
+    # "stn_id": "208",
+    # "stn_name": "經貿",
+    # "lon": 121.6209,
+    # "lat": 25.05629,
+    # "obs_time": "2025-08-18 16:50:00",
+    # "inner_value": "7.33",
+    # "outer_value": "1.4",
+    # "pumb_num": 2,
+    # "door_num": 1,
+    # "pumb_status": "停止",
+    # "door_status": "閘門開啟",
+    # "max_allowable_water_level": 9.1
     col_map = {
-        "stationNo": "station_no",
-        "stationName": "station_name",
-        "allPumbLights": "all_pumb_lights",
-        "pumbNum": "pumb_num",
-        "doorNum": "door_num",
+        "stn_id": "station_no",
+        "stn_name": "station_name",
+        "obs_time": "recTime",
+        "max_allowable_water_level":"warning_level",
+        "pumb_status":"all_pumb_lights"
     }
     data = data.rename(columns=col_map)
     # time
@@ -50,27 +63,16 @@ def _R0036(**kwargs):
     )
     # get pump location
     engine = create_engine(ready_data_db_uri)
-    location_data = pd.read_sql(
-        "SELECT * FROM work_pump_station_static_info", con=engine
+
+    data = add_point_wkbgeometry_column_to_df(
+        data, data["lng"], data["lat"], from_crs=FROM_CRS
     )
-    loc_data = pd.DataFrame(location_data)
-    loc_gdata = add_point_wkbgeometry_column_to_df(
-        loc_data, loc_data["lng"], loc_data["lat"], from_crs=FROM_CRS
-    )
-    loc_gdata.drop(columns=["geometry", "_ctime", "_mtime"], inplace=True)
     # pump location
-    col_map = {
-        "站碼": "station_no",
-        "站名": "station_name",
-        "流域": "river_basin",
-        "警戒水位": "warning_level",
-        "起抽水位": "start_pumping_level",
-    }
-    loc_gdata = loc_gdata.rename(columns=col_map)
-    join_data = data.merge(loc_gdata, how="left", on="station_name")
-    join_data = join_data.rename(columns={"station_no_x": "station_no"})
+    data["start_pumping_level"] = ""
+    data['river_basin'] = ""
+    
     # select columns
-    ready_data = join_data[
+    ready_data = data[
         [
             "station_no",
             "station_name",
