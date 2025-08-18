@@ -1,7 +1,5 @@
 from airflow import DAG
 from operators.common_pipeline import CommonDag
-from io import StringIO
-import requests
 
 
 def _transfer(**kwargs):
@@ -20,10 +18,9 @@ def _transfer(**kwargs):
     default_table = dag_infos.get("ready_data_default_table")
     history_table = dag_infos.get("ready_data_history_table")
     # 20250818 來源api 改為csv檔案
-    url = 'https://tsis.dbas.gov.taipei/statis/webMain.aspx?sys=220&ymf=5700&kind=21&type=0&funid=a05002601&cycle=4&outmode=12&compmode=0&outkind=1&deflst=2&nzo=1'
-    response = requests.get(url)
-    response.encoding = 'utf-8'
-    raw_data = pd.read_csv(StringIO(response.text))
+    URL = 'https://tsis.dbas.gov.taipei/statis/webMain.aspx?sys=220&ymf=5700&kind=21&type=0&funid=a05002601&cycle=4&outmode=12&compmode=0&outkind=1&deflst=2&nzo=1'
+    ENCODING = 'utf-8-sig'
+    raw_data = pd.read_csv(URL, encoding=ENCODING)
 
     data = raw_data.copy()
     
