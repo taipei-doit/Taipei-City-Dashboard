@@ -41,6 +41,7 @@ def _transfer(**kwargs):
     url = 'https://tsis.dbas.gov.taipei/statis/webMain.aspx?sys=220&ymf=10600&kind=21&type=0&funid=a05042701&cycle=4&outmode=12&compmode=0&outkind=1&deflst=2&nzo=1'
     response = requests.get(url)
     response.encoding = 'utf-8'
+    print("Response status code: %s", response.status_code)
     raw_data = pd.read_csv(StringIO(response.text))
 
     # Transform
