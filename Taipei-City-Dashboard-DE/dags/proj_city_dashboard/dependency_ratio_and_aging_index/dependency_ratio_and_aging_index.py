@@ -9,6 +9,7 @@ def _transfer(**kwargs):
         save_dataframe_to_postgresql,
         update_lasttime_in_data_to_dataset_info,
     )
+    from utils.get_time import get_tpe_now_time_str
 
     # Config
     ready_data_db_uri = kwargs.get("ready_data_db_uri")
@@ -24,24 +25,44 @@ def _transfer(**kwargs):
 
     data = raw_data.copy()
     
-    data = data.rename(
-        columns={
-            "統計期": "end_of_year",
-            "幼年人口數[人]": "young_population",
-            "幼年人口占全市人口比率[％]": "young_population_percentage",
-            "青壯年人口數[人]": "working_age_population",
-            "青壯年人口占全市人口比率[％]": "working_age_population_percentage",
-            "老年人口數[人]": "elderly_population",
-            "老年人口占全市人口比率[％]": "elderly_population_percentage",
-            "扶老比[％]": "elderly_dependency_ratio",
-            "扶幼比[％]": "youth_dependency_ratio",
-            "扶養比[％]": "total_dependency_ratio",
-            "老化指數[％]": "aging_index",
-        }
-    )
+    # Debug: Print available columns to understand the actual column names
+    print("Available columns:", list(data.columns))
+    
+    # Create a more flexible column mapping that handles both full-width and half-width characters
+    column_mapping = {}
+    for col in data.columns:
+        if "統計期" in col:
+            column_mapping[col] = "end_of_year"
+        elif "幼年人口數" in col:
+            column_mapping[col] = "young_population"
+        elif "幼年人口占全市人口比率" in col:
+            column_mapping[col] = "young_population_percentage"
+        elif "青壯年人口數" in col:
+            column_mapping[col] = "working_age_population"
+        elif "青壯年人口占全市人口比率" in col:
+            column_mapping[col] = "working_age_population_percentage"
+        elif "老年人口數" in col:
+            column_mapping[col] = "elderly_population"
+        elif "老年人口占全市人口比率" in col:
+            column_mapping[col] = "elderly_population_percentage"
+        elif "扶老比" in col:
+            column_mapping[col] = "elderly_dependency_ratio"
+        elif "扶幼比" in col:
+            column_mapping[col] = "youth_dependency_ratio"
+        elif "扶養比" in col:
+            column_mapping[col] = "total_dependency_ratio"
+        elif "老化指數" in col:
+            column_mapping[col] = "aging_index"
+    
+    print("Column mapping:", column_mapping)
+    data = data.rename(columns=column_mapping)
+    
     # Clean up end_of_year column by removing non-numeric characters
     data['end_of_year'] = data['end_of_year'].str.replace(r'[^\d]', '', regex=True)
     data['end_of_year'] = data['end_of_year'].astype(int) + 1911
+    
+    # Add data_time column
+    data["data_time"] = get_tpe_now_time_str(is_with_tz=True)
     engine = create_engine(ready_data_db_uri)
     save_dataframe_to_postgresql(
         engine,

@@ -27,8 +27,48 @@ def _transfer(**kwargs):
         raise ValueError(f"Request failed! status: {res.status_code}")
     res_json = res.json()
     
-
-    data = pd.DataFrame(res_json["data"])
+    # Debug: Check the structure of the response
+    print(f"Response type: {type(res_json)}")
+    if isinstance(res_json, dict):
+        print(f"Available keys: {list(res_json.keys())}")
+    elif isinstance(res_json, list):
+        print(f"Response is a list with {len(res_json)} items")
+        if len(res_json) > 0:
+            print(f"First item type: {type(res_json[0])}")
+            if isinstance(res_json[0], dict):
+                print(f"First item keys: {list(res_json[0].keys())}")
+    
+    # Handle different response structures
+    if isinstance(res_json, list):
+        data = pd.DataFrame(res_json)
+    elif isinstance(res_json, dict) and "data" in res_json:
+        data = pd.DataFrame(res_json["data"])
+    elif isinstance(res_json, dict) and "result" in res_json:
+        # Check if result contains results array
+        if isinstance(res_json["result"], dict) and "results" in res_json["result"]:
+            data = pd.DataFrame(res_json["result"]["results"])
+            print(f"Found data in result.results with {len(res_json['result']['results'])} items")
+        elif isinstance(res_json["result"], list):
+            data = pd.DataFrame(res_json["result"])
+            print(f"Found data in result with {len(res_json['result'])} items")
+        else:
+            raise ValueError(f"Unexpected result structure: {type(res_json['result'])}")
+    else:
+        # Try to find the data in the response
+        if isinstance(res_json, dict):
+            # Look for common data keys
+            data_keys = ["data", "result", "results", "records", "items"]
+            data_found = False
+            for key in data_keys:
+                if key in res_json and isinstance(res_json[key], list):
+                    data = pd.DataFrame(res_json[key])
+                    print(f"Found data in key: {key}")
+                    data_found = True
+                    break
+            if not data_found:
+                raise ValueError(f"Could not find data in response. Available keys: {list(res_json.keys())}")
+        else:
+            raise ValueError(f"Unexpected response structure: {type(res_json)}")
 
     data["data_time"] = get_tpe_now_time_str(is_with_tz=True)
     
