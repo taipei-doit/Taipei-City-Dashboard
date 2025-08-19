@@ -149,6 +149,7 @@ jobs:
           helm upgrade --install ${{ env.RELEASE }} ./helm-chart \
             $VALUES_FLAG \
             --set backend.image.tag="${{ steps.tag.outputs.value }}" \
+            --set frontend.image.tag="${{ steps.tag.outputs.value }}" \
             --namespace=dashboard \
             --wait --timeout=20m \
             --debug
@@ -276,6 +277,7 @@ jobs:
           helm upgrade --install ${{ env.RELEASE }} ./helm-chart \
             $VALUES_FLAG \
             --set frontend.image.tag="${{ steps.tag.outputs.value }}" \
+            --set backend.image.tag="${{ steps.tag.outputs.value }}" \
             --namespace=dashboard \
             --wait --timeout=20m \
             --debug
