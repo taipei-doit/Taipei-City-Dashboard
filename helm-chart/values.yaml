@@ -23,6 +23,11 @@ fullnameOverride: ""
 frontend:
   enabled: true
   replicaCount: 2
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
   
   image:
     repository: ghcr.io/taipei-doit/taipei-city-dashboard-fe
@@ -67,6 +72,11 @@ frontend:
 backend:
   enabled: true
   replicaCount: 2
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
   
   image:
     repository: ghcr.io/taipei-doit/taipei-city-dashboard-be

@@ -9,6 +9,13 @@ spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.backend.replicaCount }}
   {{- end }}
+  strategy:
+    type: {{ default "RollingUpdate" .Values.backend.updateStrategy.type }}
+    {{- if and .Values.backend.updateStrategy.rollingUpdate (eq (default "RollingUpdate" .Values.backend.updateStrategy.type) "RollingUpdate") }}
+    rollingUpdate:
+      maxSurge: {{ .Values.backend.updateStrategy.rollingUpdate.maxSurge }}
+      maxUnavailable: {{ .Values.backend.updateStrategy.rollingUpdate.maxUnavailable }}
+    {{- end }}
   selector:
     matchLabels:
       {{- include "taipei-city-dashboard.backend.selectorLabels" . | nindent 6 }}
@@ -35,17 +42,15 @@ spec:
               containerPort: {{ .Values.backend.service.targetPort }}
               protocol: TCP
           livenessProbe:
-            httpGet:
-              path: /health
+            tcpSocket:
+              port: http
+            initialDelaySeconds: 60
+            periodSeconds: 30
+          readinessProbe:
+            tcpSocket:
               port: http
             initialDelaySeconds: 30
             periodSeconds: 10
-          readinessProbe:
-            httpGet:
-              path: /health
-              port: http
-            initialDelaySeconds: 5
-            periodSeconds: 5
           resources:
             {{- toYaml .Values.backend.resources | nindent 12 }}
           env:
@@ -229,10 +234,17 @@ spec:
             {{- range .Values.backend.secretEnv }}
             {{- if not (has .name (list "DB_DASHBOARD_HOST" "DB_DASHBOARD_USER" "DB_DASHBOARD_PASSWORD" "DB_DASHBOARD_DBNAME" "DB_DASHBOARD_PORT" "DB_MANAGER_HOST" "DB_MANAGER_USER" "DB_MANAGER_PASSWORD" "DB_MANAGER_DBNAME" "DB_MANAGER_PORT" "REDIS_HOST" "REDIS_PORT" "REDIS_PASSWORD" "REDIS_DB")) }}
             - name: {{ .name }}
+              {{- if .value }}
+              value: {{ .value | quote }}
+              {{- else }}
               valueFrom:
                 secretKeyRef:
                   name: {{ include "taipei-city-dashboard.fullname" $ }}-secrets
-                  key: {{ .name }}
+                  key: {{ default .name .secretKey }}
+                  {{- if .optional }}
+                  optional: true
+                  {{- end }}
+              {{- end }}
             {{- end }}
             {{- end }}
           volumeMounts:

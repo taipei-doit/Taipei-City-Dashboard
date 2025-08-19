@@ -82,21 +82,21 @@ backend:
   # Secret environment variables that will be set by template logic
   secretEnv:
     - name: GIN_DOMAIN
-      defaultValue: "0.0.0.0"
+      value: "https://example.test"
     - name: JWT_SECRET
-      defaultValue: "secret"
+      value: ""
     - name: IDNO_SALT
-      defaultValue: "salt"
+      value: "salt"
     - name: ISSO_URL
-      defaultValue: ""
+      value: ""
     - name: TAIPEIPASS_URL
-      defaultValue: ""
+      value: ""
     - name: ISSO_CLIENT_ID
-      defaultValue: ""
+      value: ""
     - name: ISSO_CLIENT_SECRET
-      defaultValue: ""
+      value: ""
     - name: ISSO_CLIENT_SCOPE
-      defaultValue: ""
+      value: ""
 
 # Service Account
 serviceAccount:

@@ -17,6 +17,11 @@ imagePullSecrets:
 frontend:
   enabled: true
   replicaCount: 1
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 0        # 不在升級時額外啟動超過 replica 的新 Pod
+      maxUnavailable: 1  # 允許一次少 1 個 Pod，以便無額外擴容的滾動更新
   
   image:
     repository: citydashboard-dhc2gtetgcfqeqhv.azurecr.io/taipei-city-dashboard-fe
@@ -35,25 +40,41 @@ frontend:
     NODE_ENV: "sit"
     VITE_APP_TITLE: "Taipei City Dashboard"
     VITE_APP_VERSION: "2.2.0"
-  # Disable secretEnv to avoid duplicate env vars when Azure Key Vault is disabled
+    REDIS_PORT: 6379
+    REDIS_DB: 0
+    DB_MANAGER_PORT: 5432
+    DB_DASHBOARD_PORT: 5432
+
+  # Frontend secret env from Secret (all optional)
   secretEnv:
     - name: VITE_MAPBOXTOKEN
       secretKey: "vite-mapbox-token"
+      optional: true
     - name: VITE_API_URL
       secretKey: "vite-api-url"
+      optional: true
     - name: VITE_MAPBOXTILE
       secretKey: "vite-mapbox-tile"
+      optional: true
     - name: VITE_TAIPEIPASS_URL
       secretKey: "taipeipass-url"
+      optional: true
     - name: VITE_TAIPEIPASS_CLIENT_ID
       secretKey: "taipeipass-client-id"
+      optional: true
     - name: VITE_TAIPEIPASS_SCOPE
       secretKey: "taipeipass-scope"
+      optional: true
 
 # Backend configuration  
 backend:
   enabled: true
   replicaCount: 2
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 0        # 不在升級時額外啟動超過 replica 的新 Pod
+      maxUnavailable: 1  # 允許一次少 1 個 Pod，以便無額外擴容的滾動更新
   
   image:
     repository: citydashboard-dhc2gtetgcfqeqhv.azurecr.io/taipei-city-dashboard-be
@@ -71,54 +92,59 @@ backend:
   env:
     GIN_MODE: "release"
     GIN_PORT: "8080"
-  # Disable secretEnv to avoid duplicate env vars when Azure Key Vault is disabled
+  # Backend secret env from Secret (all optional)
   secretEnv:
     - name: GIN_DOMAIN
       secretKey: "gin-domain"
+      optional: true
     - name: JWT_SECRET
       secretKey: "jwt-secret"
+      optional: true
     - name: IDNO_SALT
       secretKey: "idno-salt"
+      optional: true
     - name: ISSO_CLIENT_ID
       secretKey: "isso-client-id"
+      optional: true
     - name: ISSO_CLIENT_SECRET
       secretKey: "isso-client-secret"
+      optional: true
     - name: DB_DASHBOARD_PASSWORD
       secretKey: "db-dashboard-password"
+      optional: false
     - name: DB_DASHBOARD_HOST
       secretKey: "db-dashboard-host"
+      optional: false
     - name: DB_DASHBOARD_USER
       secretKey: "db-dashboard-user"
+      optional: false
     - name: DB_DASHBOARD_DBNAME
       secretKey: "db-dashboard-dbname"
-    - name: DB_DASHBOARD_PORT
-      secretKey: "db-dashboard-port"
+      optional: false
     - name: DB_MANAGER_PASSWORD
       secretKey: "db-manager-password"
+      optional: false
     - name: DB_MANAGER_HOST
       secretKey: "db-manager-host"
+      optional: false
     - name: DB_MANAGER_USER
       secretKey: "db-manager-user"
+      optional: false
     - name: DB_MANAGER_DBNAME
       secretKey: "db-manager-dbname"
-    - name: DB_MANAGER_PORT
-      secretKey: "db-manager-port"
+      optional: false
     - name: REDIS_PASSWORD
       secretKey: "redis-password"
+      optional: false
     - name: REDIS_HOST
       secretKey: "redis-host"
-    - name: REDIS_PORT
-      secretKey: "redis-port"
-    - name: REDIS_DB
-      secretKey: "redis-db"
+      optional: false
 
-# External Database Configuration (停用 - 由後端環境變數直接連接)
 externalDatabase:
-  enabled: false                               # 停用 Helm 的資料庫配置
+  enabled: false                              
 
-# External Redis Configuration (停用 - 由後端環境變數直接連接)  
 externalRedis:
-  enabled: true                                # 使用外部 Redis
+  enabled: false                                # 使用外部 Redis
   host: ""                                     # 通過 secrets 設定
   port: "6379"
   password: true                               # 有密碼

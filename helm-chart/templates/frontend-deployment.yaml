@@ -9,6 +9,13 @@ spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.frontend.replicaCount }}
   {{- end }}
+  strategy:
+    type: {{ default "RollingUpdate" .Values.frontend.updateStrategy.type }}
+    {{- if and .Values.frontend.updateStrategy.rollingUpdate (eq (default "RollingUpdate" .Values.frontend.updateStrategy.type) "RollingUpdate") }}
+    rollingUpdate:
+      maxSurge: {{ .Values.frontend.updateStrategy.rollingUpdate.maxSurge }}
+      maxUnavailable: {{ .Values.frontend.updateStrategy.rollingUpdate.maxUnavailable }}
+    {{- end }}
   selector:
     matchLabels:
       {{- include "taipei-city-dashboard.frontend.selectorLabels" . | nindent 6 }}
@@ -24,6 +31,18 @@ spec:
       serviceAccountName: {{ include "taipei-city-dashboard.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      initContainers:
+        - name: fix-permissions
+          image: busybox:1.36
+          command: ['sh', '-c', 'mkdir -p /var/cache/nginx && chmod 777 /var/cache/nginx && mkdir -p /nginx-run && chmod 777 /nginx-run']
+          volumeMounts:
+            - name: nginx-cache
+              mountPath: /var/cache/nginx
+            - name: nginx-run
+              mountPath: /nginx-run
+          securityContext:
+            runAsUser: 0
+            runAsNonRoot: false
       containers:
         - name: frontend
           securityContext:
@@ -35,7 +54,7 @@ spec:
               - ALL
             readOnlyRootFilesystem: false
             runAsNonRoot: true
-            runAsUser: 1000
+            runAsUser: 101
             {{- end }}
           image: {{ include "taipei-city-dashboard.image" (merge (dict "repository" .Values.frontend.image.repository "tag" .Values.frontend.image.tag) .) }}
           imagePullPolicy: {{ .Values.frontend.image.pullPolicy }}
@@ -64,10 +83,17 @@ spec:
             {{- end }}
             {{- range .Values.frontend.secretEnv }}
             - name: {{ .name }}
+              {{- if .value }}
+              value: {{ .value | quote }}
+              {{- else }}
               valueFrom:
                 secretKeyRef:
                   name: {{ include "taipei-city-dashboard.fullname" $ }}-secrets
-                  key: {{ .name }}
+                  key: {{ default .name .secretKey }}
+                  {{- if .optional }}
+                  optional: true
+                  {{- end }}
+              {{- end }}
             {{- end }}
           volumeMounts:
             - name: tmp
