@@ -30,7 +30,12 @@ spec:
             {{- if .Values.frontend.securityContext }}
             {{- toYaml .Values.frontend.securityContext | nindent 12 }}
             {{- else }}
-            {{- toYaml .Values.securityContext | nindent 12 }}
+            capabilities:
+              drop:
+              - ALL
+            readOnlyRootFilesystem: false
+            runAsNonRoot: true
+            runAsUser: 1000
             {{- end }}
           image: {{ include "taipei-city-dashboard.image" (merge (dict "repository" .Values.frontend.image.repository "tag" .Values.frontend.image.tag) .) }}
           imagePullPolicy: {{ .Values.frontend.image.pullPolicy }}
