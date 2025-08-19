@@ -1,0 +1,239 @@
+name: Build and Deploy
+
+on:
+  pull_request:
+    branches: ["main", "sit"]
+    types: [closed]
+  workflow_dispatch:
+
+env:
+  REGISTRY: citydashboard-dhc2gtetgcfqeqhv.azurecr.io
+  RELEASE: taipei-city-dashboard
+  BE_IMAGE: taipei-city-dashboard-be
+  FE_IMAGE: taipei-city-dashboard-fe
+
+jobs:
+  detect-changes:
+    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'pull_request' && github.event.pull_request.merged == true)
+    runs-on: ubuntu-latest
+    outputs:
+      backend: "true"
+      frontend: "true"
+    steps:
+      - name: Force deploy both services
+        run: echo "Deploying both backend and frontend"
+
+  backend:
+    needs: detect-changes
+    if: (github.event_name == 'workflow_dispatch' || (github.event_name == 'pull_request' && github.event.pull_request.merged == true)) && needs.detect-changes.outputs.backend == 'true'
+    runs-on: ubuntu-latest
+    environment: sit  # 暫時移除，避免環境保護規則阻擋
+    concurrency:
+      group: deploy-${{ github.ref }}
+      cancel-in-progress: false
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to ACR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.ACR_USERNAME }}
+          password: ${{ secrets.ACR_PASSWORD }}
+
+      - name: Compute image tag
+        id: tag
+        env:
+          BASE: ${{ github.event.pull_request.base.ref }}
+          MERGE_SHA: ${{ github.event.pull_request.merge_commit_sha }}
+        run: |
+          BRANCH="${BASE:-$GITHUB_REF_NAME}"
+          SHA="${MERGE_SHA:-$GITHUB_SHA}"
+          echo "value=${BRANCH}-$(echo ${SHA} | cut -c1-8)" >> $GITHUB_OUTPUT
+
+      - name: Build and push Backend
+        uses: docker/build-push-action@v5
+        with:
+          context: ./Taipei-City-Dashboard-BE
+          file: ./Taipei-City-Dashboard-BE/Dockerfile
+          push: true
+          tags: ${{ env.REGISTRY }}/${{ env.BE_IMAGE }}:${{ steps.tag.outputs.value }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          platforms: linux/amd64
+
+      - name: Setup Helm
+        uses: azure/setup-helm@v3
+        with:
+          version: '3.13.0'
+
+      - name: Configure kubeconfig
+        run: |
+          mkdir -p ~/.kube
+          if [ -z "${{ secrets.KUBE_CONFIG_DATA }}" ]; then
+            echo "ERROR: KUBE_CONFIG_DATA secret is not set!"
+            exit 1
+          fi
+          echo "KUBE_CONFIG_DATA is set, length check..."
+          echo "${{ secrets.KUBE_CONFIG_DATA }}" | wc -c
+          echo "Decoding kubeconfig..."
+          echo "${{ secrets.KUBE_CONFIG_DATA }}" | base64 -d > ~/.kube/config
+          chmod 600 ~/.kube/config
+          echo "Kubeconfig created successfully"
+          kubectl cluster-info
+
+      - name: Create/Update ACR imagePullSecret
+        run: |
+          kubectl create secret docker-registry acr-secret \
+            --docker-server=${{ env.REGISTRY }} \
+            --docker-username='${{ secrets.ACR_USERNAME }}' \
+            --docker-password='${{ secrets.ACR_PASSWORD }}' \
+            --namespace=dashboard \
+            --dry-run=client -o yaml | kubectl apply -f -
+
+      - name: Create/Update Application Secrets
+        run: |
+          kubectl create secret generic taipei-city-dashboard-secrets \
+            --from-literal=DB_DASHBOARD_HOST="${{ secrets.DB_DASHBOARD_HOST }}" \
+            --from-literal=DB_DASHBOARD_PASSWORD="${{ secrets.DB_DASHBOARD_PASSWORD }}" \
+            --from-literal=DB_DASHBOARD_USER="${{ secrets.DB_DASHBOARD_USER }}" \
+            --from-literal=DB_DASHBOARD_DBNAME="${{ secrets.DB_DASHBOARD_DBNAME }}" \
+            --from-literal=DB_DASHBOARD_PORT="${{ secrets.DB_DASHBOARD_PORT }}" \
+            --from-literal=DB_MANAGER_HOST="${{ secrets.DB_DASHBOARD_HOST }}" \
+            --from-literal=DB_MANAGER_PASSWORD="${{ secrets.DB_DASHBOARD_PASSWORD }}" \
+            --from-literal=DB_MANAGER_USER="${{ secrets.DB_DASHBOARD_USER }}" \
+            --from-literal=DB_MANAGER_DBNAME="${{ secrets.DB_DASHBOARD_DBNAME }}" \
+            --from-literal=DB_MANAGER_PORT="${{ secrets.DB_DASHBOARD_PORT }}" \
+            --from-literal=REDIS_HOST="${{ secrets.REDIS_HOST }}" \
+            --from-literal=REDIS_PASSWORD="${{ secrets.REDIS_PASSWORD }}" \
+            --from-literal=REDIS_PORT="6379" \
+            --from-literal=REDIS_DB="0" \
+            --from-literal=JWT_SECRET="${{ secrets.JWT_SECRET }}" \
+            --from-literal=GIN_DOMAIN="${{ secrets.GIN_DOMAIN }}" \
+            --from-literal=VITE_API_URL="${{ secrets.VITE_API_URL }}" \
+            --from-literal=VITE_MAPBOXTOKEN="${{ secrets.VITE_MAPBOX_TOKEN }}" \
+            --from-literal=IDNO_SALT="${{ secrets.IDNO_SALT }}" \
+            --from-literal=ISSO_CLIENT_ID="${{ secrets.ISSO_CLIENT_ID }}" \
+            --from-literal=ISSO_CLIENT_SECRET="${{ secrets.ISSO_CLIENT_SECRET }}" \
+            --from-literal=VITE_MAPBOXTILE="${{ secrets.VITE_MAPBOXTILE }}" \
+            --from-literal=VITE_TAIPEIPASS_URL="${{ secrets.VITE_TAIPEIPASS_URL }}" \
+            --from-literal=VITE_TAIPEIPASS_CLIENT_ID="${{ secrets.VITE_TAIPEIPASS_CLIENT_ID }}" \
+            --from-literal=VITE_TAIPEIPASS_SCOPE="${{ secrets.VITE_TAIPEIPASS_SCOPE }}" \
+            --namespace=dashboard \
+            --dry-run=client -o yaml | kubectl apply -f -
+
+      - name: Deploy Backend only
+        run: |
+          if helm status ${{ env.RELEASE }} >/dev/null 2>&1; then
+            VALUES_FLAG="--reuse-values"
+          else
+            VALUES_FLAG="--values helm-chart/values-external-db.yaml"
+          fi
+          helm upgrade --install ${{ env.RELEASE }} ./helm-chart \
+            $VALUES_FLAG \
+            --set backend.image.tag="${{ steps.tag.outputs.value }}" \
+            --namespace=dashboard \
+            --wait --timeout=20m \
+            --debug
+
+  frontend:
+    needs: detect-changes
+    if: (github.event_name == 'workflow_dispatch' || (github.event_name == 'pull_request' && github.event.pull_request.merged == true)) && needs.detect-changes.outputs.frontend == 'true'
+    runs-on: ubuntu-latest
+    environment: sit  # 暫時移除，避免環境保護規則阻擋
+    concurrency:
+      group: deploy-${{ github.ref }}
+      cancel-in-progress: false
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to ACR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.ACR_USERNAME }}
+          password: ${{ secrets.ACR_PASSWORD }}
+
+      - name: Compute image tag
+        id: tag
+        env:
+          BASE: ${{ github.event.pull_request.base.ref }}
+          MERGE_SHA: ${{ github.event.pull_request.merge_commit_sha }}
+        run: |
+          BRANCH="${BASE:-$GITHUB_REF_NAME}"
+          SHA="${MERGE_SHA:-$GITHUB_SHA}"
+          echo "value=${BRANCH}-$(echo ${SHA} | cut -c1-8)" >> $GITHUB_OUTPUT
+
+      - name: Build and push Frontend
+        uses: docker/build-push-action@v5
+        with:
+          context: ./Taipei-City-Dashboard-FE
+          file: ./Taipei-City-Dashboard-FE/Dockerfile
+          push: true
+          tags: ${{ env.REGISTRY }}/${{ env.FE_IMAGE }}:${{ steps.tag.outputs.value }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          platforms: linux/amd64
+
+      - name: Setup Helm
+        uses: azure/setup-helm@v3
+        with:
+          version: '3.13.0'
+
+      - name: Configure kubeconfig
+        run: |
+          mkdir -p ~/.kube
+          if [ -z "${{ secrets.KUBE_CONFIG_DATA }}" ]; then
+            echo "ERROR: KUBE_CONFIG_DATA secret is not set!"
+            exit 1
+          fi
+          echo "KUBE_CONFIG_DATA is set, length check..."
+          echo "${{ secrets.KUBE_CONFIG_DATA }}" | wc -c
+          echo "Decoding kubeconfig..."
+          echo "${{ secrets.KUBE_CONFIG_DATA }}" | base64 -d > ~/.kube/config
+          chmod 600 ~/.kube/config
+          echo "Kubeconfig created successfully"
+          kubectl cluster-info
+
+      - name: Create/Update ACR imagePullSecret
+        run: |
+          kubectl create secret docker-registry acr-secret \
+            --docker-server=${{ env.REGISTRY }} \
+            --docker-username='${{ secrets.ACR_USERNAME }}' \
+            --docker-password='${{ secrets.ACR_PASSWORD }}' \
+            --namespace=dashboard \
+            --dry-run=client -o yaml | kubectl apply -f -
+
+      - name: Create/Update Application Secrets
+        run: |
+          kubectl create secret generic taipei-city-dashboard-secrets \
+            --from-literal=VITE_API_URL="${{ secrets.VITE_API_URL }}" \
+            --from-literal=VITE_MAPBOXTOKEN="${{ secrets.VITE_MAPBOX_TOKEN }}" \
+            --from-literal=VITE_MAPBOXTILE="${{ secrets.VITE_MAPBOXTILE }}" \
+            --from-literal=VITE_TAIPEIPASS_URL="${{ secrets.VITE_TAIPEIPASS_URL }}" \
+            --from-literal=VITE_TAIPEIPASS_CLIENT_ID="${{ secrets.VITE_TAIPEIPASS_CLIENT_ID }}" \
+            --from-literal=VITE_TAIPEIPASS_SCOPE="${{ secrets.VITE_TAIPEIPASS_SCOPE }}" \
+            --namespace=dashboard \
+            --dry-run=client -o yaml | kubectl apply -f -
+
+      - name: Deploy Frontend only
+        run: |
+          if helm status ${{ env.RELEASE }} >/dev/null 2>&1; then
+            VALUES_FLAG="--reuse-values"
+          else
+            VALUES_FLAG="--values helm-chart/values-external-db.yaml"
+          fi
+          helm upgrade --install ${{ env.RELEASE }} ./helm-chart \
+            $VALUES_FLAG \
+            --set frontend.image.tag="${{ steps.tag.outputs.value }}" \
+            --namespace=dashboard \
+            --wait --timeout=20m \
+            --debug
