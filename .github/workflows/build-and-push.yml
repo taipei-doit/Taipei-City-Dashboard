@@ -95,6 +95,19 @@ jobs:
             --namespace=dashboard \
             --dry-run=client -o yaml | kubectl apply -f -
 
+      - name: Ensure ServiceAccount has imagePullSecrets
+        shell: bash
+        run: |
+          set -euo pipefail
+          NS="${{ env.NAMESPACE }}"
+          SA="taipei-city-dashboard"
+          if kubectl -n "$NS" get sa "$SA" >/dev/null 2>&1; then
+            echo "Patching ServiceAccount $SA to use imagePullSecret acr-secret"
+            kubectl -n "$NS" patch sa "$SA" --type merge -p '{"imagePullSecrets":[{"name":"acr-secret"}]}'
+          else
+            echo "ServiceAccount $SA not found, skip patch (chart may set imagePullSecrets itself)"
+          fi
+
       - name: Create/Update Application Secrets
         run: |
           kubectl create secret generic taipei-city-dashboard-secrets \
@@ -139,12 +152,41 @@ jobs:
             --namespace=dashboard \
             --wait --timeout=20m \
             --debug
+      - name: Dump diagnostics on failure
+        if: failure()
+        shell: bash
+        run: |
+          set +e
+          NS="${{ env.NAMESPACE }}"
+          echo "=== Objects ==="
+          kubectl -n "$NS" get deploy,rs,po,svc,hpa -o wide
+          echo
+          echo "=== Backend describe ==="
+          kubectl -n "$NS" describe deploy taipei-city-dashboard-backend || true
+          for p in $(kubectl -n "$NS" get pods -l app.kubernetes.io/name=taipei-city-dashboard-backend -o name); do
+            echo "----- $p describe -----"
+            kubectl -n "$NS" describe "$p" || true
+            echo "----- $p logs (all containers, last 400 lines) -----"
+            kubectl -n "$NS" logs "$p" --all-containers --tail=400 || true
+          done
+          echo
+          echo "=== Frontend describe ==="
+          kubectl -n "$NS" describe deploy taipei-city-dashboard-frontend || true
+          for p in $(kubectl -n "$NS" get pods -l app.kubernetes.io/name=taipei-city-dashboard-frontend -o name); do
+            echo "----- $p describe -----"
+            kubectl -n "$NS" describe "$p" || true
+            echo "----- $p logs (all containers, last 200 lines) -----"
+            kubectl -n "$NS" logs "$p" --all-containers --tail=200 || true
+          done
+          echo
+          echo "=== Recent events ==="
+          kubectl -n "$NS" get events --sort-by=.lastTimestamp | tail -n 200 || true
 
   frontend:
     needs: detect-changes
     if: (github.event_name == 'workflow_dispatch' || (github.event_name == 'pull_request' && github.event.pull_request.merged == true)) && needs.detect-changes.outputs.frontend == 'true'
     runs-on: ubuntu-latest
-    environment: sit  # 暫時移除，避免環境保護規則阻擋
+    environment: sit 
     concurrency:
       group: deploy-${{ github.ref }}
       cancel-in-progress: false
