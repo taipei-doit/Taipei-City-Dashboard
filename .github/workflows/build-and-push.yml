@@ -107,7 +107,6 @@ jobs:
           else
             echo "ServiceAccount $SA not found, skip patch (chart may set imagePullSecrets itself)"
           fi
-
       - name: Create/Update Application Secrets
         run: |
           kubectl create secret generic taipei-city-dashboard-secrets \
@@ -152,6 +151,7 @@ jobs:
             --namespace=dashboard \
             --wait --timeout=20m \
             --debug
+            
       - name: Dump diagnostics on failure
         if: failure()
         shell: bash
