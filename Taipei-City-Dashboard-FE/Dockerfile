@@ -17,6 +17,7 @@ COPY . .
 ARG NODE_ENV=production
 RUN if [ "$NODE_ENV" = "test" ]; then npm run build:test; else npm run build; fi
 
+
 # Use a lightweight node image
 FROM nginx:alpine
 

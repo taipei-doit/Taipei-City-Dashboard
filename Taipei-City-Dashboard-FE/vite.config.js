@@ -36,23 +36,24 @@ const serverConfig = isDockerCompose
     };
 
 export default defineConfig({
-  plugins: [vue(), viteCompression()],
-  build: {
-    rollupOptions: {
-      output: {
-        manualChunks(id) {
-          if (id.includes("node_modules")) {
-            return id
-              .toString()
-              .split("node_modules/")[1]
-              .split("/")[0]
-              .toString();
-          }
-        },
-      },
-    },
-    chunkSizeWarningLimit: 1600,
-  },
-  base: "/",
-  server: serverConfig,
+	plugins: [vue(), viteCompression()],
+	build: {
+		sourcemap: true,
+		rollupOptions: {
+			output: {
+				manualChunks(id) {
+					if (id.includes("node_modules")) {
+						return id
+							.toString()
+							.split("node_modules/")[1]
+							.split("/")[0]
+							.toString();
+					}
+				},
+			},
+		},
+		chunkSizeWarningLimit: 1600,
+	},
+	base: "/",
+	server: serverConfig,
 });
