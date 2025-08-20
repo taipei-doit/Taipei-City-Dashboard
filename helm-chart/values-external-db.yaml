@@ -144,17 +144,9 @@ backend:
       secretKey: "redis-host"
       optional: false
 
-externalDatabase:
-  enabled: false                              
+externalDatabase: {}
 
-externalRedis:
-  enabled: false                                # 使用外部 Redis
-  host: ""                                     # 通過 secrets 設定
-  port: "6379"
-  password: true                               # 有密碼
-  tls:
-    enabled: false
-    insecureSkipVerify: true
+externalRedis: {}
 
 # Disable in-cluster databases
 postgresql:

@@ -58,8 +58,7 @@ spec:
             - name: {{ $key }}
               value: {{ $value | quote }}
             {{- end }}
-            {{- if .Values.externalDatabase.enabled }}
-            # External Database Configuration
+            # Database configuration from secrets (always)
             - name: DB_DASHBOARD_HOST
               valueFrom:
                 secretKeyRef:
@@ -86,101 +85,49 @@ spec:
                   name: {{ include "taipei-city-dashboard.fullname" $ }}-secrets
                   key: DB_DASHBOARD_PASSWORD
             - name: DB_DASHBOARD_SSLMODE
-              value: {{ .Values.externalDatabase.dashboard.sslMode | quote }}
-            {{- if .Values.externalDatabase.manager.enabled }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "taipei-city-dashboard.fullname" $ }}-secrets
+                  key: DB_DASHBOARD_SSLMODE
+                  optional: true
+            # Manager DB (default to dashboard secrets if separate not provided)
             - name: DB_MANAGER_HOST
               valueFrom:
                 secretKeyRef:
                   name: {{ include "taipei-city-dashboard.fullname" $ }}-secrets
                   key: DB_MANAGER_HOST
+                  optional: true
             - name: DB_MANAGER_PORT
               valueFrom:
                 secretKeyRef:
                   name: {{ include "taipei-city-dashboard.fullname" $ }}-secrets
                   key: DB_MANAGER_PORT
+                  optional: true
             - name: DB_MANAGER_DBNAME
               valueFrom:
                 secretKeyRef:
                   name: {{ include "taipei-city-dashboard.fullname" $ }}-secrets
                   key: DB_MANAGER_DBNAME
+                  optional: true
             - name: DB_MANAGER_USER
               valueFrom:
                 secretKeyRef:
                   name: {{ include "taipei-city-dashboard.fullname" $ }}-secrets
                   key: DB_MANAGER_USER
+                  optional: true
             - name: DB_MANAGER_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "taipei-city-dashboard.fullname" $ }}-secrets
                   key: DB_MANAGER_PASSWORD
+                  optional: true
             - name: DB_MANAGER_SSLMODE
-              value: {{ .Values.externalDatabase.manager.sslMode | quote }}
-            {{- else }}
-            # Use same database for manager
-            - name: DB_MANAGER_HOST
               valueFrom:
                 secretKeyRef:
                   name: {{ include "taipei-city-dashboard.fullname" $ }}-secrets
-                  key: DB_DASHBOARD_HOST
-            - name: DB_MANAGER_PORT
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "taipei-city-dashboard.fullname" $ }}-secrets
-                  key: DB_DASHBOARD_PORT
-            - name: DB_MANAGER_DBNAME
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "taipei-city-dashboard.fullname" $ }}-secrets
-                  key: DB_DASHBOARD_DBNAME
-            - name: DB_MANAGER_USER
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "taipei-city-dashboard.fullname" $ }}-secrets
-                  key: DB_DASHBOARD_USER
-            - name: DB_MANAGER_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "taipei-city-dashboard.fullname" $ }}-secrets
-                  key: DB_DASHBOARD_PASSWORD
-            - name: DB_MANAGER_SSLMODE
-              value: {{ .Values.externalDatabase.dashboard.sslMode | quote }}
-            {{- end }}
-            {{- else }}
-            # In-cluster PostgreSQL Configuration
-            - name: DB_DASHBOARD_HOST
-              value: {{ include "taipei-city-dashboard.fullname" . }}-postgresql
-            - name: DB_DASHBOARD_PORT
-              value: "5432"
-            - name: DB_DASHBOARD_DBNAME
-              value: {{ .Values.postgresql.auth.database | quote }}
-            - name: DB_DASHBOARD_USER
-              value: {{ .Values.postgresql.auth.username | quote }}
-            - name: DB_DASHBOARD_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "taipei-city-dashboard.fullname" $ }}-secrets
-                  key: DB_DASHBOARD_PASSWORD
-            - name: DB_DASHBOARD_SSLMODE
-              value: "disable"
-            # Use same database for manager in cluster deployment
-            - name: DB_MANAGER_HOST
-              value: {{ include "taipei-city-dashboard.fullname" . }}-postgresql
-            - name: DB_MANAGER_PORT
-              value: "5432"
-            - name: DB_MANAGER_DBNAME
-              value: {{ .Values.postgresql.auth.database | quote }}
-            - name: DB_MANAGER_USER
-              value: {{ .Values.postgresql.auth.username | quote }}
-            - name: DB_MANAGER_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "taipei-city-dashboard.fullname" $ }}-secrets
-                  key: DB_DASHBOARD_PASSWORD
-            - name: DB_MANAGER_SSLMODE
-              value: "disable"
-            {{- end }}
-            {{- if .Values.externalRedis.enabled }}
-            # External Redis Configuration
+                  key: DB_MANAGER_SSLMODE
+                  optional: true
+            # Redis configuration from secrets (always)
             - name: REDIS_HOST
               valueFrom:
                 secretKeyRef:
@@ -196,41 +143,12 @@ spec:
                 secretKeyRef:
                   name: {{ include "taipei-city-dashboard.fullname" $ }}-secrets
                   key: REDIS_DB
-            {{- if .Values.externalRedis.password }}
             - name: REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "taipei-city-dashboard.fullname" $ }}-secrets
                   key: REDIS_PASSWORD
-            {{- else }}
-            - name: REDIS_PASSWORD
-              value: ""
-            {{- end }}
-            {{- if .Values.externalRedis.tls.enabled }}
-            - name: REDIS_TLS_ENABLED
-              value: "true"
-            - name: REDIS_TLS_INSECURE_SKIP_VERIFY
-              value: {{ .Values.externalRedis.tls.insecureSkipVerify | quote }}
-            {{- end }}
-            {{- else }}
-            # In-cluster Redis Configuration
-            - name: REDIS_HOST
-              value: {{ include "taipei-city-dashboard.fullname" . }}-redis-master
-            - name: REDIS_PORT
-              value: "6379"
-            - name: REDIS_DB
-              value: "0"
-            {{- if .Values.redis.auth.enabled }}
-            - name: REDIS_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "taipei-city-dashboard.fullname" $ }}-secrets
-                  key: REDIS_PASSWORD
-            {{- else }}
-            - name: REDIS_PASSWORD
-              value: ""
-            {{- end }}
-            {{- end }}
+                  optional: true
             {{- range .Values.backend.secretEnv }}
             {{- if not (has .name (list "DB_DASHBOARD_HOST" "DB_DASHBOARD_USER" "DB_DASHBOARD_PASSWORD" "DB_DASHBOARD_DBNAME" "DB_DASHBOARD_PORT" "DB_MANAGER_HOST" "DB_MANAGER_USER" "DB_MANAGER_PASSWORD" "DB_MANAGER_DBNAME" "DB_MANAGER_PORT" "REDIS_HOST" "REDIS_PORT" "REDIS_PASSWORD" "REDIS_DB")) }}
             - name: {{ .name }}
