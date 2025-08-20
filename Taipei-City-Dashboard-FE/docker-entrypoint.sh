@@ -15,7 +15,6 @@ envsubst '${BACKEND_URL}' < /etc/nginx/conf.d/nginx.conf.template > /tmp/nginx/d
 
 # Create main nginx config file
 cat > /tmp/nginx.conf << 'NGINXCONF'
-user nginx;
 worker_processes auto;
 error_log /var/log/nginx/error.log warn;
 pid /var/run/nginx.pid;
@@ -41,4 +40,4 @@ http {
 NGINXCONF
 
 # Start nginx with custom config
-exec nginx -c /tmp/nginx.conf
+exec nginx -c /tmp/nginx.conf -g 'daemon off;'
