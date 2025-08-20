@@ -1,0 +1,60 @@
+server {
+    listen       8081;
+    listen  [::]:8081;
+    server_name  localhost;
+
+    #access_log  /var/log/nginx/host.access.log  main;
+
+    # Security headers
+    add_header X-Frame-Options "SAMEORIGIN" always;
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header X-XSS-Protection "1; mode=block" always;
+    add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+
+    # API proxy to backend service
+    location /api/ {
+        # Only allow specific HTTP methods
+        limit_except GET POST PUT DELETE PATCH {
+            deny all;
+        }
+        
+        # Hide backend server info
+        proxy_hide_header X-Powered-By;
+        proxy_hide_header Server;
+        
+        proxy_pass ${BACKEND_URL}/v1/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_connect_timeout 30;
+        proxy_send_timeout 30;
+        proxy_read_timeout 30;
+        
+        # Remove sensitive headers from response
+        proxy_hide_header X-Powered-By;
+    }
+
+    # Serve static files
+    location / {
+        root   /usr/share/nginx/html;
+        index  index.html index.htm;
+        try_files $uri $uri/ /index.html;
+        
+        # Cache static assets
+        location ~* \.(js|css|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|eot)$ {
+            expires 1y;
+            add_header Cache-Control "public, immutable";
+        }
+    }
+    
+    # Security: Block access to sensitive files
+    location ~ /\. {
+        deny all;
+    }
+    
+    error_page   500 502 503 504  /50x.html;
+    location = /50x.html {
+        root   /usr/share/nginx/html;
+    }
+}
