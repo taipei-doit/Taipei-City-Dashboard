@@ -55,6 +55,9 @@ frontend:
     - name: VITE_API_URL
       secretKey: "vite-api-url"
       optional: true
+    - name: BACKEND_URL
+      secretKey: "backend-url"
+      optional: true
     - name: VITE_MAPBOXTILE
       secretKey: "vite-mapbox-tile"
       optional: true

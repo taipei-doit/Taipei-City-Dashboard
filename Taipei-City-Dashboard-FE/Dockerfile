@@ -1,5 +1,5 @@
 # Start with a base image
-FROM node:21-slim as builder
+FROM node:21-slim AS builder
 
 # Set the working directory inside the container
 WORKDIR /app
@@ -22,13 +22,15 @@ FROM nginx:alpine
 
 # Copy the built files from the builder stage to the nginx server
 COPY --from=builder /app/dist /usr/share/nginx/html
+
+# Copy nginx template and entrypoint script
 COPY nginx.conf.template /etc/nginx/conf.d/nginx.conf.template
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 
 # Make entrypoint script executable
 RUN chmod +x /docker-entrypoint.sh
 
-# Expose port 80
+# Expose port
 EXPOSE 8081
 
 # Use custom entrypoint

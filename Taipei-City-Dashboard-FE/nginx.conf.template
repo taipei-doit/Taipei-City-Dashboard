@@ -3,8 +3,6 @@ server {
     listen  [::]:8081;
     server_name  localhost;
 
-    #access_log  /var/log/nginx/host.access.log  main;
-
     # Security headers
     add_header X-Frame-Options "SAMEORIGIN" always;
     add_header X-Content-Type-Options "nosniff" always;
