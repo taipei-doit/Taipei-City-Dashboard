@@ -27,8 +27,9 @@ COPY --from=builder /app/dist /usr/share/nginx/html
 COPY nginx.conf.template /etc/nginx/conf.d/nginx.conf.template
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 
-# Make entrypoint script executable
-RUN chmod +x /docker-entrypoint.sh
+# Make entrypoint executable and ensure envsubst is available
+RUN chmod +x /docker-entrypoint.sh && \
+    apk add --no-cache gettext
 
 # Expose port
 EXPOSE 8081
