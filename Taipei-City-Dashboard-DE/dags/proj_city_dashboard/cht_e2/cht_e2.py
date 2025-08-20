@@ -45,7 +45,6 @@ def _cht_e2(**kwargs):
             logging.error(f"Request failed for stay_mins={mins} with status code {resp.status_code}. Response: {resp.text}")
             continue
             
-    
         res = resp.json()
         if res['status'] == 1:
             data = res.get("data", [])
@@ -57,11 +56,19 @@ def _cht_e2(**kwargs):
                 df['msg'] = res['msg']
                 df["stay_mins"] = mins  # 添加停留時間作為欄位
                 data_frames.append(df)
-            combined_df = pd.concat(data_frames, ignore_index=True)
-            logging.info(combined_df.head)
-
+                logging.info(f"Successfully collected data for stay_mins={mins}, rows: {len(df)}")
         else:
-            return res
+            logging.warning(f"API returned status {res['status']} for stay_mins={mins}. Message: {res.get('msg', 'No message')}")
+
+    # 檢查是否有收集到任何資料
+    if not data_frames:
+        logging.error("No data frames collected. All API requests failed or returned no data.")
+        return {"status": "error", "message": "No data collected"}
+
+    # 合併所有收集到的資料
+    combined_df = pd.concat(data_frames, ignore_index=True)
+    logging.info(f"Combined dataframe shape: {combined_df.shape}")
+    logging.info(combined_df.head())
 
     # Load
     engine = create_engine(ready_data_db_uri)
