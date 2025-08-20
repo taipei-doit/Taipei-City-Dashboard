@@ -37,6 +37,6 @@ RUN mkdir -p /var/cache/nginx/client_temp && \
 # Switch to non-root user
 USER nginx
 
-EXPOSE 80
+EXPOSE 8081
 
 CMD ["nginx", "-g", "daemon off;"]

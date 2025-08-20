@@ -44,6 +44,10 @@ frontend:
     REDIS_DB: 0
     DB_MANAGER_PORT: 5432
     DB_DASHBOARD_PORT: 5432
+  service:
+    type: ClusterIP
+    port: 80
+    targetPort: 8081
 
   # Frontend secret env from Secret (all optional)
   secretEnv:
