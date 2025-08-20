@@ -40,10 +40,7 @@ frontend:
     NODE_ENV: "sit"
     VITE_APP_TITLE: "Taipei City Dashboard"
     VITE_APP_VERSION: "2.2.0"
-    REDIS_PORT: 6379
-    REDIS_DB: 0
-    DB_MANAGER_PORT: 5432
-    DB_DASHBOARD_PORT: 5432
+
   service:
     type: ClusterIP
     port: 80
@@ -96,6 +93,24 @@ backend:
   env:
     GIN_MODE: "release"
     GIN_PORT: "8080"
+    # Note: DB/Redis ports are now configured via values below and can be overridden by GitHub Secrets
+    # Keep only app-specific vars here.
+
+  # Backend connection defaults (used unless overridden by GitHub Secrets)
+  db:
+    dashboard:
+      port: 5432
+    manager:
+      port: 5432
+  redis:
+    port: 6379
+    db: 0
+
+  # Control whether to read these fields from secrets instead of values
+  useSecretDbDashboardPort: false
+  useSecretDbManagerPort: false
+  useSecretRedisPort: false
+  useSecretRedisDb: false
   # Backend secret env from Secret (all optional)
   secretEnv:
     - name: GIN_DOMAIN

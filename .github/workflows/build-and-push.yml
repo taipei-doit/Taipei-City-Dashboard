@@ -11,6 +11,7 @@ env:
   RELEASE: taipei-city-dashboard
   BE_IMAGE: taipei-city-dashboard-be
   FE_IMAGE: taipei-city-dashboard-fe
+  NAMESPACE: dashboard
 
 jobs:
   detect-changes:
@@ -109,48 +110,88 @@ jobs:
           fi
 
       - name: Create/Update Application Secrets
+        env:
+          SEC_DB_DASHBOARD_HOST: ${{ secrets.DB_DASHBOARD_HOST }}
+          SEC_DB_DASHBOARD_PASSWORD: ${{ secrets.DB_DASHBOARD_PASSWORD }}
+          SEC_DB_DASHBOARD_USER: ${{ secrets.DB_DASHBOARD_USER }}
+          SEC_DB_DASHBOARD_DBNAME: ${{ secrets.DB_DASHBOARD_DBNAME }}
+          SEC_DB_DASHBOARD_PORT: ${{ secrets.DB_DASHBOARD_PORT }}
+          SEC_DB_MANAGER_PORT: ${{ secrets.DB_MANAGER_PORT }}
+          SEC_REDIS_HOST: ${{ secrets.REDIS_HOST }}
+          SEC_REDIS_PASSWORD: ${{ secrets.REDIS_PASSWORD }}
+          SEC_REDIS_PORT: ${{ secrets.REDIS_PORT }}
+          SEC_REDIS_DB: ${{ secrets.REDIS_DB }}
+          SEC_JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          SEC_GIN_DOMAIN: ${{ secrets.GIN_DOMAIN }}
+          SEC_VITE_API_URL: ${{ secrets.VITE_API_URL }}
+          SEC_VITE_MAPBOX_TOKEN: ${{ secrets.VITE_MAPBOX_TOKEN }}
+          SEC_IDNO_SALT: ${{ secrets.IDNO_SALT }}
+          SEC_ISSO_CLIENT_ID: ${{ secrets.ISSO_CLIENT_ID }}
+          SEC_ISSO_CLIENT_SECRET: ${{ secrets.ISSO_CLIENT_SECRET }}
+          SEC_VITE_MAPBOXTILE: ${{ secrets.VITE_MAPBOXTILE }}
+          SEC_VITE_TAIPEIPASS_URL: ${{ secrets.VITE_TAIPEIPASS_URL }}
+          SEC_VITE_TAIPEIPASS_CLIENT_ID: ${{ secrets.VITE_TAIPEIPASS_CLIENT_ID }}
+          SEC_VITE_TAIPEIPASS_SCOPE: ${{ secrets.VITE_TAIPEIPASS_SCOPE }}
         run: |
-          kubectl create secret generic taipei-city-dashboard-secrets \
-            --from-literal=DB_DASHBOARD_HOST="${{ secrets.DB_DASHBOARD_HOST }}" \
-            --from-literal=DB_DASHBOARD_PASSWORD="${{ secrets.DB_DASHBOARD_PASSWORD }}" \
-            --from-literal=DB_DASHBOARD_USER="${{ secrets.DB_DASHBOARD_USER }}" \
-            --from-literal=DB_DASHBOARD_DBNAME="${{ secrets.DB_DASHBOARD_DBNAME }}" \
-            --from-literal=DB_DASHBOARD_PORT="${{ secrets.DB_DASHBOARD_PORT }}" \
-            --from-literal=DB_MANAGER_HOST="${{ secrets.DB_DASHBOARD_HOST }}" \
-            --from-literal=DB_MANAGER_PASSWORD="${{ secrets.DB_DASHBOARD_PASSWORD }}" \
-            --from-literal=DB_MANAGER_USER="${{ secrets.DB_DASHBOARD_USER }}" \
-            --from-literal=DB_MANAGER_DBNAME="${{ secrets.DB_DASHBOARD_DBNAME }}" \
-            --from-literal=DB_MANAGER_PORT="${{ secrets.DB_DASHBOARD_PORT }}" \
-            --from-literal=REDIS_HOST="${{ secrets.REDIS_HOST }}" \
-            --from-literal=REDIS_PASSWORD="${{ secrets.REDIS_PASSWORD }}" \
-            --from-literal=REDIS_PORT="6379" \
-            --from-literal=REDIS_DB="0" \
-            --from-literal=JWT_SECRET="${{ secrets.JWT_SECRET }}" \
-            --from-literal=GIN_DOMAIN="${{ secrets.GIN_DOMAIN }}" \
-            --from-literal=VITE_API_URL="${{ secrets.VITE_API_URL }}" \
-            --from-literal=VITE_MAPBOXTOKEN="${{ secrets.VITE_MAPBOX_TOKEN }}" \
-            --from-literal=IDNO_SALT="${{ secrets.IDNO_SALT }}" \
-            --from-literal=ISSO_CLIENT_ID="${{ secrets.ISSO_CLIENT_ID }}" \
-            --from-literal=ISSO_CLIENT_SECRET="${{ secrets.ISSO_CLIENT_SECRET }}" \
-            --from-literal=VITE_MAPBOXTILE="${{ secrets.VITE_MAPBOXTILE }}" \
-            --from-literal=VITE_TAIPEIPASS_URL="${{ secrets.VITE_TAIPEIPASS_URL }}" \
-            --from-literal=VITE_TAIPEIPASS_CLIENT_ID="${{ secrets.VITE_TAIPEIPASS_CLIENT_ID }}" \
-            --from-literal=VITE_TAIPEIPASS_SCOPE="${{ secrets.VITE_TAIPEIPASS_SCOPE }}" \
-            --namespace=dashboard \
-            --dry-run=client -o yaml | kubectl apply -f -
+          # Default DB/Redis ports if secrets are missing
+          DB_PORT="$SEC_DB_DASHBOARD_PORT"
+          if [ -z "$DB_PORT" ]; then DB_PORT="5432"; fi
+          MANAGER_PORT="$SEC_DB_MANAGER_PORT"
+          if [ -z "$MANAGER_PORT" ]; then MANAGER_PORT="$DB_PORT"; fi
+          REDIS_PORT_VAL="$SEC_REDIS_PORT"
+          if [ -z "$REDIS_PORT_VAL" ]; then REDIS_PORT_VAL="6379"; fi
+          REDIS_DB_VAL="$SEC_REDIS_DB"
+          if [ -z "$REDIS_DB_VAL" ]; then REDIS_DB_VAL="0"; fi
+          # Build secret args conditionally so only provided secrets override defaults
+          ARGS=(create secret generic taipei-city-dashboard-secrets)
+          [ -n "$SEC_DB_DASHBOARD_HOST" ] && ARGS+=(--from-literal=DB_DASHBOARD_HOST="$SEC_DB_DASHBOARD_HOST")
+          [ -n "$SEC_DB_DASHBOARD_PASSWORD" ] && ARGS+=(--from-literal=DB_DASHBOARD_PASSWORD="$SEC_DB_DASHBOARD_PASSWORD")
+          [ -n "$SEC_DB_DASHBOARD_USER" ] && ARGS+=(--from-literal=DB_DASHBOARD_USER="$SEC_DB_DASHBOARD_USER")
+          [ -n "$SEC_DB_DASHBOARD_DBNAME" ] && ARGS+=(--from-literal=DB_DASHBOARD_DBNAME="$SEC_DB_DASHBOARD_DBNAME")
+          [ -n "$SEC_DB_DASHBOARD_PORT" ] && ARGS+=(--from-literal=DB_DASHBOARD_PORT="$DB_PORT")
+          [ -n "$SEC_DB_DASHBOARD_HOST" ] && ARGS+=(--from-literal=DB_MANAGER_HOST="$SEC_DB_DASHBOARD_HOST")
+          [ -n "$SEC_DB_DASHBOARD_PASSWORD" ] && ARGS+=(--from-literal=DB_MANAGER_PASSWORD="$SEC_DB_DASHBOARD_PASSWORD")
+          [ -n "$SEC_DB_DASHBOARD_USER" ] && ARGS+=(--from-literal=DB_MANAGER_USER="$SEC_DB_DASHBOARD_USER")
+          [ -n "$SEC_DB_DASHBOARD_DBNAME" ] && ARGS+=(--from-literal=DB_MANAGER_DBNAME="$SEC_DB_DASHBOARD_DBNAME")
+          [ -n "$SEC_DB_MANAGER_PORT" ] && ARGS+=(--from-literal=DB_MANAGER_PORT="$MANAGER_PORT")
+          [ -n "$SEC_REDIS_HOST" ] && ARGS+=(--from-literal=REDIS_HOST="$SEC_REDIS_HOST")
+          [ -n "$SEC_REDIS_PASSWORD" ] && ARGS+=(--from-literal=REDIS_PASSWORD="$SEC_REDIS_PASSWORD")
+          [ -n "$SEC_REDIS_PORT" ] && ARGS+=(--from-literal=REDIS_PORT="$REDIS_PORT_VAL")
+          [ -n "$SEC_REDIS_DB" ] && ARGS+=(--from-literal=REDIS_DB="$REDIS_DB_VAL")
+          [ -n "$SEC_JWT_SECRET" ] && ARGS+=(--from-literal=JWT_SECRET="$SEC_JWT_SECRET")
+          [ -n "$SEC_GIN_DOMAIN" ] && ARGS+=(--from-literal=GIN_DOMAIN="$SEC_GIN_DOMAIN")
+          [ -n "$SEC_VITE_API_URL" ] && ARGS+=(--from-literal=VITE_API_URL="$SEC_VITE_API_URL")
+          [ -n "$SEC_VITE_MAPBOX_TOKEN" ] && ARGS+=(--from-literal=VITE_MAPBOXTOKEN="$SEC_VITE_MAPBOX_TOKEN")
+          [ -n "$SEC_IDNO_SALT" ] && ARGS+=(--from-literal=IDNO_SALT="$SEC_IDNO_SALT")
+          [ -n "$SEC_ISSO_CLIENT_ID" ] && ARGS+=(--from-literal=ISSO_CLIENT_ID="$SEC_ISSO_CLIENT_ID")
+          [ -n "$SEC_ISSO_CLIENT_SECRET" ] && ARGS+=(--from-literal=ISSO_CLIENT_SECRET="$SEC_ISSO_CLIENT_SECRET")
+          [ -n "$SEC_VITE_MAPBOXTILE" ] && ARGS+=(--from-literal=VITE_MAPBOXTILE="$SEC_VITE_MAPBOXTILE")
+          [ -n "$SEC_VITE_TAIPEIPASS_URL" ] && ARGS+=(--from-literal=VITE_TAIPEIPASS_URL="$SEC_VITE_TAIPEIPASS_URL")
+          [ -n "$SEC_VITE_TAIPEIPASS_CLIENT_ID" ] && ARGS+=(--from-literal=VITE_TAIPEIPASS_CLIENT_ID="$SEC_VITE_TAIPEIPASS_CLIENT_ID")
+          [ -n "$SEC_VITE_TAIPEIPASS_SCOPE" ] && ARGS+=(--from-literal=VITE_TAIPEIPASS_SCOPE="$SEC_VITE_TAIPEIPASS_SCOPE")
+          ARGS+=(--namespace="${{ env.NAMESPACE }}" --dry-run=client -o yaml)
+          kubectl "${ARGS[@]}" | kubectl apply -f -
 
       - name: Deploy Backend only
+        env:
+          SEC_DB_DASHBOARD_PORT: ${{ secrets.DB_DASHBOARD_PORT }}
+          SEC_DB_MANAGER_PORT: ${{ secrets.DB_MANAGER_PORT }}
+          SEC_REDIS_PORT: ${{ secrets.REDIS_PORT }}
+          SEC_REDIS_DB: ${{ secrets.REDIS_DB }}
         run: |
-          if helm status ${{ env.RELEASE }} >/dev/null 2>&1; then
-            VALUES_FLAG="--reuse-values"
-          else
-            VALUES_FLAG="--values helm-chart/values-external-db.yaml"
-          fi
+          # Always include values file for defaults; compute secret override flags if secrets exist
+          VALUES_FLAG="--values helm-chart/values-external-db.yaml"
+          HELM_SET=""
+          if [ -n "$SEC_DB_DASHBOARD_PORT" ]; then HELM_SET+=" --set backend.useSecretDbDashboardPort=true"; fi
+          if [ -n "$SEC_DB_MANAGER_PORT" ]; then HELM_SET+=" --set backend.useSecretDbManagerPort=true"; fi
+          if [ -n "$SEC_REDIS_PORT" ]; then HELM_SET+=" --set backend.useSecretRedisPort=true"; fi
+          if [ -n "$SEC_REDIS_DB" ]; then HELM_SET+=" --set backend.useSecretRedisDb=true"; fi
           helm upgrade --install ${{ env.RELEASE }} ./helm-chart \
             $VALUES_FLAG \
+            $HELM_SET \
             --set backend.image.tag="${{ steps.tag.outputs.value }}" \
             --set frontend.image.tag="${{ steps.tag.outputs.value }}" \
-            --namespace=dashboard \
+            --namespace="${{ env.NAMESPACE }}" \
             --wait --timeout=20m \
             --debug
       - name: Dump diagnostics on failure
@@ -269,15 +310,11 @@ jobs:
 
       - name: Deploy Frontend only
         run: |
-          if helm status ${{ env.RELEASE }} >/dev/null 2>&1; then
-            VALUES_FLAG="--reuse-values"
-          else
-            VALUES_FLAG="--values helm-chart/values-external-db.yaml"
-          fi
+          VALUES_FLAG="--values helm-chart/values-external-db.yaml"
           helm upgrade --install ${{ env.RELEASE }} ./helm-chart \
             $VALUES_FLAG \
             --set frontend.image.tag="${{ steps.tag.outputs.value }}" \
             --set backend.image.tag="${{ steps.tag.outputs.value }}" \
-            --namespace=dashboard \
+            --namespace="${{ env.NAMESPACE }}" \
             --wait --timeout=20m \
             --debug

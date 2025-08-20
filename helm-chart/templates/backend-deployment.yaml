@@ -58,17 +58,37 @@ spec:
             - name: {{ $key }}
               value: {{ $value | quote }}
             {{- end }}
+            # Defaults from values when not overridden by secrets
+            {{- if not .Values.backend.useSecretDbDashboardPort }}
+            - name: DB_DASHBOARD_PORT
+              value: {{ default 5432 .Values.backend.db.dashboard.port | quote }}
+            {{- end }}
+            {{- if not .Values.backend.useSecretDbManagerPort }}
+            - name: DB_MANAGER_PORT
+              value: {{ default 5432 .Values.backend.db.manager.port | quote }}
+            {{- end }}
+            {{- if not .Values.backend.useSecretRedisPort }}
+            - name: REDIS_PORT
+              value: {{ default 6379 .Values.backend.redis.port | quote }}
+            {{- end }}
+            {{- if not .Values.backend.useSecretRedisDb }}
+            - name: REDIS_DB
+              value: {{ default 0 .Values.backend.redis.db | quote }}
+            {{- end }}
             # Database configuration from secrets (always)
             - name: DB_DASHBOARD_HOST
               valueFrom:
                 secretKeyRef:
                   name: {{ include "taipei-city-dashboard.fullname" $ }}-secrets
                   key: DB_DASHBOARD_HOST
+            {{- if .Values.backend.useSecretDbDashboardPort }}
             - name: DB_DASHBOARD_PORT
               valueFrom:
                 secretKeyRef:
                   name: {{ include "taipei-city-dashboard.fullname" $ }}-secrets
                   key: DB_DASHBOARD_PORT
+                  optional: true
+            {{- end }}
             - name: DB_DASHBOARD_DBNAME
               valueFrom:
                 secretKeyRef:
@@ -97,12 +117,14 @@ spec:
                   name: {{ include "taipei-city-dashboard.fullname" $ }}-secrets
                   key: DB_MANAGER_HOST
                   optional: true
+            {{- if .Values.backend.useSecretDbManagerPort }}
             - name: DB_MANAGER_PORT
               valueFrom:
                 secretKeyRef:
                   name: {{ include "taipei-city-dashboard.fullname" $ }}-secrets
                   key: DB_MANAGER_PORT
                   optional: true
+            {{- end }}
             - name: DB_MANAGER_DBNAME
               valueFrom:
                 secretKeyRef:
@@ -133,16 +155,22 @@ spec:
                 secretKeyRef:
                   name: {{ include "taipei-city-dashboard.fullname" $ }}-secrets
                   key: REDIS_HOST
+            {{- if .Values.backend.useSecretRedisPort }}
             - name: REDIS_PORT
               valueFrom:
                 secretKeyRef:
                   name: {{ include "taipei-city-dashboard.fullname" $ }}-secrets
                   key: REDIS_PORT
+                  optional: true
+            {{- end }}
+            {{- if .Values.backend.useSecretRedisDb }}
             - name: REDIS_DB
               valueFrom:
                 secretKeyRef:
                   name: {{ include "taipei-city-dashboard.fullname" $ }}-secrets
                   key: REDIS_DB
+                  optional: true
+            {{- end }}
             - name: REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:
