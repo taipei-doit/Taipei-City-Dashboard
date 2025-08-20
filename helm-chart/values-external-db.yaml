@@ -181,25 +181,7 @@ serviceAccount:
 
 # Ingress configuration
 ingress:
-  enabled: false  # Disable ingress for local development
-  className: "nginx"
-  annotations:
-    nginx.ingress.kubernetes.io/ssl-redirect: "true"
-    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-    cert-manager.io/cluster-issuer: "letsencrypt-prod"
-  hosts:
-    - host: your-dashboard-domain.com           # Replace with your domain
-      paths:
-        - path: /
-          pathType: Prefix
-          service: frontend
-        - path: /api
-          pathType: Prefix
-          service: backend
-  tls:
-    - secretName: dashboard-tls
-      hosts:
-        - your-dashboard-domain.com
+  enabled: false  # Disabled: using Azure Application Gateway (no K8s Ingress resources)
 
 # Autoscaling
 autoscaling:
