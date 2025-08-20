@@ -63,10 +63,14 @@ spec:
             - name: DB_DASHBOARD_PORT
               value: {{ default 5432 .Values.backend.db.dashboard.port | quote }}
             {{- end }}
+            - name: DB_DASHBOARD_SSLMODE
+              value: {{ default "require" .Values.backend.db.dashboard.sslmode | quote }}
             {{- if not .Values.backend.useSecretDbManagerPort }}
             - name: DB_MANAGER_PORT
               value: {{ default 5432 .Values.backend.db.manager.port | quote }}
             {{- end }}
+            - name: DB_MANAGER_SSLMODE
+              value: {{ default "require" .Values.backend.db.manager.sslmode | quote }}
             {{- if not .Values.backend.useSecretRedisPort }}
             - name: REDIS_PORT
               value: {{ default 6379 .Values.backend.redis.port | quote }}

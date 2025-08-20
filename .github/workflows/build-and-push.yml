@@ -297,16 +297,23 @@ jobs:
             --dry-run=client -o yaml | kubectl apply -f -
 
       - name: Create/Update Application Secrets
+        env:
+          SEC_VITE_API_URL: ${{ secrets.VITE_API_URL }}
+          SEC_VITE_MAPBOX_TOKEN: ${{ secrets.VITE_MAPBOX_TOKEN }}
+          SEC_VITE_MAPBOXTILE: ${{ secrets.VITE_MAPBOXTILE }}
+          SEC_VITE_TAIPEIPASS_URL: ${{ secrets.VITE_TAIPEIPASS_URL }}
+          SEC_VITE_TAIPEIPASS_CLIENT_ID: ${{ secrets.VITE_TAIPEIPASS_CLIENT_ID }}
+          SEC_VITE_TAIPEIPASS_SCOPE: ${{ secrets.VITE_TAIPEIPASS_SCOPE }}
         run: |
-          kubectl create secret generic taipei-city-dashboard-secrets \
-            --from-literal=VITE_API_URL="${{ secrets.VITE_API_URL }}" \
-            --from-literal=VITE_MAPBOXTOKEN="${{ secrets.VITE_MAPBOX_TOKEN }}" \
-            --from-literal=VITE_MAPBOXTILE="${{ secrets.VITE_MAPBOXTILE }}" \
-            --from-literal=VITE_TAIPEIPASS_URL="${{ secrets.VITE_TAIPEIPASS_URL }}" \
-            --from-literal=VITE_TAIPEIPASS_CLIENT_ID="${{ secrets.VITE_TAIPEIPASS_CLIENT_ID }}" \
-            --from-literal=VITE_TAIPEIPASS_SCOPE="${{ secrets.VITE_TAIPEIPASS_SCOPE }}" \
-            --namespace=dashboard \
-            --dry-run=client -o yaml | kubectl apply -f -
+          ARGS=(create secret generic taipei-city-dashboard-secrets)
+          [ -n "$SEC_VITE_API_URL" ] && ARGS+=(--from-literal=VITE_API_URL="$SEC_VITE_API_URL")
+          [ -n "$SEC_VITE_MAPBOX_TOKEN" ] && ARGS+=(--from-literal=VITE_MAPBOXTOKEN="$SEC_VITE_MAPBOX_TOKEN")
+          [ -n "$SEC_VITE_MAPBOXTILE" ] && ARGS+=(--from-literal=VITE_MAPBOXTILE="$SEC_VITE_MAPBOXTILE")
+          [ -n "$SEC_VITE_TAIPEIPASS_URL" ] && ARGS+=(--from-literal=VITE_TAIPEIPASS_URL="$SEC_VITE_TAIPEIPASS_URL")
+          [ -n "$SEC_VITE_TAIPEIPASS_CLIENT_ID" ] && ARGS+=(--from-literal=VITE_TAIPEIPASS_CLIENT_ID="$SEC_VITE_TAIPEIPASS_CLIENT_ID")
+          [ -n "$SEC_VITE_TAIPEIPASS_SCOPE" ] && ARGS+=(--from-literal=VITE_TAIPEIPASS_SCOPE="$SEC_VITE_TAIPEIPASS_SCOPE")
+          ARGS+=(--namespace="${{ env.NAMESPACE }}" --dry-run=client -o yaml)
+          kubectl "${ARGS[@]}" | kubectl apply -f -
 
       - name: Deploy Frontend only
         run: |

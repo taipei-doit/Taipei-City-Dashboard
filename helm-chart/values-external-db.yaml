@@ -100,8 +100,10 @@ backend:
   db:
     dashboard:
       port: 5432
+  sslmode: require
     manager:
       port: 5432
+  sslmode: require
   redis:
     port: 6379
     db: 0
