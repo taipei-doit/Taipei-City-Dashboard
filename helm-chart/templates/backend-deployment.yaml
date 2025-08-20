@@ -58,7 +58,6 @@ spec:
             - name: {{ $key }}
               value: {{ $value | quote }}
             {{- end }}
-            # Defaults from values when not overridden by secrets
             {{- if not .Values.backend.useSecretDbDashboardPort }}
             - name: DB_DASHBOARD_PORT
               value: {{ default 5432 .Values.backend.db.dashboard.port | quote }}
@@ -108,12 +107,6 @@ spec:
                 secretKeyRef:
                   name: {{ include "taipei-city-dashboard.fullname" $ }}-secrets
                   key: DB_DASHBOARD_PASSWORD
-            - name: DB_DASHBOARD_SSLMODE
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "taipei-city-dashboard.fullname" $ }}-secrets
-                  key: DB_DASHBOARD_SSLMODE
-                  optional: true
             # Manager DB (default to dashboard secrets if separate not provided)
             - name: DB_MANAGER_HOST
               valueFrom:
@@ -146,12 +139,6 @@ spec:
                 secretKeyRef:
                   name: {{ include "taipei-city-dashboard.fullname" $ }}-secrets
                   key: DB_MANAGER_PASSWORD
-                  optional: true
-            - name: DB_MANAGER_SSLMODE
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "taipei-city-dashboard.fullname" $ }}-secrets
-                  key: DB_MANAGER_SSLMODE
                   optional: true
             # Redis configuration from secrets (always)
             - name: REDIS_HOST

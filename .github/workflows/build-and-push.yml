@@ -298,15 +298,23 @@ jobs:
           SEC_VITE_TAIPEIPASS_CLIENT_ID: ${{ secrets.VITE_TAIPEIPASS_CLIENT_ID }}
           SEC_VITE_TAIPEIPASS_SCOPE: ${{ secrets.VITE_TAIPEIPASS_SCOPE }}
         run: |
-          ARGS=(create secret generic taipei-city-dashboard-secrets)
-          [ -n "$SEC_VITE_API_URL" ] && ARGS+=(--from-literal=VITE_API_URL="$SEC_VITE_API_URL")
-          [ -n "$SEC_VITE_MAPBOX_TOKEN" ] && ARGS+=(--from-literal=VITE_MAPBOXTOKEN="$SEC_VITE_MAPBOX_TOKEN")
-          [ -n "$SEC_VITE_MAPBOXTILE" ] && ARGS+=(--from-literal=VITE_MAPBOXTILE="$SEC_VITE_MAPBOXTILE")
-          [ -n "$SEC_VITE_TAIPEIPASS_URL" ] && ARGS+=(--from-literal=VITE_TAIPEIPASS_URL="$SEC_VITE_TAIPEIPASS_URL")
-          [ -n "$SEC_VITE_TAIPEIPASS_CLIENT_ID" ] && ARGS+=(--from-literal=VITE_TAIPEIPASS_CLIENT_ID="$SEC_VITE_TAIPEIPASS_CLIENT_ID")
-          [ -n "$SEC_VITE_TAIPEIPASS_SCOPE" ] && ARGS+=(--from-literal=VITE_TAIPEIPASS_SCOPE="$SEC_VITE_TAIPEIPASS_SCOPE")
-          ARGS+=(--namespace="${{ env.NAMESPACE }}" --dry-run=client -o yaml)
-          kubectl "${ARGS[@]}" | kubectl apply -f -
+          # Update existing secret with frontend-specific values using kubectl patch
+          PATCH_DATA='{}'
+          
+          [ -n "$SEC_VITE_API_URL" ] && PATCH_DATA=$(echo "$PATCH_DATA" | jq --arg val "$(echo -n "$SEC_VITE_API_URL" | base64)" '.data.VITE_API_URL = $val')
+          [ -n "$SEC_VITE_MAPBOX_TOKEN" ] && PATCH_DATA=$(echo "$PATCH_DATA" | jq --arg val "$(echo -n "$SEC_VITE_MAPBOX_TOKEN" | base64)" '.data.VITE_MAPBOXTOKEN = $val')
+          [ -n "$SEC_VITE_MAPBOXTILE" ] && PATCH_DATA=$(echo "$PATCH_DATA" | jq --arg val "$(echo -n "$SEC_VITE_MAPBOXTILE" | base64)" '.data.VITE_MAPBOXTILE = $val')
+          [ -n "$SEC_VITE_TAIPEIPASS_URL" ] && PATCH_DATA=$(echo "$PATCH_DATA" | jq --arg val "$(echo -n "$SEC_VITE_TAIPEIPASS_URL" | base64)" '.data.VITE_TAIPEIPASS_URL = $val')
+          [ -n "$SEC_VITE_TAIPEIPASS_CLIENT_ID" ] && PATCH_DATA=$(echo "$PATCH_DATA" | jq --arg val "$(echo -n "$SEC_VITE_TAIPEIPASS_CLIENT_ID" | base64)" '.data.VITE_TAIPEIPASS_CLIENT_ID = $val')
+          [ -n "$SEC_VITE_TAIPEIPASS_SCOPE" ] && PATCH_DATA=$(echo "$PATCH_DATA" | jq --arg val "$(echo -n "$SEC_VITE_TAIPEIPASS_SCOPE" | base64)" '.data.VITE_TAIPEIPASS_SCOPE = $val')
+          
+          # Only patch if we have data to add
+          if [ "$PATCH_DATA" != '{}' ]; then
+            echo "Patching secret with frontend data: $PATCH_DATA"
+            kubectl patch secret taipei-city-dashboard-secrets -n dashboard --patch "$PATCH_DATA" --type merge
+          else
+            echo "No frontend secrets to add"
+          fi
 
       - name: Deploy Frontend only
         run: |
