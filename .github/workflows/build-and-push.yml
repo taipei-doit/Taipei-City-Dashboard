@@ -1,9 +1,8 @@
 name: Build and Deploy
 
 on:
-  pull_request:
-    branches: ["main", "sit"]
-    types: [closed]
+  push:
+    branches: ["sit", "develop"]
   workflow_dispatch:
 
 env:
@@ -15,7 +14,7 @@ env:
 
 jobs:
   detect-changes:
-    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'pull_request' && github.event.pull_request.merged == true)
+    if: github.event_name == 'workflow_dispatch' || github.event_name == 'push'
     runs-on: ubuntu-latest
     outputs:
       backend: "true"
@@ -26,7 +25,7 @@ jobs:
 
   backend:
     needs: detect-changes
-    if: (github.event_name == 'workflow_dispatch' || (github.event_name == 'pull_request' && github.event.pull_request.merged == true)) && needs.detect-changes.outputs.backend == 'true'
+    if: (github.event_name == 'workflow_dispatch' || github.event_name == 'push') && needs.detect-changes.outputs.backend == 'true'
     runs-on: ubuntu-latest
     environment: sit  # 暫時移除，避免環境保護規則阻擋
     concurrency:
@@ -48,12 +47,9 @@ jobs:
 
       - name: Compute image tag
         id: tag
-        env:
-          BASE: ${{ github.event.pull_request.base.ref }}
-          MERGE_SHA: ${{ github.event.pull_request.merge_commit_sha }}
         run: |
-          BRANCH="${BASE:-$GITHUB_REF_NAME}"
-          SHA="${MERGE_SHA:-$GITHUB_SHA}"
+          BRANCH="${GITHUB_REF_NAME}"
+          SHA="${GITHUB_SHA}"
           echo "value=${BRANCH}-$(echo ${SHA} | cut -c1-8)" >> $GITHUB_OUTPUT
 
       - name: Build and push Backend
@@ -226,7 +222,7 @@ jobs:
 
   frontend:
     needs: detect-changes
-    if: (github.event_name == 'workflow_dispatch' || (github.event_name == 'pull_request' && github.event.pull_request.merged == true)) && needs.detect-changes.outputs.frontend == 'true'
+    if: (github.event_name == 'workflow_dispatch' || github.event_name == 'push') && needs.detect-changes.outputs.frontend == 'true'
     runs-on: ubuntu-latest
     environment: sit 
     concurrency:
@@ -248,12 +244,9 @@ jobs:
 
       - name: Compute image tag
         id: tag
-        env:
-          BASE: ${{ github.event.pull_request.base.ref }}
-          MERGE_SHA: ${{ github.event.pull_request.merge_commit_sha }}
         run: |
-          BRANCH="${BASE:-$GITHUB_REF_NAME}"
-          SHA="${MERGE_SHA:-$GITHUB_SHA}"
+          BRANCH="${GITHUB_REF_NAME}"
+          SHA="${GITHUB_SHA}"
           echo "value=${BRANCH}-$(echo ${SHA} | cut -c1-8)" >> $GITHUB_OUTPUT
 
       - name: Build and push Frontend
