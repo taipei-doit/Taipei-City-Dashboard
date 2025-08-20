@@ -38,8 +38,10 @@ frontend:
   # Frontend environment variables (update these values)
   env:
     NODE_ENV: "sit"
-    VITE_APP_TITLE: "Taipei City Dashboard"
-    VITE_APP_VERSION: "2.2.0"
+    VITE_APP_TITLE: "Taipei City Dashboard SIT"
+    VITE_APP_VERSION: "3.1.0"
+    VITE_API_URL: "/api/v1"
+    
 
   service:
     type: ClusterIP
