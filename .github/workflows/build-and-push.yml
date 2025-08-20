@@ -292,6 +292,7 @@ jobs:
       - name: Create/Update Application Secrets
         env:
           SEC_VITE_API_URL: ${{ secrets.VITE_API_URL }}
+          SEC_BACKEND_URL: ${{ secrets.BACKEND_URL }}
           SEC_VITE_MAPBOX_TOKEN: ${{ secrets.VITE_MAPBOX_TOKEN }}
           SEC_VITE_MAPBOXTILE: ${{ secrets.VITE_MAPBOXTILE }}
           SEC_VITE_TAIPEIPASS_URL: ${{ secrets.VITE_TAIPEIPASS_URL }}
@@ -302,6 +303,7 @@ jobs:
           PATCH_DATA='{}'
           
           [ -n "$SEC_VITE_API_URL" ] && PATCH_DATA=$(echo "$PATCH_DATA" | jq --arg val "$(echo -n "$SEC_VITE_API_URL" | base64)" '.data.VITE_API_URL = $val')
+          [ -n "$SEC_BACKEND_URL" ] && PATCH_DATA=$(echo "$PATCH_DATA" | jq --arg val "$(echo -n "$SEC_BACKEND_URL" | base64)" '.data.BACKEND_URL = $val')
           [ -n "$SEC_VITE_MAPBOX_TOKEN" ] && PATCH_DATA=$(echo "$PATCH_DATA" | jq --arg val "$(echo -n "$SEC_VITE_MAPBOX_TOKEN" | base64)" '.data.VITE_MAPBOXTOKEN = $val')
           [ -n "$SEC_VITE_MAPBOXTILE" ] && PATCH_DATA=$(echo "$PATCH_DATA" | jq --arg val "$(echo -n "$SEC_VITE_MAPBOXTILE" | base64)" '.data.VITE_MAPBOXTILE = $val')
           [ -n "$SEC_VITE_TAIPEIPASS_URL" ] && PATCH_DATA=$(echo "$PATCH_DATA" | jq --arg val "$(echo -n "$SEC_VITE_TAIPEIPASS_URL" | base64)" '.data.VITE_TAIPEIPASS_URL = $val')
