@@ -72,7 +72,6 @@ x-airflow-common:
     - ${AIRFLOW_PROJ_DIR:-..}/plugins:/opt/airflow/plugins
   user: "${AIRFLOW_UID:-50000}:0"
 
-
 services:
   airflow-scheduler:
     <<: *airflow-common
@@ -85,7 +84,6 @@ services:
       start_period: 30s
     restart: always
     depends_on:
-      <<: *airflow-common-depends-on
       airflow-init:
         condition: service_completed_successfully
 
@@ -100,7 +98,6 @@ services:
       start_period: 30s
     restart: always
     depends_on:
-      <<: *airflow-common-depends-on
       airflow-init:
         condition: service_completed_successfully
 
@@ -123,7 +120,6 @@ services:
       DUMB_INIT_SETSID: "0"
     restart: always
     depends_on:
-      <<: *airflow-common-depends-on
       airflow-apiserver:
         condition: service_healthy
       airflow-init:
@@ -140,7 +136,6 @@ services:
       start_period: 30s
     restart: always
     depends_on:
-      <<: *airflow-common-depends-on
       airflow-init:
         condition: service_completed_successfully
 
@@ -248,8 +243,22 @@ services:
       - bash
       - -c
       - airflow
+
+  airflow-apiserver:
+    <<: *airflow-common
+    command: api-server
+    ports:
+      - "8080:8080"
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+    restart: always
     depends_on:
-      <<: *airflow-common-depends-on
+      airflow-init:
+        condition: service_completed_successfully
 
   # You can enable flower by adding "--profile flower" option e.g. docker-compose --profile flower up
   # or by explicitly targeted on the command line e.g. docker-compose up flower.
@@ -269,6 +278,5 @@ services:
       start_period: 30s
     restart: always
     depends_on:
-      <<: *airflow-common-depends-on
       airflow-init:
         condition: service_completed_successfully
