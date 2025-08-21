@@ -65,6 +65,7 @@ docker/nginx/ssl
 Taipei-City-Dashboard-DE/local_env/volume_data
 Taipei-City-Dashboard-DE/logs
 Taipei-City-Dashboard-DE/data
+Taipei-City-Dashboard-DE/local_env/.env
 Taipei-City-Dashboard-DE/local_env/*.env
 **/__pycache__/
 *.py[cod]
