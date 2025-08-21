@@ -5,7 +5,7 @@ from datetime import datetime
 
 from airflow import DAG
 from airflow.models import Variable
-from airflow.operators.dummy_operator import DummyOperator
+from airflow.operators.empty import EmptyOperator  
 from airflow.operators.python_operator import PythonOperator
 from airflow.providers.postgres.hooks.postgres import PostgresHook
 from settings.global_config import DAG_PATH, DATA_PATH, PROXIES
@@ -213,7 +213,7 @@ class CommonDag:
 
         # Tasks
         with dag:
-            get_and_validate_config = DummyOperator(task_id="get_job_config")
+            get_and_validate_config = EmptyOperator(task_id="get_job_config")
 
             etl = PythonOperator(
                 task_id="etl",
@@ -233,7 +233,7 @@ class CommonDag:
                 op_kwargs={"psql_uri": self.ready_data_db_uri, "config": self.config,"proj_folder":self.proj_folder},
             )
 
-            dag_execution_success = DummyOperator(task_id="dag_execution_success")
+            dag_execution_success = EmptyOperator(task_id="dag_execution_success")
 
             # Pipeline
             get_and_validate_config >> etl >> update_dataset_info >> dag_execution_success
