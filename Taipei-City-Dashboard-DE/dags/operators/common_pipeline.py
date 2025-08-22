@@ -6,7 +6,7 @@ from datetime import datetime
 from airflow import DAG
 from airflow.models import Variable
 from airflow.operators.empty import EmptyOperator  
-from airflow.providers.standard.operators.python import PythonOperator
+from airflow.operators.python import PythonOperator
 from airflow.providers.postgres.hooks.postgres import PostgresHook
 from settings.global_config import DAG_PATH, DATA_PATH, PROXIES
 from sqlalchemy import create_engine
