@@ -63,12 +63,15 @@ x-airflow-common:
     AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
     AIRFLOW__CORE__EXECUTION_API_SERVER_URL: ${EXECUTION_API_SERVER_URL}
     AIRFLOW__SCHEDULER__ENABLE_HEALTH_CHECK: 'true'
+    AIRFLOW__CORE__DAG_DISCOVERY_SAFE_MODE: 'false'
     _PIP_ADDITIONAL_REQUIREMENTS: ${_PIP_ADDITIONAL_REQUIREMENTS:-}
     AIRFLOW_CONFIG: '/opt/airflow/config/airflow.cfg'
+    PYTHONPATH: /opt/airflow/dags:/opt/airflow/plugins  # 直接加在這裡
+
   volumes:
     - ${AIRFLOW_PROJ_DIR:-../../}/dags:/opt/airflow/dags
     - ${AIRFLOW_PROJ_DIR:-../../}/logs:/opt/airflow/logs
-    - ${AIRFLOW_PROJ_DIR:-../../}/config:/opt/airflow/config
+    - ${AIRFLOW_PROJ_DIR:-.}/config:/opt/airflow/config
     - ${AIRFLOW_PROJ_DIR:-../../}/plugins:/opt/airflow/plugins
   user: "${AIRFLOW_UID:-50000}:0"
 

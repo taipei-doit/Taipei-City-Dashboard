@@ -6,13 +6,16 @@ from datetime import datetime
 from airflow import DAG
 from airflow.models import Variable
 from airflow.operators.empty import EmptyOperator  
-from airflow.operators.python import PythonOperator
+from airflow.providers.standard.operators.python import PythonOperator
 from airflow.providers.postgres.hooks.postgres import PostgresHook
 from settings.global_config import DAG_PATH, DATA_PATH, PROXIES
 from sqlalchemy import create_engine
 from sqlalchemy.sql import text as sa_text
 from utils.get_time import get_tpe_now_time
 
+import sys
+if '/opt/airflow/dags' not in sys.path:
+    sys.path.insert(0, '/opt/airflow/dags')
 
 def _read_config(path, file_name="job_config.json"):
     """
@@ -205,7 +208,7 @@ class CommonDag:
             dag_id=f"{self.proj_folder}_{dag_infos['dag_id']}",
             default_args=default_args,
             start_date=datetime.strptime(dag_infos["start_date"], "%Y-%m-%d"),
-            schedule_interval=dag_infos["schedule_interval"],
+            schedule=dag_infos["schedule_interval"],
             tags=dag_infos["tags"],
             catchup=dag_infos["catchup"],
             description=dag_infos["description"],
