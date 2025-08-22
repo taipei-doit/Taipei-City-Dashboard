@@ -37,7 +37,7 @@ frontend:
   
   # Frontend environment variables (update these values)
   env:
-    NODE_ENV: "sit"
+    NODE_ENV: "test"
     VITE_APP_TITLE: "Taipei City Dashboard SIT"
     VITE_APP_VERSION: "3.1.0"
     
@@ -183,7 +183,34 @@ serviceAccount:
 
 # Ingress configuration
 ingress:
-  enabled: false  # Disabled: using Azure Application Gateway (no K8s Ingress resources)
+  enabled: true
+  # Use Azure Application Gateway Ingress Controller (AGIC)
+  className: "azure/application-gateway"
+  annotations:
+    # Force HTTPS at App Gateway layer
+    # For now, serve HTTP only (no SSL redirect)
+    appgw.ingress.kubernetes.io/ssl-redirect: "false"
+    # Explicitly use HTTP to backend services
+    appgw.ingress.kubernetes.io/backend-protocol: "http"
+    # Set to "true" if your App Gateway is internal (private)
+    appgw.ingress.kubernetes.io/use-private-ip: "false"
+  hosts:
+    - host: "70.157.96.179"  # TODO: replace with your domain, e.g., sit-citydashboard.taipei
+      paths:
+        - path: /
+          pathType: Prefix
+          service: frontend
+        - path: /api
+          pathType: Prefix
+          service: backend
+  # NOTE:
+  # - When using an App Gateway–stored certificate (via annotation above), this tls section is typically not used.
+  # - If you prefer Kubernetes TLS secret, remove the appgw-ssl-certificate annotation and un-comment the block below.
+  tls: []
+  # tls:
+  #   - secretName: taipei-dashboard-tls
+  #     hosts:
+  #       - change-me.example.com
 
 # Autoscaling
 autoscaling:
