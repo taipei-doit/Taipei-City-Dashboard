@@ -24,6 +24,14 @@ const linkQuery = computed(() => {
 	const cityQuery = query.city ? `&city=${query.city}` : '';
 	return `${indexQuery}${cityQuery}`;
 });
+
+const location = computed(() => {
+	return window.location;
+});
+
+const isLocalhost = computed(() => {
+	return window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+});
 </script>
 
 <template>
@@ -88,7 +96,7 @@ const linkQuery = computed(() => {
         <ul>
           <li>
             <a
-              href="https://tuic.gov.taipei/documentation"
+              :href="isLocalhost ? 'https://citydashboard.taipei/documentation/' : `${location.origin}/documentation/`"
               target="_blank"
               rel="noreferrer"
             >技術文件</a>
