@@ -65,7 +65,7 @@ def _transfer(**kwargs):
         "CaseSerious":"case_serious"
         })
     # 將 case_complete 欄位的 True/False 轉換為中文
-    data["case_complete"] = data["case_complete"].map({True: "處理完成", False: "未處理完成"})
+    data["case_complete"] = data["case_complete"].map({True: "處理完成", False: "處理中"})
     gdata = add_point_wkbgeometry_column_to_df(
         data, x=data["lng"], y=data["lat"], from_crs=FROM_CRS
     )
