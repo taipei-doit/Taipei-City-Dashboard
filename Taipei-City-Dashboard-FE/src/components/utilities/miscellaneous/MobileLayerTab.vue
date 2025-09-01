@@ -89,17 +89,17 @@ function handleMetroTaipeiToggle() {
         :src="`/images/thumbnails/${content.chart_config.types[0]}.svg`"
       >
     </label>
-	<div class="citytagwithname">
-		<ComponentTag
-		   :icon="''"
-		   :text="cityTag.name"
-		   :mode="'small'"
-		   :class="`city-tag-item ${cityTag.value}`"
-		/>
-	   <p>
-		 {{ content.name }}
-	   </p>
-	</div>
+    <div class="citytagwithname">
+      <ComponentTag
+        :icon="''"
+        :text="cityTag.name"
+        :mode="'small'"
+        :class="`city-tag-item ${cityTag.value}`"
+      />
+      <p>
+        {{ content.name }}
+      </p>
+    </div>
   </div>
 </template>
 

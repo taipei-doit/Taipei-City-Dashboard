@@ -1216,7 +1216,7 @@ function handleDataSelection(index) {
           <h6>{{ targetDistrict }}</h6>
           <span>
             {{ districtData[targetDistrict] }}
-			{{ chart_config.unit }}
+            {{ chart_config.unit }}
           </span>
 
           <template v-if="tooltipData">

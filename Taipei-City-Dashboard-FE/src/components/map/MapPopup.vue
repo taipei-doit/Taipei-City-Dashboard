@@ -56,6 +56,16 @@
               :src="popupContent[activeTab]?.properties[item.key]"
             >
           </template>
+          <template v-if="popupContent[activeTab]?.properties[item.key].includes('youtube')">
+            <iframe
+              :src="popupContent[activeTab]?.properties[item.key]"
+              width="100%"
+              height="100%"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerpolicy="strict-origin-when-cross-origin"
+              allowfullscreen
+            />
+          </template>
           <template v-else>
             <video
               ref="videoRef"
