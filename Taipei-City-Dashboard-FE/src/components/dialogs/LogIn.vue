@@ -102,14 +102,20 @@ function handleClose() {
         <a
           href="https://tuic.gov.taipei/zh/works/dashboard"
           target="_blank"
-		  rel="noopener noreferrer"
-		  referrerpolicy="no-referrer"
-        >臺北城市儀表板</a>的<a
+          rel="noopener"
+          @click.prevent="openExternal('https://tuic.gov.taipei/zh/works/dashboard')"
+        >
+          臺北城市儀表板
+        </a>
+        的
+        <a
           href="https://tuic.gov.taipei/zh/privacy"
           target="_blank"
-		  rel="noopener noreferrer"
-		  referrerpolicy="no-referrer"
-        >隱私權政策</a>
+          rel="noopener"
+          @click.prevent="openExternal('https://tuic.gov.taipei/zh/privacy')"
+        >
+          隱私權政策
+        </a>
       </p>
       <p
         :style="{
