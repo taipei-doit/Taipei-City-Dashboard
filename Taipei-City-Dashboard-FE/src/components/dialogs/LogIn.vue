@@ -7,6 +7,21 @@ import { useAuthStore } from "../../store/authStore";
 
 import DialogContainer from "./DialogContainer.vue";
 
+
+function openExternal(url: string) {
+  // 先開一個空白分頁，確保新頁自己去導向，Referer = about:blank
+  const w = window.open('about:blank', '_blank');
+  if (!w) {
+    // 部分瀏覽器阻擋彈窗的保底處理：直接導到該頁（會覆蓋本頁）
+    window.location.href = url;
+    return;
+  }
+  try { w.opener = null; } catch {}
+  w.location.assign(url);
+}
+
+
+
 const {
 	VITE_APP_TITLE,
 	PROD,
@@ -102,10 +117,20 @@ function handleClose() {
         <a
           href="https://tuic.gov.taipei/zh/works/dashboard"
           target="_blank"
-        >臺北城市儀表板</a>的<a
+          rel="noopener"
+          @click.prevent="openExternal('https://tuic.gov.taipei/zh/works/dashboard')"
+        >
+          臺北城市儀表板
+        </a>
+        的
+        <a
           href="https://tuic.gov.taipei/zh/privacy"
           target="_blank"
-        >隱私權政策</a>
+          rel="noopener"
+          @click.prevent="openExternal('https://tuic.gov.taipei/zh/privacy')"
+        >
+          隱私權政策
+        </a>
       </p>
       <p
         :style="{
