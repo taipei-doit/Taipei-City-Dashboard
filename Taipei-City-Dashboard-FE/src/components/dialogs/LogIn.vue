@@ -7,19 +7,20 @@ import { useAuthStore } from "../../store/authStore";
 
 import DialogContainer from "./DialogContainer.vue";
 
-
-function openExternal(url: string) {
-  // 先開一個空白分頁，確保新頁自己去導向，Referer = about:blank
+function openExternal(url) {
   const w = window.open('about:blank', '_blank');
   if (!w) {
-    // 部分瀏覽器阻擋彈窗的保底處理：直接導到該頁（會覆蓋本頁）
     window.location.href = url;
     return;
   }
-  try { w.opener = null; } catch {}
+  try {
+    w.opener = null;
+  } catch (e) {
+    // 在瀏覽器 console 印出錯誤，避免 no-empty
+    console.error('Failed to set opener to null:', e);
+  }
   w.location.assign(url);
 }
-
 
 
 const {
