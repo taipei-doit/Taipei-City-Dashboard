@@ -3,13 +3,16 @@ server {
     listen  [::]:8081;
     server_name  localhost;
 
-    # API proxy to backend service  
+    # API proxy to backend service
     location /api/ {
-        proxy_pass http://taipei-city-dashboard-backend.dashboard.svc.cluster.local:8080/api/v1/;
+        proxy_pass ${BACKEND_URL}/api/v1/;
+        proxy_http_version 1.1;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header Connection "";
+        proxy_buffering off;
     }
 
     # Serve static files

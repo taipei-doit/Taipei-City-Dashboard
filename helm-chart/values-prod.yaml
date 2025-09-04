@@ -1,0 +1,117 @@
+# Example production values for Taipei City Dashboard
+# Copy this file and modify according to your environment
+
+# Global configuration
+global:
+  imageRegistry: ""
+
+# Frontend configuration
+frontend:
+  enabled: true
+  replicaCount: 3
+  
+  image:
+    repository: ghcr.io/taipei-doit/taipei-city-dashboard-fe
+    tag: "2.2.0"
+  
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 250m
+      memory: 256Mi
+
+# Backend configuration  
+backend:
+  enabled: true
+  replicaCount: 3
+  
+  image:
+    repository: ghcr.io/taipei-doit/taipei-city-dashboard-be
+    tag: "2.2.0"
+  
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 1Gi
+    requests:
+      cpu: 500m
+      memory: 512Mi
+
+# Service Account
+serviceAccount:
+  create: true
+  annotations:
+    azure.workload.identity/client-id: "your-managed-identity-client-id"
+
+# Ingress configuration
+ingress:
+  enabled: true
+  className: "nginx"
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    nginx.ingress.kubernetes.io/proxy-body-size: "10m"
+  hosts:
+    - host: dashboard.taipei.gov.tw
+      paths:
+        - path: /
+          pathType: Prefix
+          service: frontend
+        - path: /api
+          pathType: Prefix
+          service: backend
+  tls:
+    - secretName: taipei-dashboard-tls
+      hosts:
+        - dashboard.taipei.gov.tw
+
+# Autoscaling
+autoscaling:
+  enabled: true
+  minReplicas: 3
+  maxReplicas: 15
+  targetCPUUtilizationPercentage: 70
+  targetMemoryUtilizationPercentage: 80
+
+# Node affinity (optional - for multi-zone deployment)
+affinity:
+  podAntiAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+    - weight: 100
+      podAffinityTerm:
+        labelSelector:
+          matchExpressions:
+          - key: app.kubernetes.io/name
+            operator: In
+            values:
+            - taipei-city-dashboard
+        topologyKey: kubernetes.io/hostname
+
+# Security context
+securityContext:
+  capabilities:
+    drop:
+    - ALL
+  readOnlyRootFilesystem: true
+  runAsNonRoot: true
+  runAsUser: 65534
+
+# External database configuration (if not using embedded)
+postgresql:
+  enabled: false  # Set to true if you want PostgreSQL in cluster
+
+redis:
+  enabled: false  # Set to true if you want Redis in cluster
+
+# Monitoring
+monitoring:
+  enabled: true
+  serviceMonitor:
+    enabled: true
+    namespace: "monitoring"
+    interval: 30s
+    labels:
+      prometheus: kube-prometheus
