@@ -195,7 +195,7 @@ ingress:
     # Set to "true" if your App Gateway is internal (private)
     appgw.ingress.kubernetes.io/use-private-ip: "false"
   hosts:
-    - host: "70.157.96.179"  # TODO: replace with your domain, e.g., sit-citydashboard.taipei
+    - host: "test-citydashboard.taipei"
       paths:
         - path: /
           pathType: Prefix
