@@ -5,8 +5,19 @@ metadata:
   name: {{ include "taipei-city-dashboard.fullname" . }}-frontend
   labels:
     {{- include "taipei-city-dashboard.frontend.labels" . | nindent 4 }}
+  annotations:
+    {{- with .Values.frontend.service.annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
 spec:
   type: {{ .Values.frontend.service.type }}
+  {{- with .Values.frontend.service.loadBalancerIP }}
+  loadBalancerIP: {{ . }}
+  {{- end }}
+  {{- with .Values.frontend.service.loadBalancerSourceRanges }}
+  loadBalancerSourceRanges:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
   ports:
     - port: {{ .Values.frontend.service.port }}
       targetPort: http
