@@ -46,8 +46,8 @@ frontend:
     type: LoadBalancer
     annotations: 
       service.beta.kubernetes.io/azure-load-balancer-internal: "true"
-      loadBalancerIP: "10.224.0.102"
-      port: 8081
+    loadBalancerIP: "10.224.0.102"
+    port: 8081
 
   # Frontend secret env from Secret (all optional)
   secretEnv:
@@ -87,8 +87,8 @@ backend:
     type: LoadBalancer
     annotations: 
       service.beta.kubernetes.io/azure-load-balancer-internal: "true"
-      loadBalancerIP: "10.224.0.103"
-      port: 8080
+    loadBalancerIP: "10.224.0.103"
+    port: 8080
 
   image:
     repository: citydashboard-dhc2gtetgcfqeqhv.azurecr.io/taipei-city-dashboard-be

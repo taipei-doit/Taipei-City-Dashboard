@@ -7,7 +7,9 @@ metadata:
     {{- include "taipei-city-dashboard.backend.labels" . | nindent 4 }}
   annotations:
     {{- with .Values.backend.service.annotations }}
-    {{- toYaml . | nindent 4 }}
+    {{- range $k, $v := . }}
+    {{ $k }}: {{ $v | quote }}
+    {{- end }}
     {{- end }}
 spec:
   type: {{ .Values.backend.service.type }}
