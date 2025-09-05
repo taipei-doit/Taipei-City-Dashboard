@@ -182,31 +182,32 @@ serviceAccount:
   annotations: {}
 
 # Ingress configuration
-ingress:
-  enabled: true
-  # Use Azure Application Gateway Ingress Controller (AGIC)
-  className: "azure/application-gateway"
-  annotations:
-    # Force HTTPS at App Gateway layer
-    # For now, serve HTTP only (no SSL redirect)
-    appgw.ingress.kubernetes.io/ssl-redirect: "false"
-    # Explicitly use HTTP to backend services
-    appgw.ingress.kubernetes.io/backend-protocol: "http"
-    # Set to "true" if your App Gateway is internal (private)
-    appgw.ingress.kubernetes.io/use-private-ip: "false"
-  hosts:
-    - host: "test-citydashboard.taipei"
-      paths:
-        - path: /
-          pathType: Prefix
-          service: frontend
-        - path: /api
-          pathType: Prefix
-          service: backend
+ingress: {}
+  # enabled: true
+  # # Use Azure Application Gateway Ingress Controller (AGIC)
+  # className: "azure-application-gateway"
+  # annotations:
+  #   kubernetes.io/ingress.class: "azure-application-gateway"
+  #   # Force HTTPS at App Gateway layer
+  #   # For now, serve HTTP only (no SSL redirect)
+  #   appgw.ingress.kubernetes.io/ssl-redirect: "false"
+  #   # Explicitly use HTTP to backend services
+  #   appgw.ingress.kubernetes.io/backend-protocol: "http"
+  #   # Set to "true" if your App Gateway is internal (private)
+  #   appgw.ingress.kubernetes.io/use-private-ip: "false"
+  # hosts:
+  #   - host: "test-citydashboard.taipei"
+  #     paths:
+  #       - path: /
+  #         pathType: Prefix
+  #         service: frontend
+  #       - path: /api
+  #         pathType: Prefix
+  #         service: backend
   # NOTE:
   # - When using an App Gateway–stored certificate (via annotation above), this tls section is typically not used.
   # - If you prefer Kubernetes TLS secret, remove the appgw-ssl-certificate annotation and un-comment the block below.
-  tls: []
+  # tls: []
   # tls:
   #   - secretName: taipei-dashboard-tls
   #     hosts:
