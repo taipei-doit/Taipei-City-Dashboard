@@ -43,9 +43,12 @@ frontend:
     
 
   service:
-    # annotations: {service.beta.kubernetes.io/azure-load-balancer-resource-group: Datacenter-PROD,service.beta.kubernetes.io/azure-pip-name: airflow-prod}
-    annotations: {service.beta.kubernetes.io/azure-load-balancer-internal: "true"}
     type: LoadBalancer
+    annotations: 
+      service.beta.kubernetes.io/azure-load-balancer-internal: "true"
+      loadBalancerIP: "10.224.0.102"
+      port: 8081
+
   # Frontend secret env from Secret (all optional)
   secretEnv:
     - name: VITE_MAPBOXTOKEN
@@ -79,7 +82,14 @@ backend:
     rollingUpdate:
       maxSurge: 0        # 不在升級時額外啟動超過 replica 的新 Pod
       maxUnavailable: 1  # 允許一次少 1 個 Pod，以便無額外擴容的滾動更新
-  
+
+  service:
+    type: LoadBalancer
+    annotations: 
+      service.beta.kubernetes.io/azure-load-balancer-internal: "true"
+      loadBalancerIP: "10.224.0.103"
+      port: 8080
+
   image:
     repository: citydashboard-dhc2gtetgcfqeqhv.azurecr.io/taipei-city-dashboard-be
     tag: ""
