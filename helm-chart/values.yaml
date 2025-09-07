@@ -37,6 +37,9 @@ frontend:
   service:
     type: ClusterIP
     port: 80
+    # targetPort separated from port for clarity; template prefers service.targetPort
+    targetPort: 8081
+  # targetPort (legacy placement) kept for backward compatibility; will be ignored if service.targetPort is set
   targetPort: 8081
   
   resources:
