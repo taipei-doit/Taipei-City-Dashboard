@@ -60,7 +60,12 @@ spec:
           imagePullPolicy: {{ .Values.frontend.image.pullPolicy }}
           ports:
             - name: http
-              containerPort: {{ .Values.frontend.service.targetPort }}
+              # containerPort resolution order:
+              # 1. .Values.frontend.service.targetPort (preferred, aligns with backend structure)
+              # 2. .Values.frontend.targetPort (backward compatibility with older values.yaml)
+              # 3. .Values.frontend.service.port (last fallback so Deployment remains valid)
+              {{- $containerPort := coalesce .Values.frontend.service.targetPort .Values.frontend.targetPort .Values.frontend.service.port }}
+              containerPort: {{ $containerPort }}
               protocol: TCP
           livenessProbe:
             httpGet:
