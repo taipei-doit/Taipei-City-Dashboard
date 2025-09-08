@@ -87,6 +87,7 @@ backend:
     type: LoadBalancer
     annotations: 
       service.beta.kubernetes.io/azure-load-balancer-internal: "true"
+    loadBalancerIP: "10.224.0.223"
     port: 8080
     targetPort: 8080
 
