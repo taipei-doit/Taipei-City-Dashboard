@@ -76,7 +76,7 @@ jobs:
             exit 1
           fi
           echo "KUBE_CONFIG_DATA is set, length check..."
-          echo "${{ secrets.KUBE_CONFIG_DATA }}" | wc -c
+            echo "${{ secrets.KUBE_CONFIG_DATA }}" | wc -c
           echo "Decoding kubeconfig..."
           echo "${{ secrets.KUBE_CONFIG_DATA }}" | base64 -d > ~/.kube/config
           chmod 600 ~/.kube/config
@@ -176,7 +176,7 @@ jobs:
           SEC_REDIS_DB: ${{ secrets.REDIS_DB }}
         run: |
           # Always include values file for defaults; compute secret override flags if secrets exist
-          VALUES_FLAG="--values helm-chart/values-external-db.yaml"
+          VALUES_FLAG="--values helm-chart/values-sit.yaml"
           HELM_SET=""
           if [ -n "$SEC_DB_DASHBOARD_PORT" ]; then HELM_SET+=" --set backend.useSecretDbDashboardPort=true"; fi
           if [ -n "$SEC_DB_MANAGER_PORT" ]; then HELM_SET+=" --set backend.useSecretDbManagerPort=true"; fi
@@ -320,7 +320,7 @@ jobs:
 
       - name: Deploy Frontend only
         run: |
-          VALUES_FLAG="--values helm-chart/values-external-db.yaml"
+          VALUES_FLAG="--values helm-chart/values-sit.yaml"
           helm upgrade --install ${{ env.RELEASE }} ./helm-chart \
             $VALUES_FLAG \
             --set frontend.image.tag="${{ steps.tag.outputs.value }}" \
