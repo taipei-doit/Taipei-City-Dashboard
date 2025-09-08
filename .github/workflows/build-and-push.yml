@@ -113,6 +113,10 @@ jobs:
           SEC_DB_DASHBOARD_DBNAME: ${{ secrets.DB_DASHBOARD_DBNAME }}
           SEC_DB_DASHBOARD_PORT: ${{ secrets.DB_DASHBOARD_PORT }}
           SEC_DB_MANAGER_PORT: ${{ secrets.DB_MANAGER_PORT }}
+          SEC_DB_MANAGER_HOST: ${{ secrets.DB_MANAGER_HOST }}
+          SEC_DB_MANAGER_PASSWORD: ${{ secrets.DB_MANAGER_PASSWORD }}
+          SEC_DB_MANAGER_DBNAME: ${{ secrets.DB_MANAGER_DBNAME }}
+          SEC_DB_MANAGER_USER: ${{ secrets.DB_MANAGER_USER }}
           SEC_REDIS_HOST: ${{ secrets.REDIS_HOST }}
           SEC_REDIS_PASSWORD: ${{ secrets.REDIS_PASSWORD }}
           SEC_REDIS_PORT: ${{ secrets.REDIS_PORT }}
