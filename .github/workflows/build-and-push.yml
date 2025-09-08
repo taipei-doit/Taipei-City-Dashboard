@@ -172,6 +172,25 @@ jobs:
           ARGS+=(--namespace="${{ env.NAMESPACE }}" --dry-run=client -o yaml)
           kubectl "${ARGS[@]}" | kubectl apply -f -
 
+      - name: Check and cleanup Helm release if needed
+        run: |
+          # Check if release exists and its status
+          if helm status ${{ env.RELEASE }} -n ${{ env.NAMESPACE }} 2>/dev/null; then
+            STATUS=$(helm status ${{ env.RELEASE }} -n ${{ env.NAMESPACE }} -o json | jq -r '.info.status')
+            echo "Current release status: $STATUS"
+            
+            # If release is in a bad state, try to rollback or delete
+            if [ "$STATUS" = "pending-install" ] || [ "$STATUS" = "pending-upgrade" ] || [ "$STATUS" = "pending-rollback" ]; then
+              echo "Release is stuck in $STATUS state, attempting to fix..."
+              
+              # Try rollback first
+              if ! helm rollback ${{ env.RELEASE }} -n ${{ env.NAMESPACE }} --wait --timeout=2m; then
+                echo "Rollback failed, deleting the release..."
+                helm delete ${{ env.RELEASE }} -n ${{ env.NAMESPACE }} --wait --timeout=2m || true
+              fi
+            fi
+          fi
+
       - name: Deploy Backend only
         env:
           SEC_DB_DASHBOARD_PORT: ${{ secrets.DB_DASHBOARD_PORT }}
@@ -336,6 +355,25 @@ jobs:
             echo "No frontend secrets to add"
           fi
 
+      - name: Check and cleanup Helm release if needed
+        run: |
+          # Check if release exists and its status
+          if helm status ${{ env.RELEASE }} -n ${{ env.NAMESPACE }} 2>/dev/null; then
+            STATUS=$(helm status ${{ env.RELEASE }} -n ${{ env.NAMESPACE }} -o json | jq -r '.info.status')
+            echo "Current release status: $STATUS"
+            
+            # If release is in a bad state, try to rollback or delete
+            if [ "$STATUS" = "pending-install" ] || [ "$STATUS" = "pending-upgrade" ] || [ "$STATUS" = "pending-rollback" ]; then
+              echo "Release is stuck in $STATUS state, attempting to fix..."
+              
+              # Try rollback first
+              if ! helm rollback ${{ env.RELEASE }} -n ${{ env.NAMESPACE }} --wait --timeout=2m; then
+                echo "Rollback failed, deleting the release..."
+                helm delete ${{ env.RELEASE }} -n ${{ env.NAMESPACE }} --wait --timeout=2m || true
+              fi
+            fi
+          fi
+          
       - name: Deploy Frontend only
         run: |
           VALUES_FLAG="--values helm-chart/values-sit.yaml"
