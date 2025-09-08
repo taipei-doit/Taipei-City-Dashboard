@@ -150,7 +150,7 @@ jobs:
           [ -n "$SEC_DB_DASHBOARD_DBNAME" ] && ARGS+=(--from-literal=DB_DASHBOARD_DBNAME="$SEC_DB_DASHBOARD_DBNAME")
           [ -n "$SEC_DB_DASHBOARD_PORT" ] && ARGS+=(--from-literal=DB_DASHBOARD_PORT="$DB_PORT")
           [ -n "$SEC_DB_MANAGER_HOST" ] && ARGS+=(--from-literal=DB_MANAGER_HOST="$SEC_DB_MANAGER_HOST")
-          [ -n "$SEC_DB_MANAGER_PASSWORD" ] && ARGS+=(--from-literal=DB_MANAGER_PASSWORD="$(echo "$SEC_DB_MANAGER_PASSWORD" | base64 -d)")
+          [ -n "$SEC_DB_MANAGER_PASSWORD" ] && ARGS+=(--from-literal=DB_MANAGER_PASSWORD="$SEC_DB_MANAGER_PASSWORD")
           [ -n "$SEC_DB_MANAGER_USER" ] && ARGS+=(--from-literal=DB_MANAGER_USER="$SEC_DB_MANAGER_USER")
           [ -n "$SEC_DB_MANAGER_DBNAME" ] && ARGS+=(--from-literal=DB_MANAGER_DBNAME="$SEC_DB_MANAGER_DBNAME")
           [ -n "$SEC_DB_MANAGER_PORT" ] && ARGS+=(--from-literal=DB_MANAGER_PORT="$MANAGER_PORT")
@@ -253,6 +253,15 @@ jobs:
           SHA="${GITHUB_SHA}"
           echo "value=${BRANCH}-$(echo ${SHA} | cut -c1-8)" >> $GITHUB_OUTPUT
 
+      - name: Create .env file for Frontend build
+        run: |
+          cat > ./Taipei-City-Dashboard-FE/.env << EOF
+          VITE_API_URL=/api
+          NODE_ENV=test
+          VITE_APP_TITLE=Taipei City Dashboard SIT
+          VITE_APP_VERSION=3.1.0
+          EOF
+
       - name: Build and push Frontend
         uses: docker/build-push-action@v5
         with:
@@ -263,6 +272,8 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           platforms: linux/amd64
+          build-args: |
+            NODE_ENV=test
 
       - name: Setup Helm
         uses: azure/setup-helm@v3
