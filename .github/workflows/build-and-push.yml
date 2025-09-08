@@ -199,6 +199,10 @@ jobs:
           SEC_REDIS_PORT: ${{ secrets.REDIS_PORT }}
           SEC_REDIS_DB: ${{ secrets.REDIS_DB }}
         run: |
+          # First check if the image exists
+          echo "Deploying with image tag: ${{ steps.tag.outputs.value }}"
+          echo "Backend image: ${{ env.REGISTRY }}/${{ env.BE_IMAGE }}:${{ steps.tag.outputs.value }}"
+          echo "Frontend image: ${{ env.REGISTRY }}/${{ env.FE_IMAGE }}:${{ steps.tag.outputs.value }}"
           # Always include values file for defaults; compute secret override flags if secrets exist
           VALUES_FLAG="--values helm-chart/values-sit.yaml"
           HELM_SET=""
@@ -206,14 +210,23 @@ jobs:
           if [ -n "$SEC_DB_MANAGER_PORT" ]; then HELM_SET+=" --set backend.useSecretDbManagerPort=true"; fi
           if [ -n "$SEC_REDIS_PORT" ]; then HELM_SET+=" --set backend.useSecretRedisPort=true"; fi
           if [ -n "$SEC_REDIS_DB" ]; then HELM_SET+=" --set backend.useSecretRedisDb=true"; fi
-          helm upgrade --install ${{ env.RELEASE }} ./helm-chart \
+          # Deploy with shorter timeout to fail faster if there's an issue
+          if ! helm upgrade --install ${{ env.RELEASE }} ./helm-chart \
             $VALUES_FLAG \
             $HELM_SET \
             --set backend.image.tag="${{ steps.tag.outputs.value }}" \
             --set frontend.image.tag="${{ steps.tag.outputs.value }}" \
             --namespace="${{ env.NAMESPACE }}" \
-            --wait --timeout=20m \
-            --debug
+            --wait --timeout=5m \
+            --debug; then
+            echo "Deployment failed, checking pod status..."
+            kubectl get pods -n ${{ env.NAMESPACE }} -o wide
+            echo "\nChecking events..."
+            kubectl get events -n ${{ env.NAMESPACE }} --sort-by='.lastTimestamp' | tail -20
+            echo "\nChecking backend pod logs..."
+            kubectl logs -n ${{ env.NAMESPACE }} -l app.kubernetes.io/component=backend --tail=50
+            exit 1
+          fi
       - name: Dump diagnostics on failure
         if: failure()
         shell: bash
@@ -377,11 +390,17 @@ jobs:
           
       - name: Deploy Frontend only
         run: |
+          echo "Deploying frontend with image tag: ${{ steps.tag.outputs.value }}"
           VALUES_FLAG="--values helm-chart/values-sit.yaml"
-          helm upgrade --install ${{ env.RELEASE }} ./helm-chart \
+          if ! helm upgrade --install ${{ env.RELEASE }} ./helm-chart \
             $VALUES_FLAG \
             --set frontend.image.tag="${{ steps.tag.outputs.value }}" \
             --set backend.image.tag="${{ steps.tag.outputs.value }}" \
             --namespace="${{ env.NAMESPACE }}" \
-            --wait --timeout=20m \
-            --debug
+            --wait --timeout=5m \
+            --debug; then
+            echo "Frontend deployment failed, checking status..."
+            kubectl get pods -n ${{ env.NAMESPACE }} -o wide
+            kubectl get events -n ${{ env.NAMESPACE }} --sort-by='.lastTimestamp' | tail -20
+            exit 1
+          fi
