@@ -64,13 +64,15 @@ spec:
             - name: http
               containerPort: {{ .Values.frontend.service.targetPort }}
               protocol: TCP
-          {{- if .Values.frontend.startupProbe.enabled }}
+          {{- with .Values.frontend.startupProbe }}
+          {{- if .enabled }}
           startupProbe:
             httpGet:
-              path: {{ default "/" .Values.frontend.startupProbe.path }}
+              path: {{ default "/" .path }}
               port: http
-            failureThreshold: {{ default 30 .Values.frontend.startupProbe.failureThreshold }}
-            periodSeconds: {{ default 5 .Values.frontend.startupProbe.periodSeconds }}
+            failureThreshold: {{ default 30 .failureThreshold }}
+            periodSeconds: {{ default 5 .periodSeconds }}
+          {{- end }}
           {{- end }}
           livenessProbe:
             httpGet:

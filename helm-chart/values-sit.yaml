@@ -14,6 +14,12 @@ imagePullSecrets:
 frontend:
   enabled: true
   replicaCount: 2
+  startupProbe:
+    enabled: false
+    # path for http probe (frontend uses httpGet); leave disabled if not needed
+    path: "/"
+    failureThreshold: 30
+    periodSeconds: 5
   updateStrategy:
     type: RollingUpdate
     rollingUpdate:
@@ -78,6 +84,13 @@ frontend:
 backend:
   enabled: true
   replicaCount: 2
+  startupProbe:
+    enabled: false
+    # type: http or tcp (backend template supports tcpSocket when type==tcp)
+    type: http
+    path: "/api/v1/dashboard"
+    failureThreshold: 30
+    periodSeconds: 5
   updateStrategy:
     type: RollingUpdate
     rollingUpdate:

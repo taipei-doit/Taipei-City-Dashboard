@@ -43,18 +43,20 @@ spec:
             - name: http
               containerPort: {{ .Values.backend.service.targetPort }}
               protocol: TCP
-          {{- if .Values.backend.startupProbe.enabled }}
+          {{- with .Values.backend.startupProbe }}
+          {{- if .enabled }}
           startupProbe:
-            {{- if eq .Values.backend.startupProbe.type "tcp" }}
+            {{- if eq (default "http" .type) "tcp" }}
             tcpSocket:
               port: http
             {{- else }}
             httpGet:
-              path: {{ default "/healthz" .Values.backend.startupProbe.path }}
+              path: {{ default "/healthz" .path }}
               port: http
             {{- end }}
-            failureThreshold: {{ default 30 .Values.backend.startupProbe.failureThreshold }}
-            periodSeconds: {{ default 5 .Values.backend.startupProbe.periodSeconds }}
+            failureThreshold: {{ default 30 .failureThreshold }}
+            periodSeconds: {{ default 5 .periodSeconds }}
+          {{- end }}
           {{- end }}
           livenessProbe:
             tcpSocket:
