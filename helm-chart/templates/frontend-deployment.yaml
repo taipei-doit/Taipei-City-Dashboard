@@ -9,6 +9,8 @@ spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.frontend.replicaCount }}
   {{- end }}
+  revisionHistoryLimit: {{ default 5 .Values.frontend.revisionHistoryLimit }}
+  minReadySeconds: {{ default 10 .Values.frontend.minReadySeconds }}
   strategy:
     type: {{ default "RollingUpdate" .Values.frontend.updateStrategy.type }}
     {{- if and .Values.frontend.updateStrategy.rollingUpdate (eq (default "RollingUpdate" .Values.frontend.updateStrategy.type) "RollingUpdate") }}
@@ -62,6 +64,14 @@ spec:
             - name: http
               containerPort: {{ .Values.frontend.service.targetPort }}
               protocol: TCP
+          {{- if .Values.frontend.startupProbe.enabled }}
+          startupProbe:
+            httpGet:
+              path: {{ default "/" .Values.frontend.startupProbe.path }}
+              port: http
+            failureThreshold: {{ default 30 .Values.frontend.startupProbe.failureThreshold }}
+            periodSeconds: {{ default 5 .Values.frontend.startupProbe.periodSeconds }}
+          {{- end }}
           livenessProbe:
             httpGet:
               path: /

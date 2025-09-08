@@ -150,7 +150,7 @@ jobs:
           [ -n "$SEC_DB_DASHBOARD_DBNAME" ] && ARGS+=(--from-literal=DB_DASHBOARD_DBNAME="$SEC_DB_DASHBOARD_DBNAME")
           [ -n "$SEC_DB_DASHBOARD_PORT" ] && ARGS+=(--from-literal=DB_DASHBOARD_PORT="$DB_PORT")
           [ -n "$SEC_DB_MANAGER_HOST" ] && ARGS+=(--from-literal=DB_MANAGER_HOST="$SEC_DB_MANAGER_HOST")
-          [ -n "$SEC_DB_MANAGER_PASSWORD" ] && ARGS+=(--from-literal=DB_MANAGER_PASSWORD="$SEC_DB_MANAGER_PASSWORD")
+          [ -n "$SEC_DB_MANAGER_PASSWORD" ] && ARGS+=(--from-literal=DB_MANAGER_PASSWORD="$(echo "$SEC_DB_MANAGER_PASSWORD" | base64 -d)")
           [ -n "$SEC_DB_MANAGER_USER" ] && ARGS+=(--from-literal=DB_MANAGER_USER="$SEC_DB_MANAGER_USER")
           [ -n "$SEC_DB_MANAGER_DBNAME" ] && ARGS+=(--from-literal=DB_MANAGER_DBNAME="$SEC_DB_MANAGER_DBNAME")
           [ -n "$SEC_DB_MANAGER_PORT" ] && ARGS+=(--from-literal=DB_MANAGER_PORT="$MANAGER_PORT")

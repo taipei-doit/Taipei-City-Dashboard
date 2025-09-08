@@ -9,6 +9,8 @@ spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.backend.replicaCount }}
   {{- end }}
+  revisionHistoryLimit: {{ default 5 .Values.backend.revisionHistoryLimit }}
+  minReadySeconds: {{ default 10 .Values.backend.minReadySeconds }}
   strategy:
     type: {{ default "RollingUpdate" .Values.backend.updateStrategy.type }}
     {{- if and .Values.backend.updateStrategy.rollingUpdate (eq (default "RollingUpdate" .Values.backend.updateStrategy.type) "RollingUpdate") }}
@@ -41,6 +43,19 @@ spec:
             - name: http
               containerPort: {{ .Values.backend.service.targetPort }}
               protocol: TCP
+          {{- if .Values.backend.startupProbe.enabled }}
+          startupProbe:
+            {{- if eq .Values.backend.startupProbe.type "tcp" }}
+            tcpSocket:
+              port: http
+            {{- else }}
+            httpGet:
+              path: {{ default "/healthz" .Values.backend.startupProbe.path }}
+              port: http
+            {{- end }}
+            failureThreshold: {{ default 30 .Values.backend.startupProbe.failureThreshold }}
+            periodSeconds: {{ default 5 .Values.backend.startupProbe.periodSeconds }}
+          {{- end }}
           livenessProbe:
             tcpSocket:
               port: http
