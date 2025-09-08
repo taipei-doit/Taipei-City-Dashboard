@@ -13,12 +13,16 @@ imagePullSecrets:
 # Frontend configuration
 frontend:
   enabled: true
-  replicaCount: 1
+  replicaCount: 2
   updateStrategy:
     type: RollingUpdate
     rollingUpdate:
-      maxSurge: 0        # 不在升級時額外啟動超過 replica 的新 Pod
-      maxUnavailable: 1  # 允許一次少 1 個 Pod，以便無額外擴容的滾動更新
+      maxSurge: 1       # 不在升級時額外啟動超過 replica 的新 Pod
+      maxUnavailable: 0  # 允許一次少 1 個 Pod，以便無額外擴容的滾動更新
+  pdb:
+    enabled: true
+    minAvailable: 1
+    # 或使用 maxUnavailable: 1 (二選一)  
   
   image:
     repository: citydashboard-dhc2gtetgcfqeqhv.azurecr.io/taipei-city-dashboard-fe
@@ -77,8 +81,12 @@ backend:
   updateStrategy:
     type: RollingUpdate
     rollingUpdate:
-      maxSurge: 0        # 不在升級時額外啟動超過 replica 的新 Pod
-      maxUnavailable: 1  # 允許一次少 1 個 Pod，以便無額外擴容的滾動更新
+      maxSurge: 1        # 不在升級時額外啟動超過 replica 的新 Pod
+      maxUnavailable: 0  # 允許一次少 1 個 Pod，以便無額外擴容的滾動更新
+  pdb:
+    enabled: true
+    minAvailable: 1
+    # 或使用 maxUnavailable: 1
 
   service:
     type: LoadBalancer
