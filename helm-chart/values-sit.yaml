@@ -202,7 +202,11 @@ autoscaling:
 # Monitoring (optional)
 monitoring:
   enabled: false  # Enable if you have Prometheus installed
-
+  serviceMonitor:
+    enabled: false
+    namespace: "monitoring"
+    interval: 30s
+    labels: {}
 # Security context
 securityContext:
   capabilities:
