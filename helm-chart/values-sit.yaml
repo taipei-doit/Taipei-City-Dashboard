@@ -46,6 +46,10 @@ frontend:
     loadBalancerIP: "10.224.0.102"
     port: 8082
     targetPort: 8081
+  # Probes configuration
+  startupProbe:
+    enabled: false
+  
   # Frontend secret env from Secret (all optional)
   secretEnv:
     - name: VITE_MAPBOXTOKEN
@@ -107,6 +111,10 @@ backend:
     # Note: DB/Redis ports are now configured via values below and can be overridden by GitHub Secrets
     # Keep only app-specific vars here.
 
+  # Probes configuration
+  startupProbe:
+    enabled: false
+  
   # Backend connection defaults (used unless overridden by GitHub Secrets)
   db:
     dashboard:
