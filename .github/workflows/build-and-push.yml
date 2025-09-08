@@ -263,6 +263,13 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           platforms: linux/amd64
+          build-args: |
+            VITE_API_URL=${{ secrets.VITE_API_URL }}
+            VITE_MAPBOXTOKEN=${{ secrets.VITE_MAPBOX_TOKEN }}
+            VITE_MAPBOXTILE=${{ secrets.VITE_MAPBOXTILE }}
+            VITE_TAIPEIPASS_URL=${{ secrets.VITE_TAIPEIPASS_URL }}
+            VITE_TAIPEIPASS_CLIENT_ID=${{ secrets.VITE_TAIPEIPASS_CLIENT_ID }}
+            VITE_TAIPEIPASS_SCOPE=${{ secrets.VITE_TAIPEIPASS_SCOPE }}
 
       - name: Setup Helm
         uses: azure/setup-helm@v3
