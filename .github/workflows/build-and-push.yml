@@ -145,10 +145,10 @@ jobs:
           [ -n "$SEC_DB_DASHBOARD_USER" ] && ARGS+=(--from-literal=DB_DASHBOARD_USER="$SEC_DB_DASHBOARD_USER")
           [ -n "$SEC_DB_DASHBOARD_DBNAME" ] && ARGS+=(--from-literal=DB_DASHBOARD_DBNAME="$SEC_DB_DASHBOARD_DBNAME")
           [ -n "$SEC_DB_DASHBOARD_PORT" ] && ARGS+=(--from-literal=DB_DASHBOARD_PORT="$DB_PORT")
-          [ -n "$SEC_DB_DASHBOARD_HOST" ] && ARGS+=(--from-literal=DB_MANAGER_HOST="$SEC_DB_DASHBOARD_HOST")
-          [ -n "$SEC_DB_DASHBOARD_PASSWORD" ] && ARGS+=(--from-literal=DB_MANAGER_PASSWORD="$SEC_DB_DASHBOARD_PASSWORD")
-          [ -n "$SEC_DB_DASHBOARD_USER" ] && ARGS+=(--from-literal=DB_MANAGER_USER="$SEC_DB_DASHBOARD_USER")
-          [ -n "$SEC_DB_DASHBOARD_DBNAME" ] && ARGS+=(--from-literal=DB_MANAGER_DBNAME="$SEC_DB_DASHBOARD_DBNAME")
+          [ -n "$SEC_DB_MANAGER_HOST" ] && ARGS+=(--from-literal=DB_MANAGER_HOST="$SEC_DB_MANAGER_HOST")
+          [ -n "$SEC_DB_MANAGER_PASSWORD" ] && ARGS+=(--from-literal=DB_MANAGER_PASSWORD="$SEC_DB_MANAGER_PASSWORD")
+          [ -n "$SEC_DB_MANAGER_USER" ] && ARGS+=(--from-literal=DB_MANAGER_USER="$SEC_DB_MANAGER_USER")
+          [ -n "$SEC_DB_MANAGER_DBNAME" ] && ARGS+=(--from-literal=DB_MANAGER_DBNAME="$SEC_DB_MANAGER_DBNAME")
           [ -n "$SEC_DB_MANAGER_PORT" ] && ARGS+=(--from-literal=DB_MANAGER_PORT="$MANAGER_PORT")
           [ -n "$SEC_REDIS_HOST" ] && ARGS+=(--from-literal=REDIS_HOST="$SEC_REDIS_HOST")
           [ -n "$SEC_REDIS_PASSWORD" ] && ARGS+=(--from-literal=REDIS_PASSWORD="$SEC_REDIS_PASSWORD")
@@ -298,6 +298,8 @@ jobs:
           SEC_VITE_TAIPEIPASS_URL: ${{ secrets.VITE_TAIPEIPASS_URL }}
           SEC_VITE_TAIPEIPASS_CLIENT_ID: ${{ secrets.VITE_TAIPEIPASS_CLIENT_ID }}
           SEC_VITE_TAIPEIPASS_SCOPE: ${{ secrets.VITE_TAIPEIPASS_SCOPE }}
+          SEC_NODE_ENV: ${{ secrets.NODE_ENV }}
+
         run: |
           # Update existing secret with frontend-specific values using kubectl patch
           PATCH_DATA='{}'
@@ -309,7 +311,8 @@ jobs:
           [ -n "$SEC_VITE_TAIPEIPASS_URL" ] && PATCH_DATA=$(echo "$PATCH_DATA" | jq --arg val "$(echo -n "$SEC_VITE_TAIPEIPASS_URL" | base64)" '.data.VITE_TAIPEIPASS_URL = $val')
           [ -n "$SEC_VITE_TAIPEIPASS_CLIENT_ID" ] && PATCH_DATA=$(echo "$PATCH_DATA" | jq --arg val "$(echo -n "$SEC_VITE_TAIPEIPASS_CLIENT_ID" | base64)" '.data.VITE_TAIPEIPASS_CLIENT_ID = $val')
           [ -n "$SEC_VITE_TAIPEIPASS_SCOPE" ] && PATCH_DATA=$(echo "$PATCH_DATA" | jq --arg val "$(echo -n "$SEC_VITE_TAIPEIPASS_SCOPE" | base64)" '.data.VITE_TAIPEIPASS_SCOPE = $val')
-          
+          [ -n "$SEC_NODE_ENV" ] && PATCH_DATA=$(echo "$PATCH_DATA" | jq --arg val "$(echo -n "$SEC_NODE_ENV" | base64)" '.data.NODE_ENV = $val')
+
           # Only patch if we have data to add
           if [ "$PATCH_DATA" != '{}' ]; then
             echo "Patching secret with frontend data: $PATCH_DATA"
