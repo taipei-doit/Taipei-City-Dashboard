@@ -1,0 +1,183 @@
+# Default values for taipei-city-dashboard.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# Global configuration
+global:
+  imageRegistry: ""
+
+# Global image configuration for fallback
+image:
+  tag: "latest"
+  pullPolicy: IfNotPresent
+
+# Image pull secrets
+imagePullSecrets: []
+
+nameOverride: ""
+fullnameOverride: ""
+
+# Frontend configuration
+frontend:
+  enabled: true
+  replicaCount: 1
+  
+  image:
+    repository: taipei-city-dashboard-fe
+    tag: ""
+    pullPolicy: IfNotPresent
+  
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  
+  service:
+    type: ClusterIP
+    port: 80
+    targetPort: 8080
+  
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+  
+  env: {}
+  secretEnv: []
+  
+  securityContext: {}
+
+# Backend configuration
+backend:
+  enabled: true
+  replicaCount: 1
+  
+  image:
+    repository: taipei-city-dashboard-be
+    tag: ""
+    pullPolicy: IfNotPresent
+  
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  
+  service:
+    type: ClusterIP
+    port: 8080
+    targetPort: 8080
+  
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 1Gi
+    requests:
+      cpu: 200m
+      memory: 256Mi
+  
+  env: {}
+  secretEnv: []
+  
+  securityContext: {}
+  
+  # Database configuration defaults
+  db:
+    dashboard:
+      port: 5432
+      sslmode: require
+    manager:
+      port: 5432
+      sslmode: require
+  
+  # Redis configuration defaults
+  redis:
+    port: 6379
+    db: 0
+  
+  # Control whether to read these fields from secrets
+  useSecretDbDashboardPort: false
+  useSecretDbManagerPort: false
+  useSecretRedisPort: false
+  useSecretRedisDb: false
+
+# Service Account
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+# Pod Security Context
+podSecurityContext: {}
+
+# Security Context
+securityContext:
+  capabilities:
+    drop:
+    - ALL
+  readOnlyRootFilesystem: true
+  runAsNonRoot: true
+  runAsUser: 65534
+
+# Node selector
+nodeSelector: {}
+
+# Tolerations
+tolerations: []
+
+# Affinity
+affinity: {}
+
+# Autoscaling
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
+
+# Ingress configuration
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts:
+    - host: chart-example.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: []
+
+# External database configuration (for external databases)
+externalDatabase: {}
+
+# External Redis configuration (for external Redis)
+externalRedis: {}
+
+# PostgreSQL subchart configuration
+postgresql:
+  enabled: false
+  auth:
+    username: dashboard
+    password: changeme
+    database: dashboard
+
+# Redis subchart configuration
+redis:
+  enabled: false
+  auth:
+    enabled: true
+    password: changeme
+
+# Monitoring
+monitoring:
+  enabled: false
+  serviceMonitor:
+    enabled: false
+    namespace: monitoring
+    interval: 30s
+    labels: {}
