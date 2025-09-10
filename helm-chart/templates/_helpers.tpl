@@ -98,7 +98,10 @@ Create image name
 */}}
 {{- define "taipei-city-dashboard.image" -}}
 {{- $repositoryName := .repository -}}
-{{- $tag := (or .tag .Values.image.tag .Chart.AppVersion) | toString -}}
+{{- /* Only use provided .tag; if empty fallback to chart AppVersion to avoid nil pointer on absent .Values.image */ -}}
+{{- $explicitTag := .tag | toString -}}
+{{- $fallback := .Chart.AppVersion | toString -}}
+{{- $tag := (ternary $explicitTag $fallback (ne $explicitTag "")) -}}
 {{- printf "%s:%s" $repositoryName $tag -}}
 {{- end }}
 
