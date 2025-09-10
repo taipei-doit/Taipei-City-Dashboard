@@ -191,7 +191,7 @@ jobs:
           SEC_JWT_SECRET: ${{ secrets.JWT_SECRET }}
           SEC_GIN_DOMAIN: ${{ secrets.GIN_DOMAIN }}
           SEC_VITE_API_URL: ${{ secrets.VITE_API_URL }}
-          SEC_VITE_MAPBOX_TOKEN: ${{ secrets.VITE_MAPBOX_TOKEN }}
+          SEC_VITE_MAPBOXTOKEN: ${{ secrets.VITE_MAPBOXTOKEN }}
           SEC_IDNO_SALT: ${{ secrets.IDNO_SALT }}
           SEC_ISSO_CLIENT_ID: ${{ secrets.ISSO_CLIENT_ID }}
           SEC_ISSO_CLIENT_SECRET: ${{ secrets.ISSO_CLIENT_SECRET }}
@@ -228,7 +228,7 @@ jobs:
           [ -n "$SEC_JWT_SECRET" ] && ARGS+=(--from-literal=JWT_SECRET="$SEC_JWT_SECRET")
           [ -n "$SEC_GIN_DOMAIN" ] && ARGS+=(--from-literal=GIN_DOMAIN="$SEC_GIN_DOMAIN")
           [ -n "$SEC_VITE_API_URL" ] && ARGS+=(--from-literal=VITE_API_URL="$SEC_VITE_API_URL")
-          [ -n "$SEC_VITE_MAPBOX_TOKEN" ] && ARGS+=(--from-literal=VITE_MAPBOXTOKEN="$SEC_VITE_MAPBOX_TOKEN")
+          [ -n "$SEC_VITE_MAPBOXTOKEN" ] && ARGS+=(--from-literal=VITE_MAPBOXTOKEN="$SEC_VITE_MAPBOXTOKEN")
           [ -n "$SEC_IDNO_SALT" ] && ARGS+=(--from-literal=IDNO_SALT="$SEC_IDNO_SALT")
           [ -n "$SEC_ISSO_CLIENT_ID" ] && ARGS+=(--from-literal=ISSO_CLIENT_ID="$SEC_ISSO_CLIENT_ID")
           [ -n "$SEC_ISSO_CLIENT_SECRET" ] && ARGS+=(--from-literal=ISSO_CLIENT_SECRET="$SEC_ISSO_CLIENT_SECRET")
@@ -325,7 +325,7 @@ jobs:
           cat > Taipei-City-Dashboard-FE/.env <<EOF
           VITE_APP_TITLE=${{ secrets.VITE_APP_TITLE }}
           VITE_API_URL=${{ secrets.VITE_API_URL }}
-          VITE_MAPBOXTOKEN=${{ secrets.VITE_MAPBOX_TOKEN }}
+          VITE_MAPBOXTOKEN=${{ secrets.VITE_MAPBOXTOKEN }}
           VITE_MAPBOXTILE=${{ secrets.VITE_MAPBOXTILE }}
           VITE_TAIPEIPASS_URL=${{ secrets.VITE_TAIPEIPASS_URL }}
           VITE_TAIPEIPASS_CLIENT_ID=${{ secrets.VITE_TAIPEIPASS_CLIENT_ID }}
@@ -346,7 +346,7 @@ jobs:
           build-args: |
             VITE_API_URL=${{ secrets.VITE_API_URL }}
             VITE_APP_TITLE=${{ secrets.VITE_APP_TITLE }}
-            VITE_MAPBOXTOKEN=${{ secrets.VITE_MAPBOX_TOKEN }}
+            VITE_MAPBOXTOKEN=${{ secrets.VITE_MAPBOXTOKEN }}
             VITE_MAPBOXTILE=${{ secrets.VITE_MAPBOXTILE }}
             VITE_TAIPEIPASS_URL=${{ secrets.VITE_TAIPEIPASS_URL }}
             VITE_TAIPEIPASS_CLIENT_ID=${{ secrets.VITE_TAIPEIPASS_CLIENT_ID }}
@@ -386,7 +386,7 @@ jobs:
           SEC_VITE_API_URL: ${{ secrets.VITE_API_URL }}
           SEC_VITE_APP_TITLE: ${{ secrets.VITE_APP_TITLE }}
           SEC_BACKEND_URL: ${{ secrets.BACKEND_URL }}
-          SEC_VITE_MAPBOX_TOKEN: ${{ secrets.VITE_MAPBOX_TOKEN }}
+          SEC_VITE_MAPBOXTOKEN: ${{ secrets.VITE_MAPBOXTOKEN }}
           SEC_VITE_MAPBOXTILE: ${{ secrets.VITE_MAPBOXTILE }}
           SEC_VITE_TAIPEIPASS_URL: ${{ secrets.VITE_TAIPEIPASS_URL }}
           SEC_VITE_TAIPEIPASS_CLIENT_ID: ${{ secrets.VITE_TAIPEIPASS_CLIENT_ID }}
@@ -400,7 +400,7 @@ jobs:
           [ -n "$SEC_VITE_API_URL" ] && PATCH_DATA=$(echo "$PATCH_DATA" | jq --arg val "$(echo -n "$SEC_VITE_API_URL" | base64)" '.data.VITE_API_URL = $val')
           [ -n "$SEC_VITE_APP_TITLE" ] && PATCH_DATA=$(echo "$PATCH_DATA" | jq --arg val "$(echo -n "$SEC_VITE_APP_TITLE" | base64)" '.data.VITE_APP_TITLE = $val')
           [ -n "$SEC_BACKEND_URL" ] && PATCH_DATA=$(echo "$PATCH_DATA" | jq --arg val "$(echo -n "$SEC_BACKEND_URL" | base64)" '.data.BACKEND_URL = $val')
-          [ -n "$SEC_VITE_MAPBOX_TOKEN" ] && PATCH_DATA=$(echo "$PATCH_DATA" | jq --arg val "$(echo -n "$SEC_VITE_MAPBOX_TOKEN" | base64)" '.data.VITE_MAPBOXTOKEN = $val')
+          [ -n "$SEC_VITE_MAPBOXTOKEN" ] && PATCH_DATA=$(echo "$PATCH_DATA" | jq --arg val "$(echo -n "$SEC_VITE_MAPBOXTOKEN" | base64)" '.data.VITE_MAPBOXTOKEN = $val')
           [ -n "$SEC_VITE_MAPBOXTILE" ] && PATCH_DATA=$(echo "$PATCH_DATA" | jq --arg val "$(echo -n "$SEC_VITE_MAPBOXTILE" | base64)" '.data.VITE_MAPBOXTILE = $val')
           [ -n "$SEC_VITE_TAIPEIPASS_URL" ] && PATCH_DATA=$(echo "$PATCH_DATA" | jq --arg val "$(echo -n "$SEC_VITE_TAIPEIPASS_URL" | base64)" '.data.VITE_TAIPEIPASS_URL = $val')
           [ -n "$SEC_VITE_TAIPEIPASS_CLIENT_ID" ] && PATCH_DATA=$(echo "$PATCH_DATA" | jq --arg val "$(echo -n "$SEC_VITE_TAIPEIPASS_CLIENT_ID" | base64)" '.data.VITE_TAIPEIPASS_CLIENT_ID = $val')
