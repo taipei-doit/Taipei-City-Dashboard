@@ -4,6 +4,17 @@ on:
   push:
     branches: ["sit", "develop"]
   workflow_dispatch:
+    inputs:
+      force_backend:
+        description: "Force deploy backend even if no changes detected"
+        type: boolean
+        required: false
+        default: false
+      force_frontend:
+        description: "Force deploy frontend even if no changes detected"
+        type: boolean
+        required: false
+        default: false
 
 env:
   REGISTRY: citydashboard-dhc2gtetgcfqeqhv.azurecr.io
@@ -17,11 +28,67 @@ jobs:
     if: github.event_name == 'workflow_dispatch' || github.event_name == 'push'
     runs-on: ubuntu-latest
     outputs:
-      backend: "true"
-      frontend: "true"
+      backend: ${{ steps.set-outputs.outputs.backend }}
+      frontend: ${{ steps.set-outputs.outputs.frontend }}
     steps:
-      - name: Force deploy both services
-        run: echo "Deploying both backend and frontend"
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Determine base ref (push only)
+        id: base
+        if: github.event_name == 'push'
+        run: |
+          if [ -n "${{ github.event.before }}" ]; then
+            echo "base=${{ github.event.before }}" >> $GITHUB_OUTPUT
+          else
+            # Fallback: use HEAD^ if available
+            echo "base=$(git rev-parse HEAD^)" >> $GITHUB_OUTPUT || echo "base=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
+          fi
+          echo "Using base SHA: $(cat $GITHUB_OUTPUT)"
+
+      - name: Path changes filter
+        id: changes
+        uses: dorny/paths-filter@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          base: ${{ steps.base.outputs.base || 'HEAD^' }}
+          filters: |
+            backend:
+              - 'Taipei-City-Dashboard-BE/**'
+              - 'helm-chart/**'ˇ
+            frontend:
+              - 'Taipei-City-Dashboard-FE/**'
+              - 'helm-chart/**'
+            shared:
+              - '.github/workflows/build-and-push.yml'
+
+      - name: Evaluate change matrix & overrides
+        id: set-outputs
+        run: |
+          FORCE_BE='${{ github.event.inputs.force_backend }}'
+          FORCE_FE='${{ github.event.inputs.force_frontend }}'
+          CHG_BE='${{ steps.changes.outputs.backend }}'
+          CHG_FE='${{ steps.changes.outputs.frontend }}'
+          CHG_SHARED='${{ steps.changes.outputs.shared }}'
+          # If workflow_dispatch without inputs (empty strings), treat as false
+          [ "$FORCE_BE" = "true" ] && CHG_BE=true
+          [ "$FORCE_FE" = "true" ] && CHG_FE=true
+          # If shared files changed, deploy both
+          if [ "$CHG_SHARED" = "true" ]; then
+            CHG_BE=true
+            CHG_FE=true
+          fi
+          # If neither changed, to avoid a no-op confusing users, default to false for both (jobs will skip)
+          echo "backend=${CHG_BE}" >> $GITHUB_OUTPUT
+          echo "frontend=${CHG_FE}" >> $GITHUB_OUTPUT
+          echo "Detected changes -> backend=$CHG_BE frontend=$CHG_FE (shared=$CHG_SHARED force_backend=$FORCE_BE force_frontend=$FORCE_FE)"
+
+      - name: Summary
+        run: |
+          echo "Backend deploy: ${{ steps.set-outputs.outputs.backend }}"
+          echo "Frontend deploy: ${{ steps.set-outputs.outputs.frontend }}"
 
   backend:
     needs: detect-changes
@@ -253,6 +320,19 @@ jobs:
           SHA="${GITHUB_SHA}"
           echo "value=${BRANCH}-$(echo ${SHA} | cut -c1-8)" >> $GITHUB_OUTPUT
 
+      - name: Generate  env file (Vite)
+        run: |
+          cat > Taipei-City-Dashboard-FE/.env <<EOF
+          VITE_APP_TITLE=${{ secrets.VITE_APP_TITLE }}
+          VITE_API_URL=${{ secrets.VITE_API_URL }}
+          VITE_MAPBOXTOKEN=${{ secrets.VITE_MAPBOX_TOKEN }}
+          VITE_MAPBOXTILE=${{ secrets.VITE_MAPBOXTILE }}
+          VITE_TAIPEIPASS_URL=${{ secrets.VITE_TAIPEIPASS_URL }}
+          VITE_TAIPEIPASS_CLIENT_ID=${{ secrets.VITE_TAIPEIPASS_CLIENT_ID }}
+          VITE_TAIPEIPASS_SCOPE=${{ secrets.VITE_TAIPEIPASS_SCOPE }}
+          EOF
+          echo ".env generated (values not echoed)"
+
       - name: Build and push Frontend
         uses: docker/build-push-action@v5
         with:
@@ -318,6 +398,7 @@ jobs:
           PATCH_DATA='{}'
           
           [ -n "$SEC_VITE_API_URL" ] && PATCH_DATA=$(echo "$PATCH_DATA" | jq --arg val "$(echo -n "$SEC_VITE_API_URL" | base64)" '.data.VITE_API_URL = $val')
+          [ -n "$SEC_VITE_APP_TITLE" ] && PATCH_DATA=$(echo "$PATCH_DATA" | jq --arg val "$(echo -n "$SEC_VITE_APP_TITLE" | base64)" '.data.VITE_APP_TITLE = $val')
           [ -n "$SEC_BACKEND_URL" ] && PATCH_DATA=$(echo "$PATCH_DATA" | jq --arg val "$(echo -n "$SEC_BACKEND_URL" | base64)" '.data.BACKEND_URL = $val')
           [ -n "$SEC_VITE_MAPBOX_TOKEN" ] && PATCH_DATA=$(echo "$PATCH_DATA" | jq --arg val "$(echo -n "$SEC_VITE_MAPBOX_TOKEN" | base64)" '.data.VITE_MAPBOXTOKEN = $val')
           [ -n "$SEC_VITE_MAPBOXTILE" ] && PATCH_DATA=$(echo "$PATCH_DATA" | jq --arg val "$(echo -n "$SEC_VITE_MAPBOXTILE" | base64)" '.data.VITE_MAPBOXTILE = $val')
