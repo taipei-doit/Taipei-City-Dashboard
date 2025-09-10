@@ -246,21 +246,38 @@ jobs:
           SEC_REDIS_PORT: ${{ secrets.REDIS_PORT }}
           SEC_REDIS_DB: ${{ secrets.REDIS_DB }}
         run: |
-          # Always include values file for defaults; compute secret override flags if secrets exist
-          VALUES_FLAG="--values helm-chart/values-sit.yaml"
-          HELM_SET=""
-          if [ -n "$SEC_DB_DASHBOARD_PORT" ]; then HELM_SET+=" --set backend.useSecretDbDashboardPort=true"; fi
-          if [ -n "$SEC_DB_MANAGER_PORT" ]; then HELM_SET+=" --set backend.useSecretDbManagerPort=true"; fi
-          if [ -n "$SEC_REDIS_PORT" ]; then HELM_SET+=" --set backend.useSecretRedisPort=true"; fi
-          if [ -n "$SEC_REDIS_DB" ]; then HELM_SET+=" --set backend.useSecretRedisDb=true"; fi
-          helm upgrade --install ${{ env.RELEASE }} ./helm-chart \
-            $VALUES_FLAG \
-            $HELM_SET \
-            --set backend.image.tag="${{ steps.tag.outputs.value }}" \
-            --set frontend.image.tag="${{ steps.tag.outputs.value }}" \
-            --namespace="${{ env.NAMESPACE }}" \
-            --wait --timeout=20m \
-            --debug
+          set -euo pipefail
+          RELEASE="${{ env.RELEASE }}"
+          NS="${{ env.NAMESPACE }}"
+          NEW_TAG="${{ steps.tag.outputs.value }}"
+          HELM_SET_FLAGS=""
+          [ -n "$SEC_DB_DASHBOARD_PORT" ] && HELM_SET_FLAGS+=" --set backend.useSecretDbDashboardPort=true"
+          [ -n "$SEC_DB_MANAGER_PORT" ] && HELM_SET_FLAGS+=" --set backend.useSecretDbManagerPort=true"
+          [ -n "$SEC_REDIS_PORT" ] && HELM_SET_FLAGS+=" --set backend.useSecretRedisPort=true"
+          [ -n "$SEC_REDIS_DB" ] && HELM_SET_FLAGS+=" --set backend.useSecretRedisDb=true"
+          echo "Verifying backend image exists in registry: ${{ env.REGISTRY }}/${{ env.BE_IMAGE }}:$NEW_TAG"
+          if ! docker manifest inspect ${{ env.REGISTRY }}/${{ env.BE_IMAGE }}:$NEW_TAG > /dev/null 2>&1; then
+            echo "ERROR: Image ${{ env.REGISTRY }}/${{ env.BE_IMAGE }}:$NEW_TAG not found. Aborting deploy." >&2
+            exit 1
+          fi
+          if helm -n "$NS" status "$RELEASE" >/dev/null 2>&1; then
+            echo "Updating existing release (backend only) with tag $NEW_TAG"
+            helm upgrade "$RELEASE" ./helm-chart \
+              -f helm-chart/values-sit.yaml \
+              --reuse-values \
+              --set backend.image.tag="$NEW_TAG" \
+              $HELM_SET_FLAGS \
+              --namespace="$NS" \
+              --wait --timeout=20m --debug
+          else
+            echo "Release not found; performing initial install (backend). NOTE: frontend image tag will remain chart default unless built separately."
+            helm upgrade --install "$RELEASE" ./helm-chart \
+              --values helm-chart/values-sit.yaml \
+              --set backend.image.tag="$NEW_TAG" \
+              $HELM_SET_FLAGS \
+              --namespace="$NS" \
+              --wait --timeout=20m --debug
+          fi
       - name: Dump diagnostics on failure
         if: failure()
         shell: bash
@@ -417,11 +434,28 @@ jobs:
 
       - name: Deploy Frontend only
         run: |
-          VALUES_FLAG="--values helm-chart/values-sit.yaml"
-          helm upgrade --install ${{ env.RELEASE }} ./helm-chart \
-            $VALUES_FLAG \
-            --set frontend.image.tag="${{ steps.tag.outputs.value }}" \
-            --set backend.image.tag="${{ steps.tag.outputs.value }}" \
-            --namespace="${{ env.NAMESPACE }}" \
-            --wait --timeout=20m \
-            --debug
+          set -euo pipefail
+          RELEASE="${{ env.RELEASE }}"
+          NS="${{ env.NAMESPACE }}"
+          NEW_TAG="${{ steps.tag.outputs.value }}"
+          echo "Verifying frontend image exists in registry: ${{ env.REGISTRY }}/${{ env.FE_IMAGE }}:$NEW_TAG"
+          if ! docker manifest inspect ${{ env.REGISTRY }}/${{ env.FE_IMAGE }}:$NEW_TAG > /dev/null 2>&1; then
+            echo "ERROR: Image ${{ env.REGISTRY }}/${{ env.FE_IMAGE }}:$NEW_TAG not found. Aborting deploy." >&2
+            exit 1
+          fi
+          if helm -n "$NS" status "$RELEASE" >/dev/null 2>&1; then
+            echo "Updating existing release (frontend only) with tag $NEW_TAG"
+            helm upgrade "$RELEASE" ./helm-chart \
+              -f helm-chart/values-sit.yaml \
+              --reuse-values \
+              --set frontend.image.tag="$NEW_TAG" \
+              --namespace="$NS" \
+              --wait --timeout=20m --debug
+          else
+            echo "Release not found; initial install (frontend). Backend image tag will stay at chart default unless backend build runs."
+            helm upgrade --install "$RELEASE" ./helm-chart \
+              --values helm-chart/values-sit.yaml \
+              --set frontend.image.tag="$NEW_TAG" \
+              --namespace="$NS" \
+              --wait --timeout=20m --debug
+          fi
