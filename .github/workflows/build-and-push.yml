@@ -57,7 +57,7 @@ jobs:
           filters: |
             backend:
               - 'Taipei-City-Dashboard-BE/**'
-              - 'helm-chart/**'ˇ
+              - 'helm-chart/**'
             frontend:
               - 'Taipei-City-Dashboard-FE/**'
               - 'helm-chart/**'
