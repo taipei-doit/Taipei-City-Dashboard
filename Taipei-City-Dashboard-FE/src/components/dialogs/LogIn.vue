@@ -25,7 +25,7 @@ function openExternal(url) {
 
 const {
 	VITE_APP_TITLE,
-	PROD,
+	// PROD,
 	VITE_TAIPEIPASS_URL,
 	VITE_TAIPEIPASS_CLIENT_ID,
 	VITE_TAIPEIPASS_SCOPE,
@@ -43,13 +43,16 @@ const taipeiPassUrl = computed(() => {
 });
 
 function handleSwitchMode() {
-	if (PROD) {
-		return;
-	} else {
-		loginMode.value = loginMode.value === "tp" ? "email" : "tp";
-		email.value = "";
-		password.value = "";
-	}
+	loginMode.value = loginMode.value === "tp" ? "email" : "tp";
+	email.value = "";
+	password.value = "";
+	// if (PROD) {
+	// 	return;
+	// } else {
+	// 	loginMode.value = loginMode.value === "tp" ? "email" : "tp";
+	// 	email.value = "";
+	// 	password.value = "";
+	// }
 }
 function handleTaipeiPassLogin() {
 	window.open(taipeiPassUrl.value, "_self");

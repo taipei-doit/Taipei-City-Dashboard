@@ -265,6 +265,7 @@ jobs:
           platforms: linux/amd64
           build-args: |
             VITE_API_URL=${{ secrets.VITE_API_URL }}
+			VITE_APP_TITLE=${{ secrets.VITE_APP_TITLE }}
             VITE_MAPBOXTOKEN=${{ secrets.VITE_MAPBOX_TOKEN }}
             VITE_MAPBOXTILE=${{ secrets.VITE_MAPBOXTILE }}
             VITE_TAIPEIPASS_URL=${{ secrets.VITE_TAIPEIPASS_URL }}
@@ -303,6 +304,7 @@ jobs:
       - name: Create/Update Application Secrets
         env:
           SEC_VITE_API_URL: ${{ secrets.VITE_API_URL }}
+          SEC_VITE_APP_TITLE: ${{ secrets.VITE_APP_TITLE }}
           SEC_BACKEND_URL: ${{ secrets.BACKEND_URL }}
           SEC_VITE_MAPBOX_TOKEN: ${{ secrets.VITE_MAPBOX_TOKEN }}
           SEC_VITE_MAPBOXTILE: ${{ secrets.VITE_MAPBOXTILE }}
