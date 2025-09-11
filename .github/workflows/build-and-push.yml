@@ -219,26 +219,36 @@ jobs:
           SEC_BACKEND_URL: ${{ secrets.BACKEND_URL }}
         run: |
           set -euo pipefail
-          DB_PORT=${SEC_DB_DASHBOARD_PORT:-5432}
-          MANAGER_PORT=${SEC_DB_MANAGER_PORT:-$DB_PORT}
-          REDIS_PORT_VAL=${SEC_REDIS_PORT:-6379}
-          REDIS_DB_VAL=${SEC_REDIS_DB:-0}
+          # Defensive: ensure we are in bash (GitHub uses bash by default for run:)
+          if [ -z "${BASH_VERSION:-}" ]; then echo "This step requires bash" >&2; exit 1; fi
+          DB_PORT="${SEC_DB_DASHBOARD_PORT:-5432}"
+          MANAGER_PORT="${SEC_DB_MANAGER_PORT:-$DB_PORT}"
+          REDIS_PORT_VAL="${SEC_REDIS_PORT:-6379}"
+          REDIS_DB_VAL="${SEC_REDIS_DB:-0}"
+          # Build args in an array with safe quoting (one element per literal)
           ARGS=(create secret generic taipei-city-dashboard-secrets)
-          add(){ [ -n "$2" ] && ARGS+=(--from-literal=$1="$2"); }
+          add(){
+            local k="$1"; shift
+            local v="$1"
+            # Only append if value is non-empty; preserve spaces & symbols
+            if [ -n "$v" ]; then
+              ARGS+=("--from-literal=${k}=${v}")
+            fi
+          }
           add DB_DASHBOARD_HOST "$SEC_DB_DASHBOARD_HOST"
           add DB_DASHBOARD_PASSWORD "$SEC_DB_DASHBOARD_PASSWORD"
-          add DB_DASHBOARD_USER "$SEC_DB_DASHBOARD_USER"
+            add DB_DASHBOARD_USER "$SEC_DB_DASHBOARD_USER"
           add DB_DASHBOARD_DBNAME "$SEC_DB_DASHBOARD_DBNAME"
-          [ -n "$SEC_DB_DASHBOARD_PORT" ] && add DB_DASHBOARD_PORT "$DB_PORT"
+          if [ -n "${SEC_DB_DASHBOARD_PORT}" ]; then add DB_DASHBOARD_PORT "$DB_PORT"; fi
           add DB_MANAGER_HOST "$SEC_DB_MANAGER_HOST"
           add DB_MANAGER_PASSWORD "$SEC_DB_MANAGER_PASSWORD"
           add DB_MANAGER_USER "$SEC_DB_MANAGER_USER"
           add DB_MANAGER_DBNAME "$SEC_DB_MANAGER_DBNAME"
-          [ -n "$SEC_DB_MANAGER_PORT" ] && add DB_MANAGER_PORT "$MANAGER_PORT"
+          if [ -n "${SEC_DB_MANAGER_PORT}" ]; then add DB_MANAGER_PORT "$MANAGER_PORT"; fi
           add REDIS_HOST "$SEC_REDIS_HOST"
           add REDIS_PASSWORD "$SEC_REDIS_PASSWORD"
-          [ -n "$SEC_REDIS_PORT" ] && add REDIS_PORT "$REDIS_PORT_VAL"
-            [ -n "$SEC_REDIS_DB" ] && add REDIS_DB "$REDIS_DB_VAL"
+          if [ -n "${SEC_REDIS_PORT}" ]; then add REDIS_PORT "$REDIS_PORT_VAL"; fi
+          if [ -n "${SEC_REDIS_DB}" ]; then add REDIS_DB "$REDIS_DB_VAL"; fi
           add JWT_SECRET "$SEC_JWT_SECRET"
           add GIN_DOMAIN "$SEC_GIN_DOMAIN"
           add IDNO_SALT "$SEC_IDNO_SALT"
@@ -252,15 +262,25 @@ jobs:
           add VITE_TAIPEIPASS_SCOPE "$SEC_VITE_TAIPEIPASS_SCOPE"
           add VITE_APP_TITLE "$SEC_VITE_APP_TITLE"
           add BACKEND_URL "$SEC_BACKEND_URL"
+          # Show which keys will be applied (without values)
+          echo "Secret keys to apply:" >&2
+          for a in "${ARGS[@]}"; do
+            case "$a" in --from-literal=*) echo "  ${a#--from-literal=}" | cut -d= -f1 ;; esac
+          done
           ARGS+=(--namespace=${{ env.NAMESPACE }} --dry-run=client -o yaml)
-          kubectl "${ARGS[@]}" | kubectl apply -f -
+          # Execute kubectl with the array (no word splitting issues)
+          if ! kubectl "${ARGS[@]}" | kubectl apply -f -; then
+            echo "[ERROR] Failed to create/update secret. Re-run with set -x for more detail." >&2
+            exit 1
+          fi
+          echo "Secret applied successfully"
 
       - name: Single Helm upgrade (backend + frontend)
         env:
-          SEC_DB_DASHBOARD_PORT: ${{ secrets.DB_DASHBOARD_PORT }}
-          SEC_DB_MANAGER_PORT: ${{ secrets.DB_MANAGER_PORT }}
-          SEC_REDIS_PORT: ${{ secrets.REDIS_PORT }}
-          SEC_REDIS_DB: ${{ secrets.REDIS_DB }}
+          SEC_DB_DASHBOARD_PORT: ${{ secrets.DB_DASHBOARD_PORT || '' }}
+          SEC_DB_MANAGER_PORT: ${{ secrets.DB_MANAGER_PORT || '' }}
+          SEC_REDIS_PORT: ${{ secrets.REDIS_PORT || '' }}
+          SEC_REDIS_DB: ${{ secrets.REDIS_DB || '' }}
         run: |
           set -euo pipefail
           RELEASE=${{ env.RELEASE }}
