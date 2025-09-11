@@ -73,8 +73,7 @@
               height="180"
               controls
               autoplay
-              muted
-            />
+              muted></video>
           </template>
         </div>
         <div v-else>
