@@ -72,29 +72,38 @@ jobs:
           CHG_BE='${{ steps.changes.outputs.backend }}'
           CHG_FE='${{ steps.changes.outputs.frontend }}'
           CHG_SHARED='${{ steps.changes.outputs.shared }}'
-          # If workflow_dispatch without inputs (empty strings), treat as false
-          [ "$FORCE_BE" = "true" ] && CHG_BE=true
-          [ "$FORCE_FE" = "true" ] && CHG_FE=true
-          # If shared files changed, deploy both
-          if [ "$CHG_SHARED" = "true" ]; then
-            CHG_BE=true
-            CHG_FE=true
+          
+          # Strategy: if ANY change detected, deploy BOTH services for consistency and safety
+          ANY_CHANGE=false
+          
+          # Check for any changes
+          if [ "$FORCE_BE" = "true" ] || [ "$FORCE_FE" = "true" ] || [ "$CHG_BE" = "true" ] || [ "$CHG_FE" = "true" ] || [ "$CHG_SHARED" = "true" ]; then
+            ANY_CHANGE=true
           fi
-          # If neither changed, to avoid a no-op confusing users, default to false for both (jobs will skip)
-          echo "backend=${CHG_BE}" >> $GITHUB_OUTPUT
-          echo "frontend=${CHG_FE}" >> $GITHUB_OUTPUT
-          echo "Detected changes -> backend=$CHG_BE frontend=$CHG_FE (shared=$CHG_SHARED force_backend=$FORCE_BE force_frontend=$FORCE_FE)"
+          
+          # If any change detected, deploy both services
+          if [ "$ANY_CHANGE" = "true" ]; then
+            echo "Changes detected - deploying both services for consistency"
+            echo "backend=true" >> $GITHUB_OUTPUT
+            echo "frontend=true" >> $GITHUB_OUTPUT
+          else
+            echo "No changes detected - skipping deployment"
+            echo "backend=false" >> $GITHUB_OUTPUT
+            echo "frontend=false" >> $GITHUB_OUTPUT
+          fi
+          
+          echo "Final decision -> backend=true frontend=true (any_change=$ANY_CHANGE, triggers: force_be=$FORCE_BE force_fe=$FORCE_FE chg_be=$CHG_BE chg_fe=$CHG_FE chg_shared=$CHG_SHARED)"
 
       - name: Summary
         run: |
           echo "Backend deploy: ${{ steps.set-outputs.outputs.backend }}"
           echo "Frontend deploy: ${{ steps.set-outputs.outputs.frontend }}"
 
-  backend:
+  build-and-deploy:
     needs: detect-changes
     if: (github.event_name == 'workflow_dispatch' || github.event_name == 'push') && needs.detect-changes.outputs.backend == 'true'
     runs-on: ubuntu-latest
-    environment: sit  # 暫時移除，避免環境保護規則阻擋
+    environment: sit
     concurrency:
       group: deploy-${{ github.ref }}
       cancel-in-progress: false
@@ -112,20 +121,46 @@ jobs:
           username: ${{ secrets.ACR_USERNAME }}
           password: ${{ secrets.ACR_PASSWORD }}
 
-      - name: Compute image tag
+      - name: Compute unified image tag
         id: tag
         run: |
           BRANCH="${GITHUB_REF_NAME}"
-          SHA="${GITHUB_SHA}"
-          echo "value=${BRANCH}-$(echo ${SHA} | cut -c1-8)" >> $GITHUB_OUTPUT
+            SHA="${GITHUB_SHA}"
+          TAG="${BRANCH}-$(echo ${SHA} | cut -c1-8)"
+          echo "value=${TAG}" >> $GITHUB_OUTPUT
+          echo "Using image tag: ${TAG}"
 
-      - name: Build and push Backend
+      - name: Generate frontend .env (Vite build)
+        run: |
+          cat > Taipei-City-Dashboard-FE/.env <<EOF
+          VITE_APP_TITLE=${{ secrets.VITE_APP_TITLE }}
+          VITE_API_URL=${{ secrets.VITE_API_URL }}
+          VITE_MAPBOXTOKEN=${{ secrets.VITE_MAPBOXTOKEN }}
+          VITE_MAPBOXTILE=${{ secrets.VITE_MAPBOXTILE }}
+          VITE_TAIPEIPASS_URL=${{ secrets.VITE_TAIPEIPASS_URL }}
+          VITE_TAIPEIPASS_CLIENT_ID=${{ secrets.VITE_TAIPEIPASS_CLIENT_ID }}
+          VITE_TAIPEIPASS_SCOPE=${{ secrets.VITE_TAIPEIPASS_SCOPE }}
+          EOF
+          echo ".env generated (values hidden)"
+
+      - name: Build & push Backend image
         uses: docker/build-push-action@v5
         with:
           context: ./Taipei-City-Dashboard-BE
           file: ./Taipei-City-Dashboard-BE/Dockerfile
           push: true
           tags: ${{ env.REGISTRY }}/${{ env.BE_IMAGE }}:${{ steps.tag.outputs.value }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          platforms: linux/amd64
+
+      - name: Build & push Frontend image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./Taipei-City-Dashboard-FE
+          file: ./Taipei-City-Dashboard-FE/Dockerfile
+          push: true
+          tags: ${{ env.REGISTRY }}/${{ env.FE_IMAGE }}:${{ steps.tag.outputs.value }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
           platforms: linux/amd64
@@ -139,15 +174,9 @@ jobs:
         run: |
           mkdir -p ~/.kube
           if [ -z "${{ secrets.KUBE_CONFIG_DATA }}" ]; then
-            echo "ERROR: KUBE_CONFIG_DATA secret is not set!"
-            exit 1
-          fi
-          echo "KUBE_CONFIG_DATA is set, length check..."
-            echo "${{ secrets.KUBE_CONFIG_DATA }}" | wc -c
-          echo "Decoding kubeconfig..."
+            echo "ERROR: KUBE_CONFIG_DATA secret is not set!"; exit 1; fi
           echo "${{ secrets.KUBE_CONFIG_DATA }}" | base64 -d > ~/.kube/config
           chmod 600 ~/.kube/config
-          echo "Kubeconfig created successfully"
           kubectl cluster-info
 
       - name: Create/Update ACR imagePullSecret
@@ -156,23 +185,10 @@ jobs:
             --docker-server=${{ env.REGISTRY }} \
             --docker-username='${{ secrets.ACR_USERNAME }}' \
             --docker-password='${{ secrets.ACR_PASSWORD }}' \
-            --namespace=dashboard \
+            --namespace=${{ env.NAMESPACE }} \
             --dry-run=client -o yaml | kubectl apply -f -
 
-      - name: Ensure ServiceAccount has imagePullSecrets
-        shell: bash
-        run: |
-          set -euo pipefail
-          NS="${{ env.NAMESPACE }}"
-          SA="taipei-city-dashboard"
-          if kubectl -n "$NS" get sa "$SA" >/dev/null 2>&1; then
-            echo "Patching ServiceAccount $SA to use imagePullSecret acr-secret"
-            kubectl -n "$NS" patch sa "$SA" --type merge -p '{"imagePullSecrets":[{"name":"acr-secret"}]}'
-          else
-            echo "ServiceAccount $SA not found, skip patch (chart may set imagePullSecrets itself)"
-          fi
-
-      - name: Create/Update Application Secrets
+      - name: Build / Apply unified application secret
         env:
           SEC_DB_DASHBOARD_HOST: ${{ secrets.DB_DASHBOARD_HOST }}
           SEC_DB_DASHBOARD_PASSWORD: ${{ secrets.DB_DASHBOARD_PASSWORD }}
@@ -190,56 +206,56 @@ jobs:
           SEC_REDIS_DB: ${{ secrets.REDIS_DB }}
           SEC_JWT_SECRET: ${{ secrets.JWT_SECRET }}
           SEC_GIN_DOMAIN: ${{ secrets.GIN_DOMAIN }}
-          SEC_VITE_API_URL: ${{ secrets.VITE_API_URL }}
-          SEC_VITE_MAPBOXTOKEN: ${{ secrets.VITE_MAPBOXTOKEN }}
           SEC_IDNO_SALT: ${{ secrets.IDNO_SALT }}
           SEC_ISSO_CLIENT_ID: ${{ secrets.ISSO_CLIENT_ID }}
           SEC_ISSO_CLIENT_SECRET: ${{ secrets.ISSO_CLIENT_SECRET }}
+          SEC_VITE_API_URL: ${{ secrets.VITE_API_URL }}
+          SEC_VITE_MAPBOXTOKEN: ${{ secrets.VITE_MAPBOXTOKEN }}
           SEC_VITE_MAPBOXTILE: ${{ secrets.VITE_MAPBOXTILE }}
           SEC_VITE_TAIPEIPASS_URL: ${{ secrets.VITE_TAIPEIPASS_URL }}
           SEC_VITE_TAIPEIPASS_CLIENT_ID: ${{ secrets.VITE_TAIPEIPASS_CLIENT_ID }}
           SEC_VITE_TAIPEIPASS_SCOPE: ${{ secrets.VITE_TAIPEIPASS_SCOPE }}
+          SEC_VITE_APP_TITLE: ${{ secrets.VITE_APP_TITLE }}
+          SEC_BACKEND_URL: ${{ secrets.BACKEND_URL }}
         run: |
-          # Default DB/Redis ports if secrets are missing
-          DB_PORT="$SEC_DB_DASHBOARD_PORT"
-          if [ -z "$DB_PORT" ]; then DB_PORT="5432"; fi
-          MANAGER_PORT="$SEC_DB_MANAGER_PORT"
-          if [ -z "$MANAGER_PORT" ]; then MANAGER_PORT="$DB_PORT"; fi
-          REDIS_PORT_VAL="$SEC_REDIS_PORT"
-          if [ -z "$REDIS_PORT_VAL" ]; then REDIS_PORT_VAL="6379"; fi
-          REDIS_DB_VAL="$SEC_REDIS_DB"
-          if [ -z "$REDIS_DB_VAL" ]; then REDIS_DB_VAL="0"; fi
-          # Build secret args conditionally so only provided secrets override defaults
+          set -euo pipefail
+          DB_PORT=${SEC_DB_DASHBOARD_PORT:-5432}
+          MANAGER_PORT=${SEC_DB_MANAGER_PORT:-$DB_PORT}
+          REDIS_PORT_VAL=${SEC_REDIS_PORT:-6379}
+          REDIS_DB_VAL=${SEC_REDIS_DB:-0}
           ARGS=(create secret generic taipei-city-dashboard-secrets)
-          [ -n "$SEC_DB_DASHBOARD_HOST" ] && ARGS+=(--from-literal=DB_DASHBOARD_HOST="$SEC_DB_DASHBOARD_HOST")
-          [ -n "$SEC_DB_DASHBOARD_PASSWORD" ] && ARGS+=(--from-literal=DB_DASHBOARD_PASSWORD="$SEC_DB_DASHBOARD_PASSWORD")
-          [ -n "$SEC_DB_DASHBOARD_USER" ] && ARGS+=(--from-literal=DB_DASHBOARD_USER="$SEC_DB_DASHBOARD_USER")
-          [ -n "$SEC_DB_DASHBOARD_DBNAME" ] && ARGS+=(--from-literal=DB_DASHBOARD_DBNAME="$SEC_DB_DASHBOARD_DBNAME")
-          [ -n "$SEC_DB_DASHBOARD_PORT" ] && ARGS+=(--from-literal=DB_DASHBOARD_PORT="$DB_PORT")
-          [ -n "$SEC_DB_MANAGER_HOST" ] && ARGS+=(--from-literal=DB_MANAGER_HOST="$SEC_DB_MANAGER_HOST")
-          [ -n "$SEC_DB_MANAGER_PASSWORD" ] && ARGS+=(--from-literal=DB_MANAGER_PASSWORD="$SEC_DB_MANAGER_PASSWORD")
-          [ -n "$SEC_DB_MANAGER_USER" ] && ARGS+=(--from-literal=DB_MANAGER_USER="$SEC_DB_MANAGER_USER")
-          [ -n "$SEC_DB_MANAGER_DBNAME" ] && ARGS+=(--from-literal=DB_MANAGER_DBNAME="$SEC_DB_MANAGER_DBNAME")
-          [ -n "$SEC_DB_MANAGER_PORT" ] && ARGS+=(--from-literal=DB_MANAGER_PORT="$MANAGER_PORT")
-          [ -n "$SEC_REDIS_HOST" ] && ARGS+=(--from-literal=REDIS_HOST="$SEC_REDIS_HOST")
-          [ -n "$SEC_REDIS_PASSWORD" ] && ARGS+=(--from-literal=REDIS_PASSWORD="$SEC_REDIS_PASSWORD")
-          [ -n "$SEC_REDIS_PORT" ] && ARGS+=(--from-literal=REDIS_PORT="$REDIS_PORT_VAL")
-          [ -n "$SEC_REDIS_DB" ] && ARGS+=(--from-literal=REDIS_DB="$REDIS_DB_VAL")
-          [ -n "$SEC_JWT_SECRET" ] && ARGS+=(--from-literal=JWT_SECRET="$SEC_JWT_SECRET")
-          [ -n "$SEC_GIN_DOMAIN" ] && ARGS+=(--from-literal=GIN_DOMAIN="$SEC_GIN_DOMAIN")
-          [ -n "$SEC_VITE_API_URL" ] && ARGS+=(--from-literal=VITE_API_URL="$SEC_VITE_API_URL")
-          [ -n "$SEC_VITE_MAPBOXTOKEN" ] && ARGS+=(--from-literal=VITE_MAPBOXTOKEN="$SEC_VITE_MAPBOXTOKEN")
-          [ -n "$SEC_IDNO_SALT" ] && ARGS+=(--from-literal=IDNO_SALT="$SEC_IDNO_SALT")
-          [ -n "$SEC_ISSO_CLIENT_ID" ] && ARGS+=(--from-literal=ISSO_CLIENT_ID="$SEC_ISSO_CLIENT_ID")
-          [ -n "$SEC_ISSO_CLIENT_SECRET" ] && ARGS+=(--from-literal=ISSO_CLIENT_SECRET="$SEC_ISSO_CLIENT_SECRET")
-          [ -n "$SEC_VITE_MAPBOXTILE" ] && ARGS+=(--from-literal=VITE_MAPBOXTILE="$SEC_VITE_MAPBOXTILE")
-          [ -n "$SEC_VITE_TAIPEIPASS_URL" ] && ARGS+=(--from-literal=VITE_TAIPEIPASS_URL="$SEC_VITE_TAIPEIPASS_URL")
-          [ -n "$SEC_VITE_TAIPEIPASS_CLIENT_ID" ] && ARGS+=(--from-literal=VITE_TAIPEIPASS_CLIENT_ID="$SEC_VITE_TAIPEIPASS_CLIENT_ID")
-          [ -n "$SEC_VITE_TAIPEIPASS_SCOPE" ] && ARGS+=(--from-literal=VITE_TAIPEIPASS_SCOPE="$SEC_VITE_TAIPEIPASS_SCOPE")
-          ARGS+=(--namespace="${{ env.NAMESPACE }}" --dry-run=client -o yaml)
+          add(){ [ -n "$2" ] && ARGS+=(--from-literal=$1="$2"); }
+          add DB_DASHBOARD_HOST "$SEC_DB_DASHBOARD_HOST"
+          add DB_DASHBOARD_PASSWORD "$SEC_DB_DASHBOARD_PASSWORD"
+          add DB_DASHBOARD_USER "$SEC_DB_DASHBOARD_USER"
+          add DB_DASHBOARD_DBNAME "$SEC_DB_DASHBOARD_DBNAME"
+          [ -n "$SEC_DB_DASHBOARD_PORT" ] && add DB_DASHBOARD_PORT "$DB_PORT"
+          add DB_MANAGER_HOST "$SEC_DB_MANAGER_HOST"
+          add DB_MANAGER_PASSWORD "$SEC_DB_MANAGER_PASSWORD"
+          add DB_MANAGER_USER "$SEC_DB_MANAGER_USER"
+          add DB_MANAGER_DBNAME "$SEC_DB_MANAGER_DBNAME"
+          [ -n "$SEC_DB_MANAGER_PORT" ] && add DB_MANAGER_PORT "$MANAGER_PORT"
+          add REDIS_HOST "$SEC_REDIS_HOST"
+          add REDIS_PASSWORD "$SEC_REDIS_PASSWORD"
+          [ -n "$SEC_REDIS_PORT" ] && add REDIS_PORT "$REDIS_PORT_VAL"
+            [ -n "$SEC_REDIS_DB" ] && add REDIS_DB "$REDIS_DB_VAL"
+          add JWT_SECRET "$SEC_JWT_SECRET"
+          add GIN_DOMAIN "$SEC_GIN_DOMAIN"
+          add IDNO_SALT "$SEC_IDNO_SALT"
+          add ISSO_CLIENT_ID "$SEC_ISSO_CLIENT_ID"
+          add ISSO_CLIENT_SECRET "$SEC_ISSO_CLIENT_SECRET"
+          add VITE_API_URL "$SEC_VITE_API_URL"
+          add VITE_MAPBOXTOKEN "$SEC_VITE_MAPBOXTOKEN"
+          add VITE_MAPBOXTILE "$SEC_VITE_MAPBOXTILE"
+          add VITE_TAIPEIPASS_URL "$SEC_VITE_TAIPEIPASS_URL"
+          add VITE_TAIPEIPASS_CLIENT_ID "$SEC_VITE_TAIPEIPASS_CLIENT_ID"
+          add VITE_TAIPEIPASS_SCOPE "$SEC_VITE_TAIPEIPASS_SCOPE"
+          add VITE_APP_TITLE "$SEC_VITE_APP_TITLE"
+          add BACKEND_URL "$SEC_BACKEND_URL"
+          ARGS+=(--namespace=${{ env.NAMESPACE }} --dry-run=client -o yaml)
           kubectl "${ARGS[@]}" | kubectl apply -f -
 
-      - name: Deploy Backend only
+      - name: Single Helm upgrade (backend + frontend)
         env:
           SEC_DB_DASHBOARD_PORT: ${{ secrets.DB_DASHBOARD_PORT }}
           SEC_DB_MANAGER_PORT: ${{ secrets.DB_MANAGER_PORT }}
@@ -247,215 +263,37 @@ jobs:
           SEC_REDIS_DB: ${{ secrets.REDIS_DB }}
         run: |
           set -euo pipefail
-          RELEASE="${{ env.RELEASE }}"
-          NS="${{ env.NAMESPACE }}"
-          NEW_TAG="${{ steps.tag.outputs.value }}"
-          HELM_SET_FLAGS=""
-          [ -n "$SEC_DB_DASHBOARD_PORT" ] && HELM_SET_FLAGS+=" --set backend.useSecretDbDashboardPort=true"
-          [ -n "$SEC_DB_MANAGER_PORT" ] && HELM_SET_FLAGS+=" --set backend.useSecretDbManagerPort=true"
-          [ -n "$SEC_REDIS_PORT" ] && HELM_SET_FLAGS+=" --set backend.useSecretRedisPort=true"
-          [ -n "$SEC_REDIS_DB" ] && HELM_SET_FLAGS+=" --set backend.useSecretRedisDb=true"
-          echo "Verifying backend image exists in registry: ${{ env.REGISTRY }}/${{ env.BE_IMAGE }}:$NEW_TAG"
-          if ! docker manifest inspect ${{ env.REGISTRY }}/${{ env.BE_IMAGE }}:$NEW_TAG > /dev/null 2>&1; then
-            echo "ERROR: Image ${{ env.REGISTRY }}/${{ env.BE_IMAGE }}:$NEW_TAG not found. Aborting deploy." >&2
-            exit 1
-          fi
+          RELEASE=${{ env.RELEASE }}
+          NS=${{ env.NAMESPACE }}
+          TAG=${{ steps.tag.outputs.value }}
+          echo "Verifying images exist..."
+          for img in ${{ env.REGISTRY }}/${{ env.BE_IMAGE }}:$TAG ${{ env.REGISTRY }}/${{ env.FE_IMAGE }}:$TAG; do
+            echo "Checking $img"; docker manifest inspect $img > /dev/null 2>&1 || { echo "Missing image $img" >&2; exit 1; }; done
+          HELM_SET="--set backend.image.tag=$TAG --set frontend.image.tag=$TAG"
+          [ -n "$SEC_DB_DASHBOARD_PORT" ] && HELM_SET+=" --set backend.useSecretDbDashboardPort=true"
+          [ -n "$SEC_DB_MANAGER_PORT" ] && HELM_SET+=" --set backend.useSecretDbManagerPort=true"
+          [ -n "$SEC_REDIS_PORT" ] && HELM_SET+=" --set backend.useSecretRedisPort=true"
+          [ -n "$SEC_REDIS_DB" ] && HELM_SET+=" --set backend.useSecretRedisDb=true"
           if helm -n "$NS" status "$RELEASE" >/dev/null 2>&1; then
-            echo "Updating existing release (backend only) with tag $NEW_TAG"
-            helm upgrade "$RELEASE" ./helm-chart \
-              -f helm-chart/values-sit.yaml \
-              --reuse-values \
-              --set backend.image.tag="$NEW_TAG" \
-              $HELM_SET_FLAGS \
-              --namespace="$NS" \
-              --wait --timeout=20m --debug
+            echo "Upgrading existing release $RELEASE with tag $TAG"
+            helm upgrade "$RELEASE" ./helm-chart -f helm-chart/values-sit.yaml $HELM_SET --namespace "$NS" --wait --timeout=20m --debug
           else
-            echo "Release not found; performing initial install (backend). NOTE: frontend image tag will remain chart default unless built separately."
-            helm upgrade --install "$RELEASE" ./helm-chart \
-              --values helm-chart/values-sit.yaml \
-              --set backend.image.tag="$NEW_TAG" \
-              $HELM_SET_FLAGS \
-              --namespace="$NS" \
-              --wait --timeout=20m --debug
+            echo "Installing new release $RELEASE with tag $TAG"
+            helm upgrade --install "$RELEASE" ./helm-chart -f helm-chart/values-sit.yaml $HELM_SET --namespace "$NS" --wait --timeout=20m --debug
           fi
-      - name: Dump diagnostics on failure
+
+      - name: Deployment summary
+        run: |
+          NS=${{ env.NAMESPACE }}
+          echo "Backend image -> $(kubectl -n $NS get deploy taipei-city-dashboard-backend -o jsonpath='{.spec.template.spec.containers[0].image}')"
+          echo "Frontend image -> $(kubectl -n $NS get deploy taipei-city-dashboard-frontend -o jsonpath='{.spec.template.spec.containers[0].image}')"
+
+      - name: Diagnostics on failure
         if: failure()
-        shell: bash
         run: |
           set +e
-          NS="${{ env.NAMESPACE }}"
-          echo "=== Objects ==="
-          kubectl -n "$NS" get deploy,rs,po,svc,hpa -o wide
-          echo
-          echo "=== Backend describe ==="
-          kubectl -n "$NS" describe deploy taipei-city-dashboard-backend || true
-          for p in $(kubectl -n "$NS" get pods -l app.kubernetes.io/name=taipei-city-dashboard-backend -o name); do
-            echo "----- $p describe -----"
-            kubectl -n "$NS" describe "$p" || true
-            echo "----- $p logs (all containers, last 400 lines) -----"
-            kubectl -n "$NS" logs "$p" --all-containers --tail=400 || true
-          done
-          echo
-          echo "=== Frontend describe ==="
-          kubectl -n "$NS" describe deploy taipei-city-dashboard-frontend || true
-          for p in $(kubectl -n "$NS" get pods -l app.kubernetes.io/name=taipei-city-dashboard-frontend -o name); do
-            echo "----- $p describe -----"
-            kubectl -n "$NS" describe "$p" || true
-            echo "----- $p logs (all containers, last 200 lines) -----"
-            kubectl -n "$NS" logs "$p" --all-containers --tail=200 || true
-          done
-          echo
-          echo "=== Recent events ==="
-          kubectl -n "$NS" get events --sort-by=.lastTimestamp | tail -n 200 || true
-
-  frontend:
-    needs: detect-changes
-    if: (github.event_name == 'workflow_dispatch' || github.event_name == 'push') && needs.detect-changes.outputs.frontend == 'true'
-    runs-on: ubuntu-latest
-    environment: sit 
-    concurrency:
-      group: deploy-${{ github.ref }}
-      cancel-in-progress: false
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Login to ACR
-        uses: docker/login-action@v3
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ secrets.ACR_USERNAME }}
-          password: ${{ secrets.ACR_PASSWORD }}
-
-      - name: Compute image tag
-        id: tag
-        run: |
-          BRANCH="${GITHUB_REF_NAME}"
-          SHA="${GITHUB_SHA}"
-          echo "value=${BRANCH}-$(echo ${SHA} | cut -c1-8)" >> $GITHUB_OUTPUT
-
-      - name: Generate  env file (Vite)
-        run: |
-          cat > Taipei-City-Dashboard-FE/.env <<EOF
-          VITE_APP_TITLE=${{ secrets.VITE_APP_TITLE }}
-          VITE_API_URL=${{ secrets.VITE_API_URL }}
-          VITE_MAPBOXTOKEN=${{ secrets.VITE_MAPBOXTOKEN }}
-          VITE_MAPBOXTILE=${{ secrets.VITE_MAPBOXTILE }}
-          VITE_TAIPEIPASS_URL=${{ secrets.VITE_TAIPEIPASS_URL }}
-          VITE_TAIPEIPASS_CLIENT_ID=${{ secrets.VITE_TAIPEIPASS_CLIENT_ID }}
-          VITE_TAIPEIPASS_SCOPE=${{ secrets.VITE_TAIPEIPASS_SCOPE }}
-          EOF
-          echo ".env generated (values not echoed)"
-
-      - name: Build and push Frontend
-        uses: docker/build-push-action@v5
-        with:
-          context: ./Taipei-City-Dashboard-FE
-          file: ./Taipei-City-Dashboard-FE/Dockerfile
-          push: true
-          tags: ${{ env.REGISTRY }}/${{ env.FE_IMAGE }}:${{ steps.tag.outputs.value }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-          platforms: linux/amd64
-          build-args: |
-            VITE_API_URL=${{ secrets.VITE_API_URL }}
-            VITE_APP_TITLE=${{ secrets.VITE_APP_TITLE }}
-            VITE_MAPBOXTOKEN=${{ secrets.VITE_MAPBOXTOKEN }}
-            VITE_MAPBOXTILE=${{ secrets.VITE_MAPBOXTILE }}
-            VITE_TAIPEIPASS_URL=${{ secrets.VITE_TAIPEIPASS_URL }}
-            VITE_TAIPEIPASS_CLIENT_ID=${{ secrets.VITE_TAIPEIPASS_CLIENT_ID }}
-            VITE_TAIPEIPASS_SCOPE=${{ secrets.VITE_TAIPEIPASS_SCOPE }}
-
-      - name: Setup Helm
-        uses: azure/setup-helm@v3
-        with:
-          version: '3.13.0'
-
-      - name: Configure kubeconfig
-        run: |
-          mkdir -p ~/.kube
-          if [ -z "${{ secrets.KUBE_CONFIG_DATA }}" ]; then
-            echo "ERROR: KUBE_CONFIG_DATA secret is not set!"
-            exit 1
-          fi
-          echo "KUBE_CONFIG_DATA is set, length check..."
-          echo "${{ secrets.KUBE_CONFIG_DATA }}" | wc -c
-          echo "Decoding kubeconfig..."
-          echo "${{ secrets.KUBE_CONFIG_DATA }}" | base64 -d > ~/.kube/config
-          chmod 600 ~/.kube/config
-          echo "Kubeconfig created successfully"
-          kubectl cluster-info
-
-      - name: Create/Update ACR imagePullSecret
-        run: |
-          kubectl create secret docker-registry acr-secret \
-            --docker-server=${{ env.REGISTRY }} \
-            --docker-username='${{ secrets.ACR_USERNAME }}' \
-            --docker-password='${{ secrets.ACR_PASSWORD }}' \
-            --namespace=dashboard \
-            --dry-run=client -o yaml | kubectl apply -f -
-
-      - name: Create/Update Application Secrets
-        env:
-          SEC_VITE_API_URL: ${{ secrets.VITE_API_URL }}
-          SEC_VITE_APP_TITLE: ${{ secrets.VITE_APP_TITLE }}
-          SEC_BACKEND_URL: ${{ secrets.BACKEND_URL }}
-          SEC_VITE_MAPBOXTOKEN: ${{ secrets.VITE_MAPBOXTOKEN }}
-          SEC_VITE_MAPBOXTILE: ${{ secrets.VITE_MAPBOXTILE }}
-          SEC_VITE_TAIPEIPASS_URL: ${{ secrets.VITE_TAIPEIPASS_URL }}
-          SEC_VITE_TAIPEIPASS_CLIENT_ID: ${{ secrets.VITE_TAIPEIPASS_CLIENT_ID }}
-          SEC_VITE_TAIPEIPASS_SCOPE: ${{ secrets.VITE_TAIPEIPASS_SCOPE }}
-          SEC_NODE_ENV: ${{ secrets.NODE_ENV }}
-
-        run: |
-          # Update existing secret with frontend-specific values using kubectl patch
-          PATCH_DATA='{}'
-          
-          [ -n "$SEC_VITE_API_URL" ] && PATCH_DATA=$(echo "$PATCH_DATA" | jq --arg val "$(echo -n "$SEC_VITE_API_URL" | base64)" '.data.VITE_API_URL = $val')
-          [ -n "$SEC_VITE_APP_TITLE" ] && PATCH_DATA=$(echo "$PATCH_DATA" | jq --arg val "$(echo -n "$SEC_VITE_APP_TITLE" | base64)" '.data.VITE_APP_TITLE = $val')
-          [ -n "$SEC_BACKEND_URL" ] && PATCH_DATA=$(echo "$PATCH_DATA" | jq --arg val "$(echo -n "$SEC_BACKEND_URL" | base64)" '.data.BACKEND_URL = $val')
-          [ -n "$SEC_VITE_MAPBOXTOKEN" ] && PATCH_DATA=$(echo "$PATCH_DATA" | jq --arg val "$(echo -n "$SEC_VITE_MAPBOXTOKEN" | base64)" '.data.VITE_MAPBOXTOKEN = $val')
-          [ -n "$SEC_VITE_MAPBOXTILE" ] && PATCH_DATA=$(echo "$PATCH_DATA" | jq --arg val "$(echo -n "$SEC_VITE_MAPBOXTILE" | base64)" '.data.VITE_MAPBOXTILE = $val')
-          [ -n "$SEC_VITE_TAIPEIPASS_URL" ] && PATCH_DATA=$(echo "$PATCH_DATA" | jq --arg val "$(echo -n "$SEC_VITE_TAIPEIPASS_URL" | base64)" '.data.VITE_TAIPEIPASS_URL = $val')
-          [ -n "$SEC_VITE_TAIPEIPASS_CLIENT_ID" ] && PATCH_DATA=$(echo "$PATCH_DATA" | jq --arg val "$(echo -n "$SEC_VITE_TAIPEIPASS_CLIENT_ID" | base64)" '.data.VITE_TAIPEIPASS_CLIENT_ID = $val')
-          [ -n "$SEC_VITE_TAIPEIPASS_SCOPE" ] && PATCH_DATA=$(echo "$PATCH_DATA" | jq --arg val "$(echo -n "$SEC_VITE_TAIPEIPASS_SCOPE" | base64)" '.data.VITE_TAIPEIPASS_SCOPE = $val')
-          [ -n "$SEC_NODE_ENV" ] && PATCH_DATA=$(echo "$PATCH_DATA" | jq --arg val "$(echo -n "$SEC_NODE_ENV" | base64)" '.data.NODE_ENV = $val')
-
-          # Only patch if we have data to add
-          if [ "$PATCH_DATA" != '{}' ]; then
-            echo "Patching secret with frontend data: $PATCH_DATA"
-            kubectl patch secret taipei-city-dashboard-secrets -n dashboard --patch "$PATCH_DATA" --type merge
-          else
-            echo "No frontend secrets to add"
-          fi
-
-      - name: Deploy Frontend only
-        run: |
-          set -euo pipefail
-          RELEASE="${{ env.RELEASE }}"
-          NS="${{ env.NAMESPACE }}"
-          NEW_TAG="${{ steps.tag.outputs.value }}"
-          echo "Verifying frontend image exists in registry: ${{ env.REGISTRY }}/${{ env.FE_IMAGE }}:$NEW_TAG"
-          if ! docker manifest inspect ${{ env.REGISTRY }}/${{ env.FE_IMAGE }}:$NEW_TAG > /dev/null 2>&1; then
-            echo "ERROR: Image ${{ env.REGISTRY }}/${{ env.FE_IMAGE }}:$NEW_TAG not found. Aborting deploy." >&2
-            exit 1
-          fi
-          if helm -n "$NS" status "$RELEASE" >/dev/null 2>&1; then
-            echo "Updating existing release (frontend only) with tag $NEW_TAG"
-            helm upgrade "$RELEASE" ./helm-chart \
-              -f helm-chart/values-sit.yaml \
-              --reuse-values \
-              --set frontend.image.tag="$NEW_TAG" \
-              --namespace="$NS" \
-              --wait --timeout=20m --debug
-          else
-            echo "Release not found; initial install (frontend). Backend image tag will stay at chart default unless backend build runs."
-            helm upgrade --install "$RELEASE" ./helm-chart \
-              --values helm-chart/values-sit.yaml \
-              --set frontend.image.tag="$NEW_TAG" \
-              --namespace="$NS" \
-              --wait --timeout=20m --debug
-          fi
+          NS=${{ env.NAMESPACE }}
+          kubectl -n $NS get deploy,rs,po,svc,hpa -o wide
+          echo "--- Backend describe"; kubectl -n $NS describe deploy taipei-city-dashboard-backend || true
+          echo "--- Frontend describe"; kubectl -n $NS describe deploy taipei-city-dashboard-frontend || true
+          echo "--- Events"; kubectl -n $NS get events --sort-by=.lastTimestamp | tail -n 200 || true
