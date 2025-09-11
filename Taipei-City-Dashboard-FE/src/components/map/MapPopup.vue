@@ -56,7 +56,7 @@
               :src="popupContent[activeTab]?.properties[item.key]"
             >
           </template>
-          <template v-if="popupContent[activeTab]?.properties[item.key].includes('youtube')">
+          <template v-else-if="popupContent[activeTab]?.properties[item.key].includes('youtube')">
             <iframe
               :src="popupContent[activeTab]?.properties[item.key]"
               width="100%"
@@ -73,8 +73,7 @@
               height="180"
               controls
               autoplay
-              muted
-            />
+              muted></video>
           </template>
         </div>
         <div v-else>
