@@ -60,7 +60,7 @@
 						/>
 					</template>
 					<template
-						v-if="
+						v-else-if="
 							popupContent[activeTab]?.properties[
 								item.key
 							].includes('youtube')
