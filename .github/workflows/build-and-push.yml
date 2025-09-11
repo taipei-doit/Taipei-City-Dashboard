@@ -130,19 +130,6 @@ jobs:
           echo "value=${TAG}" >> $GITHUB_OUTPUT
           echo "Using image tag: ${TAG}"
 
-      - name: Generate frontend .env (Vite build)
-        run: |
-          cat > Taipei-City-Dashboard-FE/.env <<EOF
-          VITE_APP_TITLE=${{ secrets.VITE_APP_TITLE }}
-          VITE_API_URL=${{ secrets.VITE_API_URL }}
-          VITE_MAPBOXTOKEN=${{ secrets.VITE_MAPBOXTOKEN }}
-          VITE_MAPBOXTILE=${{ secrets.VITE_MAPBOXTILE }}
-          VITE_TAIPEIPASS_URL=${{ secrets.VITE_TAIPEIPASS_URL }}
-          VITE_TAIPEIPASS_CLIENT_ID=${{ secrets.VITE_TAIPEIPASS_CLIENT_ID }}
-          VITE_TAIPEIPASS_SCOPE=${{ secrets.VITE_TAIPEIPASS_SCOPE }}
-          EOF
-          echo ".env generated (values hidden)"
-
       - name: Build & push Backend image
         uses: docker/build-push-action@v5
         with:
@@ -164,6 +151,15 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           platforms: linux/amd64
+          build-args: |
+            NODE_ENV=${{ secrets.NODE_ENV }}
+            VITE_APP_TITLE=${{ secrets.VITE_APP_TITLE }}
+            VITE_API_URL=${{ secrets.VITE_API_URL }}
+            VITE_MAPBOXTOKEN=${{ secrets.VITE_MAPBOXTOKEN }}
+            VITE_MAPBOXTILE=${{ secrets.VITE_MAPBOXTILE }}
+            VITE_TAIPEIPASS_URL=${{ secrets.VITE_TAIPEIPASS_URL }}
+            VITE_TAIPEIPASS_CLIENT_ID=${{ secrets.VITE_TAIPEIPASS_CLIENT_ID }}
+            VITE_TAIPEIPASS_SCOPE=${{ secrets.VITE_TAIPEIPASS_SCOPE }}
 
       - name: Setup Helm
         uses: azure/setup-helm@v3
