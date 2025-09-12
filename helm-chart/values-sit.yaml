@@ -13,7 +13,7 @@ imagePullSecrets:
 # Frontend configuration
 frontend:
   enabled: true
-  replicaCount: 1
+  replicaCount: 2
   updateStrategy:
     type: RollingUpdate
     rollingUpdate:
@@ -26,11 +26,11 @@ frontend:
   
   resources:
     limits:
-      cpu: 500m
-      memory: 512Mi
+      cpu: 1000m
+      memory: 2560Mi
     requests:
       cpu: 250m
-      memory: 256Mi
+      memory: 1280Mi
   
   # Frontend environment variables (update these values)
   env:
@@ -94,8 +94,8 @@ backend:
   
   resources:
     limits:
-      cpu: 1000m
-      memory: 1Gi
+      cpu: 1500m
+      memory: 2Gi
     requests:
       cpu: 500m
       memory: 512Mi
