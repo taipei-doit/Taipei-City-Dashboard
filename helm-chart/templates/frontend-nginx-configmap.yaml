@@ -1,0 +1,29 @@
+{{- if and .Values.frontend.enabled .Values.frontend.nginx.configMap.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "taipei-city-dashboard.fullname" . }}-frontend-nginx
+  labels:
+    {{- include "taipei-city-dashboard.frontend.labels" . | nindent 4 }}
+data:
+  default.conf: |
+    server {
+        listen {{ default .Values.frontend.service.targetPort .Values.frontend.nginx.configMap.listenPort }};
+        server_name {{ default "_" .Values.frontend.nginx.configMap.serverName }};
+        root /usr/share/nginx/html;
+        index index.html;
+
+        access_log /dev/stdout;
+        error_log /dev/stderr warn;
+
+        location / {
+            try_files $uri $uri/ /index.html;
+        }
+
+        error_page 500 502 503 504 /50x.html;
+        location = /50x.html {
+            root /usr/share/nginx/html;
+        }
+    }
+{{- end }}
+

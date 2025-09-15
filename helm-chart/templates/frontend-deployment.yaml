@@ -102,6 +102,11 @@ spec:
               mountPath: /var/cache/nginx
             - name: nginx-run
               mountPath: /var/run
+            {{- if .Values.frontend.nginx.configMap.enabled }}
+            - name: nginx-config
+              mountPath: /etc/nginx/conf.d/default.conf
+              subPath: default.conf
+            {{- end }}
       volumes:
         - name: tmp
           emptyDir: {}
@@ -109,6 +114,14 @@ spec:
           emptyDir: {}
         - name: nginx-run
           emptyDir: {}
+        {{- if .Values.frontend.nginx.configMap.enabled }}
+        - name: nginx-config
+          configMap:
+            name: {{ include "taipei-city-dashboard.fullname" . }}-frontend-nginx
+            items:
+              - key: default.conf
+                path: default.conf
+        {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

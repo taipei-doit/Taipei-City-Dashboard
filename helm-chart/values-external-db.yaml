@@ -40,7 +40,13 @@ frontend:
     NODE_ENV: "test"
     VITE_APP_TITLE: "Taipei City Dashboard SIT"
     VITE_APP_VERSION: "3.1.0"
-    
+  
+  # Nginx config override via ConfigMap
+  nginx:
+    configMap:
+      enabled: true
+      # listenPort: 8081           # optional, defaults to service.targetPort
+      # serverName: "_"            # optional
 
   service:
     type: LoadBalancer

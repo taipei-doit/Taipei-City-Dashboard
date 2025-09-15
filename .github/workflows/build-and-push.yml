@@ -2,7 +2,7 @@ name: Build and Deploy
 
 on:
   push:
-    branches: ["sit", "pre-develop"]
+    branches: ["sit", "pre-develop", "develop"]
   workflow_dispatch:
     inputs:
       force_backend:
@@ -281,6 +281,8 @@ jobs:
             VALUES_FILE="helm-chart/values-sit.yaml"
           elif [ "$BRANCH_NAME" = "pre-develop" ]; then
             VALUES_FILE="helm-chart/values-prod.yaml" # Assuming pre-develop uses prod values
+          elif [ "$BRANCH_NAME" = "develop" ]; then
+            VALUES_FILE="helm-chart/values-prod.yaml"
           elif [ "$BRANCH_NAME" = "main" ]; then
             VALUES_FILE="helm-chart/values-prod.yaml"
           else
