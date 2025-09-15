@@ -9,6 +9,12 @@ global:
 frontend:
   enabled: true
   replicaCount: 3
+  # Enforce Nginx to listen on 8081 via ConfigMap override
+  nginx:
+    configMap:
+      enabled: true
+      # listenPort: 8081           # optional, defaults to service.targetPort if set elsewhere
+      # serverName: "_"            # optional
   
   image:
     repository: ghcr.io/taipei-doit/taipei-city-dashboard-fe
