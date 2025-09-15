@@ -2,7 +2,8 @@ name: Build and Deploy
 
 on:
   push:
-    branches: ["sit", "develop"]
+    branches: ["sit", "pre-develop"]
+
   workflow_dispatch:
     inputs:
       force_backend:
@@ -103,7 +104,8 @@ jobs:
     needs: detect-changes
     if: (github.event_name == 'workflow_dispatch' || github.event_name == 'push') && needs.detect-changes.outputs.backend == 'true'
     runs-on: ubuntu-latest
-    environment: sit
+    environment:
+      name: ${{ (github.ref_name == 'sit' && 'sit') || (github.ref_name == 'pre-develop' && 'pre-prod') || (github.ref_name == 'develop' && 'dev') || (github.ref_name == 'main' && 'prod') || 'sit' }}
     concurrency:
       group: deploy-${{ github.ref }}
       cancel-in-progress: false
@@ -271,6 +273,24 @@ jobs:
           fi
           echo "Secret applied successfully"
 
+      - name: Determine Helm values file
+        id: helm-values
+        run: |
+          BRANCH_NAME="${{ github.ref_name }}"
+          VALUES_FILE=""
+          if [ "$BRANCH_NAME" = "sit" ]; then
+            VALUES_FILE="helm-chart/values-sit.yaml"
+          elif [ "$BRANCH_NAME" = "pre-develop" ]; then
+            VALUES_FILE="helm-chart/values-prod.yaml" # Assuming pre-develop uses prod values
+          elif [ "$BRANCH_NAME" = "main" ]; then
+            VALUES_FILE="helm-chart/values-prod.yaml"
+          else
+            echo "::error::No matching values file for branch ${BRANCH_NAME}"
+            exit 1
+          fi
+          echo "Using values file: ${VALUES_FILE}"
+          echo "file=${VALUES_FILE}" >> $GITHUB_OUTPUT
+
       - name: Single Helm upgrade (backend + frontend)
         env:
           SEC_DB_DASHBOARD_PORT: ${{ secrets.DB_DASHBOARD_PORT || '' }}
@@ -282,6 +302,7 @@ jobs:
           RELEASE=${{ env.RELEASE }}
           NS=${{ env.NAMESPACE }}
           TAG=${{ steps.tag.outputs.value }}
+          VALUES_FILE=${{ steps.helm-values.outputs.file }}
           echo "Verifying images exist..."
           for img in ${{ env.REGISTRY }}/${{ env.BE_IMAGE }}:$TAG ${{ env.REGISTRY }}/${{ env.FE_IMAGE }}:$TAG; do
             echo "Checking $img"; docker manifest inspect $img > /dev/null 2>&1 || { echo "Missing image $img" >&2; exit 1; }; done
@@ -291,11 +312,12 @@ jobs:
           [ -n "$SEC_REDIS_PORT" ] && HELM_SET+=" --set backend.useSecretRedisPort=true"
           [ -n "$SEC_REDIS_DB" ] && HELM_SET+=" --set backend.useSecretRedisDb=true"
           if helm -n "$NS" status "$RELEASE" >/dev/null 2>&1; then
-            echo "Upgrading existing release $RELEASE with tag $TAG"
-            helm upgrade "$RELEASE" ./helm-chart -f helm-chart/values-sit.yaml $HELM_SET --namespace "$NS" --wait --timeout=20m --debug
+            echo "Upgrading existing release $RELEASE with tag $TAG using ${VALUES_FILE}"
+            helm upgrade "$RELEASE" ./helm-chart -f "${VALUES_FILE}" $HELM_SET --namespace "$NS" --wait --timeout=20m --debug
           else
-            echo "Installing new release $RELEASE with tag $TAG"
-            helm upgrade --install "$RELEASE" ./helm-chart -f helm-chart/values-sit.yaml $HELM_SET --namespace "$NS" --wait --timeout=20m --debug
+            echo "Installing new release $RELEASE with tag $TAG using ${VALUES_FILE}"
+            helm upgrade --install "$RELEASE" ./helm-chart -f "${VALUES_FILE}" $HELM_SET --namespace "$NS" --wait --timeout=20m --debug
+
           fi
 
       - name: Deployment summary

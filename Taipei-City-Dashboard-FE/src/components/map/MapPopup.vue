@@ -46,53 +46,40 @@
             width="100%"
             height="100%"
           > -->
-					<template
-						v-if="
-							popupContent[activeTab]?.properties[
-								item.key
-							].includes('freeway.gov.tw')
-						"
-					>
-						<img
-							width="100%"
-							height="100%"
-							:src="popupContent[activeTab]?.properties[item.key]"
-						/>
-					</template>
-					<template
-						v-else-if="
-							popupContent[activeTab]?.properties[
-								item.key
-							].includes('youtube')
-						"
-					>
-						<iframe
-							:src="popupContent[activeTab]?.properties[item.key]"
-							width="100%"
-							height="100%"
-							allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-							referrerpolicy="strict-origin-when-cross-origin"
-							allowfullscreen
-						/>
-					</template>
-					<template v-else>
-						<video
-							ref="videoRef"
-							width="300"
-							height="180"
-							controls
-							autoplay
-							muted
-						></video>
-					</template>
-				</div>
-				<div v-else>
-					<h3>{{ item.name }}</h3>
-					<p>{{ popupContent[activeTab]?.properties[item.key] }}</p>
-				</div>
-			</div>
-		</div>
-	</div>
+          <template v-if="popupContent[activeTab]?.properties[item.key].includes('freeway.gov.tw')">
+            <img
+              width="100%"
+              height="100%"
+              :src="popupContent[activeTab]?.properties[item.key]"
+            >
+          </template>
+          <template v-else-if="popupContent[activeTab]?.properties[item.key].includes('youtube')">
+            <iframe
+              :src="popupContent[activeTab]?.properties[item.key]"
+              width="100%"
+              height="100%"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerpolicy="strict-origin-when-cross-origin"
+              allowfullscreen
+            />
+          </template>
+          <template v-else>
+            <video
+              ref="videoRef"
+              width="300"
+              height="180"
+              controls
+              autoplay
+              muted></video>
+          </template>
+        </div>
+        <div v-else>
+          <h3>{{ item.name }}</h3>
+          <p>{{ popupContent[activeTab]?.properties[item.key] }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <style lang="scss">
