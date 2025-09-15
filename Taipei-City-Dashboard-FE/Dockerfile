@@ -1,5 +1,5 @@
 # Start with a base image
-FROM node:20-alpine AS builder
+FROM node:21-slim AS builder
 
 # Set the working directory inside the container
 WORKDIR /app
