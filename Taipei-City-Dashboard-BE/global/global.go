@@ -21,6 +21,7 @@ type DatabaseConfig struct {
 	User     string
 	Password string
 	DBName   string
+	SSLMode  string
 }
 
 // RedisConfig defines the structure for Redis configuration
@@ -49,6 +50,7 @@ var (
 		User:     getEnv("DB_MANAGER_USER", ""),
 		Password: getEnv("DB_MANAGER_PASSWORD", ""),
 		DBName:   getEnv("DB_MANAGER_DBNAME", "dashboardmanager"),
+	SSLMode:  getEnv("DB_MANAGER_SSLMODE", "disable"),
 	}
 
 	// PostgresDashboard defines the configuration for the dashboard database
@@ -58,6 +60,7 @@ var (
 		User:     getEnv("DB_DASHBOARD_USER", ""),
 		Password: getEnv("DB_DASHBOARD_PASSWORD", ""),
 		DBName:   getEnv("DB_DASHBOARD_DBNAME", "dashboard"),
+	SSLMode:  getEnv("DB_DASHBOARD_SSLMODE", "disable"),
 	}
 
 	// only used in the init function.

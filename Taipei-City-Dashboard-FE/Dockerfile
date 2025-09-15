@@ -1,5 +1,5 @@
 # Start with a base image
-FROM node:21-slim as builder
+FROM node:21-slim AS builder
 
 # Set the working directory inside the container
 WORKDIR /app
@@ -35,7 +35,7 @@ ENV NODE_ENV=$NODE_ENV \
     VITE_TAIPEIPASS_SCOPE=$VITE_TAIPEIPASS_SCOPE \
     BACKEND_URL=$BACKEND_URL
 
-# Build the application with different modes based on environment variable
+
 RUN if [ "$NODE_ENV" = "test" ]; then npm run build:test; else npm run build; fi
 
 # Use a lightweight node image
@@ -43,11 +43,9 @@ FROM nginx:alpine
 
 # Copy the built files from the builder stage to the nginx server
 COPY --from=builder /app/dist /usr/share/nginx/html
-COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Expose port 80
 EXPOSE 8081
 
-# Command to run nginx
-CMD ["nginx", "-g", "daemon off;"]
+# Use custom entrypoint
+ENTRYPOINT ["/docker-entrypoint.sh"]
 
