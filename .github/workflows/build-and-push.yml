@@ -304,7 +304,6 @@ jobs:
           NS=${{ env.NAMESPACE }}
           TAG=${{ steps.tag.outputs.value }}
           VALUES_FILE=${{ steps.helm-values.outputs.file }}
-
           echo "Verifying images exist..."
           for img in ${{ env.REGISTRY }}/${{ env.BE_IMAGE }}:$TAG ${{ env.REGISTRY }}/${{ env.FE_IMAGE }}:$TAG; do
             echo "Checking $img"; docker manifest inspect $img > /dev/null 2>&1 || { echo "Missing image $img" >&2; exit 1; }; done
@@ -319,6 +318,7 @@ jobs:
           else
             echo "Installing new release $RELEASE with tag $TAG using ${VALUES_FILE}"
             helm upgrade --install "$RELEASE" ./helm-chart -f "${VALUES_FILE}" $HELM_SET --namespace "$NS" --wait --timeout=20m --debug
+
           fi
 
       - name: Deployment summary
