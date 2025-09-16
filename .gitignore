@@ -67,3 +67,5 @@ Taipei-City-Dashboard-DE/logs
 Taipei-City-Dashboard-DE/data
 **/__pycache__/
 *.py[cod]
+
+*.env
