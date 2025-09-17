@@ -104,7 +104,8 @@ jobs:
     if: (github.event_name == 'workflow_dispatch' || github.event_name == 'push') && needs.detect-changes.outputs.backend == 'true'
     runs-on: ubuntu-latest
     environment:
-      name: ${{ (github.ref_name == 'sit' && 'sit') || (github.ref_name == 'pre-develop' && 'pre-prod') || (github.ref_name == 'develop' && 'dev') || (github.ref_name == 'main' && 'prod') || 'sit' }}
+      # Updated: map pre-develop branch to use 'prod' environment (was 'pre-prod') so it can use prod env secrets per request
+      name: ${{ (github.ref_name == 'sit' && 'sit') || (github.ref_name == 'pre-develop' && 'prod') || (github.ref_name == 'develop' && 'prod') }}
     concurrency:
       group: deploy-${{ github.ref }}
       cancel-in-progress: false
