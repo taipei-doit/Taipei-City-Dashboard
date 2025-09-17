@@ -49,7 +49,7 @@ frontend:
     type: LoadBalancer
     annotations: 
       service.beta.kubernetes.io/azure-load-balancer-internal: "true"
-    loadBalancerIP: "10.208.0.102"
+    loadBalancerIP: "10.208.0.222"
     port: 8082
     targetPort: 8081
   # Frontend secret env from Secret (all optional)
