@@ -175,6 +175,9 @@ td:last-child {
 	.hide-if-mobile {
 		display: none !important;
 	}
+	.show-if-mobile {
+		display: block !important;
+	}
 }
 
 @keyframes spin {
