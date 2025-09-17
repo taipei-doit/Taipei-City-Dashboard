@@ -27,7 +27,8 @@ firebase.json
 
 dist.tar.gz
 *.sh
-
+!Taipei-City-Dashboard-DE/docker/develop/gitsync.sh
+!Taipei-City-Dashboard-DE/docker/prod/gitsync.sh
 # Binaries for programs and plugins
 *.exe
 *.exe~
