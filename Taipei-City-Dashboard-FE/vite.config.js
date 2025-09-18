@@ -53,6 +53,6 @@ export default defineConfig({
     },
     chunkSizeWarningLimit: 1600,
   },
-  base: "/prod/",
+  base: "/",
   server: serverConfig,
 });
