@@ -1,15 +1,14 @@
 from airflow import DAG
 from operators.common_pipeline import CommonDag
+import pandas as pd
 
-
-def _correct_4_digit_year_to_3_digit(time_column):
-    time_column = time_column.astype(str)
-    is_4_digit_year = len(time_column.iloc[0].split("-")[0]) == 4
-    if is_4_digit_year:
-        time_column = time_column.str.slice(
-            1,
-        )
-    return time_column
+def format_minguo_date(series: pd.Series) -> pd.Series:
+    def convert(date_str: str) -> str:
+        year, month, day = date_str.split("/")
+        year = year.zfill(3)  # 年份補齊成三位數
+        return f"{year}{month}{day}"
+    
+    return series.astype(str).map(convert)
 
 
 def _R0040(**kwargs):
@@ -60,17 +59,17 @@ def _R0040(**kwargs):
     gdata["positions"] = gdata["positions"].apply(lambda x: json.dumps(x))
     # time
     # apptime = 通報時間
-    gdata["apptime"] = _correct_4_digit_year_to_3_digit(gdata["apptime"])
+    gdata["apptime"] = format_minguo_date(gdata["apptime"])
     gdata["apptime_ad"] = convert_str_to_time_format(
         gdata["apptime"], from_format="%TY-%m-%dT%H:%M:S"
     )
     # cb_da = 核准施工起日
-    gdata["cb_da"] = _correct_4_digit_year_to_3_digit(gdata["cb_da"])
+    gdata["cb_da"] = format_minguo_date(gdata["cb_da"])
     gdata["cb_ad"] = convert_str_to_time_format(
         gdata["cb_da"], from_format="%TY-%m-%d", output_level="date"
     )
     # ce_da = 核准施工迄日
-    gdata["ce_da"] = _correct_4_digit_year_to_3_digit(gdata["ce_da"])
+    gdata["ce_da"] = format_minguo_date(gdata["ce_da"])
     gdata["cd_ad"] = convert_str_to_time_format(
         gdata["ce_da"], from_format="%TY-%m-%d", output_level="date"
     )
