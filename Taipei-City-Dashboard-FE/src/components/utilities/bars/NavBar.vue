@@ -164,10 +164,9 @@ const isLocalhost = computed(() => {
         "
         class="navbar-user-user"
       >
-	    <!--遷移前暫時隱藏-->
-        <!-- <button @click="dialogStore.showDialog('login')">
+        <button @click="dialogStore.showDialog('login')">
           登入
-        </button> -->
+        </button>
       </div>
     </div>
   </div>
