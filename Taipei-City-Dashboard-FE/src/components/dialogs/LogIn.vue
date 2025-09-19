@@ -1,7 +1,7 @@
 <!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 
 <script setup>
-import { computed, ref } from "vue";
+import { ref } from "vue";
 import { useDialogStore } from "../../store/dialogStore";
 import { useAuthStore } from "../../store/authStore";
 
@@ -26,9 +26,9 @@ function openExternal(url) {
 const {
 	VITE_APP_TITLE,
 	// PROD,
-	VITE_TAIPEIPASS_URL,
-	VITE_TAIPEIPASS_CLIENT_ID,
-	VITE_TAIPEIPASS_SCOPE,
+	// VITE_TAIPEIPASS_URL,
+	// VITE_TAIPEIPASS_CLIENT_ID,
+	// VITE_TAIPEIPASS_SCOPE,
 } = import.meta.env;
 
 const dialogStore = useDialogStore();
@@ -38,9 +38,9 @@ const loginMode = ref("tp");
 const email = ref("");
 const password = ref("");
 
-const taipeiPassUrl = computed(() => {
-	return `${VITE_TAIPEIPASS_URL}/oauth2/authorize?response_type=code&client_id=${VITE_TAIPEIPASS_CLIENT_ID}&scope=${VITE_TAIPEIPASS_SCOPE}`;
-});
+// const taipeiPassUrl = computed(() => {
+// 	return `${VITE_TAIPEIPASS_URL}/oauth2/authorize?response_type=code&client_id=${VITE_TAIPEIPASS_CLIENT_ID}&scope=${VITE_TAIPEIPASS_SCOPE}`;
+// });
 
 function handleSwitchMode() {
 	loginMode.value = loginMode.value === "tp" ? "email" : "tp";
