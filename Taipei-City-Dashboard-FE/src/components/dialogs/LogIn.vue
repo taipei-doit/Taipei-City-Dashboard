@@ -54,9 +54,10 @@ function handleSwitchMode() {
 	// 	password.value = "";
 	// }
 }
-function handleTaipeiPassLogin() {
-	window.open(taipeiPassUrl.value, "_self");
-}
+// 移轉前隱藏
+// function handleTaipeiPassLogin() {
+//	window.open(taipeiPassUrl.value, "_self");
+// }
 async function handleEmailLogin() {
 	const loggedIn = await authStore.loginByEmail(email.value, password.value);
 	if (loggedIn) {
