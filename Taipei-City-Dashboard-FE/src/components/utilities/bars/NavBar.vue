@@ -158,17 +158,17 @@ const isLocalhost = computed(() => {
           <user-settings />
         </teleport>
       </div>
-	  <!--遷移前暫時隱藏-->
-      <!-- <div
+      <div
         v-else-if="
           !(authStore.isMobileDevice && authStore.isNarrowDevice)
         "
         class="navbar-user-user"
       >
-        <button @click="dialogStore.showDialog('login')">
+	    <!--遷移前暫時隱藏-->
+        <!-- <button @click="dialogStore.showDialog('login')">
           登入
-        </button>
-      </div> -->
+        </button> -->
+      </div>
     </div>
   </div>
 </template>
