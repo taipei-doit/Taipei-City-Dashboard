@@ -193,10 +193,28 @@ def get_kml(url, dag_id, from_crs, **kwargs):
 
     """
     file_name = f"{dag_id}.kml"
-    fiona.drvsupport.supported_drivers["KML"] = "rw"
+    
+    # Enable KML support in fiona
+    try:
+        fiona.drvsupport.supported_drivers["KML"] = "rw"
+    except AttributeError:
+        # For newer fiona versions that don't have drvsupport
+        pass
+    
     file = download_file(file_name, url, **kwargs)
-    gdf = gpd.read_file(file, driver="KML")
-    gdf = gpd.GeoDataFrame(gdf, crs=f"EPSG:{from_crs}")
+    
+    # Use fiona directly to avoid the geopandas._is_zip issue
+    try:
+        with fiona.open(file, driver='KML') as src:
+            gdf = gpd.GeoDataFrame.from_features(src, crs=src.crs)
+    except Exception:
+        # Fallback to the original method for older versions
+        gdf = gpd.read_file(file, driver="KML")
+    
+    # Ensure the CRS is set correctly
+    if gdf.crs is None:
+        gdf = gpd.GeoDataFrame(gdf, crs=f"EPSG:{from_crs}")
+    
     return gdf
 
 
