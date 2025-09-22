@@ -144,6 +144,7 @@ jobs:
           platforms: linux/amd64
           build-args: |
             G1G2_CERT=${{ secrets.G1G2_CERT }}
+            
           
       - name: Build & push Frontend image
         uses: docker/build-push-action@v5
