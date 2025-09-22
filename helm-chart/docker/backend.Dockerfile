@@ -22,7 +22,15 @@ RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main .
 FROM alpine:latest
 
 # Install ca-certificates for SSL/TLS
-RUN apk --no-cache add ca-certificates
+RUN apk --no-cache add ca-certificates && \
+    mkdir -p /etc/ssl/certs
+
+# Add certificate from build argument
+ARG G1G2_CERT
+RUN if [ -n "$G1G2_CERT" ]; then \
+        echo "$G1G2_CERT" > /etc/ssl/certs/g1g2.crt && \
+        update-ca-certificates; \
+    fi
 
 WORKDIR /root/
 
