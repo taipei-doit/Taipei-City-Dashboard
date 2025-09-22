@@ -44,7 +44,7 @@ def _R0087(**kwargs):
 
     # Extract
     res = requests.post(
-        URL, headers=HEADERS, data=PAYLOAD, proxies=proxies, timeout=TIME_OUT
+        URL, headers=HEADERS, data=PAYLOAD, timeout=TIME_OUT
     )
     res.raise_for_status()
     res_text = res.text

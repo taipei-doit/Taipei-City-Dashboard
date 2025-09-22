@@ -36,7 +36,7 @@ def _cht_g4(**kwargs):
         "split": "1",
         "api_id": "33"
     })
-    resp = requests.post(url, headers=headers, data=playload, proxies=PROXIES,verify=False)
+    resp = requests.post(url, headers=headers, data=playload, verify=False)
     if resp.status_code != 200:
         raise ValueError(f"Request failed! status: {resp.status_code}")
 

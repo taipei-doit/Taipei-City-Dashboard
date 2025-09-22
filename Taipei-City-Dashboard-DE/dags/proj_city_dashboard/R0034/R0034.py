@@ -31,7 +31,7 @@ def _R0034(**kwargs):
     GEOMETRY_TYPE = "Point"
 
     # Extract
-    res = requests.get(URL, proxies=proxies, timeout=30)
+    res = requests.get(URL, timeout=30)
     if res.status_code != 200:
         raise ValueError(f"Request failed! status: {res.status_code}")
     res_json = res.json()
