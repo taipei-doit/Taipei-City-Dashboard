@@ -142,11 +142,7 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           platforms: linux/amd64
-          build-args: |
-            ISSO_CLIENT_ID=${{ secrets.ISSO_CLIENT_ID }}
-            ISSO_CLIENT_SECRET=${{ secrets.ISSO_CLIENT_SECRET }}
-            IDNO_SALT=${{ secrets.IDNO_SALT }}
-            JWT_SECRET=${{ secrets.JWT_SECRET }}
+          
       - name: Build & push Frontend image
         uses: docker/build-push-action@v5
         with:
