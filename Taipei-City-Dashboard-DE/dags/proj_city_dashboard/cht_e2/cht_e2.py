@@ -40,7 +40,7 @@ def _cht_e2(**kwargs):
             "stay_mins": mins,
             "api_id": "30"
         })
-        resp = requests.post(url, headers=headers, data=payload, proxies=PROXIES, verify=False)
+        resp = requests.post(url, headers=headers, data=payload, verify=False)
         if resp.status_code != 200:
             logging.error(f"Request failed for stay_mins={mins} with status code {resp.status_code}. Response: {resp.text}")
             continue
