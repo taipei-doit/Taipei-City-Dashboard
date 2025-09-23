@@ -42,6 +42,11 @@ function handleClose() {
         v-if="authStore.isMobileDevice"
         class="initialwarning-message"
       >
+	  	<p style="color: red">
+			9/23 上午 9:30~12:00
+			將執行系統移轉，系統移轉期間，台北通暫停登入與註冊新用戶，造成不便，敬請見諒。
+		</p>
+		<br>
         <p>
           臺北城市儀表板主要為給平板與電腦使用的平台，手機版僅為概覽使用，因此許多功能在行動版無法使用。
         </p>
@@ -56,6 +61,11 @@ function handleClose() {
         v-else
         class="initialwarning-message"
       >
+	  	<p style="color: red">
+			9/23 上午 9:30~12:00
+			將執行系統移轉，系統移轉期間，台北通暫停登入與註冊新用戶，造成不便，敬請見諒。
+		</p>
+		<br>
         <p>
           歡迎使用臺北城市儀表板，本產品的目的為 1.
           分享府內重要決策工具與成果 2. 促進府內與民間開發者的交流互動
