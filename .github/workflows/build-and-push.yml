@@ -165,6 +165,7 @@ jobs:
             VITE_TAIPEIPASS_URL=${{ secrets.VITE_TAIPEIPASS_URL }}
             VITE_TAIPEIPASS_CLIENT_ID=${{ secrets.VITE_TAIPEIPASS_CLIENT_ID }}
             VITE_TAIPEIPASS_SCOPE=${{ secrets.VITE_TAIPEIPASS_SCOPE }}
+            
 
       - name: Setup Helm
         uses: azure/setup-helm@v3
