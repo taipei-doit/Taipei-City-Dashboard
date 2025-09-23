@@ -1,0 +1,223 @@
+# SIT deployment values
+# Derived from former values-external-db.yaml for System Integration Testing environment
+# Adjust any SIT-specific overrides here. External DB/Redis assumed (in-cluster disabled)
+
+# Global configuration
+global:
+  imageRegistry: ""  # Use Docker Hub or your registry
+
+# Image pull secrets (for private registries like ACR)
+imagePullSecrets:
+  - name: acr-secret
+
+# Frontend configuration
+frontend:
+  enabled: true
+  replicaCount: 2
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 0        # 不在升級時額外啟動超過 replica 的新 Pod
+      maxUnavailable: 1  # 允許一次少 1 個 Pod，以便無額外擴容的滾動更新
+  
+  image:
+    repository: citydashboard-dhc2gtetgcfqeqhv.azurecr.io/taipei-city-dashboard-fe
+    tag: ""
+  
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 2560Mi
+    requests:
+      cpu: 250m
+      memory: 1280Mi
+  
+  # Frontend environment variables (update these values)
+  env:
+    NODE_ENV: "test"
+    VITE_APP_TITLE: "Taipei City Dashboard SIT"
+    VITE_APP_VERSION: "3.1.0"
+  
+  # Nginx config override via ConfigMap
+  nginx:
+    configMap:
+      enabled: true
+      # listenPort: 8081           # optional, defaults to service.targetPort
+      # serverName: "_"            # optional
+
+  service:
+    type: LoadBalancer
+    annotations: 
+      service.beta.kubernetes.io/azure-load-balancer-internal: "true"
+    loadBalancerIP: "10.224.0.102"
+    port: 8082
+    targetPort: 8081
+  # Frontend secret env from Secret (all optional)
+  secretEnv:
+    - name: VITE_MAPBOXTOKEN
+      secretKey: "vite-mapbox-token"
+      optional: true
+    - name: VITE_API_URL
+      secretKey: "vite-api-url"
+      optional: true
+    - name: BACKEND_URL
+      secretKey: "BACKEND_URL"
+      optional: true
+    - name: VITE_MAPBOXTILE
+      secretKey: "vite-mapbox-tile"
+      optional: true
+    - name: VITE_TAIPEIPASS_URL
+      secretKey: "taipeipass-url"
+      optional: true
+    - name: VITE_TAIPEIPASS_CLIENT_ID
+      secretKey: "taipeipass-client-id"
+      optional: true
+    - name: VITE_TAIPEIPASS_SCOPE
+      secretKey: "taipeipass-scope"
+      optional: true
+
+# Backend configuration  
+backend:
+  enabled: true
+  replicaCount: 2
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 0        # 不在升級時額外啟動超過 replica 的新 Pod
+      maxUnavailable: 1  # 允許一次少 1 個 Pod，以便無額外擴容的滾動更新
+
+  service:
+    type: LoadBalancer
+    annotations: 
+      service.beta.kubernetes.io/azure-load-balancer-internal: "true"
+    loadBalancerIP: "10.224.0.223"
+    port: 8080
+    targetPort: 8080
+
+  image:
+    repository: citydashboard-dhc2gtetgcfqeqhv.azurecr.io/taipei-city-dashboard-be
+    tag: ""
+  
+  resources:
+    limits:
+      cpu: 1500m
+      memory: 2Gi
+    requests:
+      cpu: 500m
+      memory: 512Mi
+  
+  # Backend environment variables (update these values)
+  env:
+    GIN_MODE: "release"
+    GIN_PORT: "8080"
+    # Note: DB/Redis ports are now configured via values below and can be overridden by GitHub Secrets
+    # Keep only app-specific vars here.
+
+  # Backend connection defaults (used unless overridden by GitHub Secrets)
+  db:
+    dashboard:
+      port: 5432
+      sslmode: require
+    manager:
+      port: 5432
+      sslmode: require
+  redis:
+    port: 6379
+    db: 0
+
+  # Control whether to read these fields from secrets instead of values
+  useSecretDbDashboardPort: false
+  useSecretDbManagerPort: false
+  useSecretRedisPort: false
+  useSecretRedisDb: false
+  # Backend secret env from Secret (all optional)
+  secretEnv:
+    - name: GIN_DOMAIN
+      secretKey: "gin-domain"
+      optional: true
+    - name: JWT_SECRET
+      secretKey: "jwt-secret"
+      optional: true
+    - name: IDNO_SALT
+      secretKey: "idno-salt"
+      optional: true
+    - name: ISSO_CLIENT_ID
+      secretKey: "isso-client-id"
+      optional: true
+    - name: ISSO_CLIENT_SECRET
+      secretKey: "isso-client-secret"
+      optional: true
+    - name: DB_DASHBOARD_PASSWORD
+      secretKey: "db-dashboard-password"
+      optional: false
+    - name: DB_DASHBOARD_HOST
+      secretKey: "db-dashboard-host"
+      optional: false
+    - name: DB_DASHBOARD_USER
+      secretKey: "db-dashboard-user"
+      optional: false
+    - name: DB_DASHBOARD_DBNAME
+      secretKey: "db-dashboard-dbname"
+      optional: false
+    - name: DB_MANAGER_PASSWORD
+      secretKey: "db-manager-password"
+      optional: false
+    - name: DB_MANAGER_HOST
+      secretKey: "db-manager-host"
+      optional: false
+    - name: DB_MANAGER_USER
+      secretKey: "db-manager-user"
+      optional: false
+    - name: DB_MANAGER_DBNAME
+      secretKey: "db-manager-dbname"
+      optional: false
+    - name: REDIS_PASSWORD
+      secretKey: "redis-password"
+      optional: false
+    - name: REDIS_HOST
+      secretKey: "redis-host"
+      optional: false
+
+externalDatabase: {}
+
+externalRedis: {}
+
+# Disable in-cluster databases
+postgresql:
+  enabled: false
+
+redis:
+  enabled: false
+
+# Service Account (standard Kubernetes)
+serviceAccount:
+  create: true
+  annotations: {}
+
+# Ingress configuration - adjust for SIT as needed
+ingress: {}
+
+# Autoscaling
+autoscaling:
+  enabled: true
+  minReplicas: 1
+  maxReplicas: 2
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
+
+# Monitoring (optional)
+monitoring:
+  enabled: false  # Enable if you have Prometheus installed
+  serviceMonitor:
+    enabled: false
+    namespace: "monitoring"
+    interval: 30s
+    labels: {}
+# Security context
+securityContext:
+  capabilities:
+    drop:
+    - ALL
+  readOnlyRootFilesystem: true
+  runAsNonRoot: true
+  runAsUser: 65534

@@ -22,10 +22,9 @@ def _transfer(**kwargs):
     default_table = dag_infos.get("ready_data_default_table")
     history_table = dag_infos.get("ready_data_history_table")
     URL = "https://tsis.dbas.gov.taipei/statis/webMain.aspx?sys=220&ymf=8907&kind=21&type=0&funid=a04000401&cycle=1&outmode=12&compmode=0&outkind=3&deflst=2&nzo=1"
+    ENCODING = 'utf-8-sig'
+    raw_data = pd.read_csv(URL, encoding=ENCODING)
 
-    response = requests.get(URL, verify=False)
-    # 讀取 CSV
-    raw_data = pd.read_csv(StringIO(response.text))
     print(f"raw data =========== {raw_data.head()}")
     # Transform
     data = raw_data.copy()

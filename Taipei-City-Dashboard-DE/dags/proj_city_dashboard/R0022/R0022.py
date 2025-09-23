@@ -28,9 +28,10 @@ def _R0022(**kwargs):
     
     # 20250315 發現來源api 改為csv檔案
     url = 'https://tsis.dbas.gov.taipei/statis/webMain.aspx?sys=220&ymf=8701&kind=21&type=0&funid=a04003101&cycle=1&outmode=12&compmode=0&outkind=3&deflst=2&nzo=1'
-    response = requests.get(url)
-    response.encoding = 'utf-8'
-    raw_data = pd.read_csv(StringIO(response.text))
+
+    ENCODING = 'utf-8-sig'
+    raw_data = pd.read_csv(url, encoding=ENCODING)
+
 
         # Transform
     data = raw_data.copy()

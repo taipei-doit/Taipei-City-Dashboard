@@ -9,8 +9,15 @@ Testing: Jack Huang (Data Scientist), Ian Huang (Data Analysis Intern)
 <!-- Department of Information Technology, Taipei City Government -->
 
 <script setup>
-import { onBeforeMount, onMounted, onBeforeUnmount, ref, computed, watch } from "vue";
-import { useRoute } from "vue-router"
+import {
+	onBeforeMount,
+	onMounted,
+	onBeforeUnmount,
+	ref,
+	computed,
+	watch,
+} from "vue";
+import { useRoute } from "vue-router";
 import { useAuthStore } from "./store/authStore";
 import { useDialogStore } from "./store/dialogStore";
 import { useContentStore } from "./store/contentStore";
@@ -32,21 +39,22 @@ const timeToUpdate = ref(600);
 
 const mapStore = useMapStore();
 const route = useRoute();
-const updateBoards = import.meta.env.VITE_PERSONAL_BOARD_UPDATE?.split(',') || [];
+const updateBoards =
+	import.meta.env.VITE_PERSONAL_BOARD_UPDATE?.split(",") || [];
 const boardIndex = ref(null);
-const board =ref(null);
+const board = ref(null);
 const frequency = ref(600);
-const isMappedToUpdateBoards =ref(false);
+const isMappedToUpdateBoards = ref(false);
 
-const updateBoardsMap = computed(()=>{
-	let needUpdateBoards = []
+const updateBoardsMap = computed(() => {
+	let needUpdateBoards = [];
 	updateBoards.map((board) => {
-		const id = board.split(':')[0];
-		const updateSeconds = board.split(':')[1];
+		const id = board.split(":")[0];
+		const updateSeconds = board.split(":")[1];
 		needUpdateBoards.push({ id, frequency: updateSeconds });
-	})
-	return needUpdateBoards
-})
+	});
+	return needUpdateBoards;
+});
 
 const formattedTimeToUpdate = computed(() => {
 	const minutes = Math.floor(timeToUpdate.value / 60);
@@ -60,7 +68,7 @@ function reloadChartData() {
 	timeToUpdate.value = frequency.value;
 
 	if (isMappedToUpdateBoards.value) {
-		reloadMapData()
+		reloadMapData();
 	}
 }
 function updateTimeToUpdate() {
@@ -93,18 +101,21 @@ function reloadMapData() {
 	});
 }
 
-watch(() => route.query, (query) => {
-	boardIndex.value = query.index;
-	board.value = updateBoardsMap.value.find(board =>{
-		return board.id === boardIndex.value
-	})
-	frequency.value = board.value ? board.value.frequency : 600;
-	isMappedToUpdateBoards.value = updateBoardsMap.value.some(board =>{
-		return board.id === query.index
-	});
-	timeToUpdate.value = frequency.value;
-
-}), { immediate: true };
+watch(
+	() => route.query,
+	(query) => {
+		boardIndex.value = query.index;
+		board.value = updateBoardsMap.value.find((board) => {
+			return board.id === boardIndex.value;
+		});
+		frequency.value = board.value ? board.value.frequency : 600;
+		isMappedToUpdateBoards.value = updateBoardsMap.value.some((board) => {
+			return board.id === query.index;
+		});
+		timeToUpdate.value = frequency.value;
+	}
+),
+	{ immediate: true };
 
 onBeforeMount(() => {
 	authStore.initialChecks();
@@ -136,59 +147,56 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="app-container">
-    <NotificationBar />
-    <NavBar v-if="authStore.currentPath !== 'embed'" />
-    <!-- /mapview, /dashboard layouts -->
-    <div
-      v-if="
-        authStore.currentPath === 'mapview' ||
-          authStore.currentPath === 'dashboard'
-      "
-      class="app-content"
-    >
-      <SideBar />
-      <div class="app-content-main">
-        <SettingsBar />
-        <RouterView />
-      </div>
-    </div>
-    <!-- /admin layouts -->
-    <div
-      v-else-if="authStore.currentPath === 'admin'"
-      class="app-content"
-    >
-      <AdminSideBar />
-      <div class="app-content-main">
-        <RouterView />
-      </div>
-    </div>
-    <!-- /component, /component/:index layouts -->
-    <div
-      v-else-if="authStore.currentPath.includes('component')"
-      class="app-content"
-    >
-      <ComponentSideBar />
-      <div class="app-content-main">
-        <RouterView />
-      </div>
-    </div>
-    <div v-else>
-      <router-view />
-    </div>
-    <InitialWarning />
-    <LogIn />
-    <div
-      v-if="
-        ['dashboard', 'mapview'].includes(authStore.currentPath) &&
-          !authStore.isMobile &&
-          !authStore.isNarrowDevice
-      "
-      class="app-update"
-    >
-      <p>下次更新：{{ formattedTimeToUpdate }}</p>
-    </div>
-  </div>
+	<div class="app-container">
+		<NotificationBar />
+		<NavBar v-if="authStore.currentPath !== 'embed'" />
+		<!-- /mapview, /dashboard layouts -->
+		<div
+			v-if="
+				authStore.currentPath === 'mapview' ||
+				authStore.currentPath === 'dashboard'
+			"
+			class="app-content"
+		>
+			<SideBar />
+			<div class="app-content-main">
+				<SettingsBar />
+				<RouterView />
+			</div>
+		</div>
+		<!-- /admin layouts -->
+		<div v-else-if="authStore.currentPath === 'admin'" class="app-content">
+			<AdminSideBar />
+			<div class="app-content-main">
+				<RouterView />
+			</div>
+		</div>
+		<!-- /component, /component/:index layouts -->
+		<div
+			v-else-if="authStore.currentPath.includes('component')"
+			class="app-content"
+		>
+			<ComponentSideBar />
+			<div class="app-content-main">
+				<RouterView />
+			</div>
+		</div>
+		<div v-else>
+			<router-view />
+		</div>
+		<InitialWarning />
+		<LogIn />
+		<div
+			v-if="
+				['dashboard', 'mapview'].includes(authStore.currentPath) &&
+				!authStore.isMobile &&
+				!authStore.isNarrowDevice
+			"
+			class="app-update"
+		>
+			<p>下次更新：{{ formattedTimeToUpdate }}</p>
+		</div>
+	</div>
 </template>
 
 <style scoped lang="scss">

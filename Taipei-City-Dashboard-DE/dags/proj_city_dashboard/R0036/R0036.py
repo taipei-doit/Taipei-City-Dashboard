@@ -27,7 +27,7 @@ def _R0036(**kwargs):
     FROM_CRS = 4326
 
     # Extract
-    res = requests.get(url, proxies=proxies, timeout=60)
+    res = requests.get(url, timeout=60)
     if res.status_code != 200:
         raise ValueError(f"Request failed! status: {res.status_code}")
     res_json = res.json()

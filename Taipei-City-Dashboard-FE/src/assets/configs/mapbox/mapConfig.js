@@ -424,6 +424,9 @@ export const maplayerCommonLayout = {
 	"symbol-triangle_white": {
 		"icon-image": "triangle_white",
 	},
+	"symbol-youbike_elec": {
+        "icon-image": "youbike_elec",
+    },
 	"symbol-youbike": {
 		"icon-image": [
 			"case",
