@@ -1,7 +1,7 @@
 <!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 
 <script setup>
-import { ref } from "vue";
+import { ref,computed } from "vue";
 import { useDialogStore } from "../../store/dialogStore";
 import { useAuthStore } from "../../store/authStore";
 
@@ -25,10 +25,10 @@ function openExternal(url) {
 
 const {
 	VITE_APP_TITLE,
-	// PROD,
-	// VITE_TAIPEIPASS_URL,
-	// VITE_TAIPEIPASS_CLIENT_ID,
-	// VITE_TAIPEIPASS_SCOPE,
+	PROD,
+	VITE_TAIPEIPASS_URL,
+	VITE_TAIPEIPASS_CLIENT_ID,
+	VITE_TAIPEIPASS_SCOPE,
 } = import.meta.env;
 
 const dialogStore = useDialogStore();
@@ -38,26 +38,27 @@ const loginMode = ref("tp");
 const email = ref("");
 const password = ref("");
 
-// const taipeiPassUrl = computed(() => {
-// 	return `${VITE_TAIPEIPASS_URL}/oauth2/authorize?response_type=code&client_id=${VITE_TAIPEIPASS_CLIENT_ID}&scope=${VITE_TAIPEIPASS_SCOPE}`;
-// });
+const taipeiPassUrl = computed(() => {
+	return `${VITE_TAIPEIPASS_URL}/oauth2/authorize?response_type=code&client_id=${VITE_TAIPEIPASS_CLIENT_ID}&scope=${VITE_TAIPEIPASS_SCOPE}`;
+});
 
 function handleSwitchMode() {
 	loginMode.value = loginMode.value === "tp" ? "email" : "tp";
 	email.value = "";
 	password.value = "";
-	// if (PROD) {
-	// 	return;
-	// } else {
-	// 	loginMode.value = loginMode.value === "tp" ? "email" : "tp";
-	// 	email.value = "";
-	// 	password.value = "";
-	// }
+	if (PROD) {
+	 	return;
+	} else {
+		loginMode.value = loginMode.value === "tp" ? "email" : "tp";
+	 	email.value = "";
+	 	password.value = "";
+	}
 }
-// 移轉前隱藏
-// function handleTaipeiPassLogin() {
-//	window.open(taipeiPassUrl.value, "_self");
-// }
+
+function handleTaipeiPassLogin() {
+	window.open(taipeiPassUrl.value, "_self");
+}
+
 async function handleEmailLogin() {
 	const loggedIn = await authStore.loginByEmail(email.value, password.value);
 	if (loggedIn) {
@@ -93,10 +94,9 @@ function handleClose() {
         v-if="loginMode === 'tp'"
         class="login-form"
       >
-	    <!-- 移轉前暫時隱藏 -->
-        <!-- <button @click="handleTaipeiPassLogin">
+        <button @click="handleTaipeiPassLogin">
           <img src="../../assets/images/taipeipass.png">台北通登入
-        </button> -->
+        </button>
       </div>
       <div
         v-if="loginMode === 'email'"
