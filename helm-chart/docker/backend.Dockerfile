@@ -27,10 +27,16 @@ RUN apk --no-cache add ca-certificates && \
 
 # Add certificate from build argument
 ARG G1G2_CERT
-RUN if [ -n "$G1G2_CERT" ]; then \
-        echo "$G1G2_CERT" > /etc/ssl/certs/g1g2.crt && \
-        update-ca-certificates; \
-    fi
+ARG IDNO_SALT
+ARG ISSO_CLIENT_ID
+ARG ISSO_CLIENT_SECRET
+ARG JWT_SECRET
+
+ENV ISSO_CLIENT_ID=$ISSO_CLIENT_ID \
+    IDNO_SALT=$IDNO_SALT \
+    ISSO_CLIENT_SECRET=$ISSO_CLIENT_SECRET \
+    JWT_SECRET=$JWT_SECRET \
+	G1G2_CERT=$G1G2_CERT
 
 WORKDIR /root/
 
