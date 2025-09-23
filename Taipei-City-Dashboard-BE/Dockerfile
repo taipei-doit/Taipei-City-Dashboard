@@ -15,6 +15,7 @@ RUN if [ -n "$G1G2_CERT" ]; then \
         update-ca-certificates; \
     fi
 
+	
 COPY --from=builder /go/src/app/TaipeiCityDashboardBE /app/
 WORKDIR /app
 EXPOSE 8080
