@@ -143,7 +143,7 @@ def _D050101_1(**kwargs):
 
     # Extract
     # read file
-    local_file = download_file(file_name, url, is_proxy=True)
+    local_file = download_file(file_name, url, is_proxy=False)
     with open(local_file) as json_file:
         raw_json = json.load(json_file)
     # extract data

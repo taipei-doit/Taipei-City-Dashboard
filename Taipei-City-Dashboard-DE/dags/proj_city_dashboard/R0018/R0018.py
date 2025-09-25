@@ -39,7 +39,7 @@ def _R0018(**kwargs):
     GEOMETRY_TYPE = "MultiLineString"
 
     # Extract
-    zip_file = download_file(filename, URL, is_proxy=True)
+    zip_file = download_file(filename, URL, is_proxy=False)
     unzip_file_to_target_folder(zip_file, unzip_path)
     target_shp_file = [f for f in os.listdir(unzip_path) if f.endswith("shp")][0]
     raw_data = gpd.read_file(f"{unzip_path}/{target_shp_file}", encoding=FILE_ENCODING)
