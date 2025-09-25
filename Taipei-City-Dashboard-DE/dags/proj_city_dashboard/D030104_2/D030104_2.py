@@ -29,7 +29,7 @@ def D030104_2(**kwargs):
     FROM_CRS = 3826
 
     # Extract
-    local_file = download_file(file_name, URL, is_proxy=True)
+    local_file = download_file(file_name, URL, is_proxy=False)
     with open(local_file) as json_file:
         res = json.load(json_file)
     update_time = res["data"]["UPDATETIME"]

@@ -38,7 +38,7 @@ def today_road_use_etl(url, **kwargs):
         key_word = "urgent"
 
     # Extract
-    local_file = download_file(file_name, url, is_proxy=True)
+    local_file = download_file(file_name, url, is_proxy=False)
     raw_data = gpd.read_file(local_file, driver="GeoJSON")
     raw_data["data_time"] = get_tpe_now_time_str(is_with_tz=True)
 

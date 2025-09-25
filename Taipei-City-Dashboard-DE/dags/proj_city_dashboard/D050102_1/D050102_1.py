@@ -26,7 +26,7 @@ def _D050102_1(**kwargs):
     url = f"https://opendata.cwa.gov.tw/fileapi/v1/opendataapi/F-C0032-001?Authorization={cwa_api_key}&format=json"
 
     # Extract
-    res_json = get_json_file(url, dag_id, is_proxy=True)
+    res_json = get_json_file(url, dag_id, is_proxy=False)
     # parse json
     issueTime = res_json["cwaopendata"]["dataset"]["datasetInfo"]["issueTime"]
     updateTime = res_json["cwaopendata"]["dataset"]["datasetInfo"]["update"]

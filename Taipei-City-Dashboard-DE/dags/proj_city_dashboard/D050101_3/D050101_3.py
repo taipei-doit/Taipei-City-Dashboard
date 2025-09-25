@@ -32,7 +32,7 @@ def _D050101_3(**kwargs):
 
     # Extract
     # download
-    local_file = download_file(file_name, url, is_proxy=True)
+    local_file = download_file(file_name, url, is_proxy=False)
     if not local_file:
         return False
     with open(local_file) as json_file:
