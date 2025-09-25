@@ -134,7 +134,7 @@ services:
       DUMB_INIT_SETSID: "0"
     restart: always
     deploy:
-      replicas: 2
+      replicas: 3
     depends_on:
       airflow-init:
         condition: service_completed_successfully

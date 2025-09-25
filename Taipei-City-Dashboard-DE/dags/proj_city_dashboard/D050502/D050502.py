@@ -41,7 +41,7 @@ def _D050502(**kwargs):
 
     # Extract
     res = get_moenv_json_data(
-        DATASET_CODE, filters_query=filters_query, is_proxy=True, timeout=None
+        DATASET_CODE, filters_query=filters_query, is_proxy=False, timeout=None
     )
     raw_data = pd.DataFrame(res)
     raw_data.rename({"datacreationdate": "data_time"}, inplace=True)
