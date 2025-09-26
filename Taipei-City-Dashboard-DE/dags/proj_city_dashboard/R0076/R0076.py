@@ -31,7 +31,7 @@ def _R0076(**kwargs):
 
     # Extract
     # download file
-    local_file = download_file(file_name, URL, is_proxy=True)
+    local_file = download_file(file_name, URL, is_proxy=False)
     with open(local_file) as json_file:
         res = json.load(json_file)
     # parse

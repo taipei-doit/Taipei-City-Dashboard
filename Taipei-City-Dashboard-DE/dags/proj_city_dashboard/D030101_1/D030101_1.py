@@ -28,7 +28,7 @@ def D030101_1(**kwargs):
     FROM_CRS = 3826
 
     # Extract
-    local_file = download_file(filename, URL, is_proxy=True, timeout=300)
+    local_file = download_file(filename, URL, is_proxy=False, timeout=300)
     raw = gpd.read_file(local_file, encoding=ENCODING)
     gdata = raw.copy()
 

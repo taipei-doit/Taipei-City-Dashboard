@@ -26,7 +26,7 @@ def _D050201_1(**kwargs):
 
     # Extract
     raw_data = get_json_file(
-        URL, dag_id, timeout=None, is_proxy=True, output_format="dataframe"
+        URL, dag_id, timeout=None, is_proxy=False, output_format="dataframe"
     )
 
     # Transform

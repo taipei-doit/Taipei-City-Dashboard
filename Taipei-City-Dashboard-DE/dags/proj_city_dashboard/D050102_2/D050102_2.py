@@ -27,7 +27,7 @@ def _D050102_2(**kwargs):
     CITY = "臺北市"
 
     # Extract
-    res_json = get_json_file(url, dag_id, is_proxy=True)
+    res_json = get_json_file(url, dag_id, is_proxy=False)
     # parse json
     issueTime = res_json["cwaopendata"]["dataset"]["datasetInfo"]["issueTime"]
     updateTime = res_json["cwaopendata"]["dataset"]["datasetInfo"]["update"]

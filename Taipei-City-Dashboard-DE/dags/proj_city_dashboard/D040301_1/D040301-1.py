@@ -43,7 +43,7 @@ def D040301_1(**kwargs):
     ]
 
     # Extract
-    local_file = download_file(file_name, URL, is_proxy=True)
+    local_file = download_file(file_name, URL, is_proxy=False)
     if not local_file:
         return False
     with open(local_file) as json_file:

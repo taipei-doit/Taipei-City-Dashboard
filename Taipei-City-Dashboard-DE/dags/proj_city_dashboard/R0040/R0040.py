@@ -38,7 +38,7 @@ def _R0040(**kwargs):
     GEOMETRY_TYPE = "Point"
 
     # Extract
-    local_file = download_file(FILE_NAME, URL, is_proxy=True)
+    local_file = download_file(FILE_NAME, URL, is_proxy=False)
     # Use gpd.read_file got error `ValueError: day is out of range for month`.
     # Which is caused by fiona, and very hard to fix.
     # So use json.load to read file and then process it to gpd.GeoDataFrame.
