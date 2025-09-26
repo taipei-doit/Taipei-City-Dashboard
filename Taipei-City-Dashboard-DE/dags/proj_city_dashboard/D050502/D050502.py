@@ -40,7 +40,7 @@ def _D050502(**kwargs):
     response = requests.get(url, params=params, timeout=30, verify=False)
     response.raise_for_status()
     res = response.json()
-    raw_data = pd.DataFrame(res)
+    raw_data = pd.DataFrame(res.get("records", []))
     raw_data.rename({"publishtime": "data_time"}, inplace=True)
     data = raw_data[raw_data['county'].isin(['臺北市', '新北市'])]
 
