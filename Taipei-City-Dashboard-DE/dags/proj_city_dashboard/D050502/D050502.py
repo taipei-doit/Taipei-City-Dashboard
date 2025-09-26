@@ -1,5 +1,11 @@
 from airflow import DAG
 from operators.common_pipeline import CommonDag
+import warnings
+from urllib3.exceptions import InsecureRequestWarning
+import requests
+from airflow.models import Variable
+
+warnings.filterwarnings("ignore", category=InsecureRequestWarning)
 
 
 def _D050502(**kwargs):
@@ -7,8 +13,6 @@ def _D050502(**kwargs):
 
     import pandas as pd
     from sqlalchemy import create_engine
-    from utils.extract_stage import get_moenv_json_data
-    from utils.get_time import get_tpe_now_time
     from utils.transform_geometry import add_point_wkbgeometry_column_to_df
     from utils.load_stage import (
         save_geodataframe_to_postgresql,
@@ -23,31 +27,23 @@ def _D050502(**kwargs):
     load_behavior = dag_infos.get("load_behavior")
     default_table = dag_infos.get("ready_data_default_table")
     history_table = dag_infos.get("ready_data_history_table")
-    DATASET_CODE = "AQX_P_488"
-    filters_query = "county,EQ,臺北市,新北市"
-    table_count = (
-        create_engine(ready_data_db_uri)
-        .execute(f"SELECT COUNT(1) FROM {history_table};")
-        .fetchall()[0][0]
-    )
-    if table_count > 0:  # only get data from last 2 hours
-        now_time = get_tpe_now_time(is_with_tz=True)
-        now_hour = now_time.replace(minute=0, second=0)
-        last_hour = str(now_hour - datetime.timedelta(hours=2))
-        last_hour = last_hour.split("+", maxsplit=1)[0]
-        filters_query += f"|datacreationdate,GR,{last_hour}"
+    api_key = Variable.get("MOENV_API_KEY")
     FROM_CRS = 4326
     GEOMETRY_TYPE = "Point"
 
     # Extract
-    res = get_moenv_json_data(
-        DATASET_CODE, filters_query=filters_query, is_proxy=False, timeout=None
-    )
+    url = "https://data.moenv.gov.tw/api/v2/aqx_p_432"
+    params = {
+        "api_key": api_key,
+        "format": "JSON"
+    }
+    response = requests.get(url, params=params, timeout=30, verify=False)
+    response.raise_for_status()
+    res = response.json()
     raw_data = pd.DataFrame(res)
-    raw_data.rename({"datacreationdate": "data_time"}, inplace=True)
+    raw_data.rename({"publishtime": "data_time"}, inplace=True)
+    data = raw_data[raw_data['county'].isin(['臺北市', '新北市'])]
 
-    # Transform
-    data = raw_data.copy()
     # Rename
     data = data.rename(
         columns={
@@ -66,18 +62,19 @@ def _D050502(**kwargs):
             "no2": "no2_ppb",  # 二氧化氮(ppb)
             "nox": "nox_ppb",  # 氮氧化物(ppb)
             "no": "no_ppb",  # 一氧化氮(ppb)
-            "windspeed": "wind_speed_m_sec",  # 風速(m/sec)
-            "winddirec": "wind_direction_degree",  # 風向(degrees)
-            "datacreationdate": "data_time",  # 資料建置日期
+            "wind_speed": "wind_speed_m_sec",  # 風速(m/sec)
+            "wind_direc": "wind_direction_degree",  # 風向(degrees)
+            "publishtime": "data_time",  # 資料發布時間
             "co_8hr": "co_8hr_ppm",  # 一氧化碳8小時移動平均(ppm)
             "pm2.5_avg": "pm_2point5_avg_ug_m3",  # 細懸浮微粒移動平均值(μg/m3)
             "pm10_avg": "pm10_avg_ug_m3",  # 懸浮微粒移動平均值(μg/m3)
             "so2_avg": "so2_avg_ppb",  # 二氧化硫移動平均值(ppb)
             "longitude": "lng",
             "latitude": "lat",
-            "data_time": "data_time",  # = data creation date
         }
     )
+    # Filter for Taipei and New Taipei
+    
     # define data type
     data["site_id"] = pd.to_numeric(data["site_id"]).astype(int)
     float_cols = [
