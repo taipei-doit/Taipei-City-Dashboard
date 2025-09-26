@@ -579,7 +579,7 @@ def get_json_file(url, dag_id, encoding="UTF-8", output_format="json", **kwargs)
         DAG_ID = 'D050102_2'
         URL = "https://tppkl.blob.core.windows.net/blobfs/TaipeiTree.json"
         raw_data = get_json_file(
-            URL, DAG_ID, timeout=None, is_proxy=True, output_format="dataframe"
+            URL, DAG_ID, timeout=None, is_proxy=False, output_format="dataframe"
         )
         print(raw_data.iloc[0])
         ```

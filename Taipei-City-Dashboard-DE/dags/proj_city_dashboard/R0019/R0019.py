@@ -39,7 +39,7 @@ def _R0019(**kwargs):
     URL = "https://data.moa.gov.tw/OpenData/GetOpenDataFile.aspx?id=I89&FileType=SHP&RID=32744"
 
     # Extract shpfile
-    zip_file = download_file(filename, URL, is_proxy=True)
+    zip_file = download_file(filename, URL, is_proxy=False)
     unzip_file_to_target_folder(zip_file, unzip_path)
     target_shp_file = [f for f in os.listdir(unzip_path) if f.endswith("shp")][0]
     raw_data = gpd.read_file(

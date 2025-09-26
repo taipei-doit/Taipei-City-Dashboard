@@ -31,7 +31,7 @@ def _R0056(**kwargs):
     GEOMETRY_TYPE = "MultiPolygon"
 
     # Extract
-    csv_file = download_file(filename, URL, is_proxy=True)
+    csv_file = download_file(filename, URL, is_proxy=False)
     raw_data = pd.read_csv(csv_file, encoding=ENCODING, encoding_errors="replace")
 
     # Transform

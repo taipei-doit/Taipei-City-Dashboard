@@ -20,7 +20,7 @@ class CHTAuth:
         self.password = Variable.get("CHT_PASSWORD")
         self.full_file_path = f"{DATA_PATH}/{FILE_NAME}"
 
-    def get_token(self, now_time, is_proxy=True, timeout=10):
+    def get_token(self, now_time, is_proxy=False, timeout=10):
         """
         Get the access token for authentication.
         """

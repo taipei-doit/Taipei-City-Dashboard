@@ -35,7 +35,7 @@ def cdc_visit_case_etl(url, diease_name, **kwargs):
     COUNTY = "台北市"
 
     # Extract
-    local_file = download_file(file_name, url, is_proxy=True, is_verify=False)
+    local_file = download_file(file_name, url, is_proxy=False, is_verify=False)
     raw_data = pd.read_csv(local_file)
     raw_data["data_time"] = _year_week_to_date(raw_data["年"], raw_data["週"])
 

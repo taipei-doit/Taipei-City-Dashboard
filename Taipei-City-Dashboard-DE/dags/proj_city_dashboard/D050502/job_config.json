@@ -2,7 +2,7 @@
 	"dag_infos": {
 		"dag_id": "D050502",
 		"start_date": "2024-04-18",
-		"schedule_interval": "50 * * * *",
+		"schedule_interval": "20 * * * *",
 		"catchup": false,
 		"tags": [
 			"moenv_air_quality",
@@ -30,7 +30,7 @@
 	"data_infos": {
 		"name_cn": "空氣品質-縣市(臺北市)小時值-每小時",
 		"airflow_update_freq": "50th minute every hour",
-		"source": "https://data.moenv.gov.tw/dataset/detail/AQX_P_136",
+		"source": "https://data.moenv.gov.tw/dataset/detail/aqx_p_432",
 		"source_type": "MOENV API",
 		"source_dept": "環境部 監測資訊司",
 		"gis_format": "",

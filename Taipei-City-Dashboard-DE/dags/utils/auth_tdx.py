@@ -24,7 +24,7 @@ class TDXAuth:
         self.client_secret = Variable.get("TDX_CLIENT_SECRET")
         self.full_file_path = f"{DATA_PATH}/{FILE_NAME}"
 
-    def get_token(self, is_proxy=True, timeout=60):
+    def get_token(self, is_proxy=False, timeout=60):
         """
         Get the access token for authentication.
         This method retrieves the access token from the specified path.

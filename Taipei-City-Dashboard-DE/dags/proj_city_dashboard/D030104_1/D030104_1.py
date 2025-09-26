@@ -26,7 +26,7 @@ def D030104_1(**kwargs):
     file_name = f"{dag_id}.json"
 
     # Extract
-    local_file = download_file(file_name, URL, is_proxy=True)
+    local_file = download_file(file_name, URL, is_proxy=False)
     with open(local_file) as json_file:
         res = json.load(json_file)
     raw_data = pd.DataFrame(res["data"]["park"])
