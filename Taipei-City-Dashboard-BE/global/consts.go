@@ -19,19 +19,19 @@ const (
 	VERSION = "v1"
 
 	// Request api limit times and duration
-	AuthLimitAPIRequestsTimes          = 300
-	AuthLimitTotalRequestsTimes        = 600
-	UserLimitAPIRequestsTimes          = 100
-	UserLimitTotalRequestsTimes        = 500
-	ComponentLimitAPIRequestsTimes     = 200
-	ComponentLimitTotalRequestsTimes   = 1000
-	ContributorLimitAPIRequestsTimes   = 100
-	ContributorLimitTotalRequestsTimes = 500
-	DashboardLimitAPIRequestsTimes     = 200
-	DashboardLimitTotalRequestsTimes   = 1000
-	IssueLimitAPIRequestsTimes         = 20
-	IssueLimitTotalRequestsTimes       = 200
-	LimitRequestsDuration              = 60 * time.Second
+	AuthLimitAPIRequestsTimes          = 30000
+	AuthLimitTotalRequestsTimes        = 60000
+	UserLimitAPIRequestsTimes          = 10000
+	UserLimitTotalRequestsTimes        = 50000
+	ComponentLimitAPIRequestsTimes     = 20000
+	ComponentLimitTotalRequestsTimes   = 100000
+	ContributorLimitAPIRequestsTimes   = 10000
+	ContributorLimitTotalRequestsTimes = 50000
+	DashboardLimitAPIRequestsTimes     = 20000
+	DashboardLimitTotalRequestsTimes   = 100000
+	IssueLimitAPIRequestsTimes         = 20000
+	IssueLimitTotalRequestsTimes       = 20000
+	LimitRequestsDuration              = 600000 * time.Second
 
 	// JWT Issuer
 	JwtIssuer = "Taipei citydashboard"
