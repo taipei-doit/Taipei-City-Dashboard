@@ -7,6 +7,9 @@ The mapStore controls the map and includes methods to modify it.
 !! PLEASE BE SURE TO REFERENCE THE MAPBOX DOCUMENTATION IF ANYTHING IS UNCLEAR !!
 https://docs.mapbox.com/mapbox-gl-js/guides/
 */
+
+/* global gtag */
+
 import { createApp, defineComponent, nextTick, ref, watch } from "vue";
 import { defineStore } from "pinia";
 import mapboxGl from "mapbox-gl";
@@ -136,7 +139,7 @@ export const useMapStore = defineStore("map", {
 			this.renderMarkers();
 
 			// 使用者點擊定位功能後觸發GA自訂事件
-			geoLocate.on('geolocate', (e) => {
+			geoLocate.on('geolocate', () => {
   				gtag('event','map_actions', {
 					action_type: "所在位置定位",
 					time: Date.now(),

@@ -6,6 +6,9 @@
 /*
 The contentStore calls APIs to get content info and stores it.
 */
+
+/* global gtag */
+
 import { defineStore } from "pinia";
 import http from "../router/axios";
 import router from "../router/index";

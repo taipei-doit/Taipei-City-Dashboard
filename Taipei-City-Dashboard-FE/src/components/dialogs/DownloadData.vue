@@ -3,6 +3,7 @@
 <!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 
 <script setup>
+/* global gtag */
 import { ref, computed } from "vue";
 import { useDialogStore } from "../../store/dialogStore";
 

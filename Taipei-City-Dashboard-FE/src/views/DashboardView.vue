@@ -9,6 +9,7 @@ Testing: Jack Huang (Data Scientist), Ian Huang (Data Analysis Intern)
 <!-- Department of Information Technology, Taipei City Government -->
 
 <script setup>
+/* global gtag */
 import DashboardComponent from "../dashboardComponent/DashboardComponent.vue";
 import router from "../router";
 import { useContentStore } from "../store/contentStore";
@@ -30,7 +31,7 @@ function handleOpenSettings() {
 	dialogStore.showDialog("addEditDashboards");
 }
 
-function toggleFavorite(id) {
+function toggleFavorite(id,name,city) {
 	if (contentStore.favorites.components.includes(id)) {
 		contentStore.unfavoriteComponent(id);
 	} else {
@@ -52,7 +53,7 @@ function handleMoreInfo(item) {
 		city_component:`${item.city}-${item.name}`,
 		time: Date.now(),
   	})
-	
+
 	if (authStore.isMobileDevice && authStore.isNarrowDevice) {
 		router.push({
 			name: "component-info",
