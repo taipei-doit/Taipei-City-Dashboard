@@ -9,6 +9,7 @@ Testing: Jack Huang (Data Scientist), Ian Huang (Data Analysis Intern)
 <!-- Department of Information Technology, Taipei City Government -->
 
 <script setup>
+/* global gtag */
 import { ref, onMounted } from "vue";
 import router from "../router";
 import DashboardComponent from "../dashboardComponent/DashboardComponent.vue";
