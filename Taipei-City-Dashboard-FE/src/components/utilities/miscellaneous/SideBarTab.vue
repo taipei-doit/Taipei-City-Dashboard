@@ -3,6 +3,7 @@
 <!-- This component has two modes "expanded" and "collapsed" which is controlled by the prop "expanded" -->
 
 <script setup>
+/* global gtag */
 import { computed } from "vue";
 import { useRoute } from "vue-router";
 import { useAuthStore } from "../../../store/authStore";
