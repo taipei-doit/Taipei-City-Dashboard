@@ -38,11 +38,29 @@ const canUseFindClosestPoint = computed(() => {
 function toggleDistrictLayer() {
 	districtLayer.value = !districtLayer.value;
 	mapStore.toggleDistrictBoundaries(districtLayer.value);
+	// 載入區界時觸發GA自訂事件
+	gtag('event','map_actions', {
+		action_type: "載入區界",
+		time: Date.now(),
+  	})
 }
 
 function toggleVillageLayer() {
 	villageLayer.value = !villageLayer.value;
 	mapStore.toggleVillageBoundaries(villageLayer.value);
+	// 載入里界時觸發GA自訂事件
+	gtag('event','map_actions', {
+		action_type: "載入里界",
+		time: Date.now(),
+  	})
+}
+
+// 尋找最近點時觸發GA自訂事件
+function findClosestPointGA() {
+	gtag('event','map_actions', {
+		action_type: "尋找最近點",
+		time: Date.now(),
+  	})
 }
 
 watch(
@@ -99,7 +117,7 @@ onMounted(() => {
           }"
           class="hide-if-mobile"
           type="button"
-          @click="dialogStore.showDialog('findClosestPoint')"
+          @click="dialogStore.showDialog('findClosestPoint'); findClosestPointGA();"
         >
           近
         </button>

@@ -34,11 +34,18 @@ const searchParams = ref({
 	pagenum: 1,
 });
 
-function toggleFavorite(id) {
+function toggleFavorite(id,name,city) {
 	if (contentStore.favorites.components.includes(id)) {
 		contentStore.unfavoriteComponent(id);
 	} else {
 		contentStore.favoriteComponent(id);
+		// 成功收藏組件時觸發GA自訂事件
+		gtag('event','popular_component', {
+			dashboard_city:city,
+			component_name:name,
+			city_component:`${city}-${name}`,
+			time: Date.now(),
+  		})
 	}
 }
 
@@ -112,7 +119,7 @@ onMounted(() => {
             "
             @favorite="
               (id) => {
-                toggleFavorite(id);
+                toggleFavorite(id,item.name,item.city);
               }
             "
           />
