@@ -35,9 +35,24 @@ function toggleFavorite(id) {
 		contentStore.unfavoriteComponent(id);
 	} else {
 		contentStore.favoriteComponent(id);
+		// 成功收藏組件時觸發GA自訂事件
+		gtag('event','popular_component', {
+			dashboard_city:city,
+			component_name:name,
+			city_component:`${city}-${name}`,
+			time: Date.now(),
+  		})
 	}
 }
 function handleMoreInfo(item) {
+	// 檢視更多資訊時觸發GA自訂事件
+	gtag('event','popular_component', {
+		dashboard_city:item.city,
+		component_name:item.name,
+		city_component:`${item.city}-${item.name}`,
+		time: Date.now(),
+  	})
+	
 	if (authStore.isMobileDevice && authStore.isNarrowDevice) {
 		router.push({
 			name: "component-info",
@@ -70,7 +85,7 @@ function handleMoreInfo(item) {
       :is-favorite="contentStore.favorites?.components.includes(item.id)"
       @favorite="
         (id) => {
-          toggleFavorite(id);
+          toggleFavorite(id,item.name,item.city);
         }
       "
       @info="
@@ -130,7 +145,7 @@ function handleMoreInfo(item) {
       :is-favorite="contentStore.favorites?.components.includes(item.id)"
       @favorite="
         (id) => {
-          toggleFavorite(id);
+          toggleFavorite(id,item.name,item.city);
         }
       "
       @info="

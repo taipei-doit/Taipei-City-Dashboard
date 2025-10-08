@@ -45,6 +45,14 @@ const parsedCsv = computed(() => {
 });
 
 function handleSubmit() {
+	// 資料下載時觸發GA自訂事件
+	gtag('event','popular_data_download', {
+			dashboard_city:content.value.city,
+			component_name:content.value.name,
+			city_component:`${content.value.city}-${content.value.name}`,
+			data_type: fileType.value,
+			time: Date.now(),
+  	})
 	handleClose();
 }
 function handleClose() {

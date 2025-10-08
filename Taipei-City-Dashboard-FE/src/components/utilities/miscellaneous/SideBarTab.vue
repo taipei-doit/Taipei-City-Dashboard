@@ -38,12 +38,23 @@ const linkActiveOrNot = computed(() => {
 
 	return isPathMatch && isCityMatch;
 });
+
+// 點擊側欄儀表板主題時觸發GA自訂事件
+const popularThemeGA = (title) => {
+	gtag('event','popular_theme', {
+		dashboard_city:props.city,
+		theme_name:title,
+		city_theme:`${props.city}-${title}`
+  })
+};
+
 </script>
 
 <template>
   <router-link
     :to="tabLink"
     :class="{ sidebartab: true, 'sidebartab-active': linkActiveOrNot }"
+	@click="popularThemeGA(title)"
   >
     <span :title="!expanded ? title : ''">{{ icon }}</span>
     <h3 v-if="expanded">
