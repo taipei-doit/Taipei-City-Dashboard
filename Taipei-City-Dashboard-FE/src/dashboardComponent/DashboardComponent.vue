@@ -95,7 +95,9 @@ const activeChart = ref(props.config.chart_config.types[0]);
 const activeCity = computed({
 	get: () => props.activeCity,
 	set: (value) => {
-		toggleOn.value = true;
+		if (toggleOn.value === false) {
+			toggleOn.value = true;
+		}
 		emits("changeCity", value);
 	},
 });
