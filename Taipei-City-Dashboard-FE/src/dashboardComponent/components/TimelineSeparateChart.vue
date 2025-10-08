@@ -95,6 +95,7 @@ const chartOptions = ref({
 	},
 });
 
+
 function parseTime(time) {
 	return time.replace("T", " ").replace("+08:00", " ");
 }
