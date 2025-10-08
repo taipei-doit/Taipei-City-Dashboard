@@ -1,7 +1,7 @@
 <!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 
 <script setup>
-import { ref, computed, watch } from "vue";
+import { ref, watch } from "vue";
 // import { MapConfig, MapFilter } from "../utilities/componentConfig";
 import VueApexCharts from "vue3-apexcharts";
 
@@ -14,12 +14,6 @@ const props = defineProps(["chart_config", "activeChart", "series"]);
 // 	"clearByLayerFilter",
 // 	"fly"
 // ]);
-
-// 計算原始資料時間差
-const diff = computed(() => {
-	const timestamps = props.series[0].data.map((p) => new Date(p.x).getTime());
-	return Math.max(...timestamps) - Math.min(...timestamps);
-});
 
 // 原始資料拷貝避免更改原始資料
 const localSeries = ref(JSON.parse(JSON.stringify(props.series)));
@@ -105,28 +99,48 @@ const chartOptions = ref({
 	},
 });
 
-// 判斷跨度如果超過5年就改成用類別呈現
-if (diff.value > 5 * 31536000000) {
-	localSeries.value.forEach((item) => {
-		item.data = item.data.map((a) => {
-			return { ...a, x: a.x.slice(0, 4) };
-		});
-	});
-	chartOptions.value.xaxis.type = "category";
-	chartOptions.value.xaxis.tickAmount = diff.value / 31536000000; // 每年一格
-	chartOptions.value.labels = {};
-}
-
 function parseTime(time) {
 	return time.replace("T", " ").replace("+08:00", " ");
 }
 
 watch(
-	() => props.series,
-	(newVal) => {
-		localSeries.value = JSON.parse(JSON.stringify(newVal));
-	},
-	{ deep: true }
+  () => props.series,
+  (newVal) => {
+    localSeries.value = JSON.parse(JSON.stringify(newVal || []));
+
+    const timestamps = newVal?.[0]?.data?.map((p) => new Date(p.x).getTime()) || [];
+    if (timestamps.length < 2) return;
+
+    const newDiff = Math.max(...timestamps) - Math.min(...timestamps);
+
+    // 跨度超過五年改成年份類別
+    if (newDiff > 5 * 31536000000) {
+      localSeries.value.forEach((item) => {
+        item.data = item.data.map((a) => ({
+          ...a,
+          x: a.x.slice(0, 4),
+        }));
+      });
+      chartOptions.value = {
+        ...chartOptions.value,
+        xaxis: {
+          ...chartOptions.value.xaxis,
+          type: "category",
+          tickAmount: Math.floor(newDiff / 31536000000),
+        },
+      };
+    } else {
+      chartOptions.value = {
+        ...chartOptions.value,
+        xaxis: {
+          ...chartOptions.value.xaxis,
+          type: "datetime",
+          labels: { datetimeUTC: false },
+        },
+      };
+    }
+  },
+  { deep: true, immediate: true }
 );
 
 </script>
