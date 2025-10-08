@@ -2,7 +2,7 @@
 <!-- Refactored and Maintained by Taipei Urban Intelligence Center -->
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, watch } from "vue";
 import VueApexCharts from "vue3-apexcharts";
 
 const props = defineProps(["chart_config", "activeChart", "series"]);
@@ -15,6 +15,12 @@ const props = defineProps(["chart_config", "activeChart", "series"]);
 // 	"fly"
 // ]);
 
+// 計算原始資料時間差
+const diff = computed(() => {
+	const timestamps = props.series[0].data.map((p) => new Date(p.x).getTime());
+	return Math.max(...timestamps) - Math.min(...timestamps);
+});
+
 const parseSeries = computed(() => {
 	return props.series.map(
 		(
@@ -26,6 +32,9 @@ const parseSeries = computed(() => {
 		})
 	);
 });
+
+// 原始資料拷貝避免更改原始資料
+const localSeries = ref(JSON.parse(JSON.stringify(parseSeries.value)));
 
 const totalMax = computed(() => {
 	if (props.series[0].name.slice(-2) === props.series[1].name.slice(-2)) {
@@ -173,9 +182,30 @@ const chartOptions = ref({
 	],
 });
 
+// 判斷跨度如果超過5年就改成用類別呈現
+if (diff.value > 5 * 31536000000) {
+	localSeries.value.forEach((item) => {
+		item.data = item.data.map((a) => {
+			return { ...a, x: a.x.slice(0, 4) };
+		});
+	});
+	chartOptions.value.xaxis.type = "category";
+	chartOptions.value.xaxis.tickAmount = diff.value / 31536000000; // 每年一格
+	chartOptions.value.labels = {};
+}
+
 function parseTime(time) {
 	return time.replace("T00:00:00+08:00", " ");
 }
+
+watch(
+	() => parseSeries.value,
+	(newVal) => {
+		localSeries.value = JSON.parse(JSON.stringify(newVal));
+	},
+	{ deep: true }
+);
+
 </script>
 
 <template>
@@ -187,7 +217,7 @@ function parseTime(time) {
       width="100%"
       height="260px"
       :options="chartOptions"
-      :series="parseSeries"
+      :series="localSeries"
     />
   </div>
 </template>
