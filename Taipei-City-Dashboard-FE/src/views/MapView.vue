@@ -11,6 +11,7 @@ Testing: Jack Huang (Data Scientist), Ian Huang (Data Analysis Intern)
 <!-- Map charts will be hidden in mobile mode and be replaced with the mobileLayers dialog -->
 
 <script setup>
+/* global gtag */
 import { computed, ref, watch } from "vue";
 import { useRoute } from "vue-router";
 import DashboardComponent from "../dashboardComponent/DashboardComponent.vue";
@@ -94,6 +95,27 @@ function shouldDisable(map_config) {
 			.length > 0
 	);
 }
+
+// 開啟主題圖層時觸發GA自訂事件
+function popularThematicLayerGA(map_config) {
+	gtag('event','popular_thematic_layer', {
+			dashboard_city:map_config[0].city,
+			layer_name:map_config[0].title,
+			city_layer:`${map_config[0].city}-${map_config[0].title}`,
+			time: Date.now(),
+  	})
+}
+
+// 開啟基本圖層時觸發GA自訂事件
+function popularBasicLayerGA(map_config) {
+	gtag('event','popular_basic_layer', {
+			dashboard_city:map_config[0].city,
+			layer_name:map_config[0].title,
+			city_layer:`${map_config[0].city}-${map_config[0].title}`,
+			time: Date.now(),
+  	})
+}
+
 </script>
 
 <template>
@@ -126,6 +148,7 @@ function shouldDisable(map_config) {
             (value, map_config) => {
               handleToggle(value, map_config);
               toggleSwitchBtn(value, 'mapLayer', arrayIdx);
+			  popularThematicLayerGA(map_config);
             }
           "
           @filter-by-param="
@@ -211,6 +234,7 @@ function shouldDisable(map_config) {
             (value, map_config) => {
               handleToggle(value, map_config);
               toggleSwitchBtn(value, 'hasMap', arrayIdx);
+			  popularThematicLayerGA(map_config);
             }
           "
           @filter-by-param="
@@ -290,6 +314,7 @@ function shouldDisable(map_config) {
             (value, map_config) => {
               handleToggle(value, map_config);
               toggleSwitchBtn(value, 'basicLayer', arrayIdx);
+			  popularBasicLayerGA(map_config);
             }
           "
           @filter-by-param="

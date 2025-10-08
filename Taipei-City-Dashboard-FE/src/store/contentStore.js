@@ -6,6 +6,9 @@
 /*
 The contentStore calls APIs to get content info and stores it.
 */
+
+/* global gtag */
+
 import { defineStore } from "pinia";
 import http from "../router/axios";
 import router from "../router/index";
@@ -630,6 +633,16 @@ export const useContentStore = defineStore("content", {
 			const dialogStore = useDialogStore();
 			const authStore = useAuthStore();
 
+			// 新建儀表板且新增新組件時觸發GA自訂事件
+			this.editDashboard.components.forEach((item)=>{
+				gtag('event','popular_component', {
+					dashboard_city:item.city,
+					component_name:item.name,
+					city_component:`${item.city}-${item.name}`,
+					time: Date.now(),
+  				})
+			})
+
 			this.editDashboard.components = this.editDashboard.components.map(
 				(item) => item.id
 			);
@@ -655,6 +668,16 @@ export const useContentStore = defineStore("content", {
 		// 2. Call this function to edit the current dashboard (only personal dashboards)
 		async editCurrentDashboard() {
 			const dialogStore = useDialogStore();
+
+			// 編輯儀表板時觸發GA自訂事件
+			this.editDashboard.components.forEach((item)=>{
+				gtag('event','popular_component', {
+					dashboard_city:item.city,
+					component_name:item.name,
+					city_component:`${item.city}-${item.name}`,
+					time: Date.now(),
+  				})
+			})
 
 			this.editDashboard.components = this.editDashboard.components.map(
 				(item) => item.id

@@ -7,6 +7,9 @@ The mapStore controls the map and includes methods to modify it.
 !! PLEASE BE SURE TO REFERENCE THE MAPBOX DOCUMENTATION IF ANYTHING IS UNCLEAR !!
 https://docs.mapbox.com/mapbox-gl-js/guides/
 */
+
+/* global gtag */
+
 import { createApp, defineComponent, nextTick, ref, watch } from "vue";
 import { defineStore } from "pinia";
 import mapboxGl from "mapbox-gl";
@@ -95,6 +98,7 @@ export const useMapStore = defineStore("map", {
 			this.map.addControl(geoLocate);
 			this.map.addControl(new mapboxGl.NavigationControl());
 			this.map.doubleClickZoom.disable();
+			let isFirstZoom = true;
 			this.map
 				.on("load", () => {
 					if (!this.map) return;
@@ -120,9 +124,28 @@ export const useMapStore = defineStore("map", {
 					this.loadingLayers = this.loadingLayers.filter(
 						(el) => el !== "rendering"
 					);
+				})
+				// 圖臺縮放時觸發GA自訂事件
+				.on("zoomend",() => {
+					if (isFirstZoom) {
+						isFirstZoom = false;
+					} else {
+						gtag('event','map_actions', {
+							action_type: "地圖縮放",
+							time: Date.now(),
+  						});
+					}
 				});
 
 			this.renderMarkers();
+
+			// 使用者點擊定位功能後觸發GA自訂事件
+			geoLocate.on('geolocate', () => {
+  				gtag('event','map_actions', {
+					action_type: "所在位置定位",
+					time: Date.now(),
+  				})
+			});
 
 			return geoLocate;
 		},
@@ -1016,6 +1039,16 @@ export const useMapStore = defineStore("map", {
 			nextTick(() => {
 				const app = createApp(PopupComponent);
 				app.mount("#vue-popup-content");
+			});
+
+			// 使用者點擊圖徵時觸發GA自訂事件
+			gtag("event", "popular_feature_click", {
+				dashboard_city: mapConfigs[0].city,
+				layer_name: mapConfigs[0].title,
+				city_layer: `${mapConfigs[0].city}-${mapConfigs[0].title}`,
+				data_type: mapConfigs[0].source,
+				feature_type: mapConfigs[0].type,
+				time: Date.now(),
 			});
 		},
 		// 2. Remove the current popup
