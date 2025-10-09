@@ -635,12 +635,14 @@ export const useContentStore = defineStore("content", {
 
 			// 新建儀表板且新增新組件時觸發GA自訂事件
 			this.editDashboard.components.forEach((item)=>{
-				gtag('event','popular_component', {
-					dashboard_city:item.city,
-					component_name:item.name,
-					city_component:`${item.city}-${item.name}`,
-					time: Date.now(),
-  				})
+				if (item.city && item.name) {
+					gtag('event','popular_component', {
+						dashboard_city:item.city,
+						component_name:item.name,
+						city_component:`${item.city}-${item.name}`,
+						time: Date.now(),
+  					})
+				}
 			})
 
 			this.editDashboard.components = this.editDashboard.components.map(
@@ -671,12 +673,14 @@ export const useContentStore = defineStore("content", {
 
 			// 編輯儀表板時觸發GA自訂事件
 			this.editDashboard.components.forEach((item)=>{
-				gtag('event','popular_component', {
-					dashboard_city:item.city,
-					component_name:item.name,
-					city_component:`${item.city}-${item.name}`,
-					time: Date.now(),
-  				})
+				if (item.city && item.name) {
+					gtag('event','popular_component', {
+						dashboard_city:item.city,
+						component_name:item.name,
+						city_component:`${item.city}-${item.name}`,
+						time: Date.now(),
+  					})
+				}
 			})
 
 			this.editDashboard.components = this.editDashboard.components.map(
