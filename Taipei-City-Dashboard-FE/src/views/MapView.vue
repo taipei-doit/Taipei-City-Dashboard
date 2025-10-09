@@ -98,7 +98,7 @@ function shouldDisable(map_config) {
 
 // 開啟主題圖層時觸發GA自訂事件
 function popularThematicLayerGA(map_config) {
-	if (map_config[0].city&&map_config[0].title) {
+	if (map_config[0].city && map_config[0].title) {
 		gtag('event','popular_thematic_layer', {
 			dashboard_city:map_config[0].city,
 			layer_name:map_config[0].title,
@@ -110,7 +110,7 @@ function popularThematicLayerGA(map_config) {
 
 // 開啟基本圖層時觸發GA自訂事件
 function popularBasicLayerGA(map_config) {
-	if (map_config[0].city&&map_config[0].title) {
+	if (map_config[0].city && map_config[0].title) {
 		gtag('event','popular_basic_layer', {
 			dashboard_city:map_config[0].city,
 			layer_name:map_config[0].title,

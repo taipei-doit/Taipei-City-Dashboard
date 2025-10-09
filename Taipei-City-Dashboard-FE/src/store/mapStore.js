@@ -1041,7 +1041,7 @@ export const useMapStore = defineStore("map", {
 			});
 
 			// 使用者點擊圖徵時觸發GA自訂事件
-			if (mapConfigs[0].city&&mapConfigs[0].title&&mapConfigs[0].source&&mapConfigs[0].type) {
+			if (mapConfigs[0].city && mapConfigs[0].title && mapConfigs[0].source && mapConfigs[0].type) {
 				gtag("event", "popular_feature_click", {
 					dashboard_city: mapConfigs[0].city,
 					layer_name: mapConfigs[0].title,

@@ -673,7 +673,7 @@ export const useContentStore = defineStore("content", {
 
 			// 編輯儀表板時觸發GA自訂事件
 			this.editDashboard.components.forEach((item)=>{
-				if (item.city&&item.name) {
+				if (item.city && item.name) {
 					gtag('event','popular_component', {
 						dashboard_city:item.city,
 						component_name:item.name,

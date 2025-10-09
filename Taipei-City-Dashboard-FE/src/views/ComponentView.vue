@@ -37,7 +37,7 @@ function toggleFavorite(id,name,city) {
 	} else {
 		contentStore.favoriteComponent(id);
 		// 成功收藏組件時觸發GA自訂事件
-		if (city&&name) {
+		if (city && name) {
 			gtag('event','popular_component', {
 				dashboard_city:city,
 				component_name:name,
