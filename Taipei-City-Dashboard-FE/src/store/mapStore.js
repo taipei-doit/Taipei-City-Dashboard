@@ -1042,14 +1042,16 @@ export const useMapStore = defineStore("map", {
 			});
 
 			// 使用者點擊圖徵時觸發GA自訂事件
-			gtag("event", "popular_feature_click", {
-				dashboard_city: mapConfigs[0].city,
-				layer_name: mapConfigs[0].title,
-				city_layer: `${mapConfigs[0].city}-${mapConfigs[0].title}`,
-				data_type: mapConfigs[0].source,
-				feature_type: mapConfigs[0].type,
-				time: Date.now(),
-			});
+			if (mapConfigs[0].city && mapConfigs[0].title && mapConfigs[0].source && mapConfigs[0].type) {
+				gtag("event", "popular_feature_click", {
+					dashboard_city: mapConfigs[0].city,
+					layer_name: mapConfigs[0].title,
+					city_layer: `${mapConfigs[0].city}-${mapConfigs[0].title}`,
+					data_type: mapConfigs[0].source,
+					feature_type: mapConfigs[0].type,
+					time: Date.now(),
+				});
+			}
 		},
 		// 2. Remove the current popup
 		removePopup() {

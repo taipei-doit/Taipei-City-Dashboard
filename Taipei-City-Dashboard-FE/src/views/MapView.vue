@@ -98,22 +98,26 @@ function shouldDisable(map_config) {
 
 // 開啟主題圖層時觸發GA自訂事件
 function popularThematicLayerGA(map_config) {
-	gtag('event','popular_thematic_layer', {
+	if (map_config[0].city && map_config[0].title) {
+		gtag('event','popular_thematic_layer', {
 			dashboard_city:map_config[0].city,
 			layer_name:map_config[0].title,
 			city_layer:`${map_config[0].city}-${map_config[0].title}`,
 			time: Date.now(),
-  	})
+  		})
+	}
 }
 
 // 開啟基本圖層時觸發GA自訂事件
 function popularBasicLayerGA(map_config) {
-	gtag('event','popular_basic_layer', {
+	if (map_config[0].city && map_config[0].title) {
+		gtag('event','popular_basic_layer', {
 			dashboard_city:map_config[0].city,
 			layer_name:map_config[0].title,
 			city_layer:`${map_config[0].city}-${map_config[0].title}`,
 			time: Date.now(),
-  	})
+  		})
+	}
 }
 
 </script>

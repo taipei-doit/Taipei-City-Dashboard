@@ -41,12 +41,14 @@ function toggleFavorite(id,name,city) {
 	} else {
 		contentStore.favoriteComponent(id);
 		// 成功收藏組件時觸發GA自訂事件
-		gtag('event','popular_component', {
-			dashboard_city:city,
-			component_name:name,
-			city_component:`${city}-${name}`,
-			time: Date.now(),
-  		})
+		if (city && name) {
+			gtag('event','popular_component', {
+				dashboard_city:city,
+				component_name:name,
+				city_component:`${city}-${name}`,
+				time: Date.now(),
+  			})
+		}
 	}
 }
 
