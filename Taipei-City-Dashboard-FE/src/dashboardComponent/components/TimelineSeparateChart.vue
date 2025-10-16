@@ -112,8 +112,8 @@ watch(
 
     const newDiff = Math.max(...timestamps) - Math.min(...timestamps);
 
-    // 跨度超過五年改成年份類別
-    if (newDiff > 5 * 31536000000) {
+    // 跨度超過三年改成年份類別
+    if (newDiff >= 3 * 31536000000) {
       localSeries.value.forEach((item) => {
         item.data = item.data.map((a) => ({
           ...a,
