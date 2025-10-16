@@ -15,8 +15,11 @@ const props = defineProps(["chart_config", "activeChart", "series"]);
 // 	"fly"
 // ]);
 
+// 原始資料拷貝避免更改原始資料
+const localSeries = ref(JSON.parse(JSON.stringify(props.series)));
+
 const parseSeries = computed(() => {
-	return props.series.map(
+	return localSeries.map(
 		(
 			serie,
 			index
@@ -26,9 +29,6 @@ const parseSeries = computed(() => {
 		})
 	);
 });
-
-// 原始資料拷貝避免更改原始資料
-const localSeries = ref(JSON.parse(JSON.stringify(parseSeries.value)));
 
 const totalMax = computed(() => {
 	if (props.series[0].name.slice(-2) === props.series[1].name.slice(-2)) {
@@ -231,7 +231,7 @@ watch(
       width="100%"
       height="260px"
       :options="chartOptions"
-      :series="localSeries"
+      :series="parseSeries"
     />
   </div>
 </template>
