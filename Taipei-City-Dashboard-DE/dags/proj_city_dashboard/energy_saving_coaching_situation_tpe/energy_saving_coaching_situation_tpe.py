@@ -57,7 +57,7 @@ def _transfer(**kwargs):
     data['year'] = (
         data['year']
         .astype(str)
-        .str.replace(r'[^0-9]', '', regex=True)
+        .str.extract(r'(\d+)', expand=False)
         .astype(int)
         + 1911
     )
