@@ -53,8 +53,14 @@ def _transfer(**kwargs):
         "相當於幾座大安森林公園碳匯量": "carbon_sink_daan_forest_parks"
     }
     data = data.rename(columns=col_map)
-    # Transfer year from ROC to AD
-    data['year'] = data['year'].astype(int) + 1911
+    # Transfer year from ROC to AD, stripping annotations like "114 (截至9月底)"
+    data['year'] = (
+        data['year']
+        .astype(str)
+        .str.replace(r'[^0-9]', '', regex=True)
+        .astype(int)
+        + 1911
+    )
     data['power_saving_degree'] = data['power_saving_degree'].replace('萬', '', regex=True).replace('', '', regex=True).replace(',', '', regex=True)
     data['power_saving_degree'] = data['power_saving_degree'].astype(int)
     data['electricity_saving_expenses'] = data['electricity_saving_expenses'].replace('萬元', '', regex=True).replace('', '', regex=True).replace(',', '', regex=True)
