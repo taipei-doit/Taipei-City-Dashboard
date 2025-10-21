@@ -238,7 +238,7 @@ function handleMoreInfo(item) {
 		grid-template-columns: 1fr 1fr;
 	}
 
-	@media (min-width: 1200px) {
+	@media (min-width: 1296px) {
 		grid-template-columns: 1fr 1fr 1fr;
 	}
 
