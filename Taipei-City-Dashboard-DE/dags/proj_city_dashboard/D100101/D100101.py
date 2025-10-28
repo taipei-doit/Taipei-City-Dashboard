@@ -26,7 +26,13 @@ def D100101(**kwargs):
     from utils.transform_address import get_addr_xy_parallel
     from utils.transform_geometry import add_point_wkbgeometry_column_to_df
     from utils.transform_time import convert_str_to_time_format
-
+    from utils.transform_address import (
+        clean_data,
+        get_addr_xy_parallel,
+        main_process,
+        save_data,
+    )
+    
     # Config
     # Retrieve all kwargs automatically generated upon DAG initialization
     raw_data_db_uri = kwargs.get("raw_data_db_uri")
@@ -91,6 +97,18 @@ def D100101(**kwargs):
     data["addr"] = (
         data["addr"].str[:3].str.cat(data["district"], sep="") + data["addr"].str[3:]
     )
+    
+    addr = data["address"]
+    addr_cleaned = clean_data(addr)
+    standard_addr_list = main_process(addr_cleaned)
+    result, output = save_data(addr, addr_cleaned, standard_addr_list)
+    data["address"] = output
+    unique_addr = pd.Series(output.unique())
+    x, y = get_addr_xy_parallel(unique_addr)
+    gdata = add_point_wkbgeometry_column_to_df(
+        data, x=x, y=y, from_crs=FROM_CRS
+    )
+
     # Replace seperations of facility descriptions and extract friendly equipment
     data["friendly_equipment"] = data["friendly_equipment"].apply(
         lambda x: x.replace(";", "、")
@@ -115,11 +133,7 @@ def D100101(**kwargs):
     )
     # Time
     data["data_time"] = convert_str_to_time_format(data["data_time"])
-    # Geometry
-    data["lng"], data["lat"] = get_addr_xy_parallel(data["addr"], sleep_time=0.5)
-    gdata = add_point_wkbgeometry_column_to_df(
-        data, x=data["lng"], y=data["lat"], from_crs=FROM_CRS
-    )
+   
     # Reshape
     ready_data = gdata.drop(columns=["lng", "lat", "geometry", "cellphone"])
 
