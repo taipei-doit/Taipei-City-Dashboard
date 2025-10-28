@@ -56,8 +56,9 @@ def D100101(**kwargs):
     raw_data["data_time"] = get_data_taipei_file_last_modified_time(PAGE_ID)
 
     # Transform
-    # Rename
-    data = raw_data
+    # Rename (process only first 10 rows for testing)
+    data = raw_data.copy()
+
     data = data.drop(columns=["_id", "_importdate"])
     data = data.rename(
         columns={
@@ -99,10 +100,9 @@ def D100101(**kwargs):
     standard_addr_list = main_process(addr_cleaned)
     result, output = save_data(addr, addr_cleaned, standard_addr_list)
     data["addr"] = output
-    unique_addr = pd.Series(output.unique())
-    x, y = get_addr_xy_parallel(unique_addr)
+    data["lng"], data["lat"] = get_addr_xy_parallel(output)
     gdata = add_point_wkbgeometry_column_to_df(
-        data, x=x, y=y, from_crs=FROM_CRS
+        data, x=data["lng"], y=data["lat"], from_crs=FROM_CRS
     )
 
     # Replace seperations of facility descriptions and extract friendly equipment
