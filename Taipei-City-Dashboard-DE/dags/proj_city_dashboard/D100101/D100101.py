@@ -93,16 +93,12 @@ def D100101(**kwargs):
     }
     data["district"] = data["district"].astype(int)
     data["district"] = data["district"].map(district_map)
-    data["addr"] = data["addr"].apply(remove_district_code)
-    data["addr"] = (
-        data["addr"].str[:3].str.cat(data["district"], sep="") + data["addr"].str[3:]
-    )
-    
-    addr = data["address"]
+
+    addr = data["addr"]
     addr_cleaned = clean_data(addr)
     standard_addr_list = main_process(addr_cleaned)
     result, output = save_data(addr, addr_cleaned, standard_addr_list)
-    data["address"] = output
+    data["addr"] = output
     unique_addr = pd.Series(output.unique())
     x, y = get_addr_xy_parallel(unique_addr)
     gdata = add_point_wkbgeometry_column_to_df(
