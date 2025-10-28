@@ -112,19 +112,19 @@ def D100101(**kwargs):
     data["basic_equipment"] = data["basic_equipment"].apply(
         lambda x: x.replace(";", "、")
     )
-    data["diaper_changing_table"] = data["friendly_equipment"].apply(
+    data["diaper_changing_table"] = data["basic_equipment"].apply(
         lambda x: True if isinstance(x, str) and "尿布台" in x else False
     )
-    data["storage_space"] = data["friendly_equipment"].apply(
+    data["storage_space"] = data["basic_equipment"].apply(
         lambda x: True if isinstance(x, str) and "置物空間" in x else False
     )
-    data["stroller_parking"] = data["friendly_equipment"].apply(
+    data["stroller_parking"] = data["basic_equipment"].apply(
         lambda x: True if isinstance(x, str) and "嬰兒車停放空間" in x else False
     )
-    data["drinking_water"] = data["friendly_equipment"].apply(
+    data["drinking_water"] = data["basic_equipment"].apply(
         lambda x: True if isinstance(x, str) and "飲水服務" in x else False
     )
-    data["fridge"] = data["friendly_equipment"].apply(
+    data["fridge"] = data["basic_equipment"].apply(
         lambda x: True if isinstance(x, str) and "母乳專用冰箱" in x else False
     )
     # Time
