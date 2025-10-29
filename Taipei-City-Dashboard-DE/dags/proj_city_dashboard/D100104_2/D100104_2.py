@@ -29,21 +29,21 @@ def D100104_2(**kwargs):
     load_behavior = dag_infos.get('load_behavior')
     default_table = dag_infos.get('ready_data_default_table')
     history_table = dag_infos.get('ready_data_history_table')
-    # Manually set
-    rid = '9470c96d-9363-4a6f-899e-1d1a85abd4b9'
     page_id = 'a14dd58c-ecef-480c-b574-889ecfa631c3'
-
+    # Manually set
+	# 資料來源異動
+    url = 'https://tsis.dbas.gov.taipei/statis/webMain.aspx?sys=220&ymf=10400&kind=21&type=0&funid=a05041801&cycle=4&outmode=12&compmode=0&outkind=1&deflst=2&nzo=1'
     # Extract
-    res = get_data_taipei_api(rid)
-    raw_data = pd.DataFrame(res)
+    ENCODING = 'utf-8-sig'
+    raw_data = pd.read_csv(url, encoding=ENCODING)
 
     # Transform
     # Rename
-    data = raw_data
-    keep_col = ['年底別', '生育健康篩檢補助/總計[人次]']
+    data = raw_data.copy()
+    keep_col = ['統計期', '生育健康篩檢補助/總計[人次]']
     data = data[keep_col]
     col_map = {
-        '年底別': 'year',
+        '統計期': 'year',
         '生育健康篩檢補助/總計[人次]': 'total_count'
     }
     data = data.rename(columns=col_map)

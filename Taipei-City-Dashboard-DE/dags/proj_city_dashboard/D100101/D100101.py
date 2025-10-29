@@ -26,7 +26,13 @@ def D100101(**kwargs):
     from utils.transform_address import get_addr_xy_parallel
     from utils.transform_geometry import add_point_wkbgeometry_column_to_df
     from utils.transform_time import convert_str_to_time_format
-
+    from utils.transform_address import (
+        clean_data,
+        get_addr_xy_parallel,
+        main_process,
+        save_data,
+    )
+    
     # Config
     # Retrieve all kwargs automatically generated upon DAG initialization
     raw_data_db_uri = kwargs.get("raw_data_db_uri")
@@ -50,8 +56,9 @@ def D100101(**kwargs):
     raw_data["data_time"] = get_data_taipei_file_last_modified_time(PAGE_ID)
 
     # Transform
-    # Rename
-    data = raw_data
+    # Rename (process only first 10 rows for testing)
+    data = raw_data.copy()
+
     data = data.drop(columns=["_id", "_importdate"])
     data = data.rename(
         columns={
@@ -87,10 +94,17 @@ def D100101(**kwargs):
     }
     data["district"] = data["district"].astype(int)
     data["district"] = data["district"].map(district_map)
-    data["addr"] = data["addr"].apply(remove_district_code)
-    data["addr"] = (
-        data["addr"].str[:3].str.cat(data["district"], sep="") + data["addr"].str[3:]
+
+    addr = data["addr"]
+    addr_cleaned = clean_data(addr)
+    standard_addr_list = main_process(addr_cleaned)
+    result, output = save_data(addr, addr_cleaned, standard_addr_list)
+    data["addr"] = output
+    data["lng"], data["lat"] = get_addr_xy_parallel(output)
+    gdata = add_point_wkbgeometry_column_to_df(
+        data, x=data["lng"], y=data["lat"], from_crs=FROM_CRS
     )
+
     # Replace seperations of facility descriptions and extract friendly equipment
     data["friendly_equipment"] = data["friendly_equipment"].apply(
         lambda x: x.replace(";", "、")
@@ -98,28 +112,24 @@ def D100101(**kwargs):
     data["basic_equipment"] = data["basic_equipment"].apply(
         lambda x: x.replace(";", "、")
     )
-    data["diaper_changing_table"] = data["friendly_equipment"].apply(
+    data["diaper_changing_table"] = data["basic_equipment"].apply(
         lambda x: True if isinstance(x, str) and "尿布台" in x else False
     )
-    data["storage_space"] = data["friendly_equipment"].apply(
+    data["storage_space"] = data["basic_equipment"].apply(
         lambda x: True if isinstance(x, str) and "置物空間" in x else False
     )
-    data["stroller_parking"] = data["friendly_equipment"].apply(
+    data["stroller_parking"] = data["basic_equipment"].apply(
         lambda x: True if isinstance(x, str) and "嬰兒車停放空間" in x else False
     )
-    data["drinking_water"] = data["friendly_equipment"].apply(
+    data["drinking_water"] = data["basic_equipment"].apply(
         lambda x: True if isinstance(x, str) and "飲水服務" in x else False
     )
-    data["fridge"] = data["friendly_equipment"].apply(
+    data["fridge"] = data["basic_equipment"].apply(
         lambda x: True if isinstance(x, str) and "母乳專用冰箱" in x else False
     )
     # Time
     data["data_time"] = convert_str_to_time_format(data["data_time"])
-    # Geometry
-    data["lng"], data["lat"] = get_addr_xy_parallel(data["addr"], sleep_time=0.5)
-    gdata = add_point_wkbgeometry_column_to_df(
-        data, x=data["lng"], y=data["lat"], from_crs=FROM_CRS
-    )
+   
     # Reshape
     ready_data = gdata.drop(columns=["lng", "lat", "geometry", "cellphone"])
 
