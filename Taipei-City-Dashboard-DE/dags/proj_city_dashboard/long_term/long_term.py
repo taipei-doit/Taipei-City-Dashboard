@@ -77,12 +77,6 @@ def _transfer(**kwargs):
         "wkb_geometry", "data_time"
     ]]
 
-    # ✅ 加這行，過濾無效點位
-    ready_data = ready_data[
-        ready_data["wkb_geometry"].notnull() &
-        ready_data["lat"].notnull() &
-        ready_data["lng"].notnull()
-    ]
     # Load to PostgreSQL
     engine = create_engine(ready_data_db_uri)
     save_geodataframe_to_postgresql(

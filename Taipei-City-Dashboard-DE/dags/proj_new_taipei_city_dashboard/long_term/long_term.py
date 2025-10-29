@@ -47,8 +47,6 @@ def _transfer(**kwargs):
     raw_data["lng"] = pd.to_numeric(raw_data["lng"], errors="coerce")
     raw_data["lat"] = pd.to_numeric(raw_data["lat"], errors="coerce")
 
-    # 過濾無經緯度者
-    raw_data = raw_data.dropna(subset=["lng", "lat"])
 
     # 擷取 city 與 zone
     def extract_city_zone(addr: str):
