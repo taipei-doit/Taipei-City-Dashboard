@@ -65,10 +65,18 @@ def _transfer(**kwargs):
     data['compliance_rate'] = data['compliance_rate'].replace('%', '', regex=True)
     data['compliance_rate'] = data['compliance_rate'].astype(float)
     data['reinspection_compliance_rate'] = data['reinspection_compliance_rate'].replace('%', '', regex=True)
-    data['audited_households'] = data['audited_households'].astype(int)
-    data['carbon_sink_daan_forest_parks'] = data['carbon_sink_daan_forest_parks'].astype(int)
-    data['power_saving_ten_thousand_kwh_per_year'] = data['power_saving_ten_thousand_kwh_per_year'].astype(int)
-    data['non_compliant_households'] = data['non_compliant_households'].astype(int)
+    # Remove thousands separators so numeric casts do not fail on values like "3,041"
+    numeric_cols = [
+        'audited_households',
+        'carbon_sink_daan_forest_parks',
+        'power_saving_ten_thousand_kwh_per_year',
+        'non_compliant_households',
+    ]
+    for col in numeric_cols:
+        data[col] = pd.to_numeric(
+            data[col].replace(',', '', regex=True),
+            errors='raise'
+        ).astype(int)
     # Time
     data['data_time'] = get_data_taipei_file_last_modified_time(page_id)
     data['data_time'] = convert_str_to_time_format(data['data_time'])

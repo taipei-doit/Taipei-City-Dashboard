@@ -51,12 +51,14 @@ def _D050601(**kwargs):
         }
     )
     # define columns type
+    data["year"] = pd.to_numeric(data["year"], errors="coerce")
+    data = data.dropna(subset=["year"])
     data["year"] = data["year"].astype(int)
     float_cols = set(data.columns) - set(["_id", "_importdate", "year", "data_time"])
     for col in float_cols:
-        data[col] = data[col].astype(str)
-        data[col] = data[col].str.replace(",", "")
-        data[col] = data[col].astype(float)
+        data[col] = pd.to_numeric(
+            data[col].astype(str).str.replace(",", ""), errors="coerce"
+        )
     # standardize time
     data["data_time"] = convert_str_to_time_format(data["data_time"])
     # select columns
