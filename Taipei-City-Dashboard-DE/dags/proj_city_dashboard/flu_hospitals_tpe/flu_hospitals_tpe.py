@@ -90,7 +90,7 @@ def _transfer(**kwargs):
     )
 
     df = gdata[["name", "tel", "address", "lon", "lat", "district", "wkb_geometry"]]
-    df['type'] = "診所"
+    # df['type'] = "診所"
     df["data_time"] = get_data_taipei_file_last_modified_time(PAGE_ID)
 
     engine = create_engine(ready_data_db_uri)
