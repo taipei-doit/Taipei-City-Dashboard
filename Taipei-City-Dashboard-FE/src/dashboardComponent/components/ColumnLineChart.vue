@@ -19,7 +19,7 @@ const props = defineProps(["chart_config", "activeChart", "series"]);
 const localSeries = ref(JSON.parse(JSON.stringify(props.series)));
 
 const parseSeries = computed(() => {
-	return localSeries.map(
+	return localSeries.value.map(
 		(
 			serie,
 			index
