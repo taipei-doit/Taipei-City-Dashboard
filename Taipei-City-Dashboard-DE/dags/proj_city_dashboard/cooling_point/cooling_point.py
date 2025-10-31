@@ -1,3 +1,4 @@
+import logging
 from airflow import DAG
 from operators.common_pipeline import CommonDag
 
@@ -35,6 +36,8 @@ def _cooling_point(**kwargs):
     response = requests.get(URL, verify=False)
     # 讀取 CSV
     raw_data = pd.read_csv(StringIO(response.text))
+    logging.info(f"Raw data columns: {raw_data.columns.tolist()}")
+    logging.info(f"Raw data sample:\n{raw_data.head()}")
     # Transform
     data = raw_data.copy()
     # Transform: rename fields to standardized columns
