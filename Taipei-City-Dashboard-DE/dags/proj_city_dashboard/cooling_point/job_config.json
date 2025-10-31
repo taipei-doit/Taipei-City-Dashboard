@@ -1,0 +1,37 @@
+{
+    "dag_infos": {  
+        "dag_id": "cooling_point",
+        "start_date": "2025-06-25",
+        "schedule_interval": "@monthly",
+        "catchup": false,
+        "tags": ["cooling_point_tpe", "臺北市涼適點", "市府資料平台"],
+        "description": "臺北市轄內戶外及室內涼適場所",
+        "default_args": {
+            "owner": "airflow",
+            "email": ["DEFAULT_EMAIL_LIST"],
+            "email_on_retry": false,
+            "email_on_failure": true,
+            "retries": 1, 
+            "retry_delay" : 60
+        },
+        "ready_data_db": "postgres_default",  
+        "ready_data_default_table": "cooling_point_tpe",
+        "ready_data_history_table": "",
+        "raw_data_db": "postgres_default",
+        "raw_data_table": "",
+        "load_behavior": "replace"
+    },
+    "data_infos":{
+        "name_cn": "臺北市涼適點",
+        "airflow_update_freq": "first day of every month",
+        "source": "https://data.taipei/dataset/detail?id=a98a3e0e-a36f-43fa-82f8-b09a3011a47a",
+        "source_type": "data.taipei",
+        "source_dept": "臺北市政府",
+        "gis_format": "Point",
+        "output_coordinate": "EPSG:4326",
+        "is_geometry": 1,
+        "dataset_description": "臺北市轄內戶外及室內涼適場所",
+        "etl_description": "由資料平台最新資源下載CSV（Big5），欄位標準化後以WKB點位寫入PostgreSQL。",
+        "sensitivity": "public"
+    }
+}
