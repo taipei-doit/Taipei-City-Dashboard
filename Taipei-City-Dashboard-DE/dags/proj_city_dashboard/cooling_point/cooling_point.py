@@ -34,8 +34,9 @@ def _cooling_point(**kwargs):
     FROM_CRS = 4326
     URL = 'https://data.taipei/api/frontstage/tpeod/dataset/resource.download?rid=ae7e5986-859d-4294-b289-7c1b2e7c23f1'
     response = requests.get(URL, verify=False)
-    # 讀取 CSV
-    raw_data = pd.read_csv(StringIO(response.text), encoding='big5')
+    # 讀取 CSV (Big5 編碼)
+    csv_text = response.content.decode('big5')
+    raw_data = pd.read_csv(StringIO(csv_text))
     logging.info(f"Raw data columns: {raw_data.columns.tolist()}")
     logging.info(f"Raw data sample:\n{raw_data.head()}")
     # Transform
