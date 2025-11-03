@@ -37,8 +37,6 @@ def _cooling_point(**kwargs):
     # 讀取 CSV (Big5 編碼)
     csv_text = response.content.decode('big5')
     raw_data = pd.read_csv(StringIO(csv_text))
-    logging.info(f"Raw data columns: {raw_data.columns.tolist()}")
-    logging.info(f"Raw data sample:\n{raw_data.head()}")
     # Transform
     data = raw_data.copy()
     # Transform: rename fields to standardized columns
@@ -66,8 +64,15 @@ def _cooling_point(**kwargs):
             "備註": "note",
         }
     )
-
+    data["longitude"] = data["longitude"].astype(str).str.replace("，", ",").str.strip()
+    mask = data["longitude"].str.contains(",", na=False)
+    split_coords = data.loc[mask, "longitude"].str.split(",", expand=True)
+    # 若出現逗號，保留右側（經度部分），去除多餘空白
+    data.loc[mask, "longitude"] = split_coords[1].str.strip()
+    data["longitude"] = pd.to_numeric(data["longitude"], errors="coerce")
+    data["latitude"] = pd.to_numeric(data["latitude"], errors="coerce")
     data["data_time"] = get_tpe_now_time_str(is_with_tz=True)
+    
     # standardize geometry
     gdata = add_point_wkbgeometry_column_to_df(
         data, x=data["longitude"], y=data["latitude"], from_crs=FROM_CRS
