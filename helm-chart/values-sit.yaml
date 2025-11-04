@@ -4,7 +4,7 @@
 
 # Global configuration
 global:
-  imageRegistry: ""  # Use Docker Hub or your registry
+  imageRegistry: "" # Use Docker Hub or your registry
 
 # Image pull secrets (for private registries like ACR)
 imagePullSecrets:
@@ -17,13 +17,13 @@ frontend:
   updateStrategy:
     type: RollingUpdate
     rollingUpdate:
-      maxSurge: 0        # 不在升級時額外啟動超過 replica 的新 Pod
-      maxUnavailable: 1  # 允許一次少 1 個 Pod，以便無額外擴容的滾動更新
-  
+      maxSurge: 0 # 不在升級時額外啟動超過 replica 的新 Pod
+      maxUnavailable: 1 # 允許一次少 1 個 Pod，以便無額外擴容的滾動更新
+
   image:
     repository: citydashboard-dhc2gtetgcfqeqhv.azurecr.io/taipei-city-dashboard-fe
     tag: ""
-  
+
   resources:
     limits:
       cpu: 1000m
@@ -31,13 +31,13 @@ frontend:
     requests:
       cpu: 250m
       memory: 1280Mi
-  
+
   # Frontend environment variables (update these values)
   env:
-    NODE_ENV: "test"
+    NODE_ENV: "development"
     VITE_APP_TITLE: "Taipei City Dashboard SIT"
     VITE_APP_VERSION: "3.1.0"
-  
+
   # Nginx config override via ConfigMap
   nginx:
     configMap:
@@ -47,7 +47,7 @@ frontend:
 
   service:
     type: LoadBalancer
-    annotations: 
+    annotations:
       service.beta.kubernetes.io/azure-load-balancer-internal: "true"
     loadBalancerIP: "10.224.0.102"
     port: 8082
@@ -76,19 +76,19 @@ frontend:
       secretKey: "taipeipass-scope"
       optional: true
 
-# Backend configuration  
+# Backend configuration
 backend:
   enabled: true
   replicaCount: 2
   updateStrategy:
     type: RollingUpdate
     rollingUpdate:
-      maxSurge: 0        # 不在升級時額外啟動超過 replica 的新 Pod
-      maxUnavailable: 1  # 允許一次少 1 個 Pod，以便無額外擴容的滾動更新
+      maxSurge: 0 # 不在升級時額外啟動超過 replica 的新 Pod
+      maxUnavailable: 1 # 允許一次少 1 個 Pod，以便無額外擴容的滾動更新
 
   service:
     type: LoadBalancer
-    annotations: 
+    annotations:
       service.beta.kubernetes.io/azure-load-balancer-internal: "true"
     loadBalancerIP: "10.224.0.223"
     port: 8080
@@ -97,7 +97,7 @@ backend:
   image:
     repository: citydashboard-dhc2gtetgcfqeqhv.azurecr.io/taipei-city-dashboard-be
     tag: ""
-  
+
   resources:
     limits:
       cpu: 1500m
@@ -105,7 +105,7 @@ backend:
     requests:
       cpu: 500m
       memory: 512Mi
-  
+
   # Backend environment variables (update these values)
   env:
     GIN_MODE: "release"
@@ -207,7 +207,7 @@ autoscaling:
 
 # Monitoring (optional)
 monitoring:
-  enabled: false  # Enable if you have Prometheus installed
+  enabled: false # Enable if you have Prometheus installed
   serviceMonitor:
     enabled: false
     namespace: "monitoring"
@@ -217,7 +217,7 @@ monitoring:
 securityContext:
   capabilities:
     drop:
-    - ALL
+      - ALL
   readOnlyRootFilesystem: true
   runAsNonRoot: true
   runAsUser: 65534
