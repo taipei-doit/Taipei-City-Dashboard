@@ -136,7 +136,6 @@ export const useMapStore = defineStore("map", {
   						});
 					}
 				});
-
 			this.renderMarkers();
 
 			// 使用者點擊定位功能後觸發GA自訂事件

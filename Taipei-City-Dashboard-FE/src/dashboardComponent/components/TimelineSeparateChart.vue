@@ -1,7 +1,7 @@
 <!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 
 <script setup>
-import { ref } from "vue";
+import { ref, watch } from "vue";
 // import { MapConfig, MapFilter } from "../utilities/componentConfig";
 import VueApexCharts from "vue3-apexcharts";
 
@@ -14,6 +14,9 @@ const props = defineProps(["chart_config", "activeChart", "series"]);
 // 	"clearByLayerFilter",
 // 	"fly"
 // ]);
+
+// 原始資料拷貝避免更改原始資料
+const localSeries = ref(JSON.parse(JSON.stringify(props.series)));
 
 const chartOptions = ref({
 	chart: {
@@ -99,6 +102,47 @@ const chartOptions = ref({
 function parseTime(time) {
 	return time.replace("T", " ").replace("+08:00", " ");
 }
+
+watch(
+  () => props.series,
+  (newVal) => {
+    localSeries.value = JSON.parse(JSON.stringify(newVal || []));
+
+    const timestamps = newVal?.[0]?.data?.map((p) => new Date(p.x).getTime()) || [];
+    if (timestamps.length < 2) return;
+
+    const newDiff = Math.max(...timestamps) - Math.min(...timestamps);
+
+    // 跨度超過三年改成年份類別
+    if (newDiff >= 3 * 31536000000) {
+      localSeries.value.forEach((item) => {
+        item.data = item.data.map((a) => ({
+          ...a,
+          x: a.x.slice(0, 4),
+        }));
+      });
+      chartOptions.value = {
+        ...chartOptions.value,
+        xaxis: {
+          ...chartOptions.value.xaxis,
+          type: "category",
+          tickAmount: Math.floor(newDiff / 31536000000),
+        },
+      };
+    } else {
+      chartOptions.value = {
+        ...chartOptions.value,
+        xaxis: {
+          ...chartOptions.value.xaxis,
+          type: "datetime",
+          labels: { datetimeUTC: false },
+        },
+      };
+    }
+  },
+  { deep: true, immediate: true }
+);
+
 </script>
 
 <template>
@@ -108,7 +152,7 @@ function parseTime(time) {
       height="260px"
       type="line"
       :options="chartOptions"
-      :series="series"
+      :series="localSeries"
     />
   </div>
 </template>

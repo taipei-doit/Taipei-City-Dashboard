@@ -45,6 +45,7 @@ function handleSwitchMode() {
 	loginMode.value = loginMode.value === "tp" ? "email" : "tp";
 	email.value = "";
 	password.value = "";
+
 	// 同步到sit
 	// if (PROD) {
 
@@ -55,10 +56,13 @@ function handleSwitchMode() {
 	// 	email.value = "";
 	// 	password.value = "";
 	// }
+
 }
+
 function handleTaipeiPassLogin() {
 	window.open(taipeiPassUrl.value, "_self");
 }
+
 async function handleEmailLogin() {
 	const loggedIn = await authStore.loginByEmail(email.value, password.value);
 	if (loggedIn) {
