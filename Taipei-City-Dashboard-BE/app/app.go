@@ -21,6 +21,8 @@ import (
 
 	"github.com/fvbock/endless"
 	"github.com/gin-gonic/gin"
+
+	ort "github.com/yalue/onnxruntime_go"
 )
 
 // app.go is the main entry point for this application.
@@ -31,6 +33,8 @@ func StartApplication() {
 	// 1. Connect to postgreSQL and Redis
 	models.ConnectToDatabases("MANAGER", "DASHBOARD")
 	cache.ConnectToRedis()
+
+	global.LMSession = models.InitLmSession()
 
 	// 2. Initiate default Gin router with logger and recovery middleware
 	routes.Router = gin.Default()
@@ -60,6 +64,11 @@ func StartApplication() {
 	// If the server stops, close the database connections
 	models.CloseConnects("MANAGER", "DASHBOARD")
 	cache.CloseConnect()
+
+	// If the server stops, close the lm session and environment
+	global.LMSession.Destroy()
+	ort.DestroyEnvironment()
+	
 }
 
 func MigrateManagerSchema() {
