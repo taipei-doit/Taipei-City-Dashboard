@@ -1,3 +1,39 @@
+# ====== Model Exporter ======
+FROM python:3.12-slim AS model_export
+ARG HF_TOKEN   # 若你有 Hugging Face 私有模型或想提高速率，可傳 token（可留空）
+ENV HF_HOME=/root/.cache/huggingface
+WORKDIR /w
+
+# 安裝匯出所需套件（使用 BuildKit cache 降下載時間）
+RUN --mount=type=cache,target=/root/.cache/pip \
+    pip install --no-cache-dir \
+      "transformers>=4.44" \
+      "optimum[onnxruntime]>=1.20.0" \
+      onnxruntime
+
+# 匯出：feature-extraction
+# 產出到 /out/onnx-e5
+RUN --mount=type=cache,target=/root/.cache/huggingface python - <<'PY'
+from pathlib import Path
+from transformers import AutoTokenizer
+from optimum.onnxruntime import ORTModelForFeatureExtraction
+
+MODEL_ID = "intfloat/multilingual-e5-base"
+OUT_DIR  = Path("/out/onnx-e5")
+OUT_DIR.mkdir(parents=True, exist_ok=True)
+
+model = ORTModelForFeatureExtraction.from_pretrained(
+    MODEL_ID,
+    export=True,                    # 關鍵：這會執行 ONNX 匯出
+    provider="CPUExecutionProvider"
+)
+tok = AutoTokenizer.from_pretrained(MODEL_ID, use_fast=True)
+
+model.save_pretrained(OUT_DIR)
+tok.save_pretrained(OUT_DIR)
+print("Exported to:", OUT_DIR)
+PY
+
 # ====== Builder ======
 FROM golang:1.25.4-bookworm AS builder
 WORKDIR /go/src/app
@@ -56,7 +92,9 @@ ENV ISSO_CLIENT_ID=$ISSO_CLIENT_ID \
 
 WORKDIR /app
 COPY --from=builder /go/src/app/TaipeiCityDashboardBE /app/
-COPY lm_model /opt/lm_model
+# COPY lm_model /opt/lm_model
+COPY --from=model_export /out/onnx-e5 /opt/lm_model/onnx-e5
+
 EXPOSE 8080
 
 RUN useradd -r -u 10001 appuser
