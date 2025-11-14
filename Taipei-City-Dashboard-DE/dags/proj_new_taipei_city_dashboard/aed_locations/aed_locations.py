@@ -31,7 +31,6 @@ def _transfer(**kwargs):
     client = NewTaipeiAPIClient(RID, input_format="json")
     res = client.get_all_data(size=1000)
     raw_data = pd.DataFrame(res)
-    raw_data = raw_data.head(10)  # 測試用:只保留前10筆資料
     raw_data["data_time"] = get_tpe_now_time_str(is_with_tz=True)
 
     # Transform
