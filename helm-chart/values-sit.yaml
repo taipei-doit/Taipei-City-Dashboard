@@ -101,10 +101,10 @@ backend:
   resources:
     limits:
       cpu: 1500m
-      memory: 2Gi
+      memory: 4Gi
     requests:
       cpu: 500m
-      memory: 512Mi
+      memory: 1.5G1
 
   # Backend environment variables (update these values)
   env:
@@ -176,6 +176,18 @@ backend:
       optional: false
     - name: REDIS_HOST
       secretKey: "redis-host"
+      optional: false
+    - name: QDRANT_URL
+      secretKey: "QDRANT_URL"
+      optional: false
+    - name: QDRANT_COLLECTION
+      secretKey: "QDRANT_COLLECTION"
+      optional: false
+    - name: QDRANT_API_KEY
+      secretKey: "QDRANT_API_KEY"
+      optional: false
+    - name: LM_MODEL_PATH
+      secretKey: "LM_MODEL_PATH"
       optional: false
 
 externalDatabase: {}
