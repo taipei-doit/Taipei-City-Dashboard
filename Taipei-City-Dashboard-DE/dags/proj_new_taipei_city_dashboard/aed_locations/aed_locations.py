@@ -65,12 +65,23 @@ def _transfer(**kwargs):
         "electrical pads expiration date": "pads_expiration"
     })
 
-    # 日期欄位處理：替換 "0000-00-00" 為 NaT 並轉為 datetime
+    # 日期欄位處理:替換 "0000-00-00" 為 NaT 並轉為 datetime
     for col in ["install_date", "battery_expiration", "pads_expiration"]:
         raw_data[col] = raw_data[col].replace("0000-00-00", pd.NaT)
         raw_data[col] = pd.to_datetime(raw_data[col], errors="coerce")
 
+    # 時間欄位處理:將空字串替換為 None
+    time_columns = [
+        "mon_start", "mon_end", "tue_start", "tue_end",
+        "wed_start", "wed_end", "thu_start", "thu_end",
+        "fri_start", "fri_end", "sat_start", "sat_end",
+        "sun_start", "sun_end"
+    ]
+    for col in time_columns:
+        raw_data[col] = raw_data[col].replace("", None)
+
     # 地址標準化
+    
     addr = raw_data["address"]
     addr_cleaned = clean_data(addr)
     standard_addr_list = main_process(addr_cleaned)
