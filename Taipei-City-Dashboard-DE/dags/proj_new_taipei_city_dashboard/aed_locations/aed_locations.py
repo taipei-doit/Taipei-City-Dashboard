@@ -130,6 +130,16 @@ def _transfer(**kwargs):
         if original_non_null != cleaned_non_null:
             print(f"📊 {col}: {original_non_null} → {cleaned_non_null} (過濾了 {original_non_null - cleaned_non_null} 筆無效資料)")
 
+    # 時間欄位處理:將空字串替換為 None
+    time_columns = [
+        "mon_start", "mon_end", "tue_start", "tue_end",
+        "wed_start", "wed_end", "thu_start", "thu_end",
+        "fri_start", "fri_end", "sat_start", "sat_end",
+        "sun_start", "sun_end"
+    ]
+    for col in time_columns:
+        raw_data[col] = raw_data[col].replace("", None)
+
     # 地址標準化
     
     addr = raw_data["address"]
