@@ -32,9 +32,6 @@ def _transfer(**kwargs):
     res = client.get_all_data(size=1000)
     raw_data = pd.DataFrame(res)
     
-    # 🧪 測試模式: 只處理前 10 筆資料
-    print(f"⚠️  測試模式: 只處理前 10 筆資料 (總共 {len(raw_data)} 筆)")
-    raw_data = raw_data.head(10)
     
     raw_data["data_time"] = get_tpe_now_time_str(is_with_tz=True)
 
@@ -87,7 +84,6 @@ def _transfer(**kwargs):
         mask = raw_data[col].notna()
         invalid_dates = (raw_data.loc[mask, col].dt.year < 1900) | (raw_data.loc[mask, col].dt.year > 2100)
         if invalid_dates.any():
-            print(f"⚠️  {col}: 發現 {invalid_dates.sum()} 筆年份超出合理範圍的日期,已設為 NULL")
             raw_data.loc[mask & invalid_dates, col] = pd.NaT
 
     # 時間欄位處理:將空字串或無效時間替換為 None
@@ -109,17 +105,14 @@ def _transfer(**kwargs):
                 return None
             parts = time_str.split(":")
             if len(parts) != 3:
-                print(f"⚠️  無效時間格式(非 HH:MM:SS): {time_str}")
                 return None
             hour, minute, second = int(parts[0]), int(parts[1]), int(parts[2])
             # 檢查時間範圍是否有效
             if 0 <= hour <= 23 and 0 <= minute <= 59 and 0 <= second <= 59:
                 return time_str
             else:
-                print(f"⚠️  時間值超出範圍: {time_str} (hour={hour}, min={minute}, sec={second})")
                 return None
         except (ValueError, AttributeError, TypeError) as e:
-            print(f"⚠️  時間格式解析錯誤: {time_str}, 錯誤: {e}")
             return None
     
     # 處理所有時間欄位並記錄統計
@@ -128,7 +121,7 @@ def _transfer(**kwargs):
         raw_data[col] = raw_data[col].apply(validate_time_format)
         cleaned_non_null = raw_data[col].notna().sum()
         if original_non_null != cleaned_non_null:
-            print(f"📊 {col}: {original_non_null} → {cleaned_non_null} (過濾了 {original_non_null - cleaned_non_null} 筆無效資料)")
+            print(f"{col}: {original_non_null} :{cleaned_non_null} (過濾了 {original_non_null - cleaned_non_null} 筆無效資料)")
 
     # 地址標準化
     
@@ -160,7 +153,6 @@ def _transfer(**kwargs):
     ]]
 
     # 最終驗證:確保所有時間欄位都是有效的
-    print("🔍 執行最終資料驗證...")
     final_time_columns = [
         "mon_start", "mon_end", "tue_start", "tue_end",
         "wed_start", "wed_end", "thu_start", "thu_end",
@@ -180,13 +172,11 @@ def _transfer(**kwargs):
                     return time_val
         except:
             pass
-        print(f"❌ 警告: 發現並移除無效時間值: {time_val}")
         return None
     
     for col in final_time_columns:
         ready_data[col] = ready_data[col].apply(final_validate_time)
     
-    print("✅ 最終驗證完成")
 
     # Load
     engine = create_engine(ready_data_db_uri)
