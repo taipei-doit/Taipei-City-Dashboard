@@ -70,23 +70,10 @@ def _transfer(**kwargs):
     # 日期欄位處理:替換無效日期為 NaT 並轉為 datetime
     date_columns = ["install_date", "battery_expiration", "pads_expiration"]
     for col in date_columns:
-        # 處理各種無效日期格式
-        raw_data[col] = raw_data[col].replace({
-            "0000-00-00": pd.NaT,
-            "": pd.NaT,
-            "NULL": pd.NaT,
-            "null": pd.NaT,
-            None: pd.NaT
-        })
-        # 轉換為 datetime,無效的自動變成 NaT
+        raw_data[col] = raw_data[col].replace("0000-00-00", pd.NaT)
         raw_data[col] = pd.to_datetime(raw_data[col], errors="coerce")
-        # 驗證日期合理性(1900-2100之間)
-        mask = raw_data[col].notna()
-        invalid_dates = (raw_data.loc[mask, col].dt.year < 1900) | (raw_data.loc[mask, col].dt.year > 2100)
-        if invalid_dates.any():
-            raw_data.loc[mask & invalid_dates, col] = pd.NaT
 
-    # 時間欄位處理:將空字串或無效時間替換為 None
+    # 時間欄位處理:將無效時間替換為 None (保留資料列,只清理時間欄位)
     time_columns = [
         "mon_start", "mon_end", "tue_start", "tue_end",
         "wed_start", "wed_end", "thu_start", "thu_end",
@@ -95,33 +82,26 @@ def _transfer(**kwargs):
     ]
     
     def validate_time_format(time_str):
-        """驗證時間格式是否有效(HH:MM:SS),小時必須在 0-23 之間"""
+        """驗證時間格式,無效時間設為 None"""
         if pd.isna(time_str) or time_str == "" or time_str is None:
             return None
         try:
             time_str = str(time_str).strip()
-            # 處理空白或只有空格的情況
             if not time_str:
                 return None
             parts = time_str.split(":")
             if len(parts) != 3:
                 return None
             hour, minute, second = int(parts[0]), int(parts[1]), int(parts[2])
-            # 檢查時間範圍是否有效
+            # 只檢查時間格式有效性,超出範圍的設為 None
             if 0 <= hour <= 23 and 0 <= minute <= 59 and 0 <= second <= 59:
                 return time_str
-            else:
-                return None
-        except (ValueError, AttributeError, TypeError) as e:
+            return None
+        except:
             return None
     
-    # 處理所有時間欄位並記錄統計
     for col in time_columns:
-        original_non_null = raw_data[col].notna().sum()
         raw_data[col] = raw_data[col].apply(validate_time_format)
-        cleaned_non_null = raw_data[col].notna().sum()
-        if original_non_null != cleaned_non_null:
-            print(f"{col}: {original_non_null} :{cleaned_non_null} (過濾了 {original_non_null - cleaned_non_null} 筆無效資料)")
 
     # 地址標準化
     
@@ -151,32 +131,6 @@ def _transfer(**kwargs):
         "sun_start", "sun_end", "remark", "install_date",
         "battery_expiration", "pads_expiration", "lng", "lat", "wkb_geometry", "data_time"
     ]]
-
-    # 最終驗證:確保所有時間欄位都是有效的
-    final_time_columns = [
-        "mon_start", "mon_end", "tue_start", "tue_end",
-        "wed_start", "wed_end", "thu_start", "thu_end",
-        "fri_start", "fri_end", "sat_start", "sat_end",
-        "sun_start", "sun_end"
-    ]
-    
-    def final_validate_time(time_val):
-        """最終驗證時間格式"""
-        if pd.isna(time_val) or time_val is None:
-            return None
-        try:
-            parts = str(time_val).split(":")
-            if len(parts) == 3:
-                h, m, s = int(parts[0]), int(parts[1]), int(parts[2])
-                if 0 <= h <= 23 and 0 <= m <= 59 and 0 <= s <= 59:
-                    return time_val
-        except:
-            pass
-        return None
-    
-    for col in final_time_columns:
-        ready_data[col] = ready_data[col].apply(final_validate_time)
-    
 
     # Load
     engine = create_engine(ready_data_db_uri)
