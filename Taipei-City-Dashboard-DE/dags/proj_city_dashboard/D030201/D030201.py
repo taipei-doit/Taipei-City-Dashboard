@@ -87,7 +87,7 @@ def _D030201(**kwargs):
                 # it used to be "2－30日死亡人數" before data.columns.str.replace(r"^\d+", "", regex=True)
                 "－30日死亡人數": "death_2_30_days",
                 "天候": "weather",
-                "光線": "light",
+                "道路照明設備": "light",
                 "道路類別": "road_category",
                 "速限－速度限制": "speed_limit",
                 "道路型態": "road_type",
