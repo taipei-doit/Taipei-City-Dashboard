@@ -1,6 +1,3 @@
-// src/utils/cutRoute.js
-import { point, nearestPointOnLine, lineSlice, distance } from "@turf/turf";
-
 /**
  * 將多段 LineString 按頭尾接成一條 LineString
  */
@@ -27,7 +24,6 @@ function mergeSegmentsFallback(segments) {
   const merged = [];
   let currentKey = startKey;
 
-  // eslint-disable-next-line no-constant-condition
   while (true) {
     const candidates = idx.get(currentKey) || [];
     let chosen = null;
@@ -60,36 +56,78 @@ function mergeSegmentsFallback(segments) {
 }
 
 /**
+ * 計算兩點平方距離 (僅用於比較)
+ */
+function distance2(pt1, pt2) {
+  const dx = pt1[0] - pt2[0];
+  const dy = pt1[1] - pt2[1];
+  return dx * dx + dy * dy;
+}
+
+/**
+ * 找點在線段上最近的投影點
+ */
+function nearestPointOnLineCoords(lineCoords, pt) {
+  let minDist = Infinity;
+  let nearest = lineCoords[0];
+  let nearestIndex = 0;
+
+  for (let i = 0; i < lineCoords.length - 1; i++) {
+    const [x1, y1] = lineCoords[i];
+    const [x2, y2] = lineCoords[i + 1];
+    const dx = x2 - x1;
+    const dy = y2 - y1;
+    const t = ((pt[0] - x1) * dx + (pt[1] - y1) * dy) / (dx * dx + dy * dy);
+    let proj;
+    if (t < 0) proj = [x1, y1];
+    else if (t > 1) proj = [x2, y2];
+    else proj = [x1 + t * dx, y1 + t * dy];
+
+    const d = distance2(proj, pt);
+    if (d < minDist) {
+      minDist = d;
+      nearest = proj;
+      nearestIndex = i;
+    }
+  }
+
+  return { nearest, nearestIndex };
+}
+
+/**
  * 切割線段並保證順序從 start 到 end
  */
 export function cutRouteSegment(geojson, startCoord, endCoord) {
+  if (!geojson) throw new Error("沒有輸入 geojson");
   let feature = geojson;
-  if (!feature) throw new Error("沒有輸入 geojson");
   if (feature.type === "FeatureCollection") feature = feature.features[0];
   if (feature.type !== "Feature") throw new Error("輸入必須是 Feature 或 FeatureCollection");
 
   const geom = feature.geometry;
-  let mergedCoords;
-  if (geom.type === "LineString") mergedCoords = geom.coordinates.slice();
-  else if (geom.type === "MultiLineString") mergedCoords = mergeSegmentsFallback(geom.coordinates);
+  let coords;
+  if (geom.type === "LineString") coords = geom.coordinates.slice();
+  else if (geom.type === "MultiLineString") coords = mergeSegmentsFallback(geom.coordinates);
   else throw new Error("只支援 LineString 或 MultiLineString");
 
-  const lineFeature = { type: "Feature", properties: {}, geometry: { type: "LineString", coordinates: mergedCoords } };
+  const start = nearestPointOnLineCoords(coords, startCoord);
+  const end = nearestPointOnLineCoords(coords, endCoord);
 
-  const startPt = point(startCoord);
-  const endPt = point(endCoord);
-  const snappedStart = nearestPointOnLine(lineFeature, startPt);
-  const snappedEnd = nearestPointOnLine(lineFeature, endPt);
+  let startIndex = start.nearestIndex;
+  let endIndex = end.nearestIndex;
 
-  let sliced = lineSlice(snappedStart, snappedEnd, lineFeature);
+  // 保證順序從 start -> end
+  if (startIndex > endIndex) {
+    [startIndex, endIndex] = [endIndex, startIndex];
+  }
 
-  const firstPt = sliced.geometry.coordinates[0];
-  const lastPt = sliced.geometry.coordinates[sliced.geometry.coordinates.length - 1];
+  const slicedCoords = coords.slice(startIndex, endIndex + 2); // 包含投影點
 
-  const distToStartFirst = distance(startPt, point(firstPt));
-  const distToStartLast = distance(startPt, point(lastPt));
-
-  if (distToStartLast < distToStartFirst) sliced.geometry.coordinates.reverse();
-
-  return sliced;
+  return {
+    type: "Feature",
+    properties: {},
+    geometry: {
+      type: "LineString",
+      coordinates: slicedCoords
+    }
+  };
 }
