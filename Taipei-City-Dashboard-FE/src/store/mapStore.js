@@ -410,7 +410,7 @@ export const useMapStore = defineStore("map", {
 					// 上sit前調整${location.origin}
 					res = await axios.get(`${location.origin}/geo_server/taipei_vioc/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=taipei_vioc%3A${map_config.index}&maxFeatures=1000000&outputFormat=application%2Fjson`);
 					res2 = await axios.get(`/mapData/${map_config.index}_route.geojson`)
-					if (map_config.index === 'metro_o_line') {
+					if (map_config.index === 'metro_o_line_car') {
 						res3 = await axios.get(`/mapData/${map_config.index}_route_2.geojson`)
 					}
 				} else {
