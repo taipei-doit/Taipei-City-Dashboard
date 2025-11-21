@@ -124,8 +124,7 @@ const chartOptions = ref({
 			},
 		},
 		labels: {
-			datetimeUTC: true,
-            timezone: 8,
+			datetimeUTC: false,
 		},
 		tooltip: {
 			enabled: false,
