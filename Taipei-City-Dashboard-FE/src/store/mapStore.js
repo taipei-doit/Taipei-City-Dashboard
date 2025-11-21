@@ -1362,7 +1362,6 @@ export const useMapStore = defineStore("map", {
 
 			if (!this.customLayers) this.customLayers = {};
 			this.customLayers[map_config.layerId] = customLayer;
-			console.log(this.customLayers)
 
     		// === 加入圖層 ===
     		this.map.addLayer(customLayer);
