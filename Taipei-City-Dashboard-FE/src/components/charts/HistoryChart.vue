@@ -34,6 +34,7 @@ const chartOptions = ref({
 	},
 	labels: {
 		datetimeUTC: true,
+        timezone: 8,
 	},
 	markers: {
 		hover: {
