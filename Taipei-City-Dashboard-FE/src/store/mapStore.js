@@ -913,12 +913,6 @@ export const useMapStore = defineStore("map", {
         		this.currentVisibleLayers.push(map_config.layerId);
     		}
 
-			// 先確認有沒有已打開的popup
-			if (this.carTooltip) {
-    			this.carTooltip.style.display = "none";
-			}
-			this.selectedCar = null;
-
     		// 組成渲染所須的列車資料
 
     		// 須注意的橘線特例
