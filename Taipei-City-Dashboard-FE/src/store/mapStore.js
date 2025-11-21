@@ -89,8 +89,6 @@ export const useMapStore = defineStore("map", {
 		preloadedModels: {},
 		// 前一包列車動畫資料
 		prevMrtCars: [],
-		// 全部列車
-		allCars: [],
 	}),
 	actions: {
 		/* Initialize Mapbox */
@@ -407,7 +405,6 @@ export const useMapStore = defineStore("map", {
 				let res2 = {}
 				let res3 = {}
 				if (map_config.type === "symbol-3d") {
-					// 上sit前調整${location.origin}
 					res = await axios.get(`${location.origin}/geo_server/taipei_vioc/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=taipei_vioc%3A${map_config.index}&maxFeatures=1000000&outputFormat=application%2Fjson`);
 					res2 = await axios.get(`/mapData/${map_config.index}_route.geojson`)
 					if (map_config.index === 'metro_o_line_car') {
@@ -916,6 +913,12 @@ export const useMapStore = defineStore("map", {
         		this.currentVisibleLayers.push(map_config.layerId);
     		}
 
+			// 先確認有沒有已打開的popup
+			if (this.carTooltip) {
+    			this.carTooltip.style.display = "none";
+			}
+			this.selectedCar = null;
+
     		// 組成渲染所須的列車資料
 
     		// 須注意的橘線特例
@@ -1030,7 +1033,7 @@ export const useMapStore = defineStore("map", {
     		} else {
         		// mrtCars = mrtCarsInit;
         		mrtCars = mrtCarsInit.map((item) => {
-            		const coords = item.coords;
+            		const {coords} = item;
 
            			if (coords.length <= 1) {
                 	// 座標太少就直接用原本
@@ -1071,74 +1074,74 @@ export const useMapStore = defineStore("map", {
         		car.routeId = map_config.layerId;
     		});
 
-    		// 清掉同路線舊的資料，再加入新的
-    		this.allCars = [
-        		...this.allCars.filter(car => car.routeId !== map_config.layerId),
-        		...mrtCars
-    		];
-
     		// === 自訂 3D 圖層 ===
+			
     		const customLayer = {
         		id: map_config.layerId,
         		type: "custom",
         		renderingMode: "3d",
         		onAdd: (map, gl) => {
-            		this.map = map;
-            		this.camera = markRaw(new THREE.Camera());
-            		this.scene = markRaw(new THREE.Scene());
+            		customLayer.map = markRaw(map);
+            		customLayer.camera = markRaw(new THREE.Camera());
+            		customLayer.scene = markRaw(new THREE.Scene());
 
             		// 環境光
             		const ambientLight = new THREE.AmbientLight(0xffffff, 1.2);
-            		this.scene.add(ambientLight);
+            		customLayer.scene.add(ambientLight);
 
             		// 預載列車模型
-            		for (const car of this.allCars) {
+            		for (const car of mrtCars) {
                 		if (!car.model) { // 避免重複建立
-                    		const carIcon = car.car_icon; // 若沒有設定 icon，就用 map_config 的預設
+                    		const carIcon = car.car_icon;
                     		const preModel = this.preloadedModels[carIcon];
 
                     		if (preModel) {
                         		const modelClone = preModel.clone(true);
+								modelClone.traverse((child) => {
+    								if (child.isMesh) {
+        								child.material = child.material.clone(); // 確保材質獨立
+    								}
+								});
                         		const horizontalOffset = -30; // 原本水平偏移
                         		modelClone.position.x += horizontalOffset;
                         		car.model = modelClone;
-                        		this.scene.add(modelClone);
+                        		customLayer.scene.add(modelClone);
                     		} else {
                         		console.warn(`⚠️ 3D 模型尚未預載完成: ${carIcon}`);
                     		}
                 		}
             		}
 
-            		this.renderer = markRaw(
+            		customLayer.renderer = markRaw(
                 		new THREE.WebGLRenderer({
                     		canvas: map.getCanvas(),
                     		context: gl,
                     		antialias: true,
                			})
             		);
-            		this.renderer.autoClear = false;
+            		customLayer.renderer.autoClear = false;
 
             		// === Tooltip 只建一次 ===
-            		if (!this.carTooltip) {
-                		this.carTooltip = document.createElement("div");
-                		this.carTooltip.style.position = "absolute";
-                		this.carTooltip.style.left = 0;
-                		this.carTooltip.style.top = 0;
-                		this.carTooltip.style.willChange = "transform";
-                		this.carTooltip.style.background = "#282A2C";
-                		this.carTooltip.style.border = "2px solid #817E79";
-                		this.carTooltip.style.color = "#fff";
-                		this.carTooltip.style.padding = "6px 10px";
-                		this.carTooltip.style.borderRadius = "6px";
-                		this.carTooltip.style.pointerEvents = "auto";
-                		this.carTooltip.style.display = "none";
-                		this.carTooltip.style.zIndex = "1";
-                		this.carTooltip.style.overflow = "hidden";
-                		this.carTooltip.style.whiteSpace = "nowrap";
-               			this.tooltipOffsetX = 5;
-                		this.tooltipOffsetY = 5;
+            		if (!customLayer.carTooltip) {
+                		customLayer.carTooltip = document.createElement("div");
+                		customLayer.carTooltip.style.position = "absolute";
+                		customLayer.carTooltip.style.left = 0;
+                		customLayer.carTooltip.style.top = 0;
+                		customLayer.carTooltip.style.willChange = "transform";
+                		customLayer.carTooltip.style.background = "#282A2C";
+                		customLayer.carTooltip.style.border = "2px solid #817E79";
+                		customLayer.carTooltip.style.color = "#fff";
+                		customLayer.carTooltip.style.padding = "6px 10px";
+                		customLayer.carTooltip.style.borderRadius = "6px";
+                		customLayer.carTooltip.style.pointerEvents = "auto";
+                		customLayer.carTooltip.style.display = "none";
+                		customLayer.carTooltip.style.zIndex = "1";
+                		customLayer.carTooltip.style.overflow = "hidden";
+                		customLayer.carTooltip.style.whiteSpace = "nowrap";
+               			customLayer.tooltipOffsetX = 5;
+                		customLayer.tooltipOffsetY = 5;
 
-                		map.getContainer().appendChild(this.carTooltip);
+                		map.getContainer().appendChild(customLayer.carTooltip);
 
                 		const closeBtn = document.createElement("button");
                 		closeBtn.innerText = "×";
@@ -1152,22 +1155,22 @@ export const useMapStore = defineStore("map", {
                 		closeBtn.style.fontWeight = "bold";
                 		closeBtn.style.fontSize = "14px";
                 		closeBtn.onclick = () => {
-                    		this.carTooltip.style.display = "none";
-                    		this.selectedCar = null;
+                    		customLayer.carTooltip.style.display = "none";
+                    		customLayer.selectedCar = null;
                 		};
-                		this.carTooltip.appendChild(closeBtn);
+                		customLayer.carTooltip.appendChild(closeBtn);
            	 		}
 
             		// === Click 事件只綁一次 ===
-            		if (this._carClickHandler) {
+            		if (customLayer._carClickHandler) {
                 		map.off("click", this._carClickHandler);
             		}
-            		this._carClickHandler = (e) => {
+            		customLayer._carClickHandler = (e) => {
                 		const clickLngLat = [e.lngLat.lng, e.lngLat.lat];
                 		let closestCar = null;
                 		let minDist = Infinity;
 
-                		for (const car of this.allCars) {
+                		for (const car of mrtCars) {
                     		if (!car.currentLngLat || !car.lastDir) continue;
 
                     		const offsetMeters = 5;
@@ -1176,9 +1179,9 @@ export const useMapStore = defineStore("map", {
                     		const dy = (-car.lastDir.x / norm) * offsetMeters;
                     		const offsetCarPos = [car.currentLngLat[0] + dx * 0.00001, car.currentLngLat[1] + dy * 0.00001];
 
-                    		const dist = turf.distance(
-                        		turf.point(clickLngLat),
-                        		turf.point(offsetCarPos), {
+                    		const dist = distance(
+                        		point(clickLngLat),
+                        		point(offsetCarPos), {
                             		units: "meters"
                         		}
                     		);
@@ -1191,13 +1194,13 @@ export const useMapStore = defineStore("map", {
 
                 		if (!closestCar) return;
 
-               			this.selectedCar = closestCar;
+               			customLayer.selectedCar = closestCar;
 
                 		// 清空 tooltip 內容（保留關閉按鈕）
-                		const closeBtn = this.carTooltip.querySelector("button");
-                		while (this.carTooltip.firstChild) {
-                    		if (this.carTooltip.firstChild !== closeBtn) {
-                        		this.carTooltip.removeChild(this.carTooltip.firstChild);
+                		const closeBtn = customLayer.carTooltip.querySelector("button");
+                		while (customLayer.carTooltip.firstChild) {
+                    		if (customLayer.carTooltip.firstChild !== closeBtn) {
+                        		customLayer.carTooltip.removeChild(customLayer.carTooltip.firstChild);
                     		} else {
                         		break;
                     		}
@@ -1248,17 +1251,16 @@ export const useMapStore = defineStore("map", {
                     		infoContainer.appendChild(row);
                 		});
 
-                		this.carTooltip.insertBefore(infoContainer, closeBtn);
-                		this.carTooltip.style.display = "block";
+                		customLayer.carTooltip.insertBefore(infoContainer, closeBtn);
+                		customLayer.carTooltip.style.display = "block";
             		};
-            		map.on("click", this._carClickHandler);
+            		map.on("click", customLayer._carClickHandler);
         		},
 
         		render: (gl, matrix) => {
-            		if (!this.renderer) {
-                		console.error('渲染器尚未準備好!');
-                		return;
-           			}
+            		const scene = customLayer.scene;
+    				const camera = customLayer.camera;
+    				const renderer = customLayer.renderer;
 
             		// 調整 z/x 軸方向，使 three 跟 mapbox 定義一致
             		const rotationX = new THREE.Matrix4().makeRotationAxis(
@@ -1321,19 +1323,19 @@ export const useMapStore = defineStore("map", {
                     		.multiply(rotationMatrix)
                     		.multiply(rotationX);
 
-                		this.camera.projectionMatrix = new THREE.Matrix4()
+                		camera.projectionMatrix = new THREE.Matrix4()
                     		.fromArray(matrix)
                     		.multiply(modelMatrix);
 
                 		// 渲染場景
-                		this.renderer.resetState();
-                		this.renderer.render(this.scene, this.camera);
+                		renderer.resetState();
+                		renderer.render(scene, camera);
 
                 		// === 更新 tooltip 位置（會跟著模型水平偏移後的位置） ===
-                		if (this.selectedCar && this.selectedCar.currentLngLat && this.selectedCar.lastDir) {
+                		if (customLayer.selectedCar && customLayer.selectedCar.currentLngLat && customLayer.selectedCar.lastDir) {
 
-                    		const dir = this.selectedCar.lastDir; // 車頭方向
-                    		const pos = this.selectedCar.currentLngLat;
+                    		const dir = customLayer.selectedCar.lastDir; // 車頭方向
+                    		const pos = customLayer.selectedCar.currentLngLat;
 
                     		// 車子左右方向（side vector = dir 旋轉 90°）
                     		const side = new THREE.Vector3(-dir.y, dir.x, 0).normalize();
@@ -1352,17 +1354,21 @@ export const useMapStore = defineStore("map", {
                     		];
 
                     		// 將偏移後的位置投影到螢幕
-                    		const screenPos = this.map.project(offsetLngLat);
+                    		const screenPos = customLayer.map.project(offsetLngLat);
 
-                    		this.carTooltip.style.transform =
-                        		`translate(${screenPos.x + this.tooltipOffsetX}px, ${screenPos.y + this.tooltipOffsetY}px)`;
+                    		customLayer.carTooltip.style.transform =
+                        		`translate(${screenPos.x + customLayer.tooltipOffsetX}px, ${screenPos.y + customLayer.tooltipOffsetY}px)`;
                 		}
             		}
 
             	// 下一幀
-            	this.map.triggerRepaint();
+            	customLayer.map.triggerRepaint();
         		},
     		};
+
+			if (!this.customLayers) this.customLayers = {};
+			this.customLayers[map_config.layerId] = customLayer;
+			console.log(this.customLayers)
 
     		// === 加入圖層 ===
     		this.map.addLayer(customLayer);
@@ -1429,10 +1435,13 @@ export const useMapStore = defineStore("map", {
 
 			// 如果3D捷運地圖 popup 存在把它清除
 			// 關閉 popup + reset
-			if (this.carTooltip) {
-    			this.carTooltip.style.display = "none";
-			}
-			this.selectedCar = null;
+			map_config.forEach((item)=>{
+				const customLayer = this.customLayers[`${item.index}-${item.type}-${item.city}`];
+				if (customLayer?.carTooltip) {
+    				customLayer.carTooltip.style.display = "none";
+    				customLayer.selectedCar = null;
+				}
+			})
 		},
 
 		/* Popup Related Functions */
