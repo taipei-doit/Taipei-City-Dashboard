@@ -25,7 +25,7 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import mapboxgl from 'mapbox-gl';
 import { markRaw } from "vue";
-import * as turf from '@turf/turf';
+import { point, distance } from '@turf/turf';
 import { cutRouteSegment } from "../assets/utilityFunctions/getRouteForAnimation.js";
 import { interpolateAlongSegment } from '../assets/utilityFunctions/geometryUtils.js';
 
