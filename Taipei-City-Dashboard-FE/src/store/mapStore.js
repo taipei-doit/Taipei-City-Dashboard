@@ -978,7 +978,7 @@ export const useMapStore = defineStore("map", {
         		const initTrainMap = new Map(
             		mrtCarsInit.map(car => [car.train_number, car])
         		);
-
+				// 先確認上一輪有的車
         		this.prevMrtCars.forEach(prevCar => {
             		const newCar = initTrainMap.get(prevCar.train_number);
             		if (!newCar) return; // 新資料沒有該車 → 跳過
@@ -1024,37 +1024,126 @@ export const useMapStore = defineStore("map", {
 
         		mrtCars = Array.from(initTrainMap.values());
 
+				// 新一輪出現的車
+				for (const [trainNumber, car] of initTrainMap) {
+    				const existed = this.prevMrtCars.some(prev => prev.train_number === trainNumber);
+    				if (existed) continue; // 已存在 → 不處理
+    				const { coords } = car;
+
+    				if (!coords || coords.length === 0) {
+        				car.coords = [];
+        				car.final_coord = null;
+        				car.progress = 0;
+        				continue;
+    				}
+
+   					if (coords.length === 1) {
+        				const c = coords[0];
+        				car.coords = [c];
+        				car.final_coord = [c[0], c[1], c[2] ?? 0];
+        				car.progress = 0;
+        				continue;
+    				}
+
+    				const ratio = 2 / 3;
+    				const finalCoord = interpolateAlongSegment(coords, ratio); // 插值後 2/3 的點
+
+    				// 切出 2/3 的前段 coords
+    				const trimmed = [];
+    				trimmed.push(coords[0]);
+
+    				let total = 0;
+    				const segLens = [];
+    				for (let i = 0; i < coords.length - 1; i++) {
+        				const dx = coords[i + 1][0] - coords[i][0];
+        				const dy = coords[i + 1][1] - coords[i][1];
+        				const dz = (coords[i + 1][2] || 0) - (coords[i][2] || 0);
+        				const len = Math.sqrt(dx*dx + dy*dy + dz*dz);
+        				total += len;
+        				segLens.push(len);
+    				}
+
+    				const targetDist = total * ratio;
+    				let accum = 0;
+
+    				for (let i = 0; i < segLens.length; i++) {
+        				if (accum + segLens[i] < targetDist) {
+            				trimmed.push(coords[i + 1]);
+            				accum += segLens[i];
+        				} else {
+            				trimmed.push(finalCoord);
+            				break;
+        				}
+    				}
+
+    				car.coords = trimmed;
+    				car.final_coord = finalCoord;
+    				car.progress = 0;
+				}
     		} else {
-        		// mrtCars = mrtCarsInit;
         		mrtCars = mrtCarsInit.map((item) => {
-            		const {coords} = item;
+  					const { coords } = item || {};
 
-           			if (coords.length <= 1) {
-                	// 座標太少就直接用原本
-                		return {
-                    		...item,
-                    		coords,
-                    		final_coord: coords[coords.length - 1],
-                    		progress: 0
-                		};
-            		}
+  					// 無座標 -> 返回空 coords 且 final_coord 為 null
+  					if (!coords || coords.length === 0) {
+    					return {
+      						...item,
+      						coords: [],
+      						final_coord: null,
+      						progress: 0
+    					};
+  					}
 
-            		// 用頭尾座標計算半點索引
-           			const halfIndex = Math.floor(coords.length / 3 * 2);
+  					// 只有一個點 -> 2/3 仍然是該點本身
+  					if (coords.length === 1) {
+    					const only = coords[0];
+    					return {
+      						...item,
+      						coords: [only],
+      						final_coord: [only[0], only[1], only[2] ?? 0],
+      						progress: 0
+    					};
+  					}
 
-            		// 取前半段座標
-            		const firstHalfCoords = coords.slice(0, halfIndex + 1);
+  					// 兩點或以上 -> 正常按距離計算 2/3 並切出前段 coords（含插值點）
+  					const ratio = 2 / 3;
+  					const finalCoord = interpolateAlongSegment(coords, ratio); // [lng, lat, z]
 
-            		// final_coord 為前半段最後一個座標
-            		const finalCoord = firstHalfCoords[firstHalfCoords.length - 1];
+  					// 計算每段長度以取得 trimmedCoords
+  					const segLens = [];
+  					let totalLength = 0;
+  					for (let i = 0; i < coords.length - 1; i++) {
+    					const dx = coords[i + 1][0] - coords[i][0];
+    					const dy = coords[i + 1][1] - coords[i][1];
+    					const dz = (coords[i + 1][2] || 0) - (coords[i][2] || 0);
+    					const len = Math.sqrt(dx * dx + dy * dy + dz * dz);
+    					segLens.push(len);
+    					totalLength += len;
+  					}
 
-            		return {
-                		...item,
-                		coords: firstHalfCoords,
-                		final_coord: [finalCoord[0], finalCoord[1], finalCoord[2] ?? 0],
-                		progress: 0
-            		};
-        		});
+  					const targetDist = totalLength * ratio;
+  					const trimmedCoords = [];
+  					trimmedCoords.push(coords[0]);
+
+  					let accum = 0;
+  					for (let i = 0; i < segLens.length; i++) {
+    					if (accum + segLens[i] < targetDist) {
+      						trimmedCoords.push(coords[i + 1]);
+      						accum += segLens[i];
+    					} else {
+      					// 2/3 落在這段 -> 補上精準的插值點（finalCoord）然後中斷
+      						trimmedCoords.push(finalCoord);
+     						break;
+    					}
+  					}
+
+  					return {
+    					...item,
+    					coords: trimmedCoords,
+    					final_coord: finalCoord,
+    					progress: 0
+  					};
+				});
     		}
 
     		if (mrtCars.length === 0) {
