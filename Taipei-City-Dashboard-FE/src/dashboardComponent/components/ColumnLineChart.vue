@@ -124,7 +124,7 @@ const chartOptions = ref({
 			},
 		},
 		labels: {
-			datetimeUTC: false,
+			datetimeUTC: true,
 		},
 		tooltip: {
 			enabled: false,

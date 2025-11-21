@@ -33,7 +33,7 @@ const chartOptions = ref({
 		show: true,
 	},
 	labels: {
-		datetimeUTC: false,
+		datetimeUTC: true,
 	},
 	markers: {
 		hover: {
