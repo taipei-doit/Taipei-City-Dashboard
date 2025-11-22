@@ -1039,8 +1039,6 @@ export const useMapStore = defineStore("map", {
 					mrtCars.push(newCar);
         		});
 
-        		mrtCars = Array.from(initTrainMap.values());
-
 				// 新資料出現的車
 				for (const [trainNumber, car] of initTrainMap) {
     				const existed = this.prevMrtCars.some(prev => prev.train_number === trainNumber);
