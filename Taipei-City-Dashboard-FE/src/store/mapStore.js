@@ -908,6 +908,7 @@ export const useMapStore = defineStore("map", {
     		this.loadingLayers.push("rendering");
     		this.currentLayers.push(map_config.layerId);
     		this.mapConfigs[map_config.layerId] = map_config;
+
     		// 注意重複加入Id
     		if (!this.currentVisibleLayers.includes(map_config.layerId)) {
         		this.currentVisibleLayers.push(map_config.layerId);
@@ -947,6 +948,7 @@ export const useMapStore = defineStore("map", {
 
         		return {
             		id: i,
+					route_id: map_config.layerId,
             		cid: item.properties.cid,
             		dir_control: item.properties.cid,
             		train_number: item.properties.trainnumber,
@@ -962,6 +964,8 @@ export const useMapStore = defineStore("map", {
             		car2: item.properties.car2,
             		car3: item.properties.car3,
             		car4: item.properties.car4,
+					car5: item.properties.car5 || "",
+					car6: item.properties.car6 || "",
            			coords,
             		car_icon: map_config.icon,
             		final_coord: interpolateAlongSegment(coords, 1),
@@ -972,6 +976,8 @@ export const useMapStore = defineStore("map", {
 
     		// 整併 prevMrtCars
     		let mrtCars = [];
+			// 把不同路線的舊資料保存起來
+			let updatePrevCar = [];
 
     		if (this.prevMrtCars.length > 0) {
         		// 建立 Map 加速查找
@@ -980,8 +986,17 @@ export const useMapStore = defineStore("map", {
         		);
 				// 先確認上一輪有的車
         		this.prevMrtCars.forEach(prevCar => {
+
+					// 先確認新來的資料是不是同一路線
+					if(prevCar.route_id !== mrtCarsInit[0].route_id) {
+						updatePrevCar.push(prevCar);
+						return;
+					}
+
             		const newCar = initTrainMap.get(prevCar.train_number);
-            		if (!newCar) return; // 新資料沒有該車 → 跳過
+
+            		// 同路線新資料沒有該車 → 跳過
+					if (!newCar) return;
 
             		// 判斷車子是否進站（curr_stationname 有無變）
             		const stationChanged = prevCar.curr_stationid !== newCar.curr_stationid;
@@ -1020,11 +1035,11 @@ export const useMapStore = defineStore("map", {
                 		newCar.progress = 0.99;
                 		newCar.dataChanged = false;
             		}
+					// 把新資料有找到的車推去待跑動畫列車陣列
+					mrtCars.push(newCar);
         		});
 
-        		mrtCars = Array.from(initTrainMap.values());
-
-				// 新一輪出現的車
+				// 新資料出現的車
 				for (const [trainNumber, car] of initTrainMap) {
     				const existed = this.prevMrtCars.some(prev => prev.train_number === trainNumber);
     				if (existed) continue; // 已存在 → 不處理
@@ -1079,8 +1094,12 @@ export const useMapStore = defineStore("map", {
     				car.coords = trimmed;
     				car.final_coord = finalCoord;
     				car.progress = 0;
+
+					// 把新資料出現的車推去待跑動畫列車陣列
+					mrtCars.push(car);
 				}
     		} else {
+				// 如果是第一次開組件則執行初始化
         		mrtCars = mrtCarsInit.map((item) => {
   					const { coords } = item || {};
 
@@ -1147,15 +1166,11 @@ export const useMapStore = defineStore("map", {
     		}
 
     		if (mrtCars.length === 0) {
-        		console.error('列車資料為空，請確認!');
+        		console.error('待跑動畫列車資料為空，請確認!');
         		return;
     		}
 
-    		this.prevMrtCars = mrtCars;
-
-    		mrtCars.forEach(car => {
-        		car.routeId = map_config.layerId;
-    		});
+    		this.prevMrtCars = [...updatePrevCar,...mrtCars];
 
     		// === 自訂 3D 圖層 ===
 			
@@ -1174,7 +1189,7 @@ export const useMapStore = defineStore("map", {
 
             		// 預載列車模型
             		for (const car of mrtCars) {
-                		if (!car.model) { // 避免重複建立
+                		if (!car.model) {
                     		const carIcon = car.car_icon;
                     		const preModel = this.preloadedModels[carIcon];
 
@@ -1182,7 +1197,7 @@ export const useMapStore = defineStore("map", {
                         		const modelClone = preModel.clone(true);
 								modelClone.traverse((child) => {
     								if (child.isMesh) {
-        								child.material = child.material.clone(); // 確保材質獨立
+        								child.material = child.material.clone();
     								}
 								});
                         		const horizontalOffset = -30; // 原本水平偏移
@@ -1246,7 +1261,7 @@ export const useMapStore = defineStore("map", {
 
             		// === Click 事件只綁一次 ===
             		if (customLayer._carClickHandler) {
-                		map.off("click", this._carClickHandler);
+                		map.off("click", customLayer._carClickHandler);
             		}
             		customLayer._carClickHandler = (e) => {
                 		const clickLngLat = [e.lngLat.lng, e.lngLat.lat];
@@ -1304,16 +1319,25 @@ export const useMapStore = defineStore("map", {
                     		}
                 		};
 
-                		const carCrowdValue = `1${getCrowdColor(closestCar.car1)}2${getCrowdColor(closestCar.car2)}3${getCrowdColor(closestCar.car3)}4${getCrowdColor(closestCar.car4)}`;
+                		let carCrowdValue = "";
+
+						for (let i = 1; i <= 6; i++) {
+    						const key = `car${i}`;
+    						if (closestCar[key] !== undefined && closestCar[key] !== null && closestCar[key] !=='') {
+        						carCrowdValue += `${i}${getCrowdColor(closestCar[key])}`;
+    						}
+						}
+
                 		const infoContainer = document.createElement("div");
-                		const fields = [{
-                        	label: "列車編號",
-                        	value: closestCar.train_number
-                    	},
-                    	{
-                        	label: "行車方向",
-                        	value: closestCar.cid
-                    	},
+                		const fields = [
+						// {
+                        // 	label: "列車編號",
+                        // 	value: closestCar.train_number
+                    	// },
+                    	// {
+                        // 	label: "行車方向",
+                        // 	value: closestCar.cid
+                    	// },
                     	{
                         	label: "起站",
                         	value: closestCar.curr_stationname
@@ -1339,6 +1363,20 @@ export const useMapStore = defineStore("map", {
             		};
             		map.on("click", customLayer._carClickHandler);
         		},
+
+				onRemove(map) {
+    				if (customLayer.carTooltip) {
+        				customLayer.carTooltip.remove();
+        				customLayer.carTooltip = null;
+    				}
+
+    				if (customLayer._carClickHandler) {
+        				map.off("click", customLayer._carClickHandler);
+        				customLayer._carClickHandler = null;
+    				}
+
+    				customLayer.selectedCar = null;
+				},
 
         		render: (gl, matrix) => {
             		const scene = customLayer.scene;
