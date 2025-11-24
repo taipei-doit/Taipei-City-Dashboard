@@ -39,6 +39,7 @@ func ConfigureRoutes() {
 	configureIncidentRoutes()
 	// configureWsRoutes()
 	configureContributorRoutes()
+	configureChatLogRoutes()
 }
 
 func configureAuthRoutes() {
@@ -68,6 +69,18 @@ func configureUserRoutes() {
 	{
 		userRoutes.GET("/", controllers.GetAllUsers)
 		userRoutes.PATCH("/:id", controllers.UpdateUserByID)
+	}
+}
+
+// configureComponentRoutes configures all component routes.
+func configureChatLogRoutes() {
+	componentRoutes := RouterGroup.Group("/chatlog")
+	componentRoutes.Use(middleware.LimitAPIRequests(global.ComponentLimitAPIRequestsTimes, global.LimitRequestsDuration))
+	componentRoutes.Use(middleware.LimitTotalRequests(global.ComponentLimitTotalRequestsTimes, global.LimitRequestsDuration))
+	{
+		componentRoutes.POST("/", controllers.CreateChatLog)
+		componentRoutes.GET("/session", controllers.GetALLChatLog)
+		componentRoutes.GET("/session/:session", controllers.GetChatLogDetailBySession)
 	}
 }
 
