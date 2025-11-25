@@ -138,10 +138,12 @@ onMounted(() => {
 
 	setInterval(reloadChartData, 1000 * frequency.value);
 	setInterval(updateTimeToUpdate, 1000 * 5);
+	setInterval(reloadMapData, 1000 * 120);
 });
 onBeforeUnmount(() => {
 	clearInterval(reloadChartData);
 	clearInterval(updateTimeToUpdate);
+	clearInterval(reloadMapData);
 	// contentStore.wsDisconnect();
 });
 </script>

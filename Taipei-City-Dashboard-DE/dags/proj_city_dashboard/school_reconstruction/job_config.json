@@ -1,0 +1,41 @@
+{
+  "dag_infos": {
+    "dag_id": "school_reconstruction",
+    "start_date": "2025-11-17",
+    "schedule_interval": "@monthly",
+    "catchup": false,
+    "tags": [
+      "school_reconstruction_tpe",
+      "教育局",
+      "臺北市新世代智慧永續校園推動進度"
+    ],
+    "description": "",
+    "default_args": {
+      "owner": "airflow",
+      "email": ["DEFAULT_EMAIL_LIST"],
+      "email_on_retry": false,
+      "email_on_failure": true,
+      "retries": 1,
+      "retry_delay": 60
+    },
+    "ready_data_db": "postgres_default",
+    "ready_data_default_table": "school_reconstruction_tpe",
+    "ready_data_history_table": "school_reconstruction_tpe_history",
+    "raw_data_db": "postgres_default",
+    "raw_data_table": "",
+    "load_behavior": "replace"
+  },
+  "data_infos": {
+    "name_cn": "臺北市新世代智慧永續校園推動進度",
+    "airflow_update_freq": "first day of every month",
+    "source": "https://data.taipei/dataset/detail?id=8b587c95-6eff-4feb-97fd-a7e847a92e01",
+    "source_type": "data.taipei",
+    "source_dept": "教育局",
+    "gis_format": "Point",
+    "output_coordinate": "EPSG:4326",
+    "is_geometry": 1,
+    "dataset_description": "臺北市新世代智慧永續校園推動進度，包含校舍改建進度資料",
+    "etl_description": "",
+    "sensitivity": "public"
+  }
+}

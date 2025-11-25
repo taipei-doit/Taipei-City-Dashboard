@@ -128,6 +128,7 @@ func MigrateManagerSchema() {
 		DBManager.AutoMigrate(&Dashboard{}, &DashboardGroup{}, &Issue{}, &QueryCharts{})
 		DBManager.AutoMigrate(&ViewPoints{})
 		DBManager.AutoMigrate(&Incident{})
+		DBManager.AutoMigrate(&ChatLog{})
 
 		// All users beneath the public group do not need to be added to the public group
 		// DBManager.Exec("ALTER TABLE auth_user_group_roles ADD CONSTRAINT check_group_id CHECK (group_id > 1);")
