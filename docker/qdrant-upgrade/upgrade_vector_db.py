@@ -9,11 +9,11 @@ def main():
     print("開始向量資料庫升級...")
     
     # === 環境變數 ===
-    DB_HOST = os.getenv("DB_DASHBOARD_HOST", "postgres-data")
-    DB_PORT = os.getenv("DB_DASHBOARD_PORT", "5432")
-    DB_USER = os.getenv("DB_DASHBOARD_USER")
-    DB_PASSWORD = os.getenv("DB_DASHBOARD_PASSWORD")
-    DB_NAME = os.getenv("DB_DASHBOARD_DBNAME")
+    DB_HOST = os.getenv("DB_MANAGER_HOST", "postgres-manager")
+    DB_PORT = os.getenv("DB_MANAGER_PORT", "5432")
+    DB_USER = os.getenv("DB_MANAGER_USER")
+    DB_PASSWORD = os.getenv("DB_MANAGER_PASSWORD")
+    DB_NAME = os.getenv("DB_MANAGER_DBNAME")
     QDRANT_URL = os.getenv("QDRANT_URL", "http://qdrant:6333")
     QDRANT_API_KEY = os.getenv("QDRANT_API_KEY", "gogosecurity")
     COLLECTION_NAME = os.getenv("QDRANT_COLLECTION_NAME", "query_charts")
@@ -26,12 +26,12 @@ def main():
     # 執行 SQL 查詢（query_charts JOIN components）
     query = """
         SELECT 
-            qc.id,
+            c.id,
             qc.index,
             c.name,
-            c.city,
-            c.long_desc,
-            c.use_case
+            qc.city,
+            qc.long_desc,
+            qc.use_case
         FROM query_charts qc
         INNER JOIN components c ON qc.index = c.index
     """
@@ -41,6 +41,8 @@ def main():
     print(f"成功讀取 {len(df)} 筆資料")
     
     # 組合描述文字
+    df["long_desc"] = df["long_desc"].fillna("")
+    df["use_case"] = df["use_case"].fillna("")
     df["text"] = df["long_desc"] + " " + df["use_case"]
     
     # 載入模型
@@ -57,7 +59,8 @@ def main():
     client = QdrantClient(url=QDRANT_URL, api_key=QDRANT_API_KEY)
     
     # 刪除舊 collection
-    if client.collection_exists(COLLECTION_NAME):
+    collections = client.get_collections().collections
+    if any(c.name == COLLECTION_NAME for c in collections):
         print(f"刪除舊 collection：{COLLECTION_NAME}")
         client.delete_collection(COLLECTION_NAME)
     
@@ -72,7 +75,7 @@ def main():
     print("上傳向量資料...")
     points = [
         PointStruct(
-            id=i,
+            id=row["id"],
             vector=v.tolist(),
             payload={
                 "id": row["id"],
@@ -83,7 +86,7 @@ def main():
                 "use_case": row["use_case"]
             }
         )
-        for i, (v, row) in enumerate(zip(embeddings, df.to_dict(orient="records")))
+        for v, row in zip(embeddings, df.to_dict(orient="records"))
     ]
     
     client.upsert(collection_name=COLLECTION_NAME, points=points)
