@@ -4,6 +4,8 @@ import (
 	"TaipeiCityDashboardBE/logs"
 	"os"
 	"strconv"
+
+	ort "github.com/yalue/onnxruntime_go"
 )
 
 // IssoConfig defines the structure for Isso configuration
@@ -30,6 +32,16 @@ type RedisConfig struct {
 	Port     string
 	Password string
 	DB       int
+}
+
+type QdrantConfig struct {
+	Url          string
+	Collection   string
+	ApiKey       string
+}
+
+type LMConfig struct {
+	ModelPath    string
 }
 
 var (
@@ -80,6 +92,18 @@ var (
 		Password: getEnv("REDIS_PASSWORD", ""),
 		DB:       getIntEnv("REDIS_DB", 0),
 	}
+
+	Qdrant = QdrantConfig{
+		Url:        getEnv("QDRANT_URL","http://127.0.0.1:6333"),
+		Collection: getEnv("QDRANT_COLLECTION",""),
+		ApiKey:     getEnv("QDRANT_API_KEY",""),
+	}
+
+	LM = LMConfig{
+		ModelPath:  getEnv("LM_MODEL_PATH","/opt/lm_model/onnx-e5/"),
+	}
+	
+	LMSession *ort.DynamicSession[int64, float32]
 )
 
 func init() {
