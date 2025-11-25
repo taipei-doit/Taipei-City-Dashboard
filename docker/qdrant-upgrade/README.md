@@ -58,11 +58,11 @@ docker compose --profile tools up vector-db-upgrade
 
 ```env
 # PostgreSQL 配置（使用與 dashboard-be 相同的配置）
-DB_DASHBOARD_HOST=postgres-data
-DB_DASHBOARD_PORT=5432
-DB_DASHBOARD_USER=your_db_user
-DB_DASHBOARD_PASSWORD=your_db_password
-DB_DASHBOARD_DBNAME=your_db_name
+DB_MANAGER_HOST=postgres-manager
+DB_MANAGER_PORT=5432
+DB_MANAGER_USER=your_db_user
+DB_MANAGER_PASSWORD=your_db_password
+DB_MANAGER_DBNAME=your_db_name
 ```
 
 ### Qdrant 配置
@@ -177,11 +177,11 @@ docker compose run --rm vector-db-upgrade sh
 pip install pandas sentence-transformers qdrant-client sqlalchemy psycopg2-binary
 
 # 設定環境變數
-export DB_DASHBOARD_HOST=localhost
-export DB_DASHBOARD_PORT=5432
-export DB_DASHBOARD_USER=your_user
-export DB_DASHBOARD_PASSWORD=your_password
-export DB_DASHBOARD_DBNAME=your_db
+export DB_MANAGER_HOST=localhost
+export DB_MANAGER_PORT=5432
+export DB_MANAGER_USER=your_user
+export DB_MANAGER_PASSWORD=your_password
+export DB_MANAGER_DBNAME=your_db
 export QDRANT_URL=http://localhost:6333
 export QDRANT_API_KEY=your_key
 
