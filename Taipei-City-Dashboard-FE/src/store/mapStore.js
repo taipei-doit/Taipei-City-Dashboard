@@ -1179,12 +1179,18 @@ export const useMapStore = defineStore("map", {
         		type: "custom",
         		renderingMode: "3d",
         		onAdd: (map, gl) => {
+					// 打開擁擠度組件自動 zoom in
+					map.easeTo({
+    					zoom: 13,    
+    					duration: 800
+					});
+
             		customLayer.map = markRaw(map);
             		customLayer.camera = markRaw(new THREE.Camera());
             		customLayer.scene = markRaw(new THREE.Scene());
 
             		// 環境光
-            		const ambientLight = new THREE.AmbientLight(0xffffff, 1.2);
+            		const ambientLight = new THREE.AmbientLight(0xffffff, 3.2);
             		customLayer.scene.add(ambientLight);
 
             		// 預載列車模型
@@ -1417,7 +1423,15 @@ export const useMapStore = defineStore("map", {
 
                 		// 經緯度轉為 THREE.js 坐標
                 		const merc = mapboxgl.MercatorCoordinate.fromLngLat(pos, pos[2]);
-                		const scale = merc.meterInMercatorCoordinateUnits() * 1;
+
+                		let scale = null;
+						
+						if(map_config.size) {
+							scale = merc.meterInMercatorCoordinateUnits() * map_config.size;
+						} else {
+							scale = merc.meterInMercatorCoordinateUnits() * 1.25;
+						}
+
                 		const fromDir = new THREE.Vector3(1, 0, 0);
 
                 		// 計算模型矩陣
