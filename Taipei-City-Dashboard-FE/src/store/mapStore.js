@@ -1232,11 +1232,11 @@ export const useMapStore = defineStore("map", {
 
 					// 各捷運路線對應圓圈顏色
 					const circleColor = {
-						'metro_br_line':'#C48C31',
-						'metro_bl_line':'#0070BD',
-						'metro_g_line':'#038258',
-						'metro_o_line':'#F5B41C',
-						'metro_r_line':'#E1002C',
+						'metro_br_line_car':'#C48C31',
+						'metro_bl_line_car':'#0070BD',
+						'metro_g_line_car':'#038258',
+						'metro_o_line_car':'#F5B41C',
+						'metro_r_line_car':'#E1002C',
 					}
 
 					if (!map.getSource(sourceId)) {
