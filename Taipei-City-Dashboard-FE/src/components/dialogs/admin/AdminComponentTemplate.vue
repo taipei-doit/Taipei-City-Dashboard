@@ -385,7 +385,7 @@ function isShowTimeToBlock(time_to) {
               }}
                 預設變形（大小/圖示）</label>
               <div class="two-block">
-                <select>
+                <select :disabled="currentComponent.map_config[index].type==='symbol-3d'">
                   <option :value="''">
                     無
                   </option>
@@ -399,7 +399,7 @@ function isShowTimeToBlock(time_to) {
                     wide (線圖)
                   </option>
                 </select>
-                <select>
+                <select :disabled="currentComponent.map_config[index].type==='symbol-3d'">
                   <option :value="''">
                     無
                   </option>
