@@ -28,6 +28,7 @@ import { markRaw } from "vue";
 import { point, distance } from '@turf/turf';
 import { cutRouteSegment } from "../assets/utilityFunctions/getRouteForAnimation.js";
 import { interpolateAlongSegment } from '../assets/utilityFunctions/geometryUtils.js';
+import { updateCarsPosition } from "../assets/utilityFunctions/mrtCars.js";
 
 // Other Stores
 import { useAuthStore } from "./authStore";
@@ -1180,10 +1181,10 @@ export const useMapStore = defineStore("map", {
         		renderingMode: "3d",
         		onAdd: (map, gl) => {
 					// 打開擁擠度組件自動 zoom in
-					map.easeTo({
-    					zoom: 13,    
-    					duration: 800
-					});
+					// map.easeTo({
+    				// 	zoom: 13,    
+    				// 	duration: 800
+					// });
 
             		customLayer.map = markRaw(map);
             		customLayer.camera = markRaw(new THREE.Camera());
@@ -1224,6 +1225,46 @@ export const useMapStore = defineStore("map", {
                			})
             		);
             		customLayer.renderer.autoClear = false;
+
+					// 加入 2D 圓圈資料
+					const sourceId = `mrt-2d-source-${map_config.layerId}`;
+    				const layerId = `mrt-2d-circles-${map_config.layerId}`;
+
+					// 各捷運路線對應圓圈顏色
+					const circleColor = {
+						'metro_br_line':'#C48C31',
+						'metro_bl_line':'#0070BD',
+						'metro_g_line':'#038258',
+						'metro_o_line':'#F5B41C',
+						'metro_r_line':'#E1002C',
+					}
+
+					if (!map.getSource(sourceId)) {
+        				map.addSource(sourceId, {
+            				type: "geojson",
+            				data: {
+                				type: "FeatureCollection",
+                				features: []
+            				}
+        				});
+        
+        				map.addLayer({
+            				id: layerId,
+            				type: "circle",
+            				source: sourceId,
+            				paint: {
+                				"circle-radius": 10,
+                				"circle-color": circleColor[map_config.index],
+                				"circle-stroke-width": 2,
+                				"circle-stroke-color": "#FFFFFF",
+                				"circle-opacity": 0.8
+            				}
+        				});
+    				}
+
+					// 儲存 sourceId 和 layerId 供 render 和 onRemove 使用
+    				customLayer.sourceId = sourceId;
+    				customLayer.layerId2D = layerId;
 
             		// === Tooltip 只建一次 ===
             		if (!customLayer.carTooltip) {
@@ -1381,123 +1422,118 @@ export const useMapStore = defineStore("map", {
         				customLayer._carClickHandler = null;
     				}
 
+					// 用 sourceId 和 layerId 清理該路線的 2D 圖層
+    				if (customLayer.layerId2D && map.getLayer(customLayer.layerId2D)) {
+        				map.removeLayer(customLayer.layerId2D);
+    				}
+
+    				if (customLayer.sourceId && map.getSource(customLayer.sourceId)) {
+        				map.removeSource(customLayer.sourceId);
+    				}
+
     				customLayer.selectedCar = null;
 				},
 
         		render: (gl, matrix) => {
-            		const scene = customLayer.scene;
-    				const camera = customLayer.camera;
-    				const renderer = customLayer.renderer;
+					// 取得當下的 zoom
+					const zoom = customLayer.map.getZoom();
 
-            		// 調整 z/x 軸方向，使 three 跟 mapbox 定義一致
-            		const rotationX = new THREE.Matrix4().makeRotationAxis(
-                		new THREE.Vector3(1, 0, 0),
-                		Math.PI / 2
-            		);
+					let allFinished = true;
+					// 確認當下各列車是否都跑完動畫
+    				for (const car of mrtCars) {
+        				if (car.progress < 1) allFinished = false;
+    				}
 
-            		// 逐一渲染每台車
-            		for (const car of mrtCars) {
-                		car.progress += car.speed;
+					if (zoom < 13) {
+        				// 2D 模式
+        				for (const car of mrtCars) if (car.model) car.model.visible = false;
 
-                		let dir = null;
+        				const features = updateCarsPosition(mrtCars);
 
-                		if (car.progress >= 1) {
-                    		car.progress = 1;
-                    		dir = car.lastDir;
-                		} else {
-                    		const pos = interpolateAlongSegment(car.coords, car.progress);
-                    		const nextProgress = Math.min(car.progress + 0.01, 1);
-                    		const nextPos = interpolateAlongSegment(car.coords, nextProgress);
-                    		dir = new THREE.Vector3(
-                        		nextPos[0] - pos[0],
-                        		nextPos[1] - pos[1],
-                        		nextPos[2] - pos[2]
-                    		).normalize();
-                    		car.lastDir = dir;
-                		}
+        				if (!allFinished) {
+            				customLayer.map.getSource(customLayer.sourceId).setData({
+                				type: "FeatureCollection",
+                				features
+            				});
+        				}
 
-                		const pos = interpolateAlongSegment(car.coords, car.progress);
+        				// 更新 2D tooltip
+        				if (customLayer.selectedCar?.currentLngLat && customLayer.selectedCar?.lastDir) {
+            				const dir = customLayer.selectedCar.lastDir;
+            				const pos = customLayer.selectedCar.currentLngLat;
+            				const side = new THREE.Vector3(-dir.y, dir.x, 0).normalize();
+            				const offsetMeters = -30;
+            				const lngOffset = side.x * offsetMeters * 0.00001;
+            				const latOffset = side.y * offsetMeters * 0.00001;
+           				 	const offsetLngLat = [pos[0] + lngOffset, pos[1] + latOffset];
+            				const screenPos = customLayer.map.project(offsetLngLat);
+            				customLayer.carTooltip.style.transform =
+                				`translate(${screenPos.x + customLayer.tooltipOffsetX}px, ${screenPos.y + customLayer.tooltipOffsetY}px)`;
+        				}
 
-                		// 記錄車廂當前位置（經緯度 + 高度）
-                		car.currentLngLat = pos;
+        				// 顯示 2D layer
+        				if (customLayer.map.getLayoutProperty(customLayer.layerId2D, "visibility") !== "visible") {
+            				customLayer.map.setLayoutProperty(customLayer.layerId2D, "visibility", "visible");
+        				}
+    				} else {
+						// 3D 模式
+						for (const car of mrtCars) if (car.model) car.model.visible = true;
 
-                		// 經緯度轉為 THREE.js 坐標
-                		const merc = mapboxgl.MercatorCoordinate.fromLngLat(pos, pos[2]);
+						// 隱藏 2D layer
+        				if (customLayer.map.getLayoutProperty(customLayer.layerId2D, "visibility") === "visible") {
+            				customLayer.map.setLayoutProperty(customLayer.layerId2D, "visibility", "none");
+        				}
 
-                		let scale = null;
-						
-						if(map_config.size) {
-							scale = merc.meterInMercatorCoordinateUnits() * map_config.size;
-						} else {
-							scale = merc.meterInMercatorCoordinateUnits() * 1.25;
-						}
+						const scene = customLayer.scene;
+        				const camera = customLayer.camera;
+        				const renderer = customLayer.renderer;
+						const rotationX = new THREE.Matrix4().makeRotationAxis(new THREE.Vector3(1, 0, 0), Math.PI / 2);
 
-                		const fromDir = new THREE.Vector3(1, 0, 0);
+						for (const car of mrtCars) {
+           					updateCarsPosition([car]); // 單台車也用同一個計算
 
-                		// 計算模型矩陣
-                		const quaternion = new THREE.Quaternion().setFromUnitVectors(
-                    		fromDir,
-                    		dir
-                		);
+            				const pos = car.currentLngLat;
+            				const dir = car.lastDir;
 
-                		const extraRot = new THREE.Matrix4().makeRotationZ(Math.PI / 2);
-                		const rotationMatrix = new THREE.Matrix4()
-                    		.makeRotationFromQuaternion(quaternion)
-                    		.multiply(extraRot);
+            				const merc = mapboxgl.MercatorCoordinate.fromLngLat(pos, pos[2]);
+           					const scale = merc.meterInMercatorCoordinateUnits() * 1.25;
+            				const fromDir = new THREE.Vector3(1, 0, 0);
 
-                		const translation = new THREE.Matrix4().makeTranslation(
-                    		merc.x,
-                    		merc.y,
-                    		merc.z
-                		);
-                		const scaleMatrix = new THREE.Matrix4().makeScale(scale, -scale, scale);
+            				const quaternion = new THREE.Quaternion().setFromUnitVectors(fromDir, dir);
+            				const extraRot = new THREE.Matrix4().makeRotationZ(Math.PI / 2);
+            				const rotationMatrix = new THREE.Matrix4().makeRotationFromQuaternion(quaternion).multiply(extraRot);
 
-                		const modelMatrix = new THREE.Matrix4()
-                    		.multiply(translation)
-                    		.multiply(scaleMatrix)
-                    		.multiply(rotationMatrix)
-                    		.multiply(rotationX);
+            				const translation = new THREE.Matrix4().makeTranslation(merc.x, merc.y, merc.z);
+            				const scaleMatrix = new THREE.Matrix4().makeScale(scale, -scale, scale);
 
-                		camera.projectionMatrix = new THREE.Matrix4()
-                    		.fromArray(matrix)
-                    		.multiply(modelMatrix);
+            				const modelMatrix = new THREE.Matrix4()
+                				.multiply(translation)
+                				.multiply(scaleMatrix)
+                				.multiply(rotationMatrix)
+                				.multiply(rotationX);
 
-                		// 渲染場景
-                		renderer.resetState();
-                		renderer.render(scene, camera);
+            				camera.projectionMatrix = new THREE.Matrix4().fromArray(matrix).multiply(modelMatrix);
 
-                		// === 更新 tooltip 位置（會跟著模型水平偏移後的位置） ===
-                		if (customLayer.selectedCar && customLayer.selectedCar.currentLngLat && customLayer.selectedCar.lastDir) {
+            				renderer.resetState();
+            				renderer.render(scene, camera);
 
-                    		const dir = customLayer.selectedCar.lastDir; // 車頭方向
-                    		const pos = customLayer.selectedCar.currentLngLat;
-
-                    		// 車子左右方向（side vector = dir 旋轉 90°）
-                    		const side = new THREE.Vector3(-dir.y, dir.x, 0).normalize();
-
-                    		// 和模型一致的水平偏移量（你的模型有 -30）
-                    		const offsetMeters = -30;
-
-                    		// m → 經緯度偏移（你程式使用 0.00001, 我沿用）
-                    		const lngOffset = side.x * offsetMeters * 0.00001;
-                    		const latOffset = side.y * offsetMeters * 0.00001;
-
-                    		// 偏移後的真正車子顯示位置
-                    		const offsetLngLat = [
-                        		pos[0] + lngOffset,
-                        		pos[1] + latOffset
-                    		];
-
-                    		// 將偏移後的位置投影到螢幕
-                    		const screenPos = customLayer.map.project(offsetLngLat);
-
-                    		customLayer.carTooltip.style.transform =
-                        		`translate(${screenPos.x + customLayer.tooltipOffsetX}px, ${screenPos.y + customLayer.tooltipOffsetY}px)`;
-                		}
-            		}
-
-            	// 下一幀
-            	customLayer.map.triggerRepaint();
+            				// 更新 tooltip
+            				if (customLayer.selectedCar?.currentLngLat && customLayer.selectedCar?.lastDir) {
+                				const dir = customLayer.selectedCar.lastDir;
+                				const pos = customLayer.selectedCar.currentLngLat;
+                				const side = new THREE.Vector3(-dir.y, dir.x, 0).normalize();
+                				const offsetMeters = -30;
+                				const lngOffset = side.x * offsetMeters * 0.00001;
+                				const latOffset = side.y * offsetMeters * 0.00001;
+                				const offsetLngLat = [pos[0] + lngOffset, pos[1] + latOffset];
+                				const screenPos = customLayer.map.project(offsetLngLat);
+                				customLayer.carTooltip.style.transform =
+                    				`translate(${screenPos.x + customLayer.tooltipOffsetX}px, ${screenPos.y + customLayer.tooltipOffsetY}px)`;
+            				}
+        				}
+					}
+            		// 下一幀
+            		customLayer.map.triggerRepaint();
         		},
     		};
 
@@ -1574,6 +1610,9 @@ export const useMapStore = defineStore("map", {
 				if (customLayer?.carTooltip) {
     				customLayer.carTooltip.style.display = "none";
     				customLayer.selectedCar = null;
+				}
+				if (customLayer?.layerId2D && this.map.getLayer(customLayer.layerId2D)) {
+    				customLayer.map.setLayoutProperty(customLayer.layerId2D, "visibility", "none");
 				}
 			})
 		},
