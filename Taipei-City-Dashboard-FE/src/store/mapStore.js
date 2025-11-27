@@ -971,7 +971,7 @@ export const useMapStore = defineStore("map", {
             		car_icon: map_config.icon,
             		final_coord: interpolateAlongSegment(coords, 1),
             		progress: 0,
-            		speed: 0.004
+            		speed: 0.008
         		};
     		});
 
@@ -1441,7 +1441,7 @@ export const useMapStore = defineStore("map", {
 					let allFinished = true;
 					// 確認當下各列車是否都跑完動畫
     				for (const car of mrtCars) {
-        				if (car.progress < 1) allFinished = false;
+        				if (car.progress <= 1) allFinished = false;
     				}
 
 					if (zoom < 13) {
