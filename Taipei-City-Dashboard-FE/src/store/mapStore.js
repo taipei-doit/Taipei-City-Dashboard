@@ -971,7 +971,7 @@ export const useMapStore = defineStore("map", {
             		car_icon: map_config.icon,
             		final_coord: interpolateAlongSegment(coords, 1),
             		progress: 0,
-            		speed: 0.004
+            		speed: 0.008
         		};
     		});
 
@@ -1455,7 +1455,14 @@ export const useMapStore = defineStore("map", {
                 				type: "FeatureCollection",
                 				features
             				});
-        				}
+        				} else if (allFinished && !customLayer.updated2D) {
+							const features = updateCarsPosition(mrtCars);
+    						customLayer.map.getSource(customLayer.sourceId).setData({
+        						type: "FeatureCollection",
+        						features
+    						});
+    						customLayer.updated2D = true; // 標記已經更新過一次
+						}
 
         				// 更新 2D tooltip
         				if (customLayer.selectedCar?.currentLngLat && customLayer.selectedCar?.lastDir) {
