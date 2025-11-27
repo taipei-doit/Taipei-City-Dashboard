@@ -252,6 +252,7 @@ export const useMapStore = defineStore("map", {
 			const models = [
         		{ id: "mrt_car_c381", url: "/images/map/C381.glb" },
         		{ id: "mrt_car_c370", url: "/images/map/C370.glb" },
+				{ id: "mrt_car_brown", url: "/images/map/mrt_car_brown.glb" },
     		];
 
 			const loadModel = (m) => {
@@ -1191,8 +1192,10 @@ export const useMapStore = defineStore("map", {
             		customLayer.scene = markRaw(new THREE.Scene());
 
             		// 環境光
-            		const ambientLight = new THREE.AmbientLight(0xffffff, 3.2);
-            		customLayer.scene.add(ambientLight);
+            		// const ambientLight = new THREE.AmbientLight(0xffffff, 3.2);
+            		const hemiLight = new THREE.HemisphereLight(0xffffff, 0x444444, 3.2);
+					hemiLight.position.set(0, 20, 0);
+					customLayer.scene.add(hemiLight);
 
             		// 預載列車模型
             		for (const car of mrtCars) {
