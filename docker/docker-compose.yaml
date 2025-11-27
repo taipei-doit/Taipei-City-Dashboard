@@ -35,8 +35,12 @@ services:
     command: ["npm", "run", "dev"]
 
   dashboard-be:
-    image: golang:${GOLANG_IMAGE_TAG:-latest} #Local Development
+    # image: golang:${GOLANG_IMAGE_TAG:-latest} #Go Lang Image Without Model and onnxruntime
+    image: dashboard-be-dev:latest #Local Development
     # image: dashboard-be:latest #Test Prod Image
+    build:
+      context: .
+      dockerfile: ../Taipei-City-Dashboard-BE/Dockerfile-dev
     container_name: dashboard-be
     restart: always
     environment:
@@ -67,10 +71,6 @@ services:
       LM_MODEL_PATH: ${LM_MODEL_PATH}
     volumes:
       - ../Taipei-City-Dashboard-BE:/opt/Taipei-City-Dashboard-BE
-      - ../Taipei-City-Dashboard-BE/lm_model:/opt/lm_model
-      - ../Taipei-City-Dashboard-BE/onnxruntime/onnxruntime-linux-aarch64-1.23.2/lib/libonnxruntime.so:/usr/lib/libonnxruntime.so # For ARM64 Device  https://github.com/microsoft/onnxruntime/releases/download/v1.23.2/onnxruntime-linux-aarch64-1.23.2.tgz
-      # - ../Taipei-City-Dashboard-BE/onnxruntime/onnxruntime-linux-x64-1.23.2/lib/libonnxruntime.so:/usr/lib/libonnxruntime.so  # For x86_64 Device  https://github.com/microsoft/onnxruntime/releases/download/v1.23.2/onnxruntime-linux-x64-1.23.2.tgz
-
     working_dir: /opt/Taipei-City-Dashboard-BE #Local Development
     # working_dir: /app #Test Prod Image
     ports:

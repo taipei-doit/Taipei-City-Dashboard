@@ -1,3 +1,7 @@
+# 匯出 ONNX 模型
+# pip install transformers
+# pip install "optimum-onnx[onnxruntime]"
+
 from transformers import AutoTokenizer
 from optimum.onnxruntime import ORTModelForFeatureExtraction
 
@@ -5,7 +9,7 @@ from pathlib import Path
 Path("./lm_model").mkdir(parents=True, exist_ok=True)
 
 MODEL_ID = "intfloat/multilingual-e5-base"
-OUT_DIR  = "./lm_model/onnx-e51"   # 匯出資料夾
+OUT_DIR  = "./lm_model/onnx-e5"   # 匯出資料夾
 
 # 1) 匯出成 ONNX（FeatureExtraction 會輸出 last_hidden_state）
 model = ORTModelForFeatureExtraction.from_pretrained(
