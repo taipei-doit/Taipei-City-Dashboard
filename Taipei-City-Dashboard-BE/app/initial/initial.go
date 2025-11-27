@@ -155,7 +155,8 @@ func checkPostgreSQLClient() error {
 	_, err := exec.LookPath("psql")
 	if err != nil {
 		// Install PostgreSQL client
-		cmd := exec.Command("apk", "add", "postgresql-client")
+		// cmd := exec.Command("apk", "add", "postgresql-client")
+		cmd := exec.Command("bash", "-c", "apt-get update && apt-get install -y postgresql-client")
 		err := cmd.Run()
 		if err != nil {
 			return fmt.Errorf("error installing PostgreSQL client: %s", err)
