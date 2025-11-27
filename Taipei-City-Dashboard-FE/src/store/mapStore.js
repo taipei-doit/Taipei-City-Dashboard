@@ -1441,7 +1441,7 @@ export const useMapStore = defineStore("map", {
 					let allFinished = true;
 					// 確認當下各列車是否都跑完動畫
     				for (const car of mrtCars) {
-        				if (car.progress <= 1) allFinished = false;
+        				if (car.progress < 1) allFinished = false;
     				}
 
 					if (zoom < 13) {
@@ -1455,7 +1455,14 @@ export const useMapStore = defineStore("map", {
                 				type: "FeatureCollection",
                 				features
             				});
-        				}
+        				} else if (allFinished && !customLayer.updated2D) {
+							const features = updateCarsPosition(mrtCars);
+    						customLayer.map.getSource(customLayer.sourceId).setData({
+        						type: "FeatureCollection",
+        						features
+    						});
+    						customLayer.updated2D = true; // 標記已經更新過一次
+						}
 
         				// 更新 2D tooltip
         				if (customLayer.selectedCar?.currentLngLat && customLayer.selectedCar?.lastDir) {
