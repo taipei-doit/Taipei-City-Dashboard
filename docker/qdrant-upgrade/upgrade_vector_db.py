@@ -19,8 +19,13 @@ def main():
     COLLECTION_NAME = os.getenv("QDRANT_COLLECTION_NAME", "query_charts")
     
     # === 1. 從 PostgreSQL 讀取資料 ===
+    # Encode special characters for connection string
+    from urllib.parse import quote_plus
+    encoded_user = quote_plus(DB_USER) if DB_USER else ""
+    encoded_password = quote_plus(DB_PASSWORD) if DB_PASSWORD else ""
+    
     print(f"連接資料庫：{DB_HOST}:{DB_PORT}/{DB_NAME}")
-    connection_string = f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+    connection_string = f"postgresql://{encoded_user}:{encoded_password}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
     engine = create_engine(connection_string)
     
     # 執行 SQL 查詢（query_charts JOIN components）
