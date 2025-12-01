@@ -120,7 +120,7 @@ export const useChatStore = defineStore('chat', () => {
 			const response = await http.post(
   				"/vector/component",
   				new URLSearchParams({
-    				query: newChatData,
+    				query: newChatData.content,
     				limit: 10,
     				score: 0.8,
   				}),
