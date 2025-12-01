@@ -117,13 +117,19 @@ export const useChatStore = defineStore('chat', () => {
 		let topK = null;
 
 		try {
-			const response = await http.post("/vector/component", {
-  				params: {
+			const response = await http.post(
+  				"/vector/component",
+  				new URLSearchParams({
     				query: newChatData,
     				limit: 10,
     				score: 0.8,
-  				},
-			});
+  				}),
+  				{
+    				headers: {
+      					"Content-Type": "application/x-www-form-urlencoded",
+    				},
+  				}
+			);
 			if (response.data.data.length > 0) {
 				recommendComponents.value = response.data.data;
 			} else {
