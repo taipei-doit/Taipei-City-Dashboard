@@ -43,6 +43,12 @@ def _transfer(**kwargs):
     FROM_CRS = 4326
     raw_data = requests.get(URL)
     raw_data_json = raw_data.json()
+    # 處理 API 回傳空資料、單一物件或陣列的情況
+    if not raw_data_json:
+        print("!!!data is empty!!!")
+        return "!!!data is empty!!!"
+    if isinstance(raw_data_json, dict):
+        raw_data_json = [raw_data_json]
     df = pd.DataFrame(raw_data_json)
     if df.empty:
         return "!!!data is empty!!!"

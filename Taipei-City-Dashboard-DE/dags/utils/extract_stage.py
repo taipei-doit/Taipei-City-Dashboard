@@ -646,11 +646,28 @@ def get_geojson_file(url, dag_id, from_crs, encoding="UTF-8", **kwargs):
         Name: 0, dtype: object
         ```
     """
+    from shapely.geometry import shape
+    
     file_name = f"{dag_id}.geojson"
     local_file = download_file(file_name, url, **kwargs)
-    gdf = gpd.read_file(
-        local_file, encoding=encoding, driver="GeoJSON", from_crs=from_crs
-    )
+    
+    # 使用 json 模組讀取 GeoJSON，避免 fiona 版本問題
+    with open(local_file, encoding=encoding) as f:
+        geojson_data = json.load(f)
+    
+    features = geojson_data.get("features", [])
+    if features:
+        rows = []
+        geometries = []
+        for feature in features:
+            props = feature.get("properties", {})
+            geom = feature.get("geometry")
+            rows.append(props)
+            geometries.append(shape(geom) if geom else None)
+        gdf = gpd.GeoDataFrame(rows, geometry=geometries, crs=f"EPSG:{from_crs}")
+    else:
+        gdf = gpd.GeoDataFrame()
+    
     print(f"Read {local_file} successfully.")
     return gdf
 
