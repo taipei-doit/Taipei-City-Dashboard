@@ -180,7 +180,7 @@ def _D050102_2(**kwargs):
             wind_speed_level = get_value("wind_speed_level")
             rainfall_probability = get_value("rainfall_probability_6hour")
             
-            # reshape - 移除 rainfall_probability_12hour，因為新 API 沒有
+            # reshape - 保留原有欄位結構，rainfall_probability_12hour 設為與 6hour 相同
             temp_res = [
                 data_time,
                 city,
@@ -201,6 +201,7 @@ def _D050102_2(**kwargs):
                 wind_speed,
                 wind_speed_level,
                 rainfall_probability,
+                rainfall_probability,  # 12hour 使用相同值
             ]
             res.append(temp_res)
     ready_data = pd.DataFrame(res)
@@ -224,7 +225,8 @@ def _D050102_2(**kwargs):
         "wind_direction",
         "wind_speed",
         "wind_speed_level",
-        "rainfall_probability",
+        "rainfall_probability_6hour",
+        "rainfall_probability_12hour",
     ]
 
     # Load
