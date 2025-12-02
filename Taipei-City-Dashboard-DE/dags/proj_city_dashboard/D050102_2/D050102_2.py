@@ -57,32 +57,48 @@ def _D050102_2(**kwargs):
                 temp["seq"] = seq
                 seq += 1
                 if isinstance(ele["elementvalue"], dict):
-                    temp["value"] = ele["elementvalue"]["value"]
-                    if ele.get(
-                        "datatime"
-                    ):  # some data are not in a period from start to end
-                        temp["start_time"] = ele["datatime"]
-                        temp["end_time"] = ele["datatime"]
+                    ev_values = list(ele["elementvalue"].values())
+                    if len(ev_values) == 1:
+                        # 單一值
+                        temp["value"] = ev_values[0]
+                        if ele.get(
+                            "datatime"
+                        ):  # some data are not in a period from start to end
+                            temp["start_time"] = ele["datatime"]
+                            temp["end_time"] = ele["datatime"]
+                        else:
+                            temp["start_time"] = ele["starttime"]
+                            temp["end_time"] = ele["endtime"]
+                        df_list.append(temp.copy())
                     else:
-                        temp["start_time"] = ele["starttime"]
-                        temp["end_time"] = ele["endtime"]
-                    # print(temp)
-                    df_list.append(temp.copy())
+                        # 多個值，每個值都要單獨處理
+                        a = 0
+                        for ev_val in ev_values:
+                            temp["item"] = (
+                                we["elementname"].lower() + "_" + str(a)
+                            )  # 多個value要改名稱
+                            temp["value"] = ev_val
+                            if ele.get("datatime"):
+                                temp["start_time"] = ele["datatime"]
+                                temp["end_time"] = ""
+                            else:
+                                temp["start_time"] = ele["starttime"]
+                                temp["end_time"] = ele["endtime"]
+                            df_list.append(temp.copy())
+                            a += 1
                 elif isinstance(ele["elementvalue"], list):
                     a = 0
                     for ele_value in ele["elementvalue"]:
                         temp["item"] = (
                             we["elementname"].lower() + "_" + str(a)
                         )  # 多個value要改名稱
-                        temp["value"] = ele_value["value"]
-                        # temp['measure'] = ele_value['measures']
+                        temp["value"] = list(ele_value.values())[0] if isinstance(ele_value, dict) else ele_value
                         if ele.get("datatime"):
                             temp["start_time"] = ele["datatime"]
                             temp["end_time"] = ""
                         else:
                             temp["start_time"] = ele["starttime"]
                             temp["end_time"] = ele["endtime"]
-                        # print(temp)
                         df_list.append(temp.copy())
                         a += 1
                 else:
