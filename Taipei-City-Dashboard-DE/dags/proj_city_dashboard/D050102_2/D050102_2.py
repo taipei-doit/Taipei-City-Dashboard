@@ -107,27 +107,26 @@ def _D050102_2(**kwargs):
 
     # Transform
     data = raw_data.copy()
-    # rename
+    # rename - 新 API 使用中文欄位名稱
     col_map = {
-        "t": "temperature",
-        "td": "temperature_dew",
-        "rh": "humidity",
-        "pop6h": "rainfall_probability_6hour",
-        "pop12h": "rainfall_probability_12hour",
-        "wd": "wind_direction",
-        "ws_0": "wind_speed",
-        "ws_1": "wind_speed_level",
-        "ci_0": "comfort",
-        "ci_1": "comfort_level",
-        "at": "temperature_body",
-        "wx_0": "weather",
-        "wx_1": "weather_code",
-        "weatherdescription": "weather_summary",
+        "溫度": "temperature",
+        "露點溫度": "temperature_dew",
+        "相對濕度": "humidity",
+        "3小時降雨機率": "rainfall_probability_6hour",
+        "風向": "wind_direction",
+        "風速_0": "wind_speed",
+        "風速_1": "wind_speed_level",
+        "舒適度指數_0": "comfort",
+        "舒適度指數_1": "comfort_level",
+        "體感溫度": "temperature_body",
+        "天氣現象_0": "weather",
+        "天氣現象_1": "weather_code",
+        "天氣預報綜合描述": "weather_summary",
     }
     for raw_col, new_col in col_map.items():
         is_target = data["item"] == raw_col
         data.loc[is_target, "item"] = new_col
-        if raw_col == "ws_1":
+        if raw_col == "風速_1":
             data.loc[is_target, "value"] = data.loc[is_target, "value"] + "級"
     # -99被用來表示無資料，全改成None
     data = data.applymap(given_string_to_none, given_str="-99")
@@ -138,64 +137,50 @@ def _D050102_2(**kwargs):
     data["end_time"] = convert_str_to_time_format(data["end_time"])
     data["data_time"] = updateTime
     data["data_time"] = convert_str_to_time_format(data["data_time"])
+    
     # restructure data by time
-    # Because the original data is not aligned, the temperature is every hour, a total of 24;
-    # the rainfall forecast for every 12 hours is only 6.
+    # 新 API 結構：以天氣現象的時間點為基準（32個時間點，每3小時）
+    # 溫度等有更多時間點，需要對應匹配
     res = []
     for _g, gdata in data.groupby(["data_time", "city", "dist"]):
         data_time = _g[0]
         city = _g[1]
         dist = _g[2]
-        for seq in range(0, 24):
-            # other attr
+        
+        # 以天氣現象的時間點為基準
+        weather_data = gdata[gdata["item"] == "weather"].sort_values("start_time")
+        max_seq = len(weather_data)
+        
+        for seq in range(max_seq):
             is_seq = gdata["seq"] == seq
-            classic = gdata.loc[is_seq & (gdata["item"] == "weather")]
-            start_time = classic["start_time"].iloc[0]
-            end_time = classic["end_time"].iloc[0]
-            # weather attr
-            comfort = gdata.loc[is_seq & (gdata["item"] == "comfort"), "value"].iloc[0]
-            comfort_level = gdata.loc[
-                is_seq & (gdata["item"] == "comfort_level"), "value"
-            ].iloc[0]
-            humidity = gdata.loc[is_seq & (gdata["item"] == "humidity"), "value"].iloc[
-                0
-            ]
-            temperature = gdata.loc[
-                is_seq & (gdata["item"] == "temperature"), "value"
-            ].iloc[0]
-            temperature_body = gdata.loc[
-                is_seq & (gdata["item"] == "temperature_body"), "value"
-            ].iloc[0]
-            temperature_dew = gdata.loc[
-                is_seq & (gdata["item"] == "temperature_dew"), "value"
-            ].iloc[0]
-            weather = gdata.loc[is_seq & (gdata["item"] == "weather"), "value"].iloc[0]
-            weather_code = gdata.loc[
-                is_seq & (gdata["item"] == "weather_code"), "value"
-            ].iloc[0]
-            weather_summary = gdata.loc[
-                is_seq & (gdata["item"] == "weather_summary"), "value"
-            ].iloc[0]
-            wind_direction = gdata.loc[
-                is_seq & (gdata["item"] == "wind_direction"), "value"
-            ].iloc[0]
-            wind_speed = gdata.loc[
-                is_seq & (gdata["item"] == "wind_speed"), "value"
-            ].iloc[0]
-            wind_speed_level = gdata.loc[
-                is_seq & (gdata["item"] == "wind_speed_level"), "value"
-            ].iloc[0]
-            twelve_seq = seq // 4
-            is_twelve = (gdata["seq"] == twelve_seq) & (
-                gdata["item"] == "rainfall_probability_12hour"
-            )
-            rainfall_probability_12hour = gdata.loc[is_twelve, "value"].iloc[0]
-            six_seq = seq // 2
-            is_six = (gdata["seq"] == six_seq) & (
-                gdata["item"] == "rainfall_probability_6hour"
-            )
-            rainfall_probability_6hour = gdata.loc[is_six, "value"].iloc[0]
-            # reshape
+            
+            # 取得該 seq 的時間範圍
+            weather_row = gdata.loc[is_seq & (gdata["item"] == "weather")]
+            if weather_row.empty:
+                continue
+            start_time = weather_row["start_time"].iloc[0]
+            end_time = weather_row["end_time"].iloc[0]
+            
+            # 取得各項天氣資訊（使用相同 seq）
+            def get_value(item_name, default=None):
+                matched = gdata.loc[is_seq & (gdata["item"] == item_name), "value"]
+                return matched.iloc[0] if not matched.empty else default
+            
+            weather = get_value("weather")
+            weather_code = get_value("weather_code")
+            weather_summary = get_value("weather_summary")
+            temperature = get_value("temperature")
+            temperature_body = get_value("temperature_body")
+            temperature_dew = get_value("temperature_dew")
+            humidity = get_value("humidity")
+            comfort = get_value("comfort")
+            comfort_level = get_value("comfort_level")
+            wind_direction = get_value("wind_direction")
+            wind_speed = get_value("wind_speed")
+            wind_speed_level = get_value("wind_speed_level")
+            rainfall_probability = get_value("rainfall_probability_6hour")
+            
+            # reshape - 移除 rainfall_probability_12hour，因為新 API 沒有
             temp_res = [
                 data_time,
                 city,
@@ -215,8 +200,7 @@ def _D050102_2(**kwargs):
                 wind_direction,
                 wind_speed,
                 wind_speed_level,
-                rainfall_probability_6hour,
-                rainfall_probability_12hour,
+                rainfall_probability,
             ]
             res.append(temp_res)
     ready_data = pd.DataFrame(res)
@@ -240,8 +224,7 @@ def _D050102_2(**kwargs):
         "wind_direction",
         "wind_speed",
         "wind_speed_level",
-        "rainfall_probability_6hour",
-        "rainfall_probability_12hour",
+        "rainfall_probability",
     ]
 
     # Load
