@@ -3,10 +3,12 @@ from operators.common_pipeline import CommonDag
 
 
 def today_road_use_etl(url, **kwargs):
+    import json
     import geopandas as gpd
     import pandas as pd
     from geopandas.tools import sjoin
     from shapely import wkt
+    from shapely.geometry import shape
     from sqlalchemy import create_engine
     from utils.extract_stage import download_file
     from utils.get_time import get_tpe_now_time_str
@@ -39,7 +41,24 @@ def today_road_use_etl(url, **kwargs):
 
     # Extract
     local_file = download_file(file_name, url, is_proxy=False)
-    raw_data = gpd.read_file(local_file, driver="GeoJSON")
+    # 使用 json 模組讀取 GeoJSON，避免 fiona 版本問題
+    with open(local_file, encoding="utf-8") as f:
+        geojson_data = json.load(f)
+    
+    # 將 GeoJSON 轉換為 GeoDataFrame
+    features = geojson_data.get("features", [])
+    if features:
+        rows = []
+        geometries = []
+        for feature in features:
+            props = feature.get("properties", {})
+            geom = feature.get("geometry")
+            rows.append(props)
+            geometries.append(shape(geom) if geom else None)
+        raw_data = gpd.GeoDataFrame(rows, geometry=geometries, crs=f"EPSG:{FROM_CRS}")
+    else:
+        raw_data = gpd.GeoDataFrame()
+    
     raw_data["data_time"] = get_tpe_now_time_str(is_with_tz=True)
 
     # Transform

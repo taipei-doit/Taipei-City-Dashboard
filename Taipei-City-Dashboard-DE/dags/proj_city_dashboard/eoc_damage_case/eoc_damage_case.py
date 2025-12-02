@@ -46,8 +46,18 @@ def _transfer(**kwargs):
 
     raw_data = requests.get(URL)
     raw_data_json = raw_data.json()
+    # 處理 API 回傳空資料或無資料狀態
+    if not raw_data_json:
+        print("!!!data is empty!!!")
+        return "!!!data is empty!!!"
+    # API 回傳 {"open":"現在無資料"} 表示目前沒有災情資料
+    if isinstance(raw_data_json, dict) and "open" in raw_data_json:
+        print(f"!!!API 回傳: {raw_data_json}!!!")
+        return "!!!data is empty!!!"
+    if isinstance(raw_data_json, dict):
+        raw_data_json = [raw_data_json]
     df = pd.DataFrame(raw_data_json)
-    if df.empty:
+    if df.empty or "CaseID" not in df.columns:
         return "!!!data is empty!!!"
     data = df.copy()
     # Extract

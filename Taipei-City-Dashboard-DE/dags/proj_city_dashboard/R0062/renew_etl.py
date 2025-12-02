@@ -1,6 +1,8 @@
 # R0062, R0063, R0064, R0065, R0066
 def renew_etl(url, from_crs, geometry_type, **kwargs):
+    import json
     import geopandas as gpd
+    from shapely.geometry import shape
     from sqlalchemy import create_engine
     from utils.extract_stage import download_file
     from utils.get_time import get_tpe_now_time_str
@@ -22,7 +24,28 @@ def renew_etl(url, from_crs, geometry_type, **kwargs):
 
     # Extract
     local_file = download_file(filename, url, is_verify=False)
-    raw_data = gpd.read_file(local_file, from_crs=from_crs, driver="GeoJSON")
+    # 使用 json 模組讀取 GeoJSON，避免 fiona 版本問題
+    with open(local_file, encoding="utf-8") as f:
+        geojson_data = json.load(f)
+    
+    # 將 GeoJSON 轉換為 GeoDataFrame
+    features = geojson_data.get("features", [])
+    if features:
+        rows = []
+        geometries = []
+        for feature in features:
+            props = feature.get("properties", {})
+            geom = feature.get("geometry")
+            rows.append(props)
+            geometries.append(shape(geom) if geom else None)
+        raw_data = gpd.GeoDataFrame(rows, geometry=geometries, crs=f"EPSG:{from_crs}")
+    else:
+        raw_data = gpd.GeoDataFrame()
+    
+    if raw_data.empty:
+        print("!!!GeoJSON data is empty!!!")
+        return
+        
     raw_data["data_time"] = get_tpe_now_time_str()
 
     # Transform
