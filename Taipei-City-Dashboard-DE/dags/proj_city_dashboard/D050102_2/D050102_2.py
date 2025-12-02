@@ -1,3 +1,5 @@
+from typing import Any, Literal
+from pandas.core.frame import DataFrame
 from airflow import DAG
 from operators.common_pipeline import CommonDag
 
@@ -14,6 +16,15 @@ def _D050102_2(**kwargs):
     from utils.transform_mixed_type import given_string_to_none
     from utils.transform_time import convert_str_to_time_format
 
+    def keys_to_lower(obj):
+        """Recursively convert all keys in a dict to lowercase."""
+        if isinstance(obj, dict):
+            return {k.lower(): keys_to_lower(v) for k, v in obj.items()}
+        elif isinstance(obj, list):
+            return [keys_to_lower(item) for item in obj]
+        else:
+            return obj
+
     # Config
     cwa_api_key = Variable.get("CWA_API_KEY")
     ready_data_db_uri = kwargs.get("ready_data_db_uri")
@@ -27,49 +38,50 @@ def _D050102_2(**kwargs):
     CITY = "臺北市"
 
     # Extract
-    res_json = get_json_file(url, dag_id, is_proxy=False)
+    res_json: Any | DataFrame | Literal[False] = get_json_file(url, dag_id, is_proxy=False)
+    res_json = keys_to_lower(res_json)
     # parse json
-    issueTime = res_json["cwaopendata"]["dataset"]["datasetInfo"]["issueTime"]
-    updateTime = res_json["cwaopendata"]["dataset"]["datasetInfo"]["update"]
+    issueTime = res_json["cwaopendata"]["dataset"]["datasetinfo"]["issuetime"]
+    updateTime = res_json["cwaopendata"]["dataset"]["datasetinfo"]["update"]
     locdata = res_json["cwaopendata"]["dataset"]["locations"]["location"]
     df_list = []
     for loc in locdata:
         temp = {}
         temp["city"] = CITY
-        temp["dist"] = loc["locationName"]
-        for we in loc["weatherElement"]:
-            temp["item"] = we["elementName"].lower()
+        temp["dist"] = loc["locationname"]
+        for we in loc["weatherelement"]:
+            temp["item"] = we["elementname"].lower()
             # temp['desc'] = we['description']
             seq = 0
             for ele in we["time"]:
                 temp["seq"] = seq
                 seq += 1
-                if isinstance(ele["elementValue"], dict):
-                    temp["value"] = ele["elementValue"]["value"]
+                if isinstance(ele["elementvalue"], dict):
+                    temp["value"] = ele["elementvalue"]["value"]
                     if ele.get(
-                        "dataTime"
+                        "datatime"
                     ):  # some data are not in a period from start to end
-                        temp["start_time"] = ele["dataTime"]
-                        temp["end_time"] = ele["dataTime"]
+                        temp["start_time"] = ele["datatime"]
+                        temp["end_time"] = ele["datatime"]
                     else:
-                        temp["start_time"] = ele["startTime"]
-                        temp["end_time"] = ele["endTime"]
+                        temp["start_time"] = ele["starttime"]
+                        temp["end_time"] = ele["endtime"]
                     # print(temp)
                     df_list.append(temp.copy())
-                elif isinstance(ele["elementValue"], list):
+                elif isinstance(ele["elementvalue"], list):
                     a = 0
-                    for ele_value in ele["elementValue"]:
+                    for ele_value in ele["elementvalue"]:
                         temp["item"] = (
-                            we["elementName"].lower() + "_" + str(a)
+                            we["elementname"].lower() + "_" + str(a)
                         )  # 多個value要改名稱
                         temp["value"] = ele_value["value"]
                         # temp['measure'] = ele_value['measures']
-                        if ele.get("dataTime"):
-                            temp["start_time"] = ele["dataTime"]
+                        if ele.get("datatime"):
+                            temp["start_time"] = ele["datatime"]
                             temp["end_time"] = ""
                         else:
-                            temp["start_time"] = ele["startTime"]
-                            temp["end_time"] = ele["endTime"]
+                            temp["start_time"] = ele["starttime"]
+                            temp["end_time"] = ele["endtime"]
                         # print(temp)
                         df_list.append(temp.copy())
                         a += 1
