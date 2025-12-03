@@ -14,6 +14,7 @@ def _D060201(**kwargs):
     from utils.transform_time import convert_str_to_time_format
 
     def get_datataipei_file_rid(page_id):
+        import re
         url = f"https://data.taipei/api/frontstage/tpeod/dataset.view?id={page_id}"
         res = requests.get(url)
         res.raise_for_status()
@@ -21,9 +22,15 @@ def _D060201(**kwargs):
         data_list = res_json["payload"]["resources"]
         url_list = {}
         for data in data_list:
-            file_tag = data["name"].split("月")[0] + "月"
+            # 從檔名中擷取年份資訊，例如 "臺北市政府消防局114年緊急救護服務統計月" -> "114"
+            name = data["name"]
+            match = re.search(r'(\d+)年', name)
+            if match:
+                year = match.group(1)  # 只取數字部分，如 "114"
+            else:
+                year = name
             rid = data["rid"]
-            url_list[file_tag] = rid
+            url_list[year] = rid
         return url_list
 
     def get_existing_data(ready_data_db_uri, table_name, column="file_tag"):
@@ -42,26 +49,36 @@ def _D060201(**kwargs):
     PAGE_ID = "a4484aa2-533c-45a1-88fd-de0c6276bcfe"
 
     # Extract
-    # get all data url
+    # get all data url (key is year, value is rid)
     data_list = get_datataipei_file_rid(PAGE_ID)
-    # filter out existing year
+    # filter out existing year - 從既有的 file_tag (如 "113年5月") 擷取年份
     existing_month = get_existing_data(ready_data_db_uri, default_table)
-    new_data_list = {k: v for k, v in data_list.items() if k not in existing_month}
+    existing_years = set()
+    for tag in existing_month:
+        if tag and "年" in str(tag):
+            existing_years.add(str(tag).split("年")[0])
+    new_data_list = {k: v for k, v in data_list.items() if k not in existing_years}
     # get data
     raw_datas = []
-    for file_tag, rid in new_data_list.items():
+    for year, rid in new_data_list.items():
         raw_data = get_data_taipei_api(rid, output_format="dataframe")
-        raw_data["file_tag"] = file_tag
+        raw_data["year"] = year  # 暫存年份
         raw_datas.append(raw_data)
 
     # Transform
     ready_datas = []
     for raw_data in raw_datas:
         data = raw_data.copy()
+        year = data["year"].iloc[0] if "year" in data.columns else ""
+        
+        # 新格式：從 "月" 欄位組合成 file_tag (如 "114年1月")
+        if "月" in data.columns:
+            data["file_tag"] = data["月"].apply(lambda x: f"{year}年{int(x)}月" if pd.notna(x) else None)
+            data["town"] = None  # 新格式沒有區域別
+        
         # rename
         data = data.rename(
             columns={
-                "file_tag": "file_tag",
                 "區域別": "town",
                 "救護出勤合計次數": "total_case",
                 "送醫次數": "to_hospital_case",
