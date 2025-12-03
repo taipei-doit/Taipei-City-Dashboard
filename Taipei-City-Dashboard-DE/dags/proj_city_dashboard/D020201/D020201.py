@@ -68,7 +68,7 @@ def _D020201(**kwargs):
         }
     )
     # define columns type
-    if 'width_meter' in df.columns:
+    if 'width_meter' in data.columns:
         data["width_meter"] = data["width_meter"].astype(float)
     else:
         print("欄位 'width_meter' 不存在")

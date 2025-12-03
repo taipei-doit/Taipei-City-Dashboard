@@ -25,7 +25,7 @@ def _R0068(**kwargs):
     load_behavior = dag_infos.get("load_behavior")
     default_table = dag_infos.get("ready_data_default_table")
     history_table = dag_infos.get("ready_data_history_table")
-    URL = "https://data.taipei/api/frontstage/tpeod/dataset/resource.download?rid=5afc5dde-3431-45a4-995f-9610616f32cc"
+    URL = "https://data.taipei/api/frontstage/tpeod/dataset/resource.download?rid=fe2b491e-31fb-4ea3-97d9-959206942582"
     ENCODING = "cp950"
     FROM_CRS = 4326
     GEOMETRY_TYPE = "Polygon"

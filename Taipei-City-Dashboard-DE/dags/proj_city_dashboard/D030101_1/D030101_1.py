@@ -29,7 +29,23 @@ def D030101_1(**kwargs):
 
     # Extract
     local_file = download_file(filename, URL, is_proxy=False, timeout=300)
-    raw = gpd.read_file(local_file, encoding=ENCODING)
+    # 使用 json 模組讀取 GeoJSON，避免 fiona 版本問題
+    import json
+    from shapely.geometry import shape
+    with open(local_file, encoding=ENCODING) as f:
+        geojson_data = json.load(f)
+    features = geojson_data.get("features", [])
+    if features:
+        records = []
+        geometries = []
+        for feature in features:
+            props = feature.get("properties", {})
+            geom = feature.get("geometry")
+            records.append(props)
+            geometries.append(shape(geom) if geom else None)
+        raw = gpd.GeoDataFrame(records, geometry=geometries, crs=f"EPSG:{FROM_CRS}")
+    else:
+        raw = gpd.GeoDataFrame()
     gdata = raw.copy()
 
     # Transform
