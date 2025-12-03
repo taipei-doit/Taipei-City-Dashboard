@@ -245,6 +245,20 @@ def get_data_taipei_api(rid, timeout=60, output_format="json"):
     url = f"https://data.taipei/api/v1/dataset/{rid}?scope=resourceAquire"
     response = requests.get(url, timeout=timeout)
     data_dict = response.json()
+    
+    # 處理 API 回傳格式可能是 list 或 dict 的情況
+    if isinstance(data_dict, list):
+        # 如果直接返回 list，表示資料格式不同
+        if output_format == "json":
+            return data_dict
+        elif output_format == "dataframe":
+            df = pd.DataFrame(data_dict)
+            if "_importdate" in df.columns:
+                df["data_time"] = df["_importdate"].apply(lambda x: x["date"] if isinstance(x, dict) else x)
+            return df
+        else:
+            raise ValueError("output_format can only be 'json' or 'dataframe'.")
+    
     count = data_dict["result"]["count"]
     res = []
     offset_count = int(count / 1000)
