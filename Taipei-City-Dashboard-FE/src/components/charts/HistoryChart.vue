@@ -86,9 +86,6 @@ const chartOptions = ref({
 		tooltip: {
 			enabled: false,
 		},
-		labels: {
-			datetimeUTC: false,
-		},
 		type: "datetime",
 	},
 });
