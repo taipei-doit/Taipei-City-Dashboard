@@ -80,11 +80,11 @@ const chartOptions = ref({
 		crosshairs: {
 			show: false,
 		},
-		tooltip: {
-			enabled: false,
-		},
 		labels: {
 			datetimeUTC: false,
+		},
+		tooltip: {
+			enabled: false,
 		},
 		type: "datetime",
 	},

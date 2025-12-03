@@ -88,12 +88,17 @@ function toggleSwitchBtn(value, Btn, BtnIndex) {
 	toggleOn.value[Btn][BtnIndex] = value;
 }
 
+// 3D Mrt Map (202511NEW)
 function shouldDisable(map_config) {
 	const allMapLayerIds = map_config.map((el) => `${el.index}-${el.type}-${el.city}`);
-	return (
-		mapStore.loadingLayers.filter((el) => allMapLayerIds.includes(el))
-			.length > 0
-	);
+	if (mapStore.isPreloading===true) {
+		return true
+	} else {
+		return (
+			mapStore.loadingLayers.filter((el) => allMapLayerIds.includes(el))
+				.length > 0
+		);
+	}
 }
 
 // 開啟主題圖層時觸發GA自訂事件
