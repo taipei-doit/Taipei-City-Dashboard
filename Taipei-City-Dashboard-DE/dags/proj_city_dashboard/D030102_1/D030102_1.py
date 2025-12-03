@@ -38,7 +38,19 @@ def D030102_1(**kwargs):
     local_file = download_file(file_name, URL)
     if not local_file:
         return False
-    tree = ET.parse(local_file)
+    
+    # 檢查檔案是否為空或無效
+    import os
+    if os.path.getsize(local_file) == 0:
+        print("!!!Downloaded file is empty!!!")
+        return "!!!data is empty!!!"
+    
+    try:
+        tree = ET.parse(local_file)
+    except ET.ParseError as e:
+        print(f"!!!XML parse error: {e}!!!")
+        return "!!!data is empty!!!"
+    
     root = tree.getroot()
     # parse kml
     results = {
