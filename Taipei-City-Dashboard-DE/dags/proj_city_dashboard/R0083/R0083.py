@@ -33,6 +33,8 @@ def _R0083(**kwargs):
     data = raw_data.copy()
     # rename
     data.columns = data.columns.str.lower()
+    # 欄位名稱變更：設施編號 -> 站碼
+    data = data.rename(columns={"設施編號": "站碼"})
     # data time
     data["data_time"] = data["_importdate"].apply(lambda x: x["date"])
     data["data_time"] = convert_str_to_time_format(data["data_time"])

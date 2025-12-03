@@ -101,7 +101,18 @@ def D050303_7(**kwargs):
 
     # Extract
     local_file = download_file(filename, url, is_proxy=False)
-    raw_data = gpd.read_file(local_file, encoding=encoding)
+    # 使用 fiona 直接開啟以避免 fiona.path 問題
+    import fiona
+    from shapely.geometry import shape
+    with fiona.open(local_file, encoding=encoding) as src:
+        records = []
+        geometries = []
+        for feature in src:
+            props = dict(feature.get("properties", {}))
+            geom = feature.get("geometry")
+            records.append(props)
+            geometries.append(shape(geom) if geom else None)
+        raw_data = gpd.GeoDataFrame(records, geometry=geometries, crs=src.crs)
     raw_data["data_time"] = get_data_taipei_file_last_modified_time(PAGE_ID, rank=rank_index)
 
     # colname

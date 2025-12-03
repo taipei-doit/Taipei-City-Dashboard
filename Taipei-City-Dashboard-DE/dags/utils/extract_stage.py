@@ -245,6 +245,20 @@ def get_data_taipei_api(rid, timeout=60, output_format="json"):
     url = f"https://data.taipei/api/v1/dataset/{rid}?scope=resourceAquire"
     response = requests.get(url, timeout=timeout)
     data_dict = response.json()
+    
+    # 處理 API 回傳格式可能是 list 或 dict 的情況
+    if isinstance(data_dict, list):
+        # 如果直接返回 list，表示資料格式不同
+        if output_format == "json":
+            return data_dict
+        elif output_format == "dataframe":
+            df = pd.DataFrame(data_dict)
+            if "_importdate" in df.columns:
+                df["data_time"] = df["_importdate"].apply(lambda x: x["date"] if isinstance(x, dict) else x)
+            return df
+        else:
+            raise ValueError("output_format can only be 'json' or 'dataframe'.")
+    
     count = data_dict["result"]["count"]
     res = []
     offset_count = int(count / 1000)
@@ -444,10 +458,23 @@ def get_shp_files_merge(
     if not all_shp_files:
         raise ValueError(f"No .shp files found in {unzip_path}")
 
+    import fiona
+    from shapely.geometry import shape
+    
     dfs = []
     for shp_path in all_shp_files:
         category = os.path.splitext(os.path.basename(shp_path))[0]
-        gdf = gpd.read_file(shp_path, encoding=encoding)
+        # 使用 fiona 直接開啟以避免 fiona.path 問題
+        with fiona.open(shp_path, encoding=encoding) as src:
+            records = []
+            geometries = []
+            for feature in src:
+                props = dict(feature.get("properties", {}))
+                geom = feature.get("geometry")
+                records.append(props)
+                geometries.append(shape(geom) if geom else None)
+            crs = src.crs
+            gdf = gpd.GeoDataFrame(records, geometry=geometries, crs=crs)
         gdf["category"] = category
         dfs.append(gdf)
     # 合併
@@ -510,7 +537,20 @@ def get_shp_file(
     if shp_file is None:
         raise ValueError(f"No .shp files found in {unzip_path}")
 
-    gdf = gpd.read_file(shp_file, encoding=encoding, from_crs=from_crs)
+    # 使用 fiona 直接開啟以避免 fiona.path 問題
+    import fiona
+    from shapely.geometry import shape
+    
+    with fiona.open(shp_file, encoding=encoding) as src:
+        records = []
+        geometries = []
+        for feature in src:
+            props = dict(feature.get("properties", {}))
+            geom = feature.get("geometry")
+            records.append(props)
+            geometries.append(shape(geom) if geom else None)
+        gdf = gpd.GeoDataFrame(records, geometry=geometries, crs=f"EPSG:{from_crs}")
+    
     print(f"Read {shp_file} successfully.")
     return gdf
 
