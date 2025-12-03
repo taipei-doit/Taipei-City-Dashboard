@@ -12,7 +12,7 @@ import { useAuthStore } from "../../store/authStore";
 const chatStore = useChatStore()
 const contentStore = useContentStore();
 const authStore = useAuthStore();
-const { addChatData, addQueryData } = chatStore
+const { addChatData, addQueryData, saveChatLog } = chatStore
 const { createDashboard } = contentStore;
 const { chatData } = storeToRefs(chatStore)
 const { editDashboard } = storeToRefs(contentStore);
@@ -35,6 +35,7 @@ const qaBtnHandler = async(text,relations) => {
 				components: components
 			}
 			createDashboard();
+			saveChatLog("建立儀表板","使用者成功建立儀表板!");
 		} else {
 			addChatData({
     			role: 'bot',
@@ -77,6 +78,18 @@ watch(
       ref="chatAreaRef"
       class="chat-area scrollbar-custom"
     >
+	  <!-- 置頂訊息 -->
+  	  <div class="chat-message sticky-message">
+    	<div class="sticky-header" @click="toggleSticky">
+      		<span>置頂公告：小幫手使用須知</span>
+      		<button class="toggle-btn">
+        		{{ isStickyOpen ? '-' : '+' }}
+      		</button>
+    	</div>
+    	<div class="sticky-body" v-show="isStickyOpen">
+      		<span>小幫手會依據您輸入的內容，自動檢索本站臺的組件資料庫，並回傳相似度較高的組件清單，協助您快速找到符合需求的元件或資訊。<br/><br/> 目前小幫手僅提供組件比對與分析服務，不支援一般聊天功能。如造成不便，敬請見諒！</span>
+    	</div>
+  	  </div>
       <div
         v-for="chat in chatData"
         :key="chat.id"
@@ -240,6 +253,44 @@ $radius-20: 20px;
     margin: 0.5rem;
     overflow-y: auto;
     background: $bg-dark;
+
+	.chat-message {
+  		padding: 4px 10px;
+		margin: 0px 8px;
+  		border-radius: 8px;
+  		background-color: $bg-dark;
+	}
+
+	// 置頂訊息
+	.sticky-message {
+  		border: 1px solid #ffffff;
+  		position: sticky;
+  		top: 0;
+  		z-index: 10;
+
+  		.sticky-header {
+    		display: flex;
+			font-weight: bold;
+    		justify-content: space-between;
+    		align-items: center;
+    		cursor: pointer;
+    		padding: 8px 12px;
+  		}
+
+  		.sticky-body {
+    		padding: 8px 12px;
+    		font-weight: 400;
+    		font-size: 14px;
+  		}
+
+  		.toggle-btn {
+    		background: none;
+    		border: none;
+    		font-size: 14px;
+    		cursor: pointer;
+    		color: #ffffff;
+  		}
+	}
 
     .message {
       padding: 0.75rem;
