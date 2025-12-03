@@ -146,7 +146,33 @@ export const useChatStore = defineStore('chat', () => {
 		} else {
 			chatData.value.push({ id: chatData.value.length + 1, role: 'bot', isDefault: false, content: `很抱歉，您提供的描述未有相關組件 !` });
 		}
+
+		// 分析結束後紀錄問答log
+		saveChatLog(newChatData.content, recommendComponents.value);
   	};
 
-	return { chatData, addChatData, addQueryData }
+	const saveChatLog = async(question, answer) => {
+		try {
+        	const formData = new FormData();
+        	const d = new Date();
+        	const todayId =
+          		d.getFullYear() +
+          		String(d.getMonth() + 1).padStart(2, "0") +
+          		String(d.getDate()).padStart(2, "0");
+
+        	formData.append("session", "session_" + todayId);
+        	formData.append("question", question);
+        	formData.append("answer", JSON.stringify(answer));
+
+        	await http.post("/chatlog/", formData, {
+          		headers: {
+            		"Content-Type": "multipart/form-data",
+          		},
+        	});
+      	} catch (error) {
+        	console.error("saveChatLog error:", error);
+      	}
+	};
+
+	return { chatData, addChatData, addQueryData, saveChatLog }
 })
