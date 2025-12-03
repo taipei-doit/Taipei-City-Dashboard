@@ -444,10 +444,23 @@ def get_shp_files_merge(
     if not all_shp_files:
         raise ValueError(f"No .shp files found in {unzip_path}")
 
+    import fiona
+    from shapely.geometry import shape
+    
     dfs = []
     for shp_path in all_shp_files:
         category = os.path.splitext(os.path.basename(shp_path))[0]
-        gdf = gpd.read_file(shp_path, encoding=encoding)
+        # 使用 fiona 直接開啟以避免 fiona.path 問題
+        with fiona.open(shp_path, encoding=encoding) as src:
+            records = []
+            geometries = []
+            for feature in src:
+                props = dict(feature.get("properties", {}))
+                geom = feature.get("geometry")
+                records.append(props)
+                geometries.append(shape(geom) if geom else None)
+            crs = src.crs
+            gdf = gpd.GeoDataFrame(records, geometry=geometries, crs=crs)
         gdf["category"] = category
         dfs.append(gdf)
     # 合併
@@ -510,7 +523,20 @@ def get_shp_file(
     if shp_file is None:
         raise ValueError(f"No .shp files found in {unzip_path}")
 
-    gdf = gpd.read_file(shp_file, encoding=encoding, from_crs=from_crs)
+    # 使用 fiona 直接開啟以避免 fiona.path 問題
+    import fiona
+    from shapely.geometry import shape
+    
+    with fiona.open(shp_file, encoding=encoding) as src:
+        records = []
+        geometries = []
+        for feature in src:
+            props = dict(feature.get("properties", {}))
+            geom = feature.get("geometry")
+            records.append(props)
+            geometries.append(shape(geom) if geom else None)
+        gdf = gpd.GeoDataFrame(records, geometry=geometries, crs=f"EPSG:{from_crs}")
+    
     print(f"Read {shp_file} successfully.")
     return gdf
 
