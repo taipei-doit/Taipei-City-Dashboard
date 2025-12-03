@@ -35,21 +35,21 @@ print("Exported to:", OUT_DIR)
 PY
 
 # ====== Builder ======
-FROM golang:1.25.4-bookworm AS builder
-WORKDIR /go/src/app
+# FROM golang:1.25.4-bookworm AS builder
+# WORKDIR /go/src/app
 
-COPY go.mod go.sum ./
-RUN go mod download
+# COPY go.mod go.sum ./
+# RUN go mod download
 
-# 複製程式碼並建置
-COPY . .
-RUN go build -o TaipeiCityDashboardBE .
+# # 複製程式碼並建置
+# COPY . .
+# RUN go build -o TaipeiCityDashboardBE .
 
 # ====== Runtime ======
 # Prod
-FROM debian:bookworm-slim
+# FROM debian:bookworm-slim
 # Dev
-# FROM golang:1.25.4-bookworm  
+FROM golang:1.25.4-bookworm  
 
 ARG TARGETARCH
 # 安裝必要相依
@@ -91,7 +91,7 @@ ENV ISSO_CLIENT_ID=$ISSO_CLIENT_ID \
 	GOCACHE=/tmp/go-build-cache
 
 WORKDIR /app
-COPY --from=builder /go/src/app/TaipeiCityDashboardBE /app/
+# COPY --from=builder /go/src/app/TaipeiCityDashboardBE /app/
 COPY --from=model_export /out/onnx-e5 /opt/lm_model/onnx-e5
 # COPY lm_model /opt/lm_model
 
@@ -101,6 +101,6 @@ RUN useradd -r -u 10001 appuser
 USER 10001
 
 # Prod
-CMD ["/app/TaipeiCityDashboardBE"]
+# CMD ["./TaipeiCityDashboardBE"]
 # Dev
-# CMD ["go", "run", "main.go"]
+CMD ["go", "run", "main.go"]

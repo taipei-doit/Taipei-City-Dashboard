@@ -3,6 +3,7 @@ package models
 
 import (
 	"encoding/json"
+	"math"
 	"slices"
 	"time"
 
@@ -68,6 +69,14 @@ type CityComponent struct{
 	QueryChart     string          `json:"-"`
 	QueryHistory   string          `json:"-"`
 	City		   string          `json:"city"`
+}
+
+type CityComponentScore struct{
+	ID             int64           `json:"id"`
+	Index          string          `json:"index"`
+	Name           string          `json:"name"`
+	City		   string          `json:"city"`
+	Score 		   float64         `json:"score"`
 }
 
 // ComponentMap is the model for the component_maps table.
@@ -205,6 +214,48 @@ func GetComponentByIDAll(id int) (component []CityComponent, err error) {
 	if err != nil {
 		return component, err
 	}
+	return component, nil
+}	
+
+func GetComponentByQueryVector(queryString string, limit int, scoreThreshold float64) (component []CityComponentScore, err error) {
+	vector, err := GenVector(queryString)
+	if err != nil {
+		return component, err
+	}
+
+	result, err := queryQdrant(vector, limit, scoreThreshold)
+	if err != nil {
+		return component, err
+	}
+
+	points := result.Result.Points
+
+	var queryOutput []map[string]interface{}
+	for _, p := range points {
+		payload := p.Payload
+		roundedScore := math.Round(p.Score*10000) / 10000
+
+		entry := map[string]interface{}{
+			"id":    payload["id"],
+			"index": payload["index"],
+			"name":  payload["name"],
+			"city":  payload["city"],
+			"score": roundedScore,
+		}
+
+		queryOutput = append(queryOutput, entry)
+	}
+
+	for _, item := range queryOutput {
+		c := CityComponentScore{}
+		c.ID = int64(item["id"].(float64))
+		c.Index = item["index"].(string)
+		c.Name = item["name"].(string)
+		c.City = item["city"].(string)
+		c.Score = item["score"].(float64)
+		component = append(component, c)
+	}
+
 	return component, nil
 }
 

@@ -32,12 +32,14 @@ func ConfigureRoutes() {
 	RouterGroup = Router.Group("/api/" + global.VERSION)
 	configureAuthRoutes()
 	configureUserRoutes()
+	configureLMRoutes()
 	configureComponentRoutes()
 	configureDashboardRoutes()
 	configureIssueRoutes()
 	configureIncidentRoutes()
 	// configureWsRoutes()
 	configureContributorRoutes()
+	configureChatLogRoutes()
 }
 
 func configureAuthRoutes() {
@@ -67,6 +69,28 @@ func configureUserRoutes() {
 	{
 		userRoutes.GET("/", controllers.GetAllUsers)
 		userRoutes.PATCH("/:id", controllers.UpdateUserByID)
+	}
+}
+
+// configureComponentRoutes configures all component routes.
+func configureChatLogRoutes() {
+	componentRoutes := RouterGroup.Group("/chatlog")
+	componentRoutes.Use(middleware.LimitAPIRequests(global.ComponentLimitAPIRequestsTimes, global.LimitRequestsDuration))
+	componentRoutes.Use(middleware.LimitTotalRequests(global.ComponentLimitTotalRequestsTimes, global.LimitRequestsDuration))
+	{
+		componentRoutes.POST("/", controllers.CreateChatLog)
+		componentRoutes.GET("/session", controllers.GetALLChatLog)
+		componentRoutes.GET("/session/:session", controllers.GetChatLogDetailBySession)
+	}
+}
+
+// configureComponentRoutes configures all component routes.
+func configureLMRoutes() {
+	componentRoutes := RouterGroup.Group("/vector")
+	componentRoutes.Use(middleware.LimitAPIRequests(global.ComponentLimitAPIRequestsTimes, global.LimitRequestsDuration))
+	componentRoutes.Use(middleware.LimitTotalRequests(global.ComponentLimitTotalRequestsTimes, global.LimitRequestsDuration))
+	{
+		componentRoutes.POST("/component", controllers.GetComponentByQueryVector)
 	}
 }
 
@@ -165,6 +189,16 @@ func configureContributorRoutes() {
 		contributorRoutes.DELETE("/:id", controllers.DeleteContributor)
 	}
 }
+
+// func configureLmRoutes() {
+// 	componentRoutes := RouterGroup.Group("/lm")
+
+// 	componentRoutes.Use(middleware.LimitAPIRequests(global.ComponentLimitAPIRequestsTimes, global.LimitRequestsDuration))
+// 	componentRoutes.Use(middleware.LimitTotalRequests(global.ComponentLimitTotalRequestsTimes, global.LimitRequestsDuration))
+// 	{
+// 		componentRoutes.GET("/", controllers.GetAllComponents)
+// 	}
+// }
 
 // func configureWsRoutes() {
 // 	wsRoutes := RouterGroup.Group("/ws")
