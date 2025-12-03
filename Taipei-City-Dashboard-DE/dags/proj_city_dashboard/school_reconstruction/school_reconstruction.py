@@ -32,7 +32,7 @@ def _school_reconstruction(**kwargs):
     # Transform
     
     data = df.rename(columns={
-        "_id": "id",
+        "序號": "id",
         "學校": "school",
         "計畫名稱": "project_name",
         "行政區": "district",
@@ -41,8 +41,8 @@ def _school_reconstruction(**kwargs):
         "階段": "stage",
         "地上樓層數": "above_ground_floors",
         "地下樓層數": "underground_floors",
-        "工程基地\n緯度": "latitude",
-        "工程基地\n經度": "longitude"
+        "工程基地緯度": "latitude",
+        "工程基地經度": "longitude"
     })
     data["data_time"] = get_tpe_now_time_str(is_with_tz=True)
     
