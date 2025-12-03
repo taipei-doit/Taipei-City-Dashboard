@@ -20,6 +20,7 @@ const { user } = storeToRefs(authStore);
 
 const userMessage = ref('')
 const chatAreaRef = ref(null)
+const isStickyOpen = ref(true);
 
 const qaBtnHandler = async(text,relations) => {
 	if(text==='建立儀表板') {
@@ -52,6 +53,10 @@ const sendBtnHandler = (text) => {
 		content: text,
 	})
 	userMessage.value = ''
+}
+
+const toggleSticky = () => {
+  isStickyOpen.value = !isStickyOpen.value;
 }
 
 watch(
