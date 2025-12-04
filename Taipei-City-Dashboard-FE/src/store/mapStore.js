@@ -951,23 +951,7 @@ export const useMapStore = defineStore("map", {
         		return {
             		id: i,
 					route_id: map_config.layerId,
-            		cid: item.properties.cid,
-            		dir_control: item.properties.cid,
-            		train_number: item.properties.trainnumber,
-            		curr_stationid: item.properties.curr_stationid,
-            		curr_stationname: item.properties.curr_stationname,
-            		curr_lon: item.properties.curr_lon,
-            		urr_lat: item.properties.curr_lat,
-            		next_stationid: item.properties.next_stationid,
-            		next_stationname: item.properties.next_stationname,
-            		next_lon: item.properties.next_lon,
-            		next_lat: item.properties.next_lat,
-           			car1: item.properties.car1,
-            		car2: item.properties.car2,
-            		car3: item.properties.car3,
-            		car4: item.properties.car4,
-					car5: item.properties.car5 || "",
-					car6: item.properties.car6 || "",
+					...item.properties,
            			coords,
             		car_icon: map_config.icon,
             		final_coord: interpolateAlongSegment(coords, 1),
@@ -984,7 +968,7 @@ export const useMapStore = defineStore("map", {
     		if (this.prevMrtCars.length > 0) {
         		// 建立 Map 加速查找
         		const initTrainMap = new Map(
-            		mrtCarsInit.map(car => [car.train_number, car])
+            		mrtCarsInit.map(car => [car.trainnumber, car])
         		);
 				// 先確認上一輪有的車
         		this.prevMrtCars.forEach(prevCar => {
@@ -995,7 +979,7 @@ export const useMapStore = defineStore("map", {
 						return;
 					}
 
-            		const newCar = initTrainMap.get(prevCar.train_number);
+            		const newCar = initTrainMap.get(prevCar.trainnumber);
 
             		// 同路線新資料沒有該車 → 跳過
 					if (!newCar) return;
@@ -1043,7 +1027,7 @@ export const useMapStore = defineStore("map", {
 
 				// 新資料出現的車
 				for (const [trainNumber, car] of initTrainMap) {
-    				const existed = this.prevMrtCars.some(prev => prev.train_number === trainNumber);
+    				const existed = this.prevMrtCars.some(prev => prev.trainnumber === trainNumber);
     				if (existed) continue; // 已存在 → 不處理
     				const { coords } = car;
 
@@ -1181,18 +1165,11 @@ export const useMapStore = defineStore("map", {
         		type: "custom",
         		renderingMode: "3d",
         		onAdd: (map, gl) => {
-					// 打開擁擠度組件自動 zoom in
-					// map.easeTo({
-    				// 	zoom: 13,    
-    				// 	duration: 800
-					// });
-
             		customLayer.map = markRaw(map);
             		customLayer.camera = markRaw(new THREE.Camera());
             		customLayer.scene = markRaw(new THREE.Scene());
 
             		// 環境光
-            		// const ambientLight = new THREE.AmbientLight(0xffffff, 3.2);
             		const hemiLight = new THREE.HemisphereLight(0xffffff, 0x444444, 3.2);
 					hemiLight.position.set(0, 20, 0);
 					customLayer.scene.add(hemiLight);
@@ -1210,7 +1187,7 @@ export const useMapStore = defineStore("map", {
         								child.material = child.material.clone();
     								}
 								});
-                        		const horizontalOffset = -30; // 原本水平偏移
+                        		const horizontalOffset = -30;
                         		modelClone.position.x += horizontalOffset;
                         		car.model = modelClone;
                         		customLayer.scene.add(modelClone);
@@ -1275,6 +1252,7 @@ export const useMapStore = defineStore("map", {
                 		customLayer.carTooltip.style.position = "absolute";
                 		customLayer.carTooltip.style.left = 0;
                 		customLayer.carTooltip.style.top = 0;
+						customLayer.carTooltip.style.minWidth = '120px';
                 		customLayer.carTooltip.style.willChange = "transform";
                 		customLayer.carTooltip.style.background = "#282A2C";
                 		customLayer.carTooltip.style.border = "2px solid #817E79";
@@ -1295,7 +1273,7 @@ export const useMapStore = defineStore("map", {
                 		closeBtn.innerText = "×";
                 		closeBtn.style.position = "absolute";
                 		closeBtn.style.top = "2px";
-                		closeBtn.style.right = "2px";
+                		closeBtn.style.right = "8px";
                 		closeBtn.style.background = "transparent";
                 		closeBtn.style.border = "none";
                 		closeBtn.style.color = "#fff";
@@ -1369,37 +1347,22 @@ export const useMapStore = defineStore("map", {
                     		}
                 		};
 
-                		let carCrowdValue = "";
+                		// let carCrowdValue = "";
 
-						for (let i = 1; i <= 6; i++) {
-    						const key = `car${i}`;
-    						if (closestCar[key] !== undefined && closestCar[key] !== null && closestCar[key] !=='') {
-        						carCrowdValue += `${i}${getCrowdColor(closestCar[key])}`;
-    						}
-						}
+						// for (let i = 1; i <= 6; i++) {
+    					// 	const key = `car${i}`;
+    					// 	if (closestCar[key] !== undefined && closestCar[key] !== null && closestCar[key] !=='') {
+        				// 		carCrowdValue += `${i}${getCrowdColor(closestCar[key])}`;
+    					// 	}
+						// }
 
                 		const infoContainer = document.createElement("div");
-                		const fields = [
-						// {
-                        // 	label: "列車編號",
-                        // 	value: closestCar.train_number
-                    	// },
-                    	// {
-                        // 	label: "行車方向",
-                        // 	value: closestCar.cid
-                    	// },
-                    	{
-                        	label: "起站",
-                        	value: closestCar.curr_stationname
-                    	},
-                    	{
-                        	label: "迄站",
-                        	value: closestCar.next_stationname
-                    	},
-                    	{
-                        	label: "車廂擁擠度",
-                        	value: carCrowdValue
-                    	}];
+						const fields = map_config.property.map(prop => ({
+    						label: prop.name,
+    						value: prop.name.includes('擁擠度') 
+        						? getCrowdColor(closestCar[prop.key]) 
+        						: closestCar[prop.key] || ''
+						}));
 
                 		fields.forEach(f => {
                     		const row = document.createElement("div");
