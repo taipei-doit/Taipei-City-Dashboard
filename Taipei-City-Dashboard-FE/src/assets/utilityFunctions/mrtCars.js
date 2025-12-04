@@ -49,7 +49,7 @@ export function updateCarsPosition(cars, options = {}) {
         return {
             type: "Feature",
             geometry: { type: "Point", coordinates: offsetLngLat },
-            properties: { train_number: car.train_number }
+            properties: { trainnumber: car.trainnumber }
         };
     });
 }
