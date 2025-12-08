@@ -10,85 +10,11 @@ export const useChatStore = defineStore('chat', () => {
       		role: 'bot',
 	  		isDefault: true,
       		content:
-        	'您好，我是【臺北城市儀表板】小幫手，很高興為您服務！\n 您可以： \n\n • 點擊左側既有的儀表板主題，快速查看各主題內容 \n • 在下方對話框輸入您想了解的臺北市相關資訊，我會協助您找到合適的組件 \n • 輸入您感興趣的主題描述，我會自動為您組建最適合的儀表板 \n\n 如果有想了解的內容，歡迎直接告訴我，我會盡力協助！',
+        	'您好，我是【臺北城市儀表板】小幫手，很高興為您服務！\n 您可以： \n\n • 點擊左側既有的儀表板主題，快速查看各主題內容 \n • 輸入您感興趣的主題描述，我會自動為您組建最適合的儀表板 \n\n 如果有想了解的內容，歡迎直接告訴我，我會盡力協助！',
     	},
   	];
 
-  	// const defaultRes = [
-	//     {
-	//         "id": 60,
-	//         "index": "youbike_availability",
-	//         "name": "YouBike使用情況",
-	//         "city": "metrotaipei",
-	//         "score": 0.8453
-	//     },
-	//     {
-	//         "id": 60,
-	//         "index": "youbike_availability",
-	//         "name": "YouBike使用情況",
-	//         "city": "taipei",
-	//         "score": 0.8445
-	//     },
-	//     {
-	//         "id": 219,
-	//         "index": "bike_map",
-	//         "name": "自行車道路網圖資",
-	//         "city": "taipei",
-	//         "score": 0.8181
-	//     },
-	//     {
-	//         "id": 114,
-	//         "index": "public_parking_lots",
-	//         "name": "公共停車場",
-	//         "city": "taipei",
-	//         "score": 0.8164
-	//     },
-	//     {
-	//         "id": 284,
-	//         "index": "test_componets",
-	//         "name": "示範組件",
-	//         "city": "taipei",
-	//         "score": 0.8163
-	//     },
-	//     {
-	//         "id": 213,
-	//         "index": "bike_network",
-	//         "name": "自行車道路統計資料",
-	//         "city": "metrotaipei",
-	//         "score": 0.8163
-	//     },
-	//     {
-	//         "id": 219,
-	//         "index": "bike_map",
-	//         "name": "自行車道路網圖資",
-	//         "city": "metrotaipei",
-	//         "score": 0.8163
-	//     },
-	//     {
-	//         "id": 213,
-	//         "index": "bike_network",
-	//         "name": "自行車道路統計資料",
-	//         "city": "taipei",
-	//         "score": 0.8158
-	//     },
-	//     {
-	//         "id": 146,
-	//         "index": "youbike_grid",
-	//         "name": "YouBike設站狀態",
-	//         "city": "taipei",
-	//         "score": 0.8156
-	//     },
-	//     {
-	//         "id": 212,
-	//         "index": "ebus_percent",
-	//         "name": "電動巴士比例",
-	//         "city": "metrotaipei",
-	//         "score": 0.8142
-	//     }
-	// ];
-
 	const recommendComponents = ref(null)
-
 
   	// 從 sessionStorage 讀取
   	const savedChatData = JSON.parse(sessionStorage.getItem('chatData')) || [];
