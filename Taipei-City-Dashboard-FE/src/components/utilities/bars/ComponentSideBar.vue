@@ -4,6 +4,7 @@
 <script setup>
 import { ref, computed } from "vue";
 import { storeToRefs } from "pinia";
+import http from "../../../router/axios";
 import { useContentStore } from "../../../store/contentStore";
 import ComponentDragTags from "../forms/ComponentDragTags.vue";
 import { allIcons } from "../../../assets/configs/AllIcons";
@@ -62,8 +63,15 @@ function switchDashboard() {
 	}
 }
 
-function handleConfirm() {
+async function handleConfirm() {
 	if (selectedDashboard.value === "new") {
+		// 確認個人儀表板是否超過20個
+		const response = await http.get(`/dashboard/`);
+		if (response.data?.data?.personal?.length > 20) {
+			console.error('您的個人儀表板已超出限制 20 個，請先移除既有儀表板後，重新執行本功能！');
+			dialogStore.showNotification("fail", "您的個人儀表板已超出限制 20 個，請先移除既有儀表板後，重新執行本功能！");
+			return;
+		}
 		contentStore.createDashboard();
 	} else {
 		contentStore.editCurrentDashboard();
