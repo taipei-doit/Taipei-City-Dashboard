@@ -250,9 +250,9 @@ export const useMapStore = defineStore("map", {
 			// 3D Mrt Map (202511NEW)
 			// 預載 3D 模型
 			const models = [
-        		{ id: "mrt_car_c381", url: "/images/map/C381.glb" },
-        		{ id: "mrt_car_c370", url: "/images/map/C370.glb" },
-				{ id: "mrt_car_brown", url: "/images/map/mrt_car_brown.glb" },
+        		{ id: "mrt_car_c381", url: "/images/map/mrt_car_c381.glb" },
+        		{ id: "mrt_car_c370", url: "/images/map/mrt_car_c370.glb" },
+				// { id: "mrt_car_brown", url: "/images/map/mrt_car_brown.glb" },
     		];
 
 			const loadModel = (m) => {

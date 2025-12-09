@@ -6,10 +6,12 @@ import { ref, computed } from "vue";
 import { storeToRefs } from "pinia";
 import http from "../../../router/axios";
 import { useContentStore } from "../../../store/contentStore";
+import { useDialogStore } from "../../../store/dialogStore";
 import ComponentDragTags from "../forms/ComponentDragTags.vue";
 import { allIcons } from "../../../assets/configs/AllIcons";
 
 const contentStore = useContentStore();
+const dialogStore = useDialogStore();
 
 const iconSearch = ref("");
 const selectedDashboard = ref("new");
