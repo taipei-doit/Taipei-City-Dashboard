@@ -58,8 +58,6 @@ export const useChatStore = defineStore('chat', () => {
 			);
 			if (response.data?.data?.length > 0) {
 				recommendComponents.value = response.data.data;
-			} else {
-				chatData.value.push({ id: chatData.value.length + 1, role: 'bot', isDefault: false, content: `很抱歉，您提供的描述沒有相似相似組件，請繼續提問 ! ` });
 			}
 		} catch (error) { 
 			console.error("VectorAnalysisError :", error);
