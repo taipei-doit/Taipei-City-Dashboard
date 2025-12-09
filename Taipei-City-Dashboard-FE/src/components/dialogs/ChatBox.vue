@@ -8,6 +8,7 @@ import UserLogo from '../icons/UserLogo.vue'
 import { useChatStore } from '../../store/chat'
 import { useContentStore } from "../../store/contentStore";
 import { useAuthStore } from "../../store/authStore";
+import http from "../../router/axios";
 
 const chatStore = useChatStore()
 const contentStore = useContentStore();
@@ -21,9 +22,22 @@ const { user } = storeToRefs(authStore);
 const userMessage = ref('')
 const chatAreaRef = ref(null)
 const isStickyOpen = ref(false);
+const dashboardCreationLoading = ref(false);
 
 const qaBtnHandler = async(text,relations) => {
-	if(text==='建立儀表板') {
+	if(text === '建立儀表板') {
+		if (dashboardCreationLoading.value === true) return;
+		dashboardCreationLoading.value = true;
+		// 確認個人儀表板是否超過20個
+		const response = await http.get(`/dashboard/`);
+		if (response.data?.data?.personal?.length > 20) {
+			addChatData({
+    			role: 'bot',
+    			content: '您的個人儀表板已超出限制 20 個，請先移除既有儀表板後，重新執行本功能！',
+  			});
+			dashboardCreationLoading.value = false;
+			return;
+		}
 		const components = Array.from(
   			new Set(relations.map(r => r.id))
 		).map(id => ({ id }));
@@ -35,7 +49,7 @@ const qaBtnHandler = async(text,relations) => {
 				icon: "star",
 				components: components
 			}
-			createDashboard();
+			await createDashboard();
 			saveChatLog("建立儀表板","使用者成功建立儀表板!");
 		} else {
 			addChatData({
@@ -43,6 +57,7 @@ const qaBtnHandler = async(text,relations) => {
     			content: '請先登入會員以使用此功能喔！',
   			})
 		}
+		dashboardCreationLoading.value = false;
 	}
 }
 
