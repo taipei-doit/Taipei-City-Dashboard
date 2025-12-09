@@ -114,11 +114,12 @@ watch(
               class="message--bubble"
             >
               <p>{{ chat.content }}</p>
-              <!-- 表格區 -->
-              <div
+            </div>
+			<!-- 表格區 -->
+            <div
                 v-if="chat.relations"
                 class="relation-area"
-              >
+            >
                 <table class="relation-table">
                   <thead>
                     <tr>
@@ -140,7 +141,6 @@ watch(
                     </tr>
                   </tbody>
                 </table>
-              </div>
             </div>
             <div
               v-if="chat.button"
@@ -332,12 +332,12 @@ $radius-20: 20px;
 		  .relation-area {
 			width: 100%;
 			display: flex;
-			justify-content: center;
 			align-items: center;
 			margin-top: 8px;
-			margin-bottom: 16px;
+			margin-bottom: 8px;
 
 			  .relation-table {
+				min-width: max-content;
   				font-size: 13px;
 		  	  }
 
