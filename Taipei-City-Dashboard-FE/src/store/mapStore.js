@@ -409,7 +409,7 @@ export const useMapStore = defineStore("map", {
 				if (map_config.type === "symbol-3d") {
 					res = await axios.get(`${location.origin}/geo_server/taipei_vioc/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=taipei_vioc%3A${map_config.index}&maxFeatures=1000000&outputFormat=application%2Fjson`);
 					res2 = await axios.get(`/mapData/${map_config.index}_route.geojson`)
-					if (map_config.index === 'metro_o_line_car') {
+					if (map_config.index === 'metro_o_line_car' || map_config.index === 'metro_g_line_car' || map_config.index === 'metro_r_line_car' ) {
 						res3 = await axios.get(`/mapData/${map_config.index}_route_2.geojson`)
 					}
 				} else {
@@ -919,14 +919,14 @@ export const useMapStore = defineStore("map", {
     		// 組成渲染所須的列車資料
 
     		// 須注意的橘線特例
-    		const orangeLineStations = ["蘆洲", "三民高中", "徐匯中學", "三和國中", "三重國小"]
+    		const branchLineStations = ["蘆洲", "三民高中", "徐匯中學", "三和國中", "三重國小","小碧潭","新北投"]
 
     		// 建立 mrtCarsInit
     		const mrtCarsInit = data.features.map((item, i) => {
 
         		let routeCoordinates = null
 
-        		if (orangeLineStations.includes(item.properties.curr_stationname) || orangeLineStations.includes(item.properties.next_stationname)) {
+        		if (branchLineStations.includes(item.properties.curr_stationname) || branchLineStations.includes(item.properties.next_stationname)) {
             		routeCoordinates = cutRouteSegment(data3, [
                     	item.properties.curr_lon,
                     	item.properties.curr_lat
@@ -998,7 +998,7 @@ export const useMapStore = defineStore("map", {
 
                			let routeCoordinates = null
 
-                		if (orangeLineStations.includes(newCar.curr_stationname) || orangeLineStations.includes(newCar.next_stationname)) {
+                		if (branchLineStations.includes(newCar.curr_stationname) || branchLineStations.includes(newCar.next_stationname)) {
                     		routeCoordinates = cutRouteSegment(data3, start, end);
                 		} else {
                     		routeCoordinates = cutRouteSegment(data2, start, end);
