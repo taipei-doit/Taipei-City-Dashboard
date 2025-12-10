@@ -918,7 +918,7 @@ export const useMapStore = defineStore("map", {
 
     		// 組成渲染所須的列車資料
 
-    		// 須注意的橘線特例
+    		// 須注意的支線特例
     		const branchLineStations = ["蘆洲", "三民高中", "徐匯中學", "三和國中", "三重國小","小碧潭","新北投"]
 
     		// 建立 mrtCarsInit
@@ -956,7 +956,7 @@ export const useMapStore = defineStore("map", {
             		car_icon: map_config.icon,
             		final_coord: interpolateAlongSegment(coords, 1),
             		progress: 0,
-            		speed: 0.0025,
+            		speed: 0.003,
         		};
     		});
 
