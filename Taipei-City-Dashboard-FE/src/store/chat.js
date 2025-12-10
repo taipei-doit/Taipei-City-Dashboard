@@ -48,7 +48,7 @@ export const useChatStore = defineStore('chat', () => {
   				new URLSearchParams({
     				query: newChatData.content,
     				limit: 10,
-    				score: 0.8,
+    				score: 0.85,
   				}),
   				{
     				headers: {
