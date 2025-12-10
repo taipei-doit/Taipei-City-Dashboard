@@ -1296,10 +1296,22 @@ export const useMapStore = defineStore("map", {
                 		let closestCar = null;
                 		let minDist = Infinity;
 
+						// 根據 zoom 等級調整點擊範圍
+    					const zoom = customLayer.map.getZoom();
+    					let clickRadius = 45; // 預設值
+    
+    					if (zoom < 11) {
+        					clickRadius = 120;  // zoom < 11 時範圍較大
+    					} else if (zoom < 13) {
+        					clickRadius = 90;
+    					} else {
+        					clickRadius = 45;
+    					}
+
                 		for (const car of mrtCars) {
                     		if (!car.currentLngLat || !car.lastDir) continue;
 
-                    		const offsetMeters = 5;
+                    		const offsetMeters = 30;
                     		const norm = Math.sqrt(car.lastDir.x ** 2 + car.lastDir.y ** 2);
                     		const dx = (car.lastDir.y / norm) * offsetMeters;
                     		const dy = (-car.lastDir.x / norm) * offsetMeters;
@@ -1312,7 +1324,7 @@ export const useMapStore = defineStore("map", {
                         		}
                     		);
 
-                    		if (dist < 45 && dist < minDist) {
+                    		if (dist < clickRadius && dist < minDist) {
                         		minDist = dist;
                         		closestCar = car;
                     		}
