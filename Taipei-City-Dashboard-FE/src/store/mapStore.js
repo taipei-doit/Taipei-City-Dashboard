@@ -956,7 +956,7 @@ export const useMapStore = defineStore("map", {
             		car_icon: map_config.icon,
             		final_coord: interpolateAlongSegment(coords, 1),
             		progress: 0,
-            		speed: 0.003,
+            		speed: 1 / 600,
         		};
     		});
 
@@ -1168,6 +1168,7 @@ export const useMapStore = defineStore("map", {
             		customLayer.map = markRaw(map);
             		customLayer.camera = markRaw(new THREE.Camera());
             		customLayer.scene = markRaw(new THREE.Scene());
+					customLayer.lastUpdateTime = 0; // 節流用
 
             		// 環境光
             		const hemiLight = new THREE.HemisphereLight(0xffffff, 0x444444, 3.2);
@@ -1415,6 +1416,7 @@ export const useMapStore = defineStore("map", {
         		render: (gl, matrix) => {
 					// 取得當下的 zoom
 					const zoom = customLayer.map.getZoom();
+					const now = performance.now();
 
 					let allFinished = true;
 					// 確認當下各列車是否都跑完動畫
@@ -1425,14 +1427,16 @@ export const useMapStore = defineStore("map", {
 					if (zoom < 13) {
         				// 2D 模式
         				for (const car of mrtCars) if (car.model) car.model.visible = false;
-
-        				const features = updateCarsPosition(mrtCars);
-
         				if (!allFinished) {
-            				customLayer.map.getSource(customLayer.sourceId).setData({
-                				type: "FeatureCollection",
-                				features
-            				});
+            				if (now - customLayer.lastUpdateTime >= 200) {
+
+                				const features = updateCarsPosition(mrtCars);
+                				customLayer.map.getSource(customLayer.sourceId).setData({
+                    				type: "FeatureCollection",
+                    				features
+                				});
+                				customLayer.lastUpdateTime = now;
+            				}
         				} else if (allFinished && !customLayer.updated2D) {
 							const features = updateCarsPosition(mrtCars);
     						customLayer.map.getSource(customLayer.sourceId).setData({
@@ -1474,8 +1478,12 @@ export const useMapStore = defineStore("map", {
         				const renderer = customLayer.renderer;
 						const rotationX = new THREE.Matrix4().makeRotationAxis(new THREE.Vector3(1, 0, 0), Math.PI / 2);
 
+						if (now - customLayer.lastUpdateTime >= 200) {
+							updateCarsPosition(mrtCars);
+						}
+
 						for (const car of mrtCars) {
-           					updateCarsPosition([car]); // 單台車也用同一個計算
+           					// updateCarsPosition([car]); // 單台車也用同一個計算
 
             				const pos = car.currentLngLat;
             				const dir = car.lastDir;
