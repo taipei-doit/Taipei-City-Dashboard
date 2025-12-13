@@ -956,7 +956,7 @@ export const useMapStore = defineStore("map", {
             		car_icon: map_config.icon,
             		final_coord: interpolateAlongSegment(coords, 1),
             		progress: 0,
-            		speed: 1 / 600,
+            		speed: 0.0015,
         		};
     		});
 

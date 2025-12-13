@@ -95,6 +95,11 @@ function reloadMapData() {
 		}
 		const layerConfig = mapStore.mapConfigs[layerName];
 
+		// 只刷新特定組件附屬圖層
+		if (!layerConfig.title.includes("擁擠程度")) {
+			return;
+		}
+
 		// 檢查 source
 		if (layerConfig.source === "geojson") {
 			// 如果 source 是 "geojson"，則使用 fetchLocalGeoJson
