@@ -90,6 +90,10 @@ export const useMapStore = defineStore("map", {
 		preloadedModels: {},
 		// 前一包列車動畫資料
 		prevMrtCars: [],
+		// 儲存圖層更新時間
+		layerUpdateTime: {
+    		// [layerId]: Date
+  		},
 	}),
 	actions: {
 		/* Initialize Mapbox */
@@ -910,6 +914,11 @@ export const useMapStore = defineStore("map", {
     		this.loadingLayers.push("rendering");
     		this.currentLayers.push(map_config.layerId);
     		this.mapConfigs[map_config.layerId] = map_config;
+
+			const layerId = map_config.layerId
+
+			// 紀錄資料更新時間
+			this.layerUpdateTime[layerId] = new Date()
 
     		// 注意重複加入Id
     		if (!this.currentVisibleLayers.includes(map_config.layerId)) {
