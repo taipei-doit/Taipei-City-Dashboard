@@ -89,15 +89,15 @@ function updateTimeToUpdate() {
 function reloadMapData() {
 	if (!["mapview"].includes(authStore.currentPath)) return;
 	mapStore.currentVisibleLayers.forEach((layerName) => {
-		mapStore.map.removeLayer(layerName);
-		if (mapStore.map.getSource(`${layerName}-source`)) {
-			mapStore.map.removeSource(`${layerName}-source`);
-		}
 		const layerConfig = mapStore.mapConfigs[layerName];
-
 		// 只刷新特定組件附屬圖層
 		if (!layerConfig.title.includes("擁擠程度")) {
 			return;
+		}
+
+		mapStore.map.removeLayer(layerName);
+		if (mapStore.map.getSource(`${layerName}-source`)) {
+			mapStore.map.removeSource(`${layerName}-source`);
 		}
 
 		// 檢查 source
