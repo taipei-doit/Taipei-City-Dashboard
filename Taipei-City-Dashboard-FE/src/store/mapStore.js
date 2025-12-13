@@ -956,7 +956,7 @@ export const useMapStore = defineStore("map", {
             		car_icon: map_config.icon,
             		final_coord: interpolateAlongSegment(coords, 1),
             		progress: 0,
-            		speed: 0.003,
+            		speed: 1 / 600,
         		};
     		});
 
@@ -1478,8 +1478,12 @@ export const useMapStore = defineStore("map", {
         				const renderer = customLayer.renderer;
 						const rotationX = new THREE.Matrix4().makeRotationAxis(new THREE.Vector3(1, 0, 0), Math.PI / 2);
 
+						if (now - customLayer.lastUpdateTime >= 200) {
+							updateCarsPosition(mrtCars);
+						}
+
 						for (const car of mrtCars) {
-           					updateCarsPosition([car]); // 單台車也用同一個計算
+           					// updateCarsPosition([car]); // 單台車也用同一個計算
 
             				const pos = car.currentLngLat;
             				const dir = car.lastDir;
