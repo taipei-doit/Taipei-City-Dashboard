@@ -90,8 +90,11 @@ function reloadMapData() {
 	if (!["mapview"].includes(authStore.currentPath)) return;
 	mapStore.currentVisibleLayers.forEach((layerName) => {
 		const layerConfig = mapStore.mapConfigs[layerName];
+		const lastUpdate = mapStore.layerUpdateTime[layerName];
+		const now = Date.now();
+		
 		// 只刷新特定組件附屬圖層
-		if (!layerConfig.title.includes("擁擠程度")) {
+		if (!layerConfig.title.includes("擁擠程度") || !lastUpdate || now - new Date(lastUpdate).getTime() < 2 * 60 * 1000) {
 			return;
 		}
 
@@ -158,7 +161,7 @@ onMounted(() => {
 
 	setInterval(reloadChartData, 1000 * frequency.value);
 	setInterval(updateTimeToUpdate, 1000 * 5);
-	setInterval(reloadMapData, 1000 * 120);
+	setInterval(reloadMapData, 1000 * 30);
 });
 onBeforeUnmount(() => {
 	clearInterval(reloadChartData);
