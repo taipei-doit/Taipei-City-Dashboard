@@ -1055,7 +1055,7 @@ export const useMapStore = defineStore("map", {
         				continue;
     				}
 
-    				const ratio = 2 / 3;
+    				const ratio = 97 / 100;
     				const finalCoord = interpolateAlongSegment(coords, ratio); // 插值後 2/3 的點
 
     				// 切出 2/3 的前段 coords
@@ -1120,7 +1120,7 @@ export const useMapStore = defineStore("map", {
   					}
 
   					// 兩點或以上 -> 正常按距離計算 2/3 並切出前段 coords（含插值點）
-  					const ratio = 2 / 3;
+  					const ratio = 97 / 100;
   					const finalCoord = interpolateAlongSegment(coords, ratio); // [lng, lat, z]
 
   					// 計算每段長度以取得 trimmedCoords
