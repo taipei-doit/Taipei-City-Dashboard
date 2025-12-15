@@ -89,6 +89,26 @@ function updateTimeToUpdate() {
 function reloadMapData() {
 	if (!["mapview"].includes(authStore.currentPath)) return;
 	mapStore.currentVisibleLayers.forEach((layerName) => {
+		mapStore.map.removeLayer(layerName);
+		if (mapStore.map.getSource(`${layerName}-source`)) {
+			mapStore.map.removeSource(`${layerName}-source`);
+		}
+		const layerConfig = mapStore.mapConfigs[layerName];
+
+		// 檢查 source
+		if (layerConfig.source === "geojson") {
+			// 如果 source 是 "geojson"，則使用 fetchLocalGeoJson
+			mapStore.fetchLocalGeoJson(layerConfig);
+		} else if (layerConfig.source === "raster") {
+			// 如果 source 是 "raster"，則使用 addRasterSource
+			mapStore.addRasterSource(layerConfig);
+		}
+	});
+}
+
+function reload3DMRTMapData() {
+	if (!["mapview"].includes(authStore.currentPath)) return;
+	mapStore.currentVisibleLayers.forEach((layerName) => {
 		const layerConfig = mapStore.mapConfigs[layerName];
 		const lastUpdate = mapStore.layerUpdateTime[layerName];
 		const now = Date.now();
@@ -161,12 +181,12 @@ onMounted(() => {
 
 	setInterval(reloadChartData, 1000 * frequency.value);
 	setInterval(updateTimeToUpdate, 1000 * 5);
-	setInterval(reloadMapData, 1000 * 30);
+	setInterval(reload3DMRTMapData, 1000 * 30);
 });
 onBeforeUnmount(() => {
 	clearInterval(reloadChartData);
 	clearInterval(updateTimeToUpdate);
-	clearInterval(reloadMapData);
+	clearInterval(reload3DMRTMapData);
 	// contentStore.wsDisconnect();
 });
 </script>
