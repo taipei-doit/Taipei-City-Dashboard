@@ -965,7 +965,7 @@ export const useMapStore = defineStore("map", {
             		car_icon: map_config.icon,
             		final_coord: interpolateAlongSegment(coords, 1),
             		progress: 0,
-            		speed: 0.0015,
+            		speed: 0.00222,
         		};
     		});
 
@@ -1489,6 +1489,7 @@ export const useMapStore = defineStore("map", {
 
 						if (now - customLayer.lastUpdateTime >= 200) {
 							updateCarsPosition(mrtCars);
+							customLayer.lastUpdateTime = now;
 						}
 
 						for (const car of mrtCars) {
