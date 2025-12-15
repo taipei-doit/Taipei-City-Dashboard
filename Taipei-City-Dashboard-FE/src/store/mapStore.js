@@ -1400,11 +1400,13 @@ export const useMapStore = defineStore("map", {
         		},
 
 				onRemove(map) {
+					// 清理 tooltip
     				if (customLayer.carTooltip) {
         				customLayer.carTooltip.remove();
         				customLayer.carTooltip = null;
     				}
 
+					// 清理 click 事件
     				if (customLayer._carClickHandler) {
         				map.off("click", customLayer._carClickHandler);
         				customLayer._carClickHandler = null;
@@ -1419,6 +1421,55 @@ export const useMapStore = defineStore("map", {
         				map.removeSource(customLayer.sourceId);
     				}
 
+					// 清理 3D 模型
+    				if (customLayer.scene && mrtCars?.length) {
+        				for (const car of mrtCars) {
+            				if (car.model) {
+                				car.model.traverse(child => {
+                    				if (child.isMesh) {
+                        				// 釋放 geometry
+                        				if (child.geometry) child.geometry.dispose();
+
+                        				// 釋放材質和貼圖
+                        				if (child.material) {
+                            				const disposeMaterial = mat => {
+                                				if (mat.map) mat.map.dispose();
+                                				if (mat.normalMap) mat.normalMap.dispose();
+                                				if (mat.roughnessMap) mat.roughnessMap.dispose();
+                                				if (mat.metalnessMap) mat.metalnessMap.dispose();
+                                				mat.dispose();
+                            				};
+
+                            				if (Array.isArray(child.material)) {
+                                				child.material.forEach(disposeMaterial);
+                            				} else {
+                                				disposeMaterial(child.material);
+                            				}
+                        				}
+                    				}
+                				});
+
+                				// 從 scene 移除
+                				customLayer.scene.remove(car.model);
+                				car.model = null;
+            				}
+        				}
+
+        				// 清空 mrtCars 陣列，避免舊引用被再次使用
+        				mrtCars.length = 0;
+    				}
+
+    				// 清理 scene / camera
+    				if (customLayer.scene) {
+        				// 移除剩餘 children
+        				while (customLayer.scene.children.length) {
+            				customLayer.scene.remove(customLayer.scene.children[0]);
+        				}
+    				}
+    				customLayer.scene = null;
+    				customLayer.camera = null;
+
+					// 清理 selectedCar
     				customLayer.selectedCar = null;
 				},
 
