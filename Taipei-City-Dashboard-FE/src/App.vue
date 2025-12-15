@@ -114,7 +114,7 @@ function reload3DMRTMapData() {
 		const now = Date.now();
 		
 		// 只刷新特定組件附屬圖層
-		if (!layerConfig.title.includes("擁擠程度") || !lastUpdate || now - new Date(lastUpdate).getTime() < 2 * 60 * 1000) {
+		if (!layerConfig.title.includes("擁擠程度") || !lastUpdate || now - new Date(lastUpdate).getTime() < 1.5 * 60 * 1000) {
 			return;
 		}
 
@@ -181,7 +181,7 @@ onMounted(() => {
 
 	setInterval(reloadChartData, 1000 * frequency.value);
 	setInterval(updateTimeToUpdate, 1000 * 5);
-	setInterval(reload3DMRTMapData, 1000 * 30);
+	setInterval(reload3DMRTMapData, 1000 * 10);
 });
 onBeforeUnmount(() => {
 	clearInterval(reloadChartData);
