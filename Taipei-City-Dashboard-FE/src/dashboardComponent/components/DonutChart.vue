@@ -22,7 +22,7 @@ const emits = defineEmits([
 ]);
 
 // How many data points to show before summing all remaining points into "other"
-const steps = ref(6);
+const steps = ref(100);
 
 // Donut charts in apexcharts uses a slightly different data format from other chart types
 // As such, the following parsing functions are required
