@@ -31,6 +31,8 @@ import NotificationBar from "./components/dialogs/NotificationBar.vue";
 import InitialWarning from "./components/dialogs/InitialWarning.vue";
 import ComponentSideBar from "./components/utilities/bars/ComponentSideBar.vue";
 import LogIn from "./components/dialogs/LogIn.vue";
+import ChatBox from "./components/dialogs/ChatBox.vue";
+import ChatBotIcon from "./components/icons/ChatBotIcon.vue";
 
 const authStore = useAuthStore();
 const dialogStore = useDialogStore();
@@ -45,6 +47,9 @@ const boardIndex = ref(null);
 const board = ref(null);
 const frequency = ref(600);
 const isMappedToUpdateBoards = ref(false);
+// Chatroom (202511NEW)
+const isChatBtnShow = ref(true);
+const isChatBoxShow = ref(false);
 
 const updateBoardsMap = computed(() => {
 	let needUpdateBoards = [];
@@ -101,6 +106,44 @@ function reloadMapData() {
 	});
 }
 
+function reload3DMRTMapData() {
+	if (!["mapview"].includes(authStore.currentPath)) return;
+	mapStore.currentVisibleLayers.forEach((layerName) => {
+		const layerConfig = mapStore.mapConfigs[layerName];
+		const lastUpdate = mapStore.layerUpdateTime[layerName];
+		const now = Date.now();
+		
+		// 只刷新特定組件附屬圖層
+		if (!layerConfig.title.includes("擁擠程度") || !lastUpdate || now - new Date(lastUpdate).getTime() < 1.5 * 60 * 1000) {
+			return;
+		}
+
+		mapStore.map.removeLayer(layerName);
+		if (mapStore.map.getSource(`${layerName}-source`)) {
+			mapStore.map.removeSource(`${layerName}-source`);
+		}
+
+		// 檢查 source
+		if (layerConfig.source === "geojson") {
+			// 如果 source 是 "geojson"，則使用 fetchLocalGeoJson
+			mapStore.fetchLocalGeoJson(layerConfig);
+		} else if (layerConfig.source === "raster") {
+			// 如果 source 是 "raster"，則使用 addRasterSource
+			mapStore.addRasterSource(layerConfig);
+		}
+	});
+}
+
+// Chatroom (202511NEW)
+function chatbotBtnHandler () {
+	isChatBoxShow.value = !isChatBoxShow.value
+}
+
+function hideBtnClickHandler () {
+	isChatBtnShow.value = false;
+	isChatBoxShow.value = false;
+}
+
 watch(
 	() => route.query,
 	(query) => {
@@ -138,10 +181,12 @@ onMounted(() => {
 
 	setInterval(reloadChartData, 1000 * frequency.value);
 	setInterval(updateTimeToUpdate, 1000 * 5);
+	setInterval(reload3DMRTMapData, 1000 * 10);
 });
 onBeforeUnmount(() => {
 	clearInterval(reloadChartData);
 	clearInterval(updateTimeToUpdate);
+	clearInterval(reload3DMRTMapData);
 	// contentStore.wsDisconnect();
 });
 </script>
@@ -196,6 +241,26 @@ onBeforeUnmount(() => {
 		>
 			<p>下次更新：{{ formattedTimeToUpdate }}</p>
 		</div>
+		<div class="chatbot-container">
+      		<ChatBox
+        		v-if="isChatBoxShow"
+        		class="chatbox"
+      		/>
+      		<div
+        		v-if="isChatBtnShow"
+        		class="chatbot-btn-area"
+      		>
+        		<div class="hide-chat-btn">
+          			<button @click="hideBtnClickHandler" />
+        		</div>
+        		<button
+          		class="chatbot-btn"
+          		@click="chatbotBtnHandler"
+        		>
+          			<ChatBotIcon />
+        		</button>
+      		</div>
+    	</div>
 	</div>
 </template>
 
@@ -239,4 +304,61 @@ onBeforeUnmount(() => {
 		}
 	}
 }
+
+// Chatroom (202511NEW)
+.chatbot-container {
+  position: fixed;
+  bottom: 1.5rem; // Tailwind bottom-6 → 24px
+  right: 1.5rem;
+  display: flex;
+  align-items: flex-end;
+  gap: 1rem; // Tailwind gap-4 → 16px
+  z-index: 10;
+
+  .chatbox {
+    width: 400px;
+    height: 500px;
+    margin-bottom: 35px;
+  }
+
+  .chatbot-btn-area {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	.hide-chat-btn {
+		margin-left: auto;
+		button {
+			font-size: 16px;	
+		}
+	}
+	.hide-chat-btn button::before {
+    	content: "–";
+    	font-weight: bold;   /* 變粗 */
+    	font-size: 20px;     /* 可以順便調整大小 */
+	}
+	.chatbot-btn {
+    	width: 70px;
+    	height: 70px;
+    	display: flex;
+    	align-items: center;
+    	justify-content: center;
+    	border-radius: 50%;
+    	background-color: #3b82f6; // Tailwind bg-blue-500
+    	filter: brightness(1.5);
+    	transition: filter 0.2s;
+
+    	&:hover {
+      		filter: brightness(1);
+    	}
+  	}
+  }
+}
+
+// 手機板隱藏小幫手
+@media (max-width: 600px) {
+	.chatbot-container {
+		display: none;
+	}
+}
+
 </style>

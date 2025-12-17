@@ -524,6 +524,7 @@ function handleClose() {
                   v-model="
                     currentComponent.map_config[index].size
                   "
+				  :disabled="currentComponent.map_config[index].type==='symbol-3d'"
                 >
                   <option :value="''">
                     無
@@ -542,6 +543,7 @@ function handleClose() {
                   v-model="
                     currentComponent.map_config[index].icon
                   "
+				  :disabled="currentComponent.map_config[index].type==='symbol-3d'"
                 >
                   <option :value="''">
                     無
