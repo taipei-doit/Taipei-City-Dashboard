@@ -134,6 +134,7 @@ watch(
             <div
                 v-if="chat.relations"
                 class="relation-area"
+				v-horizontal-wheel
             >
                 <table class="relation-table">
                   <thead>
