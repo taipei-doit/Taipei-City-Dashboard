@@ -104,7 +104,7 @@ backend:
       memory: 4Gi
     requests:
       cpu: 500m
-      memory: 1.5G1
+      memory: 1.5Gi
 
   # Backend environment variables (update these values)
   env:
