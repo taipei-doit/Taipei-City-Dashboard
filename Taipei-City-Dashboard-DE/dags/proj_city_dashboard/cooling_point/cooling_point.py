@@ -33,9 +33,42 @@ def _cooling_point(**kwargs):
     geometry_type = "Point"
     FROM_CRS = 4326
     URL = 'https://data.taipei/api/frontstage/tpeod/dataset/resource.download?rid=ae7e5986-859d-4294-b289-7c1b2e7c23f1'
-    response = requests.get(URL, verify=False)
-    # 讀取 CSV (Big5 編碼)
-    csv_text = response.content.decode('big5')
+    response = requests.get(URL, verify=False, timeout=60)
+    response.raise_for_status()
+
+    def _decode_csv_bytes(payload: bytes, resp) -> str:
+        """Decode CSV bytes with best-effort encoding detection + fallbacks."""
+        # Prefer explicit encoding (from headers), then requests' detection.
+        candidates = []
+        if getattr(resp, "encoding", None):
+            candidates.append(resp.encoding)
+        try:
+            apparent = getattr(resp, "apparent_encoding", None)
+            if apparent:
+                candidates.append(apparent)
+        except Exception:
+            pass
+
+        # Common encodings for Taiwanese CSV exports.
+        candidates.extend(["utf-8-sig", "utf-8", "big5", "big5hkscs", "cp950"])
+
+        seen = set()
+        for enc in candidates:
+            if not enc or enc in seen:
+                continue
+            seen.add(enc)
+            try:
+                return payload.decode(enc)
+            except UnicodeDecodeError:
+                continue
+
+        logging.warning(
+            "Cooling point CSV decode failed with candidates=%s; falling back to utf-8 with replacement",
+            list(seen),
+        )
+        return payload.decode("utf-8", errors="replace")
+
+    csv_text = _decode_csv_bytes(response.content, response)
     raw_data = pd.read_csv(StringIO(csv_text))
     # Transform
     data = raw_data.copy()
