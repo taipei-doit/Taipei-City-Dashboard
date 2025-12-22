@@ -246,21 +246,21 @@ onBeforeUnmount(() => {
         		v-if="isChatBoxShow"
         		class="chatbox"
       		/>
-      	<div
-        	v-if="isChatBtnShow"
-        	class="chatbot-btn-area"
-      	>
-        	<div class="hide-chat-btn">
-          		<button @click="hideBtnClickHandler" />
-        	</div>
-        	<button
-          	class="chatbot-btn"
-          	@click="chatbotBtnHandler"
-        	>
-          		<ChatBotIcon />
-        	</button>
-      	</div>
-    </div>
+      		<div
+        		v-if="isChatBtnShow"
+        		class="chatbot-btn-area"
+      		>
+        		<div class="hide-chat-btn">
+          			<button @click="hideBtnClickHandler" />
+        		</div>
+        		<button
+          		class="chatbot-btn"
+          		@click="chatbotBtnHandler"
+        		>
+          			<ChatBotIcon />
+        		</button>
+      		</div>
+    	</div>
 	</div>
 </template>
 
