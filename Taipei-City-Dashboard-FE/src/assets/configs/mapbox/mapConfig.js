@@ -30,6 +30,7 @@ export const CityMapView = {
 }
 
 // All map types
+// 3D Mrt Map (202511NEW)
 export const mapTypes = {
 	line: "線圖",
 	circle: "點圖",
@@ -39,6 +40,7 @@ export const mapTypes = {
 	arc: "立體弧線圖",
 	voronoi: "泰森多邊形",
 	isoline: "等高線圖",
+	"symbol-3d": "三維捷運動態地圖",
 };
 
 // Styles for base layer "Taipei Town"
