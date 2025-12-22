@@ -32,10 +32,10 @@ function handleClose() {
     @on-close="handleClose"
   >
     <div class="initialwarning">
-      <h2 v-if="authStore.isMobileDevice" style="color:red">
+      <h2 v-if="authStore.isMobileDevice">
         臺北城市儀表板行動版注意事項
       </h2>
-      <h2 v-else style="color:red">
+      <h2 v-else>
         臺北城市儀表板使用說明
       </h2>
       <div
