@@ -22,7 +22,7 @@ frontend:
 
   image:
     repository: citydashboard-dhc2gtetgcfqeqhv.azurecr.io/taipei-city-dashboard-fe
-    tag: "123"
+    tag: ""
 
   resources:
     limits:
