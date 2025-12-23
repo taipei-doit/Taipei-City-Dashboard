@@ -278,7 +278,7 @@ $radius-20: 20px;
 
 	.chat-message {
   		padding: 4px 10px;
-		  margin: 0px 8px;
+		margin: 0px 8px;
   		border-radius: 8px;
   		background-color: $bg-dark;
 	}
