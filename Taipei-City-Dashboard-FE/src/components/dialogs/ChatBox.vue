@@ -271,7 +271,8 @@ $radius-20: 20px;
 
   .chat-area {
     flex: 1;
-    margin: 0.5rem;
+    margin: 0.25rem;
+    padding: 0.75rem;
     overflow-y: auto;
     background: $bg-dark;
 
@@ -314,7 +315,7 @@ $radius-20: 20px;
 	}
 
     .message {
-      padding: 0.75rem;
+      padding: 8px;
 
       .bot,
       .user {
