@@ -61,6 +61,30 @@ export const useChatStore = defineStore('chat', () => {
 			if (response.data?.data?.length > 0) {
 				recommendComponents.value = response.data.data;
 			}
+
+			// 去除重複項目存到 result
+			const result = Array.from(
+  				recommendComponents.value.reduce((map, item) => {
+    				const key = item.index
+    				const exist = map.get(key)
+
+    				// 如果還沒放過，直接放
+    				if (!exist) {
+      					map.set(key, item)
+      					return map
+    				}
+
+    				// 如果已存在，但現在的是 metrotaipei，就覆蓋
+    				if (item.city === 'metrotaipei') {
+      					map.set(key, item)
+    				}
+
+    				return map
+  				}, new Map()).values()
+			)
+			// 把 result 蓋完去 recommendComponents
+			recommendComponents.value = result
+			
 		} catch (error) { 
 			console.error("VectorAnalysisError :", error);
 		}
