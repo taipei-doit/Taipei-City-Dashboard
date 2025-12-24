@@ -79,7 +79,7 @@ function reloadChartData() {
 
 function reloadCrowdingChartData() {
 	if (!["dashboard", "mapview"].includes(authStore.currentPath)) return;
-	contentStore.updateCurrentDashboardCertainChartData("擁擠程度");
+	contentStore.updateCurrentDashboardCertainChartData();
 }
 
 function updateTimeToUpdate() {
