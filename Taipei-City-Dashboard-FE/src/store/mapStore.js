@@ -965,7 +965,7 @@ export const useMapStore = defineStore("map", {
             		car_icon: map_config.icon,
             		final_coord: interpolateAlongSegment(coords, 1),
             		progress: 0,
-            		speed: 0.00222,
+            		speed: 0.0034,
         		};
     		});
 
@@ -1302,9 +1302,6 @@ export const useMapStore = defineStore("map", {
                 		map.off("click", customLayer._carClickHandler);
             		}
             		customLayer._carClickHandler = (e) => {
-						// 避免事件冒泡
-						e.originalEvent.stopPropagation();
-						
                 		const clickLngLat = [e.lngLat.lng, e.lngLat.lat];
                 		let closestCar = null;
                 		let minDist = Infinity;
