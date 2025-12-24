@@ -82,7 +82,7 @@ export const useChatStore = defineStore('chat', () => {
     				return map
   				}, new Map()).values()
 			)
-			// 把 result 蓋完去 recommendComponents
+			// 把 result 蓋回去 recommendComponents
 			recommendComponents.value = result
 
 		} catch (error) { 
