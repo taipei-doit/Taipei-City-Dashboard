@@ -67,6 +67,8 @@ export const useContentStore = defineStore("content", {
 		// Stores whether an error occurred
 		error: false,
 		ws: false,
+		// 篩選捷運擁擠度組件用參數
+		metroKeys : ["metro_red_line","metro_blue_line","metro_orange_line","metro_green_line","metro_br_line"]
 	}),
 	getters: {},
 	actions: {
@@ -353,8 +355,8 @@ export const useContentStore = defineStore("content", {
 					index++
 				) {
 					const component = this.cityDashboard.components[index];
-					if (component.name.includes("擁擠程度")) {
-						continue;
+					if (this.metroKeys.some(key => component.index.includes(key))) {
+  						continue;
 					}
 					try {
 						// 4-2. Get chart data
@@ -399,8 +401,8 @@ export const useContentStore = defineStore("content", {
 					index++
 				) {
 					const component = this.cityDashboard.components[index];
-					if (component.name.includes("擁擠程度")) {
-						continue;
+					if (this.metroKeys.some(key => component.index.includes(key))) {
+  						continue;
 					}
 					// Get history data if applicable
 					if (
@@ -446,7 +448,7 @@ export const useContentStore = defineStore("content", {
 			this.filterCurrentDashboardContent();
 		},
 
-		async updateCurrentDashboardCertainChartData(componentName) {
+		async updateCurrentDashboardCertainChartData() {
 			try {
 				// 4-1. Loop through all the components of a dashboard
 				for (
@@ -455,8 +457,8 @@ export const useContentStore = defineStore("content", {
 					index++
 				) {
 					const component = this.cityDashboard.components[index];
-					if (!component.name.includes(componentName)) {
-						continue;
+					if (!this.metroKeys.some(key => component.index.includes(key))) {
+  						continue;
 					}
 					try {
 						// 4-2. Get chart data
@@ -501,8 +503,8 @@ export const useContentStore = defineStore("content", {
 					index++
 				) {
 					const component = this.cityDashboard.components[index];
-					if (!component.name.includes(componentName)) {
-						continue;
+					if (!this.metroKeys.some(key => component.index.includes(key))) {
+  						continue;
 					}
 					// Get history data if applicable
 					if (
