@@ -120,7 +120,7 @@ function reload3DMRTMapData() {
 		const now = Date.now();
 		
 		// 只刷新特定組件附屬圖層
-		if (!layerConfig.title.includes("擁擠程度") || !lastUpdate || now - new Date(lastUpdate).getTime() < 1.5 * 60 * 1000) {
+		if (!layerConfig.title.includes("擁擠程度") || !lastUpdate || now - new Date(lastUpdate).getTime() < 1 * 60 * 1000) {
 			return;
 		}
 
