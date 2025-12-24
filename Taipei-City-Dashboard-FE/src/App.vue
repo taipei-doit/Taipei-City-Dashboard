@@ -69,13 +69,19 @@ const formattedTimeToUpdate = computed(() => {
 
 function reloadChartData() {
 	if (!["dashboard", "mapview"].includes(authStore.currentPath)) return;
-	contentStore.setCurrentDashboardAllChartData();
+	contentStore.updateCurrentDashboardAllChartData();
 	timeToUpdate.value = frequency.value;
 
 	if (isMappedToUpdateBoards.value) {
 		reloadMapData();
 	}
 }
+
+function reloadCrowdingChartData() {
+	if (!["dashboard", "mapview"].includes(authStore.currentPath)) return;
+	contentStore.updateCurrentDashboardCertainChartData("擁擠程度");
+}
+
 function updateTimeToUpdate() {
 	if (!["dashboard", "mapview"].includes(authStore.currentPath)) return;
 	if (timeToUpdate.value <= 0) {
@@ -180,11 +186,13 @@ onMounted(() => {
 	}
 
 	setInterval(reloadChartData, 1000 * frequency.value);
+	setInterval(reloadCrowdingChartData, 1000 * 60);
 	setInterval(updateTimeToUpdate, 1000 * 5);
 	setInterval(reload3DMRTMapData, 1000 * 10);
 });
 onBeforeUnmount(() => {
 	clearInterval(reloadChartData);
+	clearInterval(reloadCrowdingChartData);
 	clearInterval(updateTimeToUpdate);
 	clearInterval(reload3DMRTMapData);
 	// contentStore.wsDisconnect();
