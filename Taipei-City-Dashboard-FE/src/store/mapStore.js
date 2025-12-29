@@ -1374,6 +1374,7 @@ export const useMapStore = defineStore("map", {
                 		};
 
                 		const infoContainer = document.createElement("div");
+						infoContainer.style.marginBottom = "10px";
 						const fields = map_config.property.map(prop => ({
     						label: prop.name,
     						value: prop.name.includes('擁擠度') 
