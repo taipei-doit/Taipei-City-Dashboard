@@ -2,7 +2,7 @@ name: Build and Deploy
 
 on:
   push:
-    branches: ["sit", "pre-develop", "develop"]
+    branches: ["sit", "develop"]
   workflow_dispatch:
     inputs:
       force_backend:
@@ -30,11 +30,21 @@ jobs:
     outputs:
       backend: ${{ steps.set-outputs.outputs.backend }}
       frontend: ${{ steps.set-outputs.outputs.frontend }}
+      tag: ${{ steps.tag.outputs.value }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
+      - name: Compute unified image tag
+        id: tag
+        run: |
+          BRANCH="${GITHUB_REF_NAME}"
+          SHA="${GITHUB_SHA}"
+          TAG="${BRANCH}-$(echo ${SHA} | cut -c1-8)"
+          echo "value=${TAG}" >> $GITHUB_OUTPUT
+          echo "Using image tag: ${TAG}"
 
       - name: Determine base ref (push only)
         id: base
@@ -72,54 +82,32 @@ jobs:
           CHG_BE='${{ steps.changes.outputs.backend }}'
           CHG_FE='${{ steps.changes.outputs.frontend }}'
           CHG_SHARED='${{ steps.changes.outputs.shared }}'
-          
-          # Strategy: if ANY change detected, deploy BOTH services for consistency and safety
-          ANY_CHANGE=false
-          
-          # Check for any changes
-          if [ "$FORCE_BE" = "true" ] || [ "$FORCE_FE" = "true" ] || [ "$CHG_BE" = "true" ] || [ "$CHG_FE" = "true" ] || [ "$CHG_SHARED" = "true" ]; then
-            ANY_CHANGE=true
+
+          BACKEND=false
+          FRONTEND=false
+
+          if [ "$FORCE_BE" = "true" ] || [ "$CHG_BE" = "true" ] || [ "$CHG_SHARED" = "true" ]; then
+            BACKEND=true
           fi
-          
-          # If any change detected, deploy both services
-          if [ "$ANY_CHANGE" = "true" ]; then
-            echo "Changes detected - deploying both services for consistency"
-            echo "backend=true" >> $GITHUB_OUTPUT
-            echo "frontend=true" >> $GITHUB_OUTPUT
-          else
-            echo "No changes detected - skipping deployment"
-            echo "backend=false" >> $GITHUB_OUTPUT
-            echo "frontend=false" >> $GITHUB_OUTPUT
+          if [ "$FORCE_FE" = "true" ] || [ "$CHG_FE" = "true" ] || [ "$CHG_SHARED" = "true" ]; then
+            FRONTEND=true
           fi
-          
-          echo "Final decision -> backend=true frontend=true (any_change=$ANY_CHANGE, triggers: force_be=$FORCE_BE force_fe=$FORCE_FE chg_be=$CHG_BE chg_fe=$CHG_FE chg_shared=$CHG_SHARED)"
+
+          echo "backend=${BACKEND}" >> $GITHUB_OUTPUT
+          echo "frontend=${FRONTEND}" >> $GITHUB_OUTPUT
+
+          echo "Final decision -> backend=${BACKEND} frontend=${FRONTEND} (triggers: force_be=$FORCE_BE force_fe=$FORCE_FE chg_be=$CHG_BE chg_fe=$CHG_FE chg_shared=$CHG_SHARED)"
 
       - name: Summary
         run: |
           echo "Backend deploy: ${{ steps.set-outputs.outputs.backend }}"
           echo "Frontend deploy: ${{ steps.set-outputs.outputs.frontend }}"
 
-  build-and-deploy:
+  build-backend:
     needs: detect-changes
-    if: (github.event_name == 'workflow_dispatch' || github.event_name == 'push') && needs.detect-changes.outputs.backend == 'true'
+    if: needs.detect-changes.outputs.backend == 'true'
     runs-on: ubuntu-latest
-    environment:
-      # Updated: map pre-develop branch to use 'prod' environment (was 'pre-prod') so it can use prod env secrets per request
-      name: ${{ (github.ref_name == 'sit' && 'sit') || (github.ref_name == 'pre-develop' && 'prod') || (github.ref_name == 'develop' && 'prod') }}
-    concurrency:
-      group: deploy-${{ github.ref }}
-      cancel-in-progress: false
     steps:
-      - name: Free Disk Space (Ubuntu)
-        uses: jlumbroso/free-disk-space@main
-        with:
-          tool-cache: true
-          android: true
-          dotnet: true
-          haskell: true
-          large-packages: true
-          docker-images: true
-          swap-storage: true
       - name: Checkout
         uses: actions/checkout@v4
 
@@ -133,24 +121,15 @@ jobs:
           username: ${{ secrets.ACR_USERNAME }}
           password: ${{ secrets.ACR_PASSWORD }}
 
-      - name: Compute unified image tag
-        id: tag
-        run: |
-          BRANCH="${GITHUB_REF_NAME}"
-            SHA="${GITHUB_SHA}"
-          TAG="${BRANCH}-$(echo ${SHA} | cut -c1-8)"
-          echo "value=${TAG}" >> $GITHUB_OUTPUT
-          echo "Using image tag: ${TAG}"
-
       - name: Build & push Backend image
         uses: docker/build-push-action@v5
         with:
           context: ./Taipei-City-Dashboard-BE
           file: ./Taipei-City-Dashboard-BE/Dockerfile
           push: true
-          tags: ${{ env.REGISTRY }}/${{ env.BE_IMAGE }}:${{ steps.tag.outputs.value }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          tags: ${{ env.REGISTRY }}/${{ env.BE_IMAGE }}:${{ needs.detect-changes.outputs.tag }}
+          cache-from: type=gha,scope=be
+          cache-to: type=gha,mode=max,scope=be
           platforms: linux/amd64
           build-args: |
             G1G2_CERT=${{ secrets.G1G2_CERT }}
@@ -158,17 +137,34 @@ jobs:
             ISSO_CLIENT_SECRET=${{ secrets.ISSO_CLIENT_SECRET }}
             IDNO_SALT=${{ secrets.IDNO_SALT }}
             JWT_SECRET=${{ secrets.JWT_SECRET }}
-            
-          
+
+  build-frontend:
+    needs: detect-changes
+    if: needs.detect-changes.outputs.frontend == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to ACR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.ACR_USERNAME }}
+          password: ${{ secrets.ACR_PASSWORD }}
+
       - name: Build & push Frontend image
         uses: docker/build-push-action@v5
         with:
           context: ./Taipei-City-Dashboard-FE
           file: ./Taipei-City-Dashboard-FE/Dockerfile
           push: true
-          tags: ${{ env.REGISTRY }}/${{ env.FE_IMAGE }}:${{ steps.tag.outputs.value }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          tags: ${{ env.REGISTRY }}/${{ env.FE_IMAGE }}:${{ needs.detect-changes.outputs.tag }}
+          cache-from: type=gha,scope=fe
+          cache-to: type=gha,mode=max,scope=fe
           platforms: linux/amd64
           build-args: |
             NODE_ENV=${{ secrets.NODE_ENV }}
@@ -180,11 +176,26 @@ jobs:
             VITE_TAIPEIPASS_CLIENT_ID=${{ secrets.VITE_TAIPEIPASS_CLIENT_ID }}
             VITE_TAIPEIPASS_SCOPE=${{ secrets.VITE_TAIPEIPASS_SCOPE }}
 
+  deploy:
+    needs:
+      - detect-changes
+      - build-backend
+      - build-frontend
+    if: (github.event_name == 'workflow_dispatch' || github.event_name == 'push') && (needs.detect-changes.outputs.backend == 'true' || needs.detect-changes.outputs.frontend == 'true')
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ (github.ref_name == 'sit' && 'sit') || (github.ref_name == 'develop' && 'prod') }}
+    concurrency:
+      group: deploy-${{ github.ref }}
+      cancel-in-progress: true
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
       - name: Setup Helm
         uses: azure/setup-helm@v3
         with:
-          version: '3.13.0'
+          version: "3.13.0"
 
       - name: Configure kubeconfig
         run: |
@@ -235,25 +246,22 @@ jobs:
           SEC_BACKEND_URL: ${{ secrets.BACKEND_URL }}
         run: |
           set -euo pipefail
-          # Defensive: ensure we are in bash (GitHub uses bash by default for run:)
           if [ -z "${BASH_VERSION:-}" ]; then echo "This step requires bash" >&2; exit 1; fi
           DB_PORT="${SEC_DB_DASHBOARD_PORT:-5432}"
           MANAGER_PORT="${SEC_DB_MANAGER_PORT:-$DB_PORT}"
           REDIS_PORT_VAL="${SEC_REDIS_PORT:-6379}"
           REDIS_DB_VAL="${SEC_REDIS_DB:-0}"
-          # Build args in an array with safe quoting (one element per literal)
           ARGS=(create secret generic taipei-city-dashboard-secrets)
           add(){
             local k="$1"; shift
             local v="$1"
-            # Only append if value is non-empty; preserve spaces & symbols
             if [ -n "$v" ]; then
               ARGS+=("--from-literal=${k}=${v}")
             fi
           }
           add DB_DASHBOARD_HOST "$SEC_DB_DASHBOARD_HOST"
           add DB_DASHBOARD_PASSWORD "$SEC_DB_DASHBOARD_PASSWORD"
-            add DB_DASHBOARD_USER "$SEC_DB_DASHBOARD_USER"
+          add DB_DASHBOARD_USER "$SEC_DB_DASHBOARD_USER"
           add DB_DASHBOARD_DBNAME "$SEC_DB_DASHBOARD_DBNAME"
           if [ -n "${SEC_DB_DASHBOARD_PORT}" ]; then add DB_DASHBOARD_PORT "$DB_PORT"; fi
           add DB_MANAGER_HOST "$SEC_DB_MANAGER_HOST"
@@ -278,13 +286,11 @@ jobs:
           add VITE_TAIPEIPASS_SCOPE "$SEC_VITE_TAIPEIPASS_SCOPE"
           add VITE_APP_TITLE "$SEC_VITE_APP_TITLE"
           add BACKEND_URL "$SEC_BACKEND_URL"
-          # Show which keys will be applied (without values)
           echo "Secret keys to apply:" >&2
           for a in "${ARGS[@]}"; do
             case "$a" in --from-literal=*) echo "  ${a#--from-literal=}" | cut -d= -f1 ;; esac
           done
           ARGS+=(--namespace=${{ env.NAMESPACE }} --dry-run=client -o yaml)
-          # Execute kubectl with the array (no word splitting issues)
           if ! kubectl "${ARGS[@]}" | kubectl apply -f -; then
             echo "[ERROR] Failed to create/update secret. Re-run with set -x for more detail." >&2
             exit 1
@@ -298,8 +304,6 @@ jobs:
           VALUES_FILE=""
           if [ "$BRANCH_NAME" = "sit" ]; then
             VALUES_FILE="helm-chart/values-sit.yaml"
-          elif [ "$BRANCH_NAME" = "pre-develop" ]; then
-            VALUES_FILE="helm-chart/values-prod.yaml" # Assuming pre-develop uses prod values
           elif [ "$BRANCH_NAME" = "develop" ]; then
             VALUES_FILE="helm-chart/values-prod.yaml"
           elif [ "$BRANCH_NAME" = "main" ]; then
@@ -321,23 +325,54 @@ jobs:
           set -euo pipefail
           RELEASE=${{ env.RELEASE }}
           NS=${{ env.NAMESPACE }}
-          TAG=${{ steps.tag.outputs.value }}
+          NEW_TAG=${{ needs.detect-changes.outputs.tag }}
           VALUES_FILE=${{ steps.helm-values.outputs.file }}
-          echo "Verifying images exist..."
-          for img in ${{ env.REGISTRY }}/${{ env.BE_IMAGE }}:$TAG ${{ env.REGISTRY }}/${{ env.FE_IMAGE }}:$TAG; do
-            echo "Checking $img"; docker manifest inspect $img > /dev/null 2>&1 || { echo "Missing image $img" >&2; exit 1; }; done
-          HELM_SET="--set backend.image.tag=$TAG --set frontend.image.tag=$TAG"
+          BACKEND_CHANGED=${{ needs.detect-changes.outputs.backend }}
+          FRONTEND_CHANGED=${{ needs.detect-changes.outputs.frontend }}
+
+          if ! helm -n "$NS" status "$RELEASE" >/dev/null 2>&1; then
+            if [ "$BACKEND_CHANGED" != "true" ] || [ "$FRONTEND_CHANGED" != "true" ]; then
+              echo "::error::First install requires building both backend and frontend."
+              exit 1
+            fi
+          fi
+
+          backend_tag="$NEW_TAG"
+          frontend_tag="$NEW_TAG"
+
+          if [ "$BACKEND_CHANGED" != "true" ]; then
+            backend_tag=$(kubectl -n "$NS" get deploy taipei-city-dashboard-backend -o jsonpath='{.spec.template.spec.containers[0].image}' 2>/dev/null | awk -F: '{print $NF}')
+          fi
+          if [ "$FRONTEND_CHANGED" != "true" ]; then
+            frontend_tag=$(kubectl -n "$NS" get deploy taipei-city-dashboard-frontend -o jsonpath='{.spec.template.spec.containers[0].image}' 2>/dev/null | awk -F: '{print $NF}')
+          fi
+
+          if [ -z "$backend_tag" ] || [ -z "$frontend_tag" ]; then
+            echo "::error::Unable to determine image tags for upgrade."
+            exit 1
+          fi
+
+          if [ "$BACKEND_CHANGED" = "true" ]; then
+            echo "Verifying backend image ${{ env.REGISTRY }}/${{ env.BE_IMAGE }}:$backend_tag exists"
+            docker manifest inspect ${{ env.REGISTRY }}/${{ env.BE_IMAGE }}:$backend_tag > /dev/null 2>&1 || { echo "Missing backend image" >&2; exit 1; }
+          fi
+          if [ "$FRONTEND_CHANGED" = "true" ]; then
+            echo "Verifying frontend image ${{ env.REGISTRY }}/${{ env.FE_IMAGE }}:$frontend_tag exists"
+            docker manifest inspect ${{ env.REGISTRY }}/${{ env.FE_IMAGE }}:$frontend_tag > /dev/null 2>&1 || { echo "Missing frontend image" >&2; exit 1; }
+          fi
+
+          HELM_SET="--set backend.image.tag=$backend_tag --set frontend.image.tag=$frontend_tag"
           [ -n "$SEC_DB_DASHBOARD_PORT" ] && HELM_SET+=" --set backend.useSecretDbDashboardPort=true"
           [ -n "$SEC_DB_MANAGER_PORT" ] && HELM_SET+=" --set backend.useSecretDbManagerPort=true"
           [ -n "$SEC_REDIS_PORT" ] && HELM_SET+=" --set backend.useSecretRedisPort=true"
           [ -n "$SEC_REDIS_DB" ] && HELM_SET+=" --set backend.useSecretRedisDb=true"
+
           if helm -n "$NS" status "$RELEASE" >/dev/null 2>&1; then
-            echo "Upgrading existing release $RELEASE with tag $TAG using ${VALUES_FILE}"
+            echo "Upgrading existing release $RELEASE with backend tag $backend_tag frontend tag $frontend_tag using ${VALUES_FILE}"
             helm upgrade "$RELEASE" ./helm-chart -f "${VALUES_FILE}" $HELM_SET --namespace "$NS" --wait --timeout=20m --debug
           else
-            echo "Installing new release $RELEASE with tag $TAG using ${VALUES_FILE}"
+            echo "Installing new release $RELEASE with backend tag $backend_tag frontend tag $frontend_tag using ${VALUES_FILE}"
             helm upgrade --install "$RELEASE" ./helm-chart -f "${VALUES_FILE}" $HELM_SET --namespace "$NS" --wait --timeout=20m --debug
-
           fi
 
       - name: Deployment summary
