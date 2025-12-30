@@ -1264,7 +1264,7 @@ export const useMapStore = defineStore("map", {
                 		customLayer.carTooltip.style.left = 0;
                 		customLayer.carTooltip.style.top = 0;
 						customLayer.carTooltip.style.minWidth = '120px';
-						customLayer.carTooltip.style.height = "175px";
+						customLayer.carTooltip.style.maxHeight = "220px";
                 		customLayer.carTooltip.style.willChange = "transform";
                 		customLayer.carTooltip.style.background = "#282A2C";
                 		customLayer.carTooltip.style.border = "2px solid #817E79";
@@ -1282,14 +1282,14 @@ export const useMapStore = defineStore("map", {
                 		const closeBtn = document.createElement("button");
                 		closeBtn.innerText = "×";
                 		closeBtn.style.position = "absolute";
-                		closeBtn.style.top = "2px";
+                		closeBtn.style.top = "1px";
                 		closeBtn.style.right = "8px";
                 		closeBtn.style.background = "transparent";
                 		closeBtn.style.border = "none";
-                		closeBtn.style.color = "#fff";
+                		closeBtn.style.color = "#888787";
                 		closeBtn.style.cursor = "pointer";
                 		closeBtn.style.fontWeight = "bold";
-                		closeBtn.style.fontSize = "14px";
+                		closeBtn.style.fontSize = "20px";
                 		closeBtn.onclick = () => {
                     		customLayer.carTooltip.style.display = "none";
                     		customLayer.selectedCar = null;
@@ -1298,7 +1298,7 @@ export const useMapStore = defineStore("map", {
 
 						// popup 顯示屬性區塊
 						const contentWrapper = document.createElement("div");
-						contentWrapper.style.padding = "12px 10px";
+						contentWrapper.style.paddingRight = "12px";
 						contentWrapper.style.height = "100%";
 						contentWrapper.style.overflowY = "auto";
 
@@ -1374,7 +1374,6 @@ export const useMapStore = defineStore("map", {
                 		};
 
                 		const infoContainer = document.createElement("div");
-						infoContainer.style.marginBottom = "10px";
 						const fields = map_config.property.map(prop => ({
     						label: prop.name,
     						value: prop.name.includes('擁擠度') 
