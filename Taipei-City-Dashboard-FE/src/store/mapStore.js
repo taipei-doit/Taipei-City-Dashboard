@@ -1265,6 +1265,7 @@ export const useMapStore = defineStore("map", {
                 		customLayer.carTooltip.style.top = 0;
 						customLayer.carTooltip.style.minWidth = '120px';
 						customLayer.carTooltip.style.maxHeight = "220px";
+						customLayer.carTooltip.style.height = "100%";
                 		customLayer.carTooltip.style.willChange = "transform";
                 		customLayer.carTooltip.style.background = "#282A2C";
                 		customLayer.carTooltip.style.border = "2px solid #817E79";
