@@ -55,6 +55,8 @@ let chartTimer = null;
 let crowdingTimer = null;
 let timeTimer = null;
 let mrtTimer = null;
+// Update 狀態
+let isCrowdingUpdating = false;
 
 const updateBoardsMap = computed(() => {
 	let needUpdateBoards = [];
@@ -82,9 +84,17 @@ function reloadChartData() {
 	}
 }
 
-function reloadCrowdingChartData() {
+async function reloadCrowdingChartData() {
 	if (!["dashboard", "mapview"].includes(authStore.currentPath)) return;
-	contentStore.updateCurrentDashboardCertainChartData();
+	
+	if (isCrowdingUpdating) return;
+	
+	isCrowdingUpdating = true;
+	try {
+    	await contentStore.updateCurrentDashboardCertainChartData();
+  	} 	finally {
+		isCrowdingUpdating = false;
+  	}
 }
 
 function updateTimeToUpdate() {
