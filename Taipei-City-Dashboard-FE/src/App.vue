@@ -50,6 +50,13 @@ const isMappedToUpdateBoards = ref(false);
 // Chatroom (202511NEW)
 const isChatBtnShow = ref(true);
 const isChatBoxShow = ref(false);
+// Timers
+let chartTimer = null;
+let crowdingTimer = null;
+let timeTimer = null;
+let mrtTimer = null;
+// Update 狀態
+let isCrowdingUpdating = false;
 
 const updateBoardsMap = computed(() => {
 	let needUpdateBoards = [];
@@ -77,9 +84,17 @@ function reloadChartData() {
 	}
 }
 
-function reloadCrowdingChartData() {
+async function reloadCrowdingChartData() {
 	if (!["dashboard", "mapview"].includes(authStore.currentPath)) return;
-	contentStore.updateCurrentDashboardCertainChartData();
+	
+	if (isCrowdingUpdating) return;
+	
+	isCrowdingUpdating = true;
+	try {
+    	await contentStore.updateCurrentDashboardCertainChartData();
+  	} 	finally {
+		isCrowdingUpdating = false;
+  	}
 }
 
 function updateTimeToUpdate() {
@@ -185,16 +200,16 @@ onMounted(() => {
 		dialogStore.showDialog("initialWarning");
 	}
 
-	setInterval(reloadChartData, 1000 * frequency.value);
-	setInterval(reloadCrowdingChartData, 1000 * 60);
-	setInterval(updateTimeToUpdate, 1000 * 5);
-	setInterval(reload3DMRTMapData, 1000 * 10);
+	chartTimer = setInterval(reloadChartData, 1000 * frequency.value);
+	crowdingTimer = setInterval(reloadCrowdingChartData, 1000 * 60);
+	timeTimer = setInterval(updateTimeToUpdate, 1000 * 5);
+	mrtTimer = setInterval(reload3DMRTMapData, 1000 * 10);
 });
 onBeforeUnmount(() => {
-	clearInterval(reloadChartData);
-	clearInterval(reloadCrowdingChartData);
-	clearInterval(updateTimeToUpdate);
-	clearInterval(reload3DMRTMapData);
+	clearInterval(chartTimer);
+	clearInterval(crowdingTimer);
+	clearInterval(timeTimer);
+	clearInterval(mrtTimer);
 	// contentStore.wsDisconnect();
 });
 </script>
