@@ -31,7 +31,7 @@ const (
 	DashboardLimitTotalRequestsTimes   = 100000
 	IssueLimitAPIRequestsTimes         = 20000
 	IssueLimitTotalRequestsTimes       = 20000
-	LimitRequestsDuration              = 600000 * time.Second
+	LimitRequestsDuration              = 60 * time.Second
 	
 
 	
