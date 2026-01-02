@@ -86,6 +86,6 @@ func LimitTotalRequests(limit int, timeframe time.Duration) gin.HandlerFunc {
 
 		// Add the current request to the list of requests
 		cache.Redis.ZAddNX(redisKey, redis.Z{Score: float64(currentTime), Member: currentTime})
-		cache.Redis.Expire(redisKey, global.TokenExpirationDuration)
+		cache.Redis.Expire(redisKey, global.LimitRequestsDuration)
 	}
 }
