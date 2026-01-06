@@ -1389,7 +1389,7 @@ export const useMapStore = defineStore("map", {
                     		infoContainer.appendChild(row);
                 		});
 
-                		customLayer.carTooltip.insertBefore(infoContainer, closeBtn);
+                		customLayer.carTooltip.insertBefore(infoContainer);
                 		customLayer.carTooltip.style.display = "block";
             		};
             		map.on("click", customLayer._carClickHandler);
