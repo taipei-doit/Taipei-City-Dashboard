@@ -157,7 +157,6 @@ export const useMapStore = defineStore("map", {
   						});
 					}
 				});
-
 			this.renderMarkers();
 
 			// 使用者點擊定位功能後觸發GA自訂事件
@@ -1259,11 +1258,14 @@ export const useMapStore = defineStore("map", {
 
             		// === Tooltip 只建一次 ===
             		if (!customLayer.carTooltip) {
+						// popup 最外層
                 		customLayer.carTooltip = document.createElement("div");
                 		customLayer.carTooltip.style.position = "absolute";
                 		customLayer.carTooltip.style.left = 0;
                 		customLayer.carTooltip.style.top = 0;
 						customLayer.carTooltip.style.minWidth = '120px';
+						customLayer.carTooltip.style.maxHeight = "220px";
+						customLayer.carTooltip.style.height = "100%";
                 		customLayer.carTooltip.style.willChange = "transform";
                 		customLayer.carTooltip.style.background = "#282A2C";
                 		customLayer.carTooltip.style.border = "2px solid #817E79";
@@ -1274,28 +1276,37 @@ export const useMapStore = defineStore("map", {
                 		customLayer.carTooltip.style.display = "none";
                 		customLayer.carTooltip.style.zIndex = "1";
                 		customLayer.carTooltip.style.overflow = "hidden";
-                		customLayer.carTooltip.style.whiteSpace = "nowrap";
                			customLayer.tooltipOffsetX = 5;
                 		customLayer.tooltipOffsetY = 5;
 
-                		map.getContainer().appendChild(customLayer.carTooltip);
-
+                		// popup 關閉按鈕
                 		const closeBtn = document.createElement("button");
                 		closeBtn.innerText = "×";
                 		closeBtn.style.position = "absolute";
-                		closeBtn.style.top = "2px";
+                		closeBtn.style.top = "1px";
                 		closeBtn.style.right = "8px";
                 		closeBtn.style.background = "transparent";
                 		closeBtn.style.border = "none";
-                		closeBtn.style.color = "#fff";
+                		closeBtn.style.color = "#888787";
                 		closeBtn.style.cursor = "pointer";
                 		closeBtn.style.fontWeight = "bold";
-                		closeBtn.style.fontSize = "14px";
+                		closeBtn.style.fontSize = "20px";
                 		closeBtn.onclick = () => {
                     		customLayer.carTooltip.style.display = "none";
                     		customLayer.selectedCar = null;
                 		};
                 		customLayer.carTooltip.appendChild(closeBtn);
+
+						// popup 顯示屬性區塊
+						const contentWrapper = document.createElement("div");
+						contentWrapper.style.paddingRight = "12px";
+						contentWrapper.style.height = "100%";
+						contentWrapper.style.overflowY = "auto";
+
+						customLayer.carTooltip.appendChild(closeBtn);
+						customLayer.carTooltip.appendChild(contentWrapper);
+						customLayer.tooltipContent = contentWrapper;
+						map.getContainer().appendChild(customLayer.carTooltip);
            	 		}
 
             		// === Click 事件只綁一次 ===
@@ -1345,15 +1356,8 @@ export const useMapStore = defineStore("map", {
 
                			customLayer.selectedCar = closestCar;
 
-                		// 清空 tooltip 內容（保留關閉按鈕）
-                		const closeBtn = customLayer.carTooltip.querySelector("button");
-                		while (customLayer.carTooltip.firstChild) {
-                    		if (customLayer.carTooltip.firstChild !== closeBtn) {
-                        		customLayer.carTooltip.removeChild(customLayer.carTooltip.firstChild);
-                    		} else {
-                        		break;
-                    		}
-                		}
+                		// 清空 tooltip 內容
+						customLayer.tooltipContent.innerHTML = "";
 
                 		const getCrowdColor = (level) => {
                     		switch (level) {
@@ -1369,15 +1373,6 @@ export const useMapStore = defineStore("map", {
                             		return "⬜";
                     		}
                 		};
-
-                		// let carCrowdValue = "";
-
-						// for (let i = 1; i <= 6; i++) {
-    					// 	const key = `car${i}`;
-    					// 	if (closestCar[key] !== undefined && closestCar[key] !== null && closestCar[key] !=='') {
-        				// 		carCrowdValue += `${i}${getCrowdColor(closestCar[key])}`;
-    					// 	}
-						// }
 
                 		const infoContainer = document.createElement("div");
 						const fields = map_config.property.map(prop => ({
