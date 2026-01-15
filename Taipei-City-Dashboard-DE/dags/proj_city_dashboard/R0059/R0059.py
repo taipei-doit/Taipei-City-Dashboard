@@ -3,6 +3,7 @@ from operators.common_pipeline import CommonDag
 
 
 def extarct_license_from_xml(filename, url):
+    import os
     import xml.etree.ElementTree as ET
 
     import pandas as pd
@@ -11,8 +12,18 @@ def extarct_license_from_xml(filename, url):
     # download
     local_file = download_file(filename, url)
 
+    # 檢查檔案是否為空
+    if os.path.getsize(local_file) == 0:
+        print(f"!!!XML file is empty: {local_file}!!!")
+        return pd.DataFrame()
+
     # parse xml
-    tree = ET.parse(local_file)
+    try:
+        tree = ET.parse(local_file)
+    except ET.ParseError as e:
+        print(f"!!!XML parse error: {e}!!!")
+        return pd.DataFrame()
+    
     root = tree.getroot()
     df_list = []
     for _license in root:
@@ -121,6 +132,15 @@ def _R0059(**kwargs):
 
     # Extract
     raw_data = extarct_license_from_xml(filename, URL)
+    
+    # 檢查是否有資料
+    if raw_data.empty:
+        print("!!!XML data is empty, skipping processing!!!")
+        # Update dataset_info
+        engine = create_engine(ready_data_db_uri)
+        lasttime_in_data = get_data_taipei_file_last_modified_time(PAGE_ID)
+        update_lasttime_in_data_to_dataset_info(engine, dag_id, lasttime_in_data)
+        return
 
     # Transform
     ready_data = transform_license(raw_data, FROM_CRS)

@@ -29,6 +29,9 @@ def _transfer(**kwargs):
         DATASET_CODE, filters_query=None, is_proxy=False, timeout=None
     )
     raw_data = pd.DataFrame(res)
+    
+    # 印出欄位名稱以供除錯
+    print(f"API 回傳的欄位: {list(raw_data.columns)}")
 
     # Transform
     data = raw_data.copy()
@@ -40,7 +43,11 @@ def _transfer(**kwargs):
     gdata = add_point_wkbgeometry_column_to_df(
         data, data["longitude"], data["latitude"], from_crs=FROM_CRS
     )
-    data = gdata[["country", "city", "village", "number", "name", "address", "administration", "latitude", "longitude", "grade", "type2", "type", "exec", "diaper", "area", "data_time", "wkb_geometry"]]
+    
+    # 動態選取存在的欄位
+    desired_columns = ["country", "city", "village", "number", "name", "address", "administration", "latitude", "longitude", "grade", "type2", "type", "exec", "diaper", "area", "data_time", "wkb_geometry"]
+    existing_columns = [col for col in desired_columns if col in gdata.columns]
+    data = gdata[existing_columns]
 
     # Load data to DB
     engine = create_engine(ready_data_db_uri)

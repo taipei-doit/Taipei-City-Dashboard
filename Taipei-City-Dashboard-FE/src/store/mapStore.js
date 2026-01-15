@@ -90,6 +90,10 @@ export const useMapStore = defineStore("map", {
 		preloadedModels: {},
 		// 前一包列車動畫資料
 		prevMrtCars: [],
+		// 儲存圖層更新時間
+		layerUpdateTime: {
+    		// [layerId]: Date
+  		},
 	}),
 	actions: {
 		/* Initialize Mapbox */
@@ -250,9 +254,9 @@ export const useMapStore = defineStore("map", {
 			// 3D Mrt Map (202511NEW)
 			// 預載 3D 模型
 			const models = [
-        		{ id: "mrt_car_c381", url: "/images/map/C381.glb" },
-        		{ id: "mrt_car_c370", url: "/images/map/C370.glb" },
-				{ id: "mrt_car_brown", url: "/images/map/mrt_car_brown.glb" },
+        		{ id: "mrt_car_c381", url: "/images/map/mrt_car_c381.glb" },
+        		{ id: "mrt_car_c370", url: "/images/map/mrt_car_c370.glb" },
+				// { id: "mrt_car_brown", url: "/images/map/mrt_car_brown.glb" },
     		];
 
 			const loadModel = (m) => {
@@ -409,7 +413,7 @@ export const useMapStore = defineStore("map", {
 				if (map_config.type === "symbol-3d") {
 					res = await axios.get(`${location.origin}/geo_server/taipei_vioc/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=taipei_vioc%3A${map_config.index}&maxFeatures=1000000&outputFormat=application%2Fjson`);
 					res2 = await axios.get(`/mapData/${map_config.index}_route.geojson`)
-					if (map_config.index === 'metro_o_line_car') {
+					if (map_config.index === 'metro_o_line_car' || map_config.index === 'metro_g_line_car' || map_config.index === 'metro_r_line_car' ) {
 						res3 = await axios.get(`/mapData/${map_config.index}_route_2.geojson`)
 					}
 				} else {
@@ -911,6 +915,11 @@ export const useMapStore = defineStore("map", {
     		this.currentLayers.push(map_config.layerId);
     		this.mapConfigs[map_config.layerId] = map_config;
 
+			const layerId = map_config.layerId
+
+			// 紀錄資料更新時間
+			this.layerUpdateTime[layerId] = new Date()
+
     		// 注意重複加入Id
     		if (!this.currentVisibleLayers.includes(map_config.layerId)) {
         		this.currentVisibleLayers.push(map_config.layerId);
@@ -918,15 +927,15 @@ export const useMapStore = defineStore("map", {
 
     		// 組成渲染所須的列車資料
 
-    		// 須注意的橘線特例
-    		const orangeLineStations = ["蘆洲", "三民高中", "徐匯中學", "三和國中", "三重國小"]
+    		// 須注意的支線特例
+    		const branchLineStations = ["蘆洲", "三民高中", "徐匯中學", "三和國中", "三重國小","小碧潭","新北投"]
 
     		// 建立 mrtCarsInit
     		const mrtCarsInit = data.features.map((item, i) => {
 
         		let routeCoordinates = null
 
-        		if (orangeLineStations.includes(item.properties.curr_stationname) || orangeLineStations.includes(item.properties.next_stationname)) {
+        		if (branchLineStations.includes(item.properties.curr_stationname) || branchLineStations.includes(item.properties.next_stationname)) {
             		routeCoordinates = cutRouteSegment(data3, [
                     	item.properties.curr_lon,
                     	item.properties.curr_lat
@@ -951,28 +960,12 @@ export const useMapStore = defineStore("map", {
         		return {
             		id: i,
 					route_id: map_config.layerId,
-            		cid: item.properties.cid,
-            		dir_control: item.properties.cid,
-            		train_number: item.properties.trainnumber,
-            		curr_stationid: item.properties.curr_stationid,
-            		curr_stationname: item.properties.curr_stationname,
-            		curr_lon: item.properties.curr_lon,
-            		urr_lat: item.properties.curr_lat,
-            		next_stationid: item.properties.next_stationid,
-            		next_stationname: item.properties.next_stationname,
-            		next_lon: item.properties.next_lon,
-            		next_lat: item.properties.next_lat,
-           			car1: item.properties.car1,
-            		car2: item.properties.car2,
-            		car3: item.properties.car3,
-            		car4: item.properties.car4,
-					car5: item.properties.car5 || "",
-					car6: item.properties.car6 || "",
+					...item.properties,
            			coords,
             		car_icon: map_config.icon,
             		final_coord: interpolateAlongSegment(coords, 1),
             		progress: 0,
-            		speed: 0.008
+            		speed: 0.00222,
         		};
     		});
 
@@ -984,7 +977,7 @@ export const useMapStore = defineStore("map", {
     		if (this.prevMrtCars.length > 0) {
         		// 建立 Map 加速查找
         		const initTrainMap = new Map(
-            		mrtCarsInit.map(car => [car.train_number, car])
+            		mrtCarsInit.map(car => [car.trainnumber, car])
         		);
 				// 先確認上一輪有的車
         		this.prevMrtCars.forEach(prevCar => {
@@ -995,7 +988,7 @@ export const useMapStore = defineStore("map", {
 						return;
 					}
 
-            		const newCar = initTrainMap.get(prevCar.train_number);
+            		const newCar = initTrainMap.get(prevCar.trainnumber);
 
             		// 同路線新資料沒有該車 → 跳過
 					if (!newCar) return;
@@ -1014,7 +1007,7 @@ export const useMapStore = defineStore("map", {
 
                			let routeCoordinates = null
 
-                		if (orangeLineStations.includes(newCar.curr_stationname) || orangeLineStations.includes(newCar.next_stationname)) {
+                		if (branchLineStations.includes(newCar.curr_stationname) || branchLineStations.includes(newCar.next_stationname)) {
                     		routeCoordinates = cutRouteSegment(data3, start, end);
                 		} else {
                     		routeCoordinates = cutRouteSegment(data2, start, end);
@@ -1043,7 +1036,7 @@ export const useMapStore = defineStore("map", {
 
 				// 新資料出現的車
 				for (const [trainNumber, car] of initTrainMap) {
-    				const existed = this.prevMrtCars.some(prev => prev.train_number === trainNumber);
+    				const existed = this.prevMrtCars.some(prev => prev.trainnumber === trainNumber);
     				if (existed) continue; // 已存在 → 不處理
     				const { coords } = car;
 
@@ -1062,7 +1055,7 @@ export const useMapStore = defineStore("map", {
         				continue;
     				}
 
-    				const ratio = 2 / 3;
+    				const ratio = 90 / 100;
     				const finalCoord = interpolateAlongSegment(coords, ratio); // 插值後 2/3 的點
 
     				// 切出 2/3 的前段 coords
@@ -1127,7 +1120,7 @@ export const useMapStore = defineStore("map", {
   					}
 
   					// 兩點或以上 -> 正常按距離計算 2/3 並切出前段 coords（含插值點）
-  					const ratio = 2 / 3;
+  					const ratio = 90 / 100;
   					const finalCoord = interpolateAlongSegment(coords, ratio); // [lng, lat, z]
 
   					// 計算每段長度以取得 trimmedCoords
@@ -1181,18 +1174,12 @@ export const useMapStore = defineStore("map", {
         		type: "custom",
         		renderingMode: "3d",
         		onAdd: (map, gl) => {
-					// 打開擁擠度組件自動 zoom in
-					// map.easeTo({
-    				// 	zoom: 13,    
-    				// 	duration: 800
-					// });
-
             		customLayer.map = markRaw(map);
             		customLayer.camera = markRaw(new THREE.Camera());
             		customLayer.scene = markRaw(new THREE.Scene());
+					customLayer.lastUpdateTime = 0; // 節流用
 
             		// 環境光
-            		// const ambientLight = new THREE.AmbientLight(0xffffff, 3.2);
             		const hemiLight = new THREE.HemisphereLight(0xffffff, 0x444444, 3.2);
 					hemiLight.position.set(0, 20, 0);
 					customLayer.scene.add(hemiLight);
@@ -1210,7 +1197,7 @@ export const useMapStore = defineStore("map", {
         								child.material = child.material.clone();
     								}
 								});
-                        		const horizontalOffset = -30; // 原本水平偏移
+                        		const horizontalOffset = -30;
                         		modelClone.position.x += horizontalOffset;
                         		car.model = modelClone;
                         		customLayer.scene.add(modelClone);
@@ -1271,10 +1258,14 @@ export const useMapStore = defineStore("map", {
 
             		// === Tooltip 只建一次 ===
             		if (!customLayer.carTooltip) {
+						// popup 最外層
                 		customLayer.carTooltip = document.createElement("div");
                 		customLayer.carTooltip.style.position = "absolute";
                 		customLayer.carTooltip.style.left = 0;
                 		customLayer.carTooltip.style.top = 0;
+						customLayer.carTooltip.style.minWidth = '120px';
+						customLayer.carTooltip.style.maxHeight = "220px";
+						customLayer.carTooltip.style.height = "100%";
                 		customLayer.carTooltip.style.willChange = "transform";
                 		customLayer.carTooltip.style.background = "#282A2C";
                 		customLayer.carTooltip.style.border = "2px solid #817E79";
@@ -1285,28 +1276,37 @@ export const useMapStore = defineStore("map", {
                 		customLayer.carTooltip.style.display = "none";
                 		customLayer.carTooltip.style.zIndex = "1";
                 		customLayer.carTooltip.style.overflow = "hidden";
-                		customLayer.carTooltip.style.whiteSpace = "nowrap";
                			customLayer.tooltipOffsetX = 5;
                 		customLayer.tooltipOffsetY = 5;
 
-                		map.getContainer().appendChild(customLayer.carTooltip);
-
+                		// popup 關閉按鈕
                 		const closeBtn = document.createElement("button");
                 		closeBtn.innerText = "×";
                 		closeBtn.style.position = "absolute";
-                		closeBtn.style.top = "2px";
-                		closeBtn.style.right = "2px";
+                		closeBtn.style.top = "1px";
+                		closeBtn.style.right = "8px";
                 		closeBtn.style.background = "transparent";
                 		closeBtn.style.border = "none";
-                		closeBtn.style.color = "#fff";
+                		closeBtn.style.color = "#888787";
                 		closeBtn.style.cursor = "pointer";
                 		closeBtn.style.fontWeight = "bold";
-                		closeBtn.style.fontSize = "14px";
+                		closeBtn.style.fontSize = "20px";
                 		closeBtn.onclick = () => {
                     		customLayer.carTooltip.style.display = "none";
                     		customLayer.selectedCar = null;
                 		};
                 		customLayer.carTooltip.appendChild(closeBtn);
+
+						// popup 顯示屬性區塊
+						const contentWrapper = document.createElement("div");
+						contentWrapper.style.paddingRight = "12px";
+						contentWrapper.style.height = "100%";
+						contentWrapper.style.overflowY = "auto";
+
+						customLayer.carTooltip.appendChild(closeBtn);
+						customLayer.carTooltip.appendChild(contentWrapper);
+						customLayer.tooltipContent = contentWrapper;
+						map.getContainer().appendChild(customLayer.carTooltip);
            	 		}
 
             		// === Click 事件只綁一次 ===
@@ -1318,10 +1318,22 @@ export const useMapStore = defineStore("map", {
                 		let closestCar = null;
                 		let minDist = Infinity;
 
+						// 根據 zoom 等級調整點擊範圍
+    					const zoom = customLayer.map.getZoom();
+    					let clickRadius = 45; // 預設值
+    
+    					if (zoom < 11) {
+        					clickRadius = 120;  // zoom < 11 時範圍較大
+    					} else if (zoom < 13) {
+        					clickRadius = 90;
+    					} else {
+        					clickRadius = 45;
+    					}
+
                 		for (const car of mrtCars) {
                     		if (!car.currentLngLat || !car.lastDir) continue;
 
-                    		const offsetMeters = 5;
+                    		const offsetMeters = 30;
                     		const norm = Math.sqrt(car.lastDir.x ** 2 + car.lastDir.y ** 2);
                     		const dx = (car.lastDir.y / norm) * offsetMeters;
                     		const dy = (-car.lastDir.x / norm) * offsetMeters;
@@ -1334,7 +1346,7 @@ export const useMapStore = defineStore("map", {
                         		}
                     		);
 
-                    		if (dist < 45 && dist < minDist) {
+                    		if (dist < clickRadius && dist < minDist) {
                         		minDist = dist;
                         		closestCar = car;
                     		}
@@ -1344,15 +1356,8 @@ export const useMapStore = defineStore("map", {
 
                			customLayer.selectedCar = closestCar;
 
-                		// 清空 tooltip 內容（保留關閉按鈕）
-                		const closeBtn = customLayer.carTooltip.querySelector("button");
-                		while (customLayer.carTooltip.firstChild) {
-                    		if (customLayer.carTooltip.firstChild !== closeBtn) {
-                        		customLayer.carTooltip.removeChild(customLayer.carTooltip.firstChild);
-                    		} else {
-                        		break;
-                    		}
-                		}
+                		// 清空 tooltip 內容
+						customLayer.tooltipContent.innerHTML = "";
 
                 		const getCrowdColor = (level) => {
                     		switch (level) {
@@ -1369,37 +1374,13 @@ export const useMapStore = defineStore("map", {
                     		}
                 		};
 
-                		let carCrowdValue = "";
-
-						for (let i = 1; i <= 6; i++) {
-    						const key = `car${i}`;
-    						if (closestCar[key] !== undefined && closestCar[key] !== null && closestCar[key] !=='') {
-        						carCrowdValue += `${i}${getCrowdColor(closestCar[key])}`;
-    						}
-						}
-
                 		const infoContainer = document.createElement("div");
-                		const fields = [
-						// {
-                        // 	label: "列車編號",
-                        // 	value: closestCar.train_number
-                    	// },
-                    	// {
-                        // 	label: "行車方向",
-                        // 	value: closestCar.cid
-                    	// },
-                    	{
-                        	label: "起站",
-                        	value: closestCar.curr_stationname
-                    	},
-                    	{
-                        	label: "迄站",
-                        	value: closestCar.next_stationname
-                    	},
-                    	{
-                        	label: "車廂擁擠度",
-                        	value: carCrowdValue
-                    	}];
+						const fields = map_config.property.map(prop => ({
+    						label: prop.name,
+    						value: prop.name.includes('擁擠度') 
+        						? getCrowdColor(closestCar[prop.key]) 
+        						: closestCar[prop.key] || ''
+						}));
 
                 		fields.forEach(f => {
                     		const row = document.createElement("div");
@@ -1408,18 +1389,20 @@ export const useMapStore = defineStore("map", {
                     		infoContainer.appendChild(row);
                 		});
 
-                		customLayer.carTooltip.insertBefore(infoContainer, closeBtn);
+                		customLayer.tooltipContent.appendChild(infoContainer);
                 		customLayer.carTooltip.style.display = "block";
             		};
             		map.on("click", customLayer._carClickHandler);
         		},
 
 				onRemove(map) {
+					// 清理 tooltip
     				if (customLayer.carTooltip) {
         				customLayer.carTooltip.remove();
         				customLayer.carTooltip = null;
     				}
 
+					// 清理 click 事件
     				if (customLayer._carClickHandler) {
         				map.off("click", customLayer._carClickHandler);
         				customLayer._carClickHandler = null;
@@ -1434,12 +1417,62 @@ export const useMapStore = defineStore("map", {
         				map.removeSource(customLayer.sourceId);
     				}
 
+					// 清理 3D 模型
+    				if (customLayer.scene && mrtCars?.length) {
+        				for (const car of mrtCars) {
+            				if (car.model) {
+                				car.model.traverse(child => {
+                    				if (child.isMesh) {
+                        				// 釋放 geometry
+                        				if (child.geometry) child.geometry.dispose();
+
+                        				// 釋放材質和貼圖
+                        				if (child.material) {
+                            				const disposeMaterial = mat => {
+                                				if (mat.map) mat.map.dispose();
+                                				if (mat.normalMap) mat.normalMap.dispose();
+                                				if (mat.roughnessMap) mat.roughnessMap.dispose();
+                                				if (mat.metalnessMap) mat.metalnessMap.dispose();
+                                				mat.dispose();
+                            				};
+
+                            				if (Array.isArray(child.material)) {
+                                				child.material.forEach(disposeMaterial);
+                            				} else {
+                                				disposeMaterial(child.material);
+                            				}
+                        				}
+                    				}
+                				});
+
+                				// 從 scene 移除
+                				customLayer.scene.remove(car.model);
+                				car.model = null;
+            				}
+        				}
+
+        				// 清空 mrtCars 陣列，避免舊引用被再次使用
+        				mrtCars.length = 0;
+    				}
+
+    				// 清理 scene / camera
+    				if (customLayer.scene) {
+        				// 移除剩餘 children
+        				while (customLayer.scene.children.length) {
+            				customLayer.scene.remove(customLayer.scene.children[0]);
+        				}
+    				}
+    				customLayer.scene = null;
+    				customLayer.camera = null;
+
+					// 清理 selectedCar
     				customLayer.selectedCar = null;
 				},
 
         		render: (gl, matrix) => {
 					// 取得當下的 zoom
 					const zoom = customLayer.map.getZoom();
+					const now = performance.now();
 
 					let allFinished = true;
 					// 確認當下各列車是否都跑完動畫
@@ -1450,14 +1483,16 @@ export const useMapStore = defineStore("map", {
 					if (zoom < 13) {
         				// 2D 模式
         				for (const car of mrtCars) if (car.model) car.model.visible = false;
-
-        				const features = updateCarsPosition(mrtCars);
-
         				if (!allFinished) {
-            				customLayer.map.getSource(customLayer.sourceId).setData({
-                				type: "FeatureCollection",
-                				features
-            				});
+            				if (now - customLayer.lastUpdateTime >= 200) {
+
+                				const features = updateCarsPosition(mrtCars);
+                				customLayer.map.getSource(customLayer.sourceId).setData({
+                    				type: "FeatureCollection",
+                    				features
+                				});
+                				customLayer.lastUpdateTime = now;
+            				}
         				} else if (allFinished && !customLayer.updated2D) {
 							const features = updateCarsPosition(mrtCars);
     						customLayer.map.getSource(customLayer.sourceId).setData({
@@ -1499,8 +1534,13 @@ export const useMapStore = defineStore("map", {
         				const renderer = customLayer.renderer;
 						const rotationX = new THREE.Matrix4().makeRotationAxis(new THREE.Vector3(1, 0, 0), Math.PI / 2);
 
+						if (now - customLayer.lastUpdateTime >= 200) {
+							updateCarsPosition(mrtCars);
+							customLayer.lastUpdateTime = now;
+						}
+
 						for (const car of mrtCars) {
-           					updateCarsPosition([car]); // 單台車也用同一個計算
+           					// updateCarsPosition([car]); // 單台車也用同一個計算
 
             				const pos = car.currentLngLat;
             				const dir = car.lastDir;

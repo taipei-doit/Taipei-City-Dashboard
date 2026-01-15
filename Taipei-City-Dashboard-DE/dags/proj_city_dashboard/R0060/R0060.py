@@ -66,6 +66,15 @@ def _R0060(**kwargs):
 
     # Extract
     raw_data = extarct_license_from_xml(filename, URL)
+    
+    # 檢查是否有資料
+    if raw_data.empty:
+        print("!!!XML data is empty, skipping processing!!!")
+        # Update dataset_info
+        engine = create_engine(ready_data_db_uri)
+        lasttime_in_data = get_data_taipei_file_last_modified_time(PAGE_ID)
+        update_lasttime_in_data_to_dataset_info(engine, dag_id, lasttime_in_data)
+        return
 
     # Transform
     engine = create_engine(ready_data_db_uri)
