@@ -92,15 +92,17 @@ VECTOR_DATA_PATH=./data
 腳本會執行以下 SQL 查詢：
 
 ```sql
-SELECT
-    qc.id,
-    qc.index,
-    c.name,
-    c.city,
-    c.long_desc,
-    c.use_case
-FROM query_charts qc
-INNER JOIN components c ON qc.index = c.index
+	SELECT
+		c.id,
+		qc.index,
+		c.name,
+		qc.city,
+		qc.long_desc,
+		qc.use_case
+	FROM query_charts qc
+	INNER JOIN components c ON qc.index = c.index
+	where id in (select distinct unnest(components) from dashboards d where id
+	in (select distinct dashboard_id  from dashboard_groups dg where group_id  in (select distinct id from "groups" g where is_personal is false))
 ```
 
 ### 輸出資料（Qdrant）
@@ -211,5 +213,3 @@ query = """
 ## 相關文件
 
 - [Qdrant 文件](https://qdrant.tech/documentation/)
-- [Sentence Transformers](https://www.sbert.net/)
-- [SQLAlchemy 文件](https://docs.sqlalchemy.org/)
