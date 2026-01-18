@@ -52,6 +52,27 @@ function getPointOnPolygon(feature, clickLngLat) {
 	return closestPoint || clickPoint;
 }
 
+function pointInPolygon(point, ring) {
+	const [x, y] = point;
+	let inside = false;
+
+	// 有些 GeoJSON ring 最後一點會等於第一點，這樣處理比較安全
+	const len = ring.length;
+	for (let i = 0, j = len - 1; i < len; j = i++) {
+		const [xi, yi] = ring[i];
+		const [xj, yj] = ring[j];
+
+		// 射線法判斷是否穿越邊
+		const intersect =
+			yi > y !== yj > y &&
+			x < ((xj - xi) * (y - yi)) / (yj - yi + 0.0) + xi;
+
+		if (intersect) inside = !inside;
+	}
+
+	return inside;
+}
+
 function nearestPointOnLine(coords, lngLat) {
 	let minDist = Infinity;
 	let closestPoint = coords[0];
