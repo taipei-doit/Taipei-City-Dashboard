@@ -25,6 +25,7 @@ const (
 	UserLimitTotalRequestsTimes        = 50000
 	ComponentLimitAPIRequestsTimes     = 20000
 	ComponentLimitTotalRequestsTimes   = 100000
+	ChatLogLimitAPIRequestsTimes       = 60
 	ContributorLimitAPIRequestsTimes   = 10000
 	ContributorLimitTotalRequestsTimes = 50000
 	DashboardLimitAPIRequestsTimes     = 20000
