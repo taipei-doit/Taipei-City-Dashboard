@@ -82,6 +82,57 @@ def _get_airflow_db_cleanup_help_text() -> str:
         return ""
 
 
+def _get_airflow_db_help_text() -> str:
+    try:
+        res = subprocess.run(
+            ["airflow", "db", "--help"],
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+        return (res.stdout or "") + "\n" + (res.stderr or "")
+    except Exception:
+        logging.exception("Failed to run `airflow db --help`")
+        return ""
+
+
+def _detect_db_clean_subcommand() -> str:
+    """Detect which Airflow db subcommand to use for metadata cleanup.
+
+    Airflow CLI varies by version:
+    - Some versions provide `airflow db cleanup`
+    - Others provide `airflow db clean`
+    """
+
+    help_text = _get_airflow_db_help_text()
+    # Prefer `clean` if present, because 2.10+ uses it.
+    if re.search(r"\n\s*clean\s+", help_text):
+        return "clean"
+    if re.search(r"\n\s*cleanup\s+", help_text):
+        return "cleanup"
+
+    # Fallback: try to see if cleanup help works.
+    cleanup_help = _get_airflow_db_cleanup_help_text()
+    if cleanup_help and "invalid choice" not in cleanup_help.lower():
+        return "cleanup"
+
+    raise RuntimeError("Could not detect Airflow DB cleanup subcommand (expected `clean` or `cleanup`).")
+
+
+def _get_airflow_db_clean_help_text(subcommand: str) -> str:
+    try:
+        res = subprocess.run(
+            ["airflow", "db", subcommand, "--help"],
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+        return (res.stdout or "") + "\n" + (res.stderr or "")
+    except Exception:
+        logging.exception("Failed to run `airflow db %s --help`", subcommand)
+        return ""
+
+
 def _pick_confirmation_flag(help_text: str) -> str | None:
     if "--yes" in help_text:
         return "--yes"
@@ -146,17 +197,19 @@ def _pick_timestamp_flag_candidates(help_text: str) -> list[str]:
 
 
 def _run_airflow_db_cleanup(cutoff_timestamp: str) -> dict:
-    help_text = _get_airflow_db_cleanup_help_text()
+    subcommand = _detect_db_clean_subcommand()
+    help_text = _get_airflow_db_clean_help_text(subcommand)
     confirm_flag = _pick_confirmation_flag(help_text)
     supports_skip_archive = "--skip-archive" in help_text
 
     timestamp_flags = _pick_timestamp_flag_candidates(help_text)
-    if help_text and "db cleanup" not in help_text.lower():
-        logging.info("`airflow db cleanup --help` output captured (may be truncated).")
+    if help_text and f"db {subcommand}" not in help_text.lower():
+        logging.info("`airflow db %s --help` output captured (may be truncated).", subcommand)
 
-    if help_text and "--clean-before-timestamp" not in help_text:
+    if help_text and "--clean-before-timestamp" not in help_text and "--before" not in help_text:
         logging.warning(
-            "`airflow db cleanup --help` did not list --clean-before-timestamp; will try common variants."
+            "`airflow db %s --help` did not list known timestamp flags; will try common variants.",
+            subcommand,
         )
 
     # Try a few combinations to handle Airflow CLI changes.
@@ -175,7 +228,7 @@ def _run_airflow_db_cleanup(cutoff_timestamp: str) -> dict:
     for ts_flag in timestamp_flags:
         for use_skip_archive in skip_archive_variants:
             for cf, stdin_text in confirm_variants:
-                cmd = ["airflow", "db", "cleanup", ts_flag, cutoff_timestamp]
+                cmd = ["airflow", "db", subcommand, ts_flag, cutoff_timestamp]
                 if use_skip_archive:
                     cmd.append("--skip-archive")
                 if cf:
