@@ -1,0 +1,38 @@
+{
+  "dag_infos": {
+    "dag_id": "clean_log_and_metadata",
+    "start_date": "2025-08-06",
+    "schedule_interval": "00 18 * * *",
+    "catchup": false,
+    "tags": ["housekeeping", "cleanup", "logs", "metadata"],
+    "description": "Purge Airflow scheduler/task logs and cleanup metadata DB; keep last N days.",
+    "default_args": {
+      "owner": "airflow",
+      "email": ["DEFAULT_EMAIL_LIST"],
+      "email_on_retry": false,
+      "email_on_failure": true,
+      "retries": 1,
+      "retry_delay": 60
+    },
+    "retention_days": 7,
+    "ready_data_db": "postgres_default",
+    "ready_data_default_table": "",
+    "ready_data_history_table": "",
+    "raw_data_db": "postgres_default",
+    "raw_data_table": "",
+    "load_behavior": ""
+  },
+  "data_infos": {
+    "name_cn": "清理 Airflow log 與 metadata（保留近 N 天）",
+    "airflow_update_freq": "",
+    "source": "",
+    "source_type": "CHE api",
+    "source_dept": "",
+    "gis_format": "",
+    "output_coordinate": "",
+    "is_geometry": 0,
+    "dataset_description": "",
+    "etl_description": "delete old scheduler/task logs and cleanup airflow metadata db",
+    "sensitivity": "public"
+  }
+}

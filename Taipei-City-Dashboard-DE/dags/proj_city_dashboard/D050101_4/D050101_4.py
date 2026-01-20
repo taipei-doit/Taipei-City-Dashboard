@@ -1,5 +1,6 @@
 from airflow import DAG
 from operators.common_pipeline import CommonDag
+from utils.housekeeping import housekeep_tables
 
 
 def _D050101_4(**kwargs):
@@ -134,6 +135,8 @@ def _D050101_4(**kwargs):
 
     lasttime_in_data = data["data_time"].max()
     update_lasttime_in_data_to_dataset_info(engine, dag_id, lasttime_in_data)
+    if history_table:
+        housekeep_tables(table_names=history_table, **kwargs)
 
 
 dag = CommonDag(proj_folder="proj_city_dashboard", dag_folder="D050101_4")
