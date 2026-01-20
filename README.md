@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Taipei City Dashboard is a data visualization platform developed by [Taipei Urban Intelligence Center (TUIC)](https://tuic.gov.taipei/en).
+Taipei City Dashboard is a data visualization platform developed by [Taipei Urban Intelligence Center (TUIC)](https://citydashboard.taipei/documentation/en).
 
 Our main goal is to create a comprehensive data visualization tool to assist in Taipei City policy decisions. This was achieved through the first version of the Taipei City Dashboard, which displayed a mix of internal and open data, seamlessly blending statistical and geographical data.
 
@@ -16,15 +16,15 @@ We have since released Taipei City Dashboard 2.0 to the general public. From now
 
 Please refer to the docs for the [Chinese Version](https://tuic.gov.taipei/documentation/front-end/introduction) (and click on the "switch languages" icon in the top right corner).
 
-[Official Site](https://citydashboard.taipei) | [License](https://github.com/tpe-doit/Taipei-City-Dashboard/blob/main/LICENSE) | [Code of Conduct](https://github.com/tpe-doit/Taipei-City-Dashboard/blob/main/.github/CODE_OF_CONDUCT.md) | [Contribution Guide](https://tuic.gov.taipei/documentation/front-end/contribution-overview)
+[Official Site](https://citydashboard.taipei) | [License](https://github.com/tpe-doit/Taipei-City-Dashboard/blob/main/LICENSE) | [Code of Conduct](https://github.com/tpe-doit/Taipei-City-Dashboard/blob/main/.github/CODE_OF_CONDUCT.md) | [Contribution Guide](https://citydashboard.taipei/documentation/front-end/contribution-overview)
 
 ## Quick Start
 
-Please refer to the [Docs](https://tuic.gov.taipei/documentation/front-end/project-setup) for the quick start guide.
+Please refer to the [Docs](https://citydashboard.taipei/documentation/front-end/project-setup) for the quick start guide.
 
 ## Documentation
 
-Check out the complete documentation for Taipei City Dashboard [here](https://tuic.gov.taipei/documentation).
+Check out the complete documentation for Taipei City Dashboard [here](https://citydashboard.taipei/documentation/).
 
 ## Contributors
 

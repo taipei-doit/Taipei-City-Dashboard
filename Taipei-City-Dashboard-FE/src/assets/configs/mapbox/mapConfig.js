@@ -30,7 +30,7 @@ export const CityMapView = {
 }
 
 // All map types
-// 3D Mrt Map (202511NEW) 
+// 3D Mrt Map (202511NEW)
 export const mapTypes = {
 	line: "線圖",
 	circle: "點圖",

@@ -10,20 +10,18 @@ type ChatLog struct {
 	Session	   	   string 			`json:"session".        gorm:"column:session;type:varchar;not null;index:idx_chat_logs_session"`
 	Question	   string 			`json:"question"        gorm:"column:question;type:text"`
 	Answer         string 			`json:"answer"          gorm:"column:answer;type:text"`
-	IPAddress      string           `json:"ip_address"      gorm:"column:ip_address;type:varchar(45);not null"`
 	UserID         int 				`json:"-" 				gorm:"column:user_id;type:int;not null;index:idx_chat_logs_user_id"`
 	CreatedAt      time.Time        `json:"created_at" 		gorm:"column:created_at;type:timestamp with time zone;not null"`
 	UpdatedAt      time.Time        `json:"-" 				gorm:"column:updated_at;type:timestamp with time zone;not null"`
 }
 
 
-func CreateChatLog(Session string, Question string, Answer string, IPAddress string, UserID int)(chatLog ChatLog,err error){
+func CreateChatLog(Session string, Question string, Answer string,UserID int)(chatLog ChatLog,err error){
 
 	chatLog = ChatLog{
 		Session:   Session,
 		Question:  Question,
 		Answer:    Answer,
-		IPAddress: IPAddress,
 		UserID:    UserID,
 		CreatedAt: time.Now(),
 		UpdatedAt: time.Now(),
