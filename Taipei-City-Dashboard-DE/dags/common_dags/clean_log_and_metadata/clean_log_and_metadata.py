@@ -89,7 +89,60 @@ def _pick_confirmation_flag(help_text: str) -> str | None:
         return "-y"
     if "--confirm" in help_text:
         return "--confirm"
+    if "--skip-confirmation" in help_text:
+        return "--skip-confirmation"
+    if "--no-confirm" in help_text:
+        return "--no-confirm"
     return None
+
+
+def _looks_like_cli_parse_error(stderr_text: str) -> bool:
+    if not stderr_text:
+        return False
+    lowered = stderr_text.lower()
+    return any(
+        token in lowered
+        for token in [
+            "no such option",
+            "unrecognized arguments",
+            "unknown option",
+            "invalid choice",
+            "usage:",
+        ]
+    )
+
+
+def _pick_timestamp_flag_candidates(help_text: str) -> list[str]:
+    candidates: list[str] = []
+
+    # Prefer explicit flags if shown in help.
+    for flag in [
+        "--clean-before-timestamp",
+        "--clean-before",
+        "--clean-before-date",
+        "--before-timestamp",
+        "--before",
+    ]:
+        if help_text and flag in help_text:
+            candidates.append(flag)
+
+    # Fallback to common/legacy names.
+    candidates.extend(
+        [
+            "--clean-before-timestamp",
+            "--clean-before",
+            "--before",
+        ]
+    )
+
+    # De-dup while preserving order.
+    seen: set[str] = set()
+    ordered: list[str] = []
+    for flag in candidates:
+        if flag not in seen:
+            seen.add(flag)
+            ordered.append(flag)
+    return ordered
 
 
 def _run_airflow_db_cleanup(cutoff_timestamp: str) -> dict:
@@ -97,32 +150,69 @@ def _run_airflow_db_cleanup(cutoff_timestamp: str) -> dict:
     confirm_flag = _pick_confirmation_flag(help_text)
     supports_skip_archive = "--skip-archive" in help_text
 
-    if "--clean-before-timestamp" not in help_text and help_text:
+    timestamp_flags = _pick_timestamp_flag_candidates(help_text)
+    if help_text and "db cleanup" not in help_text.lower():
+        logging.info("`airflow db cleanup --help` output captured (may be truncated).")
+
+    if help_text and "--clean-before-timestamp" not in help_text:
         logging.warning(
-            "`airflow db cleanup` does not show --clean-before-timestamp in help; will still try running it."
+            "`airflow db cleanup --help` did not list --clean-before-timestamp; will try common variants."
         )
 
-    cmd = ["airflow", "db", "cleanup", "--clean-before-timestamp", cutoff_timestamp]
-    if supports_skip_archive:
-        cmd.append("--skip-archive")
+    # Try a few combinations to handle Airflow CLI changes.
+    confirm_variants: list[tuple[str | None, str | None]] = []
     if confirm_flag:
-        cmd.append(confirm_flag)
-    else:
-        raise RuntimeError(
-            "Could not find a non-interactive confirmation flag for `airflow db cleanup` (expected --yes/-y/--confirm)."
-        )
+        confirm_variants.append((confirm_flag, None))
+    # Last resort: feed confirmation via stdin.
+    confirm_variants.append((None, "y\n"))
 
-    logging.info("Running: %s", " ".join(cmd))
-    res = subprocess.run(cmd, check=False, capture_output=True, text=True)
-    if res.stdout:
-        logging.info("airflow db cleanup stdout:\n%s", res.stdout)
-    if res.stderr:
-        logging.warning("airflow db cleanup stderr:\n%s", res.stderr)
+    skip_archive_variants = [True, False] if supports_skip_archive else [False]
 
-    if res.returncode != 0:
-        raise RuntimeError(f"airflow db cleanup failed with exit code {res.returncode}")
+    last_stdout = ""
+    last_stderr = ""
+    last_returncode: int | None = None
 
-    return {"ok": True, "cmd": cmd, "returncode": res.returncode}
+    for ts_flag in timestamp_flags:
+        for use_skip_archive in skip_archive_variants:
+            for cf, stdin_text in confirm_variants:
+                cmd = ["airflow", "db", "cleanup", ts_flag, cutoff_timestamp]
+                if use_skip_archive:
+                    cmd.append("--skip-archive")
+                if cf:
+                    cmd.append(cf)
+
+                logging.info("Running: %s", " ".join(cmd))
+                res = subprocess.run(
+                    cmd,
+                    check=False,
+                    capture_output=True,
+                    text=True,
+                    input=stdin_text,
+                )
+
+                last_stdout = res.stdout or ""
+                last_stderr = res.stderr or ""
+                last_returncode = res.returncode
+
+                if last_stdout:
+                    logging.info("airflow db cleanup stdout:\n%s", last_stdout)
+                if last_stderr:
+                    logging.warning("airflow db cleanup stderr:\n%s", last_stderr)
+
+                if res.returncode == 0:
+                    return {"ok": True, "cmd": cmd, "returncode": res.returncode}
+
+                # If it looks like a CLI parse error, try next variant.
+                if res.returncode == 2 or _looks_like_cli_parse_error(last_stderr):
+                    logging.warning("DB cleanup command variant not accepted; trying next variant.")
+                    continue
+
+                # Non-CLI failure (DB locked, permission, etc.) -> fail fast.
+                raise RuntimeError(f"airflow db cleanup failed with exit code {res.returncode}")
+
+    raise RuntimeError(
+        f"All airflow db cleanup command variants failed (last exit={last_returncode})."
+    )
 
 
 def _transfer(**kwargs):
