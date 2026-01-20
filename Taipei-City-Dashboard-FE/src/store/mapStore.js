@@ -14,7 +14,7 @@ import { createApp, defineComponent, nextTick, ref, watch } from "vue";
 import { defineStore } from "pinia";
 import mapboxGl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
-import Hls from 'hls.js';
+import Hls from "hls.js";
 import { ArcLayer } from "@deck.gl/layers";
 import { MapboxOverlay } from "@deck.gl/mapbox";
 import axios from "axios";
@@ -56,6 +56,7 @@ import { marchingSquare } from "../assets/utilityFunctions/marchingSquare.js";
 import { voronoi } from "../assets/utilityFunctions/voronoi.js";
 import { calculateHaversineDistance } from "../assets/utilityFunctions/calculateHaversineDistance";
 import { AnimatedArcLayer } from "../assets/configs/mapbox/arcAnimate.js";
+import { getPopupCoordinates } from "../assets/utilityFunctions/getPopupCoordinates.js";
 
 export const useMapStore = defineStore("map", {
 	state: () => ({
@@ -147,24 +148,24 @@ export const useMapStore = defineStore("map", {
 					);
 				})
 				// 圖臺縮放時觸發GA自訂事件
-				.on("zoomend",() => {
+				.on("zoomend", () => {
 					if (isFirstZoom) {
 						isFirstZoom = false;
 					} else {
-						gtag('event','map_actions', {
+						gtag("event", "map_actions", {
 							action_type: "地圖縮放",
 							time: Date.now(),
-  						});
+						});
 					}
 				});
 			this.renderMarkers();
 
 			// 使用者點擊定位功能後觸發GA自訂事件
-			geoLocate.on('geolocate', () => {
-  				gtag('event','map_actions', {
+			geoLocate.on("geolocate", () => {
+				gtag("event", "map_actions", {
 					action_type: "所在位置定位",
 					time: Date.now(),
-  				})
+				});
 			});
 
 			return geoLocate;
@@ -240,7 +241,7 @@ export const useMapStore = defineStore("map", {
 				"bike_red",
 				"cctv",
 				"live",
-				"youbike_elec"
+				"youbike_elec",
 			];
 			images.forEach((element) => {
 				this.map.loadImage(
@@ -292,7 +293,11 @@ export const useMapStore = defineStore("map", {
 					"visible"
 				);
 			} else {
-				this.map.setLayoutProperty("metrotaipei_town", "visibility", "none");
+				this.map.setLayoutProperty(
+					"metrotaipei_town",
+					"visibility",
+					"none"
+				);
 			}
 			// if (status) {
 			// 	this.map.setLayoutProperty(
@@ -313,7 +318,11 @@ export const useMapStore = defineStore("map", {
 					"visible"
 				);
 			} else {
-				this.map.setLayoutProperty("metrotaipei_village", "visibility", "none");
+				this.map.setLayoutProperty(
+					"metrotaipei_village",
+					"visibility",
+					"none"
+				);
 			}
 			// if (status) {
 			// 	this.map.setLayoutProperty(
@@ -446,15 +455,21 @@ export const useMapStore = defineStore("map", {
 							`${location.origin}/geo_server/gwc/service/tms/1.0.0/taipei_vioc:${map_config.index}@EPSG:900913@pbf/{z}/{x}/{y}.pbf`,
 						],
 					});
-		
+
 					// 監聽錯誤
-					this.map.on('error', (e) => {
+					this.map.on("error", (e) => {
 						if (e.sourceId === `${map_config.layerId}-source`) {
-							console.error('Source error:', e);
+							console.error("Source error:", e);
 
 							// 清理已添加的源（如果存在）
-							if (this.map.getSource(`${map_config.layerId}-source`)) {
-								this.map.removeSource(`${map_config.layerId}-source`);
+							if (
+								this.map.getSource(
+									`${map_config.layerId}-source`
+								)
+							) {
+								this.map.removeSource(
+									`${map_config.layerId}-source`
+								);
 							}
 							// 從 loadingLayers 中移除
 							this.loadingLayers = this.loadingLayers.filter(
@@ -462,40 +477,37 @@ export const useMapStore = defineStore("map", {
 							);
 						}
 					});
-		
+
 					// 監聽源加載完成
 					const sourceLoaded = new Promise((resolve, reject) => {
 						const checkSource = (e) => {
 							if (e.sourceId === `${map_config.layerId}-source`) {
 								if (e.isSourceLoaded) {
-									this.map.off('sourcedata', checkSource);
+									this.map.off("sourcedata", checkSource);
 									resolve();
 								}
 								// 如果有錯誤也需要處理
 								if (e.error) {
-									this.map.off('sourcedata', checkSource);
+									this.map.off("sourcedata", checkSource);
 									reject(e.error);
 								}
 							}
 						};
-						
-						this.map.on('sourcedata', checkSource);
-						
+
+						this.map.on("sourcedata", checkSource);
+
 						// 設置超時
 						setTimeout(() => {
-							this.map.off('sourcedata', checkSource);
-							reject(new Error('Source load timeout'));
+							this.map.off("sourcedata", checkSource);
+							reject(new Error("Source load timeout"));
 						}, 10000);
 					});
-		
+
 					// 等待源加載完成後添加圖層
 					await sourceLoaded;
 					this.addMapLayer(map_config);
-
-
-		
 				} catch (error) {
-					console.error('Failed to add source:', error);
+					console.error("Failed to add source:", error);
 					// 清理已添加的源（如果存在）
 					if (this.map.getSource(`${map_config.layerId}-source`)) {
 						this.map.removeSource(`${map_config.layerId}-source`);
@@ -542,16 +554,12 @@ export const useMapStore = defineStore("map", {
 			const filterClass = [
 				["6h150r", "6h250r", "6h350r"],
 				["12h200r", "12h300r", "12h400r"],
-				["24h200r", "24h350r", "24h500r", "24h650r"]
-			  ];
-			  
-			  // 初始 filter 設定為第一組 (6 小時降雨)
-			  const initialFilter = [
-				"in",
-				"hazard_class",
-				...filterClass[0]
-			  ];
-			  const config = {
+				["24h200r", "24h350r", "24h500r", "24h650r"],
+			];
+
+			// 初始 filter 設定為第一組 (6 小時降雨)
+			const initialFilter = ["in", "hazard_class", ...filterClass[0]];
+			const config = {
 				id: map_config.layerId,
 				type: map_config.type,
 				"source-layer":
@@ -565,13 +573,24 @@ export const useMapStore = defineStore("map", {
 					...maplayerCommonLayout[`${map_config.type}`],
 					...extra_layout_configs,
 				},
-				source: `${map_config.layerId}-source`
-			}
-			if (map_config.layerId === 'wee_hazard_water-fill-extrusion-metrotaipei' || map_config.layerId === 'wee_hazard_water_tp-fill-extrusion-taipei') {
-				config.filter = initialFilter
+				source: `${map_config.layerId}-source`,
+			};
+			if (
+				map_config.layerId ===
+					"wee_hazard_water-fill-extrusion-metrotaipei" ||
+				map_config.layerId ===
+					"wee_hazard_water_tp-fill-extrusion-taipei"
+			) {
+				config.filter = initialFilter;
 			}
 			this.map.addLayer(config);
-			if (map_config.layerId === 'wee_hazard_water-fill-extrusion-metrotaipei' || map_config.layerId === 'wee_hazard_water_tp-fill-extrusion-taipei') this.animateFilter(map_config.layerId);
+			if (
+				map_config.layerId ===
+					"wee_hazard_water-fill-extrusion-metrotaipei" ||
+				map_config.layerId ===
+					"wee_hazard_water_tp-fill-extrusion-taipei"
+			)
+				this.animateFilter(map_config.layerId);
 			this.currentLayers.push(map_config.layerId);
 			this.mapConfigs[map_config.layerId] = map_config;
 			// 3D Mrt Map (202511NEW) 
@@ -587,25 +606,25 @@ export const useMapStore = defineStore("map", {
 			const filterClass = [
 				["6h150r", "6h250r", "6h350r"],
 				["12h200r", "12h300r", "12h400r"],
-				["24h200r", "24h350r", "24h500r", "24h650r"]
+				["24h200r", "24h350r", "24h500r", "24h650r"],
 			];
-		
+
 			let index = 1;
-		
+
 			this.waitUntilReady = setInterval(() => {
 				if (this.loadingLayers.length !== 0) return;
-		
+
 				clearInterval(this.waitUntilReady); // 停止等待
 				this.waitUntilReady = null;
-		
+
 				// 啟動動畫
 				this.filterInterval = setInterval(() => {
 					const currentFilter = [
 						"in",
 						"hazard_class",
-						...filterClass[index]
+						...filterClass[index],
 					];
-		
+
 					this.map.setFilter(mapLayerId, currentFilter);
 					index = (index + 1) % filterClass.length;
 				}, 1000);
@@ -691,15 +710,15 @@ export const useMapStore = defineStore("map", {
 			const layers = Object.keys(this.deckGlLayer).map((index) => {
 				const l = this.deckGlLayer[index];
 				switch (l.type) {
-				case "ArcLayer":
-					return new ArcLayer(l.config);
-				case "AnimatedArcLayer":
-					return new AnimatedArcLayer({
-						...l.config,
-						coef: this.step / 1000,
-					});
-				default:
-					break;
+					case "ArcLayer":
+						return new ArcLayer(l.config);
+					case "AnimatedArcLayer":
+						return new AnimatedArcLayer({
+							...l.config,
+							coef: this.step / 1000,
+						});
+					default:
+						break;
 				}
 			});
 			this.overlay.setProps({
@@ -1605,25 +1624,36 @@ export const useMapStore = defineStore("map", {
 				this.currentVisibleLayers.push(mapLayerId);
 				this.renderDeckGLLayer();
 			} else {
-				if (mapLayerId === 'wee_hazard_water-fill-extrusion-metrotaipei' || mapLayerId === 'wee_hazard_water_tp-fill-extrusion-taipei') {
+				if (
+					mapLayerId ===
+						"wee_hazard_water-fill-extrusion-metrotaipei" ||
+					mapLayerId === "wee_hazard_water_tp-fill-extrusion-taipei"
+				) {
 					const filterClass = [
 						["6h150r", "6h250r", "6h350r"],
 						["12h200r", "12h300r", "12h400r"],
-						["24h200r", "24h350r", "24h500r", "24h650r"]
-					  ];
-					  
-					  // 初始 filter 設定為第一組 (6 小時降雨)
-					  const initialFilter = [
+						["24h200r", "24h350r", "24h500r", "24h650r"],
+					];
+
+					// 初始 filter 設定為第一組 (6 小時降雨)
+					const initialFilter = [
 						"in",
 						"hazard_class",
-						...filterClass[0]
-					  ];
-					  this.map.setFilter(mapLayerId, initialFilter);
-					this.map.setLayoutProperty(mapLayerId, "visibility", "visible");
+						...filterClass[0],
+					];
+					this.map.setFilter(mapLayerId, initialFilter);
+					this.map.setLayoutProperty(
+						mapLayerId,
+						"visibility",
+						"visible"
+					);
 					this.animateFilter(mapLayerId);
-
 				} else {
-					this.map.setLayoutProperty(mapLayerId, "visibility", "visible");
+					this.map.setLayoutProperty(
+						mapLayerId,
+						"visibility",
+						"visible"
+					);
 				}
 			}
 		},
@@ -1671,21 +1701,26 @@ export const useMapStore = defineStore("map", {
 		// 1. Adds a popup when the user clicks on a item. The event will be passed in.
 		addPopup(event) {
 			const formatValue = (value, key) => {
-				if (key === 'occupied_rate') {
-					return value === -99 ? '-' : value;
+				if (key === "occupied_rate") {
+					return value === -99 ? "-" : value;
 				}
 				return value;
 			};
 
-			// Gets the info that is contained in the coordinates that the user clicked on (only visible layers)
-			const clickFeatureDatas = this.map.queryRenderedFeatures(
-				event.point,
-				{
-					layers: this.currentVisibleLayers.filter(
-						(layer) => layer.indexOf("-arc") === -1
-					),
-				}
-			);
+			const hitSize = 6; // px，手機可設 12~16
+
+			const bbox = [
+				[event.point.x - hitSize, event.point.y - hitSize],
+				[event.point.x + hitSize, event.point.y + hitSize],
+			];
+
+			// Gets the info that is contained in the bbox (only visible layers)
+			const clickFeatureDatas = this.map.queryRenderedFeatures(bbox, {
+				layers: this.currentVisibleLayers.filter(
+					(layer) => !layer.includes("-arc")
+				),
+			});
+
 			// Return if there is no info in the click
 			if (!clickFeatureDatas || clickFeatureDatas.length === 0) {
 				return;
@@ -1701,10 +1736,13 @@ export const useMapStore = defineStore("map", {
 					continue;
 
 				// format properties
-				const feature = {...clickFeatureDatas[i]};
-				feature.properties = {...feature.properties};
-				Object.keys(feature.properties).forEach(key => {
-					feature.properties[key] = formatValue(feature.properties[key], key);
+				const feature = { ...clickFeatureDatas[i] };
+				feature.properties = { ...feature.properties };
+				Object.keys(feature.properties).forEach((key) => {
+					feature.properties[key] = formatValue(
+						feature.properties[key],
+						key
+					);
 				});
 
 				previousParsedLayer = clickFeatureDatas[i].layer.id;
@@ -1712,91 +1750,110 @@ export const useMapStore = defineStore("map", {
 				parsedPopupContent.push(feature);
 			}
 			// Create a new mapbox popup
+			const popupCoords = getPopupCoordinates(
+				clickFeatureDatas[0],
+				event.lngLat
+			);
+
 			this.popup = new mapboxGl.Popup()
-				.setLngLat(event.lngLat)
+				.setLngLat(popupCoords)
 				.setHTML('<div id="vue-popup-content"></div>')
 				.addTo(this.map);
 			// Mount a vue component (MapPopup) to the id "vue-popup-content" and pass in data
 			const PopupComponent = defineComponent({
 				extends: MapPopup,
 				setup() {
-					const hls = ref(null)
-					const activeTab = ref(0)
-					const videoRef = ref(null)
+					const hls = ref(null);
+					const activeTab = ref(0);
+					const videoRef = ref(null);
 
 					const isHlsUrl = (url) => {
-						return url && (url.includes('.m3u8') || url.includes('hls'))
-					}
+						return (
+							url &&
+							(url.includes(".m3u8") || url.includes("hls"))
+						);
+					};
 
 					const initHlsPlayer = (videoElement, src) => {
-						
 						if (Hls.isSupported()) {
-							const hlsInstance = new Hls()
-							
+							const hlsInstance = new Hls();
+
 							// 添加錯誤監聽
 							hlsInstance.on(Hls.Events.ERROR, (event, data) => {
 								if (data.fatal) {
 									hlsInstance.destroy();
 								}
-							})
-							
-							hlsInstance.loadSource(src)
-							hlsInstance.attachMedia(videoElement)
-							return hlsInstance
-						} else if (videoElement.canPlayType('application/vnd.apple.mpegurl')) {
-							videoElement.src = src
-							return null
+							});
+
+							hlsInstance.loadSource(src);
+							hlsInstance.attachMedia(videoElement);
+							return hlsInstance;
+						} else if (
+							videoElement.canPlayType(
+								"application/vnd.apple.mpegurl"
+							)
+						) {
+							videoElement.src = src;
+							return null;
 						}
-						
-						return null
-					}
+
+						return null;
+					};
 
 					const handleVideoLoad = () => {
-						const activeTabValue = activeTab.value
-						let videoElement = videoRef.value
-						
+						const activeTabValue = activeTab.value;
+						let videoElement = videoRef.value;
+
 						// 如果 videoRef 是數組，取第一個元素
 						if (Array.isArray(videoElement)) {
-							videoElement = videoElement[0]
+							videoElement = videoElement[0];
 						}
-						
-						if (!videoElement || !parsedPopupContent[activeTabValue]) {
+
+						if (
+							!videoElement ||
+							!parsedPopupContent[activeTabValue]
+						) {
 							return;
 						}
-						
+
 						// 找到 video 模式的 property
-						const videoProperty = mapConfigs[activeTabValue].property.find(item => item.mode === 'video')
+						const videoProperty = mapConfigs[
+							activeTabValue
+						].property.find((item) => item.mode === "video");
 						if (!videoProperty) {
 							return;
 						}
-						
-						const videoUrl = parsedPopupContent[activeTabValue].properties[videoProperty.key]
+
+						const videoUrl =
+							parsedPopupContent[activeTabValue].properties[
+								videoProperty.key
+							];
 						if (!videoUrl) {
 							return;
 						}
-						
+
 						// 如果是 HLS URL，使用 HLS 播放器
 						if (isHlsUrl(videoUrl)) {
 							if (hls.value) {
-								hls.value.destroy()
+								hls.value.destroy();
 							}
-							hls.value = initHlsPlayer(videoElement, videoUrl)
+							hls.value = initHlsPlayer(videoElement, videoUrl);
 						} else {
-							videoElement.src = videoUrl
+							videoElement.src = videoUrl;
 						}
-					}
+					};
 
 					// 初始化影像
 					nextTick(() => {
-						handleVideoLoad()
-					})
+						handleVideoLoad();
+					});
 
 					// 監聽 activeTab 變化，重新載入影片
 					watch(activeTab, () => {
 						nextTick(() => {
-							handleVideoLoad()
-						})
-					})
+							handleVideoLoad();
+						});
+					});
 
 					// Only show the data of the topmost layer
 					return {
@@ -1814,7 +1871,12 @@ export const useMapStore = defineStore("map", {
 			});
 
 			// 使用者點擊圖徵時觸發GA自訂事件
-			if (mapConfigs[0].city && mapConfigs[0].title && mapConfigs[0].source && mapConfigs[0].type) {
+			if (
+				mapConfigs[0].city &&
+				mapConfigs[0].title &&
+				mapConfigs[0].source &&
+				mapConfigs[0].type
+			) {
 				gtag("event", "popular_feature_click", {
 					dashboard_city: mapConfigs[0].city,
 					layer_name: mapConfigs[0].title,
