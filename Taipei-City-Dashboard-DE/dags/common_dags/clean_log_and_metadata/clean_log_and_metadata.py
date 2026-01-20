@@ -1,6 +1,7 @@
 import logging
 import os
 import subprocess
+import re
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
@@ -67,41 +68,61 @@ def _delete_old_logs(root: Path, cutoff: datetime) -> dict:
     }
 
 
-def _run_airflow_db_cleanup(cutoff_date_str: str) -> dict:
-    candidates = [
-        ["airflow", "db", "cleanup", "--clean-before-timestamp", cutoff_date_str, "--yes"],
-        ["airflow", "db", "cleanup", "--clean-before-timestamp", cutoff_date_str, "-y"],
-        [
-            "airflow",
-            "db",
-            "cleanup",
-            "--clean-before-timestamp",
-            cutoff_date_str,
-            "--skip-archive",
-            "--yes",
-        ],
-        [
-            "airflow",
-            "db",
-            "cleanup",
-            "--clean-before-timestamp",
-            cutoff_date_str,
-            "--skip-archive",
-            "-y",
-        ],
-    ]
+def _get_airflow_db_cleanup_help_text() -> str:
+    try:
+        res = subprocess.run(
+            ["airflow", "db", "cleanup", "--help"],
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+        return (res.stdout or "") + "\n" + (res.stderr or "")
+    except Exception:
+        logging.exception("Failed to run `airflow db cleanup --help`")
+        return ""
 
-    last_error = None
-    for cmd in candidates:
-        try:
-            logging.info("Running: %s", " ".join(cmd))
-            subprocess.run(cmd, check=True, capture_output=True, text=True)
-            return {"ok": True, "cmd": cmd}
-        except Exception as exc:
-            last_error = exc
-            logging.warning("DB cleanup command failed, will try next candidate.")
 
-    raise RuntimeError("All airflow db cleanup command variants failed") from last_error
+def _pick_confirmation_flag(help_text: str) -> str | None:
+    if "--yes" in help_text:
+        return "--yes"
+    if re.search(r"\s-y[\s,]", help_text) or re.search(r"\(-y\)", help_text):
+        return "-y"
+    if "--confirm" in help_text:
+        return "--confirm"
+    return None
+
+
+def _run_airflow_db_cleanup(cutoff_timestamp: str) -> dict:
+    help_text = _get_airflow_db_cleanup_help_text()
+    confirm_flag = _pick_confirmation_flag(help_text)
+    supports_skip_archive = "--skip-archive" in help_text
+
+    if "--clean-before-timestamp" not in help_text and help_text:
+        logging.warning(
+            "`airflow db cleanup` does not show --clean-before-timestamp in help; will still try running it."
+        )
+
+    cmd = ["airflow", "db", "cleanup", "--clean-before-timestamp", cutoff_timestamp]
+    if supports_skip_archive:
+        cmd.append("--skip-archive")
+    if confirm_flag:
+        cmd.append(confirm_flag)
+    else:
+        raise RuntimeError(
+            "Could not find a non-interactive confirmation flag for `airflow db cleanup` (expected --yes/-y/--confirm)."
+        )
+
+    logging.info("Running: %s", " ".join(cmd))
+    res = subprocess.run(cmd, check=False, capture_output=True, text=True)
+    if res.stdout:
+        logging.info("airflow db cleanup stdout:\n%s", res.stdout)
+    if res.stderr:
+        logging.warning("airflow db cleanup stderr:\n%s", res.stderr)
+
+    if res.returncode != 0:
+        raise RuntimeError(f"airflow db cleanup failed with exit code {res.returncode}")
+
+    return {"ok": True, "cmd": cmd, "returncode": res.returncode}
 
 
 def _transfer(**kwargs):
@@ -109,7 +130,7 @@ def _transfer(**kwargs):
     retention_days = int(dag_infos.get("retention_days", 7))
     now_utc = datetime.now(timezone.utc)
     cutoff = now_utc - timedelta(days=retention_days)
-    cutoff_date_str = cutoff.strftime("%Y-%m-%d")
+    cutoff_timestamp = cutoff.replace(hour=0, minute=0, second=0, microsecond=0).isoformat()
 
     base_log_folder = Path(
         conf.get("logging", "base_log_folder", fallback=os.path.join(os.getenv("AIRFLOW_HOME", "/opt/airflow"), "logs"))
@@ -138,7 +159,7 @@ def _transfer(**kwargs):
     for root in dag_log_roots:
         results.append(_delete_old_logs(root, cutoff))
 
-    db_cleanup_res = _run_airflow_db_cleanup(cutoff_date_str)
+    db_cleanup_res = _run_airflow_db_cleanup(cutoff_timestamp)
     logging.info("Airflow DB cleanup done: %s", db_cleanup_res)
 
     total_deleted_files = sum(r.get("deleted_files", 0) for r in results)
