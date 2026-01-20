@@ -213,3 +213,5 @@ query = """
 ## 相關文件
 
 - [Qdrant 文件](https://qdrant.tech/documentation/)
+- [Sentence Transformers](https://www.sbert.net/)
+- [SQLAlchemy 文件](https://docs.sqlalchemy.org/)
