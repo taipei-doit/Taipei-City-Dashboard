@@ -1,3 +1,5 @@
+import mapboxgl from "mapbox-gl";
+
 export const getPopupCoordinates = (feature, clickLngLat) => {
 	if (feature.geometry.type === "Point") {
 		return feature.geometry.coordinates;
@@ -5,6 +7,13 @@ export const getPopupCoordinates = (feature, clickLngLat) => {
 
 	if (feature.geometry.type === "LineString") {
 		return nearestPointOnLine(feature.geometry.coordinates, clickLngLat);
+	}
+
+	if (feature.geometry.type === "MultiLineString") {
+		return nearestPointOnMultiLine(
+			feature.geometry.coordinates,
+			clickLngLat,
+		);
 	}
 
 	if (
@@ -77,27 +86,95 @@ function nearestPointOnLine(coords, lngLat) {
 	let minDist = Infinity;
 	let closestPoint = coords[0];
 
+	// 將點轉成 Web Mercator
+	const clickMerc = mapboxgl.MercatorCoordinate.fromLngLat(lngLat);
+
 	for (let i = 0; i < coords.length - 1; i++) {
-		const [x1, y1] = coords[i];
-		const [x2, y2] = coords[i + 1];
+		const [lng1, lat1] = coords[i];
+		const [lng2, lat2] = coords[i + 1];
 
-		const dx = x2 - x1;
-		const dy = y2 - y1;
+		const p1 = mapboxgl.MercatorCoordinate.fromLngLat({
+			lng: lng1,
+			lat: lat1,
+		});
+		const p2 = mapboxgl.MercatorCoordinate.fromLngLat({
+			lng: lng2,
+			lat: lat2,
+		});
 
+		const dx = p2.x - p1.x;
+		const dy = p2.y - p1.y;
+
+		// 投影比例 t
 		const t =
-			((lngLat.lng - x1) * dx + (lngLat.lat - y1) * dy) /
+			((clickMerc.x - p1.x) * dx + (clickMerc.y - p1.y) * dy) /
 			(dx * dx + dy * dy);
-
 		const clampedT = Math.max(0, Math.min(1, t));
 
-		const projX = x1 + clampedT * dx;
-		const projY = y1 + clampedT * dy;
+		// 計算投影點
+		const projX = p1.x + clampedT * dx;
+		const projY = p1.y + clampedT * dy;
 
-		const dist = (projX - lngLat.lng) ** 2 + (projY - lngLat.lat) ** 2;
+		// 計算距離平方
+		const dist = (projX - clickMerc.x) ** 2 + (projY - clickMerc.y) ** 2;
 
 		if (dist < minDist) {
 			minDist = dist;
-			closestPoint = [projX, projY];
+
+			// Mercator → 經緯度
+			const closestMerc = new mapboxgl.MercatorCoordinate(projX, projY);
+			const lngLatPoint = closestMerc.toLngLat();
+			closestPoint = [lngLatPoint.lng, lngLatPoint.lat];
+		}
+	}
+
+	return closestPoint;
+}
+
+function nearestPointOnMultiLine(multiCoords, lngLat) {
+	let minDist = Infinity;
+	let closestPoint = null;
+
+	const clickMerc = mapboxgl.MercatorCoordinate.fromLngLat(lngLat);
+
+	for (const coords of multiCoords) {
+		// 遍歷每條線
+		for (let i = 0; i < coords.length - 1; i++) {
+			const [lng1, lat1] = coords[i];
+			const [lng2, lat2] = coords[i + 1];
+
+			const p1 = mapboxgl.MercatorCoordinate.fromLngLat({
+				lng: lng1,
+				lat: lat1,
+			});
+			const p2 = mapboxgl.MercatorCoordinate.fromLngLat({
+				lng: lng2,
+				lat: lat2,
+			});
+
+			const dx = p2.x - p1.x;
+			const dy = p2.y - p1.y;
+
+			const t =
+				((clickMerc.x - p1.x) * dx + (clickMerc.y - p1.y) * dy) /
+				(dx * dx + dy * dy);
+			const clampedT = Math.max(0, Math.min(1, t));
+
+			const projX = p1.x + clampedT * dx;
+			const projY = p1.y + clampedT * dy;
+
+			const dist =
+				(projX - clickMerc.x) ** 2 + (projY - clickMerc.y) ** 2;
+
+			if (dist < minDist) {
+				minDist = dist;
+				const closestMerc = new mapboxgl.MercatorCoordinate(
+					projX,
+					projY,
+				);
+				const lngLatPoint = closestMerc.toLngLat();
+				closestPoint = [lngLatPoint.lng, lngLatPoint.lat];
+			}
 		}
 	}
 
