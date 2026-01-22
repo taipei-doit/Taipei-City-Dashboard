@@ -1,11 +1,8 @@
 from airflow import DAG
 from operators.common_pipeline import CommonDag
-import warnings
-from urllib3.exceptions import InsecureRequestWarning
+import os
 import requests
 from airflow.models import Variable
-
-warnings.filterwarnings("ignore", category=InsecureRequestWarning)
 
 
 def _D050502(**kwargs):
@@ -37,11 +34,31 @@ def _D050502(**kwargs):
         "api_key": api_key,
         "format": "JSON"
     }
-    response = requests.get(url, params=params, timeout=30, verify=False)
+
+    # Default to secure TLS verification; allow overriding for constrained runtimes.
+    verify_ssl_env = os.getenv("MOENV_VERIFY_SSL", "true").strip().lower()
+    verify_ssl = verify_ssl_env not in {"0", "false", "no"}
+
+    response = requests.get(url, params=params, timeout=30, verify=verify_ssl)
     response.raise_for_status()
     res = response.json()
-    raw_data = pd.DataFrame(res.get("records", []))
-    raw_data.rename({"publishtime": "data_time"}, inplace=True)
+
+    # The MOENV API may return either:
+    # - {"records": [...]}
+    # - {"result": {"records": [...]}}
+    # - [...] (a list of records)
+    if isinstance(res, list):
+        records = res
+    elif isinstance(res, dict):
+        records = res.get("records")
+        if records is None and isinstance(res.get("result"), dict):
+            records = res["result"].get("records")
+        if records is None:
+            records = []
+    else:
+        raise TypeError(f"Unexpected response JSON type: {type(res).__name__}")
+
+    raw_data = pd.DataFrame(records)
     data = raw_data[raw_data['county'].isin(['臺北市', '新北市'])]
 
     # Rename
