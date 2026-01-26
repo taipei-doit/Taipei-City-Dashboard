@@ -20,17 +20,24 @@ def _R0075(**kwargs):
     default_table = dag_infos.get("ready_data_default_table")
     history_table = dag_infos.get("ready_data_history_table")
     URL = "https://data.taipei/api/frontstage/tpeod/dataset/resource.download?rid=b9f8154d-c627-48a8-b3ef-512ed9cde9e7"
-    ENCODING = "big5"
+    ENCODING = "utf-8"  # 資料來源已改為 UTF-8
     FROM_CRS = 4326
     GEOMETRY_TYPE = "Point"
 
     # Extract
-    raw_data = pd.read_csv(URL, encoding=ENCODING)
+    import requests
+    from io import StringIO
+    
+    # 先下載內容再解析
+    response = requests.get(URL, timeout=60)
+    response.raise_for_status()
+    content = response.content.decode(ENCODING)
+    
+    raw_data = pd.read_csv(StringIO(content))
     is_no_header = raw_data.columns[0] != "序號"
     if is_no_header:
         raw_data = pd.read_csv(
-            URL,
-            encoding=ENCODING,
+            StringIO(content),
             header=None,
             names=[
                 "序號",
