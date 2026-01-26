@@ -24,7 +24,7 @@
     "data_infos":{
         "name_cn": "臺北市市有尚未利用建物供給資料清冊",
         "airflow_update_freq": "01:00 16th March and September every year",
-        "source": "https://data.taipei/dataset/detail?id=feaa5be3-0c43-4f0b-a46f-8a57cfd75d7a",
+        "source": "https://data.taipei/api/frontstage/tpeod/dataset/resource.download?rid=fe2b491e-31fb-4ea3-97d9-959206942582",
         "source_type": "data.taipei csv file",
         "source_dept": "財政局",
         "gis_format": "Polygon",

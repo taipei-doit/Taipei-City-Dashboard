@@ -72,7 +72,7 @@ def D100104_1(**kwargs):
     # Transform
     # Filter columns
     data = raw_data.copy()
-    keep_col = ['行政區', '醫療機構', '婚後孕前健康檢查生理女性', 
+    keep_col = ['行政區', '醫療機構', '孕前健康檢查生理女性門診', 
                 '初期孕婦唐氏症篩檢', '中期孕婦唐氏症篩檢']
     data = data[keep_col]
     data = data.iloc[:-1, :]
@@ -80,7 +80,7 @@ def D100104_1(**kwargs):
     col_map = {
         '行政區': 'district', 
         '醫療機構': 'hospital', 
-        '婚後孕前健康檢查生理女性': 'pre_marriage_check',
+        '孕前健康檢查生理女性門診': 'pre_marriage_check',
         '初期孕婦唐氏症篩檢': 'early_pregnant_screening', 
         '中期孕婦唐氏症篩檢': 'mid_pregnant_screening'
     }
