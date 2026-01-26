@@ -45,6 +45,24 @@ services:
     volumes:
       - pgadmin-data:/var/lib/pgadmin
 
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: qdrant
+    ports:
+      - "6333:6333" # HTTP/gRPC 接口預設埠
+      - "6334:6334" # 複製／分片關係預設埠（如有需要）
+    volumes:
+      - qdrant-data:/qdrant/storage # 持久化資料儲存
+    environment:
+      - QDRANT__SERVICE__GRPC_PORT=6334
+      - QDRANT__SERVICE__HTTP_PORT=6333
+      - QDRANT__STORAGE__WAL_ENABLED=true
+      - QDRANT__STORAGE__WAL_PATH=/qdrant/storage/wal
+      - QDRANT__STORAGE__SIZE_LIMIT=20GB # 預估大小，依需求調整
+      # 啟用 API key 驗證
+      - QDRANT__SERVICE__API_KEY_ENABLED=true
+      - QDRANT__SERVICE__API_KEY=${QDRANT_API_KEY}
+
 networks:
   default:
     name: br_dashboard
@@ -59,3 +77,5 @@ volumes:
     name: postgres_manager_data
   pgadmin-data:
     name: pgadmin_data
+  qdrant-data:
+    name: qdrant_data
