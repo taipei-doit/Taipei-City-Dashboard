@@ -5,6 +5,7 @@ import (
 	"os"
 	"strconv"
 
+	"github.com/sugarme/tokenizer"
 	ort "github.com/yalue/onnxruntime_go"
 )
 
@@ -104,6 +105,7 @@ var (
 	}
 	
 	LMSession *ort.DynamicSession[int64, float32]
+	LMTokenizer *tokenizer.Tokenizer
 )
 
 func init() {
