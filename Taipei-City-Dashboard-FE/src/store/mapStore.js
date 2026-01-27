@@ -56,6 +56,7 @@ import { marchingSquare } from "../assets/utilityFunctions/marchingSquare.js";
 import { voronoi } from "../assets/utilityFunctions/voronoi.js";
 import { calculateHaversineDistance } from "../assets/utilityFunctions/calculateHaversineDistance";
 import { AnimatedArcLayer } from "../assets/configs/mapbox/arcAnimate.js";
+import { getPopupCoordinates } from "../assets/utilityFunctions/getPopupCoordinates.js";
 
 export const useMapStore = defineStore("map", {
 	state: () => ({
@@ -1910,10 +1911,19 @@ export const useMapStore = defineStore("map", {
 			}
 
 			// Create a new mapbox popup
+			const popupCoords = getPopupCoordinates(
+				clickFeatureDatas[0],
+				event.lngLat,
+			);
+
 			this.popup = new mapboxGl.Popup()
-				.setLngLat(event.lngLat)
+				.setLngLat(popupCoords)
 				.setHTML('<div id="vue-popup-content"></div>')
 				.addTo(this.map);
+
+			// 定義 popup 給 PopupComponent 內使用
+			const popup = this.popup;
+
 			// Mount a vue component (MapPopup) to the id "vue-popup-content" and pass in data
 			const PopupComponent = defineComponent({
 				extends: MapPopup,
@@ -2007,6 +2017,21 @@ export const useMapStore = defineStore("map", {
 					watch(activeTab, () => {
 						nextTick(() => {
 							handleVideoLoad();
+
+							// 取得該 tab 對應圖徵
+							const feature = clickFeatureDatas[activeTab.value];
+							if (feature) {
+								// 計算新的 popup 坐標
+								const newCoords = getPopupCoordinates(
+									feature,
+									event.lngLat,
+								);
+
+								// 更新 popup 位置
+								if (popup) {
+									popup.setLngLat(newCoords);
+								}
+							}
 						});
 					});
 
