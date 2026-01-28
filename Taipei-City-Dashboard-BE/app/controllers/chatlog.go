@@ -3,6 +3,7 @@ package controllers
 
 import (
 	"TaipeiCityDashboardBE/app/models"
+	"fmt"
 	"html"
 	"net/http"
 	"time"
@@ -28,6 +29,13 @@ func CreateChatLog(c *gin.Context) {
 	session = html.EscapeString(session)
 	question = html.EscapeString(question)
 	answer = html.EscapeString(answer)
+
+	// Debugging: Print various headers to trace the client's IP address
+	fmt.Println("remote_addr = ",        c.Request.RemoteAddr)
+	fmt.Println("x_forwarded_for = ",    c.GetHeader("X-Forwarded-For"))
+	fmt.Println("x_real_ip = ",          c.GetHeader("X-Real-IP"))
+	fmt.Println("x_forwarded_proto = ",  c.GetHeader("X-Forwarded-Proto"))
+
 
     chatLog, _ = models.CreateChatLog(session, question, answer, ipAddress, accountID.(int))
 	c.JSON(http.StatusOK, gin.H{"status": "success", "data": chatLog})
