@@ -233,6 +233,11 @@ export const useMapStore = defineStore("map", {
 		async addSymbolSources() {
 			const images = [
 				"metro",
+				"old_man",
+				"artist",
+				"camera",
+				"hotel",
+				"ecofriendly_restaurant",
 				"triangle_green",
 				"triangle_white",
 				"bike_green",
@@ -292,7 +297,11 @@ export const useMapStore = defineStore("map", {
 					"visible"
 				);
 			} else {
-				this.map.setLayoutProperty("metrotaipei_town", "visibility", "none");
+				this.map.setLayoutProperty(
+					"metrotaipei_town",
+					"visibility",
+					"none"
+				);
 			}
 			// if (status) {
 			// 	this.map.setLayoutProperty(
@@ -313,7 +322,11 @@ export const useMapStore = defineStore("map", {
 					"visible"
 				);
 			} else {
-				this.map.setLayoutProperty("metrotaipei_village", "visibility", "none");
+				this.map.setLayoutProperty(
+					"metrotaipei_village",
+					"visibility",
+					"none"
+				);
 			}
 			// if (status) {
 			// 	this.map.setLayoutProperty(
@@ -446,15 +459,21 @@ export const useMapStore = defineStore("map", {
 							`${location.origin}/geo_server/gwc/service/tms/1.0.0/taipei_vioc:${map_config.index}@EPSG:900913@pbf/{z}/{x}/{y}.pbf`,
 						],
 					});
-		
+
 					// 監聽錯誤
-					this.map.on('error', (e) => {
+					this.map.on("error", (e) => {
 						if (e.sourceId === `${map_config.layerId}-source`) {
-							console.error('Source error:', e);
+							console.error("Source error:", e);
 
 							// 清理已添加的源（如果存在）
-							if (this.map.getSource(`${map_config.layerId}-source`)) {
-								this.map.removeSource(`${map_config.layerId}-source`);
+							if (
+								this.map.getSource(
+									`${map_config.layerId}-source`
+								)
+							) {
+								this.map.removeSource(
+									`${map_config.layerId}-source`
+								);
 							}
 							// 從 loadingLayers 中移除
 							this.loadingLayers = this.loadingLayers.filter(
@@ -462,40 +481,37 @@ export const useMapStore = defineStore("map", {
 							);
 						}
 					});
-		
+
 					// 監聽源加載完成
 					const sourceLoaded = new Promise((resolve, reject) => {
 						const checkSource = (e) => {
 							if (e.sourceId === `${map_config.layerId}-source`) {
 								if (e.isSourceLoaded) {
-									this.map.off('sourcedata', checkSource);
+									this.map.off("sourcedata", checkSource);
 									resolve();
 								}
 								// 如果有錯誤也需要處理
 								if (e.error) {
-									this.map.off('sourcedata', checkSource);
+									this.map.off("sourcedata", checkSource);
 									reject(e.error);
 								}
 							}
 						};
-						
-						this.map.on('sourcedata', checkSource);
-						
+
+						this.map.on("sourcedata", checkSource);
+
 						// 設置超時
 						setTimeout(() => {
-							this.map.off('sourcedata', checkSource);
-							reject(new Error('Source load timeout'));
+							this.map.off("sourcedata", checkSource);
+							reject(new Error("Source load timeout"));
 						}, 10000);
 					});
-		
+
 					// 等待源加載完成後添加圖層
 					await sourceLoaded;
 					this.addMapLayer(map_config);
-
-
-		
 				} catch (error) {
-					console.error('Failed to add source:', error);
+					console.error("Failed to add source:", error);
 					// 清理已添加的源（如果存在）
 					if (this.map.getSource(`${map_config.layerId}-source`)) {
 						this.map.removeSource(`${map_config.layerId}-source`);
@@ -691,15 +707,15 @@ export const useMapStore = defineStore("map", {
 			const layers = Object.keys(this.deckGlLayer).map((index) => {
 				const l = this.deckGlLayer[index];
 				switch (l.type) {
-				case "ArcLayer":
-					return new ArcLayer(l.config);
-				case "AnimatedArcLayer":
-					return new AnimatedArcLayer({
-						...l.config,
-						coef: this.step / 1000,
-					});
-				default:
-					break;
+					case "ArcLayer":
+						return new ArcLayer(l.config);
+					case "AnimatedArcLayer":
+						return new AnimatedArcLayer({
+							...l.config,
+							coef: this.step / 1000,
+						});
+					default:
+						break;
 				}
 			});
 			this.overlay.setProps({
@@ -1671,8 +1687,8 @@ export const useMapStore = defineStore("map", {
 		// 1. Adds a popup when the user clicks on a item. The event will be passed in.
 		addPopup(event) {
 			const formatValue = (value, key) => {
-				if (key === 'occupied_rate') {
-					return value === -99 ? '-' : value;
+				if (key === "occupied_rate") {
+					return value === -99 ? "-" : value;
 				}
 				return value;
 			};
@@ -1701,10 +1717,13 @@ export const useMapStore = defineStore("map", {
 					continue;
 
 				// format properties
-				const feature = {...clickFeatureDatas[i]};
-				feature.properties = {...feature.properties};
-				Object.keys(feature.properties).forEach(key => {
-					feature.properties[key] = formatValue(feature.properties[key], key);
+				const feature = { ...clickFeatureDatas[i] };
+				feature.properties = { ...feature.properties };
+				Object.keys(feature.properties).forEach((key) => {
+					feature.properties[key] = formatValue(
+						feature.properties[key],
+						key
+					);
 				});
 
 				previousParsedLayer = clickFeatureDatas[i].layer.id;

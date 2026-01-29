@@ -1,0 +1,5753 @@
+{
+   "type": "FeatureCollection",
+   "features": [
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5503147,25.0548617 ]
+    },
+    "properties": {
+    "name":"《扶風堂》披薩。義麵。吉拉朵",
+    "address":"臺北市松山區敦化北路165巷5號1樓",
+    "tel":"(02)27153377"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5432347,25.0240436 ]
+    },
+    "properties": {
+    "name":"6：35 Brunch & Dinner(大安旗艦店)",
+    "address":"臺北市大安區復興南路二段288號",
+    "tel":"(02)23770100"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5752559,25.0604224 ]
+    },
+    "properties": {
+    "name":"88號樂章-88 La Plaza",
+    "address":"臺北市內湖區民善街88號5樓",
+    "tel":"(02)27943800"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.543247,25.0410522 ]
+    },
+    "properties": {
+    "name":"Aunt Stella 詩特莉",
+    "address":"臺北市大安區忠孝東路三段300號B3",
+    "tel":"(02)87721638"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5481958,25.0334674 ]
+    },
+    "properties": {
+    "name":"AW Cafe Wine Bistro",
+    "address":"臺北市信義區信義路四段115-2號",
+    "tel":"(02)27012498"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5634869,25.0443206 ]
+    },
+    "properties": {
+    "name":"BaganHood 蔬食餐酒館",
+    "address":"臺北市信義區忠孝東路四段553巷46弄11號",
+    "tel":"(02)37622557"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5446401,25.0438587 ]
+    },
+    "properties": {
+    "name":"Bar. Tender 八天餐酒館",
+    "address":"臺北市大安區復興南路一段107巷5弄2號",
+    "tel":"(02)27782105"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5289153,25.0285577 ]
+    },
+    "properties": {
+    "name":"Bea's Bistro 美式餐館",
+    "address":"臺北市大安區潮州街133號",
+    "tel":"(02)23918827"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5468261,25.0588286 ]
+    },
+    "properties": {
+    "name":"Blooming 花漾蒔光",
+    "address":"臺北市松山區復興北路313巷38號",
+    "tel":"(02)25460909"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5048409,25.0457659 ]
+    },
+    "properties": {
+    "name":"Blue磚塊義法廚房",
+    "address":"臺北市萬華區武昌街二段83之8號",
+    "tel":"(02)23110070"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5285368,25.0274561 ]
+    },
+    "properties": {
+    "name":"Camo咖啡",
+    "address":"臺北市大安區和平東路一段129號",
+    "tel":"(02)33433931"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5245943,25.105306 ]
+    },
+    "properties": {
+    "name":"Capricciosa卡布里喬莎(天母SOGO店)",
+    "address":"臺北市士林區中山北路六段77號8F",
+    "tel":"(02)28332558"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5451606,25.0432384 ]
+    },
+    "properties": {
+    "name":"Chao?炒炒蔬食熱炒",
+    "address":"臺北市大安區大安路一段52巷21號",
+    "tel":"(02)27753005"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5534808,25.0385685 ]
+    },
+    "properties": {
+    "name":"Chinese Whispers 悄悄話餐酒館",
+    "address":"臺北市大安區仁愛路四段345巷2弄11號",
+    "tel":"(02)27783988"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5483016,25.0402749 ]
+    },
+    "properties": {
+    "name":"COFFEE LOVER's PLANET",
+    "address":"臺北市大安區敦化南路一段246號B1",
+    "tel":"(02)27524157"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5580269,25.0459027 ]
+    },
+    "properties": {
+    "name":"Coming Bistro",
+    "address":"臺北市松山區光復南路55號1樓",
+    "tel":"(02)27479225"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5467253,25.0423395 ]
+    },
+    "properties": {
+    "name":"CYCLO 洛城 忠孝門市",
+    "address":"臺北市大安區大安路一段75巷9號",
+    "tel":"(02)27782569"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5431893,25.0408977 ]
+    },
+    "properties": {
+    "name":"EN和食(復興SOGO店)",
+    "address":"臺北市大安區忠孝東路三段300號11樓",
+    "tel":"(02)77450796"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5483542,25.0404437 ]
+    },
+    "properties": {
+    "name":"EN壽司．和食",
+    "address":"臺北市大安區敦化南路一段246號B2",
+    "tel":"(02)27730246"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5480424,25.0610276 ]
+    },
+    "properties": {
+    "name":"Fun 心 caf?",
+    "address":"臺北市松山區敦化北路244巷29號1樓",
+    "tel":"(02)27125565"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5494185,25.0339868 ]
+    },
+    "properties": {
+    "name":"GUSTOSO",
+    "address":"臺北市大安區敦化南路一段331號",
+    "tel":"(02)77269099"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5294135,25.0258172 ]
+    },
+    "properties": {
+    "name":"inn cafe x 台北師大店",
+    "address":"臺北市大安區龍泉街7號",
+    "tel":"(02)23690055"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5252655,25.030559 ]
+    },
+    "properties": {
+    "name":"JeeWoo吉屋",
+    "address":"臺北市大安區金華街145號",
+    "tel":"(02)23918563"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5338781,25.1173343 ]
+    },
+    "properties": {
+    "name":"KANPAI CLASSIC 天母店",
+    "address":"臺北市士林區台北市士林區忠誠路二段 200 號 2 樓",
+    "tel":"(02)28771550"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5449599,25.041913 ]
+    },
+    "properties": {
+    "name":"Lady nara台北忠孝SOGO店",
+    "address":"臺北市大安區忠孝東路四段45號12樓",
+    "tel":"(02)27712585"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.577635,25.0641599 ]
+    },
+    "properties": {
+    "name":"LIFE KITCHEN",
+    "address":"臺北市內湖區新湖三路134號",
+    "tel":"(02)27931818"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5106691,25.1150272 ]
+    },
+    "properties": {
+    "name":"Los TOAST 洛城吐司",
+    "address":"臺北市北投區實踐街82巷6號",
+    "tel":"(02)28208206"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5433664,25.0513893 ]
+    },
+    "properties": {
+    "name":"Machikaka 智允餐飲",
+    "address":"臺北市中山區南京東路三段216巷4號一樓",
+    "tel":"(02)27772777"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5439556,25.0308577 ]
+    },
+    "properties": {
+    "name":"Mama Inca印加媽媽 秘魯餐館",
+    "address":"臺北市大安區瑞安街31巷1-1號",
+    "tel":"(02)27092832"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5241987,25.0676896 ]
+    },
+    "properties": {
+    "name":"Maya Bistro 瑪亞餐酒",
+    "address":"臺北市中山區雙城街46巷1號1樓",
+    "tel":"(02)25850305"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.511384,25.0444137 ]
+    },
+    "properties": {
+    "name":"meet蘋果咖啡館",
+    "address":"臺北市中正區博愛路86號",
+    "tel":"(02)23820025"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5168171,25.0360978 ]
+    },
+    "properties": {
+    "name":"Mentari萌太利(微風台大醫院商場)",
+    "address":"臺北市中正區中山南路77號B1F",
+    "tel":"(02)23952298"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5270256,25.0337234 ]
+    },
+    "properties": {
+    "name":"Miso微笑韓國料理",
+    "address":"臺北市大安區金山南路二段6號",
+    "tel":"(02)23670281"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5058635,25.0378901 ]
+    },
+    "properties": {
+    "name":"mister donut",
+    "address":"臺北市萬華區台北市萬華區桂林路1號",
+    "tel":"(02)23816949"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5227627,25.1208483 ]
+    },
+    "properties": {
+    "name":"Mos摩斯漢堡(北榮美食街)",
+    "address":"臺北市北投區石牌路二段201號生活廣場",
+    "tel":"(02)28710185"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5168171,25.0360978 ]
+    },
+    "properties": {
+    "name":"Mos摩斯漢堡(微風台大醫院商場)",
+    "address":"臺北市中正區中山南路77號B1F",
+    "tel":"(02)23952298"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5481944,25.0399224 ]
+    },
+    "properties": {
+    "name":"N° 168 PRIME",
+    "address":"臺北市大安區敦化南路一段246號7F",
+    "tel":"(02)66176168"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5448197,25.0419878 ]
+    },
+    "properties": {
+    "name":"Nara Thai Cuisine 台北忠孝SOGO 店",
+    "address":"臺北市大安區忠孝東路四段45號11樓",
+    "tel":"(02)27718939"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5188189,25.0442304 ]
+    },
+    "properties": {
+    "name":"OEC蚌麵",
+    "address":"臺北市中正區台北市中正區中山南路8號B1",
+    "tel":"(02)23117819"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5245943,25.105306 ]
+    },
+    "properties": {
+    "name":"omo cafe （天母SOGO店）",
+    "address":"臺北市士林區中山北路六段77號5樓",
+    "tel":"(02)28341668"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.523427,25.025076 ]
+    },
+    "properties": {
+    "name":"Oohchacha自然食(古亭店)",
+    "address":"臺北市中正區南昌路二段207號",
+    "tel":"(02)23677133"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5460631,25.0475889 ]
+    },
+    "properties": {
+    "name":"PAI CAF? & LIFE",
+    "address":"臺北市松山區八德路二段366巷11號",
+    "tel":""
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5347223,25.0592984 ]
+    },
+    "properties": {
+    "name":"PAI Coffee",
+    "address":"臺北市中山區民生東路二段147巷6弄1號",
+    "tel":"(02)25179787"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5508995,25.0405549 ]
+    },
+    "properties": {
+    "name":"PARADE 和巴黎人吃一樣的日常",
+    "address":"臺北市大安區忠孝東路四段170巷11號",
+    "tel":"(02)27110800"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5449653,25.0421775 ]
+    },
+    "properties": {
+    "name":"pd by petit doux 忠孝SOGO店",
+    "address":"臺北市大安區台北市大安區忠孝東路四段45號 11樓(忠孝SOGO百貨)",
+    "tel":"(02)27213008"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5306426,25.0326634 ]
+    },
+    "properties": {
+    "name":"petit doux 微兜  永康店",
+    "address":"臺北市大安區台北市大安區信義路二段 198 巷 7-3 號1樓",
+    "tel":"(02)23951336"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5172486,25.0492915 ]
+    },
+    "properties": {
+    "name":"petit doux 微兜  京站店",
+    "address":"臺北市大同區台北市大同區承德路一段1號1樓",
+    "tel":"(02)77290009"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5754615,25.0424048 ]
+    },
+    "properties": {
+    "name":"PINK SALT｜披薩｜義麵 ",
+    "address":"臺北市信義區忠孝東路五段423巷28號",
+    "tel":"(02)27564233"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.544113,25.034036 ]
+    },
+    "properties": {
+    "name":"Plants",
+    "address":"臺北市大安區復興南路1段253巷10號1樓",
+    "tel":"(02)27845677"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5068635,25.0363607 ]
+    },
+    "properties": {
+    "name":"PRIME ONE 牛排館",
+    "address":"臺北市中正區中華路二段1號",
+    "tel":"(02)23143300"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5180822,25.0888242 ]
+    },
+    "properties": {
+    "name":"Q Burger士林大南店",
+    "address":"臺北市士林區大南路315號1樓",
+    "tel":"(02)28820058"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5099903,25.0830742 ]
+    },
+    "properties": {
+    "name":"Q Burger士林延平店",
+    "address":"臺北市士林區延平北路五段179號",
+    "tel":"(02)28110658"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.532715,25.1070771 ]
+    },
+    "properties": {
+    "name":"Q Burger士林忠義店",
+    "address":"臺北市士林區忠義街113-1號一樓",
+    "tel":"(02)28343148"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5075724,25.0874157 ]
+    },
+    "properties": {
+    "name":"Q Burger士林社子店",
+    "address":"臺北市士林區社子街36號",
+    "tel":"(02)28168058"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5212767,25.0807664 ]
+    },
+    "properties": {
+    "name":"Q Burger士林通河店",
+    "address":"臺北市士林區通河街125號",
+    "tel":"(02)28853848"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5158123,25.0677675 ]
+    },
+    "properties": {
+    "name":"Q Burger大同大龍店",
+    "address":"臺北市信義區大龍街150號",
+    "tel":"(02)25996128"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5536548,25.0196685 ]
+    },
+    "properties": {
+    "name":"Q Burger大安樂業店",
+    "address":"臺北市大安區樂業街153號",
+    "tel":"(02)27360209"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5132289,25.0627721 ]
+    },
+    "properties": {
+    "name":"Q Burger大橋頭店",
+    "address":"臺北市信義區民權西路226號",
+    "tel":"(02)25500147"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5289427,25.0570579 ]
+    },
+    "properties": {
+    "name":"Q Burger中山中原店",
+    "address":"臺北市中山區中原街41號1樓",
+    "tel":"(02)25232521"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.520959,25.0611519 ]
+    },
+    "properties": {
+    "name":"Q Burger中山天祥店",
+    "address":"臺北市中山區天祥路22號1樓",
+    "tel":"(02)25311238"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5304992,25.0658122 ]
+    },
+    "properties": {
+    "name":"Q Burger中山吉林店",
+    "address":"臺北市士林區吉林路397號",
+    "tel":"(02)25910182"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5427591,25.0658765 ]
+    },
+    "properties": {
+    "name":"Q Burger中山復興店",
+    "address":"臺北市中山區復興北路514巷34號一樓",
+    "tel":"(02)25090565"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5344714,25.064565 ]
+    },
+    "properties": {
+    "name":"Q Burger中山農安店",
+    "address":"臺北市中山區農安街170號1樓、地下室",
+    "tel":"(02)25150024"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5400235,25.0644072 ]
+    },
+    "properties": {
+    "name":"Q Burger中山榮星店",
+    "address":"臺北市中山區行仁里五常街63號",
+    "tel":"(02)25016190"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5303598,25.0601262 ]
+    },
+    "properties": {
+    "name":"Q Burger中山錦州店",
+    "address":"臺北市中山區吉林路205號",
+    "tel":"(02)25222997"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5145349,25.0295261 ]
+    },
+    "properties": {
+    "name":"Q Burger中正寧波店",
+    "address":"臺北市中正區寧波西街100號1樓",
+    "tel":"(02)23325085"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.592348,25.084947 ]
+    },
+    "properties": {
+    "name":"Q Burger內湖金龍店",
+    "address":"臺北市內湖區金龍路74號",
+    "tel":"(02)27928292"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5905174,25.0777841 ]
+    },
+    "properties": {
+    "name":"Q Burger內湖星雲店",
+    "address":"臺北市內湖區星雲街14號",
+    "tel":"(02)27922009"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.588719,25.0814849 ]
+    },
+    "properties": {
+    "name":"Q Burger內湖達人店",
+    "address":"臺北市內湖區內湖路二段326號",
+    "tel":"(02)27909865"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5747381,25.081185 ]
+    },
+    "properties": {
+    "name":"Q Burger內湖麗山店",
+    "address":"臺北市內湖區內湖路一段629巷41號1樓",
+    "tel":"(02)26276424"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.567331,24.9833099 ]
+    },
+    "properties": {
+    "name":"Q Burger文山木新店",
+    "address":"臺北市文山區木新路二段229號",
+    "tel":"(02)29396817"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.547621,24.9871619 ]
+    },
+    "properties": {
+    "name":"Q Burger文山世新店",
+    "address":"臺北市文山區木柵路一段101號1樓及地下室",
+    "tel":"(02)22369201"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.539334,24.993631 ]
+    },
+    "properties": {
+    "name":"Q Burger文山景福店",
+    "address":"臺北市文山區景福街234號",
+    "tel":"(02)89351881"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5448642,24.9953491 ]
+    },
+    "properties": {
+    "name":"Q Burger文山景興店",
+    "address":"臺北市文山區景興路99號",
+    "tel":"(02)29320217"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5394727,24.9996245 ]
+    },
+    "properties": {
+    "name":"Q Burger文山萬隆店",
+    "address":"臺北市文山區萬隆里景福街4號1樓",
+    "tel":"(02)29331380"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5505955,25.0031009 ]
+    },
+    "properties": {
+    "name":"Q Burger文山福興店",
+    "address":"臺北市文山區福興路45號",
+    "tel":"(02)29308228"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5620296,24.9830229 ]
+    },
+    "properties": {
+    "name":"Q Burger文山興隆店",
+    "address":"臺北市文山區興隆路四段112號",
+    "tel":"(02)29371568"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.550182,25.0011381 ]
+    },
+    "properties": {
+    "name":"Q Burger文山興德店",
+    "address":"臺北市文山區興隆路二段215之2號1樓",
+    "tel":"(02)29343805"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4995506,25.1301436 ]
+    },
+    "properties": {
+    "name":"Q Burger北投大興店",
+    "address":"臺北市北投區大興街48號",
+    "tel":"(02)28941027"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4981691,25.1435761 ]
+    },
+    "properties": {
+    "name":"Q Burger北投中和店",
+    "address":"臺北市北投區中和街402號",
+    "tel":"(02)28915262"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5144748,25.1189597 ]
+    },
+    "properties": {
+    "name":"Q Burger北投立農店",
+    "address":"臺北市北投區立農街二段259號1樓",
+    "tel":"(02)28236017"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4670754,25.1208948 ]
+    },
+    "properties": {
+    "name":"Q Burger北投知行店",
+    "address":"臺北市北投區知行路249號",
+    "tel":"(02)28585885"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5151913,25.1093362 ]
+    },
+    "properties": {
+    "name":"Q Burger北投致遠店",
+    "address":"臺北市北投區致遠一路一段95號",
+    "tel":"(02)28250606"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5097836,25.1153574 ]
+    },
+    "properties": {
+    "name":"Q Burger北投實踐店",
+    "address":"臺北市北投區實踐街61號",
+    "tel":"(02)28250909"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.519484,25.111239 ]
+    },
+    "properties": {
+    "name":"Q Burger北投懷德店",
+    "address":"臺北市北投區建民路161-5號1樓",
+    "tel":"(02)28202320"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5524769,25.0582061 ]
+    },
+    "properties": {
+    "name":"Q Burger松山民生店",
+    "address":"臺北市松山區民生東路四段103號1樓",
+    "tel":"(02)25471072"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5661649,25.0498546 ]
+    },
+    "properties": {
+    "name":"Q Burger松山南京五店",
+    "address":"臺北市松山區南京東路五段250巷18弄2-1號",
+    "tel":"(02)27565258"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5659501,25.06274 ]
+    },
+    "properties": {
+    "name":"Q Burger松山撫遠店",
+    "address":"臺北市松山區撫遠街352號",
+    "tel":"(02)27533262"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5703993,25.0453366 ]
+    },
+    "properties": {
+    "name":"Q Burger信義永吉店",
+    "address":"臺北市信義區永吉路120巷1號1樓",
+    "tel":"(02)27653337"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5657673,25.026644 ]
+    },
+    "properties": {
+    "name":"Q Burger信義吳興店",
+    "address":"臺北市信義區吳興街281巷59號",
+    "tel":"(02)27200965"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.578496,25.0394579 ]
+    },
+    "properties": {
+    "name":"Q Burger信義松山店",
+    "address":"臺北市信義區松山路465巷2號",
+    "tel":"(02)27279620"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5687418,25.0262625 ]
+    },
+    "properties": {
+    "name":"Q Burger信義松仁店",
+    "address":"臺北市信義區松仁路227號1樓",
+    "tel":"(02)27208119"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5777955,25.035876 ]
+    },
+    "properties": {
+    "name":"Q Burger信義虎林店",
+    "address":"臺北市信義區信義路六段106號1樓",
+    "tel":"(02)27279868"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5559657,25.0241946 ]
+    },
+    "properties": {
+    "name":"Q Burger信義信安店",
+    "address":"臺北市信義區信安街127號",
+    "tel":"(02)87321008"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5876474,25.039384 ]
+    },
+    "properties": {
+    "name":"Q Burger南港福德店",
+    "address":"臺北市南港區福德街312號1樓",
+    "tel":"(02)26519876"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5024379,25.0218258 ]
+    },
+    "properties": {
+    "name":"Q Burger萬華青年店",
+    "address":"臺北市萬華區青年路140號1樓",
+    "tel":"(02)23070701"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.505644,25.0272015 ]
+    },
+    "properties": {
+    "name":"Q Burger萬華國興店",
+    "address":"臺北市萬華區國興路98號",
+    "tel":"(02)23056683"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4950984,25.0291935 ]
+    },
+    "properties": {
+    "name":"Q Burger萬華雙園店",
+    "address":"臺北市萬華區雙園街15號",
+    "tel":"(02)23087655"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4952677,25.0244721 ]
+    },
+    "properties": {
+    "name":"Q Burger萬華寶興店",
+    "address":"臺北市萬華區寶興街149號1樓",
+    "tel":"(02)23010052"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5483542,25.0404437 ]
+    },
+    "properties": {
+    "name":"SAISON du SOLEIL",
+    "address":"臺北市大安區敦化南路一段246號B2",
+    "tel":"(02)27310258"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5483016,25.0402749 ]
+    },
+    "properties": {
+    "name":"Sarabeth's",
+    "address":"臺北市大安區敦化南路一段246號B1",
+    "tel":"(02)27526998"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5245943,25.105306 ]
+    },
+    "properties": {
+    "name":"Sarabeth's 天母店",
+    "address":"臺北市士林區中山北路六段77號2樓",
+    "tel":"(02)28335669"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5278003,25.0951836 ]
+    },
+    "properties": {
+    "name":"SKYLARK加州風洋食館-士林中山北店",
+    "address":"臺北市士林區台北市士林區中山北路5段565號",
+    "tel":"(02)28837742"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.575749,25.0628906 ]
+    },
+    "properties": {
+    "name":"SKYLARK加州風洋食館-內湖大潤發2店",
+    "address":"臺北市內湖區台北市內湖區舊宗路188號1樓",
+    "tel":"(02)27966280"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.513943,25.042781 ]
+    },
+    "properties": {
+    "name":"SKYLARK加州風洋食館-和平公園店",
+    "address":"臺北市中正區台北市中正區懷寧街90號",
+    "tel":"(02)23756364"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.6114623,25.0696916 ]
+    },
+    "properties": {
+    "name":"SKYLARK加州風洋食館-東湖康寧店",
+    "address":"臺北市內湖區台北市內湖區康寧路3段72號",
+    "tel":"(02)26332850"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5087784,25.0418654 ]
+    },
+    "properties": {
+    "name":"SKYLARK加州風洋食館-寶慶遠百店",
+    "address":"臺北市中正區台北市中正區寶慶路32號1樓(遠東百貨1樓)",
+    "tel":"(02)23754730"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5033895,25.0270276 ]
+    },
+    "properties": {
+    "name":"Twinkle Twinkle Cafe & Brunch 小星星 早午餐&輕食",
+    "address":"臺北市萬華區中華路二段416巷84號",
+    "tel":"(02)23039889"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5245943,25.105306 ]
+    },
+    "properties": {
+    "name":"UCC Caf? Mercado (天母SOGO店)",
+    "address":"臺北市士林區中山北路六段77號B1樓",
+    "tel":"(02)28350652"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5449392,25.0417855 ]
+    },
+    "properties": {
+    "name":"UCC Caf? Mercado (忠孝SOGO店)",
+    "address":"臺北市大安區忠孝東路四段45號B2",
+    "tel":"(02)27416800"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5188189,25.0442304 ]
+    },
+    "properties": {
+    "name":"一雙牛肉麵",
+    "address":"臺北市中正區台北市中正區中山南路8號B1",
+    "tel":"(02)23117819"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5269515,25.050578 ]
+    },
+    "properties": {
+    "name":"九湯屋日本拉麵(台北南京店)",
+    "address":"臺北市中山區南京東路一段132巷33號",
+    "tel":"(02)25813100"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5482607,25.0429766 ]
+    },
+    "properties": {
+    "name":"二本餐廳",
+    "address":"臺北市大安區忠孝東路四段101巷27號",
+    "tel":"(02)87737033"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5459666,25.055948 ]
+    },
+    "properties": {
+    "name":"十八廚",
+    "address":"臺北市松山區興安街212號1樓",
+    "tel":"(02)27547890"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.528171,25.022075 ]
+    },
+    "properties": {
+    "name":"十六饗雀-泰式酸辣湯",
+    "address":"臺北市大安區師大路106號",
+    "tel":"(02)33651606"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5724536,25.0776861 ]
+    },
+    "properties": {
+    "name":"十里安?手麵 瑞光旗艦店",
+    "address":"臺北市內湖區台北市內湖區瑞光路413號",
+    "tel":"(02)87975398"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5227627,25.1208483 ]
+    },
+    "properties": {
+    "name":"十勝石燒(北榮美食街)",
+    "address":"臺北市北投區石牌路二段201號生活廣場",
+    "tel":""
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5405732,25.0513592 ]
+    },
+    "properties": {
+    "name":"三友拉麵(龍江店)",
+    "address":"臺北市中山區龍江路93號",
+    "tel":"(02)8772997"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.544963,25.0419132 ]
+    },
+    "properties": {
+    "name":"三合院 (忠孝SOGO店)",
+    "address":"臺北市大安區忠孝東路四段45號11F",
+    "tel":"(02)27816667"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5275199,25.026522 ]
+    },
+    "properties": {
+    "name":"下港老麵攤(台師大店)",
+    "address":"臺北市大安區和平東路一段162號",
+    "tel":""
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5910904,25.0728868 ]
+    },
+    "properties": {
+    "name":"大井屋(微風．三總商店街)",
+    "address":"臺北市內湖區成功路二段325號B1樓",
+    "tel":"(02)87923311"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5245943,25.105306 ]
+    },
+    "properties": {
+    "name":"大心新泰式麵食（天母SOGO店）",
+    "address":"臺北市士林區中山北路六段77號8樓",
+    "tel":"(02)28325366"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5438053,25.0337141 ]
+    },
+    "properties": {
+    "name":"大戶屋大安店",
+    "address":"臺北市大安區復興南路一段323號B1",
+    "tel":"(02)89782668"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5314695,25.1118523 ]
+    },
+    "properties": {
+    "name":"大戶屋大葉?島屋店",
+    "address":"臺北市士林區忠誠路二段55號B1F",
+    "tel":"(02)28326050"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5164145,25.0462341 ]
+    },
+    "properties": {
+    "name":"大戶屋台北凱撒店",
+    "address":"臺北市中正區忠孝西路一段38號B1",
+    "tel":"(02)23612377"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5233404,25.0629726 ]
+    },
+    "properties": {
+    "name":"大戶屋民權東路一段店",
+    "address":"臺北市中山區民權東路一段9號B1",
+    "tel":"(02)25958663"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5329541,25.0598098 ]
+    },
+    "properties": {
+    "name":"大戶屋行天宮站店",
+    "address":"臺北市中山區松江路276號2樓",
+    "tel":"(02)25625811"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5172458,25.0493539 ]
+    },
+    "properties": {
+    "name":"大戶屋京站店",
+    "address":"臺北市大同區承德路一段1號B3",
+    "tel":"(02)25553255"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5450238,25.0414146 ]
+    },
+    "properties": {
+    "name":"大戶屋忠孝復興店",
+    "address":"臺北市大安區忠孝東路四段52號2樓",
+    "tel":"(02)27785077"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.6118711,25.0700709 ]
+    },
+    "properties": {
+    "name":"大戶屋東湖店",
+    "address":"臺北市內湖區康寧路三段187號2樓",
+    "tel":"(02)26338839"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5791866,25.0493066 ]
+    },
+    "properties": {
+    "name":"大戶屋松山車站店",
+    "address":"臺北市信義區松山路11號1樓",
+    "tel":"(02)25287775"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5448299,25.05159 ]
+    },
+    "properties": {
+    "name":"大戶屋南京復興店",
+    "address":"臺北市松山區南京東路三段258號2樓",
+    "tel":"(02)27715337"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.6047161,25.0526211 ]
+    },
+    "properties": {
+    "name":"大戶屋南港車站店",
+    "address":"臺北市南港區忠孝東路7段369號7樓",
+    "tel":"(02)26512778"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5579941,25.0832325 ]
+    },
+    "properties": {
+    "name":"大戶屋美麗華店",
+    "address":"臺北市中山區敬業三路20號B1",
+    "tel":"(02)85012772"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.565466,25.0404655 ]
+    },
+    "properties": {
+    "name":"大戶屋統一時代店",
+    "address":"臺北市信義區忠孝東路五段8號B2",
+    "tel":"(02)89780886"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5159013,25.0475224 ]
+    },
+    "properties": {
+    "name":"大戶屋微風台北車站店",
+    "address":"臺北市中正區北平西路3號2樓(東3門)",
+    "tel":"(02)23319337"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5452192,25.0459159 ]
+    },
+    "properties": {
+    "name":"大戶屋微風廣場店",
+    "address":"臺北市松山區復興南路一段39號GF",
+    "tel":"(02)87720835"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.504345,25.137063 ]
+    },
+    "properties": {
+    "name":"大戶屋新北投店",
+    "address":"臺北市北投區中心里泉源路１２號２樓之１",
+    "tel":"(02)28951255"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5207243,25.0520942 ]
+    },
+    "properties": {
+    "name":"大戶屋誠品南西店",
+    "address":"臺北市中山區南京西路14號B1",
+    "tel":"(02)25311808"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5069956,25.1350426 ]
+    },
+    "properties": {
+    "name":"大地酒店-月兒彎彎",
+    "address":"臺北市北投區奇岩路1號",
+    "tel":"(02)55518888"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5069956,25.1350426 ]
+    },
+    "properties": {
+    "name":"大地酒店-奇岩一號",
+    "address":"臺北市北投區奇岩路1號",
+    "tel":"(02)55518888"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5072708,25.1347904 ]
+    },
+    "properties": {
+    "name":"大地酒店-喜歡廳",
+    "address":"臺北市北投區奇岩路一號",
+    "tel":"(02)55518888"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5240479,25.053837 ]
+    },
+    "properties": {
+    "name":"大根日本料亭",
+    "address":"臺北市中山區中山北路二段39巷14-1號",
+    "tel":"(02)25817776"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5425382,25.1366721 ]
+    },
+    "properties": {
+    "name":"大衛小小羊",
+    "address":"臺北市士林區國泰街9號",
+    "tel":"(02)28619668"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5040002,25.0464845 ]
+    },
+    "properties": {
+    "name":"小小蔬房",
+    "address":"臺北市萬華區漢口街二段125號",
+    "tel":"(02)23111168"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5168171,25.0360978 ]
+    },
+    "properties": {
+    "name":"小南門(微風台大醫院商場)",
+    "address":"臺北市中正區中山南路77號B1F",
+    "tel":"(02)23952298"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5227627,25.1208483 ]
+    },
+    "properties": {
+    "name":"小南門/小南門點心世界(北榮美食街)",
+    "address":"臺北市北投區石牌路二段201號生活廣場",
+    "tel":"(02)28751220"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5910904,25.0728868 ]
+    },
+    "properties": {
+    "name":"小南門傳統豆花(微風．三總商店街)",
+    "address":"臺北市內湖區成功路二段325號B1樓",
+    "tel":"(02)87923311"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5435692,25.0238555 ]
+    },
+    "properties": {
+    "name":"小拾聚 餐食館",
+    "address":"臺北市大安區復興南路二段325號",
+    "tel":"(02)27388980"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5667175,25.0413307 ]
+    },
+    "properties": {
+    "name":"小醉好(信義店)|法式下午茶Day Drink & 小餐酒館",
+    "address":"臺北市信義區忠孝東路五段61號",
+    "tel":"(02)27566629"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5109918,25.1362325 ]
+    },
+    "properties": {
+    "name":"山?咖啡",
+    "address":"臺北市北投區溫泉路110-1號1樓",
+    "tel":"(02)28939325"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5327683,25.1075241 ]
+    },
+    "properties": {
+    "name":"中東人的私房菜",
+    "address":"臺北市士林區忠義街117-3號1樓",
+    "tel":"(02)28330117"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5498627,25.053066 ]
+    },
+    "properties": {
+    "name":"中國人壽總部員工餐廳(自有)",
+    "address":"臺北市松山區敦化北路135號B2",
+    "tel":"(02)27196678"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5940817,25.0612289 ]
+    },
+    "properties": {
+    "name":"中國信託內湖行政大樓員工餐廳",
+    "address":"臺北市內湖區安康路22巷33號4樓",
+    "tel":"(02)81787777"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.6159507,25.0585084 ]
+    },
+    "properties": {
+    "name":"中國信託金融園區員工餐廳",
+    "address":"臺北市南港區經貿二路168號4樓",
+    "tel":"(02)33277777"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5516913,25.0475629 ]
+    },
+    "properties": {
+    "name":"中崙涼麵",
+    "address":"臺北市松山區八德路三段12巷5弄30號",
+    "tel":"(02)27188177"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5135855,25.0704668 ]
+    },
+    "properties": {
+    "name":"天下奇冰",
+    "address":"臺北市大同區重慶北路三段232號1樓",
+    "tel":"(02)25867867"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5417596,25.0463684 ]
+    },
+    "properties": {
+    "name":"天下食堂",
+    "address":"臺北市中山區安東街4之5號",
+    "tel":"(02)27771163"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5432417,25.0408932 ]
+    },
+    "properties": {
+    "name":"日本橋海鮮丼?半Tsujihan( SOGO復興店)",
+    "address":"臺北市大安區忠孝東路3段300號B2",
+    "tel":"(02)77553346"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5061818,25.037703 ]
+    },
+    "properties": {
+    "name":"王品餐飲股份有限公禾七台北家樂福桂林店",
+    "address":"臺北市萬華區桂林路1號4樓",
+    "tel":"(02)77074941"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5626318,25.0404376 ]
+    },
+    "properties": {
+    "name":"王鍋屋逸仙創始總店",
+    "address":"臺北市信義區逸仙路50巷20號1樓",
+    "tel":"(02)27588380"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5168171,25.0360978 ]
+    },
+    "properties": {
+    "name":"功夫肉圓(微風台大醫院商場)",
+    "address":"臺北市中正區中山南路77號B1F",
+    "tel":"(02)23952298"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5168171,25.0360978 ]
+    },
+    "properties": {
+    "name":"包家小鎮(微風台大醫院商場)",
+    "address":"臺北市中正區中山南路77號B1F",
+    "tel":"(02)23952298"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5257142,25.0541679 ]
+    },
+    "properties": {
+    "name":"古拉爵 義式屋-欣欣百貨店",
+    "address":"臺北市中山區台北市中山區林森北路247號2樓",
+    "tel":"(02)25427680"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.6156959,25.0587228 ]
+    },
+    "properties": {
+    "name":"古拉爵 義式屋-南港中信店",
+    "address":"臺北市南港區台北市南港區經貿二路166號2樓(中信總部A棟)",
+    "tel":"(02)27892688"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5068635,25.0363607 ]
+    },
+    "properties": {
+    "name":"台北花園大酒店-花園thai thai",
+    "address":"臺北市中正區中華路二段1號",
+    "tel":"(02)23121000"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5426486,25.0224472 ]
+    },
+    "properties": {
+    "name":"永和樓中華料理店",
+    "address":"臺北市大安區和平東路二段118巷52弄3號",
+    "tel":"(02)23772077"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5502599,25.0591113 ]
+    },
+    "properties": {
+    "name":"玉山銀行(第二總部大樓)員工餐廳",
+    "address":"臺北市松山區敦化北路315號",
+    "tel":"(02)21751313"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5463658,25.0582253 ]
+    },
+    "properties": {
+    "name":"玉山銀行員工餐廳",
+    "address":"臺北市松山區民生東路三段117號",
+    "tel":"(02)21751313"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5058635,25.0378901 ]
+    },
+    "properties": {
+    "name":"甘物家 x 甘物日飲(桂林家樂福店)",
+    "address":"臺北市萬華區萬華區桂林路1號",
+    "tel":"(02)23816607"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5227627,25.1208483 ]
+    },
+    "properties": {
+    "name":"甲大鴻港式燒臘(北榮美食街)",
+    "address":"臺北市北投區石牌路二段201號生活廣場",
+    "tel":""
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5454145,25.0395623 ]
+    },
+    "properties": {
+    "name":"立馬吃一鍋。有機水產火鍋專賣",
+    "address":"臺北市大安區仁愛路四段27巷9號B1",
+    "tel":"(02)27417668"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5338937,25.0517795 ]
+    },
+    "properties": {
+    "name":"丼賞和食??物vs刺身丼丼專門店",
+    "address":"臺北市中山區南京東路二段140號B1",
+    "tel":"(02)25175526"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5432167,25.0411128 ]
+    },
+    "properties": {
+    "name":"伊勢路勝勢日式豬排(復興 SOGO店)",
+    "address":"臺北市大安區忠孝東路三段300號10樓",
+    "tel":"(02)87729822"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5391995,25.0418737 ]
+    },
+    "properties": {
+    "name":"再見 麵",
+    "address":"臺北市大安區忠孝東路三段205之1號",
+    "tel":"(02)87730086"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.544963,25.0419132 ]
+    },
+    "properties": {
+    "name":"吉 天婦羅 (忠孝SOGO店)",
+    "address":"臺北市大安區忠孝東路四段45號11F",
+    "tel":"(02)27312518"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5142198,25.0620343 ]
+    },
+    "properties": {
+    "name":"向樂達工房(Caf? Chat Leopard 豹紋喵喵)",
+    "address":"臺北市大同區蘭州街蘭州街14號1樓",
+    "tel":"(02)26256499"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5083329,25.0546858 ]
+    },
+    "properties": {
+    "name":"在她家",
+    "address":"臺北市大同區貴德街47－2號",
+    "tel":""
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5910904,25.0728868 ]
+    },
+    "properties": {
+    "name":"好好吃大餛飩(微風．三總商店街)",
+    "address":"臺北市內湖區成功路二段325號B1樓",
+    "tel":"(02)87923311#1"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5168171,25.0360978 ]
+    },
+    "properties": {
+    "name":"好好吃大餛飩(微風台大醫院商場)",
+    "address":"臺北市中正區中山南路77號B1F",
+    "tel":"(02)23952298#8"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5227627,25.1208483 ]
+    },
+    "properties": {
+    "name":"安永鮮食(北榮美食街)",
+    "address":"臺北市北投區石牌路二段201號生活廣場",
+    "tel":""
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5168171,25.0360978 ]
+    },
+    "properties": {
+    "name":"安永鮮食(微風台大醫院商場)",
+    "address":"臺北市中正區中山南路77號B1F",
+    "tel":"(02)23952298#8"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5612443,24.9819461 ]
+    },
+    "properties": {
+    "name":"成家小館",
+    "address":"臺北市文山區木新路三段154號",
+    "tel":"(02)29374611"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5319025,25.1062629 ]
+    },
+    "properties": {
+    "name":"成家小館(天母店)",
+    "address":"臺北市士林區忠義街84號",
+    "tel":"(02)28366668"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5243331,25.1049953 ]
+    },
+    "properties": {
+    "name":"成真咖啡（天母SOGO店）",
+    "address":"臺北市士林區士林區中山北路六段77號1樓",
+    "tel":"(02)28368881"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5432417,25.0408932 ]
+    },
+    "properties": {
+    "name":"成真咖啡台北sogo復興店",
+    "address":"臺北市大安區忠孝東路三段300號9樓",
+    "tel":"(02)87723722"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.578408,25.041398 ]
+    },
+    "properties": {
+    "name":"有之和牛台北忠孝",
+    "address":"臺北市信義區110臺北市信義區忠孝東路五段497號1樓",
+    "tel":"(02)87851117"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5063479,25.0388306 ]
+    },
+    "properties": {
+    "name":"有點辣正宗麻辣串串鍋",
+    "address":"臺北市萬華區西寧南路285號1樓",
+    "tel":"(02)23111085"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5245943,25.105306 ]
+    },
+    "properties": {
+    "name":"朱記餡餅粥(天母SOGO店)",
+    "address":"臺北市士林區中山北路6段77號8樓",
+    "tel":"(02)28353619"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5168171,25.0360978 ]
+    },
+    "properties": {
+    "name":"朱記餡餅粥(微風台大醫院商場)",
+    "address":"臺北市中正區中山南路77號B1F",
+    "tel":"(02)23952298#8"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.6072597,25.0528955 ]
+    },
+    "properties": {
+    "name":"朱記餡餅粥店",
+    "address":"臺北市南港區忠孝東路七段371號B1",
+    "tel":"(02)26510264"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5668588,25.0363104 ]
+    },
+    "properties": {
+    "name":"老乾杯 信義店",
+    "address":"臺北市信義區台北市信義區松壽路9號8樓",
+    "tel":"(02)27253311"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5452114,25.0535557 ]
+    },
+    "properties": {
+    "name":"老乾杯 慶城店",
+    "address":"臺北市松山區台北市松山區慶城街29號1樓",
+    "tel":"(02)27139000"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5431893,25.0408977 ]
+    },
+    "properties": {
+    "name":"老乾杯(復興SOGO店)",
+    "address":"臺北市大安區忠孝東路三段300號11樓",
+    "tel":"(02)27316555"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5572333,25.082727 ]
+    },
+    "properties": {
+    "name":"老乾杯大直忠泰店",
+    "address":"臺北市中山區樂群三路200號5樓",
+    "tel":"(02)85025551"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5210481,25.0518449 ]
+    },
+    "properties": {
+    "name":"老乾杯南西店",
+    "address":"臺北市中山區台北市中山區南京西路12號號7樓",
+    "tel":"(02)25215255"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5631674,25.0419937 ]
+    },
+    "properties": {
+    "name":"老莫派咖哩",
+    "address":"臺北市信義區忠孝東路四段553巷2弄7號",
+    "tel":"(02)66039032"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5445063,25.0585947 ]
+    },
+    "properties": {
+    "name":"老舅的家鄉味",
+    "address":"臺北市松山區復興北路307號",
+    "tel":"(02)27181122"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5910904,25.0728868 ]
+    },
+    "properties": {
+    "name":"老董(微風．三總商店街)",
+    "address":"臺北市內湖區成功路二段325號B1樓",
+    "tel":"(02)87923311#1"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5168171,25.0360978 ]
+    },
+    "properties": {
+    "name":"老董牛肉麵(微風台大醫院商場)",
+    "address":"臺北市中正區中山南路77號B1F",
+    "tel":"(02)23952298#8"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5227627,25.1208483 ]
+    },
+    "properties": {
+    "name":"西雅圖極品咖啡(北榮美食街)",
+    "address":"臺北市北投區石牌路二段201號生活廣場",
+    "tel":"(02)28760276"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5910904,25.0728868 ]
+    },
+    "properties": {
+    "name":"西雅圖極品咖啡(微風．三總商店街)",
+    "address":"臺北市內湖區成功路二段325號B1樓",
+    "tel":"(02)87923311#1"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5810503,25.041234 ]
+    },
+    "properties": {
+    "name":"吾家可歸朝食販賣部",
+    "address":"臺北市信義區大道路42巷21號",
+    "tel":"(02)27599075"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5910904,25.0728868 ]
+    },
+    "properties": {
+    "name":"李記中式餐廳(微風．三總商店街)",
+    "address":"臺北市內湖區成功路二段325號B1樓",
+    "tel":"(02)87923311#1"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5188189,25.0442304 ]
+    },
+    "properties": {
+    "name":"李記港式燒臘",
+    "address":"臺北市中正區台北市中正區中山南路8號B1",
+    "tel":"(02)82872296"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5347396,25.0605922 ]
+    },
+    "properties": {
+    "name":"沙渡垂陽碳烤(錦州店)",
+    "address":"臺北市中山區錦州街241巷1弄20號",
+    "tel":""
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5596868,25.0313875 ]
+    },
+    "properties": {
+    "name":"芋品苑．先森吃麵",
+    "address":"臺北市信義區吳興街26號一樓",
+    "tel":"(02)87333373"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5444707,25.0446591 ]
+    },
+    "properties": {
+    "name":"谷炭燒肉(市民店)",
+    "address":"臺北市大安區市民大道四段12之2號",
+    "tel":"(02)27119500"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5100089,25.1153459 ]
+    },
+    "properties": {
+    "name":"味?屋",
+    "address":"臺北市北投區實踐街67號",
+    "tel":"(02)28283230"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5643605,25.049842 ]
+    },
+    "properties": {
+    "name":"咖食堂",
+    "address":"臺北市中正區八德路1段82巷9弄13號",
+    "tel":"(02)23965252"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5250049,25.0949519 ]
+    },
+    "properties": {
+    "name":"咖啡弄(士林店)",
+    "address":"臺北市士林區台北市士林區中正路253號2樓",
+    "tel":"(02)28883322"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5148084,25.045466 ]
+    },
+    "properties": {
+    "name":"咖啡弄(站前店)",
+    "address":"臺北市中正區館前路18號2樓",
+    "tel":"(02)23883000"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5514325,25.0424491 ]
+    },
+    "properties": {
+    "name":"咖啡弄(敦化店)",
+    "address":"臺北市大安區台北市大安區敦化南路一段187巷42號2樓",
+    "tel":"(02)27111910"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5136974,25.0424141 ]
+    },
+    "properties": {
+    "name":"呷米蔬食 / 素食餐廳 Rice revolution vegetarian restaurant",
+    "address":"臺北市中正區衡陽路9號",
+    "tel":"(02)23319662"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5254698,25.0423998 ]
+    },
+    "properties": {
+    "name":"幸福時光廚房",
+    "address":"臺北市中正區台北市中正區濟南路一段321號",
+    "tel":"(02)23930255"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5168171,25.0360978 ]
+    },
+    "properties": {
+    "name":"幸福道小籠包(微風台大醫院商場)",
+    "address":"臺北市中正區中山南路77號B1F",
+    "tel":"(02)23952298#8"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.564395,25.037525 ]
+    },
+    "properties": {
+    "name":"府宴餐廳",
+    "address":"臺北市信義區市府路1號B1",
+    "tel":"(02)27588950"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5910904,25.0728868 ]
+    },
+    "properties": {
+    "name":"怡來養生食舖(微風．三總商店街)",
+    "address":"臺北市內湖區成功路二段325號B1樓",
+    "tel":"(02)87923311#1"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5467382,25.0435009 ]
+    },
+    "properties": {
+    "name":"房間餐酒 The Room Bistro",
+    "address":"臺北市大安區敦化南路一段160巷56號",
+    "tel":"(02)27731665"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5227627,25.1208483 ]
+    },
+    "properties": {
+    "name":"明德素食園(北榮美食街)",
+    "address":"臺北市北投區石牌路二段201號生活廣場",
+    "tel":"(02)28739465"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5910904,25.0728868 ]
+    },
+    "properties": {
+    "name":"明德素食園(微風．三總商店街)",
+    "address":"臺北市內湖區成功路二段325號B1樓",
+    "tel":"(02)87923311#1"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5168171,25.0360978 ]
+    },
+    "properties": {
+    "name":"明德素食園(微風台大醫院商場)",
+    "address":"臺北市中正區中山南路77號B1F",
+    "tel":"(02)23952298#8"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5452517,25.0573001 ]
+    },
+    "properties": {
+    "name":"杭州小籠湯包-民生店",
+    "address":"臺北市松山區民生東路三段118號",
+    "tel":"(02)66130666"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5091924,25.0626947 ]
+    },
+    "properties": {
+    "name":"東方饌黔天下(迪化)",
+    "address":"臺北市大同區迪化街一段358-2號",
+    "tel":"(02)25577872"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5168171,25.0360978 ]
+    },
+    "properties": {
+    "name":"欣豐自助餐(微風台大醫院商場)",
+    "address":"臺北市中正區中山南路77號B1F",
+    "tel":"(02)23952298#8"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5058635,25.0378901 ]
+    },
+    "properties": {
+    "name":"爭鮮迴轉壽司",
+    "address":"臺北市萬華區台北市萬華區桂林路1號1樓",
+    "tel":"(02)23812806"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.574356,24.991606 ]
+    },
+    "properties": {
+    "name":"芽米早午餐(木柵店)",
+    "address":"臺北市文山區秀明路二段16號",
+    "tel":"(02)29393166"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5910904,25.0728868 ]
+    },
+    "properties": {
+    "name":"花蓮扁食(微風．三總商店街)",
+    "address":"臺北市內湖區成功路二段325號B1樓",
+    "tel":"(02)87923311#1"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5168171,25.0360978 ]
+    },
+    "properties": {
+    "name":"花蓮扁食(微風台大醫院商場)",
+    "address":"臺北市中正區中山南路77號B1F",
+    "tel":"(02)23952298#8"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.540876,25.0671 ]
+    },
+    "properties": {
+    "name":"初點良食 Dim sum shop",
+    "address":"臺北市中山區龍江路394巷2號",
+    "tel":""
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5659843,25.0342834 ]
+    },
+    "properties": {
+    "name":"金色三麥 UMAMI微風南山店",
+    "address":"臺北市信義區台北市信義區松智路17號7樓",
+    "tel":"(02)27291229"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5202958,25.0521949 ]
+    },
+    "properties": {
+    "name":"金色三麥 台北京站店",
+    "address":"臺北市大同區台北市大同區承德路1段1號4樓",
+    "tel":"(02)77370909"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.557274,25.0833016 ]
+    },
+    "properties": {
+    "name":"金色三麥 台北美麗華店",
+    "address":"臺北市中山區台北市中山區敬業3路20號5樓",
+    "tel":"(02)21753739"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5658456,25.0395856 ]
+    },
+    "properties": {
+    "name":"金色三麥 信義誠品店",
+    "address":"臺北市信義區台北市信義區松高路11號B1",
+    "tel":"(02)87895911"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.6047509,25.0526288 ]
+    },
+    "properties": {
+    "name":"金色三麥南港CITYLINK店",
+    "address":"臺北市南港區台北市南港區忠孝東路七段299號C棟1樓",
+    "tel":"(02)27827000"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5917584,25.0496953 ]
+    },
+    "properties": {
+    "name":"金春發牛肉店(昆陽店)",
+    "address":"臺北市南港區忠孝東路六段372號",
+    "tel":"(02)26538189"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5438585,25.0556012 ]
+    },
+    "properties": {
+    "name":"金春發牛肉店(復北店)",
+    "address":"臺北市中山區復興北路202號",
+    "tel":"(02)25026806"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.544963,25.0419132 ]
+    },
+    "properties": {
+    "name":"金澤美味壽司 (忠孝SOGO店)",
+    "address":"臺北市大安區忠孝東路四段45號11F",
+    "tel":"(02)87717770"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5432167,25.0411128 ]
+    },
+    "properties": {
+    "name":"阿瑪迪斯咖啡館",
+    "address":"臺北市大安區忠孝東路三段300號10樓",
+    "tel":"(02)87728679"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5507371,25.0980271 ]
+    },
+    "properties": {
+    "name":"青青食尚花園會館",
+    "address":"臺北市士林區至善路二段266巷32號",
+    "tel":"(02)28411996#3"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5245943,25.105306 ]
+    },
+    "properties": {
+    "name":"非常泰（天母sogo 店）",
+    "address":"臺北市士林區中山北路六段77號8樓",
+    "tel":"(02)28310188"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5310849,25.0537138 ]
+    },
+    "properties": {
+    "name":"侯黑鍋物 酸菜小火鍋 Ho Hey Hot Pot",
+    "address":"臺北市中山區四平街19號",
+    "tel":"(02)25677889"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5343264,25.0236484 ]
+    },
+    "properties": {
+    "name":"恬園餐廳",
+    "address":"臺北市大安區新生南路三段30號",
+    "tel":"(02)77122323#2"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5058635,25.0378901 ]
+    },
+    "properties": {
+    "name":"星巴克",
+    "address":"臺北市萬華區台北市萬華區桂林路1號",
+    "tel":"(02)23616931"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.556729,25.0426455 ]
+    },
+    "properties": {
+    "name":"星辰牛排",
+    "address":"臺北市大安區光復南路180巷16號",
+    "tel":"(02)27217512"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5227627,25.1208483 ]
+    },
+    "properties": {
+    "name":"洪祖師擔仔麵(北榮美食街)",
+    "address":"臺北市北投區石牌路二段201號生活廣場",
+    "tel":""
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5498781,25.0356477 ]
+    },
+    "properties": {
+    "name":"洗心壽司割烹",
+    "address":"臺北市大安區敦化南路一段295巷9號",
+    "tel":""
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5058635,25.0378901 ]
+    },
+    "properties": {
+    "name":"炸雞大獅",
+    "address":"臺北市萬華區台北市萬華區桂林路1號",
+    "tel":"(02)23813607"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5809923,25.0817534 ]
+    },
+    "properties": {
+    "name":"珍珠?子喫茶屋",
+    "address":"臺北市內湖區內湖路二段103巷38號",
+    "tel":"(02)27973972"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.544633,25.0418699 ]
+    },
+    "properties": {
+    "name":"皇家哥本哈根咖啡輕食複合店 (忠孝SOGO店)",
+    "address":"臺北市大安區忠孝東路四段45號4F",
+    "tel":"(02)27113362"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5227627,25.1208483 ]
+    },
+    "properties": {
+    "name":"皇家傳承(北榮美食街)",
+    "address":"臺北市北投區石牌路二段201號生活廣場",
+    "tel":"(02)28747328"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5310088,25.1153435 ]
+    },
+    "properties": {
+    "name":"紅瓦厝懷舊風味餐坊",
+    "address":"臺北市士林區天母東路8巷67號",
+    "tel":"(02)28767407"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5483542,25.0404437 ]
+    },
+    "properties": {
+    "name":"紅豆食府",
+    "address":"臺北市大安區敦化南路一段246號B2",
+    "tel":"(02)87715511"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5245943,25.105306 ]
+    },
+    "properties": {
+    "name":"紅豆食府(天母SOGO店)",
+    "address":"臺北市士林區中山北路六段77號8F",
+    "tel":"(02)28332208"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5227627,25.1208483 ]
+    },
+    "properties": {
+    "name":"紅豆食府(北榮美食街)",
+    "address":"臺北市北投區石牌路二段201號生活廣場",
+    "tel":"(02)28713068"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5432167,25.0411128 ]
+    },
+    "properties": {
+    "name":"紅花鐵板燒(復興SOGO店)",
+    "address":"臺北市大安區忠孝東路三段300號10樓",
+    "tel":"(02)27316555"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5549737,25.0369053 ]
+    },
+    "properties": {
+    "name":"美術系壽司(台北大安店)",
+    "address":"臺北市大安區仁愛路四段300巷9弄4號",
+    "tel":"(02)27017989"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5004978,25.1304417 ]
+    },
+    "properties": {
+    "name":"美華閣湯包麵食館",
+    "address":"臺北市北投區大興街58號",
+    "tel":"(02)28977288"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5170835,25.0443093 ]
+    },
+    "properties": {
+    "name":"美樂家速食坊",
+    "address":"臺北市中正區常德街1號B1",
+    "tel":"(02)23111298"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5343264,25.0236484 ]
+    },
+    "properties": {
+    "name":"風尚咖啡廳",
+    "address":"臺北市大安區新生南路3段30號B1",
+    "tel":"(02)88122323#2"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5042947,25.040733 ]
+    },
+    "properties": {
+    "name":"食光/此拾此客",
+    "address":"臺北市萬華區昆明街214號",
+    "tel":"(02)23147302"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5853416,25.0521215 ]
+    },
+    "properties": {
+    "name":"宮保王食品有限公司",
+    "address":"臺北市南港區南港路三段149巷49弄12號",
+    "tel":"(02)26519947"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5519345,25.0585182 ]
+    },
+    "properties": {
+    "name":"島津和牛咖哩 (民生店)",
+    "address":"臺北市松山區民生東路四段97巷1弄2號",
+    "tel":"(02)27171007"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5195223,25.0414335 ]
+    },
+    "properties": {
+    "name":"徐州路2號庭園會館",
+    "address":"臺北市中正區徐州路2號",
+    "tel":"(02)23928888"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5645389,25.033976 ]
+    },
+    "properties": {
+    "name":"捌伍添第",
+    "address":"臺北市信義區信義路五段7號85號樓B側",
+    "tel":"(02)81010085"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.531716,25.0186079 ]
+    },
+    "properties": {
+    "name":"書屋花甲(台大店)",
+    "address":"臺北市大安區羅斯福路三段283巷20號1樓",
+    "tel":"(02)23680824"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.543058,25.0411149 ]
+    },
+    "properties": {
+    "name":"泰迪農園咖哩",
+    "address":"臺北市大安區忠孝東路三段300號7樓",
+    "tel":"(02)87726099"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5061818,25.037703 ]
+    },
+    "properties": {
+    "name":"海底撈",
+    "address":"臺北市萬華區台北市萬華區桂林路1號4樓",
+    "tel":"(02)23146868"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5661991,25.0345019 ]
+    },
+    "properties": {
+    "name":"海底撈火鍋",
+    "address":"臺北市信義區松智路17號2B",
+    "tel":"(02)87801855"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5534098,25.0397665 ]
+    },
+    "properties": {
+    "name":"烤肉工廠",
+    "address":"臺北市大安區忠孝東路四段216巷27弄2號",
+    "tel":"(02)87717345"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5534984,25.0426381 ]
+    },
+    "properties": {
+    "name":"真飽餐盒",
+    "address":"臺北市大安區延吉街70巷6弄3號",
+    "tel":"(02)27720506"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5448197,25.0419878 ]
+    },
+    "properties": {
+    "name":"神樂家（忠孝SOGO店）",
+    "address":"臺北市大安區忠孝東路四段45號11樓",
+    "tel":"(02)89785666"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5315075,25.0182077 ]
+    },
+    "properties": {
+    "name":"秘徑小食光",
+    "address":"臺北市大安區羅斯福路三段283巷3號",
+    "tel":"(02)33651995"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5144965,25.1380054 ]
+    },
+    "properties": {
+    "name":"財團法人福祿文化基金會北投文物館",
+    "address":"臺北市北投區幽雅路32號",
+    "tel":"(02)28912318#1"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5407643,25.0484864 ]
+    },
+    "properties": {
+    "name":"鬥牛士(長安店)",
+    "address":"臺北市中山區長安東路二段169之12號2樓",
+    "tel":"(02)27406660"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5169983,25.0477467 ]
+    },
+    "properties": {
+    "name":"乾杯列車台北總站",
+    "address":"臺北市中正區北平西路3號2樓",
+    "tel":"(02)23618000"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5201964,25.0530943 ]
+    },
+    "properties": {
+    "name":"乾杯燒肉居酒屋 中山店",
+    "address":"臺北市大同區台北市大同區南京西路25巷2-1號",
+    "tel":"(02)25556110"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5469919,25.0406471 ]
+    },
+    "properties": {
+    "name":"乾杯燒肉居酒屋 本店",
+    "address":"臺北市大安區台北市大安區敦化南路一段236巷17號",
+    "tel":"(02)87731150"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5660108,25.035488 ]
+    },
+    "properties": {
+    "name":"乾杯燒肉居酒屋 信義 ATT 店",
+    "address":"臺北市信義區台北市信義區松壽路12號3樓",
+    "tel":"(02)87860808"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.6149583,25.0588333 ]
+    },
+    "properties": {
+    "name":"乾杯燒肉居酒屋 南港中信店",
+    "address":"臺北市南港區台北市南港區經貿二路186-1號2樓",
+    "tel":"(02)27866066"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5473381,25.0480381 ]
+    },
+    "properties": {
+    "name":"基督復臨安息日會醫療財團法人臺安醫院 嗎哪天然之味餐廳",
+    "address":"臺北市松山區八德路二段424號B1",
+    "tel":"(02)27718151#3"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.6064554,25.0526213 ]
+    },
+    "properties": {
+    "name":"敘日全日餐廳",
+    "address":"臺北市南港區忠孝東路七段359號7樓",
+    "tel":"(02)66156526"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5748083,25.1427814 ]
+    },
+    "properties": {
+    "name":"梅居休閒農場",
+    "address":"臺北市士林區平菁街43巷99號",
+    "tel":""
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5257142,25.0541679 ]
+    },
+    "properties": {
+    "name":"涮乃葉-欣欣百貨店",
+    "address":"臺北市中山區台北市中山區林森北路247號2樓",
+    "tel":"(02)25416320"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5681356,25.0368823 ]
+    },
+    "properties": {
+    "name":"涮乃葉-信義遠百店",
+    "address":"臺北市信義區台北市信義區松仁路58號7樓",
+    "tel":"(02)27230698"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.614672,25.0588739 ]
+    },
+    "properties": {
+    "name":"涮乃葉-南港中信店",
+    "address":"臺北市南港區台北市南港區經貿二路188-1號2樓(中信總部C棟)",
+    "tel":"(02)26530155"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5652968,25.0406521 ]
+    },
+    "properties": {
+    "name":"涮乃葉-統一時代市府店",
+    "address":"臺北市信義區台北市信義區忠孝東路5段8號3樓",
+    "tel":"(02)27230646"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5090355,25.0415675 ]
+    },
+    "properties": {
+    "name":"涮乃葉-寶慶遠百店",
+    "address":"臺北市中正區台北市中正區寶慶路32號6樓(遠東百貨6樓)",
+    "tel":"(02)23611258"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5483542,25.0404437 ]
+    },
+    "properties": {
+    "name":"深紅鍋物",
+    "address":"臺北市大安區敦化南路一段246號B2",
+    "tel":"(02)87730035"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5168171,25.0360978 ]
+    },
+    "properties": {
+    "name":"第一佳(微風台大醫院商場)",
+    "address":"臺北市中正區中山南路77號B1F",
+    "tel":"(02)23952298#8"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5130548,25.0455659 ]
+    },
+    "properties": {
+    "name":"第一銀行總行大樓員工餐廳",
+    "address":"臺北市中正區重慶南路一段30號21樓",
+    "tel":"(02)23481520"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5446329,25.0418698 ]
+    },
+    "properties": {
+    "name":"荷李活茶街 (忠孝SOGO店)",
+    "address":"臺北市大安區忠孝東路四段45號2F",
+    "tel":"(02)27780369"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.544839,25.0421475 ]
+    },
+    "properties": {
+    "name":"莆田 (忠孝SOGO店)",
+    "address":"臺北市大安區忠孝東路四段45號12F",
+    "tel":"(02)87710767"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5304715,25.0192877 ]
+    },
+    "properties": {
+    "name":"野橙咖啡",
+    "address":"臺北市大安區羅斯福路三段269巷6之1號",
+    "tel":"(02)27025522"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5245943,25.105306 ]
+    },
+    "properties": {
+    "name":"魚君 ????? 天母SOGO店",
+    "address":"臺北市士林區中山北路六段77號8樓",
+    "tel":"(02)88661170"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5631092,25.0430116 ]
+    },
+    "properties": {
+    "name":"鳥作洋食",
+    "address":"臺北市信義區忠孝東路四段553巷16弄2號1樓",
+    "tel":"(02)27567966"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5110787,25.0835435 ]
+    },
+    "properties": {
+    "name":"麥味登士林葫東",
+    "address":"臺北市士林區葫東街28-1號",
+    "tel":"(02)28112112"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5474966,25.0822321 ]
+    },
+    "properties": {
+    "name":"麥味登大直北安羅伯",
+    "address":"臺北市中山區北安路595巷19號",
+    "tel":"(02)85092968"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5622178,25.0867965 ]
+    },
+    "properties": {
+    "name":"麥味登內湖文湖",
+    "address":"臺北市內湖區文湖街49號",
+    "tel":"(02)87516996"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5711203,25.0778958 ]
+    },
+    "properties": {
+    "name":"麥味登內湖光寶",
+    "address":"臺北市內湖區瑞光路392號",
+    "tel":""
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.57139,25.0821319 ]
+    },
+    "properties": {
+    "name":"麥味登內湖波士店",
+    "address":"臺北市內湖區內湖路一段411巷9弄4號",
+    "tel":"(02)26277311"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5904197,25.0776788 ]
+    },
+    "properties": {
+    "name":"麥味登內湖星雲",
+    "address":"臺北市內湖區星雲街10號1F",
+    "tel":"(02)87920660"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5678929,25.084282 ]
+    },
+    "properties": {
+    "name":"麥味登內湖園區",
+    "address":"臺北市內湖區內湖路一段323巷30號",
+    "tel":"(02)26275822"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5849385,25.0572851 ]
+    },
+    "properties": {
+    "name":"麥味登內湖新明",
+    "address":"臺北市內湖區新明路198號",
+    "tel":"(02)27960603"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5774468,25.0640868 ]
+    },
+    "properties": {
+    "name":"麥味登內湖新湖",
+    "address":"臺北市內湖區新湖三路118號",
+    "tel":"(02)27956995"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.6076821,25.0709393 ]
+    },
+    "properties": {
+    "name":"麥味登內湖葫洲",
+    "address":"臺北市內湖區民權東路六段296巷67號",
+    "tel":"(02)26333323"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5832438,25.0773072 ]
+    },
+    "properties": {
+    "name":"麥味登內湖旗艦",
+    "address":"臺北市內湖區文德路90巷43號",
+    "tel":"(02)26272227"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.591069,25.085668 ]
+    },
+    "properties": {
+    "name":"麥味登內湖碧湖",
+    "address":"臺北市內湖區金龍路107號",
+    "tel":"(02)87916778"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5282897,25.1121516 ]
+    },
+    "properties": {
+    "name":"麥味登天母士東",
+    "address":"臺北市士林區士東路71號",
+    "tel":"(02)28712828"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5567808,24.9805708 ]
+    },
+    "properties": {
+    "name":"麥味登文山木星好運",
+    "address":"臺北市文山區木新路三段315號",
+    "tel":"(02)29360988"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5659902,24.9828512 ]
+    },
+    "properties": {
+    "name":"麥味登文山木新",
+    "address":"臺北市文山區木新路二段277號",
+    "tel":"(02)29398080"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5421668,24.9892698 ]
+    },
+    "properties": {
+    "name":"麥味登文山世新",
+    "address":"臺北市文山區景興路288號",
+    "tel":"(02)29350818"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5545828,25.0006072 ]
+    },
+    "properties": {
+    "name":"麥味登文山辛亥",
+    "address":"臺北市文山區辛亥路五段5號",
+    "tel":"(02)29315015"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5760303,24.988556 ]
+    },
+    "properties": {
+    "name":"麥味登文山政大",
+    "address":"臺北市文山區萬壽路25巷3號",
+    "tel":"(02)29381314"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.540521,24.9901639 ]
+    },
+    "properties": {
+    "name":"麥味登文山滬江",
+    "address":"臺北市文山區羅斯福路六段455巷21號1樓",
+    "tel":"(02)29351157"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5614362,24.9857321 ]
+    },
+    "properties": {
+    "name":"麥味登文山興隆",
+    "address":"臺北市文山區興隆路四段119號",
+    "tel":"(02)29392619"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5375967,25.0020364 ]
+    },
+    "properties": {
+    "name":"麥味登文山饗食大亨",
+    "address":"臺北市文山區羅斯福路五段218巷25號",
+    "tel":"(02)29301098"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5458685,25.0298242 ]
+    },
+    "properties": {
+    "name":"麥味登北市大安",
+    "address":"臺北市大安區大安路二段134號",
+    "tel":"(02)27017080"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.582126,25.041349 ]
+    },
+    "properties": {
+    "name":"麥味登北市大道",
+    "address":"臺北市信義區大道路50號",
+    "tel":"(02)27598668"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5356852,25.0367632 ]
+    },
+    "properties": {
+    "name":"麥味登北市仁愛",
+    "address":"臺北市大安區仁愛路三段24巷1-6號",
+    "tel":"(02)27037182"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5533861,25.0248843 ]
+    },
+    "properties": {
+    "name":"麥味登北市六張犁店",
+    "address":"臺北市信義區基隆路二段183號1樓",
+    "tel":"(02)27323011"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5588746,25.033782 ]
+    },
+    "properties": {
+    "name":"麥味登北市天秤獅",
+    "address":"臺北市信義區光復南路473巷29號",
+    "tel":"(02)27589477"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5664296,24.9886388 ]
+    },
+    "properties": {
+    "name":"麥味登北市文山木柵店",
+    "address":"臺北市文山區木柵路三段55號",
+    "tel":"(02)86617903"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5615427,25.0306362 ]
+    },
+    "properties": {
+    "name":"麥味登北市世貿莊敬店",
+    "address":"臺北市信義區莊敬路203號",
+    "tel":"(02)87861811"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5355537,25.0132493 ]
+    },
+    "properties": {
+    "name":"麥味登北市台大",
+    "address":"臺北市中正區羅斯福路四段118號",
+    "tel":"(02)23657279"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5508357,25.0474712 ]
+    },
+    "properties": {
+    "name":"麥味登北市台視店",
+    "address":"臺北市松山區八德路三段12巷5弄6號",
+    "tel":"(02)25795877"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5624689,25.059357 ]
+    },
+    "properties": {
+    "name":"麥味登北市民生",
+    "address":"臺北市松山區民生東路五段153-5號",
+    "tel":"(02)27607148"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5620214,25.0568858 ]
+    },
+    "properties": {
+    "name":"麥味登北市民生延壽店",
+    "address":"臺北市松山區延壽街173號",
+    "tel":"(02)27476967"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5129743,25.0627817 ]
+    },
+    "properties": {
+    "name":"麥味登北市民權",
+    "address":"臺北市大同區民權西路234號",
+    "tel":"(02)25506676"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5766184,25.0398303 ]
+    },
+    "properties": {
+    "name":"麥味登北市永春",
+    "address":"臺北市信義區忠孝東路五段372巷27弄77-1號",
+    "tel":"(02)27220602"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5847771,25.0454443 ]
+    },
+    "properties": {
+    "name":"麥味登北市同德",
+    "address":"臺北市南港區同德路54號",
+    "tel":"(02)27855330"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5007431,25.0282275 ]
+    },
+    "properties": {
+    "name":"麥味登北市成功",
+    "address":"臺北市萬華區萬大路177號",
+    "tel":"(02)23075752"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.564411,25.0264119 ]
+    },
+    "properties": {
+    "name":"麥味登北市百勝",
+    "address":"臺北市信義區吳興街281巷14號",
+    "tel":"(02)27584827"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5674264,25.0548238 ]
+    },
+    "properties": {
+    "name":"麥味登北市西松",
+    "address":"臺北市松山區健康路325巷6弄2號",
+    "tel":"(02)85095201"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5072371,25.0479314 ]
+    },
+    "properties": {
+    "name":"麥味登北市西門",
+    "address":"臺北市萬華區西寧南路24號",
+    "tel":"(02)23717288"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5175271,25.0248168 ]
+    },
+    "properties": {
+    "name":"麥味登北市和平",
+    "address":"臺北市中正區廈門街75號",
+    "tel":"(02)23652299"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5653136,25.0419415 ]
+    },
+    "properties": {
+    "name":"麥味登北市府捷運店",
+    "address":"臺北市信義區基隆路1段147巷12號",
+    "tel":"(02)27491801"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5652968,25.0406521 ]
+    },
+    "properties": {
+    "name":"麥味登北市忠孝店",
+    "address":"臺北市信義區忠孝東路5段524巷6號",
+    "tel":"(02)23463923"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5631421,24.9848594 ]
+    },
+    "properties": {
+    "name":"麥味登北市忠順",
+    "address":"臺北市文山區忠順街2段25號",
+    "tel":"(02)29399358"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5170502,25.0659562 ]
+    },
+    "properties": {
+    "name":"麥味登北市昌吉",
+    "address":"臺北市大同區昌吉街27號",
+    "tel":"(02)25996761"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5934512,25.0517005 ]
+    },
+    "properties": {
+    "name":"麥味登北市昆陽",
+    "address":"臺北市南港區昆陽街94號",
+    "tel":"(02)27883965"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5779883,25.044465 ]
+    },
+    "properties": {
+    "name":"麥味登北市松山",
+    "address":"臺北市信義區松山路241號",
+    "tel":"(02)27682899"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.569051,25.0252129 ]
+    },
+    "properties": {
+    "name":"麥味登北市松仁",
+    "address":"臺北市信義區松仁路232號",
+    "tel":"(02)27585197"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.574784,25.035552 ]
+    },
+    "properties": {
+    "name":"麥味登北市松德",
+    "address":"臺北市信義區松德路193號",
+    "tel":"(02)27260169"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5336666,25.0483232 ]
+    },
+    "properties": {
+    "name":"麥味登北市長安東",
+    "address":"臺北市中山區長安東路二段72號",
+    "tel":"(02)25065763"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.538196,25.0545479 ]
+    },
+    "properties": {
+    "name":"麥味登北市長春",
+    "address":"臺北市中山區長春路238號",
+    "tel":"(02)25071770"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5568266,25.0280818 ]
+    },
+    "properties": {
+    "name":"麥味登北市信義基隆店",
+    "address":"臺北市信義區基隆路二段131-2號",
+    "tel":"(02)27327880"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5635769,25.0512988 ]
+    },
+    "properties": {
+    "name":"麥味登北市南京三民(togo外賣專門店)",
+    "address":"臺北市松山區南京東路五段186號",
+    "tel":"(02)27489768"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.514129,25.0513729 ]
+    },
+    "properties": {
+    "name":"麥味登北市重慶",
+    "address":"臺北市大同區重慶北路一段61號1F",
+    "tel":"(02)25593866"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5281052,25.066501 ]
+    },
+    "properties": {
+    "name":"麥味登北市神通",
+    "address":"臺北市中山區新生北路三段69-1號",
+    "tel":"(02)25866260"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5525518,25.0546367 ]
+    },
+    "properties": {
+    "name":"麥味登北市健康店",
+    "address":"臺北市松山區健康路15巷13號",
+    "tel":"(02)25148117"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5568815,25.0496797 ]
+    },
+    "properties": {
+    "name":"麥味登北市參食",
+    "address":"臺北市松山區光復北路60巷19-4號",
+    "tel":"(02)25782800"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5234909,25.0581199 ]
+    },
+    "properties": {
+    "name":"麥味登北市國王",
+    "address":"臺北市中山區民生東路一段5號",
+    "tel":"(02)25115091"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.53235,25.054992 ]
+    },
+    "properties": {
+    "name":"麥味登北市國王二",
+    "address":"臺北市中山區長春路147-2號",
+    "tel":"(02)25312636"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5531705,25.0311876 ]
+    },
+    "properties": {
+    "name":"麥味登北市通化",
+    "address":"臺北市大安區通安街54號",
+    "tel":"(02)27065066"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5483354,25.0593265 ]
+    },
+    "properties": {
+    "name":"麥味登北市敦北",
+    "address":"臺北市松山區敦化北路222巷11號",
+    "tel":"(02)27120158"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5494309,25.0310916 ]
+    },
+    "properties": {
+    "name":"麥味登北市敦南遠企店",
+    "address":"臺北市大安區敦化南路二段63巷5號",
+    "tel":"(02)27035003"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5313124,25.042527 ]
+    },
+    "properties": {
+    "name":"麥味登北市新生店",
+    "address":"臺北市中正區忠孝東路二段116號",
+    "tel":"(02)23919493"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5644189,25.0500654 ]
+    },
+    "properties": {
+    "name":"麥味登北市新東興",
+    "address":"臺北市松山區八德路四段245巷36號",
+    "tel":"(02)27476080"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.540407,25.0288552 ]
+    },
+    "properties": {
+    "name":"麥味登北市瑞安",
+    "address":"臺北市大安區瑞安街208巷26號",
+    "tel":"(02)27077551"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.546091,25.0837391 ]
+    },
+    "properties": {
+    "name":"麥味登北市實踐",
+    "address":"臺北市中山區大直街70號",
+    "tel":"(02)25336934"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5407221,25.0644354 ]
+    },
+    "properties": {
+    "name":"麥味登北市榮星花園",
+    "address":"臺北市中山區五常街85號",
+    "tel":"(02)25082251"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5406571,25.0591671 ]
+    },
+    "properties": {
+    "name":"麥味登北市龍江1店",
+    "address":"臺北市中山區龍江路244號",
+    "tel":"(02)77292550"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.501864,25.1263407 ]
+    },
+    "properties": {
+    "name":"麥味登北投奇岩",
+    "address":"臺北市北投區三合街二段463號",
+    "tel":"(02)28985212"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5151727,25.1188809 ]
+    },
+    "properties": {
+    "name":"麥味登北投陽明",
+    "address":"臺北市北投區立農街二段275號",
+    "tel":"(02)28220198"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5098272,25.115199 ]
+    },
+    "properties": {
+    "name":"麥味登北投實踐",
+    "address":"臺北市北投區實踐街62號",
+    "tel":"(02)28201888"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5102846,25.0524305 ]
+    },
+    "properties": {
+    "name":"麥味登北門塔城",
+    "address":"臺北市大同區塔城街48號",
+    "tel":"(02)25522215"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5331907,25.0442036 ]
+    },
+    "properties": {
+    "name":"麥味登台北科大to-go 專門店",
+    "address":"臺北市大安區新生南路一段1號",
+    "tel":"(02)87729001"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5552778,25.0227778 ]
+    },
+    "properties": {
+    "name":"麥味登台北陽光店",
+    "address":"臺北市信義區信安街155號",
+    "tel":"(02)27339595"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5393063,25.0017189 ]
+    },
+    "properties": {
+    "name":"麥味登台北萬隆",
+    "address":"臺北市文山區羅斯福路五段233號",
+    "tel":"(02)29356080"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.585223,25.038746 ]
+    },
+    "properties": {
+    "name":"麥味登信義福德",
+    "address":"臺北市信義區福德街246號",
+    "tel":"(02)27271825"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.611137,25.055618 ]
+    },
+    "properties": {
+    "name":"麥味登南軟園區",
+    "address":"臺北市南港區新民街81號",
+    "tel":"(02)27833313"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5445208,24.9971174 ]
+    },
+    "properties": {
+    "name":"麥味登景興饗食大亨",
+    "address":"臺北市文山區景興路40號",
+    "tel":"(02)29325657"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4919004,25.0316068 ]
+    },
+    "properties": {
+    "name":"麥味登萬華雙園",
+    "address":"臺北市萬華區雙園街148號",
+    "tel":"(02)22123484"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.4946857,25.0254744 ]
+    },
+    "properties": {
+    "name":"麥味登萬華寶興",
+    "address":"臺北市萬華區寶興街109號",
+    "tel":"(02)23395976"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5670164,25.0403792 ]
+    },
+    "properties": {
+    "name":"麻辣45 本店",
+    "address":"臺北市信義區台北市信義區忠孝東路五段 68 號 45 樓",
+    "tel":"(02)27253358"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5432417,25.0408932 ]
+    },
+    "properties": {
+    "name":"凱林鐵板燒",
+    "address":"臺北市大安區忠孝東路三段300號B2",
+    "tel":"(02)87728551"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5515143,25.0850766 ]
+    },
+    "properties": {
+    "name":"凱基證券總公司員工餐廳(自有)",
+    "address":"臺北市中山區成功里明水路700號4樓",
+    "tel":"(02)21818888"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5381728,25.0453282 ]
+    },
+    "properties": {
+    "name":"勝利廚房",
+    "address":"臺北市中山區八德路二段174巷28號1-2樓",
+    "tel":"(02)27766603"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.565466,25.0404655 ]
+    },
+    "properties": {
+    "name":"博多天麩羅山海",
+    "address":"臺北市信義區忠孝東路五段8號B2",
+    "tel":"(02)27231885"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5910904,25.0728868 ]
+    },
+    "properties": {
+    "name":"喜陽鮮食(微風．三總商店街)",
+    "address":"臺北市內湖區成功路二段325號B1樓",
+    "tel":"(02)87923311#1"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5641242,25.0422519 ]
+    },
+    "properties": {
+    "name":"帽哥海味",
+    "address":"臺北市信義區忠孝東路四段559巷16弄8號1樓",
+    "tel":""
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5562763,25.0411575 ]
+    },
+    "properties": {
+    "name":"晶湯匙泰式主題餐廳",
+    "address":"臺北市大安區忠孝東路四段300號10樓",
+    "tel":"(02)87725006"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.524896,25.0579253 ]
+    },
+    "properties": {
+    "name":"港都熱炒 中山旗艦店",
+    "address":"臺北市中山區民生東路一段52號",
+    "tel":"(02)25221918"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.522979,25.0301296 ]
+    },
+    "properties": {
+    "name":"無二會所",
+    "address":"臺北市大安區杭州南路二段61巷12號",
+    "tel":"(02)23917599"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5448312,25.0502922 ]
+    },
+    "properties": {
+    "name":"發肉燒肉餐酒(敦化本店)",
+    "address":"臺北市松山區敦化北路4巷56號",
+    "tel":"(02)27113331"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5687809,25.0345192 ]
+    },
+    "properties": {
+    "name":"華南銀行員工餐廳",
+    "address":"臺北市信義區松仁路123號3樓",
+    "tel":"(02)23713111#3"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5050945,25.0394622 ]
+    },
+    "properties": {
+    "name":"貴陽柳州螺螄粉",
+    "address":"臺北市萬華區貴陽街二段36號",
+    "tel":"(02)23612627"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5483542,25.0404437 ]
+    },
+    "properties": {
+    "name":"開飯川食堂",
+    "address":"臺北市大安區敦化南路一段246號B2",
+    "tel":"(02)27515618"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5246077,25.0950492 ]
+    },
+    "properties": {
+    "name":"陽明山春天書食創作料理士林店",
+    "address":"臺北市士林區?山路119-1號",
+    "tel":"(02)28620178"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5346965,25.0138485 ]
+    },
+    "properties": {
+    "name":"雲泰小鎮泰式料理",
+    "address":"臺北市中正區羅斯福路四段90巷2-2號",
+    "tel":"(02)23675625"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5660665,25.03531 ]
+    },
+    "properties": {
+    "name":"黑毛屋 信義 ATT 店",
+    "address":"臺北市信義區台北市信義區松壽路 12 號 4 樓",
+    "tel":"(02)77362698"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.6149583,25.0588333 ]
+    },
+    "properties": {
+    "name":"黑毛屋 南港中信店",
+    "address":"臺北市南港區台北市南港區經貿二路 186-1 號 2 樓",
+    "tel":"(02)27865669"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5572333,25.082727 ]
+    },
+    "properties": {
+    "name":"黑毛屋大直忠泰店",
+    "address":"臺北市中正區樂群三路200號5樓",
+    "tel":"(02)85025991"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5245943,25.105306 ]
+    },
+    "properties": {
+    "name":"黑毛屋天母SOGO店",
+    "address":"臺北市士林區中山北路6段77號8樓",
+    "tel":"(02)28366018"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5667147,25.0395325 ]
+    },
+    "properties": {
+    "name":"黑毛屋本家 信義店",
+    "address":"臺北市信義區台北市信義區松高路 19 號 6 樓",
+    "tel":"(02)27237722"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5431893,25.0408977 ]
+    },
+    "properties": {
+    "name":"黑毛屋本家(復興SOGO店)",
+    "address":"臺北市大安區忠孝東路三段300號11樓",
+    "tel":"(02)27315199"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5169983,25.0477467 ]
+    },
+    "properties": {
+    "name":"黑毛屋微風台北車站店",
+    "address":"臺北市中正區北平西路 3 號 2 樓",
+    "tel":"(02)23751511"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5690534,25.0015562 ]
+    },
+    "properties": {
+    "name":"愛加倍餐廳",
+    "address":"臺北市文山區萬美街一段19巷5之1",
+    "tel":"(02)22303518"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5222703,25.0448687 ]
+    },
+    "properties": {
+    "name":"新盛員工餐廳",
+    "address":"臺北市中正區忠孝東路一段12號B3",
+    "tel":""
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5245943,25.105306 ]
+    },
+    "properties": {
+    "name":"新葡苑（天母SOGO店）",
+    "address":"臺北市士林區中山北路6段77號8樓",
+    "tel":"(02)28366628"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5432167,25.0411128 ]
+    },
+    "properties": {
+    "name":"新葡苑(復興SOGO店)",
+    "address":"臺北市大安區忠孝東路三段300號10樓",
+    "tel":"(02)87720177"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5910904,25.0728868 ]
+    },
+    "properties": {
+    "name":"楊記(微風．三總商店街)",
+    "address":"臺北市內湖區成功路二段325號B1樓",
+    "tel":"(02)87923311#1"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5606895,25.0502581 ]
+    },
+    "properties": {
+    "name":"萬芳冰室-南京店",
+    "address":"臺北市松山區台北市松山區南京東路五段66巷16號",
+    "tel":"(02)27494069"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5227627,25.1208483 ]
+    },
+    "properties": {
+    "name":"義美見學餐廳(北榮美食街)",
+    "address":"臺北市北投區石牌路二段201號生活廣場",
+    "tel":"(02)28749302"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5597365,25.0507962 ]
+    },
+    "properties": {
+    "name":"蜂蜜窩桌遊咖啡館",
+    "address":"臺北市松山區光復北路103巷38號",
+    "tel":"(02)27425922"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5447843,25.0420339 ]
+    },
+    "properties": {
+    "name":"詩特莉 Aunt Stella (忠孝SOGO店)",
+    "address":"臺北市大安區忠孝東路四段45號B1",
+    "tel":"(02)27403072"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5169983,25.0477467 ]
+    },
+    "properties": {
+    "name":"頌丹樂泰式伊善料理",
+    "address":"臺北市中正區北平西路3號2樓",
+    "tel":"(02)23882968"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5229833,25.0553636 ]
+    },
+    "properties": {
+    "name":"彰化商業銀行員工餐廳",
+    "address":"臺北市中山區中山北路二段57號13樓",
+    "tel":""
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5481944,25.0399224 ]
+    },
+    "properties": {
+    "name":"漢來名人坊",
+    "address":"臺北市大安區敦化南路一段246號4樓",
+    "tel":"(02)87732111"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.524426,25.1051037 ]
+    },
+    "properties": {
+    "name":"漢來海港-天母店",
+    "address":"臺北市士林區中山北路六段77號7F",
+    "tel":"(07)4128068"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5483374,25.040247 ]
+    },
+    "properties": {
+    "name":"漢來海港-敦化店",
+    "address":"臺北市大安區敦化南路一段246號6樓",
+    "tel":"(07)4128068"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.544963,25.0419132 ]
+    },
+    "properties": {
+    "name":"漢來蔬食 (忠孝SOGO店)",
+    "address":"臺北市大安區忠孝東路四段45號11F",
+    "tel":"(02)27311128"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5605242,25.057179 ]
+    },
+    "properties": {
+    "name":"綠帶純植物烘焙",
+    "address":"臺北市松山區民生東路五段36巷8弄64號1樓",
+    "tel":"(02)27477668"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5531003,25.0303244 ]
+    },
+    "properties": {
+    "name":"翟記牛肉麵食館",
+    "address":"臺北市大安區通安街80號",
+    "tel":"(02)87717195"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.544963,25.0419132 ]
+    },
+    "properties": {
+    "name":"聚 北海道鍋物 (忠孝SOGO店)",
+    "address":"臺北市大安區忠孝東路四段45號11F",
+    "tel":"(02)27218787"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5483468,25.055594 ]
+    },
+    "properties": {
+    "name":"聚寶員工餐廳",
+    "address":"臺北市松山區敦化北路158號",
+    "tel":"(02)27156888"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5103705,25.0512172 ]
+    },
+    "properties": {
+    "name":"臺灣企銀總行大樓員工餐廳",
+    "address":"臺北市大同區塔城街30號18樓",
+    "tel":"(02)25597171"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5333229,25.0407582 ]
+    },
+    "properties": {
+    "name":"蓋子普拉斯小餐館",
+    "address":"臺北市大安區忠孝東路三段10巷22號",
+    "tel":"(02)27118571"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5449653,25.0421775 ]
+    },
+    "properties": {
+    "name":"遠東SOGO忠孝店員工餐廳",
+    "address":"臺北市大安區忠孝東路四段45號",
+    "tel":"(02)27765555"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5168171,25.0360978 ]
+    },
+    "properties": {
+    "name":"廟口蚵仔煎(微風台大醫院商場)",
+    "address":"臺北市中正區中山南路77號B1F",
+    "tel":"(02)23952298"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5243331,25.1049953 ]
+    },
+    "properties": {
+    "name":"摩斯漢堡(天母SOGO店)",
+    "address":"臺北市士林區中山北路六段77號",
+    "tel":"(02)28343204"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.552845,25.0428925 ]
+    },
+    "properties": {
+    "name":"樂檸漢堡（忠孝敦化門市）",
+    "address":"臺北市大安區忠孝東路四段223巷47號",
+    "tel":"(02)87720607"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5679552,25.0367511 ]
+    },
+    "properties": {
+    "name":"樂檸漢堡（信義遠百門市）",
+    "address":"臺北市信義區松仁路58號B3（A13 信義遠百 B3）",
+    "tel":"(02)27255260"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5623778,25.0504299 ]
+    },
+    "properties": {
+    "name":"樂檸漢堡（南京三民門市）",
+    "address":"臺北市松山區光復北路11巷99-1號",
+    "tel":"(02)27620398"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5443146,25.043562 ]
+    },
+    "properties": {
+    "name":"蔬店手作鍋物復興店",
+    "address":"臺北市大安區復興南路一段107巷2號",
+    "tel":"(02)27311008"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5701179,25.0425878 ]
+    },
+    "properties": {
+    "name":"蔬漫小姐Miss Shumaan.house",
+    "address":"臺北市信義區永吉路120巷82號1F",
+    "tel":"(02)27662386"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.552617,25.0325599 ]
+    },
+    "properties": {
+    "name":"醉美餐酒水煙館 Drunk Night",
+    "address":"臺北市大安區文昌街128號",
+    "tel":""
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5327926,25.0527859 ]
+    },
+    "properties": {
+    "name":"養心茶樓",
+    "address":"臺北市中山區松江路128號2樓",
+    "tel":"(02)25428828"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5367066,25.0130027 ]
+    },
+    "properties": {
+    "name":"曉鹿鳴樓上海菜",
+    "address":"臺北市大安區羅斯福路四段85號",
+    "tel":"(02)23688994"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5482156,25.0519961 ]
+    },
+    "properties": {
+    "name":"橫濱牛排-微風南京店",
+    "address":"臺北市松山區南京東路3段337號3樓",
+    "tel":"(02)87125575"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.546653,25.041369 ]
+    },
+    "properties": {
+    "name":"燒肉Smile大安忠孝店",
+    "address":"臺北市大安區台北市大安區忠孝東路四段104號號2樓之1",
+    "tel":"(02)27522000"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5697476,25.0815289 ]
+    },
+    "properties": {
+    "name":"燒肉Smile台北內湖店",
+    "address":"臺北市內湖區台北市內湖區內湖路一段320號",
+    "tel":"(02)26599555"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.578408,25.041398 ]
+    },
+    "properties": {
+    "name":"燒肉Smile台北忠孝",
+    "address":"臺北市信義區忠孝東路五段497號2樓",
+    "tel":"(02)87852227"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.59167,25.0818139 ]
+    },
+    "properties": {
+    "name":"築間幸福鍋物內湖成功",
+    "address":"臺北市內湖區114臺北市內湖區成功路4段34號1樓",
+    "tel":"(02)27952275"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5133335,25.1143471 ]
+    },
+    "properties": {
+    "name":"築間幸福鍋物北投石牌",
+    "address":"臺北市北投區112臺北市北投區石牌路一段160號",
+    "tel":"(02)28289366"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5636198,25.0545691 ]
+    },
+    "properties": {
+    "name":"築間幸福鍋物台北三民",
+    "address":"臺北市松山區105臺北市松山區三民路25號",
+    "tel":"(02)25289191"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5697729,25.0816378 ]
+    },
+    "properties": {
+    "name":"築間幸福鍋物台北內湖",
+    "address":"臺北市內湖區114台北市內湖區內湖路一段318號",
+    "tel":"(02)26561277"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5052356,25.0450004 ]
+    },
+    "properties": {
+    "name":"築間幸福鍋物台北西門町",
+    "address":"臺北市萬華區108臺北市萬華區昆明街92-1號2樓",
+    "tel":"(02)23310003"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5800003,25.0423306 ]
+    },
+    "properties": {
+    "name":"築間幸福鍋物台北忠孝一",
+    "address":"臺北市信義區110臺北市信義區忠孝東路五段695號",
+    "tel":"(02)87852222"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.54732,25.0412849 ]
+    },
+    "properties": {
+    "name":"築間幸福鍋物台北忠孝二",
+    "address":"臺北市大安區106臺北市大安區忠孝東路四段120號2樓",
+    "tel":"(02)27732727"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5332259,25.0472323 ]
+    },
+    "properties": {
+    "name":"築間幸福鍋物台北松江",
+    "address":"臺北市中山區104臺北市中山區松江路27號",
+    "tel":"(02)25068633"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5273834,25.051807 ]
+    },
+    "properties": {
+    "name":"築間幸福鍋物台北南京一",
+    "address":"臺北市中山區104臺北市中山區南京東路一段138號1樓",
+    "tel":"(02)25429099"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5274034,25.0519018 ]
+    },
+    "properties": {
+    "name":"築間幸福鍋物台北南京二",
+    "address":"臺北市中山區104臺北市中山區南京東路一段138號2樓",
+    "tel":"(02)25429199"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.606695,25.0565743 ]
+    },
+    "properties": {
+    "name":"築間幸福鍋物台北南港",
+    "address":"臺北市南港區115臺北市南港區興中路56巷3號",
+    "tel":"(02)26516268"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5441305,25.0472563 ]
+    },
+    "properties": {
+    "name":"築間幸福鍋物台北復興南",
+    "address":"臺北市松山區105臺北市松山區復興南路一段1之1號",
+    "tel":"(02)27525568"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5270267,25.0650612 ]
+    },
+    "properties": {
+    "name":"築間幸福鍋物台北農安",
+    "address":"臺北市中山區104臺北市中山區農安街57號",
+    "tel":"(02)25911717"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5241667,25.0663889 ]
+    },
+    "properties": {
+    "name":"築間幸福鍋物台北雙城",
+    "address":"臺北市中山區104臺北市中山區雙城街34號1樓",
+    "tel":"(02)25960707"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5597969,25.033879 ]
+    },
+    "properties": {
+    "name":"築間幸福鍋物信義世貿店",
+    "address":"臺北市信義區台北市信義區基隆路一段426號",
+    "tel":"(02)27201555"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5277226,25.0305711 ]
+    },
+    "properties": {
+    "name":"隨意吧(公企店)",
+    "address":"臺北市大安區金華街187號1樓",
+    "tel":"(02)23416777"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5245943,25.105306 ]
+    },
+    "properties": {
+    "name":"靜岡勝政日式豬排",
+    "address":"臺北市士林區中山北路六段77號8F",
+    "tel":"(02)28363899"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.6072597,25.0528955 ]
+    },
+    "properties": {
+    "name":"靜岡勝政豬排 南港環球店",
+    "address":"臺北市南港區忠孝東路七段371號B1",
+    "tel":"(02)27865589"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5303547,25.0506088 ]
+    },
+    "properties": {
+    "name":"餡老滿(台北吉林店)",
+    "address":"臺北市中山區松江路90巷23號",
+    "tel":"(02)25672028"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.6161065,25.0571699 ]
+    },
+    "properties": {
+    "name":"餡老滿(南港旗艦店)",
+    "address":"臺北市南港區經貿二路66號2樓",
+    "tel":"(02)27893423"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5658739,25.0397197 ]
+    },
+    "properties": {
+    "name":"默爾Pasta Pizza(信義誠品店)",
+    "address":"臺北市信義區松高路11號5樓",
+    "tel":"(02)27224660"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5407182,25.0661129 ]
+    },
+    "properties": {
+    "name":"龍江涼麵",
+    "address":"臺北市中山區龍江路356巷5號(近濱江市場)",
+    "tel":"(02)25062623"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5910904,25.0728868 ]
+    },
+    "properties": {
+    "name":"龍凰號(微風．三總商店街)",
+    "address":"臺北市內湖區成功路二段325號B1樓",
+    "tel":"(02)87923311"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5910904,25.0728868 ]
+    },
+    "properties": {
+    "name":"優米自助餐(微風．三總商店街)",
+    "address":"臺北市內湖區成功路二段325號B1樓",
+    "tel":"(02)87923311"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5660819,25.0427032 ]
+    },
+    "properties": {
+    "name":"優喜-鍋物專門店",
+    "address":"臺北市信義區基隆路一段147巷5弄5號",
+    "tel":"(02)27493636"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5182125,25.035244 ]
+    },
+    "properties": {
+    "name":"戲台酒館 Theater Trattoria",
+    "address":"臺北市中正區中山南路21-1號",
+    "tel":"(02)23971920"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5329008,25.0563116 ]
+    },
+    "properties": {
+    "name":"禪風茶樓 Zen Tea Restaurant",
+    "address":"臺北市中山區松江路182號2樓",
+    "tel":"(02)25678977"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5323787,25.0485926 ]
+    },
+    "properties": {
+    "name":"韓宮韓式料理",
+    "address":"臺北市中山區長安東路二段49之1號",
+    "tel":"(02)25235380"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5431893,25.0408977 ]
+    },
+    "properties": {
+    "name":"點水樓(復興SOGO店)",
+    "address":"臺北市大安區忠孝東路三段300號11樓",
+    "tel":"(02)87725089"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.506779,25.0430379 ]
+    },
+    "properties": {
+    "name":"薆悅精品inn cafe x 台北成都會館",
+    "address":"臺北市萬華區成都路27巷8號",
+    "tel":"(02)23751212"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5488227,25.1433212 ]
+    },
+    "properties": {
+    "name":"藏粵閣",
+    "address":"臺北市士林區格致路237號2樓",
+    "tel":"(02)28616661"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5557198,25.0812115 ]
+    },
+    "properties": {
+    "name":"藏壽司 大直ATT店",
+    "address":"臺北市中山區敬業三路123號2樓",
+    "tel":"(02)77520835"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5193384,25.0531069 ]
+    },
+    "properties": {
+    "name":"藏壽司 中山南西店",
+    "address":"臺北市大同區南京西路57號2樓",
+    "tel":"(02)25565289"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5147282,25.0456618 ]
+    },
+    "properties": {
+    "name":"藏壽司 台北館前店",
+    "address":"臺北市中正區館前路12號5樓",
+    "tel":"(02)23316029"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5324727,25.0522185 ]
+    },
+    "properties": {
+    "name":"藏壽司 松江南京店",
+    "address":"臺北市中山區南京東路二段101號B1",
+    "tel":"(02)25681519"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5660665,25.03531 ]
+    },
+    "properties": {
+    "name":"藏壽司 信義ATT店",
+    "address":"臺北市信義區松壽路12號4樓",
+    "tel":"(02)77340800"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.6035521,25.0524417 ]
+    },
+    "properties": {
+    "name":"藏壽司 南港CITYLINK店",
+    "address":"臺北市南港區忠孝東路七段369號3樓",
+    "tel":"(02)26510266"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5672818,25.0387015 ]
+    },
+    "properties": {
+    "name":"藏壽司 微風松高店",
+    "address":"臺北市信義區松高路16號B1",
+    "tel":"(02)27206900"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5309857,25.1229278 ]
+    },
+    "properties": {
+    "name":"藝食知選",
+    "address":"臺北市士林區臺北市士林區天玉街81巷2號",
+    "tel":"(02)28762882"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5428109,25.0245418 ]
+    },
+    "properties": {
+    "name":"麵工坊大安店",
+    "address":"臺北市大安區和平東路二段118巷2弄1號1樓",
+    "tel":"(02)23776186"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5158349,25.0454168 ]
+    },
+    "properties": {
+    "name":"魔法咖哩",
+    "address":"臺北市中正區許昌街30號2樓",
+    "tel":"(02)23886298"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5432417,25.0408932 ]
+    },
+    "properties": {
+    "name":"鰻將劍持屋",
+    "address":"臺北市大安區忠孝東路三段300號B2",
+    "tel":"(02)87728551"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5334191,25.0188775 ]
+    },
+    "properties": {
+    "name":"靈感咖啡",
+    "address":"臺北市大安區新生南路三段84-6號3樓",
+    "tel":"(02)23631371"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.5159914,25.0651459 ]
+    },
+    "properties": {
+    "name":"讚豆工坊",
+    "address":"臺北市大同區大龍街60號",
+    "tel":""
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.50486,25.0423903 ]
+    },
+    "properties": {
+    "name":"?陸伍貳懷舊港式冰室",
+    "address":"臺北市萬華區昆明街99號",
+    "tel":""
+    }
+  }
+]
+}
