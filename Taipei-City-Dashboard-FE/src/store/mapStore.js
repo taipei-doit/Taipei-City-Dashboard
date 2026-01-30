@@ -9,8 +9,7 @@ https://docs.mapbox.com/mapbox-gl-js/guides/
 */
 
 /* global gtag */
-
-import { createApp, defineComponent, nextTick, ref, watch } from "vue";
+import { createApp, defineComponent, nextTick, ref, watch, markRaw } from "vue";
 import { defineStore } from "pinia";
 import mapboxGl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
@@ -19,16 +18,10 @@ import { ArcLayer } from "@deck.gl/layers";
 import { MapboxOverlay } from "@deck.gl/mapbox";
 import axios from "axios";
 import http from "../router/axios.js";
-
-// 3D Mrt Map (202511NEW)
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
-import mapboxgl from "mapbox-gl";
-import { markRaw } from "vue";
 import { point, distance } from "@turf/turf";
-import { cutRouteSegment } from "../assets/utilityFunctions/getRouteForAnimation.js";
-import { interpolateAlongSegment } from "../assets/utilityFunctions/geometryUtils.js";
-import { updateCarsPosition } from "../assets/utilityFunctions/mrtCars.js";
+
 
 // Other Stores
 import { useAuthStore } from "./authStore";
@@ -56,6 +49,11 @@ import { marchingSquare } from "../assets/utilityFunctions/marchingSquare.js";
 import { voronoi } from "../assets/utilityFunctions/voronoi.js";
 import { calculateHaversineDistance } from "../assets/utilityFunctions/calculateHaversineDistance";
 import { AnimatedArcLayer } from "../assets/configs/mapbox/arcAnimate.js";
+// 3D Mrt Map 相關 Utility Functions
+import { cutRouteSegment } from "../assets/utilityFunctions/getRouteForAnimation.js";
+import { interpolateAlongSegment } from "../assets/utilityFunctions/geometryUtils.js";
+import { updateCarsPosition } from "../assets/utilityFunctions/mrtCars.js";
+// 一般彈窗取得座標
 import { getPopupCoordinates } from "../assets/utilityFunctions/getPopupCoordinates.js";
 
 export const useMapStore = defineStore("map", {
@@ -84,7 +82,7 @@ export const useMapStore = defineStore("map", {
 		tempMarkerCoordinates: null,
 		// Store the user's current location,
 		userLocation: { latitude: null, longitude: null },
-		// 3D Mrt Map (202511NEW)
+		// 3D Mrt Map 相關參數
 		// 模型及圖徵是否預載中
 		isPreloading: true,
 		// 預載 3D 模型
@@ -252,8 +250,7 @@ export const useMapStore = defineStore("map", {
 					},
 				);
 			});
-			// 3D Mrt Map (202511NEW)
-			// 預載 3D 模型
+			// 預載 3D 模型給 3D MrtMap
 			const models = [
 				{ id: "mrt_car_c381", url: "/images/map/mrt_car_c381.glb" },
 				{ id: "mrt_car_c370", url: "/images/map/mrt_car_c370.glb" },
@@ -395,7 +392,6 @@ export const useMapStore = defineStore("map", {
 		},
 		// 3-1. Add a local geojson as a source in mapbox
 		addGeojsonSource(map_config, data) {
-			// 3D Mrt Map (202511NEW)
 			if (
 				!["voronoi", "isoline"].includes(map_config.type) &&
 				map_config.type !== "symbol-3d"
@@ -417,7 +413,6 @@ export const useMapStore = defineStore("map", {
 		},
 		// 3-2. Add a raster map as a source in mapbox
 		async addRasterSource(map_config) {
-			// 3D Mrt Map (202511NEW)
 			if (
 				["arc", "voronoi", "isoline", "symbol-3d"].includes(
 					map_config.type,
@@ -615,7 +610,6 @@ export const useMapStore = defineStore("map", {
 				this.animateFilter(map_config.layerId);
 			this.currentLayers.push(map_config.layerId);
 			this.mapConfigs[map_config.layerId] = map_config;
-			// 3D Mrt Map (202511NEW)
 			if (!this.currentVisibleLayers.includes(map_config.layerId)) {
 				this.currentVisibleLayers.push(map_config.layerId);
 			}
@@ -732,15 +726,15 @@ export const useMapStore = defineStore("map", {
 			const layers = Object.keys(this.deckGlLayer).map((index) => {
 				const l = this.deckGlLayer[index];
 				switch (l.type) {
-					case "ArcLayer":
-						return new ArcLayer(l.config);
-					case "AnimatedArcLayer":
-						return new AnimatedArcLayer({
-							...l.config,
-							coef: this.step / 1000,
-						});
-					default:
-						break;
+				case "ArcLayer":
+					return new ArcLayer(l.config);
+				case "AnimatedArcLayer":
+					return new AnimatedArcLayer({
+						...l.config,
+						coef: this.step / 1000,
+					});
+				default:
+					break;
 				}
 			});
 			this.overlay.setProps({
@@ -956,7 +950,7 @@ export const useMapStore = defineStore("map", {
 			this.currentLayers.push(map_config.layerId);
 			this.mapConfigs[map_config.layerId] = map_config;
 
-			const layerId = map_config.layerId;
+			const {layerId} = map_config;
 
 			// 紀錄資料更新時間
 			this.layerUpdateTime[layerId] = new Date();
@@ -1442,16 +1436,16 @@ export const useMapStore = defineStore("map", {
 
 						const getCrowdColor = (level) => {
 							switch (level) {
-								case "1":
-									return "🟩";
-								case "2":
-									return "🟨";
-								case "3":
-									return "🟧";
-								case "4":
-									return "🟥";
-								default:
-									return "⬜";
+							case "1":
+								return "🟩";
+							case "2":
+								return "🟨";
+							case "3":
+								return "🟧";
+							case "4":
+								return "🟥";
+							default:
+								return "⬜";
 							}
 						};
 
@@ -1657,9 +1651,9 @@ export const useMapStore = defineStore("map", {
 							);
 						}
 
-						const scene = customLayer.scene;
-						const camera = customLayer.camera;
-						const renderer = customLayer.renderer;
+						const {scene} = customLayer;
+						const {camera} = customLayer;
+						const {renderer} = customLayer;
 						const rotationX = new THREE.Matrix4().makeRotationAxis(
 							new THREE.Vector3(1, 0, 0),
 							Math.PI / 2,
@@ -1676,7 +1670,7 @@ export const useMapStore = defineStore("map", {
 							const pos = car.currentLngLat;
 							const dir = car.lastDir;
 
-							const merc = mapboxgl.MercatorCoordinate.fromLngLat(
+							const merc = mapboxGl.MercatorCoordinate.fromLngLat(
 								pos,
 								pos[2],
 							);
@@ -1808,7 +1802,6 @@ export const useMapStore = defineStore("map", {
 			}
 		},
 		// 6. Turn off the visibility of an exisiting map layer but don't remove it completely
-		// 3D Mrt Map (202511NEW)
 		turnOffMapLayerVisibility(map_config) {
 			this.stopAnimation();
 			map_config.forEach((element) => {
@@ -1929,7 +1922,7 @@ export const useMapStore = defineStore("map", {
 			// 取前 3 個不同圖層最近的 feature
 			const closestLayers = Object.keys(layerClosestFeature).slice(0, 3);
 			for (const layerId of closestLayers) {
-				const feature = layerClosestFeature[layerId].feature;
+				const {feature} = layerClosestFeature[layerId];
 				parsedPopupContent.push(feature);
 				mapConfigs.push(this.mapConfigs[layerId]);
 			}
@@ -1948,7 +1941,7 @@ export const useMapStore = defineStore("map", {
 				.addTo(this.map);
 
 			// 定義 popup 給 PopupComponent 內使用
-			const popup = this.popup;
+			const {popup} = this;
 
 			// Mount a vue component (MapPopup) to the id "vue-popup-content" and pass in data
 			const PopupComponent = defineComponent({
@@ -2043,6 +2036,7 @@ export const useMapStore = defineStore("map", {
 					watch(activeTab, () => {
 						nextTick(() => {
 							handleVideoLoad();
+							// 切tab彈窗出現位置更新
 							const feature = parsedPopupContent[activeTab.value];
 							if (feature && popup) {
 								const newCoords = getPopupCoordinates(
