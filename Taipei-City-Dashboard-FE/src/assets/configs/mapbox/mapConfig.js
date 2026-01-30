@@ -30,7 +30,6 @@ export const CityMapView = {
 }
 
 // All map types
-// 3D Mrt Map (202511NEW)
 export const mapTypes = {
 	line: "線圖",
 	circle: "點圖",
@@ -427,8 +426,8 @@ export const maplayerCommonLayout = {
 		"icon-image": "triangle_white",
 	},
 	"symbol-youbike_elec": {
-        "icon-image": "youbike_elec",
-    },
+		"icon-image": "youbike_elec",
+	},
 	"symbol-youbike": {
 		"icon-image": [
 			"case",
