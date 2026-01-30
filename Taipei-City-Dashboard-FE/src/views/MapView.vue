@@ -88,7 +88,6 @@ function toggleSwitchBtn(value, Btn, BtnIndex) {
 	toggleOn.value[Btn][BtnIndex] = value;
 }
 
-// 3D Mrt Map (202511NEW)
 function shouldDisable(map_config) {
 	const allMapLayerIds = map_config.map((el) => `${el.index}-${el.type}-${el.city}`);
 	if (mapStore.isPreloading===true) {
@@ -157,7 +156,7 @@ function popularBasicLayerGA(map_config) {
             (value, map_config) => {
               handleToggle(value, map_config);
               toggleSwitchBtn(value, 'mapLayer', arrayIdx);
-			  popularThematicLayerGA(map_config);
+              popularThematicLayerGA(map_config);
             }
           "
           @filter-by-param="
@@ -243,7 +242,7 @@ function popularBasicLayerGA(map_config) {
             (value, map_config) => {
               handleToggle(value, map_config);
               toggleSwitchBtn(value, 'hasMap', arrayIdx);
-			  popularThematicLayerGA(map_config);
+              popularThematicLayerGA(map_config);
             }
           "
           @filter-by-param="
@@ -323,7 +322,7 @@ function popularBasicLayerGA(map_config) {
             (value, map_config) => {
               handleToggle(value, map_config);
               toggleSwitchBtn(value, 'basicLayer', arrayIdx);
-			  popularBasicLayerGA(map_config);
+              popularBasicLayerGA(map_config);
             }
           "
           @filter-by-param="
