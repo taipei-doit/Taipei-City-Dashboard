@@ -9,8 +9,7 @@ https://docs.mapbox.com/mapbox-gl-js/guides/
 */
 
 /* global gtag */
-
-import { createApp, defineComponent, nextTick, ref, watch } from "vue";
+import { createApp, defineComponent, nextTick, ref, watch, markRaw } from "vue";
 import { defineStore } from "pinia";
 import mapboxGl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
@@ -19,16 +18,10 @@ import { ArcLayer } from "@deck.gl/layers";
 import { MapboxOverlay } from "@deck.gl/mapbox";
 import axios from "axios";
 import http from "../router/axios.js";
+import * as THREE from "three";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
+import { point, distance } from "@turf/turf";
 
-// 3D Mrt Map (202511NEW)
-import * as THREE from 'three';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import mapboxgl from 'mapbox-gl';
-import { markRaw } from "vue";
-import { point, distance } from '@turf/turf';
-import { cutRouteSegment } from "../assets/utilityFunctions/getRouteForAnimation.js";
-import { interpolateAlongSegment } from '../assets/utilityFunctions/geometryUtils.js';
-import { updateCarsPosition } from "../assets/utilityFunctions/mrtCars.js";
 
 // Other Stores
 import { useAuthStore } from "./authStore";
@@ -56,6 +49,11 @@ import { marchingSquare } from "../assets/utilityFunctions/marchingSquare.js";
 import { voronoi } from "../assets/utilityFunctions/voronoi.js";
 import { calculateHaversineDistance } from "../assets/utilityFunctions/calculateHaversineDistance";
 import { AnimatedArcLayer } from "../assets/configs/mapbox/arcAnimate.js";
+// 3D Mrt Map 相關 Utility Functions
+import { cutRouteSegment } from "../assets/utilityFunctions/getRouteForAnimation.js";
+import { interpolateAlongSegment } from "../assets/utilityFunctions/geometryUtils.js";
+import { updateCarsPosition } from "../assets/utilityFunctions/mrtCars.js";
+// 一般彈窗取得座標
 import { getPopupCoordinates } from "../assets/utilityFunctions/getPopupCoordinates.js";
 
 export const useMapStore = defineStore("map", {
@@ -84,7 +82,7 @@ export const useMapStore = defineStore("map", {
 		tempMarkerCoordinates: null,
 		// Store the user's current location,
 		userLocation: { latitude: null, longitude: null },
-		// 3D Mrt Map (202511NEW)
+		// 3D Mrt Map 相關參數
 		// 模型及圖徵是否預載中
 		isPreloading: true,
 		// 預載 3D 模型
@@ -93,8 +91,8 @@ export const useMapStore = defineStore("map", {
 		prevMrtCars: [],
 		// 儲存圖層更新時間
 		layerUpdateTime: {
-    		// [layerId]: Date
-  		},
+			// [layerId]: Date
+		},
 	}),
 	actions: {
 		/* Initialize Mapbox */
@@ -144,7 +142,7 @@ export const useMapStore = defineStore("map", {
 				})
 				.on("idle", () => {
 					this.loadingLayers = this.loadingLayers.filter(
-						(el) => el !== "rendering"
+						(el) => el !== "rendering",
 					);
 				})
 				// 圖臺縮放時觸發GA自訂事件
@@ -249,40 +247,39 @@ export const useMapStore = defineStore("map", {
 					(error, image) => {
 						if (error) throw error;
 						this.map.addImage(element, image);
-					}
+					},
 				);
 			});
-			// 3D Mrt Map (202511NEW)
-			// 預載 3D 模型
+			// 預載 3D 模型給 3D MrtMap
 			const models = [
-        		{ id: "mrt_car_c381", url: "/images/map/mrt_car_c381.glb" },
-        		{ id: "mrt_car_c370", url: "/images/map/mrt_car_c370.glb" },
+				{ id: "mrt_car_c381", url: "/images/map/mrt_car_c381.glb" },
+				{ id: "mrt_car_c370", url: "/images/map/mrt_car_c370.glb" },
 				// { id: "mrt_car_brown", url: "/images/map/mrt_car_brown.glb" },
-    		];
+			];
 
 			const loadModel = (m) => {
-        		return new Promise((resolve, reject) => {
+				return new Promise((resolve, reject) => {
 					const loader = new GLTFLoader();
-            		loader.load(
-                		m.url,
-                		(gltf) => {
-                    		this.preloadedModels[m.id] = markRaw(gltf.scene);
-                    		resolve();
-                		},
-                		undefined,
-                		(err) => {
-                    		console.error(`3D 模型 ${m.id} 載入失敗:`, err);
-                    		reject(err);
-                		}
-            		);
-        		});
-    		};
+					loader.load(
+						m.url,
+						(gltf) => {
+							this.preloadedModels[m.id] = markRaw(gltf.scene);
+							resolve();
+						},
+						undefined,
+						(err) => {
+							console.error(`3D 模型 ${m.id} 載入失敗:`, err);
+							reject(err);
+						},
+					);
+				});
+			};
 
-    		// 等待所有 3D 模型載入完成
-    		await Promise.all(models.map(loadModel));
+			// 等待所有 3D 模型載入完成
+			await Promise.all(models.map(loadModel));
 
-    		// 全部載入完畢才變 false
-    		this.isPreloading = false;
+			// 全部載入完畢才變 false
+			this.isPreloading = false;
 		},
 		// 4. Toggle district boundaries
 		toggleDistrictBoundaries(status) {
@@ -290,13 +287,13 @@ export const useMapStore = defineStore("map", {
 				this.map.setLayoutProperty(
 					"metrotaipei_town",
 					"visibility",
-					"visible"
+					"visible",
 				);
 			} else {
 				this.map.setLayoutProperty(
 					"metrotaipei_town",
 					"visibility",
-					"none"
+					"none",
 				);
 			}
 			// if (status) {
@@ -315,13 +312,13 @@ export const useMapStore = defineStore("map", {
 				this.map.setLayoutProperty(
 					"metrotaipei_village",
 					"visibility",
-					"visible"
+					"visible",
 				);
 			} else {
 				this.map.setLayoutProperty(
 					"metrotaipei_village",
 					"visibility",
-					"none"
+					"none",
 				);
 			}
 			// if (status) {
@@ -346,7 +343,7 @@ export const useMapStore = defineStore("map", {
 					},
 					(error) => {
 						console.error(error.message);
-					}
+					},
 				);
 			} else {
 				console.error("Geolocation is not supported by this browser.");
@@ -366,7 +363,7 @@ export const useMapStore = defineStore("map", {
 					this.turnOnMapLayerVisibility(mapLayerId);
 					if (
 						!this.currentVisibleLayers.find(
-							(element) => element === mapLayerId
+							(element) => element === mapLayerId,
 						)
 					) {
 						this.currentVisibleLayers.push(mapLayerId);
@@ -395,8 +392,10 @@ export const useMapStore = defineStore("map", {
 		},
 		// 3-1. Add a local geojson as a source in mapbox
 		addGeojsonSource(map_config, data) {
-			// 3D Mrt Map (202511NEW)
-			if (!["voronoi", "isoline"].includes(map_config.type) && map_config.type!=='symbol-3d') {
+			if (
+				!["voronoi", "isoline"].includes(map_config.type) &&
+				map_config.type !== "symbol-3d"
+			) {
 				this.map.addSource(`${map_config.layerId}-source`, {
 					type: "geojson",
 					data: { ...data },
@@ -414,20 +413,33 @@ export const useMapStore = defineStore("map", {
 		},
 		// 3-2. Add a raster map as a source in mapbox
 		async addRasterSource(map_config) {
-			// 3D Mrt Map (202511NEW)
-			if (["arc", "voronoi", "isoline","symbol-3d"].includes(map_config.type)) {
-				let res = {}
-				let res2 = {}
-				let res3 = {}
+			if (
+				["arc", "voronoi", "isoline", "symbol-3d"].includes(
+					map_config.type,
+				)
+			) {
+				let res = {};
+				let res2 = {};
+				let res3 = {};
 				if (map_config.type === "symbol-3d") {
-					res = await axios.get(`${location.origin}/geo_server/taipei_vioc/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=taipei_vioc%3A${map_config.index}&maxFeatures=1000000&outputFormat=application%2Fjson`);
-					res2 = await axios.get(`/mapData/${map_config.index}_route.geojson`)
-					if (map_config.index === 'metro_o_line_car' || map_config.index === 'metro_g_line_car' || map_config.index === 'metro_r_line_car' ) {
-						res3 = await axios.get(`/mapData/${map_config.index}_route_2.geojson`)
+					res = await axios.get(
+						`${location.origin}/geo_server/taipei_vioc/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=taipei_vioc%3A${map_config.index}&maxFeatures=1000000&outputFormat=application%2Fjson`,
+					);
+					res2 = await axios.get(
+						`/mapData/${map_config.index}_route.geojson`,
+					);
+					if (
+						map_config.index === "metro_o_line_car" ||
+						map_config.index === "metro_g_line_car" ||
+						map_config.index === "metro_r_line_car"
+					) {
+						res3 = await axios.get(
+							`/mapData/${map_config.index}_route_2.geojson`,
+						);
 					}
 				} else {
 					res = await axios.get(
-						`${location.origin}/geo_server/taipei_vioc/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=taipei_vioc%3A${map_config.index}&maxFeatures=1000000&outputFormat=application%2Fjson`
+						`${location.origin}/geo_server/taipei_vioc/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=taipei_vioc%3A${map_config.index}&maxFeatures=1000000&outputFormat=application%2Fjson`,
 					);
 				}
 
@@ -442,7 +454,12 @@ export const useMapStore = defineStore("map", {
 				} else if (map_config.type === "isoline") {
 					this.AddIsolineMapLayer(map_config, res.data);
 				} else if (map_config.type === "symbol-3d") {
-					this.Add3dMapLayer(map_config, res.data,res2.data, res3?.data);
+					this.Add3dMapLayer(
+						map_config,
+						res.data,
+						res2.data,
+						res3?.data,
+					);
 				}
 			} else {
 				try {
@@ -464,16 +481,16 @@ export const useMapStore = defineStore("map", {
 							// 清理已添加的源（如果存在）
 							if (
 								this.map.getSource(
-									`${map_config.layerId}-source`
+									`${map_config.layerId}-source`,
 								)
 							) {
 								this.map.removeSource(
-									`${map_config.layerId}-source`
+									`${map_config.layerId}-source`,
 								);
 							}
 							// 從 loadingLayers 中移除
 							this.loadingLayers = this.loadingLayers.filter(
-								(el) => el !== map_config.layerId
+								(el) => el !== map_config.layerId,
 							);
 						}
 					});
@@ -514,7 +531,7 @@ export const useMapStore = defineStore("map", {
 					}
 					// 從 loadingLayers 中移除
 					this.loadingLayers = this.loadingLayers.filter(
-						(el) => el !== map_config.layerId
+						(el) => el !== map_config.layerId,
 					);
 				}
 			}
@@ -593,12 +610,11 @@ export const useMapStore = defineStore("map", {
 				this.animateFilter(map_config.layerId);
 			this.currentLayers.push(map_config.layerId);
 			this.mapConfigs[map_config.layerId] = map_config;
-			// 3D Mrt Map (202511NEW) 
 			if (!this.currentVisibleLayers.includes(map_config.layerId)) {
 				this.currentVisibleLayers.push(map_config.layerId);
 			}
 			this.loadingLayers = this.loadingLayers.filter(
-				(el) => el !== map_config.layerId
+				(el) => el !== map_config.layerId,
 			);
 		},
 		animateFilter(mapLayerId) {
@@ -671,7 +687,7 @@ export const useMapStore = defineStore("map", {
 				getTargetColor: () => {
 					const color = hexToRGB(
 						paintSettings["arc-color"][1] ||
-							paintSettings["arc-color"][0]
+							paintSettings["arc-color"][0],
 					);
 					return [
 						parseInt(color.r, 16),
@@ -701,7 +717,7 @@ export const useMapStore = defineStore("map", {
 			this.currentLayers.push(map_config.layerId);
 			this.mapConfigs[map_config.layerId] = map_config;
 			this.loadingLayers = this.loadingLayers.filter(
-				(el) => el !== map_config.layerId
+				(el) => el !== map_config.layerId,
 			);
 		},
 		// 4-2-2. Render DeckGL Layer
@@ -710,15 +726,15 @@ export const useMapStore = defineStore("map", {
 			const layers = Object.keys(this.deckGlLayer).map((index) => {
 				const l = this.deckGlLayer[index];
 				switch (l.type) {
-					case "ArcLayer":
-						return new ArcLayer(l.config);
-					case "AnimatedArcLayer":
-						return new AnimatedArcLayer({
-							...l.config,
-							coef: this.step / 1000,
-						});
-					default:
-						break;
+				case "ArcLayer":
+					return new ArcLayer(l.config);
+				case "AnimatedArcLayer":
+					return new AnimatedArcLayer({
+						...l.config,
+						coef: this.step / 1000,
+					});
+				default:
+					break;
 				}
 			});
 			this.overlay.setProps({
@@ -728,7 +744,7 @@ export const useMapStore = defineStore("map", {
 				this.currentVisibleLayers.some(
 					(l) =>
 						l.indexOf("-arc") !== -1 &&
-						typeof this.deckGlLayer[l].config.coef === "number"
+						typeof this.deckGlLayer[l].config.coef === "number",
 				) &&
 				this.step < 1000
 			)
@@ -779,7 +795,7 @@ export const useMapStore = defineStore("map", {
 
 			// Get coordnates alone
 			let coords = features.map(
-				(location) => location.geometry.coordinates
+				(location) => location.geometry.coordinates,
 			);
 
 			// Remove duplicate coordinates (so that they wont't cause problems in the Voronoi algorithm...)
@@ -905,7 +921,7 @@ export const useMapStore = defineStore("map", {
 							properties: { value: isoValue },
 							geometry: { type: "LineString", coordinates: line },
 						};
-					})
+					}),
 				);
 			}
 
@@ -928,393 +944,427 @@ export const useMapStore = defineStore("map", {
 			this.addMapLayer(new_map_config);
 		},
 		// 4-5. Create 3DMap for mrtp 202511月新開發
-    	Add3dMapLayer(map_config, data, data2, data3) {
-    		// 3D 動態圖載入前設定
-    		this.loadingLayers.push("rendering");
-    		this.currentLayers.push(map_config.layerId);
-    		this.mapConfigs[map_config.layerId] = map_config;
+		Add3dMapLayer(map_config, data, data2, data3) {
+			// 3D 動態圖載入前設定
+			this.loadingLayers.push("rendering");
+			this.currentLayers.push(map_config.layerId);
+			this.mapConfigs[map_config.layerId] = map_config;
 
-			const layerId = map_config.layerId
+			const {layerId} = map_config;
 
 			// 紀錄資料更新時間
-			this.layerUpdateTime[layerId] = new Date()
+			this.layerUpdateTime[layerId] = new Date();
 
-    		// 注意重複加入Id
-    		if (!this.currentVisibleLayers.includes(map_config.layerId)) {
-        		this.currentVisibleLayers.push(map_config.layerId);
-    		}
+			// 注意重複加入Id
+			if (!this.currentVisibleLayers.includes(map_config.layerId)) {
+				this.currentVisibleLayers.push(map_config.layerId);
+			}
 
-    		// 組成渲染所須的列車資料
+			// 組成渲染所須的列車資料
 
-    		// 須注意的支線特例
-    		const branchLineStations = ["蘆洲", "三民高中", "徐匯中學", "三和國中", "三重國小","小碧潭","新北投"]
+			// 須注意的支線特例
+			const branchLineStations = [
+				"蘆洲",
+				"三民高中",
+				"徐匯中學",
+				"三和國中",
+				"三重國小",
+				"小碧潭",
+				"新北投",
+			];
 
-    		// 建立 mrtCarsInit
-    		const mrtCarsInit = data.features.map((item, i) => {
+			// 建立 mrtCarsInit
+			const mrtCarsInit = data.features.map((item, i) => {
+				let routeCoordinates = null;
 
-        		let routeCoordinates = null
+				if (
+					branchLineStations.includes(
+						item.properties.curr_stationname,
+					) ||
+					branchLineStations.includes(
+						item.properties.next_stationname,
+					)
+				) {
+					routeCoordinates = cutRouteSegment(
+						data3,
+						[item.properties.curr_lon, item.properties.curr_lat],
+						[item.properties.next_lon, item.properties.next_lat],
+					);
+				} else {
+					routeCoordinates = cutRouteSegment(
+						data2,
+						[item.properties.curr_lon, item.properties.curr_lat],
+						[item.properties.next_lon, item.properties.next_lat],
+					);
+				}
 
-        		if (branchLineStations.includes(item.properties.curr_stationname) || branchLineStations.includes(item.properties.next_stationname)) {
-            		routeCoordinates = cutRouteSegment(data3, [
-                    	item.properties.curr_lon,
-                    	item.properties.curr_lat
-                	],
-                	[
-                    	item.properties.next_lon,
-                    	item.properties.next_lat
-                	]);
-        		} else {
-            		routeCoordinates = cutRouteSegment(data2, [
-                    	item.properties.curr_lon,
-                    	item.properties.curr_lat
-                	],
-                	[
-                    	item.properties.next_lon,
-                    	item.properties.next_lat
-                	]);
-       			}
+				const coords = routeCoordinates.geometry.coordinates.map(
+					(c) => [c[0], c[1], 0],
+				);
 
-        		const coords = routeCoordinates.geometry.coordinates.map(c => [c[0], c[1], 0]);
-
-        		return {
-            		id: i,
+				return {
+					id: i,
 					route_id: map_config.layerId,
 					...item.properties,
-           			coords,
-            		car_icon: map_config.icon,
-            		final_coord: interpolateAlongSegment(coords, 1),
-            		progress: 0,
-            		speed: 0.00222,
-        		};
-    		});
+					coords,
+					car_icon: map_config.icon,
+					final_coord: interpolateAlongSegment(coords, 1),
+					progress: 0,
+					speed: 0.00222,
+				};
+			});
 
-    		// 整併 prevMrtCars
-    		let mrtCars = [];
+			// 整併 prevMrtCars
+			let mrtCars = [];
 			// 把不同路線的舊資料保存起來
 			let updatePrevCar = [];
 
-    		if (this.prevMrtCars.length > 0) {
-        		// 建立 Map 加速查找
-        		const initTrainMap = new Map(
-            		mrtCarsInit.map(car => [car.trainnumber, car])
-        		);
+			if (this.prevMrtCars.length > 0) {
+				// 建立 Map 加速查找
+				const initTrainMap = new Map(
+					mrtCarsInit.map((car) => [car.trainnumber, car]),
+				);
 				// 先確認上一輪有的車
-        		this.prevMrtCars.forEach(prevCar => {
-
+				this.prevMrtCars.forEach((prevCar) => {
 					// 先確認新來的資料是不是同一路線
-					if(prevCar.route_id !== mrtCarsInit[0].route_id) {
+					if (prevCar.route_id !== mrtCarsInit[0].route_id) {
 						updatePrevCar.push(prevCar);
 						return;
 					}
 
-            		const newCar = initTrainMap.get(prevCar.trainnumber);
+					const newCar = initTrainMap.get(prevCar.trainnumber);
 
-            		// 同路線新資料沒有該車 → 跳過
+					// 同路線新資料沒有該車 → 跳過
 					if (!newCar) return;
 
-            		// 判斷車子是否進站（curr_stationname 有無變）
-            		const stationChanged = prevCar.curr_stationid !== newCar.curr_stationid;
+					// 判斷車子是否進站（curr_stationname 有無變）
+					const stationChanged =
+						prevCar.curr_stationid !== newCar.curr_stationid;
 
-            		if (stationChanged) {
-                		// 用舊 final_coord 當作起點，切新路線到新 curr_station
-                		const start = prevCar.final_coord;
-                		const end = [
-                    		newCar.curr_lon,
-                    		newCar.curr_lat
-                		];
+					if (stationChanged) {
+						// 用舊 final_coord 當作起點，切新路線到新 curr_station
+						const start = prevCar.final_coord;
+						const end = [newCar.curr_lon, newCar.curr_lat];
 
+						let routeCoordinates = null;
 
-               			let routeCoordinates = null
+						if (
+							branchLineStations.includes(
+								newCar.curr_stationname,
+							) ||
+							branchLineStations.includes(newCar.next_stationname)
+						) {
+							routeCoordinates = cutRouteSegment(
+								data3,
+								start,
+								end,
+							);
+						} else {
+							routeCoordinates = cutRouteSegment(
+								data2,
+								start,
+								end,
+							);
+						}
 
-                		if (branchLineStations.includes(newCar.curr_stationname) || branchLineStations.includes(newCar.next_stationname)) {
-                    		routeCoordinates = cutRouteSegment(data3, start, end);
-                		} else {
-                    		routeCoordinates = cutRouteSegment(data2, start, end);
-                		}
+						const coords =
+							routeCoordinates.geometry.coordinates.map((c) => [
+								c[0],
+								c[1],
+								0,
+							]);
 
-                		const coords = routeCoordinates.geometry.coordinates.map(c => [c[0], c[1], 0]);
+						// 更新新車物件
+						newCar.coords = coords;
+						newCar.final_coord = interpolateAlongSegment(coords, 1);
 
-                		// 更新新車物件
-                		newCar.coords = coords;
-                		newCar.final_coord = interpolateAlongSegment(coords, 1);
-
-                		// progress 重置
-                		newCar.progress = 0;
-                		newCar.dataChanged = true;
-
-           			} else {
-                		// curr_station 沒變 → 保留舊狀態
-                		newCar.coords = prevCar.coords;
-                		newCar.final_coord = prevCar.final_coord;
-                		newCar.progress = 0.99;
-                		newCar.dataChanged = false;
-            		}
+						// progress 重置
+						newCar.progress = 0;
+						newCar.dataChanged = true;
+					} else {
+						// curr_station 沒變 → 保留舊狀態
+						newCar.coords = prevCar.coords;
+						newCar.final_coord = prevCar.final_coord;
+						newCar.progress = 0.99;
+						newCar.dataChanged = false;
+					}
 					// 把新資料有找到的車推去待跑動畫列車陣列
 					mrtCars.push(newCar);
-        		});
+				});
 
 				// 新資料出現的車
 				for (const [trainNumber, car] of initTrainMap) {
-    				const existed = this.prevMrtCars.some(prev => prev.trainnumber === trainNumber);
-    				if (existed) continue; // 已存在 → 不處理
-    				const { coords } = car;
+					const existed = this.prevMrtCars.some(
+						(prev) => prev.trainnumber === trainNumber,
+					);
+					if (existed) continue; // 已存在 → 不處理
+					const { coords } = car;
 
-    				if (!coords || coords.length === 0) {
-        				car.coords = [];
-        				car.final_coord = null;
-        				car.progress = 0;
-        				continue;
-    				}
+					if (!coords || coords.length === 0) {
+						car.coords = [];
+						car.final_coord = null;
+						car.progress = 0;
+						continue;
+					}
 
-   					if (coords.length === 1) {
-        				const c = coords[0];
-        				car.coords = [c];
-        				car.final_coord = [c[0], c[1], c[2] ?? 0];
-        				car.progress = 0;
-        				continue;
-    				}
+					if (coords.length === 1) {
+						const c = coords[0];
+						car.coords = [c];
+						car.final_coord = [c[0], c[1], c[2] ?? 0];
+						car.progress = 0;
+						continue;
+					}
 
-    				const ratio = 90 / 100;
-    				const finalCoord = interpolateAlongSegment(coords, ratio); // 插值後 2/3 的點
+					const ratio = 90 / 100;
+					const finalCoord = interpolateAlongSegment(coords, ratio); // 插值後 2/3 的點
 
-    				// 切出 2/3 的前段 coords
-    				const trimmed = [];
-    				trimmed.push(coords[0]);
+					// 切出 2/3 的前段 coords
+					const trimmed = [];
+					trimmed.push(coords[0]);
 
-    				let total = 0;
-    				const segLens = [];
-    				for (let i = 0; i < coords.length - 1; i++) {
-        				const dx = coords[i + 1][0] - coords[i][0];
-        				const dy = coords[i + 1][1] - coords[i][1];
-        				const dz = (coords[i + 1][2] || 0) - (coords[i][2] || 0);
-        				const len = Math.sqrt(dx*dx + dy*dy + dz*dz);
-        				total += len;
-        				segLens.push(len);
-    				}
+					let total = 0;
+					const segLens = [];
+					for (let i = 0; i < coords.length - 1; i++) {
+						const dx = coords[i + 1][0] - coords[i][0];
+						const dy = coords[i + 1][1] - coords[i][1];
+						const dz =
+							(coords[i + 1][2] || 0) - (coords[i][2] || 0);
+						const len = Math.sqrt(dx * dx + dy * dy + dz * dz);
+						total += len;
+						segLens.push(len);
+					}
 
-    				const targetDist = total * ratio;
-    				let accum = 0;
+					const targetDist = total * ratio;
+					let accum = 0;
 
-    				for (let i = 0; i < segLens.length; i++) {
-        				if (accum + segLens[i] < targetDist) {
-            				trimmed.push(coords[i + 1]);
-            				accum += segLens[i];
-        				} else {
-            				trimmed.push(finalCoord);
-            				break;
-        				}
-    				}
+					for (let i = 0; i < segLens.length; i++) {
+						if (accum + segLens[i] < targetDist) {
+							trimmed.push(coords[i + 1]);
+							accum += segLens[i];
+						} else {
+							trimmed.push(finalCoord);
+							break;
+						}
+					}
 
-    				car.coords = trimmed;
-    				car.final_coord = finalCoord;
-    				car.progress = 0;
+					car.coords = trimmed;
+					car.final_coord = finalCoord;
+					car.progress = 0;
 
 					// 把新資料出現的車推去待跑動畫列車陣列
 					mrtCars.push(car);
 				}
-    		} else {
+			} else {
 				// 如果是第一次開組件則執行初始化
-        		mrtCars = mrtCarsInit.map((item) => {
-  					const { coords } = item || {};
+				mrtCars = mrtCarsInit.map((item) => {
+					const { coords } = item || {};
 
-  					// 無座標 -> 返回空 coords 且 final_coord 為 null
-  					if (!coords || coords.length === 0) {
-    					return {
-      						...item,
-      						coords: [],
-      						final_coord: null,
-      						progress: 0
-    					};
-  					}
+					// 無座標 -> 返回空 coords 且 final_coord 為 null
+					if (!coords || coords.length === 0) {
+						return {
+							...item,
+							coords: [],
+							final_coord: null,
+							progress: 0,
+						};
+					}
 
-  					// 只有一個點 -> 2/3 仍然是該點本身
-  					if (coords.length === 1) {
-    					const only = coords[0];
-    					return {
-      						...item,
-      						coords: [only],
-      						final_coord: [only[0], only[1], only[2] ?? 0],
-      						progress: 0
-    					};
-  					}
+					// 只有一個點 -> 2/3 仍然是該點本身
+					if (coords.length === 1) {
+						const only = coords[0];
+						return {
+							...item,
+							coords: [only],
+							final_coord: [only[0], only[1], only[2] ?? 0],
+							progress: 0,
+						};
+					}
 
-  					// 兩點或以上 -> 正常按距離計算 2/3 並切出前段 coords（含插值點）
-  					const ratio = 90 / 100;
-  					const finalCoord = interpolateAlongSegment(coords, ratio); // [lng, lat, z]
+					// 兩點或以上 -> 正常按距離計算 2/3 並切出前段 coords（含插值點）
+					const ratio = 90 / 100;
+					const finalCoord = interpolateAlongSegment(coords, ratio); // [lng, lat, z]
 
-  					// 計算每段長度以取得 trimmedCoords
-  					const segLens = [];
-  					let totalLength = 0;
-  					for (let i = 0; i < coords.length - 1; i++) {
-    					const dx = coords[i + 1][0] - coords[i][0];
-    					const dy = coords[i + 1][1] - coords[i][1];
-    					const dz = (coords[i + 1][2] || 0) - (coords[i][2] || 0);
-    					const len = Math.sqrt(dx * dx + dy * dy + dz * dz);
-    					segLens.push(len);
-    					totalLength += len;
-  					}
+					// 計算每段長度以取得 trimmedCoords
+					const segLens = [];
+					let totalLength = 0;
+					for (let i = 0; i < coords.length - 1; i++) {
+						const dx = coords[i + 1][0] - coords[i][0];
+						const dy = coords[i + 1][1] - coords[i][1];
+						const dz =
+							(coords[i + 1][2] || 0) - (coords[i][2] || 0);
+						const len = Math.sqrt(dx * dx + dy * dy + dz * dz);
+						segLens.push(len);
+						totalLength += len;
+					}
 
-  					const targetDist = totalLength * ratio;
-  					const trimmedCoords = [];
-  					trimmedCoords.push(coords[0]);
+					const targetDist = totalLength * ratio;
+					const trimmedCoords = [];
+					trimmedCoords.push(coords[0]);
 
-  					let accum = 0;
-  					for (let i = 0; i < segLens.length; i++) {
-    					if (accum + segLens[i] < targetDist) {
-      						trimmedCoords.push(coords[i + 1]);
-      						accum += segLens[i];
-    					} else {
-      					// 2/3 落在這段 -> 補上精準的插值點（finalCoord）然後中斷
-      						trimmedCoords.push(finalCoord);
-     						break;
-    					}
-  					}
+					let accum = 0;
+					for (let i = 0; i < segLens.length; i++) {
+						if (accum + segLens[i] < targetDist) {
+							trimmedCoords.push(coords[i + 1]);
+							accum += segLens[i];
+						} else {
+							// 2/3 落在這段 -> 補上精準的插值點（finalCoord）然後中斷
+							trimmedCoords.push(finalCoord);
+							break;
+						}
+					}
 
-  					return {
-    					...item,
-    					coords: trimmedCoords,
-    					final_coord: finalCoord,
-    					progress: 0
-  					};
+					return {
+						...item,
+						coords: trimmedCoords,
+						final_coord: finalCoord,
+						progress: 0,
+					};
 				});
-    		}
+			}
 
-    		if (mrtCars.length === 0) {
-        		console.error('待跑動畫列車資料為空，請確認!');
-        		return;
-    		}
+			if (mrtCars.length === 0) {
+				console.error("待跑動畫列車資料為空，請確認!");
+				return;
+			}
 
-    		this.prevMrtCars = [...updatePrevCar,...mrtCars];
+			this.prevMrtCars = [...updatePrevCar, ...mrtCars];
 
-    		// === 自訂 3D 圖層 ===
-			
-    		const customLayer = {
-        		id: map_config.layerId,
-        		type: "custom",
-        		renderingMode: "3d",
-        		onAdd: (map, gl) => {
-            		customLayer.map = markRaw(map);
-            		customLayer.camera = markRaw(new THREE.Camera());
-            		customLayer.scene = markRaw(new THREE.Scene());
+			// === 自訂 3D 圖層 ===
+
+			const customLayer = {
+				id: map_config.layerId,
+				type: "custom",
+				renderingMode: "3d",
+				onAdd: (map, gl) => {
+					customLayer.map = markRaw(map);
+					customLayer.camera = markRaw(new THREE.Camera());
+					customLayer.scene = markRaw(new THREE.Scene());
 					customLayer.lastUpdateTime = 0; // 節流用
 
-            		// 環境光
-            		const hemiLight = new THREE.HemisphereLight(0xffffff, 0x444444, 3.2);
+					// 環境光
+					const hemiLight = new THREE.HemisphereLight(
+						0xffffff,
+						0x444444,
+						3.2,
+					);
 					hemiLight.position.set(0, 20, 0);
 					customLayer.scene.add(hemiLight);
 
-            		// 預載列車模型
-            		for (const car of mrtCars) {
-                		if (!car.model) {
-                    		const carIcon = car.car_icon;
-                    		const preModel = this.preloadedModels[carIcon];
+					// 預載列車模型
+					for (const car of mrtCars) {
+						if (!car.model) {
+							const carIcon = car.car_icon;
+							const preModel = this.preloadedModels[carIcon];
 
-                    		if (preModel) {
-                        		const modelClone = preModel.clone(true);
+							if (preModel) {
+								const modelClone = preModel.clone(true);
 								modelClone.traverse((child) => {
-    								if (child.isMesh) {
-        								child.material = child.material.clone();
-    								}
+									if (child.isMesh) {
+										child.material = child.material.clone();
+									}
 								});
-                        		const horizontalOffset = -30;
-                        		modelClone.position.x += horizontalOffset;
-                        		car.model = modelClone;
-                        		customLayer.scene.add(modelClone);
-                    		} else {
-                        		console.warn(`⚠️ 3D 模型尚未預載完成: ${carIcon}`);
-                    		}
-                		}
-            		}
+								const horizontalOffset = -30;
+								modelClone.position.x += horizontalOffset;
+								car.model = modelClone;
+								customLayer.scene.add(modelClone);
+							} else {
+								console.warn(
+									`⚠️ 3D 模型尚未預載完成: ${carIcon}`,
+								);
+							}
+						}
+					}
 
-            		customLayer.renderer = markRaw(
-                		new THREE.WebGLRenderer({
-                    		canvas: map.getCanvas(),
-                    		context: gl,
-                    		antialias: true,
-               			})
-            		);
-            		customLayer.renderer.autoClear = false;
+					customLayer.renderer = markRaw(
+						new THREE.WebGLRenderer({
+							canvas: map.getCanvas(),
+							context: gl,
+							antialias: true,
+						}),
+					);
+					customLayer.renderer.autoClear = false;
 
 					// 加入 2D 圓圈資料
 					const sourceId = `mrt-2d-source-${map_config.layerId}`;
-    				const layerId = `mrt-2d-circles-${map_config.layerId}`;
+					const layerId = `mrt-2d-circles-${map_config.layerId}`;
 
 					// 各捷運路線對應圓圈顏色
 					const circleColor = {
-						'metro_br_line_car':'#C48C31',
-						'metro_bl_line_car':'#0070BD',
-						'metro_g_line_car':'#038258',
-						'metro_o_line_car':'#F5B41C',
-						'metro_r_line_car':'#E1002C',
-					}
+						metro_br_line_car: "#C48C31",
+						metro_bl_line_car: "#0070BD",
+						metro_g_line_car: "#038258",
+						metro_o_line_car: "#F5B41C",
+						metro_r_line_car: "#E1002C",
+					};
 
 					if (!map.getSource(sourceId)) {
-        				map.addSource(sourceId, {
-            				type: "geojson",
-            				data: {
-                				type: "FeatureCollection",
-                				features: []
-            				}
-        				});
-        
-        				map.addLayer({
-            				id: layerId,
-            				type: "circle",
-            				source: sourceId,
-            				paint: {
-                				"circle-radius": 10,
-                				"circle-color": circleColor[map_config.index],
-                				"circle-stroke-width": 2,
-                				"circle-stroke-color": "#FFFFFF",
-                				"circle-opacity": 0.8
-            				}
-        				});
-    				}
+						map.addSource(sourceId, {
+							type: "geojson",
+							data: {
+								type: "FeatureCollection",
+								features: [],
+							},
+						});
+
+						map.addLayer({
+							id: layerId,
+							type: "circle",
+							source: sourceId,
+							paint: {
+								"circle-radius": 10,
+								"circle-color": circleColor[map_config.index],
+								"circle-stroke-width": 2,
+								"circle-stroke-color": "#FFFFFF",
+								"circle-opacity": 0.8,
+							},
+						});
+					}
 
 					// 儲存 sourceId 和 layerId 供 render 和 onRemove 使用
-    				customLayer.sourceId = sourceId;
-    				customLayer.layerId2D = layerId;
+					customLayer.sourceId = sourceId;
+					customLayer.layerId2D = layerId;
 
-            		// === Tooltip 只建一次 ===
-            		if (!customLayer.carTooltip) {
+					// === Tooltip 只建一次 ===
+					if (!customLayer.carTooltip) {
 						// popup 最外層
-                		customLayer.carTooltip = document.createElement("div");
-                		customLayer.carTooltip.style.position = "absolute";
-                		customLayer.carTooltip.style.left = 0;
-                		customLayer.carTooltip.style.top = 0;
-						customLayer.carTooltip.style.minWidth = '120px';
+						customLayer.carTooltip = document.createElement("div");
+						customLayer.carTooltip.style.position = "absolute";
+						customLayer.carTooltip.style.left = 0;
+						customLayer.carTooltip.style.top = 0;
+						customLayer.carTooltip.style.minWidth = "120px";
 						customLayer.carTooltip.style.maxHeight = "220px";
 						customLayer.carTooltip.style.height = "100%";
-                		customLayer.carTooltip.style.willChange = "transform";
-                		customLayer.carTooltip.style.background = "#282A2C";
-                		customLayer.carTooltip.style.border = "2px solid #817E79";
-                		customLayer.carTooltip.style.color = "#fff";
-                		customLayer.carTooltip.style.padding = "6px 10px";
-                		customLayer.carTooltip.style.borderRadius = "6px";
-                		customLayer.carTooltip.style.pointerEvents = "auto";
-                		customLayer.carTooltip.style.display = "none";
-                		customLayer.carTooltip.style.zIndex = "1";
-                		customLayer.carTooltip.style.overflow = "hidden";
-               			customLayer.tooltipOffsetX = 5;
-                		customLayer.tooltipOffsetY = 5;
+						customLayer.carTooltip.style.willChange = "transform";
+						customLayer.carTooltip.style.background = "#282A2C";
+						customLayer.carTooltip.style.border =
+							"2px solid #817E79";
+						customLayer.carTooltip.style.color = "#fff";
+						customLayer.carTooltip.style.padding = "6px 10px";
+						customLayer.carTooltip.style.borderRadius = "6px";
+						customLayer.carTooltip.style.pointerEvents = "auto";
+						customLayer.carTooltip.style.display = "none";
+						customLayer.carTooltip.style.zIndex = "1";
+						customLayer.carTooltip.style.overflow = "hidden";
+						customLayer.tooltipOffsetX = 5;
+						customLayer.tooltipOffsetY = 5;
 
-                		// popup 關閉按鈕
-                		const closeBtn = document.createElement("button");
-                		closeBtn.innerText = "×";
-                		closeBtn.style.position = "absolute";
-                		closeBtn.style.top = "1px";
-                		closeBtn.style.right = "8px";
-                		closeBtn.style.background = "transparent";
-                		closeBtn.style.border = "none";
-                		closeBtn.style.color = "#888787";
-                		closeBtn.style.cursor = "pointer";
-                		closeBtn.style.fontWeight = "bold";
-                		closeBtn.style.fontSize = "20px";
-                		closeBtn.onclick = () => {
-                    		customLayer.carTooltip.style.display = "none";
-                    		customLayer.selectedCar = null;
-                		};
-                		customLayer.carTooltip.appendChild(closeBtn);
+						// popup 關閉按鈕
+						const closeBtn = document.createElement("button");
+						closeBtn.innerText = "×";
+						closeBtn.style.position = "absolute";
+						closeBtn.style.top = "1px";
+						closeBtn.style.right = "8px";
+						closeBtn.style.background = "transparent";
+						closeBtn.style.border = "none";
+						closeBtn.style.color = "#888787";
+						closeBtn.style.cursor = "pointer";
+						closeBtn.style.fontWeight = "bold";
+						closeBtn.style.fontSize = "20px";
+						closeBtn.onclick = () => {
+							customLayer.carTooltip.style.display = "none";
+							customLayer.selectedCar = null;
+						};
+						customLayer.carTooltip.appendChild(closeBtn);
 
 						// popup 顯示屬性區塊
 						const contentWrapper = document.createElement("div");
@@ -1326,232 +1376,288 @@ export const useMapStore = defineStore("map", {
 						customLayer.carTooltip.appendChild(contentWrapper);
 						customLayer.tooltipContent = contentWrapper;
 						map.getContainer().appendChild(customLayer.carTooltip);
-           	 		}
+					}
 
-            		// === Click 事件只綁一次 ===
-            		if (customLayer._carClickHandler) {
-                		map.off("click", customLayer._carClickHandler);
-            		}
-            		customLayer._carClickHandler = (e) => {
-                		const clickLngLat = [e.lngLat.lng, e.lngLat.lat];
-                		let closestCar = null;
-                		let minDist = Infinity;
+					// === Click 事件只綁一次 ===
+					if (customLayer._carClickHandler) {
+						map.off("click", customLayer._carClickHandler);
+					}
+					customLayer._carClickHandler = (e) => {
+						const clickLngLat = [e.lngLat.lng, e.lngLat.lat];
+						let closestCar = null;
+						let minDist = Infinity;
 
 						// 根據 zoom 等級調整點擊範圍
-    					const zoom = customLayer.map.getZoom();
-    					let clickRadius = 45; // 預設值
-    
-    					if (zoom < 11) {
-        					clickRadius = 120;  // zoom < 11 時範圍較大
-    					} else if (zoom < 13) {
-        					clickRadius = 90;
-    					} else {
-        					clickRadius = 45;
-    					}
+						const zoom = customLayer.map.getZoom();
+						let clickRadius = 45; // 預設值
 
-                		for (const car of mrtCars) {
-                    		if (!car.currentLngLat || !car.lastDir) continue;
+						if (zoom < 11) {
+							clickRadius = 120; // zoom < 11 時範圍較大
+						} else if (zoom < 13) {
+							clickRadius = 90;
+						} else {
+							clickRadius = 45;
+						}
 
-                    		const offsetMeters = 30;
-                    		const norm = Math.sqrt(car.lastDir.x ** 2 + car.lastDir.y ** 2);
-                    		const dx = (car.lastDir.y / norm) * offsetMeters;
-                    		const dy = (-car.lastDir.x / norm) * offsetMeters;
-                    		const offsetCarPos = [car.currentLngLat[0] + dx * 0.00001, car.currentLngLat[1] + dy * 0.00001];
+						for (const car of mrtCars) {
+							if (!car.currentLngLat || !car.lastDir) continue;
 
-                    		const dist = distance(
-                        		point(clickLngLat),
-                        		point(offsetCarPos), {
-                            		units: "meters"
-                        		}
-                    		);
+							const offsetMeters = 30;
+							const norm = Math.sqrt(
+								car.lastDir.x ** 2 + car.lastDir.y ** 2,
+							);
+							const dx = (car.lastDir.y / norm) * offsetMeters;
+							const dy = (-car.lastDir.x / norm) * offsetMeters;
+							const offsetCarPos = [
+								car.currentLngLat[0] + dx * 0.00001,
+								car.currentLngLat[1] + dy * 0.00001,
+							];
 
-                    		if (dist < clickRadius && dist < minDist) {
-                        		minDist = dist;
-                        		closestCar = car;
-                    		}
-                		}
+							const dist = distance(
+								point(clickLngLat),
+								point(offsetCarPos),
+								{
+									units: "meters",
+								},
+							);
 
-                		if (!closestCar) return;
+							if (dist < clickRadius && dist < minDist) {
+								minDist = dist;
+								closestCar = car;
+							}
+						}
 
-               			customLayer.selectedCar = closestCar;
+						if (!closestCar) return;
 
-                		// 清空 tooltip 內容
+						customLayer.selectedCar = closestCar;
+
+						// 清空 tooltip 內容
 						customLayer.tooltipContent.innerHTML = "";
 
-                		const getCrowdColor = (level) => {
-                    		switch (level) {
-                        		case '1':
-                            		return "🟩";
-                        		case '2':
-                            		return "🟨";
-                        		case '3':
-                            		return "🟧";
-                        		case '4':
-                            		return "🟥";
-                        		default:
-                            		return "⬜";
-                    		}
-                		};
+						const getCrowdColor = (level) => {
+							switch (level) {
+							case "1":
+								return "🟩";
+							case "2":
+								return "🟨";
+							case "3":
+								return "🟧";
+							case "4":
+								return "🟥";
+							default:
+								return "⬜";
+							}
+						};
 
-                		const infoContainer = document.createElement("div");
-						const fields = map_config.property.map(prop => ({
-    						label: prop.name,
-    						value: prop.name.includes('擁擠度') 
-        						? getCrowdColor(closestCar[prop.key]) 
-        						: closestCar[prop.key] || ''
+						const infoContainer = document.createElement("div");
+						const fields = map_config.property.map((prop) => ({
+							label: prop.name,
+							value: prop.name.includes("擁擠度")
+								? getCrowdColor(closestCar[prop.key])
+								: closestCar[prop.key] || "",
 						}));
 
-                		fields.forEach(f => {
-                    		const row = document.createElement("div");
-                    		row.style.marginBottom = "2px";
-                    		row.textContent = `${f.label}: ${f.value ?? "-"}`;
-                    		infoContainer.appendChild(row);
-                		});
+						fields.forEach((f) => {
+							const row = document.createElement("div");
+							row.style.marginBottom = "2px";
+							row.textContent = `${f.label}: ${f.value ?? "-"}`;
+							infoContainer.appendChild(row);
+						});
 
-                		customLayer.tooltipContent.appendChild(infoContainer);
-                		customLayer.carTooltip.style.display = "block";
-            		};
-            		map.on("click", customLayer._carClickHandler);
-        		},
+						customLayer.tooltipContent.appendChild(infoContainer);
+						customLayer.carTooltip.style.display = "block";
+					};
+					map.on("click", customLayer._carClickHandler);
+				},
 
 				onRemove(map) {
 					// 清理 tooltip
-    				if (customLayer.carTooltip) {
-        				customLayer.carTooltip.remove();
-        				customLayer.carTooltip = null;
-    				}
+					if (customLayer.carTooltip) {
+						customLayer.carTooltip.remove();
+						customLayer.carTooltip = null;
+					}
 
 					// 清理 click 事件
-    				if (customLayer._carClickHandler) {
-        				map.off("click", customLayer._carClickHandler);
-        				customLayer._carClickHandler = null;
-    				}
+					if (customLayer._carClickHandler) {
+						map.off("click", customLayer._carClickHandler);
+						customLayer._carClickHandler = null;
+					}
 
 					// 用 sourceId 和 layerId 清理該路線的 2D 圖層
-    				if (customLayer.layerId2D && map.getLayer(customLayer.layerId2D)) {
-        				map.removeLayer(customLayer.layerId2D);
-    				}
+					if (
+						customLayer.layerId2D &&
+						map.getLayer(customLayer.layerId2D)
+					) {
+						map.removeLayer(customLayer.layerId2D);
+					}
 
-    				if (customLayer.sourceId && map.getSource(customLayer.sourceId)) {
-        				map.removeSource(customLayer.sourceId);
-    				}
+					if (
+						customLayer.sourceId &&
+						map.getSource(customLayer.sourceId)
+					) {
+						map.removeSource(customLayer.sourceId);
+					}
 
 					// 清理 3D 模型
-    				if (customLayer.scene && mrtCars?.length) {
-        				for (const car of mrtCars) {
-            				if (car.model) {
-                				car.model.traverse(child => {
-                    				if (child.isMesh) {
-                        				// 釋放 geometry
-                        				if (child.geometry) child.geometry.dispose();
+					if (customLayer.scene && mrtCars?.length) {
+						for (const car of mrtCars) {
+							if (car.model) {
+								car.model.traverse((child) => {
+									if (child.isMesh) {
+										// 釋放 geometry
+										if (child.geometry)
+											child.geometry.dispose();
 
-                        				// 釋放材質和貼圖
-                        				if (child.material) {
-                            				const disposeMaterial = mat => {
-                                				if (mat.map) mat.map.dispose();
-                                				if (mat.normalMap) mat.normalMap.dispose();
-                                				if (mat.roughnessMap) mat.roughnessMap.dispose();
-                                				if (mat.metalnessMap) mat.metalnessMap.dispose();
-                                				mat.dispose();
-                            				};
+										// 釋放材質和貼圖
+										if (child.material) {
+											const disposeMaterial = (mat) => {
+												if (mat.map) mat.map.dispose();
+												if (mat.normalMap)
+													mat.normalMap.dispose();
+												if (mat.roughnessMap)
+													mat.roughnessMap.dispose();
+												if (mat.metalnessMap)
+													mat.metalnessMap.dispose();
+												mat.dispose();
+											};
 
-                            				if (Array.isArray(child.material)) {
-                                				child.material.forEach(disposeMaterial);
-                            				} else {
-                                				disposeMaterial(child.material);
-                            				}
-                        				}
-                    				}
-                				});
+											if (Array.isArray(child.material)) {
+												child.material.forEach(
+													disposeMaterial,
+												);
+											} else {
+												disposeMaterial(child.material);
+											}
+										}
+									}
+								});
 
-                				// 從 scene 移除
-                				customLayer.scene.remove(car.model);
-                				car.model = null;
-            				}
-        				}
+								// 從 scene 移除
+								customLayer.scene.remove(car.model);
+								car.model = null;
+							}
+						}
 
-        				// 清空 mrtCars 陣列，避免舊引用被再次使用
-        				mrtCars.length = 0;
-    				}
+						// 清空 mrtCars 陣列，避免舊引用被再次使用
+						mrtCars.length = 0;
+					}
 
-    				// 清理 scene / camera
-    				if (customLayer.scene) {
-        				// 移除剩餘 children
-        				while (customLayer.scene.children.length) {
-            				customLayer.scene.remove(customLayer.scene.children[0]);
-        				}
-    				}
-    				customLayer.scene = null;
-    				customLayer.camera = null;
+					// 清理 scene / camera
+					if (customLayer.scene) {
+						// 移除剩餘 children
+						while (customLayer.scene.children.length) {
+							customLayer.scene.remove(
+								customLayer.scene.children[0],
+							);
+						}
+					}
+					customLayer.scene = null;
+					customLayer.camera = null;
 
 					// 清理 selectedCar
-    				customLayer.selectedCar = null;
+					customLayer.selectedCar = null;
 				},
 
-        		render: (gl, matrix) => {
+				render: (gl, matrix) => {
 					// 取得當下的 zoom
 					const zoom = customLayer.map.getZoom();
 					const now = performance.now();
 
 					let allFinished = true;
 					// 確認當下各列車是否都跑完動畫
-    				for (const car of mrtCars) {
-        				if (car.progress < 1) allFinished = false;
-    				}
+					for (const car of mrtCars) {
+						if (car.progress < 1) allFinished = false;
+					}
 
 					if (zoom < 13) {
-        				// 2D 模式
-        				for (const car of mrtCars) if (car.model) car.model.visible = false;
-        				if (!allFinished) {
-            				if (now - customLayer.lastUpdateTime >= 200) {
-
-                				const features = updateCarsPosition(mrtCars);
-                				customLayer.map.getSource(customLayer.sourceId).setData({
-                    				type: "FeatureCollection",
-                    				features
-                				});
-                				customLayer.lastUpdateTime = now;
-            				}
-        				} else if (allFinished && !customLayer.updated2D) {
+						// 2D 模式
+						for (const car of mrtCars)
+							if (car.model) car.model.visible = false;
+						if (!allFinished) {
+							if (now - customLayer.lastUpdateTime >= 200) {
+								const features = updateCarsPosition(mrtCars);
+								customLayer.map
+									.getSource(customLayer.sourceId)
+									.setData({
+										type: "FeatureCollection",
+										features,
+									});
+								customLayer.lastUpdateTime = now;
+							}
+						} else if (allFinished && !customLayer.updated2D) {
 							const features = updateCarsPosition(mrtCars);
-    						customLayer.map.getSource(customLayer.sourceId).setData({
-        						type: "FeatureCollection",
-        						features
-    						});
-    						customLayer.updated2D = true; // 標記已經更新過一次
+							customLayer.map
+								.getSource(customLayer.sourceId)
+								.setData({
+									type: "FeatureCollection",
+									features,
+								});
+							customLayer.updated2D = true; // 標記已經更新過一次
 						}
 
-        				// 更新 2D tooltip
-        				if (customLayer.selectedCar?.currentLngLat && customLayer.selectedCar?.lastDir) {
-            				const dir = customLayer.selectedCar.lastDir;
-            				const pos = customLayer.selectedCar.currentLngLat;
-            				const side = new THREE.Vector3(-dir.y, dir.x, 0).normalize();
-            				const offsetMeters = -30;
-            				const lngOffset = side.x * offsetMeters * 0.00001;
-            				const latOffset = side.y * offsetMeters * 0.00001;
-           				 	const offsetLngLat = [pos[0] + lngOffset, pos[1] + latOffset];
-            				const screenPos = customLayer.map.project(offsetLngLat);
-            				customLayer.carTooltip.style.transform =
-                				`translate(${screenPos.x + customLayer.tooltipOffsetX}px, ${screenPos.y + customLayer.tooltipOffsetY}px)`;
-        				}
+						// 更新 2D tooltip
+						if (
+							customLayer.selectedCar?.currentLngLat &&
+							customLayer.selectedCar?.lastDir
+						) {
+							const dir = customLayer.selectedCar.lastDir;
+							const pos = customLayer.selectedCar.currentLngLat;
+							const side = new THREE.Vector3(
+								-dir.y,
+								dir.x,
+								0,
+							).normalize();
+							const offsetMeters = -30;
+							const lngOffset = side.x * offsetMeters * 0.00001;
+							const latOffset = side.y * offsetMeters * 0.00001;
+							const offsetLngLat = [
+								pos[0] + lngOffset,
+								pos[1] + latOffset,
+							];
+							const screenPos =
+								customLayer.map.project(offsetLngLat);
+							customLayer.carTooltip.style.transform = `translate(${screenPos.x + customLayer.tooltipOffsetX}px, ${screenPos.y + customLayer.tooltipOffsetY}px)`;
+						}
 
-        				// 顯示 2D layer
-        				if (customLayer.map.getLayoutProperty(customLayer.layerId2D, "visibility") !== "visible") {
-            				customLayer.map.setLayoutProperty(customLayer.layerId2D, "visibility", "visible");
-        				}
-    				} else {
+						// 顯示 2D layer
+						if (
+							customLayer.map.getLayoutProperty(
+								customLayer.layerId2D,
+								"visibility",
+							) !== "visible"
+						) {
+							customLayer.map.setLayoutProperty(
+								customLayer.layerId2D,
+								"visibility",
+								"visible",
+							);
+						}
+					} else {
 						// 3D 模式
-						for (const car of mrtCars) if (car.model) car.model.visible = true;
+						for (const car of mrtCars)
+							if (car.model) car.model.visible = true;
 
 						// 隱藏 2D layer
-        				if (customLayer.map.getLayoutProperty(customLayer.layerId2D, "visibility") === "visible") {
-            				customLayer.map.setLayoutProperty(customLayer.layerId2D, "visibility", "none");
-        				}
+						if (
+							customLayer.map.getLayoutProperty(
+								customLayer.layerId2D,
+								"visibility",
+							) === "visible"
+						) {
+							customLayer.map.setLayoutProperty(
+								customLayer.layerId2D,
+								"visibility",
+								"none",
+							);
+						}
 
-						const scene = customLayer.scene;
-        				const camera = customLayer.camera;
-        				const renderer = customLayer.renderer;
-						const rotationX = new THREE.Matrix4().makeRotationAxis(new THREE.Vector3(1, 0, 0), Math.PI / 2);
+						const {scene} = customLayer;
+						const {camera} = customLayer;
+						const {renderer} = customLayer;
+						const rotationX = new THREE.Matrix4().makeRotationAxis(
+							new THREE.Vector3(1, 0, 0),
+							Math.PI / 2,
+						);
 
 						if (now - customLayer.lastUpdateTime >= 200) {
 							updateCarsPosition(mrtCars);
@@ -1559,62 +1665,100 @@ export const useMapStore = defineStore("map", {
 						}
 
 						for (const car of mrtCars) {
-           					// updateCarsPosition([car]); // 單台車也用同一個計算
+							// updateCarsPosition([car]); // 單台車也用同一個計算
 
-            				const pos = car.currentLngLat;
-            				const dir = car.lastDir;
+							const pos = car.currentLngLat;
+							const dir = car.lastDir;
 
-            				const merc = mapboxgl.MercatorCoordinate.fromLngLat(pos, pos[2]);
-           					const scale = merc.meterInMercatorCoordinateUnits() * 1.25;
-            				const fromDir = new THREE.Vector3(1, 0, 0);
+							const merc = mapboxGl.MercatorCoordinate.fromLngLat(
+								pos,
+								pos[2],
+							);
+							const scale =
+								merc.meterInMercatorCoordinateUnits() * 1.25;
+							const fromDir = new THREE.Vector3(1, 0, 0);
 
-            				const quaternion = new THREE.Quaternion().setFromUnitVectors(fromDir, dir);
-            				const extraRot = new THREE.Matrix4().makeRotationZ(Math.PI / 2);
-            				const rotationMatrix = new THREE.Matrix4().makeRotationFromQuaternion(quaternion).multiply(extraRot);
+							const quaternion =
+								new THREE.Quaternion().setFromUnitVectors(
+									fromDir,
+									dir,
+								);
+							const extraRot = new THREE.Matrix4().makeRotationZ(
+								Math.PI / 2,
+							);
+							const rotationMatrix = new THREE.Matrix4()
+								.makeRotationFromQuaternion(quaternion)
+								.multiply(extraRot);
 
-            				const translation = new THREE.Matrix4().makeTranslation(merc.x, merc.y, merc.z);
-            				const scaleMatrix = new THREE.Matrix4().makeScale(scale, -scale, scale);
+							const translation =
+								new THREE.Matrix4().makeTranslation(
+									merc.x,
+									merc.y,
+									merc.z,
+								);
+							const scaleMatrix = new THREE.Matrix4().makeScale(
+								scale,
+								-scale,
+								scale,
+							);
 
-            				const modelMatrix = new THREE.Matrix4()
-                				.multiply(translation)
-                				.multiply(scaleMatrix)
-                				.multiply(rotationMatrix)
-                				.multiply(rotationX);
+							const modelMatrix = new THREE.Matrix4()
+								.multiply(translation)
+								.multiply(scaleMatrix)
+								.multiply(rotationMatrix)
+								.multiply(rotationX);
 
-            				camera.projectionMatrix = new THREE.Matrix4().fromArray(matrix).multiply(modelMatrix);
+							camera.projectionMatrix = new THREE.Matrix4()
+								.fromArray(matrix)
+								.multiply(modelMatrix);
 
-            				renderer.resetState();
-            				renderer.render(scene, camera);
+							renderer.resetState();
+							renderer.render(scene, camera);
 
-            				// 更新 tooltip
-            				if (customLayer.selectedCar?.currentLngLat && customLayer.selectedCar?.lastDir) {
-                				const dir = customLayer.selectedCar.lastDir;
-                				const pos = customLayer.selectedCar.currentLngLat;
-                				const side = new THREE.Vector3(-dir.y, dir.x, 0).normalize();
-                				const offsetMeters = -30;
-                				const lngOffset = side.x * offsetMeters * 0.00001;
-                				const latOffset = side.y * offsetMeters * 0.00001;
-                				const offsetLngLat = [pos[0] + lngOffset, pos[1] + latOffset];
-                				const screenPos = customLayer.map.project(offsetLngLat);
-                				customLayer.carTooltip.style.transform =
-                    				`translate(${screenPos.x + customLayer.tooltipOffsetX}px, ${screenPos.y + customLayer.tooltipOffsetY}px)`;
-            				}
-        				}
+							// 更新 tooltip
+							if (
+								customLayer.selectedCar?.currentLngLat &&
+								customLayer.selectedCar?.lastDir
+							) {
+								const dir = customLayer.selectedCar.lastDir;
+								const pos =
+									customLayer.selectedCar.currentLngLat;
+								const side = new THREE.Vector3(
+									-dir.y,
+									dir.x,
+									0,
+								).normalize();
+								const offsetMeters = -30;
+								const lngOffset =
+									side.x * offsetMeters * 0.00001;
+								const latOffset =
+									side.y * offsetMeters * 0.00001;
+								const offsetLngLat = [
+									pos[0] + lngOffset,
+									pos[1] + latOffset,
+								];
+								const screenPos =
+									customLayer.map.project(offsetLngLat);
+								customLayer.carTooltip.style.transform = `translate(${screenPos.x + customLayer.tooltipOffsetX}px, ${screenPos.y + customLayer.tooltipOffsetY}px)`;
+							}
+						}
 					}
-            		// 下一幀
-            		customLayer.map.triggerRepaint();
-        		},
-    		};
+					// 下一幀
+					customLayer.map.triggerRepaint();
+				},
+			};
 
 			if (!this.customLayers) this.customLayers = {};
 			this.customLayers[map_config.layerId] = customLayer;
 
-    		// === 加入圖層 ===
-    		this.map.addLayer(customLayer);
+			// === 加入圖層 ===
+			this.map.addLayer(customLayer);
 
-    		// loading 結束
-    		this.loadingLayers = this.loadingLayers.filter((el) => el !== map_config.layerId);
-    		return;
+			// loading 結束
+			this.loadingLayers = this.loadingLayers.filter(
+				(el) => el !== map_config.layerId,
+			);
+			return;
 		},
 		//  5. Turn on the visibility for a exisiting map layer
 		turnOnMapLayerVisibility(mapLayerId) {
@@ -1645,26 +1789,25 @@ export const useMapStore = defineStore("map", {
 					this.map.setLayoutProperty(
 						mapLayerId,
 						"visibility",
-						"visible"
+						"visible",
 					);
 					this.animateFilter(mapLayerId);
 				} else {
 					this.map.setLayoutProperty(
 						mapLayerId,
 						"visibility",
-						"visible"
+						"visible",
 					);
 				}
 			}
 		},
 		// 6. Turn off the visibility of an exisiting map layer but don't remove it completely
-		// 3D Mrt Map (202511NEW)
 		turnOffMapLayerVisibility(map_config) {
 			this.stopAnimation();
 			map_config.forEach((element) => {
 				let mapLayerId = `${element.index}-${element.type}-${element.city}`;
 				this.loadingLayers = this.loadingLayers.filter(
-					(el) => el !== mapLayerId
+					(el) => el !== mapLayerId,
 				);
 				if (mapLayerId.indexOf("-arc") !== -1) {
 					this.deckGlLayer[mapLayerId].config.visible = false;
@@ -1674,27 +1817,37 @@ export const useMapStore = defineStore("map", {
 					this.map.setLayoutProperty(
 						mapLayerId,
 						"visibility",
-						"none"
+						"none",
 					);
 				}
 				this.currentVisibleLayers = this.currentVisibleLayers.filter(
-					(element) => element !== mapLayerId
+					(element) => element !== mapLayerId,
 				);
 			});
 			this.removePopup();
 
 			// 如果3D捷運地圖 popup 存在把它清除
 			// 關閉 popup + reset
-			map_config.forEach((item)=>{
-				const customLayer = this.customLayers[`${item.index}-${item.type}-${item.city}`];
+			map_config.forEach((item) => {
+				const customLayer =
+					this.customLayers[
+						`${item.index}-${item.type}-${item.city}`
+					];
 				if (customLayer?.carTooltip) {
-    				customLayer.carTooltip.style.display = "none";
-    				customLayer.selectedCar = null;
+					customLayer.carTooltip.style.display = "none";
+					customLayer.selectedCar = null;
 				}
-				if (customLayer?.layerId2D && this.map.getLayer(customLayer.layerId2D)) {
-    				customLayer.map.setLayoutProperty(customLayer.layerId2D, "visibility", "none");
+				if (
+					customLayer?.layerId2D &&
+					this.map.getLayer(customLayer.layerId2D)
+				) {
+					customLayer.map.setLayoutProperty(
+						customLayer.layerId2D,
+						"visibility",
+						"none",
+					);
 				}
-			})
+			});
 		},
 
 		/* Popup Related Functions */
@@ -1707,7 +1860,7 @@ export const useMapStore = defineStore("map", {
 				return value;
 			};
 
-			const hitSize = 6; // px，手機可設 12~16
+			const hitSize = 6;
 
 			const bbox = [
 				[event.point.x - hitSize, event.point.y - hitSize],
@@ -1717,7 +1870,7 @@ export const useMapStore = defineStore("map", {
 			// Gets the info that is contained in the bbox (only visible layers)
 			const clickFeatureDatas = this.map.queryRenderedFeatures(bbox, {
 				layers: this.currentVisibleLayers.filter(
-					(layer) => !layer.includes("-arc")
+					(layer) => !layer.includes("-arc"),
 				),
 			});
 
@@ -1728,37 +1881,68 @@ export const useMapStore = defineStore("map", {
 			// Parse clickFeatureDatas to get the first 3 unique layer datas, skip over already included layers
 			const mapConfigs = [];
 			const parsedPopupContent = [];
-			let previousParsedLayer = "";
+			const layerClosestFeature = {}; // key: layerId, value: { feature, distance }
+			const clickPoint = [event.lngLat.lng, event.lngLat.lat];
 
-			for (let i = 0; i < clickFeatureDatas.length; i++) {
-				if (mapConfigs.length === 3) break;
-				if (previousParsedLayer === clickFeatureDatas[i].layer.id)
-					continue;
+			// 計算每個圖層最近的 feature
+			for (const rawFeature of clickFeatureDatas) {
+				const layerId = rawFeature.layer.id;
 
-				// format properties
-				const feature = { ...clickFeatureDatas[i] };
-				feature.properties = { ...feature.properties };
-				Object.keys(feature.properties).forEach((key) => {
-					feature.properties[key] = formatValue(
-						feature.properties[key],
-						key
-					);
-				});
+				// 計算距離最近的點
+				const featureCenter =
+					rawFeature.geometry?.type === "Point"
+						? rawFeature.geometry.coordinates
+						: getPopupCoordinates(rawFeature, event.lngLat);
 
-				previousParsedLayer = clickFeatureDatas[i].layer.id;
-				mapConfigs.push(this.mapConfigs[clickFeatureDatas[i].layer.id]);
-				parsedPopupContent.push(feature);
+				const dx = featureCenter[0] - clickPoint[0];
+				const dy = featureCenter[1] - clickPoint[1];
+				const dist2 = dx * dx + dy * dy;
+
+				// 如果是該圖層第一次或更近，就存
+				if (
+					!layerClosestFeature[layerId] ||
+					dist2 < layerClosestFeature[layerId].distance
+				) {
+					// 格式化 properties
+					const feature = { ...rawFeature };
+					feature.geometry =
+						rawFeature.geometry || rawFeature._geometry;
+					feature.properties = { ...rawFeature.properties };
+					Object.keys(feature.properties).forEach((key) => {
+						feature.properties[key] = formatValue(
+							feature.properties[key],
+							key,
+						);
+					});
+
+					layerClosestFeature[layerId] = { feature, distance: dist2 };
+				}
 			}
+
+			// 取前 3 個不同圖層最近的 feature
+			const closestLayers = Object.keys(layerClosestFeature).slice(0, 3);
+			for (const layerId of closestLayers) {
+				const {feature} = layerClosestFeature[layerId];
+				parsedPopupContent.push(feature);
+				mapConfigs.push(this.mapConfigs[layerId]);
+			}
+
+			if (!parsedPopupContent.length) return;
+
 			// Create a new mapbox popup
 			const popupCoords = getPopupCoordinates(
-				clickFeatureDatas[0],
-				event.lngLat
+				parsedPopupContent[0],
+				event.lngLat,
 			);
 
 			this.popup = new mapboxGl.Popup()
 				.setLngLat(popupCoords)
 				.setHTML('<div id="vue-popup-content"></div>')
 				.addTo(this.map);
+
+			// 定義 popup 給 PopupComponent 內使用
+			const {popup} = this;
+
 			// Mount a vue component (MapPopup) to the id "vue-popup-content" and pass in data
 			const PopupComponent = defineComponent({
 				extends: MapPopup,
@@ -1790,7 +1974,7 @@ export const useMapStore = defineStore("map", {
 							return hlsInstance;
 						} else if (
 							videoElement.canPlayType(
-								"application/vnd.apple.mpegurl"
+								"application/vnd.apple.mpegurl",
 							)
 						) {
 							videoElement.src = src;
@@ -1852,6 +2036,15 @@ export const useMapStore = defineStore("map", {
 					watch(activeTab, () => {
 						nextTick(() => {
 							handleVideoLoad();
+							// 切tab彈窗出現位置更新
+							const feature = parsedPopupContent[activeTab.value];
+							if (feature && popup) {
+								const newCoords = getPopupCoordinates(
+									feature,
+									event.lngLat,
+								);
+								popup.setLngLat(newCoords);
+							}
 						});
 					});
 
@@ -1926,7 +2119,7 @@ export const useMapStore = defineStore("map", {
 					bearing,
 					name,
 					point_type: "view",
-				}
+				},
 			);
 			this.viewPoints.push(res.data.data);
 		},
@@ -1943,7 +2136,7 @@ export const useMapStore = defineStore("map", {
 					bearing: 0,
 					name: name,
 					point_type: "pin",
-				}
+				},
 			);
 
 			this.viewPoints.push(res.data.data);
@@ -1953,7 +2146,7 @@ export const useMapStore = defineStore("map", {
 				{ color: "#5a9cf8" },
 				name,
 				res.data.data.id,
-				{ lng, lat }
+				{ lng, lat },
 			);
 			this.tempMarkerCoordinates = null;
 		},
@@ -1962,7 +2155,7 @@ export const useMapStore = defineStore("map", {
 			colorSetting,
 			markerName,
 			markerId,
-			{ lng, lat }
+			{ lng, lat },
 		) {
 			const authStore = useAuthStore();
 			const dialogStore = useDialogStore();
@@ -1970,18 +2163,18 @@ export const useMapStore = defineStore("map", {
 			const popup = new mapboxGl.Popup({ closeButton: false }).setHTML(
 				`<div class="popup-for-pin"><div>${markerName}</div> <button id="delete-${markerId}" class="delete-pin"}">
 						<span>delete</span>
-					  </button></div>`
+					  </button></div>`,
 			);
 
 			popup.on("open", () => {
 				const el = document.getElementById(`delete-${markerId}`);
 				el.addEventListener("click", async () => {
 					await http.delete(
-						`user/${authStore.user.user_id}/viewpoint/${markerId}`
+						`user/${authStore.user.user_id}/viewpoint/${markerId}`,
 					);
 					dialogStore.showNotification("success", "地標刪除成功");
 					this.viewPoints = this.viewPoints.filter(
-						(viewPoint) => viewPoint.id !== markerId
+						(viewPoint) => viewPoint.id !== markerId,
 					);
 
 					marker.remove();
@@ -1995,12 +2188,12 @@ export const useMapStore = defineStore("map", {
 		async removeViewPoint(item) {
 			const authStore = useAuthStore();
 			await http.delete(
-				`user/${authStore.user.user_id}/viewpoint/${item.id}`
+				`user/${authStore.user.user_id}/viewpoint/${item.id}`,
 			);
 			const dialogStore = useDialogStore();
 
 			this.viewPoints = this.viewPoints.filter(
-				(viewPoint) => viewPoint.id !== item.id
+				(viewPoint) => viewPoint.id !== item.id,
 			);
 			dialogStore.showNotification("success", "視角刪除成功");
 		},
@@ -2009,7 +2202,7 @@ export const useMapStore = defineStore("map", {
 			const authStore = useAuthStore();
 
 			const res = await http.get(
-				`user/${authStore.user.user_id}/viewpoint`
+				`user/${authStore.user.user_id}/viewpoint`,
 			);
 			this.viewPoints = res.data;
 			if (this.map) this.renderMarkers();
@@ -2024,7 +2217,7 @@ export const useMapStore = defineStore("map", {
 						{ color: "#5a9cf8" },
 						item.name,
 						item.id,
-						{ lng: item.center_x, lat: item.center_y }
+						{ lng: item.center_x, lat: item.center_y },
 					);
 				}
 			});
@@ -2160,13 +2353,13 @@ export const useMapStore = defineStore("map", {
 					this.map.setLayoutProperty(
 						mapLayerId,
 						"visibility",
-						"none"
+						"none",
 					);
 				} else {
 					this.map.setLayoutProperty(
 						mapLayerId,
 						"visibility",
-						"visible"
+						"visible",
 					);
 				}
 			});
@@ -2238,7 +2431,7 @@ export const useMapStore = defineStore("map", {
 							latitude: userCoords.latitude,
 							longitude: userCoords.longitude,
 						},
-						{ latitude: lat, longitude: lon }
+						{ latitude: lat, longitude: lon },
 					);
 
 					// Update the closest location if the current distance is smaller
@@ -2250,9 +2443,9 @@ export const useMapStore = defineStore("map", {
 					// Catch and log any errors during processing
 					console.error(
 						`Error processing location: ${JSON.stringify(
-							location
+							location,
 						)}`,
-						e
+						e,
 					);
 				}
 			}
@@ -2284,8 +2477,8 @@ export const useMapStore = defineStore("map", {
 			if (layerSourceType === "geojson") {
 				features.push(
 					...this.map.getSource(
-						`${this.currentVisibleLayers[targetLayer]}-source`
-					)._data.features
+						`${this.currentVisibleLayers[targetLayer]}-source`,
+					)._data.features,
 				);
 			} else {
 				const res = await axios.get(
@@ -2294,7 +2487,7 @@ export const useMapStore = defineStore("map", {
 					}/geo_server/taipei_vioc/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=taipei_vioc%3A${
 						this.mapConfigs[this.currentVisibleLayers[targetLayer]]
 							.index
-					}&maxFeatures=1000000&outputFormat=application%2Fjson`
+					}&maxFeatures=1000000&outputFormat=application%2Fjson`,
 				);
 
 				features.push(...res.data.features);
@@ -2310,7 +2503,7 @@ export const useMapStore = defineStore("map", {
 					longitude: lng,
 					latitude: lat,
 				},
-				features
+				features,
 			);
 
 			this.map.once("moveend", () => {
@@ -2318,7 +2511,7 @@ export const useMapStore = defineStore("map", {
 					() => {
 						this.manualTriggerPopup();
 					},
-					layerSourceType === "geojson" ? 0 : 500
+					layerSourceType === "geojson" ? 0 : 500,
 				);
 			});
 

@@ -35,6 +35,7 @@ func StartApplication() {
 	cache.ConnectToRedis()
 
 	global.LMSession = models.InitLmSession()
+	global.LMTokenizer = models.InitTokenizer()
 
 	// 2. Initiate default Gin router with logger and recovery middleware
 	routes.Router = gin.Default()
@@ -48,6 +49,7 @@ func StartApplication() {
 
 	// 3. Add common middlewares that need to run on all routes
 	routes.Router.Use(middleware.AddCommonHeaders)
+	routes.Router.Use(middleware.SanitizeXForwardedFor)
 	// routes.Router.Use(cors.New(cors.Config{
 	// 	AllowOrigins:     []string{"https://tuic.gov.taipei"},
 	// 	AllowMethods:     []string{"GET"},
