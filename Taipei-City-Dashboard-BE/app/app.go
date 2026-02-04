@@ -33,6 +33,7 @@ func StartApplication() {
 	// 1. Connect to postgreSQL and Redis
 	models.ConnectToDatabases("MANAGER", "DASHBOARD")
 	cache.ConnectToRedis()
+	initial.InitCronJobs()
 
 	global.LMSession = models.InitLmSession()
 	global.LMTokenizer = models.InitTokenizer()
