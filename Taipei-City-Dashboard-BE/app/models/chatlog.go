@@ -53,6 +53,12 @@ func GetALLChatLogSession(UserID int)(chatLogList []ChatLog,err error){
 	return chatLogList, nil
 }
 
+func DeleteOldChatLogs(months int) error {
+	cutoffDate := time.Now().AddDate(0, -months, 0)
+	err := DBManager.Where("created_at < ?", cutoffDate).Delete(&ChatLog{}).Error
+	return err
+}
+
 
 func GetChatLogDetailBySession(Session string,UserID int)(chatLogList []ChatLog,err error){
 
