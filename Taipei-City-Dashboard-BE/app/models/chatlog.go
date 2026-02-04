@@ -1,6 +1,7 @@
 package models
 
 import (
+	"context" // Add context import
 	"time"
 )
 
@@ -53,10 +54,12 @@ func GetALLChatLogSession(UserID int)(chatLogList []ChatLog,err error){
 	return chatLogList, nil
 }
 
-func DeleteOldChatLogs(months int) error {
+// DeleteOldChatLogs deletes chat logs older than the specified number of months.
+// It returns the number of rows affected and an error, if any.
+func DeleteOldChatLogs(ctx context.Context, months int) (int64, error) { // Modified function signature
 	cutoffDate := time.Now().AddDate(0, -months, 0)
-	err := DBManager.Where("created_at < ?", cutoffDate).Delete(&ChatLog{}).Error
-	return err
+	db := DBManager.WithContext(ctx).Where("created_at < ?", cutoffDate).Delete(&ChatLog{}) // Use WithContext
+	return db.RowsAffected, db.Error // Return rows affected and error
 }
 
 
