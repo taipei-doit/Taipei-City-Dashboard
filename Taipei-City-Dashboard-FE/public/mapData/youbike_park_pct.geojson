@@ -25,7 +25,7 @@
     "stop_id":"U101002",
     "stopname":"復興南路二段273號前",
     "capacity":21,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.54357 25.02565)"
     }
   },
@@ -95,7 +95,7 @@
     "stop_id":"U101007",
     "stopname":"復興南路二段340巷口",
     "capacity":11,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.54326 25.02253)"
     }
   },
@@ -151,7 +151,7 @@
     "stop_id":"U101012",
     "stopname":"辛亥路一段30號前",
     "capacity":8,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.52982 25.01986)"
     }
   },
@@ -165,7 +165,7 @@
     "stop_id":"U101013",
     "stopname":"和平復興路口西北側",
     "capacity":9,
-    "category":"中",
+    "category":"高",
     "wkb_geometry":"POINT (121.54332 25.02543)"
     }
   },
@@ -207,7 +207,7 @@
     "stop_id":"U101016",
     "stopname":"羅斯福路三段245號前",
     "capacity":8,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.52989 25.01927)"
     }
   },
@@ -221,7 +221,7 @@
     "stop_id":"U101018",
     "stopname":"溫州公園",
     "capacity":5,
-    "category":"中",
+    "category":"高",
     "wkb_geometry":"POINT (121.53156 25.01895)"
     }
   },
@@ -249,7 +249,7 @@
     "stop_id":"U101021",
     "stopname":"銘傳國小側門",
     "capacity":7,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.53549 25.01385)"
     }
   },
@@ -291,7 +291,7 @@
     "stop_id":"U101024",
     "stopname":"臺灣科技大學正門",
     "capacity":50,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.54142 25.01451)"
     }
   },
@@ -319,7 +319,7 @@
     "stop_id":"U101026",
     "stopname":"公館公園",
     "capacity":30,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.54062 25.01137)"
     }
   },
@@ -347,7 +347,7 @@
     "stop_id":"U101028",
     "stopname":"臺大醫學院附設癌醫中心",
     "capacity":20,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.54382 25.01426)"
     }
   },
@@ -361,7 +361,7 @@
     "stop_id":"U101029",
     "stopname":"臺大環研大樓",
     "capacity":41,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.54503 25.01234)"
     }
   },
@@ -389,7 +389,7 @@
     "stop_id":"U101031",
     "stopname":"臺大男七舍前",
     "capacity":20,
-    "category":"中",
+    "category":"高",
     "wkb_geometry":"POINT (121.54698 25.01537)"
     }
   },
@@ -417,7 +417,7 @@
     "stop_id":"U101033",
     "stopname":"臺大男六舍前",
     "capacity":40,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.5452 25.01664)"
     }
   },
@@ -431,7 +431,7 @@
     "stop_id":"U101034",
     "stopname":"臺大動物醫院前",
     "capacity":18,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.54291 25.01576)"
     }
   },
@@ -459,7 +459,7 @@
     "stop_id":"U101036",
     "stopname":"臺大萬才館前",
     "capacity":20,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.54497 25.02032)"
     }
   },
@@ -487,7 +487,7 @@
     "stop_id":"U101038",
     "stopname":"臺大社科院圖書館前",
     "capacity":27,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.54284 25.02101)"
     }
   },
@@ -585,7 +585,7 @@
     "stop_id":"U101093",
     "stopname":"大安區健康服務中心",
     "capacity":23,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.544069 25.021469)"
     }
   },
@@ -725,7 +725,7 @@
     "stop_id":"U101104",
     "stopname":"捷運臺電大樓站(2號出口)",
     "capacity":18,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.52942 25.02021)"
     }
   },
@@ -907,7 +907,7 @@
     "stop_id":"U101122",
     "stopname":"敦化南路二段293巷口南側",
     "capacity":14,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.54899 25.0237)"
     }
   },
@@ -1075,7 +1075,7 @@
     "stop_id":"U101134",
     "stopname":"捷運大安站(4號出口)",
     "capacity":13,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.5439 25.0332)"
     }
   },
@@ -1355,7 +1355,7 @@
     "stop_id":"U101155",
     "stopname":"捷運大安森林公園站(5號出口)",
     "capacity":15,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.5364 25.03336)"
     }
   },
@@ -1719,7 +1719,7 @@
     "stop_id":"U101184",
     "stopname":"新生南路三段94巷口",
     "capacity":15,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.53334 25.01744)"
     }
   },
@@ -1789,7 +1789,7 @@
     "stop_id":"U101189",
     "stopname":"臥龍基隆路口",
     "capacity":25,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.54853 25.02039)"
     }
   },
@@ -1817,7 +1817,7 @@
     "stop_id":"U101191",
     "stopname":"大安運動中心",
     "capacity":33,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.54561 25.02054)"
     }
   },
@@ -1845,7 +1845,7 @@
     "stop_id":"U101193",
     "stopname":"基隆長興路口",
     "capacity":51,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.54435 25.01705)"
     }
   },
@@ -2111,7 +2111,7 @@
     "stop_id":"U101214",
     "stopname":"仁愛敦南圓環(西北側)",
     "capacity":20,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.54802 25.03827)"
     }
   },
@@ -2153,7 +2153,7 @@
     "stop_id":"U101217",
     "stopname":"捷運大安站(5號出口)",
     "capacity":26,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.54372 25.03303)"
     }
   },
@@ -2447,7 +2447,7 @@
     "stop_id":"U101239",
     "stopname":"古風公園",
     "capacity":15,
-    "category":"中",
+    "category":"高",
     "wkb_geometry":"POINT (121.52912 25.02187)"
     }
   },
@@ -2517,7 +2517,7 @@
     "stop_id":"U101244",
     "stopname":"浦城街26巷",
     "capacity":17,
-    "category":"中",
+    "category":"高",
     "wkb_geometry":"POINT (121.52618 25.02324)"
     }
   },
@@ -2559,7 +2559,7 @@
     "stop_id":"U101247",
     "stopname":"捷運忠孝復興站(4號出口)",
     "capacity":25,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.54412 25.04173)"
     }
   },
@@ -2713,7 +2713,7 @@
     "stop_id":"U101259",
     "stopname":"臺靜農人文會館",
     "capacity":12,
-    "category":"中",
+    "category":"高",
     "wkb_geometry":"POINT (121.53347 25.02462)"
     }
   },
@@ -2797,7 +2797,7 @@
     "stop_id":"U101266",
     "stopname":"臺科大側門(基隆路四段73巷)",
     "capacity":35,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.53967 25.01291)"
     }
   },
@@ -2839,7 +2839,7 @@
     "stop_id":"U101269",
     "stopname":"和平高中(辛亥基隆路口)",
     "capacity":55,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.54708 25.01917)"
     }
   },
@@ -3161,7 +3161,7 @@
     "stop_id":"U103026",
     "stopname":"捷運民權西路站(2號出口)",
     "capacity":25,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.51969 25.06174)"
     }
   },
@@ -3203,7 +3203,7 @@
     "stop_id":"U103029",
     "stopname":"朝陽公園",
     "capacity":10,
-    "category":"中",
+    "category":"高",
     "wkb_geometry":"POINT (121.51367 25.05592)"
     }
   },
@@ -4533,7 +4533,7 @@
     "stop_id":"U104041",
     "stopname":"捷運士林站(2號出口)",
     "capacity":30,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.52642 25.09343)"
     }
   },
@@ -4603,7 +4603,7 @@
     "stop_id":"U104046",
     "stopname":"捷運芝山站(1號出口)",
     "capacity":35,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.52286 25.10225)"
     }
   },
@@ -4953,7 +4953,7 @@
     "stop_id":"U104071",
     "stopname":"聖山綠地",
     "capacity":15,
-    "category":"中",
+    "category":"高",
     "wkb_geometry":"POINT (121.53234 25.10696)"
     }
   },
@@ -6101,7 +6101,7 @@
     "stop_id":"U105005",
     "stopname":"捷運萬隆站(2號出口)",
     "capacity":18,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.53983 25.00144)"
     }
   },
@@ -6255,7 +6255,7 @@
     "stop_id":"U105016",
     "stopname":"景華街128巷口",
     "capacity":29,
-    "category":"中",
+    "category":"高",
     "wkb_geometry":"POINT (121.54725 24.99543)"
     }
   },
@@ -6297,7 +6297,7 @@
     "stop_id":"U105019",
     "stopname":"捷運動物園站",
     "capacity":57,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.57985 24.99873)"
     }
   },
@@ -6353,7 +6353,7 @@
     "stop_id":"U105023",
     "stopname":"捷運辛亥站",
     "capacity":42,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.55684 25.00467)"
     }
   },
@@ -6703,7 +6703,7 @@
     "stop_id":"U105048",
     "stopname":"捷運萬芳醫院站(興隆路三段115巷)",
     "capacity":20,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.55848 24.99939)"
     }
   },
@@ -6913,7 +6913,7 @@
     "stop_id":"U105066",
     "stopname":"景美污水抽水站",
     "capacity":15,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.53637 25.01076)"
     }
   },
@@ -6983,7 +6983,7 @@
     "stop_id":"U105071",
     "stopname":"景行公園",
     "capacity":15,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.54255 24.99279)"
     }
   },
@@ -7025,7 +7025,7 @@
     "stop_id":"U105074",
     "stopname":"景興路42巷口",
     "capacity":12,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.54454 24.99696)"
     }
   },
@@ -7375,7 +7375,7 @@
     "stop_id":"U105101",
     "stopname":"捷運木柵站(西側)",
     "capacity":26,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.57279 24.9983)"
     }
   },
@@ -7711,7 +7711,7 @@
     "stop_id":"U106001",
     "stopname":"臺北自來水事業處",
     "capacity":20,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.53068 25.013741)"
     }
   },
@@ -7739,7 +7739,7 @@
     "stop_id":"U106003",
     "stopname":"捷運公館站(1號出口)",
     "capacity":12,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.534374 25.014529)"
     }
   },
@@ -7753,7 +7753,7 @@
     "stop_id":"U106004",
     "stopname":"捷運公館站(4號出口)",
     "capacity":12,
-    "category":"中",
+    "category":"高",
     "wkb_geometry":"POINT (121.533828 25.015069)"
     }
   },
@@ -7879,7 +7879,7 @@
     "stop_id":"U106013",
     "stopname":"羅斯福三段金門街口",
     "capacity":15,
-    "category":"中",
+    "category":"高",
     "wkb_geometry":"POINT (121.52498 25.02345)"
     }
   },
@@ -7907,7 +7907,7 @@
     "stop_id":"U106015",
     "stopname":"捷運古亭站(8號出口)",
     "capacity":15,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.52164 25.02701)"
     }
   },
@@ -7921,7 +7921,7 @@
     "stop_id":"U106016",
     "stopname":"捷運古亭站(7號出口)",
     "capacity":12,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.52155 25.02805)"
     }
   },
@@ -8243,7 +8243,7 @@
     "stop_id":"U106046",
     "stopname":"林森仁愛路口",
     "capacity":13,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.52163 25.03915)"
     }
   },
@@ -8285,7 +8285,7 @@
     "stop_id":"U106049",
     "stopname":"捷運善導寺站(3號出口)",
     "capacity":20,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.52336 25.04428)"
     }
   },
@@ -8607,7 +8607,7 @@
     "stop_id":"U106072",
     "stopname":"捷運中正紀念堂站(5號出口)",
     "capacity":29,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.5168 25.03526)"
     }
   },
@@ -8635,7 +8635,7 @@
     "stop_id":"U106074",
     "stopname":"王貫英先生紀念圖書館",
     "capacity":15,
-    "category":"中",
+    "category":"高",
     "wkb_geometry":"POINT (121.52362 25.02266)"
     }
   },
@@ -9013,7 +9013,7 @@
     "stop_id":"U106104",
     "stopname":"捷運臺大醫院站(1號出口)",
     "capacity":19,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.51586 25.04074)"
     }
   },
@@ -9447,7 +9447,7 @@
     "stop_id":"U106135",
     "stopname":"羅斯福路四段108巷口",
     "capacity":20,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.5355 25.01346)"
     }
   },
@@ -9503,7 +9503,7 @@
     "stop_id":"U106142",
     "stopname":"愛國東羅斯福路口",
     "capacity":24,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.51733 25.03454)"
     }
   },
@@ -10091,7 +10091,7 @@
     "stop_id":"U107038",
     "stopname":"捷運中山國小站(4號出口)",
     "capacity":20,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.52697 25.06283)"
     }
   },
@@ -10147,7 +10147,7 @@
     "stop_id":"U107042",
     "stopname":"臺北市立美術館",
     "capacity":24,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.52291 25.06987)"
     }
   },
@@ -10161,7 +10161,7 @@
     "stop_id":"U107043",
     "stopname":"中山民族路口",
     "capacity":16,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.52265 25.06816)"
     }
   },
@@ -10917,7 +10917,7 @@
     "stop_id":"U107102",
     "stopname":"南京一江街口",
     "capacity":20,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.53171 25.05215)"
     }
   },
@@ -11197,7 +11197,7 @@
     "stop_id":"U107122",
     "stopname":"捷運南京復興站(1號出口)",
     "capacity":21,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.54256 25.05253)"
     }
   },
@@ -11239,7 +11239,7 @@
     "stop_id":"U107125",
     "stopname":"大直街94巷",
     "capacity":13,
-    "category":"中",
+    "category":"高",
     "wkb_geometry":"POINT (121.54755 25.08431)"
     }
   },
@@ -13157,7 +13157,7 @@
     "stop_id":"U108064",
     "stopname":"捷運內湖站(2號出口)",
     "capacity":10,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.59454 25.0835)"
     }
   },
@@ -16223,7 +16223,7 @@
     "stop_id":"U109076",
     "stopname":"石牌立農街口",
     "capacity":29,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.51921 25.11879)"
     }
   },
@@ -16923,7 +16923,7 @@
     "stop_id":"U110009",
     "stopname":"捷運南京三民站(4號出口)",
     "capacity":13,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.5646 25.05152)"
     }
   },
@@ -17049,7 +17049,7 @@
     "stop_id":"U110018",
     "stopname":"捷運小巨蛋站(2號出口)",
     "capacity":26,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.55118 25.05157)"
     }
   },
@@ -17231,7 +17231,7 @@
     "stop_id":"U110031",
     "stopname":"民權光復路口(東北側)",
     "capacity":39,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.55475 25.06206)"
     }
   },
@@ -17399,7 +17399,7 @@
     "stop_id":"U110043",
     "stopname":"捷運南京復興站(7號出口)",
     "capacity":15,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.54478 25.05278)"
     }
   },
@@ -17497,7 +17497,7 @@
     "stop_id":"U110050",
     "stopname":"捷運松山站(2號出口)",
     "capacity":14,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.57635 25.05013)"
     }
   },
@@ -17567,7 +17567,7 @@
     "stop_id":"U110055",
     "stopname":"西松公園",
     "capacity":11,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.56407 25.05406)"
     }
   },
@@ -17791,7 +17791,7 @@
     "stop_id":"U110071",
     "stopname":"捷運小巨蛋站(3號出口)",
     "capacity":28,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.55243 25.05152)"
     }
   },
@@ -18561,7 +18561,7 @@
     "stop_id":"U111019",
     "stopname":"捷運南港軟體園區(2號出口)",
     "capacity":70,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.61677 25.05933)"
     }
   },
@@ -18785,7 +18785,7 @@
     "stop_id":"U111035",
     "stopname":"南港車站(市民大道)",
     "capacity":30,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.60656 25.05326)"
     }
   },
@@ -19149,7 +19149,7 @@
     "stop_id":"U111061",
     "stopname":"捷運南港展覽館站(6號出口)",
     "capacity":25,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.6185 25.05465)"
     }
   },
@@ -19261,7 +19261,7 @@
     "stop_id":"U111069",
     "stopname":"南港車站(興華路)",
     "capacity":48,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.60633 25.05343)"
     }
   },
@@ -19359,7 +19359,7 @@
     "stop_id":"U111076",
     "stopname":"南港展覽館2館",
     "capacity":18,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.61646 25.05545)"
     }
   },
@@ -19485,7 +19485,7 @@
     "stop_id":"U111085",
     "stopname":"新富公園",
     "capacity":12,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.61713 25.05296)"
     }
   },
@@ -19653,7 +19653,7 @@
     "stop_id":"U111097",
     "stopname":"捷運南港軟體園區站(1號出口)",
     "capacity":36,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.61498 25.06043)"
     }
   },
@@ -20087,7 +20087,7 @@
     "stop_id":"U112013",
     "stopname":"興雅國中",
     "capacity":18,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.56983 25.03616)"
     }
   },
@@ -20101,7 +20101,7 @@
     "stop_id":"U112014",
     "stopname":"捷運象山站(1號出口)",
     "capacity":24,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.56867 25.03295)"
     }
   },
@@ -20171,7 +20171,7 @@
     "stop_id":"U112019",
     "stopname":"捷運台北101/世貿站(3號出口)",
     "capacity":15,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.56337 25.03275)"
     }
   },
@@ -20311,7 +20311,7 @@
     "stop_id":"U112030",
     "stopname":"松智松壽路口",
     "capacity":39,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.56535 25.03607)"
     }
   },
@@ -20367,7 +20367,7 @@
     "stop_id":"U112035",
     "stopname":"信義廣場(台北101)",
     "capacity":90,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.5662 25.03306)"
     }
   },
@@ -20381,7 +20381,7 @@
     "stop_id":"U112036",
     "stopname":"捷運台北101/世貿站(5號出口)",
     "capacity":21,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.56333 25.03338)"
     }
   },
@@ -20409,7 +20409,7 @@
     "stop_id":"U112038",
     "stopname":"松仁路121巷口",
     "capacity":31,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.56865 25.03476)"
     }
   },
@@ -20465,7 +20465,7 @@
     "stop_id":"U112043",
     "stopname":"興雅松仁路口",
     "capacity":65,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.56822 25.0401)"
     }
   },
@@ -20913,7 +20913,7 @@
     "stop_id":"U112076",
     "stopname":"捷運台北101/世貿站(2號出口)",
     "capacity":52,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.56157 25.0327)"
     }
   },
@@ -20969,7 +20969,7 @@
     "stop_id":"U112081",
     "stopname":"松仁路95巷口",
     "capacity":78,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.56866 25.03656)"
     }
   },
@@ -21081,7 +21081,7 @@
     "stop_id":"U112089",
     "stopname":"忠孝東路五段215巷口",
     "capacity":24,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.5705 25.0409)"
     }
   },
@@ -21095,7 +21095,7 @@
     "stop_id":"U112090",
     "stopname":"松勤莊敬路口",
     "capacity":15,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.5615 25.03203)"
     }
   },
@@ -21109,7 +21109,7 @@
     "stop_id":"U112091",
     "stopname":"松仁松平路口",
     "capacity":10,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.56838 25.03047)"
     }
   },
@@ -21137,7 +21137,7 @@
     "stop_id":"U112093",
     "stopname":"捷運市政府站(4號出口)",
     "capacity":14,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.56731 25.04146)"
     }
   },
@@ -21151,7 +21151,7 @@
     "stop_id":"U112094",
     "stopname":"吳興街284巷(廣安宮)",
     "capacity":15,
-    "category":"中",
+    "category":"高",
     "wkb_geometry":"POINT (121.56329 25.02326)"
     }
   },
@@ -21277,7 +21277,7 @@
     "stop_id":"U112103",
     "stopname":"臺北文化體育園區辦公大樓",
     "capacity":33,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.56126 25.04144)"
     }
   },
@@ -21291,7 +21291,7 @@
     "stop_id":"U112104",
     "stopname":"捷運國父紀念館站(5號出口)",
     "capacity":23,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.55792 25.04206)"
     }
   },
@@ -21501,7 +21501,7 @@
     "stop_id":"U112119",
     "stopname":"信義松智路口(東南側)",
     "capacity":51,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.56555 25.03284)"
     }
   },
@@ -21557,7 +21557,7 @@
     "stop_id":"U112125",
     "stopname":"象山公園(松勤街140巷)",
     "capacity":29,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.5697 25.03098)"
     }
   },
@@ -21683,7 +21683,7 @@
     "stop_id":"U113002",
     "stopname":"寶興長泰街口(西南角)",
     "capacity":17,
-    "category":"中",
+    "category":"高",
     "wkb_geometry":"POINT (121.49597 25.0216)"
     }
   },
@@ -22159,7 +22159,7 @@
     "stop_id":"U113040",
     "stopname":"捷運龍山寺站(1號出口)",
     "capacity":11,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.49938 25.03535)"
     }
   },
@@ -22565,7 +22565,7 @@
     "stop_id":"U113071",
     "stopname":"萬大路493巷",
     "capacity":10,
-    "category":"中",
+    "category":"高",
     "wkb_geometry":"POINT (121.4992 25.01975)"
     }
   },
@@ -22845,7 +22845,7 @@
     "stop_id":"U113094",
     "stopname":"萬華51號公園",
     "capacity":14,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.49928 25.03484)"
     }
   },
@@ -22859,7 +22859,7 @@
     "stop_id":"U113095",
     "stopname":"萬華區公所(大理街)",
     "capacity":26,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.5 25.03457)"
     }
   },
@@ -22929,7 +22929,7 @@
     "stop_id":"U119005",
     "stopname":"臺大水源舍區A棟",
     "capacity":37,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.53044 25.01493)"
     }
   },
@@ -22957,7 +22957,7 @@
     "stop_id":"U119007",
     "stopname":"臺大水源修齊會館",
     "capacity":35,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.52997 25.01411)"
     }
   },
@@ -23013,7 +23013,7 @@
     "stop_id":"U119044",
     "stopname":"臺大禮賢樓東南側",
     "capacity":35,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.53767 25.01415)"
     }
   },
@@ -23055,7 +23055,7 @@
     "stop_id":"U119047",
     "stopname":"臺大土木系館",
     "capacity":30,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.53844 25.01761)"
     }
   },
@@ -23069,7 +23069,7 @@
     "stop_id":"U119048",
     "stopname":"臺大大一女舍北側",
     "capacity":53,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.53436 25.01547)"
     }
   },
@@ -23097,7 +23097,7 @@
     "stop_id":"U119050",
     "stopname":"臺大小福樓東側",
     "capacity":31,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.5376 25.01846)"
     }
   },
@@ -23111,7 +23111,7 @@
     "stop_id":"U119051",
     "stopname":"臺大立體機車停車場",
     "capacity":27,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.54251 25.01616)"
     }
   },
@@ -23125,7 +23125,7 @@
     "stop_id":"U119052",
     "stopname":"臺大工綜館南側",
     "capacity":26,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.54059 25.01857)"
     }
   },
@@ -23139,7 +23139,7 @@
     "stop_id":"U119053",
     "stopname":"臺大天文數學館南側",
     "capacity":19,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.53783 25.02108)"
     }
   },
@@ -23153,7 +23153,7 @@
     "stop_id":"U119054",
     "stopname":"臺大心理系館南側",
     "capacity":30,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.5404 25.01941)"
     }
   },
@@ -23167,7 +23167,7 @@
     "stop_id":"U119055",
     "stopname":"臺大樂學館東側",
     "capacity":28,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.53585 25.01793)"
     }
   },
@@ -23181,7 +23181,7 @@
     "stop_id":"U119056",
     "stopname":"臺大農化新館西側",
     "capacity":10,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.53535 25.01627)"
     }
   },
@@ -23209,7 +23209,7 @@
     "stop_id":"U119058",
     "stopname":"臺大舊體育館西側",
     "capacity":33,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.53583 25.0198)"
     }
   },
@@ -23223,7 +23223,7 @@
     "stop_id":"U119059",
     "stopname":"臺大共同教室北側",
     "capacity":68,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.53791 25.01595)"
     }
   },
@@ -23251,7 +23251,7 @@
     "stop_id":"U119061",
     "stopname":"臺大鹿鳴堂東側",
     "capacity":39,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.53786 25.01511)"
     }
   },
@@ -23279,7 +23279,7 @@
     "stop_id":"U119063",
     "stopname":"臺大第二行政大樓南側",
     "capacity":27,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.53635 25.01603)"
     }
   },
@@ -23293,7 +23293,7 @@
     "stop_id":"U119064",
     "stopname":"臺大明達館機車停車場",
     "capacity":28,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.54398 25.01754)"
     }
   },
@@ -23307,7 +23307,7 @@
     "stop_id":"U119065",
     "stopname":"臺大二號館",
     "capacity":10,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.53574 25.01699)"
     }
   },
@@ -23321,7 +23321,7 @@
     "stop_id":"U119066",
     "stopname":"臺大凝態館南側",
     "capacity":20,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.53633 25.02157)"
     }
   },
@@ -23335,7 +23335,7 @@
     "stop_id":"U119067",
     "stopname":"臺大社科院西側",
     "capacity":42,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.54145 25.02053)"
     }
   },
@@ -23349,7 +23349,7 @@
     "stop_id":"U119068",
     "stopname":"臺大社會系館南側",
     "capacity":66,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.54175 25.01987)"
     }
   },
@@ -23405,7 +23405,7 @@
     "stop_id":"U119072",
     "stopname":"臺大原分所北側",
     "capacity":12,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.53868 25.01881)"
     }
   },
@@ -23419,7 +23419,7 @@
     "stop_id":"U119074",
     "stopname":"臺大生命科學館西北側",
     "capacity":30,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.53825 25.01548)"
     }
   },
@@ -23433,7 +23433,7 @@
     "stop_id":"U119075",
     "stopname":"臺大第一活動中心西南側",
     "capacity":48,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.53995 25.01761)"
     }
   },
@@ -23447,7 +23447,7 @@
     "stop_id":"U119076",
     "stopname":"臺大博理館西側",
     "capacity":22,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.54195 25.01922)"
     }
   },
@@ -23475,7 +23475,7 @@
     "stop_id":"U119078",
     "stopname":"臺大森林館北側",
     "capacity":10,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.53888 25.01704)"
     }
   },
@@ -23489,7 +23489,7 @@
     "stop_id":"U119079",
     "stopname":"臺大一號館",
     "capacity":19,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.53455 25.01698)"
     }
   },
@@ -23503,7 +23503,7 @@
     "stop_id":"U119080",
     "stopname":"臺大小小福西南側",
     "capacity":10,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.53686 25.01539)"
     }
   },
@@ -23517,7 +23517,7 @@
     "stop_id":"U119081",
     "stopname":"臺大教研館北側",
     "capacity":26,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.53909 25.01337)"
     }
   },
@@ -23531,7 +23531,7 @@
     "stop_id":"U119082",
     "stopname":"臺大四號館東北側",
     "capacity":10,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.53781 25.01703)"
     }
   },
@@ -23545,7 +23545,7 @@
     "stop_id":"U119083",
     "stopname":"臺大新生教室南側",
     "capacity":18,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.53846 25.0196)"
     }
   },
@@ -23559,7 +23559,7 @@
     "stop_id":"U119084",
     "stopname":"臺大鄭江樓北側",
     "capacity":40,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.54309 25.01854)"
     }
   },
@@ -23573,7 +23573,7 @@
     "stop_id":"U119085",
     "stopname":"臺大電機二館東南側",
     "capacity":14,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.54247 25.01857)"
     }
   },
@@ -23587,7 +23587,7 @@
     "stop_id":"U119086",
     "stopname":"臺大圖資系館北側",
     "capacity":51,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.53928 25.01804)"
     }
   },
@@ -23601,7 +23601,7 @@
     "stop_id":"U119087",
     "stopname":"臺大總圖書館西南側",
     "capacity":30,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.54031 25.0169)"
     }
   },
@@ -23629,7 +23629,7 @@
     "stop_id":"U119089",
     "stopname":"臺大獸醫館南側",
     "capacity":24,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.54242 25.01791)"
     }
   },
@@ -23643,7 +23643,7 @@
     "stop_id":"U119090",
     "stopname":"臺大新體育館東南側",
     "capacity":51,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.53591 25.02112)"
     }
   },
@@ -23671,7 +23671,7 @@
     "stop_id":"U119092",
     "stopname":"臺大管理學院一館",
     "capacity":17,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.53828 25.01436)"
     }
   },
@@ -23685,7 +23685,7 @@
     "stop_id":"U119093",
     "stopname":"臺大禮賢樓西側",
     "capacity":36,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.53765 25.01467)"
     }
   },
@@ -23699,7 +23699,7 @@
     "stop_id":"U119094",
     "stopname":"臺大大一女餐廳廣場",
     "capacity":40,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.53494 25.01479)"
     }
   },
@@ -23713,7 +23713,7 @@
     "stop_id":"U119095",
     "stopname":"臺大學新館",
     "capacity":33,
-    "category":"高",
+    "category":"中",
     "wkb_geometry":"POINT (121.54339 25.01944)"
     }
   },
