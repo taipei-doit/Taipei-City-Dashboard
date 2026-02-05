@@ -3949,7 +3949,7 @@
         "on_stop": "臺大社科院西側",
         "off_stop": "捷運公館站(3號出口)",
         "sum_of_txn_times": 44,
-        "TOWNNAME_origin": "大安區",
+        "TOWNNAME_origin": "臺大專區",
         "TOWNNAME_destination": "大安區",
         "width": 1.0374
       },
@@ -8509,7 +8509,7 @@
         "on_stop": "臺大小福樓東側",
         "off_stop": "捷運公館站(3號出口)",
         "sum_of_txn_times": 32,
-        "TOWNNAME_origin": "大安區",
+        "TOWNNAME_origin": "臺大專區",
         "TOWNNAME_destination": "大安區",
         "width": 1.027
       },
@@ -10093,7 +10093,7 @@
         "on_stop": "臺大立體機車停車場",
         "off_stop": "捷運公館站(2號出口)",
         "sum_of_txn_times": 30,
-        "TOWNNAME_origin": "大安區",
+        "TOWNNAME_origin": "臺大專區",
         "TOWNNAME_destination": "大安區",
         "width": 1.0252
       },
@@ -10502,7 +10502,7 @@
         "off_stop": "臺大第一活動中心西南側",
         "sum_of_txn_times": 29,
         "TOWNNAME_origin": "大安區",
-        "TOWNNAME_destination": "大安區",
+        "TOWNNAME_destination": "臺大專區",
         "width": 1.0243
       },
       "geometry": {
@@ -12085,7 +12085,7 @@
         "on_stop": "臺大第一活動中心西南側",
         "off_stop": "捷運公館站(3號出口)",
         "sum_of_txn_times": 28,
-        "TOWNNAME_origin": "大安區",
+        "TOWNNAME_origin": "臺大專區",
         "TOWNNAME_destination": "大安區",
         "width": 1.0235
       },
@@ -17990,7 +17990,7 @@
         "off_stop": "臺大立體機車停車場",
         "sum_of_txn_times": 23,
         "TOWNNAME_origin": "大安區",
-        "TOWNNAME_destination": "大安區",
+        "TOWNNAME_destination": "臺大專區",
         "width": 1.0191
       },
       "geometry": {
@@ -19598,7 +19598,7 @@
         "off_stop": "臺大社科院西側",
         "sum_of_txn_times": 22,
         "TOWNNAME_origin": "大安區",
-        "TOWNNAME_destination": "大安區",
+        "TOWNNAME_destination": "臺大專區",
         "width": 1.0183
       },
       "geometry": {
@@ -23534,7 +23534,7 @@
         "off_stop": "臺大男八舍東側",
         "sum_of_txn_times": 20,
         "TOWNNAME_origin": "大安區",
-        "TOWNNAME_destination": "大安區",
+        "TOWNNAME_destination": "臺大專區",
         "width": 1.0165
       },
       "geometry": {
@@ -24685,7 +24685,7 @@
         "on_stop": "臺大男八舍東側",
         "off_stop": "捷運公館站(2號出口)",
         "sum_of_txn_times": 20,
-        "TOWNNAME_origin": "大安區",
+        "TOWNNAME_origin": "臺大專區",
         "TOWNNAME_destination": "大安區",
         "width": 1.0165
       },
@@ -25790,7 +25790,7 @@
         "off_stop": "臺大社科院西側",
         "sum_of_txn_times": 19,
         "TOWNNAME_origin": "大安區",
-        "TOWNNAME_destination": "大安區",
+        "TOWNNAME_destination": "臺大專區",
         "width": 1.0157
       },
       "geometry": {
@@ -27229,7 +27229,7 @@
         "on_stop": "臺大社科院西側",
         "off_stop": "捷運公館站(2號出口)",
         "sum_of_txn_times": 19,
-        "TOWNNAME_origin": "大安區",
+        "TOWNNAME_origin": "臺大專區",
         "TOWNNAME_destination": "大安區",
         "width": 1.0157
       },
@@ -27253,7 +27253,7 @@
         "on_stop": "臺大黑森林西側",
         "off_stop": "捷運公館站(2號出口)",
         "sum_of_txn_times": 19,
-        "TOWNNAME_origin": "大安區",
+        "TOWNNAME_origin": "臺大專區",
         "TOWNNAME_destination": "大安區",
         "width": 1.0157
       },
@@ -33493,7 +33493,7 @@
         "on_stop": "臺大女九舍西南側",
         "off_stop": "捷運公館站(3號出口)",
         "sum_of_txn_times": 17,
-        "TOWNNAME_origin": "大安區",
+        "TOWNNAME_origin": "臺大專區",
         "TOWNNAME_destination": "大安區",
         "width": 1.0139
       },
@@ -33517,7 +33517,7 @@
         "on_stop": "臺大工綜館南側",
         "off_stop": "捷運公館站(3號出口)",
         "sum_of_txn_times": 17,
-        "TOWNNAME_origin": "大安區",
+        "TOWNNAME_origin": "臺大專區",
         "TOWNNAME_destination": "大安區",
         "width": 1.0139
       },
@@ -33565,7 +33565,7 @@
         "on_stop": "臺大第一活動中心西南側",
         "off_stop": "捷運公館站(2號出口)",
         "sum_of_txn_times": 17,
-        "TOWNNAME_origin": "大安區",
+        "TOWNNAME_origin": "臺大專區",
         "TOWNNAME_destination": "大安區",
         "width": 1.0139
       },
@@ -35606,7 +35606,7 @@
         "off_stop": "臺大小福樓東側",
         "sum_of_txn_times": 16,
         "TOWNNAME_origin": "大安區",
-        "TOWNNAME_destination": "大安區",
+        "TOWNNAME_destination": "臺大專區",
         "width": 1.013
       },
       "geometry": {
@@ -42445,7 +42445,7 @@
         "on_stop": "臺大凝態館南側",
         "off_stop": "捷運公館站(3號出口)",
         "sum_of_txn_times": 15,
-        "TOWNNAME_origin": "大安區",
+        "TOWNNAME_origin": "臺大專區",
         "TOWNNAME_destination": "大安區",
         "width": 1.0122
       },
@@ -42469,8 +42469,8 @@
         "on_stop": "臺大立體機車停車場",
         "off_stop": "臺大大一女餐廳廣場",
         "sum_of_txn_times": 15,
-        "TOWNNAME_origin": "大安區",
-        "TOWNNAME_destination": "大安區",
+        "TOWNNAME_origin": "臺大專區",
+        "TOWNNAME_destination": "臺大專區",
         "width": 1.0122
       },
       "geometry": {
@@ -45062,7 +45062,7 @@
         "off_stop": "臺大第一活動中心西南側",
         "sum_of_txn_times": 14,
         "TOWNNAME_origin": "大安區",
-        "TOWNNAME_destination": "大安區",
+        "TOWNNAME_destination": "臺大專區",
         "width": 1.0113
       },
       "geometry": {
@@ -46214,7 +46214,7 @@
         "off_stop": "臺大黑森林西側",
         "sum_of_txn_times": 14,
         "TOWNNAME_origin": "大安區",
-        "TOWNNAME_destination": "大安區",
+        "TOWNNAME_destination": "臺大專區",
         "width": 1.0113
       },
       "geometry": {
@@ -48397,7 +48397,7 @@
         "on_stop": "臺大新體育館東南側",
         "off_stop": "捷運公館站(3號出口)",
         "sum_of_txn_times": 14,
-        "TOWNNAME_origin": "大安區",
+        "TOWNNAME_origin": "臺大專區",
         "TOWNNAME_destination": "大安區",
         "width": 1.0113
       },
@@ -48421,7 +48421,7 @@
         "on_stop": "臺大管理學院一館",
         "off_stop": "捷運公館站(2號出口)",
         "sum_of_txn_times": 14,
-        "TOWNNAME_origin": "大安區",
+        "TOWNNAME_origin": "臺大專區",
         "TOWNNAME_destination": "大安區",
         "width": 1.0113
       },
@@ -52430,7 +52430,7 @@
         "off_stop": "臺大社會系館南側",
         "sum_of_txn_times": 13,
         "TOWNNAME_origin": "大安區",
-        "TOWNNAME_destination": "大安區",
+        "TOWNNAME_destination": "臺大專區",
         "width": 1.0104
       },
       "geometry": {
@@ -55069,7 +55069,7 @@
         "on_stop": "臺大社會系館南側",
         "off_stop": "捷運公館站(3號出口)",
         "sum_of_txn_times": 13,
-        "TOWNNAME_origin": "大安區",
+        "TOWNNAME_origin": "臺大專區",
         "TOWNNAME_destination": "大安區",
         "width": 1.0104
       },
@@ -55093,7 +55093,7 @@
         "on_stop": "臺大計資中心南側",
         "off_stop": "捷運公館站(3號出口)",
         "sum_of_txn_times": 13,
-        "TOWNNAME_origin": "大安區",
+        "TOWNNAME_origin": "臺大專區",
         "TOWNNAME_destination": "大安區",
         "width": 1.0104
       },
@@ -59102,7 +59102,7 @@
         "off_stop": "臺大水源舍區C棟",
         "sum_of_txn_times": 12,
         "TOWNNAME_origin": "大安區",
-        "TOWNNAME_destination": "中正區",
+        "TOWNNAME_destination": "臺大專區",
         "width": 1.0096
       },
       "geometry": {
@@ -59198,7 +59198,7 @@
         "off_stop": "臺大社科院西側",
         "sum_of_txn_times": 12,
         "TOWNNAME_origin": "大安區",
-        "TOWNNAME_destination": "大安區",
+        "TOWNNAME_destination": "臺大專區",
         "width": 1.0096
       },
       "geometry": {
@@ -59558,7 +59558,7 @@
         "off_stop": "臺大生命科學館西北側",
         "sum_of_txn_times": 12,
         "TOWNNAME_origin": "大安區",
-        "TOWNNAME_destination": "大安區",
+        "TOWNNAME_destination": "臺大專區",
         "width": 1.0096
       },
       "geometry": {
@@ -63349,8 +63349,8 @@
         "on_stop": "臺大公館停車場西北側",
         "off_stop": "臺大生命科學館西北側",
         "sum_of_txn_times": 12,
-        "TOWNNAME_origin": "大安區",
-        "TOWNNAME_destination": "大安區",
+        "TOWNNAME_origin": "臺大專區",
+        "TOWNNAME_destination": "臺大專區",
         "width": 1.0096
       },
       "geometry": {
@@ -63373,7 +63373,7 @@
         "on_stop": "臺大明達館機車停車場",
         "off_stop": "捷運公館站(2號出口)",
         "sum_of_txn_times": 12,
-        "TOWNNAME_origin": "大安區",
+        "TOWNNAME_origin": "臺大專區",
         "TOWNNAME_destination": "大安區",
         "width": 1.0096
       },
@@ -63445,7 +63445,7 @@
         "on_stop": "臺大電機二館東南側",
         "off_stop": "捷運公館站(3號出口)",
         "sum_of_txn_times": 12,
-        "TOWNNAME_origin": "大安區",
+        "TOWNNAME_origin": "臺大專區",
         "TOWNNAME_destination": "大安區",
         "width": 1.0096
       },
@@ -63758,7 +63758,7 @@
         "off_stop": "臺大立體機車停車場",
         "sum_of_txn_times": 12,
         "TOWNNAME_origin": "萬華區",
-        "TOWNNAME_destination": "大安區",
+        "TOWNNAME_destination": "臺大專區",
         "width": 1.0096
       },
       "geometry": {
@@ -68054,7 +68054,7 @@
         "off_stop": "臺大總圖書館西南側",
         "sum_of_txn_times": 11,
         "TOWNNAME_origin": "大安區",
-        "TOWNNAME_destination": "大安區",
+        "TOWNNAME_destination": "臺大專區",
         "width": 1.0087
       },
       "geometry": {
@@ -68102,7 +68102,7 @@
         "off_stop": "臺大博理館西側",
         "sum_of_txn_times": 11,
         "TOWNNAME_origin": "大安區",
-        "TOWNNAME_destination": "大安區",
+        "TOWNNAME_destination": "臺大專區",
         "width": 1.0087
       },
       "geometry": {
@@ -68126,7 +68126,7 @@
         "off_stop": "臺大黑森林西側",
         "sum_of_txn_times": 11,
         "TOWNNAME_origin": "大安區",
-        "TOWNNAME_destination": "大安區",
+        "TOWNNAME_destination": "臺大專區",
         "width": 1.0087
       },
       "geometry": {
@@ -73189,8 +73189,8 @@
         "on_stop": "臺大原分所北側",
         "off_stop": "臺大原分所北側",
         "sum_of_txn_times": 11,
-        "TOWNNAME_origin": "大安區",
-        "TOWNNAME_destination": "大安區",
+        "TOWNNAME_origin": "臺大專區",
+        "TOWNNAME_destination": "臺大專區",
         "width": 1.0087
       },
       "geometry": {
@@ -73213,8 +73213,8 @@
         "on_stop": "臺大大一女舍北側",
         "off_stop": "臺大小福樓東側",
         "sum_of_txn_times": 11,
-        "TOWNNAME_origin": "大安區",
-        "TOWNNAME_destination": "大安區",
+        "TOWNNAME_origin": "臺大專區",
+        "TOWNNAME_destination": "臺大專區",
         "width": 1.0087
       },
       "geometry": {
@@ -73237,8 +73237,8 @@
         "on_stop": "臺大天文數學館南側",
         "off_stop": "臺大天文數學館南側",
         "sum_of_txn_times": 11,
-        "TOWNNAME_origin": "大安區",
-        "TOWNNAME_destination": "大安區",
+        "TOWNNAME_origin": "臺大專區",
+        "TOWNNAME_destination": "臺大專區",
         "width": 1.0087
       },
       "geometry": {
@@ -73261,7 +73261,7 @@
         "on_stop": "臺大學新館",
         "off_stop": "捷運公館站(2號出口)",
         "sum_of_txn_times": 11,
-        "TOWNNAME_origin": "大安區",
+        "TOWNNAME_origin": "臺大專區",
         "TOWNNAME_destination": "大安區",
         "width": 1.0087
       },
@@ -73285,7 +73285,7 @@
         "on_stop": "臺大教研館北側",
         "off_stop": "捷運公館站(2號出口)",
         "sum_of_txn_times": 11,
-        "TOWNNAME_origin": "大安區",
+        "TOWNNAME_origin": "臺大專區",
         "TOWNNAME_destination": "大安區",
         "width": 1.0087
       },
@@ -73309,7 +73309,7 @@
         "on_stop": "臺大社會系館南側",
         "off_stop": "捷運臺電大樓站(2號出口)",
         "sum_of_txn_times": 11,
-        "TOWNNAME_origin": "大安區",
+        "TOWNNAME_origin": "臺大專區",
         "TOWNNAME_destination": "大安區",
         "width": 1.0087
       },
@@ -73333,7 +73333,7 @@
         "on_stop": "臺大鄭江樓北側",
         "off_stop": "捷運公館站(2號出口)",
         "sum_of_txn_times": 11,
-        "TOWNNAME_origin": "大安區",
+        "TOWNNAME_origin": "臺大專區",
         "TOWNNAME_destination": "大安區",
         "width": 1.0087
       },
