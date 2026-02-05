@@ -1789,7 +1789,7 @@
         "on_stop": "臺大新體育館東南側",
         "off_stop": "捷運公館站(3號出口)",
         "sum_of_txn_times": 19,
-        "TOWNNAME_origin": "大安區",
+        "TOWNNAME_origin": "臺大專區",
         "TOWNNAME_destination": "大安區",
         "width": 1.014
       },
@@ -8077,7 +8077,7 @@
         "on_stop": "臺大舊體育館西側",
         "off_stop": "捷運公館站(3號出口)",
         "sum_of_txn_times": 11,
-        "TOWNNAME_origin": "大安區",
+        "TOWNNAME_origin": "臺大專區",
         "TOWNNAME_destination": "大安區",
         "width": 1.0078
       },
