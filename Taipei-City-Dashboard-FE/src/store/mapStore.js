@@ -22,7 +22,6 @@ import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { point, distance } from "@turf/turf";
 
-
 // Other Stores
 import { useAuthStore } from "./authStore";
 import { useDialogStore } from "./dialogStore";
@@ -726,15 +725,15 @@ export const useMapStore = defineStore("map", {
 			const layers = Object.keys(this.deckGlLayer).map((index) => {
 				const l = this.deckGlLayer[index];
 				switch (l.type) {
-				case "ArcLayer":
-					return new ArcLayer(l.config);
-				case "AnimatedArcLayer":
-					return new AnimatedArcLayer({
-						...l.config,
-						coef: this.step / 1000,
-					});
-				default:
-					break;
+					case "ArcLayer":
+						return new ArcLayer(l.config);
+					case "AnimatedArcLayer":
+						return new AnimatedArcLayer({
+							...l.config,
+							coef: this.step / 1000,
+						});
+					default:
+						break;
 				}
 			});
 			this.overlay.setProps({
@@ -950,7 +949,7 @@ export const useMapStore = defineStore("map", {
 			this.currentLayers.push(map_config.layerId);
 			this.mapConfigs[map_config.layerId] = map_config;
 
-			const {layerId} = map_config;
+			const { layerId } = map_config;
 
 			// 紀錄資料更新時間
 			this.layerUpdateTime[layerId] = new Date();
@@ -1436,16 +1435,16 @@ export const useMapStore = defineStore("map", {
 
 						const getCrowdColor = (level) => {
 							switch (level) {
-							case "1":
-								return "🟩";
-							case "2":
-								return "🟨";
-							case "3":
-								return "🟧";
-							case "4":
-								return "🟥";
-							default:
-								return "⬜";
+								case "1":
+									return "🟩";
+								case "2":
+									return "🟨";
+								case "3":
+									return "🟧";
+								case "4":
+									return "🟥";
+								default:
+									return "⬜";
 							}
 						};
 
@@ -1651,9 +1650,9 @@ export const useMapStore = defineStore("map", {
 							);
 						}
 
-						const {scene} = customLayer;
-						const {camera} = customLayer;
-						const {renderer} = customLayer;
+						const { scene } = customLayer;
+						const { camera } = customLayer;
+						const { renderer } = customLayer;
 						const rotationX = new THREE.Matrix4().makeRotationAxis(
 							new THREE.Vector3(1, 0, 0),
 							Math.PI / 2,
@@ -1829,23 +1828,25 @@ export const useMapStore = defineStore("map", {
 			// 如果3D捷運地圖 popup 存在把它清除
 			// 關閉 popup + reset
 			map_config.forEach((item) => {
-				const customLayer =
-					this.customLayers[
-						`${item.index}-${item.type}-${item.city}`
-					];
-				if (customLayer?.carTooltip) {
-					customLayer.carTooltip.style.display = "none";
-					customLayer.selectedCar = null;
-				}
-				if (
-					customLayer?.layerId2D &&
-					this.map.getLayer(customLayer.layerId2D)
-				) {
-					customLayer.map.setLayoutProperty(
-						customLayer.layerId2D,
-						"visibility",
-						"none",
-					);
+				if (item.type === "symbol-3d") {
+					const customLayer =
+						this.customLayers[
+							`${item.index}-${item.type}-${item.city}`
+						];
+					if (customLayer?.carTooltip) {
+						customLayer.carTooltip.style.display = "none";
+						customLayer.selectedCar = null;
+					}
+					if (
+						customLayer?.layerId2D &&
+						this.map.getLayer(customLayer.layerId2D)
+					) {
+						customLayer.map.setLayoutProperty(
+							customLayer.layerId2D,
+							"visibility",
+							"none",
+						);
+					}
 				}
 			});
 		},
@@ -1922,7 +1923,7 @@ export const useMapStore = defineStore("map", {
 			// 取前 3 個不同圖層最近的 feature
 			const closestLayers = Object.keys(layerClosestFeature).slice(0, 3);
 			for (const layerId of closestLayers) {
-				const {feature} = layerClosestFeature[layerId];
+				const { feature } = layerClosestFeature[layerId];
 				parsedPopupContent.push(feature);
 				mapConfigs.push(this.mapConfigs[layerId]);
 			}
@@ -1941,7 +1942,7 @@ export const useMapStore = defineStore("map", {
 				.addTo(this.map);
 
 			// 定義 popup 給 PopupComponent 內使用
-			const {popup} = this;
+			const { popup } = this;
 
 			// Mount a vue component (MapPopup) to the id "vue-popup-content" and pass in data
 			const PopupComponent = defineComponent({
