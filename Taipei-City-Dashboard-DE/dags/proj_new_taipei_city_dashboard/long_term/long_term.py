@@ -39,8 +39,8 @@ def _transfer(**kwargs):
         "service_area": "service_area",
         "service_item": "service_item",
         "contact_person": "contact_person",
-        "wgs84ax": "lng",
-        "wgs84ay": "lat"
+        "wgs84ax_longitude": "lng",
+        "wgs84ay_latitude": "lat"
     })
 
     # 將空字串轉換為 NaN，再轉為 float
