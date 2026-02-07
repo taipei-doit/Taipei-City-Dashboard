@@ -8,7 +8,7 @@ import { useAuthStore } from "../../store/authStore";
 import DialogContainer from "./DialogContainer.vue";
 
 function openExternal(url) {
-	const w = window.open("about:blank", "_blank");
+	const w = window.open('about:blank', '_blank');
 	if (!w) {
 		window.location.href = url;
 		return;
@@ -17,7 +17,7 @@ function openExternal(url) {
 		w.opener = null;
 	} catch (e) {
 		// 在瀏覽器 console 印出錯誤，避免 no-empty
-		console.error("Failed to set opener to null:", e);
+		console.error('Failed to set opener to null:', e);
 	}
 	w.location.assign(url);
 }
