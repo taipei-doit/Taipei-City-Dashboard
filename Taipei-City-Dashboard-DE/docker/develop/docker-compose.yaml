@@ -64,6 +64,12 @@ x-airflow-common:
     AIRFLOW__WEBSERVER__BASE_URL: 'https://test-citydashboard.taipei/airflow-sit'
     AIRFLOW__WEBSERVER__ENABLE_PROXY_FIX: "True"
 
+    # Reduce DAG parsing CPU pressure
+    AIRFLOW__SCHEDULER__PARSING_PROCESSES: 2
+    AIRFLOW__SCHEDULER__MIN_FILE_PROCESS_INTERVAL: 120
+    AIRFLOW__SCHEDULER__DAG_DIR_LIST_INTERVAL: 300
+    AIRFLOW__SCHEDULER__MAX_THREADS: 2
+
     # yamllint disable rule:line-length
     # Use simple http server on scheduler for health checks
     # See https://airflow.apache.org/docs/apache-airflow/stable/administration-and-deployment/logging-monitoring/check-health.html#scheduler-health-check-server
@@ -87,6 +93,8 @@ services:
   airflow-webserver:
     <<: *airflow-common
     command: webserver
+    cpus: "1.0"
+    mem_limit: "2g"
     ports:
       - "8080:8080"
     healthcheck:
@@ -103,6 +111,8 @@ services:
   airflow-scheduler:
     <<: *airflow-common
     command: scheduler
+    cpus: "1.0"
+    mem_limit: "4g"
     healthcheck:
       test: ["CMD", "curl", "--fail", "http://localhost:8974/health"]
       interval: 30s
@@ -110,13 +120,24 @@ services:
       retries: 5
       start_period: 30s
     restart: always
+    cpuset: "0-5"
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 4G
+        reservations:
+          cpus: '0.25'
+          memory: 2G
     depends_on:
       airflow-init:
         condition: service_completed_successfully
 
-  airflow-worker:
+  airflow-worker-default:
     <<: *airflow-common
-    command: celery worker
+    command: celery worker -q default
+    cpus: "1.0"
+    mem_limit: "4g"
     healthcheck:
       # yamllint disable rule:line-length
       test:
@@ -128,10 +149,86 @@ services:
       start_period: 30s
     environment:
       <<: *airflow-common-env
+      # Limit concurrency to prevent resource exhaustion (calculated for ~10 tasks/min)
+      AIRFLOW__CELERY__WORKER_CONCURRENCY: 2
       # Required to handle warm shutdown of the celery workers properly
       # See https://airflow.apache.org/docs/docker-stack/entrypoint.html#signal-propagation
       DUMB_INIT_SETSID: "0"
     restart: always
+    cpuset: "0-5"
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 4G
+        reservations:
+          cpus: '0.5'
+          memory: 2G
+    depends_on:
+      airflow-init:
+        condition: service_completed_successfully
+
+  airflow-worker-realtime:
+    <<: *airflow-common
+    command: celery worker -q realtime
+    cpus: "1.0"
+    mem_limit: "4g"
+    healthcheck:
+      # yamllint disable rule:line-length
+      test:
+        - "CMD-SHELL"
+        - 'celery --app airflow.providers.celery.executors.celery_executor.app inspect ping -d "celery@$${HOSTNAME}" || celery --app airflow.executors.celery_executor.app inspect ping -d "celery@$${HOSTNAME}"'
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+    environment:
+      <<: *airflow-common-env
+      AIRFLOW__CELERY__WORKER_CONCURRENCY: 4
+      DUMB_INIT_SETSID: "0"
+    restart: always
+    cpuset: "0-5"
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 4G
+        reservations:
+          cpus: '0.25'
+          memory: 2G
+    depends_on:
+      airflow-init:
+        condition: service_completed_successfully
+
+  airflow-worker-heavy:
+    <<: *airflow-common
+    command: celery worker -q heavy
+    cpus: "3.0"
+    mem_limit: "8g"
+    healthcheck:
+      # yamllint disable rule:line-length
+      test:
+        - "CMD-SHELL"
+        - 'celery --app airflow.providers.celery.executors.celery_executor.app inspect ping -d "celery@$${HOSTNAME}" || celery --app airflow.executors.celery_executor.app inspect ping -d "celery@$${HOSTNAME}"'
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+    environment:
+      <<: *airflow-common-env
+      # Heavy tasks need dedicated resources
+      AIRFLOW__CELERY__WORKER_CONCURRENCY: 4
+      DUMB_INIT_SETSID: "0"
+    restart: always
+    cpuset: "0-5"
+    deploy:
+      resources:
+        limits:
+          cpus: '3.0'
+          memory: 8G
+        reservations:
+          cpus: '1.0'
+          memory: 4G
     depends_on:
       airflow-init:
         condition: service_completed_successfully
@@ -139,6 +236,8 @@ services:
   airflow-triggerer:
     <<: *airflow-common
     command: triggerer
+    cpus: "0.5"
+    mem_limit: "1g"
     healthcheck:
       test: ["CMD-SHELL", 'airflow jobs check --job-type TriggererJob --hostname "$${HOSTNAME}"']
       interval: 30s
