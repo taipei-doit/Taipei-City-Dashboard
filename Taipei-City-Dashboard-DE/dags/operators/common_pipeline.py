@@ -1,5 +1,7 @@
 import json
 import os
+import hashlib
+import re
 from ast import literal_eval
 from datetime import datetime
 
@@ -16,6 +18,121 @@ from utils.get_time import get_tpe_now_time
 import sys
 if '/opt/airflow/dags' not in sys.path:
     sys.path.insert(0, '/opt/airflow/dags')
+
+
+def _expand_cron_field(field, max_value):
+    field = field.strip()
+    if field == "*":
+        return list(range(0, max_value + 1))
+
+    parts = field.split(",")
+    values = []
+    for part in parts:
+        part = part.strip()
+        step_match = re.match(r"^\*/(\d+)$", part)
+        if step_match:
+            step = int(step_match.group(1))
+            if step <= 0:
+                return None
+            values.extend(range(0, max_value + 1, step))
+            continue
+
+        range_match = re.match(r"^(\d+)-(\d+)(?:/(\d+))?$", part)
+        if range_match:
+            start = int(range_match.group(1))
+            end = int(range_match.group(2))
+            step = int(range_match.group(3)) if range_match.group(3) else 1
+            if step <= 0 or start > end:
+                return None
+            values.extend(range(start, end + 1, step))
+            continue
+
+        if part.isdigit():
+            values.append(int(part))
+            continue
+
+        return None
+
+    values = sorted(set(v for v in values if 0 <= v <= max_value))
+    return values if values else None
+
+
+def _min_gap(values, cycle):
+    if not values or len(values) == 1:
+        return cycle
+    values = sorted(values)
+    gaps = [values[i + 1] - values[i] for i in range(len(values) - 1)]
+    gaps.append(cycle + values[0] - values[-1])
+    return min(gaps)
+
+
+def _is_realtime_schedule(schedule):
+    if not isinstance(schedule, str):
+        return False
+    schedule = schedule.strip()
+    if schedule.startswith("@"):
+        return False
+
+    fields = schedule.split()
+    if len(fields) != 5:
+        return False
+
+    minute_field = fields[0]
+    minutes = _expand_cron_field(minute_field, 59)
+    if minutes is None:
+        return False
+    return _min_gap(minutes, 60) <= 10
+
+
+def _is_daily_schedule(schedule):
+    if not isinstance(schedule, str):
+        return False
+    schedule = schedule.strip()
+    if schedule == "@daily":
+        return True
+    if schedule.startswith("@"):
+        return False
+
+    fields = schedule.split()
+    if len(fields) != 5:
+        return False
+
+    minute, hour, dom, month, dow = fields
+    if dom == "*" and month == "*" and dow == "*":
+        return minute.isdigit() and hour.isdigit()
+    return False
+
+
+def _is_monthly_or_more(schedule):
+    if not isinstance(schedule, str):
+        return False
+    schedule = schedule.strip()
+    if schedule in {"@monthly", "@quarterly", "@yearly", "@annually", "@once"}:
+        return True
+    if schedule.startswith("@"):
+        return False
+
+    fields = schedule.split()
+    if len(fields) != 5:
+        return False
+
+    _, _, dom, month, _ = fields
+    return dom != "*" or month != "*"
+
+
+def _split_daily_queue(dag_id):
+    digest = hashlib.md5(dag_id.encode("utf-8")).hexdigest()
+    return "default" if int(digest[-1], 16) % 2 == 0 else "heavy"
+
+
+def _assign_queue(schedule, dag_id):
+    if _is_realtime_schedule(schedule):
+        return "realtime"
+    if _is_daily_schedule(schedule):
+        return _split_daily_queue(dag_id)
+    if _is_monthly_or_more(schedule):
+        return "heavy"
+    return "default"
 
 def _read_config(path, file_name="job_config.json"):
     """
@@ -203,6 +320,10 @@ class CommonDag:
         dag_infos = self.config["dag_infos"]
         default_args = dag_infos["default_args"]
         default_args["email"] = self.fetch_email_list(default_args.get("email", []))
+        default_args["queue"] = _assign_queue(
+            dag_infos.get("schedule_interval"),
+            f"{self.proj_folder}_{dag_infos.get('dag_id', '')}",
+        )
         # Create Pipeline
         dag = DAG(
             dag_id=f"{self.proj_folder}_{dag_infos['dag_id']}",
