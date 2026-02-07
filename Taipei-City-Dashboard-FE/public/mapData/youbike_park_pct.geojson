@@ -33,7 +33,7 @@
         "capacity": 21,
         "latitude": 25.02565,
         "longitude": 121.54357,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -123,7 +123,7 @@
         "capacity": 11,
         "latitude": 25.02253,
         "longitude": 121.54326,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -195,7 +195,7 @@
         "capacity": 8,
         "latitude": 25.01986,
         "longitude": 121.52982,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -213,7 +213,7 @@
         "capacity": 9,
         "latitude": 25.02543,
         "longitude": 121.54332,
-        "category": "中"
+        "category": "高"
       },
       "geometry": {
         "type": "Point",
@@ -267,7 +267,7 @@
         "capacity": 8,
         "latitude": 25.01927,
         "longitude": 121.52989,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -285,7 +285,7 @@
         "capacity": 5,
         "latitude": 25.01895,
         "longitude": 121.53156,
-        "category": "中"
+        "category": "高"
       },
       "geometry": {
         "type": "Point",
@@ -321,7 +321,7 @@
         "capacity": 7,
         "latitude": 25.01385,
         "longitude": 121.53549,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -375,7 +375,7 @@
         "capacity": 50,
         "latitude": 25.01451,
         "longitude": 121.54142,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -411,7 +411,7 @@
         "capacity": 30,
         "latitude": 25.01137,
         "longitude": 121.54062,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -447,7 +447,7 @@
         "capacity": 20,
         "latitude": 25.01426,
         "longitude": 121.54382,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -465,7 +465,7 @@
         "capacity": 41,
         "latitude": 25.01234,
         "longitude": 121.54503,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -501,7 +501,7 @@
         "capacity": 20,
         "latitude": 25.01537,
         "longitude": 121.54698,
-        "category": "中"
+        "category": "高"
       },
       "geometry": {
         "type": "Point",
@@ -537,7 +537,7 @@
         "capacity": 40,
         "latitude": 25.01664,
         "longitude": 121.5452,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -555,7 +555,7 @@
         "capacity": 18,
         "latitude": 25.01576,
         "longitude": 121.54291,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -591,7 +591,7 @@
         "capacity": 20,
         "latitude": 25.02032,
         "longitude": 121.54497,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -627,7 +627,7 @@
         "capacity": 27,
         "latitude": 25.02101,
         "longitude": 121.54284,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -753,7 +753,7 @@
         "capacity": 23,
         "latitude": 25.021469,
         "longitude": 121.544069,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -933,7 +933,7 @@
         "capacity": 18,
         "latitude": 25.02021,
         "longitude": 121.52942,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -1167,7 +1167,7 @@
         "capacity": 14,
         "latitude": 25.0237,
         "longitude": 121.54899,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -1383,7 +1383,7 @@
         "capacity": 13,
         "latitude": 25.0332,
         "longitude": 121.5439,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -1743,7 +1743,7 @@
         "capacity": 15,
         "latitude": 25.03336,
         "longitude": 121.5364,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -2211,7 +2211,7 @@
         "capacity": 15,
         "latitude": 25.01744,
         "longitude": 121.53334,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -2301,7 +2301,7 @@
         "capacity": 25,
         "latitude": 25.02039,
         "longitude": 121.54853,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -2337,7 +2337,7 @@
         "capacity": 33,
         "latitude": 25.02054,
         "longitude": 121.54561,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -2373,7 +2373,7 @@
         "capacity": 51,
         "latitude": 25.01705,
         "longitude": 121.54435,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -2715,7 +2715,7 @@
         "capacity": 20,
         "latitude": 25.03827,
         "longitude": 121.54802,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -2769,7 +2769,7 @@
         "capacity": 26,
         "latitude": 25.03303,
         "longitude": 121.54372,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -3147,7 +3147,7 @@
         "capacity": 15,
         "latitude": 25.02187,
         "longitude": 121.52912,
-        "category": "中"
+        "category": "高"
       },
       "geometry": {
         "type": "Point",
@@ -3237,7 +3237,7 @@
         "capacity": 17,
         "latitude": 25.02324,
         "longitude": 121.52618,
-        "category": "中"
+        "category": "高"
       },
       "geometry": {
         "type": "Point",
@@ -3291,7 +3291,7 @@
         "capacity": 25,
         "latitude": 25.04173,
         "longitude": 121.54412,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -3489,7 +3489,7 @@
         "capacity": 12,
         "latitude": 25.02462,
         "longitude": 121.53347,
-        "category": "中"
+        "category": "高"
       },
       "geometry": {
         "type": "Point",
@@ -3597,7 +3597,7 @@
         "capacity": 35,
         "latitude": 25.01291,
         "longitude": 121.53967,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -3651,7 +3651,7 @@
         "capacity": 55,
         "latitude": 25.01917,
         "longitude": 121.54708,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -4065,7 +4065,7 @@
         "capacity": 25,
         "latitude": 25.06174,
         "longitude": 121.51969,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -4119,7 +4119,7 @@
         "capacity": 10,
         "latitude": 25.05592,
         "longitude": 121.51367,
-        "category": "中"
+        "category": "高"
       },
       "geometry": {
         "type": "Point",
@@ -5829,7 +5829,7 @@
         "capacity": 30,
         "latitude": 25.09343,
         "longitude": 121.52642,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -5919,7 +5919,7 @@
         "capacity": 35,
         "latitude": 25.10225,
         "longitude": 121.52286,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -6369,7 +6369,7 @@
         "capacity": 15,
         "latitude": 25.10696,
         "longitude": 121.53234,
-        "category": "中"
+        "category": "高"
       },
       "geometry": {
         "type": "Point",
@@ -7845,7 +7845,7 @@
         "capacity": 18,
         "latitude": 25.00144,
         "longitude": 121.53983,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -8043,7 +8043,7 @@
         "capacity": 29,
         "latitude": 24.99543,
         "longitude": 121.54725,
-        "category": "中"
+        "category": "高"
       },
       "geometry": {
         "type": "Point",
@@ -8097,7 +8097,7 @@
         "capacity": 57,
         "latitude": 24.99873,
         "longitude": 121.57985,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -8169,7 +8169,7 @@
         "capacity": 42,
         "latitude": 25.00467,
         "longitude": 121.55684,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -8619,7 +8619,7 @@
         "capacity": 20,
         "latitude": 24.99939,
         "longitude": 121.55848,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -8889,7 +8889,7 @@
         "capacity": 15,
         "latitude": 25.01076,
         "longitude": 121.53637,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -8979,7 +8979,7 @@
         "capacity": 15,
         "latitude": 24.99279,
         "longitude": 121.54255,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -9033,7 +9033,7 @@
         "capacity": 12,
         "latitude": 24.99696,
         "longitude": 121.54454,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -9483,7 +9483,7 @@
         "capacity": 26,
         "latitude": 24.9983,
         "longitude": 121.57279,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -9915,7 +9915,7 @@
         "capacity": 20,
         "latitude": 25.013741,
         "longitude": 121.53068,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -9951,7 +9951,7 @@
         "capacity": 12,
         "latitude": 25.014529,
         "longitude": 121.534374,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -9969,7 +9969,7 @@
         "capacity": 12,
         "latitude": 25.015069,
         "longitude": 121.533828,
-        "category": "中"
+        "category": "高"
       },
       "geometry": {
         "type": "Point",
@@ -10131,7 +10131,7 @@
         "capacity": 15,
         "latitude": 25.02345,
         "longitude": 121.52498,
-        "category": "中"
+        "category": "高"
       },
       "geometry": {
         "type": "Point",
@@ -10167,7 +10167,7 @@
         "capacity": 15,
         "latitude": 25.02701,
         "longitude": 121.52164,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -10185,7 +10185,7 @@
         "capacity": 12,
         "latitude": 25.02805,
         "longitude": 121.52155,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -10599,7 +10599,7 @@
         "capacity": 13,
         "latitude": 25.03915,
         "longitude": 121.52163,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -10653,7 +10653,7 @@
         "capacity": 20,
         "latitude": 25.04428,
         "longitude": 121.52336,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -11067,7 +11067,7 @@
         "capacity": 29,
         "latitude": 25.03526,
         "longitude": 121.5168,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -11103,7 +11103,7 @@
         "capacity": 15,
         "latitude": 25.02266,
         "longitude": 121.52362,
-        "category": "中"
+        "category": "高"
       },
       "geometry": {
         "type": "Point",
@@ -11589,7 +11589,7 @@
         "capacity": 19,
         "latitude": 25.04074,
         "longitude": 121.51586,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -12147,7 +12147,7 @@
         "capacity": 20,
         "latitude": 25.01346,
         "longitude": 121.5355,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -12219,7 +12219,7 @@
         "capacity": 24,
         "latitude": 25.03454,
         "longitude": 121.51733,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -12975,7 +12975,7 @@
         "capacity": 20,
         "latitude": 25.06283,
         "longitude": 121.52697,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -13047,7 +13047,7 @@
         "capacity": 24,
         "latitude": 25.06987,
         "longitude": 121.52291,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -13065,7 +13065,7 @@
         "capacity": 16,
         "latitude": 25.06816,
         "longitude": 121.52265,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -14037,7 +14037,7 @@
         "capacity": 20,
         "latitude": 25.05215,
         "longitude": 121.53171,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -14397,7 +14397,7 @@
         "capacity": 21,
         "latitude": 25.05253,
         "longitude": 121.54256,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -14451,7 +14451,7 @@
         "capacity": 13,
         "latitude": 25.08431,
         "longitude": 121.54755,
-        "category": "中"
+        "category": "高"
       },
       "geometry": {
         "type": "Point",
@@ -16917,7 +16917,7 @@
         "capacity": 10,
         "latitude": 25.0835,
         "longitude": 121.59454,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -20859,7 +20859,7 @@
         "capacity": 29,
         "latitude": 25.11879,
         "longitude": 121.51921,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -21759,7 +21759,7 @@
         "capacity": 13,
         "latitude": 25.05152,
         "longitude": 121.5646,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -21921,7 +21921,7 @@
         "capacity": 26,
         "latitude": 25.05157,
         "longitude": 121.55118,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -22155,7 +22155,7 @@
         "capacity": 39,
         "latitude": 25.06206,
         "longitude": 121.55475,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -22371,7 +22371,7 @@
         "capacity": 15,
         "latitude": 25.05278,
         "longitude": 121.54478,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -22497,7 +22497,7 @@
         "capacity": 14,
         "latitude": 25.05013,
         "longitude": 121.57635,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -22587,7 +22587,7 @@
         "capacity": 11,
         "latitude": 25.05406,
         "longitude": 121.56407,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -22875,7 +22875,7 @@
         "capacity": 28,
         "latitude": 25.05152,
         "longitude": 121.55243,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -23865,7 +23865,7 @@
         "capacity": 70,
         "latitude": 25.05933,
         "longitude": 121.61677,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -24153,7 +24153,7 @@
         "capacity": 30,
         "latitude": 25.05326,
         "longitude": 121.60656,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -24621,7 +24621,7 @@
         "capacity": 25,
         "latitude": 25.05465,
         "longitude": 121.6185,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -24765,7 +24765,7 @@
         "capacity": 48,
         "latitude": 25.05343,
         "longitude": 121.60633,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -24891,7 +24891,7 @@
         "capacity": 18,
         "latitude": 25.05545,
         "longitude": 121.61646,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -25053,7 +25053,7 @@
         "capacity": 12,
         "latitude": 25.05296,
         "longitude": 121.61713,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -25269,7 +25269,7 @@
         "capacity": 36,
         "latitude": 25.06043,
         "longitude": 121.61498,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -25827,7 +25827,7 @@
         "capacity": 18,
         "latitude": 25.03616,
         "longitude": 121.56983,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -25845,7 +25845,7 @@
         "capacity": 24,
         "latitude": 25.03295,
         "longitude": 121.56867,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -25935,7 +25935,7 @@
         "capacity": 15,
         "latitude": 25.03275,
         "longitude": 121.56337,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -26115,7 +26115,7 @@
         "capacity": 39,
         "latitude": 25.03607,
         "longitude": 121.56535,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -26187,7 +26187,7 @@
         "capacity": 90,
         "latitude": 25.03306,
         "longitude": 121.5662,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -26205,7 +26205,7 @@
         "capacity": 21,
         "latitude": 25.03338,
         "longitude": 121.56333,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -26241,7 +26241,7 @@
         "capacity": 31,
         "latitude": 25.03476,
         "longitude": 121.56865,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -26313,7 +26313,7 @@
         "capacity": 65,
         "latitude": 25.0401,
         "longitude": 121.56822,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -26889,7 +26889,7 @@
         "capacity": 52,
         "latitude": 25.0327,
         "longitude": 121.56157,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -26961,7 +26961,7 @@
         "capacity": 78,
         "latitude": 25.03656,
         "longitude": 121.56866,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -27105,7 +27105,7 @@
         "capacity": 24,
         "latitude": 25.0409,
         "longitude": 121.5705,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -27123,7 +27123,7 @@
         "capacity": 15,
         "latitude": 25.03203,
         "longitude": 121.5615,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -27141,7 +27141,7 @@
         "capacity": 10,
         "latitude": 25.03047,
         "longitude": 121.56838,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -27177,7 +27177,7 @@
         "capacity": 14,
         "latitude": 25.04146,
         "longitude": 121.56731,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -27195,7 +27195,7 @@
         "capacity": 15,
         "latitude": 25.02326,
         "longitude": 121.56329,
-        "category": "中"
+        "category": "高"
       },
       "geometry": {
         "type": "Point",
@@ -27357,7 +27357,7 @@
         "capacity": 33,
         "latitude": 25.04144,
         "longitude": 121.56126,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -27375,7 +27375,7 @@
         "capacity": 23,
         "latitude": 25.04206,
         "longitude": 121.55792,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -27645,7 +27645,7 @@
         "capacity": 51,
         "latitude": 25.03284,
         "longitude": 121.56555,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -27717,7 +27717,7 @@
         "capacity": 29,
         "latitude": 25.03098,
         "longitude": 121.5697,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -27879,7 +27879,7 @@
         "capacity": 17,
         "latitude": 25.0216,
         "longitude": 121.49597,
-        "category": "中"
+        "category": "高"
       },
       "geometry": {
         "type": "Point",
@@ -28491,7 +28491,7 @@
         "capacity": 11,
         "latitude": 25.03535,
         "longitude": 121.49938,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -29013,7 +29013,7 @@
         "capacity": 10,
         "latitude": 25.01975,
         "longitude": 121.4992,
-        "category": "中"
+        "category": "高"
       },
       "geometry": {
         "type": "Point",
@@ -29373,7 +29373,7 @@
         "capacity": 14,
         "latitude": 25.03484,
         "longitude": 121.49928,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -29391,7 +29391,7 @@
         "capacity": 26,
         "latitude": 25.03457,
         "longitude": 121.5,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -29481,7 +29481,7 @@
         "capacity": 37,
         "latitude": 25.01493,
         "longitude": 121.53044,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -29517,7 +29517,7 @@
         "capacity": 35,
         "latitude": 25.01411,
         "longitude": 121.52997,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -29589,7 +29589,7 @@
         "capacity": 35,
         "latitude": 25.01415,
         "longitude": 121.53767,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -29643,7 +29643,7 @@
         "capacity": 30,
         "latitude": 25.01761,
         "longitude": 121.53844,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -29661,7 +29661,7 @@
         "capacity": 53,
         "latitude": 25.01547,
         "longitude": 121.53436,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -29697,7 +29697,7 @@
         "capacity": 31,
         "latitude": 25.01846,
         "longitude": 121.5376,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -29715,7 +29715,7 @@
         "capacity": 27,
         "latitude": 25.01616,
         "longitude": 121.54251,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -29733,7 +29733,7 @@
         "capacity": 26,
         "latitude": 25.01857,
         "longitude": 121.54059,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -29751,7 +29751,7 @@
         "capacity": 19,
         "latitude": 25.02108,
         "longitude": 121.53783,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -29769,7 +29769,7 @@
         "capacity": 30,
         "latitude": 25.01941,
         "longitude": 121.5404,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -29787,7 +29787,7 @@
         "capacity": 28,
         "latitude": 25.01793,
         "longitude": 121.53585,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -29805,7 +29805,7 @@
         "capacity": 10,
         "latitude": 25.01627,
         "longitude": 121.53535,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -29841,7 +29841,7 @@
         "capacity": 33,
         "latitude": 25.0198,
         "longitude": 121.53583,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -29859,7 +29859,7 @@
         "capacity": 68,
         "latitude": 25.01595,
         "longitude": 121.53791,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -29895,7 +29895,7 @@
         "capacity": 39,
         "latitude": 25.01511,
         "longitude": 121.53786,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -29931,7 +29931,7 @@
         "capacity": 27,
         "latitude": 25.01603,
         "longitude": 121.53635,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -29949,7 +29949,7 @@
         "capacity": 28,
         "latitude": 25.01754,
         "longitude": 121.54398,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -29967,7 +29967,7 @@
         "capacity": 10,
         "latitude": 25.01699,
         "longitude": 121.53574,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -29985,7 +29985,7 @@
         "capacity": 20,
         "latitude": 25.02157,
         "longitude": 121.53633,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -30003,7 +30003,7 @@
         "capacity": 42,
         "latitude": 25.02053,
         "longitude": 121.54145,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -30021,7 +30021,7 @@
         "capacity": 66,
         "latitude": 25.01987,
         "longitude": 121.54175,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -30093,7 +30093,7 @@
         "capacity": 12,
         "latitude": 25.01881,
         "longitude": 121.53868,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -30111,7 +30111,7 @@
         "capacity": 30,
         "latitude": 25.01548,
         "longitude": 121.53825,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -30129,7 +30129,7 @@
         "capacity": 48,
         "latitude": 25.01761,
         "longitude": 121.53995,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -30147,7 +30147,7 @@
         "capacity": 22,
         "latitude": 25.01922,
         "longitude": 121.54195,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -30183,7 +30183,7 @@
         "capacity": 10,
         "latitude": 25.01704,
         "longitude": 121.53888,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -30201,7 +30201,7 @@
         "capacity": 19,
         "latitude": 25.01698,
         "longitude": 121.53455,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -30219,7 +30219,7 @@
         "capacity": 10,
         "latitude": 25.01539,
         "longitude": 121.53686,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -30237,7 +30237,7 @@
         "capacity": 26,
         "latitude": 25.01337,
         "longitude": 121.53909,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -30255,7 +30255,7 @@
         "capacity": 10,
         "latitude": 25.01703,
         "longitude": 121.53781,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -30273,7 +30273,7 @@
         "capacity": 18,
         "latitude": 25.0196,
         "longitude": 121.53846,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -30291,7 +30291,7 @@
         "capacity": 40,
         "latitude": 25.01854,
         "longitude": 121.54309,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -30309,7 +30309,7 @@
         "capacity": 14,
         "latitude": 25.01857,
         "longitude": 121.54247,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -30327,7 +30327,7 @@
         "capacity": 51,
         "latitude": 25.01804,
         "longitude": 121.53928,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -30345,7 +30345,7 @@
         "capacity": 30,
         "latitude": 25.0169,
         "longitude": 121.54031,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -30381,7 +30381,7 @@
         "capacity": 24,
         "latitude": 25.01791,
         "longitude": 121.54242,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -30399,7 +30399,7 @@
         "capacity": 51,
         "latitude": 25.02112,
         "longitude": 121.53591,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -30435,7 +30435,7 @@
         "capacity": 17,
         "latitude": 25.01436,
         "longitude": 121.53828,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -30453,7 +30453,7 @@
         "capacity": 36,
         "latitude": 25.01467,
         "longitude": 121.53765,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -30471,7 +30471,7 @@
         "capacity": 40,
         "latitude": 25.01479,
         "longitude": 121.53494,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",
@@ -30489,7 +30489,7 @@
         "capacity": 33,
         "latitude": 25.01944,
         "longitude": 121.54339,
-        "category": "高"
+        "category": "中"
       },
       "geometry": {
         "type": "Point",

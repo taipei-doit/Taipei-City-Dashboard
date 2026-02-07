@@ -1892,15 +1892,30 @@ export const useMapStore = defineStore("map", {
 					);
 				});
 
-				previousParsedLayer = clickFeatureDatas[i].layer.id;
-				mapConfigs.push(this.mapConfigs[clickFeatureDatas[i].layer.id]);
+			// 取前 3 個不同圖層最近的 feature
+			const closestLayers = Object.keys(layerClosestFeature).slice(0, 3);
+			for (const layerId of closestLayers) {
+				const { feature } = layerClosestFeature[layerId];
 				parsedPopupContent.push(feature);
+				mapConfigs.push(this.mapConfigs[layerId]);
 			}
+
+			if (!parsedPopupContent.length) return;
+
 			// Create a new mapbox popup
+			const popupCoords = getPopupCoordinates(
+				parsedPopupContent[0],
+				event.lngLat,
+			);
+
 			this.popup = new mapboxGl.Popup()
-				.setLngLat(event.lngLat)
+				.setLngLat(popupCoords)
 				.setHTML('<div id="vue-popup-content"></div>')
 				.addTo(this.map);
+
+			// 定義 popup 給 PopupComponent 內使用
+			const { popup } = this;
+
 			// Mount a vue component (MapPopup) to the id "vue-popup-content" and pass in data
 			const PopupComponent = defineComponent({
 				extends: MapPopup,
@@ -2289,9 +2304,32 @@ export const useMapStore = defineStore("map", {
 			});
 		},
 		// 2. filter by layer name (byLayer)
+		// filterByLayer(map_configs, xParam) {
+		// 	const dialogStore = useDialogStore();
+		// 	// If there are layers loading, don't filter
+		// 	if (this.loadingLayers.length > 0) return;
+		// 	if (!this.map || dialogStore.dialogs.moreInfo) {
+		// 		return;
+		// 	}
+		// 	map_configs.map((map_config) => {
+		// 		let mapLayerId = `${map_config.index}-${map_config.type}-${map_config.city}`;
+		// 		if (map_config.title !== xParam) {
+		// 			this.map.setLayoutProperty(
+		// 				mapLayerId,
+		// 				"visibility",
+		// 				"none",
+		// 			);
+		// 		} else {
+		// 			this.map.setLayoutProperty(
+		// 				mapLayerId,
+		// 				"visibility",
+		// 				"visible",
+		// 			);
+		// 		}
+		// 	});
+		// },
 		filterByLayer(map_configs, xParam) {
 			const dialogStore = useDialogStore();
-			// If there are layers loading, don't filter
 			if (this.loadingLayers.length > 0) return;
 			if (!this.map || dialogStore.dialogs.moreInfo) {
 				return;
@@ -2310,9 +2348,25 @@ export const useMapStore = defineStore("map", {
 						"visibility",
 						"visible",
 					);
+				} else {
+					// fill / line / circle 等
+					const opacityProp = {
+						fill: "fill-opacity",
+						line: "line-opacity",
+						circle: "circle-opacity",
+					}[this.map.getLayer(layerId).type];
+
+					if (opacityProp) {
+						this.map.setPaintProperty(
+							layerId,
+							opacityProp,
+							isActive ? 1 : 0,
+						);
+					}
 				}
 			});
 		},
+
 		// 3. Remove any property filters on a map layer
 		clearByParamFilter(map_configs) {
 			const dialogStore = useDialogStore();
@@ -2331,14 +2385,40 @@ export const useMapStore = defineStore("map", {
 			});
 		},
 		// 4. Remove any layer filters on a map layer.
+		// clearByLayerFilter(map_configs) {
+		// 	const dialogStore = useDialogStore();
+		// 	if (!this.map || dialogStore.dialogs.moreInfo) {
+		// 		return;
+		// 	}
+		// 	map_configs.map((map_config) => {
+		// 		let mapLayerId = `${map_config.index}-${map_config.type}-${map_config.city}`;
+		// 		this.map.setLayoutProperty(mapLayerId, "visibility", "visible");
+		// 	});
+		// },
 		clearByLayerFilter(map_configs) {
 			const dialogStore = useDialogStore();
-			if (!this.map || dialogStore.dialogs.moreInfo) {
-				return;
-			}
-			map_configs.map((map_config) => {
-				let mapLayerId = `${map_config.index}-${map_config.type}-${map_config.city}`;
-				this.map.setLayoutProperty(mapLayerId, "visibility", "visible");
+			if (!this.map || dialogStore.dialogs.moreInfo) return;
+
+			map_configs.forEach((map_config) => {
+				const layerId = `${map_config.index}-${map_config.type}-${map_config.city}`;
+				if (!this.map.getLayer(layerId)) return;
+
+				// symbol layer
+				if (this.map.getLayer(layerId).type === "symbol") {
+					this.map.setPaintProperty(layerId, "icon-opacity", 1);
+					this.map.setPaintProperty(layerId, "text-opacity", 1);
+				} else {
+					// fill / line / circle
+					const opacityProp = {
+						fill: "fill-opacity",
+						line: "line-opacity",
+						circle: "circle-opacity",
+					}[this.map.getLayer(layerId).type];
+
+					if (opacityProp) {
+						this.map.setPaintProperty(layerId, opacityProp, 1);
+					}
+				}
 			});
 		},
 
