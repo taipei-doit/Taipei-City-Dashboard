@@ -52,8 +52,6 @@ import { AnimatedArcLayer } from "../assets/configs/mapbox/arcAnimate.js";
 import { cutRouteSegment } from "../assets/utilityFunctions/getRouteForAnimation.js";
 import { interpolateAlongSegment } from "../assets/utilityFunctions/geometryUtils.js";
 import { updateCarsPosition } from "../assets/utilityFunctions/mrtCars.js";
-// 一般彈窗取得座標
-import { getPopupCoordinates } from "../assets/utilityFunctions/getPopupCoordinates.js";
 
 export const useMapStore = defineStore("map", {
 	state: () => ({
@@ -249,7 +247,7 @@ export const useMapStore = defineStore("map", {
 					},
 				);
 			});
-			// 預載 3D 模型給 3D MrtMap
+			// 預載 3D 模型給 3D Mrt Map
 			const models = [
 				{ id: "mrt_car_c381", url: "/images/map/mrt_car_c381.glb" },
 				{ id: "mrt_car_c370", url: "/images/map/mrt_car_c370.glb" },
@@ -1861,20 +1859,15 @@ export const useMapStore = defineStore("map", {
 				return value;
 			};
 
-			const hitSize = 6;
-
-			const bbox = [
-				[event.point.x - hitSize, event.point.y - hitSize],
-				[event.point.x + hitSize, event.point.y + hitSize],
-			];
-
-			// Gets the info that is contained in the bbox (only visible layers)
-			const clickFeatureDatas = this.map.queryRenderedFeatures(bbox, {
-				layers: this.currentVisibleLayers.filter(
-					(layer) => !layer.includes("-arc"),
-				),
-			});
-
+			// Gets the info that is contained in the coordinates that the user clicked on (only visible layers)
+			const clickFeatureDatas = this.map.queryRenderedFeatures(
+				event.point,
+				{
+					layers: this.currentVisibleLayers.filter(
+						(layer) => layer.indexOf("-arc") === -1,
+					),
+				},
+			);
 			// Return if there is no info in the click
 			if (!clickFeatureDatas || clickFeatureDatas.length === 0) {
 				return;
@@ -1882,43 +1875,22 @@ export const useMapStore = defineStore("map", {
 			// Parse clickFeatureDatas to get the first 3 unique layer datas, skip over already included layers
 			const mapConfigs = [];
 			const parsedPopupContent = [];
-			const layerClosestFeature = {}; // key: layerId, value: { feature, distance }
-			const clickPoint = [event.lngLat.lng, event.lngLat.lat];
+			let previousParsedLayer = "";
 
-			// 計算每個圖層最近的 feature
-			for (const rawFeature of clickFeatureDatas) {
-				const layerId = rawFeature.layer.id;
+			for (let i = 0; i < clickFeatureDatas.length; i++) {
+				if (mapConfigs.length === 3) break;
+				if (previousParsedLayer === clickFeatureDatas[i].layer.id)
+					continue;
 
-				// 計算距離最近的點
-				const featureCenter =
-					rawFeature.geometry?.type === "Point"
-						? rawFeature.geometry.coordinates
-						: getPopupCoordinates(rawFeature, event.lngLat);
-
-				const dx = featureCenter[0] - clickPoint[0];
-				const dy = featureCenter[1] - clickPoint[1];
-				const dist2 = dx * dx + dy * dy;
-
-				// 如果是該圖層第一次或更近，就存
-				if (
-					!layerClosestFeature[layerId] ||
-					dist2 < layerClosestFeature[layerId].distance
-				) {
-					// 格式化 properties
-					const feature = { ...rawFeature };
-					feature.geometry =
-						rawFeature.geometry || rawFeature._geometry;
-					feature.properties = { ...rawFeature.properties };
-					Object.keys(feature.properties).forEach((key) => {
-						feature.properties[key] = formatValue(
-							feature.properties[key],
-							key,
-						);
-					});
-
-					layerClosestFeature[layerId] = { feature, distance: dist2 };
-				}
-			}
+				// format properties
+				const feature = { ...clickFeatureDatas[i] };
+				feature.properties = { ...feature.properties };
+				Object.keys(feature.properties).forEach((key) => {
+					feature.properties[key] = formatValue(
+						feature.properties[key],
+						key,
+					);
+				});
 
 			// 取前 3 個不同圖層最近的 feature
 			const closestLayers = Object.keys(layerClosestFeature).slice(0, 3);
@@ -2037,15 +2009,6 @@ export const useMapStore = defineStore("map", {
 					watch(activeTab, () => {
 						nextTick(() => {
 							handleVideoLoad();
-							// 切tab彈窗出現位置更新
-							const feature = parsedPopupContent[activeTab.value];
-							if (feature && popup) {
-								const newCoords = getPopupCoordinates(
-									feature,
-									event.lngLat,
-								);
-								popup.setLngLat(newCoords);
-							}
 						});
 					});
 
@@ -2368,24 +2331,22 @@ export const useMapStore = defineStore("map", {
 		filterByLayer(map_configs, xParam) {
 			const dialogStore = useDialogStore();
 			if (this.loadingLayers.length > 0) return;
-			if (!this.map || dialogStore.dialogs.moreInfo) return;
-
-			map_configs.forEach((map_config) => {
-				const layerId = `${map_config.index}-${map_config.type}-${map_config.city}`;
-				if (!this.map.getLayer(layerId)) return;
-
-				const isActive = map_config.title === xParam;
-				// symbol layer
-				if (this.map.getLayer(layerId).type === "symbol") {
-					this.map.setPaintProperty(
-						layerId,
-						"icon-opacity",
-						isActive ? 1 : 0,
+			if (!this.map || dialogStore.dialogs.moreInfo) {
+				return;
+			}
+			map_configs.map((map_config) => {
+				let mapLayerId = `${map_config.index}-${map_config.type}-${map_config.city}`;
+				if (map_config.title !== xParam) {
+					this.map.setLayoutProperty(
+						mapLayerId,
+						"visibility",
+						"none",
 					);
-					this.map.setPaintProperty(
-						layerId,
-						"text-opacity",
-						isActive ? 1 : 0,
+				} else {
+					this.map.setLayoutProperty(
+						mapLayerId,
+						"visibility",
+						"visible",
 					);
 				} else {
 					// fill / line / circle 等

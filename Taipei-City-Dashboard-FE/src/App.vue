@@ -86,15 +86,15 @@ function reloadChartData() {
 
 async function reloadCrowdingChartData() {
 	if (!["dashboard", "mapview"].includes(authStore.currentPath)) return;
-	
+
 	if (isCrowdingUpdating) return;
-	
+
 	isCrowdingUpdating = true;
 	try {
-    	await contentStore.updateCurrentDashboardCertainChartData();
-  	} 	finally {
+		await contentStore.updateCurrentDashboardCertainChartData();
+	} finally {
 		isCrowdingUpdating = false;
-  	}
+	}
 }
 
 function updateTimeToUpdate() {
@@ -133,9 +133,13 @@ function reload3DMRTMapData() {
 		const layerConfig = mapStore.mapConfigs[layerName];
 		const lastUpdate = mapStore.layerUpdateTime[layerName];
 		const now = Date.now();
-		
+
 		// 只刷新特定組件附屬圖層
-		if (!layerConfig.title.includes("擁擠程度") || !lastUpdate || now - new Date(lastUpdate).getTime() < 1.5 * 60 * 1000) {
+		if (
+			!layerConfig.title.includes("擁擠程度") ||
+			!lastUpdate ||
+			now - new Date(lastUpdate).getTime() < 1.5 * 60 * 1000
+		) {
 			return;
 		}
 
@@ -155,17 +159,17 @@ function reload3DMRTMapData() {
 	});
 }
 
-// Chatroom功能顯示隱藏
-function chatbotBtnHandler () {
-	isChatBoxShow.value = !isChatBoxShow.value
+// Chatroom 功能顯示隱藏
+function chatbotBtnHandler() {
+	isChatBoxShow.value = !isChatBoxShow.value;
 }
 
-function hideBtnClickHandler () {
+function hideBtnClickHandler() {
 	isChatBtnShow.value = false;
 	isChatBoxShow.value = false;
 }
 
-watch(
+(watch(
 	() => route.query,
 	(query) => {
 		boardIndex.value = query.index;
@@ -177,9 +181,9 @@ watch(
 			return board.id === query.index;
 		});
 		timeToUpdate.value = frequency.value;
-	}
+	},
 ),
-{ immediate: true };
+{ immediate: true });
 
 onBeforeMount(() => {
 	authStore.initialChecks();
@@ -333,51 +337,51 @@ onBeforeUnmount(() => {
 
 // Chatroom 樣式
 .chatbot-container {
-  position: fixed;
-  bottom: 1.5rem; // Tailwind bottom-6 → 24px
-  right: 1.5rem;
-  display: flex;
-  align-items: flex-end;
-  gap: 1rem; // Tailwind gap-4 → 16px
-  z-index: 10;
-
-  .chatbox {
-    width: 400px;
-    height: 500px;
-    margin-bottom: 35px;
-  }
-
-  .chatbot-btn-area {
-	position: relative;
+	position: fixed;
+	bottom: 1.5rem; // Tailwind bottom-6 → 24px
+	right: 1.5rem;
 	display: flex;
-	flex-direction: column;
-	.hide-chat-btn {
-		margin-left: auto;
-		button {
-			font-size: 16px;	
+	align-items: flex-end;
+	gap: 1rem; // Tailwind gap-4 → 16px
+	z-index: 10;
+
+	.chatbox {
+		width: 400px;
+		height: 500px;
+		margin-bottom: 35px;
+	}
+
+	.chatbot-btn-area {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		.hide-chat-btn {
+			margin-left: auto;
+			button {
+				font-size: 16px;
+			}
+		}
+		.hide-chat-btn button::before {
+			content: "–";
+			font-weight: bold; /* 變粗 */
+			font-size: 20px; /* 可以順便調整大小 */
+		}
+		.chatbot-btn {
+			width: 70px;
+			height: 70px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			border-radius: 50%;
+			background-color: #3b82f6; // Tailwind bg-blue-500
+			filter: brightness(1.5);
+			transition: filter 0.2s;
+
+			&:hover {
+				filter: brightness(1);
+			}
 		}
 	}
-	.hide-chat-btn button::before {
-    	content: "–";
-    	font-weight: bold;   /* 變粗 */
-    	font-size: 20px;     /* 可以順便調整大小 */
-	}
-	.chatbot-btn {
-    	width: 70px;
-    	height: 70px;
-    	display: flex;
-    	align-items: center;
-    	justify-content: center;
-    	border-radius: 50%;
-    	background-color: #3b82f6; // Tailwind bg-blue-500
-    	filter: brightness(1.5);
-    	transition: filter 0.2s;
-
-    	&:hover {
-      		filter: brightness(1);
-    	}
-  	}
-  }
 }
 
 // 手機板隱藏小幫手
@@ -386,5 +390,4 @@ onBeforeUnmount(() => {
 		display: none;
 	}
 }
-
 </style>

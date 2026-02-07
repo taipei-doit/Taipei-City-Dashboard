@@ -5,7 +5,7 @@ export const MapObjectConfig = {
 	center: [121.536609, 25.044808],
 	maxBounds: [
 		[121.2825, 24.6961], // Southwest coordinates
-		[122.0073, 25.2979]  // Northeast coordinates
+		[122.0073, 25.2979], // Northeast coordinates
 	],
 	zoom: 9,
 	minZoom: 9,
@@ -19,15 +19,15 @@ export const CityMapView = {
 		center: [121.536609, 25.044808],
 		zoom: 12,
 	},
-	metrotaipei:{
+	metrotaipei: {
 		center: [121.64080359050314, 24.980598540245936],
 		zoom: 9,
 	},
 	default: {
 		center: [121.56376521148917, 25.086495621435404],
 		zoom: 10,
-	}
-}
+	},
+};
 
 // All map types
 export const mapTypes = {
