@@ -99,7 +99,7 @@ services:
   airflow-webserver:
     <<: *airflow-common
     command: webserver
-    cpus: "1.0"
+    cpus: "0.5"
     mem_limit: "2g"
     ports:
       - "8080:8080"
@@ -213,7 +213,7 @@ services:
   airflow-worker-heavy:
     <<: *airflow-common
     command: celery worker -q heavy
-    cpus: "3.0"
+    cpus: "2.0"
     mem_limit: "8g"
     healthcheck:
       # yamllint disable rule:line-length
