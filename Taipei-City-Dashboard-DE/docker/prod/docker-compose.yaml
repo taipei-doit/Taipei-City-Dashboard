@@ -127,15 +127,6 @@ services:
       start_period: 30s
     restart: always
     cpuset: "0-5"
-    deploy:
-      replicas: 2
-      resources:
-        limits:
-          cpus: '1.0'
-          memory: 4G
-        reservations:
-          cpus: '0.25'
-          memory: 2G
     depends_on:
       airflow-init:
         condition: service_completed_successfully
@@ -163,15 +154,6 @@ services:
       DUMB_INIT_SETSID: "0"
     restart: always
     cpuset: "0-5"
-    deploy:
-      replicas: 1
-      resources:
-        limits:
-          cpus: '1.0'
-          memory: 4G
-        reservations:
-          cpus: '0.5'
-          memory: 2G
     depends_on:
       airflow-init:
         condition: service_completed_successfully
@@ -197,15 +179,6 @@ services:
       DUMB_INIT_SETSID: "0"
     restart: always
     cpuset: "0-5"
-    deploy:
-      replicas: 1
-      resources:
-        limits:
-          cpus: '1.0'
-          memory: 4G
-        reservations:
-          cpus: '0.25'
-          memory: 2G
     depends_on:
       airflow-init:
         condition: service_completed_successfully
@@ -231,15 +204,6 @@ services:
       DUMB_INIT_SETSID: "0"
     restart: always
     cpuset: "0-5"
-    deploy:
-      replicas: 1
-      resources:
-        limits:
-          cpus: '3.0'
-          memory: 8G
-        reservations:
-          cpus: '1.0'
-          memory: 4G
     depends_on:
       airflow-init:
         condition: service_completed_successfully
