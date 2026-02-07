@@ -1,7 +1,7 @@
 <!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 
 <script setup>
-import { ref,computed } from "vue";
+import { ref, computed } from "vue";
 import { useDialogStore } from "../../store/dialogStore";
 import { useAuthStore } from "../../store/authStore";
 
@@ -22,10 +22,9 @@ function openExternal(url) {
 	w.location.assign(url);
 }
 
-
 const {
 	VITE_APP_TITLE,
-	// PROD,
+	// PRODxxx,
 	VITE_TAIPEIPASS_URL,
 	VITE_TAIPEIPASS_CLIENT_ID,
 	VITE_TAIPEIPASS_SCOPE,
@@ -39,24 +38,31 @@ const email = ref("");
 const password = ref("");
 
 const taipeiPassUrl = computed(() => {
-	 return `${VITE_TAIPEIPASS_URL}/oauth2/authorize?response_type=code&client_id=${VITE_TAIPEIPASS_CLIENT_ID}&scope=${VITE_TAIPEIPASS_SCOPE}`;
+	return `${VITE_TAIPEIPASS_URL}/oauth2/authorize?response_type=code&client_id=${VITE_TAIPEIPASS_CLIENT_ID}&scope=${VITE_TAIPEIPASS_SCOPE}`;
 });
 
 function handleSwitchMode() {
 	loginMode.value = loginMode.value === "tp" ? "email" : "tp";
 	email.value = "";
 	password.value = "";
+
+	// 同步到sit
 	// if (PROD) {
+
 	// 	return;
+
 	// } else {
 	// 	loginMode.value = loginMode.value === "tp" ? "email" : "tp";
 	// 	email.value = "";
 	// 	password.value = "";
 	// }
+
 }
+
 function handleTaipeiPassLogin() {
-	 window.open(taipeiPassUrl.value, "_self");
+	window.open(taipeiPassUrl.value, "_self");
 }
+
 async function handleEmailLogin() {
 	const loggedIn = await authStore.loginByEmail(email.value, password.value);
 	if (loggedIn) {
@@ -122,7 +128,11 @@ function handleClose() {
           href="https://tuic.gov.taipei/zh/works/dashboard"
           target="_blank"
           rel="noopener"
-          @click.prevent="openExternal('https://tuic.gov.taipei/zh/works/dashboard')"
+          @click.prevent="
+            openExternal(
+              'https://tuic.gov.taipei/zh/works/dashboard'
+            )
+          "
         >
           臺北城市儀表板
         </a>
@@ -131,7 +141,9 @@ function handleClose() {
           href="https://tuic.gov.taipei/zh/privacy"
           target="_blank"
           rel="noopener"
-          @click.prevent="openExternal('https://tuic.gov.taipei/zh/privacy')"
+          @click.prevent="
+            openExternal('https://tuic.gov.taipei/zh/privacy')
+          "
         >
           隱私權政策
         </a>

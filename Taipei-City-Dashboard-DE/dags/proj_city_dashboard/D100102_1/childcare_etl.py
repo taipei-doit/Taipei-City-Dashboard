@@ -1,13 +1,20 @@
 from airflow import DAG
 from operators.common_pipeline import CommonDag
 
-def childcare_etl(rid, page_id, **kwargs):
+def childcare_etl(rid, page_id, source_type="api", **kwargs):
     """
     只入庫指定欄位：
       ['type', 'name', 'address', 'phone', 'data_time', 'town', 'wkb_geometry']
     其他來源欄位一律忽略；缺欄位自動補 None，避免 KeyError。
+    
+    Args:
+        rid: 資料集 resource ID
+        page_id: data.taipei 頁面 ID
+        source_type: "api" 使用 get_data_taipei_api, "csv" 使用下載 CSV
     """
     import pandas as pd
+    import requests
+    from io import StringIO
     from sqlalchemy import create_engine
 
     # === utils ===
@@ -38,8 +45,16 @@ def childcare_etl(rid, page_id, **kwargs):
     from_crs = 4326
 
     # ===== Extract =====
-    raw = get_data_taipei_api(rid)
-    raw_df = pd.DataFrame(raw)
+    if source_type == "csv":
+        # 下載 CSV 方式
+        url = f"https://data.taipei/api/frontstage/tpeod/dataset/resource.download?rid={rid}"
+        response = requests.get(url, timeout=60)
+        response.raise_for_status()
+        raw_df = pd.read_csv(StringIO(response.text))
+    else:
+        # 使用 API 方式 (預設)
+        raw = get_data_taipei_api(rid)
+        raw_df = pd.DataFrame(raw)
     # 動態取得 data.taipei 頁面右側「更新時間」作為資料時間
     raw_df["data_time"] = get_data_taipei_file_last_modified_time(page_id)
 
