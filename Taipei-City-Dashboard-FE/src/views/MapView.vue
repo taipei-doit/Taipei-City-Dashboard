@@ -32,34 +32,45 @@ const toggleOn = ref({
 	noMap: [],
 	mapLayer: [],
 	basicLayer: [],
-})
+});
 
 // Separate components with maps from those without
 const parseMapLayers = computed(() => {
 	const hasMap = contentStore.currentDashboard.components?.filter(
-		(item) => item.map_config[0]
+		(item) => item.map_config[0],
 	);
 	const noMap = contentStore.currentDashboard.components?.filter(
-		(item) => !item.map_config[0]
+		(item) => !item.map_config[0],
 	);
 
 	return { hasMap: hasMap, noMap: noMap };
 });
 
-watch( () => route.query.index, (newIndex, oldIndex) => {
-	if (newIndex !== oldIndex) {
-		toggleOn.value = {
-			hasMap: new Array(parseMapLayers.value.hasMap?.length).fill(false),
-			noMap: new Array(parseMapLayers.value.noMap?.length).fill(false),
-			mapLayer: new Array(contentStore.currentDashboard.components?.length).fill(false),
-			basicLayer: new Array(contentStore.mapLayers?.length).fill(false)
+watch(
+	() => route.query.index,
+	(newIndex, oldIndex) => {
+		if (newIndex !== oldIndex) {
+			toggleOn.value = {
+				hasMap: new Array(parseMapLayers.value.hasMap?.length).fill(
+					false,
+				),
+				noMap: new Array(parseMapLayers.value.noMap?.length).fill(
+					false,
+				),
+				mapLayer: new Array(
+					contentStore.currentDashboard.components?.length,
+				).fill(false),
+				basicLayer: new Array(contentStore.mapLayers?.length).fill(
+					false,
+				),
+			};
 		}
-	}
-})
+	},
+);
 
 function handleOpenSettings() {
 	contentStore.editDashboard = JSON.parse(
-		JSON.stringify(contentStore.currentDashboard)
+		JSON.stringify(contentStore.currentDashboard),
 	);
 	dialogStore.addEdit = "edit";
 	dialogStore.showDialog("addEditDashboards");
@@ -71,7 +82,7 @@ function handleToggle(value, map_config) {
 		if (value) {
 			dialogStore.showNotification(
 				"info",
-				"本組件沒有空間資料，不會渲染地圖"
+				"本組件沒有空間資料，不會渲染地圖",
 			);
 		}
 		return;
@@ -88,11 +99,12 @@ function toggleSwitchBtn(value, Btn, BtnIndex) {
 	toggleOn.value[Btn][BtnIndex] = value;
 }
 
-// 3D Mrt Map (202511NEW)
 function shouldDisable(map_config) {
-	const allMapLayerIds = map_config.map((el) => `${el.index}-${el.type}-${el.city}`);
-	if (mapStore.isPreloading===true) {
-		return true
+	const allMapLayerIds = map_config.map(
+		(el) => `${el.index}-${el.type}-${el.city}`,
+	);
+	if (mapStore.isPreloading === true) {
+		return true;
 	} else {
 		return (
 			mapStore.loadingLayers.filter((el) => allMapLayerIds.includes(el))
@@ -104,27 +116,26 @@ function shouldDisable(map_config) {
 // 開啟主題圖層時觸發GA自訂事件
 function popularThematicLayerGA(map_config) {
 	if (map_config[0].city && map_config[0].title) {
-		gtag('event','popular_thematic_layer', {
-			dashboard_city:map_config[0].city,
-			layer_name:map_config[0].title,
-			city_layer:`${map_config[0].city}-${map_config[0].title}`,
+		gtag("event", "popular_thematic_layer", {
+			dashboard_city: map_config[0].city,
+			layer_name: map_config[0].title,
+			city_layer: `${map_config[0].city}-${map_config[0].title}`,
 			time: Date.now(),
-  		})
+		});
 	}
 }
 
 // 開啟基本圖層時觸發GA自訂事件
 function popularBasicLayerGA(map_config) {
 	if (map_config[0].city && map_config[0].title) {
-		gtag('event','popular_basic_layer', {
-			dashboard_city:map_config[0].city,
-			layer_name:map_config[0].title,
-			city_layer:`${map_config[0].city}-${map_config[0].title}`,
+		gtag("event", "popular_basic_layer", {
+			dashboard_city: map_config[0].city,
+			layer_name: map_config[0].title,
+			city_layer: `${map_config[0].city}-${map_config[0].title}`,
 			time: Date.now(),
-  		})
+		});
 	}
 }
-
 </script>
 
 <template>
@@ -132,20 +143,35 @@ function popularBasicLayerGA(map_config) {
     <div class="hide-if-mobile">
       <!-- 1. If the dashboard is map-layers -->
       <div
-        v-if="contentStore.currentDashboard.index?.includes('map-layers')"
+        v-if="
+          contentStore.currentDashboard.index?.includes('map-layers')
+        "
         class="map-charts"
       >
         <DashboardComponent
-          v-for="(item, arrayIdx) in contentStore.currentDashboard.components"
+          v-for="(item, arrayIdx) in contentStore.currentDashboard
+            .components"
           :key="`map-layer-${item.index}-${item.city}`"
           :config="item"
           mode="halfmap"
           :info-btn="true"
           :active-city="item.city"
           :select-btn="true"
-          :select-btn-disabled="contentStore.cityManager.getSelectList(contentStore.currentDashboard?.city).length === 1"
-          :select-btn-list="contentStore.cityManager.getSelectList(contentStore.currentDashboard?.city)"
-          :city-tag="contentStore.cityManager.getTagList(contentStore.currentDashboard?.city)"
+          :select-btn-disabled="
+            contentStore.cityManager.getSelectList(
+              contentStore.currentDashboard?.city,
+            ).length === 1
+          "
+          :select-btn-list="
+            contentStore.cityManager.getSelectList(
+              contentStore.currentDashboard?.city,
+            )
+          "
+          :city-tag="
+            contentStore.cityManager.getTagList(
+              contentStore.currentDashboard?.city,
+            )
+          "
           :toggle-disable="shouldDisable(item.map_config)"
           :toggle-on="toggleOn.mapLayer[arrayIdx]"
           @info="
@@ -157,7 +183,7 @@ function popularBasicLayerGA(map_config) {
             (value, map_config) => {
               handleToggle(value, map_config);
               toggleSwitchBtn(value, 'mapLayer', arrayIdx);
-			  popularThematicLayerGA(map_config);
+              popularThematicLayerGA(map_config);
             }
           "
           @filter-by-param="
@@ -166,7 +192,7 @@ function popularBasicLayerGA(map_config) {
                 map_filter,
                 map_config,
                 x,
-                y
+                y,
               );
             }
           "
@@ -185,26 +211,40 @@ function popularBasicLayerGA(map_config) {
               mapStore.clearByLayerFilter(map_config);
             }
           "
-          @change-city="(city)=> {
-            const selectedData = contentStore.cityDashboard.components.find((data) => {
-              if (data.index === item.index && data.city === city) {
-                return data
+          @change-city="
+            (city) => {
+              const selectedData =
+                contentStore.cityDashboard.components.find(
+                  (data) => {
+                    if (
+                      data.index === item.index &&
+                      data.city === city
+                    ) {
+                      return data;
+                    }
+                  },
+                );
+
+              const componentIndex =
+                contentStore.currentDashboard.components.findIndex(
+                  (item) => item.id === selectedData.id,
+                );
+
+              if (selectedData) {
+                mapStore.clearByParamFilter(item.map_config);
+                mapStore.turnOffMapLayerVisibility(
+                  item.map_config,
+                );
+                mapStore.addToMapLayerList(
+                  selectedData.map_config,
+                );
+
+                contentStore.setComponentData(
+                  componentIndex,
+                  selectedData,
+                );
               }
-            });
-
-            const componentIndex = contentStore.currentDashboard.components.findIndex(
-              (item) => item.id === selectedData.id
-            );
-
-            if (selectedData) {
-
-              mapStore.clearByParamFilter(item.map_config);
-              mapStore.turnOffMapLayerVisibility(item.map_config);
-              mapStore.addToMapLayerList(selectedData.map_config);
-
-              contentStore.setComponentData(componentIndex, selectedData);
             }
-          }
           "
         />
       </div>
@@ -223,14 +263,29 @@ function popularBasicLayerGA(map_config) {
           :info-btn="true"
           :active-city="item.city"
           :select-btn="true"
-          :select-btn-disabled="contentStore.cityManager.getSelectList(contentStore.currentDashboard?.city).length === 1 || contentStore.currentDashboardExcluded.components.filter((data) => data.index === item.index).length === 0"
-          :select-btn-list="contentStore.currentDashboard?.city
-            ? contentStore.cityManager.getSelectList(contentStore.currentDashboard?.city)
-            : contentStore.cityManager.getCities(contentStore.cityManager.activeCities)
+          :select-btn-disabled="
+            contentStore.cityManager.getSelectList(
+              contentStore.currentDashboard?.city,
+            ).length === 1 ||
+              contentStore.currentDashboardExcluded.components.filter(
+                (data) => data.index === item.index,
+              ).length === 0
           "
-          :city-tag="contentStore.currentDashboard?.city
-            ? contentStore.cityManager.getTagList(contentStore.currentDashboard?.city)
-            : contentStore.cityManager.getTagList(item.city)
+          :select-btn-list="
+            contentStore.currentDashboard?.city
+              ? contentStore.cityManager.getSelectList(
+                contentStore.currentDashboard?.city,
+              )
+              : contentStore.cityManager.getCities(
+                contentStore.cityManager.activeCities,
+              )
+          "
+          :city-tag="
+            contentStore.currentDashboard?.city
+              ? contentStore.cityManager.getTagList(
+                contentStore.currentDashboard?.city,
+              )
+              : contentStore.cityManager.getTagList(item.city)
           "
           :toggle-disable="shouldDisable(item.map_config)"
           :toggle-on="toggleOn.hasMap[arrayIdx]"
@@ -243,7 +298,7 @@ function popularBasicLayerGA(map_config) {
             (value, map_config) => {
               handleToggle(value, map_config);
               toggleSwitchBtn(value, 'hasMap', arrayIdx);
-			  popularThematicLayerGA(map_config);
+              popularThematicLayerGA(map_config);
             }
           "
           @filter-by-param="
@@ -252,7 +307,7 @@ function popularBasicLayerGA(map_config) {
                 map_filter,
                 map_config,
                 x,
-                y
+                y,
               );
             }
           "
@@ -276,26 +331,40 @@ function popularBasicLayerGA(map_config) {
               mapStore.flyToLocation(location);
             }
           "
-          @change-city="(city)=> {
-            const selectedData = contentStore.cityDashboard.components.find((data) => {
-              if (data.index === item.index && data.city === city) {
-                return data
+          @change-city="
+            (city) => {
+              const selectedData =
+                contentStore.cityDashboard.components.find(
+                  (data) => {
+                    if (
+                      data.index === item.index &&
+                      data.city === city
+                    ) {
+                      return data;
+                    }
+                  },
+                );
+
+              const componentIndex =
+                contentStore.currentDashboard.components.findIndex(
+                  (item) => item.id === selectedData.id,
+                );
+
+              if (selectedData) {
+                mapStore.clearByParamFilter(item.map_config);
+                mapStore.turnOffMapLayerVisibility(
+                  item.map_config,
+                );
+                mapStore.addToMapLayerList(
+                  selectedData.map_config,
+                );
+
+                contentStore.setComponentData(
+                  componentIndex,
+                  selectedData,
+                );
               }
-            });
-
-            const componentIndex = contentStore.currentDashboard.components.findIndex(
-              (item) => item.id === selectedData.id
-            );
-			
-            if (selectedData) {
-
-              mapStore.clearByParamFilter(item.map_config);
-              mapStore.turnOffMapLayerVisibility(item.map_config);
-              mapStore.addToMapLayerList(selectedData.map_config);
-
-              contentStore.setComponentData(componentIndex, selectedData);
             }
-          }
           "
         />
         <h2 v-if="contentStore.mapLayers.length > 0">
@@ -309,9 +378,21 @@ function popularBasicLayerGA(map_config) {
           :info-btn="true"
           :active-city="item.city"
           :select-btn="true"
-          :select-btn-disabled="contentStore.cityManager.getSelectList(contentStore.currentDashboard?.city).length === 1"
-          :select-btn-list="contentStore.cityManager.getSelectList(contentStore.currentDashboard?.city)"
-          :city-tag="contentStore.cityManager.getTagList(contentStore.currentDashboard?.city)"
+          :select-btn-disabled="
+            contentStore.cityManager.getSelectList(
+              contentStore.currentDashboard?.city,
+            ).length === 1
+          "
+          :select-btn-list="
+            contentStore.cityManager.getSelectList(
+              contentStore.currentDashboard?.city,
+            )
+          "
+          :city-tag="
+            contentStore.cityManager.getTagList(
+              contentStore.currentDashboard?.city,
+            )
+          "
           :toggle-disable="shouldDisable(item.map_config)"
           :toggle-on="toggleOn.basicLayer[arrayIdx]"
           @info="
@@ -323,7 +404,7 @@ function popularBasicLayerGA(map_config) {
             (value, map_config) => {
               handleToggle(value, map_config);
               toggleSwitchBtn(value, 'basicLayer', arrayIdx);
-			  popularBasicLayerGA(map_config);
+              popularBasicLayerGA(map_config);
             }
           "
           @filter-by-param="
@@ -332,7 +413,7 @@ function popularBasicLayerGA(map_config) {
                 map_filter,
                 map_config,
                 x,
-                y
+                y,
               );
             }
           "
@@ -351,21 +432,34 @@ function popularBasicLayerGA(map_config) {
               mapStore.clearByLayerFilter(map_config);
             }
           "
-          @change-city="(city)=> {
-            const selectedData = contentStore.allMapLayers.find((data) => {
-              if (data.index === item.index && data.city === city) {
-                return data
+          @change-city="
+            (city) => {
+              const selectedData = contentStore.allMapLayers.find(
+                (data) => {
+                  if (
+                    data.index === item.index &&
+                    data.city === city
+                  ) {
+                    return data;
+                  }
+                },
+              );
+
+              if (selectedData) {
+                mapStore.clearByParamFilter(item.map_config);
+                mapStore.turnOffMapLayerVisibility(
+                  item.map_config,
+                );
+                mapStore.addToMapLayerList(
+                  selectedData.map_config,
+                );
+
+                contentStore.setMapLayerData(
+                  arrayIdx,
+                  selectedData,
+                );
               }
-            });
-
-            if (selectedData) {
-              mapStore.clearByParamFilter(item.map_config);
-              mapStore.turnOffMapLayerVisibility(item.map_config);
-              mapStore.addToMapLayerList(selectedData.map_config);
-
-              contentStore.setMapLayerData(arrayIdx,selectedData);
             }
-          }
           "
         />
         <h2 v-if="parseMapLayers.noMap?.length > 0">
@@ -379,14 +473,29 @@ function popularBasicLayerGA(map_config) {
           :info-btn="true"
           :active-city="item.city"
           :select-btn="true"
-          :select-btn-disabled="contentStore.cityManager.getSelectList(contentStore.currentDashboard?.city).length === 1 || contentStore.currentDashboardExcluded.components.filter((data) => data.index === item.index).length === 0"
-          :select-btn-list="contentStore.currentDashboard?.city
-            ? contentStore.cityManager.getSelectList(contentStore.currentDashboard?.city)
-            : contentStore.cityManager.getCities(contentStore.cityManager.activeCities)
+          :select-btn-disabled="
+            contentStore.cityManager.getSelectList(
+              contentStore.currentDashboard?.city,
+            ).length === 1 ||
+              contentStore.currentDashboardExcluded.components.filter(
+                (data) => data.index === item.index,
+              ).length === 0
           "
-          :city-tag="contentStore.currentDashboard?.city
-            ? contentStore.cityManager.getTagList(contentStore.currentDashboard?.city)
-            : contentStore.cityManager.getTagList(item.city)
+          :select-btn-list="
+            contentStore.currentDashboard?.city
+              ? contentStore.cityManager.getSelectList(
+                contentStore.currentDashboard?.city,
+              )
+              : contentStore.cityManager.getCities(
+                contentStore.cityManager.activeCities,
+              )
+          "
+          :city-tag="
+            contentStore.currentDashboard?.city
+              ? contentStore.cityManager.getTagList(
+                contentStore.currentDashboard?.city,
+              )
+              : contentStore.cityManager.getTagList(item.city)
           "
           :toggle-on="toggleOn.noMap[arrayIdx]"
           @info="
@@ -400,18 +509,32 @@ function popularBasicLayerGA(map_config) {
               toggleSwitchBtn(value, 'noMap', arrayIdx);
             }
           "
-          @change-city="(city)=> {
-            const selectedData = contentStore.cityDashboard.components.find((data) => {
-              if (data.index === item.index && data.city === city) {
-                return data
+          @change-city="
+            (city) => {
+              const selectedData =
+                contentStore.cityDashboard.components.find(
+                  (data) => {
+                    if (
+                      data.index === item.index &&
+                      data.city === city
+                    ) {
+                      return data;
+                    }
+                  },
+                );
+              const componentIndex =
+                contentStore.currentDashboard.components.findIndex(
+                  (data) =>
+                    data.index === item.index &&
+                    data.city === item.city,
+                );
+              if (selectedData && componentIndex !== -1) {
+                contentStore.setComponentData(
+                  componentIndex,
+                  selectedData,
+                );
               }
-            });
-            const componentIndex = contentStore.currentDashboard.components.findIndex((data) => data.index === item.index && data.city === item.city);
-            if (selectedData && componentIndex !== -1) {
-
-              contentStore.setComponentData(componentIndex, selectedData);
             }
-          }
           "
         />
       </div>

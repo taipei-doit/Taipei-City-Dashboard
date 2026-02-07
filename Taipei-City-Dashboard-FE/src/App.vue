@@ -47,7 +47,7 @@ const boardIndex = ref(null);
 const board = ref(null);
 const frequency = ref(600);
 const isMappedToUpdateBoards = ref(false);
-// Chatroom (202511NEW)
+// Chatroom
 const isChatBtnShow = ref(true);
 const isChatBoxShow = ref(false);
 // Timers
@@ -86,15 +86,15 @@ function reloadChartData() {
 
 async function reloadCrowdingChartData() {
 	if (!["dashboard", "mapview"].includes(authStore.currentPath)) return;
-	
+
 	if (isCrowdingUpdating) return;
-	
+
 	isCrowdingUpdating = true;
 	try {
-    	await contentStore.updateCurrentDashboardCertainChartData();
-  	} 	finally {
+		await contentStore.updateCurrentDashboardCertainChartData();
+	} finally {
 		isCrowdingUpdating = false;
-  	}
+	}
 }
 
 function updateTimeToUpdate() {
@@ -133,9 +133,13 @@ function reload3DMRTMapData() {
 		const layerConfig = mapStore.mapConfigs[layerName];
 		const lastUpdate = mapStore.layerUpdateTime[layerName];
 		const now = Date.now();
-		
+
 		// 只刷新特定組件附屬圖層
-		if (!layerConfig.title.includes("擁擠程度") || !lastUpdate || now - new Date(lastUpdate).getTime() < 1.5 * 60 * 1000) {
+		if (
+			!layerConfig.title.includes("擁擠程度") ||
+			!lastUpdate ||
+			now - new Date(lastUpdate).getTime() < 1.5 * 60 * 1000
+		) {
 			return;
 		}
 
@@ -155,17 +159,17 @@ function reload3DMRTMapData() {
 	});
 }
 
-// Chatroom (202511NEW)
-function chatbotBtnHandler () {
-	isChatBoxShow.value = !isChatBoxShow.value
+// Chatroom 功能顯示隱藏
+function chatbotBtnHandler() {
+	isChatBoxShow.value = !isChatBoxShow.value;
 }
 
-function hideBtnClickHandler () {
+function hideBtnClickHandler() {
 	isChatBtnShow.value = false;
 	isChatBoxShow.value = false;
 }
 
-watch(
+(watch(
 	() => route.query,
 	(query) => {
 		boardIndex.value = query.index;
@@ -177,9 +181,9 @@ watch(
 			return board.id === query.index;
 		});
 		timeToUpdate.value = frequency.value;
-	}
+	},
 ),
-	{ immediate: true };
+{ immediate: true });
 
 onBeforeMount(() => {
 	authStore.initialChecks();
@@ -215,76 +219,79 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-	<div class="app-container">
-		<NotificationBar />
-		<NavBar v-if="authStore.currentPath !== 'embed'" />
-		<!-- /mapview, /dashboard layouts -->
-		<div
-			v-if="
-				authStore.currentPath === 'mapview' ||
-				authStore.currentPath === 'dashboard'
-			"
-			class="app-content"
-		>
-			<SideBar />
-			<div class="app-content-main">
-				<SettingsBar />
-				<RouterView />
-			</div>
-		</div>
-		<!-- /admin layouts -->
-		<div v-else-if="authStore.currentPath === 'admin'" class="app-content">
-			<AdminSideBar />
-			<div class="app-content-main">
-				<RouterView />
-			</div>
-		</div>
-		<!-- /component, /component/:index layouts -->
-		<div
-			v-else-if="authStore.currentPath.includes('component')"
-			class="app-content"
-		>
-			<ComponentSideBar />
-			<div class="app-content-main">
-				<RouterView />
-			</div>
-		</div>
-		<div v-else>
-			<router-view />
-		</div>
-		<InitialWarning />
-		<LogIn />
-		<div
-			v-if="
-				['dashboard', 'mapview'].includes(authStore.currentPath) &&
-				!authStore.isMobile &&
-				!authStore.isNarrowDevice
-			"
-			class="app-update"
-		>
-			<p>下次更新：{{ formattedTimeToUpdate }}</p>
-		</div>
-		<div class="chatbot-container">
-      		<ChatBox
-        		v-if="isChatBoxShow"
-        		class="chatbox"
-      		/>
-      		<div
-        		v-if="isChatBtnShow"
-        		class="chatbot-btn-area"
-      		>
-        		<div class="hide-chat-btn">
-          			<button @click="hideBtnClickHandler" />
-        		</div>
-        		<button
-          		class="chatbot-btn"
-          		@click="chatbotBtnHandler"
-        		>
-          			<ChatBotIcon />
-        		</button>
-      		</div>
-    	</div>
-	</div>
+  <div class="app-container">
+    <NotificationBar />
+    <NavBar v-if="authStore.currentPath !== 'embed'" />
+    <!-- /mapview, /dashboard layouts -->
+    <div
+      v-if="
+        authStore.currentPath === 'mapview' ||
+          authStore.currentPath === 'dashboard'
+      "
+      class="app-content"
+    >
+      <SideBar />
+      <div class="app-content-main">
+        <SettingsBar />
+        <RouterView />
+      </div>
+    </div>
+    <!-- /admin layouts -->
+    <div
+      v-else-if="authStore.currentPath === 'admin'"
+      class="app-content"
+    >
+      <AdminSideBar />
+      <div class="app-content-main">
+        <RouterView />
+      </div>
+    </div>
+    <!-- /component, /component/:index layouts -->
+    <div
+      v-else-if="authStore.currentPath.includes('component')"
+      class="app-content"
+    >
+      <ComponentSideBar />
+      <div class="app-content-main">
+        <RouterView />
+      </div>
+    </div>
+    <div v-else>
+      <router-view />
+    </div>
+    <InitialWarning />
+    <LogIn />
+    <div
+      v-if="
+        ['dashboard', 'mapview'].includes(authStore.currentPath) &&
+          !authStore.isMobile &&
+          !authStore.isNarrowDevice
+      "
+      class="app-update"
+    >
+      <p>下次更新：{{ formattedTimeToUpdate }}</p>
+    </div>
+    <div class="chatbot-container">
+      <ChatBox
+        v-if="isChatBoxShow"
+        class="chatbox"
+      />
+      <div
+        v-if="isChatBtnShow"
+        class="chatbot-btn-area"
+      >
+        <div class="hide-chat-btn">
+          <button @click="hideBtnClickHandler" />
+        </div>
+        <button
+          class="chatbot-btn"
+          @click="chatbotBtnHandler"
+        >
+          <ChatBotIcon />
+        </button>
+      </div>
+    </div>
+  </div>
 </template>
 
 <style scoped lang="scss">
@@ -328,53 +335,53 @@ onBeforeUnmount(() => {
 	}
 }
 
-// Chatroom (202511NEW)
+// Chatroom 樣式
 .chatbot-container {
-  position: fixed;
-  bottom: 1.5rem; // Tailwind bottom-6 → 24px
-  right: 1.5rem;
-  display: flex;
-  align-items: flex-end;
-  gap: 1rem; // Tailwind gap-4 → 16px
-  z-index: 10;
-
-  .chatbox {
-    width: 400px;
-    height: 500px;
-    margin-bottom: 35px;
-  }
-
-  .chatbot-btn-area {
-	position: relative;
+	position: fixed;
+	bottom: 1.5rem; // Tailwind bottom-6 → 24px
+	right: 1.5rem;
 	display: flex;
-	flex-direction: column;
-	.hide-chat-btn {
-		margin-left: auto;
-		button {
-			font-size: 16px;	
+	align-items: flex-end;
+	gap: 1rem; // Tailwind gap-4 → 16px
+	z-index: 10;
+
+	.chatbox {
+		width: 400px;
+		height: 500px;
+		margin-bottom: 35px;
+	}
+
+	.chatbot-btn-area {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		.hide-chat-btn {
+			margin-left: auto;
+			button {
+				font-size: 16px;
+			}
+		}
+		.hide-chat-btn button::before {
+			content: "–";
+			font-weight: bold; /* 變粗 */
+			font-size: 20px; /* 可以順便調整大小 */
+		}
+		.chatbot-btn {
+			width: 70px;
+			height: 70px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			border-radius: 50%;
+			background-color: #3b82f6; // Tailwind bg-blue-500
+			filter: brightness(1.5);
+			transition: filter 0.2s;
+
+			&:hover {
+				filter: brightness(1);
+			}
 		}
 	}
-	.hide-chat-btn button::before {
-    	content: "–";
-    	font-weight: bold;   /* 變粗 */
-    	font-size: 20px;     /* 可以順便調整大小 */
-	}
-	.chatbot-btn {
-    	width: 70px;
-    	height: 70px;
-    	display: flex;
-    	align-items: center;
-    	justify-content: center;
-    	border-radius: 50%;
-    	background-color: #3b82f6; // Tailwind bg-blue-500
-    	filter: brightness(1.5);
-    	transition: filter 0.2s;
-
-    	&:hover {
-      		filter: brightness(1);
-    	}
-  	}
-  }
 }
 
 // 手機板隱藏小幫手
@@ -383,5 +390,4 @@ onBeforeUnmount(() => {
 		display: none;
 	}
 }
-
 </style>

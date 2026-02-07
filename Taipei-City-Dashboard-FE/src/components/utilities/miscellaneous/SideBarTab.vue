@@ -57,7 +57,7 @@ const popularThemeGA = (title) => {
   <router-link
     :to="tabLink"
     :class="{ sidebartab: true, 'sidebartab-active': linkActiveOrNot }"
-	@click="popularThemeGA(title)"
+    @click="popularThemeGA(title)"
   >
     <span :title="!expanded ? title : ''">{{ icon }}</span>
     <h3 v-if="expanded">
