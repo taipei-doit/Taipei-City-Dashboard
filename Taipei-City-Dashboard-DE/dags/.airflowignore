@@ -1,0 +1,12 @@
+# Ignore common non-DAG artifacts and sample folders
+**/__pycache__/**
+**/*.pyc
+**/*.pyo
+**/*.pyd
+**/.DS_Store
+**/.git/**
+**/.venv/**
+**/test/**
+**/tests/**
+**/tutorial/**
+**/docs/**

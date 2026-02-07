@@ -12,7 +12,8 @@
       "email_on_retry": false,
       "email_on_failure": true,
       "retries": 1,
-      "retry_delay": 60
+      "retry_delay": 60,
+      "queue": "realtime"
     },
     "ready_data_db": "postgres_default",
     "ready_data_default_table": "mrtp_metro_capacity_realtime",
