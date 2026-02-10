@@ -10,6 +10,7 @@ import { useContentStore } from "../../store/contentStore";
 
 import DialogContainer from "./DialogContainer.vue";
 
+const authStore = useAuthStore();
 const dialogStore = useDialogStore();
 const contentStore = useContentStore();
 
@@ -20,9 +21,10 @@ const searchIndex = ref("");
 
 // Filters out components already in the dashboard
 const availableComponents = computed(() => {
-	const taken = contentStore.editDashboard.components?.map((item) => item.id) || [];
+	const taken =
+		contentStore.editDashboard.components?.map((item) => item.id) || [];
 	const available = allComponents.value?.filter(
-		(item) => !taken.includes(+item.id)
+		(item) => !taken.includes(+item.id),
 	);
 	return available;
 });
@@ -36,20 +38,42 @@ async function handleSearch() {
 		},
 	});
 	const data = response.data.data || [];
-	const uniqueData = [...new Map(data
-		// Sort the data to ensure that items with city 'metrotaipei' are at the end
-		.sort((a) => a.city === 'metrotaipei' ? 1 : -1)
-		// Create a map with item.id as the key to remove duplicates
-		.map(item => [item.id, item]))
-		// Convert the map values back to an array
-		.values()
+	let publicComponentID = await contentStore.getPublicComponents();
+
+	// const uniqueData = [
+	// 	...new Map(
+	// 		data
+	// 			// Sort the data to ensure that items with city 'metrotaipei' are at the end
+	// 			.sort((a) => (a.city === "metrotaipei" ? 1 : -1))
+	// 			// Create a map with item.id as the key to remove duplicates
+	// 			.map((item) => [item.id, item]),
+	// 	)
+	// 		// Convert the map values back to an array
+	// 		.values(),
+	// ];
+
+	// 非管理員要過濾公共 component
+	if (!authStore.user.is_admin) {
+		data = data.filter((item) => publicComponentID.has(item.id));
+	}
+
+	// 排序 + 去重（metrotaipei 排後）
+	const uniqueData = [
+		...new Map(
+			data
+				.sort((a) => (a.city === "metrotaipei" ? 1 : -1))
+				.map((item) => [item.id, item]),
+		).values(),
 	];
+
 	allComponents.value = uniqueData;
 	contentStore.loading = false;
 }
 function handleSubmit() {
 	contentStore.editDashboard.components =
-		contentStore.editDashboard.components?.concat(componentsSelected.value) ?? componentsSelected.value;
+		contentStore.editDashboard.components?.concat(
+			componentsSelected.value,
+		) ?? componentsSelected.value;
 	handleClose();
 }
 function handleClose() {
@@ -66,92 +90,97 @@ onMounted(() => {
 </script>
 
 <template>
-  <DialogContainer
-    dialog="addComponent"
-    @on-close="handleClose"
-  >
-    <div class="addcomponent">
-      <div class="addcomponent-header">
-        <h2>新增組件至儀表板</h2>
-        <div class="addcomponent-header-search">
-          <div>
-            <div>
-              <input
-                v-model="searchName"
-                type="text"
-                placeholder="以名稱搜尋 (Enter)"
-                @keypress.enter="handleSearch"
-              >
-              <span
-                v-if="searchName"
-                @click="
-                  () => {
-                    searchName = '';
-                    handleSearch();
-                  }
-                "
-              >cancel</span>
-            </div>
-            <div>
-              <input
-                v-model="searchIndex"
-                type="text"
-                placeholder="以Index搜尋 (Enter)"
-                @keypress.enter="handleSearch"
-              >
-              <span
-                v-if="searchIndex"
-                @click="
-                  () => {
-                    searchIndex = '';
-                    handleSearch();
-                  }
-                "
-              >cancel</span>
-            </div>
-          </div>
-          <div>
-            <button @click="handleClose">
-              取消
-            </button>
-            <button
-              v-if="componentsSelected?.length > 0"
-              @click="handleSubmit"
-            >
-              <span>add_chart</span>確認新增
-            </button>
-          </div>
-        </div>
-      </div>
-      <p :style="{ margin: '1rem 0 0.5rem' }">
-        計 {{ availableComponents?.length }} 個組件符合篩選條件 | 共選取
-        {{ componentsSelected?.length }} 個
-      </p>
+	<DialogContainer dialog="addComponent" @on-close="handleClose">
+		<div class="addcomponent">
+			<div class="addcomponent-header">
+				<h2>新增組件至儀表板</h2>
+				<div class="addcomponent-header-search">
+					<div>
+						<div>
+							<input
+								v-model="searchName"
+								type="text"
+								placeholder="以名稱搜尋 (Enter)"
+								@keypress.enter="handleSearch"
+							/>
+							<span
+								v-if="searchName"
+								@click="
+									() => {
+										searchName = '';
+										handleSearch();
+									}
+								"
+								>cancel</span
+							>
+						</div>
+						<div>
+							<input
+								v-model="searchIndex"
+								type="text"
+								placeholder="以Index搜尋 (Enter)"
+								@keypress.enter="handleSearch"
+							/>
+							<span
+								v-if="searchIndex"
+								@click="
+									() => {
+										searchIndex = '';
+										handleSearch();
+									}
+								"
+								>cancel</span
+							>
+						</div>
+					</div>
+					<div>
+						<button @click="handleClose">取消</button>
+						<button
+							v-if="componentsSelected?.length > 0"
+							@click="handleSubmit"
+						>
+							<span>add_chart</span>確認新增
+						</button>
+					</div>
+				</div>
+			</div>
+			<p :style="{ margin: '1rem 0 0.5rem' }">
+				計 {{ availableComponents?.length }} 個組件符合篩選條件 | 共選取
+				{{ componentsSelected?.length }} 個
+			</p>
 
-      <div class="addcomponent-list">
-        <div
-          v-for="item in availableComponents"
-          :key="`${item.id}-${item.city}`"
-        >
-          <input
-            :id="`${item.name}-${item.city}`"
-            v-model="componentsSelected"
-            type="checkbox"
-            :value="{ id: item.id, name: item.name, city: item.city }"
-          >
-          <label :for="`${item.name}-${item.city}`">
-            <div class="addcomponent-list-item">
-              <DashboardComponent
-                :config="item"
-                :city-tag="contentStore.cityManager.getTagList(item.city)"
-                mode="preview"
-              />
-            </div>
-          </label>
-        </div>
-      </div>
-    </div>
-  </DialogContainer>
+			<div class="addcomponent-list">
+				<div
+					v-for="item in availableComponents"
+					:key="`${item.id}-${item.city}`"
+				>
+					<input
+						:id="`${item.name}-${item.city}`"
+						v-model="componentsSelected"
+						type="checkbox"
+						:value="{
+							id: item.id,
+							name: item.name,
+							city: item.city,
+						}"
+					/>
+					<label :for="`${item.name}-${item.city}`">
+						<div class="addcomponent-list-item">
+							<DashboardComponent
+								:config="item"
+								:city-tag="
+									contentStore.cityManager.getTagList(
+										item.city,
+									)
+								"
+								mode="preview"
+							/>
+						</div>
+					</label>
+				</div>
+			</div>
+		</div>
+	</DialogContainer>
 </template>
 
 <style scoped lang="scss">
@@ -237,7 +266,9 @@ onMounted(() => {
 		&-item {
 			border-radius: 5px;
 			border: solid 1px var(--color-border);
-			transition: border-color 0.2s, border-width 0.2s;
+			transition:
+				border-color 0.2s,
+				border-width 0.2s;
 			cursor: pointer;
 		}
 
