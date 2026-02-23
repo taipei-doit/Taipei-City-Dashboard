@@ -51,48 +51,40 @@ def _transfer(**kwargs):
         }
     )
 
-    # 轉換成與台北市資料相同的結構
-    melted_data = data.melt(id_vars=["year"], var_name="age_gender", value_name="percentage")
+    # 將百分比欄位轉換為浮點數
+    percent_cols = [c for c in data.columns if c != "year"]
+    data[percent_cols] = data[percent_cols].apply(pd.to_numeric, errors="coerce")
 
-    # 解析 `age_gender` 欄位來對應 `age_structure` 和 `gender`
-    age_mapping = {
-        "15-24_male": "就業人口按年齡別/15-24歲",
-        "15-24_female": "就業人口按年齡別/15-24歲",
-        "25-29_male": "就業人口按年齡別/25-29歲",
-        "25-29_female": "就業人口按年齡別/25-29歲",
-        "30-34_male": "就業人口按年齡別/30-34歲",
-        "30-34_female": "就業人口按年齡別/30-34歲",
-        "35-39_male": "就業人口按年齡別/35-39歲",
-        "35-39_female": "就業人口按年齡別/35-39歲",
-        "40-44_male": "就業人口按年齡別/40-44歲",
-        "40-44_female": "就業人口按年齡別/40-44歲",
-        "45-49_male": "就業人口按年齡別/45-49歲",
-        "45-49_female": "就業人口按年齡別/45-49歲",
-        "50-54_male": "就業人口按年齡別/50-54歲",
-        "50-54_female": "就業人口按年齡別/50-54歲",
-        "55-59_male": "就業人口按年齡別/55-59歲",
-        "55-59_female": "就業人口按年齡別/55-59歲",
-        "60-64_male": "就業人口按年齡別/60-64歲",
-        "60-64_female": "就業人口按年齡別/60-64歲",
-        "65_above_male": "就業人口按年齡別/65歲以上",
-        "65_above_female": "就業人口按年齡別/65歲以上",
-    }
+    # 定義年齡組對應 (male_col, female_col, age_label)
+    age_groups = [
+        ("15-24_male", "15-24_female", "就業人口按年齡別/15-24歲"),
+        ("25-29_male", "25-29_female", "就業人口按年齡別/25-29歲"),
+        ("30-34_male", "30-34_female", "就業人口按年齡別/30-34歲"),
+        ("35-39_male", "35-39_female", "就業人口按年齡別/35-39歲"),
+        ("40-44_male", "40-44_female", "就業人口按年齡別/40-44歲"),
+        ("45-49_male", "45-49_female", "就業人口按年齡別/45-49歲"),
+        ("50-54_male", "50-54_female", "就業人口按年齡別/50-54歲"),
+        ("55-59_male", "55-59_female", "就業人口按年齡別/55-59歲"),
+        ("60-64_male", "60-64_female", "就業人口按年齡別/60-64歲"),
+        ("65_above_male", "65_above_female", "就業人口按年齡別/65歲以上"),
+    ]
 
-    # 提取 `age_structure` 和 `gender`
-    melted_data["age_structure"] = melted_data["age_gender"].map(age_mapping)
-    melted_data["gender"] = melted_data["age_gender"].apply(lambda x: "男" if "male" in x else "女")
+    # 建構男、女、總計的資料列
+    rows = []
+    for _, row in data.iterrows():
+        year = row["year"]
+        for male_col, female_col, age_label in age_groups:
+            male_val = row[male_col]
+            female_val = row[female_col]
+            total_val = round(male_val + female_val, 2)
+            rows.append({"year": year, "gender": "男", "age_structure": age_label, "percentage": male_val})
+            rows.append({"year": year, "gender": "女", "age_structure": age_label, "percentage": female_val})
+            rows.append({"year": year, "gender": "總計", "age_structure": age_label, "percentage": total_val})
 
-    # 民國年份轉換為西元（例如 67 年 → 1978 年）
-    melted_data["year"] = melted_data["year"].astype(int) + 1911
-
-    # 移除不需要的欄位
-    melted_data = melted_data.drop(columns=["age_gender"])
-
-    # 重新排列欄位順序
-    melted_data = melted_data[["year", "gender", "age_structure", "percentage"]]
+    melted_data = pd.DataFrame(rows)
     melted_data["data_time"] = get_tpe_now_time_str(is_with_tz=True)
 
-    print(f"ready_data =========== {melted_data.head()}")
+    print(f"ready_data =========== {melted_data.head(10)}")
 
     
     engine = create_engine(ready_data_db_uri)
