@@ -28,8 +28,8 @@ def _transfer(**kwargs):
 
 
     data = raw_data.copy()
-    # ** 只保留 "新北市- 計" 的資料**
-    data = data[data["field1"].str.contains("新北市- 計")].copy()
+    # ** 只保留 "新北市...計" 的資料 (全市合計)**
+    data = data[data["field1"].str.contains(r"新北市.*計")].copy()
 
     # ** 提取年份數字 (民國/西元 皆適用)**
     data["end_of_year"] = data["field1"].str.extract(r"(\d{4})").astype(int)
