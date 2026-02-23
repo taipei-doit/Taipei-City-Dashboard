@@ -723,15 +723,15 @@ export const useMapStore = defineStore("map", {
 			const layers = Object.keys(this.deckGlLayer).map((index) => {
 				const l = this.deckGlLayer[index];
 				switch (l.type) {
-					case "ArcLayer":
-						return new ArcLayer(l.config);
-					case "AnimatedArcLayer":
-						return new AnimatedArcLayer({
-							...l.config,
-							coef: this.step / 1000,
-						});
-					default:
-						break;
+				case "ArcLayer":
+					return new ArcLayer(l.config);
+				case "AnimatedArcLayer":
+					return new AnimatedArcLayer({
+						...l.config,
+						coef: this.step / 1000,
+					});
+				default:
+					break;
 				}
 			});
 			this.overlay.setProps({
@@ -1433,16 +1433,16 @@ export const useMapStore = defineStore("map", {
 
 						const getCrowdColor = (level) => {
 							switch (level) {
-								case "1":
-									return "🟩";
-								case "2":
-									return "🟨";
-								case "3":
-									return "🟧";
-								case "4":
-									return "🟥";
-								default:
-									return "⬜";
+							case "1":
+								return "🟩";
+							case "2":
+								return "🟨";
+							case "3":
+								return "🟧";
+							case "4":
+								return "🟥";
+							default:
+								return "⬜";
 							}
 						};
 
