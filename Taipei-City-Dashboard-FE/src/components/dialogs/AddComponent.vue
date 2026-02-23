@@ -7,11 +7,13 @@ import DashboardComponent from "../../dashboardComponent/DashboardComponent.vue"
 
 import { useDialogStore } from "../../store/dialogStore";
 import { useContentStore } from "../../store/contentStore";
+import { useAuthStore } from "../../store/authStore";
 
 import DialogContainer from "./DialogContainer.vue";
 
 const dialogStore = useDialogStore();
 const contentStore = useContentStore();
+const authStore = useAuthStore();
 
 const allComponents = ref(null);
 const componentsSelected = ref([]);
@@ -20,9 +22,10 @@ const searchIndex = ref("");
 
 // Filters out components already in the dashboard
 const availableComponents = computed(() => {
-	const taken = contentStore.editDashboard.components?.map((item) => item.id) || [];
+	const taken =
+		contentStore.editDashboard.components?.map((item) => item.id) || [];
 	const available = allComponents.value?.filter(
-		(item) => !taken.includes(+item.id)
+		(item) => !taken.includes(+item.id),
 	);
 	return available;
 });
@@ -35,21 +38,31 @@ async function handleSearch() {
 			searchbyname: searchName.value,
 		},
 	});
-	const data = response.data.data || [];
-	const uniqueData = [...new Map(data
-		// Sort the data to ensure that items with city 'metrotaipei' are at the end
-		.sort((a) => a.city === 'metrotaipei' ? 1 : -1)
-		// Create a map with item.id as the key to remove duplicates
-		.map(item => [item.id, item]))
-		// Convert the map values back to an array
-		.values()
+	let data = response.data.data || [];
+	let publicComponentID = await contentStore.getPublicComponents();
+
+	// 非管理員要過濾公共 component
+	if (!authStore.user.is_admin) {
+		data = data.filter((item) => publicComponentID.has(item.id));
+	}
+
+	// 排序 + 去重（metrotaipei 排後）
+	const uniqueData = [
+		...new Map(
+			data
+				.sort((a) => (a.city === "metrotaipei" ? 1 : -1))
+				.map((item) => [item.id, item]),
+		).values(),
 	];
+
 	allComponents.value = uniqueData;
 	contentStore.loading = false;
 }
 function handleSubmit() {
 	contentStore.editDashboard.components =
-		contentStore.editDashboard.components?.concat(componentsSelected.value) ?? componentsSelected.value;
+		contentStore.editDashboard.components?.concat(
+			componentsSelected.value,
+		) ?? componentsSelected.value;
 	handleClose();
 }
 function handleClose() {
@@ -137,13 +150,21 @@ onMounted(() => {
             :id="`${item.name}-${item.city}`"
             v-model="componentsSelected"
             type="checkbox"
-            :value="{ id: item.id, name: item.name, city: item.city }"
+            :value="{
+              id: item.id,
+              name: item.name,
+              city: item.city,
+            }"
           >
           <label :for="`${item.name}-${item.city}`">
             <div class="addcomponent-list-item">
               <DashboardComponent
                 :config="item"
-                :city-tag="contentStore.cityManager.getTagList(item.city)"
+                :city-tag="
+                  contentStore.cityManager.getTagList(
+                    item.city,
+                  )
+                "
                 mode="preview"
               />
             </div>
@@ -237,7 +258,9 @@ onMounted(() => {
 		&-item {
 			border-radius: 5px;
 			border: solid 1px var(--color-border);
-			transition: border-color 0.2s, border-width 0.2s;
+			transition:
+				border-color 0.2s,
+				border-width 0.2s;
 			cursor: pointer;
 		}
 
