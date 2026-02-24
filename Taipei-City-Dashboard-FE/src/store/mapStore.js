@@ -53,6 +53,10 @@ import { cutRouteSegment } from "../assets/utilityFunctions/getRouteForAnimation
 import { interpolateAlongSegment } from "../assets/utilityFunctions/geometryUtils.js";
 import { updateCarsPosition } from "../assets/utilityFunctions/mrtCars.js";
 import { getPopupCoordinates } from "../assets/utilityFunctions/getPopupCoordinates.js";
+import {
+	getCrowdColor,
+	mrtLineColor,
+} from "../assets/utilityFunctions/getThematicColor.js";
 
 export const useMapStore = defineStore("map", {
 	state: () => ({
@@ -724,15 +728,15 @@ export const useMapStore = defineStore("map", {
 			const layers = Object.keys(this.deckGlLayer).map((index) => {
 				const l = this.deckGlLayer[index];
 				switch (l.type) {
-				case "ArcLayer":
-					return new ArcLayer(l.config);
-				case "AnimatedArcLayer":
-					return new AnimatedArcLayer({
-						...l.config,
-						coef: this.step / 1000,
-					});
-				default:
-					break;
+					case "ArcLayer":
+						return new ArcLayer(l.config);
+					case "AnimatedArcLayer":
+						return new AnimatedArcLayer({
+							...l.config,
+							coef: this.step / 1000,
+						});
+					default:
+						break;
 				}
 			});
 			this.overlay.setProps({
@@ -948,10 +952,8 @@ export const useMapStore = defineStore("map", {
 			this.currentLayers.push(map_config.layerId);
 			this.mapConfigs[map_config.layerId] = map_config;
 
-			const { layerId } = map_config;
-
 			// 紀錄資料更新時間
-			this.layerUpdateTime[layerId] = new Date();
+			this.layerUpdateTime[map_config.layerId] = new Date();
 
 			// 注意重複加入Id
 			if (!this.currentVisibleLayers.includes(map_config.layerId)) {
@@ -1286,15 +1288,6 @@ export const useMapStore = defineStore("map", {
 					const sourceId = `mrt-2d-source-${map_config.layerId}`;
 					const layerId = `mrt-2d-circles-${map_config.layerId}`;
 
-					// 各捷運路線對應圓圈顏色
-					const circleColor = {
-						metro_br_line_car: "#C48C31",
-						metro_bl_line_car: "#0070BD",
-						metro_g_line_car: "#038258",
-						metro_o_line_car: "#F5B41C",
-						metro_r_line_car: "#E1002C",
-					};
-
 					if (!map.getSource(sourceId)) {
 						map.addSource(sourceId, {
 							type: "geojson",
@@ -1310,7 +1303,7 @@ export const useMapStore = defineStore("map", {
 							source: sourceId,
 							paint: {
 								"circle-radius": 10,
-								"circle-color": circleColor[map_config.index],
+								"circle-color": mrtLineColor[map_config.index],
 								"circle-stroke-width": 2,
 								"circle-stroke-color": "#FFFFFF",
 								"circle-opacity": 0.8,
@@ -1431,22 +1424,6 @@ export const useMapStore = defineStore("map", {
 
 						// 清空 tooltip 內容
 						customLayer.tooltipContent.innerHTML = "";
-
-						const getCrowdColor = (level) => {
-							switch (level) {
-							case "1":
-								return "🟩";
-							case "2":
-								return "🟨";
-							case "3":
-								return "🟧";
-							case "4":
-								return "🟥";
-							default:
-								return "⬜";
-							}
-						};
-
 						const infoContainer = document.createElement("div");
 						const fields = map_config.property.map((prop) => ({
 							label: prop.name,
@@ -1922,7 +1899,7 @@ export const useMapStore = defineStore("map", {
 			// 取前 3 個不同圖層最近的 feature
 			const closestLayers = Object.keys(layerClosestFeature).slice(0, 3);
 			for (const layerId of closestLayers) {
-				const {feature} = layerClosestFeature[layerId];
+				const { feature } = layerClosestFeature[layerId];
 				parsedPopupContent.push(feature);
 				mapConfigs.push(this.mapConfigs[layerId]);
 			}
@@ -1941,7 +1918,7 @@ export const useMapStore = defineStore("map", {
 				.addTo(this.map);
 
 			// 定義 popup 給 PopupComponent 內使用
-			const {popup} = this;
+			const { popup } = this;
 
 			// Mount a vue component (MapPopup) to the id "vue-popup-content" and pass in data
 			const PopupComponent = defineComponent({
