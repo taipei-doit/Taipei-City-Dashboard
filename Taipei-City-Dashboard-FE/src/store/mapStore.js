@@ -1303,7 +1303,7 @@ export const useMapStore = defineStore("map", {
 							source: sourceId,
 							paint: {
 								"circle-radius": 10,
-								"circle-color": circleColor[map_config.index],
+								"circle-color": mrtLineColor[map_config.index],
 								"circle-stroke-width": 2,
 								"circle-stroke-color": "#FFFFFF",
 								"circle-opacity": 0.8,
