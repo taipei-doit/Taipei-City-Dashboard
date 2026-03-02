@@ -52,6 +52,7 @@ import { AnimatedArcLayer } from "../assets/configs/mapbox/arcAnimate.js";
 import { cutRouteSegment } from "../assets/utilityFunctions/getRouteForAnimation.js";
 import { interpolateAlongSegment } from "../assets/utilityFunctions/geometryUtils.js";
 import { updateCarsPosition } from "../assets/utilityFunctions/mrtCars.js";
+import { getPopupCoordinates } from "../assets/utilityFunctions/getPopupCoordinates.js";
 import {
 	getCrowdColor,
 	mrtLineColor,
@@ -1836,15 +1837,20 @@ export const useMapStore = defineStore("map", {
 				return value;
 			};
 
+			const hitSize = 6;
+
+			const bbox = [
+				[event.point.x - hitSize, event.point.y - hitSize],
+				[event.point.x + hitSize, event.point.y + hitSize],
+			];
+
 			// Gets the info that is contained in the coordinates that the user clicked on (only visible layers)
-			const clickFeatureDatas = this.map.queryRenderedFeatures(
-				event.point,
-				{
-					layers: this.currentVisibleLayers.filter(
-						(layer) => layer.indexOf("-arc") === -1,
-					),
-				},
-			);
+			const clickFeatureDatas = this.map.queryRenderedFeatures(bbox, {
+				layers: this.currentVisibleLayers.filter(
+					(layer) => layer.indexOf("-arc") === -1,
+				),
+			});
+
 			// Return if there is no info in the click
 			if (!clickFeatureDatas || clickFeatureDatas.length === 0) {
 				return;
@@ -1852,32 +1858,68 @@ export const useMapStore = defineStore("map", {
 			// Parse clickFeatureDatas to get the first 3 unique layer datas, skip over already included layers
 			const mapConfigs = [];
 			const parsedPopupContent = [];
-			let previousParsedLayer = "";
+			const layerClosestFeature = {}; // key: layerId, value: { feature, distance }
+			const clickPoint = [event.lngLat.lng, event.lngLat.lat];
 
-			for (let i = 0; i < clickFeatureDatas.length; i++) {
-				if (mapConfigs.length === 3) break;
-				if (previousParsedLayer === clickFeatureDatas[i].layer.id)
-					continue;
+			// 計算每個圖層最近的 feature
+			for (const rawFeature of clickFeatureDatas) {
+				const layerId = rawFeature.layer.id;
 
-				// format properties
-				const feature = { ...clickFeatureDatas[i] };
-				feature.properties = { ...feature.properties };
-				Object.keys(feature.properties).forEach((key) => {
-					feature.properties[key] = formatValue(
-						feature.properties[key],
-						key,
-					);
-				});
+				// 計算距離最近的點
+				const featureCenter =
+					rawFeature.geometry?.type === "Point"
+						? rawFeature.geometry.coordinates
+						: getPopupCoordinates(rawFeature, event.lngLat);
 
-				previousParsedLayer = clickFeatureDatas[i].layer.id;
-				mapConfigs.push(this.mapConfigs[clickFeatureDatas[i].layer.id]);
-				parsedPopupContent.push(feature);
+				const dx = featureCenter[0] - clickPoint[0];
+				const dy = featureCenter[1] - clickPoint[1];
+				const dist2 = dx * dx + dy * dy;
+
+				// 如果是該圖層第一次或更近，就存
+				if (
+					!layerClosestFeature[layerId] ||
+					dist2 < layerClosestFeature[layerId].distance
+				) {
+					// 格式化 properties
+					const feature = { ...rawFeature };
+					feature.geometry =
+						rawFeature.geometry || rawFeature._geometry;
+					feature.properties = { ...rawFeature.properties };
+					Object.keys(feature.properties).forEach((key) => {
+						feature.properties[key] = formatValue(
+							feature.properties[key],
+							key,
+						);
+					});
+
+					layerClosestFeature[layerId] = { feature, distance: dist2 };
+				}
 			}
+
+			// 取前 3 個不同圖層最近的 feature
+			const closestLayers = Object.keys(layerClosestFeature).slice(0, 3);
+			for (const layerId of closestLayers) {
+				const { feature } = layerClosestFeature[layerId];
+				parsedPopupContent.push(feature);
+				mapConfigs.push(this.mapConfigs[layerId]);
+			}
+
+			if (!parsedPopupContent.length) return;
+
 			// Create a new mapbox popup
+			const popupCoords = getPopupCoordinates(
+				parsedPopupContent[0],
+				event.lngLat,
+			);
+
 			this.popup = new mapboxGl.Popup()
-				.setLngLat(event.lngLat)
+				.setLngLat(popupCoords)
 				.setHTML('<div id="vue-popup-content"></div>')
 				.addTo(this.map);
+
+			// 定義 popup 給 PopupComponent 內使用
+			const { popup } = this;
+
 			// Mount a vue component (MapPopup) to the id "vue-popup-content" and pass in data
 			const PopupComponent = defineComponent({
 				extends: MapPopup,
@@ -1971,6 +2013,14 @@ export const useMapStore = defineStore("map", {
 					watch(activeTab, () => {
 						nextTick(() => {
 							handleVideoLoad();
+							const feature = parsedPopupContent[activeTab.value];
+							if (feature && popup) {
+								const newCoords = getPopupCoordinates(
+									feature,
+									event.lngLat,
+								);
+								popup.setLngLat(newCoords);
+							}
 						});
 					});
 
