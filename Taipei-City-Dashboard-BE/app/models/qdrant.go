@@ -11,6 +11,7 @@ import (
 	"net/http"
 	"path/filepath"
 
+	"github.com/sugarme/tokenizer"
 	"github.com/sugarme/tokenizer/pretrained"
 	ort "github.com/yalue/onnxruntime_go"
 )
@@ -132,19 +133,25 @@ func InitLmSession() *ort.DynamicSession[int64, float32] {
 	return session
 }
 
-func GenVector(inputText string) ([]float32, error) {
-	LMConfig := global.LM
-
-	modelDir := LMConfig.ModelPath
-	tokenizerPath := filepath.Join(modelDir, "tokenizer.json")
-
-	// 5) 載入 tokenizer.json（用 sugarme/tokenizer）
+func InitTokenizer() *tokenizer.Tokenizer {
+    modelDir := global.LM.ModelPath
+    tokenizerPath := filepath.Join(modelDir, "tokenizer.json")
 	tk, err := pretrained.FromFile(tokenizerPath)
-	if err != nil {
-		log.Fatalf("load tokenizer error: %v", err)
-	}
+    if err != nil {
+        // 啟動時失敗就報警並停止，這比執行中當機好找原因
+        log.Fatalf("Critical: Failed to load tokenizer: %v", err)
+    }
+    return tk
+}
 
-	// 6) 將查詢字串轉成 input_ids 與 attention_mask
+func GenVector(inputText string) ([]float32, error) {
+    // 1) 載入 tokenizer.json 直接檢查全域變數，不再讀取檔案
+    if global.LMTokenizer == nil {
+        return nil, fmt.Errorf("tokenizer is not initialized")
+    }
+    tk := global.LMTokenizer
+
+	// 2) 將查詢字串轉成 input_ids 與 attention_mask
 	text := "query: " + inputText
 
 	enc, err := tk.EncodeSingle(text) // 預設 addSpecialTokens = true
@@ -162,7 +169,7 @@ func GenVector(inputText string) ([]float32, error) {
 	seqLen := int64(len(ids))
 	batchSize := int64(1)
 
-	// 6) 準備 input_ids tensor [1, seq_len] (int64)
+	// 3) 準備 input_ids tensor [1, seq_len] (int64)
 	idsShape := ort.NewShape(batchSize, seqLen)
 	idsTensor, err := ort.NewEmptyTensor[int64](idsShape)
 	if err != nil {
@@ -175,7 +182,7 @@ func GenVector(inputText string) ([]float32, error) {
 		idsData[i] = int64(v)
 	}
 
-	// 7) 準備 attention_mask tensor [1, seq_len] (int64)
+	// 4) 準備 attention_mask tensor [1, seq_len] (int64)
 	maskShape := ort.NewShape(batchSize, seqLen)
 	maskTensor, err := ort.NewEmptyTensor[int64](maskShape)
 	if err != nil {
@@ -190,7 +197,7 @@ func GenVector(inputText string) ([]float32, error) {
 
 	inputTensors := []*ort.Tensor[int64]{idsTensor, maskTensor}
 
-	// 8) 準備輸出 tensor：last_hidden_state [1, seq_len, 768] (float32)
+	// 5) 準備輸出 tensor：last_hidden_state [1, seq_len, 768] (float32)
 	hiddenSize := int64(768)
 	outShape := ort.NewShape(batchSize, seqLen, hiddenSize)
 	outTensor, err := ort.NewEmptyTensor[float32](outShape)
@@ -203,12 +210,12 @@ func GenVector(inputText string) ([]float32, error) {
 
 	session := global.LMSession
 
-	// 9) 跑一次推論
+	// 6) 跑一次推論
 	if err := session.Run(inputTensors, outputTensors); err != nil {
 		log.Fatalf("session.Run error: %v", err)
 	}
 
-	// 10) 拿出 last_hidden_state 做 mean pooling + L2 normalize
+	// 7) 拿出 last_hidden_state 做 mean pooling + L2 normalize
 	lastHidden := outTensor.GetData() // 長度 = 1 * seqLen * 768
 
 	embedding := make([]float32, hiddenSize)

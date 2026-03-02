@@ -6,6 +6,7 @@ import (
 	"strconv"
 
 	"TaipeiCityDashboardBE/app/models"
+	"TaipeiCityDashboardBE/app/services"
 
 	"github.com/gin-gonic/gin"
 )
@@ -191,7 +192,10 @@ func UpdateComponent(c *gin.Context) {
 		return
 	}
 
-	// 5. Return the component
+	// 5. Trigger Qdrant rebuild in the background
+    go services.RebuildQdrantPublicCollection()
+
+    // 6. Return the component
 	c.JSON(http.StatusOK, gin.H{"status": "success", "data": cityComponent})
 }
 
