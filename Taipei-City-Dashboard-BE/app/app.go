@@ -51,6 +51,7 @@ func StartApplication() {
 
 	// 3. Add common middlewares that need to run on all routes
 	routes.Router.Use(middleware.AddCommonHeaders)
+	routes.Router.Use(middleware.SanitizeXForwardedFor)
 	// routes.Router.Use(cors.New(cors.Config{
 	// 	AllowOrigins:     []string{"https://tuic.gov.taipei"},
 	// 	AllowMethods:     []string{"GET"},
