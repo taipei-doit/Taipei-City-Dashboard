@@ -1,6 +1,7 @@
 package models
 
 import (
+	"context" // Add context import
 	"time"
 )
 
@@ -10,18 +11,20 @@ type ChatLog struct {
 	Session	   	   string 			`json:"session".        gorm:"column:session;type:varchar;not null;index:idx_chat_logs_session"`
 	Question	   string 			`json:"question"        gorm:"column:question;type:text"`
 	Answer         string 			`json:"answer"          gorm:"column:answer;type:text"`
+	IPAddress      string           `json:"ip_address"      gorm:"column:ip_address;type:varchar(45);not null"`
 	UserID         int 				`json:"-" 				gorm:"column:user_id;type:int;not null;index:idx_chat_logs_user_id"`
 	CreatedAt      time.Time        `json:"created_at" 		gorm:"column:created_at;type:timestamp with time zone;not null"`
 	UpdatedAt      time.Time        `json:"-" 				gorm:"column:updated_at;type:timestamp with time zone;not null"`
 }
 
 
-func CreateChatLog(Session string, Question string, Answer string,UserID int)(chatLog ChatLog,err error){
+func CreateChatLog(Session string, Question string, Answer string, IPAddress string, UserID int)(chatLog ChatLog,err error){
 
 	chatLog = ChatLog{
 		Session:   Session,
 		Question:  Question,
 		Answer:    Answer,
+		IPAddress: IPAddress,
 		UserID:    UserID,
 		CreatedAt: time.Now(),
 		UpdatedAt: time.Now(),
@@ -51,6 +54,13 @@ func GetALLChatLogSession(UserID int)(chatLogList []ChatLog,err error){
 	return chatLogList, nil
 }
 
+// DeleteOldChatLogs deletes chat logs older than the specified number of months.
+// It returns the number of rows affected and an error, if any.
+func DeleteOldChatLogs(ctx context.Context, months int) (int64, error) { // Modified function signature
+    cutoffDate := time.Now().AddDate(0, -months, 0)
+    db := DBManager.WithContext(ctx).Where("created_at < ?", cutoffDate).Delete(&ChatLog{}) // Use WithContext
+    return db.RowsAffected, db.Error // Return rows affected and error
+}
 
 func GetChatLogDetailBySession(Session string,UserID int)(chatLogList []ChatLog,err error){
 

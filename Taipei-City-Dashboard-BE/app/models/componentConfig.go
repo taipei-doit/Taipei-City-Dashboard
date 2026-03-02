@@ -99,7 +99,45 @@ type ComponentChart struct {
 	Types pq.StringArray `json:"types" gorm:"column:types;type:varchar[]"`
 	Unit  string         `json:"unit" gorm:"column:unit;type:varchar"`
 }
+
+// QuertChartAndConponentForQdrant defines the structure for query_charts&component data fetched for Qdrant.
+// It's a subset of fields from query_charts and components.
+type QuertChartAndConponentForQdrant struct {
+    ID       string `gorm:"column:id"`
+    Index    string `gorm:"column:index"`
+    Name     string `gorm:"column:name"`
+    City     string `gorm:"column:city"`
+    LongDesc string `gorm:"column:long_desc"`
+    UseCase  string `gorm:"column:use_case"`
+}
+
 /* ----- Handlers ----- */
+
+// GetPublicComponentsForQdrant fetches all query_charts and components that are part of a public (non-personal) dashboard.
+// This data is used to rebuild the Qdrant vector index.
+func GetPublicComponentsForQdrant() (results []QuertChartAndConponentForQdrant, err error) {
+    // subQueryGroups := SELECT DISTINCT id FROM "groups" g WHERE is_personal IS FALSE
+    subQueryGroups := DBManager.Table("groups").Select("id").Where("is_personal IS FALSE")
+
+    // subQueryDashboards := SELECT DISTINCT dashboard_id FROM dashboard_groups dg WHERE group_id IN (subQueryGroups)
+    subQueryDashboards := DBManager.Table("dashboard_groups").Select("dashboard_id").Where("group_id IN (?)", subQueryGroups)
+
+    // subQueryComponents := SELECT DISTINCT unnest(components) FROM dashboards d WHERE id IN (subQueryDashboards)
+    subQueryComponents := DBManager.Table("dashboards").Select("DISTINCT unnest(components)").Where("id IN (?)", subQueryDashboards)
+
+    // Final Query
+    err = DBManager.Table("query_charts as qc").
+        Select("c.id, qc.index, c.name, qc.city, qc.long_desc, qc.use_case").
+        Joins("INNER JOIN components c ON qc.index = c.index").
+        Where("c.id IN (?)", subQueryComponents).
+        Scan(&results).Error
+
+    if err != nil {
+        return nil, err
+    }
+
+    return results, nil
+}
 
 // createTempComponentDB joins the components, component_maps, and component_charts tables and selects the columns to return.
 func createTempComponentDB() *gorm.DB {

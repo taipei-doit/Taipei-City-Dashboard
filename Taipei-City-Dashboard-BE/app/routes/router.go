@@ -74,13 +74,19 @@ func configureUserRoutes() {
 
 // configureComponentRoutes configures all component routes.
 func configureChatLogRoutes() {
-	componentRoutes := RouterGroup.Group("/chatlog")
-	componentRoutes.Use(middleware.LimitAPIRequests(global.ComponentLimitAPIRequestsTimes, global.LimitRequestsDuration))
-	componentRoutes.Use(middleware.LimitTotalRequests(global.ComponentLimitTotalRequestsTimes, global.LimitRequestsDuration))
+	chatLogRoutes := RouterGroup.Group("/chatlog")
+    // Apply the total request limit to all chatlog routes
+    chatLogRoutes.Use(middleware.LimitTotalRequests(global.ComponentLimitTotalRequestsTimes, global.LimitRequestsDuration))
+
+    // POST /chatlog route gets the new strict limit of 60/min
+    chatLogRoutes.POST("/", middleware.LimitAPIRequests(global.ChatLogLimitAPIRequestsTimes, global.LimitRequestsDuration),controllers.CreateChatLog)
+
+    // Other chatlog-related routes keep the general component limit
+    chatLogSessionRoutes := chatLogRoutes.Group("/")
+    chatLogSessionRoutes.Use(middleware.LimitAPIRequests(global.ComponentLimitAPIRequestsTimes, global.LimitRequestsDuration))
 	{
-		componentRoutes.POST("/", controllers.CreateChatLog)
-		componentRoutes.GET("/session", controllers.GetALLChatLog)
-		componentRoutes.GET("/session/:session", controllers.GetChatLogDetailBySession)
+		chatLogSessionRoutes.GET("/session", controllers.GetALLChatLog)
+        chatLogSessionRoutes.GET("/session/:session", controllers.GetChatLogDetailBySession)
 	}
 }
 

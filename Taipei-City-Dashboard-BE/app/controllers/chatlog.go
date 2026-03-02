@@ -24,11 +24,12 @@ func CreateChatLog(c *gin.Context) {
 	session := c.PostForm("session")
 	question := c.PostForm("question")
 	answer := c.PostForm("answer")
+	ipAddress := c.ClientIP()
 	session = html.EscapeString(session)
 	question = html.EscapeString(question)
 	answer = html.EscapeString(answer)
 
-	chatLog, _ = models.CreateChatLog(session, question, answer, accountID.(int))
+	chatLog, _ = models.CreateChatLog(session, question, answer, ipAddress, accountID.(int))
 	c.JSON(http.StatusOK, gin.H{"status": "success", "data": chatLog})
 }
 

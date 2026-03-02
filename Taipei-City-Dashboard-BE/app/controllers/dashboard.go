@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"TaipeiCityDashboardBE/app/models"
+	"TaipeiCityDashboardBE/app/services"
 	"TaipeiCityDashboardBE/app/util"
 
 	"github.com/gin-gonic/gin"
@@ -233,6 +234,9 @@ func UpdateDashboard(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": err.Error()})
 		return
 	}
+
+	// Trigger Qdrant rebuild in the background
+    go services.RebuildQdrantPublicCollection()
 
 	c.JSON(http.StatusOK, gin.H{"status": "success", "data": dashboard})
 }

@@ -33,11 +33,21 @@ func StartApplication() {
 	// 1. Connect to postgreSQL and Redis
 	models.ConnectToDatabases("MANAGER", "DASHBOARD")
 	cache.ConnectToRedis()
+	initial.InitCronJobs()
 
 	global.LMSession = models.InitLmSession()
+	global.LMTokenizer = models.InitTokenizer()
 
 	// 2. Initiate default Gin router with logger and recovery middleware
 	routes.Router = gin.Default()
+
+	// Set trusted proxies to ensure ClientIP() returns the user's actual IP.
+    // This is necessary when running behind a reverse proxy like Nginx.
+    // Trusting common private network ranges is a safe default for containerized environments.
+    if err := routes.Router.SetTrustedProxies([]string{"127.0.0.1", "::1", "10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16"}); err != nil {
+        logs.FWarn("SetTrustedProxies failed: %v", err)
+    } 
+
 
 	// 3. Add common middlewares that need to run on all routes
 	routes.Router.Use(middleware.AddCommonHeaders)
