@@ -50,7 +50,7 @@ def _transfer(**kwargs):
         if not unique_names:
             try:
                 # 刪除所有 disaster_sus_*_% 相關的 component、query_charts、component_charts、dashboard、dashboard_groups
-                dashboard_hook = PostgresHook(postgres_conn_id="dashboad-postgre")
+                dashboard_hook = PostgresHook(postgres_conn_id="dashboard-postgre")
                 status_keys = ["disaster_sus_water", "disaster_sus_power", "disaster_sus_tel", "disaster_sus_gas"]
                 for status_key in status_keys:
                     like_pattern = f"{status_key}_%"
