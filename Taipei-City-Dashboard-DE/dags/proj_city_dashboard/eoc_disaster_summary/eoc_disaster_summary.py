@@ -80,7 +80,7 @@ def _transfer(**kwargs):
         # 若有此欄位，將缺失值填為空字串
         data["case_location_district"] = data["case_location_district"].fillna("")
     gdata = add_point_wkbgeometry_column_to_df(
-        data, x=data["lng"], y=data["lat"], from_crs=FROM_CRS
+        data, x=data["lng"], y=data["lat"], from_crs=FROM_CRS, to_crs=3826
     )
     # sele
     gdata['data_time'] = get_tpe_now_time_str()
