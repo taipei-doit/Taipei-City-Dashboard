@@ -34,11 +34,13 @@ def _transfer(**kwargs):
                     FROM eoc_damage_case_tpe
                     WHERE data_time >= NOW() - INTERVAL '24 hours'
                     AND ABS(EXTRACT(EPOCH FROM (data_time - report_send_time)) / 86400) <= 5
+                    AND dp_name NOT ILIKE '%測試%' AND dp_name NOT ILIKE '%test%'
                     UNION ALL
                     SELECT dpname AS name
                     FROM eoc_disaster_summary_tpe
                     WHERE data_time >= NOW() - INTERVAL '24 hours'
                     AND ABS(EXTRACT(EPOCH FROM (data_time - case_time)) / 86400) <= 5
+                    AND dpname NOT ILIKE '%測試%' AND dpname NOT ILIKE '%test%'
                 ) t
         """)
         unique_names = [row[0] for row in connection.execute(names_sql).fetchall()]
