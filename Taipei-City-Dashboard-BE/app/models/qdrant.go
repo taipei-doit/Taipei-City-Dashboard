@@ -136,8 +136,7 @@ func InitLmSession() *ort.DynamicSession[int64, float32] {
 func InitTokenizer() *tokenizer.Tokenizer {
     modelDir := global.LM.ModelPath
     tokenizerPath := filepath.Join(modelDir, "tokenizer.json")
-
-    tk, err := pretrained.FromFile(tokenizerPath)
+	tk, err := pretrained.FromFile(tokenizerPath)
     if err != nil {
         // 啟動時失敗就報警並停止，這比執行中當機好找原因
         log.Fatalf("Critical: Failed to load tokenizer: %v", err)
@@ -146,7 +145,7 @@ func InitTokenizer() *tokenizer.Tokenizer {
 }
 
 func GenVector(inputText string) ([]float32, error) {
-	// 1) 載入 tokenizer.json 直接檢查全域變數，不再讀取檔案
+    // 1) 載入 tokenizer.json 直接檢查全域變數，不再讀取檔案
     if global.LMTokenizer == nil {
         return nil, fmt.Errorf("tokenizer is not initialized")
     }

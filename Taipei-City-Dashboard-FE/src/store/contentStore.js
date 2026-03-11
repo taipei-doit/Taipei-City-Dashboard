@@ -823,25 +823,10 @@ export const useContentStore = defineStore("content", {
 		// 1. Search through all the components (used in /component)
 		async getAllComponents(params) {
 			const authStore = useAuthStore();
-			const response = await http.get(`/component/`, {
-				params,
-			});
-
-			const publicComponentID = await this.getPublicComponents(params);
-
-			// const uniqueData = [
-			// 	...new Map(
-			// 		response.data.data
-			// 			// Sort the data to ensure that items with city 'metrotaipei' are at the end
-			// 			.sort((a) => (a.city === "metrotaipei" ? 1 : -1))
-			// 			// Create a map with item.id as the key to remove duplicates
-			// 			.map((item) => [item.id, item]),
-			// 	)
-			// 		// Convert the map values back to an array
-			// 		.values(),
-			// ];
-
-			// this.components = uniqueData;
+			const [response, publicComponentID] = await Promise.all([
+				http.get(`/component/`, { params }),
+				this.getPublicComponents(params),
+			]);
 
 			// 先依權限決定資料來源(一般使用者只能看到公共儀表板組件)
 			let data = response.data.data || [];
@@ -861,7 +846,7 @@ export const useContentStore = defineStore("content", {
 
 			this.loading = false;
 		},
-		// 1-1. Search Public components only
+		// 1.1 Get Public Components
 		async getPublicComponents(params) {
 			const filterRawData = await http.get(`/dashboard/`, { params });
 

@@ -236,7 +236,7 @@ func UpdateDashboard(c *gin.Context) {
 	}
 
 	// Trigger Qdrant rebuild in the background
-	go services.RebuildQdrantPublicCollection()
+    go services.RebuildQdrantPublicCollection()
 
 	c.JSON(http.StatusOK, gin.H{"status": "success", "data": dashboard})
 }

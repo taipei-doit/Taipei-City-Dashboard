@@ -84,10 +84,10 @@ func configureChatLogRoutes() {
     // Other chatlog-related routes keep the general component limit
     chatLogSessionRoutes := chatLogRoutes.Group("/")
     chatLogSessionRoutes.Use(middleware.LimitAPIRequests(global.ComponentLimitAPIRequestsTimes, global.LimitRequestsDuration))
-    {
-        chatLogSessionRoutes.GET("/session", controllers.GetALLChatLog)
+	{
+		chatLogSessionRoutes.GET("/session", controllers.GetALLChatLog)
         chatLogSessionRoutes.GET("/session/:session", controllers.GetChatLogDetailBySession)
-    }
+	}
 }
 
 // configureComponentRoutes configures all component routes.

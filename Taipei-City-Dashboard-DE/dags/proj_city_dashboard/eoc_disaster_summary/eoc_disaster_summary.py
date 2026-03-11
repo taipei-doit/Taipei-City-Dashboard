@@ -6,18 +6,17 @@ def _transfer(**kwargs):
     '''
     data example
     {
-        "DPID": "d9ea6131-9f91-4100-8607-717095df89e7",
-        "DPName": "尼伯特颱風",
-        "CaseID": "02373bed-8ca2-4e63-bcf8-886a6f9edaca",
-        "CaseTime": "2016-07-07T16:44:52",
-        "PName": "民生、基礎設施災情",
-        "CaseLocationDistrict": "松山區",
-        "CaseLocationDescription": "南京東路五段250 巷 18 弄1 號",
-        "CaseDescription": "路燈上之纜線垂落，請清除以免掉落造成危險。",
-        "CaseComplete": true,
-        "Wgs84X": 121.566231,
-        "Wgs84Y": 25.0503178,
-        "CaseSerious":false
+        "DPID": "290e30bb-d2b1-448d-8a51-0099a738734a",
+        "DPName": "1140414_陽明山小油坑森林火災",
+        "CaseID": "171a1cdf-8c54-414b-8bd3-7e4f499b1795",
+        "CaseTime": "2025-12-24T10:23:00",
+        "DisasterName": "其他(前述以外火災)",
+        "Address": "忠孝東路三段3號",
+        "CaseDesc": "test 1224測試",
+        "ProcStatus": false,
+        "WGS84X": 121.533379,
+        "WGS84Y": 25.042028,
+        "IsSerious": false
     }
     '''
     from utils.load_stage import save_geodataframe_to_postgresql,update_lasttime_in_data_to_dataset_info
@@ -37,8 +36,7 @@ def _transfer(**kwargs):
     load_behavior = dag_infos.get('load_behavior')
     default_table = dag_infos.get('ready_data_default_table')
     history_table = dag_infos.get('ready_data_history_table')
-    history_table = dag_infos.get('ready_data_history_table')
-    URL = '''https://tfd.blob.core.windows.net/blobfs/data/GetDisasterSummary.json'''
+    URL = '''https://tfd.blob.core.windows.net/blobfs/data/TEST-T-TSAGEDisasterSummary.json'''
     GEOMETRY_TYPE = "Point"   
     FROM_CRS = 4326
     raw_data = requests.get(URL)
@@ -64,17 +62,23 @@ def _transfer(**kwargs):
         "DPName": "dpname",
         "CaseID": "caseid",
         "CaseTime": "case_time",
-        "PName": "pname",
-        "CaseLocationDistrict": "case_location_district",
-        "CaseLocationDescription": "case_location_description",
-        "CaseDescription": "case_description",
-        "CaseComplete": "case_complete",
-        "Wgs84X": "lng",
-        "Wgs84Y": "lat",
-        "CaseSerious":"case_serious"
+        "DisasterName": "pname",
+        "District": "case_location_district",
+        "Address": "case_location_description",
+        "CaseDesc": "case_description",
+        "ProcStatus": "case_complete",
+        "WGS84X": "lng",
+        "WGS84Y": "lat",
+        "IsSerious":"case_serious"
         })
     # 將 case_complete 欄位的 True/False 轉換為中文
     data["case_complete"] = data["case_complete"].map({True: "處理完成", False: "處理中"})
+    # 新資料欄位可能沒有行政區 (District) 資訊，給定空字串避免後續操作失敗
+    if "case_location_district" not in data.columns:
+        data["case_location_district"] = ""
+    else:
+        # 若有此欄位，將缺失值填為空字串
+        data["case_location_district"] = data["case_location_district"].fillna("")
     gdata = add_point_wkbgeometry_column_to_df(
         data, x=data["lng"], y=data["lat"], from_crs=FROM_CRS
     )
