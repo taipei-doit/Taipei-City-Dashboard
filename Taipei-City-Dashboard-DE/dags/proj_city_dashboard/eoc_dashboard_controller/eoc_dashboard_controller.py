@@ -33,13 +33,13 @@ def _transfer(**kwargs):
                     SELECT dp_name AS name
                     FROM eoc_damage_case_tpe
                     WHERE data_time >= NOW() - INTERVAL '24 hours'
-                    AND ABS(EXTRACT(EPOCH FROM (data_time - report_send_time)) / 86400) <= 5
+                    AND ABS(EXTRACT(EPOCH FROM (data_time - COALESCE(report_send_time, dp_issue_date_time, data_time))) / 86400) <= 5
                     AND dp_name NOT ILIKE '%測試%' AND dp_name NOT ILIKE '%test%'
                     UNION ALL
                     SELECT dpname AS name
                     FROM eoc_disaster_summary_tpe
                     WHERE data_time >= NOW() - INTERVAL '24 hours'
-                    AND ABS(EXTRACT(EPOCH FROM (data_time - case_time)) / 86400) <= 5
+                    AND ABS(EXTRACT(EPOCH FROM (data_time - COALESCE(case_time, data_time))) / 86400) <= 5
                     AND dpname NOT ILIKE '%測試%' AND dpname NOT ILIKE '%test%'
                 ) t
         """)
@@ -50,7 +50,7 @@ def _transfer(**kwargs):
         if not unique_names:
             try:
                 # 刪除所有 disaster_sus_*_% 相關的 component、query_charts、component_charts、dashboard、dashboard_groups
-                dashboard_hook = PostgresHook(postgres_conn_id="dashboard-postgre")
+                dashboard_hook = PostgresHook(postgres_conn_id="dashboad-postgre")
                 status_keys = ["disaster_sus_water", "disaster_sus_power", "disaster_sus_tel", "disaster_sus_gas"]
                 for status_key in status_keys:
                     like_pattern = f"{status_key}_%"
