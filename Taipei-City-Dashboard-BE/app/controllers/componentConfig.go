@@ -193,9 +193,9 @@ func UpdateComponent(c *gin.Context) {
 	}
 
 	// 5. Trigger Qdrant rebuild in the background
-	go services.RebuildQdrantPublicCollection()
+    go services.RebuildQdrantPublicCollection()
 
-	// 6. Return the component
+    // 6. Return the component
 	c.JSON(http.StatusOK, gin.H{"status": "success", "data": cityComponent})
 }
 

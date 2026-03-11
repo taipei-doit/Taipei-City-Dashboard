@@ -8,12 +8,14 @@ import DashboardComponent from "../../dashboardComponent/DashboardComponent.vue"
 import { useAuthStore } from "../../store/authStore";
 import { useDialogStore } from "../../store/dialogStore";
 import { useContentStore } from "../../store/contentStore";
+import { useAuthStore } from "../../store/authStore";
 
 import DialogContainer from "./DialogContainer.vue";
 
 const authStore = useAuthStore();
 const dialogStore = useDialogStore();
 const contentStore = useContentStore();
+const authStore = useAuthStore();
 
 const allComponents = ref(null);
 const componentsSelected = ref([]);
@@ -40,18 +42,6 @@ async function handleSearch() {
 	});
 	let data = response.data.data || [];
 	let publicComponentID = await contentStore.getPublicComponents();
-
-	// const uniqueData = [
-	// 	...new Map(
-	// 		data
-	// 			// Sort the data to ensure that items with city 'metrotaipei' are at the end
-	// 			.sort((a) => (a.city === "metrotaipei" ? 1 : -1))
-	// 			// Create a map with item.id as the key to remove duplicates
-	// 			.map((item) => [item.id, item]),
-	// 	)
-	// 		// Convert the map values back to an array
-	// 		.values(),
-	// ];
 
 	// 非管理員要過濾公共 component
 	if (!authStore.user.is_admin) {

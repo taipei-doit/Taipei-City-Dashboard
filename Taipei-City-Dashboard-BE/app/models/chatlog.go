@@ -57,11 +57,10 @@ func GetALLChatLogSession(UserID int)(chatLogList []ChatLog,err error){
 // DeleteOldChatLogs deletes chat logs older than the specified number of months.
 // It returns the number of rows affected and an error, if any.
 func DeleteOldChatLogs(ctx context.Context, months int) (int64, error) { // Modified function signature
-	cutoffDate := time.Now().AddDate(0, -months, 0)
-	db := DBManager.WithContext(ctx).Where("created_at < ?", cutoffDate).Delete(&ChatLog{}) // Use WithContext
-	return db.RowsAffected, db.Error // Return rows affected and error
+    cutoffDate := time.Now().AddDate(0, -months, 0)
+    db := DBManager.WithContext(ctx).Where("created_at < ?", cutoffDate).Delete(&ChatLog{}) // Use WithContext
+    return db.RowsAffected, db.Error // Return rows affected and error
 }
-
 
 func GetChatLogDetailBySession(Session string,UserID int)(chatLogList []ChatLog,err error){
 

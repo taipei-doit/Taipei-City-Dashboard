@@ -32,10 +32,10 @@ func InitCronJobs() {
 
 	// Schedule a daily task to clean up old chat logs.
 	// The job runs once a day at midnight (server time).
-	_, err := c.AddFunc("@daily", func() { // Changed schedule to @daily
-		// Create a context with a 10-minute timeout for the entire job.
-		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Minute)
-		defer cancel() // Ensure context resources are released
+	    _, err := c.AddFunc("@daily", func() { // Changed schedule to @daily
+        // Create a context with a 10-minute timeout for the entire job.
+        ctx, cancel := context.WithTimeout(context.Background(), 10*time.Minute)
+        defer cancel() // Ensure context resources are released
 
 		// Generate a unique token for this lock attempt (fencing token)
 		token := uuid.New().String()
@@ -67,8 +67,8 @@ func InitCronJobs() {
 
 		logs.Info("Cron job 'chatlog cleanup' started...")
 		// Pass the timeout context to the deletion function and capture deleted rows
-		deletedRows, err := models.DeleteOldChatLogs(ctx, 6)
-		if err != nil {
+        deletedRows, err := models.DeleteOldChatLogs(ctx, 6)
+        if err != nil {
 			logs.Error("Error during chatlog cleanup cron job:", err)
 		} else {
 			logs.FInfo("Cron job 'chatlog cleanup' finished successfully. Delete %d rows.", deletedRows)

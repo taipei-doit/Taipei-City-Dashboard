@@ -25,7 +25,7 @@
   "data_infos": {
     "name_cn": "EOC最新受損情形資料",
     "airflow_update_freq": "every 5 minutes",
-    "source": "https://www.eocmap.gov.taipei/DisasterOperationSystemWebAPIUnite/api/DoItTaipeiApi/GetDamageCaseData",
+    "source": "https://tfd.blob.core.windows.net/blobfs/data/TEST-T-SAGEDamageCaseData.json",
     "source_type": "消防局 API",
     "source_dept": "消防局",
     "gis_format": "",

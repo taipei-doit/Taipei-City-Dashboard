@@ -1844,10 +1844,10 @@ export const useMapStore = defineStore("map", {
 				[event.point.x + hitSize, event.point.y + hitSize],
 			];
 
-			// Gets the info that is contained in the bbox (only visible layers)
+			// Gets the info that is contained in the coordinates that the user clicked on (only visible layers)
 			const clickFeatureDatas = this.map.queryRenderedFeatures(bbox, {
 				layers: this.currentVisibleLayers.filter(
-					(layer) => !layer.includes("-arc"),
+					(layer) => layer.indexOf("-arc") === -1,
 				),
 			});
 
