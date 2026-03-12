@@ -69,6 +69,12 @@ services:
       QDRANT_COLLECTION: ${QDRANT_COLLECTION}
       QDRANT_API_KEY: ${QDRANT_API_KEY}
       LM_MODEL_PATH: ${LM_MODEL_PATH}
+      TWCC_API_URL: ${TWCC_API_URL}
+      TWCC_API_KEY: ${TWCC_API_KEY}
+      TWCC_MODEL: ${TWCC_MODEL}
+      TWCC_TIMEOUT: ${TWCC_TIMEOUT}
+      TWCC_MAX_RETRY: ${TWCC_MAX_RETRY}
+      TWCC_MAX_CONCURRENT: ${TWCC_MAX_CONCURRENT}
     volumes:
       - ../Taipei-City-Dashboard-BE:/opt/Taipei-City-Dashboard-BE
     working_dir: /opt/Taipei-City-Dashboard-BE
