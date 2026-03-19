@@ -8,14 +8,12 @@ import DashboardComponent from "../../dashboardComponent/DashboardComponent.vue"
 import { useAuthStore } from "../../store/authStore";
 import { useDialogStore } from "../../store/dialogStore";
 import { useContentStore } from "../../store/contentStore";
-import { useAuthStore } from "../../store/authStore";
 
 import DialogContainer from "./DialogContainer.vue";
 
 const authStore = useAuthStore();
 const dialogStore = useDialogStore();
 const contentStore = useContentStore();
-const authStore = useAuthStore();
 
 const allComponents = ref(null);
 const componentsSelected = ref([]);
