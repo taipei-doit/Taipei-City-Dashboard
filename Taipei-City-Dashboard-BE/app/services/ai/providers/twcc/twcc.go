@@ -1,6 +1,7 @@
 package twcc
 
 import (
+	"TaipeiCityDashboardBE/logs"
 	"bytes"
 	"context"
 	"encoding/json"
@@ -105,6 +106,9 @@ func (m *TWCC) GenerateContent(ctx context.Context, messages []llms.MessageConte
 	if err != nil {
 		return nil, fmt.Errorf("failed to create request: %v", err)
 	}
+
+	logs.FWarn("TWCC APIUrl: %v", m.BaseURL)
+	logs.FWarn("TWCC APIKey: %v", m.APIKey)
 
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("X-API-KEY", m.APIKey)
