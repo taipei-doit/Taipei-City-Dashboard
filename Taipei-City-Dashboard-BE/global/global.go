@@ -115,7 +115,7 @@ var (
 
 	TWCC = TWCCConfig{
 		ApiUrl:        getEnv("TWCC_API_URL", "https://api-ams.twcc.ai/api"),
-		ApiKey:        getEnv("TWCC_API_KEY", ""),
+		ApiKey:        getEnv("TWCC_API_KEY", "default_your_twcc_api_key_here"),
 		Model:         getEnv("TWCC_MODEL", "llama3.3-ffm-70b-32k-chat"),
 		Timeout:       getIntEnv("TWCC_TIMEOUT", 60),
 		MaxRetry:      getIntEnv("TWCC_MAX_RETRY", 2),
