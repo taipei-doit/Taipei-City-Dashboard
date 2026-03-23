@@ -2,6 +2,7 @@
 import { ref, watch, nextTick } from "vue";
 import { storeToRefs } from "pinia";
 import SendIcon from "../icons/SendIcon.vue";
+import ArrowIcon from "../icons/ArrowIcon.vue";
 import BotLogo from "../icons/BotLogo.vue";
 import UserLogo from "../icons/UserLogo.vue";
 
@@ -88,138 +89,122 @@ watch(
 </script>
 
 <template>
-  <div class="chat-widget">
-    <!-- 標題 -->
-    <div class="header">
-      <h3>臺北城市儀表板小幫手</h3>
-    </div>
+	<div class="chat-widget">
+		<!-- 標題 -->
+		<div class="header">
+			<h2>臺北城市儀表板小幫手</h2>
+		</div>
 
-    <!-- 聊天區 -->
-    <div
-      ref="chatAreaRef"
-      class="chat-area scrollbar-custom"
-    >
-      <!-- 置頂訊息 -->
-      <div class="chat-message sticky-message">
-        <div
-          class="sticky-header"
-          @click="toggleSticky"
-        >
-          <span>置頂公告：小幫手使用須知</span>
-          <button class="toggle-btn">
-            {{ isStickyOpen ? "-" : "+" }}
-          </button>
-        </div>
-        <div
-          v-show="isStickyOpen"
-          class="sticky-body"
-        >
-          <span>小幫手會依據您輸入的內容，自動檢索本站臺的組件資料庫，並回傳相似度較高的組件清單，協助您快速找到符合需求的元件或資訊。<br><br>
-            目前小幫手僅提供組件比對與分析服務，不支援一般聊天功能。如造成不便，敬請見諒！</span>
-        </div>
-      </div>
-      <div
-        v-for="chat in chatData"
-        :key="chat.id"
-        class="message"
-      >
-        <!-- 機器人訊息 -->
-        <div
-          v-if="chat.role === 'bot'"
-          class="bot"
-        >
-          <div class="avatar">
-            <BotLogo />
-          </div>
-          <div class="content">
-            <div
-              v-if="chat.content"
-              class="message--bubble"
-            >
-              <p>{{ chat.content }}</p>
-            </div>
-            <!-- 表格區 -->
-            <div
-              v-if="chat.relations"
-              v-horizontal-wheel
-              class="relation-area"
-            >
-              <table class="relation-table">
-                <thead>
-                  <tr>
-                    <th>排名</th>
-                    <th>城市名</th>
-                    <th>組件名</th>
-                    <th>關聯性</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr
-                    v-for="(item, index) in chat.relations"
-                    :key="index"
-                  >
-                    <td>{{ index + 1 }}</td>
-                    <td>
-                      {{
-                        item.city === "taipei"
-                          ? "臺北"
-                          : "雙北"
-                      }}
-                    </td>
-                    <td>{{ item.name }}</td>
-                    <td>{{ item.score }}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <div
-              v-if="chat.button"
-              v-horizontal-wheel
-              class="message--button scrollbar-x-hide"
-            >
-              <button
-                v-for="btn in chat.button"
-                :key="btn.id"
-                @click="qaBtnHandler(btn.text, chat.relations)"
-              >
-                {{ btn.text }}
-              </button>
-            </div>
-          </div>
-        </div>
-        <!-- 使用者訊息 -->
-        <div
-          v-else
-          class="user"
-        >
-          <div class="avatar">
-            <UserLogo />
-          </div>
-          <div
-            v-if="chat.content"
-            class="content"
-          >
-            <div class="message--bubble">
-              <p>{{ chat.content }}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+		<!-- 聊天區 -->
+		<div ref="chatAreaRef" class="chat-area scrollbar-custom">
+			<!-- 置頂訊息 -->
+			<div class="chat-message sticky-message">
+				<div class="sticky-header" @click="toggleSticky">
+					<span>置頂公告：小幫手使用須知</span>
+					<button class="toggle-btn">
+						<ArrowIcon
+							:style="{
+								transform: isStickyOpen
+									? 'rotate(180deg)'
+									: 'rotate(0deg)',
+								transition: 'transform 0.3s',
+							}"
+						/>
+					</button>
+				</div>
+				<div v-show="isStickyOpen" class="sticky-body">
+					<span
+						>小幫手會依據您輸入的內容，自動檢索本站臺的組件資料庫，並回傳相似度較高的組件清單，協助您快速找到符合需求的元件或資訊。<br /><br />
+						目前小幫手僅提供組件比對與分析服務，不支援一般聊天功能。如造成不便，敬請見諒！</span
+					>
+				</div>
+			</div>
+			<div v-for="chat in chatData" :key="chat.id" class="message">
+				<!-- 機器人訊息 -->
+				<div v-if="chat.role === 'bot'" class="bot">
+					<div class="avatar">
+						<BotLogo />
+					</div>
+					<div class="content">
+						<div v-if="chat.content" class="message--bubble">
+							<p>{{ chat.content }}</p>
+						</div>
+						<!-- 表格區 -->
+						<div
+							v-if="chat.relations"
+							v-horizontal-wheel
+							class="relation-area"
+						>
+							<table class="relation-table">
+								<thead>
+									<tr>
+										<th>排名</th>
+										<th>城市名</th>
+										<th>組件名</th>
+										<th>關聯性</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr
+										v-for="(item, index) in chat.relations"
+										:key="index"
+									>
+										<td>{{ index + 1 }}</td>
+										<td>
+											{{
+												item.city === "taipei"
+													? "臺北"
+													: "雙北"
+											}}
+										</td>
+										<td>{{ item.name }}</td>
+										<td>{{ item.score }}</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div
+							v-if="chat.button"
+							v-horizontal-wheel
+							class="message--button scrollbar-x-hide"
+						>
+							<button
+								v-for="btn in chat.button"
+								:key="btn.id"
+								@click="qaBtnHandler(btn.text, chat.relations)"
+							>
+								{{ btn.text }}
+							</button>
+						</div>
+					</div>
+				</div>
+				<!-- 使用者訊息 -->
+				<div v-else class="user">
+					<div class="avatar">
+						<UserLogo />
+					</div>
+					<div v-if="chat.content" class="content">
+						<div class="message--bubble">
+							<p>{{ chat.content }}</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 
-    <!-- 輸入區 -->
-    <div class="input-area">
-      <input
-        v-model="userMessage"
-        type="text"
-        placeholder="輸入訊息..."
-        @keyup.enter="sendBtnHandler(userMessage)"
-      >
-      <button @click="sendBtnHandler(userMessage)">
-        <SendIcon />
-      </button>
-    </div>
-  </div>
+		<!-- 輸入區 -->
+		<div class="input-area">
+			<input
+				v-model="userMessage"
+				type="text"
+				placeholder="輸入訊息..."
+				@keyup.enter="sendBtnHandler(userMessage)"
+			/>
+			<button @click="sendBtnHandler(userMessage)">
+				<SendIcon />
+			</button>
+		</div>
+	</div>
 </template>
 
 <style lang="scss" scoped>
@@ -274,13 +259,6 @@ $radius-20: 20px;
 		padding: 1rem;
 		background: $panel-bg;
 		border-bottom: 3px solid $border-color;
-
-		h3 {
-			font-size: 18px;
-			font-weight: 700;
-			color: $white;
-			margin: 0;
-		}
 	}
 
 	.chat-area {
@@ -314,15 +292,17 @@ $radius-20: 20px;
 			}
 
 			.sticky-body {
-				padding: 8px 12px;
+				padding: 0px 12px 8px 12px;
 				font-weight: 400;
-				font-size: 14px;
+				font-size: 0.875rem;
 			}
 
 			.toggle-btn {
+				display: flex;
+				align-items: center;
 				background: none;
 				border: none;
-				font-size: 14px;
+				font-size: 0.875rem;
 				cursor: pointer;
 				color: #ffffff;
 			}
@@ -404,7 +384,7 @@ $radius-20: 20px;
 							padding-bottom: 8px;
 							padding-left: 16px;
 							padding-right: 16px;
-							font-size: 16px;
+							font-size: var(--font-ms);
 						}
 					}
 
@@ -417,7 +397,7 @@ $radius-20: 20px;
 							flex-shrink: 0;
 							background: $panel-bg;
 							color: $white;
-							font-size: 14px;
+							font-size: 0.875rem;
 							padding: 0.5rem 1rem;
 							border-radius: $radius-15;
 							border: none;
