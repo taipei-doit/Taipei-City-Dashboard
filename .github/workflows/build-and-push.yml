@@ -234,6 +234,12 @@ jobs:
           SEC_VITE_TAIPEIPASS_SCOPE: ${{ secrets.VITE_TAIPEIPASS_SCOPE }}
           SEC_VITE_APP_TITLE: ${{ secrets.VITE_APP_TITLE }}
           SEC_BACKEND_URL: ${{ secrets.BACKEND_URL }}
+          SEC_TWCC_API_URL: ${{ secrets.TWCC_API_URL }}
+          SEC_TWCC_API_KEY: ${{ secrets.TWCC_API_KEY }}
+          SEC_TWCC_MODEL: ${{ secrets.TWCC_MODEL }}
+          SEC_TWCC_TIMEOUT: ${{ secrets.TWCC_TIMEOUT }}
+          SEC_TWCC_MAX_RETRY: ${{ secrets.TWCC_MAX_RETRY }}
+          SEC_TWCC_MAX_CONCURRENT: ${{ secrets.TWCC_MAX_CONCURRENT }}
         run: |
           set -euo pipefail
           # Defensive: ensure we are in bash (GitHub uses bash by default for run:)
@@ -279,6 +285,12 @@ jobs:
           add VITE_TAIPEIPASS_SCOPE "$SEC_VITE_TAIPEIPASS_SCOPE"
           add VITE_APP_TITLE "$SEC_VITE_APP_TITLE"
           add BACKEND_URL "$SEC_BACKEND_URL"
+          add TWCC_API_URL "$SEC_TWCC_API_URL"
+          add TWCC_API_KEY "$SEC_TWCC_API_KEY"
+          add TWCC_MODEL "$SEC_TWCC_MODEL"
+          add TWCC_TIMEOUT "$SEC_TWCC_TIMEOUT"
+          add TWCC_MAX_RETRY "$SEC_TWCC_MAX_RETRY"
+          add TWCC_MAX_CONCURRENT "$SEC_TWCC_MAX_CONCURRENT"
           # Show which keys will be applied (without values)
           echo "Secret keys to apply:" >&2
           for a in "${ARGS[@]}"; do
