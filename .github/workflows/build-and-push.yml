@@ -8,12 +8,10 @@ on:
       force_backend:
         description: "Force deploy backend even if no changes detected"
         type: boolean
-        required: false
         default: false
       force_frontend:
         description: "Force deploy frontend even if no changes detected"
         type: boolean
-        required: false
         default: false
 
 env:
@@ -24,93 +22,58 @@ env:
   NAMESPACE: dashboard
 
 jobs:
-  detect-changes:
-    if: github.event_name == 'workflow_dispatch' || github.event_name == 'push'
+  # ── 1. 偵測變動 + 計算 tag ──
+  prepare:
     runs-on: ubuntu-latest
     outputs:
-      backend: ${{ steps.set-outputs.outputs.backend }}
-      frontend: ${{ steps.set-outputs.outputs.frontend }}
+      backend: ${{ steps.eval.outputs.backend }}
+      frontend: ${{ steps.eval.outputs.frontend }}
+      tag: ${{ steps.tag.outputs.value }}
+      helm_values: ${{ steps.helm.outputs.file }}
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
-          fetch-depth: 0
-
-      - name: Determine base ref (push only)
-        id: base
-        if: github.event_name == 'push'
-        run: |
-          if [ -n "${{ github.event.before }}" ]; then
-            echo "base=${{ github.event.before }}" >> $GITHUB_OUTPUT
-          else
-            # Fallback: use HEAD^ if available
-            echo "base=$(git rev-parse HEAD^)" >> $GITHUB_OUTPUT || echo "base=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
-          fi
-          echo "Using base SHA: $(cat $GITHUB_OUTPUT)"
+          fetch-depth: 2
 
       - name: Path changes filter
         id: changes
         uses: dorny/paths-filter@v3
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          base: ${{ steps.base.outputs.base || 'HEAD^' }}
           filters: |
             backend:
               - 'Taipei-City-Dashboard-BE/**'
               - 'helm-chart/**'
+              - '.github/workflows/build-and-push.yml'
             frontend:
               - 'Taipei-City-Dashboard-FE/**'
               - 'helm-chart/**'
-            shared:
               - '.github/workflows/build-and-push.yml'
 
-      - name: Evaluate change matrix & overrides
-        id: set-outputs
+      - name: Evaluate
+        id: eval
         run: |
-          FORCE_BE='${{ github.event.inputs.force_backend }}'
-          FORCE_FE='${{ github.event.inputs.force_frontend }}'
-          CHG_BE='${{ steps.changes.outputs.backend }}'
-          CHG_FE='${{ steps.changes.outputs.frontend }}'
-          CHG_SHARED='${{ steps.changes.outputs.shared }}'
-          
-          # Strategy: if ANY change detected, deploy BOTH services for consistency and safety
-          ANY_CHANGE=false
-          
-          # Check for any changes
-          if [ "$FORCE_BE" = "true" ] || [ "$FORCE_FE" = "true" ] || [ "$CHG_BE" = "true" ] || [ "$CHG_FE" = "true" ] || [ "$CHG_SHARED" = "true" ]; then
-            ANY_CHANGE=true
-          fi
-          
-          # If any change detected, deploy both services
-          if [ "$ANY_CHANGE" = "true" ]; then
-            echo "Changes detected - deploying both services for consistency"
-            echo "backend=true" >> $GITHUB_OUTPUT
-            echo "frontend=true" >> $GITHUB_OUTPUT
-          else
-            echo "No changes detected - skipping deployment"
-            echo "backend=false" >> $GITHUB_OUTPUT
-            echo "frontend=false" >> $GITHUB_OUTPUT
-          fi
-          
-          echo "Final decision -> backend=true frontend=true (any_change=$ANY_CHANGE, triggers: force_be=$FORCE_BE force_fe=$FORCE_FE chg_be=$CHG_BE chg_fe=$CHG_FE chg_shared=$CHG_SHARED)"
+          echo "backend=${{ steps.changes.outputs.backend == 'true' || github.event.inputs.force_backend == 'true' }}" >> $GITHUB_OUTPUT
+          echo "frontend=${{ steps.changes.outputs.frontend == 'true' || github.event.inputs.force_frontend == 'true' }}" >> $GITHUB_OUTPUT
 
-      - name: Summary
+      - name: Image tag
+        id: tag
+        run: echo "value=${GITHUB_REF_NAME}-$(echo ${GITHUB_SHA} | cut -c1-8)" >> $GITHUB_OUTPUT
+
+      - name: Helm values file
+        id: helm
         run: |
-          echo "Backend deploy: ${{ steps.set-outputs.outputs.backend }}"
-          echo "Frontend deploy: ${{ steps.set-outputs.outputs.frontend }}"
+          case "${{ github.ref_name }}" in
+            sit) echo "file=helm-chart/values-sit.yaml" ;;
+            *)   echo "file=helm-chart/values-prod.yaml" ;;
+          esac >> $GITHUB_OUTPUT
 
-  build-and-deploy:
-    needs: detect-changes
-    if: (github.event_name == 'workflow_dispatch' || github.event_name == 'push') && needs.detect-changes.outputs.backend == 'true'
+  # ── 2. Build BE (並行) ──
+  build-be:
+    needs: prepare
+    if: needs.prepare.outputs.backend == 'true'
     runs-on: ubuntu-latest
-    environment:
-      # Updated: map pre-develop branch to use 'prod' environment (was 'pre-prod') so it can use prod env secrets per request
-      name: ${{ (github.ref_name == 'sit' && 'sit') || (github.ref_name == 'pre-develop' && 'prod') || (github.ref_name == 'develop' && 'prod') }}
-    concurrency:
-      group: deploy-${{ github.ref }}
-      cancel-in-progress: false
     steps:
-      - name: Free Disk Space (Ubuntu)
+      - name: Free Disk Space
         uses: jlumbroso/free-disk-space@main
         with:
           tool-cache: true
@@ -120,37 +83,24 @@ jobs:
           large-packages: true
           docker-images: true
           swap-storage: true
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Login to ACR
-        uses: docker/login-action@v3
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/login-action@v3
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ secrets.ACR_USERNAME }}
           password: ${{ secrets.ACR_PASSWORD }}
 
-      - name: Compute unified image tag
-        id: tag
-        run: |
-          BRANCH="${GITHUB_REF_NAME}"
-            SHA="${GITHUB_SHA}"
-          TAG="${BRANCH}-$(echo ${SHA} | cut -c1-8)"
-          echo "value=${TAG}" >> $GITHUB_OUTPUT
-          echo "Using image tag: ${TAG}"
-
-      - name: Build & push Backend image
-        uses: docker/build-push-action@v5
+      - name: Build & push
+        uses: docker/build-push-action@v6
         with:
           context: ./Taipei-City-Dashboard-BE
           file: ./Taipei-City-Dashboard-BE/Dockerfile
+          target: prod
           push: true
-          tags: ${{ env.REGISTRY }}/${{ env.BE_IMAGE }}:${{ steps.tag.outputs.value }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          tags: ${{ env.REGISTRY }}/${{ env.BE_IMAGE }}:${{ needs.prepare.outputs.tag }}
+          cache-from: type=gha,scope=be
+          cache-to: type=gha,scope=be,mode=max
           platforms: linux/amd64
           build-args: |
             G1G2_CERT=${{ secrets.G1G2_CERT }}
@@ -158,17 +108,30 @@ jobs:
             ISSO_CLIENT_SECRET=${{ secrets.ISSO_CLIENT_SECRET }}
             IDNO_SALT=${{ secrets.IDNO_SALT }}
             JWT_SECRET=${{ secrets.JWT_SECRET }}
-            
-          
-      - name: Build & push Frontend image
-        uses: docker/build-push-action@v5
+
+  # ── 3. Build FE (並行) ──
+  build-fe:
+    needs: prepare
+    if: needs.prepare.outputs.frontend == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.ACR_USERNAME }}
+          password: ${{ secrets.ACR_PASSWORD }}
+
+      - name: Build & push
+        uses: docker/build-push-action@v6
         with:
           context: ./Taipei-City-Dashboard-FE
           file: ./Taipei-City-Dashboard-FE/Dockerfile
           push: true
-          tags: ${{ env.REGISTRY }}/${{ env.FE_IMAGE }}:${{ steps.tag.outputs.value }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          tags: ${{ env.REGISTRY }}/${{ env.FE_IMAGE }}:${{ needs.prepare.outputs.tag }}
+          cache-from: type=gha,scope=fe
+          cache-to: type=gha,scope=fe,mode=max
           platforms: linux/amd64
           build-args: |
             NODE_ENV=${{ secrets.NODE_ENV }}
@@ -180,22 +143,33 @@ jobs:
             VITE_TAIPEIPASS_CLIENT_ID=${{ secrets.VITE_TAIPEIPASS_CLIENT_ID }}
             VITE_TAIPEIPASS_SCOPE=${{ secrets.VITE_TAIPEIPASS_SCOPE }}
 
+  # ── 4. Deploy (等 build 完) ──
+  deploy:
+    needs: [prepare, build-be, build-fe]
+    if: always() && (needs.build-be.result == 'success' || needs.build-fe.result == 'success')
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ github.ref_name == 'sit' && 'sit' || 'prod' }}
+    concurrency:
+      group: deploy-${{ github.ref }}
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
 
-      - name: Setup Helm
-        uses: azure/setup-helm@v3
-        with:
-          version: '3.13.0'
-
-      - name: Configure kubeconfig
+      - name: Setup tools
         run: |
+          curl -fsSL https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
           mkdir -p ~/.kube
-          if [ -z "${{ secrets.KUBE_CONFIG_DATA }}" ]; then
-            echo "ERROR: KUBE_CONFIG_DATA secret is not set!"; exit 1; fi
           echo "${{ secrets.KUBE_CONFIG_DATA }}" | base64 -d > ~/.kube/config
           chmod 600 ~/.kube/config
-          kubectl cluster-info
 
-      - name: Create/Update ACR imagePullSecret
+      - uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.ACR_USERNAME }}
+          password: ${{ secrets.ACR_PASSWORD }}
+
+      - name: Create ACR imagePullSecret
         run: |
           kubectl create secret docker-registry acr-secret \
             --docker-server=${{ env.REGISTRY }} \
@@ -204,154 +178,70 @@ jobs:
             --namespace=${{ env.NAMESPACE }} \
             --dry-run=client -o yaml | kubectl apply -f -
 
-      - name: Build / Apply unified application secret
+      - name: Apply application secrets
         env:
-          SEC_DB_DASHBOARD_HOST: ${{ secrets.DB_DASHBOARD_HOST }}
-          SEC_DB_DASHBOARD_PASSWORD: ${{ secrets.DB_DASHBOARD_PASSWORD }}
-          SEC_DB_DASHBOARD_USER: ${{ secrets.DB_DASHBOARD_USER }}
-          SEC_DB_DASHBOARD_DBNAME: ${{ secrets.DB_DASHBOARD_DBNAME }}
-          SEC_DB_DASHBOARD_PORT: ${{ secrets.DB_DASHBOARD_PORT }}
-          SEC_DB_MANAGER_PORT: ${{ secrets.DB_MANAGER_PORT }}
-          SEC_DB_MANAGER_HOST: ${{ secrets.DB_MANAGER_HOST }}
-          SEC_DB_MANAGER_PASSWORD: ${{ secrets.DB_MANAGER_PASSWORD }}
-          SEC_DB_MANAGER_DBNAME: ${{ secrets.DB_MANAGER_DBNAME }}
-          SEC_DB_MANAGER_USER: ${{ secrets.DB_MANAGER_USER }}
-          SEC_REDIS_HOST: ${{ secrets.REDIS_HOST }}
-          SEC_REDIS_PASSWORD: ${{ secrets.REDIS_PASSWORD }}
-          SEC_REDIS_PORT: ${{ secrets.REDIS_PORT }}
-          SEC_REDIS_DB: ${{ secrets.REDIS_DB }}
-          SEC_JWT_SECRET: ${{ secrets.JWT_SECRET }}
-          SEC_GIN_DOMAIN: ${{ secrets.GIN_DOMAIN }}
-          SEC_IDNO_SALT: ${{ secrets.IDNO_SALT }}
-          SEC_ISSO_CLIENT_ID: ${{ secrets.ISSO_CLIENT_ID }}
-          SEC_ISSO_CLIENT_SECRET: ${{ secrets.ISSO_CLIENT_SECRET }}
-          SEC_VITE_API_URL: ${{ secrets.VITE_API_URL }}
-          SEC_VITE_MAPBOXTOKEN: ${{ secrets.VITE_MAPBOXTOKEN }}
-          SEC_VITE_MAPBOXTILE: ${{ secrets.VITE_MAPBOXTILE }}
-          SEC_VITE_TAIPEIPASS_URL: ${{ secrets.VITE_TAIPEIPASS_URL }}
-          SEC_VITE_TAIPEIPASS_CLIENT_ID: ${{ secrets.VITE_TAIPEIPASS_CLIENT_ID }}
-          SEC_VITE_TAIPEIPASS_SCOPE: ${{ secrets.VITE_TAIPEIPASS_SCOPE }}
-          SEC_VITE_APP_TITLE: ${{ secrets.VITE_APP_TITLE }}
-          SEC_BACKEND_URL: ${{ secrets.BACKEND_URL }}
+          SECRETS_JSON: |
+            {
+              "DB_DASHBOARD_HOST": "${{ secrets.DB_DASHBOARD_HOST }}",
+              "DB_DASHBOARD_PASSWORD": "${{ secrets.DB_DASHBOARD_PASSWORD }}",
+              "DB_DASHBOARD_USER": "${{ secrets.DB_DASHBOARD_USER }}",
+              "DB_DASHBOARD_DBNAME": "${{ secrets.DB_DASHBOARD_DBNAME }}",
+              "DB_DASHBOARD_PORT": "${{ secrets.DB_DASHBOARD_PORT }}",
+              "DB_MANAGER_HOST": "${{ secrets.DB_MANAGER_HOST }}",
+              "DB_MANAGER_PASSWORD": "${{ secrets.DB_MANAGER_PASSWORD }}",
+              "DB_MANAGER_USER": "${{ secrets.DB_MANAGER_USER }}",
+              "DB_MANAGER_DBNAME": "${{ secrets.DB_MANAGER_DBNAME }}",
+              "DB_MANAGER_PORT": "${{ secrets.DB_MANAGER_PORT }}",
+              "REDIS_HOST": "${{ secrets.REDIS_HOST }}",
+              "REDIS_PASSWORD": "${{ secrets.REDIS_PASSWORD }}",
+              "REDIS_PORT": "${{ secrets.REDIS_PORT }}",
+              "REDIS_DB": "${{ secrets.REDIS_DB }}",
+              "JWT_SECRET": "${{ secrets.JWT_SECRET }}",
+              "GIN_DOMAIN": "${{ secrets.GIN_DOMAIN }}",
+              "IDNO_SALT": "${{ secrets.IDNO_SALT }}",
+              "ISSO_CLIENT_ID": "${{ secrets.ISSO_CLIENT_ID }}",
+              "ISSO_CLIENT_SECRET": "${{ secrets.ISSO_CLIENT_SECRET }}",
+              "VITE_API_URL": "${{ secrets.VITE_API_URL }}",
+              "VITE_MAPBOXTOKEN": "${{ secrets.VITE_MAPBOXTOKEN }}",
+              "VITE_MAPBOXTILE": "${{ secrets.VITE_MAPBOXTILE }}",
+              "VITE_TAIPEIPASS_URL": "${{ secrets.VITE_TAIPEIPASS_URL }}",
+              "VITE_TAIPEIPASS_CLIENT_ID": "${{ secrets.VITE_TAIPEIPASS_CLIENT_ID }}",
+              "VITE_TAIPEIPASS_SCOPE": "${{ secrets.VITE_TAIPEIPASS_SCOPE }}",
+              "VITE_APP_TITLE": "${{ secrets.VITE_APP_TITLE }}",
+              "BACKEND_URL": "${{ secrets.BACKEND_URL }}",
+              "TWCC_API_URL": "${{ secrets.TWCC_API_URL }}",
+              "TWCC_API_KEY": "${{ secrets.TWCC_API_KEY }}",
+              "TWCC_MODEL": "${{ secrets.TWCC_MODEL }}",
+              "TWCC_TIMEOUT": "${{ secrets.TWCC_TIMEOUT }}",
+              "TWCC_MAX_RETRY": "${{ secrets.TWCC_MAX_RETRY }}",
+              "TWCC_MAX_CONCURRENT": "${{ secrets.TWCC_MAX_CONCURRENT }}"
+            }
         run: |
-          set -euo pipefail
-          # Defensive: ensure we are in bash (GitHub uses bash by default for run:)
-          if [ -z "${BASH_VERSION:-}" ]; then echo "This step requires bash" >&2; exit 1; fi
-          DB_PORT="${SEC_DB_DASHBOARD_PORT:-5432}"
-          MANAGER_PORT="${SEC_DB_MANAGER_PORT:-$DB_PORT}"
-          REDIS_PORT_VAL="${SEC_REDIS_PORT:-6379}"
-          REDIS_DB_VAL="${SEC_REDIS_DB:-0}"
-          # Build args in an array with safe quoting (one element per literal)
           ARGS=(create secret generic taipei-city-dashboard-secrets)
-          add(){
-            local k="$1"; shift
-            local v="$1"
-            # Only append if value is non-empty; preserve spaces & symbols
-            if [ -n "$v" ]; then
-              ARGS+=("--from-literal=${k}=${v}")
-            fi
-          }
-          add DB_DASHBOARD_HOST "$SEC_DB_DASHBOARD_HOST"
-          add DB_DASHBOARD_PASSWORD "$SEC_DB_DASHBOARD_PASSWORD"
-            add DB_DASHBOARD_USER "$SEC_DB_DASHBOARD_USER"
-          add DB_DASHBOARD_DBNAME "$SEC_DB_DASHBOARD_DBNAME"
-          if [ -n "${SEC_DB_DASHBOARD_PORT}" ]; then add DB_DASHBOARD_PORT "$DB_PORT"; fi
-          add DB_MANAGER_HOST "$SEC_DB_MANAGER_HOST"
-          add DB_MANAGER_PASSWORD "$SEC_DB_MANAGER_PASSWORD"
-          add DB_MANAGER_USER "$SEC_DB_MANAGER_USER"
-          add DB_MANAGER_DBNAME "$SEC_DB_MANAGER_DBNAME"
-          if [ -n "${SEC_DB_MANAGER_PORT}" ]; then add DB_MANAGER_PORT "$MANAGER_PORT"; fi
-          add REDIS_HOST "$SEC_REDIS_HOST"
-          add REDIS_PASSWORD "$SEC_REDIS_PASSWORD"
-          if [ -n "${SEC_REDIS_PORT}" ]; then add REDIS_PORT "$REDIS_PORT_VAL"; fi
-          if [ -n "${SEC_REDIS_DB}" ]; then add REDIS_DB "$REDIS_DB_VAL"; fi
-          add JWT_SECRET "$SEC_JWT_SECRET"
-          add GIN_DOMAIN "$SEC_GIN_DOMAIN"
-          add IDNO_SALT "$SEC_IDNO_SALT"
-          add ISSO_CLIENT_ID "$SEC_ISSO_CLIENT_ID"
-          add ISSO_CLIENT_SECRET "$SEC_ISSO_CLIENT_SECRET"
-          add VITE_API_URL "$SEC_VITE_API_URL"
-          add VITE_MAPBOXTOKEN "$SEC_VITE_MAPBOXTOKEN"
-          add VITE_MAPBOXTILE "$SEC_VITE_MAPBOXTILE"
-          add VITE_TAIPEIPASS_URL "$SEC_VITE_TAIPEIPASS_URL"
-          add VITE_TAIPEIPASS_CLIENT_ID "$SEC_VITE_TAIPEIPASS_CLIENT_ID"
-          add VITE_TAIPEIPASS_SCOPE "$SEC_VITE_TAIPEIPASS_SCOPE"
-          add VITE_APP_TITLE "$SEC_VITE_APP_TITLE"
-          add BACKEND_URL "$SEC_BACKEND_URL"
-          # Show which keys will be applied (without values)
-          echo "Secret keys to apply:" >&2
-          for a in "${ARGS[@]}"; do
-            case "$a" in --from-literal=*) echo "  ${a#--from-literal=}" | cut -d= -f1 ;; esac
-          done
-          ARGS+=(--namespace=${{ env.NAMESPACE }} --dry-run=client -o yaml)
-          # Execute kubectl with the array (no word splitting issues)
-          if ! kubectl "${ARGS[@]}" | kubectl apply -f -; then
-            echo "[ERROR] Failed to create/update secret. Re-run with set -x for more detail." >&2
-            exit 1
-          fi
-          echo "Secret applied successfully"
+          while IFS='=' read -r key value; do
+            [ -n "$value" ] && ARGS+=("--from-literal=${key}=${value}")
+          done < <(echo "$SECRETS_JSON" | jq -r 'to_entries[] | select(.value != "") | "\(.key)=\(.value)"')
+          kubectl "${ARGS[@]}" --namespace=${{ env.NAMESPACE }} --dry-run=client -o yaml | kubectl apply -f -
 
-      - name: Determine Helm values file
-        id: helm-values
+      - name: Helm deploy
         run: |
-          BRANCH_NAME="${{ github.ref_name }}"
-          VALUES_FILE=""
-          if [ "$BRANCH_NAME" = "sit" ]; then
-            VALUES_FILE="helm-chart/values-sit.yaml"
-          elif [ "$BRANCH_NAME" = "pre-develop" ]; then
-            VALUES_FILE="helm-chart/values-prod.yaml" # Assuming pre-develop uses prod values
-          elif [ "$BRANCH_NAME" = "develop" ]; then
-            VALUES_FILE="helm-chart/values-prod.yaml"
-          elif [ "$BRANCH_NAME" = "main" ]; then
-            VALUES_FILE="helm-chart/values-prod.yaml"
-          else
-            echo "::error::No matching values file for branch ${BRANCH_NAME}"
-            exit 1
-          fi
-          echo "Using values file: ${VALUES_FILE}"
-          echo "file=${VALUES_FILE}" >> $GITHUB_OUTPUT
+          TAG=${{ needs.prepare.outputs.tag }}
+          helm upgrade --install ${{ env.RELEASE }} ./helm-chart \
+            -f ${{ needs.prepare.outputs.helm_values }} \
+            --set backend.image.tag=$TAG \
+            --set frontend.image.tag=$TAG \
+            --namespace ${{ env.NAMESPACE }} \
+            --wait --timeout=20m
 
-      - name: Single Helm upgrade (backend + frontend)
-        env:
-          SEC_DB_DASHBOARD_PORT: ${{ secrets.DB_DASHBOARD_PORT || '' }}
-          SEC_DB_MANAGER_PORT: ${{ secrets.DB_MANAGER_PORT || '' }}
-          SEC_REDIS_PORT: ${{ secrets.REDIS_PORT || '' }}
-          SEC_REDIS_DB: ${{ secrets.REDIS_DB || '' }}
-        run: |
-          set -euo pipefail
-          RELEASE=${{ env.RELEASE }}
-          NS=${{ env.NAMESPACE }}
-          TAG=${{ steps.tag.outputs.value }}
-          VALUES_FILE=${{ steps.helm-values.outputs.file }}
-          echo "Verifying images exist..."
-          for img in ${{ env.REGISTRY }}/${{ env.BE_IMAGE }}:$TAG ${{ env.REGISTRY }}/${{ env.FE_IMAGE }}:$TAG; do
-            echo "Checking $img"; docker manifest inspect $img > /dev/null 2>&1 || { echo "Missing image $img" >&2; exit 1; }; done
-          HELM_SET="--set backend.image.tag=$TAG --set frontend.image.tag=$TAG"
-          [ -n "$SEC_DB_DASHBOARD_PORT" ] && HELM_SET+=" --set backend.useSecretDbDashboardPort=true"
-          [ -n "$SEC_DB_MANAGER_PORT" ] && HELM_SET+=" --set backend.useSecretDbManagerPort=true"
-          [ -n "$SEC_REDIS_PORT" ] && HELM_SET+=" --set backend.useSecretRedisPort=true"
-          [ -n "$SEC_REDIS_DB" ] && HELM_SET+=" --set backend.useSecretRedisDb=true"
-          if helm -n "$NS" status "$RELEASE" >/dev/null 2>&1; then
-            echo "Upgrading existing release $RELEASE with tag $TAG using ${VALUES_FILE}"
-            helm upgrade "$RELEASE" ./helm-chart -f "${VALUES_FILE}" $HELM_SET --namespace "$NS" --wait --timeout=20m --debug
-          else
-            echo "Installing new release $RELEASE with tag $TAG using ${VALUES_FILE}"
-            helm upgrade --install "$RELEASE" ./helm-chart -f "${VALUES_FILE}" $HELM_SET --namespace "$NS" --wait --timeout=20m --debug
-
-          fi
-
-      - name: Deployment summary
+      - name: Summary
         run: |
           NS=${{ env.NAMESPACE }}
-          echo "Backend image -> $(kubectl -n $NS get deploy taipei-city-dashboard-backend -o jsonpath='{.spec.template.spec.containers[0].image}')"
-          echo "Frontend image -> $(kubectl -n $NS get deploy taipei-city-dashboard-frontend -o jsonpath='{.spec.template.spec.containers[0].image}')"
+          echo "BE -> $(kubectl -n $NS get deploy taipei-city-dashboard-backend -o jsonpath='{.spec.template.spec.containers[0].image}')"
+          echo "FE -> $(kubectl -n $NS get deploy taipei-city-dashboard-frontend -o jsonpath='{.spec.template.spec.containers[0].image}')"
 
       - name: Diagnostics on failure
         if: failure()
         run: |
-          set +e
           NS=${{ env.NAMESPACE }}
-          kubectl -n $NS get deploy,rs,po,svc,hpa -o wide
-          echo "--- Backend describe"; kubectl -n $NS describe deploy taipei-city-dashboard-backend || true
-          echo "--- Frontend describe"; kubectl -n $NS describe deploy taipei-city-dashboard-frontend || true
-          echo "--- Events"; kubectl -n $NS get events --sort-by=.lastTimestamp | tail -n 200 || true
+          kubectl -n $NS get deploy,po -o wide
+          kubectl -n $NS get events --sort-by=.lastTimestamp | tail -50
