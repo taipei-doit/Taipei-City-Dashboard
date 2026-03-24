@@ -3,8 +3,10 @@ package models
 
 import (
 	"encoding/json"
+	"fmt"
 	"math"
 	"slices"
+	"strconv"
 	"time"
 
 	"github.com/lib/pq"
@@ -103,7 +105,7 @@ type ComponentChart struct {
 // QuertChartAndConponentForQdrant defines the structure for query_charts&component data fetched for Qdrant.
 // It's a subset of fields from query_charts and components.
 type QuertChartAndConponentForQdrant struct {
-    ID       string `gorm:"column:id"`
+    ID       int64  `gorm:"column:id"`
     Index    string `gorm:"column:index"`
     Name     string `gorm:"column:name"`
     City     string `gorm:"column:city"`
@@ -286,11 +288,43 @@ func GetComponentByQueryVector(queryString string, limit int, scoreThreshold flo
 
 	for _, item := range queryOutput {
 		c := CityComponentScore{}
-		c.ID = int64(item["id"].(float64))
-		c.Index = item["index"].(string)
-		c.Name = item["name"].(string)
-		c.City = item["city"].(string)
-		c.Score = item["score"].(float64)
+		
+		// Safe conversion for ID
+		if idVal, ok := item["id"]; ok {
+			switch v := idVal.(type) {
+			case float64:
+				c.ID = int64(v)
+			case string:
+				c.ID, _ = strconv.ParseInt(v, 10, 64)
+			case int:
+				c.ID = int64(v)
+			case int64:
+				c.ID = v
+			}
+		}
+
+		// Safe conversion for Index
+		if indexVal, ok := item["index"]; ok {
+			c.Index = fmt.Sprintf("%v", indexVal)
+		}
+
+		// Safe conversion for Name
+		if nameVal, ok := item["name"]; ok {
+			c.Name = fmt.Sprintf("%v", nameVal)
+		}
+
+		// Safe conversion for City
+		if cityVal, ok := item["city"]; ok {
+			c.City = fmt.Sprintf("%v", cityVal)
+		}
+
+		// Safe conversion for Score
+		if scoreVal, ok := item["score"]; ok {
+			if s, ok := scoreVal.(float64); ok {
+				c.Score = s
+			}
+		}
+
 		component = append(component, c)
 	}
 
