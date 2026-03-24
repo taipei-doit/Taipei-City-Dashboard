@@ -180,48 +180,85 @@ jobs:
 
       - name: Apply application secrets
         env:
-          SECRETS_JSON: |
-            {
-              "DB_DASHBOARD_HOST": "${{ secrets.DB_DASHBOARD_HOST }}",
-              "DB_DASHBOARD_PASSWORD": "${{ secrets.DB_DASHBOARD_PASSWORD }}",
-              "DB_DASHBOARD_USER": "${{ secrets.DB_DASHBOARD_USER }}",
-              "DB_DASHBOARD_DBNAME": "${{ secrets.DB_DASHBOARD_DBNAME }}",
-              "DB_DASHBOARD_PORT": "${{ secrets.DB_DASHBOARD_PORT }}",
-              "DB_MANAGER_HOST": "${{ secrets.DB_MANAGER_HOST }}",
-              "DB_MANAGER_PASSWORD": "${{ secrets.DB_MANAGER_PASSWORD }}",
-              "DB_MANAGER_USER": "${{ secrets.DB_MANAGER_USER }}",
-              "DB_MANAGER_DBNAME": "${{ secrets.DB_MANAGER_DBNAME }}",
-              "DB_MANAGER_PORT": "${{ secrets.DB_MANAGER_PORT }}",
-              "REDIS_HOST": "${{ secrets.REDIS_HOST }}",
-              "REDIS_PASSWORD": "${{ secrets.REDIS_PASSWORD }}",
-              "REDIS_PORT": "${{ secrets.REDIS_PORT }}",
-              "REDIS_DB": "${{ secrets.REDIS_DB }}",
-              "JWT_SECRET": "${{ secrets.JWT_SECRET }}",
-              "GIN_DOMAIN": "${{ secrets.GIN_DOMAIN }}",
-              "IDNO_SALT": "${{ secrets.IDNO_SALT }}",
-              "ISSO_CLIENT_ID": "${{ secrets.ISSO_CLIENT_ID }}",
-              "ISSO_CLIENT_SECRET": "${{ secrets.ISSO_CLIENT_SECRET }}",
-              "VITE_API_URL": "${{ secrets.VITE_API_URL }}",
-              "VITE_MAPBOXTOKEN": "${{ secrets.VITE_MAPBOXTOKEN }}",
-              "VITE_MAPBOXTILE": "${{ secrets.VITE_MAPBOXTILE }}",
-              "VITE_TAIPEIPASS_URL": "${{ secrets.VITE_TAIPEIPASS_URL }}",
-              "VITE_TAIPEIPASS_CLIENT_ID": "${{ secrets.VITE_TAIPEIPASS_CLIENT_ID }}",
-              "VITE_TAIPEIPASS_SCOPE": "${{ secrets.VITE_TAIPEIPASS_SCOPE }}",
-              "VITE_APP_TITLE": "${{ secrets.VITE_APP_TITLE }}",
-              "BACKEND_URL": "${{ secrets.BACKEND_URL }}",
-              "TWCC_API_URL": "${{ secrets.TWCC_API_URL }}",
-              "TWCC_API_KEY": "${{ secrets.TWCC_API_KEY }}",
-              "TWCC_MODEL": "${{ secrets.TWCC_MODEL }}",
-              "TWCC_TIMEOUT": "${{ secrets.TWCC_TIMEOUT }}",
-              "TWCC_MAX_RETRY": "${{ secrets.TWCC_MAX_RETRY }}",
-              "TWCC_MAX_CONCURRENT": "${{ secrets.TWCC_MAX_CONCURRENT }}"
-            }
+          SEC_DB_DASHBOARD_HOST: ${{ secrets.DB_DASHBOARD_HOST }}
+          SEC_DB_DASHBOARD_PASSWORD: ${{ secrets.DB_DASHBOARD_PASSWORD }}
+          SEC_DB_DASHBOARD_USER: ${{ secrets.DB_DASHBOARD_USER }}
+          SEC_DB_DASHBOARD_DBNAME: ${{ secrets.DB_DASHBOARD_DBNAME }}
+          SEC_DB_DASHBOARD_PORT: ${{ secrets.DB_DASHBOARD_PORT }}
+          SEC_DB_MANAGER_PORT: ${{ secrets.DB_MANAGER_PORT }}
+          SEC_DB_MANAGER_HOST: ${{ secrets.DB_MANAGER_HOST }}
+          SEC_DB_MANAGER_PASSWORD: ${{ secrets.DB_MANAGER_PASSWORD }}
+          SEC_DB_MANAGER_DBNAME: ${{ secrets.DB_MANAGER_DBNAME }}
+          SEC_DB_MANAGER_USER: ${{ secrets.DB_MANAGER_USER }}
+          SEC_REDIS_HOST: ${{ secrets.REDIS_HOST }}
+          SEC_REDIS_PASSWORD: ${{ secrets.REDIS_PASSWORD }}
+          SEC_REDIS_PORT: ${{ secrets.REDIS_PORT }}
+          SEC_REDIS_DB: ${{ secrets.REDIS_DB }}
+          SEC_JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          SEC_GIN_DOMAIN: ${{ secrets.GIN_DOMAIN }}
+          SEC_IDNO_SALT: ${{ secrets.IDNO_SALT }}
+          SEC_ISSO_CLIENT_ID: ${{ secrets.ISSO_CLIENT_ID }}
+          SEC_ISSO_CLIENT_SECRET: ${{ secrets.ISSO_CLIENT_SECRET }}
+          SEC_VITE_API_URL: ${{ secrets.VITE_API_URL }}
+          SEC_VITE_MAPBOXTOKEN: ${{ secrets.VITE_MAPBOXTOKEN }}
+          SEC_VITE_MAPBOXTILE: ${{ secrets.VITE_MAPBOXTILE }}
+          SEC_VITE_TAIPEIPASS_URL: ${{ secrets.VITE_TAIPEIPASS_URL }}
+          SEC_VITE_TAIPEIPASS_CLIENT_ID: ${{ secrets.VITE_TAIPEIPASS_CLIENT_ID }}
+          SEC_VITE_TAIPEIPASS_SCOPE: ${{ secrets.VITE_TAIPEIPASS_SCOPE }}
+          SEC_VITE_APP_TITLE: ${{ secrets.VITE_APP_TITLE }}
+          SEC_BACKEND_URL: ${{ secrets.BACKEND_URL }}
+          SEC_TWCC_API_URL: ${{ secrets.TWCC_API_URL }}
+          SEC_TWCC_API_KEY: ${{ secrets.TWCC_API_KEY }}
+          SEC_TWCC_MODEL: ${{ secrets.TWCC_MODEL }}
+          SEC_TWCC_TIMEOUT: ${{ secrets.TWCC_TIMEOUT }}
+          SEC_TWCC_MAX_RETRY: ${{ secrets.TWCC_MAX_RETRY }}
+          SEC_TWCC_MAX_CONCURRENT: ${{ secrets.TWCC_MAX_CONCURRENT }}
         run: |
+          set -euo pipefail
+          DB_PORT="${SEC_DB_DASHBOARD_PORT:-5432}"
+          MANAGER_PORT="${SEC_DB_MANAGER_PORT:-$DB_PORT}"
+          REDIS_PORT_VAL="${SEC_REDIS_PORT:-6379}"
+          REDIS_DB_VAL="${SEC_REDIS_DB:-0}"
           ARGS=(create secret generic taipei-city-dashboard-secrets)
-          while IFS='=' read -r key value; do
-            [ -n "$value" ] && ARGS+=("--from-literal=${key}=${value}")
-          done < <(echo "$SECRETS_JSON" | jq -r 'to_entries[] | select(.value != "") | "\(.key)=\(.value)"')
-          kubectl "${ARGS[@]}" --namespace=${{ env.NAMESPACE }} --dry-run=client -o yaml | kubectl apply -f -
+          add(){
+            local k="$1"; shift; local v="$1"
+            [ -n "$v" ] && ARGS+=("--from-literal=${k}=${v}")
+          }
+          add DB_DASHBOARD_HOST "$SEC_DB_DASHBOARD_HOST"
+          add DB_DASHBOARD_PASSWORD "$SEC_DB_DASHBOARD_PASSWORD"
+          add DB_DASHBOARD_USER "$SEC_DB_DASHBOARD_USER"
+          add DB_DASHBOARD_DBNAME "$SEC_DB_DASHBOARD_DBNAME"
+          [ -n "${SEC_DB_DASHBOARD_PORT}" ] && add DB_DASHBOARD_PORT "$DB_PORT"
+          add DB_MANAGER_HOST "$SEC_DB_MANAGER_HOST"
+          add DB_MANAGER_PASSWORD "$SEC_DB_MANAGER_PASSWORD"
+          add DB_MANAGER_USER "$SEC_DB_MANAGER_USER"
+          add DB_MANAGER_DBNAME "$SEC_DB_MANAGER_DBNAME"
+          [ -n "${SEC_DB_MANAGER_PORT}" ] && add DB_MANAGER_PORT "$MANAGER_PORT"
+          add REDIS_HOST "$SEC_REDIS_HOST"
+          add REDIS_PASSWORD "$SEC_REDIS_PASSWORD"
+          [ -n "${SEC_REDIS_PORT}" ] && add REDIS_PORT "$REDIS_PORT_VAL"
+          [ -n "${SEC_REDIS_DB}" ] && add REDIS_DB "$REDIS_DB_VAL"
+          add JWT_SECRET "$SEC_JWT_SECRET"
+          add GIN_DOMAIN "$SEC_GIN_DOMAIN"
+          add IDNO_SALT "$SEC_IDNO_SALT"
+          add ISSO_CLIENT_ID "$SEC_ISSO_CLIENT_ID"
+          add ISSO_CLIENT_SECRET "$SEC_ISSO_CLIENT_SECRET"
+          add VITE_API_URL "$SEC_VITE_API_URL"
+          add VITE_MAPBOXTOKEN "$SEC_VITE_MAPBOXTOKEN"
+          add VITE_MAPBOXTILE "$SEC_VITE_MAPBOXTILE"
+          add VITE_TAIPEIPASS_URL "$SEC_VITE_TAIPEIPASS_URL"
+          add VITE_TAIPEIPASS_CLIENT_ID "$SEC_VITE_TAIPEIPASS_CLIENT_ID"
+          add VITE_TAIPEIPASS_SCOPE "$SEC_VITE_TAIPEIPASS_SCOPE"
+          add VITE_APP_TITLE "$SEC_VITE_APP_TITLE"
+          add BACKEND_URL "$SEC_BACKEND_URL"
+          add TWCC_API_URL "$SEC_TWCC_API_URL"
+          add TWCC_API_KEY "$SEC_TWCC_API_KEY"
+          add TWCC_MODEL "$SEC_TWCC_MODEL"
+          add TWCC_TIMEOUT "$SEC_TWCC_TIMEOUT"
+          add TWCC_MAX_RETRY "$SEC_TWCC_MAX_RETRY"
+          add TWCC_MAX_CONCURRENT "$SEC_TWCC_MAX_CONCURRENT"
+          ARGS+=(--namespace=${{ env.NAMESPACE }} --dry-run=client -o yaml)
+          kubectl "${ARGS[@]}" | kubectl apply -f -
 
       - name: Helm deploy
         run: |
