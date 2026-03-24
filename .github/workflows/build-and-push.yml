@@ -30,7 +30,6 @@ jobs:
     outputs:
       backend: ${{ steps.set-outputs.outputs.backend }}
       frontend: ${{ steps.set-outputs.outputs.frontend }}
-      tag: ${{ steps.tag.outputs.value }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -73,15 +72,15 @@ jobs:
           CHG_BE='${{ steps.changes.outputs.backend }}'
           CHG_FE='${{ steps.changes.outputs.frontend }}'
           CHG_SHARED='${{ steps.changes.outputs.shared }}'
-
+          
           # Strategy: if ANY change detected, deploy BOTH services for consistency and safety
           ANY_CHANGE=false
-
+          
           # Check for any changes
           if [ "$FORCE_BE" = "true" ] || [ "$FORCE_FE" = "true" ] || [ "$CHG_BE" = "true" ] || [ "$CHG_FE" = "true" ] || [ "$CHG_SHARED" = "true" ]; then
             ANY_CHANGE=true
           fi
-
+          
           # If any change detected, deploy both services
           if [ "$ANY_CHANGE" = "true" ]; then
             echo "Changes detected - deploying both services for consistency"
@@ -92,7 +91,7 @@ jobs:
             echo "backend=false" >> $GITHUB_OUTPUT
             echo "frontend=false" >> $GITHUB_OUTPUT
           fi
-
+          
           echo "Final decision -> backend=true frontend=true (any_change=$ANY_CHANGE, triggers: force_be=$FORCE_BE force_fe=$FORCE_FE chg_be=$CHG_BE chg_fe=$CHG_FE chg_shared=$CHG_SHARED)"
 
       - name: Summary
@@ -100,20 +99,16 @@ jobs:
           echo "Backend deploy: ${{ steps.set-outputs.outputs.backend }}"
           echo "Frontend deploy: ${{ steps.set-outputs.outputs.frontend }}"
 
-      - name: Compute unified image tag
-        id: tag
-        run: |
-          BRANCH="${GITHUB_REF_NAME}"
-            SHA="${GITHUB_SHA}"
-          TAG="${BRANCH}-$(echo ${SHA} | cut -c1-8)"
-          echo "value=${TAG}" >> $GITHUB_OUTPUT
-          echo "Using image tag: ${TAG}"
-
-  # ── Build BE (並行) ──
-  build-be:
+  build-and-deploy:
     needs: detect-changes
-    if: needs.detect-changes.outputs.backend == 'true'
+    if: (github.event_name == 'workflow_dispatch' || github.event_name == 'push') && needs.detect-changes.outputs.backend == 'true'
     runs-on: ubuntu-latest
+    environment:
+      # Updated: map pre-develop branch to use 'prod' environment (was 'pre-prod') so it can use prod env secrets per request
+      name: ${{ (github.ref_name == 'sit' && 'sit') || (github.ref_name == 'pre-develop' && 'prod') || (github.ref_name == 'develop' && 'prod') }}
+    concurrency:
+      group: deploy-${{ github.ref }}
+      cancel-in-progress: false
     steps:
       - name: Free Disk Space (Ubuntu)
         uses: jlumbroso/free-disk-space@main
@@ -125,7 +120,6 @@ jobs:
           large-packages: true
           docker-images: true
           swap-storage: true
-
       - name: Checkout
         uses: actions/checkout@v4
 
@@ -138,6 +132,15 @@ jobs:
           registry: ${{ env.REGISTRY }}
           username: ${{ secrets.ACR_USERNAME }}
           password: ${{ secrets.ACR_PASSWORD }}
+
+      - name: Compute unified image tag
+        id: tag
+        run: |
+          BRANCH="${GITHUB_REF_NAME}"
+            SHA="${GITHUB_SHA}"
+          TAG="${BRANCH}-$(echo ${SHA} | cut -c1-8)"
+          echo "value=${TAG}" >> $GITHUB_OUTPUT
+          echo "Using image tag: ${TAG}"
 
       - name: Build & push Backend image
         uses: docker/build-push-action@v5
@@ -146,9 +149,9 @@ jobs:
           file: ./Taipei-City-Dashboard-BE/Dockerfile
           target: prod
           push: true
-          tags: ${{ env.REGISTRY }}/${{ env.BE_IMAGE }}:${{ needs.detect-changes.outputs.tag }}
-          cache-from: type=gha,scope=be
-          cache-to: type=gha,scope=be,mode=max
+          tags: ${{ env.REGISTRY }}/${{ env.BE_IMAGE }}:${{ steps.tag.outputs.value }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
           platforms: linux/amd64
           build-args: |
             G1G2_CERT=${{ secrets.G1G2_CERT }}
@@ -156,35 +159,17 @@ jobs:
             ISSO_CLIENT_SECRET=${{ secrets.ISSO_CLIENT_SECRET }}
             IDNO_SALT=${{ secrets.IDNO_SALT }}
             JWT_SECRET=${{ secrets.JWT_SECRET }}
-
-  # ── Build FE (並行) ──
-  build-fe:
-    needs: detect-changes
-    if: needs.detect-changes.outputs.frontend == 'true'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Login to ACR
-        uses: docker/login-action@v3
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ secrets.ACR_USERNAME }}
-          password: ${{ secrets.ACR_PASSWORD }}
-
+            
+          
       - name: Build & push Frontend image
         uses: docker/build-push-action@v5
         with:
           context: ./Taipei-City-Dashboard-FE
           file: ./Taipei-City-Dashboard-FE/Dockerfile
           push: true
-          tags: ${{ env.REGISTRY }}/${{ env.FE_IMAGE }}:${{ needs.detect-changes.outputs.tag }}
-          cache-from: type=gha,scope=fe
-          cache-to: type=gha,scope=fe,mode=max
+          tags: ${{ env.REGISTRY }}/${{ env.FE_IMAGE }}:${{ steps.tag.outputs.value }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
           platforms: linux/amd64
           build-args: |
             NODE_ENV=${{ secrets.NODE_ENV }}
@@ -196,20 +181,6 @@ jobs:
             VITE_TAIPEIPASS_CLIENT_ID=${{ secrets.VITE_TAIPEIPASS_CLIENT_ID }}
             VITE_TAIPEIPASS_SCOPE=${{ secrets.VITE_TAIPEIPASS_SCOPE }}
 
-  # ── Deploy (等 build 完) ──
-  deploy:
-    needs: [detect-changes, build-be, build-fe]
-    if: always() && (needs.build-be.result == 'success' || needs.build-fe.result == 'success')
-    runs-on: ubuntu-latest
-    environment:
-      # Updated: map pre-develop branch to use 'prod' environment (was 'pre-prod') so it can use prod env secrets per request
-      name: ${{ (github.ref_name == 'sit' && 'sit') || (github.ref_name == 'pre-develop' && 'prod') || (github.ref_name == 'develop' && 'prod') }}
-    concurrency:
-      group: deploy-${{ github.ref }}
-      cancel-in-progress: false
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
 
       - name: Setup Helm
         uses: azure/setup-helm@v3
@@ -224,13 +195,6 @@ jobs:
           echo "${{ secrets.KUBE_CONFIG_DATA }}" | base64 -d > ~/.kube/config
           chmod 600 ~/.kube/config
           kubectl cluster-info
-
-      - name: Login to ACR
-        uses: docker/login-action@v3
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ secrets.ACR_USERNAME }}
-          password: ${{ secrets.ACR_PASSWORD }}
 
       - name: Create/Update ACR imagePullSecret
         run: |
@@ -270,12 +234,6 @@ jobs:
           SEC_VITE_TAIPEIPASS_SCOPE: ${{ secrets.VITE_TAIPEIPASS_SCOPE }}
           SEC_VITE_APP_TITLE: ${{ secrets.VITE_APP_TITLE }}
           SEC_BACKEND_URL: ${{ secrets.BACKEND_URL }}
-          SEC_TWCC_API_URL: ${{ secrets.TWCC_API_URL }}
-          SEC_TWCC_API_KEY: ${{ secrets.TWCC_API_KEY }}
-          SEC_TWCC_MODEL: ${{ secrets.TWCC_MODEL }}
-          SEC_TWCC_TIMEOUT: ${{ secrets.TWCC_TIMEOUT }}
-          SEC_TWCC_MAX_RETRY: ${{ secrets.TWCC_MAX_RETRY }}
-          SEC_TWCC_MAX_CONCURRENT: ${{ secrets.TWCC_MAX_CONCURRENT }}
         run: |
           set -euo pipefail
           # Defensive: ensure we are in bash (GitHub uses bash by default for run:)
@@ -321,12 +279,6 @@ jobs:
           add VITE_TAIPEIPASS_SCOPE "$SEC_VITE_TAIPEIPASS_SCOPE"
           add VITE_APP_TITLE "$SEC_VITE_APP_TITLE"
           add BACKEND_URL "$SEC_BACKEND_URL"
-          add TWCC_API_URL "$SEC_TWCC_API_URL"
-          add TWCC_API_KEY "$SEC_TWCC_API_KEY"
-          add TWCC_MODEL "$SEC_TWCC_MODEL"
-          add TWCC_TIMEOUT "$SEC_TWCC_TIMEOUT"
-          add TWCC_MAX_RETRY "$SEC_TWCC_MAX_RETRY"
-          add TWCC_MAX_CONCURRENT "$SEC_TWCC_MAX_CONCURRENT"
           # Show which keys will be applied (without values)
           echo "Secret keys to apply:" >&2
           for a in "${ARGS[@]}"; do
@@ -370,7 +322,7 @@ jobs:
           set -euo pipefail
           RELEASE=${{ env.RELEASE }}
           NS=${{ env.NAMESPACE }}
-          TAG=${{ needs.detect-changes.outputs.tag }}
+          TAG=${{ steps.tag.outputs.value }}
           VALUES_FILE=${{ steps.helm-values.outputs.file }}
           echo "Verifying images exist..."
           for img in ${{ env.REGISTRY }}/${{ env.BE_IMAGE }}:$TAG ${{ env.REGISTRY }}/${{ env.FE_IMAGE }}:$TAG; do
