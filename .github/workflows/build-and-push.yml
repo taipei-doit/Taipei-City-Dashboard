@@ -147,6 +147,7 @@ jobs:
         with:
           context: ./Taipei-City-Dashboard-BE
           file: ./Taipei-City-Dashboard-BE/Dockerfile
+          target: prod
           push: true
           tags: ${{ env.REGISTRY }}/${{ env.BE_IMAGE }}:${{ steps.tag.outputs.value }}
           cache-from: type=gha
