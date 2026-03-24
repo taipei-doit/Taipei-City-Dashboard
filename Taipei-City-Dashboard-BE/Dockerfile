@@ -4,35 +4,16 @@ ARG HF_TOKEN   # 若你有 Hugging Face 私有模型或想提高速率，可傳 
 ENV HF_HOME=/root/.cache/huggingface
 WORKDIR /w
 
-# 安裝匯出所需套件（使用 BuildKit cache 降下載時間）
-RUN --mount=type=cache,target=/root/.cache/pip \
-    pip install --no-cache-dir \
+# 安裝匯出所需套件
+RUN pip install --no-cache-dir \
       "transformers>=4.44" \
       "optimum[onnxruntime]>=1.20.0" \
       onnxruntime
 
 # 匯出：feature-extraction
 # 產出到 /out/onnx-e5
-RUN --mount=type=cache,target=/root/.cache/huggingface python - <<'PY'
-from pathlib import Path
-from transformers import AutoTokenizer
-from optimum.onnxruntime import ORTModelForFeatureExtraction
-
-MODEL_ID = "intfloat/multilingual-e5-base"
-OUT_DIR  = Path("/out/onnx-e5")
-OUT_DIR.mkdir(parents=True, exist_ok=True)
-
-model = ORTModelForFeatureExtraction.from_pretrained(
-    MODEL_ID,
-    export=True,
-    provider="CPUExecutionProvider"
-)
-tok = AutoTokenizer.from_pretrained(MODEL_ID, use_fast=True)
-
-model.save_pretrained(OUT_DIR)
-tok.save_pretrained(OUT_DIR)
-print("Exported to:", OUT_DIR)
-PY
+COPY export_model_docker.py /w/export_model_docker.py
+RUN python /w/export_model_docker.py
 
 # ====== Builder ======
 FROM golang:1.25.4-bookworm AS builder
