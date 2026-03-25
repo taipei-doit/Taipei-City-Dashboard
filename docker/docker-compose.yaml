@@ -71,12 +71,10 @@ services:
       LM_MODEL_PATH: ${LM_MODEL_PATH}
     volumes:
       - ../Taipei-City-Dashboard-BE:/opt/Taipei-City-Dashboard-BE
-    # working_dir: /opt/Taipei-City-Dashboard-BE #Local Development
-    working_dir: /app #Test Prod Image
+    working_dir: /opt/Taipei-City-Dashboard-BE
     ports:
       - "8088:${PORT:-8080}"
-    # command: ["go", "run", "main.go"] #Local Development
-    command: ["./TaipeiCityDashboardBE"] #Test Prod Image
+    command: ["go", "run", "main.go"]
 
 
 networks:
