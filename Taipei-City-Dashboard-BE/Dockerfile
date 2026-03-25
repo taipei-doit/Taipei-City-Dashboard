@@ -28,7 +28,7 @@ RUN go build -o TaipeiCityDashboardBE .
 
 # ====== Runtime ======
 # Prod
-FROM debian:bookworm-slim
+FROM debian:bookworm-slim AS prod
 # Dev
 # FROM golang:1.25.4-bookworm  
 
