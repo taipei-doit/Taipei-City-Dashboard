@@ -39,8 +39,8 @@ services:
     image: dashboard-be-dev:latest #Local Development
     # image: dashboard-be:latest #Test Prod Image
     build:
-      context: .
-      dockerfile: ../Taipei-City-Dashboard-BE/Dockerfile-dev
+      context: ../Taipei-City-Dashboard-BE
+      dockerfile: Dockerfile
     container_name: dashboard-be
     restart: always
     environment:
@@ -71,28 +71,13 @@ services:
       LM_MODEL_PATH: ${LM_MODEL_PATH}
     volumes:
       - ../Taipei-City-Dashboard-BE:/opt/Taipei-City-Dashboard-BE
-    working_dir: /opt/Taipei-City-Dashboard-BE #Local Development
-    # working_dir: /app #Test Prod Image
+    # working_dir: /opt/Taipei-City-Dashboard-BE #Local Development
+    working_dir: /app #Test Prod Image
     ports:
       - "8088:${PORT:-8080}"
-    command: ["go", "run", "main.go"] #Local Development
-    # command: ["./TaipeiCityDashboardBE"] #Test Prod Image
+    # command: ["go", "run", "main.go"] #Local Development
+    command: ["./TaipeiCityDashboardBE"] #Test Prod Image
 
-  vector-db-upgrade:
-    build:
-      context: ./qdrant-upgrade
-      dockerfile: Dockerfile
-    image: dashboard-vector-upgrade:latest
-    container_name: vector-db-upgrade
-    environment:
-      DB_MANAGER_HOST: ${DB_MANAGER_HOST:-postgres-manager}
-      DB_MANAGER_USER: ${DB_MANAGER_USER}
-      DB_MANAGER_PASSWORD: ${DB_MANAGER_PASSWORD}
-      DB_MANAGER_DBNAME: ${DB_MANAGER_DBNAME}
-      DB_MANAGER_PORT: ${DB_MANAGER_PORT:-5432}
-      QDRANT_URL: ${QDRANT_URL:-http://qdrant:6333}
-      QDRANT_API_KEY: ${QDRANT_API_KEY:-gogosecurity}
-      QDRANT_COLLECTION_NAME: ${QDRANT_COLLECTION_NAME:-query_charts}
 
 networks:
   default:
