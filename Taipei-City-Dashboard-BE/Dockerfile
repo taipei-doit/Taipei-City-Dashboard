@@ -81,7 +81,42 @@ EXPOSE 8080
 RUN useradd -r -u 10001 appuser
 USER 10001
 
-# Prod
 CMD ["/app/TaipeiCityDashboardBE"]
-# Dev
-# CMD ["go", "run", "main.go"]
+
+# ====== Dev Target ======
+# 本地開發用：docker build --target dev
+# 搭配 volume mount + go run，不需要編譯
+FROM golang:1.25.4-bookworm AS dev
+
+ARG TARGETARCH
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        ca-certificates wget libgomp1 && \
+    update-ca-certificates && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN set -eux; \
+    if [ "$TARGETARCH" = "amd64" ]; then \
+        URL="https://github.com/microsoft/onnxruntime/releases/download/v1.23.2/onnxruntime-linux-x64-1.23.2.tgz"; \
+    elif [ "$TARGETARCH" = "arm64" ]; then \
+        URL="https://github.com/microsoft/onnxruntime/releases/download/v1.23.2/onnxruntime-linux-aarch64-1.23.2.tgz"; \
+    else \
+        echo "Unsupported arch: $TARGETARCH" && exit 1; \
+    fi; \
+    wget -O /tmp/ort.tgz "$URL" && \
+    tar -xzf /tmp/ort.tgz -C /tmp && \
+    ORTDIR=$(find /tmp -maxdepth 1 -type d -name "onnxruntime-linux-*") && \
+    cp "$ORTDIR/lib/libonnxruntime.so" /usr/lib/ && \
+    rm -rf /tmp/ort.tgz "$ORTDIR"
+
+ENV LD_LIBRARY_PATH=/usr/lib
+ENV GOCACHE=/tmp/go-build-cache
+
+COPY --from=model_export /out/onnx-e5 /opt/lm_model/onnx-e5
+
+WORKDIR /app
+EXPOSE 8080
+
+RUN useradd -r -u 10001 appuser
+USER 10001
+CMD ["go", "run", "main.go"]
