@@ -41,7 +41,6 @@ services:
     build:
       context: ../Taipei-City-Dashboard-BE
       dockerfile: Dockerfile
-      target: dev
     container_name: dashboard-be
     restart: always
     environment:
