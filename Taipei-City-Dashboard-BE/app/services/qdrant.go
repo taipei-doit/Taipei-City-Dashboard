@@ -10,7 +10,6 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"strconv"
 	"strings" // Added for string manipulation
 	"sync/atomic"
 
@@ -108,7 +107,7 @@ func generateVectors(data []models.QuertChartAndConponentForQdrant) ([]qdrantPoi
 		combinedText = strings.ReplaceAll(combinedText, "\n", " ")
 		
 		if combinedText == "" {
-			log.Printf("Skipping item ID %s (%s) due to empty combined text for vector generation.", item.ID, item.Name)
+			log.Printf("Skipping item ID %d (%s) due to empty combined text for vector generation.", item.ID, item.Name)
 			continue
 		}
 
@@ -134,17 +133,9 @@ func generateVectors(data []models.QuertChartAndConponentForQdrant) ([]qdrantPoi
 		}
 
 		// Handle point ID type: Qdrant accepts integer or UUID string.
-		// Try to convert the ID to an unsigned integer. If it fails, use the original string.
-		var pointID interface{}
-		id, err := strconv.ParseUint(item.ID, 10, 64)
-		if err == nil {
-			pointID = id
-		} else {
-			pointID = item.ID
-		}
-
+		// Since item.ID is now int64, we can use it directly as a uint64 point ID.
 		points = append(points, qdrantPoint{
-			ID:      pointID,
+			ID:      uint64(item.ID),
 			Vector:  vector,
 			Payload: payload,
 		})

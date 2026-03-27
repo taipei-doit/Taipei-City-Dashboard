@@ -4,35 +4,16 @@ ARG HF_TOKEN   # 若你有 Hugging Face 私有模型或想提高速率，可傳 
 ENV HF_HOME=/root/.cache/huggingface
 WORKDIR /w
 
-# 安裝匯出所需套件（使用 BuildKit cache 降下載時間）
-RUN --mount=type=cache,target=/root/.cache/pip \
-    pip install --no-cache-dir \
+# 安裝匯出所需套件
+RUN pip install --no-cache-dir \
       "transformers>=4.44" \
       "optimum[onnxruntime]>=1.20.0" \
       onnxruntime
 
 # 匯出：feature-extraction
 # 產出到 /out/onnx-e5
-RUN --mount=type=cache,target=/root/.cache/huggingface python - <<'PY'
-from pathlib import Path
-from transformers import AutoTokenizer
-from optimum.onnxruntime import ORTModelForFeatureExtraction
-
-MODEL_ID = "intfloat/multilingual-e5-base"
-OUT_DIR  = Path("/out/onnx-e5")
-OUT_DIR.mkdir(parents=True, exist_ok=True)
-
-model = ORTModelForFeatureExtraction.from_pretrained(
-    MODEL_ID,
-    export=True,
-    provider="CPUExecutionProvider"
-)
-tok = AutoTokenizer.from_pretrained(MODEL_ID, use_fast=True)
-
-model.save_pretrained(OUT_DIR)
-tok.save_pretrained(OUT_DIR)
-print("Exported to:", OUT_DIR)
-PY
+COPY export_model_docker.py /w/export_model_docker.py
+RUN python /w/export_model_docker.py
 
 # ====== Builder ======
 FROM golang:1.25.4-bookworm AS builder
@@ -47,7 +28,7 @@ RUN go build -o TaipeiCityDashboardBE .
 
 # ====== Runtime ======
 # Prod
-FROM debian:bookworm-slim
+FROM debian:bookworm-slim AS prod
 # Dev
 # FROM golang:1.25.4-bookworm  
 
@@ -100,7 +81,42 @@ EXPOSE 8080
 RUN useradd -r -u 10001 appuser
 USER 10001
 
-# Prod
 CMD ["/app/TaipeiCityDashboardBE"]
-# Dev
-# CMD ["go", "run", "main.go"]
+
+# ====== Dev Target ======
+# 本地開發用：docker build --target dev
+# 搭配 volume mount + go run，不需要編譯
+FROM golang:1.25.4-bookworm AS dev
+
+ARG TARGETARCH
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        ca-certificates wget libgomp1 && \
+    update-ca-certificates && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN set -eux; \
+    if [ "$TARGETARCH" = "amd64" ]; then \
+        URL="https://github.com/microsoft/onnxruntime/releases/download/v1.23.2/onnxruntime-linux-x64-1.23.2.tgz"; \
+    elif [ "$TARGETARCH" = "arm64" ]; then \
+        URL="https://github.com/microsoft/onnxruntime/releases/download/v1.23.2/onnxruntime-linux-aarch64-1.23.2.tgz"; \
+    else \
+        echo "Unsupported arch: $TARGETARCH" && exit 1; \
+    fi; \
+    wget -O /tmp/ort.tgz "$URL" && \
+    tar -xzf /tmp/ort.tgz -C /tmp && \
+    ORTDIR=$(find /tmp -maxdepth 1 -type d -name "onnxruntime-linux-*") && \
+    cp "$ORTDIR/lib/libonnxruntime.so" /usr/lib/ && \
+    rm -rf /tmp/ort.tgz "$ORTDIR"
+
+ENV LD_LIBRARY_PATH=/usr/lib
+ENV GOCACHE=/tmp/go-build-cache
+
+COPY --from=model_export /out/onnx-e5 /opt/lm_model/onnx-e5
+
+WORKDIR /app
+EXPOSE 8080
+
+RUN useradd -r -u 10001 appuser
+USER 10001
+CMD ["go", "run", "main.go"]
