@@ -37,6 +37,7 @@ func init() {
 type AIChatRequest struct {
 	SessionID string                `json:"session_id"`
 	UserID    string                `json:"user_id"`
+	IPAddress string                `json:"ip_address"`
 	Messages  []llms.MessageContent `json:"messages"`
 	Params    map[string]interface{} `json:"params"`
 }
@@ -54,13 +55,25 @@ func ChatWithTWCC(ctx context.Context, req AIChatRequest, options ...llms.CallOp
 	var lastErr error
 
 	// 2. Retry Logic (Up to MaxRetry + 1 attempts)
-	for i := 0; i <= global.TWCC.MaxRetry; i++ {
+	// Disable retries for streaming requests as we can't restart an SSE connection easily
+	maxRetry := global.TWCC.MaxRetry
+	opts := llms.CallOptions{}
+	for _, opt := range options {
+		opt(&opts)
+	}
+	if opts.StreamingFunc != nil {
+		maxRetry = 0
+	}
+
+	for i := 0; i <= maxRetry; i++ {
 		finalResp, lastErr = twccModel.GenerateContent(ctx, req.Messages, options...)
 		if lastErr == nil {
 			break
 		}
 		logs.FError("TWCC Attempt %d failed: %v", i+1, lastErr)
-		time.Sleep(500 * time.Millisecond) // Short delay between retries
+		if i < maxRetry {
+			time.Sleep(500 * time.Millisecond) // Short delay between retries
+		}
 	}
 
 	latency := int(time.Since(startTime).Milliseconds())
@@ -69,6 +82,7 @@ func ChatWithTWCC(ctx context.Context, req AIChatRequest, options ...llms.CallOp
 	chatLog := &models.AIChatLog{
 		SessionID: req.SessionID,
 		UserID:    req.UserID,
+		IPAddress: req.IPAddress,
 		Provider:  "twcc",
 		Model:     global.TWCC.Model,
 		LatencyMS: latency,

@@ -22,6 +22,7 @@ type AIChatLog struct {
 	Status       string    `gorm:"type:varchar(30);not null;default:'success'" json:"status"`
 	ErrorCode    string    `gorm:"type:varchar(100)" json:"error_code"`
 	ErrorMessage string    `gorm:"type:text" json:"error_message"`
+	IPAddress    string    `gorm:"type:varchar(45);not null" json:"ip_address"`
 	CreatedAt    time.Time `gorm:"not null;default:now()" json:"created_at"`
 }
 

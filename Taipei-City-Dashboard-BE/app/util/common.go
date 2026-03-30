@@ -11,13 +11,29 @@ Developed By Taipei Urban Intelligence Center 2023-2024
 package util
 
 import (
+	"crypto/rand"
 	"crypto/sha256"
 	"errors"
 	"fmt"
+	"math/big"
 	"time"
 
 	"github.com/gin-gonic/gin"
 )
+
+// GenerateRandomString generates a random alphanumeric string of a specified length.
+func GenerateRandomString(length int) string {
+	const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+	result := make([]byte, length)
+	for i := range result {
+		num, err := rand.Int(rand.Reader, big.NewInt(int64(len(charset))))
+		if err != nil {
+			return ""
+		}
+		result[i] = charset[num.Int64()]
+	}
+	return string(result)
+}
 
 // HashString takes a string as input, hashes it using SHA-256, and returns the hexadecimal representation of the hash.
 func HashString(s string) string {
