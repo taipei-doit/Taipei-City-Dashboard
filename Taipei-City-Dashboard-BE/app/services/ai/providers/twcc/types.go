@@ -1,8 +1,10 @@
 package twcc
 
 type TWCCMessage struct {
-	Role    string `json:"role"`
-	Content string `json:"content"`
+	Role       string         `json:"role"`
+	Content    string         `json:"content"`
+	ToolCalls  []TWCCToolCall `json:"tool_calls,omitempty"`
+	ToolCallID string         `json:"tool_call_id,omitempty"`
 }
 
 type TWCCParameters struct {
@@ -21,18 +23,40 @@ type TWCCRequest struct {
 	Messages   []TWCCMessage  `json:"messages"`
 	Parameters TWCCParameters `json:"parameters"`
 	Stream     bool           `json:"stream,omitempty"`
-	// Future-proofing for Tool Calling
-	Tools      []interface{}  `json:"tools,omitempty"`
+	Tools      []TWCCTool     `json:"tools,omitempty"`
 	ToolChoice interface{}    `json:"tool_choice,omitempty"`
 }
 
+type TWCCTool struct {
+	Type     string         `json:"type"`
+	Function TWCCToolFunction `json:"function"`
+}
+
+type TWCCToolFunction struct {
+	Name        string      `json:"name"`
+	Description string      `json:"description,omitempty"`
+	Parameters  interface{} `json:"parameters"`
+}
+
+type TWCCToolCall struct {
+	ID       string `json:"id"`
+	Type     string `json:"type"`
+	Function struct {
+		Name      string `json:"name"`
+		Arguments string `json:"arguments"`
+	} `json:"function"`
+}
+
 type TWCCResponse struct {
-	GeneratedText string `json:"generated_text"`
+	GeneratedText string         `json:"generated_text"`
+	ToolCalls     []TWCCToolCall `json:"tool_calls,omitempty"`
 	Choices       []struct {
 		Message struct {
-			Role    string `json:"role"`
-			Content string `json:"content"`
+			Role      string         `json:"role"`
+			Content   string         `json:"content"`
+			ToolCalls []TWCCToolCall `json:"tool_calls,omitempty"`
 		} `json:"message"`
+		FinishReason string `json:"finish_reason"`
 	} `json:"choices"`
 	// TWCC AFS Specific Token Fields (at root level)
 	PromptTokens    int `json:"prompt_tokens"`
@@ -41,14 +65,16 @@ type TWCCResponse struct {
 }
 
 type TWCCStreamResponse struct {
-	ID            string `json:"id"`
-	Model         string `json:"model"`
-	GeneratedText string `json:"generated_text"`
+	ID            string         `json:"id"`
+	Model         string         `json:"model"`
+	GeneratedText string         `json:"generated_text"`
+	ToolCalls     []TWCCToolCall `json:"tool_calls,omitempty"`
 	Choices       []struct {
 		Index int `json:"index"`
 		Delta struct {
-			Content string `json:"content"`
-			Role    string `json:"role"`
+			Content   string         `json:"content"`
+			Role      string         `json:"role"`
+			ToolCalls []TWCCToolCall `json:"tool_calls,omitempty"`
 		} `json:"delta"`
 		FinishReason string `json:"finish_reason"`
 	} `json:"choices"`
