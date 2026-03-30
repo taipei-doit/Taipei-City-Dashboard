@@ -35,7 +35,7 @@ func init() {
 
 // AIChatRequest represents the incoming request structure for AI chat
 type AIChatRequest struct {
-	SessionID string                `json:"session_id"`
+	SessionID string                `json:"session"`
 	UserID    string                `json:"user_id"`
 	IPAddress string                `json:"ip_address"`
 	Messages  []llms.MessageContent `json:"messages"`
@@ -62,12 +62,54 @@ func ChatWithTWCC(ctx context.Context, req AIChatRequest, options ...llms.CallOp
 
 	// 2. Main Tool Calling Loop
 	maxToolLoops := 5
-	currentMessages := req.Messages
+	
+	// Extract Tools list for system message and error reporting
+	availableTools := ""
+	for i, t := range opts.Tools {
+		if i > 0 { availableTools += ", " }
+		availableTools += t.Function.Name
+	}
+
+	// Inject or merge a strict system constraint to prevent tool hallucination
+	instruction := fmt.Sprintf("\nSystem Instruction: You MUST ONLY use the tools provided in your toolset: [%s]. NEVER hallucinate or make up tool names like 'get_scenic_spots'. If a requested action cannot be performed by these specific tools, respond to the user directly with text and explain you don't have that capability.", availableTools)
+	
+	currentMessages := make([]llms.MessageContent, 0)
+	systemMerged := false
+	for _, m := range req.Messages {
+		if m.Role == llms.ChatMessageTypeSystem && !systemMerged {
+			// Merge into existing system message
+			newParts := make([]llms.ContentPart, 0)
+			for _, p := range m.Parts {
+				if tp, ok := p.(llms.TextContent); ok {
+					newParts = append(newParts, llms.TextContent{Text: tp.Text + instruction})
+				} else {
+					newParts = append(newParts, p)
+				}
+			}
+			currentMessages = append(currentMessages, llms.MessageContent{Role: m.Role, Parts: newParts})
+			systemMerged = true
+		} else {
+			currentMessages = append(currentMessages, m)
+		}
+	}
+	
+	// If no system message existed, prepend a new one
+	if !systemMerged {
+		constraintMsg := llms.MessageContent{
+			Role: llms.ChatMessageTypeSystem,
+			Parts: []llms.ContentPart{llms.TextContent{
+				Text: "System Instruction: You MUST ONLY use the tools provided in your toolset: [" + availableTools + "]. NEVER hallucinate or make up tool names. If a requested action cannot be performed by these specific tools, respond to the user directly with text.",
+			}},
+		}
+		currentMessages = append([]llms.MessageContent{constraintMsg}, currentMessages...)
+	}
+	
 	totalInputTokens := 0
 	totalOutputTokens := 0
 	var toolUsed bool
 
 	for loop := 0; loop < maxToolLoops; loop++ {
+		// ... existing loop code ...
 		// Generate Content with Retries
 		maxRetry := global.TWCC.MaxRetry
 		if opts.StreamingFunc != nil {
@@ -76,9 +118,6 @@ func ChatWithTWCC(ctx context.Context, req AIChatRequest, options ...llms.CallOp
 
 		var currentResp *llms.ContentResponse
 		for i := 0; i <= maxRetry; i++ {
-			// CRITICAL: We pass the original options (including StreamingFunc) to every call.
-			// The provider (twcc.go) is responsible for INTERCEPTING tool chunks 
-			// and ONLY calling StreamingFunc for actual text content.
 			currentResp, lastErr = twccModel.GenerateContent(ctx, currentMessages, options...)
 			if lastErr == nil {
 				break
@@ -107,7 +146,7 @@ func ChatWithTWCC(ctx context.Context, req AIChatRequest, options ...llms.CallOp
 			totalOutputTokens += parseUsageInt(usage["output_tokens"])
 		}
 
-		// Check for Tool Calls (this will be populated even in streaming if it was intercepted)
+		// Check for Tool Calls
 		toolCalls, ok := choice.GenerationInfo["tool_calls"].([]llms.ToolCall)
 		if !ok || len(toolCalls) == 0 {
 			break
@@ -132,7 +171,7 @@ func ChatWithTWCC(ctx context.Context, req AIChatRequest, options ...llms.CallOp
 		for _, tc := range toolCalls {
 			result, err := tools.Execute(ctx, tc.FunctionCall.Name, tc.FunctionCall.Arguments)
 			if err != nil {
-				result = fmt.Sprintf("Error executing tool %s: %v", tc.FunctionCall.Name, err)
+				result = fmt.Sprintf("Error: tool '%s' not found. Available tools are: [%s]. Please do NOT call non-existent tools.", tc.FunctionCall.Name, availableTools)
 				logs.FError(result)
 			}
 
