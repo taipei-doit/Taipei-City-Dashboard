@@ -2,7 +2,8 @@ package twcc
 
 type TWCCMessage struct {
 	Role       string         `json:"role"`
-	Content    string         `json:"content"`
+	Content    *string        `json:"content,omitempty"`
+	Name       string         `json:"name,omitempty"`
 	ToolCalls  []TWCCToolCall `json:"tool_calls,omitempty"`
 	ToolCallID string         `json:"tool_call_id,omitempty"`
 }
@@ -78,6 +79,11 @@ type TWCCStreamResponse struct {
 		} `json:"delta"`
 		FinishReason string `json:"finish_reason"`
 	} `json:"choices"`
+	// AFS sends these at root level in streaming chunks
+	PromptTokens    int `json:"prompt_tokens"`
+	GeneratedTokens int `json:"generated_tokens"`
+	TotalTokens     int `json:"total_tokens"`
+	// Keep Usage for compatibility with other formats/future changes
 	Usage *struct {
 		PromptTokens    int `json:"prompt_tokens"`
 		GeneratedTokens int `json:"generated_tokens"`

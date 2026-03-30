@@ -7,7 +7,7 @@ import (
 // AIChatLog defines the model for AI chat logs as specified in the system design.
 type AIChatLog struct {
 	ID           int64     `gorm:"primaryKey;autoIncrement" json:"id"`
-	SessionID    string    `gorm:"type:varchar(100);not null;index:idx_ai_chatlog_session" json:"session_id"`
+	SessionID    string    `gorm:"type:varchar(100);not null;index:idx_ai_chatlog_session" json:"session"`
 	UserID       string    `gorm:"type:varchar(100);index:idx_ai_chatlog_user" json:"user_id"`
 	Provider     string    `gorm:"type:varchar(50);not null;default:'twcc'" json:"provider"`
 	Model        string    `gorm:"type:varchar(100)" json:"model"`

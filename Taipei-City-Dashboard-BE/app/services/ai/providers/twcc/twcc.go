@@ -50,6 +50,7 @@ func (m *TWCC) GenerateContent(ctx context.Context, messages []llms.MessageConte
 	for _, mc := range messages {
 		role := string(mc.Role)
 		var toolCallID string
+		var toolName string
 		var twccToolCalls []TWCCToolCall
 
 		// Map langchaingo roles to TWCC roles
@@ -64,11 +65,11 @@ func (m *TWCC) GenerateContent(ctx context.Context, messages []llms.MessageConte
 			role = "tool"
 		}
 
-		content := ""
+		var contentText string
 		for _, part := range mc.Parts {
 			switch p := part.(type) {
 			case llms.TextContent:
-				content = p.Text
+				contentText = p.Text
 			case llms.ToolCall:
 				twccToolCalls = append(twccToolCalls, TWCCToolCall{
 					ID:   p.ID,
@@ -83,16 +84,26 @@ func (m *TWCC) GenerateContent(ctx context.Context, messages []llms.MessageConte
 				})
 			case llms.ToolCallResponse:
 				toolCallID = p.ToolCallID
-				content = p.Content
+				toolName = p.Name
+				contentText = p.Content
 			}
 		}
 
-		twccMessages = append(twccMessages, TWCCMessage{
+		msg := TWCCMessage{
 			Role:       role,
-			Content:    content,
 			ToolCalls:  twccToolCalls,
 			ToolCallID: toolCallID,
-		})
+			Name:       toolName,
+		}
+		// AFS requires content to be present for most roles, 
+		// but assistant messages with tool_calls might have empty/null content.
+		if role == "assistant" && len(twccToolCalls) > 0 && contentText == "" {
+			// Don't set content pointer, it will be omitted from JSON
+		} else {
+			msg.Content = strPtr(contentText)
+		}
+
+		twccMessages = append(twccMessages, msg)
 	}
 
 	// 2. Build Request Payload using Metadata for precise mapping
@@ -195,6 +206,8 @@ func (m *TWCC) GenerateContent(ctx context.Context, messages []llms.MessageConte
 		var lastUsage *TWCCStreamResponse
 		var toolCallsMap = make(map[int]*TWCCToolCall)
 		var isToolCalling bool
+		var lineBuffer []string
+		var bufferFlushed bool
 
 		for {
 			line, err := reader.ReadString('\n')
@@ -209,14 +222,26 @@ func (m *TWCC) GenerateContent(ctx context.Context, messages []llms.MessageConte
 				if jsonData != "" && jsonData != "[DONE]" {
 					var streamResp TWCCStreamResponse
 					if unmarshalErr := json.Unmarshal([]byte(jsonData), &streamResp); unmarshalErr == nil {
-						// Detection: Does THIS chunk have tools?
+						// Detection: Does THIS chunk have tools or look like a tool call starting?
+						text := streamResp.GeneratedText
+						if text == "" && len(streamResp.Choices) > 0 {
+							text = streamResp.Choices[0].Delta.Content
+						}
+
 						thisChunkHasTools := len(streamResp.ToolCalls) > 0
 						if len(streamResp.Choices) > 0 && len(streamResp.Choices[0].Delta.ToolCalls) > 0 {
 							thisChunkHasTools = true
 						}
 
-						if thisChunkHasTools {
-							isToolCalling = true
+						// Accumulate content and check for tool call markers
+						if !isToolCalling {
+							combined := fullContent.String() + text
+							if strings.Contains(combined, "tool<") || strings.Contains(combined, "<function") || thisChunkHasTools {
+								isToolCalling = true
+							}
+						}
+
+						if isToolCalling {
 							// Process ToolCalls from root
 							for _, tc := range streamResp.ToolCalls {
 								if _, exists := toolCallsMap[0]; !exists {
@@ -236,29 +261,71 @@ func (m *TWCC) GenerateContent(ctx context.Context, messages []llms.MessageConte
 								}
 							}
 						} else {
-							// Normal text chunk: Pass the ORIGINAL line to keep SSE protocol (\n included)
-							if streamErr := opts.StreamingFunc(ctx, []byte(line)); streamErr != nil {
-								return nil, streamErr
-							}
-							if len(streamResp.Choices) > 0 && streamResp.Choices[0].Delta.Content != "" {
-								fullContent.WriteString(streamResp.Choices[0].Delta.Content)
+							// BUFFERING LOGIC: Prevent leaks by waiting for a clear signal
+							if !bufferFlushed {
+								lineBuffer = append(lineBuffer, line)
+								if text != "" {
+									fullContent.WriteString(text)
+								}
+
+								// Flush conditions:
+								// 1. Content is long enough to confirm it's not a tool call
+								// 2. Content definitely doesn't start with tool-calling characters
+								combined := fullContent.String()
+								shouldFlush := false
+								if len(combined) > 50 {
+									shouldFlush = true
+								} else if len(combined) > 0 {
+									firstChar := strings.ToLower(string(combined[0]))
+									// If it doesn't start with 't', '<', or whitespace, it's likely normal text
+									if firstChar != "t" && firstChar != "<" && firstChar != " " {
+										shouldFlush = true
+									}
+								}
+
+								if shouldFlush {
+									bufferFlushed = true
+									for _, l := range lineBuffer {
+										if streamErr := opts.StreamingFunc(ctx, []byte(l)); streamErr != nil {
+											return nil, streamErr
+										}
+									}
+									lineBuffer = nil
+								}
+							} else {
+								// Normal streaming after buffer is flushed
+								if streamErr := opts.StreamingFunc(ctx, []byte(line)); streamErr != nil {
+									return nil, streamErr
+								}
+								if text != "" {
+									fullContent.WriteString(text)
+								}
 							}
 						}
 
-						if streamResp.Usage != nil {
+						if streamResp.PromptTokens > 0 || streamResp.GeneratedTokens > 0 || streamResp.Usage != nil {
 							lastUsage = &streamResp
 						}
 					}
 				} else if jsonData == "[DONE]" {
 					// End of stream
 					if !isToolCalling {
+						// If we reach [DONE] and never flushed, flush now
+						if !bufferFlushed {
+							for _, l := range lineBuffer {
+								opts.StreamingFunc(ctx, []byte(l))
+							}
+						}
 						opts.StreamingFunc(ctx, []byte(line))
 					}
 				} else {
-					// This is likely an empty line or non-data SSE line (like a retry or comment)
-					// Pass it through to keep the connection alive/valid
+					// Handle empty or non-data lines
 					if !isToolCalling {
-						opts.StreamingFunc(ctx, []byte(line))
+						if !bufferFlushed {
+							lineBuffer = append(lineBuffer, line)
+						} else {
+							opts.StreamingFunc(ctx, []byte(line))
+						}
 					}
 				}
 			}
@@ -296,11 +363,23 @@ func (m *TWCC) GenerateContent(ctx context.Context, messages []llms.MessageConte
 			}
 			finalResp.Choices[0].GenerationInfo["tool_calls"] = ltc
 		}
-		if lastUsage != nil && lastUsage.Usage != nil {
-			finalResp.Choices[0].GenerationInfo["usage"] = map[string]interface{}{
-				"input_tokens":  lastUsage.Usage.PromptTokens,
-				"output_tokens": lastUsage.Usage.GeneratedTokens,
-				"total_tokens":  lastUsage.Usage.TotalTokens,
+		if lastUsage != nil {
+			inputTokens := lastUsage.PromptTokens
+			outputTokens := lastUsage.GeneratedTokens
+			totalTokens := lastUsage.TotalTokens
+
+			if lastUsage.Usage != nil {
+				if inputTokens == 0 { inputTokens = lastUsage.Usage.PromptTokens }
+				if outputTokens == 0 { outputTokens = lastUsage.Usage.GeneratedTokens }
+				if totalTokens == 0 { totalTokens = lastUsage.Usage.TotalTokens }
+			}
+
+			if inputTokens > 0 || outputTokens > 0 {
+				finalResp.Choices[0].GenerationInfo["usage"] = map[string]interface{}{
+					"input_tokens":  inputTokens,
+					"output_tokens": outputTokens,
+					"total_tokens":  totalTokens,
+				}
 			}
 		}
 		return finalResp, nil
@@ -323,7 +402,7 @@ func (m *TWCC) GenerateContent(ctx context.Context, messages []llms.MessageConte
 	content := twccResp.GeneratedText
 	var toolCalls []llms.ToolCall
 
-	// 1. Try to get tool_calls from root level first (as seen in log)
+	// 1. Try to get tool_calls from root level first
 	if len(twccResp.ToolCalls) > 0 {
 		for _, tc := range twccResp.ToolCalls {
 			toolCalls = append(toolCalls, llms.ToolCall{
@@ -337,7 +416,7 @@ func (m *TWCC) GenerateContent(ctx context.Context, messages []llms.MessageConte
 		}
 	}
 
-	// 2. Fallback to choices if root level is empty
+	// 2. Fallback to choices
 	if len(twccResp.Choices) > 0 {
 		choice := twccResp.Choices[0]
 		if choice.Message.Content != "" {
@@ -354,6 +433,15 @@ func (m *TWCC) GenerateContent(ctx context.Context, messages []llms.MessageConte
 					},
 				})
 			}
+		}
+	}
+
+	// 3. Heuristic Parsing: If still no tools, try to parse XML tags from content
+	if len(toolCalls) == 0 && (strings.Contains(content, "<function=") || strings.Contains(content, "tool<")) {
+		extractedTools, cleanedContent := extractXMLToolCalls(content)
+		if len(extractedTools) > 0 {
+			toolCalls = extractedTools
+			content = cleanedContent
 		}
 	}
 
@@ -379,6 +467,53 @@ func (m *TWCC) GenerateContent(ctx context.Context, messages []llms.MessageConte
 	}, nil
 }
 
+// extractXMLToolCalls identifies <function=NAME>{ARGS}</function> in text,
+// extracts them as ToolCalls, and returns the text with tags removed.
+func extractXMLToolCalls(text string) ([]llms.ToolCall, string) {
+	var toolCalls []llms.ToolCall
+	remainingText := text
+
+	// Basic regex-free parsing for reliability with AFS fragments
+	// Pattern: <function=([^>]+)>(.*?)</function>
+	for {
+		startTag := "<function="
+		startIdx := strings.Index(remainingText, startTag)
+		if startIdx == -1 {
+			// Try the other common AFS format: tool<function=...
+			startTag = "tool<function="
+			startIdx = strings.Index(remainingText, startTag)
+			if startIdx == -1 { break }
+		}
+
+		nameEndIdx := strings.Index(remainingText[startIdx:], ">")
+		if nameEndIdx == -1 { break }
+		nameEndIdx += startIdx
+
+		funcName := remainingText[startIdx+len(startTag) : nameEndIdx]
+
+		endTag := "</function>"
+		endIdx := strings.Index(remainingText[nameEndIdx:], endTag)
+		if endIdx == -1 { break }
+		endIdx += nameEndIdx
+
+		args := remainingText[nameEndIdx+1 : endIdx]
+
+		toolCalls = append(toolCalls, llms.ToolCall{
+			ID:   fmt.Sprintf("call_%d", time.Now().UnixNano()),
+			Type: "function",
+			FunctionCall: &llms.FunctionCall{
+				Name:      funcName,
+				Arguments: args,
+			},
+		})
+
+		// Remove the tag from content to prevent 400 errors in next round
+		remainingText = remainingText[:startIdx] + remainingText[endIdx+len(endTag):]
+	}
+
+	return toolCalls, strings.TrimSpace(remainingText)
+}
+
 func (m *TWCC) Call(ctx context.Context, prompt string, options ...llms.CallOption) (string, error) {
 	msg := llms.MessageContent{
 		Role:  llms.ChatMessageTypeHuman,
@@ -389,4 +524,8 @@ func (m *TWCC) Call(ctx context.Context, prompt string, options ...llms.CallOpti
 		return "", err
 	}
 	return resp.Choices[0].Content, nil
+}
+
+func strPtr(s string) *string {
+	return &s
 }
