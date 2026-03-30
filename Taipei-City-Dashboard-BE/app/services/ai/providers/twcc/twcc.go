@@ -11,6 +11,7 @@ import (
 	"strings"
 	"time"
 
+	"TaipeiCityDashboardBE/logs"
 	"github.com/tmc/langchaingo/llms"
 )
 
@@ -48,6 +49,9 @@ func (m *TWCC) GenerateContent(ctx context.Context, messages []llms.MessageConte
 	twccMessages := make([]TWCCMessage, 0)
 	for _, mc := range messages {
 		role := string(mc.Role)
+		var toolCallID string
+		var twccToolCalls []TWCCToolCall
+
 		// Map langchaingo roles to TWCC roles
 		switch mc.Role {
 		case llms.ChatMessageTypeHuman:
@@ -60,14 +64,35 @@ func (m *TWCC) GenerateContent(ctx context.Context, messages []llms.MessageConte
 			role = "tool"
 		}
 
+		content := ""
 		for _, part := range mc.Parts {
-			if text, ok := part.(llms.TextContent); ok {
-				twccMessages = append(twccMessages, TWCCMessage{
-					Role:    role,
-					Content: text.Text,
+			switch p := part.(type) {
+			case llms.TextContent:
+				content = p.Text
+			case llms.ToolCall:
+				twccToolCalls = append(twccToolCalls, TWCCToolCall{
+					ID:   p.ID,
+					Type: p.Type,
+					Function: struct {
+						Name      string `json:"name"`
+						Arguments string `json:"arguments"`
+					}{
+						Name:      p.FunctionCall.Name,
+						Arguments: p.FunctionCall.Arguments,
+					},
 				})
+			case llms.ToolCallResponse:
+				toolCallID = p.ToolCallID
+				content = p.Content
 			}
 		}
+
+		twccMessages = append(twccMessages, TWCCMessage{
+			Role:       role,
+			Content:    content,
+			ToolCalls:  twccToolCalls,
+			ToolCallID: toolCallID,
+		})
 	}
 
 	// 2. Build Request Payload using Metadata for precise mapping
@@ -104,6 +129,34 @@ func (m *TWCC) GenerateContent(ctx context.Context, messages []llms.MessageConte
 		Stream:     isStreaming,
 	}
 
+	// Handle Tools
+	if len(opts.Tools) > 0 {
+		twccTools := make([]TWCCTool, 0)
+		for _, t := range opts.Tools {
+			params := t.Function.Parameters
+			if params == nil {
+				params = map[string]interface{}{
+					"type":       "object",
+					"properties": map[string]interface{}{},
+				}
+			}
+			twccTools = append(twccTools, TWCCTool{
+				Type: t.Type,
+				Function: TWCCToolFunction{
+					Name:        t.Function.Name,
+					Description: t.Function.Description,
+					Parameters:  params,
+				},
+			})
+		}
+		reqBody.Tools = twccTools
+		if opts.ToolChoice != nil {
+			reqBody.ToolChoice = opts.ToolChoice
+		} else {
+			reqBody.ToolChoice = "auto"
+		}
+	}
+
 	// 3. Send Request
 	jsonData, err := json.Marshal(reqBody)
 	if err != nil {
@@ -118,11 +171,10 @@ func (m *TWCC) GenerateContent(ctx context.Context, messages []llms.MessageConte
 
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("X-API-KEY", m.APIKey)
-	
-	// Use a dedicated client for streaming to avoid global timeout issues
+
 	client := m.HTTPClient
 	if isStreaming {
-		client = &http.Client{Timeout: 0} // No global timeout, rely on context
+		client = &http.Client{Timeout: 0}
 	}
 
 	resp, err := client.Do(req)
@@ -138,43 +190,75 @@ func (m *TWCC) GenerateContent(ctx context.Context, messages []llms.MessageConte
 
 	// 4. Handle Streaming vs Standard Response
 	if isStreaming {
-		// Use bufio.Reader for more precise control over SSE lines
 		reader := bufio.NewReader(resp.Body)
 		var fullContent strings.Builder
 		var lastUsage *TWCCStreamResponse
-		
+		var toolCallsMap = make(map[int]*TWCCToolCall)
+		var isToolCalling bool
+
 		for {
 			line, err := reader.ReadString('\n')
-			
-			// Process the line if it's not empty, even if err is io.EOF
 			if line != "" {
-				// Pass RAW data line to StreamingFunc (preserving the original \n)
-				if streamErr := opts.StreamingFunc(ctx, []byte(line)); streamErr != nil {
-					return nil, streamErr
-				}
-
-				// Internal extraction for logging
-				// Be robust: trim spaces and handle both "data: " and "data:"
 				trimmedLine := strings.TrimSpace(line)
-				jsonData := trimmedLine
+				jsonData := ""
 				if strings.HasPrefix(trimmedLine, "data:") {
 					jsonData = strings.TrimPrefix(trimmedLine, "data:")
 					jsonData = strings.TrimSpace(jsonData)
 				}
-				
+
 				if jsonData != "" && jsonData != "[DONE]" {
 					var streamResp TWCCStreamResponse
 					if unmarshalErr := json.Unmarshal([]byte(jsonData), &streamResp); unmarshalErr == nil {
-						// Capture content from either GeneratedText or Choices
-						if streamResp.GeneratedText != "" {
-							fullContent.WriteString(streamResp.GeneratedText)
-						} else if len(streamResp.Choices) > 0 {
-							fullContent.WriteString(streamResp.Choices[0].Delta.Content)
+						// Detection: Does THIS chunk have tools?
+						thisChunkHasTools := len(streamResp.ToolCalls) > 0
+						if len(streamResp.Choices) > 0 && len(streamResp.Choices[0].Delta.ToolCalls) > 0 {
+							thisChunkHasTools = true
+						}
+
+						if thisChunkHasTools {
+							isToolCalling = true
+							// Process ToolCalls from root
+							for _, tc := range streamResp.ToolCalls {
+								if _, exists := toolCallsMap[0]; !exists {
+									toolCallsMap[0] = &TWCCToolCall{ID: tc.ID, Type: tc.Type}
+									toolCallsMap[0].Function.Name = tc.Function.Name
+								}
+								toolCallsMap[0].Function.Arguments += tc.Function.Arguments
+							}
+							// Process ToolCalls from choices
+							if len(streamResp.Choices) > 0 {
+								for _, tc := range streamResp.Choices[0].Delta.ToolCalls {
+									if _, exists := toolCallsMap[0]; !exists {
+										toolCallsMap[0] = &TWCCToolCall{ID: tc.ID, Type: tc.Type}
+										toolCallsMap[0].Function.Name = tc.Function.Name
+									}
+									toolCallsMap[0].Function.Arguments += tc.Function.Arguments
+								}
+							}
+						} else {
+							// Normal text chunk: Pass the ORIGINAL line to keep SSE protocol (\n included)
+							if streamErr := opts.StreamingFunc(ctx, []byte(line)); streamErr != nil {
+								return nil, streamErr
+							}
+							if len(streamResp.Choices) > 0 && streamResp.Choices[0].Delta.Content != "" {
+								fullContent.WriteString(streamResp.Choices[0].Delta.Content)
+							}
 						}
 
 						if streamResp.Usage != nil {
 							lastUsage = &streamResp
 						}
+					}
+				} else if jsonData == "[DONE]" {
+					// End of stream
+					if !isToolCalling {
+						opts.StreamingFunc(ctx, []byte(line))
+					}
+				} else {
+					// This is likely an empty line or non-data SSE line (like a retry or comment)
+					// Pass it through to keep the connection alive/valid
+					if !isToolCalling {
+						opts.StreamingFunc(ctx, []byte(line))
 					}
 				}
 			}
@@ -187,7 +271,6 @@ func (m *TWCC) GenerateContent(ctx context.Context, messages []llms.MessageConte
 			}
 		}
 
-		// Prepare a final Response object for downstream use (logging)
 		finalResp := &llms.ContentResponse{
 			Choices: []*llms.ContentChoice{
 				{
@@ -198,7 +281,21 @@ func (m *TWCC) GenerateContent(ctx context.Context, messages []llms.MessageConte
 				},
 			},
 		}
-		
+
+		if isToolCalling {
+			ltc := make([]llms.ToolCall, 0)
+			for _, tc := range toolCallsMap {
+				ltc = append(ltc, llms.ToolCall{
+					ID:   tc.ID,
+					Type: tc.Type,
+					FunctionCall: &llms.FunctionCall{
+						Name:      tc.Function.Name,
+						Arguments: tc.Function.Arguments,
+					},
+				})
+			}
+			finalResp.Choices[0].GenerationInfo["tool_calls"] = ltc
+		}
 		if lastUsage != nil && lastUsage.Usage != nil {
 			finalResp.Choices[0].GenerationInfo["usage"] = map[string]interface{}{
 				"input_tokens":  lastUsage.Usage.PromptTokens,
@@ -206,7 +303,6 @@ func (m *TWCC) GenerateContent(ctx context.Context, messages []llms.MessageConte
 				"total_tokens":  lastUsage.Usage.TotalTokens,
 			}
 		}
-		
 		return finalResp, nil
 	}
 
@@ -216,35 +312,72 @@ func (m *TWCC) GenerateContent(ctx context.Context, messages []llms.MessageConte
 		return nil, fmt.Errorf("failed to read response body: %v", err)
 	}
 
+	// Log the raw response for debugging
+	logs.FInfo("TWCC Raw Response: %s", string(rawBody))
+
 	var twccResp TWCCResponse
 	if err := json.Unmarshal(rawBody, &twccResp); err != nil {
-		return nil, fmt.Errorf("failed to unmarshal response: %v, body: %s", err, string(rawBody))
+		return nil, fmt.Errorf("failed to unmarshal response: %v", err)
 	}
 
-	content := ""
+	content := twccResp.GeneratedText
+	var toolCalls []llms.ToolCall
+
+	// 1. Try to get tool_calls from root level first (as seen in log)
+	if len(twccResp.ToolCalls) > 0 {
+		for _, tc := range twccResp.ToolCalls {
+			toolCalls = append(toolCalls, llms.ToolCall{
+				ID:   tc.ID,
+				Type: tc.Type,
+				FunctionCall: &llms.FunctionCall{
+					Name:      tc.Function.Name,
+					Arguments: tc.Function.Arguments,
+				},
+			})
+		}
+	}
+
+	// 2. Fallback to choices if root level is empty
 	if len(twccResp.Choices) > 0 {
-		content = twccResp.Choices[0].Message.Content
-	} else {
-		content = twccResp.GeneratedText
+		choice := twccResp.Choices[0]
+		if choice.Message.Content != "" {
+			content = choice.Message.Content
+		}
+		if len(toolCalls) == 0 && len(choice.Message.ToolCalls) > 0 {
+			for _, tc := range choice.Message.ToolCalls {
+				toolCalls = append(toolCalls, llms.ToolCall{
+					ID:   tc.ID,
+					Type: tc.Type,
+					FunctionCall: &llms.FunctionCall{
+						Name:      tc.Function.Name,
+						Arguments: tc.Function.Arguments,
+					},
+				})
+			}
+		}
+	}
+
+	genInfo := map[string]interface{}{
+		"model": m.ModelName,
+		"usage": map[string]interface{}{
+			"input_tokens":  twccResp.PromptTokens,
+			"output_tokens": twccResp.GeneratedTokens,
+			"total_tokens":  twccResp.TotalTokens,
+		},
+	}
+	if len(toolCalls) > 0 {
+		genInfo["tool_calls"] = toolCalls
 	}
 
 	return &llms.ContentResponse{
 		Choices: []*llms.ContentChoice{
 			{
-				Content: content,
-				GenerationInfo: map[string]interface{}{
-					"model": m.ModelName,
-					"usage": map[string]interface{}{
-						"input_tokens":  twccResp.PromptTokens,
-						"output_tokens": twccResp.GeneratedTokens,
-						"total_tokens":  twccResp.TotalTokens,
-					},
-				},
+				Content:        content,
+				GenerationInfo: genInfo,
 			},
 		},
 	}, nil
 }
-
 
 func (m *TWCC) Call(ctx context.Context, prompt string, options ...llms.CallOption) (string, error) {
 	msg := llms.MessageContent{

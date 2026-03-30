@@ -17,8 +17,17 @@ type AIChatInput struct {
 	SessionID string `json:"session_id"`
 	Stream    bool   `json:"stream"`
 	Messages  []struct {
-		Role    string `json:"role" binding:"required,oneof=system user assistant tool"`
-		Content string `json:"content" binding:"required"`
+		Role      string `json:"role" binding:"required,oneof=system user assistant tool"`
+		Content   string `json:"content" binding:"required"`
+		ToolCalls []struct {
+			ID       string `json:"id"`
+			Type     string `json:"type"`
+			Function struct {
+				Name      string `json:"name"`
+				Arguments string `json:"arguments"`
+			} `json:"function"`
+		} `json:"tool_calls,omitempty"`
+		ToolCallID string `json:"tool_call_id,omitempty"`
 	} `json:"messages" binding:"required,gt=0"`
 	MaxNewTokens     *int      `json:"max_new_tokens" binding:"omitempty,gt=0"`
 	Temperature      *float64  `json:"temperature" binding:"omitempty,gt=0"`
@@ -27,6 +36,15 @@ type AIChatInput struct {
 	FrequencePenalty *float64  `json:"frequence_penalty" binding:"omitempty,gt=0"`
 	StopSequences    []string  `json:"stop_sequences" binding:"omitempty,max=4"`
 	Seed             *int      `json:"seed" binding:"omitempty,gte=0"`
+	Tools            []struct {
+		Type     string `json:"type" binding:"required,eq=function"`
+		Function struct {
+			Name        string      `json:"name" binding:"required"`
+			Description string      `json:"description,omitempty"`
+			Parameters  interface{} `json:"parameters,omitempty"`
+		} `json:"function" binding:"required"`
+	} `json:"tools,omitempty"`
+	ToolChoice interface{} `json:"tool_choice,omitempty"`
 }
 
 // ChatWithTWCC is the controller for POST /api/v1/ai/chat/twai
@@ -52,15 +70,38 @@ func ChatWithTWCC(c *gin.Context) {
 	serviceMsgs := make([]llms.MessageContent, 0)
 	for _, m := range input.Messages {
 		role := llms.ChatMessageTypeHuman
+		var parts []llms.ContentPart
+		parts = append(parts, llms.TextContent{Text: m.Content})
+
 		switch m.Role {
-		case "assistant": role = llms.ChatMessageTypeAI
-		case "system":    role = llms.ChatMessageTypeSystem
-		case "tool":      role = llms.ChatMessageTypeTool
+		case "assistant":
+			role = llms.ChatMessageTypeAI
+			if len(m.ToolCalls) > 0 {
+				for _, tc := range m.ToolCalls {
+					parts = append(parts, llms.ToolCall{
+						ID:   tc.ID,
+						Type: tc.Type,
+						FunctionCall: &llms.FunctionCall{
+							Name:      tc.Function.Name,
+							Arguments: tc.Function.Arguments,
+						},
+					})
+				}
+			}
+		case "system":
+			role = llms.ChatMessageTypeSystem
+		case "tool":
+			role = llms.ChatMessageTypeTool
+			// Use ToolCallResponse for the tool result
+			parts = []llms.ContentPart{llms.ToolCallResponse{
+				ToolCallID: m.ToolCallID,
+				Content:    m.Content,
+			}}
 		}
-		
+
 		serviceMsgs = append(serviceMsgs, llms.MessageContent{
 			Role:  role,
-			Parts: []llms.ContentPart{llms.TextContent{Text: m.Content}},
+			Parts: parts,
 		})
 	}
 
@@ -68,7 +109,7 @@ func ChatWithTWCC(c *gin.Context) {
 	_, accountID, _, _, _ := util.GetUserInfoFromContext(c)
 	userID := fmt.Sprintf("%d", accountID)
 	ipAddress := c.ClientIP()
-	
+
 	req := ai.AIChatRequest{
 		SessionID: sessionID,
 		UserID:    userID,
@@ -106,6 +147,25 @@ func ChatWithTWCC(c *gin.Context) {
 	}
 	if input.Seed != nil {
 		params["seed"] = *input.Seed
+	}
+
+	// Handle Tools
+	if len(input.Tools) > 0 {
+		lt := make([]llms.Tool, 0)
+		for _, t := range input.Tools {
+			lt = append(lt, llms.Tool{
+				Type: t.Type,
+				Function: &llms.FunctionDefinition{
+					Name:        t.Function.Name,
+					Description: t.Function.Description,
+					Parameters:  t.Function.Parameters,
+				},
+			})
+		}
+		options = append(options, llms.WithTools(lt))
+		if input.ToolChoice != nil {
+			options = append(options, llms.WithToolChoice(input.ToolChoice))
+		}
 	}
 
 	// Pass explicit parameters through Metadata for Provider's precise mapping
