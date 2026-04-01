@@ -268,6 +268,32 @@ func (m *TWCC) GenerateContent(ctx context.Context, messages []llms.MessageConte
 								}
 								lineBuffer = nil
 							}
+						} else if !isToolCalling {
+							// DYNAMIC INTERCEPTION with Pre-emptive Buffering:
+							// We buffer lines that look like they COULD be the start of a tool call.
+							contentBuffer.WriteString(deltaText)
+							lineBuffer = append(lineBuffer, line)
+							
+							combined := contentBuffer.String()
+							if strings.Contains(combined, "<function=") || strings.Contains(combined, "tool<function") {
+								isToolCalling = true
+								lineBuffer = nil // Wipe the leaked/buffered tool tags
+								contentBuffer.Reset()
+							} else {
+								// Check if the current buffer ends with a potential tool marker prefix
+								if isPotentialToolPrefix(combined) {
+									// Holding potential tool prefix...
+								} else {
+									// Safe to flush all buffered pass-through lines
+									for _, bl := range lineBuffer {
+										if streamErr := opts.StreamingFunc(ctx, []byte(bl)); streamErr != nil {
+											return nil, streamErr
+										}
+									}
+									lineBuffer = nil
+									contentBuffer.Reset()
+								}
+							}
 						}
 
 						// C. Action based on confirmed state
@@ -292,12 +318,8 @@ func (m *TWCC) GenerateContent(ctx context.Context, messages []llms.MessageConte
 										toolCallsMap[0].Function.Arguments += tc.Function.Arguments
 									}
 								}
-							} else {
-								// PASS-THROUGH MODE: Send current line directly to frontend
-								if streamErr := opts.StreamingFunc(ctx, []byte(line)); streamErr != nil {
-									return nil, streamErr
-								}
 							}
+							// Note: Pass-through is now handled by the logic above to support buffering
 						} else {
 							lineBuffer = append(lineBuffer, line)
 						}
@@ -561,4 +583,27 @@ func (m *TWCC) Call(ctx context.Context, prompt string, options ...llms.CallOpti
 
 func strPtr(s string) *string {
 	return &s
+}
+
+// isPotentialToolPrefix checks if the string ends with a potential start of an XML tool call tag.
+func isPotentialToolPrefix(s string) bool {
+	if len(s) > 20 {
+		s = s[len(s)-20:]
+	}
+	s = strings.ToLower(s)
+
+	// Check for prefixes of "tool<function" or "<function"
+	prefixes := []string{" tool<", "tool<", "<func", "<f", " <"}
+	for _, p := range prefixes {
+		if strings.HasSuffix(s, p) {
+			return true
+		}
+	}
+
+	// Also catch the word "tool" preceded by a space or newline
+	if strings.HasSuffix(s, " tool") {
+		return true
+	}
+
+	return false
 }
