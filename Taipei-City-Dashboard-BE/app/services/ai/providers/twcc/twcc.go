@@ -173,6 +173,7 @@ func (m *TWCC) GenerateContent(ctx context.Context, messages []llms.MessageConte
 	if err != nil {
 		return nil, fmt.Errorf("failed to marshal request: %v", err)
 	}
+	logs.FInfo("TWCC Outgoing Request: %s", string(jsonData))
 
 	endpoint := fmt.Sprintf("%s/models/conversation", m.BaseURL)
 	req, err := http.NewRequestWithContext(ctx, "POST", endpoint, bytes.NewBuffer(jsonData))
@@ -205,9 +206,12 @@ func (m *TWCC) GenerateContent(ctx context.Context, messages []llms.MessageConte
 		var fullContent strings.Builder
 		var lastUsage *TWCCStreamResponse
 		var toolCallsMap = make(map[int]*TWCCToolCall)
+		
+		// Detection State
 		var isToolCalling bool
+		var detectionConfirmed bool
 		var lineBuffer []string
-		var bufferFlushed bool
+		var contentBuffer strings.Builder
 
 		for {
 			line, err := reader.ReadString('\n')
@@ -222,110 +226,112 @@ func (m *TWCC) GenerateContent(ctx context.Context, messages []llms.MessageConte
 				if jsonData != "" && jsonData != "[DONE]" {
 					var streamResp TWCCStreamResponse
 					if unmarshalErr := json.Unmarshal([]byte(jsonData), &streamResp); unmarshalErr == nil {
-						// Detection: Does THIS chunk have tools or look like a tool call starting?
-						text := streamResp.GeneratedText
-						if text == "" && len(streamResp.Choices) > 0 {
-							text = streamResp.Choices[0].Delta.Content
+						// A. Structural Detection (Highest Priority)
+						hasFields := len(streamResp.ToolCalls) > 0
+						if len(streamResp.Choices) > 0 {
+							if len(streamResp.Choices[0].Delta.ToolCalls) > 0 || streamResp.Choices[0].FinishReason == "tool_calls" {
+								hasFields = true
+							}
 						}
 
-						thisChunkHasTools := len(streamResp.ToolCalls) > 0
-						if len(streamResp.Choices) > 0 && len(streamResp.Choices[0].Delta.ToolCalls) > 0 {
-							thisChunkHasTools = true
+						if hasFields && !isToolCalling {
+							isToolCalling = true
+							detectionConfirmed = true
 						}
 
-						// Accumulate content and check for tool call markers
-						if !isToolCalling {
-							combined := fullContent.String() + text
-							if strings.Contains(combined, "tool<") || strings.Contains(combined, "<function") || thisChunkHasTools {
+						// B. Extract Content and Heuristic Detection
+						deltaText := ""
+						if len(streamResp.Choices) > 0 {
+							deltaText = streamResp.Choices[0].Delta.Content
+						}
+						if deltaText == "" {
+							deltaText = streamResp.GeneratedText
+						}
+
+						if !detectionConfirmed {
+							contentBuffer.WriteString(deltaText)
+							combined := contentBuffer.String()
+							
+							// Check for XML-like tags common in AFS
+							if strings.Contains(combined, "<function=") || strings.Contains(combined, "tool<function") {
 								isToolCalling = true
+								detectionConfirmed = true
+							} else if len(combined) > 64 {
+								isToolCalling = false
+								detectionConfirmed = true
+								
+								// Flush buffered lines to frontend
+								for _, bl := range lineBuffer {
+									if streamErr := opts.StreamingFunc(ctx, []byte(bl)); streamErr != nil {
+										return nil, streamErr
+									}
+								}
+								lineBuffer = nil
 							}
 						}
 
-						if isToolCalling {
-							// Process ToolCalls from root
-							for _, tc := range streamResp.ToolCalls {
-								if _, exists := toolCallsMap[0]; !exists {
-									toolCallsMap[0] = &TWCCToolCall{ID: tc.ID, Type: tc.Type}
-									toolCallsMap[0].Function.Name = tc.Function.Name
-								}
-								toolCallsMap[0].Function.Arguments += tc.Function.Arguments
-							}
-							// Process ToolCalls from choices
-							if len(streamResp.Choices) > 0 {
-								for _, tc := range streamResp.Choices[0].Delta.ToolCalls {
+						// C. Action based on confirmed state
+						if detectionConfirmed {
+							if isToolCalling {
+								// SILENT MODE: Accumulate tool call data, do NOT stream to frontend
+								// Process ToolCalls from root
+								for _, tc := range streamResp.ToolCalls {
 									if _, exists := toolCallsMap[0]; !exists {
 										toolCallsMap[0] = &TWCCToolCall{ID: tc.ID, Type: tc.Type}
 										toolCallsMap[0].Function.Name = tc.Function.Name
 									}
 									toolCallsMap[0].Function.Arguments += tc.Function.Arguments
 								}
-							}
-						} else {
-							// BUFFERING LOGIC: Prevent leaks by waiting for a clear signal
-							if !bufferFlushed {
-								lineBuffer = append(lineBuffer, line)
-								if text != "" {
-									fullContent.WriteString(text)
-								}
-
-								// Flush conditions:
-								// 1. Content is long enough to confirm it's not a tool call
-								// 2. Content definitely doesn't start with tool-calling characters
-								combined := fullContent.String()
-								shouldFlush := false
-								if len(combined) > 50 {
-									shouldFlush = true
-								} else if len(combined) > 0 {
-									firstChar := strings.ToLower(string(combined[0]))
-									// If it doesn't start with 't', '<', or whitespace, it's likely normal text
-									if firstChar != "t" && firstChar != "<" && firstChar != " " {
-										shouldFlush = true
-									}
-								}
-
-								if shouldFlush {
-									bufferFlushed = true
-									for _, l := range lineBuffer {
-										if streamErr := opts.StreamingFunc(ctx, []byte(l)); streamErr != nil {
-											return nil, streamErr
+								// Process ToolCalls from choices
+								if len(streamResp.Choices) > 0 {
+									for _, tc := range streamResp.Choices[0].Delta.ToolCalls {
+										if _, exists := toolCallsMap[0]; !exists {
+											toolCallsMap[0] = &TWCCToolCall{ID: tc.ID, Type: tc.Type}
+											toolCallsMap[0].Function.Name = tc.Function.Name
 										}
+										toolCallsMap[0].Function.Arguments += tc.Function.Arguments
 									}
-									lineBuffer = nil
 								}
 							} else {
-								// Normal streaming after buffer is flushed
+								// PASS-THROUGH MODE: Send current line directly to frontend
 								if streamErr := opts.StreamingFunc(ctx, []byte(line)); streamErr != nil {
 									return nil, streamErr
 								}
-								if text != "" {
-									fullContent.WriteString(text)
-								}
 							}
+						} else {
+							lineBuffer = append(lineBuffer, line)
 						}
+
+						// Always keep track of full content for the final return
+						fullContent.WriteString(deltaText)
 
 						if streamResp.PromptTokens > 0 || streamResp.GeneratedTokens > 0 || streamResp.Usage != nil {
 							lastUsage = &streamResp
 						}
 					}
 				} else if jsonData == "[DONE]" {
-					// End of stream
-					if !isToolCalling {
-						// If we reach [DONE] and never flushed, flush now
-						if !bufferFlushed {
-							for _, l := range lineBuffer {
-								opts.StreamingFunc(ctx, []byte(l))
-							}
+					// End of stream handling
+					if !detectionConfirmed {
+						// If we reach [DONE] and never confirmed Tool vs Text, 
+						// and there's content in the buffer, it must be Text.
+						isToolCalling = false
+						detectionConfirmed = true
+						for _, bl := range lineBuffer {
+							opts.StreamingFunc(ctx, []byte(bl))
 						}
+						lineBuffer = nil
+					}
+
+					if !isToolCalling {
+						// Stream the final [DONE] if it's a normal conversation
 						opts.StreamingFunc(ctx, []byte(line))
 					}
 				} else {
-					// Handle empty or non-data lines
-					if !isToolCalling {
-						if !bufferFlushed {
-							lineBuffer = append(lineBuffer, line)
-						} else {
-							opts.StreamingFunc(ctx, []byte(line))
-						}
+					// Handle empty or heart-beat lines
+					if !detectionConfirmed {
+						lineBuffer = append(lineBuffer, line)
+					} else if !isToolCalling {
+						opts.StreamingFunc(ctx, []byte(line))
 					}
 				}
 			}
@@ -338,6 +344,20 @@ func (m *TWCC) GenerateContent(ctx context.Context, messages []llms.MessageConte
 			}
 		}
 
+		// Final flush if the stream ended without [DONE] or confirming type
+		if !detectionConfirmed && len(lineBuffer) > 0 {
+			logs.FInfo("TWCC Action: Finalizing stream, flushing remaining buffer (length: %d)", len(lineBuffer))
+			isToolCalling = false
+			detectionConfirmed = true
+			for _, bl := range lineBuffer {
+				if streamErr := opts.StreamingFunc(ctx, []byte(bl)); streamErr != nil {
+					return nil, streamErr
+				}
+			}
+			lineBuffer = nil
+		}
+
+		// Prepare Final Response Object for ai_service.go
 		finalResp := &llms.ContentResponse{
 			Choices: []*llms.ContentChoice{
 				{
@@ -351,6 +371,8 @@ func (m *TWCC) GenerateContent(ctx context.Context, messages []llms.MessageConte
 
 		if isToolCalling {
 			ltc := make([]llms.ToolCall, 0)
+			
+			// If we have structural tool calls, process them
 			for _, tc := range toolCallsMap {
 				ltc = append(ltc, llms.ToolCall{
 					ID:   tc.ID,
@@ -361,6 +383,17 @@ func (m *TWCC) GenerateContent(ctx context.Context, messages []llms.MessageConte
 					},
 				})
 			}
+
+			// If no structural tool calls found but isToolCalling is true, 
+			// or if we want to support mixed mode, try heuristic XML extraction
+			if len(ltc) == 0 && (strings.Contains(fullContent.String(), "<function=") || strings.Contains(fullContent.String(), "tool<")) {
+				extracted, cleaned := extractXMLToolCalls(fullContent.String())
+				if len(extracted) > 0 {
+					ltc = extracted
+					finalResp.Choices[0].Content = cleaned
+				}
+			}
+
 			finalResp.Choices[0].GenerationInfo["tool_calls"] = ltc
 		}
 		if lastUsage != nil {
