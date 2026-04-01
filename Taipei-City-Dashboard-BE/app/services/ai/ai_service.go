@@ -8,6 +8,7 @@ import (
 	"TaipeiCityDashboardBE/logs"
 	"context"
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/tmc/langchaingo/llms"
@@ -109,7 +110,11 @@ func ChatWithTWCC(ctx context.Context, req AIChatRequest, options ...llms.CallOp
 	var toolUsed bool
 
 	for loop := 0; loop < maxToolLoops; loop++ {
-		// ... existing loop code ...
+		// A. Heartbeat: Send an SSE comment to keep connection alive before LLM starts
+		if opts.StreamingFunc != nil {
+			opts.StreamingFunc(ctx, []byte(": heartbeat\n\n"))
+		}
+
 		// Generate Content with Retries
 		maxRetry := global.TWCC.MaxRetry
 		if opts.StreamingFunc != nil {
@@ -169,12 +174,26 @@ func ChatWithTWCC(ctx context.Context, req AIChatRequest, options ...llms.CallOp
 
 		// Execute Tools and append results
 		for _, tc := range toolCalls {
-			result, err := tools.Execute(ctx, tc.FunctionCall.Name, tc.FunctionCall.Arguments)
-			if err != nil {
-				result = fmt.Sprintf("Error: tool '%s' not found. Available tools are: [%s]. Please do NOT call non-existent tools.", tc.FunctionCall.Name, availableTools)
-				logs.FError(result)
+			// A. Heartbeat: Send an SSE comment to keep connection alive during tool execution
+			if opts.StreamingFunc != nil {
+				opts.StreamingFunc(ctx, []byte(": heartbeat\n\n"))
 			}
 
+			// B. Execute tool with whitelist check
+			result, err := tools.Execute(ctx, tc.FunctionCall.Name, tc.FunctionCall.Arguments)
+			if err != nil {
+				// C. Error Feedback: Don't break, tell the model what went wrong
+				// Provide a helpful message so it can fix the call in the next loop
+				errorMsg := fmt.Sprintf("Error: %v. Please check the tool name and ensure arguments are valid JSON.", err)
+				if strings.Contains(err.Error(), "not found") {
+					errorMsg = fmt.Sprintf("Error: tool '%s' is not in your whitelist. Available tools: [%s].", tc.FunctionCall.Name, availableTools)
+				}
+				
+				logs.FError("Tool Error (Loop %d): %s", loop, errorMsg)
+				result = errorMsg
+			}
+
+			// D. LangChain Strict Pairing: Assistant Message -> Tool Message
 			toolResMsg := llms.MessageContent{
 				Role: llms.ChatMessageTypeTool,
 				Parts: []llms.ContentPart{llms.ToolCallResponse{

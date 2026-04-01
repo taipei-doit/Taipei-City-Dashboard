@@ -178,9 +178,15 @@ func ChatWithTWCC(c *gin.Context) {
 		c.Header("Content-Type", "text/event-stream")
 		c.Header("Cache-Control", "no-cache")
 		c.Header("X-Content-Type-Options", "nosniff")
+		c.Header("Connection", "keep-alive")
 
 		// Add Streaming Callback
 		options = append(options, llms.WithStreamingFunc(func(ctx context.Context, chunk []byte) error {
+			// Filter out internal backend heartbeats to keep frontend stream clean
+			if string(chunk) == ": heartbeat\n\n" {
+				return nil
+			}
+			
 			_, err := c.Writer.Write(chunk)
 			if err != nil {
 				return err
