@@ -45,6 +45,15 @@ type LMConfig struct {
 	ModelPath    string
 }
 
+type TWCCConfig struct {
+	ApiUrl        string
+	ApiKey        string
+	Model         string
+	Timeout       int
+	MaxRetry      int
+	MaxConcurrent int
+}
+
 var (
 	JwtSecret = getEnv("JWT_SECRET","")
 	IDNoSalt = getEnv("IDNO_SALT","")
@@ -102,6 +111,15 @@ var (
 
 	LM = LMConfig{
 		ModelPath:  getEnv("LM_MODEL_PATH","/opt/lm_model/onnx-e5/"),
+	}
+
+	TWCC = TWCCConfig{
+		ApiUrl:        getEnv("TWCC_API_URL", "https://api-ams.twcc.ai/api"),
+		ApiKey:        getEnv("TWCC_API_KEY", "default_your_twcc_api_key_here"),
+		Model:         getEnv("TWCC_MODEL", "llama3.3-ffm-70b-32k-chat"),
+		Timeout:       getIntEnv("TWCC_TIMEOUT", 60),
+		MaxRetry:      getIntEnv("TWCC_MAX_RETRY", 2),
+		MaxConcurrent: getIntEnv("TWCC_MAX_CONCURRENT", 100),
 	}
 	
 	LMSession *ort.DynamicSession[int64, float32]
