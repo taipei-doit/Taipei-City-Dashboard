@@ -39,37 +39,59 @@ func New(apiKey, baseURL, model string, timeout int) *TWCC {
 }
 
 func (m *TWCC) GenerateContent(ctx context.Context, messages []llms.MessageContent, options ...llms.CallOption) (*llms.ContentResponse, error) {
-	// 0. Handle Options
 	opts := llms.CallOptions{}
 	for _, opt := range options {
 		opt(&opts)
 	}
 
-	// 1. Convert langchaingo messages to TWCC format
-	twccMessages := make([]TWCCMessage, 0)
+	twccMessages := m.toTWCCMessages(messages)
+	twccParams := m.toTWCCParameters(&opts)
+	isStreaming := opts.StreamingFunc != nil
+
+	reqBody := TWCCRequest{
+		Model:      m.ModelName,
+		Messages:   twccMessages,
+		Parameters: twccParams,
+		Stream:     isStreaming,
+		Tools:      m.toTWCCTools(opts.Tools),
+	}
+	if opts.ToolChoice != nil {
+		reqBody.ToolChoice = opts.ToolChoice
+	} else if len(reqBody.Tools) > 0 {
+		reqBody.ToolChoice = "auto"
+	}
+
+	jsonData, err := json.Marshal(reqBody)
+	if err != nil {
+		return nil, fmt.Errorf("failed to marshal request: %v", err)
+	}
+	logs.FInfo("TWCC Outgoing Request: %s", string(jsonData))
+
+	resp, err := m.doRequest(ctx, jsonData, isStreaming)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	if isStreaming {
+		return m.handleStreamingResponse(ctx, resp.Body, &opts)
+	}
+	return m.handleStandardResponse(resp.Body)
+}
+
+// toTWCCMessages converts langchaingo messages to TWCC format with XML cleanup.
+func (m *TWCC) toTWCCMessages(messages []llms.MessageContent) []TWCCMessage {
+	twccMessages := make([]TWCCMessage, 0, len(messages))
 	for _, mc := range messages {
-		role := string(mc.Role)
-		var toolCallID string
-		var toolName string
+		role := m.mapRole(mc.Role)
+		var toolCallID, toolName string
 		var twccToolCalls []TWCCToolCall
-
-		// Map langchaingo roles to TWCC roles
-		switch mc.Role {
-		case llms.ChatMessageTypeHuman:
-			role = "user"
-		case llms.ChatMessageTypeAI:
-			role = "assistant"
-		case llms.ChatMessageTypeSystem:
-			role = "system"
-		case llms.ChatMessageTypeTool:
-			role = "tool"
-		}
-
 		var contentText string
+
 		for _, part := range mc.Parts {
 			switch p := part.(type) {
 			case llms.TextContent:
-				contentText = p.Text
+				contentText = cleanXML(p.Text)
 			case llms.ToolCall:
 				twccToolCalls = append(twccToolCalls, TWCCToolCall{
 					ID:   p.ID,
@@ -79,104 +101,76 @@ func (m *TWCC) GenerateContent(ctx context.Context, messages []llms.MessageConte
 						Arguments string `json:"arguments"`
 					}{
 						Name:      p.FunctionCall.Name,
-						Arguments: p.FunctionCall.Arguments,
+						Arguments: cleanXML(p.FunctionCall.Arguments),
 					},
 				})
 			case llms.ToolCallResponse:
-				toolCallID = p.ToolCallID
-				toolName = p.Name
-				contentText = p.Content
+				toolCallID, toolName = p.ToolCallID, p.Name
+				contentText = cleanXML(p.Content)
 			}
 		}
 
 		msg := TWCCMessage{
-			Role:       role,
-			ToolCalls:  twccToolCalls,
-			ToolCallID: toolCallID,
-			Name:       toolName,
+			Role: role, ToolCalls: twccToolCalls, ToolCallID: toolCallID, Name: toolName,
 		}
-		// AFS requires content to be present for most roles, 
-		// but assistant messages with tool_calls might have empty/null content.
+
+		// AFS Protocol: assistant with tools MUST have content: null if no text
 		if role == "assistant" && len(twccToolCalls) > 0 && contentText == "" {
-			// Don't set content pointer, it will be omitted from JSON
+			msg.Content = nil
 		} else {
 			msg.Content = strPtr(contentText)
 		}
-
 		twccMessages = append(twccMessages, msg)
 	}
+	return twccMessages
+}
 
-	// 2. Build Request Payload using Metadata for precise mapping
-	twccParams := TWCCParameters{}
-	if val, ok := opts.Metadata["max_new_tokens"].(int); ok {
-		twccParams.MaxNewTokens = &val
+func (m *TWCC) mapRole(role llms.ChatMessageType) string {
+	switch role {
+	case llms.ChatMessageTypeHuman: return "user"
+	case llms.ChatMessageTypeAI: return "assistant"
+	case llms.ChatMessageTypeSystem: return "system"
+	case llms.ChatMessageTypeTool: return "tool"
+	default: return string(role)
 	}
-	if val, ok := opts.Metadata["temperature"].(float64); ok {
-		twccParams.Temperature = &val
-	}
-	if val, ok := opts.Metadata["top_p"].(float64); ok {
-		twccParams.TopP = &val
-	}
-	if val, ok := opts.Metadata["top_k"].(int); ok {
-		twccParams.TopK = &val
-	}
-	if val, ok := opts.Metadata["frequence_penalty"].(float64); ok {
-		twccParams.FrequencePenalty = &val
-	}
-	if val, ok := opts.Metadata["stop_sequences"].([]string); ok {
-		twccParams.StopSequences = val
-	}
-	if val, ok := opts.Metadata["seed"].(int); ok {
-		twccParams.Seed = &val
-	}
+}
 
-	isStreaming := opts.StreamingFunc != nil
-	twccParams.Stream = isStreaming
+func (m *TWCC) toTWCCParameters(opts *llms.CallOptions) TWCCParameters {
+	p := TWCCParameters{Stream: opts.StreamingFunc != nil}
+	meta := opts.Metadata
 
-	reqBody := TWCCRequest{
-		Model:      m.ModelName,
-		Messages:   twccMessages,
-		Parameters: twccParams,
-		Stream:     isStreaming,
-	}
+	if v, ok := meta["max_new_tokens"].(int); ok { p.MaxNewTokens = &v }
+	if v, ok := meta["temperature"].(float64); ok { p.Temperature = &v }
+	if v, ok := meta["top_p"].(float64); ok { p.TopP = &v }
+	if v, ok := meta["top_k"].(int); ok { p.TopK = &v }
+	if v, ok := meta["frequence_penalty"].(float64); ok { p.FrequencePenalty = &v }
+	if v, ok := meta["stop_sequences"].([]string); ok { p.StopSequences = v }
+	if v, ok := meta["seed"].(int); ok { p.Seed = &v }
+	
+	return p
+}
 
-	// Handle Tools
-	if len(opts.Tools) > 0 {
-		twccTools := make([]TWCCTool, 0)
-		for _, t := range opts.Tools {
-			params := t.Function.Parameters
-			if params == nil {
-				params = map[string]interface{}{
-					"type":       "object",
-					"properties": map[string]interface{}{},
-				}
-			}
-			twccTools = append(twccTools, TWCCTool{
-				Type: t.Type,
-				Function: TWCCToolFunction{
-					Name:        t.Function.Name,
-					Description: t.Function.Description,
-					Parameters:  params,
-				},
-			})
+func (m *TWCC) toTWCCTools(tools []llms.Tool) []TWCCTool {
+	if len(tools) == 0 { return nil }
+	twccTools := make([]TWCCTool, 0, len(tools))
+	for _, t := range tools {
+		params := t.Function.Parameters
+		if params == nil {
+			params = map[string]interface{}{"type": "object", "properties": map[string]interface{}{}}
 		}
-		reqBody.Tools = twccTools
-		if opts.ToolChoice != nil {
-			reqBody.ToolChoice = opts.ToolChoice
-		} else {
-			reqBody.ToolChoice = "auto"
-		}
+		twccTools = append(twccTools, TWCCTool{
+			Type: t.Type,
+			Function: TWCCToolFunction{
+				Name: t.Function.Name, Description: t.Function.Description, Parameters: params,
+			},
+		})
 	}
+	return twccTools
+}
 
-	// 3. Send Request
-	jsonData, err := json.Marshal(reqBody)
-	if err != nil {
-		return nil, fmt.Errorf("failed to marshal request: %v", err)
-	}
-	logs.FInfo("TWCC Outgoing Request: %s", string(jsonData))
-
+func (m *TWCC) doRequest(ctx context.Context, body []byte, isStreaming bool) (*http.Response, error) {
 	endpoint := fmt.Sprintf("%s/models/conversation", m.BaseURL)
-	req, err := http.NewRequestWithContext(ctx, "POST", endpoint, bytes.NewBuffer(jsonData))
+	req, err := http.NewRequestWithContext(ctx, "POST", endpoint, bytes.NewBuffer(body))
 	if err != nil {
 		return nil, fmt.Errorf("failed to create request: %v", err)
 	}
@@ -185,340 +179,259 @@ func (m *TWCC) GenerateContent(ctx context.Context, messages []llms.MessageConte
 	req.Header.Set("X-API-KEY", m.APIKey)
 
 	client := m.HTTPClient
-	if isStreaming {
-		client = &http.Client{Timeout: 0}
-	}
+	if isStreaming { client = &http.Client{Timeout: 0} }
 
 	resp, err := client.Do(req)
-	if err != nil {
-		return nil, fmt.Errorf("failed to send request to TWCC: %v", err)
-	}
-	defer resp.Body.Close()
+	if err != nil { return nil, fmt.Errorf("failed to send request to TWCC: %v", err) }
 
 	if resp.StatusCode != http.StatusOK {
-		rawBody, _ := io.ReadAll(resp.Body)
-		return nil, fmt.Errorf("TWCC API returned error status %d: %s", resp.StatusCode, string(rawBody))
+		raw, _ := io.ReadAll(resp.Body)
+		resp.Body.Close()
+		return nil, fmt.Errorf("TWCC API returned error status %d: %s", resp.StatusCode, string(raw))
+	}
+	return resp, nil
+}
+
+// handleStreamingResponse manages the SSE flow using a dedicated processor.
+func (m *TWCC) handleStreamingResponse(ctx context.Context, body io.Reader, opts *llms.CallOptions) (*llms.ContentResponse, error) {
+	reader := bufio.NewReader(body)
+	proc := &streamProcessor{
+		toolCallsMap: make(map[int]*TWCCToolCall),
+		streamingFunc: opts.StreamingFunc,
 	}
 
-	// 4. Handle Streaming vs Standard Response
-	if isStreaming {
-		reader := bufio.NewReader(resp.Body)
-		var fullContent strings.Builder
-		var lastUsage *TWCCStreamResponse
-		var toolCallsMap = make(map[int]*TWCCToolCall)
-		
-		// Detection State
-		var isToolCalling bool
-		var detectionConfirmed bool
-		var lineBuffer []string
-		var contentBuffer strings.Builder
-
-		for {
-			line, err := reader.ReadString('\n')
-			if line != "" {
-				trimmedLine := strings.TrimSpace(line)
-				jsonData := ""
-				if strings.HasPrefix(trimmedLine, "data:") {
-					jsonData = strings.TrimPrefix(trimmedLine, "data:")
-					jsonData = strings.TrimSpace(jsonData)
-				}
-
-				if jsonData != "" && jsonData != "[DONE]" {
-					var streamResp TWCCStreamResponse
-					if unmarshalErr := json.Unmarshal([]byte(jsonData), &streamResp); unmarshalErr == nil {
-						// A. Structural Detection (Highest Priority)
-						hasFields := len(streamResp.ToolCalls) > 0
-						if len(streamResp.Choices) > 0 {
-							if len(streamResp.Choices[0].Delta.ToolCalls) > 0 || streamResp.Choices[0].FinishReason == "tool_calls" {
-								hasFields = true
-							}
-						}
-
-						if hasFields && !isToolCalling {
-							isToolCalling = true
-							detectionConfirmed = true
-						}
-
-						// B. Extract Content and Heuristic Detection
-						deltaText := ""
-						if len(streamResp.Choices) > 0 {
-							deltaText = streamResp.Choices[0].Delta.Content
-						}
-						if deltaText == "" {
-							deltaText = streamResp.GeneratedText
-						}
-
-						if !detectionConfirmed {
-							contentBuffer.WriteString(deltaText)
-							combined := contentBuffer.String()
-							
-							// Check for XML-like tags common in AFS
-							if strings.Contains(combined, "<function=") || strings.Contains(combined, "tool<function") {
-								isToolCalling = true
-								detectionConfirmed = true
-							} else if len(combined) > 64 {
-								isToolCalling = false
-								detectionConfirmed = true
-								
-								// Flush buffered lines to frontend
-								for _, bl := range lineBuffer {
-									if streamErr := opts.StreamingFunc(ctx, []byte(bl)); streamErr != nil {
-										return nil, streamErr
-									}
-								}
-								lineBuffer = nil
-							}
-						} else if !isToolCalling {
-							// DYNAMIC INTERCEPTION with Pre-emptive Buffering:
-							// We buffer lines that look like they COULD be the start of a tool call.
-							contentBuffer.WriteString(deltaText)
-							lineBuffer = append(lineBuffer, line)
-							
-							combined := contentBuffer.String()
-							if strings.Contains(combined, "<function=") || strings.Contains(combined, "tool<function") {
-								isToolCalling = true
-								lineBuffer = nil // Wipe the leaked/buffered tool tags
-								contentBuffer.Reset()
-							} else {
-								// Check if the current buffer ends with a potential tool marker prefix
-								if isPotentialToolPrefix(combined) {
-									// Holding potential tool prefix...
-								} else {
-									// Safe to flush all buffered pass-through lines
-									for _, bl := range lineBuffer {
-										if streamErr := opts.StreamingFunc(ctx, []byte(bl)); streamErr != nil {
-											return nil, streamErr
-										}
-									}
-									lineBuffer = nil
-									contentBuffer.Reset()
-								}
-							}
-						}
-
-						// C. Action based on confirmed state
-						if detectionConfirmed {
-							if isToolCalling {
-								// SILENT MODE: Accumulate tool call data, do NOT stream to frontend
-								// Process ToolCalls from root
-								for _, tc := range streamResp.ToolCalls {
-									if _, exists := toolCallsMap[0]; !exists {
-										toolCallsMap[0] = &TWCCToolCall{ID: tc.ID, Type: tc.Type}
-										toolCallsMap[0].Function.Name = tc.Function.Name
-									}
-									toolCallsMap[0].Function.Arguments += tc.Function.Arguments
-								}
-								// Process ToolCalls from choices
-								if len(streamResp.Choices) > 0 {
-									for _, tc := range streamResp.Choices[0].Delta.ToolCalls {
-										if _, exists := toolCallsMap[0]; !exists {
-											toolCallsMap[0] = &TWCCToolCall{ID: tc.ID, Type: tc.Type}
-											toolCallsMap[0].Function.Name = tc.Function.Name
-										}
-										toolCallsMap[0].Function.Arguments += tc.Function.Arguments
-									}
-								}
-							}
-							// Note: Pass-through is now handled by the logic above to support buffering
-						} else {
-							lineBuffer = append(lineBuffer, line)
-						}
-
-						// Always keep track of full content for the final return
-						fullContent.WriteString(deltaText)
-
-						if streamResp.PromptTokens > 0 || streamResp.GeneratedTokens > 0 || streamResp.Usage != nil {
-							lastUsage = &streamResp
-						}
-					}
-				} else if jsonData == "[DONE]" {
-					// End of stream handling
-					if !detectionConfirmed {
-						// If we reach [DONE] and never confirmed Tool vs Text, 
-						// and there's content in the buffer, it must be Text.
-						isToolCalling = false
-						detectionConfirmed = true
-						for _, bl := range lineBuffer {
-							opts.StreamingFunc(ctx, []byte(bl))
-						}
-						lineBuffer = nil
-					}
-
-					if !isToolCalling {
-						// Stream the final [DONE] if it's a normal conversation
-						opts.StreamingFunc(ctx, []byte(line))
-					}
-				} else {
-					// Handle empty or heart-beat lines
-					if !detectionConfirmed {
-						lineBuffer = append(lineBuffer, line)
-					} else if !isToolCalling {
-						opts.StreamingFunc(ctx, []byte(line))
-					}
-				}
-			}
-
-			if err != nil {
-				if err == io.EOF {
-					break
-				}
-				return nil, fmt.Errorf("error reading stream: %v", err)
-			}
+	for {
+		line, err := reader.ReadString('\n')
+		if line != "" {
+			if stop := proc.processLine(ctx, line); stop { break }
 		}
-
-		// Final flush if the stream ended without [DONE] or confirming type
-		if !detectionConfirmed && len(lineBuffer) > 0 {
-			logs.FInfo("TWCC Action: Finalizing stream, flushing remaining buffer (length: %d)", len(lineBuffer))
-			isToolCalling = false
-			detectionConfirmed = true
-			for _, bl := range lineBuffer {
-				if streamErr := opts.StreamingFunc(ctx, []byte(bl)); streamErr != nil {
-					return nil, streamErr
-				}
-			}
-			lineBuffer = nil
+		if err != nil {
+			if err == io.EOF { break }
+			return nil, fmt.Errorf("error reading stream: %v", err)
 		}
-
-		// Prepare Final Response Object for ai_service.go
-		finalResp := &llms.ContentResponse{
-			Choices: []*llms.ContentChoice{
-				{
-					Content: fullContent.String(),
-					GenerationInfo: map[string]interface{}{
-						"model": m.ModelName,
-					},
-				},
-			},
-		}
-
-		if isToolCalling {
-			ltc := make([]llms.ToolCall, 0)
-			
-			// If we have structural tool calls, process them
-			for _, tc := range toolCallsMap {
-				ltc = append(ltc, llms.ToolCall{
-					ID:   tc.ID,
-					Type: tc.Type,
-					FunctionCall: &llms.FunctionCall{
-						Name:      tc.Function.Name,
-						Arguments: tc.Function.Arguments,
-					},
-				})
-			}
-
-			// If no structural tool calls found but isToolCalling is true, 
-			// or if we want to support mixed mode, try heuristic XML extraction
-			if len(ltc) == 0 && (strings.Contains(fullContent.String(), "<function=") || strings.Contains(fullContent.String(), "tool<")) {
-				extracted, cleaned := extractXMLToolCalls(fullContent.String())
-				if len(extracted) > 0 {
-					ltc = extracted
-					finalResp.Choices[0].Content = cleaned
-				}
-			}
-
-			finalResp.Choices[0].GenerationInfo["tool_calls"] = ltc
-		}
-		if lastUsage != nil {
-			inputTokens := lastUsage.PromptTokens
-			outputTokens := lastUsage.GeneratedTokens
-			totalTokens := lastUsage.TotalTokens
-
-			if lastUsage.Usage != nil {
-				if inputTokens == 0 { inputTokens = lastUsage.Usage.PromptTokens }
-				if outputTokens == 0 { outputTokens = lastUsage.Usage.GeneratedTokens }
-				if totalTokens == 0 { totalTokens = lastUsage.Usage.TotalTokens }
-			}
-
-			if inputTokens > 0 || outputTokens > 0 {
-				finalResp.Choices[0].GenerationInfo["usage"] = map[string]interface{}{
-					"input_tokens":  inputTokens,
-					"output_tokens": outputTokens,
-					"total_tokens":  totalTokens,
-				}
-			}
-		}
-		return finalResp, nil
 	}
 
-	// Standard Non-Streaming Path
-	rawBody, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return nil, fmt.Errorf("failed to read response body: %v", err)
+	proc.finalize(ctx)
+	return proc.toContentResponse(m.ModelName), nil
+}
+
+type streamProcessor struct {
+	isToolCalling      bool
+	detectionConfirmed bool
+	lineBuffer         []string
+	contentBuffer      strings.Builder
+	toolCallsMap       map[int]*TWCCToolCall
+	fullContent        strings.Builder
+	lastUsage          *TWCCStreamResponse
+	streamingFunc      func(context.Context, []byte) error
+}
+
+func (p *streamProcessor) processLine(ctx context.Context, line string) bool {
+	trimmed := strings.TrimSpace(line)
+	if !strings.HasPrefix(trimmed, "data:") {
+		p.handleControlLine(ctx, line)
+		return false
 	}
 
-	// Log the raw response for debugging
-	logs.FInfo("TWCC Raw Response: %s", string(rawBody))
-
-	var twccResp TWCCResponse
-	if err := json.Unmarshal(rawBody, &twccResp); err != nil {
-		return nil, fmt.Errorf("failed to unmarshal response: %v", err)
+	jsonData := strings.TrimSpace(strings.TrimPrefix(trimmed, "data:"))
+	if jsonData == "[DONE]" {
+		p.handleDone(ctx, line)
+		return true
 	}
 
-	content := twccResp.GeneratedText
-	var toolCalls []llms.ToolCall
+	var chunk TWCCStreamResponse
+	if err := json.Unmarshal([]byte(jsonData), &chunk); err != nil {
+		return false
+	}
 
-	// 1. Try to get tool_calls from root level first
-	if len(twccResp.ToolCalls) > 0 {
-		for _, tc := range twccResp.ToolCalls {
-			toolCalls = append(toolCalls, llms.ToolCall{
-				ID:   tc.ID,
-				Type: tc.Type,
-				FunctionCall: &llms.FunctionCall{
-					Name:      tc.Function.Name,
-					Arguments: tc.Function.Arguments,
-				},
+	p.detectType(&chunk)
+	p.processChunk(ctx, &chunk, line)
+	return false
+}
+
+func (p *streamProcessor) handleControlLine(ctx context.Context, line string) {
+	if !p.detectionConfirmed {
+		p.lineBuffer = append(p.lineBuffer, line)
+	} else if !p.isToolCalling {
+		p.streamingFunc(ctx, []byte(line))
+	}
+}
+
+func (p *streamProcessor) handleDone(ctx context.Context, line string) {
+	if !p.detectionConfirmed {
+		p.isToolCalling = false
+		p.detectionConfirmed = true
+		p.flushBuffer(ctx)
+	}
+	if !p.isToolCalling {
+		p.streamingFunc(ctx, []byte(line))
+	}
+}
+
+func (p *streamProcessor) detectType(chunk *TWCCStreamResponse) {
+	if p.detectionConfirmed { return }
+
+	// A. Structural Check
+	hasTools := len(chunk.ToolCalls) > 0 || (len(chunk.Choices) > 0 && (len(chunk.Choices[0].Delta.ToolCalls) > 0 || chunk.Choices[0].FinishReason == "tool_calls"))
+	if hasTools {
+		p.isToolCalling, p.detectionConfirmed = true, true
+		return
+	}
+
+	// B. Heuristic Check (Wait for enough content or XML tags)
+	text := chunk.GeneratedText
+	if len(chunk.Choices) > 0 { text = chunk.Choices[0].Delta.Content }
+	p.contentBuffer.WriteString(text)
+	
+	combined := p.contentBuffer.String()
+	if strings.Contains(combined, "<function=") || strings.Contains(combined, "tool<function") {
+		p.isToolCalling, p.detectionConfirmed = true, true
+	} else if len(combined) > 64 {
+		p.isToolCalling, p.detectionConfirmed = false, true
+	}
+}
+
+func (p *streamProcessor) processChunk(ctx context.Context, chunk *TWCCStreamResponse, rawLine string) {
+	text := chunk.GeneratedText
+	if len(chunk.Choices) > 0 { text = chunk.Choices[0].Delta.Content }
+	p.fullContent.WriteString(text)
+
+	if chunk.PromptTokens > 0 || chunk.Usage != nil { p.lastUsage = chunk }
+
+	if !p.detectionConfirmed {
+		p.lineBuffer = append(p.lineBuffer, rawLine)
+		return
+	}
+
+	if p.isToolCalling {
+		p.accumulateTools(chunk)
+	} else {
+		p.flushBuffer(ctx)
+		p.streamingFunc(ctx, []byte(rawLine))
+	}
+}
+
+func (p *streamProcessor) accumulateTools(chunk *TWCCStreamResponse) {
+	// Source deduplication: Prefer delta
+	source := chunk.ToolCalls
+	if len(chunk.Choices) > 0 && len(chunk.Choices[0].Delta.ToolCalls) > 0 {
+		source = chunk.Choices[0].Delta.ToolCalls
+	}
+
+	for _, tc := range source {
+		idx := 0
+		if tc.Index != nil { idx = *tc.Index }
+
+		if _, exists := p.toolCallsMap[idx]; !exists {
+			p.toolCallsMap[idx] = &TWCCToolCall{ID: tc.ID, Type: tc.Type}
+			p.toolCallsMap[idx].Function.Name = tc.Function.Name
+		}
+		p.toolCallsMap[idx].Function.Arguments += cleanXML(tc.Function.Arguments)
+		if tc.ID != "" { p.toolCallsMap[idx].ID = tc.ID }
+		if tc.Function.Name != "" { p.toolCallsMap[idx].Function.Name = tc.Function.Name }
+	}
+}
+
+func (p *streamProcessor) flushBuffer(ctx context.Context) {
+	if len(p.lineBuffer) == 0 { return }
+	for _, b := range p.lineBuffer { p.streamingFunc(ctx, []byte(b)) }
+	p.lineBuffer = nil
+}
+
+func (p *streamProcessor) finalize(ctx context.Context) {
+	if !p.detectionConfirmed {
+		p.isToolCalling = false
+		p.flushBuffer(ctx)
+	}
+}
+
+func (p *streamProcessor) toContentResponse(model string) *llms.ContentResponse {
+	resp := &llms.ContentResponse{
+		Choices: []*llms.ContentChoice{{
+			Content: p.fullContent.String(),
+			GenerationInfo: map[string]interface{}{"model": model},
+		}},
+	}
+
+	if p.isToolCalling {
+		tools := make([]llms.ToolCall, 0)
+		for _, tc := range p.toolCallsMap {
+			tools = append(tools, llms.ToolCall{
+				ID: tc.ID, Type: tc.Type,
+				FunctionCall: &llms.FunctionCall{Name: tc.Function.Name, Arguments: tc.Function.Arguments},
+			})
+		}
+		// Heuristic XML fallback
+		if len(tools) == 0 {
+			extracted, cleaned := extractXMLToolCalls(p.fullContent.String())
+			if len(extracted) > 0 {
+				tools = extracted
+				resp.Choices[0].Content = cleaned
+			}
+		}
+		resp.Choices[0].GenerationInfo["tool_calls"] = tools
+	}
+
+	if p.lastUsage != nil {
+		u := p.lastUsage
+		it, ot, tt := u.PromptTokens, u.GeneratedTokens, u.TotalTokens
+		if u.Usage != nil {
+			if it == 0 { it = u.Usage.PromptTokens }
+			if ot == 0 { ot = u.Usage.GeneratedTokens }
+			tt = it + ot
+		}
+		resp.Choices[0].GenerationInfo["usage"] = map[string]interface{}{
+			"input_tokens": it, "output_tokens": ot, "total_tokens": tt,
+		}
+	}
+	return resp
+}
+
+func (m *TWCC) handleStandardResponse(body io.Reader) (*llms.ContentResponse, error) {
+	raw, _ := io.ReadAll(body)
+	logs.FInfo("TWCC Raw Response: %s", string(raw))
+
+	var tr TWCCResponse
+	if err := json.Unmarshal(raw, &tr); err != nil {
+		return nil, fmt.Errorf("failed to unmarshal: %v", err)
+	}
+
+	content := tr.GeneratedText
+	var tools []llms.ToolCall
+
+	// Extraction logic... (flattened)
+	if len(tr.ToolCalls) > 0 {
+		for _, tc := range tr.ToolCalls {
+			tools = append(tools, llms.ToolCall{
+				ID: tc.ID, Type: tc.Type,
+				FunctionCall: &llms.FunctionCall{Name: tc.Function.Name, Arguments: tc.Function.Arguments},
+			})
+		}
+	} else if len(tr.Choices) > 0 {
+		c := tr.Choices[0]
+		if c.Message.Content != "" { content = c.Message.Content }
+		for _, tc := range c.Message.ToolCalls {
+			tools = append(tools, llms.ToolCall{
+				ID: tc.ID, Type: tc.Type,
+				FunctionCall: &llms.FunctionCall{Name: tc.Function.Name, Arguments: tc.Function.Arguments},
 			})
 		}
 	}
 
-	// 2. Fallback to choices
-	if len(twccResp.Choices) > 0 {
-		choice := twccResp.Choices[0]
-		if choice.Message.Content != "" {
-			content = choice.Message.Content
-		}
-		if len(toolCalls) == 0 && len(choice.Message.ToolCalls) > 0 {
-			for _, tc := range choice.Message.ToolCalls {
-				toolCalls = append(toolCalls, llms.ToolCall{
-					ID:   tc.ID,
-					Type: tc.Type,
-					FunctionCall: &llms.FunctionCall{
-						Name:      tc.Function.Name,
-						Arguments: tc.Function.Arguments,
-					},
-				})
-			}
-		}
-	}
-
-	// 3. Heuristic Parsing: If still no tools, try to parse XML tags from content
-	if len(toolCalls) == 0 && (strings.Contains(content, "<function=") || strings.Contains(content, "tool<")) {
-		extractedTools, cleanedContent := extractXMLToolCalls(content)
-		if len(extractedTools) > 0 {
-			toolCalls = extractedTools
-			content = cleanedContent
-		}
-	}
-
-	genInfo := map[string]interface{}{
-		"model": m.ModelName,
-		"usage": map[string]interface{}{
-			"input_tokens":  twccResp.PromptTokens,
-			"output_tokens": twccResp.GeneratedTokens,
-			"total_tokens":  twccResp.TotalTokens,
-		},
-	}
-	if len(toolCalls) > 0 {
-		genInfo["tool_calls"] = toolCalls
+	if len(tools) == 0 && (strings.Contains(content, "<function=") || strings.Contains(content, "tool<")) {
+		tools, content = extractXMLToolCalls(content)
 	}
 
 	return &llms.ContentResponse{
-		Choices: []*llms.ContentChoice{
-			{
-				Content:        content,
-				GenerationInfo: genInfo,
+		Choices: []*llms.ContentChoice{{
+			Content: content,
+			GenerationInfo: map[string]interface{}{
+				"model": m.ModelName, "tool_calls": tools,
+				"usage": map[string]interface{}{
+					"input_tokens": tr.PromptTokens, "output_tokens": tr.GeneratedTokens, "total_tokens": tr.TotalTokens,
+				},
 			},
-		},
+		}},
 	}, nil
 }
 
@@ -529,12 +442,10 @@ func extractXMLToolCalls(text string) ([]llms.ToolCall, string) {
 	remainingText := text
 
 	// Basic regex-free parsing for reliability with AFS fragments
-	// Pattern: <function=([^>]+)>(.*?)</function>
 	for {
 		startTag := "<function="
 		startIdx := strings.Index(remainingText, startTag)
 		if startIdx == -1 {
-			// Try the other common AFS format: tool<function=...
 			startTag = "tool<function="
 			startIdx = strings.Index(remainingText, startTag)
 			if startIdx == -1 { break }
@@ -545,65 +456,53 @@ func extractXMLToolCalls(text string) ([]llms.ToolCall, string) {
 		nameEndIdx += startIdx
 
 		funcName := remainingText[startIdx+len(startTag) : nameEndIdx]
-
 		endTag := "</function>"
 		endIdx := strings.Index(remainingText[nameEndIdx:], endTag)
 		if endIdx == -1 { break }
 		endIdx += nameEndIdx
 
 		args := remainingText[nameEndIdx+1 : endIdx]
-
 		toolCalls = append(toolCalls, llms.ToolCall{
-			ID:   fmt.Sprintf("call_%d", time.Now().UnixNano()),
-			Type: "function",
-			FunctionCall: &llms.FunctionCall{
-				Name:      funcName,
-				Arguments: args,
-			},
+			ID: fmt.Sprintf("call_%d", time.Now().UnixNano()), Type: "function",
+			FunctionCall: &llms.FunctionCall{Name: funcName, Arguments: args},
 		})
-
-		// Remove the tag from content to prevent 400 errors in next round
 		remainingText = remainingText[:startIdx] + remainingText[endIdx+len(endTag):]
 	}
-
 	return toolCalls, strings.TrimSpace(remainingText)
 }
 
 func (m *TWCC) Call(ctx context.Context, prompt string, options ...llms.CallOption) (string, error) {
-	msg := llms.MessageContent{
-		Role:  llms.ChatMessageTypeHuman,
-		Parts: []llms.ContentPart{llms.TextContent{Text: prompt}},
-	}
+	msg := llms.MessageContent{Role: llms.ChatMessageTypeHuman, Parts: []llms.ContentPart{llms.TextContent{Text: prompt}}}
 	resp, err := m.GenerateContent(ctx, []llms.MessageContent{msg}, options...)
-	if err != nil {
-		return "", err
-	}
+	if err != nil { return "", err }
 	return resp.Choices[0].Content, nil
 }
 
-func strPtr(s string) *string {
-	return &s
+func strPtr(s string) *string { return &s }
+
+// cleanXML removes hallucinated XML tags from a string.
+func cleanXML(s string) string {
+	for {
+		startIdx := strings.Index(s, "<function=")
+		if startIdx == -1 {
+			startIdx = strings.Index(s, "tool<function=")
+			if startIdx == -1 { break }
+		}
+		endIdx := strings.Index(s[startIdx:], ">")
+		if endIdx == -1 { break }
+		endIdx += startIdx
+		s = s[:startIdx] + s[endIdx+1:]
+	}
+	return strings.ReplaceAll(s, "</function>", "")
 }
 
 // isPotentialToolPrefix checks if the string ends with a potential start of an XML tool call tag.
 func isPotentialToolPrefix(s string) bool {
-	if len(s) > 20 {
-		s = s[len(s)-20:]
-	}
+	if len(s) > 20 { s = s[len(s)-20:] }
 	s = strings.ToLower(s)
-
-	// Check for prefixes of "tool<function" or "<function"
 	prefixes := []string{" tool<", "tool<", "<func", "<f", " <"}
 	for _, p := range prefixes {
-		if strings.HasSuffix(s, p) {
-			return true
-		}
+		if strings.HasSuffix(s, p) { return true }
 	}
-
-	// Also catch the word "tool" preceded by a space or newline
-	if strings.HasSuffix(s, " tool") {
-		return true
-	}
-
-	return false
+	return strings.HasSuffix(s, " tool")
 }

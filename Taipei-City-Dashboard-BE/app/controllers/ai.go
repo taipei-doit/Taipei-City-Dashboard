@@ -66,7 +66,82 @@ func ChatWithTWCC(c *gin.Context) {
 	}
 	sessionID = html.EscapeString(sessionID)
 
-	// 2. Convert input to Service Request
+	// 2. Prepare AI Request
+	_, accountID, _, _, _ := util.GetUserInfoFromContext(c)
+	req := ai.AIChatRequest{
+		SessionID: sessionID,
+		UserID:    fmt.Sprintf("%d", accountID),
+		IPAddress: c.ClientIP(),
+		Messages:  input.ToServiceMessages(),
+	}
+
+	// 3. Prepare Dynamic Options
+	options := input.ToCallOptions()
+
+	// 4. Handle Streaming Response
+	if input.Stream {
+		c.Header("Content-Type", "text/event-stream")
+		c.Header("Cache-Control", "no-cache")
+		c.Header("X-Content-Type-Options", "nosniff")
+		c.Header("Connection", "keep-alive")
+
+		// Add Streaming Callback
+		options = append(options, llms.WithStreamingFunc(func(ctx context.Context, chunk []byte) error {
+			if string(chunk) == ": heartbeat\n\n" {
+				return nil
+			}
+			_, err := c.Writer.Write(chunk)
+			if err != nil {
+				return err
+			}
+			c.Writer.Flush()
+			return nil
+		}))
+
+		_, err := ai.ChatWithTWCC(c.Request.Context(), req, options...)
+		if err != nil {
+			if !c.Writer.Written() {
+				c.JSON(http.StatusInternalServerError, gin.H{
+					"status": "error",
+					"error_code": "AI_SERVICE_STREAM_ERROR",
+					"message": err.Error(),
+				})
+			}
+		}
+		return
+	}
+
+	// 5. Standard Non-Streaming Response
+	logEntry, err := ai.ChatWithTWCC(c.Request.Context(), req, options...)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"status": "error",
+			"error_code": "AI_SERVICE_ERROR",
+			"message": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"status": "success",
+		"data": gin.H{
+			"session":     logEntry.SessionID,
+			"content":     logEntry.Answer,
+			"usage": gin.H{
+				"input_tokens":  logEntry.InputTokens,
+				"output_tokens": logEntry.OutputTokens,
+				"total_tokens":  logEntry.TotalTokens,
+			},
+			"tool_used":   logEntry.ToolUsed,
+			"latency_ms":  logEntry.LatencyMS,
+			"model":       logEntry.Model,
+			"provider":    logEntry.Provider,
+		},
+	})
+}
+
+// ToServiceMessages converts input messages to langchaingo internal format
+func (input *AIChatInput) ToServiceMessages() []llms.MessageContent {
 	serviceMsgs := make([]llms.MessageContent, 0)
 	for _, m := range input.Messages {
 		role := llms.ChatMessageTypeHuman
@@ -92,7 +167,6 @@ func ChatWithTWCC(c *gin.Context) {
 			role = llms.ChatMessageTypeSystem
 		case "tool":
 			role = llms.ChatMessageTypeTool
-			// Use ToolCallResponse for the tool result
 			parts = []llms.ContentPart{llms.ToolCallResponse{
 				ToolCallID: m.ToolCallID,
 				Content:    m.Content,
@@ -104,23 +178,15 @@ func ChatWithTWCC(c *gin.Context) {
 			Parts: parts,
 		})
 	}
+	return serviceMsgs
+}
 
-	// 3. Extract UserID from Token (using project utility)
-	_, accountID, _, _, _ := util.GetUserInfoFromContext(c)
-	userID := fmt.Sprintf("%d", accountID)
-	ipAddress := c.ClientIP()
-
-	req := ai.AIChatRequest{
-		SessionID: sessionID,
-		UserID:    userID,
-		IPAddress: ipAddress,
-		Messages:  serviceMsgs,
-	}
-
-	// 4. Call AI Service with dynamic options
+// ToCallOptions extracts and maps AI generation options and tools
+func (input *AIChatInput) ToCallOptions() []llms.CallOption {
 	options := make([]llms.CallOption, 0)
 	params := make(map[string]interface{})
 
+	// Map numerical parameters
 	if input.MaxNewTokens != nil {
 		options = append(options, llms.WithMaxTokens(*input.MaxNewTokens))
 		params["max_new_tokens"] = *input.MaxNewTokens
@@ -149,7 +215,7 @@ func ChatWithTWCC(c *gin.Context) {
 		params["seed"] = *input.Seed
 	}
 
-	// Handle Tools
+	// Map Tools
 	if len(input.Tools) > 0 {
 		lt := make([]llms.Tool, 0)
 		for _, t := range input.Tools {
@@ -168,74 +234,10 @@ func ChatWithTWCC(c *gin.Context) {
 		}
 	}
 
-	// Pass explicit parameters through Metadata for Provider's precise mapping
 	if len(params) > 0 {
 		options = append(options, llms.WithMetadata(params))
 	}
 
-	// 5. Handle Streaming Response
-	if input.Stream {
-		c.Header("Content-Type", "text/event-stream")
-		c.Header("Cache-Control", "no-cache")
-		c.Header("X-Content-Type-Options", "nosniff")
-		c.Header("Connection", "keep-alive")
-
-		// Add Streaming Callback
-		options = append(options, llms.WithStreamingFunc(func(ctx context.Context, chunk []byte) error {
-			// Filter out internal backend heartbeats to keep frontend stream clean
-			if string(chunk) == ": heartbeat\n\n" {
-				return nil
-			}
-			
-			_, err := c.Writer.Write(chunk)
-			if err != nil {
-				return err
-			}
-			c.Writer.Flush()
-			return nil
-		}))
-
-		_, err := ai.ChatWithTWCC(c.Request.Context(), req, options...)
-		if err != nil {
-			// In streaming, we can't easily change Status Code after headers sent, 
-			// but if the call fails immediately, we return JSON error.
-			if !c.Writer.Written() {
-				c.JSON(http.StatusInternalServerError, gin.H{
-					"status": "error",
-					"error_code": "AI_SERVICE_STREAM_ERROR",
-					"message": err.Error(),
-				})
-			}
-		}
-		return
-	}
-
-	// 6. Standard Non-Streaming Response
-	logEntry, err := ai.ChatWithTWCC(c.Request.Context(), req, options...)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"status": "error",
-			"error_code": "AI_SERVICE_ERROR",
-			"message": err.Error(),
-		})
-		return
-	}
-
-	c.JSON(http.StatusOK, gin.H{
-		"status": "success",
-		"data": gin.H{
-			"session":     logEntry.SessionID,
-			"content":     logEntry.Answer,
-			"usage": gin.H{
-				"input_tokens":  logEntry.InputTokens,
-				"output_tokens": logEntry.OutputTokens,
-				"total_tokens":  logEntry.TotalTokens,
-			},
-			"tool_used":   logEntry.ToolUsed,
-			"latency_ms":  logEntry.LatencyMS,
-			"model":       logEntry.Model,
-			"provider":    logEntry.Provider,
-		},
-	})
+	return options
 }
 
