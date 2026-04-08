@@ -1,16 +1,16 @@
 // 取得擁擠程度對應的顏色
 export const getCrowdColor = (level) => {
 	switch (level) {
-		case "1":
-			return "🟩";
-		case "2":
-			return "🟨";
-		case "3":
-			return "🟧";
-		case "4":
-			return "🟥";
-		default:
-			return "⬜";
+	case "1":
+		return "🟩";
+	case "2":
+		return "🟨";
+	case "3":
+		return "🟧";
+	case "4":
+		return "🟥";
+	default:
+		return "⬜";
 	}
 };
 

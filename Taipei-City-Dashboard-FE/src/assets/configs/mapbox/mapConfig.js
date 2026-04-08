@@ -1,4 +1,8 @@
 // Initial Position and Settings
+const allowedDomains = ["citydashboard.taipei", "test-citydashboard.taipei"];
+
+const hasSourceLayer = allowedDomains.includes(window.location.hostname);
+
 export const MapObjectConfig = {
 	antialias: true,
 	container: "mapboxBox",
@@ -215,7 +219,10 @@ export const TpVillage = {
 export const metroTpDistrict = {
 	id: "metrotaipei_town",
 	source: "metrotaipei_town",
-	"source-layer": "metrotaipei_town",
+	// "source-layer": "metrotaipei_town",
+	...(hasSourceLayer && {
+		"source-layer": "metrotaipei_town",
+	}),
 	type: "line",
 	paint: {
 		"line-color": "white",
@@ -229,7 +236,10 @@ export const metroTpDistrict = {
 export const metroTpVillage = {
 	id: "metrotaipei_village",
 	source: "metrotaipei_village",
-	"source-layer": "metrotaipei_village",
+	// "source-layer": "metrotaipei_village",
+	...(hasSourceLayer && {
+		"source-layer": "metrotaipei_village",
+	}),
 	type: "line",
 	paint: {
 		"line-color": "#aaaaaa",
