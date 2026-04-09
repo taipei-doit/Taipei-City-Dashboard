@@ -8,7 +8,7 @@ services:
     working_dir: /opt/Taipei-City-Dashboard-FE
     environment:
       DOCKER_COMPOSE: "true"
-    command: ["npm", "install"]
+    command: ["npm", "ci"]
 
   dashboard-be-init-manager:
     image: golang:${GOLANG_IMAGE_TAG:-latest}
