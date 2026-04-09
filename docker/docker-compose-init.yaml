@@ -1,4 +1,3 @@
-version: "3.7"
 services:
   dashboard-fe-init:
     image: node:${NODE_IMAGE_TAG:-latest}

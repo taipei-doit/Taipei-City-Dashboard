@@ -1,5 +1,3 @@
-version: "3.7"
-
 services:
   nginx:
     restart: always
@@ -30,7 +28,7 @@ services:
     volumes:
       - ../Taipei-City-Dashboard-FE:/opt/Taipei-City-Dashboard-FE
     ports:
-      - "8080:80"
+      - "8081:80"
     working_dir: /opt/Taipei-City-Dashboard-FE
     command: ["npm", "run", "dev"]
 
