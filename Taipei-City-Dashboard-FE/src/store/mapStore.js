@@ -174,6 +174,14 @@ export const useMapStore = defineStore("map", {
 		// Due to performance concerns, Taipei 3D Buildings won't be added in the mobile version
 		initializeBasicLayers() {
 			const authStore = useAuthStore();
+			const allowedDomains = [
+				"citydashboard.taipei",
+				"test-citydashboard.taipei",
+			];
+			const hasSourceLayer = allowedDomains.includes(
+				window.location.hostname,
+			);
+
 			if (!this.map) return;
 			// metroTaipei District Labels
 			fetch(`/mapData/metrotaipei_town.geojson`)
@@ -207,26 +215,86 @@ export const useMapStore = defineStore("map", {
 					.addLayer(TaipeiBuilding);
 			}
 			// Taipei Village Boundaries
-			this.map
-				.addSource(`metrotaipei_village`, {
-					type: "vector",
-					scheme: "tms",
-					tolerance: 0,
-					tiles: [
-						`${location.origin}/geo_server/gwc/service/tms/1.0.0/taipei_vioc:metrotaipei_village@EPSG:900913@pbf/{z}/{x}/{y}.pbf`,
-					],
-				})
-				.addLayer(metroTpVillage);
-			this.map
-				.addSource(`metrotaipei_town`, {
-					type: "vector",
-					scheme: "tms",
-					tolerance: 0,
-					tiles: [
-						`${location.origin}/geo_server/gwc/service/tms/1.0.0/taipei_vioc:metrotaipei_town@EPSG:900913@pbf/{z}/{x}/{y}.pbf`,
-					],
-				})
-				.addLayer(metroTpDistrict);
+			if (hasSourceLayer) {
+				this.map
+					.addSource(`metrotaipei_village`, {
+						type: "vector",
+						scheme: "tms",
+						tolerance: 0,
+						tiles: [
+							`${location.origin}/geo_server/gwc/service/tms/1.0.0/taipei_vioc:metrotaipei_village@EPSG:900913@pbf/{z}/{x}/{y}.pbf`,
+						],
+					})
+					.addLayer(metroTpVillage);
+				this.map
+					.addSource(`metrotaipei_town`, {
+						type: "vector",
+						scheme: "tms",
+						tolerance: 0,
+						tiles: [
+							`${location.origin}/geo_server/gwc/service/tms/1.0.0/taipei_vioc:metrotaipei_town@EPSG:900913@pbf/{z}/{x}/{y}.pbf`,
+						],
+					})
+					.addLayer(metroTpDistrict);
+			} else {
+				// 加入 loading
+				this.loadingLayers.push("metrotaipei_town");
+
+				// 載入區界
+				// 加入 source + layer
+				this.map.addSource("metrotaipei_town", {
+					type: "geojson",
+					data: "/mapData/metrotaipei_town.geojson",
+				});
+
+				this.map.addLayer({
+					...metroTpDistrict,
+					id: "metrotaipei_town",
+					source: "metrotaipei_town",
+				});
+
+				// 綁定 loading 完成
+				this.map.on("sourcedata", (e) => {
+					if (
+						e.sourceId === "metrotaipei_town" &&
+						e.isSourceLoaded &&
+						this.loadingLayers.includes("metrotaipei_town")
+					) {
+						this.loadingLayers = this.loadingLayers.filter(
+							(el) => el !== "metrotaipei_town",
+						);
+					}
+				});
+
+				// 載入村里界
+				// 加入 loading
+				this.loadingLayers.push("metrotaipei_village");
+
+				// 加入 source + layer
+				this.map.addSource("metrotaipei_village", {
+					type: "geojson",
+					data: "/mapData/metrotaipei_village.geojson",
+				});
+
+				this.map.addLayer({
+					...metroTpVillage,
+					id: "metrotaipei_village",
+					source: "metrotaipei_village",
+				});
+
+				// 綁定 loading 完成
+				this.map.on("sourcedata", (e) => {
+					if (
+						e.sourceId === "metrotaipei_village" &&
+						e.isSourceLoaded &&
+						this.loadingLayers.includes("metrotaipei_village")
+					) {
+						this.loadingLayers = this.loadingLayers.filter(
+							(el) => el !== "metrotaipei_village",
+						);
+					}
+				});
+			}
 
 			this.addSymbolSources();
 		},
@@ -728,15 +796,15 @@ export const useMapStore = defineStore("map", {
 			const layers = Object.keys(this.deckGlLayer).map((index) => {
 				const l = this.deckGlLayer[index];
 				switch (l.type) {
-					case "ArcLayer":
-						return new ArcLayer(l.config);
-					case "AnimatedArcLayer":
-						return new AnimatedArcLayer({
-							...l.config,
-							coef: this.step / 1000,
-						});
-					default:
-						break;
+				case "ArcLayer":
+					return new ArcLayer(l.config);
+				case "AnimatedArcLayer":
+					return new AnimatedArcLayer({
+						...l.config,
+						coef: this.step / 1000,
+					});
+				default:
+					break;
 				}
 			});
 			this.overlay.setProps({
