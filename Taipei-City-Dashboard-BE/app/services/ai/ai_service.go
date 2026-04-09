@@ -7,6 +7,7 @@ import (
 	"TaipeiCityDashboardBE/global"
 	"TaipeiCityDashboardBE/logs"
 	"context"
+	"encoding/json"
 	"fmt"
 	"time"
 
@@ -71,6 +72,7 @@ type aiSession struct {
 	totalInput      int
 	totalOutput     int
 	toolUsed        bool
+	executedTools   []string
 	lastResp        *llms.ContentResponse
 	lastErr         error
 	startTime       time.Time
@@ -78,6 +80,7 @@ type aiSession struct {
 
 func (s *aiSession) run(ctx context.Context) (*models.AIChatLog, error) {
 	maxLoops := 5
+	s.executedTools = make([]string, 0)
 	for i := 0; i < maxLoops; i++ {
 		s.sendHeartbeat(ctx)
 
@@ -153,6 +156,7 @@ func (s *aiSession) executeTools(ctx context.Context, toolCalls []llms.ToolCall)
 	})
 
 	for _, tc := range toolCalls {
+		s.executedTools = append(s.executedTools, tc.FunctionCall.Name)
 		result, err := tools.Execute(ctx, tc.FunctionCall.Name, tc.FunctionCall.Arguments)
 		if err != nil {
 			result = fmt.Sprintf("Error: %v. Please verify arguments.", err)
@@ -176,7 +180,7 @@ func (s *aiSession) injectInstructions() {
 		toolNames += t.Function.Name
 	}
 
-	instruction := fmt.Sprintf("\nSystem Instruction:\n1. Use ONLY: [%s].\n2. 'year' MUST be a literal integer.\n3. If stuck, respond with text.", toolNames)
+	instruction := fmt.Sprintf("\nSystem Instruction:\n1. Use ONLY: [%s].\n2. NEVER nest tool calls \n3. Arguments MUST be literal values (strings, integers, etc.), never function calls \n4. For dependent tasks, call tools sequentially in separate turns.\n5. If stuck, respond with text.", toolNames)
 	
 	s.currentMessages = make([]llms.MessageContent, 0)
 	merged := false
@@ -218,7 +222,12 @@ func (s *aiSession) finalize() (*models.AIChatLog, error) {
 		log.Answer = s.lastResp.Choices[0].Content
 		log.InputTokens, log.OutputTokens = s.totalInput, s.totalOutput
 		log.TotalTokens = s.totalInput + s.totalOutput
-		if s.toolUsed { log.ToolUsed, log.Tools = true, "[\"executed\"]" }
+		if s.toolUsed {
+			log.ToolUsed = true
+			if toolJSON, err := json.Marshal(s.executedTools); err == nil {
+				log.Tools = string(toolJSON)
+			}
+		}
 	}
 
 	if err := models.CreateAIChatLog(log); err != nil {
