@@ -7,8 +7,8 @@ import (
 	"TaipeiCityDashboardBE/global"
 	"TaipeiCityDashboardBE/logs"
 	"context"
+	"encoding/json"
 	"fmt"
-	"strings"
 	"time"
 
 	"github.com/tmc/langchaingo/llms"
@@ -22,10 +22,7 @@ var (
 )
 
 func init() {
-	// Initialize semaphore from config
 	aiSemaphore = semaphore.NewWeighted(int64(global.TWCC.MaxConcurrent))
-	
-	// Initialize TWCC provider as the default LLM
 	twccModel = twcc.New(
 		global.TWCC.ApiKey,
 		global.TWCC.ApiUrl,
@@ -34,232 +31,235 @@ func init() {
 	)
 }
 
-// AIChatRequest represents the incoming request structure for AI chat
 type AIChatRequest struct {
-	SessionID string                `json:"session"`
-	UserID    string                `json:"user_id"`
-	IPAddress string                `json:"ip_address"`
-	Messages  []llms.MessageContent `json:"messages"`
+	SessionID string                 `json:"session"`
+	UserID    string                 `json:"user_id"`
+	IPAddress string                 `json:"ip_address"`
+	Messages  []llms.MessageContent  `json:"messages"`
 	Params    map[string]interface{} `json:"params"`
 }
 
-// ChatWithTWCC handles the AI conversation logic including retries, tool calling loop, and logging
+// ChatWithTWCC handles the AI conversation logic including retries, tool calling loop, and logging.
 func ChatWithTWCC(ctx context.Context, req AIChatRequest, options ...llms.CallOption) (*models.AIChatLog, error) {
-	// 1. Concurrency Control
 	if err := aiSemaphore.Acquire(ctx, 1); err != nil {
 		return nil, fmt.Errorf("server too busy: %v", err)
 	}
 	defer aiSemaphore.Release(1)
 
-	startTime := time.Now()
-	var finalResp *llms.ContentResponse
-	var lastErr error
-
-	// Extract CallOptions for retry logic
-	opts := llms.CallOptions{}
-	for _, opt := range options {
-		opt(&opts)
-	}
-
-	// 2. Main Tool Calling Loop
-	maxToolLoops := 5
-	
-	// Extract Tools list for system message and error reporting
-	availableTools := ""
-	for i, t := range opts.Tools {
-		if i > 0 { availableTools += ", " }
-		availableTools += t.Function.Name
-	}
-
-	// Inject or merge a strict system constraint to prevent tool hallucination
-	instruction := fmt.Sprintf("\nSystem Instruction: You MUST ONLY use the tools provided in your toolset: [%s]. NEVER hallucinate or make up tool names like 'get_scenic_spots'. If a requested action cannot be performed by these specific tools, respond to the user directly with text and explain you don't have that capability.", availableTools)
-	
-	currentMessages := make([]llms.MessageContent, 0)
-	systemMerged := false
-	for _, m := range req.Messages {
-		if m.Role == llms.ChatMessageTypeSystem && !systemMerged {
-			// Merge into existing system message
-			newParts := make([]llms.ContentPart, 0)
-			for _, p := range m.Parts {
-				if tp, ok := p.(llms.TextContent); ok {
-					newParts = append(newParts, llms.TextContent{Text: tp.Text + instruction})
-				} else {
-					newParts = append(newParts, p)
-				}
-			}
-			currentMessages = append(currentMessages, llms.MessageContent{Role: m.Role, Parts: newParts})
-			systemMerged = true
-		} else {
-			currentMessages = append(currentMessages, m)
-		}
-	}
-	
-	// If no system message existed, prepend a new one
-	if !systemMerged {
-		constraintMsg := llms.MessageContent{
-			Role: llms.ChatMessageTypeSystem,
-			Parts: []llms.ContentPart{llms.TextContent{
-				Text: "System Instruction: You MUST ONLY use the tools provided in your toolset: [" + availableTools + "]. NEVER hallucinate or make up tool names. If a requested action cannot be performed by these specific tools, respond to the user directly with text.",
-			}},
-		}
-		currentMessages = append([]llms.MessageContent{constraintMsg}, currentMessages...)
-	}
-	
-	totalInputTokens := 0
-	totalOutputTokens := 0
-	var toolUsed bool
-
-	for loop := 0; loop < maxToolLoops; loop++ {
-		// A. Heartbeat: Send an SSE comment to keep connection alive before LLM starts
-		if opts.StreamingFunc != nil {
-			opts.StreamingFunc(ctx, []byte(": heartbeat\n\n"))
-		}
-
-		// Generate Content with Retries
-		maxRetry := global.TWCC.MaxRetry
-		if opts.StreamingFunc != nil {
-			maxRetry = 0
-		}
-
-		var currentResp *llms.ContentResponse
-		for i := 0; i <= maxRetry; i++ {
-			currentResp, lastErr = twccModel.GenerateContent(ctx, currentMessages, options...)
-			if lastErr == nil {
-				break
-			}
-			logs.FError("TWCC Attempt %d failed: %v", i+1, lastErr)
-			if i < maxRetry {
-				time.Sleep(500 * time.Millisecond)
-			}
-		}
-
-		if lastErr != nil {
-			break
-		}
-
-		if currentResp == nil || len(currentResp.Choices) == 0 {
-			lastErr = fmt.Errorf("empty response from model")
-			break
-		}
-
-		choice := currentResp.Choices[0]
-		finalResp = currentResp 
-
-		// Accumulate tokens
-		if usage, ok := choice.GenerationInfo["usage"].(map[string]interface{}); ok {
-			totalInputTokens += parseUsageInt(usage["input_tokens"])
-			totalOutputTokens += parseUsageInt(usage["output_tokens"])
-		}
-
-		// Check for Tool Calls
-		toolCalls, ok := choice.GenerationInfo["tool_calls"].([]llms.ToolCall)
-		if !ok || len(toolCalls) == 0 {
-			break
-		}
-
-		toolUsed = true
-		logs.FInfo("Model requested %d tool calls at loop %d (Streaming: %v)", len(toolCalls), loop, opts.StreamingFunc != nil)
-
-		// Create Assistant message with ToolCalls to keep history
-		assistantParts := []llms.ContentPart{llms.TextContent{Text: choice.Content}}
-		for _, tc := range toolCalls {
-			assistantParts = append(assistantParts, tc)
-		}
-
-		assistantMsg := llms.MessageContent{
-			Role:  llms.ChatMessageTypeAI,
-			Parts: assistantParts,
-		}
-		currentMessages = append(currentMessages, assistantMsg)
-
-		// Execute Tools and append results
-		for _, tc := range toolCalls {
-			// A. Heartbeat: Send an SSE comment to keep connection alive during tool execution
-			if opts.StreamingFunc != nil {
-				opts.StreamingFunc(ctx, []byte(": heartbeat\n\n"))
-			}
-
-			// B. Execute tool with whitelist check
-			result, err := tools.Execute(ctx, tc.FunctionCall.Name, tc.FunctionCall.Arguments)
-			if err != nil {
-				// C. Error Feedback: Don't break, tell the model what went wrong
-				// Provide a helpful message so it can fix the call in the next loop
-				errorMsg := fmt.Sprintf("Error: %v. Please check the tool name and ensure arguments are valid JSON.", err)
-				if strings.Contains(err.Error(), "not found") {
-					errorMsg = fmt.Sprintf("Error: tool '%s' is not in your whitelist. Available tools: [%s].", tc.FunctionCall.Name, availableTools)
-				}
-				
-				logs.FError("Tool Error (Loop %d): %s", loop, errorMsg)
-				result = errorMsg
-			}
-
-			// D. LangChain Strict Pairing: Assistant Message -> Tool Message
-			toolResMsg := llms.MessageContent{
-				Role: llms.ChatMessageTypeTool,
-				Parts: []llms.ContentPart{llms.ToolCallResponse{
-					ToolCallID: tc.ID,
-					Name:       tc.FunctionCall.Name,
-					Content:    result,
-				}},
-			}
-			currentMessages = append(currentMessages, toolResMsg)
-		}
-	}
-
-	latency := int(time.Since(startTime).Milliseconds())
-
-	// 3. Prepare Log Entry
-	chatLog := &models.AIChatLog{
-		SessionID: req.SessionID,
-		UserID:    req.UserID,
-		IPAddress: req.IPAddress,
-		Provider:  "twcc",
-		Model:     global.TWCC.Model,
-		LatencyMS: latency,
-		Status:    "success",
-		Tools:     "[]",
-		CreatedAt: startTime,
-	}
-
-	// Extract question
-	if len(req.Messages) > 0 {
-		lastMsg := req.Messages[len(req.Messages)-1]
-		for _, part := range lastMsg.Parts {
-			if text, ok := part.(llms.TextContent); ok {
-				chatLog.Question = text.Text
-			}
-		}
-	}
-
-	if lastErr != nil {
-		chatLog.Status = "error"
-		chatLog.ErrorCode = "MODEL_ERROR"
-		chatLog.ErrorMessage = lastErr.Error()
-		models.CreateAIChatLog(chatLog)
-		return chatLog, lastErr
-	}
-
-	// 4. Finalize Answer and Usage
-	if finalResp != nil && len(finalResp.Choices) > 0 {
-		chatLog.Answer = finalResp.Choices[0].Content
-		chatLog.InputTokens = totalInputTokens
-		chatLog.OutputTokens = totalOutputTokens
-		chatLog.TotalTokens = totalInputTokens + totalOutputTokens
-		
-		if toolUsed {
-			chatLog.ToolUsed = true
-			chatLog.Tools = "[\"tool_calling_loop_executed\"]"
-		}
-	}
-
-	// 5. Persist Log
-	if err := models.CreateAIChatLog(chatLog); err != nil {
-		logs.FError("Failed to save AI chatlog: %v", err)
-	}
-
-	return chatLog, nil
+	session := newSession(req, options...)
+	return session.run(ctx)
 }
 
+func newSession(req AIChatRequest, options ...llms.CallOption) *aiSession {
+	s := &aiSession{
+		req:             req,
+		options:         options,
+		currentMessages: make([]llms.MessageContent, 0),
+		startTime:       time.Now(),
+	}
+	for _, opt := range options {
+		opt(&s.callOpts)
+	}
+	s.injectInstructions()
+	return s
+}
+
+type aiSession struct {
+	req             AIChatRequest
+	options         []llms.CallOption
+	callOpts        llms.CallOptions
+	currentMessages []llms.MessageContent
+	totalInput      int
+	totalOutput     int
+	toolUsed        bool
+	executedTools   []string
+	lastResp        *llms.ContentResponse
+	lastErr         error
+	startTime       time.Time
+}
+
+func (s *aiSession) run(ctx context.Context) (*models.AIChatLog, error) {
+	maxLoops := 5
+	s.executedTools = make([]string, 0)
+	for i := 0; i < maxLoops; i++ {
+		s.sendHeartbeat(ctx)
+
+		if err := s.generate(ctx); err != nil {
+			break
+		}
+
+		toolCalls := s.extractToolCalls()
+		if len(toolCalls) == 0 {
+			break
+		}
+
+		s.toolUsed = true
+		logs.FInfo("Loop %d: Processing %d tool calls", i, len(toolCalls))
+		if err := s.executeTools(ctx, toolCalls); err != nil {
+			break
+		}
+	}
+	return s.finalize()
+}
+
+func (s *aiSession) sendHeartbeat(ctx context.Context) {
+	if s.callOpts.StreamingFunc != nil {
+		s.callOpts.StreamingFunc(ctx, []byte(": heartbeat\n\n"))
+	}
+}
+
+func (s *aiSession) generate(ctx context.Context) error {
+	maxRetry := global.TWCC.MaxRetry
+	if s.callOpts.StreamingFunc != nil {
+		maxRetry = 0
+	}
+
+	for i := 0; i <= maxRetry; i++ {
+		s.lastResp, s.lastErr = twccModel.GenerateContent(ctx, s.currentMessages, s.options...)
+		if s.lastErr == nil {
+			s.updateTokens()
+			return nil
+		}
+		logs.FError("Attempt %d failed: %v", i+1, s.lastErr)
+		if i < maxRetry {
+			time.Sleep(500 * time.Millisecond)
+		}
+	}
+	return s.lastErr
+}
+
+func (s *aiSession) extractToolCalls() []llms.ToolCall {
+	if s.lastResp == nil || len(s.lastResp.Choices) == 0 {
+		return nil
+	}
+	tc, _ := s.lastResp.Choices[0].GenerationInfo["tool_calls"].([]llms.ToolCall)
+	return tc
+}
+
+func (s *aiSession) updateTokens() {
+	if s.lastResp == nil || len(s.lastResp.Choices) == 0 {
+		return
+	}
+	if usage, ok := s.lastResp.Choices[0].GenerationInfo["usage"].(map[string]interface{}); ok {
+		s.totalInput += parseUsageInt(usage["input_tokens"])
+		s.totalOutput += parseUsageInt(usage["output_tokens"])
+	}
+}
+
+func (s *aiSession) executeTools(ctx context.Context, toolCalls []llms.ToolCall) error {
+	choice := s.lastResp.Choices[0]
+	
+	// Add Assistant's intent
+	s.currentMessages = append(s.currentMessages, llms.MessageContent{
+		Role:  llms.ChatMessageTypeAI,
+		Parts: append([]llms.ContentPart{llms.TextContent{Text: choice.Content}}, toolsToParts(toolCalls)...),
+	})
+
+	for _, tc := range toolCalls {
+		s.executedTools = append(s.executedTools, tc.FunctionCall.Name)
+		result, err := tools.Execute(ctx, tc.FunctionCall.Name, tc.FunctionCall.Arguments)
+		if err != nil {
+			result = fmt.Sprintf("Error: %v. Please verify arguments.", err)
+			logs.FError("Tool Error: %v", err)
+		}
+
+		s.currentMessages = append(s.currentMessages, llms.MessageContent{
+			Role: llms.ChatMessageTypeTool,
+			Parts: []llms.ContentPart{llms.ToolCallResponse{
+				ToolCallID: tc.ID, Name: tc.FunctionCall.Name, Content: result,
+			}},
+		})
+	}
+	return nil
+}
+
+func (s *aiSession) injectInstructions() {
+	toolNames := ""
+	for i, t := range s.callOpts.Tools {
+		if i > 0 { toolNames += ", " }
+		toolNames += t.Function.Name
+	}
+
+	instruction := fmt.Sprintf("\nSystem Instruction:\n1. Use ONLY: [%s].\n2. NEVER nest tool calls \n3. Arguments MUST be literal values (strings, integers, etc.), never function calls \n4. For dependent tasks, call tools sequentially in separate turns.\n5. If stuck, respond with text.", toolNames)
+	
+	s.currentMessages = make([]llms.MessageContent, 0)
+	merged := false
+	for _, m := range s.req.Messages {
+		if m.Role == llms.ChatMessageTypeSystem && !merged {
+			s.currentMessages = append(s.currentMessages, mergeSystemMsg(m, instruction))
+			merged = true
+		} else {
+			s.currentMessages = append(s.currentMessages, m)
+		}
+	}
+	
+	if !merged {
+		s.currentMessages = append([]llms.MessageContent{{
+			Role: llms.ChatMessageTypeSystem,
+			Parts: []llms.ContentPart{llms.TextContent{Text: "Instruction: Use tools: [" + toolNames + "]."}},
+		}}, s.currentMessages...)
+	}
+}
+
+func (s *aiSession) finalize() (*models.AIChatLog, error) {
+	log := &models.AIChatLog{
+		SessionID: s.req.SessionID, UserID: s.req.UserID, IPAddress: s.req.IPAddress,
+		Provider: "twcc", Model: global.TWCC.Model, LatencyMS: int(time.Since(s.startTime).Milliseconds()),
+		Status: "success", Tools: "[]", CreatedAt: s.startTime,
+	}
+
+	if len(s.req.Messages) > 0 {
+		log.Question = extractText(s.req.Messages[len(s.req.Messages)-1])
+	}
+
+	if s.lastErr != nil {
+		log.Status, log.ErrorCode, log.ErrorMessage = "error", "MODEL_ERROR", s.lastErr.Error()
+		models.CreateAIChatLog(log)
+		return log, s.lastErr
+	}
+
+	if s.lastResp != nil && len(s.lastResp.Choices) > 0 {
+		log.Answer = s.lastResp.Choices[0].Content
+		log.InputTokens, log.OutputTokens = s.totalInput, s.totalOutput
+		log.TotalTokens = s.totalInput + s.totalOutput
+		if s.toolUsed {
+			log.ToolUsed = true
+			if toolJSON, err := json.Marshal(s.executedTools); err == nil {
+				log.Tools = string(toolJSON)
+			}
+		}
+	}
+
+	if err := models.CreateAIChatLog(log); err != nil {
+		logs.FError("DB Log Error: %v", err)
+	}
+	return log, nil
+}
+
+func toolsToParts(calls []llms.ToolCall) []llms.ContentPart {
+	parts := make([]llms.ContentPart, len(calls))
+	for i, c := range calls { parts[i] = c }
+	return parts
+}
+
+func mergeSystemMsg(m llms.MessageContent, instruction string) llms.MessageContent {
+	newParts := make([]llms.ContentPart, len(m.Parts))
+	for i, p := range m.Parts {
+		if tp, ok := p.(llms.TextContent); ok {
+			newParts[i] = llms.TextContent{Text: tp.Text + instruction}
+		} else {
+			newParts[i] = p
+		}
+	}
+	return llms.MessageContent{Role: m.Role, Parts: newParts}
+}
+
+func extractText(m llms.MessageContent) string {
+	for _, p := range m.Parts {
+		if t, ok := p.(llms.TextContent); ok { return t.Text }
+	}
+	return ""
+}
 
 func parseUsageInt(val interface{}) int {
 	switch v := val.(type) {
