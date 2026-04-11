@@ -1,0 +1,138 @@
+# Windmill PoC for Taipei City Dashboard DE
+#
+# 架構（對齊 https://www.windmill.dev/docs/misc/architecture）：
+#   postgres (14)         ← 狀態 + job queue 都在這
+#   windmill-server       ← UI + API (port 8000)
+#   windmill-worker-*     ← 三組 worker 對應現有 queue 分流 (default / realtime / heavy)
+#
+# 啟動：
+#   cd Taipei-City-Dashboard-DE/windmill-poc
+#   cp .env.example .env            # 填 DE_DAGS_HOST_PATH 與三個 DB URI
+#   docker compose build windmill-worker-default     # 第一次建 worker image
+#   docker compose up -d
+#
+# UI: http://localhost:8000
+# 預設登入：admin@windmill.dev / changeme （第一次登入會被要求改密碼）
+#
+# PoC 後續設定（在 UI 裡做一次性動作）：
+#   1. Workers → 建立 worker group "realtime" / "heavy"（"default" 預設已存在）
+#      → 把 tag 設成跟 group 同名，讓 WORKER_GROUP env 對應得上
+#   2. Scripts → New script → Python → 把 scripts/*.py 貼進去，每支 script
+#      的 "Tag" 欄位分別設 realtime / default / heavy
+#   3. Schedules → New schedule → 指向剛才建的 script，填 6-field cron
+#      （Windmill 用 hexagon/croner，格式是 "秒 分 時 日 月 週"）
+#       - eoc_dashboard_controller:  "0 */5 * * * *"
+#       - bike_path:                 "0 0 20 * * *"
+#       - tourist_attractions:       "0 0 0 1 * *"
+#   4. Timezone 選 Asia/Taipei
+#
+# Production 建議：
+#   - DB URI 改為 Windmill Resource (type: postgresql)，用 wmill.get_resource() 取得
+#   - 正式環境請關閉 POSTGRES_PASSWORD 明文，改用 secret manager
+#   - server + worker 加 resource limit (cpus / mem_limit)
+#   - 前面放 caddy / nginx 做 reverse proxy + TLS
+
+volumes:
+  windmill-pg-data:
+  windmill-worker-cache:
+
+networks:
+  windmill-poc:
+    driver: bridge
+
+x-logging:
+  &default-logging
+  driver: "json-file"
+  options:
+    max-size: "100m"
+    max-file: "5"
+
+x-worker-base:
+  &worker-base
+  image: windmill-de-worker:latest
+  build:
+    context: .
+    dockerfile: worker/Dockerfile
+  restart: unless-stopped
+  depends_on:
+    postgres:
+      condition: service_healthy
+    windmill-server:
+      condition: service_started
+  environment:
+    &worker-env
+    DATABASE_URL: postgres://postgres:${POSTGRES_PASSWORD:-changeme}@postgres/windmill?sslmode=disable
+    MODE: worker
+    # 關掉 PID namespace 隔離以避免部分 Linux host 的 cap 問題；若 host 支援可改 true
+    DISABLE_NSJAIL: "true"
+    # 以下會被 Python script 的 airflow_shim / dag_runner 讀到
+    READY_DATA_DB_URI: ${READY_DATA_DB_URI}
+    RAW_DATA_DB_URI: ${RAW_DATA_DB_URI}
+    DASHBOARD_DB_URI: ${DASHBOARD_DB_URI}
+    DAG_PATH: /opt/airflow/dags
+    DATA_PATH: /opt/airflow/data
+    PYTHONPATH: "/opt/adapters:/opt/airflow/dags"
+  volumes:
+    # 把原本的 dags 資料夾掛進去，scripts 才能 import 現有的 utils / operators
+    - ${DE_DAGS_HOST_PATH}:/opt/airflow/dags:ro
+    # Windmill 的 Python venv cache，避免每次 restart 都重跑 pip install
+    - windmill-worker-cache:/tmp/windmill/cache
+  logging: *default-logging
+  networks: [windmill-poc]
+
+services:
+  postgres:
+    image: postgres:14-alpine
+    container_name: windmill-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
+      POSTGRES_DB: windmill
+    volumes:
+      - windmill-pg-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    logging: *default-logging
+    networks: [windmill-poc]
+
+  windmill-server:
+    image: ghcr.io/windmill-labs/windmill:main
+    container_name: windmill-server
+    restart: unless-stopped
+    pull_policy: missing
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgres://postgres:${POSTGRES_PASSWORD:-changeme}@postgres/windmill?sslmode=disable
+      MODE: server
+      BASE_URL: http://localhost:8000
+    ports:
+      - "8000:8000"
+    logging: *default-logging
+    networks: [windmill-poc]
+
+  windmill-worker-default:
+    <<: *worker-base
+    container_name: windmill-worker-default
+    environment:
+      <<: *worker-env
+      WORKER_GROUP: default
+
+  windmill-worker-realtime:
+    <<: *worker-base
+    container_name: windmill-worker-realtime
+    environment:
+      <<: *worker-env
+      WORKER_GROUP: realtime
+
+  windmill-worker-heavy:
+    <<: *worker-base
+    container_name: windmill-worker-heavy
+    environment:
+      <<: *worker-env
+      WORKER_GROUP: heavy
