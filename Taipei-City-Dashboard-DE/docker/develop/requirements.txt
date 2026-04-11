@@ -1,3 +1,12 @@
+# --- Airflow providers required for 3.x ---
+# 3.0+ 之後 FAB（UI auth manager）不再預裝，必須明確列出。
+# Postgres / Celery provider 已在 base image，但明確列出可避免 provider 被意外移除時炸開。
+# 版本不手動 pin，讓 base image 的 PIP_CONSTRAINT 自動解析成跟 Airflow 3.2.0 相容的版本。
+apache-airflow-providers-fab
+apache-airflow-providers-postgres
+apache-airflow-providers-celery
+
+# --- Data / GIS utilities ---
 geopandas==1.1.1
 GeoAlchemy2==0.14.7
 pytest==8.1.1
@@ -10,4 +19,3 @@ XlsxWriter==3.2.0
 pyminizip==0.2.6
 minio==7.2.5
 odfpy==1.4.1
-
