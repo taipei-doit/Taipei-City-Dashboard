@@ -1,0 +1,94 @@
+# Kestra PoC for Taipei City Dashboard DE
+#
+# 用途：驗證能否把現有 Airflow DAG 的 ETL 邏輯原封不動搬到 Kestra 排程。
+#
+# 啟動流程：
+#   cd Taipei-City-Dashboard-DE/kestra-poc
+#   cp .env.example .env                 # 填入 DB 連線字串、DAG 目錄絕對路徑
+#   docker build -t taipei-de-etl:latest ./etl-runner
+#   docker compose up -d
+#
+# UI: http://localhost:8080  (PoC 關閉了 basic-auth，正式環境請打開)
+# Flow 匯入：UI > Flows > Import > 選 flows/ 底下三個 yaml 依序上傳；或掛 namespaceFiles 自動同步。
+#
+# 若之後要上 k8s，這份 compose 對應的 Helm chart：
+#   https://kestra.io/docs/installation/kubernetes
+
+volumes:
+  kestra-data:
+  kestra-postgres-data:
+
+networks:
+  kestra-poc:
+    driver: bridge
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: kestra-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: kestra
+      POSTGRES_USER: kestra
+      POSTGRES_PASSWORD: kestra
+    volumes:
+      - kestra-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U kestra -d kestra"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks: [kestra-poc]
+
+  kestra:
+    # latest-full 內建常用 plugin（含 scripts.python 與 docker task runner）
+    # 正式環境請釘版本，例如 kestra/kestra:v0.20.0-full
+    image: kestra/kestra:latest-full
+    container_name: kestra
+    restart: unless-stopped
+    pull_policy: missing
+    user: "root"
+    command: server standalone
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      KESTRA_CONFIGURATION: |
+        datasources:
+          postgres:
+            url: jdbc:postgresql://postgres:5432/kestra
+            driverClassName: org.postgresql.Driver
+            username: kestra
+            password: kestra
+        kestra:
+          server:
+            basic-auth:
+              enabled: false
+          repository:
+            type: postgres
+          queue:
+            type: postgres
+          storage:
+            type: local
+            local:
+              base-path: "/app/storage"
+          tasks:
+            tmp-dir:
+              path: /tmp/kestra-wd/tmp
+            scripts:
+              docker:
+                volume-enabled: true
+      # 以下 env 會被 flow YAML 透過 {{ envs.xxx }} 讀到
+      DE_DAGS_HOST_PATH: ${DE_DAGS_HOST_PATH}
+      READY_DATA_DB_URI: ${READY_DATA_DB_URI}
+      RAW_DATA_DB_URI: ${RAW_DATA_DB_URI}
+      DASHBOARD_DB_URI: ${DASHBOARD_DB_URI}
+    volumes:
+      - kestra-data:/app/storage
+      # docker task runner 需要跟 host 共用 docker daemon 來 spawn task container
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /tmp/kestra-wd:/tmp/kestra-wd
+    ports:
+      - "8080:8080"   # UI
+      - "8081:8081"   # API / healthcheck
+    networks: [kestra-poc]

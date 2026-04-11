@@ -1,0 +1,42 @@
+id: monthly_tourist_attractions
+namespace: tpe_city_dashboard.monthly
+description: |
+  臺北旅遊網景點資料（每月 1 號 00:00）
+
+  原始 Airflow DAG: proj_city_dashboard.tourist_attractions
+  Airflow schedule: @monthly
+  Airflow queue: heavy
+  行為：從 TDX API 抓 Taipei ScenicSpot，轉 Point geometry，
+        寫入 tourist_attractions_tpe。
+
+labels:
+  queue: heavy
+  migrated_from: airflow
+  source_dag_id: proj_city_dashboard_tourist_attractions
+
+tasks:
+  - id: etl
+    type: io.kestra.plugin.scripts.python.Commands
+    description: 呼叫 tourist_attractions 的 _transfer 函式
+    taskRunner:
+      type: io.kestra.plugin.scripts.runner.docker.Docker
+      image: taipei-de-etl:latest
+      pullPolicy: NEVER
+      volumes:
+        - "{{ envs.de_dags_host_path }}:/opt/airflow/dags:ro"
+    env:
+      PYTHONPATH: "/opt/adapters:/opt/airflow/dags"
+      DAG_PATH: /opt/airflow/dags
+      DATA_PATH: /opt/airflow/data
+      READY_DATA_DB_URI: "{{ envs.ready_data_db_uri }}"
+      RAW_DATA_DB_URI: "{{ envs.raw_data_db_uri }}"
+      DASHBOARD_DB_URI: "{{ envs.dashboard_db_uri }}"
+      AIRFLOW_VAR_DEFAULT_EMAIL_LIST: "[]"
+    commands:
+      - python /opt/adapters/run_etl.py proj_city_dashboard tourist_attractions
+
+triggers:
+  - id: schedule
+    type: io.kestra.plugin.core.trigger.Schedule
+    cron: "0 0 1 * *"
+    timezone: Asia/Taipei
