@@ -11,6 +11,6 @@ RUN apt-get update \
 USER airflow
 COPY requirements.txt /tmp/
 RUN  pip install \
-       --constraint "https://raw.githubusercontent.com/apache/airflow/constraints-3.2.0/constraints-3.12.txt" \
+       --constraint "https://raw.githubusercontent.com/apache/airflow/constraints-3.2.0/constraints-3.13.txt" \
        -r /tmp/requirements.txt
 
