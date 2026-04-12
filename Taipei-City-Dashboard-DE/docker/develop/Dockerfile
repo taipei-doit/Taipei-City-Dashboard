@@ -10,7 +10,8 @@ RUN apt-get update \
 
 USER airflow
 COPY requirements.txt /tmp/
-RUN  pip install \
-       --constraint "https://raw.githubusercontent.com/apache/airflow/constraints-3.2.0/constraints-3.13.txt" \
+RUN  PYTHON_VERSION=$(python -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')") && \
+     pip install \
+       --constraint "https://raw.githubusercontent.com/apache/airflow/constraints-3.2.0/constraints-${PYTHON_VERSION}.txt" \
        -r /tmp/requirements.txt
 
