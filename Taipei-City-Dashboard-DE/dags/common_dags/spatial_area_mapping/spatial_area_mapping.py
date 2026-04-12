@@ -1,6 +1,6 @@
 from airflow import DAG
 from operators.common_pipeline import CommonDag
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, text
 from airflow.models import Variable
 import logging
 
