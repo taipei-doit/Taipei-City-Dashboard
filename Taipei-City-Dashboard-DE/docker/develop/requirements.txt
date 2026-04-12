@@ -1,20 +1,22 @@
 # --- Airflow 3.x core + providers ---
-# 版本由 Dockerfile 的 --constraint 自動解析成跟 Airflow 3.2.0 相容的版本。
+# 版本由 Dockerfile 的 --constraint 自動解析，不手動 pin。
 apache-airflow-task-sdk
 apache-airflow-providers-fab
 apache-airflow-providers-postgres
 apache-airflow-providers-celery
 
 # --- Data / GIS utilities ---
-geopandas==1.1.1
-GeoAlchemy2==0.14.7
-pytest==8.1.1
-openpyxl==3.1.2
-wget==3.2
-Rtree==1.2.0
-psycopg2-binary==2.9.9
-geopy==2.4.1
-XlsxWriter==3.2.0
-pyminizip==0.2.6
-minio==7.2.5
-odfpy==1.4.1
+# 不 pin 版本，由 constraints file 管有交集的套件；
+# 沒在 constraints 裡的套件 pip 會裝最新相容版。
+geopandas
+GeoAlchemy2
+pytest
+openpyxl
+wget
+Rtree
+psycopg2-binary
+geopy
+XlsxWriter
+pyminizip
+minio
+odfpy
