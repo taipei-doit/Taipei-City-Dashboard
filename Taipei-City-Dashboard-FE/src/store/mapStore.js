@@ -2642,8 +2642,10 @@ export const useMapStore = defineStore("map", {
 					this.map.removeSource(`${element}-source`);
 				}
 			});
+			if (this.overlay) {
+				this.overlay.setProps({ layers: [] });
+			}
 			this.deckGlLayer = {};
-			this.renderDeckGLLayer();
 			this.currentLayers = [];
 			this.mapConfigs = {};
 			this.currentVisibleLayers = [];
