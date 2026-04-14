@@ -178,7 +178,9 @@ export const useMapStore = defineStore("map", {
 				"citydashboard.taipei",
 				"test-citydashboard.taipei",
 			];
-			const hasSourceLayer = allowedDomains.includes(window.location.hostname);
+			const hasSourceLayer = allowedDomains.includes(
+				window.location.hostname,
+			);
 
 			if (!this.map) return;
 			// metroTaipei District Labels
@@ -255,8 +257,8 @@ export const useMapStore = defineStore("map", {
 				this.map.on("sourcedata", (e) => {
 					if (
 						e.sourceId === "metrotaipei_town" &&
-					e.isSourceLoaded &&
-					this.loadingLayers.includes("metrotaipei_town")
+						e.isSourceLoaded &&
+						this.loadingLayers.includes("metrotaipei_town")
 					) {
 						this.loadingLayers = this.loadingLayers.filter(
 							(el) => el !== "metrotaipei_town",
@@ -284,15 +286,14 @@ export const useMapStore = defineStore("map", {
 				this.map.on("sourcedata", (e) => {
 					if (
 						e.sourceId === "metrotaipei_village" &&
-					e.isSourceLoaded &&
-					this.loadingLayers.includes("metrotaipei_village")
+						e.isSourceLoaded &&
+						this.loadingLayers.includes("metrotaipei_village")
 					) {
 						this.loadingLayers = this.loadingLayers.filter(
 							(el) => el !== "metrotaipei_village",
 						);
 					}
 				});
-
 			}
 
 			this.addSymbolSources();
@@ -2634,11 +2635,15 @@ export const useMapStore = defineStore("map", {
 		// 1. Called when the user is switching between maps
 		clearOnlyLayers() {
 			this.currentLayers.forEach((element) => {
-				this.map.removeLayer(element);
+				if (this.map.getLayer(element)) {
+					this.map.removeLayer(element);
+				}
 				if (this.map.getSource(`${element}-source`)) {
 					this.map.removeSource(`${element}-source`);
 				}
 			});
+			this.deckGlLayer = {};
+			this.renderDeckGLLayer();
 			this.currentLayers = [];
 			this.mapConfigs = {};
 			this.currentVisibleLayers = [];
