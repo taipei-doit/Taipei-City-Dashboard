@@ -6,7 +6,13 @@ import time
 import zipfile
 from pathlib import Path
 import glob
-import fiona
+
+# Fiona is optional in some runtime images; keep DAG parsing resilient.
+try:
+    import fiona
+except ModuleNotFoundError:
+    fiona = None
+
 import geopandas as gpd
 import pandas as pd
 import requests
@@ -194,6 +200,11 @@ def get_kml(url, dag_id, from_crs, **kwargs):
     """
     file_name = f"{dag_id}.kml"
     
+    if fiona is None:
+        raise ModuleNotFoundError(
+            "fiona is required for get_kml but is not installed in this environment."
+        )
+
     # Enable KML support in fiona
     try:
         fiona.drvsupport.supported_drivers["KML"] = "rw"
