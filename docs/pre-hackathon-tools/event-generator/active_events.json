@@ -1,0 +1,11 @@
+[
+  {
+    "title": "Mass Layoff",
+    "target": {
+      "district": "內湖區"
+    },
+    "impact": {
+      "unemployment_rate_mul": 2.5
+    }
+  }
+]
