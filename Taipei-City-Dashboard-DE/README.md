@@ -120,17 +120,17 @@ sed -i "s#^REDIS_CONN=.*#REDIS_CONN=redis://redis:6379/0#" .env
 請務必把 `YOUR_DB_PASSWORD` 換成 root `docker/.env` 內的 `DB_MANAGER_PASSWORD`。
 若未替換，`airflow-init` 會以 `FATAL: password authentication failed for user "postgres"` 結束。
 
-3. 用 override 啟動 DE（共用 `br_dashboard`）：
+3. 若 `airflow` 資料庫尚未建立，可先建立一次：
+
+```bash
+docker exec -i postgres-data psql -U postgres -d dashboard -c "CREATE DATABASE airflow;" || true
+```
+
+4. 用 override 啟動 DE（共用 `br_dashboard`）：
 
 ```bash
 cd /home/raylon/code/Taipei-City-Dashboard/Taipei-City-Dashboard-DE/docker/develop
 docker compose -p de -f docker-compose.yaml -f docker-compose.br-dashboard.yaml up -d --build
-```
-
-4. 若 `airflow` 資料庫尚未建立，可先建立一次：
-
-```bash
-docker exec -i postgres-manager psql -U postgres -d postgres -c "CREATE DATABASE airflow;" || true
 ```
 
 ### Airflow 排程與資源設定紀錄
