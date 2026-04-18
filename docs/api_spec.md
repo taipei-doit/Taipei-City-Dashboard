@@ -1,6 +1,6 @@
 韌性防災 API 規格書 (v1.0)
 
-## 1. 模型：Incident
+## 1. Incident
 
 | JSON 欄位名     | 型態     | 來源     | 說明                       |
 | :-------------- | :------- | :------- | :------------------------- |
@@ -33,3 +33,64 @@
   "aiRisk": "High"
 }
 ```
+
+## 2. Component Data
+
+**描述：** 所有的統計圖表（長條圖、折線圖、圓餅圖）都透過統一格式回傳。
+
+### [GET] /api/v1/component/{id}?city={city}
+
+#### (1) 二維資料
+
+> 對應Go結構：`TwoDimensionalDataOutput`
+
+````json
+{
+  "data": [
+    { "x": "板橋區", "y": 12.5 },
+    { "x": "萬華區", "y": 8.3 }
+  ]
+}
+
+#### (2) 時間序列
+> 對應 Go 結構：`TimeSeriesDataOutput`
+```json
+{
+  "data": [
+    {
+      "name": "累積降雨量",
+      "data": [
+        { "x": "2026-04-18T14:00:00+08:00", "y": 45.0 },
+        { "x": "2026-04-18T15:00:00+08:00", "y": 52.5 }
+      ]
+    }
+  ]
+}
+#### (3) 三維資料
+> 對應 Go 結構：`ThreeDimensionalDataOutput`
+```json
+{
+  "data": [
+    {
+      "name": "臺北市",
+      "icon": "rain-icon",
+      "data": [12, 15, 8] // 代表三個行政區的數值
+    },
+    {
+      "name": "新北市",
+      "icon": "rain-icon",
+      "data": [20, 25, 14]
+    }
+  ]
+}
+
+#### (4) 地圖圖例資料
+> 對應 Go 結構：`MapLegendData`
+```json
+{
+  "name": "一級警戒區",
+  "type": "flood",
+  "icon": "red-drop",
+  "value": 80.5
+}
+````
