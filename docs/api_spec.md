@@ -34,13 +34,11 @@
 }
 ```
 
-## 2. Component Data
+## 2.Component Data
 
-**描述：** 所有的統計圖表（長條圖、折線圖、圓餅圖）都透過統一格式回傳。
+### [GET]/api/v1/component/{id}?city={city}
 
-### [GET] /api/v1/component/{id}?city={city}
-
-#### (1) 二維資料
+#### (1)二維資料
 
 > 對應Go結構：`TwoDimensionalDataOutput`
 
@@ -52,8 +50,8 @@
   ]
 }
 
-#### (2) 時間序列
-> 對應 Go 結構：`TimeSeriesDataOutput`
+####(2)時間序列
+>對應 Go 結構：`TimeSeriesDataOutput`
 ```json
 {
   "data": [
@@ -66,8 +64,8 @@
     }
   ]
 }
-#### (3) 三維資料
-> 對應 Go 結構：`ThreeDimensionalDataOutput`
+####(3)三維資料
+>對應 Go 結構：`ThreeDimensionalDataOutput`
 ```json
 {
   "data": [
@@ -84,8 +82,8 @@
   ]
 }
 
-#### (4) 地圖圖例資料
-> 對應 Go 結構：`MapLegendData`
+####(4)地圖圖例資料
+>對應 Go 結構：`MapLegendData`
 ```json
 {
   "name": "一級警戒區",
