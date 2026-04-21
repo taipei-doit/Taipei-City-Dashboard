@@ -1,0 +1,38 @@
+{
+  "_default": "雙北文化資產",
+  "臺北市文化資產": {
+    "dag_id": "臺北市文化資產",
+    "output_table": "臺北市文化資產",
+    "source_dept": "文化局",
+    "source_type": "data.taipei API",
+    "RID": "7ddefbf9-01e5-4365-b5b6-db0a28043108",
+    "PAGE_ID": "46119295-2534-4ac9-82d5-5f4653ba15bb",
+    "keep_cols": [
+      "data_time",
+      "個案名稱",
+      "資產類別",
+      "資產種類",
+      "所屬主管機關",
+      "機關代碼",
+      "所在地理區域",
+      "縣市別代碼"
+    ]
+  },
+  "新北市文化資產": {
+    "dag_id": "新北市文化資產",
+    "output_table": "新北市文化資產",
+    "source_dept": "新北市政府文化局/文化資產科/無形資產股",
+    "source_type": "data.ntpc API",
+    "RID": "",
+    "PAGE_ID": "d8eb898f-6c59-4689-9191-48dbbef16606",
+    "keep_cols": [
+      "data_time",
+      "名稱",
+      "文化資產",
+      "類別",
+      "分級",
+      "西元年",
+      "地址"
+    ]
+  }
+}
