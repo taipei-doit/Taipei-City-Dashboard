@@ -1,68 +1,20 @@
-"""
-transforms/C3_文化設施密度.py
-==============================
-雙北文化設施密度比較的 transform 策略。
-
-【欄位映射規則】（雙北不一致，統一輸出欄位如下）
-  臺北市文化資產  →  統一欄位
-  ─────────────────────────
-  個案名稱        →  facility_name
-  資產類別        →  facility_type
-  資產種類        →  facility_subtype
-  所在地理區域    →  district  （直接使用）
-
-  新北市文化資產  →  統一欄位
-  ─────────────────────────
-  名稱            →  facility_name
-  文化資產        →  facility_type
-  類別            →  facility_subtype
-  地址            →  raw_address  （擷取前三字作為行政區）
-
-輸出層次：每行政區一列，含設施數量與類型清單。
-輸出表：hackathon_component_3_cultural_density_ready
-"""
-
 import re
 import pandas as pd
-from datetime import datetime
-from transform_utils import TAIPEI_TZ, transform_single
-
-# 新北市地址中的行政區正規表達式（三字區名）
-_NTPC_DISTRICT_RE = re.compile(r"新北市([^\s市]{2,3}區)")
 
 
-def _parse_ntpc_district(address: str) -> str:
-    """從新北市地址字串擷取行政區名稱。"""
-    if not address:
-        return "未知"
-    m = _NTPC_DISTRICT_RE.search(str(address))
-    if m:
-        return m.group(1)
-    # 退而求其次：取前三字（去掉「新北市」前綴）
-    addr = str(address).replace("新北市", "").strip()
-    return addr[:3] if len(addr) >= 3 else addr or "未知"
+def extract_district(text):
+    """從地址字串擷取行政區（XX區/XX鄉/XX鎮/XX市）。"""
+    if pd.isna(text):
+        return None
+    m = re.search(r"([^\s市縣]+[鄉鎮市區])", str(text))
+    return m.group(1) if m else str(text).strip()
 
 
-_COLUMN_MAP = {
-    "臺北市文化資產": {
-        "個案名稱":   "facility_name",
-        "資產類別":   "facility_type",
-        "資產種類":   "facility_subtype",
-        "所在地理區域": "district",
-    },
-    "新北市文化資產": {
-        # 新北市 API 回傳英文欄位
-        "name":      "facility_name",
-        "affection": "facility_type",
-        "category":  "facility_subtype",
-        "address":   "_raw_address",   # 稍後從地址擷取行政區
-    },
-}
-
-_CITY_LABELS = {
-    "臺北市文化資產": "Taipei",
-    "新北市文化資產": "NewTaipei",
-}
+OUTPUT_COLS = [
+    "data_time", "city_scope", "city", "district",
+    "asset_name", "asset_category", "asset_type",
+    "address", "source_trace", "data_mode",
+]
 
 
 def transform(
@@ -71,45 +23,46 @@ def transform(
     config: dict,
     dataset_configs: dict,
 ) -> pd.DataFrame:
-    parts = []
+    tp_df = raw["臺北市文化資產"].copy()
+    ntpc_df = raw["新北市文化資產"].copy()
 
-    for source_id, df in raw.items():
-        df = df.copy()
-        mapping = _COLUMN_MAP.get(source_id, {})
-        df = df.rename(columns=mapping)
+    # --- 臺北市 ---
+    tp_df = tp_df.rename(columns={
+        "個案名稱":   "asset_name",
+        "資產類別":   "asset_category",
+        "資產種類":   "asset_type",
+        "所在地理區域": "address",
+    })
+    tp_df["city"]        = "臺北市"
+    tp_df["city_scope"]  = "Taipei"
+    tp_df["source_trace"] = "data.taipei（臺北市文化資產）"
+    tp_df["district"]    = tp_df["address"].apply(extract_district)
 
-        df["city_scope"] = _CITY_LABELS.get(source_id, source_id)
+    # --- 新北市 ---
+    ntpc_df["asset_category"] = ntpc_df["rank"].map({
+        "縣定": "縣定古蹟",
+        "市定": "直轄市定古蹟",
+    }).fillna(ntpc_df["affection"])
 
-        # 新北市：從 _raw_address 擷取行政區
-        if "_raw_address" in df.columns:
-            df["district"] = df["_raw_address"].apply(_parse_ntpc_district)
-            df = df.drop(columns=["_raw_address"])
+    ntpc_df = ntpc_df.rename(columns={
+        "name":     "asset_name",
+        "category": "asset_type",
+        "address":  "address",
+    })
+    ntpc_df["city"]        = "新北市"
+    ntpc_df["city_scope"]  = "NewTaipei"
+    ntpc_df["source_trace"] = "data.ntpc（新北市文化資產）"
+    ntpc_df["district"]    = ntpc_df["address"].apply(extract_district)
 
-        # 確保必要欄位存在
-        for col in ("facility_name", "facility_type", "facility_subtype", "district"):
-            if col not in df.columns:
-                df[col] = ""
+    # --- 合併 ---
+    for df in (tp_df, ntpc_df):
+        df["data_time"] = data_time
+        df["data_mode"] = "real"
 
-        df = df[["city_scope", "district", "facility_name", "facility_type", "facility_subtype"]]
-        df = df.dropna(subset=["facility_name"])
-        df = df[df["facility_name"].str.strip() != ""]
-        parts.append(df)
-
-    combined = pd.concat(parts, ignore_index=True)
-
-    # 按城市+行政區聚合：計算設施數量與類型清單
-    agg = (
-        combined.groupby(["city_scope", "district"])
-        .agg(
-            facility_count=("facility_name", "count"),
-            facility_types=("facility_type", lambda x: "、".join(sorted(set(x.dropna())))),
-        )
-        .reset_index()
+    final = pd.concat(
+        [tp_df[OUTPUT_COLS], ntpc_df[OUTPUT_COLS]],
+        ignore_index=True,
     )
 
-    agg["source_trace"] = "data.taipei + data.ntpc（文化資產資料集）"
-    agg["data_mode"]    = "real"
-    agg["last_updated"] = datetime.now(tz=TAIPEI_TZ).isoformat()
-
-    print(f"[Transform] C3 文化設施密度，共 {len(agg)} 個行政區記錄")
-    return agg
+    print(f"[Transform] C3 文化設施密度，共 {len(final)} 筆（臺北 {len(tp_df)} + 新北 {len(ntpc_df)}）")
+    return final

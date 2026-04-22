@@ -1,5 +1,22 @@
 {
-  "_default": "C8_避難收容缺口",
+  "_default": "C3_文化設施密度",
+
+  "C1_藝文活動": {
+    "dag_id": "C1_藝文活動",
+    "output_table": "hackathon_component_1_event_map_ready",
+    "source_dept": "文化部",
+    "source_type": "open_api",
+    "api_url": "https://cloud.culture.tw/frontsite/trans/SearchShowAction.do?method=doFindTypeJ&category=1"
+  },
+  "C3_文化設施密度": {
+    "dag_id": "C3_文化設施密度",
+    "output_table": "hackathon_component_3_cultural_density_ready",
+    "source_type": "merged",
+    "sources": [
+      "臺北市文化資產",
+      "新北市文化資產"
+    ]
+  },
   "臺北市文化資產": {
     "dag_id": "臺北市文化資產",
     "output_table": "臺北市文化資產",
@@ -34,55 +51,6 @@
       "yyyy",
       "address"
     ]
-  },
-  "雙北文化資產": {
-    "dag_id": "雙北文化資產",
-    "output_table": "雙北文化資產",
-    "source_type": "merged",
-    "sources": [
-      "臺北市文化資產",
-      "新北市文化資產"
-    ],
-    "column_map": {
-      "新北市文化資產": {
-        "name": "個案名稱",
-        "affection": "資產類別",
-        "category": "資產種類",
-        "address": "所在地理區域"
-      }
-    },
-    "keep_cols": [
-      "data_time",
-      "城市",
-      "個案名稱",
-      "資產類別",
-      "資產種類",
-      "所在地理區域"
-    ]
-  },
-  "C1_藝文活動": {
-    "dag_id": "C1_藝文活動",
-    "output_table": "hackathon_component_1_event_map_ready",
-    "source_dept": "文化部",
-    "source_type": "open_api",
-    "api_url": "https://cloud.culture.tw/frontsite/trans/SearchShowAction.do?method=doFindTypeJ&category=1"
-  },
-  "C3_文化設施密度": {
-    "dag_id": "C3_文化設施密度",
-    "output_table": "hackathon_component_3_cultural_density_ready",
-    "source_type": "merged",
-    "sources": [
-      "臺北市文化資產",
-      "新北市文化資產"
-    ],
-    "column_map": {
-      "新北市文化資產": {
-        "name": "個案名稱",
-        "affection": "資產類別",
-        "category": "資產種類",
-        "address": "所在地理區域"
-      }
-    }
   },
   "C4_AED急救": {
     "dag_id": "C4_AED急救",

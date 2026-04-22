@@ -49,6 +49,15 @@ def convert_str_to_time_format(series: pd.Series, from_format: str = None) -> pd
             except Exception:
                 return None
 
+        # 帶時區的 ISO 格式（isoformat() 輸出，如 2026-04-22T21:11:18+08:00）
+        try:
+            dt = datetime.fromisoformat(val)
+            if dt.tzinfo is None:
+                dt = TAIPEI_TZ.localize(dt)
+            return dt
+        except ValueError:
+            pass
+
         # 常見格式自動解析
         for fmt in (
             "%Y-%m-%d %H:%M:%S",
