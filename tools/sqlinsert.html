@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Query Charts — INSERT 產生器</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&family=DM+Mono:wght@400&family=Noto+Sans+TC:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #f5f4f0;
+    --surface: #ffffff;
+    --surface-2: #f9f8f5;
+    --border: #e4e2db;
+    --border-focus: #a8a49a;
+    --text-primary: #1a1916;
+    --text-secondary: #6b6860;
+    --text-hint: #a8a49a;
+    --accent: #1a1916;
+    --accent-text: #ffffff;
+    --success: #2d6a4f;
+    --success-bg: #d8f3dc;
+    --danger: #c0392b;
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 14px;
+    --font: 'DM Sans', 'Noto Sans TC', system-ui, sans-serif;
+    --mono: 'DM Mono', 'Fira Mono', 'Courier New', monospace;
+  }
+
+  body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text-primary);
+    min-height: 100vh;
+    padding: 2.5rem 1rem;
+    line-height: 1.5;
+  }
+
+  .container {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  .page-header {
+    margin-bottom: 2rem;
+  }
+
+  .page-title {
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--text-primary);
+    letter-spacing: -0.02em;
+    margin-bottom: 4px;
+  }
+
+  .page-sub {
+    font-size: 14px;
+    color: var(--text-hint);
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 12px;
+  }
+
+  .card-label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-hint);
+    margin-bottom: 1rem;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .stack  { display: flex; flex-direction: column; gap: 12px; }
+
+  @media (max-width: 560px) {
+    .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+  }
+
+  .field { display: flex; flex-direction: column; gap: 5px; }
+
+  .field label {
+    font-size: 13px;
+    color: var(--text-secondary);
+    font-weight: 400;
+  }
+
+  .field label .req { color: var(--danger); margin-left: 2px; }
+
+  .field input,
+  .field select,
+  .field textarea {
+    font-family: var(--font);
+    font-size: 14px;
+    color: var(--text-primary);
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 8px 11px;
+    width: 100%;
+    outline: none;
+    transition: border-color 0.12s, background 0.12s;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+
+  .field select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23a8a49a' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 11px center;
+    padding-right: 32px;
+    cursor: pointer;
+  }
+
+  .field textarea {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    line-height: 1.65;
+    resize: vertical;
+  }
+
+  .field input:focus,
+  .field select:focus,
+  .field textarea:focus {
+    border-color: var(--border-focus);
+    background: var(--surface);
+  }
+
+  .field input::placeholder,
+  .field textarea::placeholder {
+    color: var(--text-hint);
+  }
+
+  .hint {
+    font-size: 12px;
+    color: var(--text-hint);
+    margin-top: 2px;
+  }
+
+  .action-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 1.5rem 0 0;
+  }
+
+  .btn-primary {
+    font-family: var(--font);
+    font-size: 14px;
+    font-weight: 500;
+    padding: 9px 22px;
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+    background: var(--accent);
+    border: none;
+    color: var(--accent-text);
+    letter-spacing: 0.01em;
+    transition: opacity 0.12s;
+  }
+
+  .btn-primary:hover { opacity: 0.82; }
+  .btn-primary:active { opacity: 0.7; transform: scale(0.98); }
+
+  .btn-ghost {
+    font-family: var(--font);
+    font-size: 13px;
+    padding: 8px 18px;
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    transition: border-color 0.12s, color 0.12s;
+  }
+
+  .btn-ghost:hover {
+    border-color: var(--border-focus);
+    color: var(--text-primary);
+  }
+
+  .output-wrap {
+    display: none;
+    margin-top: 1.5rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+
+  .output-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface-2);
+  }
+
+  .output-tag {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-hint);
+  }
+
+  .btn-copy {
+    font-family: var(--font);
+    font-size: 13px;
+    padding: 5px 14px;
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    transition: all 0.12s;
+  }
+
+  .btn-copy:hover {
+    border-color: var(--border-focus);
+    color: var(--text-primary);
+  }
+
+  .btn-copy.ok {
+    color: var(--success);
+    border-color: #74c69d;
+    background: var(--success-bg);
+  }
+
+  pre {
+    padding: 1.25rem 1.5rem;
+    font-family: var(--mono);
+    font-size: 12.5px;
+    line-height: 1.7;
+    color: var(--text-primary);
+    white-space: pre-wrap;
+    word-break: break-all;
+    max-height: 360px;
+    overflow-y: auto;
+  }
+
+  pre::-webkit-scrollbar { width: 6px; }
+  pre::-webkit-scrollbar-track { background: transparent; }
+  pre::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="page-header">
+    <div class="page-title">Query charts — INSERT 產生器</div>
+    <div class="page-sub">填寫欄位後按「產生 SQL」，即可複製完整 INSERT 語句</div>
+  </div>
+
+  <div class="card">
+    <div class="card-label">基本識別</div>
+    <div class="grid-4">
+      <div class="field">
+        <label>index <span class="req">*</span></label>
+        <input id="f_index" type="text" placeholder="aging_kpi">
+      </div>
+      <div class="field">
+        <label>city <span class="req">*</span></label>
+        <select id="f_city">
+          <option value="">— 選擇 —</option>
+          <option value="taipei">taipei</option>
+          <option value="metrotaipei">metrotaipei</option>
+          <option value="newtaipei">newtaipei</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>query_type</label>
+        <select id="f_query_type">
+          <option value="three_d">three_d</option>
+          <option value="time_line">time_line</option>
+          <option value="map">map</option>
+          <option value="percent">percent</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>source</label>
+        <input id="f_source" type="text" placeholder="主計處">
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-label">時間 &amp; 更新頻率</div>
+    <div class="grid-4">
+      <div class="field">
+        <label>time_from</label>
+        <input id="f_time_from" type="text" placeholder="static">
+      </div>
+      <div class="field">
+        <label>time_to</label>
+        <input id="f_time_to" type="text" placeholder="留空 = NULL">
+      </div>
+      <div class="field">
+        <label>update_freq</label>
+        <input id="f_update_freq" type="number" placeholder="0" value="0">
+      </div>
+      <div class="field">
+        <label>update_freq_unit</label>
+        <input id="f_update_freq_unit" type="text" placeholder="留空 = NULL">
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-label">描述文字</div>
+    <div class="stack">
+      <div class="field">
+        <label>short_desc</label>
+        <input id="f_short_desc" type="text" placeholder="此圖顯示…">
+      </div>
+      <div class="field">
+        <label>long_desc</label>
+        <textarea id="f_long_desc" rows="3" placeholder="此圖表呈現…"></textarea>
+      </div>
+      <div class="field">
+        <label>use_case</label>
+        <textarea id="f_use_case" rows="3" placeholder="在制定政策時…"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-label">來源 &amp; 貢獻者</div>
+    <div class="grid-2">
+      <div class="field">
+        <label>links</label>
+        <input id="f_links" type="text" placeholder="https://... , https://...">
+        <span class="hint">多個連結用逗號分隔，自動包成 {…}</span>
+      </div>
+      <div class="field">
+        <label>contributors</label>
+        <input id="f_contributors" type="text" placeholder="doit , ntpc">
+        <span class="hint">多個項目用逗號分隔，自動包成 {…}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-label">Config</div>
+    <div class="grid-3">
+      <div class="field">
+        <label>history_config</label>
+        <input id="f_history_config" type="text" value="{}">
+      </div>
+      <div class="field">
+        <label>map_config_ids</label>
+        <input id="f_map_config_ids" type="text" value="{}">
+      </div>
+      <div class="field">
+        <label>map_filter</label>
+        <input id="f_map_filter" type="text" placeholder="留空 = NULL">
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-label">SQL 查詢</div>
+    <div class="stack">
+      <div class="field">
+        <label>query_chart <span class="req">*</span></label>
+        <textarea id="f_query_chart" rows="12" placeholder="SELECT ..."></textarea>
+      </div>
+      <div class="field">
+        <label>query_history</label>
+        <textarea id="f_query_history" rows="5" placeholder="（選填）SELECT ..."></textarea>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-label">時間戳記</div>
+    <div class="grid-2">
+      <div class="field">
+        <label>created_at</label>
+        <input id="f_created_at" type="text" placeholder="2023-12-20 05:56:00+00">
+      </div>
+      <div class="field">
+        <label>updated_at</label>
+        <input id="f_updated_at" type="text" placeholder="2024-06-12 06:02:41.642+00">
+      </div>
+    </div>
+  </div>
+
+  <div class="action-row">
+    <button class="btn-primary" onclick="generate()">產生 SQL</button>
+    <button class="btn-ghost" onclick="clearAll()">清除</button>
+  </div>
+
+  <div class="output-wrap" id="output-wrap">
+    <div class="output-header">
+      <span class="output-tag">INSERT SQL</span>
+      <button class="btn-copy" id="btn-copy" onclick="copySQL()">複製</button>
+    </div>
+    <pre id="sql-out"></pre>
+  </div>
+
+</div>
+
+<script>
+function esc(v) { return v.replace(/'/g, "''"); }
+
+function sqlVal(raw, isArr) {
+  if (!raw || raw.trim() === '') return 'NULL';
+  const s = raw.trim();
+  if (isArr) {
+    const items = s.split(',').map(x => x.trim()).filter(Boolean);
+    return "'{" + items.join(',') + "}'";
+  }
+  return "'" + esc(s) + "'";
+}
+
+function generate() {
+  const v = id => document.getElementById(id).value;
+  const freq = v('f_update_freq').trim();
+
+  const fields = [
+    '"index"', 'history_config', 'map_config_ids', 'map_filter',
+    'time_from', 'time_to', 'update_freq', 'update_freq_unit',
+    'source', 'short_desc', 'long_desc', 'use_case',
+    'links', 'contributors', 'created_at', 'updated_at',
+    'query_type', 'query_chart', 'query_history', 'city'
+  ];
+
+  const values = [
+    sqlVal(v('f_index')),
+    sqlVal(v('f_history_config')),
+    sqlVal(v('f_map_config_ids')),
+    sqlVal(v('f_map_filter')),
+    sqlVal(v('f_time_from')),
+    sqlVal(v('f_time_to')),
+    freq === '' ? 'NULL' : freq,
+    sqlVal(v('f_update_freq_unit')),
+    sqlVal(v('f_source')),
+    sqlVal(v('f_short_desc')),
+    sqlVal(v('f_long_desc')),
+    sqlVal(v('f_use_case')),
+    sqlVal(v('f_links'), true),
+    sqlVal(v('f_contributors'), true),
+    sqlVal(v('f_created_at')),
+    sqlVal(v('f_updated_at')),
+    sqlVal(v('f_query_type')),
+    sqlVal(v('f_query_chart')),
+    sqlVal(v('f_query_history')),
+    sqlVal(v('f_city'))
+  ];
+
+  const sql = `INSERT INTO public.query_charts (\n    ${fields.join(',\n    ')}\n) VALUES (\n    ${values.join(',\n    ')}\n);`;
+
+  document.getElementById('sql-out').textContent = sql;
+  const wrap = document.getElementById('output-wrap');
+  wrap.style.display = 'block';
+  const btn = document.getElementById('btn-copy');
+  btn.textContent = '複製';
+  btn.classList.remove('ok');
+  wrap.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function copySQL() {
+  const text = document.getElementById('sql-out').textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.getElementById('btn-copy');
+    btn.textContent = '已複製';
+    btn.classList.add('ok');
+    setTimeout(() => { btn.textContent = '複製'; btn.classList.remove('ok'); }, 2000);
+  });
+}
+
+function clearAll() {
+  const textFields = ['f_index','f_source','f_short_desc','f_long_desc','f_use_case',
+    'f_links','f_contributors','f_map_filter','f_time_from','f_time_to',
+    'f_update_freq_unit','f_query_chart','f_query_history','f_created_at','f_updated_at'];
+  textFields.forEach(id => { document.getElementById(id).value = ''; });
+  document.getElementById('f_history_config').value = '{}';
+  document.getElementById('f_map_config_ids').value = '{}';
+  document.getElementById('f_update_freq').value = '0';
+  document.getElementById('f_city').value = '';
+  document.getElementById('f_query_type').value = 'three_d';
+  document.getElementById('output-wrap').style.display = 'none';
+}
+</script>
+</body>
+</html>
