@@ -34,7 +34,7 @@ def _D060102_1(**kwargs):
         columns={
             "場所名稱": "name",
             "場所地址": "addr",
-            "區域代碼": "vil_code",
+            "行政區域代碼": "vil_code",
             "場所分類": "main_type",
             "場所類型": "sub_type",
             "aed放置地點": "aed_place",
