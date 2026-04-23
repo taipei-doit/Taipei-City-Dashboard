@@ -311,10 +311,8 @@
   <body>
     <div class="container">
       <div class="page-header">
-        <div class="page-title">Query charts — INSERT 產生器</div>
-        <div class="page-sub">
-          填寫欄位後按「產生 SQL」，即可複製完整 INSERT 語句
-        </div>
+        <div class="page-title">水蜜頭罐桃_INSERT</div>
+        <div class="page-sub">兄弟，我能幫的就到這了</div>
       </div>
 
       <div class="card">
@@ -330,7 +328,6 @@
               <option value="">— 選擇 —</option>
               <option value="taipei">taipei</option>
               <option value="metrotaipei">metrotaipei</option>
-              <option value="newtaipei">newtaipei</option>
             </select>
           </div>
           <div class="field">
@@ -371,7 +368,7 @@
           </div>
           <div class="field">
             <label>update_freq</label>
-            <input id="f_update_freq" type="number" placeholder="0" value="0" />
+            <input id="f_update_freq" type="number" placeholder="留空 = NULL" />
           </div>
           <div class="field">
             <label>update_freq_unit</label>
@@ -435,7 +432,11 @@
         <div class="grid-3">
           <div class="field">
             <label>history_config</label>
-            <input id="f_history_config" type="text" value="[null]" />
+            <input
+              id="f_history_config"
+              type="text"
+              placeholder="留空 = NULL"
+            />
           </div>
           <div class="field">
             <label>map_config_ids(id)</label>
@@ -561,7 +562,6 @@
           "city",
         ];
 
-        const histConf = v("f_history_config").trim();
         const freqVal = freq === "" ? "NULL" : freq;
 
         let queryType = v("f_query_type");
@@ -569,7 +569,7 @@
 
         const values = [
           sqlVal(v("f_index")),
-          histConf === "" ? "'[null]'" : "'" + esc(histConf) + "'",
+          sqlVal(v("f_history_config")),
           sqlVal(v("f_map_config_ids")),
           sqlVal(v("f_map_filter")),
           sqlVal(v("f_time_from")),
@@ -632,9 +632,9 @@
         textFields.forEach((id) => {
           document.getElementById(id).value = "";
         });
-        document.getElementById("f_history_config").value = "[null]";
+        document.getElementById("f_history_config").value = "";
         document.getElementById("f_map_config_ids").value = "{}";
-        document.getElementById("f_update_freq").value = "0";
+        document.getElementById("f_update_freq").value = "";
         document.getElementById("f_contributors").value = "doit";
         document.getElementById("f_time_from").value = "static";
         document.getElementById("f_city").value = "";
