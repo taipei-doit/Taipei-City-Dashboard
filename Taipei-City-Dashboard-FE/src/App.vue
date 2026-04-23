@@ -16,7 +16,9 @@ import {
 	ref,
 	computed,
 	watch,
+	nextTick,
 } from "vue";
+
 import { useRoute } from "vue-router";
 import { useAuthStore } from "./store/authStore";
 import { useDialogStore } from "./store/dialogStore";
@@ -48,8 +50,8 @@ const board = ref(null);
 const frequency = ref(600);
 const isMappedToUpdateBoards = ref(false);
 // Chatroom
-const isChatBtnShow = ref(true);
 const isChatBoxShow = ref(false);
+const chatMode = ref("floating"); // 'floating' | 'sidebar'
 // Timers
 let chartTimer = null;
 let crowdingTimer = null;
@@ -160,14 +162,148 @@ function reload3DMRTMapData() {
 }
 
 // Chatroom 功能顯示隱藏
+const wasDragged = ref(false);
+const snapSide = ref("right");   // 'left' | 'right'
+const alignMode = ref("end");    // 'end' = 圖示在下（聊天框往上）| 'start' = 圖示在上（聊天框往下）
+const isSidebarOpen = computed(() => chatMode.value === "sidebar" && isChatBoxShow.value);
+
+// dragPos.y = 圖示底部到視窗頂部的距離（iconBottomY），與 alignMode 共同決定 CSS
+const CHATBOX_H = 500;
+const ICON_H = 70;
+const SNAP_MARGIN = 24;
+
 function chatbotBtnHandler() {
+	if (wasDragged.value) {
+		wasDragged.value = false;
+		return;
+	}
 	isChatBoxShow.value = !isChatBoxShow.value;
 }
 
-function hideBtnClickHandler() {
-	isChatBtnShow.value = false;
-	isChatBoxShow.value = false;
+function onChatModeChange(mode) {
+	chatMode.value = mode;
 }
+
+function onChatClose() {
+	isChatBoxShow.value = false;
+	chatMode.value = "floating";
+}
+
+// 聊天框開啟時：根據圖示位置決定聊天框要往上還是往下展開
+watch(isChatBoxShow, async (isOpen) => {
+	if (!isOpen || dragPos.value.y === null) return;
+	await nextTick();
+	const vh = window.innerHeight;
+	const iconBottomY = dragPos.value.y;
+	if (iconBottomY - CHATBOX_H >= SNAP_MARGIN) {
+		alignMode.value = "end";
+	} else {
+		alignMode.value = "start";
+		const maxY = vh - CHATBOX_H + ICON_H - SNAP_MARGIN;
+		if (dragPos.value.y > maxY) {
+			dragPos.value = { ...dragPos.value, y: maxY };
+		}
+	}
+});
+
+// 拖曳邏輯（dragPos.y = iconBottomY：圖示底部距視窗頂部距離）
+const chatbotContainerRef = ref(null);
+const dragPos = ref({ x: null, y: null });
+const isDragging = ref(false);
+
+function snapToEdge(leftX, iconBottomY) {
+	const el = chatbotContainerRef.value;
+	if (!el) return { x: SNAP_MARGIN, y: iconBottomY };
+	const w = el.offsetWidth;
+	const vw = window.innerWidth;
+	const vh = window.innerHeight;
+
+	// 決定上下對齊：優先讓聊天框往上（end），空間不夠時改往下（start）
+	const hasSpaceAbove = iconBottomY - CHATBOX_H >= SNAP_MARGIN;
+	alignMode.value = hasSpaceAbove ? "end" : "start";
+
+	let clampedY;
+	if (alignMode.value === "end") {
+		// 聊天框往上：確保 container 頂部不超出視窗頂
+		clampedY = Math.max(SNAP_MARGIN + CHATBOX_H, Math.min(iconBottomY, vh - SNAP_MARGIN));
+	} else {
+		// 聊天框往下：確保 container 底部不超出視窗底
+		clampedY = Math.max(SNAP_MARGIN + ICON_H, Math.min(iconBottomY, vh - CHATBOX_H + ICON_H - SNAP_MARGIN));
+	}
+
+	snapSide.value = leftX + w / 2 < vw / 2 ? "left" : "right";
+	return { x: SNAP_MARGIN, y: clampedY };
+}
+
+function onChatbotBtnAreaMousedown(e) {
+	const el = chatbotContainerRef.value;
+	if (!el) return;
+	const rect = el.getBoundingClientRect();
+	const startX = e.clientX;
+	const startY = e.clientY;
+	const offsetX = e.clientX - rect.left;
+	// 圖示底部 Y（alignMode 決定圖示在 container 頂或底）
+	const startIconBottomY = alignMode.value === "start" ? rect.top + ICON_H : rect.bottom;
+	const offsetFromIconBottom = e.clientY - startIconBottomY;
+	let hasDragged = false;
+
+	const onMouseMove = (ev) => {
+		const dx = ev.clientX - startX;
+		const dy = ev.clientY - startY;
+		if (!hasDragged && Math.sqrt(dx * dx + dy * dy) > 4) {
+			hasDragged = true;
+			isDragging.value = true;
+			dragPos.value = { x: rect.left, y: startIconBottomY };
+		}
+		if (!hasDragged) return;
+		const newX = ev.clientX - offsetX;
+		const newIconBottomY = ev.clientY - offsetFromIconBottom;
+		dragPos.value = {
+			x: Math.max(0, Math.min(newX, window.innerWidth - el.offsetWidth)),
+			y: Math.max(SNAP_MARGIN + ICON_H, Math.min(newIconBottomY, window.innerHeight - SNAP_MARGIN)),
+		};
+	};
+
+	const onMouseUp = () => {
+		if (hasDragged) {
+			wasDragged.value = true;
+			dragPos.value = snapToEdge(dragPos.value.x, dragPos.value.y);
+		}
+		isDragging.value = false;
+		document.removeEventListener("mousemove", onMouseMove);
+		document.removeEventListener("mouseup", onMouseUp);
+	};
+
+	document.addEventListener("mousemove", onMouseMove);
+	document.addEventListener("mouseup", onMouseUp);
+}
+
+const chatbotContainerStyle = computed(() => {
+	if (chatMode.value === "sidebar") {
+		return { top: "0", right: "0", bottom: "0", left: "auto" };
+	}
+	if (dragPos.value.y === null) return {};
+
+	const vh = window.innerHeight;
+	const iconBottomY = dragPos.value.y;
+
+	// Y 方向：end = 圖示在下（container 用 bottom 定位），start = 圖示在上（container 用 top 定位）
+	const yStyle = alignMode.value === "start"
+		? { top: `${iconBottomY - ICON_H}px`, bottom: "auto" }
+		: { bottom: `${vh - iconBottomY}px`, top: "auto" };
+
+	// X 方向：拖曳中用 left，吸附後右側用 right、左側用 left
+	let xStyle;
+	if (isDragging.value) {
+		xStyle = { left: `${dragPos.value.x}px`, right: "auto" };
+	} else if (snapSide.value === "right") {
+		xStyle = { right: `${dragPos.value.x}px`, left: "auto" };
+	} else {
+		xStyle = { left: `${dragPos.value.x}px`, right: "auto" };
+	}
+
+	return { ...yStyle, ...xStyle };
+});
 
 (watch(
 	() => route.query,
@@ -219,7 +355,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="app-container">
+  <div class="app-container" :class="{ 'chatbot-sidebar-open': isSidebarOpen }">
     <NotificationBar />
     <NavBar v-if="authStore.currentPath !== 'embed'" />
     <!-- /mapview, /dashboard layouts -->
@@ -271,18 +407,29 @@ onBeforeUnmount(() => {
     >
       <p>下次更新：{{ formattedTimeToUpdate }}</p>
     </div>
-    <div class="chatbot-container">
+    <div
+      ref="chatbotContainerRef"
+      class="chatbot-container"
+      :class="{
+        'is-dragging': isDragging,
+        'snap-left': snapSide === 'left',
+        'sidebar-mode': chatMode === 'sidebar',
+        'align-start': alignMode === 'start',
+      }"
+      :style="chatbotContainerStyle"
+    >
       <ChatBox
         v-if="isChatBoxShow"
         class="chatbox"
+        :mode="chatMode"
+        @change-mode="onChatModeChange"
+        @close="onChatClose"
       />
       <div
-        v-if="isChatBtnShow"
+        v-if="!(isChatBoxShow && chatMode === 'sidebar')"
         class="chatbot-btn-area"
+        @mousedown.prevent="onChatbotBtnAreaMousedown"
       >
-        <div class="hide-chat-btn">
-          <button @click="hideBtnClickHandler" />
-        </div>
         <button
           class="chatbot-btn"
           @click="chatbotBtnHandler"
@@ -300,6 +447,11 @@ onBeforeUnmount(() => {
 		max-width: 100vw;
 		max-height: 100vh;
 		max-height: calc(var(--vh) * 100);
+		transition: max-width 0.25s ease;
+
+		&.chatbot-sidebar-open {
+			max-width: calc(100vw - 400px);
+		}
 	}
 
 	&-content {
@@ -308,6 +460,7 @@ onBeforeUnmount(() => {
 		height: calc(100vh - 60px);
 		height: calc(var(--vh) * 100 - 60px);
 		display: flex;
+		transition: width 0.25s ease, max-width 0.25s ease;
 
 		&-main {
 			width: 100%;
@@ -335,37 +488,68 @@ onBeforeUnmount(() => {
 	}
 }
 
+.app-container.chatbot-sidebar-open .app-content {
+	width: calc(100vw - 400px);
+	max-width: calc(100vw - 400px);
+}
+
 // Chatroom 樣式
 .chatbot-container {
 	position: fixed;
-	bottom: 1.5rem; // Tailwind bottom-6 → 24px
+	bottom: 1.5rem;
 	right: 1.5rem;
 	display: flex;
 	align-items: flex-end;
-	gap: 1rem; // Tailwind gap-4 → 16px
+	gap: 1rem;
 	z-index: 10;
+	transition: left 0.25s ease, right 0.25s ease, top 0.25s ease, bottom 0.25s ease;
+
+	&.is-dragging {
+		transition: none;
+		user-select: none;
+	}
+
+	// 圖示在左側時，聊天框展開於右側
+	&.snap-left {
+		flex-direction: row-reverse;
+	}
+
+	// 圖示在上方時，align-items 改為 flex-start（聊天框往下展開）
+	&.align-start {
+		align-items: flex-start;
+	}
+
+	// 側邊欄模式
+	&.sidebar-mode {
+		top: 0;
+		right: 0;
+		bottom: 0;
+		left: auto;
+		flex-direction: column;
+		align-items: stretch;
+		gap: 0;
+
+		.chatbox {
+			width: 400px;
+			height: 100%;
+			margin-bottom: 0;
+		}
+	}
 
 	.chatbox {
 		width: 400px;
 		height: 500px;
-		margin-bottom: 35px;
 	}
 
 	.chatbot-btn-area {
-		position: relative;
 		display: flex;
 		flex-direction: column;
-		.hide-chat-btn {
-			margin-left: auto;
-			button {
-				font-size: 16px;
-			}
+		cursor: grab;
+
+		&:active {
+			cursor: grabbing;
 		}
-		.hide-chat-btn button::before {
-			content: "–";
-			font-weight: bold; /* 變粗 */
-			font-size: 20px; /* 可以順便調整大小 */
-		}
+
 		.chatbot-btn {
 			width: 70px;
 			height: 70px;
@@ -373,7 +557,7 @@ onBeforeUnmount(() => {
 			align-items: center;
 			justify-content: center;
 			border-radius: 50%;
-			background-color: #3b82f6; // Tailwind bg-blue-500
+			background-color: #3b82f6;
 			filter: brightness(1.5);
 			transition: filter 0.2s;
 
