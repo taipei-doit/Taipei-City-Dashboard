@@ -10,6 +10,11 @@ import { useContentStore } from "../../store/contentStore";
 import { useAuthStore } from "../../store/authStore";
 import http from "../../router/axios";
 
+const props = defineProps({
+	mode: { type: String, default: "floating" },
+});
+const emit = defineEmits(["changeMode", "close"]);
+
 const chatStore = useChatStore();
 const contentStore = useContentStore();
 const authStore = useAuthStore();
@@ -92,6 +97,66 @@ watch(
     <!-- 標題 -->
     <div class="header">
       <h3>臺北城市儀表板小幫手</h3>
+      <div class="header-actions">
+        <button
+          class="action-btn"
+          :title="props.mode === 'floating' ? '切換為側邊欄' : '切換為懸浮'"
+          @click="emit('changeMode', props.mode === 'floating' ? 'sidebar' : 'floating')"
+        >
+          <!-- 懸浮模式：顯示「吸附側邊欄」圖示 -->
+          <svg
+            v-if="props.mode === 'floating'"
+            xmlns="http://www.w3.org/2000/svg"
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <rect x="3" y="3" width="18" height="18" rx="2" />
+            <line x1="15" y1="3" x2="15" y2="21" />
+          </svg>
+          <!-- 側邊欄模式：顯示「切換懸浮」圖示 -->
+          <svg
+            v-else
+            xmlns="http://www.w3.org/2000/svg"
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <rect x="5" y="5" width="14" height="14" rx="2" />
+            <path d="M3 9H5M3 15H5M9 3V5M15 3V5" />
+          </svg>
+        </button>
+        <button
+          class="action-btn"
+          title="關閉"
+          @click="emit('close')"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+        </button>
+      </div>
     </div>
 
     <!-- 聊天區 -->
@@ -271,15 +336,42 @@ $radius-20: 20px;
 	flex-direction: column;
 
 	.header {
-		padding: 1rem;
+		padding: 0.75rem 1rem;
 		background: $panel-bg;
 		border-bottom: 3px solid $border-color;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
 
 		h3 {
 			font-size: 18px;
 			font-weight: 700;
 			color: $white;
 			margin: 0;
+		}
+
+		.header-actions {
+			display: flex;
+			gap: 0.5rem;
+			align-items: center;
+
+			.action-btn {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				background: transparent;
+				border: none;
+				color: $white;
+				cursor: pointer;
+				padding: 4px;
+				border-radius: 4px;
+				opacity: 0.7;
+
+				&:hover {
+					opacity: 1;
+					background: rgba(255, 255, 255, 0.15);
+				}
+			}
 		}
 	}
 
