@@ -218,6 +218,39 @@ def get_kml(url, dag_id, from_crs, **kwargs):
     return gdf
 
 
+def get_current_rid_from_page_id(page_id, resource_name_contains=None, timeout=30):
+    """
+    Resolve the *current* resource id (rid) from a data.taipei dataset PAGE_ID.
+
+    Data owners rotate rid each time they republish the dataset. Hardcoding a rid
+    makes the DAG silently read a frozen snapshot. Use this helper to always read
+    the latest published resource.
+
+    Args:
+        page_id (str): Dataset page id (the UUID in the dataset detail URL).
+        resource_name_contains (str, optional): If given, pick the first resource
+            whose name contains this substring (for pages with multiple files).
+        timeout (int, optional): HTTP timeout in seconds.
+
+    Returns:
+        str: Current rid.
+
+    Raises:
+        ValueError: If the page has no resources.
+    """
+    url = f"https://data.taipei/api/frontstage/tpeod/dataset.view?id={page_id}"
+    res = requests.get(url, timeout=timeout)
+    res.raise_for_status()
+    resources = res.json().get("payload", {}).get("resources", [])
+    if not resources:
+        raise ValueError(f"No resources found for page_id={page_id}")
+    if resource_name_contains:
+        for r in resources:
+            if resource_name_contains in (r.get("name") or ""):
+                return r["rid"]
+    return resources[0]["rid"]
+
+
 def get_data_taipei_api(rid, timeout=60, output_format="json"):
     """
     Retrieve data from Data.taipei API by automatically traversing all data.
