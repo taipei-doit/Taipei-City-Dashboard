@@ -22,6 +22,7 @@ def _transfer(**kwargs):
     )
     from utils.get_time import get_tpe_now_time_str
     from utils.extract_stage import (
+        get_current_rid_from_page_id,
         get_data_taipei_file_last_modified_time,
         get_data_taipei_api,
     )
@@ -42,11 +43,9 @@ def _transfer(**kwargs):
     default_table = dag_infos.get("ready_data_default_table")
     history_table = dag_infos.get("ready_data_history_table")
     GEOMETRY_TYPE = "Point"
-
-    RID = "47b02c29-efa2-4614-ac7e-1b0b9499e6ea"
     PAGE_ID = "ec201f0a-2efa-4426-9439-a8daea7b33c7"
     # Extract
-    res = get_data_taipei_api(RID)
+    res = get_data_taipei_api(get_current_rid_from_page_id(PAGE_ID))
 
     raw_data = pd.DataFrame(res)
 

@@ -42,7 +42,7 @@ def D100104_1(**kwargs):
     import pandas as pd
     from utils.transform_time import convert_str_to_time_format
     from utils.transform_geometry import add_point_wkbgeometry_column_to_df
-    from utils.extract_stage import get_data_taipei_file_last_modified_time, get_data_taipei_api
+    from utils.extract_stage import get_current_rid_from_page_id, get_data_taipei_file_last_modified_time, get_data_taipei_api
     from utils.load_stage import save_geodataframe_to_postgresql, update_lasttime_in_data_to_dataset_info
     from sqlalchemy import create_engine
 
@@ -61,11 +61,11 @@ def D100104_1(**kwargs):
     clinic_table = 'heal_clinic'
     hospital_table = 'heal_hospital'
     # Manually set
-    rid = '66bfed0f-17c6-4cbd-b9e9-88ea1980bc46'
     page_id = '9ee72240-f9b3-42a7-bcbe-e1bb1a28a2dc'
     from_crs = 4326
 
     # Extract
+    rid = get_current_rid_from_page_id(page_id)
     res = get_data_taipei_api(rid)
     raw_data = pd.DataFrame(res)
 

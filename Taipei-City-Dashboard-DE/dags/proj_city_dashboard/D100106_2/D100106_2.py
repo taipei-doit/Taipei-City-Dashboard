@@ -25,6 +25,7 @@ def D100106_2(**kwargs):
     """
     from sqlalchemy import create_engine
     from utils.extract_stage import (
+        get_current_rid_from_page_id,
         get_data_taipei_api,
         get_data_taipei_file_last_modified_time,
     )
@@ -48,12 +49,11 @@ def D100106_2(**kwargs):
     history_table = dag_infos.get("ready_data_history_table")
     VILLAGE_TABLE = "tw_village"
     # Manually set
-    RID = "c8f5b53d-ef3d-4321-ae8e-58cd2a5ee73c"
     PAGE_ID = "a6394e3f-3514-4542-87bd-de4310a40db3"
     from_crs = 4326
 
     # Extract
-    res = get_data_taipei_api(RID)
+    res = get_data_taipei_api(get_current_rid_from_page_id(PAGE_ID))
     raw_data = pd.DataFrame(res)
 
     # Transform

@@ -16,6 +16,7 @@ def D100101(**kwargs):
     import pandas as pd
     from sqlalchemy import create_engine
     from utils.extract_stage import (
+        get_current_rid_from_page_id,
         get_data_taipei_file_last_modified_time,
         get_data_taipei_api,
     )
@@ -46,12 +47,11 @@ def D100101(**kwargs):
     default_table = dag_infos.get("ready_data_default_table")
     history_table = dag_infos.get("ready_data_history_table")
     # Manually set
-    RID = "4350117f-8697-4903-8a49-a7a59f30eeb1"
     PAGE_ID = "5d1d34d8-1b81-4162-87b6-05e0896af958"
     FROM_CRS = 4326
 
     # Extract
-    res = get_data_taipei_api(RID)
+    res = get_data_taipei_api(get_current_rid_from_page_id(PAGE_ID))
     raw_data = pd.DataFrame(res)
     raw_data["data_time"] = get_data_taipei_file_last_modified_time(PAGE_ID)
 
