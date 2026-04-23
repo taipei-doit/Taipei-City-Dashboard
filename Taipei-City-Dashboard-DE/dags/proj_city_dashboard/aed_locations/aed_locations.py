@@ -1,7 +1,7 @@
 from shapely.geometry import Point
 from airflow import DAG
 from operators.common_pipeline import CommonDag
-from utils.extract_stage import get_data_taipei_api
+from utils.extract_stage import get_current_rid_from_page_id, get_data_taipei_api
 from utils.load_stage import save_geodataframe_to_postgresql, update_lasttime_in_data_to_dataset_info
 from utils.get_time import get_tpe_now_time_str
 from utils.transform_geometry import add_point_wkbgeometry_column_to_df
@@ -22,10 +22,10 @@ def _transfer(**kwargs):
     FROM_CRS = 4326
 
     # Resource ID
-    rid = '438c61ad-24f6-4e54-a1cc-e2cfe0e7051e'
+    page_id = "cd050577-115f-4299-b37a-012ff490a632"
 
     # Extract
-    res = get_data_taipei_api(rid)
+    res = get_data_taipei_api(get_current_rid_from_page_id(page_id))
     raw_data = pd.DataFrame(res)
     raw_data["data_time"] = get_tpe_now_time_str()
 
