@@ -31,6 +31,9 @@ def _R0083(**kwargs):
 
     # Transform
     data = raw_data.copy()
+    # 資料集欄位改版:「站碼」已改名為「設施編號」,對齊 DB schema
+    if "設施編號" in data.columns and "站碼" not in data.columns:
+        data = data.rename(columns={"設施編號": "站碼"})
     # rename
     data.columns = data.columns.str.lower()
     # data time

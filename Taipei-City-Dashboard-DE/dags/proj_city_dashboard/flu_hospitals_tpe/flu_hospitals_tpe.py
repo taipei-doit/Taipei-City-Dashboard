@@ -3,15 +3,19 @@ from operators.common_pipeline import CommonDag
 import pandas as pd
 
 def convert_vaccine_symbols(value):
-    """Convert vaccine availability symbols to binary values"""
-    if pd.isna(value) or value == '':
+    """Convert vaccine availability symbols to binary values.
+
+    資料集原本用 '◎' 標示提供該項疫苗,2025 後改為 '1'/'' 的數值格式。
+    此函式兼容新舊格式:任何非空且等於 '1'、'◎' 或含 '◎' 的值都視為 1。
+    """
+    if pd.isna(value):
         return 0
-    elif value == '◎':
-        return 1
-    elif '◎' in str(value):  # Handle cases like "◎\n限院內腎友及家屬"
-        return 1
-    else:
+    s = str(value).strip()
+    if not s:
         return 0
+    if s == '1' or s == '◎' or '◎' in s:
+        return 1
+    return 0
 
 
 def _transfer(**kwargs):

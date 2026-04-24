@@ -72,46 +72,42 @@ def D100104_1(**kwargs):
     # Transform
     # Filter columns
     data = raw_data.copy()
-    keep_col = ['行政區', '醫療機構', '婚後孕前健康檢查生理女性', 
+    # 資料集欄位改版:「婚後孕前健康檢查生理女性」已改為「孕前健康檢查生理女性門診」
+    if '婚後孕前健康檢查生理女性' not in data.columns and '孕前健康檢查生理女性門診' in data.columns:
+        data = data.rename(columns={'孕前健康檢查生理女性門診': '婚後孕前健康檢查生理女性'})
+    keep_col = ['行政區', '醫療機構', '婚後孕前健康檢查生理女性',
                 '初期孕婦唐氏症篩檢', '中期孕婦唐氏症篩檢']
     data = data[keep_col]
     data = data.iloc[:-1, :]
     # Rename
     col_map = {
-        '行政區': 'district', 
-        '醫療機構': 'hospital', 
+        '行政區': 'district',
+        '醫療機構': 'hospital',
         '婚後孕前健康檢查生理女性': 'pre_marriage_check',
-        '初期孕婦唐氏症篩檢': 'early_pregnant_screening', 
+        '初期孕婦唐氏症篩檢': 'early_pregnant_screening',
         '中期孕婦唐氏症篩檢': 'mid_pregnant_screening'
     }
     data = data.rename(columns=col_map)
-    # Mapping district and replace ZIP code
+    # 行政區代碼兼容 8 碼舊格式(63000040) 與 7 碼新格式(6300400)
     district_map = {
-        63000040: '中山區',
-        63000050: '中正區',
-        63000020: '信義區',
-        63000100: '內湖區',
-        63000120: '北投區',
-        63000090: '南港區',
-        63000110: '士林區',
-        63000060: '大同區',
-        63000030: '大安區',
-        63000080: '文山區',
-        63000010: '松山區',
-        63000070: '萬華區'
+        # 舊 8 碼
+        63000010: '松山區', 63000020: '信義區', 63000030: '大安區',
+        63000040: '中山區', 63000050: '中正區', 63000060: '大同區',
+        63000070: '萬華區', 63000080: '文山區', 63000090: '南港區',
+        63000100: '內湖區', 63000110: '士林區', 63000120: '北投區',
+        # 新 7 碼
+        6300100: '松山區', 6300200: '信義區', 6300300: '大安區',
+        6300400: '中山區', 6300500: '中正區', 6300600: '大同區',
+        6300700: '萬華區', 6300800: '文山區', 6300900: '南港區',
+        6301000: '內湖區', 6301100: '士林區', 6301200: '北投區',
     }
     data['district'] = data['district'].astype(int)
     data['district'] = data['district'].map(district_map)
-    # Map columns
-    data['pre_marriage_check'] = data['pre_marriage_check'].apply(
-        lambda x: True if x == 'V' else False
-    )
-    data['early_pregnant_screening'] = data['early_pregnant_screening'].apply(
-        lambda x: True if x == 'V' else False
-    )
-    data['mid_pregnant_screening'] = data['mid_pregnant_screening'].apply(
-        lambda x: True if x == 'V' else False
-    )
+    # 值格式也從 'V' 改為 '1';兼容兩者
+    _truthy = {'V', '1', 'Y', True, 1}
+    data['pre_marriage_check'] = data['pre_marriage_check'].apply(lambda x: x in _truthy)
+    data['early_pregnant_screening'] = data['early_pregnant_screening'].apply(lambda x: x in _truthy)
+    data['mid_pregnant_screening'] = data['mid_pregnant_screening'].apply(lambda x: x in _truthy)
     # Time
     data['data_time'] = get_data_taipei_file_last_modified_time(page_id)
     data['data_time'] = convert_str_to_time_format(data['data_time'])
