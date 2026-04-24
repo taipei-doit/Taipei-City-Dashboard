@@ -19,6 +19,8 @@ Login uses `POST /api/v1/auth/login` and user records are backed by `dashboardma
 
 Users can open settings from the navigation bar. `GET /api/v1/users/me` returns fields including `user_id`, `account`, `name`, `created_at`, `login_at`, and `is_admin`. Currently, only `name` is editable through `POST /api/v1/users/me`.
 
+The backend API documentation records these current-user endpoints as `GET /api/v1/user/me` and `PATCH /api/v1/user/me`, not `/api/v1/users/me`. This is a source conflict between the front-end and backend documentation and should be verified against the actual router before implementation.
+
 The documented permission model has three levels:
 
 - Visitors can access dashboard and map pages but cannot modify dashboards.
@@ -51,6 +53,8 @@ Issue management lives at `/admin/issue` and uses APIs to list and update user-r
 
 Contributor management lives at `/admin/contributor` and supports listing, creating, updating, and deleting contributors.
 
+Backend operational APIs add that contributors can be read by guests but created, updated, and deleted only by admins. Issue reports can be created by users and admins, while issue listing and status updates are admin-only. Viewpoints are saved under `/api/v1/user/:userid/viewpoint` with point types `view` and `pin`.
+
 ## Dialog Dependencies
 
 Many operations surface through dialogs controlled by `dialogStore`, including login, dashboard settings, add/edit dashboards, add components, user settings, report issue, and admin dialogs. This makes dialog registration and placement part of the operational surface, not just UI styling.
@@ -60,3 +64,5 @@ Many operations surface through dialogs controlled by `dialogStore`, including l
 - [Platform Model](platform-model.md)
 - [UI Customization and Dialogs](ui-customization-and-dialogs.md)
 - [Static Application Conversion](static-application-conversion.md)
+- [Authentication and User APIs](../taipei-dashboard-backend/authentication-and-user-apis.md)
+- [Operations APIs](../taipei-dashboard-backend/operations-apis.md)

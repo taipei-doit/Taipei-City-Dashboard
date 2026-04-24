@@ -50,6 +50,12 @@ The front-end source layout is organized by responsibility:
 - `/src/router`: Vue Router and Axios configuration.
 - `/public`: larger static data and assets, including map data, contributor data, and images.
 
+## Backend Connection
+
+The backend is a Go service whose `/app` package is split into router, middlewares, controllers, models, cache, and utilities. It connects to two PostgreSQL databases: `dashboard` for statistical, historical, and geographical component data, and `dashboardmanager` for management/configuration data such as users, roles, groups, dashboards, components, contributors, issues, viewpoints, and chat logs.
+
+Dashboard visibility is tied to backend permission groups through `dashboard_groups`. Component responses are assembled from backend tables that separate component identity, city-specific query metadata, chart settings, and map settings.
+
 ## See Also
 
 - [Hackathon Rules and Delivery Requirements](hackathon-rules-and-delivery-requirements.md)
@@ -58,3 +64,5 @@ The front-end source layout is organized by responsibility:
 - [Map Features and Configuration](map-features-and-configuration.md)
 - [Authentication, Admin, and Dashboard Operations](auth-admin-and-dashboard-operations.md)
 - [Static Application Conversion](static-application-conversion.md)
+- [Backend Architecture and Databases](../taipei-dashboard-backend/backend-architecture-and-databases.md)
+- [Dashboard and Component APIs](../taipei-dashboard-backend/dashboard-and-component-apis.md)

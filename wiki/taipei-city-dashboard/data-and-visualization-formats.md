@@ -36,6 +36,12 @@ Chart components live under `/src/dashboardComponents/components`. ApexCharts-ba
 
 `map_legend` stores legend items as configuration objects with `name`, `type`, optional `icon`, and optional `value`. It supports `MapLegend`.
 
+## Backend Query Parsing
+
+Backend component data APIs execute SQL strings stored in component configuration against the `dashboard` database and parse returned rows according to `query_type`. Chart queries can have zero placeholders or two `%s` placeholders for start/end time. History queries default to `time` and require three placeholders: timestep unit, start time, and end time.
+
+The backend docs add an implementation constraint for `three_d`, `percent`, and `time`: SQL results must be ordered by the relevant `x_axis` and `y_axis` fields so the parser can build stable categories and series. Zero-valued subcategories should still be represented, commonly by generating all category combinations and left joining measured values.
+
 ## Chart Types
 
 The documented chart set includes `BarChart`, `BarPercentChart`, `ColumnChart`, `DonutChart`, `GuageChart`, `RadarChart`, `TimelineSeparateChart`, `TimelineStackedChart`, `TreemapChart`, `DistrictChart`, `MetroChart`, `HeatmapChart`, `PolarAreaChart`, `ColumnLineChart`, `BarChartWithGoal`, `IconPercentChart`, `IndicatorChart`, and `TextUnitChart`.
@@ -62,3 +68,4 @@ Historical timelines use `history_config` stored directly on `dashboardmanager.c
 - [Platform Model](platform-model.md)
 - [Map Features and Configuration](map-features-and-configuration.md)
 - [Design and Code Standards](design-and-code-standards.md)
+- [Component Data Querying](../taipei-dashboard-backend/component-data-querying.md)

@@ -54,6 +54,8 @@ POST /api/v1/ai/chat/twai
 
 The basic request sends a `messages` array containing `role` and `content`. In the initial mode, the system returns a plain-text AI answer and does not yet involve tool calling.
 
+The backend API documentation also names `POST /ai/chat/twai` as the AI chat route. Treat this as a source conflict with the workshop gateway path until confirmed against router configuration.
+
 ## Tool Calling Flow
 
 The AI architecture is organized around four steps:
@@ -64,6 +66,10 @@ The AI architecture is organized around four steps:
 4. Conversation details are written to `AI_ChatLog`.
 
 The core flow is: user request, LLM analysis, tool router execution, and natural-language response. The LLM maps user intent into `tool_calls` containing tool names and arguments. The backend then parses those calls and invokes actual backend functions or APIs. API results are returned to the model, which continues reasoning until it generates a final answer.
+
+The backend implementation uses `langchaingo`, a service-layer `aiSession` state machine, a TWCC provider adapter, and a tool registry under `app/services/ai/tools/registry.go`. Tool calls can be parsed from JSON or XML. The backend appends tool execution results as `role: tool` messages and loops until a final answer is produced or the maximum of five tool-call loops is reached.
+
+For streaming, the backend buffers the first 64 characters to detect tool instructions. If a tool call is detected, raw tool-call content is withheld from the client until the tool finishes and the model generates the final plain-text answer.
 
 ## Chat Log and Governance
 
@@ -82,3 +88,4 @@ The guide emphasizes that AI should support application value. Judging does not 
 - [Hackathon Rules and Delivery Requirements](hackathon-rules-and-delivery-requirements.md)
 - [Authentication, Admin, and Dashboard Operations](auth-admin-and-dashboard-operations.md)
 - [Platform Model](platform-model.md)
+- [AI Chat and Chatlog Services](../taipei-dashboard-backend/ai-chat-and-chatlog-services.md)

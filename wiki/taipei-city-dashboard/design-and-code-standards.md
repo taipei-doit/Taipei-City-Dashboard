@@ -56,3 +56,4 @@ Code contributions that introduce data should also follow data-cleaning expectat
 - [UI Customization and Dialogs](ui-customization-and-dialogs.md)
 - [Data and Visualization Formats](data-and-visualization-formats.md)
 - [Platform Model](platform-model.md)
+- [Backend Coding Standards](../taipei-dashboard-backend/backend-coding-standards.md)
