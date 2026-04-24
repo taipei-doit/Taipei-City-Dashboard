@@ -83,6 +83,8 @@ services:
     command: ["go", "run", "main.go"]
 
   vector-db-upgrade:
+    profiles:
+      - tools
     build:
       context: ./qdrant-upgrade
       dockerfile: Dockerfile
@@ -97,6 +99,7 @@ services:
       QDRANT_URL: ${QDRANT_URL:-http://qdrant:6333}
       QDRANT_API_KEY: ${QDRANT_API_KEY:-gogosecurity}
       QDRANT_COLLECTION: ${QDRANT_COLLECTION:-query_charts}
+      QDRANT_COLLECTION_NAME: ${QDRANT_COLLECTION_NAME:-query_charts}
 
 networks:
   default:

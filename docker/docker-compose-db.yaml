@@ -1,5 +1,3 @@
-version: "3.7"
-
 services:
   redis:
     restart: always
@@ -10,6 +8,7 @@ services:
       
   postgres-data:
     image: postgis/postgis:16-3.4-alpine
+    platform: linux/amd64
     container_name: postgres-data
     restart: always
     environment:
@@ -21,6 +20,7 @@ services:
 
   postgres-manager:
     image: postgis/postgis:16-3.4-alpine
+    platform: linux/amd64
     container_name: postgres-manager
     restart: always
     environment:

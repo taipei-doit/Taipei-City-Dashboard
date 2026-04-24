@@ -16,7 +16,7 @@ def main():
     DB_NAME = os.getenv("DB_MANAGER_DBNAME")
     QDRANT_URL = os.getenv("QDRANT_URL", "http://qdrant:6333")
     QDRANT_API_KEY = os.getenv("QDRANT_API_KEY", "gogosecurity")
-    COLLECTION_NAME = os.getenv("QDRANT_COLLECTION_NAME", "query_charts")
+    COLLECTION_NAME = os.getenv("QDRANT_COLLECTION_NAME") or os.getenv("QDRANT_COLLECTION", "query_charts")
     
     # === 1. 從 PostgreSQL 讀取資料 ===
     # Encode special characters for connection string
