@@ -30,9 +30,9 @@ def _transfer(**kwargs):
     raw_data["data_time"] = get_tpe_now_time_str()
 
     # Rename columns to match provided structure
+    # 注意:資料集目前無「縣市別代碼」欄位,city_code 從「行政區域代碼」衍生
     raw_data = raw_data.rename(columns={
         "_id": "place_id",
-        "縣市別代碼": "city_code",
         "場所名稱": "place_name",
         "場所地址": "address",
         "行政區域代碼": "district_code",
@@ -45,13 +45,13 @@ def _transfer(**kwargs):
 
     # Clean and select
     df = raw_data[[
-        "place_id", "city_code", "place_name", "address", "district_code",
+        "place_id", "place_name", "address", "district_code",
         "lat", "lng", "category", "type", "aed_location", "data_time"
     ]].copy()
 
-    # 補上 city / district 欄位（若未來需要地圖篩選用）
-    df["city"] = df["city_code"].astype(str).str[:2] + "000"
+    # 從 district_code (8 碼,例如 63000030) 衍生 city (5 碼,63000) 與 district (8 碼)
     df["district"] = df["district_code"].astype(str)
+    df["city"] = df["district"].str[:5]
 
     # 經緯度轉為 WKB 幾何
     df["lat"] = pd.to_numeric(df["lat"], errors="coerce")

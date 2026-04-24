@@ -433,29 +433,33 @@ def get_moenv_json_data(
         if sort_query:
             url += f"&sort={sort_query}"
 
-    if is_test:
-        limit = 10
-        offset = [0]
-    else:
-        res = requests.get(
-            f"{url}&offset=0&limit=1",
-            proxies=PROXIES if is_proxy else None,
-            timeout=timeout,
-        )
-        _check_request_status(res)
-        total_records = res.json()["total"]
-        limit = 1000
-        offset = [i for i in range(0, int(total_records), limit)]
-
+    # MOENV API v2 近年改為直接回傳 list(無 total/records 包裝),
+    # 舊格式為 {"total": N, "records": [...]}。此處兼容兩種格式,並改用
+    # 「持續分頁直到回傳少於 limit」避免依賴 total。
+    limit = 10 if is_test else 1000
     results = []
-    for o in offset:
+    offset = 0
+    max_pages = 1 if is_test else 1000
+    for _ in range(max_pages):
         res = requests.get(
-            f"{url}&offset={o}&limit={limit}",
+            f"{url}&offset={offset}&limit={limit}",
             proxies=PROXIES if is_proxy else None,
             timeout=timeout,
         )
         _check_request_status(res)
-        results.extend(res.json()["records"])
+        body = res.json()
+        if isinstance(body, list):
+            batch = body
+        elif isinstance(body, dict):
+            batch = body.get("records") or body.get("data") or []
+        else:
+            batch = []
+        if not batch:
+            break
+        results.extend(batch)
+        if len(batch) < limit:
+            break
+        offset += limit
         time.sleep(0.1)
 
     return results
