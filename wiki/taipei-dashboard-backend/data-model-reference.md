@@ -50,6 +50,7 @@ Component configuration is split across `components`, `query_charts`, `component
 ## See Also
 
 - [Backend Architecture and Databases](backend-architecture-and-databases.md)
+- [Data Tables and Metadata](../taipei-dashboard-dataend/data-tables-and-metadata.md)
 - [Dashboard and Component APIs](dashboard-and-component-apis.md)
 - [Component Data Querying](component-data-querying.md)
 - [Authentication and User APIs](authentication-and-user-apis.md)

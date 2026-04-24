@@ -41,5 +41,6 @@ The documentation notes that Airflow and Geoserver configurations were still in 
 ## See Also
 
 - [Platform Model](../taipei-city-dashboard/platform-model.md)
+- [Data-End Architecture](../taipei-dashboard-dataend/data-end-architecture.md)
 - [Data Model Reference](data-model-reference.md)
 - [Backend Coding Standards](backend-coding-standards.md)

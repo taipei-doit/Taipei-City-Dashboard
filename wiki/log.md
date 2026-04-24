@@ -28,3 +28,11 @@
 - Updated: Authentication, Admin, and Dashboard Operations
 - Updated: AI Model and Tool Calling Integration
 - Updated: Design and Code Standards
+
+## [2026-04-24] ingest | Data-End Architecture
+- Updated: Airflow DAG Development
+- Updated: Data Tables and Metadata
+- Updated: Data-End Utility Functions
+- Updated: Data-End Coding Standards
+- Updated: Backend Architecture and Databases
+- Updated: Data Model Reference

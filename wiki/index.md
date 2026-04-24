@@ -30,3 +30,15 @@ Backend documentation for Taipei City Dashboard, covering Go service architectur
 | [AI Chat and Chatlog Services](taipei-dashboard-backend/ai-chat-and-chatlog-services.md) | Documents TWCC chat API parameters, streaming/tool-calling runtime, environment variables, AI logs, and chatlog session APIs. | 2026-04-24 |
 | [Operations APIs](taipei-dashboard-backend/operations-apis.md) | Summarizes contributor, issue, and viewpoint APIs with permissions and related operational table rules. | 2026-04-24 |
 | [Backend Coding Standards](taipei-dashboard-backend/backend-coding-standards.md) | Records backend Go linting, naming, file structure, and responsibility-placement conventions. | 2026-04-24 |
+
+## taipei-dashboard-dataend
+
+Data-end documentation for Taipei City Dashboard, covering Airflow orchestration, DAG development, PostgreSQL table conventions, dataset metadata, ETL utilities, and Python coding standards.
+
+| Article | Summary | Updated |
+|---------|---------|---------|
+| [Data-End Architecture](taipei-dashboard-dataend/data-end-architecture.md) | Explains the data end's ETL role, Airflow runtime, common pipeline, database boundary, and environment configuration. | 2026-04-24 |
+| [Airflow DAG Development](taipei-dashboard-dataend/airflow-dag-development.md) | Summarizes DAG Python structure, job configuration, metadata planning, load behavior, and Airflow/pgAdmin testing workflow. | 2026-04-24 |
+| [Data Tables and Metadata](taipei-dashboard-dataend/data-tables-and-metadata.md) | Documents standard data-end table fields, `dataset_info`, load behaviors, table SQL generation, and source metadata conventions. | 2026-04-24 |
+| [Data-End Utility Functions](taipei-dashboard-dataend/data-end-utility-functions.md) | Catalogs extraction, time, spatial, address, load, table-SQL, and TDX authentication utilities under `/dags/utils`. | 2026-04-24 |
+| [Data-End Coding Standards](taipei-dashboard-dataend/data-end-coding-standards.md) | Records data-end Python style rules, linting/formatting expectations, naming conventions, and Airflow-specific code placement notes. | 2026-04-24 |
