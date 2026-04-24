@@ -131,6 +131,11 @@ def childcare_etl(rid, page_id, **kwargs):
 
     # 9) 僅留最終入庫欄位（白名單）
     final_cols = ["type", "name", "address", "phone", "data_time", "town", "wkb_geometry"]
+    # 9b) 截斷字串欄位長度,對齊 DB schema(name/phone varchar(50) 等)
+    if "name" in gdf.columns:
+        gdf["name"] = gdf["name"].astype(str).str.replace(r"\s+", " ", regex=True).str.strip().str[:50]
+    if "phone" in gdf.columns:
+        gdf["phone"] = gdf["phone"].astype(str).str.replace(r"\s+", " ", regex=True).str.strip().str[:50]
     for col in final_cols:
         if col not in gdf.columns:
             gdf[col] = None
