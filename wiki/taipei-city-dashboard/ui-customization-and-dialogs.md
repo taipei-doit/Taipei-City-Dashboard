@@ -1,7 +1,7 @@
 # UI Customization and Dialogs
 
 > Sources: Taipei Urban Intelligence Center, 2026-04-24
-> Raw: [客製化樣式](../../raw/客製化樣式.md); [客製化彈跳視窗](../../raw/客製化彈跳視窗.md); [設計指南](../../raw/設計指南.md)
+> Raw: [客製化樣式](../../raw/taipei-dashboard-frontend/客製化樣式.md); [客製化彈跳視窗](../../raw/taipei-dashboard-frontend/客製化彈跳視窗.md); [設計指南](../../raw/taipei-dashboard-frontend/設計指南.md)
 
 ## Overview
 

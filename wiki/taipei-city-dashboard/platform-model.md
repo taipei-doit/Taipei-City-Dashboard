@@ -1,7 +1,7 @@
 # Platform Model
 
 > Sources: Taipei Urban Intelligence Center, 2026-04-24
-> Raw: [儀表板簡介](../../raw/儀表板簡介.md); [組件簡介](../../raw/組件簡介.md); [畫面渲染策略](../../raw/畫面渲染策略.md); [檔案儲存系統](../../raw/檔案儲存系統.md)
+> Raw: [儀表板簡介](../../raw/taipei-dashboard-frontend/儀表板簡介.md); [組件簡介](../../raw/taipei-dashboard-frontend/組件簡介.md); [畫面渲染策略](../../raw/taipei-dashboard-frontend/畫面渲染策略.md); [檔案儲存系統](../../raw/taipei-dashboard-frontend/檔案儲存系統.md)
 
 ## Overview
 

@@ -1,7 +1,7 @@
 # Design and Code Standards
 
 > Sources: Taipei Urban Intelligence Center, 2026-04-24
-> Raw: [設計指南](../../raw/設計指南.md); [程式撰寫規範](../../raw/程式撰寫規範.md); [客製化樣式](../../raw/客製化樣式.md); [資料來源與清理](../../raw/資料來源與清理.md)
+> Raw: [設計指南](../../raw/taipei-dashboard-frontend/設計指南.md); [程式撰寫規範](../../raw/taipei-dashboard-frontend/程式撰寫規範.md); [客製化樣式](../../raw/taipei-dashboard-frontend/客製化樣式.md); [資料來源與清理](../../raw/taipei-dashboard-frontend/資料來源與清理.md)
 
 ## Overview
 

@@ -1,7 +1,7 @@
 # Data and Visualization Formats
 
 > Sources: Taipei Urban Intelligence Center, 2026-04-24
-> Raw: [圖表資料樣式](../../raw/圖表資料樣式.md); [支援圖表類型](../../raw/支援圖表類型.md); [歷史資料樣式](../../raw/歷史資料樣式.md); [客製化圖表](../../raw/客製化圖表.md); [資料來源與清理](../../raw/資料來源與清理.md)
+> Raw: [圖表資料樣式](../../raw/taipei-dashboard-frontend/圖表資料樣式.md); [支援圖表類型](../../raw/taipei-dashboard-frontend/支援圖表類型.md); [歷史資料樣式](../../raw/taipei-dashboard-frontend/歷史資料樣式.md); [客製化圖表](../../raw/taipei-dashboard-frontend/客製化圖表.md); [資料來源與清理](../../raw/taipei-dashboard-frontend/資料來源與清理.md)
 
 ## Overview
 

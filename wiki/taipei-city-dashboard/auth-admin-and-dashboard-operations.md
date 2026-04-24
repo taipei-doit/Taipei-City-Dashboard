@@ -1,7 +1,7 @@
 # Authentication, Admin, and Dashboard Operations
 
 > Sources: Taipei Urban Intelligence Center, 2026-04-24
-> Raw: [用戶驗證](../../raw/用戶驗證.md); [系統管理](../../raw/系統管理.md); [編輯儀表板](../../raw/編輯儀表板.md); [客製化彈跳視窗](../../raw/客製化彈跳視窗.md)
+> Raw: [用戶驗證](../../raw/taipei-dashboard-frontend/用戶驗證.md); [系統管理](../../raw/taipei-dashboard-frontend/系統管理.md); [編輯儀表板](../../raw/taipei-dashboard-frontend/編輯儀表板.md); [客製化彈跳視窗](../../raw/taipei-dashboard-frontend/客製化彈跳視窗.md)
 
 ## Overview
 

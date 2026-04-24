@@ -1,7 +1,7 @@
 # Hackathon Rules and Delivery Requirements
 
 > Sources: Taipei City Government Department of Information Technology, 2026-04-11; Taipei City Government Department of Information Technology, 2026-04-10
-> Raw: [2026雙北程式設計節競賽工作坊 競賽規則簡報](../../raw/2026雙北程式設計節競賽工作坊 競賽規則簡報.pdf); [2026雙北程式設計節競賽工作坊 開發團隊工作坊指南編V2](../../raw/2026雙北程式設計節競賽工作坊 開發團隊工作坊指南編V2.pdf)
+> Raw: [2026雙北程式設計節競賽工作坊 競賽規則簡報](../../raw/hackathon/2026雙北程式設計節競賽工作坊 競賽規則簡報.pdf); [2026雙北程式設計節競賽工作坊 開發團隊工作坊指南編V2](../../raw/hackathon/2026雙北程式設計節競賽工作坊 開發團隊工作坊指南編V2.pdf)
 
 ## Overview
 
