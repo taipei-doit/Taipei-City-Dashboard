@@ -95,6 +95,17 @@ def D100101(**kwargs):
     data["district"] = data["district"].astype(int)
     data["district"] = data["district"].map(district_map)
 
+    # DB `extension` 欄位為 varchar(20),但資料提供者偶爾把多支分機/電話寫在
+    # 同一格(含換行、"轉"、括號等),需清洗後截斷,否則會觸發
+    # StringDataRightTruncation。
+    if "extension" in data.columns:
+        data["extension"] = (
+            data["extension"].astype(str)
+            .str.replace(r"\s+", " ", regex=True)
+            .str.strip()
+            .str[:20]
+        )
+
     addr = data["addr"]
     addr_cleaned = clean_data(addr)
     standard_addr_list = main_process(addr_cleaned)
