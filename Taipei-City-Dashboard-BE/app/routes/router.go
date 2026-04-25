@@ -41,6 +41,7 @@ func ConfigureRoutes() {
 	configureContributorRoutes()
 	configureChatLogRoutes()
 	configureAIRoutes()
+	configureMrtA11yRoutes()
 }
 
 func configureAuthRoutes() {
@@ -204,6 +205,18 @@ func configureAIRoutes() {
 	aiRoutes.Use(middleware.IsLoggedIn())
 	{
 		aiRoutes.POST("/chat/twai", controllers.ChatWithTWCC)
+	}
+}
+
+func configureMrtA11yRoutes() {
+	mrtRoutes := RouterGroup.Group("/mrt/a11y")
+	mrtRoutes.Use(middleware.LimitAPIRequests(global.ComponentLimitAPIRequestsTimes, global.LimitRequestsDuration))
+	mrtRoutes.Use(middleware.LimitTotalRequests(global.ComponentLimitTotalRequestsTimes, global.LimitRequestsDuration))
+	{
+		mrtRoutes.GET("/alert-count", controllers.GetMrtAlertCount)
+		mrtRoutes.GET("/alert-by-line", controllers.GetMrtAlertByLine)
+		mrtRoutes.GET("/alert-by-type", controllers.GetMrtAlertByType)
+		mrtRoutes.GET("/station-overview", controllers.GetMrtStationOverview)
 	}
 }
 
