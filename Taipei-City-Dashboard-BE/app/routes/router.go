@@ -215,8 +215,8 @@ func configureMrtA11yRoutes() {
 	{
 		mrtRoutes.GET("/alert-count", controllers.GetMrtAlertCount)
 		mrtRoutes.GET("/alert-by-line", controllers.GetMrtAlertByLine)
-		mrtRoutes.GET("/alert-by-type", controllers.GetMrtAlertByType)
-		mrtRoutes.GET("/station-overview", controllers.GetMrtStationOverview)
+		mrtRoutes.GET("/alert-trend-30d", controllers.GetMrtAlertTrend30d)
+		mrtRoutes.GET("/stations", controllers.GetMrtStations)
 	}
 }
 
