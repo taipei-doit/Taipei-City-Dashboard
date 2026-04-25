@@ -34,6 +34,7 @@
 	},
 	"devDependencies": {
 		"@eslint/js": "^9.0.0",
+		"@vitejs/plugin-basic-ssl": "^2.3.0",
 		"@vitejs/plugin-vue": "^5.0.3",
 		"eslint-plugin-vue": "^9.20.1",
 		"sass": "^1.70.0",

@@ -1,0 +1,7 @@
+{
+	"status": "success",
+	"data": [
+		{ "name": "異常", "type": "alert", "icon": "mrt_station", "value": 5 },
+		{ "name": "正常", "type": "normal", "icon": "mrt_station", "value": 5 }
+	]
+}

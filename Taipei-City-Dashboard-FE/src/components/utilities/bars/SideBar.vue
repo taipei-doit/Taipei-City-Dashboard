@@ -153,6 +153,29 @@ onMounted(() => {
         </div>
       </transition>
     </template>
+    <h1>
+      {{ isExpanded ? `示範儀表板` : `示範` }}
+    </h1>
+    <RouterLink
+      :to="$route.path.startsWith('/mrt-a11y') && !$route.path.startsWith('/mrt-a11y-v2') ? $route.path : '/mrt-a11y'"
+      class="sidebar-demo-link"
+      active-class="sidebar-demo-link-active"
+    >
+      <span :title="!isExpanded ? '雙城暢行 ｜ 捷運無障礙' : ''">accessible</span>
+      <h3 v-if="isExpanded">
+        雙城暢行 ｜ 捷運無障礙
+      </h3>
+    </RouterLink>
+    <RouterLink
+      :to="$route.path.startsWith('/mrt-a11y-v2') ? $route.path : '/mrt-a11y-v2'"
+      class="sidebar-demo-link"
+      active-class="sidebar-demo-link-active"
+    >
+      <span :title="!isExpanded ? '雙城暢行 V2 ｜ 捷運無障礙' : ''">accessible_forward</span>
+      <h3 v-if="isExpanded">
+        雙城暢行 V2 ｜ 捷運無障礙
+      </h3>
+    </RouterLink>
     <h1 @click="toggleCollapse(contentStore.cityManager.activeCities)">
       {{ isExpanded ? `公共儀表板` : `公共` }}
     </h1>
@@ -217,6 +240,48 @@ onMounted(() => {
 		text-wrap: nowrap;
 		cursor: pointer;
 		margin-left: 1em;
+	}
+
+	&-demo-link {
+		max-height: var(--font-xl);
+		display: flex;
+		align-items: center;
+		margin: var(--font-s) 0;
+		border-left: solid 4px transparent;
+		border-radius: 0 5px 5px 0;
+		text-decoration: none;
+		text-wrap: nowrap;
+		white-space: nowrap;
+		transition: background-color 0.2s;
+
+		&:hover {
+			background-color: var(--color-component-background);
+		}
+
+		span {
+			min-width: var(--font-l);
+			margin-left: var(--font-s);
+			color: var(--color-normal-text);
+			font-family: var(--font-icon);
+			font-size: calc(var(--font-m) * var(--font-to-icon));
+		}
+
+		h3 {
+			margin-left: var(--font-s);
+			color: var(--color-normal-text);
+			font-size: var(--font-m);
+			font-weight: 400;
+		}
+
+		&-active {
+			border-left-color: var(--color-highlight);
+			background-color: var(--color-component-background);
+
+			span,
+			h3 {
+				color: var(--color-highlight);
+			}
+		}
 	}
 
 	&-sub {

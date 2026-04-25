@@ -18,6 +18,10 @@ import MapView from "../views/MapView.vue";
 import ComponentView from "../views/ComponentView.vue";
 import ComponentInfoView from "../views/ComponentInfoView.vue";
 import EmbedView from "../views/EmbedView.vue";
+// import FloodRadarView from "../views/FloodRadarView.vue";
+import AccessibilityRouteView from "../views/AccessibilityRouteView.vue";
+import MrtAccessibilityView from "../views/MrtAccessibilityView.vue";
+import MrtAccessibilityV2View from "../views/MrtAccessibilityV2View.vue";
 
 const routes = [
 	{
@@ -38,6 +42,47 @@ const routes = [
 		path: "/mapview",
 		name: "mapview",
 		component: MapView,
+	},
+	// {
+	// 	path: "/flood-radar",
+	// 	name: "flood-radar",
+	// 	component: FloodRadarView,
+	// },
+	{
+		path: "/accessibility-route",
+		name: "accessibility-route",
+		component: AccessibilityRouteView,
+		meta: { layout: "dashboard" },
+	},
+	{
+		path: "/accessibility-route/mapview",
+		name: "accessibility-route-mapview",
+		component: AccessibilityRouteView,
+		meta: { layout: "dashboard" },
+	},
+	{
+		path: "/mrt-a11y",
+		name: "mrt-a11y",
+		component: MrtAccessibilityView,
+		meta: { layout: "dashboard" },
+	},
+	{
+		path: "/mrt-a11y/mapview",
+		name: "mrt-a11y-mapview",
+		component: MrtAccessibilityView,
+		meta: { layout: "dashboard" },
+	},
+	{
+		path: "/mrt-a11y-v2",
+		name: "mrt-a11y-v2",
+		component: MrtAccessibilityV2View,
+		meta: { layout: "dashboard" },
+	},
+	{
+		path: "/mrt-a11y-v2/mapview",
+		name: "mrt-a11y-v2-mapview",
+		component: MrtAccessibilityV2View,
+		meta: { layout: "dashboard" },
 	},
 	{
 		path: "/component",
@@ -176,7 +221,8 @@ router.beforeEach((to) => {
 		to.name === "component-info"
 	) {
 		contentStore.setDashboards(true);
-	} else {
+	} else if (to.meta?.layout !== "dashboard") {
+		// 自訂 dashboard layout 路由由 view 自管 currentDashboard，這裡不清
 		contentStore.clearCurrentDashboard();
 	}
 	// Get Component data if the path is component-info
@@ -184,11 +230,14 @@ router.beforeEach((to) => {
 		contentStore.getCurrentComponentData(to.params.index, to.query.city);
 	}
 	// Clear the entire mapStore if the path doesn't start with /mapview
-	if (to.path.toLowerCase() !== "/mapview") {
+	if (
+		to.path.toLowerCase() !== "/mapview" &&
+		to.meta?.layout !== "dashboard"
+	) {
 		mapStore.clearEntireMap();
 	}
-	// Clear only map layers if the path starts with /mapview
-	else if (to.path.toLowerCase() === "/mapview") {
+	// Clear only map layers if the path starts with /mapview or 自訂 dashboard layout
+	else {
 		mapStore.clearOnlyLayers();
 	}
 });
