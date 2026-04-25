@@ -1,0 +1,37 @@
+{
+    "dag_infos": {
+        "dag_id": "mrt_a11y_elevator",
+        "start_date": "2026-04-25",
+        "schedule_interval": "0 4 * * *",
+        "catchup": false,
+        "tags": ["mrt", "accessibility", "data.taipei", "臺北市", "Taipei-City"],
+        "description": "臺北捷運車站出入口無障礙電梯、無障礙坡道 GPS 座標（00001516，master data）",
+        "default_args": {
+            "owner": "airflow",
+            "email": ["DEFAULT_EMAIL_LIST"],
+            "email_on_retry": false,
+            "email_on_failure": true,
+            "retries": 1,
+            "retry_delay": 60
+        },
+        "ready_data_db": "postgres_default",
+        "ready_data_default_table": "mrtp_a11y_elevator",
+        "ready_data_history_table": "",
+        "raw_data_db": "postgres_default",
+        "raw_data_table": "",
+        "load_behavior": "replace"
+    },
+    "data_infos": {
+        "name_cn": "臺北捷運車站出入口無障礙電梯、無障礙坡道GPS座標",
+        "airflow_update_freq": "0 4 * * *",
+        "source": "https://data.taipei/dataset/detail?id=0a3bb422-9eb5-459b-a9d4-138456516183",
+        "source_type": "data.taipei api",
+        "source_dept": "臺北捷運公司",
+        "gis_format": "Point",
+        "output_coordinate": "EPSG:4326",
+        "is_geometry": 1,
+        "dataset_description": "臺北捷運車站出入口無障礙電梯與坡道位置（master data）",
+        "etl_description": "解析 page_id 取最新 rid → 從 facility_name 抽 station 與 facility_type → 標準化 geometry → replace 寫入",
+        "sensitivity": "public"
+    }
+}
