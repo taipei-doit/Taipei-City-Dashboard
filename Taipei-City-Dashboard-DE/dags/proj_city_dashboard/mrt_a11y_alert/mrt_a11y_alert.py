@@ -1,3 +1,4 @@
+from airflow import DAG  # noqa: F401  # 觸發 Airflow safe_mode 解析此檔
 from operators.common_pipeline import CommonDag
 
 
