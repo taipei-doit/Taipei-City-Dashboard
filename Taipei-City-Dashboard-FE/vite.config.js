@@ -54,7 +54,12 @@ const serverConfig = isDockerCompose
 	};
 
 export default defineConfig({
-	plugins: [mockBE(), vue(), viteCompression(), basicSsl()],
+	plugins: [
+		mockBE(),
+		vue(),
+		viteCompression(),
+		...(isDockerCompose ? [] : [basicSsl()]),
+	],
 	build: {
 		rollupOptions: {
 			output: {

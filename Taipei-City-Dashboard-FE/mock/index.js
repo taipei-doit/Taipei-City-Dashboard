@@ -11,12 +11,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // 路徑相對於 mock/ 資料夾
-const routes = {
-	"/api/v1/mrt/a11y/alert-count": "mrt-a11y/alert-count.json",
-	"/api/v1/mrt/a11y/alert-by-line": "mrt-a11y/alert-by-line.json",
-	"/api/v1/mrt/a11y/alert-by-type": "mrt-a11y/alert-by-type.json",
-	"/api/v1/mrt/a11y/station-overview": "mrt-a11y/station-overview.json",
-};
+const routes = {};
 
 export default function mockBE() {
 	return {

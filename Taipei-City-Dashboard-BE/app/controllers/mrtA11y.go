@@ -30,6 +30,17 @@ func GetMrtAlertByLine(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"status": "success", "data": data, "categories": categories})
 }
 
+// GetMrtAlertByType returns active-alert distinct station counts grouped by facility type.
+// GET /api/v1/mrt/a11y/alert-by-type
+func GetMrtAlertByType(c *gin.Context) {
+	data, categories, err := models.GetMrtAlertByType()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"status": "success", "data": data, "categories": categories})
+}
+
 // GetMrtAlertTrend30d returns per-line alert count over the past 30 days as three_d bar data.
 // GET /api/v1/mrt/a11y/alert-trend-30d
 func GetMrtAlertTrend30d(c *gin.Context) {
@@ -45,6 +56,17 @@ func GetMrtAlertTrend30d(c *gin.Context) {
 // GET /api/v1/mrt/a11y/stations
 func GetMrtStations(c *gin.Context) {
 	data, err := models.GetMrtStations()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"status": "success", "data": data})
+}
+
+// GetMrtStationOverview returns a 2-row alert / normal summary of distinct stations.
+// GET /api/v1/mrt/a11y/station-overview
+func GetMrtStationOverview(c *gin.Context) {
+	data, err := models.GetMrtStationOverview()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": err.Error()})
 		return

@@ -71,7 +71,36 @@ func GetMrtAlertByLine() (data []ThreeDimensionalDataOutput, categories []string
 	return groupLineRows(rows)
 }
 
-// ─── C3: alert-trend-30d (three_d, from history table) ──────────────────────
+// ─── C3: alert-by-type (three_d, JOIN elevator for facility_type) ──────────
+
+// GetMrtAlertByType returns active-alert distinct station counts grouped by facility type.
+// alert table 沒有 facility_type，需 JOIN elevator ON station 取得設施類型。
+// type 用 CASE 直接 mapping 成中文 label，與 alert-by-line 的 line 中文化作風一致。
+func GetMrtAlertByType() (data []ThreeDimensionalDataOutput, categories []string, err error) {
+	var rows []mrtA11yLineCountRow
+	err = DBDashboard.Raw(`
+		SELECT
+			CASE e.facility_type
+				WHEN 'elevator' THEN '電梯'
+				WHEN 'ramp'     THEN '坡道'
+				ELSE '其他'
+			END                            AS x_axis,
+			''                             AS icon,
+			'異常設施數'                   AS y_axis,
+			COUNT(DISTINCT e.station)::int AS data
+		FROM mrtp_a11y_elevator e
+		JOIN mrtp_a11y_alert a
+		  ON a.station = e.station AND a.status = 'active'
+		GROUP BY e.facility_type
+		ORDER BY data DESC
+	`).Scan(&rows).Error
+	if err != nil {
+		return nil, nil, err
+	}
+	return groupLineRows(rows)
+}
+
+// ─── C3-history: alert-trend-30d (three_d, from history table) ─────────────
 
 // GetMrtAlertTrend30d returns count of distinct alert events per line over the last 30 days.
 // DISTINCT (publish_time, line, station, description) deduplicates the 15-min snapshots
@@ -127,6 +156,43 @@ func GetMrtStations() ([]MrtA11yStation, error) {
 		return nil, err
 	}
 	return rows, nil
+}
+
+// ─── C4-overview: station-overview (legend cards) ──────────────────────────
+
+// MrtA11yStationOverviewItem is one legend card row.
+type MrtA11yStationOverviewItem struct {
+	Name  string `json:"name"`
+	Type  string `json:"type"`
+	Icon  string `json:"icon"`
+	Value int    `json:"value"`
+}
+
+// GetMrtStationOverview returns a 2-row alert / normal summary of distinct stations.
+// elevator 表是「全部站」基準集合；alert 表 (status='active') 標記哪些站目前有異常公告。
+func GetMrtStationOverview() ([]MrtA11yStationOverviewItem, error) {
+	var row struct {
+		AlertCount  int `gorm:"column:alert_count"`
+		NormalCount int `gorm:"column:normal_count"`
+	}
+	err := DBDashboard.Raw(`
+		WITH stations AS (
+			SELECT DISTINCT station FROM mrtp_a11y_elevator
+		),
+		alert_stations AS (
+			SELECT DISTINCT station FROM mrtp_a11y_alert WHERE status = 'active'
+		)
+		SELECT
+			(SELECT COUNT(*) FROM stations s WHERE     EXISTS (SELECT 1 FROM alert_stations a WHERE a.station = s.station)) AS alert_count,
+			(SELECT COUNT(*) FROM stations s WHERE NOT EXISTS (SELECT 1 FROM alert_stations a WHERE a.station = s.station)) AS normal_count
+	`).Scan(&row).Error
+	if err != nil {
+		return nil, err
+	}
+	return []MrtA11yStationOverviewItem{
+		{Name: "異常", Type: "alert", Icon: "mrt_station", Value: row.AlertCount},
+		{Name: "正常", Type: "normal", Icon: "mrt_station", Value: row.NormalCount},
+	}, nil
 }
 
 // ─── helpers ────────────────────────────────────────────────────────────────

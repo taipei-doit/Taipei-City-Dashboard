@@ -1,9 +1,0 @@
-{
-	"status": "success",
-	"categories": ["電梯", "坡道", "月臺隙縫板"],
-	"data": [
-		{ "name": "電梯", "icon": "", "data": [3] },
-		{ "name": "坡道", "icon": "", "data": [1] },
-		{ "name": "月臺隙縫板", "icon": "", "data": [1] }
-	]
-}

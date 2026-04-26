@@ -1,7 +1,0 @@
-{
-	"status": "success",
-	"categories": ["板南線", "淡水信義線"],
-	"data": [
-		{ "name": "異常站數", "icon": "", "data": [3, 2] }
-	]
-}
