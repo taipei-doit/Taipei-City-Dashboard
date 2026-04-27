@@ -48,7 +48,6 @@
 
 ### [GET]/api/v1/component/{id}?city={city}
 
-<<<<<<< HEAD
 【輸入 (Input)】:
 Path Parameter: {id} (組件識別碼，如 rain_trend, hospital_bed)
 Query Parameter: city: 過濾縣市 (TP/NTP)
@@ -60,8 +59,6 @@ Query Parameter: city: 過濾縣市 (TP/NTP)
 
 【輸出 (Output)】:
 
-=======
->>>>>>> d75545648f12ace20bbdac025a3606677251d70f
 #### (1)二維資料
 
 > 對應Go結構：`TwoDimensionalDataOutput`
@@ -79,11 +76,10 @@ Query Parameter: city: 過濾縣市 (TP/NTP)
 
 > 對應Go結構：`TimeSeriesDataOutput`
 
-<<<<<<< HEAD
-=======
 ####(2)時間序列
->對應 Go 結構：`TimeSeriesDataOutput`
->>>>>>> d75545648f12ace20bbdac025a3606677251d70f
+
+> 對應 Go 結構：`TimeSeriesDataOutput`
+
 ```json
 {
   "data": [
@@ -96,17 +92,16 @@ Query Parameter: city: 過濾縣市 (TP/NTP)
     }
   ]
 }
-<<<<<<< HEAD
 ```
 
 #### (3)三維資料
 
 > 對應Go結構：`ThreeDimensionalDataOutput`
 
-=======
 ####(3)三維資料
->對應 Go 結構：`ThreeDimensionalDataOutput`
->>>>>>> d75545648f12ace20bbdac025a3606677251d70f
+
+> 對應 Go 結構：`ThreeDimensionalDataOutput`
+
 ```json
 {
   "data": [
@@ -128,11 +123,10 @@ Query Parameter: city: 過濾縣市 (TP/NTP)
 
 > 對應Go結構：`MapLegendData`
 
-<<<<<<< HEAD
-=======
 ####(4)地圖圖例資料
->對應 Go 結構：`MapLegendData`
->>>>>>> d75545648f12ace20bbdac025a3606677251d70f
+
+> 對應 Go 結構：`MapLegendData`
+
 ```json
 {
   "name": "一級警戒區",
