@@ -4,7 +4,7 @@ import pandas as pd
 from airflow import DAG
 from sqlalchemy import create_engine
 from operators.common_pipeline import CommonDag
-from utils.extract_stage import get_data_taipei_api
+from utils.extract_stage import get_current_rid_from_page_id, get_data_taipei_api
 from utils.load_stage import save_geodataframe_to_postgresql, update_lasttime_in_data_to_dataset_info
 from utils.get_time import get_tpe_now_time_str
 from utils.transform_geometry import add_point_wkbgeometry_column_to_df
@@ -24,8 +24,8 @@ def _transfer(**kwargs):
     GEOMETRY_TYPE = 'Point'
     FROM_CRS = 4326
 
-    rid = '5a5b36e0-f870-4b7f-8378-c91ac5f57941'
-    res = get_data_taipei_api(rid)
+    page_id = "d807396c-e41f-4005-be42-0160280783a1"
+    res = get_data_taipei_api(get_current_rid_from_page_id(page_id, resource_name_contains="友善店家"))
     raw_data = pd.DataFrame(res)
     raw_data['data_time'] = get_tpe_now_time_str()
 

@@ -39,8 +39,8 @@ services:
     image: dashboard-be-dev:latest #Local Development
     # image: dashboard-be:latest #Test Prod Image
     build:
-      context: .
-      dockerfile: ../Taipei-City-Dashboard-BE/Dockerfile-dev
+      context: ../Taipei-City-Dashboard-BE
+      dockerfile: Dockerfile
     container_name: dashboard-be
     restart: always
     environment:
@@ -69,14 +69,18 @@ services:
       QDRANT_COLLECTION: ${QDRANT_COLLECTION}
       QDRANT_API_KEY: ${QDRANT_API_KEY}
       LM_MODEL_PATH: ${LM_MODEL_PATH}
+      TWCC_API_URL: ${TWCC_API_URL}
+      TWCC_API_KEY: ${TWCC_API_KEY}
+      TWCC_MODEL: ${TWCC_MODEL}
+      TWCC_TIMEOUT: ${TWCC_TIMEOUT}
+      TWCC_MAX_RETRY: ${TWCC_MAX_RETRY}
+      TWCC_MAX_CONCURRENT: ${TWCC_MAX_CONCURRENT}
     volumes:
       - ../Taipei-City-Dashboard-BE:/opt/Taipei-City-Dashboard-BE
-    working_dir: /opt/Taipei-City-Dashboard-BE #Local Development
-    # working_dir: /app #Test Prod Image
+    working_dir: /opt/Taipei-City-Dashboard-BE
     ports:
       - "8088:${PORT:-8080}"
-    command: ["go", "run", "main.go"] #Local Development
-    # command: ["./TaipeiCityDashboardBE"] #Test Prod Image
+    command: ["go", "run", "main.go"]
 
   vector-db-upgrade:
     build:
@@ -92,7 +96,7 @@ services:
       DB_MANAGER_PORT: ${DB_MANAGER_PORT:-5432}
       QDRANT_URL: ${QDRANT_URL:-http://qdrant:6333}
       QDRANT_API_KEY: ${QDRANT_API_KEY:-gogosecurity}
-      QDRANT_COLLECTION_NAME: ${QDRANT_COLLECTION_NAME:-query_charts}
+      QDRANT_COLLECTION: ${QDRANT_COLLECTION:-query_charts}
 
 networks:
   default:

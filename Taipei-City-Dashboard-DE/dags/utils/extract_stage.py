@@ -218,6 +218,39 @@ def get_kml(url, dag_id, from_crs, **kwargs):
     return gdf
 
 
+def get_current_rid_from_page_id(page_id, resource_name_contains=None, timeout=30):
+    """
+    Resolve the *current* resource id (rid) from a data.taipei dataset PAGE_ID.
+
+    Data owners rotate rid each time they republish the dataset. Hardcoding a rid
+    makes the DAG silently read a frozen snapshot. Use this helper to always read
+    the latest published resource.
+
+    Args:
+        page_id (str): Dataset page id (the UUID in the dataset detail URL).
+        resource_name_contains (str, optional): If given, pick the first resource
+            whose name contains this substring (for pages with multiple files).
+        timeout (int, optional): HTTP timeout in seconds.
+
+    Returns:
+        str: Current rid.
+
+    Raises:
+        ValueError: If the page has no resources.
+    """
+    url = f"https://data.taipei/api/frontstage/tpeod/dataset.view?id={page_id}"
+    res = requests.get(url, timeout=timeout)
+    res.raise_for_status()
+    resources = res.json().get("payload", {}).get("resources", [])
+    if not resources:
+        raise ValueError(f"No resources found for page_id={page_id}")
+    if resource_name_contains:
+        for r in resources:
+            if resource_name_contains in (r.get("name") or ""):
+                return r["rid"]
+    return resources[0]["rid"]
+
+
 def get_data_taipei_api(rid, timeout=60, output_format="json"):
     """
     Retrieve data from Data.taipei API by automatically traversing all data.
@@ -400,29 +433,33 @@ def get_moenv_json_data(
         if sort_query:
             url += f"&sort={sort_query}"
 
-    if is_test:
-        limit = 10
-        offset = [0]
-    else:
-        res = requests.get(
-            f"{url}&offset=0&limit=1",
-            proxies=PROXIES if is_proxy else None,
-            timeout=timeout,
-        )
-        _check_request_status(res)
-        total_records = res.json()["total"]
-        limit = 1000
-        offset = [i for i in range(0, int(total_records), limit)]
-
+    # MOENV API v2 近年改為直接回傳 list(無 total/records 包裝),
+    # 舊格式為 {"total": N, "records": [...]}。此處兼容兩種格式,並改用
+    # 「持續分頁直到回傳少於 limit」避免依賴 total。
+    limit = 10 if is_test else 1000
     results = []
-    for o in offset:
+    offset = 0
+    max_pages = 1 if is_test else 1000
+    for _ in range(max_pages):
         res = requests.get(
-            f"{url}&offset={o}&limit={limit}",
+            f"{url}&offset={offset}&limit={limit}",
             proxies=PROXIES if is_proxy else None,
             timeout=timeout,
         )
         _check_request_status(res)
-        results.extend(res.json()["records"])
+        body = res.json()
+        if isinstance(body, list):
+            batch = body
+        elif isinstance(body, dict):
+            batch = body.get("records") or body.get("data") or []
+        else:
+            batch = []
+        if not batch:
+            break
+        results.extend(batch)
+        if len(batch) < limit:
+            break
+        offset += limit
         time.sleep(0.1)
 
     return results

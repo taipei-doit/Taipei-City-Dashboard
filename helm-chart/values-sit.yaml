@@ -189,6 +189,24 @@ backend:
     - name: LM_MODEL_PATH
       secretKey: "LM_MODEL_PATH"
       optional: false
+    - name: TWCC_API_URL
+      secretKey: "TWCC_API_URL"
+      optional: false
+    - name: TWCC_API_KEY
+      secretKey: "TWCC_API_KEY"
+      optional: false
+    - name: TWCC_MODEL
+      secretKey: "TWCC_MODEL"
+      optional: false
+    - name: TWCC_TIMEOUT
+      secretKey: "TWCC_TIMEOUT"
+      optional: false
+    - name: TWCC_MAX_RETRY
+      secretKey: "TWCC_MAX_RETRY"
+      optional: false
+    - name: TWCC_MAX_CONCURRENT
+      secretKey: "TWCC_MAX_CONCURRENT"
+      optional: false
 
 externalDatabase: {}
 

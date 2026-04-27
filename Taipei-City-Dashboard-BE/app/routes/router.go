@@ -40,6 +40,7 @@ func ConfigureRoutes() {
 	// configureWsRoutes()
 	configureContributorRoutes()
 	configureChatLogRoutes()
+	configureAIRoutes()
 }
 
 func configureAuthRoutes() {
@@ -193,6 +194,16 @@ func configureContributorRoutes() {
 		contributorRoutes.POST("/", controllers.CreateContributor)
 		contributorRoutes.PATCH("/:id", controllers.UpdateContributor)
 		contributorRoutes.DELETE("/:id", controllers.DeleteContributor)
+	}
+}
+
+func configureAIRoutes() {
+	aiRoutes := RouterGroup.Group("/ai")
+	aiRoutes.Use(middleware.LimitAPIRequests(global.ComponentLimitAPIRequestsTimes, global.LimitRequestsDuration))
+	aiRoutes.Use(middleware.LimitTotalRequests(global.ComponentLimitTotalRequestsTimes, global.LimitRequestsDuration))
+	aiRoutes.Use(middleware.IsLoggedIn())
+	{
+		aiRoutes.POST("/chat/twai", controllers.ChatWithTWCC)
 	}
 }
 
