@@ -7,6 +7,7 @@ import (
 	"TaipeiCityDashboardBE/global"
 	"TaipeiCityDashboardBE/logs"
 	"context"
+	"encoding/json"
 	"fmt"
 	"strings"
 	"time"
@@ -108,6 +109,8 @@ func ChatWithTWCC(ctx context.Context, req AIChatRequest, options ...llms.CallOp
 	totalInputTokens := 0
 	totalOutputTokens := 0
 	var toolUsed bool
+	var componentResults string
+	usedToolNames := make([]string, 0)
 
 	for loop := 0; loop < maxToolLoops; loop++ {
 		// A. Heartbeat: Send an SSE comment to keep connection alive before LLM starts
@@ -181,6 +184,12 @@ func ChatWithTWCC(ctx context.Context, req AIChatRequest, options ...llms.CallOp
 
 			// B. Execute tool with whitelist check
 			result, err := tools.Execute(ctx, tc.FunctionCall.Name, tc.FunctionCall.Arguments)
+			if err == nil {
+				usedToolNames = append(usedToolNames, tc.FunctionCall.Name)
+				if tc.FunctionCall.Name == "search_dashboards" {
+					componentResults = result
+				}
+			}
 			if err != nil {
 				// C. Error Feedback: Don't break, tell the model what went wrong
 				// Provide a helpful message so it can fix the call in the next loop
@@ -248,8 +257,11 @@ func ChatWithTWCC(ctx context.Context, req AIChatRequest, options ...llms.CallOp
 		
 		if toolUsed {
 			chatLog.ToolUsed = true
-			chatLog.Tools = "[\"tool_calling_loop_executed\"]"
+			if toolsJSON, err := json.Marshal(usedToolNames); err == nil {
+				chatLog.Tools = string(toolsJSON)
+			}
 		}
+		chatLog.ComponentResults = componentResults
 	}
 
 	// 5. Persist Log

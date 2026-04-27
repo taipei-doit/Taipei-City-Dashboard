@@ -114,6 +114,20 @@ type MapLegendData struct {
 
 /* ----- Handlers ----- */
 
+func GetComponentChartDataByIndex(index string, city string) (queryType string, queryString string, err error) {
+	var chartDataQuery ChartDataQuery
+	err = DBManager.
+		Table("query_charts").
+		Select("query_type, query_chart").
+		Where("index = ?", index).
+		Where("city = ?", city).
+		Find(&chartDataQuery).Error
+	if err != nil {
+		return "", "", err
+	}
+	return chartDataQuery.QueryType, chartDataQuery.QueryChart, nil
+}
+
 func GetComponentChartDataQuery(id int, city string) (queryType string, queryString string, err error) {
 	var chartDataQuery ChartDataQuery
 

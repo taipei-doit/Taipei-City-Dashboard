@@ -18,7 +18,7 @@ const emit = defineEmits(["changeMode", "close"]);
 const chatStore = useChatStore();
 const contentStore = useContentStore();
 const authStore = useAuthStore();
-const { addChatData, addQueryData, saveChatLog } = chatStore;
+const { addChatData, addQueryData, saveChatLog, sendChatMessage } = chatStore;
 const { createDashboard } = contentStore;
 const { chatData } = storeToRefs(chatStore);
 const { editDashboard } = storeToRefs(contentStore);
@@ -69,10 +69,7 @@ const qaBtnHandler = async (text, relations) => {
 
 const sendBtnHandler = (text) => {
 	if (!text.trim()) return;
-	addQueryData({
-		role: "user",
-		content: text,
-	});
+	sendChatMessage(text);
 	userMessage.value = "";
 };
 

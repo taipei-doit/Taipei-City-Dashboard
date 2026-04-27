@@ -231,10 +231,11 @@ func ChatWithTWCC(c *gin.Context) {
 				"output_tokens": logEntry.OutputTokens,
 				"total_tokens":  logEntry.TotalTokens,
 			},
-			"tool_used":   logEntry.ToolUsed,
-			"latency_ms":  logEntry.LatencyMS,
-			"model":       logEntry.Model,
-			"provider":    logEntry.Provider,
+			"tool_used":         logEntry.ToolUsed,
+			"component_results": logEntry.ComponentResults,
+			"latency_ms":        logEntry.LatencyMS,
+			"model":             logEntry.Model,
+			"provider":          logEntry.Provider,
 		},
 	})
 }
