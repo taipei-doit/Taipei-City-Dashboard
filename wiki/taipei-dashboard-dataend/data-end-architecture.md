@@ -1,7 +1,7 @@
 # Data-End Architecture
 
-> Sources: Taipei Urban Intelligence Center, 2026-04-24
-> Raw: [dataend overview](../../raw/taipei-dashboard-dataend/dataend overview.md); [airflow overview](../../raw/taipei-dashboard-dataend/airflow overview.md); [database overview](../../raw/taipei-dashboard-dataend/database overview.md); [global variable](../../raw/taipei-dashboard-dataend/global variable.md); [custom pipeline](../../raw/taipei-dashboard-dataend/custom pipeline.md)
+> Sources: Taipei Urban Intelligence Center, 2026-04-24; Taipei Urban Intelligence Center, 2026-04-28
+> Raw: [dataend overview](../../raw/taipei-dashboard-dataend/dataend overview.md); [airflow overview](../../raw/taipei-dashboard-dataend/airflow overview.md); [database overview](../../raw/taipei-dashboard-dataend/database overview.md); [global variable](../../raw/taipei-dashboard-dataend/global variable.md); [custom pipeline](../../raw/taipei-dashboard-dataend/custom pipeline.md); [DataEnd Project Settings](../../raw/taipei-dashboard-dataend/DataEnd Project Settings.md)
 
 ## Overview
 
@@ -55,8 +55,11 @@ Global configuration comes from three places:
 
 Documented optional variables include `CWA_API_KEY`, `MOENV_API_KEY`, `TDX_CLIENT_ID`, and `TDX_CLIENT_SECRET`. Shared Python access to project-level settings is centralized in `/dag/settings/global_config.py`.
 
+The local setup documentation also defines the minimum Airflow runtime settings: a Docker image and `.env` file for Airflow, the shared `br_dashboard` Docker network, an Airflow `postgres_default` connection to the dashboard PostgreSQL database, and Airflow Variables for `DEFAULT_EMAIL_LIST`, `HTTPS_PROXY_ENABLED`, and optional `PROXY_URL`.
+
 ## See Also
 
+- [Data-End Project Setup](data-end-project-setup.md)
 - [Airflow DAG Development](airflow-dag-development.md)
 - [Data Tables and Metadata](data-tables-and-metadata.md)
 - [Data-End Utility Functions](data-end-utility-functions.md)

@@ -66,6 +66,7 @@ Data persistence is checked through pgAdmin at `http://localhost:8889`. Develope
 ## See Also
 
 - [Data-End Architecture](data-end-architecture.md)
+- [Data-End Project Setup](data-end-project-setup.md)
 - [Data Tables and Metadata](data-tables-and-metadata.md)
 - [Data-End Utility Functions](data-end-utility-functions.md)
 - [Data-End Coding Standards](data-end-coding-standards.md)

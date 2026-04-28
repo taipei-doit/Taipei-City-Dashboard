@@ -36,3 +36,7 @@
 - Updated: Data-End Coding Standards
 - Updated: Backend Architecture and Databases
 - Updated: Data Model Reference
+
+## [2026-04-28] ingest | Data-End Project Setup
+- Updated: Data-End Architecture
+- Updated: Airflow DAG Development
