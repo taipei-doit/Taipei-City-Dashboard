@@ -44,42 +44,47 @@
 #
 # Feel free to modify this file to suit your needs.
 ---
-x-airflow-common:
-  &airflow-common
+x-airflow-common: &airflow-common
   # In order to add custom dependencies or upgrade provider packages you can use your extended image.
   # Comment the image line, place your Dockerfile in the directory where you placed the docker-compose.yaml
   # and uncomment the "build" line below, Then run `docker-compose build` to build the images.
   # image: ${AIRFLOW_IMAGE_NAME:-apache/airflow:2.10.5}
   build: .
-  environment:
-    &airflow-common-env
+  environment: &airflow-common-env
     AIRFLOW__CORE__EXECUTOR: CeleryExecutor
     AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: ${MATADATA_DATABASE}
     AIRFLOW__CELERY__RESULT_BACKEND: ${CELERY_RESULT_BACKEND}
     AIRFLOW__CELERY__BROKER_URL: ${REDIS_CONN}
-    AIRFLOW__CORE__FERNET_KEY: ''
-    AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: 'true'
-    AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
-    AIRFLOW__API__AUTH_BACKENDS: 'airflow.api.auth.backend.basic_auth,airflow.api.auth.backend.session'
-    AIRFLOW__WEBSERVER__BASE_URL: 'https://test-citydashboard.taipei/airflow-prod'
+    AIRFLOW__CORE__FERNET_KEY: ""
+    AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: "true"
+    AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+    AIRFLOW__API__AUTH_BACKENDS: "airflow.api.auth.backend.basic_auth,airflow.api.auth.backend.session"
+    AIRFLOW__WEBSERVER__BASE_URL: "https://test-citydashboard.taipei/airflow-prod"
     AIRFLOW__WEBSERVER__ENABLE_PROXY_FIX: "True"
     # Reduce DAG parsing CPU pressure
     AIRFLOW__SCHEDULER__PARSING_PROCESSES: 2
     AIRFLOW__SCHEDULER__MIN_FILE_PROCESS_INTERVAL: 120
     AIRFLOW__SCHEDULER__DAG_DIR_LIST_INTERVAL: 300
     AIRFLOW__SCHEDULER__MAX_THREADS: 2
+    # 每個 worker 改成 concurrency=1, prefetch=1
+    AIRFLOW__CELERY__WORKER_CONCURRENCY: 1
+    AIRFLOW__CELERY__WORKER_PREFETCH_MULTIPLIER: 1
+    # 3. 限制 scheduler 排程速度
+    AIRFLOW__SCHEDULER__MAX_DAGRUNS_PER_LOOP_TO_SCHEDULE: 5
+    AIRFLOW__CORE__PARALLELISM: 32
+    AIRFLOW__CORE__MAX_ACTIVE_RUNS_PER_DAG: 1
     # yamllint disable rule:line-length
     # Use simple http server on scheduler for health checks
     # See https://airflow.apache.org/docs/apache-airflow/stable/administration-and-deployment/logging-monitoring/check-health.html#scheduler-health-check-server
     # yamllint enable rule:line-length
-    AIRFLOW__SCHEDULER__ENABLE_HEALTH_CHECK: 'true'
+    AIRFLOW__SCHEDULER__ENABLE_HEALTH_CHECK: "true"
     # WARNING: Use _PIP_ADDITIONAL_REQUIREMENTS option ONLY for a quick checks
     # for other purpose (development, test and especially production usage) build/extend Airflow image.
     _PIP_ADDITIONAL_REQUIREMENTS: ${_PIP_ADDITIONAL_REQUIREMENTS:-}
     # Gmail SMTP Configuration
-    AIRFLOW__SMTP__SMTP_HOST: 'smtp.gmail.com'
-    AIRFLOW__SMTP__SMTP_STARTTLS: 'True'
-    AIRFLOW__SMTP__SMTP_SSL: 'False'
+    AIRFLOW__SMTP__SMTP_HOST: "smtp.gmail.com"
+    AIRFLOW__SMTP__SMTP_STARTTLS: "True"
+    AIRFLOW__SMTP__SMTP_SSL: "False"
     AIRFLOW__SMTP__SMTP_PORT: 587
     AIRFLOW__SMTP__SMTP_USER: ${SMTP_USER}
     AIRFLOW__SMTP__SMTP_PASSWORD: ${SMTP_PASSWORD}
@@ -96,6 +101,17 @@ x-airflow-common:
   user: "${AIRFLOW_UID:-50000}:0"
 
 services:
+  redis:
+    image: redis:7.2-alpine
+    container_name: airflow-redis
+    restart: always
+    expose:
+      - 6379
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 30s
+      retries: 50
   airflow-webserver:
     <<: *airflow-common
     command: webserver
@@ -104,7 +120,8 @@ services:
     ports:
       - "8080:8080"
     healthcheck:
-      test: ["CMD", "curl", "--fail", "http://localhost:8080/airflow-prod/health"]
+      test:
+        ["CMD", "curl", "--fail", "http://localhost:8080/airflow-prod/health"]
       interval: 30s
       timeout: 10s
       retries: 5
@@ -162,7 +179,7 @@ services:
     <<: *airflow-common
     command: celery worker -q realtime
     cpus: "1.0"
-    mem_limit: "4g"
+    mem_limit: "8g"
     healthcheck:
       # yamllint disable rule:line-length
       test:
@@ -175,7 +192,7 @@ services:
     environment:
       <<: *airflow-common-env
       # Realtime tasks need immediate execution availability
-      AIRFLOW__CELERY__WORKER_CONCURRENCY: 4
+      AIRFLOW__CELERY__WORKER_CONCURRENCY: 10
       DUMB_INIT_SETSID: "0"
     restart: always
     cpuset: "0-5"
@@ -214,7 +231,11 @@ services:
     cpus: "0.5"
     mem_limit: "1g"
     healthcheck:
-      test: ["CMD-SHELL", 'airflow jobs check --job-type TriggererJob --hostname "$${HOSTNAME}"']
+      test:
+        [
+          "CMD-SHELL",
+          'airflow jobs check --job-type TriggererJob --hostname "$${HOSTNAME}"',
+        ]
       interval: 30s
       timeout: 10s
       retries: 5
@@ -278,11 +299,11 @@ services:
     # yamllint enable rule:line-length
     environment:
       <<: *airflow-common-env
-      _AIRFLOW_DB_MIGRATE: 'true'
-      _AIRFLOW_WWW_USER_CREATE: 'true'
+      _AIRFLOW_DB_MIGRATE: "true"
+      _AIRFLOW_WWW_USER_CREATE: "true"
       _AIRFLOW_WWW_USER_USERNAME: ${USERNAME}
       _AIRFLOW_WWW_USER_PASSWORD: ${PASSWORD}
-      _PIP_ADDITIONAL_REQUIREMENTS: ''
+      _PIP_ADDITIONAL_REQUIREMENTS: ""
     user: "0:0"
     volumes:
       - ${AIRFLOW_PROJ_DIR:-../../}:/sources

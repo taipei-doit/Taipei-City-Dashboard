@@ -14,7 +14,7 @@ def _transfer(**kwargs):
     `減碳量－公噸` as carbon_reduction_metric_tons.
     `相當於幾座大安森林公園碳匯量` as carbon_sink_daan_forest_parks.
     '''
-    from utils.extract_stage import get_data_taipei_api
+    from utils.extract_stage import get_current_rid_from_page_id, get_data_taipei_api
     import pandas as pd
     from utils.transform_time import convert_str_to_time_format
     from utils.extract_stage import get_data_taipei_file_last_modified_time
@@ -34,11 +34,10 @@ def _transfer(**kwargs):
     default_table = dag_infos.get('ready_data_default_table')
     history_table = dag_infos.get('ready_data_history_table')
     # Manually set
-    rid = '5a2c9899-9c34-44ef-8860-1ed773e08dc8'
     page_id = '687f5170-06e9-46be-80bc-fcae87bcaeba'
  
     # Extract
-    res = get_data_taipei_api(rid)
+    res = get_data_taipei_api(get_current_rid_from_page_id(page_id, resource_name_contains="輔導成效"))
     raw_data = pd.DataFrame(res)
 
     # Transform

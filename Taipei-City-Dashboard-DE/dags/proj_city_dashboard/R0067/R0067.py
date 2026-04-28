@@ -6,7 +6,7 @@ def _R0067(**kwargs):
     import geopandas as gpd
     import pandas as pd
     from sqlalchemy import create_engine
-    from utils.extract_stage import get_data_taipei_api
+    from utils.extract_stage import get_current_rid_from_page_id, get_data_taipei_api
     from utils.load_stage import (
         drop_duplicated_after_saving,
         save_geodataframe_to_postgresql,
@@ -27,12 +27,12 @@ def _R0067(**kwargs):
     load_behavior = dag_infos.get("load_behavior")
     default_table = dag_infos.get("ready_data_default_table")
     history_table = dag_infos.get("ready_data_history_table")
-    RID = "15c3dde7-b6db-4a66-84c2-098236b84512"
+    PAGE_ID = "020bc1fc-34ff-4caa-ab1b-4267bd0bf386"
     FROM_CRS = 4326
     GEOMETRY_TYPE = "MultiPolygon"
 
     # Extract
-    res = get_data_taipei_api(RID)
+    res = get_data_taipei_api(get_current_rid_from_page_id(PAGE_ID))
     raw_data = pd.DataFrame(res)
 
     # Transform
