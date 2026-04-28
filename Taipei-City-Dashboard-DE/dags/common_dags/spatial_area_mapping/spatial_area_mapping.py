@@ -1,11 +1,10 @@
 from airflow import DAG
 from operators.common_pipeline import CommonDag
 from sqlalchemy import create_engine
+from sqlalchemy import text
 from airflow.models import Variable
 import logging
 
-
-MAPPINGS = Variable.get("SPATIAL_MAPPINGS", deserialize_json=True)
 
 def build_update_sql(cfg: dict) -> str:
     if cfg["src_table"].endswith("_ntpe"):
@@ -24,12 +23,13 @@ def build_update_sql(cfg: dict) -> str:
 def _transfer(**kwargs):
     # Config
     ready_data_db_uri = kwargs.get("ready_data_db_uri")
+    mappings = Variable.get("SPATIAL_MAPPINGS", default_var="[]", deserialize_json=True)
     engine = create_engine(ready_data_db_uri)
     # main
     results = []
     conn = engine.connect()
     with engine.begin() as conn:
-        for cfg in MAPPINGS:
+        for cfg in mappings:
             sql = build_update_sql(cfg)
             result = conn.execute(text(sql))
             updated = result.rowcount

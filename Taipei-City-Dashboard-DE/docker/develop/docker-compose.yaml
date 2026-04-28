@@ -54,15 +54,20 @@ x-airflow-common:
   environment:
     &airflow-common-env
     AIRFLOW__CORE__EXECUTOR: CeleryExecutor
-    AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: ${MATADATA_DATABASE}
-    AIRFLOW__CELERY__RESULT_BACKEND: ${CELERY_RESULT_BACKEND}
-    AIRFLOW__CELERY__BROKER_URL: ${REDIS_CONN}
+    AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://${DB_MANAGER_USER}:${DB_MANAGER_PASSWORD}@postgres-manager:5432/${AIRFLOW_METADATA_DB:-airflow}
+    AIRFLOW__CELERY__RESULT_BACKEND: db+postgresql://${DB_MANAGER_USER}:${DB_MANAGER_PASSWORD}@postgres-manager:5432/${AIRFLOW_METADATA_DB:-airflow}
+    AIRFLOW__CELERY__BROKER_URL: redis://redis:6379/${AIRFLOW_REDIS_DB:-1}
     AIRFLOW__CORE__FERNET_KEY: ''
     AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: 'true'
     AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
+    AIRFLOW__CORE__DAG_IGNORE_FILE_SYNTAX: 'glob'
     AIRFLOW__API__AUTH_BACKENDS: 'airflow.api.auth.backend.basic_auth,airflow.api.auth.backend.session'
-    AIRFLOW__WEBSERVER__BASE_URL: 'https://test-citydashboard.taipei/airflow-sit'
-    AIRFLOW__WEBSERVER__ENABLE_PROXY_FIX: "True"
+    AIRFLOW__WEBSERVER__BASE_URL: ${AIRFLOW_WEBSERVER_BASE_URL:-http://localhost:8081}
+    AIRFLOW__WEBSERVER__ENABLE_PROXY_FIX: "False"
+    AIRFLOW_CONN_POSTGRES_DEFAULT: postgresql://${DB_DASHBOARD_USER}:${DB_DASHBOARD_PASSWORD}@postgres-data:5432/${DB_DASHBOARD_DBNAME}
+    AIRFLOW_VAR_DEFAULT_EMAIL_LIST: ${DEFAULT_EMAIL_LIST:-[]}
+    AIRFLOW_VAR_HTTPS_PROXY_ENABLED: ${HTTPS_PROXY_ENABLED:-false}
+    AIRFLOW_VAR_PROXY_URL: ${PROXY_URL:-{}}
 
     # Reduce DAG parsing CPU pressure
     AIRFLOW__SCHEDULER__PARSING_PROCESSES: 2
@@ -96,9 +101,9 @@ services:
     cpus: "0.5"
     mem_limit: "2g"
     ports:
-      - "8080:8080"
+      - "${AIRFLOW_WEBSERVER_PORT:-8081}:8080"
     healthcheck:
-      test: ["CMD", "curl", "--fail", "http://localhost:8080/airflow-sit/health"]
+      test: ["CMD", "curl", "--fail", "http://localhost:8080/health"]
       interval: 30s
       timeout: 10s
       retries: 5
@@ -313,3 +318,8 @@ services:
     depends_on:
       airflow-init:
         condition: service_completed_successfully
+
+networks:
+  default:
+    name: br_dashboard
+    external: true
