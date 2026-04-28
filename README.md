@@ -33,3 +33,7 @@ Many thanks to the contributors to this project!
 <a href="https://github.com/tpe-doit/Taipei-City-Dashboard/graphs/contributors">
 <img src="https://contrib.rocks/image?repo=tpe-doit/Taipei-City-Dashboard" />
 </a>
+
+# docker-compose -f docker-compose-db.yaml up -d
+# docker-compose -f docker-compose-init.yaml up -d
+# docker-compose up -d
