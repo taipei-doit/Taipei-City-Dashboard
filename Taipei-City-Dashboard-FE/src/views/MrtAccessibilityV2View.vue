@@ -1,6 +1,6 @@
 <script setup>
 import axios from "axios";
-import { computed, onBeforeUnmount, onMounted, ref } from "vue";
+import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import { useRoute } from "vue-router";
 
 import DashboardComponent from "../dashboardComponent/DashboardComponent.vue";
@@ -105,11 +105,11 @@ const c3Component = ref({
 });
 
 const c4Component = ref({
-	id: "mrt-a11y-v2-station-overview",
-	index: "mrt_a11y_v2_station_overview",
+	id: "mrt-a11y-v2-stations",
+	index: "mrt_a11y_v2_stations",
 	city: "taipei",
 	name: "C4｜捷運站無障礙狀態總覽",
-	source: "BE Live｜/api/v1/mrt/a11y/station-overview",
+	source: "BE Live｜/api/v1/mrt/a11y/stations",
 	time_from: "current",
 	time_to: null,
 	update_freq: 15,
@@ -124,6 +124,8 @@ const c4Component = ref({
 });
 
 const toggleStationOn = ref(false);
+const stationGeoJson = ref(null);
+const STATION_SOURCE_ID = "mrt_station_demo-circle-taipei-source";
 
 // ── fetch + transform（依 reference/api-to-chart-mappings.md 4 種樣板）────────
 async function fetchAll() {
@@ -131,7 +133,7 @@ async function fetchAll() {
 		axios.get("/api/v1/mrt/a11y/alert-count"),
 		axios.get("/api/v1/mrt/a11y/alert-by-line"),
 		axios.get("/api/v1/mrt/a11y/alert-by-type"),
-		axios.get("/api/v1/mrt/a11y/station-overview"),
+		axios.get("/api/v1/mrt/a11y/stations"),
 	];
 	const [r1, r2, r3, r4] = await Promise.allSettled(calls);
 
@@ -173,15 +175,40 @@ async function fetchAll() {
 		c3Component.value.chart_data = null;
 	}
 
-	// C4 map_legend → MapLegend（icon alias mrt_station→metro 對齊既有 icon map）
+	// C4 /stations → GeoJSON 注入地圖 layer + MapLegend 統計（alert/normal 站數）
 	if (r4.status === "fulfilled") {
-		const body = r4.value.data;
-		c4Component.value.chart_data = (body.data || []).map((item) => ({
-			name: item.name,
-			type: item.type,
-			icon: item.icon === "mrt_station" ? "metro" : item.icon,
-			value: Math.round(Number(item.value ?? 0)),
+		const rows = r4.value.data?.data || [];
+
+		// 轉 GeoJSON FeatureCollection，status 欄位對應 STATION_LAYER paint
+		const features = rows.map((s) => ({
+			type: "Feature",
+			geometry: { type: "Point", coordinates: [s.lng, s.lat] },
+			properties: {
+				station_name: s.station,
+				facility_name: s.facility_name,
+				facility_type: s.facility_type,
+				status: s.alert_status,
+				alert_description: s.alert_description ?? null,
+			},
 		}));
+		stationGeoJson.value = { type: "FeatureCollection", features };
+
+		// 若 layer source 已存在（用戶已 toggle on），直接更新
+		if (mapStore.map?.getSource(STATION_SOURCE_ID)) {
+			mapStore.map.getSource(STATION_SOURCE_ID).setData(stationGeoJson.value);
+		}
+
+		// MapLegend 顯示異常/正常站數（以獨立站名去重）
+		const alertStations = new Set(
+			rows.filter((s) => s.alert_status === "active").map((s) => s.station),
+		);
+		const normalStations = new Set(
+			rows.filter((s) => s.alert_status === "normal").map((s) => s.station),
+		);
+		c4Component.value.chart_data = [
+			{ name: "異常", type: "circle", icon: "circle", value: alertStations.size },
+			{ name: "正常", type: "circle", icon: "circle", value: normalStations.size },
+		];
 	} else {
 		console.error("C4 fetch failed", r4.reason);
 		c4Component.value.chart_data = null;
@@ -198,6 +225,26 @@ function shouldDisable(map_config) {
 	return mapStore.loadingLayers.filter((el) => ids.includes(el)).length > 0;
 }
 
+// 當 layer 載入完成（loadingLayers 中不再含 station layer ID）時，
+// 用 BE 資料覆蓋靜態 mrt_station_demo.geojson
+const STATION_LAYER_ID = "mrt_station_demo-circle-taipei";
+let pendingInject = false;
+
+watch(
+	() => mapStore.loadingLayers,
+	(layers) => {
+		if (!pendingInject || !stationGeoJson.value) return;
+		if (!layers.includes(STATION_LAYER_ID)) {
+			const source = mapStore.map?.getSource(STATION_SOURCE_ID);
+			if (source) {
+				source.setData(stationGeoJson.value);
+			}
+			pendingInject = false;
+		}
+	},
+	{ deep: true },
+);
+
 function handleStationToggle(value, map_config) {
 	toggleStationOn.value = value;
 	if (!map_config?.[0]) {
@@ -210,8 +257,10 @@ function handleStationToggle(value, map_config) {
 		return;
 	}
 	if (value) {
+		pendingInject = true;
 		mapStore.addToMapLayerList(map_config);
 	} else {
+		pendingInject = false;
 		mapStore.clearByParamFilter(map_config);
 		mapStore.turnOffMapLayerVisibility(map_config);
 	}
