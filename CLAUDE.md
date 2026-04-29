@@ -142,6 +142,10 @@ page skill 的 SKILL.md 已有完整 8 步驟與 checkbox，照著做即可。**
 
 - ❌ 跨越工作邊界動 BE / DE / docker / helm
 
+### 本機環境
+
+- ❌ **禁止在本機直接執行 `npm install`**——專案用 Docker 開發，node_modules 在 container 內，本機不需要安裝。需要驗證時請在 container 內執行，或告知使用者。
+
 ## 10. 新增依賴前
 
 若要 `npm install <new-package>`，先在對話中說明：
