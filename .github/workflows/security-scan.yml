@@ -58,6 +58,32 @@ jobs:
           work-dir: Taipei-City-Dashboard-BE
           go-package: ./...
 
+  python-audit:
+    name: Python dependency audit
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        requirements:
+          - docker/qdrant-upgrade/requirements.txt
+          - Taipei-City-Dashboard-DE/cicd/utils/requirements-test.txt
+          - Taipei-City-Dashboard-DE/docker/develop/requirements.txt
+          - Taipei-City-Dashboard-DE/docker/prod/requirements.txt
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install pip-audit
+        run: python -m pip install --upgrade pip-audit
+
+      - name: Audit ${{ matrix.requirements }}
+        run: python -m pip_audit --no-deps -r "${{ matrix.requirements }}"
+
   secret-scan:
     name: Secret scan
     runs-on: ubuntu-latest
