@@ -6,10 +6,9 @@ toolchain go1.24.10
 
 require (
 	github.com/comail/colog v0.0.0-20160416085026-fba8e7b1f46c
-	github.com/dgrijalva/jwt-go v3.2.0+incompatible
-	github.com/fvbock/endless v0.0.0-20170109170031-447134032cb6
 	github.com/gin-gonic/gin v1.9.1
 	github.com/go-redis/redis v6.15.9+incompatible
+	github.com/golang-jwt/jwt/v4 v4.5.2
 	github.com/google/uuid v1.6.0
 	github.com/robfig/cron/v3 v3.0.1
 	github.com/spf13/cobra v1.8.0

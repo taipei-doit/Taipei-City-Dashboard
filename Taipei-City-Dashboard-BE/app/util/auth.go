@@ -12,8 +12,8 @@ import (
 	"TaipeiCityDashboardBE/app/models"
 	"TaipeiCityDashboardBE/global"
 
-	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt/v4"
 )
 
 // GetAuthFromRequest retrieves authentication information from the HTTP request headers and returns the decoded email and password from the Authorization header.

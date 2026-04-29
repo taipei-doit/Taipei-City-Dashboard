@@ -7,8 +7,8 @@ import (
 	"TaipeiCityDashboardBE/app/util"
 	"TaipeiCityDashboardBE/global"
 
-	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt/v4"
 )
 
 var jwtSecret = []byte(global.JwtSecret)
@@ -28,7 +28,7 @@ func ValidateJWT(c *gin.Context) {
 		// Non auth user can read public group
 		publicGroupids, _ := models.GetAllPublicGroupsID()
 		permissions := []models.Permission{}
-		for _, v := range publicGroupids{
+		for _, v := range publicGroupids {
 			// RoleID 3 = Viewer
 			permissions = append(permissions, models.Permission{GroupID: v, RoleID: 3})
 		}
