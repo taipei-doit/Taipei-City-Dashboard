@@ -74,3 +74,4 @@ Taipei-City-Dashboard-DE/docker/prod/.env
 
 *.env
 /.ignore
+semgrep.sarif
