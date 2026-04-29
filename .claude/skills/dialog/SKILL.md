@@ -1,9 +1,27 @@
 ---
 name: dialog
-description: 當使用者要新增、修改、除錯彈跳視窗（dialog），或涉及 dialogStore、DialogContainer、Teleport、MoreInfo、ReportIssue、NotificationBar 時觸發此技能
+description: >
+  當使用者要新增、修改、除錯彈跳視窗（dialog），或涉及 dialogStore、DialogContainer、Teleport、MoreInfo、ReportIssue、NotificationBar 時觸發此技能。
+  觸發情境：「新增彈跳視窗」「加一個 modal」「修改 dialog」「dialogStore 怎麼用」「用 DialogContainer 包」「新增 popup」「dialog 關不掉」等。
+  不要使用：使用者只問圖表、地圖圖層、頁面路由等純非彈跳視窗問題。
 ---
 
 # 客製化彈跳視窗
+
+## Step 0：觀摩既有彈跳視窗（**強制**，開工前必做）
+
+**任何新彈跳視窗動手前，必須先讀至少一個既有 dialog 元件**，確認 `DialogContainer` 用法、`Teleport`/`Transition` 模式、樣式命名一致。
+
+建議讀：
+- `Taipei-City-Dashboard-FE/src/components/dialogs/MoreInfo.vue`（標準 DialogContainer 用法）
+
+讀完後，在對話中向使用者回報：打算沿用哪個殼、哪些偏離點。
+
+## Step 0.5：盤點 `dialogs/` 現有彈跳視窗（**強制**）
+
+掃 `Taipei-City-Dashboard-FE/src/components/dialogs/`，列出現有 dialog 元件。**不得自己生成已存在的彈跳視窗**。
+
+判定：能直接用就 import；需小改先說明再改原檔；真不適用才自幹並列原因。
 
 ## 彈跳視窗運作原理
 
@@ -139,3 +157,13 @@ notificationBar 彈跳視窗可透過呼叫 dialogStore 的 showNotification 函
 首先，決定彈跳視窗名稱並創建一個遵循彈跳視窗 Vue 元件結構的 Vue 元件。接著，在 dialogStore 中註冊該彈跳視窗，將其名稱添加到現有的彈跳視窗列表中。最後，將該彈跳視窗 Vue 元件添加到應用程式中。建議將彈跳視窗 Vue 元件放在觸發它的元素旁邊，例如按鈕。
 
 不要將彈跳視窗 Vue 元件添加到應用程式中的多個位置，不然啟用該彈跳視窗時會有重複渲染情形。
+
+## 完成後檢查
+
+- [ ] 已讀既有 dialog 元件（Step 0）確認風格一致
+- [ ] 已掃 `src/components/dialogs/` 確認沒重複建已存在的彈窗（Step 0.5）
+- [ ] 在 `dialogStore` 的 `dialogs` 物件中新增該名稱（預設 `false`）
+- [ ] 使用 `DialogContainer` 包裝（或手動 `Teleport` + `Transition`）
+- [ ] Vue 元件**只放一個地方**，避免重複渲染
+- [ ] 無 hardcoded 顏色（用 `var(--color-*)`）
+- [ ] `npm run lint` 無錯誤

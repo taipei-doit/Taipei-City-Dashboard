@@ -24,6 +24,7 @@ Exit code 0 = all PASS, 1 = at least one FAIL.
 """
 import json
 import os
+import re
 import sys
 import importlib.util
 from datetime import datetime, timezone, timedelta
@@ -31,6 +32,20 @@ from datetime import datetime, timezone, timedelta
 from airflow.providers.postgres.hooks.postgres import PostgresHook
 
 CONN_ID = "postgres_default"
+
+# 允許的 table name 格式：字母/數字/底線，可含 schema prefix（schema.table）
+_TABLE_NAME_RE = re.compile(r'^[a-zA-Z_][a-zA-Z0-9_]*(\.[a-zA-Z_][a-zA-Z0-9_]*)?$')
+
+
+def safe_table(name: str) -> str:
+    """驗證 table name 格式，防止 job_config 被竄改時 f-string 查詢遭注入。
+    Table name 來自受控的 job_config.json，屬 trusted local input，
+    但仍做白名單檢查以防範未來 config 被 supply-chain 汙染。
+    """
+    if not _TABLE_NAME_RE.match(name):
+        print(f"❌ Invalid table name: {name!r}")
+        sys.exit(2)
+    return name
 
 
 def load_config():
@@ -65,8 +80,10 @@ def maybe_load_custom_verifier(dag_id):
 def main():
     dag_infos, data_infos = load_config()
     dag_id = dag_infos["dag_id"]
-    default_table = dag_infos["ready_data_default_table"]
+    default_table = safe_table(dag_infos["ready_data_default_table"])
     history_table = dag_infos.get("ready_data_history_table") or ""
+    if history_table:
+        history_table = safe_table(history_table)
     load_behavior = dag_infos.get("load_behavior", "")
     is_geometry = data_infos.get("is_geometry", 0) == 1
 

@@ -1,9 +1,27 @@
 ---
 name: chart
-description: 當使用者要新增、修改、除錯圖表元件，或涉及 chart_config、chart_data、ApexCharts、DashboardComponent、dashboardComponent/ 資料夾時觸發此技能
+description: >
+  當使用者要新增、修改、除錯圖表元件，或涉及 chart_config、chart_data、ApexCharts、DashboardComponent、dashboardComponent/ 資料夾時觸發此技能。
+  觸發情境：「新增圖表」「修改圖表樣式」「新圖表類型」「客製化 ApexCharts」「chart_config 怎麼設」「DashboardComponent 怎麼用」「為儀表板加一個折線圖」等。
+  不要使用：使用者只問地圖圖層、彈跳視窗、頁面路由等純非圖表問題。
 ---
 
 # 客製化圖表
+
+## Step 0：觀摩既有圖表（**強制**，開工前必做）
+
+**任何新圖表元件動手前，必須先讀至少一個既有圖表 Vue 元件**，確認視覺風格、prop 命名、ApexCharts 選項結構一致。
+
+建議讀：`Taipei-City-Dashboard-FE/src/dashboardComponent/components/ColumnChart.vue`
+
+讀完後，在對話中向使用者回報：
+- 打算重用哪個元件的結構
+- 哪些 `chartOptions` 設定沿用
+- 明確偏離點（如果有）
+
+## Step 0.5：盤點 `utilities/` 與 `dialogs/`（**強制**）
+
+掃 `Taipei-City-Dashboard-FE/src/components/utilities/` 與 `src/components/dialogs/`，列出可重用元件，**不得自己生成已存在的元件**。
 
 ## 顯示圖表
 
@@ -120,6 +138,16 @@ function handleDataSelection(index) {
 
 首先，決定圖表名稱，然後建立一個遵循圖表 Vue 元件結構的 Vue 元件。如果使用 Apexcharts 來渲染該圖表，亦須填寫相關的圖表選項(chartOptions)。
 
-接下來，註冊該圖表，將其添加到 /src/assets/configs/apexcharts 中的 chartTypes.js 文件的列表中。然後在 /src 目錄下的 main.js 中將該圖表 Vue 元件註冊為全域 Vue 元件。
+接下來，註冊該圖表，將其添加到 `/src/assets/configs/apexcharts/chartTypes.js` 文件的列表中。然後在 `/src/main.js` 中將該圖表 Vue 元件註冊為全域 Vue 元件。
 
 最後，在任何組件配置中添加該圖表名稱以渲染它。
+
+## 完成後檢查
+
+- [ ] 已讀既有圖表元件（Step 0）確認視覺一致
+- [ ] Vue 元件放在 `src/dashboardComponent/components/`
+- [ ] 已在 `chartTypes.js` 註冊新圖表名稱
+- [ ] 已在 `main.js` 全域註冊 Vue 元件
+- [ ] props 包含 `chart_config`、`activeChart`、`series`、`map_config`
+- [ ] 無 hardcoded 顏色（用 `var(--color-*)` 或 `chart_config.color`）
+- [ ] `npm run lint` 無錯誤

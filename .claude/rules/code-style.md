@@ -46,7 +46,7 @@ import { ref, computed, onMounted } from 'vue';
 import { useContentStore } from '../store/contentStore';
 
 // Component, config, utility function imports. Ex:
-import AddComponent from './dialogs/AddComponent.vue';P
+import AddComponent from './dialogs/AddComponent.vue';
 
 // Library, package, and Pinia Store constant declarations. Ex:
 const contentStore = useContentStore();

@@ -125,7 +125,7 @@ curl -s "<URL>" | python3 -c "import sys,json; d=json.load(sys.stdin); f=d['feat
 
 ### Step 5. 寫規劃文件
 
-照下列 §1～§11 結構，全部章節都寫（不省略）。每節該寫什麼見 [`references/doc-structure.md`](.claude/skills/plan-de-dag-from-eval/references/doc-structure.md)。
+照下列 §1～§11 結構，全部章節都寫（不省略）。每節該寫什麼見 [references/doc-structure.md](references/doc-structure.md)。
 
 ```
 # <儀表板標題>｜<重點 keyword> — DE 實作規劃

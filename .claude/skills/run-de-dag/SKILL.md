@@ -27,8 +27,8 @@ skill 主要參數是 `<DAG_ID>`，可一次給一個或多個（依序執行）
 
 ## 環境前提
 
-- Skill 安裝在 repo root：[`.claude/skills/run-de-dag/`](.claude/skills/run-de-dag/)
-- Working directory 必須是 [`Taipei-City-Dashboard-DE/`](Taipei-City-Dashboard-DE/)（docker-compose 路徑相對於該目錄）。skill 自動 `cd` 到 `$REPO_ROOT/Taipei-City-Dashboard-DE`
+- Skill 安裝在 repo root：`.claude/skills/run-de-dag/`
+- Working directory 必須是 `Taipei-City-Dashboard-DE/`（docker-compose 路徑相對於該目錄）。skill 自動 `cd` 到 `$REPO_ROOT/Taipei-City-Dashboard-DE`
 - Docker compose stack 須已啟動（`airflow-scheduler` 容器 running）— skill 不擅自 `docker compose up`
 - DAG 目標表須已建立（`current+history` / `replace` 開頭都會 `TRUNCATE`，表不存在會 fail）
 - Airflow connection `postgres_default` 已設好
@@ -76,7 +76,7 @@ $DC exec -T airflow-scheduler airflow dags trigger "$DAG_ID" --run-id "$RUN_ID"
 預設超時 5 分鐘，輕量 ETL 多在 30–60 秒內完成。每 5 秒 poll，每 30 秒對 user 印一次 progress 不洗版。
 
 ```bash
-TIMEOUT=300
+TIMEOUT="${RUN_DE_DAG_TIMEOUT:-300}"  # 可用環境變數覆寫，例如 export RUN_DE_DAG_TIMEOUT=600
 ELAPSED=0
 while [ $ELAPSED -lt $TIMEOUT ]; do
   STATE=$($DC exec -T airflow-scheduler airflow dags list-runs -d "$DAG_ID" --output json 2>/dev/null \
@@ -170,8 +170,8 @@ def verify(hook, config) -> List[Tuple[str, bool, str]]:
 
 ### 已附範例
 
-- [`scripts/verifications/mrt_a11y_alert.py`](.claude/skills/run-de-dag/scripts/verifications/mrt_a11y_alert.py)：驗 status keyword、station 字尾 strip、line 非空
-- [`scripts/verifications/mrt_a11y_elevator.py`](.claude/skills/run-de-dag/scripts/verifications/mrt_a11y_elevator.py)：驗 row count ≈ 188、facility_type 集合、unique stations、other 比例
+- [scripts/verifications/mrt_a11y_alert.py](scripts/verifications/mrt_a11y_alert.py)：驗 status keyword、station 字尾 strip、line 非空
+- [scripts/verifications/mrt_a11y_elevator.py](scripts/verifications/mrt_a11y_elevator.py)：驗 row count ≈ 188、facility_type 集合、unique stations、other 比例
 
 ### 新建客製驗證
 
@@ -191,7 +191,7 @@ def verify(hook, config):
 | 錯誤訊息 | 根因 | 處理 |
 |---|---|---|
 | `DAG not found: dags/.../job_config.json` | DAG ID 拼錯或不在 proj_city_dashboard | Step 1 已自動列出可用 DAG |
-| `relation "xxx" does not exist` | 表沒建（current+history / replace 都會 TRUNCATE） | 提示 user 建表；可參考 [`scripts/examples/mrt_a11y_setup_tables.sql`](.claude/skills/run-de-dag/scripts/examples/mrt_a11y_setup_tables.sql) 風格自製，或從 dag 程式 reverse-engineer 欄位 |
+| `relation "xxx" does not exist` | 表沒建（current+history / replace 都會 TRUNCATE） | 提示 user 建表；可參考 [scripts/examples/mrt_a11y_setup_tables.sql](scripts/examples/mrt_a11y_setup_tables.sql) 風格自製，或從 dag 程式 reverse-engineer 欄位 |
 | `airflow-scheduler: No such service` | docker compose 未起 | 提示 `cd Taipei-City-Dashboard-DE/docker/develop && docker compose up -d` |
 | Timeout (>5 min) | DAG 卡 queue / worker 沒起 | 檢查 `airflow-worker-default` / `airflow-worker-realtime` 是否 running，或 schedule_interval 對應 queue 是否啟動 |
 | `KeyError: '_importdate'` | data.taipei API 回空 | 偶發，重試；或仿 `childcare_etl` 加 CSV fallback |

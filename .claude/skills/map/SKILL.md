@@ -67,3 +67,13 @@ export const maplayerCommonLayout = {
 ```
 
 當您完成新的地圖類型或預設變化的設定，只需在適用的組件配置中指定它即可使用。
+
+## Reference Files
+
+本 skill 的詳細設定資料分散在三份 reference 文件中，依需求查閱：
+
+| Reference | 何時讀 |
+|---|---|
+| [reference/map-type.md](reference/map-type.md) | 新增地圖類型（paint/layout 選項、type 命名規則） |
+| [reference/map-filter.md](reference/map-filter.md) | 新增地圖篩選條件（filter 語法、mapStore 整合） |
+| [reference/map-data.md](reference/map-data.md) | 地圖資料格式（GeoJSON 結構、座標系、geometry 欄位） |

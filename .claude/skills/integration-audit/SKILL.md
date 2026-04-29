@@ -250,6 +250,30 @@ INTEGRATION_ISSUES.md 已更新到 ./.claude_output/
 - 不需要 `npm install` / `go build` — 純 read-only 分析，靠 grep + docker exec 就夠
 - 不要修改任何 source code — 這是 audit 不是 fix；改動要等使用者另外指示
 
+### 容器名稱動態偵測（重要）
+
+**不要** hardcode 容器名稱。先動態查出實際名稱再用：
+
+```bash
+# 偵測 postgres 容器名稱
+PG_DATA=$(docker ps --format '{{.Names}}' | grep -E 'postgres.*(data|dashboard)' | head -1)
+PG_MGR=$(docker ps --format '{{.Names}}' | grep -E 'postgres.*(manager|mgr)' | head -1)
+AIRFLOW_SCHED=$(docker ps --format '{{.Names}}' | grep -E 'airflow.*(scheduler)' | head -1)
+
+[ -z "$PG_DATA" ] && echo "⚠️  找不到 postgres-data 容器，跳過 DB 相關檢查" || echo "postgres-data → $PG_DATA"
+[ -z "$AIRFLOW_SCHED" ] && echo "⚠️  找不到 airflow-scheduler 容器，跳過 DAG 相關檢查" || echo "airflow-scheduler → $AIRFLOW_SCHED"
+```
+
+找到後用變數取代後續所有 `docker exec postgres-data` / `docker exec develop-airflow-scheduler-1` 呼叫。
+
+### `.gitignore` 提醒
+
+輸出目錄 `.claude_output/` 預設**不在** `.gitignore` 中。開工前確認：
+
+```bash
+grep -q '\.claude_output' .gitignore 2>/dev/null || echo "⚠️  建議將 .claude_output/ 加進 .gitignore，避免 audit 報告被 commit"
+```
+
 ## 大致時間預期
 
 完整跑一次約 2-5 分鐘，視 monorepo 大小跟服務數量。並行用 Bash multi-command 可加速。

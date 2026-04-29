@@ -6,6 +6,15 @@ Tests business logic that the generic verifier cannot know:
 - status values are constrained to {active, closed}
 - line column is non-empty
 """
+import re
+
+_TABLE_NAME_RE = re.compile(r'^[a-zA-Z_][a-zA-Z0-9_]*(\.[a-zA-Z_][a-zA-Z0-9_]*)?$')
+
+
+def _safe_table(name):
+    if not _TABLE_NAME_RE.match(name):
+        raise ValueError(f"Invalid table name: {name!r}")
+    return name
 
 
 def verify(hook, config):
@@ -17,7 +26,7 @@ def verify(hook, config):
         list of (name, ok, detail)
     """
     results = []
-    table = config["ready_data_default_table"]
+    table = _safe_table(config["ready_data_default_table"])
 
     bad_status = hook.get_first(
         f"SELECT COUNT(*) FROM {table} "

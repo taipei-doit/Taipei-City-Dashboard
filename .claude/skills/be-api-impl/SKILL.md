@@ -208,6 +208,8 @@ func initTestDB(t *testing.T) {
     cfg := global.DatabaseConfig{
         Host:     getTestEnv("DB_DASHBOARD_HOST", "127.0.0.1"),
         Port:     getTestEnv("DB_DASHBOARD_PORT", "5432"),
+        // 預設 user 沿用 Homebrew local PG 慣例（role 名稱 = macOS $USER）。
+        // Docker/Linux（含 CI）$USER 可能是 root/runner，請明確設 DB_DASHBOARD_USER=postgres。
         User:     getTestEnv("DB_DASHBOARD_USER", os.Getenv("USER")),
         Password: getTestEnv("DB_DASHBOARD_PASSWORD", ""),
         DBName:   getTestEnv("DB_DASHBOARD_DBNAME", "dashboard"),
@@ -217,6 +219,10 @@ func initTestDB(t *testing.T) {
         cfg.Host, cfg.Port, cfg.User, cfg.DBName, cfg.Password, cfg.SSLMode)
     db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
     if err != nil {
+        // CI 環境要求 DB 必須存在，失敗視為錯誤；本機 dev 才允許跳過
+        if os.Getenv("CI") != "" {
+            t.Fatalf("CI: cannot connect to test dashboard DB (%v)", err)
+        }
         t.Skipf("skip: cannot connect to test dashboard DB (%v)", err)
     }
     DBDashboard = db
@@ -233,7 +239,7 @@ func getTestEnv(key, fallback string) string {
 2. 輸出的長度/結構正確（例如 `len(data) == 1`、`len(categories) > 0`）
 3. 數值與 Step 2 塞的假資料吻合（例如 active 筆數 = 5）
 
-**用 `t.Skipf` 而非 `t.Fatalf` 處理連線失敗**，讓 CI 在沒有 DB 的環境不爆紅。
+**連線失敗處理**：CI 環境（`CI=true`）用 `t.Fatalf` 讓 CI 明確失敗；本機 dev 用 `t.Skipf` 跳過（避免沒 DB 就爆紅）。
 
 ### 4b. 執行測試
 

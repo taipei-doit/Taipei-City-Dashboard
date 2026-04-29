@@ -6,6 +6,15 @@ Tests business logic that the generic verifier cannot know:
 - facility_type ⊆ {elevator, ramp, other} and 'other' < 10%
 - station unique count between 110 and 125
 """
+import re
+
+_TABLE_NAME_RE = re.compile(r'^[a-zA-Z_][a-zA-Z0-9_]*(\.[a-zA-Z_][a-zA-Z0-9_]*)?$')
+
+
+def _safe_table(name):
+    if not _TABLE_NAME_RE.match(name):
+        raise ValueError(f"Invalid table name: {name!r}")
+    return name
 
 EXPECTED_ROWS = 188
 ROW_TOLERANCE = 0.05
@@ -16,7 +25,7 @@ EXPECTED_UNIQUE_STATIONS = (110, 125)
 
 def verify(hook, config):
     results = []
-    table = config["ready_data_default_table"]
+    table = _safe_table(config["ready_data_default_table"])
 
     row_count = hook.get_first(f"SELECT COUNT(*) FROM {table}")[0]
     lo = int(EXPECTED_ROWS * (1 - ROW_TOLERANCE))
