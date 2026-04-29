@@ -94,7 +94,7 @@ services:
     cpus: "0.5"
     mem_limit: "2g"
     ports:
-      - "8080:8080"
+      - "9080:8080"
     healthcheck:
       test:
         ["CMD", "curl", "--fail", "http://localhost:8080/airflow-sit/health"]
