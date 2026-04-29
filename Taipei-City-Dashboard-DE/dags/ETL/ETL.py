@@ -25,6 +25,7 @@ from datetime import datetime
 import os
 import argparse
 
+
 from transform_utils import TAIPEI_TZ, get_source_last_modified, transform_single
 
 _HERE        = os.path.dirname(os.path.abspath(__file__))
@@ -57,7 +58,6 @@ LIMIT    = 1000
 # 統一回傳 dict[source_id, DataFrame]
 # ─────────────────────────────────────────────
 def extract(config: dict) -> dict[str, pd.DataFrame]:
-    """根據 source_type 分派，統一回傳 {source_id: DataFrame}。"""
     source_type = config.get("source_type", "data.taipei API")
     dag_id      = config["dag_id"]
 
@@ -69,10 +69,11 @@ def extract(config: dict) -> dict[str, pd.DataFrame]:
         return {dag_id: _extract_post_api(config["api_url"], config.get("api_body", {}))}
     elif source_type == "data.ntpc API":
         return {dag_id: _extract_ntpc(config["PAGE_ID"])}
+    elif source_type == "data.taipei CSV":
+        return {dag_id: _extract_data_taipei_csv(config["PAGE_ID"])}
     elif source_type == "other":
-        print("[警告] 此資料集需自行實作 extract 邏輯。")
-        return {}
-    else:  # data.taipei API
+        return _extract_other(config)
+    else:
         return {dag_id: _extract_data_taipei(config["RID"])}
 
 
@@ -82,6 +83,16 @@ def _extract_merged(config: dict) -> dict[str, pd.DataFrame]:
     for source_id in config["sources"]:
         results.update(extract(DATASET_CONFIGS[source_id]))
     return results
+
+def _extract_other(config: dict) -> dict[str, pd.DataFrame]:
+    """source_type='other' 的資料集，依 dag_id 動態載入 extract/{dag_id}.py。"""
+    dag_id = config["dag_id"]
+    try:
+        mod = importlib.import_module(f"extract.{dag_id}")
+        return {dag_id: mod.extract(config)}
+    except ModuleNotFoundError:
+        print(f"[警告] extract/{dag_id}.py 不存在，跳過。")
+        return {}
 
 
 def _extract_data_taipei(rid: str) -> pd.DataFrame:
@@ -112,6 +123,49 @@ def _extract_data_taipei(rid: str) -> pd.DataFrame:
     print(f"[Extract] 共取得 {len(records)} 筆原始資料，欄位：{list(df.columns)}")
     return df
 
+
+def _extract_data_taipei_csv(page_id: str, rid: str = None) -> pd.DataFrame:
+    """
+    下載 data.taipei CSV 資料集。
+    優先使用 rid 直接下載；沒有 rid 才嘗試 meta API 查詢。
+    """
+    from io import StringIO
+    headers = {"User-Agent": "Mozilla/5.0"}
+
+    #  方法一：直接用 rid 下載（推薦）
+    if rid:
+        url = f"https://data.taipei/api/frontstage/tpeod/dataset/resource.download?rid={rid}"
+        print(f"[Extract] 直接下載 CSV：{url}")
+        resp = requests.get(url, headers=headers, timeout=60, verify=False)
+        resp.raise_for_status()
+        df = pd.read_csv(StringIO(resp.content.decode("utf-8-sig")))
+        print(f"[Extract] 共取得 {len(df)} 筆，欄位：{list(df.columns)}")
+        return df
+
+    #  方法二：用 v1 API 查 resources（備用）
+    meta_url = f"https://data.taipei/api/v1/dataset/{page_id}"
+    resp = requests.get(meta_url, headers=headers, timeout=30, verify=False)
+    print(f"[Extract] meta status: {resp.status_code}, url: {meta_url}")
+    resp.raise_for_status()
+    
+    data = resp.json()
+    # v1 回傳格式: {"result": {"resources": [...]}}
+    resources = data.get("result", {}).get("resources", [])
+    csv_rid = None
+    for res in resources:
+        if res.get("format", "").upper() == "CSV":
+            csv_rid = res.get("id")
+            break
+    if not csv_rid:
+        available = [r.get("format") for r in resources]
+        raise ValueError(f"[Extract] 無 CSV 資源，可用格式：{available}")
+
+    url = f"https://data.taipei/api/frontstage/tpeod/dataset/resource.download?rid={csv_rid}"
+    resp2 = requests.get(url, headers=headers, timeout=60, verify=False)
+    resp2.raise_for_status()
+    df = pd.read_csv(StringIO(resp2.content.decode("utf-8-sig")))
+    print(f"[Extract] 共取得 {len(df)} 筆，欄位：{list(df.columns)}")
+    return df
 
 def _extract_open_api(api_url: str) -> pd.DataFrame:
     """直接 GET 即時 API 並轉為 DataFrame。"""
@@ -159,26 +213,45 @@ def _extract_post_api(api_url: str, json_body: dict) -> pd.DataFrame:
 
 
 def _extract_ntpc(ntpc_id: str) -> pd.DataFrame:
-    """分頁取回 data.ntpc.gov.tw 資料集。"""
+    """分頁取回 data.ntpc.gov.tw 資料集（修正版）。"""
+    import time
     records = []
-    offset  = 0
-    limit   = 1000
-    url     = f"https://data.ntpc.gov.tw/api/datasets/{ntpc_id}/json"
+    page = 0
+    size = 1000  # 建議設定 1000，若仍被截斷請改 100
+    url = f"https://data.ntpc.gov.tw/api/datasets/{ntpc_id}/json"
 
     while True:
-        resp  = requests.get(url, params={"limit": limit, "offset": offset},
-                             timeout=30, verify=False)
-        resp.raise_for_status()
-        batch = resp.json()
-        if not batch:
-            break
-        records.extend(batch)
-        offset += len(batch)
-        if len(batch) < limit:
+        # 新北市 API 通常使用 page 與 size 參數
+        params = {
+            "page": page,
+            "size": size
+        }
+        
+        try:
+            resp = requests.get(url, params=params, timeout=30, verify=False)
+            resp.raise_for_status()
+            batch = resp.json()
+
+            if not batch or len(batch) == 0:
+                break
+
+            records.extend(batch)
+            print(f"[Extract] 正在抓取第 {page} 頁，目前累計 {len(records)} 筆...")
+
+            # 如果取得的數量小於請求數量，代表已經是最後一頁
+            if len(batch) < size:
+                break
+
+            page += 1
+            # 增加微小延遲，避免 API 頻率限制 (Rate Limit)
+            time.sleep(0.5) 
+
+        except Exception as e:
+            print(f"[Error] 抓取第 {page} 頁失敗: {e}")
             break
 
     df = pd.DataFrame(records)
-    print(f"[Extract] 共取得 {len(records)} 筆原始資料（NTPC），欄位：{list(df.columns)}")
+    print(f"[Extract] 完畢！共取得 {len(records)} 筆資料，欄位：{list(df.columns)}")
     return df
 
 
@@ -208,7 +281,7 @@ def extract_api(
         return _extract_open_api(endpoint)
     else:
         raise ValueError("extract_api() 需要提供 rid 或 endpoint 其中之一")
-
+    
 
 # ─────────────────────────────────────────────
 # 2. Transform
@@ -218,13 +291,16 @@ def extract_api(
 def transform(raw: dict[str, pd.DataFrame], data_time: str, config: dict) -> pd.DataFrame:
     """
     依 dag_id 尋找 transforms/{dag_id}.py。
-    找到則呼叫其 transform(raw, data_time, config, DATASET_CONFIGS)。
+    找到則呼叫其 transform(raw, data_time, config, dataset_configs)。
     找不到則以 transform_single 通用清洗。
     """
     dag_id = config["dag_id"]
     try:
         mod = importlib.import_module(f"transforms.{dag_id}")
-        return mod.transform(raw, data_time, config, DATASET_CONFIGS)
+        try:
+            return mod.transform(raw, data_time, config, DATASET_CONFIGS)
+        except TypeError:
+            return mod.transform(raw, data_time)
     except ModuleNotFoundError:
         df = next(iter(raw.values()))
         return transform_single(df, data_time, config)
@@ -270,7 +346,7 @@ def load_to_db(df: pd.DataFrame, table_name: str, db_url: str = None) -> None:
         host = os.environ.get("DB_DASHBOARD_HOST", "localhost")
         port = os.environ.get("DB_DASHBOARD_PORT", "5433")
         db   = os.environ.get("DB_DASHBOARD_DBNAME", "dashboard")
-        db_url = f"postgresql+psycopg2://{user}:{pwd}@{host}:{port}/{db}"
+        db_url = f"postgresql+pg8000://{user}:{pwd}@{host}:{port}/{db}"
 
     try:
         engine = create_engine(db_url)
@@ -329,7 +405,10 @@ def update_meta(df: pd.DataFrame, output_path: str, config: dict):
     meta_dir  = os.path.dirname(output_path)
     meta_path = os.path.join(meta_dir, "etl_meta.csv")
 
-    lasttime = df["data_time"].max() if "data_time" in df.columns else ""
+    if "data_time" in df.columns:
+        lasttime = df["data_time"].dropna().max() if len(df["data_time"].dropna()) > 0 else ""
+    else:
+        lasttime = ""
     meta = {
         "dag_id":           config["dag_id"],
         "output_file":      os.path.basename(output_path),
@@ -366,13 +445,31 @@ def main(config: dict):
     else:
         data_time = get_source_last_modified(config.get("PAGE_ID", ""))
 
-    ready_df    = transform(raw, data_time, config)
-    output_path = load(ready_df, config["output_dir"], config["output_table"])
-    update_meta(ready_df, output_path, config)
+    result = transform(raw, data_time, config)
 
-    # hackathon 組件自動寫入 DB
-    if config["output_table"].startswith("hackathon_"):
-        load_to_db(ready_df, config["output_table"])
+    # 處理 transform 可能回傳 tuple（多張表）或單一 DataFrame
+    if isinstance(result, tuple):
+        dfs = result
+        # 多張表時，使用 output_tables（陣列）或自動生成表名
+        output_tables = config.get("output_tables", [])
+        if not output_tables:
+            # 自動生成表名：用 _stats 和 _map 後綴
+            base = config["output_table"]
+            output_tables = [
+                base.replace("_map_ready", "_stats_ready") if "_map_ready" in base else f"{base}_stats",
+                base
+            ]
+    else:
+        dfs = (result,)
+        output_tables = [config["output_table"]]
+
+    for ready_df, table_name in zip(dfs, output_tables):
+        output_path = load(ready_df, config["output_dir"], table_name)
+        update_meta(ready_df, output_path, config)
+
+        # hackathon 組件自動寫入 DB
+        if table_name.startswith("hackathon_"):
+            load_to_db(ready_df, table_name)
 
     print("=" * 50)
     print("ETL 完成")

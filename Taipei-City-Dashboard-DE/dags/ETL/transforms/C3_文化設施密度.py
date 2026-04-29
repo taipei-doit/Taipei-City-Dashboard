@@ -3,10 +3,10 @@ import pandas as pd
 
 
 def extract_district(text):
-    """從地址字串擷取行政區（XX區/XX鄉/XX鎮/XX市）。"""
     if pd.isna(text):
         return None
-    m = re.search(r"([^\s市縣]+[鄉鎮市區])", str(text))
+    # 先嘗試取「市/縣」後面的「區/鄉/鎮」
+    m = re.search(r"[市縣][^\s]*?([^\s市縣]+[區鄉鎮])", str(text))
     return m.group(1) if m else str(text).strip()
 
 
