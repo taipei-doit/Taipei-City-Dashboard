@@ -527,19 +527,12 @@ onBeforeUnmount(() => {
 		background: var(--color-highlight);
 		color: #fff;
 		cursor: pointer;
-		opacity: 0;
-		pointer-events: none;
-		transition: opacity 0.15s ease, transform 0.15s ease;
+		transition: transform 0.15s ease;
 		z-index: 10;
 
 		.material-icons { font-size: 16px; }
 
 		&:hover { transform: scale(1.1); }
-	}
-
-	&:hover .mrt-ai-btn {
-		opacity: 1;
-		pointer-events: auto;
 	}
 }
 </style>

@@ -2,6 +2,7 @@
 <script setup>
 import { ref, nextTick, watch, computed } from "vue";
 import axios from "axios";
+import { useAuthStore } from "../store/authStore";
 
 const props = defineProps({
 	show: { type: Boolean, default: false },
@@ -11,6 +12,8 @@ const props = defineProps({
 });
 const emit = defineEmits(["close"]);
 
+const authStore = useAuthStore();
+
 const messages = ref([]);
 const isLoading = ref(false);
 const error = ref("");
@@ -19,19 +22,23 @@ const systemPrompt = ref("");
 const messageListRef = ref(null);
 let idCounter = 0;
 
+function authHeaders() {
+	return { Authorization: `Bearer ${authStore.token || ""}` };
+}
+
 const MODAL_WIDTH = 380;
+
 const MODAL_HEIGHT = 420;
 
 const popoverStyle = computed(() => {
 	const { top, left } = props.anchor;
-	const vw = window.innerWidth;
 	const vh = window.innerHeight;
 	// 優先放在按鈕左側；若超出螢幕左緣則放右側
 	let x = left - MODAL_WIDTH - 8;
 	if (x < 8) x = left + 40;
-	// 垂直對齊按鈕，超出底部則往上移
-	let y = top;
-	if (y + MODAL_HEIGHT > vh - 8) y = vh - MODAL_HEIGHT - 8;
+	// 從按鈕往上展開，確保 modal 底部不超出螢幕
+	let y = top - MODAL_HEIGHT;
+	if (y < 8) y = 8;
 	return { top: `${y}px`, left: `${x}px` };
 });
 
@@ -43,9 +50,15 @@ async function scrollToBottom() {
 }
 
 watch(
-	() => props.show,
-	async (val) => {
-		if (!val) return;
+	[() => props.show, () => props.componentId],
+	async ([show], [, oldComponentId]) => {
+		if (!show) return;
+		if (props.componentId !== oldComponentId) {
+			messages.value = [];
+			systemPrompt.value = "";
+			error.value = "";
+			inputText.value = "";
+		}
 		if (messages.value.length > 0) return;
 		await fetchInitialSummary();
 	}
@@ -57,7 +70,7 @@ async function fetchInitialSummary() {
 	try {
 		const res = await axios.post("/api/v1/mrt/a11y/ai-summary", {
 			component_id: props.componentId,
-		});
+		}, { headers: authHeaders() });
 		systemPrompt.value = res.data.system_prompt ?? "";
 		messages.value.push({
 			id: ++idCounter,
@@ -94,11 +107,11 @@ async function handleSend() {
 			temperature: 0.5,
 			max_tokens: 500,
 			top_p: 0.95,
-		});
+		}, { headers: authHeaders() });
 		messages.value.push({
 			id: ++idCounter,
 			role: "assistant",
-			content: res.data.content ?? "（無回應）",
+			content: res.data.data?.content ?? "（無回應）",
 		});
 	} catch {
 		error.value = "發生錯誤，請稍後再試。";
@@ -108,12 +121,14 @@ async function handleSend() {
 	}
 }
 
-function handleKeydown(e) {
-	if (e.key === "Enter" && !e.shiftKey) {
-		e.preventDefault();
-		handleSend();
-	}
+function handleInputKeydown(event) {
+	if (event.key !== "Enter") return;
+	if (!event.metaKey && !event.ctrlKey) return;
+
+	event.preventDefault();
+	handleSend();
 }
+
 </script>
 
 <template>
@@ -171,10 +186,10 @@ function handleKeydown(e) {
 					<textarea
 						v-model="inputText"
 						class="mrt-ai-modal__input"
-						placeholder="繼續詢問… (Enter 送出，Shift+Enter 換行)"
+						placeholder="繼續詢問…"
 						rows="1"
 						:disabled="isLoading"
-						@keydown="handleKeydown"
+						@keydown="handleInputKeydown"
 					/>
 					<button
 						class="mrt-ai-modal__send"
@@ -196,12 +211,14 @@ function handleKeydown(e) {
 	display: flex;
 	flex-direction: column;
 	width: 380px;
+	height: 420px;
 	z-index: 1000;
 	max-width: calc(100vw - 2 * var(--font-m));
-	max-height: 60vh;
+	max-height: calc(100vh - 2 * var(--font-m));
 	border-radius: 8px;
 	background: var(--color-component-background);
 	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+	overflow: hidden;
 
 	&__header {
 		display: flex;
@@ -244,9 +261,31 @@ function handleKeydown(e) {
 		display: flex;
 		flex: 1;
 		flex-direction: column;
-		gap: var(--font-s);
-		padding: var(--font-m);
-		overflow-y: auto;
+		gap: var(--font-m);
+		padding: var(--font-m) var(--font-s) var(--font-m) var(--font-m);
+		min-height: 0;
+		overflow-x: hidden;
+		overflow-y: scroll;
+		scrollbar-gutter: stable;
+		scrollbar-width: thin;
+		scrollbar-color: var(--color-complement-text) transparent;
+
+		&::-webkit-scrollbar {
+			width: 4px;
+		}
+
+		&::-webkit-scrollbar-track {
+			background: transparent;
+		}
+
+		&::-webkit-scrollbar-thumb {
+			border-radius: 8px;
+			background: var(--color-complement-text);
+		}
+
+		&::-webkit-scrollbar-thumb:hover {
+			background: var(--color-normal-text);
+		}
 	}
 
 	&__error {
@@ -267,6 +306,9 @@ function handleKeydown(e) {
 
 	&__input {
 		flex: 1;
+		width: auto;
+		min-width: 0;
+		max-width: none;
 		padding: var(--font-s);
 		border: 1px solid var(--color-border);
 		border-radius: 6px;
@@ -291,14 +333,19 @@ function handleKeydown(e) {
 		flex-shrink: 0;
 		align-items: center;
 		justify-content: center;
-		width: 36px;
-		height: 36px;
+		width: 40px;
+		height: 40px;
+		padding: 0;
 		border: none;
-		border-radius: 6px;
+		border-radius: 50%;
 		background: var(--color-highlight);
 		color: #fff;
 		cursor: pointer;
 		transition: background 0.15s ease;
+
+		.material-icons {
+			font-size: 18px;
+		}
 
 		&:hover:not(:disabled) {
 			background: #4a8ce8;
@@ -308,20 +355,19 @@ function handleKeydown(e) {
 			opacity: 0.5;
 			cursor: not-allowed;
 		}
-
-		.material-icons {
-			font-size: 18px;
-		}
 	}
 }
 
 .mrt-ai-bubble {
+	flex-shrink: 0;
 	max-width: 85%;
 	padding: var(--font-s) var(--font-m);
 	border-radius: 12px;
 	font-size: var(--font-s);
 	line-height: 1.6;
 	white-space: pre-wrap;
+	overflow-wrap: anywhere;
+	word-break: break-word;
 
 	&--assistant {
 		align-self: flex-start;
