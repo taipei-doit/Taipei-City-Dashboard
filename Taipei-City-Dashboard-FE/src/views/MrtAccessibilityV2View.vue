@@ -169,7 +169,7 @@ async function fetchAll() {
 			x: s.name,
 			y: Math.round(Number(s.data?.[0] ?? 0)),
 		}));
-		c3Component.value.chart_data = points.length ? [{ data: points }] : [];
+		c3Component.value.chart_data = [{ data: points.length ? points : [{ x: "無異常", y: 0 }] }];
 	} else {
 		console.error("C3 fetch failed", r3.reason);
 		c3Component.value.chart_data = null;

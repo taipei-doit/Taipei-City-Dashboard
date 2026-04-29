@@ -167,7 +167,7 @@ async function fetchAll() {
 			x: s.name,
 			y: Math.round(Number(s.data?.[0] ?? 0)),
 		}));
-		c3Component.value.chart_data = series.length ? [{ data: series }] : [];
+		c3Component.value.chart_data = [{ data: series.length ? series : [{ x: "無異常", y: 0 }] }];
 	} else {
 		console.error("C3 fetch failed", c3Res.reason);
 		c3Component.value.chart_data = null;

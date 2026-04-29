@@ -13,6 +13,10 @@ const serverConfig = isDockerCompose
 		host: "0.0.0.0",
 		port: 80, // 如有需要可變更 port
 		proxy: {
+			"/api/v1": {
+				target: "http://dashboard-be:8080",
+				changeOrigin: true,
+			},
 			"/api/dev": {
 				target: "http://dashboard-be:8080",
 				changeOrigin: true,

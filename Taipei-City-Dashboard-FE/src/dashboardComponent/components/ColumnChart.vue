@@ -22,13 +22,13 @@ const emits = defineEmits([
 ]);
 
 const isLargeDataSet = computed(() => {
-	return props.series[0].data.length > 12
+	return (props.series?.[0]?.data?.length ?? 0) > 12;
 })
 
 // Calculate initial width for large datasets only
 const initialWidth = computed(() => {
 	const WIDTH_PER_ITEM = 32
-	const itemCount = props.series[0].data.length;
+	const itemCount = props.series?.[0]?.data?.length ?? 0;
 	return itemCount * WIDTH_PER_ITEM;
 });
 
