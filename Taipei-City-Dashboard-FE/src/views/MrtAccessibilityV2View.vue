@@ -5,6 +5,7 @@ import { useRoute } from "vue-router";
 
 import DashboardComponent from "../dashboardComponent/DashboardComponent.vue";
 import MapContainer from "../components/map/MapContainer.vue";
+import MrtAiChatModal from "../components/MrtAiChatModal.vue";
 import { useContentStore } from "../store/contentStore";
 import { useMapStore } from "../store/mapStore";
 import { useDialogStore } from "../store/dialogStore";
@@ -125,6 +126,24 @@ const c4Component = ref({
 
 const toggleStationOn = ref(false);
 const stationGeoJson = ref(null);
+
+const activeAiComponentId = ref("");
+const activeAiComponentName = ref("");
+const showAiModal = ref(false);
+const aiModalAnchor = ref({ top: 0, left: 0 });
+
+function openAiModal(event, componentId, componentName) {
+	if (activeAiComponentId.value !== componentId) {
+		activeAiComponentId.value = componentId;
+		activeAiComponentName.value = componentName;
+	}
+	const rect = event.currentTarget.getBoundingClientRect();
+	aiModalAnchor.value = {
+		top: rect.top,
+		left: rect.left,
+	};
+	showAiModal.value = true;
+}
 const STATION_SOURCE_ID = "mrt_station_demo-circle-taipei-source";
 
 // ── fetch + transform（依 reference/api-to-chart-mappings.md 4 種樣板）────────
@@ -286,26 +305,62 @@ onBeforeUnmount(() => {
     v-if="!isMapView"
     class="mrtaccessibilityv2view-overview"
   >
-    <DashboardComponent
-      :config="c1Component"
-      mode="default"
-      :info-btn="false"
-    />
-    <DashboardComponent
-      :config="c2Component"
-      mode="default"
-      :info-btn="false"
-    />
-    <DashboardComponent
-      :config="c3Component"
-      mode="default"
-      :info-btn="false"
-    />
-    <DashboardComponent
-      :config="c4Component"
-      mode="default"
-      :info-btn="false"
-    />
+    <div class="mrt-card-wrapper">
+      <DashboardComponent
+        :config="c1Component"
+        mode="default"
+        :info-btn="false"
+      />
+      <button
+        class="mrt-ai-btn"
+        title="AI 分析"
+        @click="openAiModal($event, c1Component.id, 'C1｜目前異常設施總數')"
+      >
+        <span class="material-icons">smart_toy</span>
+      </button>
+    </div>
+    <div class="mrt-card-wrapper">
+      <DashboardComponent
+        :config="c2Component"
+        mode="default"
+        :info-btn="false"
+      />
+      <button
+        class="mrt-ai-btn"
+        title="AI 分析"
+        @click="openAiModal($event, c2Component.id, 'C2｜各捷運線異常站數')"
+      >
+        <span class="material-icons">smart_toy</span>
+      </button>
+    </div>
+    <div class="mrt-card-wrapper">
+      <DashboardComponent
+        :config="c3Component"
+        mode="default"
+        :info-btn="false"
+      />
+      <button
+        class="mrt-ai-btn"
+        title="AI 分析"
+        @click="openAiModal($event, c3Component.id, 'C3｜異常設施類型分布')"
+      >
+        <span class="material-icons">smart_toy</span>
+      </button>
+    </div>
+    <div class="mrt-card-wrapper">
+      <DashboardComponent
+        :config="c4Component"
+        mode="default"
+        :info-btn="false"
+      />
+      <button
+        class="mrt-ai-btn"
+        title="AI 分析"
+        @click="openAiModal($event, c4Component.id, 'C4｜捷運站無障礙狀態總覽')"
+      >
+        <span class="material-icons">smart_toy</span>
+      </button>
+    </div>
   </div>
 
   <!-- 地圖交叉比對：左組件右地圖 -->
@@ -315,30 +370,66 @@ onBeforeUnmount(() => {
   >
     <div class="mrtaccessibilityv2view-mapview-charts">
       <h2>無空間資料組件</h2>
-      <DashboardComponent
-        :config="c1Component"
-        mode="map"
-        :info-btn="false"
-      />
-      <DashboardComponent
-        :config="c2Component"
-        mode="map"
-        :info-btn="false"
-      />
-      <DashboardComponent
-        :config="c3Component"
-        mode="map"
-        :info-btn="false"
-      />
+      <div class="mrt-card-wrapper">
+        <DashboardComponent
+          :config="c1Component"
+          mode="map"
+          :info-btn="false"
+        />
+        <button
+          class="mrt-ai-btn"
+          title="AI 分析"
+          @click="openAiModal($event, c1Component.id, 'C1｜目前異常設施總數')"
+        >
+          <span class="material-icons">smart_toy</span>
+        </button>
+      </div>
+      <div class="mrt-card-wrapper">
+        <DashboardComponent
+          :config="c2Component"
+          mode="map"
+          :info-btn="false"
+        />
+        <button
+          class="mrt-ai-btn"
+          title="AI 分析"
+          @click="openAiModal($event, c2Component.id, 'C2｜各捷運線異常站數')"
+        >
+          <span class="material-icons">smart_toy</span>
+        </button>
+      </div>
+      <div class="mrt-card-wrapper">
+        <DashboardComponent
+          :config="c3Component"
+          mode="map"
+          :info-btn="false"
+        />
+        <button
+          class="mrt-ai-btn"
+          title="AI 分析"
+          @click="openAiModal($event, c3Component.id, 'C3｜異常設施類型分布')"
+        >
+          <span class="material-icons">smart_toy</span>
+        </button>
+      </div>
       <h2>地圖圖層組件</h2>
-      <DashboardComponent
-        :config="c4Component"
-        mode="map"
-        :info-btn="false"
-        :toggle-disable="shouldDisable(c4Component.map_config)"
-        :toggle-on="toggleStationOn"
-        @toggle="handleStationToggle"
-      />
+      <div class="mrt-card-wrapper">
+        <DashboardComponent
+          :config="c4Component"
+          mode="map"
+          :info-btn="false"
+          :toggle-disable="shouldDisable(c4Component.map_config)"
+          :toggle-on="toggleStationOn"
+          @toggle="handleStationToggle"
+        />
+        <button
+          class="mrt-ai-btn"
+          title="AI 分析"
+          @click="openAiModal($event, c4Component.id, 'C4｜捷運站無障礙狀態總覽')"
+        >
+          <span class="material-icons">smart_toy</span>
+        </button>
+      </div>
       <p class="mrtaccessibilityv2view-mapview-charts-tip">
         打開 C4 開關可在地圖載入站點圖層；
         <br>紅點＝有異常、綠點＝正常。
@@ -346,6 +437,14 @@ onBeforeUnmount(() => {
     </div>
     <MapContainer />
   </div>
+
+  <MrtAiChatModal
+    :show="showAiModal"
+    :component-id="activeAiComponentId"
+    :component-name="activeAiComponentName"
+    :anchor="aiModalAnchor"
+    @close="showAiModal = false"
+  />
 </template>
 
 <style scoped lang="scss">
@@ -406,6 +505,41 @@ onBeforeUnmount(() => {
 				line-height: 1.6;
 			}
 		}
+	}
+}
+
+.mrt-card-wrapper {
+	position: relative;
+	flex-shrink: 0;
+	height: 414px;
+
+	.mrt-ai-btn {
+		position: absolute;
+		bottom: var(--font-s);
+		right: var(--font-s);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 32px;
+		height: 32px;
+		border: none;
+		border-radius: 50%;
+		background: var(--color-highlight);
+		color: #fff;
+		cursor: pointer;
+		opacity: 0;
+		pointer-events: none;
+		transition: opacity 0.15s ease, transform 0.15s ease;
+		z-index: 10;
+
+		.material-icons { font-size: 16px; }
+
+		&:hover { transform: scale(1.1); }
+	}
+
+	&:hover .mrt-ai-btn {
+		opacity: 1;
+		pointer-events: auto;
 	}
 }
 </style>
