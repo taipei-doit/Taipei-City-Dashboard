@@ -48,13 +48,13 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
-          go-version-file: Taipei-City-Dashboard-BE/go.mod
+          go-version: "1.26.2"
           cache-dependency-path: Taipei-City-Dashboard-BE/go.sum
 
       - name: Run Go vulnerability scan
         uses: golang/govulncheck-action@v1
         with:
-          go-version-file: Taipei-City-Dashboard-BE/go.mod
+          go-version-input: "1.26.2"
           work-dir: Taipei-City-Dashboard-BE
           go-package: ./...
 

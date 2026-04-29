@@ -1,8 +1,6 @@
 module TaipeiCityDashboardBE
 
-go 1.24.4
-
-toolchain go1.24.10
+go 1.26.2
 
 require (
 	github.com/comail/colog v0.0.0-20160416085026-fba8e7b1f46c
