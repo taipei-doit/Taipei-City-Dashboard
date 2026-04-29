@@ -165,3 +165,15 @@ page skill 的 SKILL.md 已有完整 8 步驟與 checkbox，照著做即可。**
 5. 雙北整合需求：臺北 only，還是雙北切換？
 
 問完再 follow 對應 skill 的 SKILL.md 流程。
+
+## 12. agent-browser 截圖注意事項
+
+此專案的儀表板 grid 容器（如 `.mrtaccessibilityview-overview`）使用 `overflow-y: scroll`，`agent-browser scroll down <px>` 只滾 window，**對這個 scroll container 無效**。
+
+正確做法：用 `scrollintoview` 把目標組件捲進 viewport，讓 ApexCharts 觸發渲染後再截圖：
+
+```bash
+agent-browser scrollintoview ".dashboardcomponent:nth-child(3)"
+sleep 3
+agent-browser screenshot /tmp/screenshot.png
+```
