@@ -1,5 +1,7 @@
 version: "3.7"
 
+name: taipei-city-dashboard
+
 services:
   redis:
     restart: unless-stopped
