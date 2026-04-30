@@ -137,9 +137,11 @@ func GetComponentDataTool(ctx context.Context, args string) (string, error) {
 	return string(resultBytes), nil
 }
 
-// QueryCityDataTool 一次完成「搜尋組件 → 取得實際數據」，避免 AI 需要連續呼叫兩個工具
+// QueryCityDataTool 依 index 直接取得實際數據（AI 從組件清單選定 index 後呼叫）
+// 若未提供 index，則退而使用向量搜尋
 func QueryCityDataTool(ctx context.Context, args string) (string, error) {
 	var params struct {
+		Index    string `json:"index"`
 		Query    string `json:"query"`
 		City     string `json:"city"`
 		TimeFrom string `json:"time_from"`
@@ -147,9 +149,6 @@ func QueryCityDataTool(ctx context.Context, args string) (string, error) {
 	}
 	if err := parseArgs(args, &params); err != nil {
 		return "", fmt.Errorf("參數解析失敗: %v", err)
-	}
-	if params.Query == "" {
-		return "", fmt.Errorf("query 不可為空")
 	}
 	if params.City == "" {
 		params.City = "taipei"
@@ -163,53 +162,59 @@ func QueryCityDataTool(ctx context.Context, args string) (string, error) {
 		params.TimeFrom = time.Now().In(loc).Add(-24 * time.Hour).Format("2006-01-02T15:04:05+08:00")
 	}
 
-	// 步驟一：向量搜尋找最相關的組件
-	components, err := services.SearchQdrantComponents(ctx, params.Query, 3, 0.8)
-	if err != nil {
-		return "", fmt.Errorf("向量搜尋失敗: %v", err)
-	}
-	if len(components) == 0 {
-		return "找不到與查詢相關的組件", nil
+	targetIndex := params.Index
+	componentName := ""
+
+	// index 未提供時，退而使用向量搜尋
+	if targetIndex == "" {
+		if params.Query == "" {
+			return "", fmt.Errorf("index 或 query 至少需要提供一個")
+		}
+		components, err := services.SearchQdrantComponents(ctx, params.Query, 3, 0.8)
+		if err != nil || len(components) == 0 {
+			return "找不到與查詢相關的組件，請確認組件清單是否有此主題", nil
+		}
+		targetIndex = components[0].Index
+		componentName = components[0].Name
+		if params.City == "taipei" && components[0].City != "" {
+			params.City = components[0].City
+		}
 	}
 
-	// 步驟二：取第一個（最相關）組件的實際數據
-	best := components[0]
-	queryType, queryString, err := models.GetComponentChartDataByIndex(best.Index, params.City)
+	// 取 query_chart SQL 與單位
+	info, err := models.GetComponentQueryInfoByIndex(targetIndex, params.City)
 	if err != nil {
 		return "", fmt.Errorf("查詢組件設定失敗: %v", err)
 	}
-	if queryString == "" {
-		return fmt.Sprintf("組件「%s」(%s) 目前沒有可用資料", best.Name, best.Index), nil
+	if info.QueryChart == "" {
+		return fmt.Sprintf("組件 %s 在 %s 目前沒有可用資料", targetIndex, params.City), nil
 	}
 
 	var chartData interface{}
-	switch queryType {
+	switch info.QueryType {
 	case "two_d":
-		chartData, err = models.GetTwoDimensionalData(&queryString, params.TimeFrom, params.TimeTo)
+		chartData, err = models.GetTwoDimensionalData(&info.QueryChart, params.TimeFrom, params.TimeTo)
 	case "three_d", "percent":
 		var categories []string
 		var data interface{}
-		data, categories, err = models.GetThreeDimensionalData(&queryString, params.TimeFrom, params.TimeTo)
+		data, categories, err = models.GetThreeDimensionalData(&info.QueryChart, params.TimeFrom, params.TimeTo)
 		chartData = map[string]interface{}{"data": data, "categories": categories}
 	case "time":
-		chartData, err = models.GetTimeSeriesData(&queryString, params.TimeFrom, params.TimeTo)
+		chartData, err = models.GetTimeSeriesData(&info.QueryChart, params.TimeFrom, params.TimeTo)
 	case "map_legend":
-		chartData, err = models.GetMapLegendData(&queryString, params.TimeFrom, params.TimeTo)
+		chartData, err = models.GetMapLegendData(&info.QueryChart, params.TimeFrom, params.TimeTo)
 	default:
-		return fmt.Sprintf("不支援的資料類型: %s", queryType), nil
+		return fmt.Sprintf("不支援的資料類型: %s", info.QueryType), nil
 	}
 	if err != nil {
 		return "", fmt.Errorf("取得資料失敗: %v", err)
 	}
 
 	result := map[string]interface{}{
-		"component": map[string]interface{}{
-			"index": best.Index,
-			"name":  best.Name,
-			"city":  best.City,
-			"score": best.Score,
-		},
-		"query_type": queryType,
+		"index":      targetIndex,
+		"name":       componentName,
+		"unit":       info.Unit,
+		"query_type": info.QueryType,
 		"data":       chartData,
 	}
 	resultBytes, _ := json.Marshal(result)

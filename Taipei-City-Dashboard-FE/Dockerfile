@@ -4,9 +4,9 @@ FROM node:21-slim AS builder
 # Set the working directory inside the container
 WORKDIR /app
 
-# Install dependencies using npm ci for consistency
+# Install dependencies using npm ci for consistency (include devDeps for build tools)
 COPY package*.json ./
-RUN npm ci
+RUN npm ci --include=dev
 # test
 # Copy the rest of the application code
 COPY . .

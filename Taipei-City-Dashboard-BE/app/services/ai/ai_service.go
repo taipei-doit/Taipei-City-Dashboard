@@ -110,7 +110,7 @@ func ChatWithTWCC(ctx context.Context, req AIChatRequest, options ...llms.CallOp
 	totalOutputTokens := 0
 	var toolUsed bool
 	var componentResults string
-	usedToolNames := make([]string, 0)
+	usedToolNamesSet := make(map[string]struct{})
 
 	for loop := 0; loop < maxToolLoops; loop++ {
 		// A. Heartbeat: Send an SSE comment to keep connection alive before LLM starts
@@ -185,7 +185,7 @@ func ChatWithTWCC(ctx context.Context, req AIChatRequest, options ...llms.CallOp
 			// B. Execute tool with whitelist check
 			result, err := tools.Execute(ctx, tc.FunctionCall.Name, tc.FunctionCall.Arguments)
 			if err == nil {
-				usedToolNames = append(usedToolNames, tc.FunctionCall.Name)
+				usedToolNamesSet[tc.FunctionCall.Name] = struct{}{}
 				if tc.FunctionCall.Name == "search_dashboards" {
 					componentResults = result
 				}
@@ -257,7 +257,11 @@ func ChatWithTWCC(ctx context.Context, req AIChatRequest, options ...llms.CallOp
 		
 		if toolUsed {
 			chatLog.ToolUsed = true
-			if toolsJSON, err := json.Marshal(usedToolNames); err == nil {
+			uniqueNames := make([]string, 0, len(usedToolNamesSet))
+			for name := range usedToolNamesSet {
+				uniqueNames = append(uniqueNames, name)
+			}
+			if toolsJSON, err := json.Marshal(uniqueNames); err == nil {
 				chatLog.Tools = string(toolsJSON)
 			}
 		}

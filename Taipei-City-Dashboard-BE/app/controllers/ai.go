@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"TaipeiCityDashboardBE/app/models"
 	"TaipeiCityDashboardBE/app/services/ai"
 	"TaipeiCityDashboardBE/app/util"
 	"context"
@@ -45,6 +46,16 @@ type AIChatInput struct {
 		} `json:"function" binding:"required"`
 	} `json:"tools,omitempty"`
 	ToolChoice interface{} `json:"tool_choice,omitempty"`
+}
+
+// GetAIComponentList returns all components with units for AI system prompt usage
+func GetAIComponentList(c *gin.Context) {
+	components, err := models.GetAllComponentsForAI()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"status": "success", "data": components})
 }
 
 // ChatWithTWCC is the controller for POST /api/v1/ai/chat/twai

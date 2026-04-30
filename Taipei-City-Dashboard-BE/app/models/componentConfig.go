@@ -113,7 +113,44 @@ type QuertChartAndConponentForQdrant struct {
     UseCase  string `gorm:"column:use_case"`
 }
 
+// AIComponentInfo is a lightweight struct for AI system prompt usage
+type AIComponentInfo struct {
+	Index string `gorm:"column:index" json:"index"`
+	Name  string `gorm:"column:name"  json:"name"`
+	City  string `gorm:"column:city"  json:"city"`
+	Unit  string `gorm:"column:unit"  json:"unit"`
+}
+
+// ComponentQueryInfo bundles query config and unit for tool use
+type ComponentQueryInfo struct {
+	QueryType  string `gorm:"column:query_type"`
+	QueryChart string `gorm:"column:query_chart"`
+	Unit       string `gorm:"column:unit"`
+}
+
 /* ----- Handlers ----- */
+
+// GetAllComponentsForAI returns index + name from components table for AI name-based selection
+func GetAllComponentsForAI() ([]AIComponentInfo, error) {
+	var results []AIComponentInfo
+	err := DBManager.Table("components").
+		Select("index, name").
+		Order("index").
+		Find(&results).Error
+	return results, err
+}
+
+// GetComponentQueryInfoByIndex fetches query config and unit together
+func GetComponentQueryInfoByIndex(index string, city string) (ComponentQueryInfo, error) {
+	var info ComponentQueryInfo
+	err := DBManager.Table("query_charts qc").
+		Select("qc.query_type, qc.query_chart, COALESCE(cc.unit, '') as unit").
+		Joins("LEFT JOIN component_charts cc ON qc.index = cc.index").
+		Where("qc.index = ?", index).
+		Where("qc.city = ?", city).
+		Find(&info).Error
+	return info, err
+}
 
 // GetPublicComponentsForQdrant fetches all query_charts and components that are part of a public (non-personal) dashboard.
 // This data is used to rebuild the Qdrant vector index.

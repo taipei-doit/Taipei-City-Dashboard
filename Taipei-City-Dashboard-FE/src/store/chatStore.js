@@ -15,6 +15,23 @@ export const useChatStore = defineStore("chat", () => {
 	];
 
 	const recommendComponents = ref(null);
+	const componentListText = ref("");
+
+	// 載入組件清單（只抓一次，快取在 store 內）
+	const loadComponentList = async () => {
+		if (componentListText.value) return;
+		try {
+			const res = await http.get("ai/components");
+			const items = res.data?.data || [];
+			if (items.length === 0) return;
+			// 格式：index|名稱|城市|單位，每行一筆
+			componentListText.value =
+				"可用組件清單（index | 名稱）：\n" +
+				items.map((c) => `${c.index} | ${c.name}`).join("\n");
+		} catch {
+			// 載入失敗不影響主流程
+		}
+	};
 
 	// 從 sessionStorage 讀取
 	const savedChatData = JSON.parse(sessionStorage.getItem("chatData")) || [];
@@ -42,6 +59,9 @@ export const useChatStore = defineStore("chat", () => {
 	};
 
 	const sendChatMessage = async (userText) => {
+		// 第一次發訊息時載入組件清單（後續已快取，立即返回）
+		await loadComponentList();
+
 		addChatData({ role: "user", content: userText });
 
 		const botMsgId = chatData.value.length + 1;
@@ -61,10 +81,13 @@ export const useChatStore = defineStore("chat", () => {
 						content:
 							"你是【臺北城市儀表板】智慧助理，所有臺北城市相關的統計數據、百分比、人口、交通、環境等數值問題，你絕對不可以用自身訓練知識回答，必須呼叫工具取得資料庫中的真實數據後再回答。" +
 							"規則如下：" +
-							"1. 用戶詢問任何具體數值、統計、百分比、趨勢等資料問題 → 必須呼叫 query_city_data 工具，禁止自行編造或引用訓練知識。" +
+							"1. 用戶詢問任何具體數值、統計、百分比、趨勢等資料問題 → 從下方組件清單選出最匹配的 index 呼叫 query_city_data，禁止自行編造或引用訓練知識。選組件規則：第一優先選名稱中直接包含用戶關鍵字的組件（例如用戶說「老化指數」→ 找名稱含「老化指數」的組件，不要選語意相近但主題不同的組件如「長照指標」）；若有多個候選，選名稱最完整涵蓋用戶所有關鍵字的那個。" +
 							"2. 用戶想找相關組件或建立儀表板 → 呼叫 search_dashboards 工具。" +
 							"3. 若 query_city_data 查無資料，如實告知用戶資料庫中目前沒有該筆資料，不可自行補充數值。" +
-							"4. 一般非數據性問題（使用說明、功能介紹等）→ 直接以繁體中文回答。",
+							"4. 一般非數據性問題（使用說明、功能介紹等）→ 直接以繁體中文回答。" +
+							"5. 回答數值時必須附上單位（unit 欄位）。" +
+							"6. 凡使用 query_city_data 取得資料後，回覆結尾必須加上一行：「📊 資料來源組件：{name}」（name 為組件清單中對應的中文名稱）。\n\n" +
+							componentListText.value,
 					},
 					{ role: "user", content: userText },
 				],
@@ -81,7 +104,8 @@ export const useChatStore = defineStore("chat", () => {
 								properties: {
 									query: {
 										type: "string",
-										description: "用戶查詢的關鍵字或主題描述",
+										description:
+											"用戶查詢的關鍵字或主題描述",
 									},
 								},
 								required: ["query"],
@@ -103,15 +127,18 @@ export const useChatStore = defineStore("chat", () => {
 									},
 									city: {
 										type: "string",
-										description: "城市名稱，taipei 或 metrotaipei，預設 taipei",
+										description:
+											"城市名稱，taipei 或 metrotaipei，預設 taipei",
 									},
 									time_from: {
 										type: "string",
-										description: "查詢起始時間，格式 2006-01-02T15:04:05+08:00，不填則預設最近 24 小時",
+										description:
+											"查詢起始時間，格式 2006-01-02T15:04:05+08:00，不填則預設最近 24 小時",
 									},
 									time_to: {
 										type: "string",
-										description: "查詢結束時間，格式 2006-01-02T15:04:05+08:00，不填則為現在",
+										description:
+											"查詢結束時間，格式 2006-01-02T15:04:05+08:00，不填則為現在",
 									},
 								},
 								required: ["query"],
