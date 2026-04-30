@@ -2,7 +2,7 @@ version: "3.7"
 
 services:
   nginx:
-    restart: always
+    restart: unless-stopped
     container_name: nginx
     image: nginx:${NGINX_IMAGE_TAG:-latest}
     volumes:
@@ -15,7 +15,7 @@ services:
   dashboard-fe:
     image: node:${NODE_IMAGE_TAG:-latest}
     container_name: dashboard-fe
-    restart: always
+    restart: unless-stopped
     environment:
       DOCKER_COMPOSE: "true"
       NODE_ENV: ${NODE_ENV}
@@ -42,7 +42,7 @@ services:
       context: ../Taipei-City-Dashboard-BE
       dockerfile: Dockerfile
     container_name: dashboard-be
-    restart: always
+    restart: unless-stopped
     environment:
       GIN_MODE: ${GIN_MODE}
       GIN_DOMAIN: ${GIN_DOMAIN}

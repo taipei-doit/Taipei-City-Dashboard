@@ -2,16 +2,16 @@ version: "3.7"
 
 services:
   redis:
-    restart: always
+    restart: unless-stopped
     container_name: redis
     image: redis:7.2.3-alpine
     volumes:
       - redis-data:/data
-      
+
   postgres-data:
     image: postgis/postgis:16-3.4-alpine
     container_name: postgres-data
-    restart: always
+    restart: unless-stopped
     environment:
       POSTGRES_DB: ${DB_DASHBOARD_DBNAME}
       POSTGRES_USER: ${DB_DASHBOARD_USER}
@@ -22,7 +22,7 @@ services:
   postgres-manager:
     image: postgis/postgis:16-3.4-alpine
     container_name: postgres-manager
-    restart: always
+    restart: unless-stopped
     environment:
       POSTGRES_DB: ${DB_MANAGER_DBNAME}
       POSTGRES_USER: ${DB_MANAGER_USER}
@@ -35,7 +35,7 @@ services:
   pgadmin:
     image: dpage/pgadmin4:latest
     container_name: pgadmin
-    restart: always
+    restart: unless-stopped
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
