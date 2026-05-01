@@ -1,0 +1,37 @@
+{
+    "dag_infos": {
+        "dag_id": "traffic_pedestrian_accident_taipei",
+        "start_date": "2024-01-01",
+        "schedule_interval": "0 2 1 1 *",
+        "catchup": false,
+        "tags": ["警政署", "交通", "行人", "事故", "台北"],
+        "description": "台北市行人事故資料 ETL（來源：內政部警政署），每年更新一次",
+        "default_args": {
+            "owner": "airflow",
+            "email": ["DEFAULT_MAIL_LIST"],
+            "email_on_retry": false,
+            "email_on_failure": true,
+            "retries": 1,
+            "retry_delay": 60
+        },
+        "ready_data_db": "postgres_default",
+        "ready_data_default_table": "traffic_pedestrian_accident_taipei",
+        "ready_data_history_table": "traffic_pedestrian_accident_taipei_history",
+        "raw_data_db": "postgres_default",
+        "raw_data_table": "",
+        "load_behavior": "replace"
+    },
+    "data_infos": {
+        "name_cn": "臺北市行人交通事故明細",
+        "airflow_update_freq": "once a year (January 1st)",
+        "source": "https://data.gov.tw/dataset/13139",
+        "source_type": "MOI ZIP CSV (opdadm.moi.gov.tw)",
+        "source_dept": "內政部警政署",
+        "gis_format": "Point",
+        "output_coordinate": "EPSG:4326",
+        "is_geometry": 1,
+        "dataset_description": "全國A2交通事故中，篩選臺北市行人相關事故（與新北市 ETL 同一來源）",
+        "etl_description": "filter taipei + pedestrian, parse hour from HHMMSS (// 10000), fix bad coordinates",
+        "sensitivity": "public"
+    }
+}

@@ -18,6 +18,8 @@ services:
       POSTGRES_PASSWORD: ${DB_DASHBOARD_PASSWORD}
     volumes:
       - postgres-data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
 
   postgres-manager:
     image: postgis/postgis:16-3.4-alpine

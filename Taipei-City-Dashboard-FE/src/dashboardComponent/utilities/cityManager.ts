@@ -36,7 +36,7 @@ export class CityManager {
                 expandedName: "雙北儀表板",
 				collapsedName: "雙北",
                 enabled: true,
-                selectList: ["metrotaipei", "taipei"],
+                selectList: ["metrotaipei", "taipei", "newtaipei"],
                 tagList: ["metrotaipei", "taipei"],
             },
         ],

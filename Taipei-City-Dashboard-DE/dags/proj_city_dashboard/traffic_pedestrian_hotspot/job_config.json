@@ -1,0 +1,37 @@
+{
+    "dag_infos": {
+        "dag_id": "traffic_pedestrian_hotspot",
+        "start_date": "2024-01-01",
+        "schedule_interval": "0 4 1 1 *",
+        "catchup": false,
+        "tags": ["交通", "行人", "熱點", "路口"],
+        "description": "計算雙北行人事故路口熱點，使用近三年資料聚合",
+        "default_args": {
+            "owner": "airflow",
+            "email": ["DEFAULT_MAIL_LIST"],
+            "email_on_retry": false,
+            "email_on_failure": true,
+            "retries": 1,
+            "retry_delay": 60
+        },
+        "ready_data_db": "postgres_default",
+        "ready_data_default_table": "traffic_pedestrian_hotspot",
+        "ready_data_history_table": "traffic_pedestrian_hotspot_history",
+        "raw_data_db": "postgres_default",
+        "raw_data_table": "",
+        "load_behavior": "replace"
+    },
+    "data_infos": {
+        "name_cn": "雙北行人事故路口熱點",
+        "airflow_update_freq": "once a year",
+        "source": "derived from traffic_pedestrian_accident_taipei and ntpc",
+        "source_type": "PostgreSQL aggregation",
+        "source_dept": "derived",
+        "gis_format": "Point",
+        "output_coordinate": "EPSG:4326",
+        "is_geometry": 1,
+        "dataset_description": "近三年雙北行人事故聚合至約100公尺格網，計算各熱點件數、死傷、主要肇因與高峰時段",
+        "etl_description": "spatial aggregation by rounding coordinates, top cause/hour",
+        "sensitivity": "public"
+    }
+}

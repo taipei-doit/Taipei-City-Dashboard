@@ -1,0 +1,37 @@
+{
+    "dag_infos": {
+        "dag_id": "traffic_pedestrian_yearly_trend",
+        "start_date": "2024-01-01",
+        "schedule_interval": "0 5 1 1 *",
+        "catchup": false,
+        "tags": ["交通", "行人", "年度趨勢"],
+        "description": "計算雙北行人事故年度趨勢統計",
+        "default_args": {
+            "owner": "airflow",
+            "email": ["DEFAULT_MAIL_LIST"],
+            "email_on_retry": false,
+            "email_on_failure": true,
+            "retries": 1,
+            "retry_delay": 60
+        },
+        "ready_data_db": "postgres_default",
+        "ready_data_default_table": "traffic_pedestrian_yearly_trend",
+        "ready_data_history_table": "traffic_pedestrian_yearly_trend_history",
+        "raw_data_db": "postgres_default",
+        "raw_data_table": "",
+        "load_behavior": "replace"
+    },
+    "data_infos": {
+        "name_cn": "雙北行人事故年度趨勢",
+        "airflow_update_freq": "once a year",
+        "source": "derived from traffic_pedestrian_accident_taipei and ntpc",
+        "source_type": "PostgreSQL aggregation",
+        "source_dept": "derived",
+        "gis_format": "None",
+        "output_coordinate": "N/A",
+        "is_geometry": 0,
+        "dataset_description": "雙北行人事故按年度、城市統計，供年度趨勢圖使用",
+        "etl_description": "group by year and city from accident detail tables",
+        "sensitivity": "public"
+    }
+}
