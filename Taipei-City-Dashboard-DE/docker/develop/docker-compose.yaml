@@ -85,7 +85,7 @@ x-airflow-common: &airflow-common
     - ${AIRFLOW_PROJ_DIR:-../../}/data:/opt/airflow/data
     - ${AIRFLOW_PROJ_DIR:-.}/config:/opt/airflow/config
     - ${AIRFLOW_PROJ_DIR:-../../}/plugins:/opt/airflow/plugins
-    - ~/Taipei-City-Dashboard/public/mapData:/opt/airflow/mapData
+    - ~/Taipei-City-Dashboard/Taipei-City-Dashboard-FE/public/mapData:/opt/airflow/mapData
   user: "${AIRFLOW_UID:-50000}:0"
 
 services:
