@@ -10,6 +10,9 @@ const serverConfig = isDockerCompose
 		// Docker Compose override config
 		host: "0.0.0.0",
 		port: 80, // 如有需要可變更 port
+		watch: {
+			usePolling: true,
+		},
 		proxy: {
 			"/api/dev": {
 				target: "http://dashboard-be:8080",

@@ -48,7 +48,8 @@ import BarChartWithGoalSvg from "./assets/chart/BarChartWithGoal.svg";
 import TreemapChartSvg from "./assets/chart/TreemapChart.svg";
 import IndicatorChartSvg from "./assets/chart/IndicatorChart.svg";
 import TextUnitChartSvg from "./assets/chart/TextUnitChart.svg";
-
+import GuageChartDemoSvg from "./assets/chart/GuageChart.svg";
+import GuageChartDemo from "./components/GuageChartDemo.vue";
 
 const props = defineProps({
 	style: { type: Object, default: () => ({}) },
@@ -222,6 +223,8 @@ function returnChartComponent(name, svg) {
 		return svg ? IndicatorChartSvg : IndicatorChart;
 	case "TextUnitChart":
 		return svg ? TextUnitChartSvg : TextUnitChart;
+	case "GuageChartDemo":
+		return svg ? GuageChartDemoSvg : GuageChartDemo;
 	default:
 		return svg ? MapLegendSvg : MapLegend;
 	}

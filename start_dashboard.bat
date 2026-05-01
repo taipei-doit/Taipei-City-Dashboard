@@ -14,7 +14,7 @@ timeout /t 15 /nobreak > nul
 
 start http://localhost
 start http://localhost:8889
-start http://localhost:8090/airflow-sit
+
 
 echo All services started!
 pause
