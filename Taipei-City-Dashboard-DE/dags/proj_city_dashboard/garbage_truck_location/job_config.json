@@ -24,7 +24,7 @@
     "ready_data_history_table": "",
     "raw_data_db": "postgres_default",
     "raw_data_table": "",
-    "load_behavior": "append"
+    "load_behavior": "replace"
   },
   "data_infos": {
     "name_cn": "垃圾車收運點位",
