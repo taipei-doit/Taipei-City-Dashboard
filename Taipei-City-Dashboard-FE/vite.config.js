@@ -4,18 +4,30 @@ import viteCompression from "vite-plugin-compression";
 
 // 嘗試讀取環境變數，若不存在則回傳 false
 let isDockerCompose = process?.env.DOCKER_COMPOSE === "true"; // eslint-disable-line no-undef
+const hmrClientPort = Number(process?.env.VITE_HMR_CLIENT_PORT || 8080); // eslint-disable-line no-undef
+const hmrHost = process?.env.VITE_HMR_HOST || "localhost"; // eslint-disable-line no-undef
 
 const serverConfig = isDockerCompose
 	? {
 		// Docker Compose override config
 		host: "0.0.0.0",
 		port: 80, // 如有需要可變更 port
+		strictPort: true,
+		hmr: {
+			host: hmrHost,
+			clientPort: hmrClientPort,
+			protocol: "ws",
+		},
 		proxy: {
 			"/api/dev": {
 				target: "http://dashboard-be:8080",
 				changeOrigin: true,
 				rewrite: (path) => path.replace("/dev", "/v1")
 			}
+		},
+		watch: {
+			usePolling: true,
+			interval: 250,
 		}
 	}
 	: {
