@@ -127,6 +127,33 @@ func GetMrtAlertTrend30d() (data []ThreeDimensionalDataOutput, categories []stri
 	return groupLineRows(rows)
 }
 
+// MrtA11yActiveAlert is the row shape for a single active公告 record from
+// `mrtp_a11y_alert`, used to feed the LLM with the raw公告 text so it can
+// answer "which stations are abnormal right now and why".
+type MrtA11yActiveAlert struct {
+	Line        string     `gorm:"column:line"         json:"line"`
+	Station     string     `gorm:"column:station"      json:"station"`
+	PublishTime *time.Time `gorm:"column:publish_time" json:"publish_time,omitempty"`
+	Description string     `gorm:"column:description"  json:"description"`
+}
+
+// GetActiveAlerts returns every currently-active accessibility alert as raw
+// rows from `mrtp_a11y_alert`. The result is small (typically a handful of
+// rows) and is intended to be JSON-serialized into an LLM system prompt.
+func GetActiveAlerts() ([]MrtA11yActiveAlert, error) {
+	var rows []MrtA11yActiveAlert
+	err := DBDashboard.Raw(`
+		SELECT line, station, publish_time, description
+		FROM mrtp_a11y_alert
+		WHERE status = 'active'
+		ORDER BY publish_time DESC NULLS LAST, line, station
+	`).Scan(&rows).Error
+	if err != nil {
+		return nil, err
+	}
+	return rows, nil
+}
+
 // ─── C4: stations (point array) ─────────────────────────────────────────────
 
 // GetMrtStations returns every elevator/ramp exit point joined with its latest active alert (if any).

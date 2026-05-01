@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 
@@ -314,19 +315,21 @@ func buildMrtComponentPrompt(componentID string) (string, error) {
 %s`+mrtA11ySystemSuffix, details), nil
 
 	case "mrt-a11y-v2-stations":
-		data, err := models.GetMrtStationOverview()
+		alerts, err := models.GetActiveAlerts()
 		if err != nil {
 			return "", err
 		}
-		details := ""
-		for _, item := range data {
-			details += fmt.Sprintf("  - %s：%d 站\n", item.Name, item.Value)
+		// 直接把 mrtp_a11y_alert (status='active') 的原始 row 序列化成 JSON
+		// 餵給 LLM——description 已含站別、設施、故障與預計修復資訊。
+		alertsJSON, err := json.Marshal(alerts)
+		if err != nil {
+			return "", err
 		}
-		return fmt.Sprintf(`你是台北捷運無障礙設施狀態分析助理。以下是目前的即時資料，請根據這些資料回答使用者的問題。
+		return fmt.Sprintf(`你是台北捷運無障礙設施狀態分析助理。以下是目前所有「進行中」的無障礙設施異常公告，以 JSON 陣列提供，來源為 mrtp_a11y_alert 表（已過濾 status='active'）。每筆 row 的 description 為臺北捷運官方公告原文，通常已包含站別、設施類型、故障描述與預計修復時間。
 
-【即時資料】
-捷運站無障礙狀態總覽：
-%s`+mrtA11ySystemSuffix, details), nil
+【即時資料】目前 active 異常公告共 %d 筆：
+%s
+`+mrtA11ySystemSuffix, len(alerts), string(alertsJSON)), nil
 
 	default:
 		return "", fmt.Errorf("unknown component_id: %s", componentID)

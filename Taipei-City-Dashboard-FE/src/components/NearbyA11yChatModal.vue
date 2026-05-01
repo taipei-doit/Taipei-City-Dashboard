@@ -48,9 +48,35 @@ function locateUser() {
 		navigator.geolocation.getCurrentPosition(
 			(pos) => resolve({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
 			(err) => reject(err),
-			{ enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 },
+			{ enableHighAccuracy: false, timeout: 15000, maximumAge: 60000 },
 		);
 	});
+}
+
+function describeGeoError(e) {
+	if (e?.code === 1) return "未授權使用定位，請於瀏覽器網址列旁的鎖頭圖示允許位置存取後重試。";
+	if (e?.code === 2) return "目前無法取得位置。請確認 macOS『系統設定 → 隱私權與安全性 → 定位服務』已開啟，且瀏覽器有獲准存取定位。";
+	if (e?.code === 3) return "定位逾時。請檢查網路或關閉 VPN 後重試。";
+	return e?.message || "無法取得定位，請稍後再試。";
+}
+
+async function tryLocate() {
+	if (isLocating.value) return;
+	isLocating.value = true;
+	error.value = "";
+	try {
+		coords.value = await locateUser();
+		messages.value.push({
+			id: ++idCounter,
+			role: "assistant",
+			content: "已取得您的定位，請問附近的捷運無障礙設施狀況？例如「附近有沒有故障的電梯？」",
+		});
+		await scrollToBottom();
+	} catch (e) {
+		error.value = describeGeoError(e);
+	} finally {
+		isLocating.value = false;
+	}
 }
 
 watch(
@@ -58,24 +84,7 @@ watch(
 	async (show) => {
 		if (!show) return;
 		if (coords.value) return;
-		isLocating.value = true;
-		error.value = "";
-		try {
-			coords.value = await locateUser();
-			messages.value.push({
-				id: ++idCounter,
-				role: "assistant",
-				content: "已取得您的定位，請問附近的捷運無障礙設施狀況？例如「附近有沒有故障的電梯？」",
-			});
-			await scrollToBottom();
-		} catch (e) {
-			error.value =
-				e?.code === 1
-					? "未授權使用定位，請於瀏覽器允許位置存取後再試。"
-					: "無法取得定位，請稍後再試。";
-		} finally {
-			isLocating.value = false;
-		}
+		await tryLocate();
 	},
 );
 
@@ -194,7 +203,17 @@ function handleClose() {
 					v-if="error"
 					class="nearbya11ychat-error"
 				>
-					{{ error }}
+					<span>{{ error }}</span>
+					<button
+						v-if="!coords"
+						class="nearbya11ychat-error-retry"
+						type="button"
+						:disabled="isLocating"
+						@click="tryLocate"
+					>
+						<span class="material-icons">refresh</span>
+						重試定位
+					</button>
 				</div>
 
 				<div class="nearbya11ychat-input-row">
@@ -322,9 +341,45 @@ function handleClose() {
 
 	&-error {
 		flex-shrink: 0;
+		display: flex;
+		align-items: center;
+		gap: var(--font-s);
 		padding: var(--font-s) var(--font-m);
 		color: #f87171;
 		font-size: var(--font-s);
+		line-height: 1.5;
+
+		span {
+			flex: 1;
+		}
+
+		&-retry {
+			flex-shrink: 0;
+			display: inline-flex;
+			align-items: center;
+			gap: 4px;
+			padding: 4px 10px;
+			border: 1px solid var(--color-border);
+			border-radius: 999px;
+			background: transparent;
+			color: var(--color-normal-text);
+			font-size: var(--font-s);
+			cursor: pointer;
+			transition: background 0.15s ease;
+
+			.material-icons {
+				font-size: 14px;
+			}
+
+			&:hover:not(:disabled) {
+				background: rgba(255, 255, 255, 0.08);
+			}
+
+			&:disabled {
+				opacity: 0.5;
+				cursor: not-allowed;
+			}
+		}
 	}
 
 	&-input-row {

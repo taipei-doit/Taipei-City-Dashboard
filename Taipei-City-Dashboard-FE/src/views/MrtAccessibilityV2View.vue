@@ -487,7 +487,6 @@ onBeforeUnmount(() => {
 		height: calc(100vh - 127px);
 		height: calc(var(--vh) * 100 - 127px);
 		display: flex;
-		position: relative;
 		margin: var(--font-m) var(--font-m);
 
 		&-charts {
@@ -531,9 +530,9 @@ onBeforeUnmount(() => {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	position: absolute;
-	right: 24px;
-	bottom: 24px;
+	position: fixed;
+	right: 32px;
+	bottom: 116px;
 	border: none;
 	border-radius: 50%;
 	background: var(--color-highlight);
@@ -541,7 +540,7 @@ onBeforeUnmount(() => {
 	box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
 	cursor: pointer;
 	transition: transform 0.15s ease, background 0.15s ease;
-	z-index: 5;
+	z-index: 11;
 
 	.material-icons {
 		font-size: 26px;
