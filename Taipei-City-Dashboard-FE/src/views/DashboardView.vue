@@ -23,6 +23,8 @@ const contentStore = useContentStore();
 const dialogStore = useDialogStore();
 const authStore = useAuthStore();
 
+
+
 function handleOpenSettings() {
 	contentStore.editDashboard = JSON.parse(
 		JSON.stringify(contentStore.currentDashboard)

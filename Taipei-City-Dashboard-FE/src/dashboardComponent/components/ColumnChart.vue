@@ -1,7 +1,7 @@
 <!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 
 <script setup>
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 import VueApexCharts from "vue3-apexcharts";
 
 const props = defineProps([
@@ -25,19 +25,21 @@ const isLargeDataSet = computed(() => {
 	return props.series[0].data.length > 12
 })
 
-// Calculate initial width for large datasets only
-const initialWidth = computed(() => {
-	const WIDTH_PER_ITEM = 32
-	const itemCount = props.series[0].data.length;
-	return itemCount * WIDTH_PER_ITEM;
-});
+// null = "show all" (100%) mode; number = zoomed pixel width
+const widthValue = ref(null);
 
-const widthValue = ref(initialWidth.value);
+// Reset to "show all" when series data changes (e.g. switching cities)
+watch(
+	() => props.series[0].data.length,
+	() => {
+		widthValue.value = null;
+		scrollLeft.value = 0;
+	}
+);
 
-// Convert to a string with unit for ApexCharts
-const chartWidth = computed(() => {
-	return isLargeDataSet.value ? `${widthValue.value}px` : "100%";
-});
+const chartWidth = computed(() =>
+	widthValue.value ? `${widthValue.value}px` : "100%"
+);
 
 
 const chartOptions = ref({
@@ -173,18 +175,51 @@ function handleDataSelection(_e, _chartContext, config) {
 	}
 }
 
+// ── Bottom scroll slider ──────────────────────────────────────────────────────
+const scrollWrapper = ref(null);
+const scrollLeft    = ref(0);
+
+const maxScroll = computed(() =>
+	widthValue.value
+		? Math.max(0, widthValue.value - (scrollWrapper.value?.clientWidth ?? 0))
+		: 0
+);
+
 function increaseWidth() {
-	widthValue.value += 50;
+	if (!widthValue.value) {
+		// First zoom: expand beyond container width
+		widthValue.value = (scrollWrapper.value?.clientWidth ?? 600) + 50;
+	} else {
+		widthValue.value += 50;
+	}
 }
 
 function decreaseWidth() {
-	if (widthValue.value > 150) {
+	if (!widthValue.value) return;
+	const containerW = scrollWrapper.value?.clientWidth ?? 600;
+	if (widthValue.value - 50 > containerW) {
 		widthValue.value -= 50;
+	} else {
+		// Back to "show all" mode — minimum reached
+		widthValue.value = null;
+		scrollLeft.value = 0;
 	}
 }
 
 function resetWidth() {
-	widthValue.value = initialWidth.value;
+	widthValue.value = null;
+	scrollLeft.value = 0;
+}
+
+function onSliderInput(e) {
+	scrollLeft.value = Number(e.target.value);
+	if (scrollWrapper.value) {
+		scrollWrapper.value.scrollLeft = scrollLeft.value;
+	}
+}
+
+function onWrapperScroll() {
+	scrollLeft.value = scrollWrapper.value?.scrollLeft ?? 0;
 }
 </script>
 
@@ -197,6 +232,15 @@ function resetWidth() {
       v-if="isLargeDataSet"
       class="columnChart-toolbar"
     >
+      <input
+        v-if="maxScroll > 0"
+        type="range"
+        class="columnChart-slider"
+        :min="0"
+        :max="maxScroll"
+        :value="scrollLeft"
+        @input="onSliderInput"
+      >
       <p
         class="columnChart-toolbar-item"
         @click="increaseWidth"
@@ -216,23 +260,75 @@ function resetWidth() {
         重置
       </p>
     </div>
-    <VueApexCharts
-      :key="chartWidth"
-      type="bar"
-      :width="chartWidth"
-      height="250px"
-      :options="chartOptions"
-      :series="series"
-      @data-point-selection="handleDataSelection"
-    />
+    <div
+      ref="scrollWrapper"
+      class="columnChart-scroll"
+      @scroll="onWrapperScroll"
+    >
+      <VueApexCharts
+        :key="chartWidth"
+        type="bar"
+        :width="chartWidth"
+        height="250px"
+        :options="chartOptions"
+        :series="series"
+        @data-point-selection="handleDataSelection"
+      />
+    </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
 .columnChart {
-	overflow: auto;
 	position: relative;
 	height: 100%;
+	display: flex;
+	flex-direction: column;
+
+	&-scroll {
+		overflow: hidden;
+	}
+
+	&-slider {
+		flex: 1;
+		min-width: 0;
+		margin-right: 6px;
+		height: 16px;
+		cursor: pointer;
+		appearance: none;
+		background: transparent;
+
+		&::-webkit-slider-runnable-track {
+			height: 3px;
+			background: var(--color-component-background);
+			border-radius: 0;
+		}
+
+		&::-webkit-slider-thumb {
+			appearance: none;
+			width: 8px;
+			height: 14px;
+			margin-top: -5.5px;
+			background: #999;
+			border-radius: 2px;
+			cursor: pointer;
+		}
+
+		&::-moz-range-track {
+			height: 3px;
+			background: var(--color-component-background);
+			border-radius: 0;
+		}
+
+		&::-moz-range-thumb {
+			width: 8px;
+			height: 14px;
+			background: #999;
+			border-radius: 2px;
+			border: none;
+			cursor: pointer;
+		}
+	}
 
 	.vue-apexcharts {
 		justify-content: unset !important;

@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep -E \"\\\\.\\(py|js|ts\\)$\")",
+      "Bash(xargs grep *)",
+      "Bash(grep -E \"\\\\.py$\")"
+    ]
+  }
+}

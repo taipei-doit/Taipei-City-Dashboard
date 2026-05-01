@@ -28,6 +28,7 @@ import BarChartWithGoal from "./components/BarChartWithGoal.vue";
 import IconPercentChart from "./components/IconPercentChart.vue";
 import IndicatorChart from "./components/IndicatorChart.vue";
 import TextUnitChart from "./components/TextUnitChart.vue";
+import CascadeBarChart from "./components/CascadeBarChart.vue";
 
 import MapLegendSvg from "./assets/chart/MapLegend.svg";
 import DistrictChartSvg from "./assets/chart/DistrictChart.svg";
@@ -222,6 +223,8 @@ function returnChartComponent(name, svg) {
 		return svg ? IndicatorChartSvg : IndicatorChart;
 	case "TextUnitChart":
 		return svg ? TextUnitChartSvg : TextUnitChart;
+	case "CascadeBarChart":
+		return svg ? BarChartSvg : CascadeBarChart;
 	default:
 		return svg ? MapLegendSvg : MapLegend;
 	}
@@ -360,7 +363,7 @@ function returnChartComponent(name, svg) {
         </template>
       </select>
       <div
-        v-if="config.chart_config.types.length > 1"
+        v-if="config.chart_config.types.length > 1 && !config.chart_config.types.includes('CascadeBarChart')"
         class="dashboardcomponent-control-group"
       >
         <button
