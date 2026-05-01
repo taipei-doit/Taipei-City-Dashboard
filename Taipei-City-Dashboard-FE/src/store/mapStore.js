@@ -423,8 +423,15 @@ export const useMapStore = defineStore("map", {
 		/* Adding Map Layers */
 		// 1. Passes in the map_config (an Array of Objects) of a component and adds all layers to the map layer list
 		addToMapLayerList(map_config) {
+			console.log("[map-debug] addToMapLayerList", map_config);
 			map_config.forEach((element) => {
 				let mapLayerId = `${element.index}-${element.type}-${element.city}`;
+				console.log("[map-debug] layer candidate", {
+					mapLayerId,
+					element,
+					hasMap: !!this.map,
+					currentLayers: this.currentLayers,
+				});
 				// 1-1. If the layer exists, simply turn on the visibility and add it to the visible layers list
 				if (
 					this.currentLayers.find((element) => element === mapLayerId)
@@ -453,23 +460,41 @@ export const useMapStore = defineStore("map", {
 		},
 		// 2. Call an API to get the layer data
 		fetchLocalGeoJson(map_config) {
+			console.log("[map-debug] fetchLocalGeoJson", `/mapData/${map_config.index}.geojson`, map_config);
 			axios
 				.get(`/mapData/${map_config.index}.geojson`)
 				.then((rs) => {
-					this.addGeojsonSource(map_config, rs.data);
+					const geojson =
+						typeof rs.data === "string"
+							? JSON.parse(rs.data.replace(/^\uFEFF/, ""))
+							: rs.data;
+					console.log("[map-debug] geojson loaded", {
+						layerId: map_config.layerId,
+						responseType: typeof rs.data,
+						type: geojson?.type,
+						featureCount: geojson?.features?.length,
+						firstFeature: geojson?.features?.[0],
+					});
+					this.addGeojsonSource(map_config, geojson);
 				})
 				.catch((e) => console.error(e));
 		},
 		// 3-1. Add a local geojson as a source in mapbox
 		addGeojsonSource(map_config, data) {
+			console.log("[map-debug] addGeojsonSource", map_config);
 			if (
 				!["voronoi", "isoline"].includes(map_config.type) &&
 				map_config.type !== "symbol-3d"
 			) {
-				this.map.addSource(`${map_config.layerId}-source`, {
-					type: "geojson",
-					data: { ...data },
-				});
+				try {
+					this.map.addSource(`${map_config.layerId}-source`, {
+						type: "geojson",
+						data,
+					});
+					console.log("[map-debug] source added", `${map_config.layerId}-source`);
+				} catch (error) {
+					console.error("[map-debug] addSource failed", error);
+				}
 			}
 			if (map_config.type === "arc") {
 				this.AddArcMapLayer(map_config, data);
@@ -609,6 +634,7 @@ export const useMapStore = defineStore("map", {
 		// 4-1. Using the mapbox source and map config, create a new layer
 		// The styles and configs can be edited in /assets/configs/mapbox/mapConfig.js
 		addMapLayer(map_config) {
+			console.log("[map-debug] addMapLayer start", map_config);
 			let extra_paint_configs = {};
 			let extra_layout_configs = {};
 			if (map_config.icon) {
@@ -649,8 +675,6 @@ export const useMapStore = defineStore("map", {
 			const config = {
 				id: map_config.layerId,
 				type: map_config.type,
-				"source-layer":
-					map_config.source === "raster" ? map_config.index : "",
 				paint: {
 					...maplayerCommonPaint[`${map_config.type}`],
 					...extra_paint_configs,
@@ -662,6 +686,9 @@ export const useMapStore = defineStore("map", {
 				},
 				source: `${map_config.layerId}-source`,
 			};
+			if (map_config.source === "raster") {
+				config["source-layer"] = map_config.index;
+			}
 			if (
 				map_config.layerId ===
 					"wee_hazard_water-fill-extrusion-metrotaipei" ||
@@ -670,7 +697,16 @@ export const useMapStore = defineStore("map", {
 			) {
 				config.filter = initialFilter;
 			}
-			this.map.addLayer(config);
+			console.log("[map-debug] addLayer config", config);
+			try {
+				this.map.addLayer(config);
+				console.log("[map-debug] layer added", config.id, {
+					hasLayer: !!this.map.getLayer(config.id),
+					hasSource: !!this.map.getSource(`${map_config.layerId}-source`),
+				});
+			} catch (error) {
+				console.error("[map-debug] addLayer failed", error);
+			}
 			if (
 				map_config.layerId ===
 					"wee_hazard_water-fill-extrusion-metrotaipei" ||
