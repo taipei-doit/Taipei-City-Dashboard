@@ -6,6 +6,7 @@ import { useRoute } from "vue-router";
 import DashboardComponent from "../dashboardComponent/DashboardComponent.vue";
 import MapContainer from "../components/map/MapContainer.vue";
 import MrtAiChatModal from "../components/MrtAiChatModal.vue";
+import NearbyA11yChatModal from "../components/NearbyA11yChatModal.vue";
 import { useContentStore } from "../store/contentStore";
 import { useMapStore } from "../store/mapStore";
 import { useDialogStore } from "../store/dialogStore";
@@ -131,6 +132,8 @@ const activeAiComponentId = ref("");
 const activeAiComponentName = ref("");
 const showAiModal = ref(false);
 const aiModalAnchor = ref({ top: 0, left: 0 });
+
+const showNearbyChat = ref(false);
 
 function openAiModal(event, componentId, componentName) {
 	if (activeAiComponentId.value !== componentId) {
@@ -436,6 +439,14 @@ onBeforeUnmount(() => {
       </p>
     </div>
     <MapContainer />
+    <button
+      class="mrtaccessibilityv2view-nearby-fab"
+      title="附近無障礙設施 AI 助理"
+      aria-label="附近無障礙設施 AI 助理"
+      @click="showNearbyChat = true"
+    >
+      <span class="material-icons">location_on</span>
+    </button>
   </div>
 
   <MrtAiChatModal
@@ -444,6 +455,11 @@ onBeforeUnmount(() => {
     :component-name="activeAiComponentName"
     :anchor="aiModalAnchor"
     @close="showAiModal = false"
+  />
+  <NearbyA11yChatModal
+    :show="showNearbyChat"
+    :radius="500"
+    @close="showNearbyChat = false"
   />
 </template>
 
@@ -471,6 +487,7 @@ onBeforeUnmount(() => {
 		height: calc(100vh - 127px);
 		height: calc(var(--vh) * 100 - 127px);
 		display: flex;
+		position: relative;
 		margin: var(--font-m) var(--font-m);
 
 		&-charts {
@@ -505,6 +522,34 @@ onBeforeUnmount(() => {
 				line-height: 1.6;
 			}
 		}
+	}
+}
+
+.mrtaccessibilityv2view-nearby-fab {
+	width: 52px;
+	height: 52px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: absolute;
+	right: 24px;
+	bottom: 24px;
+	border: none;
+	border-radius: 50%;
+	background: var(--color-highlight);
+	color: #fff;
+	box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+	cursor: pointer;
+	transition: transform 0.15s ease, background 0.15s ease;
+	z-index: 5;
+
+	.material-icons {
+		font-size: 26px;
+	}
+
+	&:hover {
+		background: #4a8ce8;
+		transform: scale(1.05);
 	}
 }
 

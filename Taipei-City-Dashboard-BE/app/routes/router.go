@@ -220,6 +220,7 @@ func configureMrtA11yRoutes() {
 		mrtRoutes.GET("/stations", controllers.GetMrtStations)
 		mrtRoutes.GET("/station-overview", controllers.GetMrtStationOverview)
 		mrtRoutes.POST("/ai-summary", controllers.GetMrtA11yAiSummary)
+		mrtRoutes.POST("/nearby-chat", controllers.PostMrtNearbyChat)
 	}
 }
 

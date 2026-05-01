@@ -1,6 +1,9 @@
 package models
 
-import "time"
+import (
+	"math"
+	"time"
+)
 
 // ─── Row shapes (for GORM scanning) ─────────────────────────────────────────
 
@@ -156,6 +159,54 @@ func GetMrtStations() ([]MrtA11yStation, error) {
 		return nil, err
 	}
 	return rows, nil
+}
+
+// ─── C4-nearby: stations within radius (Haversine filter) ─────────────────
+
+// MrtA11yStationNearby augments MrtA11yStation with the great-circle distance
+// (in meters) from the user's query coordinate, so the LLM can reason about
+// "closest" / "furthest" without re-deriving it.
+type MrtA11yStationNearby struct {
+	MrtA11yStation
+	DistanceM int `json:"distance_m"`
+}
+
+// GetMrtStationsNearby returns elevator/ramp exits within radiusM meters of (lat, lng),
+// sorted by ascending distance. Filtering is done in Go because the dataset is small
+// (~hundreds of rows) and `mrtp_a11y_elevator` has no spatial index.
+func GetMrtStationsNearby(lat, lng float64, radiusM int) ([]MrtA11yStationNearby, error) {
+	all, err := GetMrtStations()
+	if err != nil {
+		return nil, err
+	}
+	out := make([]MrtA11yStationNearby, 0)
+	for _, s := range all {
+		d := haversineMeters(lat, lng, s.Lat, s.Lng)
+		if d <= float64(radiusM) {
+			out = append(out, MrtA11yStationNearby{
+				MrtA11yStation: s,
+				DistanceM:      int(math.Round(d)),
+			})
+		}
+	}
+	for i := 1; i < len(out); i++ {
+		for j := i; j > 0 && out[j-1].DistanceM > out[j].DistanceM; j-- {
+			out[j-1], out[j] = out[j], out[j-1]
+		}
+	}
+	return out, nil
+}
+
+// haversineMeters returns the great-circle distance (meters) between two WGS84 points.
+func haversineMeters(lat1, lng1, lat2, lng2 float64) float64 {
+	const earthRadiusM = 6371000.0
+	rad := func(d float64) float64 { return d * math.Pi / 180 }
+	dLat := rad(lat2 - lat1)
+	dLng := rad(lng2 - lng1)
+	a := math.Sin(dLat/2)*math.Sin(dLat/2) +
+		math.Cos(rad(lat1))*math.Cos(rad(lat2))*math.Sin(dLng/2)*math.Sin(dLng/2)
+	c := 2 * math.Atan2(math.Sqrt(a), math.Sqrt(1-a))
+	return earthRadiusM * c
 }
 
 // ─── C4-overview: station-overview (legend cards) ──────────────────────────
