@@ -21,6 +21,7 @@ def _transfer(**kwargs):
 	'''
 	# 匯入處理函式與套件
 	import pandas as pd
+	import geopandas as gpd
 	import requests
 	from sqlalchemy import create_engine
 
@@ -30,6 +31,7 @@ def _transfer(**kwargs):
 	)
 	from utils.transform_time import convert_str_to_time_format
 	from utils.transform_geometry import add_point_wkbgeometry_column_to_df
+	from shapely.geometry import Point
 
 	ready_data_db_uri = kwargs.get("ready_data_db_uri")
 	proxies = kwargs.get('proxies')  # 如果有使用 proxy
@@ -40,19 +42,33 @@ def _transfer(**kwargs):
 	history_table = dag_infos.get("ready_data_history_table")
 	FROM_CRS = 4326
 
-	source_url = "https://data.taipei/api/v1/dataset/a6e90031-7ec4-4089-afb5-361a4efe7202?scope=resourceAquire"
-	response = requests.get(source_url, timeout=60, proxies=proxies)
-	response.raise_for_status()
-	payload = response.json()
-	records = payload.get("result", payload)
-	if isinstance(records, dict):
-		records = records.get("results", records.get("data", []))
-	raw_data = pd.DataFrame(records)
+	base_url = "https://data.taipei/api/v1/dataset/a6e90031-7ec4-4089-afb5-361a4efe7202"
+	limit = 1000
+	offset = 0
+	all_records = []
+	while True:
+		response = requests.get(
+			base_url,
+			params={"scope": "resourceAquire", "limit": limit, "offset": offset},
+			timeout=60,
+			proxies=proxies,
+		)
+		response.raise_for_status()
+		payload = response.json()
+		records = payload.get("result", payload)
+		if isinstance(records, dict):
+			records = records.get("results", records.get("data", []))
+		if not records:
+			break
+		print(f"Fetched {len(records)} records at offset {offset}")
+		all_records.extend(records)
+		offset += limit
+	raw_data = pd.DataFrame(all_records)
 	if raw_data.empty:
 		raise ValueError("Source API returned no records.")
 	
 	data = raw_data.copy()
-	
+	print(data)
 	lasttime_in_data = None
 	if "arrival_time" in data.columns and data["_importdate"]["date"].notna().any():
 		lasttime_in_data = data["_importdate"]["date"].max()
@@ -74,7 +90,10 @@ def _transfer(**kwargs):
 	}
 	data = data.rename(columns=rename_map)
 	data = data.drop(["_id", "_importdate"], axis=1, errors='ignore')
-	print(data.head())
+	for col in ["longitude", "latitude"]:
+		if col in data.columns:
+			data[col] = pd.to_numeric(data[col], errors="coerce")
+	# print(data)
 	# geoData = add_point_wkbgeometry_column_to_df(
     #     data, x=data["longitude"], y=data["latitude"], from_crs=FROM_CRS
     # )
@@ -87,6 +106,19 @@ def _transfer(**kwargs):
 		history_table=history_table,
 	)
 	
+	if {"longitude", "latitude"}.issubset(data.columns):
+		lon = pd.to_numeric(data["longitude"], errors="coerce")
+		lat = pd.to_numeric(data["latitude"], errors="coerce")
+		geo_data = data.assign(longitude=lon, latitude=lat).dropna(subset=["longitude", "latitude"])
+		if not geo_data.empty:
+			geometry = [Point(xy) for xy in zip(geo_data["longitude"], geo_data["latitude"])]
+			gdata = gpd.GeoDataFrame(geo_data, geometry=geometry, crs=f"EPSG:{FROM_CRS}")
+			gdata.to_file("/opt/airflow/mapData/garbage_truck_location.geojson", driver='GeoJSON', encoding='utf-8')
+			print("GeoJSON file has been created")
+		else:
+			print("No valid coordinates for GeoJSON output.")
+	else:
+		print("Missing longitude/latitude columns; skipping GeoJSON output.")
 
 # 建立 DAG 實例，指定專案與 DAG 所屬資料夾
 dag = CommonDag(
