@@ -444,8 +444,8 @@ export const maplayerCommonLayout = {
 			["==", ["get", "available_return_bikes"], 0],
 			"bike_red",
 			["==", ["get", "available_rent_general_bikes"], 0],
-			"bike_orange",
-			"bike_green",
+			"bike_red",
+			"bike_red",
 		],
 		"icon-size": [
 			"interpolate",

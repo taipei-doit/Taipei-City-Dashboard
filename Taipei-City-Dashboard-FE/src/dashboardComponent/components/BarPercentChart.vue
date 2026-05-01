@@ -30,7 +30,7 @@ const chartOptions = ref({
 		},
 	},
 	colors: props.chart_config.types.includes("GuageChart")
-		? [props.chart_config.color[0], "#777"]
+		? ["#FF0000", "#777"]
 		: props.chart_config.color,
 	dataLabels: {
 		textAnchor: "start",

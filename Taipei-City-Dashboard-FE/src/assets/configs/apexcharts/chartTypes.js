@@ -48,6 +48,7 @@ export const chartsPerDataType = {
 		"BarPercentChart",
 		"BarChartWithGoal",
 		"IconPercentChart",
+		"GuageChartDemo",
 	],
 	map_legend: ["MapLegend"],
 };

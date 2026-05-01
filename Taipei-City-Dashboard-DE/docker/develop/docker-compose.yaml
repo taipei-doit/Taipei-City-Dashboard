@@ -96,7 +96,7 @@ services:
     cpus: "0.5"
     mem_limit: "2g"
     ports:
-      - "8080:8080"
+      - "8090:8080"
     healthcheck:
       test: ["CMD", "curl", "--fail", "http://localhost:8080/airflow-sit/health"]
       interval: 30s
@@ -313,3 +313,8 @@ services:
     depends_on:
       airflow-init:
         condition: service_completed_successfully
+
+networks:
+  default:
+    external: true
+    name: br_dashboard
