@@ -7,10 +7,11 @@
 -- ============================================================
 
 INSERT INTO public.components (index, name) VALUES
-    ('traffic_pedestrian_heatmap',       '雙北行人事故熱區'),
-    ('traffic_pedestrian_hourly_taipei', '雙北行人事故時段分析'),
-    ('traffic_pedestrian_yearly_trend',  '雙北行人事故年度趨勢'),
-    ('traffic_pedestrian_hotspot_ranking', '行人事故高風險路口排名')
+    ('traffic_pedestrian_heatmap',         '雙北行人事故熱區'),
+    ('traffic_pedestrian_hourly_taipei',   '雙北行人事故時段分析'),
+    ('traffic_pedestrian_yearly_trend',    '雙北行人事故年度趨勢'),
+    ('traffic_pedestrian_hotspot_ranking', '行人事故高風險路口排名'),
+    ('traffic_pedestrian_ai_report',       'AI 路口安全報告')
 ON CONFLICT (index) DO UPDATE SET name = EXCLUDED.name;
 
 
@@ -34,7 +35,11 @@ INSERT INTO public.component_charts (index, color, types, unit) VALUES
     ('traffic_pedestrian_hotspot_ranking',
         ARRAY['#B71C1C'],
         ARRAY['BarChart'],
-        '件')
+        '件'),
+    ('traffic_pedestrian_ai_report',
+        ARRAY['#5eb3f0'],
+        ARRAY['AIHotspotReport'],
+        '')
 ON CONFLICT (index) DO UPDATE
     SET color = EXCLUDED.color,
         types = EXCLUDED.types,
@@ -57,22 +62,27 @@ INSERT INTO public.component_maps (index, title, type, source, size, icon, paint
             "circle-color": [
                 "interpolate", ["linear"],
                 ["get", "accident_count"],
-                1, "#FFF9C4",
-                5, "#FFB300",
+                1,  "#FFF9C4",
+                5,  "#FFB300",
                 10, "#E65100",
                 20, "#B71C1C"
             ],
             "circle-radius": [
-                "interpolate", ["linear"],
-                ["get", "accident_count"],
-                1, 6,
-                5, 10,
-                10, 16,
-                20, 22
+                "interpolate", ["linear"], ["zoom"],
+                10, ["interpolate", ["linear"], ["get", "accident_count"],
+                      1, 1,   5, 2,   10, 3,   20, 5],
+                13, ["interpolate", ["linear"], ["get", "accident_count"],
+                      1, 3,   5, 5,   10, 7,   20, 10],
+                16, ["interpolate", ["linear"], ["get", "accident_count"],
+                      1, 5,   5, 8,   10, 12,  20, 16]
             ],
-            "circle-opacity": 0.75,
+            "circle-opacity": [
+                "interpolate", ["linear"], ["zoom"],
+                10, 0.6,
+                13, 0.85
+            ],
             "circle-stroke-width": 0,
-            "circle-blur": 0.3
+            "circle-blur": 0.1
         }',
         '[
             {"key": "accident_count", "name": "事故件數"},
@@ -127,7 +137,7 @@ INSERT INTO public.query_charts (
     NOW(),
     NOW(),
     'map_legend',
-    E'SELECT\n    unnest(ARRAY[''台北市'', ''新北市'']) AS name,\n    unnest(ARRAY[\n        (SELECT COUNT(*)::float FROM traffic_pedestrian_accident_taipei WHERE year >= 2022),\n        (SELECT COUNT(*)::float FROM traffic_pedestrian_accident_ntpc  WHERE year >= 2022)\n    ]) AS value,\n    ''circle'' AS type',
+    E'SELECT\n    unnest(ARRAY[''1-4件（低）'', ''5-9件（中）'', ''10-19件（高）'', ''20件以上（極高）'']) AS name,\n    NULL::float AS value,\n    ''circle'' AS type',
     NULL,
     'metrotaipei'
 );
@@ -293,6 +303,36 @@ INSERT INTO public.query_charts (
     'metrotaipei'
 );
 
+-- C5：AI 路口安全報告 (metrotaipei)
+INSERT INTO public.query_charts (
+    index, history_config, map_config_ids, map_filter,
+    time_from, time_to, update_freq, update_freq_unit,
+    source, short_desc, long_desc, use_case,
+    links, contributors, created_at, updated_at,
+    query_type, query_chart, query_history, city
+) VALUES (
+    'traffic_pedestrian_ai_report',
+    NULL,
+    '{}',
+    '{}',
+    'year_start',
+    'now',
+    1,
+    'year',
+    '內政部警政署、AI 分析（llama3.3-ffm-70b）',
+    '輸入路口名稱，AI 自動查詢事故統計並生成行人安全改善建議報告。',
+    '使用 Tool Calling 架構，AI 根據使用者輸入的路口名稱自動呼叫後端 API 查詢該路口的統計資料，並生成包含事故概況、風險因素與具體改善建議的白話報告，展現「數據 → AI 分析 → 行動建議」的完整閉環。',
+    '協助決策者快速了解特定路口的行人安全狀況，並取得具體可行的改善方向。',
+    ARRAY['https://data.gov.tw/dataset/13139'],
+    ARRAY['b12705030'],
+    NOW(),
+    NOW(),
+    'custom',
+    E'SELECT 1',
+    NULL,
+    'metrotaipei'
+);
+
 
 -- ============================================================
 -- 5. dashboards 表（建立行人安全儀表板）
@@ -308,14 +348,16 @@ SELECT
             'traffic_pedestrian_heatmap',
             'traffic_pedestrian_hourly_taipei',
             'traffic_pedestrian_yearly_trend',
-            'traffic_pedestrian_hotspot_ranking'
+            'traffic_pedestrian_hotspot_ranking',
+            'traffic_pedestrian_ai_report'
         )
         ORDER BY ARRAY_POSITION(
             ARRAY[
                 'traffic_pedestrian_heatmap',
                 'traffic_pedestrian_hourly_taipei',
                 'traffic_pedestrian_yearly_trend',
-                'traffic_pedestrian_hotspot_ranking'
+                'traffic_pedestrian_hotspot_ranking',
+                'traffic_pedestrian_ai_report'
             ],
             index
         )

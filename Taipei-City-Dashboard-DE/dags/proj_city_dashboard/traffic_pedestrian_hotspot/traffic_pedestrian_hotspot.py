@@ -33,7 +33,12 @@ def etl_function(**kwargs):
             SUM(death_count) AS death_count,
             SUM(injury_count) AS injury_count,
             MODE() WITHIN GROUP (ORDER BY cause_name) AS top_cause,
-            MODE() WITHIN GROUP (ORDER BY hour) AS top_hour
+            MODE() WITHIN GROUP (ORDER BY hour) AS top_hour,
+            MODE() WITHIN GROUP (ORDER BY signal_type) FILTER (WHERE signal_type != '') AS top_signal,
+            ROUND(
+                100.0 * COUNT(*) FILTER (WHERE accident_location LIKE '%路口%' OR accident_location LIKE '%交叉%')
+                / NULLIF(COUNT(*) FILTER (WHERE accident_location != ''), 0)
+            ) AS intersection_pct
         FROM traffic_pedestrian_accident_taipei
         WHERE year >= {THREE_YEARS_AGO}
             AND lng IS NOT NULL AND lat IS NOT NULL
@@ -52,7 +57,12 @@ def etl_function(**kwargs):
             SUM(death_count) AS death_count,
             SUM(injury_count) AS injury_count,
             MODE() WITHIN GROUP (ORDER BY cause_name) AS top_cause,
-            MODE() WITHIN GROUP (ORDER BY hour) AS top_hour
+            MODE() WITHIN GROUP (ORDER BY hour) AS top_hour,
+            MODE() WITHIN GROUP (ORDER BY signal_type) FILTER (WHERE signal_type != '') AS top_signal,
+            ROUND(
+                100.0 * COUNT(*) FILTER (WHERE accident_location LIKE '%路口%' OR accident_location LIKE '%交叉%')
+                / NULLIF(COUNT(*) FILTER (WHERE accident_location != ''), 0)
+            ) AS intersection_pct
         FROM traffic_pedestrian_accident_ntpc
         WHERE year >= {THREE_YEARS_AGO}
             AND lng IS NOT NULL AND lat IS NOT NULL
@@ -71,6 +81,8 @@ def etl_function(**kwargs):
 
     data["near_location"] = ""
     data["h3_index"] = ""
+    data["top_signal"] = data["top_signal"].fillna("")
+    data["intersection_pct"] = pd.to_numeric(data["intersection_pct"], errors="coerce").fillna(0).astype(int)
 
     now_str = str(pd.Timestamp.now(tz="Asia/Taipei"))
     data["data_time"] = convert_str_to_time_format(pd.Series([now_str] * len(data)))
@@ -82,7 +94,8 @@ def etl_function(**kwargs):
     ready_data = gdata[[
         "data_time", "city", "h3_index", "center_lng", "center_lat",
         "accident_count", "death_count", "injury_count",
-        "top_cause", "top_hour", "near_location", "wkb_geometry"
+        "top_cause", "top_hour", "top_signal", "intersection_pct",
+        "near_location", "wkb_geometry"
     ]]
 
     save_geodataframe_to_postgresql(

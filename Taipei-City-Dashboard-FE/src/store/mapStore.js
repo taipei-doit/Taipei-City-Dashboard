@@ -454,9 +454,15 @@ export const useMapStore = defineStore("map", {
 		// 2. Call an API to get the layer data
 		fetchLocalGeoJson(map_config) {
 			axios
-				.get(`/mapData/${map_config.index}.geojson`)
+				.get(`/mapData/${map_config.index}.geojson`, {
+					headers: { "Cache-Control": "no-cache" },
+				})
 				.then((rs) => {
-					this.addGeojsonSource(map_config, rs.data);
+					const data =
+						typeof rs.data === "string"
+							? JSON.parse(rs.data)
+							: rs.data;
+					this.addGeojsonSource(map_config, data);
 				})
 				.catch((e) => console.error(e));
 		},
@@ -468,7 +474,7 @@ export const useMapStore = defineStore("map", {
 			) {
 				this.map.addSource(`${map_config.layerId}-source`, {
 					type: "geojson",
-					data: { ...data },
+					data: data,
 				});
 			}
 			if (map_config.type === "arc") {

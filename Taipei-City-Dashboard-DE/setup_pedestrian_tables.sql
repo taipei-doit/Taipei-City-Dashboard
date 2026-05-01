@@ -15,6 +15,8 @@ CREATE TABLE IF NOT EXISTS public.traffic_pedestrian_accident_taipei (
     age INTEGER,
     cause_name VARCHAR(200),
     pedestrian_action VARCHAR(100),
+    signal_type VARCHAR(100),
+    accident_location VARCHAR(100),
     lng DOUBLE PRECISION,
     lat DOUBLE PRECISION,
     wkb_geometry geometry(Point, 4326)
@@ -36,6 +38,8 @@ CREATE TABLE IF NOT EXISTS public.traffic_pedestrian_accident_ntpc (
     age INTEGER,
     cause_name VARCHAR(200),
     pedestrian_action VARCHAR(100),
+    signal_type VARCHAR(100),
+    accident_location VARCHAR(100),
     lng DOUBLE PRECISION,
     lat DOUBLE PRECISION,
     wkb_geometry geometry(Point, 4326)
@@ -58,6 +62,8 @@ CREATE TABLE IF NOT EXISTS public.traffic_pedestrian_hotspot (
     injury_count INTEGER,
     top_cause VARCHAR(200),
     top_hour INTEGER,
+    top_signal VARCHAR(100),
+    intersection_pct INTEGER,
     near_location VARCHAR(200),
     wkb_geometry geometry(Point, 4326)
 );

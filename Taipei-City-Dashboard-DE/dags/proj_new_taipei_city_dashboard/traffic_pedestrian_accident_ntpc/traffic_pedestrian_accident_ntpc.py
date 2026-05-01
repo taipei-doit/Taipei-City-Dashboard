@@ -131,10 +131,14 @@ def etl_function(**kwargs):
     age_col = next((c for c in data.columns if "年齡" in c), None)
     cause_col = next((c for c in data.columns if "肇因" in c and "個別" in c), None)
     ped_sub_col = next((c for c in data.columns if "行動狀態子" in c), None)
+    signal_type_col = next((c for c in data.columns if "號誌種類" in c), None)
+    location_type_col = next((c for c in data.columns if "事故位置大類" in c), None)
 
     data["age"] = pd.to_numeric(data[age_col], errors="coerce").fillna(0).astype(int) if age_col else 0
     data["cause_name"] = data[cause_col].fillna("其他") if cause_col else "其他"
     data["pedestrian_action"] = data[ped_sub_col].fillna("") if ped_sub_col else ""
+    data["signal_type"] = data[signal_type_col].fillna("") if signal_type_col else ""
+    data["accident_location"] = data[location_type_col].fillna("") if location_type_col else ""
 
     # 7. 座標
     lng_col = next((c for c in data.columns if "經度" in c or c.lower() in ["lng", "lon"]), None)
@@ -165,7 +169,9 @@ def etl_function(**kwargs):
     ready_data = gdata[[
         "data_time", "year", "month", "hour",
         "death_count", "injury_count", "age",
-        "cause_name", "pedestrian_action", "lng", "lat", "wkb_geometry"
+        "cause_name", "pedestrian_action",
+        "signal_type", "accident_location",
+        "lng", "lat", "wkb_geometry"
     ]]
 
     # Load
