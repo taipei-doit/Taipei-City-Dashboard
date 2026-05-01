@@ -41,7 +41,9 @@ const STATION_LAYER = {
 	},
 	property: [
 		{ key: "station_name", name: "車站名稱" },
-		{ key: "line", name: "所屬路線" },
+		{ key: "exit_no", name: "出口" },
+		{ key: "facility_name", name: "設施名稱" },
+		{ key: "facility_type", name: "設施類型" },
 		{ key: "status", name: "目前狀態" },
 	],
 	city: "taipei",
@@ -207,8 +209,9 @@ async function fetchAll() {
 			geometry: { type: "Point", coordinates: [s.lng, s.lat] },
 			properties: {
 				station_name: s.station,
+				exit_no: s.exit_no,
 				facility_name: s.facility_name,
-				facility_type: s.facility_type,
+				facility_type: s.facility_type === "elevator" ? "電梯" : s.facility_type === "ramp" ? "坡道" : s.facility_type,
 				status: s.alert_status,
 				alert_description: s.alert_description ?? null,
 			},
