@@ -129,6 +129,7 @@ const chartChatSession = ref("");
 const chartChatRoom = ref(null);
 const chartChatInput = ref(null);
 const chartChatComposerOpen = ref(false);
+const chartChatComposerFocused = ref(false);
 
 // Parses time data into display format
 const dataTime = computed(() => {
@@ -396,17 +397,26 @@ async function openChartChatComposer() {
 	await nextTick();
 	chartChatInput.value?.focus();
 }
+function closeChartChatComposerIfIdle() {
+	if (
+		chartChatQuestion.value.trim() === "" &&
+		chartChatStatus.value !== "loading" &&
+		!chartChatComposerFocused.value
+	) {
+		chartChatComposerOpen.value = false;
+	}
+}
+function handleChartChatComposerFocusin() {
+	chartChatComposerFocused.value = true;
+	chartChatComposerOpen.value = true;
+}
 function handleChartChatComposerFocusout(event) {
 	const nextTarget = event.relatedTarget;
 	if (nextTarget && event.currentTarget.contains(nextTarget)) {
 		return;
 	}
-	if (
-		chartChatQuestion.value.trim() === "" &&
-		chartChatStatus.value !== "loading"
-	) {
-		chartChatComposerOpen.value = false;
-	}
+	chartChatComposerFocused.value = false;
+	window.setTimeout(closeChartChatComposerIfIdle, 120);
 }
 async function submitChartQuestion() {
 	const question = chartChatQuestion.value.trim();
@@ -452,6 +462,7 @@ async function submitChartQuestion() {
 		pendingMessage.status = "success";
 		chartChatSession.value = payload?.data?.session || chartChatSession.value;
 		chartChatStatus.value = "success";
+		closeChartChatComposerIfIdle();
 		scrollChartChatToBottom();
 	} catch (error) {
 		console.error(
@@ -461,6 +472,7 @@ async function submitChartQuestion() {
 		pendingMessage.answer = CHART_CHAT_ERROR;
 		pendingMessage.status = "error";
 		chartChatStatus.value = "error";
+		closeChartChatComposerIfIdle();
 		scrollChartChatToBottom();
 	}
 }
@@ -836,6 +848,7 @@ function returnChartComponent(name, svg) {
       <form
         class="dashboardcomponent-chart-chat-form dashboardcomponent-ai-room-form"
         @submit.prevent="submitChartQuestion"
+        @focusin="handleChartChatComposerFocusin"
         @focusout="handleChartChatComposerFocusout"
       >
         <input
@@ -930,31 +943,32 @@ button:hover {
 }
 
 .dashboardcomponent {
-	height: 560px;
-	max-height: 560px;
+	height: 480px;
+	max-height: 480px;
 	width: calc(100% - var(--font-m) * 2);
 	max-width: calc(100% - var(--font-m) * 2);
 	display: flex;
 	flex-direction: column;
-	justify-content: space-between;
+	justify-content: flex-start;
+	gap: 4px;
 	position: relative;
 	padding: var(--font-m);
 	border-radius: 5px;
 	background-color: var(--color-component-background);
 
 	@media (min-width: 1050px) {
-		height: 570px;
-		max-height: 570px;
+		height: 490px;
+		max-height: 490px;
 	}
 
 	@media (min-width: 1650px) {
-		height: 590px;
-		max-height: 590px;
+		height: 500px;
+		max-height: 500px;
 	}
 
 	@media (min-width: 2200px) {
-		height: 700px;
-		max-height: 700px;
+		height: 530px;
+		max-height: 530px;
 	}
 
 	&-header {
@@ -1081,7 +1095,7 @@ button:hover {
 		top: 4.2rem;
 		left: 0;
 		z-index: 8;
-		padding: 4px 0;
+		padding: 2px 0;
 
 		&-group {
 			display: flex;
@@ -1494,15 +1508,15 @@ button:hover {
 
 	&-ai-section {
 		flex: 0 0 auto;
-		height: 96px;
-		min-height: 96px;
-		max-height: 96px;
+		height: 116px;
+		min-height: 116px;
+		max-height: 116px;
 		position: relative;
 		display: grid;
 		grid-template-columns: minmax(0, 1fr) 32px;
 		column-gap: 8px;
 		align-items: stretch;
-		margin-top: 6px;
+		margin-top: auto;
 		padding: 6px 8px;
 		border: 1px solid rgba(255, 255, 255, 0.14);
 		border-radius: 8px;
@@ -1624,6 +1638,10 @@ button:hover {
 
 		&-ai {
 			justify-content: flex-start;
+
+			.dashboardcomponent-ai-bubble {
+				min-height: 70px;
+			}
 		}
 
 		&-user {
@@ -1811,22 +1829,22 @@ button:hover {
 }
 
 .large {
-	height: 640px;
-	max-height: 640px;
+	height: 600px;
+	max-height: 600px;
 
 	@media (min-width: 820px) {
-		height: 660px;
-		max-height: 660px;
+		height: 620px;
+		max-height: 620px;
 	}
 
 	@media (min-width: 1200px) {
-		height: 700px;
-		max-height: 700px;
+		height: 640px;
+		max-height: 640px;
 	}
 
 	@media (min-width: 2200px) {
-		height: 800px;
-		max-height: 800px;
+		height: 700px;
+		max-height: 700px;
 	}
 
 	.dashboardcomponent-chart,
@@ -2006,7 +2024,7 @@ button:hover {
 .city {
 	&-tag {
 		&-container {
-			margin: 4px 0;
+			margin: 2px 0;
 			display: flex;
 			gap: 5px;
 	
