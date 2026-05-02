@@ -123,8 +123,14 @@ export const useContentStore = defineStore("content", {
 			this.setCurrentDashboardAllContent();
 		},
 		// 2. Call an API to get all dashboard info and reroute the user to the first dashboard in the list
-		async setDashboards(onlyDashboard = false) {
+		async setDashboards(
+			onlyDashboard = false,
+			isStale = undefined,
+		) {
 			const response = await http.get(`/dashboard/`);
+			if (typeof isStale === "function" && isStale()) {
+				return;
+			}
 			const data = response.data.data || {};
 
 			this.dashboards.clear();
@@ -159,6 +165,9 @@ export const useContentStore = defineStore("content", {
 			});
 
 			if (onlyDashboard) {
+				if (typeof isStale === "function" && isStale()) {
+					return;
+				}
 				this.applyCurrentDashboardLabelsFromLists();
 				return;
 			}

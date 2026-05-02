@@ -58,6 +58,10 @@ export const useTranslationStore = defineStore("translation", {
 		staticDictionaryLocale: null,
 		/** 字典載入／語系切換計數 */
 		dictionaryEpoch: 0,
+		/**
+		 * 每次使用者切換語系遞增。用於捨棄較慢的舊請求（GET /translation/static、GET /dashboard/），避免翻譯與目前語系不同步。
+		 */
+		localeApplyGeneration: 0,
 	}),
 	getters: {
 		isSourceLocale: (s) => s.locale === SOURCE_LOCALE,
@@ -66,12 +70,18 @@ export const useTranslationStore = defineStore("translation", {
 		/**
          * 載入後端靜態 key→繁中原文（ Navbar 等備援）。
          */
-		async fetchStaticDictionary() {
+		async fetchStaticDictionary(forGeneration = undefined) {
 			try {
 				const { data } = await http.get(STATIC_TRANSLATION_PATH, {
 					skipGlobalLoading: true,
 					skipErrorHandler: true,
 				});
+				if (
+					forGeneration !== undefined &&
+                    forGeneration !== this.localeApplyGeneration
+				) {
+					return;
+				}
 				const body = data?.data ?? data;
 				const strings = body?.strings;
 				if (strings && typeof strings === "object") {
@@ -81,9 +91,14 @@ export const useTranslationStore = defineStore("translation", {
 				}
 			} catch {
 				// 後端未上線或路由未開時不中斷流程
-			} finally {
-				this.dictionaryEpoch += 1;
 			}
+			if (
+				forGeneration !== undefined &&
+				forGeneration !== this.localeApplyGeneration
+			) {
+				return;
+			}
+			this.dictionaryEpoch += 1;
 		},
 
 
@@ -128,12 +143,19 @@ export const useTranslationStore = defineStore("translation", {
 			this.releasePendingTranslates();
 			this.locale = code;
 			localStorage.setItem(LOCALE_STORAGE_KEY, code);
-			await this.fetchStaticDictionary();
+
+			const applyGen = ++this.localeApplyGeneration;
+
+			await this.fetchStaticDictionary(applyGen);
+
+			if (applyGen !== this.localeApplyGeneration) return;
 
 			// 僅重抓 GET /dashboard/（setDashboards(true)）以帶後端依 Accept-Language 的譯名；
 			// 不重拉 /dashboard/:index chart，避免圖表像整頁重新載入。
 			if (changed) {
-				await contentStore.setDashboards(true);
+				const isStale = () =>
+					applyGen !== this.localeApplyGeneration;
+				await contentStore.setDashboards(true, isStale);
 			}
 		},
 
