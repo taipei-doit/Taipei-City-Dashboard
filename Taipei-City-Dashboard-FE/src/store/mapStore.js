@@ -112,6 +112,18 @@ const MOVING_LABEL_LAYER_IDS = [
 	"cinematic-map-labels",
 ];
 
+const SIMPLE_ROUTE_SOURCE_ID = "simple-navigation-route-source";
+const SIMPLE_ROUTE_LAYER_IDS = [
+	"simple-navigation-route-case",
+	"simple-navigation-route-glow",
+	"simple-navigation-route-line",
+];
+const SIMPLE_ROUTE_PROFILES = [
+	"mapbox/driving",
+	"mapbox/walking",
+	"mapbox/cycling",
+];
+
 function isMotionLabelLayer(layer) {
 	if (layer.type !== "symbol" || !layer.layout?.["text-field"]) {
 		return false;
@@ -194,11 +206,14 @@ export const useMapStore = defineStore("map", {
 		hasLoadedDeferredMapData: false,
 		labelRestoreTimer: null,
 		hiddenMotionLabelLayers: {},
+		navigationRouteMarkers: [],
+		navigationRouteSummary: null,
 	}),
 	actions: {
 		/* Initialize Mapbox */
 		// 1. Creates the mapbox instance and passes in initial configs
 		initializeMapBox() {
+			this.clearSimpleRoute();
 			this.map = null;
 			this.marker = null;
 			this.overlay = null;
@@ -212,6 +227,8 @@ export const useMapStore = defineStore("map", {
 			this.hasLoadedDeferredMapData = false;
 			this.labelRestoreTimer = null;
 			this.hiddenMotionLabelLayers = {};
+			this.navigationRouteMarkers = [];
+			this.navigationRouteSummary = null;
 			this.cinematicPitch = MapObjectConfig.pitch;
 			const MAPBOXTOKEN = import.meta.env.VITE_MAPBOXTOKEN;
 			mapboxGl.accessToken = MAPBOXTOKEN;
@@ -2810,6 +2827,327 @@ export const useMapStore = defineStore("map", {
 			});
 		},
 
+		/* Simple Navigation */
+		getSimpleRouteProfile(profile) {
+			return SIMPLE_ROUTE_PROFILES.includes(profile)
+				? profile
+				: "mapbox/driving";
+		},
+		estimateSimpleRouteDuration(distanceMeters, profile) {
+			const speeds = {
+				"mapbox/driving": 9.5,
+				"mapbox/walking": 1.35,
+				"mapbox/cycling": 4.2,
+			};
+			const safeProfile = this.getSimpleRouteProfile(profile);
+			return (distanceMeters * 1.25) / speeds[safeProfile];
+		},
+		async geocodeSimpleRouteAddress(searchText) {
+			const token = import.meta.env.VITE_MAPBOXTOKEN;
+			const query = String(searchText || "").trim();
+			if (!query) {
+				throw new Error("請輸入完整的起點與終點");
+			}
+			if (!token) {
+				throw new Error("缺少 Mapbox Token，無法查詢路線");
+			}
+
+			const bounds = MapObjectConfig.maxBounds.flat().join(",");
+			const res = await axios.get(
+				"https://api.mapbox.com/search/geocode/v6/forward",
+				{
+					params: {
+						q: query,
+						access_token: token,
+						language: "zh-TW",
+						country: "tw",
+						bbox: bounds,
+						limit: 1,
+						proximity: "121.536609,25.044808",
+					},
+				},
+			);
+			const feature = res.data?.features?.[0];
+			const geometryCoordinates = feature?.geometry?.coordinates;
+			const propertyCoordinates = feature?.properties?.coordinates;
+			const longitude =
+				geometryCoordinates?.[0] || propertyCoordinates?.longitude;
+			const latitude =
+				geometryCoordinates?.[1] || propertyCoordinates?.latitude;
+
+			if (
+				!Number.isFinite(Number(longitude)) ||
+				!Number.isFinite(Number(latitude))
+			) {
+				throw new Error(`找不到「${query}」的位置`);
+			}
+
+			return {
+				name:
+					feature.properties?.name_preferred ||
+					feature.properties?.full_address ||
+					feature.properties?.name ||
+					query,
+				coordinates: [Number(longitude), Number(latitude)],
+			};
+		},
+		async fetchSimpleRoute(startCoordinates, endCoordinates, profile) {
+			const token = import.meta.env.VITE_MAPBOXTOKEN;
+			const safeProfile = this.getSimpleRouteProfile(profile);
+			const coordinateText = `${startCoordinates.join(
+				",",
+			)};${endCoordinates.join(",")}`;
+			const res = await axios.get(
+				`https://api.mapbox.com/directions/v5/${safeProfile}/${coordinateText}`,
+				{
+					params: {
+						alternatives: false,
+						geometries: "geojson",
+						overview: "simplified",
+						steps: false,
+						access_token: token,
+					},
+				},
+			);
+			const route = res.data?.routes?.[0];
+
+			if (!route?.geometry?.coordinates?.length) {
+				throw new Error("找不到可用路線");
+			}
+
+			return route;
+		},
+		async findSimpleRoute({ startText, endText, profile }) {
+			if (!this.map) {
+				throw new Error("地圖尚未載入完成");
+			}
+			const safeProfile = this.getSimpleRouteProfile(profile);
+			const [start, end] = await Promise.all([
+				this.geocodeSimpleRouteAddress(startText),
+				this.geocodeSimpleRouteAddress(endText),
+			]);
+			let route = null;
+			let isApproximate = false;
+
+			try {
+				route = await this.fetchSimpleRoute(
+					start.coordinates,
+					end.coordinates,
+					safeProfile,
+				);
+			} catch {
+				const straightDistance =
+					distance(point(start.coordinates), point(end.coordinates), {
+						units: "kilometers",
+					}) * 1000;
+				route = {
+					distance: straightDistance,
+					duration: this.estimateSimpleRouteDuration(
+						straightDistance,
+						safeProfile,
+					),
+					geometry: {
+						type: "LineString",
+						coordinates: [start.coordinates, end.coordinates],
+					},
+				};
+				isApproximate = true;
+			}
+
+			this.renderSimpleRoute({
+				geometry: route.geometry,
+				start,
+				end,
+				distance: route.distance,
+				duration: route.duration,
+				profile: safeProfile,
+				isApproximate,
+			});
+
+			return this.navigationRouteSummary;
+		},
+		createSimpleRouteMarker(label, coordinates, variant) {
+			if (!this.map) return null;
+			const markerElement = document.createElement("div");
+			markerElement.className = `simple-navigation-marker simple-navigation-marker--${variant}`;
+			markerElement.textContent = label;
+
+			return markRaw(
+				new mapboxGl.Marker({
+					element: markerElement,
+					anchor: "center",
+				})
+					.setLngLat(coordinates)
+					.addTo(this.map),
+			);
+		},
+		renderSimpleRoute(routeData) {
+			if (!this.map || !routeData?.geometry?.coordinates?.length) {
+				return;
+			}
+			this.clearSimpleRoute();
+
+			this.map.addSource(SIMPLE_ROUTE_SOURCE_ID, {
+				type: "geojson",
+				data: {
+					type: "Feature",
+					properties: {
+						isApproximate: routeData.isApproximate,
+					},
+					geometry: routeData.geometry,
+				},
+			});
+			this.map.addLayer({
+				id: SIMPLE_ROUTE_LAYER_IDS[0],
+				type: "line",
+				source: SIMPLE_ROUTE_SOURCE_ID,
+				layout: {
+					"line-cap": "round",
+					"line-join": "round",
+				},
+				paint: {
+					"line-color": "#050506",
+					"line-width": [
+						"interpolate",
+						["linear"],
+						["zoom"],
+						10,
+						9,
+						15,
+						15,
+					],
+					"line-opacity": 0.9,
+					"line-blur": 1.2,
+				},
+			});
+			this.map.addLayer({
+				id: SIMPLE_ROUTE_LAYER_IDS[1],
+				type: "line",
+				source: SIMPLE_ROUTE_SOURCE_ID,
+				layout: {
+					"line-cap": "round",
+					"line-join": "round",
+				},
+				paint: {
+					"line-color": [
+						"case",
+						["boolean", ["get", "isApproximate"], false],
+						"#f4f2eb",
+						"#ff4ecb",
+					],
+					"line-width": [
+						"interpolate",
+						["linear"],
+						["zoom"],
+						10,
+						15,
+						15,
+						24,
+					],
+					"line-opacity": 0.24,
+					"line-blur": 8,
+				},
+			});
+			this.map.addLayer({
+				id: SIMPLE_ROUTE_LAYER_IDS[2],
+				type: "line",
+				source: SIMPLE_ROUTE_SOURCE_ID,
+				layout: {
+					"line-cap": "round",
+					"line-join": "round",
+				},
+				paint: {
+					"line-color": [
+						"case",
+						["boolean", ["get", "isApproximate"], false],
+						"#f4f2eb",
+						"#ff4ecb",
+					],
+					"line-width": [
+						"interpolate",
+						["linear"],
+						["zoom"],
+						10,
+						4,
+						15,
+						7,
+					],
+					"line-opacity": 0.96,
+				},
+			});
+
+			this.navigationRouteMarkers = [
+				this.createSimpleRouteMarker(
+					"起",
+					routeData.start.coordinates,
+					"start",
+				),
+				this.createSimpleRouteMarker(
+					"迄",
+					routeData.end.coordinates,
+					"end",
+				),
+			].filter(Boolean);
+			this.navigationRouteSummary = {
+				startName: routeData.start.name,
+				endName: routeData.end.name,
+				distance: routeData.distance,
+				duration: routeData.duration,
+				profile: routeData.profile,
+				isApproximate: routeData.isApproximate,
+			};
+			this.fitSimpleRouteBounds(routeData.geometry.coordinates);
+		},
+		fitSimpleRouteBounds(coordinates) {
+			if (!this.map || !coordinates?.length) return;
+			const bounds = new mapboxGl.LngLatBounds();
+			coordinates.forEach((coordinate) => bounds.extend(coordinate));
+			if (bounds.isEmpty()) return;
+
+			const { clientWidth, clientHeight } = this.map.getContainer();
+			const leftPadding =
+				clientWidth > 1000 ? Math.min(440, clientWidth * 0.3) : 60;
+			const rightPadding =
+				clientWidth > 1000 ? Math.min(360, clientWidth * 0.24) : 60;
+			const verticalPadding =
+				clientHeight > 680 ? 150 : Math.max(60, clientHeight * 0.12);
+
+			this.map.fitBounds(bounds, {
+				padding: {
+					top: verticalPadding,
+					bottom: verticalPadding,
+					left: leftPadding,
+					right: rightPadding,
+				},
+				maxZoom: 15.5,
+				duration: 950,
+				pitch: Math.min(this.map.getPitch(), 58),
+				bearing: this.map.getBearing(),
+				essential: true,
+			});
+		},
+		clearSimpleRoute() {
+			if (this.navigationRouteMarkers?.length) {
+				this.navigationRouteMarkers.forEach((marker) => {
+					marker.remove();
+				});
+			}
+			this.navigationRouteMarkers = [];
+			if (this.map) {
+				SIMPLE_ROUTE_LAYER_IDS.slice()
+					.reverse()
+					.forEach((layerId) => {
+						if (this.map.getLayer(layerId)) {
+							this.map.removeLayer(layerId);
+						}
+					});
+				if (this.map.getSource(SIMPLE_ROUTE_SOURCE_ID)) {
+					this.map.removeSource(SIMPLE_ROUTE_SOURCE_ID);
+				}
+			}
+			this.navigationRouteSummary = null;
+		},
+
 		/* Functions that change the viewing experience of the map */
 		// 1. Zoom to a location
 		// [[lng, lat], zoom, pitch, bearing, savedLocationName]
@@ -3223,6 +3561,7 @@ export const useMapStore = defineStore("map", {
 		},
 		// 2. Called when user navigates away from the map
 		clearEntireMap() {
+			this.clearSimpleRoute();
 			this.stopAnimation();
 			if (this.labelRestoreTimer) {
 				window.clearTimeout(this.labelRestoreTimer);

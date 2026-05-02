@@ -1,11 +1,12 @@
 <script setup>
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 // import "./styles/chartStyles.css";
 // import "./styles/toggleswitch.css";
 import "material-icons/iconfont/material-icons.css";
 import { getComponentDataTimeframe } from "./utilities/dataTimeframe";
 import { timeTerms } from "./utilities/AllTimes";
 import { chartTypes } from "./utilities/chartTypes";
+import { useAuthStore } from "../store/authStore";
 
 import ComponentTag from "./components/ComponentTag.vue";
 import TagTooltip from "./components/TagTooltip.vue";
@@ -53,6 +54,10 @@ import TextUnitChartSvg from "./assets/chart/TextUnitChart.svg";
 const AI_COMMENT_DEFAULT = "AI 圖表評論待生成";
 const AI_COMMENT_LOADING = "AI 圖表評論生成中...";
 const AI_COMMENT_ERROR = "AI 評論暫時無法生成";
+const CHART_CHAT_CONTEXT_LIMIT = 7000;
+const CHART_CHAT_HISTORY_LIMIT = 3;
+const CHART_CHAT_DEFAULT_ANSWER = "AI 未回傳內容";
+const CHART_CHAT_ERROR = "AI 問答暫時無法回應";
 
 const props = defineProps({
 	style: { type: Object, default: () => ({}) },
@@ -97,6 +102,7 @@ const emits = defineEmits([
 ]);
 
 const activeChart = ref(props.config.chart_config.types[0]);
+const authStore = useAuthStore();
 const activeCity = computed({
 	get: () => props.activeCity,
 	set: (value) => {
@@ -116,6 +122,10 @@ const toggleOn = computed({
 
 const mousePosition = ref({ x: null, y: null });
 const showTagTooltip = ref(false);
+const chartChatQuestion = ref("");
+const chartChatMessages = ref([]);
+const chartChatStatus = ref("idle");
+const chartChatSession = ref("");
 
 // Parses time data into display format
 const dataTime = computed(() => {
@@ -203,6 +213,70 @@ const aiCommentStatusLabel = computed(() => {
 	return "待生成";
 });
 
+const hasChartChatData = computed(() => {
+	if (Array.isArray(props.config.chart_data)) {
+		return props.config.chart_data.length > 0;
+	}
+	return (
+		props.config.chart_data &&
+		typeof props.config.chart_data === "object" &&
+		Object.keys(props.config.chart_data).length > 0
+	);
+});
+
+const chartChatInputDisabled = computed(
+	() =>
+		chartChatStatus.value === "loading" ||
+		!authStore.token ||
+		!hasChartChatData.value,
+);
+
+const chartChatSendDisabled = computed(
+	() => chartChatInputDisabled.value || chartChatQuestion.value.trim() === "",
+);
+
+const chartChatStatusLabel = computed(() => {
+	if (chartChatStatus.value === "loading") {
+		return "回答中";
+	}
+	if (chartChatStatus.value === "error") {
+		return "需重試";
+	}
+	if (chartChatStatus.value === "success") {
+		return "已回覆";
+	}
+	return "待提問";
+});
+
+const chartChatEmptyText = computed(() => {
+	if (!authStore.token) {
+		return "登入後可提問";
+	}
+	if (!hasChartChatData.value) {
+		return "目前沒有可分析資料";
+	}
+	return "等待提問";
+});
+
+const chartChatPlaceholder = computed(() =>
+	chartChatInputDisabled.value ? chartChatEmptyText.value : "輸入圖表問題",
+);
+
+watch(
+	() => [
+		props.config.id,
+		props.config.index,
+		props.config.city,
+		props.config.chart_data,
+	],
+	() => {
+		chartChatQuestion.value = "";
+		chartChatMessages.value = [];
+		chartChatStatus.value = "idle";
+		chartChatSession.value = "";
+	},
+);
+
 function changeActiveChart(chartName) {
 	if (
 		props.mode === "map" &&
@@ -229,6 +303,138 @@ function changeShowTagTooltipState(state) {
 }
 function retryAIComment() {
 	emits("refreshAiComment", props.config);
+}
+function getAIChatEndpoint() {
+	const apiUrl = import.meta.env.VITE_API_URL || "";
+	return `${apiUrl.replace(/\/$/, "")}/ai/chat/twai`;
+}
+function getChartChatSession() {
+	if (!chartChatSession.value) {
+		const identity = props.config.id || props.config.index || "component";
+		chartChatSession.value = `dashboard-chart-${identity}-${Math.random()
+			.toString(36)
+			.slice(2, 10)}`;
+	}
+	return chartChatSession.value;
+}
+function truncateChartChatContext(value) {
+	const runes = Array.from(value);
+	if (runes.length <= CHART_CHAT_CONTEXT_LIMIT) {
+		return value;
+	}
+	return `${runes.slice(0, CHART_CHAT_CONTEXT_LIMIT).join("")}\n...（資料已截斷）`;
+}
+function stringifyChartChatPayload(payload) {
+	try {
+		return truncateChartChatContext(JSON.stringify(payload, null, 2));
+	} catch (error) {
+		console.error("Failed to build chart chat context:", error);
+		return "{}";
+	}
+}
+function buildChartChatContext() {
+	return stringifyChartChatPayload({
+		component: {
+			id: props.config.id,
+			index: props.config.index,
+			city: props.config.city,
+			name: props.config.name,
+			source: props.config.source,
+			time_from: props.config.time_from,
+			time_to: props.config.time_to,
+			display_time: dataTime.value,
+			update_freq: props.config.update_freq,
+			update_freq_unit: props.config.update_freq_unit,
+			description: props.config.short_desc || props.config.long_desc,
+		},
+		active_chart: activeChart.value,
+		chart_config: props.config.chart_config,
+		chart_data: props.config.chart_data,
+		ai_comment: aiComment.value,
+	});
+}
+function buildChartChatMessages(question) {
+	const historyMessages = chartChatMessages.value
+		.slice(-CHART_CHAT_HISTORY_LIMIT)
+		.flatMap((message) => [
+			{
+				role: "user",
+				content: message.question,
+			},
+			{
+				role: "assistant",
+				content: message.answer,
+			},
+		]);
+
+	return [
+		{
+			role: "system",
+			content:
+				"你是臺北城市儀表板的圖表問答助理。請只根據提供的圖表上下文回答，使用繁體中文，回答要精簡、具體；若資料不足，請明確說明不能判斷，不要編造數字。",
+		},
+		{
+			role: "user",
+			content: `以下是目前圖表上下文，後續問題都要以此為依據：\n${buildChartChatContext()}`,
+		},
+		...historyMessages,
+		{
+			role: "user",
+			content: question,
+		},
+	];
+}
+async function submitChartQuestion() {
+	const question = chartChatQuestion.value.trim();
+	if (chartChatSendDisabled.value || !question) {
+		return;
+	}
+
+	const pendingMessage = {
+		id: `${Date.now()}-${chartChatMessages.value.length}`,
+		question,
+		answer: "回答生成中...",
+		status: "loading",
+	};
+
+	chartChatQuestion.value = "";
+	chartChatStatus.value = "loading";
+	chartChatMessages.value.push(pendingMessage);
+
+	try {
+		const response = await fetch(getAIChatEndpoint(), {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: `Bearer ${authStore.token}`,
+			},
+			body: JSON.stringify({
+				session: getChartChatSession(),
+				stream: false,
+				max_new_tokens: 420,
+				temperature: 0.2,
+				top_p: 0.9,
+				messages: buildChartChatMessages(question),
+			}),
+		});
+		const payload = await response.json().catch(() => ({}));
+		if (!response.ok) {
+			throw new Error(payload?.message || `HTTP ${response.status}`);
+		}
+		const answer = payload?.data?.content || CHART_CHAT_DEFAULT_ANSWER;
+		pendingMessage.answer = answer;
+		pendingMessage.status = "success";
+		chartChatSession.value = payload?.data?.session || chartChatSession.value;
+		chartChatStatus.value = "success";
+	} catch (error) {
+		console.error(
+			`Failed to ask AI chart question for component ${props.config.id}:`,
+			error,
+		);
+		pendingMessage.answer = CHART_CHAT_ERROR;
+		pendingMessage.status = "error";
+		chartChatStatus.value = "error";
+	}
 }
 function returnChartComponent(name, svg) {
 	switch (name) {
@@ -548,6 +754,70 @@ function returnChartComponent(name, svg) {
         <span>refresh</span>
       </button>
     </div>
+    <div
+      v-if="mode !== 'preview' && (!mode.includes('map') || toggleOn)"
+      :class="[
+        'dashboardcomponent-chart-chat',
+        `dashboardcomponent-chart-chat-${chartChatStatus}`,
+      ]"
+    >
+      <div class="dashboardcomponent-chart-chat-heading">
+        <div>
+          <span>forum</span>
+          <strong>圖表問答</strong>
+        </div>
+        <span class="dashboardcomponent-chart-chat-status">
+          {{ chartChatStatusLabel }}
+        </span>
+      </div>
+      <div
+        class="dashboardcomponent-chart-chat-thread"
+        :class="{
+          'dashboardcomponent-chart-chat-thread-empty':
+            chartChatMessages.length === 0,
+        }"
+      >
+        <p v-if="chartChatMessages.length === 0">
+          {{ chartChatEmptyText }}
+        </p>
+        <template v-else>
+          <div
+            v-for="message in chartChatMessages"
+            :key="message.id"
+            :class="[
+              'dashboardcomponent-chart-chat-message',
+              `dashboardcomponent-chart-chat-message-${message.status}`,
+            ]"
+          >
+            <p class="dashboardcomponent-chart-chat-question">
+              <strong>Q</strong>{{ message.question }}
+            </p>
+            <p class="dashboardcomponent-chart-chat-answer">
+              <strong>A</strong>{{ message.answer }}
+            </p>
+          </div>
+        </template>
+      </div>
+      <form
+        class="dashboardcomponent-chart-chat-form"
+        @submit.prevent="submitChartQuestion"
+      >
+        <input
+          v-model="chartChatQuestion"
+          type="text"
+          maxlength="160"
+          :placeholder="chartChatPlaceholder"
+          :disabled="chartChatInputDisabled"
+        >
+        <button
+          type="submit"
+          title="送出問題"
+          :disabled="chartChatSendDisabled"
+        >
+          <span>{{ chartChatStatus === 'loading' ? 'hourglass_top' : 'send' }}</span>
+        </button>
+      </form>
+    </div>
     <!-- Footer -->
     <div
       v-if="footer && (!mode.includes('map') || toggleOn)"
@@ -824,7 +1094,7 @@ button:hover {
 	&-error {
 		flex: 1 1 auto;
 		height: auto;
-		min-height: 200px;
+		min-height: 140px;
 		position: relative;
 		padding-top: 1%;
 		overflow-y: scroll;
@@ -836,8 +1106,8 @@ button:hover {
 
 	&-ai-comment {
 		flex: 0 0 auto;
-		min-height: 118px;
-		max-height: 142px;
+		min-height: 88px;
+		max-height: 106px;
 		display: grid;
 		grid-template-columns: 32px minmax(0, 1fr) auto;
 		align-items: flex-start;
@@ -906,7 +1176,7 @@ button:hover {
 		p {
 			flex: 1 1 auto;
 			min-width: 0;
-			max-height: 78px;
+			max-height: 48px;
 			padding-right: 6px;
 			color: var(--color-complement-text);
 			font-size: var(--font-s);
@@ -963,6 +1233,220 @@ button:hover {
 			.dashboardcomponent-ai-comment-status,
 			p {
 				color: rgb(237, 90, 90);
+			}
+		}
+	}
+
+	&-chart-chat {
+		flex: 0 0 auto;
+		min-height: 106px;
+		max-height: 124px;
+		display: flex;
+		flex-direction: column;
+		gap: 7px;
+		margin-top: 8px;
+		padding: 10px 12px;
+		border: 1px solid rgba(255, 255, 255, 0.12);
+		border-radius: 8px;
+		background:
+			linear-gradient(135deg, rgba(255, 255, 255, 0.06), rgba(0, 0, 0, 0.18)),
+			rgba(0, 0, 0, 0.14);
+		box-shadow:
+			inset 0 1px 0 rgba(255, 255, 255, 0.08),
+			0 10px 24px rgba(0, 0, 0, 0.16);
+
+		&-heading {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: 8px;
+			overflow: visible;
+
+			div {
+				min-width: 0;
+				display: flex;
+				align-items: center;
+				gap: 6px;
+			}
+
+			span {
+				margin: 0;
+				color: var(--color-highlight);
+				font-family: var(--font-icon);
+				font-size: var(--font-ms);
+				user-select: none;
+			}
+
+			strong {
+				color: var(--color-normal-text);
+				font-size: var(--font-s);
+				font-weight: 700;
+				line-height: 1.2;
+			}
+		}
+
+		&-status {
+			flex: 0 0 auto;
+			padding: 2px 7px;
+			border-radius: 999px;
+			background-color: rgba(255, 255, 255, 0.08);
+			color: var(--color-complement-text) !important;
+			font-family: "微軟正黑體", "Microsoft JhengHei", "Droid Sans", "Open Sans",
+				"Helvetica" !important;
+			font-size: 0.72rem !important;
+			line-height: 1.35;
+			letter-spacing: 0;
+		}
+
+		&-thread {
+			flex: 1 1 auto;
+			min-height: 32px;
+			max-height: 48px;
+			padding-right: 4px;
+			overflow-y: auto;
+			scrollbar-width: thin;
+			scrollbar-color: rgba(255, 255, 255, 0.24) transparent;
+
+			&-empty {
+				display: flex;
+				align-items: center;
+			}
+
+			p {
+				color: var(--color-complement-text);
+				font-size: var(--font-s);
+				line-height: 1.45;
+				white-space: normal;
+			}
+		}
+
+		&-thread::-webkit-scrollbar {
+			width: 4px;
+		}
+
+		&-thread::-webkit-scrollbar-thumb {
+			border-radius: 999px;
+			background-color: rgba(255, 255, 255, 0.24);
+		}
+
+		&-message {
+			display: flex;
+			flex-direction: column;
+			gap: 3px;
+			margin-bottom: 7px;
+			overflow: visible;
+
+			&:last-child {
+				margin-bottom: 0;
+			}
+
+			strong {
+				display: inline-grid;
+				place-items: center;
+				width: 18px;
+				height: 18px;
+				margin-right: 5px;
+				border-radius: 5px;
+				background-color: rgba(255, 255, 255, 0.08);
+				color: var(--color-highlight);
+				font-size: 0.7rem;
+				line-height: 1;
+			}
+
+			&-loading .dashboardcomponent-chart-chat-answer {
+				animation: pulse 1.2s ease-in-out infinite;
+			}
+
+			&-error .dashboardcomponent-chart-chat-answer,
+			&-error strong {
+				color: rgb(237, 90, 90);
+			}
+		}
+
+		&-question {
+			color: var(--color-normal-text) !important;
+			font-weight: 700;
+		}
+
+		&-answer {
+			color: var(--color-complement-text);
+		}
+
+		&-form {
+			flex: 0 0 auto;
+			display: grid;
+			grid-template-columns: minmax(0, 1fr) 32px;
+			gap: 8px;
+			overflow: visible;
+
+			input {
+				min-width: 0;
+				height: 32px;
+				padding: 0 10px;
+				border: 1px solid rgba(255, 255, 255, 0.12);
+				border-radius: 8px;
+				background-color: rgba(0, 0, 0, 0.16);
+				color: var(--color-normal-text);
+				font-size: var(--font-s);
+				outline: none;
+				transition: border-color 0.2s, background-color 0.2s;
+
+				&::placeholder {
+					color: var(--color-complement-text);
+					opacity: 0.75;
+				}
+
+				&:focus {
+					border-color: rgba(255, 255, 255, 0.28);
+					background-color: rgba(255, 255, 255, 0.06);
+				}
+
+				&:disabled {
+					cursor: not-allowed;
+					opacity: 0.58;
+				}
+			}
+
+			button {
+				width: 32px;
+				height: 32px;
+				display: grid;
+				place-items: center;
+				border-radius: 8px;
+				background:
+					linear-gradient(135deg, rgba(78, 149, 255, 0.32), rgba(122, 78, 255, 0.18)),
+					rgba(255, 255, 255, 0.05);
+				color: var(--color-highlight);
+				transition: background-color 0.2s, color 0.2s, opacity 0.2s;
+
+				&:hover:not(:disabled) {
+					background-color: rgba(255, 255, 255, 0.12);
+					color: white;
+				}
+
+				&:disabled {
+					cursor: not-allowed;
+					opacity: 0.52;
+				}
+
+				span {
+					margin: 0;
+					font-family: var(--font-icon);
+					font-size: var(--font-ms);
+					user-select: none;
+				}
+			}
+		}
+
+		&-loading .dashboardcomponent-chart-chat-heading > div span {
+			animation: pulse 1.2s ease-in-out infinite;
+		}
+
+		&-error {
+			border-color: rgba(237, 90, 90, 0.58);
+
+			.dashboardcomponent-chart-chat-status {
+				color: rgb(237, 90, 90) !important;
 			}
 		}
 	}
@@ -1051,22 +1535,22 @@ button:hover {
 }
 
 .large {
-	height: 470px;
-	max-height: 470px;
+	height: 560px;
+	max-height: 560px;
 
 	@media (min-width: 820px) {
-		height: 500px;
-		max-height: 500px;
+		height: 600px;
+		max-height: 600px;
 	}
 
 	@media (min-width: 1200px) {
-		height: 540px;
-		max-height: 540px;
+		height: 640px;
+		max-height: 640px;
 	}
 
 	@media (min-width: 2200px) {
-		height: 660px;
-		max-height: 660px;
+		height: 740px;
+		max-height: 740px;
 	}
 }
 
@@ -1076,14 +1560,14 @@ button:hover {
 }
 
 .mapopen {
-	max-height: 420px;
-	height: 420px;
+	max-height: 460px;
+	height: 460px;
 
 	&-chart,
 	&-loading {
 		padding-top: 0%;
 		height: auto;
-		min-height: 210px;
+		min-height: 170px;
 		position: relative;
 		overflow-y: scroll;
 
@@ -1091,52 +1575,99 @@ button:hover {
 			color: var(--color-border);
 		}
 	}
+
+	.dashboardcomponent-ai-comment {
+		min-height: 74px;
+		max-height: 88px;
+
+		p {
+			max-height: 34px;
+		}
+	}
+
+	.dashboardcomponent-chart-chat {
+		min-height: 84px;
+		max-height: 96px;
+		padding: 8px 10px;
+
+		&-thread {
+			max-height: 30px;
+		}
+	}
 }
 
 .half {
-	height: 310px;
-	max-height: 310px;
+	height: 390px;
+	max-height: 390px;
 
 	@media (min-width: 1050px) {
-		height: 335px;
-		max-height: 335px;
+		height: 415px;
+		max-height: 415px;
 	}
 
 	@media (min-width: 1650px) {
-		height: 360px;
-		max-height: 360px;
+		height: 440px;
+		max-height: 440px;
 	}
 
 	@media (min-width: 2200px) {
-		height: 430px;
-		max-height: 430px;
+		height: 520px;
+		max-height: 520px;
 	}
 
 	&-chart,
 	&-loading {
 		height: auto;
-		min-height: 120px;
+		min-height: 76px;
 	}
 
 	.dashboardcomponent-ai-comment {
-		min-height: 56px;
-		max-height: 72px;
+		min-height: 74px;
+		max-height: 88px;
+
+		p {
+			max-height: 34px;
+		}
+	}
+
+	.dashboardcomponent-chart-chat {
+		min-height: 84px;
+		max-height: 96px;
+		padding: 8px 10px;
+
+		&-thread {
+			max-height: 30px;
+		}
 	}
 }
 
 .halfmapopen {
-	height: 330px;
-	max-height: 330px;
+	height: 400px;
+	max-height: 400px;
 
 	&-chart {
 		padding-top: 0;
 		height: auto;
-		min-height: 140px;
+		min-height: 80px;
 	}
 
 	.dashboardcomponent-ai-comment {
-		min-height: 56px;
-		max-height: 72px;
+		min-height: 74px;
+		max-height: 88px;
+
+		p {
+			max-height: 34px;
+		}
+	}
+
+	.dashboardcomponent-chart-chat {
+		min-height: 84px;
+		max-height: 96px;
+		padding: 8px 10px;
+
+		&-thread {
+			max-height: 30px;
+		}
 	}
 }
 

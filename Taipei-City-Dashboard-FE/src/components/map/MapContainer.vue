@@ -2,7 +2,7 @@
 
 <script setup>
 /* global gtag */
-import { onMounted, computed, watch } from "vue";
+import { onMounted, computed, ref, watch } from "vue";
 import { useRoute } from "vue-router";
 import { useAuthStore } from "../../store/authStore";
 import { useContentStore } from "../../store/contentStore";
@@ -20,6 +20,29 @@ const mapStore = useMapStore();
 const dialogStore = useDialogStore();
 const contentStore = useContentStore();
 const route = useRoute();
+const isRoutePanelOpen = ref(false);
+const routeStart = ref("");
+const routeEnd = ref("");
+const routeProfile = ref("mapbox/driving");
+const routeMessage = ref("");
+const isRouting = ref(false);
+const routeProfileOptions = [
+	{
+		label: "開車",
+		icon: "directions_car",
+		value: "mapbox/driving",
+	},
+	{
+		label: "步行",
+		icon: "directions_walk",
+		value: "mapbox/walking",
+	},
+	{
+		label: "單車",
+		icon: "directions_bike",
+		value: "mapbox/cycling",
+	},
+];
 
 const canUseFindClosestPoint = computed(() => {
 	let pointLayerCount = 0;
@@ -54,6 +77,69 @@ function setCinematicPitch(event) {
 	mapStore.setCinematicMapPitch(event.target.value);
 }
 
+function formatRouteDistance(distanceMeters) {
+	if (!Number.isFinite(Number(distanceMeters))) return "";
+	if (distanceMeters >= 1000) {
+		return `${(distanceMeters / 1000).toFixed(1)} km`;
+	}
+	return `${Math.round(distanceMeters)} m`;
+}
+
+function formatRouteDuration(durationSeconds) {
+	if (!Number.isFinite(Number(durationSeconds))) return "";
+	const roundedMinutes = Math.max(1, Math.round(durationSeconds / 60));
+	if (roundedMinutes >= 60) {
+		const hours = Math.floor(roundedMinutes / 60);
+		const minutes = roundedMinutes % 60;
+		return minutes ? `${hours} 小時 ${minutes} 分` : `${hours} 小時`;
+	}
+	return `${roundedMinutes} 分`;
+}
+
+const routeStatusText = computed(() => {
+	const summary = mapStore.navigationRouteSummary;
+	if (!summary) return routeMessage.value;
+	const prefix = summary.isApproximate ? "直線估算" : "簡易路線";
+	return `${prefix} ${formatRouteDistance(summary.distance)} / ${formatRouteDuration(summary.duration)}`;
+});
+
+function toggleRoutePanel() {
+	isRoutePanelOpen.value = !isRoutePanelOpen.value;
+}
+
+async function handleSimpleRoute() {
+	if (!routeStart.value || !routeEnd.value) {
+		routeMessage.value = "請輸入起點與終點";
+		return;
+	}
+	isRouting.value = true;
+	routeMessage.value = "路線搜尋中...";
+	try {
+		const summary = await mapStore.findSimpleRoute({
+			startText: routeStart.value,
+			endText: routeEnd.value,
+			profile: routeProfile.value,
+		});
+		routeMessage.value = summary.isApproximate
+			? "無法取得道路路線，已改用直線估算"
+			: "路線已標示";
+		gtag("event", "map_actions", {
+			action_type: "簡易導航",
+			time: Date.now(),
+		});
+	} catch (error) {
+		routeMessage.value = error?.message || "無法建立路線";
+		dialogStore.showNotification("fail", routeMessage.value);
+	} finally {
+		isRouting.value = false;
+	}
+}
+
+function clearSimpleRoute() {
+	routeMessage.value = "";
+	mapStore.clearSimpleRoute();
+}
+
 watch(
 	() => route.query?.city,
 	(newValue) => {
@@ -78,6 +164,15 @@ onMounted(() => {
       <div id="mapboxBox" />
       <div class="mapcontainer-layers">
         <button
+          class="hide-if-mobile"
+          :class="{ 'mapcontainer-layers-button--active': isRoutePanelOpen }"
+          title="簡易導航"
+          type="button"
+          @click="toggleRoutePanel"
+        >
+          <span>navigation</span>
+        </button>
+        <button
           v-if="canUseFindClosestPoint"
           class="hide-if-mobile"
           type="button"
@@ -92,6 +187,69 @@ onMounted(() => {
           <span>layers</span>
         </button>
       </div>
+      <form
+        v-if="isRoutePanelOpen"
+        class="mapcontainer-navigation hide-if-mobile"
+        @submit.prevent="handleSimpleRoute"
+      >
+        <div class="mapcontainer-navigation-heading">
+          <span>ROUTE</span>
+          <strong>簡易導航</strong>
+        </div>
+        <label>
+          <span>起點</span>
+          <input
+            v-model.trim="routeStart"
+            autocomplete="off"
+            placeholder="例：台北車站"
+            type="text"
+          >
+        </label>
+        <label>
+          <span>終點</span>
+          <input
+            v-model.trim="routeEnd"
+            autocomplete="off"
+            placeholder="例：台北市政府"
+            type="text"
+          >
+        </label>
+        <div class="mapcontainer-navigation-profiles">
+          <button
+            v-for="option in routeProfileOptions"
+            :key="option.value"
+            class="mapcontainer-navigation-profile"
+            :class="{
+              'mapcontainer-navigation-profile--active':
+                routeProfile === option.value,
+            }"
+            type="button"
+            @click="routeProfile = option.value"
+          >
+            <span>{{ option.icon }}</span>
+            {{ option.label }}
+          </button>
+        </div>
+        <div class="mapcontainer-navigation-actions">
+          <button
+            class="mapcontainer-navigation-submit"
+            :disabled="isRouting"
+            type="submit"
+          >
+            {{ isRouting ? "搜尋中" : "標示路線" }}
+          </button>
+          <button
+            class="mapcontainer-navigation-clear"
+            type="button"
+            @click="clearSimpleRoute"
+          >
+            清除
+          </button>
+        </div>
+        <p v-if="routeStatusText">
+          {{ routeStatusText }}
+        </p>
+      </form>
       <div
         class="mapcontainer-camera hide-if-mobile"
         aria-label="地圖攝影機控制"
@@ -432,6 +590,17 @@ onMounted(() => {
 			transition: color 0.2s;
 		}
 
+		button:hover,
+		&-button--active {
+			background-color: #ff4ecb;
+			color: #050506;
+		}
+
+		button:hover span,
+		&-button--active span {
+			color: #050506;
+		}
+
 		span {
 			color: var(--color-component-background);
 			font-size: 1.2rem;
@@ -455,6 +624,151 @@ onMounted(() => {
 			&:hover {
 				background-color: var(--color-highlight);
 			}
+		}
+	}
+
+	&-navigation {
+		position: absolute;
+		right: 24px;
+		bottom: 22px;
+		z-index: 7;
+		width: min(340px, calc(100vw - 48px));
+		display: grid;
+		gap: 10px;
+		padding: 12px;
+		border: 1px solid rgba(244, 242, 235, 0.5);
+		background-color: rgba(0, 0, 0, 0.72);
+		box-shadow: 0 0 24px rgba(255, 78, 203, 0.16);
+		backdrop-filter: blur(4px);
+		color: #f4f2eb;
+		font-family: Consolas, "Courier New", monospace;
+
+		&-heading {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: 12px;
+
+			span {
+				color: rgba(244, 242, 235, 0.52);
+				font-size: 0.64rem;
+				font-weight: 700;
+			}
+
+			strong {
+				color: #fff;
+				font-size: 0.9rem;
+				font-weight: 700;
+			}
+		}
+
+		label {
+			display: grid;
+			gap: 5px;
+			min-width: 0;
+
+			span {
+				color: rgba(244, 242, 235, 0.62);
+				font-size: 0.72rem;
+				font-weight: 700;
+			}
+		}
+
+		input {
+			width: 100%;
+			min-width: 0;
+			height: 34px;
+			padding: 0 10px;
+			border: 1px solid rgba(244, 242, 235, 0.34);
+			border-radius: 0;
+			background-color: rgba(255, 255, 255, 0.06);
+			color: #fff;
+			font-size: 0.84rem;
+			outline: none;
+
+			&::placeholder {
+				color: rgba(244, 242, 235, 0.36);
+			}
+
+			&:focus {
+				border-color: rgba(255, 78, 203, 0.88);
+				box-shadow: 0 0 0 1px rgba(255, 78, 203, 0.28);
+			}
+		}
+
+		&-profiles {
+			display: grid;
+			grid-template-columns: repeat(3, minmax(0, 1fr));
+			gap: 6px;
+		}
+
+		&-profile {
+			height: 34px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 4px;
+			min-width: 0;
+			border: 1px solid rgba(244, 242, 235, 0.32);
+			background-color: rgba(255, 255, 255, 0.045);
+			color: rgba(244, 242, 235, 0.76);
+			font-size: 0.76rem;
+			font-weight: 700;
+			transition:
+				border-color 0.18s,
+				background-color 0.18s,
+				color 0.18s;
+
+			span {
+				font-family: var(--font-icon);
+				font-size: 1rem;
+			}
+
+			&:hover,
+			&--active {
+				border-color: rgba(255, 78, 203, 0.95);
+				background-color: rgba(255, 78, 203, 0.18);
+				color: #fff;
+			}
+		}
+
+		&-actions {
+			display: grid;
+			grid-template-columns: minmax(0, 1fr) 76px;
+			gap: 8px;
+		}
+
+		&-submit,
+		&-clear {
+			height: 34px;
+			border: 1px solid rgba(244, 242, 235, 0.4);
+			border-radius: 0;
+			font-size: 0.82rem;
+			font-weight: 700;
+		}
+
+		&-submit {
+			background-color: rgba(255, 78, 203, 0.86);
+			color: #050506;
+
+			&:disabled {
+				opacity: 0.58;
+				cursor: progress;
+			}
+		}
+
+		&-clear {
+			background-color: rgba(255, 255, 255, 0.05);
+			color: rgba(244, 242, 235, 0.82);
+		}
+
+		p {
+			min-height: 18px;
+			margin: 0;
+			color: rgba(244, 242, 235, 0.72);
+			font-size: 0.72rem;
+			font-weight: 700;
+			line-height: 1.35;
 		}
 	}
 
@@ -660,6 +974,32 @@ onMounted(() => {
 	width: 100%;
 	height: 100%;
 	border-radius: 0;
+}
+
+:deep(.simple-navigation-marker) {
+	width: 30px;
+	height: 30px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border: 2px solid #050506;
+	border-radius: 50%;
+	background-color: #f4f2eb;
+	color: #050506;
+	font-family: "Noto Sans TC", sans-serif;
+	font-size: 0.78rem;
+	font-weight: 800;
+	box-shadow:
+		0 0 0 2px rgba(244, 242, 235, 0.34),
+		0 0 18px rgba(255, 78, 203, 0.42);
+}
+
+:deep(.simple-navigation-marker--start) {
+	background-color: #ff4ecb;
+}
+
+:deep(.simple-navigation-marker--end) {
+	background-color: #f4f2eb;
 }
 
 :deep(.mapboxgl-ctrl-group) {
