@@ -58,6 +58,70 @@ Do not add custom BE endpoints for ordinary map datasets. The BE already exposes
 - Reset sequences after inserting manager rows when needed:
   `SELECT setval('public.components_id_seq', (SELECT COALESCE(MAX(id), 0) FROM public.components), true);`
 
+## Local Data Injection
+
+Local development uses two Postgres services:
+
+- `postgres-data`, database `dashboard`: actual dataset tables/views.
+- `postgres-manager`, database `dashboardmanager`: dashboard metadata, component config, map config, and chart queries.
+
+Before injecting data, make sure the local Docker stack is up. Use the repo compose files and env file:
+
+`docker compose --env-file docker/.env -f docker/docker-compose-db.yaml -f docker/docker-compose.yaml up -d`
+
+Useful local services:
+
+- `dashboard-fe`: Vite frontend, exposed at `http://localhost:8080`, bind-mounted from `Taipei-City-Dashboard-FE`.
+- `dashboard-be`: Go backend, exposed at `http://localhost:8088` internally proxied by the FE/nginx API route.
+- `postgres-data`: dashboard data DB, PostGIS enabled.
+- `postgres-manager`: dashboard manager/config DB, exposed on host port `5432`.
+- `qdrant`, `redis`, `pgadmin`: supporting services.
+
+Useful checks:
+
+- `docker ps --format 'table {{.Names}}\t{{.Status}}\t{{.Ports}}'`
+- `docker logs --tail 40 dashboard-fe`
+- `docker logs --tail 40 dashboard-be`
+
+After adding a new source, inject it locally in this order:
+
+1. Apply the dataset SQL to `postgres-data` so tables/views and indexes exist:
+   `docker exec -i postgres-data psql -U postgres -d dashboard < db-sample-data/<dataset>.sql`
+2. Apply the same SQL to `postgres-manager` so component/dashboard config exists:
+   `docker exec -i postgres-manager psql -U postgres -d dashboardmanager < db-sample-data/<dataset>.sql`
+3. It is normal for the first command to print errors for manager-only tables such as `components`, `query_charts`, or `dashboards` when using combined SQL files. The important part is that the data table/view is created in `postgres-data`; manager rows should succeed in `postgres-manager`.
+4. Load the data into `postgres-data`. Prefer running the DAG in the DE environment when available. For one-off local validation, a temporary Python loader in Docker is acceptable if it uses the same parsing logic and writes to the same table.
+5. Use the Docker network when a loader needs DB access:
+   `docker run --rm --network br_dashboard <image> ...`
+6. Default local DB connection values are usually:
+   `host=postgres-data dbname=dashboard user=postgres password=password`
+7. Never insert map/component config into `postgres-data`; never insert dataset rows into `postgres-manager`.
+8. If the map payload is too large, create a DB view for map rendering and point `component_maps.index` to that view while leaving charts on the full table.
+
+The local one-off loader pattern used in this repo:
+
+- Use `dashboard-vector-upgrade` as a convenient Python image when it already has the needed runtime packages such as `requests`, `pandas`, `sqlalchemy`, or `psycopg2`.
+- Run it on `br_dashboard` so container hostnames like `postgres-data` resolve.
+- Connect to the data DB with:
+  `psycopg2.connect(host="postgres-data", dbname="dashboard", user="postgres", password="password")`
+- `TRUNCATE TABLE public.<table> RESTART IDENTITY` before inserting replacement/static data.
+- Use PostGIS constructors when avoiding local GeoPandas in a one-off loader:
+  `ST_SetSRID(ST_MakePoint(lng, lat), 4326)`
+  or
+  `ST_Transform(ST_SetSRID(ST_GeomFromText(wkt), 3826), 4326)`
+- For large XML files, stream with `requests.get(..., stream=True)` and `xml.etree.ElementTree.iterparse`.
+- For sources requiring detail-page enrichment, a bounded `ThreadPoolExecutor` is acceptable for local seeding; keep the DAG code equally bounded and polite.
+- After updating only manager config, apply changes directly to `postgres-manager` with `UPDATE public.query_charts ...` or `UPDATE public.component_maps ...`, then verify through the BE component API.
+
+Always verify local injection before handing off:
+
+- `docker exec postgres-data psql -U postgres -d dashboard -c "SELECT COUNT(*), ST_AsText(ST_Extent(wkb_geometry)) FROM public.<table>;"`
+- `docker exec postgres-manager psql -U postgres -d dashboardmanager -c "SELECT * FROM components WHERE \"index\" = '<component_index>';"`
+- `GET /api/dev/component/?searchbyindex=<component_index>&city=taipei`
+- `GET /api/dev/component/<id>/chart?city=taipei`
+- `GET /api/dev/map-data/<map_index>`
+- `GET /api/dev/dashboard/?city=taipei`
+
 ## Map Config Practices
 
 - Use `source = 'api'` for DB-backed map layers.
@@ -92,6 +156,8 @@ For a new or changed dataset, verify:
 - `cd Taipei-City-Dashboard-FE && npm run build` when FE code or map popup behavior changed.
 
 The dev FE service is Vite with a bind mount. Small FE edits often hot reload, but browser state may cache dashboard/component lists; hard refresh if a newly added dashboard does not appear.
+
+If frontend dependencies are broken locally, `cd Taipei-City-Dashboard-FE && npm install` can repair missing optional packages such as Rollup native binaries. Do not use `npm audit fix --force` unless explicitly requested.
 
 ## Working Tree Rules
 
