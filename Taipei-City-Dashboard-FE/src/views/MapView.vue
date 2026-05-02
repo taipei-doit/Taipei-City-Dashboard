@@ -27,6 +27,8 @@ const dialogStore = useDialogStore();
 const mapStore = useMapStore();
 const route = useRoute();
 const isPanelOpen = ref(false);
+const districtLayer = ref(false);
+const villageLayer = ref(false);
 
 const toggleOn = ref({
 	hasMap: [],
@@ -79,6 +81,24 @@ const mapComponentCount = computed(
 
 function togglePanel() {
 	isPanelOpen.value = !isPanelOpen.value;
+}
+
+function toggleDistrictLayer() {
+	districtLayer.value = !districtLayer.value;
+	mapStore.toggleDistrictBoundaries(districtLayer.value);
+	gtag("event", "map_actions", {
+		action_type: "載入區界",
+		time: Date.now(),
+	});
+}
+
+function toggleVillageLayer() {
+	villageLayer.value = !villageLayer.value;
+	mapStore.toggleVillageBoundaries(villageLayer.value);
+	gtag("event", "map_actions", {
+		action_type: "載入里界",
+		time: Date.now(),
+	});
 }
 
 function handleOpenSettings() {
@@ -154,29 +174,54 @@ function popularBasicLayerGA(map_config) {
 <template>
   <div class="map">
     <MapContainer class="map-stage" />
-    <div class="map-status hide-if-mobile">
-      <div>
-        <p>MAPVIEW</p>
-        <strong>{{ contentStore.currentDashboard.name || "Taipei" }}</strong>
+    <div class="map-left-ui hide-if-mobile">
+      <div class="map-heading">
+        <p>TAIPEI CITY</p>
+        <h1>MAP VIEW</h1>
+        <div class="map-heading-meta">
+          <span>{{ activeLayerCount }} ACTIVE</span>
+          <span>{{ mapComponentCount }} LAYERS</span>
+        </div>
       </div>
-      <span>{{ activeLayerCount }} ACTIVE</span>
-    </div>
-    <div class="map-commandbar">
-      <button
-        class="map-commandbar-button"
-        :class="{ 'map-commandbar-button--active': isPanelOpen }"
-        type="button"
-        @click="togglePanel"
-      >
-        <span>layers</span>
-        <strong>圖層 / 組件</strong>
-        <em>{{ mapComponentCount }}</em>
-      </button>
+      <div class="map-commandbar">
+        <button
+          class="map-commandbar-button"
+          :class="{ 'map-commandbar-button--active': isPanelOpen }"
+          type="button"
+          @click="togglePanel"
+        >
+          <span>layers</span>
+          <strong>圖層 / 組件</strong>
+          <em>{{ mapComponentCount }}</em>
+        </button>
+      </div>
     </div>
     <div
       v-if="isPanelOpen"
       class="map-panels hide-if-mobile"
     >
+      <div class="map-layer-tools">
+        <div class="map-layer-tools-heading">
+          <span>BASE MAP</span>
+          <strong>行政邊界</strong>
+        </div>
+        <div class="map-layer-tools-actions">
+          <button
+            :class="{ 'map-layer-tools-button--active': districtLayer }"
+            type="button"
+            @click="toggleDistrictLayer"
+          >
+            區界
+          </button>
+          <button
+            :class="{ 'map-layer-tools-button--active': villageLayer }"
+            type="button"
+            @click="toggleVillageLayer"
+          >
+            里界
+          </button>
+        </div>
+      </div>
       <!-- 1. If the dashboard is map-layers -->
       <div
         v-if="
@@ -615,8 +660,8 @@ function popularBasicLayerGA(map_config) {
 
 <style scoped lang="scss">
 .map {
-	height: calc(100vh - 127px);
-	height: calc(var(--vh) * 100 - 127px);
+	height: 100%;
+	min-height: 0;
 	position: relative;
 	margin: 0;
 	overflow: hidden;
@@ -634,46 +679,57 @@ function popularBasicLayerGA(map_config) {
 		z-index: 1;
 	}
 
-	&-status {
+	&-left-ui {
 		position: absolute;
-		top: 24px;
-		left: 430px;
-		z-index: 6;
-		display: flex;
-		gap: 18px;
-		align-items: flex-end;
-		color: #f4f2eb;
-		font-family: Consolas, "Courier New", monospace;
-		text-shadow: 0 0 12px rgba(255, 255, 255, 0.62);
+		top: 28px;
+		left: 30px;
+		z-index: 30;
+		width: min(430px, calc(100vw - 60px));
 		pointer-events: none;
 
-		p,
-		span {
-			font-size: 0.68rem;
+		@media (max-width: 1000px), (max-height: 500px) {
+			display: none;
+		}
+	}
+
+	&-heading {
+		color: #f4f2eb;
+		font-family: Consolas, "Courier New", monospace;
+		text-shadow: 0 0 12px rgba(255, 255, 255, 0.72);
+
+		p {
+			font-size: 0.72rem;
 			font-weight: 700;
+			letter-spacing: 0.04em;
 		}
 
-		strong {
-			display: block;
-			max-width: 420px;
-			font-size: 1.1rem;
-			white-space: nowrap;
-			text-overflow: ellipsis;
+		h1 {
+			margin: 2px 0 0;
+			color: #fff;
+			font-size: clamp(2.5rem, 3.8vw, 4.7rem);
+			line-height: 0.86;
+			letter-spacing: 0;
 		}
 
-		span {
-			padding: 4px 8px;
-			border: 1px solid rgba(244, 242, 235, 0.5);
-			background-color: rgba(0, 0, 0, 0.4);
+		&-meta {
+			display: flex;
+			gap: 8px;
+			margin-top: 10px;
+
+			span {
+				padding: 4px 8px;
+				border: 1px solid rgba(244, 242, 235, 0.42);
+				background-color: rgba(0, 0, 0, 0.48);
+				color: rgba(244, 242, 235, 0.82);
+				font-size: 0.68rem;
+				font-weight: 700;
+			}
 		}
 	}
 
 	&-commandbar {
-		position: absolute;
-		top: 118px;
-		left: 30px;
-		z-index: 30;
 		display: flex;
+		margin-top: 18px;
 		gap: 8px;
 		align-items: center;
 		pointer-events: auto;
@@ -727,38 +783,97 @@ function popularBasicLayerGA(map_config) {
 				color: #fff;
 			}
 		}
-
-		@media (max-width: 1000px), (max-height: 500px) {
-			display: none;
-		}
 	}
 
 	&-panels {
 		position: absolute;
-		top: 150px;
-		bottom: 20px;
-		left: 20px;
+		top: 210px;
+		bottom: 16px;
+		left: 30px;
 		z-index: 29;
-		width: min(390px, calc(100vw - 40px));
-		pointer-events: none;
+		width: min(420px, calc(100vw - 60px));
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+		padding-right: 8px;
+		padding-bottom: 52px;
+		overflow-y: auto;
+		scrollbar-gutter: stable;
+		pointer-events: auto;
+	}
+
+	&-layer-tools {
+		display: grid;
+		grid-template-columns: 1fr auto;
+		gap: 12px;
+		align-items: center;
+		min-height: 76px;
+		padding: 16px 14px;
+		border: 1px solid rgba(244, 242, 235, 0.38);
+		background-color: rgba(0, 0, 0, 0.68);
+		color: #f4f2eb;
+		font-family: Consolas, "Courier New", monospace;
+		box-shadow: 0 0 18px rgba(255, 255, 255, 0.08);
+		overflow: visible;
+
+		&-heading {
+			display: grid;
+			gap: 7px;
+			min-width: 0;
+
+			span {
+				color: rgba(244, 242, 235, 0.48);
+				font-size: 0.64rem;
+				font-weight: 700;
+				line-height: 1;
+			}
+
+			strong {
+				font-size: 0.92rem;
+				font-weight: 700;
+				line-height: 1.25;
+				white-space: nowrap;
+			}
+		}
+
+		&-actions {
+			display: flex;
+			gap: 8px;
+		}
+
+		button {
+			min-width: 54px;
+			height: 32px;
+			padding: 0 12px;
+			border: 1px solid rgba(244, 242, 235, 0.44);
+			background-color: rgba(255, 255, 255, 0.05);
+			color: rgba(244, 242, 235, 0.74);
+			font-size: 0.8rem;
+			font-weight: 700;
+			transition:
+				border-color 0.18s,
+				background-color 0.18s,
+				color 0.18s;
+
+			&:hover,
+			&.map-layer-tools-button--active {
+				border-color: rgba(255, 255, 255, 0.92);
+				background-color: rgba(255, 255, 255, 0.16);
+				color: #fff;
+			}
+		}
 	}
 
 	&-charts {
 		width: 100%;
-		max-height: 100%;
-		height: 100%;
+		flex: none;
+		min-height: 0;
 		display: grid;
-		row-gap: var(--font-m);
-		padding-right: 8px;
+		align-content: start;
+		row-gap: 10px;
+		padding: 2px 0 0;
 		border-radius: 0;
-		overflow-y: scroll;
-		pointer-events: auto;
-		mask-image: linear-gradient(
-			transparent 0,
-			black 22px,
-			black calc(100% - 22px),
-			transparent 100%
-		);
+		overflow: visible;
 
 		@media (min-width: 1000px) {
 			width: 100%;
@@ -769,6 +884,7 @@ function popularBasicLayerGA(map_config) {
 		}
 
 		h2 {
+			margin: 0;
 			padding: 7px 10px;
 			border: 1px solid rgba(244, 242, 235, 0.38);
 			background-color: rgba(0, 0, 0, 0.56);
@@ -780,8 +896,8 @@ function popularBasicLayerGA(map_config) {
 
 		&-nodashboard {
 			width: 100%;
-			height: calc(100vh - 127px);
-			height: calc(var(--vh) * 100 - 127px);
+			flex: 1;
+			min-height: 220px;
 			display: flex;
 			flex-direction: column;
 			align-items: center;

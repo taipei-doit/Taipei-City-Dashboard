@@ -2,7 +2,7 @@
 
 <script setup>
 /* global gtag */
-import { onMounted, ref, computed, watch } from "vue";
+import { onMounted, computed, watch } from "vue";
 import { useRoute } from "vue-router";
 import { useAuthStore } from "../../store/authStore";
 import { useContentStore } from "../../store/contentStore";
@@ -21,9 +21,6 @@ const dialogStore = useDialogStore();
 const contentStore = useContentStore();
 const route = useRoute();
 
-const districtLayer = ref(false);
-const villageLayer = ref(false);
-
 const canUseFindClosestPoint = computed(() => {
 	let pointLayerCount = 0;
 
@@ -35,26 +32,6 @@ const canUseFindClosestPoint = computed(() => {
 
 	return pointLayerCount === 1;
 });
-
-function toggleDistrictLayer() {
-	districtLayer.value = !districtLayer.value;
-	mapStore.toggleDistrictBoundaries(districtLayer.value);
-	// 載入區界時觸發GA自訂事件
-	gtag('event','map_actions', {
-		action_type: "載入區界",
-		time: Date.now(),
-  	})
-}
-
-function toggleVillageLayer() {
-	villageLayer.value = !villageLayer.value;
-	mapStore.toggleVillageBoundaries(villageLayer.value);
-	// 載入里界時觸發GA自訂事件
-	gtag('event','map_actions', {
-		action_type: "載入里界",
-		time: Date.now(),
-  	})
-}
 
 // 尋找最近點時觸發GA自訂事件
 function findClosestPointGA() {
@@ -99,39 +76,9 @@ onMounted(() => {
     <div class="mapcontainer-map">
       <!-- #mapboxBox needs to be empty to ensure Mapbox performance -->
       <div id="mapboxBox" />
-      <div class="mapcontainer-titleplate hide-if-mobile">
-        <p>TAIPEI CITY</p>
-        <h1>MAP VIEW</h1>
-      </div>
       <div class="mapcontainer-layers">
         <button
-          :style="{
-            color: districtLayer
-              ? 'var(--color-highlight)'
-              : 'var(--color-component-background)',
-          }"
-          @click="toggleDistrictLayer"
-        >
-          區
-        </button>
-        <button
-          :style="{
-            color: villageLayer
-              ? 'var(--color-highlight)'
-              : 'var(--color-component-background)',
-          }"
-          @click="toggleVillageLayer"
-        >
-          里
-        </button>
-
-        <button
           v-if="canUseFindClosestPoint"
-          :style="{
-            color: villageLayer
-              ? 'var(--color-highlight)'
-              : 'var(--color-component-background)',
-          }"
           class="hide-if-mobile"
           type="button"
           @click="dialogStore.showDialog('findClosestPoint'); findClosestPointGA();"
@@ -155,18 +102,21 @@ onMounted(() => {
         class="mapcontainer-camera hide-if-mobile"
         aria-label="地圖攝影機控制"
       >
-        <button
-          title="重新播放進場動畫"
-          @click="
-            mapStore.playInitialMapReveal(
-              mapStore.pendingMapViewCity || 'default',
-              true,
-            )
-          "
-        >
-          <span>play_arrow</span>
-        </button>
-        <div class="mapcontainer-camera-angle">
+        <div class="mapcontainer-camera-replay">
+          <span>ANIM</span>
+          <button
+            title="重新播放進場動畫"
+            @click="
+              mapStore.playInitialMapReveal(
+                mapStore.pendingMapViewCity || 'default',
+                true,
+              )
+            "
+          >
+            <span>play_arrow</span>
+          </button>
+        </div>
+        <div class="mapcontainer-camera-angle mapcontainer-camera-section">
           <div class="mapcontainer-camera-angle-heading">
             <span>VIEW</span>
             <strong>
@@ -206,65 +156,81 @@ onMounted(() => {
             </button>
           </div>
         </div>
-        <div class="mapcontainer-camera-group">
-          <button
-            title="放大"
-            @click="mapStore.zoomCinematicMap(0.8)"
-          >
-            <span>zoom_in</span>
-          </button>
-          <button
-            title="縮小"
-            @click="mapStore.zoomCinematicMap(-0.8)"
-          >
-            <span>zoom_out</span>
-          </button>
+        <div class="mapcontainer-camera-move mapcontainer-camera-section">
+          <span class="mapcontainer-camera-label">PAN</span>
+          <div class="mapcontainer-camera-pad">
+            <button
+              class="mapcontainer-camera-pan-up"
+              title="向上平移"
+              @click="mapStore.panCinematicMap('up')"
+            >
+              <span>keyboard_arrow_up</span>
+            </button>
+            <button
+              class="mapcontainer-camera-pan-left"
+              title="向左平移"
+              @click="mapStore.panCinematicMap('left')"
+            >
+              <span>keyboard_arrow_left</span>
+            </button>
+            <button
+              class="mapcontainer-camera-pan-reset"
+              title="回到目前城市視角"
+              @click="mapStore.resetCinematicMapView()"
+            >
+              <span>my_location</span>
+            </button>
+            <button
+              class="mapcontainer-camera-pan-right"
+              title="向右平移"
+              @click="mapStore.panCinematicMap('right')"
+            >
+              <span>keyboard_arrow_right</span>
+            </button>
+            <button
+              class="mapcontainer-camera-pan-down"
+              title="向下平移"
+              @click="mapStore.panCinematicMap('down')"
+            >
+              <span>keyboard_arrow_down</span>
+            </button>
+          </div>
         </div>
-        <div class="mapcontainer-camera-pad">
-          <button
-            title="向上平移"
-            @click="mapStore.panCinematicMap('up')"
-          >
-            <span>keyboard_arrow_up</span>
-          </button>
-          <button
-            title="向左平移"
-            @click="mapStore.panCinematicMap('left')"
-          >
-            <span>keyboard_arrow_left</span>
-          </button>
-          <button
-            title="回到目前城市視角"
-            @click="mapStore.resetCinematicMapView()"
-          >
-            <span>my_location</span>
-          </button>
-          <button
-            title="向右平移"
-            @click="mapStore.panCinematicMap('right')"
-          >
-            <span>keyboard_arrow_right</span>
-          </button>
-          <button
-            title="向下平移"
-            @click="mapStore.panCinematicMap('down')"
-          >
-            <span>keyboard_arrow_down</span>
-          </button>
-        </div>
-        <div class="mapcontainer-camera-group">
-          <button
-            title="逆時針旋轉"
-            @click="mapStore.rotateCinematicMap(-24)"
-          >
-            <span>rotate_left</span>
-          </button>
-          <button
-            title="順時針旋轉"
-            @click="mapStore.rotateCinematicMap(24)"
-          >
-            <span>rotate_right</span>
-          </button>
+        <div class="mapcontainer-camera-tools mapcontainer-camera-section">
+          <div class="mapcontainer-camera-tools-row">
+            <span>ZOOM</span>
+            <div class="mapcontainer-camera-group">
+              <button
+                title="放大"
+                @click="mapStore.zoomCinematicMap(0.8)"
+              >
+                <span>zoom_in</span>
+              </button>
+              <button
+                title="縮小"
+                @click="mapStore.zoomCinematicMap(-0.8)"
+              >
+                <span>zoom_out</span>
+              </button>
+            </div>
+          </div>
+          <div class="mapcontainer-camera-tools-row">
+            <span>ROT</span>
+            <div class="mapcontainer-camera-group">
+              <button
+                title="逆時針旋轉"
+                @click="mapStore.rotateCinematicMap(-24)"
+              >
+                <span>rotate_left</span>
+              </button>
+              <button
+                title="順時針旋轉"
+                @click="mapStore.rotateCinematicMap(24)"
+              >
+                <span>rotate_right</span>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -353,36 +319,6 @@ onMounted(() => {
 		&::before,
 		&::after {
 			display: none;
-		}
-	}
-
-	&-titleplate {
-		position: absolute;
-		top: 28px;
-		left: 30px;
-		z-index: 4;
-		color: #f4f2eb;
-		font-family: Consolas, "Courier New", monospace;
-		letter-spacing: 0;
-		text-shadow: 0 0 12px rgba(255, 255, 255, 0.72);
-		pointer-events: none;
-
-		p,
-		span {
-			font-size: 0.76rem;
-			font-weight: 700;
-		}
-
-		h1 {
-			margin: 2px 0;
-			color: #fff;
-			font-size: clamp(2.1rem, 4.2vw, 5.5rem);
-			line-height: 0.86;
-		}
-
-		span {
-			display: block;
-			color: rgba(244, 242, 235, 0.62);
 		}
 	}
 
@@ -541,21 +477,40 @@ onMounted(() => {
 
 	&-camera {
 		position: absolute;
-		top: 28px;
-		right: 28px;
+		top: 22px;
+		right: 24px;
 		z-index: 6;
 		display: grid;
-		grid-template-columns: auto minmax(148px, 180px) auto auto auto;
-		gap: 8px;
+		grid-template-columns: 60px minmax(172px, 1fr) 126px 118px;
+		gap: 10px;
 		align-items: stretch;
-		padding: 8px;
+		width: min(560px, calc(100vw - 500px));
+		min-width: 500px;
+		padding: 10px;
 		border: 1px solid rgba(244, 242, 235, 0.55);
 		background-color: rgba(0, 0, 0, 0.66);
 		box-shadow: 0 0 24px rgba(255, 255, 255, 0.12);
+		backdrop-filter: blur(4px);
+
+		&-section,
+		&-replay {
+			border: 1px solid rgba(244, 242, 235, 0.22);
+			background-color: rgba(255, 255, 255, 0.035);
+		}
+
+		&-label,
+		&-replay > span,
+		&-tools-row > span {
+			color: rgba(244, 242, 235, 0.48);
+			font-family: Consolas, "Courier New", monospace;
+			font-size: 0.62rem;
+			font-weight: 700;
+			line-height: 1;
+		}
 
 		button {
-			width: 34px;
-			height: 34px;
+			width: 32px;
+			height: 32px;
 			display: flex;
 			align-items: center;
 			justify-content: center;
@@ -591,14 +546,26 @@ onMounted(() => {
 			font-weight: 700;
 		}
 
+		&-replay {
+			display: grid;
+			grid-template-rows: auto 1fr;
+			gap: 8px;
+			align-items: center;
+			justify-items: center;
+			padding: 10px 8px;
+
+			button {
+				width: 38px;
+				height: 38px;
+			}
+		}
+
 		&-angle {
 			display: grid;
 			grid-template-rows: auto auto auto;
 			gap: 7px;
 			min-height: 100%;
-			padding: 7px 8px;
-			border: 1px solid rgba(244, 242, 235, 0.34);
-			background-color: rgba(255, 255, 255, 0.04);
+			padding: 10px 12px;
 			color: rgba(244, 242, 235, 0.82);
 			font-family: Consolas, "Courier New", monospace;
 
@@ -614,7 +581,6 @@ onMounted(() => {
 				align-items: center;
 				justify-content: space-between;
 				gap: 10px;
-				font-size: 0.72rem;
 				line-height: 1;
 
 				span {
@@ -646,17 +612,62 @@ onMounted(() => {
 
 		&-group {
 			display: grid;
+			grid-template-columns: repeat(2, 32px);
 			gap: 6px;
+		}
+
+		&-move {
+			display: grid;
+			grid-template-rows: auto 1fr;
+			gap: 8px;
+			align-items: center;
+			justify-items: center;
+			padding: 10px;
 		}
 
 		&-pad {
 			display: grid;
-			grid-template-columns: repeat(3, 34px);
+			grid-template-columns: repeat(3, 32px);
+			grid-template-rows: repeat(3, 32px);
 			gap: 6px;
 
-			button:first-child,
-			button:last-child {
+			.mapcontainer-camera-pan-up {
 				grid-column: 2;
+				grid-row: 1;
+			}
+
+			.mapcontainer-camera-pan-left {
+				grid-column: 1;
+				grid-row: 2;
+			}
+
+			.mapcontainer-camera-pan-reset {
+				grid-column: 2;
+				grid-row: 2;
+			}
+
+			.mapcontainer-camera-pan-right {
+				grid-column: 3;
+				grid-row: 2;
+			}
+
+			.mapcontainer-camera-pan-down {
+				grid-column: 2;
+				grid-row: 3;
+			}
+		}
+
+		&-tools {
+			display: grid;
+			grid-template-rows: 1fr 1fr;
+			gap: 8px;
+			padding: 10px;
+
+			&-row {
+				display: grid;
+				grid-template-rows: auto auto;
+				gap: 6px;
+				align-content: center;
 			}
 		}
 	}

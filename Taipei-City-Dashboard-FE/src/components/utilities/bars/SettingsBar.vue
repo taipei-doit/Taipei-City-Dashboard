@@ -32,7 +32,10 @@ function handleOpenSettings() {
 </script>
 
 <template>
-  <div class="settingsbar">
+  <div
+    v-if="!isCurrentPageMapView"
+    class="settingsbar"
+  >
     <div class="settingsbar-title">
       <span>{{ contentStore.currentDashboard.icon }}</span>
       <h2>{{ contentStore.currentDashboard.name }}</h2>

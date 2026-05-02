@@ -105,10 +105,39 @@ const MOVING_LABEL_LAYER_IDS = [
 	"settlement-subdivision-label",
 	"settlement-minor-label",
 	"settlement-major-label",
+	"state-label",
+	"country-label",
 	"metrotaipei_town_label",
 	"metrotaipei_village_label",
 	"cinematic-map-labels",
 ];
+
+function isMotionLabelLayer(layer) {
+	if (layer.type !== "symbol" || !layer.layout?.["text-field"]) {
+		return false;
+	}
+	if (MOVING_LABEL_LAYER_IDS.includes(layer.id)) {
+		return true;
+	}
+
+	const layerId = layer.id.toLowerCase();
+	const sourceLayer = String(layer["source-layer"] || "").toLowerCase();
+	const group = String(layer.metadata?.["mapbox:group"] || "").toLowerCase();
+	const component = String(
+		layer.metadata?.["mapbox:featureComponent"] || "",
+	).toLowerCase();
+	return (
+		layerId.includes("metrotaipei") ||
+		layerId.includes("district") ||
+		layerId.includes("town") ||
+		layerId.includes("village") ||
+		layerId.includes("settlement") ||
+		layerId.includes("road-label") ||
+		sourceLayer === "place_label" ||
+		group.includes("place labels") ||
+		component.includes("place-labels")
+	);
+}
 
 function getPerformanceMapStyle() {
 	return {
@@ -164,6 +193,7 @@ export const useMapStore = defineStore("map", {
 		arcAnimationFrame: null,
 		hasLoadedDeferredMapData: false,
 		labelRestoreTimer: null,
+		hiddenMotionLabelLayers: {},
 	}),
 	actions: {
 		/* Initialize Mapbox */
@@ -181,6 +211,7 @@ export const useMapStore = defineStore("map", {
 			this.hasAppliedCinematicStyle = false;
 			this.hasLoadedDeferredMapData = false;
 			this.labelRestoreTimer = null;
+			this.hiddenMotionLabelLayers = {};
 			this.cinematicPitch = MapObjectConfig.pitch;
 			const MAPBOXTOKEN = import.meta.env.VITE_MAPBOXTOKEN;
 			mapboxGl.accessToken = MAPBOXTOKEN;
@@ -202,7 +233,31 @@ export const useMapStore = defineStore("map", {
 				.on("movestart", () => {
 					this.hideLabelsDuringMapMotion();
 				})
+				.on("zoomstart", () => {
+					this.hideLabelsDuringMapMotion();
+				})
+				.on("rotatestart", () => {
+					this.hideLabelsDuringMapMotion();
+				})
+				.on("pitchstart", () => {
+					this.hideLabelsDuringMapMotion();
+				})
+				.on("dragstart", () => {
+					this.hideLabelsDuringMapMotion();
+				})
 				.on("moveend", () => {
+					this.scheduleLabelsAfterMapMotion();
+				})
+				.on("zoomend", () => {
+					this.scheduleLabelsAfterMapMotion();
+				})
+				.on("rotateend", () => {
+					this.scheduleLabelsAfterMapMotion();
+				})
+				.on("pitchend", () => {
+					this.scheduleLabelsAfterMapMotion();
+				})
+				.on("dragend", () => {
 					this.scheduleLabelsAfterMapMotion();
 				})
 				.on("click", (event) => {
@@ -275,7 +330,35 @@ export const useMapStore = defineStore("map", {
 		},
 		setMapLayerVisibility(layerId, visibility) {
 			if (!this.map?.getLayer(layerId)) return;
-			this.map.setLayoutProperty(layerId, "visibility", visibility);
+			try {
+				this.map.setLayoutProperty(layerId, "visibility", visibility);
+			} catch {
+				// Layer visibility may fail while Mapbox is rebuilding the style.
+			}
+		},
+		getMotionLabelLayerIds() {
+			if (!this.map) return [];
+			const layers = this.map.getStyle()?.layers || [];
+			const layerIds = new Set(MOVING_LABEL_LAYER_IDS);
+			layers.forEach((layer) => {
+				if (isMotionLabelLayer(layer)) {
+					layerIds.add(layer.id);
+				}
+			});
+			return Array.from(layerIds).filter((layerId) =>
+				this.map.getLayer(layerId),
+			);
+		},
+		getMapLayerVisibility(layerId) {
+			if (!this.map?.getLayer(layerId)) return null;
+			try {
+				return (
+					this.map.getLayoutProperty(layerId, "visibility") ||
+					"visible"
+				);
+			} catch {
+				return null;
+			}
 		},
 		hideLabelsDuringMapMotion() {
 			if (!this.map) return;
@@ -283,9 +366,15 @@ export const useMapStore = defineStore("map", {
 				window.clearTimeout(this.labelRestoreTimer);
 				this.labelRestoreTimer = null;
 			}
-			MOVING_LABEL_LAYER_IDS.forEach((layerId) => {
+			const hiddenLayers = { ...this.hiddenMotionLabelLayers };
+			this.getMotionLabelLayerIds().forEach((layerId) => {
+				const currentVisibility = this.getMapLayerVisibility(layerId);
+				if (!currentVisibility) return;
+				if (currentVisibility === "none") return;
+				hiddenLayers[layerId] = currentVisibility;
 				this.setMapLayerVisibility(layerId, "none");
 			});
+			this.hiddenMotionLabelLayers = hiddenLayers;
 		},
 		scheduleLabelsAfterMapMotion() {
 			if (!this.map) return;
@@ -293,14 +382,21 @@ export const useMapStore = defineStore("map", {
 				window.clearTimeout(this.labelRestoreTimer);
 			}
 			this.labelRestoreTimer = window.setTimeout(() => {
+				if (this.map?.isMoving()) {
+					this.scheduleLabelsAfterMapMotion();
+					return;
+				}
 				this.restoreLabelsAfterMapMotion();
-			}, 120);
+			}, 160);
 		},
 		restoreLabelsAfterMapMotion() {
 			if (!this.map) return;
-			MOVING_LABEL_LAYER_IDS.forEach((layerId) => {
-				this.setMapLayerVisibility(layerId, "visible");
-			});
+			Object.entries(this.hiddenMotionLabelLayers).forEach(
+				([layerId, visibility]) => {
+					this.setMapLayerVisibility(layerId, visibility);
+				},
+			);
+			this.hiddenMotionLabelLayers = {};
 			this.labelRestoreTimer = null;
 		},
 		applyCinematicMapEffects() {
