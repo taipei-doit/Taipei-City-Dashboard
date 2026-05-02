@@ -1,0 +1,44 @@
+{
+  "dag_infos": {
+    "dag_id": "water_valve",
+    "start_date": "2026-05-02",
+    "schedule_interval": "@monthly",
+    "catchup": false,
+    "tags": [
+      "water",
+      "water_valve",
+      "臺北市公共管線圖資",
+      "自來水系統閥類"
+    ],
+    "description": "Taipei public utility water-system valve point data from Taipei Open Data.",
+    "default_args": {
+      "owner": "airflow",
+      "email": [
+        "DEFAULT_EMAIL_LIST"
+      ],
+      "email_on_retry": false,
+      "email_on_failure": true,
+      "retries": 1,
+      "retry_delay": 60
+    },
+    "ready_data_db": "postgres_default",
+    "ready_data_default_table": "water_valve",
+    "ready_data_history_table": "",
+    "raw_data_db": "postgres_default",
+    "raw_data_table": "",
+    "load_behavior": "replace"
+  },
+  "data_infos": {
+    "name_cn": "臺北市公共管線圖資_自來水系統閥類",
+    "airflow_update_freq": "monthly",
+    "source": "https://data.taipei/api/dataset/44c6fb09-8f51-403a-95a8-99a2387c2f05/resource/2046c65f-024f-4ded-ad25-5349b66a41ed/download",
+    "source_type": "Taipei Open Data XML download",
+    "source_dept": "臺北市政府工務局",
+    "gis_format": "Point",
+    "output_coordinate": "EPSG:4326",
+    "is_geometry": 1,
+    "dataset_description": "臺北市公共管線圖資中的自來水系統閥類點位，包含閥類編號、口徑、設置日期、型態與使用狀態。",
+    "etl_description": "Fetch gzipped XML, stream parse UTL_開關閥 records, convert coordinates from TWD97 to WGS84, normalize 1912 setup dates to NULL, then write PostgreSQL.",
+    "sensitivity": "public"
+  }
+}
