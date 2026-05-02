@@ -243,138 +243,253 @@ function interpolateSimpleRoutePath(routePath, progress) {
 	};
 }
 
-function createSimpleRouteCarPart(routeSample, options) {
-	const center = mapboxGl.MercatorCoordinate.fromLngLat(
-		routeSample.coordinate,
-		0,
-	);
-	const meterScale = center.meterInMercatorCoordinateUnits();
-	const direction = {
-		x: Math.cos(routeSample.angle),
-		y: Math.sin(routeSample.angle),
-	};
-	const side = {
-		x: -direction.y,
-		y: direction.x,
-	};
-	const centerX =
-		center.x +
-		direction.x * (options.forwardOffsetMeters || 0) * meterScale +
-		side.x * (options.sideOffsetMeters || 0) * meterScale;
-	const centerY =
-		center.y +
-		direction.y * (options.forwardOffsetMeters || 0) * meterScale +
-		side.y * (options.sideOffsetMeters || 0) * meterScale;
-	const halfLength = (options.lengthMeters * meterScale) / 2;
-	const halfWidth = (options.widthMeters * meterScale) / 2;
-	const corners = [
-		[
-			centerX + direction.x * halfLength + side.x * halfWidth,
-			centerY + direction.y * halfLength + side.y * halfWidth,
-		],
-		[
-			centerX + direction.x * halfLength - side.x * halfWidth,
-			centerY + direction.y * halfLength - side.y * halfWidth,
-		],
-		[
-			centerX - direction.x * halfLength - side.x * halfWidth,
-			centerY - direction.y * halfLength - side.y * halfWidth,
-		],
-		[
-			centerX - direction.x * halfLength + side.x * halfWidth,
-			centerY - direction.y * halfLength + side.y * halfWidth,
-		],
-	].map(([x, y]) => {
-		const lngLat = new mapboxGl.MercatorCoordinate(x, y, 0).toLngLat();
-		return [lngLat.lng, lngLat.lat];
+function disposeThreeObject(object) {
+	object.traverse((child) => {
+		if (!child.isMesh) return;
+		child.geometry?.dispose?.();
+		const materials = Array.isArray(child.material)
+			? child.material
+			: [child.material];
+		materials.filter(Boolean).forEach((material) => material.dispose?.());
+	});
+}
+
+function removeSimpleRouteModelExtras(model) {
+	const extras = [];
+	model.traverse((child) => {
+		if (
+			child.isCamera ||
+			child.isLight ||
+			child.name === "Plane002"
+		) {
+			extras.push(child);
+		}
+	});
+	extras.forEach((child) => child.parent?.remove(child));
+}
+
+function normalizeSimpleRouteCarModel(model) {
+	removeSimpleRouteModelExtras(model);
+	model.updateMatrixWorld(true);
+
+	const box = new THREE.Box3().setFromObject(model);
+	const size = new THREE.Vector3();
+	const center = new THREE.Vector3();
+	box.getSize(size);
+	box.getCenter(center);
+
+	if (!Number.isFinite(size.x) || size.x <= 0) {
+		return createSimpleRouteFallbackCarModel();
+	}
+
+	model.position.x -= center.x;
+	model.position.y -= box.min.y;
+	model.position.z -= center.z;
+	model.traverse((child) => {
+		if (!child.isMesh) return;
+		child.frustumCulled = false;
+		const materials = Array.isArray(child.material)
+			? child.material
+			: [child.material];
+		materials.filter(Boolean).forEach((material) => {
+			material.side = THREE.DoubleSide;
+			material.needsUpdate = true;
+		});
 	});
 
-	corners.push(corners[0]);
+	const group = new THREE.Group();
+	group.add(model);
 
 	return {
-		type: "Feature",
-		properties: {
-			color: options.color,
-			height: options.heightMeters,
-			base: options.baseMeters || 0,
-		},
-		geometry: {
-			type: "Polygon",
-			coordinates: [corners],
-		},
+		model: group,
+		modelLengthUnits: size.x,
 	};
 }
 
-function offsetSimpleRouteSample(routeSample, sideOffsetMeters) {
-	const center = mapboxGl.MercatorCoordinate.fromLngLat(
-		routeSample.coordinate,
-		0,
+function createSimpleRouteFallbackCarModel() {
+	const group = new THREE.Group();
+	const bodyMaterial = new THREE.MeshStandardMaterial({
+		color: "#ff4ecb",
+		roughness: 0.62,
+		metalness: 0.18,
+	});
+	const cabinMaterial = new THREE.MeshStandardMaterial({
+		color: "#f4f2eb",
+		roughness: 0.48,
+		metalness: 0.08,
+	});
+	const body = new THREE.Mesh(
+		new THREE.BoxGeometry(1, 0.24, 0.34),
+		bodyMaterial,
 	);
-	const meterScale = center.meterInMercatorCoordinateUnits();
-	const side = {
-		x: -Math.sin(routeSample.angle),
-		y: Math.cos(routeSample.angle),
-	};
-	const offsetMercator = new mapboxGl.MercatorCoordinate(
-		center.x + side.x * sideOffsetMeters * meterScale,
-		center.y + side.y * sideOffsetMeters * meterScale,
-		0,
+	const cabin = new THREE.Mesh(
+		new THREE.BoxGeometry(0.42, 0.22, 0.24),
+		cabinMaterial,
 	);
-	const lngLat = offsetMercator.toLngLat();
+	body.position.y = 0.12;
+	cabin.position.set(-0.05, 0.35, 0);
+	group.add(body, cabin);
 
 	return {
-		coordinate: [lngLat.lng, lngLat.lat],
-		angle: routeSample.angle,
+		model: group,
+		modelLengthUnits: 1,
 	};
 }
 
-function createSimpleRouteCarFeatureCollection(routeSample, scale = 1) {
-	const carSample = offsetSimpleRouteSample(
-		routeSample,
-		SIMPLE_ROUTE_CAR_SIDE_OFFSET_METERS * scale,
-	);
+function createSimpleRouteCarLayer(routePath, animationDuration, firstSample) {
+	const customLayer = {
+		id: SIMPLE_ROUTE_CAR_LAYER_IDS[0],
+		type: "custom",
+		renderingMode: "3d",
+		startedAt: performance.now(),
+		routePath,
+		animationDuration,
+		currentSample: firstSample,
+		model: null,
+		modelLengthUnits: 1,
+		isRemoved: false,
+		onAdd(map, gl) {
+			customLayer.map = markRaw(map);
+			customLayer.camera = markRaw(new THREE.Camera());
+			customLayer.scene = markRaw(new THREE.Scene());
 
-	return {
-		type: "FeatureCollection",
-		features: [
-			createSimpleRouteCarPart(carSample, {
-				lengthMeters: SIMPLE_ROUTE_CAR_BODY_LENGTH_METERS * scale,
-				widthMeters: SIMPLE_ROUTE_CAR_BODY_WIDTH_METERS * scale,
-				heightMeters: SIMPLE_ROUTE_CAR_BODY_HEIGHT_METERS * scale,
-				color: "#ff4ecb",
-			}),
-			createSimpleRouteCarPart(carSample, {
-				lengthMeters: SIMPLE_ROUTE_CAR_CABIN_LENGTH_METERS * scale,
-				widthMeters: SIMPLE_ROUTE_CAR_CABIN_WIDTH_METERS * scale,
-				heightMeters: SIMPLE_ROUTE_CAR_CABIN_HEIGHT_METERS * scale,
-				baseMeters: SIMPLE_ROUTE_CAR_BODY_HEIGHT_METERS * scale,
-				forwardOffsetMeters: -4 * scale,
-				color: "#f4f2eb",
-			}),
-			createSimpleRouteCarPart(carSample, {
-				lengthMeters: 7 * scale,
-				widthMeters: 8 * scale,
-				heightMeters:
-					(SIMPLE_ROUTE_CAR_BODY_HEIGHT_METERS + 0.4) * scale,
-				baseMeters: 0.2 * scale,
-				forwardOffsetMeters:
-					(SIMPLE_ROUTE_CAR_BODY_LENGTH_METERS / 2 - 6) * scale,
-				sideOffsetMeters: -9 * scale,
-				color: "#ffffff",
-			}),
-			createSimpleRouteCarPart(carSample, {
-				lengthMeters: 7 * scale,
-				widthMeters: 8 * scale,
-				heightMeters:
-					(SIMPLE_ROUTE_CAR_BODY_HEIGHT_METERS + 0.4) * scale,
-				baseMeters: 0.2 * scale,
-				forwardOffsetMeters:
-					(SIMPLE_ROUTE_CAR_BODY_LENGTH_METERS / 2 - 6) * scale,
-				sideOffsetMeters: 9 * scale,
-				color: "#ffffff",
-			}),
-		],
+			customLayer.scene.add(
+				new THREE.HemisphereLight(0xffffff, 0x26213c, 2.2),
+			);
+			const keyLight = new THREE.DirectionalLight(0xffffff, 2.6);
+			keyLight.position.set(-3, -4, 6);
+			customLayer.scene.add(keyLight);
+
+			customLayer.renderer = markRaw(
+				new THREE.WebGLRenderer({
+					canvas: map.getCanvas(),
+					context: gl,
+					antialias: true,
+				}),
+			);
+			customLayer.renderer.autoClear = false;
+
+			new FBXLoader().load(
+				SIMPLE_ROUTE_CAR_MODEL_URL,
+				(model) => {
+					const normalizedModel =
+						normalizeSimpleRouteCarModel(model);
+					if (customLayer.isRemoved) {
+						disposeThreeObject(normalizedModel.model);
+						return;
+					}
+					customLayer.model = markRaw(normalizedModel.model);
+					customLayer.modelLengthUnits =
+						normalizedModel.modelLengthUnits;
+					customLayer.scene.add(customLayer.model);
+					map.triggerRepaint();
+				},
+				undefined,
+				(error) => {
+					console.warn(
+						"Failed to load simple route cybertruck model.",
+						error,
+					);
+					const fallbackModel = createSimpleRouteFallbackCarModel();
+					if (customLayer.isRemoved) {
+						disposeThreeObject(fallbackModel.model);
+						return;
+					}
+					customLayer.model = markRaw(fallbackModel.model);
+					customLayer.modelLengthUnits =
+						fallbackModel.modelLengthUnits;
+					customLayer.scene.add(customLayer.model);
+					map.triggerRepaint();
+				},
+			);
+		},
+		onRemove() {
+			customLayer.isRemoved = true;
+			if (customLayer.model) {
+				customLayer.scene?.remove(customLayer.model);
+				disposeThreeObject(customLayer.model);
+			}
+			customLayer.scene = null;
+			customLayer.camera = null;
+			customLayer.renderer = null;
+			customLayer.model = null;
+		},
+		render(gl, matrix) {
+			if (
+				!customLayer.map ||
+				!customLayer.scene ||
+				!customLayer.camera ||
+				!customLayer.renderer
+			) {
+				return;
+			}
+
+			const progress = clampNumber(
+				(performance.now() - customLayer.startedAt) /
+					customLayer.animationDuration,
+				0,
+				1,
+			);
+			const routeSample = interpolateSimpleRoutePath(
+				customLayer.routePath,
+				progress,
+			);
+			customLayer.currentSample = routeSample;
+
+			if (customLayer.model) {
+				const mercator =
+					mapboxGl.MercatorCoordinate.fromLngLat(
+						routeSample.coordinate,
+						SIMPLE_ROUTE_CAR_MODEL_ALTITUDE_METERS,
+					);
+				const zoomScale = getSimpleRouteCarScale(
+					customLayer.map.getZoom(),
+				);
+				const modelScale =
+					(mercator.meterInMercatorCoordinateUnits() *
+						SIMPLE_ROUTE_CAR_MODEL_LENGTH_METERS *
+						zoomScale) /
+					customLayer.modelLengthUnits;
+				const rotationX = new THREE.Matrix4().makeRotationAxis(
+					new THREE.Vector3(1, 0, 0),
+					Math.PI / 2,
+				);
+				const rotationZ = new THREE.Matrix4().makeRotationZ(
+					-routeSample.angle,
+				);
+				const translation = new THREE.Matrix4().makeTranslation(
+					mercator.x,
+					mercator.y,
+					mercator.z,
+				);
+				const scaleMatrix = new THREE.Matrix4().makeScale(
+					modelScale,
+					-modelScale,
+					modelScale,
+				);
+				const modelMatrix = new THREE.Matrix4()
+					.multiply(translation)
+					.multiply(scaleMatrix)
+					.multiply(rotationZ)
+					.multiply(rotationX);
+
+				customLayer.camera.projectionMatrix = new THREE.Matrix4()
+					.fromArray(matrix)
+					.multiply(modelMatrix);
+				customLayer.renderer.resetState();
+				customLayer.renderer.render(
+					customLayer.scene,
+					customLayer.camera,
+				);
+			}
+
+			if (progress < 1 || !customLayer.model) {
+				customLayer.map.triggerRepaint();
+			}
+		},
 	};
+
+	return customLayer;
 }
 
 function isMotionLabelLayer(layer) {
@@ -462,6 +577,7 @@ export const useMapStore = defineStore("map", {
 		navigationRouteMarkers: [],
 		navigationRouteSummary: null,
 		navigationRouteCarSample: null,
+		navigationRouteCarLayer: null,
 		navigationRouteCarZoomHandler: null,
 		navigationRouteCarUpdateFrame: null,
 		navigationRouteCarAnimationFrame: null,
@@ -487,6 +603,7 @@ export const useMapStore = defineStore("map", {
 			this.navigationRouteMarkers = [];
 			this.navigationRouteSummary = null;
 			this.navigationRouteCarSample = null;
+			this.navigationRouteCarLayer = null;
 			this.navigationRouteCarZoomHandler = null;
 			this.navigationRouteCarUpdateFrame = null;
 			this.navigationRouteCarAnimationFrame = null;
@@ -3242,33 +3359,6 @@ export const useMapStore = defineStore("map", {
 					.addTo(this.map),
 			);
 		},
-		updateSimpleRouteCarScale() {
-			if (
-				!this.map?.getSource(SIMPLE_ROUTE_CAR_SOURCE_ID) ||
-				!this.navigationRouteCarSample
-			) {
-				return;
-			}
-			const scale = getSimpleRouteCarScale(this.map.getZoom());
-			this.map
-				.getSource(SIMPLE_ROUTE_CAR_SOURCE_ID)
-				.setData(
-					createSimpleRouteCarFeatureCollection(
-						this.navigationRouteCarSample,
-						scale,
-					),
-				);
-		},
-		scheduleSimpleRouteCarScaleUpdate() {
-			if (this.navigationRouteCarUpdateFrame) return;
-			if (this.navigationRouteCarAnimationFrame) return;
-			this.navigationRouteCarUpdateFrame = window.requestAnimationFrame(
-				() => {
-					this.navigationRouteCarUpdateFrame = null;
-					this.updateSimpleRouteCarScale();
-				},
-			);
-		},
 		renderSimpleRouteCar(routeData) {
 			if (!this.map || !routeData?.geometry?.coordinates?.length) {
 				return;
@@ -3279,11 +3369,9 @@ export const useMapStore = defineStore("map", {
 			if (!routePath) return;
 
 			const firstSample = interpolateSimpleRoutePath(routePath, 0);
-			const initialScale = getSimpleRouteCarScale(this.map.getZoom());
 			const animationDuration = getSimpleRouteCarDuration(
 				routeData.distance,
 			);
-			const startedAt = performance.now();
 			this.navigationRouteCarSample = firstSample;
 
 			SIMPLE_ROUTE_CAR_LAYER_IDS.slice()
@@ -3297,74 +3385,20 @@ export const useMapStore = defineStore("map", {
 				this.map.removeSource(SIMPLE_ROUTE_CAR_SOURCE_ID);
 			}
 
-			this.map.addSource(SIMPLE_ROUTE_CAR_SOURCE_ID, {
-				type: "geojson",
-				data: createSimpleRouteCarFeatureCollection(
-					firstSample,
-					initialScale,
-				),
-			});
-			this.map.addLayer({
-				id: SIMPLE_ROUTE_CAR_LAYER_IDS[0],
-				type: "fill-extrusion",
-				source: SIMPLE_ROUTE_CAR_SOURCE_ID,
-				paint: {
-					"fill-extrusion-color": ["get", "color"],
-					"fill-extrusion-height": ["get", "height"],
-					"fill-extrusion-base": ["get", "base"],
-					"fill-extrusion-opacity": 0.96,
-					"fill-extrusion-vertical-gradient": true,
-				},
-			});
-
-			if (this.navigationRouteCarZoomHandler) {
-				this.map.off("zoom", this.navigationRouteCarZoomHandler);
-			}
-			this.navigationRouteCarZoomHandler = () => {
-				this.scheduleSimpleRouteCarScaleUpdate();
-			};
-			this.map.on("zoom", this.navigationRouteCarZoomHandler);
-
-			const animateCar = () => {
-				if (!this.map?.getSource(SIMPLE_ROUTE_CAR_SOURCE_ID)) {
-					this.navigationRouteCarAnimationFrame = null;
-					return;
-				}
-				const progress = clampNumber(
-					(performance.now() - startedAt) / animationDuration,
-					0,
-					1,
-				);
-				const routeSample = interpolateSimpleRoutePath(
-					routePath,
-					progress,
-				);
-				const scale = getSimpleRouteCarScale(this.map.getZoom());
-				this.navigationRouteCarSample = routeSample;
-				this.map
-					.getSource(SIMPLE_ROUTE_CAR_SOURCE_ID)
-					.setData(
-						createSimpleRouteCarFeatureCollection(
-							routeSample,
-							scale,
-						),
-					);
-
-				if (progress < 1) {
-					this.navigationRouteCarAnimationFrame =
-						window.requestAnimationFrame(animateCar);
-					return;
-				}
-				this.navigationRouteCarAnimationFrame = null;
-			};
-
 			if (this.navigationRouteCarAnimationFrame) {
 				window.cancelAnimationFrame(
 					this.navigationRouteCarAnimationFrame,
 				);
+				this.navigationRouteCarAnimationFrame = null;
 			}
-			this.navigationRouteCarAnimationFrame =
-				window.requestAnimationFrame(animateCar);
+
+			const carLayer = createSimpleRouteCarLayer(
+				routePath,
+				animationDuration,
+				firstSample,
+			);
+			this.navigationRouteCarLayer = markRaw(carLayer);
+			this.map.addLayer(carLayer);
 		},
 		renderSimpleRoute(routeData) {
 			if (!this.map || !routeData?.geometry?.coordinates?.length) {
@@ -3530,6 +3564,7 @@ export const useMapStore = defineStore("map", {
 			}
 			this.navigationRouteCarZoomHandler = null;
 			this.navigationRouteCarSample = null;
+			this.navigationRouteCarLayer = null;
 			if (this.navigationRouteMarkers?.length) {
 				this.navigationRouteMarkers.forEach((marker) => {
 					marker.remove();
