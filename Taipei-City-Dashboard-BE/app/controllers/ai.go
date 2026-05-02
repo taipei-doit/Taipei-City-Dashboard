@@ -272,7 +272,7 @@ func GetComponemtByNews(c *gin.Context){
 			{
 				Role: llms.ChatMessageTypeSystem,
 				Parts: []llms.ContentPart{
-					llms.TextContent{Text: "輸入：一段來自某新聞網站的HTML結構碼\n目標：擷取新聞主標題及全文內容\n注意事項：\n1. 要完整取出全文內容，不要摘要\n2. 直接給我結果，不回應思考過程\n\n"},
+					llms.TextContent{Text: "輸入：一段來自某新聞網站的 HTML 結構碼。\n目標：擷取主標題與正文全文。\n請嚴格依下列字面格式輸出（第一行行首文字須與示例一致）：\n新聞主標題：<一行標題>\n\n【正文開始】\n（此處接完整正文）\n【正文結束】\n\n注意：\n1. 標題／正文請保留來源語言（原文外文亦可），勿整篇譯為中文。\n2. 正文務必完整、不可摘要。\n3. 只輸出以上區塊，不要前言／後語／思考過程。\n"},
 				},
 			},
 			{
@@ -314,13 +314,41 @@ func GetComponemtByNews(c *gin.Context){
 	// 1. 提取新聞標題 (優先尋找包含「新聞主標題」的行)
 	newsTitle := ""
 	lines := strings.Split(newsContent, "\n")
+	titlePrefixes := []string{
+		"新聞主標題：", "新聞主標題:", "[新聞主標題]：", "[新聞主標題]:",
+		"標題：", "標題:",
+		"Title:", "TITLE:", "Headline:",
+	}
 	for _, line := range lines {
 		trimmed := strings.TrimSpace(line)
-		if strings.Contains(trimmed, "新聞主標題") {
-			newsTitle = strings.ReplaceAll(trimmed, "[新聞主標題]：", "")
-			newsTitle = strings.ReplaceAll(newsTitle, "新聞主標題：", "")
-			newsTitle = strings.TrimSpace(newsTitle)
+		found := ""
+		for _, pre := range titlePrefixes {
+			if strings.HasPrefix(trimmed, pre) {
+				found = strings.TrimSpace(strings.TrimPrefix(trimmed, pre))
+				break
+			}
+		}
+		if found != "" && found != trimmed {
+			newsTitle = found
 			break
+		}
+	}
+	// 舊格式或模型未嚴守前綴時之後備
+	if newsTitle == "" {
+		for _, line := range lines {
+			t := strings.TrimSpace(line)
+			if !strings.Contains(t, "新聞主標題") {
+				continue
+			}
+			tmp := strings.ReplaceAll(t, "[新聞主標題]：", "")
+			tmp = strings.ReplaceAll(tmp, "[新聞主標題]:", "")
+			tmp = strings.ReplaceAll(tmp, "新聞主標題：", "")
+			tmp = strings.ReplaceAll(tmp, "新聞主標題:", "")
+			tmp = strings.TrimSpace(tmp)
+			if tmp != "" && tmp != t {
+				newsTitle = tmp
+				break
+			}
 		}
 	}
 	if newsTitle == "" && len(lines) > 0 {
@@ -335,13 +363,13 @@ func GetComponemtByNews(c *gin.Context){
 			{
 				Role: llms.ChatMessageTypeSystem,
 				Parts: []llms.ContentPart{
-					llms.TextContent{Text: "你是一位數據儀表板架構師。請根據提供的新聞內容，想像一個『最能提供相關數據背景』的儀表板組件。請為這個想像中的組件寫一段 2 句的『功能描述』，包含它統計了哪些指標。直接輸出內容，不要前言。"},
+					llms.TextContent{Text: "你是一位數據儀表板架構師。請根據提供的新聞標題與內容，想像一個『最能提供相關數據背景』的儀表板組件。\n新聞可為任一語種；請你自行理解議題。\n請只輸出一小段（恰好兩個完整句子）的功能描述：說明此組件涵蓋哪些指標／維度，且必須全部使用「繁體中文」書寫，以便與同為繁中文案的儀表板組件做語意對照。\n不要前言、小標題、引號以外的包裝。"},
 				},
 			},
 			{
 				Role: llms.ChatMessageTypeHuman,
 				Parts: []llms.ContentPart{
-					llms.TextContent{Text: fmt.Sprintf("新聞標題: %s\n新聞內容: %s", newsTitle, newsContent)},
+					llms.TextContent{Text: fmt.Sprintf("新聞標題:\n%s\n\n新聞內容（可能為外文，請據此作答）:\n%s", newsTitle, newsContent)},
 				},
 			},
 		},

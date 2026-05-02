@@ -3,8 +3,9 @@
 
 /**
  * UI 語系：靜態文案以前端 frontendBundles 為主；
- * GET /translation/static 僅備援繁中原稿。
- * 動態儀表板／組件內容不再走後端 LLM；LLM 僅用於小幫手向量推薦與 Storyline。
+ * GET /translation/static 備援未覆蓋的 key。
+ * 少量動態繁中短文（如新聞標題／摘要／洞察）可走 POST …/translate（後端 TWCC／快取）；
+ * 儀表板組件大批量欄位仍由 GET /dashboard/ 後端批次處理。
  */
 
 
@@ -19,7 +20,22 @@ import { lookupFrontendStatic } from "../i18n/frontendBundles";
  * GET …/translation/static（備援鍵→繁中原文）
  */
 const STATIC_TRANSLATION_PATH =
-    import.meta.env.VITE_STATIC_TRANSLATION_PATH || "/translation/static";
+	import.meta.env.VITE_STATIC_TRANSLATION_PATH || "/translation/static";
+
+const TRANSLATE_PATH =
+	import.meta.env.VITE_TRANSLATE_PATH?.trim?.() || "/translate";
+
+/** locale + 原文 → 動態短文譯文（與組件級 dashboard 批次翻譯分開） */
+const dynTranslateMem = new Map();
+
+/** 合併同時進行的相同請求 */
+const dynTranslateInflight = new Map();
+
+function bypassDynamicTranslateLocale(code) {
+	return (
+		code === SOURCE_LOCALE || code === "zh-Hant" || code === "zh-tw"
+	);
+}
 
 
 /** 介面預設以繁中為源文案 */
@@ -171,6 +187,8 @@ export const useTranslationStore = defineStore("translation", {
 			// 語系切換期間先蓋 loading，等 dashboard 文字合併完再放開
 			if (changed) {
 				this.isApplyingLocale = true;
+				dynTranslateMem.clear();
+				dynTranslateInflight.clear();
 			}
 
 			this.releasePendingTranslates();
@@ -203,11 +221,72 @@ export const useTranslationStore = defineStore("translation", {
 
 
 		/**
-         * 後端已不再對動態內容做 LLM；僅回傳原文（維持 async 契約）。
-         */
+		 * 單段繁中 → 目標語系（POST /translate，後端快取＋LLM）。
+		 * 失敗時回傳原文；VITE_MOCK_TRANSLATION=true 時回傳前綴標記供本機離線測試。
+		 */
 		translate(text) {
-			if (typeof text !== "string") return Promise.resolve(String(text));
-			return Promise.resolve(text);
+			if (typeof text !== "string") {
+				return Promise.resolve(String(text));
+			}
+			const loc = this.locale;
+			if (bypassDynamicTranslateLocale(loc)) {
+				return Promise.resolve(text);
+			}
+			const trimmed = text.trim();
+			if (!trimmed) {
+				return Promise.resolve(text);
+			}
+
+			const ck = `${loc}::${trimmed}`;
+			if (dynTranslateMem.has(ck)) {
+				return Promise.resolve(dynTranslateMem.get(ck));
+			}
+			const pending = dynTranslateInflight.get(ck);
+			if (pending) {
+				return pending;
+			}
+
+			const promise = (async () => {
+				try {
+					if (String(import.meta.env.VITE_MOCK_TRANSLATION) === "true") {
+						const out = `[${loc}·mock] ${trimmed}`;
+						dynTranslateMem.set(ck, out);
+						return out;
+					}
+
+					const { data } = await http.post(
+						TRANSLATE_PATH,
+						{
+							source_locale: SOURCE_LOCALE,
+							target_locale: loc,
+							texts: [trimmed],
+						},
+						{ skipGlobalLoading: true, skipErrorHandler: true }
+					);
+
+					const body = data?.data ?? data;
+					const arr = body?.translations;
+					let out =
+						Array.isArray(arr) && typeof arr[0] === "string"
+							? arr[0]
+							: trimmed;
+					out =
+						String(out || "").trim() !== ""
+							? String(out)
+							: trimmed;
+
+					dynTranslateMem.set(ck, out);
+					return out;
+				} catch {
+					dynTranslateMem.set(ck, trimmed);
+					return trimmed;
+				} finally {
+					dynTranslateInflight.delete(ck);
+				}
+			})();
+
+			dynTranslateInflight.set(ck, promise);
+			return promise;
 		},
 	},
 });
