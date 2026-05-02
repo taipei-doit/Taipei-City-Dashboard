@@ -221,6 +221,23 @@ onMounted(() => {
             {{ option.label }}
           </button>
         </div>
+        <div class="mapcontainer-navigation-view">
+          <span>VIEW</span>
+          <button
+            class="mapcontainer-navigation-view-toggle"
+            :aria-pressed="mapStore.isSimpleRouteFirstPersonCamera"
+            :class="{
+              'mapcontainer-navigation-view-toggle--active':
+                mapStore.isSimpleRouteFirstPersonCamera,
+            }"
+            title="第一人稱視角"
+            type="button"
+            @click="mapStore.toggleSimpleRouteFirstPersonCamera()"
+          >
+            <span>videocam</span>
+            第一人稱
+          </button>
+        </div>
         <div class="mapcontainer-navigation-actions">
           <button
             class="mapcontainer-navigation-submit"
@@ -743,6 +760,49 @@ onMounted(() => {
 				border-color: rgba(255, 78, 203, 0.95);
 				background-color: rgba(255, 78, 203, 0.18);
 				color: #fff;
+			}
+		}
+
+		&-view {
+			display: grid;
+			grid-template-columns: auto minmax(0, 1fr);
+			gap: 8px;
+			align-items: center;
+
+			> span {
+				color: rgba(244, 242, 235, 0.52);
+				font-size: 0.64rem;
+				font-weight: 700;
+			}
+
+			&-toggle {
+				height: 34px;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				gap: 6px;
+				min-width: 0;
+				border: 1px solid rgba(244, 242, 235, 0.34);
+				background-color: rgba(255, 255, 255, 0.045);
+				color: rgba(244, 242, 235, 0.78);
+				font-size: 0.76rem;
+				font-weight: 700;
+				transition:
+					border-color 0.18s,
+					background-color 0.18s,
+					color 0.18s;
+
+				span {
+					font-family: var(--font-icon);
+					font-size: 1rem;
+				}
+
+				&:hover,
+				&--active {
+					border-color: rgba(255, 78, 203, 0.95);
+					background-color: rgba(255, 78, 203, 0.2);
+					color: #fff;
+				}
 			}
 		}
 

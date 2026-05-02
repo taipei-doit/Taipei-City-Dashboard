@@ -152,6 +152,10 @@ const SIMPLE_ROUTE_CAR_MAX_SCALE = 7;
 const SIMPLE_ROUTE_CAR_MIN_DURATION_MS = 6500;
 const SIMPLE_ROUTE_CAR_MAX_DURATION_MS = 22000;
 const SIMPLE_ROUTE_CAR_MS_PER_METER = 1.6;
+const SIMPLE_ROUTE_FIRST_PERSON_FORWARD_METERS = 42;
+const SIMPLE_ROUTE_FIRST_PERSON_PITCH = 78;
+const SIMPLE_ROUTE_FIRST_PERSON_ZOOM = 17.2;
+const SIMPLE_ROUTE_FIRST_PERSON_UPDATE_INTERVAL_MS = 80;
 const SIMPLE_ROUTE_PROFILES = [
 	"mapbox/driving",
 	"mapbox/walking",
@@ -187,6 +191,39 @@ function getSimpleRouteVehicleModel(profile) {
 		SIMPLE_ROUTE_VEHICLE_MODELS[profile] ||
 		SIMPLE_ROUTE_VEHICLE_MODELS.default
 	);
+}
+
+function normalizeMapBearing(bearing) {
+	return ((((bearing % 360) + 540) % 360) - 180);
+}
+
+function getSimpleRouteBearing(routeSample) {
+	return normalizeMapBearing((routeSample.angle * 180) / Math.PI + 90);
+}
+
+function offsetSimpleRouteCoordinate(coordinate, angle, meters) {
+	const center = mapboxGl.MercatorCoordinate.fromLngLat(coordinate, 0);
+	const meterScale = center.meterInMercatorCoordinateUnits();
+	const offset = new mapboxGl.MercatorCoordinate(
+		center.x + Math.cos(angle) * meters * meterScale,
+		center.y + Math.sin(angle) * meters * meterScale,
+		0,
+	);
+	const lngLat = offset.toLngLat();
+	return [lngLat.lng, lngLat.lat];
+}
+
+function getSimpleRouteFirstPersonCamera(routeSample) {
+	return {
+		center: offsetSimpleRouteCoordinate(
+			routeSample.coordinate,
+			routeSample.angle,
+			SIMPLE_ROUTE_FIRST_PERSON_FORWARD_METERS,
+		),
+		zoom: SIMPLE_ROUTE_FIRST_PERSON_ZOOM,
+		pitch: SIMPLE_ROUTE_FIRST_PERSON_PITCH,
+		bearing: getSimpleRouteBearing(routeSample),
+	};
 }
 
 function normalizeSimpleRouteCoordinates(coordinates) {
@@ -393,6 +430,7 @@ function createSimpleRouteCarLayer(
 	animationDuration,
 	firstSample,
 	modelConfig,
+	options = {},
 ) {
 	const customLayer = {
 		id: SIMPLE_ROUTE_CAR_LAYER_IDS[0],
@@ -405,6 +443,33 @@ function createSimpleRouteCarLayer(
 		model: null,
 		modelLengthUnits: 1,
 		isRemoved: false,
+		lastFirstPersonCameraUpdate: 0,
+		shouldUseFirstPersonCamera:
+			options.shouldUseFirstPersonCamera || (() => false),
+		applyFirstPersonCamera(force = false) {
+			if (
+				!customLayer.map ||
+				!customLayer.shouldUseFirstPersonCamera() ||
+				!customLayer.currentSample
+			) {
+				return;
+			}
+			const now = performance.now();
+			if (
+				!force &&
+				now - customLayer.lastFirstPersonCameraUpdate <
+					SIMPLE_ROUTE_FIRST_PERSON_UPDATE_INTERVAL_MS
+			) {
+				return;
+			}
+			customLayer.lastFirstPersonCameraUpdate = now;
+			customLayer.map.jumpTo({
+				...getSimpleRouteFirstPersonCamera(
+					customLayer.currentSample,
+				),
+				essential: true,
+			});
+		},
 		onAdd(map, gl) {
 			customLayer.map = markRaw(map);
 			customLayer.camera = markRaw(new THREE.Camera());
@@ -492,6 +557,7 @@ function createSimpleRouteCarLayer(
 				progress,
 			);
 			customLayer.currentSample = routeSample;
+			customLayer.applyFirstPersonCamera();
 
 			if (customLayer.model) {
 				const mercator =
@@ -638,6 +704,8 @@ export const useMapStore = defineStore("map", {
 		navigationRouteCarZoomHandler: null,
 		navigationRouteCarUpdateFrame: null,
 		navigationRouteCarAnimationFrame: null,
+		isSimpleRouteFirstPersonCamera: false,
+		simpleRouteCameraSnapshot: null,
 	}),
 	actions: {
 		/* Initialize Mapbox */
@@ -664,6 +732,8 @@ export const useMapStore = defineStore("map", {
 			this.navigationRouteCarZoomHandler = null;
 			this.navigationRouteCarUpdateFrame = null;
 			this.navigationRouteCarAnimationFrame = null;
+			this.isSimpleRouteFirstPersonCamera = false;
+			this.simpleRouteCameraSnapshot = null;
 			this.cinematicPitch = MapObjectConfig.pitch;
 			const MAPBOXTOKEN = import.meta.env.VITE_MAPBOXTOKEN;
 			mapboxGl.accessToken = MAPBOXTOKEN;
@@ -3416,6 +3486,43 @@ export const useMapStore = defineStore("map", {
 					.addTo(this.map),
 			);
 		},
+		setSimpleRouteFirstPersonCamera(enabled) {
+			const shouldEnable = Boolean(enabled);
+			if (this.isSimpleRouteFirstPersonCamera === shouldEnable) return;
+
+			if (shouldEnable) {
+				if (this.map && !this.simpleRouteCameraSnapshot) {
+					const center = this.map.getCenter();
+					this.simpleRouteCameraSnapshot = {
+						center: [center.lng, center.lat],
+						zoom: this.map.getZoom(),
+						pitch: this.map.getPitch(),
+						bearing: this.map.getBearing(),
+					};
+				}
+				this.isSimpleRouteFirstPersonCamera = true;
+				this.cinematicPitch = SIMPLE_ROUTE_FIRST_PERSON_PITCH;
+				this.navigationRouteCarLayer?.applyFirstPersonCamera?.(true);
+				return;
+			}
+
+			this.isSimpleRouteFirstPersonCamera = false;
+			const snapshot = this.simpleRouteCameraSnapshot;
+			this.simpleRouteCameraSnapshot = null;
+			if (this.map && snapshot) {
+				this.cinematicPitch = Math.round(snapshot.pitch);
+				this.map.easeTo({
+					...snapshot,
+					duration: 550,
+					essential: true,
+				});
+			}
+		},
+		toggleSimpleRouteFirstPersonCamera() {
+			this.setSimpleRouteFirstPersonCamera(
+				!this.isSimpleRouteFirstPersonCamera,
+			);
+		},
 		renderSimpleRouteCar(routeData) {
 			if (!this.map || !routeData?.geometry?.coordinates?.length) {
 				return;
@@ -3455,6 +3562,10 @@ export const useMapStore = defineStore("map", {
 				animationDuration,
 				firstSample,
 				modelConfig,
+				{
+					shouldUseFirstPersonCamera: () =>
+						this.isSimpleRouteFirstPersonCamera,
+				},
 			);
 			this.navigationRouteCarLayer = markRaw(carLayer);
 			this.map.addLayer(carLayer);
@@ -3463,7 +3574,7 @@ export const useMapStore = defineStore("map", {
 			if (!this.map || !routeData?.geometry?.coordinates?.length) {
 				return;
 			}
-			this.clearSimpleRoute();
+			this.clearSimpleRoute({ preserveFirstPersonCamera: true });
 
 			this.map.addSource(SIMPLE_ROUTE_SOURCE_ID, {
 				type: "geojson",
@@ -3575,6 +3686,10 @@ export const useMapStore = defineStore("map", {
 				isApproximate: routeData.isApproximate,
 			};
 			this.renderSimpleRouteCar(routeData);
+			if (this.isSimpleRouteFirstPersonCamera) {
+				this.navigationRouteCarLayer?.applyFirstPersonCamera?.(true);
+				return;
+			}
 			this.fitSimpleRouteBounds(routeData.geometry.coordinates);
 		},
 		fitSimpleRouteBounds(coordinates) {
@@ -3605,7 +3720,12 @@ export const useMapStore = defineStore("map", {
 				essential: true,
 			});
 		},
-		clearSimpleRoute() {
+		clearSimpleRoute(options = {}) {
+			const preserveFirstPersonCamera =
+				options.preserveFirstPersonCamera === true;
+			if (!preserveFirstPersonCamera) {
+				this.setSimpleRouteFirstPersonCamera(false);
+			}
 			if (this.navigationRouteCarAnimationFrame) {
 				window.cancelAnimationFrame(
 					this.navigationRouteCarAnimationFrame,
@@ -3653,6 +3773,10 @@ export const useMapStore = defineStore("map", {
 				}
 			}
 			this.navigationRouteSummary = null;
+			if (!preserveFirstPersonCamera) {
+				this.isSimpleRouteFirstPersonCamera = false;
+				this.simpleRouteCameraSnapshot = null;
+			}
 		},
 
 		/* Functions that change the viewing experience of the map */
