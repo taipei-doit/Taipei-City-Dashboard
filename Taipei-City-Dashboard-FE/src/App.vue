@@ -110,12 +110,21 @@ function updateTimeToUpdate() {
 function reloadMapData() {
 	if (!["mapview"].includes(authStore.currentPath)) return;
 	mapStore.currentVisibleLayers.forEach((layerName) => {
-		mapStore.map.removeLayer(layerName);
+		const layerConfig = mapStore.mapConfigs[layerName];
+		if (layerConfig?.isIsochroneAux) return;
+		if (layerConfig?.type === "isochrone") {
+			[`${layerName}-network`, `${layerName}-network-stops`, `${layerName}-outline`].forEach((layerId) => {
+				if (mapStore.map.getLayer(layerId)) {
+					mapStore.map.removeLayer(layerId);
+				}
+			});
+		}
+		if (mapStore.map.getLayer(layerName)) {
+			mapStore.map.removeLayer(layerName);
+		}
 		if (mapStore.map.getSource(`${layerName}-source`)) {
 			mapStore.map.removeSource(`${layerName}-source`);
 		}
-		const layerConfig = mapStore.mapConfigs[layerName];
-
 		// 檢查 source
 		if (layerConfig.source === "geojson") {
 			// 如果 source 是 "geojson"，則使用 fetchLocalGeoJson

@@ -41,6 +41,21 @@ func ConfigureRoutes() {
 	configureContributorRoutes()
 	configureChatLogRoutes()
 	configureAIRoutes()
+	configureIsochroneRoutes()
+}
+
+func configureIsochroneRoutes() {
+	isochroneRoutes := RouterGroup.Group("/transit/isochrone")
+	isochroneRoutes.Use(middleware.LimitAPIRequests(global.ComponentLimitAPIRequestsTimes, global.LimitRequestsDuration))
+	isochroneRoutes.Use(middleware.LimitTotalRequests(global.ComponentLimitTotalRequestsTimes, global.LimitRequestsDuration))
+	{
+		isochroneRoutes.POST("/full", controllers.GetFull)
+		isochroneRoutes.POST("/network", controllers.GetNetwork)
+	}
+
+	// Legacy / top-level endpoint
+	RouterGroup.POST("/isochrone", controllers.GetIsochrone)
+}
 }
 
 func configureAuthRoutes() {

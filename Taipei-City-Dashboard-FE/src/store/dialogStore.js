@@ -44,6 +44,18 @@ export const useDialogStore = defineStore("dialog", {
 			addPin: false,
 			addViewPoint: false,
 			findClosestPoint: false,
+			isochroneSettings: false,
+		},
+		// Stores the current isochrone query settings
+		isochrone: {
+			layerId: null,
+			modes: ["bus", "rail", "train", "jumpfrog"],
+			dayType: "weekday",
+			timeDirection: "arrival",
+			showNetwork: false,
+			loading: false,
+			networkLoading: false,
+			error: "",
 		},
 		// Stores the content for notifications
 		notification: {
