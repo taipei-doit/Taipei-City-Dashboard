@@ -186,9 +186,12 @@ router.beforeEach((to) => {
 	const authStore = useAuthStore();
 	if (authStore.isMobileDevice && authStore.isNarrowDevice) {
 		if (
-			!["dashboard", "component-info", "callback", "embed", "mapview", "eco-diet", "eco-diet-mapview"].includes(
-				to.name
-			)
+			![
+				"dashboard", "component-info", "callback", "embed", "mapview",
+				"eco-diet", "eco-diet-mapview",
+				"mrt-a11y", "mrt-a11y-mapview",
+				"mrt-a11y-v2", "mrt-a11y-v2-mapview",
+			].includes(to.name)
 		) {
 			router.push("/dashboard");
 		}
