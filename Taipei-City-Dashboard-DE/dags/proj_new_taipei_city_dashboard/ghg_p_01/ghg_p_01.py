@@ -133,6 +133,18 @@ def _transfer(**kwargs):
         if col in data.columns:
             data[col] = data[col].fillna("").astype(str)
 
+    # 僅保留臺北／新北
+    target_cities = {"臺北市", "新北市"}
+    if "city" not in data.columns:
+        raise ValueError("MOENV ghg_p_01 response has no city column; cannot filter.")
+    before_city = len(data)
+    data = data[data["city"].str.strip().isin(target_cities)].copy()
+    print(f"Filtered by city (臺北市/新北市): {before_city} -> {len(data)} rows")
+    if data.empty:
+        raise ValueError(
+            "No ghg_p_01 rows left after filtering to Taipei / New Taipei cities."
+        )
+
     # 是否經查證 → boolean（可空）
     if "check_yn" in data.columns:
         data["check_yn"] = data["check_yn"].map(parse_check_yn_value)
