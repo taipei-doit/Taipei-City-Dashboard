@@ -6,7 +6,7 @@ import http from "../router/axios";
 const props = defineProps({
 	show: { type: Boolean, default: false },
 });
-const emit = defineEmits(["close"]);
+const emit = defineEmits(["close", "apply-actions"]);
 
 const FACILITY_OPTIONS = [
 	{ value: "restaurant", label: "環保餐廳", color: "#5fcf80" },
@@ -141,6 +141,9 @@ async function handleSend() {
 			role: "assistant",
 			content: res.data.answer ?? "（無回應）",
 		});
+		if (Array.isArray(res.data.actions) && res.data.actions.length) {
+			emit("apply-actions", res.data.actions);
+		}
 	} catch {
 		error.value = "AI 服務暫時無法使用，請稍後再試。";
 	} finally {

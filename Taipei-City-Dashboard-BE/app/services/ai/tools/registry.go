@@ -22,6 +22,7 @@ func init() {
 	Register("get_nearby_stations", GetNearbyStations)
 	Register("get_nearby_eco_facilities", GetNearbyEcoFacilities)
 	Register("plan_route_to_nearest_eco_facility", PlanRouteToNearestEcoFacility)
+	Register("list_eco_facilities_by_area", ListEcoFacilitiesByArea)
 }
 
 // Register adds a tool to the registry
@@ -401,6 +402,136 @@ func PlanRouteToNearestEcoFacility(ctx context.Context, args string) (string, er
 		return "", fmt.Errorf("序列化結果失敗: %v", err)
 	}
 	return string(b), nil
+}
+
+// EcoFacilitiesByAreaArgs — 「指定地區模式」tool 的 args；不依賴 GPS。
+// district 與 city 至少要給一個，facility_types 為空陣列代表全部三類。
+type EcoFacilitiesByAreaArgs struct {
+	District      string   `json:"district"`
+	City          string   `json:"city"`
+	FacilityTypes []string `json:"facility_types"`
+}
+
+// ListEcoFacilitiesByArea 依 district / city 過濾綠色飲食設施清單。
+// 對應 controllers.PostEcoDietNearbyChat 的「指定地區模式」prompt 區段：
+// 使用者點名行政區或縣市時，AI 應呼叫此 tool 而不是 get_nearby_eco_facilities。
+func ListEcoFacilitiesByArea(ctx context.Context, args string) (string, error) {
+	var p EcoFacilitiesByAreaArgs
+	if err := parseArgs(args, &p); err != nil {
+		return "", fmt.Errorf("invalid arguments: %v", err)
+	}
+	if p.District == "" && p.City == "" {
+		return "", fmt.Errorf("district 與 city 至少要提供一個")
+	}
+
+	wanted := map[string]bool{}
+	if len(p.FacilityTypes) == 0 {
+		wanted["restaurant"] = true
+		wanted["green_store"] = true
+		wanted["food_bank"] = true
+	} else {
+		for _, t := range p.FacilityTypes {
+			wanted[t] = true
+		}
+	}
+
+	const perTypeCap = 20
+
+	payload := map[string]interface{}{
+		"district":      p.District,
+		"city":          p.City,
+		"queried_types": []string{},
+	}
+	count := map[string]int{}
+	queried := []string{}
+
+	if wanted["restaurant"] {
+		queried = append(queried, "restaurant")
+		rows, err := models.GetEcoRestaurantList(p.District, "", p.City)
+		if err != nil {
+			return "", fmt.Errorf("查詢環保餐廳失敗: %v", err)
+		}
+		if len(rows) > perTypeCap {
+			rows = rows[:perTypeCap]
+		}
+		payload["restaurant"] = rows
+		count["restaurant"] = len(rows)
+	}
+	if wanted["green_store"] {
+		queried = append(queried, "green_store")
+		all, err := models.GetGreenStorePoints("", p.City)
+		if err != nil {
+			return "", fmt.Errorf("查詢綠色商店失敗: %v", err)
+		}
+		rows := filterGreenStoreByDistrict(all, p.District)
+		if len(rows) > perTypeCap {
+			rows = rows[:perTypeCap]
+		}
+		payload["green_store"] = rows
+		count["green_store"] = len(rows)
+	}
+	if wanted["food_bank"] {
+		queried = append(queried, "food_bank")
+		all, err := models.GetFoodBankPoints()
+		if err != nil {
+			return "", fmt.Errorf("查詢實物銀行失敗: %v", err)
+		}
+		rows := filterFoodBankByArea(all, p.District, p.City)
+		if len(rows) > perTypeCap {
+			rows = rows[:perTypeCap]
+		}
+		payload["food_bank"] = rows
+		count["food_bank"] = len(rows)
+	}
+
+	totalCount := 0
+	for _, n := range count {
+		totalCount += n
+	}
+	payload["queried_types"] = queried
+	payload["count"] = count
+	payload["total_count"] = totalCount
+	if totalCount == 0 {
+		payload["note"] = "此地區查無符合條件的設施，請告知使用者並建議改其他行政區、縣市或設施類型"
+	}
+
+	b, err := json.Marshal(payload)
+	if err != nil {
+		return "", fmt.Errorf("序列化結果失敗: %v", err)
+	}
+	return string(b), nil
+}
+
+func filterGreenStoreByDistrict(rows []models.GreenStorePoint, district string) []models.GreenStorePoint {
+	if district == "" {
+		return rows
+	}
+	out := make([]models.GreenStorePoint, 0, len(rows))
+	for _, r := range rows {
+		if r.District != nil && *r.District == district {
+			out = append(out, r)
+		}
+	}
+	return out
+}
+
+func filterFoodBankByArea(rows []models.FoodBankPoint, district, city string) []models.FoodBankPoint {
+	if district == "" && city == "" {
+		return rows
+	}
+	out := make([]models.FoodBankPoint, 0, len(rows))
+	for _, r := range rows {
+		if district != "" {
+			if r.District == nil || *r.District != district {
+				continue
+			}
+		}
+		if city != "" && r.City != city {
+			continue
+		}
+		out = append(out, r)
+	}
+	return out
 }
 
 func joinNonEmpty(parts []string) string {
