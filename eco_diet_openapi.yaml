@@ -1,0 +1,939 @@
+openapi: 3.0.3
+info:
+  title: 市民綠色飲食行為流程儀表板 — 後端 API
+  description: |
+    對應 DE 規劃 [`08_市民綠色飲食行為流程儀表板_DE實作規劃_儀表板一.md`](../twin-cities-coding-festival/題目評估報告/永續環境/08_市民綠色飲食行為流程儀表板_DE實作規劃_儀表板一.md)。
+
+    ## Component → Endpoint 對照
+
+    | Component | Endpoint | Response 型別 | FE 渲染 |
+    |---|---|---|---|
+    | C1a 環保餐廳點位地圖 | `GET /eco_diet/restaurant/points` | `EcoRestaurantPoint[]` | Mapbox 點位 |
+    | C1b 環保餐廳行政區密度 | `GET /eco_diet/restaurant/density-by-district` | `TwoDimensionalDataOutput[]` | ApexCharts BarChart |
+    | C2 雙城家數數字卡 | `GET /eco_diet/restaurant/count-by-city` | `TwoDimensionalDataOutput[]` | KPI 數字卡 |
+    | C3 環保餐廳篩選列表 | `GET /eco_diet/restaurant/list` | `EcoRestaurantPoint[]` | 表格＋Mapbox 過濾 |
+    | C4 綠色商店點位 | `GET /eco_diet/green_store/points` | `GreenStorePoint[]` | Mapbox 點位 |
+    | C5 雙北廢棄物年趨勢 | `GET /eco_diet/waste/yearly` | `ThreeDimensionalDataOutput[]` + `categories[]` | ApexCharts LineChart |
+    | C7a 實物銀行點位 | `GET /eco_diet/food_bank/points` | `FoodBankPoint[]` | Mapbox 點位 |
+    | C7b 最近實物銀行（Haversine） | `GET /eco_diet/food_bank/nearby` | `FoodBankPointNearby[]` | FE 顯示 top-3 卡片 |
+
+    ## 設計慣例（對齊 mrtA11y）
+
+    - **點位類 endpoint**（C1a / C3 / C4 / C7a / C7b）回傳**領域專屬 struct**（含 `lng` / `lat` + 該表特有欄位），
+      參考既有 [`MrtA11yStation`](../Taipei-City-Dashboard-BE/app/models/mrtA11y.go#L26)。
+    - **聚合類 endpoint**（C1b / C2 / C5）沿用 [`componentData.go`](../Taipei-City-Dashboard-BE/app/models/componentData.go) 既有的 `TwoDimensionalDataOutput` / `ThreeDimensionalDataOutput`，**不新增型別**。
+    - **C7b Haversine 排序**：對齊 [`GetMrtStationsNearby`](../Taipei-City-Dashboard-BE/app/models/mrtA11y.go#L179) 既有實作（Go side 計算、無 PostGIS 空間查詢，因為 80 筆量級極小）。
+
+    ## Response 信封
+
+    所有 endpoint 統一遵循 BE 既有約定：
+    ```json
+    { "status": "success", "data": <payload>, "categories"?: [...], "message"?: "..." }
+    ```
+    錯誤時：`{ "status": "error", "message": "<error string>" }`。
+  version: 1.0.0
+  contact:
+    name: Taipei-City-Dashboard 雙北黑客松組
+
+servers:
+  - url: http://localhost:8080/api/v1
+    description: 本機開發
+  - url: https://citydashboard.taipei/api/v1
+    description: Production
+
+tags:
+  - name: eco_diet_restaurant
+    description: 雙北環保餐廳（C1a / C1b / C2 / C3）
+  - name: eco_diet_green_store
+    description: 雙北綠色商店（C4）
+  - name: eco_diet_waste
+    description: 雙北廚餘量年趨勢（C5）
+  - name: eco_diet_food_bank
+    description: 雙北實物銀行（C7）
+
+paths:
+  # ─────────────────────────── C1a ───────────────────────────
+  /eco_diet/restaurant/points:
+    get:
+      tags: [eco_diet_restaurant]
+      summary: C1a — 環保餐廳全量點位
+      description: |
+        回傳所有雙北環保餐廳（約 1,228 筆）含座標、額外環保作為陣列等屬性。
+        FE 用 Mapbox 渲染點位，顏色依 `city` 分（臺北 / 新北）。
+
+        **SQL**
+        ```sql
+        SELECT
+          source_dataset, seq_no, name, address, city, district, tel,
+          env_actions, lng, lat
+        FROM eco_restaurant
+        WHERE wkb_geometry IS NOT NULL
+        ORDER BY city, district, name;
+        ```
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/EcoRestaurantPoint'
+              example:
+                status: success
+                data:
+                  - source_dataset: tpe_00002761
+                    seq_no: '1'
+                    name: '《扶風堂》披薩。義麵。吉拉朵'
+                    address: '臺北市松山區敦化北路165巷5號1樓'
+                    city: '臺北市'
+                    district: '松山區'
+                    tel: '(02)27153377'
+                    env_actions: ['環境管理', '惜食(善用食材)', '環境教育']
+                    lng: 121.5495
+                    lat: 25.0556
+                  - source_dataset: tpe_00002761
+                    seq_no: '42'
+                    name: '微風信義美食街'
+                    address: '臺北市信義區忠孝東路五段68號'
+                    city: '臺北市'
+                    district: '信義區'
+                    tel: '(02)66362699'
+                    env_actions: ['惜食(善用食材)']
+                    lng: 121.5673
+                    lat: 25.0410
+                  - source_dataset: ntpe_e90d14f8
+                    seq_no: '1'
+                    name: '31早午餐'
+                    address: '新北市蘆洲區和平路171號'
+                    city: '新北市'
+                    district: '蘆洲區'
+                    tel: '02-82861790'
+                    env_actions: []
+                    lng: 121.4732
+                    lat: 25.0852
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  # ─────────────────────────── C1b ───────────────────────────
+  /eco_diet/restaurant/density-by-district:
+    get:
+      tags: [eco_diet_restaurant]
+      summary: C1b — 環保餐廳行政區密度
+      description: |
+        回傳每個行政區的環保餐廳家數，依家數降冪排序。
+
+        **SQL**
+        ```sql
+        SELECT district AS x_axis, COUNT(*)::float AS data
+        FROM eco_restaurant
+        WHERE district IS NOT NULL
+          AND ($1::text IS NULL OR city = $1)
+        GROUP BY district
+        ORDER BY data DESC;
+        ```
+      parameters:
+        - in: query
+          name: city
+          required: false
+          description: 限縮到單一城市；省略時回雙北合併。
+          schema:
+            type: string
+            enum: ['臺北市', '新北市']
+            example: '臺北市'
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/TwoDimensionalDataOutput'
+              examples:
+                bothCities:
+                  summary: 雙北合併（無 city 參數）
+                  value:
+                    status: success
+                    data:
+                      - data:
+                          - { x: '板橋區', y: 78 }
+                          - { x: '新莊區', y: 62 }
+                          - { x: '信義區', y: 51 }
+                          - { x: '大安區', y: 47 }
+                          - { x: '中山區', y: 44 }
+                          - { x: '中和區', y: 41 }
+                          - { x: '松山區', y: 38 }
+                          - { x: '士林區', y: 35 }
+                          - { x: '永和區', y: 32 }
+                          - { x: '內湖區', y: 30 }
+                taipeiOnly:
+                  summary: city=臺北市
+                  value:
+                    status: success
+                    data:
+                      - data:
+                          - { x: '信義區', y: 51 }
+                          - { x: '大安區', y: 47 }
+                          - { x: '中山區', y: 44 }
+                          - { x: '松山區', y: 38 }
+                          - { x: '士林區', y: 35 }
+                          - { x: '內湖區', y: 30 }
+                          - { x: '萬華區', y: 28 }
+                          - { x: '北投區', y: 25 }
+                          - { x: '南港區', y: 22 }
+                          - { x: '中正區', y: 21 }
+                          - { x: '文山區', y: 19 }
+                          - { x: '大同區', y: 14 }
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  # ─────────────────────────── C2 ───────────────────────────
+  /eco_diet/restaurant/count-by-city:
+    get:
+      tags: [eco_diet_restaurant]
+      summary: C2 — 雙城環保餐廳家數
+      description: |
+        固定回 2 列：臺北市、新北市的環保餐廳總家數。FE 渲染為兩張並排數字卡。
+
+        **SQL**
+        ```sql
+        SELECT city AS x_axis, COUNT(*)::float AS data
+        FROM eco_restaurant
+        GROUP BY city
+        ORDER BY x_axis;
+        ```
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/TwoDimensionalDataOutput'
+              example:
+                status: success
+                data:
+                  - data:
+                      - { x: '臺北市', y: 479 }
+                      - { x: '新北市', y: 749 }
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  # ─────────────────────────── C3 ───────────────────────────
+  /eco_diet/restaurant/list:
+    get:
+      tags: [eco_diet_restaurant]
+      summary: C3 — 環保餐廳篩選列表
+      description: |
+        三個篩選參數（`district` / `action` / `city`）皆 optional，AND 組合。
+        Response shape 與 C1a 相同（同 `EcoRestaurantPoint`）。
+
+        **SQL**
+        ```sql
+        SELECT
+          source_dataset, seq_no, name, address, city, district, tel,
+          env_actions, lng, lat
+        FROM eco_restaurant
+        WHERE
+              ($1::text IS NULL OR district = $1)
+          AND ($2::text IS NULL OR $2 = ANY(env_actions))
+          AND ($3::text IS NULL OR city = $3)
+          AND wkb_geometry IS NOT NULL
+        ORDER BY city, district, name;
+        ```
+
+        **重要**：`action` 參數對應 `env_actions text[]` 的 ANY match；
+        新北側資料**沒有 `額外環保作為` 欄位**（DE plan §11 修正 #3），
+        若 `action` 有值，新北資料會被過濾掉是預期行為，FE 應於介面標註「此篩選僅適用臺北市資料」。
+      parameters:
+        - in: query
+          name: district
+          required: false
+          description: 行政區嚴格 match（如 `松山區` / `板橋區`）
+          schema:
+            type: string
+            example: '松山區'
+        - in: query
+          name: action
+          required: false
+          description: 額外環保作為標籤（如 `惜食(善用食材)`、`環境教育`）；對 `env_actions` 陣列做 `= ANY` match。**僅臺北市資料具備此欄位**
+          schema:
+            type: string
+            example: '惜食(善用食材)'
+        - in: query
+          name: city
+          required: false
+          description: 城市嚴格 match
+          schema:
+            type: string
+            enum: ['臺北市', '新北市']
+            example: '臺北市'
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/EcoRestaurantPoint'
+              examples:
+                filteredByDistrictAndAction:
+                  summary: 'district=松山區 & action=惜食(善用食材)'
+                  value:
+                    status: success
+                    data:
+                      - source_dataset: tpe_00002761
+                        seq_no: '1'
+                        name: '《扶風堂》披薩。義麵。吉拉朵'
+                        address: '臺北市松山區敦化北路165巷5號1樓'
+                        city: '臺北市'
+                        district: '松山區'
+                        tel: '(02)27153377'
+                        env_actions: ['環境管理', '惜食(善用食材)', '環境教育']
+                        lng: 121.5495
+                        lat: 25.0556
+                emptyResult:
+                  summary: 篩選後無結果
+                  value:
+                    status: success
+                    data: []
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  # ─────────────────────────── C4 ───────────────────────────
+  /eco_diet/green_store/points:
+    get:
+      tags: [eco_diet_green_store]
+      summary: C4 — 綠色商店全量點位（含篩選）
+      description: |
+        回傳所有雙北綠色商店（約 3,691 筆）含座標。FE 用 Mapbox 渲染點位，
+        顏色依 `store_type`（連鎖型 / 一般型）區分。
+
+        **資料量警示**：3,691 筆全量回傳壓力可接受（payload 約 1.5 MB），
+        若 FE 體感慢可加 `?city=` 切分（雙北各約 1,640 / 2,051 筆）。
+
+        **SQL**
+        ```sql
+        SELECT
+          source_dataset, store_code, name, address, city, district, tel,
+          store_type, lng, lat
+        FROM green_store
+        WHERE wkb_geometry IS NOT NULL
+          AND ($1::text IS NULL OR store_type = $1)
+          AND ($2::text IS NULL OR city = $2)
+        ORDER BY city, district, name;
+        ```
+      parameters:
+        - in: query
+          name: store_type
+          required: false
+          description: 商店類型篩選
+          schema:
+            type: string
+            enum: ['連鎖型綠色商店', '一般型綠色商店']
+            example: '連鎖型綠色商店'
+        - in: query
+          name: city
+          required: false
+          schema:
+            type: string
+            enum: ['臺北市', '新北市']
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/GreenStorePoint'
+              example:
+                status: success
+                data:
+                  - source_dataset: tpe_00002657
+                    store_code: A000204
+                    name: '7-11OPEN門市'
+                    address: '臺北市士林區基河路128號'
+                    city: '臺北市'
+                    district: '士林區'
+                    tel: '(02)27478711'
+                    store_type: '連鎖型綠色商店'
+                    lng: 121.5238
+                    lat: 25.0902
+                  - source_dataset: ntpe_6ccd0274
+                    store_code: F002166
+                    name: '台象股份有限公司-象印板橋服務中心'
+                    address: '新北市板橋區國光路52號1樓'
+                    city: '新北市'
+                    district: '板橋區'
+                    tel: '02-2506-9009#217'
+                    store_type: '連鎖型綠色商店'
+                    lng: 121.4673
+                    lat: 25.0205
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  # ─────────────────────────── C5 ───────────────────────────
+  /eco_diet/waste/yearly:
+    get:
+      tags: [eco_diet_waste]
+      summary: C5 — 雙北年度廢棄物趨勢（含廚餘）
+      description: |
+        回傳臺北、新北逐年廢棄物相關 4 個指標：**廚餘量** / **一般垃圾** / **資源垃圾** / **總產生量**。
+        雙北 × 4 metric → 共 **8 條 series**。FE 可全部畫進一張 LineChart，
+        或在前端依 `name` 子串過濾出單一城市 / 單一 metric 的視圖（如「廚餘 vs 一般垃圾比例」）。
+
+        對應資料表 `gov_open_waste_yearly`（DE plan §6.6.2）：
+
+        | metric_label | 對應欄位 | 語意 |
+        |---|---|---|
+        | `廚餘量` | `food_wastes_recycled` | 廚餘回收量 |
+        | `一般垃圾` | `garbage_clearance` | 焚化／掩埋的一般垃圾 |
+        | `資源垃圾` | `garbage_recycled` | 資源回收（紙類、塑膠等） |
+        | `總產生量` | `garbage_generated` | 一般廢棄物總產生量 |
+
+        **SQL**
+        ```sql
+        WITH yearly AS (
+          SELECT data_year, county,
+                 food_wastes_recycled, garbage_clearance,
+                 garbage_recycled, garbage_generated
+          FROM gov_open_waste_yearly
+          WHERE county IN ('臺北市', '新北市')
+        )
+        SELECT data_year::text AS x_axis, '' AS icon,
+               county || '-廚餘量' AS y_axis,
+               ROUND(food_wastes_recycled)::int AS data FROM yearly
+        UNION ALL
+        SELECT data_year::text, '', county || '-一般垃圾',
+               ROUND(garbage_clearance)::int   FROM yearly
+        UNION ALL
+        SELECT data_year::text, '', county || '-資源垃圾',
+               ROUND(garbage_recycled)::int    FROM yearly
+        UNION ALL
+        SELECT data_year::text, '', county || '-總產生量',
+               ROUND(garbage_generated)::int   FROM yearly
+        ORDER BY x_axis, y_axis;
+        ```
+
+        **單位**：公噸/年（tonnes/year）。`ThreeDimensionalDataOutput.Data` 既有型別為 `[]int`，
+        SQL 端 `ROUND(...)::int` 取整數；雙北年度廢棄物量級在數萬至百萬公噸，整數精度足夠。
+
+        **Series 命名約定**：`{county}-{metric_label}`，如 `臺北市-廚餘量`、`新北市-總產生量`。
+        FE 用 `series.name.split('-')` 即可拆解城市與指標兩個維度。
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        description: 8 條 series（雙北 × 4 metric）
+                        items:
+                          $ref: '#/components/schemas/ThreeDimensionalDataOutput'
+                      categories:
+                        type: array
+                        description: X 軸年度標籤
+                        items:
+                          type: string
+                        example: ['2018', '2019', '2020', '2021', '2022', '2023']
+              example:
+                status: success
+                data:
+                  - name: '臺北市-廚餘量'
+                    icon: ''
+                    data: [62458, 64320, 65180, 63927, 60815, 58432]
+                  - name: '臺北市-一般垃圾'
+                    icon: ''
+                    data: [712380, 698250, 685120, 672400, 658730, 642510]
+                  - name: '臺北市-資源垃圾'
+                    icon: ''
+                    data: [398240, 412580, 425130, 432670, 438920, 445280]
+                  - name: '臺北市-總產生量'
+                    icon: ''
+                    data: [1173078, 1175150, 1175430, 1168997, 1158465, 1146222]
+                  - name: '新北市-廚餘量'
+                    icon: ''
+                    data: [78213, 81045, 82960, 80517, 76842, 73598]
+                  - name: '新北市-一般垃圾'
+                    icon: ''
+                    data: [892450, 875320, 858610, 841850, 825740, 808920]
+                  - name: '新北市-資源垃圾'
+                    icon: ''
+                    data: [521380, 538720, 552180, 561420, 569350, 577810]
+                  - name: '新北市-總產生量'
+                    icon: ''
+                    data: [1492043, 1495087, 1493750, 1483787, 1471932, 1460328]
+                categories: ['2018', '2019', '2020', '2021', '2022', '2023']
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  # ─────────────────────────── C7a ───────────────────────────
+  /eco_diet/food_bank/points:
+    get:
+      tags: [eco_diet_food_bank]
+      summary: C7a — 實物銀行全量點位
+      description: |
+        回傳所有雙北實物銀行（約 80 筆：臺北 23 + 新北 57）。
+        相比 C1a / C4，多回 `address` / `tel` 兩個欄位（FE 點擊卡片時直接顯示，省一次 detail API）。
+
+        **SQL**
+        ```sql
+        SELECT
+          source_dataset, seq_no, name, org_type,
+          city, district, district_code, postal_code,
+          address, tel, lng, lat
+        FROM food_bank
+        WHERE wkb_geometry IS NOT NULL
+        ORDER BY city, district, name;
+        ```
+
+        **欄位差異**：
+        - 臺北側 (`tpe_00003431`) `org_type` = `'實物銀行'`；新北側 (`ntpe_1c1d0066`) `org_type` 為 `null`/空字串（DE plan §11 修正 #6 已記錄）。
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/FoodBankPoint'
+              example:
+                status: success
+                data:
+                  - source_dataset: tpe_00003431
+                    seq_no: '1'
+                    name: '中山社會福利服務中心'
+                    org_type: '實物銀行'
+                    city: '臺北市'
+                    district: '中山區'
+                    district_code: '63000040'
+                    postal_code: null
+                    address: '臺北市中山區合江街137號3樓'
+                    tel: null
+                    lng: 121.5430
+                    lat: 25.0596
+                  - source_dataset: ntpe_1c1d0066
+                    seq_no: '1'
+                    name: '板橋第一社會福利服務中心'
+                    org_type: ''
+                    city: '新北市'
+                    district: '板橋區'
+                    district_code: '65000010'
+                    postal_code: '220677'
+                    address: '新北市板橋區漢生東路258號三樓'
+                    tel: '(02)29537301'
+                    lng: 121.4658
+                    lat: 25.0231
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  # ─────────────────────────── C7b ───────────────────────────
+  /eco_diet/food_bank/nearby:
+    get:
+      tags: [eco_diet_food_bank]
+      summary: C7b — 最近實物銀行（Haversine 排序）
+      description: |
+        以使用者座標為中心，依 Haversine 大圓距離排序所有實物銀行；可選擇 `limit` 取前 N 筆。
+        對齊 mrtA11y 既有 [`GetMrtStationsNearby`](../Taipei-City-Dashboard-BE/app/models/mrtA11y.go#L179) 實作（Go side 計算、無 PostGIS 空間查詢）。
+
+        **演算法**：BE 載入 `food_bank` 全量 80 筆 → 對每筆計算 Haversine 距離 → 升冪排序 → 切前 `limit` 筆。
+      parameters:
+        - in: query
+          name: lat
+          required: true
+          description: 使用者所在緯度（WGS84）
+          schema:
+            type: number
+            format: double
+            example: 25.0330
+        - in: query
+          name: lng
+          required: true
+          description: 使用者所在經度（WGS84）
+          schema:
+            type: number
+            format: double
+            example: 121.5654
+        - in: query
+          name: limit
+          required: false
+          description: 取最近的 N 筆。省略時回全部 80 筆（依距離升冪排序）。
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 3
+            example: 3
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/FoodBankPointNearby'
+              example:
+                status: success
+                data:
+                  - source_dataset: tpe_00003431
+                    seq_no: '2'
+                    name: '信義社會福利服務中心'
+                    org_type: '實物銀行'
+                    city: '臺北市'
+                    district: '信義區'
+                    district_code: '63000080'
+                    postal_code: null
+                    address: '臺北市信義區松仁路100號'
+                    tel: null
+                    lng: 121.5680
+                    lat: 25.0349
+                    distance_m: 337
+                  - source_dataset: tpe_00003431
+                    seq_no: '3'
+                    name: '大安社會福利服務中心'
+                    org_type: '實物銀行'
+                    city: '臺北市'
+                    district: '大安區'
+                    district_code: '63000060'
+                    postal_code: null
+                    address: '臺北市大安區四維路198巷30弄14-1號'
+                    tel: null
+                    lng: 121.5489
+                    lat: 25.0263
+                    distance_m: 1822
+                  - source_dataset: tpe_00003431
+                    seq_no: '1'
+                    name: '中山社會福利服務中心'
+                    org_type: '實物銀行'
+                    city: '臺北市'
+                    district: '中山區'
+                    district_code: '63000040'
+                    postal_code: null
+                    address: '臺北市中山區合江街137號3樓'
+                    tel: null
+                    lng: 121.5430
+                    lat: 25.0596
+                    distance_m: 3720
+        '400':
+          description: 缺少 lat / lng 或數值不合法
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+              example:
+                status: error
+                message: 'lat and lng are required'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+components:
+  schemas:
+    # ─── 通用信封 ────────────────────────────────────────────
+    SuccessEnvelope:
+      type: object
+      required: [status]
+      properties:
+        status:
+          type: string
+          enum: [success]
+          example: success
+
+    ErrorEnvelope:
+      type: object
+      required: [status, message]
+      properties:
+        status:
+          type: string
+          enum: [error]
+          example: error
+        message:
+          type: string
+          example: 'pq: relation "eco_restaurant" does not exist'
+
+    # ─── 沿用 componentData.go 既有型別 ─────────────────────
+    TwoDimensionalData:
+      description: |
+        對應 Go struct `models.TwoDimensionalData`（[componentData.go:37](../Taipei-City-Dashboard-BE/app/models/componentData.go#L37)）。
+        `x` 是類別字串、`y` 是 float64 聚合值。
+      type: object
+      required: [x, y]
+      properties:
+        x:
+          type: string
+          example: '松山區'
+        y:
+          type: number
+          format: double
+          example: 38
+
+    TwoDimensionalDataOutput:
+      description: |
+        對應 Go struct `models.TwoDimensionalDataOutput`（[componentData.go:41](../Taipei-City-Dashboard-BE/app/models/componentData.go#L41)）。
+        Controller 一律回傳 `[]TwoDimensionalDataOutput`（雙層陣列）；本儀表板 C1b/C2 外層 array 永遠只有 1 個元素。
+      type: object
+      required: [data]
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/TwoDimensionalData'
+
+    ThreeDimensionalDataOutput:
+      description: |
+        對應 Go struct `models.ThreeDimensionalDataOutput`（[componentData.go:67](../Taipei-City-Dashboard-BE/app/models/componentData.go#L67)）。
+        每個元素是一條 series；`name` 為 series 名（本儀表板為城市名）、`data` 與頂層 `categories` 索引對齊。
+      type: object
+      required: [name, icon, data]
+      properties:
+        name:
+          type: string
+          description: Series 名稱
+          example: '臺北市'
+        icon:
+          type: string
+          description: 預留欄位，目前一律回空字串
+          example: ''
+        data:
+          type: array
+          description: 與頂層 `categories` 索引對齊的整數陣列
+          items:
+            type: integer
+            format: int32
+          example: [62458, 64320, 65180, 63927, 60815, 58432]
+
+    # ─── 新增領域 struct（對齊 mrtA11y 既有 pattern）────────
+    EcoRestaurantPoint:
+      description: |
+        環保餐廳點位資料。對應未來新增的 Go struct `models.EcoRestaurantPoint`，
+        參考 [`MrtA11yStation`](../Taipei-City-Dashboard-BE/app/models/mrtA11y.go#L26) 既有 pattern。
+      type: object
+      required: [source_dataset, name, address, city, lng, lat, env_actions]
+      properties:
+        source_dataset:
+          type: string
+          enum: ['tpe_00002761', 'ntpe_e90d14f8']
+          description: 資料來源（區分臺北 / 新北 API）
+          example: 'tpe_00002761'
+        seq_no:
+          type: string
+          description: 來源 API 自然 key（對齊 DE plan unique constraint）
+          example: '1'
+        name:
+          type: string
+          example: '《扶風堂》披薩。義麵。吉拉朵'
+        address:
+          type: string
+          description: Geocode 後標準化地址
+          example: '臺北市松山區敦化北路165巷5號1樓'
+        city:
+          type: string
+          enum: ['臺北市', '新北市']
+          example: '臺北市'
+        district:
+          type: string
+          nullable: true
+          description: 從地址 regex 抽取，少數無法抽取時為 null
+          example: '松山區'
+        tel:
+          type: string
+          nullable: true
+          example: '(02)27153377'
+        env_actions:
+          type: array
+          description: |
+            額外環保作為標籤（多選）。**僅臺北市資料具備**；
+            新北市資料一律為 `[]`（DE plan §11 修正 #3）。
+            常見值：`環境管理` / `惜食(善用食材)` / `環境教育` / `綠色採購` 等。
+          items:
+            type: string
+          example: ['環境管理', '惜食(善用食材)', '環境教育']
+        lng:
+          type: number
+          format: double
+          description: |
+            WGS84 經度。BE 已過濾 lng/lat NULL 的 row（geocode 失敗的資料），
+            所以這個欄位**保證有效**，FE 可以直接畫 marker。
+          example: 121.5495
+        lat:
+          type: number
+          format: double
+          description: WGS84 緯度。語意同上 `lng`，保證有效。
+          example: 25.0556
+
+    GreenStorePoint:
+      description: 綠色商店點位資料。對應未來新增的 Go struct `models.GreenStorePoint`。
+      type: object
+      required: [source_dataset, name, address, city, lng, lat]
+      properties:
+        source_dataset:
+          type: string
+          enum: ['tpe_00002657', 'ntpe_6ccd0274']
+          example: 'tpe_00002657'
+        store_code:
+          type: string
+          description: 商店編號（臺北 `商店編號` / 新北 `number`）
+          example: 'A000204'
+        name:
+          type: string
+          example: '7-11OPEN門市'
+        address:
+          type: string
+          example: '臺北市士林區基河路128號'
+        city:
+          type: string
+          enum: ['臺北市', '新北市']
+        district:
+          type: string
+          nullable: true
+        tel:
+          type: string
+          nullable: true
+        store_type:
+          type: string
+          enum: ['連鎖型綠色商店', '一般型綠色商店']
+          example: '連鎖型綠色商店'
+        lng:
+          type: number
+          format: double
+          description: |
+            WGS84 經度。BE 已過濾 lng/lat NULL 的 row，FE 可以直接畫 marker。
+        lat:
+          type: number
+          format: double
+          description: WGS84 緯度。語意同上 `lng`。
+
+    FoodBankPoint:
+      description: |
+        實物銀行點位資料。對齊 DE plan §6.5.2 schema，包含全部 12 個非 DB-internal 欄位。
+
+        **欄位差異提示**（DE plan §1.1 / §11 修正 #6）：
+        - `org_type`：臺北側 (`tpe_00003431`) 固定 `'實物銀行'`；新北側 (`ntpe_1c1d0066`) 來源無此欄，落庫為空字串/null。
+        - `postal_code`：臺北側 S5 來源無 `postalcode` 欄，落庫為 null；新北側 S6 有值（如 `'220677'`）。
+        - `tel`：臺北側 S5 sample 未列出 phone 欄位（DE plan §1.1），可能多數為 null；新北側來自 `localcallservice`，有值。
+        - `district_code`：臺北側為 `'63000xxx'`（如 `63000040 = 中山區`）；新北側為 `'65000xxx'`（如 `65000010 = 板橋區`）。
+      type: object
+      required: [source_dataset, name, address, city, lng, lat]
+      properties:
+        source_dataset:
+          type: string
+          enum: ['tpe_00003431', 'ntpe_1c1d0066']
+          example: 'tpe_00003431'
+        seq_no:
+          type: string
+          example: '1'
+        name:
+          type: string
+          description: 機構名稱（臺北 `機構名稱` / 新北 `title`）
+          example: '中山社會福利服務中心'
+        org_type:
+          type: string
+          nullable: true
+          example: '實物銀行'
+        city:
+          type: string
+          enum: ['臺北市', '新北市']
+        district:
+          type: string
+          nullable: true
+          example: '中山區'
+        district_code:
+          type: string
+          nullable: true
+          description: |
+            行政區代碼（臺北 `行政區代碼` / 新北 `areacode`）。
+            臺北範例：`63000040 = 中山區`；新北範例：`65000010 = 板橋區`。
+          example: '63000040'
+        postal_code:
+          type: string
+          nullable: true
+          description: 郵遞區號；**僅新北側 (`postalcode`) 具備**，臺北側為 null。
+          example: '220677'
+        address:
+          type: string
+          example: '臺北市中山區合江街137號3樓'
+        tel:
+          type: string
+          nullable: true
+          description: 電話；**新北側來自 `localcallservice`**，臺北側 S5 sample 未列出此欄位，可能多數為 null。
+          example: '(02)29537301'
+        lng:
+          type: number
+          format: double
+          description: |
+            WGS84 經度。BE 已過濾 lng/lat NULL 的 row（geocode 失敗的食物銀行），
+            FE 可以直接畫 marker。C7b `nearby` 距離計算同樣只考慮已 geocode 的 row。
+        lat:
+          type: number
+          format: double
+          description: WGS84 緯度。語意同上 `lng`。
+
+    FoodBankPointNearby:
+      description: |
+        實物銀行點位 + Haversine 距離。對應未來新增的 Go struct `models.FoodBankPointNearby`，
+        嵌入 `FoodBankPoint` 並補一個 `distance_m` 欄位（對齊 [`MrtA11yStationNearby`](../Taipei-City-Dashboard-BE/app/models/mrtA11y.go#L171)）。
+      allOf:
+        - $ref: '#/components/schemas/FoodBankPoint'
+        - type: object
+          required: [distance_m]
+          properties:
+            distance_m:
+              type: integer
+              description: 距離使用者座標（公尺，整數四捨五入）
+              example: 280
+
+  responses:
+    InternalError:
+      description: 伺服器內部錯誤（DB 連線失敗、SQL 執行錯誤等）
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorEnvelope'
+          example:
+            status: error
+            message: 'pq: relation "eco_restaurant" does not exist'
