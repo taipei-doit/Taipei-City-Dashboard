@@ -41,6 +41,7 @@ func ConfigureRoutes() {
 	configureContributorRoutes()
 	configureChatLogRoutes()
 	configureAIRoutes()
+	configureNavigationRoutes()
 }
 
 func configureAuthRoutes() {
@@ -205,6 +206,17 @@ func configureAIRoutes() {
 	{
 		aiRoutes.POST("/chat/twai", controllers.ChatWithTWCC)
 		aiRoutes.POST("/chart-comment", controllers.GetAIChartComment)
+	}
+}
+
+// configureNavigationRoutes configures all navigation routes.
+func configureNavigationRoutes() {
+	navigationRoutes := RouterGroup.Group("/navigation")
+	navigationRoutes.Use(middleware.LimitAPIRequests(global.ComponentLimitAPIRequestsTimes, global.LimitRequestsDuration))
+	navigationRoutes.Use(middleware.LimitTotalRequests(global.ComponentLimitTotalRequestsTimes, global.LimitRequestsDuration))
+	navigationRoutes.Use(middleware.IsLoggedIn())
+	{
+		navigationRoutes.POST("/geojson", controllers.HandleNavigationGeoJSON)
 	}
 }
 
