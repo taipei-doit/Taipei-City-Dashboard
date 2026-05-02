@@ -11,6 +11,7 @@ import {
 	toStorylineApiLang,
 	collectRelatedNewsFromSteps,
 } from "../../../api/storyline";
+import { extractNewsInsight } from "../../../api/ai";
 
 const mapStore = useMapStore();
 const translationStore = useTranslationStore();
@@ -28,6 +29,30 @@ const loadError = ref(null);
 const recommendError = ref(null);
 const loadingTopics = ref(false);
 const loadingRecommend = ref(false);
+
+// AI Insight State
+const aiNewsUrl = ref("");
+const aiInsightResult = ref(null);
+const loadingAiInsight = ref(false);
+const aiInsightError = ref(null);
+
+async function handleAiInsight() {
+	if (!aiNewsUrl.value) return;
+	
+	loadingAiInsight.value = true;
+	aiInsightError.value = null;
+	aiInsightResult.value = null;
+	
+	try {
+		const result = await extractNewsInsight(aiNewsUrl.value);
+		aiInsightResult.value = result;
+		// 如果有推薦組件，也可以考慮自動選取或展開
+	} catch (err) {
+		aiInsightError.value = "AI 分析失敗，請檢查網址或稍後再試。";
+	} finally {
+		loadingAiInsight.value = false;
+	}
+}
 
 function readExpandedFromStorage() {
 	const stored = localStorage.getItem(RECOMMEND_SIDEBAR_EXPANDED_KEY);
@@ -128,7 +153,7 @@ onMounted(() => {
             今日推薦
           </h1>
           <p class="recommendsidebar-lead">
-            選擇主題以檢視相關新聞摘要。
+            選擇主題或貼上新聞連結。
           </p>
         </div>
       </template>
@@ -140,6 +165,75 @@ onMounted(() => {
     </div>
 
     <template v-if="isExpanded">
+      <!-- AI Insight Input Section -->
+      <div class="recommendsidebar-ai-section">
+        <div class="recommendsidebar-ai-input-group">
+          <input
+            v-model="aiNewsUrl"
+            type="text"
+            placeholder="貼上新聞網址擷取洞察..."
+            class="recommendsidebar-ai-input"
+            @keyup.enter="handleAiInsight"
+          >
+          <button
+            type="button"
+            class="recommendsidebar-ai-btn"
+            :disabled="loadingAiInsight || !aiNewsUrl"
+            @click="handleAiInsight"
+          >
+            <span v-if="!loadingAiInsight">auto_awesome</span>
+            <span
+              v-else
+              class="is-spinning"
+            >sync</span>
+          </button>
+        </div>
+        <p
+          v-if="aiInsightError"
+          class="recommendsidebar-msg recommendsidebar-msg--error"
+        >
+          {{ aiInsightError }}
+        </p>
+      </div>
+
+      <!-- AI Result: Storyline -->
+      <div
+        v-if="aiInsightResult"
+        class="recommendsidebar-ai-result"
+      >
+        <h2 class="recommendsidebar-subtitle recommendsidebar-subtitle--ai">
+          AI 數據洞察
+        </h2>
+        <div class="recommendsidebar-storyline">
+          {{ aiInsightResult.storyline }}
+        </div>
+        
+        <h2
+          v-if="aiInsightResult.components?.length"
+          class="recommendsidebar-subtitle"
+        >
+          推薦數據組件
+        </h2>
+        <ul
+          v-if="aiInsightResult.components?.length"
+          class="recommendsidebar-topiclist"
+        >
+          <li
+            v-for="comp in aiInsightResult.components"
+            :key="comp.id"
+          >
+            <button
+              type="button"
+              class="recommendsidebar-topic recommendsidebar-topic--ai"
+              @click="mapStore.addComponentToDashboard(comp)"
+            >
+              <span class="recommendsidebar-topic-title">{{ comp.name }}</span>
+              <span class="recommendsidebar-topic-summary">{{ comp.short_desc }}</span>
+            </button>
+          </li>
+        </ul>
+      </div>
+
       <div
         v-if="loadingTopics"
         class="recommendsidebar-status"
@@ -296,6 +390,85 @@ onMounted(() => {
 	&-headertext {
 		flex: 1;
 		min-width: 0;
+	}
+
+	&-ai-section {
+		margin-bottom: 16px;
+	}
+
+	&-ai-input-group {
+		display: flex;
+		gap: 4px;
+		background: var(--color-component-background);
+		padding: 4px;
+		border-radius: 6px;
+		border: 1px solid var(--color-border);
+
+		&:focus-within {
+			border-color: var(--color-highlight);
+		}
+	}
+
+	&-ai-input {
+		flex: 1;
+		border: none;
+		background: transparent;
+		color: var(--color-normal-text);
+		font-size: var(--font-s);
+		padding: 4px 8px;
+		outline: none;
+		min-width: 0;
+
+		&::placeholder {
+			color: var(--color-complement-text);
+		}
+	}
+
+	&-ai-btn {
+		background: var(--color-highlight);
+		color: #fff;
+		border-radius: 4px;
+		padding: 4px 8px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		transition: opacity 0.2s;
+
+		&:disabled {
+			opacity: 0.5;
+			cursor: not-allowed;
+		}
+
+		span {
+			font-family: var(--font-icon);
+			font-size: var(--font-m);
+		}
+
+		.is-spinning {
+			animation: spin 1s linear infinite;
+		}
+	}
+
+	&-ai-result {
+		margin-bottom: 20px;
+		padding-bottom: 16px;
+		border-bottom: 1px dashed var(--color-border);
+	}
+
+	&-storyline {
+		font-size: var(--font-m);
+		line-height: 1.6;
+		color: var(--color-normal-text);
+		background: var(--color-menu-dropdown);
+		padding: 12px;
+		border-radius: 8px;
+		margin-bottom: 12px;
+		white-space: pre-wrap;
+	}
+
+	@keyframes spin {
+		from { transform: rotate(0deg); }
+		to { transform: rotate(360deg); }
 	}
 
 	/* 與左側 SideBar：h1＝私人儀表板層級；h2／SideBarTab 儀表板名＝ var(--font-m) */
