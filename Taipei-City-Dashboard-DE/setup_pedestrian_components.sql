@@ -53,6 +53,7 @@ ON CONFLICT (index) DO UPDATE
 INSERT INTO public.component_maps (index, title, type, source, size, icon, paint, property) VALUES
     (
         'traffic_pedestrian_heatmap',
+
         '行人事故熱點',
         'circle',
         'geojson',
@@ -93,7 +94,15 @@ INSERT INTO public.component_maps (index, title, type, source, size, icon, paint
             {"key": "near_location",  "name": "鄰近路口"},
             {"key": "city",           "name": "城市"}
         ]'
-    );
+    )
+ON CONFLICT (index) DO UPDATE
+    SET title    = EXCLUDED.title,
+        type     = EXCLUDED.type,
+        source   = EXCLUDED.source,
+        size     = EXCLUDED.size,
+        icon     = EXCLUDED.icon,
+        paint    = EXCLUDED.paint,
+        property = EXCLUDED.property;
 
 -- 取得剛剛插入的 component_maps id 備用
 -- (假設為自動序列，查詢: SELECT id FROM component_maps WHERE index='traffic_pedestrian_heatmap')
@@ -101,11 +110,10 @@ INSERT INTO public.component_maps (index, title, type, source, size, icon, paint
 
 -- ============================================================
 -- 4. query_charts 表
---    注意：map_config_ids 需填入上方 component_maps 的 id
---    請先查詢：
---      SELECT id FROM component_maps WHERE index='traffic_pedestrian_heatmap';
---    再將結果填入下方 ARRAY[?] 中
 -- ============================================================
+
+-- 清除所有舊的 pedestrian query_charts（確保重跑時能正確更新）
+DELETE FROM public.query_charts WHERE index LIKE 'traffic_pedestrian%';
 
 -- C1：雙北行人事故熱區地圖 (metrotaipei)
 INSERT INTO public.query_charts (
@@ -143,8 +151,6 @@ INSERT INTO public.query_charts (
 );
 
 -- C2：雙北行人事故時段分析（三個 city 版本，對應後端 query_charts.city 篩選）
--- 先刪除舊的單一 taipei 版本，再插入三個版本
-DELETE FROM public.query_charts WHERE index = 'traffic_pedestrian_hourly_taipei';
 
 -- 共用 SQL 片段（CASE weekday）抽出為說明，實際各版本重複寫入
 -- city = taipei：只查臺北市
