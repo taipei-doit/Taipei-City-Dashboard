@@ -95,6 +95,7 @@ export const useMapStore = defineStore("map", {
 		layerUpdateTime: {
 			// [layerId]: Date
 		},
+		flowLineIntervals: {},
 	}),
 	actions: {
 		/* Initialize Mapbox */
@@ -656,6 +657,18 @@ export const useMapStore = defineStore("map", {
 
 			// 初始 filter 設定為第一組 (6 小時降雨)
 			const initialFilter = ["in", "hazard_class", ...filterClass[0]];
+			const paintConfig = { ...(map_config.paint || {}) };
+			const isFlowLine =
+				map_config.type === "line" && paintConfig["line-flow"];
+			const flowColor = paintConfig["line-flow-color"] || "#E7FBFF";
+			const flowWidth = paintConfig["line-flow-width"] || 2;
+			const lineCap = paintConfig["line-cap"];
+			const lineJoin = paintConfig["line-join"];
+			delete paintConfig["line-flow"];
+			delete paintConfig["line-flow-color"];
+			delete paintConfig["line-flow-width"];
+			delete paintConfig["line-cap"];
+			delete paintConfig["line-join"];
 			const config = {
 				id: map_config.layerId,
 				type: map_config.type,
@@ -664,11 +677,13 @@ export const useMapStore = defineStore("map", {
 				paint: {
 					...maplayerCommonPaint[`${map_config.type}`],
 					...extra_paint_configs,
-					...map_config.paint,
+					...paintConfig,
 				},
 				layout: {
 					...maplayerCommonLayout[`${map_config.type}`],
 					...extra_layout_configs,
+					...(lineCap && { "line-cap": lineCap }),
+					...(lineJoin && { "line-join": lineJoin }),
 				},
 				source: `${map_config.layerId}-source`,
 			};
@@ -681,6 +696,25 @@ export const useMapStore = defineStore("map", {
 				config.filter = initialFilter;
 			}
 			this.map.addLayer(config);
+			if (isFlowLine) {
+				const flowLayerId = `${map_config.layerId}-flow`;
+				this.map.addLayer({
+					id: flowLayerId,
+					type: "line",
+					source: `${map_config.layerId}-source`,
+					paint: {
+						"line-color": flowColor,
+						"line-width": flowWidth,
+						"line-opacity": 0.9,
+						"line-dasharray": [0, 3, 1.2, 3],
+					},
+					layout: {
+						"line-cap": "round",
+						"line-join": "round",
+					},
+				});
+				this.animateFlowLine(map_config.layerId);
+			}
 			if (
 				map_config.layerId ===
 					"wee_hazard_water-fill-extrusion-metrotaipei" ||
@@ -696,6 +730,42 @@ export const useMapStore = defineStore("map", {
 			this.loadingLayers = this.loadingLayers.filter(
 				(el) => el !== map_config.layerId,
 			);
+		},
+		animateFlowLine(mapLayerId) {
+			this.stopFlowLineAnimation(mapLayerId);
+			const flowLayerId = `${mapLayerId}-flow`;
+			const dashFrames = [
+				[0, 3, 1.2, 3],
+				[0.4, 3, 1.2, 2.6],
+				[0.8, 3, 1.2, 2.2],
+				[1.2, 3, 0, 3],
+				[0.8, 2.2, 0.4, 3],
+				[0.4, 2.6, 0.8, 3],
+			];
+			let index = 0;
+			this.flowLineIntervals[mapLayerId] = setInterval(() => {
+				if (!this.map?.getLayer(flowLayerId)) {
+					this.stopFlowLineAnimation(mapLayerId);
+					return;
+				}
+				this.map.setPaintProperty(
+					flowLayerId,
+					"line-dasharray",
+					dashFrames[index],
+				);
+				index = (index + 1) % dashFrames.length;
+			}, 160);
+		},
+		stopFlowLineAnimation(mapLayerId) {
+			if (this.flowLineIntervals[mapLayerId]) {
+				clearInterval(this.flowLineIntervals[mapLayerId]);
+				delete this.flowLineIntervals[mapLayerId];
+			}
+		},
+		stopAllFlowLineAnimations() {
+			Object.keys(this.flowLineIntervals).forEach((mapLayerId) => {
+				this.stopFlowLineAnimation(mapLayerId);
+			});
 		},
 		animateFilter(mapLayerId) {
 			this.stopAnimation();
@@ -1851,6 +1921,14 @@ export const useMapStore = defineStore("map", {
 						"visibility",
 						"visible",
 					);
+					if (this.map.getLayer(`${mapLayerId}-flow`)) {
+						this.map.setLayoutProperty(
+							`${mapLayerId}-flow`,
+							"visibility",
+							"visible",
+						);
+						this.animateFlowLine(mapLayerId);
+					}
 				}
 			}
 		},
@@ -1872,6 +1950,14 @@ export const useMapStore = defineStore("map", {
 						"visibility",
 						"none",
 					);
+					if (this.map.getLayer(`${mapLayerId}-flow`)) {
+						this.map.setLayoutProperty(
+							`${mapLayerId}-flow`,
+							"visibility",
+							"none",
+						);
+						this.stopFlowLineAnimation(mapLayerId);
+					}
 				}
 				this.currentVisibleLayers = this.currentVisibleLayers.filter(
 					(element) => element !== mapLayerId,
@@ -2575,7 +2661,11 @@ export const useMapStore = defineStore("map", {
 		/* Clearing the map */
 		// 1. Called when the user is switching between maps
 		clearOnlyLayers() {
+			this.stopAllFlowLineAnimations();
 			this.currentLayers.forEach((element) => {
+				if (this.map.getLayer(`${element}-flow`)) {
+					this.map.removeLayer(`${element}-flow`);
+				}
 				this.map.removeLayer(element);
 				if (this.map.getSource(`${element}-source`)) {
 					this.map.removeSource(`${element}-source`);
@@ -2588,6 +2678,7 @@ export const useMapStore = defineStore("map", {
 		},
 		// 2. Called when user navigates away from the map
 		clearEntireMap() {
+			this.stopAllFlowLineAnimations();
 			this.currentLayers = [];
 			this.mapConfigs = {};
 			this.map = null;
