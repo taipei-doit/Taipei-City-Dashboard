@@ -1,0 +1,605 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.399865,
+          25.146582
+        ]
+      },
+      "properties": {
+        "name": "下庄公有市場",
+        "district": "八里區",
+        "supply_active": true,
+        "supply_categories": "漁產, 肉類, 蔬果",
+        "total_items": 335,
+        "trust_score": 75.0,
+        "status_text": "今日新鮮物資已由批發市場供應",
+        "top_items_display": "甘藍-初秋, 鳳梨-金鑽鳳梨, 西瓜-大西瓜, 木瓜-網室紅肉, 番茄-牛番茄"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5008,
+          25.064323
+        ]
+      },
+      "properties": {
+        "name": "中央公有市場",
+        "district": "三重區",
+        "supply_active": true,
+        "supply_categories": "漁產, 肉類, 蔬果",
+        "total_items": 335,
+        "trust_score": 75.0,
+        "status_text": "今日新鮮物資已由批發市場供應",
+        "top_items_display": "甘藍-初秋, 鳳梨-金鑽鳳梨, 西瓜-大西瓜, 木瓜-網室紅肉, 番茄-牛番茄"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.491414,
+          25.057157
+        ]
+      },
+      "properties": {
+        "name": "光明公有市場",
+        "district": "三重區",
+        "supply_active": true,
+        "supply_categories": "漁產, 肉類, 蔬果",
+        "total_items": 335,
+        "trust_score": 75.0,
+        "status_text": "今日新鮮物資已由批發市場供應",
+        "top_items_display": "甘藍-初秋, 鳳梨-金鑽鳳梨, 西瓜-大西瓜, 木瓜-網室紅肉, 番茄-牛番茄"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.488534,
+          25.061008
+        ]
+      },
+      "properties": {
+        "name": "重新公有市場",
+        "district": "三重區",
+        "supply_active": true,
+        "supply_categories": "漁產, 肉類, 蔬果",
+        "total_items": 335,
+        "trust_score": 75.0,
+        "status_text": "今日新鮮物資已由批發市場供應",
+        "top_items_display": "甘藍-初秋, 鳳梨-金鑽鳳梨, 西瓜-大西瓜, 木瓜-網室紅肉, 番茄-牛番茄"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.491414,
+          25.057157
+        ]
+      },
+      "properties": {
+        "name": "光明公有市場2樓",
+        "district": "三重區",
+        "supply_active": true,
+        "supply_categories": "漁產, 肉類, 蔬果",
+        "total_items": 335,
+        "trust_score": 75.0,
+        "status_text": "今日新鮮物資已由批發市場供應",
+        "top_items_display": "甘藍-初秋, 鳳梨-金鑽鳳梨, 西瓜-大西瓜, 木瓜-網室紅肉, 番茄-牛番茄"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.370671,
+          24.934939
+        ]
+      },
+      "properties": {
+        "name": "三峽公有市場",
+        "district": "三峽區",
+        "supply_active": true,
+        "supply_categories": "漁產, 肉類, 蔬果",
+        "total_items": 335,
+        "trust_score": 75.0,
+        "status_text": "今日新鮮物資已由批發市場供應",
+        "top_items_display": "甘藍-初秋, 鳳梨-金鑽鳳梨, 西瓜-大西瓜, 木瓜-網室紅肉, 番茄-牛番茄"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.376129,
+          24.928297
+        ]
+      },
+      "properties": {
+        "name": "礁溪公有市場",
+        "district": "三峽區",
+        "supply_active": true,
+        "supply_categories": "漁產, 肉類, 蔬果",
+        "total_items": 335,
+        "trust_score": 75.0,
+        "status_text": "今日新鮮物資已由批發市場供應",
+        "top_items_display": "甘藍-初秋, 鳳梨-金鑽鳳梨, 西瓜-大西瓜, 木瓜-網室紅肉, 番茄-牛番茄"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.443018,
+          24.974944
+        ]
+      },
+      "properties": {
+        "name": "土城公有零售市場",
+        "district": "土城區",
+        "supply_active": true,
+        "supply_categories": "漁產, 肉類, 蔬果",
+        "total_items": 335,
+        "trust_score": 75.0,
+        "status_text": "今日新鮮物資已由批發市場供應",
+        "top_items_display": "甘藍-初秋, 鳳梨-金鑽鳳梨, 西瓜-大西瓜, 木瓜-網室紅肉, 番茄-牛番茄"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.415179,
+          24.95816
+        ]
+      },
+      "properties": {
+        "name": "頂埔公有市場",
+        "district": "土城區",
+        "supply_active": true,
+        "supply_categories": "漁產, 肉類, 蔬果",
+        "total_items": 335,
+        "trust_score": 75.0,
+        "status_text": "今日新鮮物資已由批發市場供應",
+        "top_items_display": "甘藍-初秋, 鳳梨-金鑽鳳梨, 西瓜-大西瓜, 木瓜-網室紅肉, 番茄-牛番茄"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.474073,
+          25.003591
+        ]
+      },
+      "properties": {
+        "name": "民享公有市場",
+        "district": "中和區",
+        "supply_active": true,
+        "supply_categories": "漁產, 肉類, 蔬果",
+        "total_items": 335,
+        "trust_score": 75.0,
+        "status_text": "今日新鮮物資已由批發市場供應",
+        "top_items_display": "甘藍-初秋, 鳳梨-金鑽鳳梨, 西瓜-大西瓜, 木瓜-網室紅肉, 番茄-牛番茄"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.500961,
+          25.000577
+        ]
+      },
+      "properties": {
+        "name": "枋寮公有市場",
+        "district": "中和區",
+        "supply_active": true,
+        "supply_categories": "漁產, 肉類, 蔬果",
+        "total_items": 335,
+        "trust_score": 75.0,
+        "status_text": "今日新鮮物資已由批發市場供應",
+        "top_items_display": "甘藍-初秋, 鳳梨-金鑽鳳梨, 西瓜-大西瓜, 木瓜-網室紅肉, 番茄-牛番茄"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.505029,
+          24.992102
+        ]
+      },
+      "properties": {
+        "name": "和平街攤販集中區",
+        "district": "中和區",
+        "supply_active": true,
+        "supply_categories": "漁產, 肉類, 蔬果",
+        "total_items": 335,
+        "trust_score": 75.0,
+        "status_text": "今日新鮮物資已由批發市場供應",
+        "top_items_display": "甘藍-初秋, 鳳梨-金鑽鳳梨, 西瓜-大西瓜, 木瓜-網室紅肉, 番茄-牛番茄"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.514272,
+          25.004216
+        ]
+      },
+      "properties": {
+        "name": "永安公有市場",
+        "district": "永和區",
+        "supply_active": true,
+        "supply_categories": "漁產, 肉類, 蔬果",
+        "total_items": 335,
+        "trust_score": 75.0,
+        "status_text": "今日新鮮物資已由批發市場供應",
+        "top_items_display": "甘藍-初秋, 鳳梨-金鑽鳳梨, 西瓜-大西瓜, 木瓜-網室紅肉, 番茄-牛番茄"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.516597,
+          25.013606
+        ]
+      },
+      "properties": {
+        "name": "溪洲公有市場",
+        "district": "永和區",
+        "supply_active": true,
+        "supply_categories": "漁產, 肉類, 蔬果",
+        "total_items": 335,
+        "trust_score": 75.0,
+        "status_text": "今日新鮮物資已由批發市場供應",
+        "top_items_display": "甘藍-初秋, 鳳梨-金鑽鳳梨, 西瓜-大西瓜, 木瓜-網室紅肉, 番茄-牛番茄"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.629518,
+          25.068392
+        ]
+      },
+      "properties": {
+        "name": "金龍公有市場",
+        "district": "汐止區",
+        "supply_active": true,
+        "supply_categories": "漁產, 肉類, 蔬果",
+        "total_items": 335,
+        "trust_score": 75.0,
+        "status_text": "今日新鮮物資已由批發市場供應",
+        "top_items_display": "甘藍-初秋, 鳳梨-金鑽鳳梨, 西瓜-大西瓜, 木瓜-網室紅肉, 番茄-牛番茄"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.662034,
+          25.068507
+        ]
+      },
+      "properties": {
+        "name": "秀豐公有市場(攤集區)",
+        "district": "汐止區",
+        "supply_active": true,
+        "supply_categories": "漁產, 肉類, 蔬果",
+        "total_items": 335,
+        "trust_score": 75.0,
+        "status_text": "今日新鮮物資已由批發市場供應",
+        "top_items_display": "甘藍-初秋, 鳳梨-金鑽鳳梨, 西瓜-大西瓜, 木瓜-網室紅肉, 番茄-牛番茄"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.658972,
+          25.068162
+        ]
+      },
+      "properties": {
+        "name": "中正中繼市場",
+        "district": "汐止區",
+        "supply_active": true,
+        "supply_categories": "漁產, 肉類, 蔬果",
+        "total_items": 335,
+        "trust_score": 75.0,
+        "status_text": "今日新鮮物資已由批發市場供應",
+        "top_items_display": "甘藍-初秋, 鳳梨-金鑽鳳梨, 西瓜-大西瓜, 木瓜-網室紅肉, 番茄-牛番茄"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.640863,
+          25.065988
+        ]
+      },
+      "properties": {
+        "name": "忠厚公有市場",
+        "district": "汐止區",
+        "supply_active": true,
+        "supply_categories": "漁產, 肉類, 蔬果",
+        "total_items": 335,
+        "trust_score": 75.0,
+        "status_text": "今日新鮮物資已由批發市場供應",
+        "top_items_display": "甘藍-初秋, 鳳梨-金鑽鳳梨, 西瓜-大西瓜, 木瓜-網室紅肉, 番茄-牛番茄"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.658759,
+          25.063797
+        ]
+      },
+      "properties": {
+        "name": "林森攤販集中區",
+        "district": "汐止區",
+        "supply_active": true,
+        "supply_categories": "漁產, 肉類, 蔬果",
+        "total_items": 335,
+        "trust_score": 75.0,
+        "status_text": "今日新鮮物資已由批發市場供應",
+        "top_items_display": "甘藍-初秋, 鳳梨-金鑽鳳梨, 西瓜-大西瓜, 木瓜-網室紅肉, 番茄-牛番茄"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.654316,
+          25.060973
+        ]
+      },
+      "properties": {
+        "name": "觀光攤販集中區",
+        "district": "汐止區",
+        "supply_active": true,
+        "supply_categories": "漁產, 肉類, 蔬果",
+        "total_items": 335,
+        "trust_score": 75.0,
+        "status_text": "今日新鮮物資已由批發市場供應",
+        "top_items_display": "甘藍-初秋, 鳳梨-金鑽鳳梨, 西瓜-大西瓜, 木瓜-網室紅肉, 番茄-牛番茄"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.45543,
+          25.007356
+        ]
+      },
+      "properties": {
+        "name": "湳興公有市場",
+        "district": "板橋區",
+        "supply_active": true,
+        "supply_categories": "漁產, 肉類, 蔬果",
+        "total_items": 335,
+        "trust_score": 75.0,
+        "status_text": "今日新鮮物資已由批發市場供應",
+        "top_items_display": "甘藍-初秋, 鳳梨-金鑽鳳梨, 西瓜-大西瓜, 木瓜-網室紅肉, 番茄-牛番茄"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.458873,
+          25.006606
+        ]
+      },
+      "properties": {
+        "name": "後埔公有市場",
+        "district": "板橋區",
+        "supply_active": true,
+        "supply_categories": "漁產, 肉類, 蔬果",
+        "total_items": 335,
+        "trust_score": 75.0,
+        "status_text": "今日新鮮物資已由批發市場供應",
+        "top_items_display": "甘藍-初秋, 鳳梨-金鑽鳳梨, 西瓜-大西瓜, 木瓜-網室紅肉, 番茄-牛番茄"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.377254,
+          25.068775
+        ]
+      },
+      "properties": {
+        "name": "東勢公有市場",
+        "district": "林口區",
+        "supply_active": true,
+        "supply_categories": "漁產, 肉類, 蔬果",
+        "total_items": 335,
+        "trust_score": 75.0,
+        "status_text": "今日新鮮物資已由批發市場供應",
+        "top_items_display": "甘藍-初秋, 鳳梨-金鑽鳳梨, 西瓜-大西瓜, 木瓜-網室紅肉, 番茄-牛番茄"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.391483,
+          25.077745
+        ]
+      },
+      "properties": {
+        "name": "林口公有市場",
+        "district": "林口區",
+        "supply_active": true,
+        "supply_categories": "漁產, 肉類, 蔬果",
+        "total_items": 335,
+        "trust_score": 75.0,
+        "status_text": "今日新鮮物資已由批發市場供應",
+        "top_items_display": "甘藍-初秋, 鳳梨-金鑽鳳梨, 西瓜-大西瓜, 木瓜-網室紅肉, 番茄-牛番茄"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.367576,
+          25.068859
+        ]
+      },
+      "properties": {
+        "name": "麗林公有市場",
+        "district": "林口區",
+        "supply_active": true,
+        "supply_categories": "漁產, 肉類, 蔬果",
+        "total_items": 335,
+        "trust_score": 75.0,
+        "status_text": "今日新鮮物資已由批發市場供應",
+        "top_items_display": "甘藍-初秋, 鳳梨-金鑽鳳梨, 西瓜-大西瓜, 木瓜-網室紅肉, 番茄-牛番茄"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.63812,
+          25.22147
+        ]
+      },
+      "properties": {
+        "name": "第一公有市場",
+        "district": "金山區",
+        "supply_active": true,
+        "supply_categories": "漁產, 肉類, 蔬果",
+        "total_items": 335,
+        "trust_score": 75.0,
+        "status_text": "今日新鮮物資已由批發市場供應",
+        "top_items_display": "甘藍-初秋, 鳳梨-金鑽鳳梨, 西瓜-大西瓜, 木瓜-網室紅肉, 番茄-牛番茄"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.433653,
+          25.056131
+        ]
+      },
+      "properties": {
+        "name": "泰山公有市場",
+        "district": "泰山區",
+        "supply_active": true,
+        "supply_categories": "漁產, 肉類, 蔬果",
+        "total_items": 335,
+        "trust_score": 75.0,
+        "status_text": "今日新鮮物資已由批發市場供應",
+        "top_items_display": "甘藍-初秋, 鳳梨-金鑽鳳梨, 西瓜-大西瓜, 木瓜-網室紅肉, 番茄-牛番茄"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.926917,
+          25.054775
+        ]
+      },
+      "properties": {
+        "name": "澳底公有市場",
+        "district": "貢寮區",
+        "supply_active": true,
+        "supply_categories": "漁產, 肉類, 蔬果",
+        "total_items": 335,
+        "trust_score": 75.0,
+        "status_text": "今日新鮮物資已由批發市場供應",
+        "top_items_display": "甘藍-初秋, 鳳梨-金鑽鳳梨, 西瓜-大西瓜, 木瓜-網室紅肉, 番茄-牛番茄"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.4427,
+          25.170409
+        ]
+      },
+      "properties": {
+        "name": "中山公有零售市場",
+        "district": "淡水區",
+        "supply_active": true,
+        "supply_categories": "漁產, 肉類, 蔬果",
+        "total_items": 335,
+        "trust_score": 75.0,
+        "status_text": "今日新鮮物資已由批發市場供應",
+        "top_items_display": "甘藍-初秋, 鳳梨-金鑽鳳梨, 西瓜-大西瓜, 木瓜-網室紅肉, 番茄-牛番茄"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.460255,
+          25.137366
+        ]
+      },
+      "properties": {
+        "name": "中正美食廣場",
+        "district": "淡水區",
+        "supply_active": true,
+        "supply_categories": "漁產, 肉類, 蔬果",
+        "total_items": 335,
+        "trust_score": 75.0,
+        "status_text": "今日新鮮物資已由批發市場供應",
+        "top_items_display": "甘藍-初秋, 鳳梨-金鑽鳳梨, 西瓜-大西瓜, 木瓜-網室紅肉, 番茄-牛番茄"
+      }
+    }
+  ]
+}

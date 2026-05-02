@@ -1,0 +1,43 @@
+{
+    "dag_infos": {
+        "dag_id": "infectious_food_disease_monthly",
+        "start_date": "2025-05-01",
+        "schedule_interval": "@monthly",
+        "catchup": false,
+        "tags": [
+            "food_disease",
+            "衛生局",
+            "食安"
+        ],
+        "description": "Monthly food-related infectious disease cases in Taipei City.",
+        "default_args": {
+            "owner": "airflow",
+            "email": [
+                "DEFAULT_EMAIL_LIST"
+            ],
+            "email_on_retry": false,
+            "email_on_failure": true,
+            "retries": 1,
+            "retry_delay": 60
+        },
+        "ready_data_db": "postgres_default",
+        "ready_data_default_table": "infectious_food_disease_monthly",
+        "ready_data_history_table": "infectious_food_disease_monthly_history",
+        "raw_data_db": "postgres_default",
+        "raw_data_table": "",
+        "load_behavior": "current+history"
+    },
+    "data_infos": {
+        "name_cn": "臺北市食物相關傳染病月統計",
+        "airflow_update_freq": "@monthly",
+        "source": "https://statistics.health.gov.tw/tbl/m005法定傳染病確定病例(行政區).html",
+        "source_type": "web scraping",
+        "source_dept": "臺北市政府衛生局",
+        "gis_format": null,
+        "output_coordinate": null,
+        "is_geometry": 0,
+        "dataset_description": "臺北市月度食物相關傳染病確定病例統計，包含傷寒、A肝、桿菌性痢疾、阿米巴性痢疾、霍亂、腸道出血性大腸桿菌感染症、李斯特菌症、肉毒桿菌中毒等",
+        "etl_description": "extract embedded JSON from HTML, filter food-related diseases, aggregate by month",
+        "sensitivity": "public"
+    }
+}

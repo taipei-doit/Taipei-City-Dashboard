@@ -1,0 +1,44 @@
+{
+  "dag_infos": {
+    "dag_id": "water_pipe",
+    "start_date": "2026-05-02",
+    "schedule_interval": "@monthly",
+    "catchup": false,
+    "tags": [
+      "water",
+      "water_pipe",
+      "臺北市公共管線圖資",
+      "自來水系統"
+    ],
+    "description": "Taipei public utility water-system pipe LineString data from Taipei Open Data.",
+    "default_args": {
+      "owner": "airflow",
+      "email": [
+        "DEFAULT_EMAIL_LIST"
+      ],
+      "email_on_retry": false,
+      "email_on_failure": true,
+      "retries": 1,
+      "retry_delay": 60
+    },
+    "ready_data_db": "postgres_default",
+    "ready_data_default_table": "water_pipe",
+    "ready_data_history_table": "",
+    "raw_data_db": "postgres_default",
+    "raw_data_table": "",
+    "load_behavior": "replace"
+  },
+  "data_infos": {
+    "name_cn": "臺北市公共管線圖資_自來水系統管線",
+    "airflow_update_freq": "monthly",
+    "source": "https://data.taipei/dataset/detail?id=af167303-0e5f-45dd-b624-a01f541565ce",
+    "source_type": "Taipei Open Data XML downloads",
+    "source_dept": "臺北市政府工務局",
+    "gis_format": "LineString",
+    "output_coordinate": "EPSG:4326",
+    "is_geometry": 1,
+    "dataset_description": "臺北市公共管線圖資中的自來水系統管線，原始資料分割為多個 XML 檔案，包含 posList 與管線屬性。",
+    "etl_description": "Fetch all XML resources, stream parse pipe records, convert posList line geometry from TWD97 to WGS84, then write the current PostgreSQL table.",
+    "sensitivity": "public"
+  }
+}

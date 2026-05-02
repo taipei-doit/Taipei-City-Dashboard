@@ -1,0 +1,37 @@
+{
+    "dag_infos": {
+        "dag_id": "public_market_new_tpe",
+        "start_date": "2025-05-01",
+        "schedule_interval": "@monthly",
+        "catchup": false,
+        "tags": ["public_market_new_tpe", "新北市公有市場", "新北市市場處"],
+        "description": "新北市公有零售市場點位資料",
+        "default_args": {
+            "owner": "airflow",
+            "email": ["DEFAULT_EMAIL_LIST"],
+            "email_on_retry": false,
+            "email_on_failure": true,
+            "retries": 1,
+            "retry_delay": 60
+        },
+        "ready_data_db": "postgres_default",
+        "ready_data_default_table": "public_market_new_tpe",
+        "ready_data_history_table": "",
+        "raw_data_db": "postgres_default",
+        "raw_data_table": "",
+        "load_behavior": "replace"
+    },
+    "data_infos": {
+        "name_cn": "新北市公有市場",
+        "airflow_update_freq": "first day of every month",
+        "source": "dags/utils/opendata/夜市/metrotaipei_market.csv",
+        "source_type": "local CSV",
+        "source_dept": "新北市市場處",
+        "gis_format": "Point",
+        "output_coordinate": "EPSG:4326",
+        "is_geometry": 1,
+        "dataset_description": "新北市公有零售市場基本資料，含市場名稱、地址、電話及營業類型",
+        "etl_description": "讀取本地 CSV（UTF-8），地址標準化後進行地理編碼，寫入 PostgreSQL",
+        "sensitivity": "public"
+    }
+}

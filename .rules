@@ -1,0 +1,231 @@
+# Taipei City Dashboard Agent Rules
+
+## Documentation
+
+Primary documentation lives at:
+https://github.com/taipei-doit/Taipei-City-Dashboard-Documentation/tree/main/src/assets/articles
+
+Check the documentation and the current local implementation before changing code. Prefer existing repo patterns over new conventions.
+
+## Repo Layout
+
+- `Taipei-City-Dashboard-DE/`: Airflow DAGs and data ingestion/transformation code.
+- `Taipei-City-Dashboard-BE/`: Go API. Map data is served generically from DB tables/views with `wkb_geometry`.
+- `Taipei-City-Dashboard-FE/`: Vue/Pinia/Mapbox frontend.
+- `db-sample-data/`: SQL for data tables, manager component config, charts, map config, and dashboard/group wiring.
+- `docker/`: local compose files and environment.
+
+## Standard Dataset Flow
+
+For new dashboard data, follow this path unless the repo already has a better pattern:
+
+1. Add a DE DAG under `Taipei-City-Dashboard-DE/dags/proj_city_dashboard/<dataset>/`.
+2. Add `<dataset>.py`, `job_config.json`, and `__init__.py`.
+3. Normalize source fields into stable English column names.
+4. Create `wkb_geometry` in EPSG:4326.
+5. Add SQL in `db-sample-data/<dataset>.sql`.
+6. Create the data table in the dashboard DB.
+7. Create manager DB rows: `components`, `component_charts`, `component_maps`, `query_charts`, `dashboards`, `dashboard_groups`.
+8. Verify BE APIs and FE rendering.
+
+Do not add custom BE endpoints for ordinary map datasets. The BE already exposes tables/views through `/api/dev/map-data/:index` as long as the DB object has `wkb_geometry`.
+
+## DE Guidelines
+
+- Use `CommonDag(proj_folder="proj_city_dashboard", dag_folder="<dataset>")`.
+- Use `requests` for HTTP sources and honor `proxies = kwargs.get("proxies")`.
+- Use `save_geodataframe_to_postgresql` for geospatial data.
+- Use `update_lasttime_in_data_to_dataset_info` after loading.
+- Use `replace` for static/current public datasets unless history is explicitly needed.
+- For point geometry, use `add_point_wkbgeometry_column_to_df`.
+- For lines/polygons or custom geometry, use GeoPandas/Shapely plus `convert_geometry_to_wkbgeometry`.
+- If the source is large XML, stream parse it with `xml.etree.ElementTree.iterparse`; avoid loading huge documents when streaming is practical.
+- If source coordinates are TWD97, treat them as EPSG:3826 and transform to EPSG:4326.
+- Keep source-specific parsing in the DAG module; do not modify Dockerfiles just to add one-off tooling unless explicitly approved.
+
+## DB and Manager SQL
+
+- Put setup SQL in `db-sample-data/`.
+- Data DB objects should be safe to apply repeatedly with `CREATE TABLE IF NOT EXISTS`, `CREATE INDEX IF NOT EXISTS`, and `CREATE OR REPLACE VIEW`.
+- Manager DB rows should be id-safe. Avoid hardcoded component/map IDs.
+- Use `"index"` as the stable component key.
+- Use `ON CONFLICT ("index") DO UPDATE` for `components`, `component_charts`, and `dashboards`.
+- Delete and reinsert `component_maps` for a component when replacing map config.
+- Delete and reinsert matching `query_charts` rows when changing query or map wiring.
+- Use dynamic map IDs:
+  `ARRAY[(SELECT id FROM public.component_maps WHERE "index" = '<map_index>' ORDER BY id DESC LIMIT 1)]`
+- Add dashboards to the correct public group with `dashboard_groups`; Taipei is usually group `2`, Metro Taipei is usually group `3`.
+- Reset sequences after inserting manager rows when needed:
+  `SELECT setval('public.components_id_seq', (SELECT COALESCE(MAX(id), 0) FROM public.components), true);`
+
+## Local Data Injection
+
+Local development uses two Postgres services:
+
+- `postgres-data`, database `dashboard`: actual dataset tables/views.
+- `postgres-manager`, database `dashboardmanager`: dashboard metadata, component config, map config, and chart queries.
+
+Before injecting data, make sure the local Docker stack is up. Use the repo compose files and env file:
+
+`docker compose --env-file docker/.env -f docker/docker-compose-db.yaml -f docker/docker-compose.yaml up -d`
+
+Useful local services:
+
+- `dashboard-fe`: Vite frontend, exposed at `http://localhost:8080`, bind-mounted from `Taipei-City-Dashboard-FE`.
+- `dashboard-be`: Go backend, exposed at `http://localhost:8088` internally proxied by the FE/nginx API route.
+- `postgres-data`: dashboard data DB, PostGIS enabled.
+- `postgres-manager`: dashboard manager/config DB, exposed on host port `5432`.
+- `qdrant`, `redis`, `pgadmin`: supporting services.
+
+Useful checks:
+
+- `docker ps --format 'table {{.Names}}\t{{.Status}}\t{{.Ports}}'`
+- `docker logs --tail 40 dashboard-fe`
+- `docker logs --tail 40 dashboard-be`
+
+After adding a new source, inject it locally in this order:
+
+1. Apply the dataset SQL to `postgres-data` so tables/views and indexes exist:
+   `docker exec -i postgres-data psql -U postgres -d dashboard < db-sample-data/<dataset>.sql`
+2. Apply the same SQL to `postgres-manager` so component/dashboard config exists:
+   `docker exec -i postgres-manager psql -U postgres -d dashboardmanager < db-sample-data/<dataset>.sql`
+3. It is normal for the first command to print errors for manager-only tables such as `components`, `query_charts`, or `dashboards` when using combined SQL files. The important part is that the data table/view is created in `postgres-data`; manager rows should succeed in `postgres-manager`.
+4. Load the data into `postgres-data`. Prefer running the DAG in the DE environment when available. For one-off local validation, a temporary Python loader in Docker is acceptable if it uses the same parsing logic and writes to the same table.
+5. Use the Docker network when a loader needs DB access:
+   `docker run --rm --network br_dashboard <image> ...`
+6. Default local DB connection values are usually:
+   `host=postgres-data dbname=dashboard user=postgres password=password`
+7. Never insert map/component config into `postgres-data`; never insert dataset rows into `postgres-manager`.
+8. If the map payload is too large, create a DB view for map rendering and point `component_maps.index` to that view while leaving charts on the full table.
+
+The local one-off loader pattern used in this repo:
+
+- Use `dashboard-vector-upgrade` as a convenient Python image when it already has the needed runtime packages such as `requests`, `pandas`, `sqlalchemy`, or `psycopg2`.
+- Run it on `br_dashboard` so container hostnames like `postgres-data` resolve.
+- Connect to the data DB with:
+  `psycopg2.connect(host="postgres-data", dbname="dashboard", user="postgres", password="password")`
+- `TRUNCATE TABLE public.<table> RESTART IDENTITY` before inserting replacement/static data.
+- Use PostGIS constructors when avoiding local GeoPandas in a one-off loader:
+  `ST_SetSRID(ST_MakePoint(lng, lat), 4326)`
+  or
+  `ST_Transform(ST_SetSRID(ST_GeomFromText(wkt), 3826), 4326)`
+- For large XML files, stream with `requests.get(..., stream=True)` and `xml.etree.ElementTree.iterparse`.
+- For sources requiring detail-page enrichment, a bounded `ThreadPoolExecutor` is acceptable for local seeding; keep the DAG code equally bounded and polite.
+- After updating only manager config, apply changes directly to `postgres-manager` with `UPDATE public.query_charts ...` or `UPDATE public.component_maps ...`, then verify through the BE component API.
+
+Concrete one-off loader command shape:
+
+```sh
+docker run --rm --network br_dashboard dashboard-vector-upgrade sh -lc "python - <<'PY'
+import requests
+import psycopg2
+from psycopg2.extras import execute_values
+
+# 1. Fetch and parse source data here.
+# Keep this logic equivalent to the DAG parser.
+rows = []
+
+# 2. Connect to the dashboard data DB from inside the Docker network.
+conn = psycopg2.connect(
+    host='postgres-data',
+    dbname='dashboard',
+    user='postgres',
+    password='password',
+)
+cur = conn.cursor()
+
+# 3. Replace local table contents for current/static datasets.
+cur.execute('TRUNCATE TABLE public.<table> RESTART IDENTITY')
+
+# 4. Insert rows. Use PostGIS functions for geometry when needed.
+sql = '''
+INSERT INTO public.<table> (
+    data_time,
+    name,
+    lng,
+    lat,
+    wkb_geometry
+) VALUES %s
+'''
+template = '''
+(NOW(), %s, %s, %s, ST_SetSRID(ST_MakePoint(%s, %s), 4326))
+'''
+execute_values(cur, sql, rows, template=template, page_size=1000)
+
+# 5. Commit and close.
+conn.commit()
+cur.close()
+conn.close()
+print('loaded', len(rows))
+PY"
+```
+
+Step-by-step when using that command:
+
+1. Confirm services are running:
+   `docker ps --format 'table {{.Names}}\t{{.Status}}\t{{.Ports}}'`
+2. Confirm the target table exists by applying SQL first:
+   `docker exec -i postgres-data psql -U postgres -d dashboard < db-sample-data/<dataset>.sql`
+3. Confirm manager config exists:
+   `docker exec -i postgres-manager psql -U postgres -d dashboardmanager < db-sample-data/<dataset>.sql`
+4. Run the `docker run --rm --network br_dashboard dashboard-vector-upgrade sh -lc "python - <<'PY' ... PY"` loader.
+5. Check row count and geometry:
+   `docker exec postgres-data psql -U postgres -d dashboard -c "SELECT COUNT(*), ST_AsText(ST_Extent(wkb_geometry)) FROM public.<table>;"`
+6. Check API exposure:
+   `curl -sS 'http://localhost:8080/api/dev/map-data/<map_index>' | head -c 500`
+7. Check component config:
+   `curl -sS 'http://localhost:8080/api/dev/component/?searchbyindex=<component_index>&city=taipei'`
+
+Always verify local injection before handing off:
+
+- `docker exec postgres-data psql -U postgres -d dashboard -c "SELECT COUNT(*), ST_AsText(ST_Extent(wkb_geometry)) FROM public.<table>;"`
+- `docker exec postgres-manager psql -U postgres -d dashboardmanager -c "SELECT * FROM components WHERE \"index\" = '<component_index>';"`
+- `GET /api/dev/component/?searchbyindex=<component_index>&city=taipei`
+- `GET /api/dev/component/<id>/chart?city=taipei`
+- `GET /api/dev/map-data/<map_index>`
+- `GET /api/dev/dashboard/?city=taipei`
+
+## Map Config Practices
+
+- Use `source = 'api'` for DB-backed map layers.
+- Use `source = 'geojson'` only for static files in `Taipei-City-Dashboard-FE/public/mapData/`.
+- The `component_maps.index` must match the DB table/view for API-backed map data.
+- Use views for map-friendly subsets when the full table is too large for browser rendering.
+- Keep full data in the base table for charts/analysis, and point map config at the smaller view.
+- Use Mapbox paint expressions in SQL JSON for thematic styling.
+- Include useful popup `property` entries with stable DB column keys.
+
+## Frontend Practices
+
+- Map rendering is centralized in `Taipei-City-Dashboard-FE/src/store/mapStore.js`.
+- Generic popup rendering is in `Taipei-City-Dashboard-FE/src/components/map/MapPopup.vue`.
+- Prefer config-driven map styling through `component_maps.paint` before adding FE logic.
+- Add FE code only for reusable behavior that cannot be expressed with Mapbox config, such as animated flow lines or image popup modes.
+- For popup photos, use a property with `mode: "image"` and a URL field such as `photo_url`.
+- For video/HLS streams, use existing `mode: "video"` behavior.
+- Keep map payloads reasonable. Test `/api/dev/map-data/<index>` size and feature count before assuming a layer is usable.
+
+## Verification Checklist
+
+For a new or changed dataset, verify:
+
+- Data table row count and geometry extent in `postgres-data`.
+- Manager component exists in `postgres-manager`.
+- `GET /api/dev/component/?searchbyindex=<index>&city=taipei`
+- `GET /api/dev/component/<id>/chart?city=taipei`
+- `GET /api/dev/map-data/<map_index>`
+- `GET /api/dev/dashboard/?city=taipei`
+- `python3 -m py_compile <dag_file>.py`
+- `cd Taipei-City-Dashboard-FE && npm run build` when FE code or map popup behavior changed.
+
+The dev FE service is Vite with a bind mount. Small FE edits often hot reload, but browser state may cache dashboard/component lists; hard refresh if a newly added dashboard does not appear.
+
+If frontend dependencies are broken locally, `cd Taipei-City-Dashboard-FE && npm install` can repair missing optional packages such as Rollup native binaries. Do not use `npm audit fix --force` unless explicitly requested.
+
+## Working Tree Rules
+
+- Assume the worktree may contain user changes. Do not revert unrelated edits.
+- Avoid destructive git commands such as `git reset --hard` or `git checkout --` unless explicitly requested.
+- Use `rg` for searching.
+- Use `apply_patch` for manual file edits.
+- Keep changes scoped to the requested dataset or behavior.

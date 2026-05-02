@@ -1,0 +1,44 @@
+{
+  "dag_infos": {
+    "dag_id": "drinking_fountain_quality_test",
+    "start_date": "2026-05-02",
+    "schedule_interval": "@once",
+    "catchup": false,
+    "tags": [
+      "water",
+      "drinking_fountain",
+      "water_quality_test",
+      "pdf"
+    ],
+    "description": "Parse static drinking fountain water quality test PDF and join results to drinking fountain locations.",
+    "default_args": {
+      "owner": "airflow",
+      "email": [
+        "DEFAULT_EMAIL_LIST"
+      ],
+      "email_on_retry": false,
+      "email_on_failure": true,
+      "retries": 1,
+      "retry_delay": 60
+    },
+    "ready_data_db": "postgres_default",
+    "ready_data_default_table": "drinking_fountain_quality_test",
+    "ready_data_history_table": "drinking_fountain_quality_test_history",
+    "raw_data_db": "postgres_default",
+    "raw_data_table": "",
+    "load_behavior": "current+history"
+  },
+  "data_infos": {
+    "name_cn": "直飲臺水質檢驗結果",
+    "airflow_update_freq": "static PDF, manual/@once",
+    "source": "https://www-ws.gov.taipei/Download.ashx?u=LzAwMS9VcGxvYWQvMzA2L3JlbGZpbGUvNDQ3NzYvNzY1MTI5NC9iODNhOTkwZC02M2IyLTQ0ZDItYmNlOS1lN2U0YjQ3ZDc0YzgucGRm&n=MTE1MDTpo7LmsLTlj7DmsLTos6rmqqLpqZfntZDmnpwucGRm&icon=.pdf",
+    "source_type": "PDF",
+    "source_dept": "臺北自來水事業處",
+    "gis_format": null,
+    "output_coordinate": "",
+    "is_geometry": 0,
+    "dataset_description": "直飲臺大腸桿菌群水質檢驗結果 PDF，包含樣品名稱、直飲臺編號、採樣日期時間及檢驗值。",
+    "etl_description": "Download fixed PDF URL, extract coordinate-aware text rows, parse sample records by fountain_id, write latest and all parsed records, and recreate joined views with drinking_fountain locations.",
+    "sensitivity": "public"
+  }
+}

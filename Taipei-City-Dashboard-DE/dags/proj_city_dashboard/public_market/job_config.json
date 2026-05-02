@@ -1,0 +1,37 @@
+{
+    "dag_infos": {
+        "dag_id": "public_market",
+        "start_date": "2025-05-01",
+        "schedule_interval": "@monthly",
+        "catchup": false,
+        "tags": ["public_market_tpe", "臺北市公有市場", "市場處"],
+        "description": "臺北市公有零售市場攤位統計及點位資料",
+        "default_args": {
+            "owner": "airflow",
+            "email": ["DEFAULT_EMAIL_LIST"],
+            "email_on_retry": false,
+            "email_on_failure": true,
+            "retries": 1,
+            "retry_delay": 60
+        },
+        "ready_data_db": "postgres_default",
+        "ready_data_default_table": "public_market_tpe",
+        "ready_data_history_table": "",
+        "raw_data_db": "postgres_default",
+        "raw_data_table": "",
+        "load_behavior": "replace"
+    },
+    "data_infos": {
+        "name_cn": "臺北市公有市場",
+        "airflow_update_freq": "first day of every month",
+        "source": "dags/utils/opendata/夜市/taipei_market.csv",
+        "source_type": "local CSV",
+        "source_dept": "臺北市市場處",
+        "gis_format": "Point",
+        "output_coordinate": "EPSG:4326",
+        "is_geometry": 1,
+        "dataset_description": "臺北市公有零售市場攤位分類統計資料，含各市場攤位數量及類別分布",
+        "etl_description": "讀取本地 CSV（Big5），以市場名稱組合地址進行地理編碼，寫入 PostgreSQL",
+        "sensitivity": "public"
+    }
+}

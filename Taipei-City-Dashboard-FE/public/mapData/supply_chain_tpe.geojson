@@ -1,0 +1,1034 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5267,
+          25.0346
+        ]
+      },
+      "properties": {
+        "name": "東門市場",
+        "district": "中正區",
+        "total_stalls": 61,
+        "supply_active": true,
+        "supply_categories": "漁產, 肉類, 家禽, 蔬果",
+        "total_items": 339,
+        "trust_score": 75.0,
+        "status_text": "今日新鮮物資已由批發市場供應",
+        "top_items_display": "黑羽土雞, 白肉雞/雞蛋, 紅羽土雞, 甘藍-初秋, 鳳梨-金鑽鳳梨"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.52477,
+          25.04425
+        ]
+      },
+      "properties": {
+        "name": "華山市場",
+        "district": "中正區",
+        "total_stalls": 35,
+        "supply_active": true,
+        "supply_categories": "肉類, 家禽, 蔬果",
+        "total_items": 337,
+        "trust_score": 75.0,
+        "status_text": "今日新鮮物資已由批發市場供應",
+        "top_items_display": "黑羽土雞, 白肉雞/雞蛋, 紅羽土雞, 甘藍-初秋, 鳳梨-金鑽鳳梨"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.532097,
+          25.045216
+        ]
+      },
+      "properties": {
+        "name": "光華數位新天地(110)",
+        "district": "中正區",
+        "total_stalls": 377,
+        "supply_active": false,
+        "supply_categories": "",
+        "total_items": 0,
+        "trust_score": 0,
+        "status_text": "無資料",
+        "top_items_display": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.535007,
+          25.013742
+        ]
+      },
+      "properties": {
+        "name": "新生市場",
+        "district": "中正區",
+        "total_stalls": 27,
+        "supply_active": true,
+        "supply_categories": "肉類, 蔬果",
+        "total_items": 334,
+        "trust_score": 75.0,
+        "status_text": "今日新鮮物資已由批發市場供應",
+        "top_items_display": "甘藍-初秋, 鳳梨-金鑽鳳梨, 西瓜-大西瓜, 木瓜-網室紅肉, 番茄-牛番茄"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.535007,
+          25.013742
+        ]
+      },
+      "properties": {
+        "name": "幸安市場",
+        "district": "中正區",
+        "total_stalls": 51,
+        "supply_active": true,
+        "supply_categories": "肉類, 蔬果",
+        "total_items": 334,
+        "trust_score": 75.0,
+        "status_text": "今日新鮮物資已由批發市場供應",
+        "top_items_display": "甘藍-初秋, 鳳梨-金鑽鳳梨, 西瓜-大西瓜, 木瓜-網室紅肉, 番茄-牛番茄"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.535007,
+          25.013742
+        ]
+      },
+      "properties": {
+        "name": "水源市場",
+        "district": "中正區",
+        "total_stalls": 212,
+        "supply_active": true,
+        "supply_categories": "漁產, 肉類, 家禽, 蔬果",
+        "total_items": 339,
+        "trust_score": 75.0,
+        "status_text": "今日新鮮物資已由批發市場供應",
+        "top_items_display": "黑羽土雞, 白肉雞/雞蛋, 紅羽土雞, 甘藍-初秋, 鳳梨-金鑽鳳梨"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.516861,
+          25.056847
+        ]
+      },
+      "properties": {
+        "name": "雙連市場",
+        "district": "大同區",
+        "total_stalls": 145,
+        "supply_active": true,
+        "supply_categories": "漁產, 肉類, 家禽, 蔬果",
+        "total_items": 304,
+        "trust_score": 75.0,
+        "status_text": "今日新鮮物資已由批發市場供應",
+        "top_items_display": "黑羽土雞, 白肉雞/雞蛋, 紅羽土雞, 甘藍-初秋, 蘋果-富士進口"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5141,
+          25.0749
+        ]
+      },
+      "properties": {
+        "name": "大龍市場(108)",
+        "district": "大同區",
+        "total_stalls": 82,
+        "supply_active": true,
+        "supply_categories": "漁產, 肉類, 家禽, 蔬果",
+        "total_items": 304,
+        "trust_score": 75.0,
+        "status_text": "今日新鮮物資已由批發市場供應",
+        "top_items_display": "黑羽土雞, 白肉雞/雞蛋, 紅羽土雞, 甘藍-初秋, 蘋果-富士進口"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5156,
+          25.066
+        ]
+      },
+      "properties": {
+        "name": "蘭州市場",
+        "district": "大同區",
+        "total_stalls": 210,
+        "supply_active": true,
+        "supply_categories": "漁產, 肉類, 家禽, 蔬果",
+        "total_items": 304,
+        "trust_score": 75.0,
+        "status_text": "今日新鮮物資已由批發市場供應",
+        "top_items_display": "黑羽土雞, 白肉雞/雞蛋, 紅羽土雞, 甘藍-初秋, 蘋果-富士進口"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5104,
+          25.0548
+        ]
+      },
+      "properties": {
+        "name": "永樂市場",
+        "district": "大同區",
+        "total_stalls": 212,
+        "supply_active": false,
+        "supply_categories": "",
+        "total_items": 0,
+        "trust_score": 0,
+        "status_text": "無資料",
+        "top_items_display": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5104,
+          25.0548
+        ]
+      },
+      "properties": {
+        "name": "永樂市場(1樓)",
+        "district": "大同區",
+        "total_stalls": 182,
+        "supply_active": true,
+        "supply_categories": "漁產, 肉類, 家禽, 蔬果",
+        "total_items": 304,
+        "trust_score": 75.0,
+        "status_text": "今日新鮮物資已由批發市場供應",
+        "top_items_display": "黑羽土雞, 白肉雞/雞蛋, 紅羽土雞, 甘藍-初秋, 蘋果-富士進口"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.533628,
+          25.064251
+        ]
+      },
+      "properties": {
+        "name": "大直市場",
+        "district": "中山區",
+        "total_stalls": 82,
+        "supply_active": true,
+        "supply_categories": "漁產, 肉類, 家禽, 蔬果",
+        "total_items": 304,
+        "trust_score": 75.0,
+        "status_text": "今日新鮮物資已由批發市場供應",
+        "top_items_display": "黑羽土雞, 白肉雞/雞蛋, 紅羽土雞, 甘藍-初秋, 蘋果-富士進口"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.533628,
+          25.064251
+        ]
+      },
+      "properties": {
+        "name": "中山大樓",
+        "district": "中山區",
+        "total_stalls": 75,
+        "supply_active": true,
+        "supply_categories": "漁產, 蔬果",
+        "total_items": 300,
+        "trust_score": 75.0,
+        "status_text": "今日新鮮物資已由批發市場供應",
+        "top_items_display": "甘藍-初秋, 蘋果-富士進口, 鳳梨-金鑽鳳梨, 木瓜-網室紅肉, 香蕉"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.533905,
+          25.06307
+        ]
+      },
+      "properties": {
+        "name": "行天宮商場",
+        "district": "中山區",
+        "total_stalls": 1,
+        "supply_active": false,
+        "supply_categories": "",
+        "total_items": 0,
+        "trust_score": 0,
+        "status_text": "無資料",
+        "top_items_display": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.54234,
+          25.05473
+        ]
+      },
+      "properties": {
+        "name": "長春市場",
+        "district": "中山區",
+        "total_stalls": 116,
+        "supply_active": true,
+        "supply_categories": "漁產, 肉類, 家禽, 蔬果",
+        "total_items": 304,
+        "trust_score": 75.0,
+        "status_text": "今日新鮮物資已由批發市場供應",
+        "top_items_display": "黑羽土雞, 白肉雞/雞蛋, 紅羽土雞, 甘藍-初秋, 蘋果-富士進口"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.533628,
+          25.064251
+        ]
+      },
+      "properties": {
+        "name": "建國市場",
+        "district": "中山區",
+        "total_stalls": 133,
+        "supply_active": true,
+        "supply_categories": "漁產, 肉類, 家禽, 蔬果",
+        "total_items": 304,
+        "trust_score": 75.0,
+        "status_text": "今日新鮮物資已由批發市場供應",
+        "top_items_display": "黑羽土雞, 白肉雞/雞蛋, 紅羽土雞, 甘藍-初秋, 蘋果-富士進口"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.521261,
+          25.050091
+        ]
+      },
+      "properties": {
+        "name": "中山市場",
+        "district": "中山區",
+        "total_stalls": 74,
+        "supply_active": true,
+        "supply_categories": "漁產, 肉類, 家禽, 蔬果",
+        "total_items": 304,
+        "trust_score": 75.0,
+        "status_text": "今日新鮮物資已由批發市場供應",
+        "top_items_display": "黑羽土雞, 白肉雞/雞蛋, 紅羽土雞, 甘藍-初秋, 蘋果-富士進口"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.563561,
+          25.03593
+        ]
+      },
+      "properties": {
+        "name": "八德市場(110)",
+        "district": "中山區",
+        "total_stalls": 179,
+        "supply_active": true,
+        "supply_categories": "漁產, 肉類, 家禽, 蔬果",
+        "total_items": 304,
+        "trust_score": 75.0,
+        "status_text": "今日新鮮物資已由批發市場供應",
+        "top_items_display": "黑羽土雞, 白肉雞/雞蛋, 紅羽土雞, 甘藍-初秋, 蘋果-富士進口"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.533628,
+          25.064251
+        ]
+      },
+      "properties": {
+        "name": "松江市場",
+        "district": "中山區",
+        "total_stalls": 149,
+        "supply_active": true,
+        "supply_categories": "漁產, 肉類, 家禽, 蔬果",
+        "total_items": 304,
+        "trust_score": 75.0,
+        "status_text": "今日新鮮物資已由批發市場供應",
+        "top_items_display": "黑羽土雞, 白肉雞/雞蛋, 紅羽土雞, 甘藍-初秋, 蘋果-富士進口"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.576802,
+          25.049725
+        ]
+      },
+      "properties": {
+        "name": "龍城市場",
+        "district": "松山區",
+        "total_stalls": 70,
+        "supply_active": true,
+        "supply_categories": "漁產, 肉類, 家禽, 蔬果",
+        "total_items": 304,
+        "trust_score": 75.0,
+        "status_text": "今日新鮮物資已由批發市場供應",
+        "top_items_display": "黑羽土雞, 白肉雞/雞蛋, 紅羽土雞, 甘藍-初秋, 蘋果-富士進口"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.570551,
+          25.050877
+        ]
+      },
+      "properties": {
+        "name": "南松市場",
+        "district": "松山區",
+        "total_stalls": 87,
+        "supply_active": true,
+        "supply_categories": "漁產, 肉類, 家禽, 蔬果",
+        "total_items": 304,
+        "trust_score": 75.0,
+        "status_text": "今日新鮮物資已由批發市場供應",
+        "top_items_display": "黑羽土雞, 白肉雞/雞蛋, 紅羽土雞, 甘藍-初秋, 蘋果-富士進口"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.575896,
+          25.050351
+        ]
+      },
+      "properties": {
+        "name": "松山市場",
+        "district": "松山區",
+        "total_stalls": 44,
+        "supply_active": true,
+        "supply_categories": "漁產, 肉類, 蔬果",
+        "total_items": 301,
+        "trust_score": 75.0,
+        "status_text": "今日新鮮物資已由批發市場供應",
+        "top_items_display": "甘藍-初秋, 蘋果-富士進口, 鳳梨-金鑽鳳梨, 木瓜-網室紅肉, 香蕉"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.552445,
+          25.047963
+        ]
+      },
+      "properties": {
+        "name": "中崙市場(BOT)",
+        "district": "松山區",
+        "total_stalls": 131,
+        "supply_active": true,
+        "supply_categories": "漁產, 肉類, 家禽, 蔬果",
+        "total_items": 304,
+        "trust_score": 75.0,
+        "status_text": "今日新鮮物資已由批發市場供應",
+        "top_items_display": "黑羽土雞, 白肉雞/雞蛋, 紅羽土雞, 甘藍-初秋, 蘋果-富士進口"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.529391,
+          25.028504
+        ]
+      },
+      "properties": {
+        "name": "錦安市場",
+        "district": "大安區",
+        "total_stalls": 35,
+        "supply_active": false,
+        "supply_categories": "",
+        "total_items": 0,
+        "trust_score": 0,
+        "status_text": "無資料",
+        "top_items_display": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.534563,
+          25.026456
+        ]
+      },
+      "properties": {
+        "name": "安東市場",
+        "district": "大安區",
+        "total_stalls": 62,
+        "supply_active": true,
+        "supply_categories": "漁產, 肉類, 家禽, 蔬果",
+        "total_items": 339,
+        "trust_score": 75.0,
+        "status_text": "今日新鮮物資已由批發市場供應",
+        "top_items_display": "黑羽土雞, 白肉雞/雞蛋, 紅羽土雞, 甘藍-初秋, 鳳梨-金鑽鳳梨"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.534563,
+          25.026456
+        ]
+      },
+      "properties": {
+        "name": "南門中繼市場",
+        "district": "大安區",
+        "total_stalls": 258,
+        "supply_active": true,
+        "supply_categories": "漁產, 肉類, 家禽, 蔬果",
+        "total_items": 339,
+        "trust_score": 75.0,
+        "status_text": "今日新鮮物資已由批發市場供應",
+        "top_items_display": "黑羽土雞, 白肉雞/雞蛋, 紅羽土雞, 甘藍-初秋, 鳳梨-金鑽鳳梨"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.499701,
+          25.035103
+        ]
+      },
+      "properties": {
+        "name": "信義市場(108)",
+        "district": "大安區",
+        "total_stalls": 68,
+        "supply_active": true,
+        "supply_categories": "漁產, 肉類, 家禽, 蔬果",
+        "total_items": 339,
+        "trust_score": 75.0,
+        "status_text": "今日新鮮物資已由批發市場供應",
+        "top_items_display": "黑羽土雞, 白肉雞/雞蛋, 紅羽土雞, 甘藍-初秋, 鳳梨-金鑽鳳梨"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.534563,
+          25.026456
+        ]
+      },
+      "properties": {
+        "name": "成功中繼市場",
+        "district": "大安區",
+        "total_stalls": 196,
+        "supply_active": true,
+        "supply_categories": "漁產, 肉類, 家禽, 蔬果",
+        "total_items": 339,
+        "trust_score": 75.0,
+        "status_text": "今日新鮮物資已由批發市場供應",
+        "top_items_display": "黑羽土雞, 白肉雞/雞蛋, 紅羽土雞, 甘藍-初秋, 鳳梨-金鑽鳳梨"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.501766,
+          25.039382
+        ]
+      },
+      "properties": {
+        "name": "直興市場",
+        "district": "萬華區",
+        "total_stalls": 201,
+        "supply_active": true,
+        "supply_categories": "漁產, 肉類, 家禽, 蔬果",
+        "total_items": 339,
+        "trust_score": 75.0,
+        "status_text": "今日新鮮物資已由批發市場供應",
+        "top_items_display": "黑羽土雞, 白肉雞/雞蛋, 紅羽土雞, 甘藍-初秋, 鳳梨-金鑽鳳梨"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.499891,
+          25.034887
+        ]
+      },
+      "properties": {
+        "name": "新富市場",
+        "district": "萬華區",
+        "total_stalls": 28,
+        "supply_active": true,
+        "supply_categories": "漁產, 家禽, 蔬果",
+        "total_items": 338,
+        "trust_score": 75.0,
+        "status_text": "今日新鮮物資已由批發市場供應",
+        "top_items_display": "黑羽土雞, 白肉雞/雞蛋, 紅羽土雞, 甘藍-初秋, 鳳梨-金鑽鳳梨"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.499891,
+          25.034887
+        ]
+      },
+      "properties": {
+        "name": "河濱(2)商場",
+        "district": "萬華區",
+        "total_stalls": 40,
+        "supply_active": false,
+        "supply_categories": "",
+        "total_items": 0,
+        "trust_score": 0,
+        "status_text": "無資料",
+        "top_items_display": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.499891,
+          25.034887
+        ]
+      },
+      "properties": {
+        "name": "龍山商場",
+        "district": "萬華區",
+        "total_stalls": 93,
+        "supply_active": false,
+        "supply_categories": "",
+        "total_items": 0,
+        "trust_score": 0,
+        "status_text": "無資料",
+        "top_items_display": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.499891,
+          25.034887
+        ]
+      },
+      "properties": {
+        "name": "河濱(1)商場",
+        "district": "萬華區",
+        "total_stalls": 133,
+        "supply_active": false,
+        "supply_categories": "",
+        "total_items": 0,
+        "trust_score": 0,
+        "status_text": "無資料",
+        "top_items_display": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.499891,
+          25.034887
+        ]
+      },
+      "properties": {
+        "name": "環南中繼市場",
+        "district": "萬華區",
+        "total_stalls": 1060,
+        "supply_active": true,
+        "supply_categories": "漁產, 肉類, 家禽, 蔬果",
+        "total_items": 339,
+        "trust_score": 75.0,
+        "status_text": "今日新鮮物資已由批發市場供應",
+        "top_items_display": "黑羽土雞, 白肉雞/雞蛋, 紅羽土雞, 甘藍-初秋, 鳳梨-金鑽鳳梨"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.506879,
+          25.048078
+        ]
+      },
+      "properties": {
+        "name": "西寧市場",
+        "district": "萬華區",
+        "total_stalls": 355,
+        "supply_active": true,
+        "supply_categories": "漁產, 肉類, 家禽, 蔬果",
+        "total_items": 339,
+        "trust_score": 75.0,
+        "status_text": "今日新鮮物資已由批發市場供應",
+        "top_items_display": "黑羽土雞, 白肉雞/雞蛋, 紅羽土雞, 甘藍-初秋, 鳳梨-金鑽鳳梨"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.499891,
+          25.034887
+        ]
+      },
+      "properties": {
+        "name": "西門商場(店鋪)",
+        "district": "萬華區",
+        "total_stalls": 57,
+        "supply_active": false,
+        "supply_categories": "",
+        "total_items": 0,
+        "trust_score": 0,
+        "status_text": "無資料",
+        "top_items_display": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.531598,
+          25.104673
+        ]
+      },
+      "properties": {
+        "name": "永春市場(111)",
+        "district": "信義區",
+        "total_stalls": 79,
+        "supply_active": true,
+        "supply_categories": "漁產, 肉類, 家禽, 蔬果",
+        "total_items": 339,
+        "trust_score": 75.0,
+        "status_text": "今日新鮮物資已由批發市場供應",
+        "top_items_display": "黑羽土雞, 白肉雞/雞蛋, 紅羽土雞, 甘藍-初秋, 鳳梨-金鑽鳳梨"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.56772,
+          25.033131
+        ]
+      },
+      "properties": {
+        "name": "光復市場",
+        "district": "信義區",
+        "total_stalls": 56,
+        "supply_active": true,
+        "supply_categories": "漁產, 肉類, 家禽, 蔬果",
+        "total_items": 339,
+        "trust_score": 75.0,
+        "status_text": "今日新鮮物資已由批發市場供應",
+        "top_items_display": "黑羽土雞, 白肉雞/雞蛋, 紅羽土雞, 甘藍-初秋, 鳳梨-金鑽鳳梨"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.56772,
+          25.033131
+        ]
+      },
+      "properties": {
+        "name": "永吉市場",
+        "district": "信義區",
+        "total_stalls": 51,
+        "supply_active": true,
+        "supply_categories": "漁產, 肉類, 家禽, 蔬果",
+        "total_items": 339,
+        "trust_score": 75.0,
+        "status_text": "今日新鮮物資已由批發市場供應",
+        "top_items_display": "黑羽土雞, 白肉雞/雞蛋, 紅羽土雞, 甘藍-初秋, 鳳梨-金鑽鳳梨"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.525697,
+          25.095036
+        ]
+      },
+      "properties": {
+        "name": "士林市場(109)",
+        "district": "士林區",
+        "total_stalls": 512,
+        "supply_active": true,
+        "supply_categories": "漁產, 肉類, 家禽, 蔬果",
+        "total_items": 304,
+        "trust_score": 75.0,
+        "status_text": "今日新鮮物資已由批發市場供應",
+        "top_items_display": "黑羽土雞, 白肉雞/雞蛋, 紅羽土雞, 甘藍-初秋, 蘋果-富士進口"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.519827,
+          25.092857
+        ]
+      },
+      "properties": {
+        "name": "士東市場",
+        "district": "士林區",
+        "total_stalls": 255,
+        "supply_active": true,
+        "supply_categories": "漁產, 肉類, 家禽, 蔬果",
+        "total_items": 304,
+        "trust_score": 75.0,
+        "status_text": "今日新鮮物資已由批發市場供應",
+        "top_items_display": "黑羽土雞, 白肉雞/雞蛋, 紅羽土雞, 甘藍-初秋, 蘋果-富士進口"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.502681,
+          25.132303
+        ]
+      },
+      "properties": {
+        "name": "北投中繼市場",
+        "district": "北投區",
+        "total_stalls": 481,
+        "supply_active": true,
+        "supply_categories": "漁產, 肉類, 家禽, 蔬果",
+        "total_items": 304,
+        "trust_score": 75.0,
+        "status_text": "今日新鮮物資已由批發市場供應",
+        "top_items_display": "黑羽土雞, 白肉雞/雞蛋, 紅羽土雞, 甘藍-初秋, 蘋果-富士進口"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5666,
+          25.0825
+        ]
+      },
+      "properties": {
+        "name": "西湖市場",
+        "district": "內湖區",
+        "total_stalls": 121,
+        "supply_active": true,
+        "supply_categories": "漁產, 肉類, 家禽, 蔬果",
+        "total_items": 304,
+        "trust_score": 75.0,
+        "status_text": "今日新鮮物資已由批發市場供應",
+        "top_items_display": "黑羽土雞, 白肉雞/雞蛋, 紅羽土雞, 甘藍-初秋, 蘋果-富士進口"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.606829,
+          25.05467
+        ]
+      },
+      "properties": {
+        "name": "中研市場",
+        "district": "南港區",
+        "total_stalls": 58,
+        "supply_active": true,
+        "supply_categories": "漁產, 肉類, 家禽, 蔬果",
+        "total_items": 339,
+        "trust_score": 75.0,
+        "status_text": "今日新鮮物資已由批發市場供應",
+        "top_items_display": "黑羽土雞, 白肉雞/雞蛋, 紅羽土雞, 甘藍-初秋, 鳳梨-金鑽鳳梨"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.606829,
+          25.05467
+        ]
+      },
+      "properties": {
+        "name": "成德市場",
+        "district": "南港區",
+        "total_stalls": 151,
+        "supply_active": true,
+        "supply_categories": "漁產, 肉類, 家禽, 蔬果",
+        "total_items": 339,
+        "trust_score": 75.0,
+        "status_text": "今日新鮮物資已由批發市場供應",
+        "top_items_display": "黑羽土雞, 白肉雞/雞蛋, 紅羽土雞, 甘藍-初秋, 鳳梨-金鑽鳳梨"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.542755,
+          24.990475
+        ]
+      },
+      "properties": {
+        "name": "景美市場",
+        "district": "文山區",
+        "total_stalls": 1,
+        "supply_active": false,
+        "supply_categories": "",
+        "total_items": 0,
+        "trust_score": 0,
+        "status_text": "無資料",
+        "top_items_display": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5655,
+          24.9827
+        ]
+      },
+      "properties": {
+        "name": "木柵市場",
+        "district": "文山區",
+        "total_stalls": 169,
+        "supply_active": true,
+        "supply_categories": "漁產, 肉類, 家禽, 蔬果",
+        "total_items": 339,
+        "trust_score": 75.0,
+        "status_text": "今日新鮮物資已由批發市場供應",
+        "top_items_display": "黑羽土雞, 白肉雞/雞蛋, 紅羽土雞, 甘藍-初秋, 鳳梨-金鑽鳳梨"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.570296,
+          24.989467
+        ]
+      },
+      "properties": {
+        "name": "興隆市場",
+        "district": "文山區",
+        "total_stalls": 82,
+        "supply_active": true,
+        "supply_categories": "漁產, 肉類, 家禽, 蔬果",
+        "total_items": 339,
+        "trust_score": 75.0,
+        "status_text": "今日新鮮物資已由批發市場供應",
+        "top_items_display": "黑羽土雞, 白肉雞/雞蛋, 紅羽土雞, 甘藍-初秋, 鳳梨-金鑽鳳梨"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.570296,
+          24.989467
+        ]
+      },
+      "properties": {
+        "name": "木新市場",
+        "district": "文山區",
+        "total_stalls": 122,
+        "supply_active": true,
+        "supply_categories": "漁產, 肉類, 家禽, 蔬果",
+        "total_items": 339,
+        "trust_score": 75.0,
+        "status_text": "今日新鮮物資已由批發市場供應",
+        "top_items_display": "黑羽土雞, 白肉雞/雞蛋, 紅羽土雞, 甘藍-初秋, 鳳梨-金鑽鳳梨"
+      }
+    }
+  ]
+}

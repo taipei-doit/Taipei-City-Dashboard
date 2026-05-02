@@ -1,7 +1,7 @@
 <!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 
 <script setup>
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 import VueApexCharts from "vue3-apexcharts";
 
 const props = defineProps([
@@ -21,18 +21,26 @@ const emits = defineEmits([
 	"fly"
 ]);
 
+const firstSeriesData = computed(
+	() => props.series?.[0]?.data ?? [],
+);
+
 const isLargeDataSet = computed(() => {
-	return props.series[0].data.length > 12
-})
+	return firstSeriesData.value.length > 12;
+});
 
 // Calculate initial width for large datasets only
 const initialWidth = computed(() => {
-	const WIDTH_PER_ITEM = 32
-	const itemCount = props.series[0].data.length;
-	return itemCount * WIDTH_PER_ITEM;
+	const WIDTH_PER_ITEM = 32;
+	const itemCount = firstSeriesData.value.length;
+	return Math.max(itemCount * WIDTH_PER_ITEM, WIDTH_PER_ITEM);
 });
 
 const widthValue = ref(initialWidth.value);
+
+watch(initialWidth, (w) => {
+	widthValue.value = w;
+});
 
 // Convert to a string with unit for ApexCharts
 const chartWidth = computed(() => {

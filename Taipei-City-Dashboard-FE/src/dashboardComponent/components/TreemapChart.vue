@@ -37,6 +37,7 @@ const chartOptions = ref({
 		) {
 			return dataPointIndex > 5 ? "" : val;
 		},
+		enabled: true,
 	},
 	grid: {
 		show: false,
@@ -102,11 +103,11 @@ const displaySeries = computed(() => {
 });
 
 const sum = computed(() => {
-	let sum = 0;
-	displaySeries.value[0].data.forEach(
-		(item) => (sum += item.y)
-	);
-	return Math.round(sum * 100) / 100;
+	const data = props.series?.[0]?.data;
+	if (!data?.length) return 0;
+	let total = 0;
+	data.forEach((item) => (total += item.y));
+	return Math.round(total * 100) / 100;
 });
 
 const selectedIndex = ref(null);

@@ -14,6 +14,8 @@ import cross_normal from "../assets/map/cross_normal.png";
 import cctv from "../assets/map/cctv.png";
 import live from "../assets/map/live.png";
 
+const eco_cup = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='10' fill='%234CAF50'/%3E%3C/svg%3E";
+
 const props = defineProps([
 	"chart_config",
 	"series",
@@ -26,6 +28,7 @@ const emits = defineEmits([
 	"filterByLayer",
 	"clearByParamFilter",
 	"clearByLayerFilter",
+	"toggleLayer",
 	"fly"
 ]);
 
@@ -53,19 +56,32 @@ function returnIcon(name) {
 		return cctv;
 	case "live":
 		return live;
+	case "eco_cup":
+		return eco_cup;
 	default:
 		return "";
 	}
 }
 
 const selectedIndex = ref(null);
+const selectedIndices = ref(new Set());
 
 function handleDataSelection(index) {
 	if (!props.map_filter || !props.map_filter_on) {
 		return;
 	}
+	if (props.map_filter.mode === "byLayerToggle") {
+		const name = props.series[index].name;
+		if (selectedIndices.value.has(index)) {
+			selectedIndices.value.delete(index);
+			emits("toggleLayer", props.map_config, name, true);
+		} else {
+			selectedIndices.value.add(index);
+			emits("toggleLayer", props.map_config, name, false);
+		}
+		return;
+	}
 	if (index !== selectedIndex.value) {
-		// Supports filtering by xAxis
 		if (props.map_filter.mode === "byParam") {
 			emits(
 				"filterByParam",
@@ -74,9 +90,7 @@ function handleDataSelection(index) {
 				props.series[index].name,
 				null
 			);
-		}
-		// Supports filtering by xAxis
-		else if (props.map_filter.mode === "byLayer") {
+		} else if (props.map_filter.mode === "byLayer") {
 			emits("filterByLayer", props.map_config, props.series[index].name);
 		}
 		selectedIndex.value = index;
@@ -101,7 +115,7 @@ function handleDataSelection(index) {
           'maplegend-legend-item': true,
           'maplegend-filter': map_filter_on && map_filter,
           'maplegend-selected':
-            map_filter_on && selectedIndex === index,
+            map_filter_on && (map_filter?.mode === 'byLayerToggle' ? !selectedIndices.has(index) : selectedIndex === index),
         }"
         @click="handleDataSelection(index)"
       >
