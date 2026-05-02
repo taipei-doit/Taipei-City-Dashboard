@@ -10,6 +10,7 @@ import { useFullscreen } from "@vueuse/core";
 import { useAuthStore } from "../../../store/authStore";
 import { useDialogStore } from "../../../store/dialogStore";
 import { useThemeStore } from "../../../store/themeStore";
+import { useBackendTranslation } from "../../../composables/useBackendTranslation";
 
 import UserSettings from "../../dialogs/UserSettings.vue";
 import ContributorsList from "../../dialogs/ContributorsList.vue";
@@ -18,6 +19,7 @@ const route = useRoute();
 const authStore = useAuthStore();
 const dialogStore = useDialogStore();
 const themeStore = useThemeStore();
+const { locale, setLocale, supportedLocales } = useBackendTranslation();
 const { isFullscreen, toggle } = useFullscreen();
 
 const linkQuery = computed(() => {
@@ -84,6 +86,27 @@ const isLocalhost = computed(() => {
       </router-link>
     </div>
     <div class="navbar-user">
+      <div
+        class="navbar-locale"
+        title="語系 / Language"
+      >
+        <span class="navbar-locale-icon">translate</span>
+        <label class="navbar-locale-sr">語系</label>
+        <select
+          class="navbar-locale-select"
+          :value="locale"
+          aria-label="語系"
+          @change="setLocale($event.target.value)"
+        >
+          <option
+            v-for="opt in supportedLocales"
+            :key="opt.code"
+            :value="opt.code"
+          >
+            {{ opt.label }}
+          </option>
+        </select>
+      </div>
       <button
         type="button"
         class="navbar-theme"
@@ -256,6 +279,50 @@ const isLocalhost = computed(() => {
 		// @media screen and (max-height: 500px) {
 		// 	display: none;
 		// }
+	}
+
+	&-locale {
+		display: flex;
+		align-items: center;
+		margin-right: var(--font-s);
+		min-width: 0;
+		gap: 4px;
+
+		&-icon {
+			flex-shrink: 0;
+			font-family: var(--font-icon);
+			font-size: calc(var(--font-m) * var(--font-to-icon));
+			color: var(--color-complement-text);
+		}
+
+		&-sr {
+			position: absolute;
+			width: 1px;
+			height: 1px;
+			padding: 0;
+			margin: -1px;
+			overflow: hidden;
+			clip: rect(0, 0, 0, 0);
+			white-space: nowrap;
+			border: 0;
+		}
+
+		&-select {
+			min-width: 0;
+			max-width: 7.5rem;
+			padding: 4px 6px;
+			border-radius: 4px;
+			border: solid 1px var(--color-border);
+			background-color: var(--color-background);
+			color: var(--color-normal-text);
+			font-size: var(--font-s);
+			cursor: pointer;
+			outline: none;
+		}
+
+		&-select:focus {
+			border-color: var(--color-highlight);
+		}
 	}
 
 	&-user {
