@@ -60,9 +60,9 @@ VALUES (
     '水質監測站',
     'circle',
     'api',
-    'small',
     NULL,
-    '{"circle-color":["interpolate",["linear"],["to-number",["get","ph"]],6.5,"#24B0DD",7.2,"#56B96D",8.5,"#F8CF58"],"circle-opacity":0.88,"circle-stroke-color":"#ffffff","circle-stroke-width":1}',
+    NULL,
+    '{"circle-radius":["interpolate",["linear"],["zoom"],10,["interpolate",["linear"],["to-number",["get","turbidity_ntu"]],0,3,0.1,5,0.5,8,1,11],15,["interpolate",["linear"],["to-number",["get","turbidity_ntu"]],0,5,0.1,8,0.5,13,1,18]],"circle-color":["interpolate",["linear"],["to-number",["get","residual_chlorine_mg_l"]],0,"#ED6A45",0.2,"#F8CF58",0.5,"#56B96D",1,"#24B0DD"],"circle-opacity":0.86,"circle-stroke-color":"#ffffff","circle-stroke-width":1}',
     '[{"key":"station_name","name":"監測站"},{"key":"station_id","name":"站點代碼"},{"key":"data_time","name":"資料時間"},{"key":"turbidity_ntu","name":"濁度(NTU)"},{"key":"residual_chlorine_mg_l","name":"餘氯(mg/L)"},{"key":"ph","name":"pH值"}]'
 );
 
