@@ -129,18 +129,18 @@ VALUES
     'metrotaipei'
 );
 
--- ===== 加入「食安健康」儀表板 =====
+-- ===== 加入「食安健康」儀表板（tpe + newtpe） =====
 
 UPDATE public.dashboards
 SET components = array_append(components, (SELECT id FROM public.components WHERE "index" = 'traceability_inspection')),
     updated_at = NOW()
-WHERE "index" = 'food_safety_health_tpe'
+WHERE "index" IN ('food_safety_health_tpe', 'food_safety_health_newtpe')
   AND NOT ((SELECT id FROM public.components WHERE "index" = 'traceability_inspection') = ANY(components));
 
 UPDATE public.dashboards
 SET components = array_append(components, (SELECT id FROM public.components WHERE "index" = 'cas_product')),
     updated_at = NOW()
-WHERE "index" = 'food_safety_health_tpe'
+WHERE "index" IN ('food_safety_health_tpe', 'food_safety_health_newtpe')
   AND NOT ((SELECT id FROM public.components WHERE "index" = 'cas_product') = ANY(components));
 
 SELECT setval('public.components_id_seq', (SELECT COALESCE(MAX(id), 0) FROM public.components), true);
