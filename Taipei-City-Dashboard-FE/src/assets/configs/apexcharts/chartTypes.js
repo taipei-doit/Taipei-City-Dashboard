@@ -42,6 +42,7 @@ export const chartsPerDataType = {
 		"IndicatorChart",
 		"PolarAreaChart",
 		"TextUnitChart",
+		"TreemapChart",
 	],
 	time: ["TimelineSeparateChart", "TimelineStackedChart", "ColumnLineChart"],
 	percent: [

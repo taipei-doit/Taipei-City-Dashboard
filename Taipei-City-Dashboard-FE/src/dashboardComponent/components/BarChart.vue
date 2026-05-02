@@ -48,7 +48,7 @@ const displaySeries = computed(() => {
 
 function alignTotalLabels(chartContext) {
 	if (!showStacked.value) return;
-	requestAnimationFrame(() => {
+	const doAlign = () => {
 		const el = chartContext.el;
 		if (!el) return;
 		const labels = el.querySelectorAll("text.apexcharts-datalabel");
@@ -62,7 +62,8 @@ function alignTotalLabels(chartContext) {
 			label.setAttribute("x", String(maxX));
 			label.setAttribute("text-anchor", "start");
 		});
-	});
+	};
+	requestAnimationFrame(() => requestAnimationFrame(doAlign));
 }
 
 const chartOptions = computed(() => ({
@@ -75,6 +76,7 @@ const chartOptions = computed(() => ({
 		events: {
 			mounted: alignTotalLabels,
 			updated: alignTotalLabels,
+			animationEnd: alignTotalLabels,
 		},
 	},
 	colors: showStacked.value
@@ -89,6 +91,9 @@ const chartOptions = computed(() => ({
 	},
 	grid: {
 		show: false,
+		padding: {
+			right: showStacked.value ? 30 : 0,
+		},
 	},
 	legend: {
 		show: showStacked.value,
@@ -102,7 +107,11 @@ const chartOptions = computed(() => ({
 				hideOverflowingLabels: false,
 				total: {
 					enabled: showStacked.value,
-					offsetX: 10,
+					offsetX: 0,
+					offsetY: 5,
+					style: {
+						color: "#ffffff",
+					},
 				},
 			},
 		},

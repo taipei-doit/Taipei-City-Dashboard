@@ -30,6 +30,7 @@ const chartOptions = ref({
 	},
 	colors: [...props.chart_config.color],
 	dataLabels: {
+		offsetY: -2,
 		formatter: function (
 			val,
 			{ dataPointIndex }
@@ -89,9 +90,20 @@ const chartOptions = ref({
 	},
 });
 
+const displaySeries = computed(() => {
+	if (props.chart_config.categories) {
+		const aggregated = props.chart_config.categories.map((cat, i) => {
+			const total = props.series.reduce((sum, s) => sum + (s.data[i] || 0), 0);
+			return { x: cat, y: total };
+		});
+		return [{ data: aggregated }];
+	}
+	return props.series;
+});
+
 const sum = computed(() => {
 	let sum = 0;
-	props.series[0].data.forEach(
+	displaySeries.value[0].data.forEach(
 		(item) => (sum += item.y)
 	);
 	return Math.round(sum * 100) / 100;
@@ -149,7 +161,7 @@ function handleDataSelection(_e, _chartContext, config) {
       width="100%"
       type="treemap"
       :options="chartOptions"
-      :series="series"
+      :series="displaySeries"
       @data-point-selection="handleDataSelection"
     />
   </div>
