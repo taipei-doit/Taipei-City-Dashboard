@@ -92,7 +92,6 @@ def _transfer(**kwargs):
         "cultivationarea",
         "cultivationkind",
         "serialnumber",
-        "status",
         "totalconsumptionofwater",
     ]
     for col in numeric_cols:
@@ -135,13 +134,7 @@ def _transfer(**kwargs):
         }
     )
 
-    # 僅取審核通過資料，避免把退回/刪除/待議列納入年度用水量
-    if "status" in data.columns:
-        before_status = len(data)
-        data = data[data["status"] == 2].copy()
-        print(f"Filtered by status=2 (approved): {before_status} -> {len(data)} rows")
-        if data.empty:
-            raise ValueError("No fish water rows left after filtering status=2.")
+    # 不因 status 篩選：未通過審核之列仍計入用水（依業務需求全部加總）
 
     # API 依魚種分列，年度總用水量需按 年度+縣市 彙總
     data = (
@@ -152,15 +145,17 @@ def _transfer(**kwargs):
         )
         .copy()
     )
-    data["status"] = 2
 
-    # 欄位排序並剔除無法解析年度的資料
+    # 彙總後數值統一四捨五入至小數點後一位
+    data["cultivationarea"] = data["cultivationarea"].round(1)
+    data["totalconsumptionofwater"] = data["totalconsumptionofwater"].round(1)
+
+    # 欄位排序並剔除無法解析年度的資料（不含 status：彙總後無單一審核狀態）
     order_cols = [
         "year",
         "area",
         "countycode",
         "cultivationarea",
-        "status",
         "totalconsumptionofwater",
     ]
     ready_data = data[order_cols].dropna(subset=["year"], how="any")
