@@ -129,6 +129,13 @@ def _transfer(**kwargs):
     if n_old_taipei_county:
         print(f"Normalized countycode 10001 -> 65000: {int(n_old_taipei_county)} rows")
 
+    # 縣市代碼轉縣市名稱
+    countycode_to_name = {
+        "63000": "臺北市",
+        "65000": "新北市",
+    }
+    data["countyname"] = data["countycode"].map(countycode_to_name).fillna("")
+
     # 僅取審核通過資料，避免把退回/刪除/待議列納入年度用水量
     if "status" in data.columns:
         before_status = len(data)
@@ -139,7 +146,7 @@ def _transfer(**kwargs):
 
     # API 依魚種分列，年度總用水量需按 年度+縣市 彙總
     data = (
-        data.groupby(["year", "area", "countycode"], as_index=False)
+        data.groupby(["year", "area", "countycode", "countyname"], as_index=False)
         .agg(
             cultivationarea=("cultivationarea", "sum"),
             totalconsumptionofwater=("totalconsumptionofwater", "sum"),
@@ -152,7 +159,7 @@ def _transfer(**kwargs):
     order_cols = [
         "year",
         "area",
-        "countycode",
+        "countyname",
         "cultivationarea",
         "status",
         "totalconsumptionofwater",
