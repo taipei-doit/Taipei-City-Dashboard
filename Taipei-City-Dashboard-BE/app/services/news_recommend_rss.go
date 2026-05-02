@@ -2,6 +2,7 @@ package services
 
 import (
 	"TaipeiCityDashboardBE/app/models"
+	"TaipeiCityDashboardBE/logs"
 	"context"
 	"encoding/xml"
 	"fmt"
@@ -18,9 +19,14 @@ import (
 	"unicode/utf8"
 )
 
+const atomNS = "http://www.w3.org/2005/Atom"
+
 var rssTagStripper = regexp.MustCompile(`(?is)<[^>]+>`)
 
-type rssEnvelope struct {
+const browserLikeUserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
+
+type rssDoc struct {
+	XMLName xml.Name   `xml:"rss"`
 	Channel rssChannel `xml:"channel"`
 }
 
@@ -34,6 +40,32 @@ type rssItem struct {
 	Link        string `xml:"link"`
 	Description string `xml:"description"`
 	PubDate     string `xml:"pubDate"`
+	GUID        struct {
+		IsPermaLink bool   `xml:"isPermaLink,attr"`
+		Value       string `xml:",chardata"`
+	} `xml:"guid"`
+	ContentEncoded string `xml:"http://purl.org/rss/1.0/modules/content encoded"`
+}
+
+type atomDecoded struct {
+	Title atomInner         `xml:"title"`
+	Entry []atomEntryDecoded `xml:"entry"`
+}
+
+type atomInner struct {
+	Body string `xml:",chardata"`
+}
+
+type atomEntryDecoded struct {
+	Title     atomInner `xml:"title"`
+	Links     []struct {
+		HRef string `xml:"href,attr"`
+		Rel  string `xml:"rel,attr"`
+		Type string `xml:"type,attr"`
+	} `xml:"link"`
+	Summary   atomInner `xml:"summary"`
+	Published string    `xml:"published"`
+	Updated   string    `xml:"updated"`
 }
 
 type rssStory struct {
@@ -57,7 +89,11 @@ func defaultRSSFeeds() []string {
 		}
 	}
 	return []string{
-		"https://rss.cna.com.tw/list/aall.xml",
+		// 中央社 FeedBurner（多數環境可被拉取；舊 rss.cna.com.tw 路徑已常 404）
+		"https://feeds.feedburner.com/rsscna/cmEe",
+		"https://feeds.feedburner.com/rsscna/local",
+		"https://feeds.feedburner.com/rsscna/social",
+		"https://www.cna.com.tw/rss/aall.xml",
 		"https://news.pts.org.tw/xml/newsfeed.xml",
 	}
 }
@@ -87,6 +123,139 @@ func truncateRunes(s string, maxLen int) string {
 		return s
 	}
 	return string(rs[:maxLen]) + "…"
+}
+
+func effectiveRSSLink(it rssItem) string {
+	if u := strings.TrimSpace(it.Link); u != "" {
+		return u
+	}
+	g := strings.TrimSpace(it.GUID.Value)
+	if strings.HasPrefix(g, "http://") || strings.HasPrefix(g, "https://") {
+		return g
+	}
+	return ""
+}
+
+func descFromRSSItem(it rssItem) string {
+	if d := stripRSSHTML(it.Description); strings.TrimSpace(d) != "" {
+		return d
+	}
+	return stripRSSHTML(it.ContentEncoded)
+}
+
+func atomEntryLink(e atomEntryDecoded) string {
+	var fallback string
+	for _, l := range e.Links {
+		h := strings.TrimSpace(l.HRef)
+		if h == "" {
+			continue
+		}
+		rel := strings.ToLower(strings.TrimSpace(l.Rel))
+		if rel == "alternate" || rel == "" {
+			if strings.Contains(strings.ToLower(l.Type), "html") || l.Type == "" {
+				return h
+			}
+			fallback = h
+		}
+	}
+	if fallback != "" {
+		return fallback
+	}
+	if len(e.Links) > 0 {
+		return strings.TrimSpace(e.Links[0].HRef)
+	}
+	return ""
+}
+
+func parseRSSBody(body []byte) ([]rssStory, string) {
+	var doc rssDoc
+	if err := xml.Unmarshal(body, &doc); err != nil || len(doc.Channel.Items) == 0 {
+		return nil, ""
+	}
+	ch := strings.TrimSpace(doc.Channel.Title)
+	out := make([]rssStory, 0, len(doc.Channel.Items))
+	maxItems := 15
+	for i, it := range doc.Channel.Items {
+		if i >= maxItems {
+			break
+		}
+		title := strings.TrimSpace(strings.TrimPrefix(it.Title, "\ufeff"))
+		link := effectiveRSSLink(it)
+		if title == "" {
+			continue
+		}
+		out = append(out, rssStory{
+			title:       title,
+			link:        link,
+			description: truncateRunes(descFromRSSItem(it), 320),
+			pubDate:     strings.TrimSpace(it.PubDate),
+			source:      rssSourceLabel(ch, link),
+		})
+	}
+	if len(out) == 0 {
+		return nil, ""
+	}
+	return out, ch
+}
+
+func parseAtomBody(body []byte) ([]rssStory, string) {
+	dec := xml.NewDecoder(strings.NewReader(string(body)))
+	dec.DefaultSpace = atomNS
+	var f atomDecoded
+	if err := dec.Decode(&f); err != nil || len(f.Entry) == 0 {
+		return nil, ""
+	}
+	ch := strings.TrimSpace(f.Title.Body)
+	out := make([]rssStory, 0, len(f.Entry))
+	maxItems := 15
+	for i, e := range f.Entry {
+		if i >= maxItems {
+			break
+		}
+		title := strings.TrimSpace(e.Title.Body)
+		link := atomEntryLink(e)
+		if title == "" {
+			continue
+		}
+		desc := strings.TrimSpace(e.Summary.Body)
+		pub := e.Published
+		if pub == "" {
+			pub = e.Updated
+		}
+		out = append(out, rssStory{
+			title:       title,
+			link:        link,
+			description: truncateRunes(stripRSSHTML(desc), 320),
+			pubDate:     strings.TrimSpace(pub),
+			source:      rssSourceLabel(ch, link),
+		})
+	}
+	if len(out) == 0 {
+		return nil, ""
+	}
+	return out, ch
+}
+
+func storiesFromFeedBytes(body []byte) ([]rssStory, string) {
+	sniff := strings.TrimSpace(string(body))
+	if strings.HasPrefix(sniff, "\ufeff") {
+		sniff = sniff[len("\ufeff"):]
+	}
+	body = []byte(sniff)
+	prefixLen := min(1200, len(sniff))
+	low := strings.ToLower(sniff[:prefixLen])
+	if strings.Contains(low, "<feed") {
+		if s, ch := parseAtomBody(body); len(s) > 0 {
+			return s, ch
+		}
+	}
+	if s, ch := parseRSSBody(body); len(s) > 0 {
+		return s, ch
+	}
+	if s, ch := parseAtomBody(body); len(s) > 0 {
+		return s, ch
+	}
+	return nil, ""
 }
 
 // tokenRunsLower splits loosely on non-letter/non-digit runes so Chinese phrases stay as blocks.
@@ -185,33 +354,41 @@ func FetchSimpleRSSNewsRecommendations(ctx context.Context) ([]map[string]any, e
 		if err != nil {
 			continue
 		}
-		req.Header.Set("User-Agent", "TaipeiCityDashboard/1.1 news-recommend-rss (+https://github.com/taipei-city-dashboard)")
+		req.Header.Set("User-Agent", browserLikeUserAgent)
+		req.Header.Set("Accept", "application/rss+xml, application/atom+xml, application/xml;q=0.9, text/xml;q=0.9, */*;q=0.5")
+		req.Header.Set("Accept-Language", "zh-TW,zh;q=0.9,en;q=0.8")
 		resp, err := client.Do(req)
 		if err != nil || resp == nil || resp.StatusCode >= http.StatusBadRequest {
 			if resp != nil && resp.Body != nil {
 				_ = resp.Body.Close()
+			}
+			if err != nil {
+				logs.FWarn("RSS fetch error %s: %v", feedURL, err)
+			} else if resp != nil {
+				logs.FWarn("RSS fetch bad status %s: %s", feedURL, resp.Status)
 			}
 			continue
 		}
 		bodyBytes, readErr := io.ReadAll(io.LimitReader(resp.Body, 4<<20))
 		_ = resp.Body.Close()
 		if readErr != nil {
+			logs.FWarn("RSS read body %s: %v", feedURL, readErr)
 			continue
 		}
 
-		var env rssEnvelope
-		if err := xml.Unmarshal(bodyBytes, &env); err != nil || len(env.Channel.Items) == 0 {
+		items, _ := storiesFromFeedBytes(bodyBytes)
+		if len(items) == 0 {
+			logs.FWarn("RSS parse 0 items: %s (body prefix %d bytes)", feedURL, len(bodyBytes))
 			continue
 		}
-		chTitle := strings.TrimSpace(env.Channel.Title)
 
 		maxItemsPerFeed := 15
-		for i, it := range env.Channel.Items {
+		for i, st := range items {
 			if i >= maxItemsPerFeed {
 				break
 			}
-			title := strings.TrimSpace(strings.TrimPrefix(it.Title, "\ufeff"))
-			link := strings.TrimSpace(it.Link)
+			title := strings.TrimSpace(st.title)
+			link := strings.TrimSpace(st.link)
 			if title == "" {
 				continue
 			}
@@ -224,15 +401,17 @@ func FetchSimpleRSSNewsRecommendations(ctx context.Context) ([]map[string]any, e
 			stories = append(stories, rssStory{
 				title:       title,
 				link:        link,
-				description: truncateRunes(stripRSSHTML(it.Description), 320),
-				pubDate:     strings.TrimSpace(it.PubDate),
-				source:      rssSourceLabel(chTitle, link),
+				description: st.description,
+				pubDate:     st.pubDate,
+				source:      st.source,
 			})
 		}
 	}
 
 	if len(stories) == 0 {
-		return nil, fmt.Errorf("無法取得 RSS 資料，請確認 NEWS_RSS_FEEDS 或可連線來源網址")
+		return nil, fmt.Errorf(
+			"無法取得 RSS 資料。請確認：1) 伺服器對外 HTTPS 可走；2) 設環境變數 NEWS_RSS_FEEDS 為可用的 RSS／Atom URL（可多個逗號分隔）。預設已含中央社 FeedBurner 鏈結；若環境會擋媒體站，請換成可被貴環境抓取之來源；3) 請檢視應用程式日誌中 RSS fetch / parse 訊息",
+		)
 	}
 
 	var allScored []scoredPick
