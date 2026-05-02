@@ -11,8 +11,8 @@ import { getAcceptLanguageHeader } from "../utils/acceptLanguage";
 
 const http = axios.create({
 	baseURL: import.meta.env.VITE_API_URL,
-	// 避免翻譯／dashboard 請求卡死導致 UI 需 refresh 才恢復
-	timeout: 30000,
+	// 0 = 不設逾時（由瀏覽器／網路決定；長時間 AI 等請求不會被前端主動斷開）
+	timeout: 0,
 	headers: {
 		"Content-Type": "application/json",
 	},

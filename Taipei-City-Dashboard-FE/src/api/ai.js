@@ -24,7 +24,7 @@ export async function extractNewsInsight(url) {
 		const { data: body } = await http.post(
 			"/ai/extract-insight/news",
 			{ url },
-			reqOpts
+			reqOpts,
 		);
 
 		if (body?.status === "success" && body?.data) {
