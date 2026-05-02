@@ -214,13 +214,69 @@ CREATE INDEX IF NOT EXISTS ... ON <table_name> (...);
 
 ---
 
-## §8 對 BE 的接口（DE 落庫後 BE 怎麼撈）
+## §8 對 BE 的接口（API contract + chart query）
 
-雖 DE 不負責 chart query，但要先把 BE 的 component SQL 規劃好，DE 表設計才能對齊。
+DE plan 的下游是 BE 實作（`be-api-impl` skill）。為了讓 BE 不必回頭重新設計 endpoint shape，這一節同時提供 **API contract** + **SQL** + **response 欄位語意**，三段一起寫。
 
-寫 4 條 SQL 對應評估報告中的 components C1～C4。每條 SQL 用樣本驗過的欄位。**禁止用評估報告假設的欄位**（會踩到 §1.1 的修正紀錄）。
+### §8.1 API Contract（endpoint × method × response type × FE 渲染）
 
-如果 BE 撈表設計上有特殊處理（如 `LATERAL JOIN`、`DISTINCT ON` 去重），在 SQL 後面用 markdown blockquote 解釋為什麼。
+每個 component 一行：
+
+| Component | Endpoint | Method | Response type | FE 渲染元件 |
+|---|---|---|---|---|
+| C1 異常統計卡 | `/api/v1/<domain>/<sub>/alert-count` | GET | `two_d` (`TwoDimensionalDataOutput`) | 數字卡片 / 單軸折線 |
+| C2 各路線異常 | `/api/v1/<domain>/<sub>/alert-by-line` | GET | `three_d` (`ThreeDimensionalDataOutput` + `categories`) | 長條圖 |
+| C3 異常類型分布 | `/api/v1/<domain>/<sub>/alert-by-type` | GET | `percent` (同 `three_d`，`data[i].data` 長度 1) | 圓餅圖 |
+| C4 站點地圖 | `/api/v1/<domain>/<sub>/station-overview` | GET | `map_legend` (`MapLegendData`) | 地圖圖例 |
+
+**規則**：
+
+- Response type 四選一，對齊 `Taipei-City-Dashboard-BE/app/models/componentData.go` 的既有型別。**禁止自訂新 struct**，除非樣本資料形狀真的塞不進四種標準（這時要在後面用 blockquote 說明為何）。
+- Endpoint 走 `/api/v1/<domain>/<subdomain>/<metric>` pattern；`<domain>` / `<subdomain>` 對齊既有 router group（如 `/api/v1/mrt/a11y/...`）。掃 `Taipei-City-Dashboard-BE/app/routes/router.go` 確認命名慣例。
+- Method 一律 GET，無必填參數，無 request body（與 dashboard 既有 component endpoint 一致）。
+
+對應的 response 結構（給 BE / FE 對齊）：
+
+```json
+// two_d
+{ "status": "success", "data": [{ "data": [{ "x": "...", "y": 0 }] }] }
+
+// three_d / percent
+{ "status": "success", "data": [{ "name": "...", "icon": "", "data": [3, 2] }], "categories": ["...", "..."] }
+
+// map_legend
+{ "status": "success", "data": [{ "name": "...", "type": "...", "icon": "...", "value": 4 }] }
+```
+
+### §8.2 各 endpoint 對應的 SQL
+
+每個 endpoint 一條 SQL，用 §1.1 樣本驗過的欄位寫。**禁止用評估報告假設的欄位**（會踩到 §11 的修正紀錄）。
+
+如果 SQL 有特殊處理（`LATERAL JOIN`、`DISTINCT ON` 去重、CTE 多步聚合），在 SQL 後面用 markdown blockquote 解釋為什麼。
+
+```sql
+-- C1: /api/v1/<domain>/<sub>/alert-count → two_d
+SELECT TO_CHAR(data_time, 'YYYY-MM-DD') AS x, COUNT(*) AS y
+FROM <table>
+WHERE ...
+GROUP BY 1 ORDER BY 1;
+```
+
+> 為什麼用 `TO_CHAR` 而不是 `data_time::date`：FE 的 `x` 期望字串，避免 driver 把 date 序列化成 timezone-aware timestamp。
+
+### §8.3 Response 欄位語意
+
+每個 endpoint 列出回應內每個欄位的意思、允許值、單位、注意事項。讓 BE 實作 / FE 對接不用回頭翻 schema 就知道怎麼用。
+
+| Endpoint | 欄位 | 型別 | 語意 / 允許值 |
+|---|---|---|---|
+| `/.../alert-count` | `data[0].data[i].x` | string | 日期，格式 `YYYY-MM-DD` |
+| `/.../alert-count` | `data[0].data[i].y` | int | 該日異常筆數 |
+| `/.../alert-by-type` | `categories[i]` | string | 異常類型中文（`電梯` / `坡道` / `其他`） |
+| `/.../station-overview` | `data[i].type` | string | `active` / `closed`（決定地圖 marker 顏色） |
+| `/.../station-overview` | `data[i].value` | int | 該站當前 active 異常數 |
+
+**寫到「允許值」要列舉完整**（特別是 `type` / `status` 這類 FE 會切顏色的欄位），讓 FE 不用猜可能值。
 
 ---
 

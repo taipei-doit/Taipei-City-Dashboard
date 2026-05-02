@@ -1,6 +1,6 @@
 ---
 name: plan-de-dag-from-eval
-description: 從題目評估報告（智慧通勤、智慧治理等領域題目的 .md 文件）產出 Taipei-City-Dashboard-DE 的「DE 實作規劃」文件，內容含資料源確認、實際欄位對照、排程建議、骨架對照 DAG、PostgreSQL schema、BE chart query、實作順序、關鍵決策等 §1～§11 結構。**主動使用情境**：使用者說「為 XXX 評估報告寫 DE 規劃」「把這份評估報告轉 DE 實作」「設計這個儀表板的 ETL」「規劃 XXX 儀表板的資料工程」「DE planning for ...」「依這份題目寫一份規劃」「依 XX_儀表板二 寫」等等。**不要使用**：使用者要的是 DAG 程式碼實作（不需要規劃，要寫 code）、要修改既有規劃、或評估報告本身的內容。
+description: 從題目評估報告（智慧通勤、智慧治理等領域題目的 .md 文件）產出 Taipei-City-Dashboard-DE 的「DE 實作規劃」文件，內容含資料源確認、實際欄位對照、排程建議、骨架對照 DAG、PostgreSQL schema、**BE API contract（endpoint × response type × SQL）**、實作順序、關鍵決策等 §1～§11 結構。**主動使用情境**：使用者說「為 XXX 評估報告寫 DE 規劃」「把這份評估報告轉 DE 實作」「設計這個儀表板的 ETL」「規劃 XXX 儀表板的資料工程」「DE planning for ...」「依這份題目寫一份規劃」「依 XX_儀表板二 寫」等等。**不要使用**：使用者要的是 DAG 程式碼實作（不需要規劃，要寫 code）、要修改既有規劃、或評估報告本身的內容。
 ---
 
 # 從題目評估報告產出 DE 實作規劃文件
@@ -164,7 +164,7 @@ curl -s "<URL>" | python3 -c "import sys,json; d=json.load(sys.stdin); f=d['feat
 
 > 規劃日期：<today>
 > 對應評估報告：[<原檔名>](<原檔名>)
-> 範圍：僅聚焦 Taipei-City-Dashboard-DE 端（Airflow DAG + PostgreSQL 落庫）。BE chart query / FE 不在本文件規劃範圍。
+> 範圍：聚焦 Taipei-City-Dashboard-DE 端（Airflow DAG + PostgreSQL 落庫），並含交給 BE 的 **API contract（endpoint × response type × SQL）** 作為下游接力依據。FE 渲染細節不在本文件規劃範圍。
 
 ## 1. 資料源確認（page_id 與 rid 已查到 / API endpoint 已確認）
 ## 1.1 實際欄位（已抓樣本驗證 <today>）
@@ -175,7 +175,10 @@ curl -s "<URL>" | python3 -c "import sys,json; d=json.load(sys.stdin); f=d['feat
 ## 5. DAG A：<dag_id> — <主題>
 ## 6. DAG B：<dag_id> — <主題>（若該儀表板需要 2 支 DAG）
 ## 7. 已知風險與緩解
-## 8. 對 BE 的接口（DE 落庫後 BE 怎麼撈）
+## 8. 對 BE 的接口（API contract + chart query）
+## 8.1 API Contract（endpoint × method × response type × FE 渲染）
+## 8.2 各 endpoint 對應的 SQL
+## 8.3 Response 欄位語意說明
 ## 9. 實作順序（建議 1 個工作日完成）
 ## 10. 關鍵決策請確認後再動工
 ## 11. 修正紀錄（<today> 抓樣本後）
@@ -187,7 +190,10 @@ curl -s "<URL>" | python3 -c "import sys,json; d=json.load(sys.stdin); f=d['feat
 - **§3.1 一定要列具體 DAG**：不要說「參照 accessible_facilities/」這種模糊指引；要明確指出「mrt_a11y_alert 對照 [env_srv_energy_subsidy/]，理由：page_id + 純 DataFrame + current+history」
 - **§5 / §6 程式碼骨架**：rename mapping、status 邏輯、station 命名統一都要符合樣本實況。**禁止寫評估報告假設的欄位**
 - **§7 風險表至少 5 項**：data.taipei API 偶空、欄位中文鍵不確定、來源更新頻率不明、station 命名一致性、history 表累積、開發遺留 print
-- **§8 BE chart 4 條 SQL**：直接用樣本驗過的欄位寫，不要用評估報告假設的欄位
+- **§8 BE 接口分三段都要寫**：
+  - **§8.1 API Contract 表**：每個 component 一行，欄位含 `Endpoint`、`Method`（一律 GET）、`Response type`（`two_d` / `three_d` / `percent` / `map_legend` 四選一，對齊 `Taipei-City-Dashboard-BE/app/models/componentData.go` 的 `TwoDimensionalDataOutput` / `ThreeDimensionalDataOutput` / `MapLegendData`）、`FE 渲染元件`。Endpoint 命名走 `/api/v1/<domain>/<subdomain>/<metric>` pattern（如 `/api/v1/mrt/a11y/alert-count`）。**禁止自訂新型別**，除非樣本資料形狀真的塞不進四種標準。
+  - **§8.2 各 endpoint SQL**：每個 endpoint 一條，用樣本驗過的欄位（禁用評估報告假設欄位）。如有特殊處理（`LATERAL JOIN`、`DISTINCT ON`），SQL 後加 blockquote 說明為何。
+  - **§8.3 Response 欄位語意**：每個 endpoint 列出 response 內每個欄位的意思、允許值、單位（如 `x` 是日期字串 `YYYY-MM-DD`、`y` 是該日異常筆數整數、`type` 允許 `active`/`closed`），讓 BE/FE 不需回頭翻 DE plan 也能對齊。
 - **§10 至少 2 個決策**：通常包含「是否拆 DAG」、「是否 current+history」、「status / 分類規則」
 
 ### Step 6. 自動命名 + 寫檔
