@@ -1,0 +1,1833 @@
+{
+  "type": "FeatureCollection",
+  "name": "weather_station_newtaipei",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "411",
+        "station_id": "C0AK30",
+        "station_name": "硬漢嶺",
+        "county_name": "新北市",
+        "town_name": "八里區",
+        "station_altitude": "607.0",
+        "latitude": 25.136097,
+        "longitude": 121.426372,
+        "wind_direction": "205.0",
+        "wind_speed": "1.1",
+        "air_temperature": "20.4",
+        "relative_humidity": "100.0",
+        "air_pressure": "943.0",
+        "gust_speed": "NULL",
+        "gust_direction": "NULL",
+        "obs_time": "2026-05-02 12:00:00+00",
+        "updated_at": "2026-05-02 13:00:01.130644"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.426372,
+          25.136097
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "412",
+        "station_id": "C0AK10",
+        "station_name": "太平里",
+        "county_name": "新北市",
+        "town_name": "林口區",
+        "station_altitude": "18.0",
+        "latitude": 25.134937,
+        "longitude": 121.364899,
+        "wind_direction": "180.0",
+        "wind_speed": "0.9",
+        "air_temperature": "25.2",
+        "relative_humidity": "79.0",
+        "air_pressure": "1007.9",
+        "gust_speed": "NULL",
+        "gust_direction": "NULL",
+        "obs_time": "2026-05-02 12:00:00+00",
+        "updated_at": "2026-05-02 13:00:01.130644"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.364899,
+          25.134937
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "413",
+        "station_id": "C0AJ90",
+        "station_name": "澳底",
+        "county_name": "新北市",
+        "town_name": "貢寮區",
+        "station_altitude": "23.0",
+        "latitude": 25.055192,
+        "longitude": 121.925264,
+        "wind_direction": "218.0",
+        "wind_speed": "1.3",
+        "air_temperature": "24.3",
+        "relative_humidity": "87.0",
+        "air_pressure": "1008.3",
+        "gust_speed": "NULL",
+        "gust_direction": "NULL",
+        "obs_time": "2026-05-02 12:00:00+00",
+        "updated_at": "2026-05-02 13:00:01.130644"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.925264,
+          25.055192
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "415",
+        "station_id": "C0AJ20",
+        "station_name": "野柳",
+        "county_name": "新北市",
+        "town_name": "萬里區",
+        "station_altitude": "77.0",
+        "latitude": 25.207031,
+        "longitude": 121.690022,
+        "wind_direction": "125.0",
+        "wind_speed": "1.5",
+        "air_temperature": "23.7",
+        "relative_humidity": "93.0",
+        "air_pressure": "1003.8",
+        "gust_speed": "NULL",
+        "gust_direction": "NULL",
+        "obs_time": "2026-05-02 12:00:00+00",
+        "updated_at": "2026-05-02 13:00:01.130644"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.690022,
+          25.207031
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "416",
+        "station_id": "C0AJ30",
+        "station_name": "淡水觀海",
+        "county_name": "新北市",
+        "town_name": "淡水區",
+        "station_altitude": "22.0",
+        "latitude": 25.184592,
+        "longitude": 121.408617,
+        "wind_direction": "313.0",
+        "wind_speed": "2.3",
+        "air_temperature": "25.0",
+        "relative_humidity": "85.0",
+        "air_pressure": "1008.0",
+        "gust_speed": "NULL",
+        "gust_direction": "NULL",
+        "obs_time": "2026-05-02 12:00:00+00",
+        "updated_at": "2026-05-02 13:00:01.130644"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.408617,
+          25.184592
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "417",
+        "station_id": "C0AJ40",
+        "station_name": "石門",
+        "county_name": "新北市",
+        "town_name": "石門區",
+        "station_altitude": "154.0",
+        "latitude": 25.273672,
+        "longitude": 121.6012,
+        "wind_direction": "162.0",
+        "wind_speed": "1.7",
+        "air_temperature": "22.6",
+        "relative_humidity": "89.0",
+        "air_pressure": "994.3",
+        "gust_speed": "NULL",
+        "gust_direction": "NULL",
+        "obs_time": "2026-05-02 12:00:00+00",
+        "updated_at": "2026-05-02 13:00:01.130644"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.6012,
+          25.273672
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "418",
+        "station_id": "C0AJ50",
+        "station_name": "水湳洞",
+        "county_name": "新北市",
+        "town_name": "瑞芳區",
+        "station_altitude": "30.0",
+        "latitude": 25.123697,
+        "longitude": 121.862239,
+        "wind_direction": "210.0",
+        "wind_speed": "2.1",
+        "air_temperature": "26.1",
+        "relative_humidity": "73.0",
+        "air_pressure": "1008.7",
+        "gust_speed": "NULL",
+        "gust_direction": "NULL",
+        "obs_time": "2026-05-02 12:00:00+00",
+        "updated_at": "2026-05-02 13:00:01.130644"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.862239,
+          25.123697
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "419",
+        "station_id": "C0AJ60",
+        "station_name": "六塊厝",
+        "county_name": "新北市",
+        "town_name": "淡水區",
+        "station_altitude": "13.0",
+        "latitude": 25.240002,
+        "longitude": 121.448102,
+        "wind_direction": "177.0",
+        "wind_speed": "0.6",
+        "air_temperature": "23.1",
+        "relative_humidity": "93.0",
+        "air_pressure": "1009.3",
+        "gust_speed": "NULL",
+        "gust_direction": "NULL",
+        "obs_time": "2026-05-02 12:00:00+00",
+        "updated_at": "2026-05-02 13:00:01.130644"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.448102,
+          25.240002
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "420",
+        "station_id": "C0AJ70",
+        "station_name": "田寮",
+        "county_name": "新北市",
+        "town_name": "三芝區",
+        "station_altitude": "21.0",
+        "latitude": 25.2698,
+        "longitude": 121.488597,
+        "wind_direction": "167.0",
+        "wind_speed": "1.0",
+        "air_temperature": "23.2",
+        "relative_humidity": "93.0",
+        "air_pressure": "1008.6",
+        "gust_speed": "NULL",
+        "gust_direction": "NULL",
+        "obs_time": "2026-05-02 12:00:00+00",
+        "updated_at": "2026-05-02 13:00:01.130644"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.488597,
+          25.2698
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "421",
+        "station_id": "C0AJ80",
+        "station_name": "板橋",
+        "county_name": "新北市",
+        "town_name": "板橋區",
+        "station_altitude": "38.0",
+        "latitude": 25.010653,
+        "longitude": 121.448861,
+        "wind_direction": "93.0",
+        "wind_speed": "1.2",
+        "air_temperature": "25.7",
+        "relative_humidity": "76.0",
+        "air_pressure": "1007.1",
+        "gust_speed": "NULL",
+        "gust_direction": "NULL",
+        "obs_time": "2026-05-02 12:00:00+00",
+        "updated_at": "2026-05-02 13:00:01.130644"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.448861,
+          25.010653
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "423",
+        "station_id": "C0AI20",
+        "station_name": "白沙灣",
+        "county_name": "新北市",
+        "town_name": "石門區",
+        "station_altitude": "25.0",
+        "latitude": 25.283128,
+        "longitude": 121.519058,
+        "wind_direction": "197.0",
+        "wind_speed": "0.5",
+        "air_temperature": "22.9",
+        "relative_humidity": "94.0",
+        "air_pressure": "1007.3",
+        "gust_speed": "NULL",
+        "gust_direction": "NULL",
+        "obs_time": "2026-05-02 12:00:00+00",
+        "updated_at": "2026-05-02 13:00:01.130644"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.519058,
+          25.283128
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "424",
+        "station_id": "C0A970",
+        "station_name": "三貂角",
+        "county_name": "新北市",
+        "town_name": "貢寮區",
+        "station_altitude": "96.0",
+        "latitude": 25.007606,
+        "longitude": 122.002058,
+        "wind_direction": "188.0",
+        "wind_speed": "8.9",
+        "air_temperature": "22.9",
+        "relative_humidity": "91.0",
+        "air_pressure": "1001.0",
+        "gust_speed": "NULL",
+        "gust_direction": "NULL",
+        "obs_time": "2026-05-02 12:00:00+00",
+        "updated_at": "2026-05-02 13:00:01.130644"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          122.002058,
+          25.007606
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "425",
+        "station_id": "C0AH90",
+        "station_name": "福山植物園",
+        "county_name": "新北市",
+        "town_name": "烏來區",
+        "station_altitude": "660.0",
+        "latitude": 24.760717,
+        "longitude": 121.58135,
+        "wind_direction": "0.0",
+        "wind_speed": "0.0",
+        "air_temperature": "17.8",
+        "relative_humidity": "99.0",
+        "air_pressure": "939.6",
+        "gust_speed": "NULL",
+        "gust_direction": "NULL",
+        "obs_time": "2026-05-02 12:00:00+00",
+        "updated_at": "2026-05-02 13:00:01.130644"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.58135,
+          24.760717
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "426",
+        "station_id": "C0A530",
+        "station_name": "坪林",
+        "county_name": "新北市",
+        "town_name": "坪林區",
+        "station_altitude": "300.0",
+        "latitude": 24.938183,
+        "longitude": 121.70975,
+        "wind_direction": "0.0",
+        "wind_speed": "0.0",
+        "air_temperature": "19.5",
+        "relative_humidity": "90.0",
+        "air_pressure": "975.6",
+        "gust_speed": "NULL",
+        "gust_direction": "NULL",
+        "obs_time": "2026-05-02 12:00:00+00",
+        "updated_at": "2026-05-02 13:00:01.130644"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.70975,
+          24.938183
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "427",
+        "station_id": "C0A550",
+        "station_name": "泰平",
+        "county_name": "新北市",
+        "town_name": "雙溪區",
+        "station_altitude": "422.0",
+        "latitude": 24.971197,
+        "longitude": 121.823711,
+        "wind_direction": "0.0",
+        "wind_speed": "0.0",
+        "air_temperature": "20.4",
+        "relative_humidity": "100.0",
+        "air_pressure": "965.2",
+        "gust_speed": "NULL",
+        "gust_direction": "NULL",
+        "obs_time": "2026-05-02 12:00:00+00",
+        "updated_at": "2026-05-02 13:00:01.130644"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.823711,
+          24.971197
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "428",
+        "station_id": "C0A870",
+        "station_name": "五指山",
+        "county_name": "新北市",
+        "town_name": "汐止區",
+        "station_altitude": "685.0",
+        "latitude": 25.132153,
+        "longitude": 121.608692,
+        "wind_direction": "248.0",
+        "wind_speed": "2.0",
+        "air_temperature": "20.5",
+        "relative_humidity": "97.0",
+        "air_pressure": "931.3",
+        "gust_speed": "NULL",
+        "gust_direction": "NULL",
+        "obs_time": "2026-05-02 12:00:00+00",
+        "updated_at": "2026-05-02 13:00:01.130644"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.608692,
+          25.132153
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "429",
+        "station_id": "C0AH00",
+        "station_name": "汐止",
+        "county_name": "新北市",
+        "town_name": "汐止區",
+        "station_altitude": "38.0",
+        "latitude": 25.066881,
+        "longitude": 121.658778,
+        "wind_direction": "NULL",
+        "wind_speed": "NULL",
+        "air_temperature": "NULL",
+        "relative_humidity": "NULL",
+        "air_pressure": "NULL",
+        "gust_speed": "NULL",
+        "gust_direction": "NULL",
+        "obs_time": "2026-05-02 12:00:00+00",
+        "updated_at": "2026-05-02 13:00:01.130644"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.658778,
+          25.066881
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "430",
+        "station_id": "C0AC60",
+        "station_name": "三峽",
+        "county_name": "新北市",
+        "town_name": "三峽區",
+        "station_altitude": "55.0",
+        "latitude": 24.939025,
+        "longitude": 121.369728,
+        "wind_direction": "0.0",
+        "wind_speed": "0.0",
+        "air_temperature": "25.8",
+        "relative_humidity": "87.0",
+        "air_pressure": "1005.5",
+        "gust_speed": "NULL",
+        "gust_direction": "NULL",
+        "obs_time": "2026-05-02 12:00:00+00",
+        "updated_at": "2026-05-02 13:00:01.130644"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.369728,
+          24.939025
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "433",
+        "station_id": "C0ACA0",
+        "station_name": "新莊",
+        "county_name": "新北市",
+        "town_name": "新莊區",
+        "station_altitude": "25.0",
+        "latitude": 25.051478,
+        "longitude": 121.446756,
+        "wind_direction": "0.0",
+        "wind_speed": "0.0",
+        "air_temperature": "25.1",
+        "relative_humidity": "78.0",
+        "air_pressure": "1007.2",
+        "gust_speed": "NULL",
+        "gust_direction": "NULL",
+        "obs_time": "2026-05-02 12:00:00+00",
+        "updated_at": "2026-05-02 13:00:01.130644"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.446756,
+          25.051478
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "434",
+        "station_id": "C0A520",
+        "station_name": "山佳",
+        "county_name": "新北市",
+        "town_name": "樹林區",
+        "station_altitude": "48.0",
+        "latitude": 24.974944,
+        "longitude": 121.402008,
+        "wind_direction": "242.0",
+        "wind_speed": "0.6",
+        "air_temperature": "25.7",
+        "relative_humidity": "85.0",
+        "air_pressure": "1004.9",
+        "gust_speed": "NULL",
+        "gust_direction": "NULL",
+        "obs_time": "2026-05-02 12:00:00+00",
+        "updated_at": "2026-05-02 13:00:01.130644"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.402008,
+          24.974944
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "435",
+        "station_id": "C0A570",
+        "station_name": "桶後",
+        "county_name": "新北市",
+        "town_name": "烏來區",
+        "station_altitude": "360.0",
+        "latitude": 24.848222,
+        "longitude": 121.597992,
+        "wind_direction": "71.0",
+        "wind_speed": "0.4",
+        "air_temperature": "20.7",
+        "relative_humidity": "97.0",
+        "air_pressure": "969.8",
+        "gust_speed": "NULL",
+        "gust_direction": "NULL",
+        "obs_time": "2026-05-02 12:00:00+00",
+        "updated_at": "2026-05-02 13:00:01.130644"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.597992,
+          24.848222
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "436",
+        "station_id": "C0A890",
+        "station_name": "雙溪",
+        "county_name": "新北市",
+        "town_name": "雙溪區",
+        "station_altitude": "40.0",
+        "latitude": 25.036003,
+        "longitude": 121.864242,
+        "wind_direction": "0.0",
+        "wind_speed": "0.0",
+        "air_temperature": "24.6",
+        "relative_humidity": "89.0",
+        "air_pressure": "1005.9",
+        "gust_speed": "NULL",
+        "gust_direction": "NULL",
+        "obs_time": "2026-05-02 12:00:00+00",
+        "updated_at": "2026-05-02 13:00:01.130644"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.864242,
+          25.036003
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "437",
+        "station_id": "C0A950",
+        "station_name": "鼻頭角",
+        "county_name": "新北市",
+        "town_name": "瑞芳區",
+        "station_altitude": "60.0",
+        "latitude": 25.129036,
+        "longitude": 121.923372,
+        "wind_direction": "133.0",
+        "wind_speed": "1.1",
+        "air_temperature": "25.3",
+        "relative_humidity": "84.0",
+        "air_pressure": "1003.9",
+        "gust_speed": "7.1",
+        "gust_direction": "152.0",
+        "obs_time": "2026-05-02 12:00:00+00",
+        "updated_at": "2026-05-02 13:00:01.130644"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.923372,
+          25.129036
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "438",
+        "station_id": "C0A860",
+        "station_name": "大坪",
+        "county_name": "新北市",
+        "town_name": "萬里區",
+        "station_altitude": "362.0",
+        "latitude": 25.165914,
+        "longitude": 121.632969,
+        "wind_direction": "0.0",
+        "wind_speed": "0.0",
+        "air_temperature": "20.1",
+        "relative_humidity": "92.0",
+        "air_pressure": "970.4",
+        "gust_speed": "NULL",
+        "gust_direction": "NULL",
+        "obs_time": "2026-05-02 12:00:00+00",
+        "updated_at": "2026-05-02 13:00:01.130644"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.632969,
+          25.165914
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "439",
+        "station_id": "C0A931",
+        "station_name": "三和",
+        "county_name": "新北市",
+        "town_name": "金山區",
+        "station_altitude": "216.0",
+        "latitude": 25.233153,
+        "longitude": 121.595236,
+        "wind_direction": "0.0",
+        "wind_speed": "0.1",
+        "air_temperature": "20.5",
+        "relative_humidity": "93.0",
+        "air_pressure": "985.1",
+        "gust_speed": "NULL",
+        "gust_direction": "NULL",
+        "obs_time": "2026-05-02 12:00:00+00",
+        "updated_at": "2026-05-02 13:00:01.130644"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.595236,
+          25.233153
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "440",
+        "station_id": "C0A940",
+        "station_name": "金山",
+        "county_name": "新北市",
+        "town_name": "金山區",
+        "station_altitude": "49.0",
+        "latitude": 25.223628,
+        "longitude": 121.643967,
+        "wind_direction": "0.0",
+        "wind_speed": "0.0",
+        "air_temperature": "23.2",
+        "relative_humidity": "91.0",
+        "air_pressure": "1006.0",
+        "gust_speed": "NULL",
+        "gust_direction": "NULL",
+        "obs_time": "2026-05-02 12:00:00+00",
+        "updated_at": "2026-05-02 13:00:01.130644"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.643967,
+          25.223628
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "441",
+        "station_id": "C0A640",
+        "station_name": "石碇",
+        "county_name": "新北市",
+        "town_name": "石碇區",
+        "station_altitude": "241.0",
+        "latitude": 24.993969,
+        "longitude": 121.662917,
+        "wind_direction": "0.0",
+        "wind_speed": "0.0",
+        "air_temperature": "22.6",
+        "relative_humidity": "86.0",
+        "air_pressure": "984.3",
+        "gust_speed": "NULL",
+        "gust_direction": "NULL",
+        "obs_time": "2026-05-02 12:00:00+00",
+        "updated_at": "2026-05-02 13:00:01.130644"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.662917,
+          24.993969
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "443",
+        "station_id": "C0AG80",
+        "station_name": "中和",
+        "county_name": "新北市",
+        "town_name": "中和區",
+        "station_altitude": "48.0",
+        "latitude": 24.991622,
+        "longitude": 121.491792,
+        "wind_direction": "149.0",
+        "wind_speed": "0.3",
+        "air_temperature": "25.2",
+        "relative_humidity": "79.0",
+        "air_pressure": "1005.6",
+        "gust_speed": "NULL",
+        "gust_direction": "NULL",
+        "obs_time": "2026-05-02 12:00:00+00",
+        "updated_at": "2026-05-02 13:00:01.130644"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.491792,
+          24.991622
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "447",
+        "station_id": "C0AD10",
+        "station_name": "八里",
+        "county_name": "新北市",
+        "town_name": "八里區",
+        "station_altitude": "27.0",
+        "latitude": 25.150211,
+        "longitude": 121.403947,
+        "wind_direction": "19.0",
+        "wind_speed": "0.6",
+        "air_temperature": "25.0",
+        "relative_humidity": "99.0",
+        "air_pressure": "1006.1",
+        "gust_speed": "NULL",
+        "gust_direction": "NULL",
+        "obs_time": "2026-05-02 12:00:00+00",
+        "updated_at": "2026-05-02 13:00:01.130644"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.403947,
+          25.150211
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "448",
+        "station_id": "C0AD30",
+        "station_name": "蘆洲",
+        "county_name": "新北市",
+        "town_name": "蘆洲區",
+        "station_altitude": "20.0",
+        "latitude": 25.086594,
+        "longitude": 121.472331,
+        "wind_direction": "0.0",
+        "wind_speed": "0.0",
+        "air_temperature": "26.8",
+        "relative_humidity": "78.0",
+        "air_pressure": "1006.8",
+        "gust_speed": "NULL",
+        "gust_direction": "NULL",
+        "obs_time": "2026-05-02 12:00:00+00",
+        "updated_at": "2026-05-02 13:00:01.130644"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.472331,
+          25.086594
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "449",
+        "station_id": "C0AD40",
+        "station_name": "土城",
+        "county_name": "新北市",
+        "town_name": "土城區",
+        "station_altitude": "32.0",
+        "latitude": 24.973208,
+        "longitude": 121.445169,
+        "wind_direction": "0.0",
+        "wind_speed": "0.0",
+        "air_temperature": "23.1",
+        "relative_humidity": "85.0",
+        "air_pressure": "1006.2",
+        "gust_speed": "NULL",
+        "gust_direction": "NULL",
+        "obs_time": "2026-05-02 12:00:00+00",
+        "updated_at": "2026-05-02 13:00:01.130644"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.445169,
+          24.973208
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "450",
+        "station_id": "C0AD50",
+        "station_name": "鶯歌",
+        "county_name": "新北市",
+        "town_name": "鶯歌區",
+        "station_altitude": "84.0",
+        "latitude": 24.951533,
+        "longitude": 121.346294,
+        "wind_direction": "0.0",
+        "wind_speed": "0.0",
+        "air_temperature": "25.5",
+        "relative_humidity": "90.0",
+        "air_pressure": "1000.9",
+        "gust_speed": "NULL",
+        "gust_direction": "NULL",
+        "obs_time": "2026-05-02 12:00:00+00",
+        "updated_at": "2026-05-02 13:00:01.130644"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.346294,
+          24.951533
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "451",
+        "station_id": "C0AH10",
+        "station_name": "永和",
+        "county_name": "新北市",
+        "town_name": "永和區",
+        "station_altitude": "30.0",
+        "latitude": 25.01125,
+        "longitude": 121.508111,
+        "wind_direction": "168.0",
+        "wind_speed": "1.3",
+        "air_temperature": "26.2",
+        "relative_humidity": "77.0",
+        "air_pressure": "1007.3",
+        "gust_speed": "NULL",
+        "gust_direction": "NULL",
+        "obs_time": "2026-05-02 12:00:00+00",
+        "updated_at": "2026-05-02 13:00:01.130644"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.508111,
+          25.01125
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "452",
+        "station_id": "C0AH30",
+        "station_name": "五分山",
+        "county_name": "新北市",
+        "town_name": "瑞芳區",
+        "station_altitude": "755.0",
+        "latitude": 25.07125,
+        "longitude": 121.780794,
+        "wind_direction": "100.0",
+        "wind_speed": "3.4",
+        "air_temperature": "20.6",
+        "relative_humidity": "94.0",
+        "air_pressure": "925.6",
+        "gust_speed": "NULL",
+        "gust_direction": "NULL",
+        "obs_time": "2026-05-02 12:00:00+00",
+        "updated_at": "2026-05-02 13:00:01.130644"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.780794,
+          25.07125
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "454",
+        "station_id": "C0AH50",
+        "station_name": "林口",
+        "county_name": "新北市",
+        "town_name": "林口區",
+        "station_altitude": "275.0",
+        "latitude": 25.072181,
+        "longitude": 121.380839,
+        "wind_direction": "0.0",
+        "wind_speed": "0.0",
+        "air_temperature": "24.1",
+        "relative_humidity": "89.0",
+        "air_pressure": "979.9",
+        "gust_speed": "NULL",
+        "gust_direction": "NULL",
+        "obs_time": "2026-05-02 12:00:00+00",
+        "updated_at": "2026-05-02 13:00:01.130644"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.380839,
+          25.072181
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "455",
+        "station_id": "C0AH80",
+        "station_name": "深坑",
+        "county_name": "新北市",
+        "town_name": "深坑區",
+        "station_altitude": "68.0",
+        "latitude": 25.002703,
+        "longitude": 121.628328,
+        "wind_direction": "0.0",
+        "wind_speed": "0.0",
+        "air_temperature": "24.5",
+        "relative_humidity": "89.0",
+        "air_pressure": "1000.5",
+        "gust_speed": "NULL",
+        "gust_direction": "NULL",
+        "obs_time": "2026-05-02 12:00:00+00",
+        "updated_at": "2026-05-02 13:00:01.130644"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.628328,
+          25.002703
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "456",
+        "station_id": "C0AI00",
+        "station_name": "五股",
+        "county_name": "新北市",
+        "town_name": "五股區",
+        "station_altitude": "188.0",
+        "latitude": 25.074453,
+        "longitude": 121.427281,
+        "wind_direction": "123.0",
+        "wind_speed": "1.4",
+        "air_temperature": "24.2",
+        "relative_humidity": "89.0",
+        "air_pressure": "990.3",
+        "gust_speed": "NULL",
+        "gust_direction": "NULL",
+        "obs_time": "2026-05-02 12:00:00+00",
+        "updated_at": "2026-05-02 13:00:01.130644"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.427281,
+          25.074453
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "457",
+        "station_id": "C0AI10",
+        "station_name": "屈尺",
+        "county_name": "新北市",
+        "town_name": "新店區",
+        "station_altitude": "76.0",
+        "latitude": 24.921836,
+        "longitude": 121.544725,
+        "wind_direction": "179.0",
+        "wind_speed": "1.8",
+        "air_temperature": "26.0",
+        "relative_humidity": "85.0",
+        "air_pressure": "1001.1",
+        "gust_speed": "NULL",
+        "gust_direction": "NULL",
+        "obs_time": "2026-05-02 12:00:00+00",
+        "updated_at": "2026-05-02 13:00:01.130644"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.544725,
+          24.921836
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "458",
+        "station_id": "C0AI30",
+        "station_name": "三重",
+        "county_name": "新北市",
+        "town_name": "三重區",
+        "station_altitude": "26.0",
+        "latitude": 25.057378,
+        "longitude": 121.500625,
+        "wind_direction": "0.0",
+        "wind_speed": "0.1",
+        "air_temperature": "26.3",
+        "relative_humidity": "95.0",
+        "air_pressure": "1008.6",
+        "gust_speed": "NULL",
+        "gust_direction": "NULL",
+        "obs_time": "2026-05-02 12:00:00+00",
+        "updated_at": "2026-05-02 13:00:01.130644"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.500625,
+          25.057378
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "460",
+        "station_id": "466881",
+        "station_name": "新北",
+        "county_name": "新北市",
+        "town_name": "新店區",
+        "station_altitude": "24.5",
+        "latitude": 24.959207,
+        "longitude": 121.525196,
+        "wind_direction": "120.0",
+        "wind_speed": "0.9",
+        "air_temperature": "23.5",
+        "relative_humidity": "87.0",
+        "air_pressure": "1008.0",
+        "gust_speed": "NULL",
+        "gust_direction": "NULL",
+        "obs_time": "2026-05-02 12:00:00+00",
+        "updated_at": "2026-05-02 13:00:01.130644"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.525196,
+          24.959207
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "461",
+        "station_id": "466900",
+        "station_name": "淡水",
+        "county_name": "新北市",
+        "town_name": "淡水區",
+        "station_altitude": "19.0",
+        "latitude": 25.164889,
+        "longitude": 121.448906,
+        "wind_direction": "130.0",
+        "wind_speed": "1.9",
+        "air_temperature": "24.2",
+        "relative_humidity": "86.0",
+        "air_pressure": "1008.6",
+        "gust_speed": "NULL",
+        "gust_direction": "NULL",
+        "obs_time": "2026-05-02 12:00:00+00",
+        "updated_at": "2026-05-02 13:00:01.130644"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.448906,
+          25.164889
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "465",
+        "station_id": "72AI40",
+        "station_name": "桃改樹林分場",
+        "county_name": "新北市",
+        "town_name": "樹林區",
+        "station_altitude": "40.0",
+        "latitude": 24.944503,
+        "longitude": 121.386972,
+        "wind_direction": "210.0",
+        "wind_speed": "1.0",
+        "air_temperature": "23.4",
+        "relative_humidity": "85.0",
+        "air_pressure": "1007.4",
+        "gust_speed": "NULL",
+        "gust_direction": "NULL",
+        "obs_time": "2026-05-02 12:00:00+00",
+        "updated_at": "2026-05-02 13:00:01.130644"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.386972,
+          24.944503
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "466",
+        "station_id": "82A750",
+        "station_name": "茶改北部分場",
+        "county_name": "新北市",
+        "town_name": "石碇區",
+        "station_altitude": "401.0",
+        "latitude": 24.955778,
+        "longitude": 121.631222,
+        "wind_direction": "220.0",
+        "wind_speed": "2.0",
+        "air_temperature": "21.7",
+        "relative_humidity": "91.0",
+        "air_pressure": "965.5",
+        "gust_speed": "NULL",
+        "gust_direction": "NULL",
+        "obs_time": "2026-05-02 12:00:00+00",
+        "updated_at": "2026-05-02 13:00:01.130644"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.631222,
+          24.955778
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "469",
+        "station_id": "C2A540",
+        "station_name": "四堵",
+        "county_name": "新北市",
+        "town_name": "坪林區",
+        "station_altitude": "401.0",
+        "latitude": 24.8926,
+        "longitude": 121.745736,
+        "wind_direction": "0.0",
+        "wind_speed": "0.2",
+        "air_temperature": "20.3",
+        "relative_humidity": "94.0",
+        "air_pressure": "967.7",
+        "gust_speed": "NULL",
+        "gust_direction": "NULL",
+        "obs_time": "2026-05-02 12:00:00+00",
+        "updated_at": "2026-05-02 13:00:01.130644"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.745736,
+          24.8926
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "470",
+        "station_id": "C2A560",
+        "station_name": "福山",
+        "county_name": "新北市",
+        "town_name": "烏來區",
+        "station_altitude": "405.0",
+        "latitude": 24.776203,
+        "longitude": 121.502811,
+        "wind_direction": "0.0",
+        "wind_speed": "0.1",
+        "air_temperature": "20.6",
+        "relative_humidity": "95.0",
+        "air_pressure": "966.2",
+        "gust_speed": "NULL",
+        "gust_direction": "NULL",
+        "obs_time": "2026-05-02 12:00:00+00",
+        "updated_at": "2026-05-02 13:00:01.130644"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.502811,
+          24.776203
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "471",
+        "station_id": "C2A650",
+        "station_name": "火燒寮",
+        "county_name": "新北市",
+        "town_name": "平溪區",
+        "station_altitude": "287.0",
+        "latitude": 25.002719,
+        "longitude": 121.742892,
+        "wind_direction": "50.0",
+        "wind_speed": "0.5",
+        "air_temperature": "21.4",
+        "relative_humidity": "92.0",
+        "air_pressure": "979.7",
+        "gust_speed": "NULL",
+        "gust_direction": "NULL",
+        "obs_time": "2026-05-02 12:00:00+00",
+        "updated_at": "2026-05-02 13:00:01.130644"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.742892,
+          25.002719
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "472",
+        "station_id": "C2A660",
+        "station_name": "瑞芳",
+        "county_name": "新北市",
+        "town_name": "瑞芳區",
+        "station_altitude": "97.0",
+        "latitude": 25.113169,
+        "longitude": 121.801147,
+        "wind_direction": "150.0",
+        "wind_speed": "0.4",
+        "air_temperature": "23.6",
+        "relative_humidity": "83.0",
+        "air_pressure": "999.8",
+        "gust_speed": "NULL",
+        "gust_direction": "NULL",
+        "obs_time": "2026-05-02 12:00:00+00",
+        "updated_at": "2026-05-02 13:00:01.130644"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.801147,
+          25.113169
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "473",
+        "station_id": "C2A880",
+        "station_name": "福隆",
+        "county_name": "新北市",
+        "town_name": "貢寮區",
+        "station_altitude": "6.0",
+        "latitude": 25.017842,
+        "longitude": 121.942083,
+        "wind_direction": "320.0",
+        "wind_speed": "0.6",
+        "air_temperature": "24.3",
+        "relative_humidity": "85.0",
+        "air_pressure": "1009.1",
+        "gust_speed": "NULL",
+        "gust_direction": "NULL",
+        "obs_time": "2026-05-02 12:00:00+00",
+        "updated_at": "2026-05-02 13:00:01.130644"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.942083,
+          25.017842
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "474",
+        "station_id": "C2A920",
+        "station_name": "富貴角",
+        "county_name": "新北市",
+        "town_name": "石門區",
+        "station_altitude": "196.0",
+        "latitude": 25.263783,
+        "longitude": 121.565258,
+        "wind_direction": "130.0",
+        "wind_speed": "0.5",
+        "air_temperature": "22.4",
+        "relative_humidity": "87.0",
+        "air_pressure": "988.4",
+        "gust_speed": "NULL",
+        "gust_direction": "NULL",
+        "obs_time": "2026-05-02 12:00:00+00",
+        "updated_at": "2026-05-02 13:00:01.130644"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.565258,
+          25.263783
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "476",
+        "station_id": "C2AK30",
+        "station_name": "信賢",
+        "county_name": "新北市",
+        "town_name": "烏來區",
+        "station_altitude": "356.0",
+        "latitude": 24.84108,
+        "longitude": 121.53492,
+        "wind_direction": "310.0",
+        "wind_speed": "0.5",
+        "air_temperature": "21.2",
+        "relative_humidity": "95.0",
+        "air_pressure": "972.9",
+        "gust_speed": "NULL",
+        "gust_direction": "NULL",
+        "obs_time": "2026-05-02 12:00:00+00",
+        "updated_at": "2026-05-02 13:00:01.130644"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.53492,
+          24.84108
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "477",
+        "station_id": "C2AK40",
+        "station_name": "漁光",
+        "county_name": "新北市",
+        "town_name": "坪林區",
+        "station_altitude": "723.0",
+        "latitude": 24.96875,
+        "longitude": 121.72132,
+        "wind_direction": "60.0",
+        "wind_speed": "1.1",
+        "air_temperature": "20.2",
+        "relative_humidity": "90.0",
+        "air_pressure": "932.3",
+        "gust_speed": "NULL",
+        "gust_direction": "NULL",
+        "obs_time": "2026-05-02 12:00:00+00",
+        "updated_at": "2026-05-02 13:00:01.130644"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.72132,
+          24.96875
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "478",
+        "station_id": "CAA010",
+        "station_name": "國一N013K",
+        "county_name": "新北市",
+        "town_name": "汐止區",
+        "station_altitude": "39.0",
+        "latitude": 25.066739,
+        "longitude": 121.628153,
+        "wind_direction": "110.0",
+        "wind_speed": "0.6",
+        "air_temperature": "24.8",
+        "relative_humidity": "87.0",
+        "air_pressure": "1008.0",
+        "gust_speed": "NULL",
+        "gust_direction": "NULL",
+        "obs_time": "2026-05-02 12:00:00+00",
+        "updated_at": "2026-05-02 13:00:01.130644"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.628153,
+          25.066739
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "479",
+        "station_id": "CAA020",
+        "station_name": "國一S026K",
+        "county_name": "新北市",
+        "town_name": "三重區",
+        "station_altitude": "27.0",
+        "latitude": 25.07639,
+        "longitude": 121.4964,
+        "wind_direction": "60.0",
+        "wind_speed": "1.1",
+        "air_temperature": "25.7",
+        "relative_humidity": "80.0",
+        "air_pressure": "1008.2",
+        "gust_speed": "NULL",
+        "gust_direction": "NULL",
+        "obs_time": "2026-05-02 12:00:00+00",
+        "updated_at": "2026-05-02 13:00:01.130644"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.4964,
+          25.07639
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "480",
+        "station_id": "CAA030",
+        "station_name": "國三S010K",
+        "county_name": "新北市",
+        "town_name": "汐止區",
+        "station_altitude": "50.0",
+        "latitude": 25.08,
+        "longitude": 121.6475,
+        "wind_direction": "350.0",
+        "wind_speed": "1.3",
+        "air_temperature": "22.8",
+        "relative_humidity": "84.0",
+        "air_pressure": "1005.7",
+        "gust_speed": "NULL",
+        "gust_direction": "NULL",
+        "obs_time": "2026-05-02 12:00:00+00",
+        "updated_at": "2026-05-02 13:00:01.130644"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.6475,
+          25.08
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "482",
+        "station_id": "CAA050",
+        "station_name": "國三S037K",
+        "county_name": "新北市",
+        "town_name": "土城區",
+        "station_altitude": "51.0",
+        "latitude": 24.982361,
+        "longitude": 121.471042,
+        "wind_direction": "140.0",
+        "wind_speed": "0.6",
+        "air_temperature": "24.0",
+        "relative_humidity": "88.0",
+        "air_pressure": "1005.4",
+        "gust_speed": "NULL",
+        "gust_direction": "NULL",
+        "obs_time": "2026-05-02 12:00:00+00",
+        "updated_at": "2026-05-02 13:00:01.130644"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.471042,
+          24.982361
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "483",
+        "station_id": "CAA060",
+        "station_name": "國三S042K",
+        "county_name": "新北市",
+        "town_name": "土城區",
+        "station_altitude": "50.0",
+        "latitude": 24.96,
+        "longitude": 121.4306,
+        "wind_direction": "180.0",
+        "wind_speed": "0.6",
+        "air_temperature": "23.5",
+        "relative_humidity": "90.0",
+        "air_pressure": "1006.4",
+        "gust_speed": "NULL",
+        "gust_direction": "NULL",
+        "obs_time": "2026-05-02 12:00:00+00",
+        "updated_at": "2026-05-02 13:00:01.130644"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.4306,
+          24.96
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "484",
+        "station_id": "CAA070",
+        "station_name": "國三N046K",
+        "county_name": "新北市",
+        "town_name": "樹林區",
+        "station_altitude": "54.0",
+        "latitude": 24.95083,
+        "longitude": 121.3958,
+        "wind_direction": "230.0",
+        "wind_speed": "0.8",
+        "air_temperature": "23.3",
+        "relative_humidity": "94.0",
+        "air_pressure": "1005.2",
+        "gust_speed": "NULL",
+        "gust_direction": "NULL",
+        "obs_time": "2026-05-02 12:00:00+00",
+        "updated_at": "2026-05-02 13:00:01.130644"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.3958,
+          24.95083
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "485",
+        "station_id": "CAA080",
+        "station_name": "國三S054K",
+        "county_name": "新北市",
+        "town_name": "鶯歌區",
+        "station_altitude": "97.0",
+        "latitude": 24.93917,
+        "longitude": 121.3239,
+        "wind_direction": "300.0",
+        "wind_speed": "0.6",
+        "air_temperature": "23.5",
+        "relative_humidity": "89.0",
+        "air_pressure": "1001.1",
+        "gust_speed": "NULL",
+        "gust_direction": "NULL",
+        "obs_time": "2026-05-02 12:00:00+00",
+        "updated_at": "2026-05-02 13:00:01.130644"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.3239,
+          24.93917
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "487",
+        "station_id": "CAA990",
+        "station_name": "國一N039K",
+        "county_name": "新北市",
+        "town_name": "泰山區",
+        "station_altitude": "233.0",
+        "latitude": 25.064433,
+        "longitude": 121.381972,
+        "wind_direction": "200.0",
+        "wind_speed": "0.3",
+        "air_temperature": "22.2",
+        "relative_humidity": "90.0",
+        "air_pressure": "988.0",
+        "gust_speed": "NULL",
+        "gust_direction": "NULL",
+        "obs_time": "2026-05-02 12:00:00+00",
+        "updated_at": "2026-05-02 13:00:01.130644"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.381972,
+          25.064433
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "488",
+        "station_id": "CAAD60",
+        "station_name": "國五S005K",
+        "county_name": "新北市",
+        "town_name": "石碇區",
+        "station_altitude": "154.0",
+        "latitude": 24.996414,
+        "longitude": 121.651931,
+        "wind_direction": "200.0",
+        "wind_speed": "0.5",
+        "air_temperature": "NULL",
+        "relative_humidity": "NULL",
+        "air_pressure": "NULL",
+        "gust_speed": "NULL",
+        "gust_direction": "NULL",
+        "obs_time": "2026-05-02 12:00:00+00",
+        "updated_at": "2026-05-02 13:00:01.130644"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.651931,
+          24.996414
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "489",
+        "station_id": "CAAD70",
+        "station_name": "國五S006K",
+        "county_name": "新北市",
+        "town_name": "石碇區",
+        "station_altitude": "187.0",
+        "latitude": 24.989964,
+        "longitude": 121.656972,
+        "wind_direction": "90.0",
+        "wind_speed": "0.4",
+        "air_temperature": "22.5",
+        "relative_humidity": "95.0",
+        "air_pressure": "991.6",
+        "gust_speed": "NULL",
+        "gust_direction": "NULL",
+        "obs_time": "2026-05-02 12:00:00+00",
+        "updated_at": "2026-05-02 13:00:01.130644"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.656972,
+          24.989964
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "490",
+        "station_id": "CAAD80",
+        "station_name": "國五N008K",
+        "county_name": "新北市",
+        "town_name": "石碇區",
+        "station_altitude": "217.0",
+        "latitude": 24.982411,
+        "longitude": 121.668089,
+        "wind_direction": "180.0",
+        "wind_speed": "0.9",
+        "air_temperature": "23.0",
+        "relative_humidity": "90.0",
+        "air_pressure": "987.2",
+        "gust_speed": "NULL",
+        "gust_direction": "NULL",
+        "obs_time": "2026-05-02 12:00:00+00",
+        "updated_at": "2026-05-02 13:00:01.130644"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.668089,
+          24.982411
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "491",
+        "station_id": "CAAD90",
+        "station_name": "國五N013K",
+        "county_name": "新北市",
+        "town_name": "坪林區",
+        "station_altitude": "280.0",
+        "latitude": 24.947603,
+        "longitude": 121.705508,
+        "wind_direction": "360.0",
+        "wind_speed": "0.6",
+        "air_temperature": "21.5",
+        "relative_humidity": "96.0",
+        "air_pressure": "981.9",
+        "gust_speed": "NULL",
+        "gust_direction": "NULL",
+        "obs_time": "2026-05-02 12:00:00+00",
+        "updated_at": "2026-05-02 13:00:01.130644"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.705508,
+          24.947603
+        ]
+      }
+    }
+  ]
+}

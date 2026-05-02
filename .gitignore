@@ -73,3 +73,7 @@ Taipei-City-Dashboard-DE/docker/prod/.env
 *.py[cod]
 
 *.env
+
+# Large geojson files too big for GitHub
+Taipei-City-Dashboard-FE/public/mapData/land_use_zone_metrotaipei.geojson
+Taipei-City-Dashboard-FE/public/mapData/land_use_zone_newtaipei.geojson

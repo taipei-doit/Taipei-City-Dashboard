@@ -30,6 +30,12 @@ func InitCronJobs() {
 		cron.WithSeconds(),
     )
 
+	go func() {
+		if err := models.FetchAndSaveCwaStationWind(); err != nil {
+			logs.Error("Initial CWA wind fetch failed:", err)
+		}
+	}()
+
 	// Fetch CWA automatic weather station wind data every 10 minutes.
 	_, errCwa := c.AddFunc("0 0 * * * *", func() {
 		if err := models.FetchAndSaveCwaStationWind(); err != nil {

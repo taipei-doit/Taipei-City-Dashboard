@@ -1,0 +1,557 @@
+{
+  "type": "FeatureCollection",
+  "name": "weather_station_taipei",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "414",
+        "station_id": "C0A770",
+        "station_name": "科教館",
+        "county_name": "臺北市",
+        "town_name": "士林區",
+        "station_altitude": "60.0",
+        "latitude": 25.096356,
+        "longitude": 121.516506,
+        "wind_direction": "0.0",
+        "wind_speed": "0.0",
+        "air_temperature": "25.0",
+        "relative_humidity": "82.0",
+        "air_pressure": "1005.1",
+        "gust_speed": "NULL",
+        "gust_direction": "NULL",
+        "obs_time": "2026-05-02 12:00:00+00",
+        "updated_at": "2026-05-02 13:00:01.130644"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.516506,
+          25.096356
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "422",
+        "station_id": "C0AH70",
+        "station_name": "松山",
+        "county_name": "臺北市",
+        "town_name": "松山區",
+        "station_altitude": "34.0",
+        "latitude": 25.048711,
+        "longitude": 121.550428,
+        "wind_direction": "52.0",
+        "wind_speed": "0.7",
+        "air_temperature": "25.8",
+        "relative_humidity": "78.0",
+        "air_pressure": "1007.4",
+        "gust_speed": "NULL",
+        "gust_direction": "NULL",
+        "obs_time": "2026-05-02 12:00:00+00",
+        "updated_at": "2026-05-02 13:00:01.130644"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.550428,
+          25.048711
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "431",
+        "station_id": "C0AC70",
+        "station_name": "信義",
+        "county_name": "臺北市",
+        "town_name": "信義區",
+        "station_altitude": "71.0",
+        "latitude": 25.037822,
+        "longitude": 121.564597,
+        "wind_direction": "80.0",
+        "wind_speed": "0.5",
+        "air_temperature": "26.0",
+        "relative_humidity": "76.0",
+        "air_pressure": "1002.2",
+        "gust_speed": "NULL",
+        "gust_direction": "NULL",
+        "obs_time": "2026-05-02 12:00:00+00",
+        "updated_at": "2026-05-02 13:00:01.130644"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.564597,
+          25.037822
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "432",
+        "station_id": "C0AC80",
+        "station_name": "文山",
+        "county_name": "臺北市",
+        "town_name": "文山區",
+        "station_altitude": "40.0",
+        "latitude": 25.00235,
+        "longitude": 121.575728,
+        "wind_direction": "0.0",
+        "wind_speed": "0.0",
+        "air_temperature": "24.5",
+        "relative_humidity": "99.0",
+        "air_pressure": "1004.7",
+        "gust_speed": "NULL",
+        "gust_direction": "NULL",
+        "obs_time": "2026-05-02 12:00:00+00",
+        "updated_at": "2026-05-02 13:00:01.130644"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.575728,
+          25.00235
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "442",
+        "station_id": "C0A9F0",
+        "station_name": "內湖",
+        "county_name": "臺北市",
+        "town_name": "內湖區",
+        "station_altitude": "35.0",
+        "latitude": 25.079422,
+        "longitude": 121.57545,
+        "wind_direction": "81.0",
+        "wind_speed": "0.4",
+        "air_temperature": "27.0",
+        "relative_humidity": "78.0",
+        "air_pressure": "1006.9",
+        "gust_speed": "NULL",
+        "gust_direction": "NULL",
+        "obs_time": "2026-05-02 12:00:00+00",
+        "updated_at": "2026-05-02 13:00:01.130644"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.57545,
+          25.079422
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "444",
+        "station_id": "C0A9C0",
+        "station_name": "天母",
+        "county_name": "臺北市",
+        "town_name": "士林區",
+        "station_altitude": "35.0",
+        "latitude": 25.117494,
+        "longitude": 121.537169,
+        "wind_direction": "0.0",
+        "wind_speed": "0.0",
+        "air_temperature": "24.9",
+        "relative_humidity": "84.0",
+        "air_pressure": "1007.9",
+        "gust_speed": "NULL",
+        "gust_direction": "NULL",
+        "obs_time": "2026-05-02 12:00:00+00",
+        "updated_at": "2026-05-02 13:00:01.130644"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.537169,
+          25.117494
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "445",
+        "station_id": "C0A980",
+        "station_name": "社子",
+        "county_name": "臺北市",
+        "town_name": "士林區",
+        "station_altitude": "11.0",
+        "latitude": 25.109508,
+        "longitude": 121.469681,
+        "wind_direction": "0.0",
+        "wind_speed": "0.0",
+        "air_temperature": "25.2",
+        "relative_humidity": "83.0",
+        "air_pressure": "1010.5",
+        "gust_speed": "NULL",
+        "gust_direction": "NULL",
+        "obs_time": "2026-05-02 12:00:00+00",
+        "updated_at": "2026-05-02 13:00:01.130644"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.469681,
+          25.109508
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "446",
+        "station_id": "C0AC40",
+        "station_name": "大屯山",
+        "county_name": "臺北市",
+        "town_name": "北投區",
+        "station_altitude": "1079.0",
+        "latitude": 25.175675,
+        "longitude": 121.522408,
+        "wind_direction": "279.0",
+        "wind_speed": "7.5",
+        "air_temperature": "18.2",
+        "relative_humidity": "100.0",
+        "air_pressure": "893.0",
+        "gust_speed": "NULL",
+        "gust_direction": "NULL",
+        "obs_time": "2026-05-02 12:00:00+00",
+        "updated_at": "2026-05-02 13:00:01.130644"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.522408,
+          25.175675
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "453",
+        "station_id": "C0AH40",
+        "station_name": "平等",
+        "county_name": "臺北市",
+        "town_name": "士林區",
+        "station_altitude": "426.0",
+        "latitude": 25.129142,
+        "longitude": 121.577086,
+        "wind_direction": "NULL",
+        "wind_speed": "NULL",
+        "air_temperature": "NULL",
+        "relative_humidity": "NULL",
+        "air_pressure": "NULL",
+        "gust_speed": "NULL",
+        "gust_direction": "NULL",
+        "obs_time": "2026-05-02 12:00:00+00",
+        "updated_at": "2026-05-02 13:00:01.130644"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.577086,
+          25.129142
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "459",
+        "station_id": "C0AI40",
+        "station_name": "石牌",
+        "county_name": "臺北市",
+        "town_name": "北投區",
+        "station_altitude": "37.0",
+        "latitude": 25.115597,
+        "longitude": 121.513139,
+        "wind_direction": "111.0",
+        "wind_speed": "0.3",
+        "air_temperature": "27.3",
+        "relative_humidity": "78.0",
+        "air_pressure": "1007.2",
+        "gust_speed": "NULL",
+        "gust_direction": "NULL",
+        "obs_time": "2026-05-02 12:00:00+00",
+        "updated_at": "2026-05-02 13:00:01.130644"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.513139,
+          25.115597
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "462",
+        "station_id": "466910",
+        "station_name": "鞍部",
+        "county_name": "臺北市",
+        "town_name": "北投區",
+        "station_altitude": "837.6",
+        "latitude": 25.182586,
+        "longitude": 121.529731,
+        "wind_direction": "150.0",
+        "wind_speed": "1.8",
+        "air_temperature": "19.4",
+        "relative_humidity": "96.0",
+        "air_pressure": "919.7",
+        "gust_speed": "NULL",
+        "gust_direction": "NULL",
+        "obs_time": "2026-05-02 12:00:00+00",
+        "updated_at": "2026-05-02 13:00:01.130644"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.529731,
+          25.182586
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "463",
+        "station_id": "466920",
+        "station_name": "臺北",
+        "county_name": "臺北市",
+        "town_name": "中正區",
+        "station_altitude": "6.3",
+        "latitude": 25.037658,
+        "longitude": 121.514853,
+        "wind_direction": "150.0",
+        "wind_speed": "1.5",
+        "air_temperature": "25.9",
+        "relative_humidity": "75.0",
+        "air_pressure": "1007.4",
+        "gust_speed": "NULL",
+        "gust_direction": "NULL",
+        "obs_time": "2026-05-02 12:00:00+00",
+        "updated_at": "2026-05-02 13:00:01.130644"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.514853,
+          25.037658
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "464",
+        "station_id": "466930",
+        "station_name": "陽明山",
+        "county_name": "臺北市",
+        "town_name": "北投區",
+        "station_altitude": "607.1",
+        "latitude": 25.162078,
+        "longitude": 121.544547,
+        "wind_direction": "60.0",
+        "wind_speed": "0.4",
+        "air_temperature": "20.3",
+        "relative_humidity": "92.0",
+        "air_pressure": "943.3",
+        "gust_speed": "NULL",
+        "gust_direction": "NULL",
+        "obs_time": "2026-05-02 12:00:00+00",
+        "updated_at": "2026-05-02 13:00:01.130644"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.544547,
+          25.162078
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "467",
+        "station_id": "A0A010",
+        "station_name": "臺灣大學",
+        "county_name": "臺北市",
+        "town_name": "大安區",
+        "station_altitude": "17.0",
+        "latitude": 25.014278,
+        "longitude": 121.539416,
+        "wind_direction": "0.0",
+        "wind_speed": "0.0",
+        "air_temperature": "23.9",
+        "relative_humidity": "83.0",
+        "air_pressure": "1009.9",
+        "gust_speed": "NULL",
+        "gust_direction": "NULL",
+        "obs_time": "2026-05-02 12:00:00+00",
+        "updated_at": "2026-05-02 13:00:01.130644"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.539416,
+          25.014278
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "468",
+        "station_id": "A0A460",
+        "station_name": "文化大學",
+        "county_name": "臺北市",
+        "town_name": "士林區",
+        "station_altitude": "424.4",
+        "latitude": 25.13605,
+        "longitude": 121.53987,
+        "wind_direction": "50.0",
+        "wind_speed": "1.0",
+        "air_temperature": "21.7",
+        "relative_humidity": "85.0",
+        "air_pressure": "963.4",
+        "gust_speed": "NULL",
+        "gust_direction": "NULL",
+        "obs_time": "2026-05-02 12:00:00+00",
+        "updated_at": "2026-05-02 13:00:01.130644"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.53987,
+          25.13605
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "475",
+        "station_id": "C2AA10",
+        "station_name": "中八仙",
+        "county_name": "臺北市",
+        "town_name": "北投區",
+        "station_altitude": "16.0",
+        "latitude": 25.11576,
+        "longitude": 121.49199,
+        "wind_direction": "NULL",
+        "wind_speed": "NULL",
+        "air_temperature": "23.0",
+        "relative_humidity": "91.0",
+        "air_pressure": "1010.7",
+        "gust_speed": "NULL",
+        "gust_direction": "NULL",
+        "obs_time": "2026-05-02 12:00:00+00",
+        "updated_at": "2026-05-02 13:00:01.130644"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.49199,
+          25.11576
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "481",
+        "station_id": "CAA040",
+        "station_name": "國三S016K",
+        "county_name": "臺北市",
+        "town_name": "南港區",
+        "station_altitude": "71.0",
+        "latitude": 25.03306,
+        "longitude": 121.6158,
+        "wind_direction": "170.0",
+        "wind_speed": "0.6",
+        "air_temperature": "23.0",
+        "relative_humidity": "93.0",
+        "air_pressure": "1003.1",
+        "gust_speed": "NULL",
+        "gust_direction": "NULL",
+        "obs_time": "2026-05-02 12:00:00+00",
+        "updated_at": "2026-05-02 13:00:01.130644"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.6158,
+          25.03306
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "486",
+        "station_id": "CAA090",
+        "station_name": "國三甲005K",
+        "county_name": "臺北市",
+        "town_name": "文山區",
+        "station_altitude": "60.0",
+        "latitude": 25.00194,
+        "longitude": 121.5975,
+        "wind_direction": "80.0",
+        "wind_speed": "1.3",
+        "air_temperature": "23.3",
+        "relative_humidity": "94.0",
+        "air_pressure": "1004.5",
+        "gust_speed": "NULL",
+        "gust_direction": "NULL",
+        "obs_time": "2026-05-02 12:00:00+00",
+        "updated_at": "2026-05-02 13:00:01.130644"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5975,
+          25.00194
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "492",
+        "station_id": "CAAH60",
+        "station_name": "大安森林",
+        "county_name": "臺北市",
+        "town_name": "大安區",
+        "station_altitude": "18.0",
+        "latitude": 25.02955,
+        "longitude": 121.53628,
+        "wind_direction": "0.0",
+        "wind_speed": "0.0",
+        "air_temperature": "23.7",
+        "relative_humidity": "84.0",
+        "air_pressure": "1009.6",
+        "gust_speed": "NULL",
+        "gust_direction": "NULL",
+        "obs_time": "2026-05-02 12:00:00+00",
+        "updated_at": "2026-05-02 13:00:01.130644"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.53628,
+          25.02955
+        ]
+      }
+    }
+  ]
+}
