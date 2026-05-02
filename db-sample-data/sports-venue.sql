@@ -133,7 +133,7 @@ VALUES (
     'sports_venue',
     NULL,
     ARRAY[(SELECT id FROM public.component_maps WHERE "index" = 'sports_venue' ORDER BY id DESC LIMIT 1)],
-    '{"mode":"byLayer"}',
+    '{"mode":"byParam","byParam":{"xParam":"name"}}',
     'current',
     NULL,
     1,
@@ -147,7 +147,7 @@ VALUES (
     NOW(),
     NOW(),
     'two_d',
-    'SELECT COALESCE(NULLIF(district, ''''), ''未分類'') AS x_axis, COUNT(*)::float AS data FROM public.sports_venue GROUP BY x_axis ORDER BY data DESC',
+    'SELECT name AS x_axis, COUNT(*)::float AS data FROM public.sports_venue GROUP BY name ORDER BY data DESC, x_axis',
     NULL,
     'taipei'
 );
