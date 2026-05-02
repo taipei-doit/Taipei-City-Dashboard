@@ -82,7 +82,7 @@ const c1aComponent = ref({
 	id: "eco-diet-c1a",
 	index: "eco_diet_restaurants_points",
 	city: "metrotaipei",
-	name: "C1a｜環保餐廳點位",
+	name: "C1｜環保餐廳點位",
 	source: "雙北環保局",
 	time_from: "current",
 	time_to: null,
@@ -106,7 +106,7 @@ const c1bComponent = ref({
 	id: "eco-diet-c1b",
 	index: "eco_diet_restaurants_density",
 	city: "metrotaipei",
-	name: "C1b｜環保餐廳行政區密度",
+	name: "C2｜環保餐廳行政區密度",
 	source: "雙北環保局",
 	time_from: "current",
 	time_to: null,
@@ -126,35 +126,11 @@ const c1bComponent = ref({
 	contributors: SHARED_CONTRIBUTORS,
 });
 
-const c2Component = ref({
-	id: "eco-diet-c2",
-	index: "eco_diet_restaurants_count_city",
-	city: "metrotaipei",
-	name: "C2｜雙城環保餐廳家數",
-	source: "雙北環保局",
-	time_from: "current",
-	time_to: null,
-	update_freq: null,
-	update_freq_unit: null,
-	chart_config: {
-		types: ["TextUnitChart"],
-		color: ["#888787", "#5fcf80", "#888787"],
-		unit: "家",
-	},
-	chart_data: null,
-	map_config: [null],
-	short_desc: "雙北環保餐廳總家數的單一數字卡呈現",
-	long_desc: "顯示臺北市與新北市目前列管的環保餐廳總家數，反映雙北兩市對環保飲食店家認證的覆蓋程度差異。",
-	use_case: "雙城環保政策推廣成效對比、研究分析雙北綠色飲食市場規模、簡報快速展示雙城資料量級。",
-	links: SHARED_LINKS.restaurant,
-	contributors: SHARED_CONTRIBUTORS,
-});
-
 const c4Component = ref({
 	id: "eco-diet-c4",
 	index: "eco_diet_green_stores_points",
 	city: "metrotaipei",
-	name: "C4｜綠色商店點位",
+	name: "C3｜綠色商店點位",
 	source: "雙北環保局",
 	time_from: "current",
 	time_to: null,
@@ -178,7 +154,7 @@ const c5Component = ref({
 	id: "eco-diet-c5",
 	index: "eco_diet_waste_yearly",
 	city: "metrotaipei",
-	name: "C5｜雙北年度廢棄物趨勢",
+	name: "C4｜雙北年度廢棄物趨勢",
 	source: "環境部",
 	time_from: "current",
 	time_to: null,
@@ -208,7 +184,7 @@ const c7aComponent = ref({
 	id: "eco-diet-c7a",
 	index: "eco_diet_food_banks_points",
 	city: "metrotaipei",
-	name: "C7a｜實物銀行點位",
+	name: "C5｜實物銀行點位",
 	source: "雙北社會局",
 	time_from: "current",
 	time_to: null,
@@ -232,7 +208,6 @@ const c7aComponent = ref({
 const allComponents = computed(() => [
 	c1aComponent.value,
 	c1bComponent.value,
-	c2Component.value,
 	c4Component.value,
 	c5Component.value,
 	c7aComponent.value,
@@ -248,7 +223,6 @@ const noMapComponents = computed(() =>
 const activeCityMap = reactive({
 	eco_diet_restaurants_points: "metrotaipei",
 	eco_diet_restaurants_density: "metrotaipei",
-	eco_diet_restaurants_count_city: "metrotaipei",
 	eco_diet_green_stores_points: "metrotaipei",
 	eco_diet_waste_yearly: "metrotaipei",
 	eco_diet_food_banks_points: "metrotaipei",
@@ -264,7 +238,6 @@ const toggleOn = ref({
 const rawData = ref({
 	restaurantPoints: [],
 	restaurantDensity: { metrotaipei: [], taipei: [], newtaipei: [] },
-	restaurantCountByCity: [],
 	greenStorePoints: [],
 	wasteCategories: [],
 	wasteSeries: [],
@@ -339,23 +312,6 @@ function recomputeC1b() {
 		: [{ data: [] }];
 }
 
-function recomputeC2() {
-	const city = activeCityMap.eco_diet_restaurants_count_city;
-	const rows = rawData.value.restaurantCountByCity;
-	const tpeRow = rows.find((r) => r.x === "臺北市");
-	const ntpRow = rows.find((r) => r.x === "新北市");
-	const tpe = Math.round(Number(tpeRow?.y ?? 0));
-	const ntp = Math.round(Number(ntpRow?.y ?? 0));
-	const cards = [];
-	if (city === "metrotaipei" || city === "taipei") {
-		cards.push({ name: "臺北市", data: [tpe], icon: "家" });
-	}
-	if (city === "metrotaipei" || city === "newtaipei") {
-		cards.push({ name: "新北市", data: [ntp], icon: "家" });
-	}
-	c2Component.value.chart_data = cards;
-}
-
 function recomputeC4() {
 	const city = activeCityMap.eco_diet_green_stores_points;
 	const points = rawData.value.greenStorePoints;
@@ -420,12 +376,11 @@ async function fetchAll() {
 		ecoApi("/api/v1/eco_diet/restaurant/density-by-district"),
 		ecoApi("/api/v1/eco_diet/restaurant/density-by-district?city=臺北市"),
 		ecoApi("/api/v1/eco_diet/restaurant/density-by-district?city=新北市"),
-		ecoApi("/api/v1/eco_diet/restaurant/count-by-city"),
 		ecoApi("/api/v1/eco_diet/green_store/points"),
 		ecoApi("/api/v1/eco_diet/waste/yearly"),
 		ecoApi("/api/v1/eco_diet/food_bank/points"),
 	];
-	const [r1a, r1b_all, r1b_tpe, r1b_ntpe, r2, r4, r5, r7a] = await Promise.allSettled(calls);
+	const [r1a, r1b_all, r1b_tpe, r1b_ntpe, r4, r5, r7a] = await Promise.allSettled(calls);
 
 	// C1a: 點位 → 快取後依 activeCity 算 MapLegend
 	if (r1a.status === "fulfilled") {
@@ -462,15 +417,6 @@ async function fetchAll() {
 		c1bComponent.value.chart_data = null;
 	} else {
 		recomputeC1b();
-	}
-
-	// C2: 雙城家數，雙北自行加總一張卡
-	if (r2.status === "fulfilled") {
-		rawData.value.restaurantCountByCity = r2.value.data?.data?.[0]?.data || [];
-		recomputeC2();
-	} else {
-		console.error("C2 fetch failed", r2.reason);
-		c2Component.value.chart_data = null;
 	}
 
 	// C4: 綠色商店點位，依 activeCity 算 MapLegend（依城市分組，非店家類型）
@@ -1203,9 +1149,6 @@ function handleChangeCity(component, cityValue) {
 		break;
 	case "eco_diet_restaurants_density":
 		recomputeC1b();
-		break;
-	case "eco_diet_restaurants_count_city":
-		recomputeC2();
 		break;
 	case "eco_diet_green_stores_points":
 		recomputeC4();
