@@ -11,6 +11,7 @@ import {
 	fetchCrawledNewsRecommendations,
 } from "../../../api/ai";
 import { useBackendTranslation } from "../../../composables/useBackendTranslation";
+import BackendTranslatedText from "../i18n/BackendTranslatedText.vue";
 
 const { t } = useBackendTranslation();
 
@@ -33,25 +34,26 @@ const recommendMode = ref(MODE_AUTO_NEWS);
 const aiNewsUrl = ref("");
 const aiInsightResult = ref(null);
 const loadingAiInsight = ref(false);
-const aiInsightError = ref(null);
+/** 請求／解析網址失敗時為 true（文案用靜態字典 recommend.err_*） */
+const aiInsightFetchFailed = ref(false);
 
 /** 自動新聞：null = 尚未請求，[] = 已成功但無項目 */
 const autoNewsItems = ref(null);
 const loadingAutoNews = ref(false);
-const autoNewsError = ref(null);
+const autoNewsFetchFailed = ref(false);
 
 async function handleAiInsight() {
 	if (!aiNewsUrl.value) return;
 
 	loadingAiInsight.value = true;
-	aiInsightError.value = null;
+	aiInsightFetchFailed.value = false;
 	aiInsightResult.value = null;
 
 	try {
 		const result = await extractNewsInsight(aiNewsUrl.value);
 		aiInsightResult.value = result;
 	} catch {
-		aiInsightError.value = "無法載入主題。";
+		aiInsightFetchFailed.value = true;
 	} finally {
 		loadingAiInsight.value = false;
 	}
@@ -95,13 +97,12 @@ async function handleLoadAutoNews() {
 		return;
 	}
 	loadingAutoNews.value = true;
-	autoNewsError.value = null;
+	autoNewsFetchFailed.value = false;
 
 	try {
 		autoNewsItems.value = await fetchCrawledNewsRecommendations({});
 	} catch {
-		autoNewsError.value =
-			"無法載入新聞推薦。請稍後再試；或請管理員檢查 RSS（NEWS_RSS_FEEDS）與 TWCC／LLM 服務是否正常。";
+		autoNewsFetchFailed.value = true;
 		autoNewsItems.value = null;
 	} finally {
 		loadingAutoNews.value = false;
@@ -230,13 +231,13 @@ async function openStorylineRecommendedComponent(comp) {
             v-if="recommendMode === MODE_MANUAL_URL"
             class="recommendsidebar-lead"
           >
-            貼上新聞網址取得洞察與推薦主題。
+            <BackendTranslatedText dict-key="recommend.lead_manual" />
           </p>
           <p
             v-else
             class="recommendsidebar-lead"
           >
-            由系統擷取近期新聞，推薦與儀表板組件相關的 2–3 則報導。
+            <BackendTranslatedText dict-key="recommend.lead_auto" />
           </p>
         </div>
       </template>
@@ -251,7 +252,7 @@ async function openStorylineRecommendedComponent(comp) {
       <div
         class="recommendsidebar-modes"
         role="tablist"
-        aria-label="今日推薦模式"
+        :aria-label="t('recommend.aria_mode_tabs') || '今日推薦模式'"
       >
         <button
           type="button"
@@ -264,7 +265,7 @@ async function openStorylineRecommendedComponent(comp) {
           :aria-selected="recommendMode === MODE_AUTO_NEWS"
           @click="switchRecommendMode(MODE_AUTO_NEWS)"
         >
-          自動新聞
+          {{ t('recommend.mode_auto') || '自動新聞' }}
         </button>
         <button
           type="button"
@@ -277,7 +278,7 @@ async function openStorylineRecommendedComponent(comp) {
           :aria-selected="recommendMode === MODE_MANUAL_URL"
           @click="switchRecommendMode(MODE_MANUAL_URL)"
         >
-          網址分析
+          {{ t('recommend.mode_manual') || '網址分析' }}
         </button>
       </div>
 
@@ -287,7 +288,7 @@ async function openStorylineRecommendedComponent(comp) {
             <input
               v-model="aiNewsUrl"
               type="text"
-              placeholder="貼上新聞網址擷取洞察..."
+              :placeholder="t('recommend.placeholder_url') || '貼上新聞網址擷取洞察...'"
               class="recommendsidebar-ai-input"
               @keyup.enter="handleAiInsight"
             >
@@ -305,10 +306,10 @@ async function openStorylineRecommendedComponent(comp) {
             </button>
           </div>
           <p
-            v-if="aiInsightError"
+            v-if="aiInsightFetchFailed"
             class="recommendsidebar-msg recommendsidebar-msg--error"
           >
-            {{ aiInsightError }}
+            <BackendTranslatedText dict-key="recommend.err_load_topic" />
           </p>
         </div>
 
@@ -317,7 +318,7 @@ async function openStorylineRecommendedComponent(comp) {
           class="recommendsidebar-ai-result"
         >
           <h2 class="recommendsidebar-subtitle">
-            推薦主題
+            {{ t('recommend.subtitle_topics') || '推薦主題' }}
           </h2>
           <ul
             v-if="aiInsightResult.components?.length"
@@ -332,8 +333,8 @@ async function openStorylineRecommendedComponent(comp) {
                 class="recommendsidebar-topic recommendsidebar-topic--ai"
                 @click="openStorylineRecommendedComponent(comp)"
               >
-                <span class="recommendsidebar-topic-title">{{ comp.name }}</span>
-                <span class="recommendsidebar-topic-summary">{{ comp.short_desc }}</span>
+                <span class="recommendsidebar-topic-title"><BackendTranslatedText :text="comp.name || ''" /></span>
+                <span class="recommendsidebar-topic-summary"><BackendTranslatedText :text="comp.short_desc || ''" /></span>
               </button>
             </li>
           </ul>
@@ -341,14 +342,14 @@ async function openStorylineRecommendedComponent(comp) {
             v-else
             class="recommendsidebar-msg recommendsidebar-msg--error"
           >
-            無法載入主題。
+            <BackendTranslatedText dict-key="recommend.err_load_topic" />
           </p>
 
           <h2 class="recommendsidebar-subtitle">
-            AI 數據洞察
+            {{ t('recommend.subtitle_insight') || 'AI 數據洞察' }}
           </h2>
           <div class="recommendsidebar-storyline">
-            {{ aiInsightResult.storyline }}
+            <BackendTranslatedText :text="aiInsightResult.storyline || ''" />
           </div>
         </div>
       </div>
@@ -369,14 +370,14 @@ async function openStorylineRecommendedComponent(comp) {
             class="is-spinning"
           >sync</span>
           <span class="recommendsidebar-crawl-btn-label">
-            {{ loadingAutoNews ? "載入中…" : "取得新聞推薦" }}
+            {{ loadingAutoNews ? (t('recommend.loading') || '載入中…') : (t('recommend.btn_fetch_news') || '取得新聞推薦') }}
           </span>
         </button>
         <p
-          v-if="autoNewsError"
+          v-if="autoNewsFetchFailed"
           class="recommendsidebar-msg recommendsidebar-msg--error"
         >
-          {{ autoNewsError }}
+          <BackendTranslatedText dict-key="recommend.err_news_load" />
         </p>
         <p
           v-else-if="
@@ -386,7 +387,7 @@ async function openStorylineRecommendedComponent(comp) {
           "
           class="recommendsidebar-msg"
         >
-          目前沒有可推薦的新聞項目。
+          <BackendTranslatedText dict-key="recommend.no_news_items" />
         </p>
         <ul
           v-if="autoNewsItems?.length"
@@ -405,10 +406,10 @@ async function openStorylineRecommendedComponent(comp) {
                   rel="noopener noreferrer"
                   class="recommendsidebar-news-link"
                 >
-                  {{ item.title }}
+                  <BackendTranslatedText :text="item.title || ''" />
                 </a>
                 <template v-else>
-                  {{ item.title }}
+                  <BackendTranslatedText :text="item.title || ''" />
                 </template>
               </h3>
               <p
@@ -416,7 +417,7 @@ async function openStorylineRecommendedComponent(comp) {
                 class="recommendsidebar-news-meta"
               >
                 <span v-if="item.source">
-                  {{ item.source }}
+                  <BackendTranslatedText :text="item.source" />
                 </span>
                 <span v-if="item.source && item.published_at"> · </span>
                 <span v-if="item.published_at">
@@ -427,13 +428,17 @@ async function openStorylineRecommendedComponent(comp) {
                 v-if="item.summary"
                 class="recommendsidebar-news-summary"
               >
-                {{ item.summary }}
+                <BackendTranslatedText :text="item.summary" />
               </p>
               <p
                 v-if="item.component?.name"
                 class="recommendsidebar-news-related"
               >
-                關聯組件：{{ item.component.name }}
+                <BackendTranslatedText dict-key="recommend.related_prefix" />
+                <BackendTranslatedText
+                  tag="span"
+                  :text="item.component.name"
+                />
               </p>
               <div class="recommendsidebar-news-actions">
                 <button
@@ -443,7 +448,7 @@ async function openStorylineRecommendedComponent(comp) {
                   @click="openExternalNewsUrl(item.url)"
                 >
                   <span class="recommendsidebar-news-action-icon">open_in_new</span>
-                  開啟全文
+                  {{ t('recommend.btn_open_article') || '開啟全文' }}
                 </button>
                 <button
                   type="button"
@@ -451,7 +456,7 @@ async function openStorylineRecommendedComponent(comp) {
                   :disabled="!item.component"
                   @click="openStorylineRecommendedComponent(item.component)"
                 >
-                  查看組件
+                  {{ t('recommend.btn_view_component') || '查看組件' }}
                 </button>
               </div>
             </article>
