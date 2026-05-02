@@ -87,7 +87,7 @@ const c1aComponent = ref({
 	update_freq: null,
 	update_freq_unit: null,
 	chart_config: {
-		types: ["MapLegend"],
+		types: ["DonutChart", "BarChart"],
 		color: ["#5fcf80", "#5a9cf8"],
 		unit: "家",
 	},
@@ -112,7 +112,7 @@ const c1bComponent = ref({
 	update_freq_unit: null,
 	chart_config: {
 		types: ["DistrictChart", "BarChart"],
-		color: ["#5fcf80"],
+		color: ["#5fcf80", "#5a9cf8"],
 		unit: "家",
 	},
 	chart_data: null,
@@ -159,7 +159,7 @@ const c4Component = ref({
 	update_freq: null,
 	update_freq_unit: null,
 	chart_config: {
-		types: ["MapLegend"],
+		types: ["DonutChart", "BarChart"],
 		color: ["#ec7cb1", "#67baca"],
 		unit: "家",
 	},
@@ -183,12 +183,15 @@ const c5Component = ref({
 	update_freq: null,
 	update_freq_unit: null,
 	chart_config: {
-		types: ["TimelineSeparateChart"],
+		types: ["TimelineSeparateChart", "BubbleChart"],
 		color: [
 			"#ed5a5a", "#f6c344", "#5fcf80", "#5a9cf8",
 			"#a37cf6", "#ec7cb1", "#888787", "#67baca",
 		],
 		unit: "公噸",
+		// BubbleChart 用：x 走 datetime（與 TimelineSeparate 共用同一份 x），bubble 半徑由 z 決定
+		xType: "datetime",
+		xTickAmount: 6,
 	},
 	chart_data: null,
 	map_config: [null],
@@ -210,7 +213,7 @@ const c7aComponent = ref({
 	update_freq: null,
 	update_freq_unit: null,
 	chart_config: {
-		types: ["MapLegend"],
+		types: ["DonutChart", "BarChart"],
 		color: ["#f6c344", "#a37cf6"],
 		unit: "處",
 	},
@@ -289,17 +292,18 @@ function recomputeC1a() {
 	const tpe = points.filter((p) => p.city === "臺北市").length;
 	const ntp = points.filter((p) => p.city === "新北市").length;
 	const palette = CITY_COLOR.eco_diet_restaurants_points;
-	const legend = [];
+	const buckets = [];
 	const colors = [];
 	if (city === "metrotaipei" || city === "taipei") {
-		legend.push({ name: "臺北市", type: "circle", icon: "circle", value: tpe });
+		buckets.push({ x: "臺北市", y: tpe });
 		colors.push(palette.taipei);
 	}
 	if (city === "metrotaipei" || city === "newtaipei") {
-		legend.push({ name: "新北市", type: "circle", icon: "circle", value: ntp });
+		buckets.push({ x: "新北市", y: ntp });
 		colors.push(palette.newtaipei);
 	}
-	c1aComponent.value.chart_data = legend;
+	// DonutChart / BarChart 共用 [{name:"", data:[{x,y},...]}] 格式
+	c1aComponent.value.chart_data = [{ name: "", data: buckets }];
 	c1aComponent.value.chart_config.color = colors;
 }
 
@@ -335,17 +339,17 @@ function recomputeC4() {
 	const tpe = points.filter((p) => p.city === "臺北市").length;
 	const ntp = points.filter((p) => p.city === "新北市").length;
 	const palette = CITY_COLOR.eco_diet_green_stores_points;
-	const legend = [];
+	const buckets = [];
 	const colors = [];
 	if (city === "metrotaipei" || city === "taipei") {
-		legend.push({ name: "臺北市", type: "circle", icon: "circle", value: tpe });
+		buckets.push({ x: "臺北市", y: tpe });
 		colors.push(palette.taipei);
 	}
 	if (city === "metrotaipei" || city === "newtaipei") {
-		legend.push({ name: "新北市", type: "circle", icon: "circle", value: ntp });
+		buckets.push({ x: "新北市", y: ntp });
 		colors.push(palette.newtaipei);
 	}
-	c4Component.value.chart_data = legend;
+	c4Component.value.chart_data = [{ name: "", data: buckets }];
 	c4Component.value.chart_config.color = colors;
 }
 
@@ -354,12 +358,14 @@ function recomputeC5() {
 	const allSeries = rawData.value.wasteSeries;
 	const categories = rawData.value.wasteCategories;
 	const filtered = allSeries.filter((s) => matchSeriesByCity(s.name, city));
-	// TimelineSeparateChart 吃 [{x: ISO, y: num}, ...] 格式，把年份轉成年初 ISO
+	// TimelineSeparateChart 吃 {x:ISO, y}；BubbleChart 額外吃 z（半徑）
+	// z 用 sqrt 壓縮值域：60k→8、1.5M→40，bubble 大小落在合理區間
 	c5Component.value.chart_data = filtered.map((s) => ({
 		name: s.name,
 		data: s.data.map((y, i) => ({
 			y,
 			x: `${categories[i]}-01-01T00:00:00+08:00`,
+			z: Math.max(2, Math.sqrt(y) / 30),
 		})),
 	}));
 }
@@ -370,17 +376,17 @@ function recomputeC7a() {
 	const tpe = points.filter((p) => p.city === "臺北市").length;
 	const ntp = points.filter((p) => p.city === "新北市").length;
 	const palette = CITY_COLOR.eco_diet_food_banks_points;
-	const legend = [];
+	const buckets = [];
 	const colors = [];
 	if (city === "metrotaipei" || city === "taipei") {
-		legend.push({ name: "臺北市", type: "circle", icon: "circle", value: tpe });
+		buckets.push({ x: "臺北市", y: tpe });
 		colors.push(palette.taipei);
 	}
 	if (city === "metrotaipei" || city === "newtaipei") {
-		legend.push({ name: "新北市", type: "circle", icon: "circle", value: ntp });
+		buckets.push({ x: "新北市", y: ntp });
 		colors.push(palette.newtaipei);
 	}
-	c7aComponent.value.chart_data = legend;
+	c7aComponent.value.chart_data = [{ name: "", data: buckets }];
 	c7aComponent.value.chart_config.color = colors;
 }
 
