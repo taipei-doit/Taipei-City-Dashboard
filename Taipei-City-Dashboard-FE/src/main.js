@@ -18,6 +18,7 @@ import App from "./App.vue";
 // Import Core Packages: Vue-Router, Pinia, Apexcharts
 import router from "./router";
 import { createPinia } from "pinia";
+import { useThemeStore } from "./store/themeStore";
 import VueApexCharts from "vue3-apexcharts";
 import debounce from "lodash/debounce";
 import horizontalWheel from './directives/horizontalWheel';
@@ -43,6 +44,7 @@ pinia.use(({ options, store }) => {
 });
 
 app.use(pinia);
+useThemeStore().init();
 app.use(VueApexCharts);
 app.directive('horizontalWheel', horizontalWheel);
 app.mount("#app");

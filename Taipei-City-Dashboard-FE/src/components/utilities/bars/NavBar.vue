@@ -9,6 +9,7 @@ import { useRoute } from "vue-router";
 import { useFullscreen } from "@vueuse/core";
 import { useAuthStore } from "../../../store/authStore";
 import { useDialogStore } from "../../../store/dialogStore";
+import { useThemeStore } from "../../../store/themeStore";
 
 import UserSettings from "../../dialogs/UserSettings.vue";
 import ContributorsList from "../../dialogs/ContributorsList.vue";
@@ -16,6 +17,7 @@ import ContributorsList from "../../dialogs/ContributorsList.vue";
 const route = useRoute();
 const authStore = useAuthStore();
 const dialogStore = useDialogStore();
+const themeStore = useThemeStore();
 const { isFullscreen, toggle } = useFullscreen();
 
 const linkQuery = computed(() => {
@@ -82,6 +84,14 @@ const isLocalhost = computed(() => {
       </router-link>
     </div>
     <div class="navbar-user">
+      <button
+        type="button"
+        class="navbar-theme"
+        :title="themeStore.isLight ? '切換深色模式' : '切換淺色模式'"
+        @click="themeStore.toggle()"
+      >
+        <span>{{ themeStore.isLight ? "dark_mode" : "light_mode" }}</span>
+      </button>
       <button
         v-if="!(authStore.isMobileDevice && authStore.isNarrowDevice)"
         class="hide-if-mobile"
@@ -210,7 +220,7 @@ const isLocalhost = computed(() => {
 
 			img {
 				height: 45px;
-				filter: invert(1);
+				filter: var(--navbar-logo-filter);
 			}
 		}
 	}
@@ -297,7 +307,7 @@ const isLocalhost = computed(() => {
 				top: 55px;
 				padding: 8px;
 				border-radius: 5px;
-				background-color: rgb(85, 85, 85);
+				background-color: var(--color-menu-dropdown);
 				opacity: 0;
 				transition: opacity 0.25s;
 				z-index: 10;
