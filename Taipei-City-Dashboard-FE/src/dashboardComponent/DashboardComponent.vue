@@ -29,6 +29,7 @@ import IconPercentChart from "./components/IconPercentChart.vue";
 import IndicatorChart from "./components/IndicatorChart.vue";
 import TextUnitChart from "./components/TextUnitChart.vue";
 import WaterQualityChart from "./components/WaterQualityChart.vue";
+import SportsVenueCapacityChart from "./components/SportsVenueCapacityChart.vue";
 
 import MapLegendSvg from "./assets/chart/MapLegend.svg";
 import DistrictChartSvg from "./assets/chart/DistrictChart.svg";
@@ -225,6 +226,8 @@ function returnChartComponent(name, svg) {
 		return svg ? TextUnitChartSvg : TextUnitChart;
 	case "WaterQualityChart":
 		return svg ? TextUnitChartSvg : WaterQualityChart;
+	case "SportsVenueCapacityChart":
+		return svg ? TextUnitChartSvg : SportsVenueCapacityChart;
 	default:
 		return svg ? MapLegendSvg : MapLegend;
 	}
