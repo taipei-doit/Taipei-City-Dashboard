@@ -64,6 +64,20 @@ type FoodBankPointNearby struct {
 	DistanceM int `json:"distance_m"`
 }
 
+// EcoRestaurantPointNearby 嵌入 EcoRestaurantPoint 並補 distance_m，
+// 用於「附近綠色飲食 AI 助理」function tool 的查詢結果。
+type EcoRestaurantPointNearby struct {
+	EcoRestaurantPoint
+	DistanceM int `json:"distance_m"`
+}
+
+// GreenStorePointNearby 嵌入 GreenStorePoint 並補 distance_m，
+// 用於「附近綠色飲食 AI 助理」function tool 的查詢結果。
+type GreenStorePointNearby struct {
+	GreenStorePoint
+	DistanceM int `json:"distance_m"`
+}
+
 // ─── 私用 raw row（內部聚合用） ──────────────────────────────────────
 
 // ecoDietWasteRow 是 gov_open_waste_yearly 經 UNION ALL 攤平後的一列；
@@ -261,6 +275,83 @@ func GetFoodBankNearby(lat, lng float64, limit int) ([]FoodBankPointNearby, erro
 	}
 	if limit > 0 && limit < len(out) {
 		out = out[:limit]
+	}
+	return out, nil
+}
+
+// ─── 附近綠色飲食 AI 助理：餐廳 / 綠色商店 nearby (Haversine filter) ─────
+
+// GetEcoRestaurantNearby 載入全量 → Haversine filter (radiusM) → 升冪排序。
+// 模式對齊 GetMrtStationsNearby（mrtA11y.go:179）；資料量百筆等級，Go 端計算即可。
+func GetEcoRestaurantNearby(lat, lng float64, radiusM int) ([]EcoRestaurantPointNearby, error) {
+	all, err := GetEcoRestaurantPoints()
+	if err != nil {
+		return nil, err
+	}
+	out := make([]EcoRestaurantPointNearby, 0)
+	for _, p := range all {
+		d := haversineMetersFoodBank(lat, lng, p.Lat, p.Lng)
+		if d <= float64(radiusM) {
+			out = append(out, EcoRestaurantPointNearby{
+				EcoRestaurantPoint: p,
+				DistanceM:          int(math.Round(d)),
+			})
+		}
+	}
+	for i := 1; i < len(out); i++ {
+		for j := i; j > 0 && out[j-1].DistanceM > out[j].DistanceM; j-- {
+			out[j-1], out[j] = out[j], out[j-1]
+		}
+	}
+	return out, nil
+}
+
+// GetGreenStoreNearby 載入全量綠色商店 → Haversine filter → 升冪排序。
+func GetGreenStoreNearby(lat, lng float64, radiusM int) ([]GreenStorePointNearby, error) {
+	all, err := GetGreenStorePoints("", "")
+	if err != nil {
+		return nil, err
+	}
+	out := make([]GreenStorePointNearby, 0)
+	for _, p := range all {
+		d := haversineMetersFoodBank(lat, lng, p.Lat, p.Lng)
+		if d <= float64(radiusM) {
+			out = append(out, GreenStorePointNearby{
+				GreenStorePoint: p,
+				DistanceM:       int(math.Round(d)),
+			})
+		}
+	}
+	for i := 1; i < len(out); i++ {
+		for j := i; j > 0 && out[j-1].DistanceM > out[j].DistanceM; j-- {
+			out[j-1], out[j] = out[j], out[j-1]
+		}
+	}
+	return out, nil
+}
+
+// GetFoodBankNearbyByRadius 載入全量實物銀行 → Haversine filter (radiusM) → 升冪排序。
+// 與既有 GetFoodBankNearby(limit) 不同：本函式以「半徑」為過濾條件，而非「前 N 名」，
+// 給「附近綠色飲食 AI 助理」tool 使用（C7b API 仍維持 limit 介面不動）。
+func GetFoodBankNearbyByRadius(lat, lng float64, radiusM int) ([]FoodBankPointNearby, error) {
+	all, err := GetFoodBankPoints()
+	if err != nil {
+		return nil, err
+	}
+	out := make([]FoodBankPointNearby, 0)
+	for _, p := range all {
+		d := haversineMetersFoodBank(lat, lng, p.Lat, p.Lng)
+		if d <= float64(radiusM) {
+			out = append(out, FoodBankPointNearby{
+				FoodBankPoint: p,
+				DistanceM:     int(math.Round(d)),
+			})
+		}
+	}
+	for i := 1; i < len(out); i++ {
+		for j := i; j > 0 && out[j-1].DistanceM > out[j].DistanceM; j-- {
+			out[j-1], out[j] = out[j], out[j-1]
+		}
 	}
 	return out, nil
 }

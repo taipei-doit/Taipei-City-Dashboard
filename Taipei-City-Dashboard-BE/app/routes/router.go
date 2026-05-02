@@ -249,6 +249,9 @@ func configureEcoDietRoutes() {
 
 		// AI summary（每個 component 點 AI 鈕時呼叫）
 		ecoDiet.POST("/ai-summary", controllers.GetEcoDietAiSummary)
+
+		// 附近綠色飲食 AI 助理（GPS 對話查詢）
+		ecoDiet.POST("/nearby-chat", controllers.PostEcoDietNearbyChat)
 	}
 }
 

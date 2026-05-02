@@ -18,6 +18,7 @@ func init() {
 	Register("get_current_time", GetCurrentTime)
 	Register("get_population_summary", GetPopulationSummary)
 	Register("get_nearby_stations", GetNearbyStations)
+	Register("get_nearby_eco_facilities", GetNearbyEcoFacilities)
 }
 
 // Register adds a tool to the registry
@@ -132,6 +133,109 @@ func GetNearbyStations(ctx context.Context, args string) (string, error) {
 		"active_alert_count": alertCount,
 		"stations":           stations,
 	}
+	b, err := json.Marshal(payload)
+	if err != nil {
+		return "", fmt.Errorf("序列化結果失敗: %v", err)
+	}
+	return string(b), nil
+}
+
+// NearbyEcoFacilitiesArgs defines the arguments for the get_nearby_eco_facilities tool.
+// FacilityTypes 為空陣列代表查全部（環保餐廳 + 綠色商店 + 實物銀行）。
+type NearbyEcoFacilitiesArgs struct {
+	Lat           float64  `json:"lat"`
+	Lng           float64  `json:"lng"`
+	Radius        int      `json:"radius"`
+	FacilityTypes []string `json:"facility_types"`
+}
+
+// GetNearbyEcoFacilities returns eco-diet facilities (eco-restaurants, green stores,
+// food banks) within radius meters of (lat, lng), grouped by facility type.
+// 對齊 GetNearbyStations（registry.go:96）模式，回傳 JSON 字串給 LLM。
+func GetNearbyEcoFacilities(ctx context.Context, args string) (string, error) {
+	var params NearbyEcoFacilitiesArgs
+	if err := parseArgs(args, &params); err != nil {
+		return "", fmt.Errorf("invalid arguments: %v", err)
+	}
+	if params.Lat == 0 && params.Lng == 0 {
+		return "", fmt.Errorf("lat/lng are required")
+	}
+
+	radius := params.Radius
+	if radius <= 0 {
+		radius = 800
+	}
+
+	// 空陣列＝全部三類
+	wanted := map[string]bool{}
+	if len(params.FacilityTypes) == 0 {
+		wanted["restaurant"] = true
+		wanted["green_store"] = true
+		wanted["food_bank"] = true
+	} else {
+		for _, t := range params.FacilityTypes {
+			wanted[t] = true
+		}
+	}
+
+	const perTypeCap = 20
+
+	payload := map[string]interface{}{
+		"radius_m":      radius,
+		"queried_types": []string{},
+	}
+	count := map[string]int{}
+	queried := []string{}
+
+	if wanted["restaurant"] {
+		queried = append(queried, "restaurant")
+		rows, err := models.GetEcoRestaurantNearby(params.Lat, params.Lng, radius)
+		if err != nil {
+			return "", fmt.Errorf("查詢附近環保餐廳失敗: %v", err)
+		}
+		if len(rows) > perTypeCap {
+			rows = rows[:perTypeCap]
+		}
+		payload["restaurant"] = rows
+		count["restaurant"] = len(rows)
+	}
+	if wanted["green_store"] {
+		queried = append(queried, "green_store")
+		rows, err := models.GetGreenStoreNearby(params.Lat, params.Lng, radius)
+		if err != nil {
+			return "", fmt.Errorf("查詢附近綠色商店失敗: %v", err)
+		}
+		if len(rows) > perTypeCap {
+			rows = rows[:perTypeCap]
+		}
+		payload["green_store"] = rows
+		count["green_store"] = len(rows)
+	}
+	if wanted["food_bank"] {
+		queried = append(queried, "food_bank")
+		rows, err := models.GetFoodBankNearbyByRadius(params.Lat, params.Lng, radius)
+		if err != nil {
+			return "", fmt.Errorf("查詢附近實物銀行失敗: %v", err)
+		}
+		if len(rows) > perTypeCap {
+			rows = rows[:perTypeCap]
+		}
+		payload["food_bank"] = rows
+		count["food_bank"] = len(rows)
+	}
+
+	totalCount := 0
+	for _, n := range count {
+		totalCount += n
+	}
+
+	payload["queried_types"] = queried
+	payload["count"] = count
+	payload["total_count"] = totalCount
+	if totalCount == 0 {
+		payload["note"] = "半徑內無資料，可建議使用者擴大查詢半徑或調整設施類型"
+	}
+
 	b, err := json.Marshal(payload)
 	if err != nil {
 		return "", fmt.Errorf("序列化結果失敗: %v", err)

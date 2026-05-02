@@ -4,6 +4,7 @@ import { useRoute } from "vue-router";
 import mapboxGl from "mapbox-gl";
 
 import AiChatModal from "../components/AiChatModal.vue";
+import EcoDietNearbyChatModal from "../components/EcoDietNearbyChatModal.vue";
 import DashboardComponent from "../dashboardComponent/DashboardComponent.vue";
 import MapContainer from "../components/map/MapContainer.vue";
 import MoreInfo from "../components/dialogs/MoreInfo.vue";
@@ -269,6 +270,9 @@ const activeAiComponentId = ref("");
 const activeAiComponentName = ref("");
 const showAiModal = ref(false);
 const aiModalAnchor = ref({ top: 0, left: 0 });
+
+// ── 附近綠色飲食 AI 助理 FAB（僅 mapview tab 顯示）──────────────────────────
+const showNearbyChat = ref(false);
 
 function openAiModal(event, componentId, componentName) {
 	if (activeAiComponentId.value !== componentId) {
@@ -889,6 +893,14 @@ function tagListOf(component) {
       </div>
     </div>
     <MapContainer />
+    <button
+      class="ecodietview-nearby-fab"
+      title="附近綠色飲食 AI 助理"
+      aria-label="附近綠色飲食 AI 助理"
+      @click="showNearbyChat = true"
+    >
+      <span class="material-icons">eco</span>
+    </button>
     <MoreInfo />
     <ReportIssue />
   </div>
@@ -901,6 +913,10 @@ function tagListOf(component) {
     summary-endpoint="/api/v1/eco_diet/ai-summary"
     @close="showAiModal = false"
   />
+  <EcoDietNearbyChatModal
+    :show="showNearbyChat"
+    @close="showNearbyChat = false"
+  />
 </template>
 
 <style scoped lang="scss">
@@ -909,6 +925,10 @@ function tagListOf(component) {
 		max-height: calc(100vh - 127px);
 		max-height: calc(var(--vh) * 100 - 127px);
 		display: grid;
+		// 把 row 高度寫死成 DashboardComponent 內部 .dashboardcomponent 的
+		// height 跨 breakpoint 對應值，避免某張卡片內容把 row 撐高、其他
+		// wrapper 被 stretch 拉伸後 footer 浮在中段、看起來像消失。
+		grid-auto-rows: 330px;
 		row-gap: var(--font-s);
 		column-gap: var(--font-s);
 		margin: var(--font-m) var(--font-m);
@@ -918,8 +938,20 @@ function tagListOf(component) {
 			grid-template-columns: 1fr 1fr;
 		}
 
+		@media (min-width: 1050px) {
+			grid-auto-rows: 400px;
+		}
+
 		@media (min-width: 1296px) {
 			grid-template-columns: 1fr 1fr 1fr;
+		}
+
+		@media (min-width: 1650px) {
+			grid-auto-rows: 400px;
+		}
+
+		@media (min-width: 2200px) {
+			grid-auto-rows: 500px;
 		}
 	}
 
@@ -953,6 +985,34 @@ function tagListOf(component) {
 				font-weight: 500;
 			}
 		}
+	}
+}
+
+.ecodietview-nearby-fab {
+	width: 52px;
+	height: 52px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: fixed;
+	right: 32px;
+	bottom: 116px;
+	border: none;
+	border-radius: 50%;
+	background: #5fcf80;
+	color: #fff;
+	box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+	cursor: pointer;
+	transition: transform 0.15s ease, background 0.15s ease;
+	z-index: 11;
+
+	.material-icons {
+		font-size: 26px;
+	}
+
+	&:hover {
+		background: #4cb86c;
+		transform: scale(1.05);
 	}
 }
 
