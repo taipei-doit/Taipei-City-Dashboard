@@ -11,8 +11,10 @@ def _transfer(**kwargs):
     """
     import pandas as pd
     import requests
+    import geopandas as gpd
     from airflow.models import Variable
     from sqlalchemy import create_engine
+    from shapely.geometry import Point
 
     from utils.load_stage import (
         save_dataframe_to_postgresql,
@@ -165,6 +167,26 @@ def _transfer(**kwargs):
         default_table=default_table,
         history_table=history_table,
     )
+
+    output_path = "/opt/airflow/mapData/aqx_p_432.geojson"
+    if {"longitude", "latitude"}.issubset(ready_data.columns):
+        lon = pd.to_numeric(ready_data["longitude"], errors="coerce")
+        lat = pd.to_numeric(ready_data["latitude"], errors="coerce")
+        geo_data = ready_data.assign(longitude=lon, latitude=lat).dropna(
+            subset=["longitude", "latitude"]
+        )
+        if not geo_data.empty:
+            geometry = [
+                Point(xy) for xy in zip(geo_data["longitude"], geo_data["latitude"])
+            ]
+            gdata = gpd.GeoDataFrame(geo_data, geometry=geometry, crs="EPSG:4326")
+            os.makedirs(os.path.dirname(output_path), exist_ok=True)
+            gdata.to_file(output_path, driver="GeoJSON", encoding="utf-8")
+            print(f"GeoJSON file created: {output_path}")
+        else:
+            print("No valid coordinates for GeoJSON output.")
+    else:
+        print("Missing longitude/latitude columns; skipping GeoJSON output.")
 
 
 # --- DAG 註冊：CommonDag 依 proj_folder + dag_folder 載入 job_config.json ---
