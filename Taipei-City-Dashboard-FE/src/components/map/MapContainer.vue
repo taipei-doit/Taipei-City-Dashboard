@@ -164,15 +164,6 @@ onMounted(() => {
       <div id="mapboxBox" />
       <div class="mapcontainer-layers">
         <button
-          class="hide-if-mobile"
-          :class="{ 'mapcontainer-layers-button--active': isRoutePanelOpen }"
-          title="簡易導航"
-          type="button"
-          @click="toggleRoutePanel"
-        >
-          <span>navigation</span>
-        </button>
-        <button
           v-if="canUseFindClosestPoint"
           class="hide-if-mobile"
           type="button"
@@ -266,6 +257,20 @@ onMounted(() => {
             "
           >
             <span>play_arrow</span>
+          </button>
+        </div>
+        <div class="mapcontainer-camera-route">
+          <span>ROUTE</span>
+          <button
+            class="mapcontainer-camera-route-button"
+            :class="{
+              'mapcontainer-camera-route-button--active': isRoutePanelOpen,
+            }"
+            title="簡易導航"
+            type="button"
+            @click="toggleRoutePanel"
+          >
+            <span>navigation</span>
           </button>
         </div>
         <div class="mapcontainer-camera-angle mapcontainer-camera-section">
@@ -630,9 +635,11 @@ onMounted(() => {
 	&-navigation {
 		position: absolute;
 		right: 24px;
-		bottom: 22px;
+		top: 202px;
 		z-index: 7;
 		width: min(340px, calc(100vw - 48px));
+		max-height: calc(100% - 224px);
+		box-sizing: border-box;
 		display: grid;
 		gap: 10px;
 		padding: 12px;
@@ -642,6 +649,12 @@ onMounted(() => {
 		backdrop-filter: blur(4px);
 		color: #f4f2eb;
 		font-family: Consolas, "Courier New", monospace;
+		overflow-y: auto;
+		scrollbar-gutter: stable;
+
+		* {
+			box-sizing: border-box;
+		}
 
 		&-heading {
 			display: flex;
@@ -678,6 +691,7 @@ onMounted(() => {
 			width: 100%;
 			min-width: 0;
 			height: 34px;
+			line-height: 34px;
 			padding: 0 10px;
 			border: 1px solid rgba(244, 242, 235, 0.34);
 			border-radius: 0;
@@ -778,11 +792,11 @@ onMounted(() => {
 		right: 24px;
 		z-index: 6;
 		display: grid;
-		grid-template-columns: 60px minmax(172px, 1fr) 126px 118px;
+		grid-template-columns: 60px 60px minmax(172px, 1fr) 126px 118px;
 		gap: 10px;
 		align-items: stretch;
-		width: min(560px, calc(100vw - 500px));
-		min-width: 500px;
+		width: min(630px, calc(100vw - 500px));
+		min-width: 590px;
 		padding: 10px;
 		border: 1px solid rgba(244, 242, 235, 0.55);
 		background-color: rgba(0, 0, 0, 0.66);
@@ -790,13 +804,15 @@ onMounted(() => {
 		backdrop-filter: blur(4px);
 
 		&-section,
-		&-replay {
+		&-replay,
+		&-route {
 			border: 1px solid rgba(244, 242, 235, 0.22);
 			background-color: rgba(255, 255, 255, 0.035);
 		}
 
 		&-label,
 		&-replay > span,
+		&-route > span,
 		&-tools-row > span {
 			color: rgba(244, 242, 235, 0.48);
 			font-family: Consolas, "Courier New", monospace;
@@ -854,6 +870,27 @@ onMounted(() => {
 			button {
 				width: 38px;
 				height: 38px;
+			}
+		}
+
+		&-route {
+			display: grid;
+			grid-template-rows: auto 1fr;
+			gap: 8px;
+			align-items: center;
+			justify-items: center;
+			padding: 10px 8px;
+
+			button {
+				width: 38px;
+				height: 38px;
+			}
+
+			&-button--active {
+				border-color: rgba(255, 78, 203, 0.96);
+				background-color: rgba(255, 78, 203, 0.88);
+				color: #050506;
+				box-shadow: 0 0 14px rgba(255, 78, 203, 0.28);
 			}
 		}
 

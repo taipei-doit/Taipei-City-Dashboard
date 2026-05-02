@@ -878,6 +878,7 @@ function returnChartComponent(name, svg) {
 
 <style scoped lang="scss">
 * {
+	box-sizing: border-box;
 	margin: 0;
 	padding: 0;
 	font-family: "微軟正黑體", "Microsoft JhengHei", "Droid Sans", "Open Sans",
@@ -899,8 +900,8 @@ button:hover {
 }
 
 .dashboardcomponent {
-	height: 500px;
-	max-height: 500px;
+	height: 560px;
+	max-height: 560px;
 	width: calc(100% - var(--font-m) * 2);
 	max-width: calc(100% - var(--font-m) * 2);
 	display: flex;
@@ -912,18 +913,18 @@ button:hover {
 	background-color: var(--color-component-background);
 
 	@media (min-width: 1050px) {
-		height: 530px;
-		max-height: 530px;
+		height: 570px;
+		max-height: 570px;
 	}
 
 	@media (min-width: 1650px) {
-		height: 560px;
-		max-height: 560px;
+		height: 590px;
+		max-height: 590px;
 	}
 
 	@media (min-width: 2200px) {
-		height: 660px;
-		max-height: 660px;
+		height: 700px;
+		max-height: 700px;
 	}
 
 	&-header {
@@ -1046,7 +1047,7 @@ button:hover {
 		top: 4.2rem;
 		left: 0;
 		z-index: 8;
-		padding: 8px 0;
+		padding: 4px 0;
 
 		&-group {
 			display: flex;
@@ -1057,7 +1058,7 @@ button:hover {
 
 			&-button {
 				margin: 0 2px;
-				padding: 4px 4px;
+				padding: 3px 5px;
 				border-radius: 5px;
 				background-color: rgb(77, 77, 77);
 				opacity: 0.6;
@@ -1094,9 +1095,9 @@ button:hover {
 	&-error {
 		flex: 1 1 auto;
 		height: auto;
-		min-height: 140px;
+		min-height: 230px;
 		position: relative;
-		padding-top: 1%;
+		padding-top: 0.5%;
 		overflow-y: scroll;
 
 		p {
@@ -1106,14 +1107,15 @@ button:hover {
 
 	&-ai-comment {
 		flex: 0 0 auto;
-		min-height: 88px;
-		max-height: 106px;
+		height: 74px;
+		min-height: 74px;
+		max-height: 74px;
 		display: grid;
-		grid-template-columns: 32px minmax(0, 1fr) auto;
+		grid-template-columns: 28px minmax(0, 1fr) auto;
 		align-items: flex-start;
-		gap: 10px;
-		margin-top: 10px;
-		padding: 11px 12px;
+		gap: 8px;
+		margin-top: 6px;
+		padding: 8px 10px;
 		border: 1px solid rgba(255, 255, 255, 0.14);
 		border-radius: 8px;
 		background:
@@ -1126,8 +1128,8 @@ button:hover {
 		overflow: hidden;
 
 		&-icon {
-			width: 32px;
-			height: 32px;
+			width: 28px;
+			height: 28px;
 			display: grid;
 			place-items: center;
 			border-radius: 8px;
@@ -1151,7 +1153,7 @@ button:hover {
 			align-items: center;
 			justify-content: space-between;
 			gap: 8px;
-			margin-bottom: 6px;
+			margin-bottom: 4px;
 			overflow: visible;
 
 			strong {
@@ -1176,11 +1178,11 @@ button:hover {
 		p {
 			flex: 1 1 auto;
 			min-width: 0;
-			max-height: 48px;
+			max-height: 34px;
 			padding-right: 6px;
 			color: var(--color-complement-text);
 			font-size: var(--font-s);
-			line-height: 1.55;
+			line-height: 1.45;
 			overflow-y: auto;
 			scrollbar-width: thin;
 			scrollbar-color: rgba(255, 255, 255, 0.24) transparent;
@@ -1199,8 +1201,8 @@ button:hover {
 
 		button {
 			flex: 0 0 auto;
-			width: 32px;
-			height: 32px;
+			width: 28px;
+			height: 28px;
 			display: grid;
 			align-items: center;
 			justify-content: center;
@@ -1239,13 +1241,14 @@ button:hover {
 
 	&-chart-chat {
 		flex: 0 0 auto;
-		min-height: 106px;
-		max-height: 124px;
+		height: 90px;
+		min-height: 90px;
+		max-height: 90px;
 		display: flex;
 		flex-direction: column;
-		gap: 7px;
-		margin-top: 8px;
-		padding: 10px 12px;
+		gap: 4px;
+		margin-top: 6px;
+		padding: 8px 10px;
 		border: 1px solid rgba(255, 255, 255, 0.12);
 		border-radius: 8px;
 		background:
@@ -1300,8 +1303,8 @@ button:hover {
 
 		&-thread {
 			flex: 1 1 auto;
-			min-height: 32px;
-			max-height: 48px;
+			min-height: 20px;
+			max-height: 22px;
 			padding-right: 4px;
 			overflow-y: auto;
 			scrollbar-width: thin;
@@ -1315,7 +1318,7 @@ button:hover {
 			p {
 				color: var(--color-complement-text);
 				font-size: var(--font-s);
-				line-height: 1.45;
+				line-height: 1.35;
 				white-space: normal;
 			}
 		}
@@ -1333,7 +1336,7 @@ button:hover {
 			display: flex;
 			flex-direction: column;
 			gap: 3px;
-			margin-bottom: 7px;
+			margin-bottom: 5px;
 			overflow: visible;
 
 			&:last-child {
@@ -1375,13 +1378,13 @@ button:hover {
 		&-form {
 			flex: 0 0 auto;
 			display: grid;
-			grid-template-columns: minmax(0, 1fr) 32px;
-			gap: 8px;
+			grid-template-columns: minmax(0, 1fr) 28px;
+			gap: 6px;
 			overflow: visible;
 
 			input {
 				min-width: 0;
-				height: 32px;
+				height: 28px;
 				padding: 0 10px;
 				border: 1px solid rgba(255, 255, 255, 0.12);
 				border-radius: 8px;
@@ -1408,8 +1411,8 @@ button:hover {
 			}
 
 			button {
-				width: 32px;
-				height: 32px;
+				width: 28px;
+				height: 28px;
 				display: grid;
 				place-items: center;
 				border-radius: 8px;
@@ -1535,22 +1538,28 @@ button:hover {
 }
 
 .large {
-	height: 560px;
-	max-height: 560px;
+	height: 640px;
+	max-height: 640px;
 
 	@media (min-width: 820px) {
-		height: 600px;
-		max-height: 600px;
+		height: 660px;
+		max-height: 660px;
 	}
 
 	@media (min-width: 1200px) {
-		height: 640px;
-		max-height: 640px;
+		height: 700px;
+		max-height: 700px;
 	}
 
 	@media (min-width: 2200px) {
-		height: 740px;
-		max-height: 740px;
+		height: 800px;
+		max-height: 800px;
+	}
+
+	.dashboardcomponent-chart,
+	.dashboardcomponent-loading,
+	.dashboardcomponent-error {
+		min-height: 300px;
 	}
 }
 
@@ -1560,14 +1569,14 @@ button:hover {
 }
 
 .mapopen {
-	max-height: 460px;
-	height: 460px;
+	max-height: 500px;
+	height: 500px;
 
 	&-chart,
 	&-loading {
 		padding-top: 0%;
 		height: auto;
-		min-height: 170px;
+		min-height: 210px;
 		position: relative;
 		overflow-y: scroll;
 
@@ -1577,96 +1586,105 @@ button:hover {
 	}
 
 	.dashboardcomponent-ai-comment {
-		min-height: 74px;
-		max-height: 88px;
+		height: 64px;
+		min-height: 64px;
+		max-height: 64px;
+		padding: 7px 9px;
 
 		p {
-			max-height: 34px;
+			max-height: 28px;
 		}
 	}
 
 	.dashboardcomponent-chart-chat {
-		min-height: 84px;
-		max-height: 96px;
-		padding: 8px 10px;
+		height: 78px;
+		min-height: 78px;
+		max-height: 78px;
+		padding: 7px 9px;
 
 		&-thread {
-			max-height: 30px;
+			max-height: 18px;
 		}
 	}
 }
 
 .half {
-	height: 390px;
-	max-height: 390px;
+	height: 450px;
+	max-height: 450px;
 
 	@media (min-width: 1050px) {
-		height: 415px;
-		max-height: 415px;
+		height: 470px;
+		max-height: 470px;
 	}
 
 	@media (min-width: 1650px) {
-		height: 440px;
-		max-height: 440px;
+		height: 490px;
+		max-height: 490px;
 	}
 
 	@media (min-width: 2200px) {
-		height: 520px;
-		max-height: 520px;
+		height: 580px;
+		max-height: 580px;
 	}
 
 	&-chart,
 	&-loading {
 		height: auto;
-		min-height: 76px;
+		min-height: 160px;
 	}
 
 	.dashboardcomponent-ai-comment {
-		min-height: 74px;
-		max-height: 88px;
+		height: 64px;
+		min-height: 64px;
+		max-height: 64px;
+		padding: 7px 9px;
 
 		p {
-			max-height: 34px;
+			max-height: 28px;
 		}
 	}
 
 	.dashboardcomponent-chart-chat {
-		min-height: 84px;
-		max-height: 96px;
-		padding: 8px 10px;
+		height: 78px;
+		min-height: 78px;
+		max-height: 78px;
+		padding: 7px 9px;
 
 		&-thread {
-			max-height: 30px;
+			max-height: 18px;
 		}
 	}
 }
 
 .halfmapopen {
-	height: 400px;
-	max-height: 400px;
+	height: 470px;
+	max-height: 470px;
 
 	&-chart {
 		padding-top: 0;
 		height: auto;
-		min-height: 80px;
+		min-height: 170px;
 	}
 
 	.dashboardcomponent-ai-comment {
-		min-height: 74px;
-		max-height: 88px;
+		height: 64px;
+		min-height: 64px;
+		max-height: 64px;
+		padding: 7px 9px;
 
 		p {
-			max-height: 34px;
+			max-height: 28px;
 		}
 	}
 
 	.dashboardcomponent-chart-chat {
-		min-height: 84px;
-		max-height: 96px;
-		padding: 8px 10px;
+		height: 78px;
+		min-height: 78px;
+		max-height: 78px;
+		padding: 7px 9px;
 
 		&-thread {
-			max-height: 30px;
+			max-height: 18px;
 		}
 	}
 }
