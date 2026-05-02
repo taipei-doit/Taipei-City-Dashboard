@@ -1,6 +1,7 @@
 <script setup>
 import { computed, onBeforeUnmount, onMounted, reactive, ref, watch } from "vue";
 import { useRoute } from "vue-router";
+import mapboxGl from "mapbox-gl";
 
 import DashboardComponent from "../dashboardComponent/DashboardComponent.vue";
 import MapContainer from "../components/map/MapContainer.vue";
@@ -561,6 +562,82 @@ async function ensureLayer(layerId, key) {
 		layout: { visibility: "none" },
 		paint: PAINT_BY_KEY[key],
 	});
+	attachHoverPopup(layerId, key);
+}
+
+// ── 地圖點位 hover popup ─────────────────────────────────────────────────
+let hoverPopup = null;
+
+function ensureHoverPopup() {
+	if (!hoverPopup) {
+		hoverPopup = new mapboxGl.Popup({
+			closeButton: false,
+			closeOnClick: false,
+			offset: 10,
+			anchor: "bottom",
+		});
+	}
+	return hoverPopup;
+}
+
+function escapeHtml(str) {
+	if (str == null) return "";
+	return String(str)
+		.replace(/&/g, "&amp;")
+		.replace(/</g, "&lt;")
+		.replace(/>/g, "&gt;")
+		.replace(/"/g, "&quot;")
+		.replace(/'/g, "&#39;");
+}
+
+function buildPopupHtml(key, props) {
+	const lines = [];
+	lines.push(`<h4 style="color:#fff;font-size:0.95rem;font-weight:500;margin-bottom:6px;">${escapeHtml(props.name)}</h4>`);
+	const cityDistrict = [props.city, props.district].filter(Boolean).map(escapeHtml).join(" ");
+	if (cityDistrict) {
+		lines.push(`<p style="color:#888787;font-size:0.75rem;margin-bottom:2px;">${cityDistrict}</p>`);
+	}
+	if (props.address) {
+		lines.push(`<p style="color:#fff;font-size:0.8rem;margin-bottom:2px;">${escapeHtml(props.address)}</p>`);
+	}
+	if (props.tel) {
+		lines.push(`<p style="color:#fff;font-size:0.8rem;margin-bottom:2px;">☎ ${escapeHtml(props.tel)}</p>`);
+	}
+	if (key === "restaurant" && props.env_actions) {
+		lines.push(`<p style="color:#5fcf80;font-size:0.75rem;margin-top:4px;">${escapeHtml(props.env_actions)}</p>`);
+	}
+	if (key === "greenStore" && props.store_type) {
+		lines.push(`<p style="color:#5a9cf8;font-size:0.75rem;margin-top:4px;">${escapeHtml(props.store_type)}</p>`);
+	}
+	if (key === "foodBank" && props.org_type) {
+		lines.push(`<p style="color:#a37cf6;font-size:0.75rem;margin-top:4px;">${escapeHtml(props.org_type)}</p>`);
+	}
+	return `<div style="padding:10px 12px;font-family:'微軟正黑體','Microsoft JhengHei',sans-serif;">${lines.join("")}</div>`;
+}
+
+function attachHoverPopup(layerId, key) {
+	if (!mapStore.map) return;
+	const map = mapStore.map;
+
+	map.on("mouseenter", layerId, () => {
+		map.getCanvas().style.cursor = "pointer";
+	});
+
+	map.on("mousemove", layerId, (e) => {
+		if (!e.features?.length) return;
+		const feature = e.features[0];
+		const coords = feature.geometry.coordinates.slice();
+		const popup = ensureHoverPopup();
+		popup
+			.setLngLat(coords)
+			.setHTML(buildPopupHtml(key, feature.properties || {}))
+			.addTo(map);
+	});
+
+	map.on("mouseleave", layerId, () => {
+		map.getCanvas().style.cursor = "";
+		hoverPopup?.remove();
+	});
 }
 
 function applyLayerCityFilter(layerId, cityValue) {
@@ -655,6 +732,10 @@ onMounted(async () => {
 });
 
 onBeforeUnmount(() => {
+	if (hoverPopup) {
+		hoverPopup.remove();
+		hoverPopup = null;
+	}
 	if (!mapStore.map) return;
 	[RESTAURANT_LAYER_ID, GREEN_STORE_LAYER_ID, FOOD_BANK_LAYER_ID].forEach((id) => {
 		if (mapStore.map.getLayer(id)) mapStore.map.removeLayer(id);
