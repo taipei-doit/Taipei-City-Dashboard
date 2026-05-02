@@ -1,0 +1,515 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "下庄公有市場",
+        "district": "八里區",
+        "address": "新北市八里區舊城路19號",
+        "phone": "(02)26101533",
+        "market_type": "早市"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.399865,
+          25.146582
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "中央公有市場",
+        "district": "三重區",
+        "address": "新北市三重區中央北路26號",
+        "phone": "(02)29754991",
+        "market_type": "早市"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5008,
+          25.064323
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "光明公有市場",
+        "district": "三重區",
+        "address": "新北市三重區重安街70號",
+        "phone": "(02)29772735",
+        "market_type": "早市"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.491414,
+          25.057157
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "重新公有市場",
+        "district": "三重區",
+        "address": "新北市三重區重新路87-6號",
+        "phone": "(02)29754991",
+        "market_type": "早市"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.488534,
+          25.061008
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "光明公有市場2樓",
+        "district": "三重區",
+        "address": "新北市三重區重安街70號2樓",
+        "phone": "",
+        "market_type": "超市"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.491414,
+          25.057157
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "三峽公有市場",
+        "district": "三峽區",
+        "address": "新北市三峽區民生街186號",
+        "phone": "(02)86721664",
+        "market_type": "早市"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.370671,
+          24.934939
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "礁溪公有市場",
+        "district": "三峽區",
+        "address": "新北市三峽區光明路71號",
+        "phone": "",
+        "market_type": "超市"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.376129,
+          24.928297
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "土城公有零售市場",
+        "district": "土城區",
+        "address": "新北市土城區中正路18號",
+        "phone": "(02)29410176",
+        "market_type": "早市及黃昏市場"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.443018,
+          24.974944
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "頂埔公有市場",
+        "district": "土城區",
+        "address": "新北市土城區中州路28巷30號",
+        "phone": "",
+        "market_type": "超市"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.415179,
+          24.95816
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "民享公有市場",
+        "district": "中和區",
+        "address": "新北市中和區民享街37號",
+        "phone": "(02)22492868",
+        "market_type": "早市及黃昏市場"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.474073,
+          25.003591
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "枋寮公有市場",
+        "district": "中和區",
+        "address": "新北市中和區中和路74號",
+        "phone": "(02)22492868",
+        "market_type": "早市"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.500961,
+          25.000577
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "和平街攤販集中區",
+        "district": "中和區",
+        "address": "新北市中和區和平街89號",
+        "phone": "(02)29410176",
+        "market_type": "黃昏市場"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.505029,
+          24.992102
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "永安公有市場",
+        "district": "永和區",
+        "address": "新北市永和區安樂路431號",
+        "phone": "(02)29256805",
+        "market_type": "早市"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.514272,
+          25.004216
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "溪洲公有市場",
+        "district": "永和區",
+        "address": "新北市永和區勵行街42-1號",
+        "phone": "(02)29256803",
+        "market_type": "早市"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.516597,
+          25.013606
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "金龍公有市場",
+        "district": "汐止區",
+        "address": "新北市汐止區中興路250號",
+        "phone": "(02)86933583",
+        "market_type": "早市"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.629518,
+          25.068392
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "秀豐公有市場(攤集區)",
+        "district": "汐止區",
+        "address": "新北市汐止火車站臺鐵橋下",
+        "phone": "(02)86462351",
+        "market_type": "黃昏市場"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.662034,
+          25.068507
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "中正中繼市場",
+        "district": "汐止區",
+        "address": "新北市汐止區公園路忠順廟旁",
+        "phone": "(02)86462351",
+        "market_type": "早市"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.658972,
+          25.068162
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "忠厚公有市場",
+        "district": "汐止區",
+        "address": "新北市汐止區樟樹一路137巷26號",
+        "phone": "(02)86462231",
+        "market_type": "早市"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.640863,
+          25.065988
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "林森攤販集中區",
+        "district": "汐止區",
+        "address": "汐止國道高速公路高架橋下(15K+265至15K+397)",
+        "phone": "(02)86462231",
+        "market_type": "早市"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.658759,
+          25.063797
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "觀光攤販集中區",
+        "district": "汐止區",
+        "address": "新北市汐止區水源路一段至新興路之臺鐵橋下",
+        "phone": "(02)86462351",
+        "market_type": "夜市"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.654316,
+          25.060973
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "湳興公有市場",
+        "district": "板橋區",
+        "address": "新北市板橋區中興路63號",
+        "phone": "(02)29663624",
+        "market_type": "早市"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.45543,
+          25.007356
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "後埔公有市場",
+        "district": "板橋區",
+        "address": "新北市板橋區大華街5號",
+        "phone": "(02)29663624",
+        "market_type": "早市"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.458873,
+          25.006606
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "東勢公有市場",
+        "district": "林口區",
+        "address": "新北市林口區林口區麗園一街35號",
+        "phone": "(02)29004000",
+        "market_type": "早市"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.377254,
+          25.068775
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "林口公有市場",
+        "district": "林口區",
+        "address": "新北市林口區林口路15號",
+        "phone": "(02)26020082",
+        "market_type": "早市"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.391483,
+          25.077745
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "麗林公有市場",
+        "district": "林口區",
+        "address": "新北市林口區公園路59號",
+        "phone": "",
+        "market_type": "超市"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.367576,
+          25.068859
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "第一公有市場",
+        "district": "金山區",
+        "address": "新北市金山區中山路188號",
+        "phone": "(02)24926381",
+        "market_type": "早市"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.63812,
+          25.22147
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "泰山公有市場",
+        "district": "泰山區",
+        "address": "新北市泰山區全興路212號",
+        "phone": "(02)29004000",
+        "market_type": "早市"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.433653,
+          25.056131
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "澳底公有市場",
+        "district": "貢寮區",
+        "address": "新北市貢寮區仁愛路79號",
+        "phone": "(02)24930205",
+        "market_type": "早市"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.926917,
+          25.054775
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "中山公有零售市場",
+        "district": "淡水區",
+        "address": "新北市淡水區中山路77號",
+        "phone": "(02)26219669",
+        "market_type": "早市"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.4427,
+          25.170409
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "中正美食廣場",
+        "district": "淡水區",
+        "address": "新北市淡水區中正路115號",
+        "phone": "(02)26219669",
+        "market_type": "美食廣場"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.460255,
+          25.137366
+        ]
+      }
+    }
+  ]
+}

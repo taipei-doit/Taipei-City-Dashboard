@@ -1,0 +1,1279 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "東門市場",
+        "district": "中正區",
+        "total_stalls": 61,
+        "vegetable": 3,
+        "fruit": 2,
+        "meat": 18,
+        "seafood": 10,
+        "poultry": 2,
+        "grain": 0,
+        "flower": 0,
+        "grocery": 13,
+        "department": 2,
+        "food_drink": 10,
+        "other": 1
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5267,
+          25.0346
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "華山市場",
+        "district": "中正區",
+        "total_stalls": 35,
+        "vegetable": 1,
+        "fruit": 2,
+        "meat": 2,
+        "seafood": 0,
+        "poultry": 2,
+        "grain": 0,
+        "flower": 1,
+        "grocery": 4,
+        "department": 8,
+        "food_drink": 14,
+        "other": 1
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.52477,
+          25.04425
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "光華數位新天地(110)",
+        "district": "中正區",
+        "total_stalls": 377,
+        "vegetable": 0,
+        "fruit": 0,
+        "meat": 0,
+        "seafood": 0,
+        "poultry": 0,
+        "grain": 0,
+        "flower": 0,
+        "grocery": 0,
+        "department": 377,
+        "food_drink": 0,
+        "other": 0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.532097,
+          25.045216
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "新生市場",
+        "district": "中正區",
+        "total_stalls": 27,
+        "vegetable": 0,
+        "fruit": 2,
+        "meat": 4,
+        "seafood": 0,
+        "poultry": 0,
+        "grain": 0,
+        "flower": 0,
+        "grocery": 1,
+        "department": 1,
+        "food_drink": 7,
+        "other": 12
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.535007,
+          25.013742
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "幸安市場",
+        "district": "中正區",
+        "total_stalls": 51,
+        "vegetable": 3,
+        "fruit": 0,
+        "meat": 1,
+        "seafood": 0,
+        "poultry": 0,
+        "grain": 0,
+        "flower": 0,
+        "grocery": 10,
+        "department": 32,
+        "food_drink": 0,
+        "other": 5
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.535007,
+          25.013742
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "水源市場",
+        "district": "中正區",
+        "total_stalls": 212,
+        "vegetable": 6,
+        "fruit": 27,
+        "meat": 13,
+        "seafood": 11,
+        "poultry": 8,
+        "grain": 1,
+        "flower": 1,
+        "grocery": 21,
+        "department": 63,
+        "food_drink": 45,
+        "other": 16
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.535007,
+          25.013742
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "雙連市場",
+        "district": "大同區",
+        "total_stalls": 145,
+        "vegetable": 40,
+        "fruit": 1,
+        "meat": 16,
+        "seafood": 17,
+        "poultry": 12,
+        "grain": 0,
+        "flower": 1,
+        "grocery": 12,
+        "department": 3,
+        "food_drink": 16,
+        "other": 27
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.516861,
+          25.056847
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "大龍市場(108)",
+        "district": "大同區",
+        "total_stalls": 82,
+        "vegetable": 6,
+        "fruit": 1,
+        "meat": 12,
+        "seafood": 5,
+        "poultry": 2,
+        "grain": 0,
+        "flower": 2,
+        "grocery": 20,
+        "department": 17,
+        "food_drink": 9,
+        "other": 8
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5141,
+          25.0749
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "蘭州市場",
+        "district": "大同區",
+        "total_stalls": 210,
+        "vegetable": 1,
+        "fruit": 75,
+        "meat": 24,
+        "seafood": 32,
+        "poultry": 6,
+        "grain": 0,
+        "flower": 0,
+        "grocery": 44,
+        "department": 7,
+        "food_drink": 4,
+        "other": 17
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5156,
+          25.066
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "永樂市場",
+        "district": "大同區",
+        "total_stalls": 212,
+        "vegetable": 0,
+        "fruit": 0,
+        "meat": 0,
+        "seafood": 0,
+        "poultry": 0,
+        "grain": 0,
+        "flower": 0,
+        "grocery": 0,
+        "department": 212,
+        "food_drink": 0,
+        "other": 0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5104,
+          25.0548
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "永樂市場(1樓)",
+        "district": "大同區",
+        "total_stalls": 182,
+        "vegetable": 0,
+        "fruit": 11,
+        "meat": 7,
+        "seafood": 11,
+        "poultry": 2,
+        "grain": 0,
+        "flower": 0,
+        "grocery": 55,
+        "department": 56,
+        "food_drink": 3,
+        "other": 37
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5104,
+          25.0548
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "大直市場",
+        "district": "中山區",
+        "total_stalls": 82,
+        "vegetable": 25,
+        "fruit": 1,
+        "meat": 11,
+        "seafood": 12,
+        "poultry": 9,
+        "grain": 0,
+        "flower": 0,
+        "grocery": 14,
+        "department": 2,
+        "food_drink": 8,
+        "other": 0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.533628,
+          25.064251
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "中山大樓",
+        "district": "中山區",
+        "total_stalls": 75,
+        "vegetable": 1,
+        "fruit": 1,
+        "meat": 0,
+        "seafood": 3,
+        "poultry": 0,
+        "grain": 2,
+        "flower": 0,
+        "grocery": 30,
+        "department": 14,
+        "food_drink": 5,
+        "other": 19
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.533628,
+          25.064251
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "行天宮商場",
+        "district": "中山區",
+        "total_stalls": 1,
+        "vegetable": 0,
+        "fruit": 0,
+        "meat": 0,
+        "seafood": 0,
+        "poultry": 0,
+        "grain": 0,
+        "flower": 0,
+        "grocery": 0,
+        "department": 0,
+        "food_drink": 0,
+        "other": 1
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.533905,
+          25.06307
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "長春市場",
+        "district": "中山區",
+        "total_stalls": 116,
+        "vegetable": 10,
+        "fruit": 13,
+        "meat": 18,
+        "seafood": 32,
+        "poultry": 9,
+        "grain": 0,
+        "flower": 1,
+        "grocery": 23,
+        "department": 2,
+        "food_drink": 5,
+        "other": 3
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.54234,
+          25.05473
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "建國市場",
+        "district": "中山區",
+        "total_stalls": 133,
+        "vegetable": 15,
+        "fruit": 6,
+        "meat": 15,
+        "seafood": 9,
+        "poultry": 8,
+        "grain": 0,
+        "flower": 2,
+        "grocery": 44,
+        "department": 25,
+        "food_drink": 7,
+        "other": 2
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.533628,
+          25.064251
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "中山市場",
+        "district": "中山區",
+        "total_stalls": 74,
+        "vegetable": 17,
+        "fruit": 0,
+        "meat": 5,
+        "seafood": 7,
+        "poultry": 5,
+        "grain": 1,
+        "flower": 2,
+        "grocery": 20,
+        "department": 6,
+        "food_drink": 6,
+        "other": 5
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.521261,
+          25.050091
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "八德市場(110)",
+        "district": "中山區",
+        "total_stalls": 179,
+        "vegetable": 0,
+        "fruit": 20,
+        "meat": 20,
+        "seafood": 14,
+        "poultry": 13,
+        "grain": 0,
+        "flower": 0,
+        "grocery": 0,
+        "department": 98,
+        "food_drink": 3,
+        "other": 11
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.563561,
+          25.03593
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "松江市場",
+        "district": "中山區",
+        "total_stalls": 149,
+        "vegetable": 4,
+        "fruit": 0,
+        "meat": 9,
+        "seafood": 14,
+        "poultry": 10,
+        "grain": 1,
+        "flower": 1,
+        "grocery": 30,
+        "department": 52,
+        "food_drink": 24,
+        "other": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.533628,
+          25.064251
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "龍城市場",
+        "district": "松山區",
+        "total_stalls": 70,
+        "vegetable": 11,
+        "fruit": 6,
+        "meat": 3,
+        "seafood": 7,
+        "poultry": 3,
+        "grain": 0,
+        "flower": 1,
+        "grocery": 6,
+        "department": 11,
+        "food_drink": 11,
+        "other": 11
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.576802,
+          25.049725
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "南松市場",
+        "district": "松山區",
+        "total_stalls": 87,
+        "vegetable": 3,
+        "fruit": 19,
+        "meat": 14,
+        "seafood": 13,
+        "poultry": 3,
+        "grain": 0,
+        "flower": 0,
+        "grocery": 13,
+        "department": 19,
+        "food_drink": 2,
+        "other": 1
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.570551,
+          25.050877
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "松山市場",
+        "district": "松山區",
+        "total_stalls": 44,
+        "vegetable": 4,
+        "fruit": 1,
+        "meat": 9,
+        "seafood": 1,
+        "poultry": 0,
+        "grain": 0,
+        "flower": 0,
+        "grocery": 5,
+        "department": 3,
+        "food_drink": 21,
+        "other": 0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.575896,
+          25.050351
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "中崙市場(BOT)",
+        "district": "松山區",
+        "total_stalls": 131,
+        "vegetable": 3,
+        "fruit": 27,
+        "meat": 11,
+        "seafood": 4,
+        "poultry": 4,
+        "grain": 0,
+        "flower": 0,
+        "grocery": 12,
+        "department": 16,
+        "food_drink": 54,
+        "other": 0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.552445,
+          25.047963
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "錦安市場",
+        "district": "大安區",
+        "total_stalls": 35,
+        "vegetable": 0,
+        "fruit": 0,
+        "meat": 0,
+        "seafood": 0,
+        "poultry": 0,
+        "grain": 0,
+        "flower": 0,
+        "grocery": 0,
+        "department": 32,
+        "food_drink": 1,
+        "other": 2
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.529391,
+          25.028504
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "安東市場",
+        "district": "大安區",
+        "total_stalls": 62,
+        "vegetable": 4,
+        "fruit": 5,
+        "meat": 5,
+        "seafood": 3,
+        "poultry": 2,
+        "grain": 0,
+        "flower": 1,
+        "grocery": 8,
+        "department": 20,
+        "food_drink": 5,
+        "other": 9
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.534563,
+          25.026456
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "南門中繼市場",
+        "district": "大安區",
+        "total_stalls": 258,
+        "vegetable": 19,
+        "fruit": 2,
+        "meat": 22,
+        "seafood": 16,
+        "poultry": 8,
+        "grain": 0,
+        "flower": 0,
+        "grocery": 73,
+        "department": 50,
+        "food_drink": 16,
+        "other": 52
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.534563,
+          25.026456
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "信義市場(108)",
+        "district": "大安區",
+        "total_stalls": 68,
+        "vegetable": 0,
+        "fruit": 26,
+        "meat": 13,
+        "seafood": 13,
+        "poultry": 2,
+        "grain": 0,
+        "flower": 0,
+        "grocery": 8,
+        "department": 2,
+        "food_drink": 0,
+        "other": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.499701,
+          25.035103
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "成功中繼市場",
+        "district": "大安區",
+        "total_stalls": 196,
+        "vegetable": 27,
+        "fruit": 22,
+        "meat": 14,
+        "seafood": 13,
+        "poultry": 4,
+        "grain": 0,
+        "flower": 0,
+        "grocery": 41,
+        "department": 49,
+        "food_drink": 25,
+        "other": 1
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.534563,
+          25.026456
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "直興市場",
+        "district": "萬華區",
+        "total_stalls": 201,
+        "vegetable": 42,
+        "fruit": 5,
+        "meat": 21,
+        "seafood": 37,
+        "poultry": 20,
+        "grain": 2,
+        "flower": 0,
+        "grocery": 45,
+        "department": 14,
+        "food_drink": 5,
+        "other": 10
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.501766,
+          25.039382
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "新富市場",
+        "district": "萬華區",
+        "total_stalls": 28,
+        "vegetable": 2,
+        "fruit": 1,
+        "meat": 0,
+        "seafood": 3,
+        "poultry": 5,
+        "grain": 1,
+        "flower": 2,
+        "grocery": 9,
+        "department": 3,
+        "food_drink": 1,
+        "other": 1
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.499891,
+          25.034887
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "河濱(2)商場",
+        "district": "萬華區",
+        "total_stalls": 40,
+        "vegetable": 0,
+        "fruit": 0,
+        "meat": 0,
+        "seafood": 0,
+        "poultry": 0,
+        "grain": 0,
+        "flower": 0,
+        "grocery": 0,
+        "department": 2,
+        "food_drink": 0,
+        "other": 38
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.499891,
+          25.034887
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "龍山商場",
+        "district": "萬華區",
+        "total_stalls": 93,
+        "vegetable": 0,
+        "fruit": 0,
+        "meat": 0,
+        "seafood": 0,
+        "poultry": 0,
+        "grain": 0,
+        "flower": 0,
+        "grocery": 0,
+        "department": 72,
+        "food_drink": 21,
+        "other": 0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.499891,
+          25.034887
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "河濱(1)商場",
+        "district": "萬華區",
+        "total_stalls": 133,
+        "vegetable": 0,
+        "fruit": 0,
+        "meat": 0,
+        "seafood": 0,
+        "poultry": 0,
+        "grain": 0,
+        "flower": 0,
+        "grocery": 5,
+        "department": 33,
+        "food_drink": 1,
+        "other": 94
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.499891,
+          25.034887
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "環南中繼市場",
+        "district": "萬華區",
+        "total_stalls": 1060,
+        "vegetable": 364,
+        "fruit": 5,
+        "meat": 160,
+        "seafood": 136,
+        "poultry": 73,
+        "grain": 0,
+        "flower": 0,
+        "grocery": 124,
+        "department": 0,
+        "food_drink": 25,
+        "other": 173
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.499891,
+          25.034887
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "西寧市場",
+        "district": "萬華區",
+        "total_stalls": 355,
+        "vegetable": 43,
+        "fruit": 9,
+        "meat": 47,
+        "seafood": 74,
+        "poultry": 19,
+        "grain": 1,
+        "flower": 0,
+        "grocery": 43,
+        "department": 87,
+        "food_drink": 6,
+        "other": 26
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.506879,
+          25.048078
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "西門商場(店鋪)",
+        "district": "萬華區",
+        "total_stalls": 57,
+        "vegetable": 0,
+        "fruit": 0,
+        "meat": 0,
+        "seafood": 0,
+        "poultry": 0,
+        "grain": 0,
+        "flower": 2,
+        "grocery": 0,
+        "department": 19,
+        "food_drink": 33,
+        "other": 3
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.499891,
+          25.034887
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "永春市場(111)",
+        "district": "信義區",
+        "total_stalls": 79,
+        "vegetable": 1,
+        "fruit": 7,
+        "meat": 20,
+        "seafood": 12,
+        "poultry": 6,
+        "grain": 2,
+        "flower": 1,
+        "grocery": 18,
+        "department": 7,
+        "food_drink": 0,
+        "other": 5
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.531598,
+          25.104673
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "光復市場",
+        "district": "信義區",
+        "total_stalls": 56,
+        "vegetable": 0,
+        "fruit": 15,
+        "meat": 9,
+        "seafood": 3,
+        "poultry": 3,
+        "grain": 0,
+        "flower": 0,
+        "grocery": 14,
+        "department": 10,
+        "food_drink": 1,
+        "other": 1
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.56772,
+          25.033131
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "永吉市場",
+        "district": "信義區",
+        "total_stalls": 51,
+        "vegetable": 3,
+        "fruit": 13,
+        "meat": 13,
+        "seafood": 3,
+        "poultry": 9,
+        "grain": 0,
+        "flower": 0,
+        "grocery": 10,
+        "department": 0,
+        "food_drink": 0,
+        "other": 0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.56772,
+          25.033131
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "士林市場(109)",
+        "district": "士林區",
+        "total_stalls": 512,
+        "vegetable": 31,
+        "fruit": 49,
+        "meat": 14,
+        "seafood": 21,
+        "poultry": 10,
+        "grain": 0,
+        "flower": 0,
+        "grocery": 102,
+        "department": 186,
+        "food_drink": 99,
+        "other": 0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.525697,
+          25.095036
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "士東市場",
+        "district": "士林區",
+        "total_stalls": 255,
+        "vegetable": 18,
+        "fruit": 11,
+        "meat": 17,
+        "seafood": 16,
+        "poultry": 7,
+        "grain": 0,
+        "flower": 5,
+        "grocery": 50,
+        "department": 78,
+        "food_drink": 50,
+        "other": 3
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.519827,
+          25.092857
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "北投中繼市場",
+        "district": "北投區",
+        "total_stalls": 481,
+        "vegetable": 48,
+        "fruit": 36,
+        "meat": 18,
+        "seafood": 28,
+        "poultry": 11,
+        "grain": 0,
+        "flower": 0,
+        "grocery": 58,
+        "department": 115,
+        "food_drink": 47,
+        "other": 120
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.502681,
+          25.132303
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "西湖市場",
+        "district": "內湖區",
+        "total_stalls": 121,
+        "vegetable": 0,
+        "fruit": 24,
+        "meat": 10,
+        "seafood": 11,
+        "poultry": 3,
+        "grain": 0,
+        "flower": 1,
+        "grocery": 14,
+        "department": 15,
+        "food_drink": 42,
+        "other": 1
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5666,
+          25.0825
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "中研市場",
+        "district": "南港區",
+        "total_stalls": 58,
+        "vegetable": 0,
+        "fruit": 19,
+        "meat": 7,
+        "seafood": 5,
+        "poultry": 3,
+        "grain": 0,
+        "flower": 0,
+        "grocery": 7,
+        "department": 10,
+        "food_drink": 5,
+        "other": 2
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.606829,
+          25.05467
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "成德市場",
+        "district": "南港區",
+        "total_stalls": 151,
+        "vegetable": 1,
+        "fruit": 47,
+        "meat": 13,
+        "seafood": 10,
+        "poultry": 7,
+        "grain": 0,
+        "flower": 2,
+        "grocery": 24,
+        "department": 25,
+        "food_drink": 20,
+        "other": 2
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.606829,
+          25.05467
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "景美市場",
+        "district": "文山區",
+        "total_stalls": 1,
+        "vegetable": 0,
+        "fruit": 0,
+        "meat": 0,
+        "seafood": 0,
+        "poultry": 0,
+        "grain": 0,
+        "flower": 0,
+        "grocery": 0,
+        "department": 0,
+        "food_drink": 0,
+        "other": 1
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.542755,
+          24.990475
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "木柵市場",
+        "district": "文山區",
+        "total_stalls": 169,
+        "vegetable": 0,
+        "fruit": 55,
+        "meat": 35,
+        "seafood": 25,
+        "poultry": 9,
+        "grain": 0,
+        "flower": 3,
+        "grocery": 25,
+        "department": 12,
+        "food_drink": 5,
+        "other": 0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5655,
+          24.9827
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "興隆市場",
+        "district": "文山區",
+        "total_stalls": 82,
+        "vegetable": 0,
+        "fruit": 16,
+        "meat": 9,
+        "seafood": 9,
+        "poultry": 4,
+        "grain": 0,
+        "flower": 2,
+        "grocery": 21,
+        "department": 9,
+        "food_drink": 4,
+        "other": 8
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.570296,
+          24.989467
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "木新市場",
+        "district": "文山區",
+        "total_stalls": 122,
+        "vegetable": 38,
+        "fruit": 5,
+        "meat": 12,
+        "seafood": 13,
+        "poultry": 7,
+        "grain": 0,
+        "flower": 0,
+        "grocery": 29,
+        "department": 11,
+        "food_drink": 2,
+        "other": 5
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.570296,
+          24.989467
+        ]
+      }
+    }
+  ]
+}
