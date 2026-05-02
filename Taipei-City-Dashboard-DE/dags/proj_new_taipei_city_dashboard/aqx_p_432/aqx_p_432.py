@@ -175,6 +175,11 @@ def _transfer(**kwargs):
         geo_data = ready_data.assign(longitude=lon, latitude=lat).dropna(
             subset=["longitude", "latitude"]
         )
+        if "county" in geo_data.columns:
+            allowed_counties = {"新北市", "台北市", "臺北市"}
+            geo_data = geo_data[geo_data["county"].isin(allowed_counties)]
+        else:
+            print("Missing county column; skipping city filter.")
         if not geo_data.empty:
             geometry = [
                 Point(xy) for xy in zip(geo_data["longitude"], geo_data["latitude"])
