@@ -1,0 +1,90 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "台北農產運銷(一)",
+        "type": "蔬果批發",
+        "address": "萬大路533號",
+        "district": "萬華區",
+        "categories": "蔬果"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5128,
+          25.0698
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "台北農產運銷(二)",
+        "type": "蔬果批發",
+        "address": "民族東路336號",
+        "district": "中山區",
+        "categories": "蔬果"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5614,
+          25.061
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "台北魚市",
+        "type": "漁產批發",
+        "address": "民族東路410巷2弄18號",
+        "district": "中山區",
+        "categories": "漁產"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5617,
+          25.0625
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "三重魚市",
+        "type": "漁產批發",
+        "address": "中正北路560巷",
+        "district": "三重區",
+        "categories": "漁產"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.4735,
+          25.0651
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "新北肉品市場",
+        "type": "肉品批發",
+        "address": "板橋區",
+        "district": "板橋區",
+        "categories": "肉類"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.4497,
+          24.993
+        ]
+      }
+    }
+  ]
+}

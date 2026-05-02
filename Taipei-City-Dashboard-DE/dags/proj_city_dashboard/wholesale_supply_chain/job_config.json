@@ -1,0 +1,37 @@
+{
+    "dag_infos": {
+        "dag_id": "wholesale_supply_chain",
+        "start_date": "2025-05-02",
+        "schedule_interval": "0 */1 * * *",
+        "catchup": false,
+        "tags": ["wholesale", "supply_chain", "food_safety", "市場交易行情", "物流推演"],
+        "description": "每小時抓取農產品(蔬果/豬肉/漁產/家禽)批發市場交易行情，透過供應鏈對應表推演雙北公有市場供貨狀態與信任分數",
+        "default_args": {
+            "owner": "airflow",
+            "email": ["DEFAULT_EMAIL_LIST"],
+            "email_on_retry": false,
+            "email_on_failure": true,
+            "retries": 2,
+            "retry_delay": 120
+        },
+        "ready_data_db": "postgres_default",
+        "ready_data_default_table": "wholesale_daily_summary",
+        "ready_data_history_table": "",
+        "raw_data_db": "postgres_default",
+        "raw_data_table": "",
+        "load_behavior": "replace"
+    },
+    "data_infos": {
+        "name_cn": "雙北批發市場供應鏈推演",
+        "airflow_update_freq": "every hour",
+        "source": "農業部農業開放資料平臺 (data.moa.gov.tw)",
+        "source_type": "REST API (JSON)",
+        "source_dept": "農業部",
+        "gis_format": null,
+        "output_coordinate": "",
+        "is_geometry": 0,
+        "dataset_description": "整合蔬果(A01)、毛豬、漁產、家禽批發交易行情，搭配產銷履歷與CAS驗證資料，推演雙北79間公有市場的即時供貨狀態與食安信任分數",
+        "etl_description": "1.抓取4類批發行情API→wholesale_daily_summary 2.比對market_supply_chain對應表 3.結合產銷履歷/CAS算trust_score 4.更新market_supply_status",
+        "sensitivity": "public"
+    }
+}

@@ -101,6 +101,13 @@ export const useMapStore = defineStore("map", {
 		/* Initialize Mapbox */
 		// 1. Creates the mapbox instance and passes in initial configs
 		initializeMapBox() {
+			if (this.map) {
+				try {
+					this.map.remove();
+				} catch {
+					// map may already be torn down
+				}
+			}
 			this.map = null;
 			this.marker = null;
 			this.overlay = null;
@@ -131,6 +138,10 @@ export const useMapStore = defineStore("map", {
 					});
 					this.map.addControl(this.overlay);
 					this.initializeBasicLayers();
+					// SPA: container often gets final size after first paint; refresh always worked
+					nextTick(() => {
+						if (this.map) this.map.resize();
+					});
 				})
 				.on("click", (event) => {
 					if (this.popup) {
@@ -206,14 +217,123 @@ export const useMapStore = defineStore("map", {
 						})
 						.addLayer(metroTaipeiVillage);
 				});
-			// Taipei 3D Buildings
-			if (!authStore.isMobileDevice) {
-				this.map
-					.addSource("taipei_building_3d_source", {
+			// Taipei 3D Buildings (TileJSON `vector_layers` ids change when tileset is republished)
+			if (!authStore.isMobileDevice && import.meta.env.VITE_MAPBOXTILE) {
+				const sourceId = "taipei_building_3d_source";
+				const layerId = "taipei_building_3d";
+
+				const cleanupSource = () => {
+					if (!this.map) return;
+					try {
+						if (this.map.getLayer(layerId)) this.map.removeLayer(layerId);
+						if (this.map.getSource(sourceId))
+							this.map.removeSource(sourceId);
+					} catch {
+						// ignore
+					}
+				};
+
+				const pickSourceLayer = (ids) => {
+					const explicit =
+						import.meta.env.VITE_TAIPEI_BUILDING_SOURCE_LAYER?.trim();
+					if (explicit && ids.includes(explicit)) return explicit;
+					return (
+						ids.find((id) => /^tp_building_height/i.test(id)) ||
+						ids.find((id) =>
+							/building.*height|height.*building/i.test(id),
+						) ||
+						null
+					);
+				};
+
+				let settled = false;
+				const finishListeners = () => {
+					if (settled || !this.map) return;
+					settled = true;
+					this.map.off("data", onData);
+					this.map.off("sourcedata", onSourceData);
+				};
+
+				const tryAddLayer = () => {
+					if (!this.map) return true;
+					if (this.map.getLayer(layerId)) {
+						finishListeners();
+						return true;
+					}
+					const src = this.map.getSource(sourceId);
+					if (!src || src.type !== "vector") return false;
+					const ids = src.vectorLayerIds;
+					if (!Array.isArray(ids) || ids.length === 0) return false;
+
+					const sourceLayer = pickSourceLayer(ids);
+					if (!sourceLayer) {
+						console.warn(
+							"[map] taipei_building_3d: no matching source-layer in",
+							ids,
+						);
+						cleanupSource();
+						finishListeners();
+						return true;
+					}
+					try {
+						this.map.addLayer({
+							...TaipeiBuilding,
+							id: layerId,
+							source: sourceId,
+							"source-layer": sourceLayer,
+						});
+						finishListeners();
+						return true;
+					} catch (e) {
+						console.warn(
+							"[map] taipei_building_3d addLayer:",
+							e?.message || e,
+						);
+						cleanupSource();
+						finishListeners();
+						return true;
+					}
+				};
+
+				const onData = (e) => {
+					if (e.dataType !== "source" || e.sourceId !== sourceId)
+						return;
+					tryAddLayer();
+				};
+
+				const onSourceData = (e) => {
+					if (e.sourceId !== sourceId || !e.isSourceLoaded) return;
+					tryAddLayer();
+				};
+
+				this.map.on("data", onData);
+				this.map.on("sourcedata", onSourceData);
+
+				try {
+					this.map.addSource(sourceId, {
 						type: "vector",
 						url: import.meta.env.VITE_MAPBOXTILE,
-					})
-					.addLayer(TaipeiBuilding);
+					});
+				} catch (e) {
+					finishListeners();
+					console.warn(
+						"[map] taipei_building_3d addSource:",
+						e?.message || e,
+					);
+				}
+
+				queueMicrotask(() => tryAddLayer());
+
+				setTimeout(() => {
+					if (!this.map || settled) return;
+					if (this.map.getSource(sourceId) && !this.map.getLayer(layerId)) {
+						console.warn(
+							"[map] taipei_building_3d: TileJSON did not yield a mountable layer in time",
+						);
+						cleanupSource();
+					}
+					finishListeners();
+				}, 15000);
 			}
 			// Taipei Village Boundaries
 			if (hasSourceLayer) {
@@ -687,6 +807,25 @@ export const useMapStore = defineStore("map", {
 				},
 				source: `${map_config.layerId}-source`,
 			};
+			// 供應鏈零售狀態圓點：paint 來自 DB 時常仍是舊半徑，在此強制縮小（不依賴重灌 sample SQL）
+			if (
+				map_config.type === "circle" &&
+				["supply_chain_tpe", "supply_chain_new_tpe"].includes(
+					map_config.index,
+				)
+			) {
+				config.paint["circle-radius"] = [
+					"interpolate",
+					["linear"],
+					["get", "trust_score"],
+					0,
+					2.5,
+					50,
+					4.5,
+					90,
+					6.5,
+				];
+			}
 			if (
 				map_config.layerId ===
 					"wee_hazard_water-fill-extrusion-metrotaipei" ||
@@ -2402,8 +2541,10 @@ export const useMapStore = defineStore("map", {
 		},
 		// 4. Update the zoom and center of the map
 		updateMapViewForCity(city) {
-			this.map.setZoom(CityMapView[city].zoom);
-			this.map.setCenter(CityMapView[city].center);
+			if (!this.map) return;
+			const view = CityMapView[city] ?? CityMapView.default;
+			this.map.setZoom(view.zoom);
+			this.map.setCenter(view.center);
 		},
 
 		/* Map Filtering */
@@ -2490,16 +2631,48 @@ export const useMapStore = defineStore("map", {
 			map_configs.map((map_config) => {
 				let mapLayerId = `${map_config.index}-${map_config.type}-${map_config.city}`;
 				if (map_config.title !== xParam) {
-					this.map.setLayoutProperty(
-						mapLayerId,
-						"visibility",
-						"none",
-					);
+					if (map_config.type === "arc" && this.deckGlLayer[mapLayerId]) {
+						this.deckGlLayer[mapLayerId].config.data = [];
+						this.renderDeckGLLayer();
+					} else {
+						this.map.setLayoutProperty(
+							mapLayerId,
+							"visibility",
+							"none",
+						);
+					}
+				} else {
+					if (map_config.type === "arc" && this.deckGlLayer[mapLayerId]) {
+						this.deckGlLayer[mapLayerId].config.data =
+							this.deckGlLayer[mapLayerId].data;
+						this.renderDeckGLLayer();
+					} else {
+						this.map.setLayoutProperty(
+							mapLayerId,
+							"visibility",
+							"visible",
+						);
+					}
+				}
+			});
+		},
+		toggleLayerByName(map_configs, layerName, visible) {
+			const dialogStore = useDialogStore();
+			if (this.loadingLayers.length > 0) return;
+			if (!this.map || dialogStore.dialogs.moreInfo) return;
+			map_configs.map((map_config) => {
+				let mapLayerId = `${map_config.index}-${map_config.type}-${map_config.city}`;
+				if (!map_config.title.includes(layerName)) return;
+				if (map_config.type === "arc" && this.deckGlLayer[mapLayerId]) {
+					this.deckGlLayer[mapLayerId].config.data = visible
+						? this.deckGlLayer[mapLayerId].data
+						: [];
+					this.renderDeckGLLayer();
 				} else {
 					this.map.setLayoutProperty(
 						mapLayerId,
 						"visibility",
-						"visible",
+						visible ? "visible" : "none",
 					);
 				}
 			});
@@ -2529,7 +2702,13 @@ export const useMapStore = defineStore("map", {
 			}
 			map_configs.map((map_config) => {
 				let mapLayerId = `${map_config.index}-${map_config.type}-${map_config.city}`;
-				this.map.setLayoutProperty(mapLayerId, "visibility", "visible");
+				if (map_config.type === "arc" && this.deckGlLayer[mapLayerId]) {
+					this.deckGlLayer[mapLayerId].config.data =
+						this.deckGlLayer[mapLayerId].data;
+					this.renderDeckGLLayer();
+				} else {
+					this.map.setLayoutProperty(mapLayerId, "visibility", "visible");
+				}
 			});
 		},
 
@@ -2661,6 +2840,13 @@ export const useMapStore = defineStore("map", {
 		/* Clearing the map */
 		// 1. Called when the user is switching between maps
 		clearOnlyLayers() {
+			if (!this.map) {
+				this.currentLayers = [];
+				this.mapConfigs = {};
+				this.currentVisibleLayers = [];
+				this.removePopup();
+				return;
+			}
 			this.stopAllFlowLineAnimations();
 			this.currentLayers.forEach((element) => {
 				if (this.map.getLayer(`${element}-flow`)) {
@@ -2678,6 +2864,13 @@ export const useMapStore = defineStore("map", {
 		},
 		// 2. Called when user navigates away from the map
 		clearEntireMap() {
+			if (this.map) {
+				try {
+					this.map.remove();
+				} catch {
+					// ignore
+				}
+			}
 			this.stopAllFlowLineAnimations();
 			this.currentLayers = [];
 			this.mapConfigs = {};
