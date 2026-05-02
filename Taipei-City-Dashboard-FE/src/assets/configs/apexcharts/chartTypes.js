@@ -34,6 +34,7 @@ export const chartsPerDataType = {
 	],
 	three_d: [
 		"ColumnChart",
+		"BarChart",
 		"BarPercentChart",
 		"RadarChart",
 		"DistrictChart",

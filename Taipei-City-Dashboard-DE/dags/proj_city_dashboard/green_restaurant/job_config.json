@@ -1,0 +1,37 @@
+{
+  "dag_infos": {
+    "dag_id": "green_restaurant",
+    "start_date": "2025-07-01",
+    "schedule_interval": "@monthly",
+    "catchup": false,
+    "tags": ["green_restaurant", "環保局", "臺北市環保餐廳"],
+    "description": "Monthly ETL for Taipei eco-friendly restaurant list from local xlsx file.",
+    "default_args": {
+      "owner": "airflow",
+      "email": ["DEFAULT_EMAIL_LIST"],
+      "email_on_retry": false,
+      "email_on_failure": true,
+      "retries": 1,
+      "retry_delay": 60
+    },
+    "ready_data_db": "postgres_default",
+    "ready_data_default_table": "green_restaurant_tpe",
+    "ready_data_history_table": "green_restaurant_tpe_history",
+    "raw_data_db": "postgres_default",
+    "raw_data_table": "",
+    "load_behavior": "current+history"
+  },
+  "data_infos": {
+    "name_cn": "臺北市環保餐廳名單",
+    "airflow_update_freq": "@monthly",
+    "source": "utils/opendata/green_restaurant/台北環保餐廳.xlsx",
+    "source_type": "xlsx local file",
+    "source_dept": "環保局",
+    "gis_format": "point",
+    "output_coordinate": "EPSG:4326",
+    "is_geometry": 1,
+    "dataset_description": "臺北市環保餐廳名單，包含餐廳名稱、類別、地址、電話及環保作為等資訊。",
+    "etl_description": "讀取本地xlsx，解析行政區，地理編碼，轉換為Point幾何存入PostgreSQL。",
+    "sensitivity": "public"
+  }
+}
