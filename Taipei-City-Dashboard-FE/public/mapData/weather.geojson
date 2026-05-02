@@ -1,0 +1,1399 @@
+{
+   "type": "FeatureCollection",
+   "features": [
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.426372,25.136097 ]
+    },
+    "properties": {
+    "CountyName":"新北市",
+    "TownName":"八里區",
+    "Weather":"多雲",
+    "WindSpeed":0.2,
+    "AirTemperature":24.1,
+    "RelativeHumidity":84,
+    "DailyHigh":24.8,
+    "DailyLow":16.9
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.364899,25.134937 ]
+    },
+    "properties": {
+    "CountyName":"新北市",
+    "TownName":"林口區",
+    "Weather":"多雲",
+    "WindSpeed":3,
+    "AirTemperature":25.4,
+    "RelativeHumidity":79,
+    "DailyHigh":26.3,
+    "DailyLow":22.3
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.925264,25.055192 ]
+    },
+    "properties": {
+    "CountyName":"新北市",
+    "TownName":"貢寮區",
+    "Weather":"多雲",
+    "WindSpeed":6.6,
+    "AirTemperature":25.9,
+    "RelativeHumidity":69,
+    "DailyHigh":26.3,
+    "DailyLow":20.6
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.516506,25.096356 ]
+    },
+    "properties": {
+    "CountyName":"臺北市",
+    "TownName":"士林區",
+    "Weather":"多雲",
+    "WindSpeed":0.4,
+    "AirTemperature":30.5,
+    "RelativeHumidity":51,
+    "DailyHigh":30.5,
+    "DailyLow":22.2
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.690022,25.207031 ]
+    },
+    "properties": {
+    "CountyName":"新北市",
+    "TownName":"萬里區",
+    "Weather":"多雲",
+    "WindSpeed":2.4,
+    "AirTemperature":26.5,
+    "RelativeHumidity":63,
+    "DailyHigh":26.5,
+    "DailyLow":20.8
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.408617,25.184592 ]
+    },
+    "properties": {
+    "CountyName":"新北市",
+    "TownName":"淡水區",
+    "Weather":"多雲",
+    "WindSpeed":4.2,
+    "AirTemperature":24.7,
+    "RelativeHumidity":85,
+    "DailyHigh":27.4,
+    "DailyLow":22.7
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.601200,25.273672 ]
+    },
+    "properties": {
+    "CountyName":"新北市",
+    "TownName":"石門區",
+    "Weather":"陰",
+    "WindSpeed":1.6,
+    "AirTemperature":26,
+    "RelativeHumidity":73,
+    "DailyHigh":26.9,
+    "DailyLow":20.2
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.862239,25.123697 ]
+    },
+    "properties": {
+    "CountyName":"新北市",
+    "TownName":"瑞芳區",
+    "Weather":"多雲",
+    "WindSpeed":4,
+    "AirTemperature":27.7,
+    "RelativeHumidity":62,
+    "DailyHigh":27.7,
+    "DailyLow":22.4
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.448102,25.240002 ]
+    },
+    "properties": {
+    "CountyName":"新北市",
+    "TownName":"淡水區",
+    "Weather":"陰",
+    "WindSpeed":5.7,
+    "AirTemperature":25.7,
+    "RelativeHumidity":84,
+    "DailyHigh":26.9,
+    "DailyLow":20.7
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.488597,25.269800 ]
+    },
+    "properties": {
+    "CountyName":"新北市",
+    "TownName":"三芝區",
+    "Weather":"陰",
+    "WindSpeed":4.4,
+    "AirTemperature":25.7,
+    "RelativeHumidity":85,
+    "DailyHigh":27,
+    "DailyLow":20.9
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.448861,25.010653 ]
+    },
+    "properties": {
+    "CountyName":"新北市",
+    "TownName":"板橋區",
+    "Weather":"晴",
+    "WindSpeed":0.7,
+    "AirTemperature":29,
+    "RelativeHumidity":58,
+    "DailyHigh":29,
+    "DailyLow":21.3
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.550428,25.048711 ]
+    },
+    "properties": {
+    "CountyName":"臺北市",
+    "TownName":"松山區",
+    "Weather":"晴",
+    "WindSpeed":1.4,
+    "AirTemperature":28.5,
+    "RelativeHumidity":58,
+    "DailyHigh":28.6,
+    "DailyLow":21.7
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.519058,25.283128 ]
+    },
+    "properties": {
+    "CountyName":"新北市",
+    "TownName":"石門區",
+    "Weather":"陰",
+    "WindSpeed":2.7,
+    "AirTemperature":25.5,
+    "RelativeHumidity":85,
+    "DailyHigh":25.5,
+    "DailyLow":20.5
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 122.002058,25.007606 ]
+    },
+    "properties": {
+    "CountyName":"新北市",
+    "TownName":"貢寮區",
+    "Weather":"多雲",
+    "WindSpeed":6.8,
+    "AirTemperature":23.9,
+    "RelativeHumidity":75,
+    "DailyHigh":24.2,
+    "DailyLow":20.4
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.581350,24.760717 ]
+    },
+    "properties": {
+    "CountyName":"新北市",
+    "TownName":"烏來區",
+    "Weather":"晴",
+    "WindSpeed":1.1,
+    "AirTemperature":24.6,
+    "RelativeHumidity":70,
+    "DailyHigh":24.6,
+    "DailyLow":15.8
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.709750,24.938183 ]
+    },
+    "properties": {
+    "CountyName":"新北市",
+    "TownName":"坪林區",
+    "Weather":"晴",
+    "WindSpeed":1.6,
+    "AirTemperature":26.6,
+    "RelativeHumidity":69,
+    "DailyHigh":26.6,
+    "DailyLow":15.6
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.823711,24.971197 ]
+    },
+    "properties": {
+    "CountyName":"新北市",
+    "TownName":"雙溪區",
+    "Weather":"晴",
+    "WindSpeed":0.1,
+    "AirTemperature":25.4,
+    "RelativeHumidity":74,
+    "DailyHigh":25.4,
+    "DailyLow":17.5
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.608692,25.132153 ]
+    },
+    "properties": {
+    "CountyName":"新北市",
+    "TownName":"汐止區",
+    "Weather":"多雲",
+    "WindSpeed":1.2,
+    "AirTemperature":25.3,
+    "RelativeHumidity":71,
+    "DailyHigh":25.3,
+    "DailyLow":17.1
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.658778,25.066881 ]
+    },
+    "properties": {
+    "CountyName":"新北市",
+    "TownName":"汐止區",
+    "Weather":"晴",
+    "WindSpeed":-99,
+    "AirTemperature":-99,
+    "RelativeHumidity":-99,
+    "DailyHigh":-99,
+    "DailyLow":-99
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.369728,24.939025 ]
+    },
+    "properties": {
+    "CountyName":"新北市",
+    "TownName":"三峽區",
+    "Weather":"晴",
+    "WindSpeed":1.1,
+    "AirTemperature":29.7,
+    "RelativeHumidity":64,
+    "DailyHigh":29.7,
+    "DailyLow":21.8
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.564597,25.037822 ]
+    },
+    "properties": {
+    "CountyName":"臺北市",
+    "TownName":"信義區",
+    "Weather":"晴",
+    "WindSpeed":0.2,
+    "AirTemperature":29.8,
+    "RelativeHumidity":50,
+    "DailyHigh":29.8,
+    "DailyLow":21.7
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.575728,25.002350 ]
+    },
+    "properties": {
+    "CountyName":"臺北市",
+    "TownName":"文山區",
+    "Weather":"晴",
+    "WindSpeed":0.7,
+    "AirTemperature":29,
+    "RelativeHumidity":75,
+    "DailyHigh":29.2,
+    "DailyLow":20
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.446756,25.051478 ]
+    },
+    "properties": {
+    "CountyName":"新北市",
+    "TownName":"新莊區",
+    "Weather":"多雲",
+    "WindSpeed":0.8,
+    "AirTemperature":27,
+    "RelativeHumidity":60,
+    "DailyHigh":27,
+    "DailyLow":21.5
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.402008,24.974944 ]
+    },
+    "properties": {
+    "CountyName":"新北市",
+    "TownName":"樹林區",
+    "Weather":"晴",
+    "WindSpeed":1.5,
+    "AirTemperature":29.2,
+    "RelativeHumidity":67,
+    "DailyHigh":29.2,
+    "DailyLow":20.9
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.597992,24.848222 ]
+    },
+    "properties": {
+    "CountyName":"新北市",
+    "TownName":"烏來區",
+    "Weather":"晴",
+    "WindSpeed":3.8,
+    "AirTemperature":25.8,
+    "RelativeHumidity":68,
+    "DailyHigh":28.1,
+    "DailyLow":17.3
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.864242,25.036003 ]
+    },
+    "properties": {
+    "CountyName":"新北市",
+    "TownName":"雙溪區",
+    "Weather":"多雲",
+    "WindSpeed":1.4,
+    "AirTemperature":28.3,
+    "RelativeHumidity":65,
+    "DailyHigh":28.3,
+    "DailyLow":18.5
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.923372,25.129036 ]
+    },
+    "properties": {
+    "CountyName":"新北市",
+    "TownName":"瑞芳區",
+    "Weather":"多雲",
+    "WindSpeed":4.9,
+    "AirTemperature":26.7,
+    "RelativeHumidity":70,
+    "DailyHigh":26.7,
+    "DailyLow":22.2
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.632969,25.165914 ]
+    },
+    "properties": {
+    "CountyName":"新北市",
+    "TownName":"萬里區",
+    "Weather":"多雲",
+    "WindSpeed":2,
+    "AirTemperature":25.8,
+    "RelativeHumidity":64,
+    "DailyHigh":25.8,
+    "DailyLow":18.3
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.595236,25.233153 ]
+    },
+    "properties": {
+    "CountyName":"新北市",
+    "TownName":"金山區",
+    "Weather":"多雲",
+    "WindSpeed":0.9,
+    "AirTemperature":26.5,
+    "RelativeHumidity":79,
+    "DailyHigh":26.5,
+    "DailyLow":18.5
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.643967,25.223628 ]
+    },
+    "properties": {
+    "CountyName":"新北市",
+    "TownName":"金山區",
+    "Weather":"多雲",
+    "WindSpeed":0.1,
+    "AirTemperature":26.6,
+    "RelativeHumidity":70,
+    "DailyHigh":26.8,
+    "DailyLow":19.5
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.662917,24.993969 ]
+    },
+    "properties": {
+    "CountyName":"新北市",
+    "TownName":"石碇區",
+    "Weather":"晴",
+    "WindSpeed":0.5,
+    "AirTemperature":26.7,
+    "RelativeHumidity":67,
+    "DailyHigh":27.4,
+    "DailyLow":18.4
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.575450,25.079422 ]
+    },
+    "properties": {
+    "CountyName":"臺北市",
+    "TownName":"內湖區",
+    "Weather":"多雲",
+    "WindSpeed":1.2,
+    "AirTemperature":29.1,
+    "RelativeHumidity":55,
+    "DailyHigh":29.2,
+    "DailyLow":22
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.491792,24.991622 ]
+    },
+    "properties": {
+    "CountyName":"新北市",
+    "TownName":"中和區",
+    "Weather":"晴",
+    "WindSpeed":1.1,
+    "AirTemperature":28.1,
+    "RelativeHumidity":58,
+    "DailyHigh":28.1,
+    "DailyLow":21.6
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.537169,25.117494 ]
+    },
+    "properties": {
+    "CountyName":"臺北市",
+    "TownName":"士林區",
+    "Weather":"多雲",
+    "WindSpeed":1.4,
+    "AirTemperature":29,
+    "RelativeHumidity":59,
+    "DailyHigh":30.1,
+    "DailyLow":22.3
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.469681,25.109508 ]
+    },
+    "properties": {
+    "CountyName":"臺北市",
+    "TownName":"士林區",
+    "Weather":"多雲",
+    "WindSpeed":0.1,
+    "AirTemperature":30.5,
+    "RelativeHumidity":55,
+    "DailyHigh":30.5,
+    "DailyLow":22.7
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.522408,25.175675 ]
+    },
+    "properties": {
+    "CountyName":"臺北市",
+    "TownName":"北投區",
+    "Weather":"多雲",
+    "WindSpeed":2.5,
+    "AirTemperature":20,
+    "RelativeHumidity":91,
+    "DailyHigh":21.2,
+    "DailyLow":17.5
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.403947,25.150211 ]
+    },
+    "properties": {
+    "CountyName":"新北市",
+    "TownName":"八里區",
+    "Weather":"多雲",
+    "WindSpeed":2.8,
+    "AirTemperature":25.5,
+    "RelativeHumidity":97,
+    "DailyHigh":27.6,
+    "DailyLow":22.8
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.472331,25.086594 ]
+    },
+    "properties": {
+    "CountyName":"新北市",
+    "TownName":"蘆洲區",
+    "Weather":"多雲",
+    "WindSpeed":-99,
+    "AirTemperature":-99,
+    "RelativeHumidity":-99,
+    "DailyHigh":29.1,
+    "DailyLow":23.2
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.445169,24.973208 ]
+    },
+    "properties": {
+    "CountyName":"新北市",
+    "TownName":"土城區",
+    "Weather":"晴",
+    "WindSpeed":1.4,
+    "AirTemperature":27,
+    "RelativeHumidity":66,
+    "DailyHigh":27.2,
+    "DailyLow":19.1
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.346294,24.951533 ]
+    },
+    "properties": {
+    "CountyName":"新北市",
+    "TownName":"鶯歌區",
+    "Weather":"多雲",
+    "WindSpeed":1.7,
+    "AirTemperature":29.4,
+    "RelativeHumidity":69,
+    "DailyHigh":29.4,
+    "DailyLow":21.6
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.508111,25.011250 ]
+    },
+    "properties": {
+    "CountyName":"新北市",
+    "TownName":"永和區",
+    "Weather":"晴",
+    "WindSpeed":1.6,
+    "AirTemperature":28.6,
+    "RelativeHumidity":59,
+    "DailyHigh":28.6,
+    "DailyLow":22
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.780794,25.071250 ]
+    },
+    "properties": {
+    "CountyName":"新北市",
+    "TownName":"瑞芳區",
+    "Weather":"晴",
+    "WindSpeed":4.2,
+    "AirTemperature":25.4,
+    "RelativeHumidity":81,
+    "DailyHigh":25.4,
+    "DailyLow":17.2
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.577086,25.129142 ]
+    },
+    "properties": {
+    "CountyName":"臺北市",
+    "TownName":"士林區",
+    "Weather":"多雲",
+    "WindSpeed":-99,
+    "AirTemperature":-99,
+    "RelativeHumidity":-99,
+    "DailyHigh":25.6,
+    "DailyLow":19.1
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.380839,25.072181 ]
+    },
+    "properties": {
+    "CountyName":"新北市",
+    "TownName":"林口區",
+    "Weather":"多雲",
+    "WindSpeed":0.5,
+    "AirTemperature":26.6,
+    "RelativeHumidity":68,
+    "DailyHigh":26.6,
+    "DailyLow":20.2
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.628328,25.002703 ]
+    },
+    "properties": {
+    "CountyName":"新北市",
+    "TownName":"深坑區",
+    "Weather":"晴",
+    "WindSpeed":1.2,
+    "AirTemperature":29,
+    "RelativeHumidity":64,
+    "DailyHigh":29.1,
+    "DailyLow":19.9
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.427281,25.074453 ]
+    },
+    "properties": {
+    "CountyName":"新北市",
+    "TownName":"五股區",
+    "Weather":"多雲",
+    "WindSpeed":1.4,
+    "AirTemperature":29.2,
+    "RelativeHumidity":68,
+    "DailyHigh":29.9,
+    "DailyLow":20.6
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.544725,24.921836 ]
+    },
+    "properties": {
+    "CountyName":"新北市",
+    "TownName":"新店區",
+    "Weather":"晴",
+    "WindSpeed":2.3,
+    "AirTemperature":29.9,
+    "RelativeHumidity":63,
+    "DailyHigh":29.9,
+    "DailyLow":20
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.500625,25.057378 ]
+    },
+    "properties": {
+    "CountyName":"新北市",
+    "TownName":"三重區",
+    "Weather":"多雲",
+    "WindSpeed":1.8,
+    "AirTemperature":27.7,
+    "RelativeHumidity":69,
+    "DailyHigh":27.7,
+    "DailyLow":22.1
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.513139,25.115597 ]
+    },
+    "properties": {
+    "CountyName":"臺北市",
+    "TownName":"北投區",
+    "Weather":"多雲",
+    "WindSpeed":-99,
+    "AirTemperature":-99,
+    "RelativeHumidity":-99,
+    "DailyHigh":29.2,
+    "DailyLow":22.7
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.525196,24.959207 ]
+    },
+    "properties": {
+    "CountyName":"新北市",
+    "TownName":"新店區",
+    "Weather":"晴",
+    "WindSpeed":1.5,
+    "AirTemperature":28.6,
+    "RelativeHumidity":60,
+    "DailyHigh":29.4,
+    "DailyLow":20.7
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.448906,25.164889 ]
+    },
+    "properties": {
+    "CountyName":"新北市",
+    "TownName":"淡水區",
+    "Weather":"多雲",
+    "WindSpeed":1.3,
+    "AirTemperature":26.7,
+    "RelativeHumidity":77,
+    "DailyHigh":27.9,
+    "DailyLow":21.8
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.529731,25.182586 ]
+    },
+    "properties": {
+    "CountyName":"臺北市",
+    "TownName":"北投區",
+    "Weather":"多雲",
+    "WindSpeed":1.3,
+    "AirTemperature":21.3,
+    "RelativeHumidity":83,
+    "DailyHigh":22.9,
+    "DailyLow":16.3
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.514853,25.037658 ]
+    },
+    "properties": {
+    "CountyName":"臺北市",
+    "TownName":"中正區",
+    "Weather":"晴",
+    "WindSpeed":0.9,
+    "AirTemperature":28.9,
+    "RelativeHumidity":56,
+    "DailyHigh":29.3,
+    "DailyLow":21.5
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.544547,25.162078 ]
+    },
+    "properties": {
+    "CountyName":"臺北市",
+    "TownName":"北投區",
+    "Weather":"多雲",
+    "WindSpeed":1.5,
+    "AirTemperature":23.9,
+    "RelativeHumidity":68,
+    "DailyHigh":24.3,
+    "DailyLow":17.7
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.386972,24.944503 ]
+    },
+    "properties": {
+    "CountyName":"新北市",
+    "TownName":"樹林區",
+    "Weather":"晴",
+    "WindSpeed":1,
+    "AirTemperature":29.4,
+    "RelativeHumidity":58,
+    "DailyHigh":29.6,
+    "DailyLow":19.2
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.631222,24.955778 ]
+    },
+    "properties": {
+    "CountyName":"新北市",
+    "TownName":"石碇區",
+    "Weather":"晴",
+    "WindSpeed":0.6,
+    "AirTemperature":27.6,
+    "RelativeHumidity":62,
+    "DailyHigh":27.8,
+    "DailyLow":18.6
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.539416,25.014278 ]
+    },
+    "properties": {
+    "CountyName":"臺北市",
+    "TownName":"大安區",
+    "Weather":"晴",
+    "WindSpeed":0.6,
+    "AirTemperature":28.9,
+    "RelativeHumidity":52,
+    "DailyHigh":29.4,
+    "DailyLow":20.5
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.539870,25.136050 ]
+    },
+    "properties": {
+    "CountyName":"臺北市",
+    "TownName":"士林區",
+    "Weather":"多雲",
+    "WindSpeed":1.5,
+    "AirTemperature":24.8,
+    "RelativeHumidity":62,
+    "DailyHigh":26.3,
+    "DailyLow":19.4
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.745736,24.892600 ]
+    },
+    "properties": {
+    "CountyName":"新北市",
+    "TownName":"坪林區",
+    "Weather":"晴",
+    "WindSpeed":1.8,
+    "AirTemperature":24.9,
+    "RelativeHumidity":66,
+    "DailyHigh":25.1,
+    "DailyLow":18.4
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.502811,24.776203 ]
+    },
+    "properties": {
+    "CountyName":"新北市",
+    "TownName":"烏來區",
+    "Weather":"晴",
+    "WindSpeed":0.9,
+    "AirTemperature":27.9,
+    "RelativeHumidity":60,
+    "DailyHigh":28.7,
+    "DailyLow":16.1
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.742892,25.002719 ]
+    },
+    "properties": {
+    "CountyName":"新北市",
+    "TownName":"平溪區",
+    "Weather":"晴",
+    "WindSpeed":1.5,
+    "AirTemperature":27.1,
+    "RelativeHumidity":64,
+    "DailyHigh":27.3,
+    "DailyLow":16.1
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.801147,25.113169 ]
+    },
+    "properties": {
+    "CountyName":"新北市",
+    "TownName":"瑞芳區",
+    "Weather":"多雲",
+    "WindSpeed":1.3,
+    "AirTemperature":28.9,
+    "RelativeHumidity":58,
+    "DailyHigh":29,
+    "DailyLow":20.8
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.942083,25.017842 ]
+    },
+    "properties": {
+    "CountyName":"新北市",
+    "TownName":"貢寮區",
+    "Weather":"多雲",
+    "WindSpeed":2.2,
+    "AirTemperature":28.3,
+    "RelativeHumidity":62,
+    "DailyHigh":28.4,
+    "DailyLow":21.1
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.565258,25.263783 ]
+    },
+    "properties": {
+    "CountyName":"新北市",
+    "TownName":"石門區",
+    "Weather":"陰",
+    "WindSpeed":1.5,
+    "AirTemperature":26,
+    "RelativeHumidity":69,
+    "DailyHigh":27.5,
+    "DailyLow":20.5
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.491990,25.115760 ]
+    },
+    "properties": {
+    "CountyName":"臺北市",
+    "TownName":"北投區",
+    "Weather":"多雲",
+    "WindSpeed":-99,
+    "AirTemperature":27.9,
+    "RelativeHumidity":58,
+    "DailyHigh":28.4,
+    "DailyLow":20.7
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.534920,24.841080 ]
+    },
+    "properties": {
+    "CountyName":"新北市",
+    "TownName":"烏來區",
+    "Weather":"晴",
+    "WindSpeed":1.7,
+    "AirTemperature":27.6,
+    "RelativeHumidity":64,
+    "DailyHigh":28.6,
+    "DailyLow":17.2
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.721320,24.968750 ]
+    },
+    "properties": {
+    "CountyName":"新北市",
+    "TownName":"坪林區",
+    "Weather":"晴",
+    "WindSpeed":1.1,
+    "AirTemperature":23.6,
+    "RelativeHumidity":76,
+    "DailyHigh":24.4,
+    "DailyLow":15.9
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.628153,25.066739 ]
+    },
+    "properties": {
+    "CountyName":"新北市",
+    "TownName":"汐止區",
+    "Weather":"晴",
+    "WindSpeed":1.3,
+    "AirTemperature":29,
+    "RelativeHumidity":63,
+    "DailyHigh":29.3,
+    "DailyLow":19.8
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.496400,25.076390 ]
+    },
+    "properties": {
+    "CountyName":"新北市",
+    "TownName":"三重區",
+    "Weather":"多雲",
+    "WindSpeed":2.2,
+    "AirTemperature":28.5,
+    "RelativeHumidity":64,
+    "DailyHigh":29.1,
+    "DailyLow":22.1
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.647500,25.080000 ]
+    },
+    "properties": {
+    "CountyName":"新北市",
+    "TownName":"汐止區",
+    "Weather":"晴",
+    "WindSpeed":1.2,
+    "AirTemperature":29.6,
+    "RelativeHumidity":54,
+    "DailyHigh":29.8,
+    "DailyLow":18.3
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.615800,25.033060 ]
+    },
+    "properties": {
+    "CountyName":"臺北市",
+    "TownName":"南港區",
+    "Weather":"晴",
+    "WindSpeed":1.8,
+    "AirTemperature":28.6,
+    "RelativeHumidity":68,
+    "DailyHigh":28.8,
+    "DailyLow":19.7
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.471042,24.982361 ]
+    },
+    "properties": {
+    "CountyName":"新北市",
+    "TownName":"土城區",
+    "Weather":"晴",
+    "WindSpeed":1.3,
+    "AirTemperature":28.8,
+    "RelativeHumidity":66,
+    "DailyHigh":29.2,
+    "DailyLow":19.8
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.430600,24.960000 ]
+    },
+    "properties": {
+    "CountyName":"新北市",
+    "TownName":"土城區",
+    "Weather":"晴",
+    "WindSpeed":1.2,
+    "AirTemperature":29,
+    "RelativeHumidity":67,
+    "DailyHigh":29.3,
+    "DailyLow":19.3
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.395800,24.950830 ]
+    },
+    "properties": {
+    "CountyName":"新北市",
+    "TownName":"樹林區",
+    "Weather":"晴",
+    "WindSpeed":1.6,
+    "AirTemperature":28.6,
+    "RelativeHumidity":69,
+    "DailyHigh":28.8,
+    "DailyLow":19.3
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.323900,24.939170 ]
+    },
+    "properties": {
+    "CountyName":"新北市",
+    "TownName":"鶯歌區",
+    "Weather":"多雲",
+    "WindSpeed":1.5,
+    "AirTemperature":28.8,
+    "RelativeHumidity":67,
+    "DailyHigh":29.3,
+    "DailyLow":19.8
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.597500,25.001940 ]
+    },
+    "properties": {
+    "CountyName":"臺北市",
+    "TownName":"文山區",
+    "Weather":"晴",
+    "WindSpeed":1.7,
+    "AirTemperature":28.3,
+    "RelativeHumidity":68,
+    "DailyHigh":28.8,
+    "DailyLow":18.8
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.381972,25.064433 ]
+    },
+    "properties": {
+    "CountyName":"新北市",
+    "TownName":"泰山區",
+    "Weather":"多雲",
+    "WindSpeed":1.2,
+    "AirTemperature":27.1,
+    "RelativeHumidity":67,
+    "DailyHigh":27.6,
+    "DailyLow":19
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.651931,24.996414 ]
+    },
+    "properties": {
+    "CountyName":"新北市",
+    "TownName":"石碇區",
+    "Weather":"晴",
+    "WindSpeed":1.5,
+    "AirTemperature":-99,
+    "RelativeHumidity":-99,
+    "DailyHigh":-99,
+    "DailyLow":-99
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.656972,24.989964 ]
+    },
+    "properties": {
+    "CountyName":"新北市",
+    "TownName":"石碇區",
+    "Weather":"晴",
+    "WindSpeed":1.7,
+    "AirTemperature":27.6,
+    "RelativeHumidity":67,
+    "DailyHigh":28.5,
+    "DailyLow":18.1
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.668089,24.982411 ]
+    },
+    "properties": {
+    "CountyName":"新北市",
+    "TownName":"石碇區",
+    "Weather":"晴",
+    "WindSpeed":2.7,
+    "AirTemperature":27.8,
+    "RelativeHumidity":66,
+    "DailyHigh":28.8,
+    "DailyLow":19
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.705508,24.947603 ]
+    },
+    "properties": {
+    "CountyName":"新北市",
+    "TownName":"坪林區",
+    "Weather":"晴",
+    "WindSpeed":1.3,
+    "AirTemperature":27.3,
+    "RelativeHumidity":66,
+    "DailyHigh":27.7,
+    "DailyLow":16.5
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.536280,25.029550 ]
+    },
+    "properties": {
+    "CountyName":"臺北市",
+    "TownName":"大安區",
+    "Weather":"晴",
+    "WindSpeed":0.3,
+    "AirTemperature":29.3,
+    "RelativeHumidity":53,
+    "DailyHigh":29.9,
+    "DailyLow":19.7
+    }
+  }
+]
+}
