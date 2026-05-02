@@ -797,13 +797,13 @@ components:
           type: number
           format: double
           description: |
-            WGS84 經度。**MVP sentinel**：DE geocode 尚未補齊時，DB 寫入 NULL，
-            BE 回傳 `0`（FE 應檢查 `lng !== 0 || lat !== 0` 才畫 marker）。
+            WGS84 經度。BE 已過濾 lng/lat NULL 的 row（geocode 失敗的資料），
+            所以這個欄位**保證有效**，FE 可以直接畫 marker。
           example: 121.5495
         lat:
           type: number
           format: double
-          description: WGS84 緯度。0 為 sentinel，語意同上 `lng`。
+          description: WGS84 緯度。語意同上 `lng`，保證有效。
           example: 25.0556
 
     GreenStorePoint:
@@ -842,12 +842,11 @@ components:
           type: number
           format: double
           description: |
-            WGS84 經度。**MVP sentinel**：DE geocode 尚未補齊時，BE 回 `0`；
-            FE 應檢查 `lng !== 0 || lat !== 0` 才畫 marker。
+            WGS84 經度。BE 已過濾 lng/lat NULL 的 row，FE 可以直接畫 marker。
         lat:
           type: number
           format: double
-          description: WGS84 緯度。0 為 sentinel，語意同上 `lng`。
+          description: WGS84 緯度。語意同上 `lng`。
 
     FoodBankPoint:
       description: |
@@ -907,13 +906,12 @@ components:
           type: number
           format: double
           description: |
-            WGS84 經度。**MVP sentinel**：DE geocode 尚未補齊時，BE 回 `0`；
-            FE 應檢查 `lng !== 0 || lat !== 0` 才畫 marker。
-            C7b `nearby` 在無座標時 `distance_m` 也會全為 `0`。
+            WGS84 經度。BE 已過濾 lng/lat NULL 的 row（geocode 失敗的食物銀行），
+            FE 可以直接畫 marker。C7b `nearby` 距離計算同樣只考慮已 geocode 的 row。
         lat:
           type: number
           format: double
-          description: WGS84 緯度。0 為 sentinel，語意同上 `lng`。
+          description: WGS84 緯度。語意同上 `lng`。
 
     FoodBankPointNearby:
       description: |

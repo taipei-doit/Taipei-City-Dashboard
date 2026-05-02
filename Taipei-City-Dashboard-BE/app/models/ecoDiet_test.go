@@ -52,10 +52,12 @@ func TestGetEcoRestaurantPoints_Returns13RowsWithGeoAndActions(t *testing.T) {
 	}
 }
 
-// TestGetEcoRestaurantPoints_NullGeoIncludedAsZeroSentinel covers MVP mode where
-// DE has not yet geocoded (lng/lat = NULL). BE must include the row anyway with
-// lng=0, lat=0 acting as a sentinel; FE detects (0,0) and skips map marker.
-func TestGetEcoRestaurantPoints_NullGeoIncludedAsZeroSentinel(t *testing.T) {
+// TestGetEcoRestaurantPoints_NullGeoExcludedByFilter verifies geocode-fail rows
+// (lng/lat = NULL — fallback when DE geocoding misses an address) are excluded
+// from map endpoints, so the FE map never gets (0,0) phantom markers.
+// Same filter is applied in C3/C4/C7a/C7b — covering one is sufficient since
+// the SQL clause is identical.
+func TestGetEcoRestaurantPoints_NullGeoExcludedByFilter(t *testing.T) {
 	initTestDB(t)
 
 	const fixtureSeqNo = "__null_geo_test__"
@@ -77,18 +79,14 @@ func TestGetEcoRestaurantPoints_NullGeoIncludedAsZeroSentinel(t *testing.T) {
 	if err != nil {
 		t.Fatalf("GetEcoRestaurantPoints() error = %v", err)
 	}
-	var found *EcoRestaurantPoint
-	for i := range rows {
-		if rows[i].SeqNo == fixtureSeqNo {
-			found = &rows[i]
-			break
+	for _, r := range rows {
+		if r.SeqNo == fixtureSeqNo {
+			t.Errorf("fixture row with NULL lng/lat leaked into result: %+v", r)
 		}
 	}
-	if found == nil {
-		t.Fatalf("fixture row with seq_no=%q not returned (filter regression)", fixtureSeqNo)
-	}
-	if found.Lng != 0 || found.Lat != 0 {
-		t.Errorf("Lng/Lat = (%v,%v), want (0,0) sentinel for NULL", found.Lng, found.Lat)
+	// Existing seed rows (all geocoded) should still be there.
+	if len(rows) != 13 {
+		t.Errorf("non-fixture row count = %d, want 13", len(rows))
 	}
 }
 

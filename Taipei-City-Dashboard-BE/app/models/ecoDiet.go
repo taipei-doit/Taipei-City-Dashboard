@@ -77,14 +77,15 @@ type ecoDietWasteRow struct {
 
 // ─── C1a: GET /eco_diet/restaurant/points ───────────────────────────
 
-// GetEcoRestaurantPoints 回傳全部餐廳。**MVP 模式**：DE geocode 尚未補齊時，
-// lng/lat NULL 會 scan 成 0，視為 sentinel 值「未地理編碼」；FE 自行處理（不畫 marker）。
+// GetEcoRestaurantPoints 回傳含座標的全部餐廳。geocode 失敗的 row（lng/lat NULL）
+// 會被 filter 掉，避免 FE 地圖上出現 (0,0) 等假點。
 func GetEcoRestaurantPoints() ([]EcoRestaurantPoint, error) {
 	var rows []EcoRestaurantPoint
 	err := DBDashboard.Raw(`
 		SELECT source_dataset, seq_no, name, address, city, district, tel,
 		       env_actions, lng, lat
 		FROM eco_restaurant
+		WHERE lng IS NOT NULL AND lat IS NOT NULL
 		ORDER BY city, district, name
 	`).Scan(&rows).Error
 	if err != nil {
@@ -150,7 +151,8 @@ func GetEcoRestaurantList(district, action, city string) ([]EcoRestaurantPoint, 
 		SELECT source_dataset, seq_no, name, address, city, district, tel,
 		       env_actions, lng, lat
 		FROM eco_restaurant
-		WHERE (NULLIF(?, '') IS NULL OR district = ?)
+		WHERE lng IS NOT NULL AND lat IS NOT NULL
+		  AND (NULLIF(?, '') IS NULL OR district = ?)
 		  AND (NULLIF(?, '') IS NULL OR ? = ANY(env_actions))
 		  AND (NULLIF(?, '') IS NULL OR city = ?)
 		ORDER BY city, district, name
@@ -171,7 +173,8 @@ func GetGreenStorePoints(storeType, city string) ([]GreenStorePoint, error) {
 		SELECT source_dataset, store_code, name, address, city, district, tel,
 		       store_type, lng, lat
 		FROM green_store
-		WHERE (NULLIF(?, '') IS NULL OR store_type = ?)
+		WHERE lng IS NOT NULL AND lat IS NOT NULL
+		  AND (NULLIF(?, '') IS NULL OR store_type = ?)
 		  AND (NULLIF(?, '') IS NULL OR city = ?)
 		ORDER BY city, district, name
 	`, storeType, storeType, city, city).Scan(&rows).Error
@@ -225,6 +228,7 @@ func GetFoodBankPoints() ([]FoodBankPoint, error) {
 		       city, district, district_code, postal_code,
 		       address, tel, lng, lat
 		FROM food_bank
+		WHERE lng IS NOT NULL AND lat IS NOT NULL
 		ORDER BY city, district, name
 	`).Scan(&rows).Error
 	if err != nil {
