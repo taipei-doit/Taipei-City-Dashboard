@@ -265,7 +265,7 @@ async function openStorylineRecommendedComponent(comp) {
           :aria-selected="recommendMode === MODE_AUTO_NEWS"
           @click="switchRecommendMode(MODE_AUTO_NEWS)"
         >
-          {{ t('recommend.mode_auto') || '自動新聞' }}
+          <span class="recommendsidebar-mode-btn-label">{{ t('recommend.mode_auto') || '自動新聞' }}</span>
         </button>
         <button
           type="button"
@@ -278,7 +278,7 @@ async function openStorylineRecommendedComponent(comp) {
           :aria-selected="recommendMode === MODE_MANUAL_URL"
           @click="switchRecommendMode(MODE_MANUAL_URL)"
         >
-          {{ t('recommend.mode_manual') || '網址分析' }}
+          <span class="recommendsidebar-mode-btn-label">{{ t('recommend.mode_manual') || '網址分析' }}</span>
         </button>
       </div>
 
@@ -536,14 +536,20 @@ async function openStorylineRecommendedComponent(comp) {
 	}
 
 	&-mode-btn {
+		display: flex;
+		align-items: center;
+		justify-content: center;
 		flex: 1;
-		padding: 8px 10px;
+		min-height: 2.75rem;
+		min-width: 0;
+		padding: 8px 6px;
 		font-size: var(--font-m);
+		line-height: 1.35;
 		color: var(--color-complement-text);
+		text-align: center;
 		transition:
 			background-color 0.2s,
 			color 0.2s;
-		text-wrap: nowrap;
 
 		&:hover {
 			color: var(--color-normal-text);
@@ -559,6 +565,15 @@ async function openStorylineRecommendedComponent(comp) {
 				color: #fff;
 			}
 		}
+	}
+
+	&-mode-btn-label {
+		display: inline-block;
+		max-width: 100%;
+		line-height: 1.35;
+		text-wrap: balance;
+		word-break: break-word;
+		overflow-wrap: break-word;
 	}
 
 	&-auto-news {
