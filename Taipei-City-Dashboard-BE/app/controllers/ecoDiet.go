@@ -507,6 +507,13 @@ func buildEcoDietComponentPrompt(componentID string) (string, error) {
 		}
 		return ecoDietWasteYearlyPrompt(out, categories), nil
 
+	case "eco-diet-c5b":
+		out, categories, err := models.GetWasteCarbonFootprintYearly()
+		if err != nil {
+			return "", err
+		}
+		return ecoDietWasteCarbonYearlyPrompt(out, categories), nil
+
 	case "eco-diet-c7a":
 		rows, err := models.GetFoodBankPoints()
 		if err != nil {
@@ -653,6 +660,40 @@ func ecoDietWasteYearlyPrompt(out []models.ThreeDimensionalDataOutput, categorie
 【即時資料】
 年度範圍：%s
 各 series 年度值（series 名稱格式為「縣市-指標」）：
+%s%s`, yearRange, body, ecoDietSystemSuffix)
+}
+
+func ecoDietWasteCarbonYearlyPrompt(out []models.ThreeDimensionalDataOutput, categories []string) string {
+	var lines strings.Builder
+	for _, series := range out {
+		if series.Name == "" {
+			continue
+		}
+		fmt.Fprintf(&lines, "  - %s：", series.Name)
+		for i, v := range series.Data {
+			if i >= len(categories) {
+				break
+			}
+			if i > 0 {
+				lines.WriteString("、")
+			}
+			fmt.Fprintf(&lines, "%s=%d", categories[i], v)
+		}
+		lines.WriteString("\n")
+	}
+	body := lines.String()
+	if body == "" {
+		body = "  （無資料）\n"
+	}
+	yearRange := "（無年度資料）"
+	if len(categories) > 0 {
+		yearRange = fmt.Sprintf("%s ~ %s", categories[0], categories[len(categories)-1])
+	}
+	return fmt.Sprintf(`你是「綠色飲食行為流程」資料分析助理。以下是「C5｜雙北年度廢棄物碳足跡」的即時統計（資料表：gov_open_waste_yearly；係數：廚餘 48.3、一般垃圾 340、資源垃圾 369 kgCO₂e/公噸）。請根據這些資料回答使用者的問題。
+
+【即時資料】
+年度範圍：%s
+各 series 年度碳足跡值（單位：公噸 CO₂e/年）：
 %s%s`, yearRange, body, ecoDietSystemSuffix)
 }
 
