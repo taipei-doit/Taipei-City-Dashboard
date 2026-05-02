@@ -1,12 +1,14 @@
 package controllers
 
 import (
+	"TaipeiCityDashboardBE/app/services"
 	"TaipeiCityDashboardBE/app/services/ai"
 	"TaipeiCityDashboardBE/app/util"
 	"context"
 	"fmt"
 	"html"
 	"net/http"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/tmc/langchaingo/llms"
@@ -45,6 +47,10 @@ type AIChatInput struct {
 		} `json:"function" binding:"required"`
 	} `json:"tools,omitempty"`
 	ToolChoice interface{} `json:"tool_choice,omitempty"`
+}
+
+type ExtractInsightInput struct {
+	Url string `json:"url"`
 }
 
 // ChatWithTWCC is the controller for POST /api/v1/ai/chat/twai
@@ -241,3 +247,79 @@ func (input *AIChatInput) ToCallOptions() []llms.CallOption {
 	return options
 }
 
+func GetComponemtByNews(c *gin.Context){
+
+	var req ExtractInsightInput
+
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(400, gin.H{"error": err.Error()})
+		return
+	}
+
+	body := services.GetHTMLBody(req.Url)
+
+	body = strings.ReplaceAll(body, "\n\n", "\n")
+	body = strings.ReplaceAll(body, "\t\t", "\t")
+	body = strings.ReplaceAll(body, "     ", " ")
+
+	reqAIChatRequest := ai.AIChatRequest{
+		SessionID: "",
+		UserID:    "",
+		IPAddress: "",
+		Messages: []llms.MessageContent{
+			{
+				Role: llms.ChatMessageTypeSystem,
+				Parts: []llms.ContentPart{
+					llms.TextContent{Text: "輸入：一段來自某新聞網站的HTML結構碼\n目標：擷取新聞主標題及全文內容\n注意事項：\n1. 要完整取出全文內容，不要摘要\n2. 直接給我結果，不回應思考過程\n\n"},
+				},
+			},
+			{
+				Role: llms.ChatMessageTypeHuman,
+				Parts: []llms.ContentPart{
+					llms.TextContent{Text: body},
+				},
+			},
+		},
+	}
+		// 1. 直接建構 options slice
+	opts := []llms.CallOption{
+		llms.WithTemperature(0.7),
+		llms.WithTopP(0.9),
+		llms.WithTopK(40),
+		llms.WithRepetitionPenalty(1.1),
+		llms.WithSeed(42),
+
+		llms.WithMetadata(map[string]any{
+			"source": "manual",
+			"env":    "dev",
+		}),
+	}
+
+	ctx := context.Background()
+	logEntry, err := ai.ChatWithTWCC(ctx, reqAIChatRequest, opts...)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"status": "error",
+			"error_code": "AI_SERVICE_ERROR",
+			"message": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"status": "success",
+		"data": gin.H{
+			"session":     logEntry.SessionID,
+			"content":     logEntry.Answer,
+			"usage": gin.H{
+				"input_tokens":  logEntry.InputTokens,
+				"output_tokens": logEntry.OutputTokens,
+				"total_tokens":  logEntry.TotalTokens,
+			},
+			"tool_used":   logEntry.ToolUsed,
+			"latency_ms":  logEntry.LatencyMS,
+			"model":       logEntry.Model,
+			"provider":    logEntry.Provider,
+		},
+	})
+}
