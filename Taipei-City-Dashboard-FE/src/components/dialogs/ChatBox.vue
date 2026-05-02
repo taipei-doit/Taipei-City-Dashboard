@@ -15,7 +15,7 @@ const contentStore = useContentStore();
 const authStore = useAuthStore();
 const { addChatData, addQueryData, saveChatLog } = chatStore;
 const { createDashboard } = contentStore;
-const { chatData } = storeToRefs(chatStore);
+const { chatData, isChatLoading } = storeToRefs(chatStore);
 const { editDashboard } = storeToRefs(contentStore);
 const { user } = storeToRefs(authStore);
 
@@ -63,7 +63,7 @@ const qaBtnHandler = async (text, relations) => {
 };
 
 const sendBtnHandler = (text) => {
-	if (!text.trim()) return;
+	if (!text.trim() || isChatLoading.value) return;
 	addQueryData({
 		role: "user",
 		content: text,
@@ -114,8 +114,8 @@ watch(
           v-show="isStickyOpen"
           class="sticky-body"
         >
-          <span>小幫手會依據您輸入的內容，自動檢索本站臺的組件資料庫，並回傳相似度較高的組件清單，協助您快速找到符合需求的元件或資訊。<br><br>
-            目前小幫手僅提供組件比對與分析服務，不支援一般聊天功能。如造成不便，敬請見諒！</span>
+          <span>小幫手會依據您輸入的內容，提供 AI 問答並自動檢索本站臺的組件資料庫，回傳相似度較高的組件清單，協助您快速找到符合需求的元件或資訊。<br><br>
+            若 AI 回覆或組件推薦暫時無法使用，您仍可稍後重新提問或改用左側儀表板主題瀏覽。</span>
         </div>
       </div>
       <div
@@ -205,6 +205,21 @@ watch(
           </div>
         </div>
       </div>
+      <div
+        v-if="isChatLoading"
+        class="message"
+      >
+        <div class="bot">
+          <div class="avatar">
+            <BotLogo />
+          </div>
+          <div class="content">
+            <div class="message--bubble">
+              <p>回覆產生中...</p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- 輸入區 -->
@@ -212,10 +227,14 @@ watch(
       <input
         v-model="userMessage"
         type="text"
-        placeholder="輸入訊息..."
+        :placeholder="isChatLoading ? '回覆產生中...' : '輸入訊息...'"
+        :disabled="isChatLoading"
         @keyup.enter="sendBtnHandler(userMessage)"
       >
-      <button @click="sendBtnHandler(userMessage)">
+      <button
+        :disabled="isChatLoading"
+        @click="sendBtnHandler(userMessage)"
+      >
         <SendIcon />
       </button>
     </div>
@@ -451,6 +470,11 @@ $radius-20: 20px;
 			border: none;
 			outline: none;
 			color: black;
+
+			&:disabled {
+				opacity: 0.7;
+				cursor: not-allowed;
+			}
 		}
 
 		button {
@@ -464,6 +488,12 @@ $radius-20: 20px;
 
 			&:hover {
 				filter: brightness(0.5);
+			}
+
+			&:disabled {
+				cursor: not-allowed;
+				filter: grayscale(1);
+				opacity: 0.5;
 			}
 		}
 	}

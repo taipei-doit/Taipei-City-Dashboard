@@ -9,6 +9,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/tmc/langchaingo/llms"
@@ -29,6 +30,9 @@ func init() {
 		global.TWCC.Model,
 		global.TWCC.Timeout,
 	)
+	if !IsTWCCConfigured() {
+		logs.Warn("TWCC API key is not configured; AI chat endpoint will return 503")
+	}
 }
 
 type AIChatRequest struct {
@@ -37,6 +41,12 @@ type AIChatRequest struct {
 	IPAddress string                 `json:"ip_address"`
 	Messages  []llms.MessageContent  `json:"messages"`
 	Params    map[string]interface{} `json:"params"`
+}
+
+// IsTWCCConfigured reports whether the backend has a usable TWCC API key.
+func IsTWCCConfigured() bool {
+	apiKey := strings.TrimSpace(global.TWCC.ApiKey)
+	return apiKey != "" && apiKey != "default_your_twcc_api_key_here" && apiKey != "your_api_key"
 }
 
 // ChatWithTWCC handles the AI conversation logic including retries, tool calling loop, and logging.
@@ -148,7 +158,7 @@ func (s *aiSession) updateTokens() {
 
 func (s *aiSession) executeTools(ctx context.Context, toolCalls []llms.ToolCall) error {
 	choice := s.lastResp.Choices[0]
-	
+
 	// Add Assistant's intent
 	s.currentMessages = append(s.currentMessages, llms.MessageContent{
 		Role:  llms.ChatMessageTypeAI,
@@ -176,12 +186,14 @@ func (s *aiSession) executeTools(ctx context.Context, toolCalls []llms.ToolCall)
 func (s *aiSession) injectInstructions() {
 	toolNames := ""
 	for i, t := range s.callOpts.Tools {
-		if i > 0 { toolNames += ", " }
+		if i > 0 {
+			toolNames += ", "
+		}
 		toolNames += t.Function.Name
 	}
 
 	instruction := fmt.Sprintf("\nSystem Instruction:\n1. Use ONLY: [%s].\n2. NEVER nest tool calls \n3. Arguments MUST be literal values (strings, integers, etc.), never function calls \n4. For dependent tasks, call tools sequentially in separate turns.\n5. If stuck, respond with text.", toolNames)
-	
+
 	s.currentMessages = make([]llms.MessageContent, 0)
 	merged := false
 	for _, m := range s.req.Messages {
@@ -192,10 +204,10 @@ func (s *aiSession) injectInstructions() {
 			s.currentMessages = append(s.currentMessages, m)
 		}
 	}
-	
+
 	if !merged {
 		s.currentMessages = append([]llms.MessageContent{{
-			Role: llms.ChatMessageTypeSystem,
+			Role:  llms.ChatMessageTypeSystem,
 			Parts: []llms.ContentPart{llms.TextContent{Text: "Instruction: Use tools: [" + toolNames + "]."}},
 		}}, s.currentMessages...)
 	}
@@ -238,7 +250,9 @@ func (s *aiSession) finalize() (*models.AIChatLog, error) {
 
 func toolsToParts(calls []llms.ToolCall) []llms.ContentPart {
 	parts := make([]llms.ContentPart, len(calls))
-	for i, c := range calls { parts[i] = c }
+	for i, c := range calls {
+		parts[i] = c
+	}
 	return parts
 }
 
@@ -256,15 +270,20 @@ func mergeSystemMsg(m llms.MessageContent, instruction string) llms.MessageConte
 
 func extractText(m llms.MessageContent) string {
 	for _, p := range m.Parts {
-		if t, ok := p.(llms.TextContent); ok { return t.Text }
+		if t, ok := p.(llms.TextContent); ok {
+			return t.Text
+		}
 	}
 	return ""
 }
 
 func parseUsageInt(val interface{}) int {
 	switch v := val.(type) {
-	case int: return v
-	case float64: return int(v)
-	default: return 0
+	case int:
+		return v
+	case float64:
+		return int(v)
+	default:
+		return 0
 	}
 }
