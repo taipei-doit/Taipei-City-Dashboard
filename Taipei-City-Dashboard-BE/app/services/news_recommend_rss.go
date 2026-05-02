@@ -89,6 +89,11 @@ func defaultRSSFeeds() []string {
 		}
 	}
 	return []string{
+		// 衛福部食品藥物管理署（官網 RSS 訂閱頁：https://www.fda.gov.tw/tc/rss.aspx ）
+		"https://www.fda.gov.tw/tc/rssAnnouncement.ashx",
+		"https://www.fda.gov.tw/tc/rssNews.ashx",
+		"https://www.fda.gov.tw/tc/rssNewsAboutRumor.ashx",
+		"https://www.fda.gov.tw/tc/rssActivity.ashx",
 		// 中央社 FeedBurner（多數環境可被拉取；舊 rss.cna.com.tw 路徑已常 404）
 		"https://feeds.feedburner.com/rsscna/cmEe",
 		"https://feeds.feedburner.com/rsscna/local",
@@ -410,7 +415,7 @@ func FetchSimpleRSSNewsRecommendations(ctx context.Context) ([]map[string]any, e
 
 	if len(stories) == 0 {
 		return nil, fmt.Errorf(
-			"無法取得 RSS 資料。請確認：1) 伺服器對外 HTTPS 可走；2) 設環境變數 NEWS_RSS_FEEDS 為可用的 RSS／Atom URL（可多個逗號分隔）。預設已含中央社 FeedBurner 鏈結；若環境會擋媒體站，請換成可被貴環境抓取之來源；3) 請檢視應用程式日誌中 RSS fetch / parse 訊息",
+			"無法取得 RSS 資料。請確認：1) 伺服器對外 HTTPS 可走；2) 設環境變數 NEWS_RSS_FEEDS 為可用的 RSS／Atom URL（可多個逗號分隔）。預設已含食藥署與中央社等公開 RSS；若環境會擋特定站點，請換成可被貴環境抓取之來源；3) 請檢視應用程式日誌中 RSS fetch / parse 訊息",
 		)
 	}
 
@@ -425,6 +430,10 @@ func FetchSimpleRSSNewsRecommendations(ctx context.Context) ([]map[string]any, e
 				best = sc
 				chosen = c
 			}
+		}
+		// 與公開組件字詞無重疊（常見於英文來源對中文組件名）時，仍附上第一筆公開組件，避免前端濾掉整段與使用者看到「無推薦」。
+		if best == 0 && len(comps) > 0 {
+			chosen = comps[0]
 		}
 		allScored = append(allScored, scoredPick{story: st, score: best, comp: chosen})
 	}
@@ -442,6 +451,10 @@ func FetchSimpleRSSNewsRecommendations(ctx context.Context) ([]map[string]any, e
 	}
 	if len(uniq) < 1 {
 		uniq = pickDistinctTopStories(allScored, 1, 3)
+	}
+	// 僅在高相關分數全掛時才放行：否則若每則得分皆為 0，上面門檻 1 仍會挑出 0 則。
+	if len(uniq) < 1 {
+		uniq = pickDistinctTopStories(allScored, 0, 3)
 	}
 
 	out := make([]map[string]any, 0, len(uniq))
