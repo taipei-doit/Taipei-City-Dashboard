@@ -71,6 +71,8 @@ const props = defineProps({
 	deleteBtn: { type: Boolean, default: false },
 	addBtn: { type: Boolean, default: false },
 	infoBtn: { type: Boolean, default: false },
+	/** 靜態 i18n key（優先） */
+	infoBtnKey: { type: String, default: "component.info.button" },
 	infoBtnText: { type: String, default: "組件資訊" },
 	toggleDisable: { type: Boolean, default: false },
 	footer: { type: Boolean, default: true },
@@ -422,6 +424,11 @@ function returnChartComponent(name, svg) {
           />
         </button>
       </div>
+      <!-- spacer：讓中間 control group 在整排視覺置中 -->
+      <div
+        v-if="(selectBtn && !selectBtnDisabled) || config.chart_config.types.length > 1"
+        class="dashboardcomponent-control-spacer"
+      />
     </div>
     <!-- Main Content -->
     <div
@@ -560,6 +567,7 @@ function returnChartComponent(name, svg) {
       >
         <BackendTranslatedText
           tag="p"
+          :dict-key="infoBtnKey"
           :text="infoBtnText"
         />
         <span>arrow_circle_right</span>
@@ -747,9 +755,10 @@ button:hover {
 
 	&-control {
 		width: 100%;
-		display: flex;
-		// justify-content: center;
+		display: grid;
+		grid-template-columns: 1fr auto 1fr;
 		align-items: center;
+		column-gap: 10px;
 		// position: absolute;
 		top: 4.2rem;
 		left: 0;
@@ -760,8 +769,8 @@ button:hover {
 			display: flex;
 			justify-content: center;
 			align-items: center;
-			margin: 0 auto;
-			transform: translateX(-15%);
+			/* 交給 grid 置中，不再用 transform 偏移 */
+			margin: 0;
 
 			&-button {
 				flex: 0 0 auto;
@@ -801,6 +810,7 @@ button:hover {
 		}
 
 		.selectBtn {
+			justify-self: start;
 			flex: 0 0 auto;
 			box-sizing: border-box;
 			/* 固定寬度：不因 i18n 字數拉寬控件；過長標籤以省略顯示，完整文字見 title */
@@ -819,6 +829,10 @@ button:hover {
 			&-disabled {
 				cursor: not-allowed;
 			}
+		}
+
+		&-spacer {
+			justify-self: end;
 		}
 	}
 
@@ -1044,6 +1058,10 @@ button:hover {
 			&-preview {
 				display: flex;
 				gap: 4px;
+				justify-content: center;
+				align-items: center;
+				width: 100%;
+				flex-wrap: wrap;
 			}
 		}
 	}

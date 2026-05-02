@@ -103,6 +103,8 @@ const ZH = {
 	"component.info.related_links": "相關資料",
 	"component.info.contributors": "協作者",
 	"component.info.contributors_alt_prefix": "協作者-",
+	"component.info.button": "組件資訊",
+	"component.info.page": "資訊頁面",
 	"component.time.static": "固定資料",
 
 	"admin.sidebar.dashboard_settings": "儀表板設定",
@@ -241,6 +243,8 @@ const EN = {
 	"component.info.related_links": "Related links",
 	"component.info.contributors": "Collaborators",
 	"component.info.contributors_alt_prefix": "Collaborator · ",
+	"component.info.button": "Component info",
+	"component.info.page": "Info page",
 	"component.time.static": "Static data",
 
 	"admin.sidebar.dashboard_settings": "Dashboard setup",
@@ -313,6 +317,8 @@ const JA = {
 	"component.info.related_links": "関連資料",
 	"component.info.contributors": "協力者",
 	"component.info.contributors_alt_prefix": "協力者・",
+	"component.info.button": "コンポーネント情報",
+	"component.info.page": "情報ページ",
 	"component.time.static": "固定データ",
 
 	"login.taipeipass_button": "台北通でログイン",
@@ -436,6 +442,8 @@ const KO = {
 	"component.info.related_links": "관련 자료",
 	"component.info.contributors": "기여자",
 	"component.info.contributors_alt_prefix": "기여자 · ",
+	"component.info.button": "구성 요소 정보",
+	"component.info.page": "정보 페이지",
 	"component.time.static": "고정 데이터",
 
 	"admin.sidebar.dashboard_settings": "대시보드 설정",
@@ -574,6 +582,8 @@ const VI = {
 	"component.info.related_links": "Liên kết liên quan",
 	"component.info.contributors": "Cộng tác viên",
 	"component.info.contributors_alt_prefix": "CTV · ",
+	"component.info.button": "Thông tin thành phần",
+	"component.info.page": "Trang thông tin",
 	"component.time.static": "Dữ liệu cố định",
 
 	"admin.sidebar.dashboard_settings": "Cài đặt bảng",
@@ -711,6 +721,8 @@ const TH = {
 	"component.info.related_links": "แหล่งข้อมูลที่เกี่ยวข้อง",
 	"component.info.contributors": "ผู้ร่วมพัฒนา",
 	"component.info.contributors_alt_prefix": "ผู้ร่วมพัฒนา · ",
+	"component.info.button": "ข้อมูลคอมโพเนนต์",
+	"component.info.page": "หน้าแสดงข้อมูล",
 	"component.time.static": "ข้อมูลคงที่",
 
 	"admin.sidebar.dashboard_settings": "ตั้งค่าแดชบอร์ด",
@@ -849,6 +861,8 @@ const ID = {
 	"component.info.related_links": "Tautan terkait",
 	"component.info.contributors": "Kontributor",
 	"component.info.contributors_alt_prefix": "Kontributor · ",
+	"component.info.button": "Info komponen",
+	"component.info.page": "Halaman info",
 	"component.time.static": "Data statis",
 
 	"admin.sidebar.dashboard_settings": "Pengaturan dasbor",
