@@ -29,6 +29,7 @@ services:
       VITE_TAIPEIPASS_SCOPE: ${ISSO_CLIENT_SCOPE}
     volumes:
       - ../Taipei-City-Dashboard-FE:/opt/Taipei-City-Dashboard-FE
+      - dashboard-fe-node-modules:/opt/Taipei-City-Dashboard-FE/node_modules
     ports:
       - "8080:80"
     working_dir: /opt/Taipei-City-Dashboard-FE
@@ -75,8 +76,12 @@ services:
       TWCC_TIMEOUT: ${TWCC_TIMEOUT}
       TWCC_MAX_RETRY: ${TWCC_MAX_RETRY}
       TWCC_MAX_CONCURRENT: ${TWCC_MAX_CONCURRENT}
+      GOMODCACHE: /go/pkg/mod
+      GOCACHE: /tmp/go-build-cache
     volumes:
       - ../Taipei-City-Dashboard-BE:/opt/Taipei-City-Dashboard-BE
+      - dashboard-be-go-mod-cache:/go/pkg/mod
+      - dashboard-be-go-build-cache:/tmp/go-build-cache
     working_dir: /opt/Taipei-City-Dashboard-BE
     ports:
       - "8088:${PORT:-8080}"
@@ -102,6 +107,14 @@ networks:
   default:
     name: br_dashboard
     external: true
+
+volumes:
+  dashboard-fe-node-modules:
+    name: dashboard-fe-node-modules
+  dashboard-be-go-mod-cache:
+    name: dashboard-be-go-mod-cache
+  dashboard-be-go-build-cache:
+    name: dashboard-be-go-build-cache
 ###########################################
 ## Create docker network command sample: ##
 ## ------------------------------------- ##################################################################

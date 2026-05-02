@@ -5,6 +5,7 @@ services:
     container_name: dashboard-fe-init
     volumes:
       - ../Taipei-City-Dashboard-FE:/opt/Taipei-City-Dashboard-FE
+      - dashboard-fe-node-modules:/opt/Taipei-City-Dashboard-FE/node_modules
     working_dir: /opt/Taipei-City-Dashboard-FE
     environment:
       DOCKER_COMPOSE: "true"
@@ -24,9 +25,13 @@ services:
       DB_MANAGER_DBNAME: ${DB_MANAGER_DBNAME}
       DB_MANAGER_PORT: ${DB_MANAGER_PORT}
       MANAGER_SAMPLE_FILE: ${MANAGER_SAMPLE_FILE:-dashboardmanager-demo.sql}
+      GOMODCACHE: /go/pkg/mod
+      GOCACHE: /tmp/go-build-cache
     volumes:
       - ../Taipei-City-Dashboard-BE:/opt/Taipei-City-Dashboard-BE
       - ../db-sample-data:/opt/db-sample-data
+      - dashboard-be-go-mod-cache:/go/pkg/mod
+      - dashboard-be-go-build-cache:/tmp/go-build-cache
     working_dir: /opt/Taipei-City-Dashboard-BE
     command: ["go", "run", "main.go", "migrateDB"]
     # command: ["sleep","600000"]
@@ -42,9 +47,13 @@ services:
       DB_DASHBOARD_DBNAME: ${DB_DASHBOARD_DBNAME}
       DB_DASHBOARD_PORT: ${DB_DASHBOARD_PORT:-5432}
       DASHBOARD_SAMPLE_FILE: ${DASHBOARD_SAMPLE_FILE:-dashboard-demo.sql}
+      GOMODCACHE: /go/pkg/mod
+      GOCACHE: /tmp/go-build-cache
     volumes:
       - ../Taipei-City-Dashboard-BE:/opt/Taipei-City-Dashboard-BE
       - ../db-sample-data:/opt/db-sample-data
+      - dashboard-be-go-mod-cache:/go/pkg/mod
+      - dashboard-be-go-build-cache:/tmp/go-build-cache
     working_dir: /opt/Taipei-City-Dashboard-BE
     command: ["go", "run", "main.go", "initDashboard"]
     # command: ["sleep","600000"]
@@ -53,3 +62,11 @@ networks:
   default:
     name: br_dashboard
     external: true
+
+volumes:
+  dashboard-fe-node-modules:
+    name: dashboard-fe-node-modules
+  dashboard-be-go-mod-cache:
+    name: dashboard-be-go-mod-cache
+  dashboard-be-go-build-cache:
+    name: dashboard-be-go-build-cache
