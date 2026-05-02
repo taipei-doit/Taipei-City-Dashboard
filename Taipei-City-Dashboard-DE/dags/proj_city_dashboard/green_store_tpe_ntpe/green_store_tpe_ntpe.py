@@ -1,5 +1,7 @@
 import re
+import concurrent.futures
 
+import requests
 import pandas as pd
 from sqlalchemy import create_engine
 
@@ -15,6 +17,29 @@ from utils.get_time import get_tpe_now_time_str
 from utils.load_stage import (
     save_dataframe_to_postgresql,
 )
+
+ARCGIS_URL = "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates"
+
+
+def _geocode_one(addr):
+    try:
+        r = requests.get(ARCGIS_URL, params={
+            "SingleLine": addr, "f": "json",
+            "outSR": '{"wkid":4326}', "maxLocations": 1,
+        }, timeout=15)
+        candidates = r.json().get("candidates", [])
+        if candidates and candidates[0].get("score", 0) >= 80:
+            loc = candidates[0]["location"]
+            return loc["x"], loc["y"]
+    except Exception:
+        pass
+    return None, None
+
+
+def _geocode_parallel(addresses, max_workers=6):
+    with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as pool:
+        results = list(pool.map(_geocode_one, addresses))
+    return [r[0] for r in results], [r[1] for r in results]
 
 DAG_ID = "green_store_tpe_ntpe"
 TPE_PAGE_ID = "1756cb64-0066-444a-a323-9f3b5a961045"
@@ -75,9 +100,15 @@ def _transfer(**kwargs):
     df["district"] = df["address"].str.extract(DISTRICT_PATTERN, expand=False)
     df["data_time"] = get_tpe_now_time_str(is_with_tz=True)
 
-    # === Geometry（暫時跳過 geocoding，待 TPGOS_GET_ADDR_XY 設定後補）===
-    df["lng"] = None
-    df["lat"] = None
+    # === Geocode via ArcGIS ===
+    unique_addr = pd.Series(df["address"].unique())
+    x, y = _geocode_parallel(unique_addr)
+    geo = pd.DataFrame({"lng": x, "lat": y, "address": unique_addr})
+    df = df.merge(geo, on="address", how="left")
+    df["lng"] = pd.to_numeric(df["lng"], errors="coerce")
+    df["lat"] = pd.to_numeric(df["lat"], errors="coerce")
+    rate = df["lng"].notna().sum() / len(df)
+    print(f"[{DAG_ID}] geocode success rate: {rate:.2%}")
     ready_data = df[[
         "source_dataset", "store_code", "name", "address", "city", "district",
         "tel", "store_type", "lng", "lat", "data_time",

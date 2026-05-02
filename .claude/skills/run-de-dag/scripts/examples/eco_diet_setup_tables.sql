@@ -102,7 +102,8 @@ CREATE TABLE IF NOT EXISTS public.gov_open_waste_yearly (
 );
 
 CREATE TABLE IF NOT EXISTS public.gov_open_waste_yearly_history
-    (LIKE public.gov_open_waste_yearly INCLUDING ALL);
+    (LIKE public.gov_open_waste_yearly INCLUDING DEFAULTS INCLUDING INDEXES);
+ALTER TABLE public.gov_open_waste_yearly_history DROP CONSTRAINT IF EXISTS gov_open_waste_yearly_history_data_year_county_key;
 
 CREATE INDEX IF NOT EXISTS idx_gov_open_waste_yearly_year_county
     ON public.gov_open_waste_yearly (data_year, county);
