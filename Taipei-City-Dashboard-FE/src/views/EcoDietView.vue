@@ -269,6 +269,17 @@ const toggleOn = ref({
 	foodBank: false,
 });
 
+// 無空間資料組件（C2、C4、C5）的本地展開狀態，不連動地圖圖層
+const noMapToggleOn = reactive({
+	"eco-diet-c1b": false,
+	"eco-diet-c5": false,
+	"eco-diet-c5b": false,
+});
+
+function handleNoMapToggle(id, value) {
+	noMapToggleOn[id] = value;
+}
+
 // 原始 BE 回應快取，切換城市時據此重算 chart_data 與 layer 篩選
 const rawData = ref({
 	restaurantPoints: [],
@@ -1411,7 +1422,9 @@ function tagListOf(component) {
         :select-btn="true"
         :select-btn-list="CITY_SELECT_LIST"
         :city-tag="tagListOf(item)"
+        :toggle-on="noMapToggleOn[item.id] ?? false"
         @info="handleMoreInfo"
+        @toggle="(v) => handleNoMapToggle(item.id, v)"
         @change-city="(city) => handleChangeCity(item, city)"
       />
     </div>
