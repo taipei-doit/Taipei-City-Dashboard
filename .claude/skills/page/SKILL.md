@@ -7,6 +7,47 @@ description: 當使用者要建立新頁面（View）、新增路由、或建立
 
 建立新頁面是一個多步驟任務。請依照以下順序執行，並在每個步驟確認相關規範。
 
+## ⚠️ Step -1：先判斷你真的需要新 view 嗎（MANDATORY）
+
+主站本來就是「**BE 在 dashboardmanager 註冊好就自動長一個頁面**」的設計，FE **完全不用寫任何 view 程式碼**。寫自訂 view 是**例外狀況**，不是常態。動手前先依下面決策樹判定：
+
+```
+你要做的是什麼？
+│
+├─ 想新增一個「儀表板」（一組 chart 卡片組合）
+│     └─ 圖表類型 fit 既有 chart 元件嗎？
+│         （ColumnChart / DonutChart / BarChart / TimelineSeparateChart / RadarChart /
+│           DistrictChart / IconPercentChart / TextUnitChart / MapLegend ...）
+│         ├─ 是 → ❌ 不要寫 view！請 BE 在 dashboardmanager DB 註冊：
+│         │       1. dashboards 表加 1 筆 (index, name, city, icon)
+│         │       2. components 表為每個 chart 加 1 筆 (chart_config, query_type, ...)
+│         │       3. query_charts 加 SQL 從你們的 PG 撈資料
+│         │     完成後 FE 直接 /dashboard?index=<your-index>&city=<city> 就有畫面
+│         └─ 否 → 需新 chart 元件，仍**不需要新 view**：
+│               請用 chart skill 在 src/dashboardComponent/components/ 加新元件
+│               + 在 DashboardComponent.vue returnChartComponent() 註冊
+│               + BE 在 chart_config.types 寫新元件名稱即可
+│
+├─ 想新增一個「彈跳互動」（chat、表單、編輯器、特殊互動 widget）
+│     └─ → 用 dialog skill，**禁建 view**，dialog 會被任何 view 共用
+│
+├─ 想新增一個「全螢幕／非標準 layout」（登入 callback、嵌入頁、admin）
+│     └─ → 才寫新 view（這是少數例外，本 SKILL 後續步驟適用）
+│
+└─ 想做「demo / hackathon / 一次性展示」
+      └─ → 視展示需求決定。優先走 dashboardmanager 註冊（最符合主站精神）；
+            真的需要繞過時才寫 view，但要在對話中明說理由
+```
+
+**反例（已踩過的坑，別再來）**：
+
+- 拿到 BE contract 就直接寫一個 view 自管 axios + chart_config——這違反主站設計，dashboard 本來就應該由 BE 註冊驅動
+- 寫了 demo view 還要再加 SideBar link、router、NavBar tabContext 一堆接線——只是再次證明你選錯路徑
+- 在 `src/components/` 根目錄加 modal——應該在 `src/components/dialogs/`
+- view 內 `import axios from "axios"` 直接打 BE——應該 `import http from "../router/axios"`
+
+如果上面決策樹判定「需要新 view」（例外情境），才往下走；否則停下來，去對應的 chart / dialog skill 或要求 BE 動 dashboardmanager。
+
 ## 開始前
 
 向使用者確認以下資訊（如尚未提供）：
@@ -40,21 +81,67 @@ description: 當使用者要建立新頁面（View）、新增路由、或建立
 
 使用者確認對照表後，才進 Step 1。
 
-### Step 0.5：盤點 `src/components/utilities/` 與 `src/components/dialogs/`（**MANDATORY**）
+### Step 0.5：盤點現有元件 + 確認檔案歸屬位置（**MANDATORY**）
 
-開工前**必須**先掃過 `Taipei-City-Dashboard-FE/src/components/utilities/` 與 `src/components/dialogs/` 兩個資料夾，列清楚現有的工具元件清單──這是這個專案累積的視覺／互動共用資產，**不得自己生成已存在的元件**。常見會撞名重做的：
+開工前**必須**先掃過下列資料夾，列清楚現有可重用元件給使用者看：
 
-- `utilities/bars/`（NavBar / SideBar / SettingsBar / AdminSideBar / ComponentSideBar）
-- `utilities/miscellaneous/`（SideBarTab / MobileLayerTab 等）
-- `utilities/forms/`、`utilities/buttons/`、`utilities/loading/` 等通用 input / button / loading
-- `dialogs/`（MoreInfo / ReportIssue / FindClosestPoint / NotificationBar / LogIn 等彈窗）
+| 資料夾 | 用途 | 常見元件 |
+|---|---|---|
+| `src/components/utilities/bars/` | 全站殼（不要自刻） | NavBar / SideBar / SettingsBar / AdminSideBar / ComponentSideBar |
+| `src/components/utilities/miscellaneous/` | 共用 widget | SideBarTab / MobileLayerTab / ComponentTag |
+| `src/components/utilities/forms/` `buttons/` `loading/` | 通用表單／按鈕／loading | CustomCheckBox / SelectButtons / InputTags 等 |
+| `src/components/dialogs/` | 全部彈跳視窗 | MoreInfo / ReportIssue / FindClosestPoint / NotificationBar / LogIn / ChatBox 等 |
+| `src/components/icons/` | SVG icon 元件 | BotLogo / SendIcon / UserLogo / ChatBotIcon |
+| `src/dashboardComponent/components/` | chart 卡片元件 | ColumnChart / DonutChart / TextUnitChart / MapLegend ⋯ 18 種 |
 
 判定流程：
-1. **能直接用**：用 import 路徑帶進新 view，不要拷貝樣式或重寫
-2. **需要小改但符合精神**：先在對話中說明你要怎麼擴 props / slot，待使用者同意，再改原元件（而非另開一個）
-3. **真的不適用**才允許自幹──但要在對話中明確列出「`utilities/X` 為什麼不適用」，避免之後 review 才發現可以重用
+1. **能直接用**：import 帶進來，不要拷貝樣式或重寫
+2. **需要小改但符合精神**：先在對話中說明擴 props / slot 方案，待使用者同意，再改原元件（不是另開一個）
+3. **真的不適用**才允許自幹──但要在對話中列「為什麼不適用」，且**檔案要放對位置**（見下表）
 
-**反模式**：看到要做 link / button / sidebar 條目就直接寫 inline `<a>` 或新元件，沒先去 `utilities/` 看──這條會讓 demo 視覺與主站脫節，且重複的 CSS 散落各處難維護。
+### 新元件的「正確檔案歸屬」（硬規矩）
+
+| 元件性質 | 必須放哪 | 反例（已踩過） |
+|---|---|---|
+| 新 chart 卡片（吃 chart_config + series props） | `src/dashboardComponent/components/<Name>.vue` + DashboardComponent.vue 的 `returnChartComponent()` switch 註冊 | ❌ 放 `src/components/` |
+| 新 dialog / modal / chat panel | `src/components/dialogs/<Name>.vue` | ❌ 放 `src/components/` 根目錄（隊友 MrtAiChatModal/NearbyA11yChatModal 就踩這條） |
+| 新 SVG icon | `src/components/icons/<Name>.vue` | ❌ 直接寫 `<span class="material-icons">xxx</span>`（除非真沒對應 icon 元件） |
+| 新通用 widget（form input / button / loading） | `src/components/utilities/<category>/<Name>.vue` | ❌ 放 view 檔內 inline |
+| 新 view（極少見，看 Step -1 決策樹） | `src/views/<Name>View.vue` | — |
+
+**錯放後果**：未來 dev 找不到（慣例破壞）、CSS 散落、無法統一維護。
+
+### Dialog 必須走 dialogStore + Teleport 模式（**硬禁**）
+
+新 dialog/modal **不允許**用自管 `props.show + emit('close')`。專案標準：
+
+1. 在 `src/store/dialogStore.js` 的 `dialogs` state 加你的 dialog name（boolean，預設 `false`）
+2. 元件用 `<Teleport to="body">` 包住，外層判斷 `dialogStore.dialogs.<your-name> === true` 才顯示
+3. 開啟用 `dialogStore.showDialog('<your-name>')`
+4. 全域 `dialogStore.hideAllDialogs()` 能一次關掉
+
+範例參照：`src/components/dialogs/MoreInfo.vue`、`AddViewPoint.vue`。
+
+**為什麼強制**：ESC 鍵、點背景關閉、其他 dialog 開啟時的互斥、z-index 全自動對齊。自管 show 等於放棄全部。
+
+### API 呼叫硬禁：禁用原生 axios
+
+`view`、`dialog`、`store` 內**禁止** `import axios from "axios"`。**唯一**允許：
+
+```js
+import http from "../router/axios";   // 或 ../../router/axios，視層數
+```
+
+`http` instance 內建：
+- `baseURL = VITE_API_URL`（環境決定 prod / 本機 BE）
+- request interceptor 自動注入 `Authorization: Bearer <token>`
+- response interceptor 處理 401（自動登出） / 500（NotificationBar 通知）
+
+直接 `import axios from "axios"` 等於放棄上面三條 — token 過期不會自動登出、500 沒通知、baseURL 寫死。
+
+**例外**：要打非主站 BE（data.taipei、CWA、外部公開 API）才允許原生 axios，且要在對話中明說 endpoint 不在主站範圍。
+
+**反模式（已踩過）**：隊友的 `MrtAiChatModal.vue` / `NearbyA11yChatModal.vue` 都直接 `import axios from "axios"` + 自寫 `authHeaders()` — 結果 401 不會觸發自動登出，500 也沒提示。
 
 ### 重用優先原則
 

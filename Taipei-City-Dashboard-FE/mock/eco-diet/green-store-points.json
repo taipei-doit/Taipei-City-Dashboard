@@ -1,0 +1,15 @@
+{
+	"status": "success",
+	"data": [
+		{ "source_dataset": "tpe_00002657", "store_code": "A000204", "name": "7-11OPEN門市", "address": "臺北市士林區基河路128號", "city": "臺北市", "district": "士林區", "tel": "(02)27478711", "store_type": "連鎖型綠色商店", "lng": 121.5238, "lat": 25.0902 },
+		{ "source_dataset": "tpe_00002657", "store_code": "A001120", "name": "全聯福利中心民生店", "address": "臺北市松山區民生東路三段1號", "city": "臺北市", "district": "松山區", "tel": "(02)27130456", "store_type": "連鎖型綠色商店", "lng": 121.5418, "lat": 25.0578 },
+		{ "source_dataset": "tpe_00002657", "store_code": "A002310", "name": "家樂福桂林店", "address": "臺北市萬華區桂林路1號", "city": "臺北市", "district": "萬華區", "tel": "(02)23030456", "store_type": "連鎖型綠色商店", "lng": 121.5044, "lat": 25.0382 },
+		{ "source_dataset": "tpe_00002657", "store_code": "B003012", "name": "安心有機小舖", "address": "臺北市大安區忠孝東路四段20號", "city": "臺北市", "district": "大安區", "tel": "(02)27718800", "store_type": "一般型綠色商店", "lng": 121.5454, "lat": 25.0411 },
+		{ "source_dataset": "tpe_00002657", "store_code": "B004156", "name": "天母素食材料行", "address": "臺北市士林區中山北路六段45號", "city": "臺北市", "district": "士林區", "tel": "(02)28720023", "store_type": "一般型綠色商店", "lng": 121.5316, "lat": 25.1083 },
+		{ "source_dataset": "ntpe_6ccd0274", "store_code": "F002166", "name": "象印板橋服務中心", "address": "新北市板橋區國光路52號1樓", "city": "新北市", "district": "板橋區", "tel": "02-25069009", "store_type": "連鎖型綠色商店", "lng": 121.4673, "lat": 25.0205 },
+		{ "source_dataset": "ntpe_6ccd0274", "store_code": "F004523", "name": "美廉社三重店", "address": "新北市三重區重新路三段10號", "city": "新北市", "district": "三重區", "tel": "02-29821234", "store_type": "連鎖型綠色商店", "lng": 121.4877, "lat": 25.0625 },
+		{ "source_dataset": "ntpe_6ccd0274", "store_code": "G005019", "name": "新店有機站", "address": "新北市新店區北宜路一段100號", "city": "新北市", "district": "新店區", "tel": "02-29127789", "store_type": "一般型綠色商店", "lng": 121.5388, "lat": 24.9712 },
+		{ "source_dataset": "ntpe_6ccd0274", "store_code": "G006547", "name": "中和綠生活雜貨", "address": "新北市中和區員山路56號", "city": "新北市", "district": "中和區", "tel": "02-22456622", "store_type": "一般型綠色商店", "lng": 121.4889, "lat": 25.0057 },
+		{ "source_dataset": "ntpe_6ccd0274", "store_code": "G007234", "name": "永和環保小店", "address": "新北市永和區中正路200號", "city": "新北市", "district": "永和區", "tel": "02-29299988", "store_type": "一般型綠色商店", "lng": 121.5145, "lat": 25.0119 }
+	]
+}

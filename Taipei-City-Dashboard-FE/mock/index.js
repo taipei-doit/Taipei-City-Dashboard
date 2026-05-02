@@ -11,7 +11,16 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // 路徑相對於 mock/ 資料夾
-const routes = {};
+// BE 實作完哪一條，就把對應 entry 從這裡移除，FE 立刻吃真資料（vite proxy 接手）
+const routes = {
+	// 永續環境 — 綠色飲食行為流程儀表板（contract: 08_eco_diet_openapi.yaml）
+	"/api/v1/eco_diet/restaurant/points": "eco-diet/restaurant-points.json",
+	"/api/v1/eco_diet/restaurant/density-by-district": "eco-diet/restaurant-density-by-district.json",
+	"/api/v1/eco_diet/restaurant/count-by-city": "eco-diet/restaurant-count-by-city.json",
+	"/api/v1/eco_diet/green_store/points": "eco-diet/green-store-points.json",
+	"/api/v1/eco_diet/waste/yearly": "eco-diet/waste-yearly.json",
+	"/api/v1/eco_diet/food_bank/points": "eco-diet/food-bank-points.json",
+};
 
 export default function mockBE() {
 	return {
