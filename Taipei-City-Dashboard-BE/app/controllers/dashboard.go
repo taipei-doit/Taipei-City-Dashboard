@@ -2,6 +2,7 @@
 package controllers
 
 import (
+	"context"
 	"errors"
 	"net/http"
 	"strings"
@@ -9,6 +10,7 @@ import (
 	"TaipeiCityDashboardBE/app/models"
 	"TaipeiCityDashboardBE/app/services"
 	"TaipeiCityDashboardBE/app/util"
+	"TaipeiCityDashboardBE/global"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
@@ -41,7 +43,25 @@ func GetAllDashboards(c *gin.Context) {
 		return
 	}
 
+	if lang, ok := c.Get("lang"); ok && global.GlobalTranslator != nil {
+		targetLang := lang.(string)
+		ctx := c.Request.Context()
+		translateDashboardNames(ctx, dashboards.Public, targetLang)
+		translateDashboardNames(ctx, dashboards.Taipei, targetLang)
+		translateDashboardNames(ctx, dashboards.MetroTaipei, targetLang)
+		translateDashboardNames(ctx, dashboards.Personal, targetLang)
+	}
+
 	c.JSON(http.StatusOK, gin.H{"status": "success", "data": dashboards})
+}
+
+func translateDashboardNames(ctx context.Context, list []models.Dashboard, targetLang string) {
+	if global.GlobalTranslator == nil {
+		return
+	}
+	for i := range list {
+		list[i].Name = global.GlobalTranslator.Translate(ctx, list[i].Name, targetLang, "dashboard_name")
+	}
 }
 
 /*

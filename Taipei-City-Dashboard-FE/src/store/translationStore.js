@@ -122,21 +122,18 @@ export const useTranslationStore = defineStore("translation", {
 		async setLocale(code) {
 			if (!SUPPORTED_LOCALES.some((l) => l.code === code)) return;
 
-
 			const contentStore = useContentStore();
-
-
 			const changed = code !== this.locale;
+
 			this.releasePendingTranslates();
 			this.locale = code;
 			localStorage.setItem(LOCALE_STORAGE_KEY, code);
 			await this.fetchStaticDictionary();
 
-
-			if (changed && contentStore.currentDashboard?.index) {
-				contentStore.setCurrentDashboardAllContent();
-			} else if (changed) {
-				contentStore.setDashboards(true);
+			// 僅重抓 GET /dashboard/（setDashboards(true)）以帶後端依 Accept-Language 的譯名；
+			// 不重拉 /dashboard/:index chart，避免圖表像整頁重新載入。
+			if (changed) {
+				await contentStore.setDashboards(true);
 			}
 		},
 

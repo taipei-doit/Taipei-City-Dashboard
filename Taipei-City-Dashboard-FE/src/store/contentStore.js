@@ -158,7 +158,10 @@ export const useContentStore = defineStore("content", {
 				}
 			});
 
-			if (onlyDashboard) return;
+			if (onlyDashboard) {
+				this.applyCurrentDashboardLabelsFromLists();
+				return;
+			}
 
 			// 2-1. If the current path is /dashboard or /mapview, redirect to the first dashboard
 			if (!this.currentDashboard.index) {
@@ -210,7 +213,28 @@ export const useContentStore = defineStore("content", {
 
 			return dashboards;
 		},
-		// 2-3. Get all dashboards of a city
+		// 2-3. Sync 儀表板標題／圖示（僅 name、icon）自 GET /dashboard，不重拉組件資料——用於語系切換後帶入後端譯名。
+		applyCurrentDashboardLabelsFromLists() {
+			const { index } = this.currentDashboard;
+			if (!index) return;
+
+			for (const dashboards of this.dashboards.values()) {
+				const found = dashboards?.find((d) => d.index === index);
+				if (found) {
+					this.currentDashboard.name = found.name;
+					this.currentDashboard.icon = found.icon;
+					return;
+				}
+			}
+			const personal = this.personalDashboards?.find(
+				(d) => d.index === index,
+			);
+			if (personal) {
+				this.currentDashboard.name = personal.name;
+				this.currentDashboard.icon = personal.icon;
+			}
+		},
+		// 2-4. Get all dashboards of a city
 		getDashboardsByCity(city) {
 			return this.dashboards.get(city) || [];
 		},

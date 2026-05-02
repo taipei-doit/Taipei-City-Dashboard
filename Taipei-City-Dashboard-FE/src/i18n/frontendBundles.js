@@ -2,6 +2,7 @@
 /**
  * Navbar / Sidebar / Dash 標籤 / 問題回報等——前端寫死字串。
  * LLM／GET /translation/static 僅在未覆蓋的 key 或未列語系時補位。
+ * 儀表板顯示名稱以資料庫為準，並由後端 GET /dashboard 依 Accept-Language（translations 快取／LLM）。
  * 新增語系：擴充 BUNDLES；未定義時依序 fallback en → zh-TW。
  */
 
