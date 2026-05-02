@@ -469,6 +469,12 @@ function returnChartComponent(name, svg) {
     >
       <div />
     </div>
+    <div
+      v-if="mode !== 'preview' && (!mode.includes('map') || toggleOn)"
+      class="dashboardcomponent-ai-comment"
+    >
+      <p>AI 圖表評論待生成</p>
+    </div>
     <!-- Footer -->
     <div
       v-if="footer && (!mode.includes('map') || toggleOn)"
@@ -550,8 +556,8 @@ button:hover {
 }
 
 .dashboardcomponent {
-	height: 330px;
-	max-height: 330px;
+	height: 420px;
+	max-height: 420px;
 	width: calc(100% - var(--font-m) * 2);
 	max-width: calc(100% - var(--font-m) * 2);
 	display: flex;
@@ -563,18 +569,18 @@ button:hover {
 	background-color: var(--color-component-background);
 
 	@media (min-width: 1050px) {
-		height: 370px;
-		max-height: 370px;
+		height: 450px;
+		max-height: 450px;
 	}
 
 	@media (min-width: 1650px) {
-		height: 400px;
-		max-height: 400px;
+		height: 480px;
+		max-height: 480px;
 	}
 
 	@media (min-width: 2200px) {
-		height: 500px;
-		max-height: 500px;
+		height: 580px;
+		max-height: 580px;
 	}
 
 	&-header {
@@ -743,13 +749,34 @@ button:hover {
 	&-chart,
 	&-loading,
 	&-error {
-		height: 75%;
+		height: calc(78% - 34px);
+		min-height: 270px;
 		position: relative;
 		padding-top: 1%;
 		overflow-y: scroll;
 
 		p {
 			color: var(--color-border);
+		}
+	}
+
+	&-ai-comment {
+		height: 28px;
+		min-height: 28px;
+		display: flex;
+		align-items: center;
+		margin-top: 2px;
+		padding: 0 8px;
+		border: 1px dashed var(--color-complement-text);
+		border-radius: 5px;
+		background-color: rgba(0, 0, 0, 0.12);
+		opacity: 0.72;
+
+		p {
+			color: var(--color-complement-text);
+			font-size: var(--font-s);
+			white-space: nowrap;
+			text-overflow: ellipsis;
 		}
 	}
 
@@ -831,22 +858,22 @@ button:hover {
 }
 
 .large {
-	height: 350px;
-	max-height: 350px;
+	height: 470px;
+	max-height: 470px;
 
 	@media (min-width: 820px) {
-		height: 380px;
-		max-height: 380px;
+		height: 500px;
+		max-height: 500px;
 	}
 
 	@media (min-width: 1200px) {
-		height: 420px;
-		max-height: 420px;
+		height: 540px;
+		max-height: 540px;
 	}
 
 	@media (min-width: 2200px) {
-		height: 520px;
-		max-height: 520px;
+		height: 660px;
+		max-height: 660px;
 	}
 }
 
@@ -856,13 +883,14 @@ button:hover {
 }
 
 .mapopen {
-	max-height: 330px;
-	height: 330px;
+	max-height: 420px;
+	height: 420px;
 
 	&-chart,
 	&-loading {
 		padding-top: 0%;
-		height: 80%;
+		height: calc(82% - 34px);
+		min-height: 280px;
 		position: relative;
 		overflow-y: scroll;
 
@@ -873,37 +901,39 @@ button:hover {
 }
 
 .half {
-	height: 180px;
-	max-height: 180px;
+	height: 310px;
+	max-height: 310px;
 
 	@media (min-width: 1050px) {
-		height: 210px;
-		max-height: 210px;
+		height: 335px;
+		max-height: 335px;
 	}
 
 	@media (min-width: 1650px) {
-		height: 225px;
-		max-height: 225px;
+		height: 360px;
+		max-height: 360px;
 	}
 
 	@media (min-width: 2200px) {
-		height: 275px;
-		max-height: 275px;
+		height: 430px;
+		max-height: 430px;
 	}
 
 	&-chart,
 	&-loading {
-		height: 60%;
+		height: calc(72% - 34px);
+		min-height: 180px;
 	}
 }
 
 .halfmapopen {
-	height: 200px;
-	max-height: 200px;
+	height: 330px;
+	max-height: 330px;
 
 	&-chart {
 		padding-top: 0;
-		height: 75%;
+		height: calc(76% - 34px);
+		min-height: 210px;
 	}
 }
 

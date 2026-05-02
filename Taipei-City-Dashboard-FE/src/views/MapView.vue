@@ -26,6 +26,7 @@ const contentStore = useContentStore();
 const dialogStore = useDialogStore();
 const mapStore = useMapStore();
 const route = useRoute();
+const isPanelOpen = ref(false);
 
 const toggleOn = ref({
 	hasMap: [],
@@ -50,6 +51,7 @@ watch(
 	() => route.query.index,
 	(newIndex, oldIndex) => {
 		if (newIndex !== oldIndex) {
+			isPanelOpen.value = false;
 			toggleOn.value = {
 				hasMap: new Array(parseMapLayers.value.hasMap?.length).fill(
 					false,
@@ -67,6 +69,17 @@ watch(
 		}
 	},
 );
+
+const activeLayerCount = computed(() => mapStore.currentVisibleLayers.length);
+const mapComponentCount = computed(
+	() =>
+		(parseMapLayers.value.hasMap?.length || 0) +
+		(contentStore.mapLayers?.length || 0),
+);
+
+function togglePanel() {
+	isPanelOpen.value = !isPanelOpen.value;
+}
 
 function handleOpenSettings() {
 	contentStore.editDashboard = JSON.parse(
@@ -140,7 +153,30 @@ function popularBasicLayerGA(map_config) {
 
 <template>
   <div class="map">
-    <div class="hide-if-mobile">
+    <MapContainer class="map-stage" />
+    <div class="map-status hide-if-mobile">
+      <div>
+        <p>MAPVIEW</p>
+        <strong>{{ contentStore.currentDashboard.name || "Taipei" }}</strong>
+      </div>
+      <span>{{ activeLayerCount }} ACTIVE</span>
+    </div>
+    <div class="map-commandbar">
+      <button
+        class="map-commandbar-button"
+        :class="{ 'map-commandbar-button--active': isPanelOpen }"
+        type="button"
+        @click="togglePanel"
+      >
+        <span>layers</span>
+        <strong>圖層 / 組件</strong>
+        <em>{{ mapComponentCount }}</em>
+      </button>
+    </div>
+    <div
+      v-if="isPanelOpen"
+      class="map-panels hide-if-mobile"
+    >
       <!-- 1. If the dashboard is map-layers -->
       <div
         v-if="
@@ -572,7 +608,6 @@ function popularBasicLayerGA(map_config) {
         </p>
       </div>
     </div>
-    <MapContainer />
     <MoreInfo />
     <ReportIssue />
   </div>
@@ -582,39 +617,181 @@ function popularBasicLayerGA(map_config) {
 .map {
 	height: calc(100vh - 127px);
 	height: calc(var(--vh) * 100 - 127px);
-	display: flex;
-	margin: var(--font-m) var(--font-m);
+	position: relative;
+	margin: 0;
+	overflow: hidden;
+	background-color: #020203;
+	isolation: isolate;
+
+	&::before,
+	&::after {
+		display: none;
+	}
+
+	&-stage {
+		position: absolute;
+		inset: 0;
+		z-index: 1;
+	}
+
+	&-status {
+		position: absolute;
+		top: 24px;
+		left: 430px;
+		z-index: 6;
+		display: flex;
+		gap: 18px;
+		align-items: flex-end;
+		color: #f4f2eb;
+		font-family: Consolas, "Courier New", monospace;
+		text-shadow: 0 0 12px rgba(255, 255, 255, 0.62);
+		pointer-events: none;
+
+		p,
+		span {
+			font-size: 0.68rem;
+			font-weight: 700;
+		}
+
+		strong {
+			display: block;
+			max-width: 420px;
+			font-size: 1.1rem;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+		}
+
+		span {
+			padding: 4px 8px;
+			border: 1px solid rgba(244, 242, 235, 0.5);
+			background-color: rgba(0, 0, 0, 0.4);
+		}
+	}
+
+	&-commandbar {
+		position: absolute;
+		top: 118px;
+		left: 30px;
+		z-index: 30;
+		display: flex;
+		gap: 8px;
+		align-items: center;
+		pointer-events: auto;
+
+		&-button {
+			height: 42px;
+			display: grid;
+			grid-template-columns: 22px auto 24px;
+			gap: 8px;
+			align-items: center;
+			padding: 0 10px;
+			border: 1px solid rgba(244, 242, 235, 0.42);
+			background-color: rgba(0, 0, 0, 0.58);
+			color: rgba(244, 242, 235, 0.86);
+			font-family: Consolas, "Courier New", monospace;
+			box-shadow: 0 0 18px rgba(255, 255, 255, 0.1);
+			cursor: pointer;
+			transition:
+				border-color 0.18s,
+				background-color 0.18s,
+				color 0.18s;
+
+			span {
+				font-family: var(--font-icon);
+				font-size: 1.2rem;
+				line-height: 1;
+			}
+
+			strong {
+				font-size: 0.78rem;
+				font-weight: 700;
+				white-space: nowrap;
+			}
+
+			em {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				width: 24px;
+				height: 22px;
+				border: 1px solid rgba(244, 242, 235, 0.32);
+				color: #fff;
+				font-size: 0.72rem;
+				font-style: normal;
+			}
+
+			&:hover,
+			&--active {
+				border-color: rgba(255, 255, 255, 0.9);
+				background-color: rgba(255, 255, 255, 0.12);
+				color: #fff;
+			}
+		}
+
+		@media (max-width: 1000px), (max-height: 500px) {
+			display: none;
+		}
+	}
+
+	&-panels {
+		position: absolute;
+		top: 150px;
+		bottom: 20px;
+		left: 20px;
+		z-index: 29;
+		width: min(390px, calc(100vw - 40px));
+		pointer-events: none;
+	}
 
 	&-charts {
-		width: 360px;
+		width: 100%;
 		max-height: 100%;
-		height: fit-content;
+		height: 100%;
 		display: grid;
 		row-gap: var(--font-m);
-		margin-right: var(--font-s);
-		border-radius: 5px;
+		padding-right: 8px;
+		border-radius: 0;
 		overflow-y: scroll;
+		pointer-events: auto;
+		mask-image: linear-gradient(
+			transparent 0,
+			black 22px,
+			black calc(100% - 22px),
+			transparent 100%
+		);
 
 		@media (min-width: 1000px) {
-			width: 370px;
+			width: 100%;
 		}
 
 		@media (min-width: 2000px) {
-			width: 400px;
+			width: 420px;
+		}
+
+		h2 {
+			padding: 7px 10px;
+			border: 1px solid rgba(244, 242, 235, 0.38);
+			background-color: rgba(0, 0, 0, 0.56);
+			color: rgba(244, 242, 235, 0.84);
+			font-family: Consolas, "Courier New", monospace;
+			font-size: 0.78rem;
+			font-weight: 700;
 		}
 
 		&-nodashboard {
-			width: 360px;
+			width: 100%;
 			height: calc(100vh - 127px);
 			height: calc(var(--vh) * 100 - 127px);
 			display: flex;
 			flex-direction: column;
 			align-items: center;
 			justify-content: center;
-			margin-right: var(--font-s);
+			border: 1px solid rgba(244, 242, 235, 0.38);
+			background-color: rgba(0, 0, 0, 0.52);
+			pointer-events: auto;
 
 			@media (min-width: 1000px) {
-				width: 370px;
+				width: 100%;
 			}
 
 			@media (min-width: 2000px) {

@@ -33,7 +33,6 @@ import MapPopup from "../components/map/MapPopup.vue";
 import {
 	MapObjectConfig,
 	CityMapView,
-	TaipeiBuilding,
 	metroTaipeiTown,
 	metroTaipeiVillage,
 	metroTpDistrict,
@@ -57,6 +56,68 @@ import {
 	getCrowdColor,
 	mrtLineColor,
 } from "../assets/utilityFunctions/getThematicColor.js";
+
+function safelySetPaintProperty(map, layerId, property, value) {
+	try {
+		map.setPaintProperty(layerId, property, value);
+	} catch {
+		// Some style properties are only available on newer Mapbox GL versions.
+	}
+}
+
+const mapImageNames = [
+	"metro",
+	"triangle_green",
+	"triangle_white",
+	"bike_green",
+	"bike_orange",
+	"bike_red",
+	"cctv",
+	"live",
+	"youbike_elec",
+];
+
+const mrtModelConfigs = [
+	{ id: "mrt_car_c381", url: "/images/map/mrt_car_c381.glb" },
+	{ id: "mrt_car_c370", url: "/images/map/mrt_car_c370.glb" },
+];
+
+const ENABLE_AWWWARDS_MAP_STYLE = false;
+const PERFORMANCE_STYLE_LAYER_IDS = new Set([
+	"land",
+	"water",
+	"waterway",
+	"admin-1-boundary",
+	"admin-0-boundary",
+	"road-motorway-trunk-navigation",
+	"road-primary-navigation",
+	"road-secondary-tertiary-navigation",
+	"bridge-motorway-trunk-navigation",
+	"bridge-primary-navigation",
+	"bridge-secondary-tertiary-navigation",
+	"road-label-navigation",
+	"settlement-subdivision-label",
+	"settlement-minor-label",
+	"settlement-major-label",
+]);
+const MOVING_LABEL_LAYER_IDS = [
+	"road-label-navigation",
+	"settlement-subdivision-label",
+	"settlement-minor-label",
+	"settlement-major-label",
+	"metrotaipei_town_label",
+	"metrotaipei_village_label",
+	"cinematic-map-labels",
+];
+
+function getPerformanceMapStyle() {
+	return {
+		...mapStyle,
+		layers: mapStyle.layers.filter((layer) =>
+			PERFORMANCE_STYLE_LAYER_IDS.has(layer.id),
+		),
+	};
+}
 
 export const useMapStore = defineStore("map", {
 	state: () => ({
@@ -95,6 +156,14 @@ export const useMapStore = defineStore("map", {
 		layerUpdateTime: {
 			// [layerId]: Date
 		},
+		pendingMapViewCity: "default",
+		hasPlayedInitialReveal: false,
+		hasAppliedCinematicStyle: false,
+		cinematicPitch: MapObjectConfig.pitch,
+		isArcAnimationRunning: false,
+		arcAnimationFrame: null,
+		hasLoadedDeferredMapData: false,
+		labelRestoreTimer: null,
 	}),
 	actions: {
 		/* Initialize Mapbox */
@@ -103,33 +172,38 @@ export const useMapStore = defineStore("map", {
 			this.map = null;
 			this.marker = null;
 			this.overlay = null;
+			this.isPreloading = false;
+			this.preloadedModels = {};
+			this.deckGlLayer = {};
+			this.isArcAnimationRunning = false;
+			this.arcAnimationFrame = null;
+			this.hasPlayedInitialReveal = false;
+			this.hasAppliedCinematicStyle = false;
+			this.hasLoadedDeferredMapData = false;
+			this.labelRestoreTimer = null;
+			this.cinematicPitch = MapObjectConfig.pitch;
 			const MAPBOXTOKEN = import.meta.env.VITE_MAPBOXTOKEN;
 			mapboxGl.accessToken = MAPBOXTOKEN;
 			this.map = new mapboxGl.Map({
 				...MapObjectConfig,
-				style: mapStyle,
+				style: getPerformanceMapStyle(),
 			});
 			this.marker = new mapboxGl.Marker();
-			const geoLocate = new mapboxGl.GeolocateControl({
-				positionOptions: {
-					enableHighAccuracy: true,
-				},
-				trackUserLocation: true,
-				showUserHeading: true,
-			});
-			this.map.addControl(geoLocate);
-			this.map.addControl(new mapboxGl.NavigationControl());
 			this.map.doubleClickZoom.disable();
 			let isFirstZoom = true;
 			this.map
 				.on("load", () => {
 					if (!this.map) return;
-					this.overlay = new MapboxOverlay({
-						interleaved: true,
-						layers: [],
-					});
-					this.map.addControl(this.overlay);
-					this.initializeBasicLayers();
+					this.scheduleInitialMapReveal(this.pendingMapViewCity);
+				})
+				.on("styleimagemissing", (event) => {
+					this.loadMapImage(event.id);
+				})
+				.on("movestart", () => {
+					this.hideLabelsDuringMapMotion();
+				})
+				.on("moveend", () => {
+					this.scheduleLabelsAfterMapMotion();
 				})
 				.on("click", (event) => {
 					if (this.popup) {
@@ -159,213 +233,572 @@ export const useMapStore = defineStore("map", {
 					}
 				});
 			this.renderMarkers();
+			return null;
+		},
+		scheduleInitialMapReveal(city = "default") {
+			if (!this.map || this.hasPlayedInitialReveal) return;
+			const startReveal = () => {
+				if (!this.map || this.hasPlayedInitialReveal) return;
+				window.setTimeout(() => {
+					if (!this.map || this.hasPlayedInitialReveal) return;
+					this.playInitialMapReveal(
+						this.pendingMapViewCity || city,
+					);
+				}, 120);
+			};
 
-			// 使用者點擊定位功能後觸發GA自訂事件
-			geoLocate.on("geolocate", () => {
-				gtag("event", "map_actions", {
-					action_type: "所在位置定位",
-					time: Date.now(),
+			if (
+				this.map.loaded() &&
+				(typeof this.map.areTilesLoaded !== "function" ||
+					this.map.areTilesLoaded())
+			) {
+				startReveal();
+				return;
+			}
+
+			const fallbackTimer = window.setTimeout(startReveal, 1600);
+			this.map.once("idle", () => {
+				window.clearTimeout(fallbackTimer);
+				startReveal();
+			});
+		},
+		revealCinematicMapStyle() {
+			if (!this.map || this.hasAppliedCinematicStyle) return;
+			this.hasAppliedCinematicStyle = true;
+			if (ENABLE_AWWWARDS_MAP_STYLE) {
+				this.applyCinematicMapEffects();
+				this.initializeCinematicMapAnnotations();
+			}
+			const idleLoad = window.requestIdleCallback || window.setTimeout;
+			idleLoad(() => this.addSymbolSources());
+			this.loadDeferredMapData();
+		},
+		setMapLayerVisibility(layerId, visibility) {
+			if (!this.map?.getLayer(layerId)) return;
+			this.map.setLayoutProperty(layerId, "visibility", visibility);
+		},
+		hideLabelsDuringMapMotion() {
+			if (!this.map) return;
+			if (this.labelRestoreTimer) {
+				window.clearTimeout(this.labelRestoreTimer);
+				this.labelRestoreTimer = null;
+			}
+			MOVING_LABEL_LAYER_IDS.forEach((layerId) => {
+				this.setMapLayerVisibility(layerId, "none");
+			});
+		},
+		scheduleLabelsAfterMapMotion() {
+			if (!this.map) return;
+			if (this.labelRestoreTimer) {
+				window.clearTimeout(this.labelRestoreTimer);
+			}
+			this.labelRestoreTimer = window.setTimeout(() => {
+				this.restoreLabelsAfterMapMotion();
+			}, 120);
+		},
+		restoreLabelsAfterMapMotion() {
+			if (!this.map) return;
+			MOVING_LABEL_LAYER_IDS.forEach((layerId) => {
+				this.setMapLayerVisibility(layerId, "visible");
+			});
+			this.labelRestoreTimer = null;
+		},
+		applyCinematicMapEffects() {
+			if (!this.map) return;
+
+			try {
+				this.map.setFog({
+					color: "rgb(8, 8, 9)",
+					"high-color": "rgb(52, 52, 56)",
+					"horizon-blend": 0.18,
+					"space-color": "rgb(0, 0, 0)",
+					"star-intensity": 0.35,
 				});
+			} catch {
+				// Fog is a progressive enhancement for Mapbox GL.
+			}
+
+			const layers = this.map.getStyle()?.layers || [];
+			layers.forEach((layer) => {
+				if (layer.type === "background") {
+					safelySetPaintProperty(
+						this.map,
+						layer.id,
+						"background-color",
+						"#020203",
+					);
+				}
+				if (layer.type === "fill") {
+					safelySetPaintProperty(
+						this.map,
+						layer.id,
+						"fill-color",
+						"#060607",
+					);
+					safelySetPaintProperty(
+						this.map,
+						layer.id,
+						"fill-opacity",
+						0.82,
+					);
+				}
+				if (layer.type === "line") {
+					safelySetPaintProperty(
+						this.map,
+						layer.id,
+						"line-color",
+						"#f2efe6",
+					);
+					safelySetPaintProperty(
+						this.map,
+						layer.id,
+						"line-opacity",
+						[
+							"interpolate",
+							["linear"],
+							["zoom"],
+							8,
+							0.14,
+							12,
+							0.28,
+							16,
+							0.62,
+						],
+					);
+					safelySetPaintProperty(
+						this.map,
+						layer.id,
+						"line-blur",
+						0.18,
+					);
+					safelySetPaintProperty(
+						this.map,
+						layer.id,
+						"line-emissive-strength",
+						0.9,
+					);
+				}
+				if (layer.type === "symbol") {
+					safelySetPaintProperty(
+						this.map,
+						layer.id,
+						"text-color",
+						"#f4f2eb",
+					);
+					safelySetPaintProperty(
+						this.map,
+						layer.id,
+						"text-halo-color",
+						"#050505",
+					);
+					safelySetPaintProperty(
+						this.map,
+						layer.id,
+						"text-halo-width",
+						1.2,
+					);
+					safelySetPaintProperty(
+						this.map,
+						layer.id,
+						"text-opacity",
+						0.62,
+					);
+					safelySetPaintProperty(
+						this.map,
+						layer.id,
+						"icon-opacity",
+						0.35,
+					);
+				}
+				if (layer.type === "fill-extrusion") {
+					safelySetPaintProperty(
+						this.map,
+						layer.id,
+						"fill-extrusion-color",
+						"#d7d4cb",
+					);
+					safelySetPaintProperty(
+						this.map,
+						layer.id,
+						"fill-extrusion-opacity",
+						0.44,
+					);
+					safelySetPaintProperty(
+						this.map,
+						layer.id,
+						"fill-extrusion-emissive-strength",
+						0.35,
+					);
+				}
+			});
+		},
+		playInitialMapReveal(city = "default", force = false) {
+			if (!this.map || (!force && this.hasPlayedInitialReveal)) return;
+			const mapView = CityMapView[city] || CityMapView.default;
+			const revealDuration = 1800;
+			const minZoom =
+				typeof this.map.getMinZoom === "function"
+					? this.map.getMinZoom()
+					: MapObjectConfig.minZoom;
+
+			this.hasPlayedInitialReveal = true;
+			this.cinematicPitch = 18;
+			this.map.stop();
+			this.map.jumpTo({
+				center: [
+					mapView.center[0] - 0.08,
+					mapView.center[1] + 0.055,
+				],
+				zoom: Math.max(minZoom, mapView.zoom - 2.2),
+				pitch: 18,
+				bearing: mapView.bearing - 42,
 			});
 
-			return geoLocate;
+			window.setTimeout(() => {
+				if (!this.map) return;
+				const finishReveal = () => {
+					if (!this.map) return;
+					this.cinematicPitch = Math.round(this.map.getPitch());
+					this.revealCinematicMapStyle();
+					this.scheduleLabelsAfterMapMotion();
+				};
+
+				this.map.once("moveend", finishReveal);
+				window.setTimeout(finishReveal, revealDuration + 360);
+				this.cinematicPitch = mapView.pitch;
+				this.map.easeTo({
+					center: mapView.center,
+					zoom: mapView.zoom,
+					pitch: mapView.pitch,
+					bearing: mapView.bearing,
+					duration: revealDuration,
+					essential: true,
+				});
+			}, 120);
+		},
+		initializeCinematicMapAnnotations() {
+			if (!this.map) return;
+			const annotationFeatures = [
+				{
+					label: "北投 / 士林",
+					labelCoordinates: [121.47, 25.158],
+					anchorCoordinates: [121.525, 25.12],
+				},
+				{
+					label: "內湖 / 南港",
+					labelCoordinates: [121.692, 25.088],
+					anchorCoordinates: [121.62, 25.06],
+				},
+				{
+					label: "都會核心",
+					labelCoordinates: [121.596, 25.018],
+					anchorCoordinates: [121.535, 25.044],
+				},
+				{
+					label: "文山 / 南區",
+					labelCoordinates: [121.478, 24.962],
+					anchorCoordinates: [121.568, 24.998],
+				},
+			];
+			const labelData = {
+				type: "FeatureCollection",
+				features: annotationFeatures.map((item) => ({
+					type: "Feature",
+					properties: {
+						label: item.label,
+					},
+					geometry: {
+						type: "Point",
+						coordinates: item.labelCoordinates,
+					},
+				})),
+			};
+			const anchorData = {
+				type: "FeatureCollection",
+				features: annotationFeatures.map((item) => ({
+					type: "Feature",
+					properties: {
+						label: item.label,
+					},
+					geometry: {
+						type: "Point",
+						coordinates: item.anchorCoordinates,
+					},
+				})),
+			};
+			const leaderData = {
+				type: "FeatureCollection",
+				features: annotationFeatures.map((item) => ({
+					type: "Feature",
+					properties: {
+						label: item.label,
+					},
+					geometry: {
+						type: "LineString",
+						coordinates: [
+							item.anchorCoordinates,
+							item.labelCoordinates,
+						],
+					},
+				})),
+			};
+
+			if (!this.map.getSource("cinematic-map-labels")) {
+				this.map.addSource("cinematic-map-labels", {
+					type: "geojson",
+					data: labelData,
+				});
+			}
+			if (!this.map.getSource("cinematic-map-anchors")) {
+				this.map.addSource("cinematic-map-anchors", {
+					type: "geojson",
+					data: anchorData,
+				});
+			}
+			if (!this.map.getSource("cinematic-map-leaders")) {
+				this.map.addSource("cinematic-map-leaders", {
+					type: "geojson",
+					data: leaderData,
+				});
+			}
+
+			if (!this.map.getLayer("cinematic-map-leaders")) {
+				this.map.addLayer({
+					id: "cinematic-map-leaders",
+					type: "line",
+					source: "cinematic-map-leaders",
+					paint: {
+						"line-color": "#f4f2eb",
+						"line-width": [
+							"interpolate",
+							["linear"],
+							["zoom"],
+							8,
+							0.45,
+							14,
+							1,
+						],
+						"line-opacity": [
+							"interpolate",
+							["linear"],
+							["zoom"],
+							8,
+							0.22,
+							12,
+							0.58,
+						],
+					},
+				});
+			}
+			if (!this.map.getLayer("cinematic-map-anchor-halo")) {
+				this.map.addLayer({
+					id: "cinematic-map-anchor-halo",
+					type: "circle",
+					source: "cinematic-map-anchors",
+					paint: {
+						"circle-radius": [
+							"interpolate",
+							["linear"],
+							["zoom"],
+							8,
+							4,
+							14,
+							8,
+						],
+						"circle-color": "rgba(244, 242, 235, 0.2)",
+						"circle-stroke-color": "#f4f2eb",
+						"circle-stroke-width": 1,
+						"circle-opacity": 0.75,
+					},
+				});
+			}
+			if (!this.map.getLayer("cinematic-map-labels")) {
+				this.map.addLayer({
+					id: "cinematic-map-labels",
+					type: "symbol",
+					source: "cinematic-map-labels",
+					layout: {
+						"text-field": ["get", "label"],
+						"text-size": [
+							"interpolate",
+							["linear"],
+							["zoom"],
+							8,
+							12,
+							14,
+							18,
+						],
+						"text-anchor": "center",
+						"text-allow-overlap": true,
+						"text-ignore-placement": true,
+					},
+					paint: {
+						"text-color": "#f4f2eb",
+						"text-halo-color": "#050505",
+						"text-halo-width": 1.8,
+						"text-opacity": [
+							"interpolate",
+							["linear"],
+							["zoom"],
+							8,
+							0.54,
+							12,
+							0.92,
+						],
+					},
+				});
+			}
 		},
 		// 2. Adds three basic layers to the map (Taipei District, Taipei Village labels, and Taipei 3D Buildings)
 		// Due to performance concerns, Taipei 3D Buildings won't be added in the mobile version
 		initializeBasicLayers() {
-			const authStore = useAuthStore();
-			const allowedDomains = [
-				"citydashboard.taipei",
-				"test-citydashboard.taipei",
-			];
-			const hasSourceLayer = allowedDomains.includes(
-				window.location.hostname,
-			);
-
+			// Kept as a public action for compatibility. Base layers are now
+			// lazy-loaded by the controls so the intro animation stays light.
+			this.loadDeferredMapData();
+		},
+		loadDeferredMapData() {
+			if (!this.map || this.hasLoadedDeferredMapData) return;
+			this.hasLoadedDeferredMapData = true;
+			this.addAdministrativeLabels();
+			this.addBoundaryLayers();
+		},
+		addAdministrativeLabels() {
 			if (!this.map) return;
-			// metroTaipei District Labels
-			fetch(`/mapData/metrotaipei_town.geojson`)
-				.then((response) => response.json())
-				.then((data) => {
-					this.map
-						.addSource("metrotaipei_town_label", {
-							type: "geojson",
-							data: data,
-						})
-						.addLayer(metroTaipeiTown);
-				});
-			// metroTaipei Village Labels
-			fetch(`/mapData/metrotaipei_village.geojson`)
-				.then((response) => response.json())
-				.then((data) => {
-					this.map
-						.addSource("metrotaipei_village_label", {
-							type: "geojson",
-							data: data,
-						})
-						.addLayer(metroTaipeiVillage);
-				});
-			// Taipei 3D Buildings
-			if (!authStore.isMobileDevice) {
-				this.map
-					.addSource("taipei_building_3d_source", {
-						type: "vector",
-						url: import.meta.env.VITE_MAPBOXTILE,
-					})
-					.addLayer(TaipeiBuilding);
-			}
-			// Taipei Village Boundaries
-			if (hasSourceLayer) {
-				this.map
-					.addSource(`metrotaipei_village`, {
-						type: "vector",
-						scheme: "tms",
-						tolerance: 0,
-						tiles: [
-							`${location.origin}/geo_server/gwc/service/tms/1.0.0/taipei_vioc:metrotaipei_village@EPSG:900913@pbf/{z}/{x}/{y}.pbf`,
-						],
-					})
-					.addLayer(metroTpVillage);
-				this.map
-					.addSource(`metrotaipei_town`, {
-						type: "vector",
-						scheme: "tms",
-						tolerance: 0,
-						tiles: [
-							`${location.origin}/geo_server/gwc/service/tms/1.0.0/taipei_vioc:metrotaipei_town@EPSG:900913@pbf/{z}/{x}/{y}.pbf`,
-						],
-					})
-					.addLayer(metroTpDistrict);
-			} else {
-				// 加入 loading
-				this.loadingLayers.push("metrotaipei_town");
-
-				// 載入區界
-				// 加入 source + layer
-				this.map.addSource("metrotaipei_town", {
+			if (!this.map.getSource("metrotaipei_town_label")) {
+				this.map.addSource("metrotaipei_town_label", {
 					type: "geojson",
 					data: "/mapData/metrotaipei_town.geojson",
 				});
-
-				this.map.addLayer({
-					...metroTpDistrict,
-					id: "metrotaipei_town",
-					source: "metrotaipei_town",
-				});
-
-				// 綁定 loading 完成
-				this.map.on("sourcedata", (e) => {
-					if (
-						e.sourceId === "metrotaipei_town" &&
-						e.isSourceLoaded &&
-						this.loadingLayers.includes("metrotaipei_town")
-					) {
-						this.loadingLayers = this.loadingLayers.filter(
-							(el) => el !== "metrotaipei_town",
-						);
-					}
-				});
-
-				// 載入村里界
-				// 加入 loading
-				this.loadingLayers.push("metrotaipei_village");
-
-				// 加入 source + layer
-				this.map.addSource("metrotaipei_village", {
+			}
+			if (!this.map.getLayer("metrotaipei_town_label")) {
+				this.map.addLayer(metroTaipeiTown);
+			}
+			if (!this.map.getSource("metrotaipei_village_label")) {
+				this.map.addSource("metrotaipei_village_label", {
 					type: "geojson",
 					data: "/mapData/metrotaipei_village.geojson",
 				});
-
-				this.map.addLayer({
-					...metroTpVillage,
-					id: "metrotaipei_village",
-					source: "metrotaipei_village",
-				});
-
-				// 綁定 loading 完成
-				this.map.on("sourcedata", (e) => {
-					if (
-						e.sourceId === "metrotaipei_village" &&
-						e.isSourceLoaded &&
-						this.loadingLayers.includes("metrotaipei_village")
-					) {
-						this.loadingLayers = this.loadingLayers.filter(
-							(el) => el !== "metrotaipei_village",
-						);
-					}
-				});
 			}
-
-			this.addSymbolSources();
+			if (!this.map.getLayer("metrotaipei_village_label")) {
+				this.map.addLayer(metroTaipeiVillage);
+			}
+			if (this.map.isMoving()) {
+				this.hideLabelsDuringMapMotion();
+			}
+		},
+		addBoundaryLayers() {
+			const hadDistrictLayer = this.map?.getLayer("metrotaipei_town");
+			const hadVillageLayer = this.map?.getLayer("metrotaipei_village");
+			this.ensureBoundaryLayer("district");
+			this.ensureBoundaryLayer("village");
+			if (!hadDistrictLayer) {
+				this.setBoundaryLayerVisibility("metrotaipei_town", false);
+			}
+			if (!hadVillageLayer) {
+				this.setBoundaryLayerVisibility("metrotaipei_village", false);
+			}
 		},
 		// 3. Adds symbols that will be used by some map layers
-		async addSymbolSources() {
-			const images = [
-				"metro",
-				"triangle_green",
-				"triangle_white",
-				"bike_green",
-				"bike_orange",
-				"bike_red",
-				"cctv",
-				"live",
-				"youbike_elec",
-			];
-			images.forEach((element) => {
-				this.map.loadImage(
-					`/images/map/${element}.png`,
-					(error, image) => {
-						if (error) throw error;
-						this.map.addImage(element, image);
-					},
-				);
+		addSymbolSources() {
+			if (!this.map) return;
+			mapImageNames.forEach((imageName) => {
+				this.loadMapImage(imageName);
 			});
-			// 預載 3D 模型給 3D Mrt Map
-			const models = [
-				{ id: "mrt_car_c381", url: "/images/map/mrt_car_c381.glb" },
-				{ id: "mrt_car_c370", url: "/images/map/mrt_car_c370.glb" },
-				// { id: "mrt_car_brown", url: "/images/map/mrt_car_brown.glb" },
-			];
-
-			const loadModel = (m) => {
-				return new Promise((resolve, reject) => {
-					const loader = new GLTFLoader();
+		},
+		loadMapImage(imageName) {
+			if (!this.map || !mapImageNames.includes(imageName)) return;
+			if (this.map.hasImage(imageName)) return;
+			this.map.loadImage(
+				`/images/map/${imageName}.png`,
+				(error, image) => {
+					if (error || !this.map || this.map.hasImage(imageName)) {
+						if (error) console.error(error);
+						return;
+					}
+					this.map.addImage(imageName, image);
+				},
+			);
+		},
+		async preloadMrtModels() {
+			const unloadedModels = mrtModelConfigs.filter(
+				(model) => !this.preloadedModels[model.id],
+			);
+			if (unloadedModels.length === 0) return;
+			this.isPreloading = true;
+			const loader = new GLTFLoader();
+			const loadModel = (model) =>
+				new Promise((resolve) => {
 					loader.load(
-						m.url,
+						model.url,
 						(gltf) => {
-							this.preloadedModels[m.id] = markRaw(gltf.scene);
+							this.preloadedModels[model.id] = markRaw(
+								gltf.scene,
+							);
 							resolve();
 						},
 						undefined,
-						(err) => {
-							console.error(`3D 模型 ${m.id} 載入失敗:`, err);
-							reject(err);
+						(error) => {
+							console.error(
+								`3D 模型 ${model.id} 載入失敗:`,
+								error,
+							);
+							resolve();
 						},
 					);
 				});
-			};
 
-			// 等待所有 3D 模型載入完成
-			await Promise.all(models.map(loadModel));
-
-			// 全部載入完畢才變 false
+			await Promise.all(unloadedModels.map(loadModel));
 			this.isPreloading = false;
+		},
+		ensureBoundaryLayer(layerType) {
+			if (!this.map) return;
+			const layerConfig =
+				layerType === "district" ? metroTpDistrict : metroTpVillage;
+			const layerId =
+				layerType === "district"
+					? "metrotaipei_town"
+					: "metrotaipei_village";
+			const hasServerVectorBoundaries = [
+				"citydashboard.taipei",
+				"test-citydashboard.taipei",
+			].includes(window.location.hostname);
+
+			if (this.map.getLayer(layerId)) return;
+			if (!this.map.getSource(layerId)) {
+				if (hasServerVectorBoundaries) {
+					this.map.addSource(layerId, {
+						type: "vector",
+						scheme: "tms",
+						tolerance: 0,
+						tiles: [
+							`${location.origin}/geo_server/gwc/service/tms/1.0.0/taipei_vioc:${layerId}@EPSG:900913@pbf/{z}/{x}/{y}.pbf`,
+						],
+					});
+				} else {
+					this.map.addSource(layerId, {
+						type: "geojson",
+						data: `/mapData/${layerId}.geojson`,
+					});
+				}
+			}
+			this.map.addLayer({
+				...layerConfig,
+				id: layerId,
+				source: layerId,
+			});
+		},
+		setBoundaryLayerVisibility(layerId, status) {
+			if (!this.map?.getLayer(layerId)) return;
+			this.map.setLayoutProperty(
+				layerId,
+				"visibility",
+				status ? "visible" : "none",
+			);
 		},
 		// 4. Toggle district boundaries
 		toggleDistrictBoundaries(status) {
-			if (status) {
-				this.map.setLayoutProperty(
-					"metrotaipei_town",
-					"visibility",
-					"visible",
-				);
-			} else {
-				this.map.setLayoutProperty(
-					"metrotaipei_town",
-					"visibility",
-					"none",
-				);
-			}
+			this.ensureBoundaryLayer("district");
+			this.setBoundaryLayerVisibility("metrotaipei_town", status);
 			// if (status) {
 			// 	this.map.setLayoutProperty(
 			// 		"tp_district",
@@ -378,19 +811,8 @@ export const useMapStore = defineStore("map", {
 		},
 		// 5. Toggle village boundaries
 		toggleVillageBoundaries(status) {
-			if (status) {
-				this.map.setLayoutProperty(
-					"metrotaipei_village",
-					"visibility",
-					"visible",
-				);
-			} else {
-				this.map.setLayoutProperty(
-					"metrotaipei_village",
-					"visibility",
-					"none",
-				);
-			}
+			this.ensureBoundaryLayer("village");
+			this.setBoundaryLayerVisibility("metrotaipei_village", status);
 			// if (status) {
 			// 	this.map.setLayoutProperty(
 			// 		"tp_village",
@@ -492,6 +914,7 @@ export const useMapStore = defineStore("map", {
 				let res2 = {};
 				let res3 = {};
 				if (map_config.type === "symbol-3d") {
+					await this.preloadMrtModels();
 					res = await axios.get(
 						`${location.origin}/geo_server/taipei_vioc/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=taipei_vioc%3A${map_config.index}&maxFeatures=1000000&outputFormat=application%2Fjson`,
 					);
@@ -717,6 +1140,11 @@ export const useMapStore = defineStore("map", {
 			}, 200);
 		},
 		stopAnimation() {
+			if (this.arcAnimationFrame) {
+				cancelAnimationFrame(this.arcAnimationFrame);
+				this.arcAnimationFrame = null;
+			}
+			this.isArcAnimationRunning = false;
 			if (this.filterInterval) {
 				clearInterval(this.filterInterval);
 				this.filterInterval = null;
@@ -790,39 +1218,55 @@ export const useMapStore = defineStore("map", {
 				(el) => el !== map_config.layerId,
 			);
 		},
+		ensureDeckGlOverlay() {
+			if (!this.map || this.overlay) return;
+			this.overlay = new MapboxOverlay({
+				interleaved: true,
+				layers: [],
+			});
+			this.map.addControl(this.overlay);
+		},
+		updateDeckGlLayerProps() {
+			if (!this.overlay) return;
+			const layers = Object.keys(this.deckGlLayer)
+				.map((index) => {
+					const l = this.deckGlLayer[index];
+					switch (l.type) {
+					case "ArcLayer":
+						return new ArcLayer(l.config);
+					case "AnimatedArcLayer":
+						return new AnimatedArcLayer({
+							...l.config,
+							coef: this.step / 1000,
+						});
+					default:
+						return null;
+					}
+				})
+				.filter(Boolean);
+			this.overlay.setProps({ layers });
+		},
 		// 4-2-2. Render DeckGL Layer
 		// Developed by Weeee Chill, Taipei Codefest 2024
 		renderDeckGLLayer() {
-			const layers = Object.keys(this.deckGlLayer).map((index) => {
-				const l = this.deckGlLayer[index];
-				switch (l.type) {
-				case "ArcLayer":
-					return new ArcLayer(l.config);
-				case "AnimatedArcLayer":
-					return new AnimatedArcLayer({
-						...l.config,
-						coef: this.step / 1000,
-					});
-				default:
-					break;
-				}
-			});
-			this.overlay.setProps({
-				layers,
-			});
+			this.ensureDeckGlOverlay();
+			this.updateDeckGlLayerProps();
 			if (
 				this.currentVisibleLayers.some(
 					(l) =>
 						l.indexOf("-arc") !== -1 &&
 						typeof this.deckGlLayer[l].config.coef === "number",
 				) &&
-				this.step < 1000
+				this.step < 1000 &&
+				!this.isArcAnimationRunning
 			)
 				this.animateArcLayer();
 		},
 		// 4-2-3. Animate Arc Layer
 		// Developed by Weeee Chill, Taipei Codefest 2024
 		animateArcLayer() {
+			if (this.isArcAnimationRunning) return;
+			this.isArcAnimationRunning = true;
 			// 開始時間
 			let startTime = performance.now();
 			// 每個動畫步驟的持續時間（毫秒）
@@ -838,16 +1282,19 @@ export const useMapStore = defineStore("map", {
 				// 如果時間已經超過一個步驟，則增加步驟數
 				if (progress >= (_this.step / 1000) * 100) {
 					_this.step = _this.step + 1;
-					_this.renderDeckGLLayer();
+					_this.updateDeckGlLayerProps();
 				}
 
 				// 如果動畫還未完成，繼續下一個動畫步驟
 				if (_this.step <= 1000) {
-					requestAnimationFrame(step);
+					_this.arcAnimationFrame = requestAnimationFrame(step);
+				} else {
+					_this.isArcAnimationRunning = false;
+					_this.arcAnimationFrame = null;
 				}
 			};
 			// 啟動動畫
-			requestAnimationFrame(step);
+			this.arcAnimationFrame = requestAnimationFrame(step);
 		},
 		// 4-3. Add Map Layer for Voronoi Maps
 		// Developed by 00:21, Taipei Codefest 2023
@@ -2296,6 +2743,78 @@ export const useMapStore = defineStore("map", {
 				duration: 1000,
 			});
 		},
+		zoomCinematicMap(delta) {
+			if (!this.map) return;
+			const minZoom =
+				typeof this.map.getMinZoom === "function"
+					? this.map.getMinZoom()
+					: MapObjectConfig.minZoom;
+			const maxZoom =
+				typeof this.map.getMaxZoom === "function"
+					? this.map.getMaxZoom()
+					: MapObjectConfig.maxZoom;
+			const nextZoom = Math.min(
+				maxZoom,
+				Math.max(minZoom, this.map.getZoom() + delta),
+			);
+
+			this.map.easeTo({
+				zoom: nextZoom,
+				duration: 520,
+				essential: true,
+			});
+		},
+		rotateCinematicMap(delta) {
+			if (!this.map) return;
+			this.map.easeTo({
+				bearing: this.map.getBearing() + delta,
+				duration: 620,
+				essential: true,
+			});
+		},
+		setCinematicMapPitch(pitch) {
+			const numericPitch = Number(pitch);
+			const maxPitch = MapObjectConfig.maxPitch || 78;
+			const fallbackPitch =
+				CityMapView[this.pendingMapViewCity]?.pitch ||
+				MapObjectConfig.pitch;
+			const nextPitch = Number.isFinite(numericPitch)
+				? Math.min(maxPitch, Math.max(0, numericPitch))
+				: fallbackPitch;
+
+			this.cinematicPitch = Math.round(nextPitch);
+			if (!this.map) return;
+			this.map.easeTo({
+				pitch: nextPitch,
+				duration: 420,
+				essential: true,
+			});
+		},
+		panCinematicMap(direction) {
+			if (!this.map) return;
+			const centerPoint = this.map.project(this.map.getCenter());
+			const distance = 180;
+			const offsets = {
+				up: [0, -distance],
+				down: [0, distance],
+				left: [-distance, 0],
+				right: [distance, 0],
+			};
+			const offset = offsets[direction] || [0, 0];
+			const nextCenter = this.map.unproject([
+				centerPoint.x + offset[0],
+				centerPoint.y + offset[1],
+			]);
+
+			this.map.easeTo({
+				center: nextCenter,
+				duration: 520,
+				essential: true,
+			});
+		},
+		resetCinematicMapView() {
+			this.updateMapViewForCity(this.pendingMapViewCity || "default");
+		},
 		// 3. Force map to resize after sidebar collapses
 		resizeMap() {
 			if (this.map) {
@@ -2306,8 +2825,25 @@ export const useMapStore = defineStore("map", {
 		},
 		// 4. Update the zoom and center of the map
 		updateMapViewForCity(city) {
-			this.map.setZoom(CityMapView[city].zoom);
-			this.map.setCenter(CityMapView[city].center);
+			this.pendingMapViewCity = city || "default";
+			if (!this.map) return;
+			const mapView = CityMapView[city] || CityMapView.default;
+			if (!this.map.loaded()) {
+				return;
+			}
+			if (!this.hasPlayedInitialReveal) {
+				this.playInitialMapReveal(city);
+				return;
+			}
+			this.map.easeTo({
+				center: mapView.center,
+				zoom: mapView.zoom,
+				pitch: mapView.pitch,
+				bearing: mapView.bearing,
+				duration: 1200,
+				essential: true,
+			});
+			this.cinematicPitch = mapView.pitch;
 		},
 
 		/* Map Filtering */
@@ -2578,10 +3114,17 @@ export const useMapStore = defineStore("map", {
 		},
 		// 2. Called when user navigates away from the map
 		clearEntireMap() {
+			this.stopAnimation();
+			if (this.labelRestoreTimer) {
+				window.clearTimeout(this.labelRestoreTimer);
+				this.labelRestoreTimer = null;
+			}
 			this.currentLayers = [];
 			this.mapConfigs = {};
 			this.map = null;
 			this.currentVisibleLayers = [];
+			this.overlay = null;
+			this.deckGlLayer = {};
 			this.removePopup();
 			this.tempMarkerCoordinates = null;
 		},

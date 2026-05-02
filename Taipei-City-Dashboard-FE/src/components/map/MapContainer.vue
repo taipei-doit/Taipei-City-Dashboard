@@ -64,6 +64,19 @@ function findClosestPointGA() {
   	})
 }
 
+const cinematicPitchValue = computed(() =>
+	Math.round(mapStore.cinematicPitch),
+);
+const cinematicPitchLabel = computed(() => {
+	if (mapStore.cinematicPitch < 18) return "俯視";
+	if (mapStore.cinematicPitch < 50) return "中視";
+	return "斜視";
+});
+
+function setCinematicPitch(event) {
+	mapStore.setCinematicMapPitch(event.target.value);
+}
+
 watch(
 	() => route.query?.city,
 	(newValue) => {
@@ -75,7 +88,6 @@ watch(
 
 onMounted(() => {
 	mapStore.initializeMapBox();
-	mapStore.setCurrentLocation();
 	route.query.city 
 		? mapStore.updateMapViewForCity(route.query.city)
 		: mapStore.updateMapViewForCity('default');
@@ -87,6 +99,10 @@ onMounted(() => {
     <div class="mapcontainer-map">
       <!-- #mapboxBox needs to be empty to ensure Mapbox performance -->
       <div id="mapboxBox" />
+      <div class="mapcontainer-titleplate hide-if-mobile">
+        <p>TAIPEI CITY</p>
+        <h1>MAP VIEW</h1>
+      </div>
       <div class="mapcontainer-layers">
         <button
           :style="{
@@ -133,6 +149,122 @@ onMounted(() => {
           class="mapcontainer-layers-loading"
         >
           <div />
+        </div>
+      </div>
+      <div
+        class="mapcontainer-camera hide-if-mobile"
+        aria-label="地圖攝影機控制"
+      >
+        <button
+          title="重新播放進場動畫"
+          @click="
+            mapStore.playInitialMapReveal(
+              mapStore.pendingMapViewCity || 'default',
+              true,
+            )
+          "
+        >
+          <span>play_arrow</span>
+        </button>
+        <div class="mapcontainer-camera-angle">
+          <div class="mapcontainer-camera-angle-heading">
+            <span>VIEW</span>
+            <strong>
+              {{ cinematicPitchLabel }} {{ cinematicPitchValue }}°
+            </strong>
+          </div>
+          <input
+            :value="mapStore.cinematicPitch"
+            aria-label="地圖視角俯視到斜視"
+            max="72"
+            min="0"
+            step="1"
+            type="range"
+            @input="setCinematicPitch"
+          >
+          <div class="mapcontainer-camera-angle-presets">
+            <button
+              class="mapcontainer-camera-textbutton"
+              title="俯視"
+              @click="mapStore.setCinematicMapPitch(0)"
+            >
+              0°
+            </button>
+            <button
+              class="mapcontainer-camera-textbutton"
+              title="中視角"
+              @click="mapStore.setCinematicMapPitch(45)"
+            >
+              45°
+            </button>
+            <button
+              class="mapcontainer-camera-textbutton"
+              title="斜視"
+              @click="mapStore.setCinematicMapPitch(68)"
+            >
+              68°
+            </button>
+          </div>
+        </div>
+        <div class="mapcontainer-camera-group">
+          <button
+            title="放大"
+            @click="mapStore.zoomCinematicMap(0.8)"
+          >
+            <span>zoom_in</span>
+          </button>
+          <button
+            title="縮小"
+            @click="mapStore.zoomCinematicMap(-0.8)"
+          >
+            <span>zoom_out</span>
+          </button>
+        </div>
+        <div class="mapcontainer-camera-pad">
+          <button
+            title="向上平移"
+            @click="mapStore.panCinematicMap('up')"
+          >
+            <span>keyboard_arrow_up</span>
+          </button>
+          <button
+            title="向左平移"
+            @click="mapStore.panCinematicMap('left')"
+          >
+            <span>keyboard_arrow_left</span>
+          </button>
+          <button
+            title="回到目前城市視角"
+            @click="mapStore.resetCinematicMapView()"
+          >
+            <span>my_location</span>
+          </button>
+          <button
+            title="向右平移"
+            @click="mapStore.panCinematicMap('right')"
+          >
+            <span>keyboard_arrow_right</span>
+          </button>
+          <button
+            title="向下平移"
+            @click="mapStore.panCinematicMap('down')"
+          >
+            <span>keyboard_arrow_down</span>
+          </button>
+        </div>
+        <div class="mapcontainer-camera-group">
+          <button
+            title="逆時針旋轉"
+            @click="mapStore.rotateCinematicMap(-24)"
+          >
+            <span>rotate_left</span>
+          </button>
+          <button
+            title="順時針旋轉"
+            @click="mapStore.rotateCinematicMap(24)"
+          >
+            <span>rotate_right</span>
+          </button>
         </div>
       </div>
 
@@ -207,18 +339,61 @@ onMounted(() => {
 	width: 100%;
 	height: 100%;
 	flex: 1;
+	isolation: isolate;
 
 	&-map {
-		height: calc(100% - 32px);
+		position: relative;
+		height: 100%;
+		background-color: #020203;
 
 		@media (max-width: 1000px) {
 			height: 100%;
 		}
+
+		&::before,
+		&::after {
+			display: none;
+		}
+	}
+
+	&-titleplate {
+		position: absolute;
+		top: 28px;
+		left: 30px;
+		z-index: 4;
+		color: #f4f2eb;
+		font-family: Consolas, "Courier New", monospace;
+		letter-spacing: 0;
+		text-shadow: 0 0 12px rgba(255, 255, 255, 0.72);
+		pointer-events: none;
+
+		p,
+		span {
+			font-size: 0.76rem;
+			font-weight: 700;
+		}
+
+		h1 {
+			margin: 2px 0;
+			color: #fff;
+			font-size: clamp(2.1rem, 4.2vw, 5.5rem);
+			line-height: 0.86;
+		}
+
+		span {
+			display: block;
+			color: rgba(244, 242, 235, 0.62);
+		}
 	}
 
 	&-controls {
+		position: absolute;
+		left: 18px;
+		bottom: 16px;
+		z-index: 5;
 		display: flex;
-		margin-top: 8px;
+		max-width: calc(100% - 36px);
+		margin-top: 0;
 		overflow: visible;
 
 		button {
@@ -226,9 +401,11 @@ onMounted(() => {
 			width: fit-content;
 			margin-right: 6px;
 			padding: 4px;
-			border-radius: 5px;
-			background-color: var(--color-component-background);
-			color: var(--color-complement-text);
+			border: 1px solid rgba(244, 242, 235, 0.52);
+			border-radius: 0;
+			background-color: rgba(0, 0, 0, 0.5);
+			color: #f4f2eb;
+			font-family: Consolas, "Courier New", monospace;
 			cursor: pointer;
 
 			&:focus {
@@ -298,7 +475,7 @@ onMounted(() => {
 		position: absolute;
 		right: 10px;
 		top: 150px;
-		z-index: 1;
+		z-index: 5;
 		display: flex;
 		flex-direction: column;
 		row-gap: 4px;
@@ -309,8 +486,9 @@ onMounted(() => {
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			border-radius: 50%;
-			background-color: white;
+			border: 1px solid rgba(244, 242, 235, 0.7);
+			border-radius: 0;
+			background-color: rgba(244, 242, 235, 0.92);
 			transition: color 0.2s;
 		}
 
@@ -360,12 +538,149 @@ onMounted(() => {
 			}
 		}
 	}
+
+	&-camera {
+		position: absolute;
+		top: 28px;
+		right: 28px;
+		z-index: 6;
+		display: grid;
+		grid-template-columns: auto minmax(148px, 180px) auto auto auto;
+		gap: 8px;
+		align-items: stretch;
+		padding: 8px;
+		border: 1px solid rgba(244, 242, 235, 0.55);
+		background-color: rgba(0, 0, 0, 0.66);
+		box-shadow: 0 0 24px rgba(255, 255, 255, 0.12);
+
+		button {
+			width: 34px;
+			height: 34px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			border: 1px solid rgba(244, 242, 235, 0.48);
+			background-color: rgba(7, 7, 8, 0.72);
+			color: rgba(244, 242, 235, 0.88);
+			transition:
+				border-color 0.2s,
+				background-color 0.2s,
+				color 0.2s;
+
+			&:hover {
+				border-color: rgba(255, 255, 255, 0.95);
+				background-color: rgba(255, 255, 255, 0.14);
+				color: #fff;
+			}
+
+			span {
+				font-family: var(--font-icon);
+				font-size: 1.25rem;
+				line-height: 1;
+				user-select: none;
+			}
+		}
+
+		&-textbutton {
+			width: auto;
+			min-width: 42px;
+			padding: 0 8px;
+			color: rgba(244, 242, 235, 0.82);
+			font-family: Consolas, "Courier New", monospace;
+			font-size: 0.72rem;
+			font-weight: 700;
+		}
+
+		&-angle {
+			display: grid;
+			grid-template-rows: auto auto auto;
+			gap: 7px;
+			min-height: 100%;
+			padding: 7px 8px;
+			border: 1px solid rgba(244, 242, 235, 0.34);
+			background-color: rgba(255, 255, 255, 0.04);
+			color: rgba(244, 242, 235, 0.82);
+			font-family: Consolas, "Courier New", monospace;
+
+			input {
+				width: 100%;
+				margin: 0;
+				accent-color: #f4f2eb;
+				cursor: pointer;
+			}
+
+			&-heading {
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				gap: 10px;
+				font-size: 0.72rem;
+				line-height: 1;
+
+				span {
+					color: rgba(244, 242, 235, 0.48);
+					font-family: Consolas, "Courier New", monospace;
+					font-size: 0.64rem;
+					font-weight: 700;
+				}
+
+				strong {
+					color: #fff;
+					font-size: 0.76rem;
+					font-weight: 700;
+					text-shadow: 0 0 10px rgba(255, 255, 255, 0.48);
+				}
+			}
+
+			&-presets {
+				display: grid;
+				grid-template-columns: repeat(3, 1fr);
+				gap: 5px;
+
+				button {
+					width: 100%;
+					height: 24px;
+				}
+			}
+		}
+
+		&-group {
+			display: grid;
+			gap: 6px;
+		}
+
+		&-pad {
+			display: grid;
+			grid-template-columns: repeat(3, 34px);
+			gap: 6px;
+
+			button:first-child,
+			button:last-child {
+				grid-column: 2;
+			}
+		}
+	}
 }
 
 #mapboxBox {
 	width: 100%;
 	height: 100%;
-	border-radius: 5px;
+	border-radius: 0;
+}
+
+:deep(.mapboxgl-ctrl-group) {
+	border: 1px solid rgba(244, 242, 235, 0.55);
+	border-radius: 0;
+	background-color: rgba(0, 0, 0, 0.54);
+}
+
+:deep(.mapboxgl-ctrl-group button) {
+	filter: invert(1) grayscale(1);
+}
+
+:deep(.mapboxgl-ctrl-bottom-left),
+:deep(.mapboxgl-ctrl-bottom-right) {
+	opacity: 0.42;
 }
 
 @keyframes colorfade {

@@ -4,32 +4,44 @@ const allowedDomains = ["citydashboard.taipei", "test-citydashboard.taipei"];
 const hasSourceLayer = allowedDomains.includes(window.location.hostname);
 
 export const MapObjectConfig = {
-	antialias: true,
+	antialias: false,
 	container: "mapboxBox",
+	collectResourceTiming: false,
 	center: [121.536609, 25.044808],
+	fadeDuration: 0,
 	maxBounds: [
 		[121.2825, 24.6961], // Southwest coordinates
 		[122.0073, 25.2979], // Northeast coordinates
 	],
-	zoom: 9,
-	minZoom: 9,
+	zoom: 10.4,
+	minZoom: 8.8,
 	maxZoom: 22,
-	projection: "globe", // display the map as a 3D globe
+	pitch: 58,
+	bearing: -18,
+	maxPitch: 78,
+	projection: "mercator",
+	renderWorldCopies: false,
 };
 
 // City Map View Settings
 export const CityMapView = {
 	taipei: {
 		center: [121.536609, 25.044808],
-		zoom: 12,
+		zoom: 12.6,
+		pitch: 60,
+		bearing: -20,
 	},
 	metrotaipei: {
 		center: [121.64080359050314, 24.980598540245936],
-		zoom: 9,
+		zoom: 9.8,
+		pitch: 56,
+		bearing: -18,
 	},
 	default: {
 		center: [121.56376521148917, 25.086495621435404],
-		zoom: 10,
+		zoom: 10.5,
+		pitch: 58,
+		bearing: -18,
 	},
 };
 
@@ -175,16 +187,17 @@ export const TaipeiBuilding = {
 			1044.14,
 			1044.14,
 		],
-		"fill-extrusion-opacity": 0.8,
+		"fill-extrusion-opacity": 0.68,
 		"fill-extrusion-color": [
 			"interpolate",
 			["linear"],
 			["zoom"],
 			14.4,
-			"#121212",
+			"#101010",
 			14.5,
-			"#272727",
+			"#d9d9d9",
 		],
+		"fill-extrusion-vertical-gradient": true,
 	},
 };
 
