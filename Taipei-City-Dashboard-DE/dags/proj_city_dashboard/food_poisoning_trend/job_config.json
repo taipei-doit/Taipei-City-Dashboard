@@ -1,0 +1,43 @@
+{
+    "dag_infos": {
+        "dag_id": "food_poisoning_trend",
+        "start_date": "2025-05-01",
+        "schedule_interval": "@yearly",
+        "catchup": false,
+        "tags": [
+            "food_poisoning",
+            "衛生局",
+            "食安"
+        ],
+        "description": "Taipei City annual food poisoning incident statistics from Health Bureau.",
+        "default_args": {
+            "owner": "airflow",
+            "email": [
+                "DEFAULT_EMAIL_LIST"
+            ],
+            "email_on_retry": false,
+            "email_on_failure": true,
+            "retries": 1,
+            "retry_delay": 60
+        },
+        "ready_data_db": "postgres_default",
+        "ready_data_default_table": "food_poisoning_trend",
+        "ready_data_history_table": "food_poisoning_trend_history",
+        "raw_data_db": "postgres_default",
+        "raw_data_table": "",
+        "load_behavior": "current+history"
+    },
+    "data_infos": {
+        "name_cn": "臺北市食品中毒案件統計趨勢",
+        "airflow_update_freq": "@yearly",
+        "source": "https://statistics.health.gov.tw/tbl/b111食品中毒事件(場所別).html",
+        "source_type": "web scraping",
+        "source_dept": "臺北市政府衛生局",
+        "gis_format": null,
+        "output_coordinate": null,
+        "is_geometry": 0,
+        "dataset_description": "臺北市年度食品中毒案件統計，包含場所別之案件數、患者數與死亡數",
+        "etl_description": "extract embedded JSON from HTML, pivot metrics, ROC-to-Gregorian year conversion",
+        "sensitivity": "public"
+    }
+}
