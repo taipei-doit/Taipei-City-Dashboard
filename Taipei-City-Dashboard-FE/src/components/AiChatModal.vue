@@ -27,6 +27,14 @@ function authHeaders() {
 	return { Authorization: `Bearer ${authStore.token || ""}` };
 }
 
+function isAuthError(err) {
+	if (!authStore.token) return true;
+	const status = err?.response?.status;
+	return status === 401 || status === 403;
+}
+
+const LOGIN_REQUIRED_MESSAGE = "請先登入後再使用 AI 助理。";
+
 const MODAL_WIDTH = 380;
 
 const MODAL_HEIGHT = 420;
@@ -78,8 +86,10 @@ async function fetchInitialSummary() {
 			content: res.data.summary ?? "（無摘要內容）",
 		});
 		await scrollToBottom();
-	} catch {
-		error.value = "AI 摘要服務暫時無法使用，請稍後再試。";
+	} catch (err) {
+		error.value = isAuthError(err)
+			? LOGIN_REQUIRED_MESSAGE
+			: "AI 摘要服務暫時無法使用，請稍後再試。";
 	} finally {
 		isLoading.value = false;
 	}
@@ -113,8 +123,10 @@ async function handleSend() {
 			role: "assistant",
 			content: res.data.data?.content ?? "（無回應）",
 		});
-	} catch {
-		error.value = "發生錯誤，請稍後再試。";
+	} catch (err) {
+		error.value = isAuthError(err)
+			? LOGIN_REQUIRED_MESSAGE
+			: "發生錯誤，請稍後再試。";
 	} finally {
 		isLoading.value = false;
 		await scrollToBottom();
