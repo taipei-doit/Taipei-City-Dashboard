@@ -1,0 +1,141 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.517231036684,
+          24.992658991829
+        ]
+      },
+      "properties": {
+        "name": "港都熱炒",
+        "cuisine_type": "中式",
+        "star_rating": "★★★",
+        "address": "新北市中和區大勇街12號",
+        "tel": "02-2940-6751"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.42677571691,
+          25.175926999737
+        ]
+      },
+      "properties": {
+        "name": "將捷金鬱金香酒店-河畔餐廳",
+        "cuisine_type": "西式",
+        "star_rating": "★★★",
+        "address": "25172新北市淡水區中正路一段2號",
+        "tel": "02-2626-9970"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.409196509244,
+          25.016330458016
+        ]
+      },
+      "properties": {
+        "name": "雙翼食品有限公司",
+        "cuisine_type": "中式",
+        "star_rating": "★★★",
+        "address": "新北市樹林區忠愛街三號",
+        "tel": "02-26895506"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.444694968613,
+          25.169375997581
+        ]
+      },
+      "properties": {
+        "name": "魔法咖哩",
+        "cuisine_type": "日式",
+        "star_rating": "★★",
+        "address": "新北市淡水區中山路 8 號 8 樓",
+        "tel": "02-2620-6123"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.464423035022,
+          25.011040002578
+        ]
+      },
+      "properties": {
+        "name": "果然匯",
+        "cuisine_type": "異國料理",
+        "star_rating": "★★",
+        "address": "新北市板橋區中山路一段152號11樓",
+        "tel": "02-2956-2888"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.466619009835,
+          25.013677997055
+        ]
+      },
+      "properties": {
+        "name": "SAIKABO",
+        "cuisine_type": "異國料理",
+        "star_rating": "★★",
+        "address": "新北市板橋區新站路28號9樓",
+        "tel": "02-8952-1898"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.428337936023,
+          24.995446687096
+        ]
+      },
+      "properties": {
+        "name": "朴庶韓國銅盤烤肉",
+        "cuisine_type": "異國料理",
+        "star_rating": "★★",
+        "address": "238新北市樹林區樹新路40-6號七樓",
+        "tel": "02-2686-3377"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.515214015504,
+          25.012055009143
+        ]
+      },
+      "properties": {
+        "name": "築間燒肉本命",
+        "cuisine_type": "日式",
+        "star_rating": "★★",
+        "address": "234新北市永和區永和路二段116號5樓",
+        "tel": "02-2921-8255"
+      }
+    }
+  ]
+}

@@ -1,0 +1,413 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.541628493714,
+          25.062557735975
+        ]
+      },
+      "properties": {
+        "name": "石二鍋 12hotpot",
+        "cuisine_type": "火鍋",
+        "star_rating": "★★★",
+        "address": "台北市中山區民權東路三段19號",
+        "tel": "02-2517-2389"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.606055824834,
+          25.052512444115
+        ]
+      },
+      "properties": {
+        "name": "台北六福萬怡酒店 粵亮廣式料理餐廳",
+        "cuisine_type": "異國料理",
+        "star_rating": "★★★",
+        "address": "台北市南港區忠孝東路七段359號8樓",
+        "tel": "+886 2 6615 6528"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.529590320554,
+          25.030031634974
+        ]
+      },
+      "properties": {
+        "name": "搖滾牛冰淇淋專賣店",
+        "cuisine_type": "冰品",
+        "star_rating": "★★★",
+        "address": "台北市大安區永康街51號",
+        "tel": "02-2358-2330"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.516822418904,
+          25.049215129134
+        ]
+      },
+      "properties": {
+        "name": "君品酒店 頤宮中餐廳Le Palais",
+        "cuisine_type": "中式",
+        "star_rating": "★★★",
+        "address": "台北市大同區承德路一段3號17樓",
+        "tel": "(02)2181-9985"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.516822418904,
+          25.049215129134
+        ]
+      },
+      "properties": {
+        "name": "君品酒店 茶苑餐廳 Le Thé",
+        "cuisine_type": "西式",
+        "star_rating": "★★★",
+        "address": "台北市大同區承德路一段3號6樓",
+        "tel": "(02)2181-9999轉3255"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.507277694301,
+          25.134627895958
+        ]
+      },
+      "properties": {
+        "name": "大地酒店-月兒彎彎",
+        "cuisine_type": "火鍋",
+        "star_rating": "★★★",
+        "address": "台北市北投區奇岩路一號2樓",
+        "tel": "02-5551-8888"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.523942426557,
+          25.094674171458
+        ]
+      },
+      "properties": {
+        "name": "禾馨月子餐",
+        "cuisine_type": "中式",
+        "star_rating": "★★★",
+        "address": "台北市士林區中正路289-1號",
+        "tel": "(02)2382-2333 #1816"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.581657110519,
+          25.067740057161
+        ]
+      },
+      "properties": {
+        "name": "禾馨醫療",
+        "cuisine_type": "中式",
+        "star_rating": "★★★",
+        "address": "臺北市內湖區民權東路六段42號",
+        "tel": "(02)2382-2333 #1816"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.513107727055,
+          25.045571934919
+        ]
+      },
+      "properties": {
+        "name": "第一商業銀行股份有限公司 員工餐廳",
+        "cuisine_type": "中式",
+        "star_rating": "★★★",
+        "address": "台北市中正區重慶南路一段30號21樓",
+        "tel": "(02)2348-1073"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.585225621977,
+          25.052165181866
+        ]
+      },
+      "properties": {
+        "name": "宮保王食品有限公司",
+        "cuisine_type": "中式",
+        "star_rating": "★★★",
+        "address": "台北市南港區南港路三段149巷49弄14號",
+        "tel": "02-2651-9947"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.526518604498,
+          25.094207257542
+        ]
+      },
+      "properties": {
+        "name": "豐盛號",
+        "cuisine_type": "中式",
+        "star_rating": "★★",
+        "address": "台北市士林區中正路223巷4號1樓",
+        "tel": "(02)2880-1388"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.531494776523,
+          25.015541165902
+        ]
+      },
+      "properties": {
+        "name": "池上木片便當",
+        "cuisine_type": "中式",
+        "star_rating": "★★",
+        "address": "台北市中正區汀州路3段64號",
+        "tel": "02-23672369"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.535660243377,
+          25.048309380677
+        ]
+      },
+      "properties": {
+        "name": "老四川",
+        "cuisine_type": "火鍋",
+        "star_rating": "★★",
+        "address": "台北市中山區長安東路二段112號",
+        "tel": "02-2515-2222"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.565540554731,
+          25.050474090991
+        ]
+      },
+      "properties": {
+        "name": "甘擔廚房",
+        "cuisine_type": "中式",
+        "star_rating": "★★",
+        "address": "台北市松山區東興路7號1樓",
+        "tel": "02-27420566"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0.0,
+          0.0
+        ]
+      },
+      "properties": {
+        "name": "這一小鍋",
+        "cuisine_type": "火鍋",
+        "star_rating": "★★",
+        "address": "(104)台北市中山區南京西路14號3樓(308櫃)",
+        "tel": "02-25810850"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.6072007,
+          25.0526495
+        ]
+      },
+      "properties": {
+        "name": "燒肉同話",
+        "cuisine_type": "日式",
+        "star_rating": "★★",
+        "address": "台北市南港區忠孝東路七段369號C棟9樓 (CITYLINK南港店)",
+        "tel": "(02)2652-9380"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.619434934864,
+          25.058136365869
+        ]
+      },
+      "properties": {
+        "name": "島語自助餐廳",
+        "cuisine_type": "異國料理",
+        "star_rating": "★★",
+        "address": "台北市南港區經貿一路168號2樓",
+        "tel": "02-2788-1568"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.508645201804,
+          25.045012987705
+        ]
+      },
+      "properties": {
+        "name": "绘馬別邸 エマベッテイ",
+        "cuisine_type": "日式",
+        "star_rating": "★★",
+        "address": "108台北市萬華區中華路一段88號",
+        "tel": "02-2311-8989"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.503705913901,
+          25.137584738032
+        ]
+      },
+      "properties": {
+        "name": "北投老爺 PURE歐式餐廳",
+        "cuisine_type": "西式",
+        "star_rating": "★★",
+        "address": "台北市北投區中和街2號",
+        "tel": "02-2896-6966 #8385"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.567967870072,
+          25.036731960735
+        ]
+      },
+      "properties": {
+        "name": "旭集",
+        "cuisine_type": "異國料理",
+        "star_rating": "★★",
+        "address": "台北市信義區松仁路58號9樓",
+        "tel": "02-8780-3366"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.566693820789,
+          25.040647776351
+        ]
+      },
+      "properties": {
+        "name": "饗饗",
+        "cuisine_type": "異國料理",
+        "star_rating": "★★",
+        "address": "台北市信義區忠孝東路五段68號46樓",
+        "tel": "02-8780-9988"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.523260139638,
+          25.060676878812
+        ]
+      },
+      "properties": {
+        "name": "台泥企業團營運總部-員工餐廳",
+        "cuisine_type": "中式",
+        "star_rating": "★★",
+        "address": "台北市中山區中山北路二段113號",
+        "tel": "-"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.516784113607,
+          25.049090071139
+        ]
+      },
+      "properties": {
+        "name": "開飯",
+        "cuisine_type": "中式",
+        "star_rating": "★",
+        "address": "台北市大同區承德路一段1號B3樓",
+        "tel": "02-2556-5788"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.564789620025,
+          25.033416708481
+        ]
+      },
+      "properties": {
+        "name": "饗Ajoy",
+        "cuisine_type": "異國料理",
+        "star_rating": "★",
+        "address": "台北市信義區信義路五段7號86樓",
+        "tel": "02-8101-0111"
+      }
+    }
+  ]
+}
