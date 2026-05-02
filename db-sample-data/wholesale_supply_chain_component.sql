@@ -13,8 +13,9 @@ ON CONFLICT ("index") DO UPDATE SET name = EXCLUDED.name;
 INSERT INTO public.component_charts ("index", color, types, unit)
 VALUES (
     'wholesale_supply_chain',
-    ARRAY['#2ECC71','#E67E22','#27AE60','#2980B9','#C0392B','#8E44AD','#2ECC71'],
-    ARRAY['MapLegend','BarChart','ColumnChart'],
+    -- 順序與 map_config：臺北點、新北點、批發、蔬果弧、漁弧、肉弧、家禽弧（色與 arc paint 首色對齊）
+    ARRAY['#2ECC71','#2ECC71','#E67E22','#27AE60','#2980B9','#C0392B','#8E44AD'],
+    ARRAY['MapLegend'],
     '公斤'
 )
 ON CONFLICT ("index") DO UPDATE
@@ -38,14 +39,14 @@ VALUES
     'supply_chain_tpe',
     '供應鏈狀態（臺北）',
     'circle', 'geojson', NULL, NULL,
-    '{"circle-color":["case",["get","supply_active"],"#2ECC71","#E74C3C"],"circle-radius":["interpolate",["linear"],["get","trust_score"],0,4,50,7,90,11],"circle-opacity":0.85,"circle-stroke-color":"#ffffff","circle-stroke-width":1.5}'::json,
+    '{"circle-color":["case",["get","supply_active"],"#2ECC71","#E74C3C"],"circle-radius":["interpolate",["linear"],["get","trust_score"],0,3,50,5,90,7],"circle-opacity":0.85,"circle-stroke-color":"#ffffff","circle-stroke-width":1.5}'::json,
     '[{"key":"name","name":"市場名稱"},{"key":"district","name":"行政區"},{"key":"supply_active","name":"今日供貨"},{"key":"supply_categories","name":"供貨���別"},{"key":"total_items","name":"供應品項數"},{"key":"trust_score","name":"信任分數"},{"key":"status_text","name":"供應狀態"},{"key":"top_items_display","name":"主要供應品項"}]'::json
 ),
 (
     'supply_chain_new_tpe',
     '��應鏈狀態（��北）',
     'circle', 'geojson', NULL, NULL,
-    '{"circle-color":["case",["get","supply_active"],"#2ECC71","#E74C3C"],"circle-radius":["interpolate",["linear"],["get","trust_score"],0,4,50,7,90,11],"circle-opacity":0.85,"circle-stroke-color":"#ffffff","circle-stroke-width":1.5}'::json,
+    '{"circle-color":["case",["get","supply_active"],"#2ECC71","#E74C3C"],"circle-radius":["interpolate",["linear"],["get","trust_score"],0,3,50,5,90,7],"circle-opacity":0.85,"circle-stroke-color":"#ffffff","circle-stroke-width":1.5}'::json,
     '[{"key":"name","name":"市場��稱"},{"key":"district","name":"行政區"},{"key":"supply_active","name":"今日供貨"},{"key":"supply_categories","name":"供貨類別"},{"key":"total_items","name":"供應品項數"},{"key":"trust_score","name":"信任分數"},{"key":"status_text","name":"供應狀態"}]'::json
 ),
 -- 批發市場點位 (symbol)

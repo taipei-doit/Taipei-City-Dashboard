@@ -162,6 +162,57 @@ def _fetch_poultry(session, today):
     return results
 
 
+def _poultry_kg_from_record(record):
+    """
+    Sum kg from a single MOA poultry row if the API exposes a quantity field.
+    The three poultry endpoints mostly return 指價（元/台斤）欄位，與蔬果/漁產的
+    Trans_Quantity（公斤）不同；若欄位不存在則回傳 0.0。
+    """
+    for key in (
+        "Trans_Quantity",
+        "TransQuantity",
+        "Transaction_Quantity",
+        "TotalQty",
+        "Total_Quantity",
+    ):
+        if key not in record or record[key] is None:
+            continue
+        try:
+            return float(record[key])
+        except (TypeError, ValueError):
+            continue
+    return 0.0
+
+
+def _poultry_total_kg(records):
+    return round(sum(_poultry_kg_from_record(r) for r in records), 1)
+
+
+def _poultry_top_items_json(records):
+    """每筆家禽列保留類別 + 一組代表性欄位（價格或數量）供儀表板顯示。"""
+    import json
+
+    lines = []
+    for r in records[:5]:
+        label = r.get("_poultry_type", "")
+        pair = None
+        for k, v in r.items():
+            if k.startswith("_") or k in ("TransDate", "LunarCalendar"):
+                continue
+            if v is None or v == "":
+                continue
+            pair = (k, v)
+            break
+        lines.append(
+            {
+                "name": label,
+                "field": pair[0] if pair else "",
+                "value": pair[1] if pair else "",
+            }
+        )
+    return json.dumps(lines, ensure_ascii=False)
+
+
 def _aggregate_to_summary(vf_records, pork_records, fish_records, poultry_records, today):
     """Aggregate raw API records into wholesale_daily_summary rows."""
     import json
@@ -240,19 +291,17 @@ def _aggregate_to_summary(vf_records, pork_records, fish_records, poultry_record
         })
 
     if poultry_records:
+        # 公斤數：僅在 API 回傳 Trans_Quantity 等欄位時有值；否則為 0（與農業部僅提供指價的現況一致）
+        poultry_kg = _poultry_total_kg(poultry_records)
         rows.append({
             "data_date": roc_date,
             "market_code": "NATIONAL",
             "market_name": "全國家禽行情",
             "category": "poultry",
             "total_items": len(poultry_records),
-            "total_quantity": 0,
+            "total_quantity": poultry_kg,
             "avg_price": 0,
-            "top_items": json.dumps(
-                [{"name": r.get("_poultry_type", ""), "price": r.get("BlackFeather_S_M", "")}
-                 for r in poultry_records[:5]],
-                ensure_ascii=False,
-            ),
+            "top_items": _poultry_top_items_json(poultry_records),
         })
 
     return pd.DataFrame(rows) if rows else pd.DataFrame()

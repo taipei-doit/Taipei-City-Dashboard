@@ -792,6 +792,25 @@ export const useMapStore = defineStore("map", {
 				},
 				source: `${map_config.layerId}-source`,
 			};
+			// 供應鏈零售狀態圓點：paint 來自 DB 時常仍是舊半徑，在此強制縮小（不依賴重灌 sample SQL）
+			if (
+				map_config.type === "circle" &&
+				["supply_chain_tpe", "supply_chain_new_tpe"].includes(
+					map_config.index,
+				)
+			) {
+				config.paint["circle-radius"] = [
+					"interpolate",
+					["linear"],
+					["get", "trust_score"],
+					0,
+					2.5,
+					50,
+					4.5,
+					90,
+					6.5,
+				];
+			}
 			if (
 				map_config.layerId ===
 					"wee_hazard_water-fill-extrusion-metrotaipei" ||
