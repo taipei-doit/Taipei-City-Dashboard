@@ -19,7 +19,7 @@ const route = useRoute();
 const authStore = useAuthStore();
 const dialogStore = useDialogStore();
 const themeStore = useThemeStore();
-const { locale, setLocale, supportedLocales } = useBackendTranslation();
+const { locale, setLocale, supportedLocales, t } = useBackendTranslation();
 const { isFullscreen, toggle } = useFullscreen();
 
 const linkQuery = computed(() => {
@@ -132,13 +132,13 @@ const isLocalhost = computed(() => {
               :href="isLocalhost ? 'https://citydashboard.taipei/documentation/' : `${location.origin}/documentation/`"
               target="_blank"
               rel="noreferrer"
-            >技術文件</a>
+            >{{ t('label.tech_doc') || '技術文件' }}</a>
           </li>
           <li>
             <button
               @click="dialogStore.showDialog('contributorsList')"
             >
-              專案貢獻者
+              {{ t('label.contributors') || '專案貢獻者' }}
             </button>
           </li>
         </ul>
@@ -159,7 +159,7 @@ const isLocalhost = computed(() => {
         <ul>
           <li>
             <button @click="dialogStore.showDialog('userSettings')">
-              用戶設定
+              {{ t('label.user_settings') || '用戶設定' }}
             </button>
           </li>
           <li
@@ -170,7 +170,7 @@ const isLocalhost = computed(() => {
             class="hide-if-mobile"
           >
             <router-link to="/admin">
-              管理員後臺
+              {{ t('label.admin_panel') || '管理員後臺' }}
             </router-link>
           </li>
           <li
@@ -178,7 +178,7 @@ const isLocalhost = computed(() => {
             class="hide-if-mobile"
           >
             <router-link to="/dashboard">
-              返回儀表板
+              {{ t('label.back_to_dashboard') || '返回儀表板' }}
             </router-link>
           </li>
           <li>
@@ -198,7 +198,7 @@ const isLocalhost = computed(() => {
         class="navbar-user-user"
       >
         <button @click="dialogStore.showDialog('login')">
-          登入
+          {{ t('label.login') || '登入' }}
         </button>
       </div>
     </div>

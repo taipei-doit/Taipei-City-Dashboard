@@ -9,6 +9,11 @@ var StaticUITranslations = map[string]string{
 	"nav.analysis":  "數據分析",
 	"nav.search":    "搜尋",
 
+	// UI Titles
+	"title.component_platform": "組件瀏覽平台",
+	"title.dashboard_overview": "儀表板總覽",
+	"title.map_comparison":     "地圖交叉比對",
+
 	// Sidebar
 	"sidebar.favorites": "我的收藏",
 	"sidebar.recent":    "最近瀏覽",

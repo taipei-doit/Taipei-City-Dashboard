@@ -16,6 +16,7 @@
 import { defineStore } from "pinia";
 import debounce from "lodash/debounce";
 import http from "../router/axios";
+import { useContentStore } from "./contentStore";
 import { LOCALE_STORAGE_KEY } from "../utils/acceptLanguage";
 
 /**
@@ -132,12 +133,20 @@ export const useTranslationStore = defineStore("translation", {
 				: key;
 		},
 
-		setLocale(code) {
-			if (!SUPPORTED_LOCALES.some((l) => l.code === code)) return;
-			this.locale = code;
-			localStorage.setItem(LOCALE_STORAGE_KEY, code);
-			this.fetchStaticDictionary();
-		},
+                setLocale(code) {
+                        if (!SUPPORTED_LOCALES.some((l) => l.code === code)) return;
+                        this.locale = code;
+                        localStorage.setItem(LOCALE_STORAGE_KEY, code);
+                        this.fetchStaticDictionary();
+                        
+                        // u81eau52d5u91cdu65b0u62c9u53d6u5167u5bb9uff0cu4e0du9700u8981u4f7fu7528u8005u624bu52d5 F5
+                        const contentStore = useContentStore();
+                        if (contentStore.currentDashboard.index) {
+                            contentStore.setCurrentDashboardAllContent();
+                        } else {
+                            contentStore.setDashboards(true);
+                        }
+                },
 
 		cacheGet(text) {
 			const k = cacheKey(this.locale, text);

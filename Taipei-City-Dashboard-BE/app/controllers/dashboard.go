@@ -103,6 +103,8 @@ func GetDashboardByIndex(c *gin.Context) {
 			// Translate JSON configs
 			components[i].ChartConfig = global.GlobalTranslator.TranslateJSON(ctx, components[i].ChartConfig, targetLang, "chart_config")
 			components[i].MapConfig = global.GlobalTranslator.TranslateJSON(ctx, components[i].MapConfig, targetLang, "map_config")
+			components[i].HistoryConfig = global.GlobalTranslator.TranslateJSON(ctx, components[i].HistoryConfig, targetLang, "history_config")
+			components[i].MapFilter = global.GlobalTranslator.TranslateJSON(ctx, components[i].MapFilter, targetLang, "map_filter")
 		}
 	}
 

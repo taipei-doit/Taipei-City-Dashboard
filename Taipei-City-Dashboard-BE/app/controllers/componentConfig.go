@@ -142,6 +142,8 @@ func GetComponentByID(c *gin.Context) {
 		// Translate JSON configs
 		cityComponent.ChartConfig = global.GlobalTranslator.TranslateJSON(ctx, cityComponent.ChartConfig, targetLang, "chart_config")
 		cityComponent.MapConfig = global.GlobalTranslator.TranslateJSON(ctx, cityComponent.MapConfig, targetLang, "map_config")
+		cityComponent.HistoryConfig = global.GlobalTranslator.TranslateJSON(ctx, cityComponent.HistoryConfig, targetLang, "history_config")
+		cityComponent.MapFilter = global.GlobalTranslator.TranslateJSON(ctx, cityComponent.MapFilter, targetLang, "map_filter")
 	}
 
 	// Return the component

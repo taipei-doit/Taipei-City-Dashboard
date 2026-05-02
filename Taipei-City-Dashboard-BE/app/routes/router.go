@@ -50,6 +50,8 @@ func configureTranslationRoutes() {
 	{
 		translationRoutes.GET("/static", controllers.GetStaticTranslations)
 	}
+	// 批次翻譯補洞 API
+	RouterGroup.POST("/translate", controllers.BatchTranslate)
 }
 
 func configureAuthRoutes() {

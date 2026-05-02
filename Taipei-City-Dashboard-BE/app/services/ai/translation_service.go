@@ -79,16 +79,30 @@ func (s *TranslationService) Translate(ctx context.Context, text string, targetL
 
 // TranslatableKeys is a whitelist of JSON keys that should be translated.
 var TranslatableKeys = map[string]bool{
-	"title":      true,
-	"name":       true,
-	"unit":       true,
-	"label":      true,
-	"short_desc": true,
-	"long_desc":  true,
-	"use_case":   true,
-	"source":     true,
-	"text":       true,
+	"title":       true,
+	"name":        true,
+	"unit":        true,
+	"label":       true,
+	"short_desc":  true,
+	"long_desc":   true,
+	"use_case":    true,
+	"source":      true,
+	"text":        true,
 	"placeholder": true,
+	"city":        true,
+	"category":    true,
+	"description": true,
+	"value":       true, // Some charts use "value" as a label
+	"legend":      true,
+	"xAxis":       true,
+	"yAxis":       true,
+	"filter":      true,
+	"group":       true,
+	"sub_title":   true,
+	"header":      true,
+	"footer":      true,
+	"content":     true,
+	"tooltip":     true,
 }
 
 // TranslateJSON recursively walks through a JSON object and translates string values of whitelisted keys.
