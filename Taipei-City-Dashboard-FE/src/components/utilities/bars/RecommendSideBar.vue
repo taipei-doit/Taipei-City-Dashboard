@@ -289,7 +289,6 @@ async function openStorylineRecommendedComponent(comp) {
 	&-headertext {
 		flex: 1;
 		min-width: 0;
-		text-align: right;
 	}
 
 	&-ai-section {
