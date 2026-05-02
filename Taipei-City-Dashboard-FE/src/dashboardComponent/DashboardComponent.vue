@@ -279,6 +279,14 @@ function returnChartComponent(name, svg) {
     ]"
     :style="style"
   >
+    <!-- 避免語系切換時新舊翻譯混雜：整張卡片先蓋 loading，完成後再一次呈現 -->
+    <div
+      v-if="isApplyingLocale"
+      class="dashboardcomponent-locale-loading"
+      aria-busy="true"
+    >
+      <div />
+    </div>
     <!-- Header -->
     <div class="dashboardcomponent-header">
       <!-- Upper Left Corner -->
@@ -434,13 +442,7 @@ function returnChartComponent(name, svg) {
     </div>
     <!-- Main Content -->
     <div
-      v-if="isApplyingLocale"
-      class="dashboardcomponent-loading"
-    >
-      <div />
-    </div>
-    <div
-      v-else-if="mode === 'preview'"
+      v-if="mode === 'preview'"
       class="preview-content"
     >
       <div
@@ -634,6 +636,28 @@ button:hover {
 	padding: var(--font-m);
 	border-radius: 5px;
 	background-color: var(--color-component-background);
+
+	&-locale-loading {
+		position: absolute;
+		inset: 0;
+		z-index: 20;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border-radius: inherit;
+		background-color: rgba(0, 0, 0, 0.25);
+		backdrop-filter: blur(1px);
+		pointer-events: all;
+
+		div {
+			width: 2rem;
+			height: 2rem;
+			border-radius: 50%;
+			border: solid 4px var(--color-border);
+			border-top: solid 4px var(--color-highlight);
+			animation: spin 0.7s ease-in-out infinite;
+		}
+	}
 
 	@media (min-width: 1050px) {
 		height: 370px;
