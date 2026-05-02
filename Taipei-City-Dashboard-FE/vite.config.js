@@ -23,6 +23,10 @@ const serverConfig = isDockerCompose
 				target: "http://dashboard-be:8080",
 				changeOrigin: true,
 				rewrite: (path) => path.replace("/dev", "/v1")
+			},
+			"/map_engine": {
+				target: "https://www.map.com.tw",
+				changeOrigin: true,
 			}
 		},
 		watch: {
@@ -43,6 +47,10 @@ const serverConfig = isDockerCompose
 				target: "https://citydashboard.taipei/geo_server/",
 				changeOrigin: true,
 				rewrite: (path) => path.replace(/^\/geo_server/, "")
+			},
+			"/map_engine": {
+				target: "https://www.map.com.tw",
+				changeOrigin: true,
 			}
 		}
 	};

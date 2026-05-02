@@ -110,7 +110,10 @@ function updateTimeToUpdate() {
 function reloadMapData() {
 	if (!["mapview"].includes(authStore.currentPath)) return;
 	mapStore.currentVisibleLayers.forEach((layerName) => {
-		mapStore.map.removeLayer(layerName);
+		mapStore.removeRainAnimationLayer(layerName);
+		if (mapStore.map.getLayer(layerName)) {
+			mapStore.map.removeLayer(layerName);
+		}
 		if (mapStore.map.getSource(`${layerName}-source`)) {
 			mapStore.map.removeSource(`${layerName}-source`);
 		}
@@ -143,7 +146,10 @@ function reload3DMRTMapData() {
 			return;
 		}
 
-		mapStore.map.removeLayer(layerName);
+		mapStore.removeRainAnimationLayer(layerName);
+		if (mapStore.map.getLayer(layerName)) {
+			mapStore.map.removeLayer(layerName);
+		}
 		if (mapStore.map.getSource(`${layerName}-source`)) {
 			mapStore.map.removeSource(`${layerName}-source`);
 		}

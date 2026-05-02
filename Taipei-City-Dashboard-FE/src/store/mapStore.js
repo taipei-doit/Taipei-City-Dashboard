@@ -58,6 +58,10 @@ import {
 	getCrowdColor,
 	mrtLineColor,
 } from "../assets/utilityFunctions/getThematicColor.js";
+import {
+	extractRoadNameFromAddress,
+	findTaipeiRoadSpeedLimit,
+} from "../assets/utilityFunctions/roadSpeedLimit.js";
 
 function safelySetPaintProperty(map, layerId, property, value) {
 	try {
@@ -161,21 +165,351 @@ const SIMPLE_ROUTE_VEHICLE_MODELS = {
 const SIMPLE_ROUTE_CAR_BASE_ZOOM = 14.5;
 const SIMPLE_ROUTE_CAR_MIN_SCALE = 0.5;
 const SIMPLE_ROUTE_CAR_MAX_SCALE = 7;
-const SIMPLE_ROUTE_CAR_MIN_DURATION_MS = 6500;
-const SIMPLE_ROUTE_CAR_MAX_DURATION_MS = 22000;
-const SIMPLE_ROUTE_CAR_MS_PER_METER = 1.6;
+const SIMPLE_ROUTE_CAR_MIN_DURATION_MS = 9000;
+const SIMPLE_ROUTE_CAR_MAX_DURATION_MS = 36000;
+const SIMPLE_ROUTE_CAR_MS_PER_METER = 2.6;
 const SIMPLE_ROUTE_FIRST_PERSON_FORWARD_METERS = 0;
 const SIMPLE_ROUTE_FIRST_PERSON_PITCH = 78;
 const SIMPLE_ROUTE_FIRST_PERSON_ZOOM = 17.2;
 const SIMPLE_ROUTE_FIRST_PERSON_UPDATE_INTERVAL_MS = 0;
+const SIMPLE_ROUTE_SPEED_LIMIT_LOOKUP_THROTTLE_MS = 1800;
+const ROAD_NAME_LOOKUP_API_URL = "/map_engine/search.ashx";
 const SIMPLE_ROUTE_PROFILES = [
 	"mapbox/driving",
 	"mapbox/walking",
 	"mapbox/cycling",
 ];
 
+function createInitialRoadSpeedLimitState() {
+	return {
+		status: "idle",
+		roadName: "",
+		address: "",
+		speedLimit: "",
+		speedLimitText: "",
+		category: "",
+		segment: "",
+		isDefault: false,
+		isMultiple: false,
+		updatedAt: null,
+		error: "",
+	};
+}
+const FUTURE_HOUR_RAIN_LAYER_INDEX = "future_hour_rain";
+const RAIN_ANIMATION_LAYER_SUFFIX = "-rain-animation";
+const RAIN_ANIMATION_MIN_DROPS = 600;
+const RAIN_ANIMATION_MAX_DROPS = 3600;
+const RAIN_ANIMATION_DROP_FACTOR = 0.65;
+const RAIN_ANIMATION_AVG_DROP_FACTOR = 1500;
+
 function clampNumber(value, min, max) {
 	return Math.max(min, Math.min(max, value));
+}
+
+function getRainAnimationLayerId(mapLayerId) {
+	return `${mapLayerId}${RAIN_ANIMATION_LAYER_SUFFIX}`;
+}
+
+function seededRandom(seed) {
+	const value = Math.sin(seed * 12.9898) * 43758.5453;
+	return value - Math.floor(value);
+}
+
+function visitLngLatCoordinates(coordinates, callback) {
+	if (!Array.isArray(coordinates)) return;
+	if (
+		typeof coordinates[0] === "number" &&
+		typeof coordinates[1] === "number"
+	) {
+		callback(coordinates);
+		return;
+	}
+	coordinates.forEach((coordinate) =>
+		visitLngLatCoordinates(coordinate, callback),
+	);
+}
+
+function getGeometryLngLatBbox(geometry) {
+	if (!geometry?.coordinates) return null;
+	const bbox = {
+		minLng: Infinity,
+		minLat: Infinity,
+		maxLng: -Infinity,
+		maxLat: -Infinity,
+	};
+
+	visitLngLatCoordinates(geometry.coordinates, ([lng, lat]) => {
+		if (!Number.isFinite(lng) || !Number.isFinite(lat)) return;
+		bbox.minLng = Math.min(bbox.minLng, lng);
+		bbox.minLat = Math.min(bbox.minLat, lat);
+		bbox.maxLng = Math.max(bbox.maxLng, lng);
+		bbox.maxLat = Math.max(bbox.maxLat, lat);
+	});
+
+	if (!Number.isFinite(bbox.minLng) || !Number.isFinite(bbox.minLat)) {
+		return null;
+	}
+	return bbox;
+}
+
+function getRainFeatureEntries(data) {
+	const features = Array.isArray(data?.features) ? data.features : [];
+	const entries = features
+		.map((feature) => {
+			const rain = Number(feature?.properties?.rain);
+			const bbox = getGeometryLngLatBbox(feature?.geometry);
+			if (!Number.isFinite(rain) || rain <= 0 || !bbox) return null;
+			return {
+				bbox,
+				rain,
+				weight: rain + 8,
+			};
+		})
+		.filter(Boolean);
+
+	if (!entries.length) return null;
+
+	const stats = entries.reduce(
+		(result, entry) => {
+			result.maxRain = Math.max(result.maxRain, entry.rain);
+			result.totalRain += entry.rain;
+			result.totalWeight += entry.weight;
+			result.cumulativeWeights.push(result.totalWeight);
+			return result;
+		},
+		{
+			maxRain: 0,
+			totalRain: 0,
+			totalWeight: 0,
+			cumulativeWeights: [],
+		},
+	);
+
+	stats.averageRain = stats.totalRain / entries.length;
+	return { entries, stats };
+}
+
+function pickWeightedRainEntry(entries, cumulativeWeights, targetWeight) {
+	let low = 0;
+	let high = cumulativeWeights.length - 1;
+
+	while (low < high) {
+		const mid = Math.floor((low + high) / 2);
+		if (targetWeight <= cumulativeWeights[mid]) {
+			high = mid;
+		} else {
+			low = mid + 1;
+		}
+	}
+	return entries[low];
+}
+
+function createRainDropDescriptors(data) {
+	const rainData = getRainFeatureEntries(data);
+	if (!rainData) return null;
+
+	const { entries, stats } = rainData;
+	const averageIntensity = clampNumber(
+		stats.averageRain / Math.max(stats.maxRain, 1),
+		0,
+		1,
+	);
+	const dropCount = Math.round(
+		clampNumber(
+			entries.length * RAIN_ANIMATION_DROP_FACTOR +
+				averageIntensity * RAIN_ANIMATION_AVG_DROP_FACTOR,
+			RAIN_ANIMATION_MIN_DROPS,
+			RAIN_ANIMATION_MAX_DROPS,
+		),
+	);
+
+	const drops = Array.from({ length: dropCount }, (_, index) => {
+		const entry = pickWeightedRainEntry(
+			entries,
+			stats.cumulativeWeights,
+			seededRandom(index + 19) * stats.totalWeight,
+		);
+		const intensity = clampNumber(entry.rain / Math.max(stats.maxRain, 1), 0.08, 1);
+		const lng =
+			entry.bbox.minLng +
+			(entry.bbox.maxLng - entry.bbox.minLng) *
+				seededRandom(index * 7 + 3);
+		const lat =
+			entry.bbox.minLat +
+			(entry.bbox.maxLat - entry.bbox.minLat) *
+				seededRandom(index * 11 + 5);
+		const mercator = mapboxGl.MercatorCoordinate.fromLngLat([lng, lat], 0);
+
+		return {
+			x: mercator.x,
+			y: mercator.y,
+			meterScale: mercator.meterInMercatorCoordinateUnits(),
+			intensity,
+			lengthMeters:
+				360 + intensity * 720 + seededRandom(index * 13 + 7) * 260,
+			topAltitudeMeters:
+				620 + seededRandom(index * 17 + 11) * 1320,
+			windXMeters: -120 - intensity * 260,
+			windYMeters: 60 + seededRandom(index * 19 + 13) * 130,
+			speedMetersPerSecond:
+				620 + intensity * 1280 + seededRandom(index * 23 + 17) * 340,
+			phase: seededRandom(index * 29 + 23),
+		};
+	});
+
+	return {
+		averageIntensity,
+		drops,
+	};
+}
+
+function writeRainDropPosition(drop, positions, index, elapsedSeconds) {
+	const stride = index * 6;
+	const spanMeters =
+		drop.topAltitudeMeters + drop.lengthMeters + 520;
+	const fallingMeters =
+		(elapsedSeconds * drop.speedMetersPerSecond +
+			drop.phase * spanMeters) %
+		spanMeters;
+	const fallProgress = fallingMeters / spanMeters;
+	const headAltitudeMeters = drop.topAltitudeMeters - fallingMeters;
+	const x =
+		drop.x + drop.windXMeters * fallProgress * drop.meterScale;
+	const y =
+		drop.y + drop.windYMeters * fallProgress * drop.meterScale;
+	const tailX =
+		x + drop.windXMeters * 0.16 * drop.meterScale * drop.intensity;
+	const tailY =
+		y + drop.windYMeters * 0.16 * drop.meterScale * drop.intensity;
+	const headZ = headAltitudeMeters * drop.meterScale;
+	const tailZ =
+		(headAltitudeMeters - drop.lengthMeters) * drop.meterScale;
+
+	positions[stride] = x;
+	positions[stride + 1] = y;
+	positions[stride + 2] = headZ;
+	positions[stride + 3] = tailX;
+	positions[stride + 4] = tailY;
+	positions[stride + 5] = tailZ;
+}
+
+function writeRainDropColor(drop, colors, index) {
+	const stride = index * 6;
+	const red = 0.46 + drop.intensity * 0.42;
+	const green = 0.74 + drop.intensity * 0.22;
+	const blue = 1;
+
+	for (let offset = 0; offset < 6; offset += 3) {
+		colors[stride + offset] = red;
+		colors[stride + offset + 1] = green;
+		colors[stride + offset + 2] = blue;
+	}
+}
+
+function createRainAnimationLayer(layerId, data) {
+	const descriptorData = createRainDropDescriptors(data);
+	if (!descriptorData) return null;
+	const { averageIntensity, drops } = descriptorData;
+	const positions = new Float32Array(drops.length * 6);
+	const colors = new Float32Array(drops.length * 6);
+
+	drops.forEach((drop, index) => {
+		writeRainDropPosition(drop, positions, index, 0);
+		writeRainDropColor(drop, colors, index);
+	});
+
+	const customLayer = {
+		id: layerId,
+		type: "custom",
+		renderingMode: "3d",
+		visible: true,
+		startedAt: performance.now(),
+		onAdd(map, gl) {
+			customLayer.map = markRaw(map);
+			customLayer.camera = markRaw(new THREE.Camera());
+			customLayer.scene = markRaw(new THREE.Scene());
+			customLayer.geometry = markRaw(new THREE.BufferGeometry());
+			customLayer.geometry.setAttribute(
+				"position",
+				new THREE.BufferAttribute(positions, 3),
+			);
+			customLayer.geometry.setAttribute(
+				"color",
+				new THREE.BufferAttribute(colors, 3),
+			);
+			customLayer.material = markRaw(
+				new THREE.LineBasicMaterial({
+					vertexColors: true,
+					transparent: true,
+					opacity: 0.28 + averageIntensity * 0.24,
+					blending: THREE.AdditiveBlending,
+					depthWrite: false,
+				}),
+			);
+			customLayer.rainLines = markRaw(
+				new THREE.LineSegments(
+					customLayer.geometry,
+					customLayer.material,
+				),
+			);
+			customLayer.scene.add(customLayer.rainLines);
+			customLayer.renderer = markRaw(
+				new THREE.WebGLRenderer({
+					canvas: map.getCanvas(),
+					context: gl,
+					antialias: true,
+				}),
+			);
+			customLayer.renderer.autoClear = false;
+		},
+		onRemove() {
+			customLayer.geometry?.dispose?.();
+			customLayer.material?.dispose?.();
+			customLayer.scene?.remove?.(customLayer.rainLines);
+			customLayer.map = null;
+			customLayer.camera = null;
+			customLayer.scene = null;
+			customLayer.geometry = null;
+			customLayer.material = null;
+			customLayer.rainLines = null;
+			customLayer.renderer = null;
+		},
+		render(gl, matrix) {
+			if (
+				!customLayer.visible ||
+				!customLayer.camera ||
+				!customLayer.geometry ||
+				!customLayer.renderer ||
+				!customLayer.scene
+			) {
+				return;
+			}
+
+			const elapsedSeconds =
+				(performance.now() - customLayer.startedAt) / 1000;
+			const positionAttribute =
+				customLayer.geometry.getAttribute("position");
+			drops.forEach((drop, index) => {
+				writeRainDropPosition(
+					drop,
+					positionAttribute.array,
+					index,
+					elapsedSeconds,
+				);
+			});
+			positionAttribute.needsUpdate = true;
+			customLayer.camera.projectionMatrix =
+				new THREE.Matrix4().fromArray(matrix);
+			customLayer.renderer.resetState();
+			customLayer.renderer.render(
+				customLayer.scene,
+				customLayer.camera,
+			);
+			customLayer.map?.triggerRepaint?.();
+		},
+	};
+
+	return customLayer;
 }
 
 function getSimpleRouteCarScale(zoom) {
@@ -355,6 +689,36 @@ function interpolateSimpleRoutePath(routePath, progress) {
 	};
 }
 
+function getCoordinateLookupKey(coordinate) {
+	return coordinate
+		.map((value) => Number(value).toFixed(5))
+		.join(",");
+}
+
+function parseRoadNameLookupPayload(data) {
+	if (!data) return {};
+	if (typeof data === "object") return data;
+	try {
+		return JSON.parse(data);
+	} catch {
+		return {};
+	}
+}
+
+function getRoadNameLookupAddress(data) {
+	const payload = parseRoadNameLookupPayload(data);
+	const firstResult = payload?.results?.[0] || {};
+
+	return (
+		payload.address ||
+		payload.formatted_address ||
+		firstResult.formatted_address ||
+		firstResult.address ||
+		firstResult.name ||
+		""
+	);
+}
+
 function disposeThreeObject(object) {
 	object.traverse((child) => {
 		if (!child.isMesh) return;
@@ -494,6 +858,7 @@ function createSimpleRouteCarLayer(
 		lastFirstPersonCameraUpdate: 0,
 		shouldUseFirstPersonCamera:
 			options.shouldUseFirstPersonCamera || (() => false),
+		onRouteSample: options.onRouteSample || (() => {}),
 		applyFirstPersonCamera(force = false) {
 			if (
 				!customLayer.map ||
@@ -662,6 +1027,7 @@ function createSimpleRouteCarLayer(
 
 			if (isFirstPersonCamera) {
 				customLayer.currentSample = routeSample;
+				customLayer.onRouteSample(routeSample);
 				customLayer.applyFirstPersonCamera();
 			}
 
@@ -724,6 +1090,8 @@ export const useMapStore = defineStore("map", {
 		overlay: null,
 		// Store deck.gl layer
 		deckGlLayer: {},
+		// Store Three.js rain animation layers keyed by their map layer id
+		rainAnimationLayers: {},
 		// Store animate step form 1 to 100
 		step: 1,
 		// Stores popup information
@@ -765,6 +1133,12 @@ export const useMapStore = defineStore("map", {
 		navigationRouteCarAnimationFrame: null,
 		isSimpleRouteFirstPersonCamera: false,
 		simpleRouteCameraSnapshot: null,
+		currentRoadSpeedLimit: createInitialRoadSpeedLimitState(),
+		lastRoadSpeedLimitLookupAt: 0,
+		lastRoadSpeedLimitLookupKey: "",
+		pendingRoadSpeedLimitCoordinate: null,
+		roadSpeedLimitLookupTimer: null,
+		roadSpeedLimitRequestId: 0,
 	}),
 	actions: {
 		/* Initialize Mapbox */
@@ -777,6 +1151,7 @@ export const useMapStore = defineStore("map", {
 			this.isPreloading = false;
 			this.preloadedModels = {};
 			this.deckGlLayer = {};
+			this.rainAnimationLayers = {};
 			this.isArcAnimationRunning = false;
 			this.arcAnimationFrame = null;
 			this.hasPlayedInitialReveal = false;
@@ -793,6 +1168,7 @@ export const useMapStore = defineStore("map", {
 			this.navigationRouteCarAnimationFrame = null;
 			this.isSimpleRouteFirstPersonCamera = false;
 			this.simpleRouteCameraSnapshot = null;
+			this.resetCurrentRoadSpeedLimit();
 			this.cinematicPitch = MapObjectConfig.pitch;
 			const MAPBOXTOKEN = import.meta.env.VITE_MAPBOXTOKEN;
 			mapboxGl.accessToken = MAPBOXTOKEN;
@@ -1577,8 +1953,45 @@ export const useMapStore = defineStore("map", {
 			} else if (map_config.type === "isoline") {
 				this.AddIsolineMapLayer(map_config, data);
 			} else {
-				this.addMapLayer(map_config);
+				this.addMapLayer(map_config, data);
 			}
+		},
+		addRainAnimationLayer(map_config, data) {
+			if (
+				!this.map ||
+				map_config.index !== FUTURE_HOUR_RAIN_LAYER_INDEX
+			) {
+				return;
+			}
+
+			this.removeRainAnimationLayer(map_config.layerId);
+			const layerId = getRainAnimationLayerId(map_config.layerId);
+			const rainLayer = createRainAnimationLayer(layerId, data);
+			if (!rainLayer) return;
+
+			this.rainAnimationLayers[map_config.layerId] = markRaw(rainLayer);
+			this.map.addLayer(rainLayer);
+		},
+		removeRainAnimationLayer(mapLayerId) {
+			const layerId = getRainAnimationLayerId(mapLayerId);
+			if (this.map?.getLayer(layerId)) {
+				this.map.removeLayer(layerId);
+			}
+			if (this.rainAnimationLayers[mapLayerId]) {
+				delete this.rainAnimationLayers[mapLayerId];
+			}
+		},
+		removeAllRainAnimationLayers() {
+			Object.keys(this.rainAnimationLayers).forEach((mapLayerId) => {
+				this.removeRainAnimationLayer(mapLayerId);
+			});
+			this.rainAnimationLayers = {};
+		},
+		setRainAnimationLayerVisibility(mapLayerId, isVisible) {
+			const rainLayer = this.rainAnimationLayers[mapLayerId];
+			if (!rainLayer) return;
+			rainLayer.visible = isVisible;
+			this.map?.triggerRepaint?.();
 		},
 		// 3-2. Add a raster map as a source in mapbox
 		async addRasterSource(map_config) {
@@ -1708,7 +2121,7 @@ export const useMapStore = defineStore("map", {
 		},
 		// 4-1. Using the mapbox source and map config, create a new layer
 		// The styles and configs can be edited in /assets/configs/mapbox/mapConfig.js
-		addMapLayer(map_config) {
+		addMapLayer(map_config, sourceData = null) {
 			let extra_paint_configs = {};
 			let extra_layout_configs = {};
 			if (map_config.icon) {
@@ -1771,6 +2184,7 @@ export const useMapStore = defineStore("map", {
 				config.filter = initialFilter;
 			}
 			this.map.addLayer(config);
+			this.addRainAnimationLayer(map_config, sourceData);
 			if (
 				map_config.layerId ===
 					"wee_hazard_water-fill-extrusion-metrotaipei" ||
@@ -2935,6 +3349,7 @@ export const useMapStore = defineStore("map", {
 				this.currentVisibleLayers.push(mapLayerId);
 				this.renderDeckGLLayer();
 			} else {
+				this.setRainAnimationLayerVisibility(mapLayerId, true);
 				if (
 					mapLayerId ===
 						"wee_hazard_water-fill-extrusion-metrotaipei" ||
@@ -2976,6 +3391,7 @@ export const useMapStore = defineStore("map", {
 				this.loadingLayers = this.loadingLayers.filter(
 					(el) => el !== mapLayerId,
 				);
+				this.setRainAnimationLayerVisibility(mapLayerId, false);
 				if (mapLayerId.indexOf("-arc") !== -1) {
 					this.deckGlLayer[mapLayerId].config.visible = false;
 					this.renderDeckGLLayer();
@@ -3533,6 +3949,122 @@ export const useMapStore = defineStore("map", {
 					.addTo(this.map),
 			);
 		},
+		resetCurrentRoadSpeedLimit() {
+			if (this.roadSpeedLimitLookupTimer) {
+				window.clearTimeout(this.roadSpeedLimitLookupTimer);
+			}
+			this.currentRoadSpeedLimit = createInitialRoadSpeedLimitState();
+			this.lastRoadSpeedLimitLookupAt = 0;
+			this.lastRoadSpeedLimitLookupKey = "";
+			this.pendingRoadSpeedLimitCoordinate = null;
+			this.roadSpeedLimitLookupTimer = null;
+			this.roadSpeedLimitRequestId += 1;
+		},
+		scheduleCurrentRoadSpeedLimitLookup(coordinate, options = {}) {
+			if (
+				!options.force &&
+				!this.isSimpleRouteFirstPersonCamera
+			) {
+				return;
+			}
+			if (!Array.isArray(coordinate)) return;
+
+			const normalizedCoordinate = [
+				Number(coordinate[0]),
+				Number(coordinate[1]),
+			];
+			if (
+				!Number.isFinite(normalizedCoordinate[0]) ||
+				!Number.isFinite(normalizedCoordinate[1])
+			) {
+				return;
+			}
+
+			this.pendingRoadSpeedLimitCoordinate = normalizedCoordinate;
+			const now = Date.now();
+			const elapsed = now - this.lastRoadSpeedLimitLookupAt;
+
+			if (
+				options.force ||
+				elapsed >= SIMPLE_ROUTE_SPEED_LIMIT_LOOKUP_THROTTLE_MS
+			) {
+				if (this.roadSpeedLimitLookupTimer) {
+					window.clearTimeout(this.roadSpeedLimitLookupTimer);
+					this.roadSpeedLimitLookupTimer = null;
+				}
+				this.fetchCurrentRoadSpeedLimit(normalizedCoordinate);
+				return;
+			}
+
+			if (this.roadSpeedLimitLookupTimer) return;
+
+			this.roadSpeedLimitLookupTimer = window.setTimeout(() => {
+				const pendingCoordinate =
+					this.pendingRoadSpeedLimitCoordinate;
+				this.pendingRoadSpeedLimitCoordinate = null;
+				this.roadSpeedLimitLookupTimer = null;
+				this.fetchCurrentRoadSpeedLimit(pendingCoordinate);
+			}, SIMPLE_ROUTE_SPEED_LIMIT_LOOKUP_THROTTLE_MS - elapsed);
+		},
+		async fetchCurrentRoadSpeedLimit(coordinate) {
+			if (!Array.isArray(coordinate)) return;
+			const coordinateKey = getCoordinateLookupKey(coordinate);
+			if (
+				coordinateKey === this.lastRoadSpeedLimitLookupKey &&
+				["loading", "success"].includes(
+					this.currentRoadSpeedLimit.status,
+				)
+			) {
+				return;
+			}
+
+			const requestId = this.roadSpeedLimitRequestId + 1;
+			this.roadSpeedLimitRequestId = requestId;
+			this.lastRoadSpeedLimitLookupAt = Date.now();
+			this.lastRoadSpeedLimitLookupKey = coordinateKey;
+			this.currentRoadSpeedLimit = {
+				...this.currentRoadSpeedLimit,
+				status: "loading",
+				error: "",
+			};
+
+			try {
+				const res = await axios.get(ROAD_NAME_LOOKUP_API_URL, {
+					params: {
+						searchType: "latLng",
+						x: Number(coordinate[0]).toFixed(6),
+						y: Number(coordinate[1]).toFixed(6),
+					},
+					transformResponse: [(data) => data],
+				});
+				const address = getRoadNameLookupAddress(res.data);
+				const roadName = extractRoadNameFromAddress(address);
+				const speedLimit = findTaipeiRoadSpeedLimit({
+					roadName,
+					address,
+				});
+
+				if (requestId !== this.roadSpeedLimitRequestId) return;
+
+				this.currentRoadSpeedLimit = {
+					...speedLimit,
+					status: "success",
+					address,
+					roadName: speedLimit.roadName || roadName,
+					updatedAt: Date.now(),
+					error: "",
+				};
+			} catch {
+				if (requestId !== this.roadSpeedLimitRequestId) return;
+
+				this.currentRoadSpeedLimit = {
+					...this.currentRoadSpeedLimit,
+					status: "error",
+					error: "無法取得道路資訊",
+					updatedAt: Date.now(),
+				};
+			}
+		},
 		setSimpleRouteFirstPersonCamera(enabled) {
 			const shouldEnable = Boolean(enabled);
 			if (this.isSimpleRouteFirstPersonCamera === shouldEnable) return;
@@ -3550,10 +4082,16 @@ export const useMapStore = defineStore("map", {
 				this.isSimpleRouteFirstPersonCamera = true;
 				this.cinematicPitch = SIMPLE_ROUTE_FIRST_PERSON_PITCH;
 				this.navigationRouteCarLayer?.applyFirstPersonCamera?.(true);
+				this.scheduleCurrentRoadSpeedLimitLookup(
+					this.navigationRouteCarLayer?.currentSample?.coordinate ||
+						this.navigationRouteCarSample?.coordinate,
+					{ force: true },
+				);
 				return;
 			}
 
 			this.isSimpleRouteFirstPersonCamera = false;
+			this.resetCurrentRoadSpeedLimit();
 			const snapshot = this.simpleRouteCameraSnapshot;
 			this.simpleRouteCameraSnapshot = null;
 			if (this.map && snapshot) {
@@ -3612,10 +4150,20 @@ export const useMapStore = defineStore("map", {
 				{
 					shouldUseFirstPersonCamera: () =>
 						this.isSimpleRouteFirstPersonCamera,
+					onRouteSample: (routeSample) => {
+						this.scheduleCurrentRoadSpeedLimitLookup(
+							routeSample.coordinate,
+						);
+					},
 				},
 			);
 			this.navigationRouteCarLayer = markRaw(carLayer);
 			this.map.addLayer(carLayer);
+			if (this.isSimpleRouteFirstPersonCamera) {
+				this.scheduleCurrentRoadSpeedLimitLookup(firstSample.coordinate, {
+					force: true,
+				});
+			}
 		},
 		renderSimpleRoute(routeData) {
 			if (!this.map || !routeData?.geometry?.coordinates?.length) {
@@ -3773,6 +4321,7 @@ export const useMapStore = defineStore("map", {
 			if (!preserveFirstPersonCamera) {
 				this.setSimpleRouteFirstPersonCamera(false);
 			}
+			this.resetCurrentRoadSpeedLimit();
 			if (this.navigationRouteCarAnimationFrame) {
 				window.cancelAnimationFrame(
 					this.navigationRouteCarAnimationFrame,
@@ -4227,7 +4776,10 @@ export const useMapStore = defineStore("map", {
 		// 1. Called when the user is switching between maps
 		clearOnlyLayers() {
 			this.currentLayers.forEach((element) => {
-				this.map.removeLayer(element);
+				this.removeRainAnimationLayer(element);
+				if (this.map.getLayer(element)) {
+					this.map.removeLayer(element);
+				}
 				if (this.map.getSource(`${element}-source`)) {
 					this.map.removeSource(`${element}-source`);
 				}
@@ -4245,12 +4797,14 @@ export const useMapStore = defineStore("map", {
 				window.clearTimeout(this.labelRestoreTimer);
 				this.labelRestoreTimer = null;
 			}
+			this.removeAllRainAnimationLayers();
 			this.currentLayers = [];
 			this.mapConfigs = {};
 			this.map = null;
 			this.currentVisibleLayers = [];
 			this.overlay = null;
 			this.deckGlLayer = {};
+			this.rainAnimationLayers = {};
 			this.removePopup();
 			this.tempMarkerCoordinates = null;
 		},

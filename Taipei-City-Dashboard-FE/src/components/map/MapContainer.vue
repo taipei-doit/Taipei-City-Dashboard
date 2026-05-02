@@ -102,6 +102,42 @@ const routeStatusText = computed(() => {
 	const prefix = summary.isApproximate ? "直線估算" : "簡易路線";
 	return `${prefix} ${formatRouteDistance(summary.distance)} / ${formatRouteDuration(summary.duration)}`;
 });
+const speedLimitState = computed(() => mapStore.currentRoadSpeedLimit || {});
+const speedLimitValue = computed(() => {
+	const state = speedLimitState.value;
+	if (state.status === "loading" || state.status === "idle") return "--";
+	if (state.status === "error") return "N/A";
+	return state.speedLimitText || "--";
+});
+const speedLimitUnit = computed(() =>
+	["--", "N/A"].includes(speedLimitValue.value) ? "" : "km/h",
+);
+const speedLimitSignValue = computed(() => {
+	const value = String(speedLimitValue.value || "");
+	const numericValue = value.match(/\d+(?:-\d+)?/)?.[0];
+	return numericValue || value;
+});
+const isSpeedLimitSignCompact = computed(
+	() => String(speedLimitSignValue.value).length > 2,
+);
+const speedLimitDetailValue = computed(() =>
+	speedLimitValue.value === speedLimitSignValue.value
+		? ""
+		: speedLimitValue.value,
+);
+const speedLimitRoadName = computed(() => {
+	const state = speedLimitState.value;
+	if (state.status === "loading") return "路名查詢中";
+	if (state.status === "error") return state.error || "道路資訊無法取得";
+	return state.roadName || "目前道路";
+});
+const speedLimitSourceLabel = computed(() => {
+	const state = speedLimitState.value;
+	if (state.status === "loading") return "SYNC";
+	if (state.status === "error") return "OFFLINE";
+	if (state.isMultiple) return "依路段";
+	return state.isDefault ? "法定" : "OPEN DATA";
+});
 
 function toggleRoutePanel() {
 	isRoutePanelOpen.value = !isRoutePanelOpen.value;
@@ -258,6 +294,29 @@ onMounted(() => {
           {{ routeStatusText }}
         </p>
       </form>
+      <div
+        v-if="mapStore.isSimpleRouteFirstPersonCamera"
+        class="mapcontainer-speedlimit"
+      >
+        <div class="mapcontainer-speedlimit-sign">
+          <strong
+            :class="{
+              'mapcontainer-speedlimit-sign-number--compact':
+                isSpeedLimitSignCompact,
+            }"
+          >
+            {{ speedLimitSignValue }}
+          </strong>
+        </div>
+        <div class="mapcontainer-speedlimit-meta">
+          <span>{{ speedLimitSourceLabel }}</span>
+          <strong>{{ speedLimitRoadName }}</strong>
+          <em v-if="speedLimitDetailValue">
+            {{ speedLimitDetailValue }}
+          </em>
+          <small v-if="speedLimitUnit">{{ speedLimitUnit }}</small>
+        </div>
+      </div>
       <div
         class="mapcontainer-camera hide-if-mobile"
         aria-label="地圖攝影機控制"
@@ -843,6 +902,120 @@ onMounted(() => {
 			font-size: 0.72rem;
 			font-weight: 700;
 			line-height: 1.35;
+		}
+	}
+
+	&-speedlimit {
+		position: absolute;
+		left: 50%;
+		bottom: 28px;
+		z-index: 8;
+		display: grid;
+		grid-template-columns: 96px minmax(130px, 230px);
+		gap: 10px;
+		align-items: center;
+		transform: translateX(-50%);
+		color: #f4f2eb;
+		font-family: Consolas, "Courier New", monospace;
+		pointer-events: none;
+
+		@media (max-width: 700px) {
+			bottom: 18px;
+			grid-template-columns: 82px minmax(0, 170px);
+		}
+
+		&-sign {
+			width: 92px;
+			height: 92px;
+			box-sizing: border-box;
+			position: relative;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			border: none;
+			border-radius: 50%;
+			background-color: #ed0000;
+			color: #231815;
+			box-shadow:
+				0 0 0 1px rgba(5, 5, 6, 0.82),
+				0 0 24px rgba(237, 0, 0, 0.36);
+
+			@media (max-width: 700px) {
+				width: 78px;
+				height: 78px;
+			}
+
+			&::before {
+				content: "";
+				position: absolute;
+				inset: 15.4%;
+				border-radius: 50%;
+				background-color: #fff;
+			}
+
+			strong {
+				position: relative;
+				z-index: 1;
+				max-width: 62px;
+				color: #231815;
+				font-family: Arial, "Noto Sans TC", sans-serif;
+				font-size: 2.48rem;
+				font-weight: 900;
+				letter-spacing: 0;
+				line-height: 0.9;
+				text-align: center;
+				overflow-wrap: anywhere;
+
+				@media (max-width: 700px) {
+					max-width: 52px;
+					font-size: 2.08rem;
+				}
+			}
+
+			&-number--compact {
+				font-size: 1.46rem;
+
+				@media (max-width: 700px) {
+					font-size: 1.22rem;
+				}
+			}
+		}
+
+		&-meta {
+			min-width: 0;
+			display: grid;
+			gap: 5px;
+			padding: 10px 12px;
+			border: 1px solid rgba(244, 242, 235, 0.42);
+			background-color: rgba(0, 0, 0, 0.7);
+			box-shadow: 0 0 20px rgba(255, 78, 203, 0.16);
+			backdrop-filter: blur(4px);
+
+			span {
+				color: rgba(244, 242, 235, 0.58);
+				font-size: 0.62rem;
+				font-weight: 800;
+				line-height: 1;
+			}
+
+			strong {
+				min-width: 0;
+				color: #fff;
+				font-size: 0.86rem;
+				font-weight: 800;
+				line-height: 1.25;
+				overflow-wrap: anywhere;
+			}
+
+			em,
+			small {
+				color: rgba(244, 242, 235, 0.72);
+				font-size: 0.68rem;
+				font-style: normal;
+				font-weight: 800;
+				line-height: 1.2;
+				overflow-wrap: anywhere;
+			}
 		}
 	}
 
