@@ -33,8 +33,18 @@ def _general_hotel_registry(**kwargs):
     FROM_CRS = 4326
     URL = 'https://data.taipei/api/dataset/4d7d0b46-2e90-4ee7-b000-c0f2f3a37651/resource/3cea29db-66b1-4ab5-886c-4cafd3e1dcbc/download'
     response = requests.get(URL, verify=False)
-    # 讀取 CSV
-    df = pd.read_csv(StringIO(response.text))
+    # 讀取 CSV(資料集 charset 為 BIG-5,但含擴充字需用 cp950;
+    # 直接 response.text (UTF-8) 會欄位亂碼 → KeyError)
+    csv_text = None
+    for enc in ('cp950', 'big5', 'utf-8-sig'):
+        try:
+            csv_text = response.content.decode(enc)
+            break
+        except UnicodeDecodeError:
+            continue
+    if csv_text is None:
+        csv_text = response.content.decode('utf-8', errors='replace')
+    df = pd.read_csv(StringIO(csv_text))
     # Transform
     
     data = df.rename(columns={
@@ -48,8 +58,8 @@ def _general_hotel_registry(**kwargs):
     })
     data["data_time"] = get_tpe_now_time_str(is_with_tz=True)
     # 資料格式為"108臺北市萬華區昆明街142號7-8樓", 只取區
-    area_candidates = data['address'].str.slice(3, 6)
-    data['area'] = area_candidates.apply(lambda x: x if x.endswith('區') else None)
+    # 地址可能帶郵遞區號(108),用 regex 擷取「XX區」比 slice 穩定
+    data['area'] = data['address'].str.extract(r"([^市縣\s]{1,3}區)", expand=False)
 
 
     addr = data["address"]

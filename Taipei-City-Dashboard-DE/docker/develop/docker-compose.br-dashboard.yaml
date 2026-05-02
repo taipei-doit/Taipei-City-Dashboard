@@ -1,0 +1,8 @@
+# Override file for connecting DE services to the shared root stack network.
+# Usage:
+# docker compose -p de -f docker-compose.yaml -f docker-compose.br-dashboard.yaml up -d --build
+
+networks:
+  default:
+    name: br_dashboard
+    external: true

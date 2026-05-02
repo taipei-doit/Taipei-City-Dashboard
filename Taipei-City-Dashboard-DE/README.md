@@ -8,6 +8,131 @@
 
 ## 中文說明
 
+### 快速啟動（可直接照做）
+
+啟動入口：`docker/develop/docker-compose.yaml`
+
+環境變數範本：`docker/develop/.env.template`
+
+#### 0) 前置需求
+
+- Docker Engine
+- Docker Compose v2（`docker compose`）
+- 建議至少 2 vCPU / 4GB RAM
+
+#### 1) 建立 `.env`
+
+```bash
+cd docker/develop
+cp .env.template .env
+```
+
+Linux 建議把 `AIRFLOW_UID` 設成目前使用者，避免 volume 權限問題：
+
+```bash
+cd docker/develop
+sed -i "s/^AIRFLOW_UID=.*/AIRFLOW_UID=$(id -u)/" .env
+```
+
+#### 2) 啟動本機相依服務（PostgreSQL + Redis）
+
+以下指令會建立 `de_default` 網路，讓 DE compose（`-p de`）可直接用 `de-postgres`、`de-redis` 連線。
+
+```bash
+docker network create de_default || true
+
+docker rm -f de-postgres de-redis 2>/dev/null || true
+
+docker run -d \
+	--name de-postgres \
+	--network de_default \
+	-e POSTGRES_USER=postgres \
+	-e POSTGRES_PASSWORD=postgres \
+	-e POSTGRES_DB=airflow \
+	postgres:16
+
+docker run -d \
+	--name de-redis \
+	--network de_default \
+	redis:7.2-alpine
+```
+
+#### 3) 啟動 DE Airflow
+
+```bash
+cd docker/develop
+docker compose -p de -f docker-compose.yaml up -d --build
+docker compose -p de -f docker-compose.yaml ps
+```
+
+#### 4) 開啟 Airflow Web UI
+
+- URL: `http://localhost:8080/airflow-sit`
+- 帳號密碼：使用 `.env` 內 `USERNAME` / `PASSWORD`
+
+#### 5) 驗證 DAG 載入
+
+```bash
+cd docker/develop
+docker compose -p de -f docker-compose.yaml exec airflow-webserver airflow dags list | head
+docker compose -p de -f docker-compose.yaml logs -f airflow-scheduler
+```
+
+#### 6) 停止與清理
+
+```bash
+cd docker/develop
+docker compose -p de -f docker-compose.yaml down
+docker rm -f de-postgres de-redis
+```
+
+#### 使用外部 PostgreSQL / Redis
+
+若你已有外部服務，僅需修改 `.env` 內以下欄位即可：
+
+- `MATADATA_DATABASE`
+- `CELERY_RESULT_BACKEND`
+- `REDIS_CONN`
+- `USERNAME`
+- `PASSWORD`
+
+#### 連到前後端共用 `docker-compose-db`
+
+可以，建議用 override 檔把 DE 也接到 `br_dashboard` 網路。
+
+1. 先確認根目錄 DB stack 正在執行：
+
+```bash
+cd /home/raylon/code/Taipei-City-Dashboard/docker
+docker compose -f docker-compose-db.yaml up -d
+```
+
+2. 在 DE 建立 `.env`，改用共用服務名稱：
+
+```bash
+cd /home/raylon/code/Taipei-City-Dashboard/Taipei-City-Dashboard-DE/docker/develop
+cp .env.template .env
+sed -i "s#^MATADATA_DATABASE=.*#MATADATA_DATABASE=postgresql+psycopg2://postgres:YOUR_DB_PASSWORD@postgres-manager:5432/airflow#" .env
+sed -i "s#^CELERY_RESULT_BACKEND=.*#CELERY_RESULT_BACKEND=db+postgresql://postgres:YOUR_DB_PASSWORD@postgres-manager:5432/airflow#" .env
+sed -i "s#^REDIS_CONN=.*#REDIS_CONN=redis://redis:6379/0#" .env
+```
+
+請務必把 `YOUR_DB_PASSWORD` 換成 root `docker/.env` 內的 `DB_MANAGER_PASSWORD`。
+若未替換，`airflow-init` 會以 `FATAL: password authentication failed for user "postgres"` 結束。
+
+3. 若 `airflow` 資料庫尚未建立，可先建立一次：
+
+```bash
+docker exec -i postgres-data psql -U postgres -d dashboard -c "CREATE DATABASE airflow;" || true
+```
+
+4. 用 override 啟動 DE（共用 `br_dashboard`）：
+
+```bash
+cd /home/raylon/code/Taipei-City-Dashboard/Taipei-City-Dashboard-DE/docker/develop
+docker compose -p de -f docker-compose.yaml -f docker-compose.br-dashboard.yaml up -d --build
+```
+
 ### Airflow 排程與資源設定紀錄
 
 本專案已針對 Airflow 在長時間運行後 CPU 飆高、排程延遲的情況，調整以下設定。
@@ -52,6 +177,82 @@ This folder is the Data Engineering (DE) module for the Taipei City Dashboard.
 It manages data ingestion, transformation, and loading into databases using Airflow DAGs.
 Deployment is based on Docker Compose (scheduler, webserver, and Celery workers),
 and tasks are auto‑routed to queues by schedule frequency to isolate realtime and heavy workloads.
+
+### Quick Start (Runnable)
+
+Entrypoint: `docker/develop/docker-compose.yaml`
+
+Environment template: `docker/develop/.env.template`
+
+#### 1) Create `.env`
+
+```bash
+cd docker/develop
+cp .env.template .env
+sed -i "s/^AIRFLOW_UID=.*/AIRFLOW_UID=$(id -u)/" .env
+```
+
+#### 2) Start local dependencies (PostgreSQL + Redis)
+
+```bash
+docker network create de_default || true
+
+docker rm -f de-postgres de-redis 2>/dev/null || true
+
+docker run -d \
+	--name de-postgres \
+	--network de_default \
+	-e POSTGRES_USER=postgres \
+	-e POSTGRES_PASSWORD=postgres \
+	-e POSTGRES_DB=airflow \
+	postgres:16
+
+docker run -d \
+	--name de-redis \
+	--network de_default \
+	redis:7.2-alpine
+```
+
+#### 3) Start DE services
+
+```bash
+cd docker/develop
+docker compose -p de -f docker-compose.yaml up -d --build
+docker compose -p de -f docker-compose.yaml ps
+```
+
+#### 4) Open Airflow UI
+
+- URL: `http://localhost:8080/airflow-sit`
+- Login: `USERNAME` / `PASSWORD` from `.env`
+
+#### 5) Stop and clean up
+
+```bash
+cd docker/develop
+docker compose -p de -f docker-compose.yaml down
+docker rm -f de-postgres de-redis
+```
+
+#### Connect DE to shared docker-compose-db
+
+Yes. Use the override file so DE services join `br_dashboard`.
+
+```bash
+cd /home/raylon/code/Taipei-City-Dashboard/docker
+docker compose -f docker-compose-db.yaml up -d
+
+cd /home/raylon/code/Taipei-City-Dashboard/Taipei-City-Dashboard-DE/docker/develop
+cp .env.template .env
+sed -i "s#^MATADATA_DATABASE=.*#MATADATA_DATABASE=postgresql+psycopg2://postgres:YOUR_DB_PASSWORD@postgres-manager:5432/airflow#" .env
+sed -i "s#^CELERY_RESULT_BACKEND=.*#CELERY_RESULT_BACKEND=db+postgresql://postgres:YOUR_DB_PASSWORD@postgres-manager:5432/airflow#" .env
+sed -i "s#^REDIS_CONN=.*#REDIS_CONN=redis://redis:6379/0#" .env
+
+docker compose -p de -f docker-compose.yaml -f docker-compose.br-dashboard.yaml up -d --build
+```
+
+Make sure `YOUR_DB_PASSWORD` is replaced with `DB_MANAGER_PASSWORD` from root `docker/.env`.
+If not replaced, `airflow-init` exits with `FATAL: password authentication failed for user "postgres"`.
 
 ### Airflow Scheduling & Resource Tuning Notes
 

@@ -1,0 +1,37 @@
+{
+  "dag_infos": {
+    "dag_id": "fish_water",
+    "start_date": "2026-05-02",
+    "schedule_interval": "0 8 * * *",
+    "catchup": false,
+    "tags": ["fish_water", "WRA", "養殖", "養殖用水量"],
+    "description": "經濟部水利署 養殖用水量統計；欄位小寫，year 由民國年轉西元年後寫入 fish_water（replace）。",
+    "default_args": {
+      "owner": "airflow",
+      "email": ["DEFAULT_EMAIL_LIST"],
+      "email_on_retry": false,
+      "email_on_failure": true,
+      "retries": 1,
+      "retry_delay": 60
+    },
+    "ready_data_db": "postgres_default",
+    "ready_data_default_table": "fish_water",
+    "ready_data_history_table": "",
+    "raw_data_db": "postgres_default",
+    "raw_data_table": "",
+    "load_behavior": "replace"
+  },
+  "data_infos": {
+    "name_cn": "養殖用水量統計",
+    "airflow_update_freq": "08:00 every day",
+    "source": "https://opendata.wra.gov.tw/api/v2/dfc12113-9e62-4185-a3e6-4a83042d0c71?sort=_importdate%20asc&format=JSON",
+    "source_type": "WRA OpenData API v2",
+    "source_dept": "經濟部 水利署",
+    "gis_format": "",
+    "output_coordinate": "",
+    "is_geometry": 0,
+    "dataset_description": "年報：各縣市養殖用水量相關統計，包含區域、縣市代碼、養殖面積、養殖種類、狀態與總用水量。",
+    "etl_description": "單次 GET JSON 全量；欄位小寫；year 民國轉西元；欄位轉型；replace",
+    "sensitivity": "public"
+  }
+}
