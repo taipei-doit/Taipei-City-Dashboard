@@ -5,6 +5,7 @@ import mapboxGl from "mapbox-gl";
 
 import AiChatModal from "../components/AiChatModal.vue";
 import EcoDietNearbyChatModal from "../components/EcoDietNearbyChatModal.vue";
+import EcoDietStoryModal from "../components/EcoDietStoryModal.vue";
 import DashboardComponent from "../dashboardComponent/DashboardComponent.vue";
 import MapContainer from "../components/map/MapContainer.vue";
 import MoreInfo from "../components/dialogs/MoreInfo.vue";
@@ -294,6 +295,9 @@ const aiModalAnchor = ref({ top: 0, left: 0 });
 
 // ── 附近綠色飲食 AI 助理 FAB（僅 mapview tab 顯示）──────────────────────────
 const showNearbyChat = ref(false);
+
+// ── 儀表板故事 Modal ──────────────────────────────────────────────────────
+const showStoryModal = ref(false);
 
 function openAiModal(event, componentId, componentName) {
 	if (activeAiComponentId.value !== componentId) {
@@ -1273,10 +1277,14 @@ watch(isMapView, (active) => {
 onMounted(async () => {
 	contentStore.currentDashboard.name = "綠色飲食行為流程儀表板";
 	contentStore.currentDashboard.icon = "eco";
+	contentStore.currentDashboard.storyBtn = {
+		onClick: () => { showStoryModal.value = true; },
+	};
 	await fetchAll();
 });
 
 onBeforeUnmount(() => {
+	contentStore.currentDashboard.storyBtn = null;
 	hoverPopup?.remove();
 	hoverPopup = null;
 	clickPopup?.remove();
@@ -1544,6 +1552,10 @@ function tagListOf(component) {
     :show="showNearbyChat"
     @close="showNearbyChat = false"
     @apply-actions="handleChatActions"
+  />
+  <EcoDietStoryModal
+    :show="showStoryModal"
+    @close="showStoryModal = false"
   />
 </template>
 
