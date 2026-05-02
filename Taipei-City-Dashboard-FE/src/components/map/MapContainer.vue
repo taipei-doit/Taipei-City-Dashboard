@@ -75,6 +75,7 @@ watch(
 
 onMounted(() => {
 	mapStore.initializeMapBox();
+	mapStore.fetchIncidents();
 	mapStore.setCurrentLocation();
 	route.query.city 
 		? mapStore.updateMapViewForCity(route.query.city)
@@ -136,12 +137,11 @@ onMounted(() => {
         </div>
       </div>
 
-      <button
-        v-if="authStore.user.is_admin"
-        class="mapcontainer-layers-incident"
-        title="通報災害"
-        @click="dialogStore.showDialog('incidentReport')"
-      >
+			<button
+				class="mapcontainer-layers-incident"
+				title="民眾食安通報"
+				@click="dialogStore.showDialog('incidentReport')"
+			>
         !
       </button><!-- The key prop informs vue that the component should be updated when switching dashboards -->
       <MobileLayers :key="contentStore.currentDashboard.index" />

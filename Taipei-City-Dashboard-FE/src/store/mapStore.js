@@ -80,6 +80,9 @@ export const useMapStore = defineStore("map", {
 		loadingLayers: [],
 		// Store all view points
 		viewPoints: [],
+		// Store all public incident reports
+		incidents: [],
+		incidentMarkers: [],
 		marker: null,
 		tempMarkerCoordinates: null,
 		// Store the user's current location,
@@ -130,6 +133,7 @@ export const useMapStore = defineStore("map", {
 					});
 					this.map.addControl(this.overlay);
 					this.initializeBasicLayers();
+					this.renderIncidents();
 				})
 				.on("click", (event) => {
 					if (this.popup) {
@@ -2251,6 +2255,12 @@ export const useMapStore = defineStore("map", {
 			this.viewPoints = res.data;
 			if (this.map) this.renderMarkers();
 		},
+		// Fetch all public incident reports
+		async fetchIncidents() {
+			const res = await http.get("/incident/public/");
+			this.incidents = res.data.data ?? [];
+			if (this.map) this.renderIncidents();
+		},
 		// 6. Render all markers
 		renderMarkers() {
 			if (!this.viewPoints.length) return;
@@ -2265,6 +2275,70 @@ export const useMapStore = defineStore("map", {
 					);
 				}
 			});
+		},
+		// Render all incident markers
+		renderIncidents() {
+			if (this.incidentMarkers.length) {
+				this.incidentMarkers.forEach((marker) => marker.remove());
+				this.incidentMarkers = [];
+			}
+
+			if (!this.map || !this.incidents.length) return;
+
+			this.incidents.forEach((incident) => {
+				if (!incident.latitude || !incident.longitude) return;
+
+				const marker = this.createIncidentMarkerOnMap(incident);
+				this.incidentMarkers.push(marker);
+			});
+		},
+		// Create an incident marker and popup on the map
+		createIncidentMarkerOnMap(incident) {
+			const marker = new mapboxGl.Marker({ color: "#d9480f" });
+			const popupContent = document.createElement("div");
+			popupContent.className = "popup-for-incident";
+
+			const summary = document.createElement("div");
+			summary.style.marginBottom = "6px";
+
+			const place = document.createElement("div");
+			place.textContent = incident.place || "地點：未提供";
+			place.style.fontWeight = "600";
+			place.style.whiteSpace = "pre-line";
+			place.style.lineHeight = "1.4";
+			place.style.marginBottom = "2px";
+
+			const title = document.createElement("div");
+			title.textContent = incident.inctype || "食安通報";
+			title.style.fontSize = "12px";
+			title.style.color = "#666";
+			title.style.marginBottom = "2px";
+
+			const description = document.createElement("div");
+			description.textContent = incident.description || "";
+			description.style.fontSize = "12px";
+			description.style.color = "#666";
+
+			const time = document.createElement("div");
+			time.textContent = incident.reportTime
+				? `通報時間：${new Date(incident.reportTime).toLocaleString()}`
+				: "通報時間：未提供";
+			time.style.fontSize = "12px";
+			time.style.color = "#666";
+
+			summary.appendChild(place);
+			summary.appendChild(title);
+			summary.appendChild(description);
+
+			popupContent.appendChild(summary);
+			popupContent.appendChild(time);
+
+			const popup = new mapboxGl.Popup({ closeButton: true }).setDOMContent(
+				popupContent,
+			);
+
+			marker.setLngLat({ lng: incident.longitude, lat: incident.latitude }).setPopup(popup).addTo(this.map);
+			return marker;
 		},
 
 		/* Functions that change the viewing experience of the map */

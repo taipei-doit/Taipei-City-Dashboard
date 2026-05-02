@@ -91,13 +91,16 @@ func GetLocationData(latitude, longitude float64) (*PlaceResponse, error) {
 	return &locationData, nil
 }
 
-func CreateIncident(incidentType, description string, distance, latitude, longitude float64, status string) (incident Incident, err error) {
-	locationData, err := GetLocationData(latitude, longitude)
-	if err != nil {
-		fmt.Printf("Error fetching location data: %v\n", err)
-		return
+func CreateIncident(incidentType, description, place string, distance, latitude, longitude float64, status string) (incident Incident, err error) {
+	place = strings.TrimSpace(place)
+	if place == "" {
+		locationData, locationErr := GetLocationData(latitude, longitude)
+		if locationErr != nil {
+			fmt.Printf("Error fetching location data: %v\n", locationErr)
+		} else {
+			place = locationData.CtyName + locationData.TownName + locationData.SectName + locationData.VillageName
+		}
 	}
-	place := locationData.CtyName + locationData.TownName + locationData.SectName + locationData.VillageName
 
 	incident = Incident{
 		Type:        incidentType,

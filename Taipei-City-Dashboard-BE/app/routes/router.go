@@ -37,6 +37,7 @@ func ConfigureRoutes() {
 	configureDashboardRoutes()
 	configureIssueRoutes()
 	configureIncidentRoutes()
+	configurePublicIncidentRoutes()
 	// configureWsRoutes()
 	configureContributorRoutes()
 	configureChatLogRoutes()
@@ -179,6 +180,16 @@ func configureIncidentRoutes() {
 		incidentRoutes.POST("/", controllers.CreateIncident)
 		incidentRoutes.PATCH("/:id", controllers.UpdateIncidentByID)
 		incidentRoutes.DELETE("/", controllers.DeleteIncident)
+	}
+}
+
+func configurePublicIncidentRoutes() {
+	publicIncidentRoutes := RouterGroup.Group("/incident/public")
+	publicIncidentRoutes.Use(middleware.LimitAPIRequests(global.IssueLimitAPIRequestsTimes, global.LimitRequestsDuration))
+	publicIncidentRoutes.Use(middleware.LimitTotalRequests(global.IssueLimitTotalRequestsTimes, global.LimitRequestsDuration))
+	{
+		publicIncidentRoutes.GET("/", controllers.GetIncident)
+		publicIncidentRoutes.POST("/", controllers.CreateIncident)
 	}
 }
 
