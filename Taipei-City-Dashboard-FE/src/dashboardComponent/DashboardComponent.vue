@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref, watch } from "vue";
+import { computed, nextTick, ref, watch } from "vue";
 // import "./styles/chartStyles.css";
 // import "./styles/toggleswitch.css";
 import "material-icons/iconfont/material-icons.css";
@@ -126,6 +126,7 @@ const chartChatQuestion = ref("");
 const chartChatMessages = ref([]);
 const chartChatStatus = ref("idle");
 const chartChatSession = ref("");
+const chartChatRoom = ref(null);
 
 // Parses time data into display format
 const dataTime = computed(() => {
@@ -234,19 +235,6 @@ const chartChatInputDisabled = computed(
 const chartChatSendDisabled = computed(
 	() => chartChatInputDisabled.value || chartChatQuestion.value.trim() === "",
 );
-
-const chartChatStatusLabel = computed(() => {
-	if (chartChatStatus.value === "loading") {
-		return "回答中";
-	}
-	if (chartChatStatus.value === "error") {
-		return "需重試";
-	}
-	if (chartChatStatus.value === "success") {
-		return "已回覆";
-	}
-	return "待提問";
-});
 
 const chartChatEmptyText = computed(() => {
 	if (!authStore.token) {
@@ -384,6 +372,17 @@ function buildChartChatMessages(question) {
 		},
 	];
 }
+async function scrollChartChatToBottom() {
+	await nextTick();
+	const room = chartChatRoom.value;
+	if (!room) {
+		return;
+	}
+	room.scrollTo({
+		top: room.scrollHeight,
+		behavior: "smooth",
+	});
+}
 async function submitChartQuestion() {
 	const question = chartChatQuestion.value.trim();
 	if (chartChatSendDisabled.value || !question) {
@@ -400,6 +399,7 @@ async function submitChartQuestion() {
 	chartChatQuestion.value = "";
 	chartChatStatus.value = "loading";
 	chartChatMessages.value.push(pendingMessage);
+	scrollChartChatToBottom();
 
 	try {
 		const response = await fetch(getAIChatEndpoint(), {
@@ -426,6 +426,7 @@ async function submitChartQuestion() {
 		pendingMessage.status = "success";
 		chartChatSession.value = payload?.data?.session || chartChatSession.value;
 		chartChatStatus.value = "success";
+		scrollChartChatToBottom();
 	} catch (error) {
 		console.error(
 			`Failed to ask AI chart question for component ${props.config.id}:`,
@@ -434,6 +435,7 @@ async function submitChartQuestion() {
 		pendingMessage.answer = CHART_CHAT_ERROR;
 		pendingMessage.status = "error";
 		chartChatStatus.value = "error";
+		scrollChartChatToBottom();
 	}
 }
 function returnChartComponent(name, svg) {
@@ -723,83 +725,76 @@ function returnChartComponent(name, svg) {
     >
       <div />
     </div>
-    <div
+    <section
       v-if="mode !== 'preview' && (!mode.includes('map') || toggleOn)"
       :class="[
-        'dashboardcomponent-ai-comment',
-        `dashboardcomponent-ai-comment-${aiCommentStatus}`,
+        'dashboardcomponent-ai-section',
+        `dashboardcomponent-ai-section-comment-${aiCommentStatus}`,
+        `dashboardcomponent-ai-section-chat-${chartChatStatus}`,
       ]"
     >
-      <span class="dashboardcomponent-ai-comment-icon">
-        {{ aiCommentIcon }}
-      </span>
-      <div class="dashboardcomponent-ai-comment-content">
-        <div class="dashboardcomponent-ai-comment-heading">
-          <strong>AI 圖表評論</strong>
-          <span class="dashboardcomponent-ai-comment-status">
-            {{ aiCommentStatusLabel }}
-          </span>
-        </div>
-        <p :title="aiComment">
-          {{ aiComment }}
-        </p>
-      </div>
-      <button
-        v-if="aiCommentStatus === 'error'"
-        type="button"
-        class="dashboardcomponent-ai-comment-action"
-        title="重新生成"
-        @click="retryAIComment"
-      >
-        <span>refresh</span>
-      </button>
-    </div>
-    <div
-      v-if="mode !== 'preview' && (!mode.includes('map') || toggleOn)"
-      :class="[
-        'dashboardcomponent-chart-chat',
-        `dashboardcomponent-chart-chat-${chartChatStatus}`,
-      ]"
-    >
-      <div class="dashboardcomponent-chart-chat-heading">
-        <div>
-          <span>forum</span>
-          <strong>圖表問答</strong>
-        </div>
-        <span class="dashboardcomponent-chart-chat-status">
-          {{ chartChatStatusLabel }}
-        </span>
-      </div>
       <div
-        class="dashboardcomponent-chart-chat-thread"
-        :class="{
-          'dashboardcomponent-chart-chat-thread-empty':
-            chartChatMessages.length === 0,
-        }"
+        ref="chartChatRoom"
+        class="dashboardcomponent-ai-room"
       >
-        <p v-if="chartChatMessages.length === 0">
-          {{ chartChatEmptyText }}
-        </p>
-        <template v-else>
-          <div
-            v-for="message in chartChatMessages"
-            :key="message.id"
-            :class="[
-              'dashboardcomponent-chart-chat-message',
-              `dashboardcomponent-chart-chat-message-${message.status}`,
-            ]"
-          >
-            <p class="dashboardcomponent-chart-chat-question">
-              <strong>Q</strong>{{ message.question }}
-            </p>
-            <p class="dashboardcomponent-chart-chat-answer">
-              <strong>A</strong>{{ message.answer }}
+        <div
+          :class="[
+            'dashboardcomponent-ai-message',
+            'dashboardcomponent-ai-message-ai',
+            `dashboardcomponent-ai-message-${aiCommentStatus}`,
+          ]"
+        >
+          <span class="dashboardcomponent-ai-message-icon">
+            {{ aiCommentIcon }}
+          </span>
+          <div class="dashboardcomponent-ai-bubble">
+            <div class="dashboardcomponent-ai-bubble-heading">
+              <strong>AI 圖表評論</strong>
+              <span>{{ aiCommentStatusLabel }}</span>
+            </div>
+            <p :title="aiComment">
+              {{ aiComment }}
             </p>
           </div>
+          <button
+            v-if="aiCommentStatus === 'error'"
+            type="button"
+            class="dashboardcomponent-ai-message-action"
+            title="重新生成"
+            @click="retryAIComment"
+          >
+            <span>refresh</span>
+          </button>
+        </div>
+        <template v-if="chartChatMessages.length > 0">
+          <template
+            v-for="message in chartChatMessages"
+            :key="message.id"
+          >
+            <div class="dashboardcomponent-ai-message dashboardcomponent-ai-message-user">
+              <div class="dashboardcomponent-ai-bubble">
+                <p>{{ message.question }}</p>
+              </div>
+            </div>
+            <div
+              :class="[
+                'dashboardcomponent-ai-message',
+                'dashboardcomponent-ai-message-ai',
+                `dashboardcomponent-ai-message-${message.status}`,
+              ]"
+            >
+              <span class="dashboardcomponent-ai-message-icon">
+                smart_toy
+              </span>
+              <div class="dashboardcomponent-ai-bubble">
+                <p>{{ message.answer }}</p>
+              </div>
+            </div>
+          </template>
         </template>
       </div>
       <form
-        class="dashboardcomponent-chart-chat-form"
+        class="dashboardcomponent-chart-chat-form dashboardcomponent-ai-room-form"
         @submit.prevent="submitChartQuestion"
       >
         <input
@@ -817,7 +812,7 @@ function returnChartComponent(name, svg) {
           <span>{{ chartChatStatus === 'loading' ? 'hourglass_top' : 'send' }}</span>
         </button>
       </form>
-    </div>
+    </section>
     <!-- Footer -->
     <div
       v-if="footer && (!mode.includes('map') || toggleOn)"
@@ -1451,6 +1446,175 @@ button:hover {
 			.dashboardcomponent-chart-chat-status {
 				color: rgb(237, 90, 90) !important;
 			}
+		}
+	}
+
+	&-ai-section {
+		flex: 0 0 auto;
+		height: 152px;
+		min-height: 152px;
+		max-height: 152px;
+		display: flex;
+		flex-direction: column;
+		margin-top: 6px;
+		padding: 8px 10px;
+		border: 1px solid rgba(255, 255, 255, 0.14);
+		border-radius: 8px;
+		background:
+			linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(0, 0, 0, 0.18)),
+			rgba(0, 0, 0, 0.16);
+		box-shadow:
+			inset 0 1px 0 rgba(255, 255, 255, 0.08),
+			0 12px 28px rgba(0, 0, 0, 0.18);
+		overflow: hidden;
+
+		&-comment-error,
+		&-chat-error {
+			border-color: rgba(237, 90, 90, 0.68);
+		}
+	}
+
+	&-ai-room {
+		flex: 1 1 auto;
+		min-height: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 7px;
+		padding-right: 4px;
+		overflow-y: auto;
+		scrollbar-width: thin;
+		scrollbar-color: rgba(255, 255, 255, 0.24) transparent;
+
+		&::-webkit-scrollbar {
+			width: 4px;
+		}
+
+		&::-webkit-scrollbar-thumb {
+			border-radius: 999px;
+			background-color: rgba(255, 255, 255, 0.24);
+		}
+
+		&-form {
+			flex: 0 0 auto;
+			position: relative;
+			margin-top: 8px;
+			z-index: 1;
+			background:
+				linear-gradient(180deg, rgba(36, 38, 40, 0), rgba(36, 38, 40, 0.78) 36%),
+				transparent;
+		}
+	}
+
+	&-ai-message {
+		width: 100%;
+		display: flex;
+		align-items: flex-start;
+		gap: 7px;
+		overflow: visible;
+
+		&-ai {
+			justify-content: flex-start;
+		}
+
+		&-user {
+			justify-content: flex-end;
+
+			.dashboardcomponent-ai-bubble {
+				border-radius: 12px 12px 3px 12px;
+				background:
+					linear-gradient(135deg, rgba(78, 149, 255, 0.36), rgba(122, 78, 255, 0.22)),
+					rgba(255, 255, 255, 0.08);
+				color: var(--color-normal-text);
+			}
+		}
+
+		&-icon,
+		&-action {
+			flex: 0 0 auto;
+			width: 28px;
+			height: 28px;
+			display: grid;
+			place-items: center;
+			border-radius: 8px;
+			background:
+				linear-gradient(135deg, rgba(78, 149, 255, 0.32), rgba(122, 78, 255, 0.18)),
+				rgba(255, 255, 255, 0.05);
+			color: var(--color-highlight);
+			font-family: var(--font-icon);
+			font-size: var(--font-ms);
+			box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+			user-select: none;
+		}
+
+		&-action {
+			background-color: rgba(255, 255, 255, 0.06);
+			transition: background-color 0.2s, color 0.2s;
+
+			&:hover {
+				background-color: rgba(255, 255, 255, 0.12);
+				color: white;
+			}
+
+			span {
+				margin: 0;
+				font-family: var(--font-icon);
+				font-size: var(--font-ms);
+			}
+		}
+
+		&-loading .dashboardcomponent-ai-message-icon,
+		&-loading .dashboardcomponent-ai-bubble {
+			animation: pulse 1.2s ease-in-out infinite;
+		}
+
+		&-error {
+			.dashboardcomponent-ai-message-icon,
+			.dashboardcomponent-ai-bubble,
+			.dashboardcomponent-ai-bubble-heading span {
+				color: rgb(237, 90, 90);
+			}
+		}
+	}
+
+	&-ai-bubble {
+		max-width: calc(100% - 35px);
+		padding: 7px 9px;
+		border-radius: 12px 12px 12px 3px;
+		background-color: rgba(255, 255, 255, 0.07);
+		color: var(--color-complement-text);
+		overflow: visible;
+
+		&-heading {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: 8px;
+			margin-bottom: 3px;
+			overflow: visible;
+
+			strong {
+				color: var(--color-normal-text);
+				font-size: var(--font-s);
+				font-weight: 700;
+				line-height: 1.2;
+			}
+
+			span {
+				flex: 0 0 auto;
+				padding: 1px 6px;
+				border-radius: 999px;
+				background-color: rgba(255, 255, 255, 0.08);
+				color: var(--color-complement-text);
+				font-size: 0.72rem;
+				line-height: 1.35;
+			}
+		}
+
+		p {
+			color: inherit;
+			font-size: var(--font-s);
+			line-height: 1.45;
+			white-space: normal;
 		}
 	}
 
