@@ -59,20 +59,24 @@ function handleOpenSettings() {
       </div>
       <AddEditDashboards />
     </div>
-    <button
+    <div
       v-if="authStore.user?.user_id && isCurrentPageMapView"
-      class="settingsbar-pin hide-if-mobile"
-      :disabled="!mapStore.tempMarkerCoordinates"
-      :style="{
-        opacity: !mapStore.tempMarkerCoordinates ? 0.5 : 1,
-        cursor: !mapStore.tempMarkerCoordinates
-          ? 'not-allowed'
-          : 'pointer',
-      }"
-      @click="dialogStore.showDialog('addPin')"
+      class="settingsbar-actions hide-if-mobile"
     >
-      {{ mapStore.tempMarkerCoordinates ? "新增地標" : "雙擊以建立地標" }}
-    </button>
+      <button
+        class="settingsbar-pin"
+        :disabled="!mapStore.tempMarkerCoordinates"
+        :style="{
+          opacity: !mapStore.tempMarkerCoordinates ? 0.5 : 1,
+          cursor: !mapStore.tempMarkerCoordinates
+            ? 'not-allowed'
+            : 'pointer',
+        }"
+        @click="dialogStore.showDialog('addPin')"
+      >
+        {{ mapStore.tempMarkerCoordinates ? "新增地標" : "雙擊以建立地標" }}
+      </button>
+    </div>
   </div>
   <AddViewPoint name="addPin" />
 </template>
@@ -150,6 +154,15 @@ function handleOpenSettings() {
 				color: var(--color-highlight);
 			}
 		}
+	}
+
+	&-actions {
+		display: flex;
+		align-items: center;
+		justify-content: flex-end;
+		gap: var(--font-s);
+		flex-shrink: 0;
+		margin-left: auto;
 	}
 
 	&-pin {
