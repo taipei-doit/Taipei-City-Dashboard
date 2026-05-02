@@ -75,6 +75,8 @@ export const useContentStore = defineStore("content", {
 			"metro_green_line",
 			"metro_br_line",
 		],
+		// 故事線／推薦點組件後，在儀表板總覽捲動到該卡（對應 data-dashboard-component-id）
+		pendingScrollToComponentId: null,
 	}),
 	getters: {},
 	actions: {
@@ -213,6 +215,63 @@ export const useContentStore = defineStore("content", {
 		// 2-3. Get all dashboards of a city
 		getDashboardsByCity(city) {
 			return this.dashboards.get(city) || [];
+		},
+		/**
+		 * 依儀表板清單（含 components id 陣列）找出可從側欄開啟的儀表板 index 與 query.city。
+		 * city 使用側欄分組鍵（taipei、metrotaipei 等），與 SideBarTab 一致；個人用儀表板不帶 city。
+		 */
+		findDashboardLocationForComponent(componentId, preferredSidebarCity = null) {
+			if (componentId === undefined || componentId === null) {
+				return null;
+			}
+			const matches = (cid) =>
+				String(cid) === String(componentId) ||
+				Number(cid) === Number(componentId);
+
+			const searchInList = (dashboardList, routeCityKey) => {
+				if (!dashboardList?.length) return null;
+				for (const d of dashboardList) {
+					if (d.components?.some(matches)) {
+						return { index: d.index, city: routeCityKey };
+					}
+				}
+				return null;
+			};
+
+			const trySidebarCity = (cityKey) => {
+				if (
+					cityKey == null ||
+					cityKey === "" ||
+					!this.dashboards.has(cityKey)
+				) {
+					return null;
+				}
+				return searchInList(this.getDashboardsByCity(cityKey), cityKey);
+			};
+
+			if (
+				preferredSidebarCity &&
+				this.cityManager.isCityEnabled(preferredSidebarCity)
+			) {
+				const preferredHit = trySidebarCity(preferredSidebarCity);
+				if (preferredHit) return preferredHit;
+			}
+
+			for (const cityKey of this.dashboards.keys()) {
+				if (cityKey === preferredSidebarCity) continue;
+				const hit = trySidebarCity(cityKey);
+				if (hit) return hit;
+			}
+
+			if (this.personalDashboards?.length) {
+				for (const d of this.personalDashboards) {
+					if (d.components?.some(matches)) {
+						return { index: d.index, city: undefined };
+					}
+				}
+			}
+
+			return null;
 		},
 		// 3. Call an API to get all component info of the current index dashboard not filtered by city and store it
 		async setCurrentDashboardAllContent() {

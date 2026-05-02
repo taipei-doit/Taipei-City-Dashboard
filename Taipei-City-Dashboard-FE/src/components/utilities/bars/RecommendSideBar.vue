@@ -4,9 +4,11 @@
 import { onMounted, ref } from "vue";
 import router from "../../../router";
 import { useMapStore } from "../../../store/mapStore";
+import { useContentStore } from "../../../store/contentStore";
 import { extractNewsInsight } from "../../../api/ai";
 
 const mapStore = useMapStore();
+const contentStore = useContentStore();
 
 const RECOMMEND_SIDEBAR_EXPANDED_KEY = "isRecommendSidebarExpanded";
 
@@ -58,21 +60,60 @@ onMounted(() => {
 });
 
 /**
- * 前往組件詳情頁（與 DashboardView 手機版「組件資訊」行為一致）
+ * 導向儀表板總覽中該組件所在版面（保留右側推薦側欄，避免 component-info 卸載側欄）
  */
-function openStorylineRecommendedComponent(comp) {
-	const idx = comp?.index;
-	if (idx === undefined || idx === null || idx === "") {
+async function openStorylineRecommendedComponent(comp) {
+	const compId = comp?.id;
+	if (compId === undefined || compId === null || compId === "") {
+		const idx = comp?.index;
+		if (idx === undefined || idx === null || idx === "") return;
+		router.push({
+			name: "component-info",
+			params: { index: String(idx) },
+			query: comp.city ? { city: comp.city } : {},
+		});
 		return;
 	}
-	const payload = {
-		name: "component-info",
-		params: { index: String(idx) },
-	};
-	if (comp.city) {
-		payload.query = { city: comp.city };
+
+	if (
+		contentStore.dashboards.size === 0 &&
+		(!contentStore.personalDashboards?.length)
+	) {
+		await contentStore.setDashboards(true);
 	}
-	router.push(payload);
+
+	const loc = contentStore.findDashboardLocationForComponent(
+		compId,
+		comp?.city || null,
+	);
+	if (!loc) {
+		const idx = comp?.index;
+		if (idx === undefined || idx === null || idx === "") return;
+		router.push({
+			name: "component-info",
+			params: { index: String(idx) },
+			query: comp.city ? { city: comp.city } : {},
+		});
+		return;
+	}
+
+	contentStore.pendingScrollToComponentId = compId;
+	const query = { index: loc.index };
+	if (loc.city != null && loc.city !== "") {
+		query.city = loc.city;
+	}
+
+	const rt = router.currentRoute.value;
+	const sameDashboard =
+		rt.path === "/dashboard" &&
+		String(rt.query.index || "") === String(loc.index || "") &&
+		String(rt.query.city || "") === String(loc.city || "");
+
+	if (sameDashboard) {
+		return;
+	}
+
+	await router.push({ path: "/dashboard", query });
 }
 </script>
 
@@ -152,13 +193,6 @@ function openStorylineRecommendedComponent(comp) {
         v-if="aiInsightResult"
         class="recommendsidebar-ai-result"
       >
-        <h2 class="recommendsidebar-subtitle recommendsidebar-subtitle--ai">
-          AI 數據洞察
-        </h2>
-        <div class="recommendsidebar-storyline">
-          {{ aiInsightResult.storyline }}
-        </div>
-
         <h2 class="recommendsidebar-subtitle">
           推薦主題
         </h2>
@@ -186,6 +220,13 @@ function openStorylineRecommendedComponent(comp) {
         >
           無法載入主題。
         </p>
+
+        <h2 class="recommendsidebar-subtitle">
+          AI 數據洞察
+        </h2>
+        <div class="recommendsidebar-storyline">
+          {{ aiInsightResult.storyline }}
+        </div>
       </div>
     </template>
   </div>
@@ -248,6 +289,7 @@ function openStorylineRecommendedComponent(comp) {
 	&-headertext {
 		flex: 1;
 		min-width: 0;
+		text-align: right;
 	}
 
 	&-ai-section {
@@ -311,6 +353,10 @@ function openStorylineRecommendedComponent(comp) {
 		margin-bottom: 20px;
 		padding-bottom: 16px;
 		border-bottom: 1px dashed var(--color-border);
+
+		> .recommendsidebar-subtitle:first-of-type {
+			margin-top: 0;
+		}
 	}
 
 	&-storyline {
@@ -333,7 +379,7 @@ function openStorylineRecommendedComponent(comp) {
 		cursor: default;
 		margin: 0 0 6px;
 		font-size: var(--font-l);
-		font-weight: 400;
+		font-weight: 700;
 	}
 
 	&-lead {
@@ -349,7 +395,7 @@ function openStorylineRecommendedComponent(comp) {
 		writing-mode: vertical-rl;
 		text-orientation: mixed;
 		font-size: var(--font-m);
-		font-weight: 400;
+		font-weight: 700;
 		color: var(--color-complement-text);
 		letter-spacing: 0.12em;
 		user-select: none;
@@ -362,10 +408,6 @@ function openStorylineRecommendedComponent(comp) {
 		font-size: var(--font-m);
 		margin: 10px 0 6px;
 		text-wrap: nowrap;
-
-		&--ai {
-			margin-top: 0;
-		}
 	}
 
 	&-msg {

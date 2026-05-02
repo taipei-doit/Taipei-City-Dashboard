@@ -230,6 +230,7 @@ function returnChartComponent(name, svg) {
 
 <template>
   <div
+    :data-dashboard-component-id="config.id"
     :class="[
       {
         dashboardcomponent: true,
