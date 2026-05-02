@@ -5,7 +5,7 @@ from operators.common_pipeline import CommonDag
 def _D020105(**kwargs):
     import pandas as pd
     from sqlalchemy import create_engine
-    from utils.extract_stage import get_data_taipei_api
+    from utils.extract_stage import get_current_rid_from_page_id, get_data_taipei_api
     from utils.load_stage import (
         save_geodataframe_to_postgresql,
         update_lasttime_in_data_to_dataset_info,
@@ -27,24 +27,26 @@ def _D020105(**kwargs):
     load_behavior = dag_infos.get("load_behavior")
     default_table = dag_infos.get("ready_data_default_table")
     history_table = dag_infos.get("ready_data_history_table")
-    RID = "e7aecde4-ef04-46e3-849b-1ee159ea6d5f"
+    PAGE_ID = "29a13836-028e-430d-bf5d-18ad3850f178"
     FROM_CRS = 4326
     GEOMETRY_TYPE = "Point"
 
     # Extract
-    raw_list = get_data_taipei_api(RID)
+    rid = get_current_rid_from_page_id(PAGE_ID)
+    raw_list = get_data_taipei_api(rid)
     raw_data = pd.DataFrame(raw_list)
     raw_data["data_time"] = raw_data["_importdate"].iloc[0]["date"]
 
     # Transform
     data = raw_data.copy()
-    # rename
+    # rename(欄位名於 2025 資料集改版後更改,新舊都 rename 以相容)
     data = data.rename(
         columns={
             "地址": "address",
             "面積": "area",
             "容留人數": "person_capacity",
             "無障礙設施": "is_accessible",
+            "是否依建築物無障礙設施設計規範檢討": "is_accessible",
             "data_time": "data_time",
         }
     )
@@ -53,10 +55,13 @@ def _D020105(**kwargs):
     # define columns
     data["area"] = pd.to_numeric(data["area"], errors="coerce")
     data["person_capacity"] = pd.to_numeric(data["person_capacity"], errors="coerce")
-    # convert to bool
-    data["is_accessible"] = data["is_accessible"].apply(
-        lambda x: True if x == "有" else False
-    )
+    # convert to bool(欄位可能缺席,缺席時視為 False)
+    if "is_accessible" in data.columns:
+        data["is_accessible"] = data["is_accessible"].apply(
+            lambda x: True if x == "有" else False
+        )
+    else:
+        data["is_accessible"] = False
     # standardize time
     data["data_time"] = convert_str_to_time_format(data["data_time"])
     # geocoding

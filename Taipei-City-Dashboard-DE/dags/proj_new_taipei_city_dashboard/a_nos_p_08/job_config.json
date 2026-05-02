@@ -1,0 +1,30 @@
+{
+    "dag_infos": {
+        "dag_id": "nos_p_08",
+        "start_date": "2026-05-02",
+        "schedule_interval": "@daily",
+        "catchup": false,
+        "tags": [
+            "nos_p_08",
+            "MOENV",
+            "環境音量監測站點"
+        ],
+        "description": "MOENV nos_p_08 寫入 noise_stations（replace，不寫 dataset_info）。",
+        "default_args": {
+            "owner": "airflow",
+            "email": [
+                "DEFAULT_EMAIL_LIST"
+            ],
+            "email_on_retry": false,
+            "email_on_failure": true,
+            "retries": 1,
+            "retry_delay": 60
+        },
+        "ready_data_db": "postgres_default",
+        "ready_data_default_table": "noise_stations",
+        "ready_data_history_table": "",
+        "raw_data_db": "postgres_default",
+        "raw_data_table": "",
+        "load_behavior": "replace"
+    }
+}

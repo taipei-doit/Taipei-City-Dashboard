@@ -1,10 +1,10 @@
 from airflow import DAG
 from operators.common_pipeline import CommonDag
 
-
 def _R0068(**kwargs):
     import pandas as pd
     from sqlalchemy import create_engine
+    from utils.extract_stage import get_data_taipei_api
     from utils.load_stage import (
         save_geodataframe_to_postgresql,
         update_lasttime_in_data_to_dataset_info,
@@ -25,14 +25,12 @@ def _R0068(**kwargs):
     load_behavior = dag_infos.get("load_behavior")
     default_table = dag_infos.get("ready_data_default_table")
     history_table = dag_infos.get("ready_data_history_table")
-    URL = "https://data.taipei/api/frontstage/tpeod/dataset/resource.download?rid=5afc5dde-3431-45a4-995f-9610616f32cc"
-    ENCODING = "cp950"
+    RID = "fe2b491e-31fb-4ea3-97d9-959206942582"
     FROM_CRS = 4326
     GEOMETRY_TYPE = "Polygon"
 
     # Extract
-    raw_data = pd.read_csv(URL, encoding=ENCODING)
-
+    raw_data = get_data_taipei_api(RID, output_format="dataframe")
     # Transform
     data = raw_data.copy()
     # rename

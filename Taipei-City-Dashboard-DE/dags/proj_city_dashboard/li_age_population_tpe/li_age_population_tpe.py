@@ -1,6 +1,6 @@
 from airflow import DAG
 from operators.common_pipeline import CommonDag
-from utils.extract_stage import get_data_taipei_api
+from utils.extract_stage import get_current_rid_from_page_id, get_data_taipei_api
 from utils.load_stage import save_dataframe_to_postgresql, update_lasttime_in_data_to_dataset_info
 from utils.get_time import get_tpe_now_time_str
 from sqlalchemy import create_engine
@@ -21,10 +21,10 @@ def _transfer(**kwargs):
     default_table = dag_infos.get('ready_data_default_table')
 
     # Manual Config
-    rid = 'c8f5b53d-ef3d-4321-ae8e-58cd2a5ee73c'
+    page_id = "a6394e3f-3514-4542-87bd-de4310a40db3"
 
     # Extract
-    res = get_data_taipei_api(rid)
+    res = get_data_taipei_api(get_current_rid_from_page_id(page_id))
     raw_data = pd.DataFrame(res)
     raw_data["data_time"] = get_tpe_now_time_str()
 
