@@ -52,6 +52,8 @@ function readInitialLocale() {
 export const useTranslationStore = defineStore("translation", {
 	state: () => ({
 		locale: readInitialLocale(),
+		/** 語系切換中：用於 UI 暫時顯示 loading，避免新舊語系混雜 */
+		isApplyingLocale: false,
 		/** GET /translation/static 回傳之字典（繁中備援） */
 		staticDictionary: {},
 		/** 後端回報的字典語系（供非同步載入後比對用） */
@@ -140,28 +142,39 @@ export const useTranslationStore = defineStore("translation", {
 			const contentStore = useContentStore();
 			const changed = code !== this.locale;
 
+			// 語系切換期間先蓋 loading，等 dashboard 文字合併完再放開
+			if (changed) {
+				this.isApplyingLocale = true;
+			}
+
 			this.releasePendingTranslates();
 			this.locale = code;
 			localStorage.setItem(LOCALE_STORAGE_KEY, code);
 
 			const applyGen = ++this.localeApplyGeneration;
+			try {
+				await this.fetchStaticDictionary(applyGen);
 
-			await this.fetchStaticDictionary(applyGen);
+				if (applyGen !== this.localeApplyGeneration) return;
 
-			if (applyGen !== this.localeApplyGeneration) return;
-
-			// 先重抓 GET /dashboard 更新儀表板列表；再以輕量 GET /dashboard/:index 合併組件標題／說明，
-			// 與不重拉 chart 並行（僅 PATCH 現有元件物件上的文字欄位）。
-			if (changed) {
-				const isStale = () =>
-					applyGen !== this.localeApplyGeneration;
-				await contentStore.setDashboards(true, isStale);
-				if (applyGen !== this.localeApplyGeneration) {
-					return;
+				// 先重抓 GET /dashboard 更新儀表板列表；再以輕量 GET /dashboard/:index 合併組件標題／說明，
+				// 與不重拉 chart 並行（僅 PATCH 現有元件物件上的文字欄位）。
+				if (changed) {
+					const isStale = () =>
+						applyGen !== this.localeApplyGeneration;
+					await contentStore.setDashboards(true, isStale);
+					if (applyGen !== this.localeApplyGeneration) {
+						return;
+					}
+					await contentStore.refreshDashboardComponentTranslationsForLocale(
+						isStale,
+					);
 				}
-				await contentStore.refreshDashboardComponentTranslationsForLocale(
-					isStale,
-				);
+			} finally {
+				// 只有最新一輪切換才可以放開 loading
+				if (applyGen === this.localeApplyGeneration) {
+					this.isApplyingLocale = false;
+				}
 			}
 		},
 

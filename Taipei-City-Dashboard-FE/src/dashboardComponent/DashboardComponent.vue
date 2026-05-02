@@ -1,6 +1,7 @@
 <script setup>
 import { computed, ref, watch } from "vue";
 import { useBackendTranslation } from "../composables/useBackendTranslation";
+import { useTranslationStore } from "../store/translationStore";
 // import "./styles/chartStyles.css";
 // import "./styles/toggleswitch.css";
 import "material-icons/iconfont/material-icons.css";
@@ -81,6 +82,8 @@ const props = defineProps({
 });
 
 const { t } = useBackendTranslation();
+const translationStore = useTranslationStore();
+const isApplyingLocale = computed(() => translationStore.isApplyingLocale);
 
 const emits = defineEmits([
 	"favorite",
@@ -431,7 +434,13 @@ function returnChartComponent(name, svg) {
     </div>
     <!-- Main Content -->
     <div
-      v-if="mode === 'preview'"
+      v-if="isApplyingLocale"
+      class="dashboardcomponent-loading"
+    >
+      <div />
+    </div>
+    <div
+      v-else-if="mode === 'preview'"
       class="preview-content"
     >
       <div
