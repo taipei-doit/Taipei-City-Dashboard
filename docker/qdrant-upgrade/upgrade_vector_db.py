@@ -48,15 +48,15 @@ def main():
     df = pd.read_sql(query, engine)
     print(f"成功讀取 {len(df)} 筆資料")
     
-    # 組合描述文字
+    # 組合描述文字（multilingual-e5 要求 passage: 前綴才能與 query: 前綴的查詢向量相容）
     df["long_desc"] = df["long_desc"].fillna("")
     df["use_case"] = df["use_case"].fillna("")
-    df["text"] = df["long_desc"] + " " + df["use_case"]
-    
+    df["text"] = "passage: " + df["long_desc"] + " " + df["use_case"]
+
     # 載入模型
     print("載入 SentenceTransformer 模型...")
     model = SentenceTransformer("intfloat/multilingual-e5-base")
-    
+
     # 轉成向量
     print("生成向量嵌入...")
     embeddings = model.encode(df["text"].tolist(), normalize_embeddings=True)

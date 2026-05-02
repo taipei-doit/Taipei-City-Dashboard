@@ -10,7 +10,7 @@ import (
 const (
 	defaultEvidenceTopK           = 5
 	maxEvidenceTopK               = 8
-	defaultEvidenceScoreThreshold = 0.75
+	defaultEvidenceScoreThreshold = 0.85
 	maxEvidenceArrayItems         = 30
 )
 

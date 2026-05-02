@@ -168,8 +168,8 @@ func GetDashboardByIndex(index string, groups []int, city string) (components []
 
 	// 4. Get components by ids
 	query := tempDB.
-		Where(componentIdsSlice).
-		Order(fmt.Sprintf("ARRAY_POSITION(ARRAY[%s], components.id)", componentIdsString))
+		Where("components.id IN ?", componentIdsSlice).
+		Order(fmt.Sprintf("ARRAY_POSITION(ARRAY[%s]::bigint[], components.id)", componentIdsString))
 		if (city != ""){
 			query = query.Where("query_charts.city = ?", city)
 		}
@@ -193,6 +193,10 @@ func GetDashboardByIndex(index string, groups []int, city string) (components []
 	for k,v := range components{
 		var maps []ComponentMap
 		filteredMaps := make([]ComponentMap, 0)
+		if v.MapConfig == nil {
+			components[k].MapConfig = json.RawMessage("[]")
+			continue
+		}
 		if err := json.Unmarshal(v.MapConfig, &maps); err != nil {
 			return components, err
 		}

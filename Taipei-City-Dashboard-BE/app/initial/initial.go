@@ -96,6 +96,7 @@ func createAdmin() {
 	adminUserID, err := models.CreateUser(userName, &email, &password, &isAdmin, &isActive, &isWhitelist, &isBlacked, nil)
 	if err != nil {
 		logs.FError("Failed to create user:%s", err)
+		return
 	}
 	logs.FInfo("create admin: %s success", userName)
 

@@ -3,7 +3,12 @@
     "allow": [
       "Bash(grep -E \"\\\\.\\(py|js|ts\\)$\")",
       "Bash(xargs grep *)",
-      "Bash(grep -E \"\\\\.py$\")"
+      "Bash(grep -E \"\\\\.py$\")",
+      "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\User\\\\Documents\\\\2026_Github\\\\Taipei-City-Dashboard\" -Directory)",
+      "Bash(Select-Object Name)",
+      "Bash(xargs ls *)",
+      "Bash(python -c \"import openpyxl; print\\('ok'\\)\")",
+      "Bash(pip install *)"
     ]
   }
 }

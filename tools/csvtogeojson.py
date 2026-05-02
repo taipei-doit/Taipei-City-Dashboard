@@ -1,43 +1,75 @@
 import csv
 import json
 import os
+import sys
+
+import openpyxl
+
+sys.stdout.reconfigure(encoding="utf-8")
 
 
-def csv_to_geojson(csv_path, output_path, lon_col, lat_col):
-    features = []
+def detect_encoding(csv_path):
+    for enc in ("utf-8-sig", "cp950", "big5", "utf-8"):
+        try:
+            with open(csv_path, encoding=enc) as f:
+                f.read()
+            return enc
+        except UnicodeDecodeError:
+            continue
+    return "utf-8"
 
-    with open(csv_path, newline="", encoding="utf-8-sig") as f:
+
+def read_rows(file_path):
+    """Return (headers, row_dicts) from CSV or XLSX."""
+    ext = os.path.splitext(file_path)[1].lower()
+
+    if ext in (".xlsx", ".xls"):
+        wb = openpyxl.load_workbook(file_path, read_only=True, data_only=True)
+        ws = wb.active
+        rows = list(ws.iter_rows(values_only=True))
+        wb.close()
+        if not rows:
+            return [], []
+        headers = [str(h) if h is not None else "" for h in rows[0]]
+        row_dicts = [
+            {headers[i]: (str(v) if v is not None else "") for i, v in enumerate(row)}
+            for row in rows[1:]
+        ]
+        return headers, row_dicts
+
+    # CSV
+    encoding = detect_encoding(file_path)
+    with open(file_path, newline="", encoding=encoding) as f:
         reader = csv.DictReader(f)
-        headers = reader.fieldnames
+        headers = list(reader.fieldnames or [])
+        row_dicts = list(reader)
+    return headers, row_dicts
 
-        if lon_col not in headers or lat_col not in headers:
-            raise ValueError(
-                f"找不到欄位：確認經度欄位「{lon_col}」和緯度欄位「{lat_col}」是正確的嗎 \n現有欄位：{headers}"
-            )
 
-        for row in reader:
-            try:
-                lon = float(row[lon_col])
-                lat = float(row[lat_col])
-            except (ValueError, TypeError):
-                continue
+def to_geojson(file_path, output_path, lon_col, lat_col):
+    headers, rows = read_rows(file_path)
 
-            properties = {k: v for k, v in row.items() if k not in (lon_col, lat_col)}
+    if lon_col not in headers or lat_col not in headers:
+        raise ValueError(
+            f"找不到欄位：確認經度欄位「{lon_col}」和緯度欄位「{lat_col}」是正確的嗎 \n現有欄位：{headers}"
+        )
 
-            feature = {
-                "type": "Feature",
-                "geometry": {
-                    "type": "Point",
-                    "coordinates": [lon, lat],
-                },
-                "properties": properties,
-            }
-            features.append(feature)
+    features = []
+    for row in rows:
+        try:
+            lon = float(row[lon_col])
+            lat = float(row[lat_col])
+        except (ValueError, TypeError):
+            continue
 
-    geojson = {
-        "type": "FeatureCollection",
-        "features": features,
-    }
+        properties = {k: v for k, v in row.items() if k not in (lon_col, lat_col)}
+        features.append({
+            "type": "Feature",
+            "geometry": {"type": "Point", "coordinates": [lon, lat]},
+            "properties": properties,
+        })
+
+    geojson = {"type": "FeatureCollection", "features": features}
 
     with open(output_path, "w", encoding="utf-8") as f:
         json.dump(geojson, f, ensure_ascii=False, indent=2)
@@ -46,9 +78,9 @@ def csv_to_geojson(csv_path, output_path, lon_col, lat_col):
 
 
 def main():
-    print("=== CSV 轉 GeoJSON  ===\n")
+    print("=== CSV / XLSX 轉 GeoJSON ===\n")
 
-    csv_path = input("輸入CSV檔案路徑：").strip().strip('"')
+    csv_path = input("輸入檔案路徑（CSV 或 XLSX）：").strip().strip('"')
     if not os.path.isfile(csv_path):
         print(f"error：找不到檔案 {csv_path}")
         return
@@ -69,7 +101,7 @@ def main():
     lat_col = input("輸入緯度欄位名稱：").strip()
 
     try:
-        count = csv_to_geojson(csv_path, output_path, lon_col, lat_col)
+        count = to_geojson(csv_path, output_path, lon_col, lat_col)
         print(f"\n完成！轉換 {count} 筆資料，輸出至：{output_path}")
     except ValueError as e:
         print(f"\n錯誤：{e}")

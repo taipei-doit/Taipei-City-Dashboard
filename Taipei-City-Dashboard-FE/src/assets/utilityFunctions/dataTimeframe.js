@@ -69,7 +69,7 @@ export function getComponentDataTimeframe(time_from, time_to, api) {
 		.split(".")[0]
 		.replace("T", " ");
 
-	if (time_to === "now") {
+	if (!time_to || time_to === "now") {
 		// let parsedTimeTo be the current time formated YYYY-MM-DD HH:MM:SS and in UTC+8
 		parsedTimeTo = new Date(nowTimeTo - tzoffset)
 			.toISOString()
