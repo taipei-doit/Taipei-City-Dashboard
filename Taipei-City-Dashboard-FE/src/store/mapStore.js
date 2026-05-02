@@ -21,6 +21,7 @@ import http from "../router/axios.js";
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { FBXLoader } from "three/examples/jsm/loaders/FBXLoader.js";
+import { TDSLoader } from "three/examples/jsm/loaders/TDSLoader.js";
 import { point, distance } from "@turf/turf";
 
 // Other Stores
@@ -123,9 +124,28 @@ const SIMPLE_ROUTE_CAR_SOURCE_ID = "simple-navigation-car-source";
 const SIMPLE_ROUTE_CAR_LAYER_IDS = [
 	"simple-navigation-car-layer",
 ];
-const SIMPLE_ROUTE_CAR_MODEL_URL = "/cybertruck.fbx";
-const SIMPLE_ROUTE_CAR_MODEL_LENGTH_METERS = 132;
-const SIMPLE_ROUTE_CAR_MODEL_ALTITUDE_METERS = 4;
+const SIMPLE_ROUTE_VEHICLE_MODELS = {
+	default: {
+		label: "cybertruck",
+		loader: "fbx",
+		url: "/cybertruck.fbx",
+		lengthMeters: 132,
+		altitudeMeters: 4,
+		removeNames: ["Plane002"],
+	},
+	"mapbox/cycling": {
+		label: "scooter",
+		loader: "3ds",
+		url: "/scooter.3DS",
+		lengthMeters: 92,
+		altitudeMeters: 3,
+		orientation: [
+			{ axis: "z", radians: Math.PI / 2 },
+			{ axis: "z", radians: Math.PI },
+			{ axis: "x", radians: -Math.PI / 2 },
+		],
+	},
+};
 const SIMPLE_ROUTE_CAR_BASE_ZOOM = 14.5;
 const SIMPLE_ROUTE_CAR_MIN_SCALE = 0.5;
 const SIMPLE_ROUTE_CAR_MAX_SCALE = 7;
@@ -159,6 +179,13 @@ function getSimpleRouteCarDuration(distanceMeters) {
 		duration,
 		SIMPLE_ROUTE_CAR_MIN_DURATION_MS,
 		SIMPLE_ROUTE_CAR_MAX_DURATION_MS,
+	);
+}
+
+function getSimpleRouteVehicleModel(profile) {
+	return (
+		SIMPLE_ROUTE_VEHICLE_MODELS[profile] ||
+		SIMPLE_ROUTE_VEHICLE_MODELS.default
 	);
 }
 
@@ -254,13 +281,14 @@ function disposeThreeObject(object) {
 	});
 }
 
-function removeSimpleRouteModelExtras(model) {
+function removeSimpleRouteModelExtras(model, modelConfig) {
 	const extras = [];
+	const removeNames = new Set(modelConfig.removeNames || []);
 	model.traverse((child) => {
 		if (
 			child.isCamera ||
 			child.isLight ||
-			child.name === "Plane002"
+			removeNames.has(child.name)
 		) {
 			extras.push(child);
 		}
@@ -268,8 +296,23 @@ function removeSimpleRouteModelExtras(model) {
 	extras.forEach((child) => child.parent?.remove(child));
 }
 
-function normalizeSimpleRouteCarModel(model) {
-	removeSimpleRouteModelExtras(model);
+function orientSimpleRouteVehicleModel(model, modelConfig) {
+	(modelConfig.orientation || []).forEach(({ axis, radians }) => {
+		const vector =
+			axis === "x"
+				? new THREE.Vector3(1, 0, 0)
+				: axis === "y"
+					? new THREE.Vector3(0, 1, 0)
+					: new THREE.Vector3(0, 0, 1);
+		model.applyMatrix4(
+			new THREE.Matrix4().makeRotationAxis(vector, radians),
+		);
+	});
+}
+
+function normalizeSimpleRouteVehicleModel(model, modelConfig) {
+	removeSimpleRouteModelExtras(model, modelConfig);
+	orientSimpleRouteVehicleModel(model, modelConfig);
 	model.updateMatrixWorld(true);
 
 	const box = new THREE.Box3().setFromObject(model);
@@ -336,7 +379,21 @@ function createSimpleRouteFallbackCarModel() {
 	};
 }
 
-function createSimpleRouteCarLayer(routePath, animationDuration, firstSample) {
+function createSimpleRouteVehicleLoader(modelConfig) {
+	if (modelConfig.loader === "3ds") {
+		const loader = new TDSLoader();
+		loader.setResourcePath("/");
+		return loader;
+	}
+	return new FBXLoader();
+}
+
+function createSimpleRouteCarLayer(
+	routePath,
+	animationDuration,
+	firstSample,
+	modelConfig,
+) {
 	const customLayer = {
 		id: SIMPLE_ROUTE_CAR_LAYER_IDS[0],
 		type: "custom",
@@ -369,11 +426,11 @@ function createSimpleRouteCarLayer(routePath, animationDuration, firstSample) {
 			);
 			customLayer.renderer.autoClear = false;
 
-			new FBXLoader().load(
-				SIMPLE_ROUTE_CAR_MODEL_URL,
+			createSimpleRouteVehicleLoader(modelConfig).load(
+				modelConfig.url,
 				(model) => {
 					const normalizedModel =
-						normalizeSimpleRouteCarModel(model);
+						normalizeSimpleRouteVehicleModel(model, modelConfig);
 					if (customLayer.isRemoved) {
 						disposeThreeObject(normalizedModel.model);
 						return;
@@ -387,7 +444,7 @@ function createSimpleRouteCarLayer(routePath, animationDuration, firstSample) {
 				undefined,
 				(error) => {
 					console.warn(
-						"Failed to load simple route cybertruck model.",
+						`Failed to load simple route ${modelConfig.label} model.`,
 						error,
 					);
 					const fallbackModel = createSimpleRouteFallbackCarModel();
@@ -440,14 +497,14 @@ function createSimpleRouteCarLayer(routePath, animationDuration, firstSample) {
 				const mercator =
 					mapboxGl.MercatorCoordinate.fromLngLat(
 						routeSample.coordinate,
-						SIMPLE_ROUTE_CAR_MODEL_ALTITUDE_METERS,
+						modelConfig.altitudeMeters,
 					);
 				const zoomScale = getSimpleRouteCarScale(
 					customLayer.map.getZoom(),
 				);
 				const modelScale =
 					(mercator.meterInMercatorCoordinateUnits() *
-						SIMPLE_ROUTE_CAR_MODEL_LENGTH_METERS *
+						modelConfig.lengthMeters *
 						zoomScale) /
 					customLayer.modelLengthUnits;
 				const rotationX = new THREE.Matrix4().makeRotationAxis(
@@ -3372,6 +3429,7 @@ export const useMapStore = defineStore("map", {
 			const animationDuration = getSimpleRouteCarDuration(
 				routeData.distance,
 			);
+			const modelConfig = getSimpleRouteVehicleModel(routeData.profile);
 			this.navigationRouteCarSample = firstSample;
 
 			SIMPLE_ROUTE_CAR_LAYER_IDS.slice()
@@ -3396,6 +3454,7 @@ export const useMapStore = defineStore("map", {
 				routePath,
 				animationDuration,
 				firstSample,
+				modelConfig,
 			);
 			this.navigationRouteCarLayer = markRaw(carLayer);
 			this.map.addLayer(carLayer);
