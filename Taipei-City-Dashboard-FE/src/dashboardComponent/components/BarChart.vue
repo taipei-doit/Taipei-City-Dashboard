@@ -46,12 +46,35 @@ const displaySeries = computed(() => {
 	return [{ data: aggregated }];
 });
 
+function alignTotalLabels(chartContext) {
+	if (!showStacked.value) return;
+	requestAnimationFrame(() => {
+		const el = chartContext.el;
+		if (!el) return;
+		const labels = el.querySelectorAll("text.apexcharts-datalabel");
+		if (!labels.length) return;
+		let maxX = 0;
+		labels.forEach((label) => {
+			const x = parseFloat(label.getAttribute("x") || "0");
+			if (x > maxX) maxX = x;
+		});
+		labels.forEach((label) => {
+			label.setAttribute("x", String(maxX));
+			label.setAttribute("text-anchor", "start");
+		});
+	});
+}
+
 const chartOptions = computed(() => ({
 	chart: {
 		offsetY: hasCategories ? 0 : 15,
 		stacked: true,
 		toolbar: {
 			show: false,
+		},
+		events: {
+			mounted: alignTotalLabels,
+			updated: alignTotalLabels,
 		},
 	},
 	colors: showStacked.value
@@ -128,8 +151,9 @@ const chartOptions = computed(() => ({
 	},
 	yaxis: {
 		labels: {
+			maxWidth: 180,
 			formatter: function (value) {
-				return value.length > 7 ? value.slice(0, 6) + "..." : value;
+				return value.length > 10 ? value.slice(0, 9) + "..." : value;
 			},
 		},
 	},

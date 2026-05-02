@@ -1,1 +1,329 @@
-{"type": "FeatureCollection", "features": [{"type": "Feature", "geometry": {"type": "Point", "coordinates": [121.518797027654, 25.012143983046]}, "properties": {"name": "清真泰式廚房", "cert_type": "MR", "nature": "泰式料理", "cert_org": "中國回教協會", "address": "新北市永和區中興街92號1樓", "tel": "+886-2-2924-8655"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [121.424770514213, 25.042608513051]}, "properties": {"name": "鍋棧精緻養生鍋", "cert_type": "MR", "nature": "中式料理", "cert_org": "中國回教協會", "address": "新北市泰山區明志路三段38號", "tel": "+886-2-2904-6828"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [121.475204006524, 25.032795316089]}, "properties": {"name": "瑪莎拉印度餐廳 板橋店", "cert_type": "MR", "nature": "印度料理", "cert_org": "中國回教協會", "address": "新北市板橋區文化路二段476號", "tel": "+886-2-8258-8338"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [121.5010864, 25.2578784]}, "properties": {"name": "瑪莎拉印度餐廳 三芝店", "cert_type": "MR", "nature": "印度料理", "cert_org": "中國回教協會", "address": "新北市三芝區北勢子12-7號", "tel": "+886-2-2636-5786"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [121.609705976029, 25.001147009899]}, "properties": {"name": "地中海私房料理", "cert_type": "MR", "nature": "地中海料理", "cert_org": "中國回教協會", "address": "新北市深坑區北深路三段22號", "tel": "+886-921151340"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [121.36175100755, 25.069380018427]}, "properties": {"name": "達卡印度廚房", "cert_type": "MR", "nature": "印度料理", "cert_org": "中國回教協會", "address": "新北市林口區文化三路一段171號", "tel": "+886-2-2608-1712"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [121.456198041074, 25.00257700449]}, "properties": {"name": "炸鷄大獅-板橋愛買店", "cert_type": "MFR", "nature": "速食", "cert_org": "中國回教協會", "address": "新北市板橋區貴興路101號1樓", "tel": "+886-2-2964-6090"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [121.507654963763, 24.9849890056]}, "properties": {"name": "旺旺來亞州咖哩屋", "cert_type": "MFR", "nature": "午晚餐", "cert_org": "中國回教協會", "address": "新北市中和區華新街23號", "tel": "+886-909-637668"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [121.434038133097, 25.174070492002]}, "properties": {"name": "蘆洲紅燒羊肉拉麵-淡水店", "cert_type": "MFR", "nature": "午晚餐", "cert_org": "聯璽商務開發有限公司", "address": "新北市淡水區中正路243號", "tel": "+886-9-63024767、+886-2-26255699"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [121.501576994314, 25.073026984498]}, "properties": {"name": "蘆洲紅燒羊肉拉麵-三重店", "cert_type": "MFR", "nature": "午晚餐", "cert_org": "聯璽商務開發有限公司", "address": "新北市三重區龍濱路265號", "tel": "+886-2-29771599"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [121.462422023277, 25.011294980073]}, "properties": {"name": "臺北新板希爾頓酒店 - 全日餐廳-悅．市集", "cert_type": "MFR/MFT", "nature": "早午晚餐/住宿", "cert_org": "中國回教協會", "address": "新北市板橋區民權路88號", "tel": "+886-2-2958-3770"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [121.600444978848, 25.004168015441]}, "properties": {"name": "福容大飯店新北深坑-福園中餐廳", "cert_type": "MFR/MFT", "nature": "早午晚餐/住宿", "cert_org": "中國回教協會", "address": "新北市深坑區北深路三段236號", "tel": "+886-2-2662-1717"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [121.415489903379, 25.182101193435]}, "properties": {"name": "福容大飯店淡水漁人碼頭店 - 碧玉廳、翡翠廳、珊瑚廳、水仙廳、百合廳", "cert_type": "MFR/MFT", "nature": "早午晚餐/住宿", "cert_org": "中國回教協會", "address": "新北市淡水區觀海路83號", "tel": "+886-2-2628-7777"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [121.466260503804, 25.01522240631]}, "properties": {"name": "板橋凱撒大飯店 - 蓮花泰式餐廳", "cert_type": "MFR/MFT", "nature": "早午晚餐/住宿", "cert_org": "中國回教協會", "address": "新北市板橋區縣民大道二段8號", "tel": "+886-2-8953-9777"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [121.943971664619, 25.018156699379]}, "properties": {"name": "福隆貝悅大飯店股份有限公司", "cert_type": "MFR/MFA", "nature": "早午晚餐/住宿", "cert_org": "伊斯蘭商務發展有限公司", "address": "新北市貢寮區福隆街41號", "tel": "+886-2-2499-1188"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [121.463391390379, 25.011102783033]}, "properties": {"name": "趣淘漫旅台北", "cert_type": "MFT", "nature": "早餐/住宿", "cert_org": "中國回教協會", "address": "新北市板橋區中山路一段139號", "tel": "+886-2-8951-6686"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [121.458003000104, 25.009282988035]}, "properties": {"name": "美麗殿商旅", "cert_type": "MFT", "nature": "早餐/住宿", "cert_org": "中國回教協會", "address": "新北市板橋區府中路67號2樓", "tel": "+886-2-2969-8588"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [121.504307734549, 24.99679768225]}, "properties": {"name": "泰旺穆斯林泰式餐廳", "cert_type": "AH", "nature": "餐廳團套餐", "cert_org": "台灣伊斯蘭協會", "address": "新北市中和區南華路50號1樓", "tel": "+886-2-2242-6188"}}]}
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.518797027654,
+          25.012143983046
+        ]
+      },
+      "properties": {
+        "name": "清真泰式廚房",
+        "cert_type": "穆斯林餐廳",
+        "nature": "泰式料理",
+        "cert_org": "中國回教協會",
+        "address": "新北市永和區中興街92號1樓",
+        "tel": "+886-2-2924-8655"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.424770514213,
+          25.042608513051
+        ]
+      },
+      "properties": {
+        "name": "鍋棧精緻養生鍋",
+        "cert_type": "穆斯林餐廳",
+        "nature": "中式料理",
+        "cert_org": "中國回教協會",
+        "address": "新北市泰山區明志路三段38號",
+        "tel": "+886-2-2904-6828"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.475204006524,
+          25.032795316089
+        ]
+      },
+      "properties": {
+        "name": "瑪莎拉印度餐廳 板橋店",
+        "cert_type": "穆斯林餐廳",
+        "nature": "印度料理",
+        "cert_org": "中國回教協會",
+        "address": "新北市板橋區文化路二段476號",
+        "tel": "+886-2-8258-8338"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5010864,
+          25.2578784
+        ]
+      },
+      "properties": {
+        "name": "瑪莎拉印度餐廳 三芝店",
+        "cert_type": "穆斯林餐廳",
+        "nature": "印度料理",
+        "cert_org": "中國回教協會",
+        "address": "新北市三芝區北勢子12-7號",
+        "tel": "+886-2-2636-5786"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.609705976029,
+          25.001147009899
+        ]
+      },
+      "properties": {
+        "name": "地中海私房料理",
+        "cert_type": "穆斯林餐廳",
+        "nature": "地中海料理",
+        "cert_org": "中國回教協會",
+        "address": "新北市深坑區北深路三段22號",
+        "tel": "+886-921151340"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.36175100755,
+          25.069380018427
+        ]
+      },
+      "properties": {
+        "name": "達卡印度廚房",
+        "cert_type": "穆斯林餐廳",
+        "nature": "印度料理",
+        "cert_org": "中國回教協會",
+        "address": "新北市林口區文化三路一段171號",
+        "tel": "+886-2-2608-1712"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.456198041074,
+          25.00257700449
+        ]
+      },
+      "properties": {
+        "name": "炸鷄大獅-板橋愛買店",
+        "cert_type": "穆斯林友善餐廳",
+        "nature": "速食",
+        "cert_org": "中國回教協會",
+        "address": "新北市板橋區貴興路101號1樓",
+        "tel": "+886-2-2964-6090"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.507654963763,
+          24.9849890056
+        ]
+      },
+      "properties": {
+        "name": "旺旺來亞州咖哩屋",
+        "cert_type": "穆斯林友善餐廳",
+        "nature": "午晚餐",
+        "cert_org": "中國回教協會",
+        "address": "新北市中和區華新街23號",
+        "tel": "+886-909-637668"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.434038133097,
+          25.174070492002
+        ]
+      },
+      "properties": {
+        "name": "蘆洲紅燒羊肉拉麵-淡水店",
+        "cert_type": "穆斯林友善餐廳",
+        "nature": "午晚餐",
+        "cert_org": "聯璽商務開發有限公司",
+        "address": "新北市淡水區中正路243號",
+        "tel": "+886-9-63024767、+886-2-26255699"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.501576994314,
+          25.073026984498
+        ]
+      },
+      "properties": {
+        "name": "蘆洲紅燒羊肉拉麵-三重店",
+        "cert_type": "穆斯林友善餐廳",
+        "nature": "午晚餐",
+        "cert_org": "聯璽商務開發有限公司",
+        "address": "新北市三重區龍濱路265號",
+        "tel": "+886-2-29771599"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.462422023277,
+          25.011294980073
+        ]
+      },
+      "properties": {
+        "name": "臺北新板希爾頓酒店 - 全日餐廳-悅．市集",
+        "cert_type": "穆斯林友善餐廳/穆斯林友善餐旅",
+        "nature": "早午晚餐/住宿",
+        "cert_org": "中國回教協會",
+        "address": "新北市板橋區民權路88號",
+        "tel": "+886-2-2958-3770"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.600444978848,
+          25.004168015441
+        ]
+      },
+      "properties": {
+        "name": "福容大飯店新北深坑-福園中餐廳",
+        "cert_type": "穆斯林友善餐廳/穆斯林友善餐旅",
+        "nature": "早午晚餐/住宿",
+        "cert_org": "中國回教協會",
+        "address": "新北市深坑區北深路三段236號",
+        "tel": "+886-2-2662-1717"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.415489903379,
+          25.182101193435
+        ]
+      },
+      "properties": {
+        "name": "福容大飯店淡水漁人碼頭店 - 碧玉廳、翡翠廳、珊瑚廳、水仙廳、百合廳",
+        "cert_type": "穆斯林友善餐廳/穆斯林友善餐旅",
+        "nature": "早午晚餐/住宿",
+        "cert_org": "中國回教協會",
+        "address": "新北市淡水區觀海路83號",
+        "tel": "+886-2-2628-7777"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.466260503804,
+          25.01522240631
+        ]
+      },
+      "properties": {
+        "name": "板橋凱撒大飯店 - 蓮花泰式餐廳",
+        "cert_type": "穆斯林友善餐廳/穆斯林友善餐旅",
+        "nature": "早午晚餐/住宿",
+        "cert_org": "中國回教協會",
+        "address": "新北市板橋區縣民大道二段8號",
+        "tel": "+886-2-8953-9777"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.943971664619,
+          25.018156699379
+        ]
+      },
+      "properties": {
+        "name": "福隆貝悅大飯店股份有限公司",
+        "cert_type": "穆斯林友善餐廳/穆斯林友善旅宿",
+        "nature": "早午晚餐/住宿",
+        "cert_org": "伊斯蘭商務發展有限公司",
+        "address": "新北市貢寮區福隆街41號",
+        "tel": "+886-2-2499-1188"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.463391390379,
+          25.011102783033
+        ]
+      },
+      "properties": {
+        "name": "趣淘漫旅台北",
+        "cert_type": "穆斯林友善餐旅",
+        "nature": "早餐/住宿",
+        "cert_org": "中國回教協會",
+        "address": "新北市板橋區中山路一段139號",
+        "tel": "+886-2-8951-6686"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.458003000104,
+          25.009282988035
+        ]
+      },
+      "properties": {
+        "name": "美麗殿商旅",
+        "cert_type": "穆斯林友善餐旅",
+        "nature": "早餐/住宿",
+        "cert_org": "中國回教協會",
+        "address": "新北市板橋區府中路67號2樓",
+        "tel": "+886-2-2969-8588"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.504307734549,
+          24.99679768225
+        ]
+      },
+      "properties": {
+        "name": "泰旺穆斯林泰式餐廳",
+        "cert_type": "全清真商店",
+        "nature": "餐廳團套餐",
+        "cert_org": "台灣伊斯蘭協會",
+        "address": "新北市中和區南華路50號1樓",
+        "tel": "+886-2-2242-6188"
+      }
+    }
+  ]
+}
