@@ -263,10 +263,7 @@ function returnChartComponent(name, svg) {
       <!-- Upper Left Corner -->
       <div>
         <h3>
-          <BackendTranslatedText
-            tag="span"
-            :text="config.name"
-          />
+          <span>{{ config.name }}</span>
           <ComponentTag
             v-if="!mode.includes('map')"
             icon=""
@@ -280,29 +277,30 @@ function returnChartComponent(name, svg) {
             @mousemove="updateMouseLocation"
             @mouseleave="changeShowTagTooltipState(false)"
           >
-            <span v-if="config.map_filter && config.map_config">tune</span>
-            <span v-if="config.map_config && config.map_config[0]">map</span>
-            <span v-if="config.history_config?.range">insights</span>
+            <span
+              v-if="config.map_filter && config.map_config"
+              class="header-icon"
+            >tune</span>
+            <span
+              v-if="config.map_config && config.map_config[0]"
+              class="header-icon"
+            >map</span>
+            <span
+              v-if="config.history_config?.range"
+              class="header-icon"
+            >insights</span>
           </div>
         </h3>
-        <BackendTranslatedText
-          v-if="mode === 'preview' && props.config.short_desc"
-          tag="p"
-          :text="props.config.short_desc"
-        />
+        <p v-if="mode === 'preview' && props.config.short_desc">
+          {{ props.config.short_desc }}
+        </p>
         <div v-if="!mode.includes('map') || toggleOn">
           <h4 v-if="config.time_from === 'maintain'">
-            <BackendTranslatedText
-              tag="span"
-              :text="`${config.source} | ${dataTime}`"
-            />
-            <span>warning</span>
+            <span>{{ `${config.source} | ${dataTime}` }}</span>
+            <span class="header-icon">warning</span>
           </h4>
           <h4 v-else>
-            <BackendTranslatedText
-              tag="span"
-              :text="`${config.source} | ${dataTime}`"
-            />
+            <span>{{ `${config.source} | ${dataTime}` }}</span>
           </h4>
           <div
             v-if="mode !== 'preview'"
@@ -642,7 +640,7 @@ button:hover {
 			font-weight: 400;
 			overflow: visible;
 
-			span {
+			span.header-icon {
 				margin-left: 4px !important;
 				margin: 0 4px;
 				color: rgb(237, 90, 90) !important;
@@ -668,7 +666,7 @@ button:hover {
 				align-items: center;
 			}
 
-			span {
+			span.header-icon {
 				margin-left: 8px;
 				color: var(--color-complement-text);
 				font-family: var(--font-icon);
