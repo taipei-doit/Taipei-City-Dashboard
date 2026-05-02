@@ -31,6 +31,7 @@ aging_kpi	{#F65658,#F49F36,#F5C860,#9AC17C,#4CB495,#569C9A,#60819C,#2F8AB1}	{Tex
 aging_workforce_trend	{#24B0DD,#56B96D,#F8CF58,#F5AD4A,#E170A6,#ED6A45,#AF4137,#10294A}	{BarPercentChart,RadarChart,ColumnChart}	%
 bike_network	{#a0b8e8,#b7ff98}	{DonutChart,BarChart}	公里
 bike_map	{#a0b8e8,#b7ff98}	{MapLegend}	條
+green_restaurant	{#4caf50,#81c784,#a5d6a7,#c8e6c9}	{BarChart}	間
 \.
 
 
@@ -43,6 +44,8 @@ COPY public.component_maps (id, index, title, type, source, size, icon, paint, p
 99	youbike_realtime_metrotaipei	youbike站點	symbol	geojson	\N	youbike	{}	[{"key":"sna","name":"場站名稱"},{"key":"sno","name":"場站ID"},{"key":"available_return_bikes","name":"可還車位"},{"key":"available_rent_general_bikes","name":"剩餘車輛"}]
 100	bike_network_tpe	自行車路網	line	geojson	\N	\N	{"line-color":["match",["get","direction"],"雙向","#097138","單向","#007BFF","#808080"]}	[\r\n  {"key": "data_time", "name": "數據時間"},\r\n  {"key": "route_name", "name": "路線名稱"},\r\n  {"key": "city_code", "name": "城市代碼"},\r\n  {"key": "city", "name": "城市"},\r\n  {"key": "road_section_start", "name": "起點路段"},\r\n  {"key": "road_section_end", "name": "終點路段"},\r\n  {"key": "direction", "name": "方向"},\r\n  {"key": "cycling_length", "name": "自行車道長度"},\r\n  {"key": "finished_time", "name": "完工時間"},\r\n  {"key": "update_time", "name": "更新時間"}\r\n]
 101	bike_network_metrotaipei	自行車路網	line	geojson	\N	\N	{"line-color":["match",["get","direction"],"雙向","#097138","單向","#007BFF","#808080"]}	[\r\n  {"key": "data_time", "name": "數據時間"},\r\n  {"key": "route_name", "name": "路線名稱"},\r\n  {"key": "city_code", "name": "城市代碼"},\r\n  {"key": "city", "name": "城市"},\r\n  {"key": "road_section_start", "name": "起點路段"},\r\n  {"key": "road_section_end", "name": "終點路段"},\r\n  {"key": "direction", "name": "方向"},\r\n  {"key": "cycling_length", "name": "自行車道長度"},\r\n  {"key": "finished_time", "name": "完工時間"},\r\n  {"key": "update_time", "name": "更新時間"}\r\n]
+102	green_restaurant_tpe	台北環保餐廳	circle	geojson	\N	\N	{"circle-color":"#4caf50","circle-radius":3,"circle-opacity":0.85,"circle-stroke-color":"#2e7d32","circle-stroke-width":0.5}	[{"key":"name","name":"餐廳名稱"},{"key":"district","name":"行政區"},{"key":"category","name":"餐廳類別"},{"key":"tel","name":"電話"},{"key":"address","name":"地址"},{"key":"eco_actions","name":"額外環保作為"}]
+103	green_restaurant_ntpc	新北環保餐廳	circle	geojson	\N	\N	{"circle-color":"#66bb6a","circle-radius":3,"circle-opacity":0.85,"circle-stroke-color":"#388e3c","circle-stroke-width":0.5}	[{"key":"name","name":"餐廳名稱"},{"key":"district","name":"行政區"},{"key":"category","name":"餐廳類別"},{"key":"tel","name":"電話"},{"key":"address","name":"地址"},{"key":"eco_actions","name":"額外環保作為"}]
 \.
 
 
@@ -59,6 +62,7 @@ COPY public.components (id, index, name) FROM stdin;
 218	aging_kpi	長照指標
 215	aging_workforce_trend	高齡就業人口之年增結構
 217	bike_map	自行車道路網圖資
+219	green_restaurant	環保餐廳
 \.
 
 
@@ -83,6 +87,7 @@ COPY public.dashboards (id, index, name, components, icon, updated_at, created_a
 358	practical_transportation_newtpe	務實交通	{60,212,213}	directions_car	2025-03-12 08:00:38.75842+00	2024-03-21 09:38:37.66+00
 1	09a25cd9cb7d	收藏組件	\N	favorite	2025-03-14 07:34:22.247753+00	2025-03-14 07:34:22.247753+00
 2	3245d9eace5f	我的新儀表板	{215,218,216,213,212,214,60,146}	star	2025-03-14 14:55:11.732116+00	2025-03-14 14:55:11.732116+00
+361	food_safety_health	食安健康	{219}	restaurant	2025-05-02 00:00:00+00	2025-05-02 00:00:00+00
 \.
 
 
@@ -122,6 +127,8 @@ ebus_percent	\N	\N	\N	static	\N	\N	\N	交通局	顯示雙北電動公車比例	�
 ebus_percent	\N	\N	\N	static	\N	\N	\N	交通局	顯示臺北電動公車比例	此圖顯示臺北市電動公車的比例，呈現全市公車車隊中電動車所占比重，以及近年來電動公車數量的成長情形。圖表比較傳統燃油公車與電動公車的比例變化，並標示臺北市政府推動電動化政策、補助措施及其帶來的環保效益。透過這些數據，可評估臺北市電動公車的普及程度，及其在減碳與空氣品質改善上的貢獻，有助於進一步規劃更完善的公共運輸電動化策略，推動城市交通朝向低碳永續目標邁進。	可用於評估臺北市公共運輸電動化的進程，透過此圖顯示電動公車在市區公車總數中的占比及其成長趨勢。圖表呈現傳統燃油公車與電動公車的比例變化，並標示臺北市政府推動的政策措施、補助方案及相關環保效益等影響因素。透過這些數據，可分析臺北市電動公車的普及程度及其在減碳排放與空氣品質改善方面的貢獻，有助於進一步規劃更完善的公共運輸電動化策略，推動臺北朝向低碳與永續發展的城市目標邁進。	{https://tdx.transportdata.tw/api/basic/v2/Bus/Vehicle/City/Taipei?%24top=30&%24format=JSON}	{doit}	2025-02-15 05:56:00+00	2025-02-20 09:11:21.620625+00	percent	select '電動公車數量' as x_axis,y_axis,sum(data) data from \r\n(\r\nselect '電動巴士' as y_axis,count(*) as  data\r\nfrom public.bus_info_tpe\r\nwhere plate_numb like 'E%'\r\nunion all\r\nselect '非電動巴士' as y_axis,count(*) as  data\r\nfrom public.bus_info_tpe)d\r\ngroup by \r\ny_axis	\N	taipei
 youbike_availability	\N	{99}	\N	current	\N	10	minute	交通局	顯示當前雙北共享單車YouBike的使用情況。	顯示雙北地區（臺北市與新北市）當前共享單車 YouBike 的使用情況，格式為可借車輛數／全區車位數。資料來源為兩市交通局公開資料，每5分鐘更新一次，提供即時的車輛可用資訊與站點使用狀況，有助於掌握整體運行效率與民眾使用情形，亦可作為交通管理與營運調度的參考依據。	藉由顯示雙北地區 YouBike 的使用情況，以及觀察可借車輛數約為車柱總數的一半，可大致掌握目前停放於站點與使用中車輛的整體分布情形。使用者亦可透過地圖模式查詢雙北各站點的即時資訊，包括可借車輛數、可還空位數及站點位置，方便規劃路線與掌握使用狀況，提升共享單車的便利性與使用效率。	{https://tdx.transportdata.tw/api-service/swagger/basic/2cc9b888-a592-496f-99de-9ab35b7fb70d#/Bike/BikeApi_Availability_2181,https://tdx.transportdata.tw/api/basic/v2/Bike/Availability/City/NewTaipei?%24top=30&%24format=JSON}	{doit,ntpc}	2023-12-20 05:56:00+00	2024-03-19 06:08:17.99+00	percent	select x_axis,y_axis,sum(data)data\r\nfrom (select '在站車輛' as x_axis, \r\nunnest(ARRAY['可借車輛', '空位']) as y_axis, \r\nunnest(ARRAY[SUM(available_rent_general_bikes), SUM(available_return_bikes)]) as data\r\nfrom tran_ubike_realtime_new_tpe\r\nunion all \r\nselect '在站車輛' as x_axis, \r\nunnest(ARRAY['可借車輛', '空位']) as y_axis, \r\nunnest(ARRAY[SUM(available_rent_general_bikes), SUM(available_return_bikes)]) as data\r\nfrom tran_ubike_realtime)d\r\ngroup by x_axis,y_axis	\N	metrotaipei
 youbike_availability	\N	{70}	\N	current	\N	10	minute	交通局	顯示當前臺北市共享單車YouBike的使用情況。	顯示臺北市當前共享單車 YouBike 的使用情況，格式為可借車輛數／全市車位數。資料來源為臺北市政府交通局公開資料，每5分鐘更新一次，反映即時的使用狀況與車輛調度情形，可作為交通監測與市民使用參考依據。	藉由臺北市 YouBike 使用情況的顯示，以及全市可借車輛數約為車柱總數的一半，可大致掌握目前停放於站點與正在使用中的車輛數量。使用者可透過地圖模式查詢臺北市各站點的即時資訊，包括可借車輛數、可還空位數及站點位置，方便即時掌握使用狀況，提升共享單車的使用效率與便利性。	{https://tdx.transportdata.tw/api-service/swagger/basic/2cc9b888-a592-496f-99de-9ab35b7fb70d#/Bike/BikeApi_Availability_2181}	{doit}	2023-12-20 05:56:00+00	2024-03-19 06:08:17.99+00	percent	select '在站車輛' as x_axis, \r\nunnest(ARRAY['可借車輛', '空位']) as y_axis, \r\nunnest(ARRAY[SUM(available_rent_general_bikes), SUM(available_return_bikes)]) as data\r\nfrom tran_ubike_realtime	\N	taipei
+green_restaurant	\N	{102}	{"mode":"byParam","byParam":{"xParam":"district"}}	static	\N	1	month	環保局	顯示臺北市環保餐廳按行政區之分布數量。	臺北市環保餐廳依行政區分布統計，資料來源為環保局認證之環保餐廳名單，涵蓋餐廳名稱、類別、地址、電話、參與活動及環保標章等級等資訊。點選橫向長條圖中的行政區可在地圖上篩選對應區域之餐廳點位。	可用於評估各行政區環保餐廳密度，協助市民查詢鄰近環保餐廳，並作為環保政策推廣成效之參考依據。	{}	{doit}	2025-05-02 00:00:00+00	2025-05-02 00:00:00+00	two_d	SELECT district AS x_axis, COUNT(*) AS data FROM public.green_restaurant_tpe WHERE district IS NOT NULL GROUP BY district ORDER BY data DESC	\N	taipei
+green_restaurant	\N	{102,103}	{"mode":"byParam","byParam":{"xParam":"district"}}	static	\N	1	month	環保局	顯示雙北環保餐廳按行政區之分布數量。	雙北環保餐廳依行政區分布統計，資料來源為環保局認證之環保餐廳名單，涵蓋臺北市與新北市兩地資料，包含餐廳名稱、類別、地址、電話、參與活動及環保標章等級等資訊。點選橫向長條圖中的行政區可在地圖上篩選對應區域之餐廳點位。	可用於比較雙北各行政區環保餐廳分布差異，協助市民與旅客查詢環保餐廳，並作為雙北環保政策推廣整體成效之參考依據。	{}	{doit,ntpc}	2025-05-02 00:00:00+00	2025-05-02 00:00:00+00	two_d	SELECT x_axis, SUM(data) AS data FROM (SELECT district AS x_axis, COUNT(*) AS data FROM public.green_restaurant_tpe WHERE district IS NOT NULL GROUP BY district UNION ALL SELECT district AS x_axis, COUNT(*) AS data FROM public.green_restaurant_ntpc WHERE district IS NOT NULL GROUP BY district) d GROUP BY x_axis ORDER BY data DESC	\N	metrotaipei
 \.
 
 
@@ -131,6 +138,8 @@ COPY public.dashboard_groups (dashboard_id, group_id) FROM stdin;
 355	3
 359	3
 358	3
+361	2
+361	3
 \.
 
 --
