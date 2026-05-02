@@ -41,6 +41,7 @@ func ConfigureRoutes() {
 	configureContributorRoutes()
 	configureChatLogRoutes()
 	configureAIRoutes()
+	configureWindRoutes()
 }
 
 func configureAuthRoutes() {
@@ -228,3 +229,34 @@ func configureAIRoutes() {
 // 		wsRoutes.PUT("/write/", controllers.WriteMap)
 // 	}
 // }
+
+// configureWindRoutes 處理都市風道模擬相關的 API
+func configureWindRoutes() {
+    windRoutes := RouterGroup.Group("/wind")
+    
+    // 設定限流，防止模擬數據過大造成後端壓力
+    windRoutes.Use(middleware.LimitAPIRequests(global.ComponentLimitAPIRequestsTimes, global.LimitRequestsDuration))
+    windRoutes.Use(middleware.LimitTotalRequests(global.ComponentLimitTotalRequestsTimes, global.LimitRequestsDuration))
+
+    {
+        // 1. 取得即時風向風速 (由後端去抓氣象局或市府 Open Data)
+        windRoutes.GET("/realtime", controllers.GetRealTimeWindData)
+        
+        // 2. 取得歷史模擬熱力圖快照 (讀取資料庫已存的網格數據)
+        windRoutes.GET("/simulations", controllers.GetAllWindSimulations)
+        windRoutes.GET("/simulations/:id", controllers.GetWindSimulationByID)
+    }
+
+    // 需要登入才能儲存模擬結果
+    windRoutes.Use(middleware.IsLoggedIn())
+    {
+        // 3. 儲存前端運算完的熱力圖頻率數據 (POST JSON 到資料庫)
+        windRoutes.POST("/simulations", controllers.CreateWindSimulation)
+    }
+
+    // 系統管理員權限：清理或更新特定模擬資料
+    windRoutes.Use(middleware.IsSysAdm())
+    {
+        windRoutes.DELETE("/simulations/:id", controllers.DeleteWindSimulation)
+    }
+}

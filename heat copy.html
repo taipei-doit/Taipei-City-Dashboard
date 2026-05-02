@@ -1,0 +1,623 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>台灣都市風道模擬 - 3D 熱力圖版</title>
+    <meta
+      name="viewport"
+      content="initial-scale=1,maximum-scale=1,user-scalable=no"
+    />
+    <link
+      href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css"
+      rel="stylesheet"
+    />
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+      }
+      #map {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 100%;
+      }
+      .console {
+        position: absolute;
+        width: 280px;
+        margin: 20px;
+        padding: 20px;
+        background: rgba(20, 20, 20, 0.85);
+        color: white;
+        border-radius: 12px;
+        backdrop-filter: blur(5px);
+        z-index: 10;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      .slider-group {
+        margin: 15px 0;
+      }
+      input[type="range"] {
+        width: 100%;
+      }
+      h2 {
+        margin: 0;
+        font-size: 16px;
+        color: #00d4ff;
+      }
+      .val {
+        font-family: monospace;
+        color: #ffcc00;
+        float: right;
+      }
+      .legend {
+        margin-top: 15px;
+        font-size: 12px;
+        display: flex;
+        justify-content: space-between;
+        background: linear-gradient(
+          to right,
+          rgba(255, 80, 80, 0.8),
+          rgba(0, 170, 255, 0.8)
+        );
+        height: 10px;
+        border-radius: 5px;
+      }
+      .legend-labels {
+        display: flex;
+        justify-content: space-between;
+        font-size: 11px;
+        color: #aaa;
+        margin-top: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="console">
+      <h2>3D 都市風道診斷</h2>
+      <div class="slider-group">
+        <label>風向: <span id="v-dir" class="val">45</span>°</label>
+        <input id="wind-dir" type="range" min="0" max="360" value="45" />
+      </div>
+      <div class="slider-group">
+        <label>風速: <span id="v-speed" class="val">3</span>x</label>
+        <input
+          id="wind-speed"
+          type="range"
+          min="1"
+          max="10"
+          step="0.1"
+          value="3"
+        />
+      </div>
+      <div style="margin-top: 20px">
+        <label style="font-size: 12px; color: #fff">通風舒適度熱力區</label>
+        <div class="legend"></div>
+        <div class="legend-labels">
+          <span>無風/悶熱</span><span>通風良好</span>
+        </div>
+      </div>
+    </div>
+
+    <div id="map"></div>
+
+    <script>
+      mapboxgl.accessToken =
+        "pk.eyJ1IjoieGlhb3dhbmcxMjEyIiwiYSI6ImNtbnE4Y284ZTA0ZnMycW9pNHdmaWdza2EifQ.WVK2YirV3SzgPXpSGt7Qog";
+
+      const SPATIAL_INDEX_STEP = 0.002;
+      let buildingSpatialIndex = {};
+
+      let particlePool = [];
+      const MAX_PARTICLES = 3000;
+
+      const HIDE_SECONDS_PER_METER = 1 / 40;
+      const MIN_HIDE_SECONDS = 1.5;
+      const MAX_HIDE_SECONDS = 12;
+
+      const map = new mapboxgl.Map({
+        container: "map",
+        style: "mapbox://styles/mapbox/dark-v11",
+        center: [121.5646, 25.0339],
+        zoom: 15.5, // 拉近一點看 3D 更清楚
+        pitch: 60, // ★ 開啟 3D 視角傾斜
+        bearing: -20, // 旋轉地圖
+        antialias: true,
+      });
+
+      // --- 核心修正 1：縮小網格尺寸 ---
+      const WIND_COMFORT_GRID_STEP = 0.0005; // 約 50公尺 (原本0.01約1公里太大)
+      const GRID_DECAY = 0.98;
+
+      let windComfortGrid = [];
+      let windGridIndex = {};
+      let maxGridCount = 1;
+
+      function getGridCellId(lng, lat) {
+        const x = Math.floor(lng / WIND_COMFORT_GRID_STEP);
+        const y = Math.floor(lat / WIND_COMFORT_GRID_STEP);
+        return `${x}:${y}`;
+      }
+
+      // ★ 3D 視角下的安全邊界 (避免生成到地平線導致當機)
+      function getSafeBounds() {
+        const b = map.getBounds();
+        const center = map.getCenter();
+        const maxSpan = 0.015;
+        return {
+          south: Math.max(b.getSouth(), center.lat - maxSpan),
+          north: Math.min(b.getNorth(), center.lat + maxSpan),
+          west: Math.max(b.getWest(), center.lng - maxSpan),
+          east: Math.min(b.getEast(), center.lng + maxSpan),
+        };
+      }
+
+      function createWindComfortGrid(safeB) {
+        windComfortGrid = [];
+        windGridIndex = {};
+        const step = WIND_COMFORT_GRID_STEP;
+        const minX = Math.floor(safeB.west / step);
+        const maxX = Math.floor(safeB.east / step);
+        const minY = Math.floor(safeB.south / step);
+        const maxY = Math.floor(safeB.north / step);
+
+        for (let y = minY; y <= maxY; y++) {
+          for (let x = minX; x <= maxX; x++) {
+            const cellWest = x * step;
+            const cellSouth = y * step;
+            const cellId = `${x}:${y}`;
+            const cell = {
+              type: "Feature",
+              geometry: {
+                type: "Polygon",
+                coordinates: [
+                  [
+                    [cellWest, cellSouth],
+                    [cellWest + step, cellSouth],
+                    [cellWest + step, cellSouth + step],
+                    [cellWest, cellSouth + step],
+                    [cellWest, cellSouth],
+                  ],
+                ],
+              },
+              properties: { cellId, count: 0, frequency: 0 },
+            };
+            windComfortGrid.push(cell);
+            windGridIndex[cellId] = cell;
+          }
+        }
+      }
+
+      function updateWindComfortSource() {
+        maxGridCount = 1;
+        for (const cell of windComfortGrid) {
+          cell.properties.count *= GRID_DECAY;
+          maxGridCount = Math.max(maxGridCount, cell.properties.count);
+        }
+        const norm = Math.max(maxGridCount, 3); // 避免除以 0 或閃爍
+        for (const cell of windComfortGrid) {
+          cell.properties.frequency = cell.properties.count / norm;
+        }
+        if (map.getSource("comfort-grid")) {
+          map.getSource("comfort-grid").setData({
+            type: "FeatureCollection",
+            features: windComfortGrid,
+          });
+        }
+      }
+
+      // --- 繪製箭頭 ---
+      function createArrowImage() {
+        const canvas = document.createElement("canvas");
+        canvas.width = 32;
+        canvas.height = 32;
+        const ctx = canvas.getContext("2d");
+        ctx.fillStyle = "#00d4ff";
+        ctx.strokeStyle = "#00d4ff";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(16, 6);
+        ctx.lineTo(16, 26);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(16, 6);
+        ctx.lineTo(10, 14);
+        ctx.lineTo(22, 14);
+        ctx.closePath();
+        ctx.fill();
+        return canvas;
+      }
+
+      // --- 工具函數 ---
+      function pointInRing(ptLng, ptLat, ring) {
+        let inside = false;
+        for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+          const xi = ring[i][0],
+            yi = ring[i][1],
+            xj = ring[j][0],
+            yj = ring[j][1];
+          const intersects =
+            yi > ptLat !== yj > ptLat &&
+            ptLng < ((xj - xi) * (ptLat - yi)) / (yj - yi) + xi;
+          if (intersects) inside = !inside;
+        }
+        return inside;
+      }
+      function pointInBuilding(lng, lat, building) {
+        const geo = building.geometry;
+        if (!geo) return false;
+
+        const coords =
+          geo.type === "Polygon" ? geo.coordinates : geo.coordinates[0]; // 處理可能的嵌套層級
+
+        for (let i = 0; i < coords.length; i++) {
+          if (pointInRing(lng, lat, coords[i])) return true;
+        }
+        return false;
+      }
+      function getBuildingHeight(f) {
+        return f?.properties?.height || f?.properties?.render_height || 20;
+      }
+      function getBuildingKey(f, i) {
+        return f?.id ? String(f.id) : `b-${i}`;
+      }
+
+      let sourceReady = false,
+        animationTime = 0,
+        lastFeatures = [];
+      let isZooming = false,
+        isMoving = false,
+        buildingData = [];
+      const arrowCanvas = createArrowImage();
+      let frameCount = 0; // 用於節流
+
+      map.on("load", () => {
+        map.addSource("wind-source", {
+          type: "geojson",
+          data: { type: "FeatureCollection", features: [] },
+        });
+        map.addSource("comfort-grid", {
+          type: "geojson",
+          data: { type: "FeatureCollection", features: [] },
+        });
+
+        // 1. 加入熱力圖層 (墊在最底層)
+        map.addLayer({
+          id: "comfort-heat",
+          type: "fill",
+          source: "comfort-grid",
+          paint: {
+            "fill-color": [
+              "interpolate",
+              ["linear"],
+              ["get", "frequency"],
+              0,
+              "rgba(255, 80, 80, 0.4)", // 無風區紅色
+              0.3,
+              "rgba(255, 160, 80, 0.4)",
+              0.6,
+              "rgba(160, 220, 255, 0.4)",
+              1,
+              "rgba(0, 170, 255, 0.6)", // 通風區藍色
+            ],
+            "fill-opacity": 0.8,
+          },
+        });
+
+        // 2. 加入風動箭頭層
+        map.addImage(
+          "arrow-icon",
+          arrowCanvas.getContext("2d").getImageData(0, 0, 32, 32),
+        );
+        map.addLayer({
+          id: "wind-arrows",
+          type: "symbol",
+          source: "wind-source",
+          layout: {
+            "icon-image": "arrow-icon",
+            "icon-size": [
+              "interpolate",
+              ["linear"],
+              ["zoom"],
+              12,
+              0.2,
+              16,
+              0.5,
+            ],
+            "icon-rotate": ["get", "angle"],
+            "icon-allow-overlap": true,
+            "icon-pitch-alignment": "map", // ★ 讓箭頭貼齊 3D 地面
+          },
+          paint: { "icon-opacity": 0.7 },
+        });
+
+        // 3. ★ 將建築物改為 3D 實體 (fill-extrusion)
+        map.addLayer({
+          id: "3d-buildings",
+          type: "fill-extrusion",
+          source: "composite",
+          "source-layer": "building",
+          paint: {
+            "fill-extrusion-color": "#2a2a2a",
+            "fill-extrusion-height": ["get", "height"], // 依據真實高度拉伸
+            "fill-extrusion-opacity": 0.95,
+          },
+        });
+
+        function cacheBuildingData() {
+          buildingData = map.querySourceFeatures("composite", {
+            sourceLayer: "building",
+          });
+        }
+        cacheBuildingData();
+        sourceReady = true;
+
+        function rebuildBuildingIndex() {
+          // 1. 清空舊索引
+          buildingSpatialIndex = {};
+
+          // 2. 獲取當前地圖上的建築數據
+          // 注意：buildingData 是你在 map.on('moveend') 裡用 querySourceFeatures 拿到的
+          buildingData.forEach((building, index) => {
+            const geometry = building.geometry;
+            let coords = [];
+
+            // 處理 Polygon 或 MultiPolygon 取得所有座標點
+            if (geometry.type === "Polygon") {
+              coords = geometry.coordinates[0];
+            } else if (geometry.type === "MultiPolygon") {
+              coords = geometry.coordinates.flat(2);
+            }
+
+            if (coords.length === 0) return;
+
+            // 3. 計算 Bounding Box (外接矩形)
+            let minLng = Infinity,
+              maxLng = -Infinity,
+              minLat = Infinity,
+              maxLat = -Infinity;
+            for (const [lng, lat] of coords) {
+              if (lng < minLng) minLng = lng;
+              if (lng > maxLng) maxLng = lng;
+              if (lat < minLat) minLat = lat;
+              if (lat > maxLat) maxLat = lat;
+            }
+
+            // 4. 封裝 Metadata，預存 BBox 減少後續運算
+            const metadata = {
+              feature: building,
+              bbox: { minLng, maxLng, minLat, maxLat },
+              height: getBuildingHeight(building),
+            };
+
+            // 5. 將建築物註冊到它覆蓋的所有網格格子中
+            const startX = Math.floor(minLng / SPATIAL_INDEX_STEP);
+            const endX = Math.floor(maxLng / SPATIAL_INDEX_STEP);
+            const startY = Math.floor(minLat / SPATIAL_INDEX_STEP);
+            const endY = Math.floor(maxLat / SPATIAL_INDEX_STEP);
+
+            for (let x = startX; x <= endX; x++) {
+              for (let y = startY; y <= endY; y++) {
+                const key = `${x}:${y}`;
+                if (!buildingSpatialIndex[key]) buildingSpatialIndex[key] = [];
+                buildingSpatialIndex[key].push(metadata);
+              }
+            }
+          });
+        }
+
+        function generateGrid() {
+          if (!sourceReady || isZooming || isMoving) return;
+          const safeB = getSafeBounds();
+          const z = map.getZoom();
+          const step = 0.0007;
+          const feats = [];
+          for (let lt = safeB.south; lt < safeB.north; lt += step) {
+            for (let ln = safeB.west; ln < safeB.east; ln += step) {
+              feats.push({
+                type: "Feature",
+                geometry: { type: "Point", coordinates: [ln, lt] },
+                properties: { oLng: ln, oLat: lt },
+              });
+            }
+          }
+          lastFeatures = feats;
+          createWindComfortGrid(safeB);
+        }
+
+        function update() {
+          // 移除 !isMoving 的判斷，讓移動時動畫繼續跑
+          if (!sourceReady || isZooming || lastFeatures.length === 0) {
+            requestAnimationFrame(update);
+            return;
+          }
+
+          const dir = parseFloat(document.getElementById("wind-dir").value);
+          const spd = parseFloat(document.getElementById("wind-speed").value);
+          const rad = (dir * Math.PI) / 180;
+          const vX = Math.sin(rad) * 0.00001 * spd;
+          const vY = Math.cos(rad) * 0.00001 * spd;
+
+          animationTime += 2.0;
+          const now = performance.now();
+          const safeB = getSafeBounds();
+          const lngRange = safeB.east - safeB.west;
+          const latRange = safeB.north - safeB.south;
+
+          const wrap = (v, min, range) =>
+            ((((v - min) % range) + range) % range) + min;
+
+          const visibleFeatures = [];
+
+          for (let i = 0; i < lastFeatures.length; i++) {
+            const f = lastFeatures[i];
+
+            // 即使在隱藏期間，也要計算座標位移 (讓它在建築物背後偷偷移動)
+            const finalLng = wrap(
+              f.properties.oLng + vX * animationTime,
+              safeB.west,
+              lngRange,
+            );
+            const finalLat = wrap(
+              f.properties.oLat + vY * animationTime,
+              safeB.south,
+              latRange,
+            );
+
+            // 如果還在隱藏冷卻中，跳過渲染但更新座標參考
+            if ((f.properties.hiddenUntil || 0) > now) {
+              continue;
+            }
+
+            // 碰撞偵測
+            const cellX = Math.floor(finalLng / SPATIAL_INDEX_STEP);
+            const cellY = Math.floor(finalLat / SPATIAL_INDEX_STEP);
+            const candidateBuildings =
+              buildingSpatialIndex[`${cellX}:${cellY}`] || [];
+
+            let hitBuilding = null;
+            for (let j = 0; j < candidateBuildings.length; j++) {
+              const bMeta = candidateBuildings[j];
+              if (
+                finalLng > bMeta.bbox.minLng &&
+                finalLng < bMeta.bbox.maxLng &&
+                finalLat > bMeta.bbox.minLat &&
+                finalLat < bMeta.bbox.maxLat
+              ) {
+                if (pointInBuilding(finalLng, finalLat, bMeta.feature)) {
+                  hitBuilding = bMeta;
+                  break;
+                }
+              }
+            }
+
+            if (hitBuilding) {
+              // 在碰撞偵測 hitBuilding 成功後
+              const box = hitBuilding.bbox;
+              const windDir = parseFloat(
+                document.getElementById("wind-dir").value,
+              );
+
+              // 根據風向決定要計算哪一個軸向的偏移比
+              // 簡化邏輯：計算粒子距離 BBox 中心的歸一化距離 (0~1)
+              const distX =
+                Math.abs(finalLng - (box.minLng + box.maxLng) / 2) /
+                ((box.maxLng - box.minLng) / 2);
+              const distY =
+                Math.abs(finalLat - (box.minLat + box.maxLat) / 2) /
+                ((box.maxLat - box.minLat) / 2);
+
+              // 這裡的偏移係數 offset 取決於風向（垂直於風向的偏移會導致繞流加速）
+              // 我們可以用一個簡單的投影邏輯，或者直接取最大偏移量
+              let offsetRatio = Math.max(distX, distY);
+
+              // 計算權重係數 W：正中心為 1.0，邊緣縮短（例如縮短到 0.4 倍時間）
+              const W = 1.0 - offsetRatio * 0.6;
+
+              const baseHideDur =
+                Math.min(
+                  MAX_HIDE_SECONDS,
+                  Math.max(
+                    MIN_HIDE_SECONDS,
+                    hitBuilding.height * HIDE_SECONDS_PER_METER,
+                  ),
+                ) * 1000;
+
+              // 最終等待時間 = 基礎時間 * 權重
+              const finalHideDur = baseHideDur * W;
+              f.properties.hiddenUntil = now + finalHideDur;
+
+			  continue
+            }
+
+            // 更新渲染資料
+            f.geometry.coordinates[0] = finalLng;
+            f.geometry.coordinates[1] = finalLat;
+            f.properties.angle = dir;
+            visibleFeatures.push(f);
+
+            // 熱力圖累加
+            const gridKey = getGridCellId(finalLng, finalLat);
+            if (windGridIndex[gridKey])
+              windGridIndex[gridKey].properties.count += 1;
+          }
+
+          map.getSource("wind-source").setData({
+            type: "FeatureCollection",
+            features: visibleFeatures,
+          });
+
+          if (++frameCount % 20 === 0) updateWindComfortSource();
+          requestAnimationFrame(update);
+        }
+
+        // 修改事件監聽器部分
+        map.on("zoomstart", () => {
+          isZooming = true;
+          // ★ 立即清空箭頭，減少縮放時的渲染負擔
+          map
+            .getSource("wind-source")
+            .setData({ type: "FeatureCollection", features: [] });
+          map
+            .getSource("comfort-grid")
+            .setData({ type: "FeatureCollection", features: [] });
+        });
+
+        map.on("zoomend", () => {
+          isZooming = false;
+          generateGrid(); // 重新生成適合當前縮放層級的網格
+        });
+
+        map.on("movestart", () => {
+          isMoving = true;
+          // ★ 移動時也清空粒子
+          map
+            .getSource("wind-source")
+            .setData({ type: "FeatureCollection", features: [] });
+        });
+
+        map.on("moveend", () => {
+          isMoving = false;
+          // 延遲 300ms 確保 3D 建築瓦片已渲染，querySourceFeatures 才能抓到資料
+          setTimeout(() => {
+            cacheBuildingData();
+            rebuildBuildingIndex();
+            generateGrid();
+          }, 300);
+        });
+        document
+          .getElementById("wind-dir")
+          .addEventListener(
+            "input",
+            (e) =>
+              (document.getElementById("v-dir").innerText = e.target.value),
+          );
+        document
+          .getElementById("wind-speed")
+          .addEventListener(
+            "input",
+            (e) =>
+              (document.getElementById("v-speed").innerText = e.target.value),
+          );
+
+        function startup() {
+          cacheBuildingData();
+
+          if (buildingData.length === 0) {
+            console.log("等待建築數據載入中...");
+            setTimeout(startup, 300);
+            return;
+          }
+
+          console.log("數據就緒，啟動模擬。抓取建築數量:", buildingData.length);
+          rebuildBuildingIndex();
+          generateGrid();
+          if (frameCount === 0) update();
+        }
+
+        startup();
+      });
+    </script>
+  </body>
+</html>

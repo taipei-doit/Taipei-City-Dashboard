@@ -97,6 +97,11 @@ const routes = [
 		name: "notFoundRedirect",
 		redirect: "/dashboard",
 	},
+	{
+		path: "/WindMapView",
+		name: "WindMapView",
+		component: () => import("../views/WindMapView.vue"),
+	}
 ];
 
 const router = createRouter({

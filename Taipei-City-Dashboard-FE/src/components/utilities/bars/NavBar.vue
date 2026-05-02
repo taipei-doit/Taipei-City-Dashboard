@@ -80,6 +80,9 @@ const isLocalhost = computed(() => {
       >
         地圖交叉比對
       </router-link>
+      <router-link :to="{ path: '/WindMapView' }">
+        風道診斷
+      </router-link>
     </div>
     <div class="navbar-user">
       <button

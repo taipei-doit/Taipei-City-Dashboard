@@ -1,0 +1,418 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>台灣都市風道模擬 - 穩定版</title>
+    <meta
+      name="viewport"
+      content="initial-scale=1,maximum-scale=1,user-scalable=no"
+    />
+    <link
+      href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css"
+      rel="stylesheet"
+    />
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+      }
+      #map {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 100%;
+      }
+      .console {
+        position: absolute;
+        width: 280px;
+        margin: 20px;
+        padding: 20px;
+        background: rgba(20, 20, 20, 0.85);
+        color: white;
+        border-radius: 12px;
+        backdrop-filter: blur(5px);
+        z-index: 10;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      .slider-group {
+        margin: 15px 0;
+      }
+      input[type="range"] {
+        width: 100%;
+      }
+      h2 {
+        margin: 0;
+        font-size: 16px;
+        color: #00d4ff;
+      }
+      .val {
+        font-family: monospace;
+        color: #ffcc00;
+        float: right;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="console">
+      <h2>都市風道診斷 (Hackathon)</h2>
+      <div class="slider-group">
+        <label>風向 (來自): <span id="v-dir" class="val">45</span>°</label>
+        <input id="wind-dir" type="range" min="0" max="360" value="45" />
+      </div>
+      <div class="slider-group">
+        <label>風速: <span id="v-speed" class="val">3</span>x</label>
+        <input
+          id="wind-speed"
+          type="range"
+          min="1"
+          max="10"
+          step="0.1"
+          value="3"
+        />
+      </div>
+    </div>
+
+    <div id="map"></div>
+
+    <script>
+      mapboxgl.accessToken =
+        "pk.eyJ1IjoieGlhb3dhbmcxMjEyIiwiYSI6ImNtbnE4Y284ZTA0ZnMycW9pNHdmaWdza2EifQ.WVK2YirV3SzgPXpSGt7Qog";
+
+      const HIDE_SECONDS_PER_METER = 1 / 18;
+      const MIN_HIDE_SECONDS = 1.5;
+      const MAX_HIDE_SECONDS = 12;
+
+      const map = new mapboxgl.Map({
+        container: "map",
+        style: "mapbox://styles/mapbox/dark-v11",
+        center: [121.5646, 25.0339],
+        zoom: 14.5,
+        pitch: 0,
+        maxBounds: [
+          [121.28, 24.67],
+          [122.01, 25.3],
+        ],
+        antialias: true,
+      });
+
+      function createArrowImage() {
+        const canvas = document.createElement("canvas");
+        canvas.width = 32;
+        canvas.height = 32;
+        const ctx = canvas.getContext("2d");
+        ctx.fillStyle = "#00d4ff";
+        ctx.strokeStyle = "#00d4ff";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(16, 6);
+        ctx.lineTo(16, 26);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(16, 6);
+        ctx.lineTo(10, 14);
+        ctx.lineTo(22, 14);
+        ctx.closePath();
+        ctx.fill();
+        return canvas;
+      }
+
+      function getNumericProperty(feature, keys) {
+        for (const key of keys) {
+          const value = Number(feature?.properties?.[key]);
+          if (Number.isFinite(value)) return value;
+        }
+        return null;
+      }
+
+      function getBuildingHeight(feature) {
+        const height = getNumericProperty(feature, ["height", "render_height", "building_height"]);
+        return height && height > 0 ? height : 20;
+      }
+
+      function getBuildingKey(feature, fallbackIndex) {
+        if (feature?.id !== undefined && feature?.id !== null) {
+          return String(feature.id);
+        }
+
+        const coords = feature?.geometry?.coordinates?.[0];
+        if (!coords || coords.length === 0) {
+          return `building-${fallbackIndex}`;
+        }
+
+        let minLng = Infinity;
+        let minLat = Infinity;
+        let maxLng = -Infinity;
+        let maxLat = -Infinity;
+
+        for (const coord of coords) {
+          minLng = Math.min(minLng, coord[0]);
+          maxLng = Math.max(maxLng, coord[0]);
+          minLat = Math.min(minLat, coord[1]);
+          maxLat = Math.max(maxLat, coord[1]);
+        }
+
+        return `${minLng.toFixed(6)}:${minLat.toFixed(6)}:${maxLng.toFixed(6)}:${maxLat.toFixed(6)}`;
+      }
+
+      function pointInRing(pointLng, pointLat, ring) {
+        let inside = false;
+
+        for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+          const xi = ring[i][0];
+          const yi = ring[i][1];
+          const xj = ring[j][0];
+          const yj = ring[j][1];
+
+          const intersects =
+            yi > pointLat !== yj > pointLat &&
+            pointLng < ((xj - xi) * (pointLat - yi)) / (yj - yi) + xi;
+
+          if (intersects) inside = !inside;
+        }
+
+        return inside;
+      }
+
+      function pointInBuilding(pointLng, pointLat, building) {
+        const geometry = building?.geometry;
+        if (!geometry) return false;
+
+        if (geometry.type === "Polygon") {
+          return pointInRing(pointLng, pointLat, geometry.coordinates[0] || []);
+        }
+
+        if (geometry.type === "MultiPolygon") {
+          return geometry.coordinates.some((polygon) =>
+            pointInRing(pointLng, pointLat, polygon[0] || []),
+          );
+        }
+
+        return false;
+      }
+
+      function getHideDurationMs(height) {
+        const seconds = Math.min(
+          MAX_HIDE_SECONDS,
+          Math.max(MIN_HIDE_SECONDS, height * HIDE_SECONDS_PER_METER),
+        );
+        return seconds * 1000;
+      }
+
+      let sourceReady = false;
+      let animationTime = 0;
+      let lastFeatures = [];
+      let isZooming = false;
+      let isMoving = false;
+      const arrowCanvas = createArrowImage();
+      let buildingData = []; // 緩存建築物空間數據
+      let buildingBounds = {
+        minLng: 121.28,
+        minLat: 24.67,
+        maxLng: 122.01,
+        maxLat: 25.3,
+      };
+
+      map.on("load", () => {
+        map.addSource("wind-source", {
+          type: "geojson",
+          data: { type: "FeatureCollection", features: [] },
+        });
+
+        // 1. 風動箭頭層
+        map.addImage(
+          "arrow-icon",
+          arrowCanvas.getContext("2d").getImageData(0, 0, 32, 32),
+        );
+        map.addLayer({
+          id: "wind-arrows",
+          type: "symbol",
+          source: "wind-source",
+          layout: {
+            "icon-image": "arrow-icon",
+            "icon-size": [
+              "interpolate",
+              ["linear"],
+              ["zoom"],
+              12,
+              0.2,
+              16,
+              0.5,
+            ],
+            "icon-rotate": ["get", "angle"],
+            "icon-allow-overlap": true,
+          },
+          paint: { "icon-opacity": 0.5 },
+        });
+
+        // 3. 建築物層 (不透明遮擋)
+        map.addLayer({
+          id: "2d-buildings",
+          type: "fill",
+          source: "composite",
+          "source-layer": "building",
+          paint: {
+            "fill-color": "#111",
+            "fill-opacity": 1.0,
+            "fill-outline-color": "#333",
+          },
+        });
+
+        // 4. 緩存建築物數據用於碰撞檢測
+        function cacheBuildingData() {
+          buildingData = map.querySourceFeatures("composite", {
+            sourceLayer: "building",
+          });
+        }
+        cacheBuildingData();
+
+        sourceReady = true;
+
+        // 優化：只在移動結束後生成網格
+        function generateGrid() {
+          if (!sourceReady || isZooming || isMoving) return;
+          const b = map.getBounds();
+          const z = map.getZoom();
+          const stepLat = z > 15 ? 0.001 : 0.0025; // 緯度步長
+          const feats = [];
+          for (let lt = b.getSouth(); lt < b.getNorth(); lt += stepLat) {
+            // 經度方向用 cos(lat) 校正，讓畫面上的點距更平均
+            const cosLat = Math.max(Math.cos((lt * Math.PI) / 180), 0.1);
+            const stepLng = stepLat / cosLat;
+            for (let ln = b.getWest(); ln < b.getEast(); ln += stepLng) {
+              feats.push({
+                type: "Feature",
+                geometry: { type: "Point", coordinates: [ln, lt] },
+                properties: { oLng: ln, oLat: lt },
+              });
+            }
+          }
+          lastFeatures = feats;
+          map.getSource("wind-source").setData({
+            type: "FeatureCollection",
+            features: lastFeatures,
+          });
+        }
+
+        // 動畫循環：優化運算效能
+        function update() {
+          if (
+            !sourceReady ||
+            isZooming ||
+            isMoving ||
+            lastFeatures.length === 0
+          ) {
+            requestAnimationFrame(update);
+            return;
+          }
+
+          const dir = parseFloat(document.getElementById("wind-dir").value);
+          const spd = parseFloat(document.getElementById("wind-speed").value);
+          const rad = (dir * Math.PI) / 180;
+          const source = map.getSource("wind-source");
+
+          // 1. 計算風向向量
+          const vX = Math.sin(rad) * 0.00001 * spd;
+          const vY = Math.cos(rad) * 0.00001 * spd;
+
+          animationTime += 1.2; // 略微調快流速
+          const cycle = 600;
+          const b = map.getBounds();
+          const west = b.getWest();
+          const east = b.getEast();
+          const south = b.getSouth();
+          const north = b.getNorth();
+          const lngRange = east - west;
+          const latRange = north - south;
+
+          const wrap = (v, min, range) =>
+            ((((v - min) % range) + range) % range) + min;
+
+          const visibleFeatures = [];
+          const now = performance.now();
+
+          // 2. 更新座標並進行建築碰撞判定
+          for (let i = 0; i < lastFeatures.length; i++) {
+            const f = lastFeatures[i];
+            const movedLng = f.properties.oLng + vX * (animationTime % cycle);
+            const movedLat = f.properties.oLat + vY * (animationTime % cycle);
+
+            const finalLng = wrap(movedLng, west, lngRange);
+            const finalLat = wrap(movedLat, south, latRange);
+
+            let hitBuildingKey = null;
+            let hitBuildingDurationMs = 0;
+
+            for (let j = 0; j < buildingData.length; j++) {
+              const building = buildingData[j];
+              if (!pointInBuilding(finalLng, finalLat, building)) continue;
+
+              const buildingKey = getBuildingKey(building, j);
+              const buildingHeight = getBuildingHeight(building);
+              const hideDurationMs = getHideDurationMs(buildingHeight);
+
+              if (!hitBuildingKey || hideDurationMs > hitBuildingDurationMs) {
+                hitBuildingKey = buildingKey;
+                hitBuildingDurationMs = hideDurationMs;
+              }
+            }
+
+            const previousCollisionKey = f.properties.collisionKey || null;
+            const hiddenUntil = Number(f.properties.hiddenUntil) || 0;
+
+            if (hitBuildingKey && hitBuildingKey !== previousCollisionKey) {
+              f.properties.hiddenUntil = Math.max(
+                hiddenUntil,
+                now + hitBuildingDurationMs,
+              );
+              f.properties.collisionKey = hitBuildingKey;
+            } else if (!hitBuildingKey) {
+              f.properties.collisionKey = null;
+            }
+
+            if ((Number(f.properties.hiddenUntil) || 0) > now) continue;
+
+            f.geometry.coordinates[0] = finalLng;
+            f.geometry.coordinates[1] = finalLat;
+            f.properties.angle = dir;
+            visibleFeatures.push(f);
+          }
+
+          source.setData({
+            type: "FeatureCollection",
+            features: visibleFeatures,
+          });
+
+          requestAnimationFrame(update);
+        }
+
+        map.on("zoomstart", () => (isZooming = true));
+        map.on("zoomend", () => {
+          isZooming = false;
+          generateGrid();
+        });
+        map.on("movestart", () => {
+          isMoving = true;
+        });
+        map.on("moveend", () => {
+			isMoving = false;
+			setTimeout(() => {
+				cacheBuildingData();
+				generateGrid();
+			}, 300);
+		});
+
+        document.getElementById("wind-dir").addEventListener("input", (e) => {
+          document.getElementById("v-dir").innerText = e.target.value;
+        });
+        document.getElementById("wind-speed").addEventListener("input", (e) => {
+          document.getElementById("v-speed").innerText = e.target.value;
+        });
+
+        generateGrid();
+        update();
+      });
+    </script>
+  </body>
+</html>
+
