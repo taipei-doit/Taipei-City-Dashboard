@@ -15905,3 +15905,11 @@ CREATE TRIGGER tran_ubike_realtime_new_tpe_mtime BEFORE INSERT OR UPDATE ON publ
 -- PostgreSQL database dump complete
 --
 
+
+--
+-- Additional indexes for performance optimization
+--
+CREATE INDEX IF NOT EXISTS idx_city_age_distribution_taipei_year ON public.city_age_distribution_taipei ("年份");
+CREATE INDEX IF NOT EXISTS idx_city_age_distribution_newtaipei_year ON public.city_age_distribution_newtaipei ("年份");
+CREATE INDEX IF NOT EXISTS idx_dependency_ratio_tpe_year ON public.dependency_ratio_and_aging_index_tpe (end_of_year);
+CREATE INDEX IF NOT EXISTS idx_dependency_ratio_new_tpe_year ON public.dependency_ratio_and_aging_index_new_tpe (end_of_year);
