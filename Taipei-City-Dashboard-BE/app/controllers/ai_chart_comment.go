@@ -19,9 +19,11 @@ import (
 
 const (
 	chartCommentPromptLimit   = 6000
-	chartCommentPromptVersion = "v2-100-char-decision"
-	chartCommentMinRunes      = 100
-	chartCommentMaxAttempts   = 3
+	chartCommentPromptVersion = "v5-25-50-char-summary"
+	chartCommentTargetRunes   = 40
+	chartCommentMinRunes      = 25
+	chartCommentMaxRunes      = 50
+	chartCommentMaxAttempts   = 4
 	defaultChartCommentTTL    = 15 * time.Minute
 )
 
@@ -88,7 +90,7 @@ func GetAIChartComment(c *gin.Context) {
 			{
 				Role: llms.ChatMessageTypeSystem,
 				Parts: []llms.ContentPart{
-					llms.TextContent{Text: "你是臺北城市儀表板的資料分析助理，擅長用清楚的圖表判讀協助使用者做決策。"},
+					llms.TextContent{Text: "你是臺北城市儀表板的資料分析助理，擅長用短句點出圖表重點。"},
 				},
 			},
 			{
@@ -131,7 +133,7 @@ func generateChartComment(c *gin.Context, req ai.AIChatRequest, input AIChartCom
 		logEntry, err := ai.ChatWithTWCC(
 			c.Request.Context(),
 			req,
-			llms.WithMaxTokens(360),
+			llms.WithMaxTokens(100),
 			llms.WithTemperature(0.3),
 			llms.WithTopP(0.9),
 		)
@@ -139,18 +141,18 @@ func generateChartComment(c *gin.Context, req ai.AIChatRequest, input AIChartCom
 			return "", err
 		}
 
-		comment := strings.TrimSpace(logEntry.Answer)
+		comment := normalizeChartComment(logEntry.Answer)
 		if comment == "" {
 			continue
 		}
-		if len([]rune(comment)) >= chartCommentMinRunes {
+		lastComment = comment
+		if isChartCommentLengthValid(comment) {
 			return comment, nil
 		}
-		lastComment = comment
 	}
 
 	if lastComment != "" {
-		return "", fmt.Errorf("AI chart comment is shorter than %d characters", chartCommentMinRunes)
+		return lastComment, nil
 	}
 	return "", fmt.Errorf("AI chart comment is empty")
 }
@@ -220,14 +222,25 @@ func buildChartCommentPrompt(input AIChartCommentInput, attempt int) string {
 	}
 	retryInstruction := ""
 	if attempt > 0 {
-		retryInstruction = "前一次輸出未達字數要求，這次請務必輸出完整評論並達到最低字數。"
+		retryInstruction = "前一次短評未落在字數範圍，這次請控制在 25 到 50 字且保持完整句。"
 	}
 	return fmt.Sprintf(
-		"請根據以下臺北城市儀表板圖表資料，產生一段繁體中文圖表評論。請只輸出單一段落，至少 %d 字、建議 100 到 160 字，不要使用 Markdown，也不要編造資料。內容必須包含：1. 主要趨勢、異常或比較；2. 圖表輔助判讀，例如單位、分類、時間序列或高低值如何閱讀；3. 一項可執行的決策建議或後續追蹤方向。若資料不足以做強結論，請明確提醒需持續觀察。%s\n\n%s",
+		"請根據以下臺北城市儀表板圖表資料，產生一段繁體中文圖表短評。請只輸出單一完整段落，以約 %d 字為佳，字數需落在 %d 到 %d 字之間，不要使用 Markdown，也不要編造資料。聚焦最明顯的趨勢、異常或比較；若能給簡短建議，請自然帶入。%s\n\n%s",
+		chartCommentTargetRunes,
 		chartCommentMinRunes,
+		chartCommentMaxRunes,
 		retryInstruction,
 		marshalPromptPayload(payload),
 	)
+}
+
+func normalizeChartComment(value string) string {
+	return strings.Trim(strings.Join(strings.Fields(strings.TrimSpace(value)), " "), "「」\"'` ")
+}
+
+func isChartCommentLengthValid(comment string) bool {
+	length := len([]rune(comment))
+	return length >= chartCommentMinRunes && length <= chartCommentMaxRunes
 }
 
 func marshalPromptPayload(payload interface{}) string {
