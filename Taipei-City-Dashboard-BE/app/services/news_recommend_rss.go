@@ -12,10 +12,8 @@ import (
 	"net/url"
 	"os"
 	"regexp"
-	"slices"
 	"strings"
 	"time"
-	"unicode"
 	"unicode/utf8"
 )
 
@@ -263,83 +261,7 @@ func storiesFromFeedBytes(body []byte) ([]rssStory, string) {
 	return nil, ""
 }
 
-// tokenRunsLower splits loosely on non-letter/non-digit runes so Chinese phrases stay as blocks.
-func tokenRunsLower(src string, minRunes int) []string {
-	var out []string
-	var b strings.Builder
-	flush := func() {
-		if b.Len() == 0 {
-			b.Reset()
-			return
-		}
-		t := strings.TrimSpace(strings.ToLower(b.String()))
-		n := utf8.RuneCountInString(t)
-		if n >= minRunes && n <= 48 {
-			out = append(out, t)
-		}
-		b.Reset()
-	}
-	for _, r := range src {
-		if unicode.IsLetter(r) || unicode.IsDigit(r) {
-			b.WriteRune(r)
-		} else {
-			flush()
-		}
-	}
-	flush()
-	return out
-}
-
-func keywordOverlapScore(newsLower string, c models.PublicComponentForNewsMatch) int {
-	tokenSet := make(map[string]struct{})
-	for _, part := range []string{c.Name, c.ShortDesc, c.Index} {
-		for _, t := range tokenRunsLower(strings.TrimSpace(part), 2) {
-			tokenSet[t] = struct{}{}
-		}
-	}
-
-	score := 0
-
-	nameLower := strings.ToLower(strings.TrimSpace(c.Name))
-	if nameLower != "" && utf8.RuneCountInString(nameLower) >= 4 && strings.Contains(newsLower, nameLower) {
-		score += utf8.RuneCountInString(nameLower) * 2
-	}
-
-	for t := range tokenSet {
-		if strings.Contains(newsLower, t) {
-			score += utf8.RuneCountInString(t)
-		}
-	}
-	return score
-}
-
-type scoredPick struct {
-	story rssStory
-	score int
-	comp  models.PublicComponentForNewsMatch
-}
-
-func pickDistinctTopStories(scored []scoredPick, minScore int, limit int) []scoredPick {
-	seenTitles := map[string]struct{}{}
-	out := make([]scoredPick, 0, limit)
-	for _, p := range scored {
-		if p.score < minScore {
-			continue
-		}
-		key := strings.ToLower(strings.TrimSpace(p.story.title))
-		if _, ok := seenTitles[key]; ok {
-			continue
-		}
-		seenTitles[key] = struct{}{}
-		out = append(out, p)
-		if len(out) >= limit {
-			break
-		}
-	}
-	return out
-}
-
-// FetchSimpleRSSNewsRecommendations pulls default RSS URLs, merges items, picks up to three with strongest keyword overlap to public components.
+// FetchSimpleRSSNewsRecommendations 擷取預設 RSS，合併後以系統 TWCC／LLM 判斷與公開組件的關聯，至多回傳 3 則；不相關者不列入。
 func FetchSimpleRSSNewsRecommendations(ctx context.Context) ([]map[string]any, error) {
 	comps, err := models.ListPublicComponentsForNewsMatch()
 	if err != nil {
@@ -419,47 +341,14 @@ func FetchSimpleRSSNewsRecommendations(ctx context.Context) ([]map[string]any, e
 		)
 	}
 
-	var allScored []scoredPick
-	for _, st := range stories {
-		txt := strings.ToLower(st.title + " " + st.description)
-		best := 0
-		var chosen models.PublicComponentForNewsMatch
-		for _, c := range comps {
-			sc := keywordOverlapScore(txt, c)
-			if sc > best {
-				best = sc
-				chosen = c
-			}
-		}
-		// 與公開組件字詞無重疊（常見於英文來源對中文組件名）時，仍附上第一筆公開組件，避免前端濾掉整段與使用者看到「無推薦」。
-		if best == 0 && len(comps) > 0 {
-			chosen = comps[0]
-		}
-		allScored = append(allScored, scoredPick{story: st, score: best, comp: chosen})
+	matched, errLLM := matchRSSStoriesToComponentsViaLLM(ctx, stories, comps, rssLLMRecommendOutputCap)
+	if errLLM != nil {
+		return nil, errLLM
 	}
 
-	slices.SortFunc(allScored, func(a, b scoredPick) int {
-		if a.score != b.score {
-			return b.score - a.score
-		}
-		return 0
-	})
+	out := make([]map[string]any, 0, len(matched))
 
-	uniq := pickDistinctTopStories(allScored, 8, 3)
-	if len(uniq) < 1 {
-		uniq = pickDistinctTopStories(allScored, 4, 3)
-	}
-	if len(uniq) < 1 {
-		uniq = pickDistinctTopStories(allScored, 1, 3)
-	}
-	// 僅在高相關分數全掛時才放行：否則若每則得分皆為 0，上面門檻 1 仍會挑出 0 則。
-	if len(uniq) < 1 {
-		uniq = pickDistinctTopStories(allScored, 0, 3)
-	}
-
-	out := make([]map[string]any, 0, len(uniq))
-
-	for _, p := range uniq {
+	for _, p := range matched {
 		c := p.comp
 		out = append(out, map[string]any{
 			"title":         p.story.title,

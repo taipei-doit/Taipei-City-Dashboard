@@ -98,7 +98,7 @@ async function handleLoadAutoNews() {
 		autoNewsItems.value = await fetchCrawledNewsRecommendations({});
 	} catch {
 		autoNewsError.value =
-			"無法載入新聞推薦。請稍後再試，或請管理員檢查伺服器 RSS（環境變數 NEWS_RSS_FEEDS）是否可連線。";
+			"無法載入新聞推薦。請稍後再試；或請管理員檢查 RSS（NEWS_RSS_FEEDS）與 TWCC／LLM 服務是否正常。";
 		autoNewsItems.value = null;
 	} finally {
 		loadingAutoNews.value = false;
