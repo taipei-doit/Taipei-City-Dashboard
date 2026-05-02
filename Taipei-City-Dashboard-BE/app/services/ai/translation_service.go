@@ -28,7 +28,7 @@ func NewTranslationService(db *gorm.DB, model llms.Model) *TranslationService {
 }
 
 // Translate translates a single string with cache-first logic.
-// If cache misses, it triggers an ASYNC translation in the background and returns the original text immediately.
+// Now changed to SYNCHRONOUS to ensure UI consistency.
 func (s *TranslationService) Translate(ctx context.Context, text string, targetLang string, contextHint string) string {
 	if text == "" || targetLang == "" || targetLang == "zh-TW" || targetLang == "zh-Hant" {
 		return text
@@ -41,40 +41,38 @@ func (s *TranslationService) Translate(ctx context.Context, text string, targetL
 		return cached.TranslatedText
 	}
 
-	// 2. Cache Miss -> Trigger Async Translation
-	// We use a background context to ensure the translation continues even if the request context is cancelled.
-	go func(originalText, lang, hint string) {
-		bgCtx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
-		defer cancel()
+	// 2. Cache Miss -> Synchronous Translation
+	// We use a timeout to prevent the API from hanging too long
+	syncCtx, cancel := context.WithTimeout(ctx, 10*time.Second)
+	defer cancel()
 
-		translated, err := s.callLLM(bgCtx, originalText, lang)
-		if err != nil {
-			logs.FError("[Async] LLM Translation failed for '%s': %v", originalText, err)
-			return
-		}
+	translated, err := s.callLLM(syncCtx, text, targetLang)
+	if err != nil {
+		logs.FError("LLM Translation failed for '%s': %v", text, err)
+		return text // Fallback to original
+	}
 
-		// Save to Cache
-		newCache := models.Translation{
-			SourceText:     originalText,
-			TargetLang:     lang,
-			TranslatedText: translated,
-			ContextHint:    hint,
-		}
+	// 3. Save to Cache
+	newCache := models.Translation{
+		SourceText:     text,
+		TargetLang:     targetLang,
+		TranslatedText: translated,
+		ContextHint:    contextHint,
+	}
 
-		err = s.db.Clauses(clause.OnConflict{
-			Columns:   []clause.Column{{Name: "source_text"}, {Name: "target_lang"}},
-			DoUpdates: clause.AssignmentColumns([]string{"translated_text", "context_hint", "updated_at"}),
-		}).Create(&newCache).Error
+	// Use Upsert logic
+	err = s.db.Clauses(clause.OnConflict{
+		Columns:   []clause.Column{{Name: "source_text"}, {Name: "target_lang"}},
+		DoUpdates: clause.AssignmentColumns([]string{"translated_text", "context_hint", "updated_at"}),
+	}).Create(&newCache).Error
 
-		if err != nil {
-			logs.FError("[Async] Failed to save translation to cache: %v", err)
-		} else {
-			logs.FInfo("[Async] Successfully translated and cached: '%s' -> '%s' (%s)", originalText, translated, lang)
-		}
-	}(text, targetLang, contextHint)
+	if err != nil {
+		logs.FError("Failed to save translation to cache: %v", err)
+	} else {
+		logs.FInfo("Successfully translated and cached: '%s' -> '%s' (%s)", text, translated, targetLang)
+	}
 
-	// Return original text immediately
-	return text
+	return translated
 }
 
 // TranslatableKeys is a whitelist of JSON keys that should be translated.
