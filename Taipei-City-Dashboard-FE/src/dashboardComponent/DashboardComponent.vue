@@ -190,6 +190,19 @@ const aiCommentIcon = computed(() => {
 	return "psychology";
 });
 
+const aiCommentStatusLabel = computed(() => {
+	if (aiCommentStatus.value === "loading") {
+		return "生成中";
+	}
+	if (aiCommentStatus.value === "error") {
+		return "需重試";
+	}
+	if (aiCommentStatus.value === "success") {
+		return "已生成";
+	}
+	return "待生成";
+});
+
 function changeActiveChart(chartName) {
 	if (
 		props.mode === "map" &&
@@ -514,12 +527,21 @@ function returnChartComponent(name, svg) {
       <span class="dashboardcomponent-ai-comment-icon">
         {{ aiCommentIcon }}
       </span>
-      <p :title="aiComment">
-        {{ aiComment }}
-      </p>
+      <div class="dashboardcomponent-ai-comment-content">
+        <div class="dashboardcomponent-ai-comment-heading">
+          <strong>AI 圖表評論</strong>
+          <span class="dashboardcomponent-ai-comment-status">
+            {{ aiCommentStatusLabel }}
+          </span>
+        </div>
+        <p :title="aiComment">
+          {{ aiComment }}
+        </p>
+      </div>
       <button
         v-if="aiCommentStatus === 'error'"
         type="button"
+        class="dashboardcomponent-ai-comment-action"
         title="重新生成"
         @click="retryAIComment"
       >
@@ -607,8 +629,8 @@ button:hover {
 }
 
 .dashboardcomponent {
-	height: 420px;
-	max-height: 420px;
+	height: 500px;
+	max-height: 500px;
 	width: calc(100% - var(--font-m) * 2);
 	max-width: calc(100% - var(--font-m) * 2);
 	display: flex;
@@ -620,18 +642,18 @@ button:hover {
 	background-color: var(--color-component-background);
 
 	@media (min-width: 1050px) {
-		height: 450px;
-		max-height: 450px;
+		height: 530px;
+		max-height: 530px;
 	}
 
 	@media (min-width: 1650px) {
-		height: 480px;
-		max-height: 480px;
+		height: 560px;
+		max-height: 560px;
 	}
 
 	@media (min-width: 2200px) {
-		height: 580px;
-		max-height: 580px;
+		height: 660px;
+		max-height: 660px;
 	}
 
 	&-header {
@@ -802,7 +824,7 @@ button:hover {
 	&-error {
 		flex: 1 1 auto;
 		height: auto;
-		min-height: 220px;
+		min-height: 200px;
 		position: relative;
 		padding-top: 1%;
 		overflow-y: scroll;
@@ -813,43 +835,114 @@ button:hover {
 	}
 
 	&-ai-comment {
-		min-height: 76px;
-		max-height: 96px;
-		display: flex;
+		flex: 0 0 auto;
+		min-height: 118px;
+		max-height: 142px;
+		display: grid;
+		grid-template-columns: 32px minmax(0, 1fr) auto;
 		align-items: flex-start;
-		gap: 6px;
-		margin-top: 6px;
-		padding: 6px 8px;
-		border: 1px dashed var(--color-complement-text);
-		border-radius: 5px;
-		background-color: rgba(0, 0, 0, 0.12);
-		opacity: 0.72;
-		overflow-y: auto;
+		gap: 10px;
+		margin-top: 10px;
+		padding: 11px 12px;
+		border: 1px solid rgba(255, 255, 255, 0.14);
+		border-radius: 8px;
+		background:
+			linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(0, 0, 0, 0.18)),
+			rgba(0, 0, 0, 0.16);
+		box-shadow:
+			inset 0 1px 0 rgba(255, 255, 255, 0.08),
+			0 12px 28px rgba(0, 0, 0, 0.18);
+		opacity: 1;
+		overflow: hidden;
 
 		&-icon {
-			flex: 0 0 auto;
-			margin-top: 1px;
+			width: 32px;
+			height: 32px;
+			display: grid;
+			place-items: center;
+			border-radius: 8px;
+			background:
+				linear-gradient(135deg, rgba(78, 149, 255, 0.32), rgba(122, 78, 255, 0.18)),
+				rgba(255, 255, 255, 0.05);
 			color: var(--color-highlight);
 			font-family: var(--font-icon);
 			font-size: var(--font-ms);
+			box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
 			user-select: none;
+		}
+
+		&-content {
+			min-width: 0;
+			overflow: hidden;
+		}
+
+		&-heading {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: 8px;
+			margin-bottom: 6px;
+			overflow: visible;
+
+			strong {
+				color: var(--color-normal-text);
+				font-size: var(--font-s);
+				font-weight: 700;
+				line-height: 1.2;
+			}
+		}
+
+		&-status {
+			flex: 0 0 auto;
+			padding: 2px 7px;
+			border-radius: 999px;
+			background-color: rgba(255, 255, 255, 0.08);
+			color: var(--color-complement-text);
+			font-size: 0.72rem;
+			line-height: 1.35;
+			letter-spacing: 0;
 		}
 
 		p {
 			flex: 1 1 auto;
 			min-width: 0;
+			max-height: 78px;
+			padding-right: 6px;
 			color: var(--color-complement-text);
 			font-size: var(--font-s);
-			line-height: 1.45;
+			line-height: 1.55;
+			overflow-y: auto;
+			scrollbar-width: thin;
+			scrollbar-color: rgba(255, 255, 255, 0.24) transparent;
 			white-space: normal;
 			text-overflow: clip;
 		}
 
+		p::-webkit-scrollbar {
+			width: 4px;
+		}
+
+		p::-webkit-scrollbar-thumb {
+			border-radius: 999px;
+			background-color: rgba(255, 255, 255, 0.24);
+		}
+
 		button {
 			flex: 0 0 auto;
-			display: flex;
+			width: 32px;
+			height: 32px;
+			display: grid;
 			align-items: center;
+			justify-content: center;
+			border-radius: 8px;
+			background-color: rgba(255, 255, 255, 0.06);
 			color: var(--color-highlight);
+			transition: background-color 0.2s, color 0.2s;
+
+			&:hover {
+				background-color: rgba(255, 255, 255, 0.12);
+				color: white;
+			}
 
 			span {
 				margin: 0;
@@ -867,6 +960,7 @@ button:hover {
 			border-color: rgba(237, 90, 90, 0.8);
 
 			.dashboardcomponent-ai-comment-icon,
+			.dashboardcomponent-ai-comment-status,
 			p {
 				color: rgb(237, 90, 90);
 			}
