@@ -1,5 +1,5 @@
 <!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
-<!-- 靜態 key（GET …/translation/static）優先；缺詞時改用 text 備援（zh-TW 直出，其它語言走 POST /translate） -->
+<!-- frontendBundles／靜態 key 優先；缺詞時 text 備援為繁中原文（不依賴 POST /translate LLM） -->
 
 <script setup>
 import { ref, watch } from "vue";
@@ -17,38 +17,53 @@ const props = defineProps({
 const store = useTranslationStore();
 const display = ref("");
 
+/** 換語／字典更新時過濾未完成之 async watch，避免舊 await 覆寫新畫面 */
+let watchGeneration = 0;
+
 watch(
 	[
 		() => store.locale,
 		() => store.dictionaryEpoch,
+		() => store.staticDictionaryLocale,
 		() => props.text,
 		() => props.dictKey,
-		() => (props.dictKey ? store.staticDictionary[props.dictKey] : null),
+		() =>
+			props.dictKey ? store.staticDictionary[props.dictKey] : null,
 		() => store.staticDictionary,
 	],
 	async () => {
+		const gen = ++watchGeneration;
+
+		function commit(next) {
+			if (gen !== watchGeneration) {
+				return;
+			}
+			display.value = next;
+		}
+
 		if (props.dictKey) {
-			const dv = store.staticDictionary[props.dictKey];
+			const dv = store.localizeStaticKey(props.dictKey);
 			if (dv !== undefined && dv !== null && dv !== "") {
-				display.value = dv;
+				commit(dv);
 				return;
 			}
 			const srcZh = props.text || "";
 			if (store.locale === SOURCE_LOCALE) {
-				display.value = srcZh || props.dictKey;
+				commit(srcZh || props.dictKey);
 				return;
 			}
 			if (srcZh) {
-				display.value = await store.translate(srcZh);
-			} else {
-				display.value = props.dictKey;
+				commit(await store.translate(srcZh));
+				return;
 			}
+			commit(props.dictKey);
 			return;
 		}
-		display.value =
+		const plain =
 			store.locale === SOURCE_LOCALE || !props.text
 				? props.text
 				: await store.translate(props.text);
+		commit(plain ?? "");
 	},
 	{ immediate: true }
 );

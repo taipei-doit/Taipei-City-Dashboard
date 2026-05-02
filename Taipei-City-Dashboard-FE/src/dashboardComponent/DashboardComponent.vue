@@ -1,5 +1,6 @@
 <script setup>
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
+import { useBackendTranslation } from "../composables/useBackendTranslation";
 // import "./styles/chartStyles.css";
 // import "./styles/toggleswitch.css";
 import "material-icons/iconfont/material-icons.css";
@@ -77,6 +78,8 @@ const props = defineProps({
 	toggleOn: { type: Boolean, default: false },
 });
 
+const { t } = useBackendTranslation();
+
 const emits = defineEmits([
 	"favorite",
 	"delete",
@@ -92,6 +95,18 @@ const emits = defineEmits([
 ]);
 
 const activeChart = ref(props.config.chart_config.types[0]);
+
+watch(
+	() => [...(props.config.chart_config?.types ?? [])],
+	(types) => {
+		if (!types.length) return;
+		if (!types.includes(activeChart.value)) {
+			activeChart.value = types[0];
+		}
+	},
+	{ immediate: false }
+);
+
 const activeCity = computed({
 	get: () => props.activeCity,
 	set: (value) => {
@@ -367,7 +382,7 @@ function returnChartComponent(name, svg) {
           :key="city.value"
         >
           <option :value="city.value">
-            {{ city.name }}
+            {{ t(`city.area.${city.value}`) || city.name }}
           </option>
         </template>
       </select>
@@ -376,8 +391,8 @@ function returnChartComponent(name, svg) {
         class="dashboardcomponent-control-group"
       >
         <button
-          v-for="item in config.chart_config.types"
-          :key="`${config.index}-${item}-button`"
+          v-for="(item, chartTypeIdx) in config.chart_config.types"
+          :key="`${config.index}-${chartTypeIdx}-${item}-button`"
           :class="{
             'dashboardcomponent-control-group-button': true,
             'dashboardcomponent-control-group-active': activeChart === item,
@@ -437,8 +452,8 @@ function returnChartComponent(name, svg) {
     >
       <component
         :is="returnChartComponent(item)"
-        v-for="item in config.chart_config.types"
-        :key="`${props.config.index}-${item}-chart-${item.city}`"
+        v-for="(item, chartIdx) in config.chart_config.types"
+        :key="`${props.config.index}-${chartIdx}-${item}-chart`"
         :active-chart="activeChart"
         :active-city="activeCity"
         :chart_config="config.chart_config"

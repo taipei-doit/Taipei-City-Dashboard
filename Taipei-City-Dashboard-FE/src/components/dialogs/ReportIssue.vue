@@ -6,23 +6,38 @@ import http from "../../router/axios";
 import { useDialogStore } from "../../store/dialogStore";
 import { useAuthStore } from "../../store/authStore";
 import { useContentStore } from "../../store/contentStore";
+import { useBackendTranslation } from "../../composables/useBackendTranslation";
 import DialogContainer from "./DialogContainer.vue";
+
+const ISSUE_TYPE_IDS = [
+	"incorrect_info",
+	"incorrect_data",
+	"system",
+	"other",
+];
+
+/** 送後端／管理界面仍沿用繁中原句，利於對照 */
+const CONTEXT_ZH_LABEL = {
+	incorrect_info: "組件基本資訊有誤",
+	incorrect_data: "組件資料有誤或未更新",
+	system: "系統問題",
+	other: "其他建議",
+};
 
 const dialogStore = useDialogStore();
 const authStore = useAuthStore();
 const contentStore = useContentStore();
+const { t } = useBackendTranslation();
 
-const allInputs = ref({
-	type: "組件基本資訊有誤",
-	description: "",
-	title: "",
-});
-const issueTypes = [
-	"組件基本資訊有誤",
-	"組件資料有誤或未更新",
-	"系統問題",
-	"其他建議",
-];
+function blankInputs() {
+	return {
+		typeId: ISSUE_TYPE_IDS[0],
+		description: "",
+		title: "",
+	};
+}
+
+const allInputs = ref(blankInputs());
 
 async function handleSubmit() {
 	const submitObject = {
@@ -30,20 +45,22 @@ async function handleSubmit() {
 		description: allInputs.value.description,
 		user_name: authStore.user.name,
 		user_id: `${authStore.user.user_id}`,
-		context: `類型：${allInputs.value.type} // 來源：${dialogStore.issue.id} - ${dialogStore.issue.index} - ${dialogStore.issue.name}`,
+		context: `類型：${
+			CONTEXT_ZH_LABEL[allInputs.value.typeId] ?? ""
+		} // 來源：${dialogStore.issue.id} - ${dialogStore.issue.index} - ${dialogStore.issue.name}`,
 		status: "待處理",
 	};
 	await http.post(`/issue/`, submitObject);
-	dialogStore.showNotification("success", "回報問題成功，感謝您的建議");
+	dialogStore.showNotification(
+		"success",
+		t("report.issue.success_notify") ||
+			"回報問題成功，感謝您的建議"
+	);
 	contentStore.loading = false;
 	handleClose();
 }
 function handleClose() {
-	allInputs.value = {
-		type: "組件基本資訊有誤",
-		description: "",
-		title: "",
-	};
+	allInputs.value = blankInputs();
 	dialogStore.dialogs.reportIssue = false;
 }
 </script>
@@ -54,8 +71,10 @@ function handleClose() {
     @on-close="handleClose"
   >
     <div class="reportissue">
-      <h2>回報問題</h2>
-      <h3>問題標題* ({{ allInputs.title.length }}/20)</h3>
+      <h2>{{ t('report.issue.dialog_title') }}</h2>
+      <h3>
+        {{ t('report.issue.field_title_hint') }} ({{ allInputs.title.length }}/20)
+      </h3>
       <input
         v-model="allInputs.title"
         class="reportissue-input"
@@ -64,24 +83,27 @@ function handleClose() {
         :maxLength="20"
         required
       >
-      <h3>問題種類*</h3>
+      <h3>{{ t('report.issue.field_type') }}</h3>
       <div
-        v-for="item in issueTypes"
-        :key="item"
+        v-for="tid in ISSUE_TYPE_IDS"
+        :key="tid"
       >
         <input
-          :id="item"
-          v-model="allInputs.type"
+          :id="'report-type-' + tid"
+          v-model="allInputs.typeId"
           class="reportissue-radio"
           type="radio"
-          :value="item"
+          :value="tid"
         >
-        <label :for="item">
+        <label :for="'report-type-' + tid">
           <div />
-          {{ item }}
+          {{ t('report.issue.type.' + tid) }}
         </label>
       </div>
-      <h3>問題簡述* ({{ allInputs.description.length }}/200)</h3>
+      <h3>
+        {{ t('report.issue.field_description_hint') }}
+        ({{ allInputs.description.length }}/200)
+      </h3>
       <textarea
         v-model="allInputs.description"
         :minLength="1"
@@ -93,14 +115,14 @@ function handleClose() {
           class="reportissue-control-cancel"
           @click="handleClose"
         >
-          取消
+          {{ t('report.issue.cancel') }}
         </button>
         <button
           v-if="allInputs.description && allInputs.title"
           class="reportissue-control-confirm"
           @click="handleSubmit"
         >
-          回報問題
+          {{ t('report.issue.submit') }}
         </button>
       </div>
     </div>

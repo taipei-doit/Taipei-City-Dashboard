@@ -11,10 +11,12 @@ import HistoryChart from "../charts/HistoryChart.vue";
 import DownloadData from "./DownloadData.vue";
 import EmbedComponent from "./EmbedComponent.vue";
 import { useCityLabels } from "../../composables/useCityLabels";
+import { useBackendTranslation } from "../../composables/useBackendTranslation";
 import BackendTranslatedText from "../utilities/i18n/BackendTranslatedText.vue";
 
 const dialogStore = useDialogStore();
 const { translatedTagList } = useCityLabels();
+const { t } = useBackendTranslation();
 const contentStore = useContentStore();
 const authStore = useAuthStore();
 
@@ -134,7 +136,7 @@ function getLinkTag(link, index) {
               )
             "
           >
-            <span>flag</span>回報
+            <span>flag</span>{{ t('report.issue.action_label') }}
           </button>
           <button
             v-if="

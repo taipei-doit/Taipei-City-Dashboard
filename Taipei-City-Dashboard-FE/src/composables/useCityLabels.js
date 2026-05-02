@@ -3,6 +3,7 @@
 
 import { useContentStore } from "../store/contentStore";
 import { useTranslationStore } from "../store/translationStore";
+import { lookupFrontendStatic } from "../i18n/frontendBundles";
 
 export function useCityLabels() {
 	const contentStore = useContentStore();
@@ -12,7 +13,15 @@ export function useCityLabels() {
 		void translationStore.staticDictionary;
 		void translationStore.dictionaryEpoch;
 		void translationStore.locale;
-		const raw = translationStore.staticDictionary[key];
+		void translationStore.staticDictionaryLocale;
+		const fe = lookupFrontendStatic(translationStore.locale, key);
+		if (fe !== undefined && fe !== null && fe !== "") {
+			return fe;
+		}
+		const raw =
+			translationStore.staticDictionaryLocale === translationStore.locale
+				? translationStore.staticDictionary[key]
+				: undefined;
 		return raw !== undefined && raw !== null && raw !== ""
 			? raw
 			: fallback;

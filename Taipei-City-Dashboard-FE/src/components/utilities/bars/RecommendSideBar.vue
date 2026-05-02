@@ -2,9 +2,8 @@
 
 <script setup>
 import { onMounted, ref, watch } from "vue";
-import { storeToRefs } from "pinia";
 import { useMapStore } from "../../../store/mapStore";
-import { useTranslationStore } from "../../../store/translationStore";
+import { useBackendTranslation } from "../../../composables/useBackendTranslation";
 import {
 	fetchStorylineTopics,
 	postStorylineRecommend,
@@ -13,8 +12,7 @@ import {
 } from "../../../api/storyline";
 
 const mapStore = useMapStore();
-const translationStore = useTranslationStore();
-const { locale } = storeToRefs(translationStore);
+const { t, locale } = useBackendTranslation();
 
 const RECOMMEND_SIDEBAR_EXPANDED_KEY = "isRecommendSidebarExpanded";
 
@@ -24,8 +22,10 @@ const isExpanded = ref(true);
 const topics = ref([]);
 const selectedTopicId = ref(null);
 const relatedNews = ref([]);
-const loadError = ref(null);
-const recommendError = ref(null);
+/** @type {import('vue').Ref<string | null>} */
+const loadErrorKey = ref(null);
+/** @type {import('vue').Ref<string | null>} */
+const recommendErrorKey = ref(null);
 const loadingTopics = ref(false);
 const loadingRecommend = ref(false);
 
@@ -48,13 +48,13 @@ function toggleExpand() {
 }
 
 async function loadTopics() {
-	loadError.value = null;
+	loadErrorKey.value = null;
 	loadingTopics.value = true;
 	topics.value = [];
 	try {
 		topics.value = await fetchStorylineTopics();
 	} catch {
-		loadError.value = "無法載入主題。";
+		loadErrorKey.value = "recommend.error_topics_load";
 	} finally {
 		loadingTopics.value = false;
 	}
@@ -62,7 +62,7 @@ async function loadTopics() {
 
 async function selectTopic(topic) {
 	selectedTopicId.value = topic.id;
-	recommendError.value = null;
+	recommendErrorKey.value = null;
 	relatedNews.value = [];
 	loadingRecommend.value = true;
 	const lang = toStorylineApiLang(locale.value);
@@ -74,10 +74,10 @@ async function selectTopic(topic) {
 		});
 		relatedNews.value = collectRelatedNewsFromSteps(steps);
 		if (!relatedNews.value.length) {
-			recommendError.value = "此主題暫無摘要。";
+			recommendErrorKey.value = "recommend.error_news_empty_summary";
 		}
 	} catch {
-		recommendError.value = "無法載入新聞。";
+		recommendErrorKey.value = "recommend.error_news_load";
 	} finally {
 		loadingRecommend.value = false;
 	}
@@ -85,9 +85,9 @@ async function selectTopic(topic) {
 
 watch(locale, () => {
 	if (selectedTopicId.value) {
-		const t = topics.value.find((x) => x.id === selectedTopicId.value);
-		if (t) {
-			selectTopic(t);
+		const sel = topics.value.find((x) => x.id === selectedTopicId.value);
+		if (sel) {
+			selectTopic(sel);
 		}
 	}
 });
@@ -113,7 +113,7 @@ onMounted(() => {
       <button
         type="button"
         class="recommendsidebar-toggle"
-        :title="isExpanded ? '收合今日推薦' : '展開今日推薦'"
+        :title="isExpanded ? t('recommend.toggle_collapse_title') : t('recommend.toggle_expand_title')"
         @click="toggleExpand"
       >
         <span>{{
@@ -125,10 +125,10 @@ onMounted(() => {
       <template v-if="isExpanded">
         <div class="recommendsidebar-headertext">
           <h1 class="recommendsidebar-title">
-            今日推薦
+            {{ t('recommend.title') }}
           </h1>
           <p class="recommendsidebar-lead">
-            選擇主題以檢視相關新聞摘要。
+            {{ t('recommend.lead') }}
           </p>
         </div>
       </template>
@@ -136,7 +136,7 @@ onMounted(() => {
         v-else
         class="recommendsidebar-collapsed-label-text"
         aria-hidden="true"
-      >今日推薦</span>
+      >{{ t('recommend.title') }}</span>
     </div>
 
     <template v-if="isExpanded">
@@ -144,67 +144,67 @@ onMounted(() => {
         v-if="loadingTopics"
         class="recommendsidebar-status"
       >
-        載入中…
+        {{ t('recommend.loading_topics') }}
       </div>
       <template v-else>
         <h2 class="recommendsidebar-subtitle">
-          推薦主題
+          {{ t('recommend.section_topics') }}
         </h2>
         <p
-          v-if="loadError"
+          v-if="loadErrorKey"
           class="recommendsidebar-msg recommendsidebar-msg--error"
         >
-          {{ loadError }}
+          {{ t(loadErrorKey) }}
         </p>
         <p
           v-else-if="!topics.length"
           class="recommendsidebar-msg"
         >
-          尚無推薦主題。
+          {{ t('recommend.empty_topics') }}
         </p>
         <ul
           v-else
           class="recommendsidebar-topiclist"
         >
           <li
-            v-for="t in topics"
-            :key="t.id"
+            v-for="top in topics"
+            :key="top.id"
           >
             <button
               type="button"
               class="recommendsidebar-topic"
-              :class="{ 'is-selected': selectedTopicId === t.id }"
-              @click="selectTopic(t)"
+              :class="{ 'is-selected': selectedTopicId === top.id }"
+              @click="selectTopic(top)"
             >
-              <span class="recommendsidebar-topic-title">{{ t.title }}</span>
+              <span class="recommendsidebar-topic-title">{{ top.title }}</span>
               <span
-                v-if="t.summary"
+                v-if="top.summary"
                 class="recommendsidebar-topic-summary"
-              >{{ t.summary }}</span>
+              >{{ top.summary }}</span>
             </button>
           </li>
         </ul>
 
         <h2 class="recommendsidebar-subtitle recommendsidebar-subtitle--news">
-          相關新聞
+          {{ t('recommend.section_news') }}
         </h2>
         <div
           v-if="!selectedTopicId"
           class="recommendsidebar-msg"
         >
-          請先選擇主題。
+          {{ t('recommend.pick_topic_hint') }}
         </div>
         <div
           v-else-if="loadingRecommend"
           class="recommendsidebar-status"
         >
-          載入新聞…
+          {{ t('recommend.loading_news') }}
         </div>
         <p
-          v-else-if="recommendError"
+          v-else-if="recommendErrorKey"
           class="recommendsidebar-msg recommendsidebar-msg--error"
         >
-          {{ recommendError }}
+          {{ t(recommendErrorKey) }}
         </p>
         <ul
           v-else

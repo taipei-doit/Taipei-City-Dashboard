@@ -10,7 +10,7 @@ import {
 /**
  * 後端多語 — 在元件中使用：
  * - 靜態 key（字典）：store.t('nav.dashboard') 或 <BackendTranslatedText dict-key="nav.dashboard" />
- * - 動態 LLM 逐字翻譯：<BackendTranslatedText text="..." /> 或 await translate(s)
+ * - 動態內容（後端來文）：不切語系機翻；非繁中外語介面仍以繁中原文顯示（<BackendTranslatedText text="..." />／translate）
  */
 export function useBackendTranslation() {
 	const store = useTranslationStore();
@@ -20,6 +20,7 @@ export function useBackendTranslation() {
 		void store.staticDictionary;
 		void store.dictionaryEpoch;
 		void store.locale;
+		void store.staticDictionaryLocale;
 		return store.t(key);
 	}
 

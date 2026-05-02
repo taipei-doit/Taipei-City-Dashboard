@@ -9,7 +9,6 @@ import (
 	"TaipeiCityDashboardBE/app/models"
 	"TaipeiCityDashboardBE/app/services"
 	"TaipeiCityDashboardBE/app/util"
-	"TaipeiCityDashboardBE/global"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
@@ -42,25 +41,6 @@ func GetAllDashboards(c *gin.Context) {
 		return
 	}
 
-	// Translation Integration
-	lang, exists := c.Get("lang")
-	if exists && global.GlobalTranslator != nil {
-		targetLang := lang.(string)
-		ctx := c.Request.Context()
-		for i := range dashboards.Public {
-			dashboards.Public[i].Name = global.GlobalTranslator.Translate(ctx, dashboards.Public[i].Name, targetLang, "dashboard_name")
-		}
-		for i := range dashboards.Taipei {
-			dashboards.Taipei[i].Name = global.GlobalTranslator.Translate(ctx, dashboards.Taipei[i].Name, targetLang, "dashboard_name")
-		}
-		for i := range dashboards.MetroTaipei {
-			dashboards.MetroTaipei[i].Name = global.GlobalTranslator.Translate(ctx, dashboards.MetroTaipei[i].Name, targetLang, "dashboard_name")
-		}
-		for i := range dashboards.Personal {
-			dashboards.Personal[i].Name = global.GlobalTranslator.Translate(ctx, dashboards.Personal[i].Name, targetLang, "dashboard_name")
-		}
-	}
-
 	c.JSON(http.StatusOK, gin.H{"status": "success", "data": dashboards})
 }
 
@@ -86,26 +66,6 @@ func GetDashboardByIndex(c *gin.Context) {
 
 		c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": err.Error()})
 		return
-	}
-
-	// Translation Integration
-	lang, exists := c.Get("lang")
-	if exists && global.GlobalTranslator != nil {
-		targetLang := lang.(string)
-		ctx := c.Request.Context()
-		for i := range components {
-			components[i].Name = global.GlobalTranslator.Translate(ctx, components[i].Name, targetLang, "component_name")
-			components[i].ShortDesc = global.GlobalTranslator.Translate(ctx, components[i].ShortDesc, targetLang, "short_desc")
-			components[i].LongDesc = global.GlobalTranslator.Translate(ctx, components[i].LongDesc, targetLang, "long_desc")
-			components[i].UseCase = global.GlobalTranslator.Translate(ctx, components[i].UseCase, targetLang, "use_case")
-			components[i].Source = global.GlobalTranslator.Translate(ctx, components[i].Source, targetLang, "source")
-			
-			// Translate JSON configs
-			components[i].ChartConfig = global.GlobalTranslator.TranslateJSON(ctx, components[i].ChartConfig, targetLang, "chart_config")
-			components[i].MapConfig = global.GlobalTranslator.TranslateJSON(ctx, components[i].MapConfig, targetLang, "map_config")
-			components[i].HistoryConfig = global.GlobalTranslator.TranslateJSON(ctx, components[i].HistoryConfig, targetLang, "history_config")
-			components[i].MapFilter = global.GlobalTranslator.TranslateJSON(ctx, components[i].MapFilter, targetLang, "map_filter")
-		}
 	}
 
 	c.JSON(http.StatusOK, gin.H{"status": "success", "data": components})

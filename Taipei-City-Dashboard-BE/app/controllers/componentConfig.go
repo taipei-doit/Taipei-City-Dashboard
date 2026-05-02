@@ -7,7 +7,6 @@ import (
 
 	"TaipeiCityDashboardBE/app/models"
 	"TaipeiCityDashboardBE/app/services"
-	"TaipeiCityDashboardBE/global"
 
 	"github.com/gin-gonic/gin"
 )
@@ -84,15 +83,6 @@ func GetAllComponents(c *gin.Context) {
 		return
 	}
 
-	// Translation Integration
-	lang, exists := c.Get("lang")
-	if exists && global.GlobalTranslator != nil {
-		targetLang := lang.(string)
-		for i := range cityComponents {
-			cityComponents[i].Name = global.GlobalTranslator.Translate(c.Request.Context(), cityComponents[i].Name, targetLang, "component_name")
-		}
-	}
-
 	// Return the components
 	c.JSON(http.StatusOK, gin.H{"status": "success", "total": totalComponents, "results": resultNum, "data": cityComponents})
 }
@@ -126,24 +116,6 @@ func GetComponentByID(c *gin.Context) {
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"status": "error", "message": "component not found"})
 		return
-	}
-
-	// Translation Integration
-	lang, exists := c.Get("lang")
-	if exists && global.GlobalTranslator != nil {
-		targetLang := lang.(string)
-		ctx := c.Request.Context()
-		cityComponent.Name = global.GlobalTranslator.Translate(ctx, cityComponent.Name, targetLang, "component_name")
-		cityComponent.ShortDesc = global.GlobalTranslator.Translate(ctx, cityComponent.ShortDesc, targetLang, "short_desc")
-		cityComponent.LongDesc = global.GlobalTranslator.Translate(ctx, cityComponent.LongDesc, targetLang, "long_desc")
-		cityComponent.UseCase = global.GlobalTranslator.Translate(ctx, cityComponent.UseCase, targetLang, "use_case")
-		cityComponent.Source = global.GlobalTranslator.Translate(ctx, cityComponent.Source, targetLang, "source")
-		
-		// Translate JSON configs
-		cityComponent.ChartConfig = global.GlobalTranslator.TranslateJSON(ctx, cityComponent.ChartConfig, targetLang, "chart_config")
-		cityComponent.MapConfig = global.GlobalTranslator.TranslateJSON(ctx, cityComponent.MapConfig, targetLang, "map_config")
-		cityComponent.HistoryConfig = global.GlobalTranslator.TranslateJSON(ctx, cityComponent.HistoryConfig, targetLang, "history_config")
-		cityComponent.MapFilter = global.GlobalTranslator.TranslateJSON(ctx, cityComponent.MapFilter, targetLang, "map_filter")
 	}
 
 	// Return the component

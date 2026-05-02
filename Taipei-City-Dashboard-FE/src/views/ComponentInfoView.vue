@@ -22,10 +22,12 @@ import ReportIssue from "../components/dialogs/ReportIssue.vue";
 import DownloadData from "../components/dialogs/DownloadData.vue";
 import EmbedComponent from "../components/dialogs/EmbedComponent.vue";
 import { useCityLabels } from "../composables/useCityLabels";
+import { useBackendTranslation } from "../composables/useBackendTranslation";
 import BackendTranslatedText from "../components/utilities/i18n/BackendTranslatedText.vue";
 
 const contentStore = useContentStore();
 const { translatedTagList } = useCityLabels();
+const { t } = useBackendTranslation();
 const dialogStore = useDialogStore();
 const authStore = useAuthStore();
 
@@ -163,7 +165,7 @@ onMounted(() => {
                 )
               "
             >
-              <span>flag</span>回報
+              <span>flag</span>{{ t('report.issue.action_label') }}
             </button>
             <button
               v-if="
