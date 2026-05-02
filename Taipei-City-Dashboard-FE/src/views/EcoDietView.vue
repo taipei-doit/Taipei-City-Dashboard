@@ -1251,7 +1251,7 @@ function tagListOf(component) {
   >
     <div class="ecodietview-mapview-charts">
       <!-- hasMap section（無 h2，第一段）：3 個點位元件，可 toggle layer -->
-      <div
+      <DashboardComponent
         v-for="item in hasMapComponents"
         :key="`map-${item.index}-${activeCityMap[item.index]}`"
         :config="item"
@@ -1271,7 +1271,7 @@ function tagListOf(component) {
       <h2 v-if="noMapComponents.length > 0">
         無空間資料組件
       </h2>
-      <div
+      <DashboardComponent
         v-for="item in noMapComponents"
         :key="`nomap-${item.index}-${activeCityMap[item.index]}`"
         :config="item"
