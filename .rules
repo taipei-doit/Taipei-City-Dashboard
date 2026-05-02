@@ -1,3 +1,102 @@
-# Documentation
+# Taipei City Dashboard Agent Rules
 
-See https://github.com/taipei-doit/Taipei-City-Dashboard-Documentation/tree/main/src/assets/articles for documentation
+## Documentation
+
+Primary documentation lives at:
+https://github.com/taipei-doit/Taipei-City-Dashboard-Documentation/tree/main/src/assets/articles
+
+Check the documentation and the current local implementation before changing code. Prefer existing repo patterns over new conventions.
+
+## Repo Layout
+
+- `Taipei-City-Dashboard-DE/`: Airflow DAGs and data ingestion/transformation code.
+- `Taipei-City-Dashboard-BE/`: Go API. Map data is served generically from DB tables/views with `wkb_geometry`.
+- `Taipei-City-Dashboard-FE/`: Vue/Pinia/Mapbox frontend.
+- `db-sample-data/`: SQL for data tables, manager component config, charts, map config, and dashboard/group wiring.
+- `docker/`: local compose files and environment.
+
+## Standard Dataset Flow
+
+For new dashboard data, follow this path unless the repo already has a better pattern:
+
+1. Add a DE DAG under `Taipei-City-Dashboard-DE/dags/proj_city_dashboard/<dataset>/`.
+2. Add `<dataset>.py`, `job_config.json`, and `__init__.py`.
+3. Normalize source fields into stable English column names.
+4. Create `wkb_geometry` in EPSG:4326.
+5. Add SQL in `db-sample-data/<dataset>.sql`.
+6. Create the data table in the dashboard DB.
+7. Create manager DB rows: `components`, `component_charts`, `component_maps`, `query_charts`, `dashboards`, `dashboard_groups`.
+8. Verify BE APIs and FE rendering.
+
+Do not add custom BE endpoints for ordinary map datasets. The BE already exposes tables/views through `/api/dev/map-data/:index` as long as the DB object has `wkb_geometry`.
+
+## DE Guidelines
+
+- Use `CommonDag(proj_folder="proj_city_dashboard", dag_folder="<dataset>")`.
+- Use `requests` for HTTP sources and honor `proxies = kwargs.get("proxies")`.
+- Use `save_geodataframe_to_postgresql` for geospatial data.
+- Use `update_lasttime_in_data_to_dataset_info` after loading.
+- Use `replace` for static/current public datasets unless history is explicitly needed.
+- For point geometry, use `add_point_wkbgeometry_column_to_df`.
+- For lines/polygons or custom geometry, use GeoPandas/Shapely plus `convert_geometry_to_wkbgeometry`.
+- If the source is large XML, stream parse it with `xml.etree.ElementTree.iterparse`; avoid loading huge documents when streaming is practical.
+- If source coordinates are TWD97, treat them as EPSG:3826 and transform to EPSG:4326.
+- Keep source-specific parsing in the DAG module; do not modify Dockerfiles just to add one-off tooling unless explicitly approved.
+
+## DB and Manager SQL
+
+- Put setup SQL in `db-sample-data/`.
+- Data DB objects should be safe to apply repeatedly with `CREATE TABLE IF NOT EXISTS`, `CREATE INDEX IF NOT EXISTS`, and `CREATE OR REPLACE VIEW`.
+- Manager DB rows should be id-safe. Avoid hardcoded component/map IDs.
+- Use `"index"` as the stable component key.
+- Use `ON CONFLICT ("index") DO UPDATE` for `components`, `component_charts`, and `dashboards`.
+- Delete and reinsert `component_maps` for a component when replacing map config.
+- Delete and reinsert matching `query_charts` rows when changing query or map wiring.
+- Use dynamic map IDs:
+  `ARRAY[(SELECT id FROM public.component_maps WHERE "index" = '<map_index>' ORDER BY id DESC LIMIT 1)]`
+- Add dashboards to the correct public group with `dashboard_groups`; Taipei is usually group `2`, Metro Taipei is usually group `3`.
+- Reset sequences after inserting manager rows when needed:
+  `SELECT setval('public.components_id_seq', (SELECT COALESCE(MAX(id), 0) FROM public.components), true);`
+
+## Map Config Practices
+
+- Use `source = 'api'` for DB-backed map layers.
+- Use `source = 'geojson'` only for static files in `Taipei-City-Dashboard-FE/public/mapData/`.
+- The `component_maps.index` must match the DB table/view for API-backed map data.
+- Use views for map-friendly subsets when the full table is too large for browser rendering.
+- Keep full data in the base table for charts/analysis, and point map config at the smaller view.
+- Use Mapbox paint expressions in SQL JSON for thematic styling.
+- Include useful popup `property` entries with stable DB column keys.
+
+## Frontend Practices
+
+- Map rendering is centralized in `Taipei-City-Dashboard-FE/src/store/mapStore.js`.
+- Generic popup rendering is in `Taipei-City-Dashboard-FE/src/components/map/MapPopup.vue`.
+- Prefer config-driven map styling through `component_maps.paint` before adding FE logic.
+- Add FE code only for reusable behavior that cannot be expressed with Mapbox config, such as animated flow lines or image popup modes.
+- For popup photos, use a property with `mode: "image"` and a URL field such as `photo_url`.
+- For video/HLS streams, use existing `mode: "video"` behavior.
+- Keep map payloads reasonable. Test `/api/dev/map-data/<index>` size and feature count before assuming a layer is usable.
+
+## Verification Checklist
+
+For a new or changed dataset, verify:
+
+- Data table row count and geometry extent in `postgres-data`.
+- Manager component exists in `postgres-manager`.
+- `GET /api/dev/component/?searchbyindex=<index>&city=taipei`
+- `GET /api/dev/component/<id>/chart?city=taipei`
+- `GET /api/dev/map-data/<map_index>`
+- `GET /api/dev/dashboard/?city=taipei`
+- `python3 -m py_compile <dag_file>.py`
+- `cd Taipei-City-Dashboard-FE && npm run build` when FE code or map popup behavior changed.
+
+The dev FE service is Vite with a bind mount. Small FE edits often hot reload, but browser state may cache dashboard/component lists; hard refresh if a newly added dashboard does not appear.
+
+## Working Tree Rules
+
+- Assume the worktree may contain user changes. Do not revert unrelated edits.
+- Avoid destructive git commands such as `git reset --hard` or `git checkout --` unless explicitly requested.
+- Use `rg` for searching.
+- Use `apply_patch` for manual file edits.
+- Keep changes scoped to the requested dataset or behavior.
