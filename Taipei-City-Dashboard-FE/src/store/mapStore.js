@@ -20,6 +20,7 @@ import axios from "axios";
 import http from "../router/axios.js";
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
+import { FBXLoader } from "three/examples/jsm/loaders/FBXLoader.js";
 import { point, distance } from "@turf/turf";
 
 // Other Stores
@@ -122,13 +123,9 @@ const SIMPLE_ROUTE_CAR_SOURCE_ID = "simple-navigation-car-source";
 const SIMPLE_ROUTE_CAR_LAYER_IDS = [
 	"simple-navigation-car-layer",
 ];
-const SIMPLE_ROUTE_CAR_BODY_LENGTH_METERS = 96;
-const SIMPLE_ROUTE_CAR_BODY_WIDTH_METERS = 38;
-const SIMPLE_ROUTE_CAR_BODY_HEIGHT_METERS = 26;
-const SIMPLE_ROUTE_CAR_CABIN_LENGTH_METERS = 42;
-const SIMPLE_ROUTE_CAR_CABIN_WIDTH_METERS = 24;
-const SIMPLE_ROUTE_CAR_CABIN_HEIGHT_METERS = 52;
-const SIMPLE_ROUTE_CAR_SIDE_OFFSET_METERS = 58;
+const SIMPLE_ROUTE_CAR_MODEL_URL = "/cybertruck.fbx";
+const SIMPLE_ROUTE_CAR_MODEL_LENGTH_METERS = 96;
+const SIMPLE_ROUTE_CAR_MODEL_ALTITUDE_METERS = 4;
 const SIMPLE_ROUTE_CAR_BASE_ZOOM = 14.5;
 const SIMPLE_ROUTE_CAR_MIN_SCALE = 0.5;
 const SIMPLE_ROUTE_CAR_MAX_SCALE = 7;
