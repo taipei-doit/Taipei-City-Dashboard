@@ -35,21 +35,10 @@ func GetMrtAlertByLine(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"status": "success", "data": data, "categories": categories})
 }
 
-// GetMrtAlertByType returns active-alert distinct station counts grouped by facility type.
+// GetMrtAlertByType returns active alert counts grouped by facility type parsed from the description text.
 // GET /api/v1/mrt/a11y/alert-by-type
 func GetMrtAlertByType(c *gin.Context) {
 	data, categories, err := models.GetMrtAlertByType()
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": err.Error()})
-		return
-	}
-	c.JSON(http.StatusOK, gin.H{"status": "success", "data": data, "categories": categories})
-}
-
-// GetMrtAlertTrend30d returns per-line alert count over the past 30 days as three_d bar data.
-// GET /api/v1/mrt/a11y/alert-trend-30d
-func GetMrtAlertTrend30d(c *gin.Context) {
-	data, categories, err := models.GetMrtAlertTrend30d()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": err.Error()})
 		return
@@ -295,14 +284,16 @@ func buildMrtComponentPrompt(componentID string) (string, error) {
 %s`+mrtA11ySystemSuffix, details), nil
 
 	case "mrt-a11y-v2-alert-by-type":
-		data, _, err := models.GetMrtAlertByType()
+		data, categories, err := models.GetMrtAlertByType()
 		if err != nil {
 			return "", err
 		}
 		details := ""
-		for _, series := range data {
-			if len(series.Data) > 0 {
-				details += fmt.Sprintf("  - %s：%d 處\n", series.Name, series.Data[0])
+		if len(data) > 0 {
+			for i, cat := range categories {
+				if i < len(data[0].Data) {
+					details += fmt.Sprintf("  - %s：%d 則\n", cat, data[0].Data[i])
+				}
 			}
 		}
 		if details == "" {
@@ -311,7 +302,7 @@ func buildMrtComponentPrompt(componentID string) (string, error) {
 		return fmt.Sprintf(`你是台北捷運無障礙設施狀態分析助理。以下是目前的即時資料，請根據這些資料回答使用者的問題。
 
 【即時資料】
-異常設施類型分布：
+異常公告類型分布：
 %s`+mrtA11ySystemSuffix, details), nil
 
 	case "mrt-a11y-v2-stations":
