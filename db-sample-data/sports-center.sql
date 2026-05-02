@@ -35,7 +35,7 @@ INSERT INTO public.component_charts ("index", color, types, unit)
 VALUES (
     'sports_center',
     ARRAY['#24B0DD', '#ED6A45', '#56B96D', '#F8CF58', '#8F98A3'],
-    ARRAY['BarChart', 'DonutChart'],
+    ARRAY['SportsVenueCapacityChart'],
     '人'
 )
 ON CONFLICT ("index") DO UPDATE
@@ -130,8 +130,15 @@ VALUES (
     ARRAY['doit'],
     NOW(),
     NOW(),
-    'two_d',
-    'SELECT name AS x_axis, (COALESCE(sw_people_num, 0) + COALESCE(gym_people_num, 0))::float AS data FROM public.sports_center ORDER BY name',
+    'three_d',
+    'SELECT name AS x_axis, ''pool'' AS icon, ''泳池目前人數'' AS y_axis, COALESCE(sw_people_num, 0)::int AS data FROM public.sports_center
+UNION ALL
+SELECT name AS x_axis, ''pool'' AS icon, ''泳池容留人數'' AS y_axis, COALESCE(sw_max_people_num, 0)::int AS data FROM public.sports_center
+UNION ALL
+SELECT name AS x_axis, ''fitness_center'' AS icon, ''健身房目前人數'' AS y_axis, COALESCE(gym_people_num, 0)::int AS data FROM public.sports_center
+UNION ALL
+SELECT name AS x_axis, ''fitness_center'' AS icon, ''健身房容留人數'' AS y_axis, COALESCE(gym_max_people_num, 0)::int AS data FROM public.sports_center
+ORDER BY x_axis, y_axis',
     NULL,
     'taipei'
 );
