@@ -1,12 +1,14 @@
 package controllers
 
 import (
+	"TaipeiCityDashboardBE/app/models"
 	"TaipeiCityDashboardBE/app/services/ai"
 	"TaipeiCityDashboardBE/app/util"
 	"context"
 	"fmt"
 	"html"
 	"net/http"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/tmc/langchaingo/llms"
@@ -68,7 +70,67 @@ func ChatWithTWCC(c *gin.Context) {
 
 	// 2. Convert input to Service Request
 	serviceMsgs := make([]llms.MessageContent, 0)
+
+	// 設定系統回覆規則
+	systemPrompt := `你是台北市政府的政策顧問，專門根據城市數據提供政策建議。
+
+		你的回答必須：
+		1. 根據提供的數據說話，不要憑空捏造
+		2. 指出數據中的趨勢或問題
+		3. 給出具體可行的政策建議
+		4. 用繁體中文回答，語氣專業但易懂
+
+		如果數據不足以回答問題，請說明需要哪些額外資料。`
+
+	// 根據使用者問題決定查哪些資料
+	userQuestion := ""
 	for _, m := range input.Messages {
+		if m.Role == "user" {
+			userQuestion = m.Content
+		}
+	}
+
+	dataText := ""
+
+	// 可根據條件從不同的資料庫中抓取資料
+	if strings.Contains(userQuestion, "綠植") {
+		type GreenPointStat struct {
+			XAxis string  `gorm:"column:x_axis"`
+			Data  float64 `gorm:"column:data"`
+		}
+		var stats []GreenPointStat
+		models.DBDashboard.Raw(`
+			SELECT 
+				type AS x_axis,
+				ROUND(100.0 * COUNT(*) / SUM(COUNT(*)) OVER (), 2) AS data
+			FROM (
+				SELECT type FROM public.green_point_taipei WHERE type != ''
+				UNION ALL
+				SELECT type FROM public.green_point_new_taipei WHERE type != ''
+			) AS combined
+			GROUP BY type
+			ORDER BY type;
+		`).Scan(&stats)
+
+		dataText += "以下是綠植分佈資料：\n"
+		for _, s := range stats {
+			dataText += fmt.Sprintf("- %s：%.2f%%\n", s.XAxis, s.Data)
+		}
+	}
+
+	// 塞進 system message
+	serviceMsgs = append(serviceMsgs, llms.MessageContent{
+		Role: llms.ChatMessageTypeSystem,
+		Parts: []llms.ContentPart{
+			llms.TextContent{Text: systemPrompt + "\n\n參考數據：\n" + dataText},
+		},
+	})
+
+	for _, m := range input.Messages {
+		if m.Role == "system" {
+			continue
+		}
+
 		role := llms.ChatMessageTypeHuman
 		var parts []llms.ContentPart
 		parts = append(parts, llms.TextContent{Text: m.Content})
