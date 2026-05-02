@@ -1,0 +1,44 @@
+{
+  "dag_infos": {
+    "dag_id": "dengue_confirmed_cases",
+    "start_date": "2025-05-02",
+    "schedule_interval": "0 8 * * *",
+    "catchup": false,
+    "tags": [
+      "dengue",
+      "CDC",
+      "disease",
+      "health"
+    ],
+    "description": "Daily update of dengue fever confirmed cases from CDC open data.",
+    "default_args": {
+      "owner": "airflow",
+      "email": [
+        "DEFAULT_EMAIL_LIST"
+      ],
+      "email_on_retry": false,
+      "email_on_failure": true,
+      "retries": 1,
+      "retry_delay": 60
+    },
+    "ready_data_db": "postgres_default",
+    "ready_data_default_table": "dengue_confirmed_cases",
+    "ready_data_history_table": "",
+    "raw_data_db": "postgres_default",
+    "raw_data_table": "",
+    "load_behavior": "replace"
+  },
+  "data_infos": {
+    "name_cn": "登革熱確定病例統計",
+    "airflow_update_freq": "08:00+8 每日",
+    "source": "https://od.cdc.gov.tw/eic/Dengue_Daily.json",
+    "source_type": "CDC json",
+    "source_dept": "疾病管制署",
+    "gis_format": null,
+    "output_coordinate": "EPSG:4326",
+    "is_geometry": 1,
+    "dataset_description": "登革熱確定病例每日統計資料，包含發病日、個案研判日、居住地區、年齡層、性別、是否境外移入等資訊。",
+    "etl_description": "從 CDC 開放資料下載登革熱確定病例 JSON，篩選台北市且具有座標之案例，轉換經緯度為 WKB 幾何後寫入 PostgreSQL。",
+    "sensitivity": "public"
+  }
+}
