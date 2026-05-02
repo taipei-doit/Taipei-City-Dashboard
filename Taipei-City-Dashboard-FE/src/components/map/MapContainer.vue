@@ -255,7 +255,10 @@ onMounted(() => {
             12.5,
             0,
             0,
-          ])
+          ], {
+            preserveCamera: true,
+            duration: 850,
+          })
         "
       >
         返回預設
@@ -265,7 +268,14 @@ onMounted(() => {
           v-for="(item, index) in savedLocations"
           :key="`${item[4]}-${index}`"
         >
-          <button @click="mapStore.easeToLocation(item)">
+          <button
+            @click="
+              mapStore.easeToLocation(item, {
+                preserveCamera: true,
+                duration: 850,
+              })
+            "
+          >
             {{ item[4] }}
           </button>
         </div>

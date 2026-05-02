@@ -2813,22 +2813,35 @@ export const useMapStore = defineStore("map", {
 		/* Functions that change the viewing experience of the map */
 		// 1. Zoom to a location
 		// [[lng, lat], zoom, pitch, bearing, savedLocationName]
-		easeToLocation(location_array) {
+		easeToLocation(location_array, options = {}) {
+			if (!this.map) return;
+			const preserveCamera = options.preserveCamera === true;
+			const duration = Number.isFinite(Number(options.duration))
+				? Number(options.duration)
+				: 4000;
+			const currentPitch = this.map.getPitch();
+			const currentBearing = this.map.getBearing();
 			if (location_array?.zoom) {
 				this.map.easeTo({
 					center: [location_array.center_x, location_array.center_y],
 					zoom: location_array.zoom,
-					duration: 4000,
-					pitch: location_array.pitch,
-					bearing: location_array.bearing,
+					duration,
+					pitch: preserveCamera
+						? currentPitch
+						: location_array.pitch,
+					bearing: preserveCamera
+						? currentBearing
+						: location_array.bearing,
 				});
 			} else {
 				this.map.easeTo({
 					center: location_array[0],
 					zoom: location_array[1],
-					duration: 4000,
-					pitch: location_array[2],
-					bearing: location_array[3],
+					duration,
+					pitch: preserveCamera ? currentPitch : location_array[2],
+					bearing: preserveCamera
+						? currentBearing
+						: location_array[3],
 				});
 			}
 		},
