@@ -74,51 +74,26 @@ func GetMrtAlertByLine() (data []ThreeDimensionalDataOutput, categories []string
 	return groupLineRows(rows)
 }
 
-// ─── C3: alert-by-type (three_d, JOIN elevator for facility_type) ──────────
+// ─── C3: alert-by-type (description parse, no JOIN) ────────────────────────
 
-// GetMrtAlertByType returns active-alert distinct station counts grouped by facility type.
-// alert table 沒有 facility_type，需 JOIN elevator ON station 取得設施類型。
-// type 用 CASE 直接 mapping 成中文 label，與 alert-by-line 的 line 中文化作風一致。
+// GetMrtAlertByType groups currently-active alerts by the facility type the
+// description text mentions (電梯 / 坡道 / 其他). Counts公告 rows directly so
+//粒度跟 alert 表本身一致，不再用 elevator master 表的 facility_type 當 proxy。
 func GetMrtAlertByType() (data []ThreeDimensionalDataOutput, categories []string, err error) {
 	var rows []mrtA11yLineCountRow
 	err = DBDashboard.Raw(`
 		SELECT
-			CASE e.facility_type
-				WHEN 'elevator' THEN '電梯'
-				WHEN 'ramp'     THEN '坡道'
+			CASE
+				WHEN description LIKE '%電梯%' AND description NOT LIKE '%坡道%' THEN '電梯'
+				WHEN description LIKE '%坡道%' AND description NOT LIKE '%電梯%' THEN '坡道'
 				ELSE '其他'
-			END                            AS x_axis,
-			''                             AS icon,
-			'異常設施數'                   AS y_axis,
-			COUNT(DISTINCT e.station)::int AS data
-		FROM mrtp_a11y_elevator e
-		JOIN mrtp_a11y_alert a
-		  ON a.station = e.station AND a.status = 'active'
-		GROUP BY e.facility_type
-		ORDER BY data DESC
-	`).Scan(&rows).Error
-	if err != nil {
-		return nil, nil, err
-	}
-	return groupLineRows(rows)
-}
-
-// ─── C3-history: alert-trend-30d (three_d, from history table) ─────────────
-
-// GetMrtAlertTrend30d returns count of distinct alert events per line over the last 30 days.
-// DISTINCT (publish_time, line, station, description) deduplicates the 15-min snapshots
-// that current+history load_behavior accumulates in the history table.
-func GetMrtAlertTrend30d() (data []ThreeDimensionalDataOutput, categories []string, err error) {
-	var rows []mrtA11yLineCountRow
-	err = DBDashboard.Raw(`
-		SELECT line AS x_axis, '' AS icon, '近30天公告數' AS y_axis,
-		       COUNT(*)::int AS data
-		FROM (
-			SELECT DISTINCT publish_time, line, station, description
-			FROM mrtp_a11y_alert_history
-			WHERE data_time >= NOW() - INTERVAL '30 days'
-		) t
-		GROUP BY line
+			END           AS x_axis,
+			''            AS icon,
+			'異常公告'    AS y_axis,
+			COUNT(*)::int AS data
+		FROM mrtp_a11y_alert
+		WHERE status = 'active'
+		GROUP BY 1
 		ORDER BY data DESC
 	`).Scan(&rows).Error
 	if err != nil {

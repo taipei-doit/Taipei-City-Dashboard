@@ -90,7 +90,7 @@ const c3Component = ref({
 	id: "mrt-alert-by-type",
 	index: "mrt_alert_by_type",
 	city: "taipei",
-	name: "C3｜異常設施類型分布",
+	name: "C3｜異常公告類型分布",
 	source: "BE Live｜/api/v1/mrt/a11y/alert-by-type",
 	time_from: "current",
 	time_to: null,
@@ -99,7 +99,7 @@ const c3Component = ref({
 	chart_config: {
 		types: ["DonutChart"],
 		color: ["#ed5a5a", "#f6c344", "#5fcf80", "#5a9cf8", "#a37cf6"],
-		unit: "處",
+		unit: "則",
 	},
 	chart_data: null,
 	map_config: [null],
