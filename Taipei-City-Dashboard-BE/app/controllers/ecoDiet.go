@@ -92,6 +92,20 @@ func GetWasteYearly(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"status": "success", "data": data, "categories": categories})
 }
 
+// ─── C5b: GET /api/v1/eco_diet/waste/carbon_footprint_yearly ────────
+
+// GetWasteCarbonFootprintYearly returns yearly waste-derived carbon footprint
+// (公噸 CO2e/year) for Taipei + New Taipei: 2 series × N years.
+// 平均碳足跡係數來源 repo 根目錄 `coal_emission.csv`，計算依據見 models/ecoDiet.go。
+func GetWasteCarbonFootprintYearly(c *gin.Context) {
+	data, categories, err := models.GetWasteCarbonFootprintYearly()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"status": "success", "data": data, "categories": categories})
+}
+
 // ─── C7a: GET /api/v1/eco_diet/food_bank/points ─────────────────────
 
 // GetFoodBankPoints returns all food bank locations (~80 rows).

@@ -42,7 +42,8 @@ const chartWidth = computed(() => {
 
 const chartOptions = ref({
 	chart: {
-		stacked: true,
+		// 預設 stacked；c5b 碳足跡這類雙城獨立量值需 grouped（並排）才看得出單城起伏
+		stacked: props.chart_config?.stacked ?? true,
 		zoom: {
 			allowMouseWheelZoom: false,
 		},
@@ -133,6 +134,12 @@ const chartOptions = ref({
 		},
 		type: "category",
 	},
+	// chart_config.yAxis 未設則交給 ApexCharts 預設（從 0 起）；c5b 大基數小變化要 auto-scale
+	...(props.chart_config?.yAxis ? { yaxis: props.chart_config.yAxis } : {}),
+	// chart_config.yAxisAnnotations 可注入 y 軸 annotation band（如 c5b 雙城時遮中段空白）
+	...(props.chart_config?.yAxisAnnotations
+		? { annotations: { yaxis: props.chart_config.yAxisAnnotations } }
+		: {}),
 });
 
 const selectedIndex = ref(null);

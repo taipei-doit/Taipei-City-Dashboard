@@ -93,9 +93,14 @@ const chartOptions = ref({
 		},
 		type: "datetime",
 	},
-	yaxis: {
+	// 預設 min:0；若 chart_config.yAxis 有給就 passthrough（如 c5b 碳足跡此類大基數小變化的 series 需 auto-scale）
+	yaxis: props.chart_config?.yAxis ?? {
 		min: 0,
 	},
+	// chart_config.yAxisAnnotations 可注入 y 軸 annotation band（如 c5b 雙城時用波浪帶遮中段空白）
+	...(props.chart_config?.yAxisAnnotations
+		? { annotations: { yaxis: props.chart_config.yAxisAnnotations } }
+		: {}),
 });
 
 
