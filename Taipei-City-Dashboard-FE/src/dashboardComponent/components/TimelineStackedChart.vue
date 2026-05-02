@@ -108,6 +108,13 @@ watch(
 	(newVal) => {
 		localSeries.value = JSON.parse(JSON.stringify(newVal || []));
 
+		// Sort series by total sum ascending so largest series is rendered last (on top)
+		localSeries.value.sort((a, b) => {
+			const sumA = a.data.reduce((acc, point) => acc + (point.y || 0), 0);
+			const sumB = b.data.reduce((acc, point) => acc + (point.y || 0), 0);
+			return sumA - sumB;
+		});
+
 		const timestamps = newVal?.[0]?.data?.map((p) => new Date(p.x).getTime()) || [];
 		if (timestamps.length < 2) return;
 
