@@ -38,7 +38,7 @@
     "output_coordinate": "EPSG:4326",
     "is_geometry": 1,
     "dataset_description": "臺北市政府體育局場地租借系統運動場館資料，包含場館名稱、主場館、行政區、開放狀態、容納人數、面積、租借狀態、照片與座標。",
-    "etl_description": "POST venue list API, fetch each venue detail page, parse VLatLon/static map coordinates, normalize image URL, generate WGS84 points, then write PostgreSQL.",
+    "etl_description": "POST venue list API, fetch each venue detail page, parse VLatLon/static map coordinates, normalize image URL, classify venue category from name with TWCC AI, generate WGS84 points, then write PostgreSQL.",
     "sensitivity": "public"
   }
 }

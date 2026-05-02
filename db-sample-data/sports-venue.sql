@@ -2,6 +2,7 @@ CREATE TABLE IF NOT EXISTS public.sports_venue (
     data_time timestamp with time zone,
     venue_id text,
     name text,
+    category text,
     name_eng text,
     main_name text,
     main_name_eng text,
@@ -25,11 +26,17 @@ CREATE TABLE IF NOT EXISTS public.sports_venue (
     ogc_fid serial PRIMARY KEY
 );
 
+ALTER TABLE public.sports_venue
+    ADD COLUMN IF NOT EXISTS category text;
+
 CREATE INDEX IF NOT EXISTS sports_venue_wkb_geometry_idx
     ON public.sports_venue USING gist (wkb_geometry);
 
 CREATE INDEX IF NOT EXISTS sports_venue_district_idx
     ON public.sports_venue (district);
+
+CREATE INDEX IF NOT EXISTS sports_venue_category_idx
+    ON public.sports_venue (category);
 
 INSERT INTO public.components ("index", name)
 VALUES ('sports_venue', '運動場館')
@@ -94,6 +101,7 @@ VALUES (
     '[
         {"key":"photo_url","name":"照片","mode":"image"},
         {"key":"name","name":"場地名稱"},
+        {"key":"category","name":"場地類別"},
         {"key":"main_name","name":"主場館"},
         {"key":"district","name":"行政區"},
         {"key":"people_capacity","name":"容納人數"},
@@ -133,7 +141,7 @@ VALUES (
     'sports_venue',
     NULL,
     ARRAY[(SELECT id FROM public.component_maps WHERE "index" = 'sports_venue' ORDER BY id DESC LIMIT 1)],
-    '{"mode":"byParam","byParam":{"xParam":"name"}}',
+    '{"mode":"byParam","byParam":{"xParam":"category"}}',
     'current',
     NULL,
     1,
@@ -147,7 +155,7 @@ VALUES (
     NOW(),
     NOW(),
     'two_d',
-    'SELECT name AS x_axis, COUNT(*)::float AS data FROM public.sports_venue GROUP BY name ORDER BY data DESC, x_axis',
+    'SELECT category AS x_axis, COUNT(*)::float AS data FROM public.sports_venue WHERE category IS NOT NULL AND category != '''' GROUP BY category ORDER BY data DESC, x_axis',
     NULL,
     'taipei'
 );
