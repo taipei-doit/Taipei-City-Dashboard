@@ -13,73 +13,66 @@ from utils.load_stage import save_dataframe_to_postgresql
 def _transfer(**kwargs):
     """
     CWA 降雨量資料：Extract → Transform → Load
-    (客製化：篩選雙北測站，清洗降雨量異常值，並輸出 GeoJSON 供地圖使用)
+    (客製化：篩選雙北測站，計算行政區平均降雨量)
     """
     
-    # --- 執行環境與 DAG 目標表（由 job_config / kwargs 注入）---
+    # --- 執行環境與 DAG 目標表 ---
     ready_data_db_uri = kwargs.get("ready_data_db_uri")
     proxies = kwargs.get("proxies")
     dag_infos = kwargs.get("dag_infos")
     load_behavior = dag_infos.get("load_behavior")
-    default_table = dag_infos.get("ready_data_default_table")  # 在 config 設定為 district_rainfall 
+    default_table = dag_infos.get("ready_data_default_table")  # config 設定為 district_rainfall 
     history_table = dag_infos.get("ready_data_history_table")
 
     # --- Extract：抓取 CWA API ---
-    # 建議在 Airflow UI 的 Variables 中設定 CWA_API_KEY
-	# --- 1. 確保 API Key 絕對沒有隱形空白或換行 ---
     raw_api_key = Variable.get("CWA_API_KEY", "rdec-key-123-45678-011121314")
-    api_key = raw_api_key.strip()  # 🌟 關鍵殺手鐧
+    api_key = raw_api_key.strip()
     
-    url = f'https://opendata.cwa.gov.tw/fileapi/v1/opendataapi/O-A0002-001?Authorization={api_key}&format=JSON'
+    url = 'https://opendata.cwa.gov.tw/api/v1/rest/datastore/O-A0002-001'
     
-    print("Fetching data from CWA API...")
+    # 修正：拉高 limit 確保拿到所有測站，移除 RainfallElement 避免過濾異常
+    params = {       
+        'offset': 0,
+        'format': 'JSON'
+    }
+
+    print("Fetching data from CWA REST API...")
     
-    # --- 2. 升級全套瀏覽器偽裝 Headers ---
     headers = {
+        'Authorization': api_key,
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
-        'Accept': 'application/json, text/plain, */*',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
         'Accept-Language': 'zh-TW,zh;q=0.9,en-US;q=0.8,en;q=0.7',
-        'Connection': 'keep-alive'
+        'Connection': 'keep-alive',
+        'Upgrade-Insecure-Requests': '1'
     }
     
-    # 發送請求
-    response = requests.get(url, headers=headers, proxies=proxies, timeout=120)
+    response = requests.get(url, headers=headers, params=params, timeout=120)
     
     try:
         response.raise_for_status()
         data = response.json()
+        print("🎉 成功拿到 JSON 資料了！")
     except Exception as e:
-        print(f"❌ API 請求失敗或無法解析 JSON！")
-        print(f"HTTP 狀態碼: {response.status_code}")
-        print(f"請求的 URL (請檢查是否有異常換行): {url}") # 印出 URL 幫你肉眼檢查
-        print(f"API 原始回傳內容: {response.text}")
+        print(f"❌ API 請求失敗！回傳內容: {response.text}")
         raise e
-    # -------------------------
-    
-    stations = data.get('cwaopendata', {}).get('dataset', {}).get('Station', [])
-    if not stations:
-        raise ValueError("No stations found in CWA API.")
 
     # --- Transform：解析與清洗資料 ---
+    stations = data.get('records', {}).get('Station', [])
+    
+    if not stations:
+        raise ValueError("API 回傳成功，但在 records 裡找不到 'Station' 陣列！")
+
     records = []
     for s in stations:
         geo = s.get('GeoInfo', {})
         county = geo.get('CountyName')
         town = geo.get('TownName')
         
-        # 📍 過濾邏輯：只保留「雙北」的測站
+        # 只保留「雙北」的測站
         if county in ['臺北市', '台北市', '新北市']:
             rain_data = s.get('RainfallElement', {})
-            coords = geo.get('Coordinates', [])
-            
-            # 取得 WGS84 經緯度供地圖使用
-            lat, lon = None, None
-            for c in coords:
-                if c.get('CoordinateName') == 'WGS84':
-                    lat = c.get('StationLatitude')
-                    lon = c.get('StationLongitude')
 
-            # 處理氣象局特殊數值 (例如: 'T' 軌跡降雨微量, '-99.0' 儀器故障)
             def clean_rain_value(val):
                 try:
                     v = float(val)
@@ -87,30 +80,27 @@ def _transfer(**kwargs):
                 except (ValueError, TypeError):
                     return 0.0
 
+            # 確保欄位名稱與你的 SQL Table 完全一致
             records.append({
-                'station_id': s.get('StationId'),
-                'station_name': s.get('StationName'),
-                'county': county,
-                'town': town,
-                'rain_1hr': clean_rain_value(rain_data.get('Past1hr', {}).get('Precipitation')),
-                'rain_24hr': clean_rain_value(rain_data.get('Past24hr', {}).get('Precipitation')),
-                'longitude': lon,
-                'latitude': lat
+                'county_name': str(county),
+                'town_name': str(town),
+                'avg_rainfall_1hr': clean_rain_value(rain_data.get('Past1hr', {}).get('Precipitation')),
+                'avg_rainfall_24hr': clean_rain_value(rain_data.get('Past24hr', {}).get('Precipitation')),
+                'avg_rainfall_3days': clean_rain_value(rain_data.get('Past3days', {}).get('Precipitation'))
             })
             
-    ready_data = pd.DataFrame(records)
-    print(f"🌍 縣市過濾：篩選出雙北共 {len(ready_data)} 個氣象站。")
-    
-    if ready_data.empty:
+    raw_df = pd.DataFrame(records)
+    if raw_df.empty:
         print("⚠️ 警告：本次 API 回傳中沒有雙北測站，提早結束任務。")
         return
 
-    # 轉型經緯度確保能存入 DB 與轉成 Point 幾何圖形
-    ready_data['longitude'] = pd.to_numeric(ready_data['longitude'], errors="coerce")
-    ready_data['latitude'] = pd.to_numeric(ready_data['latitude'], errors="coerce")
+    # 計算行政區平均降雨量 (GroupBy)
+    ready_data = raw_df.groupby(['county_name', 'town_name'], as_index=False).mean()
+    ready_data['avg_rainfall_1hr'] = ready_data['avg_rainfall_1hr'].round(2)
+    ready_data['avg_rainfall_24hr'] = ready_data['avg_rainfall_24hr'].round(2)
+    ready_data['avg_rainfall_3days'] = ready_data['avg_rainfall_3days'].round(2)
 
-    # 去重防呆機制 (保護 Primary Key)
-    ready_data = ready_data.drop_duplicates(subset=["station_id"], keep="last")
+    print(f"🌍 縣市過濾與平均計算完成：產出 {len(ready_data)} 個行政區平均數據。")
 
     # --- Load：寫入 PostgreSQL ---
     engine = create_engine(ready_data_db_uri)
@@ -122,22 +112,19 @@ def _transfer(**kwargs):
         history_table=history_table,
     )
 
-    # --- 輸出 GeoJSON 供儀表板地圖直接讀取 ---
-    geo_data = ready_data.dropna(subset=["longitude", "latitude"])
-    if not geo_data.empty:
-        geometry = [Point(xy) for xy in zip(geo_data["longitude"], geo_data["latitude"])]
-        gdata = gpd.GeoDataFrame(geo_data, geometry=geometry, crs="EPSG:4326")
-        
-        # 輸出路徑要跟前端呼叫的 API 對齊
-        output_path = "/opt/airflow/mapData/cwa_rainfall.geojson"
-        os.makedirs(os.path.dirname(output_path), exist_ok=True)
-        gdata.to_file(output_path, driver="GeoJSON", encoding="utf-8")
-        print(f"GeoJSON file has been created: {output_path}")
-    else:
-        print("No valid coordinates for GeoJSON output.")
+    # --- 輸出 GeoJSON (目前依需求註解停用) ---
+    # geo_data = ready_data.dropna(subset=["longitude", "latitude"])
+    # if not geo_data.empty:
+    #     geometry = [Point(xy) for xy in zip(geo_data["longitude"], geo_data["latitude"])]
+    #     gdata = gpd.GeoDataFrame(geo_data, geometry=geometry, crs="EPSG:4326")
+    #     output_path = "/opt/airflow/mapData/cwa_rainfall.geojson"
+    #     os.makedirs(os.path.dirname(output_path), exist_ok=True)
+    #     gdata.to_file(output_path, driver="GeoJSON", encoding="utf-8")
+    #     print(f"GeoJSON file has been created: {output_path}")
+    # else:
+    #     print("No valid coordinates for GeoJSON output.")
 
 # --- DAG 註冊 ---
-# 確保 dag_folder 名稱與你們團隊的架構規則相符
 dag = CommonDag(
     proj_folder="proj_new_taipei_city_dashboard",
     dag_folder="cwa_district_rainfall",  
