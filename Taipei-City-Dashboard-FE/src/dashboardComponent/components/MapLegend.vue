@@ -71,7 +71,7 @@ function handleDataSelection(index) {
 		return;
 	}
 	if (props.map_filter.mode === "byLayerToggle") {
-		const name = props.series[index].name;
+		const {name} = props.series[index];
 		if (selectedIndices.value.has(index)) {
 			selectedIndices.value.delete(index);
 			emits("toggleLayer", props.map_config, name, true);

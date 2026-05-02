@@ -1,8 +1,9 @@
 <!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 
 <script setup>
-import { computed, ref, nextTick } from "vue";
+import { computed, ref, nextTick, watch } from "vue";
 import { districtCoordinates } from "../utilities/districtCoordinates";
+import { useMapStore } from "../../store/mapStore";
 
 const props = defineProps([
 	"chart_config",
@@ -21,6 +22,7 @@ const emits = defineEmits([
 	"clearByLayerFilter",
 	"fly"
 ]);
+const mapStore = useMapStore();
 
 const targetDistrict = ref(null);
 function brightenHex(hex, factor = 2) {
@@ -169,6 +171,24 @@ const districtData = computed(() => {
 
 	return output;
 });
+
+// Watch districtData changes and sync to mapStore fill layer
+watch(
+	districtData,
+	(newData) => {
+		if (!props.map_config) return;
+		const fillConfig = props.map_config.find((m) => m.type === "fill");
+		if (!fillConfig) return;
+		mapStore.setDistrictFillData(
+			fillConfig.index,
+			newData,
+			props.chart_config.color[0],
+			props.activeCity || "metrotaipei"
+		);
+	},
+	{ immediate: true, deep: true }
+);
+
 const tooltipData = computed(() => {
 	const categories = props.chart_config?.categories;
 	const series = props?.series;

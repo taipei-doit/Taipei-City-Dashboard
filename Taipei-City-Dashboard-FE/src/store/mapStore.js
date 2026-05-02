@@ -96,6 +96,8 @@ export const useMapStore = defineStore("map", {
 			// [layerId]: Date
 		},
 		flowLineIntervals: {},
+		// 儲存行政區熱力圖資料（key: layer index, value: { districtData, baseColor, city }）
+		districtFillData: {},
 	}),
 	actions: {
 		/* Initialize Mapbox */
@@ -593,6 +595,20 @@ export const useMapStore = defineStore("map", {
 		},
 		// 3-1. Add a local geojson as a source in mapbox
 		addGeojsonSource(map_config, data) {
+			// If this is a fill layer and we have district data stored, inject count properties
+			if (map_config.type === "fill" && this.districtFillData[map_config.index]) {
+				const { districtData } = this.districtFillData[map_config.index];
+				const updatedData = JSON.parse(JSON.stringify(data));
+				updatedData.features.forEach((feature) => {
+					const districtName = feature.properties.TNAME;
+					if (districtData[districtName] !== undefined) {
+						feature.properties.count = districtData[districtName];
+					} else {
+						feature.properties.count = -1;
+					}
+				});
+				data = updatedData;
+			}
 			if (
 				!["voronoi", "isoline"].includes(map_config.type) &&
 				map_config.type !== "symbol-3d"
@@ -611,6 +627,50 @@ export const useMapStore = defineStore("map", {
 			} else {
 				this.addMapLayer(map_config);
 			}
+		},
+		// 3-1a. Update district fill layer with choropleth data
+		setDistrictFillData(index, districtData, baseColor, city) {
+			this.districtFillData[index] = { districtData, baseColor, city };
+			const highest = districtData.highest || 1;
+			const cities = city === "metrotaipei" ? ["taipei", "metrotaipei"] : [city];
+			const targetCounty = city === "taipei" ? "臺北市" : null;
+
+			cities.forEach((c) => {
+				const layerId = `${index}-fill-${c}`;
+				const sourceId = `${layerId}-source`;
+				if (!this.map || !this.map.getSource(sourceId)) return;
+
+				axios.get(`/mapData/${index}.geojson`).then((rs) => {
+					const {data} = rs;
+					data.features.forEach((feature) => {
+						const districtName = feature.properties.TNAME;
+						const countyName = feature.properties.PNAME;
+						if (targetCounty && countyName !== targetCounty) {
+							feature.properties.count = -1;
+						} else if (districtData[districtName] !== undefined) {
+							feature.properties.count = districtData[districtName];
+						} else {
+							feature.properties.count = -1;
+						}
+					});
+					this.map.getSource(sourceId).setData(data);
+					this.map.setPaintProperty(layerId, "fill-color", [
+						"interpolate",
+						["linear"],
+						["get", "count"],
+						0,
+						"#E8F5E9",
+						highest,
+						baseColor,
+					]);
+					this.map.setPaintProperty(layerId, "fill-opacity", [
+						"case",
+						["<", ["get", "count"], 0],
+						0,
+						0.6,
+					]);
+				});
+			});
 		},
 		// 3-2. Add a raster map as a source in mapbox
 		async addRasterSource(map_config) {
