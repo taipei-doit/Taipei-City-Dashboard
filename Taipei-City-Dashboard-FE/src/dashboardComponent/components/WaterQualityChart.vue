@@ -136,18 +136,20 @@ const metrics = computed(() => {
 .water-quality-chart {
 	display: grid;
 	grid-template-columns: 1fr;
-	gap: 0.75rem;
+	grid-template-rows: repeat(3, minmax(0, 1fr));
+	gap: 0.45rem;
 	height: 100%;
-	padding: 0.25rem 0;
+	min-height: 0;
+	padding: 0.1rem 0 0.2rem;
 	color: var(--color-normal-text);
 
 	&__metric {
 		display: flex;
 		flex-direction: column;
-		justify-content: center;
-		gap: 0.45rem;
+		justify-content: space-between;
+		gap: 0.25rem;
 		min-height: 0;
-		padding: 0.75rem;
+		padding: 0.45rem 0.65rem 0.35rem;
 		border: 1px solid var(--color-border);
 		border-radius: 5px;
 		background: rgba(255, 255, 255, 0.03);
@@ -155,13 +157,16 @@ const metrics = computed(() => {
 
 	&__header {
 		display: flex;
-		align-items: baseline;
+		align-items: center;
 		justify-content: space-between;
 		gap: 0.5rem;
+		min-height: 1.35rem;
+		line-height: 1.2;
 	}
 
 	&__label {
 		font-size: var(--font-s);
+		line-height: 1.2;
 		color: var(--color-complement-text);
 	}
 
@@ -172,10 +177,11 @@ const metrics = computed(() => {
 		background: rgba(86, 185, 109, 0.14);
 		color: #9dc56e;
 		font-size: 0.72rem;
+		line-height: 1.2;
 	}
 
 	&__value {
-		font-size: 1.55rem;
+		font-size: 1.25rem;
 		font-weight: 700;
 		line-height: 1;
 	}
@@ -188,7 +194,8 @@ const metrics = computed(() => {
 
 	&__track {
 		position: relative;
-		height: 0.6rem;
+		flex: 0 0 0.45rem;
+		height: 0.45rem;
 		border-radius: 999px;
 		background: rgba(255, 255, 255, 0.12);
 	}
@@ -214,6 +221,8 @@ const metrics = computed(() => {
 		justify-content: space-between;
 		color: var(--color-complement-text);
 		font-size: 0.75rem;
+		line-height: 1;
+		min-height: 0.75rem;
 	}
 }
 </style>
