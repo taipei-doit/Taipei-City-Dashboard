@@ -150,12 +150,18 @@ export const useTranslationStore = defineStore("translation", {
 
 			if (applyGen !== this.localeApplyGeneration) return;
 
-			// 僅重抓 GET /dashboard/（setDashboards(true)）以帶後端依 Accept-Language 的譯名；
-			// 不重拉 /dashboard/:index chart，避免圖表像整頁重新載入。
+			// 先重抓 GET /dashboard 更新儀表板列表；再以輕量 GET /dashboard/:index 合併組件標題／說明，
+			// 與不重拉 chart 並行（僅 PATCH 現有元件物件上的文字欄位）。
 			if (changed) {
 				const isStale = () =>
 					applyGen !== this.localeApplyGeneration;
 				await contentStore.setDashboards(true, isStale);
+				if (applyGen !== this.localeApplyGeneration) {
+					return;
+				}
+				await contentStore.refreshDashboardComponentTranslationsForLocale(
+					isStale,
+				);
 			}
 		},
 

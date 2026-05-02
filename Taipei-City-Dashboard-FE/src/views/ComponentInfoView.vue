@@ -199,7 +199,7 @@ onMounted(() => {
             v-if="item.links?.length > 0"
             class="componentinfoview-source-links"
           >
-            <h3>相關資料</h3>
+            <h3>{{ t('component.info.related_links') }}</h3>
             <a
               v-for="(link, index) in item.links"
               :key="`${link}-${index}`"
@@ -213,7 +213,7 @@ onMounted(() => {
             v-if="item.contributors"
             class="componentinfoview-source-contributors"
           >
-            <h3>協作者</h3>
+            <h3>{{ t('component.info.contributors') }}</h3>
             <div>
               <div
                 v-for="contributor in item
@@ -233,7 +233,7 @@ onMounted(() => {
                          .image
                        : `/images/contributors/${contentStore.contributors[contributor].image}`
                    "
-                   :alt="`協作者-${contentStore.contributors[contributor].user_name}`"
+                   :alt="`${t('component.info.contributors_alt_prefix')}${contentStore.contributors[contributor].user_name}`"
                  >
                   <p>
                     {{

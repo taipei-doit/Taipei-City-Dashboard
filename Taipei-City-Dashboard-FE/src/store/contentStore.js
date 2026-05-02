@@ -243,6 +243,66 @@ export const useContentStore = defineStore("content", {
 				this.currentDashboard.icon = personal.icon;
 			}
 		},
+
+		/**
+		 * 將 GET /dashboard/:index（依 Accept-Language 已翻譯）之名稱／說明／來源合併回既有組件物件，
+		 * 不重抓 chart／history——供語系切換時與靜態圖標文案同步。
+		 */
+		mergeTranslatedTextsFromDashboardPayload(rows) {
+			if (!Array.isArray(rows) || !rows.length) return;
+			const key = (row) =>
+				`${row?.id ?? ""}::${row?.city ?? ""}`;
+			const byPair = new Map();
+			for (const row of rows) {
+				if (row == null || row.id == null) continue;
+				byPair.set(key(row), row);
+			}
+			const applyOne = (c) => {
+				if (!c || c.id == null) return;
+				const f = byPair.get(key(c));
+				if (!f) return;
+				c.name = f.name;
+				c.short_desc = f.short_desc;
+				c.source = f.source;
+				c.long_desc = f.long_desc;
+				c.use_case = f.use_case;
+			};
+			const list = this.cityDashboard.components;
+			if (Array.isArray(list) && list.length) {
+				list.forEach(applyOne);
+			}
+			if (Array.isArray(this.allMapLayers) && this.allMapLayers.length) {
+				this.allMapLayers.forEach(applyOne);
+			}
+		},
+
+		async refreshDashboardComponentTranslationsForLocale(isStale) {
+			const idx = this.currentDashboard.index;
+			const list = this.cityDashboard.components;
+			if (
+				!idx ||
+				!Array.isArray(list) ||
+				list.length === 0
+			) {
+				return;
+			}
+
+			try {
+				const response = await http.get(`/dashboard/${idx}`, {
+					skipGlobalLoading: true,
+				});
+				if (typeof isStale === "function" && isStale()) {
+					return;
+				}
+				const data = response.data.data || [];
+				this.mergeTranslatedTextsFromDashboardPayload(data);
+			} catch (e) {
+				console.error(
+					"refreshDashboardComponentTranslationsForLocale:",
+					e,
+				);
+			}
+		},
 		// 2-4. Get all dashboards of a city
 		getDashboardsByCity(city) {
 			return this.dashboards.get(city) || [];

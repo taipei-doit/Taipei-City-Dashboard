@@ -76,7 +76,7 @@ function getLinkTag(link, index) {
             />
           </div>
           <div v-if="dialogStore.moreInfoContent.links?.length > 0">
-            <h3>相關資料</h3>
+            <h3>{{ t('component.info.related_links') }}</h3>
             <div class="moreinfo-info-links">
               <a
                 v-for="(link, index) in dialogStore
@@ -89,7 +89,7 @@ function getLinkTag(link, index) {
             </div>
           </div>
           <div v-if="dialogStore.moreInfoContent.contributors">
-            <h3>協作者</h3>
+            <h3>{{ t('component.info.contributors') }}</h3>
             <div class="moreinfo-info-contributors">
               <div
                 v-for="contributor in dialogStore
@@ -113,7 +113,7 @@ function getLinkTag(link, index) {
                       ].image
                       : `/images/contributors/${contentStore.contributors[contributor].image}`
                   "
-                  :alt="`協作者-${contentStore.contributors[contributor].user_name}`"
+                  :alt="`${t('component.info.contributors_alt_prefix')}${contentStore.contributors[contributor].user_name}`"
                 >
                 </a>
               </div>

@@ -117,6 +117,22 @@ const activeCity = computed({
 	},
 });
 
+/** 下拉固定寬度截斷時，用原生 title 顯示完整行政區標籤 */
+const selectBtnActiveLabel = computed(() => {
+	const list = props.selectBtnList;
+	const city = props.activeCity;
+	if (!Array.isArray(list) || city === null || city === "") {
+		return "";
+	}
+	const row = list.find((c) => c.value === city);
+	if (!row) {
+		return "";
+	}
+	const key = `city.area.${row.value}`;
+	const localized = t(key);
+	return localized && localized !== key ? localized : row.name ?? "";
+});
+
 const toggleOn = computed({
 	get: () => props.toggleOn,
 	set: (value) => {
@@ -130,7 +146,7 @@ const showTagTooltip = ref(false);
 // Parses time data into display format
 const dataTime = computed(() => {
 	if (props.config.time_from === "static") {
-		return "固定資料";
+		return t("component.time.static");
 	} else if (props.config.time_from === "current") {
 		return "即時資料";
 	} else if (props.config.time_from === "demo") {
@@ -374,6 +390,7 @@ function returnChartComponent(name, svg) {
         name="city"
         class="selectBtn"
         :class="{'selectBtn-disabled': selectBtnDisabled}"
+        :title="selectBtnActiveLabel"
       >
         <template
           v-for="city in props.selectBtnList"
@@ -395,6 +412,7 @@ function returnChartComponent(name, svg) {
             'dashboardcomponent-control-group-button': true,
             'dashboardcomponent-control-group-active': activeChart === item,
           }"
+          :title="t(`chart.type.${item}`) || chartTypes[item] || item"
           @click="changeActiveChart(item)"
         >
           <BackendTranslatedText
@@ -746,8 +764,9 @@ button:hover {
 			transform: translateX(-15%);
 
 			&-button {
+				flex: 0 0 auto;
 				margin: 0 2px;
-				padding: 4px 4px;
+				padding: 4px 6px;
 				border-radius: 5px;
 				background-color: rgb(77, 77, 77);
 				opacity: 0.6;
@@ -756,6 +775,18 @@ button:hover {
 				text-align: center;
 				transition: color 0.2s, opacity 0.2s;
 				user-select: none;
+				/* 固定寬度：不因 i18n 字數撐開；完整文字見 title */
+				width: 5.75rem;
+				min-width: 5.75rem;
+				max-width: 5.75rem;
+				overflow: hidden;
+
+				span {
+					display: block;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					white-space: nowrap;
+				}
 	
 				&:hover {
 					opacity: 1;
@@ -770,8 +801,20 @@ button:hover {
 		}
 
 		.selectBtn {
+			flex: 0 0 auto;
+			box-sizing: border-box;
+			/* 固定寬度：不因 i18n 字數拉寬控件；過長標籤以省略顯示，完整文字見 title */
+			width: 6.75rem;
+			min-width: 6.75rem;
+			max-width: 6.75rem;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
 			background-color: var(--color-component-background);
 			padding: 3px;
+			padding-right: 1.25rem;
+			font-size: var(--font-s);
+			cursor: pointer;
 
 			&-disabled {
 				cursor: not-allowed;
