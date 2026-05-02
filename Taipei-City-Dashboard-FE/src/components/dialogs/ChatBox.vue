@@ -15,7 +15,7 @@ const contentStore = useContentStore();
 const authStore = useAuthStore();
 const { addChatData, addQueryData, saveChatLog } = chatStore;
 const { createDashboard } = contentStore;
-const { chatData } = storeToRefs(chatStore);
+const { chatData, isAgentThinking } = storeToRefs(chatStore);
 const { editDashboard } = storeToRefs(contentStore);
 const { user } = storeToRefs(authStore);
 
@@ -114,8 +114,8 @@ watch(
           v-show="isStickyOpen"
           class="sticky-body"
         >
-          <span>小幫手會依據您輸入的內容，自動檢索本站臺的組件資料庫，並回傳相似度較高的組件清單，協助您快速找到符合需求的元件或資訊。<br><br>
-            目前小幫手僅提供組件比對與分析服務，不支援一般聊天功能。如造成不便，敬請見諒！</span>
+					<span>小幫手 Agent 會先理解您的需求，再透過 RAG 檢索儀表板組件與資料摘要，提供可執行的建議。<br><br>
+						您可以連續追問與補充條件（例如：只看臺北市、近三年、特定主題），系統會保留對話脈絡持續調整推薦結果。</span>
         </div>
       </div>
       <div
@@ -140,7 +140,7 @@ watch(
             </div>
             <!-- 表格區 -->
             <div
-              v-if="chat.relations"
+							v-if="chat.relations && chat.showRelationTable !== false"
               v-horizontal-wheel
               class="relation-area"
             >
@@ -205,6 +205,23 @@ watch(
           </div>
         </div>
       </div>
+
+			<div
+				v-if="isAgentThinking"
+				class="message"
+			>
+				<div class="bot">
+					<div class="avatar">
+						<BotLogo />
+					</div>
+					<div class="content">
+						<div class="message--bubble thinking-bubble">
+							<span class="spinner" />
+							<span>思考中...</span>
+						</div>
+					</div>
+				</div>
+			</div>
     </div>
 
     <!-- 輸入區 -->
@@ -241,6 +258,30 @@ $radius-20: 20px;
 
 	&::-webkit-scrollbar {
 		display: none;
+	}
+}
+
+.thinking-bubble {
+	display: inline-flex;
+	align-items: center;
+	gap: 10px;
+}
+
+.spinner {
+	width: 14px;
+	height: 14px;
+	border: 2px solid rgba(255, 255, 255, 0.35);
+	border-top-color: #ffffff;
+	border-radius: 50%;
+	animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+	from {
+		transform: rotate(0deg);
+	}
+	to {
+		transform: rotate(360deg);
 	}
 }
 
