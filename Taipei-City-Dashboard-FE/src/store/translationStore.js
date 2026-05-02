@@ -69,6 +69,32 @@ export const useTranslationStore = defineStore("translation", {
 		isSourceLocale: (s) => s.locale === SOURCE_LOCALE,
 	},
 	actions: {
+		async sleep(ms) {
+			return new Promise((resolve) => setTimeout(resolve, ms));
+		},
+
+		/**
+		 * 針對偶發網路/冷啟/短暫 5xx：小幅重試，避免使用者必須 refresh 才成功。
+		 * - 支援 isStale：切換到下一輪 generation 後立刻中止重試
+		 */
+		async retry(fn, { tries = 2, delayMs = 400, isStale } = {}) {
+			let lastErr;
+			for (let i = 0; i < tries; i++) {
+				if (typeof isStale === "function" && isStale()) {
+					return;
+				}
+				try {
+					return await fn();
+				} catch (e) {
+					lastErr = e;
+					if (i < tries - 1) {
+						await this.sleep(delayMs * (i + 1));
+					}
+				}
+			}
+			throw lastErr;
+		},
+
 		/**
          * 載入後端靜態 key→繁中原文（ Navbar 等備援）。
          */
@@ -162,12 +188,19 @@ export const useTranslationStore = defineStore("translation", {
 				if (changed) {
 					const isStale = () =>
 						applyGen !== this.localeApplyGeneration;
-					await contentStore.setDashboards(true, isStale);
+					await this.retry(
+						() => contentStore.setDashboards(true, isStale),
+						{ tries: 2, delayMs: 500, isStale }
+					);
 					if (applyGen !== this.localeApplyGeneration) {
 						return;
 					}
-					await contentStore.refreshDashboardComponentTranslationsForLocale(
-						isStale,
+					await this.retry(
+						() =>
+							contentStore.refreshDashboardComponentTranslationsForLocale(
+								isStale,
+							),
+						{ tries: 2, delayMs: 500, isStale }
 					);
 				}
 			} finally {
