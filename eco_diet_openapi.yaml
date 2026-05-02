@@ -14,6 +14,7 @@ info:
     | C3 環保餐廳篩選列表 | `GET /eco_diet/restaurant/list` | `EcoRestaurantPoint[]` | 表格＋Mapbox 過濾 |
     | C4 綠色商店點位 | `GET /eco_diet/green_store/points` | `GreenStorePoint[]` | Mapbox 點位 |
     | C5 雙北廢棄物年趨勢 | `GET /eco_diet/waste/yearly` | `ThreeDimensionalDataOutput[]` + `categories[]` | ApexCharts LineChart |
+    | C5b 雙北廢棄物年碳足跡 | `GET /eco_diet/waste/carbon_footprint_yearly` | `ThreeDimensionalDataOutput[]` + `categories[]` | ApexCharts LineChart |
     | C7a 實物銀行點位 | `GET /eco_diet/food_bank/points` | `FoodBankPoint[]` | Mapbox 點位 |
     | C7b 最近實物銀行（Haversine） | `GET /eco_diet/food_bank/nearby` | `FoodBankPointNearby[]` | FE 顯示 top-3 卡片 |
 
@@ -47,7 +48,7 @@ tags:
   - name: eco_diet_green_store
     description: 雙北綠色商店（C4）
   - name: eco_diet_waste
-    description: 雙北廚餘量年趨勢（C5）
+    description: 雙北廚餘量年趨勢與年碳足跡（C5 / C5b）
   - name: eco_diet_food_bank
     description: 雙北實物銀行（C7）
 
@@ -497,6 +498,77 @@ paths:
                   - name: '新北市-總產生量'
                     icon: ''
                     data: [1492043, 1495087, 1493750, 1483787, 1471932, 1460328]
+                categories: ['2018', '2019', '2020', '2021', '2022', '2023']
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  # ─────────────────────────── C5b ───────────────────────────
+  /eco_diet/waste/carbon_footprint_yearly:
+    get:
+      tags: [eco_diet_waste]
+      summary: C5b — 雙北年度廢棄物碳足跡
+      description: |
+        以 C5 同表 `gov_open_waste_yearly` 的 3 個量值欄位（廚餘 / 一般垃圾 / 資源垃圾），
+        乘上 repo 根目錄 `coal_emission.csv` 萃取的「平均碳足跡係數」，
+        加總得出雙北每年的**廢棄物總碳足跡**（公噸 CO2e/年）。
+        雙北 × 1 metric → 共 **2 條 series**。
+
+        **平均碳足跡係數**（kg CO2e / 公噸 廢棄物，來源 `coal_emission.csv`）
+
+        | metric_label | 對應 DB 欄位 | 樣本來源 | 平均係數 |
+        |---|---|---|---|
+        | 廚餘 | `food_wastes_recycled` | 有機廢棄物免發酵轉化肥料處理服務（n=1） | **48.3** |
+        | 一般垃圾 | `garbage_clearance` | 4 座都市垃圾焚化廠平均（永康/城西/苗栗/岡山，n=4） | **340** |
+        | 資源垃圾 | `garbage_recycled` | 再生料-廢*容器- 系列（n=10，0.369 kg/kg → 369 kg/公噸） | **369** |
+
+        **SQL**
+        ```sql
+        SELECT data_year::text AS x_axis, '' AS icon,
+               county || '-碳足跡' AS y_axis,
+               ROUND(
+                   food_wastes_recycled * 0.0483 +
+                   garbage_clearance    * 0.340  +
+                   garbage_recycled     * 0.369
+               )::int AS data
+        FROM gov_open_waste_yearly
+        WHERE county IN ('臺北市', '新北市')
+        ORDER BY x_axis, y_axis;
+        ```
+
+        **單位**：公噸 CO2e/年。係數 0.0483 / 0.340 / 0.369 = 公噸 CO2e/公噸 廢棄物
+        （由 kg/公噸 同除 1000 換算，使輸入/輸出單位一致）。
+
+        **Series 命名約定**：`{county}-碳足跡`，如 `臺北市-碳足跡`、`新北市-碳足跡`。
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessEnvelope'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        description: 2 條 series（雙北各一條總碳足跡）
+                        items:
+                          $ref: '#/components/schemas/ThreeDimensionalDataOutput'
+                      categories:
+                        type: array
+                        description: X 軸年度標籤
+                        items:
+                          type: string
+                        example: ['2018', '2019', '2020', '2021', '2022', '2023']
+              example:
+                status: success
+                data:
+                  - name: '臺北市-碳足跡'
+                    icon: ''
+                    data: [392177, 386394, 381218, 374538, 368121, 361546]
+                  - name: '新北市-碳足跡'
+                    icon: ''
+                    data: [499123, 492480, 487127, 480244, 472810, 466281]
                 categories: ['2018', '2019', '2020', '2021', '2022', '2023']
         '500':
           $ref: '#/components/responses/InternalError'

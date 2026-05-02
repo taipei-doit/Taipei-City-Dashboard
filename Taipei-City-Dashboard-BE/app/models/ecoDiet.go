@@ -233,6 +233,45 @@ func GetWasteYearly() ([]ThreeDimensionalDataOutput, []string, error) {
 	return groupEcoDietWasteRows(rows)
 }
 
+// ─── C5b: GET /eco_diet/waste/carbon_footprint_yearly ───────────────
+
+// 平均碳足跡係數（kg CO2e / 公噸 廢棄物），來源：repo 根目錄 `coal_emission.csv`：
+//
+//   - 廚餘:   有機廢棄物免發酵轉化肥料處理服務（n=1）→ 48.3
+//   - 一般垃圾: 4 座都市垃圾焚化廠平均（永康/城西/苗栗/岡山，n=4，{327,333,340,360}）→ 340
+//   - 資源垃圾: 再生料-廢*容器- 系列（kg→公噸 換算後 n=10）→ 369
+//
+// SQL 內以 公噸 CO2e/年（kg/1000）輸出，量級對齊 gov_open_waste_yearly 既有公噸欄位。
+const (
+	wasteCarbonCoefFood     = 0.0483 // 公噸 CO2e/公噸 廚餘
+	wasteCarbonCoefGarbage  = 0.340  // 公噸 CO2e/公噸 一般垃圾
+	wasteCarbonCoefRecycled = 0.369  // 公噸 CO2e/公噸 資源垃圾
+)
+
+// GetWasteCarbonFootprintYearly 回傳雙北逐年「廢棄物總碳足跡」(公噸 CO2e/年)。
+// 公式：food_wastes_recycled × 0.0483 + garbage_clearance × 0.34 + garbage_recycled × 0.369。
+// Series 命名 `{county}-碳足跡`，與 GetWasteYearly 同樣可被 FE 用 split('-') 拆解。
+func GetWasteCarbonFootprintYearly() ([]ThreeDimensionalDataOutput, []string, error) {
+	var rows []ecoDietWasteRow
+	err := DBDashboard.Raw(`
+		SELECT data_year::text AS x_axis, '' AS icon,
+		       county || '-碳足跡' AS y_axis,
+		       ROUND(
+		           food_wastes_recycled * ? +
+		           garbage_clearance    * ? +
+		           garbage_recycled     * ?
+		       )::int AS data
+		FROM gov_open_waste_yearly
+		WHERE county IN ('臺北市', '新北市')
+		ORDER BY 1, 3
+	`, wasteCarbonCoefFood, wasteCarbonCoefGarbage, wasteCarbonCoefRecycled).
+		Scan(&rows).Error
+	if err != nil {
+		return nil, nil, err
+	}
+	return groupEcoDietWasteRows(rows)
+}
+
 // ─── C7a: GET /eco_diet/food_bank/points ────────────────────────────
 
 func GetFoodBankPoints() ([]FoodBankPoint, error) {

@@ -362,6 +362,57 @@ func TestGetWasteYearly_Returns8SeriesAcross6Years(t *testing.T) {
 	}
 }
 
+// ─── C5b: GET /eco_diet/waste/carbon_footprint_yearly ───────────────
+
+func TestGetWasteCarbonFootprintYearly_Returns2SeriesAcross6Years(t *testing.T) {
+	initTestDB(t)
+
+	data, categories, err := GetWasteCarbonFootprintYearly()
+	if err != nil {
+		t.Fatalf("error = %v", err)
+	}
+	// 6 years (2018-2023), 對齊 GetWasteYearly seed data
+	if len(categories) != 6 {
+		t.Fatalf("expected 6 year categories, got %d: %v", len(categories), categories)
+	}
+	if categories[0] != "2018" || categories[5] != "2023" {
+		t.Errorf("year range wrong: %v", categories)
+	}
+	// 2 series = 雙北各一條總碳足跡
+	if len(data) != 2 {
+		t.Fatalf("expected 2 series, got %d", len(data))
+	}
+	for _, s := range data {
+		if len(s.Data) != 6 {
+			t.Errorf("series %s has %d points, want 6", s.Name, len(s.Data))
+		}
+	}
+
+	wantNames := []string{"臺北市-碳足跡", "新北市-碳足跡"}
+	gotNames := map[string]bool{}
+	for _, s := range data {
+		gotNames[s.Name] = true
+	}
+	for _, n := range wantNames {
+		if !gotNames[n] {
+			t.Errorf("missing series %q", n)
+		}
+	}
+
+	// Spot-check 臺北市 2018 = round(62458×0.0483 + 712380×0.34 + 398240×0.369)
+	//                        = round(3016.7 + 242209.2 + 146950.6) = 392177
+	// 容許 ±2 公噸 浮點誤差
+	for _, s := range data {
+		if s.Name == "臺北市-碳足跡" {
+			got := s.Data[0]
+			want := 392177
+			if got < want-2 || got > want+2 {
+				t.Errorf("臺北市-碳足跡[2018] = %d, want ~%d", got, want)
+			}
+		}
+	}
+}
+
 // ─── C7a: GET /eco_diet/food_bank/points ────────────────────────────
 
 func TestGetFoodBankPoints_Returns6Rows(t *testing.T) {

@@ -243,6 +243,9 @@ func configureEcoDietRoutes() {
 		// C5 — 廢棄物年趨勢
 		ecoDiet.GET("/waste/yearly", controllers.GetWasteYearly)
 
+		// C5b — 廢棄物年碳足跡（雙北）
+		ecoDiet.GET("/waste/carbon_footprint_yearly", controllers.GetWasteCarbonFootprintYearly)
+
 		// C7a / C7b — 實物銀行
 		ecoDiet.GET("/food_bank/points", controllers.GetFoodBankPoints)
 		ecoDiet.GET("/food_bank/nearby", controllers.GetFoodBankNearby)

@@ -180,11 +180,43 @@ const c5Component = ref({
 	contributors: SHARED_CONTRIBUTORS,
 });
 
+const c5bComponent = ref({
+	id: "eco-diet-c5b",
+	index: "eco_diet_waste_carbon_footprint_yearly",
+	city: "metrotaipei",
+	name: "C5｜雙北年度廢棄物碳足跡",
+	source: "環境部 × 行政院環保署 產品碳足跡公開資料",
+	time_from: "current",
+	time_to: null,
+	update_freq: null,
+	update_freq_unit: null,
+	chart_config: {
+		// TimelineSeparateChart 看趨勢；ColumnChart 看雙北逐年總和（stacked）
+		types: ["TimelineSeparateChart", "ColumnChart"],
+		// 兩條 series：臺北綠／新北藍，沿用 C1a 配色語言
+		color: ["#5fcf80", "#5a9cf8"],
+		unit: "公噸 CO₂e",
+		xType: "datetime",
+		xTickAmount: 6,
+		// 雙北碳足跡實際範圍：臺北 385k–393k、新北 492k–500k；年際差只 1-2%
+		// yAxis / yAxisAnnotations 改由 recomputeC5b 依當前 city 動態套用
+		// ColumnChart 預設 stacked；雙城是獨立量值，改 grouped（並排）才看得出單城變化
+		stacked: false,
+	},
+	chart_data: null,
+	map_config: [null],
+	short_desc: "雙北逐年廢棄物碳足跡（係數：廚餘 48.3、一般垃圾 340、資源垃圾 369 kgCO₂e/公噸）",
+	long_desc: "計算公式：碳足跡(公噸 CO₂e/年) = 廚餘量(公噸) × 0.0483 + 一般垃圾量(公噸) × 0.340 + 資源垃圾量(公噸) × 0.369。三個轉換係數均萃取自 coal_emission.csv 平均值：(1) 廚餘 48.3 kgCO₂e/公噸，取自有機廢棄物免發酵轉化肥料處理服務 (n=1)；(2) 一般垃圾 340 kgCO₂e/公噸，取自永康、城西、苗栗、岡山 4 座都市垃圾焚化廠平均，原始值 327/333/340/360 kgCO₂e/公噸 (n=4)；(3) 資源垃圾 369 kgCO₂e/公噸，取自再生料-廢*容器- 系列 10 項平均 0.369 kgCO₂e/kg 換算 (n=10)。輸出單位為公噸 CO₂e/年；廢棄物量值來自 C4 同表 gov_open_waste_yearly。",
+	use_case: "雙北減碳政策推進評估、不同廢棄物類別對碳排貢獻拆解、媒體製作雙城碳足跡對照、循環經濟議題量化討論。",
+	links: SHARED_LINKS.waste,
+	contributors: SHARED_CONTRIBUTORS,
+});
+
 const c7aComponent = ref({
 	id: "eco-diet-c7a",
 	index: "eco_diet_food_banks_points",
 	city: "metrotaipei",
-	name: "C5｜實物銀行點位",
+	name: "C6｜實物銀行點位",
 	source: "雙北社會局",
 	time_from: "current",
 	time_to: null,
@@ -210,6 +242,7 @@ const allComponents = computed(() => [
 	c1bComponent.value,
 	c4Component.value,
 	c5Component.value,
+	c5bComponent.value,
 	c7aComponent.value,
 ]);
 const hasMapComponents = computed(() =>
@@ -225,6 +258,7 @@ const activeCityMap = reactive({
 	eco_diet_restaurants_density: "metrotaipei",
 	eco_diet_green_stores_points: "metrotaipei",
 	eco_diet_waste_yearly: "metrotaipei",
+	eco_diet_waste_carbon_footprint_yearly: "metrotaipei",
 	eco_diet_food_banks_points: "metrotaipei",
 });
 
@@ -241,6 +275,8 @@ const rawData = ref({
 	greenStorePoints: [],
 	wasteCategories: [],
 	wasteSeries: [],
+	wasteCarbonCategories: [],
+	wasteCarbonSeries: [],
 	foodBankPoints: [],
 });
 
@@ -349,6 +385,45 @@ function recomputeC5() {
 	}));
 }
 
+function recomputeC5b() {
+	const city = activeCityMap.eco_diet_waste_carbon_footprint_yearly;
+	const allSeries = rawData.value.wasteCarbonSeries;
+	const categories = rawData.value.wasteCarbonCategories;
+	const filtered = allSeries.filter((s) => matchSeriesByCity(s.name, city));
+	// 依城市過濾後重排顏色，避免單城時錯位（如僅顯示新北仍套到臺北綠）
+	const colors = filtered.map((s) =>
+		s.name.startsWith("臺北市") ? "#5fcf80" : "#5a9cf8",
+	);
+	c5bComponent.value.chart_config.color = colors;
+	c5bComponent.value.chart_data = filtered.map((s) => ({
+		name: s.name,
+		data: s.data.map((y, i) => ({
+			y,
+			x: `${categories[i]}-01-01T00:00:00+08:00`,
+		})),
+	}));
+	// ColumnChart 看 stacked 雙北加總，需要 categories 為年份字串
+	c5bComponent.value.chart_config.categories = categories;
+	// 依 city 動態決定 yAxis 範圍 ——
+	//   單城：把軸卡到該城資料 min/max ±2k，把 1-2% 起伏放最大
+	//   雙城：保留 380k–510k 全域；中段 broken-axis 視覺需要真畫 SVG 波浪、ApexCharts 沒原生支援，
+	//         先不做，避免用文字假裝。要看單城起伏請切下拉選擇臺北或新北。
+	if (city === "taipei") {
+		c5bComponent.value.chart_config.yAxis = {
+			min: 384000, max: 394000, forceNiceScale: true,
+		};
+	} else if (city === "newtaipei") {
+		c5bComponent.value.chart_config.yAxis = {
+			min: 491000, max: 501000, forceNiceScale: true,
+		};
+	} else {
+		c5bComponent.value.chart_config.yAxis = {
+			min: 380000, max: 510000, forceNiceScale: true,
+		};
+	}
+	c5bComponent.value.chart_config.yAxisAnnotations = [];
+}
+
 function recomputeC7a() {
 	const city = activeCityMap.eco_diet_food_banks_points;
 	const points = rawData.value.foodBankPoints;
@@ -378,9 +453,10 @@ async function fetchAll() {
 		ecoApi("/api/v1/eco_diet/restaurant/density-by-district?city=新北市"),
 		ecoApi("/api/v1/eco_diet/green_store/points"),
 		ecoApi("/api/v1/eco_diet/waste/yearly"),
+		ecoApi("/api/v1/eco_diet/waste/carbon_footprint_yearly"),
 		ecoApi("/api/v1/eco_diet/food_bank/points"),
 	];
-	const [r1a, r1b_all, r1b_tpe, r1b_ntpe, r4, r5, r7a] = await Promise.allSettled(calls);
+	const [r1a, r1b_all, r1b_tpe, r1b_ntpe, r4, r5, r5b, r7a] = await Promise.allSettled(calls);
 
 	// C1a: 點位 → 快取後依 activeCity 算 MapLegend
 	if (r1a.status === "fulfilled") {
@@ -450,6 +526,17 @@ async function fetchAll() {
 	} else {
 		console.error("C5 fetch failed", r5.reason);
 		c5Component.value.chart_data = null;
+	}
+
+	// C5b: 廢棄物碳足跡，依 activeCity 過濾雙北/單城 series
+	if (r5b.status === "fulfilled") {
+		const body = r5b.value.data;
+		rawData.value.wasteCarbonCategories = body.categories || [];
+		rawData.value.wasteCarbonSeries = body.data || [];
+		recomputeC5b();
+	} else {
+		console.error("C5b fetch failed", r5b.reason);
+		c5bComponent.value.chart_data = null;
 	}
 
 	// C7a: 實物銀行點位 → 依 activeCity 算 MapLegend
@@ -1156,6 +1243,9 @@ function handleChangeCity(component, cityValue) {
 		break;
 	case "eco_diet_waste_yearly":
 		recomputeC5();
+		break;
+	case "eco_diet_waste_carbon_footprint_yearly":
+		recomputeC5b();
 		break;
 	case "eco_diet_food_banks_points":
 		recomputeC7a();
