@@ -5,7 +5,7 @@ import { useRoute } from "vue-router";
 
 import DashboardComponent from "../dashboardComponent/DashboardComponent.vue";
 import MapContainer from "../components/map/MapContainer.vue";
-import MrtAiChatModal from "../components/MrtAiChatModal.vue";
+import AiChatModal from "../components/AiChatModal.vue";
 import NearbyA11yChatModal from "../components/NearbyA11yChatModal.vue";
 import { useContentStore } from "../store/contentStore";
 import { useMapStore } from "../store/mapStore";
@@ -454,11 +454,12 @@ onBeforeUnmount(() => {
     </button>
   </div>
 
-  <MrtAiChatModal
+  <AiChatModal
     :show="showAiModal"
     :component-id="activeAiComponentId"
     :component-name="activeAiComponentName"
     :anchor="aiModalAnchor"
+    summary-endpoint="/api/v1/mrt/a11y/ai-summary"
     @close="showAiModal = false"
   />
   <NearbyA11yChatModal

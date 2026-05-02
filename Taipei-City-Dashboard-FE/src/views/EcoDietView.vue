@@ -3,6 +3,8 @@ import { computed, onBeforeUnmount, onMounted, reactive, ref, watch } from "vue"
 import { useRoute } from "vue-router";
 import mapboxGl from "mapbox-gl";
 
+import AiChatModal from "../components/AiChatModal.vue";
+import EcoDietNearbyChatModal from "../components/EcoDietNearbyChatModal.vue";
 import DashboardComponent from "../dashboardComponent/DashboardComponent.vue";
 import MapContainer from "../components/map/MapContainer.vue";
 import MoreInfo from "../components/dialogs/MoreInfo.vue";
@@ -274,6 +276,28 @@ const featureCache = ref({
 	greenStore: [],
 	foodBank: [],
 });
+
+// ── AI 助理 modal（mirror MrtAccessibilityV2View 模式）───────────────────────
+const activeAiComponentId = ref("");
+const activeAiComponentName = ref("");
+const showAiModal = ref(false);
+const aiModalAnchor = ref({ top: 0, left: 0 });
+
+// ── 附近綠色飲食 AI 助理 FAB（僅 mapview tab 顯示）──────────────────────────
+const showNearbyChat = ref(false);
+
+function openAiModal(event, componentId, componentName) {
+	if (activeAiComponentId.value !== componentId) {
+		activeAiComponentId.value = componentId;
+		activeAiComponentName.value = componentName;
+	}
+	const rect = event.currentTarget.getBoundingClientRect();
+	aiModalAnchor.value = {
+		top: rect.top,
+		left: rect.left,
+	};
+	showAiModal.value = true;
+}
 
 // ── city → 篩選 helper ────────────────────────────────────────────────────
 function matchByCity(row, cityValue) {
@@ -853,6 +877,71 @@ function clearRoute() {
 	}
 }
 
+// pickEndProgrammatic 等同「使用者點了一個點當終點」的行為，從 map.on("click")
+// 的 pick-end 分支抽出來，讓自動流程（AI 觸發）與真人 click 共用同一條路徑。
+async function pickEndProgrammatic(point) {
+	routeEnd.value = { lng: point.lng, lat: point.lat, name: point.name };
+	setEndMarker(routeEnd.value);
+	routeStep.value = null;
+	await drawRoute();
+}
+
+// FACILITY_TO_KEY 把 BE actions.facility_type 映射到 (toggle key, layer id)。
+const FACILITY_TO_KEY = {
+	restaurant: ["restaurant", RESTAURANT_LAYER_ID],
+	green_store: ["greenStore", GREEN_STORE_LAYER_ID],
+	food_bank: ["foodBank", FOOD_BANK_LAYER_ID],
+};
+
+// simulateClickRouteToFacility 模擬人手三步：開路線面板 → 從目前位置出發 → 點 marker。
+// 由 AI chat actions 觸發，不需使用者再互動。
+async function simulateClickRouteToFacility(to) {
+	if (!navigator.geolocation) {
+		dialogStore.showNotification("error", "瀏覽器不支援定位 API");
+		return;
+	}
+	clearRoute();
+	panelPos.value = null;
+	showNearbyChat.value = false;
+	routePanelOpen.value = true;
+	ensurePanelPos();
+	const pos = await new Promise((resolve, reject) => {
+		navigator.geolocation.getCurrentPosition(resolve, reject, {
+			enableHighAccuracy: true,
+			timeout: 5000,
+		});
+	}).catch(() => null);
+	if (!pos) {
+		dialogStore.showNotification("error", "取得位置失敗，請允許瀏覽器定位權限");
+		return;
+	}
+	routeStart.value = {
+		lng: pos.coords.longitude,
+		lat: pos.coords.latitude,
+		name: "目前位置",
+	};
+	setStartMarker(routeStart.value);
+	routeStep.value = "pick-end";
+	await pickEndProgrammatic(to);
+}
+
+// handleChatActions 解析 BE response.actions 並依序執行。AI tool
+// plan_route_to_nearest_eco_facility 會發出 show_layer + draw_route 兩條 action。
+async function handleChatActions(actions) {
+	if (!Array.isArray(actions)) return;
+	for (const a of actions) {
+		if (a.type === "show_layer") {
+			const mapping = FACILITY_TO_KEY[a.facility_type];
+			if (mapping) {
+				const [key, layerId] = mapping;
+				await handleToggle(true, key, layerId);
+			}
+		} else if (a.type === "draw_route" && a.to) {
+			await simulateClickRouteToFacility(a.to);
+		}
+	}
+}
+
 function formatDistance(m) {
 	if (m == null) return "—";
 	return m >= 1000 ? `${(m / 1000).toFixed(2)} 公里` : `${Math.round(m)} 公尺`;
@@ -887,20 +976,30 @@ const panelPos = ref(null); // null = 第一次開啟前；{x,y} = 已決定位�
 // 在 route mode（已選擇從目前位置 / 選兩個點位）才顯示「清除選取」按鈕
 const inRouteMode = computed(() => Boolean(routeStep.value || routeStats.value));
 
+// 計算 panel 初始位置：放在 walk icon 左邊（panel 約 260 寬）。
+// 兩個觸發路徑共用：(1) toggleRoutePanel 真實 click event；(2) AI chatbox 程式化觸發。
+function ensurePanelPos(eventTarget) {
+	if (panelPos.value) return;
+	const target = eventTarget || document.querySelector(".ecodietview-walkbtn");
+	const btnRect = target?.getBoundingClientRect?.();
+	if (btnRect && Number.isFinite(btnRect.left)) {
+		panelPos.value = {
+			x: Math.max(20, btnRect.left - 280),
+			y: btnRect.top,
+		};
+	} else {
+		// fallback：viewport 右上偏下，避免完全飛掉
+		panelPos.value = { x: Math.max(20, window.innerWidth - 320), y: 252 };
+	}
+}
+
 function toggleRoutePanel(e) {
 	if (routePanelOpen.value) {
 		routePanelOpen.value = false;
 		return;
 	}
 	routePanelOpen.value = true;
-	if (!panelPos.value) {
-		// 初始位置：步行 icon 的左邊（panel 約 260 寬）
-		const btnRect = e.currentTarget.getBoundingClientRect();
-		panelPos.value = {
-			x: Math.max(20, btnRect.left - 280),
-			y: btnRect.top,
-		};
-	}
+	ensurePanelPos(e?.currentTarget);
 }
 
 function onPanelDragStart(e) {
@@ -1010,10 +1109,11 @@ function attachHoverPopup(layerId, key) {
 			return;
 		}
 		if (routeStep.value === "pick-end") {
-			routeEnd.value = { lng: coords[0], lat: coords[1], name: feature.properties?.name };
-			setEndMarker(routeEnd.value);
-			routeStep.value = null;
-			drawRoute();
+			pickEndProgrammatic({
+				lng: coords[0],
+				lat: coords[1],
+				name: feature.properties?.name,
+			});
 			return;
 		}
 
@@ -1198,19 +1298,30 @@ function tagListOf(component) {
     v-if="!isMapView"
     class="ecodietview-overview"
   >
-    <DashboardComponent
+    <div
       v-for="item in allComponents"
       :key="`${item.index}-${activeCityMap[item.index]}`"
-      :config="item"
-      mode="default"
-      :info-btn="true"
-      :active-city="activeCityMap[item.index]"
-      :select-btn="true"
-      :select-btn-list="CITY_SELECT_LIST"
-      :city-tag="tagListOf(item)"
-      @info="handleMoreInfo"
-      @change-city="(city) => handleChangeCity(item, city)"
-    />
+      class="ecodiet-card-wrapper"
+    >
+      <DashboardComponent
+        :config="item"
+        mode="default"
+        :info-btn="true"
+        :active-city="activeCityMap[item.index]"
+        :select-btn="true"
+        :select-btn-list="CITY_SELECT_LIST"
+        :city-tag="tagListOf(item)"
+        @info="handleMoreInfo"
+        @change-city="(city) => handleChangeCity(item, city)"
+      />
+      <button
+        class="ecodiet-ai-btn"
+        title="AI 分析"
+        @click="openAiModal($event, item.id, item.name)"
+      >
+        <span class="material-icons">smart_toy</span>
+      </button>
+    </div>
     <MoreInfo />
     <ReportIssue />
   </div>
@@ -1238,7 +1349,7 @@ function tagListOf(component) {
         @toggle="(v) => handleToggle(v, toggleKeyOf(item), layerIdOf(item))"
         @change-city="(city) => handleChangeCity(item, city)"
       />
-      <!-- 無空間資料組件 section（h2 + 3 個聚合卡片，無地圖層所以用 default 模式直接展開）-->
+      <!-- 無空間資料組件 section（h2 + 3 個聚合卡片）-->
       <h2 v-if="noMapComponents.length > 0">
         無空間資料組件
       </h2>
@@ -1246,7 +1357,7 @@ function tagListOf(component) {
         v-for="item in noMapComponents"
         :key="`nomap-${item.index}-${activeCityMap[item.index]}`"
         :config="item"
-        mode="default"
+        mode="map"
         :info-btn="true"
         :active-city="activeCityMap[item.index]"
         :select-btn="true"
@@ -1257,7 +1368,7 @@ function tagListOf(component) {
       />
     </div>
     <MapContainer />
-    <!-- 步行 icon 按鈕：放在區/里/近 按鈕同一垂直軸下方，預設收合 -->
+    <!-- 步行 icon 按鈕 -->
     <button
       class="ecodietview-walkbtn"
       :class="{ 'ecodietview-walkbtn-active': routePanelOpen }"
@@ -1266,7 +1377,7 @@ function tagListOf(component) {
     >
       <span>directions_walk</span>
     </button>
-    <!-- 可拖曳的步行路線視窗：開啟時 fixed 定位，header 可拖 -->
+    <!-- 可拖曳的步行路線視窗 -->
     <div
       v-if="routePanelOpen"
       class="ecodietview-route"
@@ -1349,7 +1460,6 @@ function tagListOf(component) {
           清除路線
         </button>
       </div>
-      <!-- 進入 route mode 後才出現「清除選取」-->
       <button
         v-if="inRouteMode && clickedFeatures.length > 0"
         class="ecodietview-route-btn ecodietview-route-btn-secondary"
@@ -1358,9 +1468,32 @@ function tagListOf(component) {
         清除選取（{{ clickedFeatures.length }}）
       </button>
     </div>
+    <!-- 附近綠色飲食 AI 助理 -->
+    <button
+      class="ecodietview-nearby-fab"
+      title="附近綠色飲食 AI 助理"
+      aria-label="附近綠色飲食 AI 助理"
+      @click="showNearbyChat = true"
+    >
+      <span class="material-icons">eco</span>
+    </button>
     <MoreInfo />
     <ReportIssue />
   </div>
+
+  <AiChatModal
+    :show="showAiModal"
+    :component-id="activeAiComponentId"
+    :component-name="activeAiComponentName"
+    :anchor="aiModalAnchor"
+    summary-endpoint="/api/v1/eco_diet/ai-summary"
+    @close="showAiModal = false"
+  />
+  <EcoDietNearbyChatModal
+    :show="showNearbyChat"
+    @close="showNearbyChat = false"
+    @apply-actions="handleChatActions"
+  />
 </template>
 
 <style scoped lang="scss">
@@ -1369,6 +1502,10 @@ function tagListOf(component) {
 		max-height: calc(100vh - 127px);
 		max-height: calc(var(--vh) * 100 - 127px);
 		display: grid;
+		// 把 row 高度寫死成 DashboardComponent 內部 .dashboardcomponent 的
+		// height 跨 breakpoint 對應值，避免某張卡片內容把 row 撐高、其他
+		// wrapper 被 stretch 拉伸後 footer 浮在中段、看起來像消失。
+		grid-auto-rows: 330px;
 		row-gap: var(--font-s);
 		column-gap: var(--font-s);
 		margin: var(--font-m) var(--font-m);
@@ -1378,8 +1515,20 @@ function tagListOf(component) {
 			grid-template-columns: 1fr 1fr;
 		}
 
+		@media (min-width: 1050px) {
+			grid-auto-rows: 400px;
+		}
+
 		@media (min-width: 1296px) {
 			grid-template-columns: 1fr 1fr 1fr;
+		}
+
+		@media (min-width: 1650px) {
+			grid-auto-rows: 400px;
+		}
+
+		@media (min-width: 2200px) {
+			grid-auto-rows: 500px;
 		}
 	}
 
@@ -1586,4 +1735,62 @@ function tagListOf(component) {
 		}
 	}
 }
+
+.ecodietview-nearby-fab {
+	width: 52px;
+	height: 52px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: fixed;
+	right: 32px;
+	bottom: 116px;
+	border: none;
+	border-radius: 50%;
+	background: #5fcf80;
+	color: #fff;
+	box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+	cursor: pointer;
+	transition: transform 0.15s ease, background 0.15s ease;
+	z-index: 11;
+
+	.material-icons {
+		font-size: 26px;
+	}
+
+	&:hover {
+		background: #4cb86c;
+		transform: scale(1.05);
+	}
+}
+
+.ecodiet-card-wrapper {
+	position: relative;
+	flex-shrink: 0;
+
+	.ecodiet-ai-btn {
+		position: absolute;
+		// DashboardComponent 卡片寬度 = 100% - 2*var(--font-m) 並靠左對齊，
+		// 故按鈕 right 需補上 var(--font-m) 才會落在卡片內右上角。
+		top: var(--font-s);
+		right: calc(var(--font-m) + var(--font-s));
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 32px;
+		height: 32px;
+		border: none;
+		border-radius: 50%;
+		background: var(--color-highlight);
+		color: #fff;
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+		cursor: pointer;
+		transition: transform 0.15s ease;
+		z-index: 10;
+
+		.material-icons { font-size: 16px; }
+		&:hover { transform: scale(1.1); }
+	}
+}
+
 </style>
