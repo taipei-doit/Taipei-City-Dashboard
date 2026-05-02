@@ -275,6 +275,7 @@ onBeforeUnmount(() => {
       <ChatBox
         v-if="isChatBoxShow"
         class="chatbox"
+        @navigate="isChatBoxShow = false"
       />
       <div
         v-if="isChatBtnShow"

@@ -37,10 +37,55 @@ export const useChatStore = defineStore('chat', () => {
     	chatData.value.push({ id: chatData.value.length + 1, isDefault: false, ...newChatData });
   	};
 
-  	const addQueryData = async (newChatData) => {
+	const actionLabels = {
+		show_accident_heatmap: '行人事故熱點地圖',
+		show_ltc_care:         '長照關懷儀表板',
+		show_map_layers:       '圖資資訊地圖',
+		show_transportation:   '務實交通儀表板',
+	}
 
+	const describeResult = (action, params) => {
+		const cityLabel = params.city === 'taipei' ? '台北市' : '雙北'
+		if (action === 'show_accident_heatmap') return `${params.district || '雙北全市'} 行人事故熱點`
+		if (action === 'show_ltc_care') return `${cityLabel} 長照關懷`
+		if (action === 'show_map_layers') return `${cityLabel} 圖資資訊`
+		if (action === 'show_transportation') return '雙北務實交通'
+		return null
+	}
+
+  	const addQueryData = async (newChatData) => {
     	chatData.value.push({ id: chatData.value.length + 1, isDefault: false, ...newChatData });
 
+		// 先嘗試 AI 路由
+		try {
+			const aiResp = await fetch('http://localhost:8090/query', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ text: newChatData.content }),
+			})
+			const { action, params } = await aiResp.json()
+
+			if (action && action !== 'show_text') {
+				const label = actionLabels[action] || action
+				const desc = describeResult(action, params)
+				const hasCityChoice = ['show_ltc_care', 'show_map_layers'].includes(action)
+				const buttons = hasCityChoice
+					? [
+						{ id: 1, text: `查看台北市${label}`, city: 'taipei' },
+						{ id: 2, text: `查看雙北${label}`,   city: 'metrotaipei' },
+					  ]
+					: [{ id: 1, text: `查看${label}` }]
+				chatData.value.push({ id: chatData.value.length + 1, role: 'bot', isDefault: false,
+					content: `已為您找到對應組件：\n\n📍 ${label}${hasCityChoice ? '\n請選擇地區：' : (desc ? '\n條件：' + desc : '')}`,
+					action, params,
+					button: buttons,
+				})
+				saveChatLog(newChatData.content, { action, params })
+				return
+			}
+		} catch (_) { /* AI server 無法連線，繼續 vector search */ }
+
+		// Fallback：vector search
 		recommendComponents.value = [];
 		let topK = null;
 
@@ -62,30 +107,18 @@ export const useChatStore = defineStore('chat', () => {
 				recommendComponents.value = response.data.data;
 			}
 
-			// 去除重複項目存到 result
 			const result = Array.from(
   				recommendComponents.value.reduce((map, item) => {
     				const key = item.index
     				const exist = map.get(key)
-
-    				// 如果還沒放過，直接放
-    				if (!exist) {
-      					map.set(key, item)
-      					return map
-    				}
-
-    				// 如果已存在，但現在的是 metrotaipei，就覆蓋
-    				if (item.city === 'metrotaipei') {
-      					map.set(key, item)
-    				}
-
+    				if (!exist) { map.set(key, item); return map }
+    				if (item.city === 'metrotaipei') map.set(key, item)
     				return map
   				}, new Map()).values()
 			)
-			// 把 result 蓋回去 recommendComponents
 			recommendComponents.value = result
 
-		} catch (error) { 
+		} catch (error) {
 			console.error("VectorAnalysisError :", error);
 		}
 
@@ -97,7 +130,6 @@ export const useChatStore = defineStore('chat', () => {
 			chatData.value.push({ id: chatData.value.length + 1, role: 'bot', isDefault: false, content: `很抱歉，您提供的描述沒有相似組件，請繼續提問 ! ` });
 		}
 
-		// 分析結束後紀錄問答log
 		saveChatLog(newChatData.content, recommendComponents.value);
   	};
 

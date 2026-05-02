@@ -1,5 +1,7 @@
 <script setup>
+const emit = defineEmits(["navigate"]);
 import { ref, watch, nextTick } from "vue";
+import { useRouter } from "vue-router";
 import { storeToRefs } from "pinia";
 import SendIcon from "../icons/SendIcon.vue";
 import BotLogo from "../icons/BotLogo.vue";
@@ -19,12 +21,34 @@ const { chatData } = storeToRefs(chatStore);
 const { editDashboard } = storeToRefs(contentStore);
 const { user } = storeToRefs(authStore);
 
+const router = useRouter();
+
 const userMessage = ref("");
 const chatAreaRef = ref(null);
 const isStickyOpen = ref(false);
 const dashboardCreationLoading = ref(false);
 
-const qaBtnHandler = async (text, relations) => {
+const resolveRoute = (action, params) => {
+	const city = params?.city || 'metrotaipei'
+	if (action === 'show_accident_heatmap')
+		return { path: "/mapview", query: { index: "pedestrian-safety", city: "metrotaipei" } }
+	if (action === 'show_ltc_care')
+		return { path: "/dashboard", query: { index: city === 'taipei' ? 'ltc_care_tpe' : 'ltc_care_newtpe', city } }
+	if (action === 'show_map_layers')
+		return { path: "/mapview", query: { index: city === 'taipei' ? 'map-layers-taipei' : 'map-layers-metrotaipei', city } }
+	if (action === 'show_transportation')
+		return { path: "/dashboard", query: { index: "practical_transportation_newtpe", city: "metrotaipei" } }
+	return null
+}
+
+const qaBtnHandler = async (text, relations, action, params, btnCity) => {
+	const effectiveParams = btnCity ? { ...params, city: btnCity } : params
+	const route = resolveRoute(action, effectiveParams)
+	if (route) {
+		emit("navigate")
+		router.push(route)
+		return
+	}
 	if (text === "建立儀表板") {
 		if (dashboardCreationLoading.value === true) return;
 		dashboardCreationLoading.value = true;
@@ -180,7 +204,7 @@ watch(
               <button
                 v-for="btn in chat.button"
                 :key="btn.id"
-                @click="qaBtnHandler(btn.text, chat.relations)"
+                @click="qaBtnHandler(btn.text, chat.relations, chat.action, chat.params, btn.city)"
               >
                 {{ btn.text }}
               </button>
