@@ -105,12 +105,15 @@ const routeStatusText = computed(() => {
 const speedLimitState = computed(() => mapStore.currentRoadSpeedLimit || {});
 const speedLimitValue = computed(() => {
 	const state = speedLimitState.value;
-	if (state.status === "loading" || state.status === "idle") return "--";
-	if (state.status === "error") return "N/A";
-	return state.speedLimitText || "--";
+	const fallbackValue = state.speedLimitText || "50";
+	if (state.status === "loading" || state.status === "idle") {
+		return fallbackValue;
+	}
+	if (state.status === "error") return fallbackValue || "--";
+	return state.speedLimitText || fallbackValue || "--";
 });
 const speedLimitUnit = computed(() =>
-	["--", "N/A"].includes(speedLimitValue.value) ? "" : "km/h",
+	speedLimitValue.value === "--" ? "" : "km/h",
 );
 const speedLimitSignValue = computed(() => {
 	const value = String(speedLimitValue.value || "");
@@ -127,14 +130,14 @@ const speedLimitDetailValue = computed(() =>
 );
 const speedLimitRoadName = computed(() => {
 	const state = speedLimitState.value;
-	if (state.status === "loading") return "路名查詢中";
-	if (state.status === "error") return state.error || "道路資訊無法取得";
+	if (state.status === "loading") return state.roadName || "路名查詢中";
+	if (state.status === "error") return state.roadName || "暫用法定速限";
 	return state.roadName || "目前道路";
 });
 const speedLimitSourceLabel = computed(() => {
 	const state = speedLimitState.value;
-	if (state.status === "loading") return "SYNC";
-	if (state.status === "error") return "OFFLINE";
+	if (state.status === "loading") return state.roadName ? "沿用" : "SYNC";
+	if (state.status === "error") return state.speedLimitText ? "暫用" : "OFFLINE";
 	if (state.isMultiple) return "依路段";
 	return state.isDefault ? "法定" : "OPEN DATA";
 });

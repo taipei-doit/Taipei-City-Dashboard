@@ -173,6 +173,18 @@ function formatSpeedLimitText(speedLimit) {
 		.replace(/、/g, " / ");
 }
 
+function createDefaultSpeedLimit(roadName = "") {
+	return {
+		speedLimit: TAIPEI_DEFAULT_SPEED_LIMIT,
+		speedLimitText: formatSpeedLimitText(TAIPEI_DEFAULT_SPEED_LIMIT),
+		roadName,
+		segment: "",
+		category: "法定速限",
+		isDefault: true,
+		isMultiple: false,
+	};
+}
+
 function normalizeDigits(value) {
 	return String(value || "")
 		.replace(/[０-９]/g, (digit) =>
@@ -321,15 +333,7 @@ export function findTaipeiRoadSpeedLimit({ roadName, address }) {
 	);
 
 	if (!normalizedRoadName && !normalizedContext) {
-		return {
-			speedLimit: "",
-			speedLimitText: "",
-			roadName: "",
-			segment: "",
-			category: "",
-			isDefault: false,
-			isMultiple: false,
-		};
+		return createDefaultSpeedLimit();
 	}
 
 	const scoredMatches = TAIPEI_ROAD_SPEED_LIMITS.map((record) => {
@@ -368,15 +372,7 @@ export function findTaipeiRoadSpeedLimit({ roadName, address }) {
 	}).filter((record) => record.score > 0);
 
 	if (!scoredMatches.length) {
-		return {
-			speedLimit: TAIPEI_DEFAULT_SPEED_LIMIT,
-			speedLimitText: formatSpeedLimitText(TAIPEI_DEFAULT_SPEED_LIMIT),
-			roadName: resolvedRoadName,
-			segment: "",
-			category: "法定速限",
-			isDefault: true,
-			isMultiple: false,
-		};
+		return createDefaultSpeedLimit(resolvedRoadName);
 	}
 
 	const maxScore = Math.max(...scoredMatches.map((record) => record.score));

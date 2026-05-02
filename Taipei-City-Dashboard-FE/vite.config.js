@@ -24,9 +24,10 @@ const serverConfig = isDockerCompose
 				changeOrigin: true,
 				rewrite: (path) => path.replace("/dev", "/v1")
 			},
-			"/map_engine": {
-				target: "https://www.map.com.tw",
+			"/nominatim": {
+				target: "https://nominatim.openstreetmap.org",
 				changeOrigin: true,
+				rewrite: (path) => path.replace(/^\/nominatim/, "")
 			}
 		},
 		watch: {
@@ -48,9 +49,10 @@ const serverConfig = isDockerCompose
 				changeOrigin: true,
 				rewrite: (path) => path.replace(/^\/geo_server/, "")
 			},
-			"/map_engine": {
-				target: "https://www.map.com.tw",
+			"/nominatim": {
+				target: "https://nominatim.openstreetmap.org",
 				changeOrigin: true,
+				rewrite: (path) => path.replace(/^\/nominatim/, "")
 			}
 		}
 	};
