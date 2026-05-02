@@ -48,13 +48,11 @@ func (s *TranslationService) Translate(ctx context.Context, text string, targetL
 	syncCtx, cancel := context.WithTimeout(ctx, 10*time.Second)
 	defer cancel()
 
-	translated, err := s.callLLM(syncCtx, text, targetLang)
-	if err != nil || translated == "" || translated == text {
+		translated, err := s.callLLM(bgCtx, originalText, lang)
 		if err != nil {
-			logs.FError("LLM Translation failed for '%s': %v", text, err)
+			logs.FError("[Async] LLM Translation failed for '%s': %v", originalText, err)
+			return
 		}
-		return text // Fallback to original
-	}
 
 	// Sanitize output
 	translated = strings.Trim(translated, "\"")

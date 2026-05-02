@@ -23,6 +23,11 @@ var (
 
 func init() {
 	aiSemaphore = semaphore.NewWeighted(int64(global.TWCC.MaxConcurrent))
+	InitModel() // Initial attempt
+}
+
+// InitModel (re)initializes the global LLM model with the current global configuration.
+func InitModel() {
 	twccModel = twcc.New(
 		global.TWCC.ApiKey,
 		global.TWCC.ApiUrl,

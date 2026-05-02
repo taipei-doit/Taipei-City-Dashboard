@@ -1,33 +1,58 @@
 <!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 
 <script setup>
-import { onMounted, ref, watch } from "vue";
+import { ref, watch } from "vue";
+import router from "../../../router";
 import { useMapStore } from "../../../store/mapStore";
-import { useBackendTranslation } from "../../../composables/useBackendTranslation";
+import { useContentStore } from "../../../store/contentStore";
+import { useThemeStore } from "../../../store/themeStore";
 import {
-	fetchStorylineTopics,
-	postStorylineRecommend,
-	toStorylineApiLang,
-	collectRelatedNewsFromSteps,
-} from "../../../api/storyline";
+	extractNewsInsight,
+	fetchCrawledNewsRecommendations,
+} from "../../../api/ai";
 
 const mapStore = useMapStore();
-const { t, locale } = useBackendTranslation();
+const contentStore = useContentStore();
+const themeStore = useThemeStore();
 
 const RECOMMEND_SIDEBAR_EXPANDED_KEY = "isRecommendSidebarExpanded";
+const MODE_STORAGE_KEY = "recommendSidebarAiMode";
+/** 自行貼上網址並解析 */
+const MODE_MANUAL_URL = "manual_url";
+/** 伺服器自動抓取新聞並配對組件 */
+const MODE_AUTO_NEWS = "auto_news";
 
 /** 展開寬度略大於左側 SideBar，收合 45px */
 const isExpanded = ref(true);
 
-const topics = ref([]);
-const selectedTopicId = ref(null);
-const relatedNews = ref([]);
-/** @type {import('vue').Ref<string | null>} */
-const loadErrorKey = ref(null);
-/** @type {import('vue').Ref<string | null>} */
-const recommendErrorKey = ref(null);
-const loadingTopics = ref(false);
-const loadingRecommend = ref(false);
+const recommendMode = ref(MODE_AUTO_NEWS);
+
+const aiNewsUrl = ref("");
+const aiInsightResult = ref(null);
+const loadingAiInsight = ref(false);
+const aiInsightError = ref(null);
+
+/** 自動新聞：null = 尚未請求，[] = 已成功但無項目 */
+const autoNewsItems = ref(null);
+const loadingAutoNews = ref(false);
+const autoNewsError = ref(null);
+
+async function handleAiInsight() {
+	if (!aiNewsUrl.value) return;
+
+	loadingAiInsight.value = true;
+	aiInsightError.value = null;
+	aiInsightResult.value = null;
+
+	try {
+		const result = await extractNewsInsight(aiNewsUrl.value);
+		aiInsightResult.value = result;
+	} catch {
+		aiInsightError.value = "無法載入主題。";
+	} finally {
+		loadingAiInsight.value = false;
+	}
+}
 
 function readExpandedFromStorage() {
 	const stored = localStorage.getItem(RECOMMEND_SIDEBAR_EXPANDED_KEY);
@@ -47,55 +72,122 @@ function toggleExpand() {
 	mapStore.resizeMap();
 }
 
-async function loadTopics() {
-	loadErrorKey.value = null;
-	loadingTopics.value = true;
-	topics.value = [];
-	try {
-		topics.value = await fetchStorylineTopics();
-	} catch {
-		loadErrorKey.value = "recommend.error_topics_load";
-	} finally {
-		loadingTopics.value = false;
+function switchRecommendMode(mode) {
+	if (mode !== MODE_MANUAL_URL && mode !== MODE_AUTO_NEWS) {
+		return;
+	}
+	recommendMode.value = mode;
+	localStorage.setItem(MODE_STORAGE_KEY, mode);
+}
+
+function readRecommendModeFromStorage() {
+	const stored = localStorage.getItem(MODE_STORAGE_KEY);
+	if (stored === MODE_AUTO_NEWS || stored === MODE_MANUAL_URL) {
+		recommendMode.value = stored;
 	}
 }
 
-async function selectTopic(topic) {
-	selectedTopicId.value = topic.id;
-	recommendErrorKey.value = null;
-	relatedNews.value = [];
-	loadingRecommend.value = true;
-	const lang = toStorylineApiLang(locale.value);
+async function handleLoadAutoNews() {
+	if (loadingAutoNews.value) {
+		return;
+	}
+	loadingAutoNews.value = true;
+	autoNewsError.value = null;
+
 	try {
-		const { steps } = await postStorylineRecommend({
-			lang,
-			topic_id: String(topic.id),
-			limit: 12,
+		autoNewsItems.value = await fetchCrawledNewsRecommendations({});
+	} catch {
+		autoNewsError.value =
+			"無法載入新聞推薦。請稍後再試；或請管理員檢查 RSS（NEWS_RSS_FEEDS）與 TWCC／LLM 服務是否正常。";
+		autoNewsItems.value = null;
+	} finally {
+		loadingAutoNews.value = false;
+	}
+}
+
+function openExternalNewsUrl(url) {
+	if (!url || typeof url !== "string") return;
+	globalThis.open(url, "_blank", "noopener,noreferrer");
+}
+
+readExpandedFromStorage();
+readRecommendModeFromStorage();
+
+watch(
+	[recommendMode, isExpanded],
+	([mode, expanded]) => {
+		if (mode === MODE_AUTO_NEWS && expanded) {
+			handleLoadAutoNews();
+		}
+	},
+	{ immediate: true },
+);
+
+watch(
+	() => themeStore.theme,
+	() => {
+		if (recommendMode.value === MODE_AUTO_NEWS && isExpanded.value) {
+			handleLoadAutoNews();
+		}
+	},
+);
+
+/**
+ * 導向儀表板總覽中該組件所在版面（保留右側推薦側欄，避免 component-info 卸載側欄）
+ */
+async function openStorylineRecommendedComponent(comp) {
+	const compId = comp?.id;
+	if (compId === undefined || compId === null || compId === "") {
+		const idx = comp?.index;
+		if (idx === undefined || idx === null || idx === "") return;
+		router.push({
+			name: "component-info",
+			params: { index: String(idx) },
+			query: comp.city ? { city: comp.city } : {},
 		});
-		relatedNews.value = collectRelatedNewsFromSteps(steps);
-		if (!relatedNews.value.length) {
-			recommendErrorKey.value = "recommend.error_news_empty_summary";
-		}
-	} catch {
-		recommendErrorKey.value = "recommend.error_news_load";
-	} finally {
-		loadingRecommend.value = false;
+		return;
 	}
+
+	if (
+		contentStore.dashboards.size === 0 &&
+		(!contentStore.personalDashboards?.length)
+	) {
+		await contentStore.setDashboards(true);
+	}
+
+	const loc = contentStore.findDashboardLocationForComponent(
+		compId,
+		comp?.city || null,
+	);
+	if (!loc) {
+		const idx = comp?.index;
+		if (idx === undefined || idx === null || idx === "") return;
+		router.push({
+			name: "component-info",
+			params: { index: String(idx) },
+			query: comp.city ? { city: comp.city } : {},
+		});
+		return;
+	}
+
+	contentStore.pendingScrollToComponentId = compId;
+	const query = { index: loc.index };
+	if (loc.city != null && loc.city !== "") {
+		query.city = loc.city;
+	}
+
+	const rt = router.currentRoute.value;
+	const sameDashboard =
+		rt.path === "/dashboard" &&
+		String(rt.query.index || "") === String(loc.index || "") &&
+		String(rt.query.city || "") === String(loc.city || "");
+
+	if (sameDashboard) {
+		return;
+	}
+
+	await router.push({ path: "/dashboard", query });
 }
-
-watch(locale, () => {
-	if (selectedTopicId.value) {
-		const sel = topics.value.find((x) => x.id === selectedTopicId.value);
-		if (sel) {
-			selectTopic(sel);
-		}
-	}
-});
-
-onMounted(() => {
-	readExpandedFromStorage();
-	loadTopics();
-});
 </script>
 
 <template>
@@ -127,8 +219,17 @@ onMounted(() => {
           <h1 class="recommendsidebar-title">
             {{ t('recommend.title') }}
           </h1>
-          <p class="recommendsidebar-lead">
-            {{ t('recommend.lead') }}
+          <p
+            v-if="recommendMode === MODE_MANUAL_URL"
+            class="recommendsidebar-lead"
+          >
+            貼上新聞網址取得洞察與推薦主題。
+          </p>
+          <p
+            v-else
+            class="recommendsidebar-lead"
+          >
+            由系統擷取近期新聞，推薦與儀表板組件相關的 2–3 則報導。
           </p>
         </div>
       </template>
@@ -141,100 +242,215 @@ onMounted(() => {
 
     <template v-if="isExpanded">
       <div
-        v-if="loadingTopics"
-        class="recommendsidebar-status"
+        class="recommendsidebar-modes"
+        role="tablist"
+        aria-label="今日推薦模式"
       >
-        {{ t('recommend.loading_topics') }}
+        <button
+          type="button"
+          role="tab"
+          class="recommendsidebar-mode-btn"
+          :class="{
+            'recommendsidebar-mode-btn--active':
+              recommendMode === MODE_AUTO_NEWS,
+          }"
+          :aria-selected="recommendMode === MODE_AUTO_NEWS"
+          @click="switchRecommendMode(MODE_AUTO_NEWS)"
+        >
+          自動新聞
+        </button>
+        <button
+          type="button"
+          role="tab"
+          class="recommendsidebar-mode-btn"
+          :class="{
+            'recommendsidebar-mode-btn--active':
+              recommendMode === MODE_MANUAL_URL,
+          }"
+          :aria-selected="recommendMode === MODE_MANUAL_URL"
+          @click="switchRecommendMode(MODE_MANUAL_URL)"
+        >
+          網址分析
+        </button>
       </div>
-      <template v-else>
-        <h2 class="recommendsidebar-subtitle">
-          {{ t('recommend.section_topics') }}
-        </h2>
-        <p
-          v-if="loadErrorKey"
-          class="recommendsidebar-msg recommendsidebar-msg--error"
-        >
-          {{ t(loadErrorKey) }}
-        </p>
-        <p
-          v-else-if="!topics.length"
-          class="recommendsidebar-msg"
-        >
-          {{ t('recommend.empty_topics') }}
-        </p>
-        <ul
-          v-else
-          class="recommendsidebar-topiclist"
-        >
-          <li
-            v-for="top in topics"
-            :key="top.id"
-          >
+
+      <div v-show="recommendMode === MODE_MANUAL_URL">
+        <div class="recommendsidebar-ai-section">
+          <div class="recommendsidebar-ai-input-group">
+            <input
+              v-model="aiNewsUrl"
+              type="text"
+              placeholder="貼上新聞網址擷取洞察..."
+              class="recommendsidebar-ai-input"
+              @keyup.enter="handleAiInsight"
+            >
             <button
               type="button"
-              class="recommendsidebar-topic"
-              :class="{ 'is-selected': selectedTopicId === top.id }"
-              @click="selectTopic(top)"
+              class="recommendsidebar-ai-btn"
+              :disabled="loadingAiInsight || !aiNewsUrl"
+              @click="handleAiInsight"
             >
-              <span class="recommendsidebar-topic-title">{{ top.title }}</span>
+              <span v-if="!loadingAiInsight">auto_awesome</span>
               <span
-                v-if="top.summary"
-                class="recommendsidebar-topic-summary"
-              >{{ top.summary }}</span>
+                v-else
+                class="is-spinning"
+              >sync</span>
             </button>
-          </li>
-        </ul>
+          </div>
+          <p
+            v-if="aiInsightError"
+            class="recommendsidebar-msg recommendsidebar-msg--error"
+          >
+            {{ aiInsightError }}
+          </p>
+        </div>
 
-        <h2 class="recommendsidebar-subtitle recommendsidebar-subtitle--news">
-          {{ t('recommend.section_news') }}
-        </h2>
         <div
-          v-if="!selectedTopicId"
-          class="recommendsidebar-msg"
+          v-if="aiInsightResult"
+          class="recommendsidebar-ai-result"
         >
-          {{ t('recommend.pick_topic_hint') }}
+          <h2 class="recommendsidebar-subtitle">
+            推薦主題
+          </h2>
+          <ul
+            v-if="aiInsightResult.components?.length"
+            class="recommendsidebar-topiclist"
+          >
+            <li
+              v-for="comp in aiInsightResult.components"
+              :key="`${comp.id}-${comp.city ?? ''}`"
+            >
+              <button
+                type="button"
+                class="recommendsidebar-topic recommendsidebar-topic--ai"
+                @click="openStorylineRecommendedComponent(comp)"
+              >
+                <span class="recommendsidebar-topic-title">{{ comp.name }}</span>
+                <span class="recommendsidebar-topic-summary">{{ comp.short_desc }}</span>
+              </button>
+            </li>
+          </ul>
+          <p
+            v-else
+            class="recommendsidebar-msg recommendsidebar-msg--error"
+          >
+            無法載入主題。
+          </p>
+
+          <h2 class="recommendsidebar-subtitle">
+            AI 數據洞察
+          </h2>
+          <div class="recommendsidebar-storyline">
+            {{ aiInsightResult.storyline }}
+          </div>
         </div>
-        <div
-          v-else-if="loadingRecommend"
-          class="recommendsidebar-status"
+      </div>
+
+      <div
+        v-show="recommendMode === MODE_AUTO_NEWS"
+        class="recommendsidebar-auto-news"
+      >
+        <button
+          type="button"
+          class="recommendsidebar-crawl-btn"
+          :disabled="loadingAutoNews"
+          @click="handleLoadAutoNews"
         >
-          {{ t('recommend.loading_news') }}
-        </div>
+          <span v-if="!loadingAutoNews">newspaper</span>
+          <span
+            v-else
+            class="is-spinning"
+          >sync</span>
+          <span class="recommendsidebar-crawl-btn-label">
+            {{ loadingAutoNews ? "載入中…" : "取得新聞推薦" }}
+          </span>
+        </button>
         <p
-          v-else-if="recommendErrorKey"
+          v-if="autoNewsError"
           class="recommendsidebar-msg recommendsidebar-msg--error"
         >
-          {{ t(recommendErrorKey) }}
+          {{ autoNewsError }}
+        </p>
+        <p
+          v-else-if="
+            autoNewsItems !== null &&
+              autoNewsItems.length === 0 &&
+              !loadingAutoNews
+          "
+          class="recommendsidebar-msg"
+        >
+          目前沒有可推薦的新聞項目。
         </p>
         <ul
-          v-else
+          v-if="autoNewsItems?.length"
           class="recommendsidebar-newslist"
         >
           <li
-            v-for="(n, idx) in relatedNews"
-            :key="n.news_id ?? idx"
-            class="recommendsidebar-newsitem"
+            v-for="(item, idx) in autoNewsItems"
+            :key="`${item.url || item.title}-${idx}`"
           >
-            <a
-              v-if="n.url"
-              :href="n.url"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="recommendsidebar-news-title"
-            >{{ n.title }}</a>
-            <span
-              v-else
-              class="recommendsidebar-news-title"
-            >{{ n.title }}</span>
-            <p
-              v-if="n.summary"
-              class="recommendsidebar-news-summary"
-            >
-              {{ n.summary }}
-            </p>
+            <article class="recommendsidebar-news-card">
+              <h3 class="recommendsidebar-news-title">
+                <a
+                  v-if="item.url"
+                  :href="item.url"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="recommendsidebar-news-link"
+                >
+                  {{ item.title }}
+                </a>
+                <template v-else>
+                  {{ item.title }}
+                </template>
+              </h3>
+              <p
+                v-if="item.source || item.published_at"
+                class="recommendsidebar-news-meta"
+              >
+                <span v-if="item.source">
+                  {{ item.source }}
+                </span>
+                <span v-if="item.source && item.published_at"> · </span>
+                <span v-if="item.published_at">
+                  {{ item.published_at }}
+                </span>
+              </p>
+              <p
+                v-if="item.summary"
+                class="recommendsidebar-news-summary"
+              >
+                {{ item.summary }}
+              </p>
+              <p
+                v-if="item.component?.name"
+                class="recommendsidebar-news-related"
+              >
+                關聯組件：{{ item.component.name }}
+              </p>
+              <div class="recommendsidebar-news-actions">
+                <button
+                  v-if="item.url"
+                  type="button"
+                  class="recommendsidebar-news-action recommendsidebar-news-action--ghost"
+                  @click="openExternalNewsUrl(item.url)"
+                >
+                  <span class="recommendsidebar-news-action-icon">open_in_new</span>
+                  開啟全文
+                </button>
+                <button
+                  type="button"
+                  class="recommendsidebar-news-action recommendsidebar-news-action--primary"
+                  :disabled="!item.component"
+                  @click="openStorylineRecommendedComponent(item.component)"
+                >
+                  查看組件
+                </button>
+              </div>
+            </article>
           </li>
         </ul>
-      </template>
+      </div>
     </template>
   </div>
 </template>
@@ -298,12 +514,276 @@ onMounted(() => {
 		min-width: 0;
 	}
 
-	/* 與左側 SideBar：h1＝私人儀表板層級；h2／SideBarTab 儀表板名＝ var(--font-m) */
+	&-modes {
+		display: flex;
+		margin-bottom: 12px;
+		border-radius: 8px;
+		border: 1px solid var(--color-border);
+		overflow: hidden;
+		background: var(--color-component-background);
+	}
+
+	&-mode-btn {
+		flex: 1;
+		padding: 8px 10px;
+		font-size: var(--font-m);
+		color: var(--color-complement-text);
+		transition:
+			background-color 0.2s,
+			color 0.2s;
+		text-wrap: nowrap;
+
+		&:hover {
+			color: var(--color-normal-text);
+			background: var(--color-background);
+		}
+
+		&--active {
+			background: var(--color-highlight);
+			color: #fff;
+			font-weight: 600;
+
+			&:hover {
+				color: #fff;
+			}
+		}
+	}
+
+	&-auto-news {
+		margin-bottom: 16px;
+	}
+
+	&-crawl-btn {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 6px;
+		width: 100%;
+		padding: 8px 10px;
+		margin-bottom: 10px;
+		border-radius: 6px;
+		background: var(--color-highlight);
+		color: #fff !important;
+		font-size: var(--font-m);
+		transition: opacity 0.2s;
+
+		&:disabled {
+			opacity: 0.55;
+			cursor: not-allowed;
+		}
+
+		span {
+			color: #fff !important;
+		}
+
+		span:first-of-type {
+			font-family: var(--font-icon);
+			font-size: var(--font-m);
+		}
+	}
+
+	&-crawl-btn-label {
+		font-weight: 500;
+	}
+
+	&-newslist {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+	}
+
+	&-news-card {
+		border: 1px solid var(--color-border);
+		border-radius: 8px;
+		padding: 10px;
+		background: var(--color-background);
+	}
+
+	&-news-title {
+		margin: 0 0 4px;
+		font-size: var(--font-ms);
+		font-weight: 600;
+		line-height: 1.35;
+	}
+
+	&-news-link {
+		color: var(--color-highlight);
+		text-decoration: none;
+		word-break: break-word;
+
+		&:hover {
+			text-decoration: underline;
+		}
+	}
+
+	&-news-meta {
+		margin: 0 0 6px;
+		font-size: var(--font-s);
+		color: var(--color-complement-text);
+		line-height: 1.3;
+	}
+
+	&-news-summary {
+		margin: 0 0 8px;
+		font-size: var(--font-s);
+		color: var(--color-normal-text);
+		line-height: 1.45;
+		word-break: break-word;
+		line-clamp: 5;
+		display: -webkit-box;
+		-webkit-box-orient: vertical;
+		-webkit-line-clamp: 5;
+		overflow: hidden;
+	}
+
+	&-news-related {
+		margin: 0 0 10px;
+		font-size: var(--font-s);
+		color: var(--color-complement-text);
+		line-height: 1.35;
+	}
+
+	&-news-actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 6px;
+		align-items: center;
+	}
+
+	&-news-action {
+		display: inline-flex;
+		align-items: center;
+		gap: 4px;
+		padding: 6px 8px;
+		border-radius: 5px;
+		font-size: var(--font-s);
+		cursor: pointer;
+		transition:
+			filter 0.15s,
+			border-color 0.2s;
+
+		&--primary {
+			flex: 1;
+			min-width: 0;
+			justify-content: center;
+			border: none;
+			background: var(--color-highlight);
+			color: #fff;
+
+			&:disabled {
+				opacity: 0.45;
+				cursor: not-allowed;
+				filter: none;
+			}
+		}
+
+		&--ghost {
+			border: 1px solid var(--color-border);
+			background: var(--color-component-background);
+			color: var(--color-normal-text);
+		}
+
+		&:not(:disabled):hover {
+			filter: brightness(1.08);
+		}
+	}
+
+	&-news-action-icon {
+		font-family: var(--font-icon);
+		font-size: var(--font-m);
+	}
+
+	&-ai-section {
+		margin-bottom: 16px;
+	}
+
+	&-ai-input-group {
+		display: flex;
+		gap: 4px;
+		background: var(--color-component-background);
+		padding: 4px;
+		border-radius: 6px;
+		border: 1px solid var(--color-border);
+
+		&:focus-within {
+			border-color: var(--color-highlight);
+		}
+	}
+
+	&-ai-input {
+		flex: 1;
+		border: none;
+		background: transparent;
+		color: var(--color-normal-text);
+		font-size: var(--font-s);
+		padding: 4px 8px;
+		outline: none;
+		min-width: 0;
+
+		&::placeholder {
+			color: var(--color-complement-text);
+		}
+	}
+
+	&-ai-btn {
+		background: var(--color-highlight);
+		color: #fff;
+		border-radius: 4px;
+		padding: 4px 8px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		transition: opacity 0.2s;
+
+		&:disabled {
+			opacity: 0.5;
+			cursor: not-allowed;
+		}
+
+		span {
+			font-family: var(--font-icon);
+			font-size: var(--font-m);
+		}
+
+		.is-spinning {
+			animation: spin 1s linear infinite;
+		}
+	}
+
+	&-ai-result {
+		margin-bottom: 20px;
+		padding-bottom: 16px;
+		border-bottom: 1px dashed var(--color-border);
+
+		> .recommendsidebar-subtitle:first-of-type {
+			margin-top: 0;
+		}
+	}
+
+	&-storyline {
+		font-size: var(--font-m);
+		line-height: 1.6;
+		color: var(--color-normal-text);
+		background: var(--color-menu-dropdown);
+		padding: 12px;
+		border-radius: 8px;
+		margin-bottom: 12px;
+		white-space: pre-wrap;
+	}
+
+	@keyframes spin {
+		from { transform: rotate(0deg); }
+		to { transform: rotate(360deg); }
+	}
+
 	&-title {
 		cursor: default;
 		margin: 0 0 6px;
 		font-size: var(--font-l);
-		font-weight: 400;
+		font-weight: 700;
 	}
 
 	&-lead {
@@ -319,7 +799,7 @@ onMounted(() => {
 		writing-mode: vertical-rl;
 		text-orientation: mixed;
 		font-size: var(--font-m);
-		font-weight: 400;
+		font-weight: 700;
 		color: var(--color-complement-text);
 		letter-spacing: 0.12em;
 		user-select: none;
@@ -332,15 +812,8 @@ onMounted(() => {
 		font-size: var(--font-m);
 		margin: 10px 0 6px;
 		text-wrap: nowrap;
-
-		&--news {
-			margin-top: 14px;
-			padding-top: 10px;
-			border-top: 1px solid var(--color-border);
-		}
 	}
 
-	&-status,
 	&-msg {
 		margin: 0 0 8px;
 		font-size: var(--font-m);
@@ -395,45 +868,6 @@ onMounted(() => {
 		font-size: var(--font-s);
 		color: var(--color-complement-text);
 		line-height: 1.35;
-		word-break: break-word;
-	}
-
-	&-newslist {
-		list-style: none;
-		margin: 0;
-		padding: 0;
-		display: flex;
-		flex-direction: column;
-		gap: var(--font-s);
-	}
-
-	&-newsitem {
-		padding-bottom: var(--font-s);
-		border-bottom: 1px solid var(--color-border);
-
-		&:last-child {
-			border-bottom: none;
-			padding-bottom: 0;
-		}
-	}
-
-	&-news-title {
-		font-size: var(--font-m);
-		font-weight: 400;
-		color: var(--color-highlight);
-		text-decoration: none;
-		word-break: break-word;
-
-		&:hover {
-			text-decoration: underline;
-		}
-	}
-
-	&-news-summary {
-		margin: 4px 0 0;
-		font-size: var(--font-s);
-		color: var(--color-normal-text);
-		line-height: 1.45;
 		word-break: break-word;
 	}
 

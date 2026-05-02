@@ -1,12 +1,16 @@
 package controllers
 
 import (
+	"TaipeiCityDashboardBE/app/models"
+	"TaipeiCityDashboardBE/app/services"
 	"TaipeiCityDashboardBE/app/services/ai"
 	"TaipeiCityDashboardBE/app/util"
+	"TaipeiCityDashboardBE/global"
 	"context"
 	"fmt"
 	"html"
 	"net/http"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/tmc/langchaingo/llms"
@@ -45,6 +49,10 @@ type AIChatInput struct {
 		} `json:"function" binding:"required"`
 	} `json:"tools,omitempty"`
 	ToolChoice interface{} `json:"tool_choice,omitempty"`
+}
+
+type ExtractInsightInput struct {
+	Url string `json:"url"`
 }
 
 // ChatWithTWCC is the controller for POST /api/v1/ai/chat/twai
@@ -241,3 +249,172 @@ func (input *AIChatInput) ToCallOptions() []llms.CallOption {
 	return options
 }
 
+func GetComponemtByNews(c *gin.Context){
+
+	var req ExtractInsightInput
+
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(400, gin.H{"error": err.Error()})
+		return
+	}
+
+	body := services.GetHTMLBody(req.Url)
+
+	body = strings.ReplaceAll(body, "\n\n", "\n")
+	body = strings.ReplaceAll(body, "\t\t", "\t")
+	body = strings.ReplaceAll(body, "     ", " ")
+
+	reqAIChatRequest := ai.AIChatRequest{
+		SessionID: "",
+		UserID:    "",
+		IPAddress: "",
+		Messages: []llms.MessageContent{
+			{
+				Role: llms.ChatMessageTypeSystem,
+				Parts: []llms.ContentPart{
+					llms.TextContent{Text: "輸入：一段來自某新聞網站的HTML結構碼\n目標：擷取新聞主標題及全文內容\n注意事項：\n1. 要完整取出全文內容，不要摘要\n2. 直接給我結果，不回應思考過程\n\n"},
+				},
+			},
+			{
+				Role: llms.ChatMessageTypeHuman,
+				Parts: []llms.ContentPart{
+					llms.TextContent{Text: body},
+				},
+			},
+		},
+	}
+		// 1. 直接建構 options slice
+	opts := []llms.CallOption{
+		llms.WithTemperature(0.7),
+		llms.WithTopP(0.9),
+		llms.WithTopK(40),
+		llms.WithRepetitionPenalty(1.1),
+		llms.WithSeed(42),
+
+		llms.WithMetadata(map[string]any{
+			"source": "manual",
+			"env":    "dev",
+		}),
+	}
+
+	ctx := context.Background()
+	logEntry, err := ai.ChatWithTWCC(ctx, reqAIChatRequest, opts...)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"status": "error",
+			"error_code": "AI_SERVICE_ERROR",
+			"message": err.Error(),
+		})
+		return
+	}
+
+	// --- 以下為新增的配對與故事線邏輯 ---
+	newsContent := logEntry.Answer
+
+	// 1. 提取新聞標題 (優先尋找包含「新聞主標題」的行)
+	newsTitle := ""
+	lines := strings.Split(newsContent, "\n")
+	for _, line := range lines {
+		trimmed := strings.TrimSpace(line)
+		if strings.Contains(trimmed, "新聞主標題") {
+			newsTitle = strings.ReplaceAll(trimmed, "[新聞主標題]：", "")
+			newsTitle = strings.ReplaceAll(newsTitle, "新聞主標題：", "")
+			newsTitle = strings.TrimSpace(newsTitle)
+			break
+		}
+	}
+	if newsTitle == "" && len(lines) > 0 {
+		for _, l := range lines {
+			if strings.TrimSpace(l) != "" { newsTitle = l; break }
+		}
+	}
+
+	// 2. 執行 HyDE (Hypothetical Document Embeddings)
+	hydeReq := ai.AIChatRequest{
+		Messages: []llms.MessageContent{
+			{
+				Role: llms.ChatMessageTypeSystem,
+				Parts: []llms.ContentPart{
+					llms.TextContent{Text: "你是一位數據儀表板架構師。請根據提供的新聞內容，想像一個『最能提供相關數據背景』的儀表板組件。請為這個想像中的組件寫一段 2 句的『功能描述』，包含它統計了哪些指標。直接輸出內容，不要前言。"},
+				},
+			},
+			{
+				Role: llms.ChatMessageTypeHuman,
+				Parts: []llms.ContentPart{
+					llms.TextContent{Text: fmt.Sprintf("新聞標題: %s\n新聞內容: %s", newsTitle, newsContent)},
+				},
+			},
+		},
+	}
+	hydeLog, _ := ai.ChatWithTWCC(ctx, hydeReq, llms.WithTemperature(0.5))
+	queryText := newsTitle
+	if hydeLog != nil && hydeLog.Answer != "" {
+		queryText = hydeLog.Answer
+		fmt.Printf("[DEBUG] HyDE Hypothetical Doc: %s\n", queryText)
+	}
+
+	// 3. 向量檢索與詳細資訊抓取 (門檻 0.15)
+	searchRes, _ := models.GetComponentByQueryVector(queryText, 3, 0.15)
+	detailedComponents := make([]models.CityComponent, 0)
+	componentSummaries := make([]string, 0)
+	for _, res := range searchRes {
+		comps, err := models.GetComponentByIDAll(int(res.ID))
+		if err == nil && len(comps) > 0 {
+			comp := comps[0]
+			lang, _ := c.Get("lang")
+			targetLang := "zh-TW"
+			if lang != nil { targetLang = lang.(string) }
+			if global.GlobalTranslator != nil && targetLang != "zh-TW" {
+				comp.Name = global.GlobalTranslator.Translate(ctx, comp.Name, targetLang, "component_name")
+				comp.ShortDesc = global.GlobalTranslator.Translate(ctx, comp.ShortDesc, targetLang, "short_desc")
+				comp.UseCase = global.GlobalTranslator.Translate(ctx, comp.UseCase, targetLang, "use_case")
+				comp.ChartConfig = global.GlobalTranslator.TranslateJSON(ctx, comp.ChartConfig, targetLang, "chart_config")
+				comp.MapConfig = global.GlobalTranslator.TranslateJSON(ctx, comp.MapConfig, targetLang, "map_config")
+			}
+			detailedComponents = append(detailedComponents, comp)
+			componentSummaries = append(componentSummaries, fmt.Sprintf("- %s: %s", comp.Name, comp.ShortDesc))
+		}
+	}
+
+	// 4. 調用 LLM 串起故事線 (Storyline) - 無論如何都要生成
+	storylineReq := ai.AIChatRequest{
+		Messages: []llms.MessageContent{
+			{
+				Role: llms.ChatMessageTypeSystem,
+				Parts: []llms.ContentPart{
+					llms.TextContent{Text: "你是一位資深城市數據分析師。請根據提供的新聞內容撰寫一段數據洞察敘事（Storyline）。\n1. 如果有推薦組件，請解釋這些數據如何幫助讀者理解新聞背後的社會脈絡。\n2. 如果沒有高度相關組件，請根據新聞內容分析其對城市發展的潛在數據趨勢影響。直接輸出結果，不需前言。"},
+				},
+			},
+			{
+				Role: llms.ChatMessageTypeHuman,
+				Parts: []llms.ContentPart{
+					llms.TextContent{Text: fmt.Sprintf("【新聞內容】\n%s\n\n【推薦組件摘要】\n%s", newsContent, strings.Join(componentSummaries, "\n"))},
+				},
+			},
+		},
+	}
+	storyLog, err := ai.ChatWithTWCC(ctx, storylineReq, llms.WithTemperature(0.7))
+	storyline := "針對此新聞，系統目前未發現直接關聯的數據。"
+	if err == nil {
+		storyline = storyLog.Answer
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"status": "success",
+		"data": gin.H{
+			"session":     logEntry.SessionID,
+			"content":     logEntry.Answer,
+			"storyline":   storyline,
+			"components":  detailedComponents,
+			"usage": gin.H{
+				"input_tokens":  logEntry.InputTokens,
+				"output_tokens": logEntry.OutputTokens,
+				"total_tokens":  logEntry.TotalTokens,
+			},
+			"tool_used":   logEntry.ToolUsed,
+			"latency_ms":  logEntry.LatencyMS,
+			"model":       logEntry.Model,
+			"provider":    logEntry.Provider,
+		},
+	})
+	}
