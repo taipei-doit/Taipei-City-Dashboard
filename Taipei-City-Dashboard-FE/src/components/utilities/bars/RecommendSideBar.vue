@@ -11,9 +11,14 @@ import {
 	fetchCrawledNewsRecommendations,
 } from "../../../api/ai";
 import { useBackendTranslation } from "../../../composables/useBackendTranslation";
+import { useTranslationStore } from "../../../store/translationStore";
 import BackendTranslatedText from "../i18n/BackendTranslatedText.vue";
 
 const { t } = useBackendTranslation();
+const translationStore = useTranslationStore();
+
+/** 語系切換時遞增，捨棄尚未完成的洞察／自動新聞請求結果 */
+const sidebarResultsEpoch = ref(0);
 
 const mapStore = useMapStore();
 const contentStore = useContentStore();
@@ -45,17 +50,25 @@ const autoNewsFetchFailed = ref(false);
 async function handleAiInsight() {
 	if (!aiNewsUrl.value) return;
 
+	const epoch = sidebarResultsEpoch.value;
 	loadingAiInsight.value = true;
 	aiInsightFetchFailed.value = false;
 	aiInsightResult.value = null;
 
 	try {
 		const result = await extractNewsInsight(aiNewsUrl.value);
+		if (epoch !== sidebarResultsEpoch.value) {
+			return;
+		}
 		aiInsightResult.value = result;
 	} catch {
-		aiInsightFetchFailed.value = true;
+		if (epoch === sidebarResultsEpoch.value) {
+			aiInsightFetchFailed.value = true;
+		}
 	} finally {
-		loadingAiInsight.value = false;
+		if (epoch === sidebarResultsEpoch.value) {
+			loadingAiInsight.value = false;
+		}
 	}
 }
 
@@ -96,16 +109,25 @@ async function handleLoadAutoNews() {
 	if (loadingAutoNews.value) {
 		return;
 	}
+	const epoch = sidebarResultsEpoch.value;
 	loadingAutoNews.value = true;
 	autoNewsFetchFailed.value = false;
 
 	try {
-		autoNewsItems.value = await fetchCrawledNewsRecommendations({});
+		const items = await fetchCrawledNewsRecommendations({});
+		if (epoch !== sidebarResultsEpoch.value) {
+			return;
+		}
+		autoNewsItems.value = items;
 	} catch {
-		autoNewsFetchFailed.value = true;
-		autoNewsItems.value = null;
+		if (epoch === sidebarResultsEpoch.value) {
+			autoNewsFetchFailed.value = true;
+			autoNewsItems.value = null;
+		}
 	} finally {
-		loadingAutoNews.value = false;
+		if (epoch === sidebarResultsEpoch.value) {
+			loadingAutoNews.value = false;
+		}
 	}
 }
 
@@ -116,6 +138,22 @@ function openExternalNewsUrl(url) {
 
 readExpandedFromStorage();
 readRecommendModeFromStorage();
+
+watch(
+	() => translationStore.locale,
+	() => {
+		sidebarResultsEpoch.value++;
+		aiInsightResult.value = null;
+		aiInsightFetchFailed.value = false;
+		loadingAiInsight.value = false;
+		autoNewsItems.value = null;
+		autoNewsFetchFailed.value = false;
+		loadingAutoNews.value = false;
+		if (recommendMode.value === MODE_AUTO_NEWS && isExpanded.value) {
+			handleLoadAutoNews();
+		}
+	},
+);
 
 watch(
 	[recommendMode, isExpanded],
