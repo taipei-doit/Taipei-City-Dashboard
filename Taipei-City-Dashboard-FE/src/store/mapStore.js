@@ -165,22 +165,24 @@ const SIMPLE_ROUTE_VEHICLE_MODELS = {
 const SIMPLE_ROUTE_CAR_BASE_ZOOM = 14.5;
 const SIMPLE_ROUTE_CAR_MIN_SCALE = 0.5;
 const SIMPLE_ROUTE_CAR_MAX_SCALE = 7;
-const SIMPLE_ROUTE_CAR_MIN_DURATION_MS = 9000;
-const SIMPLE_ROUTE_CAR_MAX_DURATION_MS = 36000;
-const SIMPLE_ROUTE_CAR_MS_PER_METER = 2.6;
+const SIMPLE_ROUTE_CAR_MIN_DURATION_MS = 14000;
+const SIMPLE_ROUTE_CAR_MAX_DURATION_MS = 60000;
+const SIMPLE_ROUTE_CAR_MS_PER_METER = 4.4;
 const SIMPLE_ROUTE_FIRST_PERSON_FORWARD_METERS = 0;
 const SIMPLE_ROUTE_FIRST_PERSON_PITCH = 78;
 const SIMPLE_ROUTE_FIRST_PERSON_ZOOM = 17.2;
 const SIMPLE_ROUTE_FIRST_PERSON_UPDATE_INTERVAL_MS = 0;
-const SIMPLE_ROUTE_SPEED_LIMIT_LOOKUP_THROTTLE_MS = 700;
-const SIMPLE_ROUTE_SPEED_LIMIT_NETWORK_INTERVAL_MS = 1050;
-const SIMPLE_ROUTE_SPEED_LIMIT_PREFETCH_INTERVAL_MS = 350;
-const SIMPLE_ROUTE_SPEED_LIMIT_PREFETCH_SAMPLE_COUNT = 10;
-const SIMPLE_ROUTE_SPEED_LIMIT_CACHE_DISTANCE_METERS = 60;
+const SIMPLE_ROUTE_SPEED_LIMIT_LOOKUP_THROTTLE_MS = 3000;
+const SIMPLE_ROUTE_SPEED_LIMIT_NETWORK_INTERVAL_MS = 2200;
+const SIMPLE_ROUTE_SPEED_LIMIT_PREFETCH_INTERVAL_MS = 6500;
+const SIMPLE_ROUTE_SPEED_LIMIT_PREFETCH_SAMPLE_COUNT = 4;
+const SIMPLE_ROUTE_SPEED_LIMIT_CACHE_DISTANCE_METERS = 90;
 const SIMPLE_ROUTE_SPEED_LIMIT_CACHE_MAX_SIZE = 32;
+const SIMPLE_ROUTE_SPEED_LIMIT_RATE_LIMIT_COOLDOWN_MS = 30000;
 const ROAD_NAME_LOOKUP_API_URL = "/nominatim/reverse";
-let lastRoadSpeedLimitNetworkRequestAt = 0;
-let roadSpeedLimitNetworkQueue = Promise.resolve();
+let lastRoadSpeedLimitNetworkRequestStartedAt = 0;
+let nextRoadSpeedLimitPrefetchRequestAt = 0;
+let roadSpeedLimitNetworkCooldownUntil = 0;
 const SIMPLE_ROUTE_PROFILES = [
 	"mapbox/driving",
 	"mapbox/walking",
@@ -211,6 +213,10 @@ function createRoadSpeedLimitLookupCanceledError() {
 
 function isRoadSpeedLimitLookupCanceled(error) {
 	return error?.isRoadSpeedLimitLookupCanceled === true;
+}
+
+function isRoadSpeedLimitRateLimited(error) {
+	return Number(error?.response?.status) === 429;
 }
 const FUTURE_HOUR_RAIN_LAYER_INDEX = "future_hour_rain";
 const RAIN_ANIMATION_LAYER_SUFFIX = "-rain-animation";
@@ -823,34 +829,45 @@ function waitForRoadSpeedLimitNetworkDelay(delayMs) {
 	});
 }
 
-function requestRoadNameLookup(config, options = {}) {
-	const runLookup = roadSpeedLimitNetworkQueue
-		.catch(() => {})
-		.then(async () => {
-			if (options.shouldRun && !options.shouldRun()) {
-				throw createRoadSpeedLimitLookupCanceledError();
-			}
+function getRoadSpeedLimitNetworkDelay(isPriority) {
+	const now = Date.now();
+	if (isPriority) {
+		return Math.max(
+			0,
+			roadSpeedLimitNetworkCooldownUntil - now,
+			SIMPLE_ROUTE_SPEED_LIMIT_NETWORK_INTERVAL_MS -
+				(now - lastRoadSpeedLimitNetworkRequestStartedAt),
+		);
+	}
 
-			const elapsed = Date.now() - lastRoadSpeedLimitNetworkRequestAt;
-			const delayMs = Math.max(
-				0,
-				SIMPLE_ROUTE_SPEED_LIMIT_NETWORK_INTERVAL_MS - elapsed,
-			);
+	const scheduledAt = Math.max(
+		now,
+		roadSpeedLimitNetworkCooldownUntil,
+		nextRoadSpeedLimitPrefetchRequestAt,
+		lastRoadSpeedLimitNetworkRequestStartedAt +
+			SIMPLE_ROUTE_SPEED_LIMIT_NETWORK_INTERVAL_MS,
+	);
+	nextRoadSpeedLimitPrefetchRequestAt =
+		scheduledAt + SIMPLE_ROUTE_SPEED_LIMIT_NETWORK_INTERVAL_MS;
+	return scheduledAt - now;
+}
 
-			if (delayMs > 0) {
-				await waitForRoadSpeedLimitNetworkDelay(delayMs);
-			}
+async function requestRoadNameLookup(config, options = {}) {
+	if (options.shouldRun && !options.shouldRun()) {
+		throw createRoadSpeedLimitLookupCanceledError();
+	}
 
-			if (options.shouldRun && !options.shouldRun()) {
-				throw createRoadSpeedLimitLookupCanceledError();
-			}
+	const delayMs = getRoadSpeedLimitNetworkDelay(options.priority === true);
+	if (delayMs > 0) {
+		await waitForRoadSpeedLimitNetworkDelay(delayMs);
+	}
 
-			lastRoadSpeedLimitNetworkRequestAt = Date.now();
-			return axios.get(ROAD_NAME_LOOKUP_API_URL, config);
-		});
+	if (options.shouldRun && !options.shouldRun()) {
+		throw createRoadSpeedLimitLookupCanceledError();
+	}
 
-	roadSpeedLimitNetworkQueue = runLookup.catch(() => {});
-	return runLookup;
+	lastRoadSpeedLimitNetworkRequestStartedAt = Date.now();
+	return axios.get(ROAD_NAME_LOOKUP_API_URL, config);
 }
 
 function disposeThreeObject(object) {
@@ -1286,8 +1303,8 @@ export const useMapStore = defineStore("map", {
 		pendingRoadSpeedLimitCoordinate: null,
 		roadSpeedLimitLookupTimer: null,
 		roadSpeedLimitRequestId: 0,
+		appliedRoadSpeedLimitRequestId: 0,
 		roadSpeedLimitLookupSessionId: 0,
-		isRoadSpeedLimitLookupInFlight: false,
 		roadSpeedLimitCache: {},
 		roadSpeedLimitPrefetchQueue: [],
 		roadSpeedLimitPrefetchTimer: null,
@@ -4113,8 +4130,9 @@ export const useMapStore = defineStore("map", {
 			this.pendingRoadSpeedLimitCoordinate = null;
 			this.roadSpeedLimitLookupTimer = null;
 			this.roadSpeedLimitRequestId += 1;
+			this.appliedRoadSpeedLimitRequestId =
+				this.roadSpeedLimitRequestId;
 			this.roadSpeedLimitLookupSessionId += 1;
-			this.isRoadSpeedLimitLookupInFlight = false;
 			this.stopSimpleRouteSpeedLimitPrefetch();
 		},
 		finishCurrentRoadSpeedLimitLookup() {
@@ -4124,8 +4142,9 @@ export const useMapStore = defineStore("map", {
 			this.roadSpeedLimitLookupTimer = null;
 			this.pendingRoadSpeedLimitCoordinate = null;
 			this.roadSpeedLimitRequestId += 1;
+			this.appliedRoadSpeedLimitRequestId =
+				this.roadSpeedLimitRequestId;
 			this.roadSpeedLimitLookupSessionId += 1;
-			this.isRoadSpeedLimitLookupInFlight = false;
 			this.stopSimpleRouteSpeedLimitPrefetch();
 			if (
 				["idle", "loading", "error"].includes(
@@ -4268,10 +4287,6 @@ export const useMapStore = defineStore("map", {
 			this.applyCachedRoadSpeedLimit(normalizedCoordinate);
 			this.pendingRoadSpeedLimitCoordinate = normalizedCoordinate;
 
-			if (this.isRoadSpeedLimitLookupInFlight) {
-				return;
-			}
-
 			const now = Date.now();
 			const elapsed = now - this.lastRoadSpeedLimitLookupAt;
 
@@ -4316,10 +4331,6 @@ export const useMapStore = defineStore("map", {
 			) {
 				return;
 			}
-			if (!options.prefetch && this.isRoadSpeedLimitLookupInFlight) {
-				this.pendingRoadSpeedLimitCoordinate = coordinate;
-				return;
-			}
 			if (
 				!options.prefetch &&
 				coordinateKey === this.lastRoadSpeedLimitLookupKey &&
@@ -4338,7 +4349,6 @@ export const useMapStore = defineStore("map", {
 				this.roadSpeedLimitRequestId = requestId;
 				this.lastRoadSpeedLimitLookupAt = Date.now();
 				this.lastRoadSpeedLimitLookupKey = coordinateKey;
-				this.isRoadSpeedLimitLookupInFlight = true;
 				this.currentRoadSpeedLimit = {
 					...this.currentRoadSpeedLimit,
 					status: "loading",
@@ -4356,6 +4366,7 @@ export const useMapStore = defineStore("map", {
 					},
 					timeout: 10000,
 				}, {
+					priority: !options.prefetch,
 					shouldRun: () =>
 						lookupSessionId ===
 							this.roadSpeedLimitLookupSessionId &&
@@ -4380,45 +4391,38 @@ export const useMapStore = defineStore("map", {
 					error: "",
 				};
 
+				if (
+					lookupSessionId !==
+					this.roadSpeedLimitLookupSessionId
+				) {
+					return;
+				}
 				this.cacheRoadSpeedLimit(coordinate, nextSpeedLimit);
 				if (options.prefetch) return;
-				if (requestId !== this.roadSpeedLimitRequestId) return;
+				if (requestId <= this.appliedRoadSpeedLimitRequestId) return;
 
+				this.appliedRoadSpeedLimitRequestId = requestId;
 				this.currentRoadSpeedLimit = nextSpeedLimit;
 			} catch (error) {
 				if (isRoadSpeedLimitLookupCanceled(error)) return;
+				if (isRoadSpeedLimitRateLimited(error)) {
+					roadSpeedLimitNetworkCooldownUntil =
+						Date.now() +
+						SIMPLE_ROUTE_SPEED_LIMIT_RATE_LIMIT_COOLDOWN_MS;
+				}
 				if (options.prefetch) return;
 				if (requestId !== this.roadSpeedLimitRequestId) return;
 
 				this.currentRoadSpeedLimit = {
 					...this.currentRoadSpeedLimit,
 					status: "error",
-					error: this.currentRoadSpeedLimit.speedLimitText
-						? "OSM 暫時無回應，沿用上一筆"
-						: "OSM 暫時無回應，暫用法定速限",
+					error: isRoadSpeedLimitRateLimited(error)
+						? "OSM 限流中，暫緩查詢"
+						: this.currentRoadSpeedLimit.speedLimitText
+							? "OSM 暫時無回應，沿用上一筆"
+							: "OSM 暫時無回應，暫用法定速限",
 					updatedAt: Date.now(),
 				};
-			} finally {
-				if (
-					!options.prefetch &&
-					requestId === this.roadSpeedLimitRequestId
-				) {
-					this.isRoadSpeedLimitLookupInFlight = false;
-					const pendingCoordinate =
-						this.pendingRoadSpeedLimitCoordinate;
-					this.pendingRoadSpeedLimitCoordinate = null;
-					const shouldSchedulePending =
-						pendingCoordinate &&
-						this.isSimpleRouteFirstPersonCamera &&
-						this.isSimpleRouteCarAnimating &&
-						getCoordinateLookupKey(pendingCoordinate) !==
-							coordinateKey;
-					if (shouldSchedulePending) {
-						this.scheduleCurrentRoadSpeedLimitLookup(
-							pendingCoordinate,
-						);
-					}
-				}
 			}
 		},
 		setSimpleRouteFirstPersonCamera(enabled) {
