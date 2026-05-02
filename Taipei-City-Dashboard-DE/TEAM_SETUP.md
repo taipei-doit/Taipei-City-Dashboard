@@ -25,7 +25,7 @@ docker exec -i postgres-data psql -U postgres -d dashboard < Taipei-City-Dashboa
 
 ## 三、取得行人事故資料（擇一）
 
-### 方法 A：從隊友拿 dump 檔（快，推薦）
+### 方法 A：用 repo 內的 dump 檔（快，推薦）
 
 pull 之後 repo 裡已有，直接跑：
 
