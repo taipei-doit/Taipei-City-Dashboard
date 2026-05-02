@@ -30,7 +30,7 @@ INSERT INTO public.component_charts (index, color, types, unit) VALUES
         '件'),
     ('traffic_pedestrian_yearly_trend',
         ARRAY['#E53935', '#1E88E5'],
-        ARRAY['ColumnLineChart'],
+        ARRAY['TimelineSeparateChart'],
         '件'),
     ('traffic_pedestrian_hotspot_ranking',
         ARRAY['#B71C1C'],
@@ -270,8 +270,8 @@ INSERT INTO public.query_charts (
     ARRAY['b12705030'],
     NOW(),
     NOW(),
-    'three_d',
-    E'SELECT\n    year::text AS x_axis,\n    city AS y_axis,\n    accident_count::INT AS data\nFROM traffic_pedestrian_yearly_trend\nWHERE year > 0\nORDER BY year, city',
+    'time',
+    E'SELECT\n    make_date(year::int, 1, 1) AS x_axis,\n    city AS y_axis,\n    accident_count AS data\nFROM traffic_pedestrian_yearly_trend\nWHERE year > 0\nORDER BY year, city',
     NULL,
     'metrotaipei'
 );

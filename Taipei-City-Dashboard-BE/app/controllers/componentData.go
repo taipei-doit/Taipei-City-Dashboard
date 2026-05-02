@@ -28,7 +28,7 @@ func GetComponentChartData(c *gin.Context) {
 	// 1.1 Get the city name from the URL
 	var query componentQuery
 	c.ShouldBindQuery(&query)
-	if !(query.City == "taipei" || query.City == "metrotaipei" || query.City == ""){
+	if !(query.City == "taipei" || query.City == "newtaipei" || query.City == "metrotaipei" || query.City == ""){
 		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": "Invalid City Name"})
 		return
 	}
@@ -109,7 +109,7 @@ func GetComponentHistoryData(c *gin.Context) {
 	// 1.1 Get the city name from the URL
 	var query componentQuery
 	c.ShouldBindQuery(&query)
-	if !(query.City == "taipei" || query.City == "metrotaipei" || query.City == ""){
+	if !(query.City == "taipei" || query.City == "newtaipei" || query.City == "metrotaipei" || query.City == ""){
 		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": "Invalid City Name"})
 		return
 	}
