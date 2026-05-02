@@ -1,0 +1,44 @@
+{
+  "dag_infos": {
+    "dag_id": "water_quality_realtime",
+    "start_date": "2026-05-02",
+    "schedule_interval": "*/30 * * * *",
+    "catchup": false,
+    "tags": [
+      "water",
+      "water_quality",
+      "臺北自來水事業處",
+      "即時水質"
+    ],
+    "description": "Realtime Taipei drinking water quality monitoring data from Taipei Water Department.",
+    "default_args": {
+      "owner": "airflow",
+      "email": [
+        "DEFAULT_EMAIL_LIST"
+      ],
+      "email_on_retry": false,
+      "email_on_failure": true,
+      "retries": 1,
+      "retry_delay": 60
+    },
+    "ready_data_db": "postgres_default",
+    "ready_data_default_table": "water_quality_realtime",
+    "ready_data_history_table": "water_quality_realtime_history",
+    "raw_data_db": "postgres_default",
+    "raw_data_table": "",
+    "load_behavior": "current+history"
+  },
+  "data_infos": {
+    "name_cn": "臺北市即時水質監測資料",
+    "airflow_update_freq": "every 30 minutes",
+    "source": "https://twd.water.gov.taipei/opendata/wqb/wqb.asmx/GetQualityData",
+    "source_type": "Taipei Water Department XML API",
+    "source_dept": "臺北自來水事業處",
+    "gis_format": "Point",
+    "output_coordinate": "EPSG:4326",
+    "is_geometry": 1,
+    "dataset_description": "臺北市即時水質監測站資料，包含監測站名稱、座標、濁度、餘氯及 pH 值。",
+    "etl_description": "Fetch XML API, normalize timestamp and numeric fields, generate WGS84 point geometry, then write current and history PostgreSQL tables.",
+    "sensitivity": "public"
+  }
+}

@@ -446,6 +446,8 @@ export const useMapStore = defineStore("map", {
 				this.loadingLayers.push(appendLayer.layerId);
 				if (element.source === "geojson") {
 					this.fetchLocalGeoJson(appendLayer);
+				} else if (element.source === "api") {
+					this.fetchApiGeoJson(appendLayer);
 				} else if (element.source === "raster") {
 					this.addRasterSource(appendLayer);
 				}
@@ -455,6 +457,14 @@ export const useMapStore = defineStore("map", {
 		fetchLocalGeoJson(map_config) {
 			axios
 				.get(`/mapData/${map_config.index}.geojson`)
+				.then((rs) => {
+					this.addGeojsonSource(map_config, rs.data);
+				})
+				.catch((e) => console.error(e));
+		},
+		fetchApiGeoJson(map_config) {
+			axios
+				.get(`${import.meta.env.VITE_API_URL}/map-data/${map_config.index}`)
 				.then((rs) => {
 					this.addGeojsonSource(map_config, rs.data);
 				})

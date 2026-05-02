@@ -1,0 +1,44 @@
+{
+  "dag_infos": {
+    "dag_id": "drinking_fountain",
+    "start_date": "2026-05-02",
+    "schedule_interval": "0 2 * * *",
+    "catchup": false,
+    "tags": [
+      "water",
+      "drinking_fountain",
+      "直飲臺",
+      "臺北自來水事業處"
+    ],
+    "description": "Daily Taipei drinking fountain locations and maintenance status from Data Taipei.",
+    "default_args": {
+      "owner": "airflow",
+      "email": [
+        "DEFAULT_EMAIL_LIST"
+      ],
+      "email_on_retry": false,
+      "email_on_failure": true,
+      "retries": 1,
+      "retry_delay": 60
+    },
+    "ready_data_db": "postgres_default",
+    "ready_data_default_table": "drinking_fountain",
+    "ready_data_history_table": "drinking_fountain_history",
+    "raw_data_db": "postgres_default",
+    "raw_data_table": "",
+    "load_behavior": "current+history"
+  },
+  "data_infos": {
+    "name_cn": "直飲臺",
+    "airflow_update_freq": "02:00+8 daily",
+    "source": "https://data.taipei/api/v1/dataset/181097e0-c171-4bcd-ad41-c7b55dbc616e?scope=resourceAquire",
+    "source_type": "data.taipei json API",
+    "source_dept": "臺北自來水事業處",
+    "gis_format": "Point",
+    "output_coordinate": "EPSG:4326",
+    "is_geometry": 1,
+    "dataset_description": "直飲臺位置、場所資訊、維護狀態、最近採樣時間與水質維護連結。",
+    "etl_description": "Paginate Data Taipei API, normalize fields and timestamps, generate WGS84 point geometry, then write current and history PostgreSQL tables.",
+    "sensitivity": "public"
+  }
+}
