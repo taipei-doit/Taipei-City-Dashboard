@@ -13,7 +13,9 @@ import { useMapStore } from "../../../store/mapStore";
 import AddEditDashboards from "../../dialogs/AddEditDashboards.vue";
 import MobileNavigation from "../../dialogs/MobileNavigation.vue";
 import AddViewPoint from "../../dialogs/AddViewPoint.vue";
+import { useBackendTranslation } from "../../../composables/useBackendTranslation";
 
+const { t } = useBackendTranslation();
 const contentStore = useContentStore();
 const dialogStore = useDialogStore();
 const mapStore = useMapStore();
@@ -54,25 +56,33 @@ function handleOpenSettings() {
       >
         <button @click="handleOpenSettings">
           <span>settings</span>
-          <p>設定</p>
+          <p>{{ t('toolbar.settings') || '設定' }}</p>
         </button>
       </div>
       <AddEditDashboards />
     </div>
-    <button
+    <div
       v-if="authStore.user?.user_id && isCurrentPageMapView"
-      class="settingsbar-pin hide-if-mobile"
-      :disabled="!mapStore.tempMarkerCoordinates"
-      :style="{
-        opacity: !mapStore.tempMarkerCoordinates ? 0.5 : 1,
-        cursor: !mapStore.tempMarkerCoordinates
-          ? 'not-allowed'
-          : 'pointer',
-      }"
-      @click="dialogStore.showDialog('addPin')"
+      class="settingsbar-actions hide-if-mobile"
     >
-      {{ mapStore.tempMarkerCoordinates ? "新增地標" : "雙擊以建立地標" }}
-    </button>
+      <button
+        class="settingsbar-pin"
+        :disabled="!mapStore.tempMarkerCoordinates"
+        :style="{
+          opacity: !mapStore.tempMarkerCoordinates ? 0.5 : 1,
+          cursor: !mapStore.tempMarkerCoordinates
+            ? 'not-allowed'
+            : 'pointer',
+        }"
+        @click="dialogStore.showDialog('addPin')"
+      >
+        {{
+          mapStore.tempMarkerCoordinates
+            ? (t('map.add_pin') || '新增地標')
+            : (t('map.double_click_placeholder') || '雙擊以建立地標')
+        }}
+      </button>
+    </div>
   </div>
   <AddViewPoint name="addPin" />
 </template>
@@ -150,6 +160,15 @@ function handleOpenSettings() {
 				color: var(--color-highlight);
 			}
 		}
+	}
+
+	&-actions {
+		display: flex;
+		align-items: center;
+		justify-content: flex-end;
+		gap: var(--font-s);
+		flex-shrink: 0;
+		margin-left: auto;
 	}
 
 	&-pin {

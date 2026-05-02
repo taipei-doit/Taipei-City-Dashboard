@@ -6,16 +6,18 @@ import { useRoute } from "vue-router";
 import http from "../router/axios";
 import DashboardComponent from "../dashboardComponent/DashboardComponent.vue";
 import { useContentStore } from "../store/contentStore";
+import { useCityLabels } from "../composables/useCityLabels";
 
 import { getComponentDataTimeframe } from "../assets/utilityFunctions/dataTimeframe";
 
 const contentStore = useContentStore();
+const { translatedCities } = useCityLabels();
 const route = useRoute();
 
 const content = ref(null);
 const cities = computed(() => {
-	const cities = contentStore.embedComponents.map((data) => data.city)
-	return contentStore.cityManager.getCities(cities)
+	const keys = contentStore.embedComponents.map((data) => data.city);
+	return translatedCities(keys);
 });
 
 function changeCity(city) {

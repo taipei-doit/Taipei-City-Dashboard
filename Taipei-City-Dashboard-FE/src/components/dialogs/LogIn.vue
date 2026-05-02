@@ -4,6 +4,7 @@
 import { ref,computed } from "vue";
 import { useDialogStore } from "../../store/dialogStore";
 import { useAuthStore } from "../../store/authStore";
+import { useBackendTranslation } from "../../composables/useBackendTranslation";
 
 import DialogContainer from "./DialogContainer.vue";
 
@@ -33,6 +34,7 @@ const {
 
 const dialogStore = useDialogStore();
 const authStore = useAuthStore();
+const { t, locale } = useBackendTranslation();
 
 const loginMode = ref("tp");
 const email = ref("");
@@ -85,7 +87,7 @@ function handleClose() {
         </div>
         <div>
           <h1>{{ VITE_APP_TITLE }}</h1>
-          <h2>Taipei City Dashboard</h2>
+          <h2>{{ t('nav.app_subtitle') }}</h2>
         </div>
       </div>
       <div
@@ -93,48 +95,61 @@ function handleClose() {
         class="login-form"
       >
         <button @click="handleTaipeiPassLogin">
-          <img src="../../assets/images/taipeipass.png">台北通登入
+          <img src="../../assets/images/taipeipass.png">{{ t('login.taipeipass_button') }}
         </button>
       </div>
       <div
         v-if="loginMode === 'email'"
         class="login-form"
       >
-        <label>電子郵件</label>
+        <label>{{ t('login.email_label') }}</label>
         <input
           v-model="email"
           required
           type="email"
         >
-        <label>密碼</label>
+        <label>{{ t('login.password_label') }}</label>
         <input
           v-model="password"
           required
           type="password"
         >
         <button @click="handleEmailLogin">
-          登入
+          {{ t('login.submit') }}
         </button>
       </div>
-      <p>點擊「台北通登入」即表示您已閱讀並同意</p>
       <p>
-        <a
-          href="https://tuic.gov.taipei/zh/works/dashboard"
-          target="_blank"
-          rel="noopener"
-          @click.prevent="openExternal('https://tuic.gov.taipei/zh/works/dashboard')"
-        >
-          臺北城市儀表板
-        </a>
-        的
+        {{ t('login.legal_open') }}{{ t('login.taipeipass_button') }}{{ t('login.legal_close') }}
+      </p>
+      <p
+        v-if="locale !== 'zh-TW' && locale !== 'ja'"
+      >
         <a
           href="https://tuic.gov.taipei/zh/privacy"
           target="_blank"
           rel="noopener"
           @click.prevent="openExternal('https://tuic.gov.taipei/zh/privacy')"
-        >
-          隱私權政策
-        </a>
+        >{{ t('login.privacy_policy') }}</a>
+        <span> · </span>
+        <a
+          href="https://tuic.gov.taipei/zh/works/dashboard"
+          target="_blank"
+          rel="noopener"
+          @click.prevent="openExternal('https://tuic.gov.taipei/zh/works/dashboard')"
+        >{{ t('login.link_dashboard_short') }}</a>
+      </p>
+      <p v-else>
+        <a
+          href="https://tuic.gov.taipei/zh/works/dashboard"
+          target="_blank"
+          rel="noopener"
+          @click.prevent="openExternal('https://tuic.gov.taipei/zh/works/dashboard')"
+        >{{ t('login.link_dashboard_short') }}</a>{{ t('login.possessive_particle') }}<a
+          href="https://tuic.gov.taipei/zh/privacy"
+          target="_blank"
+          rel="noopener"
+          @click.prevent="openExternal('https://tuic.gov.taipei/zh/privacy')"
+        >{{ t('login.privacy_policy') }}</a>
       </p>
       <p
         :style="{
@@ -145,7 +160,7 @@ function handleClose() {
       >
         TUIC Igor Ann Iima Chu Jack 2023-2024
       </p>
-      <p>《讓臺北城市儀表板成為您的儀表板》</p>
+      <p>{{ t('login.tagline') }}</p>
     </div>
   </DialogContainer>
 </template>

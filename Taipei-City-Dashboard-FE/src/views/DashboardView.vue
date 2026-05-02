@@ -18,8 +18,11 @@ import { useAuthStore } from "../store/authStore";
 
 import MoreInfo from "../components/dialogs/MoreInfo.vue";
 import ReportIssue from "../components/dialogs/ReportIssue.vue";
+import { useCityLabels } from "../composables/useCityLabels";
 
 const contentStore = useContentStore();
+const { translatedTagList, translatedSelectList, translatedCities } =
+	useCityLabels();
 const dialogStore = useDialogStore();
 const authStore = useAuthStore();
 
@@ -83,9 +86,9 @@ function handleMoreInfo(item) {
       :info-btn="true"
       :active-city="item.city"
       :select-btn="true"
-      :select-btn-disabled="contentStore.cityManager.getSelectList(contentStore.currentDashboard?.city).length === 1"
-      :select-btn-list="contentStore.cityManager.getSelectList(contentStore.currentDashboard?.city)"
-      :city-tag="contentStore.cityManager.getTagList(contentStore.currentDashboard?.city)"
+      :select-btn-disabled="translatedSelectList(contentStore.currentDashboard?.city).length === 1"
+      :select-btn-list="translatedSelectList(contentStore.currentDashboard?.city)"
+      :city-tag="translatedTagList(contentStore.currentDashboard?.city)"
       :favorite-btn="authStore.token ? true : false"
       :is-favorite="contentStore.favorites?.components.includes(item.id)"
       @favorite="
@@ -129,14 +132,14 @@ function handleMoreInfo(item) {
       :info-btn="true"
       :active-city="item.city"
       :select-btn="true"
-      :select-btn-disabled="contentStore.cityManager.getSelectList(contentStore.currentDashboard?.city).length === 1 || contentStore.currentDashboardExcluded.components.filter((data) => data.index === item.index).length === 0"
+      :select-btn-disabled="translatedSelectList(contentStore.currentDashboard?.city).length === 1 || contentStore.currentDashboardExcluded.components.filter((data) => data.index === item.index).length === 0"
       :select-btn-list="contentStore.currentDashboard?.city
-        ? contentStore.cityManager.getSelectList(contentStore.currentDashboard?.city)
-        : contentStore.cityManager.getCities(contentStore.cityManager.activeCities)
+        ? translatedSelectList(contentStore.currentDashboard?.city)
+        : translatedCities(contentStore.cityManager.activeCities)
       "
       :city-tag="contentStore.currentDashboard?.city
-        ? contentStore.cityManager.getTagList(contentStore.currentDashboard?.city)
-        : contentStore.cityManager.getTagList(item.city)
+        ? translatedTagList(contentStore.currentDashboard?.city)
+        : translatedTagList(item.city)
       "
       :delete-btn="
         contentStore.personalDashboards

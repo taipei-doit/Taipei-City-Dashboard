@@ -9,6 +9,8 @@ import { useRoute } from "vue-router";
 import { useFullscreen } from "@vueuse/core";
 import { useAuthStore } from "../../../store/authStore";
 import { useDialogStore } from "../../../store/dialogStore";
+import { useThemeStore } from "../../../store/themeStore";
+import { useBackendTranslation } from "../../../composables/useBackendTranslation";
 
 import UserSettings from "../../dialogs/UserSettings.vue";
 import ContributorsList from "../../dialogs/ContributorsList.vue";
@@ -16,7 +18,15 @@ import ContributorsList from "../../dialogs/ContributorsList.vue";
 const route = useRoute();
 const authStore = useAuthStore();
 const dialogStore = useDialogStore();
+const themeStore = useThemeStore();
+const { locale, setLocale, supportedLocales, t } = useBackendTranslation();
 const { isFullscreen, toggle } = useFullscreen();
+
+const themeToggleTitle = computed(() =>
+	themeStore.isLight
+		? t("theme.to_dark") || "切換深色模式"
+		: t("theme.to_light") || "切換淺色模式"
+);
 
 const linkQuery = computed(() => {
 	const { query } = route;
@@ -46,7 +56,7 @@ const isLocalhost = computed(() => {
         </div>
         <div>
           <h1>{{ VITE_APP_TITLE }}</h1>
-          <h2>Taipei City Dashboard</h2>
+          <h2>{{ t('nav.app_subtitle') || 'Taipei City Dashboard' }}</h2>
         </div>
       </div>
     </a>
@@ -64,24 +74,53 @@ const isLocalhost = computed(() => {
             authStore.currentPath.includes('component'),
         }"
       >
-        組件瀏覽平台
+        {{ t('nav.component_browse') || '組件瀏覽平台' }}
       </router-link>
       <router-link
         :to="`/dashboard${
           linkQuery.includes('undefined') ? '' : linkQuery
         }`"
       >
-        儀表板總覽
+        {{ t('nav.dashboard_overview') || '儀表板總覽' }}
       </router-link>
       <router-link
         :to="`/mapview${
           linkQuery.includes('undefined') ? '' : linkQuery
         }`"
       >
-        地圖交叉比對
+        {{ t('nav.map_compare') || '地圖交叉比對' }}
       </router-link>
     </div>
     <div class="navbar-user">
+      <div
+        class="navbar-locale"
+        :title="t('nav.locale_title') || '語系 / Language'"
+      >
+        <span class="navbar-locale-icon">translate</span>
+        <label class="navbar-locale-sr">{{ t('nav.locale_aria') || '語系' }}</label>
+        <select
+          class="navbar-locale-select"
+          :value="locale"
+          :aria-label="t('nav.locale_aria') || '語系'"
+          @change="setLocale($event.target.value)"
+        >
+          <option
+            v-for="opt in supportedLocales"
+            :key="opt.code"
+            :value="opt.code"
+          >
+            {{ opt.label }}
+          </option>
+        </select>
+      </div>
+      <button
+        type="button"
+        class="navbar-theme"
+        :title="themeToggleTitle"
+        @click="themeStore.toggle()"
+      >
+        <span>{{ themeStore.isLight ? "dark_mode" : "light_mode" }}</span>
+      </button>
       <button
         v-if="!(authStore.isMobileDevice && authStore.isNarrowDevice)"
         class="hide-if-mobile"
@@ -99,13 +138,13 @@ const isLocalhost = computed(() => {
               :href="isLocalhost ? 'https://citydashboard.taipei/documentation/' : `${location.origin}/documentation/`"
               target="_blank"
               rel="noreferrer"
-            >技術文件</a>
+            >{{ t('label.tech_doc') || '技術文件' }}</a>
           </li>
           <li>
             <button
               @click="dialogStore.showDialog('contributorsList')"
             >
-              專案貢獻者
+              {{ t('label.contributors') || '專案貢獻者' }}
             </button>
           </li>
         </ul>
@@ -126,7 +165,7 @@ const isLocalhost = computed(() => {
         <ul>
           <li>
             <button @click="dialogStore.showDialog('userSettings')">
-              用戶設定
+              {{ t('label.user_settings') || '用戶設定' }}
             </button>
           </li>
           <li
@@ -137,7 +176,7 @@ const isLocalhost = computed(() => {
             class="hide-if-mobile"
           >
             <router-link to="/admin">
-              管理員後臺
+              {{ t('label.admin_panel') || '管理員後臺' }}
             </router-link>
           </li>
           <li
@@ -145,12 +184,12 @@ const isLocalhost = computed(() => {
             class="hide-if-mobile"
           >
             <router-link to="/dashboard">
-              返回儀表板
+              {{ t('label.back_to_dashboard') || '返回儀表板' }}
             </router-link>
           </li>
           <li>
             <button @click="authStore.handleLogout">
-              登出
+              {{ t('auth.logout') || '登出' }}
             </button>
           </li>
         </ul>
@@ -165,7 +204,7 @@ const isLocalhost = computed(() => {
         class="navbar-user-user"
       >
         <button @click="dialogStore.showDialog('login')">
-          登入
+          {{ t('label.login') || '登入' }}
         </button>
       </div>
     </div>
@@ -210,7 +249,7 @@ const isLocalhost = computed(() => {
 
 			img {
 				height: 45px;
-				filter: invert(1);
+				filter: var(--navbar-logo-filter);
 			}
 		}
 	}
@@ -246,6 +285,50 @@ const isLocalhost = computed(() => {
 		// @media screen and (max-height: 500px) {
 		// 	display: none;
 		// }
+	}
+
+	&-locale {
+		display: flex;
+		align-items: center;
+		margin-right: var(--font-s);
+		min-width: 0;
+		gap: 4px;
+
+		&-icon {
+			flex-shrink: 0;
+			font-family: var(--font-icon);
+			font-size: calc(var(--font-m) * var(--font-to-icon));
+			color: var(--color-complement-text);
+		}
+
+		&-sr {
+			position: absolute;
+			width: 1px;
+			height: 1px;
+			padding: 0;
+			margin: -1px;
+			overflow: hidden;
+			clip: rect(0, 0, 0, 0);
+			white-space: nowrap;
+			border: 0;
+		}
+
+		&-select {
+			min-width: 0;
+			max-width: 7.5rem;
+			padding: 4px 6px;
+			border-radius: 4px;
+			border: solid 1px var(--color-border);
+			background-color: var(--color-background);
+			color: var(--color-normal-text);
+			font-size: var(--font-s);
+			cursor: pointer;
+			outline: none;
+		}
+
+		&-select:focus {
+			border-color: var(--color-highlight);
+		}
 	}
 
 	&-user {
@@ -297,7 +380,7 @@ const isLocalhost = computed(() => {
 				top: 55px;
 				padding: 8px;
 				border-radius: 5px;
-				background-color: rgb(85, 85, 85);
+				background-color: var(--color-menu-dropdown);
 				opacity: 0;
 				transition: opacity 0.25s;
 				z-index: 10;
@@ -343,3 +426,5 @@ const isLocalhost = computed(() => {
 	}
 }
 </style>
+
+

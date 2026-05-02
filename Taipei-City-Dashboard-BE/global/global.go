@@ -2,6 +2,7 @@ package global
 
 import (
 	"TaipeiCityDashboardBE/logs"
+	"context"
 	"os"
 	"strconv"
 
@@ -124,7 +125,15 @@ var (
 	
 	LMSession *ort.DynamicSession[int64, float32]
 	LMTokenizer *tokenizer.Tokenizer
+
+	GlobalTranslator Translator
 )
+
+// Translator is a global interface for translation service
+type Translator interface {
+	Translate(ctx context.Context, text string, targetLang string, contextHint string) string
+	TranslateJSON(ctx context.Context, data []byte, targetLang string, contextHint string) []byte
+}
 
 func init() {
 	logs.FInfo(PostgresDashboard.Host)

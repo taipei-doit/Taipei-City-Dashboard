@@ -6,8 +6,6 @@ import { storeToRefs } from "pinia";
 import DashboardComponent from "../../../dashboardComponent/DashboardComponent.vue";
 import { useDialogStore } from "../../../store/dialogStore";
 import { useAdminStore } from "../../../store/adminStore";
-import { useContentStore } from "../../../store/contentStore";
-
 import DialogContainer from "../DialogContainer.vue";
 import InputTags from "../../utilities/forms/InputTags.vue";
 import SelectButtons from "../../utilities/forms/SelectButtons.vue";
@@ -16,10 +14,11 @@ import HistoryChart from "../../charts/HistoryChart.vue";
 import { chartsPerDataType } from "../../../assets/configs/apexcharts/chartTypes";
 import { timeTerms } from "../../../assets/configs/AllTimes";
 import { mapTypes } from "../../../assets/configs/mapbox/mapConfig";
+import { useCityLabels } from "../../../composables/useCityLabels";
 
 const dialogStore = useDialogStore();
+const { translatedTagList } = useCityLabels();
 const adminStore = useAdminStore();
-const contentStore = useContentStore();
 
 const props = defineProps(["searchParams"]);
 
@@ -601,7 +600,9 @@ function handleClose() {
             :key="`${currentComponent.index}-${currentComponent.chart_config.color}-${currentComponent.chart_config.types}`"
             :config="JSON.parse(JSON.stringify(currentComponent))"
             :active-city="currentComponent.city"
-            :city-tag="contentStore.cityManager.getTagList(currentComponent.city)"
+            :city-tag="
+              translatedTagList(currentComponent.city)
+            "
             mode="large"
           />
           <div

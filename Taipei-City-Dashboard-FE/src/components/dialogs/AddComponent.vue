@@ -8,10 +8,12 @@ import DashboardComponent from "../../dashboardComponent/DashboardComponent.vue"
 import { useDialogStore } from "../../store/dialogStore";
 import { useContentStore } from "../../store/contentStore";
 import { useAuthStore } from "../../store/authStore";
+import { useCityLabels } from "../../composables/useCityLabels";
 
 import DialogContainer from "./DialogContainer.vue";
 
 const dialogStore = useDialogStore();
+const { translatedTagList } = useCityLabels();
 const contentStore = useContentStore();
 const authStore = useAuthStore();
 
@@ -160,11 +162,7 @@ onMounted(() => {
             <div class="addcomponent-list-item">
               <DashboardComponent
                 :config="item"
-                :city-tag="
-                  contentStore.cityManager.getTagList(
-                    item.city,
-                  )
-                "
+                :city-tag="translatedTagList(item.city)"
                 mode="preview"
               />
             </div>

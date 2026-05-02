@@ -1,12 +1,13 @@
 <script setup>
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
+import { useBackendTranslation } from "../composables/useBackendTranslation";
 // import "./styles/chartStyles.css";
 // import "./styles/toggleswitch.css";
 import "material-icons/iconfont/material-icons.css";
 import { getComponentDataTimeframe } from "./utilities/dataTimeframe";
 import { timeTerms } from "./utilities/AllTimes";
 import { chartTypes } from "./utilities/chartTypes";
-
+import BackendTranslatedText from "../components/utilities/i18n/BackendTranslatedText.vue";
 import ComponentTag from "./components/ComponentTag.vue";
 import TagTooltip from "./components/TagTooltip.vue";
 import DistrictChart from "./components/DistrictChart.vue";
@@ -77,6 +78,8 @@ const props = defineProps({
 	toggleOn: { type: Boolean, default: false },
 });
 
+const { t } = useBackendTranslation();
+
 const emits = defineEmits([
 	"favorite",
 	"delete",
@@ -92,6 +95,18 @@ const emits = defineEmits([
 ]);
 
 const activeChart = ref(props.config.chart_config.types[0]);
+
+watch(
+	() => [...(props.config.chart_config?.types ?? [])],
+	(types) => {
+		if (!types.length) return;
+		if (!types.includes(activeChart.value)) {
+			activeChart.value = types[0];
+		}
+	},
+	{ immediate: false }
+);
+
 const activeCity = computed({
 	get: () => props.activeCity,
 	set: (value) => {
@@ -248,10 +263,14 @@ function returnChartComponent(name, svg) {
       <!-- Upper Left Corner -->
       <div>
         <h3>
-          {{ config.name }}
+          <BackendTranslatedText
+            tag="span"
+            :text="config.name"
+          />
           <ComponentTag
             v-if="!mode.includes('map')"
             icon=""
+            translate-text
             :text="updateFreq"
             mode="small"
           />
@@ -266,26 +285,34 @@ function returnChartComponent(name, svg) {
             <span v-if="config.history_config?.range">insights</span>
           </div>
         </h3>
-        <p v-if="mode === 'preview'">
-          {{ props.config.short_desc }}
-        </p>
+        <BackendTranslatedText
+          v-if="mode === 'preview' && props.config.short_desc"
+          tag="p"
+          :text="props.config.short_desc"
+        />
         <div v-if="!mode.includes('map') || toggleOn">
-          <h4 v-if="dataTime === '維護修復中'">
-            {{ `${config.source} | ` }}<span>warning</span>
-            <h4>{{ `${dataTime}` }}</h4>
+          <h4 v-if="config.time_from === 'maintain'">
+            <BackendTranslatedText
+              tag="span"
+              :text="`${config.source} | ${dataTime}`"
+            />
             <span>warning</span>
           </h4>
           <h4 v-else>
-            {{ `${config.source} | ${dataTime}` }}
+            <BackendTranslatedText
+              tag="span"
+              :text="`${config.source} | ${dataTime}`"
+            />
           </h4>
           <div
             v-if="mode !== 'preview'"
             class="city-tag-container"
           >
             <ComponentTag
-              v-for=" city in props.cityTag"
-              :key="city"
+              v-for="city in props.cityTag"
+              :key="city.value"
               :icon="''"
+              :dict-key="`city.area.${city.value}`"
               :text="city.name"
               :mode="'small'"
               :class="`city-tag-item ${city.value}`"
@@ -355,7 +382,7 @@ function returnChartComponent(name, svg) {
           :key="city.value"
         >
           <option :value="city.value">
-            {{ city.name }}
+            {{ t(`city.area.${city.value}`) || city.name }}
           </option>
         </template>
       </select>
@@ -364,15 +391,19 @@ function returnChartComponent(name, svg) {
         class="dashboardcomponent-control-group"
       >
         <button
-          v-for="item in config.chart_config.types"
-          :key="`${config.index}-${item}-button`"
+          v-for="(item, chartTypeIdx) in config.chart_config.types"
+          :key="`${config.index}-${chartTypeIdx}-${item}-button`"
           :class="{
             'dashboardcomponent-control-group-button': true,
             'dashboardcomponent-control-group-active': activeChart === item,
           }"
           @click="changeActiveChart(item)"
         >
-          {{ chartTypes[item] }}
+          <BackendTranslatedText
+            tag="span"
+            :dict-key="`chart.type.${item}`"
+            :text="chartTypes[item] ?? item"
+          />
         </button>
       </div>
     </div>
@@ -392,6 +423,7 @@ function returnChartComponent(name, svg) {
             v-for="city in props.cityTag"
             :key="city.value"
             :icon="''"
+            :dict-key="`city.area.${city.value}`"
             :text="city.name"
             :mode="'small'"
             :class="`city-tag-item ${city.value}`"
@@ -420,8 +452,8 @@ function returnChartComponent(name, svg) {
     >
       <component
         :is="returnChartComponent(item)"
-        v-for="item in config.chart_config.types"
-        :key="`${props.config.index}-${item}-chart-${item.city}`"
+        v-for="(item, chartIdx) in config.chart_config.types"
+        :key="`${props.config.index}-${chartIdx}-${item}-chart`"
         :active-chart="activeChart"
         :active-city="activeCity"
         :chart_config="config.chart_config"
@@ -457,7 +489,10 @@ function returnChartComponent(name, svg) {
       }"
     >
       <span>error</span>
-      <p>組件資料異常</p>
+      <BackendTranslatedText
+        tag="p"
+        text="組件資料異常"
+      />
     </div>
     <div
       v-else-if="toggleOn || !mode.includes('map')"
@@ -483,18 +518,21 @@ function returnChartComponent(name, svg) {
         <ComponentTag
           v-if="config.map_filter && config.map_config?.length > 0"
           :icon="mode === 'preview' ? '' : 'tune'"
+          dict-key="dashboard.footer.filter_map"
           text="篩選地圖"
           class="hide-if-mobile"
         />
         <ComponentTag
           v-if="config.map_config && config.map_config[0] !== null && config.map_config?.length > 0"
           :icon="mode === 'preview' ? '' : 'map'"
+          dict-key="dashboard.footer.spatial_data"
           text="空間資料"
           class="hide-if-mobile"
         />
         <ComponentTag
           v-if="config.history_config?.range"
           :icon="mode === 'preview' ? '' : 'insights'"
+          dict-key="dashboard.footer.history_data"
           text="歷史資料"
           class="history-tag"
         />
@@ -504,7 +542,10 @@ function returnChartComponent(name, svg) {
         v-if="infoBtn"
         @click="$emit('info', config)"
       >
-        <p>{{ infoBtnText }}</p>
+        <BackendTranslatedText
+          tag="p"
+          :text="infoBtnText"
+        />
         <span>arrow_circle_right</span>
       </button>
     </div>

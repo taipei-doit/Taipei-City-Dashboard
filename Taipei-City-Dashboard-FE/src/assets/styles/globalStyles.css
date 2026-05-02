@@ -1,6 +1,7 @@
 /* Cleaned */
 
 :root {
+	color-scheme: dark;
 	--color-background: #090909;
 	--color-border: #494b4e;
 	--color-highlight: #5a9cf8;
@@ -8,6 +9,8 @@
 	--color-complement-text: #888787;
 	--color-component-background: #282a2c;
 	--color-overlay: rgba(0, 0, 0, 0.65);
+	--color-menu-dropdown: rgb(85, 85, 85);
+	--navbar-logo-filter: invert(1);
 	--font-to-icon: 1.2;
 	--font-xl: 1.5rem;
 	--font-l: 1.25rem;
@@ -19,6 +22,19 @@
 	
 	--color-taipei: #1411AC;
 	--color-metrotaipei: #ac7811;
+}
+
+html[data-theme="light"] {
+	color-scheme: light;
+	--color-background: #f8fafc;
+	--color-border: #cbd5e1;
+	--color-highlight: #2563eb;
+	--color-normal-text: #0f172a;
+	--color-complement-text: #64748b;
+	--color-component-background: #e2e8f0;
+	--color-overlay: rgba(15, 23, 42, 0.5);
+	--color-menu-dropdown: #e2e8f0;
+	--navbar-logo-filter: invert(0);
 }
 
 * {
@@ -121,6 +137,7 @@ textarea:required:invalid {
 
 body {
 	background-color: var(--color-background);
+	transition: background-color 0.2s ease;
 }
 
 table {
@@ -230,7 +247,7 @@ html .mapboxgl-popup .popup-for-pin {
 	div {
 		padding: 2px 4px;
 		border-radius: 5px;
-		background-color: rgb(77, 77, 77);
+		background-color: var(--color-component-background);
 	}
 
 	.delete-pin {

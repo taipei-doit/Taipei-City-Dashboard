@@ -29,6 +29,7 @@ import AdminSideBar from "./components/utilities/bars/AdminSideBar.vue";
 import SettingsBar from "./components/utilities/bars/SettingsBar.vue";
 import NotificationBar from "./components/dialogs/NotificationBar.vue";
 import InitialWarning from "./components/dialogs/InitialWarning.vue";
+import RecommendSideBar from "./components/utilities/bars/RecommendSideBar.vue";
 import ComponentSideBar from "./components/utilities/bars/ComponentSideBar.vue";
 import LogIn from "./components/dialogs/LogIn.vue";
 import ChatBox from "./components/dialogs/ChatBox.vue";
@@ -235,6 +236,7 @@ onBeforeUnmount(() => {
         <SettingsBar />
         <RouterView />
       </div>
+      <RecommendSideBar />
     </div>
     <!-- /admin layouts -->
     <div
@@ -310,7 +312,8 @@ onBeforeUnmount(() => {
 		display: flex;
 
 		&-main {
-			width: 100%;
+			flex: 1 1 auto;
+			min-width: 0;
 			display: flex;
 			flex-direction: column;
 		}

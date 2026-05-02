@@ -21,8 +21,11 @@ import { useMapStore } from "../store/mapStore";
 import MapContainer from "../components/map/MapContainer.vue";
 import MoreInfo from "../components/dialogs/MoreInfo.vue";
 import ReportIssue from "../components/dialogs/ReportIssue.vue";
+import { useCityLabels } from "../composables/useCityLabels";
 
 const contentStore = useContentStore();
+const { translatedTagList, translatedSelectList, translatedCities } =
+	useCityLabels();
 const dialogStore = useDialogStore();
 const mapStore = useMapStore();
 const route = useRoute();
@@ -158,17 +161,17 @@ function popularBasicLayerGA(map_config) {
           :active-city="item.city"
           :select-btn="true"
           :select-btn-disabled="
-            contentStore.cityManager.getSelectList(
+            translatedSelectList(
               contentStore.currentDashboard?.city,
             ).length === 1
           "
           :select-btn-list="
-            contentStore.cityManager.getSelectList(
+            translatedSelectList(
               contentStore.currentDashboard?.city,
             )
           "
           :city-tag="
-            contentStore.cityManager.getTagList(
+            translatedTagList(
               contentStore.currentDashboard?.city,
             )
           "
@@ -264,7 +267,7 @@ function popularBasicLayerGA(map_config) {
           :active-city="item.city"
           :select-btn="true"
           :select-btn-disabled="
-            contentStore.cityManager.getSelectList(
+            translatedSelectList(
               contentStore.currentDashboard?.city,
             ).length === 1 ||
               contentStore.currentDashboardExcluded.components.filter(
@@ -273,19 +276,19 @@ function popularBasicLayerGA(map_config) {
           "
           :select-btn-list="
             contentStore.currentDashboard?.city
-              ? contentStore.cityManager.getSelectList(
+              ? translatedSelectList(
                 contentStore.currentDashboard?.city,
               )
-              : contentStore.cityManager.getCities(
+              : translatedCities(
                 contentStore.cityManager.activeCities,
               )
           "
           :city-tag="
             contentStore.currentDashboard?.city
-              ? contentStore.cityManager.getTagList(
+              ? translatedTagList(
                 contentStore.currentDashboard?.city,
               )
-              : contentStore.cityManager.getTagList(item.city)
+              : translatedTagList(item.city)
           "
           :toggle-disable="shouldDisable(item.map_config)"
           :toggle-on="toggleOn.hasMap[arrayIdx]"
@@ -379,17 +382,17 @@ function popularBasicLayerGA(map_config) {
           :active-city="item.city"
           :select-btn="true"
           :select-btn-disabled="
-            contentStore.cityManager.getSelectList(
+            translatedSelectList(
               contentStore.currentDashboard?.city,
             ).length === 1
           "
           :select-btn-list="
-            contentStore.cityManager.getSelectList(
+            translatedSelectList(
               contentStore.currentDashboard?.city,
             )
           "
           :city-tag="
-            contentStore.cityManager.getTagList(
+            translatedTagList(
               contentStore.currentDashboard?.city,
             )
           "
@@ -474,7 +477,7 @@ function popularBasicLayerGA(map_config) {
           :active-city="item.city"
           :select-btn="true"
           :select-btn-disabled="
-            contentStore.cityManager.getSelectList(
+            translatedSelectList(
               contentStore.currentDashboard?.city,
             ).length === 1 ||
               contentStore.currentDashboardExcluded.components.filter(
@@ -483,19 +486,19 @@ function popularBasicLayerGA(map_config) {
           "
           :select-btn-list="
             contentStore.currentDashboard?.city
-              ? contentStore.cityManager.getSelectList(
+              ? translatedSelectList(
                 contentStore.currentDashboard?.city,
               )
-              : contentStore.cityManager.getCities(
+              : translatedCities(
                 contentStore.cityManager.activeCities,
               )
           "
           :city-tag="
             contentStore.currentDashboard?.city
-              ? contentStore.cityManager.getTagList(
+              ? translatedTagList(
                 contentStore.currentDashboard?.city,
               )
-              : contentStore.cityManager.getTagList(item.city)
+              : translatedTagList(item.city)
           "
           :toggle-on="toggleOn.noMap[arrayIdx]"
           @info="

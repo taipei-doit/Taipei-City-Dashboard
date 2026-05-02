@@ -7,6 +7,7 @@ import axios from "axios";
 import { useAuthStore } from "../store/authStore";
 import { useDialogStore } from "../store/dialogStore";
 import { useContentStore } from "../store/contentStore";
+import { getAcceptLanguageHeader } from "../utils/acceptLanguage";
 
 const http = axios.create({
 	baseURL: import.meta.env.VITE_API_URL,
@@ -20,7 +21,9 @@ http.interceptors.request.use((request) => {
 	const authStore = useAuthStore();
 	const contentStore = useContentStore();
 
-	contentStore.loading = true;
+	if (!request.skipGlobalLoading) {
+		contentStore.loading = true;
+	}
 	contentStore.error = false;
 
 	if (authStore.token) {
@@ -28,6 +31,7 @@ http.interceptors.request.use((request) => {
 	} else {
 		request.headers.setAuthorization(`Bearer`);
 	}
+	request.headers.set("Accept-Language", getAcceptLanguageHeader());
 	return request;
 });
 
@@ -43,12 +47,24 @@ http.interceptors.response.use(
 		return response;
 	},
 	(error) => {
+		if (error.config?.skipErrorHandler) {
+			return Promise.reject(error);
+		}
+
 		const dialogStore = useDialogStore();
 		const authStore = useAuthStore();
 		const contentStore = useContentStore();
 
 		contentStore.error = true;
 		contentStore.loading = false;
+
+		if (!error.response) {
+			dialogStore.showNotification(
+				"fail",
+				"網路錯誤，請檢查連線後再試"
+			);
+			return Promise.reject(error);
+		}
 
 		switch (error.response.status) {
 			case 401:

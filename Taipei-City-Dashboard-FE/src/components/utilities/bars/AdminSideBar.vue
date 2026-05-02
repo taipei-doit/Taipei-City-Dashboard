@@ -6,7 +6,11 @@ import { useMapStore } from "../../../store/mapStore";
 import { useContentStore } from "../../../store/contentStore";
 
 import SideBarTab from "../miscellaneous/SideBarTab.vue";
+import { useCityLabels } from "../../../composables/useCityLabels";
+import { useBackendTranslation } from "../../../composables/useBackendTranslation";
 
+const { expandedLabel } = useCityLabels();
+const { t } = useBackendTranslation();
 const mapStore = useMapStore();
 const contentStore = useContentStore();
 
@@ -48,49 +52,73 @@ onMounted(() => {
           : "keyboard_double_arrow_right"
       }}</span>
     </button>
-    <h2>{{ isExpanded ? `儀表板設定` : `表板` }}</h2>
+    <h2>
+      {{
+        isExpanded
+          ? t('admin.sidebar.dashboard_settings')
+          : t('admin.sidebar.dashboard_abbr')
+      }}
+    </h2>
     <template
       v-for="city in contentStore.cityManager.activeCities"
       :key="city"
     >
       <SideBarTab
         icon="dashboard"
-        :title="`${contentStore.cityManager.getExpandedNameName(city)}`"
+        :title="`${expandedLabel(city)}`"
         index="dashboard"
         :expanded="isExpanded"
         :city="city"
       />
     </template>
-    <h2>{{ isExpanded ? `組件設定` : `組件` }}</h2>
+    <h2>
+      {{
+        isExpanded
+          ? t('admin.sidebar.component_settings')
+          : t('admin.sidebar.component_abbr')
+      }}
+    </h2>
     <SideBarTab
       icon="edit_note"
-      title="編輯公開組件"
+      :title="t('admin.sidebar.edit_public_components')"
       :expanded="isExpanded"
       index="edit-component"
     />
-    <h2>{{ isExpanded ? `問題回報` : `問題` }}</h2>
+    <h2>
+      {{
+        isExpanded
+          ? t('admin.sidebar.issue_heading')
+          : t('admin.sidebar.issue_abbr')
+      }}
+    </h2>
     <SideBarTab
       icon="bug_report"
-      title="待回覆問題"
+      :title="t('admin.sidebar.issue_pending_tab')"
       :expanded="isExpanded"
       index="issue"
     />
     <SideBarTab
       icon="flood"
-      title="民眾災害通報"
+      :title="t('admin.sidebar.disaster_heading')"
       :expanded="isExpanded"
       index="disaster"
     />
-    <h2>{{ isExpanded ? `系統總覽` : `系統` }}</h2>
+    <h2>
+      {{
+        isExpanded
+          ? t('admin.sidebar.system_heading')
+          : t('admin.sidebar.system_abbr')
+      }}
+    </h2>
     <SideBarTab
       icon="person"
-      title="使用者資訊"
+      :title="t('admin.sidebar.user_info')"
       :expanded="isExpanded"
       index="user"
     />
     <SideBarTab
       icon="handshake"
-      title="貢獻者資訊"
+      :title="t('admin.sidebar.contributor_info')"
       :expanded="isExpanded"
       index="contributor"
     />

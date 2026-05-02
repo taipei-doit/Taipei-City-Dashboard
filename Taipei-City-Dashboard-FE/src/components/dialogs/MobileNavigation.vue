@@ -5,9 +5,13 @@ import { onMounted, ref, watch } from "vue";
 import { useDialogStore } from "../../store/dialogStore";
 import { useContentStore } from "../../store/contentStore";
 import { useAuthStore } from "../../store/authStore";
+import { useBackendTranslation } from "../../composables/useBackendTranslation";
+import { useCityLabels } from "../../composables/useCityLabels";
 
 import SideBarTab from "../utilities/miscellaneous/SideBarTab.vue";
 
+const { t } = useBackendTranslation();
+const { expandedLabel } = useCityLabels();
 const dialogStore = useDialogStore();
 const contentStore = useContentStore();
 const authStore = useAuthStore();
@@ -63,16 +67,16 @@ onMounted(() => {
           <div class="mobilenavigation">
             <template v-if="authStore.token">
               <h1 @click="toggleCollapse(['favorites', 'personal'])">
-                私人儀表板
+                {{ (t('sidebar.private_full') || '私人儀表板').trimEnd() }}
               </h1>
               <h2 @click="toggleCollapse('favorites')">
-                我的最愛
+                {{ t('sidebar.favorites_full') || '我的最愛' }}
               </h2>
               <transition name="collapse">
                 <template v-if="!collapsedStates.favorites">
                   <SideBarTab
                     icon="favorite"
-                    title="收藏組件"
+                    :title="t('sidebar.saved_components') || '收藏組件'"
                     :expanded="true"
                     :index="contentStore.favorites?.index"
                     @click="dialogStore.hideAllDialogs"
@@ -81,7 +85,7 @@ onMounted(() => {
               </transition>
 
               <h2 @click="toggleCollapse('personal')">
-                個人儀表板
+                {{ (t('sidebar.personal_full') || '個人儀表板').trimEnd() }}
               </h2>
               <div
                 v-if="
@@ -91,7 +95,7 @@ onMounted(() => {
                 "
                 class="mobilenavigation-sub-no"
               >
-                <p>尚無個人儀表板</p>
+                <p>{{ (t('sidebar.no_personal_full') || '尚無個人儀表板').trimEnd() }}</p>
               </div>
               <transition name="collapse">
                 <div v-if="!collapsedStates.personal">
@@ -110,14 +114,14 @@ onMounted(() => {
               </transition>
             </template>
             <h1 @click="toggleCollapse(contentStore.cityManager.activeCities)">
-              公共儀表板
+              {{ t('sidebar.public_full') || '公共儀表板' }}
             </h1>
             <template
               v-for="city in contentStore.cityManager.activeCities"
               :key="city"
             >
               <h2 @click="toggleCollapse(city)">
-                {{ `${contentStore.cityManager.getExpandedNameName(city)}` }}
+                {{ `${expandedLabel(city)}` }}
               </h2>
               <transition name="collapse">
                 <div

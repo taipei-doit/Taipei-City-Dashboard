@@ -15,8 +15,10 @@ import DashboardComponent from "../dashboardComponent/DashboardComponent.vue";
 
 import { useContentStore } from "../store/contentStore";
 import router from "../router/index";
+import { useCityLabels } from "../composables/useCityLabels";
 
 const contentStore = useContentStore();
+const { translatedTagList } = useCityLabels();
 
 const searchParams = ref({
 	searchbyindex: "",
@@ -92,7 +94,7 @@ onMounted(() => {
           .map((item) => item.id)
           .includes(item.id)
       "
-      :city-tag="contentStore.cityManager.getTagList(item.city)"
+      :city-tag="translatedTagList(item.city)"
       :favorite-btn="true"
       :is-favorite="contentStore.favorites?.components.includes(item.id)"
       info-btn-text="資訊頁面"

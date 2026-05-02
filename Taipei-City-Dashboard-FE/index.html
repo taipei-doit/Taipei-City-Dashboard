@@ -25,6 +25,16 @@ Testing: Jack Huang (Data Scientist), Ian Huang (Data Analysis Intern)
 			content="Taipei City Dashboard, Taipei Urban Intelligence Center, Department of Information Technology, Taipei City Government"
 		/>
 		<title>%VITE_APP_TITLE%</title>
+		<script>
+			(function () {
+				try {
+					var t = localStorage.getItem("tcd-theme");
+					if (t === "light" || t === "dark") {
+						document.documentElement.setAttribute("data-theme", t);
+					}
+				} catch (e) {}
+			})();
+		</script>
 		<!-- Global tag (gtag.js) -->
 		<script
 			async
