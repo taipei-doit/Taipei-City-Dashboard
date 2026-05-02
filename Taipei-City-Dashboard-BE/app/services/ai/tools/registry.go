@@ -1,12 +1,12 @@
 package tools
 
 import (
-	"TaipeiCityDashboardBE/app/models"
-	"TaipeiCityDashboardBE/app/services"
 	"context"
 	"encoding/json"
 	"fmt"
 	"time"
+
+	"TaipeiCityDashboardBE/app/services"
 )
 
 // ToolFunc defines the signature for a tool function
@@ -19,6 +19,7 @@ func init() {
 	Register("search_dashboards", SearchDashboardsTool)
 	Register("get_component_data", GetComponentDataTool)
 	Register("query_city_data", QueryCityDataTool)
+	Register("answer_city_data_question", AnswerCityDataQuestionTool)
 }
 
 // Register adds a tool to the registry
@@ -86,54 +87,16 @@ func GetComponentDataTool(ctx context.Context, args string) (string, error) {
 		params.City = "taipei"
 	}
 
-	// 預設時間範圍：最近 24 小時
-	loc, _ := time.LoadLocation("Asia/Taipei")
-	if params.TimeTo == "" {
-		params.TimeTo = time.Now().In(loc).Format("2006-01-02T15:04:05+08:00")
-	}
-	if params.TimeFrom == "" {
-		params.TimeFrom = time.Now().In(loc).Add(-24 * time.Hour).Format("2006-01-02T15:04:05+08:00")
-	}
-
-	queryType, queryString, err := models.GetComponentChartDataByIndex(params.Index, params.City)
+	params.TimeFrom, params.TimeTo, _ = services.NormalizeComponentTimeRange(params.TimeFrom, params.TimeTo)
+	result, err := services.FetchComponentChartDataByIndexAndTime(params.Index, params.City, params.TimeFrom, params.TimeTo)
 	if err != nil {
-		return "", fmt.Errorf("查詢組件設定失敗: %v", err)
+		return "", fmt.Errorf("取得組件資料失敗: %v", err)
 	}
-	if queryString == "" {
+	if result.Data == nil {
 		return fmt.Sprintf("組件 %s 在 %s 目前沒有可用資料", params.Index, params.City), nil
 	}
 
-	var result interface{}
-	switch queryType {
-	case "two_d":
-		data, err := models.GetTwoDimensionalData(&queryString, params.TimeFrom, params.TimeTo)
-		if err != nil {
-			return "", fmt.Errorf("取得 2D 資料失敗: %v", err)
-		}
-		result = data
-	case "three_d", "percent":
-		data, categories, err := models.GetThreeDimensionalData(&queryString, params.TimeFrom, params.TimeTo)
-		if err != nil {
-			return "", fmt.Errorf("取得 3D 資料失敗: %v", err)
-		}
-		result = map[string]interface{}{"data": data, "categories": categories}
-	case "time":
-		data, err := models.GetTimeSeriesData(&queryString, params.TimeFrom, params.TimeTo)
-		if err != nil {
-			return "", fmt.Errorf("取得時序資料失敗: %v", err)
-		}
-		result = data
-	case "map_legend":
-		data, err := models.GetMapLegendData(&queryString, params.TimeFrom, params.TimeTo)
-		if err != nil {
-			return "", fmt.Errorf("取得地圖資料失敗: %v", err)
-		}
-		result = data
-	default:
-		return fmt.Sprintf("不支援的資料類型: %s", queryType), nil
-	}
-
-	resultBytes, _ := json.Marshal(result)
+	resultBytes, _ := json.Marshal(result.Data)
 	return string(resultBytes), nil
 }
 
@@ -154,13 +117,7 @@ func QueryCityDataTool(ctx context.Context, args string) (string, error) {
 		params.City = "taipei"
 	}
 
-	loc, _ := time.LoadLocation("Asia/Taipei")
-	if params.TimeTo == "" {
-		params.TimeTo = time.Now().In(loc).Format("2006-01-02T15:04:05+08:00")
-	}
-	if params.TimeFrom == "" {
-		params.TimeFrom = time.Now().In(loc).Add(-24 * time.Hour).Format("2006-01-02T15:04:05+08:00")
-	}
+	params.TimeFrom, params.TimeTo, _ = services.NormalizeComponentTimeRange(params.TimeFrom, params.TimeTo)
 
 	targetIndex := params.Index
 	componentName := ""
@@ -181,43 +138,56 @@ func QueryCityDataTool(ctx context.Context, args string) (string, error) {
 		}
 	}
 
-	// 取 query_chart SQL 與單位
-	info, err := models.GetComponentQueryInfoByIndex(targetIndex, params.City)
-	if err != nil {
-		return "", fmt.Errorf("查詢組件設定失敗: %v", err)
-	}
-	if info.QueryChart == "" {
-		return fmt.Sprintf("組件 %s 在 %s 目前沒有可用資料", targetIndex, params.City), nil
-	}
-
-	var chartData interface{}
-	switch info.QueryType {
-	case "two_d":
-		chartData, err = models.GetTwoDimensionalData(&info.QueryChart, params.TimeFrom, params.TimeTo)
-	case "three_d", "percent":
-		var categories []string
-		var data interface{}
-		data, categories, err = models.GetThreeDimensionalData(&info.QueryChart, params.TimeFrom, params.TimeTo)
-		chartData = map[string]interface{}{"data": data, "categories": categories}
-	case "time":
-		chartData, err = models.GetTimeSeriesData(&info.QueryChart, params.TimeFrom, params.TimeTo)
-	case "map_legend":
-		chartData, err = models.GetMapLegendData(&info.QueryChart, params.TimeFrom, params.TimeTo)
-	default:
-		return fmt.Sprintf("不支援的資料類型: %s", info.QueryType), nil
-	}
+	chartResult, err := services.FetchComponentChartDataByIndexAndTime(targetIndex, params.City, params.TimeFrom, params.TimeTo)
 	if err != nil {
 		return "", fmt.Errorf("取得資料失敗: %v", err)
+	}
+	if chartResult.Data == nil {
+		return fmt.Sprintf("組件 %s 在 %s 目前沒有可用資料", targetIndex, params.City), nil
 	}
 
 	result := map[string]interface{}{
 		"index":      targetIndex,
 		"name":       componentName,
-		"unit":       info.Unit,
-		"query_type": info.QueryType,
-		"data":       chartData,
+		"unit":       chartResult.Unit,
+		"query_type": chartResult.QueryType,
+		"data":       chartResult.Data,
 	}
 	resultBytes, _ := json.Marshal(result)
+	return string(resultBytes), nil
+}
+
+// AnswerCityDataQuestionTool returns structured evidence for cross-component
+// city-data questions. It never accepts SQL, table names, or column names.
+func AnswerCityDataQuestionTool(ctx context.Context, args string) (string, error) {
+	var params struct {
+		UserQuestion   string  `json:"user_question"`
+		City           string  `json:"city"`
+		TimeFrom       string  `json:"time_from"`
+		TimeTo         string  `json:"time_to"`
+		TopK           int     `json:"top_k"`
+		ScoreThreshold float32 `json:"score_threshold"`
+	}
+	if err := parseArgs(args, &params); err != nil {
+		return "", fmt.Errorf("參數解析失敗: %v", err)
+	}
+	if params.UserQuestion == "" {
+		return "", fmt.Errorf("user_question 不可為空")
+	}
+
+	pack, err := services.BuildComponentEvidencePack(ctx, services.ComponentEvidenceQuery{
+		UserQuestion:   params.UserQuestion,
+		City:           params.City,
+		TimeFrom:       params.TimeFrom,
+		TimeTo:         params.TimeTo,
+		TopK:           params.TopK,
+		ScoreThreshold: params.ScoreThreshold,
+	})
+	if err != nil {
+		return "", err
+	}
+
+	resultBytes, _ := json.Marshal(pack)
 	return string(resultBytes), nil
 }
 
