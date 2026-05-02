@@ -1,0 +1,37 @@
+{
+    "dag_infos": {
+        "dag_id": "traceability_inspection",
+        "start_date": "2025-05-02",
+        "schedule_interval": "30 */1 * * *",
+        "catchup": false,
+        "tags": ["traceability", "food_safety", "產銷履歷", "農業部"],
+        "description": "產銷履歷農產品抽驗結果，來自農業部開放資料平臺 SalesResumeAgriproductsResultsType API",
+        "default_args": {
+            "owner": "airflow",
+            "email": ["DEFAULT_EMAIL_LIST"],
+            "email_on_retry": false,
+            "email_on_failure": true,
+            "retries": 2,
+            "retry_delay": 120
+        },
+        "ready_data_db": "postgres_default",
+        "ready_data_default_table": "traceability_inspection",
+        "ready_data_history_table": "",
+        "raw_data_db": "postgres_default",
+        "raw_data_table": "",
+        "load_behavior": "replace"
+    },
+    "data_infos": {
+        "name_cn": "產銷履歷農產品抽驗結果",
+        "airflow_update_freq": "every hour (at :30)",
+        "source": "https://data.moa.gov.tw/api/v1/SalesResumeAgriproductsResultsType/",
+        "source_type": "REST API (JSON)",
+        "source_dept": "農業部",
+        "gis_format": null,
+        "output_coordinate": "",
+        "is_geometry": 0,
+        "dataset_description": "產銷履歷農產品各產地之抽驗結果，包含抽樣地點、檢驗結果等欄位",
+        "etl_description": "呼叫 MOA API 取得產銷履歷抽驗資料，正規化欄位後寫入 PostgreSQL traceability_inspection 表",
+        "sensitivity": "public"
+    }
+}
