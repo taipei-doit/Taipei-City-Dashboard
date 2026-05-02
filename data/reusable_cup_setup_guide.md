@@ -51,18 +51,17 @@ VALUES ('文山區', 53, '臺北市');
 | 欄位 | 說明 | 備註 |
 | :--- | :--- | :--- |
 | `index` | 對應 `components.index` | |
-| `query_type` | 資料維度 | 二維資料請設為 `two_d` |
+| `query_type` | 資料維度 | 雙北合併請設為 `three_d` |
 | `query_chart` | 執行的 SQL 查詢 | 必須回傳 `x_axis`, `y_axis`, `data` |
-| `city` | 城市標記 | 通常為 `taipei` |
+| `city` | 城市標記 | 雙北合併請設為 `metrotaipei` |
 
-**SQL 要求格式：**
+**SQL 要求格式（雙北合併版）：**
 ```sql
 SELECT 
-    district as x_axis,   -- X 軸顯示文字 (如：行政區)
-    '門市數量' as y_axis, -- 資料分類名稱
-    count as data         -- 數值
-FROM public.reusable_cup_stats 
-WHERE city = '臺北市' 
+    district as x_axis,   -- X 軸顯示文字 (行政區)
+    city as y_axis,        -- 資料分類名稱 (臺北市/新北市)
+    count as data          -- 數值
+FROM public.reusable_cup_stats
 ORDER BY data DESC;
 ```
 
@@ -71,7 +70,7 @@ ORDER BY data DESC;
 | :--- | :--- | :--- |
 | `index` | 對應 `components.index` | |
 | `types` | 支援的圖表類型 (Array) | `ARRAY['DistrictChart', 'BarChart']` |
-| `color` | 圖表顏色 (Array) | `ARRAY['#4CAF50']` |
+| `color` | 圖表顏色 (Array，雙北需兩色) | `ARRAY['#4CAF50', '#2196F3']` |
 | `unit` | 數值單位 | `間` |
 
 > [!TIP]
@@ -80,6 +79,11 @@ ORDER BY data DESC;
 > - `BarChart`：橫向長條圖
 > - `ColumnChart`：縱向柱狀圖
 > - `PieChart`：圓餅圖
+>
+> **雙北合併注意事項：**
+> - `query_type` 須設為 `three_d`，讓後端以 `y_axis`（城市）分組產生多系列資料
+> - `color` 需至少兩個顏色，分別代表臺北市與新北市
+> - `city` 須設為 `metrotaipei`，使組件歸屬於雙北儀表板
 
 #### (D) `dashboard_groups` 表：控制選單顯示
 必須將儀表板 ID 與群組 ID 關聯，否則選單不會出現。
@@ -88,6 +92,56 @@ ORDER BY data DESC;
 
 ```sql
 INSERT INTO public.dashboard_groups (dashboard_id, group_id) VALUES (400, 2);
+```
+
+---
+
+## 二之一、 雙北合併組件 SQL 範例
+
+將原本分開的臺北市與新北市循環杯組件合併為一個雙北組件：
+
+### 1. 資料表（dashboard 資料庫）
+```sql
+-- reusable_cup_stats 表已包含兩市資料，無需修改
+-- 確認資料：
+SELECT city, COUNT(*) FROM public.reusable_cup_stats GROUP BY city;
+-- 預期：臺北市 12 筆、新北市 27 ��
+```
+
+### 2. 組件設定（dashboardmanager 資料庫）
+
+```sql
+-- (A) components：合併為單一組件
+INSERT INTO public.components (id, index, name)
+VALUES (301, 'metrotaipei_reusable_cup', '雙北各區循環杯門市數量')
+ON CONFLICT (id) DO UPDATE SET index = EXCLUDED.index, name = EXCLUDED.name;
+
+-- (B) query_charts：使用 three_d 查詢類型，city 設為 metrotaipei
+INSERT INTO public.query_charts (index, query_type, query_chart, city)
+VALUES (
+    'metrotaipei_reusable_cup',
+    'three_d',
+    'SELECT district as x_axis, city as y_axis, count as data FROM public.reusable_cup_stats ORDER BY data DESC',
+    'metrotaipei'
+);
+
+-- (C) component_charts：DistrictChart + BarChart，兩個顏色分別代表兩市
+INSERT INTO public.component_charts (index, types, color, unit)
+VALUES (
+    'metrotaipei_reusable_cup',
+    ARRAY['DistrictChart', 'BarChart'],
+    ARRAY['#4CAF50', '#2196F3'],
+    '間'
+);
+```
+
+### 3. 儀表板關聯
+```sql
+-- 將合併後的組件加入循環經濟儀表板（假設 dashboard_id = 400）
+-- 確保 dashboard_groups 關聯到 Group 3（雙北）
+INSERT INTO public.dashboard_groups (dashboard_id, group_id)
+VALUES (400, 3)
+ON CONFLICT DO NOTHING;
 ```
 
 ---

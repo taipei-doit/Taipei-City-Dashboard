@@ -20,6 +20,8 @@ const emits = defineEmits([
 	"fly"
 ]);
 
+const hasCategories = computed(() => !!props.chart_config.categories);
+
 const chartOptions = ref({
 	chart: {
 		offsetY: 15,
@@ -32,17 +34,18 @@ const chartOptions = ref({
 	dataLabels: {
 		offsetX: 20,
 		textAnchor: "start",
+		enabled: !props.chart_config.categories,
 	},
 	grid: {
 		show: false,
 	},
 	legend: {
-		show: false,
+		show: !!props.chart_config.categories,
 	},
 	plotOptions: {
 		bar: {
 			borderRadius: 2,
-			distributed: true,
+			distributed: !props.chart_config.categories,
 			horizontal: true,
 			dataLabels: {
 				hideOverflowingLabels: false
@@ -66,6 +69,11 @@ const chartOptions = ref({
 				'<div class="chart-tooltip">' +
 				"<h6>" +
 				w.globals.labels[dataPointIndex] +
+				`${
+					props.chart_config.categories
+						? "-" + w.globals.seriesNames[seriesIndex]
+						: ""
+				}` +
 				"</h6>" +
 				"<span>" +
 				series[seriesIndex][dataPointIndex] +
@@ -83,6 +91,9 @@ const chartOptions = ref({
 		axisTicks: {
 			show: false,
 		},
+		categories: props.chart_config.categories
+			? props.chart_config.categories
+			: [],
 		labels: {
 			show: false,
 		},
@@ -91,6 +102,7 @@ const chartOptions = ref({
 	yaxis: {
 		labels: {
 			formatter: function (value) {
+				if (typeof value !== 'string') return value;
 				return value.length > 7 ? value.slice(0, 6) + "..." : value;
 			},
 		},
@@ -98,6 +110,9 @@ const chartOptions = ref({
 });
 
 const chartHeight = computed(() => {
+	if (hasCategories.value) {
+		return `${40 + props.chart_config.categories.length * 30}`;
+	}
 	return `${40 + props.series[0].data.length * 30}`;
 });
 
@@ -110,14 +125,14 @@ function handleDataSelection(_e, _chartContext, config) {
 	if (
 		`${config.dataPointIndex}-${config.seriesIndex}` !== selectedIndex.value
 	) {
-		// Supports filtering by xAxis
+		// Supports filtering by xAxis + yAxis
 		if (props.map_filter.mode === "byParam") {
 			emits(
 				"filterByParam",
 				props.map_filter,
 				props.map_config,
 				config.w.globals.labels[config.dataPointIndex],
-				null
+				config.w.globals.seriesNames[config.seriesIndex]
 			);
 		}
 		// Supports filtering by xAxis
