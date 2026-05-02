@@ -1,0 +1,44 @@
+{
+  "dag_infos": {
+    "dag_id": "sports_venue",
+    "start_date": "2026-05-02",
+    "schedule_interval": "@daily",
+    "catchup": false,
+    "tags": [
+      "sports",
+      "venue",
+      "運動場館",
+      "臺北市政府體育局"
+    ],
+    "description": "Taipei sports venue booking system venue list and locations.",
+    "default_args": {
+      "owner": "airflow",
+      "email": [
+        "DEFAULT_EMAIL_LIST"
+      ],
+      "email_on_retry": false,
+      "email_on_failure": true,
+      "retries": 1,
+      "retry_delay": 60
+    },
+    "ready_data_db": "postgres_default",
+    "ready_data_default_table": "sports_venue",
+    "ready_data_history_table": "",
+    "raw_data_db": "postgres_default",
+    "raw_data_table": "",
+    "load_behavior": "replace"
+  },
+  "data_infos": {
+    "name_cn": "臺北市運動場館",
+    "airflow_update_freq": "daily",
+    "source": "https://vbs.sports.taipei/venues/ajax.php FUNC=GetVenues",
+    "source_type": "Taipei sports venue booking API and HTML detail pages",
+    "source_dept": "臺北市政府體育局",
+    "gis_format": "Point",
+    "output_coordinate": "EPSG:4326",
+    "is_geometry": 1,
+    "dataset_description": "臺北市政府體育局場地租借系統運動場館資料，包含場館名稱、主場館、行政區、開放狀態、容納人數、面積、租借狀態、照片與座標。",
+    "etl_description": "POST venue list API, fetch each venue detail page, parse VLatLon/static map coordinates, normalize image URL, generate WGS84 points, then write PostgreSQL.",
+    "sensitivity": "public"
+  }
+}
