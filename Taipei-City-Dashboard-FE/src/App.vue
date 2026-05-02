@@ -50,6 +50,8 @@ const isMappedToUpdateBoards = ref(false);
 // Chatroom
 const isChatBtnShow = ref(true);
 const isChatBoxShow = ref(false);
+const isChatBoxExpanded = ref(false);
+const isChatBoxCompare = ref(false);
 // Timers
 let chartTimer = null;
 let crowdingTimer = null;
@@ -274,7 +276,10 @@ onBeforeUnmount(() => {
     <div class="chatbot-container">
       <ChatBox
         v-if="isChatBoxShow"
-        class="chatbox"
+        :class="['chatbox', { 'chatbox-compare': isChatBoxCompare, 'chatbox-expanded': isChatBoxExpanded && !isChatBoxCompare }]"
+        :expanded="isChatBoxExpanded"
+        @toggle-expand="isChatBoxExpanded = !isChatBoxExpanded; isChatBoxCompare = false"
+        @start-compare="isChatBoxCompare = true; isChatBoxExpanded = false"
       />
       <div
         v-if="isChatBtnShow"
@@ -343,12 +348,33 @@ onBeforeUnmount(() => {
 	display: flex;
 	align-items: flex-end;
 	gap: 1rem; // Tailwind gap-4 → 16px
-	z-index: 10;
+	z-index: 10001;
 
 	.chatbox {
 		width: 400px;
 		height: 500px;
 		margin-bottom: 35px;
+		resize: both;
+		overflow: hidden;
+		min-width: 300px;
+		min-height: 380px;
+		max-width: 75vw;
+		max-height: 80vh;
+		transition: width 0.25s ease, height 0.25s ease;
+
+		&.chatbox-expanded {
+			width: 680px;
+			height: 75vh;
+			max-width: 90vw;
+			max-height: 90vh;
+		}
+
+		&.chatbox-compare {
+			width: min(960px, 92vw);
+			height: 80vh;
+			max-width: 92vw;
+			max-height: 90vh;
+		}
 	}
 
 	.chatbot-btn-area {

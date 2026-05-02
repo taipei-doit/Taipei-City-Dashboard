@@ -1,5 +1,6 @@
 <script setup>
 import { computed, ref } from "vue";
+import http from "../router/axios.js";
 // import "./styles/chartStyles.css";
 // import "./styles/toggleswitch.css";
 import "material-icons/iconfont/material-icons.css";
@@ -71,6 +72,7 @@ const props = defineProps({
 	addBtn: { type: Boolean, default: false },
 	infoBtn: { type: Boolean, default: false },
 	infoBtnText: { type: String, default: "組件資訊" },
+	aiSummaryBtn: { type: Boolean, default: false },
 	toggleDisable: { type: Boolean, default: false },
 	footer: { type: Boolean, default: true },
 	activeCity: { type: String, default: '' },
@@ -111,6 +113,69 @@ const toggleOn = computed({
 
 const mousePosition = ref({ x: null, y: null });
 const showTagTooltip = ref(false);
+
+const aiSummary = ref("");
+const aiLoading = ref(false);
+const aiError = ref(false);
+const showAIPopup = ref(false);
+const aiPopupCollapsed = ref(false);
+
+async function fetchAISummary() {
+	if (aiLoading.value) return;
+
+	showAIPopup.value = true;
+	aiPopupCollapsed.value = false;
+	aiLoading.value = true;
+	aiError.value = false;
+	aiSummary.value = "";
+
+	try {
+		const baseUrl = import.meta.env.VITE_API_URL || "";
+		const res = await fetch(`${baseUrl}/ai/chat/twai`, {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({
+				stream: true,
+				messages: [{
+					role: "user",
+					content: `這是雙北城市儀表板上的「${props.config.name}」組件（${props.config.short_desc || '城市治理資料'}）。請直接說明此組件呈現的資料特性、主要指標或趨勢、以及值得關注的面向，限100字。`,
+				}],
+			}),
+		});
+		if (!res.ok) throw new Error(res.status);
+
+		const reader = res.body.getReader();
+		const decoder = new TextDecoder();
+		let buffer = "";
+		aiLoading.value = false;
+
+		while (true) {
+			const { done, value } = await reader.read();
+			if (done) break;
+			buffer += decoder.decode(value, { stream: true });
+			const lines = buffer.split("\n");
+			buffer = lines.pop(); // 保留不完整的最後一行
+			for (const line of lines) {
+				if (!line.startsWith("data:")) continue;
+				try {
+					const json = JSON.parse(line.slice(5).trim());
+					if (json.generated_text) {
+						aiSummary.value += json.generated_text;
+					}
+				} catch {
+					// 略過無法解析的行
+				}
+			}
+		}
+	} catch {
+		aiError.value = true;
+		aiLoading.value = false;
+	}
+}
+
+function closeAIPopup() {
+	showAIPopup.value = false;
+}
 
 // Parses time data into display format
 const dataTime = computed(() => {
@@ -500,18 +565,49 @@ function returnChartComponent(name, svg) {
         />
       </div>
       <div v-else />
-      <button
-        v-if="infoBtn"
-        @click="$emit('info', config)"
-      >
-        <p>{{ infoBtnText }}</p>
-        <span>arrow_circle_right</span>
-      </button>
+      <div class="dashboardcomponent-footer-right">
+        <button
+          v-if="aiSummaryBtn"
+          class="dashboardcomponent-ai-btn"
+          :class="{ 'ai-loading': aiLoading }"
+          :disabled="aiLoading"
+          @click="fetchAISummary"
+        >
+          <p>{{ aiLoading ? "查詢中..." : "AI 摘要" }}</p>
+          <span>auto_awesome</span>
+        </button>
+        <button
+          v-if="infoBtn"
+          @click="$emit('info', config)"
+        >
+          <p>{{ infoBtnText }}</p>
+          <span>arrow_circle_right</span>
+        </button>
+      </div>
     </div>
     <div
-      v-else-if="!mode.includes('map')"
+      v-if="!mode.includes('map')"
       class="dashboardcomponent-footer"
     />
+    <!-- AI Summary Popup (跟著組件移動) -->
+    <div
+      v-if="showAIPopup"
+      class="ai-summary-popup"
+    >
+      <div class="ai-summary-popup-header" @click="aiPopupCollapsed = !aiPopupCollapsed">
+        <span>auto_awesome</span>
+        <p>AI 摘要｜{{ config.name }}</p>
+        <button @click.stop="aiPopupCollapsed = !aiPopupCollapsed">
+          <span>{{ aiPopupCollapsed ? 'expand_more' : 'expand_less' }}</span>
+        </button>
+        <button @click.stop="closeAIPopup"><span>close</span></button>
+      </div>
+      <div v-show="!aiPopupCollapsed" class="ai-summary-popup-body">
+        <p v-if="aiLoading" class="ai-loading-text">查詢中，請稍候...</p>
+        <p v-else-if="aiError" class="ai-error-text">AI 摘要服務暫時無法使用，請稍後再試。</p>
+        <p v-else>{{ aiSummary }}</p>
+      </div>
+    </div>
   </div>
   <Teleport to="body">
     <!-- The class "chart-tooltip" could be edited in /assets/styles/chartStyles.css -->
@@ -558,6 +654,7 @@ button:hover {
 	flex-direction: column;
 	justify-content: space-between;
 	position: relative;
+	overflow: visible;
 	padding: var(--font-m);
 	border-radius: 5px;
 	background-color: var(--color-component-background);
@@ -792,6 +889,8 @@ button:hover {
 		align-items: center;
 		justify-content: space-between;
 		overflow: visible;
+		position: relative;
+		z-index: 10000;
 
 		div {
 			display: flex;
@@ -821,7 +920,44 @@ button:hover {
 				user-select: none;
 			}
 		}
+
+		&-right {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+		}
 	}
+
+	&-ai-btn {
+		display: flex;
+		align-items: center;
+		transition: opacity 0.2s;
+
+		&:hover {
+			opacity: 0.8;
+		}
+
+		&.ai-loading {
+			opacity: 0.5;
+			cursor: default;
+		}
+
+		span {
+			margin-left: 4px;
+			color: var(--color-highlight);
+			font-family: var(--font-icon);
+			font-size: var(--font-m);
+			user-select: none;
+		}
+
+		p {
+			max-height: 1.2rem;
+			color: var(--color-highlight);
+			font-size: var(--font-s);
+			user-select: none;
+		}
+	}
+
 }
 
 @keyframes spin {
@@ -963,6 +1099,85 @@ button:hover {
 				display: flex;
 				gap: 4px;
 			}
+		}
+	}
+}
+</style>
+
+<style lang="scss">
+.ai-summary-popup {
+	position: absolute;
+	z-index: 9999;
+	width: 220px;
+	top: calc(100% - 38px);
+	left: 0;
+	background-color: var(--color-component-background);
+	border: 1px solid var(--color-border);
+	border-radius: 8px;
+	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+	overflow: hidden;
+
+	&-header {
+		display: flex;
+		align-items: center;
+		gap: 6px;
+		padding: 8px 12px;
+		background-color: rgba(255, 255, 255, 0.05);
+		border-bottom: 1px solid var(--color-border);
+		cursor: pointer;
+		user-select: none;
+
+		span {
+			font-family: var(--font-icon);
+			color: var(--color-highlight);
+			font-size: 16px;
+		}
+
+		p {
+			flex: 1;
+			color: var(--color-highlight);
+			font-size: var(--font-s);
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
+
+		button {
+			background: none;
+			border: none;
+			cursor: pointer;
+			padding: 0;
+			display: flex;
+			align-items: center;
+			opacity: 0.6;
+			transition: opacity 0.2s;
+
+			&:hover { opacity: 1; }
+
+			span {
+				color: var(--color-complement-text);
+				font-size: 18px;
+			}
+		}
+	}
+
+	&-body {
+		padding: 12px;
+		max-height: 200px;
+		overflow-y: auto;
+
+		p {
+			color: var(--color-complement-text);
+			font-size: var(--font-s);
+			line-height: 1.7;
+		}
+
+		.ai-loading-text {
+			color: var(--color-border);
+		}
+
+		.ai-error-text {
+			color: var(--color-border);
 		}
 	}
 }
