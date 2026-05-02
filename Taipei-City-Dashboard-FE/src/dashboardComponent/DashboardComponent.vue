@@ -127,6 +127,8 @@ const chartChatMessages = ref([]);
 const chartChatStatus = ref("idle");
 const chartChatSession = ref("");
 const chartChatRoom = ref(null);
+const chartChatInput = ref(null);
+const chartChatComposerOpen = ref(false);
 
 // Parses time data into display format
 const dataTime = computed(() => {
@@ -215,6 +217,15 @@ const hasChartChatData = computed(() => {
 	);
 });
 
+const hasDashboardFooterContent = computed(() => {
+	const mapConfig = props.config.map_config;
+	return Boolean(
+		(props.config.map_filter && mapConfig?.length > 0) ||
+			(mapConfig?.[0] !== null && mapConfig?.length > 0) ||
+			props.config.history_config?.range,
+	);
+});
+
 const chartChatInputDisabled = computed(
 	() =>
 		chartChatStatus.value === "loading" ||
@@ -238,6 +249,13 @@ const chartChatEmptyText = computed(() => {
 
 const chartChatPlaceholder = computed(() =>
 	chartChatInputDisabled.value ? chartChatEmptyText.value : "輸入圖表問題",
+);
+
+const chartChatComposerVisible = computed(
+	() =>
+		chartChatComposerOpen.value ||
+		chartChatQuestion.value.trim() !== "" ||
+		chartChatStatus.value === "loading",
 );
 
 watch(
@@ -373,6 +391,23 @@ async function scrollChartChatToBottom() {
 		behavior: "smooth",
 	});
 }
+async function openChartChatComposer() {
+	chartChatComposerOpen.value = true;
+	await nextTick();
+	chartChatInput.value?.focus();
+}
+function handleChartChatComposerFocusout(event) {
+	const nextTarget = event.relatedTarget;
+	if (nextTarget && event.currentTarget.contains(nextTarget)) {
+		return;
+	}
+	if (
+		chartChatQuestion.value.trim() === "" &&
+		chartChatStatus.value !== "loading"
+	) {
+		chartChatComposerOpen.value = false;
+	}
+}
 async function submitChartQuestion() {
 	const question = chartChatQuestion.value.trim();
 	if (chartChatSendDisabled.value || !question) {
@@ -387,6 +422,7 @@ async function submitChartQuestion() {
 	};
 
 	chartChatQuestion.value = "";
+	chartChatComposerOpen.value = true;
 	chartChatStatus.value = "loading";
 	chartChatMessages.value.push(pendingMessage);
 	scrollChartChatToBottom();
@@ -560,6 +596,14 @@ function returnChartComponent(name, svg) {
           <span>favorite</span>
         </button>
         <button
+          v-if="infoBtn"
+          class="isInfo"
+          :title="infoBtnText"
+          @click="$emit('info', config)"
+        >
+          <span>info</span>
+        </button>
+        <button
           v-if="deleteBtn"
           class="isDelete"
           @click="$emit('delete', config.id)"
@@ -721,6 +765,10 @@ function returnChartComponent(name, svg) {
         'dashboardcomponent-ai-section',
         `dashboardcomponent-ai-section-comment-${aiCommentStatus}`,
         `dashboardcomponent-ai-section-chat-${chartChatStatus}`,
+        {
+          'dashboardcomponent-ai-section-composer-open':
+            chartChatComposerVisible,
+        },
       ]"
     >
       <div
@@ -777,11 +825,21 @@ function returnChartComponent(name, svg) {
           </template>
         </template>
       </div>
+      <button
+        type="button"
+        class="dashboardcomponent-ai-chat-trigger"
+        :title="chartChatPlaceholder"
+        @click="openChartChatComposer"
+      >
+        <span>chat_bubble</span>
+      </button>
       <form
         class="dashboardcomponent-chart-chat-form dashboardcomponent-ai-room-form"
         @submit.prevent="submitChartQuestion"
+        @focusout="handleChartChatComposerFocusout"
       >
         <input
+          ref="chartChatInput"
           v-model="chartChatQuestion"
           type="text"
           maxlength="160"
@@ -799,7 +857,11 @@ function returnChartComponent(name, svg) {
     </section>
     <!-- Footer -->
     <div
-      v-if="footer && (!mode.includes('map') || toggleOn)"
+      v-if="
+        footer &&
+          hasDashboardFooterContent &&
+          (!mode.includes('map') || toggleOn)
+      "
       class="dashboardcomponent-footer"
     >
       <div
@@ -828,18 +890,7 @@ function returnChartComponent(name, svg) {
         />
       </div>
       <div v-else />
-      <button
-        v-if="infoBtn"
-        @click="$emit('info', config)"
-      >
-        <p>{{ infoBtnText }}</p>
-        <span>arrow_circle_right</span>
-      </button>
     </div>
-    <div
-      v-else-if="!mode.includes('map')"
-      class="dashboardcomponent-footer"
-    />
   </div>
   <Teleport to="body">
     <!-- The class "chart-tooltip" could be edited in /assets/styles/chartStyles.css -->
@@ -990,6 +1041,10 @@ button:hover {
 					color: rgb(160, 112, 106);
 				}
 			}
+
+			button.isInfo {
+				margin-left: 8px;
+			}
 		}
 
 		&-toggle {
@@ -1082,6 +1137,10 @@ button:hover {
 		p {
 			color: var(--color-border);
 		}
+	}
+
+	&-chart {
+		flex: 0 1 auto;
 	}
 
 	&-ai-comment {
@@ -1435,14 +1494,16 @@ button:hover {
 
 	&-ai-section {
 		flex: 0 0 auto;
-		height: 152px;
-		min-height: 152px;
-		max-height: 152px;
+		height: 96px;
+		min-height: 96px;
+		max-height: 96px;
 		position: relative;
-		display: flex;
-		flex-direction: column;
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) 32px;
+		column-gap: 8px;
+		align-items: stretch;
 		margin-top: 6px;
-		padding: 8px 10px;
+		padding: 6px 8px;
 		border: 1px solid rgba(255, 255, 255, 0.14);
 		border-radius: 8px;
 		background:
@@ -1451,15 +1512,20 @@ button:hover {
 		box-shadow:
 			inset 0 1px 0 rgba(255, 255, 255, 0.08),
 			0 12px 28px rgba(0, 0, 0, 0.18);
-		overflow: hidden;
+		overflow: visible;
 
 		&-comment-error,
 		&-chat-error {
 			border-color: rgba(237, 90, 90, 0.68);
 		}
 
-		&:hover,
-		&:focus-within {
+		&-composer-open {
+			.dashboardcomponent-ai-chat-trigger {
+				opacity: 0;
+				pointer-events: none;
+				transform: scale(0.92);
+			}
+
 			.dashboardcomponent-ai-room-form {
 				opacity: 1;
 				pointer-events: auto;
@@ -1468,35 +1534,41 @@ button:hover {
 					linear-gradient(180deg, rgba(36, 38, 40, 0), rgba(36, 38, 40, 0.94) 32%),
 					transparent;
 			}
+
+			.dashboardcomponent-ai-room {
+				padding-bottom: 34px;
+			}
+		}
+
+		&-chat-idle .dashboardcomponent-ai-room {
+			padding-bottom: 0;
+			overflow-y: visible;
 		}
 	}
 
 	&-ai-room {
-		flex: 1 1 auto;
+		height: 100%;
 		min-height: 0;
 		display: flex;
 		flex-direction: column;
 		gap: 7px;
-		padding-right: 4px;
-		padding-bottom: 42px;
+		padding-right: 0;
+		padding-bottom: 0;
 		overflow-y: auto;
-		scrollbar-width: thin;
-		scrollbar-color: rgba(255, 255, 255, 0.24) transparent;
+		scrollbar-width: none;
+		-ms-overflow-style: none;
 
 		&::-webkit-scrollbar {
-			width: 4px;
-		}
-
-		&::-webkit-scrollbar-thumb {
-			border-radius: 999px;
-			background-color: rgba(255, 255, 255, 0.24);
+			width: 0;
+			height: 0;
+			display: none;
 		}
 
 		&-form {
 			position: absolute;
-			right: 10px;
-			bottom: 8px;
-			left: 10px;
+			right: 8px;
+			bottom: 6px;
+			left: 8px;
 			z-index: 1;
 			opacity: 0;
 			pointer-events: none;
@@ -1508,11 +1580,46 @@ button:hover {
 		}
 	}
 
+	&-ai-chat-trigger {
+		position: static;
+		z-index: 2;
+		width: 30px;
+		height: 30px;
+		align-self: center;
+		justify-self: end;
+		display: grid;
+		place-items: center;
+		border: 1px solid rgba(255, 255, 255, 0.14);
+		border-radius: 999px;
+		background:
+			linear-gradient(135deg, rgba(78, 149, 255, 0.34), rgba(122, 78, 255, 0.24)),
+			rgba(20, 22, 26, 0.9);
+		box-shadow:
+			inset 0 1px 0 rgba(255, 255, 255, 0.12),
+			0 8px 18px rgba(0, 0, 0, 0.22);
+		color: var(--color-highlight);
+		opacity: 0.9;
+		transition: opacity 0.18s ease, transform 0.18s ease, background-color 0.18s ease;
+
+		&:hover {
+			opacity: 1;
+			background-color: rgba(255, 255, 255, 0.08);
+			transform: translateY(-1px);
+		}
+
+		span {
+			margin: 0;
+			font-family: var(--font-icon);
+			font-size: var(--font-ms);
+			user-select: none;
+		}
+	}
+
 	&-ai-message {
 		width: 100%;
 		display: flex;
 		align-items: flex-start;
-		gap: 7px;
+		gap: 6px;
 		overflow: visible;
 
 		&-ai {
@@ -1578,8 +1685,8 @@ button:hover {
 
 	&-ai-bubble {
 		min-width: 0;
-		max-width: 88%;
-		padding: 7px 9px;
+		max-width: 100%;
+		padding: 5px 9px;
 		border-radius: 12px 12px 12px 3px;
 		background-color: rgba(255, 255, 255, 0.07);
 		color: var(--color-complement-text);
@@ -1590,7 +1697,7 @@ button:hover {
 			align-items: center;
 			justify-content: space-between;
 			gap: 8px;
-			margin-bottom: 3px;
+			margin-bottom: 1px;
 			overflow: visible;
 
 			strong {
@@ -1614,7 +1721,8 @@ button:hover {
 		p {
 			color: inherit;
 			font-size: var(--font-s);
-			line-height: 1.45;
+			line-height: 1.38;
+			overflow: visible;
 			white-space: normal;
 		}
 	}
