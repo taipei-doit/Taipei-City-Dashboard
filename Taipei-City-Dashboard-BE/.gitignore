@@ -1,2 +1,7 @@
 lm_model
 onnxruntime
+
+# Test and Documentation
+test/
+*.md
+.env

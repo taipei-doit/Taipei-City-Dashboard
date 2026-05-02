@@ -28,6 +28,7 @@ var (
 // ConfigureRoutes configures all routes for the API and sets version router groups.
 func ConfigureRoutes() {
 	Router.Use(middleware.ValidateJWT)
+	Router.Use(middleware.LanguageHandler()) // 偵測 Accept-Language
 	// API routers
 	RouterGroup = Router.Group("/api/" + global.VERSION)
 	configureAuthRoutes()
@@ -41,6 +42,14 @@ func ConfigureRoutes() {
 	configureContributorRoutes()
 	configureChatLogRoutes()
 	configureAIRoutes()
+	configureTranslationRoutes()
+}
+
+func configureTranslationRoutes() {
+	translationRoutes := RouterGroup.Group("/translation")
+	{
+		translationRoutes.GET("/static", controllers.GetStaticTranslations)
+	}
 }
 
 func configureAuthRoutes() {
