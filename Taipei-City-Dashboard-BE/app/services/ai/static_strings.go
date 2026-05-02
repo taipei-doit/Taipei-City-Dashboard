@@ -62,4 +62,8 @@ var StaticUITranslations = map[string]string{
 	"label.admin_panel": "管理員後臺",
 	"label.back_to_dashboard": "返回儀表板",
 	"label.login": "登入",
+
+	"recommend.title":           "今日推薦",
+	"recommend.toggle_expand":  "展開今日推薦",
+	"recommend.toggle_collapse": "收合今日推薦",
 }

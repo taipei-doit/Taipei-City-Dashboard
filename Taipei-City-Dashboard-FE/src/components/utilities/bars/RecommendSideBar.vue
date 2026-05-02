@@ -10,6 +10,9 @@ import {
 	extractNewsInsight,
 	fetchCrawledNewsRecommendations,
 } from "../../../api/ai";
+import { useBackendTranslation } from "../../../composables/useBackendTranslation";
+
+const { t } = useBackendTranslation();
 
 const mapStore = useMapStore();
 const contentStore = useContentStore();
@@ -205,7 +208,11 @@ async function openStorylineRecommendedComponent(comp) {
       <button
         type="button"
         class="recommendsidebar-toggle"
-        :title="isExpanded ? t('recommend.toggle_collapse_title') : t('recommend.toggle_expand_title')"
+        :title="
+          isExpanded
+            ? (t('recommend.toggle_collapse') || '收合今日推薦')
+            : (t('recommend.toggle_expand') || '展開今日推薦')
+        "
         @click="toggleExpand"
       >
         <span>{{
@@ -217,7 +224,7 @@ async function openStorylineRecommendedComponent(comp) {
       <template v-if="isExpanded">
         <div class="recommendsidebar-headertext">
           <h1 class="recommendsidebar-title">
-            {{ t('recommend.title') }}
+            {{ t('recommend.title') || '今日推薦' }}
           </h1>
           <p
             v-if="recommendMode === MODE_MANUAL_URL"
@@ -237,7 +244,7 @@ async function openStorylineRecommendedComponent(comp) {
         v-else
         class="recommendsidebar-collapsed-label-text"
         aria-hidden="true"
-      >{{ t('recommend.title') }}</span>
+      >{{ t('recommend.title') || '今日推薦' }}</span>
     </div>
 
     <template v-if="isExpanded">
