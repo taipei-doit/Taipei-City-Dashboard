@@ -34,6 +34,12 @@ const tabContext = computed(() => {
 			mapviewPath: '/accessibility-route/mapview',
 		};
 	}
+	if (route.path.startsWith('/eco-diet')) {
+		return {
+			dashboardPath: '/eco-diet',
+			mapviewPath: '/eco-diet/mapview',
+		};
+	}
 	if (route.path.startsWith('/mrt-a11y-v2')) {
 		return {
 			dashboardPath: '/mrt-a11y-v2',

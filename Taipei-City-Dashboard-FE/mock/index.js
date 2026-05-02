@@ -11,6 +11,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // 路徑相對於 mock/ 資料夾
+// BE 實作完哪一條，就把對應 entry 從這裡移除，FE 立刻吃真資料（vite proxy 接手）
 const routes = {};
 
 export default function mockBE() {

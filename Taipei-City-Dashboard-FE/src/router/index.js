@@ -22,6 +22,7 @@ import EmbedView from "../views/EmbedView.vue";
 import AccessibilityRouteView from "../views/AccessibilityRouteView.vue";
 import MrtAccessibilityView from "../views/MrtAccessibilityView.vue";
 import MrtAccessibilityV2View from "../views/MrtAccessibilityV2View.vue";
+import EcoDietView from "../views/EcoDietView.vue";
 
 const routes = [
 	{
@@ -82,6 +83,18 @@ const routes = [
 		path: "/mrt-a11y-v2/mapview",
 		name: "mrt-a11y-v2-mapview",
 		component: MrtAccessibilityV2View,
+		meta: { layout: "dashboard" },
+	},
+	{
+		path: "/eco-diet",
+		name: "eco-diet",
+		component: EcoDietView,
+		meta: { layout: "dashboard" },
+	},
+	{
+		path: "/eco-diet/mapview",
+		name: "eco-diet-mapview",
+		component: EcoDietView,
 		meta: { layout: "dashboard" },
 	},
 	{

@@ -1,0 +1,37 @@
+{
+    "dag_infos": {
+        "dag_id": "gov_open_waste_yearly",
+        "start_date": "2026-05-01",
+        "schedule_interval": "0 5 5 9 *",
+        "catchup": false,
+        "tags": ["gov_open_waste_yearly", "永續環境", "全國廚餘量"],
+        "description": "Annual update of national municipal waste statistics (dataset 89022) including food waste recycled amount.",
+        "default_args": {
+            "owner": "airflow",
+            "email": ["DEFAULT_EMAIL_LIST"],
+            "email_on_retry": false,
+            "email_on_failure": true,
+            "retries": 1,
+            "retry_delay": 60
+        },
+        "ready_data_db": "postgres_default",
+        "ready_data_default_table": "gov_open_waste_yearly",
+        "ready_data_history_table": "gov_open_waste_yearly_history",
+        "raw_data_db": "postgres_default",
+        "raw_data_table": "",
+        "load_behavior": "current+history"
+    },
+    "data_infos": {
+        "name_cn": "全國一般廢棄物清理情況（含廚餘量）— 89022",
+        "airflow_update_freq": "05:00 Sep 5th every year",
+        "source": "https://data.gov.tw/dataset/89022",
+        "source_type": "data.gov.tw csv",
+        "source_dept": "環境部",
+        "gis_format": null,
+        "output_coordinate": "",
+        "is_geometry": 0,
+        "dataset_description": "全國 22 縣市逐年一般廢棄物清理情況，含廚餘量（foodwastesrecycled）。主要用於 C5 雙北年度廚餘量趨勢折線圖。",
+        "etl_description": "fetch csv url from data.gov.tw metadata, download csv, rename cols, filter/clean, load with current+history",
+        "sensitivity": "public"
+    }
+}
