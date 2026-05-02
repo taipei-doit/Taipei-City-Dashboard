@@ -563,13 +563,17 @@ async function openStorylineRecommendedComponent(comp) {
 		margin-bottom: 10px;
 		border-radius: 6px;
 		background: var(--color-highlight);
-		color: #fff;
+		color: #fff !important;
 		font-size: var(--font-m);
 		transition: opacity 0.2s;
 
 		&:disabled {
 			opacity: 0.55;
 			cursor: not-allowed;
+		}
+
+		span {
+			color: #fff !important;
 		}
 
 		span:first-of-type {
