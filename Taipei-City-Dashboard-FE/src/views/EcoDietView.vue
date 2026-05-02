@@ -896,6 +896,7 @@ async function simulateClickRouteToFacility(to) {
 	}
 	clearRoute();
 	panelPos.value = null;
+	showNearbyChat.value = false;
 	routePanelOpen.value = true;
 	ensurePanelPos();
 	const pos = await new Promise((resolve, reject) => {
