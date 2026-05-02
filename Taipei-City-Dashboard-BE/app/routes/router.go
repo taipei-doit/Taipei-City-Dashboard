@@ -35,6 +35,7 @@ func ConfigureRoutes() {
 	configureLMRoutes()
 	configureComponentRoutes()
 	configureDashboardRoutes()
+	configureMapDataRoutes()
 	configureIssueRoutes()
 	configureIncidentRoutes()
 	// configureWsRoutes()
