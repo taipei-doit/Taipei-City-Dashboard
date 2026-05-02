@@ -125,7 +125,8 @@ var (
 	LMSession *ort.DynamicSession[int64, float32]
 	LMTokenizer *tokenizer.Tokenizer
 
-	CWAApiKey = getEnv("CWA_API_KEY", "")
+	CWAApiKey  = getEnv("CWA_API_KEY", "")
+	MapDataDir = getEnv("MAP_DATA_DIR", "/opt/mapData")
 )
 
 func init() {

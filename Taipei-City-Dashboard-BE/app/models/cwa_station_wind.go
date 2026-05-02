@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"os"
+	"path/filepath"
 	"strconv"
 	"time"
 
@@ -221,7 +223,138 @@ func FetchAndSaveCwaStationWind() error {
 	}
 
 	logs.FInfo("cwa_station_wind: saved %d stations", len(records))
+
+	if err := writeCwaGeoJSON(records); err != nil {
+		logs.FInfo("cwa_station_wind: geojson write failed (non-fatal): %v", err)
+	}
+
+	if err := writeCwaStationDensityGeoJSON(); err != nil {
+		logs.FInfo("cwa_station_wind: density geojson write failed (non-fatal): %v", err)
+	}
+
 	return nil
+}
+
+// writeCwaGeoJSON writes the station snapshot as a GeoJSON file for the frontend.
+func writeCwaGeoJSON(records []CwaStationWind) error {
+	type geometry struct {
+		Type        string     `json:"type"`
+		Coordinates [2]float64 `json:"coordinates"`
+	}
+	type properties struct {
+		StationId        string   `json:"station_id"`
+		StationName      string   `json:"station_name"`
+		CountyName       string   `json:"county_name"`
+		TownName         string   `json:"town_name"`
+		WindSpeed        *float64 `json:"wind_speed"`
+		WindDirection    *float64 `json:"wind_direction"`
+		AirTemperature   *float64 `json:"air_temperature"`
+		RelativeHumidity *float64 `json:"relative_humidity"`
+		AirPressure      *float64 `json:"air_pressure"`
+		GustSpeed        *float64 `json:"gust_speed"`
+		ObsTime          string   `json:"obs_time"`
+	}
+	type feature struct {
+		Type       string     `json:"type"`
+		Geometry   geometry   `json:"geometry"`
+		Properties properties `json:"properties"`
+	}
+	type featureCollection struct {
+		Type     string    `json:"type"`
+		Features []feature `json:"features"`
+	}
+
+	features := make([]feature, 0, len(records))
+	for _, r := range records {
+		features = append(features, feature{
+			Type:     "Feature",
+			Geometry: geometry{Type: "Point", Coordinates: [2]float64{r.Longitude, r.Latitude}},
+			Properties: properties{
+				StationId:        r.StationId,
+				StationName:      r.StationName,
+				CountyName:       r.CountyName,
+				TownName:         r.TownName,
+				WindSpeed:        r.WindSpeed,
+				WindDirection:    r.WindDirection,
+				AirTemperature:   r.AirTemperature,
+				RelativeHumidity: r.RelativeHumidity,
+				AirPressure:      r.AirPressure,
+				GustSpeed:        r.GustSpeed,
+				ObsTime:          r.ObsTime.Format(time.RFC3339),
+			},
+		})
+	}
+
+	fc := featureCollection{Type: "FeatureCollection", Features: features}
+	data, err := json.MarshalIndent(fc, "", "  ")
+	if err != nil {
+		return err
+	}
+
+	outPath := filepath.Join(global.MapDataDir, "cwa_auto_station_wind.geojson")
+	return os.WriteFile(outPath, data, 0644)
+}
+
+// writeCwaStationDensityGeoJSON reads metrotaipei_town.geojson, joins station
+// counts per district from the DB, and writes cwa_station_density.geojson.
+func writeCwaStationDensityGeoJSON() error {
+	// 1. Read base boundary file
+	basePath := filepath.Join(global.MapDataDir, "metrotaipei_town.geojson")
+	raw, err := os.ReadFile(basePath)
+	if err != nil {
+		return fmt.Errorf("reading base geojson: %w", err)
+	}
+
+	// Parse as generic map so we preserve all existing fields
+	var fc map[string]interface{}
+	if err := json.Unmarshal(raw, &fc); err != nil {
+		return fmt.Errorf("parsing base geojson: %w", err)
+	}
+
+	// 2. Query station counts per town from DB
+	type townCount struct {
+		TownName string
+		Count    int
+	}
+	var rows []townCount
+	if err := DBDashboard.Raw(
+		"SELECT town_name, COUNT(*)::int AS count FROM cwa_auto_station_wind GROUP BY town_name",
+	).Scan(&rows).Error; err != nil {
+		return fmt.Errorf("querying town counts: %w", err)
+	}
+	counts := make(map[string]int, len(rows))
+	for _, r := range rows {
+		counts[r.TownName] = r.Count
+	}
+
+	// 3. Merge counts into each feature's properties
+	features, ok := fc["features"].([]interface{})
+	if !ok {
+		return fmt.Errorf("features field missing or wrong type")
+	}
+	for _, f := range features {
+		feat, ok := f.(map[string]interface{})
+		if !ok {
+			continue
+		}
+		props, ok := feat["properties"].(map[string]interface{})
+		if !ok {
+			continue
+		}
+		tname, _ := props["TNAME"].(string)
+		pname, _ := props["PNAME"].(string)
+		props["station_count"] = counts[tname]
+		props["town_name"] = tname
+		props["county_name"] = pname
+	}
+
+	// 4. Write output
+	out, err := json.Marshal(fc)
+	if err != nil {
+		return err
+	}
+	outPath := filepath.Join(global.MapDataDir, "cwa_station_density.geojson")
+	return os.WriteFile(outPath, out, 0644)
 }
 
 // GetCwaStationWindAll returns all rows from cwa_auto_station_wind.

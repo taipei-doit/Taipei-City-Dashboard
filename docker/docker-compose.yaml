@@ -76,6 +76,7 @@ services:
       CWA_API_KEY: ${CWA_API_KEY}
     volumes:
       - ../Taipei-City-Dashboard-BE:/opt/Taipei-City-Dashboard-BE
+      - ../Taipei-City-Dashboard-FE/public/mapData:/opt/mapData
     working_dir: /opt/Taipei-City-Dashboard-BE
     ports:
       - "8088:${PORT:-8080}"

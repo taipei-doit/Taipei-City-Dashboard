@@ -148,7 +148,7 @@ func createTempComponentDB() *gorm.DB {
 	Joins("JOIN component_charts ON components.index = component_charts.index")
 
 	subQuery2 := DBManager.Table("query_charts").
-	Select("query_charts.index,query_charts.city,json_agg(row_to_json(component_maps.*)) as map_config").
+	Select("query_charts.index,query_charts.city,json_agg(row_to_json(component_maps.*) ORDER BY array_position(query_charts.map_config_ids, component_maps.id)) as map_config").
 	Joins("LEFT JOIN unnest(query_charts.map_config_ids) AS id_value on true").
 	Joins("LEFT JOIN component_maps ON id_value = component_maps.id").
 	Group("query_charts.index, query_charts.city")
