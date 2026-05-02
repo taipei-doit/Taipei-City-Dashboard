@@ -197,10 +197,82 @@ function createInitialRoadSpeedLimitState() {
 }
 const FUTURE_HOUR_RAIN_LAYER_INDEX = "future_hour_rain";
 const RAIN_ANIMATION_LAYER_SUFFIX = "-rain-animation";
-const RAIN_ANIMATION_MIN_DROPS = 600;
-const RAIN_ANIMATION_MAX_DROPS = 3600;
-const RAIN_ANIMATION_DROP_FACTOR = 0.65;
-const RAIN_ANIMATION_AVG_DROP_FACTOR = 1500;
+const RAIN_ANIMATION_MIN_DROPS = 1200;
+const RAIN_ANIMATION_MAX_DROPS = 5200;
+const RAIN_ANIMATION_DROP_FACTOR = 0.95;
+const RAIN_ANIMATION_AVG_DROP_FACTOR = 2600;
+const RAIN_VERTEX_SHADER = `
+uniform float uTime;
+
+attribute vec2 aRainInfo;
+attribute vec4 aRainMotion;
+attribute vec4 aRainTiming;
+
+varying float vRainAlpha;
+varying float vRainIntensity;
+
+void main() {
+	float meterScale = aRainInfo.x;
+	float intensity = aRainInfo.y;
+	float lengthMeters = aRainMotion.x;
+	float topAltitudeMeters = aRainMotion.y;
+	float spanMeters = topAltitudeMeters + lengthMeters + 420.0;
+	float fallingMeters = mod(
+		uTime * aRainTiming.x + aRainTiming.y * spanMeters,
+		spanMeters
+	);
+	float fallProgress = fallingMeters / spanMeters;
+	float role = aRainTiming.z;
+	float headAltitudeMeters = topAltitudeMeters - fallingMeters;
+	float altitudeMeters = headAltitudeMeters - (1.0 - role) * lengthMeters;
+	float gust = sin(
+		uTime * (1.2 + intensity * 1.7) +
+		aRainTiming.w * 6.2831853 +
+		fallProgress * 7.0
+	) * (14.0 + intensity * 48.0);
+	vec3 animatedPosition = position;
+
+	animatedPosition.x +=
+		(aRainMotion.z * fallProgress + gust) * meterScale;
+	animatedPosition.y +=
+		(aRainMotion.w * fallProgress - gust * 0.28) * meterScale;
+	animatedPosition.z = altitudeMeters * meterScale;
+
+	float groundFade = smoothstep(-220.0, 140.0, altitudeMeters);
+	float skyFade =
+		1.0 -
+		smoothstep(
+			topAltitudeMeters - lengthMeters * 0.35,
+			topAltitudeMeters + 40.0,
+			altitudeMeters
+		);
+	float headBrightness = mix(0.42, 1.0, role);
+
+	vRainIntensity = intensity;
+	vRainAlpha =
+		(0.18 + intensity * 0.7) *
+		groundFade *
+		skyFade *
+		headBrightness;
+
+	gl_Position =
+		projectionMatrix * modelViewMatrix * vec4(animatedPosition, 1.0);
+}
+`;
+const RAIN_FRAGMENT_SHADER = `
+uniform float uOpacity;
+
+varying float vRainAlpha;
+varying float vRainIntensity;
+
+void main() {
+	vec3 farRain = vec3(0.46, 0.72, 0.98);
+	vec3 nearRain = vec3(0.9, 0.97, 1.0);
+	vec3 rainColor = mix(farRain, nearRain, vRainIntensity);
+
+	gl_FragColor = vec4(rainColor, vRainAlpha * uOpacity);
+}
+`;
 
 function clampNumber(value, min, max) {
 	return Math.max(min, Math.min(max, value));
@@ -262,7 +334,7 @@ function getRainFeatureEntries(data) {
 			return {
 				bbox,
 				rain,
-				weight: rain + 8,
+				weight: Math.max(4, rain ** 1.32),
 			};
 		})
 		.filter(Boolean);
@@ -329,7 +401,11 @@ function createRainDropDescriptors(data) {
 			stats.cumulativeWeights,
 			seededRandom(index + 19) * stats.totalWeight,
 		);
-		const intensity = clampNumber(entry.rain / Math.max(stats.maxRain, 1), 0.08, 1);
+		const intensity = clampNumber(
+			entry.rain / Math.max(stats.maxRain, 1),
+			0.08,
+			1,
+		);
 		const lng =
 			entry.bbox.minLng +
 			(entry.bbox.maxLng - entry.bbox.minLng) *
@@ -346,14 +422,18 @@ function createRainDropDescriptors(data) {
 			meterScale: mercator.meterInMercatorCoordinateUnits(),
 			intensity,
 			lengthMeters:
-				360 + intensity * 720 + seededRandom(index * 13 + 7) * 260,
+				180 + intensity * 540 + seededRandom(index * 13 + 7) * 190,
 			topAltitudeMeters:
-				620 + seededRandom(index * 17 + 11) * 1320,
-			windXMeters: -120 - intensity * 260,
-			windYMeters: 60 + seededRandom(index * 19 + 13) * 130,
+				340 + intensity * 420 + seededRandom(index * 17 + 11) * 980,
+			windXMeters:
+				-55 -
+				intensity * 135 +
+				(seededRandom(index * 19 + 13) - 0.5) * 42,
+			windYMeters: 18 + seededRandom(index * 23 + 17) * 72,
 			speedMetersPerSecond:
-				620 + intensity * 1280 + seededRandom(index * 23 + 17) * 340,
-			phase: seededRandom(index * 29 + 23),
+				760 + intensity * 1420 + seededRandom(index * 29 + 23) * 520,
+			phase: seededRandom(index * 31 + 29),
+			shimmer: seededRandom(index * 37 + 31),
 		};
 	});
 
@@ -363,60 +443,55 @@ function createRainDropDescriptors(data) {
 	};
 }
 
-function writeRainDropPosition(drop, positions, index, elapsedSeconds) {
-	const stride = index * 6;
-	const spanMeters =
-		drop.topAltitudeMeters + drop.lengthMeters + 520;
-	const fallingMeters =
-		(elapsedSeconds * drop.speedMetersPerSecond +
-			drop.phase * spanMeters) %
-		spanMeters;
-	const fallProgress = fallingMeters / spanMeters;
-	const headAltitudeMeters = drop.topAltitudeMeters - fallingMeters;
-	const x =
-		drop.x + drop.windXMeters * fallProgress * drop.meterScale;
-	const y =
-		drop.y + drop.windYMeters * fallProgress * drop.meterScale;
-	const tailX =
-		x + drop.windXMeters * 0.16 * drop.meterScale * drop.intensity;
-	const tailY =
-		y + drop.windYMeters * 0.16 * drop.meterScale * drop.intensity;
-	const headZ = headAltitudeMeters * drop.meterScale;
-	const tailZ =
-		(headAltitudeMeters - drop.lengthMeters) * drop.meterScale;
+function createRainAnimationGeometry(drops) {
+	const vertexCount = drops.length * 2;
+	const positions = new Float32Array(vertexCount * 3);
+	const rainInfo = new Float32Array(vertexCount * 2);
+	const rainMotion = new Float32Array(vertexCount * 4);
+	const rainTiming = new Float32Array(vertexCount * 4);
 
-	positions[stride] = x;
-	positions[stride + 1] = y;
-	positions[stride + 2] = headZ;
-	positions[stride + 3] = tailX;
-	positions[stride + 4] = tailY;
-	positions[stride + 5] = tailZ;
-}
+	drops.forEach((drop, dropIndex) => {
+		for (let vertexOffset = 0; vertexOffset < 2; vertexOffset++) {
+			const vertexIndex = dropIndex * 2 + vertexOffset;
+			const positionStride = vertexIndex * 3;
+			const infoStride = vertexIndex * 2;
+			const motionStride = vertexIndex * 4;
+			const timingStride = vertexIndex * 4;
 
-function writeRainDropColor(drop, colors, index) {
-	const stride = index * 6;
-	const red = 0.46 + drop.intensity * 0.42;
-	const green = 0.74 + drop.intensity * 0.22;
-	const blue = 1;
+			positions[positionStride] = drop.x;
+			positions[positionStride + 1] = drop.y;
+			positions[positionStride + 2] = 0;
+			rainInfo[infoStride] = drop.meterScale;
+			rainInfo[infoStride + 1] = drop.intensity;
+			rainMotion[motionStride] = drop.lengthMeters;
+			rainMotion[motionStride + 1] = drop.topAltitudeMeters;
+			rainMotion[motionStride + 2] = drop.windXMeters;
+			rainMotion[motionStride + 3] = drop.windYMeters;
+			rainTiming[timingStride] = drop.speedMetersPerSecond;
+			rainTiming[timingStride + 1] = drop.phase;
+			rainTiming[timingStride + 2] = vertexOffset === 0 ? 1 : 0;
+			rainTiming[timingStride + 3] = drop.shimmer;
+		}
+	});
 
-	for (let offset = 0; offset < 6; offset += 3) {
-		colors[stride + offset] = red;
-		colors[stride + offset + 1] = green;
-		colors[stride + offset + 2] = blue;
-	}
+	const geometry = new THREE.BufferGeometry();
+	geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+	geometry.setAttribute("aRainInfo", new THREE.BufferAttribute(rainInfo, 2));
+	geometry.setAttribute(
+		"aRainMotion",
+		new THREE.BufferAttribute(rainMotion, 4),
+	);
+	geometry.setAttribute(
+		"aRainTiming",
+		new THREE.BufferAttribute(rainTiming, 4),
+	);
+	return geometry;
 }
 
 function createRainAnimationLayer(layerId, data) {
 	const descriptorData = createRainDropDescriptors(data);
 	if (!descriptorData) return null;
 	const { averageIntensity, drops } = descriptorData;
-	const positions = new Float32Array(drops.length * 6);
-	const colors = new Float32Array(drops.length * 6);
-
-	drops.forEach((drop, index) => {
-		writeRainDropPosition(drop, positions, index, 0);
-		writeRainDropColor(drop, colors, index);
-	});
 
 	const customLayer = {
 		id: layerId,
@@ -428,22 +503,20 @@ function createRainAnimationLayer(layerId, data) {
 			customLayer.map = markRaw(map);
 			customLayer.camera = markRaw(new THREE.Camera());
 			customLayer.scene = markRaw(new THREE.Scene());
-			customLayer.geometry = markRaw(new THREE.BufferGeometry());
-			customLayer.geometry.setAttribute(
-				"position",
-				new THREE.BufferAttribute(positions, 3),
-			);
-			customLayer.geometry.setAttribute(
-				"color",
-				new THREE.BufferAttribute(colors, 3),
-			);
+			customLayer.geometry = markRaw(createRainAnimationGeometry(drops));
 			customLayer.material = markRaw(
-				new THREE.LineBasicMaterial({
-					vertexColors: true,
+				new THREE.ShaderMaterial({
+					uniforms: {
+						uTime: { value: 0 },
+						uOpacity: { value: 0.38 + averageIntensity * 0.26 },
+					},
+					vertexShader: RAIN_VERTEX_SHADER,
+					fragmentShader: RAIN_FRAGMENT_SHADER,
 					transparent: true,
-					opacity: 0.28 + averageIntensity * 0.24,
 					blending: THREE.AdditiveBlending,
+					depthTest: false,
 					depthWrite: false,
+					toneMapped: false,
 				}),
 			);
 			customLayer.rainLines = markRaw(
@@ -452,15 +525,17 @@ function createRainAnimationLayer(layerId, data) {
 					customLayer.material,
 				),
 			);
+			customLayer.rainLines.frustumCulled = false;
 			customLayer.scene.add(customLayer.rainLines);
 			customLayer.renderer = markRaw(
 				new THREE.WebGLRenderer({
 					canvas: map.getCanvas(),
 					context: gl,
-					antialias: true,
+					antialias: false,
 				}),
 			);
 			customLayer.renderer.autoClear = false;
+			customLayer.renderer.sortObjects = false;
 		},
 		onRemove() {
 			customLayer.geometry?.dispose?.();
@@ -485,19 +560,8 @@ function createRainAnimationLayer(layerId, data) {
 				return;
 			}
 
-			const elapsedSeconds =
+			customLayer.material.uniforms.uTime.value =
 				(performance.now() - customLayer.startedAt) / 1000;
-			const positionAttribute =
-				customLayer.geometry.getAttribute("position");
-			drops.forEach((drop, index) => {
-				writeRainDropPosition(
-					drop,
-					positionAttribute.array,
-					index,
-					elapsedSeconds,
-				);
-			});
-			positionAttribute.needsUpdate = true;
 			customLayer.camera.projectionMatrix =
 				new THREE.Matrix4().fromArray(matrix);
 			customLayer.renderer.resetState();
