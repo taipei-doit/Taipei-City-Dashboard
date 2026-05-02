@@ -248,7 +248,7 @@ const toggleOn = ref({
 // 原始 BE 回應快取，切換城市時據此重算 chart_data 與 layer 篩選
 const rawData = ref({
 	restaurantPoints: [],
-	restaurantDensity: [],
+	restaurantDensity: { metrotaipei: [], taipei: [], newtaipei: [] },
 	restaurantCountByCity: [],
 	greenStorePoints: [],
 	wasteCategories: [],
@@ -295,10 +295,9 @@ function recomputeC1a() {
 
 function recomputeC1b() {
 	const city = activeCityMap.eco_diet_restaurants_density;
-	const allRows = rawData.value.restaurantDensity;
-	const filtered = allRows.filter((row) => matchByCity(row, city));
-	c1bComponent.value.chart_data = filtered.length
-		? [{ data: filtered.map(({ x, y }) => ({ x, y })) }]
+	const rows = rawData.value.restaurantDensity[city] || [];
+	c1bComponent.value.chart_data = rows.length
+		? [{ data: rows.map(({ x, y }) => ({ x, y })) }]
 		: [{ data: [] }];
 }
 
@@ -372,12 +371,14 @@ async function fetchAll() {
 	const calls = [
 		ecoApi("/api/v1/eco_diet/restaurant/points"),
 		ecoApi("/api/v1/eco_diet/restaurant/density-by-district"),
+		ecoApi("/api/v1/eco_diet/restaurant/density-by-district?city=臺北市"),
+		ecoApi("/api/v1/eco_diet/restaurant/density-by-district?city=新北市"),
 		ecoApi("/api/v1/eco_diet/restaurant/count-by-city"),
 		ecoApi("/api/v1/eco_diet/green_store/points"),
 		ecoApi("/api/v1/eco_diet/waste/yearly"),
 		ecoApi("/api/v1/eco_diet/food_bank/points"),
 	];
-	const [r1a, r1b, r2, r4, r5, r7a] = await Promise.allSettled(calls);
+	const [r1a, r1b_all, r1b_tpe, r1b_ntpe, r2, r4, r5, r7a] = await Promise.allSettled(calls);
 
 	// C1a: 點位 → 快取後依 activeCity 算 MapLegend
 	if (r1a.status === "fulfilled") {
@@ -402,13 +403,18 @@ async function fetchAll() {
 		c1aComponent.value.chart_data = null;
 	}
 
-	// C1b: 行政區密度，依 activeCity 篩選 city 欄位後給 BarChart
-	if (r1b.status === "fulfilled") {
-		rawData.value.restaurantDensity = r1b.value.data?.data?.[0]?.data || [];
-		recomputeC1b();
-	} else {
-		console.error("C1b fetch failed", r1b.reason);
+	// C1b: 行政區密度（三個 city variant 並行抓，切換城市時直接取對應 key）
+	rawData.value.restaurantDensity.metrotaipei =
+		r1b_all.status === "fulfilled" ? r1b_all.value.data?.data?.[0]?.data || [] : [];
+	rawData.value.restaurantDensity.taipei =
+		r1b_tpe.status === "fulfilled" ? r1b_tpe.value.data?.data?.[0]?.data || [] : [];
+	rawData.value.restaurantDensity.newtaipei =
+		r1b_ntpe.status === "fulfilled" ? r1b_ntpe.value.data?.data?.[0]?.data || [] : [];
+	if (r1b_all.status === "rejected") {
+		console.error("C1b fetch failed", r1b_all.reason);
 		c1bComponent.value.chart_data = null;
+	} else {
+		recomputeC1b();
 	}
 
 	// C2: 雙城家數，雙北自行加總一張卡

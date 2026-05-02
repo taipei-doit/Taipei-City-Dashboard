@@ -1,7 +1,5 @@
 import re
-import concurrent.futures
 
-import requests
 import pandas as pd
 from sqlalchemy import create_engine
 
@@ -14,32 +12,9 @@ from utils.extract_stage import (
     get_data_taipei_api,
 )
 from utils.get_time import get_tpe_now_time_str
-from utils.load_stage import (
-    save_dataframe_to_postgresql,
-)
-
-ARCGIS_URL = "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates"
-
-
-def _geocode_one(addr):
-    try:
-        r = requests.get(ARCGIS_URL, params={
-            "SingleLine": addr, "f": "json",
-            "outSR": '{"wkid":4326}', "maxLocations": 1,
-        }, timeout=8)
-        candidates = r.json().get("candidates", [])
-        if candidates and candidates[0].get("score", 0) >= 80:
-            loc = candidates[0]["location"]
-            return loc["x"], loc["y"]
-    except Exception:
-        pass
-    return None, None
-
-
-def _geocode_parallel(addresses, max_workers=20):
-    with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as pool:
-        results = list(pool.map(_geocode_one, addresses))
-    return [r[0] for r in results], [r[1] for r in results]
+from utils.load_stage import save_geodataframe_to_postgresql
+from utils.transform_address import clean_data, get_addr_xy_parallel, main_process, save_data
+from utils.transform_geometry import add_point_wkbgeometry_column_to_df
 
 DAG_ID = "green_store_tpe_ntpe"
 TPE_PAGE_ID = "1756cb64-0066-444a-a323-9f3b5a961045"
@@ -50,7 +25,6 @@ DISTRICT_PATTERN = re.compile(r"([^市縣\s]{1,3}區)")
 def _transfer(**kwargs):
     ready_data_db_uri = kwargs.get("ready_data_db_uri")
     dag_infos = kwargs.get("dag_infos")
-    dag_id = dag_infos.get("dag_id")
     load_behavior = dag_infos.get("load_behavior")
     default_table = dag_infos.get("ready_data_default_table")
     history_table = dag_infos.get("ready_data_history_table")
@@ -65,7 +39,6 @@ def _transfer(**kwargs):
     print(f"[{DAG_ID}] ntpe raw rows: {len(ntpe)}")
 
     # === Transform: 臺北側 ===
-    # 臺北側 聯絡地址 開頭可能含郵遞區號（如 "111台北市..."），clean_data() 會 strip
     tpe = tpe.rename(columns={
         "序號": "seq_no",
         "綠色商店名稱": "name",
@@ -100,28 +73,36 @@ def _transfer(**kwargs):
     df["district"] = df["address"].str.extract(DISTRICT_PATTERN, expand=False)
     df["data_time"] = get_tpe_now_time_str(is_with_tz=True)
 
-    # === Geocode via ArcGIS ===
-    unique_addr = pd.Series(df["address"].unique())
-    x, y = _geocode_parallel(unique_addr)
+    # === Geocode via Taiwan gov geocoder ===
+    addr_cleaned = clean_data(df["address"])
+    standard_addr_list = main_process(addr_cleaned)
+    _, output = save_data(df["address"], addr_cleaned, standard_addr_list)
+    df["address"] = output
+    unique_addr = pd.Series(output.unique())
+    x, y = get_addr_xy_parallel(unique_addr)
     geo = pd.DataFrame({"lng": x, "lat": y, "address": unique_addr})
     df = df.merge(geo, on="address", how="left")
     df["lng"] = pd.to_numeric(df["lng"], errors="coerce")
     df["lat"] = pd.to_numeric(df["lat"], errors="coerce")
     rate = df["lng"].notna().sum() / len(df)
     print(f"[{DAG_ID}] geocode success rate: {rate:.2%}")
-    ready_data = df[[
+
+    # === Geometry ===
+    gdata = add_point_wkbgeometry_column_to_df(df, df["lng"], df["lat"], from_crs=4326)
+    ready_data = gdata[[
         "source_dataset", "store_code", "name", "address", "city", "district",
-        "tel", "store_type", "lng", "lat", "data_time",
+        "tel", "store_type", "lng", "lat", "wkb_geometry", "data_time",
     ]]
 
     # === Load ===
     engine = create_engine(ready_data_db_uri)
-    save_dataframe_to_postgresql(
+    save_geodataframe_to_postgresql(
         engine,
-        data=ready_data,
+        gdata=ready_data,
         load_behavior=load_behavior,
         default_table=default_table,
         history_table=history_table,
+        geometry_type="Point",
     )
     print(f"[{DAG_ID}] loaded {len(ready_data)} rows into {default_table}")
 
