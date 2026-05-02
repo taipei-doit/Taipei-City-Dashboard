@@ -1,36 +1,18 @@
 <!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 
 <script setup>
-import { onMounted, ref, watch } from "vue";
-import { storeToRefs } from "pinia";
+import { onMounted, ref } from "vue";
+import router from "../../../router";
 import { useMapStore } from "../../../store/mapStore";
-import { useTranslationStore } from "../../../store/translationStore";
-import {
-	fetchStorylineTopics,
-	postStorylineRecommend,
-	toStorylineApiLang,
-	collectRelatedNewsFromSteps,
-} from "../../../api/storyline";
 import { extractNewsInsight } from "../../../api/ai";
 
 const mapStore = useMapStore();
-const translationStore = useTranslationStore();
-const { locale } = storeToRefs(translationStore);
 
 const RECOMMEND_SIDEBAR_EXPANDED_KEY = "isRecommendSidebarExpanded";
 
 /** 展開寬度略大於左側 SideBar，收合 45px */
 const isExpanded = ref(true);
 
-const topics = ref([]);
-const selectedTopicId = ref(null);
-const relatedNews = ref([]);
-const loadError = ref(null);
-const recommendError = ref(null);
-const loadingTopics = ref(false);
-const loadingRecommend = ref(false);
-
-// AI Insight State
 const aiNewsUrl = ref("");
 const aiInsightResult = ref(null);
 const loadingAiInsight = ref(false);
@@ -38,17 +20,16 @@ const aiInsightError = ref(null);
 
 async function handleAiInsight() {
 	if (!aiNewsUrl.value) return;
-	
+
 	loadingAiInsight.value = true;
 	aiInsightError.value = null;
 	aiInsightResult.value = null;
-	
+
 	try {
 		const result = await extractNewsInsight(aiNewsUrl.value);
 		aiInsightResult.value = result;
-		// 如果有推薦組件，也可以考慮自動選取或展開
-	} catch (err) {
-		aiInsightError.value = "AI 分析失敗，請檢查網址或稍後再試。";
+	} catch {
+		aiInsightError.value = "無法載入主題。";
 	} finally {
 		loadingAiInsight.value = false;
 	}
@@ -72,55 +53,27 @@ function toggleExpand() {
 	mapStore.resizeMap();
 }
 
-async function loadTopics() {
-	loadError.value = null;
-	loadingTopics.value = true;
-	topics.value = [];
-	try {
-		topics.value = await fetchStorylineTopics();
-	} catch {
-		loadError.value = "無法載入主題。";
-	} finally {
-		loadingTopics.value = false;
-	}
-}
-
-async function selectTopic(topic) {
-	selectedTopicId.value = topic.id;
-	recommendError.value = null;
-	relatedNews.value = [];
-	loadingRecommend.value = true;
-	const lang = toStorylineApiLang(locale.value);
-	try {
-		const { steps } = await postStorylineRecommend({
-			lang,
-			topic_id: String(topic.id),
-			limit: 12,
-		});
-		relatedNews.value = collectRelatedNewsFromSteps(steps);
-		if (!relatedNews.value.length) {
-			recommendError.value = "此主題暫無摘要。";
-		}
-	} catch {
-		recommendError.value = "無法載入新聞。";
-	} finally {
-		loadingRecommend.value = false;
-	}
-}
-
-watch(locale, () => {
-	if (selectedTopicId.value) {
-		const t = topics.value.find((x) => x.id === selectedTopicId.value);
-		if (t) {
-			selectTopic(t);
-		}
-	}
-});
-
 onMounted(() => {
 	readExpandedFromStorage();
-	loadTopics();
 });
+
+/**
+ * 前往組件詳情頁（與 DashboardView 手機版「組件資訊」行為一致）
+ */
+function openStorylineRecommendedComponent(comp) {
+	const idx = comp?.index;
+	if (idx === undefined || idx === null || idx === "") {
+		return;
+	}
+	const payload = {
+		name: "component-info",
+		params: { index: String(idx) },
+	};
+	if (comp.city) {
+		payload.query = { city: comp.city };
+	}
+	router.push(payload);
+}
 </script>
 
 <template>
@@ -153,7 +106,7 @@ onMounted(() => {
             今日推薦
           </h1>
           <p class="recommendsidebar-lead">
-            選擇主題或貼上新聞連結。
+            貼上新聞網址取得洞察與推薦主題。
           </p>
         </div>
       </template>
@@ -165,7 +118,6 @@ onMounted(() => {
     </div>
 
     <template v-if="isExpanded">
-      <!-- AI Insight Input Section -->
       <div class="recommendsidebar-ai-section">
         <div class="recommendsidebar-ai-input-group">
           <input
@@ -196,7 +148,6 @@ onMounted(() => {
         </p>
       </div>
 
-      <!-- AI Result: Storyline -->
       <div
         v-if="aiInsightResult"
         class="recommendsidebar-ai-result"
@@ -207,12 +158,9 @@ onMounted(() => {
         <div class="recommendsidebar-storyline">
           {{ aiInsightResult.storyline }}
         </div>
-        
-        <h2
-          v-if="aiInsightResult.components?.length"
-          class="recommendsidebar-subtitle"
-        >
-          推薦數據組件
+
+        <h2 class="recommendsidebar-subtitle">
+          推薦主題
         </h2>
         <ul
           v-if="aiInsightResult.components?.length"
@@ -220,115 +168,25 @@ onMounted(() => {
         >
           <li
             v-for="comp in aiInsightResult.components"
-            :key="comp.id"
+            :key="`${comp.id}-${comp.city ?? ''}`"
           >
             <button
               type="button"
               class="recommendsidebar-topic recommendsidebar-topic--ai"
-              @click="mapStore.addComponentToDashboard(comp)"
+              @click="openStorylineRecommendedComponent(comp)"
             >
               <span class="recommendsidebar-topic-title">{{ comp.name }}</span>
               <span class="recommendsidebar-topic-summary">{{ comp.short_desc }}</span>
             </button>
           </li>
         </ul>
-      </div>
-
-      <div
-        v-if="loadingTopics"
-        class="recommendsidebar-status"
-      >
-        載入中…
-      </div>
-      <template v-else>
-        <h2 class="recommendsidebar-subtitle">
-          推薦主題
-        </h2>
         <p
-          v-if="loadError"
+          v-else
           class="recommendsidebar-msg recommendsidebar-msg--error"
         >
-          {{ loadError }}
+          無法載入主題。
         </p>
-        <p
-          v-else-if="!topics.length"
-          class="recommendsidebar-msg"
-        >
-          尚無推薦主題。
-        </p>
-        <ul
-          v-else
-          class="recommendsidebar-topiclist"
-        >
-          <li
-            v-for="t in topics"
-            :key="t.id"
-          >
-            <button
-              type="button"
-              class="recommendsidebar-topic"
-              :class="{ 'is-selected': selectedTopicId === t.id }"
-              @click="selectTopic(t)"
-            >
-              <span class="recommendsidebar-topic-title">{{ t.title }}</span>
-              <span
-                v-if="t.summary"
-                class="recommendsidebar-topic-summary"
-              >{{ t.summary }}</span>
-            </button>
-          </li>
-        </ul>
-
-        <h2 class="recommendsidebar-subtitle recommendsidebar-subtitle--news">
-          相關新聞
-        </h2>
-        <div
-          v-if="!selectedTopicId"
-          class="recommendsidebar-msg"
-        >
-          請先選擇主題。
-        </div>
-        <div
-          v-else-if="loadingRecommend"
-          class="recommendsidebar-status"
-        >
-          載入新聞…
-        </div>
-        <p
-          v-else-if="recommendError"
-          class="recommendsidebar-msg recommendsidebar-msg--error"
-        >
-          {{ recommendError }}
-        </p>
-        <ul
-          v-else
-          class="recommendsidebar-newslist"
-        >
-          <li
-            v-for="(n, idx) in relatedNews"
-            :key="n.news_id ?? idx"
-            class="recommendsidebar-newsitem"
-          >
-            <a
-              v-if="n.url"
-              :href="n.url"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="recommendsidebar-news-title"
-            >{{ n.title }}</a>
-            <span
-              v-else
-              class="recommendsidebar-news-title"
-            >{{ n.title }}</span>
-            <p
-              v-if="n.summary"
-              class="recommendsidebar-news-summary"
-            >
-              {{ n.summary }}
-            </p>
-          </li>
-        </ul>
-      </template>
+      </div>
     </template>
   </div>
 </template>
@@ -471,7 +329,6 @@ onMounted(() => {
 		to { transform: rotate(360deg); }
 	}
 
-	/* 與左側 SideBar：h1＝私人儀表板層級；h2／SideBarTab 儀表板名＝ var(--font-m) */
 	&-title {
 		cursor: default;
 		margin: 0 0 6px;
@@ -506,14 +363,11 @@ onMounted(() => {
 		margin: 10px 0 6px;
 		text-wrap: nowrap;
 
-		&--news {
-			margin-top: 14px;
-			padding-top: 10px;
-			border-top: 1px solid var(--color-border);
+		&--ai {
+			margin-top: 0;
 		}
 	}
 
-	&-status,
 	&-msg {
 		margin: 0 0 8px;
 		font-size: var(--font-m);
@@ -568,45 +422,6 @@ onMounted(() => {
 		font-size: var(--font-s);
 		color: var(--color-complement-text);
 		line-height: 1.35;
-		word-break: break-word;
-	}
-
-	&-newslist {
-		list-style: none;
-		margin: 0;
-		padding: 0;
-		display: flex;
-		flex-direction: column;
-		gap: var(--font-s);
-	}
-
-	&-newsitem {
-		padding-bottom: var(--font-s);
-		border-bottom: 1px solid var(--color-border);
-
-		&:last-child {
-			border-bottom: none;
-			padding-bottom: 0;
-		}
-	}
-
-	&-news-title {
-		font-size: var(--font-m);
-		font-weight: 400;
-		color: var(--color-highlight);
-		text-decoration: none;
-		word-break: break-word;
-
-		&:hover {
-			text-decoration: underline;
-		}
-	}
-
-	&-news-summary {
-		margin: 4px 0 0;
-		font-size: var(--font-s);
-		color: var(--color-normal-text);
-		line-height: 1.45;
 		word-break: break-word;
 	}
 
