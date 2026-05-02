@@ -124,6 +124,18 @@ const SIMPLE_ROUTE_CAR_SOURCE_ID = "simple-navigation-car-source";
 const SIMPLE_ROUTE_CAR_LAYER_IDS = [
 	"simple-navigation-car-layer",
 ];
+const SIMPLE_ROUTE_SEARCH_BBOX = MapObjectConfig.maxBounds.flat().join(",");
+const SIMPLE_ROUTE_SEARCH_PROXIMITY = "121.536609,25.044808";
+const SIMPLE_ROUTE_SEARCH_TYPES = [
+	"poi",
+	"address",
+	"street",
+	"place",
+	"city",
+	"locality",
+	"neighborhood",
+	"district",
+].join(",");
 const SIMPLE_ROUTE_VEHICLE_MODELS = {
 	default: {
 		label: "cybertruck",
@@ -152,10 +164,10 @@ const SIMPLE_ROUTE_CAR_MAX_SCALE = 7;
 const SIMPLE_ROUTE_CAR_MIN_DURATION_MS = 6500;
 const SIMPLE_ROUTE_CAR_MAX_DURATION_MS = 22000;
 const SIMPLE_ROUTE_CAR_MS_PER_METER = 1.6;
-const SIMPLE_ROUTE_FIRST_PERSON_FORWARD_METERS = 42;
+const SIMPLE_ROUTE_FIRST_PERSON_FORWARD_METERS = 0;
 const SIMPLE_ROUTE_FIRST_PERSON_PITCH = 78;
 const SIMPLE_ROUTE_FIRST_PERSON_ZOOM = 17.2;
-const SIMPLE_ROUTE_FIRST_PERSON_UPDATE_INTERVAL_MS = 80;
+const SIMPLE_ROUTE_FIRST_PERSON_UPDATE_INTERVAL_MS = 0;
 const SIMPLE_ROUTE_PROFILES = [
 	"mapbox/driving",
 	"mapbox/walking",
@@ -224,6 +236,42 @@ function getSimpleRouteFirstPersonCamera(routeSample) {
 		pitch: SIMPLE_ROUTE_FIRST_PERSON_PITCH,
 		bearing: getSimpleRouteBearing(routeSample),
 	};
+}
+
+function getSimpleRouteFeatureName(feature, fallbackName) {
+	const properties = feature?.properties || {};
+	const combinedName = [properties.name, properties.place_formatted]
+		.filter(Boolean)
+		.join("，");
+	return (
+		properties.name_preferred ||
+		properties.full_address ||
+		combinedName ||
+		properties.name ||
+		fallbackName
+	);
+}
+
+function getSimpleRouteFeatureCoordinates(feature) {
+	const propertyCoordinates = feature?.properties?.coordinates;
+	const routablePoint = propertyCoordinates?.routable_points?.[0];
+	const longitude =
+		routablePoint?.longitude ??
+		feature?.geometry?.coordinates?.[0] ??
+		propertyCoordinates?.longitude;
+	const latitude =
+		routablePoint?.latitude ??
+		feature?.geometry?.coordinates?.[1] ??
+		propertyCoordinates?.latitude;
+
+	if (
+		!Number.isFinite(Number(longitude)) ||
+		!Number.isFinite(Number(latitude))
+	) {
+		return null;
+	}
+
+	return [Number(longitude), Number(latitude)];
 }
 
 function normalizeSimpleRouteCoordinates(coordinates) {
@@ -556,13 +604,19 @@ function createSimpleRouteCarLayer(
 				customLayer.routePath,
 				progress,
 			);
-			customLayer.currentSample = routeSample;
-			customLayer.applyFirstPersonCamera();
+			const isFirstPersonCamera =
+				customLayer.shouldUseFirstPersonCamera();
+			const renderSample = isFirstPersonCamera
+				? customLayer.currentSample || routeSample
+				: routeSample;
+			if (!isFirstPersonCamera) {
+				customLayer.currentSample = routeSample;
+			}
 
 			if (customLayer.model) {
 				const mercator =
 					mapboxGl.MercatorCoordinate.fromLngLat(
-						routeSample.coordinate,
+						renderSample.coordinate,
 						modelConfig.altitudeMeters,
 					);
 				const zoomScale = getSimpleRouteCarScale(
@@ -578,7 +632,7 @@ function createSimpleRouteCarLayer(
 					Math.PI / 2,
 				);
 				const rotationZ = new THREE.Matrix4().makeRotationZ(
-					-routeSample.angle,
+					-renderSample.angle,
 				);
 				const translation = new THREE.Matrix4().makeTranslation(
 					mercator.x,
@@ -604,6 +658,11 @@ function createSimpleRouteCarLayer(
 					customLayer.scene,
 					customLayer.camera,
 				);
+			}
+
+			if (isFirstPersonCamera) {
+				customLayer.currentSample = routeSample;
+				customLayer.applyFirstPersonCamera();
 			}
 
 			if (progress < 1 || !customLayer.model) {
@@ -3357,43 +3416,31 @@ export const useMapStore = defineStore("map", {
 				throw new Error("缺少 Mapbox Token，無法查詢路線");
 			}
 
-			const bounds = MapObjectConfig.maxBounds.flat().join(",");
 			const res = await axios.get(
-				"https://api.mapbox.com/search/geocode/v6/forward",
+				"https://api.mapbox.com/search/searchbox/v1/forward",
 				{
 					params: {
 						q: query,
 						access_token: token,
 						language: "zh-TW",
-						country: "tw",
-						bbox: bounds,
+						country: "TW",
+						bbox: SIMPLE_ROUTE_SEARCH_BBOX,
 						limit: 1,
-						proximity: "121.536609,25.044808",
+						proximity: SIMPLE_ROUTE_SEARCH_PROXIMITY,
+						types: SIMPLE_ROUTE_SEARCH_TYPES,
 					},
 				},
 			);
 			const feature = res.data?.features?.[0];
-			const geometryCoordinates = feature?.geometry?.coordinates;
-			const propertyCoordinates = feature?.properties?.coordinates;
-			const longitude =
-				geometryCoordinates?.[0] || propertyCoordinates?.longitude;
-			const latitude =
-				geometryCoordinates?.[1] || propertyCoordinates?.latitude;
+			const coordinates = getSimpleRouteFeatureCoordinates(feature);
 
-			if (
-				!Number.isFinite(Number(longitude)) ||
-				!Number.isFinite(Number(latitude))
-			) {
+			if (!coordinates) {
 				throw new Error(`找不到「${query}」的位置`);
 			}
 
 			return {
-				name:
-					feature.properties?.name_preferred ||
-					feature.properties?.full_address ||
-					feature.properties?.name ||
-					query,
-				coordinates: [Number(longitude), Number(latitude)],
+				name: getSimpleRouteFeatureName(feature, query),
+				coordinates,
 			};
 		},
 		async fetchSimpleRoute(startCoordinates, endCoordinates, profile) {
