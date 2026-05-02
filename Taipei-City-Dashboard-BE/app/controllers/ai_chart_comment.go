@@ -18,8 +18,11 @@ import (
 )
 
 const (
-	chartCommentPromptLimit = 6000
-	defaultChartCommentTTL  = 15 * time.Minute
+	chartCommentPromptLimit   = 6000
+	chartCommentPromptVersion = "v2-100-char-decision"
+	chartCommentMinRunes      = 100
+	chartCommentMaxAttempts   = 3
+	defaultChartCommentTTL    = 15 * time.Minute
 )
 
 type AIChartCommentInput struct {
@@ -85,40 +88,24 @@ func GetAIChartComment(c *gin.Context) {
 			{
 				Role: llms.ChatMessageTypeSystem,
 				Parts: []llms.ContentPart{
-					llms.TextContent{Text: "你是臺北城市儀表板的資料分析助理，擅長用一句話說明圖表的重點。"},
+					llms.TextContent{Text: "你是臺北城市儀表板的資料分析助理，擅長用清楚的圖表判讀協助使用者做決策。"},
 				},
 			},
 			{
 				Role: llms.ChatMessageTypeHuman,
 				Parts: []llms.ContentPart{
-					llms.TextContent{Text: buildChartCommentPrompt(input)},
+					llms.TextContent{Text: buildChartCommentPrompt(input, 0)},
 				},
 			},
 		},
 	}
 
-	logEntry, err := ai.ChatWithTWCC(
-		c.Request.Context(),
-		req,
-		llms.WithMaxTokens(120),
-		llms.WithTemperature(0.3),
-		llms.WithTopP(0.9),
-	)
+	comment, err := generateChartComment(c, req, input)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"status":     "error",
 			"error_code": "AI_CHART_COMMENT_ERROR",
 			"message":    err.Error(),
-		})
-		return
-	}
-
-	comment := strings.TrimSpace(logEntry.Answer)
-	if comment == "" {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"status":     "error",
-			"error_code": "AI_CHART_COMMENT_EMPTY",
-			"message":    "AI chart comment is empty",
 		})
 		return
 	}
@@ -132,6 +119,40 @@ func GetAIChartComment(c *gin.Context) {
 			"expires_at": entry.ExpiresAt,
 		},
 	})
+}
+
+func generateChartComment(c *gin.Context, req ai.AIChatRequest, input AIChartCommentInput) (string, error) {
+	lastComment := ""
+	for attempt := 0; attempt < chartCommentMaxAttempts; attempt++ {
+		req.Messages[1].Parts = []llms.ContentPart{
+			llms.TextContent{Text: buildChartCommentPrompt(input, attempt)},
+		}
+
+		logEntry, err := ai.ChatWithTWCC(
+			c.Request.Context(),
+			req,
+			llms.WithMaxTokens(360),
+			llms.WithTemperature(0.3),
+			llms.WithTopP(0.9),
+		)
+		if err != nil {
+			return "", err
+		}
+
+		comment := strings.TrimSpace(logEntry.Answer)
+		if comment == "" {
+			continue
+		}
+		if len([]rune(comment)) >= chartCommentMinRunes {
+			return comment, nil
+		}
+		lastComment = comment
+	}
+
+	if lastComment != "" {
+		return "", fmt.Errorf("AI chart comment is shorter than %d characters", chartCommentMinRunes)
+	}
+	return "", fmt.Errorf("AI chart comment is empty")
 }
 
 func getChartCommentCache(key string) (chartCommentCacheEntry, bool) {
@@ -166,6 +187,7 @@ func setChartCommentCache(key string, comment string, ttl time.Duration) chartCo
 
 func buildChartCommentCacheKey(input AIChartCommentInput) string {
 	payload := map[string]interface{}{
+		"prompt_version":   chartCommentPromptVersion,
 		"component_id":     input.ComponentID,
 		"index":            input.Index,
 		"city":             input.City,
@@ -181,7 +203,7 @@ func buildChartCommentCacheKey(input AIChartCommentInput) string {
 	return hex.EncodeToString(sum[:])
 }
 
-func buildChartCommentPrompt(input AIChartCommentInput) string {
+func buildChartCommentPrompt(input AIChartCommentInput, attempt int) string {
 	payload := map[string]interface{}{
 		"component": map[string]interface{}{
 			"name":             input.Name,
@@ -196,8 +218,14 @@ func buildChartCommentPrompt(input AIChartCommentInput) string {
 		"chart_config": input.ChartConfig,
 		"chart_data":   input.ChartData,
 	}
+	retryInstruction := ""
+	if attempt > 0 {
+		retryInstruction = "前一次輸出未達字數要求，這次請務必輸出完整評論並達到最低字數。"
+	}
 	return fmt.Sprintf(
-		"請根據以下臺北城市儀表板圖表資料，產生一段繁體中文圖表評論。請只輸出一段，45 字以內，聚焦最明顯的趨勢、異常或比較，不要使用 Markdown，也不要編造資料。\n\n%s",
+		"請根據以下臺北城市儀表板圖表資料，產生一段繁體中文圖表評論。請只輸出單一段落，至少 %d 字、建議 100 到 160 字，不要使用 Markdown，也不要編造資料。內容必須包含：1. 主要趨勢、異常或比較；2. 圖表輔助判讀，例如單位、分類、時間序列或高低值如何閱讀；3. 一項可執行的決策建議或後續追蹤方向。若資料不足以做強結論，請明確提醒需持續觀察。%s\n\n%s",
+		chartCommentMinRunes,
+		retryInstruction,
 		marshalPromptPayload(payload),
 	)
 }

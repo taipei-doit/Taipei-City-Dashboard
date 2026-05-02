@@ -800,8 +800,9 @@ button:hover {
 	&-chart,
 	&-loading,
 	&-error {
-		height: calc(78% - 34px);
-		min-height: 270px;
+		flex: 1 1 auto;
+		height: auto;
+		min-height: 220px;
 		position: relative;
 		padding-top: 1%;
 		overflow-y: scroll;
@@ -812,20 +813,22 @@ button:hover {
 	}
 
 	&-ai-comment {
-		height: 28px;
-		min-height: 28px;
+		min-height: 76px;
+		max-height: 96px;
 		display: flex;
-		align-items: center;
+		align-items: flex-start;
 		gap: 6px;
-		margin-top: 2px;
-		padding: 0 8px;
+		margin-top: 6px;
+		padding: 6px 8px;
 		border: 1px dashed var(--color-complement-text);
 		border-radius: 5px;
 		background-color: rgba(0, 0, 0, 0.12);
 		opacity: 0.72;
+		overflow-y: auto;
 
 		&-icon {
 			flex: 0 0 auto;
+			margin-top: 1px;
 			color: var(--color-highlight);
 			font-family: var(--font-icon);
 			font-size: var(--font-ms);
@@ -837,8 +840,9 @@ button:hover {
 			min-width: 0;
 			color: var(--color-complement-text);
 			font-size: var(--font-s);
-			white-space: nowrap;
-			text-overflow: ellipsis;
+			line-height: 1.45;
+			white-space: normal;
+			text-overflow: clip;
 		}
 
 		button {
@@ -984,8 +988,8 @@ button:hover {
 	&-chart,
 	&-loading {
 		padding-top: 0%;
-		height: calc(82% - 34px);
-		min-height: 280px;
+		height: auto;
+		min-height: 210px;
 		position: relative;
 		overflow-y: scroll;
 
@@ -1016,8 +1020,13 @@ button:hover {
 
 	&-chart,
 	&-loading {
-		height: calc(72% - 34px);
-		min-height: 180px;
+		height: auto;
+		min-height: 120px;
+	}
+
+	.dashboardcomponent-ai-comment {
+		min-height: 56px;
+		max-height: 72px;
 	}
 }
 
@@ -1027,8 +1036,13 @@ button:hover {
 
 	&-chart {
 		padding-top: 0;
-		height: calc(76% - 34px);
-		min-height: 210px;
+		height: auto;
+		min-height: 140px;
+	}
+
+	.dashboardcomponent-ai-comment {
+		min-height: 56px;
+		max-height: 72px;
 	}
 }
 

@@ -91,12 +91,6 @@ onMounted(() => {
         >
           <span>layers</span>
         </button>
-        <div
-          v-if="mapStore.loadingLayers.length > 0"
-          class="mapcontainer-layers-loading"
-        >
-          <div />
-        </div>
       </div>
       <div
         class="mapcontainer-camera hide-if-mobile"
@@ -442,27 +436,6 @@ onMounted(() => {
 			color: var(--color-component-background);
 			font-size: 1.2rem;
 			font-family: var(--font-icon);
-		}
-
-		&-loading {
-			height: 2rem;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			z-index: 20;
-
-			@media (max-width: 1000px) {
-				top: 145px;
-			}
-
-			div {
-				width: 1.3rem;
-				height: 1.3rem;
-				border-radius: 50%;
-				border: solid 4px var(--color-border);
-				border-top: solid 4px var(--color-highlight);
-				animation: spin 0.7s ease-in-out infinite;
-			}
 		}
 
 		&-incident {
