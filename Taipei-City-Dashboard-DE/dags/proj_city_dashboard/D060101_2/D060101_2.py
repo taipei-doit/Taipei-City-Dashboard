@@ -4,7 +4,7 @@ from operators.common_pipeline import CommonDag
 
 def _D060101_2(**kwargs):
     from sqlalchemy import create_engine
-    from utils.extract_stage import get_data_taipei_api
+    from utils.extract_stage import get_current_rid_from_page_id, get_data_taipei_api
     from utils.load_stage import (
         save_geodataframe_to_postgresql,
         update_lasttime_in_data_to_dataset_info,
@@ -25,12 +25,13 @@ def _D060101_2(**kwargs):
     load_behavior = dag_infos.get("load_behavior")
     default_table = dag_infos.get("ready_data_default_table")
     history_table = dag_infos.get("ready_data_history_table")
-    RID = "3a02af7d-8c33-46c1-8226-c12a11610f6b"
+    PAGE_ID = "ffdd5753-30db-4c38-b65f-b77892773d60"
     FROM_CRS = 4326
     GEOMETRY_TYPE = "Point"
 
     # Extract
-    raw_data = get_data_taipei_api(RID, output_format="dataframe")
+    rid = get_current_rid_from_page_id(PAGE_ID, resource_name_contains="診所")
+    raw_data = get_data_taipei_api(rid, output_format="dataframe")
 
     # Transform
     data = raw_data.copy()

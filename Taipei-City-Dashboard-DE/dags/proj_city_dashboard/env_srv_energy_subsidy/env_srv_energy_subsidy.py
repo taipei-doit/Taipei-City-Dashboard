@@ -2,7 +2,7 @@ from airflow import DAG
 from operators.common_pipeline import CommonDag
 import pandas as pd
 from sqlalchemy import create_engine
-from utils.extract_stage import get_data_taipei_api
+from utils.extract_stage import get_current_rid_from_page_id, get_data_taipei_api
 from utils.load_stage import (
     save_geodataframe_to_postgresql,
     update_lasttime_in_data_to_dataset_info, save_dataframe_to_postgresql
@@ -34,14 +34,14 @@ def _transfer(**kwargs):
     load_behavior = dag_infos.get("load_behavior")
     default_table = dag_infos.get("ready_data_default_table")
     history_table = dag_infos.get("ready_data_history_table")
-    RID = "5f239e5c-9388-4dc2-b6a6-f65491edd78a"
+    PAGE_ID = "01370301-b843-4b60-ae8c-6a8789880bfe"
     FROM_CRS = 4326
     GEOMETRY_TYPE = "Point"
 
     ##############
     ## Extract
     ##############
-    raw_list = get_data_taipei_api(RID)
+    raw_list = get_data_taipei_api(get_current_rid_from_page_id(PAGE_ID))
     print(raw_list)
     raw_data = pd.DataFrame(raw_list)
     print(raw_data)

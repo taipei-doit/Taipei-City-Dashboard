@@ -3,15 +3,19 @@ from operators.common_pipeline import CommonDag
 import pandas as pd
 
 def convert_vaccine_symbols(value):
-    """Convert vaccine availability symbols to binary values"""
-    if pd.isna(value) or value == '':
+    """Convert vaccine availability symbols to binary values.
+
+    資料集原本用 '◎' 標示提供該項疫苗,2025 後改為 '1'/'' 的數值格式。
+    此函式兼容新舊格式:任何非空且等於 '1'、'◎' 或含 '◎' 的值都視為 1。
+    """
+    if pd.isna(value):
         return 0
-    elif value == '◎':
-        return 1
-    elif '◎' in str(value):  # Handle cases like "◎\n限院內腎友及家屬"
-        return 1
-    else:
+    s = str(value).strip()
+    if not s:
         return 0
+    if s == '1' or s == '◎' or '◎' in s:
+        return 1
+    return 0
 
 
 def _transfer(**kwargs):
@@ -22,6 +26,7 @@ def _transfer(**kwargs):
     )
     from utils.get_time import get_tpe_now_time_str
     from utils.extract_stage import (
+        get_current_rid_from_page_id,
         get_data_taipei_file_last_modified_time,
         get_data_taipei_api,
     )
@@ -42,11 +47,9 @@ def _transfer(**kwargs):
     default_table = dag_infos.get("ready_data_default_table")
     history_table = dag_infos.get("ready_data_history_table")
     GEOMETRY_TYPE = "Point"
-
-    RID = "47b02c29-efa2-4614-ac7e-1b0b9499e6ea"
     PAGE_ID = "ec201f0a-2efa-4426-9439-a8daea7b33c7"
     # Extract
-    res = get_data_taipei_api(RID)
+    res = get_data_taipei_api(get_current_rid_from_page_id(PAGE_ID))
 
     raw_data = pd.DataFrame(res)
 

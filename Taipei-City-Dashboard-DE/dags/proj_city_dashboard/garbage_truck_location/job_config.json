@@ -1,0 +1,42 @@
+{
+  "dag_infos": {
+    "dag_id": "garbage_truck_location",
+    "start_date": "2026-03-11",
+    "schedule_interval": "00 20 * * *",
+    "catchup": false,
+    "tags": [
+      "garbage_truck_location",
+      "臺北資料大平台",
+      "台北市",
+      "垃圾車收運點位"
+    ],
+    "description": "This dataset contains essential information on Taipei City’s garbage truck locations, including route details, administrative divisions, and geographic data for GIS analysis and urban planning.",
+    "default_args": {
+      "owner": "airflow",
+      "email": ["DEFAULT_EMAIL_LIST"],
+      "email_on_retry": false,
+      "email_on_failure": true,
+      "retries": 1,
+      "retry_delay": 60
+    },
+    "ready_data_db": "postgres_default",
+    "ready_data_default_table": "garbage_truck_location",
+    "ready_data_history_table": "",
+    "raw_data_db": "postgres_default",
+    "raw_data_table": "",
+    "load_behavior": "replace"
+  },
+  "data_infos": {
+    "name_cn": "垃圾車收運點位",
+    "airflow_update_freq": "20:00 every day",
+    "source": "https://tdx.transportdata.tw/api/basic/v2/Cycling/Shape/City/Taipei?%24&%24format=JSON",
+    "source_type": "臺北資料大平台 API",
+    "source_dept": "臺北資料大平台",
+    "gis_format": "Point",
+    "output_coordinate": "EPSG:4326",
+    "is_geometry": 1,
+    "dataset_description": "垃圾車收運點位",
+    "etl_description": "target url, fill data columns, standardize time",
+    "sensitivity": "public"
+  }
+}

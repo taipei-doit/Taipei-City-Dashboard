@@ -1,0 +1,37 @@
+{
+  "dag_infos": {
+    "dag_id": "aqx_p_432",
+    "start_date": "2026-05-02",
+    "schedule_interval": "20 * * * *",
+    "catchup": false,
+    "tags": ["aqx_p_432", "MOENV", "空氣品質指標"],
+    "description": "Real-time air quality index (aqx_p_432) from MOENV Open Data API.",
+    "default_args": {
+      "owner": "airflow",
+      "email": ["DEFAULT_EMAIL_LIST"],
+      "email_on_retry": false,
+      "email_on_failure": true,
+      "retries": 1,
+      "retry_delay": 60
+    },
+    "ready_data_db": "postgres_default",
+    "ready_data_default_table": "aqi_records",
+    "ready_data_history_table": "aqi_records_history",
+    "raw_data_db": "postgres_default",
+    "raw_data_table": "",
+    "load_behavior": "replace"
+  },
+  "data_infos": {
+    "name_cn": "環境部空氣品質指標（全國測站）",
+    "airflow_update_freq": "20th minute every hour",
+    "source": "https://data.moenv.gov.tw/api/v2/aqx_p_432?format=json&offset=0&limit=1&api_key=",
+    "source_type": "MOENV API",
+    "source_dept": "環境部",
+    "gis_format": "",
+    "output_coordinate": "EPSG:4326",
+    "is_geometry": 0,
+    "dataset_description": "MOENV AQI 即時資料（aqx_p_432），寫入 aqi_records；API 金鑰請設定 Airflow Variable「MOENV_API_KEY」。",
+    "etl_description": "requests GET pagination, pm2.5→pm2_5, dtypes per aqi_records schema, publishtime",
+    "sensitivity": "public"
+  }
+}

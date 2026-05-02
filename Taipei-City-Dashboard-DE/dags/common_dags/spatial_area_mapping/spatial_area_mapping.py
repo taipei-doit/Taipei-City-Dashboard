@@ -5,7 +5,7 @@ from airflow.models import Variable
 import logging
 
 
-MAPPINGS = Variable.get("SPATIAL_MAPPINGS", deserialize_json=True)
+MAPPINGS = Variable.get("SPATIAL_MAPPINGS", default_var="[]", deserialize_json=True)
 
 def build_update_sql(cfg: dict) -> str:
     if cfg["src_table"].endswith("_ntpe"):

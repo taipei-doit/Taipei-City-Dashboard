@@ -73,3 +73,11 @@ Taipei-City-Dashboard-DE/docker/prod/.env
 *.py[cod]
 
 *.env
+
+.devcontainer
+.github/agents
+.github/reference
+.github/scripts
+.github/skills
+.github/copilot-instructions.md
+docs
