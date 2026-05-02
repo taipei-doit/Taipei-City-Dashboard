@@ -224,7 +224,8 @@ onMounted(() => {
                 v-for="(chart, index) in component.chart_config
                   .types"
                 :key="`${component.index}-chart-${index}`"
-                :text="chartTypes[chart]"
+                :dict-key="`chart.type.${chart}`"
+                :text="chartTypes[chart] ?? chart"
                 mode="fill"
               />
             </div>

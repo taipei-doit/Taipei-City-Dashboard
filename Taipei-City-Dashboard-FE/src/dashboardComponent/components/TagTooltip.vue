@@ -2,6 +2,8 @@
 
 <!-- The little dialog that pops up when you hover over component tags -->
 <script setup>
+import BackendTranslatedText from "../../components/utilities/i18n/BackendTranslatedText.vue";
+
 const props = defineProps({
 	position: { type: Object },
 	hasFilter: { type: Boolean, default: false },
@@ -15,15 +17,30 @@ const props = defineProps({
     :style="props.position"
     class="chart-tooltip tagtooltip"
   >
-    <h6>組件資訊與功能</h6>
+    <BackendTranslatedText
+      tag="h6"
+      text="組件資訊與功能"
+    />
     <p>
-      <span>{{ props.hasFilter ? "check" : "clear" }}</span>可用圖表篩選地圖
+      <span>{{ props.hasFilter ? "check" : "clear" }}</span>
+      <BackendTranslatedText
+        tag="span"
+        text="可用圖表篩選地圖"
+      />
     </p>
     <p>
-      <span>{{ props.hasMapLayer ? "check" : "clear" }}</span>具備空間資料
+      <span>{{ props.hasMapLayer ? "check" : "clear" }}</span>
+      <BackendTranslatedText
+        tag="span"
+        text="具備空間資料"
+      />
     </p>
     <p>
-      <span>{{ props.hasHistory ? "check" : "clear" }}</span>具備歷史資料
+      <span>{{ props.hasHistory ? "check" : "clear" }}</span>
+      <BackendTranslatedText
+        tag="span"
+        text="具備歷史資料"
+      />
     </p>
   </div>
 </template>

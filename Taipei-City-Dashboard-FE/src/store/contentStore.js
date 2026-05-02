@@ -690,8 +690,11 @@ export const useContentStore = defineStore("content", {
 		setContributors() {
 			http.get(`/contributor/`)
 				.then((rs) => {
+					const raw = rs?.data?.data ?? rs?.data;
+					const list = Array.isArray(raw) ? raw : [];
 					const contributors = {};
-					rs.data.data.forEach((item) => {
+					list.forEach((item) => {
+						if (item == null || item.user_id == null) return;
 						contributors[item.user_id] = {
 							id: item.id,
 							user_id: item.user_id,
@@ -705,7 +708,10 @@ export const useContentStore = defineStore("content", {
 					});
 					this.contributors = contributors;
 				})
-				.catch((e) => console.error(e));
+				.catch((e) => {
+					console.error(e);
+					this.contributors = {};
+				});
 		},
 		// 7. Call an API to get map layer component info and store it (if in /mapview)
 		async setMapLayers(city) {

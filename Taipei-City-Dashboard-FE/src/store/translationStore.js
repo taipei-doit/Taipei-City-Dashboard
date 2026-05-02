@@ -30,14 +30,15 @@ const CACHE_MAX_ENTRIES = 500;
 /** 介面預設以繁中為源文案；與此相同時不呼叫 API */
 export const SOURCE_LOCALE = "zh-TW";
 
+/** 下拉選項顯示各語言自稱（非一律用中文寫語言名） */
 export const SUPPORTED_LOCALES = [
-	{ code: "zh-TW", label: "中文" },
-	{ code: "en", label: "英文" },
-	{ code: "ja", label: "日文" },
-	{ code: "ko", label: "韓文" },
-	{ code: "vi", label: "越南文" },
-	{ code: "th", label: "泰語" },
-	{ code: "id", label: "印尼文" },
+	{ code: "zh-TW", label: "繁體中文" },
+	{ code: "en", label: "English" },
+	{ code: "ja", label: "日本語" },
+	{ code: "ko", label: "한국어" },
+	{ code: "vi", label: "Tiếng Việt" },
+	{ code: "th", label: "ไทย" },
+	{ code: "id", label: "Bahasa Indonesia" },
 ];
 
 const TRANSLATE_PATH =
@@ -95,6 +96,8 @@ export const useTranslationStore = defineStore("translation", {
 		staticDictionary: {},
 		/** 後端回報的字典語系（供非同步翻譯完成後比對用） */
 		staticDictionaryLocale: null,
+		/** 字典載入／語系切換計數：讓依賴 t() / 字典的視圖穩定重算 */
+		dictionaryEpoch: 0,
 	}),
 	getters: {
 		isSourceLocale: (s) => s.locale === SOURCE_LOCALE,
@@ -119,10 +122,28 @@ export const useTranslationStore = defineStore("translation", {
 				}
 			} catch {
 				// 後端未上線或路由未開時不中斷流程
+			} finally {
+				this.dictionaryEpoch += 1;
 			}
 		},
 
-		/** 靜態 key -> 譯文；缺少時回傳 key */
+		/** 語系切換或取消批次時：釋放仍排隊中的 translate promise（先回原文，元件會因 locale／epoch 再跑翻譯） */
+		releasePendingTranslates() {
+			if (typeof this.flushTranslateBatch?.cancel === "function") {
+				this.flushTranslateBatch.cancel();
+			}
+			const resolversByText = new Map(this._batchResolvers);
+			this._batchResolvers.clear();
+			this._batchTexts.clear();
+			for (const [text, waiters] of resolversByText) {
+				waiters.forEach((resolve) => resolve(text));
+			}
+		},
+
+		/**
+		 * 靜態 key -> 譯文；缺少時回傳空字串（方便模板寫 `t('nav.x') || '繁中後備'`）。
+		 * 若缺少後備而需除錯，可檢查 staticDictionary[key]。
+		 */
 		t(key) {
 			if (typeof key !== "string" || !key) {
 				return "";
@@ -130,23 +151,27 @@ export const useTranslationStore = defineStore("translation", {
 			const s = this.staticDictionary[key];
 			return s !== undefined && s !== null && s !== ""
 				? s
-				: key;
+				: "";
 		},
 
-                setLocale(code) {
-                        if (!SUPPORTED_LOCALES.some((l) => l.code === code)) return;
-                        this.locale = code;
-                        localStorage.setItem(LOCALE_STORAGE_KEY, code);
-                        this.fetchStaticDictionary();
-                        
-                        // u81eau52d5u91cdu65b0u62c9u53d6u5167u5bb9uff0cu4e0du9700u8981u4f7fu7528u8005u624bu52d5 F5
-                        const contentStore = useContentStore();
-                        if (contentStore.currentDashboard.index) {
-                            contentStore.setCurrentDashboardAllContent();
-                        } else {
-                            contentStore.setDashboards(true);
-                        }
-                },
+		async setLocale(code) {
+			if (!SUPPORTED_LOCALES.some((l) => l.code === code)) return;
+			this.releasePendingTranslates();
+
+			const contentStore = useContentStore();
+
+			const changed = code !== this.locale;
+			this.locale = code;
+			localStorage.setItem(LOCALE_STORAGE_KEY, code);
+			await this.fetchStaticDictionary();
+
+			// setLocale → 自動重拉資料，不需使用者手動 F5
+			if (changed && contentStore.currentDashboard?.index) {
+				contentStore.setCurrentDashboardAllContent();
+			} else if (changed) {
+				contentStore.setDashboards(true);
+			}
+		},
 
 		cacheGet(text) {
 			const k = cacheKey(this.locale, text);
@@ -187,12 +212,14 @@ export const useTranslationStore = defineStore("translation", {
 			const resolversByText = new Map(store._batchResolvers);
 			store._batchResolvers.clear();
 
+			const targetLocale = store.locale;
+
 			try {
 				const { data } = await http.post(
 					TRANSLATE_PATH,
 					{
 						source_locale: SOURCE_LOCALE,
-						target_locale: store.locale,
+						target_locale: targetLocale,
 						texts,
 					},
 					{
@@ -203,6 +230,13 @@ export const useTranslationStore = defineStore("translation", {
 				const out = data?.translations;
 				if (!Array.isArray(out) || out.length !== texts.length) {
 					throw new Error("Invalid translation response shape");
+				}
+				if (store.locale !== targetLocale) {
+					for (const src of texts) {
+						const waiters = resolversByText.get(src) || [];
+						waiters.forEach((fn) => fn(src));
+					}
+					return;
 				}
 				texts.forEach((src, i) => {
 					const translated = out[i] ?? src;
@@ -216,6 +250,6 @@ export const useTranslationStore = defineStore("translation", {
 					waiters.forEach((fn) => fn(t));
 				}
 			}
-		}, 80),
+		}, 48),
 	},
 });

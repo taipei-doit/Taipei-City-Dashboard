@@ -6,9 +6,13 @@ import { useContentStore } from "../../../store/contentStore";
 import { useDialogStore } from "../../../store/dialogStore";
 import { useMapStore } from "../../../store/mapStore";
 import { useAuthStore } from "../../../store/authStore";
+import { useBackendTranslation } from "../../../composables/useBackendTranslation";
+import { useCityLabels } from "../../../composables/useCityLabels";
 
 import SideBarTab from "../miscellaneous/SideBarTab.vue";
 
+const { t } = useBackendTranslation();
+const { expandedLabel, collapsedLabel } = useCityLabels();
 const contentStore = useContentStore();
 const dialogStore = useDialogStore();
 const mapStore = useMapStore();
@@ -97,16 +101,24 @@ onMounted(() => {
     </div>
     <template v-if="authStore.token">
       <h1 @click="toggleCollapse(['favorites', 'personal'])">
-        {{ isExpanded ? `私人儀表板 ` : `私人` }}
+        {{
+          isExpanded
+            ? (t('sidebar.private_full') || '私人儀表板 ')
+            : (t('sidebar.private_short') || '私人')
+        }}
       </h1>
       <h2 @click="toggleCollapse('favorites')">
-        {{ isExpanded ? `我的最愛` : `最愛` }}
+        {{
+          isExpanded
+            ? (t('sidebar.favorites_full') || '我的最愛')
+            : (t('sidebar.favorites_short') || '最愛')
+        }}
       </h2>
       <transition name="collapse">
         <template v-if="!collapsedStates.favorites">
           <SideBarTab
             icon="favorite"
-            title="收藏組件"
+            :title="t('sidebar.saved_components') || '收藏組件'"
             :expanded="isExpanded"
             :index="contentStore.favorites?.index"
           />
@@ -114,13 +126,17 @@ onMounted(() => {
       </transition>
       <div class="sidebar-sub-add">
         <h2 @click="toggleCollapse('personal')">
-          {{ isExpanded ? `個人儀表板 ` : `個人` }}
+          {{
+            isExpanded
+              ? (t('sidebar.personal_full') || '個人儀表板 ')
+              : (t('sidebar.personal_short') || '個人')
+          }}
         </h2>
         <button
           v-if="isExpanded && !collapsedStates.personal"
           @click="handleOpenAddDashboard"
         >
-          <span>add_circle_outline</span>新增
+          <span>add_circle_outline</span>{{ t('sidebar.add') || '新增' }}
         </button>
       </div>
       <div
@@ -131,7 +147,13 @@ onMounted(() => {
         "
         class="sidebar-sub-no"
       >
-        <p>{{ isExpanded ? `尚無個人儀表板 ` : `尚無` }}</p>
+        <p>
+          {{
+            isExpanded
+              ? (t('sidebar.no_personal_full') || '尚無個人儀表板 ')
+              : (t('sidebar.no_personal_short') || '尚無')
+          }}
+        </p>
       </div>
       <transition name="collapse">
         <div
@@ -154,14 +176,18 @@ onMounted(() => {
       </transition>
     </template>
     <h1 @click="toggleCollapse(contentStore.cityManager.activeCities)">
-      {{ isExpanded ? `公共儀表板` : `公共` }}
+      {{
+        isExpanded
+          ? (t('sidebar.public_full') || '公共儀表板')
+          : (t('sidebar.public_short') || '公共')
+      }}
     </h1>
     <template
       v-for="city in contentStore.cityManager.activeCities"
       :key="city"
     >
       <h2 @click="toggleCollapse(city)">
-        {{ isExpanded ? `${contentStore.cityManager.getExpandedNameName(city)} ` : contentStore.cityManager.getCollapsedName(city) }}
+        {{ isExpanded ? `${expandedLabel(city)} ` : collapsedLabel(city) }}
       </h2>
       <transition name="collapse">
         <div

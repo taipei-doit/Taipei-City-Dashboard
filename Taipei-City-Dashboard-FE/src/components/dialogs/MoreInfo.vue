@@ -10,8 +10,11 @@ import DialogContainer from "./DialogContainer.vue";
 import HistoryChart from "../charts/HistoryChart.vue";
 import DownloadData from "./DownloadData.vue";
 import EmbedComponent from "./EmbedComponent.vue";
+import { useCityLabels } from "../../composables/useCityLabels";
+import BackendTranslatedText from "../utilities/i18n/BackendTranslatedText.vue";
 
 const dialogStore = useDialogStore();
+const { translatedTagList } = useCityLabels();
 const contentStore = useContentStore();
 const authStore = useAuthStore();
 
@@ -39,7 +42,9 @@ function getLinkTag(link, index) {
       <DashboardComponent
         :config="dialogStore.moreInfoContent"
         :active-city="dialogStore.moreInfoContent.city"
-        :city-tag="contentStore.cityManager.getTagList(dialogStore.moreInfoContent.city)"
+        :city-tag="
+          translatedTagList(dialogStore.moreInfoContent.city)
+        "
         mode="large"
       />
       <div class="moreinfo-info">
@@ -49,9 +54,17 @@ function getLinkTag(link, index) {
               ` ID: ${dialogStore.moreInfoContent.id}｜Index: ${dialogStore.moreInfoContent.index}｜City: ${dialogStore.moreInfoContent.city}`
             }}）
           </h3>
-          <p>{{ dialogStore.moreInfoContent.long_desc }}</p>
+          <BackendTranslatedText
+            v-if="dialogStore.moreInfoContent.long_desc"
+            tag="p"
+            :text="dialogStore.moreInfoContent.long_desc"
+          />
           <h3>範例情境</h3>
-          <p>{{ dialogStore.moreInfoContent.use_case }}</p>
+          <BackendTranslatedText
+            v-if="dialogStore.moreInfoContent.use_case"
+            tag="p"
+            :text="dialogStore.moreInfoContent.use_case"
+          />
           <div v-if="dialogStore.moreInfoContent.history_config">
             <h3>歷史軸</h3>
             <h4>*點擊並拉動以檢視細部區間資料</h4>

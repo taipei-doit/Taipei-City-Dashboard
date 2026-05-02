@@ -22,6 +22,12 @@ const themeStore = useThemeStore();
 const { locale, setLocale, supportedLocales, t } = useBackendTranslation();
 const { isFullscreen, toggle } = useFullscreen();
 
+const themeToggleTitle = computed(() =>
+	themeStore.isLight
+		? t("theme.to_dark") || "切換深色模式"
+		: t("theme.to_light") || "切換淺色模式"
+);
+
 const linkQuery = computed(() => {
 	const { query } = route;
 	const indexQuery = `?index=${query.index}`;
@@ -50,7 +56,7 @@ const isLocalhost = computed(() => {
         </div>
         <div>
           <h1>{{ VITE_APP_TITLE }}</h1>
-          <h2>Taipei City Dashboard</h2>
+          <h2>{{ t('nav.app_subtitle') || 'Taipei City Dashboard' }}</h2>
         </div>
       </div>
     </a>
@@ -68,34 +74,34 @@ const isLocalhost = computed(() => {
             authStore.currentPath.includes('component'),
         }"
       >
-        組件瀏覽平台
+        {{ t('nav.component_browse') || '組件瀏覽平台' }}
       </router-link>
       <router-link
         :to="`/dashboard${
           linkQuery.includes('undefined') ? '' : linkQuery
         }`"
       >
-        儀表板總覽
+        {{ t('nav.dashboard_overview') || '儀表板總覽' }}
       </router-link>
       <router-link
         :to="`/mapview${
           linkQuery.includes('undefined') ? '' : linkQuery
         }`"
       >
-        地圖交叉比對
+        {{ t('nav.map_compare') || '地圖交叉比對' }}
       </router-link>
     </div>
     <div class="navbar-user">
       <div
         class="navbar-locale"
-        title="語系 / Language"
+        :title="t('nav.locale_title') || '語系 / Language'"
       >
         <span class="navbar-locale-icon">translate</span>
-        <label class="navbar-locale-sr">語系</label>
+        <label class="navbar-locale-sr">{{ t('nav.locale_aria') || '語系' }}</label>
         <select
           class="navbar-locale-select"
           :value="locale"
-          aria-label="語系"
+          :aria-label="t('nav.locale_aria') || '語系'"
           @change="setLocale($event.target.value)"
         >
           <option
@@ -110,7 +116,7 @@ const isLocalhost = computed(() => {
       <button
         type="button"
         class="navbar-theme"
-        :title="themeStore.isLight ? '切換深色模式' : '切換淺色模式'"
+        :title="themeToggleTitle"
         @click="themeStore.toggle()"
       >
         <span>{{ themeStore.isLight ? "dark_mode" : "light_mode" }}</span>
@@ -183,7 +189,7 @@ const isLocalhost = computed(() => {
           </li>
           <li>
             <button @click="authStore.handleLogout">
-              登出
+              {{ t('auth.logout') || '登出' }}
             </button>
           </li>
         </ul>

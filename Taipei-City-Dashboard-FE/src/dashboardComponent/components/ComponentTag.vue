@@ -3,9 +3,18 @@
 <!-- This component has two modes "outline" and "fill" which is controlled via the prop "mode" -->
 
 <script setup>
+import BackendTranslatedText from "../../components/utilities/i18n/BackendTranslatedText.vue";
+
 defineProps({
 	icon: String,
 	text: String,
+	/** GET /translation/static 的鍵（與 dict-key 並用時優先） */
+	dictKey: { type: String, default: "" },
+	/** true 時以 LLM／快取動態翻譯 text（適用資料時間、組件來源中文等） */
+	translateText: {
+		type: Boolean,
+		default: false,
+	},
 	mode: {
 		type: String,
 		default: "outline",
@@ -22,7 +31,20 @@ defineProps({
     }"
   >
     <span v-if="icon">{{ icon }}</span>
-    <p>{{ text }}</p>
+    <BackendTranslatedText
+      v-if="dictKey"
+      tag="p"
+      :dict-key="dictKey"
+      :text="text"
+    />
+    <BackendTranslatedText
+      v-else-if="translateText && text !== undefined && text !== null"
+      tag="p"
+      :text="text"
+    />
+    <p v-else>
+      {{ text }}
+    </p>
   </div>
 </template>
 

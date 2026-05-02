@@ -1,48 +1,61 @@
 <!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
-<!-- 靜態 key：後端 GET /translation/static；動態：後端 LLM POST /translate -->
+<!-- 靜態 key（GET …/translation/static）優先；缺詞時改用 text 備援（zh-TW 直出，其它語言走 POST /translate） -->
 
 <script setup>
-import { computed, ref, watch } from "vue";
-import { useTranslationStore } from "../../../store/translationStore";
+import { ref, watch } from "vue";
+import {
+	useTranslationStore,
+	SOURCE_LOCALE,
+} from "../../../store/translationStore";
 
 const props = defineProps({
-	/** 後端字典 key，例如 nav.dashboard（與 GET /translation/static 的 strings 鍵一致） */
 	dictKey: { type: String, default: "" },
-	/** 原文（繁中）；語系非繁中時走 LLM 批次翻譯 */
 	text: { type: String, default: "" },
 	tag: { type: String, default: "span" },
 });
 
 const store = useTranslationStore();
-
-const displayFromDict = computed(() => {
-	if (!props.dictKey) {
-		return null;
-	}
-	return store.staticDictionary[props.dictKey] ?? props.dictKey;
-});
-
-const displayFromLlm = ref(props.text);
+const display = ref("");
 
 watch(
-	() => [store.locale, props.text, props.dictKey],
+	[
+		() => store.locale,
+		() => store.dictionaryEpoch,
+		() => props.text,
+		() => props.dictKey,
+		() => (props.dictKey ? store.staticDictionary[props.dictKey] : null),
+		() => store.staticDictionary,
+	],
 	async () => {
 		if (props.dictKey) {
+			const dv = store.staticDictionary[props.dictKey];
+			if (dv !== undefined && dv !== null && dv !== "") {
+				display.value = dv;
+				return;
+			}
+			const srcZh = props.text || "";
+			if (store.locale === SOURCE_LOCALE) {
+				display.value = srcZh || props.dictKey;
+				return;
+			}
+			if (srcZh) {
+				display.value = await store.translate(srcZh);
+			} else {
+				display.value = props.dictKey;
+			}
 			return;
 		}
-		displayFromLlm.value = props.text;
-		displayFromLlm.value = await store.translate(props.text);
+		display.value =
+			store.locale === SOURCE_LOCALE || !props.text
+				? props.text
+				: await store.translate(props.text);
 	},
 	{ immediate: true }
-);
-
-const display = computed(() =>
-	props.dictKey ? displayFromDict.value : displayFromLlm.value
 );
 </script>
 
 <template>
-  <component :is="tag">
+  <component :is="props.tag">
     {{ display }}
   </component>
 </template>

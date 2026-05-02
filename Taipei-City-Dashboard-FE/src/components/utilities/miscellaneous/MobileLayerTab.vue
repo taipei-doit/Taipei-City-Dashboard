@@ -2,19 +2,30 @@
 <!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 
 <script setup>
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { useMapStore } from "../../../store/mapStore";
 import { useContentStore } from "../../../store/contentStore";
+import { useCityLabels } from "../../../composables/useCityLabels";
 import ComponentTag from "../../../dashboardComponent/components/ComponentTag.vue";
+import BackendTranslatedText from "../i18n/BackendTranslatedText.vue";
 
 const contentStore = useContentStore();
 const mapStore = useMapStore();
+const { areaName } = useCityLabels();
 
 const props = defineProps(["content"]);
 
 const checked = ref(false);
 const toggleCount = ref(0);
 const cityTag = ref(contentStore.cityManager.getTagList(props.content.city).find((tag) => tag.value === props.content.city));
+
+const cityTagDisplay = computed(() => {
+	const tag = cityTag.value;
+	if (!tag?.value) {
+		return { name: "", value: props.content.city || "" };
+	}
+	return { ...tag, name: areaName(tag.value) };
+});
 
 // Communicates with the mapStore to open and close map layers on mobile
 function handleToggle() {
@@ -92,13 +103,21 @@ function handleMetroTaipeiToggle() {
     <div class="citytagwithname">
       <ComponentTag
         :icon="''"
-        :text="cityTag.name"
+        :dict-key="
+          cityTagDisplay.value ? `city.area.${cityTagDisplay.value}` : ''
+        "
+        :text="cityTagDisplay.name"
+        :translate-text="
+          !cityTagDisplay.value &&
+            !!(cityTagDisplay.name && cityTagDisplay.name.trim())
+        "
         :mode="'small'"
-        :class="`city-tag-item ${cityTag.value}`"
+        :class="`city-tag-item ${cityTagDisplay.value}`"
       />
-      <p>
-        {{ content.name }}
-      </p>
+      <BackendTranslatedText
+        tag="p"
+        :text="content.name"
+      />
     </div>
   </div>
 </template>

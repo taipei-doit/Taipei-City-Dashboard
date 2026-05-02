@@ -21,8 +21,11 @@ import HistoryChart from "../components/charts/HistoryChart.vue";
 import ReportIssue from "../components/dialogs/ReportIssue.vue";
 import DownloadData from "../components/dialogs/DownloadData.vue";
 import EmbedComponent from "../components/dialogs/EmbedComponent.vue";
+import { useCityLabels } from "../composables/useCityLabels";
+import BackendTranslatedText from "../components/utilities/i18n/BackendTranslatedText.vue";
 
 const contentStore = useContentStore();
+const { translatedTagList } = useCityLabels();
 const dialogStore = useDialogStore();
 const authStore = useAuthStore();
 
@@ -99,7 +102,7 @@ onMounted(() => {
             :config="item"
             :style="{ height: '350px', width: '400px' }"
             :active-city="item.city"
-            :city-tag="contentStore.cityManager.getTagList(item.city)"
+            :city-tag="translatedTagList(item.city)"
             :add-btn="
               !contentStore.editDashboard.components
                 .map((item) => item.id)
@@ -137,9 +140,17 @@ onMounted(() => {
               }}
             </p>
             <h3>組件說明</h3>
-            <p>{{ item.long_desc }}</p>
+            <BackendTranslatedText
+              v-if="item.long_desc"
+              tag="p"
+              :text="item.long_desc"
+            />
             <h3>範例情境</h3>
-            <p>{{ item.use_case }}</p>
+            <BackendTranslatedText
+              v-if="item.use_case"
+              tag="p"
+              :text="item.use_case"
+            />
           </div>
           <div class="componentinfoview-content-control">
             <button

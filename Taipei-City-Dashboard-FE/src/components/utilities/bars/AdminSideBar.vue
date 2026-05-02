@@ -6,7 +6,9 @@ import { useMapStore } from "../../../store/mapStore";
 import { useContentStore } from "../../../store/contentStore";
 
 import SideBarTab from "../miscellaneous/SideBarTab.vue";
+import { useCityLabels } from "../../../composables/useCityLabels";
 
+const { expandedLabel } = useCityLabels();
 const mapStore = useMapStore();
 const contentStore = useContentStore();
 
@@ -55,7 +57,7 @@ onMounted(() => {
     >
       <SideBarTab
         icon="dashboard"
-        :title="`${contentStore.cityManager.getExpandedNameName(city)}`"
+        :title="`${expandedLabel(city)}`"
         index="dashboard"
         :expanded="isExpanded"
         :city="city"
