@@ -103,6 +103,11 @@ const displaySeries = computed(() => {
 });
 
 const sum = computed(() => {
+	if (props.chart_config.categories) {
+		let total = 0;
+		props.series.forEach((s) => s.data.forEach((val) => (total += val)));
+		return Math.round(total * 100) / 100;
+	}
 	const data = props.series?.[0]?.data;
 	if (!data?.length) return 0;
 	let total = 0;
@@ -170,6 +175,8 @@ function handleDataSelection(_e, _chartContext, config) {
 
 <style scoped lang="scss">
 .treemapchart {
+	min-height: 100%;
+
 	&-title {
 		display: flex;
 		justify-content: center;

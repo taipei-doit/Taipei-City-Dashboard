@@ -77,7 +77,7 @@ INSERT INTO public.component_charts ("index", color, types, unit)
 VALUES (
     'cas_product',
     ARRAY['#3498DB','#E67E22','#2ECC71','#9B59B6','#E74C3C','#1ABC9C','#F39C12','#34495E'],
-    ARRAY['TreemapChart'],
+    ARRAY['TreemapChart','BarChart'],
     '項'
 )
 ON CONFLICT ("index") DO UPDATE
