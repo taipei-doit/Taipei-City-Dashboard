@@ -42,6 +42,7 @@ func ConfigureRoutes() {
 	configureChatLogRoutes()
 	configureAIRoutes()
 	configureMrtA11yRoutes()
+	configureEcoDietRoutes()
 }
 
 func configureAuthRoutes() {
@@ -220,6 +221,31 @@ func configureMrtA11yRoutes() {
 		mrtRoutes.GET("/station-overview", controllers.GetMrtStationOverview)
 		mrtRoutes.POST("/ai-summary", controllers.GetMrtA11yAiSummary)
 		mrtRoutes.POST("/nearby-chat", controllers.PostMrtNearbyChat)
+	}
+}
+
+// configureEcoDietRoutes wires up the 市民綠色飲食行為流程儀表板 endpoints.
+// Contract: docs/eco_diet_openapi.yaml
+func configureEcoDietRoutes() {
+	ecoDiet := RouterGroup.Group("/eco_diet")
+	ecoDiet.Use(middleware.LimitAPIRequests(global.ComponentLimitAPIRequestsTimes, global.LimitRequestsDuration))
+	ecoDiet.Use(middleware.LimitTotalRequests(global.ComponentLimitTotalRequestsTimes, global.LimitRequestsDuration))
+	{
+		// C1a / C1b / C2 / C3 — 環保餐廳
+		ecoDiet.GET("/restaurant/points", controllers.GetEcoRestaurantPoints)
+		ecoDiet.GET("/restaurant/density-by-district", controllers.GetEcoRestaurantDensityByDistrict)
+		ecoDiet.GET("/restaurant/count-by-city", controllers.GetEcoRestaurantCountByCity)
+		ecoDiet.GET("/restaurant/list", controllers.GetEcoRestaurantList)
+
+		// C4 — 綠色商店
+		ecoDiet.GET("/green_store/points", controllers.GetGreenStorePoints)
+
+		// C5 — 廢棄物年趨勢
+		ecoDiet.GET("/waste/yearly", controllers.GetWasteYearly)
+
+		// C7a / C7b — 實物銀行
+		ecoDiet.GET("/food_bank/points", controllers.GetFoodBankPoints)
+		ecoDiet.GET("/food_bank/nearby", controllers.GetFoodBankNearby)
 	}
 }
 
