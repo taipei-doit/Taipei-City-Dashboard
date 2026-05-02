@@ -388,7 +388,12 @@ function recomputeC5() {
 function recomputeC5b() {
 	const city = activeCityMap.eco_diet_waste_carbon_footprint_yearly;
 	const allSeries = rawData.value.wasteCarbonSeries;
-	const categories = rawData.value.wasteCarbonCategories;
+	const rawCategories = rawData.value.wasteCarbonCategories;
+	// BE 來源年份可能是西元（"2018"）也可能是民國（"100"）；< 1911 視為民國 + 1911
+	const categories = rawCategories.map((c) => {
+		const n = parseInt(c, 10);
+		return Number.isFinite(n) && n < 1911 ? String(n + 1911) : String(c);
+	});
 	const filtered = allSeries.filter((s) => matchSeriesByCity(s.name, city));
 	// 依城市過濾後重排顏色，避免單城時錯位（如僅顯示新北仍套到臺北綠）
 	const colors = filtered.map((s) =>
@@ -402,24 +407,26 @@ function recomputeC5b() {
 			x: `${categories[i]}-01-01T00:00:00+08:00`,
 		})),
 	}));
-	// ColumnChart 看 stacked 雙北加總，需要 categories 為年份字串
+	// ColumnChart 用：x 軸顯示年份字串
 	c5bComponent.value.chart_config.categories = categories;
-	// 依 city 動態決定 yAxis 範圍 ——
-	//   單城：把軸卡到該城資料 min/max ±2k，把 1-2% 起伏放最大
-	//   雙城：保留 380k–510k 全域；中段 broken-axis 視覺需要真畫 SVG 波浪、ApexCharts 沒原生支援，
-	//         先不做，避免用文字假裝。要看單城起伏請切下拉選擇臺北或新北。
-	if (city === "taipei") {
+
+	// 動態 y 軸範圍：依 filtered series 實際 min/max 加 5% padding，再 round 到鄰近 5k／10k
+	// 避免寫死範圍導致 prod 資料（單城跨度 12 萬、雙城跨度 45 萬）出框。
+	const allValues = filtered.flatMap((s) => s.data).filter((v) => Number.isFinite(v));
+	if (allValues.length > 0) {
+		const dataMin = Math.min(...allValues);
+		const dataMax = Math.max(...allValues);
+		const span = Math.max(dataMax - dataMin, 1);
+		const pad = span * 0.1; // 上下各留 10% 空間，避免線/柱貼到軸線
+		// round 到「5k / 10k / 50k」級距，依 span 大小選一個讓 axis 看起來整齊
+		const step = span < 30000 ? 5000 : span < 200000 ? 10000 : 50000;
+		const yMin = Math.max(0, Math.floor((dataMin - pad) / step) * step);
+		const yMax = Math.ceil((dataMax + pad) / step) * step;
 		c5bComponent.value.chart_config.yAxis = {
-			min: 384000, max: 394000, forceNiceScale: true,
-		};
-	} else if (city === "newtaipei") {
-		c5bComponent.value.chart_config.yAxis = {
-			min: 491000, max: 501000, forceNiceScale: true,
+			min: yMin, max: yMax, forceNiceScale: true,
 		};
 	} else {
-		c5bComponent.value.chart_config.yAxis = {
-			min: 380000, max: 510000, forceNiceScale: true,
-		};
+		c5bComponent.value.chart_config.yAxis = { forceNiceScale: true };
 	}
 	c5bComponent.value.chart_config.yAxisAnnotations = [];
 }
