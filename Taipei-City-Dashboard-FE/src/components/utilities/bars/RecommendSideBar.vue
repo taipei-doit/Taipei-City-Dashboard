@@ -349,7 +349,7 @@ async function openStorylineRecommendedComponent(comp) {
             {{ t('recommend.subtitle_insight') || 'AI 數據洞察' }}
           </h2>
           <div class="recommendsidebar-storyline">
-            <BackendTranslatedText :text="aiInsightResult.storyline || ''" />
+            {{ aiInsightResult.storyline }}
           </div>
         </div>
       </div>

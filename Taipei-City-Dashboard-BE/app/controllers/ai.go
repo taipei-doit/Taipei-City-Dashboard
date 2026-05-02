@@ -381,6 +381,14 @@ func GetComponemtByNews(c *gin.Context){
 		fmt.Printf("[DEBUG] HyDE Hypothetical Doc: %s\n", queryText)
 	}
 
+	langIface, _ := c.Get("lang")
+	targetLang := "zh-TW"
+	if langIface != nil {
+		if s, ok := langIface.(string); ok && strings.TrimSpace(s) != "" {
+			targetLang = s
+		}
+	}
+
 	// 3. 向量檢索與詳細資訊抓取 (門檻 0.15)
 	searchRes, _ := models.GetComponentByQueryVector(queryText, 3, 0.15)
 	detailedComponents := make([]models.CityComponent, 0)
@@ -389,9 +397,6 @@ func GetComponemtByNews(c *gin.Context){
 		comps, err := models.GetComponentByIDAll(int(res.ID))
 		if err == nil && len(comps) > 0 {
 			comp := comps[0]
-			lang, _ := c.Get("lang")
-			targetLang := "zh-TW"
-			if lang != nil { targetLang = lang.(string) }
 			if global.GlobalTranslator != nil && targetLang != "zh-TW" {
 				comp.Name = global.GlobalTranslator.Translate(ctx, comp.Name, targetLang, "component_name")
 				comp.ShortDesc = global.GlobalTranslator.Translate(ctx, comp.ShortDesc, targetLang, "short_desc")
@@ -425,6 +430,9 @@ func GetComponemtByNews(c *gin.Context){
 	storyline := "針對此新聞，系統目前未發現直接關聯的數據。"
 	if err == nil {
 		storyline = storyLog.Answer
+	}
+	if global.GlobalTranslator != nil && targetLang != "zh-TW" && strings.TrimSpace(storyline) != "" {
+		storyline = global.GlobalTranslator.Translate(ctx, storyline, targetLang, "news_insight_storyline")
 	}
 
 	c.JSON(http.StatusOK, gin.H{
