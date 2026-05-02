@@ -159,6 +159,7 @@ export const TaipeiVillage = {
 	},
 };
 
+// source-layer id is resolved at runtime from TileJSON (mapStore); value below is legacy fallback only
 export const TaipeiBuilding = {
 	id: "taipei_building_3d",
 	source: "taipei_building_3d_source",

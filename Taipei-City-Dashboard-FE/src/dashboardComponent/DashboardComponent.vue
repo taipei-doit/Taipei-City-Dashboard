@@ -88,6 +88,7 @@ const emits = defineEmits([
 	"filterByLayer",
 	"clearByParamFilter",
 	"clearByLayerFilter",
+	"toggleLayer",
 	"fly",
 	"changeCity"
 ]);
@@ -444,6 +445,9 @@ function returnChartComponent(name, svg) {
         "
         @clear-by-layer-filter="
           (map_config) => $emit('clearByLayerFilter', map_config)
+        "
+        @toggle-layer="
+          (map_config, name, visible) => $emit('toggleLayer', map_config, name, visible)
         "
         @fly="(location) => $emit('fly', location)"
       />
