@@ -52,6 +52,90 @@ func TestGetEcoRestaurantPoints_Returns13RowsWithGeoAndActions(t *testing.T) {
 	}
 }
 
+// TestGetEcoRestaurantPoints_NullGeoIncludedAsZeroSentinel covers MVP mode where
+// DE has not yet geocoded (lng/lat = NULL). BE must include the row anyway with
+// lng=0, lat=0 acting as a sentinel; FE detects (0,0) and skips map marker.
+func TestGetEcoRestaurantPoints_NullGeoIncludedAsZeroSentinel(t *testing.T) {
+	initTestDB(t)
+
+	const fixtureSeqNo = "__null_geo_test__"
+	if err := DBDashboard.Exec(`
+		INSERT INTO eco_restaurant
+		  (source_dataset, seq_no, name, address, city, district, tel,
+		   env_actions, lng, lat, data_time)
+		VALUES
+		  ('tpe_00002761', ?, 'NULL_GEO_FIXTURE', '臺北市測試區測試路2號',
+		   '臺北市', '測試區', NULL, ARRAY[]::TEXT[], NULL, NULL, '2026-05-01 10:00:00+08')
+	`, fixtureSeqNo).Error; err != nil {
+		t.Fatalf("insert fixture: %v", err)
+	}
+	t.Cleanup(func() {
+		_ = DBDashboard.Exec(`DELETE FROM eco_restaurant WHERE seq_no = ?`, fixtureSeqNo).Error
+	})
+
+	rows, err := GetEcoRestaurantPoints()
+	if err != nil {
+		t.Fatalf("GetEcoRestaurantPoints() error = %v", err)
+	}
+	var found *EcoRestaurantPoint
+	for i := range rows {
+		if rows[i].SeqNo == fixtureSeqNo {
+			found = &rows[i]
+			break
+		}
+	}
+	if found == nil {
+		t.Fatalf("fixture row with seq_no=%q not returned (filter regression)", fixtureSeqNo)
+	}
+	if found.Lng != 0 || found.Lat != 0 {
+		t.Errorf("Lng/Lat = (%v,%v), want (0,0) sentinel for NULL", found.Lng, found.Lat)
+	}
+}
+
+// TestGetEcoRestaurantPoints_NullEnvActionsReturnsEmptyArray covers DE plan §5.2 edge case:
+// schema permits env_actions NULL, but BE must marshal as `[]` for FE compatibility.
+// Inserts a fixture row with NULL env_actions, verifies returned struct has non-nil
+// EnvActions of length 0 (so json.Marshal produces `[]`, not `null`).
+func TestGetEcoRestaurantPoints_NullEnvActionsReturnsEmptyArray(t *testing.T) {
+	initTestDB(t)
+
+	const fixtureSeqNo = "__null_env_test__"
+	if err := DBDashboard.Exec(`
+		INSERT INTO eco_restaurant
+		  (source_dataset, seq_no, name, address, city, district, tel,
+		   env_actions, lng, lat, data_time)
+		VALUES
+		  ('tpe_00002761', ?, 'NULL_ENV_ACTIONS_FIXTURE', '臺北市測試區測試路1號',
+		   '臺北市', '測試區', NULL, NULL, 121.5, 25.05, '2026-05-01 10:00:00+08')
+	`, fixtureSeqNo).Error; err != nil {
+		t.Fatalf("insert fixture: %v", err)
+	}
+	t.Cleanup(func() {
+		_ = DBDashboard.Exec(`DELETE FROM eco_restaurant WHERE seq_no = ?`, fixtureSeqNo).Error
+	})
+
+	rows, err := GetEcoRestaurantPoints()
+	if err != nil {
+		t.Fatalf("GetEcoRestaurantPoints() error = %v", err)
+	}
+	var found *EcoRestaurantPoint
+	for i := range rows {
+		if rows[i].SeqNo == fixtureSeqNo {
+			found = &rows[i]
+			break
+		}
+	}
+	if found == nil {
+		t.Fatalf("fixture row with seq_no=%q not returned", fixtureSeqNo)
+	}
+	if found.EnvActions == nil {
+		t.Errorf("EnvActions = nil, want non-nil empty slice (so JSON marshals as `[]`)")
+	}
+	if len(found.EnvActions) != 0 {
+		t.Errorf("EnvActions len = %d, want 0", len(found.EnvActions))
+	}
+}
+
 // ─── C1b: GET /eco_diet/restaurant/density-by-district ──────────────
 
 func TestGetEcoRestaurantDensityByDistrict_NoFilterCoversBothCities(t *testing.T) {

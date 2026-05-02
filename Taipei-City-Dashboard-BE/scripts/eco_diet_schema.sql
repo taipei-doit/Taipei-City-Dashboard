@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS eco_restaurant (
     city            VARCHAR(10)              NOT NULL,
     district        VARCHAR(20),
     tel             TEXT,
-    env_actions     TEXT[]                   NOT NULL DEFAULT '{}',
+    env_actions     TEXT[],                  -- DE plan §5.2: nullable; ETL §5.3 一律 populate ([] for ntpe)
     lng             DOUBLE PRECISION,
     lat             DOUBLE PRECISION,
     data_time       TIMESTAMP WITH TIME ZONE NOT NULL,

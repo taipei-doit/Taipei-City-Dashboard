@@ -77,18 +77,20 @@ type ecoDietWasteRow struct {
 
 // ─── C1a: GET /eco_diet/restaurant/points ───────────────────────────
 
+// GetEcoRestaurantPoints 回傳全部餐廳。**MVP 模式**：DE geocode 尚未補齊時，
+// lng/lat NULL 會 scan 成 0，視為 sentinel 值「未地理編碼」；FE 自行處理（不畫 marker）。
 func GetEcoRestaurantPoints() ([]EcoRestaurantPoint, error) {
 	var rows []EcoRestaurantPoint
 	err := DBDashboard.Raw(`
 		SELECT source_dataset, seq_no, name, address, city, district, tel,
 		       env_actions, lng, lat
 		FROM eco_restaurant
-		WHERE lng IS NOT NULL AND lat IS NOT NULL
 		ORDER BY city, district, name
 	`).Scan(&rows).Error
 	if err != nil {
 		return nil, err
 	}
+	normalizeEnvActions(rows)
 	return rows, nil
 }
 
@@ -148,8 +150,7 @@ func GetEcoRestaurantList(district, action, city string) ([]EcoRestaurantPoint, 
 		SELECT source_dataset, seq_no, name, address, city, district, tel,
 		       env_actions, lng, lat
 		FROM eco_restaurant
-		WHERE lng IS NOT NULL AND lat IS NOT NULL
-		  AND (NULLIF(?, '') IS NULL OR district = ?)
+		WHERE (NULLIF(?, '') IS NULL OR district = ?)
 		  AND (NULLIF(?, '') IS NULL OR ? = ANY(env_actions))
 		  AND (NULLIF(?, '') IS NULL OR city = ?)
 		ORDER BY city, district, name
@@ -157,6 +158,7 @@ func GetEcoRestaurantList(district, action, city string) ([]EcoRestaurantPoint, 
 	if err != nil {
 		return nil, err
 	}
+	normalizeEnvActions(rows)
 	return rows, nil
 }
 
@@ -169,8 +171,7 @@ func GetGreenStorePoints(storeType, city string) ([]GreenStorePoint, error) {
 		SELECT source_dataset, store_code, name, address, city, district, tel,
 		       store_type, lng, lat
 		FROM green_store
-		WHERE lng IS NOT NULL AND lat IS NOT NULL
-		  AND (NULLIF(?, '') IS NULL OR store_type = ?)
+		WHERE (NULLIF(?, '') IS NULL OR store_type = ?)
 		  AND (NULLIF(?, '') IS NULL OR city = ?)
 		ORDER BY city, district, name
 	`, storeType, storeType, city, city).Scan(&rows).Error
@@ -224,7 +225,6 @@ func GetFoodBankPoints() ([]FoodBankPoint, error) {
 		       city, district, district_code, postal_code,
 		       address, tel, lng, lat
 		FROM food_bank
-		WHERE lng IS NOT NULL AND lat IS NOT NULL
 		ORDER BY city, district, name
 	`).Scan(&rows).Error
 	if err != nil {
@@ -275,6 +275,17 @@ func haversineMetersFoodBank(lat1, lng1, lat2, lng2 float64) float64 {
 }
 
 // ─── helpers ────────────────────────────────────────────────────────
+
+// normalizeEnvActions 把 nil pq.StringArray 改成空陣列，確保 JSON 輸出 `[]` 而不是 `null`。
+// DE plan §5.2 schema 允許 env_actions 為 NULL（無 NOT NULL 約束）；雖然 DE plan §5.3 ETL
+// 實務上一律 populate（新北側填 []），但 BE 自己吸收這個邊緣情況，不要求 DE 改 schema。
+func normalizeEnvActions(rows []EcoRestaurantPoint) {
+	for i := range rows {
+		if rows[i].EnvActions == nil {
+			rows[i].EnvActions = pq.StringArray{}
+		}
+	}
+}
 
 // groupEcoDietWasteRows 將攤平的 (year, series_name, value) 列 reshape 成
 // ThreeDimensional 結構：每個 unique y_axis 一條 series、x_axis 收集成 categories。
