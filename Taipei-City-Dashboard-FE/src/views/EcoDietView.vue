@@ -1401,30 +1401,19 @@ function tagListOf(component) {
       <h2 v-if="noMapComponents.length > 0">
         無空間資料組件
       </h2>
-      <div
+      <DashboardComponent
         v-for="item in noMapComponents"
         :key="`nomap-${item.index}-${activeCityMap[item.index]}`"
-        class="ecodiet-card-wrapper"
-      >
-        <DashboardComponent
-          :config="item"
-          mode="map"
-          :info-btn="true"
-          :active-city="activeCityMap[item.index]"
-          :select-btn="true"
-          :select-btn-list="CITY_SELECT_LIST"
-          :city-tag="tagListOf(item)"
-          @info="handleMoreInfo"
-          @change-city="(city) => handleChangeCity(item, city)"
-        />
-        <button
-          class="ecodiet-ai-btn"
-          title="AI 分析"
-          @click="openAiModal($event, item.id, item.name)"
-        >
-          <span class="material-icons">smart_toy</span>
-        </button>
-      </div>
+        :config="item"
+        mode="map"
+        :info-btn="true"
+        :active-city="activeCityMap[item.index]"
+        :select-btn="true"
+        :select-btn-list="CITY_SELECT_LIST"
+        :city-tag="tagListOf(item)"
+        @info="handleMoreInfo"
+        @change-city="(city) => handleChangeCity(item, city)"
+      />
     </div>
     <MapContainer />
     <!-- 步行 icon 按鈕 -->
