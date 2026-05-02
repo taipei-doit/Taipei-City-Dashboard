@@ -1,0 +1,40 @@
+root = "."
+tmp_dir = "/tmp/air"
+
+[build]
+cmd = "go build -o /tmp/air/dashboard-be ."
+entrypoint = "/tmp/air/dashboard-be"
+delay = 1000
+exclude_dir = [".git", "tmp", "vendor"]
+exclude_file = []
+exclude_regex = ["_test.go"]
+exclude_unchanged = false
+follow_symlink = false
+include_dir = []
+include_ext = ["go"]
+kill_delay = "0s"
+log = "/tmp/air/air-build.log"
+poll = false
+poll_interval = 0
+rerun = false
+rerun_delay = 500
+send_interrupt = true
+stop_on_error = true
+
+[color]
+app = ""
+build = "yellow"
+main = "magenta"
+runner = "green"
+watcher = "cyan"
+
+[log]
+main_only = false
+time = false
+
+[misc]
+clean_on_exit = true
+
+[screen]
+clear_on_rebuild = false
+keep_scroll = true

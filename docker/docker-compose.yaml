@@ -29,10 +29,11 @@ services:
       VITE_TAIPEIPASS_SCOPE: ${ISSO_CLIENT_SCOPE}
     volumes:
       - ../Taipei-City-Dashboard-FE:/opt/Taipei-City-Dashboard-FE
+      - dashboard-fe-node-modules:/opt/Taipei-City-Dashboard-FE/node_modules
     ports:
       - "8080:80"
     working_dir: /opt/Taipei-City-Dashboard-FE
-    command: ["npm", "run", "dev"]
+    command: ["sh", "-c", "npm install && npm run dev"]
 
   dashboard-be:
     # image: golang:${GOLANG_IMAGE_TAG:-latest} #Go Lang Image Without Model and onnxruntime
@@ -80,7 +81,7 @@ services:
     working_dir: /opt/Taipei-City-Dashboard-BE
     ports:
       - "8088:${PORT:-8080}"
-    command: ["go", "run", "main.go"]
+    command: ["/go/bin/air", "-c", ".air.toml"]
 
   vector-db-upgrade:
     profiles:
@@ -105,6 +106,9 @@ networks:
   default:
     name: br_dashboard
     external: true
+
+volumes:
+  dashboard-fe-node-modules:
 ###########################################
 ## Create docker network command sample: ##
 ## ------------------------------------- ##################################################################

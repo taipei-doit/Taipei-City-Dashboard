@@ -111,6 +111,11 @@ RUN set -eux; \
 
 ENV LD_LIBRARY_PATH=/usr/lib
 ENV GOCACHE=/tmp/go-build-cache
+ENV GOMODCACHE=/tmp/go-mod-cache
+
+RUN go install github.com/air-verse/air@latest
+RUN mkdir -p /tmp/go-build-cache /tmp/go-mod-cache /tmp/air && \
+    chmod -R 0777 /tmp/go-build-cache /tmp/go-mod-cache /tmp/air
 
 COPY --from=model_export /out/onnx-e5 /opt/lm_model/onnx-e5
 
