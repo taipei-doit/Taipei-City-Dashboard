@@ -15,6 +15,7 @@ export const useChatStore = defineStore('chat', () => {
   	];
 
 	const recommendComponents = ref(null)
+	const isAiLoading = ref(false)
 
   	// 從 sessionStorage 讀取
   	const savedChatData = JSON.parse(sessionStorage.getItem('chatData')) || [];
@@ -33,13 +34,21 @@ export const useChatStore = defineStore('chat', () => {
     	{ deep: true }
   	);
 
+	const appendChatData = (newChatData) => {
+		chatData.value.push({
+			id: chatData.value.length + 1,
+			isDefault: false,
+			...newChatData,
+		});
+	};
+
   	const addChatData = (newChatData) => {
-    	chatData.value.push({ id: chatData.value.length + 1, isDefault: false, ...newChatData });
+		appendChatData(newChatData);
   	};
 
   	const addQueryData = async (newChatData) => {
 
-    	chatData.value.push({ id: chatData.value.length + 1, isDefault: false, ...newChatData });
+		appendChatData(newChatData);
 
 		recommendComponents.value = [];
 		let topK = null;
@@ -91,38 +100,103 @@ export const useChatStore = defineStore('chat', () => {
 
 		if (recommendComponents.value && recommendComponents.value?.length > 0) {
 			topK = [...recommendComponents.value].sort((a, b) => b.score - a.score);
-			chatData.value.push({ id: chatData.value.length + 1, role: 'bot', isDefault: false, button: [{ id:1, text:'建立儀表板' }], content: `您好 😊 \n 以下是根據您的問題，自動為您推薦的「組件清單」。您可以將這些組件整批加入「個人儀表板」，方便日後快速查看與使用。\n`, relations: topK });
-			chatData.value.push({ id: chatData.value.length + 1, role: 'bot', isDefault: false, content: `若您有任何新的查詢或想深入探索的內容，都可以隨時在對話框告訴我～\n 我很樂意再協助您 💬✨` });
+			appendChatData({
+				role: 'bot',
+				button: [{ id: 1, text: '建立儀表板' }],
+				content: `您好 😊 \n 以下是根據您的問題，自動為您推薦的「組件清單」。您可以將這些組件整批加入「個人儀表板」，方便日後快速查看與使用。\n`,
+				relations: topK,
+			});
+			appendChatData({
+				role: 'bot',
+				content: `若您有任何新的查詢或想深入探索的內容，都可以隨時在對話框告訴我～\n 我很樂意再協助您 💬✨`,
+			});
 		} else {
-			chatData.value.push({ id: chatData.value.length + 1, role: 'bot', isDefault: false, content: `很抱歉，您提供的描述沒有相似組件，請繼續提問 ! ` });
+			appendChatData({
+				role: 'bot',
+				content: `很抱歉，您提供的描述沒有相似組件，請繼續提問 ! `,
+			});
 		}
 
 		// 分析結束後紀錄問答log
 		saveChatLog(newChatData.content, recommendComponents.value);
   	};
 
-	const saveChatLog = async(question, answer) => {
-		try {
-        	const formData = new FormData();
-        	const d = new Date();
-        	const todayId =
-          		d.getFullYear() +
-          		String(d.getMonth() + 1).padStart(2, "0") +
-          		String(d.getDate()).padStart(2, "0");
-
-        	formData.append("session", "session_" + todayId);
-        	formData.append("question", question);
-        	formData.append("answer", JSON.stringify(answer));
-
-        	await http.post("/chatlog/", formData, {
-          		headers: {
-            		"Content-Type": "multipart/form-data",
-          		},
-        	});
-      	} catch (error) {
-        	console.error("saveChatLog error:", error);
-      	}
+	const getDailySessionId = () => {
+		const d = new Date();
+		return (
+			"session_" +
+			d.getFullYear() +
+			String(d.getMonth() + 1).padStart(2, "0") +
+			String(d.getDate()).padStart(2, "0")
+		);
 	};
 
-	return { chatData, addChatData, addQueryData, saveChatLog }
+	const addAiChatData = async (newChatData) => {
+		if (isAiLoading.value) return;
+
+		appendChatData(newChatData);
+
+		isAiLoading.value = true;
+
+		try {
+			const response = await http.post("/ai/chat/twai", {
+				session: getDailySessionId(),
+				stream: false,
+				messages: [
+					{
+						role: "user",
+						content: newChatData.content,
+					},
+				],
+			});
+
+			const answer = response.data?.data?.content;
+			appendChatData({
+				role: "bot",
+				content: answer || "AI 目前沒有回覆內容，請稍後再試。",
+			});
+		} catch (error) {
+			console.error("AIChatError :", error);
+			appendChatData({
+				role: "bot",
+				content: getAiErrorMessage(error),
+			});
+		} finally {
+			isAiLoading.value = false;
+		}
+	};
+
+	const getAiErrorMessage = (error) => {
+		const status = error.response?.status;
+		if (status === 401 || status === 403) {
+			return "請先登入會員以使用 AI 對話功能。";
+		}
+		return "AI 對話服務暫時無法回應，請稍後再試。";
+	};
+
+	const saveChatLog = async(question, answer) => {
+		try {
+			const formData = new FormData();
+			formData.append("session", getDailySessionId());
+			formData.append("question", question);
+			formData.append("answer", JSON.stringify(answer));
+
+			await http.post("/chatlog/", formData, {
+				headers: {
+					"Content-Type": "multipart/form-data",
+				},
+			});
+		} catch (error) {
+			console.error("saveChatLog error:", error);
+		}
+	};
+
+	return {
+		chatData,
+		isAiLoading,
+		addChatData,
+		addQueryData,
+		addAiChatData,
+		saveChatLog,
+	}
 })

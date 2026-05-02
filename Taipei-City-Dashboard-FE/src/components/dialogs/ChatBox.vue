@@ -13,9 +13,9 @@ import http from "../../router/axios";
 const chatStore = useChatStore();
 const contentStore = useContentStore();
 const authStore = useAuthStore();
-const { addChatData, addQueryData, saveChatLog } = chatStore;
+const { addChatData, addQueryData, addAiChatData, saveChatLog } = chatStore;
 const { createDashboard } = contentStore;
-const { chatData } = storeToRefs(chatStore);
+const { chatData, isAiLoading } = storeToRefs(chatStore);
 const { editDashboard } = storeToRefs(contentStore);
 const { user } = storeToRefs(authStore);
 
@@ -23,6 +23,11 @@ const userMessage = ref("");
 const chatAreaRef = ref(null);
 const isStickyOpen = ref(false);
 const dashboardCreationLoading = ref(false);
+const chatMode = ref("recommend");
+const chatModes = [
+	{ value: "recommend", label: "組件推薦" },
+	{ value: "ai", label: "AI 對話" },
+];
 
 const qaBtnHandler = async (text, relations) => {
 	if (text === "建立儀表板") {
@@ -63,11 +68,20 @@ const qaBtnHandler = async (text, relations) => {
 };
 
 const sendBtnHandler = (text) => {
-	if (!text.trim()) return;
-	addQueryData({
+	const trimmedText = text.trim();
+	if (!trimmedText || isAiLoading.value) return;
+
+	const message = {
 		role: "user",
-		content: text,
-	});
+		content: trimmedText,
+	};
+
+	if (chatMode.value === "ai") {
+		addAiChatData(message);
+	} else {
+		addQueryData(message);
+	}
+
 	userMessage.value = "";
 };
 
@@ -114,8 +128,7 @@ watch(
           v-show="isStickyOpen"
           class="sticky-body"
         >
-          <span>小幫手會依據您輸入的內容，自動檢索本站臺的組件資料庫，並回傳相似度較高的組件清單，協助您快速找到符合需求的元件或資訊。<br><br>
-            目前小幫手僅提供組件比對與分析服務，不支援一般聊天功能。如造成不便，敬請見諒！</span>
+          <span>小幫手提供「組件推薦」與「AI 對話」兩種模式。「組件推薦」會依據您輸入的內容，自動檢索本站臺的組件資料庫，並回傳相似度較高的組件清單；「AI 對話」可協助回答一般問題。</span>
         </div>
       </div>
       <div
@@ -208,14 +221,30 @@ watch(
     </div>
 
     <!-- 輸入區 -->
+    <div class="mode-toggle">
+      <button
+        v-for="mode in chatModes"
+        :key="mode.value"
+        :aria-pressed="chatMode === mode.value"
+        :class="{ active: chatMode === mode.value }"
+        type="button"
+        @click="chatMode = mode.value"
+      >
+        {{ mode.label }}
+      </button>
+    </div>
     <div class="input-area">
       <input
         v-model="userMessage"
         type="text"
-        placeholder="輸入訊息..."
+        :placeholder="isAiLoading ? 'AI 回覆中...' : '輸入訊息...'"
+        :disabled="isAiLoading"
         @keyup.enter="sendBtnHandler(userMessage)"
       >
-      <button @click="sendBtnHandler(userMessage)">
+      <button
+        :disabled="isAiLoading"
+        @click="sendBtnHandler(userMessage)"
+      >
         <SendIcon />
       </button>
     </div>
@@ -451,6 +480,11 @@ $radius-20: 20px;
 			border: none;
 			outline: none;
 			color: black;
+
+			&:disabled {
+				cursor: not-allowed;
+				opacity: 0.7;
+			}
 		}
 
 		button {
@@ -464,6 +498,36 @@ $radius-20: 20px;
 
 			&:hover {
 				filter: brightness(0.5);
+			}
+
+			&:disabled {
+				cursor: not-allowed;
+				opacity: 0.5;
+				filter: none;
+			}
+		}
+	}
+
+	.mode-toggle {
+		display: flex;
+		gap: 0.5rem;
+		padding: 1rem 1.125rem 0;
+		background: $panel-bg;
+
+		button {
+			flex: 1;
+			height: 32px;
+			border: 1px solid $border-color;
+			border-radius: $radius-10;
+			background: $card-bg;
+			color: $white;
+			cursor: pointer;
+			font-size: 14px;
+
+			&.active {
+				background: $white;
+				color: $bg-dark;
+				font-weight: 700;
 			}
 		}
 	}
