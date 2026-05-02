@@ -35,10 +35,11 @@ const CITY_LABEL = {
 	newtaipei: "新北市",
 };
 
-// 各組件分配給臺北／新北的固定圖表色，確保單城檢視時顏色不會錯位
+// 各組件分配給臺北／新北的固定圖表色：3 個圖層在地圖上同時打開時要能分辨，
+// 故每個組件用不同色相（餐廳=綠/藍、綠色商店=粉/青、實物銀行=黃/紫）。
 const CITY_COLOR = {
 	eco_diet_restaurants_points: { taipei: "#5fcf80", newtaipei: "#5a9cf8" },
-	eco_diet_green_stores_points: { taipei: "#5fcf80", newtaipei: "#5a9cf8" },
+	eco_diet_green_stores_points: { taipei: "#ec7cb1", newtaipei: "#67baca" },
 	eco_diet_food_banks_points: { taipei: "#f6c344", newtaipei: "#a37cf6" },
 };
 
@@ -46,6 +47,15 @@ const CITY_COLOR = {
 const RESTAURANT_LAYER_ID = "eco-diet-restaurants";
 const GREEN_STORE_LAYER_ID = "eco-diet-green-stores";
 const FOOD_BANK_LAYER_ID = "eco-diet-food-banks";
+const HOVER_HIGHLIGHT_LAYER_ID = "eco-diet-hover-highlight";
+const HOVER_HIGHLIGHT_SOURCE_ID = `${HOVER_HIGHLIGHT_LAYER_ID}-source`;
+const CLICK_HIGHLIGHT_LAYER_ID = "eco-diet-click-highlight";
+const CLICK_HIGHLIGHT_SOURCE_ID = `${CLICK_HIGHLIGHT_LAYER_ID}-source`;
+const ROUTE_LAYER_ID = "eco-diet-walking-route";
+const ROUTE_SOURCE_ID = `${ROUTE_LAYER_ID}-source`;
+// 路線色刻意避開所有 layer 配色（綠/藍、粉/青、黃/紫、白/click 藍）
+const ROUTE_COLOR = "#ff5e3a";
+const ROUTE_HALO_COLOR = "#ffffff";
 
 const SHARED_LINKS = {
 	restaurant: [
@@ -150,13 +160,13 @@ const c4Component = ref({
 	update_freq_unit: null,
 	chart_config: {
 		types: ["MapLegend"],
-		color: ["#5fcf80", "#5a9cf8"],
+		color: ["#ec7cb1", "#67baca"],
 		unit: "家",
 	},
 	chart_data: null,
 	map_config: [{ index: GREEN_STORE_LAYER_ID, type: "circle", city: "metrotaipei" }],
 	short_desc: "雙北綠色商店全量點位（依城市配色）",
-	long_desc: "整合雙北環保署認證的綠色商店資料並依城市配色（臺北綠／新北藍），呈現雙北綠色消費通路在兩市的空間分布差異。",
+	long_desc: "整合雙北環保署認證的綠色商店資料並依城市配色（臺北粉／新北青），刻意與環保餐廳的綠/藍配色錯開，方便雙圖層同時開啟時分辨。",
 	use_case: "綠色消費研究、零售業者規劃綠色商品上架通路時參考既有商店分布、消費者尋找最近綠色商店。",
 	links: SHARED_LINKS.greenStore,
 	contributors: SHARED_CONTRIBUTORS,
@@ -173,12 +183,11 @@ const c5Component = ref({
 	update_freq: null,
 	update_freq_unit: null,
 	chart_config: {
-		types: ["ColumnChart"],
+		types: ["TimelineSeparateChart"],
 		color: [
 			"#ed5a5a", "#f6c344", "#5fcf80", "#5a9cf8",
 			"#a37cf6", "#ec7cb1", "#888787", "#67baca",
 		],
-		categories: [],
 		unit: "公噸",
 	},
 	chart_data: null,
@@ -343,9 +352,16 @@ function recomputeC4() {
 function recomputeC5() {
 	const city = activeCityMap.eco_diet_waste_yearly;
 	const allSeries = rawData.value.wasteSeries;
-	c5Component.value.chart_config.categories = rawData.value.wasteCategories;
+	const categories = rawData.value.wasteCategories;
 	const filtered = allSeries.filter((s) => matchSeriesByCity(s.name, city));
-	c5Component.value.chart_data = filtered;
+	// TimelineSeparateChart 吃 [{x: ISO, y: num}, ...] 格式，把年份轉成年初 ISO
+	c5Component.value.chart_data = filtered.map((s) => ({
+		name: s.name,
+		data: s.data.map((y, i) => ({
+			y,
+			x: `${categories[i]}-01-01T00:00:00+08:00`,
+		})),
+	}));
 }
 
 function recomputeC7a() {
@@ -513,8 +529,8 @@ const PAINT_BY_KEY = {
 		"circle-color": [
 			"match",
 			["get", "city"],
-			"臺北市", "#5fcf80",
-			"新北市", "#5a9cf8",
+			"臺北市", "#ec7cb1",
+			"新北市", "#67baca",
 			"#888888",
 		],
 		"circle-stroke-color": "#ffffff",
@@ -556,11 +572,274 @@ async function ensureLayer(layerId, key) {
 		layout: { visibility: "none" },
 		paint: PAINT_BY_KEY[key],
 	});
+	ensureHighlightLayer();
 	attachHoverPopup(layerId, key);
 }
 
-// ── 地圖點位 hover popup ─────────────────────────────────────────────────
+// hover 圈圈（小白環）+ 點擊圈圈（更大、更顯眼），兩個分開避免互相覆蓋
+function ensureHighlightLayer() {
+	if (!mapStore.map) return;
+	if (!mapStore.map.getLayer(HOVER_HIGHLIGHT_LAYER_ID)) {
+		mapStore.map.addSource(HOVER_HIGHLIGHT_SOURCE_ID, {
+			type: "geojson",
+			data: { type: "FeatureCollection", features: [] },
+		});
+		mapStore.map.addLayer({
+			id: HOVER_HIGHLIGHT_LAYER_ID,
+			type: "circle",
+			source: HOVER_HIGHLIGHT_SOURCE_ID,
+			paint: {
+				"circle-radius": 10,
+				"circle-color": "rgba(255, 255, 255, 0)",
+				"circle-stroke-color": "#ffffff",
+				"circle-stroke-width": 2.5,
+				"circle-stroke-opacity": 0.9,
+			},
+		});
+	}
+	if (!mapStore.map.getLayer(CLICK_HIGHLIGHT_LAYER_ID)) {
+		mapStore.map.addSource(CLICK_HIGHLIGHT_SOURCE_ID, {
+			type: "geojson",
+			data: { type: "FeatureCollection", features: [] },
+		});
+		mapStore.map.addLayer({
+			id: CLICK_HIGHLIGHT_LAYER_ID,
+			type: "circle",
+			source: CLICK_HIGHLIGHT_SOURCE_ID,
+			paint: {
+				"circle-radius": 14,
+				// fill 全透明：原本的點不會被遮蓋
+				"circle-color": "rgba(0, 0, 0, 0)",
+				"circle-stroke-color": "#5a9cf8",
+				"circle-stroke-width": 3,
+				"circle-stroke-opacity": 0.95,
+			},
+		});
+	}
+}
+
+function setHighlightFeature(feature) {
+	const source = mapStore.map?.getSource(HOVER_HIGHLIGHT_SOURCE_ID);
+	if (!source) return;
+	source.setData({
+		type: "FeatureCollection",
+		features: feature ? [feature] : [],
+	});
+}
+
+// 累加：每次點擊的圈圈都保留，使用者可一直疊加。同 lng,lat 不重複。
+const clickedFeatures = ref([]);
+
+function addClickedFeature(feature) {
+	if (!feature?.geometry?.coordinates) return;
+	const [lng, lat] = feature.geometry.coordinates;
+	const key = `${lng},${lat}`;
+	const existing = new Set(
+		clickedFeatures.value.map((f) => {
+			const [x, y] = f.geometry.coordinates;
+			return `${x},${y}`;
+		}),
+	);
+	if (existing.has(key)) return;
+	clickedFeatures.value.push(feature);
+	syncClickedFeaturesToSource();
+}
+
+function clearClickedFeatures() {
+	clickedFeatures.value = [];
+	syncClickedFeaturesToSource();
+	clickPopup?.remove();
+	clickPopup = null;
+}
+
+function syncClickedFeaturesToSource() {
+	const source = mapStore.map?.getSource(CLICK_HIGHLIGHT_SOURCE_ID);
+	if (!source) return;
+	source.setData({
+		type: "FeatureCollection",
+		features: clickedFeatures.value,
+	});
+}
+
+// ── Mapbox Directions API（walking）──────────────────────────────────────
+function ensureRouteLayer() {
+	if (!mapStore.map || mapStore.map.getLayer(ROUTE_LAYER_ID)) return;
+	mapStore.map.addSource(ROUTE_SOURCE_ID, {
+		type: "geojson",
+		data: { type: "FeatureCollection", features: [] },
+	});
+	// 先畫白色 halo 增加在淺底圖上的對比，再畫主線
+	mapStore.map.addLayer({
+		id: `${ROUTE_LAYER_ID}-halo`,
+		type: "line",
+		source: ROUTE_SOURCE_ID,
+		layout: { "line-join": "round", "line-cap": "round" },
+		paint: {
+			"line-color": ROUTE_HALO_COLOR,
+			"line-width": 8,
+			"line-opacity": 0.5,
+		},
+	});
+	mapStore.map.addLayer({
+		id: ROUTE_LAYER_ID,
+		type: "line",
+		source: ROUTE_SOURCE_ID,
+		layout: { "line-join": "round", "line-cap": "round" },
+		paint: {
+			"line-color": ROUTE_COLOR,
+			"line-width": 5,
+			"line-opacity": 0.95,
+			"line-dasharray": [0.5, 1.5],
+		},
+	});
+}
+
+function makeEndpointMarkerEl(label, color) {
+	const el = document.createElement("div");
+	el.style.cssText = `
+		width: 22px; height: 22px; border-radius: 50%;
+		background: ${color}; border: 3px solid #fff;
+		box-shadow: 0 0 6px rgba(0,0,0,0.5);
+		display: flex; align-items: center; justify-content: center;
+		color: #fff; font-size: 11px; font-weight: 600;
+		font-family: '微軟正黑體', 'Microsoft JhengHei', sans-serif;
+	`;
+	el.textContent = label;
+	return el;
+}
+
+function setStartMarker(coords) {
+	routeStartMarker?.remove();
+	routeStartMarker = null;
+	if (!coords || !mapStore.map) return;
+	routeStartMarker = new mapboxGl.Marker({
+		element: makeEndpointMarkerEl("A", "#00c853"),
+	})
+		.setLngLat([coords.lng, coords.lat])
+		.addTo(mapStore.map);
+}
+function setEndMarker(coords) {
+	routeEndMarker?.remove();
+	routeEndMarker = null;
+	if (!coords || !mapStore.map) return;
+	routeEndMarker = new mapboxGl.Marker({
+		element: makeEndpointMarkerEl("B", ROUTE_COLOR),
+	})
+		.setLngLat([coords.lng, coords.lat])
+		.addTo(mapStore.map);
+}
+
+async function fetchWalkingRoute(start, end) {
+	const token = mapboxGl.accessToken;
+	const coords = `${start.lng},${start.lat};${end.lng},${end.lat}`;
+	const url = `https://api.mapbox.com/directions/v5/mapbox/walking/${coords}?geometries=geojson&overview=full&access_token=${token}`;
+	const res = await fetch(url);
+	if (!res.ok) {
+		throw new Error(`Directions API ${res.status}`);
+	}
+	const json = await res.json();
+	if (!json.routes?.length) {
+		throw new Error("找不到可行路徑");
+	}
+	return json.routes[0];
+}
+
+async function drawRoute() {
+	if (!routeStart.value || !routeEnd.value || !mapStore.map) return;
+	routeLoading.value = true;
+	try {
+		const route = await fetchWalkingRoute(routeStart.value, routeEnd.value);
+		ensureRouteLayer();
+		mapStore.map.getSource(ROUTE_SOURCE_ID).setData({
+			type: "Feature",
+			geometry: route.geometry,
+			properties: {},
+		});
+		routeStats.value = {
+			distanceMeters: route.distance,
+			durationSeconds: route.duration,
+		};
+		// fitBounds 把整條路線塞進視窗
+		const lineCoords = route.geometry.coordinates;
+		const bounds = lineCoords.reduce(
+			(b, c) => b.extend(c),
+			new mapboxGl.LngLatBounds(lineCoords[0], lineCoords[0]),
+		);
+		mapStore.map.fitBounds(bounds, { padding: 80, duration: 600 });
+	} catch (e) {
+		dialogStore.showNotification("error", `路徑規劃失敗：${e.message}`);
+	} finally {
+		routeLoading.value = false;
+	}
+}
+
+function startRouteFromCurrent() {
+	if (!navigator.geolocation) {
+		dialogStore.showNotification("error", "瀏覽器不支援定位 API");
+		return;
+	}
+	clearRoute();
+	dialogStore.showNotification("info", "正在取得目前位置 ⋯");
+	navigator.geolocation.getCurrentPosition(
+		(pos) => {
+			routeStart.value = {
+				lng: pos.coords.longitude,
+				lat: pos.coords.latitude,
+				name: "目前位置",
+			};
+			setStartMarker(routeStart.value);
+			routeStep.value = "pick-end";
+			dialogStore.showNotification("info", "請打開圖層並點選一個點位作為終點");
+		},
+		() => dialogStore.showNotification("error", "取得位置失敗，請允許瀏覽器定位權限"),
+	);
+}
+
+function startRoutePickTwo() {
+	clearRoute();
+	routeStep.value = "pick-start";
+	dialogStore.showNotification("info", "請打開圖層並點選一個點位作為起點");
+}
+
+function clearRoute() {
+	routeStep.value = null;
+	routeStart.value = null;
+	routeEnd.value = null;
+	routeStats.value = null;
+	setStartMarker(null);
+	setEndMarker(null);
+	const source = mapStore.map?.getSource(ROUTE_SOURCE_ID);
+	if (source) {
+		source.setData({ type: "FeatureCollection", features: [] });
+	}
+}
+
+function formatDistance(m) {
+	if (m == null) return "—";
+	return m >= 1000 ? `${(m / 1000).toFixed(2)} 公里` : `${Math.round(m)} 公尺`;
+}
+function formatDuration(s) {
+	if (s == null) return "—";
+	const min = Math.round(s / 60);
+	if (min < 60) return `${min} 分鐘`;
+	const h = Math.floor(min / 60);
+	const m = min % 60;
+	return `${h} 小時 ${m} 分鐘`;
+}
+
+// ── 地圖點位 hover / click popup ─────────────────────────────────────────
 let hoverPopup = null;
+let clickPopup = null;
+
+// ── 步行路線狀態（B：從目前位置；C：選兩個既有點位）────────────────────
+// routeStep: null | "pick-end"（已有 start，等使用者點終點）| "pick-start"（C 流程初始）
+const routeStep = ref(null);
+const routeStart = ref(null); // { lng, lat, name }
+const routeEnd = ref(null);
+const routeStats = ref(null); // { distanceMeters, durationSeconds }
+const routeLoading = ref(false);
+let routeStartMarker = null;
+let routeEndMarker = null;
 
 function ensureHoverPopup() {
 	if (!hoverPopup) {
@@ -601,7 +880,7 @@ function buildPopupHtml(key, props) {
 		lines.push(`<p style="color:#5fcf80;font-size:0.75rem;margin-top:4px;">${escapeHtml(props.env_actions)}</p>`);
 	}
 	if (key === "greenStore" && props.store_type) {
-		lines.push(`<p style="color:#5a9cf8;font-size:0.75rem;margin-top:4px;">${escapeHtml(props.store_type)}</p>`);
+		lines.push(`<p style="color:#67baca;font-size:0.75rem;margin-top:4px;">${escapeHtml(props.store_type)}</p>`);
 	}
 	if (key === "foodBank" && props.org_type) {
 		lines.push(`<p style="color:#a37cf6;font-size:0.75rem;margin-top:4px;">${escapeHtml(props.org_type)}</p>`);
@@ -626,11 +905,61 @@ function attachHoverPopup(layerId, key) {
 			.setLngLat(coords)
 			.setHTML(buildPopupHtml(key, feature.properties || {}))
 			.addTo(map);
+		setHighlightFeature(feature);
 	});
 
 	map.on("mouseleave", layerId, () => {
 		map.getCanvas().style.cursor = "";
 		hoverPopup?.remove();
+		setHighlightFeature(null);
+	});
+
+	map.on("click", layerId, (e) => {
+		if (!e.features?.length) return;
+		const feature = e.features[0];
+		const coords = feature.geometry.coordinates.slice();
+
+		// 路線模式：把點擊的點當成起點 / 終點
+		if (routeStep.value === "pick-start") {
+			routeStart.value = { lng: coords[0], lat: coords[1], name: feature.properties?.name };
+			setStartMarker(routeStart.value);
+			routeStep.value = "pick-end";
+			dialogStore.showNotification("info", "請點選終點");
+			return;
+		}
+		if (routeStep.value === "pick-end") {
+			routeEnd.value = { lng: coords[0], lat: coords[1], name: feature.properties?.name };
+			setEndMarker(routeEnd.value);
+			routeStep.value = null;
+			drawRoute();
+			return;
+		}
+
+		// 一般點擊：hover popup 拿掉，改用持續性 click popup（有關閉鈕）
+		hoverPopup?.remove();
+		setHighlightFeature(null);
+		// 拉到夠近的 zoom 讓相鄰點自然分開
+		map.flyTo({
+			center: coords,
+			zoom: Math.max(map.getZoom(), 16),
+			duration: 600,
+		});
+		// 圈圈累加（每次點擊保留）
+		addClickedFeature(feature);
+		clickPopup?.remove();
+		clickPopup = new mapboxGl.Popup({
+			closeButton: true,
+			closeOnClick: false,
+			offset: 14,
+			anchor: "bottom",
+		})
+			.setLngLat(coords)
+			.setHTML(buildPopupHtml(key, feature.properties || {}))
+			.addTo(map);
+		clickPopup.on("close", () => {
+			// 只關 popup，圈圈保留；要清光圈圈用 UI 上的「清除選取」
+			clickPopup = null;
+		});
 	});
 }
 
@@ -726,10 +1055,14 @@ onMounted(async () => {
 });
 
 onBeforeUnmount(() => {
-	if (hoverPopup) {
-		hoverPopup.remove();
-		hoverPopup = null;
-	}
+	hoverPopup?.remove();
+	hoverPopup = null;
+	clickPopup?.remove();
+	clickPopup = null;
+	routeStartMarker?.remove();
+	routeStartMarker = null;
+	routeEndMarker?.remove();
+	routeEndMarker = null;
 	if (!mapStore.map) return;
 	[RESTAURANT_LAYER_ID, GREEN_STORE_LAYER_ID, FOOD_BANK_LAYER_ID].forEach((id) => {
 		if (mapStore.map.getLayer(id)) mapStore.map.removeLayer(id);
@@ -737,6 +1070,18 @@ onBeforeUnmount(() => {
 			mapStore.map.removeSource(`${id}-source`);
 		}
 	});
+	[HOVER_HIGHLIGHT_LAYER_ID, CLICK_HIGHLIGHT_LAYER_ID].forEach((id) => {
+		if (mapStore.map.getLayer(id)) mapStore.map.removeLayer(id);
+		if (mapStore.map.getSource(`${id}-source`)) {
+			mapStore.map.removeSource(`${id}-source`);
+		}
+	});
+	[`${ROUTE_LAYER_ID}-halo`, ROUTE_LAYER_ID].forEach((id) => {
+		if (mapStore.map.getLayer(id)) mapStore.map.removeLayer(id);
+	});
+	if (mapStore.map.getSource(ROUTE_SOURCE_ID)) {
+		mapStore.map.removeSource(ROUTE_SOURCE_ID);
+	}
 });
 
 // 對應 hasMap 三個 component 的 toggle key 與 layer id（依 component.index）
@@ -811,7 +1156,7 @@ function tagListOf(component) {
         @toggle="(v) => handleToggle(v, toggleKeyOf(item), layerIdOf(item))"
         @change-city="(city) => handleChangeCity(item, city)"
       />
-      <!-- 無空間資料組件 section（h2 + 3 個聚合卡片）-->
+      <!-- 無空間資料組件 section（h2 + 3 個聚合卡片，無地圖層所以用 default 模式直接展開）-->
       <h2 v-if="noMapComponents.length > 0">
         無空間資料組件
       </h2>
@@ -819,7 +1164,7 @@ function tagListOf(component) {
         v-for="item in noMapComponents"
         :key="`nomap-${item.index}-${activeCityMap[item.index]}`"
         :config="item"
-        mode="map"
+        mode="default"
         :info-btn="true"
         :active-city="activeCityMap[item.index]"
         :select-btn="true"
@@ -830,6 +1175,83 @@ function tagListOf(component) {
       />
     </div>
     <MapContainer />
+    <!-- 步行路線控制板：浮在地圖左上角 -->
+    <div class="ecodietview-route">
+      <div class="ecodietview-route-header">
+        <span>directions_walk</span>
+        <h3>步行路線</h3>
+      </div>
+      <div
+        v-if="!routeStep && !routeStats"
+        class="ecodietview-route-actions"
+      >
+        <button
+          class="ecodietview-route-btn"
+          @click="startRouteFromCurrent"
+        >
+          從目前位置出發
+        </button>
+        <button
+          class="ecodietview-route-btn"
+          @click="startRoutePickTwo"
+        >
+          選兩個點位
+        </button>
+        <p class="ecodietview-route-hint">
+          先打開圖層再點選點位
+        </p>
+      </div>
+      <div
+        v-else-if="routeStep"
+        class="ecodietview-route-status"
+      >
+        <p>{{ routeStep === 'pick-start' ? '請點選起點' : '請點選終點' }}</p>
+        <button
+          class="ecodietview-route-btn ecodietview-route-btn-cancel"
+          @click="clearRoute"
+        >
+          取消
+        </button>
+      </div>
+      <div
+        v-else-if="routeLoading"
+        class="ecodietview-route-status"
+      >
+        <p>計算路徑中 ⋯</p>
+      </div>
+      <div
+        v-else-if="routeStats"
+        class="ecodietview-route-stats"
+      >
+        <div class="ecodietview-route-stats-row">
+          <span>straighten</span>
+          <p>{{ formatDistance(routeStats.distanceMeters) }}</p>
+        </div>
+        <div class="ecodietview-route-stats-row">
+          <span>schedule</span>
+          <p>{{ formatDuration(routeStats.durationSeconds) }}</p>
+        </div>
+        <p
+          v-if="routeStart?.name && routeEnd?.name"
+          class="ecodietview-route-stats-od"
+        >
+          {{ routeStart.name }} → {{ routeEnd.name }}
+        </p>
+        <button
+          class="ecodietview-route-btn ecodietview-route-btn-cancel"
+          @click="clearRoute"
+        >
+          清除路線
+        </button>
+      </div>
+      <button
+        v-if="clickedFeatures.length > 0"
+        class="ecodietview-route-btn ecodietview-route-btn-secondary"
+        @click="clearClickedFeatures"
+      >
+        清除選取（{{ clickedFeatures.length }}）
+      </button>
+    </div>
     <MoreInfo />
     <ReportIssue />
   </div>
@@ -859,6 +1281,7 @@ function tagListOf(component) {
 		height: calc(100vh - 127px);
 		height: calc(var(--vh) * 100 - 127px);
 		display: flex;
+		position: relative;
 		margin: var(--font-m) var(--font-m);
 
 		&-charts {
@@ -883,6 +1306,122 @@ function tagListOf(component) {
 				color: var(--color-complement-text);
 				font-size: var(--font-m);
 				font-weight: 500;
+			}
+		}
+	}
+
+	&-route {
+		min-width: 220px;
+		max-width: 260px;
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+		position: absolute;
+		top: var(--font-s);
+		left: calc(360px + var(--font-s) * 2);
+		padding: var(--font-s) var(--font-m);
+		border-radius: 6px;
+		background-color: var(--color-component-background);
+		font-family: '微軟正黑體', 'Microsoft JhengHei', sans-serif;
+		box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+		z-index: 5;
+
+		@media (min-width: 1000px) {
+			left: calc(370px + var(--font-s) * 2);
+		}
+
+		@media (min-width: 2000px) {
+			left: calc(400px + var(--font-s) * 2);
+		}
+
+		&-header {
+			display: flex;
+			align-items: center;
+			gap: 6px;
+
+			span {
+				color: #ff5e3a;
+				font-family: var(--font-icon);
+				font-size: var(--font-m);
+			}
+
+			h3 {
+				color: var(--color-normal-text);
+				font-size: var(--font-ms);
+				font-weight: 500;
+			}
+		}
+
+		&-actions {
+			display: flex;
+			flex-direction: column;
+			gap: 6px;
+		}
+
+		&-status,
+		&-stats {
+			display: flex;
+			flex-direction: column;
+			gap: 6px;
+
+			p {
+				color: var(--color-normal-text);
+				font-size: var(--font-s);
+			}
+		}
+
+		&-stats {
+			&-row {
+				display: flex;
+				align-items: center;
+				gap: 6px;
+
+				span {
+					color: var(--color-complement-text);
+					font-family: var(--font-icon);
+					font-size: var(--font-m);
+				}
+
+				p {
+					color: var(--color-normal-text);
+					font-size: var(--font-ms);
+					font-weight: 500;
+				}
+			}
+
+			&-od {
+				color: var(--color-complement-text) !important;
+				font-size: var(--font-s) !important;
+			}
+		}
+
+		&-hint {
+			color: var(--color-complement-text);
+			font-size: 11px;
+			font-style: italic;
+		}
+
+		&-btn {
+			padding: 6px 10px;
+			border-radius: 4px;
+			background-color: #ff5e3a;
+			color: var(--color-normal-text);
+			font-size: var(--font-s);
+			text-align: center;
+			transition: opacity 0.2s;
+
+			&:hover {
+				opacity: 0.85;
+			}
+
+			&-cancel {
+				background-color: var(--color-border);
+			}
+
+			&-secondary {
+				background-color: var(--color-border);
+				font-size: 11px;
+				padding: 4px 8px;
 			}
 		}
 	}

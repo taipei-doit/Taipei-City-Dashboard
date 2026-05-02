@@ -161,6 +161,17 @@ import http from "../router/axios";   // 或 ../../router/axios，視層數
 - 樣式規範：參照 .claude/rules/uiux.md 的系統顏色與間距變量
 - 詳細示範：參照 .claude/skills/page/reference/page-creation-guide.md
 
+### 特殊情境 ｜ 多城市切換 + 多 layer 自管地圖
+
+如果 view 同時符合下面任一條件，**先讀** `.claude/skills/page/reference/eco-diet-lessons.md`，再開始寫：
+
+- 每個 component 各自獨立的城市下拉（非全頁共用同一個城市）
+- view 自管 GeoJSON source / layer（不走 mapStore.addMapLayer 標準流程）
+- 同畫面有 ≥ 2 個 layer 可以同時顯示
+- 需要 hover（而非 click）顯示點位資料
+
+那份 doc 收的是 EcoDietView 已經踩完的坑：CITY_SELECT_LIST 自包不動 cityManager、activeCityMap per-component、tagListOf 避開雙北雙標籤、CITY_COLOR 多 layer 不撞色、`:key` 必須帶 activeCity 才能繞過 ApexCharts series 快取、MoreInfo dialog city_tag_override、hover popup escapeHtml、http instance baseURL override 等十條硬規矩。
+
 ### 含地圖的頁面必備元素
 
 - 引入 `MapContainer` 元件
