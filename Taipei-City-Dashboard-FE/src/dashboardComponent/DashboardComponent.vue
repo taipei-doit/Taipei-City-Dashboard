@@ -191,16 +191,6 @@ const aiComment = computed(() => {
 	return props.config.ai_comment || AI_COMMENT_DEFAULT;
 });
 
-const aiCommentIcon = computed(() => {
-	if (aiCommentStatus.value === "loading") {
-		return "auto_awesome";
-	}
-	if (aiCommentStatus.value === "error") {
-		return "error";
-	}
-	return "psychology";
-});
-
 const aiCommentStatusLabel = computed(() => {
 	if (aiCommentStatus.value === "loading") {
 		return "生成中";
@@ -744,9 +734,6 @@ function returnChartComponent(name, svg) {
             `dashboardcomponent-ai-message-${aiCommentStatus}`,
           ]"
         >
-          <span class="dashboardcomponent-ai-message-icon">
-            {{ aiCommentIcon }}
-          </span>
           <div class="dashboardcomponent-ai-bubble">
             <div class="dashboardcomponent-ai-bubble-heading">
               <strong>AI 圖表評論</strong>
@@ -783,9 +770,6 @@ function returnChartComponent(name, svg) {
                 `dashboardcomponent-ai-message-${message.status}`,
               ]"
             >
-              <span class="dashboardcomponent-ai-message-icon">
-                smart_toy
-              </span>
               <div class="dashboardcomponent-ai-bubble">
                 <p>{{ message.answer }}</p>
               </div>
@@ -1396,7 +1380,7 @@ button:hover {
 
 				&:focus {
 					border-color: rgba(255, 255, 255, 0.28);
-					background-color: rgba(255, 255, 255, 0.06);
+					background-color: rgba(20, 22, 26, 0.96);
 				}
 
 				&:disabled {
@@ -1454,6 +1438,7 @@ button:hover {
 		height: 152px;
 		min-height: 152px;
 		max-height: 152px;
+		position: relative;
 		display: flex;
 		flex-direction: column;
 		margin-top: 6px;
@@ -1472,6 +1457,18 @@ button:hover {
 		&-chat-error {
 			border-color: rgba(237, 90, 90, 0.68);
 		}
+
+		&:hover,
+		&:focus-within {
+			.dashboardcomponent-ai-room-form {
+				opacity: 1;
+				pointer-events: auto;
+				transform: translateY(0);
+				background:
+					linear-gradient(180deg, rgba(36, 38, 40, 0), rgba(36, 38, 40, 0.94) 32%),
+					transparent;
+			}
+		}
 	}
 
 	&-ai-room {
@@ -1481,6 +1478,7 @@ button:hover {
 		flex-direction: column;
 		gap: 7px;
 		padding-right: 4px;
+		padding-bottom: 42px;
 		overflow-y: auto;
 		scrollbar-width: thin;
 		scrollbar-color: rgba(255, 255, 255, 0.24) transparent;
@@ -1495,13 +1493,18 @@ button:hover {
 		}
 
 		&-form {
-			flex: 0 0 auto;
-			position: relative;
-			margin-top: 8px;
+			position: absolute;
+			right: 10px;
+			bottom: 8px;
+			left: 10px;
 			z-index: 1;
+			opacity: 0;
+			pointer-events: none;
+			transform: translateY(6px);
 			background:
 				linear-gradient(180deg, rgba(36, 38, 40, 0), rgba(36, 38, 40, 0.78) 36%),
 				transparent;
+			transition: opacity 0.18s ease, transform 0.18s ease;
 		}
 	}
 
@@ -1528,7 +1531,6 @@ button:hover {
 			}
 		}
 
-		&-icon,
 		&-action {
 			flex: 0 0 auto;
 			width: 28px;
@@ -1562,13 +1564,11 @@ button:hover {
 			}
 		}
 
-		&-loading .dashboardcomponent-ai-message-icon,
 		&-loading .dashboardcomponent-ai-bubble {
 			animation: pulse 1.2s ease-in-out infinite;
 		}
 
 		&-error {
-			.dashboardcomponent-ai-message-icon,
 			.dashboardcomponent-ai-bubble,
 			.dashboardcomponent-ai-bubble-heading span {
 				color: rgb(237, 90, 90);
@@ -1577,7 +1577,8 @@ button:hover {
 	}
 
 	&-ai-bubble {
-		max-width: calc(100% - 35px);
+		min-width: 0;
+		max-width: 88%;
 		padding: 7px 9px;
 		border-radius: 12px 12px 12px 3px;
 		background-color: rgba(255, 255, 255, 0.07);
