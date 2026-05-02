@@ -125,6 +125,7 @@ onMounted(() => {
                 toggleFavorite(id,item.name,item.city);
               }
             "
+            @refresh-ai-comment="contentStore.fetchComponentAIComment"
           />
         </div>
         <!-- 1-2. View the component's information -->

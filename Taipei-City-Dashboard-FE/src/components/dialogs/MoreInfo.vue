@@ -41,6 +41,7 @@ function getLinkTag(link, index) {
         :active-city="dialogStore.moreInfoContent.city"
         :city-tag="contentStore.cityManager.getTagList(dialogStore.moreInfoContent.city)"
         mode="large"
+        @refresh-ai-comment="contentStore.fetchComponentAIComment"
       />
       <div class="moreinfo-info">
         <div class="moreinfo-info-data">

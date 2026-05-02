@@ -84,6 +84,96 @@ export const useContentStore = defineStore("content", {
 		setMapLayerData(index, component) {
 			this.mapLayers[index] = component;
 		},
+		hasAICommentChartData(data) {
+			if (Array.isArray(data)) {
+				return data.length > 0;
+			}
+			return data && typeof data === "object" && Object.keys(data).length > 0;
+		},
+		markComponentAICommentLoading(component) {
+			if (!this.hasAICommentChartData(component.chart_data)) {
+				component.ai_comment = "";
+				component.ai_comment_status = "idle";
+				return;
+			}
+			component.ai_comment = "";
+			component.ai_comment_status = "loading";
+		},
+		buildAIChartCommentPayload(component) {
+			return {
+				component_id: component.id,
+				index: component.index,
+				city: component.city,
+				name: component.name,
+				source: component.source,
+				time_from: component.time_from,
+				time_to: component.time_to,
+				update_freq: component.update_freq,
+				update_freq_unit: component.update_freq_unit,
+				short_desc: component.short_desc,
+				long_desc: component.long_desc,
+				chart_config: component.chart_config,
+				chart_data: component.chart_data,
+			};
+		},
+		getAIChartCommentEndpoint() {
+			const apiUrl = import.meta.env.VITE_API_URL || "";
+			return `${apiUrl.replace(/\/$/, "")}/ai/chart-comment`;
+		},
+		async fetchComponentAIComment(component) {
+			const authStore = useAuthStore();
+			if (!this.hasAICommentChartData(component.chart_data)) {
+				component.ai_comment = "";
+				component.ai_comment_status = "idle";
+				return;
+			}
+			if (!authStore.token) {
+				component.ai_comment = "登入後可生成 AI 圖表評論";
+				component.ai_comment_status = "error";
+				return;
+			}
+
+			component.ai_comment_status = "loading";
+			try {
+				const response = await fetch(this.getAIChartCommentEndpoint(), {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: `Bearer ${authStore.token}`,
+					},
+					body: JSON.stringify(
+						this.buildAIChartCommentPayload(component),
+					),
+				});
+				const payload = await response.json();
+				if (!response.ok) {
+					throw new Error(payload?.message || `HTTP ${response.status}`);
+				}
+				component.ai_comment = payload?.data?.comment || "";
+				component.ai_comment_status = component.ai_comment
+					? "success"
+					: "error";
+				component.ai_comment_cache_hit =
+					payload?.data?.cache_hit || false;
+				component.ai_comment_expires_at =
+					payload?.data?.expires_at || null;
+			} catch (error) {
+				console.error(
+					`Failed to fetch AI comment for component ${component.id}:`,
+					error,
+				);
+				component.ai_comment = "AI 評論暫時無法生成";
+				component.ai_comment_status = "error";
+			}
+		},
+		preloadComponentAIComments(components) {
+			const tasks = (components || [])
+				.filter((component) =>
+					this.hasAICommentChartData(component.chart_data),
+				)
+				.map((component) => this.fetchComponentAIComment(component));
+			return Promise.allSettled(tasks);
+		},
 		/* Steps in adding content to the application (/dashboard or /mapview) */
 		// 1. Check the current path and execute actions based on the current path
 		setRouteParams(mode, index, city) {
@@ -307,6 +397,9 @@ export const useContentStore = defineStore("content", {
 							].chart_config.categories =
 								response.data.categories;
 						}
+						this.markComponentAICommentLoading(
+							this.cityDashboard.components[index],
+						);
 					} catch (error) {
 						console.error(
 							`Failed to fetch chart data for component ${component.id}:`,
@@ -314,6 +407,10 @@ export const useContentStore = defineStore("content", {
 						);
 						// Set empty chart data to avoid errors in subsequent operations
 						this.cityDashboard.components[index].chart_data = [];
+						this.cityDashboard.components[index].ai_comment = "";
+						this.cityDashboard.components[
+							index
+						].ai_comment_status = "idle";
 
 						this.loading = false;
 					}
@@ -373,6 +470,7 @@ export const useContentStore = defineStore("content", {
 				this.loading = false;
 			}
 			this.filterCurrentDashboardContent();
+			this.preloadComponentAIComments(this.cityDashboard.components);
 		},
 
 		// 20251224 因應擁擠程度相關組件須每分鐘刷新新增func
@@ -421,6 +519,9 @@ export const useContentStore = defineStore("content", {
 							].chart_config.categories =
 								response.data.categories;
 						}
+						this.markComponentAICommentLoading(
+							this.cityDashboard.components[index],
+						);
 					} catch (error) {
 						console.error(
 							`Failed to fetch chart data for component ${component.id}:`,
@@ -428,6 +529,10 @@ export const useContentStore = defineStore("content", {
 						);
 						// Set empty chart data to avoid errors in subsequent operations
 						this.cityDashboard.components[index].chart_data = [];
+						this.cityDashboard.components[index].ai_comment = "";
+						this.cityDashboard.components[
+							index
+						].ai_comment_status = "idle";
 
 						this.loading = false;
 					}
@@ -494,6 +599,7 @@ export const useContentStore = defineStore("content", {
 				this.loading = false;
 			}
 			this.filterCurrentDashboardContent();
+			this.preloadComponentAIComments(this.cityDashboard.components);
 		},
 
 		async updateCurrentDashboardCertainChartData() {
@@ -541,6 +647,9 @@ export const useContentStore = defineStore("content", {
 							].chart_config.categories =
 								response.data.categories;
 						}
+						this.markComponentAICommentLoading(
+							this.cityDashboard.components[index],
+						);
 					} catch (error) {
 						console.error(
 							`Failed to fetch chart data for component ${component.id}:`,
@@ -548,6 +657,10 @@ export const useContentStore = defineStore("content", {
 						);
 						// Set empty chart data to avoid errors in subsequent operations
 						this.cityDashboard.components[index].chart_data = [];
+						this.cityDashboard.components[index].ai_comment = "";
+						this.cityDashboard.components[
+							index
+						].ai_comment_status = "idle";
 
 						this.loading = false;
 					}
@@ -614,6 +727,7 @@ export const useContentStore = defineStore("content", {
 				this.loading = false;
 			}
 			this.filterCurrentDashboardContent();
+			this.preloadComponentAIComments(this.cityDashboard.components);
 		},
 
 		// 5. filter the info for the current dashboard based on the index and city and adds it to "currentDashboard"
@@ -787,17 +901,23 @@ export const useContentStore = defineStore("content", {
 
 						this.allMapLayers[index].chart_data =
 							response.data.data;
+						this.markComponentAICommentLoading(
+							this.allMapLayers[index],
+						);
 					} catch (error) {
 						console.error(
 							`Failed to fetch data for component ${component.id}:`,
 							error,
 						);
+						this.allMapLayers[index].ai_comment = "";
+						this.allMapLayers[index].ai_comment_status = "idle";
 						// Continue processing the next layer when an error occurs
 					}
 				}
 
 				// Filter layers by the specified city
 				this.filterMapLayersByCity(city);
+				this.preloadComponentAIComments(this.mapLayers);
 			} catch (error) {
 				console.error(
 					"Error occurred during layer data processing:",
@@ -918,6 +1038,9 @@ export const useContentStore = defineStore("content", {
 					dialogStore.moreInfoContent[index].chart_config.categories =
 						response_2.data.categories;
 				}
+				this.markComponentAICommentLoading(
+					dialogStore.moreInfoContent[index],
+				);
 
 				// 2-3. Get the component history data if applicable
 				if (dialogStore.moreInfoContent[index].history_config) {
@@ -948,6 +1071,7 @@ export const useContentStore = defineStore("content", {
 						);
 					}
 				}
+				this.fetchComponentAIComment(dialogStore.moreInfoContent[index]);
 				this.loading = false;
 			}
 		},

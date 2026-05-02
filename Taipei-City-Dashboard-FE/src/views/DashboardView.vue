@@ -98,6 +98,11 @@ function handleMoreInfo(item) {
           handleMoreInfo(item);
         }
       "
+      @refresh-ai-comment="
+        (item) => {
+          contentStore.fetchComponentAIComment(item);
+        }
+      "
       @change-city="(city)=> {
         const selectedData = contentStore.cityDashboard.components.find((data) => {
           if (data.index === item.index && data.city === city) {
@@ -161,6 +166,11 @@ function handleMoreInfo(item) {
       @delete="
         (id) => {
           contentStore.deleteComponent(id);
+        }
+      "
+      @refresh-ai-comment="
+        (item) => {
+          contentStore.fetchComponentAIComment(item);
         }
       "
       @change-city="(city)=> {

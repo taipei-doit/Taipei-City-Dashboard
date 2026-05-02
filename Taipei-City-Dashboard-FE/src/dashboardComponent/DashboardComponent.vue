@@ -50,6 +50,10 @@ import IndicatorChartSvg from "./assets/chart/IndicatorChart.svg";
 import TextUnitChartSvg from "./assets/chart/TextUnitChart.svg";
 
 
+const AI_COMMENT_DEFAULT = "AI 圖表評論待生成";
+const AI_COMMENT_LOADING = "AI 圖表評論生成中...";
+const AI_COMMENT_ERROR = "AI 評論暫時無法生成";
+
 const props = defineProps({
 	style: { type: Object, default: () => ({}) },
 	mode: {
@@ -88,7 +92,8 @@ const emits = defineEmits([
 	"clearByParamFilter",
 	"clearByLayerFilter",
 	"fly",
-	"changeCity"
+	"changeCity",
+	"refreshAiComment"
 ]);
 
 const activeChart = ref(props.config.chart_config.types[0]);
@@ -158,6 +163,33 @@ const tooltipPosition = computed(() => {
 	};
 });
 
+const aiCommentStatus = computed(() => {
+	if (props.config.ai_comment_status) {
+		return props.config.ai_comment_status;
+	}
+	return props.config.ai_comment ? "success" : "idle";
+});
+
+const aiComment = computed(() => {
+	if (aiCommentStatus.value === "loading") {
+		return AI_COMMENT_LOADING;
+	}
+	if (aiCommentStatus.value === "error") {
+		return props.config.ai_comment || AI_COMMENT_ERROR;
+	}
+	return props.config.ai_comment || AI_COMMENT_DEFAULT;
+});
+
+const aiCommentIcon = computed(() => {
+	if (aiCommentStatus.value === "loading") {
+		return "auto_awesome";
+	}
+	if (aiCommentStatus.value === "error") {
+		return "error";
+	}
+	return "psychology";
+});
+
 function changeActiveChart(chartName) {
 	if (
 		props.mode === "map" &&
@@ -181,6 +213,9 @@ function updateMouseLocation(e) {
 // Updates whether to show the tag tooltip
 function changeShowTagTooltipState(state) {
 	showTagTooltip.value = state;
+}
+function retryAIComment() {
+	emits("refreshAiComment", props.config);
 }
 function returnChartComponent(name, svg) {
 	switch (name) {
@@ -471,9 +506,25 @@ function returnChartComponent(name, svg) {
     </div>
     <div
       v-if="mode !== 'preview' && (!mode.includes('map') || toggleOn)"
-      class="dashboardcomponent-ai-comment"
+      :class="[
+        'dashboardcomponent-ai-comment',
+        `dashboardcomponent-ai-comment-${aiCommentStatus}`,
+      ]"
     >
-      <p>AI 圖表評論待生成</p>
+      <span class="dashboardcomponent-ai-comment-icon">
+        {{ aiCommentIcon }}
+      </span>
+      <p :title="aiComment">
+        {{ aiComment }}
+      </p>
+      <button
+        v-if="aiCommentStatus === 'error'"
+        type="button"
+        title="重新生成"
+        @click="retryAIComment"
+      >
+        <span>refresh</span>
+      </button>
     </div>
     <!-- Footer -->
     <div
@@ -765,6 +816,7 @@ button:hover {
 		min-height: 28px;
 		display: flex;
 		align-items: center;
+		gap: 6px;
 		margin-top: 2px;
 		padding: 0 8px;
 		border: 1px dashed var(--color-complement-text);
@@ -772,11 +824,48 @@ button:hover {
 		background-color: rgba(0, 0, 0, 0.12);
 		opacity: 0.72;
 
+		&-icon {
+			flex: 0 0 auto;
+			color: var(--color-highlight);
+			font-family: var(--font-icon);
+			font-size: var(--font-ms);
+			user-select: none;
+		}
+
 		p {
+			flex: 1 1 auto;
+			min-width: 0;
 			color: var(--color-complement-text);
 			font-size: var(--font-s);
 			white-space: nowrap;
 			text-overflow: ellipsis;
+		}
+
+		button {
+			flex: 0 0 auto;
+			display: flex;
+			align-items: center;
+			color: var(--color-highlight);
+
+			span {
+				margin: 0;
+				font-family: var(--font-icon);
+				font-size: var(--font-ms);
+				user-select: none;
+			}
+		}
+
+		&-loading .dashboardcomponent-ai-comment-icon {
+			animation: pulse 1.2s ease-in-out infinite;
+		}
+
+		&-error {
+			border-color: rgba(237, 90, 90, 0.8);
+
+			.dashboardcomponent-ai-comment-icon,
+			p {
+				color: rgb(237, 90, 90);
+			}
 		}
 	}
 
@@ -854,6 +943,12 @@ button:hover {
 @keyframes spin {
 	to {
 		transform: rotate(360deg);
+	}
+}
+
+@keyframes pulse {
+	50% {
+		opacity: 0.4;
 	}
 }
 

@@ -54,6 +54,8 @@ onMounted(async () => {
 			if (response.data.categories) {
 				component.chart_config.categories = response.data.categories;
 			}
+			contentStore.markComponentAICommentLoading(component);
+			contentStore.fetchComponentAIComment(component);
 		}
 		contentStore.embedComponents = res.data.data;
 		content.value = resData.find(
@@ -89,6 +91,7 @@ onMounted(async () => {
         maxHeight: 'calc(100% - 36px)',
       }"
       @change-city="changeCity"
+      @refresh-ai-comment="contentStore.fetchComponentAIComment"
     />
     <div
       v-else

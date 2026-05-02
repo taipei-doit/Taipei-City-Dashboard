@@ -260,6 +260,11 @@ function popularBasicLayerGA(map_config) {
               dialogStore.showMoreInfo(item);
             }
           "
+          @refresh-ai-comment="
+            (item) => {
+              contentStore.fetchComponentAIComment(item);
+            }
+          "
           @toggle="
             (value, map_config) => {
               handleToggle(value, map_config);
@@ -375,6 +380,11 @@ function popularBasicLayerGA(map_config) {
               dialogStore.showMoreInfo(item);
             }
           "
+          @refresh-ai-comment="
+            (item) => {
+              contentStore.fetchComponentAIComment(item);
+            }
+          "
           @toggle="
             (value, map_config) => {
               handleToggle(value, map_config);
@@ -481,6 +491,11 @@ function popularBasicLayerGA(map_config) {
               dialogStore.showMoreInfo(item);
             }
           "
+          @refresh-ai-comment="
+            (item) => {
+              contentStore.fetchComponentAIComment(item);
+            }
+          "
           @toggle="
             (value, map_config) => {
               handleToggle(value, map_config);
@@ -582,6 +597,11 @@ function popularBasicLayerGA(map_config) {
           @info="
             (item) => {
               dialogStore.showMoreInfo(item);
+            }
+          "
+          @refresh-ai-comment="
+            (item) => {
+              contentStore.fetchComponentAIComment(item);
             }
           "
           @toggle="

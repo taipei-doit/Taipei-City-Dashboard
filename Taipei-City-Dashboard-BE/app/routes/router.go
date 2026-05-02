@@ -204,6 +204,7 @@ func configureAIRoutes() {
 	aiRoutes.Use(middleware.IsLoggedIn())
 	{
 		aiRoutes.POST("/chat/twai", controllers.ChatWithTWCC)
+		aiRoutes.POST("/chart-comment", controllers.GetAIChartComment)
 	}
 }
 
