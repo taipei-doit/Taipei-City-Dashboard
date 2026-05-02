@@ -3,20 +3,20 @@
 
 CREATE EXTENSION IF NOT EXISTS postgis;
 
--- 台北市行人事故明細（來源：內政部警政署 MOI，與新北市欄位一致）
+-- 台北市行人事故明細（來源：內政部警政署 MOI）
 CREATE TABLE IF NOT EXISTS public.traffic_pedestrian_accident_taipei (
     id SERIAL PRIMARY KEY,
     data_time TIMESTAMP WITH TIME ZONE,
     year INTEGER,
     month INTEGER,
     hour INTEGER,
+    district VARCHAR(30),
+    location TEXT,
     death_count INTEGER DEFAULT 0,
     injury_count INTEGER DEFAULT 0,
     age INTEGER,
-    cause_name VARCHAR(200),
-    pedestrian_action VARCHAR(100),
-    signal_type VARCHAR(100),
-    accident_location VARCHAR(100),
+    cause_code VARCHAR(20),
+    cause_name VARCHAR(100),
     lng DOUBLE PRECISION,
     lat DOUBLE PRECISION,
     wkb_geometry geometry(Point, 4326)
@@ -38,8 +38,6 @@ CREATE TABLE IF NOT EXISTS public.traffic_pedestrian_accident_ntpc (
     age INTEGER,
     cause_name VARCHAR(200),
     pedestrian_action VARCHAR(100),
-    signal_type VARCHAR(100),
-    accident_location VARCHAR(100),
     lng DOUBLE PRECISION,
     lat DOUBLE PRECISION,
     wkb_geometry geometry(Point, 4326)
@@ -62,8 +60,6 @@ CREATE TABLE IF NOT EXISTS public.traffic_pedestrian_hotspot (
     injury_count INTEGER,
     top_cause VARCHAR(200),
     top_hour INTEGER,
-    top_signal VARCHAR(100),
-    intersection_pct INTEGER,
     near_location VARCHAR(200),
     wkb_geometry geometry(Point, 4326)
 );
@@ -72,28 +68,22 @@ CREATE INDEX IF NOT EXISTS idx_ped_hotspot_city
 CREATE INDEX IF NOT EXISTS idx_ped_hotspot_geom
     ON public.traffic_pedestrian_hotspot USING GIST(wkb_geometry);
 
--- 行人事故時段統計（供 HeatmapChart 使用）
-CREATE TABLE IF NOT EXISTS public.traffic_pedestrian_hourly_stats (
-    id SERIAL PRIMARY KEY,
-    data_time TIMESTAMP WITH TIME ZONE,
-    city VARCHAR(20),
-    year INTEGER,
-    weekday INTEGER,   -- 1=週一, 7=週日 (ISO)
-    hour INTEGER,      -- 0-23
-    accident_count INTEGER
-);
-CREATE INDEX IF NOT EXISTS idx_ped_hourly_city_year
-    ON public.traffic_pedestrian_hourly_stats(city, year);
-
 -- 行人事故年度趨勢（供 ColumnLineChart 使用）
 CREATE TABLE IF NOT EXISTS public.traffic_pedestrian_yearly_trend (
-    id SERIAL PRIMARY KEY,
     data_time TIMESTAMP WITH TIME ZONE,
-    city VARCHAR(20),
-    year INTEGER,
-    accident_count INTEGER,
-    death_count INTEGER,
-    injury_count INTEGER
+    city TEXT,
+    year BIGINT,
+    accident_count BIGINT,
+    death_count BIGINT,
+    injury_count BIGINT
 );
-CREATE INDEX IF NOT EXISTS idx_ped_trend_city_year
-    ON public.traffic_pedestrian_yearly_trend(city, year);
+
+-- 雙北行政區邊界（來源：metrotaipei_town.geojson，供 DistrictChart spatial join 使用）
+CREATE TABLE IF NOT EXISTS public.metro_district_boundaries (
+    id SERIAL PRIMARY KEY,
+    city_name VARCHAR(20),
+    district_name VARCHAR(20),
+    geom GEOMETRY(MultiPolygon, 4326)
+);
+CREATE INDEX IF NOT EXISTS idx_metro_district_geom
+    ON public.metro_district_boundaries USING GIST(geom);

@@ -15,39 +15,26 @@ git pull origin feature/pedestrian-safety
 
 ---
 
-## 二、建立資料表結構
+## 二、Import 行人事故資料（dump 檔，約 12MB）
 
-```powershell
-docker exec -i postgres-data psql -U postgres -d dashboard < Taipei-City-Dashboard-DE/setup_pedestrian_tables.sql
-```
-
----
-
-## 三、取得行人事故資料（擇一）
-
-### 方法 A：用 repo 內的 dump 檔（快，推薦）
-
-pull 之後 repo 裡已有，直接跑：
+> dump 本身會自動建表，不需要先跑 setup_pedestrian_tables.sql
 
 ```powershell
 docker exec -i postgres-data psql -U postgres -d dashboard < Taipei-City-Dashboard-DE/pedestrian_all.sql
 ```
 
-### 方法 B：自己從警政署下載（慢，約需 5–10 分鐘）
-
-需先安裝 Python 套件：
-```powershell
-pip install pandas geopandas shapely pyproj psycopg2-binary requests
+看到下面這樣就成功了（有些 `already exists` 警告可以忽略）：
 ```
-
-然後跑：
-```powershell
-python Taipei-City-Dashboard-DE/run_pedestrian_etl.py
+SET
+SET
+...
+COPY 29
+COPY 12
 ```
 
 ---
 
-## 四、設定儀表板組件
+## 三、設定儀表板組件
 
 ```powershell
 docker exec -i postgres-manager psql -U postgres -d dashboardmanager < Taipei-City-Dashboard-DE/setup_pedestrian_components.sql
@@ -55,7 +42,7 @@ docker exec -i postgres-manager psql -U postgres -d dashboardmanager < Taipei-Ci
 
 ---
 
-## 五、重新啟動前端容器
+## 四、重新啟動前端容器
 
 ```powershell
 docker restart dashboard-fe
@@ -79,20 +66,27 @@ docker restart dashboard-fe
 
 ## 常見問題
 
+**Q：跑 pedestrian_all.sql 出現 `already exists` 錯誤？**
+- 正常！dump 會建表，若表已存在就跳過，資料仍會正確匯入
+- 確認最後有出現 `COPY xxx` 訊息代表資料有進去
+
+**Q：行政區圖（DistrictChart）是空的？**
+- 確認 `metro_district_boundaries` 有資料：
+  ```powershell
+  docker exec postgres-data psql -U postgres -d dashboard -c "SELECT COUNT(*) FROM public.metro_district_boundaries;"
+  ```
+  應該要是 41（台北 12 + 新北 29）。若是 0，重新跑步驟二
+
 **Q：組件顯示 400 錯誤？**
-
-確認各表有資料：
-```powershell
-docker exec postgres-data psql -U postgres -d dashboard -c "SELECT COUNT(*) FROM public.traffic_pedestrian_accident_taipei;"
-docker exec postgres-data psql -U postgres -d dashboard -c "SELECT COUNT(*) FROM public.traffic_pedestrian_hotspot;"
-```
-
-如果是 0，表示資料沒有成功匯入，重跑步驟三。
+- 確認各表有資料：
+  ```powershell
+  docker exec postgres-data psql -U postgres -d dashboard -c "SELECT COUNT(*) FROM public.traffic_pedestrian_accident_taipei;"
+  docker exec postgres-data psql -U postgres -d dashboard -c "SELECT COUNT(*) FROM public.traffic_pedestrian_hotspot;"
+  ```
+  如果是 0，重跑步驟二
 
 **Q：組件設定沒有出現？**
-
-步驟四的 `setup_pedestrian_components.sql` 可能沒跑，補跑一次。
+- 步驟三的 `setup_pedestrian_components.sql` 可能沒跑，補跑一次
 
 **Q：AI 分析按鈕沒有回應？**
-
-確認 `.env` 裡有設定 `ANTHROPIC_API_KEY`。
+- 確認 `.env` 裡有設定 `ANTHROPIC_API_KEY`
