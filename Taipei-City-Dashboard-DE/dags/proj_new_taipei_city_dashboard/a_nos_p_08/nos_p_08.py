@@ -14,6 +14,8 @@ def _transfer(**kwargs):
     import requests
     from airflow.models import Variable
     from sqlalchemy import create_engine
+    import geopandas as gpd
+    from shapely.geometry import Point
 
     from utils.load_stage import save_dataframe_to_postgresql
     from utils.transform_time import convert_str_to_time_format
@@ -179,6 +181,26 @@ def _transfer(**kwargs):
         default_table=default_table,
         history_table=history_table,
     )
+
+    # --- 輸出 GeoJSON ---
+    if {"longitude", "latitude"}.issubset(ready_data.columns):
+        lon = pd.to_numeric(ready_data["longitude"], errors="coerce")
+        lat = pd.to_numeric(ready_data["latitude"], errors="coerce")
+        geo_data = ready_data.assign(longitude=lon, latitude=lat).dropna(
+            subset=["longitude", "latitude"]
+        )
+
+        if not geo_data.empty:
+            geometry = [Point(xy) for xy in zip(geo_data["longitude"], geo_data["latitude"])]
+            gdata = gpd.GeoDataFrame(geo_data, geometry=geometry, crs="EPSG:4326")
+            output_path = "/opt/airflow/mapData/noise_station.geojson"
+            os.makedirs(os.path.dirname(output_path), exist_ok=True)
+            gdata.to_file(output_path, driver="GeoJSON", encoding="utf-8")
+            print(f"GeoJSON file has been created: {output_path}")
+        else:
+            print("No valid coordinates for GeoJSON output.")
+    else:
+        print("Missing longitude/latitude columns; skipping GeoJSON output.")
 
 
 # --- DAG 註冊 ---
