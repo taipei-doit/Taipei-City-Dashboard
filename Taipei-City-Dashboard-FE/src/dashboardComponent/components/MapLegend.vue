@@ -14,6 +14,8 @@ import cross_normal from "../assets/map/cross_normal.png";
 import cctv from "../assets/map/cctv.png";
 import live from "../assets/map/live.png";
 
+const eco_cup = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='10' fill='%234CAF50'/%3E%3C/svg%3E";
+
 const props = defineProps([
 	"chart_config",
 	"series",
@@ -54,6 +56,8 @@ function returnIcon(name) {
 		return cctv;
 	case "live":
 		return live;
+	case "eco_cup":
+		return eco_cup;
 	default:
 		return "";
 	}

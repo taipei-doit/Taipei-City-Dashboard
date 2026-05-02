@@ -19,6 +19,7 @@ export const chartTypes = {
 	IndicatorChart: "指標圖",
 	MapLegend: "地圖圖例",
 	TextUnitChart: "文字單位圖",
+	SportsVenueCapacityChart: "運動中心容量圖",
 };
 
 export const chartsPerDataType = {
@@ -34,6 +35,7 @@ export const chartsPerDataType = {
 	],
 	three_d: [
 		"ColumnChart",
+		"BarChart",
 		"BarPercentChart",
 		"RadarChart",
 		"DistrictChart",
@@ -50,4 +52,5 @@ export const chartsPerDataType = {
 		"IconPercentChart",
 	],
 	map_legend: ["MapLegend"],
+	sports_capacity: ["SportsVenueCapacityChart"],
 };

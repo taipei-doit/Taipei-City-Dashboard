@@ -1,0 +1,1445 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.545846267392,
+          25.044713837581
+        ]
+      },
+      "properties": {
+        "name": "泰姬印度餐廳",
+        "cert_type": "穆斯林餐廳",
+        "nature": "印度料理",
+        "cert_org": "中國回教協會",
+        "address": "臺北市大安區市民大道四段48巷1號",
+        "tel": "+886-2-8773-0175"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.53283353035,
+          25.016786509667
+        ]
+      },
+      "properties": {
+        "name": "阿布都中東料理",
+        "cert_type": "穆斯林餐廳",
+        "nature": "中東料理",
+        "cert_org": "中國回教協會",
+        "address": "臺北市大安區新生南路三段106號2樓之1",
+        "tel": "+886-2-2363-6005"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.520621097423,
+          25.103764974095
+        ]
+      },
+      "properties": {
+        "name": "亞瑟蘭印度餐廳",
+        "cert_type": "穆斯林餐廳",
+        "nature": "印度料理",
+        "cert_org": "中國回教協會",
+        "address": "臺北市士林區德行西路114號",
+        "tel": "+886-2-2834-3303"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.530003716019,
+          25.034272500795
+        ]
+      },
+      "properties": {
+        "name": "酷思多披薩",
+        "cert_type": "穆斯林餐廳",
+        "nature": "義大利料理",
+        "cert_org": "中國回教協會",
+        "address": "臺北市中正區連雲街74-1號",
+        "tel": "+886-2-2358-7001"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.510728523839,
+          25.045732741731
+        ]
+      },
+      "properties": {
+        "name": "張家清真黃牛肉麵館",
+        "cert_type": "穆斯林餐廳",
+        "nature": "中式料理",
+        "cert_org": "中國回教協會",
+        "address": "臺北市中正區延平南路21號",
+        "tel": "+886-2-2331-2791"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.560732359793,
+          25.035345342492
+        ]
+      },
+      "properties": {
+        "name": "饗印印度巴基斯坦料理餐廳",
+        "cert_type": "穆斯林餐廳",
+        "nature": "印度料理",
+        "cert_org": "中國回教協會",
+        "address": "臺北市信義區基隆路一段366號",
+        "tel": "+886-2-8786-9366"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.510712430585,
+          25.045677295442
+        ]
+      },
+      "properties": {
+        "name": "清真黃牛肉麵館",
+        "cert_type": "穆斯林餐廳",
+        "nature": "中式料理",
+        "cert_org": "中國回教協會",
+        "address": "臺北市中正區延平南路23號",
+        "tel": "+886-2-2331-8203"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.545192898039,
+          25.051084293542
+        ]
+      },
+      "properties": {
+        "name": "清真昆明園餐廳",
+        "cert_type": "穆斯林餐廳",
+        "nature": "異國料理",
+        "cert_org": "中國回教協會",
+        "address": "臺北市松山區復興北路81巷26號",
+        "tel": "+886-2-2751-6776"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.52979936522,
+          25.051874455554
+        ]
+      },
+      "properties": {
+        "name": "阿里巴巴的廚房",
+        "cert_type": "穆斯林餐廳",
+        "nature": "印度料理",
+        "cert_org": "中國回教協會",
+        "address": "臺北市中山區南京東路二段56號2樓",
+        "tel": "+886-2-2567-7163"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.57367368302,
+          25.049819757719
+        ]
+      },
+      "properties": {
+        "name": "壹千零壹夜",
+        "cert_type": "穆斯林餐廳",
+        "nature": "波斯料理",
+        "cert_org": "中國回教協會",
+        "address": "台北市松山區八德路四段618號2樓",
+        "tel": "+886-2-2767-1661"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.564116637019,
+          25.086332585237
+        ]
+      },
+      "properties": {
+        "name": "亞瑟蘭印度料理-內湖店",
+        "cert_type": "穆斯林餐廳",
+        "nature": "中國回教協會",
+        "cert_org": "中國回教協會",
+        "address": "臺北市內湖區文湖街60巷2號",
+        "tel": "+886-2-2657-2213"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.50719731185,
+          25.033173717108
+        ]
+      },
+      "properties": {
+        "name": "暮娜餐館",
+        "cert_type": "穆斯林餐廳",
+        "nature": "印度料理",
+        "cert_org": "中國回教協會",
+        "address": "臺北市中正區延平南路252號",
+        "tel": "+886-2-2389-6093"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.517057698926,
+          25.04717593782
+        ]
+      },
+      "properties": {
+        "name": "原味德里-北車店",
+        "cert_type": "穆斯林餐廳",
+        "nature": "印度料理",
+        "cert_org": "中國回教協會",
+        "address": "臺北市中正區北平西路3號2樓",
+        "tel": "+886-2-6632-8999"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.530801840839,
+          25.028818815494
+        ]
+      },
+      "properties": {
+        "name": "登陸土星土耳其咖啡",
+        "cert_type": "穆斯林友善餐廳",
+        "nature": "午晚餐料理",
+        "cert_org": "中國回教協會",
+        "address": "臺北市大安區永康街75巷14-2號",
+        "tel": "+886-2-23955158"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.543487683657,
+          25.039236557223
+        ]
+      },
+      "properties": {
+        "name": "真的好海鮮餐廳",
+        "cert_type": "穆斯林友善餐廳",
+        "nature": "海鮮餐-套團餐",
+        "cert_org": "中國回教協會",
+        "address": "臺北市大安區復興南路一段222號",
+        "tel": "+886-2-2771-3000"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.61734465585,
+          25.056376208112
+        ]
+      },
+      "properties": {
+        "name": "炸鷄大獅北市南港一館",
+        "cert_type": "穆斯林友善餐廳",
+        "nature": "速食",
+        "cert_org": "中國回教協會",
+        "address": "臺北市南港區經貿二路1號",
+        "tel": "+886-2-7746-2978"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.616558039434,
+          25.055836542644
+        ]
+      },
+      "properties": {
+        "name": "炸鷄大獅-南港二館",
+        "cert_type": "穆斯林友善餐廳",
+        "nature": "速食",
+        "cert_org": "中國回教協會",
+        "address": "臺北市南港區經貿二路2號B1",
+        "tel": "+886-2-2653-5547"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.604162959949,
+          25.051894363415
+        ]
+      },
+      "properties": {
+        "name": "炸鷄大獅北市南港環球店",
+        "cert_type": "穆斯林友善餐廳",
+        "nature": "速食",
+        "cert_org": "中國回教協會",
+        "address": "臺北市南港區忠孝東路七段317號B1",
+        "tel": "+886-2-2651-8957"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.575364899624,
+          25.060140688466
+        ]
+      },
+      "properties": {
+        "name": "炸鷄大獅-內湖家樂福",
+        "cert_type": "穆斯林友善餐廳",
+        "nature": "速食",
+        "cert_org": "中國回教協會",
+        "address": "臺北市內湖區民善街88號",
+        "tel": "+886-2-2794-9169"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.506303549514,
+          25.037675427756
+        ]
+      },
+      "properties": {
+        "name": "炸鷄大獅西門桂林店",
+        "cert_type": "穆斯林友善餐廳",
+        "nature": "速食",
+        "cert_org": "中國回教協會",
+        "address": "臺北市萬華區桂林路1號",
+        "tel": "+886-2-2381-3607"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.554961587095,
+          25.042166116201
+        ]
+      },
+      "properties": {
+        "name": "清真中國牛肉麵食館",
+        "cert_type": "穆斯林友善餐廳",
+        "nature": "中式料理",
+        "cert_org": "（大園清真寺）環亞貝爾國際標準驗證有限公司",
+        "address": "臺北市大安區延吉街137巷7弄1號",
+        "tel": "+886-2-2721-4771"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.550883707381,
+          25.054193602434
+        ]
+      },
+      "properties": {
+        "name": "友善清真水料理食品有限公司",
+        "cert_type": "穆斯林友善餐廳",
+        "nature": "中式料理",
+        "cert_org": "(大園清真寺)環亞貝爾國際標準驗證有限公司",
+        "address": "臺北市松山區敦化北路155巷17號",
+        "tel": "+886-2-2514-9880"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.566799,
+          25.038786
+        ]
+      },
+      "properties": {
+        "name": "清真中國牛肉麵食館",
+        "cert_type": "穆斯林友善餐廳",
+        "nature": "中式料理",
+        "cert_org": "（大園清真寺）環亞貝爾國際標準驗證有限公司",
+        "address": "臺北市信義區松高路12號新光三越B2",
+        "tel": "+886-2-2722-2646"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.574810772005,
+          25.141111172336
+        ]
+      },
+      "properties": {
+        "name": "梅居休閒農場",
+        "cert_type": "穆斯林友善餐廳",
+        "nature": "午晚餐",
+        "cert_org": "伊斯蘭商務發展有限公司",
+        "address": "臺北市士林區平等里平菁街 43 巷 99 號",
+        "tel": "+886-905-169176"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.532731941684,
+          25.014964744921
+        ]
+      },
+      "properties": {
+        "name": "炸鷄大獅-公館二店",
+        "cert_type": "穆斯林友善餐廳",
+        "nature": "速食",
+        "cert_org": "中國回教協會",
+        "address": "台北市中正區羅斯福路四段24巷14號",
+        "tel": "+886-2-2368-2551"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.533791414245,
+          25.01486965223
+        ]
+      },
+      "properties": {
+        "name": "柴神興業有限公司-Furger 芙格漢堡公館店",
+        "cert_type": "穆斯林友善餐廳",
+        "nature": "漢堡",
+        "cert_org": "巴勒克清真產業有限公司",
+        "address": "臺北市大安區羅斯福路四段52巷2號(捷運公館站4號出口)",
+        "tel": "+886-2-82871801"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.568830870822,
+          25.04308125239
+        ]
+      },
+      "properties": {
+        "name": "炸雞大獅-信義永吉店",
+        "cert_type": "穆斯林友善餐廳",
+        "nature": "速食",
+        "cert_org": "中國回教協會",
+        "address": "台北市信義區永吉路30巷119號",
+        "tel": "+886-2-2765-7369"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.522745658421,
+          25.103489460937
+        ]
+      },
+      "properties": {
+        "name": "池先生士林芝山站有限公司-池先生(士林分店)",
+        "cert_type": "穆斯林友善餐廳",
+        "nature": "馬來西亞清真餐飲",
+        "cert_org": "巴勒克清真產業有限公司",
+        "address": "臺北市士林區福華路150號1樓",
+        "tel": "+886-2-28310151"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.548529314598,
+          25.052764026938
+        ]
+      },
+      "properties": {
+        "name": "茹曦酒店- 茹曦宴會廳 / Sunny 自助餐",
+        "cert_type": "穆斯林友善餐廳/穆斯林友善餐旅",
+        "nature": "早午晚餐/住宿",
+        "cert_org": "中國回教協會",
+        "address": "臺北市松山區敦化北路100號1,2樓",
+        "tel": "+886-2-2545-9288"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.523743356356,
+          25.054198673486
+        ]
+      },
+      "properties": {
+        "name": "臺北晶華酒店 - 中庭餐廳",
+        "cert_type": "穆斯林友善餐廳/穆斯林友善餐旅",
+        "nature": "早午晚餐/住宿",
+        "cert_org": "中國回教協會",
+        "address": "臺北市中山區中山北路二段39巷3號",
+        "tel": "+886-2-2521-5000"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.507277694301,
+          25.134627895958
+        ]
+      },
+      "properties": {
+        "name": "大地酒店-喜歡廳",
+        "cert_type": "穆斯林友善餐廳/穆斯林友善餐旅",
+        "nature": "早午晚餐/住宿",
+        "cert_org": "中國回教協會",
+        "address": "臺北市北投區奇岩路1號",
+        "tel": "+886-2-5551-8888"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.524400620492,
+          25.080402755265
+        ]
+      },
+      "properties": {
+        "name": "臺北圓山大飯店 - 松山軒/松高軒",
+        "cert_type": "穆斯林友善餐廳/穆斯林友善餐旅",
+        "nature": "早午晚餐/住宿",
+        "cert_org": "中國回教協會",
+        "address": "臺北市中山區中山北路四段1號",
+        "tel": "+886-2-2886-8888"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.516822418904,
+          25.049215129134
+        ]
+      },
+      "properties": {
+        "name": "台北君品大酒店－頤宮中餐廳",
+        "cert_type": "穆斯林友善餐廳/穆斯林友善餐旅",
+        "nature": "早午晚餐/住宿",
+        "cert_org": "中國回教協會",
+        "address": "臺北市大同區承德路一段3號",
+        "tel": "+886-2-2181-9999"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.503705913901,
+          25.137584738032
+        ]
+      },
+      "properties": {
+        "name": "北投老爺酒店",
+        "cert_type": "穆斯林友善餐廳/穆斯林友善旅宿",
+        "nature": "住宿/早午晚餐",
+        "cert_org": "伊斯蘭商務發展有限公司",
+        "address": "臺北市北投區中和街2號",
+        "tel": "+886-2-2896-6966#8878"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.553786360451,
+          25.080312241372
+        ]
+      },
+      "properties": {
+        "name": "台北美福大飯店",
+        "cert_type": "穆斯林友善餐廳/穆斯林友善旅宿",
+        "nature": "住宿/早午晚餐",
+        "cert_org": "伊斯蘭商務發展有限公司",
+        "address": "臺北市中山區樂群二路55號",
+        "tel": "+886-2-7722-3399"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.580626387885,
+          25.049176614289
+        ]
+      },
+      "properties": {
+        "name": "台北松山意舍酒店",
+        "cert_type": "穆斯林友善餐廳/穆斯林友善旅宿",
+        "nature": "住宿/早晚餐",
+        "cert_org": "伊斯蘭商務發展有限公司",
+        "address": "臺北市南港區市民大道七段8號",
+        "tel": "+886-2-2653-2828"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.505708602027,
+          25.045076815898
+        ]
+      },
+      "properties": {
+        "name": "台北西門町意舍酒店",
+        "cert_type": "穆斯林友善餐廳/穆斯林友善旅宿",
+        "nature": "住宿/早晚餐",
+        "cert_org": "伊斯蘭商務發展有限公司",
+        "address": "臺北市萬華區武昌街二段77號5樓",
+        "tel": "+886-"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.49730431917,
+          25.036841302662
+        ]
+      },
+      "properties": {
+        "name": "禾順行旅",
+        "cert_type": "穆斯林友善餐旅",
+        "nature": "早餐/住宿",
+        "cert_org": "中國回教協會",
+        "address": "臺北市萬華區廣州街247號",
+        "tel": "+886-2-2338-1211"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.522850432211,
+          25.053722790933
+        ]
+      },
+      "properties": {
+        "name": "臺北老爺大酒店 - 咖啡廳",
+        "cert_type": "穆斯林友善餐旅",
+        "nature": "早餐/住宿",
+        "cert_org": "中國回教協會",
+        "address": "臺北市中山區中山北路二段37-1號",
+        "tel": "+886-2-2542-3266"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.558943074923,
+          25.080489183348
+        ]
+      },
+      "properties": {
+        "name": "台北萬豪酒店",
+        "cert_type": "穆斯林友善餐旅",
+        "nature": "早餐/住宿",
+        "cert_org": "中國回教協會",
+        "address": "臺北市中山區樂群二路199號",
+        "tel": "'+886-2-8502-0899"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.513687838574,
+          25.137676058867
+        ]
+      },
+      "properties": {
+        "name": "春天酒店",
+        "cert_type": "穆斯林友善餐旅",
+        "nature": "早餐/住宿",
+        "cert_org": "中國回教協會",
+        "address": "臺北市北投區幽雅路18號",
+        "tel": "+886-2-2897-5555"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.525634648989,
+          25.068105130954
+        ]
+      },
+      "properties": {
+        "name": "歐華酒店",
+        "cert_type": "穆斯林友善餐旅",
+        "nature": "早餐/住宿",
+        "cert_org": "中國回教協會",
+        "address": "臺北市中山區林森北路646號",
+        "tel": "+886-2-2585-3258"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.509477021876,
+          25.044864711838
+        ]
+      },
+      "properties": {
+        "name": "捷絲旅台北西門町館",
+        "cert_type": "穆斯林友善餐旅",
+        "nature": "早餐/住宿",
+        "cert_org": "中國回教協會",
+        "address": "臺北市中正區中華路一段41號5樓",
+        "tel": "+886-2-2370-9000"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.502609309509,
+          25.118918491117
+        ]
+      },
+      "properties": {
+        "name": "溫拿旅館",
+        "cert_type": "穆斯林友善餐旅",
+        "nature": "早餐/住宿",
+        "cert_org": "中國回教協會",
+        "address": "臺北市北投區承德路七段380號",
+        "tel": "+886-2-2821-3191"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.516436264625,
+          25.046214533526
+        ]
+      },
+      "properties": {
+        "name": "台北凱撒大飯店 - 咖啡園自助餐",
+        "cert_type": "穆斯林友善餐旅",
+        "nature": "早餐/住宿",
+        "cert_org": "中國回教協會",
+        "address": "臺北市中正區忠孝西路一段38號",
+        "tel": "+886-2-2311-5151"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.543092225466,
+          25.03769504141
+        ]
+      },
+      "properties": {
+        "name": "台北福華大飯店 - 花梨軒",
+        "cert_type": "穆斯林友善餐旅",
+        "nature": "早餐/住宿",
+        "cert_org": "中國回教協會",
+        "address": "臺北市大安區仁愛路三段160號",
+        "tel": "+886-2-2700-2323"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.558943074923,
+          25.080489183348
+        ]
+      },
+      "properties": {
+        "name": "台北萬豪酒店-花園餐廳",
+        "cert_type": "穆斯林友善餐旅",
+        "nature": "早餐/住宿",
+        "cert_org": "中國回教協會",
+        "address": "臺北市中山區樂群二路199號",
+        "tel": "+886-2-8502-0899"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.509477021876,
+          25.044864711838
+        ]
+      },
+      "properties": {
+        "name": "捷絲旅台北西門町館-捷食驛",
+        "cert_type": "穆斯林友善餐旅",
+        "nature": "早餐/住宿",
+        "cert_org": "中國回教協會",
+        "address": "臺北市中正區中華路一段41號5樓",
+        "tel": "+886-2-2370-9000"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.525634648989,
+          25.068105130954
+        ]
+      },
+      "properties": {
+        "name": "歐華酒店-地中海牛排館",
+        "cert_type": "穆斯林友善餐旅",
+        "nature": "早餐/住宿",
+        "cert_org": "中國回教協會",
+        "address": "臺北市中山區林森北路646號",
+        "tel": "+886-2-2585-3258"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.538918205322,
+          25.054155422865
+        ]
+      },
+      "properties": {
+        "name": "背包棧旅店台北長春店",
+        "cert_type": "穆斯林友善餐旅",
+        "nature": "早餐/住宿",
+        "cert_org": "中國回教協會",
+        "address": "臺北市中山區長春路258巷6號2樓",
+        "tel": "+886-2-2518-0188"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.502615428298,
+          25.044012900928
+        ]
+      },
+      "properties": {
+        "name": "綺樂文旅-康定館",
+        "cert_type": "穆斯林友善餐旅",
+        "nature": "nan",
+        "cert_org": "中國回教協會",
+        "address": "臺北市萬華區康定路32號",
+        "tel": "+886-2-2361-5868"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.549229622609,
+          25.034060564374
+        ]
+      },
+      "properties": {
+        "name": "慕軒飯店-義大利餐廳",
+        "cert_type": "穆斯林友善餐旅",
+        "nature": "早餐/住宿",
+        "cert_org": "中國回教協會",
+        "address": "臺北市大安區敦化南路一段331號",
+        "tel": "+886-2-77266699"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.512741018791,
+          25.046063072535
+        ]
+      },
+      "properties": {
+        "name": "綺樂文旅-開封館",
+        "cert_type": "穆斯林友善餐旅",
+        "nature": "nan",
+        "cert_org": "中國回教協會",
+        "address": "台北市中正區開封街一段35號1樓",
+        "tel": "+886-2-23615889"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.50779473493,
+          25.041378158456
+        ]
+      },
+      "properties": {
+        "name": "福泰桔子商務旅館-西門店",
+        "cert_type": "穆斯林友善餐旅",
+        "nature": "早餐/住宿",
+        "cert_org": "中國回教協會",
+        "address": "台北市萬華區中華路一段166之2號",
+        "tel": "+886-2-23115556"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.570043732212,
+          25.051491612127
+        ]
+      },
+      "properties": {
+        "name": "城市商旅-南東館",
+        "cert_type": "穆斯林友善餐旅",
+        "nature": "早餐/住宿",
+        "cert_org": "中國回教協會",
+        "address": "台北市松山區南京東路五段411號",
+        "tel": "+886-2-27425888"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.505039977611,
+          25.13617729076
+        ]
+      },
+      "properties": {
+        "name": "水美溫泉會館",
+        "cert_type": "穆斯林友善餐旅",
+        "nature": "早餐/住宿",
+        "cert_org": "中國回教協會",
+        "address": "台北市北投區光明路224號",
+        "tel": "+886-2-28983838"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.51120109554,
+          25.046135198812
+        ]
+      },
+      "properties": {
+        "name": "台北109青旅",
+        "cert_type": "穆斯林友善餐旅",
+        "nature": "早餐/住宿",
+        "cert_org": "中國回教協會",
+        "address": "台北市中正區博愛路36號3樓",
+        "tel": "+886-905972109"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.513128597994,
+          25.054083003222
+        ]
+      },
+      "properties": {
+        "name": "賓王大飯店",
+        "cert_type": "穆斯林友善餐旅",
+        "nature": "早餐/住宿",
+        "cert_org": "中國回教協會",
+        "address": "台北市大同區南京西路163號3樓",
+        "tel": "+886-2-25582255"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.544882516165,
+          25.054440659031
+        ]
+      },
+      "properties": {
+        "name": "大來商旅- 桃莉廚房",
+        "cert_type": "穆斯林友善餐旅",
+        "nature": "早餐/住宿",
+        "cert_org": "中國回教協會",
+        "address": "台北市松山區長春路432號",
+        "tel": "+886-2-27160011"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.619434934864,
+          25.058136365869
+        ]
+      },
+      "properties": {
+        "name": "台北漢來大飯店",
+        "cert_type": "穆斯林友善餐旅",
+        "nature": "早餐/住宿",
+        "cert_org": "中國回教協會",
+        "address": "台北市南港區經貿一路168號",
+        "tel": "+886-2-81700568"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.51098811138,
+          25.047371697169
+        ]
+      },
+      "properties": {
+        "name": "五月家青旅-北車館",
+        "cert_type": "穆斯林友善餐旅",
+        "nature": "早餐/住宿",
+        "cert_org": "中國回教協會",
+        "address": "台北市中正區忠孝西路一段122號6樓",
+        "tel": "+886-9936-659-233"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.503567444861,
+          25.045292440357
+        ]
+      },
+      "properties": {
+        "name": "艾特文旅-西門町台北",
+        "cert_type": "穆斯林友善餐旅",
+        "nature": "早餐/住宿",
+        "cert_org": "中國回教協會",
+        "address": "台北市萬華區武昌街二段124-2號4樓",
+        "tel": "+886-2-23885558"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.513852207695,
+          25.052087649262
+        ]
+      },
+      "properties": {
+        "name": "承攜行旅-台北重慶館",
+        "cert_type": "穆斯林友善餐旅",
+        "nature": "早餐/住宿",
+        "cert_org": "中國回教協會",
+        "address": "台北市大同區重慶北路一段62號",
+        "tel": "+886-2-25510558"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.533174506171,
+          25.048650859412
+        ]
+      },
+      "properties": {
+        "name": "柯達大飯店-台北長安",
+        "cert_type": "穆斯林友善餐旅",
+        "nature": "早餐/住宿",
+        "cert_org": "中國回教協會",
+        "address": "台北市中山區松江路61-1號",
+        "tel": "+886-2-25169999"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.557491329293,
+          25.042151447871
+        ]
+      },
+      "properties": {
+        "name": "國聯大飯店—板石咖啡廳",
+        "cert_type": "穆斯林友善餐旅",
+        "nature": "早餐/住宿",
+        "cert_org": "中國回教協會",
+        "address": "臺北市大安區光復南路200號",
+        "tel": "+886-2-2773-1515#186"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.56041317692,
+          25.084071357308
+        ]
+      },
+      "properties": {
+        "name": "香樹花園酒店—香樹綠園餐廳",
+        "cert_type": "穆斯林友善餐旅",
+        "nature": "早餐/住宿",
+        "cert_org": "中國回教協會",
+        "address": "台北市中山區堤頂大道二段566號",
+        "tel": "+886-972-935-867"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.512788208906,
+          25.053855602189
+        ]
+      },
+      "properties": {
+        "name": "皇家季節酒店1館",
+        "cert_type": "穆斯林友善餐旅",
+        "nature": "早餐/住宿",
+        "cert_org": "中國回教協會",
+        "address": "台北市大同區南京西路326號",
+        "tel": "+886-982-995-803"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.537046107248,
+          25.010500082285
+        ]
+      },
+      "properties": {
+        "name": "五月家青旅台大館",
+        "cert_type": "穆斯林友善餐旅",
+        "nature": "早餐/住宿",
+        "cert_org": "中國回教協會",
+        "address": "台北市文山區羅斯福路四段208號",
+        "tel": "+886-2-2393-3608"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.520381710269,
+          25.089180253022
+        ]
+      },
+      "properties": {
+        "name": "見潭璞旅",
+        "cert_type": "穆斯林友善餐旅",
+        "nature": "早餐/住宿",
+        "cert_org": "中國回教協會",
+        "address": "台北市士林區承德路四段250號",
+        "tel": "+886-2-2883-1777"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.536343787581,
+          25.01317893854
+        ]
+      },
+      "properties": {
+        "name": "捷絲旅臺大尊賢館",
+        "cert_type": "穆斯林友善餐旅",
+        "nature": "早餐/住宿",
+        "cert_org": "中國回教協會",
+        "address": "台北市大安區羅斯福路四段83號",
+        "tel": "+886-2-7735-5088"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.511954628635,
+          25.136453181103
+        ]
+      },
+      "properties": {
+        "name": "曲水會館—麝香",
+        "cert_type": "穆斯林友善餐旅",
+        "nature": "早餐/住宿",
+        "cert_org": "中國回教協會",
+        "address": "台北市北投區溫泉路105號",
+        "tel": "+886-2-2891-2151"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.512570698519,
+          25.053840011849
+        ]
+      },
+      "properties": {
+        "name": "皇家季節酒店2館—早餐廳",
+        "cert_type": "穆斯林友善餐旅",
+        "nature": "早餐/住宿",
+        "cert_org": "中國回教協會",
+        "address": "台北市大同區南京西路330號",
+        "tel": "+886-2-2555-6488"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.563637778891,
+          25.026638011926
+        ]
+      },
+      "properties": {
+        "name": "臺北醫學大學附設醫院營養室",
+        "cert_type": "清真廚房",
+        "nature": "中央廚房",
+        "cert_org": "伊斯蘭商務發展有限公司",
+        "address": "臺北市信義區吳興街252號",
+        "tel": "+886-2-2737-2181"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.524204612488,
+          25.0548527553
+        ]
+      },
+      "properties": {
+        "name": "雲富商務飯店",
+        "cert_type": "穆斯林友善環境",
+        "nature": "早餐/住宿",
+        "cert_org": "國際穆斯林觀光產業聯合發展協會",
+        "address": "台北市中山區長春路24號",
+        "tel": "+886-2-25316767"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.606055824834,
+          25.052512444115
+        ]
+      },
+      "properties": {
+        "name": "台北六福萬怡酒店",
+        "cert_type": "穆斯林友善旅宿",
+        "nature": "早餐/住宿",
+        "cert_org": "伊斯蘭商務發展有限公司",
+        "address": "臺北市南港區忠孝東路七段359號",
+        "tel": "+886-2-6615-6565"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.568054287493,
+          25.037910456321
+        ]
+      },
+      "properties": {
+        "name": "台北寒舍艾美酒店",
+        "cert_type": "穆斯林友善旅宿",
+        "nature": "早餐/住宿",
+        "cert_org": "伊斯蘭商務發展有限公司",
+        "address": "臺北市信義區松仁路 38 號",
+        "tel": "+886-2-6622-5843"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.499842862366,
+          25.033305941631
+        ]
+      },
+      "properties": {
+        "name": "台北凱達大飯店",
+        "cert_type": "穆斯林友善旅宿",
+        "nature": "早餐/住宿",
+        "cert_org": "伊斯蘭商務發展有限公司",
+        "address": "臺北市萬華區艋舺大道167號",
+        "tel": "+886-2-2383-6789"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.606387915838,
+          25.073388579801
+        ]
+      },
+      "properties": {
+        "name": "大湖璞旅",
+        "cert_type": "穆斯林友善旅宿",
+        "nature": "早餐/住宿",
+        "cert_org": "伊斯蘭商務發展有限公司",
+        "address": "臺北市內湖區成功路五段462號",
+        "tel": "+886-2-2633-8555"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.518171318582,
+          25.0462245499
+        ]
+      },
+      "properties": {
+        "name": "台北天成大飯店",
+        "cert_type": "穆斯林友善旅宿",
+        "nature": "早餐/住宿",
+        "cert_org": "伊斯蘭商務發展有限公司",
+        "address": "臺北市中正區忠孝西路一段43號",
+        "tel": "+886-2-2361-7856"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.52207141813,
+          25.044912321048
+        ]
+      },
+      "properties": {
+        "name": "台北喜來登大飯店",
+        "cert_type": "穆斯林友善旅宿",
+        "nature": "早餐/住宿",
+        "cert_org": "伊斯蘭商務發展有限公司",
+        "address": "臺北市中正區忠孝東路一段12號",
+        "tel": "+886-2-2321-5511"
+      }
+    }
+  ]
+}
