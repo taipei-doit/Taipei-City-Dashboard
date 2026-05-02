@@ -1,0 +1,37 @@
+{
+  "dag_infos": {
+    "dag_id": "api_workflow_template",
+    "start_date": "2024-04-01",
+    "schedule_interval": "@daily",
+    "catchup": false,
+    "tags": ["tutorial", "api", "template"],
+    "description": "Tutorial template for a public API workflow.",
+    "default_args": {
+      "owner": "airflow",
+      "email": ["DEFAULT_EMAIL_LIST"],
+      "email_on_retry": false,
+      "email_on_failure": true,
+      "retries": 1,
+      "retry_delay": 60
+    },
+    "ready_data_db": "postgres_default",
+    "ready_data_default_table": "api_workflow_template",
+    "ready_data_history_table": "api_workflow_template_history",
+    "raw_data_db": "postgres_default",
+    "raw_data_table": "",
+    "load_behavior": "current+history"
+  },
+  "data_infos": {
+    "name_cn": "公共 API workflow 範本",
+    "airflow_update_freq": "daily",
+    "source": "https://example.gov.tw/api",
+    "source_type": "public api",
+    "source_dept": "example department",
+    "gis_format": "None",
+    "output_coordinate": "EPSG:4326",
+    "is_geometry": 0,
+    "dataset_description": "Tutorial template for adding a new public API workflow.",
+    "etl_description": "extract, normalize, load, update metadata",
+    "sensitivity": "public"
+  }
+}

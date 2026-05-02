@@ -7,33 +7,35 @@ let isDockerCompose = process?.env.DOCKER_COMPOSE === "true"; // eslint-disable-
 
 const serverConfig = isDockerCompose
 	? {
-		// Docker Compose override config
-		host: "0.0.0.0",
-		port: 80, // 如有需要可變更 port
-		proxy: {
-			"/api/dev": {
-				target: "http://dashboard-be:8080",
-				changeOrigin: true,
-				rewrite: (path) => path.replace("/dev", "/v1")
-			}
-		}
-	}
-	: {
-		host: "0.0.0.0",
-		port: 80,
-		proxy: {
-			"/api": {
-				target: "https://citydashboard.taipei/api/v1",
-				changeOrigin: true,
-				rewrite: (path) => path.replace(/^\/api/, "")
+			// Docker Compose override config
+			host: "0.0.0.0",
+			port: 80, // 如有需要可變更 port
+			proxy: {
+				"/api/dev": {
+					target: "http://dashboard-be:8080",
+					changeOrigin: true,
+					rewrite: (path) => path.replace("/dev", "/v1"),
+				},
 			},
-			"/geo_server": {
-				target: "https://citydashboard.taipei/geo_server/",
-				changeOrigin: true,
-				rewrite: (path) => path.replace(/^\/geo_server/, "")
-			}
 		}
-	};
+	: {
+			host: "0.0.0.0",
+			port: 80,
+			proxy: {
+				"/api": {
+					target: "https://citydashboard.taipei/api/v1",
+					changeOrigin: true,
+					secure: false,
+					rewrite: (path) => path.replace(/^\/api/, ""),
+				},
+				"/geo_server": {
+					target: "https://citydashboard.taipei/geo_server/",
+					changeOrigin: true,
+					secure: false,
+					rewrite: (path) => path.replace(/^\/geo_server/, ""),
+				},
+			},
+		};
 
 export default defineConfig({
 	plugins: [vue(), viteCompression()],
