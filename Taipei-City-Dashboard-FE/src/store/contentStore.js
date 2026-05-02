@@ -127,7 +127,19 @@ export const useContentStore = defineStore("content", {
 			onlyDashboard = false,
 			isStale = undefined,
 		) {
-			const response = await http.get(`/dashboard/`);
+			const includeIndex =
+				onlyDashboard && this.currentDashboard.index
+					? this.currentDashboard.index
+					: undefined;
+			const response = await http.get(`/dashboard/`, {
+				params: includeIndex
+					? {
+							includeIndex,
+							city: this.currentDashboard.city || "",
+						}
+					: undefined,
+				skipGlobalLoading: true,
+			});
 			if (typeof isStale === "function" && isStale()) {
 				return;
 			}
@@ -169,6 +181,14 @@ export const useContentStore = defineStore("content", {
 					return;
 				}
 				this.applyCurrentDashboardLabelsFromLists();
+				// 若後端同回 includeIndex 的已翻譯組件文字欄位，直接合併回既有物件，避免再打第二支 API。
+				const included =
+					response.data.included_components ||
+					response.data.includedComponents ||
+					null;
+				if (Array.isArray(included) && included.length > 0) {
+					this.mergeTranslatedTextsFromDashboardPayload(included);
+				}
 				return;
 			}
 

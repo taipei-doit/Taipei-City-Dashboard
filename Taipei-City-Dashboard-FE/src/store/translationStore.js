@@ -183,23 +183,13 @@ export const useTranslationStore = defineStore("translation", {
 
 				if (applyGen !== this.localeApplyGeneration) return;
 
-				// 先重抓 GET /dashboard 更新儀表板列表；再以輕量 GET /dashboard/:index 合併組件標題／說明，
-				// 與不重拉 chart 並行（僅 PATCH 現有元件物件上的文字欄位）。
+				// 單支 GET /dashboard/：後端可帶 includeIndex 直接回傳該 dashboard 的翻譯後組件文字欄位，
+				// 前端在 setDashboards(true) 內合併回既有物件，避免再打第二支 /dashboard/:index。
 				if (changed) {
 					const isStale = () =>
 						applyGen !== this.localeApplyGeneration;
 					await this.retry(
 						() => contentStore.setDashboards(true, isStale),
-						{ tries: 2, delayMs: 500, isStale }
-					);
-					if (applyGen !== this.localeApplyGeneration) {
-						return;
-					}
-					await this.retry(
-						() =>
-							contentStore.refreshDashboardComponentTranslationsForLocale(
-								isStale,
-							),
 						{ tries: 2, delayMs: 500, isStale }
 					);
 				}
