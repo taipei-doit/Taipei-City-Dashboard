@@ -1,0 +1,404 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.516506,
+          25.096356
+        ]
+      },
+      "properties": {
+        "CountyName": "臺北市",
+        "TownName": "士林區",
+        "Weather": "多雲",
+        "WindSpeed": 0.4,
+        "AirTemperature": 30.5,
+        "RelativeHumidity": 51,
+        "DailyHigh": 30.5,
+        "DailyLow": 22.2,
+        "Precipitation": 92
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.550428,
+          25.048711
+        ]
+      },
+      "properties": {
+        "CountyName": "臺北市",
+        "TownName": "松山區",
+        "Weather": "晴",
+        "WindSpeed": 1.4,
+        "AirTemperature": 28.5,
+        "RelativeHumidity": 58,
+        "DailyHigh": 28.6,
+        "DailyLow": 21.7,
+        "Precipitation": 57
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.564597,
+          25.037822
+        ]
+      },
+      "properties": {
+        "CountyName": "臺北市",
+        "TownName": "信義區",
+        "Weather": "晴",
+        "WindSpeed": 0.2,
+        "AirTemperature": 29.8,
+        "RelativeHumidity": 50,
+        "DailyHigh": 29.8,
+        "DailyLow": 21.7,
+        "Precipitation": 62
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.575728,
+          25.00235
+        ]
+      },
+      "properties": {
+        "CountyName": "臺北市",
+        "TownName": "文山區",
+        "Weather": "晴",
+        "WindSpeed": 0.7,
+        "AirTemperature": 29,
+        "RelativeHumidity": 75,
+        "DailyHigh": 29.2,
+        "DailyLow": 20,
+        "Precipitation": 50
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.57545,
+          25.079422
+        ]
+      },
+      "properties": {
+        "CountyName": "臺北市",
+        "TownName": "內湖區",
+        "Weather": "多雲",
+        "WindSpeed": 1.2,
+        "AirTemperature": 29.1,
+        "RelativeHumidity": 55,
+        "DailyHigh": 29.2,
+        "DailyLow": 22,
+        "Precipitation": 68
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.537169,
+          25.117494
+        ]
+      },
+      "properties": {
+        "CountyName": "臺北市",
+        "TownName": "士林區",
+        "Weather": "多雲",
+        "WindSpeed": 1.4,
+        "AirTemperature": 29,
+        "RelativeHumidity": 59,
+        "DailyHigh": 30.1,
+        "DailyLow": 22.3,
+        "Precipitation": 80
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.469681,
+          25.109508
+        ]
+      },
+      "properties": {
+        "CountyName": "臺北市",
+        "TownName": "士林區",
+        "Weather": "多雲",
+        "WindSpeed": 0.1,
+        "AirTemperature": 30.5,
+        "RelativeHumidity": 55,
+        "DailyHigh": 30.5,
+        "DailyLow": 22.7,
+        "Precipitation": 5
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.522408,
+          25.175675
+        ]
+      },
+      "properties": {
+        "CountyName": "臺北市",
+        "TownName": "北投區",
+        "Weather": "多雲",
+        "WindSpeed": 2.5,
+        "AirTemperature": 20,
+        "RelativeHumidity": 91,
+        "DailyHigh": 21.2,
+        "DailyLow": 17.5,
+        "Precipitation": 4
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.577086,
+          25.129142
+        ]
+      },
+      "properties": {
+        "CountyName": "臺北市",
+        "TownName": "士林區",
+        "Weather": "多雲",
+        "WindSpeed": -99,
+        "AirTemperature": -99,
+        "RelativeHumidity": -99,
+        "DailyHigh": 25.6,
+        "DailyLow": 19.1,
+        "Precipitation": 22
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.513139,
+          25.115597
+        ]
+      },
+      "properties": {
+        "CountyName": "臺北市",
+        "TownName": "北投區",
+        "Weather": "多雲",
+        "WindSpeed": -99,
+        "AirTemperature": -99,
+        "RelativeHumidity": -99,
+        "DailyHigh": 29.2,
+        "DailyLow": 22.7,
+        "Precipitation": 52
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.529731,
+          25.182586
+        ]
+      },
+      "properties": {
+        "CountyName": "臺北市",
+        "TownName": "北投區",
+        "Weather": "多雲",
+        "WindSpeed": 1.3,
+        "AirTemperature": 21.3,
+        "RelativeHumidity": 83,
+        "DailyHigh": 22.9,
+        "DailyLow": 16.3,
+        "Precipitation": 10
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.514853,
+          25.037658
+        ]
+      },
+      "properties": {
+        "CountyName": "臺北市",
+        "TownName": "中正區",
+        "Weather": "晴",
+        "WindSpeed": 0.9,
+        "AirTemperature": 28.9,
+        "RelativeHumidity": 56,
+        "DailyHigh": 29.3,
+        "DailyLow": 21.5,
+        "Precipitation": 14
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.544547,
+          25.162078
+        ]
+      },
+      "properties": {
+        "CountyName": "臺北市",
+        "TownName": "北投區",
+        "Weather": "多雲",
+        "WindSpeed": 1.5,
+        "AirTemperature": 23.9,
+        "RelativeHumidity": 68,
+        "DailyHigh": 24.3,
+        "DailyLow": 17.7,
+        "Precipitation": 13
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.539416,
+          25.014278
+        ]
+      },
+      "properties": {
+        "CountyName": "臺北市",
+        "TownName": "大安區",
+        "Weather": "晴",
+        "WindSpeed": 0.6,
+        "AirTemperature": 28.9,
+        "RelativeHumidity": 52,
+        "DailyHigh": 29.4,
+        "DailyLow": 20.5,
+        "Precipitation": 47
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.53987,
+          25.13605
+        ]
+      },
+      "properties": {
+        "CountyName": "臺北市",
+        "TownName": "士林區",
+        "Weather": "多雲",
+        "WindSpeed": 1.5,
+        "AirTemperature": 24.8,
+        "RelativeHumidity": 62,
+        "DailyHigh": 26.3,
+        "DailyLow": 19.4,
+        "Precipitation": 94
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.49199,
+          25.11576
+        ]
+      },
+      "properties": {
+        "CountyName": "臺北市",
+        "TownName": "北投區",
+        "Weather": "多雲",
+        "WindSpeed": -99,
+        "AirTemperature": 27.9,
+        "RelativeHumidity": 58,
+        "DailyHigh": 28.4,
+        "DailyLow": 20.7,
+        "Precipitation": 38
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.6158,
+          25.03306
+        ]
+      },
+      "properties": {
+        "CountyName": "臺北市",
+        "TownName": "南港區",
+        "Weather": "晴",
+        "WindSpeed": 1.8,
+        "AirTemperature": 28.6,
+        "RelativeHumidity": 68,
+        "DailyHigh": 28.8,
+        "DailyLow": 19.7,
+        "Precipitation": 99
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5975,
+          25.00194
+        ]
+      },
+      "properties": {
+        "CountyName": "臺北市",
+        "TownName": "文山區",
+        "Weather": "晴",
+        "WindSpeed": 1.7,
+        "AirTemperature": 28.3,
+        "RelativeHumidity": 68,
+        "DailyHigh": 28.8,
+        "DailyLow": 18.8,
+        "Precipitation": 13
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.53628,
+          25.02955
+        ]
+      },
+      "properties": {
+        "CountyName": "臺北市",
+        "TownName": "大安區",
+        "Weather": "晴",
+        "WindSpeed": 0.3,
+        "AirTemperature": 29.3,
+        "RelativeHumidity": 53,
+        "DailyHigh": 29.9,
+        "DailyLow": 19.7,
+        "Precipitation": 90
+      }
+    }
+  ]
+}
