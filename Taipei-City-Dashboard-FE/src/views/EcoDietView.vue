@@ -1286,6 +1286,115 @@ function tagListOf(component) {
       />
     </div>
     <MapContainer />
+    <!-- 步行 icon 按鈕 -->
+    <button
+      class="ecodietview-walkbtn"
+      :class="{ 'ecodietview-walkbtn-active': routePanelOpen }"
+      title="步行路線"
+      @click="toggleRoutePanel"
+    >
+      <span>directions_walk</span>
+    </button>
+    <!-- 可拖曳的步行路線視窗 -->
+    <div
+      v-if="routePanelOpen"
+      class="ecodietview-route"
+      :style="{ left: `${panelPos?.x ?? 0}px`, top: `${panelPos?.y ?? 0}px` }"
+    >
+      <div
+        class="ecodietview-route-header"
+        @mousedown="onPanelDragStart"
+      >
+        <span>directions_walk</span>
+        <h3>步行路線</h3>
+        <button
+          class="ecodietview-route-closebtn"
+          title="關閉"
+          @click="routePanelOpen = false"
+        >
+          <span>close</span>
+        </button>
+      </div>
+      <div
+        v-if="!routeStep && !routeStats && !routeLoading"
+        class="ecodietview-route-actions"
+      >
+        <button
+          class="ecodietview-route-btn"
+          @click="startRouteFromCurrent"
+        >
+          從目前位置出發
+        </button>
+        <button
+          class="ecodietview-route-btn"
+          @click="startRoutePickTwo"
+        >
+          選兩個點位
+        </button>
+        <p class="ecodietview-route-hint">
+          先打開圖層再點選點位
+        </p>
+      </div>
+      <div
+        v-else-if="routeStep"
+        class="ecodietview-route-status"
+      >
+        <p>{{ routeStep === 'pick-start' ? '請點選起點' : '請點選終點' }}</p>
+        <button
+          class="ecodietview-route-btn ecodietview-route-btn-cancel"
+          @click="clearRoute"
+        >
+          取消
+        </button>
+      </div>
+      <div
+        v-else-if="routeLoading"
+        class="ecodietview-route-status"
+      >
+        <p>計算路徑中 ⋯</p>
+      </div>
+      <div
+        v-else-if="routeStats"
+        class="ecodietview-route-stats"
+      >
+        <div class="ecodietview-route-stats-row">
+          <span>straighten</span>
+          <p>{{ formatDistance(routeStats.distanceMeters) }}</p>
+        </div>
+        <div class="ecodietview-route-stats-row">
+          <span>schedule</span>
+          <p>{{ formatDuration(routeStats.durationSeconds) }}</p>
+        </div>
+        <p
+          v-if="routeStart?.name && routeEnd?.name"
+          class="ecodietview-route-stats-od"
+        >
+          {{ routeStart.name }} → {{ routeEnd.name }}
+        </p>
+        <button
+          class="ecodietview-route-btn ecodietview-route-btn-cancel"
+          @click="clearRoute"
+        >
+          清除路線
+        </button>
+      </div>
+      <button
+        v-if="inRouteMode && clickedFeatures.length > 0"
+        class="ecodietview-route-btn ecodietview-route-btn-secondary"
+        @click="clearClickedFeatures"
+      >
+        清除選取（{{ clickedFeatures.length }}）
+      </button>
+    </div>
+    <!-- 附近綠色飲食 AI 助理 -->
+    <button
+      class="ecodietview-nearby-fab"
+      title="附近綠色飲食 AI 助理"
+      aria-label="附近綠色飲食 AI 助理"
+      @click="showNearbyChat = true"
+    >
+      <span class="material-icons">eco</span>
+    </button>
     <MoreInfo />
     <ReportIssue />
   </div>
