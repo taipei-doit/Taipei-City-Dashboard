@@ -178,7 +178,7 @@ INSERT INTO public.query_charts (
     NOW(),
     NOW(),
     'three_d',
-    E'SELECT\n    hour::text AS x_axis,\n    CASE EXTRACT(ISODOW FROM make_date(\n        GREATEST(year::int, 2022),\n        GREATEST(month::int, 1),\n        1\n    ))\n        WHEN 1 THEN ''週一''\n        WHEN 2 THEN ''週二''\n        WHEN 3 THEN ''週三''\n        WHEN 4 THEN ''週四''\n        WHEN 5 THEN ''週五''\n        WHEN 6 THEN ''週六''\n        WHEN 7 THEN ''週日''\n    END AS y_axis,\n    COUNT(*) AS data\nFROM traffic_pedestrian_accident_taipei\nWHERE year >= 2022 AND hour IS NOT NULL AND month IS NOT NULL\nGROUP BY hour, y_axis\nORDER BY hour, y_axis',
+    E'SELECT\n    hour::text AS x_axis,\n    CASE EXTRACT(ISODOW FROM make_date(\n        GREATEST(year::int, 2022),\n        GREATEST(month::int, 1),\n        1\n    ))\n        WHEN 1 THEN ''週一''\n        WHEN 2 THEN ''週二''\n        WHEN 3 THEN ''週三''\n        WHEN 4 THEN ''週四''\n        WHEN 5 THEN ''週五''\n        WHEN 6 THEN ''週六''\n        WHEN 7 THEN ''週日''\n    END AS y_axis,\n    COUNT(*)::INT AS data\nFROM traffic_pedestrian_accident_taipei\nWHERE year >= 2022 AND hour IS NOT NULL AND month IS NOT NULL\nGROUP BY hour, y_axis\nORDER BY hour, y_axis',
     NULL,
     'taipei'
 );
@@ -208,7 +208,7 @@ INSERT INTO public.query_charts (
     NOW(),
     NOW(),
     'three_d',
-    E'SELECT\n    hour::text AS x_axis,\n    CASE EXTRACT(ISODOW FROM make_date(\n        GREATEST(year::int, 2022),\n        GREATEST(month::int, 1),\n        1\n    ))\n        WHEN 1 THEN ''週一''\n        WHEN 2 THEN ''週二''\n        WHEN 3 THEN ''週三''\n        WHEN 4 THEN ''週四''\n        WHEN 5 THEN ''週五''\n        WHEN 6 THEN ''週六''\n        WHEN 7 THEN ''週日''\n    END AS y_axis,\n    COUNT(*) AS data\nFROM traffic_pedestrian_accident_ntpc\nWHERE year >= 2022 AND hour IS NOT NULL AND month IS NOT NULL\nGROUP BY hour, y_axis\nORDER BY hour, y_axis',
+    E'SELECT\n    hour::text AS x_axis,\n    CASE EXTRACT(ISODOW FROM make_date(\n        GREATEST(year::int, 2022),\n        GREATEST(month::int, 1),\n        1\n    ))\n        WHEN 1 THEN ''週一''\n        WHEN 2 THEN ''週二''\n        WHEN 3 THEN ''週三''\n        WHEN 4 THEN ''週四''\n        WHEN 5 THEN ''週五''\n        WHEN 6 THEN ''週六''\n        WHEN 7 THEN ''週日''\n    END AS y_axis,\n    COUNT(*)::INT AS data\nFROM traffic_pedestrian_accident_ntpc\nWHERE year >= 2022 AND hour IS NOT NULL AND month IS NOT NULL\nGROUP BY hour, y_axis\nORDER BY hour, y_axis',
     NULL,
     'newtaipei'
 );
@@ -238,7 +238,7 @@ INSERT INTO public.query_charts (
     NOW(),
     NOW(),
     'three_d',
-    E'SELECT\n    hour::text AS x_axis,\n    CASE EXTRACT(ISODOW FROM make_date(\n        GREATEST(year::int, 2022),\n        GREATEST(month::int, 1),\n        1\n    ))\n        WHEN 1 THEN ''週一''\n        WHEN 2 THEN ''週二''\n        WHEN 3 THEN ''週三''\n        WHEN 4 THEN ''週四''\n        WHEN 5 THEN ''週五''\n        WHEN 6 THEN ''週六''\n        WHEN 7 THEN ''週日''\n    END AS y_axis,\n    COUNT(*) AS data\nFROM (\n    SELECT hour, year, month FROM traffic_pedestrian_accident_taipei WHERE year >= 2022\n    UNION ALL\n    SELECT hour, year, month FROM traffic_pedestrian_accident_ntpc WHERE year >= 2022\n) combined\nWHERE hour IS NOT NULL AND month IS NOT NULL\nGROUP BY hour, y_axis\nORDER BY hour, y_axis',
+    E'SELECT\n    hour::text AS x_axis,\n    CASE EXTRACT(ISODOW FROM make_date(\n        GREATEST(year::int, 2022),\n        GREATEST(month::int, 1),\n        1\n    ))\n        WHEN 1 THEN ''週一''\n        WHEN 2 THEN ''週二''\n        WHEN 3 THEN ''週三''\n        WHEN 4 THEN ''週四''\n        WHEN 5 THEN ''週五''\n        WHEN 6 THEN ''週六''\n        WHEN 7 THEN ''週日''\n    END AS y_axis,\n    COUNT(*)::INT AS data\nFROM (\n    SELECT hour, year, month FROM traffic_pedestrian_accident_taipei WHERE year >= 2022\n    UNION ALL\n    SELECT hour, year, month FROM traffic_pedestrian_accident_ntpc WHERE year >= 2022\n) combined\nWHERE hour IS NOT NULL AND month IS NOT NULL\nGROUP BY hour, y_axis\nORDER BY hour, y_axis',
     NULL,
     'metrotaipei'
 );
@@ -271,7 +271,7 @@ INSERT INTO public.query_charts (
     NOW(),
     NOW(),
     'three_d',
-    E'SELECT\n    year::text AS x_axis,\n    city AS y_axis,\n    accident_count AS data\nFROM traffic_pedestrian_yearly_trend\nWHERE year > 0\nORDER BY year, city',
+    E'SELECT\n    year::text AS x_axis,\n    city AS y_axis,\n    accident_count::INT AS data\nFROM traffic_pedestrian_yearly_trend\nWHERE year > 0\nORDER BY year, city',
     NULL,
     'metrotaipei'
 );
