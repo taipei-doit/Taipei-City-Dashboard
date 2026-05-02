@@ -23,7 +23,6 @@ import DownloadData from "../components/dialogs/DownloadData.vue";
 import EmbedComponent from "../components/dialogs/EmbedComponent.vue";
 import { useCityLabels } from "../composables/useCityLabels";
 import { useBackendTranslation } from "../composables/useBackendTranslation";
-import BackendTranslatedText from "../components/utilities/i18n/BackendTranslatedText.vue";
 
 const contentStore = useContentStore();
 const { translatedTagList } = useCityLabels();
@@ -135,24 +134,20 @@ onMounted(() => {
         <!-- 1-2. View the component's information -->
         <div class="componentinfoview-content">
           <div :style="{ overflowY: 'scroll' }">
-            <h3>組件 ID | Index | City</h3>
+            <h3>{{ t('component.info.ids_heading') }}</h3>
             <p>
               {{
                 ` ID: ${item.id}｜Index: ${item.index}｜City: ${item.city}`
               }}
             </p>
-            <h3>組件說明</h3>
-            <BackendTranslatedText
-              v-if="item.long_desc"
-              tag="p"
-              :text="item.long_desc"
-            />
-            <h3>範例情境</h3>
-            <BackendTranslatedText
-              v-if="item.use_case"
-              tag="p"
-              :text="item.use_case"
-            />
+            <h3>{{ t('component.info.description') }}</h3>
+            <p v-if="item.long_desc">
+              {{ item.long_desc }}
+            </p>
+            <h3>{{ t('component.info.use_case') }}</h3>
+            <p v-if="item.use_case">
+              {{ item.use_case }}
+            </p>
           </div>
           <div class="componentinfoview-content-control">
             <button
@@ -174,10 +169,10 @@ onMounted(() => {
               "
               @click="dialogStore.showDialog('downloadData')"
             >
-              <span>download</span>下載
+              <span>download</span>{{ t('component.info.download') }}
             </button>
             <button @click="dialogStore.showDialog('embedComponent')">
-              <span>code</span>內嵌
+              <span>code</span>{{ t('component.info.embed') }}
             </button>
           </div>
         </div>

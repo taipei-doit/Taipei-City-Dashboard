@@ -88,6 +88,19 @@ func GetDashboardByIndex(c *gin.Context) {
 		return
 	}
 
+	// Translation: header strings plus long_desc / use_case for component-info UI; omit chart payloads.
+	if lang, ok := c.Get("lang"); ok && global.GlobalTranslator != nil {
+		targetLang := lang.(string)
+		ctx := c.Request.Context()
+		for i := range components {
+			components[i].Name = global.GlobalTranslator.Translate(ctx, components[i].Name, targetLang, "component_name")
+			components[i].ShortDesc = global.GlobalTranslator.Translate(ctx, components[i].ShortDesc, targetLang, "short_desc")
+			components[i].Source = global.GlobalTranslator.Translate(ctx, components[i].Source, targetLang, "source")
+			components[i].LongDesc = global.GlobalTranslator.Translate(ctx, components[i].LongDesc, targetLang, "long_desc")
+			components[i].UseCase = global.GlobalTranslator.Translate(ctx, components[i].UseCase, targetLang, "use_case")
+		}
+	}
+
 	c.JSON(http.StatusOK, gin.H{"status": "success", "data": components})
 }
 

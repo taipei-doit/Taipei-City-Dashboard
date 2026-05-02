@@ -7,6 +7,7 @@ import (
 
 	"TaipeiCityDashboardBE/app/models"
 	"TaipeiCityDashboardBE/app/services"
+	"TaipeiCityDashboardBE/global"
 
 	"github.com/gin-gonic/gin"
 )
@@ -83,6 +84,17 @@ func GetAllComponents(c *gin.Context) {
 		return
 	}
 
+	// Translation: preview names + long_desc / use_case for browse/detail
+	if lang, ok := c.Get("lang"); ok && global.GlobalTranslator != nil {
+		targetLang := lang.(string)
+		ctx := c.Request.Context()
+		for i := range cityComponents {
+			cityComponents[i].Name = global.GlobalTranslator.Translate(ctx, cityComponents[i].Name, targetLang, "component_name")
+			cityComponents[i].LongDesc = global.GlobalTranslator.Translate(ctx, cityComponents[i].LongDesc, targetLang, "long_desc")
+			cityComponents[i].UseCase = global.GlobalTranslator.Translate(ctx, cityComponents[i].UseCase, targetLang, "use_case")
+		}
+	}
+
 	// Return the components
 	c.JSON(http.StatusOK, gin.H{"status": "success", "total": totalComponents, "results": resultNum, "data": cityComponents})
 }
@@ -118,6 +130,17 @@ func GetComponentByID(c *gin.Context) {
 		return
 	}
 
+	// Translation: header + long_desc / use_case for detail views
+	if lang, ok := c.Get("lang"); ok && global.GlobalTranslator != nil {
+		targetLang := lang.(string)
+		ctx := c.Request.Context()
+		cityComponent.Name = global.GlobalTranslator.Translate(ctx, cityComponent.Name, targetLang, "component_name")
+		cityComponent.ShortDesc = global.GlobalTranslator.Translate(ctx, cityComponent.ShortDesc, targetLang, "short_desc")
+		cityComponent.Source = global.GlobalTranslator.Translate(ctx, cityComponent.Source, targetLang, "source")
+		cityComponent.LongDesc = global.GlobalTranslator.Translate(ctx, cityComponent.LongDesc, targetLang, "long_desc")
+		cityComponent.UseCase = global.GlobalTranslator.Translate(ctx, cityComponent.UseCase, targetLang, "use_case")
+	}
+
 	// Return the component
 	c.JSON(http.StatusOK, gin.H{"status": "success", "data": cityComponent})
 }
@@ -139,6 +162,18 @@ func GetComponentByIDAll(c *gin.Context) {
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"status": "error", "message": "component not found"})
 		return
+	}
+
+	if lang, ok := c.Get("lang"); ok && global.GlobalTranslator != nil {
+		targetLang := lang.(string)
+		ctx := c.Request.Context()
+		for i := range cityComponent {
+			cityComponent[i].Name = global.GlobalTranslator.Translate(ctx, cityComponent[i].Name, targetLang, "component_name")
+			cityComponent[i].ShortDesc = global.GlobalTranslator.Translate(ctx, cityComponent[i].ShortDesc, targetLang, "short_desc")
+			cityComponent[i].Source = global.GlobalTranslator.Translate(ctx, cityComponent[i].Source, targetLang, "source")
+			cityComponent[i].LongDesc = global.GlobalTranslator.Translate(ctx, cityComponent[i].LongDesc, targetLang, "long_desc")
+			cityComponent[i].UseCase = global.GlobalTranslator.Translate(ctx, cityComponent[i].UseCase, targetLang, "use_case")
+		}
 	}
 
 	// Return the component

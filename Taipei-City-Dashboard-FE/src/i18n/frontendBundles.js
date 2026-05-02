@@ -95,6 +95,12 @@ const ZH = {
 	"report.issue.type.system": "系統問題",
 	"report.issue.type.other": "其他建議",
 
+	"component.info.download": "下載",
+	"component.info.embed": "內嵌",
+	"component.info.description": "組件說明",
+	"component.info.use_case": "範例情境",
+	"component.info.ids_heading": "組件 ID | Index | City",
+
 	"admin.sidebar.dashboard_settings": "儀表板設定",
 	"admin.sidebar.dashboard_abbr": "表板",
 	"admin.sidebar.component_settings": "組件設定",
@@ -223,6 +229,12 @@ const EN = {
 	"report.issue.type.system": "System issue",
 	"report.issue.type.other": "Other feedback",
 
+	"component.info.download": "Download",
+	"component.info.embed": "Embed",
+	"component.info.description": "Component description",
+	"component.info.use_case": "Example use cases",
+	"component.info.ids_heading": "Component ID | Index | City",
+
 	"admin.sidebar.dashboard_settings": "Dashboard setup",
 	"admin.sidebar.dashboard_abbr": "Dash",
 	"admin.sidebar.component_settings": "Components",
@@ -284,6 +296,12 @@ const JA = {
 	"report.issue.cancel": "キャンセル",
 	"report.issue.submit": "送信",
 	"report.issue.action_label": "報告",
+
+	"component.info.download": "ダウンロード",
+	"component.info.embed": "埋め込み",
+	"component.info.description": "コンポーネント説明",
+	"component.info.use_case": "利用シナリオ例",
+	"component.info.ids_heading": "コンポーネント ID｜Index｜都市",
 
 	"login.taipeipass_button": "台北通でログイン",
 	"login.email_label": "メール",
@@ -397,6 +415,12 @@ const KO = {
 	"report.issue.type.incorrect_data": "데이터 불일치·미갱신",
 	"report.issue.type.system": "시스템 문제",
 	"report.issue.type.other": "기타 의견",
+
+	"component.info.download": "다운로드",
+	"component.info.embed": "임베드",
+	"component.info.description": "구성 요소 설명",
+	"component.info.use_case": "활용 사례",
+	"component.info.ids_heading": "구성 요소 ID | Index | 도시",
 
 	"admin.sidebar.dashboard_settings": "대시보드 설정",
 	"admin.sidebar.dashboard_abbr": "판",
@@ -526,6 +550,12 @@ const VI = {
 	"report.issue.type.system": "Lỗi hệ thống",
 	"report.issue.type.other": "Góp ý khác",
 
+	"component.info.download": "Tải xuống",
+	"component.info.embed": "Nhúng",
+	"component.info.description": "Mô tả thành phần",
+	"component.info.use_case": "Tình huống ví dụ",
+	"component.info.ids_heading": "ID thành phần | Index | Thành phố",
+
 	"admin.sidebar.dashboard_settings": "Cài đặt bảng",
 	"admin.sidebar.dashboard_abbr": "Bảng",
 	"admin.sidebar.component_settings": "Thành phần",
@@ -652,6 +682,12 @@ const TH = {
 	"report.issue.type.incorrect_data": "ข้อมูลไม่ตรงหรือล้าสมัย",
 	"report.issue.type.system": "ระบบขัดข้อง",
 	"report.issue.type.other": "ข้อเสนอแนะอื่น",
+
+	"component.info.download": "ดาวน์โหลด",
+	"component.info.embed": "ฝัง",
+	"component.info.description": "คำอธิบายคอมโพเนนต์",
+	"component.info.use_case": "ตัวอย่างการใช้งาน",
+	"component.info.ids_heading": "รหัสคอมโพเนนต์ | Index | เมือง",
 
 	"admin.sidebar.dashboard_settings": "ตั้งค่าแดชบอร์ด",
 	"admin.sidebar.dashboard_abbr": "บอร์ด",
@@ -780,6 +816,12 @@ const ID = {
 	"report.issue.type.incorrect_data": "Data salah atau kedaluwarsa",
 	"report.issue.type.system": "Masalah sistem",
 	"report.issue.type.other": "Masukan lain",
+
+	"component.info.download": "Unduh",
+	"component.info.embed": "Tanamkan",
+	"component.info.description": "Deskripsi komponen",
+	"component.info.use_case": "Contoh penggunaan",
+	"component.info.ids_heading": "ID komponen | Index | Kota",
 
 	"admin.sidebar.dashboard_settings": "Pengaturan dasbor",
 	"admin.sidebar.dashboard_abbr": "Das",
