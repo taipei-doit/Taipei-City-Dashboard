@@ -41,6 +41,7 @@ func ConfigureRoutes() {
 	configureContributorRoutes()
 	configureChatLogRoutes()
 	configureAIRoutes()
+	configureForeignCuisineRoutes()
 }
 
 func configureAuthRoutes() {
@@ -204,6 +205,16 @@ func configureAIRoutes() {
 	aiRoutes.Use(middleware.IsLoggedIn())
 	{
 		aiRoutes.POST("/chat/twai", controllers.ChatWithTWCC)
+	}
+}
+
+func configureForeignCuisineRoutes() {
+	routes := RouterGroup.Group("/foreign-cuisine")
+	routes.Use(middleware.LimitAPIRequests(global.ComponentLimitAPIRequestsTimes, global.LimitRequestsDuration))
+	routes.Use(middleware.LimitTotalRequests(global.ComponentLimitTotalRequestsTimes, global.LimitRequestsDuration))
+	{
+		routes.GET("/restaurants", controllers.GetForeignCuisineRestaurants)
+		routes.POST("/sync", controllers.SyncForeignCuisineRestaurants)
 	}
 }
 

@@ -54,10 +54,26 @@ var initDashboardDBCmd = &cobra.Command{
 	},
 }
 
+var syncForeignCuisineCmd = &cobra.Command{
+	Use:   "syncForeignCuisine",
+	Short: "sync foreign cuisine restaurant data",
+	Long:  "Fetch foreign cuisine restaurant points and upsert into dashboard database.",
+	Run: func(cmd *cobra.Command, _ []string) {
+		city, _ := cmd.Flags().GetString("city")
+		if city == "" {
+			city = "taipei"
+		}
+		app.SyncForeignCuisineData(city)
+	},
+}
+
 // Execute initializes Cobra and adds the checkExpiredCmd to the root command.
 func Execute() {
+	syncForeignCuisineCmd.Flags().String("city", "taipei", "City key: taipei or metrotaipei")
+
 	rootCmd.AddCommand(migrateDBCmd)
 	rootCmd.AddCommand(initDashboardDBCmd)
+	rootCmd.AddCommand(syncForeignCuisineCmd)
 	// Execute the root command and handle any errors.
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)

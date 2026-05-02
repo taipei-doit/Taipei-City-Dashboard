@@ -23,4 +23,5 @@ export const chartTypes: chartType = {
 	IndicatorChart: "指標圖", // V
 	MapLegend: "地圖圖例", // V
 	TextUnitChart: "文字數值圖", // V
+	ForeignRestaurantMapChart: "異國餐廳分布地圖",
 };

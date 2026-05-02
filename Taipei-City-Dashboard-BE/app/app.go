@@ -16,8 +16,10 @@ import (
 	"TaipeiCityDashboardBE/app/middleware"
 	"TaipeiCityDashboardBE/app/models"
 	"TaipeiCityDashboardBE/app/routes"
+	"TaipeiCityDashboardBE/app/services"
 	"TaipeiCityDashboardBE/global"
 	"TaipeiCityDashboardBE/logs"
+	"context"
 
 	"github.com/fvbock/endless"
 	"github.com/gin-gonic/gin"
@@ -93,4 +95,14 @@ func InsertDashbaordSampleData() {
 	models.ConnectToDatabases("DASHBOARD")
 	initial.InitSampleCityData()
 	models.CloseConnects("DASHBOARD")
+}
+
+func SyncForeignCuisineData(city string) {
+	models.ConnectToDatabases("DASHBOARD")
+	defer models.CloseConnects("DASHBOARD")
+
+	_, err := services.SyncForeignCuisineData(context.Background(), city)
+	if err != nil {
+		logs.FError("sync foreign cuisine data failed: %v", err)
+	}
 }

@@ -4,6 +4,7 @@ package initial
 import (
 	"TaipeiCityDashboardBE/app/cache"
 	"TaipeiCityDashboardBE/app/models"
+	"TaipeiCityDashboardBE/app/services"
 	"TaipeiCityDashboardBE/logs"
 	"context" // Add context import
 	"time"
@@ -77,6 +78,19 @@ func InitCronJobs() {
 
 	if err != nil {
 		logs.Error("Failed to add chatlog cleanup cron job:", err)
+		return
+	}
+
+	_, err = c.AddFunc("@every 6h", func() {
+		ctx, cancel := context.WithTimeout(context.Background(), 3*time.Minute)
+		defer cancel()
+
+		if _, syncErr := services.SyncForeignCuisineData(ctx, "taipei"); syncErr != nil {
+			logs.Error("Foreign cuisine sync cron failed for taipei:", syncErr)
+		}
+	})
+	if err != nil {
+		logs.Error("Failed to add foreign cuisine sync cron job:", err)
 		return
 	}
 
