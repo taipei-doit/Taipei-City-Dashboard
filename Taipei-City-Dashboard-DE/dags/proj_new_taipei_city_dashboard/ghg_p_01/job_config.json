@@ -1,0 +1,37 @@
+{
+  "dag_infos": {
+    "dag_id": "ghg_p_01",
+    "start_date": "2026-05-02",
+    "schedule_interval": "0 8 * * *",
+    "catchup": false,
+    "tags": ["ghg_p_01", "MOENV", "溫室氣體年排放量", "溫室氣體"],
+    "description": "MOENV ghg_p_01 annual greenhouse gas emissions by facility; load to ghg_p_01 (replace). app_year converted from ROC to Gregorian calendar.",
+    "default_args": {
+      "owner": "airflow",
+      "email": ["DEFAULT_EMAIL_LIST"],
+      "email_on_retry": false,
+      "email_on_failure": true,
+      "retries": 1,
+      "retry_delay": 60
+    },
+    "ready_data_db": "postgres_default",
+    "ready_data_default_table": "ghg_p_01",
+    "ready_data_history_table": "",
+    "raw_data_db": "postgres_default",
+    "raw_data_table": "",
+    "load_behavior": "replace"
+  },
+  "data_infos": {
+    "name_cn": "溫室氣體年排放量",
+    "airflow_update_freq": "08:00 every day",
+    "source": "https://data.moenv.gov.tw/api/v2/ghg_p_01",
+    "source_type": "MOENV API",
+    "source_dept": "環境部 氣候變遷署",
+    "gis_format": "",
+    "output_coordinate": "EPSG:4326",
+    "is_geometry": 0,
+    "dataset_description": "事業溫室氣體年排放量（公噸 CO2e）；欄位含監測年度、事業與工廠識別、直接與間接及總排放量等。",
+    "etl_description": "MOENV v2 paginated JSON; normalize column names; app_year ROC to AD; numeric and boolean types; replace",
+    "sensitivity": "public"
+  }
+}
