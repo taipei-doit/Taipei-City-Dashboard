@@ -3,6 +3,7 @@ import { computed, onBeforeUnmount, onMounted, reactive, ref, watch } from "vue"
 import { useRoute } from "vue-router";
 import mapboxGl from "mapbox-gl";
 
+import AiChatModal from "../components/AiChatModal.vue";
 import DashboardComponent from "../dashboardComponent/DashboardComponent.vue";
 import MapContainer from "../components/map/MapContainer.vue";
 import MoreInfo from "../components/dialogs/MoreInfo.vue";
@@ -262,6 +263,25 @@ const featureCache = ref({
 	greenStore: [],
 	foodBank: [],
 });
+
+// ── AI 助理 modal（mirror MrtAccessibilityV2View 模式）───────────────────────
+const activeAiComponentId = ref("");
+const activeAiComponentName = ref("");
+const showAiModal = ref(false);
+const aiModalAnchor = ref({ top: 0, left: 0 });
+
+function openAiModal(event, componentId, componentName) {
+	if (activeAiComponentId.value !== componentId) {
+		activeAiComponentId.value = componentId;
+		activeAiComponentName.value = componentName;
+	}
+	const rect = event.currentTarget.getBoundingClientRect();
+	aiModalAnchor.value = {
+		top: rect.top,
+		left: rect.left,
+	};
+	showAiModal.value = true;
+}
 
 // ── city → 篩選 helper ────────────────────────────────────────────────────
 function matchByCity(row, cityValue) {
@@ -777,19 +797,30 @@ function tagListOf(component) {
     v-if="!isMapView"
     class="ecodietview-overview"
   >
-    <DashboardComponent
+    <div
       v-for="item in allComponents"
       :key="`${item.index}-${activeCityMap[item.index]}`"
-      :config="item"
-      mode="default"
-      :info-btn="true"
-      :active-city="activeCityMap[item.index]"
-      :select-btn="true"
-      :select-btn-list="CITY_SELECT_LIST"
-      :city-tag="tagListOf(item)"
-      @info="handleMoreInfo"
-      @change-city="(city) => handleChangeCity(item, city)"
-    />
+      class="ecodiet-card-wrapper"
+    >
+      <DashboardComponent
+        :config="item"
+        mode="default"
+        :info-btn="true"
+        :active-city="activeCityMap[item.index]"
+        :select-btn="true"
+        :select-btn-list="CITY_SELECT_LIST"
+        :city-tag="tagListOf(item)"
+        @info="handleMoreInfo"
+        @change-city="(city) => handleChangeCity(item, city)"
+      />
+      <button
+        class="ecodiet-ai-btn"
+        title="AI 分析"
+        @click="openAiModal($event, item.id, item.name)"
+      >
+        <span class="material-icons">smart_toy</span>
+      </button>
+    </div>
     <MoreInfo />
     <ReportIssue />
   </div>
@@ -801,44 +832,75 @@ function tagListOf(component) {
   >
     <div class="ecodietview-mapview-charts">
       <!-- hasMap section（無 h2，第一段）：3 個點位元件，可 toggle layer -->
-      <DashboardComponent
+      <div
         v-for="item in hasMapComponents"
         :key="`map-${item.index}-${activeCityMap[item.index]}`"
-        :config="item"
-        mode="map"
-        :info-btn="true"
-        :active-city="activeCityMap[item.index]"
-        :select-btn="true"
-        :select-btn-list="CITY_SELECT_LIST"
-        :city-tag="tagListOf(item)"
-        :toggle-on="toggleOn[toggleKeyOf(item)]"
-        :toggle-disable="shouldDisable(toggleKeyOf(item))"
-        @info="handleMoreInfo"
-        @toggle="(v) => handleToggle(v, toggleKeyOf(item), layerIdOf(item))"
-        @change-city="(city) => handleChangeCity(item, city)"
-      />
+        class="ecodiet-card-wrapper"
+      >
+        <DashboardComponent
+          :config="item"
+          mode="map"
+          :info-btn="true"
+          :active-city="activeCityMap[item.index]"
+          :select-btn="true"
+          :select-btn-list="CITY_SELECT_LIST"
+          :city-tag="tagListOf(item)"
+          :toggle-on="toggleOn[toggleKeyOf(item)]"
+          :toggle-disable="shouldDisable(toggleKeyOf(item))"
+          @info="handleMoreInfo"
+          @toggle="(v) => handleToggle(v, toggleKeyOf(item), layerIdOf(item))"
+          @change-city="(city) => handleChangeCity(item, city)"
+        />
+        <button
+          class="ecodiet-ai-btn"
+          title="AI 分析"
+          @click="openAiModal($event, item.id, item.name)"
+        >
+          <span class="material-icons">smart_toy</span>
+        </button>
+      </div>
       <!-- 無空間資料組件 section（h2 + 3 個聚合卡片）-->
       <h2 v-if="noMapComponents.length > 0">
         無空間資料組件
       </h2>
-      <DashboardComponent
+      <div
         v-for="item in noMapComponents"
         :key="`nomap-${item.index}-${activeCityMap[item.index]}`"
-        :config="item"
-        mode="map"
-        :info-btn="true"
-        :active-city="activeCityMap[item.index]"
-        :select-btn="true"
-        :select-btn-list="CITY_SELECT_LIST"
-        :city-tag="tagListOf(item)"
-        @info="handleMoreInfo"
-        @change-city="(city) => handleChangeCity(item, city)"
-      />
+        class="ecodiet-card-wrapper"
+      >
+        <DashboardComponent
+          :config="item"
+          mode="map"
+          :info-btn="true"
+          :active-city="activeCityMap[item.index]"
+          :select-btn="true"
+          :select-btn-list="CITY_SELECT_LIST"
+          :city-tag="tagListOf(item)"
+          @info="handleMoreInfo"
+          @change-city="(city) => handleChangeCity(item, city)"
+        />
+        <button
+          class="ecodiet-ai-btn"
+          title="AI 分析"
+          @click="openAiModal($event, item.id, item.name)"
+        >
+          <span class="material-icons">smart_toy</span>
+        </button>
+      </div>
     </div>
     <MapContainer />
     <MoreInfo />
     <ReportIssue />
   </div>
+
+  <AiChatModal
+    :show="showAiModal"
+    :component-id="activeAiComponentId"
+    :component-name="activeAiComponentName"
+    :anchor="aiModalAnchor"
+    summary-endpoint="/api/v1/eco_diet/ai-summary"
+    @close="showAiModal = false"
+  />
 </template>
 
 <style scoped lang="scss">
@@ -893,4 +955,34 @@ function tagListOf(component) {
 		}
 	}
 }
+
+.ecodiet-card-wrapper {
+	position: relative;
+	flex-shrink: 0;
+
+	.ecodiet-ai-btn {
+		position: absolute;
+		// DashboardComponent 卡片寬度 = 100% - 2*var(--font-m) 並靠左對齊，
+		// 故按鈕 right 需補上 var(--font-m) 才會落在卡片內右上角。
+		top: var(--font-s);
+		right: calc(var(--font-m) + var(--font-s));
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 32px;
+		height: 32px;
+		border: none;
+		border-radius: 50%;
+		background: var(--color-highlight);
+		color: #fff;
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+		cursor: pointer;
+		transition: transform 0.15s ease;
+		z-index: 10;
+
+		.material-icons { font-size: 16px; }
+		&:hover { transform: scale(1.1); }
+	}
+}
+
 </style>

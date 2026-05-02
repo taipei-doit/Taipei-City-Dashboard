@@ -1,4 +1,4 @@
-<!-- Component Name: MrtAiChatModal -->
+<!-- Component Name: AiChatModal -->
 <script setup>
 import { ref, nextTick, watch, computed } from "vue";
 import axios from "axios";
@@ -9,6 +9,7 @@ const props = defineProps({
 	componentId: { type: String, required: true },
 	componentName: { type: String, default: "AI 助理" },
 	anchor: { type: Object, default: () => ({ top: 0, left: 0 }) },
+	summaryEndpoint: { type: String, required: true },
 });
 const emit = defineEmits(["close"]);
 
@@ -32,7 +33,6 @@ const MODAL_HEIGHT = 420;
 
 const popoverStyle = computed(() => {
 	const { top, left } = props.anchor;
-	const vh = window.innerHeight;
 	// 優先放在按鈕左側；若超出螢幕左緣則放右側
 	let x = left - MODAL_WIDTH - 8;
 	if (x < 8) x = left + 40;
@@ -68,7 +68,7 @@ async function fetchInitialSummary() {
 	isLoading.value = true;
 	error.value = "";
 	try {
-		const res = await axios.post("/api/v1/mrt/a11y/ai-summary", {
+		const res = await axios.post(props.summaryEndpoint, {
 			component_id: props.componentId,
 		}, { headers: authHeaders() });
 		systemPrompt.value = res.data.system_prompt ?? "";
@@ -133,19 +133,19 @@ function handleInputKeydown(event) {
 
 <template>
 	<Teleport to="body">
-		<Transition name="mrt-ai-modal">
+		<Transition name="ai-modal">
 			<div
 				v-if="show"
-				class="mrt-ai-modal"
+				class="ai-modal"
 				role="dialog"
 				aria-modal="true"
 				:style="popoverStyle"
 			>
-				<div class="mrt-ai-modal__header">
-					<span class="material-icons mrt-ai-modal__icon">smart_toy</span>
-					<span class="mrt-ai-modal__title">AI 助理｜{{ componentName }}</span>
+				<div class="ai-modal__header">
+					<span class="material-icons ai-modal__icon">smart_toy</span>
+					<span class="ai-modal__title">AI 助理｜{{ componentName }}</span>
 					<button
-						class="mrt-ai-modal__close"
+						class="ai-modal__close"
 						aria-label="關閉"
 						@click="$emit('close')"
 					>
@@ -155,21 +155,21 @@ function handleInputKeydown(event) {
 
 				<div
 					ref="messageListRef"
-					class="mrt-ai-modal__messages"
+					class="ai-modal__messages"
 				>
 					<div
 						v-for="msg in messages"
 						:key="msg.id"
-						:class="['mrt-ai-bubble', `mrt-ai-bubble--${msg.role}`]"
+						:class="['ai-bubble', `ai-bubble--${msg.role}`]"
 					>
 						{{ msg.content }}
 					</div>
 
 					<div
 						v-if="isLoading"
-						class="mrt-ai-bubble mrt-ai-bubble--assistant"
+						class="ai-bubble ai-bubble--assistant"
 					>
-						<div class="mrt-ai-dots">
+						<div class="ai-dots">
 							<span /><span /><span />
 						</div>
 					</div>
@@ -177,22 +177,22 @@ function handleInputKeydown(event) {
 
 				<div
 					v-if="error"
-					class="mrt-ai-modal__error"
+					class="ai-modal__error"
 				>
 					{{ error }}
 				</div>
 
-				<div class="mrt-ai-modal__input-row">
+				<div class="ai-modal__input-row">
 					<textarea
 						v-model="inputText"
-						class="mrt-ai-modal__input"
+						class="ai-modal__input"
 						placeholder="繼續詢問…"
 						rows="1"
 						:disabled="isLoading"
 						@keydown="handleInputKeydown"
 					/>
 					<button
-						class="mrt-ai-modal__send"
+						class="ai-modal__send"
 						:disabled="isLoading || !inputText.trim()"
 						aria-label="送出"
 						@click="handleSend"
@@ -206,7 +206,7 @@ function handleInputKeydown(event) {
 </template>
 
 <style scoped lang="scss">
-.mrt-ai-modal {
+.ai-modal {
 	position: fixed;
 	display: flex;
 	flex-direction: column;
@@ -358,7 +358,7 @@ function handleInputKeydown(event) {
 	}
 }
 
-.mrt-ai-bubble {
+.ai-bubble {
 	flex-shrink: 0;
 	max-width: 85%;
 	padding: var(--font-s) var(--font-m);
@@ -384,7 +384,7 @@ function handleInputKeydown(event) {
 	}
 }
 
-.mrt-ai-dots {
+.ai-dots {
 	display: flex;
 	align-items: center;
 	height: 20px;
@@ -395,7 +395,7 @@ function handleInputKeydown(event) {
 		height: 7px;
 		border-radius: 50%;
 		background: var(--color-complement-text);
-		animation: mrt-ai-bounce 1.2s infinite;
+		animation: ai-bounce 1.2s infinite;
 
 		&:nth-child(2) {
 			animation-delay: 0.2s;
@@ -407,7 +407,7 @@ function handleInputKeydown(event) {
 	}
 }
 
-@keyframes mrt-ai-bounce {
+@keyframes ai-bounce {
 	0%,
 	80%,
 	100% {
@@ -421,13 +421,13 @@ function handleInputKeydown(event) {
 	}
 }
 
-.mrt-ai-modal-enter-active,
-.mrt-ai-modal-leave-active {
+.ai-modal-enter-active,
+.ai-modal-leave-active {
 	transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
-.mrt-ai-modal-enter-from,
-.mrt-ai-modal-leave-to {
+.ai-modal-enter-from,
+.ai-modal-leave-to {
 	opacity: 0;
 	transform: translateY(8px);
 }

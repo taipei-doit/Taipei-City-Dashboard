@@ -246,6 +246,9 @@ func configureEcoDietRoutes() {
 		// C7a / C7b — 實物銀行
 		ecoDiet.GET("/food_bank/points", controllers.GetFoodBankPoints)
 		ecoDiet.GET("/food_bank/nearby", controllers.GetFoodBankNearby)
+
+		// AI summary（每個 component 點 AI 鈕時呼叫）
+		ecoDiet.POST("/ai-summary", controllers.GetEcoDietAiSummary)
 	}
 }
 
