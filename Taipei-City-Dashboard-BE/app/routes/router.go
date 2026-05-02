@@ -216,6 +216,7 @@ func configureAIRoutes() {
 	{
 		aiRoutes.POST("/chat/twai", controllers.ChatWithTWCC)
 		aiRoutes.POST("/extract-insight/news", controllers.GetComponemtByNews)
+		aiRoutes.POST("/recommend-news/crawl", controllers.RecommendNewsFromRSS)
 	}
 }
 

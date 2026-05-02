@@ -1,10 +1,11 @@
 <!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 
 <script setup>
-import { onMounted, ref } from "vue";
+import { ref, watch } from "vue";
 import router from "../../../router";
 import { useMapStore } from "../../../store/mapStore";
 import { useContentStore } from "../../../store/contentStore";
+import { useThemeStore } from "../../../store/themeStore";
 import {
 	extractNewsInsight,
 	fetchCrawledNewsRecommendations,
@@ -12,6 +13,7 @@ import {
 
 const mapStore = useMapStore();
 const contentStore = useContentStore();
+const themeStore = useThemeStore();
 
 const RECOMMEND_SIDEBAR_EXPANDED_KEY = "isRecommendSidebarExpanded";
 const MODE_STORAGE_KEY = "recommendSidebarAiMode";
@@ -23,7 +25,7 @@ const MODE_AUTO_NEWS = "auto_news";
 /** 展開寬度略大於左側 SideBar，收合 45px */
 const isExpanded = ref(true);
 
-const recommendMode = ref(MODE_MANUAL_URL);
+const recommendMode = ref(MODE_AUTO_NEWS);
 
 const aiNewsUrl = ref("");
 const aiInsightResult = ref(null);
@@ -86,6 +88,9 @@ function readRecommendModeFromStorage() {
 }
 
 async function handleLoadAutoNews() {
+	if (loadingAutoNews.value) {
+		return;
+	}
 	loadingAutoNews.value = true;
 	autoNewsError.value = null;
 
@@ -93,7 +98,7 @@ async function handleLoadAutoNews() {
 		autoNewsItems.value = await fetchCrawledNewsRecommendations({});
 	} catch {
 		autoNewsError.value =
-			"無法載入新聞推薦。（若後端尚未接上 /ai/recommend-news/crawl，請於 API 就緒後再試）";
+			"無法載入新聞推薦。請稍後再試，或請管理員檢查伺服器 RSS（環境變數 NEWS_RSS_FEEDS）是否可連線。";
 		autoNewsItems.value = null;
 	} finally {
 		loadingAutoNews.value = false;
@@ -105,10 +110,27 @@ function openExternalNewsUrl(url) {
 	globalThis.open(url, "_blank", "noopener,noreferrer");
 }
 
-onMounted(() => {
-	readExpandedFromStorage();
-	readRecommendModeFromStorage();
-});
+readExpandedFromStorage();
+readRecommendModeFromStorage();
+
+watch(
+	[recommendMode, isExpanded],
+	([mode, expanded]) => {
+		if (mode === MODE_AUTO_NEWS && expanded) {
+			handleLoadAutoNews();
+		}
+	},
+	{ immediate: true },
+);
+
+watch(
+	() => themeStore.theme,
+	() => {
+		if (recommendMode.value === MODE_AUTO_NEWS && isExpanded.value) {
+			handleLoadAutoNews();
+		}
+	},
+);
 
 /**
  * 導向儀表板總覽中該組件所在版面（保留右側推薦側欄，避免 component-info 卸載側欄）
@@ -230,12 +252,12 @@ async function openStorylineRecommendedComponent(comp) {
           class="recommendsidebar-mode-btn"
           :class="{
             'recommendsidebar-mode-btn--active':
-              recommendMode === MODE_MANUAL_URL,
+              recommendMode === MODE_AUTO_NEWS,
           }"
-          :aria-selected="recommendMode === MODE_MANUAL_URL"
-          @click="switchRecommendMode(MODE_MANUAL_URL)"
+          :aria-selected="recommendMode === MODE_AUTO_NEWS"
+          @click="switchRecommendMode(MODE_AUTO_NEWS)"
         >
-          網址分析
+          自動新聞
         </button>
         <button
           type="button"
@@ -243,12 +265,12 @@ async function openStorylineRecommendedComponent(comp) {
           class="recommendsidebar-mode-btn"
           :class="{
             'recommendsidebar-mode-btn--active':
-              recommendMode === MODE_AUTO_NEWS,
+              recommendMode === MODE_MANUAL_URL,
           }"
-          :aria-selected="recommendMode === MODE_AUTO_NEWS"
-          @click="switchRecommendMode(MODE_AUTO_NEWS)"
+          :aria-selected="recommendMode === MODE_MANUAL_URL"
+          @click="switchRecommendMode(MODE_MANUAL_URL)"
         >
-          自動新聞
+          網址分析
         </button>
       </div>
 
@@ -328,11 +350,6 @@ async function openStorylineRecommendedComponent(comp) {
         v-show="recommendMode === MODE_AUTO_NEWS"
         class="recommendsidebar-auto-news"
       >
-        <p class="recommendsidebar-hint">
-          後端完成爬蟲與配對後，將回傳與既有組件關聯的新聞（契約見
-          <code class="recommendsidebar-code">src/api/ai.js</code>
-          註解）。
-        </p>
         <button
           type="button"
           class="recommendsidebar-crawl-btn"
@@ -363,12 +380,6 @@ async function openStorylineRecommendedComponent(comp) {
           class="recommendsidebar-msg"
         >
           目前沒有可推薦的新聞項目。
-        </p>
-        <p
-          v-else-if="autoNewsItems === null && !loadingAutoNews && !autoNewsError"
-          class="recommendsidebar-msg"
-        >
-          點選「取得新聞推薦」向伺服器請求（API 就緒後會顯示 2–3 則）。
         </p>
         <ul
           v-if="autoNewsItems?.length"
@@ -514,8 +525,8 @@ async function openStorylineRecommendedComponent(comp) {
 
 	&-mode-btn {
 		flex: 1;
-		padding: 8px 6px;
-		font-size: var(--font-s);
+		padding: 8px 10px;
+		font-size: var(--font-m);
 		color: var(--color-complement-text);
 		transition:
 			background-color 0.2s,
@@ -540,24 +551,6 @@ async function openStorylineRecommendedComponent(comp) {
 
 	&-auto-news {
 		margin-bottom: 16px;
-	}
-
-	&-hint {
-		margin: 0 0 10px;
-		font-size: var(--font-s);
-		color: var(--color-complement-text);
-		line-height: 1.45;
-		font-weight: 400;
-	}
-
-	&-code {
-		display: inline;
-		font-size: 0.92em;
-		padding: 1px 4px;
-		border-radius: 4px;
-		background: var(--color-menu-dropdown);
-		color: var(--color-normal-text);
-		word-break: break-all;
 	}
 
 	&-crawl-btn {

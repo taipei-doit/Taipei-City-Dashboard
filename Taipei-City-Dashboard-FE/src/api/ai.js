@@ -41,7 +41,7 @@ export async function extractNewsInsight(url) {
 /**
  * 自動抓取網頁新聞並推薦與現有資料組件關聯之報導（預計 2–3 則；後端上線後實作）。
  *
- * POST /api/v1/ai/recommend-news/crawl（Path／body 可依後端調整）
+ * POST /api/v1/ai/recommend-news/crawl — 後端 RSS 來源可由環境變數 NEWS_RSS_FEEDS（逗號分隔 URL）設定。
  *
  * @typedef {Object} RecommendedNewsWithComponent
  * @property {string} title
