@@ -38,7 +38,17 @@
         }"
       >
         <div
-          v-if="item.mode === 'video'"
+          v-if="item.mode === 'image'"
+          class="mappopup-image"
+        >
+          <img
+            v-if="popupContent[activeTab]?.properties[item.key]"
+            :src="popupContent[activeTab]?.properties[item.key]"
+            :alt="item.name"
+          >
+        </div>
+        <div
+          v-else-if="item.mode === 'video'"
           class="mappopup-video"
         >
           <!-- <h3>{{ item.name }}</h3> -->
@@ -213,6 +223,22 @@
 			// position: absolute;
 			// left: 0;
 			// top: 0;
+		}
+	}
+
+	&-image {
+		width: min(256px, 100%);
+		aspect-ratio: 16 / 10;
+		align-self: center;
+		margin: 0 auto 8px;
+		overflow: hidden;
+		border-radius: 5px;
+		background-color: var(--color-border);
+
+		img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
 		}
 	}
 }
