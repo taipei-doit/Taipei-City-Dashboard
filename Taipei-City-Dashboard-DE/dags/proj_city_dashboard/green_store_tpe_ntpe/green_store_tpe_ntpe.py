@@ -26,7 +26,7 @@ def _geocode_one(addr):
         r = requests.get(ARCGIS_URL, params={
             "SingleLine": addr, "f": "json",
             "outSR": '{"wkid":4326}', "maxLocations": 1,
-        }, timeout=15)
+        }, timeout=8)
         candidates = r.json().get("candidates", [])
         if candidates and candidates[0].get("score", 0) >= 80:
             loc = candidates[0]["location"]
@@ -36,7 +36,7 @@ def _geocode_one(addr):
     return None, None
 
 
-def _geocode_parallel(addresses, max_workers=6):
+def _geocode_parallel(addresses, max_workers=20):
     with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as pool:
         results = list(pool.map(_geocode_one, addresses))
     return [r[0] for r in results], [r[1] for r in results]
