@@ -121,9 +121,11 @@ var (
 		MaxRetry:      getIntEnv("TWCC_MAX_RETRY", 2),
 		MaxConcurrent: getIntEnv("TWCC_MAX_CONCURRENT", 100),
 	}
-	
+
 	LMSession *ort.DynamicSession[int64, float32]
 	LMTokenizer *tokenizer.Tokenizer
+
+	CWAApiKey = getEnv("CWA_API_KEY", "")
 )
 
 func init() {
