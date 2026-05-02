@@ -113,6 +113,69 @@ The local one-off loader pattern used in this repo:
 - For sources requiring detail-page enrichment, a bounded `ThreadPoolExecutor` is acceptable for local seeding; keep the DAG code equally bounded and polite.
 - After updating only manager config, apply changes directly to `postgres-manager` with `UPDATE public.query_charts ...` or `UPDATE public.component_maps ...`, then verify through the BE component API.
 
+Concrete one-off loader command shape:
+
+```sh
+docker run --rm --network br_dashboard dashboard-vector-upgrade sh -lc "python - <<'PY'
+import requests
+import psycopg2
+from psycopg2.extras import execute_values
+
+# 1. Fetch and parse source data here.
+# Keep this logic equivalent to the DAG parser.
+rows = []
+
+# 2. Connect to the dashboard data DB from inside the Docker network.
+conn = psycopg2.connect(
+    host='postgres-data',
+    dbname='dashboard',
+    user='postgres',
+    password='password',
+)
+cur = conn.cursor()
+
+# 3. Replace local table contents for current/static datasets.
+cur.execute('TRUNCATE TABLE public.<table> RESTART IDENTITY')
+
+# 4. Insert rows. Use PostGIS functions for geometry when needed.
+sql = '''
+INSERT INTO public.<table> (
+    data_time,
+    name,
+    lng,
+    lat,
+    wkb_geometry
+) VALUES %s
+'''
+template = '''
+(NOW(), %s, %s, %s, ST_SetSRID(ST_MakePoint(%s, %s), 4326))
+'''
+execute_values(cur, sql, rows, template=template, page_size=1000)
+
+# 5. Commit and close.
+conn.commit()
+cur.close()
+conn.close()
+print('loaded', len(rows))
+PY"
+```
+
+Step-by-step when using that command:
+
+1. Confirm services are running:
+   `docker ps --format 'table {{.Names}}\t{{.Status}}\t{{.Ports}}'`
+2. Confirm the target table exists by applying SQL first:
+   `docker exec -i postgres-data psql -U postgres -d dashboard < db-sample-data/<dataset>.sql`
+3. Confirm manager config exists:
+   `docker exec -i postgres-manager psql -U postgres -d dashboardmanager < db-sample-data/<dataset>.sql`
+4. Run the `docker run --rm --network br_dashboard dashboard-vector-upgrade sh -lc "python - <<'PY' ... PY"` loader.
+5. Check row count and geometry:
+   `docker exec postgres-data psql -U postgres -d dashboard -c "SELECT COUNT(*), ST_AsText(ST_Extent(wkb_geometry)) FROM public.<table>;"`
+6. Check API exposure:
+   `curl -sS 'http://localhost:8080/api/dev/map-data/<map_index>' | head -c 500`
+7. Check component config:
+   `curl -sS 'http://localhost:8080/api/dev/component/?searchbyindex=<component_index>&city=taipei'`
+
 Always verify local injection before handing off:
 
 - `docker exec postgres-data psql -U postgres -d dashboard -c "SELECT COUNT(*), ST_AsText(ST_Extent(wkb_geometry)) FROM public.<table>;"`
