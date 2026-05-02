@@ -13,11 +13,8 @@ from utils.extract_stage import (
 )
 from utils.get_time import get_tpe_now_time_str
 from utils.load_stage import (
-    save_geodataframe_to_postgresql,
-    update_lasttime_in_data_to_dataset_info,
+    save_dataframe_to_postgresql,
 )
-from utils.transform_address import clean_data, get_addr_xy_parallel, main_process, save_data
-from utils.transform_geometry import add_point_wkbgeometry_column_to_df
 
 DAG_ID = "food_bank_tpe_ntpe"
 TPE_PAGE_ID = "3fbc79e5-0138-4c89-8c47-39feddbd6d3f"
@@ -93,42 +90,25 @@ def _transfer(**kwargs):
     )
     df["data_time"] = get_tpe_now_time_str(is_with_tz=True)
 
-    # === Geocode ===
-    addr_cleaned = clean_data(df["address"])
-    standard_addr_list = main_process(addr_cleaned)
-    _, output = save_data(df["address"], addr_cleaned, standard_addr_list)
-    df["address"] = output
-    unique_addr = pd.Series(output.unique())
-    x, y = get_addr_xy_parallel(unique_addr)
-    geo = pd.DataFrame({"lng": x, "lat": y, "address": unique_addr})
-    df = df.merge(geo, on="address", how="left")
-    df["lng"] = pd.to_numeric(df["lng"], errors="coerce")
-    df["lat"] = pd.to_numeric(df["lat"], errors="coerce")
-    rate = df["lng"].notna().sum() / len(df)
-    print(f"[{DAG_ID}] geocode success rate: {rate:.2%}")
-    if rate < 0.9:
-        print(f"[{DAG_ID}][WARN] geocode success rate {rate:.2%} < 90%")
-
-    # === Geometry ===
-    gdata = add_point_wkbgeometry_column_to_df(df, df["lng"], df["lat"], from_crs=4326)
-    ready_data = gdata[[
+    # === Geometry（暫時跳過 geocoding，待 TPGOS_GET_ADDR_XY 設定後補）===
+    df["lng"] = None
+    df["lat"] = None
+    ready_data = df[[
         "source_dataset", "seq_no", "name", "org_type", "city", "district",
         "district_code", "postal_code", "address", "tel",
-        "lng", "lat", "wkb_geometry", "data_time",
+        "lng", "lat", "data_time",
     ]]
 
     # === Load ===
     engine = create_engine(ready_data_db_uri)
-    save_geodataframe_to_postgresql(
+    save_dataframe_to_postgresql(
         engine,
-        gdata=ready_data,
+        data=ready_data,
         load_behavior=load_behavior,
         default_table=default_table,
         history_table=history_table,
-        geometry_type="Point",
     )
     print(f"[{DAG_ID}] loaded {len(ready_data)} rows into {default_table}")
-    update_lasttime_in_data_to_dataset_info(engine, dag_id, ready_data["data_time"].max())
 
 
 dag = CommonDag(proj_folder="proj_city_dashboard", dag_folder=DAG_ID)

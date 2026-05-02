@@ -9,11 +9,10 @@ from utils.extract_stage import download_file
 from utils.get_time import get_tpe_now_time_str
 from utils.load_stage import (
     save_dataframe_to_postgresql,
-    update_lasttime_in_data_to_dataset_info,
 )
 
 DAG_ID = "gov_open_waste_yearly"
-METADATA_URL = "https://data.gov.tw/api/v1/rest/dataset/89022"
+METADATA_URL = "https://data.gov.tw/api/v2/rest/dataset/89022"
 
 
 def _transfer(**kwargs):
@@ -29,7 +28,8 @@ def _transfer(**kwargs):
     distribution = meta.get("result", {}).get("distribution", []) or []
     csv_url = next(
         (d.get("resourceDownloadUrl") for d in distribution
-         if (d.get("resourceDownloadUrl") or "").lower().endswith(".csv")),
+         if d.get("resourceFormat", "").upper() == "CSV"
+         or (d.get("resourceDownloadUrl") or "").lower().endswith(".csv")),
         None,
     )
     if not csv_url:
@@ -88,7 +88,6 @@ def _transfer(**kwargs):
         history_table=history_table,
     )
     print(f"[{DAG_ID}] loaded {len(ready_data)} rows into {default_table} (+ {history_table})")
-    update_lasttime_in_data_to_dataset_info(engine, dag_id, ready_data["data_time"].max())
 
 
 dag = CommonDag(proj_folder="proj_city_dashboard", dag_folder=DAG_ID)
