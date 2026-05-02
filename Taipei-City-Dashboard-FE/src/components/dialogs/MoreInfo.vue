@@ -52,7 +52,7 @@ function getLinkTag(link, index) {
           <p>{{ dialogStore.moreInfoContent.long_desc }}</p>
           <h3>範例情境</h3>
           <p>{{ dialogStore.moreInfoContent.use_case }}</p>
-          <div v-if="dialogStore.moreInfoContent.history_config">
+          <div v-if="dialogStore.moreInfoContent.history_config?.range">
             <h3>歷史軸</h3>
             <h4>*點擊並拉動以檢視細部區間資料</h4>
             <HistoryChart

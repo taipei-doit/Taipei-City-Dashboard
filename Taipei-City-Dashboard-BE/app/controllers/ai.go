@@ -29,13 +29,13 @@ type AIChatInput struct {
 		} `json:"tool_calls,omitempty"`
 		ToolCallID string `json:"tool_call_id,omitempty"`
 	} `json:"messages" binding:"required,gt=0"`
-	MaxNewTokens     *int      `json:"max_new_tokens" binding:"omitempty,gt=0"`
-	Temperature      *float64  `json:"temperature" binding:"omitempty,gt=0"`
-	TopP             *float64  `json:"top_p" binding:"omitempty,gt=0,lte=1"`
-	TopK             *int      `json:"top_k" binding:"omitempty,gte=1,lte=100"`
-	FrequencePenalty *float64  `json:"frequence_penalty" binding:"omitempty,gt=0"`
-	StopSequences    []string  `json:"stop_sequences" binding:"omitempty,max=4"`
-	Seed             *int      `json:"seed" binding:"omitempty,gte=0"`
+	MaxNewTokens     *int     `json:"max_new_tokens" binding:"omitempty,gt=0"`
+	Temperature      *float64 `json:"temperature" binding:"omitempty,gt=0"`
+	TopP             *float64 `json:"top_p" binding:"omitempty,gt=0,lte=1"`
+	TopK             *int     `json:"top_k" binding:"omitempty,gte=1,lte=100"`
+	FrequencePenalty *float64 `json:"frequence_penalty" binding:"omitempty,gt=0"`
+	StopSequences    []string `json:"stop_sequences" binding:"omitempty,max=4"`
+	Seed             *int     `json:"seed" binding:"omitempty,gte=0"`
 	Tools            []struct {
 		Type     string `json:"type" binding:"required,eq=function"`
 		Function struct {
@@ -47,14 +47,23 @@ type AIChatInput struct {
 	ToolChoice interface{} `json:"tool_choice,omitempty"`
 }
 
-// ChatWithTWCC is the controller for POST /api/v1/ai/chat/twai
+// ChatWithTWCC is the controller for POST /api/v1/ai/chat/twcc and /api/v1/ai/chat/twai.
 func ChatWithTWCC(c *gin.Context) {
 	var input AIChatInput
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"status": "error",
+			"status":     "error",
 			"error_code": "INVALID_REQUEST",
-			"message": err.Error(),
+			"message":    err.Error(),
+		})
+		return
+	}
+
+	if !ai.IsTWCCConfigured() {
+		c.JSON(http.StatusServiceUnavailable, gin.H{
+			"status":     "error",
+			"error_code": "TWCC_NOT_CONFIGURED",
+			"message":    "TWCC API key is not configured",
 		})
 		return
 	}
@@ -102,9 +111,9 @@ func ChatWithTWCC(c *gin.Context) {
 		if err != nil {
 			if !c.Writer.Written() {
 				c.JSON(http.StatusInternalServerError, gin.H{
-					"status": "error",
+					"status":     "error",
 					"error_code": "AI_SERVICE_STREAM_ERROR",
-					"message": err.Error(),
+					"message":    err.Error(),
 				})
 			}
 		}
@@ -115,9 +124,9 @@ func ChatWithTWCC(c *gin.Context) {
 	logEntry, err := ai.ChatWithTWCC(c.Request.Context(), req, options...)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
-			"status": "error",
+			"status":     "error",
 			"error_code": "AI_SERVICE_ERROR",
-			"message": err.Error(),
+			"message":    err.Error(),
 		})
 		return
 	}
@@ -125,17 +134,17 @@ func ChatWithTWCC(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"status": "success",
 		"data": gin.H{
-			"session":     logEntry.SessionID,
-			"content":     logEntry.Answer,
+			"session": logEntry.SessionID,
+			"content": logEntry.Answer,
 			"usage": gin.H{
 				"input_tokens":  logEntry.InputTokens,
 				"output_tokens": logEntry.OutputTokens,
 				"total_tokens":  logEntry.TotalTokens,
 			},
-			"tool_used":   logEntry.ToolUsed,
-			"latency_ms":  logEntry.LatencyMS,
-			"model":       logEntry.Model,
-			"provider":    logEntry.Provider,
+			"tool_used":  logEntry.ToolUsed,
+			"latency_ms": logEntry.LatencyMS,
+			"model":      logEntry.Model,
+			"provider":   logEntry.Provider,
 		},
 	})
 }
@@ -240,4 +249,3 @@ func (input *AIChatInput) ToCallOptions() []llms.CallOption {
 
 	return options
 }
-
