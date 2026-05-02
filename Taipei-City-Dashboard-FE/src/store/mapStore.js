@@ -354,7 +354,9 @@ export const useMapStore = defineStore("map", {
 
 		/* Adding Map Layers */
 		// 1. Passes in the map_config (an Array of Objects) of a component and adds all layers to the map layer list
+		// GeoJSON sources are loaded sequentially to preserve layer stacking order.
 		addToMapLayerList(map_config) {
+			let chain = Promise.resolve();
 			map_config.forEach((element) => {
 				let mapLayerId = `${element.index}-${element.type}-${element.city}`;
 				// 1-1. If the layer exists, simply turn on the visibility and add it to the visible layers list
@@ -377,7 +379,7 @@ export const useMapStore = defineStore("map", {
 				// 1-2. If the layer doesn't exist, call an API to get the layer data
 				this.loadingLayers.push(appendLayer.layerId);
 				if (element.source === "geojson") {
-					this.fetchLocalGeoJson(appendLayer);
+					chain = chain.then(() => this.fetchLocalGeoJson(appendLayer));
 				} else if (element.source === "raster") {
 					this.addRasterSource(appendLayer);
 				}
@@ -385,7 +387,7 @@ export const useMapStore = defineStore("map", {
 		},
 		// 2. Call an API to get the layer data
 		fetchLocalGeoJson(map_config) {
-			axios
+			return axios
 				.get(`/mapData/${map_config.index}.geojson`)
 				.then((rs) => {
 					this.addGeojsonSource(map_config, rs.data);
