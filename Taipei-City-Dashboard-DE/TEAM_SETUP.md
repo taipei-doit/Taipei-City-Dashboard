@@ -27,10 +27,10 @@ docker exec -i postgres-data psql -U postgres -d dashboard < Taipei-City-Dashboa
 
 ### 方法 A：從隊友拿 dump 檔（快，推薦）
 
-拿到 `pedestrian_all.sql` 之後：
+pull 之後 repo 裡已有，直接跑：
 
 ```powershell
-docker exec -i postgres-data psql -U postgres -d dashboard < pedestrian_all.sql
+docker exec -i postgres-data psql -U postgres -d dashboard < Taipei-City-Dashboard-DE/pedestrian_all.sql
 ```
 
 ### 方法 B：自己從警政署下載（慢，約需 5–10 分鐘）
