@@ -796,6 +796,33 @@ function startRouteFromCurrent() {
 }
 
 function startRoutePickTwo() {
+	// 如果使用者剛剛在瀏覽模式點過點：把最新一個當起點 A，其他圈圈清掉、直接進 pick-end
+	const latest = clickedFeatures.value[clickedFeatures.value.length - 1];
+	if (latest) {
+		const [lng, lat] = latest.geometry.coordinates;
+		routeStart.value = {
+			lng,
+			lat,
+			name: latest.properties?.name,
+		};
+		// 清光之前累積的圈圈與 click popup（A marker 會取代視覺）
+		clickedFeatures.value = [];
+		syncClickedFeaturesToSource();
+		clickPopup?.remove();
+		clickPopup = null;
+		// 清乾淨可能殘留的路線狀態
+		routeEnd.value = null;
+		routeStats.value = null;
+		setEndMarker(null);
+		const source = mapStore.map?.getSource(ROUTE_SOURCE_ID);
+		source?.setData({ type: "FeatureCollection", features: [] });
+		// 設 A marker、跳到等使用者點終點
+		setStartMarker(routeStart.value);
+		routeStep.value = "pick-end";
+		dialogStore.showNotification("info", "已用最後點擊的點當起點，請點選終點");
+		return;
+	}
+	// 沒有先前點擊：完整 pick-two 流程
 	clearRoute();
 	routeStep.value = "pick-start";
 	dialogStore.showNotification("info", "請打開圖層並點選一個點位作為起點");
@@ -840,6 +867,49 @@ const routeStats = ref(null); // { distanceMeters, durationSeconds }
 const routeLoading = ref(false);
 let routeStartMarker = null;
 let routeEndMarker = null;
+
+// 步行面板開關 + 拖曳位置（fixed 定位，初始放在 walk icon 左邊）
+const routePanelOpen = ref(false);
+const panelPos = ref(null); // null = 第一次開啟前；{x,y} = 已決定位置
+
+// 在 route mode（已選擇從目前位置 / 選兩個點位）才顯示「清除選取」按鈕
+const inRouteMode = computed(() => Boolean(routeStep.value || routeStats.value));
+
+function toggleRoutePanel(e) {
+	if (routePanelOpen.value) {
+		routePanelOpen.value = false;
+		return;
+	}
+	routePanelOpen.value = true;
+	if (!panelPos.value) {
+		// 初始位置：步行 icon 的左邊（panel 約 260 寬）
+		const btnRect = e.currentTarget.getBoundingClientRect();
+		panelPos.value = {
+			x: Math.max(20, btnRect.left - 280),
+			y: btnRect.top,
+		};
+	}
+}
+
+function onPanelDragStart(e) {
+	if (e.button !== 0) return; // 只接受左鍵
+	e.preventDefault();
+	const startX = e.clientX;
+	const startY = e.clientY;
+	const initial = { ...panelPos.value };
+	function onMove(ev) {
+		panelPos.value = {
+			x: initial.x + (ev.clientX - startX),
+			y: initial.y + (ev.clientY - startY),
+		};
+	}
+	function onUp() {
+		document.removeEventListener("mousemove", onMove);
+		document.removeEventListener("mouseup", onUp);
+	}
+	document.addEventListener("mousemove", onMove);
+	document.addEventListener("mouseup", onUp);
+}
 
 function ensureHoverPopup() {
 	if (!hoverPopup) {
@@ -1175,14 +1245,37 @@ function tagListOf(component) {
       />
     </div>
     <MapContainer />
-    <!-- 步行路線控制板：浮在地圖左上角 -->
-    <div class="ecodietview-route">
-      <div class="ecodietview-route-header">
+    <!-- 步行 icon 按鈕：放在區/里/近 按鈕同一垂直軸下方，預設收合 -->
+    <button
+      class="ecodietview-walkbtn"
+      :class="{ 'ecodietview-walkbtn-active': routePanelOpen }"
+      title="步行路線"
+      @click="toggleRoutePanel"
+    >
+      <span>directions_walk</span>
+    </button>
+    <!-- 可拖曳的步行路線視窗：開啟時 fixed 定位，header 可拖 -->
+    <div
+      v-if="routePanelOpen"
+      class="ecodietview-route"
+      :style="{ left: `${panelPos?.x ?? 0}px`, top: `${panelPos?.y ?? 0}px` }"
+    >
+      <div
+        class="ecodietview-route-header"
+        @mousedown="onPanelDragStart"
+      >
         <span>directions_walk</span>
         <h3>步行路線</h3>
+        <button
+          class="ecodietview-route-closebtn"
+          title="關閉"
+          @click="routePanelOpen = false"
+        >
+          <span>close</span>
+        </button>
       </div>
       <div
-        v-if="!routeStep && !routeStats"
+        v-if="!routeStep && !routeStats && !routeLoading"
         class="ecodietview-route-actions"
       >
         <button
@@ -1244,8 +1337,9 @@ function tagListOf(component) {
           清除路線
         </button>
       </div>
+      <!-- 進入 route mode 後才出現「清除選取」-->
       <button
-        v-if="clickedFeatures.length > 0"
+        v-if="inRouteMode && clickedFeatures.length > 0"
         class="ecodietview-route-btn ecodietview-route-btn-secondary"
         @click="clearClickedFeatures"
       >
@@ -1310,34 +1404,65 @@ function tagListOf(component) {
 		}
 	}
 
+	&-walkbtn {
+		width: 1.75rem;
+		height: 1.75rem;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		position: absolute;
+		right: 10px;
+		top: 252px;
+		border-radius: 50%;
+		background-color: white;
+		transition: color 0.2s, background-color 0.2s;
+		z-index: 4;
+		cursor: pointer;
+
+		span {
+			color: var(--color-component-background);
+			font-size: 1.2rem;
+			font-family: var(--font-icon);
+		}
+
+		&-active {
+			background-color: #ff5e3a;
+
+			span {
+				color: white;
+			}
+		}
+
+		&:hover {
+			background-color: #ff5e3a;
+
+			span {
+				color: white;
+			}
+		}
+	}
+
 	&-route {
-		min-width: 220px;
-		max-width: 260px;
+		min-width: 240px;
+		max-width: 280px;
 		display: flex;
 		flex-direction: column;
 		gap: 8px;
-		position: absolute;
-		top: var(--font-s);
-		left: calc(360px + var(--font-s) * 2);
-		padding: var(--font-s) var(--font-m);
+		position: fixed;
+		padding: var(--font-s) var(--font-m) var(--font-m) var(--font-m);
 		border-radius: 6px;
 		background-color: var(--color-component-background);
 		font-family: '微軟正黑體', 'Microsoft JhengHei', sans-serif;
-		box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
-		z-index: 5;
-
-		@media (min-width: 1000px) {
-			left: calc(370px + var(--font-s) * 2);
-		}
-
-		@media (min-width: 2000px) {
-			left: calc(400px + var(--font-s) * 2);
-		}
+		box-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
+		z-index: 10;
+		user-select: none;
 
 		&-header {
 			display: flex;
 			align-items: center;
 			gap: 6px;
+			padding-bottom: 4px;
+			cursor: move;
 
 			span {
 				color: #ff5e3a;
@@ -1346,9 +1471,32 @@ function tagListOf(component) {
 			}
 
 			h3 {
+				flex: 1;
 				color: var(--color-normal-text);
 				font-size: var(--font-ms);
 				font-weight: 500;
+			}
+		}
+
+		&-closebtn {
+			width: 22px;
+			height: 22px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			border-radius: 4px;
+			background-color: transparent;
+			cursor: pointer;
+			transition: background-color 0.15s;
+
+			&:hover {
+				background-color: var(--color-border);
+			}
+
+			span {
+				color: var(--color-complement-text);
+				font-family: var(--font-icon);
+				font-size: var(--font-ms);
 			}
 		}
 
