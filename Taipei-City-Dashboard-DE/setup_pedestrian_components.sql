@@ -21,8 +21,8 @@ ON CONFLICT (index) DO UPDATE SET name = EXCLUDED.name;
 
 INSERT INTO public.component_charts (index, color, types, unit) VALUES
     ('traffic_pedestrian_heatmap',
-        ARRAY['#FFF9C4', '#FFB300', '#E65100', '#B71C1C'],
-        ARRAY['MapLegend'],
+        ARRAY['#FFDDD2', '#FF6B6B', '#C0392B', '#7B241C'],
+        ARRAY['DistrictChart'],
         '件'),
     ('traffic_pedestrian_hourly_taipei',
         ARRAY['#FFF9C4', '#FF6F00', '#B71C1C'],
@@ -144,8 +144,8 @@ INSERT INTO public.query_charts (
     ARRAY['b12705030'],
     NOW(),
     NOW(),
-    'map_legend',
-    E'SELECT\n    unnest(ARRAY[''1-4件（低）'', ''5-9件（中）'', ''10-19件（高）'', ''20件以上（極高）'']) AS name,\n    NULL::float AS value,\n    ''circle'' AS type',
+    'two_d',
+    E'SELECT\n    district_name AS x_axis,\n    SUM(accident_count)::INT AS data\nFROM traffic_pedestrian_district_stats\nGROUP BY district_name\nORDER BY x_axis',
     NULL,
     'metrotaipei'
 );
