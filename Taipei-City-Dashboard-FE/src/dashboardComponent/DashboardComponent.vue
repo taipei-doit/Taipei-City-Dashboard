@@ -386,23 +386,27 @@ function returnChartComponent(name, svg) {
       "
       class="dashboardcomponent-control"
     >
-      <select
+      <div
         v-if="selectBtn && !selectBtnDisabled"
-        v-model="activeCity"
-        name="city"
-        class="selectBtn"
-        :class="{'selectBtn-disabled': selectBtnDisabled}"
-        :title="selectBtnActiveLabel"
+        class="dashboardcomponent-control-row"
       >
-        <template
-          v-for="city in props.selectBtnList"
-          :key="city.value"
+        <select
+          v-model="activeCity"
+          name="city"
+          class="selectBtn"
+          :class="{'selectBtn-disabled': selectBtnDisabled}"
+          :title="selectBtnActiveLabel"
         >
-          <option :value="city.value">
-            {{ t(`city.area.${city.value}`) || city.name }}
-          </option>
-        </template>
-      </select>
+          <template
+            v-for="city in props.selectBtnList"
+            :key="city.value"
+          >
+            <option :value="city.value">
+              {{ t(`city.area.${city.value}`) || city.name }}
+            </option>
+          </template>
+        </select>
+      </div>
       <div
         v-if="config.chart_config.types.length > 1"
         class="dashboardcomponent-control-group"
@@ -424,11 +428,6 @@ function returnChartComponent(name, svg) {
           />
         </button>
       </div>
-      <!-- spacer：讓中間 control group 在整排視覺置中 -->
-      <div
-        v-if="(selectBtn && !selectBtnDisabled) || config.chart_config.types.length > 1"
-        class="dashboardcomponent-control-spacer"
-      />
     </div>
     <!-- Main Content -->
     <div
@@ -755,17 +754,25 @@ button:hover {
 
 	&-control {
 		width: 100%;
-		display: grid;
-		grid-template-columns: 1fr auto 1fr;
+		display: flex;
+		flex-direction: column;
 		align-items: center;
-		column-gap: 10px;
+		row-gap: 6px;
 		// position: absolute;
 		top: 4.2rem;
 		left: 0;
 		z-index: 8;
 		padding: 8px 0;
 
+		&-row {
+			width: 100%;
+			display: flex;
+			justify-content: flex-start;
+			align-items: center;
+		}
+
 		&-group {
+			width: 100%;
 			display: flex;
 			justify-content: center;
 			align-items: center;
@@ -810,7 +817,6 @@ button:hover {
 		}
 
 		.selectBtn {
-			justify-self: start;
 			flex: 0 0 auto;
 			box-sizing: border-box;
 			/* 固定寬度：不因 i18n 字數拉寬控件；過長標籤以省略顯示，完整文字見 title */
@@ -829,10 +835,6 @@ button:hover {
 			&-disabled {
 				cursor: not-allowed;
 			}
-		}
-
-		&-spacer {
-			justify-self: end;
 		}
 	}
 
