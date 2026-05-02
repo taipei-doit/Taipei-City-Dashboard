@@ -172,6 +172,7 @@ const SIMPLE_ROUTE_FIRST_PERSON_FORWARD_METERS = 0;
 const SIMPLE_ROUTE_FIRST_PERSON_PITCH = 78;
 const SIMPLE_ROUTE_FIRST_PERSON_ZOOM = 17.2;
 const SIMPLE_ROUTE_FIRST_PERSON_UPDATE_INTERVAL_MS = 0;
+const SIMPLE_ROUTE_FIRST_PERSON_BEARING_SMOOTHING_MS = 360;
 const SIMPLE_ROUTE_SPEED_LIMIT_LOOKUP_THROTTLE_MS = 3000;
 const SIMPLE_ROUTE_SPEED_LIMIT_NETWORK_INTERVAL_MS = 2200;
 const SIMPLE_ROUTE_SPEED_LIMIT_PREFETCH_INTERVAL_MS = 6500;
@@ -630,6 +631,20 @@ function normalizeMapBearing(bearing) {
 	return ((((bearing % 360) + 540) % 360) - 180);
 }
 
+function getMapBearingDelta(fromBearing, toBearing) {
+	return normalizeMapBearing(toBearing - fromBearing);
+}
+
+function smoothMapBearing(fromBearing, toBearing, elapsedMs) {
+	if (!Number.isFinite(fromBearing)) return normalizeMapBearing(toBearing);
+	if (!Number.isFinite(toBearing)) return normalizeMapBearing(fromBearing);
+	const smoothingMs = SIMPLE_ROUTE_FIRST_PERSON_BEARING_SMOOTHING_MS;
+	const alpha = 1 - Math.exp(-Math.max(0, elapsedMs) / smoothingMs);
+	return normalizeMapBearing(
+		fromBearing + getMapBearingDelta(fromBearing, toBearing) * alpha,
+	);
+}
+
 function getSimpleRouteBearing(routeSample) {
 	return normalizeMapBearing((routeSample.angle * 180) / Math.PI + 90);
 }
@@ -1008,6 +1023,7 @@ function createSimpleRouteCarLayer(
 		isRemoved: false,
 		hasCompleted: false,
 		lastFirstPersonCameraUpdate: 0,
+		smoothedFirstPersonBearing: null,
 		shouldUseFirstPersonCamera:
 			options.shouldUseFirstPersonCamera || (() => false),
 		onRouteSample: options.onRouteSample || (() => {}),
@@ -1021,18 +1037,33 @@ function createSimpleRouteCarLayer(
 				return;
 			}
 			const now = performance.now();
+			const elapsedSinceUpdate =
+				customLayer.lastFirstPersonCameraUpdate > 0
+					? now - customLayer.lastFirstPersonCameraUpdate
+					: 0;
 			if (
 				!force &&
-				now - customLayer.lastFirstPersonCameraUpdate <
+				elapsedSinceUpdate <
 					SIMPLE_ROUTE_FIRST_PERSON_UPDATE_INTERVAL_MS
 			) {
 				return;
 			}
 			customLayer.lastFirstPersonCameraUpdate = now;
+			const camera = getSimpleRouteFirstPersonCamera(
+				customLayer.currentSample,
+			);
+			const targetBearing = camera.bearing;
+			customLayer.smoothedFirstPersonBearing =
+				force || customLayer.smoothedFirstPersonBearing === null
+					? targetBearing
+					: smoothMapBearing(
+						customLayer.smoothedFirstPersonBearing,
+						targetBearing,
+						elapsedSinceUpdate,
+					);
 			customLayer.map.jumpTo({
-				...getSimpleRouteFirstPersonCamera(
-					customLayer.currentSample,
-				),
+				...camera,
+				bearing: customLayer.smoothedFirstPersonBearing,
 				essential: true,
 			});
 		},
@@ -1101,6 +1132,7 @@ function createSimpleRouteCarLayer(
 			customLayer.camera = null;
 			customLayer.renderer = null;
 			customLayer.model = null;
+			customLayer.smoothedFirstPersonBearing = null;
 		},
 		render(gl, matrix) {
 			if (
@@ -1190,7 +1222,7 @@ function createSimpleRouteCarLayer(
 				customLayer.hasCompleted = true;
 				customLayer.currentSample = routeSample;
 				if (isFirstPersonCamera) {
-					customLayer.applyFirstPersonCamera(true);
+					customLayer.applyFirstPersonCamera();
 				}
 				customLayer.onRouteComplete(routeSample);
 			}
