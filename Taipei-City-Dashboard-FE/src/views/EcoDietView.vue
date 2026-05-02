@@ -62,17 +62,17 @@ const ROUTE_HALO_COLOR = "#ffffff";
 
 const SHARED_LINKS = {
 	restaurant: [
-		"https://data.taipei/dataset/detail?id=12388eaa-4f5e-4225-b62b-d2e0a8b3edb2",
-		"https://data.ntpc.gov.tw/datasets/e90d14f8-95dc-431d-9301-4c1a5d8c8e83",
+		"https://data.taipei/dataset/detail?id=845818d9-c432-44b4-85dd-03d71bd867b2",
+		"https://data.ntpc.gov.tw/datasets/e90d14f8-5995-4ebb-af19-8f8fd7d396c8",
 	],
 	greenStore: [
-		"https://data.taipei/dataset/detail?id=ba3e0fb1-b6e4-4862-b2db-ad81ad5c8c6f",
-		"https://data.ntpc.gov.tw/datasets/6ccd0274-b8b3-4dd0-9a5f-1c6bf79d9dca",
+		"https://data.taipei/dataset/detail?id=1756cb64-0066-444a-a323-9f3b5a961045",
+		"https://data.ntpc.gov.tw/datasets/6ccd0274-0c09-43b0-98fc-4d5222a71e8b",
 	],
-	waste: ["https://data.gov.tw/dataset/9079"],
+	waste: ["https://data.gov.tw/dataset/89022"],
 	foodBank: [
-		"https://data.taipei/dataset/detail?id=3f1a3e60-1b6e-4f7e-b0c7-7c1c2e8e3b5a",
-		"https://data.ntpc.gov.tw/datasets/1c1d0066-2b9e-4d3a-9d1c-7c1f3a8f9b2c",
+		"https://data.taipei/dataset/detail?id=3fbc79e5-0138-4c89-8c47-39feddbd6d3f",
+		"https://data.ntpc.gov.tw/datasets/1c1d0066-a4e7-4753-b8bc-d7728d5f3e04",
 	],
 };
 
