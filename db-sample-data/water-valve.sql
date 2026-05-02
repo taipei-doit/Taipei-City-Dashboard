@@ -87,11 +87,11 @@ VALUES (
                 "interpolate",
                 ["linear"],
                 ["to-number", ["get", "valve_age_years"]],
-                0, "#A7D8FF",
-                10, "#24B0DD",
-                25, "#56B96D",
-                50, "#F8CF58",
-                80, "#ED6A45"
+                0, "#D9F5D6",
+                10, "#A9E7A1",
+                25, "#66C86B",
+                50, "#2F9E44",
+                80, "#0B5D1E"
             ]
         ],
         "circle-opacity": 0.82,
