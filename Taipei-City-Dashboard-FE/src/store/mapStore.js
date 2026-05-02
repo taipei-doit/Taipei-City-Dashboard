@@ -3455,7 +3455,7 @@ export const useMapStore = defineStore("map", {
 					params: {
 						alternatives: false,
 						geometries: "geojson",
-						overview: "simplified",
+						overview: "full",
 						steps: false,
 						access_token: token,
 					},
