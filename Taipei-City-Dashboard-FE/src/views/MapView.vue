@@ -806,6 +806,8 @@ function popularBasicLayerGA(map_config) {
 	}
 
 	&-panels {
+		--map-panel-item-width: calc(100% - var(--font-m) * 2);
+
 		position: absolute;
 		top: 210px;
 		bottom: 16px;
@@ -823,6 +825,9 @@ function popularBasicLayerGA(map_config) {
 	}
 
 	&-layer-tools {
+		width: var(--map-panel-item-width);
+		max-width: var(--map-panel-item-width);
+		box-sizing: border-box;
 		display: grid;
 		grid-template-columns: 1fr auto;
 		gap: 12px;
@@ -904,6 +909,9 @@ function popularBasicLayerGA(map_config) {
 		}
 
 		h2 {
+			width: var(--map-panel-item-width);
+			max-width: var(--map-panel-item-width);
+			box-sizing: border-box;
 			margin: 0;
 			padding: 7px 10px;
 			border: 1px solid rgba(244, 242, 235, 0.38);
@@ -915,7 +923,9 @@ function popularBasicLayerGA(map_config) {
 		}
 
 		&-nodashboard {
-			width: 100%;
+			width: var(--map-panel-item-width);
+			max-width: var(--map-panel-item-width);
+			box-sizing: border-box;
 			flex: 1;
 			min-height: 220px;
 			display: flex;
@@ -927,11 +937,11 @@ function popularBasicLayerGA(map_config) {
 			pointer-events: auto;
 
 			@media (min-width: 1000px) {
-				width: 100%;
+				width: var(--map-panel-item-width);
 			}
 
 			@media (min-width: 2000px) {
-				width: 400px;
+				width: var(--map-panel-item-width);
 			}
 
 			span {
