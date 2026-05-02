@@ -100,7 +100,7 @@ const c1bComponent = ref({
 	update_freq: null,
 	update_freq_unit: null,
 	chart_config: {
-		types: ["BarChart"],
+		types: ["DistrictChart", "BarChart"],
 		color: ["#5fcf80"],
 		unit: "家",
 	},
