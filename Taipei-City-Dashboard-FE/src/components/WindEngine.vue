@@ -153,7 +153,7 @@ const ORIGIN_LNG = 121.5646;
 const ORIGIN_LAT = 25.0339;
 const GRID_CELL_STEP = 0.0005;
 const SPATIAL_INDEX_STEP = computed(() => useStationData.value ? 0.004 : 0.008);
-const GRID_DECAY = 0.98;
+const GRID_DECAY = 0.99;
 const HIDE_SECONDS_PER_METER = 1 / 40;
 const MIN_HIDE_SECONDS = 1.5;
 const MAX_HIDE_SECONDS = 12;
@@ -394,15 +394,20 @@ const rebuildBuildingIndex = () => {
 };
 
 const updateWindComfortSource = () => {
-	maxGridCount = 1;
+	let currentMax = 0;
 	for (const cell of windComfortGrid) {
 		cell.properties.count *= GRID_DECAY;
-		maxGridCount = Math.max(maxGridCount, cell.properties.count);
+		if (cell.properties.count > currentMax) currentMax = cell.properties.count;
 	}
-	const norm = Math.max(maxGridCount, 3);
+    
+	maxGridCount = currentMax;
+	const norm = Math.max(maxGridCount, 5); 
+
 	for (const cell of windComfortGrid) {
-		cell.properties.frequency = cell.properties.count / norm;
+		const rawFreq = cell.properties.count / norm;
+		cell.properties.frequency = Math.pow(rawFreq, 0.7); 
 	}
+    
 	if (map?.getSource("comfort-grid")) {
 		map.getSource("comfort-grid").setData({
 			type: "FeatureCollection",
@@ -632,14 +637,10 @@ const createMap = () => {
 					"interpolate",
 					["linear"],
 					["get", "frequency"],
-					0,
-					"rgba(255, 80, 80, 0.4)",
-					0.3,
-					"rgba(255, 160, 80, 0.4)",
-					0.6,
-					"rgba(160, 220, 255, 0.4)",
-					1,
-					"rgba(0, 170, 255, 0.6)",
+					0, "rgba(255, 80, 80, 0.4)",      // 悶熱
+					0.15, "rgba(255, 160, 80, 0.4)",   // 微風
+					0.35, "rgba(160, 220, 255, 0.4)",  // 通風良好
+					0.7, "rgba(0, 170, 255, 0.6)"      // 強風廊道
 				],
 				"fill-opacity": 0.8,
 			},
@@ -909,8 +910,10 @@ const update = () => {
 		visibleFeatures.push(f);
 
 		const gridKey = `${Math.floor(adjLng / GRID_CELL_STEP)}:${Math.floor(adjLat / GRID_CELL_STEP)}`;
-		if (windGridIndex[gridKey])
-			windGridIndex[gridKey].properties.count += 1;
+		if (windGridIndex[gridKey]) {
+			const weight = useStation ? particleSpd * 0.5 : spd * 0.5;
+			windGridIndex[gridKey].properties.count += Math.max(1, weight); 
+		}
 	}
 
 	if (map?.getSource("wind-source")) {
