@@ -1,7 +1,6 @@
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 import viteCompression from "vite-plugin-compression";
-import basicSsl from "@vitejs/plugin-basic-ssl";
 import mockBE from "./mock/index.js";
 
 // 嘗試讀取環境變數，若不存在則回傳 false
@@ -27,7 +26,6 @@ const serverConfig = isDockerCompose
 	: {
 		host: "0.0.0.0",
 		port: 80,
-		https: true,
 		proxy: {
 			// 雙城暢行 MRT 無障礙 BE（contract: 13_雙城暢行_BE_api_contract.yaml）
 			// 注意：合約寫 localhost:8080 是 BE container 內部視角；本機是 8088（docker-compose 對外 mapping）
@@ -62,7 +60,6 @@ export default defineConfig({
 		mockBE(),
 		vue(),
 		viteCompression(),
-		...(isDockerCompose ? [] : [basicSsl()]),
 	],
 	build: {
 		rollupOptions: {
