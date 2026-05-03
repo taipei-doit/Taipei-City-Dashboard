@@ -41,7 +41,9 @@ const chartOptions = ref({
 		hover: {
 			size: 5,
 		},
-		size: 3,
+		// chart_config.markerSize 可傳 number 或 number[]：傳陣列時逐 series 對應，
+		// 0 代表該 series 不顯示 marker（用於虛線示意參考線，避免點點干擾視覺）
+		size: props.chart_config?.markerSize ?? 3,
 		strokeWidth: 0,
 	},
 	stroke: {
@@ -49,6 +51,11 @@ const chartOptions = ref({
 		curve: "smooth",
 		show: true,
 		width: 2,
+		// 每條 series 各別的虛線樣式（0 = 實線，>0 = 虛線間隔）。例如「實際 / 目標 / 預測」
+		// 三線並陳時可傳 [0, 6, 4]：實線 + 兩種虛線
+		...(props.chart_config?.dashArray
+			? { dashArray: props.chart_config.dashArray }
+			: {}),
 	},
 	tooltip: {
 		custom: function ({
@@ -123,7 +130,9 @@ watch(
 			localSeries.value.forEach((item) => {
 				item.data = item.data.map((a) => ({
 					...a,
-					x: a.x.slice(0, 4),
+					// split("-")[0] 同時涵蓋 4 位西元（"2024-01-01" → "2024"）
+					// 與 3 位民國（"113-01-01" → "113"）；slice(0,4) 對民國會誤抓 dash
+					x: a.x.split("-")[0],
 				}));
 			});
 			chartOptions.value = {
