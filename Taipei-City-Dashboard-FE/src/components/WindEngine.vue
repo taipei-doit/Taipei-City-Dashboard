@@ -71,7 +71,6 @@ const MAX_HIDE_SECONDS = 12;
 const IDLE_REFRESH_MS = 30000;
 
 mapboxgl.accessToken = import.meta.env.VITE_MAPBOXTOKEN;
-console.log('Mapbox Token:', mapboxgl.accessToken);
 const emptyGeoJSON = { type: 'FeatureCollection', features: [] };
 
 const cancelIdleRefresh = () => {
