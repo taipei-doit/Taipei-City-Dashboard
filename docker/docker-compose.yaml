@@ -81,6 +81,7 @@ services:
       GOCACHE: /tmp/go-build-cache
     volumes:
       - ../Taipei-City-Dashboard-BE:/opt/Taipei-City-Dashboard-BE
+      - ../Taipei-City-Dashboard-FE/public/mapdata:/opt/Taipei-City-Dashboard-BE/mapdata
       - dashboard-be-go-mod-cache:/go/pkg/mod
       - dashboard-be-go-build-cache:/tmp/go-build-cache
     working_dir: /opt/Taipei-City-Dashboard-BE
