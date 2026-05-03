@@ -1,6 +1,7 @@
 <script setup>
 import { computed, ref } from "vue";
 import http from "../router/axios.js";
+import { useAuthStore } from "../store/authStore";
 // import "./styles/chartStyles.css";
 // import "./styles/toggleswitch.css";
 import "material-icons/iconfont/material-icons.css";
@@ -93,6 +94,8 @@ const emits = defineEmits([
 	"changeCity"
 ]);
 
+const authStore = useAuthStore();
+
 const activeChart = ref(props.config.chart_config.types[0]);
 const activeCity = computed({
 	get: () => props.activeCity,
@@ -121,7 +124,7 @@ const showAIPopup = ref(false);
 const aiPopupCollapsed = ref(false);
 
 async function fetchAISummary() {
-	if (aiLoading.value) return;
+	if (aiLoading.value || !authStore.token) return;
 
 	showAIPopup.value = true;
 	aiPopupCollapsed.value = false;
@@ -133,7 +136,10 @@ async function fetchAISummary() {
 		const baseUrl = import.meta.env.VITE_API_URL || "";
 		const res = await fetch(`${baseUrl}/ai/chat/twai`, {
 			method: "POST",
-			headers: { "Content-Type": "application/json" },
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: `Bearer ${authStore.token}`,
+			},
 			body: JSON.stringify({
 				stream: true,
 				messages: [{
@@ -890,7 +896,7 @@ button:hover {
 		justify-content: space-between;
 		overflow: visible;
 		position: relative;
-		z-index: 10000;
+		//z-index: 10000;
 
 		div {
 			display: flex;
@@ -1107,7 +1113,7 @@ button:hover {
 <style lang="scss">
 .ai-summary-popup {
 	position: absolute;
-	z-index: 9999;
+	z-index: 10;
 	width: 220px;
 	top: calc(100% - 38px);
 	left: 0;

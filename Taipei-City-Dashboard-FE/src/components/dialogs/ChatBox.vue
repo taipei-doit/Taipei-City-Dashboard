@@ -89,7 +89,10 @@ async function analyzeComponents() {
 		const baseUrl = import.meta.env.VITE_API_URL || "";
 		const res = await fetch(`${baseUrl}/ai/chat/twai`, {
 			method: "POST",
-			headers: { "Content-Type": "application/json" },
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: `Bearer ${authStore.token}`,
+			},
 			body: JSON.stringify({
 				stream: true,
 				messages: [{ role: "user", content: prompt }],

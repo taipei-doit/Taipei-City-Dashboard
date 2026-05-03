@@ -201,7 +201,7 @@ func (s *aiSession) injectInstructions() {
 	merged := false
 	for _, m := range s.req.Messages {
 		if m.Role == llms.ChatMessageTypeSystem && !merged {
-			s.currentMessages = append(s.currentMessages, mergeSystemMsg(m, instruction))
+			s.currentMessages = append(s.currentMessages, mergeSystemMsg(m, "\n\n"+systemPrompt))
 			merged = true
 		} else {
 			s.currentMessages = append(s.currentMessages, m)

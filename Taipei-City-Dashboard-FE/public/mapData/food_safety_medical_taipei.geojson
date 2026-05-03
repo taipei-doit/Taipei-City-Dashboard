@@ -1,0 +1,330 @@
+{
+	"type": "FeatureCollection",
+	"features": [
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5435, 25.0381]
+			},
+			"properties": {
+				"data_time": "2026-05-02 11:45+00",
+				"city_code": "TPE",
+				"city": "臺北市",
+				"town": "大安區",
+				"town_code": 63000040,
+				"hospital_name": "聯醫仁愛",
+				"is_full_119": "0",
+				"wait_see": 2,
+				"wait_push_bed": 0,
+				"wait_admission": 1,
+				"wait_icu": 0,
+				"_ctime": "2026-05-02 11:52:14+00",
+				"_mtime": "2026-05-02 11:52:14+00",
+				"address": "台北市大安區仁愛路四段10號",
+				"latitude": 25.0381,
+				"longitude": 121.5435
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5097, 25.0503]
+			},
+			"properties": {
+				"data_time": "2026-05-02 11:45+00",
+				"city_code": "TPE",
+				"city": "臺北市",
+				"town": "大同區",
+				"town_code": 63000060,
+				"hospital_name": "北市聯醫",
+				"is_full_119": "0",
+				"wait_see": 0,
+				"wait_push_bed": 0,
+				"wait_admission": 0,
+				"wait_icu": 0,
+				"_ctime": "2026-05-02 11:52:14+00",
+				"_mtime": "2026-05-02 11:52:14+00",
+				"address": "台北市大同區鄭州路145號",
+				"latitude": 25.0503,
+				"longitude": 121.5097
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5178, 25.0416]
+			},
+			"properties": {
+				"data_time": "2026-05-02 11:45+00",
+				"city_code": "TPE",
+				"city": "臺北市",
+				"town": "中正區",
+				"town_code": 63000050,
+				"hospital_name": "臺大",
+				"is_full_119": "0",
+				"wait_see": 1,
+				"wait_push_bed": 0,
+				"wait_admission": 66,
+				"wait_icu": 1,
+				"_ctime": "2026-05-02 11:52:14+00",
+				"_mtime": "2026-05-02 11:52:14+00",
+				"address": "台北市中正區常德街1號",
+				"latitude": 25.0416,
+				"longitude": 121.5178
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5178, 25.0435]
+			},
+			"properties": {
+				"data_time": "2026-05-02 11:45+00",
+				"city_code": "TPE",
+				"city": "臺北市",
+				"town": "中正區",
+				"town_code": 63000050,
+				"hospital_name": "台大兒醫",
+				"is_full_119": "0",
+				"wait_see": 0,
+				"wait_push_bed": 0,
+				"wait_admission": 0,
+				"wait_icu": 0,
+				"_ctime": "2026-05-02 11:52:14+00",
+				"_mtime": "2026-05-02 11:52:14+00",
+				"address": "台北市中正區中山南路8號",
+				"latitude": 25.0435,
+				"longitude": 121.5178
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5938, 25.0694]
+			},
+			"properties": {
+				"data_time": "2026-05-02 11:45+00",
+				"city_code": "TPE",
+				"city": "臺北市",
+				"town": "內湖區",
+				"town_code": 63000100,
+				"hospital_name": "三總",
+				"is_full_119": "0",
+				"wait_see": 2,
+				"wait_push_bed": 0,
+				"wait_admission": 5,
+				"wait_icu": 1,
+				"_ctime": "2026-05-02 11:52:14+00",
+				"_mtime": "2026-05-02 11:52:14+00",
+				"address": "台北市內湖區成功路二段325號",
+				"latitude": 25.0694,
+				"longitude": 121.5938
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5222, 25.1206]
+			},
+			"properties": {
+				"data_time": "2026-05-02 11:45+00",
+				"city_code": "TPE",
+				"city": "臺北市",
+				"town": "北投區",
+				"town_code": 63000120,
+				"hospital_name": "北榮",
+				"is_full_119": "0",
+				"wait_see": 4,
+				"wait_push_bed": 0,
+				"wait_admission": 31,
+				"wait_icu": 0,
+				"_ctime": "2026-05-02 11:52:14+00",
+				"_mtime": "2026-05-02 11:52:14+00",
+				"address": "台北市北投區石牌路二段201號",
+				"latitude": 25.1206,
+				"longitude": 121.5222
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5492, 25.0372]
+			},
+			"properties": {
+				"data_time": "2026-05-02 11:45+00",
+				"city_code": "TPE",
+				"city": "臺北市",
+				"town": "大安區",
+				"town_code": 63000040,
+				"hospital_name": "台北國泰",
+				"is_full_119": "0",
+				"wait_see": 2,
+				"wait_push_bed": 0,
+				"wait_admission": 9,
+				"wait_icu": 0,
+				"_ctime": "2026-05-02 11:52:14+00",
+				"_mtime": "2026-05-02 11:52:14+00",
+				"address": "台北市大安區仁愛路四段280號",
+				"latitude": 25.0372,
+				"longitude": 121.5492
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5211, 25.0594]
+			},
+			"properties": {
+				"data_time": "2026-05-02 11:45+00",
+				"city_code": "TPE",
+				"city": "臺北市",
+				"town": "中山區",
+				"town_code": 63000030,
+				"hospital_name": "台北馬偕",
+				"is_full_119": "0",
+				"wait_see": 5,
+				"wait_push_bed": 0,
+				"wait_admission": 36,
+				"wait_icu": 7,
+				"_ctime": "2026-05-02 11:52:14+00",
+				"_mtime": "2026-05-02 11:52:14+00",
+				"address": "台北市中山區中山北路二段92號",
+				"latitude": 25.0594,
+				"longitude": 121.5211
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5215, 25.0597]
+			},
+			"properties": {
+				"data_time": "2026-05-02 11:45+00",
+				"city_code": "TPE",
+				"city": "臺北市",
+				"town": "中山區",
+				"town_code": 63000030,
+				"hospital_name": "馬偕兒醫",
+				"is_full_119": "0",
+				"wait_see": 0,
+				"wait_push_bed": 0,
+				"wait_admission": 0,
+				"wait_icu": 0,
+				"_ctime": "2026-05-02 11:52:14+00",
+				"_mtime": "2026-05-02 11:52:14+00",
+				"address": "台北市中山區中山北路二段92號",
+				"latitude": 25.0597,
+				"longitude": 121.5215
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5208, 25.0934]
+			},
+			"properties": {
+				"data_time": "2026-05-02 11:45+00",
+				"city_code": "TPE",
+				"city": "臺北市",
+				"town": "士林區",
+				"town_code": 63000110,
+				"hospital_name": "新光",
+				"is_full_119": "0",
+				"wait_see": 1,
+				"wait_push_bed": 0,
+				"wait_admission": 7,
+				"wait_icu": 0,
+				"_ctime": "2026-05-02 11:52:14+00",
+				"_mtime": "2026-05-02 11:52:14+00",
+				"address": "台北市士林區文昌路95號",
+				"latitude": 25.0934,
+				"longitude": 121.5208
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5205, 25.1158]
+			},
+			"properties": {
+				"data_time": "2026-05-02 11:45+00",
+				"city_code": "TPE",
+				"city": "臺北市",
+				"town": "北投區",
+				"town_code": 63000120,
+				"hospital_name": "振興",
+				"is_full_119": "0",
+				"wait_see": 0,
+				"wait_push_bed": 0,
+				"wait_admission": 3,
+				"wait_icu": 1,
+				"_ctime": "2026-05-02 11:52:14+00",
+				"_mtime": "2026-05-02 11:52:14+00",
+				"address": "台北市北投區振興街45號",
+				"latitude": 25.1158,
+				"longitude": 121.5205
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5605, 25.0252]
+			},
+			"properties": {
+				"data_time": "2026-05-02 11:45+00",
+				"city_code": "TPE",
+				"city": "臺北市",
+				"town": "信義區",
+				"town_code": 63000020,
+				"hospital_name": "北醫",
+				"is_full_119": "0",
+				"wait_see": 3,
+				"wait_push_bed": 0,
+				"wait_admission": 6,
+				"wait_icu": 0,
+				"_ctime": "2026-05-02 11:52:14+00",
+				"_mtime": "2026-05-02 11:52:14+00",
+				"address": "台北市信義區吳興街252號",
+				"latitude": 25.0252,
+				"longitude": 121.5605
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5583, 25.0001]
+			},
+			"properties": {
+				"data_time": "2026-05-02 11:45+00",
+				"city_code": "TPE",
+				"city": "臺北市",
+				"town": "文山區",
+				"town_code": 63000080,
+				"hospital_name": "萬芳",
+				"is_full_119": "0",
+				"wait_see": 3,
+				"wait_push_bed": 0,
+				"wait_admission": 16,
+				"wait_icu": 4,
+				"_ctime": "2026-05-02 11:52:14+00",
+				"_mtime": "2026-05-02 11:52:14+00",
+				"address": "台北市文山區興隆路三段111號",
+				"latitude": 25.0001,
+				"longitude": 121.5583
+			}
+		}
+	]
+}

@@ -56,7 +56,7 @@ function getDashboardPrompt(name) {
 }
 
 async function fetchDashboardSummary(dashboardName) {
-	if (!dashboardName) return;
+	if (!dashboardName || !authStore.token) return;
 	// 取消前一個進行中的請求
 	if (dashboardAIAbortController) dashboardAIAbortController.abort();
 	dashboardAIAbortController = new AbortController();
@@ -68,7 +68,9 @@ async function fetchDashboardSummary(dashboardName) {
 		const baseUrl = import.meta.env.VITE_API_URL || "";
 		const res = await fetch(`${baseUrl}/ai/chat/twai`, {
 			method: "POST",
-			headers: { "Content-Type": "application/json" },
+			headers: { "Content-Type": "application/json",
+				Authorization: `Bearer ${authStore.token}`
+			 },
 			signal: dashboardAIAbortController.signal,
 			body: JSON.stringify({
 				stream: true,
