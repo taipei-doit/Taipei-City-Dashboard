@@ -21,79 +21,86 @@ const emits = defineEmits([
 	"fly"
 ]);
 
-const chartOptions = ref({
-	chart: {
-		stacked: true,
-		stackType: "100%",
-		toolbar: {
+// multi_chart 載入後才會帶入 categories_by_type → effectiveChartConfig.categories；
+// 必須用 computed，否則 xaxis.categories 會卡在初次 mount 的空陣列，圖表無法渲染。
+const chartOptions = computed(() => {
+	const unit = props.chart_config?.unit ?? "";
+	const cats = props.chart_config?.categories?.length
+		? props.chart_config.categories
+		: [];
+	const nSeries = props.series?.length ?? 0;
+	return {
+		chart: {
+			stacked: true,
+			stackType: "100%",
+			toolbar: {
+				show: false,
+			},
+		},
+		colors: props.chart_config.types.includes("GuageChart")
+			? [props.chart_config.color[0], "#777"]
+			: props.chart_config.color,
+		dataLabels: {
+			textAnchor: "start",
+		},
+		grid: {
 			show: false,
 		},
-	},
-	colors: props.chart_config.types.includes("GuageChart")
-		? [props.chart_config.color[0], "#777"]
-		: props.chart_config.color,
-	dataLabels: {
-		textAnchor: "start",
-	},
-	grid: {
-		show: false,
-	},
-	legend: {
-		offsetY: 20,
-		position: "top",
-		show: props.series.length > 2 ? true : false,
-	},
-	plotOptions: {
-		bar: {
-			borderRadius: 5,
-			horizontal: true,
+		legend: {
+			offsetY: 20,
+			position: "top",
+			show: nSeries > 2,
 		},
-	},
-	stroke: {
-		colors: ["#282a2c"],
-		show: true,
-		width: 2,
-	},
-	tooltip: {
-		// The class "chart-tooltip" could be edited in /assets/styles/chartStyles.css
-		custom: function ({
-			series,
-			seriesIndex,
-			dataPointIndex,
-			w,
-		}) {
-			return (
-				'<div class="chart-tooltip">' +
-				"<h6>" +
-				w.globals.seriesNames[seriesIndex] +
-				"</h6>" +
-				"<span>" +
-				series[seriesIndex][dataPointIndex] +
-				` ${props.chart_config.unit}` +
-				"</span>" +
-				"</div>"
-			);
+		plotOptions: {
+			bar: {
+				borderRadius: 5,
+				horizontal: true,
+			},
 		},
-	},
-	xaxis: {
-		axisBorder: {
-			show: false,
+		stroke: {
+			colors: ["#282a2c"],
+			show: true,
+			width: 2,
 		},
-		axisTicks: {
-			show: false,
+		tooltip: {
+			custom: function ({
+				series,
+				seriesIndex,
+				dataPointIndex,
+				w,
+			}) {
+				return (
+					'<div class="chart-tooltip">' +
+					"<h6>" +
+					w.globals.seriesNames[seriesIndex] +
+					"</h6>" +
+					"<span>" +
+					series[seriesIndex][dataPointIndex] +
+					` ${unit}` +
+					"</span>" +
+					"</div>"
+				);
+			},
 		},
-		categories: props.chart_config.categories
-			? props.chart_config.categories
-			: [],
-		labels: {
-			show: false,
+		xaxis: {
+			axisBorder: {
+				show: false,
+			},
+			axisTicks: {
+				show: false,
+			},
+			categories: cats,
+			labels: {
+				show: false,
+			},
+			type: "category",
 		},
-		type: "category",
-	},
+	};
 });
 
 const chartHeight = computed(() => {
-	return `${50 + props.series[0].data.length * 30}`;
+	const n = props.series?.[0]?.data?.length ?? 0;
+	return `${50 + n * 30}`;
 });
 
 const selectedIndex = ref(null);

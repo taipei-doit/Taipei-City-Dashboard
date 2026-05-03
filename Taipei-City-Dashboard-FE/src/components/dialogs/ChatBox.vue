@@ -23,6 +23,10 @@ const userMessage = ref("");
 const chatAreaRef = ref(null);
 const isStickyOpen = ref(false);
 const dashboardCreationLoading = ref(false);
+const quickActionButtons = [
+	"減碳計算機",
+	"能源補助顧問",
+];
 
 const qaBtnHandler = async (text, relations) => {
 	if (text === "建立儀表板") {
@@ -208,6 +212,16 @@ watch(
     </div>
 
     <!-- 輸入區 -->
+		<div class="quick-actions">
+			<button
+				v-for="button in quickActionButtons"
+				:key="button"
+				type="button"
+				@click="sendBtnHandler(button)"
+			>
+				{{ button }}
+			</button>
+		</div>
     <div class="input-area">
       <input
         v-model="userMessage"
@@ -409,7 +423,7 @@ $radius-20: 20px;
 					}
 
 					.message--button {
-						display: flex;
+						display: flex;	
 						gap: 0.5rem;
 						overflow-x: auto;
 
@@ -430,6 +444,30 @@ $radius-20: 20px;
 						}
 					}
 				}
+			}
+		}
+	}
+
+	.quick-actions {
+		display: flex;
+		gap: 0.5rem;
+		flex-wrap: wrap;
+		padding: 0.75rem 1.125rem 0.5rem;
+		background: transparent;
+
+		button {
+			flex-shrink: 0;
+			background: $panel-bg;
+			color: $white;
+			font-size: 14px;
+			padding: 0.5rem 1rem;
+			border-radius: $radius-15;
+			border: none;
+			cursor: pointer;
+			white-space: nowrap;
+
+			&:hover {
+				filter: brightness(0.5);
 			}
 		}
 	}

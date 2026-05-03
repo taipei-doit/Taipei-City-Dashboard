@@ -1,0 +1,3662 @@
+{
+   "type": "FeatureCollection",
+   "features": [
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.0925091,22.7644 ]
+    },
+    "properties": {
+    "name":"台東美術館",
+    "city":"臺東縣",
+    "no":"1727520TN010",
+    "type":"道路交通噪音",
+    "address":"台東縣台東市浙江路350號",
+    "class":"第一類",
+    "star_date":"2016-08-31",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"浙江路",
+    "roadwidth":17.4,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.321788,22.629322 ]
+    },
+    "properties": {
+    "name":"凱旋監測站",
+    "city":"高雄市",
+    "no":"3635320TN009",
+    "type":"道路交通噪音",
+    "address":"高雄市苓雅區凱旋二路145號",
+    "class":"第三類",
+    "star_date":"2005-06-10",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"",
+    "roadwidth":10,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.322191,22.620003 ]
+    },
+    "properties": {
+    "name":"三多監測站",
+    "city":"高雄市",
+    "no":"3635320TN008",
+    "type":"道路交通噪音",
+    "address":"高雄市苓雅區三多二路102號",
+    "class":"第三類",
+    "star_date":"2004-05-20",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"",
+    "roadwidth":30,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.328038,22.632352 ]
+    },
+    "properties": {
+    "name":"福德監測站",
+    "city":"高雄市",
+    "no":"3635320TN005",
+    "type":"道路交通噪音",
+    "address":"高雄市苓雅區福德一路77號",
+    "class":"第二類",
+    "star_date":"2005-04-28",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"",
+    "roadwidth":10,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.286877,22.631431 ]
+    },
+    "properties": {
+    "name":"河東監測站",
+    "city":"高雄市",
+    "no":"3635220TN004",
+    "type":"道路交通噪音",
+    "address":"高雄市前金區河東路359號",
+    "class":"第二類",
+    "star_date":"2005-08-20",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"",
+    "roadwidth":10,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.315485,22.653334 ]
+    },
+    "properties": {
+    "name":"民族監測站",
+    "city":"高雄市",
+    "no":"3635020TN007",
+    "type":"道路交通噪音",
+    "address":"高雄市三民區民族一路418號",
+    "class":"第三類",
+    "star_date":"2005-03-13",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"",
+    "roadwidth":40,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.337629,22.643502 ]
+    },
+    "properties": {
+    "name":"義華監測站",
+    "city":"高雄市",
+    "no":"3635020TN003",
+    "type":"道路交通噪音",
+    "address":"高雄市三民區義華路272號",
+    "class":"第二類",
+    "star_date":"2004-05-19",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"",
+    "roadwidth":12,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.308769,22.712718 ]
+    },
+    "properties": {
+    "name":"楠梓監測站",
+    "city":"高雄市",
+    "no":"3634920TN011",
+    "type":"道路交通噪音",
+    "address":"高雄市楠梓區左楠路2號",
+    "class":"第一類",
+    "star_date":"2004-05-19",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"",
+    "roadwidth":15,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.294499,22.68439 ]
+    },
+    "properties": {
+    "name":"環潭監測站",
+    "city":"高雄市",
+    "no":"3634820TN002",
+    "type":"道路交通噪音",
+    "address":"高雄市左營區蓮潭路176號",
+    "class":"第一類",
+    "star_date":"2004-05-19",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"",
+    "roadwidth":15,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.265864,22.625152 ]
+    },
+    "properties": {
+    "name":"西子灣監測站",
+    "city":"高雄市",
+    "no":"3634720TN001",
+    "type":"道路交通噪音",
+    "address":"高雄市鼓山區蓮海路170號",
+    "class":"第一類",
+    "star_date":"2004-05-21",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"",
+    "roadwidth":12,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.340247,22.726553 ]
+    },
+    "properties": {
+    "name":"大社工業區監測站",
+    "city":"高雄市",
+    "no":"3622320TN012",
+    "type":"道路交通噪音",
+    "address":"高雄市大社區建經路5號",
+    "class":"第一類",
+    "star_date":"2004-01-16",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"",
+    "roadwidth":20,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.351223,22.627598 ]
+    },
+    "properties": {
+    "name":"鳳山中山西路監測站",
+    "city":"高雄市",
+    "no":"3621520TN010",
+    "type":"道路交通噪音",
+    "address":"高雄市鳳山區中山西路154-6號",
+    "class":"第三類",
+    "star_date":"2004-01-16",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"",
+    "roadwidth":20,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.360289,22.614209 ]
+    },
+    "properties": {
+    "name":"鳳山國泰路監測站",
+    "city":"高雄市",
+    "no":"3621520TN006",
+    "type":"道路交通噪音",
+    "address":"高雄市鳳山區國泰路一段69巷1號",
+    "class":"第二類",
+    "star_date":"2004-01-16",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"",
+    "roadwidth":20,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.176796,22.964783 ]
+    },
+    "properties": {
+    "name":"安平污水廠",
+    "city":"臺南市",
+    "no":"3533320TN021",
+    "type":"道路交通噪音",
+    "address":"臺南市安平區新樂路71號",
+    "class":"第一類",
+    "star_date":"2004-01-07",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"新樂路",
+    "roadwidth":19.5,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.141184,23.026166 ]
+    },
+    "properties": {
+    "name":"四草野生動物",
+    "city":"臺南市",
+    "no":"3533220TN027",
+    "type":"道路交通噪音",
+    "address":"臺南市安南區本田路二段300巷",
+    "class":"第一類",
+    "star_date":"2009-09-28",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"大眾路",
+    "roadwidth":6.9,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.209109,23.000914 ]
+    },
+    "properties": {
+    "name":"公園國小",
+    "city":"臺南市",
+    "no":"3533020TN029",
+    "type":"道路交通噪音",
+    "address":"臺南市北區公園路180號",
+    "class":"第二類",
+    "star_date":"2009-09-28",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"公園南路",
+    "roadwidth":10,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.178084,22.940363 ]
+    },
+    "properties": {
+    "name":"南區圖書館",
+    "city":"臺南市",
+    "no":"3532820TN025",
+    "type":"道路交通噪音",
+    "address":"臺南市南區喜樹路179號",
+    "class":"第三類",
+    "star_date":"2004-01-07",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"喜樹路",
+    "roadwidth":11,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.188718,22.961224 ]
+    },
+    "properties": {
+    "name":"南區衛生所",
+    "city":"臺南市",
+    "no":"3532820TN024",
+    "type":"道路交通噪音",
+    "address":"臺南市南區南和路6號",
+    "class":"第三類",
+    "star_date":"2004-01-06",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"南和路",
+    "roadwidth":12.7,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.218387,22.999737 ]
+    },
+    "properties": {
+    "name":"成功大學",
+    "city":"臺南市",
+    "no":"3532720TN028",
+    "type":"道路交通噪音",
+    "address":"臺南市東區大學路1號",
+    "class":"第二類",
+    "star_date":"2009-09-28",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"勝利路",
+    "roadwidth":9.4,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.460471,23.120109 ]
+    },
+    "properties": {
+    "name":"玉井工商",
+    "city":"臺南市",
+    "no":"3520620TN001",
+    "type":"道路交通噪音",
+    "address":"臺南市玉井區玉井工商",
+    "class":"第二類",
+    "star_date":"2004-10-01",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"測站編號已改",
+    "side_road":"台20省道中山路",
+    "roadwidth":26,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.323072,23.210348 ]
+    },
+    "properties": {
+    "name":"官田工業區加油站",
+    "city":"臺南市",
+    "no":"3519720TN001",
+    "type":"道路交通噪音",
+    "address":"臺南市官田區二區村工業路23-1號",
+    "class":"第一類",
+    "star_date":"2004-10-01",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"工業路",
+    "roadwidth":23.74,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.362906,23.208091 ]
+    },
+    "properties": {
+    "name":"烏山頭水庫管理局",
+    "city":"臺南市",
+    "no":"3519620TN001",
+    "type":"道路交通噪音",
+    "address":"臺南市六甲區烏山頭水庫",
+    "class":"第一類",
+    "star_date":"2004-10-01",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"南117鄉道八田路",
+    "roadwidth":6,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.182629,23.230001 ]
+    },
+    "properties": {
+    "name":"學甲區公所",
+    "city":"臺南市",
+    "no":"3519120TN001",
+    "type":"道路交通噪音",
+    "address":"臺南市華宗路313號",
+    "class":"第三類",
+    "star_date":"2004-10-01",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"華宗路",
+    "roadwidth":20,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.416121,23.351175 ]
+    },
+    "properties": {
+    "name":"白河區公所",
+    "city":"臺南市",
+    "no":"3518620TN001",
+    "type":"道路交通噪音",
+    "address":"臺南市白河區中山路",
+    "class":"第三類",
+    "star_date":"2004-10-01",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"中山路",
+    "roadwidth":12,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.233603,23.290313 ]
+    },
+    "properties": {
+    "name":"孫厝里(忠義廟)",
+    "city":"臺南市",
+    "no":"3518520TN001",
+    "type":"道路交通噪音",
+    "address":"孫厝里15之12號旁",
+    "class":"第二類",
+    "star_date":"2004-10-01",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"南6鄉道",
+    "roadwidth":9,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.682084,24.17912 ]
+    },
+    "properties": {
+    "name":"北屯區梅川東路五段",
+    "city":"臺中市",
+    "no":"3432520TN005",
+    "type":"道路交通噪音",
+    "address":"梅川東路五段146號",
+    "class":"第三類",
+    "star_date":"2000-01-01",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"",
+    "roadwidth":10,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.603281,24.175063 ]
+    },
+    "properties": {
+    "name":"職訓中心",
+    "city":"臺中市",
+    "no":"3432320TN002",
+    "type":"道路交通噪音",
+    "address":"台中市西屯區工業區一路100號",
+    "class":"第一類",
+    "star_date":"2000-01-01",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"工業區一路",
+    "roadwidth":15,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.665204,24.142554 ]
+    },
+    "properties": {
+    "name":"英才站",
+    "city":"臺中市",
+    "no":"3432120TN002",
+    "type":"道路交通噪音",
+    "address":"台中市西區英才路600號",
+    "class":"第二類",
+    "star_date":"2000-01-01",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"英才路",
+    "roadwidth":25,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.671103,24.134036 ]
+    },
+    "properties": {
+    "name":"西區三民路一段",
+    "city":"臺中市",
+    "no":"3432020TN004",
+    "type":"道路交通噪音",
+    "address":"台中市西區三民路一段120號",
+    "class":"第三類",
+    "star_date":"2000-01-01",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"三民路",
+    "roadwidth":25,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.009044,24.257322 ]
+    },
+    "properties": {
+    "name":"和平區雪山路43K處",
+    "city":"臺中市",
+    "no":"3410620TN002",
+    "type":"道路交通噪音",
+    "address":"和平區雪山路43K附近",
+    "class":"第一類",
+    "star_date":"2013-04-17",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"雪山路",
+    "roadwidth":3,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.999802,24.266691 ]
+    },
+    "properties": {
+    "name":"和平區雪山路41K處",
+    "city":"臺中市",
+    "no":"3410620TN001",
+    "type":"道路交通噪音",
+    "address":"和平區雪山路41K附近",
+    "class":"第一類",
+    "star_date":"2013-04-17",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"雪山路",
+    "roadwidth":3,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.713879,24.094278 ]
+    },
+    "properties": {
+    "name":"大里仁化路",
+    "city":"臺中市",
+    "no":"3410520TN003",
+    "type":"道路交通噪音",
+    "address":"台中市大里區仁化路大里工業區前",
+    "class":"第一類",
+    "star_date":"2000-01-01",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"仁化路",
+    "roadwidth":30,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.720766,24.130673 ]
+    },
+    "properties": {
+    "name":"太平永平路",
+    "city":"臺中市",
+    "no":"3410423TN002",
+    "type":"道路交通噪音",
+    "address":"台中市太平區永平路體育場旁",
+    "class":"第二類",
+    "star_date":"2013-08-09",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"永平路",
+    "roadwidth":30,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.6475,24.092479 ]
+    },
+    "properties": {
+    "name":"烏日區環河路",
+    "city":"臺中市",
+    "no":"3410020TN001",
+    "type":"道路交通噪音",
+    "address":"台中市烏日區五光路281號",
+    "class":"第三類",
+    "star_date":"2012-11-12",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"五光路",
+    "roadwidth":12,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.714684,24.310182 ]
+    },
+    "properties": {
+    "name":"后里甲后路",
+    "city":"臺中市",
+    "no":"3409223TN003",
+    "type":"道路交通噪音",
+    "address":"台中市后里區甲后路700號前",
+    "class":"第三類",
+    "star_date":"2004-01-01",
+    "end_date":"",
+    "record_typ":"自動",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"甲后路",
+    "roadwidth":12,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.714437,24.307229 ]
+    },
+    "properties": {
+    "name":"后里文化路",
+    "city":"臺中市",
+    "no":"3409220TN002",
+    "type":"道路交通噪音",
+    "address":"台中市后里區文化路30號旁",
+    "class":"第二類",
+    "star_date":"2004-06-28",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"文化路",
+    "roadwidth":8,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.713625,24.24805 ]
+    },
+    "properties": {
+    "name":"豐原中興路",
+    "city":"臺中市",
+    "no":"3408623TN001",
+    "type":"道路交通噪音",
+    "address":"台中市豐原區中興路136號",
+    "class":"第二類",
+    "star_date":"1994-01-01",
+    "end_date":"",
+    "record_typ":"自動",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"中興路",
+    "roadwidth":20,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.517158,25.118049 ]
+    },
+    "properties": {
+    "name":"石牌點",
+    "city":"臺北市",
+    "no":"2534423TN306",
+    "type":"道路交通噪音",
+    "address":"台北市北投區石牌路二段111號附近",
+    "class":"第三類",
+    "star_date":"1999-06-01",
+    "end_date":"",
+    "record_typ":"自動",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"石牌路二段",
+    "roadwidth":8.5,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.498318,25.128268 ]
+    },
+    "properties": {
+    "name":"大業點",
+    "city":"臺北市",
+    "no":"2534420TN304",
+    "type":"道路交通噪音",
+    "address":"台北市北投區大業路302號附近",
+    "class":"第三類",
+    "star_date":"2004-02-18",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"大業路",
+    "roadwidth":30.4,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.542842,25.179748 ]
+    },
+    "properties": {
+    "name":"陽金點",
+    "city":"臺北市",
+    "no":"2534420TN105",
+    "type":"道路交通噪音",
+    "address":"台北市北投區陽金公路近七星山登山口附近",
+    "class":"第一類",
+    "star_date":"2002-11-18",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"陽金公路",
+    "roadwidth":10.6,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.557047,25.109413 ]
+    },
+    "properties": {
+    "name":"至善點",
+    "city":"臺北市",
+    "no":"2534320TN208",
+    "type":"道路交通噪音",
+    "address":"台北市士林區至善路二段407號附近",
+    "class":"第二類",
+    "star_date":"1998-07-23",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"至善路二段",
+    "roadwidth":16.2,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.548867,25.144071 ]
+    },
+    "properties": {
+    "name":"格致點",
+    "city":"臺北市",
+    "no":"2534320TN103",
+    "type":"道路交通噪音",
+    "address":"台北市士林區格致路237號附近",
+    "class":"第一類",
+    "star_date":"1998-07-23",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"格致路",
+    "roadwidth":10.6,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.599469,25.066747 ]
+    },
+    "properties": {
+    "name":"民權點",
+    "city":"臺北市",
+    "no":"2534220TN308",
+    "type":"道路交通噪音",
+    "address":"內湖區民權東路6段附近",
+    "class":"第三類",
+    "star_date":"2008-11-19",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"成功路2段",
+    "roadwidth":10,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.589529,25.053354 ]
+    },
+    "properties": {
+    "name":"南港點",
+    "city":"臺北市",
+    "no":"2534120TN405",
+    "type":"道路交通噪音",
+    "address":"台北市南港區南港路三段106號附近",
+    "class":"第一類",
+    "star_date":"1998-07-23",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"南港路二段",
+    "roadwidth":17,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.62024,25.041768 ]
+    },
+    "properties": {
+    "name":"舊二點",
+    "city":"臺北市",
+    "no":"2534120TN209",
+    "type":"道路交通噪音",
+    "address":"南港區舊莊路1段212巷8號附近",
+    "class":"第二類",
+    "star_date":"2006-07-01",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"舊莊路1段212巷",
+    "roadwidth":10,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.576928,24.98969 ]
+    },
+    "properties": {
+    "name":"萬興點",
+    "city":"臺北市",
+    "no":"2534020TN210",
+    "type":"道路交通噪音",
+    "address":"秀明路2段114號附近",
+    "class":"第二類",
+    "star_date":"2008-11-19",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"新光路一段,萬壽路",
+    "roadwidth":8,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.522222,25.066358 ]
+    },
+    "properties": {
+    "name":"大同點",
+    "city":"臺北市",
+    "no":"2533920TN404",
+    "type":"道路交通噪音",
+    "address":"台北市中山區中山北路三段40號附近",
+    "class":"第一類",
+    "star_date":"1999-10-22",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"中山北路",
+    "roadwidth":25,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.851558,25.032646 ]
+    },
+    "properties": {
+    "name":"青年點",
+    "city":"臺北市",
+    "no":"2533720TN207",
+    "type":"道路交通噪音",
+    "address":"台北市萬華區青年路186號附近",
+    "class":"第二類",
+    "star_date":"2013-09-09",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"青年路",
+    "roadwidth":8,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.533101,25.031727 ]
+    },
+    "properties": {
+    "name":"新生點",
+    "city":"臺北市",
+    "no":"2533520TN307",
+    "type":"道路交通噪音",
+    "address":"台北市大安區新生南路二段32號附近",
+    "class":"第三類",
+    "star_date":"2004-02-18",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"新生南路",
+    "roadwidth":35,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.452975,23.488163 ]
+    },
+    "properties": {
+    "name":"嘉義市文化局前人行道",
+    "city":"嘉義市",
+    "no":"2332623TN001",
+    "type":"道路交通噪音",
+    "address":"嘉義市忠孝路275號前人行道",
+    "class":"第三類",
+    "star_date":"2006-01-01",
+    "end_date":"",
+    "record_typ":"自動",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"忠孝路",
+    "roadwidth":90,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.483563,23.463207 ]
+    },
+    "properties": {
+    "name":"嘉大蘭潭學苑",
+    "city":"嘉義市",
+    "no":"2332620TN008",
+    "type":"道路交通噪音",
+    "address":"嘉義市鹿寮里學府路300號",
+    "class":"第二類",
+    "star_date":"2006-01-01",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"學府路",
+    "roadwidth":20,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.430981,23.479696 ]
+    },
+    "properties": {
+    "name":"嘉義市西區衛生所",
+    "city":"嘉義市",
+    "no":"2332620TN007",
+    "type":"道路交通噪音",
+    "address":"嘉義市德明路1號",
+    "class":"第三類",
+    "star_date":"2006-01-01",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"北港路",
+    "roadwidth":30,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.478606,23.462853 ]
+    },
+    "properties": {
+    "name":"蘭潭家福護理之家",
+    "city":"嘉義市",
+    "no":"2332620TN006",
+    "type":"道路交通噪音",
+    "address":"嘉義市鹿寮里學府路299號",
+    "class":"第二類",
+    "star_date":"2006-01-01",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"學府路",
+    "roadwidth":20,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.446087,23.466829 ]
+    },
+    "properties": {
+    "name":"嘉義市中油煉研所",
+    "city":"嘉義市",
+    "no":"2332620TN003",
+    "type":"道路交通噪音",
+    "address":"嘉義市美源里民生南路217號",
+    "class":"第一類",
+    "star_date":"2006-01-15",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"民生南路",
+    "roadwidth":20,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.439897,23.476965 ]
+    },
+    "properties": {
+    "name":"嘉義市嘉義酒廠",
+    "city":"嘉義市",
+    "no":"2332620TN002",
+    "type":"道路交通噪音",
+    "address":"嘉義市驛站里中山路659號",
+    "class":"第三類",
+    "star_date":"2006-01-01",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"中山路",
+    "roadwidth":22,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.948958,24.832613 ]
+    },
+    "properties": {
+    "name":"空軍基地古賢門崗哨",
+    "city":"新竹市",
+    "no":"2131720TN010",
+    "type":"道路交通噪音",
+    "address":"新竹市北區中正路699號",
+    "class":"第一類",
+    "star_date":"2008-03-31",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"",
+    "roadwidth":10,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.930451,24.78501 ]
+    },
+    "properties": {
+    "name":"香山中學",
+    "city":"新竹市",
+    "no":"2131720TN009",
+    "type":"道路交通噪音",
+    "address":"元培街124號",
+    "class":"第二類",
+    "star_date":"2004-05-11",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"元培街",
+    "roadwidth":12,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.90615,24.742096 ]
+    },
+    "properties": {
+    "name":"內湖國小",
+    "city":"新竹市",
+    "no":"2131720TN006",
+    "type":"道路交通噪音",
+    "address":"內湖路109號",
+    "class":"第二類",
+    "star_date":"2004-04-29",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"內湖路",
+    "roadwidth":12,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.983049,24.809433 ]
+    },
+    "properties": {
+    "name":"新竹高工",
+    "city":"新竹市",
+    "no":"2131720TN004",
+    "type":"道路交通噪音",
+    "address":"中華路二段2號",
+    "class":"第三類",
+    "star_date":"2004-04-29",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"中華路",
+    "roadwidth":24,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.965561,24.790027 ]
+    },
+    "properties": {
+    "name":"育賢國中",
+    "city":"新竹市",
+    "no":"2131720TN003",
+    "type":"道路交通噪音",
+    "address":"南大路569號",
+    "class":"第三類",
+    "star_date":"2004-04-29",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"南大路",
+    "roadwidth":12,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.781484,25.127092 ]
+    },
+    "properties": {
+    "name":"深澳坑路測站",
+    "city":"基隆市",
+    "no":"2031623TN001",
+    "type":"道路交通噪音",
+    "address":"信義區深澳坑路78號",
+    "class":"第三類",
+    "star_date":"2014-08-06",
+    "end_date":"",
+    "record_typ":"自動",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"深澳坑路",
+    "roadwidth":17,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.776854,25.136995 ]
+    },
+    "properties": {
+    "name":"深美測站",
+    "city":"基隆市",
+    "no":"2031620TN007",
+    "type":"道路交通噪音",
+    "address":"信義區教忠街75巷77號附近",
+    "class":"第二類",
+    "star_date":"2005-03-22",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"教忠街",
+    "roadwidth":11,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.732609,25.128608 ]
+    },
+    "properties": {
+    "name":"崇德測站",
+    "city":"基隆市",
+    "no":"2031520TN006",
+    "type":"道路交通噪音",
+    "address":"安樂區崇德路87之1號附近",
+    "class":"第二類",
+    "star_date":"2005-03-22",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"崇德路",
+    "roadwidth":8,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.700953,25.094111 ]
+    },
+    "properties": {
+    "name":"工建西路測站",
+    "city":"基隆市",
+    "no":"2031123TN001",
+    "type":"道路交通噪音",
+    "address":"七堵區工建西路7號",
+    "class":"第一類",
+    "star_date":"2014-08-06",
+    "end_date":"",
+    "record_typ":"自動",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"工建西路",
+    "roadwidth":17,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.78643,25.135708 ]
+    },
+    "properties": {
+    "name":"海洋測站",
+    "city":"基隆市",
+    "no":"2031020TN004",
+    "type":"道路交通噪音",
+    "address":"中正區新豐街426號前",
+    "class":"第三類",
+    "star_date":"2014-08-06",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"新豐街",
+    "roadwidth":8.3,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 119.573613,23.569656 ]
+    },
+    "properties": {
+    "name":"自來水公司",
+    "city":"澎湖縣",
+    "no":"1930420TN007",
+    "type":"道路交通噪音",
+    "address":"澎湖縣馬公市新生路一三０號",
+    "class":"第一類",
+    "star_date":"2004-02-24",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"新生路",
+    "roadwidth":10,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 119.565791,23.570684 ]
+    },
+    "properties": {
+    "name":"警光會館",
+    "city":"澎湖縣",
+    "no":"1930420TN005",
+    "type":"道路交通噪音",
+    "address":"澎湖縣馬公市明遠路五十二號",
+    "class":"第三類",
+    "star_date":"2004-02-24",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"明遠路",
+    "roadwidth":10,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 119.58322,23.569534 ]
+    },
+    "properties": {
+    "name":"大家加油站",
+    "city":"澎湖縣",
+    "no":"1930420TN004",
+    "type":"道路交通噪音",
+    "address":"澎湖縣馬公市西文里一0六之一六號",
+    "class":"第二類",
+    "star_date":"2004-02-24",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"二０二縣道",
+    "roadwidth":18,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 119.56673,23.568555 ]
+    },
+    "properties": {
+    "name":"澎湖縣議會",
+    "city":"澎湖縣",
+    "no":"1930420TN003",
+    "type":"道路交通噪音",
+    "address":"澎湖縣馬公市中正路七十六號",
+    "class":"第三類",
+    "star_date":"2004-02-24",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"中正路",
+    "roadwidth":7,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 119.583553,23.568108 ]
+    },
+    "properties": {
+    "name":"家畜防治所",
+    "city":"澎湖縣",
+    "no":"1930420TN001",
+    "type":"道路交通噪音",
+    "address":"澎湖縣馬公市西文里一一八之一號",
+    "class":"第二類",
+    "star_date":"2004-02-24",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"二０四縣道",
+    "roadwidth":18,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.577368,24.172518 ]
+    },
+    "properties": {
+    "name":"花蓮縣秀林鄉",
+    "city":"花蓮縣",
+    "no":"1830120TN002",
+    "type":"道路交通噪音",
+    "address":"太管處收費站前",
+    "class":"第一類",
+    "star_date":"2015-03-04",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"台八線",
+    "roadwidth":8,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.593343,23.967916 ]
+    },
+    "properties": {
+    "name":"吉安鄉警察局",
+    "city":"花蓮縣",
+    "no":"1829523TN001",
+    "type":"道路交通噪音",
+    "address":"吉安鄉中正路一段三十八號前",
+    "class":"第三類",
+    "star_date":"2015-03-04",
+    "end_date":"",
+    "record_typ":"自動",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"中正路一段",
+    "roadwidth":10,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.626479,23.988919 ]
+    },
+    "properties": {
+    "name":"本局",
+    "city":"花蓮縣",
+    "no":"1829520TN005",
+    "type":"道路交通噪音",
+    "address":"花蓮市民權路123號",
+    "class":"第二類",
+    "star_date":"2015-03-04",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"民權路",
+    "roadwidth":10,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.630674,24.013079 ]
+    },
+    "properties": {
+    "name":"花蓮市美崙工業區",
+    "city":"花蓮縣",
+    "no":"1829120TN004",
+    "type":"道路交通噪音",
+    "address":"管理中心前(精美路與美工路交差路口)",
+    "class":"第一類",
+    "star_date":"2015-03-04",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"美工路與精美路",
+    "roadwidth":8,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.608787,23.974274 ]
+    },
+    "properties": {
+    "name":"花蓮市褔建街",
+    "city":"花蓮縣",
+    "no":"1829120TN003",
+    "type":"道路交通噪音",
+    "address":"花蓮市褔建街四三七號前",
+    "class":"第二類",
+    "star_date":"2015-03-04",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"福建街",
+    "roadwidth":8,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.601363,23.987042 ]
+    },
+    "properties": {
+    "name":"花蓮市中山路五四九號",
+    "city":"花蓮縣",
+    "no":"1829120TN001",
+    "type":"道路交通噪音",
+    "address":"花蓮市中山路五四九之一號",
+    "class":"第三類",
+    "star_date":"2015-03-04",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"中山路",
+    "roadwidth":8,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.151098,22.755853 ]
+    },
+    "properties": {
+    "name":"保安隊",
+    "city":"臺東縣",
+    "no":"1727520TN008",
+    "type":"道路交通噪音",
+    "address":"台東市更生路9號",
+    "class":"第三類",
+    "star_date":"2007-05-07",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"中山路",
+    "roadwidth":14,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.128144,22.788933 ]
+    },
+    "properties": {
+    "name":"環保局",
+    "city":"臺東縣",
+    "no":"1727520TN007",
+    "type":"道路交通噪音",
+    "address":"台東市興安路一段150號",
+    "class":"第二類",
+    "star_date":"2007-05-07",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"志航路一段",
+    "roadwidth":20,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.1279,22.767635 ]
+    },
+    "properties": {
+    "name":"台糖",
+    "city":"臺東縣",
+    "no":"1727520TN006",
+    "type":"道路交通噪音",
+    "address":"台東市中興路二段191號",
+    "class":"第一類",
+    "star_date":"2007-05-07",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"新生路",
+    "roadwidth":20,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.151631,22.760189 ]
+    },
+    "properties": {
+    "name":"東檢站",
+    "city":"臺東縣",
+    "no":"1727520TN005",
+    "type":"道路交通噪音",
+    "address":"台東市博愛路119號",
+    "class":"第三類",
+    "star_date":"2007-05-07",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"四維路三段",
+    "roadwidth":15,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.148863,22.757786 ]
+    },
+    "properties": {
+    "name":"台東縣衛生局",
+    "city":"臺東縣",
+    "no":"1727520TN002",
+    "type":"道路交通噪音",
+    "address":"台東市博愛路336號",
+    "class":"第二類",
+    "star_date":"2007-05-07",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"更生路",
+    "roadwidth":15,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.631814,22.591626 ]
+    },
+    "properties": {
+    "name":"泰武鄉公所",
+    "city":"屏東縣",
+    "no":"1627020TN002",
+    "type":"道路交通噪音",
+    "address":"屏東縣泰武鄉佳平村169號",
+    "class":"第二類",
+    "star_date":"2013-09-04",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"佳平村",
+    "roadwidth":10,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.513711,22.514747 ]
+    },
+    "properties": {
+    "name":"崁頂鄉公所",
+    "city":"屏東縣",
+    "no":"1625920TN004",
+    "type":"道路交通噪音",
+    "address":"屏東縣崁頂鄉中正路230號",
+    "class":"第三類",
+    "star_date":"2013-09-23",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"",
+    "roadwidth":10,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.541112,22.637877 ]
+    },
+    "properties": {
+    "name":"內埔工業區",
+    "city":"屏東縣",
+    "no":"1625420TN006",
+    "type":"道路交通噪音",
+    "address":"屏東縣內埔鄉豐田村建國路4號",
+    "class":"第一類",
+    "star_date":"2013-09-10",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"中正路",
+    "roadwidth":20,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.490124,22.740288 ]
+    },
+    "properties": {
+    "name":"九如鄉民代表會",
+    "city":"屏東縣",
+    "no":"1624920TN005",
+    "type":"道路交通噪音",
+    "address":"屏東縣九如鄉九如路二段416號",
+    "class":"第三類",
+    "star_date":"2013-09-10",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"九如二段",
+    "roadwidth":20,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.527122,22.650591 ]
+    },
+    "properties": {
+    "name":"麟洛鄉公所",
+    "city":"屏東縣",
+    "no":"1624820TN003",
+    "type":"道路交通噪音",
+    "address":"屏東縣麟洛鄉麟蹄村中山路158號",
+    "class":"第二類",
+    "star_date":"2013-09-16",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"中山路",
+    "roadwidth":20,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.796351,21.94617 ]
+    },
+    "properties": {
+    "name":"墾丁公園警察隊",
+    "city":"屏東縣",
+    "no":"1624520TN001",
+    "type":"道路交通噪音",
+    "address":"屏東縣恆春鎮墾丁路272號",
+    "class":"第一類",
+    "star_date":"2013-09-27",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"墾丁路",
+    "roadwidth":20,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.493589,22.674441 ]
+    },
+    "properties": {
+    "name":"國立屏東女中",
+    "city":"屏東縣",
+    "no":"1624223TN002",
+    "type":"道路交通噪音",
+    "address":"屏東市仁愛路94號",
+    "class":"第三類",
+    "star_date":"2013-07-01",
+    "end_date":"",
+    "record_typ":"自動",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"仁愛路",
+    "roadwidth":20,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.486063,22.671922 ]
+    },
+    "properties": {
+    "name":"唐榮國小",
+    "city":"屏東縣",
+    "no":"1624223TN001",
+    "type":"道路交通噪音",
+    "address":"屏東市中山路41號",
+    "class":"第三類",
+    "star_date":"2013-07-01",
+    "end_date":"",
+    "record_typ":"自動",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"中山路",
+    "roadwidth":20,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.802424,23.509504 ]
+    },
+    "properties": {
+    "name":"嘉義縣衛生人員訓練中心",
+    "city":"嘉義縣",
+    "no":"1318320TN004",
+    "type":"道路交通噪音",
+    "address":"嘉義縣阿里山鄉中山村南阿里山58號",
+    "class":"第一類",
+    "star_date":"",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"",
+    "roadwidth":10,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.362864,23.508983 ]
+    },
+    "properties": {
+    "name":"嘉太工業區服務中心",
+    "city":"嘉義縣",
+    "no":"1317620TN003",
+    "type":"道路交通噪音",
+    "address":"嘉義縣嘉太工業區中興路1號",
+    "class":"第一類",
+    "star_date":"",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"嘉北公路",
+    "roadwidth":15,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.290138,23.494367 ]
+    },
+    "properties": {
+    "name":"六腳鄉公所",
+    "city":"嘉義縣",
+    "no":"1317220TN003",
+    "type":"道路交通噪音",
+    "address":"嘉義縣六角鄉蒜頭村蒜頭73號",
+    "class":"第三類",
+    "star_date":"",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"嘉50線",
+    "roadwidth":10,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.269383,23.494598 ]
+    },
+    "properties": {
+    "name":"溪厝村辦公室",
+    "city":"嘉義縣",
+    "no":"1317220TN002",
+    "type":"道路交通噪音",
+    "address":"嘉義縣六腳鄉溪厝村溪墘厝77-1號",
+    "class":"第二類",
+    "star_date":"",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"嘉50線",
+    "roadwidth":10,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.308447,23.497875 ]
+    },
+    "properties": {
+    "name":"灣南村辦公處",
+    "city":"嘉義縣",
+    "no":"1317220TN001",
+    "type":"道路交通噪音",
+    "address":"嘉義縣六腳鄉灣南村11鄰145號",
+    "class":"第二類",
+    "star_date":"",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"嘉56線",
+    "roadwidth":13,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.44054,23.520473 ]
+    },
+    "properties": {
+    "name":"民雄工業區測站",
+    "city":"嘉義縣",
+    "no":"1316926TN001",
+    "type":"道路交通噪音",
+    "address":"民雄工業區中山路與台一線交叉口",
+    "class":"第一類",
+    "star_date":"",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"中山路",
+    "roadwidth":15,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.241027,23.459054 ]
+    },
+    "properties": {
+    "name":"竹圍里集會所",
+    "city":"嘉義縣",
+    "no":"1316620TN002",
+    "type":"道路交通噪音",
+    "address":"嘉義縣朴子市四維路2段78號",
+    "class":"第三類",
+    "star_date":"2013-03-25",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"四維路",
+    "roadwidth":29,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.181149,23.585188 ]
+    },
+    "properties": {
+    "name":"口湖測站",
+    "city":"雲林縣",
+    "no":"1216420TN002",
+    "type":"道路交通噪音",
+    "address":"口湖鄉中正路一段280號",
+    "class":"第三類",
+    "star_date":"2011-06-09",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"中正路",
+    "roadwidth":9,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.279919,23.679812 ]
+    },
+    "properties": {
+    "name":"東勢測站",
+    "city":"雲林縣",
+    "no":"1215920TN001",
+    "type":"道路交通噪音",
+    "address":"東勢鄉復國街11號",
+    "class":"第二類",
+    "star_date":"2004-01-01",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"復國街",
+    "roadwidth":20,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.469766,23.642264 ]
+    },
+    "properties": {
+    "name":"大埤測站",
+    "city":"雲林縣",
+    "no":"1215320TN002",
+    "type":"道路交通噪音",
+    "address":"大埤鄉豐田村14號",
+    "class":"第一類",
+    "star_date":"2004-01-01",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"台1線",
+    "roadwidth":20,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.547045,23.639531 ]
+    },
+    "properties": {
+    "name":"古坑測站",
+    "city":"雲林縣",
+    "no":"1215220TN002",
+    "type":"道路交通噪音",
+    "address":"古坑鄉光昌路260號",
+    "class":"第二類",
+    "star_date":"2011-06-09",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"光昌路",
+    "roadwidth":20,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.445679,23.709399 ]
+    },
+    "properties": {
+    "name":"虎尾測站",
+    "city":"雲林縣",
+    "no":"1214820TN002",
+    "type":"道路交通噪音",
+    "address":"虎尾鎮光復路151號",
+    "class":"第三類",
+    "star_date":"2011-06-09",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"光復路",
+    "roadwidth":10,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.535169,23.696485 ]
+    },
+    "properties": {
+    "name":"斗六市大學路測站",
+    "city":"雲林縣",
+    "no":"1214626TN001",
+    "type":"道路交通噪音",
+    "address":"斗六市大學路",
+    "class":"第三類",
+    "star_date":"2004-01-01",
+    "end_date":"",
+    "record_typ":"自動",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"大學路",
+    "roadwidth":20,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.907132,23.863719 ]
+    },
+    "properties": {
+    "name":"日月潭風景區站",
+    "city":"南投縣",
+    "no":"1114120TN001",
+    "type":"道路交通噪音",
+    "address":"南投縣魚池鄉日月潭中興路136號",
+    "class":"第一類",
+    "star_date":"2003-01-01",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"中興路",
+    "roadwidth":8,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.780752,23.831067 ]
+    },
+    "properties": {
+    "name":"集集民眾服務站",
+    "city":"南投縣",
+    "no":"1113720TN003",
+    "type":"道路交通噪音",
+    "address":"南投縣集集鎮集集里程公路69號旁",
+    "class":"第二類",
+    "star_date":"2003-01-01",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"成功路",
+    "roadwidth":15,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.688334,23.754318 ]
+    },
+    "properties": {
+    "name":"竹山戶政事務所",
+    "city":"南投縣",
+    "no":"1113620TN005",
+    "type":"道路交通噪音",
+    "address":"南投縣竹山鎮中山里大智路823號旁",
+    "class":"第三類",
+    "star_date":"2003-01-01",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"大智路",
+    "roadwidth":10,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.684428,23.965195 ]
+    },
+    "properties": {
+    "name":"草屯鎮新生路站",
+    "city":"南投縣",
+    "no":"1113520TN003",
+    "type":"道路交通噪音",
+    "address":"南投縣草屯鎮新生路76號旁",
+    "class":"第三類",
+    "star_date":"2003-01-01",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"新生路",
+    "roadwidth":10,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.669107,23.926954 ]
+    },
+    "properties": {
+    "name":"南崗站",
+    "city":"南投縣",
+    "no":"1113326TN002",
+    "type":"道路交通噪音",
+    "address":"南投縣南投市南崗三路34號",
+    "class":"第一類",
+    "star_date":"2003-01-01",
+    "end_date":"",
+    "record_typ":"自動",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"",
+    "roadwidth":30,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.68835,23.902312 ]
+    },
+    "properties": {
+    "name":"南投站",
+    "city":"南投縣",
+    "no":"1113326TN001",
+    "type":"道路交通噪音",
+    "address":"南投縣南投市復興路6號",
+    "class":"第三類",
+    "star_date":"2003-01-01",
+    "end_date":"",
+    "record_typ":"自動",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"",
+    "roadwidth":12,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.668828,23.926621 ]
+    },
+    "properties": {
+    "name":"南崗工業區南崗會堂站",
+    "city":"南投縣",
+    "no":"1113320TN006",
+    "type":"道路交通噪音",
+    "address":"南投市成功一路南崗工業區南崗會堂前",
+    "class":"第一類",
+    "star_date":"2003-01-01",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"成功一路",
+    "roadwidth":15,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.700479,23.9358 ]
+    },
+    "properties": {
+    "name":"中興新村站",
+    "city":"南投縣",
+    "no":"1113320TN002",
+    "type":"道路交通噪音",
+    "address":"南投市中興新村光明一路252號旁",
+    "class":"第二類",
+    "star_date":"2003-01-01",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"",
+    "roadwidth":8,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.321756,23.922983 ]
+    },
+    "properties": {
+    "name":"芳苑鄉交通測站",
+    "city":"彰化縣",
+    "no":"1012920TN001",
+    "type":"道路交通噪音",
+    "address":"芳苑鄉斗苑路163號",
+    "class":"第三類",
+    "star_date":"2014-06-26",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"斗苑路",
+    "roadwidth":15,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.538189,24.029581 ]
+    },
+    "properties": {
+    "name":"花壇鄉交通測站",
+    "city":"彰化縣",
+    "no":"1011920TN001",
+    "type":"道路交通噪音",
+    "address":"花壇鄉南口村中山路2段182號",
+    "class":"第二類",
+    "star_date":"2014-05-24",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"中山路",
+    "roadwidth":50,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.493235,24.026534 ]
+    },
+    "properties": {
+    "name":"秀水鄉交通測站",
+    "city":"彰化縣",
+    "no":"1011820TN001",
+    "type":"道路交通噪音",
+    "address":"秀水鄉埔崙村彰水路2段341號",
+    "class":"第二類",
+    "star_date":"2014-05-24",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"彰水路",
+    "roadwidth":25,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.486508,23.967627 ]
+    },
+    "properties": {
+    "name":"溪湖鎮交通測站",
+    "city":"彰化縣",
+    "no":"1011220TN001",
+    "type":"道路交通噪音",
+    "address":"溪湖鎮大溪路二段110號",
+    "class":"第三類",
+    "star_date":"2014-05-26",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"大溪路",
+    "roadwidth":10,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.3417191,23.5824348 ]
+    },
+    "properties": {
+    "name":"員林鎮固定交通測站",
+    "city":"彰化縣",
+    "no":"1011126TN002",
+    "type":"道路交通噪音",
+    "address":"員林市中山路二段280號(面對僑信國小門口左方)",
+    "class":"第二類",
+    "star_date":"2015-05-20",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"中山路",
+    "roadwidth":15,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.534402,24.05802 ]
+    },
+    "properties": {
+    "name":"彰化市固定交通測站",
+    "city":"彰化縣",
+    "no":"1010726TN002",
+    "type":"道路交通噪音",
+    "address":"彰化市南興里中山路一段213號",
+    "class":"第二類",
+    "star_date":"2014-05-23",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"中山路",
+    "roadwidth":25,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.56213,24.087407 ]
+    },
+    "properties": {
+    "name":"彰化市交通測站",
+    "city":"彰化縣",
+    "no":"1010720TN001",
+    "type":"道路交通噪音",
+    "address":"彰化市中山路3段359號",
+    "class":"第一類",
+    "star_date":"2014-05-14",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"中山路",
+    "roadwidth":25,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.978978,24.392961 ]
+    },
+    "properties": {
+    "name":"泰安鄉梅園村",
+    "city":"苗栗縣",
+    "no":"0808520TN001",
+    "type":"道路交通噪音",
+    "address":"泰安鄉梅園村9號附近",
+    "class":"第一類",
+    "star_date":"2005-03-30",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"苗-62",
+    "roadwidth":8,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.843789,24.648202 ]
+    },
+    "properties": {
+    "name":"造橋鄉龍昇村",
+    "city":"苗栗縣",
+    "no":"0808220TN001",
+    "type":"道路交通噪音",
+    "address":"苗栗縣造橋鄉龍昇村學府路82號旁",
+    "class":"第二類",
+    "star_date":"2004-01-01",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"學府路",
+    "roadwidth":12,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.800879,24.493924 ]
+    },
+    "properties": {
+    "name":"銅鑼鄉中興工業區",
+    "city":"苗栗縣",
+    "no":"0807720TN001",
+    "type":"道路交通噪音",
+    "address":"銅鑼鄉中平村中興路3號前方",
+    "class":"第一類",
+    "star_date":"2004-01-01",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"中興路",
+    "roadwidth":12,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.821511,24.499992 ]
+    },
+    "properties": {
+    "name":"公館鄉館南村",
+    "city":"苗栗縣",
+    "no":"0807620TN001",
+    "type":"道路交通噪音",
+    "address":"公館鄉館南村193號旁",
+    "class":"第三類",
+    "star_date":"2004-01-01",
+    "end_date":"2004-04-01",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"智通街",
+    "roadwidth":10,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.897739,24.677915 ]
+    },
+    "properties": {
+    "name":"頭份鎮蘆竹里",
+    "city":"苗栗縣",
+    "no":"0807220TN001",
+    "type":"道路交通噪音",
+    "address":"頭份鎮中華路599號",
+    "class":"第一類",
+    "star_date":"2004-01-01",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"中華路",
+    "roadwidth":20,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.886431,24.69053 ]
+    },
+    "properties": {
+    "name":"竹南鎮新南里",
+    "city":"苗栗縣",
+    "no":"0807120TN001",
+    "type":"道路交通噪音",
+    "address":"竹南鎮新南里永貞路二段198號（公園大門）",
+    "class":"第二類",
+    "star_date":"2004-01-01",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"公園一路",
+    "roadwidth":20,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 120.83158,24.562283 ]
+    },
+    "properties": {
+    "name":"苗栗市玉華里",
+    "city":"苗栗縣",
+    "no":"0806820TN001",
+    "type":"道路交通噪音",
+    "address":"苗栗市玉華里玉清路337巷37號",
+    "class":"第三類",
+    "star_date":"2004-01-01",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"玉清路",
+    "roadwidth":32,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.035658,24.902679 ]
+    },
+    "properties": {
+    "name":"新湖國中",
+    "city":"新竹縣",
+    "no":"0705920TN004",
+    "type":"道路交通噪音",
+    "address":"湖口鄉新湖路200號",
+    "class":"第二類",
+    "star_date":"2014-05-02",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"新湖路",
+    "roadwidth":12.5,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.014844,24.860915 ]
+    },
+    "properties": {
+    "name":"湖口工業區光復北路",
+    "city":"新竹縣",
+    "no":"0705920TN002",
+    "type":"道路交通噪音",
+    "address":"湖口鄉光復北路",
+    "class":"第一類",
+    "star_date":"2014-05-06",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"光復北路",
+    "roadwidth":12.5,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.088187,24.726285 ]
+    },
+    "properties": {
+    "name":"上館國小",
+    "city":"新竹縣",
+    "no":"0705820TN005",
+    "type":"道路交通噪音",
+    "address":"竹東鎮中豐路二段399號",
+    "class":"第二類",
+    "star_date":"2014-05-07",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"",
+    "roadwidth":15,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.092108,24.735811 ]
+    },
+    "properties": {
+    "name":"竹東清潔隊",
+    "city":"新竹縣",
+    "no":"0705820TN001",
+    "type":"道路交通噪音",
+    "address":"竹東鎮雞林里長安路101號",
+    "class":"第三類",
+    "star_date":"2014-05-07",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"長安路",
+    "roadwidth":10.8,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.183244,24.789364 ]
+    },
+    "properties": {
+    "name":"東安國小",
+    "city":"新竹縣",
+    "no":"0705620TN001",
+    "type":"道路交通噪音",
+    "address":"關西鎮東安里中山東路40號",
+    "class":"第二類",
+    "star_date":"2014-05-07",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"",
+    "roadwidth":10,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.01235,24.8259 ]
+    },
+    "properties": {
+    "name":"新竹縣政府",
+    "city":"新竹縣",
+    "no":"0705520TN001",
+    "type":"道路交通噪音",
+    "address":"竹北市光明六路10號",
+    "class":"第三類",
+    "star_date":"2014-04-30",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"",
+    "roadwidth":24,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.350904,24.813128 ]
+    },
+    "properties": {
+    "name":"復興青年活動中心",
+    "city":"桃園市",
+    "no":"0605420TN001",
+    "type":"道路交通噪音",
+    "address":"復興鄉中正路2號",
+    "class":"第一類",
+    "star_date":"2006-09-18",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"中正路",
+    "roadwidth":6.8,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.142936,25.04554 ]
+    },
+    "properties": {
+    "name":"草漯國小前新生路",
+    "city":"桃園市",
+    "no":"0605320TN002",
+    "type":"道路交通噪音",
+    "address":"觀音鄉草漯村195號",
+    "class":"第二類",
+    "star_date":"2004-05-01",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"新生路",
+    "roadwidth":16,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.178191,24.958942 ]
+    },
+    "properties": {
+    "name":"中平國小前民族路",
+    "city":"桃園市",
+    "no":"0605120TN003",
+    "type":"道路交通噪音",
+    "address":"平鎮市民族路雙連三段 37 號",
+    "class":"第三類",
+    "star_date":"2004-05-01",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"民權路",
+    "roadwidth":22,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.218494,24.868274 ]
+    },
+    "properties": {
+    "name":"龍潭運動公園前北龍路",
+    "city":"桃園市",
+    "no":"0605020TN001",
+    "type":"道路交通噪音",
+    "address":"龍潭鄉北龍路",
+    "class":"第三類",
+    "star_date":"2006-09-18",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"北龍路",
+    "roadwidth":24,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.271923,24.97111 ]
+    },
+    "properties": {
+    "name":"忠義街社區",
+    "city":"桃園市",
+    "no":"0604920TN004",
+    "type":"道路交通噪音",
+    "address":"八德市忠義街 103 號",
+    "class":"第二類",
+    "star_date":"2004-05-01",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"忠義街",
+    "roadwidth":8,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.371283,25.050477 ]
+    },
+    "properties": {
+    "name":"華亞科技園區管理中心",
+    "city":"桃園市",
+    "no":"0604820TN001",
+    "type":"道路交通噪音",
+    "address":"龜山鄉文化村文化二路176-1號",
+    "class":"第一類",
+    "star_date":"2006-09-18",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"中正東路",
+    "roadwidth":16,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.049831,25.0057 ]
+    },
+    "properties": {
+    "name":"北湖國小",
+    "city":"桃園市",
+    "no":"0604720TN001",
+    "type":"道路交通噪音",
+    "address":"新屋鄉東興路二段765號旁",
+    "class":"第二類",
+    "star_date":"2004-05-01",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"康興路(桃93)",
+    "roadwidth":8,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.280994,25.055901 ]
+    },
+    "properties": {
+    "name":"南崁路南崁橋附近",
+    "city":"桃園市",
+    "no":"0604620TN001",
+    "type":"道路交通噪音",
+    "address":"蘆竹鄉南崁路一段381號",
+    "class":"第三類",
+    "star_date":"2003-05-01",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"南崁路",
+    "roadwidth":22,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.138043,24.918861 ]
+    },
+    "properties": {
+    "name":"水美國小",
+    "city":"桃園市",
+    "no":"0604520TN006",
+    "type":"道路交通噪音",
+    "address":"楊梅鎮楊新路2段2號",
+    "class":"第二類",
+    "star_date":"2003-05-01",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"楊新路",
+    "roadwidth":12,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.257321,24.821948 ]
+    },
+    "properties": {
+    "name":"石門水庫",
+    "city":"桃園市",
+    "no":"0604420TN002",
+    "type":"道路交通噪音",
+    "address":"大溪鎮康莊路五段",
+    "class":"第一類",
+    "star_date":"2003-05-01",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"康莊路",
+    "roadwidth":12.5,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.235947,24.975249 ]
+    },
+    "properties": {
+    "name":"啟英工家前中園路",
+    "city":"桃園市",
+    "no":"0604320TN004",
+    "type":"道路交通噪音",
+    "address":"中壢市中園路447號",
+    "class":"第一類",
+    "star_date":"2006-09-18",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"中園路",
+    "roadwidth":30,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.313398,24.989535 ]
+    },
+    "properties": {
+    "name":"桃園火車站",
+    "city":"桃園市",
+    "no":"0604220TN004",
+    "type":"道路交通噪音",
+    "address":"桃園縣桃園市中正路1號(桃園火車站前圓環內)",
+    "class":"第三類",
+    "star_date":"2006-09-18",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"中正路",
+    "roadwidth":12,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.829267,24.633775 ]
+    },
+    "properties": {
+    "name":"龍德工業區服務中心",
+    "city":"宜蘭縣",
+    "no":"0503220TN001",
+    "type":"道路交通噪音",
+    "address":"蘇澳鎮自強路十二號",
+    "class":"第一類",
+    "star_date":"2014-01-04",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"蘇澳鎮自強路",
+    "roadwidth":16,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.753553,24.754253 ]
+    },
+    "properties": {
+    "name":"中山公園",
+    "city":"宜蘭縣",
+    "no":"0503020TN005",
+    "type":"道路交通噪音",
+    "address":"宜蘭市舊城南路",
+    "class":"第三類",
+    "star_date":"2014-02-20",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"舊城南路",
+    "roadwidth":16,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.743646,24.748511 ]
+    },
+    "properties": {
+    "name":"縣立文化中心",
+    "city":"宜蘭縣",
+    "no":"0503020TN004",
+    "type":"道路交通噪音",
+    "address":"宜蘭市復興路二段一0一號",
+    "class":"第二類",
+    "star_date":"2014-03-17",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"農權路一段",
+    "roadwidth":8,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.745965,24.754419 ]
+    },
+    "properties": {
+    "name":"地政大樓",
+    "city":"宜蘭縣",
+    "no":"0503020TN003",
+    "type":"道路交通噪音",
+    "address":"宜蘭市泰山路六十六之五號",
+    "class":"第三類",
+    "star_date":"2014-03-14",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"宜蘭市泰山路",
+    "roadwidth":12,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.75592,24.753394 ]
+    },
+    "properties": {
+    "name":"中山國小",
+    "city":"宜蘭縣",
+    "no":"0503020TN002",
+    "type":"道路交通噪音",
+    "address":"宜蘭市崇聖街四號",
+    "class":"第二類",
+    "star_date":"2014-01-18",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"和睦路",
+    "roadwidth":8,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.547756,25.155822 ]
+    },
+    "properties": {
+    "name":"金山國家公園",
+    "city":"新北市",
+    "no":"0402726TN001",
+    "type":"道路交通噪音",
+    "address":"新北市金山區陽明山國家公園界碑前",
+    "class":"第一類",
+    "star_date":"",
+    "end_date":"",
+    "record_typ":"自動",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"",
+    "roadwidth":8,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.400878,25.146052 ]
+    },
+    "properties": {
+    "name":"八里中華路",
+    "city":"新北市",
+    "no":"0402320TN001",
+    "type":"道路交通噪音",
+    "address":"新北市八里區中華路",
+    "class":"第三類",
+    "star_date":"",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"",
+    "roadwidth":12,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.440186,24.966698 ]
+    },
+    "properties": {
+    "name":"土城忠承路",
+    "city":"新北市",
+    "no":"0401320TN003",
+    "type":"道路交通噪音",
+    "address":"",
+    "class":"第一類",
+    "star_date":"2013-04-22",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"",
+    "roadwidth":10,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.793704,25.10677 ]
+    },
+    "properties": {
+    "name":"瑞芳坑子內路",
+    "city":"新北市",
+    "no":"0401220TN001",
+    "type":"道路交通噪音",
+    "address":"瑞芳區坑子內路1之1號旁",
+    "class":"第二類",
+    "star_date":"2000-03-01",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"魚坑路",
+    "roadwidth":8,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.422014,25.181913 ]
+    },
+    "properties": {
+    "name":"淡水沙崙路",
+    "city":"新北市",
+    "no":"0401020TN004",
+    "type":"道路交通噪音",
+    "address":"新北市淡水區沙崙路",
+    "class":"第二類",
+    "star_date":"",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"",
+    "roadwidth":8,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.511428,25.184418 ]
+    },
+    "properties": {
+    "name":"淡水巴拉卡公路",
+    "city":"新北市",
+    "no":"0401020TN003",
+    "type":"道路交通噪音",
+    "address":"新北市淡水區巴拉卡公路",
+    "class":"第一類",
+    "star_date":"",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"",
+    "roadwidth":6,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.376824,24.943982 ]
+    },
+    "properties": {
+    "name":"三峽大德路",
+    "city":"新北市",
+    "no":"0400920TN001",
+    "type":"道路交通噪音",
+    "address":"新北市三峽區大德路",
+    "class":"第二類",
+    "star_date":"",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"",
+    "roadwidth":12,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.42019,25.005768 ]
+    },
+    "properties": {
+    "name":"樹林中正路",
+    "city":"新北市",
+    "no":"0400720TN001",
+    "type":"道路交通噪音",
+    "address":"新北市樹林區中正路",
+    "class":"第一類",
+    "star_date":"2008-06-01",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"",
+    "roadwidth":16,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.482802,25.065283 ]
+    },
+    "properties": {
+    "name":"三重三民街",
+    "city":"新北市",
+    "no":"0400220TN001",
+    "type":"道路交通噪音",
+    "address":"新北市三重區三民公園旁",
+    "class":"第三類",
+    "star_date":"",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"",
+    "roadwidth":18,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.274851,25.002992 ]
+    },
+    "properties": {
+    "name":"板橋地政事務所",
+    "city":"新北市",
+    "no":"0400126TN001",
+    "type":"道路交通噪音",
+    "address":"板橋區實踐路1號",
+    "class":"第三類",
+    "star_date":"2016-01-01",
+    "end_date":"",
+    "record_typ":"自動",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"",
+    "roadwidth":15,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.462841,25.025134 ]
+    },
+    "properties": {
+    "name":"板橋陽明街",
+    "city":"新北市",
+    "no":"0400120TN004",
+    "type":"道路交通噪音",
+    "address":"板橋陽明街",
+    "class":"第二類",
+    "star_date":"2013-04-22",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"",
+    "roadwidth":10,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+       "type": "Point",
+       "coordinates":  [ 121.471831,25.019198 ]
+    },
+    "properties": {
+    "name":"板橋永豐街",
+    "city":"新北市",
+    "no":"0400120TN002",
+    "type":"道路交通噪音",
+    "address":"板橋市永豐街55巷62號對面華江公園內",
+    "class":"第三類",
+    "star_date":"1992-07-01",
+    "end_date":"",
+    "record_typ":"人工",
+    "status":"使用中",
+    "end_reason":"",
+    "side_road":"縣民大道",
+    "roadwidth":20,
+    "references":"https://gis.moenv.gov.tw/mapfile/shp/交通噪音監測站位置圖_WGS84.zip"
+    }
+  }
+]
+}

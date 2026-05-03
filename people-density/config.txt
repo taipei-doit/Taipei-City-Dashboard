@@ -1,0 +1,19 @@
+﻿{
+    "index": "metrotaipei_village_population_density",
+    "title": "村里人口密度",
+    "type": "fill",
+    "paint": {
+        "fill-color": "#000000",
+        "fill-opacity": 0
+    },
+    "property": [
+        { "key": "county", "name": "縣市" },
+        { "key": "town", "name": "鄉鎮市區" },
+        { "key": "village", "name": "村里" },
+        { "key": "population", "name": "人口數（人）" },
+        { "key": "households", "name": "戶數" },
+        { "key": "area_km2", "name": "面積（km²）" },
+        { "key": "density_per_km2", "name": "人口密度（人/km²）" }
+    ]
+}
+使用者點擊村里區域時，popup 會顯示所有欄位含單位。要放進基本圖層的話，讓隊友把這個組件 ID 加進 map-layers-metrotaipei 儀表板就好。

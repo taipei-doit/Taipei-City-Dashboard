@@ -300,6 +300,10 @@ export const useMapStore = defineStore("map", {
 		},
 		// 3. Adds symbols that will be used by some map layers
 		async addSymbolSources() {
+			if (!this.map) return;
+			// 先完成 inline SVG 註冊，避免 symbol layer 早於 addImage 建立而看不到 icon
+			await this.registerInlineSvgIcons();
+
 			const images = [
 				"metro",
 				"triangle_green",
@@ -320,6 +324,7 @@ export const useMapStore = defineStore("map", {
 					},
 				);
 			});
+
 			// 預載 3D 模型給 3D Mrt Map
 			const models = [
 				{ id: "mrt_car_c381", url: "/images/map/mrt_car_c381.glb" },
@@ -350,6 +355,62 @@ export const useMapStore = defineStore("map", {
 
 			// 全部載入完畢才變 false
 			this.isPreloading = false;
+		},
+		/** 將 Blob 載入的 SVG 註冊為 Mapbox image（供 component_maps 的 symbol layer 使用） */
+		registerInlineSvgIcons() {
+			if (!this.map) return Promise.resolve();
+			const inlineSvgIcons = [
+				{
+					id: "leaf-icon",
+					svg: '<svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path fill="#E8F5E9" d="M216-176q-45-45-70.5-104T120-402q0-63 24-124.5T222-642q35-35 86.5-60t122-39.5Q501-756 591.5-759t202.5 7q8 106 5 195t-16.5 160.5q-13.5 71.5-38 125T684-182q-53 53-112.5 77.5T450-80q-65 0-127-25.5T216-176Z"/><path fill="#78A75A" d="M216-176q-45-45-70.5-104T120-402q0-63 24-124.5T222-642q35-35 86.5-60t122-39.5Q501-756 591.5-759t202.5 7q8 106 5 195t-16.5 160.5q-13.5 71.5-38 125T684-182q-53 53-112.5 77.5T450-80q-65 0-127-25.5T216-176Zm112-16q29 17 59.5 24.5T450-160q46 0 91-18.5t86-59.5q18-18 36.5-50.5t32-85Q709-426 716-500.5t2-177.5q-49-2-110.5-1.5T485-670q-61 9-116 29t-90 55q-45 45-62 89t-17 85q0 59 22.5 103.5T262-246q42-80 111-153.5T534-520q-72 63-125.5 142.5T328-192Zm0 0Zm0 0Z"/></svg>',
+				},
+				{
+					id: "red-charger",
+					svg: '<svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24" fill="#D84744"><path d="m452-160 200-390H512v-250L312-410h140v250Zm28 80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-400Zm226.5 226.5Q800-347 800-480t-93.5-226.5Q613-800 480-800t-226.5 93.5Q160-613 160-480t93.5 226.5Q347-160 480-160t226.5-93.5Z"/></svg>',
+				},
+				{
+					id: "orange-charger",
+					svg: '<svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24" fill="#F59236"><path d="m452-160 200-390H512v-250L312-410h140v250Zm28 80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-400Zm226.5 226.5Q800-347 800-480t-93.5-226.5Q613-800 480-800t-226.5 93.5Q160-613 160-480t93.5 226.5Q347-160 480-160t226.5-93.5Z"/></svg>',
+				},
+				{
+					id: "green-charger",
+					svg: '<svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24" fill="#49A78D"><path d="m452-160 200-390H512v-250L312-410h140v250Zm28 80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-400Zm226.5 226.5Q800-347 800-480t-93.5-226.5Q613-800 480-800t-226.5 93.5Q160-613 160-480t93.5 226.5Q347-160 480-160t226.5-93.5Z"/></svg>',
+				},
+			];
+			return Promise.all(
+				inlineSvgIcons.map(
+					({ id, svg }) =>
+						new Promise((resolve) => {
+							if (!this.map || this.map.hasImage(id)) {
+								resolve();
+								return;
+							}
+							const blob = new Blob([svg], {
+								type: "image/svg+xml",
+							});
+							const url = URL.createObjectURL(blob);
+							const img = new Image(24, 24);
+							img.onload = () => {
+								try {
+									if (this.map && !this.map.hasImage(id)) {
+										this.map.addImage(id, img);
+									}
+								} catch (e) {
+									console.error(`addImage ${id} failed:`, e);
+								} finally {
+									URL.revokeObjectURL(url);
+									resolve();
+								}
+							};
+							img.onerror = () => {
+								URL.revokeObjectURL(url);
+								console.error(`inline SVG load failed: ${id}`);
+								resolve();
+							};
+							img.src = url;
+						}),
+				),
+			);
 		},
 		// 4. Toggle district boundaries
 		toggleDistrictBoundaries(status) {
@@ -637,6 +698,14 @@ export const useMapStore = defineStore("map", {
 					],
 				};
 			}
+			// 後端 component_maps.paint 可能內嵌 Mapbox 圖層頂層欄位（filter、layout），
+			// 若直接 spread 進 paint 會導致 symbol 無 icon、filter 不生效。
+			const rawPaint = { ...(map_config.paint || {}) };
+			const paintFilter = rawPaint.filter;
+			const paintLayout = rawPaint.layout;
+			delete rawPaint.filter;
+			delete rawPaint.layout;
+
 			this.loadingLayers.push("rendering");
 			const filterClass = [
 				["6h150r", "6h250r", "6h350r"],
@@ -654,11 +723,14 @@ export const useMapStore = defineStore("map", {
 				paint: {
 					...maplayerCommonPaint[`${map_config.type}`],
 					...extra_paint_configs,
-					...map_config.paint,
+					...rawPaint,
 				},
 				layout: {
 					...maplayerCommonLayout[`${map_config.type}`],
 					...extra_layout_configs,
+					...(paintLayout && typeof paintLayout === "object"
+						? paintLayout
+						: {}),
 				},
 				source: `${map_config.layerId}-source`,
 			};
@@ -669,6 +741,8 @@ export const useMapStore = defineStore("map", {
 					"wee_hazard_water_tp-fill-extrusion-taipei"
 			) {
 				config.filter = initialFilter;
+			} else if (paintFilter !== undefined) {
+				config.filter = paintFilter;
 			}
 			this.map.addLayer(config);
 			if (
@@ -796,15 +870,15 @@ export const useMapStore = defineStore("map", {
 			const layers = Object.keys(this.deckGlLayer).map((index) => {
 				const l = this.deckGlLayer[index];
 				switch (l.type) {
-				case "ArcLayer":
-					return new ArcLayer(l.config);
-				case "AnimatedArcLayer":
-					return new AnimatedArcLayer({
-						...l.config,
-						coef: this.step / 1000,
-					});
-				default:
-					break;
+					case "ArcLayer":
+						return new ArcLayer(l.config);
+					case "AnimatedArcLayer":
+						return new AnimatedArcLayer({
+							...l.config,
+							coef: this.step / 1000,
+						});
+					default:
+						break;
 				}
 			});
 			this.overlay.setProps({
@@ -2311,6 +2385,22 @@ export const useMapStore = defineStore("map", {
 		},
 
 		/* Map Filtering */
+		// 圖層建立時若 paint 內含 filter（如 valid / rank），必須在互動篩選時保留，
+		// 否則 clearByParamFilter 設成 null 會讓 symbol 層對全部點畫 icon。
+		getLayerBaseFilter(map_config) {
+			const f = map_config?.paint?.filter;
+			return f !== undefined && f !== null ? f : null;
+		},
+		mergeMapFeatureFilters(baseFilter, ...extraExprs) {
+			const parts = [];
+			if (baseFilter) parts.push(baseFilter);
+			for (const ex of extraExprs) {
+				if (ex !== undefined && ex !== null) parts.push(ex);
+			}
+			if (parts.length === 0) return null;
+			if (parts.length === 1) return parts[0];
+			return ["all", ...parts];
+		},
 		// 1. Add a filter based on a each map layer's properties (byParam)
 		filterByParam(map_filter, map_configs, xParam, yParam) {
 			// If there are layers loading, don't filter
@@ -2321,6 +2411,7 @@ export const useMapStore = defineStore("map", {
 			}
 			map_configs.map((map_config) => {
 				let mapLayerId = `${map_config.index}-${map_config.type}-${map_config.city}`;
+				const baseF = this.getLayerBaseFilter(map_config);
 				if (map_config && map_config.type === "arc") {
 					this.deckGlLayer[mapLayerId].config.data = this.deckGlLayer[
 						mapLayerId
@@ -2359,27 +2450,36 @@ export const useMapStore = defineStore("map", {
 					xParam &&
 					yParam
 				) {
-					this.map.setFilter(mapLayerId, [
-						"all",
-						["==", ["get", map_filter.byParam.xParam], xParam],
-						["==", ["get", map_filter.byParam.yParam], yParam],
-					]);
+					this.map.setFilter(
+						mapLayerId,
+						this.mergeMapFeatureFilters(
+							baseF,
+							["==", ["get", map_filter.byParam.xParam], xParam],
+							["==", ["get", map_filter.byParam.yParam], yParam],
+						),
+					);
 				}
 				// If only y exists, filter by y
 				else if (map_filter.byParam.yParam && yParam) {
-					this.map.setFilter(mapLayerId, [
-						"==",
-						["get", map_filter.byParam.yParam],
-						yParam,
-					]);
+					this.map.setFilter(
+						mapLayerId,
+						this.mergeMapFeatureFilters(baseF, [
+							"==",
+							["get", map_filter.byParam.yParam],
+							yParam,
+						]),
+					);
 				}
 				// default to filter by x
 				else if (map_filter.byParam.xParam && xParam) {
-					this.map.setFilter(mapLayerId, [
-						"==",
-						["get", map_filter.byParam.xParam],
-						xParam,
-					]);
+					this.map.setFilter(
+						mapLayerId,
+						this.mergeMapFeatureFilters(baseF, [
+							"==",
+							["get", map_filter.byParam.xParam],
+							xParam,
+						]),
+					);
 				}
 			});
 		},
@@ -2422,7 +2522,8 @@ export const useMapStore = defineStore("map", {
 					this.renderDeckGLLayer();
 					return;
 				}
-				this.map.setFilter(mapLayerId, null);
+				const baseF = this.getLayerBaseFilter(map_config);
+				this.map.setFilter(mapLayerId, baseF);
 			});
 		},
 		// 4. Remove any layer filters on a map layer.

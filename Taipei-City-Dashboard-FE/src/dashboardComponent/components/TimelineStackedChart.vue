@@ -113,6 +113,9 @@ watch(
 
 		const newDiff = Math.max(...timestamps) - Math.min(...timestamps);
 
+		const maxTs = Math.max(...timestamps);
+		const minTs = Math.min(...timestamps);
+
 		// 跨度超過三年改成年份類別
 		if (newDiff >= 3 * 31536000000) {
 			localSeries.value.forEach((item) => {
@@ -130,11 +133,17 @@ watch(
 				},
 			};
 		} else {
+			// 以月數估算合理的刻度數（每3個月一個刻度），並強制 max 到最後一筆資料
+			const spanMonths = Math.round(newDiff / (30.44 * 24 * 3600 * 1000));
+			const tickAmount = Math.max(4, Math.ceil(spanMonths / 3));
 			chartOptions.value = {
 				...chartOptions.value,
 				xaxis: {
 					...chartOptions.value.xaxis,
 					type: "datetime",
+					min: minTs,
+					max: maxTs,
+					tickAmount: tickAmount,
 					labels: { datetimeUTC: false },
 				},
 			};

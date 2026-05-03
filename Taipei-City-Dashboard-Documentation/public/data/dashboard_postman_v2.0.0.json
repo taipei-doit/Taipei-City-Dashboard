@@ -1,0 +1,1157 @@
+{
+	"info": {
+		"_postman_id": "98236b95-f7f8-400c-90d4-248644bc30ac",
+		"name": "Dashboard",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "28327543",
+		"_collection_link": "https://tuic-dev.postman.co/workspace/Taipei-City-Dashboard-BE~29c09118-3b12-42f9-b5b6-289b92291fa6/collection/28327543-98236b95-f7f8-400c-90d4-248644bc30ac?action=share&source=collection_link&creator=28327543"
+	},
+	"item": [
+		{
+			"name": "Components",
+			"item": [
+				{
+					"name": "Get All Components",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/{{version}}/component?sort=id&order=desc",
+							"host": ["{{url}}"],
+							"path": ["{{version}}", "component"],
+							"query": [
+								{
+									"key": "pagesize",
+									"value": "2",
+									"description": "Default: All",
+									"disabled": true
+								},
+								{
+									"key": "pagenum",
+									"value": "7",
+									"description": "Default: 1",
+									"disabled": true
+								},
+								{
+									"key": "filterby",
+									"value": "id",
+									"disabled": true
+								},
+								{
+									"key": "filtermode",
+									"value": "gt",
+									"description": "eq, ne, gt, lt, in",
+									"disabled": true
+								},
+								{
+									"key": "filtervalue",
+									"value": "5",
+									"disabled": true
+								},
+								{
+									"key": "sort",
+									"value": "id"
+								},
+								{
+									"key": "order",
+									"value": "desc",
+									"description": "default asc"
+								},
+								{
+									"key": "searchbyindex",
+									"value": "public",
+									"disabled": true
+								},
+								{
+									"key": "searchbyname",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Component By ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/{{version}}/component/:id",
+							"host": ["{{url}}"],
+							"path": ["{{version}}", "component", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "43"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Component Chart Data By ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Time_from",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "Time_to",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{url}}/{{version}}/component/:id/chart?timefrom=2023-04-11T17:17:56+08:00&timeto=2024-01-11T17:17:56+08:00",
+							"host": ["{{url}}"],
+							"path": [
+								"{{version}}",
+								"component",
+								":id",
+								"chart"
+							],
+							"query": [
+								{
+									"key": "timefrom",
+									"value": "2023-04-11T17:17:56+08:00"
+								},
+								{
+									"key": "timeto",
+									"value": "2024-01-11T17:17:56+08:00"
+								}
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Component History Data By ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "time_from",
+								"value": "2024-01-08T17:14:24+08:00",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "time_to",
+								"value": "2024-01-11T17:14:24+08:00",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{url}}/{{version}}/component/:id/history?timefrom=2024-01-08T17:14:24+08:00&timeto=2024-01-11T17:14:24+08:00",
+							"host": ["{{url}}"],
+							"path": [
+								"{{version}}",
+								"component",
+								":id",
+								"history"
+							],
+							"query": [
+								{
+									"key": "timefrom",
+									"value": "2024-01-08T17:14:24+08:00"
+								},
+								{
+									"key": "timeto",
+									"value": "2024-01-11T17:14:24+08:00"
+								}
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Component",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"index\": \"asdasd\",\n    \"update_freq\": 0\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/{{version}}/component/:id",
+							"host": ["{{url}}"],
+							"path": ["{{version}}", "component", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "164"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Chart Config",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"types\": [\"DistrictChart\", \"BarChart\"],\n    \"unit\": \"件\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/{{version}}/component/:id/chart",
+							"host": ["{{url}}"],
+							"path": [
+								"{{version}}",
+								"component",
+								":id",
+								"chart"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "20"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Map Config",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"自行車道\",\n    \"type\": \"line\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/{{version}}/component/:id/map",
+							"host": ["{{url}}"],
+							"path": ["{{version}}", "component", ":id", "map"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Component",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/{{version}}/component/:id",
+							"host": ["{{url}}"],
+							"path": ["{{version}}", "component", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "70"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Dashboards",
+			"item": [
+				{
+					"name": "Get All Dashboards",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/{{version}}/dashboard",
+							"host": ["{{url}}"],
+							"path": ["{{version}}", "dashboard"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Dashboard By Index",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/{{version}}/dashboard/:index",
+							"host": ["{{url}}"],
+							"path": ["{{version}}", "dashboard", ":index"],
+							"variable": [
+								{
+									"key": "index",
+									"value": "transport"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Personal Dashboard",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// 假設JWT保存在回應的 JSON 主體中的 token 字段中",
+									"var jsonResponse = pm.response.json();",
+									"var jwtToken = jsonResponse.token;",
+									"",
+									"// 將JWT設定為Postman變數",
+									"pm.environment.set(\"jwt_token\", jwtToken);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Last attempt\",\n    \"components\": [],\n    \"icon\": \"test\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/{{version}}/dashboard",
+							"host": ["{{url}}"],
+							"path": ["{{version}}", "dashboard"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Public Dashboard",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [""],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"index\": \"test3\",\n    \"name\": \"test\",\n    \"components\": [],\n    \"icon\": \"test\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/{{version}}/dashboard/public",
+							"host": ["{{url}}"],
+							"path": ["{{version}}", "dashboard", "public"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Check Dashboard Index",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/{{version}}/dashboard/check-index/:index",
+							"host": ["{{url}}"],
+							"path": [
+								"{{version}}",
+								"dashboard",
+								"check-index",
+								":index"
+							],
+							"variable": [
+								{
+									"key": "index",
+									"value": "18ba1c7dacfc"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Dashboard",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"社會安全\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/{{version}}/dashboard/:index",
+							"host": ["{{url}}"],
+							"path": ["{{version}}", "dashboard", ":index"],
+							"variable": [
+								{
+									"key": "index",
+									"value": "test3"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Dashboard",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// 假設JWT保存在回應的 JSON 主體中的 token 字段中",
+									"var jsonResponse = pm.response.json();",
+									"var jwtToken = jsonResponse.token;",
+									"",
+									"// 將JWT設定為Postman變數",
+									"pm.environment.set(\"jwt_token\", jwtToken);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/{{version}}/dashboard/:index",
+							"host": ["{{url}}"],
+							"path": ["{{version}}", "dashboard", ":index"],
+							"variable": [
+								{
+									"key": "index",
+									"value": "test3"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Issues",
+			"item": [
+				{
+					"name": "Get All Issues",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/{{version}}/issue?filterbystatus=處理, 已處",
+							"host": ["{{url}}"],
+							"path": ["{{version}}", "issue"],
+							"query": [
+								{
+									"key": "pagesize",
+									"value": "2",
+									"disabled": true
+								},
+								{
+									"key": "pagenum",
+									"value": "2",
+									"disabled": true
+								},
+								{
+									"key": "filterbystatus",
+									"value": "處理, 已處"
+								},
+								{
+									"key": "sort",
+									"value": "updated_at",
+									"disabled": true
+								},
+								{
+									"key": "order",
+									"value": "desc",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create New Issue",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"test\",\n    \"description\": \"test\",\n    \"user_name\": \"Chu\",\n    \"user_id\": \"ChuChuTrain\",\n    \"context\": \"\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/{{version}}/issue",
+							"host": ["{{url}}"],
+							"path": ["{{version}}", "issue"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Issue By ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"updated_by\": \"Chu\",\n    \"status\": \"\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/{{version}}/issue/:id",
+							"host": ["{{url}}"],
+							"path": ["{{version}}", "issue", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "4"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Email Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// 假設JWT保存在回應的 JSON 主體中的 token 字段中",
+									"var jsonResponse = pm.response.json();",
+									"var jwtToken = jsonResponse.token;",
+									"",
+									"// 將JWT設定為Postman變數",
+									"pm.environment.set(\"jwt_token\", jwtToken);",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "tuic@gov.taipei",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{url}}/{{version}}/auth/login",
+							"host": ["{{url}}"],
+							"path": ["{{version}}", "auth", "login"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Get My Info",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/{{version}}/user/me",
+							"host": ["{{url}}"],
+							"path": ["{{version}}", "user", "me"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit My Info",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Igor Ho\",\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/{{version}}/user/me",
+							"host": ["{{url}}"],
+							"path": ["{{version}}", "user", "me"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Users",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/{{version}}/user?pagesize=10&page=1&searchbyname=&searchbyid=1&sort=id&order=asc",
+							"host": ["{{url}}"],
+							"path": ["{{version}}", "user"],
+							"query": [
+								{
+									"key": "pagesize",
+									"value": "10"
+								},
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "searchbyname",
+									"value": ""
+								},
+								{
+									"key": "searchbyid",
+									"value": "1"
+								},
+								{
+									"key": "sort",
+									"value": "id"
+								},
+								{
+									"key": "order",
+									"value": "asc"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit User By Id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Igor H\",\n    \"is_blacked\": false\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/{{version}}/user/:id",
+							"host": ["{{url}}"],
+							"path": ["{{version}}", "user", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Viewpoints of a User",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/{{version}}/user/:userid/viewpoint",
+							"host": ["{{url}}"],
+							"path": [
+								"{{version}}",
+								"user",
+								":userid",
+								"viewpoint"
+							],
+							"variable": [
+								{
+									"key": "userid",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add a Viewpoint For a User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/{{version}}/user/:userid/viewpoint",
+							"host": ["{{url}}"],
+							"path": [
+								"{{version}}",
+								"user",
+								":userid",
+								"viewpoint"
+							],
+							"variable": [
+								{
+									"key": "userid",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete a Viewpoint of a User",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/{{version}}/user/:userid/viewpoint/:viewpointid",
+							"host": ["{{url}}"],
+							"path": [
+								"{{version}}",
+								"user",
+								":userid",
+								"viewpoint",
+								":viewpointid"
+							],
+							"variable": [
+								{
+									"key": "userid",
+									"value": ""
+								},
+								{
+									"key": "viewpointid",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Contributor",
+			"item": [
+				{
+					"name": "Get All Contributors",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/{{version}}/contributor",
+							"host": ["{{url}}"],
+							"path": ["{{version}}", "contributor"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Contributor",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/{{version}}/contributor",
+							"host": ["{{url}}"],
+							"path": ["{{version}}", "contributor"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Contributor",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/{{version}}/contributor/:id",
+							"host": ["{{url}}"],
+							"path": ["{{version}}", "contributor", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Contributor",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/{{version}}/contributor/:id",
+							"host": ["{{url}}"],
+							"path": ["{{version}}", "contributor", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

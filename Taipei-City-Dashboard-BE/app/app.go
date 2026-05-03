@@ -18,6 +18,7 @@ import (
 	"TaipeiCityDashboardBE/app/routes"
 	"TaipeiCityDashboardBE/global"
 	"TaipeiCityDashboardBE/logs"
+    "TaipeiCityDashboardBE/app/services"
 
 	"github.com/fvbock/endless"
 	"github.com/gin-gonic/gin"
@@ -32,6 +33,7 @@ import (
 func StartApplication() {
 	// 1. Connect to postgreSQL and Redis
 	models.ConnectToDatabases("MANAGER", "DASHBOARD")
+	services.InitSubsidyKB(models.DBManager)
 	cache.ConnectToRedis()
 	initial.InitCronJobs()
 

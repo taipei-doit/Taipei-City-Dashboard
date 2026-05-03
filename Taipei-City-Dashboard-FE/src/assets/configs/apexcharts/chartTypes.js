@@ -42,7 +42,11 @@ export const chartsPerDataType = {
 		"PolarAreaChart",
 		"TextUnitChart",
 	],
-	time: ["TimelineSeparateChart", "TimelineStackedChart", "ColumnLineChart"],
+	time: [
+		"TimelineSeparateChart",
+		"TimelineStackedChart",
+		"ColumnLineChart",
+	],
 	percent: [
 		"GuageChart",
 		"BarPercentChart",

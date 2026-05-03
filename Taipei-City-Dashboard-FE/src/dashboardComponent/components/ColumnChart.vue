@@ -18,16 +18,16 @@ const emits = defineEmits([
 	"filterByLayer",
 	"clearByParamFilter",
 	"clearByLayerFilter",
-	"fly"
+	"fly",
 ]);
 
 const isLargeDataSet = computed(() => {
-	return props.series[0].data.length > 12
-})
+	return props.series[0].data.length > 12;
+});
 
 // Calculate initial width for large datasets only
 const initialWidth = computed(() => {
-	const WIDTH_PER_ITEM = 32
+	const WIDTH_PER_ITEM = 32;
 	const itemCount = props.series[0].data.length;
 	return itemCount * WIDTH_PER_ITEM;
 });
@@ -39,27 +39,26 @@ const chartWidth = computed(() => {
 	return isLargeDataSet.value ? `${widthValue.value}px` : "100%";
 });
 
-
 const chartOptions = ref({
 	chart: {
 		stacked: true,
 		zoom: {
 			allowMouseWheelZoom: false,
 		},
-		toolbar: isLargeDataSet.value 
+		toolbar: isLargeDataSet.value
 			? {
-				show: true,
-				tools: {
-					download: false,
-					pan: false,
-					reset: "<p>" + "重置" + "</p>",
-					zoomin: false,
-					zoomout: false,
+					show: true,
+					tools: {
+						download: false,
+						pan: false,
+						reset: "<p>" + "重置" + "</p>",
+						zoomin: false,
+						zoomout: false,
+					},
 				}
-			  }
 			: {
-				show: false,
-			}
+					show: false,
+				},
 	},
 	colors: [...props.chart_config.color],
 	dataLabels: {
@@ -71,19 +70,19 @@ const chartOptions = ref({
 	},
 	legend: isLargeDataSet.value
 		? {
-			show: props.chart_config.categories ? true : false,
-			horizontalAlign: "left",
-			offsetX: 20,
-			floating: true,
-		  }
+				show: props.chart_config.categories ? true : false,
+				horizontalAlign: "left",
+				offsetX: 20,
+				floating: true,
+			}
 		: {
-			show: props.chart_config.categories ? true : false,
-		  },
+				show: props.chart_config.categories ? true : false,
+			},
 	plotOptions: {
 		bar: {
 			borderRadius: 5,
 			dataLabels: {
-				hideOverflowingLabels: false
+				hideOverflowingLabels: false,
 			},
 		},
 	},
@@ -94,26 +93,21 @@ const chartOptions = ref({
 	},
 	tooltip: {
 		// The class "chart-tooltip" could be edited in /assets/styles/chartStyles.css
-		custom: function ({
-			series,
-			seriesIndex,
-			dataPointIndex,
-			w,
-		}) {
+		custom: function ({ series, seriesIndex, dataPointIndex, w }) {
 			return (
 				'<div class="chart-tooltip">' +
-					"<h6>" +
-						w.globals.labels[dataPointIndex] +
-						`${
-							props.chart_config.categories
-								? "-" + w.globals.seriesNames[seriesIndex]
-								: ""
-						}` +
-					"</h6>" +
-					"<span>" +
-						series[seriesIndex][dataPointIndex] +
-						` ${props.chart_config.unit}` +
-					"</span>" +
+				"<h6>" +
+				w.globals.labels[dataPointIndex] +
+				`${
+					props.chart_config.categories
+						? "-" + w.globals.seriesNames[seriesIndex]
+						: ""
+				}` +
+				"</h6>" +
+				"<span>" +
+				series[seriesIndex][dataPointIndex] +
+				` ${props.chart_config.unit}` +
+				"</span>" +
 				"</div>"
 			);
 		},
@@ -151,7 +145,7 @@ function handleDataSelection(_e, _chartContext, config) {
 				props.map_filter,
 				props.map_config,
 				config.w.globals.labels[config.dataPointIndex],
-				config.w.globals.seriesNames[config.seriesIndex]
+				config.w.globals.seriesNames[config.seriesIndex],
 			);
 		}
 		// Supports filtering by xAxis
@@ -159,7 +153,7 @@ function handleDataSelection(_e, _chartContext, config) {
 			emits(
 				"filterByLayer",
 				props.map_config,
-				config.w.globals.labels[config.dataPointIndex]
+				config.w.globals.labels[config.dataPointIndex],
 			);
 		}
 		selectedIndex.value = `${config.dataPointIndex}-${config.seriesIndex}`;
@@ -189,43 +183,34 @@ function resetWidth() {
 </script>
 
 <template>
-  <div
-    v-if="activeChart === 'ColumnChart'"
-    class="columnChart"
-  >
-    <div
-      v-if="isLargeDataSet"
-      class="columnChart-toolbar"
-    >
-      <p
-        class="columnChart-toolbar-item"
-        @click="increaseWidth"
-      >
-        <span>add</span>
-      </p>
-      <p
-        class="columnChart-toolbar-item"
-        @click="decreaseWidth"
-      >
-        <span>remove</span>
-      </p>
-      <p
-        class="columnChart-toolbar-item reset"
-        @click="resetWidth"
-      >
-        重置
-      </p>
-    </div>
-    <VueApexCharts
-      :key="chartWidth"
-      type="bar"
-      :width="chartWidth"
-      height="250px"
-      :options="chartOptions"
-      :series="series"
-      @data-point-selection="handleDataSelection"
-    />
-  </div>
+	<div
+		v-if="
+			activeChart === 'ColumnChart' ||
+			activeChart === 'ColumnStackedChart'
+		"
+		class="columnChart"
+	>
+		<div v-if="isLargeDataSet" class="columnChart-toolbar">
+			<p class="columnChart-toolbar-item" @click="increaseWidth">
+				<span>add</span>
+			</p>
+			<p class="columnChart-toolbar-item" @click="decreaseWidth">
+				<span>remove</span>
+			</p>
+			<p class="columnChart-toolbar-item reset" @click="resetWidth">
+				重置
+			</p>
+		</div>
+		<VueApexCharts
+			:key="chartWidth"
+			type="bar"
+			:width="chartWidth"
+			height="250px"
+			:options="chartOptions"
+			:series="series"
+			@data-point-selection="handleDataSelection"
+		/>
+	</div>
 </template>
 
 <style lang="scss" scoped>
@@ -264,10 +249,9 @@ function resetWidth() {
 			}
 
 			&.reset {
-				color: var(--color-highlight)
+				color: var(--color-highlight);
 			}
 		}
 	}
 }
 </style>
-

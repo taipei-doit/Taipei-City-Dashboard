@@ -17,6 +17,27 @@ import { useAuthStore } from "./authStore";
 import { getComponentDataTimeframe } from "../assets/utilityFunctions/dataTimeframe";
 import { CityManager } from "../dashboardComponent/utilities/cityManager";
 
+/** 將 GET /component/:id/chart 回寫至組件（含 multi_chart 之 chart_data_by_type、categories_by_type） */
+function applyChartResponseToComponent(component, response) {
+	const d = response.data;
+	component.chart_data = d.data;
+	if (d.categories) {
+		if (!component.chart_config) {
+			component.chart_config = {};
+		}
+		component.chart_config.categories = d.categories;
+	}
+	if (d.chart_data_by_type) {
+		component.chart_data_by_type = d.chart_data_by_type;
+	}
+	if (d.categories_by_type) {
+		if (!component.chart_config) {
+			component.chart_config = {};
+		}
+		component.chart_config.categories_by_type = d.categories_by_type;
+	}
+}
+
 export const useContentStore = defineStore("content", {
 	state: () => ({
 		// cityManager is used to manage city settings. (tag, select, sidebar, mobileNavigation etc.)
@@ -298,15 +319,10 @@ export const useContentStore = defineStore("content", {
 							},
 						);
 
-						this.cityDashboard.components[index].chart_data =
-							response.data.data;
-
-						if (response.data.categories) {
-							this.cityDashboard.components[
-								index
-							].chart_config.categories =
-								response.data.categories;
-						}
+						applyChartResponseToComponent(
+							this.cityDashboard.components[index],
+							response,
+						);
 					} catch (error) {
 						console.error(
 							`Failed to fetch chart data for component ${component.id}:`,
@@ -532,15 +548,10 @@ export const useContentStore = defineStore("content", {
 							},
 						);
 
-						this.cityDashboard.components[index].chart_data =
-							response.data.data;
-
-						if (response.data.categories) {
-							this.cityDashboard.components[
-								index
-							].chart_config.categories =
-								response.data.categories;
-						}
+						applyChartResponseToComponent(
+							this.cityDashboard.components[index],
+							response,
+						);
 					} catch (error) {
 						console.error(
 							`Failed to fetch chart data for component ${component.id}:`,

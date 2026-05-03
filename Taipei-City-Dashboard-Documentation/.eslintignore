@@ -1,0 +1,10 @@
+mapbox-gl-rtl-text.js
+**/public/*.geojson
+/dist
+/node_modules
+/.firebase
+.firebaserc
+firebase.json
+/contribution
+/.github
+*.json

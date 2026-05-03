@@ -2,6 +2,7 @@
 package models
 
 import (
+	"encoding/json"
 	"fmt"
 	"strings"
 	"time"
@@ -279,6 +280,85 @@ func GetThreeDimensionalData(query *string, timeFrom string, timeTo string) (cha
 	}
 
 	return chartDataOutput, categories, nil
+}
+
+// BundleChartEntry defines one child component inside a multi_chart bundle (query_chart JSON).
+type BundleChartEntry struct {
+	ID    int      `json:"id"`
+	City  string   `json:"city"`
+	Types []string `json:"types"`
+}
+
+// GetBundledChartData loads chart data from multiple existing components and maps each
+// chart type string (e.g. ColumnChart, DonutChart) to the payload shape that chart expects.
+func GetBundledChartData(bundleJSON string, timeFrom string, timeTo string) (
+	primaryData interface{},
+	primaryCategories []string,
+	chartDataByType map[string]interface{},
+	categoriesByType map[string][]string,
+	err error,
+) {
+	chartDataByType = make(map[string]interface{})
+	categoriesByType = make(map[string][]string)
+	var spec []BundleChartEntry
+	if err = json.Unmarshal([]byte(bundleJSON), &spec); err != nil {
+		return nil, nil, nil, nil, err
+	}
+	if len(spec) == 0 {
+		return nil, nil, chartDataByType, categoriesByType, fmt.Errorf("empty multi_chart bundle")
+	}
+	var gotPrimary bool
+	for _, entry := range spec {
+		qType, qStr, errQ := GetComponentChartDataQuery(entry.ID, entry.City)
+		if errQ != nil {
+			return nil, nil, nil, nil, errQ
+		}
+		switch qType {
+		case "two_d":
+			out, err2 := GetTwoDimensionalData(&qStr, timeFrom, timeTo)
+			if err2 != nil {
+				return nil, nil, nil, nil, err2
+			}
+			for _, t := range entry.Types {
+				chartDataByType[t] = out
+			}
+			if !gotPrimary && len(entry.Types) > 0 {
+				primaryData = out
+				gotPrimary = true
+			}
+		case "three_d", "percent":
+			out, cats, err2 := GetThreeDimensionalData(&qStr, timeFrom, timeTo)
+			if err2 != nil {
+				return nil, nil, nil, nil, err2
+			}
+			for _, t := range entry.Types {
+				chartDataByType[t] = out
+				if len(cats) > 0 {
+					categoriesByType[t] = cats
+				}
+			}
+			if !gotPrimary && len(entry.Types) > 0 {
+				primaryData = out
+				primaryCategories = cats
+				gotPrimary = true
+			}
+		case "time":
+			out, err2 := GetTimeSeriesData(&qStr, timeFrom, timeTo)
+			if err2 != nil {
+				return nil, nil, nil, nil, err2
+			}
+			for _, t := range entry.Types {
+				chartDataByType[t] = out
+			}
+			if !gotPrimary && len(entry.Types) > 0 {
+				primaryData = out
+				gotPrimary = true
+			}
+		default:
+			return nil, nil, nil, nil, fmt.Errorf("unsupported query_type in bundle: %s", qType)
+		}
+	}
+	return primaryData, primaryCategories, chartDataByType, categoriesByType, nil
 }
 
 func GetTimeSeriesData(query *string, timeFrom string, timeTo string) (chartDataOutput []TimeSeriesDataOutput, err error) {
