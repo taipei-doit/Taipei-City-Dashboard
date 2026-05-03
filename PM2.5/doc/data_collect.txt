@@ -1,0 +1,118 @@
+使用 Mapbox 的 Heatmap（熱點圖）圖層，資料搜集的邏輯與「點」圖資幾乎一致，因為 **Heatmap 的本質就是將大量的點數據，根據其權重（Weight）與分佈密度進行渲染**。
+
+既然你已經鎖定了民生公共物聯網的 **OGC SensorThings API (STA)**，以下是為了製作高品質 Heatmap 所需的資料搜集流程：
+
+### 1. 資料源與關鍵欄位
+在搜集資料時，除了座標（$lng, lat$），**「權重值」** 是 Heatmap 的靈魂。
+
+*   **API 選取：** 使用空氣品質節點。
+*   **必抓欄位：**
+    *   `Location`: 提供點位的經緯度。
+    *   `Observation/result`: 提供 PM2.5 數值，這將作為 Heatmap 的 `heatmap-weight`。
+    *   `properties/city`: 用於篩選雙北（台北市、新北市）。
+
+---
+
+### 2. 資料搜集腳本（Python 實作）
+作為資工系的學生，你可以利用 Python 快速處理。這段腳本會從 STA API 抓取資料，並轉換成最適合 Mapbox 讀取的 **GeoJSON** 格式。
+
+```python
+import requests
+import json
+
+def get_heatmap_data():
+    # 民生公共物聯網 STA API 節點
+    url = "https://sta.colife.org.tw/STA_AirQuality_EPAIoT/v1.0/Things"
+    
+    # 使用 $expand 一次抓取位置與最新 PM2.5 觀測值
+    params = {
+        "$expand": "Locations,Datastreams($filter=name eq 'PM2.5';$expand=Observations($top=1;$orderby=phenomenonTime desc))",
+        "$select": "name,properties"
+    }
+    
+    res = requests.get(url, params=params)
+    data = res.json()
+    
+    geojson = {
+        "type": "FeatureCollection",
+        "features": []
+    }
+    
+    for item in data['value']:
+        # 篩選雙北區域
+        city = item.get('properties', {}).get('city', '')
+        if city not in ["臺北市", "新北市"]:
+            continue
+            
+        try:
+            # 取得經緯度與數值
+            coords = item['Locations'][0]['location']['coordinates']
+            pm25 = item['Datastreams'][0]['Observations'][0]['result']
+            
+            # 排除異常值（Outliers），避免 Heatmap 渲染失真
+            if pm25 < 0 or pm25 > 500: continue 
+
+            feature = {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": coords
+                },
+                "properties": {
+                    "weight": pm25, # 這是 Heatmap 的權重
+                    "station": item['name']
+                }
+            }
+            geojson['features'].append(feature)
+        except (KeyError, IndexError):
+            continue
+
+    with open('heatmap_air.geojson', 'w', encoding='utf-8') as f:
+        json.dump(geojson, f, ensure_ascii=False)
+
+get_heatmap_data()
+```
+
+---
+
+### 3. 搜集資料時的關鍵技巧
+為了讓 Heatmap 在 Mapbox 上看起來更專業，搜集與處理資料時請注意：
+
+*   **資料去噪（De-noising）：** 微型感測器有時會因為故障回傳極端值（如 PM2.5 爆表至 999）。如果在資料搜集階段不剔除，Heatmap 上會出現一個極大的「紅點」，掩蓋其他正常數據。
+*   **時間同步性：** 確保抓取的是同一個時段的 `Observations`。因為空氣品質變化快，混合不同時間點的數據會導致熱點圖失去參考意義。
+*   **資料快取機制：** 既然 API 3-5 分鐘更新一次，建議在後端（如你熟悉的 Python 或 MySQL）設定一個定時任務（Cron Job），定時抓取並存成靜態的 `.geojson` 檔，前端直接讀取檔案即可，這樣能大幅提升地圖載入速度。
+
+
+
+### 4. Mapbox 端的簡易配置
+搜集完 GeoJSON 後，在 Mapbox 設定 Layer 時，記得將 `heatmap-weight` 指向你剛剛準備的 `weight` 欄位：
+
+```javascript
+map.addLayer({
+  id: 'air-heatmap',
+  type: 'heatmap',
+  source: 'air-data',
+  paint: {
+    // 根據 PM2.5 數值調整權重
+    'heatmap-weight': [
+      'interpolate', ['linear'], ['get', 'weight'],
+      0, 0,
+      100, 1
+    ],
+    // 隨著縮放層級調整強度
+    'heatmap-intensity': ['interpolate', ['linear'], ['zoom'], 0, 1, 15, 3],
+    // 定義顏色階梯（從綠到紅）
+    'heatmap-color': [
+      'interpolate', ['linear'], ['heatmap-density'],
+      0, 'rgba(0, 255, 0, 0)',
+      0.2, 'rgb(0, 255, 0)',
+      0.6, 'rgb(255, 255, 0)',
+      1, 'rgb(255, 0, 0)'
+    ]
+  }
+});
+```
+
+這種做法非常適合用來展示「永續環境」或「食安健康」中的空氣品質議題。既然你這週末要參加黑客松，建議現在就可以先跑一次腳本，看看雙北目前的監測站分佈是否完整！
+
+你對於如何將這些資料存入 MySQL 做歷史紀錄感興趣嗎？這樣你可以做出「過去 24 小時熱點變化」的進階功能。

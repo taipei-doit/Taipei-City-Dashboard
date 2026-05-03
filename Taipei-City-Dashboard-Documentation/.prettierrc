@@ -1,0 +1,13 @@
+{
+    "editor.formatOnSave": true,
+    "overrides": [
+        {
+            "files": ".prettierrc",
+            "options": { "parser": "json" }
+        }
+    ],
+    "semi": true,
+    "singleQuote": false,
+    "tabWidth": 4,
+    "useTabs": true
+}

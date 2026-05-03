@@ -17,11 +17,19 @@ func init() {
 	// Register demo tools
 	Register("get_current_time", GetCurrentTime)
 	Register("get_population_summary", GetPopulationSummary)
+	RegisterSubsidyTool()
 }
 
 // Register adds a tool to the registry
 func Register(name string, fn ToolFunc) {
 	registry[name] = fn
+}
+
+func RegisterSubsidyTool() {
+    Register("retrieve_subsidies", func(ctx context.Context, args string) (string, error) {
+    
+        return RetrieveSubsidies(ctx, args, models.DBDashboard)
+    })
 }
 
 // Execute calls a registered tool with the given arguments

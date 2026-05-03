@@ -76,6 +76,19 @@ func GetComponentChartData(c *gin.Context) {
 			return
 		}
 		c.JSON(http.StatusOK, gin.H{"status": "success", "data": chartData})
+	} else if queryType == "multi_chart" {
+		primaryData, primaryCategories, byType, catsByType, err := models.GetBundledChartData(queryString, timeFrom, timeTo)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": err.Error()})
+			return
+		}
+		c.JSON(http.StatusOK, gin.H{
+			"status":               "success",
+			"data":                 primaryData,
+			"categories":           primaryCategories,
+			"chart_data_by_type":   byType,
+			"categories_by_type":   catsByType,
+		})
 	} else if queryType == "map_legend" {
 		chartData, err := models.GetMapLegendData(&queryString, timeFrom, timeTo)
 		if err != nil {

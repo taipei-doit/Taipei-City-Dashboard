@@ -1,0 +1,58 @@
+/* Cleaned */
+
+.doc-toggleswitch {
+	height: 1.4rem;
+	width: 2.6rem;
+	display: inline-block;
+	position: relative;
+}
+.doc-toggleswitch input {
+	width: 0;
+	height: 0;
+	opacity: 0;
+}
+
+.doc-toggleswitch-slider {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	border-radius: var(--font-m);
+	border: 1px solid gray;
+	background-color: var(--color-border);
+	-webkit-transition: 0.4s;
+	transition: 0.4s;
+	cursor: pointer;
+}
+
+.doc-toggleswitch-slider::before {
+	height: 1.1rem;
+	width: 1.1rem;
+	position: absolute;
+	left: 0.1rem;
+	bottom: 0.1rem;
+	border-radius: 50%;
+	background-color: var(--color-component-background);
+	-webkit-transition: 0.4s;
+	transition: 0.4s;
+	content: "light_mode";
+	font-family: var(--font-icon);
+	color: var(--color-complement-text);
+	font-size: 1.1rem;
+}
+
+.doc-toggleswitch input:hover + .doc-toggleswitch-slider:before {
+	color: var(--color-normal-text);
+}
+
+.doc-toggleswitch input:focus + .doc-toggleswitch-slider {
+	box-shadow: 0 0 1px var(--color-highlight);
+}
+
+.doc-toggleswitch input:checked + .doc-toggleswitch-slider:before {
+	-webkit-transform: translateX(1.3rem);
+	-ms-transform: translateX(1.3rem);
+	transform: translateX(1.2rem);
+	content: "dark_mode";
+}

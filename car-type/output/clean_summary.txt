@@ -1,0 +1,17 @@
+來源: 車輛類型11303_11503.csv
+編碼: big5
+時間粒度: 僅月度（已排除整年與 (1~3月) 等列）
+
+已套用 data_collect.txt:
+- 燃料: ICE / BEV / Hybrid
+- 車種: 大客車、大貨車、小客車、小貨車、機車（排除全體總計、汽車匯總、特種車）
+
+- vehicle_registrations_monthly_long.csv（長表，含 總計/新北市/臺北市 區域）
+- vehicle_monthly_dashboard.json（臺北市+新北市，含占比）
+- vehicle_monthly_timeline_stack.json（doc 之 timeline_fuel_stack 結構，依 scope+vehicle_type）
+- vehicle_components.json（FE 六筆：臺北市+雙北 各三組件 chart_data，key=`index`+`city`）
+- vehicle_components_sql_template.sql（後端 dashboardmanager 三表 SQL 樣板）
+- seed/01_dashboard_data.sql（dashboard DB 資料表 + 全部月度資料）
+- seed/02_dashboardmanager_components.sql（dashboardmanager 三組件、儀表板、群組）
+- 長表鍵數: 853
+- dashboard 筆數: 250

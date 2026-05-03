@@ -1,0 +1,10 @@
+來源: 再生能源-台北.csv
+編碼: utf-8-sig
+年別解析: 101–114 視為年度，11502 視為民國 115 年 2 月之最新月度快照。
+
+- reuse_energy_long.csv（長表，城市 × 年/月 × 能源類型）
+- reuse_energy_components.json（FE 四組件 chart_data，可直接接 DashboardComponent）
+- reuse_energy_components_sql_template.sql（後端 dashboardmanager 三表 SQL 樣板）
+- seed/01_dashboard_data.sql（dashboard DB 資料表 + 全部資料）
+- seed/02_dashboardmanager_components.sql（dashboardmanager 四組件 components/charts/queries；⚠️ 儀表板由 component_doc/seed/03_sustainable_env_dashboard.sql 管理）
+- 總列數: 90

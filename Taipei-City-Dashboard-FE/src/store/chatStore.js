@@ -2,45 +2,6 @@ import { ref, watch } from 'vue'
 import { defineStore } from 'pinia'
 import http from "../router/axios";
 
-// ---------------------------------------------------------------
-// RAG tool definition – sent to the backend so the LLM knows it
-// can call search_policy_knowledge during the conversation.
-// ---------------------------------------------------------------
-const ragToolDefinition = {
-	type: "function",
-	function: {
-		name: "search_policy_knowledge",
-		description: "搜尋環保節能政策知識庫。當用戶詢問關於節能家電補助、貨物稅退稅、太陽光電補助、環保補助等政策問題時使用此工具。",
-		parameters: {
-			type: "object",
-			properties: {
-				query: {
-					type: "string",
-					description: "用於搜尋知識庫的查詢字串，應包含用戶問題的關鍵概念"
-				}
-			},
-			required: ["query"]
-		}
-	}
-};
-
-// Keywords that indicate the user is asking about policy/subsidy topics
-const policyKeywords = [
-	"補助", "退稅", "貨物稅", "節能", "省電", "太陽能", "太陽光電",
-	"光電", "電冰箱", "冷氣", "除濕機", "家電", "環保", "綠能",
-	"再生能源", "申請", "減徵", "退還", "能源效率", "節電",
-	"汰換", "碳", "淨零", "solar", "subsidy", "rebate", "refund"
-];
-
-/**
- * Detect whether a user message is about policy/subsidy topics
- * that should be routed through the AI RAG pipeline.
- */
-function isPolicyQuery(text) {
-	const lower = text.toLowerCase();
-	return policyKeywords.some(kw => lower.includes(kw));
-}
-
 export const useChatStore = defineStore('chat', () => {
   	// 預設訊息
   	const defaultChatData = [
@@ -49,15 +10,14 @@ export const useChatStore = defineStore('chat', () => {
       		role: 'bot',
 	  		isDefault: true,
       		content:
-        	'您好，我是【臺北城市儀表板】小幫手，很高興為您服務！\n 您可以： \n\n • 點擊左側既有的儀表板主題，快速查看各主題內容 \n • 輸入您感興趣的主題描述，我會自動為您組建最適合的儀表板 \n • 詢問節能補助、太陽光電、家電退稅等環保政策問題 \n\n 如果有想了解的內容，歡迎直接告訴我，我會盡力協助！\n\n 📩 聯絡信箱：tuic@gov.taipei \n 🏢 臺北大數據中心 \n\n',
+        	'您好，我是【臺北城市儀表板】小幫手，很高興為您服務！\n 您可以： \n\n • 點擊左側既有的儀表板主題，快速查看各主題內容 \n • 輸入您感興趣的主題描述，我會自動為您組建最適合的儀表板 \n\n 如果有想了解的內容，歡迎直接告訴我，我會盡力協助！\n\n 📩 聯絡信箱：tuic@gov.taipei \n 🏢 臺北大數據中心 \n\n',
     	},
   	];
 
 	const recommendComponents = ref(null)
-	// AI conversation history for RAG sessions (per browser session)
-	const aiSessionId = ref(null)
-	const aiMessages = ref([])
-
+	// 當使用者啟動減碳計算機並等待輸入數據時，設為 true
+	const awaitingCarbonInput = ref(false)
+	const awaitingEnergySubsidyInput = ref(false)
   	// 從 sessionStorage 讀取
   	const savedChatData = JSON.parse(sessionStorage.getItem('chatData')) || [];
 
@@ -79,101 +39,162 @@ export const useChatStore = defineStore('chat', () => {
     	chatData.value.push({ id: chatData.value.length + 1, isDefault: false, ...newChatData });
   	};
 
-	// ---------------------------------------------------------------
-	// AI RAG Query – routes through /ai/chat/twai with tool calling
-	// ---------------------------------------------------------------
-	const addAIQueryData = async (newChatData) => {
-		chatData.value.push({ id: chatData.value.length + 1, isDefault: false, ...newChatData });
+  	const isCarbonRelatedInput = (content) => {
+		return /走|步行|大眾運輸|公車|捷運|火車|蔬食|素食|省電|省水|自備餐具|減碳|碳排|碳|樹|大安森林公園|塑膠袋|腳踏車|單車|自行車/i.test(content);
+	};
+	const isEnergySubsidyRelated = (content) => {
+		return /補助|節能|省電|申請|能源|節水|冷氣|冷房|太陽能|綠能|補助金|申請資格|條件|經費|額度|流程|步驟|辦理|核定|審核|補助對象/i.test(content);
+	};
+	const addQueryData = async (newChatData) => {
+		// 如果正在等待使用者提供減碳數據，先判斷是否真的跟減碳有關
+		if (awaitingCarbonInput.value) {
+			chatData.value.push({ id: chatData.value.length + 1, isDefault: false, ...newChatData });
 
-		// Show a thinking indicator
-		const thinkingId = chatData.value.length + 1;
-		chatData.value.push({ id: thinkingId, role: 'bot', isDefault: false, content: '正在查詢政策知識庫，請稍候...',  isLoading: true });
-
-		try {
-			// Build conversation messages for the AI
-			const messages = [
-				{
-					role: "system",
-					content: "你是臺北城市儀表板的環保政策助手。當用戶詢問關於節能補助、家電退稅、太陽光電補助等環保政策問題時，請使用 search_policy_knowledge 工具搜尋知識庫，並根據檢索到的資料回答問題。回答時請引用具體的政策內容，包含補助金額、申請條件、申請方式等細節。若知識庫中找不到相關資訊，請誠實告知用戶。請用繁體中文回答。"
-				},
-				{
-					role: "user",
-					content: newChatData.content
-				}
-			];
+			if (!isCarbonRelatedInput(newChatData.content)) {
+				const reminder = '這個問題超出我的計算範圍囉 🙈\n如需重新開始計算，請點擊下方的「減碳計算機」按鈕來呼叫我！';
+				chatData.value.push({ id: chatData.value.length + 1, role: 'bot', isDefault: false, content: reminder });
+				saveChatLog(newChatData.content, reminder);
+				awaitingCarbonInput.value = false;
+				return;
+			}
 
 			const payload = {
-				session: aiSessionId.value || undefined,
+				session: "",
 				stream: false,
-				messages: messages,
-				tools: [ragToolDefinition],
-				tool_choice: "auto",
-				temperature: 0.3,
-				max_new_tokens: 1024
+				messages: [
+					{ role: 'user', content: `你是一個減碳計算助手。請根據使用者的行為，合理估算出該行為的二氧化碳減碳量（公斤），並利用下方的「參考資料」，將最終的減碳量換算成大百科或樹木的吸碳當量。
+
+參考資料（僅供比喻換算使用）：
+- 1 棵成年樹 / 天 = 0.02 kg
+- 1 座大安森林公園 / 日 = 1052 kg
+- 1 座大安森林公園 / 年 = 384000 kg
+
+使用者提供：${newChatData.content}
+
+如果輸入內容與減碳無關，才提醒使用者這題無關。只要是走路、大眾運輸、吃素、省水電、減少塑膠袋等有關行為，請你直接利用常理知識「主動估算」減碳量！
+請先解析每個行為的減碳量，再加總成總計，全部只用 kg。
+回覆格式請包含：
+0. 開頭先用自然、活潑、有人味的口吻暖場，像是「太棒了！我幫你整理出來了～」或「很不錯，你今天已經為地球做了不少事！」，不要直接冷冰冰地進入條列。
+1. 每項減碳結果，格式為「項目：數量 -> 減碳約 X kg」（請你自行帶入合理係數計算，係數不必寫在回覆裡）
+2. 總計，格式為「總計：X kg」
+3. 根據總減碳量選擇最合適的比喻：
+   - 日常小量減碳，使用「X / 0.02 = 幾棵樹 / 天」，無條件進位到整數，回覆例句如「你今天節省了 1 kg 碳排，這相當於 50 棵樹一整天的吸碳量喔！」
+   - 個人年度累積，使用「X / 1052 = 大安森林公園工作天數」，回覆可換算成小時，例句如「你這一年共減碳 500 kg，相當於大安森林公園幫地球工作了 11.4 小時！」
+   - 企業或大型活動，使用「X / 384000 = 幾座大安森林公園 / 年」，回覆例句如「本次活動減碳 38400 kg，相當於 0.1 座大安森林公園一年的吸碳量！」
+4. 回覆語氣要活潑、鼓勵、繁體中文，並在最後再補一句自然的總結。
+` },
+				],
 			};
+			try {
+				const resp = await http.post('/ai/chat/twai', payload);
+				console.log('API response:', JSON.stringify(resp.data));
+				const botContent = resp?.data?.data?.content || '抱歉，我暫時無法計算，請稍後再試。';
+				chatData.value.push({ id: chatData.value.length + 1, role: 'bot', isDefault: false, content: botContent });
+				saveChatLog(newChatData.content, botContent);
+			} catch (err) {
+				console.error('AI carbon calculation error:', err);
+				const reply = '抱歉，計算服務暫時有問題，請稍後再試或提供更完整的資料。';
+				chatData.value.push({ id: chatData.value.length + 1, role: 'bot', isDefault: false, content: reply });
+				saveChatLog(newChatData.content, reply);
+			}
+			// 處理完畢，重置等待狀態
+			awaitingCarbonInput.value = false;
+			return;
+		}
+		if (newChatData.content === '減碳計算機') {
+			// push the user query first
+			chatData.value.push({ id: chatData.value.length + 1, isDefault: false, ...newChatData });
+			// 回覆固定歡迎詞（不呼叫 AI）
+			const welcome = `嗨！我是你的 🌍 減碳小幫手！
+ 
+ 
+ 每一個小行動都在為地球加分——不管是今天走路去買咖啡，還是選擇了一餐蔬食，都值得被記錄下來 ✨
+ 
+ 請告訴我你今天完成了哪些項目（可以多選）：
+ 
+ - 🚶 走路：XX 步
+ - 🚌 大眾運輸：XX 公里
+ - 🥗 蔬食餐：XX 餐
+ - 💧 省水：XX 公升
+ - 🛍️ 少用塑膠袋：XX 個
+ 
+ 直接輸入數字或簡單描述就好，我來幫你估算今天的碳減量！
+`;
+			chatData.value.push({ id: chatData.value.length + 1, role: 'bot', isDefault: false, content: welcome });
+			saveChatLog(newChatData.content, welcome);
+			// 等待使用者提供實際數據以便計算
+			awaitingCarbonInput.value = true;
+			return;
+		}
+		// 如果正在等待使用者提供能源補助相關問題
+		if (awaitingEnergySubsidyInput.value) {
+			chatData.value.push({ id: chatData.value.length + 1, isDefault: false, ...newChatData });
 
-			const response = await http.post("/ai/chat/twai", payload);
-
-			// Remove thinking indicator
-			const thinkingIndex = chatData.value.findIndex(item => item.id === thinkingId);
-			if (thinkingIndex !== -1) {
-				chatData.value.splice(thinkingIndex, 1);
+			if (!isEnergySubsidyRelated(newChatData.content)) {
+				const reminder = '這個問題超出我的知識範圍囉！若要繼續查補助，請再次點「能源補助顧問」🙌';
+				chatData.value.push({ id: chatData.value.length + 1, role: 'bot', isDefault: false, content: reminder });
+				saveChatLog(newChatData.content, reminder);
+				awaitingEnergySubsidyInput.value = false;
+				return;
 			}
 
-			if (response.data?.status === "success" && response.data?.data?.content) {
-				// Store session ID for potential multi-turn conversations
-				if (response.data.data.session) {
-					aiSessionId.value = response.data.data.session;
+			const payload = {
+				session: "",
+				stream: false,
+				messages: [
+					{ role: 'user', content: `你是親切的能源補助顧問。請務必使用查詢工具取得知識庫的資料後，給出包含「具體金額」與「條件」的繁體中文純文字答案。
+
+使用者問題：${newChatData.content}
+
+請遵循以下回覆格式與原則：
+1. 先給出親切簡短的開頭（例如：以下是相關資訊：）
+2. 接著請一律使用數字 (1. 2. 3.) 列點呈現重點。
+3. 內容務必包含「具體金額（如：最高補助 10,000 元）」，嚴禁給出「視地區而定」或「請查詢官網」這種籠統且無實際幫助的話。
+4. 絕對禁止使用任何 Markdown 語法（例如不要用星號產生粗體），請全部輸出純文字。` },
+				],
+			};
+			try {
+				const resp = await http.post('/ai/chat/twai', payload);
+				console.log('Subsidy API response:', resp.data);
+				const botContent = resp?.data?.data?.content || resp?.data?.content || '抱歉，我暫時無法查詢，請稍後再試。';
+				chatData.value.push({ id: chatData.value.length + 1, role: 'bot', isDefault: false, content: botContent });
+				saveChatLog(newChatData.content, botContent);
+
+				// --- 根據關鍵字觸發第二則推薦圖表訊息 ---
+				const contentStr = newChatData.content || "";
+				if (/電動機車|電動車|充電|機車|車/i.test(contentStr)) {
+					const recommendEV = "💡 延伸推薦：若你對電動車發展有興趣，可以參考「永續環境」主題中的【電動車充電站分布】與【新領牌車輛】圖表，一起了解電動車的普及與配套現況！";
+					setTimeout(() => {
+						chatData.value.push({ id: chatData.value.length + 1, role: 'bot', isDefault: false, content: recommendEV });
+						saveChatLog(newChatData.content, recommendEV);
+					}, 500); // 稍微延遲 0.5 秒發送，感覺更自然
+				} else if (/太陽能|太陽光電|太陽/i.test(contentStr)) {
+					const recommendSolar = "💡 延伸推薦：想進一步了解太陽光電的發展趨勢？可以參考「永續環境」主題中的【再生能源裝置容量】圖表！";
+					setTimeout(() => {
+						chatData.value.push({ id: chatData.value.length + 1, role: 'bot', isDefault: false, content: recommendSolar });
+						saveChatLog(newChatData.content, recommendSolar);
+					}, 500);
 				}
 
-				chatData.value.push({
-					id: chatData.value.length + 1,
-					role: 'bot',
-					isDefault: false,
-					content: response.data.data.content,
-					isAIResponse: true,
-					toolUsed: response.data.data.tool_used || false
-				});
-			} else {
-				chatData.value.push({
-					id: chatData.value.length + 1,
-					role: 'bot',
-					isDefault: false,
-					content: '很抱歉，AI 助手目前無法回應，請稍後再試。'
-				});
+			} catch (err) {
+				console.error('AI energy subsidy error:', err);
+				const reply = '抱歉，查詢服務暫時有問題，請稍後再試。';
+				chatData.value.push({ id: chatData.value.length + 1, role: 'bot', isDefault: false, content: reply });
+				saveChatLog(newChatData.content, reply);
 			}
-
-			// Log the conversation
-			saveChatLog(newChatData.content, response.data?.data?.content || "AI error");
-
-		} catch (error) {
-			console.error("AIQueryError:", error);
-
-			// Remove thinking indicator on error
-			const thinkingIndex = chatData.value.findIndex(item => item.id === thinkingId);
-			if (thinkingIndex !== -1) {
-				chatData.value.splice(thinkingIndex, 1);
-			}
-
-			chatData.value.push({
-				id: chatData.value.length + 1,
-				role: 'bot',
-				isDefault: false,
-				content: '很抱歉，查詢政策資訊時發生錯誤，請稍後再試。'
-			});
-		}
-	};
-
-	// ---------------------------------------------------------------
-	// Component Vector Search – original flow (unchanged)
-	// ---------------------------------------------------------------
-  	const addQueryData = async (newChatData) => {
-
-		// Route to AI RAG if the query is about policy/subsidy topics
-		if (isPolicyQuery(newChatData.content)) {
-			return addAIQueryData(newChatData);
+			return;
 		}
 
+		if (newChatData.content === '能源補助顧問') {
+			chatData.value.push({ id: chatData.value.length + 1, isDefault: false, ...newChatData });
+			const welcome = `⚡ 能源補助顧問已啟動！
+
+請直接問我補助相關問題，例如：有哪些補助可以申請、申請資格、流程、補助額度等。只要話題還在補助上，我就會一直留在這個模式。`;
+			chatData.value.push({ id: chatData.value.length + 1, role: 'bot', isDefault: false, content: welcome });
+			saveChatLog(newChatData.content, welcome);
+			awaitingEnergySubsidyInput.value = true;
+			return;
+		}
     	chatData.value.push({ id: chatData.value.length + 1, isDefault: false, ...newChatData });
 
 		recommendComponents.value = [];
@@ -220,7 +241,7 @@ export const useChatStore = defineStore('chat', () => {
 			// 把 result 蓋回去 recommendComponents
 			recommendComponents.value = result
 
-		} catch (error) {
+		} catch (error) { 
 			console.error("VectorAnalysisError :", error);
 		}
 
@@ -259,5 +280,5 @@ export const useChatStore = defineStore('chat', () => {
       	}
 	};
 
-	return { chatData, addChatData, addQueryData, addAIQueryData, saveChatLog }
+	return { chatData, addChatData, addQueryData, saveChatLog }
 })

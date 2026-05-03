@@ -1,0 +1,31 @@
+{
+	"name": "tuic-dashboard-documentation",
+	"private": true,
+	"version": "2.2.0",
+	"type": "module",
+	"scripts": {
+		"dev": "vite",
+		"build": "eslint --fix --ext .js,.vue . && vite build",
+		"lint": "eslint --fix --ext .js,.vue .",
+		"preview": "vite preview"
+	},
+	"dependencies": {
+		"axios": "^1.4.0",
+		"city-dashboard-component": "^1.0.3",
+		"highlight.js": "^11.8.0",
+		"i18n": "^0.15.1",
+		"marked": "^5.1.0",
+		"pinia": "^2.1.4",
+		"vue": "^3.2.47",
+		"vue-i18n": "^9.2.2",
+		"vue-router": "^4.2.2"
+	},
+	"devDependencies": {
+		"@vitejs/plugin-vue": "^4.1.0",
+		"eslint": "^8.46.0",
+		"eslint-plugin-vue": "^9.16.1",
+		"sass": "^1.64.2",
+		"vite": "^4.3.9",
+		"vite-plugin-compression": "^0.5.1"
+	}
+}

@@ -1,14 +1,6 @@
 ## DB schema
 
-DB: dashboard
-→ create table {index} (import csv data)
-
-```
-CREATE TABLE public.{index}
-```
-
-DB: dashboardmanager
-component設定{index}(english_name), name → {index}component_charts設定兩個城市的chart_config → {index}component_maps(自動產生map_config_ids），填寫細節、mapbox樣式、property → query_charts填回map_config_ids
+component設定index(english_name), name → {index}component_charts設定兩個城市的char config → query_charts 設定{map_config_ids}以及兩個城市的chart細節 → {map_config_ids}component_maps設定 map config
 
 ### components
 
