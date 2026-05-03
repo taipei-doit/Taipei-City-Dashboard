@@ -195,6 +195,8 @@ const c5bComponent = ref({
 		// TimelineSeparateChart 看趨勢；ColumnChart 看雙北逐年總和（stacked）
 		types: ["TimelineSeparateChart", "ColumnChart"],
 		// 兩條 series：臺北綠／新北藍，沿用 C1a 配色語言
+		// recomputeC5b 會在每條實線後追加同色虛線（2030 減 28%±2% 示意斜率），
+		// 故 color/dashArray 改由 recomputeC5b 動態組裝
 		color: ["#5fcf80", "#5a9cf8"],
 		unit: "公噸 CO₂e",
 		xType: "datetime",
@@ -206,7 +208,7 @@ const c5bComponent = ref({
 	},
 	chart_data: null,
 	map_config: [null],
-	short_desc: "雙北逐年廢棄物碳足跡（係數：廚餘 48.3、一般垃圾 340、資源垃圾 369 kgCO₂e/公噸）",
+	short_desc: "雙北逐年廢棄物碳足跡 + 2030 減量 28%±2% 示意斜率（虛線；對位 NDC 2.0 中期目標量級，baseline 採資料起始年）",
 	long_desc: "計算公式：碳足跡(公噸 CO₂e/年) = 廚餘量(公噸) × 0.0483 + 一般垃圾量(公噸) × 0.340 + 資源垃圾量(公噸) × 0.369。三個轉換係數均萃取自 coal_emission.csv 平均值：(1) 廚餘 48.3 kgCO₂e/公噸，取自有機廢棄物免發酵轉化肥料處理服務 (n=1)；(2) 一般垃圾 340 kgCO₂e/公噸，取自永康、城西、苗栗、岡山 4 座都市垃圾焚化廠平均，原始值 327/333/340/360 kgCO₂e/公噸 (n=4)；(3) 資源垃圾 369 kgCO₂e/公噸，取自再生料-廢*容器- 系列 10 項平均 0.369 kgCO₂e/kg 換算 (n=10)。輸出單位為公噸 CO₂e/年；廢棄物量值來自 C4 同表 gov_open_waste_yearly。",
 	use_case: "雙北減碳政策推進評估、不同廢棄物類別對碳排貢獻拆解、媒體製作雙城碳足跡對照、循環經濟議題量化討論。",
 	links: SHARED_LINKS.waste,
@@ -400,34 +402,77 @@ function recomputeC5() {
 	}));
 }
 
+// 對位環境部 NDC 2.0 / NDC 3.0 Beta 的 2030 中期目標：較基準年（2005）減 28%±2%。
+// 我們資料 baseline 不是 2005（從資料起始年算起），所以這條虛線僅作「斜率量級」示意，
+// 不宣稱政策對位；長度保留在 actual 同 x 範圍，便於目測「實際 vs 應該到的位置」落差。
+const TARGET_YEAR = 2030;
+const TARGET_REDUCTION_RATIO = 0.28;
+// 目標虛線採同色相、淡化版（與白色 50:50 混合），讓實線視覺主導、虛線當參考帶
+const TARGET_LINE_COLOR = {
+	"#5fcf80": "#afe7bf", // 臺北綠 → 淡綠
+	"#5a9cf8": "#accdfb", // 新北藍 → 淡藍
+};
+
 function recomputeC5b() {
 	const city = activeCityMap.eco_diet_waste_carbon_footprint_yearly;
 	const allSeries = rawData.value.wasteCarbonSeries;
 	const rawCategories = rawData.value.wasteCarbonCategories;
-	// BE 來源年份可能是西元（"2018"）也可能是民國（"100"）；< 1911 視為民國 + 1911
-	const categories = rawCategories.map((c) => {
-		const n = parseInt(c, 10);
-		return Number.isFinite(n) && n < 1911 ? String(n + 1911) : String(c);
-	});
+	// 不擅自把民國轉西元 — BE 給什麼就顯示什麼，避免「明明資料源是民國卻突然冒出西元」。
+	// （prod 回民國 100-113，本地 seed 回西元 2018-2023；x 軸 label 跟著各自情境走）
+	const categories = rawCategories.map((c) => String(c));
 	const filtered = allSeries.filter((s) => matchSeriesByCity(s.name, city));
-	// 依城市過濾後重排顏色，避免單城時錯位（如僅顯示新北仍套到臺北綠）
-	const colors = filtered.map((s) =>
-		s.name.startsWith("臺北市") ? "#5fcf80" : "#5a9cf8",
-	);
+	const baselineYear = parseInt(categories[0], 10);
+	const yearSpan = TARGET_YEAR - baselineYear;
+
+	// 每條實線後緊接一條同色虛線；用 dashArray 區分（0 = 實線，6 = 虛線）。
+	// 顏色順序須與 series 順序對齊；ColumnChart 不適合畫斜率線，僅 line view 需要這條。
+	// markerSize 對應每條 series 的點點大小；目標虛線 = 0（純粹當斜率參考、不要點干擾視覺）
+	const seriesOut = [];
+	const colors = [];
+	const dashArray = [];
+	const markerSize = [];
+	filtered.forEach((s) => {
+		const cityColor = s.name.startsWith("臺北市") ? "#5fcf80" : "#5a9cf8";
+		const baselineValue = s.data[0];
+		// 實線：實際碳足跡
+		seriesOut.push({
+			name: s.name,
+			data: s.data.map((y, i) => ({
+				y,
+				x: `${categories[i]}-01-01T00:00:00+08:00`,
+			})),
+		});
+		colors.push(cityColor);
+		dashArray.push(0);
+		markerSize.push(3);
+		// 虛線：2030 減量 28%±2% 所需斜率（對位 NDC 2.0／3.0 Beta 中期目標量級），與實線同 x 範圍
+		const targetData = categories.map((yStr) => {
+			const y = parseInt(yStr, 10);
+			const v = baselineValue * (1 - TARGET_REDUCTION_RATIO * (y - baselineYear) / yearSpan);
+			return { y: Math.max(0, Math.round(v)), x: `${yStr}-01-01T00:00:00+08:00` };
+		});
+		seriesOut.push({
+			name: `${s.name.split("-")[0]}-2030減28%路徑`,
+			data: targetData,
+		});
+		colors.push(TARGET_LINE_COLOR[cityColor] ?? cityColor);
+		dashArray.push(6);
+		markerSize.push(0);
+	});
+
 	c5bComponent.value.chart_config.color = colors;
-	c5bComponent.value.chart_data = filtered.map((s) => ({
-		name: s.name,
-		data: s.data.map((y, i) => ({
-			y,
-			x: `${categories[i]}-01-01T00:00:00+08:00`,
-		})),
-	}));
+	c5bComponent.value.chart_config.dashArray = dashArray;
+	c5bComponent.value.chart_config.markerSize = markerSize;
+	c5bComponent.value.chart_data = seriesOut;
 	// ColumnChart 用：x 軸顯示年份字串
 	c5bComponent.value.chart_config.categories = categories;
 
-	// 動態 y 軸範圍：依 filtered series 實際 min/max 加 5% padding，再 round 到鄰近 5k／10k
-	// 避免寫死範圍導致 prod 資料（單城跨度 12 萬、雙城跨度 45 萬）出框。
-	const allValues = filtered.flatMap((s) => s.data).filter((v) => Number.isFinite(v));
+	// 動態 y 軸範圍：含 actual + target dashed line 的 min/max，加 10% padding，再 round 到鄰近 5k／10k
+	// 避免寫死範圍導致 prod 資料（單城跨度 12 萬、雙城跨度 45 萬）出框；
+	// target 虛線會降到 baseline 以下，必須把虛線值也納入 yMin 計算才不會被裁切。
+	const allValues = seriesOut
+		.flatMap((s) => s.data.map((p) => p.y))
+		.filter((v) => Number.isFinite(v));
 	if (allValues.length > 0) {
 		const dataMin = Math.min(...allValues);
 		const dataMax = Math.max(...allValues);
