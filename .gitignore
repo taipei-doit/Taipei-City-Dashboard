@@ -76,3 +76,5 @@ Taipei-City-Dashboard-DE/docker/prod/.env
 .env.*
 .venv/
 .omc/
+.codex/
+.agents/

@@ -1423,7 +1423,7 @@ function tagListOf(component) {
         title="AI 分析"
         @click="openAiModal($event, item.id, item.name)"
       >
-        <span class="material-icons">smart_toy</span>
+        <span class="material-icons">eco</span>
       </button>
     </div>
     <MoreInfo />
@@ -1891,7 +1891,7 @@ function tagListOf(component) {
 		height: 32px;
 		border: none;
 		border-radius: 50%;
-		background: var(--color-highlight);
+		background: #5fcf80;
 		color: #fff;
 		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
 		cursor: pointer;
