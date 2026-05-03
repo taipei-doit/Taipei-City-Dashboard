@@ -68,7 +68,7 @@ var StaticUITranslations = map[string]string{
 	"recommend.toggle_collapse":  "收合今日推薦",
 	"recommend.lead_manual":      "貼上新聞網址取得洞察與推薦主題。",
 	"recommend.lead_auto":        "由系統擷取近期新聞，推薦與儀表板組件相關的 2–3 則報導。",
-	"recommend.mode_auto":        "自動新聞",
+	"recommend.mode_auto":        "焦點新聞",
 	"recommend.mode_manual":      "網址分析",
 	"recommend.aria_mode_tabs":   "今日推薦模式",
 	"recommend.placeholder_url":  "貼上新聞網址擷取洞察...",

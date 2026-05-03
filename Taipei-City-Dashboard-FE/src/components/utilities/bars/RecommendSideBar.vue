@@ -17,7 +17,7 @@ import BackendTranslatedText from "../i18n/BackendTranslatedText.vue";
 const { t } = useBackendTranslation();
 const translationStore = useTranslationStore();
 
-/** 語系切換時遞增，捨棄尚未完成的洞察／自動新聞請求結果 */
+/** 語系切換時遞增，捨棄尚未完成的洞察／焦點新聞請求結果 */
 const sidebarResultsEpoch = ref(0);
 
 const mapStore = useMapStore();
@@ -42,7 +42,7 @@ const loadingAiInsight = ref(false);
 /** 請求／解析網址失敗時為 true（文案用靜態字典 recommend.err_*） */
 const aiInsightFetchFailed = ref(false);
 
-/** 自動新聞：null = 尚未請求，[] = 已成功但無項目 */
+/** 焦點新聞：null = 尚未請求，[] = 已成功但無項目 */
 const autoNewsItems = ref(null);
 const loadingAutoNews = ref(false);
 const autoNewsFetchFailed = ref(false);
@@ -303,7 +303,7 @@ async function openStorylineRecommendedComponent(comp) {
           :aria-selected="recommendMode === MODE_AUTO_NEWS"
           @click="switchRecommendMode(MODE_AUTO_NEWS)"
         >
-          <span class="recommendsidebar-mode-btn-label">{{ t('recommend.mode_auto') || '自動新聞' }}</span>
+          <span class="recommendsidebar-mode-btn-label">{{ t('recommend.mode_auto') || '焦點新聞' }}</span>
         </button>
         <button
           type="button"

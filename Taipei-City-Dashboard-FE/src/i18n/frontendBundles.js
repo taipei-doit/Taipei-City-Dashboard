@@ -48,7 +48,7 @@ const ZH = {
 
 	"city.area.taipei": "臺北市",
 	"city.area.newtaipei": "新北市",
-	"city.area.metrotaipei": "北北基桃都會區",
+	"city.area.metrotaipei": "雙北",
 	"city.area.taoyuan": "桃園市",
 
 	"city.expanded.taipei": "臺北儀表板",
