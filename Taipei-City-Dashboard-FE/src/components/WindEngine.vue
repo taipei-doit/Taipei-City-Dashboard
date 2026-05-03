@@ -70,8 +70,8 @@ const MIN_HIDE_SECONDS = 1.5;
 const MAX_HIDE_SECONDS = 12;
 const IDLE_REFRESH_MS = 30000;
 
-mapboxgl.accessToken = 'pk.eyJ1IjoieGlhb3dhbmcxMjEyIiwiYSI6ImNtbnE4Y284ZTA0ZnMycW9pNHdmaWdza2EifQ.WVK2YirV3SzgPXpSGt7Qog';
-
+mapboxgl.accessToken = import.meta.env.VITE_MAPBOXTOKEN;
+console.log('Mapbox Token:', mapboxgl.accessToken);
 const emptyGeoJSON = { type: 'FeatureCollection', features: [] };
 
 const cancelIdleRefresh = () => {
