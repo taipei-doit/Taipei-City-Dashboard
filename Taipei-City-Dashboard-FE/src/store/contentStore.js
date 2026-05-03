@@ -75,6 +75,8 @@ export const useContentStore = defineStore("content", {
 			"metro_green_line",
 			"metro_br_line",
 		],
+		// 故事線／推薦點組件後，在儀表板總覽捲動到該卡（對應 data-dashboard-component-id）
+		pendingScrollToComponentId: null,
 	}),
 	getters: {},
 	actions: {
@@ -123,8 +125,26 @@ export const useContentStore = defineStore("content", {
 			this.setCurrentDashboardAllContent();
 		},
 		// 2. Call an API to get all dashboard info and reroute the user to the first dashboard in the list
-		async setDashboards(onlyDashboard = false) {
-			const response = await http.get(`/dashboard/`);
+		async setDashboards(
+			onlyDashboard = false,
+			isStale = undefined,
+		) {
+			const includeIndex =
+				onlyDashboard && this.currentDashboard.index
+					? this.currentDashboard.index
+					: undefined;
+			const response = await http.get(`/dashboard/`, {
+				params: includeIndex
+					? {
+							includeIndex,
+							city: this.currentDashboard.city || "",
+						}
+					: undefined,
+				skipGlobalLoading: true,
+			});
+			if (typeof isStale === "function" && isStale()) {
+				return;
+			}
 			const data = response.data.data || {};
 
 			this.dashboards.clear();
@@ -158,7 +178,21 @@ export const useContentStore = defineStore("content", {
 				}
 			});
 
-			if (onlyDashboard) return;
+			if (onlyDashboard) {
+				if (typeof isStale === "function" && isStale()) {
+					return;
+				}
+				this.applyCurrentDashboardLabelsFromLists();
+				// 若後端同回 includeIndex 的已翻譯組件文字欄位，直接合併回既有物件，避免再打第二支 API。
+				const included =
+					response.data.included_components ||
+					response.data.includedComponents ||
+					null;
+				if (Array.isArray(included) && included.length > 0) {
+					this.mergeTranslatedTextsFromDashboardPayload(included);
+				}
+				return;
+			}
 
 			// 2-1. If the current path is /dashboard or /mapview, redirect to the first dashboard
 			if (!this.currentDashboard.index) {
@@ -210,9 +244,147 @@ export const useContentStore = defineStore("content", {
 
 			return dashboards;
 		},
-		// 2-3. Get all dashboards of a city
+		// 2-3. Sync 儀表板標題／圖示（僅 name、icon）自 GET /dashboard，不重拉組件資料——用於語系切換後帶入後端譯名。
+		applyCurrentDashboardLabelsFromLists() {
+			const { index } = this.currentDashboard;
+			if (!index) return;
+
+			for (const dashboards of this.dashboards.values()) {
+				const found = dashboards?.find((d) => d.index === index);
+				if (found) {
+					this.currentDashboard.name = found.name;
+					this.currentDashboard.icon = found.icon;
+					return;
+				}
+			}
+			const personal = this.personalDashboards?.find(
+				(d) => d.index === index,
+			);
+			if (personal) {
+				this.currentDashboard.name = personal.name;
+				this.currentDashboard.icon = personal.icon;
+			}
+		},
+
+		/**
+		 * 將 GET /dashboard/:index（依 Accept-Language 已翻譯）之名稱／說明／來源合併回既有組件物件，
+		 * 不重抓 chart／history——供語系切換時與靜態圖標文案同步。
+		 */
+		mergeTranslatedTextsFromDashboardPayload(rows) {
+			if (!Array.isArray(rows) || !rows.length) return;
+			const key = (row) =>
+				`${row?.id ?? ""}::${row?.city ?? ""}`;
+			const byPair = new Map();
+			for (const row of rows) {
+				if (row == null || row.id == null) continue;
+				byPair.set(key(row), row);
+			}
+			const applyOne = (c) => {
+				if (!c || c.id == null) return;
+				const f = byPair.get(key(c));
+				if (!f) return;
+				c.name = f.name;
+				c.short_desc = f.short_desc;
+				c.source = f.source;
+				c.long_desc = f.long_desc;
+				c.use_case = f.use_case;
+			};
+			const list = this.cityDashboard.components;
+			if (Array.isArray(list) && list.length) {
+				list.forEach(applyOne);
+			}
+			if (Array.isArray(this.allMapLayers) && this.allMapLayers.length) {
+				this.allMapLayers.forEach(applyOne);
+			}
+		},
+
+		async refreshDashboardComponentTranslationsForLocale(isStale) {
+			const idx = this.currentDashboard.index;
+			const list = this.cityDashboard.components;
+			if (
+				!idx ||
+				!Array.isArray(list) ||
+				list.length === 0
+			) {
+				return;
+			}
+
+			try {
+				const response = await http.get(`/dashboard/${idx}`, {
+					skipGlobalLoading: true,
+				});
+				if (typeof isStale === "function" && isStale()) {
+					return;
+				}
+				const data = response.data.data || [];
+				this.mergeTranslatedTextsFromDashboardPayload(data);
+			} catch (e) {
+				console.error(
+					"refreshDashboardComponentTranslationsForLocale:",
+					e,
+				);
+			}
+		},
+		// 2-4. Get all dashboards of a city
 		getDashboardsByCity(city) {
 			return this.dashboards.get(city) || [];
+		},
+		/**
+		 * 依儀表板清單（含 components id 陣列）找出可從側欄開啟的儀表板 index 與 query.city。
+		 * city 使用側欄分組鍵（taipei、metrotaipei 等），與 SideBarTab 一致；個人用儀表板不帶 city。
+		 */
+		findDashboardLocationForComponent(componentId, preferredSidebarCity = null) {
+			if (componentId === undefined || componentId === null) {
+				return null;
+			}
+			const matches = (cid) =>
+				String(cid) === String(componentId) ||
+				Number(cid) === Number(componentId);
+
+			const searchInList = (dashboardList, routeCityKey) => {
+				if (!dashboardList?.length) return null;
+				for (const d of dashboardList) {
+					if (d.components?.some(matches)) {
+						return { index: d.index, city: routeCityKey };
+					}
+				}
+				return null;
+			};
+
+			const trySidebarCity = (cityKey) => {
+				if (
+					cityKey == null ||
+					cityKey === "" ||
+					!this.dashboards.has(cityKey)
+				) {
+					return null;
+				}
+				return searchInList(this.getDashboardsByCity(cityKey), cityKey);
+			};
+
+			if (
+				preferredSidebarCity &&
+				this.cityManager.isCityEnabled(preferredSidebarCity)
+			) {
+				const preferredHit = trySidebarCity(preferredSidebarCity);
+				if (preferredHit) return preferredHit;
+			}
+
+			for (const cityKey of this.dashboards.keys()) {
+				if (cityKey === preferredSidebarCity) continue;
+				const hit = trySidebarCity(cityKey);
+				if (hit) return hit;
+			}
+
+			if (this.personalDashboards?.length) {
+				for (const d of this.personalDashboards) {
+					if (d.components?.some(matches)) {
+						return { index: d.index, city: undefined };
+					}
+				}
+			}
+
+			return null;
 		},
 		// 3. Call an API to get all component info of the current index dashboard not filtered by city and store it
 		async setCurrentDashboardAllContent() {

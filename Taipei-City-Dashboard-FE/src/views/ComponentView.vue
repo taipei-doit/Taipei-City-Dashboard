@@ -97,7 +97,7 @@ onMounted(() => {
       :city-tag="translatedTagList(item.city)"
       :favorite-btn="true"
       :is-favorite="contentStore.favorites?.components.includes(item.id)"
-      info-btn-text="資訊頁面"
+      info-btn-key="component.info.page"
       @info="
         (item) => {
           router.push({

@@ -6,6 +6,8 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"strings"
+	"sync"
 	"time"
 
 	"github.com/tmc/langchaingo/llms"
@@ -49,8 +51,12 @@ func (s *TranslationService) Translate(ctx context.Context, text string, targetL
 	translated, err := s.callLLM(syncCtx, text, targetLang)
 	if err != nil {
 		logs.FError("LLM Translation failed for '%s': %v", text, err)
-		return text // Fallback to original
+		return text
 	}
+
+	// Sanitize output
+	translated = strings.Trim(translated, "\"")
+	translated = strings.TrimSpace(translated)
 
 	// 3. Save to Cache
 	newCache := models.Translation{
@@ -75,6 +81,27 @@ func (s *TranslationService) Translate(ctx context.Context, text string, targetL
 	return translated
 }
 
+// TranslateBatch translates multiple strings in parallel.
+func (s *TranslationService) TranslateBatch(ctx context.Context, texts []string, targetLang string, contextHint string) []string {
+	if len(texts) == 0 {
+		return texts
+	}
+
+	results := make([]string, len(texts))
+	var wg sync.WaitGroup
+
+	for i, text := range texts {
+		wg.Add(1)
+		go func(index int, t string) {
+			defer wg.Done()
+			results[index] = s.Translate(ctx, t, targetLang, contextHint)
+		}(i, text)
+	}
+
+	wg.Wait()
+	return results
+}
+
 // TranslatableKeys is a whitelist of JSON keys that should be translated.
 var TranslatableKeys = map[string]bool{
 	"title":       true,
@@ -87,10 +114,9 @@ var TranslatableKeys = map[string]bool{
 	"source":      true,
 	"text":        true,
 	"placeholder": true,
-	"city":        true,
 	"category":    true,
 	"description": true,
-	"value":       true, // Some charts use "value" as a label
+	"value":       true,
 	"legend":      true,
 	"xAxis":       true,
 	"yAxis":       true,
@@ -103,7 +129,7 @@ var TranslatableKeys = map[string]bool{
 	"tooltip":     true,
 }
 
-// TranslateJSON recursively walks through a JSON object and translates string values of whitelisted keys.
+// TranslateJSON recursively walks through a JSON object and translates string values of whitelisted keys in parallel.
 func (s *TranslationService) TranslateJSON(ctx context.Context, data []byte, targetLang string, contextHint string) []byte {
 	if len(data) == 0 || targetLang == "" || targetLang == "zh-TW" || targetLang == "zh-Hant" {
 		return data
@@ -115,7 +141,68 @@ func (s *TranslationService) TranslateJSON(ctx context.Context, data []byte, tar
 		return data
 	}
 
-	s.walkAndTranslate(ctx, obj, targetLang, contextHint)
+	// 1. Collect all translatable string pointers
+	type stringPtr struct {
+		val *string
+	}
+	var pointers []stringPtr
+
+	var findPointers func(v interface{})
+	findPointers = func(v interface{}) {
+		switch val := v.(type) {
+		case map[string]interface{}:
+			for k, item := range val {
+				if str, ok := item.(string); ok && TranslatableKeys[k] {
+					s := str
+					val[k] = &s
+					pointers = append(pointers, stringPtr{val: val[k].(*string)})
+				} else {
+					findPointers(item)
+				}
+			}
+		case []interface{}:
+			for _, item := range val {
+				findPointers(item)
+			}
+		}
+	}
+
+	findPointers(obj)
+
+	// 2. Extract texts and translate in batch (Parallel)
+	if len(pointers) > 0 {
+		texts := make([]string, len(pointers))
+		for i, p := range pointers {
+			texts[i] = *p.val
+		}
+
+		translated := s.TranslateBatch(ctx, texts, targetLang, contextHint)
+
+		// 3. Write back translated values
+		for i, p := range pointers {
+			*p.val = translated[i]
+		}
+	}
+
+	// 4. Clean up pointers back to strings
+	var cleanup func(v interface{})
+	cleanup = func(v interface{}) {
+		switch val := v.(type) {
+		case map[string]interface{}:
+			for k, item := range val {
+				if sPtr, ok := item.(*string); ok {
+					val[k] = *sPtr
+				} else {
+					cleanup(item)
+				}
+			}
+		case []interface{}:
+			for _, item := range val {
+				cleanup(item)
+			}
+		}
+	}
+	cleanup(obj)
 
 	translatedData, err := json.Marshal(obj)
 	if err != nil {
@@ -126,36 +213,15 @@ func (s *TranslationService) TranslateJSON(ctx context.Context, data []byte, tar
 	return translatedData
 }
 
-func (s *TranslationService) walkAndTranslate(ctx context.Context, v interface{}, targetLang string, contextHint string) {
-	switch val := v.(type) {
-	case map[string]interface{}:
-		for k, item := range val {
-			if str, ok := item.(string); ok && TranslatableKeys[k] {
-				// Translate the value and update the map
-				val[k] = s.Translate(ctx, str, targetLang, contextHint)
-			} else {
-				// Recursive call for nested objects or arrays
-				s.walkAndTranslate(ctx, item, targetLang, contextHint)
-			}
-		}
-	case []interface{}:
-		for i, item := range val {
-			s.walkAndTranslate(ctx, item, targetLang, contextHint)
-			val[i] = item // Update slice in case of replacement
-		}
-	}
-}
-
 func (s *TranslationService) callLLM(ctx context.Context, text, targetLang string) (string, error) {
 	prompt := fmt.Sprintf("Translate the following text to %s. Return ONLY the translated text without any explanations or quotes.\nText: %s", targetLang, text)
-	
-	// We can use the global semaphore to respect rate limits
+
 	if err := aiSemaphore.Acquire(ctx, 1); err != nil {
 		return "", err
 	}
 	defer aiSemaphore.Release(1)
 
-	resp, err := s.llm.Call(ctx, prompt, llms.WithTemperature(0.1)) // Low temperature for factual translation
+	resp, err := s.llm.Call(ctx, prompt, llms.WithTemperature(0.1))
 	if err != nil {
 		return "", err
 	}

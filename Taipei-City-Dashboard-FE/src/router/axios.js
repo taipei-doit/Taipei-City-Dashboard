@@ -11,6 +11,8 @@ import { getAcceptLanguageHeader } from "../utils/acceptLanguage";
 
 const http = axios.create({
 	baseURL: import.meta.env.VITE_API_URL,
+	// 0 = 不設逾時（由瀏覽器／網路決定；長時間 AI 等請求不會被前端主動斷開）
+	timeout: 0,
 	headers: {
 		"Content-Type": "application/json",
 	},

@@ -10,6 +10,7 @@ Testing: Jack Huang (Data Scientist), Ian Huang (Data Analysis Intern)
 
 <script setup>
 /* global gtag */
+import { watch, nextTick } from "vue";
 import DashboardComponent from "../dashboardComponent/DashboardComponent.vue";
 import router from "../router";
 import { useContentStore } from "../store/contentStore";
@@ -21,6 +22,34 @@ import ReportIssue from "../components/dialogs/ReportIssue.vue";
 import { useCityLabels } from "../composables/useCityLabels";
 
 const contentStore = useContentStore();
+
+function componentIdInDashboard(pendingId) {
+	const list = contentStore.currentDashboard.components;
+	return list?.some(
+		(item) =>
+			item.id === pendingId ||
+			String(item.id) === String(pendingId),
+	);
+}
+
+watch(
+	[
+		() => contentStore.pendingScrollToComponentId,
+		() => contentStore.loading,
+		() => contentStore.currentDashboard.components,
+	],
+	async ([pending, loading]) => {
+		if (pending == null || pending === "" || loading) return;
+		if (!componentIdInDashboard(pending)) return;
+		await nextTick();
+		const el = document.querySelector(
+			`[data-dashboard-component-id="${pending}"]`,
+		);
+		el?.scrollIntoView({ behavior: "smooth", block: "center" });
+		contentStore.pendingScrollToComponentId = null;
+	},
+	{ flush: "post" },
+);
 const { translatedTagList, translatedSelectList, translatedCities } =
 	useCityLabels();
 const dialogStore = useDialogStore();

@@ -132,6 +132,7 @@ var (
 // Translator is a global interface for translation service
 type Translator interface {
 	Translate(ctx context.Context, text string, targetLang string, contextHint string) string
+	TranslateBatch(ctx context.Context, texts []string, targetLang string, contextHint string) []string
 	TranslateJSON(ctx context.Context, data []byte, targetLang string, contextHint string) []byte
 }
 

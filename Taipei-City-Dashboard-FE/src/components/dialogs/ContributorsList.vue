@@ -4,12 +4,14 @@
 import { computed, ref } from "vue";
 import { useDialogStore } from "../../store/dialogStore";
 import { useContentStore } from "../../store/contentStore";
+import { useBackendTranslation } from "../../composables/useBackendTranslation";
 
 import DialogContainer from "./DialogContainer.vue";
 import ContributorInfo from "./ContributorInfo.vue";
 
 const dialogStore = useDialogStore();
 const contentStore = useContentStore();
+const { t } = useBackendTranslation();
 
 const currentContributor = ref(null);
 
@@ -50,7 +52,7 @@ function handleClose() {
                 ? contributor.image
                 : `/images/contributors/${contributor.image}`
             "
-            :alt="`協作者-${contributor.user_name}`"
+            :alt="`${t('component.info.contributors_alt_prefix')}${contributor.user_name}`"
           >
         </button>
       </div>

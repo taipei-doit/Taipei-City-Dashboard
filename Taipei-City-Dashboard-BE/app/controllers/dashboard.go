@@ -2,6 +2,7 @@
 package controllers
 
 import (
+	"context"
 	"errors"
 	"net/http"
 	"strings"
@@ -9,6 +10,7 @@ import (
 	"TaipeiCityDashboardBE/app/models"
 	"TaipeiCityDashboardBE/app/services"
 	"TaipeiCityDashboardBE/app/util"
+	"TaipeiCityDashboardBE/global"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
@@ -23,7 +25,8 @@ User, Admin: Public and personal dashboards
 */
 func GetAllDashboards(c *gin.Context) {
 	// Get the user info from the context
-	_, accountID, _, _, _ := util.GetUserInfoFromContext(c)
+	_, accountID, _, _, permissions := util.GetUserInfoFromContext(c)
+	groups := util.GetPermissionAllGroupIDs(permissions)
 	// _, _, _, _, permissions := util.GetUserInfoFromContext(c)
 	// groups := util.GetPermissionAllGroupIDs(permissions)
 
@@ -41,7 +44,47 @@ func GetAllDashboards(c *gin.Context) {
 		return
 	}
 
+	if lang, ok := c.Get("lang"); ok && global.GlobalTranslator != nil {
+		targetLang := lang.(string)
+		ctx := c.Request.Context()
+		translateDashboardNames(ctx, dashboards.Public, targetLang)
+		translateDashboardNames(ctx, dashboards.Taipei, targetLang)
+		translateDashboardNames(ctx, dashboards.MetroTaipei, targetLang)
+		translateDashboardNames(ctx, dashboards.Personal, targetLang)
+	}
+
+	// Optional: also return current dashboard components (translated) in the same response
+	includeIndex := c.Query("includeIndex")
+	includeCity := c.Query("city")
+	if includeIndex != "" {
+		components, err := models.GetDashboardByIndex(includeIndex, groups, includeCity)
+		if err == nil {
+			if lang, ok := c.Get("lang"); ok && global.GlobalTranslator != nil {
+				targetLang := lang.(string)
+				ctx := c.Request.Context()
+				for i := range components {
+					components[i].Name = global.GlobalTranslator.Translate(ctx, components[i].Name, targetLang, "component_name")
+					components[i].ShortDesc = global.GlobalTranslator.Translate(ctx, components[i].ShortDesc, targetLang, "short_desc")
+					components[i].Source = global.GlobalTranslator.Translate(ctx, components[i].Source, targetLang, "source")
+					components[i].LongDesc = global.GlobalTranslator.Translate(ctx, components[i].LongDesc, targetLang, "long_desc")
+					components[i].UseCase = global.GlobalTranslator.Translate(ctx, components[i].UseCase, targetLang, "use_case")
+				}
+			}
+			c.JSON(http.StatusOK, gin.H{"status": "success", "data": dashboards, "included_components": components})
+			return
+		}
+	}
+
 	c.JSON(http.StatusOK, gin.H{"status": "success", "data": dashboards})
+}
+
+func translateDashboardNames(ctx context.Context, list []models.Dashboard, targetLang string) {
+	if global.GlobalTranslator == nil {
+		return
+	}
+	for i := range list {
+		list[i].Name = global.GlobalTranslator.Translate(ctx, list[i].Name, targetLang, "dashboard_name")
+	}
 }
 
 /*
@@ -66,6 +109,19 @@ func GetDashboardByIndex(c *gin.Context) {
 
 		c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": err.Error()})
 		return
+	}
+
+	// Translation: header strings plus long_desc / use_case for component-info UI; omit chart payloads.
+	if lang, ok := c.Get("lang"); ok && global.GlobalTranslator != nil {
+		targetLang := lang.(string)
+		ctx := c.Request.Context()
+		for i := range components {
+			components[i].Name = global.GlobalTranslator.Translate(ctx, components[i].Name, targetLang, "component_name")
+			components[i].ShortDesc = global.GlobalTranslator.Translate(ctx, components[i].ShortDesc, targetLang, "short_desc")
+			components[i].Source = global.GlobalTranslator.Translate(ctx, components[i].Source, targetLang, "source")
+			components[i].LongDesc = global.GlobalTranslator.Translate(ctx, components[i].LongDesc, targetLang, "long_desc")
+			components[i].UseCase = global.GlobalTranslator.Translate(ctx, components[i].UseCase, targetLang, "use_case")
+		}
 	}
 
 	c.JSON(http.StatusOK, gin.H{"status": "success", "data": components})

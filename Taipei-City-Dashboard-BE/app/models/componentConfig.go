@@ -113,7 +113,35 @@ type QuertChartAndConponentForQdrant struct {
     UseCase  string `gorm:"column:use_case"`
 }
 
+// PublicComponentForNewsMatch carries fields needed for simple RSS/news ↔ component keyword matching (public dashboards only).
+type PublicComponentForNewsMatch struct {
+	ID        int64  `json:"id" gorm:"column:id"`
+	Index     string `json:"index" gorm:"column:index"`
+	Name      string `json:"name" gorm:"column:name"`
+	City      string `json:"city" gorm:"column:city"`
+	ShortDesc string `json:"short_desc" gorm:"column:short_desc"`
+}
+
 /* ----- Handlers ----- */
+
+// ListPublicComponentsForNewsMatch returns public-dashboard components with short_desc for simple news tagging.
+func ListPublicComponentsForNewsMatch() (out []PublicComponentForNewsMatch, err error) {
+	subQueryGroups := DBManager.Table("groups").Select("id").Where("is_personal IS FALSE")
+
+	subQueryDashboards := DBManager.Table("dashboard_groups").Select("dashboard_id").Where("group_id IN (?)", subQueryGroups)
+
+	subQueryComponents := DBManager.Table("dashboards").Select("DISTINCT unnest(components)").Where("id IN (?)", subQueryDashboards)
+
+	err = DBManager.Table("query_charts as qc").
+		Select("c.id, qc.index, c.name, qc.city, qc.short_desc").
+		Joins("INNER JOIN components c ON qc.index = c.index").
+		Where("c.id IN (?)", subQueryComponents).
+		Scan(&out).Error
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
 
 // GetPublicComponentsForQdrant fetches all query_charts and components that are part of a public (non-personal) dashboard.
 // This data is used to rebuild the Qdrant vector index.

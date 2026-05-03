@@ -12,7 +12,6 @@ import DownloadData from "./DownloadData.vue";
 import EmbedComponent from "./EmbedComponent.vue";
 import { useCityLabels } from "../../composables/useCityLabels";
 import { useBackendTranslation } from "../../composables/useBackendTranslation";
-import BackendTranslatedText from "../utilities/i18n/BackendTranslatedText.vue";
 
 const dialogStore = useDialogStore();
 const { translatedTagList } = useCityLabels();
@@ -52,21 +51,17 @@ function getLinkTag(link, index) {
       <div class="moreinfo-info">
         <div class="moreinfo-info-data">
           <h3>
-            組件說明（{{
+            {{ t('component.info.description') }}（{{
               ` ID: ${dialogStore.moreInfoContent.id}｜Index: ${dialogStore.moreInfoContent.index}｜City: ${dialogStore.moreInfoContent.city}`
             }}）
           </h3>
-          <BackendTranslatedText
-            v-if="dialogStore.moreInfoContent.long_desc"
-            tag="p"
-            :text="dialogStore.moreInfoContent.long_desc"
-          />
-          <h3>範例情境</h3>
-          <BackendTranslatedText
-            v-if="dialogStore.moreInfoContent.use_case"
-            tag="p"
-            :text="dialogStore.moreInfoContent.use_case"
-          />
+          <p v-if="dialogStore.moreInfoContent.long_desc">
+            {{ dialogStore.moreInfoContent.long_desc }}
+          </p>
+          <h3>{{ t('component.info.use_case') }}</h3>
+          <p v-if="dialogStore.moreInfoContent.use_case">
+            {{ dialogStore.moreInfoContent.use_case }}
+          </p>
           <div v-if="dialogStore.moreInfoContent.history_config">
             <h3>歷史軸</h3>
             <h4>*點擊並拉動以檢視細部區間資料</h4>
@@ -81,7 +76,7 @@ function getLinkTag(link, index) {
             />
           </div>
           <div v-if="dialogStore.moreInfoContent.links?.length > 0">
-            <h3>相關資料</h3>
+            <h3>{{ t('component.info.related_links') }}</h3>
             <div class="moreinfo-info-links">
               <a
                 v-for="(link, index) in dialogStore
@@ -94,7 +89,7 @@ function getLinkTag(link, index) {
             </div>
           </div>
           <div v-if="dialogStore.moreInfoContent.contributors">
-            <h3>協作者</h3>
+            <h3>{{ t('component.info.contributors') }}</h3>
             <div class="moreinfo-info-contributors">
               <div
                 v-for="contributor in dialogStore
@@ -118,7 +113,7 @@ function getLinkTag(link, index) {
                       ].image
                       : `/images/contributors/${contentStore.contributors[contributor].image}`
                   "
-                  :alt="`協作者-${contentStore.contributors[contributor].user_name}`"
+                  :alt="`${t('component.info.contributors_alt_prefix')}${contentStore.contributors[contributor].user_name}`"
                 >
                 </a>
               </div>
@@ -145,10 +140,10 @@ function getLinkTag(link, index) {
             "
             @click="dialogStore.showDialog('downloadData')"
           >
-            <span>download</span>下載
+            <span>download</span>{{ t('component.info.download') }}
           </button>
           <button @click="dialogStore.showDialog('embedComponent')">
-            <span>code</span>內嵌
+            <span>code</span>{{ t('component.info.embed') }}
           </button>
         </div>
         <DownloadData />

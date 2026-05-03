@@ -1,9 +1,11 @@
 package controllers
 
 import (
+	"TaipeiCityDashboardBE/app/models"
 	"TaipeiCityDashboardBE/app/services"
 	"TaipeiCityDashboardBE/app/services/ai"
 	"TaipeiCityDashboardBE/app/util"
+	"TaipeiCityDashboardBE/global"
 	"context"
 	"fmt"
 	"html"
@@ -270,7 +272,7 @@ func GetComponemtByNews(c *gin.Context){
 			{
 				Role: llms.ChatMessageTypeSystem,
 				Parts: []llms.ContentPart{
-					llms.TextContent{Text: "輸入：一段來自某新聞網站的HTML結構碼\n目標：擷取新聞主標題及全文內容\n注意事項：\n1. 要完整取出全文內容，不要摘要\n2. 直接給我結果，不回應思考過程\n\n"},
+					llms.TextContent{Text: "輸入：一段來自某新聞網站的 HTML 結構碼。\n目標：擷取主標題與正文全文。\n請嚴格依下列字面格式輸出（第一行行首文字須與示例一致）：\n新聞主標題：<一行標題>\n\n【正文開始】\n（此處接完整正文）\n【正文結束】\n\n注意：\n1. 標題／正文請保留來源語言（原文外文亦可），勿整篇譯為中文。\n2. 正文務必完整、不可摘要。\n3. 只輸出以上區塊，不要前言／後語／思考過程。\n"},
 				},
 			},
 			{
@@ -306,11 +308,140 @@ func GetComponemtByNews(c *gin.Context){
 		return
 	}
 
+	// --- 以下為新增的配對與故事線邏輯 ---
+	newsContent := logEntry.Answer
+
+	// 1. 提取新聞標題 (優先尋找包含「新聞主標題」的行)
+	newsTitle := ""
+	lines := strings.Split(newsContent, "\n")
+	titlePrefixes := []string{
+		"新聞主標題：", "新聞主標題:", "[新聞主標題]：", "[新聞主標題]:",
+		"標題：", "標題:",
+		"Title:", "TITLE:", "Headline:",
+	}
+	for _, line := range lines {
+		trimmed := strings.TrimSpace(line)
+		found := ""
+		for _, pre := range titlePrefixes {
+			if strings.HasPrefix(trimmed, pre) {
+				found = strings.TrimSpace(strings.TrimPrefix(trimmed, pre))
+				break
+			}
+		}
+		if found != "" && found != trimmed {
+			newsTitle = found
+			break
+		}
+	}
+	// 舊格式或模型未嚴守前綴時之後備
+	if newsTitle == "" {
+		for _, line := range lines {
+			t := strings.TrimSpace(line)
+			if !strings.Contains(t, "新聞主標題") {
+				continue
+			}
+			tmp := strings.ReplaceAll(t, "[新聞主標題]：", "")
+			tmp = strings.ReplaceAll(tmp, "[新聞主標題]:", "")
+			tmp = strings.ReplaceAll(tmp, "新聞主標題：", "")
+			tmp = strings.ReplaceAll(tmp, "新聞主標題:", "")
+			tmp = strings.TrimSpace(tmp)
+			if tmp != "" && tmp != t {
+				newsTitle = tmp
+				break
+			}
+		}
+	}
+	if newsTitle == "" && len(lines) > 0 {
+		for _, l := range lines {
+			if strings.TrimSpace(l) != "" { newsTitle = l; break }
+		}
+	}
+
+	// 2. 執行 HyDE (Hypothetical Document Embeddings)
+	hydeReq := ai.AIChatRequest{
+		Messages: []llms.MessageContent{
+			{
+				Role: llms.ChatMessageTypeSystem,
+				Parts: []llms.ContentPart{
+					llms.TextContent{Text: "你是一位數據儀表板架構師。請根據提供的新聞標題與內容，想像一個『最能提供相關數據背景』的儀表板組件。\n新聞可為任一語種；請你自行理解議題。\n請只輸出一小段（恰好兩個完整句子）的功能描述：說明此組件涵蓋哪些指標／維度，且必須全部使用「繁體中文」書寫，以便與同為繁中文案的儀表板組件做語意對照。\n不要前言、小標題、引號以外的包裝。"},
+				},
+			},
+			{
+				Role: llms.ChatMessageTypeHuman,
+				Parts: []llms.ContentPart{
+					llms.TextContent{Text: fmt.Sprintf("新聞標題:\n%s\n\n新聞內容（可能為外文，請據此作答）:\n%s", newsTitle, newsContent)},
+				},
+			},
+		},
+	}
+	hydeLog, _ := ai.ChatWithTWCC(ctx, hydeReq, llms.WithTemperature(0.5))
+	queryText := newsTitle
+	if hydeLog != nil && hydeLog.Answer != "" {
+		queryText = hydeLog.Answer
+		fmt.Printf("[DEBUG] HyDE Hypothetical Doc: %s\n", queryText)
+	}
+
+	langIface, _ := c.Get("lang")
+	targetLang := "zh-TW"
+	if langIface != nil {
+		if s, ok := langIface.(string); ok && strings.TrimSpace(s) != "" {
+			targetLang = s
+		}
+	}
+
+	// 3. 向量檢索與詳細資訊抓取 (門檻 0.15)
+	searchRes, _ := models.GetComponentByQueryVector(queryText, 3, 0.15)
+	detailedComponents := make([]models.CityComponent, 0)
+	componentSummaries := make([]string, 0)
+	for _, res := range searchRes {
+		comps, err := models.GetComponentByIDAll(int(res.ID))
+		if err == nil && len(comps) > 0 {
+			comp := comps[0]
+			if global.GlobalTranslator != nil && targetLang != "zh-TW" {
+				comp.Name = global.GlobalTranslator.Translate(ctx, comp.Name, targetLang, "component_name")
+				comp.ShortDesc = global.GlobalTranslator.Translate(ctx, comp.ShortDesc, targetLang, "short_desc")
+				comp.UseCase = global.GlobalTranslator.Translate(ctx, comp.UseCase, targetLang, "use_case")
+				comp.ChartConfig = global.GlobalTranslator.TranslateJSON(ctx, comp.ChartConfig, targetLang, "chart_config")
+				comp.MapConfig = global.GlobalTranslator.TranslateJSON(ctx, comp.MapConfig, targetLang, "map_config")
+			}
+			detailedComponents = append(detailedComponents, comp)
+			componentSummaries = append(componentSummaries, fmt.Sprintf("- %s: %s", comp.Name, comp.ShortDesc))
+		}
+	}
+
+	// 4. 調用 LLM 串起故事線 (Storyline) - 無論如何都要生成
+	storylineReq := ai.AIChatRequest{
+		Messages: []llms.MessageContent{
+			{
+				Role: llms.ChatMessageTypeSystem,
+				Parts: []llms.ContentPart{
+					llms.TextContent{Text: "你是一位資深城市數據分析師。請根據提供的新聞內容撰寫一段數據洞察敘事（Storyline）。\n1. 如果有推薦組件，請解釋這些數據如何幫助讀者理解新聞背後的社會脈絡。\n2. 如果沒有高度相關組件，請根據新聞內容分析其對城市發展的潛在數據趨勢影響。直接輸出結果，不需前言。"},
+				},
+			},
+			{
+				Role: llms.ChatMessageTypeHuman,
+				Parts: []llms.ContentPart{
+					llms.TextContent{Text: fmt.Sprintf("【新聞內容】\n%s\n\n【推薦組件摘要】\n%s", newsContent, strings.Join(componentSummaries, "\n"))},
+				},
+			},
+		},
+	}
+	storyLog, err := ai.ChatWithTWCC(ctx, storylineReq, llms.WithTemperature(0.7))
+	storyline := "針對此新聞，系統目前未發現直接關聯的數據。"
+	if err == nil {
+		storyline = storyLog.Answer
+	}
+	if global.GlobalTranslator != nil && targetLang != "zh-TW" && strings.TrimSpace(storyline) != "" {
+		storyline = global.GlobalTranslator.Translate(ctx, storyline, targetLang, "news_insight_storyline")
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"status": "success",
 		"data": gin.H{
 			"session":     logEntry.SessionID,
 			"content":     logEntry.Answer,
+			"storyline":   storyline,
+			"components":  detailedComponents,
 			"usage": gin.H{
 				"input_tokens":  logEntry.InputTokens,
 				"output_tokens": logEntry.OutputTokens,
@@ -322,4 +453,4 @@ func GetComponemtByNews(c *gin.Context){
 			"provider":    logEntry.Provider,
 		},
 	})
-}
+	}

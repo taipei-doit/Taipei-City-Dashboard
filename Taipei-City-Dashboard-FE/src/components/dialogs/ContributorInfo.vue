@@ -2,10 +2,12 @@
 
 <script setup>
 import { useDialogStore } from "../../store/dialogStore";
+import { useBackendTranslation } from "../../composables/useBackendTranslation";
 
 import DialogContainer from "./DialogContainer.vue";
 
 const dialogStore = useDialogStore();
+const { t } = useBackendTranslation();
 
 defineProps(["contributor"]);
 
@@ -27,7 +29,7 @@ function handleClose() {
               ? contributor.image
               : `/images/contributors/${contributor.image}`
           "
-          :alt="`協作者-${contributor.user_name}`"
+          :alt="`${t('component.info.contributors_alt_prefix')}${contributor.user_name}`"
         >
         <h2>{{ contributor.user_name }}</h2>
       </div>

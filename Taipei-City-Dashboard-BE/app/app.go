@@ -16,6 +16,8 @@ import (
 	"TaipeiCityDashboardBE/app/middleware"
 	"TaipeiCityDashboardBE/app/models"
 	"TaipeiCityDashboardBE/app/routes"
+	"TaipeiCityDashboardBE/app/services/ai"
+	"TaipeiCityDashboardBE/app/services/ai/providers/twcc"
 	"TaipeiCityDashboardBE/global"
 	"TaipeiCityDashboardBE/logs"
 
@@ -37,6 +39,10 @@ func StartApplication() {
 
 	global.LMSession = models.InitLmSession()
 	global.LMTokenizer = models.InitTokenizer()
+
+	// 儀表板名稱等：依資料庫原文 + translations 快取／LLM（僅為此類字串初始化翻譯服務）
+	twccLLM := twcc.New(global.TWCC.ApiKey, global.TWCC.ApiUrl, global.TWCC.Model, global.TWCC.Timeout)
+	global.GlobalTranslator = ai.NewTranslationService(models.DBManager, twccLLM)
 
 	// 2. Initiate default Gin router with logger and recovery middleware
 	routes.Router = gin.Default()

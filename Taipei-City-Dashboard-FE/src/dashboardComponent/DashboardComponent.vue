@@ -1,6 +1,7 @@
 <script setup>
 import { computed, ref, watch } from "vue";
 import { useBackendTranslation } from "../composables/useBackendTranslation";
+import { useTranslationStore } from "../store/translationStore";
 // import "./styles/chartStyles.css";
 // import "./styles/toggleswitch.css";
 import "material-icons/iconfont/material-icons.css";
@@ -71,6 +72,8 @@ const props = defineProps({
 	deleteBtn: { type: Boolean, default: false },
 	addBtn: { type: Boolean, default: false },
 	infoBtn: { type: Boolean, default: false },
+	/** 靜態 i18n key（優先） */
+	infoBtnKey: { type: String, default: "component.info.button" },
 	infoBtnText: { type: String, default: "組件資訊" },
 	toggleDisable: { type: Boolean, default: false },
 	footer: { type: Boolean, default: true },
@@ -79,6 +82,8 @@ const props = defineProps({
 });
 
 const { t } = useBackendTranslation();
+const translationStore = useTranslationStore();
+const isApplyingLocale = computed(() => translationStore.isApplyingLocale);
 
 const emits = defineEmits([
 	"favorite",
@@ -117,6 +122,22 @@ const activeCity = computed({
 	},
 });
 
+/** 下拉固定寬度截斷時，用原生 title 顯示完整行政區標籤 */
+const selectBtnActiveLabel = computed(() => {
+	const list = props.selectBtnList;
+	const city = props.activeCity;
+	if (!Array.isArray(list) || city === null || city === "") {
+		return "";
+	}
+	const row = list.find((c) => c.value === city);
+	if (!row) {
+		return "";
+	}
+	const key = `city.area.${row.value}`;
+	const localized = t(key);
+	return localized && localized !== key ? localized : row.name ?? "";
+});
+
 const toggleOn = computed({
 	get: () => props.toggleOn,
 	set: (value) => {
@@ -130,7 +151,7 @@ const showTagTooltip = ref(false);
 // Parses time data into display format
 const dataTime = computed(() => {
 	if (props.config.time_from === "static") {
-		return "固定資料";
+		return t("component.time.static");
 	} else if (props.config.time_from === "current") {
 		return "即時資料";
 	} else if (props.config.time_from === "demo") {
@@ -245,6 +266,7 @@ function returnChartComponent(name, svg) {
 
 <template>
   <div
+    :data-dashboard-component-id="config.id"
     :class="[
       {
         dashboardcomponent: true,
@@ -258,15 +280,20 @@ function returnChartComponent(name, svg) {
     ]"
     :style="style"
   >
+    <!-- 避免語系切換時新舊翻譯混雜：整張卡片先蓋 loading，完成後再一次呈現 -->
+    <div
+      v-if="isApplyingLocale"
+      class="dashboardcomponent-locale-loading"
+      aria-busy="true"
+    >
+      <div />
+    </div>
     <!-- Header -->
     <div class="dashboardcomponent-header">
       <!-- Upper Left Corner -->
       <div>
         <h3>
-          <BackendTranslatedText
-            tag="span"
-            :text="config.name"
-          />
+          <span>{{ config.name }}</span>
           <ComponentTag
             v-if="!mode.includes('map')"
             icon=""
@@ -280,29 +307,30 @@ function returnChartComponent(name, svg) {
             @mousemove="updateMouseLocation"
             @mouseleave="changeShowTagTooltipState(false)"
           >
-            <span v-if="config.map_filter && config.map_config">tune</span>
-            <span v-if="config.map_config && config.map_config[0]">map</span>
-            <span v-if="config.history_config?.range">insights</span>
+            <span
+              v-if="config.map_filter && config.map_config"
+              class="header-icon"
+            >tune</span>
+            <span
+              v-if="config.map_config && config.map_config[0]"
+              class="header-icon"
+            >map</span>
+            <span
+              v-if="config.history_config?.range"
+              class="header-icon"
+            >insights</span>
           </div>
         </h3>
-        <BackendTranslatedText
-          v-if="mode === 'preview' && props.config.short_desc"
-          tag="p"
-          :text="props.config.short_desc"
-        />
+        <p v-if="mode === 'preview' && props.config.short_desc">
+          {{ props.config.short_desc }}
+        </p>
         <div v-if="!mode.includes('map') || toggleOn">
           <h4 v-if="config.time_from === 'maintain'">
-            <BackendTranslatedText
-              tag="span"
-              :text="`${config.source} | ${dataTime}`"
-            />
-            <span>warning</span>
+            <span>{{ `${config.source} | ${dataTime}` }}</span>
+            <span class="header-icon">warning</span>
           </h4>
           <h4 v-else>
-            <BackendTranslatedText
-              tag="span"
-              :text="`${config.source} | ${dataTime}`"
-            />
+            <span>{{ `${config.source} | ${dataTime}` }}</span>
           </h4>
           <div
             v-if="mode !== 'preview'"
@@ -370,22 +398,27 @@ function returnChartComponent(name, svg) {
       "
       class="dashboardcomponent-control"
     >
-      <select
+      <div
         v-if="selectBtn && !selectBtnDisabled"
-        v-model="activeCity"
-        name="city"
-        class="selectBtn"
-        :class="{'selectBtn-disabled': selectBtnDisabled}"
+        class="dashboardcomponent-control-row"
       >
-        <template
-          v-for="city in props.selectBtnList"
-          :key="city.value"
+        <select
+          v-model="activeCity"
+          name="city"
+          class="selectBtn"
+          :class="{'selectBtn-disabled': selectBtnDisabled}"
+          :title="selectBtnActiveLabel"
         >
-          <option :value="city.value">
-            {{ t(`city.area.${city.value}`) || city.name }}
-          </option>
-        </template>
-      </select>
+          <template
+            v-for="city in props.selectBtnList"
+            :key="city.value"
+          >
+            <option :value="city.value">
+              {{ t(`city.area.${city.value}`) || city.name }}
+            </option>
+          </template>
+        </select>
+      </div>
       <div
         v-if="config.chart_config.types.length > 1"
         class="dashboardcomponent-control-group"
@@ -397,6 +430,7 @@ function returnChartComponent(name, svg) {
             'dashboardcomponent-control-group-button': true,
             'dashboardcomponent-control-group-active': activeChart === item,
           }"
+          :title="t(`chart.type.${item}`) || chartTypes[item] || item"
           @click="changeActiveChart(item)"
         >
           <BackendTranslatedText
@@ -544,6 +578,7 @@ function returnChartComponent(name, svg) {
       >
         <BackendTranslatedText
           tag="p"
+          :dict-key="infoBtnKey"
           :text="infoBtnText"
         />
         <span>arrow_circle_right</span>
@@ -603,6 +638,28 @@ button:hover {
 	border-radius: 5px;
 	background-color: var(--color-component-background);
 
+	&-locale-loading {
+		position: absolute;
+		inset: 0;
+		z-index: 20;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border-radius: inherit;
+		background-color: rgba(0, 0, 0, 0.25);
+		backdrop-filter: blur(1px);
+		pointer-events: all;
+
+		div {
+			width: 2rem;
+			height: 2rem;
+			border-radius: 50%;
+			border: solid 4px var(--color-border);
+			border-top: solid 4px var(--color-highlight);
+			animation: spin 0.7s ease-in-out infinite;
+		}
+	}
+
 	@media (min-width: 1050px) {
 		height: 370px;
 		max-height: 370px;
@@ -642,7 +699,7 @@ button:hover {
 			font-weight: 400;
 			overflow: visible;
 
-			span {
+			span.header-icon {
 				margin-left: 4px !important;
 				margin: 0 4px;
 				color: rgb(237, 90, 90) !important;
@@ -668,7 +725,7 @@ button:hover {
 				align-items: center;
 			}
 
-			span {
+			span.header-icon {
 				margin-left: 8px;
 				color: var(--color-complement-text);
 				font-family: var(--font-icon);
@@ -732,24 +789,34 @@ button:hover {
 	&-control {
 		width: 100%;
 		display: flex;
-		// justify-content: center;
+		flex-direction: column;
 		align-items: center;
+		row-gap: 6px;
 		// position: absolute;
 		top: 4.2rem;
 		left: 0;
 		z-index: 8;
 		padding: 8px 0;
 
+		&-row {
+			width: 100%;
+			display: flex;
+			justify-content: flex-start;
+			align-items: center;
+		}
+
 		&-group {
+			width: 100%;
 			display: flex;
 			justify-content: center;
 			align-items: center;
-			margin: 0 auto;
-			transform: translateX(-15%);
+			/* 交給 grid 置中，不再用 transform 偏移 */
+			margin: 0;
 
 			&-button {
+				flex: 0 0 auto;
 				margin: 0 2px;
-				padding: 4px 4px;
+				padding: 4px 6px;
 				border-radius: 5px;
 				background-color: rgb(77, 77, 77);
 				opacity: 0.6;
@@ -758,6 +825,18 @@ button:hover {
 				text-align: center;
 				transition: color 0.2s, opacity 0.2s;
 				user-select: none;
+				/* 固定寬度：不因 i18n 字數撐開；完整文字見 title */
+				width: 5.75rem;
+				min-width: 5.75rem;
+				max-width: 5.75rem;
+				overflow: hidden;
+
+				span {
+					display: block;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					white-space: nowrap;
+				}
 	
 				&:hover {
 					opacity: 1;
@@ -772,8 +851,20 @@ button:hover {
 		}
 
 		.selectBtn {
+			flex: 0 0 auto;
+			box-sizing: border-box;
+			/* 固定寬度：不因 i18n 字數拉寬控件；過長標籤以省略顯示，完整文字見 title */
+			width: 6.75rem;
+			min-width: 6.75rem;
+			max-width: 6.75rem;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
 			background-color: var(--color-component-background);
 			padding: 3px;
+			padding-right: 1.25rem;
+			font-size: var(--font-s);
+			cursor: pointer;
 
 			&-disabled {
 				cursor: not-allowed;
@@ -1003,6 +1094,10 @@ button:hover {
 			&-preview {
 				display: flex;
 				gap: 4px;
+				justify-content: center;
+				align-items: center;
+				width: 100%;
+				flex-wrap: wrap;
 			}
 		}
 	}
