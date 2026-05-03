@@ -3,14 +3,30 @@
     <div class="console">
       <h2>3D 都市風道診斷</h2>
 
-      <!-- 風向控制 -->
+      <!-- 氣象站實測風向開關 -->
       <div class="slider-group">
-        <label>風向: <span class="val">{{ windDir }}°</span></label>
+        <label style="display: flex; align-items: center; cursor: pointer">
+          <input
+            v-model="useStationData"
+            type="checkbox"
+            style="width: 16px; height: 16px; margin-right: 8px"
+          >
+          <span>使用氣象站實測風向</span>
+        </label>
+      </div>
+
+      <!-- 風向控制 -->
+      <div
+        class="slider-group"
+        :class="{ disabled: useStationData }"
+      >
+        <label>風向: <span class="val">{{ useStationData ? '站點插值' : windDir + '°' }}</span></label>
         <input
           v-model.number="windDir"
           type="range"
           min="0"
           max="360"
+          :disabled="useStationData"
         >
       </div>
 
@@ -98,7 +114,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount } from "vue";
+import { ref, computed, onMounted, onBeforeUnmount, watch } from "vue";
 import mapboxgl from "mapbox-gl";
 
 const mapContainer = ref(null);
@@ -113,16 +129,18 @@ let buildingData = [];
 let windComfortGrid = [];
 let windGridIndex = {};
 let maxGridCount = 1;
-let animationTime = 0;
+
 let lastFeatures = [];
 let frameCount = 0;
 let isZooming = false;
 let isMoving = false;
+let weatherStations = [];
 
 const showZones = ref(true);
 const showPollution = ref(true);
 const showGreen = ref(true);
 const showWeather = ref(true);
+const useStationData = ref(false);
 const zoneSources = "/mapData/land_use_zone_metrotaipei.geojson";
 const greenSource = "/mapData/green_point_metrotaipei.geojson";
 const pollutionSources = {
@@ -134,7 +152,7 @@ const weatherPath = "/mapData/weather_station_metrotaipei.geojson";
 const ORIGIN_LNG = 121.5646;
 const ORIGIN_LAT = 25.0339;
 const GRID_CELL_STEP = 0.0005;
-const SPATIAL_INDEX_STEP = 0.001;
+const SPATIAL_INDEX_STEP = computed(() => useStationData.value ? 0.004 : 0.008);
 const GRID_DECAY = 0.98;
 const HIDE_SECONDS_PER_METER = 1 / 40;
 const MIN_HIDE_SECONDS = 1.5;
@@ -157,6 +175,56 @@ const zoneColorMatch = [
 	"#E86B6B",
 	"rgba(200, 200, 200, 0.5)", // 預設色
 ];
+
+const loadWeatherStations = async () => {
+	try {
+		const res = await fetch(weatherPath);
+		const data = await res.json();
+		weatherStations = data.features
+			.filter(f => {
+				const p = f.properties;
+				return p.wind_speed !== 'NULL' && p.wind_direction !== 'NULL';
+			})
+			.map(f => {
+				const spd = parseFloat(f.properties.wind_speed);
+				const dir = parseFloat(f.properties.wind_direction);
+				return {
+					lng: f.geometry.coordinates[0],
+					lat: f.geometry.coordinates[1],
+					dir: isNaN(dir) ? 0 : dir,
+					speed: isNaN(spd) ? 0 : spd,
+				};
+			})
+			.filter(st => st.speed > 0);
+	} catch (e) {
+		console.warn('Weather station load failed', e);
+	}
+};
+
+// Inverse-distance-weighted interpolation from nearby stations
+const getLocalWind = (lng, lat) => {
+	let wSumSin = 0, wSumCos = 0, wSumSpeed = 0, totalW = 0;
+	const MAX_DIST_SQ = 0.08 * 0.08;
+
+	for (const st of weatherStations) {
+		const dx = lng - st.lng;
+		const dy = lat - st.lat;
+		const distSq = dx * dx + dy * dy;
+		if (distSq > MAX_DIST_SQ) continue;
+		const w = 1 / Math.max(Math.sqrt(distSq), 0.0005);
+		const rad = (st.dir * Math.PI) / 180;
+		wSumSin += Math.sin(rad) * w;
+		wSumCos += Math.cos(rad) * w;
+		wSumSpeed += st.speed * w;
+		totalW += w;
+	}
+
+	if (totalW === 0) return { angle: windDir.value, speed: windSpeed.value };
+
+	const angle = ((Math.atan2(wSumSin / totalW, wSumCos / totalW) * 180 / Math.PI) + 360) % 360;
+	const speed = Math.max(1, Math.min(10, wSumSpeed / totalW));
+	return { angle, speed };
+};
 
 const cancelIdleRefresh = () => {
 	if (idleRefreshTimer) {
@@ -202,6 +270,8 @@ const generateGrid = () => {
 				properties: {
 					oLng: lng,
 					oLat: lat,
+					cLng: lng,
+					cLat: lat,
 					angle: windDir.value,
 					hiddenUntil: 0,
 				},
@@ -308,10 +378,10 @@ const rebuildBuildingIndex = () => {
 			height: getBuildingHeight(building),
 		};
 
-		const startX = Math.floor(minLng / SPATIAL_INDEX_STEP);
-		const endX = Math.floor(maxLng / SPATIAL_INDEX_STEP);
-		const startY = Math.floor(minLat / SPATIAL_INDEX_STEP);
-		const endY = Math.floor(maxLat / SPATIAL_INDEX_STEP);
+		const startX = Math.floor(minLng / SPATIAL_INDEX_STEP.value);
+		const endX = Math.floor(maxLng / SPATIAL_INDEX_STEP.value);
+		const startY = Math.floor(minLat / SPATIAL_INDEX_STEP.value);
+		const endY = Math.floor(maxLat / SPATIAL_INDEX_STEP.value);
 
 		for (let x = startX; x <= endX; x++) {
 			for (let y = startY; y <= endY; y++) {
@@ -357,7 +427,6 @@ const toggleLayer = (type) => {
 	} 
 	else if (type === 'pollution') {
 		const v = visibility(showPollution.value);
-		// 因為 pollution 是由 Object.entries 跑出來的，這裡需要遍歷物件 Key
 		Object.keys(pollutionSources).forEach(id => {
 			const layerId = `${id}-dots`;
 			if (map.getLayer(layerId)) {
@@ -661,8 +730,10 @@ const createMap = () => {
 	});
 };
 
-const wrapValue = (value, min, range) =>
-	((((value - min) % range) + range) % range) + min;
+// const wrapValue = (value, min, range) =>
+// 	((((value - min) % range) + range) % range) + min;
+
+const DT = 2;
 
 const update = () => {
 	if (!map || !map.getSource("wind-source") || lastFeatures.length === 0) {
@@ -672,9 +743,7 @@ const update = () => {
 
 	const dir = windDir.value;
 	const spd = windSpeed.value;
-	const rad = (dir * Math.PI) / 180;
-	const vX = Math.sin(rad) * 0.00001 * spd;
-	const vY = Math.cos(rad) * 0.00001 * spd;
+	const useStation = useStationData.value && weatherStations.length > 0;
 	const now = performance.now();
 	const safeBounds = getSafeBounds();
 	const lngRange = safeBounds.east - safeBounds.west;
@@ -683,66 +752,133 @@ const update = () => {
 
 	for (let i = 0; i < lastFeatures.length; i++) {
 		const f = lastFeatures[i];
-		const finalLng = wrapValue(
-			f.properties.oLng + vX * animationTime,
-			safeBounds.west,
-			lngRange,
-		);
-		const finalLat = wrapValue(
-			f.properties.oLat + vY * animationTime,
-			safeBounds.south,
-			latRange,
-		);
-		let deflectX = 0;
-		let deflectY = 0;
-		const nearX = Math.floor(finalLng / SPATIAL_INDEX_STEP);
-		const nearY = Math.floor(finalLat / SPATIAL_INDEX_STEP);
+		const { cLng, cLat } = f.properties;
+
+		// 每幀根據粒子當前位置查詢風向（station mode）或使用全域設定
+		let particleAngle, particleSpd;
+		if (useStation) {
+			const lw = getLocalWind(cLng, cLat);
+			particleAngle = lw.angle;
+			particleSpd = Math.min(15, lw.speed * (spd / 5));
+		} else {
+			particleAngle = dir;
+			particleSpd = spd;
+		}
+
+		const pRad = (particleAngle * Math.PI) / 180;
+		const vX = Math.sin(pRad) * 0.00001 * particleSpd;
+		const vY = Math.cos(pRad) * 0.00001 * particleSpd;
+
+		// 步進一幀
+		const rawLng = cLng + vX * DT;
+		const rawLat = cLat + vY * DT;
+
+		// 建築偏轉
+		const nearX = Math.floor(rawLng / SPATIAL_INDEX_STEP.value);
+		const nearY = Math.floor(rawLat / SPATIAL_INDEX_STEP.value);
 		const nearBuildings = buildingSpatialIndex[`${nearX}:${nearY}`] || [];
+
+		// 建立一個斥力場向量
+		let repulsionX = 0;
+		let repulsionY = 0;
 
 		for (const b of nearBuildings) {
 			const box = b.bbox;
-			const margin = 0.00015;
+			const margin = 0.00025; // 擴大偵測邊界，讓粒子提早轉向
+
 			if (
-				finalLng > box.minLng - margin &&
-				finalLng < box.maxLng + margin &&
-				finalLat > box.minLat - margin &&
-				finalLat < box.maxLat + margin
+				rawLng > box.minLng - margin &&
+        rawLng < box.maxLng + margin &&
+        rawLat > box.minLat - margin &&
+        rawLat < box.maxLat + margin
 			) {
+				// 計算粒子到建築中心點的距離
 				const centerX = (box.minLng + box.maxLng) / 2;
 				const centerY = (box.minLat + box.maxLat) / 2;
-				let dx = finalLng - centerX;
-				let dy = finalLat - centerY;
+        
+				let dx = rawLng - centerX;
+				let dy = rawLat - centerY;
 				const dist = Math.sqrt(dx * dx + dy * dy);
+        
 				if (dist > 0) {
-					const force = 0.00004;
-					deflectX += (dx / dist) * force;
-					deflectY += (dy / dist) * force;
+					// 斥力強度：距離越近，推力越強（反比平方）
+					const force = 0.00012 / (dist * 100); 
+					repulsionX += (dx / dist) * force;
+					repulsionY += (dy / dist) * force;
 				}
 			}
 		}
 
-		const adjustedLng = finalLng + deflectX;
-		const adjustedLat = finalLat + deflectY;
+		// 這裡使用 lerp (線性插值) 概念，讓粒子平滑地改變軌跡
+		const smoothFactor = 0.2; // 數值越小轉彎越平滑
+		const finalVX = vX * (1 - smoothFactor) + repulsionX * smoothFactor;
+		const finalVY = vY * (1 - smoothFactor) + repulsionY * smoothFactor;
+
+		// --- 修改 update 函式內的粒子位置更新段落 ---
+
+		// 計算原始目標位置
+		let nextLng = cLng + finalVX * DT;
+		let nextLat = cLat + finalVY * DT;
+
+		// 檢查是否超出目前地圖視窗邊界
+		const isOut = nextLng < safeBounds.west || nextLng > safeBounds.east || 
+              nextLat < safeBounds.south || nextLat > safeBounds.north;
+
+		// 在 update 函式的粒子循環內
+		if (isOut || Math.random() < 0.005) { // 增加微小機率讓粒子隨機重生，保持密度分布
+			const side = Math.floor(Math.random() * 4);
+			const buffer = 0.0001;
+
+			// 根據隨機選擇的邊，將粒子投放到該邊緣的隨機位置
+			if (side === 0) { // 西側進入
+				f.properties.cLng = safeBounds.west + buffer;
+				f.properties.cLat = safeBounds.south + Math.random() * latRange;
+			} else if (side === 1) { // 東側進入
+				f.properties.cLng = safeBounds.east - buffer;
+				f.properties.cLat = safeBounds.south + Math.random() * latRange;
+			} else if (side === 2) { // 南側進入
+				f.properties.cLng = safeBounds.west + Math.random() * lngRange;
+				f.properties.cLat = safeBounds.south + buffer;
+			} else { // 北側進入
+				f.properties.cLng = safeBounds.west + Math.random() * lngRange;
+				f.properties.cLat = safeBounds.north - buffer;
+			}
+
+			// 重置隱藏時間，讓重生不突兀
+			f.properties.hiddenUntil = now + Math.random() * 1200;
+    
+			// 重要：重置停滯計數與路徑記憶
+			f.properties.stagnantTicks = 0; 
+			continue;
+		}
+
+		// 如果沒越界，更新內部座標
+		f.properties.cLng = nextLng;
+		f.properties.cLat = nextLat;
+
+		// 重要：這裡的渲染座標必須使用更新後的 nextLng/Lat，而不是再 wrap 一次
+		const adjLng = nextLng;
+		const adjLat = nextLat;
 
 		if ((f.properties.hiddenUntil || 0) > now) {
 			continue;
 		}
 
-		const cellX = Math.floor(adjustedLng / SPATIAL_INDEX_STEP);
-		const cellY = Math.floor(adjustedLat / SPATIAL_INDEX_STEP);
-		const candidateBuildings =
-			buildingSpatialIndex[`${cellX}:${cellY}`] || [];
+		// 建築碰撞檢測
+		const cellX = Math.floor(adjLng / SPATIAL_INDEX_STEP.value);
+		const cellY = Math.floor(adjLat / SPATIAL_INDEX_STEP.value);
+		const candidateBuildings = buildingSpatialIndex[`${cellX}:${cellY}`] || [];
 		let hitBuilding = null;
 
 		for (let j = 0; j < candidateBuildings.length; j++) {
 			const bMeta = candidateBuildings[j];
 			if (
-				adjustedLng > bMeta.bbox.minLng &&
-				adjustedLng < bMeta.bbox.maxLng &&
-				adjustedLat > bMeta.bbox.minLat &&
-				adjustedLat < bMeta.bbox.maxLat
+				adjLng > bMeta.bbox.minLng &&
+				adjLng < bMeta.bbox.maxLng &&
+				adjLat > bMeta.bbox.minLat &&
+				adjLat < bMeta.bbox.maxLat
 			) {
-				if (pointInBuilding(adjustedLng, adjustedLat, bMeta.feature)) {
+				if (pointInBuilding(adjLng, adjLat, bMeta.feature)) {
 					hitBuilding = bMeta;
 					break;
 				}
@@ -752,31 +888,27 @@ const update = () => {
 		if (hitBuilding) {
 			const box = hitBuilding.bbox;
 			const distX =
-				Math.abs(adjustedLng - (box.minLng + box.maxLng) / 2) /
+				Math.abs(adjLng - (box.minLng + box.maxLng) / 2) /
 				((box.maxLng - box.minLng) / 2);
 			const distY =
-				Math.abs(adjustedLat - (box.minLat + box.maxLat) / 2) /
+				Math.abs(adjLat - (box.minLat + box.maxLat) / 2) /
 				((box.maxLat - box.minLat) / 2);
-			const offsetRatio = Math.max(distX, distY);
-			const W = 1.0 - offsetRatio * 0.6;
+			const W = 1.0 - Math.max(distX, distY) * 0.6;
 			const baseHideDur =
 				Math.min(
 					MAX_HIDE_SECONDS,
-					Math.max(
-						MIN_HIDE_SECONDS,
-						hitBuilding.height * HIDE_SECONDS_PER_METER,
-					),
+					Math.max(MIN_HIDE_SECONDS, hitBuilding.height * HIDE_SECONDS_PER_METER),
 				) * 1000;
 			f.properties.hiddenUntil = now + baseHideDur * W;
 			continue;
 		}
 
-		f.geometry.coordinates[0] = adjustedLng;
-		f.geometry.coordinates[1] = adjustedLat;
-		f.properties.angle = dir;
+		f.geometry.coordinates[0] = adjLng;
+		f.geometry.coordinates[1] = adjLat;
+		f.properties.angle = particleAngle;
 		visibleFeatures.push(f);
 
-		const gridKey = `${Math.floor(adjustedLng / GRID_CELL_STEP)}:${Math.floor(adjustedLat / GRID_CELL_STEP)}`;
+		const gridKey = `${Math.floor(adjLng / GRID_CELL_STEP)}:${Math.floor(adjLat / GRID_CELL_STEP)}`;
 		if (windGridIndex[gridKey])
 			windGridIndex[gridKey].properties.count += 1;
 	}
@@ -790,10 +922,17 @@ const update = () => {
 
 	if (++frameCount % 20 === 0) updateWindComfortSource();
 	animationFrameId = requestAnimationFrame(update);
-	animationTime += 2.0;
 };
 
-onMounted(createMap);
+watch(useStationData, () => {
+	rebuildBuildingIndex();
+	if (lastFeatures.length > 0) generateGrid();
+});
+
+onMounted(() => {
+	loadWeatherStations();
+	createMap();
+});
 
 onBeforeUnmount(() => {
 	if (animationFrameId) cancelAnimationFrame(animationFrameId);
@@ -831,6 +970,11 @@ onBeforeUnmount(() => {
 
 .slider-group {
 	margin: 15px 0;
+}
+
+.slider-group.disabled {
+	opacity: 0.4;
+	pointer-events: none;
 }
 
 input[type="range"] {
