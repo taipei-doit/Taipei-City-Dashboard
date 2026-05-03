@@ -10,5 +10,5 @@ RUN apt-get update \
 
 USER airflow
 COPY requirements.txt /tmp/
-RUN  pip install -r /tmp/requirements.txt 
-
+RUN pip install uv
+RUN uv pip install --system -r /tmp/requirements.txt 

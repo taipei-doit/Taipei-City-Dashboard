@@ -5,11 +5,11 @@ ENV HF_HOME=/root/.cache/huggingface
 WORKDIR /w
 
 # 安裝匯出所需套件
-RUN pip install --no-cache-dir \
+RUN pip install uv
+RUN uv pip install --system --no-cache-dir \
       "transformers>=4.44" \
-      "optimum[onnxruntime]>=1.20.0" \
-      onnxruntime
-
+      "optimum[onnxruntime]>=1.20.0"
+      
 # 匯出：feature-extraction
 # 產出到 /out/onnx-e5
 COPY export_model_docker.py /w/export_model_docker.py

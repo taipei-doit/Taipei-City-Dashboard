@@ -12,7 +12,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 # 複製並安裝 Python 依賴
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install uv
+RUN uv pip install --system --no-cache-dir -r requirements.txt
 
 # 複製腳本
 COPY upgrade_vector_db.py .
