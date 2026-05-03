@@ -58,6 +58,11 @@ import {
 	mrtLineColor,
 } from "../assets/utilityFunctions/getThematicColor.js";
 
+const DEFAULT_ISOCHRONE_PICK = {
+	lng: 121.517063,
+	lat: 25.047924,
+};
+
 export const useMapStore = defineStore("map", {
 	state: () => ({
 		// Array of layer IDs that are in the map
@@ -3061,6 +3066,9 @@ export const useMapStore = defineStore("map", {
 		enableIsochroneQuery(map_config) {
 			if (!this.map) return;
 			const dialogStore = useDialogStore();
+			if (!this.isochroneLastPick) {
+				this.isochroneLastPick = { ...DEFAULT_ISOCHRONE_PICK };
+			}
 			dialogStore.isochrone = {
 				...dialogStore.isochrone,
 				layerId: map_config.layerId,
