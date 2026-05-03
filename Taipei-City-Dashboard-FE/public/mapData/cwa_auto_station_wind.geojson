@@ -15,13 +15,13 @@
         "station_name": "硬漢嶺",
         "county_name": "新北市",
         "town_name": "八里區",
-        "wind_speed": 3,
-        "wind_direction": 246,
-        "air_temperature": 21.3,
-        "relative_humidity": 97,
-        "air_pressure": 941.4,
-        "gust_speed": 11.8,
-        "obs_time": "2026-05-03T07:00:00+08:00"
+        "wind_speed": 2.7,
+        "wind_direction": 243,
+        "air_temperature": 21.8,
+        "relative_humidity": 95,
+        "air_pressure": 941.8,
+        "gust_speed": 10.5,
+        "obs_time": "2026-05-03T08:00:00+08:00"
       }
     },
     {
@@ -38,13 +38,13 @@
         "station_name": "太平里",
         "county_name": "新北市",
         "town_name": "林口區",
-        "wind_speed": 1.2,
-        "wind_direction": 238,
-        "air_temperature": 26.1,
-        "relative_humidity": 77,
-        "air_pressure": 1006.3,
+        "wind_speed": 2.2,
+        "wind_direction": 252,
+        "air_temperature": 27.4,
+        "relative_humidity": 73,
+        "air_pressure": 1006.5,
         "gust_speed": null,
-        "obs_time": "2026-05-03T07:00:00+08:00"
+        "obs_time": "2026-05-03T08:00:00+08:00"
       }
     },
     {
@@ -61,13 +61,13 @@
         "station_name": "澳底",
         "county_name": "新北市",
         "town_name": "貢寮區",
-        "wind_speed": 2.2,
-        "wind_direction": 281,
-        "air_temperature": 23.9,
-        "relative_humidity": 84,
-        "air_pressure": 1006.2,
+        "wind_speed": 1.1,
+        "wind_direction": 298,
+        "air_temperature": 25,
+        "relative_humidity": 82,
+        "air_pressure": 1006.7,
         "gust_speed": null,
-        "obs_time": "2026-05-03T07:00:00+08:00"
+        "obs_time": "2026-05-03T08:00:00+08:00"
       }
     },
     {
@@ -86,11 +86,11 @@
         "town_name": "士林區",
         "wind_speed": 0,
         "wind_direction": 0,
-        "air_temperature": 24.2,
-        "relative_humidity": 87,
-        "air_pressure": 1003.8,
+        "air_temperature": 26.6,
+        "relative_humidity": 78,
+        "air_pressure": 1004.2,
         "gust_speed": null,
-        "obs_time": "2026-05-03T07:00:00+08:00"
+        "obs_time": "2026-05-03T08:00:00+08:00"
       }
     },
     {
@@ -107,13 +107,13 @@
         "station_name": "野柳",
         "county_name": "新北市",
         "town_name": "萬里區",
-        "wind_speed": 2.2,
-        "wind_direction": 193,
-        "air_temperature": 25.9,
-        "relative_humidity": 78,
-        "air_pressure": 1002,
-        "gust_speed": null,
-        "obs_time": "2026-05-03T07:00:00+08:00"
+        "wind_speed": 4.6,
+        "wind_direction": 218,
+        "air_temperature": 28,
+        "relative_humidity": 58,
+        "air_pressure": 1002.7,
+        "gust_speed": 9.8,
+        "obs_time": "2026-05-03T08:00:00+08:00"
       }
     },
     {
@@ -130,13 +130,13 @@
         "station_name": "淡水觀海",
         "county_name": "新北市",
         "town_name": "淡水區",
-        "wind_speed": 3.2,
-        "wind_direction": 161,
-        "air_temperature": 25.8,
-        "relative_humidity": 80,
-        "air_pressure": 1006.4,
+        "wind_speed": 3.3,
+        "wind_direction": 171,
+        "air_temperature": 27.1,
+        "relative_humidity": 77,
+        "air_pressure": 1006.7,
         "gust_speed": null,
-        "obs_time": "2026-05-03T07:00:00+08:00"
+        "obs_time": "2026-05-03T08:00:00+08:00"
       }
     },
     {
@@ -153,13 +153,13 @@
         "station_name": "石門",
         "county_name": "新北市",
         "town_name": "石門區",
-        "wind_speed": 3.8,
-        "wind_direction": 203,
-        "air_temperature": 25.9,
-        "relative_humidity": 84,
-        "air_pressure": 992.6,
-        "gust_speed": 10.2,
-        "obs_time": "2026-05-03T07:00:00+08:00"
+        "wind_speed": 3.2,
+        "wind_direction": 218,
+        "air_temperature": 27.2,
+        "relative_humidity": 81,
+        "air_pressure": 992.7,
+        "gust_speed": 9.4,
+        "obs_time": "2026-05-03T08:00:00+08:00"
       }
     },
     {
@@ -176,13 +176,13 @@
         "station_name": "水湳洞",
         "county_name": "新北市",
         "town_name": "瑞芳區",
-        "wind_speed": 0.9,
-        "wind_direction": 319,
-        "air_temperature": 24.9,
-        "relative_humidity": 79,
-        "air_pressure": 1007.3,
+        "wind_speed": 0.2,
+        "wind_direction": 0,
+        "air_temperature": 27.6,
+        "relative_humidity": 72,
+        "air_pressure": 1007.9,
         "gust_speed": null,
-        "obs_time": "2026-05-03T07:00:00+08:00"
+        "obs_time": "2026-05-03T08:00:00+08:00"
       }
     },
     {
@@ -199,13 +199,13 @@
         "station_name": "六塊厝",
         "county_name": "新北市",
         "town_name": "淡水區",
-        "wind_speed": 2.7,
-        "wind_direction": 161,
-        "air_temperature": 25.9,
-        "relative_humidity": 80,
-        "air_pressure": 1007.6,
-        "gust_speed": 9.8,
-        "obs_time": "2026-05-03T07:00:00+08:00"
+        "wind_speed": 3.6,
+        "wind_direction": 187,
+        "air_temperature": 26.9,
+        "relative_humidity": 78,
+        "air_pressure": 1007.9,
+        "gust_speed": null,
+        "obs_time": "2026-05-03T08:00:00+08:00"
       }
     },
     {
@@ -222,13 +222,13 @@
         "station_name": "田寮",
         "county_name": "新北市",
         "town_name": "三芝區",
-        "wind_speed": 5.2,
-        "wind_direction": 196,
-        "air_temperature": 26.4,
-        "relative_humidity": 80,
-        "air_pressure": 1006.9,
-        "gust_speed": 10.5,
-        "obs_time": "2026-05-03T07:00:00+08:00"
+        "wind_speed": 4.7,
+        "wind_direction": 202,
+        "air_temperature": 27.5,
+        "relative_humidity": 77,
+        "air_pressure": 1007.2,
+        "gust_speed": null,
+        "obs_time": "2026-05-03T08:00:00+08:00"
       }
     },
     {
@@ -245,13 +245,13 @@
         "station_name": "板橋",
         "county_name": "新北市",
         "town_name": "板橋區",
-        "wind_speed": 0.5,
-        "wind_direction": 235,
-        "air_temperature": 23.2,
-        "relative_humidity": 87,
-        "air_pressure": 1005.9,
+        "wind_speed": 1,
+        "wind_direction": 159,
+        "air_temperature": 26.1,
+        "relative_humidity": 76,
+        "air_pressure": 1006.1,
         "gust_speed": null,
-        "obs_time": "2026-05-03T07:00:00+08:00"
+        "obs_time": "2026-05-03T08:00:00+08:00"
       }
     },
     {
@@ -268,13 +268,13 @@
         "station_name": "松山",
         "county_name": "臺北市",
         "town_name": "松山區",
-        "wind_speed": 1.3,
-        "wind_direction": 270,
-        "air_temperature": 23.2,
-        "relative_humidity": 86,
-        "air_pressure": 1006,
+        "wind_speed": 0.9,
+        "wind_direction": 259,
+        "air_temperature": 24.4,
+        "relative_humidity": 82,
+        "air_pressure": 1006.4,
         "gust_speed": null,
-        "obs_time": "2026-05-03T07:00:00+08:00"
+        "obs_time": "2026-05-03T08:00:00+08:00"
       }
     },
     {
@@ -291,13 +291,13 @@
         "station_name": "白沙灣",
         "county_name": "新北市",
         "town_name": "石門區",
-        "wind_speed": 5,
-        "wind_direction": 221,
-        "air_temperature": 26.5,
-        "relative_humidity": 83,
-        "air_pressure": 1005.4,
+        "wind_speed": 4.4,
+        "wind_direction": 230,
+        "air_temperature": 27.6,
+        "relative_humidity": 81,
+        "air_pressure": 1006,
         "gust_speed": null,
-        "obs_time": "2026-05-03T07:00:00+08:00"
+        "obs_time": "2026-05-03T08:00:00+08:00"
       }
     },
     {
@@ -314,13 +314,13 @@
         "station_name": "三貂角",
         "county_name": "新北市",
         "town_name": "貢寮區",
-        "wind_speed": 3.2,
-        "wind_direction": 220,
+        "wind_speed": 3.5,
+        "wind_direction": 182,
         "air_temperature": 24.9,
-        "relative_humidity": 79,
-        "air_pressure": 999,
-        "gust_speed": 10.1,
-        "obs_time": "2026-05-03T07:00:00+08:00"
+        "relative_humidity": 80,
+        "air_pressure": 999.6,
+        "gust_speed": null,
+        "obs_time": "2026-05-03T08:00:00+08:00"
       }
     },
     {
@@ -337,13 +337,13 @@
         "station_name": "福山植物園",
         "county_name": "新北市",
         "town_name": "烏來區",
-        "wind_speed": 0,
+        "wind_speed": 0.1,
         "wind_direction": 0,
-        "air_temperature": 17.3,
-        "relative_humidity": 100,
-        "air_pressure": 937.9,
+        "air_temperature": 23.4,
+        "relative_humidity": 84,
+        "air_pressure": 938.1,
         "gust_speed": null,
-        "obs_time": "2026-05-03T07:00:00+08:00"
+        "obs_time": "2026-05-03T08:00:00+08:00"
       }
     },
     {
@@ -360,13 +360,13 @@
         "station_name": "坪林",
         "county_name": "新北市",
         "town_name": "坪林區",
-        "wind_speed": 0,
+        "wind_speed": 0.1,
         "wind_direction": 0,
-        "air_temperature": 18,
-        "relative_humidity": 94,
-        "air_pressure": 974,
+        "air_temperature": 19.3,
+        "relative_humidity": 92,
+        "air_pressure": 974.6,
         "gust_speed": null,
-        "obs_time": "2026-05-03T07:00:00+08:00"
+        "obs_time": "2026-05-03T08:00:00+08:00"
       }
     },
     {
@@ -385,11 +385,11 @@
         "town_name": "雙溪區",
         "wind_speed": 0,
         "wind_direction": 0,
-        "air_temperature": 19.4,
+        "air_temperature": 21.3,
         "relative_humidity": 100,
-        "air_pressure": 963.3,
+        "air_pressure": 963.9,
         "gust_speed": null,
-        "obs_time": "2026-05-03T07:00:00+08:00"
+        "obs_time": "2026-05-03T08:00:00+08:00"
       }
     },
     {
@@ -406,13 +406,13 @@
         "station_name": "五指山",
         "county_name": "新北市",
         "town_name": "汐止區",
-        "wind_speed": 7.9,
-        "wind_direction": 264,
-        "air_temperature": 20.3,
-        "relative_humidity": 93,
-        "air_pressure": 929.7,
-        "gust_speed": null,
-        "obs_time": "2026-05-03T07:00:00+08:00"
+        "wind_speed": 8.3,
+        "wind_direction": 263,
+        "air_temperature": 20.9,
+        "relative_humidity": 91,
+        "air_pressure": 930,
+        "gust_speed": 14.8,
+        "obs_time": "2026-05-03T08:00:00+08:00"
       }
     },
     {
@@ -435,7 +435,7 @@
         "relative_humidity": null,
         "air_pressure": null,
         "gust_speed": null,
-        "obs_time": "2026-05-03T07:00:00+08:00"
+        "obs_time": "2026-05-03T08:00:00+08:00"
       }
     },
     {
@@ -452,13 +452,13 @@
         "station_name": "三峽",
         "county_name": "新北市",
         "town_name": "三峽區",
-        "wind_speed": 0.5,
-        "wind_direction": 150,
-        "air_temperature": 24.3,
-        "relative_humidity": 88,
-        "air_pressure": 1004.2,
+        "wind_speed": 0,
+        "wind_direction": 0,
+        "air_temperature": 26.6,
+        "relative_humidity": 77,
+        "air_pressure": 1004.5,
         "gust_speed": null,
-        "obs_time": "2026-05-03T07:00:00+08:00"
+        "obs_time": "2026-05-03T08:00:00+08:00"
       }
     },
     {
@@ -477,11 +477,11 @@
         "town_name": "信義區",
         "wind_speed": 0,
         "wind_direction": 0,
-        "air_temperature": 23.6,
-        "relative_humidity": 82,
-        "air_pressure": 1000.9,
+        "air_temperature": 24.6,
+        "relative_humidity": 79,
+        "air_pressure": 1001.3,
         "gust_speed": null,
-        "obs_time": "2026-05-03T07:00:00+08:00"
+        "obs_time": "2026-05-03T08:00:00+08:00"
       }
     },
     {
@@ -498,13 +498,13 @@
         "station_name": "文山",
         "county_name": "臺北市",
         "town_name": "文山區",
-        "wind_speed": 0.2,
-        "wind_direction": 0,
-        "air_temperature": 22.6,
-        "relative_humidity": 99,
-        "air_pressure": 1003.3,
+        "wind_speed": 0.7,
+        "wind_direction": 79,
+        "air_temperature": 24.7,
+        "relative_humidity": 97,
+        "air_pressure": 1003.7,
         "gust_speed": null,
-        "obs_time": "2026-05-03T07:00:00+08:00"
+        "obs_time": "2026-05-03T08:00:00+08:00"
       }
     },
     {
@@ -523,11 +523,11 @@
         "town_name": "新莊區",
         "wind_speed": 0,
         "wind_direction": 0,
-        "air_temperature": 22.8,
-        "relative_humidity": 92,
-        "air_pressure": 1006,
+        "air_temperature": 24.5,
+        "relative_humidity": 80,
+        "air_pressure": 1006.3,
         "gust_speed": null,
-        "obs_time": "2026-05-03T07:00:00+08:00"
+        "obs_time": "2026-05-03T08:00:00+08:00"
       }
     },
     {
@@ -544,13 +544,13 @@
         "station_name": "山佳",
         "county_name": "新北市",
         "town_name": "樹林區",
-        "wind_speed": 0,
-        "wind_direction": 0,
-        "air_temperature": 22.6,
-        "relative_humidity": 93,
-        "air_pressure": 1003.7,
+        "wind_speed": 0.8,
+        "wind_direction": 171,
+        "air_temperature": 25.8,
+        "relative_humidity": 85,
+        "air_pressure": 1004,
         "gust_speed": null,
-        "obs_time": "2026-05-03T07:00:00+08:00"
+        "obs_time": "2026-05-03T08:00:00+08:00"
       }
     },
     {
@@ -567,13 +567,13 @@
         "station_name": "桶後",
         "county_name": "新北市",
         "town_name": "烏來區",
-        "wind_speed": 0.8,
-        "wind_direction": 76,
-        "air_temperature": 19.4,
-        "relative_humidity": 91,
-        "air_pressure": 968.2,
+        "wind_speed": 0.6,
+        "wind_direction": 74,
+        "air_temperature": 23.3,
+        "relative_humidity": 92,
+        "air_pressure": 968.7,
         "gust_speed": null,
-        "obs_time": "2026-05-03T07:00:00+08:00"
+        "obs_time": "2026-05-03T08:00:00+08:00"
       }
     },
     {
@@ -592,11 +592,11 @@
         "town_name": "雙溪區",
         "wind_speed": 0,
         "wind_direction": 0,
-        "air_temperature": 22.7,
-        "relative_humidity": 93,
-        "air_pressure": 1003.9,
+        "air_temperature": 25,
+        "relative_humidity": 89,
+        "air_pressure": 1004.3,
         "gust_speed": null,
-        "obs_time": "2026-05-03T07:00:00+08:00"
+        "obs_time": "2026-05-03T08:00:00+08:00"
       }
     },
     {
@@ -613,13 +613,13 @@
         "station_name": "鼻頭角",
         "county_name": "新北市",
         "town_name": "瑞芳區",
-        "wind_speed": 0.2,
-        "wind_direction": 0,
-        "air_temperature": 25.7,
-        "relative_humidity": 79,
-        "air_pressure": 1002.3,
+        "wind_speed": 2.9,
+        "wind_direction": 265,
+        "air_temperature": 24.9,
+        "relative_humidity": 83,
+        "air_pressure": 1002.9,
         "gust_speed": null,
-        "obs_time": "2026-05-03T07:00:00+08:00"
+        "obs_time": "2026-05-03T08:00:00+08:00"
       }
     },
     {
@@ -636,13 +636,13 @@
         "station_name": "大坪",
         "county_name": "新北市",
         "town_name": "萬里區",
-        "wind_speed": 5.2,
-        "wind_direction": 205,
-        "air_temperature": 23.5,
-        "relative_humidity": 82,
-        "air_pressure": 968.4,
-        "gust_speed": 10.4,
-        "obs_time": "2026-05-03T07:00:00+08:00"
+        "wind_speed": 9.2,
+        "wind_direction": 201,
+        "air_temperature": 24.2,
+        "relative_humidity": 79,
+        "air_pressure": 968.5,
+        "gust_speed": 15.4,
+        "obs_time": "2026-05-03T08:00:00+08:00"
       }
     },
     {
@@ -659,13 +659,13 @@
         "station_name": "三和",
         "county_name": "新北市",
         "town_name": "金山區",
-        "wind_speed": 1,
-        "wind_direction": 68,
-        "air_temperature": 25,
-        "relative_humidity": 92,
-        "air_pressure": 983.2,
-        "gust_speed": null,
-        "obs_time": "2026-05-03T07:00:00+08:00"
+        "wind_speed": 1.9,
+        "wind_direction": 224,
+        "air_temperature": 28.3,
+        "relative_humidity": 75,
+        "air_pressure": 983.3,
+        "gust_speed": 8.2,
+        "obs_time": "2026-05-03T08:00:00+08:00"
       }
     },
     {
@@ -682,13 +682,13 @@
         "station_name": "金山",
         "county_name": "新北市",
         "town_name": "金山區",
-        "wind_speed": 0.4,
-        "wind_direction": 214,
-        "air_temperature": 23.1,
-        "relative_humidity": 94,
-        "air_pressure": 1004.1,
+        "wind_speed": 1.1,
+        "wind_direction": 256,
+        "air_temperature": 26,
+        "relative_humidity": 78,
+        "air_pressure": 1004.5,
         "gust_speed": null,
-        "obs_time": "2026-05-03T07:00:00+08:00"
+        "obs_time": "2026-05-03T08:00:00+08:00"
       }
     },
     {
@@ -707,11 +707,11 @@
         "town_name": "石碇區",
         "wind_speed": 0,
         "wind_direction": 0,
-        "air_temperature": 20.9,
-        "relative_humidity": 93,
-        "air_pressure": 982.8,
+        "air_temperature": 22.4,
+        "relative_humidity": 89,
+        "air_pressure": 983.4,
         "gust_speed": null,
-        "obs_time": "2026-05-03T07:00:00+08:00"
+        "obs_time": "2026-05-03T08:00:00+08:00"
       }
     },
     {
@@ -728,13 +728,13 @@
         "station_name": "內湖",
         "county_name": "臺北市",
         "town_name": "內湖區",
-        "wind_speed": 0.6,
-        "wind_direction": 237,
-        "air_temperature": 25.3,
-        "relative_humidity": 81,
-        "air_pressure": 1005.5,
+        "wind_speed": 1.3,
+        "wind_direction": 236,
+        "air_temperature": 25.9,
+        "relative_humidity": 78,
+        "air_pressure": 1005.9,
         "gust_speed": null,
-        "obs_time": "2026-05-03T07:00:00+08:00"
+        "obs_time": "2026-05-03T08:00:00+08:00"
       }
     },
     {
@@ -751,13 +751,13 @@
         "station_name": "中和",
         "county_name": "新北市",
         "town_name": "中和區",
-        "wind_speed": 0,
-        "wind_direction": 0,
-        "air_temperature": 23,
-        "relative_humidity": 90,
-        "air_pressure": 1004.2,
+        "wind_speed": 0.7,
+        "wind_direction": 106,
+        "air_temperature": 24.4,
+        "relative_humidity": 83,
+        "air_pressure": 1004.6,
         "gust_speed": null,
-        "obs_time": "2026-05-03T07:00:00+08:00"
+        "obs_time": "2026-05-03T08:00:00+08:00"
       }
     },
     {
@@ -774,13 +774,13 @@
         "station_name": "天母",
         "county_name": "臺北市",
         "town_name": "士林區",
-        "wind_speed": 0.9,
-        "wind_direction": 153,
-        "air_temperature": 24.5,
-        "relative_humidity": 86,
-        "air_pressure": 1006.7,
+        "wind_speed": 1.1,
+        "wind_direction": 320,
+        "air_temperature": 27.7,
+        "relative_humidity": 74,
+        "air_pressure": 1007.1,
         "gust_speed": null,
-        "obs_time": "2026-05-03T07:00:00+08:00"
+        "obs_time": "2026-05-03T08:00:00+08:00"
       }
     },
     {
@@ -797,13 +797,13 @@
         "station_name": "社子",
         "county_name": "臺北市",
         "town_name": "士林區",
-        "wind_speed": 0,
-        "wind_direction": 0,
-        "air_temperature": 24.3,
-        "relative_humidity": 91,
-        "air_pressure": 1009.3,
+        "wind_speed": 0.4,
+        "wind_direction": 105,
+        "air_temperature": 26.6,
+        "relative_humidity": 79,
+        "air_pressure": 1009.6,
         "gust_speed": null,
-        "obs_time": "2026-05-03T07:00:00+08:00"
+        "obs_time": "2026-05-03T08:00:00+08:00"
       }
     },
     {
@@ -820,13 +820,13 @@
         "station_name": "大屯山",
         "county_name": "臺北市",
         "town_name": "北投區",
-        "wind_speed": 13.1,
-        "wind_direction": 253,
-        "air_temperature": 18.9,
+        "wind_speed": 12.2,
+        "wind_direction": 268,
+        "air_temperature": 19,
         "relative_humidity": 100,
-        "air_pressure": 891.6,
-        "gust_speed": 24.8,
-        "obs_time": "2026-05-03T07:00:00+08:00"
+        "air_pressure": 892,
+        "gust_speed": 19.8,
+        "obs_time": "2026-05-03T08:00:00+08:00"
       }
     },
     {
@@ -843,13 +843,13 @@
         "station_name": "八里",
         "county_name": "新北市",
         "town_name": "八里區",
-        "wind_speed": 1.2,
-        "wind_direction": 267,
-        "air_temperature": 26.2,
-        "relative_humidity": 99,
-        "air_pressure": 1004.5,
+        "wind_speed": 2.6,
+        "wind_direction": 233,
+        "air_temperature": 27.4,
+        "relative_humidity": 95,
+        "air_pressure": 1004.9,
         "gust_speed": null,
-        "obs_time": "2026-05-03T07:00:00+08:00"
+        "obs_time": "2026-05-03T08:00:00+08:00"
       }
     },
     {
@@ -866,13 +866,13 @@
         "station_name": "蘆洲",
         "county_name": "新北市",
         "town_name": "蘆洲區",
-        "wind_speed": 0.4,
-        "wind_direction": 81,
-        "air_temperature": 24.7,
-        "relative_humidity": 83,
-        "air_pressure": 1005.5,
+        "wind_speed": 0.6,
+        "wind_direction": 41,
+        "air_temperature": 26.7,
+        "relative_humidity": 76,
+        "air_pressure": 1005.9,
         "gust_speed": null,
-        "obs_time": "2026-05-03T07:00:00+08:00"
+        "obs_time": "2026-05-03T08:00:00+08:00"
       }
     },
     {
@@ -889,13 +889,13 @@
         "station_name": "土城",
         "county_name": "新北市",
         "town_name": "土城區",
-        "wind_speed": 0,
+        "wind_speed": 0.2,
         "wind_direction": 0,
-        "air_temperature": 21.7,
-        "relative_humidity": 90,
-        "air_pressure": 1005,
+        "air_temperature": 23.6,
+        "relative_humidity": 82,
+        "air_pressure": 1005.3,
         "gust_speed": null,
-        "obs_time": "2026-05-03T07:00:00+08:00"
+        "obs_time": "2026-05-03T08:00:00+08:00"
       }
     },
     {
@@ -913,12 +913,12 @@
         "county_name": "新北市",
         "town_name": "鶯歌區",
         "wind_speed": 0.3,
-        "wind_direction": 111,
-        "air_temperature": 23.2,
+        "wind_direction": 127,
+        "air_temperature": 25.3,
         "relative_humidity": 92,
-        "air_pressure": 999.3,
+        "air_pressure": 999.7,
         "gust_speed": null,
-        "obs_time": "2026-05-03T07:00:00+08:00"
+        "obs_time": "2026-05-03T08:00:00+08:00"
       }
     },
     {
@@ -935,13 +935,13 @@
         "station_name": "永和",
         "county_name": "新北市",
         "town_name": "永和區",
-        "wind_speed": 0.1,
-        "wind_direction": 0,
-        "air_temperature": 23.8,
-        "relative_humidity": 81,
-        "air_pressure": 1006,
+        "wind_speed": 1.6,
+        "wind_direction": 128,
+        "air_temperature": 25,
+        "relative_humidity": 77,
+        "air_pressure": 1006.2,
         "gust_speed": null,
-        "obs_time": "2026-05-03T07:00:00+08:00"
+        "obs_time": "2026-05-03T08:00:00+08:00"
       }
     },
     {
@@ -958,13 +958,13 @@
         "station_name": "五分山",
         "county_name": "新北市",
         "town_name": "瑞芳區",
-        "wind_speed": 2,
-        "wind_direction": 88,
-        "air_temperature": 23.3,
-        "relative_humidity": 86,
-        "air_pressure": 924.2,
+        "wind_speed": 0,
+        "wind_direction": 0,
+        "air_temperature": 25.6,
+        "relative_humidity": 80,
+        "air_pressure": 924.9,
         "gust_speed": null,
-        "obs_time": "2026-05-03T07:00:00+08:00"
+        "obs_time": "2026-05-03T08:00:00+08:00"
       }
     },
     {
@@ -987,7 +987,7 @@
         "relative_humidity": null,
         "air_pressure": null,
         "gust_speed": null,
-        "obs_time": "2026-05-03T07:00:00+08:00"
+        "obs_time": "2026-05-03T08:00:00+08:00"
       }
     },
     {
@@ -1004,13 +1004,13 @@
         "station_name": "林口",
         "county_name": "新北市",
         "town_name": "林口區",
-        "wind_speed": 2.8,
-        "wind_direction": 209,
-        "air_temperature": 23.9,
-        "relative_humidity": 92,
-        "air_pressure": 978.4,
-        "gust_speed": null,
-        "obs_time": "2026-05-03T07:00:00+08:00"
+        "wind_speed": 2.2,
+        "wind_direction": 225,
+        "air_temperature": 25.1,
+        "relative_humidity": 88,
+        "air_pressure": 978.8,
+        "gust_speed": 7.7,
+        "obs_time": "2026-05-03T08:00:00+08:00"
       }
     },
     {
@@ -1029,11 +1029,11 @@
         "town_name": "深坑區",
         "wind_speed": 0,
         "wind_direction": 0,
-        "air_temperature": 22.7,
-        "relative_humidity": 94,
-        "air_pressure": 999,
+        "air_temperature": 26.1,
+        "relative_humidity": 84,
+        "air_pressure": 999.7,
         "gust_speed": null,
-        "obs_time": "2026-05-03T07:00:00+08:00"
+        "obs_time": "2026-05-03T08:00:00+08:00"
       }
     },
     {
@@ -1050,13 +1050,13 @@
         "station_name": "五股",
         "county_name": "新北市",
         "town_name": "五股區",
-        "wind_speed": 0.8,
-        "wind_direction": 40,
-        "air_temperature": 23.6,
-        "relative_humidity": 95,
-        "air_pressure": 988.7,
+        "wind_speed": 1,
+        "wind_direction": 103,
+        "air_temperature": 26.2,
+        "relative_humidity": 85,
+        "air_pressure": 989.2,
         "gust_speed": null,
-        "obs_time": "2026-05-03T07:00:00+08:00"
+        "obs_time": "2026-05-03T08:00:00+08:00"
       }
     },
     {
@@ -1073,13 +1073,13 @@
         "station_name": "屈尺",
         "county_name": "新北市",
         "town_name": "新店區",
-        "wind_speed": 2.2,
-        "wind_direction": 170,
-        "air_temperature": 22.4,
-        "relative_humidity": 90,
-        "air_pressure": 999.6,
+        "wind_speed": 2.1,
+        "wind_direction": 174,
+        "air_temperature": 23.6,
+        "relative_humidity": 87,
+        "air_pressure": 1000.1,
         "gust_speed": null,
-        "obs_time": "2026-05-03T07:00:00+08:00"
+        "obs_time": "2026-05-03T08:00:00+08:00"
       }
     },
     {
@@ -1096,13 +1096,13 @@
         "station_name": "三重",
         "county_name": "新北市",
         "town_name": "三重區",
-        "wind_speed": 0.2,
-        "wind_direction": 0,
-        "air_temperature": 23.7,
+        "wind_speed": 1.3,
+        "wind_direction": 131,
+        "air_temperature": 24.8,
         "relative_humidity": 99,
-        "air_pressure": 1007.4,
+        "air_pressure": 1007.7,
         "gust_speed": null,
-        "obs_time": "2026-05-03T07:00:00+08:00"
+        "obs_time": "2026-05-03T08:00:00+08:00"
       }
     },
     {
@@ -1119,13 +1119,13 @@
         "station_name": "石牌",
         "county_name": "臺北市",
         "town_name": "北投區",
-        "wind_speed": 1.3,
-        "wind_direction": 206,
-        "air_temperature": 25.8,
-        "relative_humidity": 82,
-        "air_pressure": 1006,
+        "wind_speed": null,
+        "wind_direction": null,
+        "air_temperature": null,
+        "relative_humidity": null,
+        "air_pressure": null,
         "gust_speed": null,
-        "obs_time": "2026-05-03T07:00:00+08:00"
+        "obs_time": "2026-05-03T08:00:00+08:00"
       }
     },
     {
@@ -1142,13 +1142,13 @@
         "station_name": "新北",
         "county_name": "新北市",
         "town_name": "新店區",
-        "wind_speed": 0.3,
-        "wind_direction": 100,
-        "air_temperature": 22.5,
-        "relative_humidity": 86,
-        "air_pressure": 1006.7,
+        "wind_speed": 0.9,
+        "wind_direction": 120,
+        "air_temperature": 24.1,
+        "relative_humidity": 79,
+        "air_pressure": 1007,
         "gust_speed": null,
-        "obs_time": "2026-05-03T07:00:00+08:00"
+        "obs_time": "2026-05-03T08:00:00+08:00"
       }
     },
     {
@@ -1165,13 +1165,13 @@
         "station_name": "淡水",
         "county_name": "新北市",
         "town_name": "淡水區",
-        "wind_speed": 2.5,
+        "wind_speed": 2.9,
         "wind_direction": 150,
-        "air_temperature": 23.5,
-        "relative_humidity": 88,
-        "air_pressure": 1007.2,
+        "air_temperature": 26.2,
+        "relative_humidity": 79,
+        "air_pressure": 1007.4,
         "gust_speed": null,
-        "obs_time": "2026-05-03T07:00:00+08:00"
+        "obs_time": "2026-05-03T08:00:00+08:00"
       }
     },
     {
@@ -1188,13 +1188,13 @@
         "station_name": "鞍部",
         "county_name": "臺北市",
         "town_name": "北投區",
-        "wind_speed": 2.7,
-        "wind_direction": 150,
-        "air_temperature": 20,
-        "relative_humidity": 99,
-        "air_pressure": 918.4,
-        "gust_speed": 9.6,
-        "obs_time": "2026-05-03T07:00:00+08:00"
+        "wind_speed": 2.3,
+        "wind_direction": 160,
+        "air_temperature": 19.9,
+        "relative_humidity": 100,
+        "air_pressure": 918.7,
+        "gust_speed": 8.5,
+        "obs_time": "2026-05-03T08:00:00+08:00"
       }
     },
     {
@@ -1211,13 +1211,13 @@
         "station_name": "臺北",
         "county_name": "臺北市",
         "town_name": "中正區",
-        "wind_speed": 0.8,
-        "wind_direction": 180,
-        "air_temperature": 23.5,
-        "relative_humidity": 82,
-        "air_pressure": 1006,
+        "wind_speed": 1.3,
+        "wind_direction": 140,
+        "air_temperature": 24.7,
+        "relative_humidity": 77,
+        "air_pressure": 1006.3,
         "gust_speed": null,
-        "obs_time": "2026-05-03T07:00:00+08:00"
+        "obs_time": "2026-05-03T08:00:00+08:00"
       }
     },
     {
@@ -1234,13 +1234,13 @@
         "station_name": "陽明山",
         "county_name": "臺北市",
         "town_name": "北投區",
-        "wind_speed": 1.5,
-        "wind_direction": 320,
-        "air_temperature": 21.6,
-        "relative_humidity": 90,
-        "air_pressure": 942.2,
+        "wind_speed": 1.4,
+        "wind_direction": 330,
+        "air_temperature": 21.5,
+        "relative_humidity": 92,
+        "air_pressure": 942.6,
         "gust_speed": null,
-        "obs_time": "2026-05-03T07:00:00+08:00"
+        "obs_time": "2026-05-03T08:00:00+08:00"
       }
     },
     {
@@ -1257,13 +1257,13 @@
         "station_name": "桃改樹林分場",
         "county_name": "新北市",
         "town_name": "樹林區",
-        "wind_speed": 0.4,
-        "wind_direction": 150,
-        "air_temperature": 22.1,
-        "relative_humidity": 84,
-        "air_pressure": 1005.9,
+        "wind_speed": 0,
+        "wind_direction": 0,
+        "air_temperature": 24.9,
+        "relative_humidity": 74,
+        "air_pressure": 1006.2,
         "gust_speed": null,
-        "obs_time": "2026-05-03T07:00:00+08:00"
+        "obs_time": "2026-05-03T08:00:00+08:00"
       }
     },
     {
@@ -1280,13 +1280,13 @@
         "station_name": "茶改北部分場",
         "county_name": "新北市",
         "town_name": "石碇區",
-        "wind_speed": 0,
-        "wind_direction": 0,
-        "air_temperature": 21.9,
-        "relative_humidity": 89,
-        "air_pressure": 963.9,
+        "wind_speed": 1.4,
+        "wind_direction": 50,
+        "air_temperature": 23.9,
+        "relative_humidity": 79,
+        "air_pressure": 964.4,
         "gust_speed": null,
-        "obs_time": "2026-05-03T07:00:00+08:00"
+        "obs_time": "2026-05-03T08:00:00+08:00"
       }
     },
     {
@@ -1303,13 +1303,13 @@
         "station_name": "臺灣大學",
         "county_name": "臺北市",
         "town_name": "大安區",
-        "wind_speed": 0,
-        "wind_direction": 0,
-        "air_temperature": 23.3,
-        "relative_humidity": 80,
-        "air_pressure": 1008.5,
+        "wind_speed": 0.3,
+        "wind_direction": 200,
+        "air_temperature": 24.8,
+        "relative_humidity": 75,
+        "air_pressure": 1008.8,
         "gust_speed": null,
-        "obs_time": "2026-05-03T07:00:00+08:00"
+        "obs_time": "2026-05-03T08:00:00+08:00"
       }
     },
     {
@@ -1326,13 +1326,13 @@
         "station_name": "文化大學",
         "county_name": "臺北市",
         "town_name": "士林區",
-        "wind_speed": 1.1,
-        "wind_direction": 260,
-        "air_temperature": 23.1,
+        "wind_speed": 2.4,
+        "wind_direction": 250,
+        "air_temperature": 23.5,
         "relative_humidity": 82,
-        "air_pressure": 962.1,
-        "gust_speed": null,
-        "obs_time": "2026-05-03T07:00:00+08:00"
+        "air_pressure": 962.6,
+        "gust_speed": 8.5,
+        "obs_time": "2026-05-03T08:00:00+08:00"
       }
     },
     {
@@ -1349,13 +1349,13 @@
         "station_name": "四堵",
         "county_name": "新北市",
         "town_name": "坪林區",
-        "wind_speed": 0.1,
+        "wind_speed": 0.2,
         "wind_direction": 0,
-        "air_temperature": 20.2,
-        "relative_humidity": 96,
-        "air_pressure": 965.8,
+        "air_temperature": 23.2,
+        "relative_humidity": 81,
+        "air_pressure": 966.4,
         "gust_speed": null,
-        "obs_time": "2026-05-03T07:00:00+08:00"
+        "obs_time": "2026-05-03T08:00:00+08:00"
       }
     },
     {
@@ -1372,13 +1372,13 @@
         "station_name": "福山",
         "county_name": "新北市",
         "town_name": "烏來區",
-        "wind_speed": 0,
-        "wind_direction": 0,
-        "air_temperature": 18.7,
-        "relative_humidity": 97,
-        "air_pressure": 964.5,
+        "wind_speed": 0.3,
+        "wind_direction": 10,
+        "air_temperature": 21.7,
+        "relative_humidity": 88,
+        "air_pressure": 964.6,
         "gust_speed": null,
-        "obs_time": "2026-05-03T07:00:00+08:00"
+        "obs_time": "2026-05-03T08:00:00+08:00"
       }
     },
     {
@@ -1395,13 +1395,13 @@
         "station_name": "火燒寮",
         "county_name": "新北市",
         "town_name": "平溪區",
-        "wind_speed": 0.1,
-        "wind_direction": 0,
-        "air_temperature": 19.6,
-        "relative_humidity": 99,
-        "air_pressure": 978.1,
+        "wind_speed": 0.3,
+        "wind_direction": 160,
+        "air_temperature": 22.8,
+        "relative_humidity": 95,
+        "air_pressure": 978.6,
         "gust_speed": null,
-        "obs_time": "2026-05-03T07:00:00+08:00"
+        "obs_time": "2026-05-03T08:00:00+08:00"
       }
     },
     {
@@ -1418,13 +1418,13 @@
         "station_name": "瑞芳",
         "county_name": "新北市",
         "town_name": "瑞芳區",
-        "wind_speed": 0.4,
-        "wind_direction": 150,
-        "air_temperature": 22,
-        "relative_humidity": 91,
-        "air_pressure": 998.3,
+        "wind_speed": 0.3,
+        "wind_direction": 190,
+        "air_temperature": 26.1,
+        "relative_humidity": 79,
+        "air_pressure": 998.8,
         "gust_speed": null,
-        "obs_time": "2026-05-03T07:00:00+08:00"
+        "obs_time": "2026-05-03T08:00:00+08:00"
       }
     },
     {
@@ -1441,13 +1441,13 @@
         "station_name": "福隆",
         "county_name": "新北市",
         "town_name": "貢寮區",
-        "wind_speed": 0.8,
-        "wind_direction": 270,
-        "air_temperature": 23.7,
-        "relative_humidity": 87,
-        "air_pressure": 1007,
+        "wind_speed": 0.3,
+        "wind_direction": 350,
+        "air_temperature": 25.5,
+        "relative_humidity": 79,
+        "air_pressure": 1007.6,
         "gust_speed": null,
-        "obs_time": "2026-05-03T07:00:00+08:00"
+        "obs_time": "2026-05-03T08:00:00+08:00"
       }
     },
     {
@@ -1464,13 +1464,13 @@
         "station_name": "富貴角",
         "county_name": "新北市",
         "town_name": "石門區",
-        "wind_speed": 5.3,
+        "wind_speed": 4.8,
         "wind_direction": 230,
         "air_temperature": 25.6,
-        "relative_humidity": 77,
-        "air_pressure": 986.2,
-        "gust_speed": 13.1,
-        "obs_time": "2026-05-03T07:00:00+08:00"
+        "relative_humidity": 78,
+        "air_pressure": 986.6,
+        "gust_speed": 13.6,
+        "obs_time": "2026-05-03T08:00:00+08:00"
       }
     },
     {
@@ -1487,13 +1487,13 @@
         "station_name": "中八仙",
         "county_name": "臺北市",
         "town_name": "北投區",
-        "wind_speed": null,
-        "wind_direction": null,
-        "air_temperature": 23.2,
-        "relative_humidity": 90,
-        "air_pressure": 1009.4,
+        "wind_speed": 1.3,
+        "wind_direction": 50,
+        "air_temperature": 26.4,
+        "relative_humidity": 81,
+        "air_pressure": 1009.7,
         "gust_speed": null,
-        "obs_time": "2026-05-03T07:00:00+08:00"
+        "obs_time": "2026-05-03T08:00:00+08:00"
       }
     },
     {
@@ -1510,13 +1510,13 @@
         "station_name": "信賢",
         "county_name": "新北市",
         "town_name": "烏來區",
-        "wind_speed": 0.6,
-        "wind_direction": 310,
-        "air_temperature": 19.7,
-        "relative_humidity": 93,
-        "air_pressure": 971.1,
+        "wind_speed": 1.1,
+        "wind_direction": 240,
+        "air_temperature": 22,
+        "relative_humidity": 80,
+        "air_pressure": 971.6,
         "gust_speed": null,
-        "obs_time": "2026-05-03T07:00:00+08:00"
+        "obs_time": "2026-05-03T08:00:00+08:00"
       }
     },
     {
@@ -1533,13 +1533,13 @@
         "station_name": "漁光",
         "county_name": "新北市",
         "town_name": "坪林區",
-        "wind_speed": 0.8,
+        "wind_speed": 1.4,
         "wind_direction": 190,
-        "air_temperature": 22.8,
+        "air_temperature": 23.6,
         "relative_humidity": 75,
-        "air_pressure": 930.6,
+        "air_pressure": 931.2,
         "gust_speed": null,
-        "obs_time": "2026-05-03T07:00:00+08:00"
+        "obs_time": "2026-05-03T08:00:00+08:00"
       }
     },
     {
@@ -1556,13 +1556,13 @@
         "station_name": "國一N013K",
         "county_name": "新北市",
         "town_name": "汐止區",
-        "wind_speed": 0.8,
+        "wind_speed": 1,
         "wind_direction": 220,
-        "air_temperature": 23.3,
-        "relative_humidity": 89,
-        "air_pressure": 1006.5,
+        "air_temperature": 25.8,
+        "relative_humidity": 81,
+        "air_pressure": 1007,
         "gust_speed": null,
-        "obs_time": "2026-05-03T07:00:00+08:00"
+        "obs_time": "2026-05-03T08:00:00+08:00"
       }
     },
     {
@@ -1579,13 +1579,13 @@
         "station_name": "國一S026K",
         "county_name": "新北市",
         "town_name": "三重區",
-        "wind_speed": 0.6,
-        "wind_direction": 150,
-        "air_temperature": 24.3,
-        "relative_humidity": 78,
-        "air_pressure": 1006.9,
+        "wind_speed": 1.5,
+        "wind_direction": 100,
+        "air_temperature": 26.3,
+        "relative_humidity": 73,
+        "air_pressure": 1007.2,
         "gust_speed": null,
-        "obs_time": "2026-05-03T07:00:00+08:00"
+        "obs_time": "2026-05-03T08:00:00+08:00"
       }
     },
     {
@@ -1602,13 +1602,13 @@
         "station_name": "國三S010K",
         "county_name": "新北市",
         "town_name": "汐止區",
-        "wind_speed": 0.6,
-        "wind_direction": 350,
-        "air_temperature": 22.3,
-        "relative_humidity": 84,
-        "air_pressure": 1004.2,
+        "wind_speed": 2,
+        "wind_direction": 160,
+        "air_temperature": 25.3,
+        "relative_humidity": 75,
+        "air_pressure": 1004.7,
         "gust_speed": null,
-        "obs_time": "2026-05-03T07:00:00+08:00"
+        "obs_time": "2026-05-03T08:00:00+08:00"
       }
     },
     {
@@ -1625,13 +1625,13 @@
         "station_name": "國三S016K",
         "county_name": "臺北市",
         "town_name": "南港區",
-        "wind_speed": 0.4,
-        "wind_direction": 360,
-        "air_temperature": 22.7,
-        "relative_humidity": 95,
-        "air_pressure": 1001.7,
+        "wind_speed": 0.5,
+        "wind_direction": 40,
+        "air_temperature": 26.5,
+        "relative_humidity": 83,
+        "air_pressure": 1002.2,
         "gust_speed": null,
-        "obs_time": "2026-05-03T07:00:00+08:00"
+        "obs_time": "2026-05-03T08:00:00+08:00"
       }
     },
     {
@@ -1648,13 +1648,13 @@
         "station_name": "國三S037K",
         "county_name": "新北市",
         "town_name": "土城區",
-        "wind_speed": 0.6,
-        "wind_direction": 160,
-        "air_temperature": 22.6,
-        "relative_humidity": 92,
-        "air_pressure": 1004.1,
+        "wind_speed": 0.9,
+        "wind_direction": 40,
+        "air_temperature": 25.6,
+        "relative_humidity": 85,
+        "air_pressure": 1004.4,
         "gust_speed": null,
-        "obs_time": "2026-05-03T07:00:00+08:00"
+        "obs_time": "2026-05-03T08:00:00+08:00"
       }
     },
     {
@@ -1671,13 +1671,13 @@
         "station_name": "國三S042K",
         "county_name": "新北市",
         "town_name": "土城區",
-        "wind_speed": 0.4,
-        "wind_direction": 40,
-        "air_temperature": 22.5,
-        "relative_humidity": 92,
-        "air_pressure": 1005,
+        "wind_speed": 0.6,
+        "wind_direction": 50,
+        "air_temperature": 25.7,
+        "relative_humidity": 83,
+        "air_pressure": 1005.2,
         "gust_speed": null,
-        "obs_time": "2026-05-03T07:00:00+08:00"
+        "obs_time": "2026-05-03T08:00:00+08:00"
       }
     },
     {
@@ -1695,12 +1695,12 @@
         "county_name": "新北市",
         "town_name": "樹林區",
         "wind_speed": 0.5,
-        "wind_direction": 290,
-        "air_temperature": 22.5,
-        "relative_humidity": 93,
-        "air_pressure": 1004.2,
+        "wind_direction": 100,
+        "air_temperature": 25.8,
+        "relative_humidity": 83,
+        "air_pressure": 1004.9,
         "gust_speed": null,
-        "obs_time": "2026-05-03T07:00:00+08:00"
+        "obs_time": "2026-05-03T08:00:00+08:00"
       }
     },
     {
@@ -1717,13 +1717,13 @@
         "station_name": "國三S054K",
         "county_name": "新北市",
         "town_name": "鶯歌區",
-        "wind_speed": 0.3,
-        "wind_direction": 130,
-        "air_temperature": 23.1,
-        "relative_humidity": 88,
-        "air_pressure": 999.7,
+        "wind_speed": 0.4,
+        "wind_direction": 210,
+        "air_temperature": 25.8,
+        "relative_humidity": 81,
+        "air_pressure": 1000,
         "gust_speed": null,
-        "obs_time": "2026-05-03T07:00:00+08:00"
+        "obs_time": "2026-05-03T08:00:00+08:00"
       }
     },
     {
@@ -1742,11 +1742,11 @@
         "town_name": "文山區",
         "wind_speed": 1.7,
         "wind_direction": 70,
-        "air_temperature": 21.8,
-        "relative_humidity": 95,
-        "air_pressure": 1003.2,
+        "air_temperature": 23.8,
+        "relative_humidity": 90,
+        "air_pressure": 1003.6,
         "gust_speed": null,
-        "obs_time": "2026-05-03T07:00:00+08:00"
+        "obs_time": "2026-05-03T08:00:00+08:00"
       }
     },
     {
@@ -1763,13 +1763,13 @@
         "station_name": "國一N039K",
         "county_name": "新北市",
         "town_name": "泰山區",
-        "wind_speed": 0.5,
-        "wind_direction": 120,
-        "air_temperature": 22.5,
-        "relative_humidity": 92,
-        "air_pressure": 986.5,
+        "wind_speed": 1,
+        "wind_direction": 20,
+        "air_temperature": 27,
+        "relative_humidity": 77,
+        "air_pressure": 986.7,
         "gust_speed": null,
-        "obs_time": "2026-05-03T07:00:00+08:00"
+        "obs_time": "2026-05-03T08:00:00+08:00"
       }
     },
     {
@@ -1786,13 +1786,13 @@
         "station_name": "國五S005K",
         "county_name": "新北市",
         "town_name": "石碇區",
-        "wind_speed": 0.3,
-        "wind_direction": 170,
+        "wind_speed": 0.1,
+        "wind_direction": 0,
         "air_temperature": null,
         "relative_humidity": null,
         "air_pressure": null,
         "gust_speed": null,
-        "obs_time": "2026-05-03T07:00:00+08:00"
+        "obs_time": "2026-05-03T08:00:00+08:00"
       }
     },
     {
@@ -1809,13 +1809,13 @@
         "station_name": "國五S006K",
         "county_name": "新北市",
         "town_name": "石碇區",
-        "wind_speed": 0.6,
-        "wind_direction": 70,
-        "air_temperature": 21.3,
-        "relative_humidity": 96,
-        "air_pressure": 990.1,
+        "wind_speed": 0.3,
+        "wind_direction": 80,
+        "air_temperature": 25.2,
+        "relative_humidity": 82,
+        "air_pressure": 990.5,
         "gust_speed": null,
-        "obs_time": "2026-05-03T07:00:00+08:00"
+        "obs_time": "2026-05-03T08:00:00+08:00"
       }
     },
     {
@@ -1832,13 +1832,13 @@
         "station_name": "國五N008K",
         "county_name": "新北市",
         "town_name": "石碇區",
-        "wind_speed": 0.4,
-        "wind_direction": 100,
-        "air_temperature": 21.5,
-        "relative_humidity": 94,
-        "air_pressure": 985.7,
+        "wind_speed": 0.8,
+        "wind_direction": 50,
+        "air_temperature": 24.8,
+        "relative_humidity": 84,
+        "air_pressure": 986.2,
         "gust_speed": null,
-        "obs_time": "2026-05-03T07:00:00+08:00"
+        "obs_time": "2026-05-03T08:00:00+08:00"
       }
     },
     {
@@ -1855,13 +1855,13 @@
         "station_name": "國五N013K",
         "county_name": "新北市",
         "town_name": "坪林區",
-        "wind_speed": 0.4,
-        "wind_direction": 330,
-        "air_temperature": 19.5,
-        "relative_humidity": 100,
-        "air_pressure": 980.2,
+        "wind_speed": 1,
+        "wind_direction": 140,
+        "air_temperature": 22.1,
+        "relative_humidity": 93,
+        "air_pressure": 980.9,
         "gust_speed": null,
-        "obs_time": "2026-05-03T07:00:00+08:00"
+        "obs_time": "2026-05-03T08:00:00+08:00"
       }
     },
     {
@@ -1880,11 +1880,11 @@
         "town_name": "大安區",
         "wind_speed": 0,
         "wind_direction": 0,
-        "air_temperature": 22.6,
-        "relative_humidity": 86,
-        "air_pressure": 1008.3,
+        "air_temperature": 24.2,
+        "relative_humidity": 79,
+        "air_pressure": 1008.6,
         "gust_speed": null,
-        "obs_time": "2026-05-03T07:00:00+08:00"
+        "obs_time": "2026-05-03T08:00:00+08:00"
       }
     }
   ]
