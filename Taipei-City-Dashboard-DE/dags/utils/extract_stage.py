@@ -6,7 +6,6 @@ import time
 import zipfile
 from pathlib import Path
 import glob
-import fiona
 import geopandas as gpd
 import pandas as pd
 import requests
@@ -193,28 +192,14 @@ def get_kml(url, dag_id, from_crs, **kwargs):
 
     """
     file_name = f"{dag_id}.kml"
-    
-    # Enable KML support in fiona
-    try:
-        fiona.drvsupport.supported_drivers["KML"] = "rw"
-    except AttributeError:
-        # For newer fiona versions that don't have drvsupport
-        pass
-    
+
     file = download_file(file_name, url, **kwargs)
-    
-    # Use fiona directly to avoid the geopandas._is_zip issue
-    try:
-        with fiona.open(file, driver='KML') as src:
-            gdf = gpd.GeoDataFrame.from_features(src, crs=src.crs)
-    except Exception:
-        # Fallback to the original method for older versions
-        gdf = gpd.read_file(file, driver="KML")
-    
-    # Ensure the CRS is set correctly
+
+    gdf = gpd.read_file(file, driver="KML", engine="pyogrio")
+
     if gdf.crs is None:
         gdf = gpd.GeoDataFrame(gdf, crs=f"EPSG:{from_crs}")
-    
+
     return gdf
 
 
@@ -481,23 +466,10 @@ def get_shp_files_merge(
     if not all_shp_files:
         raise ValueError(f"No .shp files found in {unzip_path}")
 
-    import fiona
-    from shapely.geometry import shape
-    
     dfs = []
     for shp_path in all_shp_files:
         category = os.path.splitext(os.path.basename(shp_path))[0]
-        # 使用 fiona 直接開啟以避免 fiona.path 問題
-        with fiona.open(shp_path, encoding=encoding) as src:
-            records = []
-            geometries = []
-            for feature in src:
-                props = dict(feature.get("properties", {}))
-                geom = feature.get("geometry")
-                records.append(props)
-                geometries.append(shape(geom) if geom else None)
-            crs = src.crs
-            gdf = gpd.GeoDataFrame(records, geometry=geometries, crs=crs)
+        gdf = gpd.read_file(shp_path, encoding=encoding, engine="pyogrio")
         gdf["category"] = category
         dfs.append(gdf)
     # 合併
@@ -560,19 +532,9 @@ def get_shp_file(
     if shp_file is None:
         raise ValueError(f"No .shp files found in {unzip_path}")
 
-    # 使用 fiona 直接開啟以避免 fiona.path 問題
-    import fiona
-    from shapely.geometry import shape
-    
-    with fiona.open(shp_file, encoding=encoding) as src:
-        records = []
-        geometries = []
-        for feature in src:
-            props = dict(feature.get("properties", {}))
-            geom = feature.get("geometry")
-            records.append(props)
-            geometries.append(shape(geom) if geom else None)
-        gdf = gpd.GeoDataFrame(records, geometry=geometries, crs=f"EPSG:{from_crs}")
+    gdf = gpd.read_file(shp_file, encoding=encoding, engine="pyogrio")
+    if gdf.crs is None:
+        gdf = gdf.set_crs(epsg=from_crs)
     
     print(f"Read {shp_file} successfully.")
     return gdf
