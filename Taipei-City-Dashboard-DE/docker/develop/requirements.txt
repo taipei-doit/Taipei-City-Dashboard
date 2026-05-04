@@ -9,6 +9,8 @@ apache-airflow-providers-celery
 # 不 pin 版本，由 constraints file 管有交集的套件；
 # 沒在 constraints 裡的套件 pip 會裝最新相容版。
 geopandas
+fiona
+pyogrio
 GeoAlchemy2
 pytest
 openpyxl
