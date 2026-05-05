@@ -2566,11 +2566,17 @@ export const useMapStore = defineStore("map", {
 		// 1. Called when the user is switching between maps
 		clearOnlyLayers() {
 			this.currentLayers.forEach((element) => {
-				this.map.removeLayer(element);
+				if (this.map.getLayer(element)) {
+					this.map.removeLayer(element);
+				}
 				if (this.map.getSource(`${element}-source`)) {
 					this.map.removeSource(`${element}-source`);
 				}
 			});
+			if (this.overlay) {
+				this.overlay.setProps({ layers: [] });
+			}
+			this.deckGlLayer = {};
 			this.currentLayers = [];
 			this.mapConfigs = {};
 			this.currentVisibleLayers = [];
