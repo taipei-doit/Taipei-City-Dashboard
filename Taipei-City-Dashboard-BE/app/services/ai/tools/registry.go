@@ -19,7 +19,6 @@ func init() {
 	// Register demo tools
 	Register("get_current_time", GetCurrentTime)
 	Register("get_population_summary", GetPopulationSummary)
-	Register("get_nearby_stations", GetNearbyStations)
 	Register("get_nearby_eco_facilities", GetNearbyEcoFacilities)
 	Register("plan_route_to_nearest_eco_facility", PlanRouteToNearestEcoFacility)
 	Register("list_eco_facilities_by_area", ListEcoFacilitiesByArea)
@@ -86,62 +85,6 @@ func GetPopulationSummary(ctx context.Context, args string) (string, error) {
 		result.Young+result.Working+result.Elderly,
 		result.DataTime.Format("2006-01-02"),
 	), nil
-}
-
-// NearbyStationsArgs defines the arguments for the get_nearby_stations tool
-type NearbyStationsArgs struct {
-	Lat    float64 `json:"lat"`
-	Lng    float64 `json:"lng"`
-	Radius int     `json:"radius"`
-}
-
-// GetNearbyStations returns MRT accessibility facilities (elevator/ramp exits)
-// within the given radius (meters) of the user's coordinate, joined with the
-// latest active alert per station. Returned as a JSON string for the LLM.
-func GetNearbyStations(ctx context.Context, args string) (string, error) {
-	var params NearbyStationsArgs
-	if err := parseArgs(args, &params); err != nil {
-		return "", fmt.Errorf("invalid arguments: %v", err)
-	}
-	if params.Lat == 0 && params.Lng == 0 {
-		return "", fmt.Errorf("lat/lng are required")
-	}
-
-	radius := params.Radius
-	if radius <= 0 {
-		radius = 500
-	}
-
-	stations, err := models.GetMrtStationsNearby(params.Lat, params.Lng, radius)
-	if err != nil {
-		return "", fmt.Errorf("查詢附近站點失敗: %v", err)
-	}
-
-	if len(stations) == 0 {
-		return fmt.Sprintf(
-			`{"radius_m":%d,"count":0,"stations":[],"note":"半徑內無資料，可建議使用者擴大查詢半徑"}`,
-			radius,
-		), nil
-	}
-
-	alertCount := 0
-	for _, s := range stations {
-		if s.AlertStatus == "active" {
-			alertCount++
-		}
-	}
-
-	payload := map[string]interface{}{
-		"radius_m":           radius,
-		"count":              len(stations),
-		"active_alert_count": alertCount,
-		"stations":           stations,
-	}
-	b, err := json.Marshal(payload)
-	if err != nil {
-		return "", fmt.Errorf("序列化結果失敗: %v", err)
-	}
-	return string(b), nil
 }
 
 // NearbyEcoFacilitiesArgs defines the arguments for the get_nearby_eco_facilities tool.

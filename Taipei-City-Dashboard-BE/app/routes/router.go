@@ -41,7 +41,6 @@ func ConfigureRoutes() {
 	configureContributorRoutes()
 	configureChatLogRoutes()
 	configureAIRoutes()
-	configureMrtA11yRoutes()
 	configureEcoDietRoutes()
 }
 
@@ -206,21 +205,6 @@ func configureAIRoutes() {
 	aiRoutes.Use(middleware.IsLoggedIn())
 	{
 		aiRoutes.POST("/chat/twai", controllers.ChatWithTWCC)
-	}
-}
-
-func configureMrtA11yRoutes() {
-	mrtRoutes := RouterGroup.Group("/mrt/a11y")
-	mrtRoutes.Use(middleware.LimitAPIRequests(global.ComponentLimitAPIRequestsTimes, global.LimitRequestsDuration))
-	mrtRoutes.Use(middleware.LimitTotalRequests(global.ComponentLimitTotalRequestsTimes, global.LimitRequestsDuration))
-	{
-		mrtRoutes.GET("/alert-count", controllers.GetMrtAlertCount)
-		mrtRoutes.GET("/alert-by-line", controllers.GetMrtAlertByLine)
-		mrtRoutes.GET("/alert-by-type", controllers.GetMrtAlertByType)
-		mrtRoutes.GET("/stations", controllers.GetMrtStations)
-		mrtRoutes.GET("/station-overview", controllers.GetMrtStationOverview)
-		mrtRoutes.POST("/ai-summary", controllers.GetMrtA11yAiSummary)
-		mrtRoutes.POST("/nearby-chat", controllers.PostMrtNearbyChat)
 	}
 }
 

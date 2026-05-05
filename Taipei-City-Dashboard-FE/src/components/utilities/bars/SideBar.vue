@@ -157,26 +157,6 @@ onMounted(() => {
       {{ isExpanded ? `示範儀表板` : `示範` }}
     </h1>
     <RouterLink
-      :to="$route.path.startsWith('/mrt-a11y') && !$route.path.startsWith('/mrt-a11y-v2') ? $route.path : '/mrt-a11y'"
-      class="sidebar-demo-link"
-      active-class="sidebar-demo-link-active"
-    >
-      <span :title="!isExpanded ? '雙城暢行 ｜ 捷運無障礙' : ''">accessible</span>
-      <h3 v-if="isExpanded">
-        雙城暢行 ｜ 捷運無障礙
-      </h3>
-    </RouterLink>
-    <RouterLink
-      :to="$route.path.startsWith('/mrt-a11y-v2') ? $route.path : '/mrt-a11y-v2'"
-      class="sidebar-demo-link"
-      active-class="sidebar-demo-link-active"
-    >
-      <span :title="!isExpanded ? '雙城暢行 V2 ｜ 捷運無障礙' : ''">accessible_forward</span>
-      <h3 v-if="isExpanded">
-        雙城暢行 V2 ｜ 捷運無障礙
-      </h3>
-    </RouterLink>
-    <RouterLink
       :to="$route.path.startsWith('/eco-diet') ? $route.path : '/eco-diet'"
       class="sidebar-demo-link"
       active-class="sidebar-demo-link-active"

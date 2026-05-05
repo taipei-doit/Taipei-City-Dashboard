@@ -40,18 +40,6 @@ const tabContext = computed(() => {
 			mapviewPath: '/eco-diet/mapview',
 		};
 	}
-	if (route.path.startsWith('/mrt-a11y-v2')) {
-		return {
-			dashboardPath: '/mrt-a11y-v2',
-			mapviewPath: '/mrt-a11y-v2/mapview',
-		};
-	}
-	if (route.path.startsWith('/mrt-a11y')) {
-		return {
-			dashboardPath: '/mrt-a11y',
-			mapviewPath: '/mrt-a11y/mapview',
-		};
-	}
 	return null;
 });
 

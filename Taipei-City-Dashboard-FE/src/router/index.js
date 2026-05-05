@@ -20,8 +20,6 @@ import ComponentInfoView from "../views/ComponentInfoView.vue";
 import EmbedView from "../views/EmbedView.vue";
 // import FloodRadarView from "../views/FloodRadarView.vue";
 import AccessibilityRouteView from "../views/AccessibilityRouteView.vue";
-import MrtAccessibilityView from "../views/MrtAccessibilityView.vue";
-import MrtAccessibilityV2View from "../views/MrtAccessibilityV2View.vue";
 import EcoDietView from "../views/EcoDietView.vue";
 import ComponentsCatalogView from "../views/ComponentsCatalogView.vue";
 
@@ -60,30 +58,6 @@ const routes = [
 		path: "/accessibility-route/mapview",
 		name: "accessibility-route-mapview",
 		component: AccessibilityRouteView,
-		meta: { layout: "dashboard" },
-	},
-	{
-		path: "/mrt-a11y",
-		name: "mrt-a11y",
-		component: MrtAccessibilityView,
-		meta: { layout: "dashboard" },
-	},
-	{
-		path: "/mrt-a11y/mapview",
-		name: "mrt-a11y-mapview",
-		component: MrtAccessibilityView,
-		meta: { layout: "dashboard" },
-	},
-	{
-		path: "/mrt-a11y-v2",
-		name: "mrt-a11y-v2",
-		component: MrtAccessibilityV2View,
-		meta: { layout: "dashboard" },
-	},
-	{
-		path: "/mrt-a11y-v2/mapview",
-		name: "mrt-a11y-v2-mapview",
-		component: MrtAccessibilityV2View,
 		meta: { layout: "dashboard" },
 	},
 	{
@@ -189,8 +163,6 @@ router.beforeEach((to) => {
 			![
 				"dashboard", "component-info", "callback", "embed", "mapview",
 				"eco-diet", "eco-diet-mapview",
-				"mrt-a11y", "mrt-a11y-mapview",
-				"mrt-a11y-v2", "mrt-a11y-v2-mapview",
 			].includes(to.name)
 		) {
 			router.push("/dashboard");

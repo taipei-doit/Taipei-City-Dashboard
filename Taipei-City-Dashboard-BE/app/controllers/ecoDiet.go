@@ -224,14 +224,19 @@ func GetEcoDietAiSummary(c *gin.Context) {
 
 // ─── Nearby Chat: POST /api/v1/eco_diet/nearby-chat ─────────────────
 
+// EcoDietNearbyChatMessage is one message in the FE-supplied conversation history.
+type EcoDietNearbyChatMessage struct {
+	Role    string `json:"role"`
+	Content string `json:"content"`
+}
+
 // EcoDietNearbyChatInput 是 FE「附近綠色飲食 AI 助理」送來的請求 body。
-// 沿用 controllers.MrtNearbyChatMessage（mrtA11y.go:123）作為 message struct。
 type EcoDietNearbyChatInput struct {
-	Lat           float64                `json:"lat"            binding:"required"`
-	Lng           float64                `json:"lng"            binding:"required"`
-	Radius        int                    `json:"radius"`
-	FacilityTypes []string               `json:"facility_types"`
-	Messages      []MrtNearbyChatMessage `json:"messages"       binding:"required"`
+	Lat           float64                    `json:"lat"            binding:"required"`
+	Lng           float64                    `json:"lng"            binding:"required"`
+	Radius        int                        `json:"radius"`
+	FacilityTypes []string                   `json:"facility_types"`
+	Messages      []EcoDietNearbyChatMessage `json:"messages"       binding:"required"`
 }
 
 // 設施類型代碼 → 中文，用於組 system prompt。
