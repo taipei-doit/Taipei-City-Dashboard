@@ -166,16 +166,6 @@ onMounted(() => {
         綠色飲食行為流程
       </h3>
     </RouterLink>
-    <RouterLink
-      to="/components-catalog"
-      class="sidebar-demo-link"
-      active-class="sidebar-demo-link-active"
-    >
-      <span :title="!isExpanded ? '元件目錄（內部參考）' : ''">view_module</span>
-      <h3 v-if="isExpanded">
-        元件目錄
-      </h3>
-    </RouterLink>
     <h1 @click="toggleCollapse(contentStore.cityManager.activeCities)">
       {{ isExpanded ? `公共儀表板` : `公共` }}
     </h1>

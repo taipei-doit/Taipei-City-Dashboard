@@ -21,7 +21,6 @@ import EmbedView from "../views/EmbedView.vue";
 // import FloodRadarView from "../views/FloodRadarView.vue";
 import AccessibilityRouteView from "../views/AccessibilityRouteView.vue";
 import EcoDietView from "../views/EcoDietView.vue";
-import ComponentsCatalogView from "../views/ComponentsCatalogView.vue";
 
 const routes = [
 	{
@@ -70,12 +69,6 @@ const routes = [
 		path: "/eco-diet/mapview",
 		name: "eco-diet-mapview",
 		component: EcoDietView,
-		meta: { layout: "dashboard" },
-	},
-	{
-		path: "/components-catalog",
-		name: "components-catalog",
-		component: ComponentsCatalogView,
 		meta: { layout: "dashboard" },
 	},
 	{
