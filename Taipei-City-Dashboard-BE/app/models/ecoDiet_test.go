@@ -8,7 +8,7 @@ import (
 // 市民綠色飲食行為流程儀表板 — model layer tests
 // 假資料：scripts/eco_diet_seed.sql；assertable counts 在 §Step 2 完成回報已記錄。
 //
-// initTestDB / getTestEnv 來自同 package 的 mrtA11y_test.go，無需重定義。
+// initTestDB / getTestEnv 來自同 package 的 testhelpers_test.go。
 
 // ─── C1a: GET /eco_diet/restaurant/points ───────────────────────────
 

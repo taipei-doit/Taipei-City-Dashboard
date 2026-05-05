@@ -18,12 +18,11 @@ info:
     | C7a 實物銀行點位 | `GET /eco_diet/food_bank/points` | `FoodBankPoint[]` | Mapbox 點位 |
     | C7b 最近實物銀行（Haversine） | `GET /eco_diet/food_bank/nearby` | `FoodBankPointNearby[]` | FE 顯示 top-3 卡片 |
 
-    ## 設計慣例（對齊 mrtA11y）
+    ## 設計慣例
 
-    - **點位類 endpoint**（C1a / C3 / C4 / C7a / C7b）回傳**領域專屬 struct**（含 `lng` / `lat` + 該表特有欄位），
-      參考既有 [`MrtA11yStation`](../Taipei-City-Dashboard-BE/app/models/mrtA11y.go#L26)。
+    - **點位類 endpoint**（C1a / C3 / C4 / C7a / C7b）回傳**領域專屬 struct**（含 `lng` / `lat` + 該表特有欄位）。
     - **聚合類 endpoint**（C1b / C2 / C5）沿用 [`componentData.go`](../Taipei-City-Dashboard-BE/app/models/componentData.go) 既有的 `TwoDimensionalDataOutput` / `ThreeDimensionalDataOutput`，**不新增型別**。
-    - **C7b Haversine 排序**：對齊 [`GetMrtStationsNearby`](../Taipei-City-Dashboard-BE/app/models/mrtA11y.go#L179) 既有實作（Go side 計算、無 PostGIS 空間查詢，因為 80 筆量級極小）。
+    - **C7b Haversine 排序**：Go side 計算、無 PostGIS 空間查詢，因為 80 筆量級極小。
 
     ## Response 信封
 
@@ -646,7 +645,7 @@ paths:
       summary: C7b — 最近實物銀行（Haversine 排序）
       description: |
         以使用者座標為中心，依 Haversine 大圓距離排序所有實物銀行；可選擇 `limit` 取前 N 筆。
-        對齊 mrtA11y 既有 [`GetMrtStationsNearby`](../Taipei-City-Dashboard-BE/app/models/mrtA11y.go#L179) 實作（Go side 計算、無 PostGIS 空間查詢）。
+        Go side 計算、無 PostGIS 空間查詢。
 
         **演算法**：BE 載入 `food_bank` 全量 80 筆 → 對每筆計算 Haversine 距離 → 升冪排序 → 切前 `limit` 筆。
       parameters:
@@ -819,11 +818,10 @@ components:
             format: int32
           example: [62458, 64320, 65180, 63927, 60815, 58432]
 
-    # ─── 新增領域 struct（對齊 mrtA11y 既有 pattern）────────
+    # ─── 新增領域 struct ────────────────────────────────
     EcoRestaurantPoint:
       description: |
-        環保餐廳點位資料。對應未來新增的 Go struct `models.EcoRestaurantPoint`，
-        參考 [`MrtA11yStation`](../Taipei-City-Dashboard-BE/app/models/mrtA11y.go#L26) 既有 pattern。
+        環保餐廳點位資料。對應 Go struct `models.EcoRestaurantPoint`。
       type: object
       required: [source_dataset, name, address, city, lng, lat, env_actions]
       properties:
@@ -987,8 +985,8 @@ components:
 
     FoodBankPointNearby:
       description: |
-        實物銀行點位 + Haversine 距離。對應未來新增的 Go struct `models.FoodBankPointNearby`，
-        嵌入 `FoodBankPoint` 並補一個 `distance_m` 欄位（對齊 [`MrtA11yStationNearby`](../Taipei-City-Dashboard-BE/app/models/mrtA11y.go#L171)）。
+        實物銀行點位 + Haversine 距離。對應 Go struct `models.FoodBankPointNearby`，
+        嵌入 `FoodBankPoint` 並補一個 `distance_m` 欄位。
       allOf:
         - $ref: '#/components/schemas/FoodBankPoint'
         - type: object

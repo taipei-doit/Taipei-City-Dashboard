@@ -176,7 +176,6 @@ type EcoDietAiSummaryInput struct {
 }
 
 // GetEcoDietAiSummary handles POST /api/v1/eco-diet/ai-summary.
-// Mirrors GetMrtA11yAiSummary's flow (mrtA11y.go:77).
 func GetEcoDietAiSummary(c *gin.Context) {
 	var input EcoDietAiSummaryInput
 	if err := c.ShouldBindJSON(&input); err != nil {
@@ -247,9 +246,8 @@ var ecoDietFacilityLabel = map[string]string{
 }
 
 // PostEcoDietNearbyChat handles POST /api/v1/eco_diet/nearby-chat.
-// 模式對齊 PostMrtNearbyChat（mrtA11y.go:140）：把 GPS 座標 / 篩選條件寫進
-// system prompt，註冊 get_nearby_eco_facilities function tool，由共用的 aiService
-// function-call 迴圈執行工具並產生自然語言回答。
+// 把 GPS 座標 / 篩選條件寫進 system prompt，註冊 get_nearby_eco_facilities
+// function tool，由共用的 aiService function-call 迴圈執行工具並產生自然語言回答。
 func PostEcoDietNearbyChat(c *gin.Context) {
 	var input EcoDietNearbyChatInput
 	if err := c.ShouldBindJSON(&input); err != nil {

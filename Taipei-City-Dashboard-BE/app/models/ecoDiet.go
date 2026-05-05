@@ -10,7 +10,7 @@ import (
 // API contract: docs/eco_diet_openapi.yaml
 // DE schema:    Taipei-City-Dashboard-BE/scripts/eco_diet_schema.sql
 
-// ─── 領域 struct (對齊 mrtA11y 既有 pattern) ─────────────────────────
+// ─── 領域 struct ──────────────────────────────────────────────────
 
 // EcoRestaurantPoint 對應 eco_restaurant 表的一列。env_actions 為 PostgreSQL TEXT[]，
 // 使用 pq.StringArray 才能正確 scan；新北側資料一律為空陣列（DE plan §11 修正 #3）。
@@ -58,7 +58,7 @@ type FoodBankPoint struct {
 	Lat           float64 `gorm:"column:lat"            json:"lat"`
 }
 
-// FoodBankPointNearby 嵌入 FoodBankPoint 並補 distance_m，對齊 MrtA11yStationNearby（[mrtA11y.go:171]）。
+// FoodBankPointNearby 嵌入 FoodBankPoint 並補 distance_m。
 type FoodBankPointNearby struct {
 	FoodBankPoint
 	DistanceM int `json:"distance_m"`
@@ -293,7 +293,7 @@ func GetFoodBankPoints() ([]FoodBankPoint, error) {
 // ─── C7b: GET /eco_diet/food_bank/nearby ────────────────────────────
 
 // GetFoodBankNearby 載入全量 → 計算 Haversine → 升冪排序 → 切前 limit 筆。
-// limit <= 0 時回全部。對齊 MrtA11yStationNearby 既有實作（mrtA11y.go:179）。
+// limit <= 0 時回全部。
 func GetFoodBankNearby(lat, lng float64, limit int) ([]FoodBankPointNearby, error) {
 	all, err := GetFoodBankPoints()
 	if err != nil {
@@ -321,7 +321,7 @@ func GetFoodBankNearby(lat, lng float64, limit int) ([]FoodBankPointNearby, erro
 // ─── 附近綠色飲食 AI 助理：餐廳 / 綠色商店 nearby (Haversine filter) ─────
 
 // GetEcoRestaurantNearby 載入全量 → Haversine filter (radiusM) → 升冪排序。
-// 模式對齊 GetMrtStationsNearby（mrtA11y.go:179）；資料量百筆等級，Go 端計算即可。
+// 資料量百筆等級，Go 端計算即可。
 func GetEcoRestaurantNearby(lat, lng float64, radiusM int) ([]EcoRestaurantPointNearby, error) {
 	all, err := GetEcoRestaurantPoints()
 	if err != nil {
@@ -395,8 +395,7 @@ func GetFoodBankNearbyByRadius(lat, lng float64, radiusM int) ([]FoodBankPointNe
 	return out, nil
 }
 
-// haversineMetersFoodBank 是大圓距離（公尺）。命名加 FoodBank 避免與
-// mrtA11y.go:haversineMeters 衝突（同 package 不能有同名 unexported function）。
+// haversineMetersFoodBank 是大圓距離（公尺）。
 func haversineMetersFoodBank(lat1, lng1, lat2, lng2 float64) float64 {
 	const earthRadiusM = 6371000.0
 	rad := func(d float64) float64 { return d * math.Pi / 180 }
@@ -423,7 +422,6 @@ func normalizeEnvActions(rows []EcoRestaurantPoint) {
 
 // groupEcoDietWasteRows 將攤平的 (year, series_name, value) 列 reshape 成
 // ThreeDimensional 結構：每個 unique y_axis 一條 series、x_axis 收集成 categories。
-// 與 mrtA11y.go:groupLineRows 邏輯相同，但因為它是 unexported 不能跨檔重用。
 func groupEcoDietWasteRows(rows []ecoDietWasteRow) ([]ThreeDimensionalDataOutput, []string, error) {
 	var data []ThreeDimensionalDataOutput
 	var categories []string

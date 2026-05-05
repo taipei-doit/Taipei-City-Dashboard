@@ -300,7 +300,7 @@ const featureCache = ref({
 	foodBank: [],
 });
 
-// ── AI 助理 modal（mirror MrtAccessibilityV2View 模式）───────────────────────
+// ── AI 助理 modal ───────────────────────────────────────────────────────────
 const activeAiComponentId = ref("");
 const activeAiComponentName = ref("");
 const showAiModal = ref(false);
