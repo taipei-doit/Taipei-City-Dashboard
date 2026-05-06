@@ -1,0 +1,38 @@
+{
+  "dag_infos": {
+    "dag_id": "aed_locations_geo",
+    "start_date": "2024-01-01",
+    "schedule_interval": "@monthly",
+    "catchup": false,
+    "tags": ["aed", "衛生局", "Taipei-City"],
+    "description": "Monthly snapshot of AED locations with point geometry, kept current + history.",
+    "default_args": {
+      "owner": "airflow",
+      "email": ["DEFAULT_EMAIL_LIST"],
+      "email_on_retry": false,
+      "email_on_failure": true,
+      "retries": 1,
+      "retry_delay": 60
+    },
+    "ready_data_db": "postgres_default",
+    "ready_data_default_table": "aed_locations_geo",
+    "ready_data_history_table": "aed_locations_geo_history",
+    "raw_data_db": "postgres_default",
+    "raw_data_table": "",
+    "load_behavior": "current+history"
+  },
+  "data_infos": {
+    "name_cn": "AED 位置點位",
+    "airflow_update_freq": "每月 (Asia/Taipei)",
+    "source": "https://example.gov.tw/aed_locations.zip",
+    "source_type": "shp",
+    "source_dept": "衛生局",
+    "component_name": "aed_locations_map",
+    "gis_format": "shp",
+    "output_coordinate": "EPSG:4326",
+    "is_geometry": 1,
+    "dataset_description": "全市 AED(自動體外心臟去顫器)分布點位",
+    "etl_description": "下載 SHP zip → 解壓讀取 → 標準化欄位 → 產 wkb_geometry(Point) → current+history 入庫",
+    "sensitivity": "public"
+  }
+}

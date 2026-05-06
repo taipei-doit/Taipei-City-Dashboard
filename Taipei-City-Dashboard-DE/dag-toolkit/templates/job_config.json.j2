@@ -1,0 +1,37 @@
+{
+  "dag_infos": {
+    "dag_id": "{{ table_name }}",
+    "start_date": "{{ start_date }}",
+    "schedule_interval": "{{ schedule_interval }}",
+    "catchup": false,
+    "tags": {{ tags | tojson }},
+    "description": {{ description | tojson }},
+    "default_args": {
+      "owner": "airflow",
+      "email": ["DEFAULT_EMAIL_LIST"],
+      "email_on_retry": false,
+      "email_on_failure": true,
+      "retries": 1,
+      "retry_delay": 60
+    },
+    "ready_data_db": "postgres_default",
+    "ready_data_default_table": "{{ table_name }}",
+    "ready_data_history_table": "{{ history_table | default('') }}",
+    "raw_data_db": "postgres_default",
+    "raw_data_table": "",
+    "load_behavior": "{{ load_behavior }}"
+  },
+  "data_infos": {
+    "name_cn": {{ name_cn | tojson }},
+    "airflow_update_freq": {{ airflow_update_freq | tojson }},
+    "source": {{ source | tojson }},
+    "source_type": "{{ source_type }}",
+    "source_dept": {{ source_dept | tojson }},
+    "gis_format": {{ gis_format | tojson }},
+    "output_coordinate": "{{ output_coordinate | default('EPSG:4326') }}",
+    "is_geometry": {{ 1 if is_geometry else 0 }},
+    "dataset_description": {{ dataset_description | tojson }},
+    "etl_description": {{ etl_description | tojson }},
+    "sensitivity": "{{ sensitivity | default('public') }}"
+  }
+}
