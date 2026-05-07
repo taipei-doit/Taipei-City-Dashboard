@@ -26,7 +26,7 @@
 BEGIN;
 
 -- ─── 0. 清掉 EcoDiet 既有 row（idempotent re-run 必要） ────────────
-DELETE FROM dashboard_groups WHERE dashboard_id IN (700, 701, 702);
+DELETE FROM dashboard_groups WHERE dashboard_id IN (SELECT id FROM dashboards WHERE index LIKE 'eco_diet_%');
 DELETE FROM dashboards WHERE index LIKE 'eco_diet_%';
 DELETE FROM query_charts WHERE index LIKE 'eco_diet_%';
 DELETE FROM components WHERE index LIKE 'eco_diet_%';
@@ -37,25 +37,23 @@ DELETE FROM component_maps WHERE index IN (
   'food_bank_metrotaipei','food_bank_tpe','food_bank_new_tpe'
 );
 
--- ─── 1. component_charts (7 筆) ──────────────────────────────────────
+-- ─── 1. component_charts (6 筆) ──────────────────────────────────────
 -- chart_config（顏色 / chart 類型 / 單位），同 index 不分 city 共用一筆。
 
 INSERT INTO component_charts (index, color, types, unit) VALUES
   ('eco_diet_restaurants_points',     ARRAY['#5fcf80','#5a9cf8'],                                      ARRAY['DonutChart','BarChart'], '家'),
   ('eco_diet_restaurants_density',    ARRAY['#5fcf80','#5a9cf8'],                                      ARRAY['DistrictChart','BarChart'], '家'),
-  ('eco_diet_restaurants_count_by_city', ARRAY['#5fcf80','#5a9cf8'],                                   ARRAY['ColumnChart'], '家'),
   ('eco_diet_green_stores_points',    ARRAY['#ec7cb1','#67baca'],                                      ARRAY['DonutChart','BarChart'], '家'),
   ('eco_diet_food_banks_points',      ARRAY['#f6c344','#a37cf6'],                                      ARRAY['DonutChart','BarChart'], '處'),
-  ('eco_diet_waste_yearly',           ARRAY['#ed5a5a','#f6c344','#5fcf80','#5a9cf8','#a37cf6','#ec7cb1','#888787','#67baca'], ARRAY['TimelineSeparateChart','ColumnChart'], '公噸'),
+  ('eco_diet_waste_yearly',           ARRAY['#ed5a5a','#f6c344','#5fcf80','#5a9cf8','#a37cf6','#ec7cb1','#888787','#67baca'], ARRAY['TimelineSeparateChart','BubbleChart'], '公噸'),
   ('eco_diet_waste_carbon_footprint_yearly', ARRAY['#5fcf80','#5a9cf8'],                              ARRAY['TimelineSeparateChart','ColumnChart'], '公噸 CO₂e');
 
--- ─── 2. components (7 筆) ────────────────────────────────────────────
+-- ─── 2. components (6 筆) ────────────────────────────────────────────
 -- 主庫的 component table 只有 id/index/name 三欄。
 
 INSERT INTO components (id, index, name) VALUES
   (600, 'eco_diet_restaurants_points',           '環保餐廳數量'),
   (601, 'eco_diet_restaurants_density',          '各行政區環保餐廳數量'),
-  (602, 'eco_diet_restaurants_count_by_city',    '雙北環保餐廳數量'),
   (603, 'eco_diet_green_stores_points',          '綠色商店數量'),
   (604, 'eco_diet_food_banks_points',            '實物銀行數量'),
   (605, 'eco_diet_waste_yearly',                 '雙北廢棄物產量趨勢(年)'),
@@ -109,8 +107,8 @@ INSERT INTO query_charts (index, history_config, map_config_ids, map_filter, tim
     '市民查詢居家附近的環保餐廳、店家規劃新分店時參考既有環保認證店家分布、政府評估環保餐廳推廣的地理覆蓋率。',
     ARRAY['https://data.taipei/dataset/detail?id=51d6b46c-37b2-4c9b-b5bf-ab21f8b3f58e','https://data.ntpc.gov.tw/datasets/E90D14F8-5995-4EBB-AF19-8F8FD7D396C8'],
     ARRAY['doit','ntpc'],
-    NOW(), NOW(), 'map_legend',
-    'SELECT name, ''circle'' AS type, '''' AS icon, value FROM (SELECT city AS name, COUNT(*)::float AS value FROM eco_restaurant WHERE lng IS NOT NULL AND lat IS NOT NULL GROUP BY city) t ORDER BY name',
+    NOW(), NOW(), 'two_d',
+    'SELECT city AS x_axis, COUNT(*)::float AS data FROM eco_restaurant WHERE lng IS NOT NULL AND lat IS NOT NULL GROUP BY city ORDER BY city',
     NULL, 'metrotaipei'),
   ('eco_diet_restaurants_points', NULL, ARRAY[201]::integer[], '{}'::json, 'static', NULL, NULL, NULL,
     '臺北市環保局', '臺北環保餐廳全量點位',
@@ -118,8 +116,8 @@ INSERT INTO query_charts (index, history_config, map_config_ids, map_filter, tim
     '市民查詢居家附近的環保餐廳、店家規劃新分店時參考既有環保認證店家分布。',
     ARRAY['https://data.taipei/dataset/detail?id=51d6b46c-37b2-4c9b-b5bf-ab21f8b3f58e'],
     ARRAY['doit'],
-    NOW(), NOW(), 'map_legend',
-    'SELECT name, ''circle'' AS type, '''' AS icon, value FROM (SELECT ''臺北市'' AS name, COUNT(*)::float AS value FROM eco_restaurant WHERE lng IS NOT NULL AND lat IS NOT NULL AND city=''臺北市'') t',
+    NOW(), NOW(), 'two_d',
+    'SELECT ''臺北市'' AS x_axis, COUNT(*)::float AS data FROM eco_restaurant WHERE lng IS NOT NULL AND lat IS NOT NULL AND city=''臺北市''',
     NULL, 'taipei'),
   ('eco_diet_restaurants_points', NULL, ARRAY[202]::integer[], '{}'::json, 'static', NULL, NULL, NULL,
     '新北市環保局', '新北環保餐廳全量點位',
@@ -127,8 +125,8 @@ INSERT INTO query_charts (index, history_config, map_config_ids, map_filter, tim
     '市民查詢居家附近的環保餐廳、店家規劃新分店時參考既有環保認證店家分布。',
     ARRAY['https://data.ntpc.gov.tw/datasets/E90D14F8-5995-4EBB-AF19-8F8FD7D396C8'],
     ARRAY['ntpc'],
-    NOW(), NOW(), 'map_legend',
-    'SELECT name, ''circle'' AS type, '''' AS icon, value FROM (SELECT ''新北市'' AS name, COUNT(*)::float AS value FROM eco_restaurant WHERE lng IS NOT NULL AND lat IS NOT NULL AND city=''新北市'') t',
+    NOW(), NOW(), 'two_d',
+    'SELECT ''新北市'' AS x_axis, COUNT(*)::float AS data FROM eco_restaurant WHERE lng IS NOT NULL AND lat IS NOT NULL AND city=''新北市''',
     NULL, 'newtaipei');
 
 -- ─── C1b 各行政區環保餐廳密度（two_d，3 city） ──────────────────────
@@ -165,52 +163,52 @@ INSERT INTO query_charts (index, history_config, map_config_ids, map_filter, tim
     'SELECT city AS x_axis, COUNT(*)::float AS data FROM eco_restaurant GROUP BY city ORDER BY x_axis',
     NULL, 'metrotaipei');
 
--- ─── C4 綠色商店數量（map_legend，3 city） ──────────────────────────
+-- ─── C4 綠色商店數量（two_d，3 city） ───────────────────────────────
 INSERT INTO query_charts (index, history_config, map_config_ids, map_filter, time_from, time_to, update_freq, update_freq_unit, source, short_desc, long_desc, use_case, links, contributors, created_at, updated_at, query_type, query_chart, query_history, city) VALUES
   ('eco_diet_green_stores_points', NULL, ARRAY[203]::integer[], '{}'::json, 'static', NULL, NULL, NULL,
     '雙北環保局', '雙北綠色商店全量點位', '整合雙北環保署認證的綠色商店資料並依城市配色（臺北粉／新北青）。', '綠色消費研究、消費者尋找最近綠色商店。',
     ARRAY['https://data.taipei/dataset/detail?id=2bcfa37e-9f59-4c2e-b53a-cc1d7a9e6a0c','https://data.ntpc.gov.tw/datasets/6CCD0274-0C09-43B0-98FC-4D5222A71E8B'],
     ARRAY['doit','ntpc'],
-    NOW(), NOW(), 'map_legend',
-    'SELECT name, ''circle'' AS type, '''' AS icon, value FROM (SELECT city AS name, COUNT(*)::float AS value FROM green_store WHERE lng IS NOT NULL AND lat IS NOT NULL GROUP BY city) t ORDER BY name',
+    NOW(), NOW(), 'two_d',
+    'SELECT city AS x_axis, COUNT(*)::float AS data FROM green_store WHERE lng IS NOT NULL AND lat IS NOT NULL GROUP BY city ORDER BY city',
     NULL, 'metrotaipei'),
   ('eco_diet_green_stores_points', NULL, ARRAY[204]::integer[], '{}'::json, 'static', NULL, NULL, NULL,
     '臺北市環保局', '臺北綠色商店全量點位', '臺北綠色商店全量點位。', '綠色消費研究、消費者尋找最近綠色商店。',
     ARRAY['https://data.taipei/dataset/detail?id=2bcfa37e-9f59-4c2e-b53a-cc1d7a9e6a0c'],
     ARRAY['doit'],
-    NOW(), NOW(), 'map_legend',
-    'SELECT name, ''circle'' AS type, '''' AS icon, value FROM (SELECT ''臺北市'' AS name, COUNT(*)::float AS value FROM green_store WHERE lng IS NOT NULL AND lat IS NOT NULL AND city=''臺北市'') t',
+    NOW(), NOW(), 'two_d',
+    'SELECT ''臺北市'' AS x_axis, COUNT(*)::float AS data FROM green_store WHERE lng IS NOT NULL AND lat IS NOT NULL AND city=''臺北市''',
     NULL, 'taipei'),
   ('eco_diet_green_stores_points', NULL, ARRAY[205]::integer[], '{}'::json, 'static', NULL, NULL, NULL,
     '新北市環保局', '新北綠色商店全量點位', '新北綠色商店全量點位。', '綠色消費研究、消費者尋找最近綠色商店。',
     ARRAY['https://data.ntpc.gov.tw/datasets/6CCD0274-0C09-43B0-98FC-4D5222A71E8B'],
     ARRAY['ntpc'],
-    NOW(), NOW(), 'map_legend',
-    'SELECT name, ''circle'' AS type, '''' AS icon, value FROM (SELECT ''新北市'' AS name, COUNT(*)::float AS value FROM green_store WHERE lng IS NOT NULL AND lat IS NOT NULL AND city=''新北市'') t',
+    NOW(), NOW(), 'two_d',
+    'SELECT ''新北市'' AS x_axis, COUNT(*)::float AS data FROM green_store WHERE lng IS NOT NULL AND lat IS NOT NULL AND city=''新北市''',
     NULL, 'newtaipei');
 
--- ─── C7a 實物銀行數量（map_legend，3 city） ─────────────────────────
+-- ─── C7a 實物銀行數量（two_d，3 city） ──────────────────────────────
 INSERT INTO query_charts (index, history_config, map_config_ids, map_filter, time_from, time_to, update_freq, update_freq_unit, source, short_desc, long_desc, use_case, links, contributors, created_at, updated_at, query_type, query_chart, query_history, city) VALUES
   ('eco_diet_food_banks_points', NULL, ARRAY[206]::integer[], '{}'::json, 'static', NULL, NULL, NULL,
     '雙北社會局', '雙北實物銀行（社福資源）全量點位', '整合臺北市社福機構名冊與新北市轄區社會福利服務中心資料，篩選出實物銀行（含食物銀行）類別據點。', '社福政策研究、食物剩餘再分配研究、民眾尋找最近實物銀行。',
     ARRAY['https://data.taipei/dataset/detail?id=3fbc79e5-0138-4c89-8c47-39feddbd6d3f','https://data.ntpc.gov.tw/datasets/1C1D0066-A4E7-4753-B8BC-D7728D5F3E04'],
     ARRAY['doit','ntpc'],
-    NOW(), NOW(), 'map_legend',
-    'SELECT name, ''circle'' AS type, '''' AS icon, value FROM (SELECT city AS name, COUNT(*)::float AS value FROM food_bank WHERE lng IS NOT NULL AND lat IS NOT NULL GROUP BY city) t ORDER BY name',
+    NOW(), NOW(), 'two_d',
+    'SELECT city AS x_axis, COUNT(*)::float AS data FROM food_bank WHERE lng IS NOT NULL AND lat IS NOT NULL GROUP BY city ORDER BY city',
     NULL, 'metrotaipei'),
   ('eco_diet_food_banks_points', NULL, ARRAY[207]::integer[], '{}'::json, 'static', NULL, NULL, NULL,
     '臺北市社會局', '臺北實物銀行全量點位', '臺北實物銀行（含食物銀行）類別據點。', '社福政策研究、民眾尋找最近實物銀行。',
     ARRAY['https://data.taipei/dataset/detail?id=3fbc79e5-0138-4c89-8c47-39feddbd6d3f'],
     ARRAY['doit'],
-    NOW(), NOW(), 'map_legend',
-    'SELECT name, ''circle'' AS type, '''' AS icon, value FROM (SELECT ''臺北市'' AS name, COUNT(*)::float AS value FROM food_bank WHERE lng IS NOT NULL AND lat IS NOT NULL AND city=''臺北市'') t',
+    NOW(), NOW(), 'two_d',
+    'SELECT ''臺北市'' AS x_axis, COUNT(*)::float AS data FROM food_bank WHERE lng IS NOT NULL AND lat IS NOT NULL AND city=''臺北市''',
     NULL, 'taipei'),
   ('eco_diet_food_banks_points', NULL, ARRAY[208]::integer[], '{}'::json, 'static', NULL, NULL, NULL,
     '新北市社會局', '新北實物銀行全量點位', '新北實物銀行（含食物銀行）類別據點。', '社福政策研究、民眾尋找最近實物銀行。',
     ARRAY['https://data.ntpc.gov.tw/datasets/1C1D0066-A4E7-4753-B8BC-D7728D5F3E04'],
     ARRAY['ntpc'],
-    NOW(), NOW(), 'map_legend',
-    'SELECT name, ''circle'' AS type, '''' AS icon, value FROM (SELECT ''新北市'' AS name, COUNT(*)::float AS value FROM food_bank WHERE lng IS NOT NULL AND lat IS NOT NULL AND city=''新北市'') t',
+    NOW(), NOW(), 'two_d',
+    'SELECT ''新北市'' AS x_axis, COUNT(*)::float AS data FROM food_bank WHERE lng IS NOT NULL AND lat IS NOT NULL AND city=''新北市''',
     NULL, 'newtaipei');
 
 -- ─── C5 雙北廢棄物產量趨勢（three_d，3 city） ────────────────────────
@@ -291,17 +289,13 @@ ROUND(food_wastes_recycled * 0.0483 + garbage_clearance * 0.340 + garbage_recycl
 FROM gov_open_waste_yearly WHERE county = '新北市' ORDER BY 1$sql$,
     NULL, 'newtaipei');
 
--- ─── 5. dashboards (3 筆) ────────────────────────────────────────────
--- 仿 ltc_care 模式：每個 city 一個 dashboard。
--- metrotaipei 包 7 個 component（含 C2 雙北統計）；taipei / newtaipei 各包 6 個（不含 C2）
+-- ─── 5. dashboards (1 筆) ────────────────────────────────────────────
+-- 綠色飲食只掛在雙北儀表板，不在臺北或新北各自設定 dashboard。
+-- components 對應 EcoDietView 原本的 6 個 component（C1a/C1b/C4/C5/C5b/C7a）。
 
 INSERT INTO dashboards (id, index, name, components, icon, updated_at, created_at) VALUES
   (700, 'eco_diet_metrotaipei', '綠色飲食行為流程',
-   ARRAY[600, 601, 602, 603, 604, 605, 606]::int[], 'eco', NOW(), NOW()),
-  (701, 'eco_diet_tpe',         '綠色飲食行為流程',
-   ARRAY[600, 601,      603, 604, 605, 606]::int[], 'eco', NOW(), NOW()),
-  (702, 'eco_diet_new_tpe',     '綠色飲食行為流程',
-   ARRAY[600, 601,      603, 604, 605, 606]::int[], 'eco', NOW(), NOW())
+   ARRAY[600, 601, 603, 604, 605, 606]::int[], 'eco', NOW(), NOW())
 ON CONFLICT (index) DO UPDATE SET
   id   = EXCLUDED.id,
   name = EXCLUDED.name,
@@ -309,17 +303,11 @@ ON CONFLICT (index) DO UPDATE SET
   icon = EXCLUDED.icon,
   updated_at = NOW();
 
--- ─── 6. dashboard_groups (3 筆) ──────────────────────────────────────
--- 把三個 dashboards 各掛到對應 group：
---   eco_diet_metrotaipei → metrotaipei (group 3)
---   eco_diet_tpe         → taipei      (group 2)
---   eco_diet_new_tpe     → newtaipei   (group 4)
--- group_id 從 groups.name lookup（避免假設固定 id）
+-- ─── 6. dashboard_groups (1 筆) ──────────────────────────────────────
+-- eco_diet_metrotaipei → metrotaipei (group 3)
 
 INSERT INTO dashboard_groups (dashboard_id, group_id)
 SELECT 700, id FROM groups WHERE name = 'metrotaipei'
-UNION ALL SELECT 701, id FROM groups WHERE name = 'taipei'
-UNION ALL SELECT 702, id FROM groups WHERE name = 'newtaipei'
 ON CONFLICT (dashboard_id, group_id) DO NOTHING;
 
 COMMIT;
