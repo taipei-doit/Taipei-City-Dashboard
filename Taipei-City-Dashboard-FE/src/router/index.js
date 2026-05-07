@@ -19,9 +19,6 @@ import ComponentView from "../views/ComponentView.vue";
 import ComponentInfoView from "../views/ComponentInfoView.vue";
 import EmbedView from "../views/EmbedView.vue";
 // import FloodRadarView from "../views/FloodRadarView.vue";
-import AccessibilityRouteView from "../views/AccessibilityRouteView.vue";
-import EcoDietView from "../views/EcoDietView.vue";
-
 const routes = [
 	{
 		path: "/",
@@ -41,35 +38,6 @@ const routes = [
 		path: "/mapview",
 		name: "mapview",
 		component: MapView,
-	},
-	// {
-	// 	path: "/flood-radar",
-	// 	name: "flood-radar",
-	// 	component: FloodRadarView,
-	// },
-	{
-		path: "/accessibility-route",
-		name: "accessibility-route",
-		component: AccessibilityRouteView,
-		meta: { layout: "dashboard" },
-	},
-	{
-		path: "/accessibility-route/mapview",
-		name: "accessibility-route-mapview",
-		component: AccessibilityRouteView,
-		meta: { layout: "dashboard" },
-	},
-	{
-		path: "/eco-diet",
-		name: "eco-diet",
-		component: EcoDietView,
-		meta: { layout: "dashboard" },
-	},
-	{
-		path: "/eco-diet/mapview",
-		name: "eco-diet-mapview",
-		component: EcoDietView,
-		meta: { layout: "dashboard" },
 	},
 	{
 		path: "/component",
