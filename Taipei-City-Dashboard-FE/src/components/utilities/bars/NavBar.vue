@@ -25,23 +25,6 @@ const linkQuery = computed(() => {
 	return `${indexQuery}${cityQuery}`;
 });
 
-// Context-aware tabs: demo views (e.g. /accessibility-route) bring their own
-// /<demo>/dashboard 與 /<demo>/mapview，NavBar 的 tab 改指向 demo 自己的兩個視圖。
-const tabContext = computed(() => {
-	if (route.path.startsWith('/accessibility-route')) {
-		return {
-			dashboardPath: '/accessibility-route',
-			mapviewPath: '/accessibility-route/mapview',
-		};
-	}
-	if (route.path.startsWith('/eco-diet')) {
-		return {
-			dashboardPath: '/eco-diet',
-			mapviewPath: '/eco-diet/mapview',
-		};
-	}
-	return null;
-});
 
 const location = computed(() => {
 	return window.location;
@@ -85,16 +68,12 @@ const isLocalhost = computed(() => {
         組件瀏覽平台
       </router-link>
       <router-link
-        :to="tabContext
-          ? tabContext.dashboardPath
-          : `/dashboard${linkQuery.includes('undefined') ? '' : linkQuery}`"
+        :to="`/dashboard${linkQuery.includes('undefined') ? '' : linkQuery}`"
       >
         儀表板總覽
       </router-link>
       <router-link
-        :to="tabContext
-          ? tabContext.mapviewPath
-          : `/mapview${linkQuery.includes('undefined') ? '' : linkQuery}`"
+        :to="`/mapview${linkQuery.includes('undefined') ? '' : linkQuery}`"
       >
         地圖交叉比對
       </router-link>

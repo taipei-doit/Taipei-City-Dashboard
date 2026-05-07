@@ -153,19 +153,6 @@ onMounted(() => {
         </div>
       </transition>
     </template>
-    <h1>
-      {{ isExpanded ? `示範儀表板` : `示範` }}
-    </h1>
-    <RouterLink
-      :to="$route.path.startsWith('/eco-diet') ? $route.path : '/eco-diet'"
-      class="sidebar-demo-link"
-      active-class="sidebar-demo-link-active"
-    >
-      <span :title="!isExpanded ? '綠色飲食行為流程' : ''">eco</span>
-      <h3 v-if="isExpanded">
-        綠色飲食行為流程
-      </h3>
-    </RouterLink>
     <h1 @click="toggleCollapse(contentStore.cityManager.activeCities)">
       {{ isExpanded ? `公共儀表板` : `公共` }}
     </h1>

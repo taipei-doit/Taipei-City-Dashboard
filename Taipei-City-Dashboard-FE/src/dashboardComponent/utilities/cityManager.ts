@@ -45,7 +45,7 @@ export class CityManager {
             {
                 expandedName: "新北儀表板",
 				collapsedName: "新北",
-                enabled: true,
+                enabled: false,
                 selectList: ["newtaipei"],
                 tagList: ["newtaipei"],
             },
