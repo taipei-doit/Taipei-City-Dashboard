@@ -55,14 +55,14 @@ def _transfer(**kwargs):
     data = raw_data.rename(
         columns={
             "行政區": "district",
-            "清理廢棄物(噸)": "waste_cleaned_tons",
+            "清理廢棄物（噸）": "waste_cleaned_tons",
             "填補鼠洞數": "rat_holes_filled_count",
             "放置捕鼠籠": "mouse_traps_placed_count",
-            "施放滅鼠藥劑(克)": "rodenticide_applied_grams",
-            "捕獲鼠隻數(包含投藥死亡)": "rats_captured_count",
+            "施放滅鼠藥劑（克）": "rodenticide_applied_grams",
+            "捕獲鼠隻數（包含投藥死亡）": "rats_captured_count",
             "教育宣導場次": "education_outreach_sessions",
             "違規裁處次數": "violation_reports_count",
-            "消毒面積(平方公尺)": "disinfection_area_square_meters",
+            "消毒面積（平方公尺）": "disinfection_area_square_meters",
         }
     )
 
