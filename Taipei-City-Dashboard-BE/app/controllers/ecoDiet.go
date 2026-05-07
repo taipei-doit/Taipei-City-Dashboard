@@ -325,54 +325,47 @@ const ecoDietSystemSuffix = `
 // buildEcoDietComponentPrompt queries DB and builds a system prompt for the given component.
 func buildEcoDietComponentPrompt(componentID string) (string, error) {
 	switch componentID {
-	case "eco-diet-c1a":
+	case "600": // 環保餐廳數量（點位）
 		rows, err := models.GetEcoRestaurantPoints()
 		if err != nil {
 			return "", err
 		}
 		return ecoDietRestaurantPointsPrompt(rows), nil
 
-	case "eco-diet-c1b":
+	case "601": // 各行政區環保餐廳數量
 		out, err := models.GetEcoRestaurantDensityByDistrict("")
 		if err != nil {
 			return "", err
 		}
 		return ecoDietRestaurantDensityPrompt(out), nil
 
-	case "eco-diet-c2":
-		out, err := models.GetEcoRestaurantCountByCity()
-		if err != nil {
-			return "", err
-		}
-		return ecoDietRestaurantCountByCityPrompt(out), nil
-
-	case "eco-diet-c4":
+	case "603": // 綠色商店數量
 		rows, err := models.GetGreenStorePoints("", "")
 		if err != nil {
 			return "", err
 		}
 		return ecoDietGreenStorePointsPrompt(rows), nil
 
-	case "eco-diet-c5":
+	case "604": // 實物銀行數量
+		rows, err := models.GetFoodBankPoints()
+		if err != nil {
+			return "", err
+		}
+		return ecoDietFoodBankPointsPrompt(rows), nil
+
+	case "605": // 雙北廢棄物產量趨勢(年)
 		out, categories, err := models.GetWasteYearly()
 		if err != nil {
 			return "", err
 		}
 		return ecoDietWasteYearlyPrompt(out, categories), nil
 
-	case "eco-diet-c5b":
+	case "606": // 雙北廢棄物碳足跡趨勢(年)
 		out, categories, err := models.GetWasteCarbonFootprintYearly()
 		if err != nil {
 			return "", err
 		}
 		return ecoDietWasteCarbonYearlyPrompt(out, categories), nil
-
-	case "eco-diet-c7a":
-		rows, err := models.GetFoodBankPoints()
-		if err != nil {
-			return "", err
-		}
-		return ecoDietFoodBankPointsPrompt(rows), nil
 
 	default:
 		return "", fmt.Errorf("unknown component_id: %s", componentID)
