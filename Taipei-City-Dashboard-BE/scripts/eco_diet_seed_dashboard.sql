@@ -294,7 +294,7 @@ FROM gov_open_waste_yearly WHERE county = '新北市' ORDER BY 1$sql$,
 -- components 對應 EcoDietView 原本的 6 個 component（C1a/C1b/C4/C5/C5b/C7a）。
 
 INSERT INTO dashboards (id, index, name, components, icon, updated_at, created_at) VALUES
-  (700, 'eco_diet_metrotaipei', '綠色飲食行為流程',
+  (700, 'eco_diet_metrotaipei', '綠色飲食',
    ARRAY[600, 601, 603, 604, 605, 606]::int[], 'eco', NOW(), NOW())
 ON CONFLICT (index) DO UPDATE SET
   id   = EXCLUDED.id,
