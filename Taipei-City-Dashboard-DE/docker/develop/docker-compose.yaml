@@ -88,13 +88,6 @@ x-airflow-common:
     - ${AIRFLOW_PROJ_DIR:-.}/config:/opt/airflow/config
     - ${AIRFLOW_PROJ_DIR:-../../}/plugins:/opt/airflow/plugins
   user: "${AIRFLOW_UID:-50000}:0"
-  networks:
-    - br_dashboard
-
-networks:
-  br_dashboard:
-    external: true
-    name: br_dashboard
 
 services:
   airflow-webserver:
@@ -103,7 +96,7 @@ services:
     cpus: "0.5"
     mem_limit: "2g"
     ports:
-      - "8081:8080"
+      - "8080:8080"
     healthcheck:
       test: ["CMD", "curl", "--fail", "http://localhost:8080/airflow-sit/health"]
       interval: 30s
