@@ -70,5 +70,4 @@ def _transfer(**kwargs):
     )
 
 
-dag = CommonDag(proj_folder="proj_city_dashboard", dag_folder="rat_disaster")
-dag.create_dag(etl_func=_transfer)
+dag = CommonDag(proj_folder="proj_city_dashboard", dag_folder="rat_disaster").create_dag(etl_func=_transfer)
