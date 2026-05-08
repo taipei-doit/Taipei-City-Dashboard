@@ -216,7 +216,11 @@ func configureEcoDietRoutes() {
 	ecoDiet.Use(middleware.LimitTotalRequests(global.ComponentLimitTotalRequestsTimes, global.LimitRequestsDuration))
 	{
 		ecoDiet.POST("/ai-summary", controllers.GetEcoDietAiSummary)
-		ecoDiet.POST("/nearby-chat", controllers.PostEcoDietNearbyChat)
+	}
+	ecoDietAuth := ecoDiet.Group("/")
+	ecoDietAuth.Use(middleware.IsLoggedIn())
+	{
+		ecoDietAuth.POST("/nearby-chat", controllers.PostEcoDietNearbyChat)
 	}
 }
 

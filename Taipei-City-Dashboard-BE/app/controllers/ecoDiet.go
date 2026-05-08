@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"fmt"
+	"html"
 	"net/http"
 	"sort"
 	"strings"
@@ -99,6 +100,12 @@ var ecoDietFacilityLabel = map[string]string{
 // 把 GPS 座標 / 篩選條件寫進 system prompt，註冊 get_nearby_eco_facilities
 // function tool，由共用的 aiService function-call 迴圈執行工具並產生自然語言回答。
 func PostEcoDietNearbyChat(c *gin.Context) {
+	accountID, exists := c.Get("accountID")
+	if !exists {
+		c.JSON(http.StatusUnauthorized, gin.H{"status": "error", "message": "Unauthorized"})
+		return
+	}
+
 	var input EcoDietNearbyChatInput
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": err.Error()})
@@ -282,8 +289,9 @@ func PostEcoDietNearbyChat(c *gin.Context) {
 		},
 	}
 
+	sessionID := "eco-diet-nearby-" + util.GenerateRandomString(6)
 	aiReq := aiService.AIChatRequest{
-		SessionID: "eco-diet-nearby-" + util.GenerateRandomString(6),
+		SessionID: sessionID,
 		UserID:    "system",
 		IPAddress: c.ClientIP(),
 		Messages:  messages,
@@ -292,7 +300,7 @@ func PostEcoDietNearbyChat(c *gin.Context) {
 	// ctx 注入 actions accumulator：tool 執行時 Append、本 handler 結束前 Collect 出來。
 	chatCtx := actions.With(c.Request.Context())
 
-	log, err := aiService.ChatWithTWCC(chatCtx, aiReq,
+	aiLog, err := aiService.ChatWithTWCC(chatCtx, aiReq,
 		llms.WithMaxTokens(1200),
 		llms.WithTemperature(0.3),
 		llms.WithTools([]llms.Tool{nearbyTool, planRouteTool, areaQueryTool}),
@@ -302,6 +310,22 @@ func PostEcoDietNearbyChat(c *gin.Context) {
 		return
 	}
 
+	// 取最後一則 human 訊息作為 question
+	lastQuestion := ""
+	for i := len(input.Messages) - 1; i >= 0; i-- {
+		if input.Messages[i].Role == "user" || input.Messages[i].Role == "human" {
+			lastQuestion = input.Messages[i].Content
+			break
+		}
+	}
+	models.CreateChatLog(
+		sessionID,
+		html.EscapeString(lastQuestion),
+		html.EscapeString(aiLog.Answer),
+		c.ClientIP(),
+		accountID.(int),
+	)
+
 	collected := actions.Collect(chatCtx)
 	if collected == nil {
 		collected = []actions.ChatAction{}
@@ -309,7 +333,7 @@ func PostEcoDietNearbyChat(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"status":  "success",
-		"answer":  log.Answer,
+		"answer":  aiLog.Answer,
 		"actions": collected,
 	})
 }

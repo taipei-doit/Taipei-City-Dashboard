@@ -1,7 +1,13 @@
 <!-- Component Name: EcoDietNearbyChatModal -->
 <script setup>
-import { ref, nextTick, watch } from "vue";
+import { ref, nextTick, watch, computed } from "vue";
 import http from "../router/axios";
+import { useAuthStore } from "../store/authStore";
+import { useDialogStore } from "../store/dialogStore";
+
+const authStore = useAuthStore();
+const dialogStore = useDialogStore();
+const isLoggedIn = computed(() => !!authStore.token);
 
 const props = defineProps({
 	show: { type: Boolean, default: false },
@@ -186,7 +192,22 @@ function handleClose() {
 					</button>
 				</div>
 
-				<div class="ecodietnearbychat-meta">
+				<div
+					v-if="!isLoggedIn"
+					class="ecodietnearbychat-login-required"
+				>
+					<span class="material-icons ecodietnearbychat-login-icon">lock</span>
+					<p>需要登入才能使用 AI 助理</p>
+					<button
+						class="ecodietnearbychat-login-btn"
+						type="button"
+						@click="dialogStore.dialogs.login = true"
+					>
+						前往登入
+					</button>
+				</div>
+
+				<div v-else class="ecodietnearbychat-meta">
 					<template v-if="isLocating">
 						<span class="material-icons ecodietnearbychat-meta-icon">my_location</span>
 						定位中…
@@ -201,7 +222,7 @@ function handleClose() {
 					</template>
 				</div>
 
-				<div class="ecodietnearbychat-controls">
+				<div v-if="isLoggedIn" class="ecodietnearbychat-controls">
 					<div class="ecodietnearbychat-controls-row">
 						<label class="ecodietnearbychat-controls-label">查詢半徑</label>
 						<input
@@ -244,6 +265,7 @@ function handleClose() {
 				</div>
 
 				<div
+					v-if="isLoggedIn"
 					ref="messageListRef"
 					class="ecodietnearbychat-messages"
 				>
@@ -265,7 +287,7 @@ function handleClose() {
 				</div>
 
 				<div
-					v-if="error"
+					v-if="isLoggedIn && error"
 					class="ecodietnearbychat-error"
 				>
 					<span>{{ error }}</span>
@@ -281,7 +303,7 @@ function handleClose() {
 					</button>
 				</div>
 
-				<div class="ecodietnearbychat-input-row">
+				<div v-if="isLoggedIn" class="ecodietnearbychat-input-row">
 					<textarea
 						v-model="inputText"
 						class="ecodietnearbychat-input"
@@ -480,6 +502,40 @@ function handleClose() {
 
 		&::-webkit-scrollbar-thumb:hover {
 			background: var(--color-normal-text);
+		}
+	}
+
+	&-login-required {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		gap: var(--font-m);
+		color: var(--color-complement-text);
+		font-size: var(--font-m);
+
+		p {
+			margin: 0;
+		}
+	}
+
+	&-login-icon {
+		font-size: 2.5rem;
+		color: var(--color-highlight);
+	}
+
+	&-login-btn {
+		padding: var(--font-s) var(--font-l);
+		background: var(--color-highlight);
+		color: #fff;
+		border: none;
+		border-radius: var(--border-radius);
+		font-size: var(--font-m);
+		cursor: pointer;
+
+		&:hover {
+			opacity: 0.85;
 		}
 	}
 
