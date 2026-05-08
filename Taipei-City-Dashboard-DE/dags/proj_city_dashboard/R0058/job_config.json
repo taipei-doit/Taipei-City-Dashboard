@@ -2,7 +2,7 @@
     "dag_infos": {
         "dag_id": "R0058",
         "start_date": "2021-11-17",
-        "schedule_interval": "0 5 25 * *",
+        "schedule_interval": "0 19 3,24 * *",
         "catchup": false,
         "tags": ["building_permit_history", "都發局", "歷年(除本年度)建造執照"],
         "description": "Building permits excluding this year from data.taipei.",

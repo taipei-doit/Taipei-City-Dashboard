@@ -2,7 +2,7 @@
   "dag_infos": {
     "dag_id": "employment_age_structure",
     "start_date": "2025-02-11",
-    "schedule_interval": "0 3 25 12 *",
+    "schedule_interval": "0 19 6,27 * *",
     "catchup": false,
     "tags": [
       "employment_age_structure",

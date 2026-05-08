@@ -2,7 +2,7 @@
     "dag_infos": {
         "dag_id": "R0061",
         "start_date": "2021-11-17",
-        "schedule_interval": "0 20 20 * *",
+        "schedule_interval": "30 19 3,24 * *",
         "catchup": false,
         "tags": ["building_social_house", "都發局", "社會住宅興建進度資料"],
         "description": "Social housing construction progress.",

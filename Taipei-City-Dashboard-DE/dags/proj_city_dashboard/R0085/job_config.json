@@ -2,7 +2,7 @@
     "dag_infos": {  
         "dag_id": "R0085",
         "start_date": "2021-12-21",
-        "schedule_interval": "0 5 25 3,9 *",
+        "schedule_interval": "30 16 4,25 * *",
         "catchup": false,
         "tags": ["work_rainfall_station_location", "工務局", "水利處雨量站點位"],
         "description": "Rainfall stations location.", 

@@ -2,7 +2,7 @@
   "dag_infos": {
     "dag_id": "merge_crime_type_by_dist",
     "start_date": "2025-06-30",
-    "schedule_interval": "@monthly",
+    "schedule_interval": "0 15 5,26 * *",
     "catchup": false,
     "tags": ["merge_crime_type_by_dist", "新北市", "New-Taipei-City", "犯罪資料"],
     "description": "",
