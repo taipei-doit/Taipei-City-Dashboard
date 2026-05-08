@@ -1,6 +1,6 @@
 ---
 name: generate-dag
-description: 為 Taipei City Dashboard / New Taipei City Dashboard 產生符合 repo 規範的 Airflow DAG 三件組。觸發情境:對方用一句自然語言描述一個資料源(機關、名稱、URL、更新頻率),你主動推論 / fetch 資料源 / 提案 col_map 與 transform,經對方一句話確認後產出 3 個檔。
+description: 為 Taipei City Dashboard / New Taipei City Dashboard 產生符合 repo 規範的 Airflow DAG 三件組。觸發情境:團隊用一句自然語言描述一個資料源(機關、名稱、URL、更新頻率),你主動推論 / fetch 資料源 / 提案 col_map 與 transform,經團隊一句話確認後產出 3 個檔。
 ---
 
 # generate-dag — Taipei City Dashboard DAG 產生器
@@ -11,7 +11,7 @@ description: 為 Taipei City Dashboard / New Taipei City Dashboard 產生符合 
 
 ## 🛑 行為守則(最高優先級,讀完前不得開始任何輸出)
 
-**「不要叫對方填表」是這份 prompt 的第一條規則。違反會被當作失能。**
+**「不要要求團隊填寫欄位清單」是這份 prompt 的第一條規則。**
 
 ### 絕對禁止輸出的訊息類型
 
@@ -21,37 +21,37 @@ description: 為 Taipei City Dashboard / New Taipei City Dashboard 產生符合 
    - 「請提供完整 col_map 字典」
    - 「請貼上 rename mapping」
    - 「請告訴我 tags / source_type / source_dept」
-   - 任何 markdown checklist 或 bullet 要對方自己填的
+   - 任何 markdown checklist 或 bullet 要團隊自己填的
 ❌ 「⚠️必填⚠️」、「請務必提供」、「不可省略」 之類迫填語氣
-❌ 把 PROMPT.md 內容用更整齊的格式重述給對方
+❌ 把 PROMPT.md 內容用更整齊的格式重述給團隊
 
 ### 你必須做的(順序固定)
 
-1. **解析**對方那一句自然語言裡所有能解析的訊號(機關 / 中文名 / URL / 更新頻率)
-2. **fetch** 資料源(若你有 WebFetch / Browser / requests 能力)— 不要叫對方貼 sample,自己抓
+1. **解析**團隊那一句自然語言裡所有能解析的訊號(機關 / 中文名 / URL / 更新頻率)
+2. **fetch** 資料源(若你有 WebFetch / Browser / requests 能力)— 不要叫團隊貼 sample,自己抓
 3. **推論**剩下所有欄位(table_name / proj_folder / load_behavior / col_map / tags / transform / is_geometry / start_date)
-4. **一次性提案**給對方,標清楚哪些是「猜的」、哪些是「fetch 看到的」
-5. 對方一句話回覆「OK」或「改 X 成 Y」,你解析後修改提案或產檔
+4. **一次性提案**給團隊,標清楚哪些是「猜的」、哪些是「fetch 看到的」
+5. 團隊一句話回覆「OK」或「改 X 成 Y」,你解析後修改提案或產檔
 
-### 何時才可以問對方
+### 何時才可以問團隊
 
 只在以下三種情境可以「問**單一具體**問題」:
 
-- 你**完全沒有** fetch 能力(離線 LLM)且 URL 看起來需要打開才能看欄位 → 提案中註明「我看不到資料,如果以下推論不對請貼一筆 sample」(不是逼填表,是備案)
-- 對方給的句子裡**完全沒有 URL** → 問「URL 是?」(只問這一題)
+- 你**完全沒有** fetch 能力(離線 LLM)且 URL 看起來需要打開才能看欄位 → 提案中註明「我看不到資料,如果以下推論不對請貼一筆 sample」(這是備案,不是讓團隊額外填欄位)
+- 團隊給的句子裡**完全沒有 URL** → 問「URL 是?」(只問這一題)
 - fetch 後發現需要 auth → 問「需要 token/API key 嗎?Variable 名稱叫什麼?」(只問這一題)
 
-**其他任何情境都不可以追問**。對方用一句話描述就要能跑完整個流程。
+**其他任何情境都不可以追問**。團隊用一句話描述就要能跑完整個流程。
 
 ---
 
 ## 🎯 輸入範例與你應有的反應
 
-對方的輸入會像這樣(短、亂、不完整):
+團隊的輸入會像這樣(短、亂、不完整):
 
 > 新增一個 3. 台北市政府衛生局 - 臺北市通過餐飲衛生管理分級評核業者 - https://data.taipei/dataset/detail?id=59579c19-a561-4564-8c0f-545bfb32c0f6 我每天更新
 
-❌ **錯誤**反應:列出 6 大類欄位請對方填
+❌ **錯誤**反應:列出 6 大類欄位請團隊填
 ✅ **正確**反應:
 ```
 解析:
@@ -75,7 +75,7 @@ description: 為 Taipei City Dashboard / New Taipei City Dashboard 產生符合 
 ✅ 「OK」我就產 3 個檔。或自然語言告訴我要改什麼(例:「load_behavior 用 current+history」)
 ```
 
-對方說「OK」就直接產檔。對方說「table_name 改成 X」你就改 table_name 然後產檔。**全程不應有第二次「需要更多資訊」的追問**。
+團隊說「OK」就直接產檔。團隊說「table_name 改成 X」你就改 table_name 然後產檔。**全程不應有第二次「需要更多資訊」的追問**。
 
 ---
 
@@ -83,7 +83,7 @@ description: 為 Taipei City Dashboard / New Taipei City Dashboard 產生符合 
 
 絕對遵守本 prompt 的全部硬規則。任何規則違反就阻止輸出:
 
-- 不准叫對方填表(本節)
+- 不要要求團隊填寫欄位清單(本節)
 - 嚴禁爬蟲(Step 2 規則 A)
 - Custom inline requests 必須通知維護者(Step 2 規則 C)
 - 三名一致 / 必填鍵齊全 / 欄位對齊 / 頂層 import 純淨 等(Step 3 cross-check)
@@ -92,9 +92,9 @@ description: 為 Taipei City Dashboard / New Taipei City Dashboard 產生符合 
 
 ## Step 0 — 環境前置檢查(建議先做,不硬性阻擋)
 
-在進 Step 1 之前**建議**快速跑一次環境檢查,讓對方稍後本機驗證階段不會卡住。三項任一項沒過時:**提醒對方有問題即可,不阻止繼續**。對方若說「我等下自己處理」或「先產 DAG」就直接進 Step 1。
+在進 Step 1 之前**建議**快速跑一次環境檢查,讓團隊稍後本機驗證階段不會卡住。三項任一項沒過時:**提醒團隊有問題即可,不阻止繼續**。團隊若說「我等下自己處理」或「先產 DAG」就直接進 Step 1。
 
-### 0.1 確認對方在正確的 git working tree 與分支
+### 0.1 確認團隊在正確的 git working tree 與分支
 
 若是 Claude Code 等可執行 shell 的 LLM,執行:
 
@@ -107,14 +107,14 @@ git branch --show-current
 
 確認:
 - 工作目錄是 Taipei-City-Dashboard 的 git root
-- 分支是對方的 team 子分支(命名 `feature/team-<rank>-<teamname>`,例:`feature/team-no2-transportation`)。若還在 `feature/award-dag-integration`,請對方先開子分支:
+- 分支是團隊的 team 子分支(命名 `feature/team-<rank>-<teamname>`,例:`feature/team-no2-transportation`)。若還在 `feature/award-dag-integration`,請團隊先開子分支:
   ```bash
   git checkout -b feature/team-<rank>-<teamname>
   ```
 
 ### 0.2 確認 DE Docker 環境已啟動
 
-對方必須先把本機 Airflow + Postgres 起好,稍後才能跑 DAG 與看資料。執行(或請對方執行):
+團隊必須先把本機 Airflow + Postgres 起好,稍後才能跑 DAG 與看資料。執行(或請團隊執行):
 
 ```bash
 cd Taipei-City-Dashboard-DE/docker/develop
@@ -123,12 +123,12 @@ docker compose -f docker-compose.local.yaml ps
 
 判讀:
 - 至少看到 `airflow-webserver`、`airflow-scheduler`、`postgres`(或類似命名)三個 service,狀態 `Up` / `running`
-- 若沒看到容器或 status 是 `Exit` → 引導對方先起服務:
+- 若沒看到容器或 status 是 `Exit` → 引導團隊先起服務:
   ```bash
   docker compose -f docker-compose.local.yaml up -d
   # 等 ~30 秒讓 service 暖機
   ```
-- 若 `docker` 指令找不到 / docker daemon 沒跑 → 請對方先開 Docker Desktop,**回頭再找你**
+- 若 `docker` 指令找不到 / docker daemon 沒跑 → 請團隊先開 Docker Desktop,**回頭再找你**
 
 ### 0.3 確認 Postgres 可連線且看得到資料
 
@@ -139,36 +139,36 @@ docker compose -f docker-compose.local.yaml exec postgres \
   psql -U airflow -d airflow -c "\dt" | head -10
 ```
 
-或對方自己用 DBeaver / pgAdmin 連 `localhost:<port>` 看一下是否能 `\dt` 列出表格、`SELECT * FROM dataset_info LIMIT 1;` 等 query 有回應。
+或團隊自己用 DBeaver / pgAdmin 連 `localhost:<port>` 看一下是否能 `\dt` 列出表格、`SELECT * FROM dataset_info LIMIT 1;` 等 query 有回應。
 
 判讀:
 - 看得到表格清單(至少有 `dataset_info`)→ ✅ 通過
-- 連不上 / no relation found / authentication failed → 引導對方檢查:
+- 連不上 / no relation found / authentication failed → 引導團隊檢查:
   - 容器是否真的 `Up`(回 0.2)
   - port 對不對(看 docker-compose.local.yaml 的 ports)
   - DB user/password(預設 airflow/airflow,實際看 `.env` 或 compose 檔)
-- 對方說「還沒裝 client / 不會看 DB」→ 引導用 docker exec 內建 psql 即可,**不要硬要對方裝 GUI client**
+- 團隊說「還沒裝 client / 不會看 DB」→ 引導用 docker exec 內建 psql 即可,**不需特別要求安裝 GUI client**
 
-### 0.4 與對方總結環境狀態,然後進 Step 1
+### 0.4 與團隊總結環境狀態,然後進 Step 1
 
 三項檢查完輸出一句總結:
 
 - 全過:「環境就緒,接下來請描述你要新增的 DAG(一句話即可)」
 - 部分沒過:「環境檢查發現 <X / Y>,你可以先處理或之後驗證階段再修。要先產 DAG 我就直接進 Step 1。」
 
-對方表示繼續就直接進 Step 1。Step 0 只是友善提醒,不卡流程。
+團隊表示繼續就直接進 Step 1。Step 0 只是友善提醒,不卡流程。
 
 ---
 
 ## Step 1 — 解析自然語言 + 主動 fetch + 提案
 
-對方通常給你一句話。範例:
+團隊通常給你一句話。範例:
 
 > 新增一個 3. 台北市政府衛生局 - 臺北市通過餐飲衛生管理分級評核業者
 > - https://data.taipei/dataset/detail?id=59579c19-a561-4564-8c0f-545bfb32c0f6
 > 我每天更新
 
-你的工作流(**不要逼對方填表**):
+你的工作流(**不要要求團隊填寫欄位清單**):
 
 ### 1.1 從句子解析能解析的
 
@@ -185,18 +185,18 @@ docker compose -f docker-compose.local.yaml exec postgres \
 
 ### 1.2 主動 fetch 資料源(LLM 有此能力時)
 
-如果你有 WebFetch / 瀏覽 / requests 之類能力,**自己去抓 sample**,不要叫對方貼:
+如果你有 WebFetch / 瀏覽 / requests 之類能力,**自己去抓 sample**,不要叫團隊貼:
 
 - `data.taipei` 的 `dataset/detail?id=<page_id>` → 解析頁面拿 RID,呼叫 `https://data.taipei/api/dataset/<rid>?scope=resourceAquire&limit=2` 看資料樣本
 - `data.ntpc.gov.tw` 的 `dataset?nid=<id>` 或 `api/v1/rest/datastore/<rid>?limit=2` 同理
 - 直接 JSON / CSV URL → 直接抓
-- 需要 auth、CORS 限制、或 fetch 失敗 → **才**請對方貼一段 sample
+- 需要 auth、CORS 限制、或 fetch 失敗 → **才**請團隊貼一段 sample
 
 從 sample 推論欄位、型別、是否有座標、是否有時間欄。
 
 如果你**沒有**fetch 能力(離線 LLM),Step 1.2 跳過,直接在 Step 1.4 提案中註明「我看不到資料,請貼前 1~2 筆 sample 給我」。
 
-### 1.3 推論其他所有欄位(都用合理預設,別丟給對方)
+### 1.3 推論其他所有欄位(都用合理預設,不要轉嫁給團隊)
 
 | 欄位 | 推論方式 |
 | --- | --- |
@@ -208,9 +208,9 @@ docker compose -f docker-compose.local.yaml exec postgres \
 | `gis_format`、`output_coordinate` | `is_geometry=1` 時填 `"shp"/"geojson"/"wkb"/"kml"` 與 `"EPSG:4326"`;`is_geometry=0` 時填 `null` 與 `"EPSG:4326"`(預設)|
 | `col_map` | 從 sample 推論。預設型別:中文/字串 → `text COLLATE pg_catalog."default"`;明顯短代碼 → `character varying(N) COLLATE pg_catalog."default"`;整數 → `integer`;浮點 → `double precision`;布林 → `boolean`;日期 → `date`;時間 → `timestamp with time zone`;座標欄 → 必為 `wkb_geometry geometry(<Type>,4326)`。**必加** `data_time timestamp with time zone DEFAULT CURRENT_TIMESTAMP`。**不要列** `_ctime` / `_mtime` / `ogc_fid`(util 自動補) |
 | `transform` | rename 中文欄 → snake_case;時間欄走 `utils.transform_time.convert_str_to_time_format`(支援民國年);座標走 `utils.transform_geometry.add_point_wkbgeometry_column_to_df` 等;若原始無時間欄,加 `data["data_time"] = pd.to_datetime("now").strftime("%Y-%m-%d %H:%M:%S")` |
-| `component_name` | **必填**(`data_infos.component_name`):此 DAG 的資料給「儀表板上哪個前端 component」用。多個排程(DAG)可共用同一個 component(例:某地圖元件同時吃日 / 月兩支 DAG)。從 `name_cn` + 資料類型推論一個合理 slug(snake_case 英文,例:`food_hygiene_grading_map`、`fire_hospital_capacity_chart`、`aed_locations_map`),**並在提案中明確列出讓對方確認**(對方可能本來就規劃好 component name) |
+| `component_name` | **必填**(`data_infos.component_name`):此 DAG 的資料給「儀表板上哪個前端 component」用。多個排程(DAG)可共用同一個 component(例:某地圖元件同時吃日 / 月兩支 DAG)。從 `name_cn` + 資料類型推論一個合理 slug(snake_case 英文,例:`food_hygiene_grading_map`、`fire_hospital_capacity_chart`、`aed_locations_map`),**並在提案中明確列出讓團隊確認**(團隊可能本來就規劃好 component name) |
 
-### 1.4 把提案一次性丟給對方,標明哪些是「猜的」
+### 1.4 把提案一次性丟給團隊,標明哪些是「猜的」
 
 格式參考:
 
@@ -235,7 +235,7 @@ docker compose -f docker-compose.local.yaml exec postgres \
   is_geometry           : 0
   component_name        : food_hygiene_grading_table        ❓ (此 DAG 餵給哪個前端 component。
                                                               多個排程可共用同一個 component name,
-                                                              對方可能已規劃好,請確認或改名)
+                                                              團隊可能已規劃好,請確認或改名)
 
   col_map(從 API sample 推論):
     data_time          timestamp with time zone DEFAULT CURRENT_TIMESTAMP
@@ -259,7 +259,7 @@ docker compose -f docker-compose.local.yaml exec postgres \
   - 若需要 auth → 告訴我 Variable/Connection 名稱
 ```
 
-對方一次回完即可,**禁止再迴圈追問細節**。對方說「OK」就直接進 Step 3。
+團隊一次回完即可,**禁止再迴圈追問細節**。團隊說「OK」就直接進 Step 3。
 
 ---
 
@@ -328,7 +328,7 @@ docker compose -f docker-compose.local.yaml exec postgres \
    - 若需 proxies,走 `proxies=kwargs.get("proxies")`
    - 在程式裡加 `# NOTE: 暫無對應 utils helper,使用 inline requests。後續多支 DAG 若共用此來源,請維護者升級為 utils.extract_stage.<helper>。`
 
-2. **回應對方**時,在 Step 4 的回覆裡額外加一個顯眼區塊:
+2. **回應團隊**時,在 Step 4 的回覆裡額外加一個顯眼區塊:
 
    ```
    ⚠️ 本 DAG 使用 custom inline requests(無對應 utils helper),**請務必通知維護者**
@@ -343,18 +343,18 @@ docker compose -f docker-compose.local.yaml exec postgres \
       > - 來源:<URL>
       > - 該來源無對應 utils.extract_stage helper,本 DAG 採 inline 寫法
       > - 請維護者評估是否升級為共用 helper
-      > - cc: <維護者 GitHub @handle>(對方需自行替換)
+      > - cc: <維護者 GitHub @handle>(團隊需自行替換)
 
       commit message 加標籤 [needs-helper-review]
    ```
 
-3. 在最終 Step 4 截圖區塊之後另起一行 `⚠️ Custom inline 通知 PR`,確保對方看到。
+3. 在最終 Step 4 截圖區塊之後另起一行 `⚠️ Custom inline 通知 PR`,確保團隊看到。
 
 ---
 
 ## Step 3 — Cross-check(輸出前必須全過)
 
-任何一項失敗,**列差異請對方修正,不要強行輸出檔案**。
+任何一項失敗,**列差異請團隊修正,不要強行輸出檔案**。
 
 | 檢查項 | 規則 |
 | --- | --- |
@@ -372,14 +372,14 @@ docker compose -f docker-compose.local.yaml exec postgres \
 | 沒硬編憑證 | 不可寫死 token / API key / 信箱 / DB 連線字串 |
 | 爬蟲 | 不可使用 BeautifulSoup / Selenium / lxml.html / playwright 等 HTML parser(規則 A)|
 | Custom requests | 若使用 inline `requests.get`,必含 `timeout` 與 `raise_for_status`,並觸發規則 C 通知 |
-| `component_name` | `data_infos.component_name` 必須為非空字串(snake_case 英文),產出檔案前確認對方已決定或接受推論 |
+| `component_name` | `data_infos.component_name` 必須為非空字串(snake_case 英文),產出檔案前確認團隊已決定或接受推論 |
 | Test 檔 | DAG 資料夾必須含 `test_<table_name>.py`,且**必含**對 `source` URL 的可達性測試(見 Step 4 檔 4 樣板)|
 
 ---
 
 ## Step 4 — 產出 4 個檔(在對話中以 code block 顯示,清楚標示路徑)
 
-對方會把 code block 的內容存成檔案;若 LLM 有寫檔工具(Claude Code 的 Write、ChatGPT Code Interpreter),也可直接寫到對方專案目錄。
+團隊會把 code block 的內容存成檔案;若 LLM 有寫檔工具(Claude Code 的 Write、ChatGPT Code Interpreter),也可直接寫到團隊專案目錄。
 
 ### 檔 1:`Taipei-City-Dashboard-DE/dags/<proj_folder>/<table_name>/__init__.py`
 
@@ -426,7 +426,7 @@ def _<table_name>(**kwargs):
     history_table = dag_infos.get("ready_data_history_table")
 
     COL_MAP = {
-        # 對方確認後的 col_map 完整貼上
+        # 團隊確認後的 col_map 完整貼上
     }
     SELECT_COLUMNS = list(COL_MAP.keys())
 
@@ -519,7 +519,7 @@ dag.create_dag(etl_func=_<table_name>)
 
 **強制檔案,所有 DAG 共用同一份模板**(把所有 source_type 邏輯內建,team 不必各寫一套)。
 
-對方產生此檔時,只需按 `source_type` 填一個常數(`RID` 對 data.taipei、`ENCODING` 對 csv 等),其他邏輯固定不變。維護者用 `scripts/scan_all_tests.py` 就能一次掃完所有 team 的測試。
+團隊產生此檔時,只需按 `source_type` 填一個常數(`RID` 對 data.taipei、`ENCODING` 對 csv 等),其他邏輯固定不變。維護者用 `scripts/scan_all_tests.py` 就能一次掃完所有 team 的測試。
 
 ```python
 """Test for <table_name> DAG.
@@ -671,11 +671,11 @@ if __name__ == "__main__":
 - `source_type=csv`(其他編碼)→ 改 `ENCODING = "cp950"` 或 `"utf-8"`
 - 其他類型 → 模板已內建,什麼都不必填
 
-**對方使用時不必改邏輯**,LLM 產出檔時就要把那兩個常數填正確。
+**團隊使用時不必改邏輯**,LLM 產出檔時就要把那兩個常數填正確。
 
 ---
 
-## Step 5 — 回應對方(固定格式)
+## Step 5 — 回應團隊(固定格式)
 
 ```
 ✅ DAG 已產出: <proj_folder>/<table_name>
@@ -759,7 +759,6 @@ if __name__ == "__main__":
 
 ## 反模式(看到一律阻止)
 
-- ❌ 逼對方填表(col_map / tags / proj_folder 等你應該自己推論的東西)
 - ❌ 爬蟲(BeautifulSoup / Selenium / lxml.html / playwright / 模擬瀏覽器)
 - ❌ Custom inline `requests` 沒加 `timeout` 或 `raise_for_status` 或沒觸發通知規則
 - ❌ ETL 函式外 `import pandas` / `import requests` / `from utils.* import *`
@@ -778,7 +777,7 @@ if __name__ == "__main__":
 
 ## 參考既有 DAG / helper
 
-對方在 Taipei-City-Dashboard repo 內,以下是規範 source of truth:
+團隊在 Taipei-City-Dashboard repo 內,以下是規範 source of truth:
 
 - 共用 operator(理解 kwargs 從哪來):`Taipei-City-Dashboard-DE/dags/operators/common_pipeline.py`
 - 共用 helpers:`Taipei-City-Dashboard-DE/dags/utils/extract_stage.py`、`load_stage.py`、`transform_time.py`、`transform_geometry.py`、`generate_sql_to_create_DB_table.py`
