@@ -86,14 +86,13 @@ export function getComponentDataTimeframe(time_from, time_to, api) {
 		parsedTimeTo = time_to;
 	}
 
-	return { parsedTimeFrom, parsedTimeTo };
-
-	// if (api === true) {
-	// 	return {
-	// 		timefrom: parsedTimeFrom.replace(" ", "T") + "+08:00",
-	// 		timeto: parsedTimeTo.replace(" ", "T") + "+08:00",
-	// 	};
-	// } else {
-	// 	return { parsedTimeFrom, parsedTimeTo };
-	// }
+	if (api === true) {
+		// return {
+		// 	timefrom: parsedTimeFrom.replace(" ", "T") + "+08:00",
+		// 	timeto: parsedTimeTo.replace(" ", "T") + "+08:00",
+		// };
+		return { parsedTimeFrom, parsedTimeTo };
+	} else {
+		return { parsedTimeFrom, parsedTimeTo };
+	}
 }
