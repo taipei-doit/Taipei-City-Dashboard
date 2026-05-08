@@ -2,7 +2,7 @@
   "dag_infos": {
     "dag_id": "fire_narrow_street",
     "start_date": "2025-07-07",
-    "schedule_interval": "@monthly",
+    "schedule_interval": "30 13 5,26 * *",
     "catchup": false,
     "tags": ["fire_narrow_street", "新北市", "New-Taipei-City", "狹小巷道"],
     "description": "",

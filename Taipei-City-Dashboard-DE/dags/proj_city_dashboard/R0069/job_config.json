@@ -2,7 +2,7 @@
     "dag_infos": {
         "dag_id": "R0069",
         "start_date": "2021-11-17",
-        "schedule_interval": "0 2 16 3,9 *",
+        "schedule_interval": "30 13 4,25 * *",
         "catchup": false,
         "tags": ["building_unsued_nonpublic", "財政局", "市有非公用閒置建物"],
         "description": "Inventory of non-public unutilized municipal buildings managed by the Taipei City Government Finance Bureau",

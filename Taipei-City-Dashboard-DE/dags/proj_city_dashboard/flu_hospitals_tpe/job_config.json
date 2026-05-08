@@ -2,7 +2,7 @@
   "dag_infos": {
     "dag_id": "flu_hospitals_tpe",
     "start_date": "2025-02-17",
-    "schedule_interval": "@monthly",
+    "schedule_interval": "30 18 4,25 * *",
     "catchup": false,
     "tags": ["flu_hospitals_tpe", "衛生局"],
     "description": "This dataset provides annual statistics on Taipei City's flu vaccination hospitals, including their locations, contact information, and available vaccines.",

@@ -2,7 +2,7 @@
   "dag_infos": {
     "dag_id": "accessible_facilities",
     "start_date": "2025-06-25",
-    "schedule_interval": "@monthly",
+    "schedule_interval": "0 17 6,27 * *",
     "catchup": false,
     "tags": [
       "accessible_facilities",

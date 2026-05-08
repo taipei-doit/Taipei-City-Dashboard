@@ -2,7 +2,7 @@
   "dag_infos": {
     "dag_id": "elderly_club",
     "start_date": "2025-07-07",
-    "schedule_interval": "@monthly",
+    "schedule_interval": "0 13 5,26 * *",
     "catchup": false,
     "tags": ["elderly_club", "新北市", "New-Taipei-City", "新北市銀髮俱樂部"],
     "description": "",

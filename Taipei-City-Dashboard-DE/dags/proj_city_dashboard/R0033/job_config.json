@@ -2,7 +2,7 @@
     "dag_infos": {  
         "dag_id": "R0033",
         "start_date": "2021-08-24",
-        "schedule_interval": "30 18 2 * *",
+        "schedule_interval": "0 14 3,24 * *",
         "catchup": false,
         "tags": ["patrol_fire_rescure", "消防局", "火災搶救困難地區"],
         "description": "Difficult area for fire rescue.", 
