@@ -87,11 +87,14 @@ export function getComponentDataTimeframe(time_from, time_to, api) {
 	}
 
 	if (api === true) {
-		// return {
-		// 	timefrom: parsedTimeFrom.replace(" ", "T") + "+08:00",
-		// 	timeto: parsedTimeTo.replace(" ", "T") + "+08:00",
-		// };
-		return { parsedTimeFrom, parsedTimeTo };
+		if (time_to === "now") {
+			return {
+				timefrom: parsedTimeFrom.replace(" ", "T") + "+08:00",
+				timeto: parsedTimeTo.replace(" ", "T") + "+08:00",
+			};
+		} else {
+			return { parsedTimeFrom, parsedTimeTo };
+		}
 	} else {
 		return { parsedTimeFrom, parsedTimeTo };
 	}
