@@ -91,14 +91,16 @@ export function getComponentDataTimeframe(
 		parsedTimeTo = time_to;
 	}
 
-	return { timefrom: parsedTimeFrom, timeto: parsedTimeTo };
-
-	// if (api === true) {
-	// 	return {
-	// 		timefrom: parsedTimeFrom.replace(" ", "T") + "+08:00",
-	// 		timeto: parsedTimeTo.replace(" ", "T") + "+08:00",
-	// 	};
-	// } else {
-	// 	return { timefrom: parsedTimeFrom, timeto: parsedTimeTo };
-	// }
+	if (api === true) {
+		if (time_to === "now") {
+			return {
+				timefrom: parsedTimeFrom.replace(" ", "T") + "+08:00",
+				timeto: parsedTimeTo.replace(" ", "T") + "+08:00",
+			};
+		} else {
+			return { timefrom: parsedTimeFrom, timeto: parsedTimeTo };
+		}
+	} else {
+		return { timefrom: parsedTimeFrom, timeto: parsedTimeTo };
+	}
 }
