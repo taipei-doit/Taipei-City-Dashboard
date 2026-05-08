@@ -10,15 +10,15 @@
 
 ## 工作原理
 
-1. 對方 `git fetch && git checkout feature/award-dag-integration`,toolkit 就在 `Taipei-City-Dashboard-DE/dag-toolkit/`
-2. 從本分支再開子分支 `feature/dag-<table_name>` 進行該支 DAG 的整併
-3. 對方準備好 7 項輸入(DAG 識別、來源、格式 + 樣本、col_map、transform 邏輯、load_behavior)
-4. 把 [`PROMPT.md`](./PROMPT.md) 貼進你選用的 LLM(或設成 system instruction)
-5. LLM 與對方對話,缺什麼問什麼,通過 cross-check 後輸出 3 個檔的內容
-6. 對方把產出 copy 到 `Taipei-City-Dashboard-DE/dags/<proj_folder>/<table_name>/`
-7. 對方在本機跑 `python Taipei-City-Dashboard-DE/dag-toolkit/scripts/validate_dag.py <dag_path>`,作為硬性驗證
-8. 對方起 docker-compose 跑 DAG,截 4 張圖
-9. 對方依 [`pr_template.md`](./pr_template.md) 推 PR(target = `feature/award-dag-integration`),由維護者 review
+1. 團隊 `git fetch && git checkout feature/award-dag-integration`,toolkit 就在 `Taipei-City-Dashboard-DE/dag-toolkit/`
+2. 從本分支再開團隊子分支 `feature/team-<rank>-<teamname>` 進行整併
+3. 把 [`PROMPT.md`](./PROMPT.md) 貼進團隊選用的 LLM(或設成 system instruction)
+4. 團隊用一句自然語言描述要新增的 DAG(機關 / 中文名 / URL / 更新頻率);LLM 主動 fetch 資料源、推論欄位、提案,團隊一句話確認或微調
+5. LLM 通過 cross-check 後產出 4 個檔的內容
+6. 團隊把產出 copy 到 `Taipei-City-Dashboard-DE/dags/<proj_folder>/<table_name>/`
+7. 團隊在本機跑 `python Taipei-City-Dashboard-DE/dag-toolkit/scripts/validate_dag.py <dag_path>`,作為硬性驗證
+8. 團隊跑 `python test_<table_name>.py` 確認資料源 URL 可正常取得資料
+9. 團隊依 [`pr_template.md`](./pr_template.md) 推 PR(target = `feature/award-dag-integration`),由維護者 review
 10. 整併作業結束,維護者人工 merge / 同步進 `sit`
 
 ---
@@ -76,17 +76,22 @@ ln -sf ../../Taipei-City-Dashboard-DE/dag-toolkit/PROMPT.md .claude/skills/gener
 
 ---
 
-## 對方使用前的準備清單
+## 團隊使用前的準備清單
 
-開始對話前先備齊這 7 項,過程會順很多:
+LLM 設計成「**一句話即可開工**」,團隊不需要事先填表。一句話裡建議包含:
 
-1. **proj_folder** — `proj_city_dashboard` 或 `proj_new_taipei_city_dashboard`
-2. **table_name**(=dag_folder=dag_id) — snake_case;新北市資料加 `_ntpe` 後綴
-3. **start_date** + **schedule_interval** + **load_behavior**(append / replace / current+history)
-4. **來源類型** + URL/RID + 是否需 auth
-5. **資料格式** + **資料樣本**(貼 1~5 筆原始 response / CSV 前幾行 / Excel head)
-6. **col_map**:`{col_name: pg_type}` 字典(必含 `data_time`)
-7. **Transform 處理方法**:rename mapping、時間轉換、geometry 處理、過濾、衍生欄位
+- 提供機關(例:「臺北市衛生局」「新北市環保局」)
+- 資料中文名稱
+- 資料源 URL(data.taipei / data.ntpc / 直接檔案 URL 等)
+- 更新頻率(每日 / 每月 / 每小時 等)
+
+範例:
+
+> 新增一個臺北市衛生局 - 臺北市通過餐飲衛生管理分級評核業者 - https://data.taipei/dataset/detail?id=59579c19-... 每天更新
+
+LLM 會自動 fetch 資料源、推論欄位 / 表名 / load_behavior / col_map / transform / component_name 等,並把提案丟給團隊確認。團隊只需用自然語言調整不滿意的點即可(例:「table_name 改成 X」「load_behavior 用 current+history」)。
+
+> **進階**:若資料源需要 auth(token / API key),請額外告知 Airflow Variable 或 Connection 名稱;LLM 不會自動建立憑證。
 
 ---
 
