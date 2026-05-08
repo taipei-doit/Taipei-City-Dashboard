@@ -2,7 +2,7 @@
     "dag_infos": {
         "dag_id": "R0065",
         "start_date": "2024-06-26",
-        "schedule_interval": "30 19 3 * *",
+        "schedule_interval": "30 21 3,24 * *",
         "catchup": false,
         "tags": ["building_renewunit_30", "都發局", "核准自劃單元(自劃事業(權變)計劃案件)"],
         "description": "",

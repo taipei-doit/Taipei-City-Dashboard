@@ -2,7 +2,7 @@
     "dag_infos": {
         "dag_id": "R0063",
         "start_date": "2024-06-26",
-        "schedule_interval": "10 19 3 * *",
+        "schedule_interval": "30 20 3,24 * *",
         "catchup": false,
         "tags": ["building_renewunit_12", "都發局", "公劃地區內事業(權變案件)"],
         "description": "",

@@ -2,7 +2,7 @@
     "dag_infos": {
         "dag_id": "D100102_8",
         "start_date": "2024-05-02",
-        "schedule_interval": "0 0 1 * *",
+        "schedule_interval": "0 16 2,23 * *",
         "catchup": false,
         "tags": ["childcare_resource_hub", "臺北市嬰幼兒照顧服務_兒童托育資源中心", 
             "社會局", "臺北市育兒支持資源"],
