@@ -2,7 +2,7 @@
     "dag_infos": {
         "dag_id": "R0056",
         "start_date": "2021-11-17",
-        "schedule_interval": "0 3 5 * *",
+        "schedule_interval": "0 18 3,24 * *",
         "catchup": false,
         "tags": ["building_publand", "地政局", "公有土地"],
         "description": "Locations of public land in Taipei City",

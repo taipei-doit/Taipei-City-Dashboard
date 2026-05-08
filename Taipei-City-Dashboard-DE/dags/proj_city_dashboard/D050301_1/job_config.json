@@ -2,7 +2,7 @@
     "dag_infos": {  
         "dag_id": "D050301-1",
         "start_date": "2022-09-25",
-        "schedule_interval": "0 0 1 * *",
+        "schedule_interval": "30 16 1,22 * *",
         "catchup": false,
         "tags": ["work_garden_city", "工務局", "田園城市"],
         "description": "Points of garden cities at Taipei",

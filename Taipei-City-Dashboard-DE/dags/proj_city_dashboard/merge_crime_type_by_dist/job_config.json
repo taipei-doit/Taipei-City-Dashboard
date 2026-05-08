@@ -2,7 +2,7 @@
   "dag_infos": {
     "dag_id": "merge_crime_type_by_dist",
     "start_date": "2025-06-25",
-    "schedule_interval": "@monthly",
+    "schedule_interval": "0 12 7,28 * *",
     "catchup": false,
     "tags": [
       "merge_crime_type_by_dist",

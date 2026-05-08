@@ -2,7 +2,7 @@
     "dag_infos": {  
         "dag_id": "R0037_3",
         "start_date": "2024-06-05",
-        "schedule_interval": "20 3 22 12 *",
+        "schedule_interval": "30 16 3,24 * *",
         "catchup": false,
         "tags": ["patrol_flood_130", "工務局", "降雨積水模擬圖"],
         "description": "Possible flooding areas under heavy short-duration rainfall conditions (130 mm/h) in Taipei City.", 
