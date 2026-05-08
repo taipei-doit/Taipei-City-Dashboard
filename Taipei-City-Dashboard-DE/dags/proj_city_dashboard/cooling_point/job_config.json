@@ -2,7 +2,7 @@
     "dag_infos": {  
         "dag_id": "cooling_point",
         "start_date": "2025-06-25",
-        "schedule_interval": "@monthly",
+        "schedule_interval": "0 18 4,25 * *",
         "catchup": false,
         "tags": ["cooling_point_tpe", "臺北市涼適點", "市府資料平台"],
         "description": "臺北市轄內戶外及室內涼適場所",

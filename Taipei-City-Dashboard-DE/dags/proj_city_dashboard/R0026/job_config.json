@@ -2,7 +2,7 @@
     "dag_infos": {
         "dag_id": "R0026",
         "start_date": "2021-08-24",
-        "schedule_interval": "30 0 11 * *",
+        "schedule_interval": "30 12 3,24 * *",
         "catchup": false,
         "tags": ["patrol_random_snatch", "警察局", "街頭隨機搶奪點位資訊"],
         "description": "Random snatch in Taipei began in January 2015.",

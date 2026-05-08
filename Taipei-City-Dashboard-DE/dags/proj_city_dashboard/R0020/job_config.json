@@ -2,7 +2,7 @@
     "dag_infos": {
         "dag_id": "R0020",
         "start_date": "2024-06-04",
-        "schedule_interval": "0 3 1 12 *",
+        "schedule_interval": "0 20 2,23 * *",
         "catchup": false,
         "tags": ["patrol_artificial_slope", "工務局", "山坡地人工邊坡"],
         "description": "Locations of artificial slopes in the hillside areas of Taipei City from data.taipei.",

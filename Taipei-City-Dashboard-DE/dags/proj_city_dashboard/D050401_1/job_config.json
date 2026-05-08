@@ -2,7 +2,7 @@
     "dag_infos": {  
         "dag_id": "D050401_1",
         "start_date": "2024-06-11",
-        "schedule_interval": "0 5 2 5,11 *",
+        "schedule_interval": "30 21 5,26 * *",
         "catchup": false,
         "tags": ["work_soil_liquefaction", "工務局", "土壤液化潛勢"],
         "description": "Soil liquefaction distribution in Taipei City.", 

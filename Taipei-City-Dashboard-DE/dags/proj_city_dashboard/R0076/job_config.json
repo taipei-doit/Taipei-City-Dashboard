@@ -2,7 +2,7 @@
     "dag_infos": {  
         "dag_id": "R0076",
         "start_date": "2021-11-22",
-        "schedule_interval": "* * 1 * *",
+        "schedule_interval": "30 14 4,25 * *",
         "catchup": false,
         "tags": ["work_nether", "Nether", "data.taipei", "工務局", "人行地下道", "車行地下道"],
         "description": "Nether infomation of Taipei City from data.taipei.", 

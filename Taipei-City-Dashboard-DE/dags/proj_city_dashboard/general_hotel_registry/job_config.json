@@ -2,7 +2,7 @@
     "dag_infos": {  
         "dag_id": "general_hotel_registry",
         "start_date": "2025-06-25",
-        "schedule_interval": "@monthly",
+        "schedule_interval": "0 19 4,25 * *",
         "catchup": false,
         "tags": ["general_hotel_registry_tpe", "觀光旅遊局", "臺北市合法一般旅館名冊"],
         "description": "", 
