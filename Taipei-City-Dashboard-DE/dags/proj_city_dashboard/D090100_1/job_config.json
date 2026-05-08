@@ -2,7 +2,7 @@
     "dag_infos": {  
         "dag_id": "D090100_1",
         "start_date": "2024-06-11",
-        "schedule_interval": "0 5 21 5,11 *",
+        "schedule_interval": "0 14 6,27 * *",
         "catchup": false,
         "tags": ["edu_school", "教育局", "各級學校分布"],
         "description": "Schools address in Taipei City.", 

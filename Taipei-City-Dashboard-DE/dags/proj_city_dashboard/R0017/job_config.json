@@ -2,7 +2,7 @@
     "dag_infos": {  
         "dag_id": "R0017",
         "start_date": "2021-08-24",
-        "schedule_interval": "30 3 1 4 *",
+        "schedule_interval": "30 18 2,23 * *",
         "catchup": false,
         "tags": ["patrol_designate_place", "教育局", "可供避難收容處所"],
         "description": "List of shelter available for evacuation.", 

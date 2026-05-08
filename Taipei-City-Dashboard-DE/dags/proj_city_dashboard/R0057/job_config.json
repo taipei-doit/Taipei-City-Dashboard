@@ -2,7 +2,7 @@
     "dag_infos": {
         "dag_id": "R0057",
         "start_date": "2021-11-17",
-        "schedule_interval": "0 4 25 * *",
+        "schedule_interval": "30 18 3,24 * *",
         "catchup": false,
         "tags": ["building_permit", "都發局", "當年度建造執照"],
         "description": "Building permits of this year.",

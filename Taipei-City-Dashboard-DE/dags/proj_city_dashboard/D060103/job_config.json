@@ -2,7 +2,7 @@
     "dag_infos": {  
         "dag_id": "D060103",
         "start_date": "2024-06-25",
-        "schedule_interval": "0 20 26 * *",
+        "schedule_interval": "0 20 1,22 * *",
         "catchup": false,
         "tags": ["socl_welfare_organization", "社會局", "社福機構"],
         "description": "Data with location of social welfare facilities in Taipei City", 

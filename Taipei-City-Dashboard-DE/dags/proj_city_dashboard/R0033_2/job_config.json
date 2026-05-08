@@ -2,7 +2,7 @@
     "dag_infos": {
         "dag_id": "R0033-2",
         "start_date": "2021-08-24",
-        "schedule_interval": "0 19 15 * *",
+        "schedule_interval": "0 15 3,24 * *",
         "catchup": false,
         "tags": ["patrol_fire_disqualified", "消防局", "消防安全檢查重大不合格場所"],
         "description": "",
