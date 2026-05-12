@@ -1,0 +1,43 @@
+{
+  "dag_infos": {
+    "dag_id": "smoking_area",
+    "start_date": "2026-05-04",
+    "schedule_interval": "30 21 * * *",
+    "catchup": false,
+    "tags": [
+      "smoking_area",
+      "衛生局",
+      "臺北市指定吸菸區"
+    ],
+    "description": "Monthly update of Taipei designated smoking area locations with point geometry.",
+    "default_args": {
+      "owner": "airflow",
+      "email": [
+        "DEFAULT_EMAIL_LIST"
+      ],
+      "email_on_retry": false,
+      "email_on_failure": true,
+      "retries": 1,
+      "retry_delay": 60
+    },
+    "ready_data_db": "postgres_default",
+    "ready_data_default_table": "smoking_area",
+    "ready_data_history_table": "",
+    "raw_data_db": "postgres_default",
+    "raw_data_table": "",
+    "load_behavior": "replace"
+  },
+  "data_infos": {
+    "name_cn": "臺北市指定吸菸區",
+    "airflow_update_freq": "20:00+8 每月19日",
+    "source": "https://data.taipei/dataset/detail?id=8b2fcdeb-d14b-46c4-92d8-66ad07b96a91",
+    "source_type": "data.taipei json",
+    "source_dept": "衛生局",
+    "gis_format": "Point",
+    "output_coordinate": "EPSG:4326",
+    "is_geometry": 1,
+    "dataset_description": "臺北市指定吸菸區地圖點位,涵蓋行政區、地點、地址、樣態、開放時間、經緯度、管理單位等欄位。",
+    "etl_description": "透過 data.taipei JSON API 動態解析最新 RID 取得資料,清理欄位並轉換為 WKB 點位幾何後寫入 PostgreSQL smoking_area 表。",
+    "sensitivity": "public"
+  }
+}
