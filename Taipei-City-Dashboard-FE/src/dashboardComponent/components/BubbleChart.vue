@@ -17,14 +17,13 @@ const props = defineProps(["chart_config", "activeChart", "series"]);
 // 資料格式：series = [{ name, data: [{ x, y, z }, ...] }]
 // x 為類別／數值（依 chart_config.xType 決定），y 為主數值，z 為 bubble 半徑大小
 const bubbleSeries = computed(() => {
-	const cats = props.chart_config.categories || [];
 	return props.series.map((s) => ({
 		name: s.name,
-		data: (s.data || []).map((y, i) => ({
-			x: cats[i] ?? i,
-			y: y,
-			z: Math.max(2, Math.sqrt(Math.abs(y)) / 30),
-		})),
+		data: (s.data || []).map((point) => {
+			const y = typeof point === "object" ? point.y : point;
+			const x = typeof point === "object" ? (isNaN(Number(point.x)) ? point.x : Number(point.x)) : point;
+			return { x, y, z: Math.max(2, Math.sqrt(Math.abs(y)) / 30) };
+		}),
 	}));
 });
 
