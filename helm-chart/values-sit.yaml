@@ -189,6 +189,15 @@ backend:
     - name: LM_MODEL_PATH
       secretKey: "LM_MODEL_PATH"
       optional: false
+    - name: AI_TIMEOUT
+      secretKey: "AI_TIMEOUT"
+      optional: false
+    - name: AI_MAX_RETRY
+      secretKey: "AI_MAX_RETRY"
+      optional: false
+    - name: AI_MAX_CONCURRENT
+      secretKey: "AI_MAX_CONCURRENT"
+      optional: false
     - name: TWCC_API_URL
       secretKey: "TWCC_API_URL"
       optional: false
@@ -198,14 +207,23 @@ backend:
     - name: TWCC_MODEL
       secretKey: "TWCC_MODEL"
       optional: false
-    - name: TWCC_TIMEOUT
-      secretKey: "TWCC_TIMEOUT"
+    - name: OPENAI_API_URL
+      secretKey: "OPENAI_API_URL"
       optional: false
-    - name: TWCC_MAX_RETRY
-      secretKey: "TWCC_MAX_RETRY"
+    - name: OPENAI_API_KEY
+      secretKey: "OPENAI_API_KEY"
       optional: false
-    - name: TWCC_MAX_CONCURRENT
-      secretKey: "TWCC_MAX_CONCURRENT"
+    - name: OPENAI_MODEL
+      secretKey: "OPENAI_MODEL"
+      optional: false
+    - name: GEMINI_API_URL
+      secretKey: "GEMINI_API_URL"
+      optional: false
+    - name: GEMINI_API_KEY
+      secretKey: "GEMINI_API_KEY"
+      optional: false
+    - name: GEMINI_MODEL
+      secretKey: "GEMINI_MODEL"
       optional: false
 
 externalDatabase: {}
