@@ -45,24 +45,39 @@ type LMConfig struct {
 	ModelPath    string
 }
 
-type TWCCConfig struct {
-	ApiUrl        string
-	ApiKey        string
-	Model         string
+type AIConfig struct {
 	Timeout       int
 	MaxRetry      int
 	MaxConcurrent int
 }
 
+type TWCCConfig struct {
+	ApiUrl string
+	ApiKey string
+	Model  string
+}
+
+type OpenAIConfig struct {
+	ApiUrl string
+	ApiKey string
+	Model  string
+}
+
+type GeminiConfig struct {
+	ApiUrl string
+	ApiKey string
+	Model  string
+}
+
 var (
-	JwtSecret = getEnv("JWT_SECRET","")
-	IDNoSalt = getEnv("IDNO_SALT","")
+	JwtSecret = getEnv("JWT_SECRET", "")
+	IDNoSalt  = getEnv("IDNO_SALT", "")
 	// gin addr
-    GinAddr = getEnv("GIN_DOMAIN","") + ":" + getEnv("GIN_PORT", "8080")
+	GinAddr = getEnv("GIN_DOMAIN", "") + ":" + getEnv("GIN_PORT", "8080")
 
 	// Retrieve default user information for the dashboard; only necessary in the init function.
-	DashboardDefaultUserName = getEnv("DASHBOARD_DEFAULT_USERNAME", "")
-	DashboardDefaultUserEmail = getEnv("DASHBOARD_DEFAULT_Email", "")
+	DashboardDefaultUserName     = getEnv("DASHBOARD_DEFAULT_USERNAME", "")
+	DashboardDefaultUserEmail    = getEnv("DASHBOARD_DEFAULT_Email", "")
 	DashboardDefaultUserPassword = getEnv("DASHBOARD_DEFAULT_PASSWORD", "")
 
 	// PostgresManager defines the configuration for the manager database
@@ -72,7 +87,7 @@ var (
 		User:     getEnv("DB_MANAGER_USER", ""),
 		Password: getEnv("DB_MANAGER_PASSWORD", ""),
 		DBName:   getEnv("DB_MANAGER_DBNAME", "dashboardmanager"),
-	SSLMode:  getEnv("DB_MANAGER_SSLMODE", "disable"),
+		SSLMode:  getEnv("DB_MANAGER_SSLMODE", "disable"),
 	}
 
 	// PostgresDashboard defines the configuration for the dashboard database
@@ -82,18 +97,18 @@ var (
 		User:     getEnv("DB_DASHBOARD_USER", ""),
 		Password: getEnv("DB_DASHBOARD_PASSWORD", ""),
 		DBName:   getEnv("DB_DASHBOARD_DBNAME", "dashboard"),
-	SSLMode:  getEnv("DB_DASHBOARD_SSLMODE", "disable"),
+		SSLMode:  getEnv("DB_DASHBOARD_SSLMODE", "disable"),
 	}
 
 	// only used in the init function.
-	PostgresManagerSampleDataFile = getEnv("MANAGER_SAMPLE_FILE", "dashboardmanager-demo.sql")
-    PostgresDashboardSampleDataFile = getEnv("DASHBOARD_SAMPLE_FILE", "dashboard-demo.sql")
+	PostgresManagerSampleDataFile   = getEnv("MANAGER_SAMPLE_FILE", "dashboardmanager-demo.sql")
+	PostgresDashboardSampleDataFile = getEnv("DASHBOARD_SAMPLE_FILE", "dashboard-demo.sql")
 
 	Isso = IssoConfig{
-		IssoURL:          getEnv("ISSO_URL", "https://id.taipei/isso"),
-		TaipeipassURL:    getEnv("TAIPEIPASS_URL", "https://id.taipei/tpcd"),
-		ClientID:     getEnv("ISSO_CLIENT_ID", ""),
-		ClientSecret: getEnv("ISSO_CLIENT_SECRET", ""),
+		IssoURL:       getEnv("ISSO_URL", "https://id.taipei/isso"),
+		TaipeipassURL: getEnv("TAIPEIPASS_URL", "https://id.taipei/tpcd"),
+		ClientID:      getEnv("ISSO_CLIENT_ID", ""),
+		ClientSecret:  getEnv("ISSO_CLIENT_SECRET", ""),
 	}
 
 	Redis = RedisConfig{
@@ -104,22 +119,37 @@ var (
 	}
 
 	Qdrant = QdrantConfig{
-		Url:        getEnv("QDRANT_URL","http://127.0.0.1:6333"),
-		Collection: getEnv("QDRANT_COLLECTION",""),
-		ApiKey:     getEnv("QDRANT_API_KEY",""),
+		Url:        getEnv("QDRANT_URL", "http://127.0.0.1:6333"),
+		Collection: getEnv("QDRANT_COLLECTION", ""),
+		ApiKey:     getEnv("QDRANT_API_KEY", ""),
 	}
 
 	LM = LMConfig{
-		ModelPath:  getEnv("LM_MODEL_PATH","/opt/lm_model/onnx-e5/"),
+		ModelPath: getEnv("LM_MODEL_PATH", "/opt/lm_model/onnx-e5/"),
+	}
+
+	AI = AIConfig{
+		Timeout:       getIntEnv("AI_TIMEOUT", 60),
+		MaxRetry:      getIntEnv("AI_MAX_RETRY", 2),
+		MaxConcurrent: getIntEnv("AI_MAX_CONCURRENT", 100),
 	}
 
 	TWCC = TWCCConfig{
-		ApiUrl:        getEnv("TWCC_API_URL", "https://api-ams.twcc.ai/api"),
-		ApiKey:        getEnv("TWCC_API_KEY", "default_your_twcc_api_key_here"),
-		Model:         getEnv("TWCC_MODEL", "llama3.3-ffm-70b-32k-chat"),
-		Timeout:       getIntEnv("TWCC_TIMEOUT", 60),
-		MaxRetry:      getIntEnv("TWCC_MAX_RETRY", 2),
-		MaxConcurrent: getIntEnv("TWCC_MAX_CONCURRENT", 100),
+		ApiUrl: getEnv("TWCC_API_URL", "https://api-ams.twcc.ai/api"),
+		ApiKey: getEnv("TWCC_API_KEY", "default_your_twcc_api_key_here"),
+		Model:  getEnv("TWCC_MODEL", "llama3.3-ffm-70b-32k-chat"),
+	}
+
+	OpenAI = OpenAIConfig{
+		ApiUrl: getEnv("OPENAI_API_URL", "https://api.openai.com/v1"),
+		ApiKey: getEnv("OPENAI_API_KEY", ""),
+		Model:  getEnv("OPENAI_MODEL", "gpt-4o"),
+	}
+
+	Gemini = GeminiConfig{
+		ApiUrl: getEnv("GEMINI_API_URL", "https://generativelanguage.googleapis.com"),
+		ApiKey: getEnv("GEMINI_API_KEY", ""),
+		Model:  getEnv("GEMINI_MODEL", "gemini-1.5-pro"),
 	}
 	
 	LMSession *ort.DynamicSession[int64, float32]
