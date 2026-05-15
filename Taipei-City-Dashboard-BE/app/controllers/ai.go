@@ -49,12 +49,27 @@ type AIChatInput struct {
 
 // ChatWithTWCC is the controller for POST /api/v1/ai/chat/twai
 func ChatWithTWCC(c *gin.Context) {
+	handleAIChat(c, "twcc")
+}
+
+// ChatWithOpenAI is the controller for POST /api/v1/ai/chat/openai
+func ChatWithOpenAI(c *gin.Context) {
+	handleAIChat(c, "openai")
+}
+
+// ChatWithGemini is the controller for POST /api/v1/ai/chat/gemini
+func ChatWithGemini(c *gin.Context) {
+	handleAIChat(c, "gemini")
+}
+
+// handleAIChat centralizes the AI conversation logic for all providers
+func handleAIChat(c *gin.Context, provider string) {
 	var input AIChatInput
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"status": "error",
+			"status":     "error",
 			"error_code": "INVALID_REQUEST",
-			"message": err.Error(),
+			"message":    err.Error(),
 		})
 		return
 	}
@@ -98,13 +113,13 @@ func ChatWithTWCC(c *gin.Context) {
 			return nil
 		}))
 
-		_, err := ai.ChatWithTWCC(c.Request.Context(), req, options...)
+		_, err := ai.ChatWithProvider(c.Request.Context(), provider, req, options...)
 		if err != nil {
 			if !c.Writer.Written() {
 				c.JSON(http.StatusInternalServerError, gin.H{
-					"status": "error",
+					"status":     "error",
 					"error_code": "AI_SERVICE_STREAM_ERROR",
-					"message": err.Error(),
+					"message":    err.Error(),
 				})
 			}
 		}
@@ -112,12 +127,12 @@ func ChatWithTWCC(c *gin.Context) {
 	}
 
 	// 5. Standard Non-Streaming Response
-	logEntry, err := ai.ChatWithTWCC(c.Request.Context(), req, options...)
+	logEntry, err := ai.ChatWithProvider(c.Request.Context(), provider, req, options...)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
-			"status": "error",
+			"status":     "error",
 			"error_code": "AI_SERVICE_ERROR",
-			"message": err.Error(),
+			"message":    err.Error(),
 		})
 		return
 	}
@@ -125,17 +140,17 @@ func ChatWithTWCC(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"status": "success",
 		"data": gin.H{
-			"session":     logEntry.SessionID,
-			"content":     logEntry.Answer,
+			"session":    logEntry.SessionID,
+			"content":    logEntry.Answer,
 			"usage": gin.H{
 				"input_tokens":  logEntry.InputTokens,
 				"output_tokens": logEntry.OutputTokens,
 				"total_tokens":  logEntry.TotalTokens,
 			},
-			"tool_used":   logEntry.ToolUsed,
-			"latency_ms":  logEntry.LatencyMS,
-			"model":       logEntry.Model,
-			"provider":    logEntry.Provider,
+			"tool_used":  logEntry.ToolUsed,
+			"latency_ms": logEntry.LatencyMS,
+			"model":      logEntry.Model,
+			"provider":   logEntry.Provider,
 		},
 	})
 }
