@@ -1,0 +1,38 @@
+{
+    "dag_infos": {
+        "dag_id": "food_bank_ntpe",
+        "start_date": "2026-05-16",
+        "schedule_interval": "0 5 1 1,7 *",
+        "catchup": false,
+        "tags": ["social_welfare", "社會局", "New-Taipei-City"],
+        "description": "New Taipei City food bank (實物銀行) branches and pickup stations directory, refreshed every January and July.",
+        "default_args": {
+            "owner": "airflow",
+            "email": ["DEFAULT_EMAIL_LIST"],
+            "email_on_retry": false,
+            "email_on_failure": true,
+            "retries": 1,
+            "retry_delay": 60
+        },
+        "ready_data_db": "postgres_default",
+        "ready_data_default_table": "food_bank_ntpe",
+        "ready_data_history_table": "",
+        "raw_data_db": "postgres_default",
+        "raw_data_table": "",
+        "load_behavior": "replace"
+    },
+    "data_infos": {
+        "name_cn": "新北市實物銀行分行及領用站一覽表",
+        "airflow_update_freq": "05:00+8 on 1st of January and July",
+        "source": "https://data.ntpc.gov.tw/datasets/1c1d0066-a4e7-4753-b8bc-d7728d5f3e04",
+        "source_type": "data.ntpc",
+        "source_dept": "新北市政府社會局",
+        "component_name": "food_bank_points",
+        "gis_format": null,
+        "output_coordinate": "EPSG:4326",
+        "is_geometry": 0,
+        "dataset_description": "新北市實物銀行分行及領用站清單,含機構名稱、行政區、地址、聯絡電話。",
+        "etl_description": "pull data.ntpc /api/datasets/<rid>/json via NewTaipeiAPIClient, rename columns, stamp current data_time.",
+        "sensitivity": "public"
+    }
+}
