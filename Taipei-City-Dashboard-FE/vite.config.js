@@ -11,6 +11,10 @@ const serverConfig = isDockerCompose
 		host: "0.0.0.0",
 		port: 80, // 如有需要可變更 port
 		proxy: {
+			"/api/v1": {
+				target: "http://dashboard-be:8080",
+				changeOrigin: true,
+			},
 			"/api/dev": {
 				target: "http://dashboard-be:8080",
 				changeOrigin: true,
@@ -22,9 +26,23 @@ const serverConfig = isDockerCompose
 		host: "0.0.0.0",
 		port: 80,
 		proxy: {
+			// 注意：本機是 8088（docker-compose 對外 mapping）
+			"/api/v1": {
+				target: "http://localhost:8088",
+				changeOrigin: true,
+				secure: false
+			},
+			// 非 docker 模式下，VITE_API_URL=/api/dev 走這條（剝掉 /api/dev 再接到 prod /api/v1）
+			"/api/dev": {
+				target: "https://citydashboard.taipei/api/v1",
+				changeOrigin: true,
+				secure: false,
+				rewrite: (path) => path.replace(/^\/api\/dev/, "")
+			},
 			"/api": {
 				target: "https://citydashboard.taipei/api/v1",
 				changeOrigin: true,
+				secure: false,
 				rewrite: (path) => path.replace(/^\/api/, "")
 			},
 			"/geo_server": {
@@ -36,7 +54,10 @@ const serverConfig = isDockerCompose
 	};
 
 export default defineConfig({
-	plugins: [vue(), viteCompression()],
+	plugins: [
+		vue(),
+		viteCompression(),
+	],
 	build: {
 		rollupOptions: {
 			output: {

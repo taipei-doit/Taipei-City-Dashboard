@@ -1,7 +1,11 @@
 <!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 
 <script setup>
+<<<<<<< HEAD
 import { ref, computed } from "vue";
+=======
+import { ref } from "vue";
+>>>>>>> 053d9082 (chore: 整合本地所有進度)
 import VueApexCharts from "vue3-apexcharts";
 
 const props = defineProps(["chart_config", "activeChart", "series"]);
@@ -16,6 +20,7 @@ const props = defineProps(["chart_config", "activeChart", "series"]);
 
 // 資料格式：series = [{ name, data: [{ x, y, z }, ...] }]
 // x 為類別／數值（依 chart_config.xType 決定），y 為主數值，z 為 bubble 半徑大小
+<<<<<<< HEAD
 const bubbleSeries = computed(() => {
 	return props.series.map((s) => ({
 		name: s.name,
@@ -27,6 +32,8 @@ const bubbleSeries = computed(() => {
 	}));
 });
 
+=======
+>>>>>>> 053d9082 (chore: 整合本地所有進度)
 const chartOptions = ref({
 	chart: {
 		type: "bubble",
@@ -96,7 +103,11 @@ const chartOptions = ref({
       height="270px"
       type="bubble"
       :options="chartOptions"
+<<<<<<< HEAD
       :series="bubbleSeries"
+=======
+      :series="series"
+>>>>>>> 053d9082 (chore: 整合本地所有進度)
     />
   </div>
 </template>
