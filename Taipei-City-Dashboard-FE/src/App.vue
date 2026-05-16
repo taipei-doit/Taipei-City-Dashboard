@@ -271,6 +271,7 @@ onBeforeUnmount(() => {
     >
       <p>下次更新：{{ formattedTimeToUpdate }}</p>
     </div>
+	<div v-if="isChatBoxShow" class="chat-overlay"></div>
     <div class="chatbot-container">
       <ChatBox
         v-if="isChatBoxShow"
@@ -382,6 +383,14 @@ onBeforeUnmount(() => {
 			}
 		}
 	}
+}
+
+.chat-overlay {
+    display: none; // 桌機預設隱藏
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 9;
 }
 
 // 手機板小幫手
