@@ -27,7 +27,7 @@
         "source": "https://data.ntpc.gov.tw/datasets/1c1d0066-a4e7-4753-b8bc-d7728d5f3e04",
         "source_type": "data.ntpc",
         "source_dept": "新北市政府社會局",
-        "component_name": "food_bank_ntpe_table",
+        "component_name": "food_bank_points",
         "gis_format": null,
         "output_coordinate": "EPSG:4326",
         "is_geometry": 0,
