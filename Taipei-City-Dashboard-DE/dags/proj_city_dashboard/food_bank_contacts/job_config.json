@@ -27,7 +27,7 @@
         "source": "https://data.taipei/dataset/detail?id=3fbc79e5-0138-4c89-8c47-39feddbd6d3f",
         "source_type": "data.taipei",
         "source_dept": "社會局",
-        "component_name": "food_bank_contacts_table",
+        "component_name": "food_bank_points",
         "gis_format": null,
         "output_coordinate": "EPSG:4326",
         "is_geometry": 0,
