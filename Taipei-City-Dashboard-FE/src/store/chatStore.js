@@ -16,6 +16,9 @@ export const useChatStore = defineStore('chat', () => {
 
 	const recommendComponents = ref(null)
 
+	// 儲存組件對應主題
+	const compToDashMap = ref({});
+
   	// 從 sessionStorage 讀取
   	const savedChatData = JSON.parse(sessionStorage.getItem('chatData')) || [];
 
@@ -58,6 +61,20 @@ export const useChatStore = defineStore('chat', () => {
     				},
   				}
 			);
+
+			const dashboards = await http.get(`/dashboard/`);
+
+			const compList = response.data.data;
+			const dashMap = dashboards.data.data;
+
+			compList.forEach((comp) => {
+				const cityDashboards = dashMap[comp.city] || [];
+				const matched = cityDashboards.filter((dash) =>
+					dash.components.includes(comp.id),
+				);
+				compToDashMap.value[comp.id] = matched.map((d) => d.name).join("、");
+			});
+			
 			if (response.data?.data?.length > 0) {
 				recommendComponents.value = response.data.data;
 			}
@@ -124,5 +141,5 @@ export const useChatStore = defineStore('chat', () => {
       	}
 	};
 
-	return { chatData, addChatData, addQueryData, saveChatLog }
+	return { chatData, compToDashMap, addChatData, addQueryData, saveChatLog }
 })
