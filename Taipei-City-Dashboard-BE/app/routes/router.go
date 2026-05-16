@@ -41,6 +41,7 @@ func ConfigureRoutes() {
 	configureContributorRoutes()
 	configureChatLogRoutes()
 	configureAIRoutes()
+	configureEcoDietRoutes()
 }
 
 func configureAuthRoutes() {
@@ -204,6 +205,18 @@ func configureAIRoutes() {
 	aiRoutes.Use(middleware.IsLoggedIn())
 	{
 		aiRoutes.POST("/chat/twai", controllers.ChatWithTWCC)
+	}
+}
+
+// configureEcoDietRoutes wires up the 市民綠色飲食行為流程儀表板 AI endpoints.
+// Chart data is now served via the generic /component/:id/chart endpoint.
+func configureEcoDietRoutes() {
+	ecoDiet := RouterGroup.Group("/eco_diet")
+	ecoDiet.Use(middleware.LimitAPIRequests(global.ComponentLimitAPIRequestsTimes, global.LimitRequestsDuration))
+	ecoDiet.Use(middleware.LimitTotalRequests(global.ComponentLimitTotalRequestsTimes, global.LimitRequestsDuration))
+	{
+		ecoDiet.POST("/ai-summary", controllers.GetEcoDietAiSummary)
+		ecoDiet.POST("/nearby-chat", controllers.PostEcoDietNearbyChat)
 	}
 }
 

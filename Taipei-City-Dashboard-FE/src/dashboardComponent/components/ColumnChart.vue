@@ -21,15 +21,32 @@ const emits = defineEmits([
 	"fly"
 ]);
 
+// 線圖才會用 dashArray 標目標／參考線；柱狀圖呈現「目標」毫無意義（會變成 4 排無意義的 bar），
+// 所以這裡用 dashArray > 0 作為過濾條件，保留 actual series、丟掉 reference 線。
+// chart_config.color 也須同步過濾，避免色階對不上 series index。
+const filteredSeries = computed(() => {
+	const dashArr = props.chart_config?.dashArray;
+	if (!Array.isArray(dashArr)) return props.series;
+	return props.series.filter((_, i) => !dashArr[i]);
+});
+const filteredColors = (() => {
+	const dashArr = props.chart_config?.dashArray;
+	if (!Array.isArray(dashArr)) return [...props.chart_config.color];
+	return props.chart_config.color.filter((_, i) => !dashArr[i]);
+})();
+
 const isLargeDataSet = computed(() => {
-	return props.series[0].data.length > 12
+	return (filteredSeries.value?.[0]?.data?.length ?? 0) > 12;
 })
 
 // Calculate initial width for large datasets only
+// 多 series（如雙北 grouped 模式）每個 category 槽位要塞下 N 條 bar + 間距，
+// 寬度依 series 數縮放，否則年份標籤會擠在一起（C5 雙北 14 年 × 2 城就會發生）。
 const initialWidth = computed(() => {
-	const WIDTH_PER_ITEM = 32
-	const itemCount = props.series[0].data.length;
-	return itemCount * WIDTH_PER_ITEM;
+	const WIDTH_PER_ITEM = 32;
+	const seriesCount = Math.max(1, filteredSeries.value?.length ?? 1);
+	const itemCount = filteredSeries.value?.[0]?.data?.length ?? 0;
+	return itemCount * WIDTH_PER_ITEM * seriesCount;
 });
 
 const widthValue = ref(initialWidth.value);
@@ -42,7 +59,8 @@ const chartWidth = computed(() => {
 
 const chartOptions = ref({
 	chart: {
-		stacked: true,
+		// 預設 stacked；c5b 碳足跡這類雙城獨立量值需 grouped（並排）才看得出單城起伏
+		stacked: props.chart_config?.stacked ?? true,
 		zoom: {
 			allowMouseWheelZoom: false,
 		},
@@ -61,7 +79,7 @@ const chartOptions = ref({
 				show: false,
 			}
 	},
-	colors: [...props.chart_config.color],
+	colors: filteredColors,
 	dataLabels: {
 		enabled: props.chart_config.categories ? false : true,
 		offsetY: 20,
@@ -69,16 +87,17 @@ const chartOptions = ref({
 	grid: {
 		show: false,
 	},
-	legend: isLargeDataSet.value
-		? {
-			show: props.chart_config.categories ? true : false,
-			horizontalAlign: "left",
-			offsetX: 20,
-			floating: true,
-		  }
-		: {
-			show: props.chart_config.categories ? true : false,
-		  },
+	// 改回預設 bottom（不浮動）— floating 會壓到 x 軸年份標籤上，
+	// 雙北兩條 series 並陳時會把「新北市-碳足跡」字疊在年份上看不清；
+	// 對齊 TimelineSeparateChart 的左下角錨定，避免大圖捲動時 legend 飄到中段看不見。
+	// showForSingleSeries: ApexCharts 預設單 series bar chart 不顯 legend，
+	// 但 C5 切到單城時 filter 完只剩 1 條，仍需要顯「{city}-碳足跡」標籤
+	legend: {
+		show: props.chart_config.categories ? true : false,
+		position: "bottom",
+		horizontalAlign: "left",
+		showForSingleSeries: true,
+	},
 	plotOptions: {
 		bar: {
 			borderRadius: 5,
@@ -133,6 +152,12 @@ const chartOptions = ref({
 		},
 		type: "category",
 	},
+	// chart_config.yAxis 未設則交給 ApexCharts 預設（從 0 起）；c5b 大基數小變化要 auto-scale
+	...(props.chart_config?.yAxis ? { yaxis: props.chart_config.yAxis } : {}),
+	// chart_config.yAxisAnnotations 可注入 y 軸 annotation band（如 c5b 雙城時遮中段空白）
+	...(props.chart_config?.yAxisAnnotations
+		? { annotations: { yaxis: props.chart_config.yAxisAnnotations } }
+		: {}),
 });
 
 const selectedIndex = ref(null);
@@ -222,7 +247,7 @@ function resetWidth() {
       :width="chartWidth"
       height="250px"
       :options="chartOptions"
-      :series="series"
+      :series="filteredSeries"
       @data-point-selection="handleDataSelection"
     />
   </div>

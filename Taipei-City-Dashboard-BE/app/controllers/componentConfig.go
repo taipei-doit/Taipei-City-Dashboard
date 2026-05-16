@@ -72,7 +72,7 @@ func GetAllComponents(c *gin.Context) {
 	var query componentQuery
 	c.ShouldBindQuery(&query)
 
-	if !(query.City == "taipei" || query.City == "metrotaipei" || query.City == ""){
+	if !(query.City == "taipei" || query.City == "metrotaipei" || query.City == "newtaipei" || query.City == ""){
 		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": "Invalid City Name"})
 		return
 	}
@@ -102,7 +102,7 @@ func GetComponentByID(c *gin.Context) {
 	// 1.1 Get the city name from the URL
 	var query componentQuery
 	c.ShouldBindQuery(&query)
-	if !(query.City == "taipei" || query.City == "metrotaipei" || query.City == ""){
+	if !(query.City == "taipei" || query.City == "metrotaipei" || query.City == "newtaipei" || query.City == ""){
 		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": "Invalid City Name"})
 		return
 	}
@@ -162,7 +162,7 @@ func UpdateComponent(c *gin.Context) {
 	// 1.1 Get the city name from the URL
 	var query componentQuery
 	c.ShouldBindQuery(&query)
-	if !(query.City == "taipei" || query.City == "metrotaipei" || query.City == ""){
+	if !(query.City == "taipei" || query.City == "metrotaipei" || query.City == "newtaipei" || query.City == ""){
 		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": "Invalid City Name"})
 		return
 	}
@@ -215,7 +215,7 @@ func UpdateComponentChartConfig(c *gin.Context) {
 
 	// 1.1 Get the city name from the URL
 	city := c.Param("city")
-	if !(city == "taipei" || city == "metrotaipei" || city == ""){
+	if !(city == "taipei" || city == "metrotaipei" || city == "newtaipei" || city == ""){
 		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": "Invalid City Name"})
 		return
 	}
@@ -300,7 +300,7 @@ func DeleteComponent(c *gin.Context) {
 
 	// 1.1 Get the city name from the URL
 	city := c.Param("city")
-	if !(city == "taipei" || city == "metrotaipei" || city == ""){
+	if !(city == "taipei" || city == "metrotaipei" || city == "newtaipei" || city == ""){
 		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": "Invalid City Name"})
 		return
 	}

@@ -77,6 +77,7 @@ const props = defineProps({
 	footer: { type: Boolean, default: true },
 	activeCity: { type: String, default: '' },
 	toggleOn: { type: Boolean, default: false },
+	aiChatBtn: { type: Boolean, default: false },
 });
 
 const emits = defineEmits([
@@ -90,7 +91,8 @@ const emits = defineEmits([
 	"clearByParamFilter",
 	"clearByLayerFilter",
 	"fly",
-	"changeCity"
+	"changeCity",
+	"aiChat",
 ]);
 
 const activeChart = ref(props.config.chart_config.types[0]);
@@ -302,6 +304,14 @@ function returnChartComponent(name, svg) {
         v-if="['default', 'half', 'preview'].includes(mode)"
         class="dashboardcomponent-header-button"
       >
+        <button
+          v-if="aiChatBtn"
+          class="aiChatBtn"
+          title="AI 分析"
+          @click="$emit('aiChat', config, $event)"
+        >
+          <span class="material-icons">eco</span>
+        </button>
         <button
           v-if="addBtn"
           @click="$emit('add', config.id, config.name)"
@@ -663,6 +673,26 @@ button:hover {
 
 				&:hover {
 					color: rgb(160, 112, 106);
+				}
+			}
+
+			button.aiChatBtn {
+				width: 28px;
+				height: 28px;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				border-radius: 50%;
+				background-color: #5fcf80;
+				transition: background-color 0.2s;
+
+				.material-icons {
+					color: #090909;
+					font-size: 16px;
+				}
+
+				&:hover {
+					background-color: #4cb86c;
 				}
 			}
 		}
