@@ -28,6 +28,7 @@ import BarChartWithGoal from "./components/BarChartWithGoal.vue";
 import IconPercentChart from "./components/IconPercentChart.vue";
 import IndicatorChart from "./components/IndicatorChart.vue";
 import TextUnitChart from "./components/TextUnitChart.vue";
+import SankeyChart from "./components/SankeyChart.vue";
 
 import MapLegendSvg from "./assets/chart/MapLegend.svg";
 import DistrictChartSvg from "./assets/chart/DistrictChart.svg";
@@ -92,6 +93,9 @@ const emits = defineEmits([
 ]);
 
 const activeChart = ref(props.config.chart_config.types[0]);
+const isWide = computed(() =>
+	props.config.chart_config?.types?.includes("SankeyChart") && props.mode === "default"
+);
 const activeCity = computed({
 	get: () => props.activeCity,
 	set: (value) => {
@@ -222,6 +226,8 @@ function returnChartComponent(name, svg) {
 		return svg ? IndicatorChartSvg : IndicatorChart;
 	case "TextUnitChart":
 		return svg ? TextUnitChartSvg : TextUnitChart;
+	case "SankeyChart":
+		return svg ? BarChartSvg : SankeyChart;
 	default:
 		return svg ? MapLegendSvg : MapLegend;
 	}
@@ -239,6 +245,7 @@ function returnChartComponent(name, svg) {
         half: mode === 'half',
         large: mode === 'large',
         preview: mode === 'preview',
+        wide: isWide,
       },
     ]"
     :style="style"
@@ -422,6 +429,7 @@ function returnChartComponent(name, svg) {
         :is="returnChartComponent(item)"
         v-for="item in config.chart_config.types"
         :key="`${props.config.index}-${item}-chart-${item.city}`"
+        :mode="mode"
         :active-chart="activeChart"
         :active-city="activeCity"
         :chart_config="config.chart_config"
@@ -554,6 +562,38 @@ button:hover {
 	max-height: 330px;
 	width: calc(100% - var(--font-m) * 2);
 	max-width: calc(100% - var(--font-m) * 2);
+
+	&.wide {
+		grid-column: span 3;
+		height: 560px;
+		max-height: 560px;
+		justify-content: flex-start;
+		gap: 4px;
+
+		@media (min-width: 1050px) {
+			height: 640px;
+			max-height: 640px;
+		}
+
+		@media (min-width: 1650px) {
+			height: 720px;
+			max-height: 720px;
+		}
+
+		.dashboardcomponent-control {
+			padding: 0;
+		}
+
+		.dashboardcomponent-chart {
+			flex: 1;
+			min-height: 0;
+			height: auto;
+		}
+
+		.dashboardcomponent-footer {
+			margin-top: auto;
+		}
+	}
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
