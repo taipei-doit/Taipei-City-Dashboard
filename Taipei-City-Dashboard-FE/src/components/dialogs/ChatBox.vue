@@ -149,7 +149,7 @@ watch(
                   <tr>
                     <th>排名</th>
                     <th>城市</th>
-					<th>主題</th>
+                    <th>主題</th>
                     <th>組件</th>
                     <th>關聯性</th>
                   </tr>
@@ -167,13 +167,20 @@ watch(
                           : "雙北"
                       }}
                     </td>
-					<td>
-  						<template v-for="(dash, i) in compToDashIndexMap[item.id]" :key="dash.index">
-    						<a class="theme-btn" :href="`https://test-citydashboard.taipei/dashboard?index=${dash.index}&city=${item.city}`" target="_blank">
-      							{{ dash.name }}
-    						</a>
-  						</template>
-					</td>
+                    <td>
+                      <template
+                        v-for="dash in compToDashIndexMap[item.id]"
+                        :key="dash.index"
+                      >
+                        <a
+                          class="theme-btn"
+                          :href="`https://test-citydashboard.taipei/dashboard?index=${dash.index}&city=${item.city}`"
+                          target="_blank"
+                        >
+                          {{ dash.name }}
+                        </a>
+                      </template>
+                    </td>
                     <td>{{ item.name }}</td>
                     <td>{{ item.score }}</td>
                   </tr>

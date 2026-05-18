@@ -101,7 +101,7 @@ function mergeSegmentsFallback(segments) {
 	const merged = [];
 	let currentKey = startKey;
 
-	// eslint-disable-next-line no-constant-condition
+	 
 	while (true) {
 		const candidates = idx.get(currentKey) || [];
 		let chosen = null;
