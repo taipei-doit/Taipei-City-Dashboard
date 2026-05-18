@@ -484,6 +484,16 @@ $radius-20: 20px;
 	}
 }
 
+.theme-btn {
+    padding: 0.2rem;
+    margin-right: 0.1rem;
+    background-color: #5a9cf8;
+	border-radius: 2px;
+    &:hover {
+        background-color: #3a7fd6;
+    }
+}
+
 @media (max-width: 600px) {
       .chat-widget {
         .chat-area {
