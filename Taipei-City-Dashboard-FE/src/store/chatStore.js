@@ -25,6 +25,36 @@ export const useChatStore = defineStore('chat', () => {
   	// 拼接預設訊息 + sessionStorage 的聊天紀錄
   	const chatData = ref([...defaultChatData, ...savedChatData]);
 
+	// 初始化時重建 compToDashMap
+	const rebuildCompToDashMap = async () => {
+		// 收集所有 relations 裡的組件
+		const allComps = savedChatData.flatMap((msg) => msg.relations || []);
+
+		if (allComps.length === 0) return;
+
+		try {
+			const dashboards = await http.get(`/dashboard/`);
+			const dashMap = dashboards.data.data;
+
+			allComps.forEach((comp) => {
+				const cityDashboards = dashMap[comp.city] || [];
+				const matched = cityDashboards.filter((dash) =>
+					dash.components.includes(comp.id),
+				);
+				compToDashMap.value[comp.id] = matched
+					.map((d) => d.name)
+					.join("、");
+			});
+		} catch (error) {
+			console.error("rebuildCompToDashMap error:", error);
+		}
+	};
+
+	// 有舊資料才重建
+	if (savedChatData.length > 0) {
+  		rebuildCompToDashMap();
+	}
+
   	// 監聽 chatData 的變化，自動同步到 sessionStorage
   	watch(
     	chatData,
