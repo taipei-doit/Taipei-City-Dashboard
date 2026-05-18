@@ -7,6 +7,11 @@ def _ensure_ready_table(engine, table_name, col_map):
     from utils.generate_sql_to_create_DB_table import generate_sql_to_create_db_table
 
     sql = generate_sql_to_create_db_table(table_name, col_map)
+    sql = sql.replace(
+        f"CREATE TRIGGER {table_name}_mtime",
+        f"DROP TRIGGER IF EXISTS {table_name}_mtime ON public.{table_name};\n"
+        f"    CREATE TRIGGER {table_name}_mtime",
+    )
     with engine.connect() as conn:
         conn.execute(sa_text(sql).execution_options(autocommit=True))
 

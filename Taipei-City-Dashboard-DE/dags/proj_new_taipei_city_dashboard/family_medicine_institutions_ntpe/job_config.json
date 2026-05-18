@@ -1,0 +1,44 @@
+{
+  "dag_infos": {
+    "dag_id": "family_medicine_institutions_ntpe",
+    "start_date": "2026-05-18",
+    "schedule_interval": "@daily",
+    "catchup": false,
+    "tags": [
+      "family_medicine",
+      "衛生局",
+      "New-Taipei-City"
+    ],
+    "description": "新北市家庭醫學科醫療機構清單，每日更新。",
+    "default_args": {
+      "owner": "airflow",
+      "email": [
+        "DEFAULT_EMAIL_LIST"
+      ],
+      "email_on_retry": false,
+      "email_on_failure": true,
+      "retries": 1,
+      "retry_delay": 60
+    },
+    "ready_data_db": "postgres_default",
+    "ready_data_default_table": "family_medicine_institutions_ntpe",
+    "ready_data_history_table": "",
+    "raw_data_db": "postgres_default",
+    "raw_data_table": "",
+    "load_behavior": "replace"
+  },
+  "data_infos": {
+    "name_cn": "家庭醫學科醫療機構",
+    "airflow_update_freq": "每日",
+    "source": "https://data.ntpc.gov.tw/api/datasets/9e1c1aba-4e0b-4d5a-8755-efa1f09abe65/json",
+    "source_type": "data.ntpc.gov.tw",
+    "source_dept": "衛生局",
+    "component_name": "family_medicine_institutions_ntpe_table",
+    "gis_format": null,
+    "output_coordinate": "EPSG:4326",
+    "is_geometry": 0,
+    "dataset_description": "新北市家庭醫學科醫療機構名單。",
+    "etl_description": "API 取回後欄位 rename，補 data_time。",
+    "sensitivity": "public"
+  }
+}
