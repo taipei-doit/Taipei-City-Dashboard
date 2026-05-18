@@ -5,19 +5,18 @@ import http from "../router/axios";
 export const useChatStore = defineStore('chat', () => {
   	// 預設訊息
   	const defaultChatData = [
-    	{
-      		id: 1,
-      		role: 'bot',
-	  		isDefault: true,
-      		content:
-        	'您好，我是【臺北城市儀表板】小幫手，很高興為您服務！\n 您可以： \n\n • 點擊左側既有的儀表板主題，快速查看各主題內容 \n • 輸入您感興趣的主題描述，我會自動為您組建最適合的儀表板 \n\n 如果有想了解的內容，歡迎直接告訴我，我會盡力協助！\n\n 📩 聯絡信箱：tuic@gov.taipei \n 🏢 臺北大數據中心 \n\n',
-    	},
-  	];
+		{
+			id: 1,
+			role: "bot",
+			isDefault: true,
+			content:
+				"您好，我是【臺北城市儀表板】小幫手，很高興為您服務！\n 您可以： \n\n • 點擊左側既有的儀表板主題，快速查看各主題內容 \n • 輸入您感興趣的主題描述，我會推薦相關組件，並協助組建最適合的儀表板 \n • 點擊推薦組件清單中的主題按鈕，即可前往查看該主題儀表板  \n\n 如果有想了解的內容，歡迎直接告訴我，我會盡力協助！\n\n 📩 聯絡信箱：tuic@gov.taipei \n 🏢 臺北大數據中心 \n\n",
+		},
+	];
 
 	const recommendComponents = ref(null)
 
 	// 儲存組件對應主題
-	const compToDashMap = ref({});
 	const compToDashIndexMap = ref({});
 
   	// 從 sessionStorage 讀取
@@ -26,8 +25,8 @@ export const useChatStore = defineStore('chat', () => {
   	// 拼接預設訊息 + sessionStorage 的聊天紀錄
   	const chatData = ref([...defaultChatData, ...savedChatData]);
 
-	// 初始化時重建 compToDashMap
-	const rebuildCompToDashMap = async () => {
+	// 初始化時重建 compToDashIndexMap
+	const rebuildCompToDashIndexMap = async () => {
 		// 收集所有 relations 裡的組件
 		const allComps = savedChatData.flatMap((msg) => msg.relations || []);
 
@@ -42,9 +41,6 @@ export const useChatStore = defineStore('chat', () => {
 				const matched = cityDashboards.filter((dash) =>
 					dash.components.includes(comp.id),
 				);
-				compToDashMap.value[comp.id] = matched
-					.map((d) => d.name)
-					.join("、");
 
 				// 存 name -> index 的對應關係
 				compToDashIndexMap.value[comp.id] = matched.map((d) => ({
@@ -53,13 +49,13 @@ export const useChatStore = defineStore('chat', () => {
 				}));
 			});
 		} catch (error) {
-			console.error("rebuildCompToDashMap error:", error);
+			console.error("rebuildCompToDashIndexMap error:", error);
 		}
 	};
 
 	// 有舊資料才重建
 	if (savedChatData.length > 0) {
-  		rebuildCompToDashMap();
+  		rebuildCompToDashIndexMap();
 	}
 
   	// 監聽 chatData 的變化，自動同步到 sessionStorage
@@ -109,7 +105,6 @@ export const useChatStore = defineStore('chat', () => {
 				const matched = cityDashboards.filter((dash) =>
 					dash.components.includes(comp.id),
 				);
-				compToDashMap.value[comp.id] = matched.map((d) => d.name).join("、");
 				// 存 name -> index 的對應關係
 				compToDashIndexMap.value[comp.id] = matched.map((d) => ({
 					name: d.name,
@@ -183,5 +178,5 @@ export const useChatStore = defineStore('chat', () => {
       	}
 	};
 
-	return { chatData, compToDashMap, compToDashIndexMap, addChatData, addQueryData, saveChatLog }
+	return { chatData, compToDashIndexMap, addChatData, addQueryData, saveChatLog }
 })
