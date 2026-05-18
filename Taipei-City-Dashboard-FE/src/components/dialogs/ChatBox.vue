@@ -148,9 +148,9 @@ watch(
                 <thead>
                   <tr>
                     <th>排名</th>
-                    <th>城市名</th>
-					<th>主題名</th>
-                    <th>組件名</th>
+                    <th>城市</th>
+					<th>主題</th>
+                    <th>組件</th>
                     <th>關聯性</th>
                   </tr>
                 </thead>
