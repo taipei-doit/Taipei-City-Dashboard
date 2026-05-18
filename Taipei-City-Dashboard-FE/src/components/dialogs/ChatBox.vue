@@ -15,7 +15,7 @@ const contentStore = useContentStore();
 const authStore = useAuthStore();
 const { addChatData, addQueryData, saveChatLog } = chatStore;
 const { createDashboard } = contentStore;
-const { chatData, compToDashMap, compToDashIndexMap } = storeToRefs(chatStore);
+const { chatData, compToDashIndexMap } = storeToRefs(chatStore);
 const { editDashboard } = storeToRefs(contentStore);
 const { user } = storeToRefs(authStore);
 
@@ -167,7 +167,13 @@ watch(
                           : "雙北"
                       }}
                     </td>
-					<td><a :href="`https://citydashboard.taipei/dashboard?index=${compToDashIndexMap[item.id]?.[0]?.index}&city=${item.city}`" target="_blank">{{ compToDashMap[item.id] }}</a></td>
+					<td>
+  						<template v-for="(dash, i) in compToDashIndexMap[item.id]" :key="dash.index">
+    						<a class="theme-btn" :href="`https://test-citydashboard.taipei/dashboard?index=${dash.index}&city=${item.city}`" target="_blank">
+      							{{ dash.name }}
+    						</a>
+  						</template>
+					</td>
                     <td>{{ item.name }}</td>
                     <td>{{ item.score }}</td>
                   </tr>
