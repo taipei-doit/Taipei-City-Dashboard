@@ -222,12 +222,11 @@ onBeforeUnmount(() => {
   <div class="app-container">
     <NotificationBar />
     <NavBar v-if="authStore.currentPath !== 'embed'" />
-    <!-- /mapview, /dashboard layouts (含 meta.layout === 'dashboard' 的自訂路由) -->
+    <!-- /mapview, /dashboard layouts -->
     <div
       v-if="
         authStore.currentPath === 'mapview' ||
-          authStore.currentPath === 'dashboard' ||
-          route.meta?.layout === 'dashboard'
+          authStore.currentPath === 'dashboard'
       "
       class="app-content"
     >

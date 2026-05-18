@@ -90,7 +90,6 @@ COPY public.groups (id, name, is_personal, create_by) FROM stdin;
 1	public	f	\N
 2	taipei	f	\N
 3	metrotaipei	f	\N
-4	newtaipei	f	\N
 \.
 
 

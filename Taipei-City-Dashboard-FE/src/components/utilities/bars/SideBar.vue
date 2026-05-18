@@ -219,48 +219,6 @@ onMounted(() => {
 		margin-left: 1em;
 	}
 
-	&-demo-link {
-		max-height: var(--font-xl);
-		display: flex;
-		align-items: center;
-		margin: var(--font-s) 0;
-		border-left: solid 4px transparent;
-		border-radius: 0 5px 5px 0;
-		text-decoration: none;
-		text-wrap: nowrap;
-		white-space: nowrap;
-		transition: background-color 0.2s;
-
-		&:hover {
-			background-color: var(--color-component-background);
-		}
-
-		span {
-			min-width: var(--font-l);
-			margin-left: var(--font-s);
-			color: var(--color-normal-text);
-			font-family: var(--font-icon);
-			font-size: calc(var(--font-m) * var(--font-to-icon));
-		}
-
-		h3 {
-			margin-left: var(--font-s);
-			color: var(--color-normal-text);
-			font-size: var(--font-m);
-			font-weight: 400;
-		}
-
-		&-active {
-			border-left-color: var(--color-highlight);
-			background-color: var(--color-component-background);
-
-			span,
-			h3 {
-				color: var(--color-highlight);
-			}
-		}
-	}
-
 	&-sub {
 		margin-bottom: var(--font-s);
 

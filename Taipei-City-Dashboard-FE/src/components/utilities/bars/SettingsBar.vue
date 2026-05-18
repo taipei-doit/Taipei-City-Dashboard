@@ -37,14 +37,6 @@ function handleOpenSettings() {
       <span>{{ contentStore.currentDashboard.icon }}</span>
       <h2>{{ contentStore.currentDashboard.name }}</h2>
       <button
-        v-if="contentStore.currentDashboard.storyBtn"
-        class="settingsbar-story-btn hide-if-mobile"
-        title="儀表板故事"
-        @click="contentStore.currentDashboard.storyBtn.onClick()"
-      >
-        <span>auto_stories</span>
-      </button>
-      <button
         class="show-if-mobile"
         @click="dialogStore.showDialog('mobileNavigation')"
       >
@@ -116,26 +108,6 @@ function handleOpenSettings() {
 		&-navigation {
 			margin-left: 4px;
 			color: var(--color-complement-text);
-		}
-	}
-
-	&-story-btn {
-		display: flex;
-		align-items: center;
-		border-radius: 5px;
-		margin-left: 4px;
-		padding: 2px;
-		transition: color 0.2s;
-
-		span {
-			font-family: var(--font-icon);
-			font-size: calc(var(--font-m) * var(--font-to-icon));
-			color: var(--color-complement-text);
-			transition: color 0.2s;
-		}
-
-		&:hover span {
-			color: #5af89c;
 		}
 	}
 

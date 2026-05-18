@@ -85,9 +85,6 @@ defineProps({
 			&.metrotaipei {
 				background-color: var(--color-metrotaipei);
 			}
-			&.newtaipei {
-				background-color: var(--color-newtaipei);
-			}
 		}
 	}
 }

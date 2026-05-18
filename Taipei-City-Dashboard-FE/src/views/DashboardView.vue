@@ -10,14 +10,11 @@ Testing: Jack Huang (Data Scientist), Ian Huang (Data Analysis Intern)
 
 <script setup>
 /* global gtag */
-import { computed, onBeforeUnmount, reactive, ref, watch } from "vue";
 import DashboardComponent from "../dashboardComponent/DashboardComponent.vue";
-import EcoDietExtras from "../components/extras/EcoDietExtras.vue";
 import router from "../router";
 import { useContentStore } from "../store/contentStore";
 import { useDialogStore } from "../store/dialogStore";
 import { useAuthStore } from "../store/authStore";
-import http from "../router/axios";
 
 import MoreInfo from "../components/dialogs/MoreInfo.vue";
 import ReportIssue from "../components/dialogs/ReportIssue.vue";
@@ -25,91 +22,6 @@ import ReportIssue from "../components/dialogs/ReportIssue.vue";
 const contentStore = useContentStore();
 const dialogStore = useDialogStore();
 const authStore = useAuthStore();
-
-const isEcoDiet = computed(() =>
-	contentStore.currentDashboard.index === "eco_diet_metrotaipei"
-);
-
-const CITY_SELECT_LIST = [
-	{ name: "臺北市", value: "taipei" },
-	{ name: "新北市", value: "newtaipei" },
-	{ name: "雙北", value: "metrotaipei" },
-];
-
-const activeCityMap = reactive({});
-
-const ecoDietExtrasRef = ref(null);
-
-function tagListOf(component) {
-	const cityValue = activeCityMap[component.index] ?? component.city ?? "metrotaipei";
-	if (cityValue === "taipei") return [{ name: "臺北市", value: "taipei" }];
-	if (cityValue === "newtaipei") return [{ name: "新北市", value: "newtaipei" }];
-	return [{ name: "雙北", value: "metrotaipei" }];
-}
-
-function normalizeEcoDietChartData(data, categories) {
-	if (!categories || !data) return data;
-	return data.map((series) => ({
-		...series,
-		data: Array.isArray(series.data) && typeof series.data[0] === "number"
-			? series.data.map((y, i) => ({ x: categories[i], y }))
-			: series.data,
-	}));
-}
-
-async function handleEcoDietChangeCity(component, city) {
-	activeCityMap[component.index] = city;
-	try {
-		const res = await http.get(`/component/${component.id}/chart`, {
-			params: { city },
-		});
-		const { data, categories } = res.data;
-		if (categories) {
-			component.chart_config.categories = categories;
-			component.chart_data = normalizeEcoDietChartData(data, categories);
-		} else {
-			component.chart_data = data ?? null;
-		}
-	} catch {
-		component.chart_data = null;
-	}
-}
-
-function handleAiChat(config, event) {
-	ecoDietExtrasRef.value?.openAiModal(event, String(config.id), config.name);
-}
-
-watch(isEcoDiet, (active) => {
-	if (active) {
-		contentStore.currentDashboard.storyBtn = {
-			onClick: () => ecoDietExtrasRef.value?.openStoryModal(),
-		};
-	} else {
-		contentStore.currentDashboard.storyBtn = null;
-	}
-}, { immediate: true });
-
-watch(
-	() => contentStore.currentDashboard.components,
-	(components) => {
-		if (!isEcoDiet.value || !components) return;
-		components.forEach((component) => {
-			const categories = component.chart_config?.categories;
-			if (!categories || !component.chart_data) return;
-			const needsNormalize = Array.isArray(component.chart_data) &&
-				component.chart_data[0]?.data &&
-				typeof component.chart_data[0].data[0] === "number";
-			if (needsNormalize) {
-				component.chart_data = normalizeEcoDietChartData(component.chart_data, categories);
-			}
-		});
-	},
-	{ deep: true }
-);
-
-onBeforeUnmount(() => {
-	contentStore.currentDashboard.storyBtn = null;
-});
 
 function handleOpenSettings() {
 	contentStore.editDashboard = JSON.parse(
@@ -212,24 +124,19 @@ function handleMoreInfo(item) {
   >
     <DashboardComponent
       v-for="item in contentStore.currentDashboard.components"
-      :key="`${item.index}-${activeCityMap[item.index] ?? item.city}`"
+      :key="`${item.index}-${item.city}`"
       :config="item"
       :info-btn="true"
-      :active-city="isEcoDiet ? (activeCityMap[item.index] ?? item.city) : item.city"
-      :ai-chat-btn="isEcoDiet"
+      :active-city="item.city"
       :select-btn="true"
-      :select-btn-disabled="isEcoDiet ? false : (contentStore.cityManager.getSelectList(contentStore.currentDashboard?.city).length === 1 || contentStore.currentDashboardExcluded.components.filter((data) => data.index === item.index).length === 0)"
-      :select-btn-list="isEcoDiet
-        ? CITY_SELECT_LIST
-        : (contentStore.currentDashboard?.city
-          ? contentStore.cityManager.getSelectList(contentStore.currentDashboard?.city)
-          : contentStore.cityManager.getCities(contentStore.cityManager.activeCities))
+      :select-btn-disabled="contentStore.cityManager.getSelectList(contentStore.currentDashboard?.city).length === 1 || contentStore.currentDashboardExcluded.components.filter((data) => data.index === item.index).length === 0"
+      :select-btn-list="contentStore.currentDashboard?.city
+        ? contentStore.cityManager.getSelectList(contentStore.currentDashboard?.city)
+        : contentStore.cityManager.getCities(contentStore.cityManager.activeCities)
       "
-      :city-tag="isEcoDiet
-        ? tagListOf(item)
-        : (contentStore.currentDashboard?.city
-          ? contentStore.cityManager.getTagList(contentStore.currentDashboard?.city)
-          : contentStore.cityManager.getTagList(item.city))
+      :city-tag="contentStore.currentDashboard?.city
+        ? contentStore.cityManager.getTagList(contentStore.currentDashboard?.city)
+        : contentStore.cityManager.getTagList(item.city)
       "
       :delete-btn="
         contentStore.personalDashboards
@@ -256,31 +163,25 @@ function handleMoreInfo(item) {
           contentStore.deleteComponent(id);
         }
       "
-      @ai-chat="(config, event) => handleAiChat(config, event)"
-      @change-city="(city) => {
-        if (isEcoDiet) {
-          handleEcoDietChangeCity(item, city);
-        } else {
-          const selectedData = contentStore.cityDashboard.components.find((data) => {
-            if (data.index === item.index && data.city === city) {
-              return data;
-            }
-          });
-          const componentIndex = contentStore.currentDashboard.components.findIndex(
-            (item) => item.id === selectedData.id
-          );
-          if (selectedData) {
-            contentStore.setComponentData(componentIndex, selectedData);
+      @change-city="(city)=> {
+        const selectedData = contentStore.cityDashboard.components.find((data) => {
+          if (data.index === item.index && data.city === city) {
+            return data
           }
+        });
+
+        const componentIndex = contentStore.currentDashboard.components.findIndex(
+          (item) => item.id === selectedData.id
+        );
+
+        if (selectedData) {
+          contentStore.setComponentData(componentIndex, selectedData);
         }
-      }"
+      }
+      "
     />
     <MoreInfo />
     <ReportIssue />
-    <EcoDietExtras
-      v-if="isEcoDiet"
-      ref="ecoDietExtrasRef"
-    />
   </div>
   <!-- 3. If dashboard is still loading -->
   <div

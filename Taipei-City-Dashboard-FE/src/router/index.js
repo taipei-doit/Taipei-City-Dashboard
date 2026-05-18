@@ -18,7 +18,7 @@ import MapView from "../views/MapView.vue";
 import ComponentView from "../views/ComponentView.vue";
 import ComponentInfoView from "../views/ComponentInfoView.vue";
 import EmbedView from "../views/EmbedView.vue";
-// import FloodRadarView from "../views/FloodRadarView.vue";
+
 const routes = [
 	{
 		path: "/",
@@ -176,8 +176,7 @@ router.beforeEach((to) => {
 		to.name === "component-info"
 	) {
 		contentStore.setDashboards(true);
-	} else if (to.meta?.layout !== "dashboard") {
-		// 自訂 dashboard layout 路由由 view 自管 currentDashboard，這裡不清
+	} else {
 		contentStore.clearCurrentDashboard();
 	}
 	// Get Component data if the path is component-info
@@ -185,14 +184,11 @@ router.beforeEach((to) => {
 		contentStore.getCurrentComponentData(to.params.index, to.query.city);
 	}
 	// Clear the entire mapStore if the path doesn't start with /mapview
-	if (
-		to.path.toLowerCase() !== "/mapview" &&
-		to.meta?.layout !== "dashboard"
-	) {
+	if (to.path.toLowerCase() !== "/mapview") {
 		mapStore.clearEntireMap();
 	}
-	// Clear only map layers if the path starts with /mapview or 自訂 dashboard layout
-	else {
+	// Clear only map layers if the path starts with /mapview
+	else if (to.path.toLowerCase() === "/mapview") {
 		mapStore.clearOnlyLayers();
 	}
 });
