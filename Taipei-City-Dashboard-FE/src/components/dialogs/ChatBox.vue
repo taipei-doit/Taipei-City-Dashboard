@@ -15,7 +15,7 @@ const contentStore = useContentStore();
 const authStore = useAuthStore();
 const { addChatData, addQueryData, saveChatLog } = chatStore;
 const { createDashboard } = contentStore;
-const { chatData, compToDashMap } = storeToRefs(chatStore);
+const { chatData, compToDashMap, compToDashIndexMap } = storeToRefs(chatStore);
 const { editDashboard } = storeToRefs(contentStore);
 const { user } = storeToRefs(authStore);
 
@@ -167,7 +167,7 @@ watch(
                           : "雙北"
                       }}
                     </td>
-					<td>{{ compToDashMap[item.id] }}</td>
+					<td><a :href="`https://citydashboard.taipei/dashboard?index=${compToDashIndexMap[item.id]?.[0]?.index}&city=${item.city}`" target="_blank">{{ compToDashMap[item.id] }}</a></td>
                     <td>{{ item.name }}</td>
                     <td>{{ item.score }}</td>
                   </tr>
