@@ -271,7 +271,10 @@ onBeforeUnmount(() => {
     >
       <p>下次更新：{{ formattedTimeToUpdate }}</p>
     </div>
-	<div v-if="isChatBoxShow" class="chat-overlay"></div>
+    <div
+      v-if="isChatBoxShow"
+      class="chat-overlay"
+    />
     <div class="chatbot-container">
       <ChatBox
         v-if="isChatBoxShow"
