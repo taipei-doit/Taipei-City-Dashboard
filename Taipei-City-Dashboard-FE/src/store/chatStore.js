@@ -18,6 +18,7 @@ export const useChatStore = defineStore('chat', () => {
 
 	// 儲存組件對應主題
 	const compToDashMap = ref({});
+	const compToDashIndexMap = ref({});
 
   	// 從 sessionStorage 讀取
   	const savedChatData = JSON.parse(sessionStorage.getItem('chatData')) || [];
@@ -44,6 +45,12 @@ export const useChatStore = defineStore('chat', () => {
 				compToDashMap.value[comp.id] = matched
 					.map((d) => d.name)
 					.join("、");
+
+				// 存 name -> index 的對應關係
+				compToDashIndexMap.value[comp.id] = matched.map((d) => ({
+					name: d.name,
+					index: d.index,
+				}));
 			});
 		} catch (error) {
 			console.error("rebuildCompToDashMap error:", error);
@@ -103,6 +110,11 @@ export const useChatStore = defineStore('chat', () => {
 					dash.components.includes(comp.id),
 				);
 				compToDashMap.value[comp.id] = matched.map((d) => d.name).join("、");
+				// 存 name -> index 的對應關係
+				compToDashIndexMap.value[comp.id] = matched.map((d) => ({
+					name: d.name,
+					index: d.index,
+				}));
 			});
 			
 			if (response.data?.data?.length > 0) {
@@ -171,5 +183,5 @@ export const useChatStore = defineStore('chat', () => {
       	}
 	};
 
-	return { chatData, compToDashMap, addChatData, addQueryData, saveChatLog }
+	return { chatData, compToDashMap, compToDashIndexMap, addChatData, addQueryData, saveChatLog }
 })
