@@ -43,7 +43,7 @@ export class CityManager {
         [
             "newtaipei",
             {
-                expandedName: "新北儀表板",
+                expandedName: "新北",
 				collapsedName: "新北",
                 enabled: false,
                 selectList: ["newtaipei"],

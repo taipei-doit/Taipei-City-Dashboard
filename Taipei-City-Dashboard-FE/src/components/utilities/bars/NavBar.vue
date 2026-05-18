@@ -25,7 +25,6 @@ const linkQuery = computed(() => {
 	return `${indexQuery}${cityQuery}`;
 });
 
-
 const location = computed(() => {
 	return window.location;
 });
@@ -68,12 +67,16 @@ const isLocalhost = computed(() => {
         組件瀏覽平台
       </router-link>
       <router-link
-        :to="`/dashboard${linkQuery.includes('undefined') ? '' : linkQuery}`"
+        :to="`/dashboard${
+          linkQuery.includes('undefined') ? '' : linkQuery
+        }`"
       >
         儀表板總覽
       </router-link>
       <router-link
-        :to="`/mapview${linkQuery.includes('undefined') ? '' : linkQuery}`"
+        :to="`/mapview${
+          linkQuery.includes('undefined') ? '' : linkQuery
+        }`"
       >
         地圖交叉比對
       </router-link>

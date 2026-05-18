@@ -12,14 +12,12 @@ Testing: Jack Huang (Data Scientist), Ian Huang (Data Analysis Intern)
 
 <script setup>
 /* global gtag */
-import { computed, onBeforeUnmount, reactive, ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import { useRoute } from "vue-router";
 import DashboardComponent from "../dashboardComponent/DashboardComponent.vue";
-import EcoDietExtras from "../components/extras/EcoDietExtras.vue";
 import { useContentStore } from "../store/contentStore";
 import { useDialogStore } from "../store/dialogStore";
 import { useMapStore } from "../store/mapStore";
-import http from "../router/axios";
 import MapContainer from "../components/map/MapContainer.vue";
 import MoreInfo from "../components/dialogs/MoreInfo.vue";
 import ReportIssue from "../components/dialogs/ReportIssue.vue";
@@ -28,84 +26,6 @@ const contentStore = useContentStore();
 const dialogStore = useDialogStore();
 const mapStore = useMapStore();
 const route = useRoute();
-
-const isEcoDiet = computed(() =>
-	contentStore.currentDashboard.index === "eco_diet_metrotaipei"
-);
-
-const CITY_SELECT_LIST = [
-	{ name: "臺北市", value: "taipei" },
-	{ name: "新北市", value: "newtaipei" },
-	{ name: "雙北", value: "metrotaipei" },
-];
-
-const activeCityMap = reactive({});
-const ecoDietExtrasRef = ref(null);
-
-function tagListOf(component) {
-	const cityValue = activeCityMap[component.index] ?? component.city ?? "metrotaipei";
-	if (cityValue === "taipei") return [{ name: "臺北市", value: "taipei" }];
-	if (cityValue === "newtaipei") return [{ name: "新北市", value: "newtaipei" }];
-	return [{ name: "雙北", value: "metrotaipei" }];
-}
-
-function normalizeEcoDietChartData(data, categories) {
-	if (!categories || !data) return data;
-	return data.map((series) => ({
-		...series,
-		data: Array.isArray(series.data) && typeof series.data[0] === "number"
-			? series.data.map((y, i) => ({ x: categories[i], y }))
-			: series.data,
-	}));
-}
-
-async function handleEcoDietChangeCity(component, city) {
-	activeCityMap[component.index] = city;
-	try {
-		const res = await http.get(`/component/${component.id}/chart`, {
-			params: { city },
-		});
-		const { data, categories } = res.data;
-		if (categories) {
-			component.chart_config.categories = categories;
-			component.chart_data = normalizeEcoDietChartData(data, categories);
-		} else {
-			component.chart_data = data ?? null;
-		}
-		if (component.map_config?.[0]) {
-			const cityMapIndex = {
-				metrotaipei: 0,
-				taipei: 1,
-				newtaipei: 2,
-			}[city] ?? 0;
-			const newMapConfig = [component.map_config[cityMapIndex] ?? component.map_config[0]];
-			mapStore.clearByParamFilter(component.map_config);
-			mapStore.turnOffMapLayerVisibility(component.map_config);
-			component.map_config = newMapConfig;
-			mapStore.addToMapLayerList(newMapConfig);
-		}
-	} catch {
-		component.chart_data = null;
-	}
-}
-
-function handleAiChat(config, event) {
-	ecoDietExtrasRef.value?.openAiModal(event, String(config.id), config.name);
-}
-
-watch(isEcoDiet, (active) => {
-	if (active) {
-		contentStore.currentDashboard.storyBtn = {
-			onClick: () => ecoDietExtrasRef.value?.openStoryModal(),
-		};
-	} else {
-		contentStore.currentDashboard.storyBtn = null;
-	}
-}, { immediate: true });
-
-onBeforeUnmount(() => {
-	contentStore.currentDashboard.storyBtn = null;
-});
 
 const toggleOn = ref({
 	hasMap: [],
@@ -337,32 +257,35 @@ function popularBasicLayerGA(map_config) {
       >
         <DashboardComponent
           v-for="(item, arrayIdx) in parseMapLayers.hasMap"
-          :key="`map-layer-${item.index}-${activeCityMap[item.index] ?? item.city}`"
+          :key="`map-layer-${item.index}-${item.city}`"
           :config="item"
           mode="map"
           :info-btn="true"
-          :active-city="isEcoDiet ? (activeCityMap[item.index] ?? item.city) : item.city"
-          :ai-chat-btn="isEcoDiet"
+          :active-city="item.city"
           :select-btn="true"
-          :select-btn-disabled="isEcoDiet ? false : (
+          :select-btn-disabled="
             contentStore.cityManager.getSelectList(
               contentStore.currentDashboard?.city,
             ).length === 1 ||
               contentStore.currentDashboardExcluded.components.filter(
                 (data) => data.index === item.index,
               ).length === 0
-          )"
-          :select-btn-list="isEcoDiet
-            ? CITY_SELECT_LIST
-            : (contentStore.currentDashboard?.city
-              ? contentStore.cityManager.getSelectList(contentStore.currentDashboard?.city)
-              : contentStore.cityManager.getCities(contentStore.cityManager.activeCities))
           "
-          :city-tag="isEcoDiet
-            ? tagListOf(item)
-            : (contentStore.currentDashboard?.city
-              ? contentStore.cityManager.getTagList(contentStore.currentDashboard?.city)
-              : contentStore.cityManager.getTagList(item.city))
+          :select-btn-list="
+            contentStore.currentDashboard?.city
+              ? contentStore.cityManager.getSelectList(
+                contentStore.currentDashboard?.city,
+              )
+              : contentStore.cityManager.getCities(
+                contentStore.cityManager.activeCities,
+              )
+          "
+          :city-tag="
+            contentStore.currentDashboard?.city
+              ? contentStore.cityManager.getTagList(
+                contentStore.currentDashboard?.city,
+              )
+              : contentStore.cityManager.getTagList(item.city)
           "
           :toggle-disable="shouldDisable(item.map_config)"
           :toggle-on="toggleOn.hasMap[arrayIdx]"
@@ -408,43 +331,38 @@ function popularBasicLayerGA(map_config) {
               mapStore.flyToLocation(location);
             }
           "
-          @ai-chat="(config, event) => handleAiChat(config, event)"
           @change-city="
             (city) => {
-              if (isEcoDiet) {
-                handleEcoDietChangeCity(item, city);
-              } else {
-                const selectedData =
-                  contentStore.cityDashboard.components.find(
-                    (data) => {
-                      if (
-                        data.index === item.index &&
-                        data.city === city
-                      ) {
-                        return data;
-                      }
-                    },
-                  );
+              const selectedData =
+                contentStore.cityDashboard.components.find(
+                  (data) => {
+                    if (
+                      data.index === item.index &&
+                      data.city === city
+                    ) {
+                      return data;
+                    }
+                  },
+                );
 
-                const componentIndex =
-                  contentStore.currentDashboard.components.findIndex(
-                    (item) => item.id === selectedData.id,
-                  );
+              const componentIndex =
+                contentStore.currentDashboard.components.findIndex(
+                  (item) => item.id === selectedData.id,
+                );
 
-                if (selectedData) {
-                  mapStore.clearByParamFilter(item.map_config);
-                  mapStore.turnOffMapLayerVisibility(
-                    item.map_config,
-                  );
-                  mapStore.addToMapLayerList(
-                    selectedData.map_config,
-                  );
+              if (selectedData) {
+                mapStore.clearByParamFilter(item.map_config);
+                mapStore.turnOffMapLayerVisibility(
+                  item.map_config,
+                );
+                mapStore.addToMapLayerList(
+                  selectedData.map_config,
+                );
 
-                  contentStore.setComponentData(
-                    componentIndex,
-                    selectedData,
-                  );
-                }
+                contentStore.setComponentData(
+                  componentIndex,
+                  selectedData,
+                );
               }
             }
           "
@@ -657,11 +575,6 @@ function popularBasicLayerGA(map_config) {
     <MapContainer />
     <MoreInfo />
     <ReportIssue />
-    <EcoDietExtras
-      v-if="isEcoDiet"
-      ref="ecoDietExtrasRef"
-      :is-map-view="true"
-    />
   </div>
 </template>
 
