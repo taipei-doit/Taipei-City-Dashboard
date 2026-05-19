@@ -1,0 +1,45 @@
+{
+  "dag_infos": {
+    "dag_id": "organic_farm_locations",
+    "start_date": "2026-05-19",
+    "schedule_interval": "@monthly",
+    "catchup": false,
+    "tags": [
+      "organic_farm",
+      "產業局/新北市政府農業局",
+      "Taipei-City",
+      "New-Taipei-City"
+    ],
+    "description": "雙北有機農場分布點位資料",
+    "default_args": {
+      "owner": "airflow",
+      "email": [
+        "DEFAULT_EMAIL_LIST"
+      ],
+      "email_on_retry": false,
+      "email_on_failure": true,
+      "retries": 1,
+      "retry_delay": 60
+    },
+    "ready_data_db": "postgres_default",
+    "ready_data_default_table": "organic_farm_locations",
+    "ready_data_history_table": "",
+    "raw_data_db": "postgres_default",
+    "raw_data_table": "",
+    "load_behavior": "replace"
+  },
+  "data_infos": {
+    "name_cn": "有機農場分布",
+    "airflow_update_freq": "臺北來源標示每半年/不定期更新；DAG 每月檢查來源是否更新",
+    "source": "https://data.taipei/dataset/detail?id=32aea2da-14a7-47b6-a687-57e29c1ad4a7 | https://data.ntpc.gov.tw/datasets/fc30f585-66d9-4233-a65e-c650d177ebfe",
+    "source_type": "data.taipei,data.ntpc",
+    "source_dept": "臺北市政府產業發展局/新北市政府農業局",
+    "component_name": "organic_farm_map",
+    "gis_format": "wkb",
+    "output_coordinate": "EPSG:4326",
+    "is_geometry": 1,
+    "dataset_description": "整合臺北市取得有機驗證之有機農場名單與新北市有機農場資料，包含農場名稱、經營者、地址、驗證資訊、面積與點位。",
+    "etl_description": "臺北資料由 data.taipei resource 取得，新北資料由 data.ntpc dataset API 取得；欄位標準化後使用 TPGOS 地址轉座標工具補經緯度，產出 Point wkb_geometry 並寫入 ready_data。",
+    "sensitivity": "public"
+  }
+}
