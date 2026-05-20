@@ -6,6 +6,7 @@ def _R0042(**kwargs):
     import pandas as pd
     import requests
     from sqlalchemy import create_engine
+    from utils.extract_stage import read_csv_with_encoding_fallback
     from utils.load_stage import (
         save_geodataframe_to_postgresql,
         update_lasttime_in_data_to_dataset_info,
@@ -40,10 +41,10 @@ def _R0042(**kwargs):
         last_modified = item["last_modified"]
         file_name = item["file_name"]
         # read csv
-        try:
-            temp = pd.read_csv(URL, encoding=encoding)
-        except UnicodeDecodeError:
-            temp = pd.read_csv(URL, encoding="cp950")
+        temp = read_csv_with_encoding_fallback(
+            URL,
+            encodings=(encoding, "utf-8-sig", "utf-8", "cp950", "big5"),
+        )
         temp["file_name"] = file_name
         temp["data_time"] = last_modified
         temps.append(temp)

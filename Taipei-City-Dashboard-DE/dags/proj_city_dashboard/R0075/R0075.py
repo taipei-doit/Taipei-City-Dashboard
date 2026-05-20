@@ -5,6 +5,7 @@ from operators.common_pipeline import CommonDag
 def _R0075(**kwargs):
     import pandas as pd
     from sqlalchemy import create_engine
+    from utils.extract_stage import read_csv_with_encoding_fallback
     from utils.load_stage import (
         save_geodataframe_to_postgresql,
         update_lasttime_in_data_to_dataset_info,
@@ -20,17 +21,17 @@ def _R0075(**kwargs):
     default_table = dag_infos.get("ready_data_default_table")
     history_table = dag_infos.get("ready_data_history_table")
     URL = "https://data.taipei/api/frontstage/tpeod/dataset/resource.download?rid=b9f8154d-c627-48a8-b3ef-512ed9cde9e7"
-    ENCODING = "big5"
+    ENCODINGS = ("utf-8-sig", "utf-8", "cp950", "big5")
     FROM_CRS = 4326
     GEOMETRY_TYPE = "Point"
 
     # Extract
-    raw_data = pd.read_csv(URL, encoding=ENCODING)
+    raw_data = read_csv_with_encoding_fallback(URL, encodings=ENCODINGS)
     is_no_header = raw_data.columns[0] != "序號"
     if is_no_header:
-        raw_data = pd.read_csv(
+        raw_data = read_csv_with_encoding_fallback(
             URL,
-            encoding=ENCODING,
+            encodings=ENCODINGS,
             header=None,
             names=[
                 "序號",

@@ -5,7 +5,10 @@ from operators.common_pipeline import CommonDag
 def _D090100_1(**kwargs):
     import pandas as pd
     from sqlalchemy import create_engine
-    from utils.extract_stage import get_data_taipei_file_last_modified_time
+    from utils.extract_stage import (
+        get_data_taipei_file_last_modified_time,
+        read_csv_with_encoding_fallback,
+    )
     from utils.load_stage import (
         save_geodataframe_to_postgresql,
         update_lasttime_in_data_to_dataset_info,
@@ -27,13 +30,13 @@ def _D090100_1(**kwargs):
     default_table = dag_infos.get("ready_data_default_table")
     history_table = dag_infos.get("ready_data_history_table")
     URL = "https://data.taipei/api/frontstage/tpeod/dataset/resource.download?rid=28c5792b-3af6-4bff-8ad8-f5b5e53d4062"
-    ENCODING = "utf-8-sig"  # 來源已改 UTF-8(帶 BOM);原 big5 會 UnicodeDecodeError
+    ENCODINGS = ("utf-8-sig", "utf-8", "cp950", "big5")
     PAGE_ID = "58b4f7b9-d0c5-4de8-aa7f-981fcb625e45"
     FROM_CRS = 4326
     GEOMETRY_TYPE = "Point"
 
     # Extract
-    raw_data = pd.read_csv(URL, encoding=ENCODING)
+    raw_data = read_csv_with_encoding_fallback(URL, encodings=ENCODINGS)
     raw_data = raw_data.loc[
         raw_data["school"].notnull(), ~raw_data.columns.str.startswith("Unnamed")
     ]
