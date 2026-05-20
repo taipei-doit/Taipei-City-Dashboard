@@ -61,16 +61,24 @@ def _transfer(**kwargs):
     data = pd.DataFrame(res)
 
     col_map = {
+        "number": "seqno",
         "fire branch": "fire_brigade",
         "location": "street",
+        "address": "street",
         "district": "town",
-        "the width and length": "width_meter"
+        "the width and length": "width_meter",
+        "width": "width_meter",
+        "length": "length_meter",
     }
     data = data.rename(columns=col_map)
 
     data['county'] = '新北市'
-    data['width_meter'] = data['width_meter'].str.extract(r'寬度約:([0-9.]+)')
-    data['width_meter'] = data['width_meter'].astype(float)    
+    data['width_meter'] = (
+        data['width_meter']
+        .astype(str)
+        .str.extract(r'([0-9.]+)', expand=False)
+    )
+    data['width_meter'] = pd.to_numeric(data['width_meter'], errors='coerce')
     data["data_time"] = get_tpe_now_time_str(is_with_tz=True)
     data['address'] = '新北市' + data['town'] + data['street'].fillna('') + '1號'
         # get geometry

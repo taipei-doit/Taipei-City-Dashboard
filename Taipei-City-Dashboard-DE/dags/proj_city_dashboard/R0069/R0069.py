@@ -5,6 +5,10 @@ from operators.common_pipeline import CommonDag
 def _R0069(**kwargs):
     import pandas as pd
     from sqlalchemy import create_engine
+    from utils.extract_stage import (
+        get_current_rid_from_page_id,
+        read_csv_with_encoding_fallback,
+    )
     from utils.load_stage import (
         save_geodataframe_to_postgresql,
         update_lasttime_in_data_to_dataset_info,
@@ -25,21 +29,32 @@ def _R0069(**kwargs):
     load_behavior = dag_infos.get("load_behavior")
     default_table = dag_infos.get("ready_data_default_table")
     history_table = dag_infos.get("ready_data_history_table")
-    #URL = "https://data.taipei/api/frontstage/tpeod/dataset/resource.download?rid=797999ac-a4b8-4ffe-abfd-019c95122350"
-    URL = "https://data.taipei/dataset/detail?id=feaa5be3-0c43-4f0b-a46f-8a57cfd75d7a"
-    ENCODING = "cp950"
+    PAGE_ID = "feaa5be3-0c43-4f0b-a46f-8a57cfd75d7a"
+    rid = get_current_rid_from_page_id(PAGE_ID)
+    URL = f"https://data.taipei/api/frontstage/tpeod/dataset/resource.download?rid={rid}"
+    ENCODINGS = ("utf-8-sig", "utf-8", "cp950", "big5")
     FROM_CRS = 4326
-    GEOMETRY_TYPE = "Polygon"
+    GEOMETRY_TYPE = "Point"
 
     # Extract
-    raw_data = pd.read_csv(URL, encoding=ENCODING)
+    raw_data = read_csv_with_encoding_fallback(URL, encodings=ENCODINGS)
 
     # Transform
     data = raw_data.copy()
+    data = data.rename(
+        columns={
+            "序號": "編號",
+            "AREA_平方公尺": "閒置面積_㎡",
+        }
+    )
     # geocoding
-    addr_cleaned = clean_data(data["門牌"])
+    if "行政區" in data.columns:
+        addr = "臺北市" + data["行政區"].fillna("") + data["門牌"].fillna("")
+    else:
+        addr = data["門牌"]
+    addr_cleaned = clean_data(addr)
     standard_addr_list = main_process(addr_cleaned)
-    result, output = save_data(data["門牌"], addr_cleaned, standard_addr_list)
+    result, output = save_data(addr, addr_cleaned, standard_addr_list)
     data["門牌"] = output
     x, y = get_addr_xy_parallel(output)
     # geometry

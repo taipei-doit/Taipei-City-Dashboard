@@ -251,6 +251,46 @@ def get_current_rid_from_page_id(page_id, resource_name_contains=None, timeout=3
     return resources[0]["rid"]
 
 
+def read_csv_with_encoding_fallback(source, encodings=None, **kwargs):
+    """
+    Read CSV with a small set of common Taipei open-data encodings.
+
+    data.taipei resource metadata is not always updated when data owners
+    republish files. Try strict decoding first, then retry with replacement so
+    one bad byte does not break an otherwise usable CSV.
+    """
+    if encodings is None:
+        encodings = ("utf-8-sig", "utf-8", "cp950", "big5")
+
+    ordered_encodings = []
+    for encoding in encodings:
+        if encoding and encoding not in ordered_encodings:
+            ordered_encodings.append(encoding)
+
+    last_error = None
+    for encoding in ordered_encodings:
+        try:
+            if hasattr(source, "seek"):
+                source.seek(0)
+            return pd.read_csv(source, encoding=encoding, **kwargs)
+        except UnicodeDecodeError as err:
+            last_error = err
+
+    replace_kwargs = dict(kwargs)
+    replace_kwargs.setdefault("encoding_errors", "replace")
+    for encoding in ordered_encodings:
+        try:
+            if hasattr(source, "seek"):
+                source.seek(0)
+            return pd.read_csv(source, encoding=encoding, **replace_kwargs)
+        except UnicodeDecodeError as err:
+            last_error = err
+
+    if last_error is not None:
+        raise last_error
+    return pd.read_csv(source, **kwargs)
+
+
 def get_data_taipei_api(rid, timeout=60, output_format="json"):
     """
     Retrieve data from Data.taipei API by automatically traversing all data.
