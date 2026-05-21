@@ -41,7 +41,6 @@ func ConfigureRoutes() {
 	configureContributorRoutes()
 	configureChatLogRoutes()
 	configureAIRoutes()
-	configureWindRoutes()
 }
 
 func configureAuthRoutes() {

@@ -4,7 +4,6 @@ import (
 	"TaipeiCityDashboardBE/logs"
 	"os"
 	"strconv"
-	"time"
 
 	"github.com/sugarme/tokenizer"
 	ort "github.com/yalue/onnxruntime_go"
@@ -151,14 +150,5 @@ func getIntEnv(key string, fallback int) int {
 		return value
 	}
 	return fallback
-}
-
-func GetLocalTime() time.Time {
-	taipeiZone := time.FixedZone("CST", 8*3600)
-	return time.Now().In(taipeiZone)
-}
-
-func GetLocalTimeStr() string {
-	return GetLocalTime().Format("2006-01-02 15:04:05")
 }
 
