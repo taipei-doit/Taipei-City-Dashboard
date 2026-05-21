@@ -1,0 +1,23 @@
+{
+  "dag_infos": {
+    "dag_id": "street_trees_ntpe",
+    "start_date": "2026-05-21",
+    "schedule_interval": "@daily",
+    "catchup": false,
+    "default_args": { "email": ["DEFAULT_EMAIL_LIST"] },
+    "description": "New Taipei street trees dataset",
+    "tags": ["street_trees", "New-Taipei-City", "environment"],
+    "ready_data_default_table": "street_trees_ntpe",
+    "ready_data_history_table": "",
+    "component_name": "street_trees_ntpe",
+    "load_behavior": "replace",
+    "ready_data_db": "ready_data"
+  },
+  "data_infos": {
+    "is_geometry": 0,
+    "component_name": "street_trees_ntpe"
+  },
+  "server": {
+    "ready_data_db_uri": "postgresql://user:pass@db:5432/ready_data"
+  }
+}
