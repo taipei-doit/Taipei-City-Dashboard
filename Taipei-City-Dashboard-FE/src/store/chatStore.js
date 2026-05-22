@@ -39,13 +39,14 @@ export const useChatStore = defineStore('chat', () => {
 			allComps.forEach((comp) => {
 				const matched = [];
 
-				Object.values(dashMap).forEach((cityDashboards) => {
+				Object.entries(dashMap).forEach(([city,cityDashboards]) => {
 					cityDashboards.forEach((dash) => {
 						if (dash.components.includes(comp.id)) {
 							if (!matched.some((m) => m.index === dash.index)) {
 								matched.push({
 									name: dash.name,
 									index: dash.index,
+									city: city
 								});
 							}
 						}
@@ -109,7 +110,7 @@ export const useChatStore = defineStore('chat', () => {
 			compList.forEach((comp) => {
 				const matched = [];
 
-				Object.values(dashMap).forEach((cityDashboards) => {
+				Object.entries(dashMap).forEach(([city,cityDashboards]) => {
 					cityDashboards.forEach((dash) => {
 						if (dash.components.includes(comp.id)) {
 							// 避免同名主題重複加入
@@ -117,6 +118,7 @@ export const useChatStore = defineStore('chat', () => {
 								matched.push({
 									name: dash.name,
 									index: dash.index,
+									city: city
 								});
 							}
 						}
