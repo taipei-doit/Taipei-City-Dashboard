@@ -1,0 +1,38 @@
+{
+  "dag_infos": {
+    "dag_id": "food_factory_locations_taipei",
+    "start_date": "2026-05-18",
+    "schedule_interval": "@monthly",
+    "catchup": false,
+    "tags": ["food_safety", "產業發展局", "Taipei-City"],
+    "description": "臺北市食品工廠登記資料月更新（自全行業登記工廠以工廠名稱關鍵字過濾食品相關業者）",
+    "default_args": {
+      "owner": "airflow",
+      "email": ["DEFAULT_EMAIL_LIST"],
+      "email_on_retry": false,
+      "email_on_failure": true,
+      "retries": 1,
+      "retry_delay": 60
+    },
+    "ready_data_db": "postgres_default",
+    "ready_data_default_table": "food_factory_locations_taipei",
+    "ready_data_history_table": "",
+    "raw_data_db": "postgres_default",
+    "raw_data_table": "",
+    "load_behavior": "replace"
+  },
+  "data_infos": {
+    "name_cn": "臺北市食品工廠分布",
+    "airflow_update_freq": "每月 (Asia/Taipei)",
+    "source": "https://data.taipei/api/dataset/c8215f0d-20fa-4350-bcd9-da82432c2c9d/resource/db839b8c-bcbf-4b82-ab54-4d025df79b3c/download",
+    "source_type": "csv",
+    "source_dept": "臺北市政府產業發展局",
+    "component_name": "food_factory_district",
+    "gis_format": "csv",
+    "output_coordinate": "EPSG:4326",
+    "is_geometry": 1,
+    "dataset_description": "臺北市登記工廠分布圖及基本資料，本 DAG 僅保留食品相關業者（以工廠名稱關鍵字過濾）",
+    "etl_description": "下載 Big5 CSV → rename 中文欄 → 食品關鍵字過濾 → 解析行政區 → TM2(EPSG:3826) 轉 WGS84(EPSG:4326) 並產 wkb_geometry → replace 入庫",
+    "sensitivity": "public"
+  }
+}
