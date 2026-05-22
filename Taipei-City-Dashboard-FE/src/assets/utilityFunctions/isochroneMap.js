@@ -1,3 +1,5 @@
+// Developed by Bombs King, Taipei Codefest 2026
+
 import { IsochroneMapConfig } from "../configs/mapbox/mapConfig.js";
 
 export function getIsochroneLayerIds(layerId) {

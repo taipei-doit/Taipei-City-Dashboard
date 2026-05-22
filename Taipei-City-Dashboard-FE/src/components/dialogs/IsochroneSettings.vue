@@ -1,4 +1,4 @@
-﻿<!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
+<!-- Developed by Bombs King, Taipei Codefest 2026 -->
 
 <script setup>
 import { computed } from "vue";

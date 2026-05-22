@@ -1,4 +1,4 @@
-<!-- Developed by Taipei Urban Intelligence Center 2026 -->
+<!-- Developed by Bombs King, Taipei Codefest 2026 -->
 
 <script setup>
 const props = defineProps({
