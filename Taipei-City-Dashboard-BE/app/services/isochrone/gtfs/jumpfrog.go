@@ -1,3 +1,5 @@
+// Developed by Bombs King, Taipei Codefest 2026
+
 package gtfs
 
 // JumpfrogRouteNames mirrors data/scripts/app.py. Current bus GTFS route IDs

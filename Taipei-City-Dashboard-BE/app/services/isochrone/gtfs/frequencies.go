@@ -1,3 +1,5 @@
+// Developed by Bombs King, Taipei Codefest 2026
+
 package gtfs
 
 // ExpandFrequencies generates concrete stop-time sequences for trips defined

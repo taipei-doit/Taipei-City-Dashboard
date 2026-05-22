@@ -1,3 +1,5 @@
+// Developed by Bombs King, Taipei Codefest 2026
+
 package raptor
 
 // Query runs the RAPTOR algorithm from sourceStopIdx at depTimeSec.

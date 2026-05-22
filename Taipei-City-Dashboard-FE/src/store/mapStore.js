@@ -58,6 +58,7 @@ import {
 	getCrowdColor,
 	mrtLineColor,
 } from "../assets/utilityFunctions/getThematicColor.js";
+// Developed by Bombs King, Taipei Codefest 2026
 import {
 	buildIsochroneAreaFilter,
 	buildIsochroneLayerDefinitions,
@@ -2852,6 +2853,7 @@ export const useMapStore = defineStore("map", {
 			this.flyToLocation(res.geometry.coordinates);
 		},
 
+		// Developed by Bombs King, Taipei Codefest 2026
 		/* Isochrone Dynamic Query */
 		getIsochroneTimeSlots() {
 			return getIsochroneTimeSlots();
