@@ -169,7 +169,13 @@ watch(
                     </td>
                     <td>
                       <template
-                        v-for="dash in compToDashIndexMap[item.id]"
+                        v-for="dash in (
+                          compToDashIndexMap[
+                            item.id
+                          ] || []
+                        ).filter(
+                          (d) => d.city === item.city,
+                        )"
                         :key="dash.index"
                       >
                         <a

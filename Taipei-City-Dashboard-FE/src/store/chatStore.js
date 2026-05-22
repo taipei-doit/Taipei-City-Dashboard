@@ -37,16 +37,23 @@ export const useChatStore = defineStore('chat', () => {
 			const dashMap = dashboards.data.data;
 
 			allComps.forEach((comp) => {
-				const cityDashboards = dashMap[comp.city] || [];
-				const matched = cityDashboards.filter((dash) =>
-					dash.components.includes(comp.id),
-				);
+				const matched = [];
 
-				// 存 name -> index 的對應關係
-				compToDashIndexMap.value[comp.id] = matched.map((d) => ({
-					name: d.name,
-					index: d.index,
-				}));
+				Object.entries(dashMap).forEach(([city,cityDashboards]) => {
+					cityDashboards.forEach((dash) => {
+						if (dash.components.includes(comp.id)) {
+							if (!matched.some((m) => m.index === dash.index && m.city === city)) {
+								matched.push({
+									name: dash.name,
+									index: dash.index,
+									city: city
+								});
+							}
+						}
+					});
+				});
+
+				compToDashIndexMap.value[comp.id] = matched;
 			});
 		} catch (error) {
 			console.error("rebuildCompToDashIndexMap error:", error);
@@ -101,15 +108,24 @@ export const useChatStore = defineStore('chat', () => {
 			const dashMap = dashboards.data.data;
 
 			compList.forEach((comp) => {
-				const cityDashboards = dashMap[comp.city] || [];
-				const matched = cityDashboards.filter((dash) =>
-					dash.components.includes(comp.id),
-				);
-				// 存 name -> index 的對應關係
-				compToDashIndexMap.value[comp.id] = matched.map((d) => ({
-					name: d.name,
-					index: d.index,
-				}));
+				const matched = [];
+
+				Object.entries(dashMap).forEach(([city,cityDashboards]) => {
+					cityDashboards.forEach((dash) => {
+						if (dash.components.includes(comp.id)) {
+							// 避免同名主題重複加入
+							if (!matched.some((m) => m.index === dash.index && m.city === city)) {
+								matched.push({
+									name: dash.name,
+									index: dash.index,
+									city: city
+								});
+							}
+						}
+					});
+				});
+
+				compToDashIndexMap.value[comp.id] = matched;
 			});
 			
 			if (response.data?.data?.length > 0) {
