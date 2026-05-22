@@ -33,6 +33,87 @@ export const CityMapView = {
 	},
 };
 
+export const IsochroneMapConfig = {
+	defaultPick: {
+		lng: 121.517063,
+		lat: 25.047924,
+	},
+	api: {
+		full: "/transit/isochrone/full",
+	},
+	time: {
+		slotIntervalMinutes: 15,
+		defaultSlotIndex: 36,
+		queryDates: {
+			weekday: "2026-04-30",
+			weekend: "2026-04-26",
+		},
+	},
+	defaults: {
+		dayType: "weekday",
+		timeDirection: "arrival",
+		modes: ["bus", "rail", "train", "jumpfrog"],
+	},
+	dayTypes: [
+		{ value: "weekday", label: "平日" },
+		{ value: "weekend", label: "假日" },
+	],
+	timeDirections: [
+		{ value: "departure", label: "出發" },
+		{ value: "arrival", label: "抵達" },
+	],
+	modes: [
+		{ value: "bus", label: "公車", color: "#F7B731" },
+		{ value: "rail", label: "捷運", color: "#06B6D4" },
+		{ value: "train", label: "台鐵", color: "#FC5C65" },
+		{ value: "jumpfrog", label: "跳蛙公車", color: "#A55EEA" },
+	],
+	colors: {
+		15: "#2DD4BF",
+		30: "#34D399",
+		60: "#A3E635",
+		90: "#FACC15",
+		120: "#FB923C",
+		default: "#2DD4BF",
+		network: "#38BDF8",
+		outline: "#ffffff",
+	},
+	layers: {
+		featureLayers: {
+			isochrone: "isochrone",
+			network: "network",
+		},
+		networkSuffix: "-network",
+		networkStopsSuffix: "-network-stops",
+		outlineSuffix: "-outline",
+		walkTransitType: "walk",
+	},
+	paint: {
+		areaOpacity: 0.48,
+		networkWidth: 2,
+		networkOpacity: 0.75,
+		outlineWidth: 1,
+		outlineOpacity: 0.6,
+		stopRadius: 3,
+		stopStrokeWidth: 1,
+		stopOpacity: 0.9,
+	},
+	auxProperties: {
+		stopsTitle: "站點",
+		stopsProperty: [
+			{ key: "stop_name", name: "站名" },
+			{ key: "transit_type", name: "運具" },
+			{ key: "minutes", name: "時間(分)" },
+		],
+	},
+	messages: {
+		layerRequired: "請先開啟等時圈圖層",
+		pickHint: "請在地圖上點選查詢位置",
+		modeRequired: "請至少選擇一種交通模式",
+		queryFailed: "等時圈查詢失敗，請稍後再試",
+	},
+};
+
 // All map types
 export const mapTypes = {
 	line: "線圖",
@@ -43,6 +124,7 @@ export const mapTypes = {
 	arc: "立體弧線圖",
 	voronoi: "泰森多邊形",
 	isoline: "等高線圖",
+	isochrone: "等時圈",
 	"symbol-3d": "三維捷運動態地圖",
 };
 
@@ -358,6 +440,9 @@ export const maplayerCommonPaint = {
 			0.15,
 		],
 	},
+	isochrone: {
+		"fill-opacity": 0.35,
+	},
 	line: {
 		"line-width": [
 			"interpolate",
@@ -397,6 +482,7 @@ export const maplayerCommonLayout = {
 		"line-cap": "round",
 	},
 	fill: {},
+	isochrone: {},
 	"fill-extrusion": {},
 	circle: {},
 	symbol: {
