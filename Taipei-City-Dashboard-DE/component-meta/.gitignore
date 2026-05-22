@@ -1,3 +1,0 @@
-# 生成工具（每個 component 目錄下的 _build_*.py / _dump_*.py 為本機可重現用,不 commit）
-**/_build_*.py
-**/_dump_*.py
