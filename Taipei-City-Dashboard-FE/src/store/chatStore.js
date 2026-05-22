@@ -42,7 +42,7 @@ export const useChatStore = defineStore('chat', () => {
 				Object.entries(dashMap).forEach(([city,cityDashboards]) => {
 					cityDashboards.forEach((dash) => {
 						if (dash.components.includes(comp.id)) {
-							if (!matched.some((m) => m.index === dash.index)) {
+							if (!matched.some((m) => m.index === dash.index && m.city === city)) {
 								matched.push({
 									name: dash.name,
 									index: dash.index,
@@ -114,7 +114,7 @@ export const useChatStore = defineStore('chat', () => {
 					cityDashboards.forEach((dash) => {
 						if (dash.components.includes(comp.id)) {
 							// 避免同名主題重複加入
-							if (!matched.some((m) => m.index === dash.index)) {
+							if (!matched.some((m) => m.index === dash.index && m.city === city)) {
 								matched.push({
 									name: dash.name,
 									index: dash.index,
