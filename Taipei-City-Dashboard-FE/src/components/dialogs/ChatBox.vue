@@ -169,12 +169,19 @@ watch(
                     </td>
                     <td>
                       <template
-                        v-for="dash in compToDashIndexMap[item.id]"
+                        v-for="dash in (
+                          compToDashIndexMap[
+                            item.id
+                          ] || []
+                        ).filter(
+                          (d) => d.city === item.city,
+                        )"
                         :key="dash.index"
                       >
                         <a
                           class="theme-btn"
                           :href="`https://test-citydashboard.taipei/dashboard?index=${dash.index}&city=${item.city}`"
+                          target="_blank"
                         >
                           {{ dash.name }}
                         </a>
