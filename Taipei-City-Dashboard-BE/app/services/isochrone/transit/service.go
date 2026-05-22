@@ -496,7 +496,7 @@ func haversine(lat1, lon1, lat2, lon2 float64) float64 {
 	a := math.Sin(dLat/2)*math.Sin(dLat/2) +
 		math.Cos(lat1*math.Pi/180)*math.Cos(lat2*math.Pi/180)*
 			math.Sin(dLon/2)*math.Sin(dLon/2)
-	return r * 2 * math.Atan2(math.Sqrt(a), math.Sqrt(1 - a))
+	return r * 2 * math.Atan2(math.Sqrt(a), math.Sqrt(1-a))
 }
 
 // timeToSec converts a time.Time to seconds since midnight (local).

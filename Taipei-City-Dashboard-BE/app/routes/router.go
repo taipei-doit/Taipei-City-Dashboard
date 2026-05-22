@@ -56,7 +56,6 @@ func configureIsochroneRoutes() {
 	// Legacy / top-level endpoint
 	RouterGroup.POST("/isochrone", controllers.GetIsochrone)
 }
-}
 
 func configureAuthRoutes() {
 	// auth routers
@@ -91,18 +90,18 @@ func configureUserRoutes() {
 // configureComponentRoutes configures all component routes.
 func configureChatLogRoutes() {
 	chatLogRoutes := RouterGroup.Group("/chatlog")
-    // Apply the total request limit to all chatlog routes
-    chatLogRoutes.Use(middleware.LimitTotalRequests(global.ComponentLimitTotalRequestsTimes, global.LimitRequestsDuration))
+	// Apply the total request limit to all chatlog routes
+	chatLogRoutes.Use(middleware.LimitTotalRequests(global.ComponentLimitTotalRequestsTimes, global.LimitRequestsDuration))
 
-    // POST /chatlog route gets the new strict limit of 60/min
-    chatLogRoutes.POST("/", middleware.LimitAPIRequests(global.ChatLogLimitAPIRequestsTimes, global.LimitRequestsDuration),controllers.CreateChatLog)
+	// POST /chatlog route gets the new strict limit of 60/min
+	chatLogRoutes.POST("/", middleware.LimitAPIRequests(global.ChatLogLimitAPIRequestsTimes, global.LimitRequestsDuration), controllers.CreateChatLog)
 
-    // Other chatlog-related routes keep the general component limit
-    chatLogSessionRoutes := chatLogRoutes.Group("/")
-    chatLogSessionRoutes.Use(middleware.LimitAPIRequests(global.ComponentLimitAPIRequestsTimes, global.LimitRequestsDuration))
+	// Other chatlog-related routes keep the general component limit
+	chatLogSessionRoutes := chatLogRoutes.Group("/")
+	chatLogSessionRoutes.Use(middleware.LimitAPIRequests(global.ComponentLimitAPIRequestsTimes, global.LimitRequestsDuration))
 	{
 		chatLogSessionRoutes.GET("/session", controllers.GetALLChatLog)
-        chatLogSessionRoutes.GET("/session/:session", controllers.GetChatLogDetailBySession)
+		chatLogSessionRoutes.GET("/session/:session", controllers.GetChatLogDetailBySession)
 	}
 }
 
