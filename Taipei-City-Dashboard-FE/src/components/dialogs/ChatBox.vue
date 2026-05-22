@@ -174,7 +174,7 @@ watch(
                       >
                         <a
                           class="theme-btn"
-                          :href="`https://test-citydashboard.taipei/dashboard?index=${dash.index}&city=${item.city}`"
+                          :href="`https://citydashboard.taipei/dashboard?index=${dash.index}&city=${item.city}`"
                         >
                           {{ dash.name }}
                         </a>
