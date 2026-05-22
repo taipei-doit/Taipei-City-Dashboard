@@ -1,0 +1,38 @@
+{
+  "dag_infos": {
+    "dag_id": "school_food_supply_chain_links",
+    "start_date": "2026-05-18",
+    "schedule_interval": "@monthly",
+    "catchup": false,
+    "tags": ["food_safety", "教育部國民及學前教育署", "Taipei-City"],
+    "description": "雙北中小學及高中職供餐供應鏈月更新（食材登錄平台 OpenAPI）",
+    "default_args": {
+      "owner": "airflow",
+      "email": ["DEFAULT_EMAIL_LIST"],
+      "email_on_retry": false,
+      "email_on_failure": true,
+      "retries": 1,
+      "retry_delay": 60
+    },
+    "ready_data_db": "postgres_default",
+    "ready_data_default_table": "school_food_supply_chain_links",
+    "ready_data_history_table": "",
+    "raw_data_db": "postgres_default",
+    "raw_data_table": "",
+    "load_behavior": "replace"
+  },
+  "data_infos": {
+    "name_cn": "雙北學校供餐供應鏈",
+    "airflow_update_freq": "每月 (Asia/Taipei)",
+    "source": "https://fatraceschool.k12ea.gov.tw/cateringservice/openapi/",
+    "source_type": "api",
+    "source_dept": "教育部國民及學前教育署",
+    "component_name": "school_food_supply_chain",
+    "gis_format": null,
+    "output_coordinate": "EPSG:4326",
+    "is_geometry": 0,
+    "dataset_description": "雙北中小學及高中職供餐食材供應鏈關係：上游原料／調味料供應商 → 中游供餐業者 → 下游學校。產出供桑基圖（SankeyChart）使用的 link rows。原始欄位含食材供應商與調味料供應商兩類上游關係",
+    "etl_description": "對每個縣市 scan-back 6 個月找最新可公開資料（資料延遲約 1-2 月）→ POST /opendatadownload/ 取一次性 timestamped 下載連結 → 立即 GET CSV → 食材供應商 + 調味料供應商 union 作為 up-mid source，groupby(supplier, 供餐業者) 計 row 數；mid-down groupby(供餐業者, 區域名稱, 學校名稱) 計 row 數 → replace 入庫。需 Airflow Variable: fatraceschool_accesscode",
+    "sensitivity": "public"
+  }
+}
