@@ -14,7 +14,6 @@ import (
 	"TaipeiCityDashboardBE/app/services/isochrone/gtfs"
 	"TaipeiCityDashboardBE/app/services/isochrone/isochrone"
 	"TaipeiCityDashboardBE/app/services/isochrone/raptor"
-	"TaipeiCityDashboardBE/global"
 )
 
 const (
@@ -62,6 +61,7 @@ type Service struct {
 }
 
 var defaultService *Service
+var defaultGTFSFeedSource = newGTFSFeedSource()
 
 // InitService loads RAPTOR data from Redis and initialises the global service.
 // Call this once at application startup, after ConnectToRedis.
@@ -539,39 +539,9 @@ func timeToSec(t time.Time) int32 {
 
 // loadCalendarFeeds loads only trips + calendar files (no stop_times) for runtime use.
 func loadCalendarFeeds() ([]*gtfs.Feed, error) {
-	dir := global.GTFSDir
-	var feeds []*gtfs.Feed
-	for _, sp := range runtimeFeedSpecs {
-		f, err := gtfs.LoadCalendarOnly(dir+"/"+sp.sub, sp.prefix)
-		if err != nil {
-			return nil, fmt.Errorf("%s: %w", sp.sub, err)
-		}
-		feeds = append(feeds, f)
-	}
-	return feeds, nil
+	return defaultGTFSFeedSource.LoadCalendarFeeds()
 }
 
 func buildRaptorFromGTFS() ([]*gtfs.Feed, *raptor.RaptorData, error) {
-	dir := global.GTFSDir
-	busFeed, err := gtfs.LoadFeed(dir+"/"+transitModeBus, transitModeBus+":")
-	if err != nil {
-		return nil, nil, fmt.Errorf("bus: %w", err)
-	}
-	jumpfrogFeed := gtfs.SplitJumpfrog(busFeed)
-
-	railFeed, err := gtfs.LoadFeed(dir+"/"+transitModeRail, transitModeRail+":")
-	if err != nil {
-		return nil, nil, fmt.Errorf("rail: %w", err)
-	}
-	trainFeed, err := gtfs.LoadFeed(dir+"/"+transitModeTrain, transitModeTrain+":")
-	if err != nil {
-		return nil, nil, fmt.Errorf("train: %w", err)
-	}
-
-	feeds := []*gtfs.Feed{busFeed, jumpfrogFeed, railFeed, trainFeed}
-	rd, err := raptor.Build(feeds)
-	if err != nil {
-		return nil, nil, err
-	}
-	return feeds, rd, nil
+	return defaultGTFSFeedSource.BuildRaptorData()
 }
