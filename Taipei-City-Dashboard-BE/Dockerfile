@@ -16,7 +16,7 @@ COPY export_model_docker.py /w/export_model_docker.py
 RUN python /w/export_model_docker.py
 
 # ====== Builder ======
-FROM golang:1.25.4-bookworm AS builder
+FROM golang:1.26.2-bookworm AS builder
 WORKDIR /go/src/app
 
 COPY go.mod go.sum ./
@@ -30,7 +30,7 @@ RUN go build -o TaipeiCityDashboardBE .
 # Prod
 FROM debian:bookworm-slim AS prod
 # Dev
-# FROM golang:1.25.4-bookworm  
+# FROM golang:1.26.2-bookworm
 
 ARG TARGETARCH
 # 安裝必要相依
@@ -86,7 +86,7 @@ CMD ["/app/TaipeiCityDashboardBE"]
 # ====== Dev Target ======
 # 本地開發用：docker build --target dev
 # 搭配 volume mount + go run，不需要編譯
-FROM golang:1.25.4-bookworm AS dev
+FROM golang:1.26.2-bookworm AS dev
 
 ARG TARGETARCH
 RUN apt-get update && \

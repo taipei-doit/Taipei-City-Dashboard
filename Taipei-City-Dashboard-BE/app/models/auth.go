@@ -3,7 +3,7 @@ package models
 import (
 	"fmt"
 
-	"github.com/dgrijalva/jwt-go"
+	"github.com/golang-jwt/jwt/v4"
 )
 
 /* ----- Models ----- */
@@ -244,16 +244,16 @@ func GetUserPermission(authUserID int) (permissions []Permission, err error) {
 
 	// Add all public group with viewer permission
 	publicGroupIDs, _ := GetAllPublicGroupsID()
-	for _, publicGroudID := range publicGroupIDs{
+	for _, publicGroudID := range publicGroupIDs {
 		has_priv := false
-		for _, perm := range permissions{
-			if publicGroudID == perm.GroupID{
+		for _, perm := range permissions {
+			if publicGroudID == perm.GroupID {
 				has_priv = true
 				break
 			}
 		}
 
-		if !has_priv{
+		if !has_priv {
 			permissions = append(permissions, Permission{GroupID: publicGroudID, RoleID: 3})
 		}
 	}

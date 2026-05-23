@@ -1,0 +1,112 @@
+name: Security Scan
+
+on:
+  push:
+    branches: ["main", "develop", "pre-develop", "sit"]
+  pull_request:
+    branches: ["main", "develop", "pre-develop", "sit"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+  frontend-audit:
+    name: Frontend npm audit
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Taipei-City-Dashboard-FE
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: Taipei-City-Dashboard-FE/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Audit production and development dependencies
+        run: npm audit --audit-level=moderate
+
+  backend-govulncheck:
+    name: Backend govulncheck
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Taipei-City-Dashboard-BE
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: "1.26.2"
+          cache-dependency-path: Taipei-City-Dashboard-BE/go.sum
+
+      - name: Run Go vulnerability scan
+        uses: golang/govulncheck-action@v1
+        with:
+          go-version-input: "1.26.2"
+          work-dir: Taipei-City-Dashboard-BE
+          go-package: ./...
+
+  python-audit:
+    name: Python dependency audit
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        requirements:
+          - docker/qdrant-upgrade/requirements.txt
+          - Taipei-City-Dashboard-DE/cicd/utils/requirements-test.txt
+          - Taipei-City-Dashboard-DE/docker/develop/requirements.txt
+          - Taipei-City-Dashboard-DE/docker/prod/requirements.txt
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install pip-audit
+        run: python -m pip install --upgrade pip-audit
+
+      - name: Audit ${{ matrix.requirements }}
+        run: python -m pip_audit --no-deps -r "${{ matrix.requirements }}"
+
+  secret-scan:
+    name: Secret scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run Gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  dependency-review:
+    name: Dependency review
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Review dependency changes
+        uses: actions/dependency-review-action@v4
+        with:
+          fail-on-severity: moderate
