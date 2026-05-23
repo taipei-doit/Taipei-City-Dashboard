@@ -2,7 +2,7 @@
   "dag_infos": {
     "dag_id": "tourist_attractions",
     "start_date": "2025-06-25",
-    "schedule_interval": "@monthly",
+    "schedule_interval": "30 16 7,28 * *",
     "catchup": false,
     "tags": [
       "tourist_attractions",

@@ -105,29 +105,29 @@ export const useMapStore = defineStore("map", {
 			this.overlay = null;
 			const MAPBOXTOKEN = import.meta.env.VITE_MAPBOXTOKEN;
 			mapboxGl.accessToken = MAPBOXTOKEN;
-			this.map = new mapboxGl.Map({
+			this.map = markRaw(new mapboxGl.Map({
 				...MapObjectConfig,
 				style: mapStyle,
-			});
-			this.marker = new mapboxGl.Marker();
-			const geoLocate = new mapboxGl.GeolocateControl({
+			}));
+			this.marker = markRaw(new mapboxGl.Marker());
+			const geoLocate = markRaw(new mapboxGl.GeolocateControl({
 				positionOptions: {
 					enableHighAccuracy: true,
 				},
 				trackUserLocation: true,
 				showUserHeading: true,
-			});
+			}));
 			this.map.addControl(geoLocate);
-			this.map.addControl(new mapboxGl.NavigationControl());
+			this.map.addControl(markRaw(new mapboxGl.NavigationControl()));
 			this.map.doubleClickZoom.disable();
 			let isFirstZoom = true;
 			this.map
 				.on("load", () => {
 					if (!this.map) return;
-					this.overlay = new MapboxOverlay({
+					this.overlay = markRaw(new MapboxOverlay({
 						interleaved: true,
 						layers: [],
-					});
+					}));
 					this.map.addControl(this.overlay);
 					this.initializeBasicLayers();
 				})
@@ -777,8 +777,8 @@ export const useMapStore = defineStore("map", {
 				type: paintSettings["arc-animate"]
 					? "AnimatedArcLayer"
 					: "ArcLayer",
-				config: layerConfig,
-				data: data.features,
+				config: markRaw(layerConfig),
+				data: markRaw(data.features),
 			};
 			// render deckgl layer
 			this.currentVisibleLayers.push(map_config.layerId);
@@ -2203,8 +2203,8 @@ export const useMapStore = defineStore("map", {
 		) {
 			const authStore = useAuthStore();
 			const dialogStore = useDialogStore();
-			const marker = new mapboxGl.Marker(colorSetting);
-			const popup = new mapboxGl.Popup({ closeButton: false }).setHTML(
+			const marker = markRaw(new mapboxGl.Marker(colorSetting));
+			const popup = markRaw(new mapboxGl.Popup({ closeButton: false })).setHTML(
 				`<div class="popup-for-pin"><div>${markerName}</div> <button id="delete-${markerId}" class="delete-pin"}">
 						<span>delete</span>
 					  </button></div>`,
@@ -2566,11 +2566,17 @@ export const useMapStore = defineStore("map", {
 		// 1. Called when the user is switching between maps
 		clearOnlyLayers() {
 			this.currentLayers.forEach((element) => {
-				this.map.removeLayer(element);
+				if (this.map.getLayer(element)) {
+					this.map.removeLayer(element);
+				}
 				if (this.map.getSource(`${element}-source`)) {
 					this.map.removeSource(`${element}-source`);
 				}
 			});
+			if (this.overlay) {
+				this.overlay.setProps({ layers: [] });
+			}
+			this.deckGlLayer = {};
 			this.currentLayers = [];
 			this.mapConfigs = {};
 			this.currentVisibleLayers = [];

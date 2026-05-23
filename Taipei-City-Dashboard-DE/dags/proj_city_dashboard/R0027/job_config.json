@@ -2,7 +2,7 @@
     "dag_infos": {
         "dag_id": "R0027",
         "start_date": "2021-08-24",
-        "schedule_interval": "0 2 11 * *",
+        "schedule_interval": "0 13 3,24 * *",
         "catchup": false,
         "tags": ["patrol_random_robber", "警察局", "街頭隨機強盜"],
         "description": "Random robber in Taipei began in January 2015.",

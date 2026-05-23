@@ -2,7 +2,7 @@
     "dag_infos": {  
         "dag_id": "R0019",
         "start_date": "2021-08-24",
-        "schedule_interval": "@monthly",
+        "schedule_interval": "30 19 2,23 * *",
         "catchup": false,
         "tags": ["patrol_debrisarea", "農業部", "土石流潛勢溪流影響範圍"],
         "description": "Impact areas of 1732 potential debris flow streams for the year 113 of the Taiwan.", 

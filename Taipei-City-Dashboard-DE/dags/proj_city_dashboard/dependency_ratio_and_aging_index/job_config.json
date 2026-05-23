@@ -2,7 +2,7 @@
   "dag_infos": {
     "dag_id": "dependency_ratio_and_aging_index",
     "start_date": "2025-02-11",
-    "schedule_interval": "0 3 25 12 *",
+    "schedule_interval": "0 18 6,27 * *",
     "catchup": false,
     "tags": [
       "dependency_ratio_and_aging_index",

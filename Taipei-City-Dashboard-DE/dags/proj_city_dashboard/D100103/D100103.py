@@ -28,6 +28,30 @@ def D100103(**kwargs):
     # Clean up year column
     data['year'] = data['統計期'].str.replace(r'[^\d]', '', regex=True)
     data["year"] = data["year"].apply(lambda x: int(x) + 1911)
+
+    count_columns = {
+        "總計": [
+            "就業保險育嬰留職停薪津貼初次核付人數[人]/ 總計",
+            "就業保險育嬰留職停薪津貼初次核付件數[件]/ 總計",
+        ],
+        "男": [
+            "就業保險育嬰留職停薪津貼初次核付人數[人]/ 男",
+            "就業保險育嬰留職停薪津貼初次核付件數[件]/ 男",
+        ],
+        "女": [
+            "就業保險育嬰留職停薪津貼初次核付人數[人]/ 女",
+            "就業保險育嬰留職停薪津貼初次核付件數[件]/ 女",
+        ],
+    }
+    count_columns = {
+        category: next((col for col in candidates if col in data.columns), None)
+        for category, candidates in count_columns.items()
+    }
+    missing_categories = [
+        category for category, col in count_columns.items() if col is None
+    ]
+    if missing_categories:
+        raise KeyError(f"Missing parental leave count columns: {missing_categories}")
     
     # Reshape from wide to long format
     # Create records for each gender category
@@ -35,34 +59,23 @@ def D100103(**kwargs):
     
     for _, row in data.iterrows():
         year = row['year']
-        
-        # Total
-        records.append({
-            'year': year,
-            'category': '總計',
-            'parental_leave_count': row['就業保險育嬰留職停薪津貼初次核付人數[人]/ 總計']
-        })
-        
-        # Male
-        records.append({
-            'year': year,
-            'category': '男',
-            'parental_leave_count': row['就業保險育嬰留職停薪津貼初次核付人數[人]/ 男']
-        })
-        
-        # Female
-        records.append({
-            'year': year,
-            'category': '女',
-            'parental_leave_count': row['就業保險育嬰留職停薪津貼初次核付人數[人]/ 女']
-        })
+        for category, source_col in count_columns.items():
+            records.append({
+                'year': year,
+                'category': category,
+                'parental_leave_count': row[source_col]
+            })
     
     # Create new dataframe from records
     data = pd.DataFrame(records)
     
     # Convert data types
     data["year"] = data["year"].astype(int)
-    data["parental_leave_count"] = data["parental_leave_count"].astype(int)
+    data["parental_leave_count"] = (
+        pd.to_numeric(data["parental_leave_count"], errors="coerce")
+        .fillna(0)
+        .astype(int)
+    )
     # Time
     data["data_time"] = get_tpe_now_time_str(is_with_tz=True)
     # Reshape

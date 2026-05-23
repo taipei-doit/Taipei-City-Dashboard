@@ -12,6 +12,12 @@ def _transfer(**kwargs):
         save_geodataframe_to_postgresql,
         update_lasttime_in_data_to_dataset_info,
     )
+    from utils.transform_address import (
+        clean_data,
+        get_addr_xy_parallel,
+        main_process,
+        save_data,
+    )
     from utils.transform_geometry import add_point_wkbgeometry_column_to_df
 
     # Config
@@ -29,14 +35,24 @@ def _transfer(**kwargs):
     df['data_time'] = pd.to_datetime("now").strftime("%Y-%m-%d %H:%M:%S")
 
 
-    area_candidates = df['address'].str.slice(3, 6)
-    df['district'] = area_candidates.apply(lambda x: x if x.endswith('區') else None)
+    df['district'] = df['address'].str.extract(r"([^市縣\s]{1,3}區)", expand=False)
 
 
     df = df.rename(columns={
+        "telephone number": "tel",
         "wgs84ax": "lon",
         "wgs84ay": "lat",
     })
+    if "tel" not in df.columns:
+        df["tel"] = None
+
+    if "lon" not in df.columns or "lat" not in df.columns:
+        addr_cleaned = clean_data(df["address"])
+        standard_addr_list = main_process(addr_cleaned)
+        result, output = save_data(df["address"], addr_cleaned, standard_addr_list)
+        df["address"] = output
+        df["lon"], df["lat"] = get_addr_xy_parallel(output)
+
     df["lon"] = pd.to_numeric(df["lon"], errors="coerce")
     df["lat"] = pd.to_numeric(df["lat"], errors="coerce")
     gdata = add_point_wkbgeometry_column_to_df(

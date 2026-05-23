@@ -2,7 +2,7 @@
   "dag_infos": {
     "dag_id": "urbn_air_raid_shelter",
     "start_date": "2025-07-07",
-    "schedule_interval": "@monthly",
+    "schedule_interval": "0 16 5,26 * *",
     "catchup": false,
     "tags": ["urbn_air_raid_shelter", "新北市", "New-Taipei-City", "防空避難處所"],
     "description": "",

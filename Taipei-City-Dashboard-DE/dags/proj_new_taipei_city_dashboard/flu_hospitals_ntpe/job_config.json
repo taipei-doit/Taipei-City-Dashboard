@@ -2,7 +2,7 @@
   "dag_infos": {
     "dag_id": "flu_hospitals_ntpe",
     "start_date": "2025-06-25",
-    "schedule_interval": "@monthly",
+    "schedule_interval": "30 15 7,28 * *",
     "catchup": false,
     "tags": [
       "flu_hospitals_ntpe",

@@ -15,7 +15,7 @@ const contentStore = useContentStore();
 const authStore = useAuthStore();
 const { addChatData, addQueryData, saveChatLog } = chatStore;
 const { createDashboard } = contentStore;
-const { chatData } = storeToRefs(chatStore);
+const { chatData, compToDashIndexMap } = storeToRefs(chatStore);
 const { editDashboard } = storeToRefs(contentStore);
 const { user } = storeToRefs(authStore);
 
@@ -148,8 +148,9 @@ watch(
                 <thead>
                   <tr>
                     <th>排名</th>
-                    <th>城市名</th>
-                    <th>組件名</th>
+                    <th>城市</th>
+                    <th>主題</th>
+                    <th>組件</th>
                     <th>關聯性</th>
                   </tr>
                 </thead>
@@ -165,6 +166,25 @@ watch(
                           ? "臺北"
                           : "雙北"
                       }}
+                    </td>
+                    <td>
+                      <template
+                        v-for="dash in (
+                          compToDashIndexMap[
+                            item.id
+                          ] || []
+                        ).filter(
+                          (d) => d.city === item.city,
+                        )"
+                        :key="dash.index"
+                      >
+                        <a
+                          class="theme-btn"
+                          :href="`https://citydashboard.taipei/dashboard?index=${dash.index}&city=${item.city}`"
+                        >
+                          {{ dash.name }}
+                        </a>
+                      </template>
                     </td>
                     <td>{{ item.name }}</td>
                     <td>{{ item.score }}</td>
@@ -465,6 +485,25 @@ $radius-20: 20px;
 			&:hover {
 				filter: brightness(0.5);
 			}
+		}
+	}
+}
+
+.theme-btn {
+	padding: 0.2rem;
+	margin-right: 0.1rem;
+	background-color: #5a9cf8;
+	border-radius: 2px;
+	&:hover {
+		background-color: #3a7fd6;
+	}
+}
+
+@media (max-width: 600px) {
+	.chat-widget {
+		.chat-area {
+			padding-left: 0.5rem;
+			padding-right: 0.5rem;
 		}
 	}
 }
