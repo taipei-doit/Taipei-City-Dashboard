@@ -1,5 +1,5 @@
-<!-- Developed by Taipei Urban Intelligence Center 2026 -->
-<!-- Quartile (Q1/Median/Q3) multi-group chart, narrow-width friendly -->
+<!-- Developed by Bombs King, Taipei Codefest 2026 -->
+ 
 <script setup>
 import { computed, nextTick, ref, watch } from "vue";
 import "material-icons/iconfont/material-icons.css";
