@@ -1,6 +1,7 @@
 """Source test for the New Taipei noise monitoring station DAG."""
 from __future__ import annotations
 
+import ast
 import json
 import sys
 from pathlib import Path
@@ -35,9 +36,31 @@ def test_source_url_reachable():
     print(f"keys: {list(records[0].keys())[:10]}")
 
 
+def test_dag_uses_shared_ntpc_client():
+    dag_path = HERE / f"{TABLE_NAME}.py"
+    tree = ast.parse(dag_path.read_text(encoding="utf-8"))
+
+    imports_requests = any(
+        isinstance(node, ast.Import)
+        and any(alias.name == "requests" for alias in node.names)
+        for node in ast.walk(tree)
+    )
+    calls_requests_get = any(
+        isinstance(node, ast.Call)
+        and isinstance(node.func, ast.Attribute)
+        and node.func.attr == "get"
+        and isinstance(node.func.value, ast.Name)
+        and node.func.value.id == "requests"
+        for node in ast.walk(tree)
+    )
+    if imports_requests or calls_requests_get:
+        raise AssertionError("DAG should use shared NewTaipeiAPIClient instead of inline requests")
+
+
 if __name__ == "__main__":
     try:
         test_source_url_reachable()
+        test_dag_uses_shared_ntpc_client()
     except Exception as exc:
         print(f"FAIL [{TABLE_NAME}]: {exc}", file=sys.stderr)
         sys.exit(1)
