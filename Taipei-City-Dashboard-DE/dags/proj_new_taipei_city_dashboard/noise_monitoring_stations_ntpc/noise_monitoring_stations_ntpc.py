@@ -13,8 +13,8 @@ def _ensure_ready_table(engine, table_name, col_map):
 
 def _noise_monitoring_stations_ntpc(**kwargs):
     import pandas as pd
-    import requests
     from sqlalchemy import create_engine
+    from utils.extract_stage import NewTaipeiAPIClient
     from utils.get_time import get_tpe_now_time_str
     from utils.load_stage import (
         save_geodataframe_to_postgresql,
@@ -48,21 +48,11 @@ def _noise_monitoring_stations_ntpc(**kwargs):
     }
     SELECT_COLUMNS = list(COL_MAP.keys())
 
-    source_url = (
-        "https://data.ntpc.gov.tw/api/datasets/"
-        "cad88b80-8230-48d4-a8d4-ce478954fddf/json"
+    dataset_id = "cad88b80-8230-48d4-a8d4-ce478954fddf"
+    body = NewTaipeiAPIClient(dataset_id, input_format="json").get_data(
+        page=0,
+        size=1000,
     )
-    # NOTE: This official endpoint returns records as a list in some clients
-    # and under `value` in others, which is not covered by the current
-    # NewTaipeiAPIClient helper.
-    response = requests.get(
-        source_url,
-        params={"page": 0, "size": 1000},
-        timeout=60,
-        proxies=kwargs.get("proxies"),
-    )
-    response.raise_for_status()
-    body = response.json()
     records = body.get("value", []) if isinstance(body, dict) else body
     raw_data = pd.DataFrame(records)
 

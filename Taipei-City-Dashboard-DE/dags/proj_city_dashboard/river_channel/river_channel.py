@@ -15,7 +15,6 @@ def _ensure_ready_table(engine, table_name, col_map):
 def _river_channel(**kwargs):
     # === Imports(全部寫在函式內)===
     import binascii
-    import geopandas as gpd
     import pandas as pd
     from sqlalchemy import create_engine
     from utils.extract_stage import get_shp_file
@@ -46,10 +45,7 @@ def _river_channel(**kwargs):
 
     # === Extract ===
     source_url = "https://gic.wra.gov.tw/gis/gic/API/Google/DownLoad.aspx?fname=RIVERPOLY&filetype=SHP"
-    # use helper to download shp (returns a local file path or archive)
-    shp_path = get_shp_file(source_url, proxies=kwargs.get("proxies"))
-    # read into GeoDataFrame
-    gdf = gpd.read_file(shp_path)
+    gdf = get_shp_file(source_url, dag_id, 3826, is_verify=False)
 
     # === Transform ===
     # rename common Chinese field names to snake_case English. If keys not present, leave as-is.
