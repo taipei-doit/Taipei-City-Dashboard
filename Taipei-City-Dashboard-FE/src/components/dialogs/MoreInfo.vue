@@ -11,7 +11,7 @@ import DialogContainer from "./DialogContainer.vue";
 import HistoryChart from "../charts/HistoryChart.vue";
 import DownloadData from "./DownloadData.vue";
 import EmbedComponent from "./EmbedComponent.vue";
-import WarningIcon from "../components/icons/WarningIcon.vue";
+import WarningIcon from "../icons/WarningIcon.vue";
 
 const dialogStore = useDialogStore();
 const contentStore = useContentStore();
