@@ -21,10 +21,31 @@ import HistoryChart from "../components/charts/HistoryChart.vue";
 import ReportIssue from "../components/dialogs/ReportIssue.vue";
 import DownloadData from "../components/dialogs/DownloadData.vue";
 import EmbedComponent from "../components/dialogs/EmbedComponent.vue";
+import WarningIcon from "../components/icons/WarningIcon.vue";
 
 const contentStore = useContentStore();
 const dialogStore = useDialogStore();
 const authStore = useAuthStore();
+
+// 相關資料 tooltip
+const tooltipVisible = ref(false);
+const tooltipStyle = ref({});
+
+function showTooltip(event) {
+	const rect = event.currentTarget.getBoundingClientRect();
+
+	tooltipStyle.value = {
+		top: `${rect.top + rect.height / 2}px`,
+		left: `${rect.right + 8}px`,
+		transform: "translateY(-50%)",
+	};
+
+	tooltipVisible.value = true;
+}
+
+function hideTooltip() {
+	tooltipVisible.value = false;
+}
 
 const searchParams = ref({
 	searchbyindex: "",
@@ -35,19 +56,19 @@ const searchParams = ref({
 	pagenum: 1,
 });
 
-function toggleFavorite(id,name,city) {
+function toggleFavorite(id, name, city) {
 	if (contentStore.favorites.components.includes(id)) {
 		contentStore.unfavoriteComponent(id);
 	} else {
 		contentStore.favoriteComponent(id);
 		// 成功收藏組件時觸發GA自訂事件
 		if (city && name) {
-			gtag('event','popular_component', {
-				dashboard_city:city,
-				component_name:name,
-				city_component:`${city}-${name}`,
+			gtag("event", "popular_component", {
+				dashboard_city: city,
+				component_name: name,
+				city_component: `${city}-${name}`,
 				time: Date.now(),
-  			})
+			});
 		}
 	}
 }
@@ -99,18 +120,17 @@ onMounted(() => {
             :config="item"
             :style="{ height: '350px', width: '400px' }"
             :active-city="item.city"
-            :city-tag="contentStore.cityManager.getTagList(item.city)"
+            :city-tag="
+              contentStore.cityManager.getTagList(item.city)
+            "
             :add-btn="
               !contentStore.editDashboard.components
                 .map((item) => item.id)
-                .includes(item.id) &&
-                !!authStore.token
+                .includes(item.id) && !!authStore.token
             "
             :favorite-btn="!!authStore.token"
             :is-favorite="
-              contentStore.favorites?.components.includes(
-                item.id
-              )
+              contentStore.favorites?.components.includes(item.id)
             "
             @add="
               (id, name) => {
@@ -122,7 +142,7 @@ onMounted(() => {
             "
             @favorite="
               (id) => {
-                toggleFavorite(id,item.name,item.city);
+                toggleFavorite(id, item.name, item.city);
               }
             "
           />
@@ -148,22 +168,21 @@ onMounted(() => {
                 dialogStore.showReportIssue(
                   item.id,
                   item.index,
-                  item.name
+                  item.name,
                 )
               "
             >
               <span>flag</span>回報
             </button>
             <button
-              v-if="
-                item.chart_config.types[0] !==
-                  'MetroChart'
-              "
+              v-if="item.chart_config.types[0] !== 'MetroChart'"
               @click="dialogStore.showDialog('downloadData')"
             >
               <span>download</span>下載
             </button>
-            <button @click="dialogStore.showDialog('embedComponent')">
+            <button
+              @click="dialogStore.showDialog('embedComponent')"
+            >
               <span>code</span>內嵌
             </button>
           </div>
@@ -191,7 +210,27 @@ onMounted(() => {
             v-if="item.links?.length > 0"
             class="componentinfoview-source-links"
           >
-            <h3>相關資料</h3>
+            <h3 class="componentinfoview-source-title">
+              相關資料
+
+              <span
+                class="componentinfoview-source-notice"
+                @mouseenter="showTooltip"
+                @mouseleave="hideTooltip"
+              >
+                <WarningIcon />
+              </span>
+            </h3>
+
+            <Teleport to="body">
+              <div
+                v-if="tooltipVisible"
+                class="componentinfoview-tooltip"
+                :style="tooltipStyle"
+              >
+                提醒：受資料更新頻率、資料品質、地址轉換結果及來源限制等因素影響，儀表板所呈現之資料內容可能與原始資料略有差異。
+              </div>
+            </Teleport>
             <a
               v-for="(link, index) in item.links"
               :key="`${link}-${index}`"
@@ -208,12 +247,14 @@ onMounted(() => {
             <h3>協作者</h3>
             <div>
               <div
-                v-for="contributor in item
-                  .contributors"
+                v-for="contributor in item.contributors"
                 :key="contributor"
               >
                 <a
-                  :href="contentStore.contributors[contributor]?.link"
+                  :href="
+                    contentStore.contributors[contributor]
+                      ?.link
+                  "
                   target="_blank"
                   rel="noreferrer"
                 ><img
@@ -221,16 +262,18 @@ onMounted(() => {
                      contentStore.contributors[
                        contributor
                      ]?.image.includes('http')
-                       ? contentStore.contributors[contributor]
-                         .image
+                       ? contentStore.contributors[
+                         contributor
+                       ].image
                        : `/images/contributors/${contentStore.contributors[contributor].image}`
                    "
                    :alt="`協作者-${contentStore.contributors[contributor].user_name}`"
                  >
                   <p>
                     {{
-                      contentStore.contributors[contributor]
-                        .user_name
+                      contentStore.contributors[
+                        contributor
+                      ].user_name
                     }}
                   </p>
                 </a>
@@ -447,6 +490,11 @@ onMounted(() => {
 				"contributors";
 		}
 
+		&-title {
+			display: flex;
+			gap: 0.2rem;
+		}
+
 		&-links {
 			height: calc(100% - 36px);
 			grid-area: links;
@@ -588,6 +636,47 @@ onMounted(() => {
 	}
 	@media (max-width: 600px) {
 		grid-template-areas: "contributors";
+	}
+}
+
+.componentinfoview-tooltip {
+	position: fixed;
+	transform: translateY(-50%); // 垂直置中對齊 icon
+
+	max-width: 240px;
+	padding: 8px 12px;
+	border: 1px solid #878787;
+	border-radius: 8px;
+	background: #282a2c;
+	color: #fff;
+	font-size: 0.9rem;
+	line-height: 1.5;
+
+	z-index: 999999;
+	pointer-events: none;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+	animation: fadeIn 0.15s ease;
+
+	&::before {
+		content: "";
+		position: absolute;
+		top: 50%;
+		left: -6px; // 箭頭在左側
+		transform: translateY(-50%) rotate(45deg);
+		width: 12px;
+		height: 12px;
+		background: #282a2c;
+	}
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+		transform: translateY(-50%) translateX(4px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(-50%) translateX(0);
 	}
 }
 </style>
