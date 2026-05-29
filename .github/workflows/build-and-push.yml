@@ -237,9 +237,15 @@ jobs:
           SEC_TWCC_API_URL: ${{ secrets.TWCC_API_URL }}
           SEC_TWCC_API_KEY: ${{ secrets.TWCC_API_KEY }}
           SEC_TWCC_MODEL: ${{ secrets.TWCC_MODEL }}
-          SEC_TWCC_TIMEOUT: ${{ secrets.TWCC_TIMEOUT }}
-          SEC_TWCC_MAX_RETRY: ${{ secrets.TWCC_MAX_RETRY }}
-          SEC_TWCC_MAX_CONCURRENT: ${{ secrets.TWCC_MAX_CONCURRENT }}
+          SEC_OPENAI_API_URL: ${{ secrets.OPENAI_API_URL }}
+          SEC_OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          SEC_OPENAI_MODEL: ${{ secrets.OPENAI_MODEL }}
+          SEC_GEMINI_API_URL: ${{ secrets.GEMINI_API_URL }}
+          SEC_GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          SEC_GEMINI_MODEL: ${{ secrets.GEMINI_MODEL }}
+          SEC_AI_TIMEOUT: ${{ secrets.AI_TIMEOUT }}
+          SEC_AI_MAX_RETRY: ${{ secrets.AI_MAX_RETRY }}
+          SEC_AI_MAX_CONCURRENT: ${{ secrets.AI_MAX_CONCURRENT }}
         run: |
           set -euo pipefail
           # Defensive: ensure we are in bash (GitHub uses bash by default for run:)
@@ -288,9 +294,15 @@ jobs:
           add TWCC_API_URL "$SEC_TWCC_API_URL"
           add TWCC_API_KEY "$SEC_TWCC_API_KEY"
           add TWCC_MODEL "$SEC_TWCC_MODEL"
-          add TWCC_TIMEOUT "$SEC_TWCC_TIMEOUT"
-          add TWCC_MAX_RETRY "$SEC_TWCC_MAX_RETRY"
-          add TWCC_MAX_CONCURRENT "$SEC_TWCC_MAX_CONCURRENT"
+          add OPENAI_API_URL "$SEC_OPENAI_API_URL"
+          add OPENAI_API_KEY "$SEC_OPENAI_API_KEY"
+          add OPENAI_MODEL "$SEC_OPENAI_MODEL"
+          add GEMINI_API_URL "$SEC_GEMINI_API_URL"
+          add GEMINI_API_KEY "$SEC_GEMINI_API_KEY"
+          add GEMINI_MODEL "$SEC_GEMINI_MODEL"
+          add AI_TIMEOUT "$SEC_AI_TIMEOUT"
+          add AI_MAX_RETRY "$SEC_AI_MAX_RETRY"
+          add AI_MAX_CONCURRENT "$SEC_AI_MAX_CONCURRENT"
           # Show which keys will be applied (without values)
           echo "Secret keys to apply:" >&2
           for a in "${ARGS[@]}"; do

@@ -204,6 +204,8 @@ func configureAIRoutes() {
 	aiRoutes.Use(middleware.IsLoggedIn())
 	{
 		aiRoutes.POST("/chat/twai", controllers.ChatWithTWCC)
+		aiRoutes.POST("/chat/openai", controllers.ChatWithOpenAI)
+		aiRoutes.POST("/chat/gemini", controllers.ChatWithGemini)
 	}
 }
 
