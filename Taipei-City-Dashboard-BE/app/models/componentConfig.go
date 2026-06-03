@@ -44,6 +44,7 @@ type QueryCharts struct {
 	QueryChart     string          `json:"-" gorm:"column:query_chart;type:text"`
 	QueryHistory   string          `json:"-" gorm:"column:query_history;type:text"`
 	City		   string          `json:"city" gorm:"column:city;type:text"`
+	EnableAiSummary bool           `json:"enable_ai_summary" gorm:"column:enable_ai_summary;type:bool"`
 }
 
 type CityComponent struct{
@@ -71,6 +72,7 @@ type CityComponent struct{
 	QueryChart     string          `json:"-"`
 	QueryHistory   string          `json:"-"`
 	City		   string          `json:"city"`
+	EnableAiSummary bool           `json:"enable_ai_summary" gorm:"column:enable_ai_summary;type:bool"`
 }
 
 type CityComponentScore struct{
