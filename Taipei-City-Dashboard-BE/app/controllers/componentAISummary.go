@@ -27,6 +27,15 @@ func GetComponentAISummary(c *gin.Context) {
 		return
 	}
 
+	// index 參數為必填
+	if query.Index == "" {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"status": "error",
+			"message": "Index parameter is required",
+		})
+		return
+	}
+
 	// city 有帶才驗證
 	if query.City != "" &&
 		query.City != "taipei" &&

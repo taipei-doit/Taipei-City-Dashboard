@@ -19,7 +19,7 @@ func GetComponentAISummary(
 	index string,
 	city string,
 	summaryType string,
-) (summary []ComponentAISummary, err error) {
+) (summary ComponentAISummary, err error) {
 
 	query := DBManager.Table("component_ai_summary")
 
@@ -37,7 +37,7 @@ func GetComponentAISummary(
 
 	err = query.
 		Order("updated_at DESC, id DESC").
-		Find(&summary).Error
+		First(&summary).Error
 
 	return summary, err
 }
