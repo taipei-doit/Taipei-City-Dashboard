@@ -109,6 +109,7 @@ func configureComponentRoutes() {
 	componentRoutes.Use(middleware.LimitTotalRequests(global.ComponentLimitTotalRequestsTimes, global.LimitRequestsDuration))
 	{
 		componentRoutes.GET("/", controllers.GetAllComponents)
+		componentRoutes.GET("/ai-summary", controllers.GetComponentAISummary)
 		componentRoutes.GET("/:id", controllers.GetComponentByID)
 		componentRoutes.GET("/:id/all", controllers.GetComponentByIDAll)
 		componentRoutes.GET("/:id/chart", controllers.GetComponentChartData)
