@@ -76,3 +76,6 @@ Taipei-City-Dashboard-DE/docker/prod/.env
 
 # Local agent / tooling state
 .claude/
+
+# Local-only submission artifacts (email-only deliverables; not for repo)
+submission/
