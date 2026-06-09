@@ -1,0 +1,38 @@
+{
+  "dag_infos": {
+    "dag_id": "purchase_subsidy_application_status",
+    "start_date": "2026-05-20",
+    "schedule_interval": "@yearly",
+    "catchup": false,
+    "tags": ["housing", "都發局", "Taipei-City"],
+    "description": "Yearly owner-occupied home purchase loan interest subsidy application status for Taipei.",
+    "default_args": {
+      "owner": "airflow",
+      "email": ["DEFAULT_EMAIL_LIST"],
+      "email_on_retry": false,
+      "email_on_failure": true,
+      "retries": 1,
+      "retry_delay": 60
+    },
+    "ready_data_db": "postgres_default",
+    "ready_data_default_table": "purchase_subsidy_application_status",
+    "ready_data_history_table": "",
+    "raw_data_db": "postgres_default",
+    "raw_data_table": "",
+    "load_behavior": "replace"
+  },
+  "data_infos": {
+    "name_cn": "自購住宅貸款利息補貼受理情形",
+    "airflow_update_freq": "每年 (Asia/Taipei)",
+    "source": "https://data.taipei/dataset/detail?id=6297943a-1e71-480d-967c-635855df66fe",
+    "source_type": "data.taipei",
+    "source_dept": "都發局",
+    "component_name": "purchase_subsidy_application_status_chart",
+    "gis_format": null,
+    "output_coordinate": "EPSG:4326",
+    "is_geometry": 0,
+    "dataset_description": "臺北市歷年自購住宅貸款利息補貼申請戶數、計畫戶數及核定戶數。",
+    "etl_description": "讀取臺北市資料大平臺住宅補貼資料，轉換民國年為西元年，保留臺北市至 111 年度 (2022)，移除通過率後輸出中文欄位。",
+    "sensitivity": "public"
+  }
+}
