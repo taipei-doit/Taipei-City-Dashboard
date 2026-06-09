@@ -2,7 +2,7 @@
   "dag_infos": {
     "dag_id": "school_reconstruction",
     "start_date": "2025-11-17",
-    "schedule_interval": "@monthly",
+    "schedule_interval": "0 21 4,25 * *",
     "catchup": false,
     "tags": [
       "school_reconstruction_tpe",

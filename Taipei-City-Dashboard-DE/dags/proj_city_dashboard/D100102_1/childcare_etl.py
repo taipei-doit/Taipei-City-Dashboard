@@ -1,23 +1,20 @@
 from airflow import DAG
 from operators.common_pipeline import CommonDag
 
-def childcare_etl(rid, page_id, source_type="api", **kwargs):
+def childcare_etl(rid, page_id, **kwargs):
     """
     只入庫指定欄位：
       ['type', 'name', 'address', 'phone', 'data_time', 'town', 'wkb_geometry']
     其他來源欄位一律忽略；缺欄位自動補 None，避免 KeyError。
-    
-    Args:
-        rid: 資料集 resource ID
-        page_id: data.taipei 頁面 ID
-        source_type: "api" 使用 get_data_taipei_api, "csv" 使用下載 CSV
     """
     import pandas as pd
-    import requests
-    from io import StringIO
     from sqlalchemy import create_engine
 
     # === utils ===
+    import io
+    import requests
+    import urllib3
+    urllib3.disable_warnings()
     from utils.extract_stage import (
         get_data_taipei_api,
         get_data_taipei_file_last_modified_time,
@@ -45,15 +42,33 @@ def childcare_etl(rid, page_id, source_type="api", **kwargs):
     from_crs = 4326
 
     # ===== Extract =====
-    if source_type == "csv":
-        # 下載 CSV 方式
-        url = f"https://data.taipei/api/frontstage/tpeod/dataset/resource.download?rid={rid}"
-        response = requests.get(url, timeout=60)
-        response.raise_for_status()
-        raw_df = pd.read_csv(StringIO(response.text))
-    else:
-        # 使用 API 方式 (預設)
+    # data.taipei 資料集可能只提供 CSV 而無 JSON API 內容,
+    # 此時 get_data_taipei_api 會回傳空 list 並讓後續炸 KeyError/TypeError。
+    # 改以「JSON 優先、空則 fallback CSV 下載」的方式處理。
+    raw = None
+    try:
         raw = get_data_taipei_api(rid)
+    except Exception as e:
+        print(f"[childcare_etl] JSON API failed for rid={rid}: {e}")
+        raw = None
+    if not raw:
+        csv_url = f"https://data.taipei/api/frontstage/tpeod/dataset/resource.download?rid={rid}"
+        print(f"[childcare_etl] fallback to CSV download: {csv_url}")
+        resp = requests.get(csv_url, timeout=120, verify=False)
+        resp.raise_for_status()
+        csv_text = None
+        for enc in ("utf-8-sig", "cp950", "big5", "utf-8"):
+            try:
+                csv_text = resp.content.decode(enc)
+                break
+            except UnicodeDecodeError:
+                continue
+        if csv_text is None:
+            csv_text = resp.content.decode("utf-8", errors="replace")
+        raw_df = pd.read_csv(io.StringIO(csv_text))
+        # CSV 常帶尾端逗號產生 Unnamed: N 欄位,去除之
+        raw_df = raw_df.loc[:, ~raw_df.columns.astype(str).str.startswith("Unnamed")]
+    else:
         raw_df = pd.DataFrame(raw)
     # 動態取得 data.taipei 頁面右側「更新時間」作為資料時間
     raw_df["data_time"] = get_data_taipei_file_last_modified_time(page_id)
@@ -116,6 +131,11 @@ def childcare_etl(rid, page_id, source_type="api", **kwargs):
 
     # 9) 僅留最終入庫欄位（白名單）
     final_cols = ["type", "name", "address", "phone", "data_time", "town", "wkb_geometry"]
+    # 9b) 截斷字串欄位長度,對齊 DB schema(name/phone varchar(50) 等)
+    if "name" in gdf.columns:
+        gdf["name"] = gdf["name"].astype(str).str.replace(r"\s+", " ", regex=True).str.strip().str[:50]
+    if "phone" in gdf.columns:
+        gdf["phone"] = gdf["phone"].astype(str).str.replace(r"\s+", " ", regex=True).str.strip().str[:50]
     for col in final_cols:
         if col not in gdf.columns:
             gdf[col] = None

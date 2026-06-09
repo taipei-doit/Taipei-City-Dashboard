@@ -47,7 +47,9 @@ def _transfer(**kwargs):
             "老年人口數[65歲以上][人]": "elderly_population",  # 65歲以上人口數
             "老年人口占全市人口比率[%]": "elderly_population_percentage",  # 65歲以上占全市人口比率
             "扶養比[%]": "total_dependency_ratio",  # 扶養比（％）
+            "扶養比": "total_dependency_ratio",
             "老化指數[%]": "aging_index",  # 老化指數（％）
+            "老化指數": "aging_index",
         }
     )
     data["data_time"] = get_tpe_now_time_str(is_with_tz=True)

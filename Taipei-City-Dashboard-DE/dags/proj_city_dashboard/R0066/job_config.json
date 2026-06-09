@@ -2,7 +2,7 @@
     "dag_infos": {
         "dag_id": "R0066",
         "start_date": "2024-06-26",
-        "schedule_interval": "40 19 3 * *",
+        "schedule_interval": "0 12 4,25 * *",
         "catchup": false,
         "tags": ["building_renewarea_40", "都發局", "都市計畫劃定更新地區"],
         "description": "",

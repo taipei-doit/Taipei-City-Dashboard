@@ -26,28 +26,21 @@ def _transfer(**kwargs):
 
     # Extract
     res = get_moenv_json_data(
-        DATASET_CODE, filters_query=None, is_proxy=False, timeout=None
+        DATASET_CODE, filters_query=None, is_proxy=False, timeout=60
     )
     raw_data = pd.DataFrame(res)
-    
-    # 印出欄位名稱以供除錯
-    print(f"API 回傳的欄位: {list(raw_data.columns)}")
+    # 對齊 DB schema:API 近期改欄位名,county→country、areacode→city
+    raw_data = raw_data.rename(columns={"county": "country", "areacode": "city"})
 
     # Transform
     data = raw_data.copy()
     data["data_time"] = get_tpe_now_time_str(is_with_tz=True)
-    # 資料格式為"108臺北市萬華區昆明街142號7-8樓", 只取區
-
-    area_candidates = data['address'].str.slice(3, 6)
-    data['area'] = area_candidates.apply(lambda x: x if x.endswith('區') else None)
+    # 從地址抓行政區(地址有時帶郵遞區號,用 regex 比 slice 穩定)
+    data["area"] = data["address"].str.extract(r"([^市縣\s]{1,3}區)", expand=False)
     gdata = add_point_wkbgeometry_column_to_df(
         data, data["longitude"], data["latitude"], from_crs=FROM_CRS
     )
-    
-    # 動態選取存在的欄位
-    desired_columns = ["country", "city", "village", "number", "name", "address", "administration", "latitude", "longitude", "grade", "type2", "type", "exec", "diaper", "area", "data_time", "wkb_geometry"]
-    existing_columns = [col for col in desired_columns if col in gdata.columns]
-    data = gdata[existing_columns]
+    data = gdata[["country", "city", "village", "number", "name", "address", "administration", "latitude", "longitude", "grade", "type2", "type", "exec", "diaper", "area", "data_time", "wkb_geometry"]]
 
     # Load data to DB
     engine = create_engine(ready_data_db_uri)

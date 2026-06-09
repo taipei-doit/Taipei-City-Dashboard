@@ -2,7 +2,7 @@
     "dag_infos": {
         "dag_id": "R0025",
         "start_date": "2021-08-24",
-        "schedule_interval": "0 0 11 * *",
+        "schedule_interval": "0 12 3,24 * *",
         "catchup": false,
         "tags": ["patrol_motorcycle_theft", "警察局", "機車竊盜點位資訊"],
         "description": "Motorcycle theft in Taipei began in January 2015.",

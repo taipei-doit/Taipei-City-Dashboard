@@ -5,7 +5,7 @@ from operators.common_pipeline import CommonDag
 def _R0083(**kwargs):
     import pandas as pd
     from sqlalchemy import create_engine
-    from utils.extract_stage import get_data_taipei_api
+    from utils.extract_stage import get_current_rid_from_page_id, get_data_taipei_api
     from utils.load_stage import (
         save_geodataframe_to_postgresql,
         update_lasttime_in_data_to_dataset_info,
@@ -21,20 +21,21 @@ def _R0083(**kwargs):
     load_behavior = dag_infos.get("load_behavior")
     default_table = dag_infos.get("ready_data_default_table")
     history_table = dag_infos.get("ready_data_history_table")
-    RID = "586e5233-aa60-4680-8ac1-cbb9ef7f7fde"
+    PAGE_ID = "b3648c5d-15c8-416a-a603-fda7a9ac1b0d"
     GEOMETRY_TYPE = "Point"
     FROM_CRS = 4326
 
     # Extract
-    res = get_data_taipei_api(RID)
+    res = get_data_taipei_api(get_current_rid_from_page_id(PAGE_ID))
     raw_data = pd.DataFrame(res)
 
     # Transform
     data = raw_data.copy()
+    # 資料集欄位改版:「站碼」已改名為「設施編號」,對齊 DB schema
+    if "設施編號" in data.columns and "站碼" not in data.columns:
+        data = data.rename(columns={"設施編號": "站碼"})
     # rename
     data.columns = data.columns.str.lower()
-    # 欄位名稱變更：設施編號 -> 站碼
-    data = data.rename(columns={"設施編號": "站碼"})
     # data time
     data["data_time"] = data["_importdate"].apply(lambda x: x["date"])
     data["data_time"] = convert_str_to_time_format(data["data_time"])

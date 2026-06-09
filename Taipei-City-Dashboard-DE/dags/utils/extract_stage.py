@@ -218,6 +218,79 @@ def get_kml(url, dag_id, from_crs, **kwargs):
     return gdf
 
 
+def get_current_rid_from_page_id(page_id, resource_name_contains=None, timeout=30):
+    """
+    Resolve the *current* resource id (rid) from a data.taipei dataset PAGE_ID.
+
+    Data owners rotate rid each time they republish the dataset. Hardcoding a rid
+    makes the DAG silently read a frozen snapshot. Use this helper to always read
+    the latest published resource.
+
+    Args:
+        page_id (str): Dataset page id (the UUID in the dataset detail URL).
+        resource_name_contains (str, optional): If given, pick the first resource
+            whose name contains this substring (for pages with multiple files).
+        timeout (int, optional): HTTP timeout in seconds.
+
+    Returns:
+        str: Current rid.
+
+    Raises:
+        ValueError: If the page has no resources.
+    """
+    url = f"https://data.taipei/api/frontstage/tpeod/dataset.view?id={page_id}"
+    res = requests.get(url, timeout=timeout)
+    res.raise_for_status()
+    resources = res.json().get("payload", {}).get("resources", [])
+    if not resources:
+        raise ValueError(f"No resources found for page_id={page_id}")
+    if resource_name_contains:
+        for r in resources:
+            if resource_name_contains in (r.get("name") or ""):
+                return r["rid"]
+    return resources[0]["rid"]
+
+
+def read_csv_with_encoding_fallback(source, encodings=None, **kwargs):
+    """
+    Read CSV with a small set of common Taipei open-data encodings.
+
+    data.taipei resource metadata is not always updated when data owners
+    republish files. Try strict decoding first, then retry with replacement so
+    one bad byte does not break an otherwise usable CSV.
+    """
+    if encodings is None:
+        encodings = ("utf-8-sig", "utf-8", "cp950", "big5")
+
+    ordered_encodings = []
+    for encoding in encodings:
+        if encoding and encoding not in ordered_encodings:
+            ordered_encodings.append(encoding)
+
+    last_error = None
+    for encoding in ordered_encodings:
+        try:
+            if hasattr(source, "seek"):
+                source.seek(0)
+            return pd.read_csv(source, encoding=encoding, **kwargs)
+        except UnicodeDecodeError as err:
+            last_error = err
+
+    replace_kwargs = dict(kwargs)
+    replace_kwargs.setdefault("encoding_errors", "replace")
+    for encoding in ordered_encodings:
+        try:
+            if hasattr(source, "seek"):
+                source.seek(0)
+            return pd.read_csv(source, encoding=encoding, **replace_kwargs)
+        except UnicodeDecodeError as err:
+            last_error = err
+
+    if last_error is not None:
+        raise last_error
+    return pd.read_csv(source, **kwargs)
+
+
 def get_data_taipei_api(rid, timeout=60, output_format="json"):
     """
     Retrieve data from Data.taipei API by automatically traversing all data.
@@ -245,20 +318,6 @@ def get_data_taipei_api(rid, timeout=60, output_format="json"):
     url = f"https://data.taipei/api/v1/dataset/{rid}?scope=resourceAquire"
     response = requests.get(url, timeout=timeout)
     data_dict = response.json()
-    
-    # 處理 API 回傳格式可能是 list 或 dict 的情況
-    if isinstance(data_dict, list):
-        # 如果直接返回 list，表示資料格式不同
-        if output_format == "json":
-            return data_dict
-        elif output_format == "dataframe":
-            df = pd.DataFrame(data_dict)
-            if "_importdate" in df.columns:
-                df["data_time"] = df["_importdate"].apply(lambda x: x["date"] if isinstance(x, dict) else x)
-            return df
-        else:
-            raise ValueError("output_format can only be 'json' or 'dataframe'.")
-    
     count = data_dict["result"]["count"]
     res = []
     offset_count = int(count / 1000)
@@ -414,29 +473,33 @@ def get_moenv_json_data(
         if sort_query:
             url += f"&sort={sort_query}"
 
-    if is_test:
-        limit = 10
-        offset = [0]
-    else:
-        res = requests.get(
-            f"{url}&offset=0&limit=1",
-            proxies=PROXIES if is_proxy else None,
-            timeout=timeout,
-        )
-        _check_request_status(res)
-        total_records = res.json()["total"]
-        limit = 1000
-        offset = [i for i in range(0, int(total_records), limit)]
-
+    # MOENV API v2 近年改為直接回傳 list(無 total/records 包裝),
+    # 舊格式為 {"total": N, "records": [...]}。此處兼容兩種格式,並改用
+    # 「持續分頁直到回傳少於 limit」避免依賴 total。
+    limit = 10 if is_test else 1000
     results = []
-    for o in offset:
+    offset = 0
+    max_pages = 1 if is_test else 1000
+    for _ in range(max_pages):
         res = requests.get(
-            f"{url}&offset={o}&limit={limit}",
+            f"{url}&offset={offset}&limit={limit}",
             proxies=PROXIES if is_proxy else None,
             timeout=timeout,
         )
         _check_request_status(res)
-        results.extend(res.json()["records"])
+        body = res.json()
+        if isinstance(body, list):
+            batch = body
+        elif isinstance(body, dict):
+            batch = body.get("records") or body.get("data") or []
+        else:
+            batch = []
+        if not batch:
+            break
+        results.extend(batch)
+        if len(batch) < limit:
+            break
+        offset += limit
         time.sleep(0.1)
 
     return results

@@ -2,7 +2,7 @@
     "dag_infos": {  
         "dag_id": "D050302_1",
         "start_date": "2024-06-11",
-        "schedule_interval": "0 2 1 6,12 *",
+        "schedule_interval": "0 18 5,26 * *",
         "catchup": false,
         "tags": ["work_goose_sanctuary", "工務局", "野雁保護區"],
         "description": "Goose sanctuary in Taipei City.", 

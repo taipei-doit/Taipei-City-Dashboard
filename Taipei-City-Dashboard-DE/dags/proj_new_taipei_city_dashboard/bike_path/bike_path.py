@@ -102,7 +102,7 @@ def _transfer(**kwargs):
     gdata['update_time'] = gdata['update_time'].replace('', None)
 
     # 移除多餘欄位，保留必要欄位（幾何改用 wkb_geometry）
-    gdata = gdata.drop(columns=["geometry", "Geometry", "EncodedPolyline"])
+    gdata = gdata.drop(columns=["geometry", "Geometry"])
 
     # 複製處理後的資料供儲存使用
     ready_data = gdata.copy()
