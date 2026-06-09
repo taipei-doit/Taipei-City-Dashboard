@@ -26,7 +26,7 @@ def _school_food_supply_chain_links(**kwargs):
     import io
     import pandas as pd
     import requests
-    from airflow.models import Variable
+    import os
     from sqlalchemy import create_engine
     from utils.load_stage import (
         save_dataframe_to_postgresql,
@@ -54,9 +54,10 @@ def _school_food_supply_chain_links(**kwargs):
 
     # === API 認證 ===
     # NOTE: 食材登錄平台 OpenAPI 採 email 註冊取碼模式，accesscode 透過 email
-    # 寄送、且未告知有效期限。依官方信件回覆，token 由技術團隊維運此 Variable，
-    # DAG 端僅讀取使用。若 401/403 失敗請通知維護者更新 Variable。
-    ACCESS_CODE = Variable.get("fatraceschool_accesscode")
+    # 食材登錄平台 OpenAPI accesscode（email 註冊取碼）。
+    # 透過環境變數 FATRACESCHOOL_ACCESSCODE 注入，避免依賴 Airflow Variable。
+    # 若 token 過期需重新向平台申請，更新 docker-compose 的 environment 即可。
+    ACCESS_CODE = os.environ.get("FATRACESCHOOL_ACCESSCODE", "")
 
     # === Helpers ===
     # NOTE: 暫無對應 utils.extract_stage helper 處理 fatraceschool API。
@@ -73,7 +74,7 @@ def _school_food_supply_chain_links(**kwargs):
     MAX_BACK_MONTHS = 6     # 資料延遲約 1-2 個月，scan-back 上限
 
     def _post_json(endpoint, payload):
-        r = requests.post(f"{BASE_URL}/{endpoint}/", json=payload, timeout=REQ_TIMEOUT)
+        r = requests.post(f"{BASE_URL}/{endpoint}/", json=payload, timeout=REQ_TIMEOUT, verify=False)
         r.raise_for_status()
         return r.json()
 
@@ -118,7 +119,7 @@ def _school_food_supply_chain_links(**kwargs):
             return pd.DataFrame()
 
         # 一次性連結，立即下載
-        f = requests.get(download_url, timeout=DOWNLOAD_TIMEOUT)
+        f = requests.get(download_url, timeout=DOWNLOAD_TIMEOUT, verify=False)
         f.raise_for_status()
         return pd.read_csv(io.StringIO(f.content.decode("utf-8")))
 
