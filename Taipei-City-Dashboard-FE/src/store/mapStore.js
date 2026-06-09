@@ -38,6 +38,7 @@ import {
 	metroTaipeiVillage,
 	metroTpDistrict,
 	metroTpVillage,
+	IsochroneMapConfig,
 	maplayerCommonLayout,
 	maplayerCommonPaint,
 } from "../assets/configs/mapbox/mapConfig.js";
@@ -57,6 +58,20 @@ import {
 	getCrowdColor,
 	mrtLineColor,
 } from "../assets/utilityFunctions/getThematicColor.js";
+// Developed by Bombs King, Taipei Codefest 2026
+import {
+	buildIsochroneAreaFilter,
+	buildIsochroneLayerDefinitions,
+	buildIsochroneNetworkFilter,
+	buildIsochroneRequest,
+	buildIsochroneStopsMapConfig,
+	getIsochroneAuxLayerIds,
+	getIsochroneLayerIds,
+	getIsochroneQueryDate,
+	getIsochroneTimeParams,
+	getIsochroneTimeSlots,
+	prepareIsochroneRenderData,
+} from "../assets/utilityFunctions/isochroneMap.js";
 
 export const useMapStore = defineStore("map", {
 	state: () => ({
@@ -78,6 +93,11 @@ export const useMapStore = defineStore("map", {
 		popup: null,
 		// Store currently loading layers,
 		loadingLayers: [],
+		isochroneQueryTimeout: null,
+		isochroneLegendFilter: null,
+		isochroneTimeSlotIndex: IsochroneMapConfig.time.defaultSlotIndex,
+		isochronePickArmed: false,
+		isochroneLastPick: null,
 		// Store all view points
 		viewPoints: [],
 		marker: null,
@@ -135,9 +155,22 @@ export const useMapStore = defineStore("map", {
 					if (this.popup) {
 						this.popup = null;
 					}
+					if (this.isochronePickArmed) {
+						void this.finishIsochronePickFromMap(event.lngLat);
+						return;
+					}
 					this.addPopup(event);
 				})
 				.on("dblclick", (event) => {
+					const dialogStore = useDialogStore();
+					if (
+						this.isIsochroneLayerVisible(
+							dialogStore.isochrone?.layerId,
+						)
+					) {
+						event.preventDefault();
+						return;
+					}
 					let coordinates = event.lngLat;
 					this.tempMarkerCoordinates = coordinates;
 					this.marker.setLngLat(coordinates).addTo(this.map);
@@ -206,7 +239,7 @@ export const useMapStore = defineStore("map", {
 						.addLayer(metroTaipeiVillage);
 				});
 			// Taipei 3D Buildings
-			if (!authStore.isMobileDevice) {
+			if (!authStore.isMobileDevice && import.meta.env.VITE_MAPBOXTILE) {
 				this.map
 					.addSource("taipei_building_3d_source", {
 						type: "vector",
@@ -451,6 +484,41 @@ export const useMapStore = defineStore("map", {
 				}
 			});
 		},
+		resetIsochronePickMode() {
+			this.isochronePickArmed = false;
+			const canvas = this.map?.getCanvas?.();
+			if (canvas?.style) {
+				canvas.style.cursor = "";
+			}
+		},
+		startIsochronePickToggle() {
+			if (!this.map) {
+				return;
+			}
+			const dialogStore = useDialogStore();
+			const layerId = dialogStore.isochrone?.layerId;
+			if (!this.isIsochroneLayerVisible(layerId)) {
+				dialogStore.showNotification("fail", IsochroneMapConfig.messages.layerRequired);
+				return;
+			}
+			this.isochronePickArmed = !this.isochronePickArmed;
+			const canvas = this.map?.getCanvas?.();
+			if (canvas?.style) {
+				canvas.style.cursor = this.isochronePickArmed ? "crosshair" : "";
+			}
+			if (this.isochronePickArmed) {
+				dialogStore.showNotification("info", IsochroneMapConfig.messages.pickHint);
+			}
+		},
+		async finishIsochronePickFromMap(lngLat) {
+			this.isochronePickArmed = false;
+			const canvas = this.map?.getCanvas?.();
+			if (canvas?.style) {
+				canvas.style.cursor = "";
+			}
+			this.isochroneLastPick = lngLat;
+			await this.queryIsochroneByLngLat(lngLat);
+		},
 		// 2. Call an API to get the layer data
 		fetchLocalGeoJson(map_config) {
 			axios
@@ -462,16 +530,43 @@ export const useMapStore = defineStore("map", {
 		},
 		// 3-1. Add a local geojson as a source in mapbox
 		addGeojsonSource(map_config, data) {
+			let geojson = data;
+			try {
+				geojson = JSON.parse(JSON.stringify(data));
+			} catch (e) {
+				console.error(`GeoJSON clone failed (${map_config.index}):`, e);
+				this.loadingLayers = this.loadingLayers.filter(
+					(el) => el !== map_config.layerId,
+				);
+				return;
+			}
 			if (
 				!["voronoi", "isoline"].includes(map_config.type) &&
 				map_config.type !== "symbol-3d"
 			) {
-				this.map.addSource(`${map_config.layerId}-source`, {
-					type: "geojson",
-					data: { ...data },
-				});
+				const sourceData =
+					map_config.type === "isochrone"
+						? this.prepareIsochroneRenderData(geojson)
+						: geojson;
+				try {
+					this.map.addSource(`${map_config.layerId}-source`, {
+						type: "geojson",
+						data: sourceData,
+					});
+				} catch (e) {
+					console.error(`addSource failed (${map_config.layerId}):`, e);
+					this.loadingLayers = this.loadingLayers.filter(
+						(el) => el !== map_config.layerId,
+					);
+					return;
+				}
 			}
-			if (map_config.type === "arc") {
+			if (map_config.type === "isochrone") {
+				this.AddIsochroneMapLayer(
+					map_config,
+					this.prepareIsochroneRenderData(geojson),
+				);
+			} else if (map_config.type === "arc") {
 				this.AddArcMapLayer(map_config, data);
 			} else if (map_config.type === "voronoi") {
 				this.AddVoronoiMapLayer(map_config, data);
@@ -724,6 +819,95 @@ export const useMapStore = defineStore("map", {
 			if (this.waitUntilReady) {
 				clearInterval(this.waitUntilReady);
 				this.waitUntilReady = null;
+			}
+		},
+		prepareIsochroneRenderData(geojson) {
+			return prepareIsochroneRenderData(geojson);
+		},
+		_applyIsochroneCombinedFilter(mapLayerId, timeSlot) {
+			if (!this.map || !timeSlot) return;
+			if (!this.map.getLayer(mapLayerId)) return;
+			const dialogStore = useDialogStore();
+			const selectedModes = dialogStore.isochrone?.modes || [];
+			const layerIds = getIsochroneLayerIds(mapLayerId);
+			const filter = buildIsochroneAreaFilter(
+				timeSlot,
+				this.isochroneLegendFilter,
+			);
+			this.map.setFilter(mapLayerId, filter);
+			if (this.map.getLayer(layerIds.outline)) {
+				this.map.setFilter(layerIds.outline, filter);
+			}
+			if (this.map.getLayer(layerIds.network)) {
+				this.map.setFilter(
+					layerIds.network,
+					buildIsochroneNetworkFilter(
+						"LineString",
+						selectedModes,
+						timeSlot,
+						this.isochroneLegendFilter,
+					),
+				);
+			}
+			if (this.map.getLayer(layerIds.networkStops)) {
+				this.map.setFilter(
+					layerIds.networkStops,
+					buildIsochroneNetworkFilter(
+						"Point",
+						selectedModes,
+						timeSlot,
+						this.isochroneLegendFilter,
+					),
+				);
+			}
+		},
+		_registerStopsLayer(map_config) {
+			const stopsLayerId = getIsochroneLayerIds(map_config.layerId).networkStops;
+			if (!this.currentVisibleLayers.includes(stopsLayerId)) {
+				this.currentVisibleLayers.push(stopsLayerId);
+			}
+			if (!this.mapConfigs[stopsLayerId]) {
+				this.mapConfigs[stopsLayerId] = buildIsochroneStopsMapConfig(map_config);
+			}
+		},
+		removeIsochroneAuxLayers(layerId) {
+			getIsochroneAuxLayerIds(layerId).forEach((auxLayerId) => {
+				if (this.map?.getLayer(auxLayerId)) {
+					this.map.removeLayer(auxLayerId);
+				}
+			});
+		},
+		setIsochroneAuxVisibility(layerId, showNetwork) {
+			const layerIds = getIsochroneLayerIds(layerId);
+			[
+				{ id: layerIds.network, isNetworkLayer: true },
+				{ id: layerIds.networkStops, isNetworkLayer: true },
+				{ id: layerIds.outline, isNetworkLayer: false },
+			].forEach((layer) => {
+				if (!this.map.getLayer(layer.id)) return;
+				this.map.setLayoutProperty(
+					layer.id,
+					"visibility",
+					layer.isNetworkLayer && !showNetwork ? "none" : "visible",
+				);
+			});
+		},
+		reloadMapLayer(layerName) {
+			const layerConfig = this.mapConfigs[layerName];
+			if (!layerConfig || layerConfig.isIsochroneAux) return;
+			if (layerConfig.type === "isochrone") {
+				this.removeIsochroneAuxLayers(layerName);
+			}
+			if (this.map.getLayer(layerName)) {
+				this.map.removeLayer(layerName);
+			}
+			if (this.map.getSource(`${layerName}-source`)) {
+				this.map.removeSource(`${layerName}-source`);
+			}
+			if (layerConfig.source === "geojson") {
+				this.fetchLocalGeoJson(layerConfig);
+			} else if (layerConfig.source === "raster") {
+				this.addRasterSource(layerConfig);
 			}
 		},
 		// 4-2-1. Add Map Layer for Arc Maps
@@ -1012,6 +1196,50 @@ export const useMapStore = defineStore("map", {
 				source: "geojson",
 			};
 			this.addMapLayer(new_map_config);
+		},
+		// 4-4-2. Add Map Layer for Isochrone Maps
+		AddIsochroneMapLayer(map_config, data) {
+			this.loadingLayers.push("rendering");
+			const dialogStore = useDialogStore();
+			const sourceId = `${map_config.layerId}-source`;
+			const defaultTimeSlot =
+				map_config.paint?.time_slot ||
+				data?.features?.find(
+					(feature) =>
+						feature.properties?.layer ===
+							IsochroneMapConfig.layers.featureLayers.isochrone &&
+						feature.properties?.time_slot,
+				)?.properties?.time_slot;
+
+			buildIsochroneLayerDefinitions(map_config, sourceId, {
+				selectedModes:
+					dialogStore.isochrone?.modes || IsochroneMapConfig.defaults.modes,
+				showNetwork: dialogStore.isochrone?.showNetwork,
+				defaultTimeSlot,
+			}).forEach((layer) => {
+				this.map.addLayer(layer);
+			});
+
+			this.currentLayers.push(map_config.layerId);
+			this.mapConfigs[map_config.layerId] = map_config;
+			if (!this.currentVisibleLayers.includes(map_config.layerId)) {
+				this.currentVisibleLayers.push(map_config.layerId);
+			}
+			this._registerStopsLayer(map_config);
+			this.enableIsochroneQuery(map_config);
+			dialogStore.showDialog("isochroneSettings");
+			this.loadingLayers = this.loadingLayers.filter(
+				(el) => el !== map_config.layerId,
+			);
+			if (defaultTimeSlot) {
+				const timeSlots = this.getIsochroneTimeSlots();
+				this.isochroneTimeSlotIndex =
+					IsochroneMapConfig.time.defaultSlotIndex;
+				this._applyIsochroneCombinedFilter(
+					map_config.layerId,
+					timeSlots[this.isochroneTimeSlotIndex],
+				);
+			}
 		},
 		// 4-5. Create 3DMap for mrtp 202511月新開發
 		Add3dMapLayer(map_config, data, data2, data3) {
@@ -1811,6 +2039,25 @@ export const useMapStore = defineStore("map", {
 				this.currentVisibleLayers.push(mapLayerId);
 				this.renderDeckGLLayer();
 			} else {
+				const mapConfig = this.mapConfigs[mapLayerId];
+				if (mapConfig?.type === "isochrone") {
+					this.map.setLayoutProperty(
+						mapLayerId,
+						"visibility",
+						"visible",
+					);
+					this.setIsochroneAuxVisibility(
+						mapLayerId,
+						useDialogStore().isochrone?.showNetwork,
+					);
+					if (!this.currentVisibleLayers.includes(mapLayerId)) {
+						this.currentVisibleLayers.push(mapLayerId);
+					}
+					this._registerStopsLayer(mapConfig);
+					this.enableIsochroneQuery(mapConfig);
+					useDialogStore().showDialog("isochroneSettings");
+					return;
+				}
 				if (
 					mapLayerId ===
 						"wee_hazard_water-fill-extrusion-metrotaipei" ||
@@ -1855,6 +2102,24 @@ export const useMapStore = defineStore("map", {
 				if (mapLayerId.indexOf("-arc") !== -1) {
 					this.deckGlLayer[mapLayerId].config.visible = false;
 					this.renderDeckGLLayer();
+				} else if (element.type === "isochrone") {
+					this.disableIsochroneQuery(mapLayerId);
+					if (this.map.getLayer(mapLayerId)) {
+						this.map.setLayoutProperty(
+							mapLayerId,
+							"visibility",
+							"none",
+						);
+					}
+					getIsochroneAuxLayerIds(mapLayerId).forEach((layerId) => {
+						if (this.map.getLayer(layerId)) {
+							this.map.setLayoutProperty(
+								layerId,
+								"visibility",
+								"none",
+							);
+						}
+					});
 				} else if (this.map.getLayer(mapLayerId)) {
 					this.map.setFilter(mapLayerId, null);
 					this.map.setLayoutProperty(
@@ -1864,7 +2129,9 @@ export const useMapStore = defineStore("map", {
 					);
 				}
 				this.currentVisibleLayers = this.currentVisibleLayers.filter(
-					(element) => element !== mapLayerId,
+					(element) =>
+						element !== mapLayerId &&
+						element !== getIsochroneLayerIds(mapLayerId).networkStops,
 				);
 			});
 			this.removePopup();
@@ -1905,7 +2172,7 @@ export const useMapStore = defineStore("map", {
 				return value;
 			};
 
-			const hitSize = 6;
+			const hitSize = 10;
 
 			const bbox = [
 				[event.point.x - hitSize, event.point.y - hitSize],
@@ -2352,6 +2619,21 @@ export const useMapStore = defineStore("map", {
 					this.renderDeckGLLayer();
 					return;
 				}
+				if (map_config && map_config.type === "isochrone") {
+					if (map_filter.byParam.xParam && xParam) {
+						this.isochroneLegendFilter = [
+							"==",
+							["get", map_filter.byParam.xParam],
+							xParam,
+						];
+						const timeSlots = this.getIsochroneTimeSlots();
+						this._applyIsochroneCombinedFilter(
+							mapLayerId,
+							timeSlots[this.isochroneTimeSlotIndex],
+						);
+					}
+					return;
+				}
 				// If x and y both exist, filter by both
 				if (
 					map_filter.byParam.xParam &&
@@ -2420,6 +2702,15 @@ export const useMapStore = defineStore("map", {
 					this.deckGlLayer[mapLayerId].config.data =
 						this.deckGlLayer[mapLayerId].data;
 					this.renderDeckGLLayer();
+					return;
+				}
+				if (map_config && map_config.type === "isochrone") {
+					this.isochroneLegendFilter = null;
+					const timeSlots = this.getIsochroneTimeSlots();
+					this._applyIsochroneCombinedFilter(
+						mapLayerId,
+						timeSlots[this.isochroneTimeSlotIndex],
+					);
 					return;
 				}
 				this.map.setFilter(mapLayerId, null);
@@ -2562,10 +2853,227 @@ export const useMapStore = defineStore("map", {
 			this.flyToLocation(res.geometry.coordinates);
 		},
 
+		// Developed by Bombs King, Taipei Codefest 2026
+		/* Isochrone Dynamic Query */
+		getIsochroneTimeSlots() {
+			return getIsochroneTimeSlots();
+		},
+		getIsochroneQueryDate(dayType) {
+			return getIsochroneQueryDate(dayType);
+		},
+		getIsochroneTimeParams(timeSlot, dayType, timeDirection) {
+			return getIsochroneTimeParams(timeSlot, dayType, timeDirection);
+		},
+		setIsochroneTimeSlotIndex(index) {
+			const timeSlots = this.getIsochroneTimeSlots();
+			const nextIndex = Math.min(Math.max(index, 0), timeSlots.length - 1);
+			this.stopAnimation();
+			this.isochroneTimeSlotIndex = nextIndex;
+
+			const dialogStore = useDialogStore();
+			const layerId = dialogStore.isochrone?.layerId;
+			if (!layerId) return;
+
+			// Client-side visual update (filter)
+			this._applyIsochroneCombinedFilter(layerId, timeSlots[nextIndex]);
+
+			// Debounced backend request
+			if (this.isochroneQueryTimeout) {
+				clearTimeout(this.isochroneQueryTimeout);
+			}
+			this.isochroneQueryTimeout = setTimeout(() => {
+				this.refreshIsochroneQuery();
+				this.isochroneQueryTimeout = null;
+			}, 500);
+		},
+		isIsochroneLayerVisible(layerId) {
+			if (!layerId || !this.map?.getLayer(layerId)) return false;
+			return this.map.getLayoutProperty(layerId, "visibility") !== "none";
+		},
+		enableIsochroneQuery(map_config) {
+			if (!this.map) return;
+			const dialogStore = useDialogStore();
+			if (!this.isochroneLastPick) {
+				this.isochroneLastPick = { ...IsochroneMapConfig.defaultPick };
+			}
+			dialogStore.isochrone = {
+				...dialogStore.isochrone,
+				layerId: map_config.layerId,
+				modes:
+					dialogStore.isochrone?.modes?.length > 0
+						? dialogStore.isochrone.modes
+						: [...IsochroneMapConfig.defaults.modes],
+				dayType:
+					dialogStore.isochrone?.dayType ||
+					IsochroneMapConfig.defaults.dayType,
+				timeDirection:
+					dialogStore.isochrone?.timeDirection ||
+					IsochroneMapConfig.defaults.timeDirection,
+				loading: false,
+				error: "",
+			};
+		},
+		disableIsochroneQuery(layerId, closeDialog = true) {
+			const dialogStore = useDialogStore();
+			if (dialogStore.isochrone?.layerId === layerId) {
+				this.resetIsochronePickMode();
+				this.isochroneLastPick = null;
+				dialogStore.isochrone.loading = false;
+				dialogStore.isochrone.error = "";
+				if (closeDialog) {
+					dialogStore.dialogs.isochroneSettings = false;
+					dialogStore.isochrone.layerId = null;
+				}
+			}
+		},
+		refreshIsochroneQuery() {
+			const dialogStore = useDialogStore();
+			if (!dialogStore.isochrone?.layerId || !this.isochroneLastPick) {
+				return;
+			}
+			this.queryIsochroneByLngLat(this.isochroneLastPick);
+		},
+		async queryIsochroneByLngLat(lngLat) {
+			const dialogStore = useDialogStore();
+			const { layerId, modes, dayType, timeDirection } =
+				dialogStore.isochrone || {};
+
+			if (!layerId || !this.map?.getSource(`${layerId}-source`)) return;
+			if (!this.isIsochroneLayerVisible(layerId)) return;
+			this.isochroneLastPick = lngLat;
+			if (!modes || modes.length === 0) {
+				dialogStore.isochrone.error = IsochroneMapConfig.messages.modeRequired;
+				return;
+			}
+
+			dialogStore.isochrone.loading = true;
+			dialogStore.isochrone.networkLoading = true;
+			dialogStore.isochrone.error = "";
+
+			try {
+				const timeSlot =
+					this.getIsochroneTimeSlots()[this.isochroneTimeSlotIndex] ||
+					this.getIsochroneTimeSlots()[1];
+				const res = await http.post(
+					IsochroneMapConfig.api.full,
+					buildIsochroneRequest(lngLat, {
+						timeSlot,
+						dayType,
+						timeDirection,
+						modes,
+					}),
+				);
+				const features = res.data.features.map((feature) => ({
+					...feature,
+					properties: {
+						...feature.properties,
+						time_slot: timeSlot,
+					},
+				}));
+				const isoFeatures = features.filter(
+					(feature) =>
+						feature.properties?.layer ===
+						IsochroneMapConfig.layers.featureLayers.isochrone,
+				);
+				const netFeatures = features.filter(
+					(feature) =>
+						feature.properties?.layer ===
+						IsochroneMapConfig.layers.featureLayers.network,
+				);
+				this.updateIsochroneData(layerId, {
+					type: "FeatureCollection",
+					features: isoFeatures,
+				});
+				dialogStore.isochrone.loading = false;
+				this.updateNetworkData(layerId, netFeatures);
+				dialogStore.isochrone.networkLoading = false;
+			} catch (e) {
+				console.error("Isochrone query failed:", e);
+				dialogStore.isochrone.error =
+					e.response?.data?.detail || IsochroneMapConfig.messages.queryFailed;
+				dialogStore.isochrone.loading = false;
+				dialogStore.isochrone.networkLoading = false;
+			}
+		},
+		updateIsochroneData(layerId, geojson) {
+			this.stopAnimation();
+			this.isochroneLegendFilter = null;
+			const enriched = this.prepareIsochroneRenderData(geojson);
+			const source = this.map.getSource(`${layerId}-source`);
+			if (source) {
+				source.setData(enriched);
+			}
+			const layerIds = getIsochroneLayerIds(layerId);
+			[layerIds.network, layerIds.networkStops].forEach((id) => {
+				if (this.map.getLayer(id)) {
+					this.map.setLayoutProperty(id, "visibility", "none");
+				}
+			});
+			const timeSlots = this.getIsochroneTimeSlots();
+			this._applyIsochroneCombinedFilter(
+				layerId,
+				timeSlots[this.isochroneTimeSlotIndex],
+			);
+		},
+		updateNetworkData(layerId, networkFeatures) {
+			const source = this.map.getSource(`${layerId}-source`);
+			if (!source) return;
+			const existing = source._data;
+			if (!existing || !existing.features) return;
+			const dialogStore = useDialogStore();
+			const selectedModes = dialogStore.isochrone?.modes || [];
+			const merged = {
+				...existing,
+				features: [...existing.features, ...networkFeatures],
+			};
+			source.setData(merged);
+			const timeSlots = this.getIsochroneTimeSlots();
+			this._applyIsochroneCombinedFilter(
+				layerId,
+				timeSlots[this.isochroneTimeSlotIndex],
+			);
+			const layerIds = getIsochroneLayerIds(layerId);
+			if (this.map.getLayer(layerIds.network)) {
+				this.map.setFilter(
+					layerIds.network,
+					buildIsochroneNetworkFilter("LineString", selectedModes),
+				);
+				this.map.setLayoutProperty(
+					layerIds.network,
+					"visibility",
+					dialogStore.isochrone?.showNetwork ? "visible" : "none",
+				);
+			}
+			if (this.map.getLayer(layerIds.networkStops)) {
+				this.map.setFilter(
+					layerIds.networkStops,
+					buildIsochroneNetworkFilter("Point", selectedModes),
+				);
+				this.map.setLayoutProperty(
+					layerIds.networkStops,
+					"visibility",
+					dialogStore.isochrone?.showNetwork ? "visible" : "none",
+				);
+			}
+		},
+		toggleNetworkVisibility() {
+			const dialogStore = useDialogStore();
+			const layerId = dialogStore.isochrone?.layerId;
+			if (!layerId || !this.map) return;
+			this.setIsochroneAuxVisibility(
+				layerId,
+				dialogStore.isochrone?.showNetwork,
+			);
+		},
+
 		/* Clearing the map */
 		// 1. Called when the user is switching between maps
 		clearOnlyLayers() {
-			this.currentLayers.forEach((element) => {
+			this.stopAnimation();
+			this.resetIsochronePickMode();
+			[...this.currentLayers].reverse().forEach((element) => {
+				this.disableIsochroneQuery(element);
+				this.removeIsochroneAuxLayers(element);
 				if (this.map.getLayer(element)) {
 					this.map.removeLayer(element);
 				}
@@ -2584,6 +3092,15 @@ export const useMapStore = defineStore("map", {
 		},
 		// 2. Called when user navigates away from the map
 		clearEntireMap() {
+			const dialogStore = useDialogStore();
+			dialogStore.dialogs.isochroneSettings = false;
+			if (dialogStore.isochrone) {
+				dialogStore.isochrone.layerId = null;
+				dialogStore.isochrone.loading = false;
+				dialogStore.isochrone.error = "";
+			}
+			this.isochroneLastPick = null;
+			this.resetIsochronePickMode();
 			this.currentLayers = [];
 			this.mapConfigs = {};
 			this.map = null;
