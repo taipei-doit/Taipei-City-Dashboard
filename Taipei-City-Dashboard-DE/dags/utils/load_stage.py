@@ -190,7 +190,7 @@ def save_dataframe_to_postgresql(
                 )
             )
         except Exception:
-            pass  # 表尚未建立，後續 to_sql(append) 會自動建表
+            conn.rollback()  # 清除失敗的 transaction，後續 to_sql(append) 會自動建表
         data.to_sql(
             default_table, conn, if_exists="append", index=False, schema="public"
         )
@@ -327,7 +327,7 @@ def save_geodataframe_to_postgresql(
                 )
             )
         except Exception:
-            pass  # 表尚未建立，後續 to_sql(append) 會自動建表
+            conn.rollback()  # 清除失敗的 transaction，後續 to_sql(append) 會自動建表
         gdata.to_sql(
             default_table,
             conn,
