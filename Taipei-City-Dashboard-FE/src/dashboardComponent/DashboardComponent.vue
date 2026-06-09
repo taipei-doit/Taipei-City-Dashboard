@@ -33,6 +33,7 @@ import TextUnitChart from "./components/TextUnitChart.vue";
 import SankeyChart from "./components/SankeyChart.vue";
 import BubbleChart from "./components/BubbleChart.vue";
 import MapPickButton from "../components/map/MapPickButton.vue";
+import QuartileChart from "./components/QuartileChart.vue";
 
 import MapLegendSvg from "./assets/chart/MapLegend.svg";
 import DistrictChartSvg from "./assets/chart/DistrictChart.svg";
@@ -248,10 +249,12 @@ function returnChartComponent(name, svg) {
 	case "TextUnitChart":
 		return svg ? TextUnitChartSvg : TextUnitChart;
 	case "SankeyChart":
-		return svg ? BarChartSvg : SankeyChart;
-	case "BubbleChart":
-		return svg ? BubbleChartSvg : BubbleChart;
-	default:
+			return svg ? BarChartSvg : SankeyChart;
+		case "BubbleChart":
+			return svg ? BubbleChartSvg : BubbleChart;
+		case "QuartileChart":
+			return svg ? BarChartSvg : QuartileChart;
+		default:
 		return svg ? MapLegendSvg : MapLegend;
 	}
 }
@@ -265,6 +268,14 @@ function returnChartComponent(name, svg) {
         mapclosed: mode.includes('map') && !toggleOn,
         mapopen: mode === 'map' && toggleOn,
         halfmapopen: mode === 'halfmap' && toggleOn,
+				'mapopen-quartile':
+					mode === 'map' &&
+					toggleOn &&
+					config?.chart_config?.types?.includes('QuartileChart'),
+				'halfmapopen-quartile':
+					mode === 'halfmap' &&
+					toggleOn &&
+					config?.chart_config?.types?.includes('QuartileChart'),
         half: mode === 'half',
         large: mode === 'large',
         preview: mode === 'preview',
@@ -369,7 +380,10 @@ function returnChartComponent(name, svg) {
     <div
       v-if="
         (!mode.includes('map') || toggleOn) &&
-          mode !== 'preview'
+          mode !== 'preview' &&
+		  ((selectBtn && !selectBtnDisabled) ||
+		  	config?.chart_config?.types?.length > 1) &&
+		  activeChart !== 'QuartileChart'
       "
       class="dashboardcomponent-control"
     >
@@ -453,6 +467,9 @@ function returnChartComponent(name, svg) {
         'half-chart': mode === 'half',
         'mapopen-chart': mode === 'map',
         'halfmapopen-chart': mode === 'halfmap',
+		'quartile-centered':
+			config?.chart_config?.types?.includes('QuartileChart') &&
+			mode.includes('map'),
       }"
     >
       <component
@@ -975,6 +992,39 @@ button:hover {
 		padding-top: 0;
 		height: 75%;
 	}
+}
+
+.mapopen-quartile {
+	height: 400px;
+	max-height: 400px;
+}
+
+.halfmapopen-quartile {
+	height: 320px;
+	max-height: 320px;
+}
+
+.quartile-centered {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: stretch;
+	overflow: hidden;
+}
+
+.quartile-centered :deep(.QuartileChart) {
+	height: 100%;
+	max-height: 100%;
+}
+
+.quartile-centered :deep(.QuartileChart__list) {
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+}
+
+.quartile-centered :deep(.QuartileChart__noData) {
+	flex: 1;
 }
 
 .preview {

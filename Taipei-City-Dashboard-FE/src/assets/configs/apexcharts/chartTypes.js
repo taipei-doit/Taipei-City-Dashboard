@@ -21,6 +21,7 @@ export const chartTypes = {
 	MapLegend: "地圖圖例",
 	TextUnitChart: "文字單位圖",
 	BubbleChart: "泡泡圖",
+	QuartileChart: "四分位圖",
 };
 
 export const chartsPerDataType = {
@@ -55,4 +56,5 @@ export const chartsPerDataType = {
 		"IconPercentChart",
 	],
 	map_legend: ["MapLegend"],
+	quartile: ["QuartileChart"],
 };
