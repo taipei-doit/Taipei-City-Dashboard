@@ -224,7 +224,7 @@ def get_current_rid_from_page_id(page_id, resource_name_contains=None, timeout=3
         ValueError: If the page has no resources.
     """
     url = f"https://data.taipei/api/frontstage/tpeod/dataset.view?id={page_id}"
-    res = requests.get(url, timeout=timeout)
+    res = requests.get(url, timeout=timeout, verify=False)
     res.raise_for_status()
     resources = res.json().get("payload", {}).get("resources", [])
     if not resources:
@@ -261,7 +261,7 @@ def get_data_taipei_api(rid, timeout=60, output_format="json"):
     ```
     """
     url = f"https://data.taipei/api/v1/dataset/{rid}?scope=resourceAquire"
-    response = requests.get(url, timeout=timeout)
+    response = requests.get(url, timeout=timeout, verify=False)
     data_dict = response.json()
     count = data_dict["result"]["count"]
     res = []
@@ -269,7 +269,7 @@ def get_data_taipei_api(rid, timeout=60, output_format="json"):
     for i in range(offset_count + 1):
         i = i * 1000
         url = f"https://data.taipei/api/v1/dataset/{rid}?scope=resourceAquire&offset={i}&limit=1000"
-        response = requests.get(url, timeout=timeout)
+        response = requests.get(url, timeout=timeout, verify=False)
         get_json = response.json()
         res.extend(get_json["result"]["results"])
 
@@ -312,7 +312,7 @@ def get_data_taipei_file_last_modified_time(page_id, rank=0, timeout=30):
         ```
     """
     url = f"https://data.taipei/api/frontstage/tpeod/dataset.view?id={page_id}"
-    res = requests.get(url, timeout=timeout)
+    res = requests.get(url, timeout=timeout, verify=False)
     if res.status_code != 200:
         raise ValueError(f"Request Error: {res.status_code}")
 
@@ -350,7 +350,7 @@ def get_data_taipei_page_change_time(page_id, rank=0, timeout=30):
         ```
     """
     url = f"https://data.taipei/api/frontstage/tpeod/dataset/change-history.list?id={page_id}"
-    res = requests.get(url, timeout=timeout)
+    res = requests.get(url, timeout=timeout, verify=False)
     if res.status_code != 200:
         raise ValueError(f"Request Error: {res.status_code}")
 
@@ -430,6 +430,7 @@ def get_moenv_json_data(
             f"{url}&offset={offset}&limit={limit}",
             proxies=PROXIES if is_proxy else None,
             timeout=timeout,
+            verify=False,
         )
         _check_request_status(res)
         body = res.json()
@@ -569,7 +570,7 @@ def get_tdx_data(url, is_proxy=False, timeout=60, output_format="json"):
     # get data
     headers = {"authorization": f"Bearer {token}"}
     response = requests.get(
-        url, headers=headers, proxies=PROXIES if is_proxy else None, timeout=timeout
+        url, headers=headers, proxies=PROXIES if is_proxy else None, timeout=timeout, verify=False
     )
     if response.status_code != 200:
         raise ValueError(f"Request failed! status: {response.status_code}")
@@ -758,7 +759,7 @@ class NewTaipeiAPIClient:
             print(data)
         """
         url = f"{self.BASE_URL}/{self.rid}/{self.input_format}"
-        response = requests.get(url, params=params, timeout=self.timeout)
+        response = requests.get(url, params=params, timeout=self.timeout, verify=False)
         response.raise_for_status()  # Ensure the request was successful
 
         # Use the appropriate handler to convert the response.
@@ -866,7 +867,7 @@ class TaipeiTravelAPIClient:
             "Accept": f"application/json",
             "User-Agent": "Mozilla/5.0"
         }
-        response = requests.get(url, params=params, headers=headers, timeout=self.timeout, proxies=PROXIES)
+        response = requests.get(url, params=params, headers=headers, timeout=self.timeout, proxies=PROXIES, verify=False)
         response.raise_for_status()  # Ensure the request was successful
 
         # Use the appropriate handler to convert the response.
