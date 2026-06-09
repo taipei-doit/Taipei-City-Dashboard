@@ -6,6 +6,7 @@ export const chartTypes: chartType = {
 	DonutChart: "圓餅圖", // V
 	BarChart: "橫向長條圖", // V
 	ColumnChart: "縱向長條圖", // V
+	NegativeColumnChart: "負值長條圖", // V
 	BarPercentChart: "長條圖(%)", // V
 	TreemapChart: "矩形圖", // V
 	DistrictChart: "行政區圖", // V
