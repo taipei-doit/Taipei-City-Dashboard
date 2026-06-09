@@ -73,3 +73,6 @@ Taipei-City-Dashboard-DE/docker/prod/.env
 *.py[cod]
 
 *.env
+
+# Local agent / tooling state
+.claude/
