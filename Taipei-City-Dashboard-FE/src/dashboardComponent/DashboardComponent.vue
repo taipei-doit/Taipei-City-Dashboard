@@ -34,6 +34,7 @@ import SankeyChart from "./components/SankeyChart.vue";
 import BubbleChart from "./components/BubbleChart.vue";
 import MapPickButton from "../components/map/MapPickButton.vue";
 import QuartileChart from "./components/QuartileChart.vue";
+import SunburstChart from "./components/SunburstChart.vue";
 
 import MapLegendSvg from "./assets/chart/MapLegend.svg";
 import DistrictChartSvg from "./assets/chart/DistrictChart.svg";
@@ -56,7 +57,7 @@ import TreemapChartSvg from "./assets/chart/TreemapChart.svg";
 import IndicatorChartSvg from "./assets/chart/IndicatorChart.svg";
 import TextUnitChartSvg from "./assets/chart/TextUnitChart.svg";
 import BubbleChartSvg from "./assets/chart/BubbleChart.svg";
-
+import SunburstChartSvg from "./assets/chart/SunburstChart.svg";
 
 const props = defineProps({
 	style: { type: Object, default: () => ({}) },
@@ -254,6 +255,8 @@ function returnChartComponent(name, svg) {
 			return svg ? BubbleChartSvg : BubbleChart;
 		case "QuartileChart":
 			return svg ? BarChartSvg : QuartileChart;
+		case "SunburstChart":
+			return svg ? SunburstChartSvg : SunburstChart;
 		default:
 		return svg ? MapLegendSvg : MapLegend;
 	}
