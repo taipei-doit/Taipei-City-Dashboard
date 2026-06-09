@@ -6,7 +6,6 @@ def _R0034(**kwargs):
     import geopandas as gpd
     import pandas as pd
     import requests
-    from airflow.models import Variable
     from sqlalchemy import create_engine
     from utils.load_stage import (
         save_geodataframe_to_postgresql,
@@ -24,9 +23,7 @@ def _R0034(**kwargs):
     load_behavior = dag_infos.get("load_behavior")
     default_table = dag_infos.get("ready_data_default_table")
     history_table = dag_infos.get("ready_data_history_table")
-    login_id = Variable.get("HEO_ID")
-    data_key = Variable.get("HEO_APIKEY")
-    URL = f"https://wic.heo.taipei/OpenData/API/Sewer/Get?stationNo=&loginId={login_id}&dataKey={data_key}"
+    URL = "https://wic.gov.taipei/OpenData/API/Sewer/Get?stationNo=&loginId=sewer01&dataKey=BD3E513A"
     FROM_CRS = 4326
     GEOMETRY_TYPE = "Point"
 

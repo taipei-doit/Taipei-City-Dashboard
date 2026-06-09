@@ -2,7 +2,7 @@
     "dag_infos": {
         "dag_id": "R0075",
         "start_date": "2021-11-19",
-        "schedule_interval": "0 1 20 1,4,7,10 *",
+        "schedule_interval": "0 14 4,25 * *",
         "catchup": false,
         "tags": ["fire_hydrant_location", "北水處", "消防栓點位"],
         "description": "Locations of fire hydrant distribution points in the Greater Taipei area, including 7 districts: Taipei City, Sanchong District, Zhonghe District, Yonghe District, Xindian District, and Xizhi District of New Taipei City",

@@ -2,7 +2,7 @@
     "dag_infos": {  
         "dag_id": "R0042",
         "start_date": "2021-11-17",
-        "schedule_interval": "0 3 1 4 *",
+        "schedule_interval": "0 17 3,24 * *",
         "catchup": false,
         "tags": ["traffic_accident_location", "警察局", "道路交通事故斑點圖"],
         "description": "Announced once a year, the time and location of A1, A2 traffic accidents in Taipei City", 

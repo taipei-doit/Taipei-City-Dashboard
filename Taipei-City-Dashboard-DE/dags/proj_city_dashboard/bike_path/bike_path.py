@@ -101,7 +101,7 @@ def _transfer(**kwargs):
     gdata['update_time'] = gdata['update_time'].replace('', None)
 
     # 移除原始 geometry 欄位（避免重複），只保留 wkb_geometry
-    gdata = gdata.drop(columns=["geometry", "Geometry","EncodedPolyline"])
+    gdata = gdata.drop(columns=["geometry", "Geometry"])
     ready_data = gdata.copy()
 
     # 建立資料庫連線引擎

@@ -2,7 +2,7 @@
   "dag_infos": {
     "dag_id": "long_term",
     "start_date": "2025-06-25",
-    "schedule_interval": "@monthly",
+    "schedule_interval": "30 19 4,25 * *",
     "catchup": false,
     "tags": [
       "long_term",

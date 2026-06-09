@@ -2,7 +2,7 @@
 	"dag_infos": {
 		"dag_id": "moenv_public_toilet_tpe",
 		"start_date": "2025-06-25",
-		"schedule_interval": "@monthly",
+		"schedule_interval": "0 20 4,25 * *",
 		"catchup": false,
 		"tags": [
 			"moenv_public_toilet_tpe",

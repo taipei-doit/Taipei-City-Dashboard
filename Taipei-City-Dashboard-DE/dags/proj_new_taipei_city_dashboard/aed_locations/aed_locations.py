@@ -103,16 +103,6 @@ def _transfer(**kwargs):
     for col in time_columns:
         raw_data[col] = raw_data[col].apply(validate_time_format)
 
-    # 時間欄位處理:將空字串替換為 None
-    time_columns = [
-        "mon_start", "mon_end", "tue_start", "tue_end",
-        "wed_start", "wed_end", "thu_start", "thu_end",
-        "fri_start", "fri_end", "sat_start", "sat_end",
-        "sun_start", "sun_end"
-    ]
-    for col in time_columns:
-        raw_data[col] = raw_data[col].replace("", None)
-
     # 地址標準化
     
     addr = raw_data["address"]

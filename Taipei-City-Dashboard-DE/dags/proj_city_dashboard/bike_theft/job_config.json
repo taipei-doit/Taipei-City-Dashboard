@@ -2,7 +2,7 @@
     "dag_infos": {
         "dag_id": "bike_theft",
         "start_date": "2021-08-24",
-        "schedule_interval": "30 23 10 * *",
+        "schedule_interval": "30 17 4,25 * *",
         "catchup": false,
         "tags": ["patrol_bike_theft", "警察局", "自行車竊盜點位資訊"],
         "description": "Car theft in Taipei began in January 2015.",

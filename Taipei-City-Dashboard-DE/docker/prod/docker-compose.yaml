@@ -68,6 +68,13 @@ x-airflow-common:
     AIRFLOW__SCHEDULER__MIN_FILE_PROCESS_INTERVAL: 120
     AIRFLOW__SCHEDULER__DAG_DIR_LIST_INTERVAL: 300
     AIRFLOW__SCHEDULER__MAX_THREADS: 2
+    # 每個 worker 改成 concurrency=1, prefetch=1
+    AIRFLOW__CELERY__WORKER_CONCURRENCY: 1
+    AIRFLOW__CELERY__WORKER_PREFETCH_MULTIPLIER: 1
+    # 3. 限制 scheduler 排程速度
+    AIRFLOW__SCHEDULER__MAX_DAGRUNS_PER_LOOP_TO_SCHEDULE: 5
+    AIRFLOW__CORE__PARALLELISM: 32
+    AIRFLOW__CORE__MAX_ACTIVE_RUNS_PER_DAG: 1
     # yamllint disable rule:line-length
     # Use simple http server on scheduler for health checks
     # See https://airflow.apache.org/docs/apache-airflow/stable/administration-and-deployment/logging-monitoring/check-health.html#scheduler-health-check-server
@@ -96,6 +103,17 @@ x-airflow-common:
   user: "${AIRFLOW_UID:-50000}:0"
 
 services:
+  redis:
+    image: redis:7.2-alpine
+    container_name: airflow-redis
+    restart: always
+    expose:
+      - 6379
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 30s
+      retries: 50
   airflow-webserver:
     <<: *airflow-common
     command: webserver
@@ -162,7 +180,7 @@ services:
     <<: *airflow-common
     command: celery worker -q realtime
     cpus: "1.0"
-    mem_limit: "4g"
+    mem_limit: "8g"
     healthcheck:
       # yamllint disable rule:line-length
       test:
@@ -175,7 +193,7 @@ services:
     environment:
       <<: *airflow-common-env
       # Realtime tasks need immediate execution availability
-      AIRFLOW__CELERY__WORKER_CONCURRENCY: 4
+      AIRFLOW__CELERY__WORKER_CONCURRENCY: 10
       DUMB_INIT_SETSID: "0"
     restart: always
     cpuset: "0-5"

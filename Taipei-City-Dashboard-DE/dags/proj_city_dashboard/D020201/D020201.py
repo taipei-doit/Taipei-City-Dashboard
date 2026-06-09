@@ -8,7 +8,7 @@ def _D020201(**kwargs):
     from shapely import wkt
     from shapely.ops import unary_union
     from sqlalchemy import create_engine
-    from utils.extract_stage import get_data_taipei_api
+    from utils.extract_stage import get_current_rid_from_page_id, get_data_taipei_api
     from utils.load_stage import (
         save_geodataframe_to_postgresql,
         update_lasttime_in_data_to_dataset_info,
@@ -43,12 +43,12 @@ def _D020201(**kwargs):
     load_behavior = dag_infos.get("load_behavior")
     default_table = dag_infos.get("ready_data_default_table")
     history_table = dag_infos.get("ready_data_history_table")
-    RID = "cd4ec60e-8d53-48a5-bbf1-9ec1f2afc20b"
+    PAGE_ID = "95c2eed3-8253-4dce-bf8e-1d6a01517514"
     FROM_CRS = 4326
     GEOMETRY_TYPE = "MultiLineString"
 
     # Extract
-    raw_list = get_data_taipei_api(RID)
+    raw_list = get_data_taipei_api(get_current_rid_from_page_id(PAGE_ID))
     raw_data = pd.DataFrame(raw_list)
     raw_data["data_time"] = raw_data["_importdate"].iloc[0]["date"]
 

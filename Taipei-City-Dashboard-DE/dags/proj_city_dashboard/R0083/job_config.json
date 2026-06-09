@@ -2,7 +2,7 @@
     "dag_infos": {  
         "dag_id": "R0083",
         "start_date": "2021-12-21",
-        "schedule_interval": "0 6 25 3,9 *",
+        "schedule_interval": "0 16 4,25 * *",
         "catchup": false,
         "tags": ["work_sewer_location", "工務局", "水利處雨水下水道水位監測站"],
         "description": "Rainwater sewerage level monitoring stations location.", 
