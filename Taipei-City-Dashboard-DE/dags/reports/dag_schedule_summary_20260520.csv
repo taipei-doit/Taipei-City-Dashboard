@@ -1,0 +1,181 @@
+﻿inferred_airflow_dag_id,name_cn,source_dept,schedule_interval,human_readable_utc
+common_dags_clean_log_and_metadata,清理 Airflow log 與 metadata（保留近 N 天）,,00 18 * * *,每天，18:00
+common_dags_housekeeping_tables,歷史表 housekeeping（保留近 N 個月）,,0 3 * * *,每天，03:00
+common_dags_spatial_area_mapping,指定table透過空間join更新area欄位,,00 18 * * *,每天，18:00
+proj_city_dashboard_D010501,臺北市陳情系統類別資料,研考會,"0 17 5,26 * *",每月 5、26 日，17:00
+proj_city_dashboard_D020105,臺北市防空避難處所清冊,都發局 建管處,"0 12 1,22 * *",每月 1、22 日，12:00
+proj_city_dashboard_D020201,臺北市狹小巷道清冊(紅黃區),消防局,"30 12 1,22 * *",每月 1、22 日，12:30
+proj_city_dashboard_D020301,雙北交通路口即時影像清單,交通局,"0 13 1,22 * *",每月 1、22 日，13:00
+proj_city_dashboard_D020401,臺北市消防局近兩年重大案件之災情清單(黑客松競賽用資料),消防局,"30 13 1,22 * *",每月 1、22 日，13:30
+proj_city_dashboard_D030101-1,臺北市人行道固定設施物_人行道範圍圖,工務局,"0 14 1,22 * *",每月 1、22 日，14:00
+proj_city_dashboard_D030102-1,臺北市市區自行車道,交通局,"30 14 1,22 * *",每月 1、22 日，14:30
+proj_city_dashboard_D030102-2,臺北市自行車道(河濱),工務局,"0 15 1,22 * *",每月 1、22 日，15:00
+proj_city_dashboard_D030104-1,臺北市停車場資訊-剩餘停車位數V2,交通局,*/5 * * * *,每 5 分鐘
+proj_city_dashboard_D030104-2,臺北市停車場資訊-停車場資訊V2,交通局,10 22 * * 1,每週 週一，22:10
+proj_city_dashboard_D030201,A1及A2交通事故資料,交通局,"30 15 1,22 * *",每月 1、22 日，15:30
+proj_city_dashboard_D040301-1,臺北市路燈位置分布圖,工務局,50 20 * * *,每天，20:50
+proj_city_dashboard_D040302_1,臺北市今日臨時使用道路路段,工務局 新工處,10 6 * * *,每天，06:10
+proj_city_dashboard_D040302_2,臺北市今日使用道路集會路段,工務局 新工處,0 6 * * *,每天，06:00
+proj_city_dashboard_D040401,垃圾車點位路線資訊,環保局,"0 16 1,22 * *",每月 1、22 日，16:00
+proj_city_dashboard_D050101-1,中央氣象署-一年觀測資料-地面測站觀測資料,中央氣象署,00 23 * * *,每天，23:00
+proj_city_dashboard_D050101-2,中央氣象署-有人氣象站-現在天氣觀測報告,中央氣象署,@hourly,每小時一次（整點）
+proj_city_dashboard_D050101-3,中央氣象署-自動氣象站-現在天氣觀測報告,中央氣象署,@hourly,每小時一次（整點）
+proj_city_dashboard_D050101-4,中央氣象署-自動雨量站資料-無人自動站雨量資料,中央氣象署,*/10 * * * *,每 10 分鐘
+proj_city_dashboard_D050102_1,中央氣象署-一般天氣預報-今明36小時天氣預報,中央氣象署,0 */6 * * *,每 6 小時的第 00 分
+proj_city_dashboard_D050102_2,中央氣象署-鄉鎮天氣預報-臺北市未來3天天氣預報,中央氣象署,0 */6 * * *,每 6 小時的第 00 分
+proj_city_dashboard_D050201_1,行道樹分布圖,工務局 公燈處,"30 17 5,26 * *",每月 5、26 日，17:30
+proj_city_dashboard_D050301-1,田園城市點位圖資,工務局 公燈處,"30 16 1,22 * *",每月 1、22 日，16:30
+proj_city_dashboard_D050302_1,臺北市水綠地圖集-都市綠地_野雁保護區,工務局,"0 18 5,26 * *",每月 5、26 日，18:00
+proj_city_dashboard_D050302_2,臺北市水綠地圖集-都市綠地_自然保留區,工務局,"30 18 5,26 * *",每月 5、26 日，18:30
+proj_city_dashboard_D050302_3,臺北市水綠地圖集-都市計畫保護區、農業區,工務局,"0 19 5,26 * *",每月 5、26 日，19:00
+proj_city_dashboard_D050303_1,臺北市水綠地圖集-公園綠地_公園,工務局,"30 19 5,26 * *",每月 5、26 日，19:30
+proj_city_dashboard_D050303_2,臺北市水綠地圖集-公園綠地_校園綠化,工務局,"0 20 5,26 * *",每月 5、26 日，20:00
+proj_city_dashboard_D050303_3,臺北市水綠地圖集-公園綠地_公園生態化,工務局,"30 20 5,26 * *",每月 5、26 日，20:30
+proj_city_dashboard_D050303_4,臺北市水綠地圖集-公園綠地_河濱高灘地,工務局,"0 21 5,26 * *",每月 5、26 日，21:00
+proj_city_dashboard_D050303_5,透水鋪面_學校透水鋪面,工務局,"0 17 1,22 * *",每月 1、22 日，17:00
+proj_city_dashboard_D050303_6,透水鋪面_停車場透水鋪面,工務局,"30 17 1,22 * *",每月 1、22 日，17:30
+proj_city_dashboard_D050303_7,透水鋪面_公園透水鋪面,工務局,"0 18 1,22 * *",每月 1、22 日，18:00
+proj_city_dashboard_D050303_8,透水鋪面_人行道透水鋪面,工務局,"30 18 1,22 * *",每月 1、22 日，18:30
+proj_city_dashboard_D050303_9,透水鋪面_PAC透水鋪面,工務局,"0 19 1,22 * *",每月 1、22 日，19:00
+proj_city_dashboard_D050401_1,臺北市土壤液化潛勢圖,工務局,"30 21 5,26 * *",每月 5、26 日，21:30
+proj_city_dashboard_D050502,空氣品質-縣市(臺北市)小時值-每小時,環境部 監測資訊司,20 * * * *,每小時第 20 分
+proj_city_dashboard_D050601,臺北市溫室氣體排放統計—本市總排放量及人均排放量,環保局,"30 19 1,22 * *",每月 1、22 日，19:30
+proj_city_dashboard_D060101_1,臺北市公私立醫院,衛生局,"0 12 6,27 * *",每月 6、27 日，12:00
+proj_city_dashboard_D060101_2,臺北市公私立診所,衛生局,"30 12 6,27 * *",每月 6、27 日，12:30
+proj_city_dashboard_D060102_1,臺北市各級學校分布圖,衛生局,"0 13 6,27 * *",每月 6、27 日，13:00
+proj_city_dashboard_D060103,臺北市社福設施主題地圖,社會局,"0 20 1,22 * *",每月 1、22 日，20:00
+proj_city_dashboard_D060201,緊急救護服務統計次數,消防局,"30 13 6,27 * *",每月 6、27 日，13:30
+proj_city_dashboard_D070202,台灣電力公司臺北市售電量,主計處,"30 20 1,22 * *",每月 1、22 日，20:30
+proj_city_dashboard_D080101,健保門診及住院就診人次統計-急性上呼吸道感染,衛服部 疫情中心,0 10 * * 2,每週 週二，10:00
+proj_city_dashboard_D080102,健保門診及住院就診人次統計-腸病毒,衛服部 疫情中心,10 10 * * 2,每週 週二，10:10
+proj_city_dashboard_D090100_1,臺北市各級學校分布圖,教育局,"0 14 6,27 * *",每月 6、27 日，14:00
+proj_city_dashboard_D090101_1,臺北市國小學區,教育局,"30 14 6,27 * *",每月 6、27 日，14:30
+proj_city_dashboard_D090101_2,臺北市國民小學學區里鄰對照表,教育局,"0 21 1,22 * *",每月 1、22 日，21:00
+proj_city_dashboard_D090103_1,臺北市國中學區,教育局,"0 15 6,27 * *",每月 6、27 日，15:00
+proj_city_dashboard_D090103_2,臺北市國民中學學區里鄰對照表,教育局,"30 21 1,22 * *",每月 1、22 日，21:30
+proj_city_dashboard_D100101,臺北市哺集乳室資訊,衛生局,"0 12 2,23 * *",每月 2、23 日，12:00
+proj_city_dashboard_D100102_1,臺北市嬰幼兒照顧服務_親子館,社會局,"30 12 2,23 * *",每月 2、23 日，12:30
+proj_city_dashboard_D100102_2,臺北市嬰幼兒照顧服務_育兒友善園,社會局,"0 13 2,23 * *",每月 2、23 日，13:00
+proj_city_dashboard_D100102_3,臺北市嬰幼兒照顧服務_居家托育服務中心,社會局,"30 13 2,23 * *",每月 2、23 日，13:30
+proj_city_dashboard_D100102_4,臺北市嬰幼兒照顧服務_定點臨托,社會局,"0 14 2,23 * *",每月 2、23 日，14:00
+proj_city_dashboard_D100102_5,臺北市嬰幼兒照顧服務_社區公共托育家園,社會局,"30 14 2,23 * *",每月 2、23 日，14:30
+proj_city_dashboard_D100102_6,臺北市嬰幼兒照顧服務_居家托育服務中心,社會局,"0 15 2,23 * *",每月 2、23 日，15:00
+proj_city_dashboard_D100102_7,臺北市嬰幼兒照顧服務_私立托嬰中心,社會局,"30 15 2,23 * *",每月 2、23 日，15:30
+proj_city_dashboard_D100102_8,臺北市嬰幼兒照顧服務_兒童托育資源中心,社會局,"0 16 2,23 * *",每月 2、23 日，16:00
+proj_city_dashboard_D100103,臺北市就業保險育嬰留職停薪津貼初次核付人數,主計處,"30 15 6,27 * *",每月 6、27 日，15:30
+proj_city_dashboard_D100104_1,臺北市哺集乳室資訊,衛生局,"30 16 2,23 * *",每月 2、23 日，16:30
+proj_city_dashboard_D100104_2,臺北市生育健康篩檢補助及健康服務概況,主計處,"0 16 6,27 * *",每月 6、27 日，16:00
+proj_city_dashboard_D100105,臺北市婦產科醫療機構,衛生局,"0 17 2,23 * *",每月 2、23 日，17:00
+proj_city_dashboard_D100106_1,臺北市各里人口數按年齡分_112年迄今-每月各里人口數按年齡分,民政局,"30 17 2,23 * *",每月 2、23 日，17:30
+proj_city_dashboard_D100106_2,臺北市各里人口數按年齡分_112年迄今-每月各里人口數按年齡分,民政局,"0 18 2,23 * *",每月 2、23 日，18:00
+proj_city_dashboard_D100106_3,臺北市各里人口數按年齡分_112年迄今-每月各里人口數按年齡分,民政局,"30 16 6,27 * *",每月 6、27 日，16:30
+proj_city_dashboard_R0017,臺北市可供避難收容處所一覽表,教育局,"30 18 2,23 * *",每月 2、23 日，18:30
+proj_city_dashboard_R0018,113年度1732條土石流潛勢溪流圖,農業部,"0 19 2,23 * *",每月 2、23 日，19:00
+proj_city_dashboard_R0019,113年度1732條土石流潛勢溪流影響範圍圖_UTF8,農業部,"30 19 2,23 * *",每月 2、23 日，19:30
+proj_city_dashboard_R0020,臺北市山坡地人工邊坡位置圖,工務局 大地處,"0 20 2,23 * *",每月 2、23 日，20:00
+proj_city_dashboard_R0021,臺北市老舊聚落分布圖,工務局 大地處,"30 20 2,23 * *",每月 2、23 日，20:30
+proj_city_dashboard_R0022,刑案總件數、歷史統計,主計處,0 18 * * *,每天，18:00
+proj_city_dashboard_R0023,臺北市住宅竊盜點位資訊,警察局 刑警大隊,"0 21 2,23 * *",每月 2、23 日，21:00
+proj_city_dashboard_R0024,臺北市汽車竊盜點位資訊,警察局 刑警大隊,"30 21 2,23 * *",每月 2、23 日，21:30
+proj_city_dashboard_R0025,臺北市汽車竊盜點位資訊,警察局 刑警大隊,"0 12 3,24 * *",每月 3、24 日，12:00
+proj_city_dashboard_R0026,臺北市街頭隨機搶奪案件點位資訊,警察局 刑警大隊,"30 12 3,24 * *",每月 3、24 日，12:30
+proj_city_dashboard_R0027,臺北市街頭隨機強盜點位資訊,警察局 刑警大隊,"0 13 3,24 * *",每月 3、24 日，13:00
+proj_city_dashboard_R0031,臺北市政府警察局名稱及地址,警察局,"30 13 3,24 * *",每月 3、24 日，13:30
+proj_city_dashboard_R0033,火災搶救困難地區,消防局,"0 14 3,24 * *",每月 3、24 日，14:00
+proj_city_dashboard_R0033-1,臺北市政府消防局各分隊駐地位置,消防局,"30 14 3,24 * *",每月 3、24 日，14:30
+proj_city_dashboard_R0033-2,臺北市消防安全檢查重大不合格場所,消防局,"0 15 3,24 * *",每月 3、24 日，15:00
+proj_city_dashboard_R0034,雨水下水道水面離地高度,工務局 水利處,*/5 * * * *,每 5 分鐘
+proj_city_dashboard_R0036,臺北市抽水站運作動態,工務局水利處,*/5 * * * *,每 5 分鐘
+proj_city_dashboard_R0037_1,臺北市降雨積水模擬圖,工務局,"30 15 3,24 * *",每月 3、24 日，15:30
+proj_city_dashboard_R0037_2,臺北市降雨積水模擬圖,工務局,"0 16 3,24 * *",每月 3、24 日，16:00
+proj_city_dashboard_R0037_3,臺北市降雨積水模擬圖,工務局,"30 16 3,24 * *",每月 3、24 日，16:30
+proj_city_dashboard_R0038_1,臺北市全市VD道路壅塞程度統計,交通局,*/5 * * * *,每 5 分鐘
+proj_city_dashboard_R0038_2,臺北市車輛偵測器(VD)資訊,交通局交控中心,*/10 * * * *,每 10 分鐘
+proj_city_dashboard_R0040,臺北市今日施工資訊,工務局,*/10 * * * *,每 10 分鐘
+proj_city_dashboard_R0042,臺北市道路交通事故斑點圖,警察局 交通大隊,"0 17 3,24 * *",每月 3、24 日，17:00
+proj_city_dashboard_R0046,臺北捷運列車到站站名,捷運公司,5 * * * *,每小時第 05 分
+proj_city_dashboard_R0047,臺北捷運即時運量,臺北捷運公司,"* 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,22,23 * * *",每天，於 00:xx、01:xx、02:xx、03:xx、04:xx、05:xx、06:xx、07:xx、08:xx、09:xx、10:xx、11:xx、12:xx、13:xx、14:xx、15:xx、16:xx、22:xx、23:xx 的每分鐘
+proj_city_dashboard_R0048,臺北市市區公車動態資訊,交通部,*/2 * * * *,每 2 分鐘
+proj_city_dashboard_R0051-3,YouBike即時車位,交通部,*/10 * * * *,每 10 分鐘
+proj_city_dashboard_R0051-4,Youbike站點即時使用及剩餘量,data.taipei,*/3 * * * *,每 3 分鐘
+proj_city_dashboard_R0054,臺北市都市計畫主要使用分區圖,都發局,"30 17 3,24 * *",每月 3、24 日，17:30
+proj_city_dashboard_R0056,臺北市公有土地資料,地政局,"0 18 3,24 * *",每月 3、24 日，18:00
+proj_city_dashboard_R0057,當年度建造執照摘要,都發局,"30 18 3,24 * *",每月 3、24 日，18:30
+proj_city_dashboard_R0058,歷年度建造執照摘要,都發局,"0 19 3,24 * *",每月 3、24 日，19:00
+proj_city_dashboard_R0059,當年度使用執照摘要,都發局,15 19 * * 1,每週 週一，19:15
+proj_city_dashboard_R0060,歷年度使用執照摘要,都發局,15 19 * * 4,每週 週四，19:15
+proj_city_dashboard_R0061,臺北市社會住宅興建進度資料,都發局,"30 19 3,24 * *",每月 3、24 日，19:30
+proj_city_dashboard_R0062,公劃更新地區(依都更條例),都發局,"0 20 3,24 * *",每月 3、24 日，20:00
+proj_city_dashboard_R0063,公劃地區內事業(權變案件),都發局,"30 20 3,24 * *",每月 3、24 日，20:30
+proj_city_dashboard_R0064,公告自劃單元(自劃事業(權變)計劃案件),都發局,"0 21 3,24 * *",每月 3、24 日，21:00
+proj_city_dashboard_R0065,核准自劃單元(自劃事業(權變)計劃案件),都發局,"30 21 3,24 * *",每月 3、24 日，21:30
+proj_city_dashboard_R0066,都市計畫劃定更新地區,都發局,"0 12 4,25 * *",每月 4、25 日，12:00
+proj_city_dashboard_R0067,臺北市市有公用未利用土地清冊,財政局,"30 12 4,25 * *",每月 4、25 日，12:30
+proj_city_dashboard_R0068,臺北市市有尚未利用建物供給資料清冊,財政局,"0 13 4,25 * *",每月 4、25 日，13:00
+proj_city_dashboard_R0069,臺北市政府財政局經管市有非公用閒置建物清冊,財政局,"30 13 4,25 * *",每月 4、25 日，13:30
+proj_city_dashboard_R0071_1,雙北YouBike站點,交通部 TDX,0 3 * * *,每天，03:00
+proj_city_dashboard_R0075,大臺北地區消防栓分布點位圖,北水處,"0 14 4,25 * *",每月 4、25 日，14:00
+proj_city_dashboard_R0076,臺北市地下道資訊,工務局新工處,"30 14 4,25 * *",每月 4、25 日，14:30
+proj_city_dashboard_R0081,臺北市水利處抽水站,工務局 水利處,"0 15 4,25 * *",每月 4、25 日，15:00
+proj_city_dashboard_R0082,臺北市水利處閘閥門,工務局 水利處,"30 15 4,25 * *",每月 4、25 日，15:30
+proj_city_dashboard_R0083,臺北市水利處雨水下水道水位監測站,工務局 水利處,"0 16 4,25 * *",每月 4、25 日，16:00
+proj_city_dashboard_R0085,臺北市水利處雨量站位置,工務局 水利處,"30 16 4,25 * *",每月 4、25 日，16:30
+proj_city_dashboard_R0086,中央氣象署-自動雨量站資料-無人自動站雨量資料,中央氣象署,"0 17 4,25 * *",每月 4、25 日，17:00
+proj_city_dashboard_R0087,高運量捷運車廂擁擠程度,臺北捷運公司,"* 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,22,23 * * *",每天，於 00:xx、01:xx、02:xx、03:xx、04:xx、05:xx、06:xx、07:xx、08:xx、09:xx、10:xx、11:xx、12:xx、13:xx、14:xx、15:xx、16:xx、22:xx、23:xx 的每分鐘
+proj_city_dashboard_R0088,文湖線捷運車廂擁擠程度,臺北捷運公司,"* 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,22,23 * * *",每天，於 00:xx、01:xx、02:xx、03:xx、04:xx、05:xx、06:xx、07:xx、08:xx、09:xx、10:xx、11:xx、12:xx、13:xx、14:xx、15:xx、16:xx、22:xx、23:xx 的每分鐘
+proj_city_dashboard_accessible_facilities,無障礙設施場所,觀光局,"0 17 6,27 * *",每月 6、27 日，17:00
+proj_city_dashboard_aed_locations,臺北市AED設置地點資料,衛生局,"30 17 6,27 * *",每月 6、27 日，17:30
+proj_city_dashboard_bike_path,自行車路網,交通部 TDX,00 20 * * *,每天，20:00
+proj_city_dashboard_bike_theft,臺北市自行車竊盜點位資訊,警察局 刑警大隊,"30 17 4,25 * *",每月 4、25 日，17:30
+proj_city_dashboard_cht_e2,中華電信信令E2,中華電信,*/10 * * * *,每 10 分鐘
+proj_city_dashboard_cht_g2,中華電信信令G2,中華電信,*/10 * * * *,每 10 分鐘
+proj_city_dashboard_cht_g4,中華電信信令G4,中華電信,*/10 * * * *,每 10 分鐘
+proj_city_dashboard_cooling_point,臺北市涼適點,臺北市政府,"0 18 4,25 * *",每月 4、25 日，18:00
+proj_city_dashboard_dependency_ratio_and_aging_index,臺北市扶養比及老化指數,主計處,"0 18 6,27 * *",每月 6、27 日，18:00
+proj_city_dashboard_ebus_base_info,臺北市電動巴士基本資料,交通部 TDX,00 20 * * *,每天，20:00
+proj_city_dashboard_elderly_club,臺北市銀髮族服務-社區整體照顧服務體系C級單位一覽表,,"30 18 6,27 * *",每月 6、27 日，18:30
+proj_city_dashboard_employment_age_structure,臺北市就業人口之年齡結構,主計處,"0 19 6,27 * *",每月 6、27 日，19:00
+proj_city_dashboard_energy_saving_coaching_situation_tpe,臺北市節能輔導情形,產業局,"30 19 6,27 * *",每月 6、27 日，19:30
+proj_city_dashboard_energy_saving_coaching_situation_tpe_gov,臺北市節能輔導情形,產業局,"0 20 6,27 * *",每月 6、27 日，20:00
+proj_city_dashboard_env_srv_energy_subsidy,臺北市服務業汰換節能設備補助相關資訊,產業局,"30 20 6,27 * *",每月 6、27 日，20:30
+proj_city_dashboard_eoc_damage_case,EOC最新受損情形資料,消防局,*/5 * * * *,每 5 分鐘
+proj_city_dashboard_eoc_dashboard_controller,EOC儀表板控制器,,*/5 * * * *,每 5 分鐘
+proj_city_dashboard_eoc_disaster_summary,EOC最新災害專案災情資料,消防局,*/5 * * * *,每 5 分鐘
+proj_city_dashboard_flu_hospitals_tpe,各項預防接種合約醫療院所,主計處,"30 18 4,25 * *",每月 4、25 日，18:30
+proj_city_dashboard_food_factory_locations_taipei,臺北市食品工廠分布,臺北市政府產業發展局,@monthly,每月一次（每月 1 日 00:00）
+proj_city_dashboard_friendly_store,臺北市與新北市友善店家列表,民政局,"0 21 6,27 * *",每月 6、27 日，21:00
+proj_city_dashboard_general_hotel_registry,臺北市合法一般旅館名冊,觀光旅遊局,"0 19 4,25 * *",每月 4、25 日，19:00
+proj_city_dashboard_li_age_population_tpe,臺北市各里人口數按年齡分（僅性別總計）,民政局,"30 21 6,27 * *",每月 6、27 日，21:30
+proj_city_dashboard_long_term,臺北市長期照顧機構基本資料,社會局,"30 19 4,25 * *",每月 4、25 日，19:30
+proj_city_dashboard_merge_crime_type_by_dist,偷竊統計總和,警察局,"0 12 7,28 * *",每月 7、28 日，12:00
+proj_city_dashboard_moenv_public_toilet_tpe,公共廁所-臺北市資料,環境部 環境管理署,"0 20 4,25 * *",每月 4、25 日，20:00
+proj_city_dashboard_population_age_distribution_monthly,臺北市人口年齡分配按月別時間數列統計資料,主計處,"30 20 4,25 * *",每月 4、25 日，20:30
+proj_city_dashboard_rainfall_flood_simulation_etl,降雨淹水模擬圖,,@once,只執行一次
+proj_city_dashboard_school_food_supply_chain_links,雙北學校供餐供應鏈,教育部國民及學前教育署,@monthly,每月一次（每月 1 日 00:00）
+proj_city_dashboard_school_reconstruction,臺北市新世代智慧永續校園推動進度,教育局,"0 21 4,25 * *",每月 4、25 日，21:00
+proj_city_dashboard_sea_sand_houses_tpe,海砂屋列管案件,主計處,"30 12 7,28 * *",每月 7、28 日，12:30
+proj_city_dashboard_smoking_area,臺北市指定吸菸區,衛生局,"30 21 4,25 * *",每月 4、25 日，21:30
+proj_city_dashboard_tourist_attractions,臺北旅遊網景點資料,觀光局,"0 13 7,28 * *",每月 7、28 日，13:00
+proj_city_dashboard_yearly_death_cause_etl,年度主要死亡原因,主計處,"0 12 5,26 * *",每月 5、26 日，12:00
+proj_city_dashboard_youth_enterpreneurship_financing_loan_tpe,臺北市青年創業融資貸款,產業局,"30 13 7,28 * *",每月 7、28 日，13:30
+proj_new_taipei_city_dashboard_accessible_facilities,無障礙設施場所,,"0 14 7,28 * *",每月 7、28 日，14:00
+proj_new_taipei_city_dashboard_aed_locations_metrotaipei,新北市AED設置地點資料,衛生局,"30 12 5,26 * *",每月 5、26 日，12:30
+proj_new_taipei_city_dashboard_bike_path,自行車路網,交通部 TDX,00 20 * * *,每天，20:00
+proj_new_taipei_city_dashboard_dependency_ratio_and_aging_index,新北市扶養比及老化指數,主計處,"30 14 7,28 * *",每月 7、28 日，14:30
+proj_new_taipei_city_dashboard_ebus_base_info,新北市電動巴士基本資料,交通部 TDX,00 20 * * *,每天，20:00
+proj_new_taipei_city_dashboard_elderly_club,新北市銀髮俱樂部,新北市政府警察局,"0 13 5,26 * *",每月 5、26 日，13:00
+proj_new_taipei_city_dashboard_employment_age_structure,新北市就業人口之年齡結構,主計處,"0 15 7,28 * *",每月 7、28 日，15:00
+proj_new_taipei_city_dashboard_fire_narrow_street,狹小巷道,,"30 13 5,26 * *",每月 5、26 日，13:30
+proj_new_taipei_city_dashboard_flu_hospitals_ntpe,,衛生局,"30 15 7,28 * *",每月 7、28 日，15:30
+proj_new_taipei_city_dashboard_food_factory_locations_new_taipei,新北市食品工廠分布,新北市政府衛生局,@monthly,每月一次（每月 1 日 00:00）
+proj_new_taipei_city_dashboard_general_hotel_registry,新北市合法一般旅館名冊,觀光旅遊局,"0 14 5,26 * *",每月 5、26 日，14:00
+proj_new_taipei_city_dashboard_long_term,新北市長照機構名單,社會局,"30 14 5,26 * *",每月 5、26 日，14:30
+proj_new_taipei_city_dashboard_merge_crime_type_by_dist,犯罪資料,新北市政府警察局,"0 15 5,26 * *",每月 5、26 日，15:00
+proj_new_taipei_city_dashboard_moenv_public_toilet_ntpe,公共廁所-新北市資料,環境部 環境管理署,"30 15 5,26 * *",每月 5、26 日，15:30
+proj_new_taipei_city_dashboard_population_age_distribution_monthly,新北市現住人口之年齡分配,主計處,"0 16 7,28 * *",每月 7、28 日，16:00
+proj_new_taipei_city_dashboard_rainfall_flood_simulation_etl,降雨淹水模擬圖,,@once,只執行一次
+proj_new_taipei_city_dashboard_tourist_attractions,新北旅遊網景點資料,觀光局,"30 16 7,28 * *",每月 7、28 日，16:30
+proj_new_taipei_city_dashboard_urbn_air_raid_shelter,防空避難處所,,"0 16 5,26 * *",每月 5、26 日，16:00
+proj_new_taipei_city_dashboard_yearly_death_cause_etl,,,"0 17 7,28 * *",每月 7、28 日，17:00
+proj_new_taipei_city_dashboard_youbike_station_realtime_usage_and_availability,Youbike站點即時使用及剩餘量,TDX,*/3 * * * *,每 3 分鐘
+tutorial_template_test,臺北市醫院清冊,衛生局,"30 16 5,26 * *",每月 5、26 日，16:30

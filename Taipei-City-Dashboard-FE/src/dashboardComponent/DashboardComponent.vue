@@ -29,6 +29,7 @@ import IconPercentChart from "./components/IconPercentChart.vue";
 import IndicatorChart from "./components/IndicatorChart.vue";
 import TextUnitChart from "./components/TextUnitChart.vue";
 import SankeyChart from "./components/SankeyChart.vue";
+import BubbleChart from "./components/BubbleChart.vue";
 
 import MapLegendSvg from "./assets/chart/MapLegend.svg";
 import DistrictChartSvg from "./assets/chart/DistrictChart.svg";
@@ -49,6 +50,7 @@ import BarChartWithGoalSvg from "./assets/chart/BarChartWithGoal.svg";
 import TreemapChartSvg from "./assets/chart/TreemapChart.svg";
 import IndicatorChartSvg from "./assets/chart/IndicatorChart.svg";
 import TextUnitChartSvg from "./assets/chart/TextUnitChart.svg";
+import BubbleChartSvg from "./assets/chart/BubbleChart.svg";
 
 
 const props = defineProps({
@@ -228,6 +230,8 @@ function returnChartComponent(name, svg) {
 		return svg ? TextUnitChartSvg : TextUnitChart;
 	case "SankeyChart":
 		return svg ? BarChartSvg : SankeyChart;
+	case "BubbleChart":
+		return svg ? BubbleChartSvg : BubbleChart;
 	default:
 		return svg ? MapLegendSvg : MapLegend;
 	}
