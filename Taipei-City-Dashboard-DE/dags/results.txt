@@ -1,0 +1,13 @@
+Starting analysis...
+Downloaded JSON successfully.
+
+--- Data Return Type Analysis ---
+Unique unmapped values: <StringArray>
+['1', '2']
+Length: 2, dtype: str
+Unique mapped values: <StringArray>
+['動態回傳剩餘車位數', '靜態']
+Length: 2, dtype: str
+Value: '動態回傳剩餘車位數', Length: 9
+Value: '靜態', Length: 2
+Max length found in data mapped return type: 9
