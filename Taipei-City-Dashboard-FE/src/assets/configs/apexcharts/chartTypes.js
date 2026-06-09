@@ -22,6 +22,7 @@ export const chartTypes = {
 	TextUnitChart: "文字單位圖",
 	BubbleChart: "泡泡圖",
 	QuartileChart: "四分位圖",
+	SunburstChart: "旭日圖",
 };
 
 export const chartsPerDataType = {
@@ -36,6 +37,7 @@ export const chartsPerDataType = {
 		"PolarAreaChart",
 		"MetroChart",
 		"BubbleChart",
+		"SunburstChart",
 	],
 	three_d: [
 		"ColumnChart",

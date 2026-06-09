@@ -27,4 +27,5 @@ export const chartTypes: chartType = {
 	SankeyChart: "桑基圖", // V
 	BubbleChart: "泡泡圖", // V
 	QuartileChart: "四分位圖", // V
+	SunburstChart: "旭日圖", // V
 };
