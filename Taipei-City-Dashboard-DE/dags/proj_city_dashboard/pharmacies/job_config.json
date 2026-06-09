@@ -1,0 +1,44 @@
+{
+  "dag_infos": {
+    "dag_id": "pharmacies",
+    "start_date": "2026-05-18",
+    "schedule_interval": "@daily",
+    "catchup": false,
+    "tags": [
+      "pharmacy",
+      "衛生局",
+      "Taipei-City"
+    ],
+    "description": "台北市藥局清單，每日更新。",
+    "default_args": {
+      "owner": "airflow",
+      "email": [
+        "DEFAULT_EMAIL_LIST"
+      ],
+      "email_on_retry": false,
+      "email_on_failure": true,
+      "retries": 1,
+      "retry_delay": 60
+    },
+    "ready_data_db": "postgres_default",
+    "ready_data_default_table": "pharmacies",
+    "ready_data_history_table": "",
+    "raw_data_db": "postgres_default",
+    "raw_data_table": "",
+    "load_behavior": "replace"
+  },
+  "data_infos": {
+    "name_cn": "藥局",
+    "airflow_update_freq": "每日",
+    "source": "https://data.taipei/api/v1/dataset/42cfc382-f2b8-4c3a-87ad-37249634f78e?scope=resourceAquire",
+    "source_type": "data.taipei",
+    "source_dept": "衛生局",
+    "component_name": "pharmacies_table",
+    "gis_format": null,
+    "output_coordinate": "EPSG:4326",
+    "is_geometry": 0,
+    "dataset_description": "台北市藥局名單。",
+    "etl_description": "API 取回後欄位 rename，補 data_time。",
+    "sensitivity": "public"
+  }
+}
