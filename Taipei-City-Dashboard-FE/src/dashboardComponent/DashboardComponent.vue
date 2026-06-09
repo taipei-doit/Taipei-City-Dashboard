@@ -1,5 +1,6 @@
 <script setup>
 import { computed, ref } from "vue";
+import { useMapStore } from "../store/mapStore";
 // import "./styles/chartStyles.css";
 // import "./styles/toggleswitch.css";
 import "material-icons/iconfont/material-icons.css";
@@ -30,6 +31,7 @@ import IndicatorChart from "./components/IndicatorChart.vue";
 import TextUnitChart from "./components/TextUnitChart.vue";
 import SankeyChart from "./components/SankeyChart.vue";
 import BubbleChart from "./components/BubbleChart.vue";
+import MapPickButton from "../components/map/MapPickButton.vue";
 
 import MapLegendSvg from "./assets/chart/MapLegend.svg";
 import DistrictChartSvg from "./assets/chart/DistrictChart.svg";
@@ -98,6 +100,19 @@ const activeChart = ref(props.config.chart_config.types[0]);
 const isWide = computed(() =>
 	props.config.chart_config?.types?.includes("SankeyChart") && props.mode === "default"
 );
+const mapStore = useMapStore();
+
+const hasIsochroneMapLayer = computed(() =>
+	Array.isArray(props.config.map_config) &&
+	props.config.map_config.some((item) => item?.type === "isochrone"),
+);
+
+function handleIsochroneMapPickToggle() {
+	if (!hasIsochroneMapLayer.value) {
+		return;
+	}
+	mapStore.startIsochronePickToggle();
+}
 const activeCity = computed({
 	get: () => props.activeCity,
 	set: (value) => {
@@ -370,6 +385,13 @@ function returnChartComponent(name, svg) {
           </option>
         </template>
       </select>
+      <MapPickButton
+        v-if="hasIsochroneMapLayer && mode.includes('map') && toggleOn"
+        title="Pick isochrone center on map"
+        aria-label="Pick isochrone center on map"
+        :armed="mapStore.isochronePickArmed"
+        @toggle="handleIsochroneMapPickToggle"
+      />
       <div
         v-if="config.chart_config.types.length > 1"
         class="dashboardcomponent-control-group"
