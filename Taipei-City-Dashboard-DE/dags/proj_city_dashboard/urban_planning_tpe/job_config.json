@@ -1,0 +1,38 @@
+{
+  "dag_infos": {
+    "dag_id": "urban_planning_tpe",
+    "start_date": "2026-05-19",
+    "schedule_interval": "@monthly",
+    "catchup": false,
+    "tags": ["urban_planning", "都發局", "Taipei-City"],
+    "description": "Monthly aggregation of Taipei urban planning land-use zones by district.",
+    "default_args": {
+      "owner": "airflow",
+      "email": ["DEFAULT_EMAIL_LIST"],
+      "email_on_retry": false,
+      "email_on_failure": true,
+      "retries": 1,
+      "retry_delay": 60
+    },
+    "ready_data_db": "postgres_default",
+    "ready_data_default_table": "urban_planning_tpe",
+    "ready_data_history_table": "",
+    "raw_data_db": "postgres_default",
+    "raw_data_table": "",
+    "load_behavior": "replace"
+  },
+  "data_infos": {
+    "name_cn": "臺北市都市計畫使用分區圖行政區彙總",
+    "airflow_update_freq": "每月 (Asia/Taipei)",
+    "source": "https://data.taipei/dataset/detail?id=3bab0a01-7936-4218-8cb5-f74dfcb43dda",
+    "source_type": "data.taipei",
+    "source_dept": "都發局",
+    "component_name": "urban_planning",
+    "gis_format": null,
+    "output_coordinate": "EPSG:4326",
+    "is_geometry": 0,
+    "dataset_description": "臺北市都市計畫主要計畫土地使用分區圖，依行政區交集後彙總為共同使用分區分類。",
+    "etl_description": "下載 data.taipei SHP → 讀取主計圖面圖層 → 以內政部鄉鎮市區界線進行空間交集 → 標準化使用分區 → 依行政區與分區統計數量 → replace 入庫。",
+    "sensitivity": "public"
+  }
+}

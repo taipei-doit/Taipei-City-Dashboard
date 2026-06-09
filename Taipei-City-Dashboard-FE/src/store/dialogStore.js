@@ -9,6 +9,7 @@ Finally, remember to add the component to the application.
 */
 
 import { defineStore } from "pinia";
+import { IsochroneMapConfig } from "../assets/configs/mapbox/mapConfig.js";
 
 export const useDialogStore = defineStore("dialog", {
 	state: () => ({
@@ -44,6 +45,18 @@ export const useDialogStore = defineStore("dialog", {
 			addPin: false,
 			addViewPoint: false,
 			findClosestPoint: false,
+			isochroneSettings: false,
+		},
+		// Stores the current isochrone query settings
+		isochrone: {
+			layerId: null,
+			modes: [...IsochroneMapConfig.defaults.modes],
+			dayType: IsochroneMapConfig.defaults.dayType,
+			timeDirection: IsochroneMapConfig.defaults.timeDirection,
+			showNetwork: false,
+			loading: false,
+			networkLoading: false,
+			error: "",
 		},
 		// Stores the content for notifications
 		notification: {

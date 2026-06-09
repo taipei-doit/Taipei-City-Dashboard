@@ -1,0 +1,38 @@
+{
+    "dag_infos": {
+        "dag_id": "green_store_ntpe",
+        "start_date": "2026-05-16",
+        "schedule_interval": "0 5 1 * *",
+        "catchup": false,
+        "tags": ["green_consumption", "環保局", "New-Taipei-City"],
+        "description": "Monthly snapshot of New Taipei certified green stores directory (source updates quarterly).",
+        "default_args": {
+            "owner": "airflow",
+            "email": ["DEFAULT_EMAIL_LIST"],
+            "email_on_retry": false,
+            "email_on_failure": true,
+            "retries": 1,
+            "retry_delay": 60
+        },
+        "ready_data_db": "postgres_default",
+        "ready_data_default_table": "green_store_ntpe",
+        "ready_data_history_table": "",
+        "raw_data_db": "postgres_default",
+        "raw_data_table": "",
+        "load_behavior": "replace"
+    },
+    "data_infos": {
+        "name_cn": "新北市綠色商店",
+        "airflow_update_freq": "05:00+8 1st of every month (source quarterly)",
+        "source": "https://data.ntpc.gov.tw/api/datasets/6ccd0274-0c09-43b0-98fc-4d5222a71e8b/json",
+        "source_type": "data.ntpc",
+        "source_dept": "環保局",
+        "component_name": "green_store_table",
+        "gis_format": null,
+        "output_coordinate": "EPSG:4326",
+        "is_geometry": 0,
+        "dataset_description": "新北市政府環境保護局公開之綠色商店名錄,包含商店名稱、地址、聯絡電話與商店類型(連鎖型/獨立型等)。Dataset detail: https://data.ntpc.gov.tw/datasets/6ccd0274-0c09-43b0-98fc-4d5222a71e8b",
+        "etl_description": "Fetch all records via NewTaipeiAPIClient(rid).get_all_data(), rename English columns to repo snake_case schema, attach data_time as current timestamp.",
+        "sensitivity": "public"
+    }
+}

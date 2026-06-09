@@ -1,0 +1,38 @@
+{
+  "dag_infos": {
+    "dag_id": "noise_monitoring_stations_ntpc",
+    "start_date": "2026-05-22",
+    "schedule_interval": "@yearly",
+    "catchup": false,
+    "tags": ["noise_monitoring", "新北市政府環境保護局", "New-Taipei-City"],
+    "description": "Yearly refresh of New Taipei noise monitoring station locations with address geocoding.",
+    "default_args": {
+      "owner": "airflow",
+      "email": ["DEFAULT_EMAIL_LIST"],
+      "email_on_retry": false,
+      "email_on_failure": true,
+      "retries": 1,
+      "retry_delay": 60
+    },
+    "ready_data_db": "postgres_default",
+    "ready_data_default_table": "noise_monitoring_stations_ntpc",
+    "ready_data_history_table": "",
+    "raw_data_db": "postgres_default",
+    "raw_data_table": "",
+    "load_behavior": "replace"
+  },
+  "data_infos": {
+    "name_cn": "新北市環境及交通噪音監測站地點",
+    "airflow_update_freq": "@yearly",
+    "source": "https://data.ntpc.gov.tw/datasets/cad88b80-8230-48d4-a8d4-ce478954fddf",
+    "source_type": "data.ntpc",
+    "source_dept": "新北市政府環境保護局",
+    "component_name": "noise_monitoring_stations_ntpc_map",
+    "gis_format": "point",
+    "output_coordinate": "EPSG:4326",
+    "is_geometry": 1,
+    "dataset_description": "New Taipei environmental and traffic noise monitoring station locations.",
+    "etl_description": "Read the New Taipei JSON endpoint, standardize fields, geocode station addresses, and convert coordinates to Point WKB geometry.",
+    "sensitivity": "public"
+  }
+}
