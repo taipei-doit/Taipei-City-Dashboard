@@ -1,5 +1,6 @@
 <script setup>
 import { computed, ref } from "vue";
+import { useMapStore } from "../store/mapStore";
 // import "./styles/chartStyles.css";
 // import "./styles/toggleswitch.css";
 import "material-icons/iconfont/material-icons.css";
@@ -14,6 +15,7 @@ import DonutChart from "./components/DonutChart.vue";
 import BarChart from "./components/BarChart.vue";
 import TreemapChart from "./components/TreemapChart.vue";
 import ColumnChart from "./components/ColumnChart.vue";
+import NegativeColumnChart from "./components/NegativeColumnChart.vue";
 import BarPercentChart from "./components/BarPercentChart.vue";
 import GuageChart from "./components/GuageChart.vue";
 import RadarChart from "./components/RadarChart.vue";
@@ -28,6 +30,11 @@ import BarChartWithGoal from "./components/BarChartWithGoal.vue";
 import IconPercentChart from "./components/IconPercentChart.vue";
 import IndicatorChart from "./components/IndicatorChart.vue";
 import TextUnitChart from "./components/TextUnitChart.vue";
+import SankeyChart from "./components/SankeyChart.vue";
+import BubbleChart from "./components/BubbleChart.vue";
+import MapPickButton from "../components/map/MapPickButton.vue";
+import QuartileChart from "./components/QuartileChart.vue";
+import SunburstChart from "./components/SunburstChart.vue";
 
 import MapLegendSvg from "./assets/chart/MapLegend.svg";
 import DistrictChartSvg from "./assets/chart/DistrictChart.svg";
@@ -35,6 +42,7 @@ import TimelineStackedChartSvg from "./assets/chart/TimelineStackedChart.svg";
 import BarChartSvg from "./assets/chart/BarChart.svg";
 import BarPercentChartSvg from "./assets/chart/BarPercentChart.svg";
 import ColumnChartSvg from "./assets/chart/ColumnChart.svg";
+import ColumnChartNegativeSvg from "./assets/chart/ColumnChart.svg";
 import ColumnLineChartSvg from "./assets/chart/ColumnLineChart.svg";
 import DonutChartSvg from "./assets/chart/DonutChart.svg";
 import GuageChartSvg from "./assets/chart/GuageChart.svg";
@@ -48,7 +56,8 @@ import BarChartWithGoalSvg from "./assets/chart/BarChartWithGoal.svg";
 import TreemapChartSvg from "./assets/chart/TreemapChart.svg";
 import IndicatorChartSvg from "./assets/chart/IndicatorChart.svg";
 import TextUnitChartSvg from "./assets/chart/TextUnitChart.svg";
-
+import BubbleChartSvg from "./assets/chart/BubbleChart.svg";
+import SunburstChartSvg from "./assets/chart/SunburstChart.svg";
 
 const props = defineProps({
 	style: { type: Object, default: () => ({}) },
@@ -57,14 +66,14 @@ const props = defineProps({
 		default: "default",
 		validator: (value) =>
 			["default", "large", "map", "half", "halfmap", "preview"].includes(
-				value
+				value,
 			),
 	},
 	config: { type: Object, required: true },
 	selectBtn: { type: Boolean, default: false },
 	selectBtnDisabled: { type: Boolean, default: false },
-	selectBtnList: { type: Array, default: () => ([])  },
-	cityTag: { type: Array, default: () => ([]) },
+	selectBtnList: { type: Array, default: () => [] },
+	cityTag: { type: Array, default: () => [] },
 	favoriteBtn: { type: Boolean, default: false },
 	isFavorite: { type: Boolean, default: false },
 	deleteBtn: { type: Boolean, default: false },
@@ -73,7 +82,7 @@ const props = defineProps({
 	infoBtnText: { type: String, default: "組件資訊" },
 	toggleDisable: { type: Boolean, default: false },
 	footer: { type: Boolean, default: true },
-	activeCity: { type: String, default: '' },
+	activeCity: { type: String, default: "" },
 	toggleOn: { type: Boolean, default: false },
 });
 
@@ -88,10 +97,26 @@ const emits = defineEmits([
 	"clearByParamFilter",
 	"clearByLayerFilter",
 	"fly",
-	"changeCity"
+	"changeCity",
 ]);
 
 const activeChart = ref(props.config.chart_config.types[0]);
+const isWide = computed(() =>
+	props.config.chart_config?.types?.includes("SankeyChart") && props.mode === "default"
+);
+const mapStore = useMapStore();
+
+const hasIsochroneMapLayer = computed(() =>
+	Array.isArray(props.config.map_config) &&
+	props.config.map_config.some((item) => item?.type === "isochrone"),
+);
+
+function handleIsochroneMapPickToggle() {
+	if (!hasIsochroneMapLayer.value) {
+		return;
+	}
+	mapStore.startIsochronePickToggle();
+}
 const activeCity = computed({
 	get: () => props.activeCity,
 	set: (value) => {
@@ -126,7 +151,7 @@ const dataTime = computed(() => {
 	const { timefrom, timeto } = getComponentDataTimeframe(
 		props.config.time_from,
 		props.config.time_to,
-		true
+		true,
 	);
 	if (props.config.time_from === "day_start") {
 		return `${timefrom.slice(0, 16)} ~ ${timeto.slice(11, 14)}00`;
@@ -202,6 +227,8 @@ function returnChartComponent(name, svg) {
 		return svg ? IconPercentChartSvg : IconPercentChart;
 	case "ColumnChart":
 		return svg ? ColumnChartSvg : ColumnChart;
+	case "NegativeColumnChart":
+			return svg ? ColumnChartNegativeSvg : NegativeColumnChart;
 	case "DonutChart":
 		return svg ? DonutChartSvg : DonutChart;
 	case "TreemapChart":
@@ -222,7 +249,15 @@ function returnChartComponent(name, svg) {
 		return svg ? IndicatorChartSvg : IndicatorChart;
 	case "TextUnitChart":
 		return svg ? TextUnitChartSvg : TextUnitChart;
-	default:
+	case "SankeyChart":
+			return svg ? BarChartSvg : SankeyChart;
+		case "BubbleChart":
+			return svg ? BubbleChartSvg : BubbleChart;
+		case "QuartileChart":
+			return svg ? BarChartSvg : QuartileChart;
+		case "SunburstChart":
+			return svg ? SunburstChartSvg : SunburstChart;
+		default:
 		return svg ? MapLegendSvg : MapLegend;
 	}
 }
@@ -236,9 +271,18 @@ function returnChartComponent(name, svg) {
         mapclosed: mode.includes('map') && !toggleOn,
         mapopen: mode === 'map' && toggleOn,
         halfmapopen: mode === 'halfmap' && toggleOn,
+				'mapopen-quartile':
+					mode === 'map' &&
+					toggleOn &&
+					config?.chart_config?.types?.includes('QuartileChart'),
+				'halfmapopen-quartile':
+					mode === 'halfmap' &&
+					toggleOn &&
+					config?.chart_config?.types?.includes('QuartileChart'),
         half: mode === 'half',
         large: mode === 'large',
         preview: mode === 'preview',
+        wide: isWide,
       },
     ]"
     :style="style"
@@ -339,7 +383,10 @@ function returnChartComponent(name, svg) {
     <div
       v-if="
         (!mode.includes('map') || toggleOn) &&
-          mode !== 'preview'
+          mode !== 'preview' &&
+		  ((selectBtn && !selectBtnDisabled) ||
+		  	config?.chart_config?.types?.length > 1) &&
+		  activeChart !== 'QuartileChart'
       "
       class="dashboardcomponent-control"
     >
@@ -359,6 +406,13 @@ function returnChartComponent(name, svg) {
           </option>
         </template>
       </select>
+      <MapPickButton
+        v-if="hasIsochroneMapLayer && mode.includes('map') && toggleOn"
+        title="Pick isochrone center on map"
+        aria-label="Pick isochrone center on map"
+        :armed="mapStore.isochronePickArmed"
+        @toggle="handleIsochroneMapPickToggle"
+      />
       <div
         v-if="config.chart_config.types.length > 1"
         class="dashboardcomponent-control-group"
@@ -416,12 +470,16 @@ function returnChartComponent(name, svg) {
         'half-chart': mode === 'half',
         'mapopen-chart': mode === 'map',
         'halfmapopen-chart': mode === 'halfmap',
+		'quartile-centered':
+			config?.chart_config?.types?.includes('QuartileChart') &&
+			mode.includes('map'),
       }"
     >
       <component
         :is="returnChartComponent(item)"
         v-for="item in config.chart_config.types"
         :key="`${props.config.index}-${item}-chart-${item.city}`"
+        :mode="mode"
         :active-chart="activeChart"
         :active-city="activeCity"
         :chart_config="config.chart_config"
@@ -531,7 +589,8 @@ function returnChartComponent(name, svg) {
 * {
 	margin: 0;
 	padding: 0;
-	font-family: "微軟正黑體", "Microsoft JhengHei", "Droid Sans", "Open Sans",
+	font-family:
+		"微軟正黑體", "Microsoft JhengHei", "Droid Sans", "Open Sans",
 		"Helvetica";
 	overflow: hidden;
 }
@@ -554,6 +613,38 @@ button:hover {
 	max-height: 330px;
 	width: calc(100% - var(--font-m) * 2);
 	max-width: calc(100% - var(--font-m) * 2);
+
+	&.wide {
+		grid-column: span 3;
+		height: 560px;
+		max-height: 560px;
+		justify-content: flex-start;
+		gap: 4px;
+
+		@media (min-width: 1050px) {
+			height: 640px;
+			max-height: 640px;
+		}
+
+		@media (min-width: 1650px) {
+			height: 720px;
+			max-height: 720px;
+		}
+
+		.dashboardcomponent-control {
+			padding: 0;
+		}
+
+		.dashboardcomponent-chart {
+			flex: 1;
+			min-height: 0;
+			height: auto;
+		}
+
+		.dashboardcomponent-footer {
+			margin-top: auto;
+		}
+	}
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
@@ -643,10 +734,7 @@ button:hover {
 			button span {
 				color: var(--color-complement-text);
 				font-family: var(--font-icon);
-				font-size: calc(
-					var(--font-l) *
-						var(--font-to-icon)
-				);
+				font-size: calc(var(--font-l) * var(--font-to-icon));
 				transition: color 0.2s;
 
 				&:hover {
@@ -715,15 +803,17 @@ button:hover {
 				color: var(--color-complement-text);
 				font-size: var(--font-s);
 				text-align: center;
-				transition: color 0.2s, opacity 0.2s;
+				transition:
+					color 0.2s,
+					opacity 0.2s;
 				user-select: none;
-	
+
 				&:hover {
 					opacity: 1;
 					color: white;
 				}
 			}
-	
+
 			&-active {
 				background-color: var(--color-complement-text);
 				color: white;
@@ -907,6 +997,39 @@ button:hover {
 	}
 }
 
+.mapopen-quartile {
+	height: 400px;
+	max-height: 400px;
+}
+
+.halfmapopen-quartile {
+	height: 320px;
+	max-height: 320px;
+}
+
+.quartile-centered {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: stretch;
+	overflow: hidden;
+}
+
+.quartile-centered :deep(.QuartileChart) {
+	height: 100%;
+	max-height: 100%;
+}
+
+.quartile-centered :deep(.QuartileChart__list) {
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+}
+
+.quartile-centered :deep(.QuartileChart__noData) {
+	flex: 1;
+}
+
 .preview {
 	height: 170px;
 	max-height: 170px;
@@ -940,9 +1063,7 @@ button:hover {
 				width: 40px;
 				height: 40px;
 				border-radius: 5px;
-				background-color: var(
-					--color-complement-text
-				);
+				background-color: var(--color-complement-text);
 			}
 		}
 	}
@@ -954,7 +1075,7 @@ button:hover {
 			margin: 4px 0;
 			display: flex;
 			gap: 5px;
-	
+
 			div:first-child {
 				margin-left: 5px;
 			}

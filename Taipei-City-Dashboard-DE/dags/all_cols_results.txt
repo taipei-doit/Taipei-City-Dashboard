@@ -1,0 +1,75 @@
+Total rows: 1735
+Column 'station_id': max length 10
+  Example values with length 10: <StringArray>
+['TPE0201U01', 'TPE0201U02', 'TPE0201U03']
+Length: 3, dtype: str
+Column 'dist': max length 3
+Column 'name': max length 38
+  Example values with length > 10: <StringArray>
+['捷運芝山站停車場(北側)', '嘟嘟房世貿一館站停車場', '台北世界貿易中心國際貿易大樓地下停車場']
+Length: 3, dtype: str
+Column 'data_return_type': max length 9
+Column 'summary': max length 87
+  Example values with length > 10: <StringArray>
+[                                     '大型車:0格，小型車:17格(含身心障礙停車位1格)，機車:0格',
+            '大型車:0格，小型車:335格(含身心障礙停車位6格，孕婦、育有六歲以下兒童停車位6格)，機車:0格，充電格位:7格',
+ '大型車:0格，小型車:457格(含身心障礙停車位10格，孕婦、育有六歲以下兒童停車位11格)，機車:0格，大型重機:3格，充電格位:12格']
+Length: 3, dtype: str
+Column 'addr': max length 140
+  Example values with length > 10: <StringArray>
+['台北市士林區福國路70號', '信義路5段5號地下1層', '基隆路1段333號地下3層(臨時停車區)']
+Length: 3, dtype: str
+Column 'tel': max length 32.0
+  Example values with length > 10: <StringArray>
+['02-26550818', '0800-021-111', '022597-1234']
+Length: 3, dtype: str
+Column 'pay_info': max length 305
+  Example values with length > 10: <StringArray>
+[                                                                              '小型車全日月租：4,000元/月，機車計次20元/次(隔日另計，以凌晨2時為基準)，全日月租：300元/月',
+                                     '計時：100元/時，停車未滿1小時以1小時計算，逾1小時以上，未滿半小時以半小時計算。月租：全天10,000元/月，日間：9,000元/月(08-20)，夜間8,000元/月(20-08)。',
+ '計時：小型車週一至週日、展覽期間100元/時(08-22)，週一至週日、非展覽期間70元/時(08-22)、40元/時(22-08)，停車未滿1小時以1小時計，逾1小時以上，未滿半小時以半小時計。月租：小型車全日6,200元/月。全時段進場15分鐘內離場免收費。']
+Length: 3, dtype: str
+Column 'tw97x': max length 13
+  Example values with length > 10: <StringArray>
+['302864.7812', '306711.5938', '306457.7812']
+Length: 3, dtype: str
+Column 'tw97y': max length 13
+  Example values with length > 10: <StringArray>
+['2769695.75000', '2772839.25000', '2770457.75000']
+Length: 3, dtype: str
+Column 'totalcar': max length 4
+Column 'totalmotor': max length 4
+Column 'totalbike': max length 2
+Column 'totalbus': max length 3
+Column 'Pregnancy_First': max length 2
+Column 'Handicap_First': max length 2
+Column 'Taxi_OneHR_Free': max length 1
+Column 'AED_Equipment': max length 1
+Column 'CellSignal_Enhancement': max length 1
+Column 'Accessibility_Elevator': max length 1
+Column 'Phone_Charge': max length 1
+Column 'Child_Pickup_Area': max length 1
+Column 'FareInfo': max length 274
+  Example values with length > 10: <StringArray>
+[                                                                                                                                            '{'Holiday': [{'Period': '00~24', 'Fare': '30'}], 'WorkingDay': [{'Period': '00~24', 'Fare': '30'}]}',
+ '{'Holiday': [{'Period': '00~10', 'Fare': '10'}, {'Period': '10~22', 'Fare': '50'}, {'Period': '22~24', 'Fare': '10'}], 'WorkingDay': [{'Period': '00~10', 'Fare': '10'}, {'Period': '10~22', 'Fare': '40'}, {'Period': '22~24', 'Fare': '10'}]}',
+ '{'Holiday': [{'Period': '00~09', 'Fare': '30'}, {'Period': '09~21', 'Fare': '40'}, {'Period': '21~24', 'Fare': '30'}], 'WorkingDay': [{'Period': '00~09', 'Fare': '30'}, {'Period': '09~21', 'Fare': '40'}, {'Period': '21~24', 'Fare': '30'}]}']
+Length: 3, dtype: str
+Column 'EntranceCoord': max length 259
+  Example values with length > 10: <StringArray>
+['{'EntrancecoordInfo': [{'Xcod': '25.0552', 'Ycod': '121.5242', 'Address': '入口'}]}',
+ '{'EntrancecoordInfo': [{'Xcod': '25.0585', 'Ycod': '121.5596', 'Address': '入口'}]}',
+ '{'EntrancecoordInfo': [{'Xcod': '24.9983', 'Ycod': '121.5791', 'Address': '入口'}]}']
+Length: 3, dtype: str
+Column 'owner_type': max length 15.0
+  Example values with length > 10: <StringArray>
+['本處自營停車場(委託路邊兼開)']
+Length: 1, dtype: str
+Column 'ptype': max length 1.0
+Column 'serviceTime': max length 120.0
+  Example values with length > 10: <StringArray>
+['00:00:00-23:59:59', '收費日：星期一至星期六，收費時間：07-20', '09:00:00-22:00:00']
+Length: 3, dtype: str
+Column 'totallargemotor': max length 2.0
+Column 'ChargingStation': max length 2.0
+Column 'Handicap_Discount': max length 5.0

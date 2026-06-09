@@ -1,0 +1,111 @@
+﻿dag,ready_table,db_rows,api_rows,diff(db-api),chart_component_ids,component_names,dashboards,chart_row_counts,chart_sum_data,chart_sum_value,schedule,source_type,api_note
+proj_city_dashboard/bike_path,bike_network_tpe,488,493,-5,109|213|219,自行車道|自行車道路統計|自行車道路網圖資,務實交通(雙北)|圖資資訊(台北)|圖資資訊(雙北),2|2|1,|1291|,||,00 20 * * *,TDX API,tdx
+proj_new_taipei_city_dashboard/bike_path,bike_network_new_tpe,251,253,-2,213|219,自行車道路統計|自行車道路網圖資,務實交通(雙北)|圖資資訊(台北)|圖資資訊(雙北),2|1,1291|,|,00 20 * * *,TDX API,tdx
+proj_city_dashboard/R0017,patrol_designate_place,401,401,0,11,緊急避難設施,圖資資訊(台北),1,,401,30 3 1 4 *,data.taipei ods file,data.taipei rid=9def0ac0-ad65-4f34-a8a6-aeba704c70d4
+proj_city_dashboard/R0018,patrol_debris,1736,1736,0,16,山坡地風險地點,圖資資訊(台北)|防災都市(台北),4,,35096,@monthly,data.gov.tw zip,moa-shp
+proj_city_dashboard/R0019,patrol_debrisarea,1874,,,16,山坡地風險地點,圖資資訊(台北)|防災都市(台北),4,,35096,@monthly,data.gov.tw zip,"data.moa SHP 異常,R0018 可用"
+proj_city_dashboard/R0020,patrol_artificial_slope,34849,34849,0,16,山坡地風險地點,圖資資訊(台北)|防災都市(台北),4,,35096,0 3 1 12 *,data.taipei shp,download-file
+proj_city_dashboard/R0021,patrol_old_settlement,34,34,0,16,山坡地風險地點,圖資資訊(台北)|防災都市(台北),4,,35096,"0 3 2 6,12 *",data.taipei shp,download-file
+proj_city_dashboard/R0022,patrol_criminal_case,337,,,7,刑事統計,為民服務(台北),70,280506,,0 18 * * *,data.taipei API,tsis.dbas 主計處內網 CSV
+proj_city_dashboard/R0031,patrol_police_station,112,112,0,9,警察相關設施,圖資資訊(台北),2,,,0 4 14 * *,data.taipei csv file,data.taipei rid=a90ae184-c39e-4242-b2d6-d7a0403c0632
+proj_city_dashboard/R0033,patrol_fire_rescure,446,446,0,14,火災風險地點,圖資資訊(台北),2,,449,30 18 2 * *,data.taipei csv,data.taipei rid=577b3810-49b7-44fd-a5b7-97897bb50f9e
+proj_city_dashboard/R0033_1,patrol_fire_brigade,46,46,0,15,火災應變設施,圖資資訊(台北),2,,,30 18 15 * *,data.taipei csv file,data.taipei rid=4486e759-4159-4208-9832-c32300c4e832
+proj_city_dashboard/R0033_2,patrol_fire_disqualified,3,2,1,14,火災風險地點,圖資資訊(台北),2,,449,0 19 15 * *,data.taipei csv file,data.taipei rid=d417e957-7205-451e-bf45-a31db78f6ec8
+proj_city_dashboard/R0037_1,patrol_flood_78_8,3,3,0,91|163,公車站|降雨淹水模擬圖,圖資資訊(台北)|防災都市(台北),1|9,|28531,|,0 3 22 12 *,data.taipei KML,KML Placemark
+proj_city_dashboard/R0037_2,patrol_flood_100,4,4,0,163,降雨淹水模擬圖,防災都市(台北),9,28531,,10 3 22 12 *,data.taipei KML,KML Placemark
+proj_city_dashboard/R0037_3,patrol_flood_130,4,5,-1,163,降雨淹水模擬圖,防災都市(台北),9,28531,,20 3 22 12 *,data.taipei KML,KML Placemark
+proj_city_dashboard/R0042,traffic_accident_location,144788,22762,122026,22,最新交通事故月統計,道路交通(台北),2,1992,,0 3 1 4 *,data.taipei csv,page→rid d4aaaaa6-d03e-4539-945b-cdbd9387007d
+proj_city_dashboard/R0046,traffic_metro_unusual,24,22,2,68|73|79|116|117|217|259,松山新店線擁擠程度|捷運人流趨勢|板南線擁擠程度|淡水信義線擁擠程度|中和新蘆線擁擠程度|文湖線擁擠程度|捷運站乘客流動量,商圈活化(台北)|捷運系統(台北),12||26|23|22|22|236,1466654||3126530|3114318|3140883|36222|26113,||||||,5 * * * *,data.taipei JSON,json https://tcgmetro.blob.core.windows.net/stationnames/stations
+proj_city_dashboard/R0047,mrtp_metro_capacity_realtime,650,,,68|73|79|116|117|217|259,松山新店線擁擠程度|捷運人流趨勢|板南線擁擠程度|淡水信義線擁擠程度|中和新蘆線擁擠程度|文湖線擁擠程度|捷運站乘客流動量,商圈活化(台北)|捷運系統(台北),12||26|23|22|22|236,1466654||3126530|3114318|3140883|36222|26113,||||||,"* 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,22,23 * * *",MRT API,MRT SOAP ASMX 須帳密
+proj_city_dashboard/R0054,urbn_landuse_master_plan,0,3824,-3824,34,都市計畫用地類型,都市規劃(台北),23,249,,"40 3 9 6,12 *",data.taipei SHP,download-file
+proj_city_dashboard/R0056,building_publand,147546,147546,0,33,公有土地,都市規劃(台北),7,134,,0 3 5 * *,data.taipei csv file,csv https://tpland.blob.core.windows.net/blobfs/publand.csv
+proj_city_dashboard/R0057,building_permit,40,34,6,42|140,全市屋齡分布|建照使照發照量,城市建設(台北)|都市規劃(台北)|防災都市(台北),48|4,253081|69,|,0 4 25 * *,data.taipei XML,data.taipei rid=43624c8e-c768-4b3c-93c4-595f5af7a9cb
+proj_city_dashboard/R0058,,,34,,42,全市屋齡分布,都市規劃(台北)|防災都市(台北),48,253081,,0 5 25 * *,data.taipei XML,data.taipei rid=43624c8e-c768-4b3c-93c4-595f5af7a9cb
+proj_city_dashboard/R0059,building_license,57,57,0,140,建照使照發照量,城市建設(台北),4,69,,15 19 * * 1,data.taipei XML,data.taipei rid=74a8b311-906e-44c4-91fb-7f413842d4e1
+proj_city_dashboard/R0061,building_social_house,84,84,0,29,社會住宅建設進度,城市建設(台北),5,84,,0 20 20 * *,json,direct https://hms.udd.gov.taipei/api/BigData/project
+proj_city_dashboard/R0062,building_renewarea_10,307,307,0,28,都市更新案件,城市建設(台北),5,2500,,00 19 3 * *,internal GeoJSON file,udd
+proj_city_dashboard/R0063,building_renewunit_12,967,967,0,28,都市更新案件,城市建設(台北),5,2500,,10 19 3 * *,internal GeoJSON file,udd
+proj_city_dashboard/R0064,building_renewunit_20,584,584,0,28,都市更新案件,城市建設(台北),5,2500,,20 19 3 * *,internal GeoJSON file,udd
+proj_city_dashboard/R0065,building_renewunit_30,562,562,0,28,都市更新案件,城市建設(台北),5,2500,,30 19 3 * *,internal GeoJSON file,udd
+proj_city_dashboard/R0066,building_renewarea_40,80,80,0,28,都市更新案件,城市建設(台北),5,2500,,40 19 3 * *,internal GeoJSON file,udd
+proj_city_dashboard/R0067,building_unsued_land,87,87,0,30,閒置市有財產,圖資資訊(台北),2,,108,"0 7 7 3,6,9,12 *",data.taipei API,data.taipei rid=15c3dde7-b6db-4a66-84c2-098236b84512
+proj_city_dashboard/R0068,building_unsued_public,20,65,-45,30,閒置市有財產,圖資資訊(台北),2,,108,"0 1 16 3,9 *",data.taipei csv file,data.taipei rid=5afc5dde-3431-45a4-995f-9610616f32cc
+proj_city_dashboard/R0075,fire_hydrant_location,30292,30445,-153,15,火災應變設施,圖資資訊(台北),2,,,"0 1 20 1,4,7,10 *",data.taipei csv file,data.taipei rid=b9f8154d-c627-48a8-b3ef-512ed9cde9e7
+proj_city_dashboard/D010501,resh_petition,3469373,40637,3428736,5,臺北市陳情系統,為民服務(台北),10,40637,,0 19 16 * *,data.taipei api,page→rid 4f78ad83-ba00-41ff-b1fb-83f87932da87
+proj_city_dashboard/D020105,urbn_air_raid_shelter,6052,5917,135,171|171,防空避難設施|防空避難設施,防災都市(台北)|防災都市(雙北),164|48,15377|5906,|,"0 3 24 6,12 *",data.taipei api,data.taipei rid=e7aecde4-ef04-46e3-849b-1ee159ea6d5f
+proj_city_dashboard/D020201,fire_narrow_street,283,274,9,172|172,狹小巷弄程度分佈|狹小巷弄程度分佈,防災都市(台北)|防災都市(雙北),82|24,623|238,|,20 5 25 * *,data.taipei api,data.taipei rid=cd4ec60e-8d53-48a5-bbf1-9ec1f2afc20b
+proj_city_dashboard/D020301,tran_cctv,752,752,0,176,監視器分佈,為民服務(台北)|道路交通(台北),12,450,,0 1 7 * *,ATIS api,ATIS CCTVByLBS
+proj_city_dashboard/D030101_1,work_sidewalk,15291,15291,0,105,人行道分布,圖資資訊(台北),1,,,0 0 1 * *,data.taipei GeoJSON,json https://tpnco.blob.core.windows.net/blobfs/Data/TP_SIDEWORK.
+proj_city_dashboard/D030104_2,tran_parking,1745,874,871,114,公共停車場,道路交通(台北),4,225078,,10 22 * * 1,data.taipei JSON,unresolved urls=['https://tcgbusfs.blob.core.windows.net/blobtcmsv/T'] rids=[] pages=[] ntpc=[] moenv=[] | patched
+proj_city_dashboard/D030201,traffic_accident,701132,22762,678370,22,最新交通事故月統計,道路交通(台北),2,1992,,"0 18 27 6,12 *",data.taipei csv,page→rid 83d6d29c-6801-41a2-95c6-47d551646db3
+proj_city_dashboard/D040301_1,work_street_light,145860,146372,-512,108,路燈分佈,城市建設(台北),12,145860,,50 20 * * *,data.taipei JSON,json https://tppkl.blob.core.windows.net/blobfs/TaipeiLight.json
+proj_city_dashboard/D040302_1,work_urgent_use_road,580,230,350,177,道路管制,為民服務(台北),24,596,,10 6 * * *,data.taipei GeoJSON,json https://tpnco.blob.core.windows.net/blobfs/Rally/TodayUrgent
+proj_city_dashboard/D040302_2,work_rally_use_road,16,4,12,177,道路管制,為民服務(台北),24,596,,0 6 * * *,data.taipei GeoJSON,json https://tpnco.blob.core.windows.net/blobfs/Rally/TodayRallyC
+proj_city_dashboard/D040401,garbage_truck,4015,4015,0,141,垃圾車收運點位,為民服務(台北),48,4015,,0 0 1 * *,data.taipei API,data.taipei rid=a6e90031-7ec4-4089-afb5-361a4efe7202
+proj_city_dashboard/D050201_1,work_street_tree,92989,92927,62,110,行道樹,城市建設(台北)|氣候變遷(台北),12,92989,,0 3 9 * *,data.taipei JSON,json https://tppkl.blob.core.windows.net/blobfs/TaipeiTree.json
+proj_city_dashboard/D050301_1,work_garden_city,765,765,0,111,田園城市,氣候變遷(台北)|都市規劃(台北),4,24,,0 0 1 * *,data.taipei JSON,direct https://farmcity.taipei/city/api/
+proj_city_dashboard/D050303_1,work_park,880,880,0,103|104,公園綠地|都市綠地,氣候變遷(台北)|都市規劃(台北),4|3,1913|754,|,"0 2 4 6,12 *",data.taipei GeoJSON,download-file
+proj_city_dashboard/D050303_5,work_permeable_paving_schoool,0,80,-80,162,透水鋪面,防災都市(台北),3,248,,0 0 1 * *,data.taipei API,download-file
+proj_city_dashboard/D050303_6,work_permeable_paving_parking,23,23,0,162,透水鋪面,防災都市(台北),3,248,,0 0 1 * *,data.taipei API,download-file
+proj_city_dashboard/D050303_7,work_permeable_paving_park,83,102,-19,162,透水鋪面,防災都市(台北),3,248,,0 0 1 * *,data.taipei API,download-file
+proj_city_dashboard/D050303_8,work_permeable_paving_sidewalk,848,848,0,162,透水鋪面,防災都市(台北),3,248,,0 0 1 * *,data.taipei API,download-file
+proj_city_dashboard/D050303_9,work_permeable_paving_pac,0,26,-26,162,透水鋪面,防災都市(台北),3,248,,0 0 1 * *,data.taipei API,download-file
+proj_city_dashboard/D050401_1,work_soil_liquefaction,136,,,115,土壤液化潛勢,圖資資訊(台北),3,,,"0 5 2 5,11 *",data.taipei GeoJSON,soil.taipei 已改為登入頁
+proj_city_dashboard/D050502,moenv_air_quality,19,84,-65,174,空氣品質,氣候變遷(台北),21,279,,20 * * * *,MOENV API,moenv aqx_p_432
+proj_city_dashboard/D050601,env_greenhouse_gas_stat,20,20,0,173,溫室氣體排放統計,氣候變遷(台北),5,1053,,"0 1 18 5,11 *",data.taipei api,data.taipei rid=047024e1-b7a2-4b74-b6ac-e9c2a0072593
+proj_city_dashboard/D070202,stat_power_usage,57,,,175,用電量統計,氣候變遷(台北),20,236977944,,"0 5 27 3,9 *",data.taipei API,tsis.dbas 主計處內網 CSV
+proj_city_dashboard/D100101,nursery_room_info,526,526,0,155,哺集乳室分佈,婦幼資源(台北),36,3228,,0 0 1 * *,data.taipei API,data.taipei rid=4350117f-8697-4903-8a49-a7a59f30eeb1
+proj_city_dashboard/D100102_1,childcare_family_hub,13,13,0,150,育兒支持資源,婦幼資源(台北),96,314,,0 0 1 * *,data.taipei API,data.taipei rid=5c09f39f-79cc-45b8-be8e-9b3ea8b220e3
+proj_city_dashboard/D100102_2,childcare_parenting_garden,13,13,0,150,育兒支持資源,婦幼資源(台北),96,314,,0 0 1 * *,data.taipei API,data.taipei rid=4bfa01ad-7ba0-4b7a-9c1b-f9c58a2cd751
+proj_city_dashboard/D100102_3,childcare_homecare_hub,12,12,0,150,育兒支持資源,婦幼資源(台北),96,314,,0 0 1 * *,data.taipei API,data.taipei rid=5cf938d7-350e-433b-b8be-280710038d74
+proj_city_dashboard/D100102_4,childcare_designated_care_center,23,23,0,150,育兒支持資源,婦幼資源(台北),96,314,,0 0 1 * *,data.taipei API,data.taipei rid=57685fb2-cc92-4874-8588-e5a1b1b15b50
+proj_city_dashboard/D100102_5,childcare_community_care_hub,62,62,0,150,育兒支持資源,婦幼資源(台北),96,314,,0 0 1 * *,data.taipei API,data.taipei rid=f1418a7a-4bdf-41fc-869c-63703dc16363
+proj_city_dashboard/D100102_6,childcare_gov_priv_infant_care,29,29,0,150,育兒支持資源,婦幼資源(台北),96,314,,0 0 1 * *,data.taipei API,data.taipei rid=a02ccc34-dd28-4c5d-b527-c5433ec1a453
+proj_city_dashboard/D100102_7,childcare_private_childcare,161,223,-62,150,育兒支持資源,婦幼資源(台北),96,314,,0 0 1 * *,data.taipei API,unresolved urls=[] rids=['e7cdaca3-e9da-46f9-b857-395e6e8e06a6'] pages=['081df75e-85c7-464c-b125-546920911c5c'] ntpc=[] 
+proj_city_dashboard/D100102_8,childcare_resource_hub,1,1,0,150,育兒支持資源,婦幼資源(台北),96,314,,0 0 1 * *,data.taipei API,data.taipei rid=1015e1db-bbf0-4cef-9bea-9928e84b3735
+proj_city_dashboard/D100103,parental_leave,48,,,151,育嬰假性別比,婦幼資源(台北),10,105940,,"0 0 1 3,9 *",data.taipei API,tsis.dbas 主計處內網 CSV
+proj_city_dashboard/D100104_1,maternity_hospitals,67,67,0,156,生育補助合約醫院,婦幼資源(台北),36,171,,"0 0 1 3,9 *",data.taipei API,data.taipei rid=66bfed0f-17c6-4cbd-b9e9-88ea1980bc46
+proj_city_dashboard/D100105,gynecology_clinic,143,143,0,106|153,醫療院所分布|婦產科診所與醫院分佈,圖資資訊(台北)|婦幼資源(台北),2|13,|143,1895|,"0 0 1 3,9 *",data.taipei API,data.taipei rid=ba860191-ad03-49a3-8df4-29e0a01f3026
+proj_city_dashboard/D100106_1,newborn_stats_district,468,54873,-54405,154,幼兒人數統計,婦幼資源(台北),12,87607,,0 0 1 * *,data.taipei API,data.taipei rid=c8f5b53d-ef3d-4321-ae8e-58cd2a5ee73c
+proj_city_dashboard/D100106_2,newborn_stats_vil,17940,54873,-36933,154,幼兒人數統計,婦幼資源(台北),12,87607,,0 0 1 * *,data.taipei API,data.taipei rid=c8f5b53d-ef3d-4321-ae8e-58cd2a5ee73c
+proj_city_dashboard/D100106_3,newborn_stats_time,39,54873,-54834,154,幼兒人數統計,婦幼資源(台北),12,87607,,0 0 1 * *,data.taipei API,data.taipei rid=c8f5b53d-ef3d-4321-ae8e-58cd2a5ee73c
+proj_city_dashboard/ebus_base_info,bus_info_tpe,3797,3794,3,212,電動巴士比例,務實交通(雙北),2,7874,,00 20 * * *,TDX API,tdx
+proj_new_taipei_city_dashboard/ebus_base_info,bus_info_new_tpe,2889,2889,0,212,電動巴士比例,務實交通(雙北),2,7874,,00 20 * * *,TDX API,tdx
+proj_city_dashboard/elderly_club,elderly_club_tpe,293,293,0,252|252,銀髮俱樂部|銀髮俱樂部,健康守護(台北)|健康守護(雙北),41|13,1024|293,|,0 20 19 * *,data.taipei api,data.taipei rid=ffab5e5f-4a0f-4759-8531-5302379509cd
+proj_new_taipei_city_dashboard/elderly_club,elderly_club_ntpe,1202,1202,0,252|252,銀髮俱樂部|銀髮俱樂部,健康守護(台北)|健康守護(雙北),41|13,1024|293,|,@monthly,data.ntpc.gov.tw,ntpc f531a808-4aab-4e5e-93f0-c34f9ff97a78
+proj_city_dashboard/employment_age_structure,employment_age_structure_tpe,1692,,,215,高齡就業人口年增結構,健康守護(台北)|健康守護(雙北),24,847,,0 3 25 12 *,data.taipei,tsis.dbas 主計處內網 CSV (需 Taipei proxy)
+proj_new_taipei_city_dashboard/employment_age_structure,employment_age_structure_new_tpe,570,19,551,215,高齡就業人口年增結構,健康守護(台北)|健康守護(雙北),24,847,,0 3 25 12 *,data.ntpc.gov.tw,unresolved urls=[] rids=['c285509a-7fb2-434f-8542-0b4986c337a8'] pages=[] ntpc=[] moenv=[] | patched
+proj_city_dashboard/energy_saving_coaching_situation_tpe,energy_saving_coaching_situation_tpe,11,11,0,201|202|203,節能輔導累計家數|節能輔導累計節約電量|節能輔導累計減碳量,氣候變遷(台北),11|11|11,6934|189284|970620,||,0 20 19 * *,data.taipei api,data.taipei rid=5a2c9899-9c34-44ef-8860-1ed773e08dc8
+proj_city_dashboard/energy_saving_coaching_situation_tpe_gov,energy_saving_coaching_situation_tpe_gov,11,11,0,207|208|209,節能輔導查核累計家數|節能輔導查核累計電量|節能輔導查核累計減碳量,氣候變遷(台北),11|11|11,281960|19891|99106,||,0 20 19 * *,data.taipei api,data.taipei rid=fcd166eb-4fb5-40db-962b-28899d7146fc
+proj_city_dashboard/env_srv_energy_subsidy,env_srv_energy_subsidy,7,7,0,200,服務業節能設備補助,氣候變遷(台北),14,3109638664,,"0 3 24 6,12 *",data.taipei api,data.taipei rid=5f239e5c-9388-4dc2-b6a6-f65491edd78a
+proj_city_dashboard/flu_hospitals_tpe,flu_hospitals_tpe,384,391,-7,257|257,流感疫苗接種醫院|流感疫苗接種醫院,健康守護(台北)|健康守護(雙北),41|12,896|377,|,@monthly,data.taipei csv file,data.taipei rid=47b02c29-efa2-4614-ac7e-1b0b9499e6ea
+proj_new_taipei_city_dashboard/flu_hospitals_ntpe,flu_hospitals_ntpe,672,686,-14,257|257,流感疫苗接種醫院|流感疫苗接種醫院,健康守護(台北)|健康守護(雙北),41|12,896|377,|,@monthly,data.ntpc,ntpc 551cd3f4-534a-45cf-976a-359090fb7df6
+proj_city_dashboard/friendly_store,friendly_store,518,1058,-540,260|260,友善店家|友善店家,商圈活化(台北)|商圈活化(雙北),252|144,2555|2467,|,0 20 19 * *,data.taipei csv,data.taipei rid=5a5b36e0-f870-4b7f-8378-c91ac5f57941
+proj_city_dashboard/general_hotel_registry,general_hotel_registry_tpe,582,582,0,247|247,旅館統計|旅館統計,商圈活化(台北)|商圈活化(雙北),41|12,652|473,|,@monthly,data.gov.tw,dataset-download
+proj_new_taipei_city_dashboard/general_hotel_registry,general_hotel_registry_ntpe,208,208,0,247|247,旅館統計|旅館統計,商圈活化(台北)|商圈活化(雙北),41|12,652|473,|,@monthly,data.gov.tw,ntpc 8565597e-a174-4907-99c7-adb5ddee1326
+proj_city_dashboard/li_age_population_tpe,li_age_population_tpe,603603,54873,548730,216|216|218|244|245,全市年齡分區|全市年齡分區|長照指標|各行政區性別人口|各行政區年齡層人口,健康守護(台北)|健康守護(雙北)|為民服務(台北),123|36|4|24|132,12996|4959|316|2430886|2430886,||||,0 20 19 * *,data.taipei api,data.taipei rid=c8f5b53d-ef3d-4321-ae8e-58cd2a5ee73c
+proj_city_dashboard/long_term,long_term_tpe,90,88,2,258|258,長照據點|長照據點,健康守護(台北)|健康守護(雙北),41|12,238|90,|,@monthly,data.taipei,data.taipei rid=9a3e0440-87ea-4793-9240-5c8dc02b5129
+proj_new_taipei_city_dashboard/long_term,long_term_nwtpe,167,,,258|258,長照據點|長照據點,健康守護(台北)|健康守護(雙北),41|12,238|90,|,0 20 19 * *,data.ntpc.gov.tw json,新北市 NTPC 反爬蟲
+proj_city_dashboard/merge_crime_type_by_dist,merge_crime_type_by_dist_tpe,10866,,,250|250,偷竊統計|偷竊統計,商圈活化(台北)|商圈活化(雙北),246|72,7472|7469,|,@monthly,data.taipei,衍生自 DB
+proj_new_taipei_city_dashboard/merge_crime_type_by_dist,merge_crime_type_by_dist_new_tpe,13296,13296,0,250|250,偷竊統計|偷竊統計,商圈活化(台北)|商圈活化(雙北),246|72,7472|7469,|,@monthly,data.ntpc.gov.tw,unresolved urls=[] rids=['8a32c6b5-46fc-4fac-b3a4-317b9998bfd7'] pages=[] ntpc=[] moenv=[] | patched
+proj_city_dashboard/moenv_public_toilet_tpe,moenv_public_toilet_tpe,7217,7217,0,249|249,公廁分布|公廁分布,商圈活化(台北)|商圈活化(雙北),246|72,7195|2952,|,@monthly,MOENV API,moenv fac_p_28
+proj_new_taipei_city_dashboard/moenv_public_toilet_ntpe,moenv_public_toilet_ntpe,6017,6017,0,249|249,公廁分布|公廁分布,商圈活化(台北)|商圈活化(雙北),246|72,7195|2952,|,@monthly,MOENV API,moenv fac_p_21
+proj_city_dashboard/school_reconstruction,school_reconstruction_tpe,37,37,0,291,永續校園推動,城市建設(台北),5,37,,@monthly,data.taipei,data.taipei rid=b14137d5-fde6-4491-8817-2cf5f68ef0cf
+proj_city_dashboard/sea_sand_houses_tpe,sea_sand_houses_tpe,8,,,204|205|206,海砂屋列管戶數|海砂屋列管案件數|海砂屋列管戶數案件數,防災都市(台北),16|16|16,34272|653|34925,||,0 20 19 * *,data.taipei api,tsis.dbas 主計處內網 CSV
+proj_city_dashboard/tourist_attractions,tourist_attractions_tpe,436,436,0,248|248|286,觀光景點分布|觀光景點分布|觀光景點直播,商圈活化(台北)|商圈活化(雙北)|為民服務(台北),492|144|12,798|432|6,||,@monthly,data.taipei,tdx
+proj_new_taipei_city_dashboard/tourist_attractions,tourist_attractions_ntpe,564,564,0,248|248,觀光景點分布|觀光景點分布,商圈活化(台北)|商圈活化(雙北),492|144,798|432,|,@monthly,data.ntpc.gov.tw,tdx
+proj_city_dashboard/yearly_death_cause_etl,yearly_death_cause_etl_tpe,594,,,256,死因別死亡率,健康守護(台北)|健康守護(雙北),144,22296,,@yearly,data.taipei csv file,tsis.dbas 主計處內網 CSV
+proj_new_taipei_city_dashboard/yearly_death_cause_etl,yearly_death_cause_etl_ntpe,144,19,125,256,死因別死亡率,健康守護(台北)|健康守護(雙北),144,22296,,@yearly,data.taipei,ntpc 5e6a672a-09e6-4119-8de6-0ca9856f3a01
+proj_city_dashboard/youth_enterpreneurship_financing_loan_tpe,youth_enterpreneurship_financing_loan_tpe,150,150,0,210|211,青創貸款累計件數|青創貸款核准狀態,為民服務(台北),20|10,56165|1855,|,0 20 19 * *,data.taipei api,data.taipei rid=6e66d5ea-250e-4078-ac99-6247973a0ddd
+proj_city_dashboard/cooling_point,cooling_point_tpe,494,494,0,290,涼適點,為民服務(台北),24,494,,@monthly,data.taipei,data.taipei rid=ae7e5986-859d-4294-b289-7c1b2e7c23f1
+proj_city_dashboard/aed_locations,aed_locations,2728,2728,0,261|261,AED資源設置|AED資源設置,商圈活化(台北)|商圈活化(雙北),41|12,4518|2723,|,0 20 19 * *,data.taipei json,data.taipei rid=438c61ad-24f6-4e54-a1cc-e2cfe0e7051e
+proj_new_taipei_city_dashboard/aed_locations,aed_locations_metrotaipei,1795,1795,0,261|261,AED資源設置|AED資源設置,商圈活化(台北)|商圈活化(雙北),41|12,4518|2723,|,0 20 19 * *,data.ntpc.gov.tw json,unresolved urls=[] rids=['61b29f27-219a-4394-9722-af97a5707598'] pages=[] ntpc=[] moenv=[] | patched
+proj_city_dashboard/rainfall_flood_simulation_etl,rainfall_flood_simulation_etl_tpe,60,6,54,255,各降雨強度分級淹水面積,防災都市(台北)|防災都市(雙北),50,28539,,@once,,direct https://fhy.wra.gov.tw/disaster/Uploads/Download/%E6%B7%B9%E
+proj_new_taipei_city_dashboard/rainfall_flood_simulation_etl,rainfall_flood_simulation_etl_ntpe,60,6,54,255,各降雨強度分級淹水面積,防災都市(台北)|防災都市(雙北),50,28539,,@once,,direct https://fhy.wra.gov.tw/disaster/Uploads/Download/%E6%B7%B9%E
+proj_city_dashboard/accessible_facilities,accessible_facilities_tpe,199,113,86,251,無障礙設施,商圈活化(台北),24,199,,@monthly,data.taipei,data.taipei rid=936e3be6-e029-4bdf-9199-a8b8fb482df6
+proj_new_taipei_city_dashboard/accessible_facilities,accessible_facilities_ntpe,3838,3838,0,251,無障礙設施,商圈活化(台北),24,199,,@monthly,data.taipei,unresolved urls=[] rids=['1e548c60-0b04-4507-bf60-f3be651db642'] pages=[] ntpc=[] moenv=[] | patched
+proj_city_dashboard/dependency_ratio_and_aging_index,dependency_ratio_and_aging_index_tpe,57,,,214,扶養比及老化指數,健康守護(台北)|健康守護(雙北),24,2169,,0 3 25 12 *,data.taipei ods file,tsis.dbas 主計處內網 CSV
+proj_new_taipei_city_dashboard/dependency_ratio_and_aging_index,dependency_ratio_and_aging_index_new_tpe,0,2250,-2250,214,扶養比及老化指數,健康守護(台北)|健康守護(雙北),24,2169,,0 3 25 12 *,data.ntpc.gov.tw,unresolved urls=[] rids=['8308ab58-62d1-424e-8314-24b65b7ab492'] pages=[] ntpc=[] moenv=[] | patched
+proj_new_taipei_city_dashboard/population_age_distribution_monthly,population_age_distribution_new_tpe,0,2250,-2250,216|216|218,全市年齡分區|全市年齡分區|長照指標,健康守護(台北)|健康守護(雙北),123|36|4,12996|4959|316,||,0 4 14 * *,data.ntpc.gov.tw,unresolved urls=[] rids=['8308ab58-62d1-424e-8314-24b65b7ab492'] pages=[] ntpc=[] moenv=[] | patched
+proj_new_taipei_city_dashboard/urbn_air_raid_shelter,urbn_air_raid_shelter_ntpe,9472,9472,0,171|171,防空避難設施|防空避難設施,防災都市(台北)|防災都市(雙北),164|48,15377|5906,|,@monthly,data.ntpc.gov.tw,unresolved urls=[] rids=['3a9d87f0-9490-4021-8fc9-5045ecdd8d22'] pages=[] ntpc=[] moenv=[] | patched
+proj_new_taipei_city_dashboard/fire_narrow_street,fire_narrow_street_ntpe,385,614,-229,172|172,狹小巷弄程度分佈|狹小巷弄程度分佈,防災都市(台北)|防災都市(雙北),82|24,623|238,|,@monthly,data.ntpc.gov.tw,unresolved urls=[] rids=['5e5bd1b4-b5fd-406b-84c4-ae2d70d2ba71'] pages=[] ntpc=[] moenv=[] | patched

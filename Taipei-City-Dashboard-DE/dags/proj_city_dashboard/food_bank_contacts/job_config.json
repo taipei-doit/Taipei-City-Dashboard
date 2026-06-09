@@ -1,0 +1,38 @@
+{
+    "dag_infos": {
+        "dag_id": "food_bank_contacts",
+        "start_date": "2026-05-16",
+        "schedule_interval": "0 5 1 1,7 *",
+        "catchup": false,
+        "tags": ["social_welfare", "社會局", "Taipei-City"],
+        "description": "Taipei City food bank (實物銀行) contact directory, refreshed every January and July.",
+        "default_args": {
+            "owner": "airflow",
+            "email": ["DEFAULT_EMAIL_LIST"],
+            "email_on_retry": false,
+            "email_on_failure": true,
+            "retries": 1,
+            "retry_delay": 60
+        },
+        "ready_data_db": "postgres_default",
+        "ready_data_default_table": "food_bank_contacts",
+        "ready_data_history_table": "",
+        "raw_data_db": "postgres_default",
+        "raw_data_table": "",
+        "load_behavior": "replace"
+    },
+    "data_infos": {
+        "name_cn": "臺北市政府實物銀行聯絡資訊",
+        "airflow_update_freq": "05:00+8 on 1st of January and July",
+        "source": "https://data.taipei/dataset/detail?id=3fbc79e5-0138-4c89-8c47-39feddbd6d3f",
+        "source_type": "data.taipei",
+        "source_dept": "社會局",
+        "component_name": "food_bank_points",
+        "gis_format": null,
+        "output_coordinate": "EPSG:4326",
+        "is_geometry": 0,
+        "dataset_description": "臺北市政府社會局所屬實物銀行據點名單,含機構類型、名稱、行政區代碼、地址。",
+        "etl_description": "resolve current rid by page_id, pull data.taipei api, rename Chinese columns, standardize data_time.",
+        "sensitivity": "public"
+    }
+}
