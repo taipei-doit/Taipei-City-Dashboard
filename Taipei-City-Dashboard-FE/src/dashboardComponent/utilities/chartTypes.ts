@@ -26,4 +26,5 @@ export const chartTypes: chartType = {
 	TextUnitChart: "文字數值圖", // V
 	SankeyChart: "桑基圖", // V
 	BubbleChart: "泡泡圖", // V
+	QuartileChart: "四分位圖", // V
 };
