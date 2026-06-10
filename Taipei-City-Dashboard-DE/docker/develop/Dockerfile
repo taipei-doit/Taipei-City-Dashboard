@@ -1,4 +1,4 @@
-FROM apache/airflow:3.2.0
+FROM apache/airflow:2.10.5
 USER root
 RUN apt-get update \
   && apt-get install -y --no-install-recommends \
@@ -10,8 +10,5 @@ RUN apt-get update \
 
 USER airflow
 COPY requirements.txt /tmp/
-RUN  PYTHON_VERSION=$(python -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')") && \
-     pip install \
-       --constraint "https://raw.githubusercontent.com/apache/airflow/constraints-3.2.0/constraints-${PYTHON_VERSION}.txt" \
-       -r /tmp/requirements.txt
+RUN  pip install -r /tmp/requirements.txt 
 
