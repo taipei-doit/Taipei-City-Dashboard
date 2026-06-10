@@ -1,0 +1,38 @@
+{
+  "dag_infos": {
+    "dag_id": "food_hygiene_grading",
+    "start_date": "2026-05-06",
+    "schedule_interval": "@daily",
+    "catchup": false,
+    "tags": ["food_hygiene", "衛生局", "Taipei-City"],
+    "description": "臺北市通過餐飲衛生管理分級評核業者(衛生局,data.taipei)",
+    "default_args": {
+      "owner": "airflow",
+      "email": ["DEFAULT_EMAIL_LIST"],
+      "email_on_retry": false,
+      "email_on_failure": true,
+      "retries": 1,
+      "retry_delay": 60
+    },
+    "ready_data_db": "postgres_default",
+    "ready_data_default_table": "food_hygiene_grading",
+    "ready_data_history_table": "",
+    "raw_data_db": "postgres_default",
+    "raw_data_table": "",
+    "load_behavior": "replace"
+  },
+  "data_infos": {
+    "component_name": "food_hygiene_grading",
+    "name_cn": "臺北市通過餐飲衛生管理分級評核業者",
+    "airflow_update_freq": "每日(資料源實際每年更新一次)",
+    "source": "https://data.taipei/dataset/detail?id=59579c19-a561-4564-8c0f-545bfb32c0f6",
+    "source_type": "data.taipei",
+    "source_dept": "臺北市政府衛生局",
+    "gis_format": null,
+    "output_coordinate": "EPSG:4326",
+    "is_geometry": 0,
+    "dataset_description": "臺北市通過餐飲衛生管理分級評核之業者清單,含行政區、業者名稱、食品業者登錄字號、地址與評核結果(優/良/普通)",
+    "etl_description": "由 data.taipei page_id 動態解析最新 rid → get_data_taipei_api 取全量 → rename 中文欄位 → data_time 標準化 → replace 寫入 ready DB",
+    "sensitivity": "public"
+  }
+}

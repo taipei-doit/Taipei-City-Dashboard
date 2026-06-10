@@ -1,0 +1,38 @@
+{
+  "dag_infos": {
+    "dag_id": "noise_monitoring_stations_tpe",
+    "start_date": "2026-05-22",
+    "schedule_interval": "@monthly",
+    "catchup": false,
+    "tags": ["noise_monitoring", "環保局", "Taipei-City"],
+    "description": "Monthly refresh of Taipei noise monitoring station locations with point geometry.",
+    "default_args": {
+      "owner": "airflow",
+      "email": ["DEFAULT_EMAIL_LIST"],
+      "email_on_retry": false,
+      "email_on_failure": true,
+      "retries": 1,
+      "retry_delay": 60
+    },
+    "ready_data_db": "postgres_default",
+    "ready_data_default_table": "noise_monitoring_stations_tpe",
+    "ready_data_history_table": "",
+    "raw_data_db": "postgres_default",
+    "raw_data_table": "",
+    "load_behavior": "replace"
+  },
+  "data_infos": {
+    "name_cn": "臺北市環境及交通音量監測站地點",
+    "airflow_update_freq": "@monthly",
+    "source": "https://data.taipei/dataset/detail?id=e2f4ebf5-bffa-40af-8056-383893721731",
+    "source_type": "data.taipei",
+    "source_dept": "臺北市政府環境保護局",
+    "component_name": "noise_monitoring_stations_tpe_map",
+    "gis_format": "point",
+    "output_coordinate": "EPSG:4326",
+    "is_geometry": 1,
+    "dataset_description": "Taipei environmental and traffic noise monitoring station locations.",
+    "etl_description": "Resolve the current Taipei open-data resource, standardize station fields, and convert source longitude and latitude to Point WKB geometry.",
+    "sensitivity": "public"
+  }
+}

@@ -2,6 +2,7 @@ export const chartTypes = {
 	DonutChart: "圓餅圖",
 	BarChart: "橫向長條圖",
 	ColumnChart: "縱向長條圖",
+	NegativeColumnChart: "負值長條圖",
 	BarPercentChart: "長條圖(%)",
 	TreemapChart: "矩形圖",
 	DistrictChart: "行政區圖",
@@ -19,6 +20,9 @@ export const chartTypes = {
 	IndicatorChart: "指標圖",
 	MapLegend: "地圖圖例",
 	TextUnitChart: "文字單位圖",
+	BubbleChart: "泡泡圖",
+	QuartileChart: "四分位圖",
+	SunburstChart: "旭日圖",
 };
 
 export const chartsPerDataType = {
@@ -26,11 +30,14 @@ export const chartsPerDataType = {
 		"DonutChart",
 		"BarChart",
 		"ColumnChart",
+		"NegativeColumnChart",
 		"TreemapChart",
 		"DistrictChart",
 		"RadarChart",
 		"PolarAreaChart",
 		"MetroChart",
+		"BubbleChart",
+		"SunburstChart",
 	],
 	three_d: [
 		"ColumnChart",
@@ -41,8 +48,9 @@ export const chartsPerDataType = {
 		"IndicatorChart",
 		"PolarAreaChart",
 		"TextUnitChart",
+		"BubbleChart",
 	],
-	time: ["TimelineSeparateChart", "TimelineStackedChart", "ColumnLineChart"],
+	time: ["TimelineSeparateChart", "TimelineStackedChart", "ColumnLineChart", "BubbleChart"],
 	percent: [
 		"GuageChart",
 		"BarPercentChart",
@@ -50,4 +58,5 @@ export const chartsPerDataType = {
 		"IconPercentChart",
 	],
 	map_legend: ["MapLegend"],
+	quartile: ["QuartileChart"],
 };

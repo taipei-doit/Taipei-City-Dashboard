@@ -1,0 +1,38 @@
+{
+    "dag_infos": {
+        "dag_id": "green_store",
+        "start_date": "2026-05-16",
+        "schedule_interval": "0 5 1 * *",
+        "catchup": false,
+        "tags": ["green_consumption", "環保局", "Taipei-City"],
+        "description": "Monthly snapshot of Taipei certified green stores directory.",
+        "default_args": {
+            "owner": "airflow",
+            "email": ["DEFAULT_EMAIL_LIST"],
+            "email_on_retry": false,
+            "email_on_failure": true,
+            "retries": 1,
+            "retry_delay": 60
+        },
+        "ready_data_db": "postgres_default",
+        "ready_data_default_table": "green_store",
+        "ready_data_history_table": "",
+        "raw_data_db": "postgres_default",
+        "raw_data_table": "",
+        "load_behavior": "replace"
+    },
+    "data_infos": {
+        "name_cn": "臺北市綠色商店",
+        "airflow_update_freq": "05:00+8 1st of every month",
+        "source": "https://data.taipei/dataset/detail?id=1756cb64-0066-444a-a323-9f3b5a961045",
+        "source_type": "data.taipei",
+        "source_dept": "環保局",
+        "component_name": "green_store_table",
+        "gis_format": null,
+        "output_coordinate": "EPSG:4326",
+        "is_geometry": 0,
+        "dataset_description": "臺北市政府環境保護局公開之綠色商店名錄,包含商店名稱、地址、聯絡資訊與商店類型(連鎖型/獨立型等)。",
+        "etl_description": "Resolve current rid from page_id, fetch all records via data.taipei API, rename Chinese columns to snake_case, standardize data_time.",
+        "sensitivity": "public"
+    }
+}

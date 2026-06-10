@@ -1,0 +1,26 @@
+﻿dag,ready_table,name_cn,source_dept,schedule,source_type,db_rows,api_rows,diff(db-api),api_note,geocode_signals,component_ids,components
+proj_new_taipei_city_dashboard/fire_narrow_street,fire_narrow_street_ntpe,狹小巷道,,@monthly,data.ntpc.gov.tw,385,614,-229,unresolved urls=[] rids=['5e5bd1b4-b5fd-406b-84c4-ae2d70d2ba71'] pages=[] ntpc=[] moenv=[] | patched,get_addr_xy_parallel,172,狹小巷弄程度分佈
+proj_city_dashboard/D020105,urbn_air_raid_shelter,臺北市防空避難處所清冊,都發局 建管處,"0 3 24 6,12 *",data.taipei api,6052,5917,135,data.taipei rid=e7aecde4-ef04-46e3-849b-1ee159ea6d5f,get_addr_xy_parallel,171,防空避難設施
+proj_city_dashboard/R0068,building_unsued_public,臺北市市有尚未利用建物供給資料清冊,財政局,"0 1 16 3,9 *",data.taipei csv file,20,65,-45,data.taipei rid=5afc5dde-3431-45a4-995f-9610616f32cc,get_addr_xy_parallel,30,閒置市有財產
+proj_city_dashboard/flu_hospitals_tpe,flu_hospitals_tpe,各項預防接種合約醫療院所,主計處,@monthly,data.taipei csv file,384,391,-7,data.taipei rid=47b02c29-efa2-4614-ac7e-1b0b9499e6ea,get_addr_xy_parallel,257,各行政區流感疫苗接種醫院數量統計
+proj_city_dashboard/long_term,long_term_tpe,臺北市長期照顧機構基本資料,社會局,@monthly,data.taipei,90,88,2,data.taipei rid=9a3e0440-87ea-4793-9240-5c8dc02b5129,get_addr_xy_parallel,258,長照據點
+proj_city_dashboard/R0033_2,patrol_fire_disqualified,臺北市消防安全檢查重大不合格場所,消防局,0 19 15 * *,data.taipei csv file,3,2,1,data.taipei rid=d417e957-7205-451e-bf45-a31db78f6ec8,get_addr_xy_parallel,14,火災風險地點
+proj_city_dashboard/D100101,nursery_room_info,臺北市哺集乳室資訊,衛生局,0 0 1 * *,data.taipei API,526,526,0,data.taipei rid=4350117f-8697-4903-8a49-a7a59f30eeb1,get_addr_xy_parallel,155,哺集乳室分佈
+proj_city_dashboard/D100102_1,childcare_family_hub,臺北市嬰幼兒照顧服務_親子館,社會局,0 0 1 * *,data.taipei API,13,13,0,data.taipei rid=5c09f39f-79cc-45b8-be8e-9b3ea8b220e3,get_addr_xy_parallel,150,育兒支持資源
+proj_city_dashboard/D100105,gynecology_clinic,臺北市婦產科醫療機構,衛生局,"0 0 1 3,9 *",data.taipei API,143,143,0,data.taipei rid=ba860191-ad03-49a3-8df4-29e0a01f3026,get_addr_xy_parallel,106|153,醫療院所分布|婦產科診所與醫院分佈
+proj_city_dashboard/R0017,patrol_designate_place,臺北市可供避難收容處所一覽表,教育局,30 3 1 4 *,data.taipei ods file,401,401,0,data.taipei rid=9def0ac0-ad65-4f34-a8a6-aeba704c70d4,get_addr_xy_parallel,11,緊急避難設施
+proj_city_dashboard/R0031,patrol_police_station,臺北市政府警察局名稱及地址,警察局,0 4 14 * *,data.taipei csv file,112,112,0,data.taipei rid=a90ae184-c39e-4242-b2d6-d7a0403c0632,get_addr_xy_parallel,9,警察相關設施
+proj_city_dashboard/R0033,patrol_fire_rescure,火災搶救困難地區,消防局,30 18 2 * *,data.taipei csv,446,446,0,data.taipei rid=577b3810-49b7-44fd-a5b7-97897bb50f9e,get_addr_xy_parallel,14,火災風險地點
+proj_city_dashboard/R0059,building_license,當年度使用執照摘要,都發局,15 19 * * 1,data.taipei XML,57,57,0,data.taipei rid=74a8b311-906e-44c4-91fb-7f413842d4e1,get_addr_xy_parallel,140,建照使照發照量
+proj_city_dashboard/cooling_point,cooling_point_tpe,臺北市涼適點,臺北市政府,@monthly,data.taipei,494,494,0,data.taipei rid=ae7e5986-859d-4294-b289-7c1b2e7c23f1,get_addr_xy_parallel,290,涼適點
+proj_city_dashboard/elderly_club,elderly_club_tpe,臺北市銀髮族服務-社區整體照顧服務體系C級單位一覽表,,0 20 19 * *,data.taipei api,293,293,0,data.taipei rid=ffab5e5f-4a0f-4759-8531-5302379509cd,get_addr_xy_parallel,252,銀髮俱樂部
+proj_city_dashboard/env_srv_energy_subsidy,env_srv_energy_subsidy,臺北市服務業汰換節能設備補助相關資訊,產業局,"0 3 24 6,12 *",data.taipei api,7,7,0,data.taipei rid=5f239e5c-9388-4dc2-b6a6-f65491edd78a,get_addr_xy_parallel,200,臺北市服務業汰換節能設備補助相關資訊
+proj_city_dashboard/general_hotel_registry,general_hotel_registry_tpe,臺北市合法一般旅館名冊,觀光旅遊局,@monthly,data.gov.tw,582,582,0,dataset-download,get_addr_xy_parallel,247,旅館統計
+proj_new_taipei_city_dashboard/aed_locations,aed_locations_metrotaipei,新北市AED設置地點資料,衛生局,0 20 19 * *,data.ntpc.gov.tw json,1795,1795,0,unresolved urls=[] rids=['61b29f27-219a-4394-9722-af97a5707598'] pages=[] ntpc=[] moenv=[] | patched,get_addr_xy_parallel,261,AED資源設置分布概況
+proj_new_taipei_city_dashboard/elderly_club,elderly_club_ntpe,新北市銀髮俱樂部,新北市政府警察局,@monthly,data.ntpc.gov.tw,1202,1202,0,ntpc f531a808-4aab-4e5e-93f0-c34f9ff97a78,get_addr_xy_parallel,252,銀髮俱樂部
+proj_new_taipei_city_dashboard/general_hotel_registry,general_hotel_registry_ntpe,新北市合法一般旅館名冊,觀光旅遊局,@monthly,data.gov.tw,208,208,0,ntpc 8565597e-a174-4907-99c7-adb5ddee1326,get_addr_xy_parallel,247,旅館統計
+proj_new_taipei_city_dashboard/urbn_air_raid_shelter,urbn_air_raid_shelter_ntpe,防空避難處所,,@monthly,data.ntpc.gov.tw,9472,9472,0,unresolved urls=[] rids=['3a9d87f0-9490-4021-8fc9-5045ecdd8d22'] pages=[] ntpc=[] moenv=[] | patched,get_addr_xy_parallel,171,防空避難設施
+proj_city_dashboard/R0023,patrol_residential_burglary,臺北市住宅竊盜點位資訊,警察局 刑警大隊,0 23 10 * *,data.taipei csv,4334,4344,-10,,get_addr_xy_parallel,,
+proj_city_dashboard/D090100_1,edu_school,臺北市各級學校分布圖,教育局,"0 5 21 5,11 *",data.taipei API,285,283,2,,get_addr_xy_parallel,,
+proj_city_dashboard/D060101_2,heal_clinic,臺北市公私立診所,衛生局,"10 5 18 5,11 *",data.taipei API,1858,1858,0,,get_addr_xy_parallel,,
+proj_city_dashboard/R0069,building_unsued_nonpublic,臺北市政府財政局經管市有非公用閒置建物清冊,財政局,"0 2 16 3,9 *",data.taipei csv file,1,1,0,,get_addr_xy_parallel,,

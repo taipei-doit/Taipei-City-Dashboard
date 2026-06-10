@@ -1,0 +1,835 @@
+{
+  "proj_city_dashboard/bike_path": {
+    "count": 493,
+    "note": "tdx",
+    "ready_table": "bike_network_tpe",
+    "source_type": "TDX API",
+    "schedule": ""
+  },
+  "proj_new_taipei_city_dashboard/bike_path": {
+    "count": 253,
+    "note": "tdx",
+    "ready_table": "bike_network_new_tpe",
+    "source_type": "TDX API",
+    "schedule": ""
+  },
+  "proj_city_dashboard/R0017": {
+    "count": 401,
+    "note": "data.taipei rid=9def0ac0-ad65-4f34-a8a6-aeba704c70d4",
+    "ready_table": "patrol_designate_place",
+    "source_type": "data.taipei ods file",
+    "schedule": ""
+  },
+  "proj_city_dashboard/R0018": {
+    "count": 1736,
+    "note": "moa-shp",
+    "ready_table": "patrol_debris",
+    "source_type": "data.gov.tw zip",
+    "schedule": ""
+  },
+  "proj_city_dashboard/R0019": {
+    "count": null,
+    "note": "data.moa SHP 異常,R0018 可用",
+    "ready_table": "patrol_debrisarea",
+    "source_type": "data.gov.tw zip",
+    "schedule": ""
+  },
+  "proj_city_dashboard/R0020": {
+    "count": 34849,
+    "note": "download-file",
+    "ready_table": "patrol_artificial_slope",
+    "source_type": "data.taipei shp",
+    "schedule": ""
+  },
+  "proj_city_dashboard/R0021": {
+    "count": 34,
+    "note": "download-file",
+    "ready_table": "patrol_old_settlement",
+    "source_type": "data.taipei shp",
+    "schedule": ""
+  },
+  "proj_city_dashboard/R0022": {
+    "count": null,
+    "note": "tsis.dbas 主計處內網 CSV",
+    "ready_table": "patrol_criminal_case",
+    "source_type": "data.taipei API",
+    "schedule": ""
+  },
+  "proj_city_dashboard/R0031": {
+    "count": 112,
+    "note": "data.taipei rid=a90ae184-c39e-4242-b2d6-d7a0403c0632",
+    "ready_table": "patrol_police_station",
+    "source_type": "data.taipei csv file",
+    "schedule": ""
+  },
+  "proj_city_dashboard/R0033": {
+    "count": 446,
+    "note": "data.taipei rid=577b3810-49b7-44fd-a5b7-97897bb50f9e",
+    "ready_table": "patrol_fire_rescure",
+    "source_type": "data.taipei csv",
+    "schedule": ""
+  },
+  "proj_city_dashboard/R0033_1": {
+    "count": 46,
+    "note": "data.taipei rid=4486e759-4159-4208-9832-c32300c4e832",
+    "ready_table": "patrol_fire_brigade",
+    "source_type": "data.taipei csv file",
+    "schedule": ""
+  },
+  "proj_city_dashboard/R0033_2": {
+    "count": 2,
+    "note": "data.taipei rid=d417e957-7205-451e-bf45-a31db78f6ec8",
+    "ready_table": "patrol_fire_disqualified",
+    "source_type": "data.taipei csv file",
+    "schedule": ""
+  },
+  "proj_city_dashboard/R0037_1": {
+    "count": 3,
+    "note": "KML Placemark",
+    "ready_table": "patrol_flood_78_8",
+    "source_type": "data.taipei KML",
+    "schedule": ""
+  },
+  "proj_city_dashboard/R0037_2": {
+    "count": 4,
+    "note": "KML Placemark",
+    "ready_table": "patrol_flood_100",
+    "source_type": "data.taipei KML",
+    "schedule": ""
+  },
+  "proj_city_dashboard/R0037_3": {
+    "count": 5,
+    "note": "KML Placemark",
+    "ready_table": "patrol_flood_130",
+    "source_type": "data.taipei KML",
+    "schedule": ""
+  },
+  "proj_city_dashboard/R0042": {
+    "count": 22762,
+    "note": "page→rid d4aaaaa6-d03e-4539-945b-cdbd9387007d",
+    "ready_table": "traffic_accident_location",
+    "source_type": "data.taipei csv",
+    "schedule": ""
+  },
+  "proj_city_dashboard/R0046": {
+    "count": 22,
+    "note": "json https://tcgmetro.blob.core.windows.net/stationnames/stations",
+    "ready_table": "traffic_metro_unusual",
+    "source_type": "data.taipei JSON",
+    "schedule": ""
+  },
+  "proj_city_dashboard/R0047": {
+    "count": null,
+    "note": "MRT SOAP ASMX 須帳密",
+    "ready_table": "mrtp_metro_capacity_realtime",
+    "source_type": "MRT API",
+    "schedule": ""
+  },
+  "proj_city_dashboard/R0054": {
+    "count": 3824,
+    "note": "download-file",
+    "ready_table": "urbn_landuse_master_plan",
+    "source_type": "data.taipei SHP",
+    "schedule": ""
+  },
+  "proj_city_dashboard/R0056": {
+    "count": 147546,
+    "note": "csv https://tpland.blob.core.windows.net/blobfs/publand.csv",
+    "ready_table": "building_publand",
+    "source_type": "data.taipei csv file",
+    "schedule": ""
+  },
+  "proj_city_dashboard/R0057": {
+    "count": 34,
+    "note": "data.taipei rid=43624c8e-c768-4b3c-93c4-595f5af7a9cb",
+    "ready_table": "building_permit",
+    "source_type": "data.taipei XML",
+    "schedule": ""
+  },
+  "proj_city_dashboard/R0058": {
+    "count": 34,
+    "note": "data.taipei rid=43624c8e-c768-4b3c-93c4-595f5af7a9cb",
+    "ready_table": "building_permit_history",
+    "source_type": "data.taipei XML",
+    "schedule": ""
+  },
+  "proj_city_dashboard/R0059": {
+    "count": 57,
+    "note": "data.taipei rid=74a8b311-906e-44c4-91fb-7f413842d4e1",
+    "ready_table": "building_license",
+    "source_type": "data.taipei XML",
+    "schedule": ""
+  },
+  "proj_city_dashboard/R0061": {
+    "count": 84,
+    "note": "direct https://hms.udd.gov.taipei/api/BigData/project",
+    "ready_table": "building_social_house",
+    "source_type": "json",
+    "schedule": ""
+  },
+  "proj_city_dashboard/R0062": {
+    "count": 307,
+    "note": "udd",
+    "ready_table": "building_renewarea_10",
+    "source_type": "internal GeoJSON file",
+    "schedule": ""
+  },
+  "proj_city_dashboard/R0063": {
+    "count": 967,
+    "note": "udd",
+    "ready_table": "building_renewunit_12",
+    "source_type": "internal GeoJSON file",
+    "schedule": ""
+  },
+  "proj_city_dashboard/R0064": {
+    "count": 584,
+    "note": "udd",
+    "ready_table": "building_renewunit_20",
+    "source_type": "internal GeoJSON file",
+    "schedule": ""
+  },
+  "proj_city_dashboard/R0065": {
+    "count": 562,
+    "note": "udd",
+    "ready_table": "building_renewunit_30",
+    "source_type": "internal GeoJSON file",
+    "schedule": ""
+  },
+  "proj_city_dashboard/R0066": {
+    "count": 80,
+    "note": "udd",
+    "ready_table": "building_renewarea_40",
+    "source_type": "internal GeoJSON file",
+    "schedule": ""
+  },
+  "proj_city_dashboard/R0067": {
+    "count": 87,
+    "note": "data.taipei rid=15c3dde7-b6db-4a66-84c2-098236b84512",
+    "ready_table": "building_unsued_land",
+    "source_type": "data.taipei API",
+    "schedule": ""
+  },
+  "proj_city_dashboard/R0068": {
+    "count": 65,
+    "note": "data.taipei rid=5afc5dde-3431-45a4-995f-9610616f32cc",
+    "ready_table": "building_unsued_public",
+    "source_type": "data.taipei csv file",
+    "schedule": ""
+  },
+  "proj_city_dashboard/R0075": {
+    "count": 30445,
+    "note": "data.taipei rid=b9f8154d-c627-48a8-b3ef-512ed9cde9e7",
+    "ready_table": "fire_hydrant_location",
+    "source_type": "data.taipei csv file",
+    "schedule": ""
+  },
+  "proj_city_dashboard/D010501": {
+    "count": 40637,
+    "note": "page→rid 4f78ad83-ba00-41ff-b1fb-83f87932da87",
+    "ready_table": "resh_petition",
+    "source_type": "data.taipei api",
+    "schedule": ""
+  },
+  "proj_city_dashboard/D020105": {
+    "count": 5917,
+    "note": "data.taipei rid=e7aecde4-ef04-46e3-849b-1ee159ea6d5f",
+    "ready_table": "urbn_air_raid_shelter",
+    "source_type": "data.taipei api",
+    "schedule": ""
+  },
+  "proj_city_dashboard/D020201": {
+    "count": 274,
+    "note": "data.taipei rid=cd4ec60e-8d53-48a5-bbf1-9ec1f2afc20b",
+    "ready_table": "fire_narrow_street",
+    "source_type": "data.taipei api",
+    "schedule": ""
+  },
+  "proj_city_dashboard/D020301": {
+    "count": 752,
+    "note": "ATIS CCTVByLBS",
+    "ready_table": "tran_cctv",
+    "source_type": "ATIS api",
+    "schedule": ""
+  },
+  "proj_city_dashboard/D030101_1": {
+    "count": 15291,
+    "note": "json https://tpnco.blob.core.windows.net/blobfs/Data/TP_SIDEWORK.",
+    "ready_table": "work_sidewalk",
+    "source_type": "data.taipei GeoJSON",
+    "schedule": ""
+  },
+  "proj_city_dashboard/D030104_2": {
+    "count": 874,
+    "note": "unresolved urls=['https://tcgbusfs.blob.core.windows.net/blobtcmsv/T'] rids=[] pages=[] ntpc=[] moenv=[] | patched",
+    "ready_table": "tran_parking",
+    "source_type": "data.taipei JSON",
+    "schedule": ""
+  },
+  "proj_city_dashboard/D030201": {
+    "count": 22762,
+    "note": "page→rid 83d6d29c-6801-41a2-95c6-47d551646db3",
+    "ready_table": "traffic_accident",
+    "source_type": "data.taipei csv",
+    "schedule": ""
+  },
+  "proj_city_dashboard/D040301_1": {
+    "count": 146372,
+    "note": "json https://tppkl.blob.core.windows.net/blobfs/TaipeiLight.json",
+    "ready_table": "work_street_light",
+    "source_type": "data.taipei JSON",
+    "schedule": ""
+  },
+  "proj_city_dashboard/D040302_1": {
+    "count": 230,
+    "note": "json https://tpnco.blob.core.windows.net/blobfs/Rally/TodayUrgent",
+    "ready_table": "work_urgent_use_road",
+    "source_type": "data.taipei GeoJSON",
+    "schedule": ""
+  },
+  "proj_city_dashboard/D040302_2": {
+    "count": 4,
+    "note": "json https://tpnco.blob.core.windows.net/blobfs/Rally/TodayRallyC",
+    "ready_table": "work_rally_use_road",
+    "source_type": "data.taipei GeoJSON",
+    "schedule": ""
+  },
+  "proj_city_dashboard/D040401": {
+    "count": 4015,
+    "note": "data.taipei rid=a6e90031-7ec4-4089-afb5-361a4efe7202",
+    "ready_table": "garbage_truck",
+    "source_type": "data.taipei API",
+    "schedule": ""
+  },
+  "proj_city_dashboard/D050201_1": {
+    "count": 92927,
+    "note": "json https://tppkl.blob.core.windows.net/blobfs/TaipeiTree.json",
+    "ready_table": "work_street_tree",
+    "source_type": "data.taipei JSON",
+    "schedule": ""
+  },
+  "proj_city_dashboard/D050301_1": {
+    "count": 765,
+    "note": "direct https://farmcity.taipei/city/api/",
+    "ready_table": "work_garden_city",
+    "source_type": "data.taipei JSON",
+    "schedule": ""
+  },
+  "proj_city_dashboard/D050303_1": {
+    "count": 880,
+    "note": "download-file",
+    "ready_table": "work_park",
+    "source_type": "data.taipei GeoJSON",
+    "schedule": ""
+  },
+  "proj_city_dashboard/D050303_5": {
+    "count": 80,
+    "note": "download-file",
+    "ready_table": "work_permeable_paving_schoool",
+    "source_type": "data.taipei API",
+    "schedule": ""
+  },
+  "proj_city_dashboard/D050303_6": {
+    "count": 23,
+    "note": "download-file",
+    "ready_table": "work_permeable_paving_parking",
+    "source_type": "data.taipei API",
+    "schedule": ""
+  },
+  "proj_city_dashboard/D050303_7": {
+    "count": 102,
+    "note": "download-file",
+    "ready_table": "work_permeable_paving_park",
+    "source_type": "data.taipei API",
+    "schedule": ""
+  },
+  "proj_city_dashboard/D050303_8": {
+    "count": 848,
+    "note": "download-file",
+    "ready_table": "work_permeable_paving_sidewalk",
+    "source_type": "data.taipei API",
+    "schedule": ""
+  },
+  "proj_city_dashboard/D050303_9": {
+    "count": 26,
+    "note": "download-file",
+    "ready_table": "work_permeable_paving_pac",
+    "source_type": "data.taipei API",
+    "schedule": ""
+  },
+  "proj_city_dashboard/D050401_1": {
+    "count": null,
+    "note": "soil.taipei 已改為登入頁",
+    "ready_table": "work_soil_liquefaction",
+    "source_type": "data.taipei GeoJSON",
+    "schedule": ""
+  },
+  "proj_city_dashboard/D050502": {
+    "count": 84,
+    "note": "moenv aqx_p_432",
+    "ready_table": "moenv_air_quality",
+    "source_type": "MOENV API",
+    "schedule": ""
+  },
+  "proj_city_dashboard/D050601": {
+    "count": 20,
+    "note": "data.taipei rid=047024e1-b7a2-4b74-b6ac-e9c2a0072593",
+    "ready_table": "env_greenhouse_gas_stat",
+    "source_type": "data.taipei api",
+    "schedule": ""
+  },
+  "proj_city_dashboard/D070202": {
+    "count": null,
+    "note": "tsis.dbas 主計處內網 CSV",
+    "ready_table": "stat_power_usage",
+    "source_type": "data.taipei API",
+    "schedule": ""
+  },
+  "proj_city_dashboard/D100101": {
+    "count": 526,
+    "note": "data.taipei rid=4350117f-8697-4903-8a49-a7a59f30eeb1",
+    "ready_table": "nursery_room_info",
+    "source_type": "data.taipei API",
+    "schedule": ""
+  },
+  "proj_city_dashboard/D100102_1": {
+    "count": 13,
+    "note": "data.taipei rid=5c09f39f-79cc-45b8-be8e-9b3ea8b220e3",
+    "ready_table": "childcare_family_hub",
+    "source_type": "data.taipei API",
+    "schedule": ""
+  },
+  "proj_city_dashboard/D100102_2": {
+    "count": 13,
+    "note": "data.taipei rid=4bfa01ad-7ba0-4b7a-9c1b-f9c58a2cd751",
+    "ready_table": "childcare_parenting_garden",
+    "source_type": "data.taipei API",
+    "schedule": ""
+  },
+  "proj_city_dashboard/D100102_3": {
+    "count": 12,
+    "note": "data.taipei rid=5cf938d7-350e-433b-b8be-280710038d74",
+    "ready_table": "childcare_homecare_hub",
+    "source_type": "data.taipei API",
+    "schedule": ""
+  },
+  "proj_city_dashboard/D100102_4": {
+    "count": 23,
+    "note": "data.taipei rid=57685fb2-cc92-4874-8588-e5a1b1b15b50",
+    "ready_table": "childcare_designated_care_center",
+    "source_type": "data.taipei API",
+    "schedule": ""
+  },
+  "proj_city_dashboard/D100102_5": {
+    "count": 62,
+    "note": "data.taipei rid=f1418a7a-4bdf-41fc-869c-63703dc16363",
+    "ready_table": "childcare_community_care_hub",
+    "source_type": "data.taipei API",
+    "schedule": ""
+  },
+  "proj_city_dashboard/D100102_6": {
+    "count": 29,
+    "note": "data.taipei rid=a02ccc34-dd28-4c5d-b527-c5433ec1a453",
+    "ready_table": "childcare_gov_priv_infant_care",
+    "source_type": "data.taipei API",
+    "schedule": ""
+  },
+  "proj_city_dashboard/D100102_7": {
+    "count": 223,
+    "note": "unresolved urls=[] rids=['e7cdaca3-e9da-46f9-b857-395e6e8e06a6'] pages=['081df75e-85c7-464c-b125-546920911c5c'] ntpc=[] moenv=[] | patched",
+    "ready_table": "childcare_private_childcare",
+    "source_type": "data.taipei API",
+    "schedule": ""
+  },
+  "proj_city_dashboard/D100102_8": {
+    "count": 1,
+    "note": "data.taipei rid=1015e1db-bbf0-4cef-9bea-9928e84b3735",
+    "ready_table": "childcare_resource_hub",
+    "source_type": "data.taipei API",
+    "schedule": ""
+  },
+  "proj_city_dashboard/D100103": {
+    "count": null,
+    "note": "tsis.dbas 主計處內網 CSV",
+    "ready_table": "parental_leave",
+    "source_type": "data.taipei API",
+    "schedule": ""
+  },
+  "proj_city_dashboard/D100104_1": {
+    "count": 67,
+    "note": "data.taipei rid=66bfed0f-17c6-4cbd-b9e9-88ea1980bc46",
+    "ready_table": "maternity_hospitals",
+    "source_type": "data.taipei API",
+    "schedule": ""
+  },
+  "proj_city_dashboard/D100105": {
+    "count": 143,
+    "note": "data.taipei rid=ba860191-ad03-49a3-8df4-29e0a01f3026",
+    "ready_table": "gynecology_clinic",
+    "source_type": "data.taipei API",
+    "schedule": ""
+  },
+  "proj_city_dashboard/D100106_1": {
+    "count": 54873,
+    "note": "data.taipei rid=c8f5b53d-ef3d-4321-ae8e-58cd2a5ee73c",
+    "ready_table": "newborn_stats_district",
+    "source_type": "data.taipei API",
+    "schedule": ""
+  },
+  "proj_city_dashboard/D100106_2": {
+    "count": 54873,
+    "note": "data.taipei rid=c8f5b53d-ef3d-4321-ae8e-58cd2a5ee73c",
+    "ready_table": "newborn_stats_vil",
+    "source_type": "data.taipei API",
+    "schedule": ""
+  },
+  "proj_city_dashboard/D100106_3": {
+    "count": 54873,
+    "note": "data.taipei rid=c8f5b53d-ef3d-4321-ae8e-58cd2a5ee73c",
+    "ready_table": "newborn_stats_time",
+    "source_type": "data.taipei API",
+    "schedule": ""
+  },
+  "proj_city_dashboard/ebus_base_info": {
+    "count": 3794,
+    "note": "tdx",
+    "ready_table": "bus_info_tpe",
+    "source_type": "TDX API",
+    "schedule": ""
+  },
+  "proj_new_taipei_city_dashboard/ebus_base_info": {
+    "count": 2889,
+    "note": "tdx",
+    "ready_table": "bus_info_new_tpe",
+    "source_type": "TDX API",
+    "schedule": ""
+  },
+  "proj_city_dashboard/elderly_club": {
+    "count": 293,
+    "note": "data.taipei rid=ffab5e5f-4a0f-4759-8531-5302379509cd",
+    "ready_table": "elderly_club_tpe",
+    "source_type": "data.taipei api",
+    "schedule": ""
+  },
+  "proj_new_taipei_city_dashboard/elderly_club": {
+    "count": 1202,
+    "note": "ntpc f531a808-4aab-4e5e-93f0-c34f9ff97a78",
+    "ready_table": "elderly_club_ntpe",
+    "source_type": "data.ntpc.gov.tw",
+    "schedule": ""
+  },
+  "proj_city_dashboard/employment_age_structure": {
+    "count": null,
+    "note": "tsis.dbas 主計處內網 CSV (需 Taipei proxy)",
+    "ready_table": "employment_age_structure_tpe",
+    "source_type": "data.taipei",
+    "schedule": ""
+  },
+  "proj_new_taipei_city_dashboard/employment_age_structure": {
+    "count": 19,
+    "note": "unresolved urls=[] rids=['c285509a-7fb2-434f-8542-0b4986c337a8'] pages=[] ntpc=[] moenv=[] | patched",
+    "ready_table": "employment_age_structure_new_tpe",
+    "source_type": "data.ntpc.gov.tw",
+    "schedule": ""
+  },
+  "proj_city_dashboard/energy_saving_coaching_situation_tpe": {
+    "count": 11,
+    "note": "data.taipei rid=5a2c9899-9c34-44ef-8860-1ed773e08dc8",
+    "ready_table": "energy_saving_coaching_situation_tpe",
+    "source_type": "data.taipei api",
+    "schedule": ""
+  },
+  "proj_city_dashboard/energy_saving_coaching_situation_tpe_gov": {
+    "count": 11,
+    "note": "data.taipei rid=fcd166eb-4fb5-40db-962b-28899d7146fc",
+    "ready_table": "energy_saving_coaching_situation_tpe_gov",
+    "source_type": "data.taipei api",
+    "schedule": ""
+  },
+  "proj_city_dashboard/env_srv_energy_subsidy": {
+    "count": 7,
+    "note": "data.taipei rid=5f239e5c-9388-4dc2-b6a6-f65491edd78a",
+    "ready_table": "env_srv_energy_subsidy",
+    "source_type": "data.taipei api",
+    "schedule": ""
+  },
+  "proj_city_dashboard/flu_hospitals_tpe": {
+    "count": 391,
+    "note": "data.taipei rid=47b02c29-efa2-4614-ac7e-1b0b9499e6ea",
+    "ready_table": "flu_hospitals_tpe",
+    "source_type": "data.taipei csv file",
+    "schedule": ""
+  },
+  "proj_new_taipei_city_dashboard/flu_hospitals_ntpe": {
+    "count": 686,
+    "note": "ntpc 551cd3f4-534a-45cf-976a-359090fb7df6",
+    "ready_table": "flu_hospitals_ntpe",
+    "source_type": "data.ntpc",
+    "schedule": ""
+  },
+  "proj_city_dashboard/friendly_store": {
+    "count": 1058,
+    "note": "data.taipei rid=5a5b36e0-f870-4b7f-8378-c91ac5f57941",
+    "ready_table": "friendly_store",
+    "source_type": "data.taipei csv",
+    "schedule": ""
+  },
+  "proj_city_dashboard/general_hotel_registry": {
+    "count": 582,
+    "note": "dataset-download",
+    "ready_table": "general_hotel_registry_tpe",
+    "source_type": "data.gov.tw",
+    "schedule": ""
+  },
+  "proj_new_taipei_city_dashboard/general_hotel_registry": {
+    "count": 208,
+    "note": "ntpc 8565597e-a174-4907-99c7-adb5ddee1326",
+    "ready_table": "general_hotel_registry_ntpe",
+    "source_type": "data.gov.tw",
+    "schedule": ""
+  },
+  "proj_city_dashboard/li_age_population_tpe": {
+    "count": 54873,
+    "note": "data.taipei rid=c8f5b53d-ef3d-4321-ae8e-58cd2a5ee73c",
+    "ready_table": "li_age_population_tpe",
+    "source_type": "data.taipei api",
+    "schedule": ""
+  },
+  "proj_city_dashboard/long_term": {
+    "count": 88,
+    "note": "data.taipei rid=9a3e0440-87ea-4793-9240-5c8dc02b5129",
+    "ready_table": "long_term_tpe",
+    "source_type": "data.taipei",
+    "schedule": ""
+  },
+  "proj_new_taipei_city_dashboard/long_term": {
+    "count": null,
+    "note": "新北市 NTPC 反爬蟲",
+    "ready_table": "long_term_nwtpe",
+    "source_type": "data.ntpc.gov.tw json",
+    "schedule": ""
+  },
+  "proj_city_dashboard/merge_crime_type_by_dist": {
+    "count": null,
+    "note": "衍生自 DB",
+    "ready_table": "merge_crime_type_by_dist_tpe",
+    "source_type": "data.taipei",
+    "schedule": ""
+  },
+  "proj_new_taipei_city_dashboard/merge_crime_type_by_dist": {
+    "count": 13296,
+    "note": "unresolved urls=[] rids=['8a32c6b5-46fc-4fac-b3a4-317b9998bfd7'] pages=[] ntpc=[] moenv=[] | patched",
+    "ready_table": "merge_crime_type_by_dist_new_tpe",
+    "source_type": "data.ntpc.gov.tw",
+    "schedule": ""
+  },
+  "proj_city_dashboard/moenv_public_toilet_tpe": {
+    "count": 7217,
+    "note": "moenv fac_p_28",
+    "ready_table": "moenv_public_toilet_tpe",
+    "source_type": "MOENV API",
+    "schedule": ""
+  },
+  "proj_new_taipei_city_dashboard/moenv_public_toilet_ntpe": {
+    "count": 6017,
+    "note": "moenv fac_p_21",
+    "ready_table": "moenv_public_toilet_ntpe",
+    "source_type": "MOENV API",
+    "schedule": ""
+  },
+  "proj_city_dashboard/school_reconstruction": {
+    "count": 37,
+    "note": "data.taipei rid=b14137d5-fde6-4491-8817-2cf5f68ef0cf",
+    "ready_table": "school_reconstruction_tpe",
+    "source_type": "data.taipei",
+    "schedule": ""
+  },
+  "proj_city_dashboard/sea_sand_houses_tpe": {
+    "count": null,
+    "note": "tsis.dbas 主計處內網 CSV",
+    "ready_table": "sea_sand_houses_tpe",
+    "source_type": "data.taipei api",
+    "schedule": ""
+  },
+  "proj_city_dashboard/tourist_attractions": {
+    "count": 436,
+    "note": "tdx",
+    "ready_table": "tourist_attractions_tpe",
+    "source_type": "data.taipei",
+    "schedule": ""
+  },
+  "proj_new_taipei_city_dashboard/tourist_attractions": {
+    "count": 564,
+    "note": "tdx",
+    "ready_table": "tourist_attractions_ntpe",
+    "source_type": "data.ntpc.gov.tw",
+    "schedule": ""
+  },
+  "proj_city_dashboard/yearly_death_cause_etl": {
+    "count": null,
+    "note": "tsis.dbas 主計處內網 CSV",
+    "ready_table": "yearly_death_cause_etl_tpe",
+    "source_type": "data.taipei csv file",
+    "schedule": ""
+  },
+  "proj_new_taipei_city_dashboard/yearly_death_cause_etl": {
+    "count": 19,
+    "note": "ntpc 5e6a672a-09e6-4119-8de6-0ca9856f3a01",
+    "ready_table": "yearly_death_cause_etl_ntpe",
+    "source_type": "data.taipei",
+    "schedule": ""
+  },
+  "proj_city_dashboard/youth_enterpreneurship_financing_loan_tpe": {
+    "count": 150,
+    "note": "data.taipei rid=6e66d5ea-250e-4078-ac99-6247973a0ddd",
+    "ready_table": "youth_enterpreneurship_financing_loan_tpe",
+    "source_type": "data.taipei api",
+    "schedule": ""
+  },
+  "proj_city_dashboard/cooling_point": {
+    "count": 494,
+    "note": "data.taipei rid=ae7e5986-859d-4294-b289-7c1b2e7c23f1",
+    "ready_table": "cooling_point_tpe",
+    "source_type": "data.taipei",
+    "schedule": ""
+  },
+  "proj_city_dashboard/aed_locations": {
+    "count": 2728,
+    "note": "data.taipei rid=438c61ad-24f6-4e54-a1cc-e2cfe0e7051e",
+    "ready_table": "aed_locations",
+    "source_type": "data.taipei json",
+    "schedule": ""
+  },
+  "proj_new_taipei_city_dashboard/aed_locations": {
+    "count": 1795,
+    "note": "unresolved urls=[] rids=['61b29f27-219a-4394-9722-af97a5707598'] pages=[] ntpc=[] moenv=[] | patched",
+    "ready_table": "aed_locations_metrotaipei",
+    "source_type": "data.ntpc.gov.tw json",
+    "schedule": ""
+  },
+  "proj_city_dashboard/rainfall_flood_simulation_etl": {
+    "count": 6,
+    "note": "direct https://fhy.wra.gov.tw/disaster/Uploads/Download/%E6%B7%B9%E",
+    "ready_table": "rainfall_flood_simulation_etl_tpe",
+    "source_type": "",
+    "schedule": ""
+  },
+  "proj_new_taipei_city_dashboard/rainfall_flood_simulation_etl": {
+    "count": 6,
+    "note": "direct https://fhy.wra.gov.tw/disaster/Uploads/Download/%E6%B7%B9%E",
+    "ready_table": "rainfall_flood_simulation_etl_ntpe",
+    "source_type": "",
+    "schedule": ""
+  },
+  "proj_city_dashboard/accessible_facilities": {
+    "count": 113,
+    "note": "data.taipei rid=936e3be6-e029-4bdf-9199-a8b8fb482df6",
+    "ready_table": "accessible_facilities_tpe",
+    "source_type": "data.taipei",
+    "schedule": ""
+  },
+  "proj_new_taipei_city_dashboard/accessible_facilities": {
+    "count": 3838,
+    "note": "unresolved urls=[] rids=['1e548c60-0b04-4507-bf60-f3be651db642'] pages=[] ntpc=[] moenv=[] | patched",
+    "ready_table": "accessible_facilities_ntpe",
+    "source_type": "data.taipei",
+    "schedule": ""
+  },
+  "proj_city_dashboard/dependency_ratio_and_aging_index": {
+    "count": null,
+    "note": "tsis.dbas 主計處內網 CSV",
+    "ready_table": "dependency_ratio_and_aging_index_tpe",
+    "source_type": "data.taipei ods file",
+    "schedule": ""
+  },
+  "proj_new_taipei_city_dashboard/dependency_ratio_and_aging_index": {
+    "count": 2250,
+    "note": "unresolved urls=[] rids=['8308ab58-62d1-424e-8314-24b65b7ab492'] pages=[] ntpc=[] moenv=[] | patched",
+    "ready_table": "dependency_ratio_and_aging_index_new_tpe",
+    "source_type": "data.ntpc.gov.tw",
+    "schedule": ""
+  },
+  "proj_city_dashboard/population_age_distribution_monthly": {
+    "count": null,
+    "note": "tsis.dbas 主計處內網 CSV",
+    "ready_table": "population_age_distribution_tpe",
+    "source_type": "data.taipei csv file",
+    "schedule": ""
+  },
+  "proj_new_taipei_city_dashboard/population_age_distribution_monthly": {
+    "count": 2250,
+    "note": "unresolved urls=[] rids=['8308ab58-62d1-424e-8314-24b65b7ab492'] pages=[] ntpc=[] moenv=[] | patched",
+    "ready_table": "population_age_distribution_new_tpe",
+    "source_type": "data.ntpc.gov.tw",
+    "schedule": ""
+  },
+  "proj_new_taipei_city_dashboard/urbn_air_raid_shelter": {
+    "count": 9472,
+    "note": "unresolved urls=[] rids=['3a9d87f0-9490-4021-8fc9-5045ecdd8d22'] pages=[] ntpc=[] moenv=[] | patched",
+    "ready_table": "urbn_air_raid_shelter_ntpe",
+    "source_type": "data.ntpc.gov.tw",
+    "schedule": ""
+  },
+  "proj_new_taipei_city_dashboard/fire_narrow_street": {
+    "count": 614,
+    "note": "unresolved urls=[] rids=['5e5bd1b4-b5fd-406b-84c4-ae2d70d2ba71'] pages=[] ntpc=[] moenv=[] | patched",
+    "ready_table": "fire_narrow_street_ntpe",
+    "source_type": "data.ntpc.gov.tw",
+    "schedule": ""
+  },
+  "proj_city_dashboard/R0034": {
+    "count": "N/A",
+    "note": "即時 DAG 排除 ()",
+    "schedule": "",
+    "ready_table": "patrol_rain_sewer",
+    "source_type": "internal API"
+  },
+  "proj_city_dashboard/R0036": {
+    "count": "N/A",
+    "note": "即時 DAG 排除 ()",
+    "schedule": "",
+    "ready_table": "patrol_rain_floodgate",
+    "source_type": "internal API"
+  },
+  "proj_city_dashboard/R0038_2": {
+    "count": "N/A",
+    "note": "即時 DAG 排除 ()",
+    "schedule": "",
+    "ready_table": "traffic_lives",
+    "source_type": "internal KML"
+  },
+  "proj_city_dashboard/R0040": {
+    "count": "N/A",
+    "note": "即時 DAG 排除 ()",
+    "schedule": "",
+    "ready_table": "traffic_todayworks",
+    "source_type": "data.taipei GeoJSON"
+  },
+  "proj_city_dashboard/R0051_3": {
+    "count": "N/A",
+    "note": "即時 DAG 排除 ()",
+    "schedule": "",
+    "ready_table": "tran_ubike_realtime",
+    "source_type": "TDX API"
+  },
+  "proj_city_dashboard/R0051_4": {
+    "count": "N/A",
+    "note": "即時 DAG 排除 ()",
+    "schedule": "",
+    "ready_table": "traffic_youbike_two_realtime",
+    "source_type": "API"
+  },
+  "proj_city_dashboard/D030104_1": {
+    "count": "N/A",
+    "note": "即時 DAG 排除 ()",
+    "schedule": "",
+    "ready_table": "tran_parking_capacity_realtime",
+    "source_type": "data.taipei JSON"
+  },
+  "proj_new_taipei_city_dashboard/youbike_station_realtime_usage_and_availability": {
+    "count": "N/A",
+    "note": "即時 DAG 排除 ()",
+    "schedule": "",
+    "ready_table": "traffic_youbike_two_realtime_new_tpe",
+    "source_type": "API"
+  }
+}

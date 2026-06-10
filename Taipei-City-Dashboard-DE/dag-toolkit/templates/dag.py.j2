@@ -1,0 +1,83 @@
+{# Jinja2 template — generate <table_name>.py
+
+   Required variables:
+     table_name           str    — DAG 名 = dag_folder = dag_id = table 名
+     proj_folder          str    — proj_city_dashboard 或 proj_new_taipei_city_dashboard
+     col_map              dict   — {col_name: pg_type}
+     extract_imports      list   — e.g. ["get_data_taipei_api"] from utils.extract_stage
+     extra_transform_imports  list — e.g. ["add_point_wkbgeometry_column_to_df"]
+     is_geometry          bool   — col_map 是否含 wkb_geometry
+     geometry_type        str    — "Point" / "MultiLineString" / "MultiPolygon" (僅 is_geometry=True)
+     extract_block        str    — Extract 段程式碼(對方提供 transform 邏輯後渲染)
+     transform_block      str    — Transform 段程式碼
+#}
+from airflow import DAG
+from operators.common_pipeline import CommonDag
+
+
+def _ensure_ready_table(engine, table_name, col_map):
+    """建表(若不存在)。冪等,每次 DAG run 都會跑。"""
+    from sqlalchemy.sql import text as sa_text
+    from utils.generate_sql_to_create_DB_table import generate_sql_to_create_db_table
+
+    sql = generate_sql_to_create_db_table(table_name, col_map)
+    with engine.connect() as conn:
+        conn.execute(sa_text(sql).execution_options(autocommit=True))
+
+
+def _{{ table_name }}(**kwargs):
+    import pandas as pd
+    from sqlalchemy import create_engine
+    from utils.extract_stage import {{ extract_imports | join(", ") }}
+    from utils.load_stage import (
+        {% if is_geometry %}save_geodataframe_to_postgresql,{% else %}save_dataframe_to_postgresql,{% endif %}
+        update_lasttime_in_data_to_dataset_info,
+    )
+    from utils.transform_time import convert_str_to_time_format
+{% if extra_transform_imports %}    from utils.transform_geometry import {{ extra_transform_imports | join(", ") }}
+{% endif %}
+    # === Config ===
+    ready_data_db_uri = kwargs.get("ready_data_db_uri")
+    dag_infos = kwargs.get("dag_infos")
+    dag_id = dag_infos.get("dag_id")
+    load_behavior = dag_infos.get("load_behavior")
+    default_table = dag_infos.get("ready_data_default_table")
+    history_table = dag_infos.get("ready_data_history_table")
+
+    COL_MAP = {
+{% for col, pg_type in col_map.items() %}        "{{ col }}": {{ pg_type | tojson }},
+{% endfor %}    }
+    SELECT_COLUMNS = list(COL_MAP.keys())
+
+    # === Extract ===
+{{ extract_block | indent(4, True) }}
+
+    # === Transform ===
+{{ transform_block | indent(4, True) }}
+    data = data[SELECT_COLUMNS]
+
+    # === Load ===
+    engine = create_engine(ready_data_db_uri)
+    _ensure_ready_table(engine, default_table, COL_MAP)
+{% if is_geometry %}    save_geodataframe_to_postgresql(
+        engine,
+        gdata=data,
+        load_behavior=load_behavior,
+        geometry_type="{{ geometry_type }}",
+        default_table=default_table,
+        history_table=history_table,
+    )
+{% else %}    save_dataframe_to_postgresql(
+        engine,
+        data=data,
+        load_behavior=load_behavior,
+        default_table=default_table,
+        history_table=history_table,
+    )
+{% endif %}    update_lasttime_in_data_to_dataset_info(
+        engine, dag_id, data["data_time"].max()
+    )
+
+
+dag = CommonDag(proj_folder="{{ proj_folder }}", dag_folder="{{ table_name }}")
+dag.create_dag(etl_func=_{{ table_name }})

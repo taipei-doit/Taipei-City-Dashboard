@@ -42,19 +42,10 @@ def _R0019(**kwargs):
     zip_file = download_file(filename, URL, is_proxy=False)
     unzip_file_to_target_folder(zip_file, unzip_path)
     target_shp_file = [f for f in os.listdir(unzip_path) if f.endswith("shp")][0]
-    # 使用 fiona 直接開啟以避免 fiona.path 問題
-    import fiona
-    from shapely.geometry import shape
     shp_path = f"{unzip_path}/{target_shp_file}"
-    with fiona.open(shp_path, encoding=ENCODING) as src:
-        records = []
-        geometries = []
-        for feature in src:
-            props = dict(feature.get("properties", {}))
-            geom = feature.get("geometry")
-            records.append(props)
-            geometries.append(shape(geom) if geom else None)
-        raw_data = gpd.GeoDataFrame(records, geometry=geometries, crs=f"EPSG:{FROM_CRS}")
+    raw_data = gpd.read_file(shp_path, encoding=ENCODING, engine="pyogrio")
+    if raw_data.crs is None:
+        raw_data = raw_data.set_crs(epsg=FROM_CRS)
 
     # Transform
     gdata = raw_data.copy()

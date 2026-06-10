@@ -1,0 +1,8 @@
+Checking for trailing spaces in mapped values...
+Value '動態回傳剩餘車位數' is clean. Length: 9
+Value '靜態' is clean. Length: 2
+
+Checking raw values of 'type' for anything unexpected...
+<StringArray>
+['1', '2']
+Length: 2, dtype: str

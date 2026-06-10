@@ -1,11 +1,56 @@
+import ssl
+
 import pandas as pd
-from airflow import DAG
+import requests
+from requests.adapters import HTTPAdapter
 from sqlalchemy import create_engine
+from urllib3.util.ssl_ import create_urllib3_context
+
+from airflow import DAG
 from operators.common_pipeline import CommonDag
-from utils.extract_stage import get_current_rid_from_page_id, get_data_taipei_api
 from utils.load_stage import save_geodataframe_to_postgresql, update_lasttime_in_data_to_dataset_info
 from utils.get_time import get_tpe_now_time_str
 from utils.transform_geometry import add_point_wkbgeometry_column_to_df
+
+
+class _LegacyTLSAdapter(HTTPAdapter):
+    # data.taipei 憑證缺 Subject Key Identifier,Python 3.13 預設 VERIFY_X509_STRICT 會拒絕,
+    # 仍保留 CA 驗證,只關掉 strict 旗標。
+    def init_poolmanager(self, *args, **kwargs):
+        ctx = create_urllib3_context()
+        ctx.verify_flags &= ~ssl.VERIFY_X509_STRICT
+        kwargs["ssl_context"] = ctx
+        return super().init_poolmanager(*args, **kwargs)
+
+
+def _make_session():
+    session = requests.Session()
+    session.mount("https://", _LegacyTLSAdapter())
+    return session
+
+
+def _resolve_rid_from_page(page_id, timeout=30):
+    session = _make_session()
+    url = f"https://data.taipei/api/frontstage/tpeod/dataset.view?id={page_id}"
+    res = session.get(url, timeout=timeout)
+    res.raise_for_status()
+    resources = res.json().get("payload", {}).get("resources", [])
+    if not resources:
+        raise ValueError(f"No resources found for page_id={page_id}")
+    return resources[0]["rid"]
+
+
+def _fetch_data_taipei(rid, timeout=60):
+    session = _make_session()
+    base = f"https://data.taipei/api/v1/dataset/{rid}?scope=resourceAquire"
+    first = session.get(base, timeout=timeout).json()
+    count = first["result"]["count"]
+    results = []
+    for offset in range(0, count + 1, 1000):
+        url = f"{base}&offset={offset}&limit=1000"
+        page = session.get(url, timeout=timeout).json()
+        results.extend(page["result"]["results"])
+    return results
 
 
 def _transfer(**kwargs):
@@ -19,8 +64,8 @@ def _transfer(**kwargs):
     FROM_CRS = 4326
 
     page_id = "8b2fcdeb-d14b-46c4-92d8-66ad07b96a91"
-    rid = get_current_rid_from_page_id(page_id)
-    res = get_data_taipei_api(rid)
+    rid = _resolve_rid_from_page(page_id)
+    res = _fetch_data_taipei(rid)
     raw_data = pd.DataFrame(res)
 
     raw_data = raw_data.rename(columns={
@@ -87,5 +132,4 @@ def _transfer(**kwargs):
     )
 
 
-dag = CommonDag(proj_folder='proj_city_dashboard', dag_folder='smoking_area')
-dag.create_dag(etl_func=_transfer)
+dag = CommonDag(proj_folder='proj_city_dashboard', dag_folder='smoking_area').create_dag(etl_func=_transfer)

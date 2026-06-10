@@ -1,0 +1,44 @@
+{
+	"dag_infos": {
+		"dag_id": "river_channel",
+		"start_date": "2026-05-22",
+		"schedule_interval": "@monthly",
+		"catchup": false,
+		"tags": [
+			"river",
+			"經濟部水利署",
+			"Taipei-City"
+		],
+		"description": "經濟部水利署 河川河道 (多邊形) - 定期同步 SHP 圖資",
+		"default_args": {
+			"owner": "airflow",
+			"email": [
+				"DEFAULT_EMAIL_LIST"
+			],
+			"email_on_retry": false,
+			"email_on_failure": true,
+			"retries": 1,
+			"retry_delay": 60
+		},
+		"ready_data_db": "postgres_default",
+		"ready_data_default_table": "river_channel",
+		"ready_data_history_table": "",
+		"raw_data_db": "postgres_default",
+		"raw_data_table": "",
+		"load_behavior": "replace"
+	},
+	"data_infos": {
+		"name_cn": "河川河道",
+		"airflow_update_freq": "不定期更新",
+		"source": "https://gic.wra.gov.tw/gis/gic/API/Google/DownLoad.aspx?fname=RIVERPOLY&filetype=SHP",
+		"source_type": "shp",
+		"source_dept": "經濟部水利署",
+		"component_name": "river_channel_map",
+		"gis_format": "shp",
+		"output_coordinate": "EPSG:4326",
+		"is_geometry": 1,
+		"dataset_description": "經濟部水利署彙整之河川河道圖資，多邊形圖層",
+		"etl_description": "下載 SHP，轉為 GeoDataFrame，產生 wkb_geometry 並寫入 ready_data",
+		"sensitivity": "public"
+	}
+}

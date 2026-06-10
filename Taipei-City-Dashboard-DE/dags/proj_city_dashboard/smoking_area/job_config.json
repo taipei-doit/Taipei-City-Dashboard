@@ -2,7 +2,7 @@
   "dag_infos": {
     "dag_id": "smoking_area",
     "start_date": "2026-05-04",
-    "schedule_interval": "30 21 * * *",
+    "schedule_interval": "30 21 4,25 * *",
     "catchup": false,
     "tags": [
       "smoking_area",

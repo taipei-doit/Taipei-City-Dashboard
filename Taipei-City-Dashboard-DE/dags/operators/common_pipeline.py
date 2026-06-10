@@ -209,10 +209,11 @@ def _etl_func_missing():
     raise RuntimeError(error_message)
 
 
-def _create_or_update_dataset_info(psql_uri, config, proj_folder):
+def _create_or_update_dataset_info(psql_conn_id, config, proj_folder):
     """
     Create dataset_info table if not exists, or update if exists.
     """
+    psql_uri = PostgresHook(postgres_conn_id=psql_conn_id).get_uri()
     dag_infos = config["dag_infos"]
     data_infos = config["data_infos"]
     resource_updatetime = get_tpe_now_time()
@@ -282,16 +283,14 @@ class CommonDag:
         self.data_path = DATA_PATH
         self.dag_path = os.path.join(DAG_PATH, proj_folder, dag_folder)
         self.config = _read_config(self.dag_path)
-        self.proj_folder = proj_folder 
+        self.proj_folder = proj_folder
         _validate_config(self.config)
 
         self.proxies = PROXIES
-        self.raw_data_db_uri = PostgresHook(
-            postgres_conn_id=self.config["dag_infos"]["raw_data_db"]
-        ).get_uri()
-        self.ready_data_db_uri = PostgresHook(
-            postgres_conn_id=self.config["dag_infos"]["ready_data_db"]
-        ).get_uri()
+        # Airflow 3.x SDK 禁止在 DAG parse 階段查 connection,改存 conn_id,
+        # 在 task 執行時才透過 PostgresHook 解析成 URI。
+        self.raw_data_conn_id = self.config["dag_infos"]["raw_data_db"]
+        self.ready_data_conn_id = self.config["dag_infos"]["ready_data_db"]
 
     def fetch_email_list(self, mail_list: list):
         """
@@ -335,17 +334,24 @@ class CommonDag:
             description=dag_infos["description"],
         )
 
+        raw_conn_id = self.raw_data_conn_id
+        ready_conn_id = self.ready_data_conn_id
+
+        def _etl_with_resolved_uris(**kwargs):
+            kwargs["raw_data_db_uri"] = PostgresHook(postgres_conn_id=raw_conn_id).get_uri()
+            kwargs["ready_data_db_uri"] = PostgresHook(postgres_conn_id=ready_conn_id).get_uri()
+            return etl_func(**kwargs)
+        _etl_with_resolved_uris.__name__ = f"etl_{dag_infos['dag_id']}"
+
         # Tasks
         with dag:
             get_and_validate_config = EmptyOperator(task_id="get_job_config")
 
             etl = PythonOperator(
                 task_id="etl",
-                python_callable=etl_func,
+                python_callable=_etl_with_resolved_uris,
                 op_kwargs={
                     "dag_infos": dag_infos,
-                    "raw_data_db_uri": self.raw_data_db_uri,
-                    "ready_data_db_uri": self.ready_data_db_uri,
                     "proxies": self.proxies,
                     "data_path": self.data_path,
                 },
@@ -354,7 +360,7 @@ class CommonDag:
             update_dataset_info = PythonOperator(
                 task_id="update_dataset_info",
                 python_callable=_create_or_update_dataset_info,
-                op_kwargs={"psql_uri": self.ready_data_db_uri, "config": self.config,"proj_folder":self.proj_folder},
+                op_kwargs={"psql_conn_id": self.ready_data_conn_id, "config": self.config, "proj_folder": self.proj_folder},
             )
 
             dag_execution_success = EmptyOperator(task_id="dag_execution_success")
