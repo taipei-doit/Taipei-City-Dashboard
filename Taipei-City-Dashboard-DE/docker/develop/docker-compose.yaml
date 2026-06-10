@@ -102,7 +102,11 @@ services:
       timeout: 30s
       retries: 50
       start_period: 30s
-    logging: *default-logging
+    logging:
+      driver: json-file
+      options:
+        max-size: 100m
+        max-file: 5
     volumes:
       - redis_data:/data
 
