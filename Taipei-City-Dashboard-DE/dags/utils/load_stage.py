@@ -2,6 +2,7 @@ import time
 
 import geopandas as gpd
 from geoalchemy2 import Geometry
+from sqlalchemy import inspect
 from sqlalchemy.sql import text as sa_text
 from utils.get_time import get_tpe_now_time_str
 
@@ -183,14 +184,13 @@ def save_dataframe_to_postgresql(
             default_table, conn, if_exists="append", index=False, schema="public"
         )
     elif load_behavior == "replace":
-        try:
+        inspector = inspect(conn)
+        if default_table in inspector.get_table_names():
             conn.execute(
                 sa_text(f"TRUNCATE TABLE {default_table}").execution_options(
                     autocommit=True
                 )
             )
-        except Exception:
-            conn.rollback()  # 清除失敗的 transaction，後續 to_sql(append) 會自動建表
         data.to_sql(
             default_table, conn, if_exists="append", index=False, schema="public"
         )
@@ -199,14 +199,13 @@ def save_dataframe_to_postgresql(
             raise ValueError(
                 "history_table should be provided when load_behavior is `current+history`."
             )
-        try:
+        inspector = inspect(conn)
+        if default_table in inspector.get_table_names():
             conn.execute(
                 sa_text(f"TRUNCATE TABLE {default_table}").execution_options(
                     autocommit=True
                 )
             )
-        except Exception:
-            pass
         data.to_sql(
             default_table, conn, if_exists="append", index=False, schema="public"
         )
@@ -320,14 +319,13 @@ def save_geodataframe_to_postgresql(
             dtype={geometry_col: Geometry(geometry_type, srid=4326)},
         )
     elif load_behavior == "replace":
-        try:
+        inspector = inspect(conn)
+        if default_table in inspector.get_table_names():
             conn.execute(
                 sa_text(f"TRUNCATE TABLE {default_table}").execution_options(
                     autocommit=True
                 )
             )
-        except Exception:
-            conn.rollback()  # 清除失敗的 transaction，後續 to_sql(append) 會自動建表
         gdata.to_sql(
             default_table,
             conn,
@@ -341,14 +339,13 @@ def save_geodataframe_to_postgresql(
             raise ValueError(
                 "history_table should be provided when load_behavior is `current+history`."
             )
-        try:
+        inspector = inspect(conn)
+        if default_table in inspector.get_table_names():
             conn.execute(
                 sa_text(f"TRUNCATE TABLE {default_table}").execution_options(
                     autocommit=True
                 )
             )
-        except Exception:
-            pass
         gdata.to_sql(
             default_table,
             conn,
