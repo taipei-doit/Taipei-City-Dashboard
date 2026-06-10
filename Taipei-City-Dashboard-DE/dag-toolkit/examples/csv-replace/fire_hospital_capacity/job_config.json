@@ -1,0 +1,38 @@
+{
+  "dag_infos": {
+    "dag_id": "fire_hospital_capacity",
+    "start_date": "2024-01-01",
+    "schedule_interval": "@daily",
+    "catchup": false,
+    "tags": ["emergency", "消防局", "Taipei-City"],
+    "description": "Daily snapshot of fire-emergency hospital bed capacity by town.",
+    "default_args": {
+      "owner": "airflow",
+      "email": ["DEFAULT_EMAIL_LIST"],
+      "email_on_retry": false,
+      "email_on_failure": true,
+      "retries": 1,
+      "retry_delay": 60
+    },
+    "ready_data_db": "postgres_default",
+    "ready_data_default_table": "fire_hospital_capacity",
+    "ready_data_history_table": "",
+    "raw_data_db": "postgres_default",
+    "raw_data_table": "",
+    "load_behavior": "replace"
+  },
+  "data_infos": {
+    "name_cn": "消防醫療院所即時容量",
+    "airflow_update_freq": "每日 (Asia/Taipei)",
+    "source": "https://example.gov.tw/open-data/fire_hospital_capacity.csv",
+    "source_type": "csv-big5",
+    "source_dept": "消防局",
+    "component_name": "fire_hospital_capacity_chart",
+    "gis_format": null,
+    "output_coordinate": "EPSG:4326",
+    "is_geometry": 0,
+    "dataset_description": "各鄉鎮消防急救醫院的總床數與可用床數",
+    "etl_description": "下載 Big5 CSV → rename 中文欄 → 標準化時間 → replace 入庫",
+    "sensitivity": "public"
+  }
+}

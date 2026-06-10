@@ -283,7 +283,7 @@ def _transfer(**kwargs):
     if not _safe_under(Path("/"), base_log_folder):
         raise RuntimeError(f"Unsafe base_log_folder resolved to: {base_log_folder}")
 
-    protected = {"scheduler", "webserver", "triggerer", "dag_processor_manager"}
+    protected = {"scheduler", "webserver", "api-server", "api_server", "triggerer", "dag_processor_manager"}
     scheduler_root = base_log_folder / "scheduler"
     dag_log_roots = []
     if base_log_folder.exists():

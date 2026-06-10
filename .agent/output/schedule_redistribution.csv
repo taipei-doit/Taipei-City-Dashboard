@@ -1,0 +1,132 @@
+proj,dag_id,band,old_schedule,new_schedule,執行時間說明,config_path
+proj_city_dashboard,D020105,heavy,"0 3 24 6,12 *","0 12 1,22 * *",每月 1號、22號 Taipei 20:00 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/D020105/job_config.json
+proj_city_dashboard,D100101,heavy,0 0 1 * *,"0 12 2,23 * *",每月 2號、23號 Taipei 20:00 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/D100101/job_config.json
+proj_city_dashboard,R0025,heavy,0 0 11 * *,"0 12 3,24 * *",每月 3號、24號 Taipei 20:00 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/R0025/job_config.json
+proj_city_dashboard,R0066,heavy,40 19 3 * *,"0 12 4,25 * *",每月 4號、25號 Taipei 20:00 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/R0066/job_config.json
+proj_city_dashboard,yearly_death_cause_etl,heavy,@yearly,"0 12 5,26 * *",每月 5號、26號 Taipei 20:00 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/yearly_death_cause_etl/job_config.json
+proj_city_dashboard,D060101_1,light,"0 5 18 5,11 *","0 12 6,27 * *",每月 6號、27號 Taipei 20:00 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/D060101_1/job_config.json
+proj_city_dashboard,merge_crime_type_by_dist,light,@monthly,"0 12 7,28 * *",每月 7號、28號 Taipei 20:00 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/merge_crime_type_by_dist/job_config.json
+proj_city_dashboard,D020301,heavy,0 1 7 * *,"0 13 1,22 * *",每月 1號、22號 Taipei 21:00 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/D020301/job_config.json
+proj_city_dashboard,D100102_2,heavy,0 0 1 * *,"0 13 2,23 * *",每月 2號、23號 Taipei 21:00 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/D100102_2/job_config.json
+proj_city_dashboard,R0027,heavy,0 2 11 * *,"0 13 3,24 * *",每月 3號、24號 Taipei 21:00 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/R0027/job_config.json
+proj_city_dashboard,R0068,heavy,"0 1 16 3,9 *","0 13 4,25 * *",每月 4號、25號 Taipei 21:00 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/R0068/job_config.json
+proj_new_taipei_city_dashboard,elderly_club,heavy,@monthly,"0 13 5,26 * *",每月 5號、26號 Taipei 21:00 執行,Taipei-City-Dashboard-DE/dags/proj_new_taipei_city_dashboard/elderly_club/job_config.json
+proj_city_dashboard,D060102_1,light,0 7 23 * *,"0 13 6,27 * *",每月 6號、27號 Taipei 21:00 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/D060102_1/job_config.json
+proj_city_dashboard,tourist_attractions,light,@monthly,"0 13 7,28 * *",每月 7號、28號 Taipei 21:00 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/tourist_attractions/job_config.json
+proj_city_dashboard,D030101-1,heavy,0 0 1 * *,"0 14 1,22 * *",每月 1號、22號 Taipei 22:00 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/D030101_1/job_config.json
+proj_city_dashboard,D100102_4,heavy,0 0 1 * *,"0 14 2,23 * *",每月 2號、23號 Taipei 22:00 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/D100102_4/job_config.json
+proj_city_dashboard,R0033,heavy,30 18 2 * *,"0 14 3,24 * *",每月 3號、24號 Taipei 22:00 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/R0033/job_config.json
+proj_city_dashboard,R0075,heavy,"0 1 20 1,4,7,10 *","0 14 4,25 * *",每月 4號、25號 Taipei 22:00 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/R0075/job_config.json
+proj_new_taipei_city_dashboard,general_hotel_registry,heavy,@monthly,"0 14 5,26 * *",每月 5號、26號 Taipei 22:00 執行,Taipei-City-Dashboard-DE/dags/proj_new_taipei_city_dashboard/general_hotel_registry/job_config.json
+proj_city_dashboard,D090100_1,light,"0 5 21 5,11 *","0 14 6,27 * *",每月 6號、27號 Taipei 22:00 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/D090100_1/job_config.json
+proj_new_taipei_city_dashboard,accessible_facilities,light,@monthly,"0 14 7,28 * *",每月 7號、28號 Taipei 22:00 執行,Taipei-City-Dashboard-DE/dags/proj_new_taipei_city_dashboard/accessible_facilities/job_config.json
+proj_city_dashboard,D030102-2,heavy,0 0 1 * *,"0 15 1,22 * *",每月 1號、22號 Taipei 23:00 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/D030102_2/job_config.json
+proj_city_dashboard,D100102_6,heavy,0 0 1 * *,"0 15 2,23 * *",每月 2號、23號 Taipei 23:00 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/D100102_6/job_config.json
+proj_city_dashboard,R0033-2,heavy,0 19 15 * *,"0 15 3,24 * *",每月 3號、24號 Taipei 23:00 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/R0033_2/job_config.json
+proj_city_dashboard,R0081,heavy,0 4 21 * *,"0 15 4,25 * *",每月 4號、25號 Taipei 23:00 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/R0081/job_config.json
+proj_new_taipei_city_dashboard,merge_crime_type_by_dist,heavy,@monthly,"0 15 5,26 * *",每月 5號、26號 Taipei 23:00 執行,Taipei-City-Dashboard-DE/dags/proj_new_taipei_city_dashboard/merge_crime_type_by_dist/job_config.json
+proj_city_dashboard,D090103_1,light,"40 6 21 5,11 *","0 15 6,27 * *",每月 6號、27號 Taipei 23:00 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/D090103_1/job_config.json
+proj_new_taipei_city_dashboard,employment_age_structure,light,0 3 25 12 *,"0 15 7,28 * *",每月 7號、28號 Taipei 23:00 執行,Taipei-City-Dashboard-DE/dags/proj_new_taipei_city_dashboard/employment_age_structure/job_config.json
+proj_city_dashboard,D040401,heavy,0 0 1 * *,"0 16 1,22 * *",每月 1號、22號 Taipei 00:00(隔日) 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/D040401/job_config.json
+proj_city_dashboard,D100102_8,heavy,0 0 1 * *,"0 16 2,23 * *",每月 2號、23號 Taipei 00:00(隔日) 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/D100102_8/job_config.json
+proj_city_dashboard,R0037_2,heavy,10 3 22 12 *,"0 16 3,24 * *",每月 3號、24號 Taipei 00:00(隔日) 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/R0037_2/job_config.json
+proj_city_dashboard,R0083,heavy,"0 6 25 3,9 *","0 16 4,25 * *",每月 4號、25號 Taipei 00:00(隔日) 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/R0083/job_config.json
+proj_new_taipei_city_dashboard,urbn_air_raid_shelter,heavy,@monthly,"0 16 5,26 * *",每月 5號、26號 Taipei 00:00(隔日) 執行,Taipei-City-Dashboard-DE/dags/proj_new_taipei_city_dashboard/urbn_air_raid_shelter/job_config.json
+proj_city_dashboard,D100104_2,light,"0 0 1 3,9 *","0 16 6,27 * *",每月 6號、27號 Taipei 00:00(隔日) 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/D100104_2/job_config.json
+proj_new_taipei_city_dashboard,population_age_distribution_monthly,light,0 4 14 * *,"0 16 7,28 * *",每月 7號、28號 Taipei 00:00(隔日) 執行,Taipei-City-Dashboard-DE/dags/proj_new_taipei_city_dashboard/population_age_distribution_monthly/job_config.json
+proj_city_dashboard,D050303_5,heavy,0 0 1 * *,"0 17 1,22 * *",每月 1號、22號 Taipei 01:00(隔日) 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/D050303_5/job_config.json
+proj_city_dashboard,D100105,heavy,"0 0 1 3,9 *","0 17 2,23 * *",每月 2號、23號 Taipei 01:00(隔日) 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/D100105/job_config.json
+proj_city_dashboard,R0042,heavy,0 3 1 4 *,"0 17 3,24 * *",每月 3號、24號 Taipei 01:00(隔日) 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/R0042/job_config.json
+proj_city_dashboard,R0086,heavy,0 0 1 * *,"0 17 4,25 * *",每月 4號、25號 Taipei 01:00(隔日) 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/R0086/job_config.json
+proj_city_dashboard,D010501,light,0 19 16 * *,"0 17 5,26 * *",每月 5號、26號 Taipei 01:00(隔日) 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/D010501/job_config.json
+proj_city_dashboard,accessible_facilities,light,@monthly,"0 17 6,27 * *",每月 6號、27號 Taipei 01:00(隔日) 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/accessible_facilities/job_config.json
+proj_new_taipei_city_dashboard,yearly_death_cause_etl,light,@yearly,"0 17 7,28 * *",每月 7號、28號 Taipei 01:00(隔日) 執行,Taipei-City-Dashboard-DE/dags/proj_new_taipei_city_dashboard/yearly_death_cause_etl/job_config.json
+proj_city_dashboard,D050303_7,heavy,0 0 1 * *,"0 18 1,22 * *",每月 1號、22號 Taipei 02:00(隔日) 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/D050303_7/job_config.json
+proj_city_dashboard,D100106_2,heavy,0 0 1 * *,"0 18 2,23 * *",每月 2號、23號 Taipei 02:00(隔日) 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/D100106_2/job_config.json
+proj_city_dashboard,R0056,heavy,0 3 5 * *,"0 18 3,24 * *",每月 3號、24號 Taipei 02:00(隔日) 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/R0056/job_config.json
+proj_city_dashboard,cooling_point,heavy,@monthly,"0 18 4,25 * *",每月 4號、25號 Taipei 02:00(隔日) 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/cooling_point/job_config.json
+proj_city_dashboard,D050302_1,light,"0 2 1 6,12 *","0 18 5,26 * *",每月 5號、26號 Taipei 02:00(隔日) 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/D050302_1/job_config.json
+proj_city_dashboard,dependency_ratio_and_aging_index,light,0 3 25 12 *,"0 18 6,27 * *",每月 6號、27號 Taipei 02:00(隔日) 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/dependency_ratio_and_aging_index/job_config.json
+proj_city_dashboard,D050303_9,heavy,0 0 1 * *,"0 19 1,22 * *",每月 1號、22號 Taipei 03:00(隔日) 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/D050303_9/job_config.json
+proj_city_dashboard,R0018,heavy,@monthly,"0 19 2,23 * *",每月 2號、23號 Taipei 03:00(隔日) 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/R0018/job_config.json
+proj_city_dashboard,R0058,heavy,0 5 25 * *,"0 19 3,24 * *",每月 3號、24號 Taipei 03:00(隔日) 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/R0058/job_config.json
+proj_city_dashboard,general_hotel_registry,heavy,@monthly,"0 19 4,25 * *",每月 4號、25號 Taipei 03:00(隔日) 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/general_hotel_registry/job_config.json
+proj_city_dashboard,D050302_3,light,"0 2 3 6,12 *","0 19 5,26 * *",每月 5號、26號 Taipei 03:00(隔日) 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/D050302_3/job_config.json
+proj_city_dashboard,employment_age_structure,light,0 3 25 12 *,"0 19 6,27 * *",每月 6號、27號 Taipei 03:00(隔日) 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/employment_age_structure/job_config.json
+proj_city_dashboard,D060103,heavy,0 20 26 * *,"0 20 1,22 * *",每月 1號、22號 Taipei 04:00(隔日) 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/D060103/job_config.json
+proj_city_dashboard,R0020,heavy,0 3 1 12 *,"0 20 2,23 * *",每月 2號、23號 Taipei 04:00(隔日) 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/R0020/job_config.json
+proj_city_dashboard,R0062,heavy,00 19 3 * *,"0 20 3,24 * *",每月 3號、24號 Taipei 04:00(隔日) 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/R0062/job_config.json
+proj_city_dashboard,moenv_public_toilet_tpe,heavy,@monthly,"0 20 4,25 * *",每月 4號、25號 Taipei 04:00(隔日) 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/moenv_public_toilet_tpe/job_config.json
+proj_city_dashboard,D050303_2,light,"0 2 5 6,12 *","0 20 5,26 * *",每月 5號、26號 Taipei 04:00(隔日) 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/D050303_2/job_config.json
+proj_city_dashboard,energy_saving_coaching_situation_tpe_gov,light,0 20 19 * *,"0 20 6,27 * *",每月 6號、27號 Taipei 04:00(隔日) 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/energy_saving_coaching_situation_tpe_gov/job_config.json
+proj_city_dashboard,D090101_2,heavy,"0 7 21 5,11 *","0 21 1,22 * *",每月 1號、22號 Taipei 05:00(隔日) 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/D090101_2/job_config.json
+proj_city_dashboard,R0023,heavy,0 23 10 * *,"0 21 2,23 * *",每月 2號、23號 Taipei 05:00(隔日) 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/R0023/job_config.json
+proj_city_dashboard,R0064,heavy,20 19 3 * *,"0 21 3,24 * *",每月 3號、24號 Taipei 05:00(隔日) 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/R0064/job_config.json
+proj_city_dashboard,school_reconstruction,heavy,@monthly,"0 21 4,25 * *",每月 4號、25號 Taipei 05:00(隔日) 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/school_reconstruction/job_config.json
+proj_city_dashboard,D050303_4,light,"0 2 7 6,12 *","0 21 5,26 * *",每月 5號、26號 Taipei 05:00(隔日) 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/D050303_4/job_config.json
+proj_city_dashboard,friendly_store,light,0 20 19 * *,"0 21 6,27 * *",每月 6號、27號 Taipei 05:00(隔日) 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/friendly_store/job_config.json
+proj_city_dashboard,D020201,heavy,20 5 25 * *,"30 12 1,22 * *",每月 1號、22號 Taipei 20:30 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/D020201/job_config.json
+proj_city_dashboard,D100102_1,heavy,0 0 1 * *,"30 12 2,23 * *",每月 2號、23號 Taipei 20:30 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/D100102_1/job_config.json
+proj_city_dashboard,R0026,heavy,30 0 11 * *,"30 12 3,24 * *",每月 3號、24號 Taipei 20:30 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/R0026/job_config.json
+proj_city_dashboard,R0067,heavy,"0 7 7 3,6,9,12 *","30 12 4,25 * *",每月 4號、25號 Taipei 20:30 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/R0067/job_config.json
+proj_new_taipei_city_dashboard,aed_locations_metrotaipei,heavy,0 20 19 * *,"30 12 5,26 * *",每月 5號、26號 Taipei 20:30 執行,Taipei-City-Dashboard-DE/dags/proj_new_taipei_city_dashboard/aed_locations/job_config.json
+proj_city_dashboard,D060101_2,light,"10 5 18 5,11 *","30 12 6,27 * *",每月 6號、27號 Taipei 20:30 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/D060101_2/job_config.json
+proj_city_dashboard,sea_sand_houses_tpe,light,0 20 19 * *,"30 12 7,28 * *",每月 7號、28號 Taipei 20:30 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/sea_sand_houses_tpe/job_config.json
+proj_city_dashboard,D020401,heavy,* * 1 1 *,"30 13 1,22 * *",每月 1號、22號 Taipei 21:30 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/D020401/job_config.json
+proj_city_dashboard,D100102_3,heavy,0 0 1 * *,"30 13 2,23 * *",每月 2號、23號 Taipei 21:30 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/D100102_3/job_config.json
+proj_city_dashboard,R0031,heavy,0 4 14 * *,"30 13 3,24 * *",每月 3號、24號 Taipei 21:30 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/R0031/job_config.json
+proj_city_dashboard,R0069,heavy,"0 2 16 3,9 *","30 13 4,25 * *",每月 4號、25號 Taipei 21:30 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/R0069/job_config.json
+proj_new_taipei_city_dashboard,fire_narrow_street,heavy,@monthly,"30 13 5,26 * *",每月 5號、26號 Taipei 21:30 執行,Taipei-City-Dashboard-DE/dags/proj_new_taipei_city_dashboard/fire_narrow_street/job_config.json
+proj_city_dashboard,D060201,light,0 20 19 * *,"30 13 6,27 * *",每月 6號、27號 Taipei 21:30 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/D060201/job_config.json
+proj_city_dashboard,youth_enterpreneurship_financing_loan_tpe,light,0 20 19 * *,"30 13 7,28 * *",每月 7號、28號 Taipei 21:30 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/youth_enterpreneurship_financing_loan_tpe/job_config.json
+proj_city_dashboard,D030102-1,heavy,0 0 1 * *,"30 14 1,22 * *",每月 1號、22號 Taipei 22:30 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/D030102_1/job_config.json
+proj_city_dashboard,D100102_5,heavy,0 0 1 * *,"30 14 2,23 * *",每月 2號、23號 Taipei 22:30 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/D100102_5/job_config.json
+proj_city_dashboard,R0033-1,heavy,30 18 15 * *,"30 14 3,24 * *",每月 3號、24號 Taipei 22:30 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/R0033_1/job_config.json
+proj_city_dashboard,R0076,heavy,* * 1 * *,"30 14 4,25 * *",每月 4號、25號 Taipei 22:30 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/R0076/job_config.json
+proj_new_taipei_city_dashboard,long_term,heavy,0 20 19 * *,"30 14 5,26 * *",每月 5號、26號 Taipei 22:30 執行,Taipei-City-Dashboard-DE/dags/proj_new_taipei_city_dashboard/long_term/job_config.json
+proj_city_dashboard,D090101_1,light,"30 6 21 5,11 *","30 14 6,27 * *",每月 6號、27號 Taipei 22:30 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/D090101_1/job_config.json
+proj_new_taipei_city_dashboard,dependency_ratio_and_aging_index,light,0 3 25 12 *,"30 14 7,28 * *",每月 7號、28號 Taipei 22:30 執行,Taipei-City-Dashboard-DE/dags/proj_new_taipei_city_dashboard/dependency_ratio_and_aging_index/job_config.json
+proj_city_dashboard,D030201,heavy,"0 18 27 6,12 *","30 15 1,22 * *",每月 1號、22號 Taipei 23:30 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/D030201/job_config.json
+proj_city_dashboard,D100102_7,heavy,0 0 1 * *,"30 15 2,23 * *",每月 2號、23號 Taipei 23:30 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/D100102_7/job_config.json
+proj_city_dashboard,R0037_1,heavy,0 3 22 12 *,"30 15 3,24 * *",每月 3號、24號 Taipei 23:30 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/R0037_1/job_config.json
+proj_city_dashboard,R0082,heavy,0 5 21 * *,"30 15 4,25 * *",每月 4號、25號 Taipei 23:30 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/R0082/job_config.json
+proj_new_taipei_city_dashboard,moenv_public_toilet_ntpe,heavy,@monthly,"30 15 5,26 * *",每月 5號、26號 Taipei 23:30 執行,Taipei-City-Dashboard-DE/dags/proj_new_taipei_city_dashboard/moenv_public_toilet_ntpe/job_config.json
+proj_city_dashboard,D100103,light,"0 0 1 3,9 *","30 15 6,27 * *",每月 6號、27號 Taipei 23:30 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/D100103/job_config.json
+proj_new_taipei_city_dashboard,flu_hospitals_ntpe,light,@monthly,"30 15 7,28 * *",每月 7號、28號 Taipei 23:30 執行,Taipei-City-Dashboard-DE/dags/proj_new_taipei_city_dashboard/flu_hospitals_ntpe/job_config.json
+proj_city_dashboard,D050301-1,heavy,0 0 1 * *,"30 16 1,22 * *",每月 1號、22號 Taipei 00:30(隔日) 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/D050301_1/job_config.json
+proj_city_dashboard,D100104_1,heavy,"0 0 1 3,9 *","30 16 2,23 * *",每月 2號、23號 Taipei 00:30(隔日) 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/D100104_1/job_config.json
+proj_city_dashboard,R0037_3,heavy,20 3 22 12 *,"30 16 3,24 * *",每月 3號、24號 Taipei 00:30(隔日) 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/R0037_3/job_config.json
+proj_city_dashboard,R0085,heavy,"0 5 25 3,9 *","30 16 4,25 * *",每月 4號、25號 Taipei 00:30(隔日) 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/R0085/job_config.json
+tutorial,template_test,heavy,0 0 1 * *,"30 16 5,26 * *",每月 5號、26號 Taipei 00:30(隔日) 執行,Taipei-City-Dashboard-DE/dags/tutorial/simple_template/job_config.json
+proj_city_dashboard,D100106_3,light,0 0 1 * *,"30 16 6,27 * *",每月 6號、27號 Taipei 00:30(隔日) 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/D100106_3/job_config.json
+proj_new_taipei_city_dashboard,tourist_attractions,light,@monthly,"30 16 7,28 * *",每月 7號、28號 Taipei 00:30(隔日) 執行,Taipei-City-Dashboard-DE/dags/proj_new_taipei_city_dashboard/tourist_attractions/job_config.json
+proj_city_dashboard,D050303_6,heavy,0 0 1 * *,"30 17 1,22 * *",每月 1號、22號 Taipei 01:30(隔日) 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/D050303_6/job_config.json
+proj_city_dashboard,D100106_1,heavy,0 0 1 * *,"30 17 2,23 * *",每月 2號、23號 Taipei 01:30(隔日) 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/D100106_1/job_config.json
+proj_city_dashboard,R0054,heavy,"40 3 9 6,12 *","30 17 3,24 * *",每月 3號、24號 Taipei 01:30(隔日) 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/R0054/job_config.json
+proj_city_dashboard,bike_theft,heavy,30 23 10 * *,"30 17 4,25 * *",每月 4號、25號 Taipei 01:30(隔日) 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/bike_theft/job_config.json
+proj_city_dashboard,D050201_1,light,0 3 9 * *,"30 17 5,26 * *",每月 5號、26號 Taipei 01:30(隔日) 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/D050201_1/job_config.json
+proj_city_dashboard,aed_locations,light,0 20 19 * *,"30 17 6,27 * *",每月 6號、27號 Taipei 01:30(隔日) 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/aed_locations/job_config.json
+proj_city_dashboard,D050303_8,heavy,0 0 1 * *,"30 18 1,22 * *",每月 1號、22號 Taipei 02:30(隔日) 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/D050303_8/job_config.json
+proj_city_dashboard,R0017,heavy,30 3 1 4 *,"30 18 2,23 * *",每月 2號、23號 Taipei 02:30(隔日) 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/R0017/job_config.json
+proj_city_dashboard,R0057,heavy,0 4 25 * *,"30 18 3,24 * *",每月 3號、24號 Taipei 02:30(隔日) 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/R0057/job_config.json
+proj_city_dashboard,flu_hospitals_tpe,heavy,@monthly,"30 18 4,25 * *",每月 4號、25號 Taipei 02:30(隔日) 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/flu_hospitals_tpe/job_config.json
+proj_city_dashboard,D050302_2,light,"0 2 2 6,12 *","30 18 5,26 * *",每月 5號、26號 Taipei 02:30(隔日) 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/D050302_2/job_config.json
+proj_city_dashboard,elderly_club,light,0 20 19 * *,"30 18 6,27 * *",每月 6號、27號 Taipei 02:30(隔日) 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/elderly_club/job_config.json
+proj_city_dashboard,D050601,heavy,"0 1 18 5,11 *","30 19 1,22 * *",每月 1號、22號 Taipei 03:30(隔日) 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/D050601/job_config.json
+proj_city_dashboard,R0019,heavy,@monthly,"30 19 2,23 * *",每月 2號、23號 Taipei 03:30(隔日) 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/R0019/job_config.json
+proj_city_dashboard,R0061,heavy,0 20 20 * *,"30 19 3,24 * *",每月 3號、24號 Taipei 03:30(隔日) 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/R0061/job_config.json
+proj_city_dashboard,long_term,heavy,@monthly,"30 19 4,25 * *",每月 4號、25號 Taipei 03:30(隔日) 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/long_term/job_config.json
+proj_city_dashboard,D050303_1,light,"0 2 4 6,12 *","30 19 5,26 * *",每月 5號、26號 Taipei 03:30(隔日) 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/D050303_1/job_config.json
+proj_city_dashboard,energy_saving_coaching_situation_tpe,light,0 20 19 * *,"30 19 6,27 * *",每月 6號、27號 Taipei 03:30(隔日) 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/energy_saving_coaching_situation_tpe/job_config.json
+proj_city_dashboard,D070202,heavy,"0 5 27 3,9 *","30 20 1,22 * *",每月 1號、22號 Taipei 04:30(隔日) 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/D070202/job_config.json
+proj_city_dashboard,R0021,heavy,"0 3 2 6,12 *","30 20 2,23 * *",每月 2號、23號 Taipei 04:30(隔日) 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/R0021/job_config.json
+proj_city_dashboard,R0063,heavy,10 19 3 * *,"30 20 3,24 * *",每月 3號、24號 Taipei 04:30(隔日) 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/R0063/job_config.json
+proj_city_dashboard,population_age_distribution_monthly,heavy,0 4 14 * *,"30 20 4,25 * *",每月 4號、25號 Taipei 04:30(隔日) 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/population_age_distribution_monthly/job_config.json
+proj_city_dashboard,D050303_3,light,"0 2 6 6,12 *","30 20 5,26 * *",每月 5號、26號 Taipei 04:30(隔日) 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/D050303_3/job_config.json
+proj_city_dashboard,env_srv_energy_subsidy,light,"0 3 24 6,12 *","30 20 6,27 * *",每月 6號、27號 Taipei 04:30(隔日) 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/env_srv_energy_subsidy/job_config.json
+proj_city_dashboard,D090103_2,heavy,"0 8 21 5,11 *","30 21 1,22 * *",每月 1號、22號 Taipei 05:30(隔日) 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/D090103_2/job_config.json
+proj_city_dashboard,R0024,heavy,30 23 10 * *,"30 21 2,23 * *",每月 2號、23號 Taipei 05:30(隔日) 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/R0024/job_config.json
+proj_city_dashboard,R0065,heavy,30 19 3 * *,"30 21 3,24 * *",每月 3號、24號 Taipei 05:30(隔日) 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/R0065/job_config.json
+proj_city_dashboard,smoking_area,heavy,0 20 19 * *,"30 21 4,25 * *",每月 4號、25號 Taipei 05:30(隔日) 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/smoking_area/job_config.json
+proj_city_dashboard,D050401_1,light,"0 5 2 5,11 *","30 21 5,26 * *",每月 5號、26號 Taipei 05:30(隔日) 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/D050401_1/job_config.json
+proj_city_dashboard,li_age_population_tpe,light,0 20 19 * *,"30 21 6,27 * *",每月 6號、27號 Taipei 05:30(隔日) 執行,Taipei-City-Dashboard-DE/dags/proj_city_dashboard/li_age_population_tpe/job_config.json

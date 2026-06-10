@@ -6,7 +6,6 @@ import time
 import zipfile
 from pathlib import Path
 import glob
-import fiona
 import geopandas as gpd
 import pandas as pd
 import requests
@@ -193,28 +192,14 @@ def get_kml(url, dag_id, from_crs, **kwargs):
 
     """
     file_name = f"{dag_id}.kml"
-    
-    # Enable KML support in fiona
-    try:
-        fiona.drvsupport.supported_drivers["KML"] = "rw"
-    except AttributeError:
-        # For newer fiona versions that don't have drvsupport
-        pass
-    
+
     file = download_file(file_name, url, **kwargs)
-    
-    # Use fiona directly to avoid the geopandas._is_zip issue
-    try:
-        with fiona.open(file, driver='KML') as src:
-            gdf = gpd.GeoDataFrame.from_features(src, crs=src.crs)
-    except Exception:
-        # Fallback to the original method for older versions
-        gdf = gpd.read_file(file, driver="KML")
-    
-    # Ensure the CRS is set correctly
+
+    gdf = gpd.read_file(file, driver="KML", engine="pyogrio")
+
     if gdf.crs is None:
         gdf = gpd.GeoDataFrame(gdf, crs=f"EPSG:{from_crs}")
-    
+
     return gdf
 
 
@@ -239,7 +224,7 @@ def get_current_rid_from_page_id(page_id, resource_name_contains=None, timeout=3
         ValueError: If the page has no resources.
     """
     url = f"https://data.taipei/api/frontstage/tpeod/dataset.view?id={page_id}"
-    res = requests.get(url, timeout=timeout)
+    res = requests.get(url, timeout=timeout, verify=False)
     res.raise_for_status()
     resources = res.json().get("payload", {}).get("resources", [])
     if not resources:
@@ -249,46 +234,6 @@ def get_current_rid_from_page_id(page_id, resource_name_contains=None, timeout=3
             if resource_name_contains in (r.get("name") or ""):
                 return r["rid"]
     return resources[0]["rid"]
-
-
-def read_csv_with_encoding_fallback(source, encodings=None, **kwargs):
-    """
-    Read CSV with a small set of common Taipei open-data encodings.
-
-    data.taipei resource metadata is not always updated when data owners
-    republish files. Try strict decoding first, then retry with replacement so
-    one bad byte does not break an otherwise usable CSV.
-    """
-    if encodings is None:
-        encodings = ("utf-8-sig", "utf-8", "cp950", "big5")
-
-    ordered_encodings = []
-    for encoding in encodings:
-        if encoding and encoding not in ordered_encodings:
-            ordered_encodings.append(encoding)
-
-    last_error = None
-    for encoding in ordered_encodings:
-        try:
-            if hasattr(source, "seek"):
-                source.seek(0)
-            return pd.read_csv(source, encoding=encoding, **kwargs)
-        except UnicodeDecodeError as err:
-            last_error = err
-
-    replace_kwargs = dict(kwargs)
-    replace_kwargs.setdefault("encoding_errors", "replace")
-    for encoding in ordered_encodings:
-        try:
-            if hasattr(source, "seek"):
-                source.seek(0)
-            return pd.read_csv(source, encoding=encoding, **replace_kwargs)
-        except UnicodeDecodeError as err:
-            last_error = err
-
-    if last_error is not None:
-        raise last_error
-    return pd.read_csv(source, **kwargs)
 
 
 def get_data_taipei_api(rid, timeout=60, output_format="json"):
@@ -316,7 +261,7 @@ def get_data_taipei_api(rid, timeout=60, output_format="json"):
     ```
     """
     url = f"https://data.taipei/api/v1/dataset/{rid}?scope=resourceAquire"
-    response = requests.get(url, timeout=timeout)
+    response = requests.get(url, timeout=timeout, verify=False)
     data_dict = response.json()
     count = data_dict["result"]["count"]
     res = []
@@ -324,7 +269,7 @@ def get_data_taipei_api(rid, timeout=60, output_format="json"):
     for i in range(offset_count + 1):
         i = i * 1000
         url = f"https://data.taipei/api/v1/dataset/{rid}?scope=resourceAquire&offset={i}&limit=1000"
-        response = requests.get(url, timeout=timeout)
+        response = requests.get(url, timeout=timeout, verify=False)
         get_json = response.json()
         res.extend(get_json["result"]["results"])
 
@@ -367,7 +312,7 @@ def get_data_taipei_file_last_modified_time(page_id, rank=0, timeout=30):
         ```
     """
     url = f"https://data.taipei/api/frontstage/tpeod/dataset.view?id={page_id}"
-    res = requests.get(url, timeout=timeout)
+    res = requests.get(url, timeout=timeout, verify=False)
     if res.status_code != 200:
         raise ValueError(f"Request Error: {res.status_code}")
 
@@ -405,7 +350,7 @@ def get_data_taipei_page_change_time(page_id, rank=0, timeout=30):
         ```
     """
     url = f"https://data.taipei/api/frontstage/tpeod/dataset/change-history.list?id={page_id}"
-    res = requests.get(url, timeout=timeout)
+    res = requests.get(url, timeout=timeout, verify=False)
     if res.status_code != 200:
         raise ValueError(f"Request Error: {res.status_code}")
 
@@ -485,6 +430,7 @@ def get_moenv_json_data(
             f"{url}&offset={offset}&limit={limit}",
             proxies=PROXIES if is_proxy else None,
             timeout=timeout,
+            verify=False,
         )
         _check_request_status(res)
         body = res.json()
@@ -521,23 +467,10 @@ def get_shp_files_merge(
     if not all_shp_files:
         raise ValueError(f"No .shp files found in {unzip_path}")
 
-    import fiona
-    from shapely.geometry import shape
-    
     dfs = []
     for shp_path in all_shp_files:
         category = os.path.splitext(os.path.basename(shp_path))[0]
-        # 使用 fiona 直接開啟以避免 fiona.path 問題
-        with fiona.open(shp_path, encoding=encoding) as src:
-            records = []
-            geometries = []
-            for feature in src:
-                props = dict(feature.get("properties", {}))
-                geom = feature.get("geometry")
-                records.append(props)
-                geometries.append(shape(geom) if geom else None)
-            crs = src.crs
-            gdf = gpd.GeoDataFrame(records, geometry=geometries, crs=crs)
+        gdf = gpd.read_file(shp_path, encoding=encoding, engine="pyogrio")
         gdf["category"] = category
         dfs.append(gdf)
     # 合併
@@ -600,19 +533,9 @@ def get_shp_file(
     if shp_file is None:
         raise ValueError(f"No .shp files found in {unzip_path}")
 
-    # 使用 fiona 直接開啟以避免 fiona.path 問題
-    import fiona
-    from shapely.geometry import shape
-    
-    with fiona.open(shp_file, encoding=encoding) as src:
-        records = []
-        geometries = []
-        for feature in src:
-            props = dict(feature.get("properties", {}))
-            geom = feature.get("geometry")
-            records.append(props)
-            geometries.append(shape(geom) if geom else None)
-        gdf = gpd.GeoDataFrame(records, geometry=geometries, crs=f"EPSG:{from_crs}")
+    gdf = gpd.read_file(shp_file, encoding=encoding, engine="pyogrio")
+    if gdf.crs is None:
+        gdf = gdf.set_crs(epsg=from_crs)
     
     print(f"Read {shp_file} successfully.")
     return gdf
@@ -647,7 +570,7 @@ def get_tdx_data(url, is_proxy=False, timeout=60, output_format="json"):
     # get data
     headers = {"authorization": f"Bearer {token}"}
     response = requests.get(
-        url, headers=headers, proxies=PROXIES if is_proxy else None, timeout=timeout
+        url, headers=headers, proxies=PROXIES if is_proxy else None, timeout=timeout, verify=False
     )
     if response.status_code != 200:
         raise ValueError(f"Request failed! status: {response.status_code}")
@@ -836,7 +759,7 @@ class NewTaipeiAPIClient:
             print(data)
         """
         url = f"{self.BASE_URL}/{self.rid}/{self.input_format}"
-        response = requests.get(url, params=params, timeout=self.timeout)
+        response = requests.get(url, params=params, timeout=self.timeout, verify=False)
         response.raise_for_status()  # Ensure the request was successful
 
         # Use the appropriate handler to convert the response.
@@ -944,7 +867,7 @@ class TaipeiTravelAPIClient:
             "Accept": f"application/json",
             "User-Agent": "Mozilla/5.0"
         }
-        response = requests.get(url, params=params, headers=headers, timeout=self.timeout, proxies=PROXIES)
+        response = requests.get(url, params=params, headers=headers, timeout=self.timeout, proxies=PROXIES, verify=False)
         response.raise_for_status()  # Ensure the request was successful
 
         # Use the appropriate handler to convert the response.
