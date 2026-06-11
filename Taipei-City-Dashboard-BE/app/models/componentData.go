@@ -112,6 +112,39 @@ type MapLegendData struct {
 	Value float64 `gorm:"column:value" json:"value"`
 }
 
+/*
+BubbleData Json Format:
+*/
+type BubbleData struct {
+	Yaxis string  `gorm:"column:y_axis"`
+	X     float64 `gorm:"column:x"`
+	Y     float64 `gorm:"column:y"`
+	Z     float64 `gorm:"column:z"`
+}
+
+type BubbleDataItem struct {
+	X float64 `json:"x"`
+	Y float64 `json:"y"`
+	Z float64 `json:"z"`
+}
+
+type BubbleDataOutput struct {
+	Name string           `json:"name"`
+	Data []BubbleDataItem `json:"data"`
+}
+
+/*
+LayeredFlowData Json Format:
+*/
+type LayeredFlowData struct {
+	Source      string  `gorm:"column:source" json:"source"`
+	SourceLayer *int    `gorm:"column:source_layer" json:"source_layer"`
+	Target      string  `gorm:"column:target" json:"target"`
+	TargetLayer *int    `gorm:"column:target_layer" json:"target_layer"`
+	Value       float64 `gorm:"column:value" json:"value"`
+	Category    *string `gorm:"column:category" json:"-"`
+}
+
 /* ----- Handlers ----- */
 
 func GetComponentChartDataQuery(id int, city string) (queryType string, queryString string, err error) {
@@ -344,4 +377,78 @@ func GetMapLegendData(query *string, timeFrom string, timeTo string) (chartData 
 	}
 
 	return chartData, nil
+}
+
+func GetBubbleData(query *string, timeFrom string, timeTo string) (chartDataOutput []BubbleDataOutput, err error) {
+	var chartData []BubbleData
+	var queryString string
+
+	if strings.Count(*query, "%s") == 2 {
+		queryString = fmt.Sprintf(*query, timeFrom, timeTo)
+	} else {
+		queryString = *query
+	}
+
+	err = DBDashboard.Raw(queryString).Scan(&chartData).Error
+	if err != nil {
+		return chartDataOutput, err
+	}
+	if len(chartData) == 0 {
+		return chartDataOutput, err
+	}
+
+	for _, data := range chartData {
+		var foundY bool
+		for i, output := range chartDataOutput {
+			if output.Name == data.Yaxis {
+				chartDataOutput[i].Data = append(output.Data, BubbleDataItem{X: data.X, Y: data.Y, Z: data.Z})
+				foundY = true
+				break
+			}
+		}
+
+		if !foundY {
+			chartDataOutput = append(chartDataOutput, BubbleDataOutput{
+				Name: data.Yaxis,
+				Data: []BubbleDataItem{{X: data.X, Y: data.Y, Z: data.Z}},
+			})
+		}
+	}
+
+	return chartDataOutput, nil
+}
+
+func GetLayeredFlowData(query *string, timeFrom string, timeTo string) (chartData []LayeredFlowData, categories []string, err error) {
+	var queryString string
+
+	if strings.Count(*query, "%s") == 2 {
+		queryString = fmt.Sprintf(*query, timeFrom, timeTo)
+	} else {
+		queryString = *query
+	}
+
+	err = DBDashboard.Raw(queryString).Scan(&chartData).Error
+	if err != nil {
+		return chartData, categories, err
+	}
+	if len(chartData) == 0 {
+		return chartData, categories, err
+	}
+
+	for _, data := range chartData {
+		if data.Category != nil && *data.Category != "" {
+			var found bool
+			for _, cat := range categories {
+				if cat == *data.Category {
+					found = true
+					break
+				}
+			}
+			if !found {
+				categories = append(categories, *data.Category)
+			}
+		}
+	}
+
+	return chartData, categories, nil
 }
