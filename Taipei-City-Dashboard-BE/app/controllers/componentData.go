@@ -84,12 +84,16 @@ func GetComponentChartData(c *gin.Context) {
 		}
 		c.JSON(http.StatusOK, gin.H{"status": "success", "data": chartData})
 	} else if queryType == "bubble" {
-		chartData, err := models.GetBubbleData(&queryString, timeFrom, timeTo)
+		chartData, categories, err := models.GetBubbleData(&queryString, timeFrom, timeTo)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": err.Error()})
 			return
 		}
-		c.JSON(http.StatusOK, gin.H{"status": "success", "data": chartData})
+		if len(categories) > 0 {
+			c.JSON(http.StatusOK, gin.H{"status": "success", "data": chartData, "categories": categories})
+		} else {
+			c.JSON(http.StatusOK, gin.H{"status": "success", "data": chartData})
+		}
 	} else if queryType == "layered_flow" {
 		chartData, categories, err := models.GetLayeredFlowData(&queryString, timeFrom, timeTo)
 		if err != nil {
