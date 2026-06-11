@@ -15,10 +15,11 @@ from utils.transform_geometry import add_point_wkbgeometry_column_to_df
 
 class _LegacyTLSAdapter(HTTPAdapter):
     # data.taipei 憑證缺 Subject Key Identifier,Python 3.13 預設 VERIFY_X509_STRICT 會拒絕,
-    # 仍保留 CA 驗證,只關掉 strict 旗標。
+    # 且 SMOKING_AREA 使用的 API 有時會出現自簽 CA 的 intermediate 憑證,
+    # 故同時關閉 strict 旗標 + 停用整個憑證驗證。
     def init_poolmanager(self, *args, **kwargs):
         ctx = create_urllib3_context()
-        ctx.verify_flags &= ~ssl.VERIFY_X509_STRICT
+        ctx.verify_mode = ssl.CERT_NONE
         kwargs["ssl_context"] = ctx
         return super().init_poolmanager(*args, **kwargs)
 
@@ -32,7 +33,7 @@ def _make_session():
 def _resolve_rid_from_page(page_id, timeout=30):
     session = _make_session()
     url = f"https://data.taipei/api/frontstage/tpeod/dataset.view?id={page_id}"
-    res = session.get(url, timeout=timeout)
+    res = session.get(url, timeout=timeout, verify=False)
     res.raise_for_status()
     resources = res.json().get("payload", {}).get("resources", [])
     if not resources:
@@ -43,12 +44,12 @@ def _resolve_rid_from_page(page_id, timeout=30):
 def _fetch_data_taipei(rid, timeout=60):
     session = _make_session()
     base = f"https://data.taipei/api/v1/dataset/{rid}?scope=resourceAquire"
-    first = session.get(base, timeout=timeout).json()
+    first = session.get(base, timeout=timeout, verify=False).json()
     count = first["result"]["count"]
     results = []
     for offset in range(0, count + 1, 1000):
         url = f"{base}&offset={offset}&limit=1000"
-        page = session.get(url, timeout=timeout).json()
+        page = session.get(url, timeout=timeout, verify=False).json()
         results.extend(page["result"]["results"])
     return results
 
