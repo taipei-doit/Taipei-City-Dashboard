@@ -110,7 +110,20 @@ function updateTimeToUpdate() {
 function reloadMapData() {
 	if (!["mapview"].includes(authStore.currentPath)) return;
 	mapStore.currentVisibleLayers.forEach((layerName) => {
-		mapStore.reloadMapLayer(layerName);
+		mapStore.map.removeLayer(layerName);
+		if (mapStore.map.getSource(`${layerName}-source`)) {
+			mapStore.map.removeSource(`${layerName}-source`);
+		}
+		const layerConfig = mapStore.mapConfigs[layerName];
+
+		// 檢查 source
+		if (layerConfig.source === "geojson") {
+			// 如果 source 是 "geojson"，則使用 fetchLocalGeoJson
+			mapStore.fetchLocalGeoJson(layerConfig);
+		} else if (layerConfig.source === "raster") {
+			// 如果 source 是 "raster"，則使用 addRasterSource
+			mapStore.addRasterSource(layerConfig);
+		}
 	});
 }
 
