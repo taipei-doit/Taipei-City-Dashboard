@@ -45,18 +45,18 @@ const chartOptions = ref({
 		},
 		toolbar: isLargeDataSet.value
 			? {
-					show: true,
-					tools: {
-						download: false,
-						pan: false,
-						reset: "<p>" + "重置" + "</p>",
-						zoomin: false,
-						zoomout: false,
-					},
-				}
-			: {
-					show: false,
+				show: true,
+				tools: {
+					download: false,
+					pan: false,
+					reset: "<p>" + "重置" + "</p>",
+					zoomin: false,
+					zoomout: false,
 				},
+			}
+			: {
+				show: false,
+			},
 	},
 	colors: [props.chart_config.color[0]],
 	dataLabels: {
@@ -72,14 +72,14 @@ const chartOptions = ref({
 	},
 	legend: isLargeDataSet.value
 		? {
-				show: props.chart_config.categories ? true : false,
-				horizontalAlign: "left",
-				offsetX: 20,
-				floating: true,
-			}
+			show: props.chart_config.categories ? true : false,
+			horizontalAlign: "left",
+			offsetX: 20,
+			floating: true,
+		}
 		: {
-				show: props.chart_config.categories ? true : false,
-			},
+			show: props.chart_config.categories ? true : false,
+		},
 	plotOptions: {
 		bar: {
 			borderRadius: 0,
@@ -201,28 +201,43 @@ function resetWidth() {
 </script>
 
 <template>
-	<div v-if="activeChart === 'NegativeColumnChart'" class="columnChart">
-		<div v-if="isLargeDataSet" class="columnChart-toolbar">
-			<p class="columnChart-toolbar-item" @click="increaseWidth">
-				<span>add</span>
-			</p>
-			<p class="columnChart-toolbar-item" @click="decreaseWidth">
-				<span>remove</span>
-			</p>
-			<p class="columnChart-toolbar-item reset" @click="resetWidth">
-				重置
-			</p>
-		</div>
-		<VueApexCharts
-			:key="chartWidth"
-			type="bar"
-			:width="chartWidth"
-			height="250px"
-			:options="chartOptions"
-			:series="series"
-			@data-point-selection="handleDataSelection"
-		/>
-	</div>
+  <div
+    v-if="activeChart === 'NegativeColumnChart'"
+    class="columnChart"
+  >
+    <div
+      v-if="isLargeDataSet"
+      class="columnChart-toolbar"
+    >
+      <p
+        class="columnChart-toolbar-item"
+        @click="increaseWidth"
+      >
+        <span>add</span>
+      </p>
+      <p
+        class="columnChart-toolbar-item"
+        @click="decreaseWidth"
+      >
+        <span>remove</span>
+      </p>
+      <p
+        class="columnChart-toolbar-item reset"
+        @click="resetWidth"
+      >
+        重置
+      </p>
+    </div>
+    <VueApexCharts
+      :key="chartWidth"
+      type="bar"
+      :width="chartWidth"
+      height="250px"
+      :options="chartOptions"
+      :series="series"
+      @data-point-selection="handleDataSelection"
+    />
+  </div>
 </template>
 
 <style lang="scss" scoped>

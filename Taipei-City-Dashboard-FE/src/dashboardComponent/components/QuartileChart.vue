@@ -109,95 +109,104 @@ const handleDataSelection = (name) => {
 </script>
 
 <template>
-	<div v-if="activeChart === 'QuartileChart'" class="QuartileChart">
-		<div
-			:class="[
-				'QuartileChart__list',
-				{
-					'QuartileChart__list--scroll': shouldScroll,
-				},
-			]"
-		>
-			<div
-				v-for="(it, i) in parseSeries"
-				:key="`${it.name}-${i}`"
-				class="QuartileChart__row"
-			>
-				<!-- LEFT -->
-				<div class="QuartileChart__left">
-					<div class="QuartileChart__meta">
-						<div
-							class="QuartileChart__title"
-							:class="{
-								'QuartileChart__title--active':
-									selectedIndex === it.name,
-							}"
-							@click="handleDataSelection(it.name)"
-						>
-							{{ it.name }}
-						</div>
-					</div>
-				</div>
+  <div
+    v-if="activeChart === 'QuartileChart'"
+    class="QuartileChart"
+  >
+    <div
+      :class="[
+        'QuartileChart__list',
+        {
+          'QuartileChart__list--scroll': shouldScroll,
+        },
+      ]"
+    >
+      <div
+        v-for="(it, i) in parseSeries"
+        :key="`${it.name}-${i}`"
+        class="QuartileChart__row"
+      >
+        <!-- LEFT -->
+        <div class="QuartileChart__left">
+          <div class="QuartileChart__meta">
+            <div
+              class="QuartileChart__title"
+              :class="{
+                'QuartileChart__title--active':
+                  selectedIndex === it.name,
+              }"
+              @click="handleDataSelection(it.name)"
+            >
+              {{ it.name }}
+            </div>
+          </div>
+        </div>
 
-				<!-- RIGHT -->
-				<div class="QuartileChart__right">
-					<div class="QuartileChart__labels">
-						<div class="QuartileChart__label">
-							<div class="QuartileChart__labelKey">Q1</div>
-							<div class="QuartileChart__labelVal">
-								{{ formatNumber(it.q1) }}
-							</div>
-						</div>
+        <!-- RIGHT -->
+        <div class="QuartileChart__right">
+          <div class="QuartileChart__labels">
+            <div class="QuartileChart__label">
+              <div class="QuartileChart__labelKey">
+                Q1
+              </div>
+              <div class="QuartileChart__labelVal">
+                {{ formatNumber(it.q1) }}
+              </div>
+            </div>
 
-						<div class="QuartileChart__label">
-							<div class="QuartileChart__labelKey">Q2</div>
-							<div class="QuartileChart__labelVal">
-								{{ formatNumber(it.median) }}
-							</div>
-						</div>
+            <div class="QuartileChart__label">
+              <div class="QuartileChart__labelKey">
+                Q2
+              </div>
+              <div class="QuartileChart__labelVal">
+                {{ formatNumber(it.median) }}
+              </div>
+            </div>
 
-						<div class="QuartileChart__label">
-							<div class="QuartileChart__labelKey">Q3</div>
-							<div class="QuartileChart__labelVal">
-								{{ formatNumber(it.q3) }}
-							</div>
-						</div>
-					</div>
+            <div class="QuartileChart__label">
+              <div class="QuartileChart__labelKey">
+                Q3
+              </div>
+              <div class="QuartileChart__labelVal">
+                {{ formatNumber(it.q3) }}
+              </div>
+            </div>
+          </div>
 
-					<!-- TRACK -->
-					<div class="QuartileChart__track">
-						<div
-							class="QuartileChart__trackLine"
-							:style="{
-								backgroundColor: colorForIndex(i),
-								opacity: 0.25,
-							}"
-						/>
+          <!-- TRACK -->
+          <div class="QuartileChart__track">
+            <div
+              class="QuartileChart__trackLine"
+              :style="{
+                backgroundColor: colorForIndex(i),
+                opacity: 0.25,
+              }"
+            />
 
-						<div
-							class="QuartileChart__whisker QuartileChart__whisker--min"
-							:style="whiskerStyle('min')"
-						/>
+            <div
+              class="QuartileChart__whisker QuartileChart__whisker--min"
+              :style="whiskerStyle('min')"
+            />
 
-						<div
-							class="QuartileChart__whisker QuartileChart__whisker--max"
-							:style="whiskerStyle('max')"
-						/>
+            <div
+              class="QuartileChart__whisker QuartileChart__whisker--max"
+              :style="whiskerStyle('max')"
+            />
 
-						<div
-							class="QuartileChart__range"
-							:style="rangeStyle(i)"
-						/>
+            <div
+              class="QuartileChart__range"
+              :style="rangeStyle(i)"
+            />
 
-						<div
-							class="QuartileChart__median"
-							:style="medianStyle()"
-						/>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+            <div
+              class="QuartileChart__median"
+              :style="medianStyle()"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <style scoped lang="scss">

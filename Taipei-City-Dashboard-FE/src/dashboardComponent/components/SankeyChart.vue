@@ -184,88 +184,105 @@ const layout = computed(() => {
 </script>
 
 <template>
-	<div v-if="activeChart === 'SankeyChart'" class="sankey-wrapper" ref="wrapperRef">
-		<!-- Tooltip -->
-		<div
-			v-if="hoveredTip"
-			class="sankey-tooltip"
-			:style="
-				tipOnLeft
-					? { left: tipX - 14 + 'px', top: tipY - 10 + 'px', transform: 'translateX(-100%)' }
-					: { left: tipX + 14 + 'px', top: tipY - 10 + 'px' }
-			"
-		>
-			{{ hoveredTip }}
-		</div>
+  <div
+    v-if="activeChart === 'SankeyChart'"
+    ref="wrapperRef"
+    class="sankey-wrapper"
+  >
+    <!-- Tooltip -->
+    <div
+      v-if="hoveredTip"
+      class="sankey-tooltip"
+      :style="
+        tipOnLeft
+          ? { left: tipX - 14 + 'px', top: tipY - 10 + 'px', transform: 'translateX(-100%)' }
+          : { left: tipX + 14 + 'px', top: tipY - 10 + 'px' }
+      "
+    >
+      {{ hoveredTip }}
+    </div>
 
-		<!-- 放大按鈕 -->
-		<button class="expand-btn" @click="handleExpand" title="放大檢視">
-			<span>⛶</span>
-		</button>
+    <!-- 放大按鈕 -->
+    <button
+      class="expand-btn"
+      title="放大檢視"
+      @click="handleExpand"
+    >
+      <span>⛶</span>
+    </button>
 
-		<!-- 一般檢視 -->
-		<SankeyCanvas
-			:layout="layout"
-			:svg-h="SVG_H"
-			:node-w="NODE_W"
-			:nc="NC"
-			class="sankey-svg"
-			@path-mousemove="onPathMouseMove"
-			@path-mouseleave="onPathMouseLeave"
-		/>
+    <!-- 一般檢視 -->
+    <SankeyCanvas
+      :layout="layout"
+      :svg-h="SVG_H"
+      :node-w="NODE_W"
+      :nc="NC"
+      class="sankey-svg"
+      @path-mousemove="onPathMouseMove"
+      @path-mouseleave="onPathMouseLeave"
+    />
 
-		<!-- Legend -->
-		<div class="sankey-legend">
-			<span class="legend-label">低流量</span>
-			<div
-				class="legend-gradient"
-				:style="`background: linear-gradient(to right, ${colorLowCss}, ${colorHighCss})`"
-			/>
-			<span class="legend-label">高流量</span>
-		</div>
+    <!-- Legend -->
+    <div class="sankey-legend">
+      <span class="legend-label">低流量</span>
+      <div
+        class="legend-gradient"
+        :style="`background: linear-gradient(to right, ${colorLowCss}, ${colorHighCss})`"
+      />
+      <span class="legend-label">高流量</span>
+    </div>
 
-		<!-- Fullscreen overlay -->
-		<Teleport to="body">
-			<div v-if="isExpanded" class="sankey-overlay" @click.self="isExpanded = false">
-				<div class="sankey-modal">
-					<button class="modal-close-btn" @click="isExpanded = false">✕</button>
+    <!-- Fullscreen overlay -->
+    <Teleport to="body">
+      <div
+        v-if="isExpanded"
+        class="sankey-overlay"
+        @click.self="isExpanded = false"
+      >
+        <div class="sankey-modal">
+          <button
+            class="modal-close-btn"
+            @click="isExpanded = false"
+          >
+            ✕
+          </button>
 
-					<!-- Tooltip（共用同一份 ref） -->
-					<div
-						v-if="hoveredTip"
-						class="sankey-tooltip"
-						:style="
-							tipOnLeft
-								? { left: tipX - 14 + 'px', top: tipY - 10 + 'px', transform: 'translateX(-100%)' }
-								: { left: tipX + 14 + 'px', top: tipY - 10 + 'px' }
-						"
-					>
-						{{ hoveredTip }}
-					</div>
+          <!-- Tooltip（共用同一份 ref） -->
+          <div
+            v-if="hoveredTip"
+            class="sankey-tooltip"
+            :style="
+              tipOnLeft
+                ? { left: tipX - 14 + 'px', top: tipY - 10 + 'px', transform: 'translateX(-100%)' }
+                : { left: tipX + 14 + 'px', top: tipY - 10 + 'px' }
+            "
+          >
+            {{ hoveredTip }}
+          </div>
 
-					<!-- 放大檢視 -->
-					<SankeyCanvas
-						:layout="layout"
-						:svg-h="SVG_H"
-						:node-w="NODE_W"
-						:nc="NC"
-						class="sankey-svg-full"
-						@path-mousemove="onPathMouseMove"
-						@path-mouseleave="onPathMouseLeave"
-					/>
+          <!-- 放大檢視 -->
+          <SankeyCanvas
+            :layout="layout"
+            :svg-h="SVG_H"
+            :node-w="NODE_W"
+            :nc="NC"
+            class="sankey-svg-full"
+            @path-mousemove="onPathMouseMove"
+            @path-mouseleave="onPathMouseLeave"
+          />
 
-					<div class="sankey-legend">
-						<span class="legend-label">低流量</span>
-						<div
-							class="legend-gradient"
-							:style="`background: linear-gradient(to right, ${colorLowCss}, ${colorHighCss})`"
-						/>
-						<span class="legend-label">高流量</span>
-					</div>
-				</div>
-			</div>
-		</Teleport>
-	</div>
+          <div class="sankey-legend">
+            <span class="legend-label">低流量</span>
+            <div
+              class="legend-gradient"
+              :style="`background: linear-gradient(to right, ${colorLowCss}, ${colorHighCss})`"
+            />
+            <span class="legend-label">高流量</span>
+          </div>
+        </div>
+      </div>
+    </Teleport>
+  </div>
 </template>
 
 <style scoped lang="scss">
