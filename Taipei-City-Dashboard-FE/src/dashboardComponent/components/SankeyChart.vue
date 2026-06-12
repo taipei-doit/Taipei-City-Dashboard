@@ -31,10 +31,10 @@ const PAD_R = 180;
 const SVG_H = 420;
 const AVAIL_H = SVG_H - PAD_TOP - PAD_BOT;
 const TOP_N = 14;
-const NC = "#6b8fa3";
+const NC = darken(props.chart_config.color?.[0], 25) ?? "#6b8fa3";
 
-const COLOR_LOW = hexToRGB(props.chart_config.color?.[0]);
-const COLOR_HIGH = hexToRGB(props.chart_config.color?.[1]);
+const COLOR_LOW = hexToRGB(props.chart_config.color?.[0] ?? "#3a6ea5");
+const COLOR_HIGH = hexToRGB(props.chart_config.color?.[1] ?? "#e05c5c");
 const colorLowCss = `rgb(${+COLOR_LOW.r},${+COLOR_LOW.g},${+COLOR_LOW.b})`;
 const colorHighCss = `rgb(${+COLOR_HIGH.r},${+COLOR_HIGH.g},${+COLOR_HIGH.b})`;
 
@@ -47,6 +47,21 @@ const tipOnLeft = ref(false);
 const isExpanded = ref(false);
 
 // ── Helpers ────────────────────────────────────────────────────────────────
+function darken(hex, percent = 20) {
+	const c = hex ?? "#6b8fa3";
+
+	const num = parseInt(c.slice(1), 16);
+	let r = (num >> 16) & 255;
+	let g = (num >> 8) & 255;
+	let b = num & 255;
+
+	r = Math.floor(r * (1 - percent / 100));
+	g = Math.floor(g * (1 - percent / 100));
+	b = Math.floor(b * (1 - percent / 100));
+
+	return `#${[r, g, b].map(v => v.toString(16).padStart(2, "0")).join("")}`;
+}
+
 function flowColor(t) {
 	const r = Math.round(+COLOR_LOW.r + (+COLOR_HIGH.r - +COLOR_LOW.r) * t);
 	const g = Math.round(+COLOR_LOW.g + (+COLOR_HIGH.g - +COLOR_LOW.g) * t);
