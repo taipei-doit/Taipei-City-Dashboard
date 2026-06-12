@@ -30,7 +30,13 @@ const tooltip = ref({
 	categories: {},
 });
 
-const parsedUnit = JSON.parse(props.chart_config.unit);
+const parsedUnit = (() => {
+	try {
+		return JSON.parse(props.chart_config.unit);
+	} catch {
+		return props.chart_config.unit;
+	}
+})();
 
 function showTooltip({ name, point, categories }) {
 	tooltip.value.visible = true;
@@ -229,15 +235,15 @@ function handleDataSelection(_e, _chartContext, config) {
         <h6>{{ tooltip.name }}</h6>
         <div>
           {{ tooltip.categories[0] ?? "X" }}：{{ tooltip.point.x }}
-          {{ parsedUnit.x ?? "" }}
+          {{ parsedUnit?.x ?? "" }}
         </div>
         <div>
           {{ tooltip.categories[1] ?? "Y" }}：{{ tooltip.point.y }}
-          {{ parsedUnit.y ?? "" }}
+          {{ parsedUnit?.y ?? "" }}
         </div>
         <div>
           {{ tooltip.categories[2] ?? "Z" }}：{{ tooltip.point.z }}
-          {{ parsedUnit.z ?? "" }}
+          {{ parsedUnit?.z ?? "" }}
         </div>
       </div>
     </Teleport>
