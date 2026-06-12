@@ -50,7 +50,7 @@ function getPalette() {
 }
 
 function getSunburstBranchColors() {
-	const cfg = props.chart_config?.sunburst_branch_colors;
+	const cfg = props.chart_config?.color;
 	if (
 		Array.isArray(cfg) &&
 		cfg.length >= 2 &&
@@ -586,7 +586,6 @@ onBeforeUnmount(() => {
 	overflow: visible;
 }
 
-/* 只裁切圖形；hover 用 fixed 畫在視窗上，不受父層 overflow 遮住 */
 .sunburstchart__svg-clip {
 	width: 100%;
 	height: 100%;
@@ -631,7 +630,6 @@ onBeforeUnmount(() => {
 	max-width: min(400px, calc(100vw - 20px));
 	z-index: 10050;
 	box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
-	/* 錨在游標 (left/top)；translate 讓框緣距游標固定為 --tip-gap，左右象限對稱 */
 	&--tr {
 		transform: translate(var(--tip-gap), calc(-100% - var(--tip-gap)));
 	}
