@@ -1,3 +1,9 @@
+import BubbleChart from "../../../dashboardComponent/components/BubbleChart.vue";
+import NegativeColumnChart from "../../../dashboardComponent/components/NegativeColumnChart.vue";
+import QuartileChart from "../../../dashboardComponent/components/QuartileChart.vue";
+import SankeyChart from "../../../dashboardComponent/components/SankeyChart.vue";
+import SunburstChart from "../../../dashboardComponent/components/SunburstChart.vue";
+
 export const chartTypes = {
 	DonutChart: "圓餅圖",
 	BarChart: "橫向長條圖",
@@ -19,6 +25,11 @@ export const chartTypes = {
 	IndicatorChart: "指標圖",
 	MapLegend: "地圖圖例",
 	TextUnitChart: "文字單位圖",
+	SunburstChart: "旭日圖",
+	QuartileChart: "四分位圖",
+	SankeyChart: "桑基圖",
+	BubbleChart: "泡泡圖",
+	NegativeColumnChart: "負向長條圖",
 };
 
 export const chartsPerDataType = {
@@ -31,6 +42,7 @@ export const chartsPerDataType = {
 		"RadarChart",
 		"PolarAreaChart",
 		"MetroChart",
+		"NegativeColumnChart",
 	],
 	three_d: [
 		"ColumnChart",
@@ -41,6 +53,8 @@ export const chartsPerDataType = {
 		"IndicatorChart",
 		"PolarAreaChart",
 		"TextUnitChart",
+		"NegativeColumnChart",
+		"QuartileChart"
 	],
 	time: ["TimelineSeparateChart", "TimelineStackedChart", "ColumnLineChart"],
 	percent: [
@@ -50,4 +64,6 @@ export const chartsPerDataType = {
 		"IconPercentChart",
 	],
 	map_legend: ["MapLegend"],
+	bubble: ["BubbleChart"],
+	layered_flow: ["SankeyChart","SunburstChart"],
 };

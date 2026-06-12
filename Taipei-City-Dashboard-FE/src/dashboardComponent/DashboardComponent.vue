@@ -28,6 +28,11 @@ import BarChartWithGoal from "./components/BarChartWithGoal.vue";
 import IconPercentChart from "./components/IconPercentChart.vue";
 import IndicatorChart from "./components/IndicatorChart.vue";
 import TextUnitChart from "./components/TextUnitChart.vue";
+import QuartileChart from "./components/QuartileChart.vue";
+import NegativeColumnChart from "./components/NegativeColumnChart.vue";
+import BubbleChart from "./components/BubbleChart.vue";
+import SankeyChart from "./components/SankeyChart.vue";
+import SunburstChart from "./components/SunburstChart.vue";
 
 import MapLegendSvg from "./assets/chart/MapLegend.svg";
 import DistrictChartSvg from "./assets/chart/DistrictChart.svg";
@@ -48,7 +53,11 @@ import BarChartWithGoalSvg from "./assets/chart/BarChartWithGoal.svg";
 import TreemapChartSvg from "./assets/chart/TreemapChart.svg";
 import IndicatorChartSvg from "./assets/chart/IndicatorChart.svg";
 import TextUnitChartSvg from "./assets/chart/TextUnitChart.svg";
-
+import BubbleChartSvg from "./assets/chart/BubbleChart.svg";
+import SankeyChartSvg from "./assets/chart/SankeyChart.svg";
+import SunburstChartSvg from "./assets/chart/SunburstChart.svg";
+import NegativeColumnChartSvg from "./assets/chart/NegativeColumnChart.svg";
+import QuartileChartSvg from "./assets/chart/QuartileChart.svg";
 
 const props = defineProps({
 	style: { type: Object, default: () => ({}) },
@@ -222,6 +231,16 @@ function returnChartComponent(name, svg) {
 		return svg ? IndicatorChartSvg : IndicatorChart;
 	case "TextUnitChart":
 		return svg ? TextUnitChartSvg : TextUnitChart;
+	case "QuartileChart":
+		return svg ? QuartileChartSvg : QuartileChart;
+	case "NegativeColumnChart":
+		return svg ? NegativeColumnChartSvg : NegativeColumnChart;
+	case "BubbleChart":
+		return svg ? BubbleChartSvg : BubbleChart;
+	case "SankeyChart":
+		return svg ? SankeyChartSvg : SankeyChart;
+	case "SunburstChart":
+		return svg ? SunburstChartSvg : SunburstChart;
 	default:
 		return svg ? MapLegendSvg : MapLegend;
 	}
