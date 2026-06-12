@@ -1,9 +1,3 @@
-import BubbleChart from "../../../dashboardComponent/components/BubbleChart.vue";
-import NegativeColumnChart from "../../../dashboardComponent/components/NegativeColumnChart.vue";
-import QuartileChart from "../../../dashboardComponent/components/QuartileChart.vue";
-import SankeyChart from "../../../dashboardComponent/components/SankeyChart.vue";
-import SunburstChart from "../../../dashboardComponent/components/SunburstChart.vue";
-
 export const chartTypes = {
 	DonutChart: "圓餅圖",
 	BarChart: "橫向長條圖",
