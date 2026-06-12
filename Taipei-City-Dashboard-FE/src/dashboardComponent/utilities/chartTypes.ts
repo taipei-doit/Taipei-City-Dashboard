@@ -1,9 +1,3 @@
-import BubbleChart from "../components/BubbleChart.vue";
-import NegativeColumnChart from "../components/NegativeColumnChart.vue";
-import QuartileChart from "../components/QuartileChart.vue";
-import SankeyChart from "../components/SankeyChart.vue";
-import SunburstChart from "../components/SunburstChart.vue";
-
 interface chartType {
 	[index: string]: string;
 }
