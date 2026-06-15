@@ -3,12 +3,20 @@ from operators.common_pipeline import CommonDag
 
 
 def _ensure_ready_table(engine, table_name, col_map):
-    from sqlalchemy.sql import text as sa_text
-    from utils.generate_sql_to_create_DB_table import generate_sql_to_create_db_table
+    from utils.ready_table_schema import ensure_ready_table
 
-    sql = generate_sql_to_create_db_table(table_name, col_map)
-    with engine.connect() as conn:
-        conn.execute(sa_text(sql).execution_options(autocommit=True))
+    ensure_ready_table(
+        engine,
+        table_name,
+        col_map,
+        {
+            "縣市": "city",
+            "項目": "year",
+            "自購住宅貸款利息補貼申請戶數": "application_households",
+            "自購住宅貸款利息補貼計畫戶數": "planned_households",
+            "自購住宅貸款利息補貼核定戶數": "approved_households",
+        },
+    )
 
 
 def _purchase_subsidy_application_status(**kwargs):
@@ -29,11 +37,11 @@ def _purchase_subsidy_application_status(**kwargs):
 
     COL_MAP = {
         "data_time": "timestamp with time zone DEFAULT CURRENT_TIMESTAMP",
-        "縣市": 'character varying(10) COLLATE pg_catalog."default"',
-        "項目": "integer",
-        "自購住宅貸款利息補貼申請戶數": "integer",
-        "自購住宅貸款利息補貼計畫戶數": "integer",
-        "自購住宅貸款利息補貼核定戶數": "integer",
+        "city": 'character varying(10) COLLATE pg_catalog."default"',
+        "year": "integer",
+        "application_households": "integer",
+        "planned_households": "integer",
+        "approved_households": "integer",
     }
     SELECT_COLUMNS = list(COL_MAP.keys())
 
@@ -61,25 +69,25 @@ def _purchase_subsidy_application_status(**kwargs):
     # === Transform ===
     data = taipei_raw.rename(
         columns={
-            "項目": "項目",
-            "自購住宅貸款利息補貼申請戶數": "自購住宅貸款利息補貼申請戶數",
-            "自購住宅貸款利息補貼計畫戶數": "自購住宅貸款利息補貼計畫戶數",
-            "自購住宅貸款利息補貼核定戶數": "自購住宅貸款利息補貼核定戶數",
+            "項目": "year",
+            "自購住宅貸款利息補貼申請戶數": "application_households",
+            "自購住宅貸款利息補貼計畫戶數": "planned_households",
+            "自購住宅貸款利息補貼核定戶數": "approved_households",
         }
     )
-    data["縣市"] = "臺北市"
-    data["項目"] = _to_ad_year(data["項目"])
-    data = data[data["項目"] <= 2022]
+    data["city"] = "臺北市"
+    data["year"] = _to_ad_year(data["year"])
+    data = data[data["year"] <= 2022]
 
     # === Normalize ===
     for col in [
-        "自購住宅貸款利息補貼申請戶數",
-        "自購住宅貸款利息補貼計畫戶數",
-        "自購住宅貸款利息補貼核定戶數",
+        "application_households",
+        "planned_households",
+        "approved_households",
     ]:
         data[col] = _to_int(data[col])
     data["data_time"] = data_time
-    data = data.sort_values("項目").reset_index(drop=True)
+    data = data.sort_values("year").reset_index(drop=True)
     data = data[SELECT_COLUMNS]
 
     # === Load ===
