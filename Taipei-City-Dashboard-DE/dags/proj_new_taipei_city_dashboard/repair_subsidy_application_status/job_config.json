@@ -32,7 +32,7 @@
     "output_coordinate": "EPSG:4326",
     "is_geometry": 0,
     "dataset_description": "新北市歷年修繕住宅貸款利息補貼申請戶數、計畫戶數及核定戶數。",
-    "etl_description": "讀取新北市資料開放平臺住宅補貼資料，輸出與臺北市修繕住宅貸款利息補貼受理情形一致的中文欄位與西元年，並移除通過率。",
+    "etl_description": "讀取新北市資料開放平臺住宅補貼資料，輸出與臺北市修繕住宅貸款利息補貼受理情形一致的英文欄位與西元年，並移除通過率。",
     "sensitivity": "public"
   }
 }
