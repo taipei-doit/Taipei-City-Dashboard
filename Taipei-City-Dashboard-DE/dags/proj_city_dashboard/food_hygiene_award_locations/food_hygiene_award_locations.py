@@ -107,7 +107,12 @@ def _food_hygiene_award_locations(**kwargs):
 
     # 臺北來源無座標；若 Airflow 有 TPGOS key，使用既有地址工具補點位。
     if Variable.get("TPGOS_GET_ADDR_XY", default_var=None):
-        unique_addr = taipei["address"].dropna().drop_duplicates()
+        is_taipei_address = taipei["address"].astype(str).str.contains(
+            r"(臺北市|台北市).{0,8}區",
+            regex=True,
+            na=False,
+        )
+        unique_addr = taipei.loc[is_taipei_address, "address"].dropna().drop_duplicates()
         lng, lat = get_addr_xy_parallel(unique_addr, sleep_time=0.5)
         addr_xy = pd.DataFrame({"address": unique_addr, "lng": lng, "lat": lat})
         taipei = taipei.drop(columns=["lng", "lat"]).merge(addr_xy, on="address", how="left")
@@ -144,6 +149,10 @@ def _food_hygiene_award_locations(**kwargs):
     ntpc["data_time"] = get_tpe_now_time_str(is_with_tz=True)
 
     data = pd.concat([taipei, ntpc], ignore_index=True, sort=False)
+    data["data_time"] = convert_str_to_time_format(
+        data["data_time"].astype(str),
+        errors="coerce",
+    )
     data = data.dropna(subset=["lng", "lat"]).copy()
     for col in SELECT_COLUMNS:
         if col not in data.columns:
