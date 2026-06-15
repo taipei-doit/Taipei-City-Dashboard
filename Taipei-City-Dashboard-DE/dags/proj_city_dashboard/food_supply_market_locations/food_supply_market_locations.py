@@ -95,6 +95,12 @@ def _food_supply_market_locations(**kwargs):
             return data
 
         missing = data["address"].notna() & (data["lng"].isna() | data["lat"].isna())
+        valid_address = data["address"].astype(str).str.contains(
+            r"(臺北市|台北市|新北市).{0,12}區",
+            regex=True,
+            na=False,
+        )
+        missing = missing & valid_address
         if not missing.any():
             return data
 
