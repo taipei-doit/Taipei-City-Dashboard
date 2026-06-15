@@ -20,28 +20,36 @@ const emits = defineEmits([
 
 const selectedIndex = ref(null);
 
+// 從原始陣列計算四分位數
+function calcQuartiles(arr) {
+	if (!arr || arr.length === 0)
+		return { q1: 0, median: 0, q3: 0, min: 0, max: 0 };
+
+	const sorted = [...arr].sort((a, b) => a - b);
+	const n = sorted.length;
+
+	const quantile = (sorted, q) => {
+		const pos = (n - 1) * q;
+		const base = Math.floor(pos);
+		const rest = pos - base;
+		return sorted[base + 1] !== undefined
+			? sorted[base] + rest * (sorted[base + 1] - sorted[base])
+			: sorted[base];
+	};
+
+	return {
+		min: sorted[0],
+		q1: quantile(sorted, 0.25),
+		median: quantile(sorted, 0.5),
+		q3: quantile(sorted, 0.75),
+		max: sorted[n - 1],
+	};
+}
+
 const parseSeries = computed(() => {
-	// categories 順序：優先從 chart_config 拿，否則 hardcode
-	const categories = props.chart_config?.categories ?? [
-		"q1",
-		"median",
-		"q3",
-		"min",
-		"max",
-	];
-
-	const idx = (key) => categories.indexOf(key);
-
 	return props.series.map((it) => {
-		const d = it.data ?? [];
-		return {
-			name: it.name ?? "",
-			q1: d[idx("q1")] ?? 0,
-			median: d[idx("median")] ?? 0,
-			q3: d[idx("q3")] ?? 0,
-			// min: d[idx("min")] ?? d[idx("q1")] ?? 0,
-			// max: d[idx("max")] ?? d[idx("q3")] ?? 0,
-		};
+		const { min, q1, median, q3, max } = calcQuartiles(it.data ?? []);
+		return { name: it.name ?? "", min, q1, median, q3, max };
 	});
 });
 
