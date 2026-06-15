@@ -31,11 +31,11 @@ const tooltip = ref({
 });
 
 const parsedUnit = (() => {
-	try {
-		return JSON.parse(props.chart_config.unit);
-	} catch {
-		return props.chart_config.unit;
-	}
+  try {
+    return JSON.parse(props.chart_config.unit);
+  } catch {
+    return props.chart_config.unit;
+  }
 })();
 
 function showTooltip({ name, point, categories }) {
@@ -203,51 +203,51 @@ function handleDataSelection(_e, _chartContext, config) {
 </script>
 
 <template>
-  <div
-    v-if="activeChart === 'BubbleChart'"
-    ref="chartRef"
-    class="bubbleChart"
-    @mousemove="onChartMouseMove"
-    @mouseleave="hideTooltip"
-  >
-    <VueApexCharts
-      type="bubble"
-      width="100%"
-      height="100%"
-      :options="chartOptions"
-      :series="props.series"
-      @data-point-selection="handleDataSelection"
-    />
+	<div
+		v-if="activeChart === 'BubbleChart'"
+		ref="chartRef"
+		class="bubbleChart"
+		@mousemove="onChartMouseMove"
+		@mouseleave="hideTooltip"
+	>
+		<VueApexCharts
+			type="bubble"
+			width="100%"
+			height="100%"
+			:options="chartOptions"
+			:series="props.series"
+			@data-point-selection="handleDataSelection"
+		/>
 
-    <Teleport to="body">
-      <div
-        v-if="tooltip.visible && tooltip.point"
-        class="chart-tooltip"
-        :style="{
-          top: tooltip.y + 'px',
-          left: tooltip.x + 'px',
-          transform:
-            tooltip.placement === 'left'
-              ? 'translateX(-100%)'
-              : 'none',
-        }"
-      >
-        <h6>{{ tooltip.name }}</h6>
-        <div>
-          {{ tooltip.categories[0] ?? "X" }}：{{ tooltip.point.x }}
-          {{ parsedUnit?.x ?? "" }}
-        </div>
-        <div>
-          {{ tooltip.categories[1] ?? "Y" }}：{{ tooltip.point.y }}
-          {{ parsedUnit?.y ?? "" }}
-        </div>
-        <div>
-          {{ tooltip.categories[2] ?? "Z" }}：{{ tooltip.point.z }}
-          {{ parsedUnit?.z ?? "" }}
-        </div>
-      </div>
-    </Teleport>
-  </div>
+		<Teleport to="body">
+			<div
+				v-if="tooltip.visible && tooltip.point"
+				class="chart-tooltip chart-tooltip-bubble"
+				:style="{
+					top: tooltip.y + 'px',
+					left: tooltip.x + 'px',
+					transform:
+						tooltip.placement === 'left'
+							? 'translateX(-100%)'
+							: 'none',
+				}"
+			>
+				<h6>{{ tooltip.name }}</h6>
+				<div>
+					{{ tooltip.categories[0] ?? "X" }}：{{ tooltip.point.x }}
+					{{ parsedUnit?.x ?? "" }}
+				</div>
+				<div>
+					{{ tooltip.categories[1] ?? "Y" }}：{{ tooltip.point.y }}
+					{{ parsedUnit?.y ?? "" }}
+				</div>
+				<div>
+					{{ tooltip.categories[2] ?? "Z" }}：{{ tooltip.point.z }}
+					{{ parsedUnit?.z ?? "" }}
+				</div>
+			</div>
+		</Teleport>
+	</div>
 </template>
 
 <style lang="scss" scoped>
@@ -266,7 +266,7 @@ function handleDataSelection(_e, _chartContext, config) {
 </style>
 
 <style lang="scss">
-.chart-tooltip {
+.chart-tooltip-bubble {
 	position: fixed;
 	z-index: 9999;
 	pointer-events: none;
