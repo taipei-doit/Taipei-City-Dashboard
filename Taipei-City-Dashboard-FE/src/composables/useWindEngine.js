@@ -24,6 +24,11 @@ const IDW_MAX_DIST = 0.08;
 // 最小距離防除零
 const IDW_MIN_DIST = 0.0005;
 
+// ── Mapbox 建物底圖參數 ───────────────────────────────────
+const BUILDING_SOURCE = "composite";
+const BUILDING_SOURCE_LAYER = "building";
+const BUILDING_MIN_ZOOM = 15;
+
 const EMPTY = { type: "FeatureCollection", features: [] };
 const SRC_PARTICLES = "wind:particles";
 const SRC_COMFORT = "wind:comfort-grid";
@@ -43,6 +48,7 @@ export const useWindEngine = (options = {}) => {
 	const useStationData = ref(false);
 	let stations = []; // [{ lng, lat, dir, speed }]
 	let stationsLoaded = false;
+	let stationsFailed = false;
 
 	// ── 載入天氣站 ────────────────────────────────────────
 	const loadStations = async () => {
@@ -71,6 +77,7 @@ export const useWindEngine = (options = {}) => {
 			// console.log(`[WindEngine] 載入 ${stations.length} 個有效氣象站`);
 		} catch (e) {
 			console.warn("[WindEngine] 天氣站載入失敗:", e);
+			stationsFailed = true;
 		}
 	};
 
@@ -98,10 +105,10 @@ export const useWindEngine = (options = {}) => {
 			totalW += w;
 		}
 
-		// 找不到鄰近站點，回退全域值
+		// 找不到鄰近站點，保持靜止
 		if (totalW === 0) {
-			return { dir: windDir.value, speed: windSpeed.value };
-		}
+            return { dir: 0, speed: 0 };
+        }
 
 		const dir =
 			((Math.atan2(wSin / totalW, wCos / totalW) * 180) / Math.PI + 360) %
@@ -119,20 +126,23 @@ export const useWindEngine = (options = {}) => {
 		BASE_VY = 0;
 	const updateWindVector = () => {
 		const rad = (windDir.value * Math.PI) / 180;
-		BASE_VX = Math.sin(rad) * 0.00001 * windSpeed.value;
-		BASE_VY = Math.cos(rad) * 0.00001 * windSpeed.value;
+		BASE_VX = Math.sin(rad) * 0.00003 * windSpeed.value;
+		BASE_VY = Math.cos(rad) * 0.00003 * windSpeed.value;
 	};
 	updateWindVector();
 
 	// ── 粒子向量計算（封裝，供 update 呼叫） ─────────────
 	// 回傳 { vx, vy, angle }，已考慮 station mode
 	const getParticleVector = (lng, lat) => {
+		if (stationsFailed) {
+			return { vx: 0, vy: 0, angle: 0 }; // 載入失敗：完全靜止
+		}
 		if (stations.length > 0) {
 			const lw = getLocalWind(lng, lat);
 			const rad = (lw.dir * Math.PI) / 180;
 			return {
-				vx: Math.sin(rad) * 0.00001 * lw.speed,
-				vy: Math.cos(rad) * 0.00001 * lw.speed,
+				vx: Math.sin(rad) * 0.00003 * lw.speed,
+				vy: Math.cos(rad) * 0.00003 * lw.speed,
 				angle: lw.dir,
 			};
 		}
@@ -151,7 +161,7 @@ export const useWindEngine = (options = {}) => {
 	let layersMounted = false;
 	let fetchController = null;
 
-	// ── [修正] generation 計數器，防止舊批次污染新狀態 ──
+	// ── generation 計數器，防止舊批次污染新狀態 ──────────
 	let fetchGen = 0;
 	let rebuildGen = 0;
 
@@ -175,16 +185,19 @@ export const useWindEngine = (options = {}) => {
 		};
 	};
 
-	// ── 建物抓取 ──────────────────────────────────────────
-	// [修正] 用 generation 確保只有最新一次 moveend/zoomend 的抓取會生效
+	// ── 建物抓取（Mapbox 內建 building layer） ────────────
+	// zoom < BUILDING_MIN_ZOOM 時略過，避免抓到稀疏資料
 	const fetchBuildings = () => {
 		const map = m();
 		if (!map) return;
+		if (map.getZoom() < BUILDING_MIN_ZOOM) return;
+
 		const gen = ++fetchGen;
 		const tryFetch = () => {
 			if (gen !== fetchGen) return; // 已被更新的事件取代，放棄
-			const features = map.querySourceFeatures("taipei_building_3d_source", {
-				sourceLayer: "tp_building_height84-18p8j0",
+			const features = map.querySourceFeatures(BUILDING_SOURCE, {
+				sourceLayer: BUILDING_SOURCE_LAYER,
+				filter: ["==", "extrude", "true"], // 只取有高度擠出的建物
 			});
 			if (!features.length) {
 				setTimeout(tryFetch, 300);
@@ -234,7 +247,7 @@ export const useWindEngine = (options = {}) => {
 		p.hiddenUntil = performance.now() + Math.random() * 1200;
 	};
 
-	// [修正] 生成粒子後清除過長的 hiddenUntil，避免繼承舊區域的建築碰撞狀態
+	// 生成粒子後清除過長的 hiddenUntil，避免繼承舊區域的建築碰撞狀態
 	const generateParticles = () => {
 		const b = getSafeBounds();
 		const now = performance.now();
@@ -343,7 +356,7 @@ export const useWindEngine = (options = {}) => {
 		return false;
 	};
 
-	// [修正] 用 generation 防止多次重疊的 rebuildIndex 互相污染
+	// 用 generation 防止多次重疊的 rebuildIndex 互相污染
 	const rebuildIndex = (features) => {
 		buildingIndex = {};
 		const gen = ++rebuildGen;
@@ -375,8 +388,8 @@ export const useWindEngine = (options = {}) => {
 				const meta = {
 					feature: features[i],
 					bbox: { mnLng, mxLng, mnLat, mxLat },
-					height:
-						properties?.height || properties?.render_height || 20,
+					// Mapbox building layer 使用 height / min_height
+					height: properties?.height ?? properties?.min_height ?? 0, // 無資料視為平面
 				};
 				const sx = Math.floor(mnLng / SPATIAL_STEP),
 					ex = Math.floor(mxLng / SPATIAL_STEP);
@@ -488,10 +501,15 @@ export const useWindEngine = (options = {}) => {
 	};
 	const onZoomEnd = () => {
 		isZooming = false;
+		const map = m();
 		const b = getSafeBounds();
 		generateParticles();
 		buildComfortGrid(b);
-		setTimeout(fetchBuildings, 300);
+		if (map && map.getZoom() >= BUILDING_MIN_ZOOM) {
+			setTimeout(fetchBuildings, 300);
+		} else {
+			buildingIndex = {}; // 縮小後清除建築索引
+		}
 	};
 	const onMoveStart = () => {
 		isMoving = true;
@@ -499,9 +517,12 @@ export const useWindEngine = (options = {}) => {
 	};
 	const onMoveEnd = () => {
 		isMoving = false;
+		const map = m();
 		const b = getSafeBounds();
 		setTimeout(() => {
-			fetchBuildings();
+			if (map && map.getZoom() >= BUILDING_MIN_ZOOM) {
+				fetchBuildings();
+			}
 			generateParticles();
 			buildComfortGrid(b);
 		}, 300);
@@ -538,8 +559,10 @@ export const useWindEngine = (options = {}) => {
 		let visCount = 0;
 
 		for (const p of particles) {
-			// ▼ 核心變更：每顆粒子取得本地（或全域）風向向量
+			// 每顆粒子取得本地（或全域）風向向量
 			const { vx, vy, angle } = getParticleVector(p.lng, p.lat);
+
+            if (vx === 0 && vy === 0) continue;
 
 			const rawLng = p.lng + vx * DT;
 			const rawLat = p.lat + vy * DT;
@@ -637,9 +660,9 @@ export const useWindEngine = (options = {}) => {
 			const feat = featurePool[visCount++];
 			feat.geometry.coordinates[0] = nextLng;
 			feat.geometry.coordinates[1] = nextLat;
-			feat.properties.angle = angle; // ▼ 核心變更：用本地角度渲染箭頭方向
+			feat.properties.angle = angle; // 用本地角度渲染箭頭方向
 
-			// ▼ 修正 comfort grid index mismatch
+			// comfort grid index mismatch 修正
 			const gx = Math.floor(nextLng / COMFORT_STEP);
 			const gy = Math.floor(nextLat / COMFORT_STEP);
 
