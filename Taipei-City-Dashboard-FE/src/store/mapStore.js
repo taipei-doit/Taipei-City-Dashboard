@@ -124,7 +124,7 @@ export const useMapStore = defineStore("map", {
 			this.map
 				.on("load", () => {
 					if (!this.map) return;
-					this.overlay =markRaw(new MapboxOverlay({
+					this.overlay = markRaw(new MapboxOverlay({
 						interleaved: true,
 						layers: [],
 					}));
@@ -419,6 +419,17 @@ export const useMapStore = defineStore("map", {
 				console.error("Geolocation is not supported by this browser.");
 			}
 		},
+		// 7. Regisyer Wind Engine (風場功能)
+		registerWindEngine(startFn, stopFn) {
+			this._onStart = startFn;
+			this._onStop = stopFn;
+		},
+		startWind() {
+			this._onStart?.();
+		},
+		stopWind() {
+			this._onStop?.();
+		},
 
 		/* Adding Map Layers */
 		// 1. Passes in the map_config (an Array of Objects) of a component and adds all layers to the map layer list
@@ -463,7 +474,7 @@ export const useMapStore = defineStore("map", {
 		// 3-1. Add a local geojson as a source in mapbox
 		addGeojsonSource(map_config, data) {
 			if (
-				!["voronoi", "isoline"].includes(map_config.type) &&
+				!["voronoi", "isoline", "wind-heat"].includes(map_config.type) &&
 				map_config.type !== "symbol-3d"
 			) {
 				this.map.addSource(`${map_config.layerId}-source`, {
@@ -477,6 +488,8 @@ export const useMapStore = defineStore("map", {
 				this.AddVoronoiMapLayer(map_config, data);
 			} else if (map_config.type === "isoline") {
 				this.AddIsolineMapLayer(map_config, data);
+			} else if (map_config.type === "wind-heat") {
+				this.AddWindHeatMapLayer(map_config, data);
 			} else {
 				this.addMapLayer(map_config);
 			}
@@ -484,7 +497,7 @@ export const useMapStore = defineStore("map", {
 		// 3-2. Add a raster map as a source in mapbox
 		async addRasterSource(map_config) {
 			if (
-				["arc", "voronoi", "isoline", "symbol-3d"].includes(
+				["arc", "voronoi", "isoline", "symbol-3d", "wind-heat"].includes(
 					map_config.type,
 				)
 			) {
@@ -530,6 +543,8 @@ export const useMapStore = defineStore("map", {
 						res2.data,
 						res3?.data,
 					);
+				} else if (map_config.type === "wind-heat") {
+					this.AddWindHeatMapLayer(map_config, res.data);
 				}
 			} else {
 				try {
@@ -1803,8 +1818,29 @@ export const useMapStore = defineStore("map", {
 			);
 			return;
 		},
+		// 4-6. Create wind Heat map 黑客松整併
+		AddWindHeatMapLayer(map_config) {
+			this.loadingLayers.push(map_config.layerId);
+			this.currentLayers.push(map_config.layerId);
+			this.mapConfigs[map_config.layerId] = map_config;
+
+			this.startWind();
+
+			this.loadingLayers = this.loadingLayers.filter(
+				(el) => el !== map_config.layerId,
+			);
+		},
 		//  5. Turn on the visibility for a exisiting map layer
 		turnOnMapLayerVisibility(mapLayerId) {
+			// wind-heat 特殊處理
+			const config = this.mapConfigs[mapLayerId];
+			if (config?.type === "wind-heat") {
+				this.startWind();
+				if (!this.currentVisibleLayers.includes(mapLayerId)) {
+					this.currentVisibleLayers.push(mapLayerId);
+				}
+				return;
+			}
 			if (mapLayerId.indexOf("-arc") !== -1) {
 				this.deckGlLayer[mapLayerId].config.visible = true;
 				this.step = 1;
@@ -1847,6 +1883,13 @@ export const useMapStore = defineStore("map", {
 		// 6. Turn off the visibility of an exisiting map layer but don't remove it completely
 		turnOffMapLayerVisibility(map_config) {
 			this.stopAnimation();
+			// 只有關閉 wind-heat 圖層時才停風場
+			const hasWindHeat = map_config.some(
+				(el) =>
+					this.mapConfigs[`${el.index}-${el.type}-${el.city}`]
+						?.type === "wind-heat",
+			);
+			if (hasWindHeat) this.stopWind();
 			map_config.forEach((element) => {
 				let mapLayerId = `${element.index}-${element.type}-${element.city}`;
 				this.loadingLayers = this.loadingLayers.filter(
@@ -2384,73 +2427,30 @@ export const useMapStore = defineStore("map", {
 			});
 		},
 		// 2. filter by layer name (byLayer)
-		// filterByLayer(map_configs, xParam) {
-		// 	const dialogStore = useDialogStore();
-		// 	// If there are layers loading, don't filter
-		// 	if (this.loadingLayers.length > 0) return;
-		// 	if (!this.map || dialogStore.dialogs.moreInfo) {
-		// 		return;
-		// 	}
-		// 	map_configs.map((map_config) => {
-		// 		let mapLayerId = `${map_config.index}-${map_config.type}-${map_config.city}`;
-		// 		if (map_config.title !== xParam) {
-		// 			this.map.setLayoutProperty(
-		// 				mapLayerId,
-		// 				"visibility",
-		// 				"none",
-		// 			);
-		// 		} else {
-		// 			this.map.setLayoutProperty(
-		// 				mapLayerId,
-		// 				"visibility",
-		// 				"visible",
-		// 			);
-		// 		}
-		// 	});
-		// },
 		filterByLayer(map_configs, xParam) {
 			const dialogStore = useDialogStore();
+			// If there are layers loading, don't filter
 			if (this.loadingLayers.length > 0) return;
-			if (!this.map || dialogStore.dialogs.moreInfo) return;
-
-			map_configs.forEach((map_config) => {
-				const layerId = `${map_config.index}-${map_config.type}-${map_config.city}`;
-				if (!this.map.getLayer(layerId)) return;
-
-				const isActive = map_config.title === xParam;
-
-				// 只改 opacity，不改 visibility
-				// symbol layer
-				if (this.map.getLayer(layerId).type === "symbol") {
-					this.map.setPaintProperty(
-						layerId,
-						"icon-opacity",
-						isActive ? 1 : 0,
-					);
-					this.map.setPaintProperty(
-						layerId,
-						"text-opacity",
-						isActive ? 1 : 0,
+			if (!this.map || dialogStore.dialogs.moreInfo) {
+				return;
+			}
+			map_configs.map((map_config) => {
+				let mapLayerId = `${map_config.index}-${map_config.type}-${map_config.city}`;
+				if (map_config.title !== xParam) {
+					this.map.setLayoutProperty(
+						mapLayerId,
+						"visibility",
+						"none",
 					);
 				} else {
-					// fill / line / circle 等
-					const opacityProp = {
-						fill: "fill-opacity",
-						line: "line-opacity",
-						circle: "circle-opacity",
-					}[this.map.getLayer(layerId).type];
-
-					if (opacityProp) {
-						this.map.setPaintProperty(
-							layerId,
-							opacityProp,
-							isActive ? 1 : 0,
-						);
-					}
+					this.map.setLayoutProperty(
+						mapLayerId,
+						"visibility",
+						"visible",
+					);
 				}
 			});
 		},
-
 		// 3. Remove any property filters on a map layer
 		clearByParamFilter(map_configs) {
 			const dialogStore = useDialogStore();
@@ -2469,40 +2469,14 @@ export const useMapStore = defineStore("map", {
 			});
 		},
 		// 4. Remove any layer filters on a map layer.
-		// clearByLayerFilter(map_configs) {
-		// 	const dialogStore = useDialogStore();
-		// 	if (!this.map || dialogStore.dialogs.moreInfo) {
-		// 		return;
-		// 	}
-		// 	map_configs.map((map_config) => {
-		// 		let mapLayerId = `${map_config.index}-${map_config.type}-${map_config.city}`;
-		// 		this.map.setLayoutProperty(mapLayerId, "visibility", "visible");
-		// 	});
-		// },
 		clearByLayerFilter(map_configs) {
 			const dialogStore = useDialogStore();
-			if (!this.map || dialogStore.dialogs.moreInfo) return;
-
-			map_configs.forEach((map_config) => {
-				const layerId = `${map_config.index}-${map_config.type}-${map_config.city}`;
-				if (!this.map.getLayer(layerId)) return;
-
-				// symbol layer
-				if (this.map.getLayer(layerId).type === "symbol") {
-					this.map.setPaintProperty(layerId, "icon-opacity", 1);
-					this.map.setPaintProperty(layerId, "text-opacity", 1);
-				} else {
-					// fill / line / circle
-					const opacityProp = {
-						fill: "fill-opacity",
-						line: "line-opacity",
-						circle: "circle-opacity",
-					}[this.map.getLayer(layerId).type];
-
-					if (opacityProp) {
-						this.map.setPaintProperty(layerId, opacityProp, 1);
-					}
-				}
+			if (!this.map || dialogStore.dialogs.moreInfo) {
+				return;
+			}
+			map_configs.map((map_config) => {
+				let mapLayerId = `${map_config.index}-${map_config.type}-${map_config.city}`;
+				this.map.setLayoutProperty(mapLayerId, "visibility", "visible");
 			});
 		},
 

@@ -2,7 +2,9 @@
 package models
 
 import (
+	"encoding/json"
 	"fmt"
+	"sort"
 	"strings"
 	"time"
 )
@@ -110,6 +112,40 @@ type MapLegendData struct {
 	Type  string  `gorm:"column:type" json:"type"`
 	Icon  string  `gorm:"column:icon" json:"icon"`
 	Value float64 `gorm:"column:value" json:"value"`
+}
+
+/*
+BubbleData Json Format:
+*/
+type BubbleData struct {
+	Yaxis    string  `gorm:"column:y_axis"`
+	X        float64 `gorm:"column:x"`
+	Y        float64 `gorm:"column:y"`
+	Z        float64 `gorm:"column:z"`
+	Category *string `gorm:"column:category" json:"-"`
+}
+
+type BubbleDataItem struct {
+	X float64 `json:"x"`
+	Y float64 `json:"y"`
+	Z float64 `json:"z"`
+}
+
+type BubbleDataOutput struct {
+	Name string           `json:"name"`
+	Data []BubbleDataItem `json:"data"`
+}
+
+/*
+LayeredFlowData Json Format:
+*/
+type LayeredFlowData struct {
+	Source      string  `gorm:"column:source" json:"source"`
+	SourceLayer *int    `gorm:"column:source_layer" json:"source_layer"`
+	Target      string  `gorm:"column:target" json:"target"`
+	TargetLayer *int    `gorm:"column:target_layer" json:"target_layer"`
+	Value       float64 `gorm:"column:value" json:"value"`
+	Category    *string `gorm:"column:category" json:"-"`
 }
 
 /* ----- Handlers ----- */
@@ -344,4 +380,130 @@ func GetMapLegendData(query *string, timeFrom string, timeTo string) (chartData 
 	}
 
 	return chartData, nil
+}
+
+func GetBubbleData(query *string, timeFrom string, timeTo string) (chartDataOutput []BubbleDataOutput, categories []string, err error) {
+	var chartData []BubbleData
+	var queryString string
+
+	if strings.Count(*query, "%s") == 2 {
+		queryString = fmt.Sprintf(*query, timeFrom, timeTo)
+	} else {
+		queryString = *query
+	}
+
+	err = DBDashboard.Raw(queryString).Scan(&chartData).Error
+	if err != nil {
+		return chartDataOutput, categories, err
+	}
+	if len(chartData) == 0 {
+		return chartDataOutput, categories, err
+	}
+
+	for _, data := range chartData {
+		if len(categories) == 0 && data.Category != nil && *data.Category != "" {
+			var catMap map[string]string
+			if err := json.Unmarshal([]byte(*data.Category), &catMap); err == nil {
+				if xVal, ok := catMap["x"]; ok {
+					categories = append(categories, xVal)
+				}
+				if yVal, ok := catMap["y"]; ok {
+					categories = append(categories, yVal)
+				}
+				if zVal, ok := catMap["z"]; ok {
+					categories = append(categories, zVal)
+				}
+			}
+		}
+
+		var foundY bool
+		for i, output := range chartDataOutput {
+			if output.Name == data.Yaxis {
+				chartDataOutput[i].Data = append(output.Data, BubbleDataItem{X: data.X, Y: data.Y, Z: data.Z})
+				foundY = true
+				break
+			}
+		}
+
+		if !foundY {
+			chartDataOutput = append(chartDataOutput, BubbleDataOutput{
+				Name: data.Yaxis,
+				Data: []BubbleDataItem{{X: data.X, Y: data.Y, Z: data.Z}},
+			})
+		}
+	}
+
+	return chartDataOutput, categories, nil
+}
+
+func GetLayeredFlowData(query *string, timeFrom string, timeTo string) (chartData []LayeredFlowData, categories []string, err error) {
+	var queryString string
+
+	if strings.Count(*query, "%s") == 2 {
+		queryString = fmt.Sprintf(*query, timeFrom, timeTo)
+	} else {
+		queryString = *query
+	}
+
+	err = DBDashboard.Raw(queryString).Scan(&chartData).Error
+	if err != nil {
+		return chartData, categories, err
+	}
+	if len(chartData) == 0 {
+		return chartData, categories, err
+	}
+
+	for _, data := range chartData {
+		if data.Category != nil && *data.Category != "" {
+			var catMap map[string]string
+			isJson := false
+			if strings.HasPrefix(strings.TrimSpace(*data.Category), "{") {
+				if err := json.Unmarshal([]byte(*data.Category), &catMap); err == nil {
+					isJson = true
+				}
+			}
+
+			if isJson {
+				keys := []string{"source", "target"}
+				for _, key := range keys {
+					if val, ok := catMap[key]; ok && val != "" {
+						found := false
+						for _, cat := range categories {
+							if cat == val {
+								found = true
+								break
+							}
+						}
+						if !found {
+							categories = append(categories, val)
+						}
+					}
+				}
+			} else {
+				found := false
+				for _, cat := range categories {
+					if cat == *data.Category {
+						found = true
+						break
+					}
+				}
+				if !found {
+					categories = append(categories, *data.Category)
+				}
+			}
+		}
+	}
+
+	sort.Slice(chartData, func(i, j int) bool {
+		var valI, valJ int
+		if chartData[i].SourceLayer != nil {
+			valI = *chartData[i].SourceLayer
+		}
+		if chartData[j].SourceLayer != nil {
+			valJ = *chartData[j].SourceLayer
+		}
+		return valI < valJ
+	})
+
+	return chartData, categories, nil
 }

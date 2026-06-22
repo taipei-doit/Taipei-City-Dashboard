@@ -47,6 +47,7 @@ export const mapTypes = {
 	voronoi: "泰森多邊形",
 	isoline: "等高線圖",
 	"symbol-3d": "三維捷運動態地圖",
+	"wind-heat": "風速熱力圖",
 };
 
 // Styles for base layer "Taipei Town"

@@ -6,7 +6,6 @@ export const chartTypes: chartType = {
 	DonutChart: "圓餅圖", // V
 	BarChart: "橫向長條圖", // V
 	ColumnChart: "縱向長條圖", // V
-	NegativeColumnChart: "負值長條圖", // V
 	BarPercentChart: "長條圖(%)", // V
 	TreemapChart: "矩形圖", // V
 	DistrictChart: "行政區圖", // V
@@ -24,8 +23,9 @@ export const chartTypes: chartType = {
 	IndicatorChart: "指標圖", // V
 	MapLegend: "地圖圖例", // V
 	TextUnitChart: "文字數值圖", // V
-	SankeyChart: "桑基圖", // V
-	BubbleChart: "泡泡圖", // V
-	QuartileChart: "四分位圖", // V
-	SunburstChart: "旭日圖", // V
+	SunburstChart: "旭日圖",
+	QuartileChart: "四分位圖",
+	SankeyChart: "桑基圖",
+	BubbleChart: "泡泡圖",
+	NegativeColumnChart: "負向長條圖",
 };
