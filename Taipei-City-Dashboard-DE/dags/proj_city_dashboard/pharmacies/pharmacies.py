@@ -19,12 +19,14 @@ def _pharmacies(**kwargs):
     # === Imports(全部寫在函式內)===
     import pandas as pd
     from sqlalchemy import create_engine
+    from airflow.models import Variable
     from utils.extract_stage import get_data_taipei_api
     from utils.load_stage import (
-        save_dataframe_to_postgresql,
+        save_geodataframe_to_postgresql,
         update_lasttime_in_data_to_dataset_info,
     )
-    from utils.transform_time import convert_str_to_time_format
+    from utils.transform_address import get_addr_xy_parallel
+    from utils.transform_geometry import add_point_wkbgeometry_column_to_df
 
     # === Config ===
     ready_data_db_uri = kwargs.get("ready_data_db_uri")
@@ -40,7 +42,10 @@ def _pharmacies(**kwargs):
         "pharmacy_name": "text",
         "zipcode": "text",
         "address": "text",
-        "phone": "text"
+        "phone": "text",
+        "lng": "double precision",
+        "lat": "double precision",
+        "wkb_geometry": "geometry(Point,4326)",
     }
     SELECT_COLUMNS = list(COL_MAP.keys())
 
@@ -55,15 +60,34 @@ def _pharmacies(**kwargs):
     })
     data["zipcode"] = None
     data["data_time"] = pd.to_datetime("now")
+
+    # === Geocode（地址→經緯度;參照 food_hygiene_award:去重後打 TPGOS）===
+    data["lng"] = None
+    data["lat"] = None
+    if Variable.get("TPGOS_GET_ADDR_XY", default_var=None):
+        uniq = data["address"].dropna().drop_duplicates().tolist()
+        if uniq:
+            lng, lat = get_addr_xy_parallel(uniq, sleep_time=0.5)
+            addr_xy = pd.DataFrame({"address": uniq, "lng": lng, "lat": lat})
+            data = data.drop(columns=["lng", "lat"]).merge(addr_xy, on="address", how="left")
+    data["lng"] = pd.to_numeric(data["lng"], errors="coerce")
+    data["lat"] = pd.to_numeric(data["lat"], errors="coerce")
+    # 只保留有定位的點位（TPGOS 對不到的地址捨去；同 food_hygiene_award）
+    data = data.dropna(subset=["lng", "lat"]).copy()
+    # 經緯度(WGS84)→ Point wkb_geometry
+    data = add_point_wkbgeometry_column_to_df(
+        data, x=data["lng"], y=data["lat"], from_crs=4326, to_crs=4326, is_add_xy_columns=True
+    )
     data = data[SELECT_COLUMNS]
 
     # === Load ===
     engine = create_engine(ready_data_db_uri)
     _ensure_ready_table(engine, default_table, COL_MAP)
-    save_dataframe_to_postgresql(
+    save_geodataframe_to_postgresql(
         engine,
-        data=data,
+        gdata=data,
         load_behavior=load_behavior,
+        geometry_type="Point",
         default_table=default_table,
         history_table=history_table,
     )
