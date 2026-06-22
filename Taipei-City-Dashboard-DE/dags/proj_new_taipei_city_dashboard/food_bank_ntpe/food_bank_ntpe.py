@@ -70,15 +70,20 @@ def _food_bank_ntpe(**kwargs):
     )
     data["seq"] = pd.to_numeric(data["seq"], errors="coerce").astype("Int64")
     data["data_time"] = pd.to_datetime("now").strftime("%Y-%m-%d %H:%M:%S")
-    # === Geocode(地址→經緯度;參照 food_hygiene_award)===
+    # 來源地址含全形數字(如 ２５８),轉半形
+    _fw = str.maketrans("０１２３４５６７８９", "0123456789")
+    data["address"] = data["address"].map(lambda s: s.translate(_fw) if isinstance(s, str) else s)
+    # === Geocode ===
+    # 來源 address 只有路段門牌、缺縣市/行政區(在 county/area 欄),需組完整地址才查得到 TPGOS
+    _geo = (data["county"].fillna("") + data["area"].fillna("") + data["address"].fillna("")).str.strip()
     data["lng"] = None
     data["lat"] = None
     if Variable.get("TPGOS_GET_ADDR_XY", default_var=None):
-        _uniq = data["address"].dropna().drop_duplicates().tolist()
+        _uniq = _geo[_geo != ""].drop_duplicates().tolist()
         if _uniq:
             _lng, _lat = get_addr_xy_parallel(_uniq, sleep_time=0.5)
-            _axy = pd.DataFrame({"address": _uniq, "lng": _lng, "lat": _lat})
-            data = data.drop(columns=["lng", "lat"]).merge(_axy, on="address", how="left")
+            _axy = pd.DataFrame({"_geo": _uniq, "lng": _lng, "lat": _lat})
+            data = data.drop(columns=["lng", "lat"]).assign(_geo=_geo).merge(_axy, on="_geo", how="left").drop(columns=["_geo"])
     data["lng"] = pd.to_numeric(data["lng"], errors="coerce")
     data["lat"] = pd.to_numeric(data["lat"], errors="coerce")
     data = add_point_wkbgeometry_column_to_df(

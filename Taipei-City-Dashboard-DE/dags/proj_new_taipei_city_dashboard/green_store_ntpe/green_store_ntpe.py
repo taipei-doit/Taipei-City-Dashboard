@@ -71,6 +71,8 @@ def _green_store_ntpe(**kwargs):
             data[col] = None
     data["data_time"] = pd.to_datetime("now").strftime("%Y-%m-%d %H:%M:%S")
     data["seq"] = pd.to_numeric(data["seq"], errors="coerce").astype("Int64")
+    # 來源地址開頭帶郵遞區號(如「220新北市…」),TPGOS 對不到 → 去掉開頭 3-6 碼郵遞區號
+    data["address"] = data["address"].str.replace(r"^\s*\d{3,6}\s*", "", regex=True)
     # === Geocode(地址→經緯度;參照 food_hygiene_award)===
     data["lng"] = None
     data["lat"] = None
