@@ -129,11 +129,20 @@ def _organic_farm_locations(**kwargs):
     ntpc["data_time"] = get_tpe_now_time_str(is_with_tz=True)
 
     data = pd.concat([taipei, ntpc], ignore_index=True, sort=False)
+    data["data_time"] = convert_str_to_time_format(
+        data["data_time"].astype(str),
+        errors="coerce",
+    )
     data = data.dropna(subset=["address"]).copy()
     data["address"] = data["address"].astype(str).str.strip()
     data = data[data["address"] != ""].copy()
 
-    unique_addr = data["address"].drop_duplicates()
+    valid_address = data["address"].str.contains(
+        r"(臺北市|台北市|新北市).{0,12}區",
+        regex=True,
+        na=False,
+    )
+    unique_addr = data.loc[valid_address, "address"].drop_duplicates()
     lng, lat = get_addr_xy_parallel(unique_addr, sleep_time=0.5)
     addr_xy = pd.DataFrame({"address": unique_addr, "lng": lng, "lat": lat})
     data = data.merge(addr_xy, on="address", how="left")

@@ -32,7 +32,7 @@
     "output_coordinate": "EPSG:4326",
     "is_geometry": 0,
     "dataset_description": "臺北市歷年租金補貼申請戶數、計畫戶數及核定戶數。",
-    "etl_description": "讀取臺北市資料大平臺住宅補貼資料，轉換民國年為西元年，保留臺北市至 110 年度 (2021)，並輸出中文欄位。",
+    "etl_description": "讀取臺北市資料大平臺住宅補貼資料，轉換民國年為西元年，保留臺北市至 110 年度 (2021)，並輸出英文欄位。",
     "sensitivity": "public"
   }
 }
