@@ -1004,12 +1004,22 @@ def get_addr_xy(addrs):
     y = []
     for addr in addrs:
         try:
+            if not isinstance(addr, str) or not addr.strip():
+                x.append(None)
+                y.append(None)
+                continue
             # !!! add retry process
             params["KEYWORD"] = addr
             response = requests.get(url, params=params).json()
 
+            if not isinstance(response, list):
+                print(f"Unexpected TPGOS response type: {type(response).__name__}; addr = {addr}")
+                x.append(None)
+                y.append(None)
+                continue
+
             if len(response) > 0:
-                if response[0]["QUERYTYPE"] == "完全比對":
+                if isinstance(response[0], dict) and response[0].get("QUERYTYPE") == "完全比對":
                     # print('完全比對')
                     x.append(response[0]["X"])
                     y.append(response[0]["Y"])
@@ -1023,6 +1033,10 @@ def get_addr_xy(addrs):
                 y.append(None)
         except json.decoder.JSONDecodeError:
             print("JSONDecodeError! You mught input a empty addr.")
+            x.append(None)
+            y.append(None)
+        except requests.RequestException as exc:
+            print(f"TPGOS request failed! addr = {addr}; error = {exc}")
             x.append(None)
             y.append(None)
 
@@ -1045,16 +1059,26 @@ def get_single_addr_xy(addr):
     }
     x = None
     y = None
+    if not isinstance(addr, str) or not addr.strip():
+        return addr, x, y
+
     s = requests.Session()
     s.mount("http://", HTTPAdapter(max_retries=5))
     s.mount("https://", HTTPAdapter(max_retries=5))
     # proxies = literal_eval(Variable.get("PROXY_URL"))
 
-    response = s.get(url, params=params)
+    try:
+        response = s.get(url, params=params)
+    except requests.RequestException as exc:
+        print(f"TPGOS request failed! addr = {addr}; error = {exc}")
+        return addr, x, y
+
     try:
         res_json = response.json()
-        if len(res_json) > 0:
-            if res_json[0]["QUERYTYPE"] == "完全比對":
+        if not isinstance(res_json, list):
+            print(f"Unexpected TPGOS response type: {type(res_json).__name__}; addr = {addr}")
+        elif len(res_json) > 0:
+            if isinstance(res_json[0], dict) and res_json[0].get("QUERYTYPE") == "完全比對":
                 print("完全比對 = " + addr)
                 x = res_json[0]["X"]
                 y = res_json[0]["Y"]

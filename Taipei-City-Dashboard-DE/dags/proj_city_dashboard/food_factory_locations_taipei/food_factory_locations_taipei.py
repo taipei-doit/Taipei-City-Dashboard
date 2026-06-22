@@ -66,7 +66,7 @@ def _food_factory_locations_taipei(**kwargs):
     # NOTE: 暫無對應 utils helper 處理 data.gov.tw 直接下載連結，使用 utils.extract_stage.download_file
     # 與 pandas 配合。若後續多支 DAG 共用此來源，請維護者評估升級為 utils.extract_stage.<helper>。
     local_path = os.path.join(data_path, dag_id, "raw.csv")
-    download_file(local_path, SOURCE_URL)
+    download_file(os.path.join(dag_id, "raw.csv"), SOURCE_URL)
     raw_data = pd.read_csv(local_path, encoding=SOURCE_ENCODING)
 
     # === Transform ===

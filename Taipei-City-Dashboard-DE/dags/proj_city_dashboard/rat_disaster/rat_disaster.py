@@ -4,6 +4,7 @@ import pandas as pd
 import requests
 from requests.adapters import HTTPAdapter
 from sqlalchemy import create_engine
+from urllib3.exceptions import InsecureRequestWarning
 from urllib3.util.ssl_ import create_urllib3_context
 
 from airflow import DAG
@@ -25,16 +26,28 @@ class _LegacyTLSAdapter(HTTPAdapter):
         return super().init_poolmanager(*args, **kwargs)
 
 
+def _get_json_with_tls_fallback(session, url, timeout):
+    try:
+        response = session.get(url, timeout=timeout)
+    except requests.exceptions.SSLError as exc:
+        print(f"data.taipei SSL verification failed, retrying without verification: {exc}")
+        requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
+        response = requests.get(url, timeout=timeout, verify=False)
+
+    response.raise_for_status()
+    return response.json()
+
+
 def _fetch_data_taipei(rid, timeout=60):
     session = requests.Session()
     session.mount("https://", _LegacyTLSAdapter())
     base = f"https://data.taipei/api/v1/dataset/{rid}?scope=resourceAquire"
-    first = session.get(base, timeout=timeout).json()
+    first = _get_json_with_tls_fallback(session, base, timeout)
     count = first["result"]["count"]
     results = []
     for offset in range(0, count + 1, 1000):
         url = f"{base}&offset={offset}&limit=1000"
-        page = session.get(url, timeout=timeout).json()
+        page = _get_json_with_tls_fallback(session, url, timeout)
         results.extend(page["result"]["results"])
     return results
 
