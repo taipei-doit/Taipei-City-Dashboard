@@ -72,12 +72,12 @@ def _pharmacies(**kwargs):
             data = data.drop(columns=["lng", "lat"]).merge(addr_xy, on="address", how="left")
     data["lng"] = pd.to_numeric(data["lng"], errors="coerce")
     data["lat"] = pd.to_numeric(data["lat"], errors="coerce")
-    # 只保留有定位的點位（TPGOS 對不到的地址捨去；同 food_hygiene_award）
-    data = data.dropna(subset=["lng", "lat"]).copy()
     # 經緯度(WGS84)→ Point wkb_geometry
     data = add_point_wkbgeometry_column_to_df(
         data, x=data["lng"], y=data["lat"], from_crs=4326, to_crs=4326, is_add_xy_columns=True
     )
+    # keep-all-rows:對不到座標的列保留,wkb_geometry 設 null(非空點)
+    data.loc[data["lng"].isna() | data["lat"].isna(), "wkb_geometry"] = None
     data = data[SELECT_COLUMNS]
 
     # === Load ===

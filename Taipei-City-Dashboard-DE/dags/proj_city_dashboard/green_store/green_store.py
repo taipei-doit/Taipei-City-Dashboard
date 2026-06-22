@@ -87,10 +87,11 @@ def _green_store(**kwargs):
             data = data.drop(columns=["lng", "lat"]).merge(_axy, on="address", how="left")
     data["lng"] = pd.to_numeric(data["lng"], errors="coerce")
     data["lat"] = pd.to_numeric(data["lat"], errors="coerce")
-    data = data.dropna(subset=["lng", "lat"]).copy()
     data = add_point_wkbgeometry_column_to_df(
         data, x=data["lng"], y=data["lat"], from_crs=4326, to_crs=4326, is_add_xy_columns=True
     )
+    # keep-all-rows:對不到座標的列保留,wkb_geometry 設 null(非空點)
+    data.loc[data["lng"].isna() | data["lat"].isna(), "wkb_geometry"] = None
     data = data[SELECT_COLUMNS]
 
     # === Load ===
