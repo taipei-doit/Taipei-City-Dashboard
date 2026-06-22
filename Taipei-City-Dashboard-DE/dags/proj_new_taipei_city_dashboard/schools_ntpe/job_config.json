@@ -1,0 +1,38 @@
+{
+    "dag_infos": {
+        "dag_id": "schools_ntpe",
+        "start_date": "2026-06-22",
+        "schedule_interval": "20 22 1,28 * *",
+        "catchup": false,
+        "tags": ["education", "新北市政府", "New-Taipei-City"],
+        "description": "New Taipei City schools (elementary/junior/senior/college) filtered from the city landmark dataset, with TWD97 point geometry.",
+        "default_args": {
+            "owner": "airflow",
+            "email": ["DEFAULT_EMAIL_LIST"],
+            "email_on_retry": false,
+            "email_on_failure": true,
+            "retries": 1,
+            "retry_delay": 60
+        },
+        "ready_data_db": "postgres_default",
+        "ready_data_default_table": "schools_ntpe",
+        "ready_data_history_table": "",
+        "raw_data_db": "postgres_default",
+        "raw_data_table": "",
+        "load_behavior": "replace"
+    },
+    "data_infos": {
+        "name_cn": "新北市學校分布(篩自重要地標資訊)",
+        "airflow_update_freq": "22:20+8 on 1st and 28th of each month (Asia/Taipei)",
+        "source": "https://data.ntpc.gov.tw/datasets/6dcff24a-838c-40fb-a9df-f1160afafe84",
+        "source_type": "data.ntpc",
+        "source_dept": "新北市政府",
+        "component_name": "schools_ntpe",
+        "gis_format": null,
+        "output_coordinate": "EPSG:4326",
+        "is_geometry": 1,
+        "dataset_description": "新北市重要地標資訊中篩出學校學制（國民小學、國民中學、完全中學、高中職、大專院校），含地標名稱、行政區、地址、電話、TWD97 座標。",
+        "etl_description": "pull data.ntpc /api/datasets/<rid>/json via NewTaipeiAPIClient → 篩 5 類學校學制 → twd97_x/y (EPSG:3826) 轉 WGS84 並產生 Point wkb_geometry → replace 入庫。",
+        "sensitivity": "public"
+    }
+}
