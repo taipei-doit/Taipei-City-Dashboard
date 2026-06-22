@@ -3,12 +3,18 @@ from operators.common_pipeline import CommonDag
 
 
 def _ensure_ready_table(engine, table_name, col_map):
-    from sqlalchemy.sql import text as sa_text
-    from utils.generate_sql_to_create_DB_table import generate_sql_to_create_db_table
+    from utils.ready_table_schema import ensure_ready_table
 
-    sql = generate_sql_to_create_db_table(table_name, col_map)
-    with engine.connect() as conn:
-        conn.execute(sa_text(sql).execution_options(autocommit=True))
+    ensure_ready_table(
+        engine,
+        table_name,
+        col_map,
+        {
+            "行政區": "district",
+            "使用分區": "land_use_zone",
+            "數量": "zone_count",
+        },
+    )
 
 
 def _urban_planning_tpe(**kwargs):
@@ -29,9 +35,9 @@ def _urban_planning_tpe(**kwargs):
 
     COL_MAP = {
         "data_time": "timestamp with time zone DEFAULT CURRENT_TIMESTAMP",
-        "行政區": 'character varying(20) COLLATE pg_catalog."default"',
-        "使用分區": 'character varying(30) COLLATE pg_catalog."default"',
-        "數量": "integer",
+        "district": 'character varying(20) COLLATE pg_catalog."default"',
+        "land_use_zone": 'character varying(30) COLLATE pg_catalog."default"',
+        "zone_count": "integer",
     }
     SELECT_COLUMNS = list(COL_MAP.keys())
 
@@ -163,11 +169,11 @@ def _urban_planning_tpe(**kwargs):
             lambda row: _first_present_value(row, ("使用分區", "分區簡稱", "分區代碼")),
             axis=1,
         )
-        urban["使用分區"] = urban["source_zone"].map(_standardize_zone).map(
+        urban["land_use_zone"] = urban["source_zone"].map(_standardize_zone).map(
             lambda value: ZONE_MERGE_MAP.get(value, "未分類")
         )
         urban = gpd.GeoDataFrame(
-            urban[["source_index", "使用分區", "geometry"]],
+            urban[["source_index", "land_use_zone", "geometry"]],
             geometry="geometry",
             crs="EPSG:3826",
         )
@@ -186,10 +192,10 @@ def _urban_planning_tpe(**kwargs):
         )
         joined = joined[joined["intersection_area"] > 0]
         data = (
-            joined.groupby(["TOWNNAME", "使用分區"], dropna=False)
+            joined.groupby(["TOWNNAME", "land_use_zone"], dropna=False)
             .size()
-            .reset_index(name="數量")
-            .rename(columns={"TOWNNAME": "行政區"})
+            .reset_index(name="zone_count")
+            .rename(columns={"TOWNNAME": "district"})
         )
         data["data_time"] = pd.Timestamp.now(tz="Asia/Taipei")
         return data[SELECT_COLUMNS]
@@ -211,7 +217,7 @@ def _urban_planning_tpe(**kwargs):
 
     # === Transform ===
     data = _build_district_zone_counts(raw_gdf)
-    data["數量"] = pd.to_numeric(data["數量"], errors="coerce").fillna(0).astype(int)
+    data["zone_count"] = pd.to_numeric(data["zone_count"], errors="coerce").fillna(0).astype(int)
     data = data[SELECT_COLUMNS]
 
     # === Load ===
