@@ -2,31 +2,20 @@ from airflow import DAG
 from operators.common_pipeline import CommonDag
 
 
-def _ensure_ready_table(engine, table_name, col_map):
-    from utils.ready_table_schema import ensure_ready_table
-
-    ensure_ready_table(
-        engine,
-        table_name,
-        col_map,
-        {
-            "行政區": "district",
-            "使用分區": "land_use_zone",
-            "數量": "zone_count",
-        },
-    )
-
-
 def _urban_planning_new_tpe(**kwargs):
     import pandas as pd
-    from sqlalchemy import create_engine
+    import geopandas as gpd
+    from sqlalchemy import create_engine, text as sa_text
+    from shapely.geometry import MultiPolygon
+    from shapely.validation import make_valid
     from utils.extract_stage import (
         NewTaipeiAPIClient,
         get_current_rid_from_page_id,
         get_shp_file,
     )
+    from utils.transform_geometry import convert_geometry_to_wkbgeometry
     from utils.load_stage import (
-        save_dataframe_to_postgresql,
+        save_geodataframe_to_postgresql,
         update_lasttime_in_data_to_dataset_info,
     )
 
@@ -36,14 +25,7 @@ def _urban_planning_new_tpe(**kwargs):
     load_behavior = dag_infos.get("load_behavior")
     default_table = dag_infos.get("ready_data_default_table")
     history_table = dag_infos.get("ready_data_history_table")
-
-    COL_MAP = {
-        "data_time": "timestamp with time zone DEFAULT CURRENT_TIMESTAMP",
-        "district": 'character varying(20) COLLATE pg_catalog."default"',
-        "land_use_zone": 'character varying(30) COLLATE pg_catalog."default"',
-        "zone_count": "integer",
-    }
-    SELECT_COLUMNS = list(COL_MAP.keys())
+    GEOMETRY_TYPE = "MultiPolygon"
 
     DATASET_ID = "fe26e0a5-54c2-4876-bbc7-150243c048f5"
     TAIPEI_PAGE_ID = "3bab0a01-7936-4218-8cb5-f74dfcb43dda"
@@ -151,26 +133,13 @@ def _urban_planning_new_tpe(**kwargs):
                 return str(row[column]).strip()
         return ""
 
-    def _build_district_zone_counts(urban_gdf, county_name, zone_columns):
-        import geopandas as gpd
-        from shapely.validation import make_valid
-
-        districts = get_shp_file(
-            DISTRICT_URL,
-            f"{dag_id}_districts",
-            4326,
-            encoding="UTF-8",
-            is_verify=False,
-        )
-        districts = districts[districts["COUNTYNAME"].eq(county_name)].copy()
-        districts = districts[["TOWNNAME", "geometry"]].to_crs(epsg=3826)
-
+    def _build_zone_polygons(urban_gdf, county_name, zone_columns):
+        # ponytail: 保留每個來源多邊形(不做行政區 sjoin 拆分),只做分區標準化 + 面積,留 geometry
         urban = urban_gdf[urban_gdf.geometry.notna()].copy()
         urban["geometry"] = urban["geometry"].apply(
             lambda geom: make_valid(geom) if geom is not None and not geom.is_valid else geom
         )
-        urban = urban.reset_index(drop=True)
-        urban["source_index"] = range(len(urban))
+        urban = urban[urban.geom_type.isin(["Polygon", "MultiPolygon"])].copy()
         urban["source_zone"] = urban.apply(
             lambda row: _first_present_value(row, zone_columns),
             axis=1,
@@ -178,33 +147,14 @@ def _urban_planning_new_tpe(**kwargs):
         urban["land_use_zone"] = urban["source_zone"].map(_standardize_zone).map(
             lambda value: ZONE_MERGE_MAP.get(value, "未分類")
         )
-        urban = gpd.GeoDataFrame(
-            urban[["source_index", "land_use_zone", "geometry"]],
+        urban["county"] = county_name
+        # 面積(公頃);輸入為 EPSG:3826(公尺)
+        urban["area"] = (urban.geometry.area / 10000).round(2)
+        return gpd.GeoDataFrame(
+            urban[["county", "source_zone", "land_use_zone", "area", "geometry"]],
             geometry="geometry",
             crs="EPSG:3826",
         )
-        joined = gpd.sjoin(
-            urban,
-            districts,
-            how="left",
-            predicate="intersects",
-        ).dropna(subset=["TOWNNAME"])
-        district_geometries = districts.geometry
-        joined["intersection_area"] = joined.apply(
-            lambda row: urban.at[row.name, "geometry"].intersection(
-                district_geometries.loc[int(row["index_right"])]
-            ).area,
-            axis=1,
-        )
-        joined = joined[joined["intersection_area"] > 0]
-        data = (
-            joined.groupby(["TOWNNAME", "land_use_zone"], dropna=False)
-            .size()
-            .reset_index(name="zone_count")
-            .rename(columns={"TOWNNAME": "district"})
-        )
-        data["data_time"] = pd.Timestamp.now(tz="Asia/Taipei")
-        return data[SELECT_COLUMNS]
 
     # === Extract ===
     try:
@@ -246,29 +196,66 @@ def _urban_planning_new_tpe(**kwargs):
     # === Transform ===
     data = pd.concat(
         [
-            _build_district_zone_counts(
+            _build_zone_polygons(
                 raw_taipei_gdf,
                 "臺北市",
                 ("使用分區", "分區簡稱", "分區代碼"),
             ),
-            _build_district_zone_counts(raw_ntpc_gdf, "新北市", ("ZONE",)),
+            _build_zone_polygons(raw_ntpc_gdf, "新北市", ("ZONE",)),
         ],
         ignore_index=True,
     )
-    data["zone_count"] = pd.to_numeric(data["zone_count"], errors="coerce").fillna(0).astype(int)
-    data = data[SELECT_COLUMNS]
+    data = gpd.GeoDataFrame(data, geometry="geometry", crs="EPSG:3826")
+    # 統一成 MultiPolygon(save_geodataframe 要求單一 geometry_type)
+    data["geometry"] = data["geometry"].apply(
+        lambda geom: geom
+        if geom is None or geom.geom_type == "MultiPolygon"
+        else MultiPolygon([geom])
+    )
+    data = data[data.geom_type == "MultiPolygon"].copy()
+    data["data_time"] = pd.Timestamp.now(tz="Asia/Taipei")
+    # geometry(EPSG:3826) -> wkb_geometry(EPSG:4326)
+    data = convert_geometry_to_wkbgeometry(data, from_crs=3826)
+    gdata = data.drop(columns=["geometry"])
 
     # === Load ===
     engine = create_engine(ready_data_db_uri)
-    _ensure_ready_table(engine, default_table, COL_MAP)
-    save_dataframe_to_postgresql(
+    # ponytail: 一次性 count->geo schema 遷移。舊表是 count 欄(無 wkb_geometry),
+    # 而 save 的 replace=TRUNCATE+append 需表存在且 schema 相符,故缺 geometry 欄就重建。
+    with engine.begin() as conn:
+        has_geo = conn.execute(
+            sa_text(
+                "SELECT count(*) FROM information_schema.columns "
+                "WHERE table_schema='public' AND table_name=:t "
+                "AND column_name='wkb_geometry'"
+            ),
+            {"t": default_table},
+        ).scalar()
+        if not has_geo:
+            conn.execute(sa_text(f'DROP TABLE IF EXISTS public."{default_table}"'))
+            conn.execute(
+                sa_text(
+                    f'CREATE TABLE public."{default_table}" ('
+                    "ogc_fid bigserial PRIMARY KEY, "
+                    "data_time timestamp with time zone DEFAULT CURRENT_TIMESTAMP, "
+                    "county character varying(10), "
+                    "source_zone text, "
+                    "land_use_zone character varying(30), "
+                    "area double precision, "
+                    "wkb_geometry geometry(MultiPolygon, 4326), "
+                    "_ctime timestamp with time zone DEFAULT CURRENT_TIMESTAMP, "
+                    "_mtime timestamp with time zone DEFAULT CURRENT_TIMESTAMP)"
+                )
+            )
+    save_geodataframe_to_postgresql(
         engine,
-        data=data,
+        gdata=gdata,
         load_behavior=load_behavior,
+        geometry_type=GEOMETRY_TYPE,
         default_table=default_table,
         history_table=history_table,
     )
-    update_lasttime_in_data_to_dataset_info(engine, dag_id, data["data_time"].max())
+    update_lasttime_in_data_to_dataset_info(engine, dag_id, gdata["data_time"].max())
 
 
 dag = CommonDag(

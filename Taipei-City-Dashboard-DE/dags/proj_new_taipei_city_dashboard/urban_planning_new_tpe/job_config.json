@@ -5,7 +5,7 @@
     "schedule_interval": "@monthly",
     "catchup": false,
     "tags": ["urban_planning", "新北市政府城鄉發展局", "New-Taipei-City"],
-    "description": "Monthly aggregation of Taipei and New Taipei urban planning land-use zones by district.",
+    "description": "Monthly Taipei and New Taipei urban planning land-use zone polygons (building_landuse-style geometry).",
     "default_args": {
       "owner": "airflow",
       "email": ["DEFAULT_EMAIL_LIST"],
@@ -22,7 +22,7 @@
     "load_behavior": "replace"
   },
   "data_infos": {
-    "name_cn": "雙北都市計畫土地使用分區行政區彙總",
+    "name_cn": "雙北都市計畫土地使用分區圖",
     "airflow_update_freq": "每月 (Asia/Taipei)",
     "source": "https://data.ntpc.gov.tw/datasets/fe26e0a5-54c2-4876-bbc7-150243c048f5",
     "source_type": "data.ntpc",
@@ -30,9 +30,9 @@
     "component_name": "urban_planning",
     "gis_format": null,
     "output_coordinate": "EPSG:4326",
-    "is_geometry": 0,
+    "is_geometry": 1,
     "dataset_description": "臺北市都市計畫使用分區圖與新北市都市計畫土地使用分區及範圍圖資料索引，依行政區交集彙總為共同使用分區分類。",
-    "etl_description": "下載 data.taipei 臺北市 SHP 與 data.ntpc 新北市使用分區 SHP → 以內政部鄉鎮市區界線進行空間交集 → 標準化使用分區 → 依行政區與分區統計數量 → replace 入庫。",
+    "etl_description": "下載 data.taipei 臺北市 SHP 與 data.ntpc 新北市使用分區 SHP → 標準化使用分區分類 → 保留多邊形幾何並計算面積(公頃)→ 轉 WKB(EPSG:4326)→ replace 入庫(building_landuse 同型多邊形格式)。",
     "sensitivity": "public"
   }
 }
