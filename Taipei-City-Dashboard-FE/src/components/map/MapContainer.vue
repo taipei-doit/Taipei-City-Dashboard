@@ -8,12 +8,12 @@ import { useAuthStore } from "../../store/authStore";
 import { useContentStore } from "../../store/contentStore";
 import { useDialogStore } from "../../store/dialogStore";
 import { useMapStore } from "../../store/mapStore";
+import { useWindEngine } from "../../composables/useWindEngine";
 
 import AddViewPoint from "../dialogs/AddViewPoint.vue";
 import MobileLayers from "../dialogs/MobileLayers.vue";
 import IncidentReport from "../dialogs/IncidentReport.vue";
 import FindClosestPoint from "../dialogs/FindClosestPoint.vue";
-import IsochroneSettings from "../dialogs/IsochroneSettings.vue";
 import { savedLocations } from "../../assets/configs/mapbox/savedLocations.js";
 
 const authStore = useAuthStore();
@@ -21,6 +21,9 @@ const mapStore = useMapStore();
 const dialogStore = useDialogStore();
 const contentStore = useContentStore();
 const route = useRoute();
+
+// 掛載風場引擎
+useWindEngine();
 
 const districtLayer = ref(false);
 const villageLayer = ref(false);
@@ -148,7 +151,6 @@ onMounted(() => {
       <MobileLayers :key="contentStore.currentDashboard.index" />
       <IncidentReport />
       <FindClosestPoint />
-      <IsochroneSettings />
     </div>
 
     <div class="mapcontainer-controls hide-if-mobile">

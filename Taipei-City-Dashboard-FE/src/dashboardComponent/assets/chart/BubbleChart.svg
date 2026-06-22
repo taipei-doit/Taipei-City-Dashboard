@@ -1,18 +1,10 @@
-<svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
-	<title>網站圖表ICON - 泡泡圖</title>
-	<style>
-		.s-axis { fill: none; stroke: #000000; opacity: 0.3; stroke-width: 10; stroke-linecap: round }
-		.s-bubble-a { fill: #000000; opacity: 0.3 }
-		.s-bubble-b { fill: #000000; opacity: 0.55 }
-		.s-bubble-c { fill: #000000; opacity: 0.75 }
-	</style>
-	<g id="bubble">
-		<!-- 軸線（X / Y） -->
-		<path id="axis-y" class="s-axis" d="M180 140 L180 880" />
-		<path id="axis-x" class="s-axis" d="M180 880 L880 880" />
-		<!-- 三顆代表性泡泡 -->
-		<circle class="s-bubble-a" cx="350" cy="640" r="120" />
-		<circle class="s-bubble-b" cx="560" cy="380" r="180" />
-		<circle class="s-bubble-c" cx="780" cy="560" r="80" />
-	</g>
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+<circle cx="695" cy="314" r="77.5" fill="black" stroke="#A5A5A5" stroke-width="5"/>
+<circle cx="695" cy="314" r="10" fill="#D9D9D9"/>
+<circle cx="339" cy="384" r="192.5" fill="#444343" stroke="#A5A5A5" stroke-width="5"/>
+<circle cx="339" cy="384" r="10" fill="#D9D9D9"/>
+<circle cx="685" cy="640" r="192.5" fill="#444343" stroke="#A5A5A5" stroke-width="5"/>
+<circle cx="685" cy="640" r="10" fill="#D9D9D9"/>
+<path d="M319.5 610.5C376.927 610.5 423.5 657.275 423.5 715C423.5 772.725 376.927 819.5 319.5 819.5C262.073 819.5 215.5 772.725 215.5 715C215.5 657.275 262.073 610.5 319.5 610.5Z" fill="black" stroke="#A5A5A5" stroke-width="5"/>
+<circle cx="320" cy="715" r="10" fill="#D9D9D9"/>
 </svg>
