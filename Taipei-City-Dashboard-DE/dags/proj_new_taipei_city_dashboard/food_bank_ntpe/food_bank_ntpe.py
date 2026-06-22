@@ -14,9 +14,12 @@ def _ensure_ready_table(engine, table_name, col_map):
 def _food_bank_ntpe(**kwargs):
     import pandas as pd
     from sqlalchemy import create_engine
+    from airflow.models import Variable
+    from utils.transform_address import get_addr_xy_parallel
+    from utils.transform_geometry import add_point_wkbgeometry_column_to_df
     from utils.extract_stage import NewTaipeiAPIClient
     from utils.load_stage import (
-        save_dataframe_to_postgresql,
+        save_geodataframe_to_postgresql,
         update_lasttime_in_data_to_dataset_info,
     )
 
@@ -40,6 +43,9 @@ def _food_bank_ntpe(**kwargs):
         "postal_code": 'character varying(10) COLLATE pg_catalog."default"',
         "address": 'text COLLATE pg_catalog."default"',
         "phone": 'character varying(50) COLLATE pg_catalog."default"',
+        "lng": "double precision",
+        "lat": "double precision",
+        "wkb_geometry": "geometry(Point,4326)",
     }
     SELECT_COLUMNS = list(COL_MAP.keys())
 
@@ -64,14 +70,30 @@ def _food_bank_ntpe(**kwargs):
     )
     data["seq"] = pd.to_numeric(data["seq"], errors="coerce").astype("Int64")
     data["data_time"] = pd.to_datetime("now").strftime("%Y-%m-%d %H:%M:%S")
+    # === Geocode(地址→經緯度;參照 food_hygiene_award)===
+    data["lng"] = None
+    data["lat"] = None
+    if Variable.get("TPGOS_GET_ADDR_XY", default_var=None):
+        _uniq = data["address"].dropna().drop_duplicates().tolist()
+        if _uniq:
+            _lng, _lat = get_addr_xy_parallel(_uniq, sleep_time=0.5)
+            _axy = pd.DataFrame({"address": _uniq, "lng": _lng, "lat": _lat})
+            data = data.drop(columns=["lng", "lat"]).merge(_axy, on="address", how="left")
+    data["lng"] = pd.to_numeric(data["lng"], errors="coerce")
+    data["lat"] = pd.to_numeric(data["lat"], errors="coerce")
+    data = data.dropna(subset=["lng", "lat"]).copy()
+    data = add_point_wkbgeometry_column_to_df(
+        data, x=data["lng"], y=data["lat"], from_crs=4326, to_crs=4326, is_add_xy_columns=True
+    )
     data = data[SELECT_COLUMNS]
 
     # Load
     engine = create_engine(ready_data_db_uri)
     _ensure_ready_table(engine, default_table, COL_MAP)
-    save_dataframe_to_postgresql(
+    save_geodataframe_to_postgresql(
         engine,
-        data=data,
+        gdata=data,
+        geometry_type="Point",
         load_behavior=load_behavior,
         default_table=default_table,
         history_table=history_table,
