@@ -18,7 +18,7 @@ const MAX_SPAN = 0.03;
 const MAX_CELLS = 3500;
 
 // ── 氣象站 IDW 參數 ───────────────────────────────────────
-const WEATHER_PATH = "./mapData/weather_station_metrotaipei.geojson";
+// const WEATHER_PATH = "./mapData/weather_station_metrotaipei.geojson";
 // IDW 最大有效距離（度），超過此距離的站點不納入計算
 const IDW_MAX_DIST = 0.08;
 // 最小距離防除零
@@ -54,9 +54,7 @@ export const useWindEngine = (options = {}) => {
 	const loadStations = async () => {
 		if (stationsLoaded) return;
 		try {
-			const res = await fetch(WEATHER_PATH);
-			if (!res.ok) throw new Error(`HTTP ${res.status}`);
-			const geojson = await res.json();
+			const geojson = mapStore.windHeatMapSource;
 			stations = geojson.features
 				.filter((f) => {
 					const { wind_speed, wind_direction } = f.properties;

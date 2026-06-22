@@ -95,6 +95,9 @@ export const useMapStore = defineStore("map", {
 		layerUpdateTime: {
 			// [layerId]: Date
 		},
+		windHeatMapSource: {},
+		_onStart: null,
+		_onStop: null,
 	}),
 	actions: {
 		/* Initialize Mapbox */
@@ -1819,11 +1822,11 @@ export const useMapStore = defineStore("map", {
 			return;
 		},
 		// 4-6. Create wind Heat map 黑客松整併
-		AddWindHeatMapLayer(map_config) {
+		AddWindHeatMapLayer(map_config, data) {
 			this.loadingLayers.push(map_config.layerId);
 			this.currentLayers.push(map_config.layerId);
 			this.mapConfigs[map_config.layerId] = map_config;
-
+			this.windHeatMapSource = data;
 			this.startWind();
 
 			this.loadingLayers = this.loadingLayers.filter(
