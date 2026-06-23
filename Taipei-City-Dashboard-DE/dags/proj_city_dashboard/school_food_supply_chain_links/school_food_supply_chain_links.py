@@ -26,7 +26,6 @@ def _school_food_supply_chain_links(**kwargs):
     import io
     import pandas as pd
     import requests
-    import os
     from sqlalchemy import create_engine
     from utils.load_stage import (
         save_dataframe_to_postgresql,
@@ -53,11 +52,12 @@ def _school_food_supply_chain_links(**kwargs):
     SELECT_COLUMNS = list(COL_MAP.keys())
 
     # === API 認證 ===
-    # NOTE: 食材登錄平台 OpenAPI 採 email 註冊取碼模式，accesscode 透過 email
-    # 食材登錄平台 OpenAPI accesscode（email 註冊取碼）。
-    # 透過環境變數 FATRACESCHOOL_ACCESSCODE 注入，避免依賴 Airflow Variable。
-    # 若 token 過期需重新向平台申請，更新 docker-compose 的 environment 即可。
-    ACCESS_CODE = os.environ.get("FATRACESCHOOL_ACCESSCODE", "")
+    # 食材登錄平台 OpenAPI accesscode(email 註冊取碼)。
+    # 存在 Airflow Variable FATRACESCHOOL_ACCESSCODE(同 CWA_API_KEY / TPGOS 慣例),
+    # 不寫死、不進 git;token 過期重新申請後更新 Variable 即可。
+    from airflow.models import Variable
+
+    ACCESS_CODE = Variable.get("FATRACESCHOOL_ACCESSCODE", default_var="")
 
     # === Helpers ===
     # NOTE: 暫無對應 utils.extract_stage helper 處理 fatraceschool API。
