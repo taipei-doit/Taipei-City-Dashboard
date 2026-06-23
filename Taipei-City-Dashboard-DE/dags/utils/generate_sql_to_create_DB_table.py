@@ -103,9 +103,10 @@ def generate_sql_to_create_db_table(
 
     create_mtime_trigger_sql = f"""
     
-    -- create mtime trigger
+    -- create mtime trigger（冪等：先 DROP 再 CREATE，避免表已存在時 trigger 重複建立而失敗）
+    DROP TRIGGER IF EXISTS {table_name}_mtime ON public.{table_name};
     CREATE TRIGGER {table_name}_mtime
-        BEFORE INSERT OR UPDATE 
+        BEFORE INSERT OR UPDATE
         ON public.{table_name}
         FOR EACH ROW
         EXECUTE PROCEDURE public.trigger_set_timestamp();
