@@ -73,6 +73,8 @@ def _food_bank_ntpe(**kwargs):
     # 來源地址含全形數字(如 ２５８),轉半形
     _fw = str.maketrans("０１２３４５６７８９", "0123456789")
     data["address"] = data["address"].map(lambda s: s.translate(_fw) if isinstance(s, str) else s)
+    # 範圍門牌(如 550.552號 / 196&198號 / 122,124號 / 424,424之1號)TPGOS 只認單一門牌 → 取第一個號碼
+    data["address"] = data["address"].str.replace(r"(\d+)\s*[．。.，,、＆&]\s*\d+(?:之\d+)?號", r"\1號", regex=True)
     # === Geocode ===
     # 來源 address 只有路段門牌、缺縣市/行政區(在 county/area 欄),需組完整地址才查得到 TPGOS
     _geo = (data["county"].fillna("") + data["area"].fillna("") + data["address"].fillna("")).str.strip()
