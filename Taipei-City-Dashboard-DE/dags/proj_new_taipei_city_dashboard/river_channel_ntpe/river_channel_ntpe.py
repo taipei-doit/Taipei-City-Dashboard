@@ -79,14 +79,18 @@ def _river_channel_ntpe(**kwargs):
         gdata["data_time"] = pd.to_datetime("now")
 
     # --- Filter to New Taipei City only ---
-    county_col = None
-    for candidate in ("county", "縣市", "縣市別"):
-        if candidate in gdata.columns:
-            county_col = candidate
-            break
-    if county_col:
-        mask = gdata[county_col].astype(str).str.contains(r"新北市|北縣", na=False)
-        gdata = gdata[mask]
+    # --- Filter to New Taipei City by spatial intersect ---
+    # 來源 RIVERPOLY 無縣市屬性欄,無法用欄位過濾;改用縣市界 tp_taiwan_county(SRID 4326)空間相交
+    import geopandas as gpd
+
+    _bnd = gpd.read_postgis(
+        "SELECT wkb_geometry FROM tp_taiwan_county WHERE name = %(c)s",
+        create_engine(ready_data_db_uri),
+        geom_col="wkb_geometry",
+        params={"c": "新北市"},
+    ).to_crs("EPSG:4326")
+    gdata = gdata[gdata.geometry.intersects(_bnd.geometry.unary_union)].copy()
+    gdata["county"] = "新北市"
 
     for col in SELECT_COLUMNS:
         if col not in gdata.columns:

@@ -1,0 +1,38 @@
+{
+  "dag_infos": {
+    "dag_id": "park_ntpe",
+    "start_date": "2026-06-23",
+    "schedule_interval": "20 22 1,28 * *",
+    "catchup": false,
+    "tags": ["park", "新北市", "New-Taipei-City"],
+    "description": "New Taipei City parks, geocoded from address.",
+    "default_args": {
+      "owner": "airflow",
+      "email": ["DEFAULT_EMAIL_LIST"],
+      "email_on_retry": false,
+      "email_on_failure": true,
+      "retries": 1,
+      "retry_delay": 60
+    },
+    "ready_data_db": "postgres_default",
+    "ready_data_default_table": "park_ntpe",
+    "ready_data_history_table": "",
+    "raw_data_db": "postgres_default",
+    "raw_data_table": "",
+    "load_behavior": "replace"
+  },
+  "data_infos": {
+    "name_cn": "新北市公園",
+    "airflow_update_freq": "每月 (Asia/Taipei)",
+    "source": "https://data.ntpc.gov.tw/datasets/5fe3a136-29cc-4695-a17e-6636a32c3342",
+    "source_type": "data.ntpc",
+    "source_dept": "新北市政府",
+    "component_name": "park_ntpe_map",
+    "gis_format": "Point",
+    "output_coordinate": "EPSG:4326",
+    "is_geometry": 1,
+    "dataset_description": "新北市公園位置,由地址 geocode 產生點位,對不到座標者保留列、wkb_geometry 留 null。",
+    "etl_description": "data.ntpc 取得公園清單,範圍門牌正規化 + 砍地址描述詞後 geocode→Point wkb_geometry,全英文欄。",
+    "sensitivity": "public"
+  }
+}

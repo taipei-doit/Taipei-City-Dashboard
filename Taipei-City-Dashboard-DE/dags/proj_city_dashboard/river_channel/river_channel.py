@@ -84,16 +84,19 @@ def _river_channel(**kwargs):
     if "data_time" not in gdata.columns:
         gdata["data_time"] = pd.to_datetime("now")
 
-    # --- Filter to Taipei City only ---
-    # The dataset covers multiple counties; for proj_city_dashboard we keep only 臺北市/台北市 rows
-    county_col = None
-    for candidate in ("county", "縣市", "縣市別"):
-        if candidate in gdata.columns:
-            county_col = candidate
-            break
-    if county_col:
-        mask = gdata[county_col].astype(str).str.contains(r"臺北市|台北市", na=False)
-        gdata = gdata[mask]
+    # --- Filter to Taipei City by spatial intersect ---
+    # 來源 RIVERPOLY 無縣市屬性欄,無法用欄位過濾;改用縣市界 tp_taiwan_county(SRID 4326)空間相交
+    # ponytail: 單一縣市界 unary_union 即可;日後若要逐河段標多縣市,改 gpd.sjoin 保留對應
+    import geopandas as gpd
+
+    _bnd = gpd.read_postgis(
+        "SELECT wkb_geometry FROM tp_taiwan_county WHERE name = %(c)s",
+        create_engine(ready_data_db_uri),
+        geom_col="wkb_geometry",
+        params={"c": "臺北市"},
+    ).to_crs("EPSG:4326")
+    gdata = gdata[gdata.geometry.intersects(_bnd.geometry.unary_union)].copy()
+    gdata["county"] = "臺北市"
 
     # final column selection/alignment
     # add missing cols if any (to keep column order consistent)

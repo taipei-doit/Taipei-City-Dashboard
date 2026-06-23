@@ -27,7 +27,7 @@ def _D090100_1(**kwargs):
     default_table = dag_infos.get("ready_data_default_table")
     history_table = dag_infos.get("ready_data_history_table")
     URL = "https://data.taipei/api/frontstage/tpeod/dataset/resource.download?rid=28c5792b-3af6-4bff-8ad8-f5b5e53d4062"
-    ENCODING = "big5"
+    ENCODING = "utf-8-sig"  # 來源已改 UTF-8(帶 BOM);原 big5 會 UnicodeDecodeError
     PAGE_ID = "58b4f7b9-d0c5-4de8-aa7f-981fcb625e45"
     FROM_CRS = 4326
     GEOMETRY_TYPE = "Point"
