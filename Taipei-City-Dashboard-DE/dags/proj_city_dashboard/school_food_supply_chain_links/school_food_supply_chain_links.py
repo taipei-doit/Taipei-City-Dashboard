@@ -228,14 +228,23 @@ def _school_food_supply_chain_links(**kwargs):
     data["data_time"] = pd.to_datetime("now").strftime("%Y-%m-%d %H:%M:%S")
     data = data[SELECT_COLUMNS]
 
-    # === Load ===
+    # === Load(拆雙北:臺北→base 表、新北→ _ntpe 表)===
     engine = create_engine(ready_data_db_uri)
+    ntpe_table = default_table + "_ntpe"
     _ensure_ready_table(engine, default_table, COL_MAP)
+    _ensure_ready_table(engine, ntpe_table, COL_MAP)
     save_dataframe_to_postgresql(
         engine,
-        data=data,
+        data=data[data["city"] == "臺北市"],
         load_behavior=load_behavior,
         default_table=default_table,
+        history_table=history_table,
+    )
+    save_dataframe_to_postgresql(
+        engine,
+        data=data[data["city"] == "新北市"],
+        load_behavior=load_behavior,
+        default_table=ntpe_table,
         history_table=history_table,
     )
     update_lasttime_in_data_to_dataset_info(engine, dag_id, data["data_time"].max())
