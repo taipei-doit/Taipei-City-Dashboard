@@ -48,6 +48,11 @@ def _river_channel_ntpe(**kwargs):
 
     # === Transform ===
     rename_map = {
+        # 來源 RIVERPOLY shp 實際欄位為英文(RIVER_NAME/RIVER_CODE/RIVER_TYPE/RIVER_FROM);
+        # 無管理單位/年度/縣市欄 → manage_unit/source_year 留 null、county 由空間過濾後另設
+        "RIVER_NAME": "river_name",
+        "RIVER_CODE": "river_id",
+        "RIVER_TYPE": "river_class",
         "河川編號": "river_id",
         "河川代碼": "river_id",
         "河川名稱": "river_name",

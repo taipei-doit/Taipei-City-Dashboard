@@ -12,8 +12,8 @@ def _ensure_ready_table(engine, table_name, col_map):
         conn.execute(sa_text(sql).execution_options(autocommit=True))
 
 
-def _school_food_supply_chain_links(**kwargs):
-    """雙北學校供餐供應鏈 — 食材登錄平台 OpenAPI 月更新。
+def _school_food_supply_chain_links_ntpe(**kwargs):
+    """新北市學校供餐供應鏈 — 食材登錄平台 OpenAPI 月更新。
 
     產出供桑基圖（SankeyChart）使用的 link rows：
         source → target (value, layer, city, district)
@@ -60,13 +60,8 @@ def _school_food_supply_chain_links(**kwargs):
     ACCESS_CODE = Variable.get("FATRACESCHOOL_ACCESSCODE", default_var="")
 
     # === Helpers ===
-    # NOTE: 暫無對應 utils.extract_stage helper 處理 fatraceschool API。
-    # 該 API 為 POST + JSON body，需 accesscode 認證，且採「先取下載連結
-    # 再下載資料」兩段式流程（下載連結為一次性 timestamped URL，需立即使用），
-    # 與既有 helper 模式不同。後續若有更多 DAG 共用此來源，請維護者升級為
-    # utils.extract_stage.<helper>。
     BASE_URL = "https://fatraceschool.k12ea.gov.tw/cateringservice/openapi"
-    COUNTIES = ["臺北市"]
+    COUNTIES = ["新北市"]
     GRADES = ["國中小", "高中職"]
     DATASET_NAME = "午餐食材及供應商資料集"
     REQ_TIMEOUT = 60
@@ -124,20 +119,7 @@ def _school_food_supply_chain_links(**kwargs):
         return pd.read_csv(io.StringIO(f.content.decode("utf-8")))
 
     def _aggregate_links(raw, county):
-        """將原始供餐記錄聚合為桑基 link rows。
-
-        原始欄位（fatraceschool OpenAPI 實測 2026-05）：
-            市縣名稱 / 區域名稱 / 學校名稱 / 供餐日期 /
-            供餐業者 / 供餐業者統一編號 /
-            食材供應商名稱 / 食材供應商統編 / 食材名稱 /
-            調味料供應商名稱 / 調味料供應商統編 / 調味料名稱 /
-            認證標章 / 認證號碼
-
-        聚合策略（與比賽期 scripts/aggregate-sankey.js 一致）：
-            up-mid: 食材供應商 + 調味料供應商 union，groupby(supplier, 供餐業者) 計 row 數
-            mid-down: groupby(供餐業者, 區域名稱, 學校名稱) 計 row 數
-            value = 該 link 的供餐記錄 row 數（未對日期 dedup，與下游一致）
-        """
+        """將原始供餐記錄聚合為桑基 link rows（策略同臺北版）。"""
         rows = []
         if raw.empty:
             return rows
@@ -242,7 +224,7 @@ def _school_food_supply_chain_links(**kwargs):
 
 
 dag = CommonDag(
-    proj_folder="proj_city_dashboard",
+    proj_folder="proj_new_taipei_city_dashboard",
     dag_folder="school_food_supply_chain_links",
 )
-dag.create_dag(etl_func=_school_food_supply_chain_links)
+dag.create_dag(etl_func=_school_food_supply_chain_links_ntpe)
