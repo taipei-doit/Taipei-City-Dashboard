@@ -1054,8 +1054,8 @@ def get_single_addr_xy(addr):
     try:
         res_json = response.json()
         if len(res_json) > 0:
-            if res_json[0]["QUERYTYPE"] == "完全比對":
-                print("完全比對 = " + addr)
+            if res_json[0]["QUERYTYPE"] == "完全比對" or res_json[0]["QUERYTYPE"] == "模糊比對":
+                print(f"{res_json[0]['QUERYTYPE']} + {addr}")
                 x = res_json[0]["X"]
                 y = res_json[0]["Y"]
             else:
