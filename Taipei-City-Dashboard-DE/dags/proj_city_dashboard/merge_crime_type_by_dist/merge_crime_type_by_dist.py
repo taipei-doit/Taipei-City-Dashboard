@@ -42,7 +42,8 @@ def _transfer(**kwargs):
         conn
     )
     # 取地區
-    df['dist'] = df['address'].str.extract(r'(.{2,3}區)')
+    # 錨定 市/縣 後再抓行政區,避免貪婪吃到「市」(如 臺北市大安區 → 大安區,而非 市大安區)
+    df['dist'] = df['address'].str.extract(r'[縣市](.{2,3}區)')
     df["data_time"] = get_tpe_now_time_str(is_with_tz=True)
 
     df = df[["case_id", "type", "date", "time", "location", "address", "wkb_geometry", "begin_when", "epoch_time", "dist",'data_time']]
