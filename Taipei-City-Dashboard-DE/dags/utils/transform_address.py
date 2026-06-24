@@ -1078,8 +1078,8 @@ def get_single_addr_xy(addr):
         if not isinstance(res_json, list):
             print(f"Unexpected TPGOS response type: {type(res_json).__name__}; addr = {addr}")
         elif len(res_json) > 0:
-            if isinstance(res_json[0], dict) and res_json[0].get("QUERYTYPE") == "完全比對":
-                print("完全比對 = " + addr)
+            if isinstance(res_json[0], dict) and res_json[0].get("QUERYTYPE") in ("完全比對", "模糊比對"):
+                print(f"{res_json[0]['QUERYTYPE']} + {addr}")
                 x = res_json[0]["X"]
                 y = res_json[0]["Y"]
             else:
