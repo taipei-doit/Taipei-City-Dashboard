@@ -34,7 +34,8 @@ def _transfer(**kwargs):
     raw_data = pd.DataFrame(res)
     raw_data["date"] = raw_data["date"].astype(str).apply(rocdate_to_ad)
     raw_data["data_time"] = get_tpe_now_time_str(is_with_tz=True)
-    raw_data['dist'] = raw_data['location'].str.extract(r'(.{2,3}區)')
+    # 錨定 市/縣 後再抓行政區,避免貪婪吃到「市」(如 新北市板橋區 → 板橋區,而非 市板橋區)
+    raw_data['dist'] = raw_data['location'].str.extract(r'[縣市](.{2,3}區)')
     raw_data = raw_data[["type","date","dist","location","data_time"]]
     # 建立資料庫連線
     engine = create_engine(ready_data_db_uri)
