@@ -41,6 +41,7 @@ func ConfigureRoutes() {
 	configureContributorRoutes()
 	configureChatLogRoutes()
 	configureAIRoutes()
+	configureTransitRoutes()
 }
 
 func configureAuthRoutes() {
@@ -208,6 +209,19 @@ func configureAIRoutes() {
 		aiRoutes.POST("/chat/openai", controllers.ChatWithOpenAI)
 		aiRoutes.POST("/chat/gemini", controllers.ChatWithGemini)
 	}
+}
+
+func configureTransitRoutes() {
+	transitRoutes := RouterGroup.Group("/transit")
+	transitRoutes.Use(middleware.LimitAPIRequests(global.ComponentLimitAPIRequestsTimes, global.LimitRequestsDuration))
+	transitRoutes.Use(middleware.LimitTotalRequests(global.ComponentLimitTotalRequestsTimes, global.LimitRequestsDuration))
+	{
+		transitRoutes.POST("/isochrone/full", controllers.GetIsochroneFull)
+		transitRoutes.POST("/isochrone/network", controllers.GetIsochroneNetwork)
+	}
+
+	// Legacy endpoint
+	RouterGroup.POST("/isochrone", controllers.GetIsochrone)
 }
 
 // func configureLmRoutes() {
