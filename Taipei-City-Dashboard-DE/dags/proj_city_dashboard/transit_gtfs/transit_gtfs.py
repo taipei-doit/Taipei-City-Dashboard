@@ -52,23 +52,26 @@ def _transfer(**kwargs):
         feeds_dir = os.path.join(work, "feeds")
         build(national_zip, feeds_dir, metro_src=trtc_zip)
 
-        # Load: zip each feed's .txt files and upsert as a blob row
+        # Load: zip each feed's .txt files, then upsert all 3 in ONE transaction
+        # so updated_at is identical — the backend polls max(updated_at) to decide reload.
         engine = create_engine(ready_data_db_uri)
-        upsert = text(
-            "INSERT INTO gtfs_bundle (feed, archive, updated_at) "
-            "VALUES (:feed, :archive, NOW()) "
-            "ON CONFLICT (feed) DO UPDATE SET archive = EXCLUDED.archive, updated_at = NOW()"
-        ).bindparams(bindparam("archive", type_=LargeBinary))
+        blobs = {}
         for feed in ("bus", "rail", "train"):
             feed_dir = os.path.join(feeds_dir, feed)
             buf = io.BytesIO()
             with zipfile.ZipFile(buf, "w", zipfile.ZIP_DEFLATED) as zf:
                 for name in sorted(os.listdir(feed_dir)):
                     zf.write(os.path.join(feed_dir, name), name)
-            data = buf.getvalue()
-            with engine.begin() as conn:
-                conn.execute(upsert, {"feed": feed, "archive": data})
-            print(f"{feed}: wrote {len(data)} bytes to gtfs_bundle")
+            blobs[feed] = buf.getvalue()
+        upsert = text(
+            "INSERT INTO gtfs_bundle (feed, archive, updated_at) "
+            "VALUES (:feed, :archive, NOW()) "
+            "ON CONFLICT (feed) DO UPDATE SET archive = EXCLUDED.archive, updated_at = NOW()"
+        ).bindparams(bindparam("archive", type_=LargeBinary))
+        with engine.begin() as conn:
+            for feed in ("bus", "rail", "train"):
+                conn.execute(upsert, {"feed": feed, "archive": blobs[feed]})
+                print(f"{feed}: wrote {len(blobs[feed])} bytes to gtfs_bundle")
 
         update_lasttime_in_data_to_dataset_info(engine, airflow_dag_id=dag_id)
     finally:
