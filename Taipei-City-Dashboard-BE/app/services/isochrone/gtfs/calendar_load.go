@@ -19,13 +19,13 @@ func LoadCalendarOnly(dir, prefix string) (*Feed, error) {
 		Freqs:     make(map[string][]FreqEntry),
 	}
 
-	if err := f.parseTrips(dir + "/trips.txt"); err != nil {
+	if err := parseFile(dir+"/trips.txt", f.parseTrips); err != nil {
 		return nil, fmt.Errorf("trips: %w", err)
 	}
-	if err := f.parseCalendar(dir + "/calendar.txt"); err != nil {
+	if err := parseOptionalFile(dir+"/calendar.txt", f.parseCalendar); err != nil {
 		return nil, fmt.Errorf("calendar: %w", err)
 	}
-	if err := f.parseCalendarDates(dir + "/calendar_dates.txt"); err != nil {
+	if err := parseOptionalFile(dir+"/calendar_dates.txt", f.parseCalendarDates); err != nil {
 		return nil, fmt.Errorf("calendar_dates: %w", err)
 	}
 	return f, nil

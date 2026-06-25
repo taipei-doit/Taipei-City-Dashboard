@@ -3,16 +3,104 @@
 package gtfs
 
 import (
+	"archive/zip"
+	"bytes"
 	"encoding/csv"
 	"fmt"
 	"io"
 	"math"
 	"os"
+	"path"
 	"sort"
 	"strconv"
 	"strings"
 	"time"
 )
+
+// LoadFeedFromZip reads a GTFS zip archive from memory and returns a Feed.
+func LoadFeedFromZip(blob []byte, prefix string) (*Feed, error) {
+	zr, err := zip.NewReader(bytes.NewReader(blob), int64(len(blob)))
+	if err != nil {
+		return nil, err
+	}
+	files := make(map[string]*zip.File)
+	for _, f := range zr.File {
+		files[path.Base(f.Name)] = f
+	}
+
+	feed := &Feed{
+		Prefix:    prefix,
+		Stops:     make(map[string]*RawStop),
+		Routes:    make(map[string]*RawRoute),
+		Trips:     make(map[string]*RawTrip),
+		StopTimes: make(map[string][]RawStopTime),
+		Shapes:    make(map[string][]RawShapePoint),
+		Calendar:  make(map[string]*ServicePattern),
+		CalDates:  make(map[string][]CalDateException),
+		Freqs:     make(map[string][]FreqEntry),
+	}
+
+	parseZipFile := func(name string, required bool, parseFunc func(*csv.Reader) error) error {
+		zf, ok := files[name]
+		if !ok {
+			if required {
+				return fmt.Errorf("required file %s missing in zip", name)
+			}
+			return nil
+		}
+		rc, err := zf.Open()
+		if err != nil {
+			return err
+		}
+		defer rc.Close()
+		return parseFunc(newCSVReader(rc))
+	}
+
+	if err := parseZipFile("stops.txt", true, feed.parseStops); err != nil {
+		return nil, fmt.Errorf("stops: %w", err)
+	}
+	if err := parseZipFile("routes.txt", true, feed.parseRoutes); err != nil {
+		return nil, fmt.Errorf("routes: %w", err)
+	}
+	if err := parseZipFile("trips.txt", true, feed.parseTrips); err != nil {
+		return nil, fmt.Errorf("trips: %w", err)
+	}
+	if err := parseZipFile("shapes.txt", false, feed.parseShapes); err != nil {
+		return nil, fmt.Errorf("shapes: %w", err)
+	}
+	if err := parseZipFile("calendar.txt", false, feed.parseCalendar); err != nil {
+		return nil, fmt.Errorf("calendar: %w", err)
+	}
+	if err := parseZipFile("calendar_dates.txt", false, feed.parseCalendarDates); err != nil {
+		return nil, fmt.Errorf("calendar_dates: %w", err)
+	}
+	if err := parseZipFile("frequencies.txt", false, feed.parseFrequencies); err != nil {
+		return nil, fmt.Errorf("frequencies: %w", err)
+	}
+	if err := parseZipFile("stop_times.txt", true, feed.parseStopTimes); err != nil {
+		return nil, fmt.Errorf("stop_times: %w", err)
+	}
+
+	interpolateStopTimes(feed)
+
+	for _, s := range feed.Stops {
+		if s.Lat == 0 && s.Lon == 0 && s.ParentStation != "" {
+			if parent, ok := feed.Stops[s.ParentStation]; ok {
+				s.Lat = parent.Lat
+				s.Lon = parent.Lon
+			}
+		}
+	}
+
+	return feed, nil
+}
+
+func newCSVReader(r io.Reader) *csv.Reader {
+	cr := csv.NewReader(r)
+	cr.LazyQuotes = true
+	cr.TrimLeadingSpace = true
+	return cr
+}
 
 // LoadFeed reads a GTFS directory and returns a Feed.
 func LoadFeed(dir, prefix string) (*Feed, error) {
@@ -28,36 +116,33 @@ func LoadFeed(dir, prefix string) (*Feed, error) {
 		Freqs:     make(map[string][]FreqEntry),
 	}
 
-	if err := f.parseStops(dir + "/stops.txt"); err != nil {
+	if err := parseFile(dir+"/stops.txt", f.parseStops); err != nil {
 		return nil, fmt.Errorf("stops: %w", err)
 	}
-	if err := f.parseRoutes(dir + "/routes.txt"); err != nil {
+	if err := parseFile(dir+"/routes.txt", f.parseRoutes); err != nil {
 		return nil, fmt.Errorf("routes: %w", err)
 	}
-	if err := f.parseTrips(dir + "/trips.txt"); err != nil {
+	if err := parseFile(dir+"/trips.txt", f.parseTrips); err != nil {
 		return nil, fmt.Errorf("trips: %w", err)
 	}
-	if err := f.parseShapes(dir + "/shapes.txt"); err != nil {
+	if err := parseOptionalFile(dir+"/shapes.txt", f.parseShapes); err != nil {
 		return nil, fmt.Errorf("shapes: %w", err)
 	}
-	if err := f.parseCalendar(dir + "/calendar.txt"); err != nil {
+	if err := parseOptionalFile(dir+"/calendar.txt", f.parseCalendar); err != nil {
 		return nil, fmt.Errorf("calendar: %w", err)
 	}
-	if err := f.parseCalendarDates(dir + "/calendar_dates.txt"); err != nil {
+	if err := parseOptionalFile(dir+"/calendar_dates.txt", f.parseCalendarDates); err != nil {
 		return nil, fmt.Errorf("calendar_dates: %w", err)
 	}
-	if err := f.parseFrequencies(dir + "/frequencies.txt"); err != nil {
+	if err := parseOptionalFile(dir+"/frequencies.txt", f.parseFrequencies); err != nil {
 		return nil, fmt.Errorf("frequencies: %w", err)
 	}
-	if err := f.parseStopTimes(dir + "/stop_times.txt"); err != nil {
+	if err := parseFile(dir+"/stop_times.txt", f.parseStopTimes); err != nil {
 		return nil, fmt.Errorf("stop_times: %w", err)
 	}
 
-	// Interpolate missing stop times (bus feeds often only have times at
-	// timepoint stops — first and last — with intermediate stops at 0).
 	interpolateStopTimes(f)
 
-	// Resolve missing coordinates from parent station
 	for _, s := range f.Stops {
 		if s.Lat == 0 && s.Lon == 0 && s.ParentStation != "" {
 			if parent, ok := f.Stops[s.ParentStation]; ok {
@@ -70,15 +155,25 @@ func LoadFeed(dir, prefix string) (*Feed, error) {
 	return f, nil
 }
 
-func openCSV(path string) (*csv.Reader, *os.File, error) {
+func parseFile(path string, parseFunc func(*csv.Reader) error) error {
 	fh, err := os.Open(path)
 	if err != nil {
-		return nil, nil, err
+		return err
 	}
-	r := csv.NewReader(fh)
-	r.LazyQuotes = true
-	r.TrimLeadingSpace = true
-	return r, fh, nil
+	defer fh.Close()
+	return parseFunc(newCSVReader(fh))
+}
+
+func parseOptionalFile(path string, parseFunc func(*csv.Reader) error) error {
+	fh, err := os.Open(path)
+	if err != nil {
+		if os.IsNotExist(err) {
+			return nil
+		}
+		return err
+	}
+	defer fh.Close()
+	return parseFunc(newCSVReader(fh))
 }
 
 // readHeader reads the first row and returns a map of field name → column index.
@@ -132,13 +227,7 @@ func parseDate(s string) (time.Time, error) {
 	return time.ParseInLocation("20060102", strings.TrimSpace(s), time.UTC)
 }
 
-func (f *Feed) parseStops(path string) error {
-	r, fh, err := openCSV(path)
-	if err != nil {
-		return err
-	}
-	defer fh.Close()
-
+func (f *Feed) parseStops(r *csv.Reader) error {
 	idx, err := readHeader(r)
 	if err != nil {
 		return err
@@ -173,13 +262,7 @@ func (f *Feed) parseStops(path string) error {
 	return nil
 }
 
-func (f *Feed) parseRoutes(path string) error {
-	r, fh, err := openCSV(path)
-	if err != nil {
-		return err
-	}
-	defer fh.Close()
-
+func (f *Feed) parseRoutes(r *csv.Reader) error {
 	idx, err := readHeader(r)
 	if err != nil {
 		return err
@@ -207,13 +290,7 @@ func (f *Feed) parseRoutes(path string) error {
 	return nil
 }
 
-func (f *Feed) parseTrips(path string) error {
-	r, fh, err := openCSV(path)
-	if err != nil {
-		return err
-	}
-	defer fh.Close()
-
+func (f *Feed) parseTrips(r *csv.Reader) error {
 	idx, err := readHeader(r)
 	if err != nil {
 		return err
@@ -241,16 +318,7 @@ func (f *Feed) parseTrips(path string) error {
 	return nil
 }
 
-func (f *Feed) parseShapes(path string) error {
-	r, fh, err := openCSV(path)
-	if err != nil {
-		if os.IsNotExist(err) {
-			return nil
-		}
-		return err
-	}
-	defer fh.Close()
-
+func (f *Feed) parseShapes(r *csv.Reader) error {
 	idx, err := readHeader(r)
 	if err != nil {
 		return err
@@ -282,16 +350,7 @@ func (f *Feed) parseShapes(path string) error {
 	return nil
 }
 
-func (f *Feed) parseCalendar(path string) error {
-	r, fh, err := openCSV(path)
-	if err != nil {
-		if os.IsNotExist(err) {
-			return nil
-		}
-		return err
-	}
-	defer fh.Close()
-
+func (f *Feed) parseCalendar(r *csv.Reader) error {
 	idx, err := readHeader(r)
 	if err != nil {
 		return err
@@ -332,16 +391,7 @@ func (f *Feed) parseCalendar(path string) error {
 	return nil
 }
 
-func (f *Feed) parseCalendarDates(path string) error {
-	r, fh, err := openCSV(path)
-	if err != nil {
-		if os.IsNotExist(err) {
-			return nil
-		}
-		return err
-	}
-	defer fh.Close()
-
+func (f *Feed) parseCalendarDates(r *csv.Reader) error {
 	idx, err := readHeader(r)
 	if err != nil {
 		return err
@@ -369,16 +419,7 @@ func (f *Feed) parseCalendarDates(path string) error {
 	return nil
 }
 
-func (f *Feed) parseFrequencies(path string) error {
-	r, fh, err := openCSV(path)
-	if err != nil {
-		if os.IsNotExist(err) {
-			return nil
-		}
-		return err
-	}
-	defer fh.Close()
-
+func (f *Feed) parseFrequencies(r *csv.Reader) error {
 	idx, err := readHeader(r)
 	if err != nil {
 		return err
@@ -405,13 +446,7 @@ func (f *Feed) parseFrequencies(path string) error {
 	return nil
 }
 
-func (f *Feed) parseStopTimes(path string) error {
-	r, fh, err := openCSV(path)
-	if err != nil {
-		return err
-	}
-	defer fh.Close()
-
+func (f *Feed) parseStopTimes(r *csv.Reader) error {
 	idx, err := readHeader(r)
 	if err != nil {
 		return err

@@ -3,14 +3,17 @@
 package transit
 
 import (
+	"database/sql"
 	"encoding/json"
 	"errors"
 	"fmt"
 	"math"
 	"sort"
 	"strings"
+	"sync/atomic"
 	"time"
 
+	"TaipeiCityDashboardBE/app/models"
 	"TaipeiCityDashboardBE/app/services/isochrone/gtfs"
 	"TaipeiCityDashboardBE/app/services/isochrone/isochrone"
 	"TaipeiCityDashboardBE/app/services/isochrone/raptor"
@@ -60,45 +63,86 @@ type Service struct {
 	scanners map[gtfs.ServiceProfile]*raptor.RouteScanner
 }
 
-var defaultService *Service
-var defaultGTFSFeedSource = newGTFSFeedSource()
+var current atomic.Pointer[Service]
 
-// InitService loads RAPTOR data from Redis and initialises the global service.
-// Call this once at application startup, after ConnectToRedis.
+// InitService loads RAPTOR data from DB and initialises the global service.
+// Call this once at application startup, after database connection.
 func InitService() error {
-	rd, err := Load()
-	var feeds []*gtfs.Feed
+	db, err := models.DBDashboard.DB()
 	if err != nil {
-		feeds, rd, err = buildRaptorFromGTFS()
-		if err != nil {
-			return fmt.Errorf("transit: build raptor data: %w", err)
-		}
-		if err := Save(rd); err != nil {
-			return fmt.Errorf("transit: save raptor data: %w", err)
-		}
-	} else {
-		// Re-load GTFS feeds (calendar only; stop_times not needed at runtime)
-		feeds, err = loadCalendarFeeds()
-		if err != nil {
-			return fmt.Errorf("transit: load calendar feeds: %w", err)
-		}
+		return fmt.Errorf("transit: get DBDashboard sql.DB: %w", err)
 	}
 
-	defaultService = &Service{
-		rd:       rd,
-		idx:      isochrone.NewIsochroneIndex(rd),
-		feeds:    feeds,
-		scanners: buildProfileScanners(rd, feeds),
+	svc, err := buildFromDB(db)
+	if err != nil {
+		return fmt.Errorf("transit: initial build from DB failed: %w", err)
 	}
+
+	current.Store(svc)
+
+	go watchAndReload(db)
+
 	return nil
 }
 
 // DefaultService returns the package-level Service, or an error if not initialised.
 func DefaultService() (*Service, error) {
-	if defaultService == nil {
+	svc := current.Load()
+	if svc == nil {
 		return nil, errors.New("transit service not initialised; call InitService first")
 	}
-	return defaultService, nil
+	return svc, nil
+}
+
+func buildFromDB(db *sql.DB) (*Service, error) {
+	feeds := make([]*gtfs.Feed, 0, 4)
+	for _, name := range []string{"bus", "rail", "train"} {
+		var blob []byte
+		err := db.QueryRow("SELECT archive FROM gtfs_bundle WHERE feed=$1", name).Scan(&blob)
+		if err != nil {
+			return nil, fmt.Errorf("query feed %s: %w", name, err)
+		}
+		f, err := gtfs.LoadFeedFromZip(blob, name+":")
+		if err != nil {
+			return nil, fmt.Errorf("load feed %s from zip: %w", name, err)
+		}
+		feeds = append(feeds, f)
+	}
+	feeds = append(feeds, gtfs.SplitJumpfrog(feeds[0])) // bus -> jumpfrog
+	rd, err := raptor.Build(feeds)
+	if err != nil {
+		return nil, fmt.Errorf("raptor build: %w", err)
+	}
+	return &Service{
+		rd:       rd,
+		idx:      isochrone.NewIsochroneIndex(rd),
+		feeds:    feeds,
+		scanners: buildProfileScanners(rd, feeds),
+	}, nil
+}
+
+func watchAndReload(db *sql.DB) {
+	var loaded time.Time
+	_ = db.QueryRow("SELECT max(updated_at) FROM gtfs_bundle").Scan(&loaded)
+
+	ticker := time.NewTicker(1 * time.Hour)
+	defer ticker.Stop()
+
+	for range ticker.C {
+		var newest time.Time
+		err := db.QueryRow("SELECT max(updated_at) FROM gtfs_bundle").Scan(&newest)
+		if err != nil {
+			continue
+		}
+		if newest.After(loaded) {
+			svc, err := buildFromDB(db)
+			if err != nil {
+				continue
+			}
+			current.Store(svc)
+			loaded = newest
+		}
+	}
 }
 
 // IsochroneRequest holds the parameters for a single isochrone query.
@@ -535,13 +579,4 @@ func haversine(lat1, lon1, lat2, lon2 float64) float64 {
 func timeToSec(t time.Time) int32 {
 	h, m, sec := t.Clock()
 	return int32(h*3600 + m*60 + sec)
-}
-
-// loadCalendarFeeds loads only trips + calendar files (no stop_times) for runtime use.
-func loadCalendarFeeds() ([]*gtfs.Feed, error) {
-	return defaultGTFSFeedSource.LoadCalendarFeeds()
-}
-
-func buildRaptorFromGTFS() ([]*gtfs.Feed, *raptor.RaptorData, error) {
-	return defaultGTFSFeedSource.BuildRaptorData()
 }
