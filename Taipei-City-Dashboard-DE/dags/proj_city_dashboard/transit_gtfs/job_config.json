@@ -1,0 +1,45 @@
+{
+  "dag_infos": {
+    "dag_id": "transit_gtfs",
+    "start_date": "2026-06-25",
+    "schedule_interval": "30 22 5,26 * *",
+    "catchup": false,
+    "tags": [
+      "transit_gtfs",
+      "TDX",
+      "GTFS",
+      "等時圈",
+      "雙北",
+      "Taipei-City",
+      "New-Taipei-City"
+    ],
+    "description": "雙北大眾運輸 GTFS(公車+台鐵+高鐵+北捷),切 bus/rail/train 存成 gtfs_bundle blob,供等時圈後端使用。",
+    "default_args": {
+      "owner": "airflow",
+      "email": ["DEFAULT_EMAIL_LIST"],
+      "email_on_retry": false,
+      "email_on_failure": true,
+      "retries": 1,
+      "retry_delay": 60
+    },
+    "ready_data_db": "postgres_default",
+    "ready_data_default_table": "gtfs_bundle",
+    "ready_data_history_table": "",
+    "raw_data_db": "postgres_default",
+    "raw_data_table": "",
+    "load_behavior": "replace"
+  },
+  "data_infos": {
+    "name_cn": "雙北大眾運輸 GTFS(等時圈用)",
+    "airflow_update_freq": "每月 5、26 日 22:30",
+    "source": "https://tdx.transportdata.tw/api/gtfs/V3/Map/GTFS/Static (+ /Rail/TRTC)",
+    "source_type": "TDX GTFS",
+    "source_dept": "交通部 TDX",
+    "gis_format": null,
+    "output_coordinate": "EPSG:4326",
+    "is_geometry": 0,
+    "dataset_description": "雙北範圍 GTFS,按 route_type 切成 bus/rail/train 三個 feed,各壓成 zip 存於 gtfs_bundle.archive (bytea blob)。",
+    "etl_description": "下載 TDX 全國 GTFS + 北捷 GTFS → 篩雙北、切 bus/rail/train → 每 feed zip → upsert gtfs_bundle。",
+    "sensitivity": "public"
+  }
+}
