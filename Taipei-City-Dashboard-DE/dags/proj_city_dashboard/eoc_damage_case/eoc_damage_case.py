@@ -40,7 +40,7 @@ def _transfer(**kwargs):
     load_behavior = dag_infos.get('load_behavior')
     default_table = dag_infos.get('ready_data_default_table')
     history_table = dag_infos.get('ready_data_history_table')
-    URL = '''https://tfd.blob.core.windows.net/blobfs/data/TEST-T-SAGEDamageCaseData.json'''
+    URL = '''https://tfd.blob.core.windows.net/blobfs/data/T-SAGEDamageCaseData.json'''
 
     raw_data = requests.get(URL)
     raw_data_json = raw_data.json()

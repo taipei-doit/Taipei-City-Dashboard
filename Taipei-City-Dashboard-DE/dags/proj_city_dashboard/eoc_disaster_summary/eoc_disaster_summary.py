@@ -36,7 +36,7 @@ def _transfer(**kwargs):
     load_behavior = dag_infos.get('load_behavior')
     default_table = dag_infos.get('ready_data_default_table')
     history_table = dag_infos.get('ready_data_history_table')
-    URL = '''https://tfd.blob.core.windows.net/blobfs/data/TEST-T-TSAGEDisasterSummary.json'''
+    URL = '''https://tfd.blob.core.windows.net/blobfs/data/T-SAGEDisasterSummary.json'''
     GEOMETRY_TYPE = "Point"   
     FROM_CRS = 4326
     raw_data = requests.get(URL)
