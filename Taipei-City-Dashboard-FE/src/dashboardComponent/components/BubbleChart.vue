@@ -39,6 +39,7 @@ const parsedUnit = (() => {
 })();
 
 function showTooltip({ name, point, categories }) {
+	console.log("point.x type:", typeof point.x, point.x);
 	tooltip.value.visible = true;
 	tooltip.value.name = name;
 	tooltip.value.point = point;
@@ -83,6 +84,7 @@ function onWindowLeave() {
 }
 
 onMounted(() => {
+	console.log(props.series);
 	window.addEventListener("mousemove", onMouseMove);
 	window.addEventListener("blur", onWindowLeave);
 });
@@ -91,6 +93,47 @@ onBeforeUnmount(() => {
 	window.removeEventListener("mousemove", onMouseMove);
 	window.removeEventListener("blur", onWindowLeave);
 });
+
+// ── 自動判斷 X 軸型別 ──────────────────────────────────────────
+const allX = props.series.flatMap((s) => s.data.map((d) => d.x));
+const allY = props.series.flatMap((s) => s.data.map((d) => d.y));
+
+const firstX = allX[0];
+const isDatetime =
+	(typeof firstX === "string" && /^\d{4}-\d{2}-\d{2}/.test(firstX)) ||
+	(typeof firstX === "number" && firstX > 1_000_000_000_000);
+
+console.log(
+	"firstX:",
+	firstX,
+	"type:",
+	typeof firstX,
+	"isDatetime:",
+	isDatetime,
+);
+
+function formatXForTooltip(val) {
+	if (!isDatetime) return val;
+	const d = new Date(val);
+	const yyyy = d.getUTCFullYear();
+	const MM = String(d.getUTCMonth() + 1).padStart(2, "0");
+	const dd = String(d.getUTCDate()).padStart(2, "0");
+	const hh = String(d.getUTCHours()).padStart(2, "0");
+	const mm = String(d.getUTCMinutes()).padStart(2, "0");
+	const ss = String(d.getUTCSeconds()).padStart(2, "0");
+	return `${yyyy}-${MM}-${dd} ${hh}:${mm}:${ss}`;
+}
+// ──────────────────────────────────────────────────────────────
+
+const processedSeries = isDatetime
+	? props.series
+	: props.series.map((s) => ({
+			...s,
+			data: s.data.map((d) => ({
+				...d,
+				x: Number(d.x),
+			})),
+		}));
 
 const chartOptions = ref({
 	chart: {
@@ -140,11 +183,13 @@ const chartOptions = ref({
 	xaxis: {
 		axisBorder: { show: true, color: "#666", height: 1 },
 		axisTicks: { show: false },
-		type: "numeric",
+		type: isDatetime ? "datetime" : "numeric",
 		tickAmount: 5,
 		labels: {
 			offsetY: 2,
-			formatter: (val) => Number(val).toLocaleString(),
+			formatter: isDatetime
+				? undefined
+				: (val) => Number(val).toLocaleString(),
 		},
 	},
 
@@ -157,13 +202,22 @@ const chartOptions = ref({
 	},
 });
 
-const allX = props.series.flatMap((s) => s.data.map((d) => d.x));
-const allY = props.series.flatMap((s) => s.data.map((d) => d.y));
+// ── 依型別設定 min / max ───────────────────────────────────────
+if (isDatetime) {
+	const allXms = allX.map((x) => new Date(x).getTime()); // 字串 → ms
+	const minX = Math.min(...allXms);
+	const maxX = Math.max(...allXms);
+	const padding = (maxX - minX) * 0.1 || 86_400_000;
+	chartOptions.value.xaxis.min = minX - padding;
+	chartOptions.value.xaxis.max = maxX + padding;
+} else {
+	chartOptions.value.xaxis.min = Math.min(...allX) * 0.9;
+	chartOptions.value.xaxis.max = Math.max(...allX) * 1.1;
+}
 
-chartOptions.value.xaxis.min = Math.min(...allX) * 0.9;
-chartOptions.value.xaxis.max = Math.max(...allX) * 1.1;
 chartOptions.value.yaxis.min = Math.min(...allY) * 0.9;
 chartOptions.value.yaxis.max = Math.max(...allY) * 1.1;
+// ──────────────────────────────────────────────────────────────
 
 const selectedIndex = ref(null);
 
@@ -203,51 +257,53 @@ function handleDataSelection(_e, _chartContext, config) {
 </script>
 
 <template>
-  <div
-    v-if="activeChart === 'BubbleChart'"
-    ref="chartRef"
-    class="bubbleChart"
-    @mousemove="onChartMouseMove"
-    @mouseleave="hideTooltip"
-  >
-    <VueApexCharts
-      type="bubble"
-      width="100%"
-      height="100%"
-      :options="chartOptions"
-      :series="props.series"
-      @data-point-selection="handleDataSelection"
-    />
+	<div
+		v-if="activeChart === 'BubbleChart'"
+		ref="chartRef"
+		class="bubbleChart"
+		@mousemove="onChartMouseMove"
+		@mouseleave="hideTooltip"
+	>
+		<VueApexCharts
+			type="bubble"
+			width="100%"
+			height="100%"
+			:options="chartOptions"
+			:series="processedSeries"
+			@data-point-selection="handleDataSelection"
+		/>
 
-    <Teleport to="body">
-      <div
-        v-if="tooltip.visible && tooltip.point"
-        class="chart-tooltip chart-tooltip-bubble"
-        :style="{
-          top: tooltip.y + 'px',
-          left: tooltip.x + 'px',
-          transform:
-            tooltip.placement === 'left'
-              ? 'translateX(-100%)'
-              : 'none',
-        }"
-      >
-        <h6>{{ tooltip.name }}</h6>
-        <div>
-          {{ tooltip.categories[0] ?? "X" }}：{{ tooltip.point.x }}
-          {{ parsedUnit?.x ?? "" }}
-        </div>
-        <div>
-          {{ tooltip.categories[1] ?? "Y" }}：{{ tooltip.point.y }}
-          {{ parsedUnit?.y ?? "" }}
-        </div>
-        <div>
-          {{ tooltip.categories[2] ?? "Z" }}：{{ tooltip.point.z }}
-          {{ parsedUnit?.z ?? "" }}
-        </div>
-      </div>
-    </Teleport>
-  </div>
+		<Teleport to="body">
+			<div
+				v-if="tooltip.visible && tooltip.point"
+				class="chart-tooltip chart-tooltip-bubble"
+				:style="{
+					top: tooltip.y + 'px',
+					left: tooltip.x + 'px',
+					transform:
+						tooltip.placement === 'left'
+							? 'translateX(-100%)'
+							: 'none',
+				}"
+			>
+				<h6>{{ tooltip.name }}</h6>
+				<div>
+					{{ tooltip.categories[0] ?? "X" }}：{{
+						formatXForTooltip(tooltip.point.x)
+					}}
+					{{ parsedUnit?.x ?? "" }}
+				</div>
+				<div>
+					{{ tooltip.categories[1] ?? "Y" }}：{{ tooltip.point.y }}
+					{{ parsedUnit?.y ?? "" }}
+				</div>
+				<div>
+					{{ tooltip.categories[2] ?? "Z" }}：{{ tooltip.point.z }}
+					{{ parsedUnit?.z ?? "" }}
+				</div>
+			</div>
+		</Teleport>
+	</div>
 </template>
 
 <style lang="scss" scoped>
