@@ -57,6 +57,7 @@ import {
 	getCrowdColor,
 	mrtLineColor,
 } from "../assets/utilityFunctions/getThematicColor.js";
+import { parseArrivalTime } from "../assets/utilityFunctions/parseArrivalTime.js";
 
 export const useMapStore = defineStore("map", {
 	state: () => ({
@@ -564,20 +565,28 @@ export const useMapStore = defineStore("map", {
 					type: "circle",
 					source: "isochrone-network-point-source",
 					paint: {
-						"circle-radius": 3,
-						"circle-color": "#ffffff",
+						"circle-radius": [
+							"match",
+							["get", "transit_type"],
+							"rail",
+							6,
+							"train",
+							6,
+							4, // bus / jumpfrog 小一點
+						],
+						"circle-color": ["get", "stroke"], // 直接用資料的顏色
 						"circle-stroke-width": 1.5,
-						"circle-stroke-color": colorMatch(NETWORK_COLORS),
+						"circle-stroke-color": "#ffffff",
 						"circle-opacity": 0.9,
 					},
 				});
 
 				// ── Popup ──────────────────────────────────────────────
 				const TRANSIT_LABEL = {
-					jumpfrog: "公車",
+					jumpfrog: "跳蛙公車",
 					bus: "公車",
 					rail: "捷運",
-					train: "台鐵",
+					train: "鐵路",
 				};
 
 				this.map.on("click", "isochrone-network-point", (e) => {
@@ -593,9 +602,10 @@ export const useMapStore = defineStore("map", {
 						.setLngLat(coords)
 						.setHTML(
 							`
-                <div style="padding:24px; font-size:13px; line-height:2">
+                <div style="padding:24px; font-size:13px; line-height:2; border-radius:12px;">
 					<strong>運輸工具 : ${TRANSIT_LABEL[props.transit_type]}</strong><br/>
                     <strong>站名 : ${props.stop_name}</strong><br/>
+					<strong>抵達時間 : ${parseArrivalTime(props.arrival_time)}</strong><br/>
                 </div>
             `,
 						)
@@ -1086,15 +1096,15 @@ export const useMapStore = defineStore("map", {
 			const layers = Object.keys(this.deckGlLayer).map((index) => {
 				const l = this.deckGlLayer[index];
 				switch (l.type) {
-				case "ArcLayer":
-					return new ArcLayer(l.config);
-				case "AnimatedArcLayer":
-					return new AnimatedArcLayer({
-						...l.config,
-						coef: this.step / 1000,
-					});
-				default:
-					break;
+					case "ArcLayer":
+						return new ArcLayer(l.config);
+					case "AnimatedArcLayer":
+						return new AnimatedArcLayer({
+							...l.config,
+							coef: this.step / 1000,
+						});
+					default:
+						break;
 				}
 			});
 			this.overlay.setProps({
