@@ -33,22 +33,24 @@ def _transfer(**kwargs):
                     SELECT dp_name AS name
                     FROM eoc_damage_case_tpe
                     WHERE data_time >= NOW() - INTERVAL '24 hours'
-                    AND ABS(EXTRACT(EPOCH FROM (data_time - report_send_time)) / 86400) <= 5
+                    AND ABS(EXTRACT(EPOCH FROM (data_time - COALESCE(report_send_time, dp_issue_date_time, data_time))) / 86400) <= 5
+                    AND dp_name NOT ILIKE '%測試%' AND dp_name NOT ILIKE '%test%'
                     UNION ALL
                     SELECT dpname AS name
                     FROM eoc_disaster_summary_tpe
                     WHERE data_time >= NOW() - INTERVAL '24 hours'
-                    AND ABS(EXTRACT(EPOCH FROM (data_time - case_time)) / 86400) <= 5
+                    AND ABS(EXTRACT(EPOCH FROM (data_time - COALESCE(case_time, data_time))) / 86400) <= 5
+                    AND dpname NOT ILIKE '%測試%' AND dpname NOT ILIKE '%test%'
                 ) t
         """)
         unique_names = [row[0] for row in connection.execute(names_sql).fetchall()]
-        dashboard_hook = PostgresHook(postgres_conn_id="dashboad-postgre")
+        dashboard_hook = PostgresHook(postgres_conn_id="dashboard-postgre")
 
         # 無資料：刪除關聯並結束
         if not unique_names:
             try:
                 # 刪除所有 disaster_sus_*_% 相關的 component、query_charts、component_charts、dashboard、dashboard_groups
-                dashboard_hook = PostgresHook(postgres_conn_id="dashboad-postgre")
+                dashboard_hook = PostgresHook(postgres_conn_id="dashboard-postgre")
                 status_keys = ["disaster_sus_water", "disaster_sus_power", "disaster_sus_tel", "disaster_sus_gas"]
                 for status_key in status_keys:
                     like_pattern = f"{status_key}_%"
@@ -306,6 +308,10 @@ def _transfer(**kwargs):
                 print(f"dashboard {pname} 已存在，跳出並結束排程")
                 continue
 
+            max_comp_id_records = dashboard_hook.get_records('SELECT MAX(id) FROM public.components;')
+            current_max_comp_id = max_comp_id_records[0][0] if max_comp_id_records and max_comp_id_records[0][0] is not None else 999
+            next_comp_id = max(999, current_max_comp_id)
+
             # 建立 component，status_mapping key + _pname 為 component index, status_mapping['label'] + _pname 為 component name
             for status_key, status_val in status_mapping.items():
                 comp_index = f"{status_key}_{pname}"
@@ -315,9 +321,10 @@ def _transfer(**kwargs):
                     parameters={'index': comp_index}
                 )
                 if not recs:
+                    next_comp_id += 1
                     dashboard_hook.run(
-                        'INSERT INTO public.components ("index", name) VALUES (%(index)s, %(name)s);',
-                        parameters={'index': comp_index, 'name': comp_name}
+                        'INSERT INTO public.components ("id", "index", name) VALUES (%(id)s, %(index)s, %(name)s);',
+                        parameters={'id': next_comp_id, 'index': comp_index, 'name': comp_name}
                     )
                 recs = dashboard_hook.get_records(
                     'SELECT id FROM public.components WHERE "index" = %(index)s;',
