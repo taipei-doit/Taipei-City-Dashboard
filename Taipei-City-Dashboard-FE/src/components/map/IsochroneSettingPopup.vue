@@ -17,20 +17,27 @@
         class="section current-params"
       >
         <div class="title">
-          目前等時圈設定
+          已建立等時圈設定參數
         </div>
         <div class="params-grid">
           <span class="param-label">座標</span>
           <span class="param-value">
-            經度：{{ currentParams.lng.toFixed(4) }}，
-            緯度：{{ currentParams.lat.toFixed(4) }}
+            經度：{{ currentParams.lng.toFixed(4) }}， 緯度：{{
+              currentParams.lat.toFixed(4)
+            }}
           </span>
           <span class="param-label">時間</span>
-          <span class="param-value">{{ formatDepartureTime(currentParams.departure_time) }}</span>
+          <span class="param-value">{{
+            formatDepartureTime(currentParams.departure_time)
+          }}</span>
           <span class="param-label">類型</span>
-          <span class="param-value">{{ currentParams.time_type }}、{{ currentParams.service_profile }}</span>
+          <span class="param-value">{{ currentParams.time_type }}、{{
+            currentParams.service_profile
+          }}</span>
           <span class="param-label">交通</span>
-          <span class="param-value">{{ formatModes(currentParams.modes) }}</span>
+          <span class="param-value">{{
+            formatModes(currentParams.modes)
+          }}</span>
           <span class="param-label">區間</span>
           <span class="param-value">15分鐘、30分鐘、45分鐘、60分鐘</span>
         </div>
@@ -84,22 +91,21 @@
                 :key="h"
                 :value="String(h).padStart(2, '0')"
               >
-                {{ h }} 時
+                {{ h }}
               </option>
             </select>
           </div>
           <span class="time-separator">:</span>
-          <div class="select-wrapper">
-            <select v-model="minute">
-              <option
-                v-for="i in 12"
-                :key="i"
-                :value="String((i - 1) * 5).padStart(2, '0')"
-              >
-                {{ String((i - 1) * 5).padStart(2, "0") }} 分
-              </option>
-            </select>
-          </div>
+          <!-- ▼ 分鐘改為 input -->
+          <input
+            v-model="minute"
+            type="number"
+            min="0"
+            max="59"
+            placeholder="分"
+            class="minute-input"
+            @blur="padMinute"
+          >
         </div>
       </div>
 
@@ -184,28 +190,45 @@ import LocationIcon from "../icons/LocationIcon.vue";
 // ── Constants ──────────────────────────────────────────────────────────────────
 
 const TRANSPORT_MAP = { 公車: "bus", 捷運: "rail", 鐵路: "train" };
-const MODE_LABEL    = { bus: "公車", rail: "捷運", train: "鐵路" };
+const MODE_LABEL = { bus: "公車", rail: "捷運", train: "鐵路" };
 const TRANSPORT_LABELS = Object.keys(TRANSPORT_MAP);
-const TIME_TYPES    = ["出發", "抵達"];
+const TIME_TYPES = ["出發", "抵達"];
 const SERVICE_TYPES = ["平日", "假日"];
-const CUTOFFS       = [900, 1800, 2700, 3600];
+const CUTOFFS = [900, 1800, 2700, 3600];
 
 // ── Store ──────────────────────────────────────────────────────────────────────
 
-const emit        = defineEmits(["close"]);
-const mapStore    = useMapStore();
+const emit = defineEmits(["close"]);
+const mapStore = useMapStore();
 const dialogStore = useDialogStore();
+
+// ── 取得目前時間作為預設值 ─────────────────────────────────────────────────────
+
+function getNowTimeParts() {
+	const now = new Date();
+	const h24 = now.getHours();
+	const min = now.getMinutes();
+	const period = h24 < 12 ? "AM" : "PM";
+	const h12 = h24 % 12 || 12;
+	return {
+		ampm: period,
+		hour12: String(h12).padStart(2, "0"),
+		minute: String(min).padStart(2, "0"),
+	};
+}
+
+const { ampm: initAmpm, hour12: initHour, minute: initMin } = getNowTimeParts();
 
 // ── Form state ─────────────────────────────────────────────────────────────────
 
-const lng         = ref("");
-const lat         = ref("");
-const ampm        = ref("AM");
-const hour12      = ref("12");
-const minute      = ref("00");
-const timeType    = ref("出發");
+const lng = ref("");
+const lat = ref("");
+const ampm = ref(initAmpm);
+const hour12 = ref(initHour);
+const minute = ref(initMin);
+const timeType = ref("出發");
 const serviceType = ref("平日");
-const transport   = ref(["公車"]);
+const transport = ref(["公車"]);
 
 const currentParams = computed(() => mapStore.isochroneParams);
 
@@ -220,8 +243,8 @@ function formatDepartureTime(iso) {
 	const h = (parseInt(hStr) + 8) % 24;
 	const m = mStr.replace(/\D/g, "").slice(0, 2);
 
-	if (h === 0)  return `上午 12:${m}`;
-	if (h < 12)   return `上午 ${h}:${m}`;
+	if (h === 0) return `上午 12:${m}`;
+	if (h < 12) return `上午 ${h}:${m}`;
 	if (h === 12) return `下午 12:${m}`;
 	return `下午 ${h - 12}:${m}`;
 }
@@ -234,11 +257,26 @@ function convertTo24h(hour, period) {
 }
 
 function buildDepartureTime(hour24, min) {
-	const now  = new Date();
+	const now = new Date();
 	const yyyy = now.getFullYear();
-	const mm   = String(now.getMonth() + 1).padStart(2, "0");
-	const dd   = String(now.getDate()).padStart(2, "0");
+	const mm = String(now.getMonth() + 1).padStart(2, "0");
+	const dd = String(now.getDate()).padStart(2, "0");
 	return new Date(`${yyyy}-${mm}-${dd}T${hour24}:${min}:00`).toISOString();
+}
+
+// ── 分鐘 blur 補零 & 範圍修正 ──────────────────────────────────────────────────
+
+function padMinute() {
+	const v = parseInt(minute.value);
+	if (isNaN(v) || v < 0) {
+		minute.value = "00";
+		return;
+	}
+	if (v > 59) {
+		minute.value = "59";
+		return;
+	}
+	minute.value = String(v).padStart(2, "0");
 }
 
 // ── Validation ─────────────────────────────────────────────────────────────────
@@ -250,6 +288,11 @@ function validateForm() {
 	}
 	if (!lat.value || isNaN(parseFloat(lat.value))) {
 		dialogStore.showNotification("fail", "請填寫有效的緯度 !");
+		return false;
+	}
+	const m = parseInt(minute.value);
+	if (isNaN(m) || m < 0 || m > 59) {
+		dialogStore.showNotification("fail", "請填寫有效的分鐘（0–59）!");
 		return false;
 	}
 	if (transport.value.length === 0) {
@@ -268,7 +311,10 @@ function handleCurrentLocation() {
 		lng.value = longitude;
 		lat.value = latitude;
 	} else {
-		dialogStore.showNotification("fail", "使用者位置取得失敗，請留意是否開啟瀏覽器位置權限 !");
+		dialogStore.showNotification(
+			"fail",
+			"使用者位置取得失敗，請留意是否開啟瀏覽器位置權限 !",
+		);
 	}
 }
 
@@ -281,17 +327,17 @@ function toggleTransport(mode) {
 async function createIsochrone() {
 	if (!validateForm()) return;
 
-	const hour24        = convertTo24h(hour12.value, ampm.value);
+	const hour24 = convertTo24h(hour12.value, ampm.value);
 	const departureTime = buildDepartureTime(hour24, minute.value);
 
 	const payload = {
-		lat:             parseFloat(lat.value),
-		lng:             parseFloat(lng.value),
-		time_type:       timeType.value,
-		departure_time:  departureTime,
+		lat: parseFloat(lat.value),
+		lng: parseFloat(lng.value),
+		time_type: timeType.value,
+		departure_time: departureTime,
 		service_profile: serviceType.value,
-		cutoffs:         CUTOFFS,
-		modes:           transport.value.map((m) => TRANSPORT_MAP[m]),
+		cutoffs: CUTOFFS,
+		modes: transport.value.map((m) => TRANSPORT_MAP[m]),
 	};
 
 	const res = await mapStore.setIsochroneLayer(payload);
@@ -309,25 +355,25 @@ function removeIsochrone() {
 
 <style scoped lang="scss">
 // ── Typography ─────────────────────────────────────────────────────────────────
-$fs-title:   1rem;
+$fs-title: 1rem;
 $fs-section: 0.8rem;
-$fs-body:    0.875rem;
-$fs-action:  0.95rem;
+$fs-body: 0.875rem;
+$fs-action: 0.95rem;
 
 $fw-normal: 400;
 $fw-medium: 500;
-$fw-bold:   600;
+$fw-bold: 600;
 
 // ── Colors ─────────────────────────────────────────────────────────────────────
-$bg-dark:   #2b2c2e;
+$bg-dark: #2b2c2e;
 $bg-darker: #1e1e1e;
 $bg-header: #3a3b3d;
-$border:    #555;
+$border: #555;
 $border-in: #444;
-$accent:    #4ba3e3;
+$accent: #4ba3e3;
 $accent-dk: #2f7fd1;
-$text:      #eee;
-$text-muted:#aaa;
+$text: #eee;
+$text-muted: #aaa;
 
 // ── Root ───────────────────────────────────────────────────────────────────────
 .mapcontainer-isochrone {
@@ -374,7 +420,9 @@ $text-muted:#aaa;
 	color: $text-muted;
 	cursor: pointer;
 
-	&:hover { color: $text; }
+	&:hover {
+		color: $text;
+	}
 }
 
 // ── Content ────────────────────────────────────────────────────────────────────
@@ -404,8 +452,15 @@ $text-muted:#aaa;
 	align-items: center;
 }
 
-.location-row  { @extend .row; }
-.time-select-row { display: flex; align-items: center; gap: 6px; }
+.location-row {
+	@extend .row;
+}
+.time-select-row {
+	display: flex;
+	flex: 1;
+	align-items: center;
+	gap: 6px;
+}
 
 .time-separator {
 	color: $text-muted;
@@ -426,7 +481,9 @@ $text-muted:#aaa;
 	border: unset;
 	cursor: pointer;
 
-	&:hover { color: $accent; }
+	&:hover {
+		color: $accent;
+	}
 
 	:deep(svg) {
 		width: 18px;
@@ -466,7 +523,24 @@ select {
 	appearance: none;
 	-webkit-appearance: none;
 
-	&::placeholder { color: $text-muted; }
+	&::placeholder {
+		color: $text-muted;
+	}
+}
+
+// ── 分鐘輸入框 ─────────────────────────────────────────────────────────────────
+.minute-input {
+	flex: 1;
+	min-width: 0;
+	text-align: center;
+	padding: 0 6px;
+
+	// 隱藏 number input 的上下箭頭
+	&::-webkit-inner-spin-button,
+	&::-webkit-outer-spin-button {
+		appearance: none;
+	}
+	-moz-appearance: textfield;
 }
 
 // ── Toggle buttons ─────────────────────────────────────────────────────────────
@@ -486,10 +560,19 @@ button {
 	font-size: $fs-body;
 	font-weight: $fw-medium;
 	cursor: pointer;
-	transition: background 0.2s, color 0.2s, border-color 0.2s;
+	transition:
+		background 0.2s,
+		color 0.2s,
+		border-color 0.2s;
 
-	&:hover  { background: #444; color: $text; }
-	&.active { border-color: $accent; color: $text; }
+	&:hover {
+		background: #444;
+		color: $text;
+	}
+	&.active {
+		border-color: $accent;
+		color: $text;
+	}
 }
 
 // ── Action section ─────────────────────────────────────────────────────────────
@@ -514,10 +597,18 @@ button.primary {
 	color: white;
 	background: linear-gradient(135deg, $accent, $accent-dk);
 	box-shadow: 0 6px 14px rgba(75, 163, 227, 0.35);
-	transition: transform 0.15s, filter 0.15s, box-shadow 0.15s;
+	transition:
+		transform 0.15s,
+		filter 0.15s,
+		box-shadow 0.15s;
 
-	&:hover  { filter: brightness(0.8); }
-	&:active { transform: translateY(0); box-shadow: 0 3px 8px rgba(75, 163, 227, 0.25); }
+	&:hover {
+		filter: brightness(0.8);
+	}
+	&:active {
+		transform: translateY(0);
+		box-shadow: 0 3px 8px rgba(75, 163, 227, 0.25);
+	}
 }
 
 button.danger {
@@ -532,8 +623,12 @@ button.danger {
 	cursor: pointer;
 	transition: filter 0.15s;
 
-	&:hover  { filter: brightness(0.8); }
-	&:active { filter: brightness(0.65); }
+	&:hover {
+		filter: brightness(0.8);
+	}
+	&:active {
+		filter: brightness(0.65);
+	}
 }
 
 // ── Current params block ───────────────────────────────────────────────────────

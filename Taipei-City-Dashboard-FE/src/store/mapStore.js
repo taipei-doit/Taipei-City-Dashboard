@@ -99,6 +99,7 @@ export const useMapStore = defineStore("map", {
 		_onStart: null,
 		_onStop: null,
 		isochroneParams: null,
+		isochronePopup: null,
 	}),
 	actions: {
 		/* Initialize Mapbox */
@@ -570,6 +571,43 @@ export const useMapStore = defineStore("map", {
 						"circle-opacity": 0.9,
 					},
 				});
+
+				// ── Popup ──────────────────────────────────────────────
+				const TRANSIT_LABEL = {
+					jumpfrog: "公車",
+					bus: "公車",
+					rail: "捷運",
+					train: "台鐵",
+				};
+
+				this.map.on("click", "isochrone-network-point", (e) => {
+					const props = e.features[0].properties;
+					const coords = e.features[0].geometry.coordinates.slice();
+
+					if (this.isochronePopup) this.isochronePopup.remove();
+
+					this.isochronePopup = new mapboxGl.Popup({
+						closeButton: true,
+						maxWidth: "220px",
+					})
+						.setLngLat(coords)
+						.setHTML(
+							`
+                <div style="padding:24px; font-size:13px; line-height:2">
+					<strong>運輸工具 : ${TRANSIT_LABEL[props.transit_type]}</strong><br/>
+                    <strong>站名 : ${props.stop_name}</strong><br/>
+                </div>
+            `,
+						)
+						.addTo(this.map);
+				});
+
+				this.map.on("mouseenter", "isochrone-network-point", () => {
+					this.map.getCanvas().style.cursor = "pointer";
+				});
+				this.map.on("mouseleave", "isochrone-network-point", () => {
+					this.map.getCanvas().style.cursor = "";
+				});
 			}
 
 			// ── 使用者點位（大白圈 + 亮黃實心，最顯眼） ─────────────
@@ -657,6 +695,10 @@ export const useMapStore = defineStore("map", {
 				if (this.map.getSource(id)) this.map.removeSource(id);
 			});
 			this.isochroneParams = null;
+			if (this.isochronePopup) {
+				this.isochronePopup.remove();
+				this.isochronePopup = null;
+			}
 		},
 		/* Adding Map Layers */
 		// 1. Passes in the map_config (an Array of Objects) of a component and adds all layers to the map layer list
