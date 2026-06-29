@@ -105,8 +105,8 @@ export const useWindEngine = (options = {}) => {
 
 		// 找不到鄰近站點，保持靜止
 		if (totalW === 0) {
-            return { dir: 0, speed: 0 };
-        }
+			return { dir: 0, speed: 0 };
+		}
 
 		const dir =
 			((Math.atan2(wSin / totalW, wCos / totalW) * 180) / Math.PI + 360) %
@@ -560,7 +560,7 @@ export const useWindEngine = (options = {}) => {
 			// 每顆粒子取得本地（或全域）風向向量
 			const { vx, vy, angle } = getParticleVector(p.lng, p.lat);
 
-            if (vx === 0 && vy === 0) continue;
+			if (vx === 0 && vy === 0) continue;
 
 			const rawLng = p.lng + vx * DT;
 			const rawLat = p.lat + vy * DT;

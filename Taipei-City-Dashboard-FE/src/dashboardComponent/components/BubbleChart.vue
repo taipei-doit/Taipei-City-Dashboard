@@ -92,6 +92,38 @@ onBeforeUnmount(() => {
 	window.removeEventListener("blur", onWindowLeave);
 });
 
+// ── 自動判斷 X 軸型別 ──────────────────────────────────────────
+const allX = props.series.flatMap((s) => s.data.map((d) => d.x));
+const allY = props.series.flatMap((s) => s.data.map((d) => d.y));
+
+const firstX = allX[0];
+const isDatetime =
+	(typeof firstX === "string" && /^\d{4}-\d{2}-\d{2}/.test(firstX)) ||
+	(typeof firstX === "number" && firstX > 1_000_000_000_000);
+
+function formatXForTooltip(val) {
+	if (!isDatetime) return val;
+	const d = new Date(val);
+	const yyyy = d.getUTCFullYear();
+	const MM = String(d.getUTCMonth() + 1).padStart(2, "0");
+	const dd = String(d.getUTCDate()).padStart(2, "0");
+	const hh = String(d.getUTCHours()).padStart(2, "0");
+	const mm = String(d.getUTCMinutes()).padStart(2, "0");
+	const ss = String(d.getUTCSeconds()).padStart(2, "0");
+	return `${yyyy}-${MM}-${dd} ${hh}:${mm}:${ss}`;
+}
+// ──────────────────────────────────────────────────────────────
+
+const processedSeries = isDatetime
+	? props.series
+	: props.series.map((s) => ({
+		...s,
+		data: s.data.map((d) => ({
+			...d,
+			x: Number(d.x),
+		})),
+	}));
+
 const chartOptions = ref({
 	chart: {
 		type: "bubble",
@@ -140,11 +172,13 @@ const chartOptions = ref({
 	xaxis: {
 		axisBorder: { show: true, color: "#666", height: 1 },
 		axisTicks: { show: false },
-		type: "numeric",
+		type: isDatetime ? "datetime" : "numeric",
 		tickAmount: 5,
 		labels: {
 			offsetY: 2,
-			formatter: (val) => Number(val).toLocaleString(),
+			formatter: isDatetime
+				? undefined
+				: (val) => Number(val).toLocaleString(),
 		},
 	},
 
@@ -157,13 +191,22 @@ const chartOptions = ref({
 	},
 });
 
-const allX = props.series.flatMap((s) => s.data.map((d) => d.x));
-const allY = props.series.flatMap((s) => s.data.map((d) => d.y));
+// ── 依型別設定 min / max ───────────────────────────────────────
+if (isDatetime) {
+	const allXms = allX.map((x) => new Date(x).getTime()); // 字串 → ms
+	const minX = Math.min(...allXms);
+	const maxX = Math.max(...allXms);
+	const padding = (maxX - minX) * 0.1 || 86_400_000;
+	chartOptions.value.xaxis.min = minX - padding;
+	chartOptions.value.xaxis.max = maxX + padding;
+} else {
+	chartOptions.value.xaxis.min = Math.min(...allX) * 0.9;
+	chartOptions.value.xaxis.max = Math.max(...allX) * 1.1;
+}
 
-chartOptions.value.xaxis.min = Math.min(...allX) * 0.9;
-chartOptions.value.xaxis.max = Math.max(...allX) * 1.1;
 chartOptions.value.yaxis.min = Math.min(...allY) * 0.9;
 chartOptions.value.yaxis.max = Math.max(...allY) * 1.1;
+// ──────────────────────────────────────────────────────────────
 
 const selectedIndex = ref(null);
 
@@ -215,7 +258,7 @@ function handleDataSelection(_e, _chartContext, config) {
       width="100%"
       height="100%"
       :options="chartOptions"
-      :series="props.series"
+      :series="processedSeries"
       @data-point-selection="handleDataSelection"
     />
 
@@ -234,7 +277,9 @@ function handleDataSelection(_e, _chartContext, config) {
       >
         <h6>{{ tooltip.name }}</h6>
         <div>
-          {{ tooltip.categories[0] ?? "X" }}：{{ tooltip.point.x }}
+          {{ tooltip.categories[0] ?? "X" }}：{{
+            formatXForTooltip(tooltip.point.x)
+          }}
           {{ parsedUnit?.x ?? "" }}
         </div>
         <div>
