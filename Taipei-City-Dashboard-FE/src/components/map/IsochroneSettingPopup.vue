@@ -30,10 +30,20 @@
 					<span class="param-value">{{
 						formatModes(currentParams.modes)
 					}}</span>
-					<span class="param-label">區間</span>
-					<span class="param-value"
-						>15分鐘、30分鐘、45分鐘、60分鐘</span
-					>
+					<!-- <span class="param-label">區間</span>
+					<span class="param-value">
+						等時圈以 15 / 30 / 45 / 60
+						分鐘分層，由內向外逐層擴展（每 15 分鐘一圈）
+					</span> -->
+				</div>
+			</div>
+
+			<!-- 說明區塊 -->
+			<div class="section description">
+				<div class="title">等時圈顯示說明</div>
+				<div class="desc-box">
+					等時圈會以 15 / 30 / 45 / 60
+					分鐘為分層，由內向外逐層擴展，呈現從指定位置出發（或抵達）所能涵蓋的可達範圍。除了時間與距離範圍外，也會結合實際路網（公車、捷運、鐵路等）與步行轉乘，標示可達的交通站點。
 				</div>
 			</div>
 
@@ -627,5 +637,17 @@ button.danger {
 	font-size: 0.8rem;
 	color: $text;
 	word-break: break-all;
+}
+
+.description {
+	.desc-box {
+		font-size: 0.78rem;
+		line-height: 1.5;
+		color: $text-muted;
+		background: rgba(255, 255, 255, 0.04);
+		border: 1px solid rgba(255, 255, 255, 0.08);
+		padding: 10px;
+		border-radius: 6px;
+	}
 }
 </style>
