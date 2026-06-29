@@ -605,7 +605,7 @@ export const useMapStore = defineStore("map", {
                 <div style="padding:24px; font-size:13px; line-height:2; border-radius:12px;">
 					<strong>運輸工具 : ${TRANSIT_LABEL[props.transit_type]}</strong><br/>
                     <strong>站名 : ${props.stop_name}</strong><br/>
-					<strong>抵達時間 : ${parseArrivalTime(props.arrival_time)}</strong><br/>
+					<strong>抵達時間 : ${parseArrivalTime(props.arrival_time, props.time_type, submitObject.arrival_time)}</strong><br/>
                 </div>
             `,
 						)

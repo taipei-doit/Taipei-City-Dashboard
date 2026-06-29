@@ -1,165 +1,203 @@
 <template>
-	<div class="mapcontainer-isochrone">
-		<div class="mapcontainer-isochrone-header">
-			<h3>等時圈設定</h3>
-			<button class="close-btn" @click="$emit('close')">✕</button>
-		</div>
+  <div class="mapcontainer-isochrone">
+    <div class="mapcontainer-isochrone-header">
+      <h3>等時圈設定</h3>
+      <button
+        class="close-btn"
+        @click="$emit('close')"
+      >
+        ✕
+      </button>
+    </div>
 
-		<div class="mapcontainer-isochrone-content">
-			<!-- 目前等時圈資訊 -->
-			<div v-if="currentParams" class="section current-params">
-				<div class="title">目前等時圈設定</div>
-				<div class="params-grid">
-					<span class="param-label">座標</span>
-					<span class="param-value">
-						經度：{{ currentParams.lng.toFixed(4) }}， 緯度：{{
-							currentParams.lat.toFixed(4)
-						}}
-					</span>
-					<span class="param-label">時間</span>
-					<span class="param-value">{{
-						formatDepartureTime(currentParams.departure_time)
-					}}</span>
-					<span class="param-label">類型</span>
-					<span class="param-value"
-						>{{ currentParams.time_type }}、{{
-							currentParams.service_profile
-						}}</span
-					>
-					<span class="param-label">交通</span>
-					<span class="param-value">{{
-						formatModes(currentParams.modes)
-					}}</span>
-					<!-- <span class="param-label">區間</span>
+    <div class="mapcontainer-isochrone-content">
+      <!-- 目前等時圈資訊 -->
+      <div
+        v-if="currentParams"
+        class="section current-params"
+      >
+        <div class="title">
+          目前等時圈設定
+        </div>
+        <div class="params-grid">
+          <span class="param-label">座標</span>
+          <span class="param-value">
+            經度：{{ currentParams.lng.toFixed(4) }}， 緯度：{{
+              currentParams.lat.toFixed(4)
+            }}
+          </span>
+          <span class="param-label">時間</span>
+          <span class="param-value">
+            {{
+              formatDepartureTime(
+                currentParams.arrival_time ||
+                  currentParams.departure_time,
+              )
+            }}</span>
+          <span class="param-label">類型</span>
+          <span class="param-value">
+            {{ TIME_TYPE_LABEL[currentParams.time_type] }}、
+            {{ currentParams.service_profile }}
+          </span>
+          <span class="param-label">交通</span>
+          <span class="param-value">{{
+            formatModes(currentParams.modes)
+          }}</span>
+          <!-- <span class="param-label">區間</span>
 					<span class="param-value">
 						等時圈以 15 / 30 / 45 / 60
 						分鐘分層，由內向外逐層擴展（每 15 分鐘一圈）
 					</span> -->
-				</div>
-			</div>
+        </div>
+      </div>
 
-			<!-- 說明區塊 -->
-			<div class="section description">
-				<div class="title">等時圈顯示說明</div>
-				<div class="desc-box">
-					等時圈會以 15 / 30 / 45 / 60
-					分鐘為分層，由內向外逐層擴展，呈現從指定位置出發（或抵達）所能涵蓋的可達範圍。除了時間與距離範圍外，也會結合實際路網（公車、捷運、鐵路等）與步行轉乘，標示可達的交通站點。
-				</div>
-			</div>
+      <!-- 說明區塊 -->
+      <div class="section description">
+        <div class="title">
+          等時圈顯示說明
+        </div>
+        <div class="desc-box">
+          等時圈會以 15 / 30 / 45 / 60
+          分鐘為分層，由內向外逐層擴展，呈現從指定位置出發（或抵達）所能涵蓋的可達範圍。除了時間與距離範圍外，也會結合實際路網（公車、捷運、鐵路等）與步行轉乘，標示可達的交通站點。
+        </div>
+      </div>
 
-			<!-- 位置 -->
-			<div class="section">
-				<div class="title">位置</div>
-				<div class="row location-row">
-					<input
-						v-model="lng"
-						type="text"
-						placeholder="經度 ( 如 121.5637758 )"
-					/>
-					<input
-						v-model="lat"
-						type="text"
-						placeholder="緯度 ( 如 25.0374971 )"
-					/>
-					<button class="icon-wrapper" @click="handleCurrentLocation">
-						<LocationIcon />
-					</button>
-				</div>
-			</div>
+      <!-- 位置 -->
+      <div class="section">
+        <div class="title">
+          位置
+        </div>
+        <div class="row location-row">
+          <input
+            v-model="lng"
+            type="text"
+            placeholder="經度 ( 如 121.5637758 )"
+          >
+          <input
+            v-model="lat"
+            type="text"
+            placeholder="緯度 ( 如 25.0374971 )"
+          >
+          <button
+            class="icon-wrapper"
+            @click="handleCurrentLocation"
+          >
+            <LocationIcon />
+          </button>
+        </div>
+      </div>
 
-			<!-- 時間 -->
-			<div class="section">
-				<div class="title">時間</div>
-				<div class="row time-select-row">
-					<div class="select-wrapper">
-						<select v-model="ampm">
-							<option value="AM">上午</option>
-							<option value="PM">下午</option>
-						</select>
-					</div>
-					<div class="select-wrapper">
-						<select v-model="hour12">
-							<option
-								v-for="h in 12"
-								:key="h"
-								:value="String(h).padStart(2, '0')"
-							>
-								{{ String(h).padStart(2, "0") }}
-							</option>
-						</select>
-					</div>
-					<span class="time-separator">:</span>
-					<!-- ▼ 分鐘改為 input -->
-					<input
-						v-model="minute"
-						type="number"
-						min="0"
-						max="59"
-						placeholder="分"
-						class="minute-input"
-						@blur="padMinute"
-					/>
-				</div>
-			</div>
+      <!-- 時間 -->
+      <div class="section">
+        <div class="title">
+          時間
+        </div>
+        <div class="row time-select-row">
+          <div class="select-wrapper">
+            <select v-model="ampm">
+              <option value="AM">
+                上午
+              </option>
+              <option value="PM">
+                下午
+              </option>
+            </select>
+          </div>
+          <div class="select-wrapper">
+            <select v-model="hour12">
+              <option
+                v-for="h in 12"
+                :key="h"
+                :value="String(h).padStart(2, '0')"
+              >
+                {{ String(h).padStart(2, "0") }}
+              </option>
+            </select>
+          </div>
+          <span class="time-separator">:</span>
+          <!-- ▼ 分鐘改為 input -->
+          <input
+            v-model="minute"
+            type="number"
+            min="0"
+            max="59"
+            placeholder="分"
+            class="minute-input"
+            @blur="padMinute"
+          >
+        </div>
+      </div>
 
-			<!-- 時間類型 -->
-			<div class="section">
-				<div class="title">時間類型</div>
-				<div class="btn-row">
-					<button
-						v-for="t in TIME_TYPES"
-						:key="t"
-						:class="{ active: timeType === t }"
-						@click="timeType = t"
-					>
-						{{ t }}
-					</button>
-				</div>
-			</div>
+      <!-- 時間類型 -->
+      <div class="section">
+        <div class="title">
+          時間類型
+        </div>
+        <div class="btn-row">
+          <button
+            v-for="t in TIME_TYPES"
+            :key="t"
+            :class="{ active: timeType === t }"
+            @click="timeType = t"
+          >
+            {{ t }}
+          </button>
+        </div>
+      </div>
 
-			<!-- 服務日型 -->
-			<div class="section">
-				<div class="title">服務日型</div>
-				<div class="btn-row">
-					<button
-						v-for="s in SERVICE_TYPES"
-						:key="s"
-						:class="{ active: serviceType === s }"
-						@click="serviceType = s"
-					>
-						{{ s }}
-					</button>
-				</div>
-			</div>
+      <!-- 服務日型 -->
+      <div class="section">
+        <div class="title">
+          服務日型
+        </div>
+        <div class="btn-row">
+          <button
+            v-for="s in SERVICE_TYPES"
+            :key="s"
+            :class="{ active: serviceType === s }"
+            @click="serviceType = s"
+          >
+            {{ s }}
+          </button>
+        </div>
+      </div>
 
-			<!-- 交通模式 -->
-			<div class="section">
-				<div class="title">交通模式</div>
-				<div class="btn-row">
-					<button
-						v-for="m in TRANSPORT_LABELS"
-						:key="m"
-						:class="{ active: transport.includes(m) }"
-						@click="toggleTransport(m)"
-					>
-						{{ m }}
-					</button>
-				</div>
-			</div>
+      <!-- 交通模式 -->
+      <div class="section">
+        <div class="title">
+          交通模式
+        </div>
+        <div class="btn-row">
+          <button
+            v-for="m in TRANSPORT_LABELS"
+            :key="m"
+            :class="{ active: transport.includes(m) }"
+            @click="toggleTransport(m)"
+          >
+            {{ m }}
+          </button>
+        </div>
+      </div>
 
-			<!-- 操作 -->
-			<div class="section action">
-				<div class="action-row">
-					<button class="primary" @click="createIsochrone">
-						建立等時圈
-					</button>
-					<button class="danger" @click="removeIsochrone">
-						清除
-					</button>
-				</div>
-			</div>
-		</div>
-	</div>
+      <!-- 操作 -->
+      <div class="section action">
+        <div class="action-row">
+          <button
+            class="primary"
+            @click="createIsochrone"
+          >
+            建立等時圈
+          </button>
+          <button
+            class="danger"
+            @click="removeIsochrone"
+          >
+            清除
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup>
@@ -172,6 +210,10 @@ import LocationIcon from "../icons/LocationIcon.vue";
 
 const TRANSPORT_MAP = { 公車: "bus", 捷運: "rail", 鐵路: "train" };
 const MODE_LABEL = { bus: "公車", rail: "捷運", train: "鐵路" };
+const TIME_TYPE_LABEL = {
+	departure: "出發",
+	arrival: "抵達",
+};
 const TRANSPORT_LABELS = Object.keys(TRANSPORT_MAP);
 const TIME_TYPES = ["出發", "抵達"];
 const SERVICE_TYPES = ["平日", "假日"];
@@ -210,6 +252,7 @@ const minute = ref(initMin);
 const timeType = ref("出發");
 const serviceType = ref("平日");
 const transport = ref(["公車"]);
+const isDeparture = computed(() => timeType.value === "出發");
 
 const currentParams = computed(() => mapStore.isochroneParams);
 
@@ -314,8 +357,9 @@ async function createIsochrone() {
 	const payload = {
 		lat: parseFloat(lat.value),
 		lng: parseFloat(lng.value),
-		time_type: timeType.value,
-		departure_time: departureTime,
+		time_type: isDeparture.value ? "departure" : "arrival",
+		departure_time: isDeparture.value ? departureTime : null,
+		arrival_time: !isDeparture.value ? departureTime : null,
 		service_profile: serviceType.value,
 		cutoffs: CUTOFFS,
 		modes: transport.value.map((m) => TRANSPORT_MAP[m]),
