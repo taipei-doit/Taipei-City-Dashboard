@@ -79,7 +79,9 @@ frontend:
 # Backend configuration
 backend:
   enabled: true
-  replicaCount: 2
+  # SIT 單節點放不下 2 個 isochrone build(每個啟動 peak ~6GB);固定 1 replica。
+  # 待 backend init 修好(接回 Redis 快取/丟 stop_times)可還原成 2。
+  replicaCount: 1
   updateStrategy:
     type: RollingUpdate
     rollingUpdate:
@@ -101,7 +103,9 @@ backend:
   resources:
     limits:
       cpu: 1500m
-      memory: 4Gi
+      # #1323 isochrone InitService 啟動時重建整張雙北 RAPTOR,peak ~6GB;4Gi 會 OOMKill。
+      # 暫拉到 8Gi,待 backend init 修好(接回 Redis 快取/丟 stop_times)再降回 4Gi。
+      memory: 8Gi
     requests:
       cpu: 500m
       memory: 1.5Gi
@@ -249,7 +253,9 @@ ingress: {}
 autoscaling:
   enabled: true
   minReplicas: 1
-  maxReplicas: 2
+  # backend+frontend HPA 共用此值。backend 的 ~6GB isochrone build 讓 2 replica 塞不下
+  # 單一 SIT 節點,暫 cap 為 1(frontend 很輕,1 replica 在 SIT 也夠)。
+  maxReplicas: 1
   targetCPUUtilizationPercentage: 80
   targetMemoryUtilizationPercentage: 80
 
