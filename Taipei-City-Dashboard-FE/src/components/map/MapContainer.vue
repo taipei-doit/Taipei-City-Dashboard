@@ -15,6 +15,8 @@ import MobileLayers from "../dialogs/MobileLayers.vue";
 import IncidentReport from "../dialogs/IncidentReport.vue";
 import FindClosestPoint from "../dialogs/FindClosestPoint.vue";
 import { savedLocations } from "../../assets/configs/mapbox/savedLocations.js";
+import Isochrone from "../icons/Isochrone.vue";
+import IsochroneSettingPopup from "./IsochroneSettingPopup.vue";
 
 const authStore = useAuthStore();
 const mapStore = useMapStore();
@@ -27,6 +29,7 @@ useWindEngine();
 
 const districtLayer = ref(false);
 const villageLayer = ref(false);
+const isoMenu = ref(false);
 
 const canUseFindClosestPoint = computed(() => {
 	let pointLayerCount = 0;
@@ -44,165 +47,178 @@ function toggleDistrictLayer() {
 	districtLayer.value = !districtLayer.value;
 	mapStore.toggleDistrictBoundaries(districtLayer.value);
 	// 載入區界時觸發GA自訂事件
-	gtag('event','map_actions', {
+	gtag("event", "map_actions", {
 		action_type: "載入區界",
 		time: Date.now(),
-  	})
+	});
 }
 
 function toggleVillageLayer() {
 	villageLayer.value = !villageLayer.value;
 	mapStore.toggleVillageBoundaries(villageLayer.value);
 	// 載入里界時觸發GA自訂事件
-	gtag('event','map_actions', {
+	gtag("event", "map_actions", {
 		action_type: "載入里界",
 		time: Date.now(),
-  	})
+	});
+}
+
+function toggleIsochroneSettings() {
+	isoMenu.value = !isoMenu.value;
 }
 
 // 尋找最近點時觸發GA自訂事件
 function findClosestPointGA() {
-	gtag('event','map_actions', {
+	gtag("event", "map_actions", {
 		action_type: "尋找最近點",
 		time: Date.now(),
-  	})
+	});
 }
 
 watch(
 	() => route.query?.city,
 	(newValue) => {
-		newValue 
+		newValue
 			? mapStore.updateMapViewForCity(newValue)
-			: mapStore.updateMapViewForCity('default');
-	}
+			: mapStore.updateMapViewForCity("default");
+	},
 );
 
 onMounted(() => {
 	mapStore.initializeMapBox();
 	mapStore.setCurrentLocation();
-	route.query.city 
+	route.query.city
 		? mapStore.updateMapViewForCity(route.query.city)
-		: mapStore.updateMapViewForCity('default');
+		: mapStore.updateMapViewForCity("default");
 });
 </script>
 
 <template>
-  <div class="mapcontainer">
-    <div class="mapcontainer-map">
-      <!-- #mapboxBox needs to be empty to ensure Mapbox performance -->
-      <div id="mapboxBox" />
-      <div class="mapcontainer-layers">
-        <button
-          :style="{
-            color: districtLayer
-              ? 'var(--color-highlight)'
-              : 'var(--color-component-background)',
-          }"
-          @click="toggleDistrictLayer"
-        >
-          區
-        </button>
-        <button
-          :style="{
-            color: villageLayer
-              ? 'var(--color-highlight)'
-              : 'var(--color-component-background)',
-          }"
-          @click="toggleVillageLayer"
-        >
-          里
-        </button>
+	<div class="mapcontainer">
+		<div class="mapcontainer-map">
+			<!-- #mapboxBox needs to be empty to ensure Mapbox performance -->
+			<div id="mapboxBox" />
+			<div class="mapcontainer-layers">
+				<button
+					:style="{
+						color: districtLayer
+							? 'var(--color-highlight)'
+							: 'var(--color-component-background)',
+					}"
+					@click="toggleDistrictLayer"
+				>
+					區
+				</button>
+				<button
+					:style="{
+						color: villageLayer
+							? 'var(--color-highlight)'
+							: 'var(--color-component-background)',
+					}"
+					@click="toggleVillageLayer"
+				>
+					里
+				</button>
+				<button class="isochrone-btn" @click="toggleIsochroneSettings">
+					<Isochrone />
+				</button>
+				<button
+					v-if="canUseFindClosestPoint"
+					:style="{
+						color: villageLayer
+							? 'var(--color-highlight)'
+							: 'var(--color-component-background)',
+					}"
+					class="hide-if-mobile"
+					type="button"
+					@click="
+						dialogStore.showDialog('findClosestPoint');
+						findClosestPointGA();
+					"
+				>
+					近
+				</button>
+				<button
+					class="show-if-mobile"
+					@click="dialogStore.showDialog('mobileLayers')"
+				>
+					<span>layers</span>
+				</button>
+				<div
+					v-if="mapStore.loadingLayers.length > 0"
+					class="mapcontainer-layers-loading"
+				>
+					<div />
+				</div>
+			</div>
 
-        <button
-          v-if="canUseFindClosestPoint"
-          :style="{
-            color: villageLayer
-              ? 'var(--color-highlight)'
-              : 'var(--color-component-background)',
-          }"
-          class="hide-if-mobile"
-          type="button"
-          @click="dialogStore.showDialog('findClosestPoint'); findClosestPointGA();"
-        >
-          近
-        </button>
-        <button
-          class="show-if-mobile"
-          @click="dialogStore.showDialog('mobileLayers')"
-        >
-          <span>layers</span>
-        </button>
-        <div
-          v-if="mapStore.loadingLayers.length > 0"
-          class="mapcontainer-layers-loading"
-        >
-          <div />
-        </div>
-      </div>
+			<button
+				v-if="authStore.user.is_admin"
+				class="mapcontainer-layers-incident"
+				title="通報災害"
+				@click="dialogStore.showDialog('incidentReport')"
+			>
+				!</button
+			><!-- The key prop informs vue that the component should be updated when switching dashboards -->
+			<MobileLayers :key="contentStore.currentDashboard.index" />
+			<IncidentReport />
+			<FindClosestPoint />
+		</div>
 
-      <button
-        v-if="authStore.user.is_admin"
-        class="mapcontainer-layers-incident"
-        title="通報災害"
-        @click="dialogStore.showDialog('incidentReport')"
-      >
-        !
-      </button><!-- The key prop informs vue that the component should be updated when switching dashboards -->
-      <MobileLayers :key="contentStore.currentDashboard.index" />
-      <IncidentReport />
-      <FindClosestPoint />
-    </div>
+		<!-- 等時圈設定介面 -->
+		<IsochroneSettingPopup
+			class="isochrone-setting"
+			v-if="isoMenu"
+			@close="toggleIsochroneSettings"
+		/>
 
-    <div class="mapcontainer-controls hide-if-mobile">
-      <button
-        @click="
-          mapStore.easeToLocation([
-            [121.536609, 25.044808],
-            12.5,
-            0,
-            0,
-          ])
-        "
-      >
-        返回預設
-      </button>
-      <template v-if="!authStore.user?.user_id">
-        <div
-          v-for="(item, index) in savedLocations"
-          :key="`${item[4]}-${index}`"
-        >
-          <button @click="mapStore.easeToLocation(item)">
-            {{ item[4] }}
-          </button>
-        </div>
-      </template>
-      <div
-        v-for="(item, index) in mapStore.viewPoints"
-        :key="index"
-      >
-        <button
-          v-if="item.point_type === 'view'"
-          @click="mapStore.easeToLocation(item)"
-        >
-          {{ item["name"] }}
-        </button>
-        <div
-          v-if="authStore.user?.user_id"
-          class="mapcontainer-controls-delete"
-          @click="mapStore.removeViewPoint(item)"
-        >
-          <span>delete</span>
-        </div>
-      </div>
-      <button
-        v-if="authStore.user?.user_id"
-        @click="dialogStore.showDialog('addViewPoint')"
-      >
-        新增
-      </button>
-    </div>
-  </div>
-  <AddViewPoint name="addViewPoint" />
+		<div class="mapcontainer-controls hide-if-mobile">
+			<button
+				@click="
+					mapStore.easeToLocation([
+						[121.536609, 25.044808],
+						12.5,
+						0,
+						0,
+					])
+				"
+			>
+				返回預設
+			</button>
+			<template v-if="!authStore.user?.user_id">
+				<div
+					v-for="(item, index) in savedLocations"
+					:key="`${item[4]}-${index}`"
+				>
+					<button @click="mapStore.easeToLocation(item)">
+						{{ item[4] }}
+					</button>
+				</div>
+			</template>
+			<div v-for="(item, index) in mapStore.viewPoints" :key="index">
+				<button
+					v-if="item.point_type === 'view'"
+					@click="mapStore.easeToLocation(item)"
+				>
+					{{ item["name"] }}
+				</button>
+				<div
+					v-if="authStore.user?.user_id"
+					class="mapcontainer-controls-delete"
+					@click="mapStore.removeViewPoint(item)"
+				>
+					<span>delete</span>
+				</div>
+			</div>
+			<button
+				v-if="authStore.user?.user_id"
+				@click="dialogStore.showDialog('addViewPoint')"
+			>
+				新增
+			</button>
+		</div>
+	</div>
+	<AddViewPoint name="addViewPoint" />
 </template>
 
 <style scoped lang="scss">
@@ -318,6 +334,12 @@ onMounted(() => {
 			transition: color 0.2s;
 		}
 
+		.isochrone-btn {
+			@media (max-width: 600px) {
+				display: none;
+			}
+		}
+
 		span {
 			color: var(--color-component-background);
 			font-size: 1.2rem;
@@ -356,13 +378,21 @@ onMounted(() => {
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			transition: background-color 0.2s, color 0.2s;
+			transition:
+				background-color 0.2s,
+				color 0.2s;
 			font-size: var(--font-xl);
 
 			&:hover {
 				background-color: var(--color-highlight);
 			}
 		}
+	}
+}
+
+.isochrone-setting {
+	@media (max-width: 600px) {
+		display: none;
 	}
 }
 

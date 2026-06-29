@@ -98,6 +98,7 @@ export const useMapStore = defineStore("map", {
 		windHeatMapSource: {},
 		_onStart: null,
 		_onStop: null,
+		isochroneParams: null,
 	}),
 	actions: {
 		/* Initialize Mapbox */
@@ -108,18 +109,22 @@ export const useMapStore = defineStore("map", {
 			this.overlay = null;
 			const MAPBOXTOKEN = import.meta.env.VITE_MAPBOXTOKEN;
 			mapboxGl.accessToken = MAPBOXTOKEN;
-			this.map = markRaw(new mapboxGl.Map({
-				...MapObjectConfig,
-				style: mapStyle,
-			}));
+			this.map = markRaw(
+				new mapboxGl.Map({
+					...MapObjectConfig,
+					style: mapStyle,
+				}),
+			);
 			this.marker = markRaw(new mapboxGl.Marker());
-			const geoLocate = markRaw(new mapboxGl.GeolocateControl({
-				positionOptions: {
-					enableHighAccuracy: true,
-				},
-				trackUserLocation: true,
-				showUserHeading: true,
-			}));
+			const geoLocate = markRaw(
+				new mapboxGl.GeolocateControl({
+					positionOptions: {
+						enableHighAccuracy: true,
+					},
+					trackUserLocation: true,
+					showUserHeading: true,
+				}),
+			);
 			this.map.addControl(geoLocate);
 			this.map.addControl(markRaw(new mapboxGl.NavigationControl()));
 			this.map.doubleClickZoom.disable();
@@ -127,10 +132,12 @@ export const useMapStore = defineStore("map", {
 			this.map
 				.on("load", () => {
 					if (!this.map) return;
-					this.overlay = markRaw(new MapboxOverlay({
-						interleaved: true,
-						layers: [],
-					}));
+					this.overlay = markRaw(
+						new MapboxOverlay({
+							interleaved: true,
+							layers: [],
+						}),
+					);
 					this.map.addControl(this.overlay);
 					this.initializeBasicLayers();
 				})
@@ -433,7 +440,224 @@ export const useMapStore = defineStore("map", {
 		stopWind() {
 			this._onStop?.();
 		},
+		// 8. Add IsochroneSettingPopup Layer
+		async setIsochroneLayer(submitObject) {
+			// 加入 loading
+			this.loadingLayers.push("metrotaipei_isochrone_layer");
+			const res = await http.post(
+				"/transit/isochrone/full",
+				submitObject,
+			);
+			const geojsonData = res.data;
+			if (!geojsonData.features) return "無相關等時圈分析成果";
 
+			this.clearIsochroneLayer();
+
+			// 等時圈：藍色系（由淺到深，15→60 分鐘）
+			const ISOCHRONE_COLORS = {
+				900: "#93c5f0", // 15 分鐘：淺藍
+				1800: "#4ba3e3", // 30 分鐘：中藍
+				2700: "#2f7fd1", // 45 分鐘：深藍
+				3600: "#1a5ea8", // 60 分鐘：最深藍
+			};
+
+			// 路網：依 cutoff 顯示暖色系，與等時圈藍色做區隔
+			const NETWORK_COLORS = {
+				900: "#fbbf24", // 15 分鐘：黃
+				1800: "#f97316", // 30 分鐘：橙
+				2700: "#ef4444", // 45 分鐘：紅橙
+				3600: "#b91c1c", // 60 分鐘：深紅
+			};
+
+			const colorMatch = (colorMap, property = "cutoff") => [
+				"match",
+				["get", property],
+				900,
+				colorMap[900],
+				1800,
+				colorMap[1800],
+				2700,
+				colorMap[2700],
+				3600,
+				colorMap[3600],
+				colorMap[900],
+			];
+
+			const polygonFeatures = geojsonData.features.filter(
+				(f) =>
+					f.geometry?.type === "Polygon" ||
+					f.geometry?.type === "MultiPolygon",
+			);
+			const lineFeatures = geojsonData.features.filter(
+				(f) =>
+					f.geometry?.type === "LineString" ||
+					f.geometry?.type === "MultiLineString",
+			);
+			const pointFeatures = geojsonData.features.filter(
+				(f) =>
+					f.geometry?.type === "Point" ||
+					f.geometry?.type === "MultiPoint",
+			);
+
+			// ── Polygon：等時圈面（藍色，由外到內疊） ───────────────
+			if (polygonFeatures.length > 0) {
+				this.map.addSource("isochrone-polygon-source", {
+					type: "geojson",
+					data: {
+						type: "FeatureCollection",
+						features: polygonFeatures,
+					},
+				});
+				// 填色：低透明度
+				this.map.addLayer({
+					id: "isochrone-fill",
+					type: "fill",
+					source: "isochrone-polygon-source",
+					paint: {
+						"fill-color": colorMatch(ISOCHRONE_COLORS),
+						"fill-opacity": 0.2,
+					},
+				});
+				// 邊框：較明顯
+				this.map.addLayer({
+					id: "isochrone-line",
+					type: "line",
+					source: "isochrone-polygon-source",
+					paint: {
+						"line-color": colorMatch(ISOCHRONE_COLORS),
+						"line-width": 2,
+						"line-opacity": 0.9,
+					},
+				});
+			}
+
+			// ── LineString：路網線（暖色細線） ──────────────────────
+			if (lineFeatures.length > 0) {
+				this.map.addSource("isochrone-network-line-source", {
+					type: "geojson",
+					data: { type: "FeatureCollection", features: lineFeatures },
+				});
+				this.map.addLayer({
+					id: "isochrone-network-line",
+					type: "line",
+					source: "isochrone-network-line-source",
+					paint: {
+						"line-color": colorMatch(NETWORK_COLORS),
+						"line-width": 1,
+						"line-opacity": 0.6,
+					},
+				});
+			}
+
+			// ── Point：路網站點（小白點加暖色邊） ───────────────────
+			if (pointFeatures.length > 0) {
+				this.map.addSource("isochrone-network-point-source", {
+					type: "geojson",
+					data: {
+						type: "FeatureCollection",
+						features: pointFeatures,
+					},
+				});
+				this.map.addLayer({
+					id: "isochrone-network-point",
+					type: "circle",
+					source: "isochrone-network-point-source",
+					paint: {
+						"circle-radius": 3,
+						"circle-color": "#ffffff",
+						"circle-stroke-width": 1.5,
+						"circle-stroke-color": colorMatch(NETWORK_COLORS),
+						"circle-opacity": 0.9,
+					},
+				});
+			}
+
+			// ── 使用者點位（大白圈 + 亮黃實心，最顯眼） ─────────────
+			this.map.addSource("isochrone-origin-source", {
+				type: "geojson",
+				data: {
+					type: "FeatureCollection",
+					features: [
+						{
+							type: "Feature",
+							geometry: {
+								type: "Point",
+								coordinates: [
+									submitObject.lng,
+									submitObject.lat,
+								],
+							},
+							properties: {},
+						},
+					],
+				},
+			});
+			// 最外光暈
+			this.map.addLayer({
+				id: "isochrone-origin-halo",
+				type: "circle",
+				source: "isochrone-origin-source",
+				paint: {
+					"circle-radius": 14,
+					"circle-color": "#ffffff",
+					"circle-opacity": 0.3,
+					"circle-blur": 1,
+				},
+			});
+			// 白色外圈
+			this.map.addLayer({
+				id: "isochrone-origin-ring",
+				type: "circle",
+				source: "isochrone-origin-source",
+				paint: {
+					"circle-radius": 9,
+					"circle-color": "#ffffff",
+					"circle-opacity": 1,
+				},
+			});
+			// 亮黃內點
+			this.map.addLayer({
+				id: "isochrone-origin-dot",
+				type: "circle",
+				source: "isochrone-origin-source",
+				paint: {
+					"circle-radius": 6,
+					"circle-color": "#000000",
+					"circle-stroke-width": 0,
+				},
+			});
+
+			this.flyToLocation([submitObject.lng, submitObject.lat]);
+			this.isochroneParams = { ...submitObject };
+			// 移除 loading
+			this.loadingLayers = this.loadingLayers.filter(
+				(layer) => layer !== "metrotaipei_isochrone_layer",
+			);
+		},
+
+		// 9. Clear Isochrone Layer
+		clearIsochroneLayer() {
+			[
+				"isochrone-fill",
+				"isochrone-line",
+				"isochrone-network-line",
+				"isochrone-network-point",
+				"isochrone-origin-halo",
+				"isochrone-origin-ring",
+				"isochrone-origin-dot",
+			].forEach((id) => {
+				if (this.map.getLayer(id)) this.map.removeLayer(id);
+			});
+			[
+				"isochrone-polygon-source",
+				"isochrone-network-line-source",
+				"isochrone-network-point-source",
+				"isochrone-origin-source",
+			].forEach((id) => {
+				if (this.map.getSource(id)) this.map.removeSource(id);
+			});
+			this.isochroneParams = null;
+		},
 		/* Adding Map Layers */
 		// 1. Passes in the map_config (an Array of Objects) of a component and adds all layers to the map layer list
 		addToMapLayerList(map_config) {
@@ -477,7 +701,9 @@ export const useMapStore = defineStore("map", {
 		// 3-1. Add a local geojson as a source in mapbox
 		addGeojsonSource(map_config, data) {
 			if (
-				!["voronoi", "isoline", "wind-heat"].includes(map_config.type) &&
+				!["voronoi", "isoline", "wind-heat"].includes(
+					map_config.type,
+				) &&
 				map_config.type !== "symbol-3d"
 			) {
 				this.map.addSource(`${map_config.layerId}-source`, {
@@ -500,9 +726,13 @@ export const useMapStore = defineStore("map", {
 		// 3-2. Add a raster map as a source in mapbox
 		async addRasterSource(map_config) {
 			if (
-				["arc", "voronoi", "isoline", "symbol-3d", "wind-heat"].includes(
-					map_config.type,
-				)
+				[
+					"arc",
+					"voronoi",
+					"isoline",
+					"symbol-3d",
+					"wind-heat",
+				].includes(map_config.type)
 			) {
 				let res = {};
 				let res2 = {};
@@ -814,15 +1044,15 @@ export const useMapStore = defineStore("map", {
 			const layers = Object.keys(this.deckGlLayer).map((index) => {
 				const l = this.deckGlLayer[index];
 				switch (l.type) {
-				case "ArcLayer":
-					return new ArcLayer(l.config);
-				case "AnimatedArcLayer":
-					return new AnimatedArcLayer({
-						...l.config,
-						coef: this.step / 1000,
-					});
-				default:
-					break;
+					case "ArcLayer":
+						return new ArcLayer(l.config);
+					case "AnimatedArcLayer":
+						return new AnimatedArcLayer({
+							...l.config,
+							coef: this.step / 1000,
+						});
+					default:
+						break;
 				}
 			});
 			this.overlay.setProps({
@@ -2250,7 +2480,9 @@ export const useMapStore = defineStore("map", {
 			const authStore = useAuthStore();
 			const dialogStore = useDialogStore();
 			const marker = markRaw(new mapboxGl.Marker(colorSetting));
-			const popup = markRaw(new mapboxGl.Popup({ closeButton: false })).setHTML(
+			const popup = markRaw(
+				new mapboxGl.Popup({ closeButton: false }),
+			).setHTML(
 				`<div class="popup-for-pin"><div>${markerName}</div> <button id="delete-${markerId}" class="delete-pin"}">
 						<span>delete</span>
 					  </button></div>`,
