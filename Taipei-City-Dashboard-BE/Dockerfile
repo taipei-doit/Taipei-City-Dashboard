@@ -6,8 +6,8 @@ WORKDIR /w
 
 # 安裝匯出所需套件
 RUN pip install --no-cache-dir \
-      "transformers>=4.44" \
-      "optimum[onnxruntime]>=1.20.0" \
+      "transformers==4.57.6" \
+      "optimum[onnxruntime]>=1.23.2" \
       onnxruntime
 
 # 匯出：feature-extraction

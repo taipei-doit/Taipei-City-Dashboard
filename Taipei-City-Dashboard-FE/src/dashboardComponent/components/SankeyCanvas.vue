@@ -96,7 +96,7 @@ function trunc(str, max = 13) {
 
 .layer-label {
 	fill: var(--color-text-secondary, #aaa);
-	font-size: 13px;
+	font-size: 20px;
 	text-anchor: middle;
 	font-weight: 600;
 	letter-spacing: 0.5px;
@@ -104,7 +104,17 @@ function trunc(str, max = 13) {
 
 .node-label {
 	fill: var(--color-text, #ddd);
-	font-size: 11px;
+	font-size: 14px;
 	pointer-events: none;
+}
+
+@media (max-width: 770px) {
+	.layer-label {
+		font-size: 24px;
+	}
+
+	.node-label {
+		font-size: 18px;
+	}
 }
 </style>

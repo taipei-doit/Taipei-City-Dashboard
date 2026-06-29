@@ -7,6 +7,7 @@ import (
 	"sort"
 	"strings"
 	"time"
+	"strconv"
 )
 
 /* ----- Models ----- */
@@ -119,14 +120,14 @@ BubbleData Json Format:
 */
 type BubbleData struct {
 	Yaxis    string  `gorm:"column:y_axis"`
-	X        float64 `gorm:"column:x"`
+	X        string  `gorm:"column:x"`
 	Y        float64 `gorm:"column:y"`
 	Z        float64 `gorm:"column:z"`
 	Category *string `gorm:"column:category" json:"-"`
 }
 
 type BubbleDataItem struct {
-	X float64 `json:"x"`
+	X any `json:"x"`
 	Y float64 `json:"y"`
 	Z float64 `json:"z"`
 }
@@ -382,6 +383,13 @@ func GetMapLegendData(query *string, timeFrom string, timeTo string) (chartData 
 	return chartData, nil
 }
 
+func parseX(s string) any {
+    if f, err := strconv.ParseFloat(s, 64); err == nil {
+        return f
+    }
+    return s
+}
+
 func GetBubbleData(query *string, timeFrom string, timeTo string) (chartDataOutput []BubbleDataOutput, categories []string, err error) {
 	var chartData []BubbleData
 	var queryString string
@@ -419,7 +427,7 @@ func GetBubbleData(query *string, timeFrom string, timeTo string) (chartDataOutp
 		var foundY bool
 		for i, output := range chartDataOutput {
 			if output.Name == data.Yaxis {
-				chartDataOutput[i].Data = append(output.Data, BubbleDataItem{X: data.X, Y: data.Y, Z: data.Z})
+				chartDataOutput[i].Data = append(output.Data, BubbleDataItem{X: parseX(data.X), Y: data.Y, Z: data.Z})
 				foundY = true
 				break
 			}
@@ -428,7 +436,7 @@ func GetBubbleData(query *string, timeFrom string, timeTo string) (chartDataOutp
 		if !foundY {
 			chartDataOutput = append(chartDataOutput, BubbleDataOutput{
 				Name: data.Yaxis,
-				Data: []BubbleDataItem{{X: data.X, Y: data.Y, Z: data.Z}},
+				Data: []BubbleDataItem{{X: parseX(data.X), Y: data.Y, Z: data.Z}},
 			})
 		}
 	}
