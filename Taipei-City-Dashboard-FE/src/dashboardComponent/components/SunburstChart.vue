@@ -104,14 +104,14 @@ function rgbToHsl(r, g, b) {
 		const d = max - min;
 		s = l > 0.5 ? d / (2 - max - min) : d / (max - min);
 		switch (max) {
-			case rn:
-				h = (gn - bn) / d + (gn < bn ? 6 : 0);
-				break;
-			case gn:
-				h = (bn - rn) / d + 2;
-				break;
-			default:
-				h = (rn - gn) / d + 4;
+		case rn:
+			h = (gn - bn) / d + (gn < bn ? 6 : 0);
+			break;
+		case gn:
+			h = (bn - rn) / d + 2;
+			break;
+		default:
+			h = (rn - gn) / d + 4;
 		}
 		h /= 6;
 	}
@@ -590,65 +590,65 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-	<div
-		v-if="activeChart === 'SunburstChart'"
-		ref="wrapRef"
-		class="sunburstchart"
-	>
-		<div class="sunburstchart__svg-clip">
-			<svg
-				:viewBox="`0 0 ${sunburstData.width} ${sunburstData.height}`"
-				width="100%"
-				height="100%"
-			>
-				<g>
-					<path
-						v-for="a in sunburstData.arcs"
-						:key="a.key"
-						:d="a.d"
-						class="sunburstchart__arc"
-						:fill="arcFill(a)"
-						:fill-opacity="arcOpacity(a)"
-						role="img"
-						:aria-label="a.title"
-						@mouseenter="(evt) => onArcHoverMove(evt, a)"
-						@mousemove="(evt) => onArcHoverMove(evt, a)"
-						@mouseleave="onArcHoverLeave"
-					/>
-				</g>
-				<g>
-					<text
-						v-for="t in sunburstData.labels"
-						:key="t.key"
-						:x="t.x"
-						:y="t.y"
-						class="sunburstchart__label"
-						text-anchor="middle"
-						dominant-baseline="middle"
-					>
-						{{ t.text }}
-					</text>
-				</g>
-			</svg>
-		</div>
-		<div
-			v-if="hoverTip.show"
-			class="sunburstchart__hover"
-			:class="{
-				'sunburstchart__hover--tl':
-					hoverTip.placeLeft && hoverTip.placeAbove,
-				'sunburstchart__hover--tr':
-					!hoverTip.placeLeft && hoverTip.placeAbove,
-				'sunburstchart__hover--bl':
-					hoverTip.placeLeft && !hoverTip.placeAbove,
-				'sunburstchart__hover--br':
-					!hoverTip.placeLeft && !hoverTip.placeAbove,
-			}"
-			:style="{ left: `${hoverTip.x}px`, top: `${hoverTip.y}px` }"
-		>
-			{{ hoverTip.text }}
-		</div>
-	</div>
+  <div
+    v-if="activeChart === 'SunburstChart'"
+    ref="wrapRef"
+    class="sunburstchart"
+  >
+    <div class="sunburstchart__svg-clip">
+      <svg
+        :viewBox="`0 0 ${sunburstData.width} ${sunburstData.height}`"
+        width="100%"
+        height="100%"
+      >
+        <g>
+          <path
+            v-for="a in sunburstData.arcs"
+            :key="a.key"
+            :d="a.d"
+            class="sunburstchart__arc"
+            :fill="arcFill(a)"
+            :fill-opacity="arcOpacity(a)"
+            role="img"
+            :aria-label="a.title"
+            @mouseenter="(evt) => onArcHoverMove(evt, a)"
+            @mousemove="(evt) => onArcHoverMove(evt, a)"
+            @mouseleave="onArcHoverLeave"
+          />
+        </g>
+        <g>
+          <text
+            v-for="t in sunburstData.labels"
+            :key="t.key"
+            :x="t.x"
+            :y="t.y"
+            class="sunburstchart__label"
+            text-anchor="middle"
+            dominant-baseline="middle"
+          >
+            {{ t.text }}
+          </text>
+        </g>
+      </svg>
+    </div>
+    <div
+      v-if="hoverTip.show"
+      class="sunburstchart__hover"
+      :class="{
+        'sunburstchart__hover--tl':
+          hoverTip.placeLeft && hoverTip.placeAbove,
+        'sunburstchart__hover--tr':
+          !hoverTip.placeLeft && hoverTip.placeAbove,
+        'sunburstchart__hover--bl':
+          hoverTip.placeLeft && !hoverTip.placeAbove,
+        'sunburstchart__hover--br':
+          !hoverTip.placeLeft && !hoverTip.placeAbove,
+      }"
+      :style="{ left: `${hoverTip.x}px`, top: `${hoverTip.y}px` }"
+    >
+      {{ hoverTip.text }}
+    </div>
+  </div>
 </template>
 
 <style scoped lang="scss">
