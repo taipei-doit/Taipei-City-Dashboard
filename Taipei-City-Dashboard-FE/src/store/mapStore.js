@@ -57,6 +57,7 @@ import {
 	getCrowdColor,
 	mrtLineColor,
 } from "../assets/utilityFunctions/getThematicColor.js";
+import { parseArrivalTime } from "../assets/utilityFunctions/parseArrivalTime.js";
 
 export const useMapStore = defineStore("map", {
 	state: () => ({
@@ -99,6 +100,7 @@ export const useMapStore = defineStore("map", {
 		_onStart: null,
 		_onStop: null,
 		isochroneParams: null,
+		isochronePopup: null,
 	}),
 	actions: {
 		/* Initialize Mapbox */
@@ -312,8 +314,10 @@ export const useMapStore = defineStore("map", {
 		async addSymbolSources() {
 			const images = [
 				"metro",
+				"train",
 				"triangle_green",
 				"triangle_white",
+				"bus",
 				"bike_green",
 				"bike_orange",
 				"bike_red",
@@ -560,15 +564,79 @@ export const useMapStore = defineStore("map", {
 				});
 				this.map.addLayer({
 					id: "isochrone-network-point",
-					type: "circle",
+					type: "symbol",
 					source: "isochrone-network-point-source",
-					paint: {
-						"circle-radius": 3,
-						"circle-color": "#ffffff",
-						"circle-stroke-width": 1.5,
-						"circle-stroke-color": colorMatch(NETWORK_COLORS),
-						"circle-opacity": 0.9,
+					layout: {
+						"icon-image": [
+							"match",
+							["get", "transit_type"],
+							"rail",
+							"metro",
+							"train",
+							"train",
+							"bus",
+							"bus",
+							"jumpfrog",
+							"bus",
+							"bus",
+						],
+						"icon-size": [
+							"match",
+							["get", "transit_type"],
+							"rail",
+							0.375,
+							"train",
+							0.06,
+							"bus",
+							0.55,
+							"jumpfrog",
+							0.55,
+							0.375, // fallback
+						],
+						"icon-allow-overlap": true,
+						"icon-ignore-placement": true,
 					},
+					paint: {
+						"icon-opacity": 0.9,
+					},
+				});
+
+				// ── Popup ──────────────────────────────────────────────
+				const TRANSIT_LABEL = {
+					jumpfrog: "跳蛙公車",
+					bus: "公車",
+					rail: "捷運",
+					train: "鐵路",
+				};
+
+				this.map.on("click", "isochrone-network-point", (e) => {
+					const props = e.features[0].properties;
+					const coords = e.features[0].geometry.coordinates.slice();
+
+					if (this.isochronePopup) this.isochronePopup.remove();
+
+					this.isochronePopup = new mapboxGl.Popup({
+						closeButton: true,
+						maxWidth: "220px",
+					})
+						.setLngLat(coords)
+						.setHTML(
+							`
+                <div style="padding:24px; font-size:13px; line-height:2; border-radius:12px;">
+					<strong>站點交通類型 : ${TRANSIT_LABEL[props.transit_type]}</strong><br/>
+                    <strong>站名 : ${props.stop_name}</strong><br/>
+					<strong>${props.time_type === "arrival" ? "建議出發時間" : "預估抵達時間"} : ${parseArrivalTime(props.arrival_time, props.time_type, submitObject.arrival_time)}</strong><br/>
+                </div>
+            `,
+						)
+						.addTo(this.map);
+				});
+
+				this.map.on("mouseenter", "isochrone-network-point", () => {
+					this.map.getCanvas().style.cursor = "pointer";
+				});
+				this.map.on("mouseleave", "isochrone-network-point", () => {
+					this.map.getCanvas().style.cursor = "";
 				});
 			}
 
@@ -657,6 +725,10 @@ export const useMapStore = defineStore("map", {
 				if (this.map.getSource(id)) this.map.removeSource(id);
 			});
 			this.isochroneParams = null;
+			if (this.isochronePopup) {
+				this.isochronePopup.remove();
+				this.isochronePopup = null;
+			}
 		},
 		/* Adding Map Layers */
 		// 1. Passes in the map_config (an Array of Objects) of a component and adds all layers to the map layer list
