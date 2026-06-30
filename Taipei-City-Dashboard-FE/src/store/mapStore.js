@@ -314,8 +314,10 @@ export const useMapStore = defineStore("map", {
 		async addSymbolSources() {
 			const images = [
 				"metro",
+				"train",
 				"triangle_green",
 				"triangle_white",
+				"bus",
 				"bike_green",
 				"bike_orange",
 				"bike_red",
@@ -562,22 +564,40 @@ export const useMapStore = defineStore("map", {
 				});
 				this.map.addLayer({
 					id: "isochrone-network-point",
-					type: "circle",
+					type: "symbol",
 					source: "isochrone-network-point-source",
-					paint: {
-						"circle-radius": [
+					layout: {
+						"icon-image": [
 							"match",
 							["get", "transit_type"],
 							"rail",
-							6,
+							"metro",
 							"train",
-							6,
-							4, // bus / jumpfrog 小一點
+							"train",
+							"bus",
+							"bus",
+							"jumpfrog",
+							"bus",
+							"bus",
 						],
-						"circle-color": ["get", "stroke"], // 直接用資料的顏色
-						"circle-stroke-width": 1.5,
-						"circle-stroke-color": "#ffffff",
-						"circle-opacity": 0.9,
+						"icon-size": [
+							"match",
+							["get", "transit_type"],
+							"rail",
+							0.375,
+							"train",
+							0.06,
+							"bus",
+							0.55,
+							"jumpfrog",
+							0.55,
+							0.375, // fallback
+						],
+						"icon-allow-overlap": true,
+						"icon-ignore-placement": true,
+					},
+					paint: {
+						"icon-opacity": 0.9,
 					},
 				});
 
@@ -605,7 +625,7 @@ export const useMapStore = defineStore("map", {
                 <div style="padding:24px; font-size:13px; line-height:2; border-radius:12px;">
 					<strong>站點交通類型 : ${TRANSIT_LABEL[props.transit_type]}</strong><br/>
                     <strong>站名 : ${props.stop_name}</strong><br/>
-					<strong>${props.time_type === 'arrival' ? '建議出發時間' : '預估抵達時間'} : ${parseArrivalTime(props.arrival_time, props.time_type, submitObject.arrival_time)}</strong><br/>
+					<strong>${props.time_type === "arrival" ? "建議出發時間" : "預估抵達時間"} : ${parseArrivalTime(props.arrival_time, props.time_type, submitObject.arrival_time)}</strong><br/>
                 </div>
             `,
 						)
@@ -1096,15 +1116,15 @@ export const useMapStore = defineStore("map", {
 			const layers = Object.keys(this.deckGlLayer).map((index) => {
 				const l = this.deckGlLayer[index];
 				switch (l.type) {
-					case "ArcLayer":
-						return new ArcLayer(l.config);
-					case "AnimatedArcLayer":
-						return new AnimatedArcLayer({
-							...l.config,
-							coef: this.step / 1000,
-						});
-					default:
-						break;
+				case "ArcLayer":
+					return new ArcLayer(l.config);
+				case "AnimatedArcLayer":
+					return new AnimatedArcLayer({
+						...l.config,
+						coef: this.step / 1000,
+					});
+				default:
+					break;
 				}
 			});
 			this.overlay.setProps({

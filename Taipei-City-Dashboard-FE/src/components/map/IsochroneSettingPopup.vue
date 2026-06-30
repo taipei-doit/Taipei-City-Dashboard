@@ -1,200 +1,236 @@
 <template>
-	<div class="mapcontainer-isochrone">
-		<div class="mapcontainer-isochrone-header">
-			<h3>等時圈設定</h3>
-			<button class="close-btn" @click="$emit('close')">✕</button>
-		</div>
+  <div class="mapcontainer-isochrone">
+    <div class="mapcontainer-isochrone-header">
+      <h3>等時圈設定</h3>
+      <button
+        class="close-btn"
+        @click="$emit('close')"
+      >
+        ✕
+      </button>
+    </div>
 
-		<div class="mapcontainer-isochrone-content">
-			<!-- 目前等時圈資訊 -->
-			<div v-if="currentParams" class="section current-params">
-				<div class="title">目前等時圈設定</div>
-				<div class="params-grid">
-					<span class="param-label">座標</span>
-					<span class="param-value">
-						經度：{{ currentParams.lng.toFixed(4) }}， 緯度：{{
-							currentParams.lat.toFixed(4)
-						}}
-					</span>
-					<span class="param-label">時間</span>
-					<span class="param-value">
-						{{
-							formatDepartureTime(
-								currentParams.arrival_time ||
-									currentParams.departure_time,
-							)
-						}}</span
-					>
-					<span class="param-label">類型</span>
-					<span class="param-value">
-						{{ TIME_TYPE_LABEL[currentParams.time_type] }}、
-						{{ currentParams.service_profile }}
-					</span>
-					<span class="param-label">交通</span>
-					<span class="param-value">{{
-						formatModes(currentParams.modes)
-					}}</span>
-					<!-- <span class="param-label">區間</span>
+    <div class="mapcontainer-isochrone-content">
+      <!-- 目前等時圈資訊 -->
+      <div
+        v-if="currentParams"
+        class="section current-params"
+      >
+        <div class="title">
+          目前等時圈設定
+        </div>
+        <div class="params-grid">
+          <span class="param-label">座標</span>
+          <span class="param-value">
+            經度：{{ currentParams.lng.toFixed(4) }}， 緯度：{{
+              currentParams.lat.toFixed(4)
+            }}
+          </span>
+          <span class="param-label">時間</span>
+          <span class="param-value">
+            {{
+              formatDepartureTime(
+                currentParams.arrival_time ||
+                  currentParams.departure_time,
+              )
+            }}</span>
+          <span class="param-label">類型</span>
+          <span class="param-value">
+            {{ TIME_TYPE_LABEL[currentParams.time_type] }}、
+            {{ currentParams.service_profile }}
+          </span>
+          <span class="param-label">交通</span>
+          <span class="param-value">{{
+            formatModes(currentParams.modes)
+          }}</span>
+          <!-- <span class="param-label">區間</span>
 					<span class="param-value">
 						等時圈以 15 / 30 / 45 / 60
 						分鐘分層，由內向外逐層擴展（每 15 分鐘一圈）
 					</span> -->
-				</div>
-			</div>
+        </div>
+      </div>
 
-			<!-- 說明區塊 -->
-			<div class="section description">
-				<div class="title">等時圈相關說明</div>
-				<div class="desc-box">
-					<h3>等時圈功能說明</h3>
-					<p>
-						等時圈以 15 / 30 / 45 / 60
-						分鐘為分層，從指定位置由內向外擴展，呈現不同時間限制下的可達範圍。此功能結合實際交通路網與步行轉乘，用於分析在特定時間內可到達的區域與交通站點。
-					</p>
+      <!-- 說明區塊 -->
+      <div class="section description">
+        <div class="title">
+          等時圈相關說明
+        </div>
+        <div class="desc-box">
+          <h3>等時圈功能說明</h3>
+          <p>
+            等時圈以 15 / 30 / 45 / 60
+            分鐘為分層，從指定位置由內向外擴展，呈現不同時間限制下的可達範圍。此功能結合實際交通路網與步行轉乘，用於分析在特定時間內可到達的區域與交通站點。
+          </p>
 
-					<h3>交通站點與圖例說明</h3>
-					<p>
-						系統會標示可達範圍內的交通站點，並依交通類型進行分類顏色顯示：
-					</p>
-					<div class="legend-list">
-						<div class="legend-item">
-							<span class="dot" style="background: #e05c5c"></span
-							>鐵路
-						</div>
-						<div class="legend-item">
-							<span class="dot" style="background: #5ce05c"></span
-							>捷運
-						</div>
-						<div class="legend-item">
-							<span class="dot" style="background: #e0d35c"></span
-							>公車
-						</div>
-						<div class="legend-item">
-							<span class="dot" style="background: #a35ce0"></span
-							>跳蛙公車
-						</div>
-					</div>
+          <h3>交通站點與圖例說明</h3>
+          <p>
+            系統會標示可達範圍內的交通站點，並以對應交通類型 icon 進行分類呈現，各類型與 icon 對應如下：
+          </p>
+          <div class="legend-list">
+            <div class="legend-item">
+              <img
+                src="../../../public/images/map/train.png"
+                alt="公車icon"
+              >鐵路
+            </div>
+            <div class="legend-item">
+              <img
+                src="../../../public/images/map/metro.png"
+                alt="公車icon"
+              >捷運
+            </div>
+            <div class="legend-item">
+              <img
+                src="../../../public/images/map/bus.png"
+                alt="公車icon"
+              >公車 / 跳蛙公車
+            </div>
+          </div>
 
-					<h3>使用方式與模式說明</h3>
-					<p>
-						使用者可透過定位按鈕帶入目前位置，並設定時間、時間類型（出發或抵達）、服務日型與交通模式後建立等時圈。建立後可於上方檢視條件，並可清除或重新設定參數以更新結果。出發模式以使用者位置為起點計算可達範圍；抵達模式則反推各時間區間建議出發位置。
-					</p>
-				</div>
-			</div>
+          <h3>使用方式與模式說明</h3>
+          <p>
+            使用者可透過定位按鈕帶入目前位置，並設定時間、時間類型（出發或抵達）、服務日型與交通模式後建立等時圈。建立後可於上方檢視條件，並可清除或重新設定參數以更新結果。出發模式以使用者位置為起點計算可達範圍；抵達模式則反推各時間區間建議出發位置。
+          </p>
+        </div>
+      </div>
 
-			<!-- 位置 -->
-			<div class="section">
-				<div class="title">位置</div>
-				<div class="row location-row">
-					<input
-						v-model="lng"
-						type="text"
-						placeholder="經度 ( 如 121.5637758 )"
-					/>
-					<input
-						v-model="lat"
-						type="text"
-						placeholder="緯度 ( 如 25.0374971 )"
-					/>
-					<button class="icon-wrapper" @click="handleCurrentLocation">
-						<LocationIcon />
-					</button>
-				</div>
-			</div>
+      <!-- 位置 -->
+      <div class="section">
+        <div class="title">
+          位置
+        </div>
+        <div class="row location-row">
+          <input
+            v-model="lng"
+            type="text"
+            placeholder="經度 ( 如 121.5637758 )"
+          >
+          <input
+            v-model="lat"
+            type="text"
+            placeholder="緯度 ( 如 25.0374971 )"
+          >
+          <button
+            class="icon-wrapper"
+            @click="handleCurrentLocation"
+          >
+            <LocationIcon />
+          </button>
+        </div>
+      </div>
 
-			<!-- 時間 -->
-			<div class="section">
-				<div class="title">時間</div>
-				<div class="row time-select-row">
-					<div class="select-wrapper">
-						<select v-model="ampm">
-							<option value="AM">上午</option>
-							<option value="PM">下午</option>
-						</select>
-					</div>
-					<div class="select-wrapper">
-						<select v-model="hour12">
-							<option
-								v-for="h in 12"
-								:key="h"
-								:value="String(h).padStart(2, '0')"
-							>
-								{{ String(h).padStart(2, "0") }}
-							</option>
-						</select>
-					</div>
-					<span class="time-separator">:</span>
-					<!-- ▼ 分鐘改為 input -->
-					<input
-						v-model="minute"
-						type="number"
-						min="0"
-						max="59"
-						placeholder="分"
-						class="minute-input"
-						@blur="padMinute"
-					/>
-				</div>
-			</div>
+      <!-- 時間 -->
+      <div class="section">
+        <div class="title">
+          時間
+        </div>
+        <div class="row time-select-row">
+          <div class="select-wrapper">
+            <select v-model="ampm">
+              <option value="AM">
+                上午
+              </option>
+              <option value="PM">
+                下午
+              </option>
+            </select>
+          </div>
+          <div class="select-wrapper">
+            <select v-model="hour12">
+              <option
+                v-for="h in 12"
+                :key="h"
+                :value="String(h).padStart(2, '0')"
+              >
+                {{ String(h).padStart(2, "0") }}
+              </option>
+            </select>
+          </div>
+          <span class="time-separator">:</span>
+          <!-- ▼ 分鐘改為 input -->
+          <input
+            v-model="minute"
+            type="number"
+            min="0"
+            max="59"
+            placeholder="分"
+            class="minute-input"
+            @blur="padMinute"
+          >
+        </div>
+      </div>
 
-			<!-- 時間類型 -->
-			<div class="section">
-				<div class="title">時間類型</div>
-				<div class="btn-row">
-					<button
-						v-for="t in TIME_TYPES"
-						:key="t"
-						:class="{ active: timeType === t }"
-						@click="timeType = t"
-					>
-						{{ t }}
-					</button>
-				</div>
-			</div>
+      <!-- 時間類型 -->
+      <div class="section">
+        <div class="title">
+          時間類型
+        </div>
+        <div class="btn-row">
+          <button
+            v-for="t in TIME_TYPES"
+            :key="t"
+            :class="{ active: timeType === t }"
+            @click="timeType = t"
+          >
+            {{ t }}
+          </button>
+        </div>
+      </div>
 
-			<!-- 服務日型 -->
-			<div class="section">
-				<div class="title">服務日型</div>
-				<div class="btn-row">
-					<button
-						v-for="s in SERVICE_TYPES"
-						:key="s"
-						:class="{ active: serviceType === s }"
-						@click="serviceType = s"
-					>
-						{{ s }}
-					</button>
-				</div>
-			</div>
+      <!-- 服務日型 -->
+      <div class="section">
+        <div class="title">
+          服務日型
+        </div>
+        <div class="btn-row">
+          <button
+            v-for="s in SERVICE_TYPES"
+            :key="s"
+            :class="{ active: serviceType === s }"
+            @click="serviceType = s"
+          >
+            {{ s }}
+          </button>
+        </div>
+      </div>
 
-			<!-- 交通模式 -->
-			<div class="section">
-				<div class="title">交通模式</div>
-				<div class="btn-row">
-					<button
-						v-for="m in TRANSPORT_LABELS"
-						:key="m"
-						:class="{ active: transport.includes(m) }"
-						@click="toggleTransport(m)"
-					>
-						{{ m }}
-					</button>
-				</div>
-			</div>
+      <!-- 交通模式 -->
+      <div class="section">
+        <div class="title">
+          交通模式
+        </div>
+        <div class="btn-row">
+          <button
+            v-for="m in TRANSPORT_LABELS"
+            :key="m"
+            :class="{ active: transport.includes(m) }"
+            @click="toggleTransport(m)"
+          >
+            {{ m }}
+          </button>
+        </div>
+      </div>
 
-			<!-- 操作 -->
-			<div class="section action">
-				<div class="action-row">
-					<button class="primary" @click="createIsochrone">
-						建立等時圈
-					</button>
-					<button class="danger" @click="removeIsochrone">
-						清除
-					</button>
-				</div>
-			</div>
-		</div>
-	</div>
+      <!-- 操作 -->
+      <div class="section action">
+        <div class="action-row">
+          <button
+            class="primary"
+            @click="createIsochrone"
+          >
+            建立等時圈
+          </button>
+          <button
+            class="danger"
+            @click="removeIsochrone"
+          >
+            清除
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup>
@@ -740,6 +776,10 @@ button.danger {
 	margin-top: 4px;
 
 	.legend-item {
+		img {
+			width: 16px;
+			height: 16px;
+		}
 		display: flex;
 		align-items: center;
 		gap: 6px;
