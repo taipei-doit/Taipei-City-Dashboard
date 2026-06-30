@@ -603,9 +603,9 @@ export const useMapStore = defineStore("map", {
 						.setHTML(
 							`
                 <div style="padding:24px; font-size:13px; line-height:2; border-radius:12px;">
-					<strong>運輸工具 : ${TRANSIT_LABEL[props.transit_type]}</strong><br/>
+					<strong>站點交通類型 : ${TRANSIT_LABEL[props.transit_type]}</strong><br/>
                     <strong>站名 : ${props.stop_name}</strong><br/>
-					<strong>抵達時間 : ${parseArrivalTime(props.arrival_time, props.time_type, submitObject.arrival_time)}</strong><br/>
+					<strong>${props.time_type === 'arrival' ? '建議出發時間' : '預估抵達時間'} : ${parseArrivalTime(props.arrival_time, props.time_type, submitObject.arrival_time)}</strong><br/>
                 </div>
             `,
 						)
@@ -1096,15 +1096,15 @@ export const useMapStore = defineStore("map", {
 			const layers = Object.keys(this.deckGlLayer).map((index) => {
 				const l = this.deckGlLayer[index];
 				switch (l.type) {
-				case "ArcLayer":
-					return new ArcLayer(l.config);
-				case "AnimatedArcLayer":
-					return new AnimatedArcLayer({
-						...l.config,
-						coef: this.step / 1000,
-					});
-				default:
-					break;
+					case "ArcLayer":
+						return new ArcLayer(l.config);
+					case "AnimatedArcLayer":
+						return new AnimatedArcLayer({
+							...l.config,
+							coef: this.step / 1000,
+						});
+					default:
+						break;
 				}
 			});
 			this.overlay.setProps({
