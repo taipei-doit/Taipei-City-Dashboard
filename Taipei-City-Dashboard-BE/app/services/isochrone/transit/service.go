@@ -8,6 +8,7 @@ import (
 	"errors"
 	"fmt"
 	"math"
+	"runtime"
 	"sort"
 	"strings"
 	"sync/atomic"
@@ -17,6 +18,7 @@ import (
 	"TaipeiCityDashboardBE/app/services/isochrone/gtfs"
 	"TaipeiCityDashboardBE/app/services/isochrone/isochrone"
 	"TaipeiCityDashboardBE/app/services/isochrone/raptor"
+	"TaipeiCityDashboardBE/logs"
 )
 
 const (
@@ -95,6 +97,27 @@ func DefaultService() (*Service, error) {
 }
 
 func buildFromDB(db *sql.DB) (*Service, error) {
+	// Get the latest DB updated_at timestamp to validate cache freshness
+	var dbUpdatedAt time.Time
+	_ = db.QueryRow("SELECT max(updated_at) FROM gtfs_bundle").Scan(&dbUpdatedAt)
+
+	// 1. Try loading pre-built data from Redis first, only if the cache is valid
+	if CacheIsValid(dbUpdatedAt) {
+		if rd, err := Load(); err == nil && rd != nil {
+			if feeds, err := LoadFeedsMeta(); err == nil && len(feeds) > 0 {
+				logs.FInfo("Transit: successfully loaded pre-built RaptorData and Feeds from Redis cache")
+				return &Service{
+					rd:       rd,
+					idx:      isochrone.NewIsochroneIndex(rd),
+					feeds:    feeds,
+					scanners: buildProfileScanners(rd, feeds),
+				}, nil
+			}
+		}
+	}
+
+	// 2. Redis cache miss or invalid, fallback to rebuilding from DB ZIPs
+	logs.FInfo("Transit: Redis cache stale or miss, rebuilding raptor data from SQL DB...")
 	feeds := make([]*gtfs.Feed, 0, 4)
 	for _, name := range []string{"bus", "rail", "train"} {
 		var blob []byte
@@ -107,17 +130,47 @@ func buildFromDB(db *sql.DB) (*Service, error) {
 			return nil, fmt.Errorf("load feed %s from zip: %w", name, err)
 		}
 		feeds = append(feeds, f)
+		blob = nil   // Explicitly release binary data from memory
+		runtime.GC() // Garbage collect immediately to prevent memory heap pile-up
 	}
 	feeds = append(feeds, gtfs.SplitJumpfrog(feeds[0])) // bus -> jumpfrog
 	rd, err := raptor.Build(feeds)
 	if err != nil {
 		return nil, fmt.Errorf("raptor build: %w", err)
 	}
+
+	scanners := buildProfileScanners(rd, feeds)
+
+	// 3. Prune large raw arrays/maps from feeds metadata to save heap space
+	for _, f := range feeds {
+		f.Stops = nil
+		f.Routes = nil
+		f.StopTimes = nil // This frees ~2GB of RAM
+		f.Shapes = nil    // This frees ~1GB of RAM
+		f.Freqs = nil
+	}
+
+	// 4. Cache the built RaptorData and pruned feeds metadata to Redis asynchronously
+	go func(r *raptor.RaptorData, f []*gtfs.Feed, dbTime time.Time) {
+		if err := Save(r, dbTime); err != nil {
+			logs.FWarn("Transit: failed to cache RaptorData to Redis: %v", err)
+			return
+		}
+		if err := SaveFeedsMeta(f); err != nil {
+			logs.FWarn("Transit: failed to cache feeds metadata to Redis: %v", err)
+			return
+		}
+		logs.FInfo("Transit: successfully cached built RaptorData and feeds metadata to Redis")
+	}(rd, feeds, dbUpdatedAt)
+
+	// 5. Force GC immediately to return massive temporary allocations back to OS
+	runtime.GC()
+
 	return &Service{
 		rd:       rd,
 		idx:      isochrone.NewIsochroneIndex(rd),
 		feeds:    feeds,
-		scanners: buildProfileScanners(rd, feeds),
+		scanners: scanners,
 	}, nil
 }
 
