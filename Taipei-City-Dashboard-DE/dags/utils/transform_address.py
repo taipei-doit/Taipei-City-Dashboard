@@ -992,7 +992,7 @@ def get_addr_xy(addrs):
     """
     # proxies = literal_eval(Variable.get("PROXY_URL"))
 
-    url = "https://map.tpgos.gov.taipei/embed/webapi.cfm"
+    url = "https://map-tpgos.gov.taipei/embed/webapi.cfm"
     params = {
         "SERVICE": "KEYWORDSEARCH",
         "KEYWORD": "",
@@ -1034,7 +1034,7 @@ def get_single_addr_xy(addr):
     """
     Input an address and return a coordinate.
     """
-    url = "https://map.tpgos.gov.taipei/embed/webapi.cfm"
+    url = "https://map-tpgos.gov.taipei/embed/webapi.cfm"
     params = {
         "SERVICE": "KEYWORDSEARCH",
         # 'SERVICE':'ADDRESS',
