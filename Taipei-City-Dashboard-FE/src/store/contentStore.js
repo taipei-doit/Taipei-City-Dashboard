@@ -75,6 +75,7 @@ export const useContentStore = defineStore("content", {
 			"metro_green_line",
 			"metro_br_line",
 		],
+		routeRequestToken: 0,
 	}),
 	getters: {},
 	actions: {
@@ -108,22 +109,31 @@ export const useContentStore = defineStore("content", {
 			// if (Object.keys(this.contributors).length === 0) {
 			// 	this.setContributors();
 			// }
+
+			// 每次真正要重新載入內容時,產生一個新 token,
+        	// 讓在途的舊請求日後回來時可以自我判斷已過期
+        	const token = ++this.routeRequestToken;
+			
 			// 1-3. If there is no dashboards info, call the setDashboards method (2.)
 			if (this.dashboards.size === 0) {
-				this.setDashboards();
+				this.setDashboards(false, token);
 				return;
 			}
 			// 1-4. If there is dashboard info but no index is defined, call the setDashboards method (2.)
 			if (!index) {
-				this.setDashboards();
+				this.setDashboards(false, token);
 				return;
 			}
 			// 1-5. If all info is present, skip steps 2, 3, 5 and call the setCurrentDashboardAllContent method (3.)
 			this.currentDashboard.components = [];
-			this.setCurrentDashboardAllContent();
+			this.setCurrentDashboardAllContent(token);
 		},
 		// 2. Call an API to get all dashboard info and reroute the user to the first dashboard in the list
-		async setDashboards(onlyDashboard = false) {
+		async setDashboards(onlyDashboard = false, token) {
+			if (token === undefined) {
+        		token = ++this.routeRequestToken;
+    		}
+
 			const response = await http.get(`/dashboard/`);
 			const data = response.data.data || {};
 
@@ -188,7 +198,7 @@ export const useContentStore = defineStore("content", {
 			}
 
 			// After getting dashboard info, call the setCurrentDashboardAllContent (3.) method to get component info
-			this.setCurrentDashboardAllContent();
+			this.setCurrentDashboardAllContent(token);
 		},
 		// 2-2. Move map-layers to the end of the array
 		moveMapLayersToEnd(dashboards) {
@@ -215,7 +225,7 @@ export const useContentStore = defineStore("content", {
 			return this.dashboards.get(city) || [];
 		},
 		// 3. Call an API to get all component info of the current index dashboard not filtered by city and store it
-		async setCurrentDashboardAllContent() {
+		async setCurrentDashboardAllContent(token) {
 			const currentCityDashboards = this.currentDashboard.city
 				? this.getDashboardsByCity(this.currentDashboard.city)
 				: this.personalDashboards;
@@ -258,6 +268,12 @@ export const useContentStore = defineStore("content", {
 				const response = await http.get(
 					`/dashboard/${this.currentDashboard.index}`,
 				);
+
+				// 關鍵:await 回來之後,先確認這次請求還沒被更新的請求取代
+        		if (token !== this.routeRequestToken) {
+            		return; // 過期了,使用者已經切到別的 dashboard,資料直接丟棄
+        		}
+
 				this.cityDashboard.components = response.data.data || [];
 				this.filterCurrentDashboardContent();
 			} catch (error) {
@@ -265,11 +281,11 @@ export const useContentStore = defineStore("content", {
 			}
 
 			// Get the dashboard components data
-			this.setCurrentDashboardAllChartData();
+			this.setCurrentDashboardAllChartData(token);
 		},
 		// 4. Call an API for each component to get its chart data and store it
 		// Will call an additional API if the component has history data
-		async setCurrentDashboardAllChartData() {
+		async setCurrentDashboardAllChartData(token) {
 			try {
 				// 4-1. Loop through all the components of a dashboard
 				for (
@@ -277,6 +293,12 @@ export const useContentStore = defineStore("content", {
 					index < this.cityDashboard.components?.length;
 					index++
 				) {
+					// 每次迴圈開始前先檢查 token,過期就整個提早結束,
+            		// 不用再浪費頻寬繼續打後面 component 的 API
+            		if (token !== this.routeRequestToken) {
+                		return;
+            		}
+
 					const component = this.cityDashboard.components[index];
 					try {
 						// 4-2. Get chart data
@@ -298,6 +320,12 @@ export const useContentStore = defineStore("content", {
 							},
 						);
 
+						// await 回來後,寫入 state 之前再檢查一次
+                		// (await 期間 token 也可能被搶先更新)
+                		if (token !== this.routeRequestToken) {
+                    		return;
+                		}
+
 						this.cityDashboard.components[index].chart_data =
 							response.data.data;
 
@@ -312,6 +340,10 @@ export const useContentStore = defineStore("content", {
 							`Failed to fetch chart data for component ${component.id}:`,
 							error,
 						);
+						if (token !== this.routeRequestToken) {
+                    		return; // 過期的話,連 fallback 空值都不用寫了
+                		}
+
 						// Set empty chart data to avoid errors in subsequent operations
 						this.cityDashboard.components[index].chart_data = [];
 
@@ -372,11 +404,17 @@ export const useContentStore = defineStore("content", {
 				console.error("Error setting dashboard chart data:", error);
 				this.loading = false;
 			}
+
+			// 最後真正觸發響應式更新前的最後一道防線
+    		if (token !== this.routeRequestToken) {
+        		return;
+    		}
 			this.filterCurrentDashboardContent();
 		},
 
 		// 20251224 因應擁擠程度相關組件須每分鐘刷新新增func
 		async updateCurrentDashboardAllChartData() {
+			const snapshotToken = this.routeRequestToken;
 			try {
 				// 4-1. Loop through all the components of a dashboard
 				for (
@@ -384,6 +422,10 @@ export const useContentStore = defineStore("content", {
 					index < this.cityDashboard.components?.length;
 					index++
 				) {
+					// dashboard 已經換過了,這次刷新整個作廢
+					if (this.routeRequestToken !== snapshotToken) {
+                		return;
+            		}
 					const component = this.cityDashboard.components[index];
 					if (
 						this.metroKeys.some((key) =>
@@ -437,6 +479,10 @@ export const useContentStore = defineStore("content", {
 					index < this.cityDashboard.components?.length;
 					index++
 				) {
+					// dashboard 已經換過了,這次刷新整個作廢
+					if (this.routeRequestToken !== snapshotToken) {
+                		return;
+            		}
 					const component = this.cityDashboard.components[index];
 					if (
 						this.metroKeys.some((key) =>
@@ -497,6 +543,8 @@ export const useContentStore = defineStore("content", {
 		},
 
 		async updateCurrentDashboardCertainChartData() {
+    		const snapshotToken = this.routeRequestToken;
+
 			try {
 				// 4-1. Loop through all the components of a dashboard
 				for (
@@ -504,6 +552,11 @@ export const useContentStore = defineStore("content", {
 					index < this.cityDashboard.components?.length;
 					index++
 				) {
+					// dashboard 已經換過了,這次刷新整個作廢
+					if (this.routeRequestToken !== snapshotToken) {
+                		return;
+            		}
+
 					const component = this.cityDashboard.components[index];
 					if (
 						!this.metroKeys.some((key) =>
@@ -557,6 +610,10 @@ export const useContentStore = defineStore("content", {
 					index < this.cityDashboard.components?.length;
 					index++
 				) {
+					// dashboard 已經換過了,這次刷新整個作廢
+					if (this.routeRequestToken !== snapshotToken) {
+                		return;
+            		}
 					const component = this.cityDashboard.components[index];
 					if (
 						!this.metroKeys.some((key) =>
@@ -612,7 +669,12 @@ export const useContentStore = defineStore("content", {
 			} catch (error) {
 				console.error("Error setting dashboard chart data:", error);
 				this.loading = false;
+				return;
 			}
+
+			if (this.routeRequestToken !== snapshotToken) {
+        		return;
+    		}
 			this.filterCurrentDashboardContent();
 		},
 
