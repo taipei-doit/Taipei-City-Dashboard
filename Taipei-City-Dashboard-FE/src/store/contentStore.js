@@ -539,6 +539,9 @@ export const useContentStore = defineStore("content", {
 				console.error("Error setting dashboard chart data:", error);
 				this.loading = false;
 			}
+			if (this.routeRequestToken !== snapshotToken) {
+    			return;
+			}
 			this.filterCurrentDashboardContent();
 		},
 
