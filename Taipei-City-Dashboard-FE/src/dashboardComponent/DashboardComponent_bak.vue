@@ -66,14 +66,14 @@ const props = defineProps({
 		default: "default",
 		validator: (value) =>
 			["default", "large", "map", "half", "halfmap", "preview"].includes(
-				value,
+				value
 			),
 	},
 	config: { type: Object, required: true },
 	selectBtn: { type: Boolean, default: false },
 	selectBtnDisabled: { type: Boolean, default: false },
-	selectBtnList: { type: Array, default: () => [] },
-	cityTag: { type: Array, default: () => [] },
+	selectBtnList: { type: Array, default: () => ([])  },
+	cityTag: { type: Array, default: () => ([]) },
 	favoriteBtn: { type: Boolean, default: false },
 	isFavorite: { type: Boolean, default: false },
 	deleteBtn: { type: Boolean, default: false },
@@ -82,7 +82,7 @@ const props = defineProps({
 	infoBtnText: { type: String, default: "組件資訊" },
 	toggleDisable: { type: Boolean, default: false },
 	footer: { type: Boolean, default: true },
-	activeCity: { type: String, default: "" },
+	activeCity: { type: String, default: '' },
 	toggleOn: { type: Boolean, default: false },
 });
 
@@ -97,10 +97,10 @@ const emits = defineEmits([
 	"clearByParamFilter",
 	"clearByLayerFilter",
 	"fly",
-	"changeCity",
+	"changeCity"
 ]);
 
-const activeChart = ref(props.config?.chart_config?.types?.[0] ?? null);
+const activeChart = ref(props.config.chart_config.types[0]);
 const activeCity = computed({
 	get: () => props.activeCity,
 	set: (value) => {
@@ -109,10 +109,6 @@ const activeCity = computed({
 		}
 		emits("changeCity", value);
 	},
-});
-
-const safeChartData = computed(() => {
-	return props.config?.chart_data ?? [];
 });
 
 const toggleOn = computed({
@@ -139,7 +135,7 @@ const dataTime = computed(() => {
 	const { timefrom, timeto } = getComponentDataTimeframe(
 		props.config.time_from,
 		props.config.time_to,
-		true,
+		true
 	);
 	if (props.config.time_from === "day_start") {
 		return `${timefrom.slice(0, 16)} ~ ${timeto.slice(11, 14)}00`;
@@ -306,7 +302,7 @@ function returnChartComponent(name, svg) {
             class="city-tag-container"
           >
             <ComponentTag
-              v-for="city in props.cityTag"
+              v-for=" city in props.cityTag"
               :key="city"
               :icon="''"
               :text="city.name"
@@ -360,7 +356,10 @@ function returnChartComponent(name, svg) {
     </div>
     <!-- Control Buttons -->
     <div
-      v-if="(!mode.includes('map') || toggleOn) && mode !== 'preview'"
+      v-if="
+        (!mode.includes('map') || toggleOn) &&
+          mode !== 'preview'
+      "
       class="dashboardcomponent-control"
     >
       <select
@@ -368,7 +367,7 @@ function returnChartComponent(name, svg) {
         v-model="activeCity"
         name="city"
         class="selectBtn"
-        :class="{ 'selectBtn-disabled': selectBtnDisabled }"
+        :class="{'selectBtn-disabled': selectBtnDisabled}"
       >
         <template
           v-for="city in props.selectBtnList"
@@ -388,8 +387,7 @@ function returnChartComponent(name, svg) {
           :key="`${config.index}-${item}-button`"
           :class="{
             'dashboardcomponent-control-group-button': true,
-            'dashboardcomponent-control-group-active':
-              activeChart === item,
+            'dashboardcomponent-control-group-active': activeChart === item,
           }"
           @click="changeActiveChart(item)"
         >
@@ -402,7 +400,9 @@ function returnChartComponent(name, svg) {
       v-if="mode === 'preview'"
       class="preview-content"
     >
-      <div class="preview-content-id">
+      <div
+        class="preview-content-id"
+      >
         <div
           v-if="mode === 'preview'"
           class="city-tag-container-preview"
@@ -444,7 +444,7 @@ function returnChartComponent(name, svg) {
         :active-chart="activeChart"
         :active-city="activeCity"
         :chart_config="config.chart_config"
-        :series="safeChartData"
+        :series="config.chart_data"
         :map_config="config.map_config"
         :map_filter="config.map_filter"
         :map_filter_on="mode.includes('map')"
@@ -506,11 +506,7 @@ function returnChartComponent(name, svg) {
           class="hide-if-mobile"
         />
         <ComponentTag
-          v-if="
-            config.map_config &&
-              config.map_config[0] !== null &&
-              config.map_config?.length > 0
-          "
+          v-if="config.map_config && config.map_config[0] !== null && config.map_config?.length > 0"
           :icon="mode === 'preview' ? '' : 'map'"
           text="空間資料"
           class="hide-if-mobile"
@@ -554,8 +550,7 @@ function returnChartComponent(name, svg) {
 * {
 	margin: 0;
 	padding: 0;
-	font-family:
-		"微軟正黑體", "Microsoft JhengHei", "Droid Sans", "Open Sans",
+	font-family: "微軟正黑體", "Microsoft JhengHei", "Droid Sans", "Open Sans",
 		"Helvetica";
 	overflow: hidden;
 }
@@ -667,7 +662,10 @@ button:hover {
 			button span {
 				color: var(--color-complement-text);
 				font-family: var(--font-icon);
-				font-size: calc(var(--font-l) * var(--font-to-icon));
+				font-size: calc(
+					var(--font-l) *
+						var(--font-to-icon)
+				);
 				transition: color 0.2s;
 
 				&:hover {
@@ -736,17 +734,15 @@ button:hover {
 				color: var(--color-complement-text);
 				font-size: var(--font-s);
 				text-align: center;
-				transition:
-					color 0.2s,
-					opacity 0.2s;
+				transition: color 0.2s, opacity 0.2s;
 				user-select: none;
-
+	
 				&:hover {
 					opacity: 1;
 					color: white;
 				}
 			}
-
+	
 			&-active {
 				background-color: var(--color-complement-text);
 				color: white;
@@ -963,7 +959,9 @@ button:hover {
 				width: 40px;
 				height: 40px;
 				border-radius: 5px;
-				background-color: var(--color-complement-text);
+				background-color: var(
+					--color-complement-text
+				);
 			}
 		}
 	}
@@ -975,7 +973,7 @@ button:hover {
 			margin: 4px 0;
 			display: flex;
 			gap: 5px;
-
+	
 			div:first-child {
 				margin-left: 5px;
 			}
