@@ -3,7 +3,7 @@ set -euo pipefail
 
 # === 設定 ===
 REPO_DIR="/opt/datacenter/Taipei-City-Dashboard/Taipei-City-Dashboard-DE/docker/prod"   # 修改成你的實際專案路徑
-BRANCH="pre-develop"
+BRANCH="develop-etl"
 LOG="/var/log/gitsync.log"
 LOCK="/var/lock/gitsync.lock"
 
