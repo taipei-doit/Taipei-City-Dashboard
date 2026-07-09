@@ -7,9 +7,7 @@ from sqlalchemy.sql import text as sa_text
 from utils.get_time import get_tpe_now_time
 from utils.llm_provider import generate_text
 
-# ponytail: 表名依 pkey constraint `component_ai_summaries_pkey` 推回(PG 預設命名 {table}_pkey)反推。
-# 若實際 table 是單數 component_ai_summary,改這裡即可。
-AI_SUMMARY_TABLE = "component_ai_summaries"
+AI_SUMMARY_TABLE = "component_ai_summary"
 
 CHART_SYSTEM_PROMPT = (
     "你是台北市城市儀表板的資料助理。請根據提供的組件資訊,用繁體中文寫一段"
@@ -63,8 +61,40 @@ def fetch_map_configs(engine, index, city):
         ]
 
 
-def fetch_sql_view_info(geoserver_engine, view_name):
-    """向 GeoServer 掛的 postgres connection 直接 psql 拿 SQL View 欄位與定義。查不到就回 None,讓上層優雅跳過。"""
+def fetch_sql_view_info(catalog_engine, geodata_engine, view_name):
+    """
+    圖層在 GeoServer 分兩種:
+    1. SQL View(JDBC_VIRTUAL_TABLE):真正的查詢語法(可能是 join/聚合)存在 GeoServer 自己的
+       catalog(pgconfig.resourceinfo.info.metadata.MetadataMap.JDBC_VIRTUAL_TABLE...sql),
+       不是 dashboard-stream 裡的實體物件,要先查這裡。
+    2. 純資料表:GeoServer 直接對應 dashboard-stream 的一張表,沒有 JDBC_VIRTUAL_TABLE,
+       退回查 information_schema.columns 拿欄位清單。
+    兩邊都查不到就回 None,讓上層優雅跳過。
+    """
+    if catalog_engine is not None:
+        try:
+            with catalog_engine.connect() as conn:
+                row = conn.execute(
+                    sa_text("SELECT info FROM pgconfig.resourceinfo WHERE name = :name"),
+                    {"name": view_name},
+                ).fetchone()
+            if row and row[0]:
+                vt = (
+                    row[0].get("metadata", {})
+                    .get("MetadataMap", {})
+                    .get("JDBC_VIRTUAL_TABLE", {})
+                    .get("Literal", {})
+                    .get("value", {})
+                )
+                sql_query = vt.get("sql")
+                if sql_query:
+                    return {"sql_query": sql_query.strip(), "columns": None}
+        except Exception as e:
+            print(f"GeoServer catalog lookup failed for {view_name}: {e}")
+
+    if geodata_engine is None:
+        return None
+
     columns_sql = sa_text(
         """
         SELECT column_name
@@ -73,16 +103,12 @@ def fetch_sql_view_info(geoserver_engine, view_name):
         ORDER BY ordinal_position
         """
     )
-    viewdef_sql = sa_text(
-        "SELECT view_definition FROM information_schema.views WHERE table_name = :view_name"
-    )
-    with geoserver_engine.connect() as conn:
+    with geodata_engine.connect() as conn:
         columns = [row[0] for row in conn.execute(columns_sql, {"view_name": view_name}).fetchall()]
-        viewdef_row = conn.execute(viewdef_sql, {"view_name": view_name}).fetchone()
 
     if not columns:
         return None
-    return {"columns": columns, "view_definition": viewdef_row[0] if viewdef_row else None}
+    return {"sql_query": None, "columns": columns}
 
 
 def build_chart_prompt(component):
@@ -116,7 +142,10 @@ def build_map_prompt(component, map_rows, sql_view_infos):
 
         view_info = sql_view_infos.get(row["map_index"])
         if view_info:
-            lines.append(f"資料庫欄位:{'、'.join(view_info['columns'])}")
+            if view_info["sql_query"]:
+                lines.append(f"圖層 SQL 查詢邏輯:{view_info['sql_query']}")
+            elif view_info["columns"]:
+                lines.append(f"資料庫欄位:{'、'.join(view_info['columns'])}")
 
     return "\n".join(lines)
 
@@ -136,18 +165,38 @@ def write_summary(engine, index, city, summary_type, result):
         )
 
 
-def _get_geoserver_engine():
+# ponytail: geoserver-postgres 接的 db(geoserver_pgconfig)是 GeoServer 自己的 pgconfig
+# catalog(workspace/layer/store 設定 + SQL View 查詢語法都存在這裡的 jsonb 欄位)。實際圖層
+# 資料表(非 SQL View 的 fallback 用)則在同一台 Postgres 的 dashboard-stream db、schema
+# public(實測這個部署唯一的 PostGIS store 就是指向它)。所以 catalog 用原本連線,geodata 借
+# 用同一組帳密把 dbname 換掉即可,不用另外設 connection。之後如果 GeoServer 掛了不只一個
+# store,要改成真的走 pgconfig.storeinfo 查每個 layer 對應的 store db,而不是寫死。
+GEODATA_DBNAME = "dashboard-stream"
+
+
+def _get_geoserver_catalog_engine():
     try:
         return create_engine(PostgresHook(postgres_conn_id="geoserver-postgres").get_uri())
     except Exception as e:
-        print(f"geoserver-postgres connection not available, skip SQL view lookup: {e}")
+        print(f"geoserver-postgres connection not available, skip GeoServer catalog lookup: {e}")
+        return None
+
+
+def _get_geodata_engine():
+    try:
+        conn = PostgresHook(postgres_conn_id="geoserver-postgres").get_connection("geoserver-postgres")
+        uri = f"postgresql://{conn.login}:{conn.password}@{conn.host}:{conn.port}/{GEODATA_DBNAME}"
+        return create_engine(uri)
+    except Exception as e:
+        print(f"geoserver-postgres connection not available, skip geodata table lookup: {e}")
         return None
 
 
 def ai_summary_etl(**kwargs):
     dashboard_uri = PostgresHook(postgres_conn_id="dashboard-postgre").get_uri()
     engine = create_engine(dashboard_uri)
-    geoserver_engine = _get_geoserver_engine()
+    catalog_engine = _get_geoserver_catalog_engine()
+    geodata_engine = _get_geodata_engine()
 
     components = fetch_enabled_components(engine)
     print(f"Found {len(components)} components with enable_ai_summary = true.")
@@ -167,10 +216,10 @@ def ai_summary_etl(**kwargs):
             continue
 
         sql_view_infos = {}
-        if geoserver_engine is not None:
+        if catalog_engine is not None or geodata_engine is not None:
             for row in map_rows:
                 try:
-                    info = fetch_sql_view_info(geoserver_engine, row["map_index"])
+                    info = fetch_sql_view_info(catalog_engine, geodata_engine, row["map_index"])
                     if info:
                         sql_view_infos[row["map_index"]] = info
                 except Exception as e:
