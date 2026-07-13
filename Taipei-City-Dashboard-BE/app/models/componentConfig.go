@@ -417,7 +417,7 @@ func CreateComponent(index string, name string, city string, historyConfig json.
     return cityComponent, nil
 }
 
-func UpdateComponent(id int, city string, name string, historyConfig json.RawMessage, mapFilter json.RawMessage, timeFrom string, timeTo *string, updateFreq *int64, updateFreqUnit string, source string, shortDesc string, longDesc string, useCase string, links pq.StringArray, contributors pq.StringArray) (cityComponent CityComponent, err error) {
+func UpdateComponent(id int, city string, name string, historyConfig json.RawMessage, mapFilter json.RawMessage, timeFrom string, timeTo *string, updateFreq *int64, updateFreqUnit string, source string, shortDesc string, longDesc string, useCase string, links pq.StringArray, contributors pq.StringArray, enableAiSummary bool) (cityComponent CityComponent, err error) {
 	component := Component{
 		Name: name, 
 		// HistoryConfig: historyConfig, 
@@ -449,6 +449,7 @@ func UpdateComponent(id int, city string, name string, historyConfig json.RawMes
 		UseCase: useCase, 
 		Links: links, 
 		Contributors: contributors, 
+		EnableAiSummary: enableAiSummary,
 		UpdatedAt: time.Now(),
 	}
 
@@ -467,6 +468,7 @@ func UpdateComponent(id int, city string, name string, historyConfig json.RawMes
 		UseCase: useCase, 
 		Links: links, 
 		Contributors: contributors, 
+		EnableAiSummary: enableAiSummary,
 		UpdatedAt: time.Now(),
 	}
 
@@ -482,7 +484,26 @@ func UpdateComponent(id int, city string, name string, historyConfig json.RawMes
 		return cityComponent, err
 	}
 
-	err = DBManager.Table("query_charts").Where("index = ?", tmp.Index).Where("city = ?", city).Updates(&queryCharts).Error
+	err = DBManager.Table("query_charts").
+		Where("index = ?", tmp.Index).
+		Where("city = ?", city).
+		Select(
+			"history_config",
+			"map_filter",
+			"time_from",
+			"time_to",
+			"update_freq",
+			"update_freq_unit",
+			"source",
+			"short_desc",
+			"long_desc",
+			"use_case",
+			"links",
+			"contributors",
+			"enable_ai_summary",
+			"updated_at",
+		).
+		Updates(&queryCharts).Error
 	if err != nil {
 		return cityComponent, err
 	}
