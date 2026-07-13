@@ -19,7 +19,11 @@ const isLoading = ref(false);
 
 const formatTime = (time) => {
 	if (!time) return "";
-	return time.replace("T", " ").replace(/\.\d+Z$/, "");
+
+	return time
+		.replace("T", " ")
+		.replace(/\.\d+Z?$/, "")
+		.replace(/Z$/, "");
 };
 
 watch(
@@ -161,7 +165,7 @@ const onMouseUp = () => {
 	max-width: 480px;
 	background: #2a2c2f;
 	border: 1px solid #494b4e;
-	border-radius: 12px;
+	border-radius: 5px;
 	overflow: hidden;
 	z-index: 1000;
 	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
