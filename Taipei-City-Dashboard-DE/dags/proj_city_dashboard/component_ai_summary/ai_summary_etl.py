@@ -9,23 +9,30 @@ from utils.llm_provider import generate_text
 
 AI_SUMMARY_TABLE = "component_ai_summary"
 
+# ponytail: 照抄 BE app/util/common.go GetTime() 沒帶參數時的預設值(1990-01-01 ~ 現在,
+# 等於全部資料),讓 query_chart 裡的 %s 時間區間代入跟前端預設行為一致。
+DEFAULT_TIME_FROM = "1990-01-01T00:00:00+08:00"
+ROW_SAMPLE_LIMIT = 20
+CELL_TRUNCATE_LEN = 150
+QUERY_TIMEOUT_MS = 30000
+
 CHART_SYSTEM_PROMPT = (
-    "你是台北市城市儀表板的資料助理。請根據提供的組件資訊,用繁體中文寫一段"
-    "100 到 150 字的摘要,說明這個圖表組件的用途、代表的指標意義,以及使用者可以如何解讀這份資料。"
-    "只需輸出摘要內容,不要條列、不要加標題。"
+    "你是台北市城市儀表板的資料助理。請根據提供的組件資訊與實際查詢到的資料樣本,用繁體中文寫一段"
+    "100 到 150 字的摘要,說明這個圖表組件的用途、代表的指標意義,並適度引用資料樣本中的實際數值或"
+    "趨勢,幫助使用者解讀這份資料。只需輸出摘要內容,不要條列、不要加標題。"
 )
 
 MAP_SYSTEM_PROMPT = (
-    "你是台北市城市儀表板的資料助理。請根據提供的地圖圖層資訊,用繁體中文寫一段"
-    "100 到 150 字的摘要,說明這個圖層呈現的空間資料內容、欄位意義,以及使用者可以從地圖上觀察到什麼。"
-    "只需輸出摘要內容,不要條列、不要加標題。"
+    "你是台北市城市儀表板的資料助理。請根據提供的地圖圖層資訊與實際查詢到的資料樣本,用繁體中文寫一段"
+    "100 到 150 字的摘要,說明這個圖層呈現的空間資料內容、欄位意義,並適度引用資料樣本中的實際內容,"
+    "幫助使用者理解可以從地圖上觀察到什麼。只需輸出摘要內容,不要條列、不要加標題。"
 )
 
 
 def fetch_enabled_components(engine):
     sql = sa_text(
         """
-        SELECT index, city, short_desc, long_desc, use_case
+        SELECT index, city, short_desc, long_desc, use_case, query_chart
         FROM query_charts
         WHERE enable_ai_summary IS TRUE
         """
@@ -38,6 +45,7 @@ def fetch_enabled_components(engine):
                 "short_desc": row[2],
                 "long_desc": row[3],
                 "use_case": row[4],
+                "query_chart": row[5],
             }
             for row in conn.execute(sql).fetchall()
         ]
@@ -61,16 +69,62 @@ def fetch_map_configs(engine, index, city):
         ]
 
 
-def fetch_sql_view_info(catalog_engine, geodata_engine, view_name):
+def _default_time_to():
+    return get_tpe_now_time(is_with_tz=True).strftime("%Y-%m-%dT%H:%M:%S+08:00")
+
+
+def run_query_sample(engine, query, limit=ROW_SAMPLE_LIMIT):
+    """
+    真的執行一段 SQL,只抓前 limit 筆當樣本回傳給 LLM,不把整包資料塞進 prompt。
+    照抄 BE(componentData.go)的邏輯:query 裡剛好有 2 個 %s 才代入 time_from/time_to。
+
+    ponytail: fetchmany(limit) 在預設 psycopg2 設定下不是真的 server-side cursor,不能完全
+    避免整包結果先進到 client 端記憶體;這裡另外加 statement_timeout 當安全網,擋住失控的慢查詢。
+    這些 query_chart 本來就是給前端即時渲染圖表用的正式查詢,預期已經是合理範圍,如果之後真的
+    遇到會回傳超大結果集的 query,再改用 server-side cursor。
+    """
+    if query.count("%s") == 2:
+        query = query % (DEFAULT_TIME_FROM, _default_time_to())
+
+    with engine.begin() as conn:
+        conn.execute(sa_text(f"SET LOCAL statement_timeout = {QUERY_TIMEOUT_MS}"))
+        result = conn.execute(sa_text(query))
+        if not result.returns_rows:
+            return {"columns": [], "rows": []}
+        columns = list(result.keys())
+        rows = [list(r) for r in result.fetchmany(limit)]
+
+    return {"columns": columns, "rows": rows}
+
+
+def _truncate(value, limit=CELL_TRUNCATE_LEN):
+    text = str(value)
+    return text if len(text) <= limit else text[:limit] + "…"
+
+
+def format_query_result(query, result):
+    lines = [f"實際查詢語法:\n{query.strip()}"]
+    if result and result["rows"]:
+        lines.append(f"\n查詢結果欄位:{', '.join(result['columns'])}")
+        lines.append("查詢結果樣本:")
+        for row in result["rows"]:
+            lines.append("  " + " | ".join(_truncate(v) for v in row))
+    else:
+        lines.append("\n查詢結果:無資料")
+    return "\n".join(lines)
+
+
+def fetch_map_query_info(catalog_engine, geodata_engine, view_name):
     """
     圖層在 GeoServer 分兩種:
     1. SQL View(JDBC_VIRTUAL_TABLE):真正的查詢語法(可能是 join/聚合)存在 GeoServer 自己的
        catalog(pgconfig.resourceinfo.info.metadata.MetadataMap.JDBC_VIRTUAL_TABLE...sql),
-       不是 dashboard-stream 裡的實體物件,要先查這裡。
+       不是 dashboard-stream 裡的實體物件,要先查這裡拿語法。
     2. 純資料表:GeoServer 直接對應 dashboard-stream 的一張表,沒有 JDBC_VIRTUAL_TABLE,
-       退回查 information_schema.columns 拿欄位清單。
-    兩邊都查不到就回 None,讓上層優雅跳過。
+       退回組一個 SELECT * FROM 該表當查詢語法。
+    兩種情況都會真的執行這段查詢,回傳語法 + 樣本結果給上層組 prompt。查不到就回 None。
     """
+    sql_query = None
     if catalog_engine is not None:
         try:
             with catalog_engine.connect() as conn:
@@ -86,41 +140,48 @@ def fetch_sql_view_info(catalog_engine, geodata_engine, view_name):
                     .get("Literal", {})
                     .get("value", {})
                 )
-                sql_query = vt.get("sql")
-                if sql_query:
-                    return {"sql_query": sql_query.strip(), "columns": None}
+                candidate = vt.get("sql")
+                if candidate:
+                    sql_query = candidate.strip()
         except Exception as e:
             print(f"GeoServer catalog lookup failed for {view_name}: {e}")
 
     if geodata_engine is None:
         return None
 
-    columns_sql = sa_text(
-        """
-        SELECT column_name
-        FROM information_schema.columns
-        WHERE table_name = :view_name
-        ORDER BY ordinal_position
-        """
-    )
-    with geodata_engine.connect() as conn:
-        columns = [row[0] for row in conn.execute(columns_sql, {"view_name": view_name}).fetchall()]
+    if sql_query is None:
+        with geodata_engine.connect() as conn:
+            exists = conn.execute(
+                sa_text("SELECT 1 FROM information_schema.tables WHERE table_name = :view_name"),
+                {"view_name": view_name},
+            ).fetchone()
+        if not exists:
+            return None
+        sql_query = f'SELECT * FROM "{view_name}"'
 
-    if not columns:
-        return None
-    return {"sql_query": None, "columns": columns}
+    try:
+        result = run_query_sample(geodata_engine, sql_query)
+    except Exception as e:
+        print(f"query execution failed for {view_name}: {e}")
+        result = None
 
-
-def build_chart_prompt(component):
-    return (
-        f"組件名稱(index):{component['index']}\n"
-        f"簡短說明:{component['short_desc'] or '無'}\n"
-        f"詳細說明:{component['long_desc'] or '無'}\n"
-        f"應用情境:{component['use_case'] or '無'}\n"
-    )
+    return {"sql_query": sql_query, "result": result}
 
 
-def build_map_prompt(component, map_rows, sql_view_infos):
+def build_chart_prompt(component, query_result):
+    lines = [
+        f"組件名稱(index):{component['index']}",
+        f"簡短說明:{component['short_desc'] or '無'}",
+        f"詳細說明:{component['long_desc'] or '無'}",
+        f"應用情境:{component['use_case'] or '無'}",
+    ]
+    if component["query_chart"]:
+        lines.append("")
+        lines.append(format_query_result(component["query_chart"], query_result))
+    return "\n".join(lines)
+
+
+def build_map_prompt(component, map_rows, map_query_infos):
     lines = [f"組件名稱(index):{component['index']}"]
     for row in map_rows:
         lines.append(f"\n圖層:{row['title']}(類型:{row['type']})")
@@ -140,12 +201,9 @@ def build_map_prompt(component, map_rows, sql_view_infos):
             )
             lines.append(f"欄位說明:{field_desc}")
 
-        view_info = sql_view_infos.get(row["map_index"])
-        if view_info:
-            if view_info["sql_query"]:
-                lines.append(f"圖層 SQL 查詢邏輯:{view_info['sql_query']}")
-            elif view_info["columns"]:
-                lines.append(f"資料庫欄位:{'、'.join(view_info['columns'])}")
+        query_info = map_query_infos.get(row["map_index"])
+        if query_info:
+            lines.append(format_query_result(query_info["sql_query"], query_info["result"]))
 
     return "\n".join(lines)
 
@@ -168,9 +226,10 @@ def write_summary(engine, index, city, summary_type, result):
 # ponytail: geoserver-postgres 接的 db(geoserver_pgconfig)是 GeoServer 自己的 pgconfig
 # catalog(workspace/layer/store 設定 + SQL View 查詢語法都存在這裡的 jsonb 欄位)。實際圖層
 # 資料表(非 SQL View 的 fallback 用)則在同一台 Postgres 的 dashboard-stream db、schema
-# public(實測這個部署唯一的 PostGIS store 就是指向它)。所以 catalog 用原本連線,geodata 借
-# 用同一組帳密把 dbname 換掉即可,不用另外設 connection。之後如果 GeoServer 掛了不只一個
-# store,要改成真的走 pgconfig.storeinfo 查每個 layer 對應的 store db,而不是寫死。
+# public(實測這個部署唯一的 PostGIS store 就是指向它,也是 BE query_chart 實際查詢的 db)。
+# 所以 catalog 用原本連線,geodata 借用同一組帳密把 dbname 換掉即可,不用另外設 connection。
+# 之後如果 GeoServer 掛了不只一個 store,要改成真的走 pgconfig.storeinfo 查每個 layer 對應
+# 的 store db,而不是寫死。
 GEODATA_DBNAME = "dashboard-stream"
 
 
@@ -205,7 +264,14 @@ def ai_summary_etl(**kwargs):
         index, city = component["index"], component["city"]
 
         try:
-            chart_summary = generate_text(CHART_SYSTEM_PROMPT, build_chart_prompt(component))
+            query_result = None
+            if component["query_chart"] and geodata_engine is not None:
+                try:
+                    query_result = run_query_sample(geodata_engine, component["query_chart"])
+                except Exception as e:
+                    print(f"[{index}/{city}] query_chart execution failed: {e}")
+
+            chart_summary = generate_text(CHART_SYSTEM_PROMPT, build_chart_prompt(component, query_result))
             write_summary(engine, index, city, "chart", chart_summary)
             print(f"[{index}/{city}] chart summary written.")
         except Exception as e:
@@ -215,18 +281,18 @@ def ai_summary_etl(**kwargs):
         if not map_rows:
             continue
 
-        sql_view_infos = {}
+        map_query_infos = {}
         if catalog_engine is not None or geodata_engine is not None:
             for row in map_rows:
                 try:
-                    info = fetch_sql_view_info(catalog_engine, geodata_engine, row["map_index"])
+                    info = fetch_map_query_info(catalog_engine, geodata_engine, row["map_index"])
                     if info:
-                        sql_view_infos[row["map_index"]] = info
+                        map_query_infos[row["map_index"]] = info
                 except Exception as e:
-                    print(f"[{index}/{city}] SQL view lookup failed for {row['map_index']}: {e}")
+                    print(f"[{index}/{city}] map query lookup failed for {row['map_index']}: {e}")
 
         try:
-            map_prompt = build_map_prompt(component, map_rows, sql_view_infos)
+            map_prompt = build_map_prompt(component, map_rows, map_query_infos)
             map_summary = generate_text(MAP_SYSTEM_PROMPT, map_prompt)
             write_summary(engine, index, city, "map", map_summary)
             print(f"[{index}/{city}] map summary written.")
