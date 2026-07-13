@@ -64,6 +64,35 @@ def fetch_enabled_components(engine):
         ]
 
 
+def fetch_component_by_index(engine, index, city=None):
+    """手動 trigger 帶 index(+選填 city)參數時用,只重新生成指定的組件,不管 enable_ai_summary。"""
+    conditions = "index = :index"
+    params = {"index": index}
+    if city:
+        conditions += " AND city = :city"
+        params["city"] = city
+
+    sql = sa_text(
+        f"""
+        SELECT index, city, short_desc, long_desc, use_case, query_chart
+        FROM query_charts
+        WHERE {conditions}
+        """
+    )
+    with engine.connect() as conn:
+        return [
+            {
+                "index": row[0],
+                "city": row[1],
+                "short_desc": row[2],
+                "long_desc": row[3],
+                "use_case": row[4],
+                "query_chart": row[5],
+            }
+            for row in conn.execute(sql, params).fetchall()
+        ]
+
+
 def fetch_map_configs(engine, index, city):
     """依 createTempComponentDB 同樣的 join 邏輯:query_charts.map_config_ids -> component_maps.id"""
     sql = sa_text(
@@ -286,25 +315,51 @@ def ai_summary_etl(**kwargs):
     catalog_engine = _get_geoserver_catalog_engine()
     geodata_engine = _get_geodata_engine()
 
-    components = fetch_enabled_components(engine)
-    print(f"Found {len(components)} components with enable_ai_summary = true.")
+    # 手動 trigger 帶 conf(index/city/type)時,只重新生成指定的組件,不管 enable_ai_summary、
+    # 也不跑其他組件。city/type 沒帶就是「該 index 底下所有 city」「chart 跟 map 都跑」。
+    dag_run = kwargs.get("dag_run")
+    conf = dag_run.conf if dag_run and dag_run.conf else {}
+    target_index = conf.get("index")
+    target_type = conf.get("type")
+
+    if target_type not in (None, "chart", "map"):
+        raise ValueError(f"conf.type 只能是 'chart' 或 'map',收到: {target_type!r}")
+
+    if target_index:
+        components = fetch_component_by_index(engine, target_index, conf.get("city"))
+        print(
+            f"手動指定重新生成 index={target_index} city={conf.get('city') or '(全部 city)'} "
+            f"type={target_type or '(chart+map)'},找到 {len(components)} 筆。"
+        )
+        if not components:
+            print(f"query_charts 裡查無 index={target_index} city={conf.get('city')},略過。")
+    else:
+        components = fetch_enabled_components(engine)
+        print(f"Found {len(components)} components with enable_ai_summary = true.")
+
+    do_chart = target_type in (None, "chart")
+    do_map = target_type in (None, "map")
 
     for component in components:
         index, city = component["index"], component["city"]
 
-        try:
-            query_result = None
-            if component["query_chart"] and geodata_engine is not None:
-                try:
-                    query_result = run_query_sample(geodata_engine, component["query_chart"])
-                except Exception as e:
-                    print(f"[{index}/{city}] query_chart execution failed: {e}")
+        if do_chart:
+            try:
+                query_result = None
+                if component["query_chart"] and geodata_engine is not None:
+                    try:
+                        query_result = run_query_sample(geodata_engine, component["query_chart"])
+                    except Exception as e:
+                        print(f"[{index}/{city}] query_chart execution failed: {e}")
 
-            chart_summary = generate_text(CHART_SYSTEM_PROMPT, build_chart_prompt(component, query_result))
-            write_summary(engine, index, city, "chart", chart_summary)
-            print(f"[{index}/{city}] chart summary written.")
-        except Exception as e:
-            print(f"[{index}/{city}] chart summary failed: {e}")
+                chart_summary = generate_text(CHART_SYSTEM_PROMPT, build_chart_prompt(component, query_result))
+                write_summary(engine, index, city, "chart", chart_summary)
+                print(f"[{index}/{city}] chart summary written.")
+            except Exception as e:
+                print(f"[{index}/{city}] chart summary failed: {e}")
+
+        if not do_map:
+            continue
 
         map_rows = fetch_map_configs(engine, index, city)
         if not map_rows:
