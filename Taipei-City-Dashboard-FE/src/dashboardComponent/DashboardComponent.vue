@@ -1028,6 +1028,7 @@ button:hover {
 			margin: 4px 0;
 			display: flex;
 			gap: 5px;
+			flex-shrink: 0;
 
 			div:first-child {
 				margin-left: 5px;
