@@ -31,7 +31,8 @@ CHART_SYSTEM_PROMPT = (
 MAP_SYSTEM_PROMPT = (
     "你是台北市城市儀表板的空間資料分析助理。請根據提供的地圖圖層資訊、"
     "欄位說明與實際圖層資料，使用繁體中文撰寫一段 150 到 220 字的分析摘要。"
-    "摘要應先簡要說明圖層呈現的空間資料內容與主要欄位意義，"
+    "摘要應先簡要說明圖層呈現的空間資料內容與主要欄位意義；"
+    "若提供了地圖顏色/樣式對照，也要說明不同顏色或樣式在地圖上分別代表什麼分類或狀態。"
     "再分析地圖中值得關注的空間分布現象，例如集中區域、稀疏區域、"
     "群聚、熱點、區域差異、鄰近關係、覆蓋範圍或異常點位，"
     "並說明使用者可以如何解讀這些空間特徵及其可能的城市治理意義。"
@@ -97,7 +98,7 @@ def fetch_map_configs(engine, index, city):
     """依 createTempComponentDB 同樣的 join 邏輯:query_charts.map_config_ids -> component_maps.id"""
     sql = sa_text(
         """
-        SELECT cm.index, cm.title, cm.type, cm.property
+        SELECT cm.index, cm.title, cm.type, cm.property, cm.paint
         FROM query_charts qc
         JOIN unnest(qc.map_config_ids) AS id_value ON true
         JOIN component_maps cm ON cm.id = id_value
@@ -106,9 +107,59 @@ def fetch_map_configs(engine, index, city):
     )
     with engine.connect() as conn:
         return [
-            {"map_index": row[0], "title": row[1], "type": row[2], "property": row[3]}
+            {
+                "map_index": row[0],
+                "title": row[1],
+                "type": row[2],
+                "property": row[3],
+                "paint": row[4],
+            }
             for row in conn.execute(sql, {"index": index, "city": city}).fetchall()
         ]
+
+
+def _parse_json_field(raw):
+    """component_maps 的 json 欄位,psycopg2 可能已自動解成 dict/list,也可能是原始字串,兩種都要接。"""
+    if isinstance(raw, str):
+        try:
+            return json.loads(raw)
+        except ValueError:
+            return None
+    return raw
+
+
+def describe_paint(paint):
+    """
+    把 component_maps.paint(Mapbox/MapLibre style 的著色表達式)轉成人看得懂的顏色對照
+    說明給 LLM。只特別處理最常見的 match 表達式(依欄位值對應顏色 + 預設色),其他複雜
+    表達式(interpolate/case/巢狀...)就把原始值丟給 LLM 自己解讀,不刻意寫完整的
+    expression parser。
+    """
+    paint = _parse_json_field(paint)
+    if not paint or not isinstance(paint, dict):
+        return None
+
+    lines = []
+    for prop_name, value in paint.items():
+        if isinstance(value, list) and len(value) >= 2 and value[0] == "match":
+            get_expr = value[1]
+            field = get_expr[1] if isinstance(get_expr, list) and len(get_expr) > 1 else str(get_expr)
+            rest = value[2:]
+            if len(rest) % 2 == 1:
+                default, pairs = rest[-1], rest[:-1]
+            else:
+                default, pairs = None, rest
+            mapping = "、".join(f"{pairs[i]}={pairs[i + 1]}" for i in range(0, len(pairs), 2))
+            desc = f"{prop_name} 依欄位「{field}」的值決定:{mapping}"
+            if default is not None:
+                desc += f",其他值預設為 {default}"
+            lines.append(desc)
+        elif isinstance(value, str):
+            lines.append(f"{prop_name} 固定為 {value}")
+        else:
+            lines.append(f"{prop_name}: {json.dumps(value, ensure_ascii=False)}")
+
+    return "；".join(lines) if lines else None
 
 
 def _default_time_to():
@@ -244,20 +295,16 @@ def build_map_prompt(component, map_rows, map_query_infos):
     for row in map_rows:
         lines.append(f"\n圖層:{row['title']}(類型:{row['type']})")
 
-        # property 是 PG json 欄位,psycopg2 可能已自動解成 list,也可能是原始字串,兩種都要接
-        raw_property = row["property"]
-        if isinstance(raw_property, str):
-            try:
-                fields = json.loads(raw_property)
-            except ValueError:
-                fields = []
-        else:
-            fields = raw_property or []
+        fields = _parse_json_field(row["property"]) or []
         if fields:
             field_desc = "、".join(
                 f"{f.get('name')}({f.get('key')})" for f in fields if isinstance(f, dict)
             )
             lines.append(f"欄位說明:{field_desc}")
+
+        paint_desc = describe_paint(row["paint"])
+        if paint_desc:
+            lines.append(f"地圖顏色/樣式對照:{paint_desc}")
 
         query_info = map_query_infos.get(row["map_index"])
         if query_info:
