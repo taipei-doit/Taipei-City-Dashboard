@@ -59,6 +59,11 @@ import SunburstChartSvg from "./assets/chart/SunburstChart.svg";
 import NegativeColumnChartSvg from "./assets/chart/NegativeColumnChart.svg";
 import QuartileChartSvg from "./assets/chart/QuartileChart.svg";
 
+import AiSummaryIcon from "../components/icons/AiSummaryIcon.vue";
+import AiSummaryBox from "../components/dialogs/AiSummaryBox.vue";
+import MapAiSummaryIcon from "../components/icons/MapAiSummaryIcon.vue";
+import MapAiSummaryBox from "../components/dialogs/MapAiSummaryBox.vue";
+
 const props = defineProps({
 	style: { type: Object, default: () => ({}) },
 	mode: {
@@ -124,6 +129,16 @@ const toggleOn = computed({
 
 const mousePosition = ref({ x: null, y: null });
 const showTagTooltip = ref(false);
+const showAiSummaryBox = ref(false);
+const showMapAiSummaryBox = ref(false);
+
+const handleAiSummaryBoxToggle = () => {
+	showAiSummaryBox.value = !showAiSummaryBox.value;
+};
+
+const handleMapAiSummaryBoxToggle = () => {
+	showMapAiSummaryBox.value = !showMapAiSummaryBox.value;
+};
 
 // Parses time data into display format
 const dataTime = computed(() => {
@@ -322,6 +337,13 @@ function returnChartComponent(name, svg) {
         class="dashboardcomponent-header-button"
       >
         <button
+          v-if="props.config.enable_ai_summary"
+          class="ai-summary-btn"
+          @click="handleAiSummaryBoxToggle"
+        >
+          <AiSummaryIcon />
+        </button>
+        <button
           v-if="addBtn"
           @click="$emit('add', config.id, config.name)"
         >
@@ -348,6 +370,16 @@ function returnChartComponent(name, svg) {
         v-else-if="mode.includes('map')"
         class="dashboardcomponent-header-toggle"
       >
+        <button
+          v-if="
+            props.config.enable_ai_summary &&
+              props.config.map_config.length > 0
+          "
+          class="ai-summary-btn"
+          @click="handleMapAiSummaryBoxToggle"
+        >
+          <MapAiSummaryIcon />
+        </button>
         <label class="toggleswitch">
           <input
             v-model="toggleOn"
@@ -547,6 +579,20 @@ function returnChartComponent(name, svg) {
       "
       :has-history="config.history_config?.range ? true : false"
     />
+    <AiSummaryBox
+      v-if="showAiSummaryBox"
+      :index="props.config.index"
+      :name="props.config.name"
+      :city="props.config.city"
+      @close="handleAiSummaryBoxToggle"
+    />
+    <MapAiSummaryBox
+      v-if="showMapAiSummaryBox"
+      :index="props.config.index"
+      :name="props.config.name"
+      :city="props.config.city"
+      @close="handleMapAiSummaryBoxToggle"
+    />
   </Teleport>
 </template>
 
@@ -685,6 +731,8 @@ button:hover {
 		}
 
 		&-toggle {
+			display: flex;
+			align-items: center;
 			min-height: var(--font-ms);
 			min-width: 2rem;
 			margin-top: 4px;
@@ -985,6 +1033,20 @@ button:hover {
 				gap: 4px;
 			}
 		}
+	}
+}
+
+.ai-summary-btn {
+	display: flex;
+	justify-content: center;
+	align-items: start;
+	font-size: calc(var(--font-l) * var(--font-to-icon));
+	color: var(--color-complement-text);
+	transition: color 0.2s;
+	margin: 3px;
+
+	&:hover {
+		color: white;
 	}
 }
 </style>
