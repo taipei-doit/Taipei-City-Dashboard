@@ -1,7 +1,7 @@
 <!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 
 <script setup>
-import { ref, defineProps } from "vue";
+import { ref, defineProps, watch } from "vue";
 import { storeToRefs } from "pinia";
 import DashboardComponent from "../../../dashboardComponent/DashboardComponent.vue";
 import { useDialogStore } from "../../../store/dialogStore";
@@ -16,6 +16,7 @@ import HistoryChart from "../../charts/HistoryChart.vue";
 import { chartsPerDataType } from "../../../assets/configs/apexcharts/chartTypes";
 import { timeTerms } from "../../../assets/configs/AllTimes";
 import { mapTypes } from "../../../assets/configs/mapbox/mapConfig";
+import http from "../../../router/axios";
 
 const dialogStore = useDialogStore();
 const adminStore = useAdminStore();
@@ -42,6 +43,35 @@ function handleClose() {
 	dialogStore.hideAllDialogs();
 	adminStore.currentComponent = null;
 }
+
+let responseForChart = ref(null);
+let responseForMap = ref(null);
+
+watch(
+	() => currentComponent.value,
+	async (newVal) => {
+		if (!newVal) return;
+
+		const res = await http.get("/component/ai-summary", {
+			params: {
+				index: newVal.index,
+				city: newVal.city,
+				type: "chart",
+			},
+		});
+		responseForChart.value = res;
+
+		const resMap = await http.get("/component/ai-summary", {
+			params: {
+				index: newVal.index,
+				city: newVal.city,
+				type: "map",
+			},
+		});
+		responseForMap.value = resMap;
+	},
+	{ immediate: true },
+);
 </script>
 
 <template>
@@ -167,7 +197,7 @@ function handleClose() {
                         'demo',
                         'maintain',
                       ].includes(
-                        currentComponent.time_from
+                        currentComponent.time_from,
                       )
                     ) {
                       currentComponent.time_to = '';
@@ -268,7 +298,7 @@ function handleClose() {
                 () => {
                   if (tempInputStorage.link.length > 0) {
                     currentComponent.links.push(
-                      tempInputStorage.link
+                      tempInputStorage.link,
                     );
                     tempInputStorage.link = '';
                   }
@@ -282,7 +312,7 @@ function handleClose() {
                 (index) => {
                   currentComponent.contributors.splice(
                     index,
-                    1
+                    1,
                   );
                 }
               "
@@ -301,13 +331,44 @@ function handleClose() {
                     tempInputStorage.contributor.length > 0
                   ) {
                     currentComponent.contributors.push(
-                      tempInputStorage.contributor
+                      tempInputStorage.contributor,
                     );
                     tempInputStorage.contributor = '';
                   }
                 }
               "
             >
+            <div class="enable_ai_summary">
+              <label>是否開啟 AI 摘要功能</label>
+              <label class="toggle-switch">
+                <input
+                  v-model="currentComponent.enable_ai_summary"
+                  type="checkbox"
+                >
+                <span class="toggle-switch-slider" />
+              </label>
+            </div>
+            <!-- <div class="refresh_ai_summary">
+              <label>組件圖表及地圖 AI 摘要刷新</label>
+              <button>點擊刷新</button>
+            </div> -->
+            <div class="ai_summary_preview">
+              <label>目前組件圖表 AI 摘要內容</label>
+              <div class="ai_summary_preview-content">
+                {{
+                  responseForChart?.data.data.result ||
+                    "無資料"
+                }}
+              </div>
+            </div>
+            <div class="ai_summary_preview">
+              <label>目前組件地圖 AI 摘要內容</label>
+              <div class="ai_summary_preview-content">
+                {{
+                  responseForMap?.data.data.result || "無資料"
+                }}
+              </div>
+            </div>
           </div>
           <div
             v-else-if="currentSettings === 'chart'"
@@ -364,7 +425,7 @@ function handleClose() {
                 (index) => {
                   currentComponent.chart_config.color.splice(
                     index,
-                    1
+                    1,
                   );
                 }
               "
@@ -385,7 +446,7 @@ function handleClose() {
                     tempInputStorage.chartColor.length === 7
                   ) {
                     currentComponent.chart_config.color.push(
-                      tempInputStorage.chartColor
+                      tempInputStorage.chartColor,
                     );
                     tempInputStorage.chartColor = '#000000';
                   }
@@ -430,7 +491,7 @@ function handleClose() {
                 (index) => {
                   currentComponent.history_config.color.splice(
                     index,
-                    1
+                    1,
                   );
                 }
               "
@@ -452,7 +513,7 @@ function handleClose() {
                     7
                   ) {
                     currentComponent.history_config.color.push(
-                      tempInputStorage.historyColor
+                      tempInputStorage.historyColor,
                     );
                     tempInputStorage.historyColor =
                       '#000000';
@@ -524,7 +585,10 @@ function handleClose() {
                   v-model="
                     currentComponent.map_config[index].size
                   "
-                  :disabled="currentComponent.map_config[index].type==='symbol-3d'"
+                  :disabled="
+                    currentComponent.map_config[index]
+                      .type === 'symbol-3d'
+                  "
                 >
                   <option :value="''">
                     無
@@ -543,7 +607,10 @@ function handleClose() {
                   v-model="
                     currentComponent.map_config[index].icon
                   "
-                  :disabled="currentComponent.map_config[index].type==='symbol-3d'"
+                  :disabled="
+                    currentComponent.map_config[index]
+                      .type === 'symbol-3d'
+                  "
                 >
                   <option :value="''">
                     無
@@ -601,7 +668,11 @@ function handleClose() {
             :key="`${currentComponent.index}-${currentComponent.chart_config.color}-${currentComponent.chart_config.types}`"
             :config="JSON.parse(JSON.stringify(currentComponent))"
             :active-city="currentComponent.city"
-            :city-tag="contentStore.cityManager.getTagList(currentComponent.city)"
+            :city-tag="
+              contentStore.cityManager.getTagList(
+                currentComponent.city,
+              )
+            "
             mode="large"
           />
           <div
@@ -615,8 +686,8 @@ function handleClose() {
               :history_config="
                 JSON.parse(
                   JSON.stringify(
-                    currentComponent.history_config
-                  )
+                    currentComponent.history_config,
+                  ),
                 )
               "
             />
@@ -777,6 +848,112 @@ function handleClose() {
 		align-items: center;
 		border-radius: 5px;
 		border: solid 1px var(--color-border);
+	}
+}
+
+.enable_ai_summary {
+	margin-top: 0.5rem;
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+	label {
+		margin: 0;
+	}
+}
+
+.toggle-switch {
+	position: relative;
+	display: inline-block;
+	width: 40px;
+	height: 22px;
+	flex-shrink: 0;
+
+	input {
+		opacity: 0;
+		width: 0;
+		height: 0;
+
+		&:checked + .toggle-switch-slider {
+			background-color: var(--color-highlight);
+		}
+
+		&:checked + .toggle-switch-slider:before {
+			transform: translateX(18px);
+		}
+
+		&:focus-visible + .toggle-switch-slider {
+			outline: 2px solid var(--color-highlight);
+			outline-offset: 2px;
+		}
+	}
+
+	&-slider {
+		position: absolute;
+		cursor: pointer;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background-color: var(--color-border);
+		transition: background-color 0.2s;
+		border-radius: 22px;
+
+		&:before {
+			position: absolute;
+			content: "";
+			height: 16px;
+			width: 16px;
+			left: 3px;
+			bottom: 3px;
+			background-color: white;
+			transition: transform 0.2s;
+			border-radius: 50%;
+		}
+	}
+}
+
+.refresh_ai_summary {
+	margin: 0.5rem 0;
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+	button {
+		width: fit-content;
+		padding: 2px 6px;
+		border-radius: 5px;
+		background-color: var(--color-highlight);
+	}
+}
+
+.ai_summary_preview {
+	margin-top: 0.5rem;
+	display: flex;
+	flex-direction: column;
+	gap: 0.25rem;
+
+	label {
+		margin: 0;
+	}
+
+	&-content {
+		max-height: 120px;
+		overflow-y: auto;
+		padding: 0.5rem;
+		border-radius: 5px;
+		background-color: var(--color-border);
+		font-size: var(--font-ms);
+		color: darken(white, 30%);
+		line-height: 1.5;
+		white-space: pre-wrap;
+		word-break: break-word;
+
+		&::-webkit-scrollbar {
+			width: 4px;
+		}
+		&::-webkit-scrollbar-thumb {
+			background-color: rgba(136, 135, 135, 0.5);
+			border-radius: 4px;
+		}
 	}
 }
 </style>
