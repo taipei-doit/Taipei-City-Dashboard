@@ -17,15 +17,28 @@ CELL_TRUNCATE_LEN = 150
 QUERY_TIMEOUT_MS = 30000
 
 CHART_SYSTEM_PROMPT = (
-    "你是台北市城市儀表板的資料助理。請根據提供的組件資訊與實際查詢到的資料樣本,用繁體中文寫一段"
-    "100 到 150 字的摘要,說明這個圖表組件的用途、代表的指標意義,並適度引用資料樣本中的實際數值或"
-    "趨勢,幫助使用者解讀這份資料。只需輸出摘要內容,不要條列、不要加標題。"
+    "你是台北市城市儀表板的資料分析助理。請根據提供的組件資訊與圖表資料，"
+    "使用繁體中文撰寫一段 150 到 220 字的分析摘要。"
+    "摘要應先簡要說明圖表的用途與指標意義，再分析資料中值得關注的趨勢、"
+    "高低差異、排名、變化幅度、異常值、轉折點或群組差異，"
+    "並說明這些現象可能代表的城市治理意義或使用者可以如何解讀。"
+    "請優先引用資料中的具體期間、分類、區域與數值，使洞察具有依據。"
+    "若資料不足以判斷原因，只能描述觀察到的現象，不可自行推測因果關係；"
+    "若資料沒有明顯趨勢或差異，應如實說明資料分布相對穩定。"
+    "只需輸出一段完整摘要，不要條列、不要加標題、不要描述分析步驟。"
 )
 
 MAP_SYSTEM_PROMPT = (
-    "你是台北市城市儀表板的資料助理。請根據提供的地圖圖層資訊與實際查詢到的資料樣本,用繁體中文寫一段"
-    "100 到 150 字的摘要,說明這個圖層呈現的空間資料內容、欄位意義,並適度引用資料樣本中的實際內容,"
-    "幫助使用者理解可以從地圖上觀察到什麼。只需輸出摘要內容,不要條列、不要加標題。"
+    "你是台北市城市儀表板的空間資料分析助理。請根據提供的地圖圖層資訊、"
+    "欄位說明與實際圖層資料，使用繁體中文撰寫一段 150 到 220 字的分析摘要。"
+    "摘要應先簡要說明圖層呈現的空間資料內容與主要欄位意義，"
+    "再分析地圖中值得關注的空間分布現象，例如集中區域、稀疏區域、"
+    "群聚、熱點、區域差異、鄰近關係、覆蓋範圍或異常點位，"
+    "並說明使用者可以如何解讀這些空間特徵及其可能的城市治理意義。"
+    "請優先引用資料中的行政區、地點、分類、數量或指標數值，使洞察具有依據。"
+    "不得僅依點位數量直接推論事件風險或需求程度，也不可在資料不足時推測因果關係；"
+    "若無法辨識明顯空間特徵，應如實說明目前分布較為平均或資訊不足。"
+    "只需輸出一段完整摘要，不要條列、不要加標題、不要描述分析步驟。"
 )
 
 
@@ -90,11 +103,21 @@ def run_query_sample(engine, query, limit=ROW_SAMPLE_LIMIT):
         conn.execute(sa_text(f"SET LOCAL statement_timeout = {QUERY_TIMEOUT_MS}"))
         result = conn.execute(sa_text(query))
         if not result.returns_rows:
-            return {"columns": [], "rows": []}
+            return {"columns": [], "rows": [], "total_rows": 0}
         columns = list(result.keys())
         rows = [list(r) for r in result.fetchmany(limit)]
 
-    return {"columns": columns, "rows": rows}
+    # 總筆數是額外的佐證資訊,用獨立連線/transaction 查,失敗就算了不影響已經拿到的樣本。
+    total_rows = None
+    try:
+        stripped = query.strip().rstrip(";")
+        with engine.begin() as conn:
+            conn.execute(sa_text(f"SET LOCAL statement_timeout = {QUERY_TIMEOUT_MS}"))
+            total_rows = conn.execute(sa_text(f"SELECT COUNT(*) FROM ({stripped}) AS _sub")).scalar()
+    except Exception as e:
+        print(f"total row count failed (non-fatal): {e}")
+
+    return {"columns": columns, "rows": rows, "total_rows": total_rows}
 
 
 def _truncate(value, limit=CELL_TRUNCATE_LEN):
@@ -105,8 +128,14 @@ def _truncate(value, limit=CELL_TRUNCATE_LEN):
 def format_query_result(query, result):
     lines = [f"實際查詢語法:\n{query.strip()}"]
     if result and result["rows"]:
-        lines.append(f"\n查詢結果欄位:{', '.join(result['columns'])}")
-        lines.append("查詢結果樣本:")
+        total = result.get("total_rows")
+        sample_count = len(result["rows"])
+        if total is not None and total > sample_count:
+            lines.append(f"\n查詢結果總筆數:{total}(以下為前 {sample_count} 筆樣本)")
+        else:
+            lines.append(f"\n查詢結果總筆數:{total if total is not None else sample_count}")
+        lines.append(f"欄位:{', '.join(result['columns'])}")
+        lines.append("樣本內容:")
         for row in result["rows"]:
             lines.append("  " + " | ".join(_truncate(v) for v in row))
     else:
