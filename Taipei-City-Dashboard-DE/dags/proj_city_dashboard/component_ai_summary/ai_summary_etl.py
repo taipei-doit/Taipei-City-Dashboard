@@ -16,16 +16,24 @@ ROW_SAMPLE_LIMIT = 20
 CELL_TRUNCATE_LEN = 150
 QUERY_TIMEOUT_MS = 30000
 
+DATA_GROUNDING_INSTRUCTION = (
+    "提到資料規模或分布時,只能引用查詢結果明確給出的總筆數等確切數字當佐證;"
+    "樣本筆數如果少於總筆數,不要用少量樣本做「大多數」、「普遍」這類需要看過全部資料"
+    "才能下的推論,只根據樣本中具體看到的內容描述。"
+)
+
 CHART_SYSTEM_PROMPT = (
     "你是台北市城市儀表板的資料助理。請根據提供的組件資訊與實際查詢到的資料樣本,用繁體中文寫一段"
     "100 到 150 字的摘要,說明這個圖表組件的用途、代表的指標意義,並適度引用資料樣本中的實際數值或"
-    "趨勢,幫助使用者解讀這份資料。只需輸出摘要內容,不要條列、不要加標題。"
+    "趨勢,幫助使用者解讀這份資料。" + DATA_GROUNDING_INSTRUCTION +
+    "只需輸出摘要內容,不要條列、不要加標題。"
 )
 
 MAP_SYSTEM_PROMPT = (
     "你是台北市城市儀表板的資料助理。請根據提供的地圖圖層資訊與實際查詢到的資料樣本,用繁體中文寫一段"
     "100 到 150 字的摘要,說明這個圖層呈現的空間資料內容、欄位意義,並適度引用資料樣本中的實際內容,"
-    "幫助使用者理解可以從地圖上觀察到什麼。只需輸出摘要內容,不要條列、不要加標題。"
+    "幫助使用者理解可以從地圖上觀察到什麼。" + DATA_GROUNDING_INSTRUCTION +
+    "只需輸出摘要內容,不要條列、不要加標題。"
 )
 
 
@@ -90,11 +98,21 @@ def run_query_sample(engine, query, limit=ROW_SAMPLE_LIMIT):
         conn.execute(sa_text(f"SET LOCAL statement_timeout = {QUERY_TIMEOUT_MS}"))
         result = conn.execute(sa_text(query))
         if not result.returns_rows:
-            return {"columns": [], "rows": []}
+            return {"columns": [], "rows": [], "total_rows": 0}
         columns = list(result.keys())
         rows = [list(r) for r in result.fetchmany(limit)]
 
-    return {"columns": columns, "rows": rows}
+    # 總筆數是額外的佐證資訊,用獨立連線/transaction 查,失敗就算了不影響已經拿到的樣本。
+    total_rows = None
+    try:
+        stripped = query.strip().rstrip(";")
+        with engine.begin() as conn:
+            conn.execute(sa_text(f"SET LOCAL statement_timeout = {QUERY_TIMEOUT_MS}"))
+            total_rows = conn.execute(sa_text(f"SELECT COUNT(*) FROM ({stripped}) AS _sub")).scalar()
+    except Exception as e:
+        print(f"total row count failed (non-fatal): {e}")
+
+    return {"columns": columns, "rows": rows, "total_rows": total_rows}
 
 
 def _truncate(value, limit=CELL_TRUNCATE_LEN):
@@ -105,8 +123,14 @@ def _truncate(value, limit=CELL_TRUNCATE_LEN):
 def format_query_result(query, result):
     lines = [f"實際查詢語法:\n{query.strip()}"]
     if result and result["rows"]:
-        lines.append(f"\n查詢結果欄位:{', '.join(result['columns'])}")
-        lines.append("查詢結果樣本:")
+        total = result.get("total_rows")
+        sample_count = len(result["rows"])
+        if total is not None and total > sample_count:
+            lines.append(f"\n查詢結果總筆數:{total}(以下為前 {sample_count} 筆樣本)")
+        else:
+            lines.append(f"\n查詢結果總筆數:{total if total is not None else sample_count}")
+        lines.append(f"欄位:{', '.join(result['columns'])}")
+        lines.append("樣本內容:")
         for row in result["rows"]:
             lines.append("  " + " | ".join(_truncate(v) for v in row))
     else:
