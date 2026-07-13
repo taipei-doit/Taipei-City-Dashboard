@@ -40,7 +40,7 @@ const filteredMapLayers = computed(() => {
           <!-- Map Layers Dashboard -->
           <div
             v-if="
-              contentStore?.currentDashboard.index.includes('map-layers')
+              contentStore?.currentDashboard?.index?.includes('map-layers')
             "
           >
             <MobileLayerTab

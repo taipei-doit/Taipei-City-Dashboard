@@ -199,6 +199,7 @@ export const useMapStore = defineStore("map", {
 			fetch(`/mapData/metrotaipei_town.geojson`)
 				.then((response) => response.json())
 				.then((data) => {
+					if (!this.map) return;
 					this.map
 						.addSource("metrotaipei_town_label", {
 							type: "geojson",
@@ -210,6 +211,7 @@ export const useMapStore = defineStore("map", {
 			fetch(`/mapData/metrotaipei_village.geojson`)
 				.then((response) => response.json())
 				.then((data) => {
+					if (!this.map) return;
 					this.map
 						.addSource("metrotaipei_village_label", {
 							type: "geojson",
@@ -328,6 +330,7 @@ export const useMapStore = defineStore("map", {
 				this.map.loadImage(
 					`/images/map/${element}.png`,
 					(error, image) => {
+						if (!this.map) return;
 						if (error) throw error;
 						this.map.addImage(element, image);
 					},
@@ -2933,10 +2936,24 @@ export const useMapStore = defineStore("map", {
 		},
 		// 2. Called when user navigates away from the map
 		clearEntireMap() {
+			// 1. 停掉所有還在跑的計時器
+			this.stopAnimation();
+			this.stopWind();
+
+			// 2. 解除可能還殘留的事件監聽，並真正銷毀 mapbox 實例
+			if (this.map) {
+				this.map.off("sourcedata");
+				this.map.off("error");
+				this.map.remove();
+			}
+
 			this.currentLayers = [];
 			this.mapConfigs = {};
-			this.map = null;
 			this.currentVisibleLayers = [];
+			this.loadingLayers = [];
+			this.deckGlLayer = {};
+			this.overlay = null;
+			this.map = null;
 			this.removePopup();
 			this.tempMarkerCoordinates = null;
 		},

@@ -86,7 +86,7 @@ http.interceptors.response.use(
 				);
 				break;
 			default:
-				console.error(error)
+				console.error(`${error.response.status}，${error.response.data.message}`)
 				// dialogStore.showNotification(
 				// 	"fail",
 				// 	`${error.response.status}，${error.response.data.message}`
