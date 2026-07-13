@@ -6,6 +6,7 @@ import "material-icons/iconfont/material-icons.css";
 import { getComponentDataTimeframe } from "./utilities/dataTimeframe";
 import { timeTerms } from "./utilities/AllTimes";
 import { chartTypes } from "./utilities/chartTypes";
+import { useActiveMapSummary } from "../composables/useActiveMapSummary";
 
 import ComponentTag from "./components/ComponentTag.vue";
 import TagTooltip from "./components/TagTooltip.vue";
@@ -127,18 +128,22 @@ const toggleOn = computed({
 	},
 });
 
+const { isOpen, open, close } = useActiveMapSummary();
+const mapSummaryId = computed(() => `map-${props.config.index}`);
+const showMapAiSummaryBox = computed(() => isOpen(mapSummaryId.value));
 const mousePosition = ref({ x: null, y: null });
 const showTagTooltip = ref(false);
 const showAiSummaryBox = ref(false);
-const showMapAiSummaryBox = ref(false);
 
 const handleAiSummaryBoxToggle = () => {
 	showAiSummaryBox.value = !showAiSummaryBox.value;
 };
 
-const handleMapAiSummaryBoxToggle = () => {
-	showMapAiSummaryBox.value = !showMapAiSummaryBox.value;
-};
+function handleMapAiSummaryBoxToggle() {
+	showMapAiSummaryBox.value
+		? close(mapSummaryId.value)
+		: open(mapSummaryId.value);
+}
 
 // Parses time data into display format
 const dataTime = computed(() => {
