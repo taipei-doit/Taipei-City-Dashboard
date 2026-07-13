@@ -18,7 +18,11 @@ const isLoading = ref(false);
 
 const formatTime = (time) => {
 	if (!time) return "";
-	return time.replace("T", " ").replace(/\.\d+Z$/, "");
+
+	return time
+		.replace("T", " ")
+		.replace(/\.\d+Z?$/, "")
+		.replace(/Z$/, "");
 };
 
 watch(
@@ -36,10 +40,14 @@ watch(
 	},
 	{ immediate: true },
 );
+
 </script>
 
 <template>
-  <div class="overlay">
+  <div
+    class="overlay"
+    @click.self="$emit('close')"
+  >
     <div class="modal">
       <div class="modal-header">
         <div class="modal-title">
@@ -134,7 +142,7 @@ watch(
 	max-width: 480px;
 	background: #2a2c2f;
 	border: 1px solid #494b4e;
-	border-radius: 12px;
+	border-radius: 5px;
 	overflow: hidden;
 }
 
