@@ -1,6 +1,7 @@
 <script setup>
 import { ref, watch } from "vue";
 import http from "../../router/axios";
+import { hexToSpan } from "../../assets/utilityFunctions/colorConvert";
 
 const props = defineProps({
 	index: { type: String },
@@ -8,7 +9,7 @@ const props = defineProps({
 	city: { type: String },
 	analysisTime: { type: String },
 	description: {
-		type: String
+		type: String,
 	},
 });
 defineEmits(["close"]);
@@ -40,7 +41,6 @@ watch(
 	},
 	{ immediate: true },
 );
-
 </script>
 
 <template>
@@ -106,9 +106,9 @@ watch(
             <span /><span /><span />
           </span>
           <template v-else>
-            {{
-              response?.data?.data?.result
-            }}
+            <span
+              v-html="hexToSpan(response?.data?.data?.result)"
+            />
           </template>
         </p>
       </div>

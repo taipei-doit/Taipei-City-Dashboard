@@ -1,6 +1,7 @@
 <script setup>
 import { ref, watch, onMounted } from "vue";
 import http from "../../router/axios";
+import { hexToSpan } from "../../assets/utilityFunctions/colorConvert";
 
 const props = defineProps({
 	index: { type: String },
@@ -39,7 +40,7 @@ watch(
 			isLoading.value = false;
 		}
 	},
-	{ immediate: true }
+	{ immediate: true },
 );
 
 const panelRef = ref(null);
@@ -106,7 +107,9 @@ const onMouseUp = () => {
     <div class="modal-content">
       <div class="row">
         <span class="meta-label">▪ 城市</span>
-        <span class="description">{{ city === "taipei" ? "臺北" : "雙北" }}</span>
+        <span class="description">{{
+          city === "taipei" ? "臺北" : "雙北"
+        }}</span>
       </div>
       <div class="row">
         <span class="meta-label">▪ 分析項目</span>
@@ -125,7 +128,9 @@ const onMouseUp = () => {
           >
             <span /><span /><span />
           </span>
-          <template v-else>{{ formatTime(response?.data?.data?.updated_at) }}</template>
+          <template v-else>{{
+            formatTime(response?.data?.data?.updated_at)
+          }}</template>
         </span>
       </div>
 
@@ -142,7 +147,7 @@ const onMouseUp = () => {
           <span /><span /><span />
         </span>
         <template v-else>
-          {{ response?.data?.data?.result }}
+          <span v-html="hexToSpan(response?.data?.data?.result)" />
         </template>
       </p>
     </div>
@@ -298,11 +303,23 @@ const onMouseUp = () => {
 	animation: bounce 1.2s infinite ease-in-out;
 }
 
-.dots span:nth-child(2) { animation-delay: 0.2s; }
-.dots span:nth-child(3) { animation-delay: 0.4s; }
+.dots span:nth-child(2) {
+	animation-delay: 0.2s;
+}
+.dots span:nth-child(3) {
+	animation-delay: 0.4s;
+}
 
 @keyframes bounce {
-	0%, 80%, 100% { transform: translateY(0); opacity: 0.4; }
-	40%           { transform: translateY(-5px); opacity: 1; }
+	0%,
+	80%,
+	100% {
+		transform: translateY(0);
+		opacity: 0.4;
+	}
+	40% {
+		transform: translateY(-5px);
+		opacity: 1;
+	}
 }
 </style>
