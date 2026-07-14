@@ -303,4 +303,13 @@ watch(
 		opacity: 1;
 	}
 }
+
+:deep(.color-preview) {
+	display: inline-block;
+	width: 12px;
+	height: 12px;
+	border-radius: 3px;
+	margin: 0 4px;
+	vertical-align: middle;
+}
 </style>
