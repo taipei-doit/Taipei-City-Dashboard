@@ -174,25 +174,36 @@ def _hex_to_color_name(hex_color):
     return name
 
 
-def _color_label(value):
-    """paint 表達式裡的值是 hex 色碼就換成最接近的中文顏色名(不要把色碼原樣丟給 LLM,
-    它只會照抄,不會自己翻譯);不是色碼(例如已經是分類標籤字串)就原樣輸出。"""
-    return _hex_to_color_name(value) if _is_hex_color(value) else str(value)
+def _replace_hex_colors(value):
+    """
+    遞迴走過任意巢狀結構(list/dict/str),把看起來像 hex 色碼的字串換成中文顏色名。
+    先對整個 paint 值跑過一次這個,不管表達式形狀是 match/case/interpolate/step或
+    巢狀組合,色碼都不會漏到 LLM 的 prompt 裡(不要色碼是硬性要求,不能只處理 match
+    這種常見情況就算了)。
+    """
+    if _is_hex_color(value):
+        return _hex_to_color_name(value)
+    if isinstance(value, list):
+        return [_replace_hex_colors(v) for v in value]
+    if isinstance(value, dict):
+        return {k: _replace_hex_colors(v) for k, v in value.items()}
+    return value
 
 
 def describe_paint(paint):
     """
     把 component_maps.paint(Mapbox/MapLibre style 的著色表達式)轉成人看得懂的顏色對照
-    說明給 LLM。只特別處理最常見的 match 表達式(依欄位值對應顏色 + 預設色),其他複雜
-    表達式(interpolate/case/巢狀...)就把原始值丟給 LLM 自己解讀,不刻意寫完整的
-    expression parser。
+    說明給 LLM。所有值先整個跑過 _replace_hex_colors 換成顏色名,再對最常見的 match
+    表達式(依欄位值對應顏色 + 預設色)做易讀的格式化;其他複雜表達式(interpolate/case/
+    巢狀...)color 已經換成中文名了,直接印格式化後的結構,不刻意寫完整的 expression parser。
     """
     paint = _parse_json_field(paint)
     if not paint or not isinstance(paint, dict):
         return None
 
     lines = []
-    for prop_name, value in paint.items():
+    for prop_name, raw_value in paint.items():
+        value = _replace_hex_colors(raw_value)
         if isinstance(value, list) and len(value) >= 2 and value[0] == "match":
             get_expr = value[1]
             field = get_expr[1] if isinstance(get_expr, list) and len(get_expr) > 1 else str(get_expr)
@@ -201,15 +212,13 @@ def describe_paint(paint):
                 default, pairs = rest[-1], rest[:-1]
             else:
                 default, pairs = None, rest
-            mapping = "、".join(
-                f"{pairs[i]}={_color_label(pairs[i + 1])}" for i in range(0, len(pairs), 2)
-            )
+            mapping = "、".join(f"{pairs[i]}={pairs[i + 1]}" for i in range(0, len(pairs), 2))
             desc = f"{prop_name} 依欄位「{field}」的值決定:{mapping}"
             if default is not None:
-                desc += f",其他值預設為 {_color_label(default)}"
+                desc += f",其他值預設為 {default}"
             lines.append(desc)
         elif isinstance(value, str):
-            lines.append(f"{prop_name} 固定為 {_color_label(value)}")
+            lines.append(f"{prop_name} 固定為 {value}")
         else:
             lines.append(f"{prop_name}: {json.dumps(value, ensure_ascii=False)}")
 
