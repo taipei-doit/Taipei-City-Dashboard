@@ -176,10 +176,15 @@ watch(
 	border: none;
 	cursor: pointer;
 	color: #888787;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 	font-size: 1rem;
 	line-height: 1;
-	padding: 2px 6px;
-	border-radius: 4px;
+	padding: 0;
+	width: 32px;
+	height: 32px;
+	border-radius: 999px;
 	transition: background 0.15s;
 }
 
