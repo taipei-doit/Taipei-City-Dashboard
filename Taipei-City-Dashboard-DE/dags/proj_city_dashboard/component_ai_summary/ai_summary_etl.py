@@ -128,6 +128,58 @@ def _parse_json_field(raw):
     return raw
 
 
+# ponytail: 顏色名稱只是為了讓摘要好讀(LLM 不會自己把 hex 轉成顏色名,只會照抄色碼),
+# 用簡單 RGB 歐氏距離配最接近的常見色名即可,不追求色彩學上的精確(例如不做感知均勻空間轉換)。
+_NAMED_COLORS = {
+    "紅色": (255, 0, 0),
+    "深紅色": (139, 0, 0),
+    "橙色": (255, 165, 0),
+    "黃色": (255, 255, 0),
+    "淺綠色": (144, 238, 144),
+    "綠色": (0, 128, 0),
+    "深綠色": (0, 100, 0),
+    "青色": (0, 128, 128),
+    "天藍色": (135, 206, 235),
+    "藍色": (0, 0, 255),
+    "深藍色": (0, 0, 139),
+    "靛色": (75, 0, 130),
+    "紫色": (128, 0, 128),
+    "粉紅色": (255, 192, 203),
+    "洋紅色": (255, 0, 255),
+    "棕色": (165, 42, 42),
+    "米色": (245, 245, 220),
+    "黑色": (0, 0, 0),
+    "深灰色": (64, 64, 64),
+    "灰色": (128, 128, 128),
+    "淺灰色": (211, 211, 211),
+    "白色": (255, 255, 255),
+}
+
+
+def _is_hex_color(value):
+    return (
+        isinstance(value, str)
+        and len(value) == 7
+        and value[0] == "#"
+        and all(c in "0123456789abcdefABCDEF" for c in value[1:])
+    )
+
+
+def _hex_to_color_name(hex_color):
+    r, g, b = int(hex_color[1:3], 16), int(hex_color[3:5], 16), int(hex_color[5:7], 16)
+    name, _ = min(
+        _NAMED_COLORS.items(),
+        key=lambda item: (item[1][0] - r) ** 2 + (item[1][1] - g) ** 2 + (item[1][2] - b) ** 2,
+    )
+    return name
+
+
+def _color_label(value):
+    """paint 表達式裡的值是 hex 色碼就換成最接近的中文顏色名(不要把色碼原樣丟給 LLM,
+    它只會照抄,不會自己翻譯);不是色碼(例如已經是分類標籤字串)就原樣輸出。"""
+    return _hex_to_color_name(value) if _is_hex_color(value) else str(value)
+
+
 def describe_paint(paint):
     """
     把 component_maps.paint(Mapbox/MapLibre style 的著色表達式)轉成人看得懂的顏色對照
@@ -149,13 +201,15 @@ def describe_paint(paint):
                 default, pairs = rest[-1], rest[:-1]
             else:
                 default, pairs = None, rest
-            mapping = "、".join(f"{pairs[i]}={pairs[i + 1]}" for i in range(0, len(pairs), 2))
+            mapping = "、".join(
+                f"{pairs[i]}={_color_label(pairs[i + 1])}" for i in range(0, len(pairs), 2)
+            )
             desc = f"{prop_name} 依欄位「{field}」的值決定:{mapping}"
             if default is not None:
-                desc += f",其他值預設為 {default}"
+                desc += f",其他值預設為 {_color_label(default)}"
             lines.append(desc)
         elif isinstance(value, str):
-            lines.append(f"{prop_name} 固定為 {value}")
+            lines.append(f"{prop_name} 固定為 {_color_label(value)}")
         else:
             lines.append(f"{prop_name}: {json.dumps(value, ensure_ascii=False)}")
 
