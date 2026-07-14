@@ -6,7 +6,7 @@ import "material-icons/iconfont/material-icons.css";
 import { getComponentDataTimeframe } from "./utilities/dataTimeframe";
 import { timeTerms } from "./utilities/AllTimes";
 import { chartTypes } from "./utilities/chartTypes";
-import { useActiveMapSummary } from "../composables/useActiveMapSummary";
+import { useWindowManager } from "../composables/useWindowManager";
 
 import ComponentTag from "./components/ComponentTag.vue";
 import TagTooltip from "./components/TagTooltip.vue";
@@ -128,9 +128,11 @@ const toggleOn = computed({
 	},
 });
 
-const { isOpen, open, close } = useActiveMapSummary();
-const mapSummaryId = computed(() => `map-${props.config.index}`);
-const showMapAiSummaryBox = computed(() => isOpen(mapSummaryId.value));
+// const { isOpen, open, close } = useActiveMapSummary();
+const { open, close, isOpen, getOffset, getZIndex } = useWindowManager();
+const mapAiSummaryId = computed(() => `map-${props.config.index}`);
+const showMapAiSummaryBox = computed(() => isOpen(mapAiSummaryId.value));
+
 const mousePosition = ref({ x: null, y: null });
 const showTagTooltip = ref(false);
 const showAiSummaryBox = ref(false);
@@ -141,9 +143,17 @@ const handleAiSummaryBoxToggle = () => {
 
 function handleMapAiSummaryBoxToggle() {
 	showMapAiSummaryBox.value
-		? close(mapSummaryId.value)
-		: open(mapSummaryId.value);
+		? close(mapAiSummaryId.value)
+		: open(mapAiSummaryId.value);
 }
+
+const mapAiSummaryStyle = computed(() => {
+	const { x, y } = getOffset(mapAiSummaryId.value);
+	return {
+		transform: `translate(${x}px, ${y}px)`,
+		zIndex: getZIndex(mapAiSummaryId.value),
+	};
+});
 
 // Parses time data into display format
 const dataTime = computed(() => {
@@ -596,7 +606,8 @@ function returnChartComponent(name, svg) {
       :index="props.config.index"
       :name="props.config.name"
       :city="props.config.city"
-      @close="handleMapAiSummaryBoxToggle"
+      :style="mapAiSummaryStyle"
+      @close="close(mapAiSummaryId)"
     />
   </Teleport>
 </template>
