@@ -1,6 +1,7 @@
 <script setup>
 import { ref, watch } from "vue";
 import http from "../../router/axios";
+import { hexToSpan } from "../../assets/utilityFunctions/colorConvert";
 
 const props = defineProps({
 	index: { type: String },
@@ -8,7 +9,7 @@ const props = defineProps({
 	city: { type: String },
 	analysisTime: { type: String },
 	description: {
-		type: String
+		type: String,
 	},
 });
 defineEmits(["close"]);
@@ -40,89 +41,71 @@ watch(
 	},
 	{ immediate: true },
 );
-
 </script>
 
 <template>
-  <div
-    class="overlay"
-    @click.self="$emit('close')"
-  >
-    <div class="modal">
-      <div class="modal-header">
-        <div class="modal-title">
-          <span class="title-icon">✦</span>
-          <span class="title-text">AI 洞察</span>
-        </div>
-        <button
-          class="close-btn"
-          @click="$emit('close')"
-        >
-          ✕
-        </button>
-      </div>
+	<div class="overlay" @click.self="$emit('close')">
+		<div class="modal">
+			<div class="modal-header">
+				<div class="modal-title">
+					<span class="title-icon">✦</span>
+					<span class="title-text">AI 洞察</span>
+				</div>
+				<button class="close-btn" @click="$emit('close')">✕</button>
+			</div>
 
-      <div class="modal-content">
-        <div class="row">
-          <span class="meta-label">▪ 城市</span>
-          <span class="description">
-            : {{ city === "taipei" ? "臺北" : "雙北" }}</span>
-        </div>
-        <div class="row">
-          <span class="meta-label">▪ 分析項目</span>
-          <span class="description"> : {{ name }}</span>
-        </div>
-        <div class="row">
-          <span class="meta-label">▪ 分析類別</span>
-          <span class="description"> : 圖表</span>
-        </div>
-        <div class="row">
-          <span class="meta-label">▪ 資料分析時間</span>
-          <span class="description">
-            <span
-              v-if="isLoading"
-              class="dots"
-            >
-              <span /><span /><span />
-            </span>
-            <template v-else>
-              :
-              {{
-                formatTime(response?.data?.data?.updated_at)
-              }}</template>
-          </span>
-        </div>
+			<div class="modal-content">
+				<div class="row">
+					<span class="meta-label">▪ 城市</span>
+					<span class="description">
+						: {{ city === "taipei" ? "臺北" : "雙北" }}</span
+					>
+				</div>
+				<div class="row">
+					<span class="meta-label">▪ 分析項目</span>
+					<span class="description"> : {{ name }}</span>
+				</div>
+				<div class="row">
+					<span class="meta-label">▪ 分析類別</span>
+					<span class="description"> : 圖表</span>
+				</div>
+				<div class="row">
+					<span class="meta-label">▪ 資料分析時間</span>
+					<span class="description">
+						<span v-if="isLoading" class="dots">
+							<span /><span /><span />
+						</span>
+						<template v-else>
+							:
+							{{
+								formatTime(response?.data?.data?.updated_at)
+							}}</template
+						>
+					</span>
+				</div>
 
-        <div class="divider" />
+				<div class="divider" />
 
-        <p class="section-label">
-          ▪ 資料洞察成果
-        </p>
-        <p class="description result">
-          <span
-            v-if="isLoading"
-            class="dots"
-          >
-            <span /><span /><span />
-          </span>
-          <template v-else>
-            {{
-              response?.data?.data?.result
-            }}
-          </template>
-        </p>
-      </div>
+				<p class="section-label">▪ 資料洞察成果</p>
+				<p class="description result">
+					<span v-if="isLoading" class="dots">
+						<span /><span /><span />
+					</span>
+					<template v-else>
+						<span
+							v-html="hexToSpan(response?.data?.data?.result)"
+						/>
+					</template>
+				</p>
+			</div>
 
-      <div class="modal-footer">
-        <button
-          class="btn-secondary"
-          @click="$emit('close')"
-        >
-          ← 返回
-        </button>
-      </div>
-    </div>
-  </div>
+			<div class="modal-footer">
+				<button class="btn-secondary" @click="$emit('close')">
+					← 返回
+				</button>
+			</div>
+		</div>
+	</div>
 </template>
 
 <style scoped>
