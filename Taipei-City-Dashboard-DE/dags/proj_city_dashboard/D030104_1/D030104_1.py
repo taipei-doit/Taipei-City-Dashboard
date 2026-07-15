@@ -55,20 +55,9 @@ def D030104_1(**kwargs):
     }
     data = data.rename(columns=col_map)
     # cleansing
-    charge_station = [
-        [] if pd.isna(json) else json["scoketStatusList"]
-        for json in data["chargestation"].tolist()
-    ]
-    data["charge_spot"] = [
-        [spot["spot_abrv"] for spot in s_detail if spot["spot_status"] == "充電中"]
-        for s_detail in charge_station
-    ]
-    data["charge_spot_count"] = data["charge_spot"].apply(len)
-    data["standby_spot"] = [
-        [spot["spot_abrv"] for spot in s_detail if spot["spot_status"] == "待機中"]
-        for s_detail in charge_station
-    ]
-    data["standby_spot_count"] = data["standby_spot"].apply(len)
+    # 2026-07-15: 來源資料不提供該欄位資訊，預設為 0
+    data["charge_spot_count"] = 0
+    data["standby_spot_count"] = 0
     # column type
     data["id"] = data["station_id"].astype(str)
     # missing value
