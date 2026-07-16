@@ -487,7 +487,7 @@ export const useWindEngine = (options = {}) => {
 		[SRC_PARTICLES, SRC_COMFORT].forEach((id) => {
 			if (map.getSource(id)) map.removeSource(id);
 		});
-		if (map.hasImage(IMAGE_ARROW)) map.removeImage(IMAGE_ARROW);
+		// if (map.hasImage(IMAGE_ARROW)) map.removeImage(IMAGE_ARROW);
 		layersMounted = false;
 	};
 
