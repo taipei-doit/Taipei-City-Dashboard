@@ -2774,7 +2774,9 @@ export const useMapStore = defineStore("map", {
 					this.renderDeckGLLayer();
 					return;
 				}
-				this.map.setFilter(mapLayerId, null);
+				if (this.map.getLayer(mapLayerId)) {
+					this.map.setFilter(mapLayerId, null);
+				}
 			});
 		},
 		// 4. Remove any layer filters on a map layer.
