@@ -379,16 +379,26 @@ def build_map_prompt(component, map_rows, map_query_infos):
 
 
 def write_summary(engine, index, city, summary_type, result):
+    """
+    蓋掉舊的:同一組 (index, city, type) 只留最新一筆,不再 append-only 累積歷史列。
+    表沒有 unique constraint 可以用 ON CONFLICT,改成同一個 transaction 內先刪舊的
+    再插新的(READ COMMITTED 下外部讀到的要嘛是舊列要嘛是新列,不會看到中間空窗)。
+    """
     now = get_tpe_now_time(is_with_tz=True)
-    sql = sa_text(
-        f"""
-        INSERT INTO {AI_SUMMARY_TABLE} (index, city, type, result, created_at, updated_at)
-        VALUES (:index, :city, :type, :result, :now, :now)
-        """
-    )
     with engine.begin() as conn:
         conn.execute(
-            sql,
+            sa_text(
+                f"DELETE FROM {AI_SUMMARY_TABLE} WHERE index = :index AND city = :city AND type = :type"
+            ),
+            {"index": index, "city": city, "type": summary_type},
+        )
+        conn.execute(
+            sa_text(
+                f"""
+                INSERT INTO {AI_SUMMARY_TABLE} (index, city, type, result, created_at, updated_at)
+                VALUES (:index, :city, :type, :result, :now, :now)
+                """
+            ),
             {"index": index, "city": city, "type": summary_type, "result": result, "now": now},
         )
 
