@@ -11,7 +11,7 @@
 
 完整 URL（SIT）：
 ```
-http://167.105.121.178/airflow-sit/api/v1/dags/proj_city_dashboard_component_ai_summary/dagRuns
+https://test-citydashboard.taipei/airflow-sit/api/v1/dags/proj_city_dashboard_component_ai_summary/dagRuns
 ```
 
 **認證**：HTTP Basic Auth，用專屬的服務帳號（範圍只限這支 DAG，見文末說明）
@@ -39,7 +39,7 @@ curl -X POST \
   -u "component_ai_summary_svc:<password>" \
   -H "Content-Type: application/json" \
   -d '{"conf": {"index": "aging_kpi", "city": "taipei", "type": "chart"}}' \
-  "http://167.105.121.178/airflow-sit/api/v1/dags/proj_city_dashboard_component_ai_summary/dagRuns"
+  "https://test-citydashboard.taipei/airflow-sit/api/v1/dags/proj_city_dashboard_component_ai_summary/dagRuns"
 ```
 
 **Response（HTTP 200，立即回，非同步）**
@@ -67,7 +67,7 @@ curl -X POST \
 
 ```bash
 curl -u "component_ai_summary_svc:<password>" \
-  "http://167.105.121.178/airflow-sit/api/v1/dags/proj_city_dashboard_component_ai_summary/dagRuns/manual__2026-07-14T06%3A10%3A01.165951%2B00%3A00"
+  "https://test-citydashboard.taipei/airflow-sit/api/v1/dags/proj_city_dashboard_component_ai_summary/dagRuns/manual__2026-07-14T06%3A10%3A01.165951%2B00%3A00"
 ```
 
 > `dag_run_id` 裡的 `:`、`+` 要做 URL encode（`%3A`、`%2B`），大部分 HTTP client library 會自動處理，手動組 URL 時要注意。
