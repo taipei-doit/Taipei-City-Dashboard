@@ -10,6 +10,7 @@ Run from DAG folder:
 from __future__ import annotations
 
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -28,7 +29,8 @@ TAIPEI_RID = "e54950a4-86b4-407b-bccf-180f17e1b310"
 
 def _fetch_data_taipei(rid: str) -> list[dict]:
     url = f"https://data.taipei/api/v1/dataset/{rid}?scope=resourceAquire&limit=2"
-    res = requests.get(url, timeout=30)
+    # data.taipei 憑證缺 Subject Key Identifier,新版 OpenSSL 驗證會失敗;DAG utils 同樣 verify=False
+    res = requests.get(url, timeout=30, verify=False)
     res.raise_for_status()
     body = res.json()
     records = (body.get("result") or {}).get("results") or []
@@ -53,9 +55,31 @@ def test_source_url_reachable():
     print(f"  data.taipei reachable, keys: {list(taipei_records[0].keys())[:12]}")
 
 
+def test_combined_year_row_values_numeric():
+    """合併年度列（如「112-113年度」）的補貼欄位須為數字，拆分邏輯才有依據。"""
+    url = f"https://data.taipei/api/v1/dataset/{TAIPEI_RID}?scope=resourceAquire&limit=1000"
+    res = requests.get(url, timeout=30, verify=False)
+    res.raise_for_status()
+    records = (res.json().get("result") or {}).get("results") or []
+    combined = [r for r in records if re.match(r"^\d+-\d+年度$", str(r.get("項目", "")))]
+    for row in combined:
+        for col in (
+            "修繕住宅貸款利息補貼申請戶數",
+            "修繕住宅貸款利息補貼計畫戶數",
+            "修繕住宅貸款利息補貼核定戶數",
+        ):
+            value = str(row.get(col, "")).replace(",", "").strip()
+            if not value.isdigit():
+                raise AssertionError(
+                    f"合併年度列 {row.get('項目')} 欄位非數字: {col}={row.get(col)}"
+                )
+    print(f"  combined-year rows: {len(combined)}, values numeric")
+
+
 if __name__ == "__main__":
     try:
         test_source_url_reachable()
+        test_combined_year_row_values_numeric()
     except Exception as e:
         print(f"FAIL [{TABLE_NAME}]: {e}", file=sys.stderr)
         sys.exit(1)
