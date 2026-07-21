@@ -2146,6 +2146,7 @@ export const useMapStore = defineStore("map", {
 				if (!this.currentVisibleLayers.includes(mapLayerId)) {
 					this.currentVisibleLayers.push(mapLayerId);
 				}
+				this.loadingLayers = this.loadingLayers.filter((el) => el !== "rendering");
 				return;
 			}
 			if (mapLayerId.indexOf("-arc") !== -1) {
