@@ -748,6 +748,7 @@ button:hover {
 
 		&-toggle {
 			display: flex;
+			flex-shrink: 0;
 			align-items: center;
 			min-height: var(--font-ms);
 			min-width: 2rem;
