@@ -75,9 +75,37 @@ def _repair_subsidy_application_status(**kwargs):
             "修繕住宅貸款利息補貼核定戶數": "approved_households",
         }
     )
+    # 來源自 112 年度起將兩個年度合併為一筆(如「112-113年度」),欄位數值皆為兩年合計。
+    # 平分拆回逐年(餘數給後一年,兩年加總不變);非數值(如「見備註」)無從拆分,留空。
+    # ponytail: 備註僅有租金補貼數字,本 DAG 以欄位合計平分為近似值;若來源日後改回
+    # 逐年列(如「112年度」),不會命中此 regex,會原樣通過。
+    combo = data["year"].astype("string").str.extract(r"^(\d+)-(\d+)年度$")
+    combo_mask = combo[0].notna()
+    split_rows = []
+    for idx in data.index[combo_mask]:
+        y1, y2 = int(combo.loc[idx, 0]), int(combo.loc[idx, 1])
+        if y2 != y1 + 1:
+            continue  # 非連續兩年拆不了,寧可整筆略過,也不寫入錯的數字
+        first, second = {"year": f"{y1}年度"}, {"year": f"{y2}年度"}
+        for col in [
+            "application_households",
+            "planned_households",
+            "approved_households",
+        ]:
+            total = pd.to_numeric(
+                str(data.loc[idx, col]).replace(",", ""), errors="coerce"
+            )
+            if pd.isna(total):
+                first[col] = second[col] = None
+            else:
+                first[col] = int(total) // 2
+                second[col] = int(total) - int(total) // 2
+        split_rows.append(first)
+        split_rows.append(second)
+    data = pd.concat([data[~combo_mask], pd.DataFrame(split_rows)], ignore_index=True)
     data["city"] = "臺北市"
     data["year"] = _to_ad_year(data["year"])
-    data = data[data["year"] <= 2022]
+    data = data[data["year"].notna()]
 
     # === Normalize ===
     for col in [
