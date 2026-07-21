@@ -2,7 +2,7 @@
   "dag_infos": {
     "dag_id": "rental_subsidy_application_status",
     "start_date": "2026-05-20",
-    "schedule_interval": "@yearly",
+    "schedule_interval": "@monthly",
     "catchup": false,
     "tags": ["housing", "都發局", "Taipei-City"],
     "description": "Yearly rent subsidy application, planned, and approved households for Taipei.",
@@ -23,7 +23,7 @@
   },
   "data_infos": {
     "name_cn": "租金補貼受理情形",
-    "airflow_update_freq": "每年 (Asia/Taipei)",
+    "airflow_update_freq": "每月 (Asia/Taipei)",
     "source": "https://data.taipei/dataset/detail?id=6297943a-1e71-480d-967c-635855df66fe",
     "source_type": "data.taipei",
     "source_dept": "都發局",
