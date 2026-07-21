@@ -68,6 +68,9 @@ const chartOptions = ref({
 	},
 	grid: {
 		show: false,
+		padding: {
+			bottom: 20,
+		},
 	},
 	legend: isLargeDataSet.value
 		? {

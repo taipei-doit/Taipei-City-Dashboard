@@ -170,6 +170,16 @@ export const useMapStore = defineStore("map", {
 						});
 					}
 				});
+			// 保險絲:如果 rendering 卡住超過 10 秒(通常是因為風場等持續動畫圖層讓 idle 一直不觸發),
+			// 就強制清除,避免 UI 一直轉圈
+			if (this._loadingWatchdog) clearInterval(this._loadingWatchdog);
+			this._loadingWatchdog = setInterval(() => {
+				if (this.loadingLayers.includes("rendering")) {
+					this.loadingLayers = this.loadingLayers.filter(
+						(el) => el !== "rendering",
+					);
+				}
+			}, 10000);
 			this.renderMarkers();
 
 			// 使用者點擊定位功能後觸發GA自訂事件
@@ -2146,7 +2156,6 @@ export const useMapStore = defineStore("map", {
 				if (!this.currentVisibleLayers.includes(mapLayerId)) {
 					this.currentVisibleLayers.push(mapLayerId);
 				}
-				this.loadingLayers = this.loadingLayers.filter((el) => el !== "rendering");
 				return;
 			}
 			if (mapLayerId.indexOf("-arc") !== -1) {
