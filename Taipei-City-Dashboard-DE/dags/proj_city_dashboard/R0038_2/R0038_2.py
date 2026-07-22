@@ -59,7 +59,12 @@ def _R0038_2(**kwargs):
             """
             conn.execute(sql)
         print(f"{default_table} update successful")
-        gdata.to_sql(
+        # pyogrio 讀 KML 會多出 id/timestamp/begin/end/altitudeMode/tessellate/
+        # extrude/drawOrder/icon 等欄位,traffic_lives_history 沒有這些欄位,
+        # 直接 append 整個 gdata 會報 UndefinedColumn。只寫入與 current 表
+        # (default_table)一致的欄位。
+        history_cols = ["name", "description", "snippet", "visibility", "update_at", "geom"]
+        gdata[history_cols].to_sql(
             history_table,
             conn,
             if_exists="append",
