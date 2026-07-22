@@ -191,26 +191,18 @@ def get_kml(url, dag_id, from_crs, **kwargs):
 
 
     """
-    import fiona
-
     file_name = f"{dag_id}.kml"
-
-    # Enable KML support in fiona
-    try:
-        fiona.drvsupport.supported_drivers["KML"] = "rw"
-    except AttributeError:
-        # For newer fiona versions that don't have drvsupport
-        pass
 
     file = download_file(file_name, url, **kwargs)
 
-    # Use fiona directly to avoid the geopandas._is_zip issue
-    try:
-        with fiona.open(file, driver="KML") as src:
-            gdf = gpd.GeoDataFrame.from_features(src, crs=src.crs)
-    except Exception:
-        # Fallback to the original method for older versions
-        gdf = gpd.read_file(file, driver="KML")
+    gdf = gpd.read_file(file, driver="KML", engine="pyogrio")
+
+    # pyogrio 讀 KML 會多出一個 "id" 欄位(fiona 版本沒有)。下游若用
+    # to_sql(if_exists="append") 盲寫全部欄位,寫入沒有 id 欄的表(如
+    # traffic_lives_history)會報 UndefinedColumn: column "id"。移除之以還原
+    # 舊 fiona 版的欄位集合。
+    if "id" in gdf.columns:
+        gdf = gdf.drop(columns=["id"])
 
     # Ensure the CRS is set correctly
     if gdf.crs is None:
