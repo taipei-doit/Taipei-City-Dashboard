@@ -229,6 +229,12 @@ backend:
     - name: GEMINI_MODEL
       secretKey: "GEMINI_MODEL"
       optional: false
+    - name: AIRFLOW_SUMMARY_SVC_USER
+      secretKey: "AIRFLOW_SUMMARY_SVC_USER"
+      optional: false
+    - name: AIRFLOW_SUMMARY_SVC_PASS
+      secretKey: "AIRFLOW_SUMMARY_SVC_PASS"
+      optional: false
 
 externalDatabase: {}
 
