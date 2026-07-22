@@ -104,14 +104,14 @@ function rgbToHsl(r, g, b) {
 		const d = max - min;
 		s = l > 0.5 ? d / (2 - max - min) : d / (max - min);
 		switch (max) {
-		case rn:
-			h = (gn - bn) / d + (gn < bn ? 6 : 0);
-			break;
-		case gn:
-			h = (bn - rn) / d + 2;
-			break;
-		default:
-			h = (rn - gn) / d + 4;
+			case rn:
+				h = (gn - bn) / d + (gn < bn ? 6 : 0);
+				break;
+			case gn:
+				h = (bn - rn) / d + 2;
+				break;
+			default:
+				h = (rn - gn) / d + 4;
 		}
 		h /= 6;
 	}
@@ -522,8 +522,10 @@ function onArcHoverMove(evt, arc) {
 
 	hoverTip.value = {
 		show: true,
-		x: evt.clientX,
-		y: evt.clientY,
+		left: placeLeft ? null : evt.clientX + g,
+		right: placeLeft ? vw - evt.clientX + g : null,
+		top: placeAbove ? null : evt.clientY + g,
+		bottom: placeAbove ? vh - evt.clientY + g : null,
 		text,
 		placeLeft,
 		placeAbove,
@@ -590,65 +592,61 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div
-    v-if="activeChart === 'SunburstChart'"
-    ref="wrapRef"
-    class="sunburstchart"
-  >
-    <div class="sunburstchart__svg-clip">
-      <svg
-        :viewBox="`0 0 ${sunburstData.width} ${sunburstData.height}`"
-        width="100%"
-        height="100%"
-      >
-        <g>
-          <path
-            v-for="a in sunburstData.arcs"
-            :key="a.key"
-            :d="a.d"
-            class="sunburstchart__arc"
-            :fill="arcFill(a)"
-            :fill-opacity="arcOpacity(a)"
-            role="img"
-            :aria-label="a.title"
-            @mouseenter="(evt) => onArcHoverMove(evt, a)"
-            @mousemove="(evt) => onArcHoverMove(evt, a)"
-            @mouseleave="onArcHoverLeave"
-          />
-        </g>
-        <g>
-          <text
-            v-for="t in sunburstData.labels"
-            :key="t.key"
-            :x="t.x"
-            :y="t.y"
-            class="sunburstchart__label"
-            text-anchor="middle"
-            dominant-baseline="middle"
-          >
-            {{ t.text }}
-          </text>
-        </g>
-      </svg>
-    </div>
-    <div
-      v-if="hoverTip.show"
-      class="sunburstchart__hover"
-      :class="{
-        'sunburstchart__hover--tl':
-          hoverTip.placeLeft && hoverTip.placeAbove,
-        'sunburstchart__hover--tr':
-          !hoverTip.placeLeft && hoverTip.placeAbove,
-        'sunburstchart__hover--bl':
-          hoverTip.placeLeft && !hoverTip.placeAbove,
-        'sunburstchart__hover--br':
-          !hoverTip.placeLeft && !hoverTip.placeAbove,
-      }"
-      :style="{ left: `${hoverTip.x}px`, top: `${hoverTip.y}px` }"
-    >
-      {{ hoverTip.text }}
-    </div>
-  </div>
+	<div
+		v-if="activeChart === 'SunburstChart'"
+		ref="wrapRef"
+		class="sunburstchart"
+	>
+		<div class="sunburstchart__svg-clip">
+			<svg
+				:viewBox="`0 0 ${sunburstData.width} ${sunburstData.height}`"
+				width="100%"
+				height="100%"
+			>
+				<g>
+					<path
+						v-for="a in sunburstData.arcs"
+						:key="a.key"
+						:d="a.d"
+						class="sunburstchart__arc"
+						:fill="arcFill(a)"
+						:fill-opacity="arcOpacity(a)"
+						role="img"
+						:aria-label="a.title"
+						@mouseenter="(evt) => onArcHoverMove(evt, a)"
+						@mousemove="(evt) => onArcHoverMove(evt, a)"
+						@mouseleave="onArcHoverLeave"
+					/>
+				</g>
+				<g>
+					<text
+						v-for="t in sunburstData.labels"
+						:key="t.key"
+						:x="t.x"
+						:y="t.y"
+						class="sunburstchart__label"
+						text-anchor="middle"
+						dominant-baseline="middle"
+					>
+						{{ t.text }}
+					</text>
+				</g>
+			</svg>
+		</div>
+		<div
+			v-if="hoverTip.show"
+			class="sunburstchart__hover"
+			:style="{
+				left: hoverTip.left !== null ? `${hoverTip.left}px` : 'auto',
+				right: hoverTip.right !== null ? `${hoverTip.right}px` : 'auto',
+				top: hoverTip.top !== null ? `${hoverTip.top}px` : 'auto',
+				bottom:
+					hoverTip.bottom !== null ? `${hoverTip.bottom}px` : 'auto',
+			}"
+		>
+			{{ hoverTip.text }}
+		</div>
+	</div>
 </template>
 
 <style scoped lang="scss">
@@ -666,9 +664,6 @@ onBeforeUnmount(() => {
 }
 
 .sunburstchart__label {
-	font-family:
-		"微軟正黑體", "Microsoft JhengHei", "Droid Sans", "Open Sans",
-		"Helvetica", sans-serif;
 	font-size: 14px;
 	font-weight: 700;
 	fill: #e6edf5;
@@ -687,16 +682,10 @@ onBeforeUnmount(() => {
 }
 
 .sunburstchart__hover {
-	--tip-gap: 4px;
 	position: fixed;
 	margin: 0;
-	background: rgba(8, 11, 18, 0.92);
+	background: #282a2c;
 	color: #fff;
-	font-family:
-		"微軟正黑體", "Microsoft JhengHei", "Droid Sans", "Open Sans",
-		"Helvetica", sans-serif;
-	font-size: 14px;
-	font-weight: 700;
 	padding: 8px 12px;
 	border-radius: 6px;
 	border: 1px solid rgba(255, 255, 255, 0.2);
@@ -707,20 +696,5 @@ onBeforeUnmount(() => {
 	max-width: min(400px, calc(100vw - 20px));
 	z-index: 10050;
 	box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
-	&--tr {
-		transform: translate(var(--tip-gap), calc(-100% - var(--tip-gap)));
-	}
-	&--tl {
-		transform: translate(
-			calc(-100% - var(--tip-gap)),
-			calc(-100% - var(--tip-gap))
-		);
-	}
-	&--br {
-		transform: translate(var(--tip-gap), var(--tip-gap));
-	}
-	&--bl {
-		transform: translate(calc(-100% - var(--tip-gap)), var(--tip-gap));
-	}
 }
 </style>
