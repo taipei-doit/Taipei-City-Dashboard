@@ -111,6 +111,8 @@ func configureComponentRoutes() {
 	{
 		componentRoutes.GET("/", controllers.GetAllComponents)
 		componentRoutes.GET("/ai-summary", controllers.GetComponentAISummary)
+		componentRoutes.POST("/ai-summary/trigger", controllers.TriggerComponentAISummaryDAG)
+		componentRoutes.GET("/ai-summary/status/:dag_run_id", controllers.GetComponentAISummaryDAGStatus)
 		componentRoutes.GET("/:id", controllers.GetComponentByID)
 		componentRoutes.GET("/:id/all", controllers.GetComponentByIDAll)
 		componentRoutes.GET("/:id/chart", controllers.GetComponentChartData)
