@@ -69,9 +69,15 @@ type GeminiConfig struct {
 	Model  string
 }
 
+type AirflowConfig struct {
+	SvcUser string
+	SvcPass string
+}
+
 var (
-	JwtSecret = getEnv("JWT_SECRET", "")
-	IDNoSalt  = getEnv("IDNO_SALT", "")
+	JwtSecret  = getEnv("JWT_SECRET", "")
+	IDNoSalt   = getEnv("IDNO_SALT", "")
+	BackendURL = getEnv("BACKEND_URL", "")
 	// gin addr
 	GinAddr = getEnv("GIN_DOMAIN", "") + ":" + getEnv("GIN_PORT", "8080")
 
@@ -150,6 +156,11 @@ var (
 		ApiUrl: getEnv("GEMINI_API_URL", "https://generativelanguage.googleapis.com"),
 		ApiKey: getEnv("GEMINI_API_KEY", ""),
 		Model:  getEnv("GEMINI_MODEL", "gemini-1.5-pro"),
+	}
+
+	Airflow = AirflowConfig{
+		SvcUser: getEnv("AIRFLOW_SUMMARY_SVC_USER", ""),
+		SvcPass: getEnv("AIRFLOW_SUMMARY_SVC_PASS", ""),
 	}
 	
 	LMSession *ort.DynamicSession[int64, float32]
