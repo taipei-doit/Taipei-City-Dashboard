@@ -70,14 +70,14 @@ type GeminiConfig struct {
 }
 
 type AirflowConfig struct {
+	BaseURL string
 	SvcUser string
 	SvcPass string
 }
 
 var (
-	JwtSecret  = getEnv("JWT_SECRET", "")
-	IDNoSalt   = getEnv("IDNO_SALT", "")
-	BackendURL = getEnv("BACKEND_URL", "")
+	JwtSecret = getEnv("JWT_SECRET", "")
+	IDNoSalt  = getEnv("IDNO_SALT", "")
 	// gin addr
 	GinAddr = getEnv("GIN_DOMAIN", "") + ":" + getEnv("GIN_PORT", "8080")
 
@@ -159,6 +159,7 @@ var (
 	}
 
 	Airflow = AirflowConfig{
+		BaseURL: getEnv("AIRFLOW_SUMMARY_BASE_URL", ""),
 		SvcUser: getEnv("AIRFLOW_SUMMARY_SVC_USER", ""),
 		SvcPass: getEnv("AIRFLOW_SUMMARY_SVC_PASS", ""),
 	}
