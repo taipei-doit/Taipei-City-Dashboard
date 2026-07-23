@@ -246,6 +246,8 @@ jobs:
           SEC_AI_TIMEOUT: ${{ secrets.AI_TIMEOUT }}
           SEC_AI_MAX_RETRY: ${{ secrets.AI_MAX_RETRY }}
           SEC_AI_MAX_CONCURRENT: ${{ secrets.AI_MAX_CONCURRENT }}
+          SEC_AIRFLOW_SUMMARY_SVC_USER: ${{ secrets.AIRFLOW_SUMMARY_SVC_USER }}
+          SEC_AIRFLOW_SUMMARY_SVC_PASS: ${{ secrets.AIRFLOW_SUMMARY_SVC_PASS }}
         run: |
           set -euo pipefail
           # Defensive: ensure we are in bash (GitHub uses bash by default for run:)
@@ -303,6 +305,9 @@ jobs:
           add AI_TIMEOUT "$SEC_AI_TIMEOUT"
           add AI_MAX_RETRY "$SEC_AI_MAX_RETRY"
           add AI_MAX_CONCURRENT "$SEC_AI_MAX_CONCURRENT"
+          add AIRFLOW_SUMMARY_SVC_USER "$SEC_AIRFLOW_SUMMARY_SVC_USER"
+          add AIRFLOW_SUMMARY_SVC_PASS "$SEC_AIRFLOW_SUMMARY_SVC_PASS"
+
           # Show which keys will be applied (without values)
           echo "Secret keys to apply:" >&2
           for a in "${ARGS[@]}"; do
