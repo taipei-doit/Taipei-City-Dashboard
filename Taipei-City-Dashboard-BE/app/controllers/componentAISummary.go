@@ -125,8 +125,8 @@ func TriggerComponentAISummaryDAG(c *gin.Context) {
 		return
 	}
 
-	baseURL := strings.TrimRight(global.BackendURL, "/")
-	targetURL := fmt.Sprintf("%s/airflow-sit/api/v1/dags/proj_city_dashboard_component_ai_summary/dagRuns", baseURL)
+	baseURL := strings.TrimRight(global.Airflow.BaseURL, "/")
+	targetURL := fmt.Sprintf("%s/api/v1/dags/proj_city_dashboard_component_ai_summary/dagRuns", baseURL)
 	httpReq, err := http.NewRequestWithContext(c.Request.Context(), http.MethodPost, targetURL, bytes.NewBuffer(jsonBytes))
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
@@ -183,8 +183,8 @@ func GetComponentAISummaryDAGStatus(c *gin.Context) {
 	}
 
 	escapedID := url.PathEscape(dagRunID)
-	baseURL := strings.TrimRight(global.BackendURL, "/")
-	targetURL := fmt.Sprintf("%s/airflow-sit/api/v1/dags/proj_city_dashboard_component_ai_summary/dagRuns/%s", baseURL, escapedID)
+	baseURL := strings.TrimRight(global.Airflow.BaseURL, "/")
+	targetURL := fmt.Sprintf("%s/api/v1/dags/proj_city_dashboard_component_ai_summary/dagRuns/%s", baseURL, escapedID)
 
 
 	httpReq, err := http.NewRequestWithContext(c.Request.Context(), http.MethodGet, targetURL, nil)
