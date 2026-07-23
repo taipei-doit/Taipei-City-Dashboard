@@ -70,7 +70,7 @@ const isCurrentUpdating = computed(() =>
 );
 
 const isSuperAd = computed(() => {
-	return authStore.user.is_admin && !authStore.isso_token;
+	return authStore.user.is_admin && !authStore.isso_token && authStore.token;
 });
 
 function handleConfirm() {
