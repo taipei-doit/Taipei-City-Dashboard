@@ -493,6 +493,15 @@ onBeforeUnmount(() => {
                 }}
               </button>
             </div>
+            <div class="ai_summary_preview">
+              <label>目前組件圖表 AI 摘要內容</label>
+              <div class="ai_summary_preview-content">
+                {{
+                  responseForChart?.data.data.result ||
+                    "無資料"
+                }}
+              </div>
+            </div>
             <div
               v-if="isSuperAd"
               class="refresh_ai_summary"
@@ -508,15 +517,6 @@ onBeforeUnmount(() => {
                     : "點擊刷新"
                 }}
               </button>
-            </div>
-            <div class="ai_summary_preview">
-              <label>目前組件圖表 AI 摘要內容</label>
-              <div class="ai_summary_preview-content">
-                {{
-                  responseForChart?.data.data.result ||
-                    "無資料"
-                }}
-              </div>
             </div>
             <div class="ai_summary_preview">
               <label>目前組件地圖 AI 摘要內容</label>
