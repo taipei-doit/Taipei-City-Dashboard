@@ -55,23 +55,24 @@ function persistPendingJobs() {
 	);
 }
 
-function getJobKey(city, index) {
-	return `${city}-${index}`;
+function getJobKey(city, index, type) {
+	return `${city}-${index}-${type}`;
 }
-
-// 是否正在更新，直接從 pendingJobs 算，不用另外維護陣列
-const currentJobKey = computed(() =>
-	currentComponent.value
-		? getJobKey(currentComponent.value.city, currentComponent.value.index)
-		: null,
-);
-const isCurrentUpdating = computed(() =>
-	currentJobKey.value ? !!pendingJobs.value[currentJobKey.value] : false,
-);
 
 const isSuperAd = computed(() => {
 	return authStore.user.is_admin && !authStore.isso_token && authStore.token;
 });
+
+// 個別判斷 chart / map 是否正在更新中
+function isTypeUpdating(type) {
+	if (!currentComponent.value) return false;
+	const key = getJobKey(
+		currentComponent.value.city,
+		currentComponent.value.index,
+		type,
+	);
+	return !!pendingJobs.value[key];
+}
 
 function handleConfirm() {
 	adminStore.updateComponent(props.searchParams);
@@ -84,25 +85,30 @@ function handleClose() {
 	adminStore.currentComponent = null;
 }
 
-async function handleRenewAiSummary() {
+async function handleRenewAiSummary(type) {
 	const { city } = currentComponent.value;
 	const { index } = currentComponent.value;
-	const key = getJobKey(city, index);
+	const key = getJobKey(city, index, type);
 
 	if (pendingJobs.value[key]) return; // 已經在跑，防重複點擊
 
-	const res = await http.post("/component/ai-summary/trigger", {
-		index,
-		city,
-	});
+	try {
+		const res = await http.post("/component/ai-summary/trigger", {
+			index,
+			city,
+			type,
+		});
 
-	if (res?.data) {
-		pendingJobs.value[key] = {
-			dag_run_id: res.data.dag_run_id,
-			conf: res.data.conf,
-		};
-		persistPendingJobs();
-		startPolling(key);
+		if (res?.data) {
+			pendingJobs.value[key] = {
+				dag_run_id: res.data.dag_run_id,
+				conf: { ...res.data.conf, type },
+			};
+			persistPendingJobs();
+			startPolling(key);
+		}
+	} catch (e) {
+		console.error("觸發 AI 摘要更新任務失敗", e);
 	}
 }
 
@@ -124,8 +130,17 @@ function startPolling(key) {
 				delete pendingJobs.value[key];
 				persistPendingJobs();
 
-				if (state === "success" && currentJobKey.value === key) {
-					refreshSummaries(job.conf.city, job.conf.index);
+				if (state === "success") {
+					const isCurrent =
+						currentComponent.value &&
+						getJobKey(
+							currentComponent.value.city,
+							currentComponent.value.index,
+							job.conf.type,
+						) === key;
+					if (isCurrent) {
+						refreshSummaries(job.conf.city, job.conf.index);
+					}
 				}
 			}
 		} catch (e) {
@@ -143,27 +158,27 @@ let responseForChart = ref(null);
 let responseForMap = ref(null);
 
 async function refreshSummaries(city, index) {
-  // 先清空，避免短暫顯示或錯誤時殘留上一個組件的內容
-  responseForChart.value = null;
-  responseForMap.value = null;
+	// 先清空，避免短暫顯示或錯誤時殘留上一個組件的內容
+	responseForChart.value = null;
+	responseForMap.value = null;
 
-  try {
-    responseForChart.value = await http.get("/component/ai-summary", {
-      params: { index, city, type: "chart" },
-    });
-  } catch (e) {
-    console.error("取得圖表 AI 摘要失敗", e);
-    responseForChart.value = null;
-  }
+	try {
+		responseForChart.value = await http.get("/component/ai-summary", {
+			params: { index, city, type: "chart" },
+		});
+	} catch (e) {
+		console.error("取得圖表 AI 摘要失敗", e);
+		responseForChart.value = null;
+	}
 
-  try {
-    responseForMap.value = await http.get("/component/ai-summary", {
-      params: { index, city, type: "map" },
-    });
-  } catch (e) {
-    console.error("取得地圖 AI 摘要失敗", e);
-    responseForMap.value = null;
-  }
+	try {
+		responseForMap.value = await http.get("/component/ai-summary", {
+			params: { index, city, type: "map" },
+		});
+	} catch (e) {
+		console.error("取得地圖 AI 摘要失敗", e);
+		responseForMap.value = null;
+	}
 }
 
 watch(
@@ -171,10 +186,12 @@ watch(
 	async (newVal) => {
 		if (!newVal) return;
 
-		const key = getJobKey(newVal.city, newVal.index);
-		if (pendingJobs.value[key]) {
-			startPolling(key);
-		}
+		["chart", "map"].forEach((type) => {
+			const key = getJobKey(newVal.city, newVal.index, type);
+			if (pendingJobs.value[key]) {
+				startPolling(key);
+			}
+		});
 
 		await refreshSummaries(newVal.city, newVal.index);
 	},
@@ -187,608 +204,661 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-	<DialogContainer :dialog="`adminComponentSettings`" @on-close="handleClose">
-		<div class="admincomponentsettings">
-			<div class="admincomponentsettings-header">
-				<h2>組件設定</h2>
-				<button @click="handleConfirm">確定更改</button>
-			</div>
-			<div class="admincomponentsettings-tabs">
-				<button
-					:class="{ active: currentSettings === 'all' }"
-					@click="currentSettings = 'all'"
-				>
-					整體
-				</button>
-				<button
-					:class="{ active: currentSettings === 'chart' }"
-					@click="currentSettings = 'chart'"
-				>
-					圖表
-				</button>
-				<button
-					v-if="currentComponent.history_config !== null"
-					:class="{ active: currentSettings === 'history' }"
-					@click="currentSettings = 'history'"
-				>
-					歷史軸
-				</button>
-				<button
-					v-if="currentComponent.map_config[0] !== null"
-					:class="{ active: currentSettings === 'map' }"
-					@click="currentSettings = 'map'"
-				>
-					地圖
-				</button>
-			</div>
-			<div class="admincomponentsettings-content">
-				<div class="admincomponentsettings-settings">
-					<div
-						v-if="currentSettings === 'all'"
-						class="admincomponentsettings-settings-items"
-					>
-						<label
-							>組件名稱* ({{
-								currentComponent.name.length
-							}}/10)</label
-						>
-						<input
-							v-model="currentComponent.name"
-							type="text"
-							:minlength="1"
-							:maxlength="15"
-							required
-							disabled
-						/>
-						<div class="two-block">
-							<label>組件 ID</label>
-							<label>組件 Index</label>
-						</div>
-						<div class="two-block">
-							<input
-								type="text"
-								:value="currentComponent.id"
-								disabled
-							/>
-							<input
-								type="text"
-								:value="currentComponent.index"
-								disabled
-							/>
-						</div>
-						<label>資料來源*</label>
-						<input
-							v-model="currentComponent.source"
-							type="text"
-							:minlength="1"
-							:maxlength="12"
-							required
-						/>
-						<label>更新頻率* (0 = 不定期更新)</label>
-						<div class="two-block">
-							<input
-								v-model="currentComponent.update_freq"
-								type="number"
-								:min="0"
-								:max="31"
-								required
-							/>
-							<select v-model="currentComponent.update_freq_unit">
-								<option value="minute" />
-								<option value="hour">時</option>
-								<option value="day">天</option>
-								<option value="week">週</option>
-								<option value="month">月</option>
-								<option value="year">年</option>
-							</select>
-						</div>
-						<label>資料區間</label>
-						<!-- eslint-disable no-mixed-spaces-and-tabs -->
-						<div class="three-block">
-							<select
-								v-model="currentComponent.time_from"
-								@change="
-									() => {
-										if (
-											[
-												'current',
-												'static',
-												'demo',
-												'maintain',
-											].includes(
-												currentComponent.time_from,
-											)
-										) {
-											currentComponent.time_to = '';
-										} else {
-											currentComponent.time_to = 'now';
-										}
-									}
-								"
-							>
-								<option
-									v-for="time in [
-										'current',
-										'static',
-										'demo',
-										'maintain',
-										'day_start',
-										'week_start',
-										'month_start',
-										'quarter_start',
-										'year_start',
-										'day_ago',
-										'week_ago',
-										'month_ago',
-										'quarter_ago',
-										'halfyear_ago',
-										'year_ago',
-									]"
-									:key="time"
-									:value="time"
-								>
-									{{ timeTerms[time] }}
-								</option>
-							</select>
-							<div
-								:style="{
-									display: 'flex',
-									alignItems: 'center',
-									justifyContent: 'center',
-								}"
-							>
-								至
-							</div>
-							<input
-								:value="
-									currentComponent.time_to === 'now'
-										? '現在'
-										: 'N/A'
-								"
-								:disabled="true"
-							/>
-						</div>
-						<label required
-							>組件簡述* ({{
-								currentComponent.short_desc.length
-							}}/50)</label
-						>
-						<textarea
-							v-model="currentComponent.short_desc"
-							:minlength="1"
-							:maxlength="50"
-							required
-						/>
-						<label
-							>組件詳述* ({{
-								currentComponent.long_desc.length
-							}}/100)</label
-						>
-						<textarea
-							v-model="currentComponent.long_desc"
-							:minlength="1"
-							:maxlength="100"
-							required
-						/>
-						<label
-							>範例情境* ({{
-								currentComponent.use_case.length
-							}}/100)</label
-						>
-						<textarea
-							v-model="currentComponent.use_case"
-							:minlength="1"
-							:maxlength="100"
-							required
-						/>
-						<label>資料連結</label>
-						<InputTags
-							:tags="currentComponent.links"
-							@deletetag="
-								(index) => {
-									currentComponent.links.splice(index, 1);
-								}
-							"
-							@updatetagorder="
-								(updatedTags) => {
-									currentComponent.links = updatedTags;
-								}
-							"
-						/>
-						<input
-							v-model="tempInputStorage.link"
-							type="text"
-							:minlength="1"
-							@keypress.enter="
-								() => {
-									if (tempInputStorage.link.length > 0) {
-										currentComponent.links.push(
-											tempInputStorage.link,
-										);
-										tempInputStorage.link = '';
-									}
-								}
-							"
-						/>
-						<label>貢獻者</label>
-						<InputTags
-							:tags="currentComponent.contributors"
-							@deletetag="
-								(index) => {
-									currentComponent.contributors.splice(
-										index,
-										1,
-									);
-								}
-							"
-							@updatetagorder="
-								(updatedTags) => {
-									currentComponent.contributors = updatedTags;
-								}
-							"
-						/>
-						<input
-							v-model="tempInputStorage.contributor"
-							type="text"
-							@keypress.enter="
-								() => {
-									if (
-										tempInputStorage.contributor.length > 0
-									) {
-										currentComponent.contributors.push(
-											tempInputStorage.contributor,
-										);
-										tempInputStorage.contributor = '';
-									}
-								}
-							"
-						/>
-						<div class="enable_ai_summary">
-							<label>是否開啟 AI 摘要功能</label>
-							<label class="toggle-switch">
-								<input
-									v-model="currentComponent.enable_ai_summary"
-									type="checkbox"
-								/>
-								<span class="toggle-switch-slider" />
-							</label>
-						</div>
-						<div v-if="isSuperAd" class="refresh_ai_summary">
-							<label>組件圖表及地圖 AI 摘要刷新</label>
-							<button
-								:disabled="isCurrentUpdating"
-								@click="handleRenewAiSummary"
-							>
-								{{ isCurrentUpdating ? "更新中…" : "點擊刷新" }}
-							</button>
-						</div>
-						<div class="ai_summary_preview">
-							<label>目前組件圖表 AI 摘要內容</label>
-							<div class="ai_summary_preview-content">
-								{{
-									responseForChart?.data.data.result ||
-									"無資料"
-								}}
-							</div>
-						</div>
-						<div class="ai_summary_preview">
-							<label>目前組件地圖 AI 摘要內容</label>
-							<div class="ai_summary_preview-content">
-								{{
-									responseForMap?.data.data.result || "無資料"
-								}}
-							</div>
-						</div>
-					</div>
-					<div
-						v-else-if="currentSettings === 'chart'"
-						class="admincomponentsettings-settings-items"
-					>
-						<label>圖表資料型態</label>
-						<select :value="currentComponent.query_type" disabled>
-							<option value="two_d">二維資料</option>
-							<option value="three_d">三維資料</option>
-							<option value="time">時間序列資料</option>
-							<option value="percent">百分比資料</option>
-							<option value="map_legend">圖例資料</option>
-						</select>
-						<label>資料單位*</label>
-						<input
-							v-model="currentComponent.chart_config.unit"
-							type="text"
-							:minlength="1"
-							:maxlength="6"
-							required
-						/>
-						<label>圖表類型*（限3種，依點擊順序排列）</label>
-						<SelectButtons
-							:tags="
-								chartsPerDataType[currentComponent.query_type]
-							"
-							:selected="currentComponent.chart_config.types"
-							:limit="3"
-							@updatetagorder="
-								(updatedTags) => {
-									currentComponent.chart_config.types =
-										updatedTags;
-								}
-							"
-						/>
-						<label>圖表顏色</label>
-						<InputTags
-							:tags="currentComponent.chart_config.color"
-							:color-data="true"
-							@deletetag="
-								(index) => {
-									currentComponent.chart_config.color.splice(
-										index,
-										1,
-									);
-								}
-							"
-							@updatetagorder="
-								(updatedTags) => {
-									currentComponent.chart_config.color =
-										updatedTags;
-								}
-							"
-						/>
-						<input
-							v-model="tempInputStorage.chartColor"
-							type="color"
-							class="admincomponentsettings-settings-inputcolor"
-							@focusout="
-								() => {
-									if (
-										tempInputStorage.chartColor.length === 7
-									) {
-										currentComponent.chart_config.color.push(
-											tempInputStorage.chartColor,
-										);
-										tempInputStorage.chartColor = '#000000';
-									}
-								}
-							"
-						/>
-						<div v-if="currentComponent.map_config[0] !== null">
-							<label>地圖篩選</label>
-							<textarea v-model="currentComponent.map_filter" />
-						</div>
-					</div>
-					<div
-						v-else-if="currentSettings === 'history'"
-						class="admincomponentsettings-settings-items"
-					>
-						<label
-							>歷史軸時間區間
-							(依點擊順序排列，資料無法預覽)</label
-						>
-						<SelectButtons
-							:tags="[
-								'month_ago',
-								'quarter_ago',
-								'halfyear_ago',
-								'year_ago',
-								'twoyear_ago',
-								'fiveyear_ago',
-								'tenyear_ago',
-							]"
-							:selected="currentComponent.history_config.range"
-							:limit="5"
-							@updatetagorder="
-								(updatedTags) => {
-									currentComponent.history_config.range =
-										updatedTags;
-								}
-							"
-						/>
-						<label>歷史軸顏色 (若無提供沿用圖表顏色)</label>
-						<InputTags
-							:tags="currentComponent.history_config.color"
-							:color-data="true"
-							@deletetag="
-								(index) => {
-									currentComponent.history_config.color.splice(
-										index,
-										1,
-									);
-								}
-							"
-							@updatetagorder="
-								(updatedTags) => {
-									currentComponent.history_config.color =
-										updatedTags;
-								}
-							"
-						/>
-						<input
-							v-model="tempInputStorage.historyColor"
-							type="color"
-							class="admincomponentsettings-settings-inputcolor"
-							@focusout="
-								() => {
-									if (
-										tempInputStorage.historyColor.length ===
-										7
-									) {
-										currentComponent.history_config.color.push(
-											tempInputStorage.historyColor,
-										);
-										tempInputStorage.historyColor =
-											'#000000';
-									}
-								}
-							"
-						/>
-					</div>
-					<div v-else-if="currentSettings === 'map'">
-						<div
-							v-for="(
-								map_config, index
-							) in currentComponent.map_config"
-							:key="map_config.index"
-							class="admincomponentsettings-settings-items"
-						>
-							<hr v-if="index > 0" />
-							<label>地圖{{ index + 1 }} ID / Index</label>
-							<div class="two-block">
-								<input
-									:value="
-										currentComponent.map_config[index].id
-									"
-									disabled
-								/>
-								<input
-									v-model="
-										currentComponent.map_config[index].index
-									"
-									:maxlength="30"
-									:minlength="1"
-									required
-								/>
-							</div>
+  <DialogContainer
+    :dialog="`adminComponentSettings`"
+    @on-close="handleClose"
+  >
+    <div class="admincomponentsettings">
+      <div class="admincomponentsettings-header">
+        <h2>組件設定</h2>
+        <button @click="handleConfirm">
+          確定更改
+        </button>
+      </div>
+      <div class="admincomponentsettings-tabs">
+        <button
+          :class="{ active: currentSettings === 'all' }"
+          @click="currentSettings = 'all'"
+        >
+          整體
+        </button>
+        <button
+          :class="{ active: currentSettings === 'chart' }"
+          @click="currentSettings = 'chart'"
+        >
+          圖表
+        </button>
+        <button
+          v-if="currentComponent.history_config !== null"
+          :class="{ active: currentSettings === 'history' }"
+          @click="currentSettings = 'history'"
+        >
+          歷史軸
+        </button>
+        <button
+          v-if="currentComponent.map_config[0] !== null"
+          :class="{ active: currentSettings === 'map' }"
+          @click="currentSettings = 'map'"
+        >
+          地圖
+        </button>
+      </div>
+      <div class="admincomponentsettings-content">
+        <div class="admincomponentsettings-settings">
+          <div
+            v-if="currentSettings === 'all'"
+            class="admincomponentsettings-settings-items"
+          >
+            <label>組件名稱* ({{
+              currentComponent.name.length
+            }}/10)</label>
+            <input
+              v-model="currentComponent.name"
+              type="text"
+              :minlength="1"
+              :maxlength="15"
+              required
+              disabled
+            >
+            <div class="two-block">
+              <label>組件 ID</label>
+              <label>組件 Index</label>
+            </div>
+            <div class="two-block">
+              <input
+                type="text"
+                :value="currentComponent.id"
+                disabled
+              >
+              <input
+                type="text"
+                :value="currentComponent.index"
+                disabled
+              >
+            </div>
+            <label>資料來源*</label>
+            <input
+              v-model="currentComponent.source"
+              type="text"
+              :minlength="1"
+              :maxlength="12"
+              required
+            >
+            <label>更新頻率* (0 = 不定期更新)</label>
+            <div class="two-block">
+              <input
+                v-model="currentComponent.update_freq"
+                type="number"
+                :min="0"
+                :max="31"
+                required
+              >
+              <select v-model="currentComponent.update_freq_unit">
+                <option value="minute" />
+                <option value="hour">
+                  時
+                </option>
+                <option value="day">
+                  天
+                </option>
+                <option value="week">
+                  週
+                </option>
+                <option value="month">
+                  月
+                </option>
+                <option value="year">
+                  年
+                </option>
+              </select>
+            </div>
+            <label>資料區間</label>
+            <!-- eslint-disable no-mixed-spaces-and-tabs -->
+            <div class="three-block">
+              <select
+                v-model="currentComponent.time_from"
+                @change="
+                  () => {
+                    if (
+                      [
+                        'current',
+                        'static',
+                        'demo',
+                        'maintain',
+                      ].includes(
+                        currentComponent.time_from,
+                      )
+                    ) {
+                      currentComponent.time_to = '';
+                    } else {
+                      currentComponent.time_to = 'now';
+                    }
+                  }
+                "
+              >
+                <option
+                  v-for="time in [
+                    'current',
+                    'static',
+                    'demo',
+                    'maintain',
+                    'day_start',
+                    'week_start',
+                    'month_start',
+                    'quarter_start',
+                    'year_start',
+                    'day_ago',
+                    'week_ago',
+                    'month_ago',
+                    'quarter_ago',
+                    'halfyear_ago',
+                    'year_ago',
+                  ]"
+                  :key="time"
+                  :value="time"
+                >
+                  {{ timeTerms[time] }}
+                </option>
+              </select>
+              <div
+                :style="{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }"
+              >
+                至
+              </div>
+              <input
+                :value="
+                  currentComponent.time_to === 'now'
+                    ? '現在'
+                    : 'N/A'
+                "
+                :disabled="true"
+              >
+            </div>
+            <label required>組件簡述* ({{
+              currentComponent.short_desc.length
+            }}/50)</label>
+            <textarea
+              v-model="currentComponent.short_desc"
+              :minlength="1"
+              :maxlength="50"
+              required
+            />
+            <label>組件詳述* ({{
+              currentComponent.long_desc.length
+            }}/100)</label>
+            <textarea
+              v-model="currentComponent.long_desc"
+              :minlength="1"
+              :maxlength="100"
+              required
+            />
+            <label>範例情境* ({{
+              currentComponent.use_case.length
+            }}/100)</label>
+            <textarea
+              v-model="currentComponent.use_case"
+              :minlength="1"
+              :maxlength="100"
+              required
+            />
+            <label>資料連結</label>
+            <InputTags
+              :tags="currentComponent.links"
+              @deletetag="
+                (index) => {
+                  currentComponent.links.splice(index, 1);
+                }
+              "
+              @updatetagorder="
+                (updatedTags) => {
+                  currentComponent.links = updatedTags;
+                }
+              "
+            />
+            <input
+              v-model="tempInputStorage.link"
+              type="text"
+              :minlength="1"
+              @keypress.enter="
+                () => {
+                  if (tempInputStorage.link.length > 0) {
+                    currentComponent.links.push(
+                      tempInputStorage.link,
+                    );
+                    tempInputStorage.link = '';
+                  }
+                }
+              "
+            >
+            <label>貢獻者</label>
+            <InputTags
+              :tags="currentComponent.contributors"
+              @deletetag="
+                (index) => {
+                  currentComponent.contributors.splice(
+                    index,
+                    1,
+                  );
+                }
+              "
+              @updatetagorder="
+                (updatedTags) => {
+                  currentComponent.contributors = updatedTags;
+                }
+              "
+            />
+            <input
+              v-model="tempInputStorage.contributor"
+              type="text"
+              @keypress.enter="
+                () => {
+                  if (
+                    tempInputStorage.contributor.length > 0
+                  ) {
+                    currentComponent.contributors.push(
+                      tempInputStorage.contributor,
+                    );
+                    tempInputStorage.contributor = '';
+                  }
+                }
+              "
+            >
+            <div class="enable_ai_summary">
+              <label>是否開啟 AI 摘要功能</label>
+              <label class="toggle-switch">
+                <input
+                  v-model="currentComponent.enable_ai_summary"
+                  type="checkbox"
+                >
+                <span class="toggle-switch-slider" />
+              </label>
+            </div>
+            <div
+              v-if="isSuperAd"
+              class="refresh_ai_summary"
+            >
+              <label>組件圖表 AI 摘要刷新</label>
+              <button
+                :disabled="isTypeUpdating('chart')"
+                @click="handleRenewAiSummary('chart')"
+              >
+                {{
+                  isTypeUpdating("chart")
+                    ? "更新中…"
+                    : "點擊刷新"
+                }}
+              </button>
+            </div>
+            <div
+              v-if="isSuperAd"
+              class="refresh_ai_summary"
+            >
+              <label>組件地圖 AI 摘要刷新</label>
+              <button
+                :disabled="isTypeUpdating('map')"
+                @click="handleRenewAiSummary('map')"
+              >
+                {{
+                  isTypeUpdating("map")
+                    ? "更新中…"
+                    : "點擊刷新"
+                }}
+              </button>
+            </div>
+            <div class="ai_summary_preview">
+              <label>目前組件圖表 AI 摘要內容</label>
+              <div class="ai_summary_preview-content">
+                {{
+                  responseForChart?.data.data.result ||
+                    "無資料"
+                }}
+              </div>
+            </div>
+            <div class="ai_summary_preview">
+              <label>目前組件地圖 AI 摘要內容</label>
+              <div class="ai_summary_preview-content">
+                {{
+                  responseForMap?.data.data.result || "無資料"
+                }}
+              </div>
+            </div>
+          </div>
+          <div
+            v-else-if="currentSettings === 'chart'"
+            class="admincomponentsettings-settings-items"
+          >
+            <label>圖表資料型態</label>
+            <select
+              :value="currentComponent.query_type"
+              disabled
+            >
+              <option value="two_d">
+                二維資料
+              </option>
+              <option value="three_d">
+                三維資料
+              </option>
+              <option value="time">
+                時間序列資料
+              </option>
+              <option value="percent">
+                百分比資料
+              </option>
+              <option value="map_legend">
+                圖例資料
+              </option>
+            </select>
+            <label>資料單位*</label>
+            <input
+              v-model="currentComponent.chart_config.unit"
+              type="text"
+              :minlength="1"
+              :maxlength="6"
+              required
+            >
+            <label>圖表類型*（限3種，依點擊順序排列）</label>
+            <SelectButtons
+              :tags="
+                chartsPerDataType[currentComponent.query_type]
+              "
+              :selected="currentComponent.chart_config.types"
+              :limit="3"
+              @updatetagorder="
+                (updatedTags) => {
+                  currentComponent.chart_config.types =
+                    updatedTags;
+                }
+              "
+            />
+            <label>圖表顏色</label>
+            <InputTags
+              :tags="currentComponent.chart_config.color"
+              :color-data="true"
+              @deletetag="
+                (index) => {
+                  currentComponent.chart_config.color.splice(
+                    index,
+                    1,
+                  );
+                }
+              "
+              @updatetagorder="
+                (updatedTags) => {
+                  currentComponent.chart_config.color =
+                    updatedTags;
+                }
+              "
+            />
+            <input
+              v-model="tempInputStorage.chartColor"
+              type="color"
+              class="admincomponentsettings-settings-inputcolor"
+              @focusout="
+                () => {
+                  if (
+                    tempInputStorage.chartColor.length === 7
+                  ) {
+                    currentComponent.chart_config.color.push(
+                      tempInputStorage.chartColor,
+                    );
+                    tempInputStorage.chartColor = '#000000';
+                  }
+                }
+              "
+            >
+            <div v-if="currentComponent.map_config[0] !== null">
+              <label>地圖篩選</label>
+              <textarea v-model="currentComponent.map_filter" />
+            </div>
+          </div>
+          <div
+            v-else-if="currentSettings === 'history'"
+            class="admincomponentsettings-settings-items"
+          >
+            <label>歷史軸時間區間
+              (依點擊順序排列，資料無法預覽)</label>
+            <SelectButtons
+              :tags="[
+                'month_ago',
+                'quarter_ago',
+                'halfyear_ago',
+                'year_ago',
+                'twoyear_ago',
+                'fiveyear_ago',
+                'tenyear_ago',
+              ]"
+              :selected="currentComponent.history_config.range"
+              :limit="5"
+              @updatetagorder="
+                (updatedTags) => {
+                  currentComponent.history_config.range =
+                    updatedTags;
+                }
+              "
+            />
+            <label>歷史軸顏色 (若無提供沿用圖表顏色)</label>
+            <InputTags
+              :tags="currentComponent.history_config.color"
+              :color-data="true"
+              @deletetag="
+                (index) => {
+                  currentComponent.history_config.color.splice(
+                    index,
+                    1,
+                  );
+                }
+              "
+              @updatetagorder="
+                (updatedTags) => {
+                  currentComponent.history_config.color =
+                    updatedTags;
+                }
+              "
+            />
+            <input
+              v-model="tempInputStorage.historyColor"
+              type="color"
+              class="admincomponentsettings-settings-inputcolor"
+              @focusout="
+                () => {
+                  if (
+                    tempInputStorage.historyColor.length ===
+                    7
+                  ) {
+                    currentComponent.history_config.color.push(
+                      tempInputStorage.historyColor,
+                    );
+                    tempInputStorage.historyColor =
+                      '#000000';
+                  }
+                }
+              "
+            >
+          </div>
+          <div v-else-if="currentSettings === 'map'">
+            <div
+              v-for="(
+                map_config, index
+              ) in currentComponent.map_config"
+              :key="map_config.index"
+              class="admincomponentsettings-settings-items"
+            >
+              <hr v-if="index > 0">
+              <label>地圖{{ index + 1 }} ID / Index</label>
+              <div class="two-block">
+                <input
+                  :value="
+                    currentComponent.map_config[index].id
+                  "
+                  disabled
+                >
+                <input
+                  v-model="
+                    currentComponent.map_config[index].index
+                  "
+                  :maxlength="30"
+                  :minlength="1"
+                  required
+                >
+              </div>
 
-							<label
-								>地圖{{ index + 1 }} 名稱* ({{
-									currentComponent.map_config[index].title
-										.length
-								}}/10)</label
-							>
-							<input
-								v-model="
-									currentComponent.map_config[index].title
-								"
-								type="text"
-								:minlength="1"
-								:maxlength="10"
-								required
-							/>
-							<label>地圖{{ index + 1 }} 類型*</label>
-							<select
-								v-model="
-									currentComponent.map_config[index].type
-								"
-							>
-								<option
-									v-for="(value, key) in mapTypes"
-									:key="key"
-									:value="key"
-								>
-									{{ value }}
-								</option>
-							</select>
-							<label
-								>地圖{{
-									index + 1
-								}}
-								預設變形（大小/圖示）</label
-							>
-							<div class="two-block">
-								<select
-									v-model="
-										currentComponent.map_config[index].size
-									"
-									:disabled="
-										currentComponent.map_config[index]
-											.type === 'symbol-3d'
-									"
-								>
-									<option :value="''">無</option>
-									<option value="small">small (點圖)</option>
-									<option value="big">big (點圖)</option>
-									<option value="wide">wide (線圖)</option>
-								</select>
-								<select
-									v-model="
-										currentComponent.map_config[index].icon
-									"
-									:disabled="
-										currentComponent.map_config[index]
-											.type === 'symbol-3d'
-									"
-								>
-									<option :value="''">無</option>
-									<option value="heatmap">
-										heatmap (點圖)
-									</option>
-									<option value="dash">dash (線圖)</option>
-									<option value="metro">
-										metro (符號圖)
-									</option>
-									<option value="metro-density">
-										metro-density (符號圖)
-									</option>
-									<option value="triangle_green">
-										triangle_green (符號圖)
-									</option>
-									<option value="triangle_white">
-										triangle_white (符號圖)
-									</option>
-									<option value="youbike">
-										youbike (符號圖)
-									</option>
-									<option value="bus">bus (符號圖)</option>
-									<option value="cctv">cctv (符號圖)</option>
-								</select>
-							</div>
-							<label>地圖{{ index + 1 }} Paint屬性</label>
-							<textarea
-								v-model="
-									currentComponent.map_config[index].paint
-								"
-							/>
-							<label>地圖{{ index + 1 }} Popup標籤</label>
-							<textarea
-								v-model="
-									currentComponent.map_config[index].property
-								"
-							/>
-						</div>
-					</div>
-				</div>
-				<div class="admincomponentsettings-preview">
-					<DashboardComponent
-						v-if="
-							currentSettings === 'all' ||
-							currentSettings === 'chart'
-						"
-						:key="`${currentComponent.index}-${currentComponent.chart_config.color}-${currentComponent.chart_config.types}`"
-						:config="JSON.parse(JSON.stringify(currentComponent))"
-						:active-city="currentComponent.city"
-						:city-tag="
-							contentStore.cityManager.getTagList(
-								currentComponent.city,
-							)
-						"
-						mode="large"
-					/>
-					<div
-						v-else-if="currentSettings === 'history'"
-						:style="{ width: '300px' }"
-					>
-						<HistoryChart
-							:key="`${currentComponent.index}-${currentComponent.history_config.color}`"
-							:chart_config="currentComponent.chart_config"
-							:series="currentComponent.history_data"
-							:history_config="
-								JSON.parse(
-									JSON.stringify(
-										currentComponent.history_config,
-									),
-								)
-							"
-						/>
-					</div>
-					<div
-						v-else-if="currentSettings === 'map'"
-						index="componentsettings"
-					>
-						預覽功能 Coming Soon
-					</div>
-				</div>
-			</div>
-		</div>
-	</DialogContainer>
+              <label>地圖{{ index + 1 }} 名稱* ({{
+                currentComponent.map_config[index].title
+                  .length
+              }}/10)</label>
+              <input
+                v-model="
+                  currentComponent.map_config[index].title
+                "
+                type="text"
+                :minlength="1"
+                :maxlength="10"
+                required
+              >
+              <label>地圖{{ index + 1 }} 類型*</label>
+              <select
+                v-model="
+                  currentComponent.map_config[index].type
+                "
+              >
+                <option
+                  v-for="(value, key) in mapTypes"
+                  :key="key"
+                  :value="key"
+                >
+                  {{ value }}
+                </option>
+              </select>
+              <label>地圖{{
+                index + 1
+              }}
+                預設變形（大小/圖示）</label>
+              <div class="two-block">
+                <select
+                  v-model="
+                    currentComponent.map_config[index].size
+                  "
+                  :disabled="
+                    currentComponent.map_config[index]
+                      .type === 'symbol-3d'
+                  "
+                >
+                  <option :value="''">
+                    無
+                  </option>
+                  <option value="small">
+                    small (點圖)
+                  </option>
+                  <option value="big">
+                    big (點圖)
+                  </option>
+                  <option value="wide">
+                    wide (線圖)
+                  </option>
+                </select>
+                <select
+                  v-model="
+                    currentComponent.map_config[index].icon
+                  "
+                  :disabled="
+                    currentComponent.map_config[index]
+                      .type === 'symbol-3d'
+                  "
+                >
+                  <option :value="''">
+                    無
+                  </option>
+                  <option value="heatmap">
+                    heatmap (點圖)
+                  </option>
+                  <option value="dash">
+                    dash (線圖)
+                  </option>
+                  <option value="metro">
+                    metro (符號圖)
+                  </option>
+                  <option value="metro-density">
+                    metro-density (符號圖)
+                  </option>
+                  <option value="triangle_green">
+                    triangle_green (符號圖)
+                  </option>
+                  <option value="triangle_white">
+                    triangle_white (符號圖)
+                  </option>
+                  <option value="youbike">
+                    youbike (符號圖)
+                  </option>
+                  <option value="bus">
+                    bus (符號圖)
+                  </option>
+                  <option value="cctv">
+                    cctv (符號圖)
+                  </option>
+                </select>
+              </div>
+              <label>地圖{{ index + 1 }} Paint屬性</label>
+              <textarea
+                v-model="
+                  currentComponent.map_config[index].paint
+                "
+              />
+              <label>地圖{{ index + 1 }} Popup標籤</label>
+              <textarea
+                v-model="
+                  currentComponent.map_config[index].property
+                "
+              />
+            </div>
+          </div>
+        </div>
+        <div class="admincomponentsettings-preview">
+          <DashboardComponent
+            v-if="
+              currentSettings === 'all' ||
+                currentSettings === 'chart'
+            "
+            :key="`${currentComponent.index}-${currentComponent.chart_config.color}-${currentComponent.chart_config.types}`"
+            :config="JSON.parse(JSON.stringify(currentComponent))"
+            :active-city="currentComponent.city"
+            :city-tag="
+              contentStore.cityManager.getTagList(
+                currentComponent.city,
+              )
+            "
+            mode="large"
+          />
+          <div
+            v-else-if="currentSettings === 'history'"
+            :style="{ width: '300px' }"
+          >
+            <HistoryChart
+              :key="`${currentComponent.index}-${currentComponent.history_config.color}`"
+              :chart_config="currentComponent.chart_config"
+              :series="currentComponent.history_data"
+              :history_config="
+                JSON.parse(
+                  JSON.stringify(
+                    currentComponent.history_config,
+                  ),
+                )
+              "
+            />
+          </div>
+          <div
+            v-else-if="currentSettings === 'map'"
+            index="componentsettings"
+          >
+            預覽功能 Coming Soon
+          </div>
+        </div>
+      </div>
+    </div>
+  </DialogContainer>
 </template>
 
 <style scoped lang="scss">
@@ -1009,6 +1079,13 @@ onBeforeUnmount(() => {
 		padding: 2px 6px;
 		border-radius: 5px;
 		background-color: var(--color-highlight);
+
+		&:disabled {
+			background-color: var(--color-border);
+			color: var(--color-complement-text);
+			cursor: not-allowed;
+			opacity: 0.6;
+		}
 	}
 }
 
