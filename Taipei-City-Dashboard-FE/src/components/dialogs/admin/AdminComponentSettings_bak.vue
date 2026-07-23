@@ -1,28 +1,26 @@
 <!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 
 <script setup>
-import { ref, defineProps, watch, computed, onBeforeUnmount } from "vue";
+import { ref, defineProps, watch } from "vue";
 import { storeToRefs } from "pinia";
 import DashboardComponent from "../../../dashboardComponent/DashboardComponent.vue";
-import { useDialogStore } from "../../../store/dialogStore";
-import { useAdminStore } from "../../../store/adminStore";
-import { useContentStore } from "../../../store/contentStore";
-import { useAuthStore } from "../../../store/authStore.js";
+import { useDialogStore } from "../../../store/dialogStore.js";
+import { useAdminStore } from "../../../store/adminStore.js";
+import { useContentStore } from "../../../store/contentStore.js";
 
 import DialogContainer from "../DialogContainer.vue";
 import InputTags from "../../utilities/forms/InputTags.vue";
 import SelectButtons from "../../utilities/forms/SelectButtons.vue";
 import HistoryChart from "../../charts/HistoryChart.vue";
 
-import { chartsPerDataType } from "../../../assets/configs/apexcharts/chartTypes";
-import { timeTerms } from "../../../assets/configs/AllTimes";
-import { mapTypes } from "../../../assets/configs/mapbox/mapConfig";
-import http from "../../../router/axios";
+import { chartsPerDataType } from "../../../assets/configs/apexcharts/chartTypes.js";
+import { timeTerms } from "../../../assets/configs/AllTimes.js";
+import { mapTypes } from "../../../assets/configs/mapbox/mapConfig.js";
+import http from "../../../router/axios.js";
 
 const dialogStore = useDialogStore();
 const adminStore = useAdminStore();
 const contentStore = useContentStore();
-const authStore = useAuthStore();
 
 const props = defineProps(["searchParams"]);
 
@@ -33,44 +31,6 @@ const tempInputStorage = ref({
 	contributor: "",
 	chartColor: "#000000",
 	historyColor: "#000000",
-});
-
-const pendingJobs = ref(loadPendingJobs());
-const pollingIntervals = {};
-
-function loadPendingJobs() {
-	try {
-		return JSON.parse(
-			localStorage.getItem("ai_summary_pending_jobs") || "{}",
-		);
-	} catch {
-		return {};
-	}
-}
-
-function persistPendingJobs() {
-	localStorage.setItem(
-		"ai_summary_pending_jobs",
-		JSON.stringify(pendingJobs.value),
-	);
-}
-
-function getJobKey(city, index) {
-	return `${city}-${index}`;
-}
-
-// 是否正在更新，直接從 pendingJobs 算，不用另外維護陣列
-const currentJobKey = computed(() =>
-	currentComponent.value
-		? getJobKey(currentComponent.value.city, currentComponent.value.index)
-		: null,
-);
-const isCurrentUpdating = computed(() =>
-	currentJobKey.value ? !!pendingJobs.value[currentJobKey.value] : false,
-);
-
-const isSuperAd = computed(() => {
-	return authStore.user.is_admin && !authStore.isso_token && authStore.token;
 });
 
 function handleConfirm() {
@@ -84,94 +44,34 @@ function handleClose() {
 	adminStore.currentComponent = null;
 }
 
-async function handleRenewAiSummary() {
-	const {city} = currentComponent.value;
-	const {index} = currentComponent.value;
-	const key = getJobKey(city, index);
-
-	if (pendingJobs.value[key]) return; // 已經在跑，防重複點擊
-
-	const res = await http.post("/component/ai-summary/trigger", {
-		index,
-		city,
-	});
-
-	if (res?.data) {
-		pendingJobs.value[key] = {
-			dag_run_id: res.data.dag_run_id,
-			conf: res.data.conf,
-		};
-		persistPendingJobs();
-		startPolling(key);
-	}
-}
-
-function startPolling(key) {
-	if (pollingIntervals[key]) return;
-
-	pollingIntervals[key] = setInterval(async () => {
-		const job = pendingJobs.value[key];
-		if (!job) return stopPolling(key); // 資料被清掉了(例如另一個分頁清除)，保險起見停止
-
-		try {
-			const statusRes = await http.get("/component/ai-summary/status", {
-				params: { dag_run_id: job.dag_run_id },
-			});
-			const state = statusRes?.data?.state;
-
-			if (state === "success" || state === "failed") {
-				stopPolling(key);
-				delete pendingJobs.value[key];
-				persistPendingJobs();
-
-				if (state === "success" && currentJobKey.value === key) {
-					refreshSummaries(job.conf.city, job.conf.index);
-				}
-			}
-		} catch (e) {
-			console.error("查詢 AI 摘要任務狀態失敗", e);
-		}
-	}, 5000);
-}
-
-function stopPolling(key) {
-	clearInterval(pollingIntervals[key]);
-	delete pollingIntervals[key];
-}
-
 let responseForChart = ref(null);
 let responseForMap = ref(null);
-
-async function refreshSummaries(city, index) {
-	const res = await http.get("/component/ai-summary", {
-		params: { index, city, type: "chart" },
-	});
-	responseForChart.value = res;
-
-	const resMap = await http.get("/component/ai-summary", {
-		params: { index, city, type: "map" },
-	});
-	responseForMap.value = resMap;
-}
 
 watch(
 	() => currentComponent.value,
 	async (newVal) => {
 		if (!newVal) return;
 
-		const key = getJobKey(newVal.city, newVal.index);
-		if (pendingJobs.value[key]) {
-			startPolling(key);
-		}
+		const res = await http.get("/component/ai-summary", {
+			params: {
+				index: newVal.index,
+				city: newVal.city,
+				type: "chart",
+			},
+		});
+		responseForChart.value = res;
 
-		await refreshSummaries(newVal.city, newVal.index);
+		const resMap = await http.get("/component/ai-summary", {
+			params: {
+				index: newVal.index,
+				city: newVal.city,
+				type: "map",
+			},
+		});
+		responseForMap.value = resMap;
 	},
 	{ immediate: true },
 );
-
-onBeforeUnmount(() => {
-	Object.keys(pollingIntervals).forEach(stopPolling);
-});
 </script>
 
 <template>
@@ -448,18 +348,10 @@ onBeforeUnmount(() => {
                 <span class="toggle-switch-slider" />
               </label>
             </div>
-            <div
-              v-if="isSuperAd"
-              class="refresh_ai_summary"
-            >
+            <!-- <div class="refresh_ai_summary">
               <label>組件圖表及地圖 AI 摘要刷新</label>
-              <button
-                :disabled="isCurrentUpdating"
-                @click="handleRenewAiSummary"
-              >
-                {{ isCurrentUpdating ? "更新中…" : "點擊刷新" }}
-              </button>
-            </div>
+              <button>點擊刷新</button>
+            </div> -->
             <div class="ai_summary_preview">
               <label>目前組件圖表 AI 摘要內容</label>
               <div class="ai_summary_preview-content">
