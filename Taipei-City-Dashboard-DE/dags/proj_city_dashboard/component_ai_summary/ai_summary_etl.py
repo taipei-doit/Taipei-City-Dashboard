@@ -31,7 +31,9 @@ CHART_SYSTEM_PROMPT = (
 MAP_SYSTEM_PROMPT = (
     "你是台北市城市儀表板的空間資料分析助理。請根據提供的地圖圖層資訊、"
     "欄位說明與實際圖層資料，使用繁體中文撰寫一段 150 到 220 字的分析摘要。"
-    "摘要應先簡要說明圖層呈現的空間資料內容與主要欄位意義，"
+    "摘要應先簡要說明圖層呈現的空間資料內容與主要欄位意義；"
+    "若提供了地圖顏色/樣式對照，也要說明不同顏色或樣式在地圖上分別代表什麼分類或狀態，"
+    "並附上對應的色碼。"
     "再分析地圖中值得關注的空間分布現象，例如集中區域、稀疏區域、"
     "群聚、熱點、區域差異、鄰近關係、覆蓋範圍或異常點位，"
     "並說明使用者可以如何解讀這些空間特徵及其可能的城市治理意義。"
@@ -64,11 +66,40 @@ def fetch_enabled_components(engine):
         ]
 
 
+def fetch_component_by_index(engine, index, city=None):
+    """手動 trigger 帶 index(+選填 city)參數時用,只重新生成指定的組件,不管 enable_ai_summary。"""
+    conditions = "index = :index"
+    params = {"index": index}
+    if city:
+        conditions += " AND city = :city"
+        params["city"] = city
+
+    sql = sa_text(
+        f"""
+        SELECT index, city, short_desc, long_desc, use_case, query_chart
+        FROM query_charts
+        WHERE {conditions}
+        """
+    )
+    with engine.connect() as conn:
+        return [
+            {
+                "index": row[0],
+                "city": row[1],
+                "short_desc": row[2],
+                "long_desc": row[3],
+                "use_case": row[4],
+                "query_chart": row[5],
+            }
+            for row in conn.execute(sql, params).fetchall()
+        ]
+
+
 def fetch_map_configs(engine, index, city):
     """依 createTempComponentDB 同樣的 join 邏輯:query_charts.map_config_ids -> component_maps.id"""
     sql = sa_text(
         """
-        SELECT cm.index, cm.title, cm.type, cm.property
+        SELECT cm.index, cm.title, cm.type, cm.property, cm.paint
         FROM query_charts qc
         JOIN unnest(qc.map_config_ids) AS id_value ON true
         JOIN component_maps cm ON cm.id = id_value
@@ -77,9 +108,123 @@ def fetch_map_configs(engine, index, city):
     )
     with engine.connect() as conn:
         return [
-            {"map_index": row[0], "title": row[1], "type": row[2], "property": row[3]}
+            {
+                "map_index": row[0],
+                "title": row[1],
+                "type": row[2],
+                "property": row[3],
+                "paint": row[4],
+            }
             for row in conn.execute(sql, {"index": index, "city": city}).fetchall()
         ]
+
+
+def _parse_json_field(raw):
+    """component_maps 的 json 欄位,psycopg2 可能已自動解成 dict/list,也可能是原始字串,兩種都要接。"""
+    if isinstance(raw, str):
+        try:
+            return json.loads(raw)
+        except ValueError:
+            return None
+    return raw
+
+
+# ponytail: 顏色名稱只是為了讓摘要好讀(LLM 不會自己把 hex 轉成顏色名,只會照抄色碼),
+# 用簡單 RGB 歐氏距離配最接近的常見色名即可,不追求色彩學上的精確(例如不做感知均勻空間轉換)。
+_NAMED_COLORS = {
+    "紅色": (255, 0, 0),
+    "深紅色": (139, 0, 0),
+    "橙色": (255, 165, 0),
+    "黃色": (255, 255, 0),
+    "淺綠色": (144, 238, 144),
+    "綠色": (0, 128, 0),
+    "深綠色": (0, 100, 0),
+    "青色": (0, 128, 128),
+    "天藍色": (135, 206, 235),
+    "藍色": (0, 0, 255),
+    "深藍色": (0, 0, 139),
+    "靛色": (75, 0, 130),
+    "紫色": (128, 0, 128),
+    "粉紅色": (255, 192, 203),
+    "洋紅色": (255, 0, 255),
+    "棕色": (165, 42, 42),
+    "米色": (245, 245, 220),
+    "黑色": (0, 0, 0),
+    "深灰色": (64, 64, 64),
+    "灰色": (128, 128, 128),
+    "淺灰色": (211, 211, 211),
+    "白色": (255, 255, 255),
+}
+
+
+def _is_hex_color(value):
+    return (
+        isinstance(value, str)
+        and len(value) == 7
+        and value[0] == "#"
+        and all(c in "0123456789abcdefABCDEF" for c in value[1:])
+    )
+
+
+def _hex_to_color_name(hex_color):
+    """顏色名稱給人看、hex 色碼保留給需要精確比對(例如跟前端實際渲染顏色核對)的人,兩個一起輸出。"""
+    r, g, b = int(hex_color[1:3], 16), int(hex_color[3:5], 16), int(hex_color[5:7], 16)
+    name, _ = min(
+        _NAMED_COLORS.items(),
+        key=lambda item: (item[1][0] - r) ** 2 + (item[1][1] - g) ** 2 + (item[1][2] - b) ** 2,
+    )
+    return f"{name}({hex_color})"
+
+
+def _replace_hex_colors(value):
+    """
+    遞迴走過任意巢狀結構(list/dict/str),把看起來像 hex 色碼的字串換成中文顏色名。
+    先對整個 paint 值跑過一次這個,不管表達式形狀是 match/case/interpolate/step或
+    巢狀組合,色碼都不會漏到 LLM 的 prompt 裡(不要色碼是硬性要求,不能只處理 match
+    這種常見情況就算了)。
+    """
+    if _is_hex_color(value):
+        return _hex_to_color_name(value)
+    if isinstance(value, list):
+        return [_replace_hex_colors(v) for v in value]
+    if isinstance(value, dict):
+        return {k: _replace_hex_colors(v) for k, v in value.items()}
+    return value
+
+
+def describe_paint(paint):
+    """
+    把 component_maps.paint(Mapbox/MapLibre style 的著色表達式)轉成人看得懂的顏色對照
+    說明給 LLM。所有值先整個跑過 _replace_hex_colors 換成顏色名,再對最常見的 match
+    表達式(依欄位值對應顏色 + 預設色)做易讀的格式化;其他複雜表達式(interpolate/case/
+    巢狀...)color 已經換成中文名了,直接印格式化後的結構,不刻意寫完整的 expression parser。
+    """
+    paint = _parse_json_field(paint)
+    if not paint or not isinstance(paint, dict):
+        return None
+
+    lines = []
+    for prop_name, raw_value in paint.items():
+        value = _replace_hex_colors(raw_value)
+        if isinstance(value, list) and len(value) >= 2 and value[0] == "match":
+            get_expr = value[1]
+            field = get_expr[1] if isinstance(get_expr, list) and len(get_expr) > 1 else str(get_expr)
+            rest = value[2:]
+            if len(rest) % 2 == 1:
+                default, pairs = rest[-1], rest[:-1]
+            else:
+                default, pairs = None, rest
+            mapping = "、".join(f"{pairs[i]}={pairs[i + 1]}" for i in range(0, len(pairs), 2))
+            desc = f"{prop_name} 依欄位「{field}」的值決定:{mapping}"
+            if default is not None:
+                desc += f",其他值預設為 {default}"
+            lines.append(desc)
+        elif isinstance(value, str):
+            lines.append(f"{prop_name} 固定為 {value}")
+        else:
+            lines.append(f"{prop_name}: {json.dumps(value, ensure_ascii=False)}")
+
+    return "；".join(lines) if lines else None
 
 
 def _default_time_to():
@@ -215,20 +360,16 @@ def build_map_prompt(component, map_rows, map_query_infos):
     for row in map_rows:
         lines.append(f"\n圖層:{row['title']}(類型:{row['type']})")
 
-        # property 是 PG json 欄位,psycopg2 可能已自動解成 list,也可能是原始字串,兩種都要接
-        raw_property = row["property"]
-        if isinstance(raw_property, str):
-            try:
-                fields = json.loads(raw_property)
-            except ValueError:
-                fields = []
-        else:
-            fields = raw_property or []
+        fields = _parse_json_field(row["property"]) or []
         if fields:
             field_desc = "、".join(
                 f"{f.get('name')}({f.get('key')})" for f in fields if isinstance(f, dict)
             )
             lines.append(f"欄位說明:{field_desc}")
+
+        paint_desc = describe_paint(row["paint"])
+        if paint_desc:
+            lines.append(f"地圖顏色/樣式對照:{paint_desc}")
 
         query_info = map_query_infos.get(row["map_index"])
         if query_info:
@@ -286,25 +427,51 @@ def ai_summary_etl(**kwargs):
     catalog_engine = _get_geoserver_catalog_engine()
     geodata_engine = _get_geodata_engine()
 
-    components = fetch_enabled_components(engine)
-    print(f"Found {len(components)} components with enable_ai_summary = true.")
+    # 手動 trigger 帶 conf(index/city/type)時,只重新生成指定的組件,不管 enable_ai_summary、
+    # 也不跑其他組件。city/type 沒帶就是「該 index 底下所有 city」「chart 跟 map 都跑」。
+    dag_run = kwargs.get("dag_run")
+    conf = dag_run.conf if dag_run and dag_run.conf else {}
+    target_index = conf.get("index")
+    target_type = conf.get("type")
+
+    if target_type not in (None, "chart", "map"):
+        raise ValueError(f"conf.type 只能是 'chart' 或 'map',收到: {target_type!r}")
+
+    if target_index:
+        components = fetch_component_by_index(engine, target_index, conf.get("city"))
+        print(
+            f"手動指定重新生成 index={target_index} city={conf.get('city') or '(全部 city)'} "
+            f"type={target_type or '(chart+map)'},找到 {len(components)} 筆。"
+        )
+        if not components:
+            print(f"query_charts 裡查無 index={target_index} city={conf.get('city')},略過。")
+    else:
+        components = fetch_enabled_components(engine)
+        print(f"Found {len(components)} components with enable_ai_summary = true.")
+
+    do_chart = target_type in (None, "chart")
+    do_map = target_type in (None, "map")
 
     for component in components:
         index, city = component["index"], component["city"]
 
-        try:
-            query_result = None
-            if component["query_chart"] and geodata_engine is not None:
-                try:
-                    query_result = run_query_sample(geodata_engine, component["query_chart"])
-                except Exception as e:
-                    print(f"[{index}/{city}] query_chart execution failed: {e}")
+        if do_chart:
+            try:
+                query_result = None
+                if component["query_chart"] and geodata_engine is not None:
+                    try:
+                        query_result = run_query_sample(geodata_engine, component["query_chart"])
+                    except Exception as e:
+                        print(f"[{index}/{city}] query_chart execution failed: {e}")
 
-            chart_summary = generate_text(CHART_SYSTEM_PROMPT, build_chart_prompt(component, query_result))
-            write_summary(engine, index, city, "chart", chart_summary)
-            print(f"[{index}/{city}] chart summary written.")
-        except Exception as e:
-            print(f"[{index}/{city}] chart summary failed: {e}")
+                chart_summary = generate_text(CHART_SYSTEM_PROMPT, build_chart_prompt(component, query_result))
+                write_summary(engine, index, city, "chart", chart_summary)
+                print(f"[{index}/{city}] chart summary written.")
+            except Exception as e:
+                print(f"[{index}/{city}] chart summary failed: {e}")
+
+        if not do_map:
+            continue
 
         map_rows = fetch_map_configs(engine, index, city)
         if not map_rows:
