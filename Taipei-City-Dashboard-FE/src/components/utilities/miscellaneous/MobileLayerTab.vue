@@ -6,11 +6,13 @@ import { ref } from "vue";
 import { useMapStore } from "../../../store/mapStore";
 import { useContentStore } from "../../../store/contentStore";
 import ComponentTag from "../../../dashboardComponent/components/ComponentTag.vue";
+import AiSummaryIcon from "../../../components/icons/AiSummaryIcon.vue";
 
 const contentStore = useContentStore();
 const mapStore = useMapStore();
 
 const props = defineProps(["content"]);
+const emits = defineEmits(["openMapAiSummary"]);
 
 const checked = ref(false);
 const toggleCount = ref(0);
@@ -71,6 +73,10 @@ function handleMetroTaipeiToggle() {
 		mapStore.turnOffMapLayerVisibility(selectedData.map_config);
 	}
 }
+
+function handleOpenMapAiSummary() {
+	emits("openMapAiSummary", props.content);
+}
 </script>
 
 <template>
@@ -90,12 +96,20 @@ function handleMetroTaipeiToggle() {
       >
     </label>
     <div class="citytagwithname">
-      <ComponentTag
-        :icon="''"
-        :text="cityTag.name"
-        :mode="'small'"
-        :class="`city-tag-item ${cityTag.value}`"
-      />
+      <div class="multipletagsArea">
+        <button
+          v-if="content.enable_ai_summary"
+          @click="handleOpenMapAiSummary"
+        >
+          <AiSummaryIcon style="height: 16px; width: 16px;" />
+        </button>
+        <ComponentTag
+          :icon="''"
+          :text="cityTag.name"
+          :mode="'small'"
+          :class="`city-tag-item ${cityTag.value}`"
+        />
+      </div>
       <p>
         {{ content.name }}
       </p>
@@ -116,6 +130,7 @@ function handleMetroTaipeiToggle() {
 		height: 73px;
 		display: inline-block;
 		border: solid 1px transparent;
+		margin: auto;
 		border-radius: 5px;
 		background-color: var(--color-complement-text);
 		transition: border 0.2s;
@@ -153,5 +168,22 @@ function handleMetroTaipeiToggle() {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+}
+
+.multipletagsArea {
+	display: flex;
+	align-items: center;
+	gap: 2px;
+
+	button {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 0px 4px;
+		border: 1px solid #ffffff;
+		border-radius: 5px;
+		background: transparent;
+		cursor: pointer;
+	}
 }
 </style>
