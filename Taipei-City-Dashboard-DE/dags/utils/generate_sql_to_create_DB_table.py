@@ -124,9 +124,16 @@ def generate_sql_to_create_db_table(
     """
 
     grant_sequnce_sql = f"""
-    
-    -- grant sequnce
-    ALTER TABLE IF EXISTS public.{table_name}_ogc_fid_seq OWNER to airflow;
+
+    -- grant sequnce（序列一旦 OWNED BY 資料表欄位，Postgres 就禁止單獨改它的 owner
+    -- (0A000 feature_not_supported)；此時 owner 會隨下方 ALTER TABLE ... OWNER 一併
+    -- 變更，故直接略過。其餘錯誤照常拋出。）
+    DO $$
+    BEGIN
+        ALTER TABLE IF EXISTS public.{table_name}_ogc_fid_seq OWNER to airflow;
+    EXCEPTION WHEN feature_not_supported THEN
+        NULL;
+    END $$;
     GRANT ALL ON TABLE public.{table_name}_ogc_fid_seq TO airflow WITH GRANT OPTION;
     """
 
