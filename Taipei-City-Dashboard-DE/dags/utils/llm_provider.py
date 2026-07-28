@@ -41,7 +41,10 @@ def _with_key_rotation(provider_label, api_keys, send_request):
             return send_request(api_key)
         except Exception as e:
             last_error = e
-            print(f"{provider_label} key ...{api_key[-4:]} failed, rotating to next key: {e}")
+            print(
+                f"{provider_label} API key failed, rotating to next key "
+                f"(error type: {type(e).__name__})"
+            )
     raise RuntimeError(f"All {provider_label} API keys failed: {last_error}")
 
 
