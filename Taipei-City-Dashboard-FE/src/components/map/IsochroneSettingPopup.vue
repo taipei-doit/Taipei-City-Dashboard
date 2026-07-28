@@ -447,6 +447,13 @@ $text-muted: #aaa;
 	border-radius: 8px;
 	border: 1px solid $border;
 	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+	@media (max-width: 400px) {
+    	left: 50%;
+    	top: 50%;
+    	right: auto;
+    	transform: translate(-50%, -50%);
+		z-index: 20;
+  	}
 }
 
 // ── Header ─────────────────────────────────────────────────────────────────────

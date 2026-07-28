@@ -340,12 +340,6 @@ onMounted(() => {
 			transition: color 0.2s;
 		}
 
-		.isochrone-btn {
-			@media (max-width: 600px) {
-				display: none;
-			}
-		}
-
 		span {
 			color: var(--color-component-background);
 			font-size: 1.2rem;
@@ -393,12 +387,6 @@ onMounted(() => {
 				background-color: var(--color-highlight);
 			}
 		}
-	}
-}
-
-.isochrone-setting {
-	@media (max-width: 600px) {
-		display: none;
 	}
 }
 

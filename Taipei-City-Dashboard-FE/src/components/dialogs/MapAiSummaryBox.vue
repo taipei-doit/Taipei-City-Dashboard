@@ -105,6 +105,7 @@ const onMouseUp = () => {
     </div>
 
     <div class="modal-content">
+	  <p class="ai-warning">提醒：本洞察內容係依據儀表板呈現之數值，由 AI 自動分析產生，可能存在解讀誤差，僅供參考。</p>
       <div class="row">
         <span class="meta-label">▪ 城市</span>
         <span class="description">{{
@@ -259,6 +260,21 @@ const onMouseUp = () => {
 	font-weight: 500;
 	color: #ffffff;
 	margin: 0;
+}
+
+.ai-warning {
+	display: flex;
+	width: fit-content;
+	align-items: center;
+	gap: 6px;
+	font-size: 0.78rem;
+	color: #ffffff;
+	background: rgba(160, 164, 168, 0.08);
+	border: 1px solid #ffffff;
+	border-radius: 4px;
+	padding: 6px 10px;
+	margin: 0 0 4px;
+	line-height: 1.4;
 }
 
 .description {
