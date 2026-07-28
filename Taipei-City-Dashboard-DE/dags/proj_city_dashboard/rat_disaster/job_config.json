@@ -1,0 +1,43 @@
+{
+  "dag_infos": {
+    "dag_id": "rat_disaster",
+    "start_date": "2026-05-07",
+    "schedule_interval": "0 20 19 * *",
+    "catchup": false,
+    "tags": [
+      "rat_disaster",
+      "環保局",
+      "臺北市滅鼠成果"
+    ],
+    "description": "Monthly update of Taipei rat disaster prevention statistics by district.",
+    "default_args": {
+      "owner": "airflow",
+      "email": [
+        "DEFAULT_EMAIL_LIST"
+      ],
+      "email_on_retry": false,
+      "email_on_failure": true,
+      "retries": 1,
+      "retry_delay": 60
+    },
+    "ready_data_db": "postgres_default",
+    "ready_data_default_table": "rat_disaster",
+    "ready_data_history_table": "",
+    "raw_data_db": "postgres_default",
+    "raw_data_table": "",
+    "load_behavior": "replace"
+  },
+  "data_infos": {
+    "name_cn": "臺北市滅鼠成果統計",
+    "airflow_update_freq": "20:00+8 每月19日",
+    "source": "https://data.taipei/api/v1/dataset/86f4c34d-ede3-40d2-8a06-0b154b905bb1?scope=resourceAquire",
+    "source_type": "data.taipei json",
+    "source_dept": "環保局",
+    "gis_format": "",
+    "output_coordinate": "",
+    "is_geometry": 0,
+    "dataset_description": "臺北市各行政區滅鼠成果統計,涵蓋清理廢棄物量、填補鼠洞數、放置捕鼠籠、施放滅鼠藥劑量、捕獲鼠隻數、教育宣導場次、違規裁處次數及消毒面積等欄位。",
+    "etl_description": "透過 data.taipei JSON API 取得最新滅鼠成果資料,清理欄位並轉換型別後寫入 PostgreSQL rat_disaster 表。",
+    "sensitivity": "public"
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "dag_infos": {
+    "dag_id": "river_water_quality_tpe",
+    "start_date": "2026-05-24",
+    "schedule_interval": "5 5 14 * *",
+    "catchup": false,
+    "tags": ["river_water_quality", "MOENV", "Taipei-City"],
+    "description": "Monthly refresh of Taipei river water quality monitoring records with station point geometry.",
+    "default_args": {
+      "owner": "airflow",
+      "email": ["DEFAULT_EMAIL_LIST"],
+      "email_on_retry": false,
+      "email_on_failure": true,
+      "retries": 1,
+      "retry_delay": 60
+    },
+    "ready_data_db": "postgres_default",
+    "ready_data_default_table": "river_water_quality_tpe",
+    "ready_data_history_table": "",
+    "raw_data_db": "postgres_default",
+    "raw_data_table": "",
+    "load_behavior": "replace"
+  },
+  "data_infos": {
+    "name_cn": "河川水質監測資料-臺北市",
+    "airflow_update_freq": "每月 14 號 05:05 (Asia/Taipei)",
+    "source": "https://data.moenv.gov.tw/dataset/detail/WQX_P_01",
+    "source_type": "MOENV API",
+    "source_dept": "環境部環境資訊科技司",
+    "component_name": "river_water_quality_map",
+    "gis_format": "point",
+    "output_coordinate": "EPSG:4326",
+    "is_geometry": 1,
+    "dataset_description": "環境部河川水質監測資料，包含測站、流域、河川、採樣日期、測項、監測值與 TWD97 經緯度。本 DAG 僅保留 county=臺北市。",
+    "etl_description": "Fetch WQX_P_01 from the MOENV API with county=臺北市, normalize field names, parse sample_date, convert coordinates to EPSG:4326 point geometry, and replace the ready-data table monthly.",
+    "sensitivity": "public"
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "dag_infos": {
+    "dag_id": "food_hygiene_award_locations",
+    "start_date": "2026-05-18",
+    "schedule_interval": "50 2 8 * *",
+    "catchup": false,
+    "tags": [
+      "food_hygiene",
+      "新北市政府衛生局/臺北市政府衛生局",
+      "Taipei-City",
+      "New-Taipei-City"
+    ],
+    "description": "雙北餐飲衛生優良業者分布點位資料",
+    "default_args": {
+      "owner": "airflow",
+      "email": [
+        "DEFAULT_EMAIL_LIST"
+      ],
+      "email_on_retry": false,
+      "email_on_failure": true,
+      "retries": 1,
+      "retry_delay": 60
+    },
+    "ready_data_db": "postgres_default",
+    "ready_data_default_table": "food_hygiene_award_locations",
+    "ready_data_history_table": "",
+    "raw_data_db": "postgres_default",
+    "raw_data_table": "",
+    "load_behavior": "replace"
+  },
+  "data_infos": {
+    "name_cn": "餐飲衛生優良業者分布",
+    "airflow_update_freq": "不定期更新；DAG 每月 8 號 02:50 檢查來源是否更新",
+    "source": "https://foodtracer.health.ntpc.gov.tw/w/foodtracer/FoodAward | https://data.gov.tw/dataset/145738",
+    "source_type": "api",
+    "source_dept": "新北市政府衛生局/臺北市政府衛生局",
+    "component_name": "food_hygiene_award_map",
+    "gis_format": "wkb",
+    "output_coordinate": "EPSG:4326",
+    "is_geometry": 1,
+    "dataset_description": "整合新北市 FoodTracer 餐飲衛生優良業者 marker API 與臺北市通過餐飲衛生管理分級評核業者開放資料，產出可供地圖使用的餐飲衛生優良業者點位資料。",
+    "etl_description": "新北資料由 FoodTracer POST API 取得既有經緯度；臺北資料由 data.taipei resource 取得，若 Airflow Variable TPGOS_GET_ADDR_XY 存在則以既有地址轉座標工具補經緯度。最後保留可產生點位的資料列並寫入 ready_data。",
+    "sensitivity": "public"
+  }
+}

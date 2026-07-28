@@ -1,0 +1,106 @@
+from airflow import DAG
+from operators.common_pipeline import CommonDag
+
+
+def _ensure_ready_table(engine, table_name, col_map):
+    from utils.ready_table_schema import ensure_ready_table
+
+    ensure_ready_table(
+        engine,
+        table_name,
+        col_map,
+        {
+            "縣市": "city",
+            "項目": "year",
+            "修繕住宅貸款利息補貼申請戶數": "application_households",
+            "修繕住宅貸款利息補貼計畫戶數": "planned_households",
+            "修繕住宅貸款利息補貼核定戶數": "approved_households",
+        },
+    )
+
+
+def _repair_subsidy_application_status(**kwargs):
+    import pandas as pd
+    from sqlalchemy import create_engine
+    from utils.extract_stage import NewTaipeiAPIClient
+    from utils.load_stage import (
+        save_dataframe_to_postgresql,
+        update_lasttime_in_data_to_dataset_info,
+    )
+
+    ready_data_db_uri = kwargs.get("ready_data_db_uri")
+    dag_infos = kwargs.get("dag_infos")
+    dag_id = dag_infos.get("dag_id")
+    load_behavior = dag_infos.get("load_behavior")
+    default_table = dag_infos.get("ready_data_default_table")
+    history_table = dag_infos.get("ready_data_history_table")
+
+    COL_MAP = {
+        "data_time": "timestamp with time zone DEFAULT CURRENT_TIMESTAMP",
+        "city": 'character varying(10) COLLATE pg_catalog."default"',
+        "year": "integer",
+        "application_households": "integer",
+        "planned_households": "integer",
+        "approved_households": "integer",
+    }
+    SELECT_COLUMNS = list(COL_MAP.keys())
+
+    NEW_TAIPEI_RID = "502d1589-3693-4f2c-9c05-22e3ec37330d"
+
+    def _to_ad_year(value):
+        year = pd.to_numeric(
+            pd.Series(value, dtype="string").str.extract(r"(\d+)", expand=False),
+            errors="coerce",
+        )
+        return year.mask(year < 1911, year + 1911).astype("Int64")
+
+    def _to_int(series):
+        return pd.to_numeric(
+            series.astype("string").str.replace(",", "", regex=False),
+            errors="coerce",
+        ).astype("Int64")
+
+    data_time = pd.to_datetime("now").strftime("%Y-%m-%d %H:%M:%S+08")
+
+    # === Extract ===
+    ntpc_client = NewTaipeiAPIClient(NEW_TAIPEI_RID, input_format="json")
+    raw_data = pd.DataFrame(ntpc_client.get_all_data(size=1000))
+
+    # === Transform ===
+    data = raw_data.rename(
+        columns={
+            "repair_apply_num": "application_households",
+            "repair_project_num": "planned_households",
+            "repair_ok_num": "approved_households",
+        }
+    )
+    data["city"] = "新北市"
+    data["year"] = _to_ad_year(data["year"])
+    for col in [
+        "application_households",
+        "planned_households",
+        "approved_households",
+    ]:
+        data[col] = _to_int(data[col])
+    data["data_time"] = data_time
+    data = data.sort_values("year").reset_index(drop=True)
+    data = data[SELECT_COLUMNS]
+
+    # === Load ===
+    engine = create_engine(ready_data_db_uri)
+    _ensure_ready_table(engine, default_table, COL_MAP)
+    save_dataframe_to_postgresql(
+        engine,
+        data=data,
+        load_behavior=load_behavior,
+        default_table=default_table,
+        history_table=history_table,
+    )
+    update_lasttime_in_data_to_dataset_info(engine, dag_id, data["data_time"].max())
+
+
+dag = CommonDag(
+    proj_folder="proj_new_taipei_city_dashboard",
+    dag_folder="repair_subsidy_application_status",
+)
+dag.create_dag(etl_func=_repair_subsidy_application_status)
