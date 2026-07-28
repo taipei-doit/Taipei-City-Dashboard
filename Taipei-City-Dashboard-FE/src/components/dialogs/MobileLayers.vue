@@ -2,14 +2,16 @@
 <!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 
 <script setup>
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import { useDialogStore } from "../../store/dialogStore";
 import { useContentStore } from "../../store/contentStore";
 
 import MobileLayerTab from "../utilities/miscellaneous/MobileLayerTab.vue";
+import MobileMapAiSummaryBox from "./MobileMapAiSummaryBox.vue";
 
 const dialogStore = useDialogStore();
 const contentStore = useContentStore();
+const activeMapAiSummaryContent = ref(null);
 
 // Filter out components without maps
 const filteredMapLayers = computed(() => {
@@ -20,6 +22,14 @@ const filteredMapLayers = computed(() => {
 		(element) => element?.map_config.length !== 0
 	);
 });
+
+function handleOpenMapAiSummary(content) {
+	activeMapAiSummaryContent.value = content;
+}
+
+function handleCloseMapAiSummary() {
+	activeMapAiSummaryContent.value = null;
+}
 </script>
 
 <template>
@@ -48,6 +58,7 @@ const filteredMapLayers = computed(() => {
                 .components"
               :key="`map-layer-${item.index}`"
               :content="item"
+              @open-map-ai-summary="handleOpenMapAiSummary"
             />
           </div>
           <!-- other dashboards with components -->
@@ -56,12 +67,14 @@ const filteredMapLayers = computed(() => {
               v-for="item in filteredMapLayers"
               :key="item.index"
               :content="item"
+              @open-map-ai-summary="handleOpenMapAiSummary"
             />
             <h2>基本圖層</h2>
             <MobileLayerTab
               v-for="item in contentStore.mapLayers"
               :key="`map-layer-${item.index}`"
               :content="item"
+              @open-map-ai-summary="handleOpenMapAiSummary"
             />
           </div>
           <!-- Other dashboards without components -->
@@ -71,10 +84,18 @@ const filteredMapLayers = computed(() => {
               v-for="item in contentStore.mapLayers"
               :key="`map-layer-${item.index}`"
               :content="item"
+              @open-map-ai-summary="handleOpenMapAiSummary"
             />
           </div>
         </div>
       </div>
+      <MobileMapAiSummaryBox
+        v-if="activeMapAiSummaryContent"
+        :index="activeMapAiSummaryContent.index"
+        :name="activeMapAiSummaryContent.name"
+        :city="activeMapAiSummaryContent.city"
+        @close="handleCloseMapAiSummary"
+      />
     </div>
   </Teleport>
 </template>
