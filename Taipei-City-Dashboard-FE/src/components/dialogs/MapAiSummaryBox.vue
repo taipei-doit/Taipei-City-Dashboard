@@ -155,7 +155,7 @@ const onMouseUp = () => {
         </span>
         <template v-else>
           <span v-html="hexToSpan(response?.data?.data?.result)" />
-        </template>
+		</template>
       </p>
     </div>
 
@@ -174,7 +174,10 @@ const onMouseUp = () => {
 .floating-panel {
 	position: fixed;
 	width: 100%;
+	max-height: min(78dvh, 680px);
 	max-width: 480px;
+	display: flex;
+	flex-direction: column;
 	background: #2a2c2f;
 	border: 1px solid #494b4e;
 	border-radius: 5px;
@@ -190,6 +193,7 @@ const onMouseUp = () => {
 	justify-content: space-between;
 	padding: 16px 20px;
 	border-bottom: 1px solid #494b4e;
+	flex-shrink: 0;
 	cursor: grab;
 }
 
@@ -240,6 +244,13 @@ const onMouseUp = () => {
 	flex-direction: column;
 	gap: 10px;
 	padding: 16px 20px;
+	overflow-y: auto;
+	flex: 1;
+	min-height: 0;
+}
+
+.modal-content > * {
+	flex-shrink: 0;
 }
 
 .row {
@@ -299,6 +310,7 @@ const onMouseUp = () => {
 	display: flex;
 	justify-content: flex-end;
 	border-top: 1px solid #494b4e;
+	flex-shrink: 0;
 }
 
 .btn-secondary {

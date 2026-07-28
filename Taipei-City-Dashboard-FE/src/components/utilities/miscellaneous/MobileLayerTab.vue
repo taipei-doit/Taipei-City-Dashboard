@@ -184,6 +184,10 @@ function handleOpenMapAiSummary() {
 		border-radius: 5px;
 		background: transparent;
 		cursor: pointer;
+		-webkit-tap-highlight-color: transparent;
+		user-select: none;
+		-webkit-user-select: none;
+		outline: none;
 	}
 }
 </style>
