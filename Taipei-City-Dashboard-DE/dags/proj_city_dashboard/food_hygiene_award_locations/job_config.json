@@ -2,7 +2,7 @@
   "dag_infos": {
     "dag_id": "food_hygiene_award_locations",
     "start_date": "2026-05-18",
-    "schedule_interval": "@monthly",
+    "schedule_interval": "50 2 8 * *",
     "catchup": false,
     "tags": [
       "food_hygiene",
@@ -30,7 +30,7 @@
   },
   "data_infos": {
     "name_cn": "餐飲衛生優良業者分布",
-    "airflow_update_freq": "不定期更新；DAG 每月檢查來源是否更新",
+    "airflow_update_freq": "不定期更新；DAG 每月 8 號 02:50 檢查來源是否更新",
     "source": "https://foodtracer.health.ntpc.gov.tw/w/foodtracer/FoodAward | https://data.gov.tw/dataset/145738",
     "source_type": "api",
     "source_dept": "新北市政府衛生局/臺北市政府衛生局",

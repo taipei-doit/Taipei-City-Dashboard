@@ -2,7 +2,7 @@
   "dag_infos": {
     "dag_id": "noise_monitoring_stations_tpe",
     "start_date": "2026-05-22",
-    "schedule_interval": "@monthly",
+    "schedule_interval": "35 3 10 * *",
     "catchup": false,
     "tags": ["noise_monitoring", "環保局", "Taipei-City"],
     "description": "Monthly refresh of Taipei noise monitoring station locations with point geometry.",
@@ -23,7 +23,7 @@
   },
   "data_infos": {
     "name_cn": "臺北市環境及交通音量監測站地點",
-    "airflow_update_freq": "@monthly",
+    "airflow_update_freq": "每月 10 號 03:35 (Asia/Taipei)",
     "source": "https://data.taipei/dataset/detail?id=e2f4ebf5-bffa-40af-8056-383893721731",
     "source_type": "data.taipei",
     "source_dept": "臺北市政府環境保護局",

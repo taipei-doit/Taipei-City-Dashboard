@@ -2,10 +2,10 @@
   "dag_infos": {
     "dag_id": "noise_monitoring_stations_ntpc",
     "start_date": "2026-05-22",
-    "schedule_interval": "@yearly",
+    "schedule_interval": "5 3 11 * *",
     "catchup": false,
     "tags": ["noise_monitoring", "新北市政府環境保護局", "New-Taipei-City"],
-    "description": "Yearly refresh of New Taipei noise monitoring station locations with address geocoding.",
+    "description": "Monthly refresh of New Taipei noise monitoring station locations with address geocoding.",
     "default_args": {
       "owner": "airflow",
       "email": ["DEFAULT_EMAIL_LIST"],
@@ -23,7 +23,7 @@
   },
   "data_infos": {
     "name_cn": "新北市環境及交通噪音監測站地點",
-    "airflow_update_freq": "@yearly",
+    "airflow_update_freq": "每月 11 號 03:05 (Asia/Taipei)",
     "source": "https://data.ntpc.gov.tw/datasets/cad88b80-8230-48d4-a8d4-ce478954fddf",
     "source_type": "data.ntpc",
     "source_dept": "新北市政府環境保護局",

@@ -2,7 +2,7 @@
   "dag_infos": {
     "dag_id": "organic_farm_locations",
     "start_date": "2026-05-19",
-    "schedule_interval": "@monthly",
+    "schedule_interval": "50 3 10 * *",
     "catchup": false,
     "tags": [
       "organic_farm",
@@ -30,7 +30,7 @@
   },
   "data_infos": {
     "name_cn": "有機農場分布",
-    "airflow_update_freq": "臺北來源標示每半年/不定期更新；DAG 每月檢查來源是否更新",
+    "airflow_update_freq": "臺北來源標示每半年/不定期更新；DAG 每月 10 號 03:50 檢查來源是否更新",
     "source": "https://data.taipei/dataset/detail?id=32aea2da-14a7-47b6-a687-57e29c1ad4a7 | https://data.ntpc.gov.tw/datasets/fc30f585-66d9-4233-a65e-c650d177ebfe",
     "source_type": "data.taipei,data.ntpc",
     "source_dept": "臺北市政府產業發展局/新北市政府農業局",

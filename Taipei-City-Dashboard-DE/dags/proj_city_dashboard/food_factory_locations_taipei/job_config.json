@@ -2,7 +2,7 @@
   "dag_infos": {
     "dag_id": "food_factory_locations_taipei",
     "start_date": "2026-05-18",
-    "schedule_interval": "@monthly",
+    "schedule_interval": "35 2 8 * *",
     "catchup": false,
     "tags": ["food_safety", "產業發展局", "Taipei-City"],
     "description": "臺北市食品工廠登記資料月更新（自全行業登記工廠以工廠名稱關鍵字過濾食品相關業者）",
@@ -23,7 +23,7 @@
   },
   "data_infos": {
     "name_cn": "臺北市食品工廠分布",
-    "airflow_update_freq": "每月 (Asia/Taipei)",
+    "airflow_update_freq": "每月 8 號 02:35 (Asia/Taipei)",
     "source": "https://data.taipei/api/dataset/c8215f0d-20fa-4350-bcd9-da82432c2c9d/resource/db839b8c-bcbf-4b82-ab54-4d025df79b3c/download",
     "source_type": "csv",
     "source_dept": "臺北市政府產業發展局",

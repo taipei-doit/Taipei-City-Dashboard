@@ -2,7 +2,7 @@
   "dag_infos": {
     "dag_id": "urban_planning_new_tpe",
     "start_date": "2026-05-19",
-    "schedule_interval": "@monthly",
+    "schedule_interval": "50 4 13 * *",
     "catchup": false,
     "tags": ["urban_planning", "新北市政府城鄉發展局", "New-Taipei-City"],
     "description": "Monthly Taipei and New Taipei urban planning land-use zone polygons (building_landuse-style geometry).",
@@ -23,7 +23,7 @@
   },
   "data_infos": {
     "name_cn": "雙北都市計畫土地使用分區圖",
-    "airflow_update_freq": "每月 (Asia/Taipei)",
+    "airflow_update_freq": "每月 13 號 04:50 (Asia/Taipei)",
     "source": "https://data.ntpc.gov.tw/datasets/fe26e0a5-54c2-4876-bbc7-150243c048f5",
     "source_type": "data.ntpc",
     "source_dept": "新北市政府城鄉發展局",

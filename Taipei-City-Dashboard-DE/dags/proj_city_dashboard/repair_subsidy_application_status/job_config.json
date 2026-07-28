@@ -2,10 +2,10 @@
   "dag_infos": {
     "dag_id": "repair_subsidy_application_status",
     "start_date": "2026-05-20",
-    "schedule_interval": "@monthly",
+    "schedule_interval": "35 4 12 * *",
     "catchup": false,
     "tags": ["housing", "都發局", "Taipei-City"],
-    "description": "Yearly home repair loan interest subsidy application status for Taipei.",
+    "description": "Monthly refresh of home repair loan interest subsidy application status for Taipei.",
     "default_args": {
       "owner": "airflow",
       "email": ["DEFAULT_EMAIL_LIST"],
@@ -23,7 +23,7 @@
   },
   "data_infos": {
     "name_cn": "修繕住宅貸款利息受理情形",
-    "airflow_update_freq": "每月 (Asia/Taipei)",
+    "airflow_update_freq": "每月 12 號 04:35 (Asia/Taipei)",
     "source": "https://data.taipei/dataset/detail?id=6297943a-1e71-480d-967c-635855df66fe",
     "source_type": "data.taipei",
     "source_dept": "都發局",

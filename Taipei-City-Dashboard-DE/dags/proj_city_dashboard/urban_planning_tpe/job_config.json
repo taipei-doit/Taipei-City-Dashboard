@@ -2,7 +2,7 @@
   "dag_infos": {
     "dag_id": "urban_planning_tpe",
     "start_date": "2026-05-19",
-    "schedule_interval": "@monthly",
+    "schedule_interval": "35 5 14 * *",
     "catchup": false,
     "tags": ["urban_planning", "都發局", "Taipei-City"],
     "description": "Monthly aggregation of Taipei urban planning land-use zones by district.",
@@ -23,7 +23,7 @@
   },
   "data_infos": {
     "name_cn": "臺北市都市計畫使用分區圖行政區彙總",
-    "airflow_update_freq": "每月 (Asia/Taipei)",
+    "airflow_update_freq": "每月 14 號 05:35 (Asia/Taipei)",
     "source": "https://data.taipei/dataset/detail?id=3bab0a01-7936-4218-8cb5-f74dfcb43dda",
     "source_type": "data.taipei",
     "source_dept": "都發局",

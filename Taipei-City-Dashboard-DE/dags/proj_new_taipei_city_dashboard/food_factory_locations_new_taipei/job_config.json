@@ -2,7 +2,7 @@
   "dag_infos": {
     "dag_id": "food_factory_locations_new_taipei",
     "start_date": "2026-05-18",
-    "schedule_interval": "@monthly",
+    "schedule_interval": "35 2 9 * *",
     "catchup": false,
     "tags": ["food_safety", "衛生局", "New-Taipei-City"],
     "description": "新北市食品工廠清冊月更新（data.ntpc.gov.tw OpenAPI）",
@@ -23,7 +23,7 @@
   },
   "data_infos": {
     "name_cn": "新北市食品工廠分布",
-    "airflow_update_freq": "每月 (Asia/Taipei)",
+    "airflow_update_freq": "每月 9 號 02:35 (Asia/Taipei)",
     "source": "https://data.ntpc.gov.tw/api/datasets/c51d5111-c300-44c9-b4f1-4b28b9929ca2/json",
     "source_type": "data.ntpc",
     "source_dept": "新北市政府衛生局",

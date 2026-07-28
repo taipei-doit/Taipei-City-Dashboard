@@ -2,7 +2,7 @@
     "dag_infos": {
         "dag_id": "eco_friendly_restaurant",
         "start_date": "2026-05-16",
-        "schedule_interval": "0 5 1 * *",
+        "schedule_interval": "5 2 8 * *",
         "catchup": false,
         "tags": ["eco_restaurant", "環保局", "Taipei-City"],
         "description": "Taipei City eco-friendly restaurant list from data.taipei (monthly snapshot).",
@@ -23,7 +23,7 @@
     },
     "data_infos": {
         "name_cn": "臺北市環保餐廳",
-        "airflow_update_freq": "不定期更新,DAG 每月 1 號 05:00 拉取一次當前清單",
+        "airflow_update_freq": "不定期更新，DAG 每月 8 號 02:05 拉取一次當前清單",
         "source": "https://data.taipei/dataset/detail?id=845818d9-c432-44b4-85dd-03d71bd867b2",
         "source_type": "data.taipei",
         "source_dept": "環保局",

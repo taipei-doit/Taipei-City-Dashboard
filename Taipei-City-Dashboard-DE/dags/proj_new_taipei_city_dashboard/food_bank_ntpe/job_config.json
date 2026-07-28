@@ -2,10 +2,10 @@
     "dag_infos": {
         "dag_id": "food_bank_ntpe",
         "start_date": "2026-05-16",
-        "schedule_interval": "0 5 1 1,7 *",
+        "schedule_interval": "20 2 9 * *",
         "catchup": false,
         "tags": ["social_welfare", "社會局", "New-Taipei-City"],
-        "description": "New Taipei City food bank (實物銀行) branches and pickup stations directory, refreshed every January and July.",
+        "description": "New Taipei City food bank (實物銀行) branches and pickup stations directory, refreshed monthly.",
         "default_args": {
             "owner": "airflow",
             "email": ["DEFAULT_EMAIL_LIST"],
@@ -23,7 +23,7 @@
     },
     "data_infos": {
         "name_cn": "新北市實物銀行分行及領用站一覽表",
-        "airflow_update_freq": "05:00+8 on 1st of January and July",
+        "airflow_update_freq": "每月 9 號 02:20 (Asia/Taipei)",
         "source": "https://data.ntpc.gov.tw/datasets/1c1d0066-a4e7-4753-b8bc-d7728d5f3e04",
         "source_type": "data.ntpc",
         "source_dept": "新北市政府社會局",

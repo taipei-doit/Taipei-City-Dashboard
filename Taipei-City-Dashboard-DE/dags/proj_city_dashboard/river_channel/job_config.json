@@ -2,7 +2,7 @@
 	"dag_infos": {
 		"dag_id": "river_channel",
 		"start_date": "2026-05-22",
-		"schedule_interval": "@monthly",
+		"schedule_interval": "50 4 12 * *",
 		"catchup": false,
 		"tags": [
 			"river",
@@ -29,7 +29,7 @@
 	},
 	"data_infos": {
 		"name_cn": "河川河道",
-		"airflow_update_freq": "不定期更新",
+		"airflow_update_freq": "不定期更新；DAG 每月 12 號 04:50 檢查來源是否更新",
 		"source": "https://gic.wra.gov.tw/gis/gic/API/Google/DownLoad.aspx?fname=RIVERPOLY&filetype=SHP",
 		"source_type": "shp",
 		"source_dept": "經濟部水利署",

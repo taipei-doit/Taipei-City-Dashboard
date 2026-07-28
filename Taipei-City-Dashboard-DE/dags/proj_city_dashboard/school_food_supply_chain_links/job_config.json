@@ -2,7 +2,7 @@
   "dag_infos": {
     "dag_id": "school_food_supply_chain_links",
     "start_date": "2026-05-18",
-    "schedule_interval": "@monthly",
+    "schedule_interval": "20 5 14 * *",
     "catchup": false,
     "tags": ["food_safety", "教育部國民及學前教育署", "Taipei-City"],
     "description": "雙北中小學及高中職供餐供應鏈月更新（食材登錄平台 OpenAPI）",
@@ -23,7 +23,7 @@
   },
   "data_infos": {
     "name_cn": "雙北學校供餐供應鏈",
-    "airflow_update_freq": "每月 (Asia/Taipei)",
+    "airflow_update_freq": "每月 14 號 05:20 (Asia/Taipei)",
     "source": "https://fatraceschool.k12ea.gov.tw/cateringservice/openapi/",
     "source_type": "api",
     "source_dept": "教育部國民及學前教育署",

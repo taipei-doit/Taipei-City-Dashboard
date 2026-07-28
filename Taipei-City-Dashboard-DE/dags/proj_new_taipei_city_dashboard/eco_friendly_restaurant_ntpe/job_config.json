@@ -2,7 +2,7 @@
     "dag_infos": {
         "dag_id": "eco_friendly_restaurant_ntpe",
         "start_date": "2026-05-16",
-        "schedule_interval": "0 5 1 * *",
+        "schedule_interval": "5 2 9 * *",
         "catchup": false,
         "tags": ["eco_restaurant", "環保局", "New-Taipei-City"],
         "description": "New Taipei City eco-friendly restaurant list from data.ntpc (quarterly source, monthly pull).",
@@ -23,7 +23,7 @@
     },
     "data_infos": {
         "name_cn": "新北市環保餐廳",
-        "airflow_update_freq": "原始資料每季更新,DAG 每月 1 號 05:00 拉取一次當前清單",
+        "airflow_update_freq": "原始資料每季更新，DAG 每月 9 號 02:05 拉取一次當前清單",
         "source": "https://data.ntpc.gov.tw/datasets/e90d14f8-5995-4ebb-af19-8f8fd7d396c8",
         "source_type": "data.ntpc",
         "source_dept": "環保局",

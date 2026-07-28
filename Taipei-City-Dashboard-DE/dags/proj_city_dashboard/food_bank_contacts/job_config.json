@@ -2,10 +2,10 @@
     "dag_infos": {
         "dag_id": "food_bank_contacts",
         "start_date": "2026-05-16",
-        "schedule_interval": "0 5 1 1,7 *",
+        "schedule_interval": "20 2 8 * *",
         "catchup": false,
         "tags": ["social_welfare", "社會局", "Taipei-City"],
-        "description": "Taipei City food bank (實物銀行) contact directory, refreshed every January and July.",
+        "description": "Taipei City food bank (實物銀行) contact directory, refreshed monthly.",
         "default_args": {
             "owner": "airflow",
             "email": ["DEFAULT_EMAIL_LIST"],
@@ -23,7 +23,7 @@
     },
     "data_infos": {
         "name_cn": "臺北市政府實物銀行聯絡資訊",
-        "airflow_update_freq": "05:00+8 on 1st of January and July",
+        "airflow_update_freq": "每月 8 號 02:20 (Asia/Taipei)",
         "source": "https://data.taipei/dataset/detail?id=3fbc79e5-0138-4c89-8c47-39feddbd6d3f",
         "source_type": "data.taipei",
         "source_dept": "社會局",

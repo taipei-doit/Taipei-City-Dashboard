@@ -2,7 +2,7 @@
   "dag_infos": {
     "dag_id": "river_water_quality_ntpe",
     "start_date": "2026-05-24",
-    "schedule_interval": "@monthly",
+    "schedule_interval": "20 4 13 * *",
     "catchup": false,
     "tags": ["river_water_quality", "MOENV", "New-Taipei-City"],
     "description": "Monthly refresh of New Taipei river water quality monitoring records with station point geometry.",
@@ -23,7 +23,7 @@
   },
   "data_infos": {
     "name_cn": "河川水質監測資料-新北市",
-    "airflow_update_freq": "@monthly",
+    "airflow_update_freq": "每月 13 號 04:20 (Asia/Taipei)",
     "source": "https://data.moenv.gov.tw/dataset/detail/WQX_P_01",
     "source_type": "MOENV API",
     "source_dept": "環境部環境資訊科技司",

@@ -2,10 +2,10 @@
   "dag_infos": {
     "dag_id": "repair_subsidy_application_status",
     "start_date": "2026-05-20",
-    "schedule_interval": "@yearly",
+    "schedule_interval": "50 3 11 * *",
     "catchup": false,
     "tags": ["housing", "城鄉發展局", "New-Taipei-City"],
-    "description": "Yearly home repair loan interest subsidy application status for New Taipei.",
+    "description": "Monthly refresh of home repair loan interest subsidy application status for New Taipei.",
     "default_args": {
       "owner": "airflow",
       "email": ["DEFAULT_EMAIL_LIST"],
@@ -23,7 +23,7 @@
   },
   "data_infos": {
     "name_cn": "新北市修繕住宅貸款利息受理情形",
-    "airflow_update_freq": "每年 (Asia/Taipei)",
+    "airflow_update_freq": "每月 11 號 03:50 (Asia/Taipei)",
     "source": "https://data.ntpc.gov.tw/datasets/502d1589-3693-4f2c-9c05-22e3ec37330d",
     "source_type": "data.ntpc",
     "source_dept": "城鄉發展局",

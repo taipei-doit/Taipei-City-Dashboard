@@ -2,7 +2,7 @@
   "dag_infos": {
     "dag_id": "food_supply_market_locations",
     "start_date": "2026-05-19",
-    "schedule_interval": "@monthly",
+    "schedule_interval": "5 3 10 * *",
     "catchup": false,
     "tags": [
       "food_market",
@@ -30,7 +30,7 @@
   },
   "data_infos": {
     "name_cn": "食品供應市場分布",
-    "airflow_update_freq": "來源不定期至每年更新；DAG 每月檢查來源是否更新",
+    "airflow_update_freq": "來源不定期至每年更新；DAG 每月 10 號 03:05 檢查來源是否更新",
     "source": "https://data.taipei/dataset/detail?id=f490476d-d156-4492-a463-cf3405de3b55 | https://data.gov.tw/dataset/121593 | https://data.ntpc.gov.tw/datasets/785be91a-caaf-4e1c-91d6-f7d616d31a45",
     "source_type": "api",
     "source_dept": "臺北市市場處/新北市政府市場處",
