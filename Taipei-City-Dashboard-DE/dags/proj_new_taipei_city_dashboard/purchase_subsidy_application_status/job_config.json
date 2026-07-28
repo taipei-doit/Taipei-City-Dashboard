@@ -1,0 +1,38 @@
+{
+  "dag_infos": {
+    "dag_id": "purchase_subsidy_application_status",
+    "start_date": "2026-05-20",
+    "schedule_interval": "20 3 11 * *",
+    "catchup": false,
+    "tags": ["housing", "城鄉發展局", "New-Taipei-City"],
+    "description": "Monthly refresh of owner-occupied home purchase loan interest subsidy application status for New Taipei.",
+    "default_args": {
+      "owner": "airflow",
+      "email": ["DEFAULT_EMAIL_LIST"],
+      "email_on_retry": false,
+      "email_on_failure": true,
+      "retries": 1,
+      "retry_delay": 60
+    },
+    "ready_data_db": "postgres_default",
+    "ready_data_default_table": "purchase_subsidy_application_status_ntpe",
+    "ready_data_history_table": "",
+    "raw_data_db": "postgres_default",
+    "raw_data_table": "",
+    "load_behavior": "replace"
+  },
+  "data_infos": {
+    "name_cn": "新北市自購住宅貸款利息補貼受理情形",
+    "airflow_update_freq": "每月 11 號 03:20 (Asia/Taipei)",
+    "source": "https://data.ntpc.gov.tw/datasets/502d1589-3693-4f2c-9c05-22e3ec37330d",
+    "source_type": "data.ntpc",
+    "source_dept": "城鄉發展局",
+    "component_name": "purchase_subsidy_application_status_chart",
+    "gis_format": null,
+    "output_coordinate": "EPSG:4326",
+    "is_geometry": 0,
+    "dataset_description": "新北市歷年自購住宅貸款利息補貼申請戶數、計畫戶數及核定戶數。",
+    "etl_description": "讀取新北市資料開放平臺住宅補貼資料，輸出與臺北市自購住宅貸款利息補貼受理情形一致的英文欄位與西元年，並移除通過率。",
+    "sensitivity": "public"
+  }
+}

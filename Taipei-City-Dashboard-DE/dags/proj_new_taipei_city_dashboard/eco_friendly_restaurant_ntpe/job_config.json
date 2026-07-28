@@ -1,0 +1,38 @@
+{
+    "dag_infos": {
+        "dag_id": "eco_friendly_restaurant_ntpe",
+        "start_date": "2026-05-16",
+        "schedule_interval": "5 2 9 * *",
+        "catchup": false,
+        "tags": ["eco_restaurant", "環保局", "New-Taipei-City"],
+        "description": "New Taipei City eco-friendly restaurant list from data.ntpc (quarterly source, monthly pull).",
+        "default_args": {
+            "owner": "airflow",
+            "email": ["DEFAULT_EMAIL_LIST"],
+            "email_on_retry": false,
+            "email_on_failure": true,
+            "retries": 1,
+            "retry_delay": 60
+        },
+        "ready_data_db": "postgres_default",
+        "ready_data_default_table": "eco_friendly_restaurant_ntpe",
+        "ready_data_history_table": "",
+        "raw_data_db": "postgres_default",
+        "raw_data_table": "",
+        "load_behavior": "replace"
+    },
+    "data_infos": {
+        "name_cn": "新北市環保餐廳",
+        "airflow_update_freq": "原始資料每季更新，DAG 每月 9 號 02:05 拉取一次當前清單",
+        "source": "https://data.ntpc.gov.tw/datasets/e90d14f8-5995-4ebb-af19-8f8fd7d396c8",
+        "source_type": "data.ntpc",
+        "source_dept": "環保局",
+        "component_name": "eco_friendly_restaurant_list",
+        "gis_format": null,
+        "output_coordinate": "EPSG:4326",
+        "is_geometry": 0,
+        "dataset_description": "新北市政府環保局公告之環保餐廳當前清單,含餐廳類別、名稱、電話、地址、所屬縣市與行政區代碼;欄位命名與北市版 eco_friendly_restaurant 雙北 align,共用前端 component。",
+        "etl_description": "用 NewTaipeiAPIClient 抓 data.ntpc resource,rename ntpc 欄位 (seqno/type/name/localcallservice) 對齊雙北命名,seq 轉 int,data_time 取當下,每月 replace 整張 table。",
+        "sensitivity": "public"
+    }
+}
