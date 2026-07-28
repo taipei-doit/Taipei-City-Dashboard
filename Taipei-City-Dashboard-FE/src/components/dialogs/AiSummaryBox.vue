@@ -63,7 +63,9 @@ watch(
       </div>
 
       <div class="modal-content">
-		<p class="ai-warning">提醒：本洞察內容係依據儀表板呈現之數值，由 AI 自動分析產生，可能存在解讀誤差，僅供參考。</p>
+        <p class="ai-warning">
+          提醒：本洞察內容係依據儀表板呈現之數值，由 AI 自動分析產生，可能存在解讀誤差，僅供參考。
+        </p>
         <div class="row">
           <span class="meta-label">▪ 城市</span>
           <span class="description">
@@ -76,6 +78,10 @@ watch(
         <div class="row">
           <span class="meta-label">▪ 分析類別</span>
           <span class="description"> : 圖表</span>
+        </div>
+        <div class="row">
+          <span class="meta-label">▪ 使用 AI 模型</span>
+          <span class="description"> : Llama3.3-FFM-70B-32K</span>
         </div>
         <div class="row">
           <span class="meta-label">▪ 資料分析時間</span>
@@ -141,6 +147,9 @@ watch(
 .modal {
 	width: 100%;
 	max-width: 480px;
+	max-height: calc(100dvh - 32px);
+	display: flex;
+	flex-direction: column;
 	background: #2a2c2f;
 	border: 1px solid #494b4e;
 	border-radius: 5px;
@@ -153,6 +162,7 @@ watch(
 	justify-content: space-between;
 	padding: 16px 20px;
 	border-bottom: 1px solid #494b4e;
+	flex-shrink: 0;
 }
 
 .modal-title {
@@ -198,6 +208,13 @@ watch(
 	flex-direction: column;
 	gap: 6px;
 	padding: 16px 20px;
+	overflow-y: auto;
+	flex: 1;
+	min-height: 0;
+}
+
+.modal-content > * {
+	flex-shrink: 0;
 }
 
 .meta-label {
@@ -247,6 +264,7 @@ watch(
 	display: flex;
 	justify-content: flex-end;
 	border-top: 1px solid #494b4e;
+	flex-shrink: 0;
 }
 
 .btn-secondary {
@@ -279,7 +297,7 @@ watch(
 	}
 
 	.modal-footer {
-		padding: 10px 16px 24px;
+		padding: 10px 16px;
 	}
 
 	.meta-label {
