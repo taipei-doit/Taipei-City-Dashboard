@@ -1,5 +1,3 @@
-<!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
-
 <script setup>
 import { computed, ref } from "vue";
 import VueApexCharts from "vue3-apexcharts";
@@ -18,16 +16,16 @@ const emits = defineEmits([
 	"filterByLayer",
 	"clearByParamFilter",
 	"clearByLayerFilter",
-	"fly"
+	"fly",
 ]);
 
 const isLargeDataSet = computed(() => {
-	return props.series[0].data.length > 12
-})
+	return props.series[0].data.length > 12;
+});
 
 // Calculate initial width for large datasets only
 const initialWidth = computed(() => {
-	const WIDTH_PER_ITEM = 32
+	const WIDTH_PER_ITEM = 32;
 	const itemCount = props.series[0].data.length;
 	return itemCount * WIDTH_PER_ITEM;
 });
@@ -39,14 +37,13 @@ const chartWidth = computed(() => {
 	return isLargeDataSet.value ? `${widthValue.value}px` : "100%";
 });
 
-
 const chartOptions = ref({
 	chart: {
 		stacked: true,
 		zoom: {
 			allowMouseWheelZoom: false,
 		},
-		toolbar: isLargeDataSet.value 
+		toolbar: isLargeDataSet.value
 			? {
 				show: true,
 				tools: {
@@ -55,22 +52,23 @@ const chartOptions = ref({
 					reset: "<p>" + "重置" + "</p>",
 					zoomin: false,
 					zoomout: false,
-				}
-			  }
+				},
+			}
 			: {
 				show: false,
-			}
+			},
 	},
-	colors: [...props.chart_config.color],
+	colors: [props.chart_config.color[0]],
 	dataLabels: {
 		enabled: props.chart_config.categories ? false : true,
-		offsetY: 20,
+		formatter: function (val) {
+			return val;
+		},
+		offsetY: 0,
+		style: { fontSize: "12px" },
 	},
 	grid: {
 		show: false,
-		padding: {
-			bottom: 20,
-		},
 	},
 	legend: isLargeDataSet.value
 		? {
@@ -78,45 +76,50 @@ const chartOptions = ref({
 			horizontalAlign: "left",
 			offsetX: 20,
 			floating: true,
-		  }
+		}
 		: {
 			show: props.chart_config.categories ? true : false,
-		  },
+		},
 	plotOptions: {
 		bar: {
-			borderRadius: 5,
+			borderRadius: 0,
 			dataLabels: {
-				hideOverflowingLabels: false
+				hideOverflowingLabels: false,
+				position: "top",
+			},
+			colors: {
+				ranges: [
+					{
+						from: -Infinity,
+						to: -0.001,
+						color: props.chart_config.color[1] || "#E24B4A", // 負值顏色
+					},
+					{
+						from: 0,
+						to: Infinity,
+						color: props.chart_config.color[0] || "#1D9E75", // 正值顏色
+					},
+				],
 			},
 		},
 	},
-	stroke: {
-		colors: ["#282a2c"],
-		show: true,
-		width: 2,
-	},
 	tooltip: {
 		// The class "chart-tooltip" could be edited in /assets/styles/chartStyles.css
-		custom: function ({
-			series,
-			seriesIndex,
-			dataPointIndex,
-			w,
-		}) {
+		custom: function ({ series, seriesIndex, dataPointIndex, w }) {
 			return (
 				'<div class="chart-tooltip">' +
-					"<h6>" +
-						w.globals.labels[dataPointIndex] +
-						`${
-							props.chart_config.categories
-								? "-" + w.globals.seriesNames[seriesIndex]
-								: ""
-						}` +
-					"</h6>" +
-					"<span>" +
-						series[seriesIndex][dataPointIndex] +
-						` ${props.chart_config.unit}` +
-					"</span>" +
+				"<h6>" +
+				w.globals.labels[dataPointIndex] +
+				`${
+					props.chart_config.categories
+						? "-" + w.globals.seriesNames[seriesIndex]
+						: ""
+				}` +
+				"</h6>" +
+				"<span>" +
+				series[seriesIndex][dataPointIndex] +
+				` ${props.chart_config.unit}` +
+				"</span>" +
 				"</div>"
 			);
 		},
@@ -136,6 +139,12 @@ const chartOptions = ref({
 		},
 		type: "category",
 	},
+	yaxis: {
+		crosshairs: { show: false },
+		labels: {
+			formatter: (val) => (val !== undefined ? val.toFixed(0) : val),
+		},
+	},
 });
 
 const selectedIndex = ref(null);
@@ -154,7 +163,7 @@ function handleDataSelection(_e, _chartContext, config) {
 				props.map_filter,
 				props.map_config,
 				config.w.globals.labels[config.dataPointIndex],
-				config.w.globals.seriesNames[config.seriesIndex]
+				config.w.globals.seriesNames[config.seriesIndex],
 			);
 		}
 		// Supports filtering by xAxis
@@ -162,7 +171,7 @@ function handleDataSelection(_e, _chartContext, config) {
 			emits(
 				"filterByLayer",
 				props.map_config,
-				config.w.globals.labels[config.dataPointIndex]
+				config.w.globals.labels[config.dataPointIndex],
 			);
 		}
 		selectedIndex.value = `${config.dataPointIndex}-${config.seriesIndex}`;
@@ -193,7 +202,7 @@ function resetWidth() {
 
 <template>
   <div
-    v-if="activeChart === 'ColumnChart'"
+    v-if="activeChart === 'NegativeColumnChart'"
     class="columnChart"
   >
     <div
@@ -223,7 +232,7 @@ function resetWidth() {
       :key="chartWidth"
       type="bar"
       :width="chartWidth"
-      height="260px"
+      height="250px"
       :options="chartOptions"
       :series="series"
       @data-point-selection="handleDataSelection"
@@ -267,10 +276,9 @@ function resetWidth() {
 			}
 
 			&.reset {
-				color: var(--color-highlight)
+				color: var(--color-highlight);
 			}
 		}
 	}
 }
 </style>
-
