@@ -122,14 +122,14 @@ function rgbToHsl(r, g, b) {
 		const d = max - min;
 		s = l > 0.5 ? d / (2 - max - min) : d / (max - min);
 		switch (max) {
-			case rn:
-				h = (gn - bn) / d + (gn < bn ? 6 : 0);
-				break;
-			case gn:
-				h = (bn - rn) / d + 2;
-				break;
-			default:
-				h = (rn - gn) / d + 4;
+		case rn:
+			h = (gn - bn) / d + (gn < bn ? 6 : 0);
+			break;
+		case gn:
+			h = (bn - rn) / d + 2;
+			break;
+		default:
+			h = (rn - gn) / d + 4;
 		}
 		h /= 6;
 	}
@@ -288,7 +288,7 @@ const sunburstData = computed(() => {
 
 	// 作為品項層比例的分母
 	const ring2NodeSet = new Set();
-	for (const [idx, l1] of level1.entries()) {
+	for (const [l1] of level1.entries()) {
 		for (const k of children.get(l1.name) || []) {
 			ring2NodeSet.add(k.name);
 		}
@@ -620,61 +620,61 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-	<div
-		v-if="activeChart === 'SunburstChart'"
-		ref="wrapRef"
-		class="sunburstchart"
-	>
-		<div class="sunburstchart__svg-clip">
-			<svg
-				:viewBox="`0 0 ${sunburstData.width} ${sunburstData.height}`"
-				width="100%"
-				height="100%"
-			>
-				<g>
-					<path
-						v-for="a in sunburstData.arcs"
-						:key="a.key"
-						:d="a.d"
-						class="sunburstchart__arc"
-						:fill="arcFill(a)"
-						:fill-opacity="arcOpacity(a)"
-						role="img"
-						:aria-label="a.title"
-						@mouseenter="(evt) => onArcHoverMove(evt, a)"
-						@mousemove="(evt) => onArcHoverMove(evt, a)"
-						@mouseleave="onArcHoverLeave"
-					/>
-				</g>
-				<g>
-					<text
-						v-for="t in sunburstData.labels"
-						:key="t.key"
-						:x="t.x"
-						:y="t.y"
-						class="sunburstchart__label"
-						text-anchor="middle"
-						dominant-baseline="middle"
-					>
-						{{ t.text }}
-					</text>
-				</g>
-			</svg>
-		</div>
-		<div
-			v-if="hoverTip.show"
-			class="sunburstchart__hover"
-			:style="{
-				left: hoverTip.left !== null ? `${hoverTip.left}px` : 'auto',
-				right: hoverTip.right !== null ? `${hoverTip.right}px` : 'auto',
-				top: hoverTip.top !== null ? `${hoverTip.top}px` : 'auto',
-				bottom:
-					hoverTip.bottom !== null ? `${hoverTip.bottom}px` : 'auto',
-			}"
-		>
-			{{ hoverTip.text }}
-		</div>
-	</div>
+  <div
+    v-if="activeChart === 'SunburstChart'"
+    ref="wrapRef"
+    class="sunburstchart"
+  >
+    <div class="sunburstchart__svg-clip">
+      <svg
+        :viewBox="`0 0 ${sunburstData.width} ${sunburstData.height}`"
+        width="100%"
+        height="100%"
+      >
+        <g>
+          <path
+            v-for="a in sunburstData.arcs"
+            :key="a.key"
+            :d="a.d"
+            class="sunburstchart__arc"
+            :fill="arcFill(a)"
+            :fill-opacity="arcOpacity(a)"
+            role="img"
+            :aria-label="a.title"
+            @mouseenter="(evt) => onArcHoverMove(evt, a)"
+            @mousemove="(evt) => onArcHoverMove(evt, a)"
+            @mouseleave="onArcHoverLeave"
+          />
+        </g>
+        <g>
+          <text
+            v-for="t in sunburstData.labels"
+            :key="t.key"
+            :x="t.x"
+            :y="t.y"
+            class="sunburstchart__label"
+            text-anchor="middle"
+            dominant-baseline="middle"
+          >
+            {{ t.text }}
+          </text>
+        </g>
+      </svg>
+    </div>
+    <div
+      v-if="hoverTip.show"
+      class="sunburstchart__hover"
+      :style="{
+        left: hoverTip.left !== null ? `${hoverTip.left}px` : 'auto',
+        right: hoverTip.right !== null ? `${hoverTip.right}px` : 'auto',
+        top: hoverTip.top !== null ? `${hoverTip.top}px` : 'auto',
+        bottom:
+          hoverTip.bottom !== null ? `${hoverTip.bottom}px` : 'auto',
+      }"
+    >
+      {{ hoverTip.text }}
+    </div>
+  </div>
 </template>
 
 <style scoped lang="scss">
