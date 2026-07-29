@@ -235,19 +235,24 @@ Below are the parsing functions for the four data types:
 two_d, three_d, percent, and time. three_d and percent data share a common handler.
 */
 
+func executeDashboardRawQuery(query *string, timeFrom string, timeTo string, dest any) error {
+	if query == nil {
+		return fmt.Errorf("query is nil")
+	}
+	if strings.Count(*query, "%s") == 2 {
+		queryString := strings.ReplaceAll(*query, "'%s'", "?")
+		queryString = strings.ReplaceAll(queryString, "%s", "?")
+		return DBDashboard.Raw(queryString, timeFrom, timeTo).Scan(dest).Error
+	} else if strings.Count(*query, "?") == 2 {
+		return DBDashboard.Raw(*query, timeFrom, timeTo).Scan(dest).Error
+	}
+	return DBDashboard.Raw(*query).Scan(dest).Error
+}
+
 func GetTwoDimensionalData(query *string, timeFrom string, timeTo string) (chartDataOutput []TwoDimensionalDataOutput, err error) {
 	var chartData []TwoDimensionalData
-	var queryString string
 
-	// 1. Check if query contains substring '%s'. If so, the component can be queried by time.
-	if strings.Count(*query, "%s") == 2 {
-		queryString = fmt.Sprintf(*query, timeFrom, timeTo)
-	} else {
-		queryString = *query
-	}
-
-	// 2. Get the data from the database
-	err = DBDashboard.Raw(queryString).Scan(&chartData).Error
+	err = executeDashboardRawQuery(query, timeFrom, timeTo, &chartData)
 	if err != nil {
 		return chartDataOutput, err
 	}
@@ -255,7 +260,6 @@ func GetTwoDimensionalData(query *string, timeFrom string, timeTo string) (chart
 		return chartDataOutput, err
 	}
 
-	// 3. Convert the data to the format required by the front-end
 	chartDataOutput = append(chartDataOutput, TwoDimensionalDataOutput{Data: chartData})
 
 	return chartDataOutput, nil
@@ -263,17 +267,8 @@ func GetTwoDimensionalData(query *string, timeFrom string, timeTo string) (chart
 
 func GetThreeDimensionalData(query *string, timeFrom string, timeTo string) (chartDataOutput []ThreeDimensionalDataOutput, categories []string, err error) {
 	var chartData []ThreeDimensionalData
-	var queryString string
 
-	// 1. Check if query contains substring '%s'. If so, the component can be queried by time.
-	if strings.Count(*query, "%s") == 2 {
-		queryString = fmt.Sprintf(*query, timeFrom, timeTo)
-	} else {
-		queryString = *query
-	}
-
-	// 2. Get the data from the database
-	err = DBDashboard.Raw(queryString).Scan(&chartData).Error
+	err = executeDashboardRawQuery(query, timeFrom, timeTo, &chartData)
 	if err != nil {
 		return chartDataOutput, categories, err
 	}
@@ -281,9 +276,7 @@ func GetThreeDimensionalData(query *string, timeFrom string, timeTo string) (cha
 		return chartDataOutput, categories, err
 	}
 
-	// 3. Convert the data to the format required by the front-end
 	for _, data := range chartData {
-		// Get unique categories from xAxis
 		var foundX bool
 		for _, category := range categories {
 			if category == data.Xaxis {
@@ -292,23 +285,19 @@ func GetThreeDimensionalData(query *string, timeFrom string, timeTo string) (cha
 			}
 		}
 
-		// If a unique xAxis is found, append it to the existing list of categories
 		if !foundX {
 			categories = append(categories, data.Xaxis)
 		}
 
-		// Group data together by yAxis
 		var foundY bool
 		for i, output := range chartDataOutput {
 			if output.Name == data.Yaxis {
-				// Append the data to the output
 				chartDataOutput[i].Data = append(output.Data, data.Data)
 				foundY = true
 				break
 			}
 		}
 
-		// If a unique yAxis is found, create a new entry in the output
 		if !foundY {
 			chartDataOutput = append(chartDataOutput, ThreeDimensionalDataOutput{Name: data.Yaxis, Icon: data.Icon, Data: []int{data.Data}})
 		}
@@ -319,17 +308,8 @@ func GetThreeDimensionalData(query *string, timeFrom string, timeTo string) (cha
 
 func GetTimeSeriesData(query *string, timeFrom string, timeTo string) (chartDataOutput []TimeSeriesDataOutput, err error) {
 	var chartData []TimeSeriesData
-	var queryString string
 
-	// 1. Check if query contains substring '%s'. If so, the component can be queried by time.
-	if strings.Count(*query, "%s") == 2 {
-		queryString = fmt.Sprintf(*query, timeFrom, timeTo)
-	} else {
-		queryString = *query
-	}
-
-	// 2. Get the data from the database
-	err = DBDashboard.Raw(queryString).Scan(&chartData).Error
+	err = executeDashboardRawQuery(query, timeFrom, timeTo, &chartData)
 	if err != nil {
 		return chartDataOutput, err
 	}
@@ -337,21 +317,17 @@ func GetTimeSeriesData(query *string, timeFrom string, timeTo string) (chartData
 		return chartDataOutput, err
 	}
 
-	// 3. Convert the data to the format required by the front-end
 	for _, data := range chartData {
-		// Group data together by yAxis
 		var foundY bool
 		formattedDate := data.Xaxis.Format("2006-01-02T15:04:05+08:00")
 		for i, output := range chartDataOutput {
 			if output.Name == data.Yaxis {
-				// Append the data to the output
 				chartDataOutput[i].Data = append(output.Data, TimeSeriesDataItem{X: formattedDate, Y: data.Data})
 				foundY = true
 				break
 			}
 		}
 
-		// If a unique yAxis is found, create a new entry in the output
 		if !foundY {
 			chartDataOutput = append(chartDataOutput, TimeSeriesDataOutput{Name: data.Yaxis, Data: []TimeSeriesDataItem{{X: formattedDate, Y: data.Data}}})
 		}
@@ -361,17 +337,7 @@ func GetTimeSeriesData(query *string, timeFrom string, timeTo string) (chartData
 }
 
 func GetMapLegendData(query *string, timeFrom string, timeTo string) (chartData []MapLegendData, err error) {
-	var queryString string
-
-	// 1. Check if query contains substring '%s'. If so, the component can be queried by time.
-	if strings.Count(*query, "%s") == 2 {
-		queryString = fmt.Sprintf(*query, timeFrom, timeTo)
-	} else {
-		queryString = *query
-	}
-
-	// 2. Get the data from the database
-	err = DBDashboard.Raw(queryString).Scan(&chartData).Error
+	err = executeDashboardRawQuery(query, timeFrom, timeTo, &chartData)
 	if err != nil {
 		return chartData, err
 	}
@@ -384,15 +350,8 @@ func GetMapLegendData(query *string, timeFrom string, timeTo string) (chartData 
 
 func GetBubbleData(query *string, timeFrom string, timeTo string) (chartDataOutput []BubbleDataOutput, categories []string, err error) {
 	var chartData []BubbleData
-	var queryString string
 
-	if strings.Count(*query, "%s") == 2 {
-		queryString = fmt.Sprintf(*query, timeFrom, timeTo)
-	} else {
-		queryString = *query
-	}
-
-	err = DBDashboard.Raw(queryString).Scan(&chartData).Error
+	err = executeDashboardRawQuery(query, timeFrom, timeTo, &chartData)
 	if err != nil {
 		return chartDataOutput, categories, err
 	}
@@ -437,15 +396,7 @@ func GetBubbleData(query *string, timeFrom string, timeTo string) (chartDataOutp
 }
 
 func GetLayeredFlowData(query *string, timeFrom string, timeTo string) (chartData []LayeredFlowData, categories []string, err error) {
-	var queryString string
-
-	if strings.Count(*query, "%s") == 2 {
-		queryString = fmt.Sprintf(*query, timeFrom, timeTo)
-	} else {
-		queryString = *query
-	}
-
-	err = DBDashboard.Raw(queryString).Scan(&chartData).Error
+	err = executeDashboardRawQuery(query, timeFrom, timeTo, &chartData)
 	if err != nil {
 		return chartData, categories, err
 	}

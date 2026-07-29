@@ -210,6 +210,11 @@ func parseInt(s string) int {
 	return v
 }
 
+func parseInt32(s string) int32 {
+	v, _ := strconv.ParseInt(strings.TrimSpace(s), 10, 32)
+	return int32(v)
+}
+
 // parseGTFSTime converts "HH:MM:SS" (hours may be ≥ 24) to seconds since midnight.
 func parseGTFSTime(s string) int32 {
 	s = strings.TrimSpace(s)
@@ -217,10 +222,17 @@ func parseGTFSTime(s string) int32 {
 	if len(parts) != 3 {
 		return 0
 	}
-	h, _ := strconv.Atoi(parts[0])
-	m, _ := strconv.Atoi(parts[1])
-	sec, _ := strconv.Atoi(parts[2])
-	return int32(h*3600 + m*60 + sec)
+	h, _ := strconv.ParseInt(parts[0], 10, 32)
+	m, _ := strconv.ParseInt(parts[1], 10, 32)
+	sec, _ := strconv.ParseInt(parts[2], 10, 32)
+	total := h*3600 + m*60 + sec
+	if total > math.MaxInt32 {
+		return math.MaxInt32
+	}
+	if total < math.MinInt32 {
+		return math.MinInt32
+	}
+	return int32(total)
 }
 
 func parseDate(s string) (time.Time, error) {
@@ -440,7 +452,7 @@ func (f *Feed) parseFrequencies(r *csv.Reader) error {
 		f.Freqs[tid] = append(f.Freqs[tid], FreqEntry{
 			StartTime:  parseGTFSTime(col(row, idx, "start_time")),
 			EndTime:    parseGTFSTime(col(row, idx, "end_time")),
-			HeadwaySec: int32(parseInt(col(row, idx, "headway_secs"))),
+			HeadwaySec: parseInt32(col(row, idx, "headway_secs")),
 		})
 	}
 	return nil
