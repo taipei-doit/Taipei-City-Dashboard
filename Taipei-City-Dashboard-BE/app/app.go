@@ -16,6 +16,7 @@ import (
 	"TaipeiCityDashboardBE/app/middleware"
 	"TaipeiCityDashboardBE/app/models"
 	"TaipeiCityDashboardBE/app/routes"
+	"TaipeiCityDashboardBE/app/services/isochrone/transit"
 	"TaipeiCityDashboardBE/global"
 	"TaipeiCityDashboardBE/logs"
 
@@ -33,6 +34,11 @@ func StartApplication() {
 	// 1. Connect to postgreSQL and Redis
 	models.ConnectToDatabases("MANAGER", "DASHBOARD")
 	cache.ConnectToRedis()
+
+	if err := transit.InitService(); err != nil {
+		logs.FWarn("Transit service init failed: %v", err)
+	}
+
 	initial.InitCronJobs()
 
 	global.LMSession = models.InitLmSession()
