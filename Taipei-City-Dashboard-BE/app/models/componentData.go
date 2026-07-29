@@ -239,14 +239,36 @@ func executeDashboardRawQuery(query *string, timeFrom string, timeTo string, des
 	if query == nil {
 		return fmt.Errorf("query is nil")
 	}
-	if strings.Count(*query, "%s") == 2 {
-		queryString := strings.ReplaceAll(*query, "'%s'", "?")
-		queryString = strings.ReplaceAll(queryString, "%s", "?")
-		return DBDashboard.Raw(queryString, timeFrom, timeTo).Scan(dest).Error
-	} else if strings.Count(*query, "?") == 2 {
-		return DBDashboard.Raw(*query, timeFrom, timeTo).Scan(dest).Error
+
+	layout := "2006-01-02T15:04:05+08:00"
+	var cleanTimeFrom, cleanTimeTo string
+	if timeFrom != "" {
+		if t, err := time.Parse(layout, timeFrom); err == nil {
+			cleanTimeFrom = t.Format(layout)
+		} else {
+			cleanTimeFrom = timeFrom
+		}
 	}
-	return DBDashboard.Raw(*query).Scan(dest).Error
+	if timeTo != "" {
+		if t, err := time.Parse(layout, timeTo); err == nil {
+			cleanTimeTo = t.Format(layout)
+		} else {
+			cleanTimeTo = timeTo
+		}
+	}
+
+	var sql string
+	if strings.Count(*query, "%s") == 2 {
+		sql = strings.ReplaceAll(*query, "'%s'", "?")
+		sql = strings.ReplaceAll(sql, "%s", "?")
+	} else {
+		sql = *query
+	}
+
+	if strings.Count(sql, "?") == 2 {
+		return DBDashboard.Raw(sql, cleanTimeFrom, cleanTimeTo).Scan(dest).Error
+	}
+	return DBDashboard.Raw(sql).Scan(dest).Error
 }
 
 func GetTwoDimensionalData(query *string, timeFrom string, timeTo string) (chartDataOutput []TwoDimensionalDataOutput, err error) {

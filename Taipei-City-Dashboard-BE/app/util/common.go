@@ -74,19 +74,23 @@ func GetTime(c *gin.Context) (string, string, error) {
 	if timefrom == "" {
 		timefrom = time.Date(1990, 1, 1, 0, 0, 0, 0, time.FixedZone("UTC+8", 8*60*60)).Format(layout)
 	} else {
-		// 檢查 timefrom 格式
-		if _, err := time.Parse(layout, timefrom); err != nil {
+		// 檢查與淨化 timefrom 格式
+		t, err := time.Parse(layout, timefrom)
+		if err != nil {
 			return "", "", errors.New("timefrom 格式無效")
 		}
+		timefrom = t.Format(layout)
 	}
 	// timeTo defaults to current time
 	if timeto == "" {
 		timeto = time.Now().Format(layout)
 	} else {
-		// 檢查 timeto 格式
-		if _, err := time.Parse(layout, timeto); err != nil {
+		// 檢查與淨化 timeto 格式
+		t, err := time.Parse(layout, timeto)
+		if err != nil {
 			return "", "", errors.New("timeto 格式無效")
 		}
+		timeto = t.Format(layout)
 	}
 
 	return timefrom, timeto, nil
