@@ -35,9 +35,12 @@ func StartApplication() {
 	models.ConnectToDatabases("MANAGER", "DASHBOARD")
 	cache.ConnectToRedis()
 
-	if err := transit.InitService(); err != nil {
-		logs.FWarn("Transit service init failed: %v", err)
-	}
+	// 異步啟動等時圈 RAPTOR 服務，避免阻塞 HTTP 伺服器開機與 K8s 健康檢查
+	go func() {
+		if err := transit.InitService(); err != nil {
+			logs.FWarn("Transit service init failed: %v", err)
+		}
+	}()
 
 	initial.InitCronJobs()
 
