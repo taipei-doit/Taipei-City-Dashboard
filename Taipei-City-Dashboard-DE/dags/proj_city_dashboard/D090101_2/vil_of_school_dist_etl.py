@@ -24,15 +24,19 @@ def vil_of_school_dist_etl(rid, school_dist_col, **kwargs):
 
     # Transform
     data = raw_data.copy()
-    # rename
+    # rename base columns
     data = data.rename(
         columns={
             "行政區": "dist",
             "里": "vill",
             "鄰": "neighborhood",
-            school_dist_col: "school_district",
         }
     )
+    # handle school district column safely
+    if school_dist_col in data.columns:
+        data = data.rename(columns={school_dist_col: "school_district"})
+    else:
+        data["school_district"] = None
     # time
     data["data_time"] = convert_str_to_time_format(data["data_time"])
     # repair data error
