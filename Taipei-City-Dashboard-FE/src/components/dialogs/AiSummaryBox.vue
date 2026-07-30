@@ -311,6 +311,7 @@ watch(
 
 .dots {
 	display: inline-flex;
+	height: 20px;
 	gap: 5px;
 	align-items: center;
 }
