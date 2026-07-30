@@ -60,6 +60,7 @@ const statusToIcon = {
 	transform: translateX(-50%);
 
 	span {
+		flex-shrink: 0;
 		margin-right: 10px;
 		font-family: var(--font-icon);
 		font-size: var(--font-l);
