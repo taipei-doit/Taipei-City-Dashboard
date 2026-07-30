@@ -288,10 +288,10 @@ const sunburstData = computed(() => {
 
 	// 作為品項層比例的分母
 	const ring2NodeSet = new Set();
-	for (const [l1] of level1.entries()) {
-		for (const k of children.get(l1.name) || []) {
-			ring2NodeSet.add(k.name);
-		}
+	for (const l1 of level1) {
+    	for (const k of children.get(l1.name) || []) {
+        	ring2NodeSet.add(k.name);
+    	}
 	}
 	const ring2total = Math.max(
 		1,
