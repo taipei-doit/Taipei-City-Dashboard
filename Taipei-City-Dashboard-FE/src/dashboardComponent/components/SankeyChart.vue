@@ -547,13 +547,10 @@ const layout = computed(() => {
 	width: 100%;
 	height: auto;
 	display: block;
-	margin-bottom: 20px;
 }
 
 .sankey-scroll-full {
 	flex: 1;
-	padding-bottom: 20px;
-	box-sizing: border-box;
 }
 
 @media (max-width: 770px) {
