@@ -44,8 +44,9 @@ const statusToIcon = {
 
 <style scoped lang="scss">
 .notificationbar {
-	height: 3rem;
-	width: fit-content;
+	min-height: 3rem;
+    height: auto;
+	max-width: 80vw;
 	position: fixed;
 	top: 20px;
 	left: 50%;
@@ -60,15 +61,19 @@ const statusToIcon = {
 	transform: translateX(-50%);
 
 	span {
-		flex-shrink: 0;
-		margin-right: 10px;
-		font-family: var(--font-icon);
-		font-size: var(--font-l);
-	}
+    flex-shrink: 0;
+    margin-right: 10px;
+    font-family: var(--font-icon);
+    font-size: var(--font-l);
+    margin-top: 2px;
+}
 
 	h5 {
-		font-weight: 400;
-	}
+    margin: 0;
+    font-weight: 400;
+    white-space: normal;
+    overflow-wrap: break-word;
+}
 }
 
 .success {
