@@ -30,7 +30,7 @@ const PAD_L = 250;
 const PAD_R = 250;
 const SVG_H = 420;
 const AVAIL_H = SVG_H - PAD_TOP - PAD_BOT;
-const TOP_N = 646;
+const TOP_N = 25;
 const NC = darken(props.chart_config.color?.[0], 25) ?? "#6b8fa3";
 
 const COLOR_LOW = hexToRGB(props.chart_config.color?.[0] ?? "#3a6ea5");
