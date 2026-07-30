@@ -19,6 +19,8 @@ const isMobile =
 	window.matchMedia?.("(max-width: 770px)").matches;
 const MIN_LABEL_GAP = isMobile ? 22 : 16;
 const LEADER_THRESHOLD = 1.5;
+const NODE_LABEL_FONT_SIZE = isMobile ? 18 : 14;
+const NODE_LABEL_BOUNDS_PAD = Math.ceil(NODE_LABEL_FONT_SIZE * 0.8);
 
 function declutter(nodes, minGap) {
 	if (!nodes.length) return [];
@@ -44,11 +46,22 @@ const labeledLayers = computed(() =>
 		? props.layout.nodesPerLayer.map((nodes) => declutter(nodes, MIN_LABEL_GAP))
 		: [],
 );
+
+const viewBoxHeight = computed(() => {
+	const bottomMostLabelY = labeledLayers.value.reduce((maxY, nodes) => {
+		for (const nd of nodes) {
+			maxY = Math.max(maxY, nd.labelY);
+		}
+		return maxY;
+	}, props.svgH);
+
+	return Math.max(props.svgH, Math.ceil(bottomMostLabelY + NODE_LABEL_BOUNDS_PAD));
+});
 </script>
 
 <template>
   <svg
-    :viewBox="`0 0 ${layout.svgW} ${svgH}`"
+    :viewBox="`0 0 ${layout.svgW} ${viewBoxHeight}`"
     preserveAspectRatio="xMidYMid meet"
     v-bind="$attrs"
   >
