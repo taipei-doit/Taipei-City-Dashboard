@@ -411,6 +411,7 @@ const layout = computed(() => {
 	display: flex;
 	gap: 4px;
 	flex-direction: column;
+	justify-content: center;
 	background: transparent;
 }
 
@@ -546,10 +547,13 @@ const layout = computed(() => {
 	width: 100%;
 	height: auto;
 	display: block;
+	margin-bottom: 20px;
 }
 
 .sankey-scroll-full {
 	flex: 1;
+	padding-bottom: 20px;
+	box-sizing: border-box;
 }
 
 @media (max-width: 770px) {
