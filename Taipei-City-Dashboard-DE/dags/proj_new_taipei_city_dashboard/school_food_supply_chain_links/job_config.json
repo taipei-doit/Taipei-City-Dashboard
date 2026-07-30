@@ -1,0 +1,38 @@
+{
+  "dag_infos": {
+    "dag_id": "school_food_supply_chain_links",
+    "start_date": "2026-05-18",
+    "schedule_interval": "35 4 13 * *",
+    "catchup": false,
+    "tags": ["food_safety", "教育部國民及學前教育署", "New-Taipei-City"],
+    "description": "新北市中小學及高中職供餐供應鏈月更新（食材登錄平台 OpenAPI）",
+    "default_args": {
+      "owner": "airflow",
+      "email": ["DEFAULT_EMAIL_LIST"],
+      "email_on_retry": false,
+      "email_on_failure": true,
+      "retries": 1,
+      "retry_delay": 60
+    },
+    "ready_data_db": "postgres_default",
+    "ready_data_default_table": "school_food_supply_chain_links_ntpe",
+    "ready_data_history_table": "",
+    "raw_data_db": "postgres_default",
+    "raw_data_table": "",
+    "load_behavior": "replace"
+  },
+  "data_infos": {
+    "name_cn": "新北市學校供餐供應鏈",
+    "airflow_update_freq": "每月 13 號 04:35 (Asia/Taipei)",
+    "source": "https://fatraceschool.k12ea.gov.tw/cateringservice/openapi/",
+    "source_type": "api",
+    "source_dept": "教育部國民及學前教育署",
+    "component_name": "school_food_supply_chain_ntpe",
+    "gis_format": null,
+    "output_coordinate": "EPSG:4326",
+    "is_geometry": 0,
+    "dataset_description": "新北市中小學及高中職供餐食材供應鏈關係（sankey link）：上游供應商 → 中游供餐業者 → 下游學校。需 Airflow Variable FATRACESCHOOL_ACCESSCODE。",
+    "etl_description": "scan-back 找最新可公開資料 → POST opendatadownload 取一次性連結 → GET CSV → 聚合 up-mid/mid-down link → replace 入 school_food_supply_chain_links_ntpe。",
+    "sensitivity": "public"
+  }
+}

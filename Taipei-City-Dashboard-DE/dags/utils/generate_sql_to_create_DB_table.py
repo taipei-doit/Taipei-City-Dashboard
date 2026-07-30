@@ -103,9 +103,10 @@ def generate_sql_to_create_db_table(
 
     create_mtime_trigger_sql = f"""
     
-    -- create mtime trigger
+    -- create mtime trigger（冪等：先 DROP 再 CREATE，避免表已存在時 trigger 重複建立而失敗）
+    DROP TRIGGER IF EXISTS {table_name}_mtime ON public.{table_name};
     CREATE TRIGGER {table_name}_mtime
-        BEFORE INSERT OR UPDATE 
+        BEFORE INSERT OR UPDATE
         ON public.{table_name}
         FOR EACH ROW
         EXECUTE PROCEDURE public.trigger_set_timestamp();
@@ -123,9 +124,16 @@ def generate_sql_to_create_db_table(
     """
 
     grant_sequnce_sql = f"""
-    
-    -- grant sequnce
-    ALTER TABLE IF EXISTS public.{table_name}_ogc_fid_seq OWNER to airflow;
+
+    -- grant sequnce（序列一旦 OWNED BY 資料表欄位，Postgres 就禁止單獨改它的 owner
+    -- (0A000 feature_not_supported)；此時 owner 會隨下方 ALTER TABLE ... OWNER 一併
+    -- 變更，故直接略過。其餘錯誤照常拋出。）
+    DO $$
+    BEGIN
+        ALTER TABLE IF EXISTS public.{table_name}_ogc_fid_seq OWNER to airflow;
+    EXCEPTION WHEN feature_not_supported THEN
+        NULL;
+    END $$;
     GRANT ALL ON TABLE public.{table_name}_ogc_fid_seq TO airflow WITH GRANT OPTION;
     """
 

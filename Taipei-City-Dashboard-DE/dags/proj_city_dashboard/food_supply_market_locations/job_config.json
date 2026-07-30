@@ -1,0 +1,45 @@
+{
+  "dag_infos": {
+    "dag_id": "food_supply_market_locations",
+    "start_date": "2026-05-19",
+    "schedule_interval": "5 3 10 * *",
+    "catchup": false,
+    "tags": [
+      "food_market",
+      "臺北市市場處/新北市政府市場處",
+      "Taipei-City",
+      "New-Taipei-City"
+    ],
+    "description": "雙北食品供應市場分布點位資料",
+    "default_args": {
+      "owner": "airflow",
+      "email": [
+        "DEFAULT_EMAIL_LIST"
+      ],
+      "email_on_retry": false,
+      "email_on_failure": true,
+      "retries": 1,
+      "retry_delay": 60
+    },
+    "ready_data_db": "postgres_default",
+    "ready_data_default_table": "food_supply_market_locations",
+    "ready_data_history_table": "",
+    "raw_data_db": "postgres_default",
+    "raw_data_table": "",
+    "load_behavior": "replace"
+  },
+  "data_infos": {
+    "name_cn": "食品供應市場分布",
+    "airflow_update_freq": "來源不定期至每年更新；DAG 每月 10 號 03:05 檢查來源是否更新",
+    "source": "https://data.taipei/dataset/detail?id=f490476d-d156-4492-a463-cf3405de3b55 | https://data.gov.tw/dataset/121593 | https://data.ntpc.gov.tw/datasets/785be91a-caaf-4e1c-91d6-f7d616d31a45",
+    "source_type": "api",
+    "source_dept": "臺北市市場處/新北市政府市場處",
+    "component_name": "food_supply_market_map",
+    "gis_format": "wkb",
+    "output_coordinate": "EPSG:4326",
+    "is_geometry": 1,
+    "dataset_description": "整合臺北市各區公有零售市(商)場攤位數、臺北市傳統市(商)場座標資料，以及新北市公有市場清單，產出雙北食品供應市場分布點位。",
+    "etl_description": "臺北攤位數與市場基本資料以市場名稱正規化後合併，取得攤位分類與座標；新北公有市場由 data.ntpc API 取得，若 Airflow Variable TPGOS_GET_ADDR_XY 存在則以既有地址轉座標工具補經緯度。最後保留可產生點位的資料列並寫入 ready_data。",
+    "sensitivity": "public"
+  }
+}
