@@ -60,27 +60,24 @@ function trunc(str, max = 13) {
           :fill="nc"
           rx="2"
         />
-        <text
-          v-if="li === 0"
-          :x="nd.x - 5"
-          :y="nd.y + nd.h / 2"
-          text-anchor="end"
-          dominant-baseline="middle"
-          class="node-label"
-        >
-          {{ trunc(nd.name) }}
-        </text>
-        <text
-          v-else
-          :x="nd.x + nodeW + 5"
-          :y="nd.y + nd.h / 2"
-          text-anchor="start"
-          dominant-baseline="middle"
-          class="node-label"
-        >
-          {{ trunc(nd.name, 16) }}
-        </text>
       </g>
+      <!-- Labels 最後畫 -->
+      <template
+        v-for="(nodes, li) in layout.nodesPerLayer"
+        :key="`label-layer-${li}`"
+      >
+        <text
+          v-for="nd in nodes"
+          :key="`label-${li}-${nd.name}`"
+          :x="li === 0 ? nd.x - 8 : nd.x + nodeW + 8"
+          :y="nd.y + nd.h / 2"
+          :text-anchor="li === 0 ? 'end' : 'start'"
+          dominant-baseline="middle"
+          class="node-label"
+        >
+          {{ trunc(nd.name, li === 0 ? 13 : 16) }}
+        </text>
+      </template>
     </template>
   </svg>
 </template>
