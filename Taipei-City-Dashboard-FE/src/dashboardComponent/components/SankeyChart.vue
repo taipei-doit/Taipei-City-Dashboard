@@ -30,7 +30,7 @@ const PAD_L = 250;
 const PAD_R = 250;
 const SVG_H = 420;
 const AVAIL_H = SVG_H - PAD_TOP - PAD_BOT;
-const TOP_N = 14;
+const TOP_N = 646;
 const NC = darken(props.chart_config.color?.[0], 25) ?? "#6b8fa3";
 
 const COLOR_LOW = hexToRGB(props.chart_config.color?.[0] ?? "#3a6ea5");
@@ -130,10 +130,31 @@ const layout = computed(() => {
 		nodeFlow[l.target_layer].set(l.target, (nodeFlow[l.target_layer].get(l.target) || 0) + l.value);
 	}
 
-	const topPerLayer = nodeFlow.map((m) =>
-		[...m.entries()].sort((a, b) => b[1] - a[1]).slice(0, TOP_N),
-	);
-	const setPerLayer = topPerLayer.map((t) => new Set(t.map(([name]) => name)));
+	// 逐層選取 TOP N:
+	// 第一層依整體流量排序;之後每一層只從「與前一層已選節點相連」的項目中,
+	// 依相連流量取 TOP N,確保每一層都是承接自前面已選中的節點。
+	const setPerLayer = Array.from({ length: n }, () => new Set());
+	const topPerLayer = [];
+
+	for (let i = 0; i < n; i++) {
+		let candidates;
+
+		if (i === 0) {
+			candidates = [...nodeFlow[0].entries()].sort((a, b) => b[1] - a[1]);
+		} else {
+			const flowFromSelected = new Map();
+			for (const l of links) {
+				if (l.target_layer !== i) continue;
+				if (!setPerLayer[l.source_layer].has(l.source)) continue;
+				flowFromSelected.set(l.target, (flowFromSelected.get(l.target) || 0) + l.value);
+			}
+			candidates = [...flowFromSelected.entries()].sort((a, b) => b[1] - a[1]);
+		}
+
+		const top = candidates.slice(0, TOP_N);
+		topPerLayer.push(top);
+		setPerLayer[i] = new Set(top.map(([name]) => name));
+	}
 
 	const nodesPerLayer = topPerLayer.map((top, i) => positionNodes(top, xPositions[i]));
 	const mapPerLayer = nodesPerLayer.map((nodes) => new Map(nodes.map((nd) => [nd.name, nd])));
