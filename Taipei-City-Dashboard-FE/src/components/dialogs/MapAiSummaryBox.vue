@@ -155,7 +155,7 @@ const onMouseUp = () => {
         </span>
         <template v-else>
           <span v-html="hexToSpan(response?.data?.data?.result)" />
-		</template>
+        </template>
       </p>
     </div>
 

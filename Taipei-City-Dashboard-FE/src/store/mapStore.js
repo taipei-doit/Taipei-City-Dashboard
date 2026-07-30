@@ -460,12 +460,27 @@ export const useMapStore = defineStore("map", {
 		async setIsochroneLayer(submitObject) {
 			// 加入 loading
 			this.loadingLayers.push("metrotaipei_isochrone_layer");
-			const res = await http.post(
-				"/transit/isochrone/full",
-				submitObject,
-			);
-			const geojsonData = res.data;
-			if (!geojsonData.features) return "無相關等時圈分析成果";
+
+			let geojsonData = null;
+
+			try {
+				const res = await http.post(
+					"/transit/isochrone/full",
+					submitObject,
+				);
+
+				geojsonData = res.data;
+
+				if (!geojsonData.features) {
+					return "無相關等時圈分析成果";
+				}
+			} catch {
+				return "等時圈分析失敗";
+			} finally {
+				this.loadingLayers = this.loadingLayers.filter(
+					(layer) => layer !== "metrotaipei_isochrone_layer",
+				);
+			}
 
 			this.clearIsochroneLayer();
 

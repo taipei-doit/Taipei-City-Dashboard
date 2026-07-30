@@ -65,7 +65,8 @@
 
           <h3>交通站點與圖例說明</h3>
           <p>
-            系統會標示可達範圍內的交通站點，並以對應交通類型 icon 進行分類呈現，各類型與 icon 對應如下：
+            系統會標示可達範圍內的交通站點，並以對應交通類型 icon
+            進行分類呈現，各類型與 icon 對應如下：
           </p>
           <div class="legend-list">
             <div class="legend-item">
@@ -399,10 +400,15 @@ async function createIsochrone() {
 	};
 
 	const res = await mapStore.setIsochroneLayer(payload);
+
 	if (res === "無相關等時圈分析成果") {
 		dialogStore.showNotification("fail", "無相關等時圈分析成果 !");
 		return;
+	} else if (res == "等時圈分析失敗") {
+		dialogStore.showNotification("fail", "等時圈分析失敗，請稍後再試 !");
+		return;
 	}
+
 	emit("close");
 }
 
@@ -448,12 +454,12 @@ $text-muted: #aaa;
 	border: 1px solid $border;
 	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 	@media (max-width: 400px) {
-    	left: 50%;
-    	top: 50%;
-    	right: auto;
-    	transform: translate(-50%, -50%);
+		left: 50%;
+		top: 50%;
+		right: auto;
+		transform: translate(-50%, -50%);
 		z-index: 20;
-  	}
+	}
 }
 
 // ── Header ─────────────────────────────────────────────────────────────────────

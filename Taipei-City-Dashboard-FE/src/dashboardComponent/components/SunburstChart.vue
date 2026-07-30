@@ -20,7 +20,7 @@ const hoverTip = ref({
 	placeLeft: false,
 	placeAbove: true,
 });
-const hoveredNode = ref("");
+const hoveredNodeId = ref("");
 
 function normalizeRows(raw) {
 	if (Array.isArray(raw)) return raw;
@@ -48,6 +48,24 @@ function parseLinks(raw) {
 				Number.isFinite(it.value) &&
 				it.value > 0,
 		);
+}
+
+function addVirtualRoot(links) {
+	const targets = new Set(links.map((x) => x.target));
+	// 找沒有被其他節點指向的節點
+	const roots = [
+		...new Set(links.map((x) => x.source).filter((x) => !targets.has(x))),
+	];
+	// 已經單一 root，不需要處理
+	if (roots.length <= 1) return links;
+	const rootLinks = roots.map((root) => ({
+		source: "全部供應鏈",
+		target: root,
+		value: links
+			.filter((x) => x.source === root)
+			.reduce((sum, x) => sum + x.value, 0),
+	}));
+	return [...links, ...rootLinks];
 }
 
 function getPalette() {
@@ -231,7 +249,8 @@ function maxTreeDepthFrom(nodeName, children, depth) {
 }
 
 const sunburstData = computed(() => {
-	const links = parseLinks(props.series);
+	let links = parseLinks(props.series);
+	links = addVirtualRoot(links);
 	const W = Math.max(180, chartWidth.value);
 	const H = Math.max(140, chartHeight.value);
 	if (!links.length) return { arcs: [], labels: [], width: W, height: H };
@@ -270,9 +289,9 @@ const sunburstData = computed(() => {
 	// 作為品項層比例的分母
 	const ring2NodeSet = new Set();
 	for (const l1 of level1) {
-		for (const k of children.get(l1.name) || []) {
-			ring2NodeSet.add(k.name);
-		}
+    	for (const k of children.get(l1.name) || []) {
+        	ring2NodeSet.add(k.name);
+    	}
 	}
 	const ring2total = Math.max(
 		1,
@@ -294,8 +313,10 @@ const sunburstData = computed(() => {
 
 	const arcs = [];
 	const rawLabels = [];
+	const childrenByNode = {};
+	const parentByNode = {};
 
-	function pushLabel(a0, a1, innerR, outerR, text, ring) {
+	function pushLabel(a0, a1, innerR, outerR, text, ring, nodeId) {
 		const span = a1 - a0;
 		const avgR = (innerR + outerR) / 2;
 		const need = ring <= 1 ? 40 : ring === 2 ? 36 : 28;
@@ -308,7 +329,7 @@ const sunburstData = computed(() => {
 			am,
 		);
 		rawLabels.push({
-			key: `t-${text}-${ring}-${a0}`,
+			key: `t-${nodeId}`,
 			x: p.x,
 			y: p.y,
 			text,
@@ -324,6 +345,7 @@ const sunburstData = computed(() => {
 
 	function recurse(
 		parentName,
+		parentId,
 		a0,
 		a1,
 		parentRing,
@@ -337,13 +359,17 @@ const sunburstData = computed(() => {
 		if (!kids.length) return;
 		const pSum = kids.reduce((s, x) => s + x.value, 0);
 		let cur = a0;
-		for (const k of kids) {
+		for (const [idx, k] of kids.entries()) {
 			const span = ((a1 - a0) * k.value) / Math.max(1e-6, pSum);
 			const aEnd = cur + span;
 			const sub = children.get(k.name) || [];
 			const childRing = parentRing + 1;
 			const fill = branchRingFill(branchHex, childRing, branchFillDepth);
 			const baseOpacity = ringBaseOpacity(childRing);
+			const nodeId = `${parentId}/${idx}:${k.name}`;
+			if (!childrenByNode[parentId]) childrenByNode[parentId] = [];
+			childrenByNode[parentId].push(nodeId);
+			parentByNode[nodeId] = parentId;
 
 			if (sub.length) {
 				const nodeTotal = outsum.get(k.name) || k.value;
@@ -354,19 +380,21 @@ const sunburstData = computed(() => {
 				const innerR = rHole + (childRing - 1) * w;
 				const outerR = rHole + childRing * w;
 				arcs.push({
-					key: `n-${k.name}-${childRing}-${cur}`,
+					key: `n-${nodeId}`,
 					d: arcPath(cx, cy, innerR, outerR, cur, aEnd),
 					fill,
 					ring: childRing,
 					baseOpacity,
 					node: k.name,
+					nodeId,
 					parent: parentName,
 					title: `${k.name}：${nodeTotal} ${props.chart_config.unit}`,
 					tooltip: pathTip,
 				});
-				pushLabel(cur, aEnd, innerR, outerR, k.name, childRing);
+				pushLabel(cur, aEnd, innerR, outerR, k.name, childRing, nodeId);
 				recurse(
 					k.name,
+					nodeId,
 					cur,
 					aEnd,
 					childRing,
@@ -384,17 +412,18 @@ const sunburstData = computed(() => {
 				const polar = w * (0.12 + 1.18 * (k.value / maxLeafVal));
 				const outerR = baseOuter + polar;
 				arcs.push({
-					key: `leaf-${k.name}-${childRing}-${cur}`,
+					key: `leaf-${nodeId}`,
 					d: arcPath(cx, cy, innerR, outerR, cur, aEnd),
 					fill,
 					ring: childRing,
 					baseOpacity,
 					node: k.name,
+					nodeId,
 					parent: parentName,
 					title: `${k.name}：${k.value} ${props.chart_config.unit}`,
 					tooltip: pathTip,
 				});
-				pushLabel(cur, aEnd, innerR, outerR, k.name, childRing);
+				pushLabel(cur, aEnd, innerR, outerR, k.name, childRing, nodeId);
 			}
 			cur = aEnd;
 		}
@@ -409,7 +438,7 @@ const sunburstData = computed(() => {
 		}, 0),
 	);
 
-	for (const l1 of level1) {
+	for (const [idx, l1] of level1.entries()) {
 		const nodeTotal = outsum.get(l1.name) || l1.value;
 		// 第一環佔整圈比例，用 l1.value（這段弧的實際流量）/ total
 		const pct = ((nodeTotal / ring1Total) * 100).toFixed(1);
@@ -417,6 +446,10 @@ const sunburstData = computed(() => {
 		const a1 = a0 + span1;
 		const c1 = branchColor.get(l1.name) || "#7C4DFF";
 		const sub = children.get(l1.name) || [];
+		const nodeId = `${root}/${idx}:${l1.name}`;
+		if (!childrenByNode[root]) childrenByNode[root] = [];
+		childrenByNode[root].push(nodeId);
+		parentByNode[nodeId] = root;
 		const branchFillDepth = Math.max(
 			1,
 			maxTreeDepthFrom(l1.name, children, 1),
@@ -425,33 +458,35 @@ const sunburstData = computed(() => {
 			const innerR = rHole;
 			const outerR = rHole + w;
 			arcs.push({
-				key: `l1-${l1.name}`,
+				key: `l1-${nodeId}`,
 				d: arcPath(cx, cy, innerR, outerR, a0, a1),
 				fill: branchRingFill(c1, 1, branchFillDepth),
 				ring: 1,
 				baseOpacity: ringBaseOpacity(1),
 				node: l1.name,
+				nodeId,
 				parent: root,
 				title: `${l1.name}：${nodeTotal} ${props.chart_config.unit}`,
 				tooltip: `${l1.name}：${nodeTotal} ${props.chart_config.unit}（佔${pct}%）`,
 			});
-			pushLabel(a0, a1, innerR, outerR, l1.name, 1);
-			recurse(l1.name, a0, a1, 1, c1, [l1.name], branchFillDepth);
+			pushLabel(a0, a1, innerR, outerR, l1.name, 1, nodeId);
+			recurse(l1.name, nodeId, a0, a1, 1, c1, [l1.name], branchFillDepth);
 		} else {
 			const polar = w * (0.12 + 1.18 * (l1.value / maxLeafVal));
 			const outerR = baseOuter + polar;
 			arcs.push({
-				key: `l1leaf-${l1.name}`,
+				key: `l1leaf-${nodeId}`,
 				d: arcPath(cx, cy, rHole, outerR, a0, a1),
 				fill: branchRingFill(c1, 1, branchFillDepth),
 				ring: 1,
 				baseOpacity: ringBaseOpacity(1),
 				node: l1.name,
+				nodeId,
 				parent: root,
 				title: `${l1.name}：${l1.value} ${props.chart_config.unit}`,
 				tooltip: `${l1.name}：${l1.value} ${props.chart_config.unit}（佔${pct}%）`,
 			});
-			pushLabel(a0, a1, rHole, outerR, l1.name, 1);
+			pushLabel(a0, a1, rHole, outerR, l1.name, 1, nodeId);
 		}
 		a0 = a1;
 	}
@@ -477,13 +512,6 @@ const sunburstData = computed(() => {
 			);
 		});
 		if (!overlapped) labels.push({ ...it, _box: box });
-	}
-
-	const childrenByNode = {};
-	const parentByNode = {};
-	for (const [k, arr] of children.entries()) {
-		childrenByNode[k] = arr.map((x) => x.name);
-		for (const x of arr) parentByNode[x.name] = k;
 	}
 
 	return { arcs, labels, width: W, height: H, childrenByNode, parentByNode };
@@ -530,16 +558,16 @@ function onArcHoverMove(evt, arc) {
 		placeLeft,
 		placeAbove,
 	};
-	hoveredNode.value = arc.node || "";
+	hoveredNodeId.value = arc.nodeId || "";
 }
 
 function onArcHoverLeave() {
 	hoverTip.value.show = false;
-	hoveredNode.value = "";
+	hoveredNodeId.value = "";
 }
 
 function highlightSet() {
-	const root = hoveredNode.value;
+	const root = hoveredNodeId.value;
 	if (!root) return null;
 	const set = new Set([root]);
 	const childrenByNode = sunburstData.value.childrenByNode || {};
@@ -568,14 +596,14 @@ function highlightSet() {
 function arcFill(arc) {
 	const hs = highlightSet();
 	if (!hs) return arc.fill;
-	return hs.has(arc.node) ? lighten(arc.fill, 0.1) : darken(arc.fill, 0.16);
+	return hs.has(arc.nodeId) ? lighten(arc.fill, 0.1) : darken(arc.fill, 0.16);
 }
 
 function arcOpacity(arc) {
 	const hs = highlightSet();
 	const base = arc.baseOpacity ?? 0.9;
 	if (!hs) return base;
-	return hs.has(arc.node)
+	return hs.has(arc.nodeId)
 		? Math.min(0.99, base + 0.06)
 		: Math.max(0.26, base * 0.52);
 }
