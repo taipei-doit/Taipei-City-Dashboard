@@ -73,6 +73,58 @@ function flowColor(t) {
 	return `rgb(${r},${g},${b})`;
 }
 
+function allocateLinkHeights(entries, totalHeight, minThickness = 1) {
+	if (!entries.length || totalHeight <= 0) return new Map();
+
+	const minSafeThickness =
+		entries.length * minThickness <= totalHeight
+			? minThickness
+			: totalHeight / entries.length;
+
+	const allocations = new Map();
+	const remaining = entries.map((entry) => ({ ...entry }));
+	let remainingHeight = totalHeight;
+
+	while (remaining.length) {
+		const remainingValue = remaining.reduce((sum, entry) => sum + entry.value, 0);
+		if (remainingValue <= 0 || remainingHeight <= 0) {
+			for (const entry of remaining) {
+				allocations.set(entry.key, 0);
+			}
+			break;
+		}
+
+		const forced = remaining.filter(
+			(entry) =>
+				(entry.value / remainingValue) * remainingHeight < minSafeThickness,
+		);
+
+		if (!forced.length) {
+			for (const entry of remaining) {
+				allocations.set(
+					entry.key,
+					(entry.value / remainingValue) * remainingHeight,
+				);
+			}
+			break;
+		}
+
+		for (const entry of forced) {
+			allocations.set(entry.key, minSafeThickness);
+			remainingHeight -= minSafeThickness;
+		}
+
+		const forcedKeys = new Set(forced.map((entry) => entry.key));
+		for (let i = remaining.length - 1; i >= 0; i--) {
+			if (forcedKeys.has(remaining[i].key)) {
+				remaining.splice(i, 1);
+			}
+		}
+	}
+
+	return allocations;
+}
+
 function positionNodes(topList, xPos, availH) {
 	if (!topList.length) return [];
 	const total = topList.reduce((s, [, v]) => s + v, 0);
@@ -221,6 +273,38 @@ const layout = computed(() => {
 	}
 	const aggLinks = [...aggMap.values()].sort((a, b) => b.value - a.value);
 
+	const sourceHeightMap = new Map();
+	const targetHeightMap = new Map();
+	for (let layerIndex = 0; layerIndex < nodesPerLayer.length; layerIndex++) {
+		for (const node of nodesPerLayer[layerIndex]) {
+			const sourceEntries = aggLinks
+				.filter(
+					(link) =>
+						link.source_layer === layerIndex && link.source === node.name,
+				)
+				.map((link) => ({
+					key: `${link.source_layer}|${link.source}||${link.target_layer}|${link.target}`,
+					value: link.value,
+				}));
+			const targetEntries = aggLinks
+				.filter(
+					(link) =>
+						link.target_layer === layerIndex && link.target === node.name,
+				)
+				.map((link) => ({
+					key: `${link.source_layer}|${link.source}||${link.target_layer}|${link.target}`,
+					value: link.value,
+				}));
+
+			for (const [key, height] of allocateLinkHeights(sourceEntries, node.h)) {
+				sourceHeightMap.set(key, height);
+			}
+			for (const [key, height] of allocateLinkHeights(targetEntries, node.h)) {
+				targetHeightMap.set(key, height);
+			}
+		}
+	}
+
 	const allValues = aggLinks.map((l) => l.value);
 	const minV = allValues.length ? Math.min(...allValues) : 0;
 	const maxV = allValues.length ? Math.max(...allValues) : 1;
@@ -239,20 +323,12 @@ const layout = computed(() => {
 		const tgt = mapPerLayer[l.target_layer].get(l.target);
 		if (!src || !tgt) continue;
 
+		const linkKey = `${l.source_layer}|${l.source}||${l.target_layer}|${l.target}`;
 		const lh = Math.min(
-			Math.max(
-				1,
-				(l.value /
-					(nodeFlow[l.source_layer].get(l.source) || l.value)) *
-					src.h,
-			),
-			Math.max(
-				1,
-				(l.value /
-					(nodeFlow[l.target_layer].get(l.target) || l.value)) *
-					tgt.h,
-			),
+			sourceHeightMap.get(linkKey) ?? 0,
+			targetHeightMap.get(linkKey) ?? 0,
 		);
+		if (lh <= 0) continue;
 
 		const sOff = usedRight[l.source_layer].get(l.source);
 		const tOff = usedLeft[l.target_layer].get(l.target);
