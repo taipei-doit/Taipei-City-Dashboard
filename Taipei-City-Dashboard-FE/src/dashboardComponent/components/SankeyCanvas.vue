@@ -20,27 +20,64 @@ function trunc(str, max = 13) {
 }
 
 const isMobile =
-	typeof window !== "undefined" &&
-	window.matchMedia?.("(max-width: 770px)").matches;
+  typeof window !== "undefined" &&
+  window.matchMedia?.("(max-width: 770px)").matches;
 const MIN_LABEL_GAP = isMobile ? 22 : 16;
 const LEADER_THRESHOLD = 1.5;
 const NODE_LABEL_FONT_SIZE = isMobile ? 18 : 14;
 const NODE_LABEL_BOUNDS_PAD = Math.ceil(NODE_LABEL_FONT_SIZE * 0.8);
 
+// 階層大標籤預留的獨立頂部高度
+const HEADER_HEIGHT = isMobile ? 36 : 28;
+
 function declutter(nodes, minGap) {
 	if (!nodes.length) return [];
 
-	const items = nodes.map((nd) => ({ nd, y: nd.y + nd.h / 2 }));
+	const firstNode = nodes[0];
+	const lastNode = nodes[nodes.length - 1];
+	const totalTop = firstNode.y;
+	const totalBottom = lastNode.y + lastNode.h;
+	const layerCenterY = (totalTop + totalBottom) / 2;
 
-	for (let i = 1; i < items.length; i++) {
+	const items = nodes.map((nd) => ({
+		nd,
+		origY: nd.y + nd.h / 2,
+		y: nd.y + nd.h / 2,
+	}));
+
+	const n = items.length;
+	if (n === 1) return [{ ...items[0].nd, labelY: items[0].y }];
+
+	let pivotIdx = 0;
+	let minDiff = Infinity;
+	for (let i = 0; i < n; i++) {
+		const diff = Math.abs(items[i].origY - layerCenterY);
+		if (diff < minDiff) {
+			minDiff = diff;
+			pivotIdx = i;
+		}
+	}
+
+	// 從中間向「上」推開
+	for (let i = pivotIdx - 1; i >= 0; i--) {
+		if (items[i + 1].y - items[i].y < minGap) {
+			items[i].y = items[i + 1].y - minGap;
+		}
+	}
+
+	// 從中間向「下」推開
+	for (let i = pivotIdx + 1; i < n; i++) {
 		if (items[i].y - items[i - 1].y < minGap) {
 			items[i].y = items[i - 1].y + minGap;
 		}
 	}
-	for (let i = items.length - 2; i >= 0; i--) {
-		if (items[i + 1].y - items[i].y < minGap) {
-			items[i].y = items[i + 1].y - minGap;
-		}
+
+	// 計算對稱質心校正
+	const currentCenterY = (items[0].y + items[n - 1].y) / 2;
+	const offset = layerCenterY - currentCenterY;
+
+	for (let i = 0; i < n; i++) {
+		items[i].y += offset;
 	}
 
 	return items.map((it) => ({ ...it.nd, labelY: it.y }));
@@ -52,7 +89,6 @@ const labeledLayers = computed(() =>
 		: [],
 );
 
-// 同時計算上方 / 下方各自溢出多少,取較大值做對稱 padding
 const verticalPad = computed(() => {
 	let minY = 0;
 	let maxY = props.svgH;
@@ -70,8 +106,9 @@ const verticalPad = computed(() => {
 	return Math.max(topOverflow, bottomOverflow);
 });
 
+// ViewBox 總高度 = 獨立 Header 高度 + 圖表高 + 上下擴充 Margin
 const viewBoxHeight = computed(() =>
-	Math.ceil(props.svgH + verticalPad.value * 2),
+	Math.ceil(HEADER_HEIGHT + props.svgH + verticalPad.value * 2),
 );
 
 function onNodeMouseMove(event, nd) {
@@ -85,18 +122,21 @@ function onNodeMouseMove(event, nd) {
     preserveAspectRatio="xMidYMid meet"
     v-bind="$attrs"
   >
-    <g :transform="`translate(0, ${verticalPad})`">
-      <!-- Layer labels -->
+    <!-- 1. 獨立的階層大標籤區塊 (固定在頂部，不受 verticalPad 移動影響) -->
+    <g class="header-layer">
       <text
         v-for="(label, i) in layout.layerLabels"
         :key="`label-${i}`"
         :x="layout.xPositions[i] + nodeW / 2"
-        :y="layout.padTop - 14"
+        :y="HEADER_HEIGHT"
         class="layer-label"
       >
         {{ label }}
       </text>
+    </g>
 
+    <!-- 2. 圖表主體區塊 (下移 HEADER_HEIGHT + verticalPad，提供充足的安全防撞空間) -->
+    <g :transform="`translate(0, ${HEADER_HEIGHT + verticalPad})`">
       <!-- Flow paths -->
       <path
         v-for="(p, i) in layout.paths"
@@ -135,7 +175,7 @@ function onNodeMouseMove(event, nd) {
         </g>
       </template>
 
-      <!-- Labels(防重疊後,獨立於節點迴圈外,只畫一次) -->
+      <!-- Labels (向上下對稱展開，不再壓迫頂部標籤) -->
       <template
         v-for="(nodes, li) in labeledLayers"
         :key="`label-layer-${li}`"
@@ -144,7 +184,6 @@ function onNodeMouseMove(event, nd) {
           v-for="nd in nodes"
           :key="`label-${li}-${nd.name}`"
         >
-          <!-- 引導線:label 被推開時,畫一條細線連回節點原本位置 -->
           <line
             v-if="Math.abs(nd.labelY - (nd.y + nd.h / 2)) > LEADER_THRESHOLD"
             :x1="li === 0 ? nd.x - 4 : nd.x + nodeW + 4"
