@@ -4,6 +4,28 @@ import { hexToRGB } from "../../assets/utilityFunctions/colorConvert";
 import SankeyCanvas from "./SankeyCanvas.vue";
 // import { useDialogStore } from "../../store/dialogStore.js";
 
+// ── 流量篩選(legend range slider)state ──────────────────────────────────
+const filterMin = ref(null); // null = 尚未使用者手動設定,採用完整範圍
+const filterMax = ref(null);
+let activeThumb = null; // 'min' | 'max'
+let activeTrackEl = null;
+
+const LEGEND_TRACK_W = 140;
+const LEGEND_THUMB_R = 3; // 對應長方形寬度(6px)的一半
+
+function thumbLeftPx(pct) {
+	return LEGEND_THUMB_R + pct * (LEGEND_TRACK_W - LEGEND_THUMB_R * 2);
+}
+
+function formatValue(v) {
+	if (v == null || Number.isNaN(v)) return "-";
+	const abs = Math.abs(v);
+	if (abs >= 1_000_000)
+		return (v / 1_000_000).toFixed(1).replace(/\.0$/, "") + "M";
+	if (abs >= 1_000) return (v / 1_000).toFixed(1).replace(/\.0$/, "") + "K";
+	return String(Math.round(v));
+}
+
 const props = defineProps([
 	"chart_config",
 	"activeChart",
@@ -86,7 +108,10 @@ function allocateLinkHeights(entries, totalHeight, minThickness = 1) {
 	let remainingHeight = totalHeight;
 
 	while (remaining.length) {
-		const remainingValue = remaining.reduce((sum, entry) => sum + entry.value, 0);
+		const remainingValue = remaining.reduce(
+			(sum, entry) => sum + entry.value,
+			0,
+		);
 		if (remainingValue <= 0 || remainingHeight <= 0) {
 			for (const entry of remaining) {
 				allocations.set(entry.key, 0);
@@ -96,7 +121,8 @@ function allocateLinkHeights(entries, totalHeight, minThickness = 1) {
 
 		const forced = remaining.filter(
 			(entry) =>
-				(entry.value / remainingValue) * remainingHeight < minSafeThickness,
+				(entry.value / remainingValue) * remainingHeight <
+				minSafeThickness,
 		);
 
 		if (!forced.length) {
@@ -273,6 +299,38 @@ const layout = computed(() => {
 	}
 	const aggLinks = [...aggMap.values()].sort((a, b) => b.value - a.value);
 
+	// ── 統計每個 node 的流入 / 流出總量,掛在 node 物件上供 hover 顯示 ──
+	const inFlowMap = new Map();
+	const outFlowMap = new Map();
+	for (const l of aggLinks) {
+		const outKey = `${l.source_layer}|${l.source}`;
+		outFlowMap.set(outKey, (outFlowMap.get(outKey) || 0) + l.value);
+
+		const inKey = `${l.target_layer}|${l.target}`;
+		inFlowMap.set(inKey, (inFlowMap.get(inKey) || 0) + l.value);
+	}
+
+	for (let layerIndex = 0; layerIndex < nodesPerLayer.length; layerIndex++) {
+		for (const node of nodesPerLayer[layerIndex]) {
+			const key = `${layerIndex}|${node.name}`;
+			const inFlow = Math.round(inFlowMap.get(key) || 0);
+			const outFlow = Math.round(outFlowMap.get(key) || 0);
+
+			node.inFlow = inFlow;
+			node.outFlow = outFlow;
+
+			const bits = [];
+			if (outFlow > 0) bits.push(`流出 ${outFlow.toLocaleString()} 次`);
+			if (inFlow > 0) bits.push(`流入 ${inFlow.toLocaleString()} 次`);
+			node.tip = `${node.name}｜${bits.join("，")}`;
+		}
+	}
+
+	const allValues = aggLinks.map((l) => l.value);
+	const minV = allValues.length ? Math.min(...allValues) : 0;
+	const maxV = allValues.length ? Math.max(...allValues) : 1;
+	const normalize = (v) => (maxV === minV ? 0.5 : (v - minV) / (maxV - minV));
+
 	const sourceHeightMap = new Map();
 	const targetHeightMap = new Map();
 	for (let layerIndex = 0; layerIndex < nodesPerLayer.length; layerIndex++) {
@@ -280,7 +338,8 @@ const layout = computed(() => {
 			const sourceEntries = aggLinks
 				.filter(
 					(link) =>
-						link.source_layer === layerIndex && link.source === node.name,
+						link.source_layer === layerIndex &&
+						link.source === node.name,
 				)
 				.map((link) => ({
 					key: `${link.source_layer}|${link.source}||${link.target_layer}|${link.target}`,
@@ -289,26 +348,28 @@ const layout = computed(() => {
 			const targetEntries = aggLinks
 				.filter(
 					(link) =>
-						link.target_layer === layerIndex && link.target === node.name,
+						link.target_layer === layerIndex &&
+						link.target === node.name,
 				)
 				.map((link) => ({
 					key: `${link.source_layer}|${link.source}||${link.target_layer}|${link.target}`,
 					value: link.value,
 				}));
 
-			for (const [key, height] of allocateLinkHeights(sourceEntries, node.h)) {
+			for (const [key, height] of allocateLinkHeights(
+				sourceEntries,
+				node.h,
+			)) {
 				sourceHeightMap.set(key, height);
 			}
-			for (const [key, height] of allocateLinkHeights(targetEntries, node.h)) {
+			for (const [key, height] of allocateLinkHeights(
+				targetEntries,
+				node.h,
+			)) {
 				targetHeightMap.set(key, height);
 			}
 		}
 	}
-
-	const allValues = aggLinks.map((l) => l.value);
-	const minV = allValues.length ? Math.min(...allValues) : 0;
-	const maxV = allValues.length ? Math.max(...allValues) : 1;
-	const normalize = (v) => (maxV === minV ? 0.5 : (v - minV) / (maxV - minV));
 
 	const usedRight = nodesPerLayer.map(
 		(nodes) => new Map(nodes.map((nd) => [nd.name, 0])),
@@ -348,10 +409,11 @@ const layout = computed(() => {
 			].join(" "),
 			fill: flowColor(normalize(l.value)),
 			opacity: 0.35 + normalize(l.value) * 0.35,
+			value: l.value,
 			tip:
 				l.target_layer - l.source_layer > 1
-					? `${l.source} → ${l.target}（跨 ${l.target_layer - l.source_layer} 層）：${l.value.toLocaleString()} 次`
-					: `${l.source} → ${l.target}：${l.value.toLocaleString()} 次`,
+					? `${l.source} → ${l.target}（跨 ${l.target_layer - l.source_layer} 層）：${Math.round(l.value).toLocaleString()} 次`
+					: `${l.source} → ${l.target}：${Math.round(l.value).toLocaleString()} 次`,
 		});
 
 		usedRight[l.source_layer].set(l.source, sOff + lh);
@@ -367,116 +429,318 @@ const layout = computed(() => {
 		paths,
 		n,
 		padTop: PAD_TOP,
+		valueRange: { min: minV, max: maxV },
 	};
 });
+
+// ── Legend 數值範圍 & 篩選 ────────────────────────────────────────────────
+const valueMin = computed(() => layout.value.valueRange?.min ?? 0);
+const valueMax = computed(() => layout.value.valueRange?.max ?? 1);
+
+const effectiveMin = computed(() => filterMin.value ?? valueMin.value);
+const effectiveMax = computed(() => filterMax.value ?? valueMax.value);
+
+const isFiltered = computed(() => {
+	const eps = Math.max(1e-9, (valueMax.value - valueMin.value) * 1e-6);
+	return (
+		effectiveMin.value > valueMin.value + eps ||
+		effectiveMax.value < valueMax.value - eps
+	);
+});
+
+function pctFromValue(v) {
+	const span = valueMax.value - valueMin.value;
+	if (span <= 0) return 0;
+	return Math.min(1, Math.max(0, (v - valueMin.value) / span));
+}
+
+function valueFromPct(pct) {
+	return valueMin.value + pct * (valueMax.value - valueMin.value);
+}
+
+// 套用篩選:落在區間外的連結淡出(hidden = true),node/版面本身不重排
+const filteredLayout = computed(() => {
+	const eps = Math.max(1e-9, (valueMax.value - valueMin.value) * 1e-6);
+	return {
+		...layout.value,
+		paths: (layout.value.paths ?? []).map((p) => ({
+			...p,
+			hidden:
+				p.value < effectiveMin.value - eps ||
+				p.value > effectiveMax.value + eps,
+		})),
+	};
+});
+
+function pctFromEvent(event, trackEl) {
+	const rect = trackEl.getBoundingClientRect();
+	const clientX = event.touches ? event.touches[0].clientX : event.clientX;
+	const usable = rect.width - LEGEND_THUMB_R * 2;
+	if (usable <= 0) return 0;
+	return Math.min(
+		1,
+		Math.max(0, (clientX - rect.left - LEGEND_THUMB_R) / usable),
+	);
+}
+
+function startDrag(thumb, event) {
+	activeThumb = thumb;
+	activeTrackEl = event.currentTarget.closest(".legend-track");
+	window.addEventListener("mousemove", onDrag);
+	window.addEventListener("mouseup", endDrag);
+	window.addEventListener("touchmove", onDrag, { passive: false });
+	window.addEventListener("touchend", endDrag);
+	event.preventDefault();
+}
+
+function onDrag(event) {
+	if (!activeThumb || !activeTrackEl) return;
+	if (event.cancelable) event.preventDefault();
+
+	const v = valueFromPct(pctFromEvent(event, activeTrackEl));
+
+	if (activeThumb === "min") {
+		filterMin.value = Math.min(v, effectiveMax.value);
+	} else {
+		filterMax.value = Math.max(v, effectiveMin.value);
+	}
+}
+
+function endDrag() {
+	activeThumb = null;
+	activeTrackEl = null;
+	window.removeEventListener("mousemove", onDrag);
+	window.removeEventListener("mouseup", endDrag);
+	window.removeEventListener("touchmove", onDrag);
+	window.removeEventListener("touchend", endDrag);
+}
+
+function resetFilter() {
+	if (!isFiltered.value) return;
+	filterMin.value = null;
+	filterMax.value = null;
+}
 </script>
 
 <template>
-	<div
-		v-if="activeChart === 'SankeyChart'"
-		ref="wrapperRef"
-		class="sankey-wrapper"
-	>
-		<!-- Tooltip -->
-		<div
-			v-if="hoveredTip"
-			class="sankey-tooltip"
-			:style="
-				tipOnLeft
-					? {
-							left: tipX - 14 + 'px',
-							top: tipY - 10 + 'px',
-							transform: 'translateX(-100%)',
-						}
-					: { left: tipX + 14 + 'px', top: tipY - 10 + 'px' }
-			"
-		>
-			{{ hoveredTip }}
-		</div>
+  <div
+    v-if="activeChart === 'SankeyChart'"
+    ref="wrapperRef"
+    class="sankey-wrapper"
+  >
+    <!-- Tooltip -->
+    <div
+      v-if="hoveredTip"
+      class="sankey-tooltip"
+      :style="
+        tipOnLeft
+          ? {
+            left: tipX - 14 + 'px',
+            top: tipY - 10 + 'px',
+            transform: 'translateX(-100%)',
+          }
+          : { left: tipX + 14 + 'px', top: tipY - 10 + 'px' }
+      "
+    >
+      {{ hoveredTip }}
+    </div>
 
-		<!-- 放大按鈕 -->
-		<button class="expand-btn" title="放大檢視" @click="handleExpand">
-			<span>⛶</span>
-		</button>
+    <!-- 放大按鈕 -->
+    <button
+      class="expand-btn"
+      title="放大檢視"
+      @click="handleExpand"
+    >
+      <span>⛶</span>
+    </button>
 
-		<!-- 一般檢視 -->
-		<SankeyCanvas
-			:layout="layout"
-			:svg-h="layout.svgH || BASE_SVG_H"
-			:node-w="NODE_W"
-			:nc="NC"
-			class="sankey-svg"
-			@path-mousemove="onPathMouseMove"
-			@path-mouseleave="onPathMouseLeave"
-		/>
+    <!-- 一般檢視 -->
+    <SankeyCanvas
+      :layout="filteredLayout"
+      :svg-h="layout.svgH || BASE_SVG_H"
+      :node-w="NODE_W"
+      :nc="NC"
+      class="sankey-svg"
+      @path-mousemove="onPathMouseMove"
+      @path-mouseleave="onPathMouseLeave"
+      @node-mousemove="onPathMouseMove"
+      @node-mouseleave="onPathMouseLeave"
+    />
 
-		<!-- Legend -->
-		<div class="sankey-legend">
-			<span class="legend-label">低流量</span>
-			<div
-				class="legend-gradient"
-				:style="`background: linear-gradient(to right, ${colorLowCss}, ${colorHighCss})`"
-			/>
-			<span class="legend-label">高流量</span>
-		</div>
+    <!-- Legend -->
+    <div class="sankey-legend">
+      <span class="legend-value">{{ formatValue(effectiveMin) }} 次</span>
+      <div class="legend-track">
+        <div
+          class="legend-gradient"
+          :style="`background: linear-gradient(to right, ${colorLowCss}, ${colorHighCss})`"
+        />
+        <div
+          class="legend-mask legend-mask--left"
+          :style="{
+            width: thumbLeftPx(pctFromValue(effectiveMin)) + 'px',
+          }"
+        />
+        <div
+          class="legend-mask legend-mask--right"
+          :style="{
+            width:
+              LEGEND_TRACK_W -
+              thumbLeftPx(pctFromValue(effectiveMax)) +
+              'px',
+          }"
+        />
+        <div
+          class="legend-thumb"
+          :style="{
+            left: thumbLeftPx(pctFromValue(effectiveMin)) + 'px',
+          }"
+          @mousedown="startDrag('min', $event)"
+          @touchstart="startDrag('min', $event)"
+        />
+        <div
+          class="legend-thumb"
+          :style="{
+            left: thumbLeftPx(pctFromValue(effectiveMax)) + 'px',
+          }"
+          @mousedown="startDrag('max', $event)"
+          @touchstart="startDrag('max', $event)"
+        />
+      </div>
+      <span class="legend-value">{{ formatValue(effectiveMax) }} 次</span>
+      <button
+        class="legend-reset-btn"
+        :class="{ 'legend-reset-btn--disabled': !isFiltered }"
+        :disabled="!isFiltered"
+        title="清除篩選"
+        @click="resetFilter"
+      >
+        重置
+      </button>
+    </div>
 
-		<!-- Fullscreen overlay -->
-		<Teleport to="body">
-			<div
-				v-if="isExpanded"
-				class="sankey-overlay"
-				@click.self="isExpanded = false"
-			>
-				<div class="sankey-modal">
-					<button class="modal-close-btn" @click="isExpanded = false">
-						✕
-					</button>
+    <!-- Fullscreen overlay -->
+    <Teleport to="body">
+      <div
+        v-if="isExpanded"
+        class="sankey-overlay"
+        @click.self="isExpanded = false"
+      >
+        <div class="sankey-modal">
+          <button
+            class="modal-close-btn"
+            @click="isExpanded = false"
+          >
+            ✕
+          </button>
 
-					<!-- Tooltip（共用同一份 ref） -->
-					<div
-						v-if="hoveredTip"
-						class="sankey-tooltip"
-						:style="
-							tipOnLeft
-								? {
-										left: tipX - 14 + 'px',
-										top: tipY - 10 + 'px',
-										transform: 'translateX(-100%)',
-									}
-								: {
-										left: tipX + 14 + 'px',
-										top: tipY - 10 + 'px',
-									}
-						"
-					>
-						{{ hoveredTip }}
-					</div>
+          <!-- Tooltip（共用同一份 ref） -->
+          <div
+            v-if="hoveredTip"
+            class="sankey-tooltip"
+            :style="
+              tipOnLeft
+                ? {
+                  left: tipX - 14 + 'px',
+                  top: tipY - 10 + 'px',
+                  transform: 'translateX(-100%)',
+                }
+                : {
+                  left: tipX + 14 + 'px',
+                  top: tipY - 10 + 'px',
+                }
+            "
+          >
+            {{ hoveredTip }}
+          </div>
 
-					<!-- 放大檢視 -->
-					<div class="sankey-scroll sankey-scroll-full">
-						<SankeyCanvas
-							:layout="layout"
-							:svg-h="layout.svgH || BASE_SVG_H"
-							:node-w="NODE_W"
-							:nc="NC"
-							class="sankey-svg-full"
-							@path-mousemove="onPathMouseMove"
-							@path-mouseleave="onPathMouseLeave"
-						/>
-					</div>
+          <!-- 放大檢視 -->
+          <div class="sankey-scroll sankey-scroll-full">
+            <SankeyCanvas
+              :layout="filteredLayout"
+              :svg-h="layout.svgH || BASE_SVG_H"
+              :node-w="NODE_W"
+              :nc="NC"
+              class="sankey-svg-full"
+              @path-mousemove="onPathMouseMove"
+              @path-mouseleave="onPathMouseLeave"
+              @node-mousemove="onPathMouseMove"
+              @node-mouseleave="onPathMouseLeave"
+            />
+          </div>
 
-					<div class="sankey-legend">
-						<span class="legend-label">低流量</span>
-						<div
-							class="legend-gradient"
-							:style="`background: linear-gradient(to right, ${colorLowCss}, ${colorHighCss})`"
-						/>
-						<span class="legend-label">高流量</span>
-					</div>
-				</div>
-			</div>
-		</Teleport>
-	</div>
+          <!-- Legend -->
+          <div class="sankey-legend">
+            <span class="legend-value">{{
+              formatValue(effectiveMin)
+            }} 次</span>
+            <div class="legend-track">
+              <div
+                class="legend-gradient"
+                :style="`background: linear-gradient(to right, ${colorLowCss}, ${colorHighCss})`"
+              />
+              <div
+                class="legend-mask legend-mask--left"
+                :style="{
+                  width:
+                    thumbLeftPx(
+                      pctFromValue(effectiveMin),
+                    ) + 'px',
+                }"
+              />
+              <div
+                class="legend-mask legend-mask--right"
+                :style="{
+                  width:
+                    LEGEND_TRACK_W -
+                    thumbLeftPx(
+                      pctFromValue(effectiveMax),
+                    ) +
+                    'px',
+                }"
+              />
+              <div
+                class="legend-thumb"
+                :style="{
+                  left:
+                    thumbLeftPx(
+                      pctFromValue(effectiveMin),
+                    ) + 'px',
+                }"
+                @mousedown="startDrag('min', $event)"
+                @touchstart="startDrag('min', $event)"
+              />
+              <div
+                class="legend-thumb"
+                :style="{
+                  left:
+                    thumbLeftPx(
+                      pctFromValue(effectiveMax),
+                    ) + 'px',
+                }"
+                @mousedown="startDrag('max', $event)"
+                @touchstart="startDrag('max', $event)"
+              />
+            </div>
+            <span class="legend-value">{{
+              formatValue(effectiveMax)
+            }} 次</span>
+            <button
+              class="legend-reset-btn"
+              :class="{
+                'legend-reset-btn--disabled': !isFiltered,
+              }"
+              :disabled="!isFiltered"
+              title="清除篩選"
+              @click="resetFilter"
+            >
+              重置
+            </button>
+          </div>
+        </div>
+      </div>
+    </Teleport>
+  </div>
 </template>
 
 <style scoped lang="scss">
@@ -557,15 +821,109 @@ const layout = computed(() => {
 	margin: 12px;
 }
 
-.legend-label {
-	font-size: 16px;
+.legend-value {
+	font-size: 14px;
 	white-space: nowrap;
+	min-width: 32px;
+	text-align: center;
+	font-variant-numeric: tabular-nums;
+}
+
+.legend-track {
+	position: relative;
+	width: 140px;
+	height: 15px;
+	touch-action: none;
+	user-select: none;
+	-webkit-user-select: none;
+	-webkit-touch-callout: none; // 防止 iOS 長按跳出選單/預覽
 }
 
 .legend-gradient {
-	width: 80px;
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 2px;
 	height: 10px;
 	border-radius: 3px;
+}
+
+.legend-mask {
+	position: absolute;
+	top: 2px;
+	height: 10px;
+	background: rgba(0, 0, 0, 0.6);
+	pointer-events: none;
+
+	&--left {
+		left: 0;
+		border-radius: 3px 0 0 3px;
+	}
+
+	&--right {
+		right: 0;
+		border-radius: 0 3px 3px 0;
+	}
+}
+
+.legend-thumb {
+	position: absolute;
+	top: 50%;
+	width: 6px; // = LEGEND_THUMB_R * 2
+	height: 18px;
+	background: #fff;
+	border: 2px solid #282a2c;
+	border-radius: 2px;
+	transform: translate(-50%, -50%);
+	cursor: grab;
+	box-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
+	user-select: none;
+	-webkit-user-select: none;
+	-webkit-touch-callout: none;
+
+	&:active {
+		cursor: grabbing;
+	}
+}
+
+.legend-reset-btn {
+	background: transparent;
+	border: 1px solid #555;
+	border-radius: 4px;
+	color: var(--color-text-secondary, #aaa);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+	font-size: 12px;
+	line-height: 1;
+	padding: 4px 8px;
+	white-space: nowrap;
+	transition:
+		border-color 0.15s,
+		color 0.15s,
+		opacity 0.15s;
+
+	&:hover {
+		border-color: #aaa;
+		color: #fff;
+	}
+
+	&--disabled {
+		opacity: 0.4;
+		cursor: default;
+		pointer-events: none;
+	}
+}
+
+@media (max-width: 770px) {
+	.legend-value {
+		font-size: 3.4vw;
+	}
+
+	.legend-track {
+		width: 30vw;
+	}
 }
 
 // ── Fullscreen overlay ─────────────────────────────────────────────────────
