@@ -151,7 +151,8 @@ const mapAiSummaryStyle = computed(() => {
 	const { x, y } = getOffset(mapAiSummaryId.value);
 	return {
 		transform: `translate(${x}px, ${y}px)`,
-		zIndex: getZIndex(mapAiSummaryId.value),
+		// Keep the map AI summary above dashboard content but below modal backdrops.
+		zIndex: Math.min(getZIndex(mapAiSummaryId.value), 9),
 	};
 });
 

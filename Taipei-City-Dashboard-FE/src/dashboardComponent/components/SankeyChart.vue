@@ -523,217 +523,224 @@ function resetFilter() {
 </script>
 
 <template>
-	<div
-		v-if="activeChart === 'SankeyChart'"
-		ref="wrapperRef"
-		class="sankey-wrapper"
-	>
-		<!-- Tooltip -->
-		<div
-			v-if="hoveredTip"
-			class="sankey-tooltip"
-			:style="
-				tipOnLeft
-					? {
-							left: tipX - 14 + 'px',
-							top: tipY - 10 + 'px',
-							transform: 'translateX(-100%)',
-						}
-					: { left: tipX + 14 + 'px', top: tipY - 10 + 'px' }
-			"
-		>
-			{{ hoveredTip }}
-		</div>
+  <div
+    v-if="activeChart === 'SankeyChart'"
+    ref="wrapperRef"
+    class="sankey-wrapper"
+  >
+    <!-- Tooltip -->
+    <div
+      v-if="hoveredTip"
+      class="sankey-tooltip"
+      :style="
+        tipOnLeft
+          ? {
+            left: tipX - 14 + 'px',
+            top: tipY - 10 + 'px',
+            transform: 'translateX(-100%)',
+          }
+          : { left: tipX + 14 + 'px', top: tipY - 10 + 'px' }
+      "
+    >
+      {{ hoveredTip }}
+    </div>
 
-		<!-- 放大按鈕 -->
-		<button class="expand-btn" title="放大檢視" @click="handleExpand">
-			<span>⛶</span>
-		</button>
+    <!-- 放大按鈕 -->
+    <button
+      class="expand-btn"
+      title="放大檢視"
+      @click="handleExpand"
+    >
+      <span>⛶</span>
+    </button>
 
-		<!-- 一般檢視 -->
-		<SankeyCanvas
-			:layout="filteredLayout"
-			:svg-h="layout.svgH || BASE_SVG_H"
-			:node-w="NODE_W"
-			:nc="NC"
-			class="sankey-svg"
-			@path-mousemove="onPathMouseMove"
-			@path-mouseleave="onPathMouseLeave"
-			@node-mousemove="onPathMouseMove"
-			@node-mouseleave="onPathMouseLeave"
-		/>
+    <!-- 一般檢視 -->
+    <SankeyCanvas
+      :layout="filteredLayout"
+      :svg-h="layout.svgH || BASE_SVG_H"
+      :node-w="NODE_W"
+      :nc="NC"
+      class="sankey-svg"
+      @path-mousemove="onPathMouseMove"
+      @path-mouseleave="onPathMouseLeave"
+      @node-mousemove="onPathMouseMove"
+      @node-mouseleave="onPathMouseLeave"
+    />
 
-		<!-- Legend -->
-		<div class="sankey-legend">
-			<span class="legend-value">{{ formatValue(effectiveMin) }} 次</span>
-			<div class="legend-track">
-				<div
-					class="legend-gradient"
-					:style="`background: linear-gradient(to right, ${colorLowCss}, ${colorHighCss})`"
-				/>
-				<div
-					class="legend-mask legend-mask--left"
-					:style="{
-						width: thumbLeftPx(pctFromValue(effectiveMin)) + 'px',
-					}"
-				/>
-				<div
-					class="legend-mask legend-mask--right"
-					:style="{
-						width:
-							LEGEND_TRACK_W -
-							thumbLeftPx(pctFromValue(effectiveMax)) +
-							'px',
-					}"
-				/>
-				<div
-					class="legend-thumb"
-					:style="{
-						left: thumbLeftPx(pctFromValue(effectiveMin)) + 'px',
-					}"
-					@mousedown="startDrag('min', $event)"
-					@touchstart="startDrag('min', $event)"
-				/>
-				<div
-					class="legend-thumb"
-					:style="{
-						left: thumbLeftPx(pctFromValue(effectiveMax)) + 'px',
-					}"
-					@mousedown="startDrag('max', $event)"
-					@touchstart="startDrag('max', $event)"
-				/>
-			</div>
-			<span class="legend-value">{{ formatValue(effectiveMax) }} 次</span>
-			<button
-				class="legend-reset-btn"
-				:class="{ 'legend-reset-btn--disabled': !isFiltered }"
-				:disabled="!isFiltered"
-				title="清除篩選"
-				@click="resetFilter"
-			>
-				重置
-			</button>
-		</div>
+    <!-- Legend -->
+    <div class="sankey-legend">
+      <span class="legend-value">{{ formatValue(effectiveMin) }} 次</span>
+      <div class="legend-track">
+        <div
+          class="legend-gradient"
+          :style="`background: linear-gradient(to right, ${colorLowCss}, ${colorHighCss})`"
+        />
+        <div
+          class="legend-mask legend-mask--left"
+          :style="{
+            width: thumbLeftPx(pctFromValue(effectiveMin)) + 'px',
+          }"
+        />
+        <div
+          class="legend-mask legend-mask--right"
+          :style="{
+            width:
+              LEGEND_TRACK_W -
+              thumbLeftPx(pctFromValue(effectiveMax)) +
+              'px',
+          }"
+        />
+        <div
+          class="legend-thumb"
+          :style="{
+            left: thumbLeftPx(pctFromValue(effectiveMin)) + 'px',
+          }"
+          @mousedown="startDrag('min', $event)"
+          @touchstart="startDrag('min', $event)"
+        />
+        <div
+          class="legend-thumb"
+          :style="{
+            left: thumbLeftPx(pctFromValue(effectiveMax)) + 'px',
+          }"
+          @mousedown="startDrag('max', $event)"
+          @touchstart="startDrag('max', $event)"
+        />
+      </div>
+      <span class="legend-value">{{ formatValue(effectiveMax) }} 次</span>
+      <button
+        class="legend-reset-btn"
+        :class="{ 'legend-reset-btn--disabled': !isFiltered }"
+        :disabled="!isFiltered"
+        title="清除篩選"
+        @click="resetFilter"
+      >
+        重置
+      </button>
+    </div>
 
-		<!-- Fullscreen overlay -->
-		<Teleport to="body">
-			<div
-				v-if="isExpanded"
-				class="sankey-overlay"
-				@click.self="isExpanded = false"
-			>
-				<div class="sankey-modal">
-					<button class="modal-close-btn" @click="isExpanded = false">
-						✕
-					</button>
+    <!-- Fullscreen overlay -->
+    <Teleport to="body">
+      <div
+        v-if="isExpanded"
+        class="sankey-overlay"
+        @click.self="isExpanded = false"
+      >
+        <div class="sankey-modal">
+          <button
+            class="modal-close-btn"
+            @click="isExpanded = false"
+          >
+            ✕
+          </button>
 
-					<!-- Tooltip（共用同一份 ref） -->
-					<div
-						v-if="hoveredTip"
-						class="sankey-tooltip"
-						:style="
-							tipOnLeft
-								? {
-										left: tipX - 14 + 'px',
-										top: tipY - 10 + 'px',
-										transform: 'translateX(-100%)',
-									}
-								: {
-										left: tipX + 14 + 'px',
-										top: tipY - 10 + 'px',
-									}
-						"
-					>
-						{{ hoveredTip }}
-					</div>
+          <!-- Tooltip（共用同一份 ref） -->
+          <div
+            v-if="hoveredTip"
+            class="sankey-tooltip"
+            :style="
+              tipOnLeft
+                ? {
+                  left: tipX - 14 + 'px',
+                  top: tipY - 10 + 'px',
+                  transform: 'translateX(-100%)',
+                }
+                : {
+                  left: tipX + 14 + 'px',
+                  top: tipY - 10 + 'px',
+                }
+            "
+          >
+            {{ hoveredTip }}
+          </div>
 
-					<!-- 放大檢視 -->
-					<div class="sankey-scroll sankey-scroll-full">
-						<SankeyCanvas
-							:layout="filteredLayout"
-							:svg-h="layout.svgH || BASE_SVG_H"
-							:node-w="NODE_W"
-							:nc="NC"
-							class="sankey-svg-full"
-							@path-mousemove="onPathMouseMove"
-							@path-mouseleave="onPathMouseLeave"
-							@node-mousemove="onPathMouseMove"
-							@node-mouseleave="onPathMouseLeave"
-						/>
-					</div>
+          <!-- 放大檢視 -->
+          <div class="sankey-scroll sankey-scroll-full">
+            <SankeyCanvas
+              :layout="filteredLayout"
+              :svg-h="layout.svgH || BASE_SVG_H"
+              :node-w="NODE_W"
+              :nc="NC"
+              class="sankey-svg-full"
+              @path-mousemove="onPathMouseMove"
+              @path-mouseleave="onPathMouseLeave"
+              @node-mousemove="onPathMouseMove"
+              @node-mouseleave="onPathMouseLeave"
+            />
+          </div>
 
-					<!-- Legend -->
-					<div class="sankey-legend">
-						<span class="legend-value">{{
-							formatValue(effectiveMin)
-						}} 次</span>
-						<div class="legend-track">
-							<div
-								class="legend-gradient"
-								:style="`background: linear-gradient(to right, ${colorLowCss}, ${colorHighCss})`"
-							/>
-							<div
-								class="legend-mask legend-mask--left"
-								:style="{
-									width:
-										thumbLeftPx(
-											pctFromValue(effectiveMin),
-										) + 'px',
-								}"
-							/>
-							<div
-								class="legend-mask legend-mask--right"
-								:style="{
-									width:
-										LEGEND_TRACK_W -
-										thumbLeftPx(
-											pctFromValue(effectiveMax),
-										) +
-										'px',
-								}"
-							/>
-							<div
-								class="legend-thumb"
-								:style="{
-									left:
-										thumbLeftPx(
-											pctFromValue(effectiveMin),
-										) + 'px',
-								}"
-								@mousedown="startDrag('min', $event)"
-								@touchstart="startDrag('min', $event)"
-							/>
-							<div
-								class="legend-thumb"
-								:style="{
-									left:
-										thumbLeftPx(
-											pctFromValue(effectiveMax),
-										) + 'px',
-								}"
-								@mousedown="startDrag('max', $event)"
-								@touchstart="startDrag('max', $event)"
-							/>
-						</div>
-						<span class="legend-value">{{
-							formatValue(effectiveMax)
-						}} 次</span>
-						<button
-							class="legend-reset-btn"
-							:class="{
-								'legend-reset-btn--disabled': !isFiltered,
-							}"
-							:disabled="!isFiltered"
-							title="清除篩選"
-							@click="resetFilter"
-						>
-							重置
-						</button>
-					</div>
-				</div>
-			</div>
-		</Teleport>
-	</div>
+          <!-- Legend -->
+          <div class="sankey-legend">
+            <span class="legend-value">{{
+              formatValue(effectiveMin)
+            }} 次</span>
+            <div class="legend-track">
+              <div
+                class="legend-gradient"
+                :style="`background: linear-gradient(to right, ${colorLowCss}, ${colorHighCss})`"
+              />
+              <div
+                class="legend-mask legend-mask--left"
+                :style="{
+                  width:
+                    thumbLeftPx(
+                      pctFromValue(effectiveMin),
+                    ) + 'px',
+                }"
+              />
+              <div
+                class="legend-mask legend-mask--right"
+                :style="{
+                  width:
+                    LEGEND_TRACK_W -
+                    thumbLeftPx(
+                      pctFromValue(effectiveMax),
+                    ) +
+                    'px',
+                }"
+              />
+              <div
+                class="legend-thumb"
+                :style="{
+                  left:
+                    thumbLeftPx(
+                      pctFromValue(effectiveMin),
+                    ) + 'px',
+                }"
+                @mousedown="startDrag('min', $event)"
+                @touchstart="startDrag('min', $event)"
+              />
+              <div
+                class="legend-thumb"
+                :style="{
+                  left:
+                    thumbLeftPx(
+                      pctFromValue(effectiveMax),
+                    ) + 'px',
+                }"
+                @mousedown="startDrag('max', $event)"
+                @touchstart="startDrag('max', $event)"
+              />
+            </div>
+            <span class="legend-value">{{
+              formatValue(effectiveMax)
+            }} 次</span>
+            <button
+              class="legend-reset-btn"
+              :class="{
+                'legend-reset-btn--disabled': !isFiltered,
+              }"
+              :disabled="!isFiltered"
+              title="清除篩選"
+              @click="resetFilter"
+            >
+              重置
+            </button>
+          </div>
+        </div>
+      </div>
+    </Teleport>
+  </div>
 </template>
 
 <style scoped lang="scss">
