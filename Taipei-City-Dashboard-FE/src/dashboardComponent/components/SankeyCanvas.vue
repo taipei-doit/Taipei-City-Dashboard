@@ -8,7 +8,12 @@ const props = defineProps({
 	nc: { type: String, required: true },
 });
 
-const emit = defineEmits(["path-mousemove", "path-mouseleave"]);
+const emit = defineEmits([
+	"path-mousemove",
+	"path-mouseleave",
+	"node-mousemove",
+	"node-mouseleave",
+]);
 
 function trunc(str, max = 13) {
 	return str.length > max ? str.slice(0, max) + "…" : str;
@@ -47,16 +52,31 @@ const labeledLayers = computed(() =>
 		: [],
 );
 
-const viewBoxHeight = computed(() => {
-	const bottomMostLabelY = labeledLayers.value.reduce((maxY, nodes) => {
-		for (const nd of nodes) {
-			maxY = Math.max(maxY, nd.labelY);
-		}
-		return maxY;
-	}, props.svgH);
+// 同時計算上方 / 下方各自溢出多少,取較大值做對稱 padding
+const verticalPad = computed(() => {
+	let minY = 0;
+	let maxY = props.svgH;
 
-	return Math.max(props.svgH, Math.ceil(bottomMostLabelY + NODE_LABEL_BOUNDS_PAD));
+	for (const nodes of labeledLayers.value) {
+		for (const nd of nodes) {
+			minY = Math.min(minY, nd.labelY - NODE_LABEL_BOUNDS_PAD);
+			maxY = Math.max(maxY, nd.labelY + NODE_LABEL_BOUNDS_PAD);
+		}
+	}
+
+	const topOverflow = Math.max(0, -minY);
+	const bottomOverflow = Math.max(0, maxY - props.svgH);
+
+	return Math.max(topOverflow, bottomOverflow);
 });
+
+const viewBoxHeight = computed(() =>
+	Math.ceil(props.svgH + verticalPad.value * 2),
+);
+
+function onNodeMouseMove(event, nd) {
+	emit("node-mousemove", { event, tip: nd.tip });
+}
 </script>
 
 <template>
@@ -65,79 +85,86 @@ const viewBoxHeight = computed(() => {
     preserveAspectRatio="xMidYMid meet"
     v-bind="$attrs"
   >
-    <!-- Layer labels -->
-    <text
-      v-for="(label, i) in layout.layerLabels"
-      :key="`label-${i}`"
-      :x="layout.xPositions[i] + nodeW / 2"
-      :y="layout.padTop - 14"
-      class="layer-label"
-    >
-      {{ label }}
-    </text>
-
-    <!-- Flow paths -->
-    <path
-      v-for="(p, i) in layout.paths"
-      :key="`p-${i}`"
-      :d="p.d"
-      :fill="p.fill"
-      :style="{ opacity: p.opacity }"
-      class="sankey-link"
-      @mouseenter="emit('path-mousemove', { event: $event, tip: p.tip })"
-      @mousemove="emit('path-mousemove', { event: $event, tip: p.tip })"
-      @mouseleave="emit('path-mouseleave')"
-    />
-
-    <!-- Nodes -->
-    <template
-      v-for="(nodes, li) in layout.nodesPerLayer"
-      :key="`layer-${li}`"
-    >
-      <g
-        v-for="nd in nodes"
-        :key="`n${li}-${nd.name}`"
+    <g :transform="`translate(0, ${verticalPad})`">
+      <!-- Layer labels -->
+      <text
+        v-for="(label, i) in layout.layerLabels"
+        :key="`label-${i}`"
+        :x="layout.xPositions[i] + nodeW / 2"
+        :y="layout.padTop - 14"
+        class="layer-label"
       >
-        <rect
-          :x="nd.x"
-          :y="nd.y"
-          :width="nodeW"
-          :height="nd.h"
-          :fill="nc"
-          rx="2"
-        />
-      </g>
-    </template>
+        {{ label }}
+      </text>
 
-    <!-- Labels(防重疊後,獨立於節點迴圈外,只畫一次) -->
-    <template
-      v-for="(nodes, li) in labeledLayers"
-      :key="`label-layer-${li}`"
-    >
-      <g
-        v-for="nd in nodes"
-        :key="`label-${li}-${nd.name}`"
+      <!-- Flow paths -->
+      <path
+        v-for="(p, i) in layout.paths"
+        :key="`p-${i}`"
+        :d="p.d"
+        :fill="p.fill"
+        :style="{ opacity: p.hidden ? 0 : p.opacity }"
+        class="sankey-link"
+        :class="{ 'sankey-link--hidden': p.hidden }"
+        @mouseenter="emit('path-mousemove', { event: $event, tip: p.tip })"
+        @mousemove="emit('path-mousemove', { event: $event, tip: p.tip })"
+        @mouseleave="emit('path-mouseleave')"
+      />
+
+      <!-- Nodes -->
+      <template
+        v-for="(nodes, li) in layout.nodesPerLayer"
+        :key="`layer-${li}`"
       >
-        <!-- 引導線:label 被推開時,畫一條細線連回節點原本位置 -->
-        <line
-          v-if="Math.abs(nd.labelY - (nd.y + nd.h / 2)) > LEADER_THRESHOLD"
-          :x1="li === 0 ? nd.x - 4 : nd.x + nodeW + 4"
-          :y1="nd.y + nd.h / 2"
-          :x2="li === 0 ? nd.x - 8 : nd.x + nodeW + 8"
-          :y2="nd.labelY"
-          class="label-leader"
-        />
-        <text
-          :x="li === 0 ? nd.x - 8 : nd.x + nodeW + 8"
-          :y="nd.labelY"
-          :text-anchor="li === 0 ? 'end' : 'start'"
-          dominant-baseline="middle"
-          class="node-label"
+        <g
+          v-for="nd in nodes"
+          :key="`n${li}-${nd.name}`"
         >
-          {{ trunc(nd.name, li === 0 ? 13 : 16) }}
-        </text>
-      </g>
-    </template>
+          <rect
+            :x="nd.x"
+            :y="nd.y"
+            :width="nodeW"
+            :height="nd.h"
+            :fill="nc"
+            rx="2"
+            class="sankey-node"
+            @mouseenter="onNodeMouseMove($event, nd)"
+            @mousemove="onNodeMouseMove($event, nd)"
+            @mouseleave="emit('node-mouseleave')"
+          />
+        </g>
+      </template>
+
+      <!-- Labels(防重疊後,獨立於節點迴圈外,只畫一次) -->
+      <template
+        v-for="(nodes, li) in labeledLayers"
+        :key="`label-layer-${li}`"
+      >
+        <g
+          v-for="nd in nodes"
+          :key="`label-${li}-${nd.name}`"
+        >
+          <!-- 引導線:label 被推開時,畫一條細線連回節點原本位置 -->
+          <line
+            v-if="Math.abs(nd.labelY - (nd.y + nd.h / 2)) > LEADER_THRESHOLD"
+            :x1="li === 0 ? nd.x - 4 : nd.x + nodeW + 4"
+            :y1="nd.y + nd.h / 2"
+            :x2="li === 0 ? nd.x - 8 : nd.x + nodeW + 8"
+            :y2="nd.labelY"
+            class="label-leader"
+          />
+          <text
+            :x="li === 0 ? nd.x - 8 : nd.x + nodeW + 8"
+            :y="nd.labelY"
+            :text-anchor="li === 0 ? 'end' : 'start'"
+            dominant-baseline="middle"
+            class="node-label"
+          >
+            {{ trunc(nd.name, li === 0 ? 13 : 16) }}
+          </text>
+        </g>
+      </template>
+    </g>
   </svg>
 </template>
 
@@ -145,8 +172,21 @@ const viewBoxHeight = computed(() => {
 .sankey-link {
 	transition: opacity 0.15s;
 	cursor: pointer;
+
+	&--hidden {
+		pointer-events: none;
+	}
+
 	&:hover {
 		opacity: 1 !important;
+	}
+}
+
+.sankey-node {
+	cursor: pointer;
+	transition: filter 0.15s;
+	&:hover {
+		filter: brightness(1.25);
 	}
 }
 

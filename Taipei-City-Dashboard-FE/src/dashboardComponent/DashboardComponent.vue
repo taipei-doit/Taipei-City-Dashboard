@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref } from "vue";
+import { computed, ref, onUnmounted } from "vue";
 // import "./styles/chartStyles.css";
 // import "./styles/toggleswitch.css";
 import "material-icons/iconfont/material-icons.css";
@@ -279,6 +279,12 @@ function returnChartComponent(name, svg) {
 		return svg ? MapLegendSvg : MapLegend;
 	}
 }
+
+onUnmounted(() => {
+	if (showMapAiSummaryBox.value) {
+		close(mapAiSummaryId.value);
+	}
+});
 </script>
 
 <template>
