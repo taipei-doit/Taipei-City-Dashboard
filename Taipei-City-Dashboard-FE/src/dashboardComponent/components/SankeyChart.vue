@@ -683,7 +683,7 @@ function resetFilter() {
           </div>
 
           <!-- 放大檢視 -->
-          <div class="sankey-scroll sankey-scroll-full">
+          <div class="sankey-scroll">
             <SankeyCanvas
               :layout="filteredLayout"
               :svg-h="layout.svgH || BASE_SVG_H"
@@ -821,7 +821,6 @@ function resetFilter() {
 }
 
 .sankey-scroll {
-	flex: 1;
 	min-height: 0;
 	overflow-y: auto;
 	overflow-x: hidden;
@@ -959,7 +958,7 @@ function resetFilter() {
 	}
 
 	.legend-value {
-		font-size: 3.4vw;
+		font-size: 3vw;
 		min-width: 28px;
 	}
 
@@ -1027,10 +1026,6 @@ function resetFilter() {
 	display: block;
 }
 
-.sankey-scroll-full {
-	flex: 1;
-}
-
 @media (max-width: 770px) {
 	.legend-label {
 		font-size: 3vw;
@@ -1038,7 +1033,8 @@ function resetFilter() {
 
 	.sankey-modal {
 		width: 90vw;
-		height: 60vh;
+		height: 100%;
+		max-height: 40vh;
 	}
 }
 </style>
