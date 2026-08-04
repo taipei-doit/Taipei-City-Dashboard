@@ -4,6 +4,25 @@ import { hexToRGB } from "../../assets/utilityFunctions/colorConvert";
 import SankeyCanvas from "./SankeyCanvas.vue";
 // import { useDialogStore } from "../../store/dialogStore.js";
 
+// ── 流量篩選(legend range slider)state ──────────────────────────────────
+const filterMin = ref(null); // null = 尚未使用者手動設定,採用完整範圍
+const filterMax = ref(null);
+let activeThumb = null; // 'min' | 'max'
+let activeTrackEl = null;
+
+function thumbLeftPx(pct) {
+	return LEGEND_THUMB_R + pct * (LEGEND_TRACK_W - LEGEND_THUMB_R * 2);
+}
+
+function formatValue(v) {
+	if (v == null || Number.isNaN(v)) return "-";
+	const abs = Math.abs(v);
+	if (abs >= 1_000_000)
+		return (v / 1_000_000).toFixed(1).replace(/\.0$/, "") + "M";
+	if (abs >= 1_000) return (v / 1_000).toFixed(1).replace(/\.0$/, "") + "K";
+	return String(Math.round(v));
+}
+
 const props = defineProps([
 	"chart_config",
 	"activeChart",
@@ -24,14 +43,20 @@ const parsed_series = {
 // ── Constants ──────────────────────────────────────────────────────────────
 const NODE_W = 16;
 const GAP = 4;
-const PAD_TOP = 36;
-const PAD_BOT = 6;
-const PAD_L = 160;
-const PAD_R = 180;
-const SVG_H = 420;
-const AVAIL_H = SVG_H - PAD_TOP - PAD_BOT;
-const TOP_N = 14;
+const isMobile =
+	typeof window !== "undefined" &&
+	window.matchMedia?.("(max-width: 770px)").matches;
+const LEGEND_TRACK_W = isMobile ? 104 : 140;
+const LEGEND_THUMB_R = 3; // 對應長方形寬度(6px)的一半
+const PAD_TOP = isMobile ? 28 : 36;
+const PAD_BOT = isMobile ? 0 : 6;
+const PAD_L = 250;
+const PAD_R = 250;
+const BASE_SVG_H = isMobile ? 360 : 500;
+const TOP_N = 25;
 const NC = darken(props.chart_config.color?.[0], 25) ?? "#6b8fa3";
+const MIN_LABEL_GAP = isMobile ? 22 : 16;
+const MIN_NODE_H = 3;
 
 const COLOR_LOW = hexToRGB(props.chart_config.color?.[0] ?? "#3a6ea5");
 const COLOR_HIGH = hexToRGB(props.chart_config.color?.[1] ?? "#e05c5c");
@@ -45,6 +70,10 @@ const tipX = ref(0);
 const tipY = ref(0);
 const tipOnLeft = ref(false);
 const isExpanded = ref(false);
+const TOOLTIP_OFFSET_X = 14;
+const TOOLTIP_OFFSET_Y = -10;
+const TOOLTIP_EDGE_PAD = 12;
+const TOOLTIP_MAX_W = 320;
 
 // ── Helpers ────────────────────────────────────────────────────────────────
 function darken(hex, percent = 20) {
@@ -69,13 +98,69 @@ function flowColor(t) {
 	return `rgb(${r},${g},${b})`;
 }
 
-function positionNodes(topList, xPos) {
+function allocateLinkHeights(entries, totalHeight, minThickness = 1) {
+	if (!entries.length || totalHeight <= 0) return new Map();
+
+	const minSafeThickness =
+		entries.length * minThickness <= totalHeight
+			? minThickness
+			: totalHeight / entries.length;
+
+	const allocations = new Map();
+	const remaining = entries.map((entry) => ({ ...entry }));
+	let remainingHeight = totalHeight;
+
+	while (remaining.length) {
+		const remainingValue = remaining.reduce(
+			(sum, entry) => sum + entry.value,
+			0,
+		);
+		if (remainingValue <= 0 || remainingHeight <= 0) {
+			for (const entry of remaining) {
+				allocations.set(entry.key, 0);
+			}
+			break;
+		}
+
+		const forced = remaining.filter(
+			(entry) =>
+				(entry.value / remainingValue) * remainingHeight <
+				minSafeThickness,
+		);
+
+		if (!forced.length) {
+			for (const entry of remaining) {
+				allocations.set(
+					entry.key,
+					(entry.value / remainingValue) * remainingHeight,
+				);
+			}
+			break;
+		}
+
+		for (const entry of forced) {
+			allocations.set(entry.key, minSafeThickness);
+			remainingHeight -= minSafeThickness;
+		}
+
+		const forcedKeys = new Set(forced.map((entry) => entry.key));
+		for (let i = remaining.length - 1; i >= 0; i--) {
+			if (forcedKeys.has(remaining[i].key)) {
+				remaining.splice(i, 1);
+			}
+		}
+	}
+
+	return allocations;
+}
+
+function positionNodes(topList, xPos, availH) {
 	if (!topList.length) return [];
 	const total = topList.reduce((s, [, v]) => s + v, 0);
-	const fillH = AVAIL_H - GAP * (topList.length - 1);
+	const fillH = availH - GAP * (topList.length - 1);
 	let y = PAD_TOP;
 	return topList.map(([name, flow]) => {
-		const h = Math.max(3, (flow / total) * fillH);
+		const h = Math.max(MIN_NODE_H, (flow / total) * fillH);
 		const node = { name, flow, x: xPos, y, h };
 		y += h + GAP;
 		return node;
@@ -93,6 +178,35 @@ function onPathMouseMove({ event, tip }) {
 function onPathMouseLeave() {
 	hoveredTip.value = null;
 }
+
+const tooltipStyle = computed(() => {
+	if (!hoveredTip.value) return {};
+
+	const viewportW =
+		typeof window !== "undefined" ? window.innerWidth : Number.POSITIVE_INFINITY;
+	const viewportH =
+		typeof window !== "undefined" ? window.innerHeight : Number.POSITIVE_INFINITY;
+	const maxWidth = Math.min(TOOLTIP_MAX_W, Math.max(180, viewportW - TOOLTIP_EDGE_PAD * 2));
+	const estimatedHeight = 72;
+	const preferredLeft = tipOnLeft.value
+		? tipX.value - TOOLTIP_OFFSET_X - maxWidth
+		: tipX.value + TOOLTIP_OFFSET_X;
+	const clampedLeft = Math.min(
+		Math.max(TOOLTIP_EDGE_PAD, preferredLeft),
+		Math.max(TOOLTIP_EDGE_PAD, viewportW - maxWidth - TOOLTIP_EDGE_PAD),
+	);
+	const preferredTop = tipY.value + TOOLTIP_OFFSET_Y;
+	const clampedTop = Math.min(
+		Math.max(TOOLTIP_EDGE_PAD, preferredTop),
+		Math.max(TOOLTIP_EDGE_PAD, viewportH - estimatedHeight - TOOLTIP_EDGE_PAD),
+	);
+
+	return {
+		left: `${clampedLeft}px`,
+		top: `${clampedTop}px`,
+		maxWidth: `${maxWidth}px`,
+	};
+});
 
 function handleExpand() {
 	// if (window.innerWidth < 770) {
@@ -113,6 +227,9 @@ const layout = computed(() => {
 			l.target_layer != null &&
 			l.source_layer !== l.target_layer,
 	);
+	const rawValues = links.map((l) => l.value);
+	const rawMinV = rawValues.length ? Math.min(...rawValues) : 0;
+	const rawMaxV = rawValues.length ? Math.max(...rawValues) : 1;
 
 	const n =
 		layerLabels.length ||
@@ -128,6 +245,7 @@ const layout = computed(() => {
 			paths: [],
 			n,
 			padTop: PAD_TOP,
+			valueRange: { min: rawMinV, max: rawMaxV },
 		};
 
 	const svgW = Math.max(800, PAD_L + PAD_R + n * 180);
@@ -148,15 +266,51 @@ const layout = computed(() => {
 		);
 	}
 
-	const topPerLayer = nodeFlow.map((m) =>
-		[...m.entries()].sort((a, b) => b[1] - a[1]).slice(0, TOP_N),
+	// 逐層選取 TOP N:
+	// 第一層依整體流量排序;之後每一層只從「與前一層已選節點相連」的項目中,
+	// 依相連流量取 TOP N,確保每一層都是承接自前面已選中的節點。
+	const setPerLayer = Array.from({ length: n }, () => new Set());
+	const topPerLayer = [];
+
+	for (let i = 0; i < n; i++) {
+		let candidates;
+
+		if (i === 0) {
+			candidates = [...nodeFlow[0].entries()].sort((a, b) => b[1] - a[1]);
+		} else {
+			const flowFromSelected = new Map();
+			for (const l of links) {
+				if (l.target_layer !== i) continue;
+				if (!setPerLayer[l.source_layer].has(l.source)) continue;
+				flowFromSelected.set(
+					l.target,
+					(flowFromSelected.get(l.target) || 0) + l.value,
+				);
+			}
+			candidates = [...flowFromSelected.entries()].sort(
+				(a, b) => b[1] - a[1],
+			);
+		}
+
+		const top = candidates.slice(0, TOP_N);
+		topPerLayer.push(top);
+		setPerLayer[i] = new Set(top.map(([name]) => name));
+	}
+
+	const maxNodeCount = topPerLayer.reduce(
+		(max, layer) => Math.max(max, layer.length),
+		0,
 	);
-	const setPerLayer = topPerLayer.map(
-		(t) => new Set(t.map(([name]) => name)),
-	);
+	const minAvailH =
+		maxNodeCount > 0
+			? maxNodeCount * MIN_NODE_H +
+				Math.max(0, maxNodeCount - 1) * MIN_LABEL_GAP
+			: 0;
+	const svgH = Math.max(BASE_SVG_H, PAD_TOP + PAD_BOT + minAvailH);
+	const availH = svgH - PAD_TOP - PAD_BOT;
 
 	const nodesPerLayer = topPerLayer.map((top, i) =>
-		positionNodes(top, xPositions[i]),
+		positionNodes(top, xPositions[i], availH),
 	);
 	const mapPerLayer = nodesPerLayer.map(
 		(nodes) => new Map(nodes.map((nd) => [nd.name, nd])),
@@ -181,10 +335,80 @@ const layout = computed(() => {
 	}
 	const aggLinks = [...aggMap.values()].sort((a, b) => b.value - a.value);
 
-	const allValues = aggLinks.map((l) => l.value);
-	const minV = allValues.length ? Math.min(...allValues) : 0;
-	const maxV = allValues.length ? Math.max(...allValues) : 1;
-	const normalize = (v) => (maxV === minV ? 0.5 : (v - minV) / (maxV - minV));
+	// ── 統計每個 node 的流入 / 流出總量,掛在 node 物件上供 hover 顯示 ──
+	const inFlowMap = new Map();
+	const outFlowMap = new Map();
+	for (const l of aggLinks) {
+		const outKey = `${l.source_layer}|${l.source}`;
+		outFlowMap.set(outKey, (outFlowMap.get(outKey) || 0) + l.value);
+
+		const inKey = `${l.target_layer}|${l.target}`;
+		inFlowMap.set(inKey, (inFlowMap.get(inKey) || 0) + l.value);
+	}
+
+	for (let layerIndex = 0; layerIndex < nodesPerLayer.length; layerIndex++) {
+		for (const node of nodesPerLayer[layerIndex]) {
+			const key = `${layerIndex}|${node.name}`;
+			const inFlow = Math.round(inFlowMap.get(key) || 0);
+			const outFlow = Math.round(outFlowMap.get(key) || 0);
+
+			node.inFlow = inFlow;
+			node.outFlow = outFlow;
+
+			const bits = [];
+			if (outFlow > 0) bits.push(`流出 ${outFlow.toLocaleString()} 次`);
+			if (inFlow > 0) bits.push(`流入 ${inFlow.toLocaleString()} 次`);
+			node.tip = `${node.name}｜${bits.join("，")}`;
+		}
+	}
+
+	const renderedValues = aggLinks.map((l) => l.value);
+	const renderedMinV = renderedValues.length ? Math.min(...renderedValues) : 0;
+	const renderedMaxV = renderedValues.length ? Math.max(...renderedValues) : 1;
+	const normalize = (v) =>
+		renderedMaxV === renderedMinV
+			? 0.5
+			: (v - renderedMinV) / (renderedMaxV - renderedMinV);
+
+	const sourceHeightMap = new Map();
+	const targetHeightMap = new Map();
+	for (let layerIndex = 0; layerIndex < nodesPerLayer.length; layerIndex++) {
+		for (const node of nodesPerLayer[layerIndex]) {
+			const sourceEntries = aggLinks
+				.filter(
+					(link) =>
+						link.source_layer === layerIndex &&
+						link.source === node.name,
+				)
+				.map((link) => ({
+					key: `${link.source_layer}|${link.source}||${link.target_layer}|${link.target}`,
+					value: link.value,
+				}));
+			const targetEntries = aggLinks
+				.filter(
+					(link) =>
+						link.target_layer === layerIndex &&
+						link.target === node.name,
+				)
+				.map((link) => ({
+					key: `${link.source_layer}|${link.source}||${link.target_layer}|${link.target}`,
+					value: link.value,
+				}));
+
+			for (const [key, height] of allocateLinkHeights(
+				sourceEntries,
+				node.h,
+			)) {
+				sourceHeightMap.set(key, height);
+			}
+			for (const [key, height] of allocateLinkHeights(
+				targetEntries,
+				node.h,
+			)) {
+				targetHeightMap.set(key, height);
+			}
+		}
+	}
 
 	const usedRight = nodesPerLayer.map(
 		(nodes) => new Map(nodes.map((nd) => [nd.name, 0])),
@@ -199,20 +423,12 @@ const layout = computed(() => {
 		const tgt = mapPerLayer[l.target_layer].get(l.target);
 		if (!src || !tgt) continue;
 
+		const linkKey = `${l.source_layer}|${l.source}||${l.target_layer}|${l.target}`;
 		const lh = Math.min(
-			Math.max(
-				1,
-				(l.value /
-					(nodeFlow[l.source_layer].get(l.source) || l.value)) *
-					src.h,
-			),
-			Math.max(
-				1,
-				(l.value /
-					(nodeFlow[l.target_layer].get(l.target) || l.value)) *
-					tgt.h,
-			),
+			sourceHeightMap.get(linkKey) ?? 0,
+			targetHeightMap.get(linkKey) ?? 0,
 		);
+		if (lh <= 0) continue;
 
 		const sOff = usedRight[l.source_layer].get(l.source);
 		const tOff = usedLeft[l.target_layer].get(l.target);
@@ -223,6 +439,11 @@ const layout = computed(() => {
 		const mx = (x1 + x2) / 2;
 
 		paths.push({
+			key: linkKey,
+			source: l.source,
+			source_layer: l.source_layer,
+			target: l.target,
+			target_layer: l.target_layer,
 			d: [
 				`M ${x1} ${y1}`,
 				`C ${mx} ${y1} ${mx} ${y2} ${x2} ${y2}`,
@@ -232,10 +453,11 @@ const layout = computed(() => {
 			].join(" "),
 			fill: flowColor(normalize(l.value)),
 			opacity: 0.35 + normalize(l.value) * 0.35,
+			value: l.value,
 			tip:
 				l.target_layer - l.source_layer > 1
-					? `${l.source} → ${l.target}（跨 ${l.target_layer - l.source_layer} 層）：${l.value.toLocaleString()} 次`
-					: `${l.source} → ${l.target}：${l.value.toLocaleString()} 次`,
+					? `${l.source} → ${l.target}（跨 ${l.target_layer - l.source_layer} 層）：${Math.round(l.value).toLocaleString()} 次`
+					: `${l.source} → ${l.target}：${Math.round(l.value).toLocaleString()} 次`,
 		});
 
 		usedRight[l.source_layer].set(l.source, sOff + lh);
@@ -244,14 +466,104 @@ const layout = computed(() => {
 
 	return {
 		svgW,
+		svgH,
 		xPositions,
 		nodesPerLayer,
 		layerLabels,
 		paths,
 		n,
 		padTop: PAD_TOP,
+		valueRange: { min: rawMinV, max: rawMaxV },
 	};
 });
+
+// ── Legend 數值範圍 & 篩選 ────────────────────────────────────────────────
+const valueMin = computed(() => layout.value.valueRange?.min ?? 0);
+const valueMax = computed(() => layout.value.valueRange?.max ?? 1);
+
+const effectiveMin = computed(() => filterMin.value ?? valueMin.value);
+const effectiveMax = computed(() => filterMax.value ?? valueMax.value);
+
+const isFiltered = computed(() => {
+	const eps = Math.max(1e-9, (valueMax.value - valueMin.value) * 1e-6);
+	return (
+		effectiveMin.value > valueMin.value + eps ||
+		effectiveMax.value < valueMax.value - eps
+	);
+});
+
+function pctFromValue(v) {
+	const span = valueMax.value - valueMin.value;
+	if (span <= 0) return 0;
+	return Math.min(1, Math.max(0, (v - valueMin.value) / span));
+}
+
+function valueFromPct(pct) {
+	return valueMin.value + pct * (valueMax.value - valueMin.value);
+}
+
+// 套用篩選:落在區間外的連結淡出(hidden = true),node/版面本身不重排
+const filteredLayout = computed(() => {
+	const eps = Math.max(1e-9, (valueMax.value - valueMin.value) * 1e-6);
+	return {
+		...layout.value,
+		paths: (layout.value.paths ?? []).map((p) => ({
+			...p,
+			hidden:
+				p.value < effectiveMin.value - eps ||
+				p.value > effectiveMax.value + eps,
+		})),
+	};
+});
+
+function pctFromEvent(event, trackEl) {
+	const rect = trackEl.getBoundingClientRect();
+	const clientX = event.touches ? event.touches[0].clientX : event.clientX;
+	const usable = rect.width - LEGEND_THUMB_R * 2;
+	if (usable <= 0) return 0;
+	return Math.min(
+		1,
+		Math.max(0, (clientX - rect.left - LEGEND_THUMB_R) / usable),
+	);
+}
+
+function startDrag(thumb, event) {
+	activeThumb = thumb;
+	activeTrackEl = event.currentTarget.closest(".legend-track");
+	window.addEventListener("mousemove", onDrag);
+	window.addEventListener("mouseup", endDrag);
+	window.addEventListener("touchmove", onDrag, { passive: false });
+	window.addEventListener("touchend", endDrag);
+	event.preventDefault();
+}
+
+function onDrag(event) {
+	if (!activeThumb || !activeTrackEl) return;
+	if (event.cancelable) event.preventDefault();
+
+	const v = valueFromPct(pctFromEvent(event, activeTrackEl));
+
+	if (activeThumb === "min") {
+		filterMin.value = Math.min(v, effectiveMax.value);
+	} else {
+		filterMax.value = Math.max(v, effectiveMin.value);
+	}
+}
+
+function endDrag() {
+	activeThumb = null;
+	activeTrackEl = null;
+	window.removeEventListener("mousemove", onDrag);
+	window.removeEventListener("mouseup", endDrag);
+	window.removeEventListener("touchmove", onDrag);
+	window.removeEventListener("touchend", endDrag);
+}
+
+function resetFilter() {
+	if (!isFiltered.value) return;
+	filterMin.value = null;
+	filterMax.value = null;
+}
 </script>
 
 <template>
@@ -264,15 +576,7 @@ const layout = computed(() => {
     <div
       v-if="hoveredTip"
       class="sankey-tooltip"
-      :style="
-        tipOnLeft
-          ? {
-            left: tipX - 14 + 'px',
-            top: tipY - 10 + 'px',
-            transform: 'translateX(-100%)',
-          }
-          : { left: tipX + 14 + 'px', top: tipY - 10 + 'px' }
-      "
+      :style="tooltipStyle"
     >
       {{ hoveredTip }}
     </div>
@@ -288,23 +592,70 @@ const layout = computed(() => {
 
     <!-- 一般檢視 -->
     <SankeyCanvas
-      :layout="layout"
-      :svg-h="SVG_H"
+      :layout="filteredLayout"
+      :svg-h="layout.svgH || BASE_SVG_H"
       :node-w="NODE_W"
       :nc="NC"
       class="sankey-svg"
       @path-mousemove="onPathMouseMove"
       @path-mouseleave="onPathMouseLeave"
+      @node-mousemove="onPathMouseMove"
+      @node-mouseleave="onPathMouseLeave"
     />
 
     <!-- Legend -->
     <div class="sankey-legend">
-      <span class="legend-label">低流量</span>
+      <span class="legend-value">{{ formatValue(effectiveMin) }} 次</span>
       <div
-        class="legend-gradient"
-        :style="`background: linear-gradient(to right, ${colorLowCss}, ${colorHighCss})`"
-      />
-      <span class="legend-label">高流量</span>
+        class="legend-track"
+        :style="{ width: `${LEGEND_TRACK_W}px` }"
+      >
+        <div
+          class="legend-gradient"
+          :style="`background: linear-gradient(to right, ${colorLowCss}, ${colorHighCss})`"
+        />
+        <div
+          class="legend-mask legend-mask--left"
+          :style="{
+            width: thumbLeftPx(pctFromValue(effectiveMin)) + 'px',
+          }"
+        />
+        <div
+          class="legend-mask legend-mask--right"
+          :style="{
+            width:
+              LEGEND_TRACK_W -
+              thumbLeftPx(pctFromValue(effectiveMax)) +
+              'px',
+          }"
+        />
+        <div
+          class="legend-thumb"
+          :style="{
+            left: thumbLeftPx(pctFromValue(effectiveMin)) + 'px',
+          }"
+          @mousedown="startDrag('min', $event)"
+          @touchstart="startDrag('min', $event)"
+        />
+        <div
+          class="legend-thumb"
+          :style="{
+            left: thumbLeftPx(pctFromValue(effectiveMax)) + 'px',
+          }"
+          @mousedown="startDrag('max', $event)"
+          @touchstart="startDrag('max', $event)"
+        />
+      </div>
+      <span class="legend-value">{{ formatValue(effectiveMax) }} 次</span>
+      <button
+        class="legend-reset-btn"
+        :class="{ 'legend-reset-btn--disabled': !isFiltered }"
+        :disabled="!isFiltered"
+        title="清除篩選"
+        @click="resetFilter"
+      >
+        重置
+      </button>
     </div>
 
     <!-- Fullscreen overlay -->
@@ -326,40 +677,96 @@ const layout = computed(() => {
           <div
             v-if="hoveredTip"
             class="sankey-tooltip"
-            :style="
-              tipOnLeft
-                ? {
-                  left: tipX - 14 + 'px',
-                  top: tipY - 10 + 'px',
-                  transform: 'translateX(-100%)',
-                }
-                : {
-                  left: tipX + 14 + 'px',
-                  top: tipY - 10 + 'px',
-                }
-            "
+            :style="tooltipStyle"
           >
             {{ hoveredTip }}
           </div>
 
           <!-- 放大檢視 -->
-          <SankeyCanvas
-            :layout="layout"
-            :svg-h="SVG_H"
-            :node-w="NODE_W"
-            :nc="NC"
-            class="sankey-svg-full"
-            @path-mousemove="onPathMouseMove"
-            @path-mouseleave="onPathMouseLeave"
-          />
-
-          <div class="sankey-legend">
-            <span class="legend-label">低流量</span>
-            <div
-              class="legend-gradient"
-              :style="`background: linear-gradient(to right, ${colorLowCss}, ${colorHighCss})`"
+          <div class="sankey-scroll">
+            <SankeyCanvas
+              :layout="filteredLayout"
+              :svg-h="layout.svgH || BASE_SVG_H"
+              :node-w="NODE_W"
+              :nc="NC"
+              class="sankey-svg-full"
+              @path-mousemove="onPathMouseMove"
+              @path-mouseleave="onPathMouseLeave"
+              @node-mousemove="onPathMouseMove"
+              @node-mouseleave="onPathMouseLeave"
             />
-            <span class="legend-label">高流量</span>
+          </div>
+
+          <!-- Legend -->
+          <div class="sankey-legend">
+            <span class="legend-value">{{
+              formatValue(effectiveMin)
+            }} 次</span>
+            <div
+              class="legend-track"
+              :style="{ width: `${LEGEND_TRACK_W}px` }"
+            >
+              <div
+                class="legend-gradient"
+                :style="`background: linear-gradient(to right, ${colorLowCss}, ${colorHighCss})`"
+              />
+              <div
+                class="legend-mask legend-mask--left"
+                :style="{
+                  width:
+                    thumbLeftPx(
+                      pctFromValue(effectiveMin),
+                    ) + 'px',
+                }"
+              />
+              <div
+                class="legend-mask legend-mask--right"
+                :style="{
+                  width:
+                    LEGEND_TRACK_W -
+                    thumbLeftPx(
+                      pctFromValue(effectiveMax),
+                    ) +
+                    'px',
+                }"
+              />
+              <div
+                class="legend-thumb"
+                :style="{
+                  left:
+                    thumbLeftPx(
+                      pctFromValue(effectiveMin),
+                    ) + 'px',
+                }"
+                @mousedown="startDrag('min', $event)"
+                @touchstart="startDrag('min', $event)"
+              />
+              <div
+                class="legend-thumb"
+                :style="{
+                  left:
+                    thumbLeftPx(
+                      pctFromValue(effectiveMax),
+                    ) + 'px',
+                }"
+                @mousedown="startDrag('max', $event)"
+                @touchstart="startDrag('max', $event)"
+              />
+            </div>
+            <span class="legend-value">{{
+              formatValue(effectiveMax)
+            }} 次</span>
+            <button
+              class="legend-reset-btn"
+              :class="{
+                'legend-reset-btn--disabled': !isFiltered,
+              }"
+              :disabled="!isFiltered"
+              title="清除篩選"
+              @click="resetFilter"
+            >
+              重置
+            </button>
           </div>
         </div>
       </div>
@@ -373,8 +780,9 @@ const layout = computed(() => {
 	width: 100%;
 	height: 90%;
 	display: flex;
-	flex-direction: column;
 	gap: 4px;
+	flex-direction: column;
+	justify-content: center;
 	background: transparent;
 }
 
@@ -383,7 +791,7 @@ const layout = computed(() => {
 	top: 4px;
 	right: 4px;
 	z-index: 5;
-	background: transparent;
+	background: #282a2c;
 	border: 1px solid #555;
 	border-radius: 4px;
 	color: var(--color-text-secondary, #aaa);
@@ -407,10 +815,15 @@ const layout = computed(() => {
 }
 
 .sankey-svg {
-	flex: 1;
 	width: 100%;
-	min-height: 0;
+	height: auto;
 	display: block;
+}
+
+.sankey-scroll {
+	min-height: 0;
+	overflow-y: auto;
+	overflow-x: hidden;
 }
 
 .sankey-tooltip {
@@ -423,7 +836,10 @@ const layout = computed(() => {
 	border-radius: 4px;
 	font-size: 0.875rem;
 	pointer-events: none;
-	white-space: nowrap;
+	white-space: normal;
+	word-break: break-word;
+	overflow-wrap: anywhere;
+	line-height: 1.4;
 	z-index: 9999;
 }
 
@@ -435,21 +851,122 @@ const layout = computed(() => {
 	font-size: 0.72rem;
 	color: var(--color-text-secondary, #aaa);
 	flex-shrink: 0;
-	margin: 16px;
+	margin: 12px;
+	min-width: 0;
 }
 
-.legend-label {
-	font-size: 12px;
+.legend-value {
+	font-size: 14px;
 	white-space: nowrap;
-	@media (max-width: 400px) {
-		font-size: 3vw;
-	}
+	min-width: 32px;
+	text-align: center;
+	font-variant-numeric: tabular-nums;
+}
+
+.legend-track {
+	position: relative;
+	height: 15px;
+	touch-action: none;
+	user-select: none;
+	-webkit-user-select: none;
+	-webkit-touch-callout: none; // 防止 iOS 長按跳出選單/預覽
 }
 
 .legend-gradient {
-	width: 80px;
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 2px;
 	height: 10px;
 	border-radius: 3px;
+}
+
+.legend-mask {
+	position: absolute;
+	top: 2px;
+	height: 10px;
+	background: rgba(0, 0, 0, 0.6);
+	pointer-events: none;
+
+	&--left {
+		left: 0;
+		border-radius: 3px 0 0 3px;
+	}
+
+	&--right {
+		right: 0;
+		border-radius: 0 3px 3px 0;
+	}
+}
+
+.legend-thumb {
+	position: absolute;
+	top: 50%;
+	width: 6px; // = LEGEND_THUMB_R * 2
+	height: 18px;
+	background: #fff;
+	border: 2px solid #282a2c;
+	border-radius: 2px;
+	transform: translate(-50%, -50%);
+	cursor: grab;
+	box-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
+	user-select: none;
+	-webkit-user-select: none;
+	-webkit-touch-callout: none;
+
+	&:active {
+		cursor: grabbing;
+	}
+}
+
+.legend-reset-btn {
+	background: transparent;
+	border: 1px solid #555;
+	border-radius: 4px;
+	color: var(--color-text-secondary, #aaa);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+	font-size: 12px;
+	line-height: 1;
+	padding: 4px 8px;
+	white-space: nowrap;
+	transition:
+		border-color 0.15s,
+		color 0.15s,
+		opacity 0.15s;
+
+	&:hover {
+		border-color: #aaa;
+		color: #fff;
+	}
+
+	&--disabled {
+		opacity: 0.4;
+		cursor: default;
+		pointer-events: none;
+	}
+}
+
+@media (max-width: 600px) {
+	.sankey-legend {
+		flex-wrap: wrap;
+		row-gap: 6px;
+		column-gap: 6px;
+		margin: 8px 4px;
+	}
+
+	.legend-value {
+		font-size: 3vw;
+		min-width: 28px;
+	}
+
+	.legend-reset-btn {
+		flex: 0 0 auto;
+		align-self: center;
+		margin: 0;
+	}
 }
 
 // ── Fullscreen overlay ─────────────────────────────────────────────────────
@@ -504,21 +1021,20 @@ const layout = computed(() => {
 }
 
 .sankey-svg-full {
-	flex: 1;
 	width: 100%;
-	min-height: 0;
+	height: auto;
 	display: block;
 }
 
 @media (max-width: 770px) {
-	.sankey-modal {
-		width: 90vw;
-		height: 60vh;
-		// display: none;
+	.legend-label {
+		font-size: 3vw;
 	}
 
-	.expand-btn {
-		// display: none;
+	.sankey-modal {
+		width: 90vw;
+		height: 100%;
+		max-height: 40vh;
 	}
 }
 </style>

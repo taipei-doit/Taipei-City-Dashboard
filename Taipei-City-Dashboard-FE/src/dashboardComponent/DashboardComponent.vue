@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref } from "vue";
+import { computed, ref, onUnmounted } from "vue";
 // import "./styles/chartStyles.css";
 // import "./styles/toggleswitch.css";
 import "material-icons/iconfont/material-icons.css";
@@ -151,7 +151,8 @@ const mapAiSummaryStyle = computed(() => {
 	const { x, y } = getOffset(mapAiSummaryId.value);
 	return {
 		transform: `translate(${x}px, ${y}px)`,
-		zIndex: getZIndex(mapAiSummaryId.value),
+		// Keep the map AI summary above dashboard content but below modal backdrops.
+		zIndex: Math.min(getZIndex(mapAiSummaryId.value), 9),
 	};
 });
 
@@ -279,6 +280,12 @@ function returnChartComponent(name, svg) {
 		return svg ? MapLegendSvg : MapLegend;
 	}
 }
+
+onUnmounted(() => {
+	if (showMapAiSummaryBox.value) {
+		close(mapAiSummaryId.value);
+	}
+});
 </script>
 
 <template>

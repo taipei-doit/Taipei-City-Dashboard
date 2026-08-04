@@ -7,7 +7,7 @@ const windowOffsets = ref({});
 
 const CASCADE_STEP = 32;
 const CASCADE_MAX = 8;
-const BASE_Z_INDEX = 1000;
+const BASE_Z_INDEX = 9;
 
 export function useWindowManager() {
 	function open(id) {
