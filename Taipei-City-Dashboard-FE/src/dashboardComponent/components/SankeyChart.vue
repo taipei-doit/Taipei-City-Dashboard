@@ -10,9 +10,6 @@ const filterMax = ref(null);
 let activeThumb = null; // 'min' | 'max'
 let activeTrackEl = null;
 
-const LEGEND_TRACK_W = 140;
-const LEGEND_THUMB_R = 3; // 對應長方形寬度(6px)的一半
-
 function thumbLeftPx(pct) {
 	return LEGEND_THUMB_R + pct * (LEGEND_TRACK_W - LEGEND_THUMB_R * 2);
 }
@@ -49,6 +46,8 @@ const GAP = 4;
 const isMobile =
 	typeof window !== "undefined" &&
 	window.matchMedia?.("(max-width: 770px)").matches;
+const LEGEND_TRACK_W = isMobile ? 104 : 140;
+const LEGEND_THUMB_R = 3; // 對應長方形寬度(6px)的一半
 const PAD_TOP = isMobile ? 28 : 36;
 const PAD_BOT = isMobile ? 0 : 6;
 const PAD_L = 250;
@@ -71,6 +70,10 @@ const tipX = ref(0);
 const tipY = ref(0);
 const tipOnLeft = ref(false);
 const isExpanded = ref(false);
+const TOOLTIP_OFFSET_X = 14;
+const TOOLTIP_OFFSET_Y = -10;
+const TOOLTIP_EDGE_PAD = 12;
+const TOOLTIP_MAX_W = 320;
 
 // ── Helpers ────────────────────────────────────────────────────────────────
 function darken(hex, percent = 20) {
@@ -176,6 +179,35 @@ function onPathMouseLeave() {
 	hoveredTip.value = null;
 }
 
+const tooltipStyle = computed(() => {
+	if (!hoveredTip.value) return {};
+
+	const viewportW =
+		typeof window !== "undefined" ? window.innerWidth : Number.POSITIVE_INFINITY;
+	const viewportH =
+		typeof window !== "undefined" ? window.innerHeight : Number.POSITIVE_INFINITY;
+	const maxWidth = Math.min(TOOLTIP_MAX_W, Math.max(180, viewportW - TOOLTIP_EDGE_PAD * 2));
+	const estimatedHeight = 72;
+	const preferredLeft = tipOnLeft.value
+		? tipX.value - TOOLTIP_OFFSET_X - maxWidth
+		: tipX.value + TOOLTIP_OFFSET_X;
+	const clampedLeft = Math.min(
+		Math.max(TOOLTIP_EDGE_PAD, preferredLeft),
+		Math.max(TOOLTIP_EDGE_PAD, viewportW - maxWidth - TOOLTIP_EDGE_PAD),
+	);
+	const preferredTop = tipY.value + TOOLTIP_OFFSET_Y;
+	const clampedTop = Math.min(
+		Math.max(TOOLTIP_EDGE_PAD, preferredTop),
+		Math.max(TOOLTIP_EDGE_PAD, viewportH - estimatedHeight - TOOLTIP_EDGE_PAD),
+	);
+
+	return {
+		left: `${clampedLeft}px`,
+		top: `${clampedTop}px`,
+		maxWidth: `${maxWidth}px`,
+	};
+});
+
 function handleExpand() {
 	// if (window.innerWidth < 770) {
 	// 	dialogStore.showNotification("fail","放大檢視僅限電腦版！");
@@ -195,6 +227,9 @@ const layout = computed(() => {
 			l.target_layer != null &&
 			l.source_layer !== l.target_layer,
 	);
+	const rawValues = links.map((l) => l.value);
+	const rawMinV = rawValues.length ? Math.min(...rawValues) : 0;
+	const rawMaxV = rawValues.length ? Math.max(...rawValues) : 1;
 
 	const n =
 		layerLabels.length ||
@@ -210,6 +245,7 @@ const layout = computed(() => {
 			paths: [],
 			n,
 			padTop: PAD_TOP,
+			valueRange: { min: rawMinV, max: rawMaxV },
 		};
 
 	const svgW = Math.max(800, PAD_L + PAD_R + n * 180);
@@ -326,10 +362,13 @@ const layout = computed(() => {
 		}
 	}
 
-	const allValues = aggLinks.map((l) => l.value);
-	const minV = allValues.length ? Math.min(...allValues) : 0;
-	const maxV = allValues.length ? Math.max(...allValues) : 1;
-	const normalize = (v) => (maxV === minV ? 0.5 : (v - minV) / (maxV - minV));
+	const renderedValues = aggLinks.map((l) => l.value);
+	const renderedMinV = renderedValues.length ? Math.min(...renderedValues) : 0;
+	const renderedMaxV = renderedValues.length ? Math.max(...renderedValues) : 1;
+	const normalize = (v) =>
+		renderedMaxV === renderedMinV
+			? 0.5
+			: (v - renderedMinV) / (renderedMaxV - renderedMinV);
 
 	const sourceHeightMap = new Map();
 	const targetHeightMap = new Map();
@@ -400,6 +439,11 @@ const layout = computed(() => {
 		const mx = (x1 + x2) / 2;
 
 		paths.push({
+			key: linkKey,
+			source: l.source,
+			source_layer: l.source_layer,
+			target: l.target,
+			target_layer: l.target_layer,
 			d: [
 				`M ${x1} ${y1}`,
 				`C ${mx} ${y1} ${mx} ${y2} ${x2} ${y2}`,
@@ -429,7 +473,7 @@ const layout = computed(() => {
 		paths,
 		n,
 		padTop: PAD_TOP,
-		valueRange: { min: minV, max: maxV },
+		valueRange: { min: rawMinV, max: rawMaxV },
 	};
 });
 
@@ -532,15 +576,7 @@ function resetFilter() {
     <div
       v-if="hoveredTip"
       class="sankey-tooltip"
-      :style="
-        tipOnLeft
-          ? {
-            left: tipX - 14 + 'px',
-            top: tipY - 10 + 'px',
-            transform: 'translateX(-100%)',
-          }
-          : { left: tipX + 14 + 'px', top: tipY - 10 + 'px' }
-      "
+      :style="tooltipStyle"
     >
       {{ hoveredTip }}
     </div>
@@ -570,7 +606,10 @@ function resetFilter() {
     <!-- Legend -->
     <div class="sankey-legend">
       <span class="legend-value">{{ formatValue(effectiveMin) }} 次</span>
-      <div class="legend-track">
+      <div
+        class="legend-track"
+        :style="{ width: `${LEGEND_TRACK_W}px` }"
+      >
         <div
           class="legend-gradient"
           :style="`background: linear-gradient(to right, ${colorLowCss}, ${colorHighCss})`"
@@ -638,24 +677,13 @@ function resetFilter() {
           <div
             v-if="hoveredTip"
             class="sankey-tooltip"
-            :style="
-              tipOnLeft
-                ? {
-                  left: tipX - 14 + 'px',
-                  top: tipY - 10 + 'px',
-                  transform: 'translateX(-100%)',
-                }
-                : {
-                  left: tipX + 14 + 'px',
-                  top: tipY - 10 + 'px',
-                }
-            "
+            :style="tooltipStyle"
           >
             {{ hoveredTip }}
           </div>
 
           <!-- 放大檢視 -->
-          <div class="sankey-scroll sankey-scroll-full">
+          <div class="sankey-scroll">
             <SankeyCanvas
               :layout="filteredLayout"
               :svg-h="layout.svgH || BASE_SVG_H"
@@ -674,7 +702,10 @@ function resetFilter() {
             <span class="legend-value">{{
               formatValue(effectiveMin)
             }} 次</span>
-            <div class="legend-track">
+            <div
+              class="legend-track"
+              :style="{ width: `${LEGEND_TRACK_W}px` }"
+            >
               <div
                 class="legend-gradient"
                 :style="`background: linear-gradient(to right, ${colorLowCss}, ${colorHighCss})`"
@@ -790,7 +821,6 @@ function resetFilter() {
 }
 
 .sankey-scroll {
-	flex: 1;
 	min-height: 0;
 	overflow-y: auto;
 	overflow-x: hidden;
@@ -806,7 +836,10 @@ function resetFilter() {
 	border-radius: 4px;
 	font-size: 0.875rem;
 	pointer-events: none;
-	white-space: nowrap;
+	white-space: normal;
+	word-break: break-word;
+	overflow-wrap: anywhere;
+	line-height: 1.4;
 	z-index: 9999;
 }
 
@@ -819,6 +852,7 @@ function resetFilter() {
 	color: var(--color-text-secondary, #aaa);
 	flex-shrink: 0;
 	margin: 12px;
+	min-width: 0;
 }
 
 .legend-value {
@@ -831,7 +865,6 @@ function resetFilter() {
 
 .legend-track {
 	position: relative;
-	width: 140px;
 	height: 15px;
 	touch-action: none;
 	user-select: none;
@@ -916,13 +949,23 @@ function resetFilter() {
 	}
 }
 
-@media (max-width: 770px) {
-	.legend-value {
-		font-size: 3.4vw;
+@media (max-width: 600px) {
+	.sankey-legend {
+		flex-wrap: wrap;
+		row-gap: 6px;
+		column-gap: 6px;
+		margin: 8px 4px;
 	}
 
-	.legend-track {
-		width: 30vw;
+	.legend-value {
+		font-size: 3vw;
+		min-width: 28px;
+	}
+
+	.legend-reset-btn {
+		flex: 0 0 auto;
+		align-self: center;
+		margin: 0;
 	}
 }
 
@@ -983,10 +1026,6 @@ function resetFilter() {
 	display: block;
 }
 
-.sankey-scroll-full {
-	flex: 1;
-}
-
 @media (max-width: 770px) {
 	.legend-label {
 		font-size: 3vw;
@@ -994,7 +1033,8 @@ function resetFilter() {
 
 	.sankey-modal {
 		width: 90vw;
-		height: 60vh;
+		height: 100%;
+		max-height: 40vh;
 	}
 }
 </style>

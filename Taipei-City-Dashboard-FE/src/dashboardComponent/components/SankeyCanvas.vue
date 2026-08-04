@@ -1,5 +1,5 @@
 <script setup>
-import { computed } from "vue";
+import { computed, ref } from "vue";
 
 const props = defineProps({
 	layout: { type: Object, required: true },
@@ -14,6 +14,9 @@ const emit = defineEmits([
 	"node-mousemove",
 	"node-mouseleave",
 ]);
+
+const hoveredNodeKey = ref(null);
+const hoveredPathKey = ref(null);
 
 function trunc(str, max = 13) {
 	return str.length > max ? str.slice(0, max) + "…" : str;
@@ -111,8 +114,95 @@ const viewBoxHeight = computed(() =>
 	Math.ceil(HEADER_HEIGHT + props.svgH + verticalPad.value * 2),
 );
 
-function onNodeMouseMove(event, nd) {
+function onNodeMouseMove(event, layerIndex, nd) {
+	hoveredPathKey.value = null;
+	hoveredNodeKey.value = getNodeKey(layerIndex, nd.name);
 	emit("node-mousemove", { event, tip: nd.tip });
+}
+
+function onNodeMouseLeave() {
+	hoveredNodeKey.value = null;
+	emit("node-mouseleave");
+}
+
+function onPathMouseMove(event, path) {
+	hoveredNodeKey.value = null;
+	hoveredPathKey.value = path.key;
+	emit("path-mousemove", { event, tip: path.tip });
+}
+
+function onPathMouseLeave() {
+	hoveredPathKey.value = null;
+	emit("path-mouseleave");
+}
+
+function getNodeKey(layerIndex, name) {
+	return `${layerIndex}|${name}`;
+}
+
+const graph = computed(() => {
+	const links = (props.layout?.paths ?? []).filter((path) => !path.hidden);
+	const outgoing = new Map();
+	const incoming = new Map();
+	const pathByKey = new Map();
+
+	for (const path of links) {
+		const sourceKey = getNodeKey(path.source_layer, path.source);
+		const targetKey = getNodeKey(path.target_layer, path.target);
+		const edge = { key: path.key, sourceKey, targetKey };
+
+		pathByKey.set(path.key, edge);
+
+		if (!outgoing.has(sourceKey)) outgoing.set(sourceKey, []);
+		outgoing.get(sourceKey).push(edge);
+
+		if (!incoming.has(targetKey)) incoming.set(targetKey, []);
+		incoming.get(targetKey).push(edge);
+	}
+
+	return { outgoing, incoming, pathByKey };
+});
+
+const activeState = computed(() => {
+	if (hoveredNodeKey.value) {
+		const nodeKeys = new Set([hoveredNodeKey.value]);
+		const pathKeys = new Set();
+
+		for (const edge of graph.value.outgoing.get(hoveredNodeKey.value) ?? []) {
+			nodeKeys.add(edge.targetKey);
+			pathKeys.add(edge.key);
+		}
+
+		for (const edge of graph.value.incoming.get(hoveredNodeKey.value) ?? []) {
+			nodeKeys.add(edge.sourceKey);
+			pathKeys.add(edge.key);
+		}
+
+		return { nodeKeys, pathKeys, hasActiveHover: true };
+	}
+
+	if (hoveredPathKey.value) {
+		const edge = graph.value.pathByKey.get(hoveredPathKey.value);
+		if (!edge) {
+			return { nodeKeys: new Set(), pathKeys: new Set(), hasActiveHover: false };
+		}
+
+		return {
+			nodeKeys: new Set([edge.sourceKey, edge.targetKey]),
+			pathKeys: new Set([edge.key]),
+			hasActiveHover: true,
+		};
+	}
+
+	return { nodeKeys: new Set(), pathKeys: new Set(), hasActiveHover: false };
+});
+
+function isNodeActive(layerIndex, name) {
+	return activeState.value.nodeKeys.has(getNodeKey(layerIndex, name));
+}
+
+function isPathActive(path) {
+	return activeState.value.pathKeys.has(path.key);
 }
 </script>
 
@@ -145,10 +235,15 @@ function onNodeMouseMove(event, nd) {
         :fill="p.fill"
         :style="{ opacity: p.hidden ? 0 : p.opacity }"
         class="sankey-link"
-        :class="{ 'sankey-link--hidden': p.hidden }"
-        @mouseenter="emit('path-mousemove', { event: $event, tip: p.tip })"
-        @mousemove="emit('path-mousemove', { event: $event, tip: p.tip })"
-        @mouseleave="emit('path-mouseleave')"
+        :class="{
+          'sankey-link--hidden': p.hidden,
+          'sankey-link--active': !p.hidden && isPathActive(p),
+          'sankey-link--dimmed':
+            !p.hidden && activeState.hasActiveHover && !isPathActive(p),
+        }"
+        @mouseenter="onPathMouseMove($event, p)"
+        @mousemove="onPathMouseMove($event, p)"
+        @mouseleave="onPathMouseLeave"
       />
 
       <!-- Nodes -->
@@ -159,6 +254,11 @@ function onNodeMouseMove(event, nd) {
         <g
           v-for="nd in nodes"
           :key="`n${li}-${nd.name}`"
+          :class="{
+            'sankey-node-group--active': isNodeActive(li, nd.name),
+            'sankey-node-group--dimmed':
+              activeState.hasActiveHover && !isNodeActive(li, nd.name),
+          }"
         >
           <rect
             :x="nd.x"
@@ -168,9 +268,14 @@ function onNodeMouseMove(event, nd) {
             :fill="nc"
             rx="2"
             class="sankey-node"
-            @mouseenter="onNodeMouseMove($event, nd)"
-            @mousemove="onNodeMouseMove($event, nd)"
-            @mouseleave="emit('node-mouseleave')"
+            :class="{
+              'sankey-node--active': isNodeActive(li, nd.name),
+              'sankey-node--dimmed':
+                activeState.hasActiveHover && !isNodeActive(li, nd.name),
+            }"
+            @mouseenter="onNodeMouseMove($event, li, nd)"
+            @mousemove="onNodeMouseMove($event, li, nd)"
+            @mouseleave="onNodeMouseLeave"
           />
         </g>
       </template>
@@ -183,6 +288,11 @@ function onNodeMouseMove(event, nd) {
         <g
           v-for="nd in nodes"
           :key="`label-${li}-${nd.name}`"
+          :class="{
+            'sankey-node-group--active': isNodeActive(li, nd.name),
+            'sankey-node-group--dimmed':
+              activeState.hasActiveHover && !isNodeActive(li, nd.name),
+          }"
         >
           <line
             v-if="Math.abs(nd.labelY - (nd.y + nd.h / 2)) > LEADER_THRESHOLD"
@@ -191,6 +301,11 @@ function onNodeMouseMove(event, nd) {
             :x2="li === 0 ? nd.x - 8 : nd.x + nodeW + 8"
             :y2="nd.labelY"
             class="label-leader"
+            :class="{
+              'label-leader--active': isNodeActive(li, nd.name),
+              'label-leader--dimmed':
+                activeState.hasActiveHover && !isNodeActive(li, nd.name),
+            }"
           />
           <text
             :x="li === 0 ? nd.x - 8 : nd.x + nodeW + 8"
@@ -198,6 +313,11 @@ function onNodeMouseMove(event, nd) {
             :text-anchor="li === 0 ? 'end' : 'start'"
             dominant-baseline="middle"
             class="node-label"
+            :class="{
+              'node-label--active': isNodeActive(li, nd.name),
+              'node-label--dimmed':
+                activeState.hasActiveHover && !isNodeActive(li, nd.name),
+            }"
           >
             {{ trunc(nd.name, li === 0 ? 13 : 16) }}
           </text>
@@ -209,23 +329,39 @@ function onNodeMouseMove(event, nd) {
 
 <style scoped lang="scss">
 .sankey-link {
-	transition: opacity 0.15s;
+	transition:
+		opacity 0.15s,
+		filter 0.15s;
 	cursor: pointer;
 
 	&--hidden {
+		opacity: 0 !important;
 		pointer-events: none;
+		filter: none !important;
 	}
 
-	&:hover {
+	&--active {
 		opacity: 1 !important;
+		filter: brightness(1.1);
+	}
+
+	&--dimmed {
+		opacity: 0.08 !important;
 	}
 }
 
 .sankey-node {
 	cursor: pointer;
-	transition: filter 0.15s;
-	&:hover {
+	transition:
+		filter 0.15s,
+		opacity 0.15s;
+
+	&--active {
 		filter: brightness(1.25);
+	}
+
+	&--dimmed {
+		opacity: 0.22;
 	}
 }
 
@@ -241,6 +377,17 @@ function onNodeMouseMove(event, nd) {
 	fill: var(--color-text, #ddd);
 	font-size: 14px;
 	pointer-events: none;
+	transition:
+		opacity 0.15s,
+		fill 0.15s;
+
+	&--active {
+		fill: var(--color-text, #fff);
+	}
+
+	&--dimmed {
+		opacity: 0.3;
+	}
 }
 
 .label-leader {
@@ -248,6 +395,18 @@ function onNodeMouseMove(event, nd) {
 	stroke-width: 1;
 	opacity: 0.5;
 	pointer-events: none;
+	transition:
+		opacity 0.15s,
+		stroke 0.15s;
+
+	&--active {
+		stroke: var(--color-text, #fff);
+		opacity: 0.8;
+	}
+
+	&--dimmed {
+		opacity: 0.16;
+	}
 }
 
 @media (max-width: 770px) {

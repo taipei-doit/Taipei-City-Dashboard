@@ -221,11 +221,11 @@ const handleDataSelection = (name) => {
 .QuartileChart {
 	width: 100%;
 	height: 100%;
-	overflow: hidden;
+	overflow: auto;
 
 	&__list {
 		height: 100%;
-		overflow: hidden;
+		overflow: auto;
 	}
 
 	&__list--scroll {
