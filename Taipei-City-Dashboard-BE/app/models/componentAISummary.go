@@ -14,6 +14,11 @@ type ComponentAISummary struct {
 	CreatedAt time.Time `json:"created_at" gorm:"column:created_at;type:timestamp with time zone;not null"`
 }
 
+// TableName pins this model to the existing singular table name.
+func (ComponentAISummary) TableName() string {
+	return "component_ai_summary"
+}
+
 // GetComponentAISummary returns the latest AI summary by index, city, and type.
 func GetComponentAISummary(
 	index string,
@@ -39,5 +44,52 @@ func GetComponentAISummary(
 		Order("updated_at DESC, id DESC").
 		First(&summary).Error
 
+	return summary, err
+}
+
+// GetComponentAISummaryByID returns one AI summary row by id.
+func GetComponentAISummaryByID(id int) (summary ComponentAISummary, err error) {
+	err = DBManager.Table("component_ai_summary").Where("id = ?", id).First(&summary).Error
+	return summary, err
+}
+
+// CreateComponentAISummary inserts a new AI summary row.
+func CreateComponentAISummary(
+	index string,
+	city string,
+	summaryType string,
+	result string,
+) (summary ComponentAISummary, err error) {
+	summary.Index = index
+	summary.City = city
+	summary.Type = summaryType
+	summary.Result = result
+	summary.CreatedAt = time.Now()
+	summary.UpdatedAt = time.Now()
+
+	err = DBManager.Table("component_ai_summary").Create(&summary).Error
+	return summary, err
+}
+
+// UpdateComponentAISummary updates one AI summary row by id.
+func UpdateComponentAISummary(
+	id int,
+	index string,
+	city string,
+	summaryType string,
+	result string,
+) (summary ComponentAISummary, err error) {
+	err = DBManager.Table("component_ai_summary").Where("id = ?", id).Updates(map[string]interface{}{
+		"index":      index,
+		"city":       city,
+		"type":       summaryType,
+		"result":     result,
+		"updated_at": time.Now(),
+	}).Error
+	if err != nil {
+		return summary, err
+	}
+
+	err = DBManager.Table("component_ai_summary").Where("id = ?", id).First(&summary).Error
 	return summary, err
 }
