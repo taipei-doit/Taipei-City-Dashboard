@@ -17,6 +17,10 @@ import HistoryChart from "../../charts/HistoryChart.vue";
 import { chartsPerDataType } from "../../../assets/configs/apexcharts/chartTypes";
 import { timeTerms } from "../../../assets/configs/AllTimes";
 import { mapTypes } from "../../../assets/configs/mapbox/mapConfig";
+import {
+	buildMapSummaryPromptPayload,
+	summarizeGeoJsonForAi,
+} from "../../../assets/utilityFunctions/summarizeGeoJsonForAi";
 import http from "../../../router/axios";
 
 const dialogStore = useDialogStore();
@@ -25,6 +29,20 @@ const contentStore = useContentStore();
 const authStore = useAuthStore();
 
 const props = defineProps(["searchParams"]);
+
+const allowedDomains = [
+	"citydashboard.taipei",
+	"test-citydashboard.taipei",
+];
+
+const isCloudEnv = allowedDomains.includes(
+	window.location.hostname,
+);
+
+const promptForChart = ref("你是台北市城市儀表板的資料分析助理。請根據提供的組件資訊與圖表資料，使用繁體中文撰寫一段 150 到 220 字的分析摘要。摘要應先簡要說明圖表的用途與指標意義，再分析資料中值得關注的趨勢、高低差異、排名、變化幅度、異常值、轉折點或群組差異，並說明這些現象可能代表的城市治理意義或使用者可以如何解讀。請優先引用資料中的具體期間、分類、區域與數值，使洞察具有依據。若資料不足以判斷原因，只能描述觀察到的現象，不可自行推測因果關係；若資料沒有明顯趨勢或差異，應如實說明資料分布相對穩定。只需輸出一段完整摘要，不要條列、不要加標題、不要描述分析步驟。");
+const promptForMap = ref("你是台北市城市儀表板的空間資料分析助理。請根據提供的地圖圖層資訊、欄位說明與實際圖層資料，使用繁體中文撰寫一段 150 到 220 字的分析摘要。摘要應先簡要說明圖層呈現的空間資料內容與主要欄位意義；若提供了地圖顏色或樣式對照，也要說明不同顏色或樣式在地圖上分別代表什麼分類或狀態，並附上對應的色碼。再分析地圖中值得關注的空間分布現象，例如集中區域、稀疏區域、群聚、熱點、區域差異、鄰近關係、覆蓋範圍或異常點位，並說明使用者可以如何解讀這些空間特徵及其可能的城市治理意義。請優先引用資料中的行政區、地點、分類、數量或指標數值，使洞察具有依據。不得僅依點位數量直接推論事件風險或需求程度，也不可在資料不足時推測因果關係；若無法辨識明顯空間特徵，應如實說明目前分布較為平均或資訊不足。只需輸出一段完整摘要，不要條列、不要加標題、不要描述分析步驟。");
+const updateMapSummaryLoading = ref(false);
+const updateChartSummaryLoading = ref(false);
 
 const { currentComponent } = storeToRefs(adminStore);
 const currentSettings = ref("all");
@@ -86,6 +104,15 @@ function handleClose() {
 }
 
 async function handleRenewAiSummary(type) {
+	if (!isCloudEnv) {
+		await handleRenewAiSummaryCloud(type);
+	} else {
+		await handleRenewAiSummaryLocal(type);
+	}
+}
+
+// 雲端環境 AI 摘要刷新機制
+async function handleRenewAiSummaryCloud(type) {
 	const { city } = currentComponent.value;
 	const { index } = currentComponent.value;
 	const key = getJobKey(city, index, type);
@@ -109,6 +136,108 @@ async function handleRenewAiSummary(type) {
 		}
 	} catch (e) {
 		console.error("觸發 AI 摘要更新任務失敗", e);
+	}
+}
+
+// 地端 AI 摘要刷新機制
+async function handleRenewAiSummaryLocal(type) {
+	if (type === "chart") {
+		updateChartSummaryLoading.value = true;
+		try {
+			const userContent = buildPrompt(currentComponent.value);
+			const res = await http.post("ai/chat/twai", {
+				stream: false,
+				messages: [
+					{ role: "system", content: promptForChart.value },
+					{ role: "user", content: userContent },
+				],
+				max_new_tokens: 512,
+				temperature: 0.7,
+			});
+			if (res?.data?.data?.content) {
+				await http.post("/component/ai-summary", {
+					index: currentComponent.value.index,
+					city: currentComponent.value.city,
+					type: "chart",
+					result: res.data.data.content,
+				});
+				refreshSummaries(currentComponent.value.city, currentComponent.value.index);
+			} else {
+				console.warn("圖表摘要更新失敗，AI 回傳內容為空");
+			}
+		} catch (e) {
+			console.error("圖表摘要更新失敗", e);
+		} finally {
+			updateChartSummaryLoading.value = false;
+		}
+	} else if (type === "map") {
+		updateMapSummaryLoading.value = true;
+
+		try {
+			if (currentComponent.value.map_config.length === 0) {
+				console.warn("地圖配置為空，無法生成摘要");
+				return;
+			}
+
+			const layerSummaries = [];
+
+			for (const mapConfig of currentComponent.value.map_config) {
+				if (!mapConfig?.index) {
+					continue;
+				}
+				if (mapConfig.source !== "geojson") continue;
+
+				try {
+					const response = await fetch(
+						`/mapData/${mapConfig.index}.geojson`,
+					);
+					if (!response.ok) {
+						throw new Error(`HTTP ${response.status}`);
+					}
+					const data = await response.json();
+					layerSummaries.push(summarizeGeoJsonForAi(data, mapConfig));
+				} catch (error) {
+					console.error(`取得 ${mapConfig.index} GeoJSON 失敗`, error);
+				}
+			}
+
+			if (layerSummaries.length === 0) {
+				console.warn("所有地圖圖層皆無法取得資料，無法生成摘要");
+				return;
+			}
+
+			const userContent = JSON.stringify(
+				buildMapSummaryPromptPayload(
+					currentComponent.value,
+					layerSummaries,
+				),
+			);
+
+			const res = await http.post("ai/chat/twai", {
+				stream: false,
+				messages: [
+					{ role: "system", content: promptForMap.value },
+					{ role: "user", content: userContent },
+				],
+				max_new_tokens: 512,
+				temperature: 0.7,
+			});
+			if (res?.data?.data?.content) {
+				await http.post("/component/ai-summary", {
+					index: currentComponent.value.index,
+					city: currentComponent.value.city,
+					type: "map",
+					result: res.data.data.content,
+				});
+				refreshSummaries(currentComponent.value.city, currentComponent.value.index);
+			} else {
+				console.warn("地圖摘要更新失敗，AI 回傳內容為空");
+			}
+		} catch (e) {
+			console.error("地圖摘要更新失敗", e);
+		} finally {
+			updateMapSummaryLoading.value = false;
+		}
 	}
 }
 
@@ -179,6 +308,27 @@ async function refreshSummaries(city, index) {
 		console.error("取得地圖 AI 摘要失敗", e);
 		responseForMap.value = null;
 	}
+}
+
+function buildPrompt(component) {
+	const { name, city, short_desc, long_desc, chart_data, updated_at } =
+		component;
+
+	// TextUnitChart: 每個指標只有一個數值，直接攤平成 key-value
+	const kpis = chart_data.map((d) => {
+		const value = Array.isArray(d.data) ? d.data[0] : d.data;
+		return `${d.name}：${value}${d.icon ?? ""}`;
+	});
+
+	return [
+		`圖表名稱：${name}`,
+		`所屬城市：${city}`,
+		`圖表說明：${short_desc}`,
+		`指標定義與脈絡：${long_desc}`,
+		`資料時間：${component.time_from === "static" ? "靜態資料（無特定期間）" : component.time_from}`,
+		`資料更新時間：${updated_at}`,
+		`本次數據：\n${kpis.join("\n")}`,
+	].join("\n\n");
 }
 
 watch(
@@ -482,16 +632,29 @@ onBeforeUnmount(() => {
               class="refresh_ai_summary"
             >
               <label>組件圖表 AI 摘要刷新</label>
-              <button
-                :disabled="isTypeUpdating('chart')"
-                @click="handleRenewAiSummary('chart')"
+              <div class="ai_summary-btns">
+                <button
+                  :disabled="isTypeUpdating('chart') || updateChartSummaryLoading"
+                  @click="handleRenewAiSummary('chart')"
+                >
+                  {{
+                    isTypeUpdating("chart") || updateChartSummaryLoading
+                      ? "更新中…"
+                      : "點擊刷新"
+                  }}
+                </button>
+              </div>
+              <div
+                v-if="!isCloudEnv"
+                class="ai_summary-settings"
               >
-                {{
-                  isTypeUpdating("chart")
-                    ? "更新中…"
-                    : "點擊刷新"
-                }}
-              </button>
+                <label>組件圖表 AI 摘要刷新 prompt 設定</label>
+                <textarea
+                  v-model="promptForChart"
+                  type="text"
+                  rows="5"
+                />
+              </div>
             </div>
             <div class="ai_summary_preview">
               <label>目前組件圖表 AI 摘要內容</label>
@@ -507,16 +670,29 @@ onBeforeUnmount(() => {
               class="refresh_ai_summary"
             >
               <label>組件地圖 AI 摘要刷新</label>
-              <button
-                :disabled="isTypeUpdating('map')"
-                @click="handleRenewAiSummary('map')"
+              <div class="ai_summary-btns">
+                <button
+                  :disabled="isTypeUpdating('map') || updateMapSummaryLoading"
+                  @click="handleRenewAiSummary('map')"
+                >
+                  {{
+                    isTypeUpdating("map") || updateMapSummaryLoading
+                      ? "更新中…"
+                      : "點擊刷新"
+                  }}
+                </button>
+              </div>
+              <div
+                v-if="!isCloudEnv"
+                class="ai_summary-settings"
               >
-                {{
-                  isTypeUpdating("map")
-                    ? "更新中…"
-                    : "點擊刷新"
-                }}
-              </button>
+                <label>組件地圖 AI 摘要刷新 prompt 設定</label>
+                <textarea
+                  v-model="promptForMap"
+                  type="text"
+                  rows="5"
+                />
+              </div>
             </div>
             <div class="ai_summary_preview">
               <label>目前組件地圖 AI 摘要內容</label>
@@ -1087,6 +1263,47 @@ onBeforeUnmount(() => {
 			opacity: 0.6;
 		}
 	}
+	.ai_summary-btns {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+	}
+	.ai_summary-setting {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 0;
+		background-color: transparent;
+		&:hover {
+			color: var(--color-border);
+		}
+	}
+}
+
+.ai_summary-settings {
+	margin-top: 0.5rem;
+	display: flex;
+	flex-direction: column;
+	gap: 0.25rem;
+
+	label {
+		margin: 0;
+	}
+
+	textarea {
+	overflow-y: auto;
+
+	&::-webkit-scrollbar {
+		width: 4px;
+	}
+	&::-webkit-scrollbar-thumb {
+		background-color: rgba(136, 135, 135, 0.5);
+		border-radius: 4px;
+	}
+	&::-webkit-scrollbar-thumb:hover {
+		background-color: rgba(136, 135, 135, 1);
+	}
+}
 }
 
 .ai_summary_preview {
