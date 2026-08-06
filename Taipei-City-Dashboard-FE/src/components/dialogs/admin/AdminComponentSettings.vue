@@ -135,6 +135,7 @@ async function handleRenewAiSummaryCloud(type) {
 			startPolling(key);
 		}
 	} catch (e) {
+		dialogStore.showNotification('fail', '觸發 AI 摘要更新任務失敗，請稍後再試');
 		console.error("觸發 AI 摘要更新任務失敗", e);
 	}
 }
@@ -163,9 +164,11 @@ async function handleRenewAiSummaryLocal(type) {
 				});
 				refreshSummaries(currentComponent.value.city, currentComponent.value.index);
 			} else {
+				dialogStore.showNotification('fail', '圖表摘要更新失敗，AI 回傳內容為空');
 				console.warn("圖表摘要更新失敗，AI 回傳內容為空");
 			}
 		} catch (e) {
+			dialogStore.showNotification('fail', '圖表摘要更新失敗，請稍後再試');
 			console.error("圖表摘要更新失敗", e);
 		} finally {
 			updateChartSummaryLoading.value = false;
@@ -175,6 +178,7 @@ async function handleRenewAiSummaryLocal(type) {
 
 		try {
 			if (currentComponent.value.map_config.length === 0) {
+				dialogStore.showNotification('fail', '地圖配置為空，無法生成摘要');
 				console.warn("地圖配置為空，無法生成摘要");
 				return;
 			}
@@ -202,7 +206,8 @@ async function handleRenewAiSummaryLocal(type) {
 			}
 
 			if (layerSummaries.length === 0) {
-				console.warn("所有地圖圖層皆無法取得資料，無法生成摘要");
+				dialogStore.showNotification('fail', '未有可解析之地圖圖層，無法生成摘要');
+				console.warn("未有可解析之地圖圖層，無法生成摘要");
 				return;
 			}
 
@@ -231,9 +236,11 @@ async function handleRenewAiSummaryLocal(type) {
 				});
 				refreshSummaries(currentComponent.value.city, currentComponent.value.index);
 			} else {
+				dialogStore.showNotification('fail', '地圖摘要更新失敗，AI 回傳內容為空');
 				console.warn("地圖摘要更新失敗，AI 回傳內容為空");
 			}
 		} catch (e) {
+			dialogStore.showNotification('fail', '地圖摘要更新失敗，請稍後再試');
 			console.error("地圖摘要更新失敗", e);
 		} finally {
 			updateMapSummaryLoading.value = false;
