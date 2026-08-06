@@ -104,7 +104,7 @@ function handleClose() {
 }
 
 async function handleRenewAiSummary(type) {
-	if (!isCloudEnv) {
+	if (isCloudEnv) {
 		await handleRenewAiSummaryCloud(type);
 	} else {
 		await handleRenewAiSummaryLocal(type);
