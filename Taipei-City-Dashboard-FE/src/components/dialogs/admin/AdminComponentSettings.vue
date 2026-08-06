@@ -187,7 +187,7 @@ async function handleRenewAiSummaryLocal(type) {
 
 			for (const mapConfig of currentComponent.value.map_config) {
 				if (!mapConfig?.index) {
-					continue; // 原本是 return，會讓整個函式中斷
+					continue;
 				}
 				if (mapConfig.source !== "geojson") continue;
 
