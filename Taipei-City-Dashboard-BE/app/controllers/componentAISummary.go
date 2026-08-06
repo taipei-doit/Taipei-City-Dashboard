@@ -4,10 +4,12 @@ package controllers
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
 	"net/url"
+	"strconv"
 	"strings"
 	"time"
 
@@ -15,12 +17,28 @@ import (
 	"TaipeiCityDashboardBE/global"
 
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
 type componentAISummaryQuery struct {
 	Index string `form:"index"`
 	City  string `form:"city"`
 	Type  string `form:"type"`
+}
+
+type componentAISummaryUpsertReq struct {
+	Index  string `json:"index" binding:"required"`
+	City   string `json:"city"`
+	Type   string `json:"type"`
+	Result string `json:"result" binding:"required"`
+}
+
+func isValidAISummaryCity(city string) bool {
+	return city == "" || city == "taipei" || city == "metrotaipei"
+}
+
+func isValidAISummaryType(summaryType string) bool {
+	return summaryType == "" || summaryType == "chart" || summaryType == "map"
 }
 
 // GetComponentAISummary retrieves AI summary content by index, city, and type.
@@ -45,10 +63,7 @@ func GetComponentAISummary(c *gin.Context) {
 	}
 
 	// city 有帶才驗證
-	if query.City != "" &&
-		query.City != "taipei" &&
-		query.City != "metrotaipei" {
-
+	if !isValidAISummaryCity(query.City) {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"status":  "error",
 			"message": "Invalid City Name",
@@ -63,9 +78,119 @@ func GetComponentAISummary(c *gin.Context) {
 	)
 
 	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			c.JSON(http.StatusOK, gin.H{
+				"status": "success",
+				"data":   "",
+			})
+			return
+		}
+
 		c.JSON(http.StatusNotFound, gin.H{
 			"status":  "error",
 			"message": "ai summary not found",
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"status": "success",
+		"data":   summary,
+	})
+}
+
+// CreateComponentAISummary creates a new AI summary row.
+func CreateComponentAISummary(c *gin.Context) {
+	var req componentAISummaryUpsertReq
+
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"status":  "error",
+			"message": err.Error(),
+		})
+		return
+	}
+
+	if !isValidAISummaryCity(req.City) {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"status":  "error",
+			"message": "Invalid City Name",
+		})
+		return
+	}
+
+	if !isValidAISummaryType(req.Type) {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"status":  "error",
+			"message": "Type must be either 'chart' or 'map'",
+		})
+		return
+	}
+
+	summary, err := models.CreateComponentAISummary(req.Index, req.City, req.Type, req.Result)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"status":  "error",
+			"message": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"status": "success",
+		"data":   summary,
+	})
+}
+
+// UpdateComponentAISummary updates one AI summary row by id.
+func UpdateComponentAISummary(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"status":  "error",
+			"message": "Invalid ai summary ID",
+		})
+		return
+	}
+
+	if _, err = models.GetComponentAISummaryByID(id); err != nil {
+		c.JSON(http.StatusNotFound, gin.H{
+			"status":  "error",
+			"message": "ai summary not found",
+		})
+		return
+	}
+
+	var req componentAISummaryUpsertReq
+	if err = c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"status":  "error",
+			"message": err.Error(),
+		})
+		return
+	}
+
+	if !isValidAISummaryCity(req.City) {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"status":  "error",
+			"message": "Invalid City Name",
+		})
+		return
+	}
+
+	if !isValidAISummaryType(req.Type) {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"status":  "error",
+			"message": "Type must be either 'chart' or 'map'",
+		})
+		return
+	}
+
+	summary, err := models.UpdateComponentAISummary(id, req.Index, req.City, req.Type, req.Result)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"status":  "error",
+			"message": err.Error(),
 		})
 		return
 	}
@@ -94,7 +219,7 @@ func TriggerComponentAISummaryDAG(c *gin.Context) {
 	}
 
 	// 驗證 type 參數限制為 chart 或 map
-	if req.Type != "" && req.Type != "chart" && req.Type != "map" {
+	if !isValidAISummaryType(req.Type) {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"status":  "error",
 			"message": "Type must be either 'chart' or 'map'",

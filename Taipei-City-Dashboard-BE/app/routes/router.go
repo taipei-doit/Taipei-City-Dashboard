@@ -120,6 +120,8 @@ func configureComponentRoutes() {
 	}
 	componentRoutes.Use(middleware.IsSysAdm())
 	{
+		componentRoutes.POST("/ai-summary", controllers.CreateComponentAISummary)
+		componentRoutes.PATCH("/ai-summary/:id", controllers.UpdateComponentAISummary)
 		componentRoutes.
 			POST("/", controllers.CreateComponent).
 			PATCH("/:id", controllers.UpdateComponent).
