@@ -26,9 +26,9 @@ const isMobile =
   typeof window !== "undefined" &&
   window.matchMedia?.("(max-width: 770px)").matches;
 const MIN_LABEL_GAP = isMobile ? 22 : 16;
+const LEADER_THRESHOLD = 1.5;
 const NODE_LABEL_FONT_SIZE = isMobile ? 18 : 14;
 const NODE_LABEL_BOUNDS_PAD = Math.ceil(NODE_LABEL_FONT_SIZE * 0.8);
-const CANVAS_BOTTOM_PAD = isMobile ? 20 : 16;
 
 // 階層大標籤預留的獨立頂部高度
 const HEADER_HEIGHT = isMobile ? 36 : 28;
@@ -92,29 +92,26 @@ const labeledLayers = computed(() =>
 		: [],
 );
 
-function getRenderedLabelY(nd) {
-	return nd.y + nd.h / 2;
-}
-
 const verticalPad = computed(() => {
-	let maxY = props.svgH + CANVAS_BOTTOM_PAD;
+	let minY = 0;
+	let maxY = props.svgH;
 
 	for (const nodes of labeledLayers.value) {
 		for (const nd of nodes) {
-			const renderedLabelY = getRenderedLabelY(nd);
-			maxY = Math.max(maxY, renderedLabelY + NODE_LABEL_BOUNDS_PAD);
-			maxY = Math.max(maxY, nd.y + nd.h + CANVAS_BOTTOM_PAD);
+			minY = Math.min(minY, nd.labelY - NODE_LABEL_BOUNDS_PAD);
+			maxY = Math.max(maxY, nd.labelY + NODE_LABEL_BOUNDS_PAD);
 		}
 	}
 
+	const topOverflow = Math.max(0, -minY);
 	const bottomOverflow = Math.max(0, maxY - props.svgH);
 
-	return bottomOverflow;
+	return Math.max(topOverflow, bottomOverflow);
 });
 
 // ViewBox 總高度 = 獨立 Header 高度 + 圖表高 + 上下擴充 Margin
 const viewBoxHeight = computed(() =>
-	Math.ceil(HEADER_HEIGHT + props.svgH + verticalPad.value),
+	Math.ceil(HEADER_HEIGHT + props.svgH + verticalPad.value * 2),
 );
 
 function onNodeMouseMove(event, layerIndex, nd) {
@@ -229,7 +226,7 @@ function isPathActive(path) {
     </g>
 
     <!-- 2. 圖表主體區塊 (下移 HEADER_HEIGHT + verticalPad，提供充足的安全防撞空間) -->
-    <g :transform="`translate(0, ${HEADER_HEIGHT})`">
+    <g :transform="`translate(0, ${HEADER_HEIGHT + verticalPad})`">
       <!-- Flow paths -->
       <path
         v-for="(p, i) in layout.paths"
@@ -298,10 +295,11 @@ function isPathActive(path) {
           }"
         >
           <line
-            :x1="li === 0 ? nd.x : nd.x + nodeW"
-            :y1="getRenderedLabelY(nd)"
+            v-if="Math.abs(nd.labelY - (nd.y + nd.h / 2)) > LEADER_THRESHOLD"
+            :x1="li === 0 ? nd.x - 4 : nd.x + nodeW + 4"
+            :y1="nd.y + nd.h / 2"
             :x2="li === 0 ? nd.x - 8 : nd.x + nodeW + 8"
-            :y2="getRenderedLabelY(nd)"
+            :y2="nd.labelY"
             class="label-leader"
             :class="{
               'label-leader--active': isNodeActive(li, nd.name),
@@ -311,7 +309,7 @@ function isPathActive(path) {
           />
           <text
             :x="li === 0 ? nd.x - 8 : nd.x + nodeW + 8"
-            :y="getRenderedLabelY(nd)"
+            :y="nd.labelY"
             :text-anchor="li === 0 ? 'end' : 'start'"
             dominant-baseline="middle"
             class="node-label"
