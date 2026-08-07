@@ -17,6 +17,8 @@ const emit = defineEmits([
 
 const hoveredNodeKey = ref(null);
 const hoveredPathKey = ref(null);
+const selectedNodeKey = ref(null);
+const selectedPathKey = ref(null);
 
 function trunc(str, max = 13) {
 	return str.length > max ? str.slice(0, max) + "…" : str;
@@ -128,6 +130,16 @@ function onNodeMouseLeave() {
 	emit("node-mouseleave");
 }
 
+function onNodeClick(event, layerIndex, nd) {
+	event.stopPropagation();
+	const nodeKey = getNodeKey(layerIndex, nd.name);
+	const isSameSelection =
+		selectedNodeKey.value === nodeKey && selectedPathKey.value === null;
+
+	selectedPathKey.value = null;
+	selectedNodeKey.value = isSameSelection ? null : nodeKey;
+}
+
 function onPathMouseMove(event, path) {
 	hoveredNodeKey.value = null;
 	hoveredPathKey.value = path.key;
@@ -139,8 +151,22 @@ function onPathMouseLeave() {
 	emit("path-mouseleave");
 }
 
+function onPathClick(event, path) {
+	event.stopPropagation();
+	const isSameSelection =
+		selectedPathKey.value === path.key && selectedNodeKey.value === null;
+
+	selectedNodeKey.value = null;
+	selectedPathKey.value = isSameSelection ? null : path.key;
+}
+
 function getNodeKey(layerIndex, name) {
 	return `${layerIndex}|${name}`;
+}
+
+function clearSelection() {
+	selectedNodeKey.value = null;
+	selectedPathKey.value = null;
 }
 
 const graph = computed(() => {
@@ -167,37 +193,50 @@ const graph = computed(() => {
 });
 
 const activeState = computed(() => {
-	if (hoveredNodeKey.value) {
-		const nodeKeys = new Set([hoveredNodeKey.value]);
+	const activeNodeKey = hoveredNodeKey.value || selectedNodeKey.value;
+	const activePathKey = hoveredPathKey.value || selectedPathKey.value;
+	const hasTransientHover = Boolean(hoveredNodeKey.value || hoveredPathKey.value);
+	const hasSelection = Boolean(selectedNodeKey.value || selectedPathKey.value);
+
+	if (activeNodeKey) {
+		const nodeKeys = new Set([activeNodeKey]);
 		const pathKeys = new Set();
 
-		for (const edge of graph.value.outgoing.get(hoveredNodeKey.value) ?? []) {
+		for (const edge of graph.value.outgoing.get(activeNodeKey) ?? []) {
 			nodeKeys.add(edge.targetKey);
 			pathKeys.add(edge.key);
 		}
 
-		for (const edge of graph.value.incoming.get(hoveredNodeKey.value) ?? []) {
+		for (const edge of graph.value.incoming.get(activeNodeKey) ?? []) {
 			nodeKeys.add(edge.sourceKey);
 			pathKeys.add(edge.key);
 		}
 
-		return { nodeKeys, pathKeys, hasActiveHover: true };
+		return {
+			nodeKeys,
+			pathKeys,
+			hasActiveState: hasTransientHover || hasSelection,
+		};
 	}
 
-	if (hoveredPathKey.value) {
-		const edge = graph.value.pathByKey.get(hoveredPathKey.value);
+	if (activePathKey) {
+		const edge = graph.value.pathByKey.get(activePathKey);
 		if (!edge) {
-			return { nodeKeys: new Set(), pathKeys: new Set(), hasActiveHover: false };
+			return {
+				nodeKeys: new Set(),
+				pathKeys: new Set(),
+				hasActiveState: false,
+			};
 		}
 
 		return {
 			nodeKeys: new Set([edge.sourceKey, edge.targetKey]),
 			pathKeys: new Set([edge.key]),
-			hasActiveHover: true,
+			hasActiveState: hasTransientHover || hasSelection,
 		};
 	}
 
-	return { nodeKeys: new Set(), pathKeys: new Set(), hasActiveHover: false };
+	return { nodeKeys: new Set(), pathKeys: new Set(), hasActiveState: false };
 });
 
 function isNodeActive(layerIndex, name) {
@@ -214,6 +253,7 @@ function isPathActive(path) {
     :viewBox="`0 0 ${layout.svgW} ${viewBoxHeight}`"
     preserveAspectRatio="xMidYMid meet"
     v-bind="$attrs"
+    @click="clearSelection"
   >
     <!-- 1. 獨立的階層大標籤區塊 (固定在頂部，不受 verticalPad 移動影響) -->
     <g class="header-layer">
@@ -242,11 +282,12 @@ function isPathActive(path) {
           'sankey-link--hidden': p.hidden,
           'sankey-link--active': !p.hidden && isPathActive(p),
           'sankey-link--dimmed':
-            !p.hidden && activeState.hasActiveHover && !isPathActive(p),
+            !p.hidden && activeState.hasActiveState && !isPathActive(p),
         }"
         @mouseenter="onPathMouseMove($event, p)"
         @mousemove="onPathMouseMove($event, p)"
         @mouseleave="onPathMouseLeave"
+        @click="onPathClick($event, p)"
       />
 
       <!-- Nodes -->
@@ -260,7 +301,7 @@ function isPathActive(path) {
           :class="{
             'sankey-node-group--active': isNodeActive(li, nd.name),
             'sankey-node-group--dimmed':
-              activeState.hasActiveHover && !isNodeActive(li, nd.name),
+              activeState.hasActiveState && !isNodeActive(li, nd.name),
           }"
         >
           <rect
@@ -274,11 +315,12 @@ function isPathActive(path) {
             :class="{
               'sankey-node--active': isNodeActive(li, nd.name),
               'sankey-node--dimmed':
-                activeState.hasActiveHover && !isNodeActive(li, nd.name),
+                activeState.hasActiveState && !isNodeActive(li, nd.name),
             }"
             @mouseenter="onNodeMouseMove($event, li, nd)"
             @mousemove="onNodeMouseMove($event, li, nd)"
             @mouseleave="onNodeMouseLeave"
+            @click="onNodeClick($event, li, nd)"
           />
         </g>
       </template>
@@ -294,7 +336,7 @@ function isPathActive(path) {
           :class="{
             'sankey-node-group--active': isNodeActive(li, nd.name),
             'sankey-node-group--dimmed':
-              activeState.hasActiveHover && !isNodeActive(li, nd.name),
+              activeState.hasActiveState && !isNodeActive(li, nd.name),
           }"
         >
           <line
@@ -306,7 +348,7 @@ function isPathActive(path) {
             :class="{
               'label-leader--active': isNodeActive(li, nd.name),
               'label-leader--dimmed':
-                activeState.hasActiveHover && !isNodeActive(li, nd.name),
+                activeState.hasActiveState && !isNodeActive(li, nd.name),
             }"
           />
           <text
@@ -318,7 +360,7 @@ function isPathActive(path) {
             :class="{
               'node-label--active': isNodeActive(li, nd.name),
               'node-label--dimmed':
-                activeState.hasActiveHover && !isNodeActive(li, nd.name),
+                activeState.hasActiveState && !isNodeActive(li, nd.name),
             }"
           >
             {{ trunc(nd.name, li === 0 ? 13 : 16) }}
