@@ -293,7 +293,7 @@ const layout = computed(() => {
 			);
 		}
 
-		const top = candidates.slice(0, TOP_N);
+		const top = i === 0 ? candidates.slice(0, TOP_N) : candidates;
 		topPerLayer.push(top);
 		setPerLayer[i] = new Set(top.map(([name]) => name));
 	}
