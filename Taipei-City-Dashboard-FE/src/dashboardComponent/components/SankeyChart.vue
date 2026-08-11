@@ -67,6 +67,7 @@ const colorHighCss = `rgb(${+COLOR_HIGH.r},${+COLOR_HIGH.g},${+COLOR_HIGH.b})`;
 
 // ── State ──────────────────────────────────────────────────────────────────
 const wrapperRef = ref(null);
+const tooltipRef = ref(null);
 const hoveredTip = ref(null);
 const tipX = ref(0);
 const tipY = ref(0);
@@ -189,18 +190,20 @@ const tooltipStyle = computed(() => {
 	const viewportH =
 		typeof window !== "undefined" ? window.innerHeight : Number.POSITIVE_INFINITY;
 	const maxWidth = Math.min(TOOLTIP_MAX_W, Math.max(180, viewportW - TOOLTIP_EDGE_PAD * 2));
-	const estimatedHeight = 72;
+	const tooltipRect = tooltipRef.value?.getBoundingClientRect();
+	const tooltipWidth = Math.min(tooltipRect?.width ?? maxWidth, maxWidth);
+	const tooltipHeight = tooltipRect?.height ?? 72;
 	const preferredLeft = tipOnLeft.value
-		? tipX.value - TOOLTIP_OFFSET_X - maxWidth
+		? tipX.value - TOOLTIP_OFFSET_X - tooltipWidth
 		: tipX.value + TOOLTIP_OFFSET_X;
 	const clampedLeft = Math.min(
 		Math.max(TOOLTIP_EDGE_PAD, preferredLeft),
-		Math.max(TOOLTIP_EDGE_PAD, viewportW - maxWidth - TOOLTIP_EDGE_PAD),
+		Math.max(TOOLTIP_EDGE_PAD, viewportW - tooltipWidth - TOOLTIP_EDGE_PAD),
 	);
 	const preferredTop = tipY.value + TOOLTIP_OFFSET_Y;
 	const clampedTop = Math.min(
 		Math.max(TOOLTIP_EDGE_PAD, preferredTop),
-		Math.max(TOOLTIP_EDGE_PAD, viewportH - estimatedHeight - TOOLTIP_EDGE_PAD),
+		Math.max(TOOLTIP_EDGE_PAD, viewportH - tooltipHeight - TOOLTIP_EDGE_PAD),
 	);
 
 	return {
@@ -277,7 +280,7 @@ const layout = computed(() => {
 	const topPerLayer = [];
 
 	const getOtherName = (layerIndex) =>
-		`${layerLabels[layerIndex] ?? `第${layerIndex + 1}層`}${OTHER_LABEL}`;
+		`${OTHER_LABEL}${layerLabels[layerIndex]}`;
 
 	const mapNodeName = (layerIndex, name) => {
 		if (topSetPerLayer[layerIndex].has(name)) return name;
@@ -609,6 +612,7 @@ function resetFilter() {
     <!-- Tooltip -->
     <div
       v-if="hoveredTip"
+      ref="tooltipRef"
       class="sankey-tooltip"
       :style="tooltipStyle"
     >
@@ -710,6 +714,7 @@ function resetFilter() {
           <!-- Tooltip（共用同一份 ref） -->
           <div
             v-if="hoveredTip"
+            ref="tooltipRef"
             class="sankey-tooltip"
             :style="tooltipStyle"
           >
