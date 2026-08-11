@@ -293,7 +293,9 @@ const layout = computed(() => {
 			);
 		}
 
-		const top = i === 0 ? candidates.slice(0, TOP_N) : candidates;
+		const top = candidates.slice(0, TOP_N);
+		// 第2、3層改為不取 TOP N,而是全部顯示
+		// const top = i === 0 ? candidates.slice(0, TOP_N) : candidates;
 		topPerLayer.push(top);
 		setPerLayer[i] = new Set(top.map(([name]) => name));
 	}
