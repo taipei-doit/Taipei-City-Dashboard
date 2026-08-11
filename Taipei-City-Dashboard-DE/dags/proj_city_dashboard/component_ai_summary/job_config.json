@@ -2,7 +2,7 @@
   "dag_infos": {
     "dag_id": "component_ai_summary",
     "start_date": "2026-07-07",
-    "schedule_interval": "0 20 * * *",
+    "schedule_interval": "0 20 1 * *",
     "catchup": false,
     "tags": ["component_ai_summary", "AI", "台北市", "Taipei-City", "組件摘要"],
     "description": "掃描 query_charts 已啟用 AI 摘要的組件,產製圖表摘要與地圖圖層摘要,寫入 component_ai_summaries",
