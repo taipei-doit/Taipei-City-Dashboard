@@ -1,5 +1,6 @@
 import json
 
+from airflow.models import Variable
 from airflow.providers.postgres.hooks.postgres import PostgresHook
 from sqlalchemy import create_engine
 from sqlalchemy.sql import text as sa_text
@@ -16,7 +17,7 @@ ROW_SAMPLE_LIMIT = 20
 CELL_TRUNCATE_LEN = 150
 QUERY_TIMEOUT_MS = 30000
 
-CHART_SYSTEM_PROMPT = (
+_DEFAULT_CHART_SYSTEM_PROMPT = (
     "你是台北市城市儀表板的資料分析助理。請根據提供的組件資訊與圖表資料，"
     "使用繁體中文撰寫一段 150 到 220 字的分析摘要。"
     "摘要應先簡要說明圖表的用途與指標意義，再分析資料中值得關注的趨勢、"
@@ -28,7 +29,7 @@ CHART_SYSTEM_PROMPT = (
     "只需輸出一段完整摘要，不要條列、不要加標題、不要描述分析步驟。"
 )
 
-MAP_SYSTEM_PROMPT = (
+_DEFAULT_MAP_SYSTEM_PROMPT = (
     "你是台北市城市儀表板的空間資料分析助理。請根據提供的地圖圖層資訊、"
     "欄位說明與實際圖層資料，使用繁體中文撰寫一段 150 到 220 字的分析摘要。"
     "摘要應先簡要說明圖層呈現的空間資料內容與主要欄位意義；"
@@ -42,6 +43,16 @@ MAP_SYSTEM_PROMPT = (
     "若無法辨識明顯空間特徵，應如實說明目前分布較為平均或資訊不足。"
     "只需輸出一段完整摘要，不要條列、不要加標題、不要描述分析步驟。"
 )
+
+
+def get_chart_system_prompt():
+    """從 Airflow Variable 取得 chart system prompt,未設定時 fallback 回預設值。"""
+    return Variable.get("ai_summary_chart_system_prompt", default_var=_DEFAULT_CHART_SYSTEM_PROMPT)
+
+
+def get_map_system_prompt():
+    """從 Airflow Variable 取得 map system prompt,未設定時 fallback 回預設值。"""
+    return Variable.get("ai_summary_map_system_prompt", default_var=_DEFAULT_MAP_SYSTEM_PROMPT)
 
 
 def fetch_enabled_components(engine):
@@ -464,7 +475,7 @@ def ai_summary_etl(**kwargs):
                     except Exception as e:
                         print(f"[{index}/{city}] query_chart execution failed: {e}")
 
-                chart_summary = generate_text(CHART_SYSTEM_PROMPT, build_chart_prompt(component, query_result))
+                chart_summary = generate_text(get_chart_system_prompt(), build_chart_prompt(component, query_result))
                 write_summary(engine, index, city, "chart", chart_summary)
                 print(f"[{index}/{city}] chart summary written.")
             except Exception as e:
@@ -489,7 +500,7 @@ def ai_summary_etl(**kwargs):
 
         try:
             map_prompt = build_map_prompt(component, map_rows, map_query_infos)
-            map_summary = generate_text(MAP_SYSTEM_PROMPT, map_prompt)
+            map_summary = generate_text(get_map_system_prompt(), map_prompt)
             write_summary(engine, index, city, "map", map_summary)
             print(f"[{index}/{city}] map summary written.")
         except Exception as e:
