@@ -1,4 +1,9 @@
 geopandas==1.1.1
+# geopandas 1.x 改用 pyogrio 當預設 IO engine，不再相依 fiona（0.13 時代是靠它連帶裝進來的）。
+# dags/utils/extract_stage.py 有模組層級的 import fiona，還有 fiona.open() 與 KML 的
+# fiona.drvsupport 設定，少了會讓 147 支 import extract_stage 的 DAG 在 parse 階段就掛掉，
+# 因此這裡明列，不要當成多餘的相依移除。
+fiona==1.10.1
 GeoAlchemy2==0.14.7
 pytest==8.1.1
 openpyxl==3.1.2
