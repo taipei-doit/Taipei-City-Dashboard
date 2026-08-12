@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(helm get values:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

@@ -82,16 +82,8 @@ def _cooling_point(**kwargs):
     gdata = add_point_wkbgeometry_column_to_df(
         data, x=data["longitude"], y=data["latitude"], from_crs=FROM_CRS
     )
-    # Ensure all required columns exist; fill missing with NaN
-    required_cols = ["data_time", "id", "location_type", "name", "area", "address", "longitude", "latitude",
-                     "localcall", "ext", "mobile", "contact_other", "open_time", "fan", "aircon",
-                     "toilet", "seat", "water_facility", "accessible_seat", "features", "note"]
-    for col in required_cols:
-        if col not in data.columns:
-            data[col] = pd.NA
-    # Geometry column will be added later; ensure it exists after geometry processing
     # select column
-    ready_data = gdata[required_cols + ["wkb_geometry"]]
+    ready_data = gdata[["data_time", "id", "location_type", "name", "area", "address", "longitude", "latitude", "localcall", "ext", "mobile", "contact_other", "open_time", "fan", "aircon", "toilet", "seat", "water_facility", "accessible_seat", "features", "note", "wkb_geometry"]]
 
     # Load
     engine = create_engine(ready_data_db_uri)
