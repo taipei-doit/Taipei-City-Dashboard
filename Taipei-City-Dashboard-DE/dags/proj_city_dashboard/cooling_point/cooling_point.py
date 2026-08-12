@@ -1,4 +1,10 @@
+from airflow import DAG  # noqa: F401
 from operators.common_pipeline import CommonDag
+
+# 上面那個 DAG import 看起來沒用到，但不能刪：Airflow 的 DagBag 在 safe mode
+# （AIRFLOW__CORE__DAG_DISCOVERY_SAFE_MODE，預設 True）下，只會 parse 內容同時
+# 含 "dag" 與 "airflow" 兩個字串的 .py，不符合的直接跳過，而且不會列進 import
+# errors —— DAG 會安靜地整個消失。本 repo 其餘所有 DAG 檔都含這個字串。
 
 # 涼適點分成兩個資料集發布，欄位結構相同，合併寫入同一張 cooling_point_tpe。
 SOURCES = [
