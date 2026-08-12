@@ -1,14 +1,13 @@
 from operators.common_pipeline import CommonDag
 
-# 涼適點分成兩個資料集發布，欄位結構相同，合併進同一張表，以 provider 欄位區分。
-# 兩邊的「編號」都自己從 1 開始編，併表後 id 不唯一，要辨識單一點位請用 (provider, id)
-# 或表上的 ogc_fid。
+# 涼適點分成兩個資料集發布，欄位結構相同，合併寫入同一張 cooling_point_tpe。
 SOURCES = [
-    # (rid, provider)
+    # (rid, 來源, 是否沿用來源「編號」)
     # 臺北市涼適點 https://data.taipei/dataset/detail?id=a98a3e0e-a36f-43fa-82f8-b09a3011a47a
-    ("ae7e5986-859d-4294-b289-7c1b2e7c23f1", "市府"),
+    ("ae7e5986-859d-4294-b289-7c1b2e7c23f1", "市府", True),
     # 臺北市民間涼適點 https://data.taipei/dataset/detail?id=a1b59e2f-057a-41e2-ae09-482ba5af7d58
-    ("9269d8b5-f4fa-44ab-8f2c-5203ba70ebe0", "民間"),
+    # 這份的「編號」同樣自己從 1 開始，與市府那份會撞號，故不沿用，id 留空。
+    ("9269d8b5-f4fa-44ab-8f2c-5203ba70ebe0", "民間", False),
 ]
 
 COLUMN_MAP = {
@@ -28,8 +27,8 @@ COLUMN_MAP = {
     "冷氣": "aircon",
     "廁所": "toilet",
     "座位": "seat",
-    # 兩個資料集對同一欄用了不同標題（民間版把說明括號拿掉），兩種都收；
-    # rename 會忽略對不到的 key，多放不會有副作用。
+    # 兩份 CSV 對同一欄用了不同標題（民間版把說明括號拿掉），一律收斂成 water_facility。
+    # rename 會忽略對不到的 key，兩種都列著不會有副作用。
     "飲水設施（例如：飲水機；直飲台；奉茶點等）": "water_facility",
     "飲水設施": "water_facility",
     "無障礙座位": "accessible_seat",
@@ -39,7 +38,6 @@ COLUMN_MAP = {
 
 READY_COLUMNS = [
     "data_time",
-    "provider",
     "id",
     "location_type",
     "name",
@@ -91,21 +89,23 @@ def _cooling_point(**kwargs):
 
     # Extract
     frames = []
-    for rid, provider in SOURCES:
+    for rid, source, keep_id in SOURCES:
         response = requests.get(URL.format(rid=rid), verify=False)
         csv_text = response.content.decode("big5")
-        # dtype=str: 市話/分機/手機 有前導零，讓 pandas 自動推斷會變 float64，
-        # 寫進 varchar 會多一個 .0 尾巴（972867232 -> 972867232.0）。
-        raw_data = pd.read_csv(StringIO(csv_text), dtype=str)
-        # 先各自正規化欄名再 concat：兩份 CSV 對「飲水設施」用不同標題，
+        raw_data = pd.read_csv(StringIO(csv_text))
+        # 先各自正規化欄名再 concat：兩份 CSV 的「飲水設施」標題不同，
         # 若等 concat 完才 rename，兩個標題會同時存在而產生兩個 water_facility 欄。
         raw_data = raw_data.rename(columns=COLUMN_MAP)
-        raw_data["provider"] = provider
-        print(f"Extracted {len(raw_data)} rows from {provider} ({rid}).")
+        if not keep_id:
+            raw_data["id"] = pd.NA
+        print(f"Extracted {len(raw_data)} rows from {source} ({rid}).")
         frames.append(raw_data)
 
     # Transform
     data = pd.concat(frames, ignore_index=True)
+    # Int64（可空整數）：民間那份 id 是 NA，若讓 pandas 退回 float64，
+    # 既有的 494 筆會從 1 變成 1.0 寫進表裡。
+    data["id"] = data["id"].astype("Int64")
     # 來源為人工維護，經度偶有「緯度，經度」全形逗號並列的填法，取右側經度。
     # mask 全 False 時 expand=True 會回傳 0 欄的 DataFrame，取 [1] 會 KeyError，故先擋掉。
     data["longitude"] = data["longitude"].astype(str).str.replace("，", ",").str.strip()

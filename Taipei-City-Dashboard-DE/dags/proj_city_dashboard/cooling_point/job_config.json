@@ -5,7 +5,7 @@
         "schedule_interval": "0 18 4,25 * *",
         "catchup": false,
         "tags": ["cooling_point_tpe", "臺北市涼適點", "臺北市民間涼適點", "市府資料平台"],
-        "description": "臺北市轄內戶外及室內涼適場所（市府＋民間，以 provider 欄位區分）",
+        "description": "臺北市轄內戶外及室內涼適場所（含市府與民間單位提供之場所）",
         "default_args": {
             "owner": "airflow",
             "email": ["DEFAULT_EMAIL_LIST"],
@@ -31,7 +31,7 @@
         "output_coordinate": "EPSG:4326",
         "is_geometry": 1,
         "dataset_description": "臺北市轄內戶外及室內涼適場所，含市府與民間單位提供之場所",
-        "etl_description": "由資料平台下載市府與民間兩份CSV（Big5），合併並標準化欄位後以WKB點位寫入PostgreSQL，provider 欄位標示來源。",
+        "etl_description": "由資料平台下載市府與民間兩份CSV（Big5），合併並標準化欄位後以WKB點位寫入PostgreSQL。民間那份的「編號」會與市府撞號，故 id 留空。",
         "sensitivity": "public"
     }
 }
