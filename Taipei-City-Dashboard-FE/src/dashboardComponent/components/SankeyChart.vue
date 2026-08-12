@@ -52,11 +52,12 @@ const PAD_TOP = isMobile ? 28 : 36;
 const PAD_BOT = isMobile ? 0 : 6;
 const PAD_L = 250;
 const PAD_R = 250;
-const BASE_SVG_H = isMobile ? 360 : 500;
+const BASE_SVG_H = isMobile ? 420 : 620;
 const TOP_N = 25;
 const NC = darken(props.chart_config.color?.[0], 25) ?? "#6b8fa3";
 const MIN_LABEL_GAP = isMobile ? 22 : 16;
-const MIN_NODE_H = 3;
+const MIN_NODE_H = isMobile ? 14 : 18;
+const EXTRA_NODE_H = isMobile ? 12 : 16;
 
 const COLOR_LOW = hexToRGB(props.chart_config.color?.[0] ?? "#3a6ea5");
 const COLOR_HIGH = hexToRGB(props.chart_config.color?.[1] ?? "#e05c5c");
@@ -293,6 +294,8 @@ const layout = computed(() => {
 		}
 
 		const top = candidates.slice(0, TOP_N);
+		// 第2、3層改為不取 TOP N,而是全部顯示
+		// const top = i === 0 ? candidates.slice(0, TOP_N) : candidates;
 		topPerLayer.push(top);
 		setPerLayer[i] = new Set(top.map(([name]) => name));
 	}
@@ -304,6 +307,7 @@ const layout = computed(() => {
 	const minAvailH =
 		maxNodeCount > 0
 			? maxNodeCount * MIN_NODE_H +
+				maxNodeCount * EXTRA_NODE_H +
 				Math.max(0, maxNodeCount - 1) * MIN_LABEL_GAP
 			: 0;
 	const svgH = Math.max(BASE_SVG_H, PAD_TOP + PAD_BOT + minAvailH);
