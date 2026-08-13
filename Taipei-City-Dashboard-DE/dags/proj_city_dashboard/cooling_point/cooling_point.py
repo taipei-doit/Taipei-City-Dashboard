@@ -32,11 +32,9 @@ def _cooling_point(**kwargs):
     history_table = dag_infos.get("ready_data_history_table")
     geometry_type = "Point"
     FROM_CRS = 4326
-    URL = 'https://data.taipei/api/frontstage/tpeod/dataset/resource.download?rid=ae7e5986-859d-4294-b289-7c1b2e7c23f1'
-    response = requests.get(URL, verify=False)
-    # 讀取 CSV (Big5 編碼)
-    csv_text = response.content.decode('big5')
-    raw_data = pd.read_csv(StringIO(csv_text))
+    # Load CSV from local file (new_cooling_point.csv) with Big5 encoding
+    csv_path = data_path or "new_cooling_point.csv"
+    raw_data = pd.read_csv(csv_path, encoding='big5')
     # Transform
     data = raw_data.copy()
     # Transform: rename fields to standardized columns
