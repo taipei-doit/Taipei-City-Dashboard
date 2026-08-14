@@ -1,11 +1,12 @@
 <script setup>
-import { computed, ref } from "vue";
+import { computed, ref, onUnmounted } from "vue";
 // import "./styles/chartStyles.css";
 // import "./styles/toggleswitch.css";
 import "material-icons/iconfont/material-icons.css";
 import { getComponentDataTimeframe } from "./utilities/dataTimeframe";
 import { timeTerms } from "./utilities/AllTimes";
 import { chartTypes } from "./utilities/chartTypes";
+import { useWindowManager } from "../composables/useWindowManager";
 
 import ComponentTag from "./components/ComponentTag.vue";
 import TagTooltip from "./components/TagTooltip.vue";
@@ -28,6 +29,11 @@ import BarChartWithGoal from "./components/BarChartWithGoal.vue";
 import IconPercentChart from "./components/IconPercentChart.vue";
 import IndicatorChart from "./components/IndicatorChart.vue";
 import TextUnitChart from "./components/TextUnitChart.vue";
+import QuartileChart from "./components/QuartileChart.vue";
+import NegativeColumnChart from "./components/NegativeColumnChart.vue";
+import BubbleChart from "./components/BubbleChart.vue";
+import SankeyChart from "./components/SankeyChart.vue";
+import SunburstChart from "./components/SunburstChart.vue";
 
 import MapLegendSvg from "./assets/chart/MapLegend.svg";
 import DistrictChartSvg from "./assets/chart/DistrictChart.svg";
@@ -48,7 +54,16 @@ import BarChartWithGoalSvg from "./assets/chart/BarChartWithGoal.svg";
 import TreemapChartSvg from "./assets/chart/TreemapChart.svg";
 import IndicatorChartSvg from "./assets/chart/IndicatorChart.svg";
 import TextUnitChartSvg from "./assets/chart/TextUnitChart.svg";
+import BubbleChartSvg from "./assets/chart/BubbleChart.svg";
+import SankeyChartSvg from "./assets/chart/SankeyChart.svg";
+import SunburstChartSvg from "./assets/chart/SunburstChart.svg";
+import NegativeColumnChartSvg from "./assets/chart/NegativeColumnChart.svg";
+import QuartileChartSvg from "./assets/chart/QuartileChart.svg";
 
+import AiSummaryIcon from "../components/icons/AiSummaryIcon.vue";
+import AiSummaryBox from "../components/dialogs/AiSummaryBox.vue";
+import MapAiSummaryIcon from "../components/icons/MapAiSummaryIcon.vue";
+import MapAiSummaryBox from "../components/dialogs/MapAiSummaryBox.vue";
 
 const props = defineProps({
 	style: { type: Object, default: () => ({}) },
@@ -57,14 +72,14 @@ const props = defineProps({
 		default: "default",
 		validator: (value) =>
 			["default", "large", "map", "half", "halfmap", "preview"].includes(
-				value
+				value,
 			),
 	},
 	config: { type: Object, required: true },
 	selectBtn: { type: Boolean, default: false },
 	selectBtnDisabled: { type: Boolean, default: false },
-	selectBtnList: { type: Array, default: () => ([])  },
-	cityTag: { type: Array, default: () => ([]) },
+	selectBtnList: { type: Array, default: () => [] },
+	cityTag: { type: Array, default: () => [] },
 	favoriteBtn: { type: Boolean, default: false },
 	isFavorite: { type: Boolean, default: false },
 	deleteBtn: { type: Boolean, default: false },
@@ -73,7 +88,7 @@ const props = defineProps({
 	infoBtnText: { type: String, default: "組件資訊" },
 	toggleDisable: { type: Boolean, default: false },
 	footer: { type: Boolean, default: true },
-	activeCity: { type: String, default: '' },
+	activeCity: { type: String, default: "" },
 	toggleOn: { type: Boolean, default: false },
 });
 
@@ -88,10 +103,10 @@ const emits = defineEmits([
 	"clearByParamFilter",
 	"clearByLayerFilter",
 	"fly",
-	"changeCity"
+	"changeCity",
 ]);
 
-const activeChart = ref(props.config.chart_config.types[0]);
+const activeChart = ref(props.config?.chart_config?.types?.[0] ?? null);
 const activeCity = computed({
 	get: () => props.activeCity,
 	set: (value) => {
@@ -102,6 +117,10 @@ const activeCity = computed({
 	},
 });
 
+const safeChartData = computed(() => {
+	return props.config?.chart_data ?? [];
+});
+
 const toggleOn = computed({
 	get: () => props.toggleOn,
 	set: (value) => {
@@ -109,8 +128,33 @@ const toggleOn = computed({
 	},
 });
 
+// const { isOpen, open, close } = useActiveMapSummary();
+const { open, close, isOpen, getOffset, getZIndex } = useWindowManager();
+const mapAiSummaryId = computed(() => `map-${props.config.index}`);
+const showMapAiSummaryBox = computed(() => isOpen(mapAiSummaryId.value));
+
 const mousePosition = ref({ x: null, y: null });
 const showTagTooltip = ref(false);
+const showAiSummaryBox = ref(false);
+
+const handleAiSummaryBoxToggle = () => {
+	showAiSummaryBox.value = !showAiSummaryBox.value;
+};
+
+function handleMapAiSummaryBoxToggle() {
+	showMapAiSummaryBox.value
+		? close(mapAiSummaryId.value)
+		: open(mapAiSummaryId.value);
+}
+
+const mapAiSummaryStyle = computed(() => {
+	const { x, y } = getOffset(mapAiSummaryId.value);
+	return {
+		transform: `translate(${x}px, ${y}px)`,
+		// Keep the map AI summary above dashboard content but below modal backdrops.
+		zIndex: Math.min(getZIndex(mapAiSummaryId.value), 9),
+	};
+});
 
 // Parses time data into display format
 const dataTime = computed(() => {
@@ -126,7 +170,7 @@ const dataTime = computed(() => {
 	const { timefrom, timeto } = getComponentDataTimeframe(
 		props.config.time_from,
 		props.config.time_to,
-		true
+		true,
 	);
 	if (props.config.time_from === "day_start") {
 		return `${timefrom.slice(0, 16)} ~ ${timeto.slice(11, 14)}00`;
@@ -222,10 +266,26 @@ function returnChartComponent(name, svg) {
 		return svg ? IndicatorChartSvg : IndicatorChart;
 	case "TextUnitChart":
 		return svg ? TextUnitChartSvg : TextUnitChart;
+	case "QuartileChart":
+		return svg ? QuartileChartSvg : QuartileChart;
+	case "NegativeColumnChart":
+		return svg ? NegativeColumnChartSvg : NegativeColumnChart;
+	case "BubbleChart":
+		return svg ? BubbleChartSvg : BubbleChart;
+	case "SankeyChart":
+		return svg ? SankeyChartSvg : SankeyChart;
+	case "SunburstChart":
+		return svg ? SunburstChartSvg : SunburstChart;
 	default:
 		return svg ? MapLegendSvg : MapLegend;
 	}
 }
+
+onUnmounted(() => {
+	if (showMapAiSummaryBox.value) {
+		close(mapAiSummaryId.value);
+	}
+});
 </script>
 
 <template>
@@ -283,7 +343,7 @@ function returnChartComponent(name, svg) {
             class="city-tag-container"
           >
             <ComponentTag
-              v-for=" city in props.cityTag"
+              v-for="city in props.cityTag"
               :key="city"
               :icon="''"
               :text="city.name"
@@ -298,6 +358,13 @@ function returnChartComponent(name, svg) {
         v-if="['default', 'half', 'preview'].includes(mode)"
         class="dashboardcomponent-header-button"
       >
+        <button
+          v-if="props.config.enable_ai_summary"
+          class="ai-summary-btn"
+          @click="handleAiSummaryBoxToggle"
+        >
+          <AiSummaryIcon />
+        </button>
         <button
           v-if="addBtn"
           @click="$emit('add', config.id, config.name)"
@@ -325,6 +392,16 @@ function returnChartComponent(name, svg) {
         v-else-if="mode.includes('map')"
         class="dashboardcomponent-header-toggle"
       >
+        <button
+          v-if="
+            props.config.enable_ai_summary &&
+              props.config.map_config.length > 0
+          "
+          class="ai-summary-btn"
+          @click="handleMapAiSummaryBoxToggle"
+        >
+          <MapAiSummaryIcon />
+        </button>
         <label class="toggleswitch">
           <input
             v-model="toggleOn"
@@ -337,10 +414,7 @@ function returnChartComponent(name, svg) {
     </div>
     <!-- Control Buttons -->
     <div
-      v-if="
-        (!mode.includes('map') || toggleOn) &&
-          mode !== 'preview'
-      "
+      v-if="(!mode.includes('map') || toggleOn) && mode !== 'preview'"
       class="dashboardcomponent-control"
     >
       <select
@@ -348,7 +422,7 @@ function returnChartComponent(name, svg) {
         v-model="activeCity"
         name="city"
         class="selectBtn"
-        :class="{'selectBtn-disabled': selectBtnDisabled}"
+        :class="{ 'selectBtn-disabled': selectBtnDisabled }"
       >
         <template
           v-for="city in props.selectBtnList"
@@ -368,7 +442,8 @@ function returnChartComponent(name, svg) {
           :key="`${config.index}-${item}-button`"
           :class="{
             'dashboardcomponent-control-group-button': true,
-            'dashboardcomponent-control-group-active': activeChart === item,
+            'dashboardcomponent-control-group-active':
+              activeChart === item,
           }"
           @click="changeActiveChart(item)"
         >
@@ -381,9 +456,7 @@ function returnChartComponent(name, svg) {
       v-if="mode === 'preview'"
       class="preview-content"
     >
-      <div
-        class="preview-content-id"
-      >
+      <div class="preview-content-id">
         <div
           v-if="mode === 'preview'"
           class="city-tag-container-preview"
@@ -425,7 +498,7 @@ function returnChartComponent(name, svg) {
         :active-chart="activeChart"
         :active-city="activeCity"
         :chart_config="config.chart_config"
-        :series="config.chart_data"
+        :series="safeChartData"
         :map_config="config.map_config"
         :map_filter="config.map_filter"
         :map_filter_on="mode.includes('map')"
@@ -487,7 +560,11 @@ function returnChartComponent(name, svg) {
           class="hide-if-mobile"
         />
         <ComponentTag
-          v-if="config.map_config && config.map_config[0] !== null && config.map_config?.length > 0"
+          v-if="
+            config.map_config &&
+              config.map_config[0] !== null &&
+              config.map_config?.length > 0
+          "
           :icon="mode === 'preview' ? '' : 'map'"
           text="空間資料"
           class="hide-if-mobile"
@@ -524,6 +601,21 @@ function returnChartComponent(name, svg) {
       "
       :has-history="config.history_config?.range ? true : false"
     />
+    <AiSummaryBox
+      v-if="showAiSummaryBox"
+      :index="props.config.index"
+      :name="props.config.name"
+      :city="props.config.city"
+      @close="handleAiSummaryBoxToggle"
+    />
+    <MapAiSummaryBox
+      v-if="showMapAiSummaryBox"
+      :index="props.config.index"
+      :name="props.config.name"
+      :city="props.config.city"
+      :style="mapAiSummaryStyle"
+      @close="close(mapAiSummaryId)"
+    />
   </Teleport>
 </template>
 
@@ -531,7 +623,8 @@ function returnChartComponent(name, svg) {
 * {
 	margin: 0;
 	padding: 0;
-	font-family: "微軟正黑體", "Microsoft JhengHei", "Droid Sans", "Open Sans",
+	font-family:
+		"微軟正黑體", "Microsoft JhengHei", "Droid Sans", "Open Sans",
 		"Helvetica";
 	overflow: hidden;
 }
@@ -643,10 +736,7 @@ button:hover {
 			button span {
 				color: var(--color-complement-text);
 				font-family: var(--font-icon);
-				font-size: calc(
-					var(--font-l) *
-						var(--font-to-icon)
-				);
+				font-size: calc(var(--font-l) * var(--font-to-icon));
 				transition: color 0.2s;
 
 				&:hover {
@@ -664,6 +754,9 @@ button:hover {
 		}
 
 		&-toggle {
+			display: flex;
+			flex-shrink: 0;
+			align-items: center;
 			min-height: var(--font-ms);
 			min-width: 2rem;
 			margin-top: 4px;
@@ -715,15 +808,17 @@ button:hover {
 				color: var(--color-complement-text);
 				font-size: var(--font-s);
 				text-align: center;
-				transition: color 0.2s, opacity 0.2s;
+				transition:
+					color 0.2s,
+					opacity 0.2s;
 				user-select: none;
-	
+
 				&:hover {
 					opacity: 1;
 					color: white;
 				}
 			}
-	
+
 			&-active {
 				background-color: var(--color-complement-text);
 				color: white;
@@ -940,9 +1035,7 @@ button:hover {
 				width: 40px;
 				height: 40px;
 				border-radius: 5px;
-				background-color: var(
-					--color-complement-text
-				);
+				background-color: var(--color-complement-text);
 			}
 		}
 	}
@@ -954,7 +1047,8 @@ button:hover {
 			margin: 4px 0;
 			display: flex;
 			gap: 5px;
-	
+			flex-shrink: 0;
+
 			div:first-child {
 				margin-left: 5px;
 			}
@@ -964,6 +1058,20 @@ button:hover {
 				gap: 4px;
 			}
 		}
+	}
+}
+
+.ai-summary-btn {
+	display: flex;
+	justify-content: center;
+	align-items: start;
+	font-size: calc(var(--font-l) * var(--font-to-icon));
+	color: var(--color-complement-text);
+	transition: color 0.2s;
+	margin: 3px;
+
+	&:hover {
+		color: white;
 	}
 }
 </style>

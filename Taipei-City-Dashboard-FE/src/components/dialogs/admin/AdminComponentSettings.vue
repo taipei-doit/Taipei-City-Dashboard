@@ -1,12 +1,13 @@
 <!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 
 <script setup>
-import { ref, defineProps } from "vue";
+import { ref, defineProps, watch, computed, onBeforeUnmount } from "vue";
 import { storeToRefs } from "pinia";
 import DashboardComponent from "../../../dashboardComponent/DashboardComponent.vue";
 import { useDialogStore } from "../../../store/dialogStore";
 import { useAdminStore } from "../../../store/adminStore";
 import { useContentStore } from "../../../store/contentStore";
+import { useAuthStore } from "../../../store/authStore.js";
 
 import DialogContainer from "../DialogContainer.vue";
 import InputTags from "../../utilities/forms/InputTags.vue";
@@ -16,10 +17,12 @@ import HistoryChart from "../../charts/HistoryChart.vue";
 import { chartsPerDataType } from "../../../assets/configs/apexcharts/chartTypes";
 import { timeTerms } from "../../../assets/configs/AllTimes";
 import { mapTypes } from "../../../assets/configs/mapbox/mapConfig";
+import http from "../../../router/axios";
 
 const dialogStore = useDialogStore();
 const adminStore = useAdminStore();
 const contentStore = useContentStore();
+const authStore = useAuthStore();
 
 const props = defineProps(["searchParams"]);
 
@@ -32,6 +35,45 @@ const tempInputStorage = ref({
 	historyColor: "#000000",
 });
 
+const pendingJobs = ref(loadPendingJobs());
+const pollingIntervals = {};
+
+function loadPendingJobs() {
+	try {
+		return JSON.parse(
+			localStorage.getItem("ai_summary_pending_jobs") || "{}",
+		);
+	} catch {
+		return {};
+	}
+}
+
+function persistPendingJobs() {
+	localStorage.setItem(
+		"ai_summary_pending_jobs",
+		JSON.stringify(pendingJobs.value),
+	);
+}
+
+function getJobKey(city, index, type) {
+	return `${city}-${index}-${type}`;
+}
+
+const isSuperAd = computed(() => {
+	return authStore.user.is_admin && !authStore.isso_token && authStore.token;
+});
+
+// 個別判斷 chart / map 是否正在更新中
+function isTypeUpdating(type) {
+	if (!currentComponent.value) return false;
+	const key = getJobKey(
+		currentComponent.value.city,
+		currentComponent.value.index,
+		type,
+	);
+	return !!pendingJobs.value[key];
+}
+
 function handleConfirm() {
 	adminStore.updateComponent(props.searchParams);
 	handleClose();
@@ -42,6 +84,123 @@ function handleClose() {
 	dialogStore.hideAllDialogs();
 	adminStore.currentComponent = null;
 }
+
+async function handleRenewAiSummary(type) {
+	const { city } = currentComponent.value;
+	const { index } = currentComponent.value;
+	const key = getJobKey(city, index, type);
+
+	if (pendingJobs.value[key]) return; // 已經在跑，防重複點擊
+
+	try {
+		const res = await http.post("/component/ai-summary/trigger", {
+			index,
+			city,
+			type,
+		});
+
+		if (res?.data) {
+			pendingJobs.value[key] = {
+				dag_run_id: res.data.dag_run_id,
+				conf: { ...res.data.conf, type },
+			};
+			persistPendingJobs();
+			startPolling(key);
+		}
+	} catch (e) {
+		console.error("觸發 AI 摘要更新任務失敗", e);
+	}
+}
+
+function startPolling(key) {
+	if (pollingIntervals[key]) return;
+
+	pollingIntervals[key] = setInterval(async () => {
+		const job = pendingJobs.value[key];
+		if (!job) return stopPolling(key); // 資料被清掉了(例如另一個分頁清除)，保險起見停止
+
+		try {
+			const statusRes = await http.get(
+				`/component/ai-summary/status/${encodeURIComponent(job.dag_run_id)}`,
+			);
+			const state = statusRes?.data?.state;
+
+			if (state === "success" || state === "failed") {
+				stopPolling(key);
+				delete pendingJobs.value[key];
+				persistPendingJobs();
+
+				if (state === "success") {
+					const isCurrent =
+						currentComponent.value &&
+						getJobKey(
+							currentComponent.value.city,
+							currentComponent.value.index,
+							job.conf.type,
+						) === key;
+					if (isCurrent) {
+						refreshSummaries(job.conf.city, job.conf.index);
+					}
+				}
+			}
+		} catch (e) {
+			console.error("查詢 AI 摘要任務狀態失敗", e);
+		}
+	}, 5000);
+}
+
+function stopPolling(key) {
+	clearInterval(pollingIntervals[key]);
+	delete pollingIntervals[key];
+}
+
+let responseForChart = ref(null);
+let responseForMap = ref(null);
+
+async function refreshSummaries(city, index) {
+	// 先清空，避免短暫顯示或錯誤時殘留上一個組件的內容
+	responseForChart.value = null;
+	responseForMap.value = null;
+
+	try {
+		responseForChart.value = await http.get("/component/ai-summary", {
+			params: { index, city, type: "chart" },
+		});
+	} catch (e) {
+		console.error("取得圖表 AI 摘要失敗", e);
+		responseForChart.value = null;
+	}
+
+	try {
+		responseForMap.value = await http.get("/component/ai-summary", {
+			params: { index, city, type: "map" },
+		});
+	} catch (e) {
+		console.error("取得地圖 AI 摘要失敗", e);
+		responseForMap.value = null;
+	}
+}
+
+watch(
+	() => currentComponent.value,
+	async (newVal) => {
+		if (!newVal) return;
+
+		["chart", "map"].forEach((type) => {
+			const key = getJobKey(newVal.city, newVal.index, type);
+			if (pendingJobs.value[key]) {
+				startPolling(key);
+			}
+		});
+
+		await refreshSummaries(newVal.city, newVal.index);
+	},
+	{ immediate: true },
+);
+
+onBeforeUnmount(() => {
+	Object.keys(pollingIntervals).forEach(stopPolling);
+});
 </script>
 
 <template>
@@ -167,7 +326,7 @@ function handleClose() {
                         'demo',
                         'maintain',
                       ].includes(
-                        currentComponent.time_from
+                        currentComponent.time_from,
                       )
                     ) {
                       currentComponent.time_to = '';
@@ -268,7 +427,7 @@ function handleClose() {
                 () => {
                   if (tempInputStorage.link.length > 0) {
                     currentComponent.links.push(
-                      tempInputStorage.link
+                      tempInputStorage.link,
                     );
                     tempInputStorage.link = '';
                   }
@@ -282,7 +441,7 @@ function handleClose() {
                 (index) => {
                   currentComponent.contributors.splice(
                     index,
-                    1
+                    1,
                   );
                 }
               "
@@ -301,13 +460,72 @@ function handleClose() {
                     tempInputStorage.contributor.length > 0
                   ) {
                     currentComponent.contributors.push(
-                      tempInputStorage.contributor
+                      tempInputStorage.contributor,
                     );
                     tempInputStorage.contributor = '';
                   }
                 }
               "
             >
+            <div class="enable_ai_summary">
+              <label>是否開啟 AI 摘要功能</label>
+              <label class="toggle-switch">
+                <input
+                  v-model="currentComponent.enable_ai_summary"
+                  type="checkbox"
+                >
+                <span class="toggle-switch-slider" />
+              </label>
+            </div>
+            <div
+              v-if="isSuperAd"
+              class="refresh_ai_summary"
+            >
+              <label>組件圖表 AI 摘要刷新</label>
+              <button
+                :disabled="isTypeUpdating('chart')"
+                @click="handleRenewAiSummary('chart')"
+              >
+                {{
+                  isTypeUpdating("chart")
+                    ? "更新中…"
+                    : "點擊刷新"
+                }}
+              </button>
+            </div>
+            <div class="ai_summary_preview">
+              <label>目前組件圖表 AI 摘要內容</label>
+              <div class="ai_summary_preview-content">
+                {{
+                  responseForChart?.data.data.result ||
+                    "無資料"
+                }}
+              </div>
+            </div>
+            <div
+              v-if="isSuperAd"
+              class="refresh_ai_summary"
+            >
+              <label>組件地圖 AI 摘要刷新</label>
+              <button
+                :disabled="isTypeUpdating('map')"
+                @click="handleRenewAiSummary('map')"
+              >
+                {{
+                  isTypeUpdating("map")
+                    ? "更新中…"
+                    : "點擊刷新"
+                }}
+              </button>
+            </div>
+            <div class="ai_summary_preview">
+              <label>目前組件地圖 AI 摘要內容</label>
+              <div class="ai_summary_preview-content">
+                {{
+                  responseForMap?.data.data.result || "無資料"
+                }}
+              </div>
+            </div>
           </div>
           <div
             v-else-if="currentSettings === 'chart'"
@@ -364,7 +582,7 @@ function handleClose() {
                 (index) => {
                   currentComponent.chart_config.color.splice(
                     index,
-                    1
+                    1,
                   );
                 }
               "
@@ -385,7 +603,7 @@ function handleClose() {
                     tempInputStorage.chartColor.length === 7
                   ) {
                     currentComponent.chart_config.color.push(
-                      tempInputStorage.chartColor
+                      tempInputStorage.chartColor,
                     );
                     tempInputStorage.chartColor = '#000000';
                   }
@@ -430,7 +648,7 @@ function handleClose() {
                 (index) => {
                   currentComponent.history_config.color.splice(
                     index,
-                    1
+                    1,
                   );
                 }
               "
@@ -452,7 +670,7 @@ function handleClose() {
                     7
                   ) {
                     currentComponent.history_config.color.push(
-                      tempInputStorage.historyColor
+                      tempInputStorage.historyColor,
                     );
                     tempInputStorage.historyColor =
                       '#000000';
@@ -524,7 +742,10 @@ function handleClose() {
                   v-model="
                     currentComponent.map_config[index].size
                   "
-                  :disabled="currentComponent.map_config[index].type==='symbol-3d'"
+                  :disabled="
+                    currentComponent.map_config[index]
+                      .type === 'symbol-3d'
+                  "
                 >
                   <option :value="''">
                     無
@@ -543,7 +764,10 @@ function handleClose() {
                   v-model="
                     currentComponent.map_config[index].icon
                   "
-                  :disabled="currentComponent.map_config[index].type==='symbol-3d'"
+                  :disabled="
+                    currentComponent.map_config[index]
+                      .type === 'symbol-3d'
+                  "
                 >
                   <option :value="''">
                     無
@@ -601,7 +825,11 @@ function handleClose() {
             :key="`${currentComponent.index}-${currentComponent.chart_config.color}-${currentComponent.chart_config.types}`"
             :config="JSON.parse(JSON.stringify(currentComponent))"
             :active-city="currentComponent.city"
-            :city-tag="contentStore.cityManager.getTagList(currentComponent.city)"
+            :city-tag="
+              contentStore.cityManager.getTagList(
+                currentComponent.city,
+              )
+            "
             mode="large"
           />
           <div
@@ -615,8 +843,8 @@ function handleClose() {
               :history_config="
                 JSON.parse(
                   JSON.stringify(
-                    currentComponent.history_config
-                  )
+                    currentComponent.history_config,
+                  ),
                 )
               "
             />
@@ -777,6 +1005,119 @@ function handleClose() {
 		align-items: center;
 		border-radius: 5px;
 		border: solid 1px var(--color-border);
+	}
+}
+
+.enable_ai_summary {
+	margin-top: 0.5rem;
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+	label {
+		margin: 0;
+	}
+}
+
+.toggle-switch {
+	position: relative;
+	display: inline-block;
+	width: 40px;
+	height: 22px;
+	flex-shrink: 0;
+
+	input {
+		opacity: 0;
+		width: 0;
+		height: 0;
+
+		&:checked + .toggle-switch-slider {
+			background-color: var(--color-highlight);
+		}
+
+		&:checked + .toggle-switch-slider:before {
+			transform: translateX(18px);
+		}
+
+		&:focus-visible + .toggle-switch-slider {
+			outline: 2px solid var(--color-highlight);
+			outline-offset: 2px;
+		}
+	}
+
+	&-slider {
+		position: absolute;
+		cursor: pointer;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background-color: var(--color-border);
+		transition: background-color 0.2s;
+		border-radius: 22px;
+
+		&:before {
+			position: absolute;
+			content: "";
+			height: 16px;
+			width: 16px;
+			left: 3px;
+			bottom: 3px;
+			background-color: white;
+			transition: transform 0.2s;
+			border-radius: 50%;
+		}
+	}
+}
+
+.refresh_ai_summary {
+	margin: 0.5rem 0;
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+	button {
+		width: fit-content;
+		padding: 2px 6px;
+		border-radius: 5px;
+		background-color: var(--color-highlight);
+
+		&:disabled {
+			background-color: var(--color-border);
+			color: var(--color-complement-text);
+			cursor: not-allowed;
+			opacity: 0.6;
+		}
+	}
+}
+
+.ai_summary_preview {
+	margin-top: 0.5rem;
+	display: flex;
+	flex-direction: column;
+	gap: 0.25rem;
+
+	label {
+		margin: 0;
+	}
+
+	&-content {
+		max-height: 120px;
+		overflow-y: auto;
+		padding: 0.5rem;
+		border-radius: 5px;
+		background-color: var(--color-border);
+		font-size: var(--font-ms);
+		color: darken(white, 30%);
+		line-height: 1.5;
+		white-space: pre-wrap;
+		word-break: break-word;
+
+		&::-webkit-scrollbar {
+			width: 4px;
+		}
+		&::-webkit-scrollbar-thumb {
+			background-color: rgba(136, 135, 135, 0.5);
+			border-radius: 4px;
+		}
 	}
 }
 </style>
