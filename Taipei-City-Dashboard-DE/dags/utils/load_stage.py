@@ -6,6 +6,20 @@ from sqlalchemy.sql import text as sa_text
 from utils.get_time import get_tpe_now_time_str
 
 
+def _truncate_if_exists(conn, table: str):
+    """表存在才 TRUNCATE。
+
+    表不存在是合法狀態(首次執行),後續 to_sql(if_exists='append') 會自動建表。
+    這裡用存在性檢查而非 try/except:在交易內讓 TRUNCATE 拋錯會使整個交易
+    進入 aborted 狀態,後續語句全部失敗,無法只吞掉這一個例外。
+    """
+    exists = conn.execute(
+        sa_text("SELECT to_regclass(:t)"), {"t": f"public.{table}"}
+    ).scalar()
+    if exists:
+        conn.execute(sa_text(f"TRUNCATE TABLE {table}"))
+
+
 def update_lasttime_in_data_to_dataset_info(
     engine, airflow_dag_id, lasttime_in_data=None
 ):
@@ -195,7 +209,7 @@ def save_dataframe_to_postgresql(
                 default_table, conn, if_exists="append", index=False, schema="public"
             )
         elif load_behavior == "replace":
-            conn.execute(sa_text(f"TRUNCATE TABLE {default_table}"))
+            _truncate_if_exists(conn, default_table)
             data.to_sql(
                 default_table, conn, if_exists="append", index=False, schema="public"
             )
@@ -204,7 +218,7 @@ def save_dataframe_to_postgresql(
                 raise ValueError(
                     "history_table should be provided when load_behavior is `current+history`."
                 )
-            conn.execute(sa_text(f"TRUNCATE TABLE {default_table}"))
+            _truncate_if_exists(conn, default_table)
             data.to_sql(
                 default_table, conn, if_exists="append", index=False, schema="public"
             )
@@ -325,7 +339,7 @@ def save_geodataframe_to_postgresql(
                 dtype={geometry_col: Geometry(geometry_type, srid=4326)},
             )
         elif load_behavior == "replace":
-            conn.execute(sa_text(f"TRUNCATE TABLE {default_table}"))
+            _truncate_if_exists(conn, default_table)
             gdata.to_sql(
                 default_table,
                 conn,
@@ -339,7 +353,7 @@ def save_geodataframe_to_postgresql(
                 raise ValueError(
                     "history_table should be provided when load_behavior is `current+history`."
                 )
-            conn.execute(sa_text(f"TRUNCATE TABLE {default_table}"))
+            _truncate_if_exists(conn, default_table)
             gdata.to_sql(
                 default_table,
                 conn,
