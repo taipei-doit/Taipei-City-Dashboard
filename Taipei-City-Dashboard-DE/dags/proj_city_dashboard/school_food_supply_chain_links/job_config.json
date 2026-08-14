@@ -32,7 +32,7 @@
     "output_coordinate": "EPSG:4326",
     "is_geometry": 0,
     "dataset_description": "雙北中小學及高中職供餐食材供應鏈關係：上游原料／調味料供應商 → 中游供餐業者 → 下游學校。產出供桑基圖（SankeyChart）使用的 link rows。原始欄位含食材供應商與調味料供應商兩類上游關係",
-    "etl_description": "對每個縣市 scan-back 6 個月找最新可公開資料（資料延遲約 1-2 月）→ POST /opendatadownload/ 取一次性 timestamped 下載連結 → 立即 GET CSV → 食材供應商 + 調味料供應商 union 作為 up-mid source，groupby(supplier, 供餐業者) 計 row 數；mid-down groupby(供餐業者, 區域名稱, 學校名稱) 計 row 數 → replace 入庫。需 Airflow Variable: fatraceschool_accesscode",
+    "etl_description": "對每個縣市 scan-back 6 個月找最新可公開資料（資料延遲約 1-2 月）→ POST /opendatadownload/ 取一次性 timestamped 下載連結 → 立即 GET CSV → 食材供應商 + 調味料供應商 union 作為 up-mid source，groupby(supplier, 供餐業者) 計 row 數；mid-down groupby(供餐業者, 區域名稱, 學校名稱) 計 row 數 → replace 入庫。需 Airflow Variable: FATRACESCHOOL_ACCESSCODE",
     "sensitivity": "public"
   }
 }

@@ -176,42 +176,45 @@ def save_dataframe_to_postgresql(
 
     start_time = time.time()
 
-    # main
-    conn = engine.connect()
-    if load_behavior == "append":
-        data.to_sql(
-            default_table, conn, if_exists="append", index=False, schema="public"
-        )
-    elif load_behavior == "replace":
-        conn.execute(
-            sa_text(f"TRUNCATE TABLE {default_table}").execution_options(
-                autocommit=True
-            )
-        )
-        data.to_sql(
-            default_table, conn, if_exists="append", index=False, schema="public"
-        )
-    elif load_behavior == "current+history":
-        if history_table is None:
-            raise ValueError(
-                "history_table should be provided when load_behavior is `current+history`."
-            )
-        conn.execute(
-            sa_text(f"TRUNCATE TABLE {default_table}").execution_options(
-                autocommit=True
-            )
-        )
-        data.to_sql(
-            default_table, conn, if_exists="append", index=False, schema="public"
-        )
-        data.to_sql(
-            history_table, conn, if_exists="append", index=False, schema="public"
-        )
-    else:
+    # 先確認有資料，才允許走會截斷目標表的寫入模式。
+    # 空資料 + TRUNCATE = 直接清空目標表，且清空後沒有任何資料補回來。
+    # (`append` 不截斷，寫 0 筆是無害的 no-op，不在此限。)
+    if data.empty and load_behavior in ("replace", "current+history"):
         raise ValueError(
-            "load_behavior should be one of `append`, `replace`, `current+history`."
+            f"Refuse to write empty data with load_behavior=`{load_behavior}`: "
+            f"it would truncate `{default_table}` and leave it empty."
         )
-    conn.close()
+
+    # main
+    # TRUNCATE 與 INSERT 必須在同一個 transaction 內：engine.begin() 讓寫入失敗時
+    # 連同 TRUNCATE 一起 rollback。否則 TRUNCATE 會立即 commit
+    # (SQLAlchemy 1.4 legacy autocommit)，寫入一失敗就留下被清空的表。
+    with engine.begin() as conn:
+        if load_behavior == "append":
+            data.to_sql(
+                default_table, conn, if_exists="append", index=False, schema="public"
+            )
+        elif load_behavior == "replace":
+            conn.execute(sa_text(f"TRUNCATE TABLE {default_table}"))
+            data.to_sql(
+                default_table, conn, if_exists="append", index=False, schema="public"
+            )
+        elif load_behavior == "current+history":
+            if history_table is None:
+                raise ValueError(
+                    "history_table should be provided when load_behavior is `current+history`."
+                )
+            conn.execute(sa_text(f"TRUNCATE TABLE {default_table}"))
+            data.to_sql(
+                default_table, conn, if_exists="append", index=False, schema="public"
+            )
+            data.to_sql(
+                history_table, conn, if_exists="append", index=False, schema="public"
+            )
+        else:
+            raise ValueError(
+                "load_behavior should be one of `append`, `replace`, `current+history`."
+            )
 
     # print
     cost_time = time.time() - start_time
@@ -302,62 +305,61 @@ def save_geodataframe_to_postgresql(
 
     start_time = time.time()
 
-    # main
-    conn = engine.connect()
-    if load_behavior == "append":
-        gdata.to_sql(
-            default_table,
-            conn,
-            if_exists="append",
-            index=False,
-            schema="public",
-            dtype={geometry_col: Geometry(geometry_type, srid=4326)},
-        )
-    elif load_behavior == "replace":
-        conn.execute(
-            sa_text(f"TRUNCATE TABLE {default_table}").execution_options(
-                autocommit=True
-            )
-        )
-        gdata.to_sql(
-            default_table,
-            conn,
-            if_exists="append",
-            index=False,
-            schema="public",
-            dtype={geometry_col: Geometry(geometry_type, srid=4326)},
-        )
-    elif load_behavior == "current+history":
-        if (history_table is None) or (history_table == ""):
-            raise ValueError(
-                "history_table should be provided when load_behavior is `current+history`."
-            )
-        conn.execute(
-            sa_text(f"TRUNCATE TABLE {default_table}").execution_options(
-                autocommit=True
-            )
-        )
-        gdata.to_sql(
-            default_table,
-            conn,
-            if_exists="append",
-            index=False,
-            schema="public",
-            dtype={geometry_col: Geometry(geometry_type, srid=4326)},
-        )
-        gdata.to_sql(
-            history_table,
-            conn,
-            if_exists="append",
-            index=False,
-            schema="public",
-            dtype={geometry_col: Geometry(geometry_type, srid=4326)},
-        )
-    else:
+    # 同 save_dataframe_to_postgresql：空資料不得走會截斷目標表的寫入模式。
+    if gdata.empty and load_behavior in ("replace", "current+history"):
         raise ValueError(
-            "load_behavior should be one of `append`, `replace`, `current+history`."
+            f"Refuse to write empty data with load_behavior=`{load_behavior}`: "
+            f"it would truncate `{default_table}` and leave it empty."
         )
-    conn.close()
+
+    # main
+    # TRUNCATE 與 INSERT 必須在同一個 transaction 內，理由同 save_dataframe_to_postgresql。
+    with engine.begin() as conn:
+        if load_behavior == "append":
+            gdata.to_sql(
+                default_table,
+                conn,
+                if_exists="append",
+                index=False,
+                schema="public",
+                dtype={geometry_col: Geometry(geometry_type, srid=4326)},
+            )
+        elif load_behavior == "replace":
+            conn.execute(sa_text(f"TRUNCATE TABLE {default_table}"))
+            gdata.to_sql(
+                default_table,
+                conn,
+                if_exists="append",
+                index=False,
+                schema="public",
+                dtype={geometry_col: Geometry(geometry_type, srid=4326)},
+            )
+        elif load_behavior == "current+history":
+            if (history_table is None) or (history_table == ""):
+                raise ValueError(
+                    "history_table should be provided when load_behavior is `current+history`."
+                )
+            conn.execute(sa_text(f"TRUNCATE TABLE {default_table}"))
+            gdata.to_sql(
+                default_table,
+                conn,
+                if_exists="append",
+                index=False,
+                schema="public",
+                dtype={geometry_col: Geometry(geometry_type, srid=4326)},
+            )
+            gdata.to_sql(
+                history_table,
+                conn,
+                if_exists="append",
+                index=False,
+                schema="public",
+                dtype={geometry_col: Geometry(geometry_type, srid=4326)},
+            )
+        else:
+            raise ValueError(
+                "load_behavior should be one of `append`, `replace`, `current+history`."
+            )
 
     # print
     cost_time = time.time() - start_time
