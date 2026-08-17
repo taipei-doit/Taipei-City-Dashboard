@@ -1,7 +1,12 @@
 // Package models stores the models for the postgreSQL databases.
 package models
 
-import "time"
+import (
+	"errors"
+	"time"
+
+	"gorm.io/gorm"
+)
 
 // ComponentAISummary is the model for the component_ai_summary table.
 type ComponentAISummary struct {
@@ -69,6 +74,27 @@ func CreateComponentAISummary(
 
 	err = DBManager.Table("component_ai_summary").Create(&summary).Error
 	return summary, err
+}
+
+// UpsertComponentAISummary updates the latest matching row, or creates one when none exists.
+func UpsertComponentAISummary(
+	index string,
+	city string,
+	summaryType string,
+	result string,
+) (summary ComponentAISummary, created bool, err error) {
+	summary, err = GetComponentAISummary(index, city, summaryType)
+	if err == nil {
+		updated, updateErr := UpdateComponentAISummary(int(summary.ID), index, city, summaryType, result)
+		return updated, false, updateErr
+	}
+
+	if !errors.Is(err, gorm.ErrRecordNotFound) {
+		return summary, false, err
+	}
+
+	createdSummary, createErr := CreateComponentAISummary(index, city, summaryType, result)
+	return createdSummary, true, createErr
 }
 
 // UpdateComponentAISummary updates one AI summary row by id.

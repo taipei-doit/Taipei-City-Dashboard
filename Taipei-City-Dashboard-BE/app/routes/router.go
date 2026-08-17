@@ -111,8 +111,6 @@ func configureComponentRoutes() {
 	{
 		componentRoutes.GET("/", controllers.GetAllComponents)
 		componentRoutes.GET("/ai-summary", controllers.GetComponentAISummary)
-		componentRoutes.POST("/ai-summary/trigger", controllers.TriggerComponentAISummaryDAG)
-		componentRoutes.GET("/ai-summary/status/:dag_run_id", controllers.GetComponentAISummaryDAGStatus)
 		componentRoutes.GET("/:id", controllers.GetComponentByID)
 		componentRoutes.GET("/:id/all", controllers.GetComponentByIDAll)
 		componentRoutes.GET("/:id/chart", controllers.GetComponentChartData)
@@ -120,6 +118,10 @@ func configureComponentRoutes() {
 	}
 	componentRoutes.Use(middleware.IsSysAdm())
 	{
+		componentRoutes.POST("/ai-summary/generate", controllers.GenerateComponentAISummary)
+		componentRoutes.POST("/ai-summary/trigger", controllers.TriggerComponentAISummaryDAG)
+		componentRoutes.GET("/ai-summary/status/:dag_run_id", controllers.GetComponentAISummaryDAGStatus)
+		componentRoutes.POST("/ai-summary/upsert", controllers.UpsertComponentAISummary)
 		componentRoutes.POST("/ai-summary", controllers.CreateComponentAISummary)
 		componentRoutes.PATCH("/ai-summary/:id", controllers.UpdateComponentAISummary)
 		componentRoutes.
