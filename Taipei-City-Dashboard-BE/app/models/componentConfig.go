@@ -250,6 +250,15 @@ func GetComponentByID(id int, city string) (component CityComponent, err error) 
 	return component, nil
 }
 
+func GetComponentByIndexAndCity(index string, city string) (component CityComponent, err error) {
+	tempDB := createTempComponentDB()
+	err = tempDB.Where("components.index = ?", index).Where("query_charts.city = ?", city).First(&component).Error
+	if err != nil {
+		return component, err
+	}
+	return component, nil
+}
+
 func GetComponentByIDAll(id int) (component []CityComponent, err error) {
 	tempDB := createTempComponentDB()
 	err = tempDB.Where("components.id = ?", id).Find(&component).Error
