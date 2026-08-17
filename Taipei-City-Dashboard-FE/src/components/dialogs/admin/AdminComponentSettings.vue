@@ -146,8 +146,10 @@ async function handleRenewAiSummaryLocal(type) {
 		updateChartSummaryLoading.value = true;
 		try {
 			const userContent = buildPrompt(currentComponent.value);
-			const res = await http.post("ai/chat/twai", {
-				stream: false,
+			const res = await http.post("/component/ai-summary/generate", {
+				index: currentComponent.value.index,
+				city: currentComponent.value.city,
+				type: "chart",
 				messages: [
 					{ role: "system", content: promptForChart.value },
 					{ role: "user", content: userContent },
@@ -155,13 +157,7 @@ async function handleRenewAiSummaryLocal(type) {
 				max_new_tokens: 512,
 				temperature: 0.7,
 			});
-			if (res?.data?.data?.content) {
-				await http.post("/component/ai-summary", {
-					index: currentComponent.value.index,
-					city: currentComponent.value.city,
-					type: "chart",
-					result: res.data.data.content,
-				});
+			if (res?.data?.data?.summary?.result) {
 				refreshSummaries(currentComponent.value.city, currentComponent.value.index);
 			} else {
 				dialogStore.showNotification('fail', '圖表摘要更新失敗，AI 回傳內容為空');
@@ -218,8 +214,10 @@ async function handleRenewAiSummaryLocal(type) {
 				),
 			);
 
-			const res = await http.post("ai/chat/twai", {
-				stream: false,
+			const res = await http.post("/component/ai-summary/generate", {
+				index: currentComponent.value.index,
+				city: currentComponent.value.city,
+				type: "map",
 				messages: [
 					{ role: "system", content: promptForMap.value },
 					{ role: "user", content: userContent },
@@ -227,13 +225,7 @@ async function handleRenewAiSummaryLocal(type) {
 				max_new_tokens: 512,
 				temperature: 0.7,
 			});
-			if (res?.data?.data?.content) {
-				await http.post("/component/ai-summary", {
-					index: currentComponent.value.index,
-					city: currentComponent.value.city,
-					type: "map",
-					result: res.data.data.content,
-				});
+			if (res?.data?.data?.summary?.result) {
 				refreshSummaries(currentComponent.value.city, currentComponent.value.index);
 			} else {
 				dialogStore.showNotification('fail', '地圖摘要更新失敗，AI 回傳內容為空');
