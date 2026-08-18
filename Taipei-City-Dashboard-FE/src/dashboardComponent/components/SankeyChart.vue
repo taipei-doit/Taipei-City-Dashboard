@@ -625,17 +625,19 @@ function resetFilter() {
     </button>
 
     <!-- 一般檢視 -->
-    <SankeyCanvas
-      :layout="filteredLayout"
-      :svg-h="layout.svgH || BASE_SVG_H"
-      :node-w="NODE_W"
-      :nc="NC"
-      class="sankey-svg"
-      @path-mousemove="onPathMouseMove"
-      @path-mouseleave="onPathMouseLeave"
-      @node-mousemove="onPathMouseMove"
-      @node-mouseleave="onPathMouseLeave"
-    />
+    <div class="sankey-scroll">
+      <SankeyCanvas
+        :layout="filteredLayout"
+        :svg-h="layout.svgH || BASE_SVG_H"
+        :node-w="NODE_W"
+        :nc="NC"
+        class="sankey-svg"
+        @path-mousemove="onPathMouseMove"
+        @path-mouseleave="onPathMouseLeave"
+        @node-mousemove="onPathMouseMove"
+        @node-mouseleave="onPathMouseLeave"
+      />
+    </div>
 
     <!-- Legend -->
     <div class="sankey-legend">
