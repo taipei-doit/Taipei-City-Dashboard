@@ -1,0 +1,38 @@
+{
+  "dag_infos": {
+    "dag_id": "parks_basic",
+    "start_date": "2026-05-22",
+    "schedule_interval": "@daily",
+    "catchup": false,
+    "tags": ["parks", "公園", "Taipei-City"],
+    "description": "Daily import of Taipei parks basic data from data.taipei / parks.gov.taipei API.",
+    "default_args": {
+      "owner": "airflow",
+      "email": ["DEFAULT_EMAIL_LIST"],
+      "email_on_retry": false,
+      "email_on_failure": true,
+      "retries": 1,
+      "retry_delay": 60
+    },
+    "ready_data_db": "postgres_default",
+    "ready_data_default_table": "parks_basic",
+    "ready_data_history_table": "",
+    "raw_data_db": "postgres_default",
+    "raw_data_table": "",
+    "load_behavior": "replace"
+  },
+  "data_infos": {
+    "name_cn": "臺北市公園基本資料",
+    "airflow_update_freq": "daily",
+    "source": "https://data.taipei/dataset/detail?id=ea732fb5-4bec-4be7-93f2-8ab91e74a6c6",
+    "source_type": "data.taipei",
+    "source_dept": "臺北市政府公園管理單位",
+    "gis_format": "json",
+    "output_coordinate": "EPSG:4326",
+    "is_geometry": 1,
+    "component_name": "parks_basic_map",
+    "dataset_description": "臺北市公園基本資料，含經緯度與設施說明（每日更新）",
+    "etl_description": "Fetch parks.gov.taipei JSON API, normalize columns, add wkb_geometry, save to postgres",
+    "sensitivity": "public"
+  }
+}
