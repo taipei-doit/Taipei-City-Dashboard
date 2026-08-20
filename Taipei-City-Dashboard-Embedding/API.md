@@ -57,7 +57,9 @@ OpenAI embeddings API 相容格式。
 
 截斷是靜默的：實測丟 6300 字進去回 `200`，`usage.prompt_tokens` 就是 `512`。
 要偵測有沒有被截，看 `usage.prompt_tokens == 512` 即可。
-（後端現行的 Go 版沒有截斷保護，超長輸入反而會出問題，這裡是修好的。）
+
+> 🔴 **順帶回報一個現行後端的當機問題** —— 見文末〈附錄〉。
+> 這支 API 有截斷保護，換過來就順便修掉了。
 
 ### Response `200`
 
@@ -319,3 +321,65 @@ Qdrant 現有 collection 是照這個行為建的，所以服務預設跟著關�
 | PROD | `helm-chart/values-prod.yaml` 目前 `embedding.enabled: false`，後端改完後開啟即可 |
 
 有問題或要調參數（batch 上限、CPU、replica）再跟我說。
+
+---
+
+## 附錄：現行後端有一個超長輸入會讓 process 直接結束的問題
+
+拆服務時順帶發現的，跟串接無關但建議優先處理。
+
+### 成因
+
+`app/controllers/componentConfig.go:330` 的 `query` 是使用者可控且沒有長度限制：
+
+```go
+query := c.PostForm("query")   // 沒有長度檢查
+```
+
+一路傳到 `app/models/qdrant.go` 的 `GenVector()`，那裡**沒有做截斷**，
+tokenize 出多長就直接建多長的 tensor 丟進 ONNX。
+
+但模型的 `max_position_embeddings = 514`（XLM-RoBERTa），超過就會失敗。
+在臨時 pod 用同一份 `model.onnx` 實測：
+
+```
+token 數     6  ->  OK
+token 數   284  ->  OK
+token 數   804  ->  InvalidArgument: Non-zero status code returned while running
+                    Gather node. Name:'/embeddings/position_embeddings/Gather'
+                    indices element out of data bounds, idx=514 must be within
+                    the inclusive range [-514,513]
+```
+
+而 `qdrant.go:215` 對這個錯誤的處理是：
+
+```go
+if err := session.Run(inputTensors, outputTensors); err != nil {
+    log.Fatalf("session.Run error: %v", err)   // log.Fatalf = os.Exit(1)
+}
+```
+
+`log.Fatalf` 會 `os.Exit(1)`，**整個後端 process 直接結束**，不是回 500。
+
+### 影響
+
+以中文估算約 1.7 字/token，所以 **`query` 超過大約 880 個中文字就會踩到**。
+這不需要惡意攻擊 —— 使用者把一段長文貼進搜尋框就會讓後端 pod 掛掉重啟。
+`/api/v1/vector/component` 也沒有掛認證。
+
+`GenVector()` 裡另外還有 5 處 `log.Fatalf`（行 159、166、176、189、205），
+都在請求路徑上，同樣是 process 級結束而非回傳錯誤。
+
+### 我沒有實測線上後端
+
+驗證是在獨立的臨時 pod 用同一份 `model.onnx` 跑的，**沒有真的去打 SIT 後端**，
+因為那會把它打掛。上面的錯誤訊息是臨時 pod 的真實輸出，
+「後端會 exit」則是從 `log.Fatalf` 的語意推得，沒有實際觸發過。
+
+### 換到這支 API 就解決了
+
+本服務在 `MAX_SEQ_LEN=512` 截斷，超過 `MAX_CHARS=8192` 字回 `400`，
+任何錯誤都是 HTTP 狀態碼，不會讓 process 結束。
+
+如果短期內還不換，最小修法是在 controller 對 `query` 加長度上限，
+並把 `GenVector()` 裡的 `log.Fatalf` 全部改成 `return nil, fmt.Errorf(...)`。
