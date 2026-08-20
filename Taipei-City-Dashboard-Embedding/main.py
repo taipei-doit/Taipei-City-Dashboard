@@ -16,7 +16,9 @@ MODEL_DIR = os.getenv("LM_MODEL_PATH", "/opt/lm_model/onnx-e5")
 MODEL_NAME = os.getenv("MODEL_NAME", "intfloat/multilingual-e5-base")
 # e5 要求輸入帶 prefix；後端原本寫死 "query: "，維持一致
 DEFAULT_PREFIX = os.getenv("E5_PREFIX", "query: ")
-MAX_BATCH = int(os.getenv("MAX_BATCH", "64"))
+MAX_BATCH = int(os.getenv("MAX_BATCH", "512"))
+# 一次真正送進 ONNX 的筆數。請求再大也會切成這個大小，讓記憶體用量與請求大小脫鉤
+MICRO_BATCH = int(os.getenv("MICRO_BATCH", "32"))
 MAX_SEQ_LEN = int(os.getenv("MAX_SEQ_LEN", "512"))
 MAX_CHARS = int(os.getenv("MAX_CHARS", "8192"))
 # 容器有 CPU limit，讓 ORT 照著開執行緒，避免被 cgroup throttle
@@ -32,9 +34,9 @@ ADD_SPECIAL_TOKENS = os.getenv("ADD_SPECIAL_TOKENS", "false").lower() == "true"
 
 tokenizer = Tokenizer.from_file(os.path.join(MODEL_DIR, "tokenizer.json"))
 tokenizer.enable_truncation(max_length=MAX_SEQ_LEN)
-tokenizer.enable_padding(
-    pad_id=tokenizer.token_to_id("<pad>"), pad_token="<pad>"
-)
+# 不開全域 padding：改成分塊後各自 pad 到該塊最長，避免整批被最長的那筆拖著跑
+tokenizer.no_padding()
+PAD_ID = tokenizer.token_to_id("<pad>") or 1
 
 _opts = ort.SessionOptions()
 _opts.intra_op_num_threads = INTRA_THREADS
@@ -56,10 +58,15 @@ class EmbeddingRequest(BaseModel):
     prefix: str | None = None
 
 
-def _embed(texts: list[str]) -> tuple[np.ndarray, int]:
-    encodings = tokenizer.encode_batch(texts, add_special_tokens=ADD_SPECIAL_TOKENS)
-    ids = np.array([e.ids for e in encodings], dtype=np.int64)
-    mask = np.array([e.attention_mask for e in encodings], dtype=np.int64)
+def _run(encodings) -> np.ndarray:
+    """一塊送進 ONNX，pad 到這塊最長的長度。"""
+    width = max(len(e.ids) for e in encodings)
+    ids = np.full((len(encodings), width), PAD_ID, dtype=np.int64)
+    mask = np.zeros((len(encodings), width), dtype=np.int64)
+    for r, e in enumerate(encodings):
+        n = len(e.ids)
+        ids[r, :n] = e.ids
+        mask[r, :n] = e.attention_mask
 
     hidden = session.run(
         ["last_hidden_state"], {"input_ids": ids, "attention_mask": mask}
@@ -71,7 +78,23 @@ def _embed(texts: list[str]) -> tuple[np.ndarray, int]:
 
     # L2 normalize
     norms = np.linalg.norm(pooled, axis=1, keepdims=True)
-    return pooled / np.clip(norms, 1e-12, None), int(mask.sum())
+    return pooled / np.clip(norms, 1e-12, None)
+
+
+def _embed(texts: list[str]) -> tuple[np.ndarray, int]:
+    encodings = tokenizer.encode_batch(texts, add_special_tokens=ADD_SPECIAL_TOKENS)
+
+    # 依 token 數排序再切塊，讓每塊內長度相近。長短混在一起時，
+    # 短的不會被 pad 到最長那筆的長度，省下大量無效算力。
+    order = sorted(range(len(encodings)), key=lambda i: len(encodings[i].ids))
+
+    out = np.empty((len(texts), DIM), dtype=np.float32)
+    for s in range(0, len(order), MICRO_BATCH):
+        idx = order[s : s + MICRO_BATCH]
+        out[idx] = _run([encodings[i] for i in idx])
+
+    # 回傳照原始輸入順序，呼叫端的 index 對得上
+    return out, sum(sum(e.attention_mask) for e in encodings)
 
 
 @app.post("/v1/embeddings")
@@ -113,4 +136,6 @@ def healthz():
         "model": MODEL_NAME,
         "dim": DIM,
         "add_special_tokens": ADD_SPECIAL_TOKENS,
+        "max_batch": MAX_BATCH,
+        "micro_batch": MICRO_BATCH,
     }
