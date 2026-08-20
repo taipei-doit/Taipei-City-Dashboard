@@ -1,0 +1,266 @@
+openapi: 3.0.3
+
+info:
+  title: Taipei City Dashboard Embedding Service
+  description: |
+    臺北城市儀表板向量嵌入服務。
+
+    提供 `intfloat/multilingual-e5-base` 文字向量化能力，供後端進行語意檢索與
+    Qdrant 索引建置。本服務由後端 image 拆分而來，產出向量與既有實作逐位相容。
+  version: 1.0.0
+  contact:
+    name: Taipei City Dashboard 維運團隊
+
+servers:
+  - url: http://taipei-city-dashboard-embedding:8080
+    description: 叢集內部（同 namespace 簡稱）
+  - url: http://taipei-city-dashboard-embedding.dashboard.svc.cluster.local:8080
+    description: 叢集內部（完整網域名稱）
+
+tags:
+  - name: Embeddings
+    description: 文字向量化
+  - name: Health
+    description: 服務健康狀態
+
+paths:
+  /v1/embeddings:
+    post:
+      tags: [Embeddings]
+      summary: 產生文字向量
+      description: |
+        將文字轉換為 768 維向量，格式與 OpenAI Embeddings API 相容。
+
+        向量已完成 L2 正規化，可直接寫入 Qdrant。
+        回應中 `data[i].index` 對應請求中 `input[i]` 的順序。
+      operationId: createEmbeddings
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmbeddingRequest'
+            examples:
+              single:
+                summary: 單筆文字
+                value:
+                  input: 台北市的空氣品質
+              batch:
+                summary: 批次文字
+                value:
+                  input: [台北市的空氣品質, youbike 站點]
+              passage:
+                summary: 建立索引時指定 passage prefix
+                value:
+                  input: [長描述文字]
+                  prefix: 'passage: '
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmbeddingResponse'
+        '400':
+          description: 輸入不符合限制
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestError'
+              examples:
+                empty:
+                  summary: 空陣列
+                  value:
+                    detail: input must not be empty
+                tooManyItems:
+                  summary: 超過批次上限
+                  value:
+                    detail: batch size 513 exceeds MAX_BATCH=512
+                tooLong:
+                  summary: 單筆字數超過上限
+                  value:
+                    detail: input longer than MAX_CHARS=8192
+        '422':
+          description: 請求欄位型別或結構錯誤
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+
+  /healthz:
+    get:
+      tags: [Health]
+      summary: 服務健康狀態
+      description: |
+        回報服務狀態與目前生效的設定值。
+        供 Kubernetes startup / liveness / readiness probe 使用，呼叫端無需主動存取。
+      operationId: healthz
+      responses:
+        '200':
+          description: 服務正常
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+
+components:
+  schemas:
+
+    EmbeddingRequest:
+      type: object
+      required: [input]
+      properties:
+        input:
+          description: |
+            待向量化的文字。傳入陣列即為批次處理。
+
+            單次請求筆數上限 512；單筆字元數上限 8192；
+            單筆超過 512 tokens 將自動截斷且不另行告知。
+          oneOf:
+            - type: string
+              maxLength: 8192
+            - type: array
+              minItems: 1
+              maxItems: 512
+              items:
+                type: string
+                maxLength: 8192
+        model:
+          type: string
+          description: |
+            相容性欄位。本服務僅載入單一模型，此欄位傳入任何值均予忽略。
+          example: intfloat/multilingual-e5-base
+        prefix:
+          type: string
+          description: |
+            覆寫 e5 模型輸入前綴。
+
+            未傳入時使用預設值 `"query: "`，與既有後端實作行為一致。
+            傳入空字串表示不加任何前綴。建立索引時可傳入 `"passage: "`。
+
+            呼叫端不應自行在 `input` 中加入前綴，前綴由本服務統一處理。
+          default: 'query: '
+          example: 'passage: '
+
+    EmbeddingResponse:
+      type: object
+      required: [object, data, model, usage]
+      properties:
+        object:
+          type: string
+          enum: [list]
+        data:
+          type: array
+          description: 依請求中 `input` 的原始順序排列
+          items:
+            $ref: '#/components/schemas/EmbeddingObject'
+        model:
+          type: string
+          example: intfloat/multilingual-e5-base
+        usage:
+          $ref: '#/components/schemas/Usage'
+      example:
+        object: list
+        data:
+          - object: embedding
+            index: 0
+            embedding: [3.5371242120163515e-05, 0.035948336124420166, -0.014690718613564968]
+        model: intfloat/multilingual-e5-base
+        usage:
+          prompt_tokens: 8
+          total_tokens: 8
+
+    EmbeddingObject:
+      type: object
+      required: [object, index, embedding]
+      properties:
+        object:
+          type: string
+          enum: [embedding]
+        index:
+          type: integer
+          minimum: 0
+          description: 對應請求中 `input` 的索引位置
+        embedding:
+          type: array
+          description: 768 維向量，已完成 L2 正規化
+          minItems: 768
+          maxItems: 768
+          items:
+            type: number
+            format: float
+
+    Usage:
+      type: object
+      required: [prompt_tokens, total_tokens]
+      properties:
+        prompt_tokens:
+          type: integer
+          description: |
+            實際處理的 token 數，不含 padding。
+            單筆請求此值等於 512 時，表示輸入已達模型上限並被截斷。
+        total_tokens:
+          type: integer
+          description: 同 `prompt_tokens`，為相容性欄位
+
+    HealthResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [ok]
+        model:
+          type: string
+        dim:
+          type: integer
+          description: 向量維度
+        add_special_tokens:
+          type: boolean
+          description: 是否於 tokenize 時加入 `<s>` / `</s>`
+        max_batch:
+          type: integer
+          description: 單次請求筆數上限
+        micro_batch:
+          type: integer
+          description: 內部單次推論筆數
+      example:
+        status: ok
+        model: intfloat/multilingual-e5-base
+        dim: 768
+        add_special_tokens: false
+        max_batch: 512
+        micro_batch: 32
+
+    BadRequestError:
+      type: object
+      required: [detail]
+      properties:
+        detail:
+          type: string
+          description: 錯誤說明
+
+    ValidationError:
+      type: object
+      required: [detail]
+      properties:
+        detail:
+          type: array
+          description: |
+            由 FastAPI / Pydantic 產生的驗證錯誤清單。
+            注意此處 `detail` 為陣列，與 400 回應的字串型別不同。
+          items:
+            type: object
+            properties:
+              type:
+                type: string
+                example: string_type
+              loc:
+                type: array
+                items:
+                  oneOf:
+                    - type: string
+                    - type: integer
+                example: [body, input, str]
+              msg:
+                type: string
+              input: {}
