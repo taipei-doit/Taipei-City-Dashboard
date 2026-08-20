@@ -235,6 +235,43 @@ backend:
       secretKey: "AIRFLOW_SUMMARY_SVC_PASS"
       optional: false
 
+# Embedding service (multilingual-e5-base，從後端 image 拆出的獨立推論服務)
+embedding:
+  enabled: true
+  replicaCount: 1
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+
+  image:
+    repository: citydashboard-dhc2gtetgcfqeqhv.azurecr.io/taipei-city-dashboard-embedding
+    tag: ""
+
+  # 只給叢集內部（後端）呼叫，不對外開 LoadBalancer
+  service:
+    type: ClusterIP
+    port: 8080
+    targetPort: 8080
+
+  resources:
+    limits:
+      cpu: 2000m
+      memory: 3Gi
+    requests:
+      cpu: 500m
+      memory: 1Gi
+
+  env:
+    # 與後端原本 GenVector 寫死的 prefix 一致
+    E5_PREFIX: "query: "
+    # 後端用的 sugarme/tokenizer 不會加 <s> / </s>，跟著關掉才能與現有 Qdrant collection 對齊。
+    # 要改成 true 必須同時用新服務重建 collection，詳見 Taipei-City-Dashboard-Embedding/README.md
+    ADD_SPECIAL_TOKENS: "false"
+    ORT_INTRA_THREADS: "2"
+    MAX_BATCH: "64"
+
 externalDatabase: {}
 
 externalRedis: {}
