@@ -171,7 +171,20 @@ Pod 冷啟動要載入 1.1GB ONNX 模型，約 20–30 秒。k8s 的 `startupPro
 
 ### 1. 設定
 
-新增一個環境變數指向服務，並移除 `LM_MODEL_PATH`：
+**`EMBEDDING_URL` 已經由 helm chart 自動注入，你們不用做任何部署設定。**
+
+`helm-chart/templates/backend-deployment.yaml` 會在 `embedding.enabled: true` 時
+自動從 release 名稱推導出位址塞進後端 Deployment：
+
+```yaml
+- name: EMBEDDING_URL
+  value: "http://taipei-city-dashboard-embedding:8080"
+```
+
+不放 GitHub Secret，因為這只是叢集內 DNS 名稱、非機密，且 SIT 與 PROD 完全相同。
+需要指到別的位址時，在 `values-*.yaml` 的 `backend.env` 設 `EMBEDDING_URL` 就會蓋掉自動值。
+
+後端只要讀這個環境變數，並移除 `LM_MODEL_PATH`：
 
 ```go
 // global/global.go
@@ -184,8 +197,8 @@ Embedding = EmbeddingConfig{
 }
 ```
 
-helm 那邊我已經把服務佈上去了，`EMBEDDING_URL` 要加進
-`helm-chart/values-*.yaml` 的 `backend.env`（或 secret，看你們習慣）。
+網路連通性已在 SIT 驗過 —— 直接從後端 pod `wget http://taipei-city-dashboard-embedding:8080/healthz`
+就通，同 namespace 不需要任何 NetworkPolicy 或額外設定。
 
 ### 2. `GenVector()` 換成 HTTP 呼叫
 
