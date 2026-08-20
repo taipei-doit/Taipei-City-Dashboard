@@ -21,6 +21,7 @@ env:
   RELEASE: taipei-city-dashboard
   BE_IMAGE: taipei-city-dashboard-be
   FE_IMAGE: taipei-city-dashboard-fe
+  EMB_IMAGE: taipei-city-dashboard-embedding
   NAMESPACE: dashboard
 
 jobs:
@@ -57,6 +58,7 @@ jobs:
           filters: |
             backend:
               - 'Taipei-City-Dashboard-BE/**'
+              - 'Taipei-City-Dashboard-Embedding/**'
               - 'helm-chart/**'
             frontend:
               - 'Taipei-City-Dashboard-FE/**'
@@ -161,6 +163,18 @@ jobs:
             JWT_SECRET=${{ secrets.JWT_SECRET }}
             
           
+      - name: Build & push Embedding image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./Taipei-City-Dashboard-Embedding
+          file: ./Taipei-City-Dashboard-Embedding/Dockerfile
+          target: prod
+          push: true
+          tags: ${{ env.REGISTRY }}/${{ env.EMB_IMAGE }}:${{ steps.tag.outputs.value }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          platforms: linux/amd64
+
       - name: Build & push Frontend image
         uses: docker/build-push-action@v5
         with:
@@ -356,9 +370,9 @@ jobs:
           TAG=${{ steps.tag.outputs.value }}
           VALUES_FILE=${{ steps.helm-values.outputs.file }}
           echo "Verifying images exist..."
-          for img in ${{ env.REGISTRY }}/${{ env.BE_IMAGE }}:$TAG ${{ env.REGISTRY }}/${{ env.FE_IMAGE }}:$TAG; do
+          for img in ${{ env.REGISTRY }}/${{ env.BE_IMAGE }}:$TAG ${{ env.REGISTRY }}/${{ env.FE_IMAGE }}:$TAG ${{ env.REGISTRY }}/${{ env.EMB_IMAGE }}:$TAG; do
             echo "Checking $img"; docker manifest inspect $img > /dev/null 2>&1 || { echo "Missing image $img" >&2; exit 1; }; done
-          HELM_SET="--set backend.image.tag=$TAG --set frontend.image.tag=$TAG"
+          HELM_SET="--set backend.image.tag=$TAG --set frontend.image.tag=$TAG --set embedding.image.tag=$TAG"
           [ -n "$SEC_DB_DASHBOARD_PORT" ] && HELM_SET+=" --set backend.useSecretDbDashboardPort=true"
           [ -n "$SEC_DB_MANAGER_PORT" ] && HELM_SET+=" --set backend.useSecretDbManagerPort=true"
           [ -n "$SEC_REDIS_PORT" ] && HELM_SET+=" --set backend.useSecretRedisPort=true"
@@ -377,6 +391,9 @@ jobs:
           NS=${{ env.NAMESPACE }}
           echo "Backend image -> $(kubectl -n $NS get deploy taipei-city-dashboard-backend -o jsonpath='{.spec.template.spec.containers[0].image}')"
           echo "Frontend image -> $(kubectl -n $NS get deploy taipei-city-dashboard-frontend -o jsonpath='{.spec.template.spec.containers[0].image}')"
+          kubectl -n $NS get deploy taipei-city-dashboard-embedding >/dev/null 2>&1 \
+            && echo "Embedding image -> $(kubectl -n $NS get deploy taipei-city-dashboard-embedding -o jsonpath='{.spec.template.spec.containers[0].image}')" \
+            || echo "Embedding: disabled"
 
       - name: Diagnostics on failure
         if: failure()

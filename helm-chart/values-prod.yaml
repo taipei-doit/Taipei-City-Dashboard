@@ -235,6 +235,40 @@ backend:
       secretKey: "AIRFLOW_SUMMARY_SVC_PASS"
       optional: false
 
+# Embedding service (multilingual-e5-base，從後端 image 拆出的獨立推論服務)
+# PROD 先關閉，待 SIT 驗證且後端改為呼叫 API 後再開
+embedding:
+  enabled: false
+  replicaCount: 2
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+
+  image:
+    repository: citydashboard-dhc2gtetgcfqeqhv.azurecr.io/taipei-city-dashboard-embedding
+    tag: ""
+
+  service:
+    type: ClusterIP
+    port: 8080
+    targetPort: 8080
+
+  resources:
+    limits:
+      cpu: 2000m
+      memory: 3Gi
+    requests:
+      cpu: 500m
+      memory: 1Gi
+
+  env:
+    E5_PREFIX: "query: "
+    ADD_SPECIAL_TOKENS: "false"
+    ORT_INTRA_THREADS: "2"
+    MAX_BATCH: "64"
+
 externalDatabase: {}
 
 externalRedis: {}
