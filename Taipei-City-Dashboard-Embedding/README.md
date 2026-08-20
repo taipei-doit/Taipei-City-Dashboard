@@ -44,6 +44,9 @@ Qdrant 現有的 collection 是照這個行為建出來的，所以本服務預�
 
 ## API
 
+> **要提供給後端的完整規格書在 [`API.md`](./API.md)** —— 含錯誤碼、timeout 建議、
+> Go 串接範例、以及「不要自己加 `query: `」等注意事項。下面是摘要。
+
 Base URL（叢集內）：`http://taipei-city-dashboard-embedding.dashboard.svc.cluster.local:8080`
 同 namespace 可直接用 `http://taipei-city-dashboard-embedding:8080`
 
