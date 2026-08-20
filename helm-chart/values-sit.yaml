@@ -274,7 +274,9 @@ embedding:
     # 要改成 true 必須同時用新服務重建 collection，詳見 Taipei-City-Dashboard-Embedding/README.md
     ADD_SPECIAL_TOKENS: "false"
     ORT_INTRA_THREADS: "2"
-    MAX_BATCH: "64"
+    # 單次請求上限；服務內部會再切成 MICRO_BATCH 送進 ONNX，記憶體用量與請求大小無關
+    MAX_BATCH: "512"
+    MICRO_BATCH: "32"
 
 externalDatabase: {}
 
