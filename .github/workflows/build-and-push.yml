@@ -152,8 +152,8 @@ jobs:
           target: prod
           push: true
           tags: ${{ env.REGISTRY }}/${{ env.BE_IMAGE }}:${{ steps.tag.outputs.value }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-from: type=gha,scope=be
+          cache-to: type=gha,mode=max,scope=be
           platforms: linux/amd64
           build-args: |
             G1G2_CERT=${{ secrets.G1G2_CERT }}
@@ -171,8 +171,8 @@ jobs:
           target: prod
           push: true
           tags: ${{ env.REGISTRY }}/${{ env.EMB_IMAGE }}:${{ steps.tag.outputs.value }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-from: type=gha,scope=emb
+          cache-to: type=gha,mode=max,scope=emb
           platforms: linux/amd64
 
       - name: Build & push Frontend image
@@ -182,8 +182,8 @@ jobs:
           file: ./Taipei-City-Dashboard-FE/Dockerfile
           push: true
           tags: ${{ env.REGISTRY }}/${{ env.FE_IMAGE }}:${{ steps.tag.outputs.value }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-from: type=gha,scope=fe
+          cache-to: type=gha,mode=max,scope=fe
           platforms: linux/amd64
           build-args: |
             NODE_ENV=${{ secrets.NODE_ENV }}
