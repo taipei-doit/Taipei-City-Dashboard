@@ -57,7 +57,7 @@ Request：
 
 | 欄位 | 型別 | 必填 | 說明 |
 | --- | --- | --- | --- |
-| `input` | `string` 或 `string[]` | ✅ | 要轉向量的文字。給陣列即為批次，一次最多 `MAX_BATCH`（預設 64）筆 |
+| `input` | `string` 或 `string[]` | ✅ | 要轉向量的文字。給陣列即為批次，一次最多 `MAX_BATCH`（預設 512）筆 |
 | `model` | `string` | ❌ | 相容欄位，服務只載一個模型，傳什麼都會忽略 |
 | `prefix` | `string` | ❌ | 覆蓋 e5 prefix。**不傳就是 `"query: "`，與後端現行行為相同**；建索引想用 `"passage: "` 才需要傳 |
 
@@ -142,10 +142,26 @@ func GenVector(inputText string) ([]float32, error) {
 | --- | --- | --- |
 | 1 | 25 ms | 39 texts/s |
 | 8 | 107 ms | 75 texts/s |
-| 32 | 332 ms | 96 texts/s |
-| 64 | 603 ms | 106 texts/s |
+| 32 | 292 ms | 110 texts/s |
+| 300（長短混雜） | 8.7 s | 35 texts/s |
 
-單筆查詢維持 25ms 等級；重建索引改用批次可以快 2.7 倍。
+單筆查詢維持 25ms 等級；重建索引改用批次快 2.8 倍。
+
+### 批次是怎麼處理的
+
+一次可以送到 `MAX_BATCH`（512）筆。服務內部會：
+
+1. 先全部 tokenize，**依 token 數排序**
+2. 每 `MICRO_BATCH`（32）筆切一塊送進 ONNX，各塊只 pad 到該塊最長的長度
+3. 寫回**原始輸入順序**，`data[i].index` 一定對得上第 i 筆輸入
+
+排序分塊是為了避免長短混批時，短文字被 pad 到最長那筆的長度而白燒算力。
+實測 32 短 + 32 長混在一起：3001 ms → 1644 ms（**省 45%**）。
+
+切塊也讓記憶體用量與請求大小脫鉤 —— 送 512 筆和送 32 筆的峰值記憶體一樣。
+
+批次與單筆的向量是逐位相同的（實測 50 筆混合長度 `max abs diff = 0.0`），
+所以要不要打包純粹看呼叫端方便。
 
 後端拔掉推論後可以一起清掉：
 
@@ -163,7 +179,8 @@ func GenVector(inputText string) ([]float32, error) {
 | --- | --- | --- |
 | `LM_MODEL_PATH` | `/opt/lm_model/onnx-e5` | 模型目錄（image 內已備好，通常不用改） |
 | `E5_PREFIX` | `query: ` | 預設 e5 prefix，與後端現行行為對齊 |
-| `MAX_BATCH` | `64` | 單次請求最多幾筆 |
+| `MAX_BATCH` | `512` | 單次請求最多幾筆，超過回 400 |
+| `MICRO_BATCH` | `32` | 內部一次送進 ONNX 的筆數，記憶體用量由此決定，與請求大小無關 |
 | `MAX_SEQ_LEN` | `512` | 超過就截斷（模型上限） |
 | `MAX_CHARS` | `8192` | 單筆字數上限，超過回 400 |
 | `ADD_SPECIAL_TOKENS` | `false` | 是否加 `<s>` / `</s>`。**改動前務必先看上面那段** |
