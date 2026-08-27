@@ -280,6 +280,7 @@ jobs:
           SEC_AIRFLOW_SUMMARY_BASE_URL: ${{ secrets.AIRFLOW_SUMMARY_BASE_URL }}
           SEC_AIRFLOW_SUMMARY_SVC_USER: ${{ secrets.AIRFLOW_SUMMARY_SVC_USER }}
           SEC_AIRFLOW_SUMMARY_SVC_PASS: ${{ secrets.AIRFLOW_SUMMARY_SVC_PASS }}
+          SEC_EMBEDDING_URL: ${{ secrets.EMBEDDING_URL }}
         run: |
           set -euo pipefail
           # Defensive: ensure we are in bash (GitHub uses bash by default for run:)
@@ -340,6 +341,7 @@ jobs:
           add AIRFLOW_SUMMARY_BASE_URL "$SEC_AIRFLOW_SUMMARY_BASE_URL"
           add AIRFLOW_SUMMARY_SVC_USER "$SEC_AIRFLOW_SUMMARY_SVC_USER"
           add AIRFLOW_SUMMARY_SVC_PASS "$SEC_AIRFLOW_SUMMARY_SVC_PASS"
+          add EMBEDDING_URL "$SEC_EMBEDDING_URL"
 
           # Show which keys will be applied (without values)
           echo "Secret keys to apply:" >&2

@@ -190,6 +190,9 @@ backend:
     - name: QDRANT_API_KEY
       secretKey: "QDRANT_API_KEY"
       optional: false
+    - name: EMBEDDING_URL
+      secretKey: "EMBEDDING_URL"
+      optional: false
     - name: LM_MODEL_PATH
       secretKey: "LM_MODEL_PATH"
       optional: false
