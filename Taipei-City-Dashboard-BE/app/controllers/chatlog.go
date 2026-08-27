@@ -10,24 +10,32 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+type CreateChatLogReq struct {
+	Session  string `json:"session" form:"session"`
+	Question string `json:"question" form:"question"`
+	Answer   string `json:"answer" form:"answer"`
+}
+
 func CreateChatLog(c *gin.Context) {
 	var chatLog models.ChatLog
-	
-	accountID, exists  := c.Get("accountID")
 
+	accountID, exists := c.Get("accountID")
 	if !exists {
 		c.JSON(http.StatusUnauthorized, gin.H{"status": "error", "message": "Unauthorized"})
 		return
 	}
 
+	var req CreateChatLogReq
+	if err := c.ShouldBind(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": err.Error()})
+		return
+	}
+
 	// Sanitize input to prevent XSS
-	session := c.PostForm("session")
-	question := c.PostForm("question")
-	answer := c.PostForm("answer")
+	session := html.EscapeString(req.Session)
+	question := html.EscapeString(req.Question)
+	answer := html.EscapeString(req.Answer)
 	ipAddress := c.ClientIP()
-	session = html.EscapeString(session)
-	question = html.EscapeString(question)
-	answer = html.EscapeString(answer)
 
 	chatLog, _ = models.CreateChatLog(session, question, answer, ipAddress, accountID.(int))
 	c.JSON(http.StatusOK, gin.H{"status": "success", "data": chatLog})
