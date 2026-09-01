@@ -67,12 +67,12 @@ function getLinkTag(link, index) {
           </div>
           <div v-if="dialogStore.moreInfoContent.links?.length > 0">
             <h3>相關資料</h3>
-			<!-- 提醒文字 -->
-			<div
-				class="moreinfo-inline-tooltip"
-			>
-				提醒：受資料更新頻率、資料品質、地址轉換結果及來源限制等因素影響，儀表板所呈現之資料內容可能與原始資料略有差異。
-			</div>
+            <!-- 提醒文字 -->
+            <div
+              class="moreinfo-inline-tooltip"
+            >
+              提醒：受資料更新頻率、資料品質、地址轉換結果及來源限制等因素影響，儀表板所呈現之資料內容可能與原始資料略有差異。
+            </div>
             <div class="moreinfo-info-links">
               <a
                 v-for="(link, index) in dialogStore

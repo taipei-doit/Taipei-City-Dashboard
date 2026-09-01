@@ -8,12 +8,15 @@ import { useAuthStore } from "../../store/authStore";
 import { useContentStore } from "../../store/contentStore";
 import { useDialogStore } from "../../store/dialogStore";
 import { useMapStore } from "../../store/mapStore";
+import { useWindEngine } from "../../composables/useWindEngine";
 
 import AddViewPoint from "../dialogs/AddViewPoint.vue";
 import MobileLayers from "../dialogs/MobileLayers.vue";
 import IncidentReport from "../dialogs/IncidentReport.vue";
 import FindClosestPoint from "../dialogs/FindClosestPoint.vue";
 import { savedLocations } from "../../assets/configs/mapbox/savedLocations.js";
+import Isochrone from "../icons/IsochroneIcon.vue";
+import IsochroneSettingPopup from "./IsochroneSettingPopup.vue";
 
 const authStore = useAuthStore();
 const mapStore = useMapStore();
@@ -21,8 +24,12 @@ const dialogStore = useDialogStore();
 const contentStore = useContentStore();
 const route = useRoute();
 
+// 掛載風場引擎
+useWindEngine();
+
 const districtLayer = ref(false);
 const villageLayer = ref(false);
+const isoMenu = ref(false);
 
 const canUseFindClosestPoint = computed(() => {
 	let pointLayerCount = 0;
@@ -40,45 +47,49 @@ function toggleDistrictLayer() {
 	districtLayer.value = !districtLayer.value;
 	mapStore.toggleDistrictBoundaries(districtLayer.value);
 	// 載入區界時觸發GA自訂事件
-	gtag('event','map_actions', {
+	gtag("event", "map_actions", {
 		action_type: "載入區界",
 		time: Date.now(),
-  	})
+	});
 }
 
 function toggleVillageLayer() {
 	villageLayer.value = !villageLayer.value;
 	mapStore.toggleVillageBoundaries(villageLayer.value);
 	// 載入里界時觸發GA自訂事件
-	gtag('event','map_actions', {
+	gtag("event", "map_actions", {
 		action_type: "載入里界",
 		time: Date.now(),
-  	})
+	});
+}
+
+function toggleIsochroneSettings() {
+	isoMenu.value = !isoMenu.value;
 }
 
 // 尋找最近點時觸發GA自訂事件
 function findClosestPointGA() {
-	gtag('event','map_actions', {
+	gtag("event", "map_actions", {
 		action_type: "尋找最近點",
 		time: Date.now(),
-  	})
+	});
 }
 
 watch(
 	() => route.query?.city,
 	(newValue) => {
-		newValue 
+		newValue
 			? mapStore.updateMapViewForCity(newValue)
-			: mapStore.updateMapViewForCity('default');
-	}
+			: mapStore.updateMapViewForCity("default");
+	},
 );
 
 onMounted(() => {
 	mapStore.initializeMapBox();
 	mapStore.setCurrentLocation();
-	route.query.city 
+	route.query.city
 		? mapStore.updateMapViewForCity(route.query.city)
-		: mapStore.updateMapViewForCity('default');
+		: mapStore.updateMapViewForCity("default");
 });
 </script>
 
@@ -108,7 +119,12 @@ onMounted(() => {
         >
           里
         </button>
-
+        <button
+          class="isochrone-btn"
+          @click="toggleIsochroneSettings"
+        >
+          <Isochrone />
+        </button>
         <button
           v-if="canUseFindClosestPoint"
           :style="{
@@ -118,7 +134,10 @@ onMounted(() => {
           }"
           class="hide-if-mobile"
           type="button"
-          @click="dialogStore.showDialog('findClosestPoint'); findClosestPointGA();"
+          @click="
+            dialogStore.showDialog('findClosestPoint');
+            findClosestPointGA();
+          "
         >
           近
         </button>
@@ -148,6 +167,13 @@ onMounted(() => {
       <IncidentReport />
       <FindClosestPoint />
     </div>
+
+    <!-- 等時圈設定介面 -->
+    <IsochroneSettingPopup
+      v-if="isoMenu"
+      class="isochrone-setting"
+      @close="toggleIsochroneSettings"
+    />
 
     <div class="mapcontainer-controls hide-if-mobile">
       <button
@@ -352,7 +378,9 @@ onMounted(() => {
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			transition: background-color 0.2s, color 0.2s;
+			transition:
+				background-color 0.2s,
+				color 0.2s;
 			font-size: var(--font-xl);
 
 			&:hover {

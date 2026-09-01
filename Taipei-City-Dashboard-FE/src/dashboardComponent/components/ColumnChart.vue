@@ -68,6 +68,9 @@ const chartOptions = ref({
 	},
 	grid: {
 		show: false,
+		padding: {
+			bottom: 20,
+		},
 	},
 	legend: isLargeDataSet.value
 		? {
@@ -220,7 +223,7 @@ function resetWidth() {
       :key="chartWidth"
       type="bar"
       :width="chartWidth"
-      height="250px"
+      height="260px"
       :options="chartOptions"
       :series="series"
       @data-point-selection="handleDataSelection"

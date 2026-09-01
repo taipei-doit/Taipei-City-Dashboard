@@ -15,12 +15,18 @@ on:
         type: boolean
         required: false
         default: false
+      force_embedding:
+        description: "Force deploy embedding even if no changes detected"
+        type: boolean
+        required: false
+        default: false
 
 env:
   REGISTRY: citydashboard-dhc2gtetgcfqeqhv.azurecr.io
   RELEASE: taipei-city-dashboard
   BE_IMAGE: taipei-city-dashboard-be
   FE_IMAGE: taipei-city-dashboard-fe
+  EMB_IMAGE: taipei-city-dashboard-embedding
   NAMESPACE: dashboard
 
 jobs:
@@ -30,6 +36,8 @@ jobs:
     outputs:
       backend: ${{ steps.set-outputs.outputs.backend }}
       frontend: ${{ steps.set-outputs.outputs.frontend }}
+      embedding: ${{ steps.set-outputs.outputs.embedding }}
+      deploy: ${{ steps.set-outputs.outputs.deploy }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -57,9 +65,11 @@ jobs:
           filters: |
             backend:
               - 'Taipei-City-Dashboard-BE/**'
-              - 'helm-chart/**'
             frontend:
               - 'Taipei-City-Dashboard-FE/**'
+            embedding:
+              - 'Taipei-City-Dashboard-Embedding/**'
+            helm:
               - 'helm-chart/**'
             shared:
               - '.github/workflows/build-and-push.yml'
@@ -69,39 +79,45 @@ jobs:
         run: |
           FORCE_BE='${{ github.event.inputs.force_backend }}'
           FORCE_FE='${{ github.event.inputs.force_frontend }}'
+          FORCE_EMB='${{ github.event.inputs.force_embedding }}'
           CHG_BE='${{ steps.changes.outputs.backend }}'
           CHG_FE='${{ steps.changes.outputs.frontend }}'
+          CHG_EMB='${{ steps.changes.outputs.embedding }}'
+          CHG_HELM='${{ steps.changes.outputs.helm }}'
           CHG_SHARED='${{ steps.changes.outputs.shared }}'
-          
-          # Strategy: if ANY change detected, deploy BOTH services for consistency and safety
-          ANY_CHANGE=false
-          
-          # Check for any changes
-          if [ "$FORCE_BE" = "true" ] || [ "$FORCE_FE" = "true" ] || [ "$CHG_BE" = "true" ] || [ "$CHG_FE" = "true" ] || [ "$CHG_SHARED" = "true" ]; then
-            ANY_CHANGE=true
+
+          # Strategy: 各元件只在自己的路徑有動時才重建 image，沒動的沿用叢集上正在跑的 tag。
+          # helm-chart/ 或 workflow 改動只會觸發 helm upgrade，不重建任何 image。
+          BUILD_BE=false; BUILD_FE=false; BUILD_EMB=false
+          if [ "$CHG_BE"  = "true" ] || [ "$FORCE_BE"  = "true" ]; then BUILD_BE=true;  fi
+          if [ "$CHG_FE"  = "true" ] || [ "$FORCE_FE"  = "true" ]; then BUILD_FE=true;  fi
+          if [ "$CHG_EMB" = "true" ] || [ "$FORCE_EMB" = "true" ]; then BUILD_EMB=true; fi
+
+          DEPLOY=false
+          if [ "$BUILD_BE" = "true" ] || [ "$BUILD_FE" = "true" ] || [ "$BUILD_EMB" = "true" ] \
+             || [ "$CHG_HELM" = "true" ] || [ "$CHG_SHARED" = "true" ]; then
+            DEPLOY=true
           fi
-          
-          # If any change detected, deploy both services
-          if [ "$ANY_CHANGE" = "true" ]; then
-            echo "Changes detected - deploying both services for consistency"
-            echo "backend=true" >> $GITHUB_OUTPUT
-            echo "frontend=true" >> $GITHUB_OUTPUT
-          else
-            echo "No changes detected - skipping deployment"
-            echo "backend=false" >> $GITHUB_OUTPUT
-            echo "frontend=false" >> $GITHUB_OUTPUT
-          fi
-          
-          echo "Final decision -> backend=true frontend=true (any_change=$ANY_CHANGE, triggers: force_be=$FORCE_BE force_fe=$FORCE_FE chg_be=$CHG_BE chg_fe=$CHG_FE chg_shared=$CHG_SHARED)"
+
+          echo "backend=$BUILD_BE" >> $GITHUB_OUTPUT
+          echo "frontend=$BUILD_FE" >> $GITHUB_OUTPUT
+          echo "embedding=$BUILD_EMB" >> $GITHUB_OUTPUT
+          echo "deploy=$DEPLOY" >> $GITHUB_OUTPUT
+
+          echo "Changes  -> be=$CHG_BE fe=$CHG_FE emb=$CHG_EMB helm=$CHG_HELM workflow=$CHG_SHARED"
+          echo "Forces   -> be=$FORCE_BE fe=$FORCE_FE emb=$FORCE_EMB"
+          echo "Decision -> build_be=$BUILD_BE build_fe=$BUILD_FE build_emb=$BUILD_EMB deploy=$DEPLOY"
 
       - name: Summary
         run: |
-          echo "Backend deploy: ${{ steps.set-outputs.outputs.backend }}"
-          echo "Frontend deploy: ${{ steps.set-outputs.outputs.frontend }}"
+          echo "Build backend  : ${{ steps.set-outputs.outputs.backend }}"
+          echo "Build frontend : ${{ steps.set-outputs.outputs.frontend }}"
+          echo "Build embedding: ${{ steps.set-outputs.outputs.embedding }}"
+          echo "Run deploy     : ${{ steps.set-outputs.outputs.deploy }}"
 
   build-and-deploy:
     needs: detect-changes
-    if: (github.event_name == 'workflow_dispatch' || github.event_name == 'push') && needs.detect-changes.outputs.backend == 'true'
+    if: (github.event_name == 'workflow_dispatch' || github.event_name == 'push') && needs.detect-changes.outputs.deploy == 'true'
     runs-on: ubuntu-latest
     environment:
       # Updated: map pre-develop branch to use 'prod' environment (was 'pre-prod') so it can use prod env secrets per request
@@ -143,6 +159,7 @@ jobs:
           echo "Using image tag: ${TAG}"
 
       - name: Build & push Backend image
+        if: needs.detect-changes.outputs.backend == 'true'
         uses: docker/build-push-action@v5
         with:
           context: ./Taipei-City-Dashboard-BE
@@ -150,8 +167,8 @@ jobs:
           target: prod
           push: true
           tags: ${{ env.REGISTRY }}/${{ env.BE_IMAGE }}:${{ steps.tag.outputs.value }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-from: type=gha,scope=be
+          cache-to: type=gha,mode=max,scope=be
           platforms: linux/amd64
           build-args: |
             G1G2_CERT=${{ secrets.G1G2_CERT }}
@@ -161,15 +178,29 @@ jobs:
             JWT_SECRET=${{ secrets.JWT_SECRET }}
             
           
+      - name: Build & push Embedding image
+        if: needs.detect-changes.outputs.embedding == 'true'
+        uses: docker/build-push-action@v5
+        with:
+          context: ./Taipei-City-Dashboard-Embedding
+          file: ./Taipei-City-Dashboard-Embedding/Dockerfile
+          target: prod
+          push: true
+          tags: ${{ env.REGISTRY }}/${{ env.EMB_IMAGE }}:${{ steps.tag.outputs.value }}
+          cache-from: type=gha,scope=emb
+          cache-to: type=gha,mode=max,scope=emb
+          platforms: linux/amd64
+
       - name: Build & push Frontend image
+        if: needs.detect-changes.outputs.frontend == 'true'
         uses: docker/build-push-action@v5
         with:
           context: ./Taipei-City-Dashboard-FE
           file: ./Taipei-City-Dashboard-FE/Dockerfile
           push: true
           tags: ${{ env.REGISTRY }}/${{ env.FE_IMAGE }}:${{ steps.tag.outputs.value }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-from: type=gha,scope=fe
+          cache-to: type=gha,mode=max,scope=fe
           platforms: linux/amd64
           build-args: |
             NODE_ENV=${{ secrets.NODE_ENV }}
@@ -246,6 +277,9 @@ jobs:
           SEC_AI_TIMEOUT: ${{ secrets.AI_TIMEOUT }}
           SEC_AI_MAX_RETRY: ${{ secrets.AI_MAX_RETRY }}
           SEC_AI_MAX_CONCURRENT: ${{ secrets.AI_MAX_CONCURRENT }}
+          SEC_AIRFLOW_SUMMARY_BASE_URL: ${{ secrets.AIRFLOW_SUMMARY_BASE_URL }}
+          SEC_AIRFLOW_SUMMARY_SVC_USER: ${{ secrets.AIRFLOW_SUMMARY_SVC_USER }}
+          SEC_AIRFLOW_SUMMARY_SVC_PASS: ${{ secrets.AIRFLOW_SUMMARY_SVC_PASS }}
         run: |
           set -euo pipefail
           # Defensive: ensure we are in bash (GitHub uses bash by default for run:)
@@ -303,6 +337,10 @@ jobs:
           add AI_TIMEOUT "$SEC_AI_TIMEOUT"
           add AI_MAX_RETRY "$SEC_AI_MAX_RETRY"
           add AI_MAX_CONCURRENT "$SEC_AI_MAX_CONCURRENT"
+          add AIRFLOW_SUMMARY_BASE_URL "$SEC_AIRFLOW_SUMMARY_BASE_URL"
+          add AIRFLOW_SUMMARY_SVC_USER "$SEC_AIRFLOW_SUMMARY_SVC_USER"
+          add AIRFLOW_SUMMARY_SVC_PASS "$SEC_AIRFLOW_SUMMARY_SVC_PASS"
+
           # Show which keys will be applied (without values)
           echo "Secret keys to apply:" >&2
           for a in "${ARGS[@]}"; do
@@ -336,40 +374,83 @@ jobs:
           echo "Using values file: ${VALUES_FILE}"
           echo "file=${VALUES_FILE}" >> $GITHUB_OUTPUT
 
-      - name: Single Helm upgrade (backend + frontend)
+      - name: Single Helm upgrade (backend + frontend + embedding)
         env:
           SEC_DB_DASHBOARD_PORT: ${{ secrets.DB_DASHBOARD_PORT || '' }}
           SEC_DB_MANAGER_PORT: ${{ secrets.DB_MANAGER_PORT || '' }}
           SEC_REDIS_PORT: ${{ secrets.REDIS_PORT || '' }}
           SEC_REDIS_DB: ${{ secrets.REDIS_DB || '' }}
+          BUILT_BE: ${{ needs.detect-changes.outputs.backend }}
+          BUILT_FE: ${{ needs.detect-changes.outputs.frontend }}
+          BUILT_EMB: ${{ needs.detect-changes.outputs.embedding }}
         run: |
           set -euo pipefail
           RELEASE=${{ env.RELEASE }}
           NS=${{ env.NAMESPACE }}
           TAG=${{ steps.tag.outputs.value }}
           VALUES_FILE=${{ steps.helm-values.outputs.file }}
+
+          # 這次沒重建的元件沿用叢集上正在跑的 tag，避免 helm 指到不存在的 image。
+          # 回傳空字串代表叢集上還沒有這個 deployment（首次安裝或該元件在 values 裡是關的）。
+          resolve_tag() {
+            local deploy="$1" built="$2" cur
+            if [ "$built" = "true" ]; then echo "$TAG"; return; fi
+            cur=$(kubectl -n "$NS" get deploy "$deploy" -o jsonpath='{.spec.template.spec.containers[0].image}' 2>/dev/null || true)
+            if [ -n "$cur" ]; then echo "${cur##*:}"; else echo ""; fi
+          }
+
+          BE_TAG=$(resolve_tag "${RELEASE}-backend" "$BUILT_BE")
+          FE_TAG=$(resolve_tag "${RELEASE}-frontend" "$BUILT_FE")
+          EMB_TAG=$(resolve_tag "${RELEASE}-embedding" "$BUILT_EMB")
+          echo "Image tags -> backend=${BE_TAG:-<none>} frontend=${FE_TAG:-<none>} embedding=${EMB_TAG:-<none>}"
+
           echo "Verifying images exist..."
-          for img in ${{ env.REGISTRY }}/${{ env.BE_IMAGE }}:$TAG ${{ env.REGISTRY }}/${{ env.FE_IMAGE }}:$TAG; do
-            echo "Checking $img"; docker manifest inspect $img > /dev/null 2>&1 || { echo "Missing image $img" >&2; exit 1; }; done
-          HELM_SET="--set backend.image.tag=$TAG --set frontend.image.tag=$TAG"
+          verify() {
+            if [ -z "$2" ]; then echo "  skip $1 (no tag resolved)"; return 0; fi
+            echo "  checking $1:$2"
+            docker manifest inspect "$1:$2" >/dev/null 2>&1 || { echo "Missing image $1:$2" >&2; exit 1; }
+          }
+          verify ${{ env.REGISTRY }}/${{ env.BE_IMAGE }} "$BE_TAG"
+          verify ${{ env.REGISTRY }}/${{ env.FE_IMAGE }} "$FE_TAG"
+          verify ${{ env.REGISTRY }}/${{ env.EMB_IMAGE }} "$EMB_TAG"
+
+          # 解析不到 tag 就不帶 --set；若該元件在 values 裡是開的，
+          # helm 的 image helper 會明確報 "Image tag must be explicitly set"，
+          # 此時用 workflow_dispatch 的 force_* 重跑一次即可。
+          HELM_SET=""
+          if [ -n "$BE_TAG" ]; then HELM_SET+=" --set backend.image.tag=$BE_TAG"; fi
+          if [ -n "$FE_TAG" ]; then HELM_SET+=" --set frontend.image.tag=$FE_TAG"; fi
+          if [ -n "$EMB_TAG" ]; then HELM_SET+=" --set embedding.image.tag=$EMB_TAG"; fi
           [ -n "$SEC_DB_DASHBOARD_PORT" ] && HELM_SET+=" --set backend.useSecretDbDashboardPort=true"
           [ -n "$SEC_DB_MANAGER_PORT" ] && HELM_SET+=" --set backend.useSecretDbManagerPort=true"
           [ -n "$SEC_REDIS_PORT" ] && HELM_SET+=" --set backend.useSecretRedisPort=true"
           [ -n "$SEC_REDIS_DB" ] && HELM_SET+=" --set backend.useSecretRedisDb=true"
           if helm -n "$NS" status "$RELEASE" >/dev/null 2>&1; then
-            echo "Upgrading existing release $RELEASE with tag $TAG using ${VALUES_FILE}"
+            echo "Upgrading existing release $RELEASE using ${VALUES_FILE} with:$HELM_SET"
             helm upgrade "$RELEASE" ./helm-chart -f "${VALUES_FILE}" $HELM_SET --namespace "$NS" --wait --timeout=20m --debug
           else
-            echo "Installing new release $RELEASE with tag $TAG using ${VALUES_FILE}"
+            echo "Installing new release $RELEASE using ${VALUES_FILE} with:$HELM_SET"
             helm upgrade --install "$RELEASE" ./helm-chart -f "${VALUES_FILE}" $HELM_SET --namespace "$NS" --wait --timeout=20m --debug
 
           fi
 
       - name: Deployment summary
+        env:
+          BUILT_BE: ${{ needs.detect-changes.outputs.backend }}
+          BUILT_FE: ${{ needs.detect-changes.outputs.frontend }}
+          BUILT_EMB: ${{ needs.detect-changes.outputs.embedding }}
         run: |
           NS=${{ env.NAMESPACE }}
-          echo "Backend image -> $(kubectl -n $NS get deploy taipei-city-dashboard-backend -o jsonpath='{.spec.template.spec.containers[0].image}')"
-          echo "Frontend image -> $(kubectl -n $NS get deploy taipei-city-dashboard-frontend -o jsonpath='{.spec.template.spec.containers[0].image}')"
+          RELEASE=${{ env.RELEASE }}
+          show() {
+            local img
+            img=$(kubectl -n "$NS" get deploy "${RELEASE}-$1" -o jsonpath='{.spec.template.spec.containers[0].image}' 2>/dev/null || true)
+            if [ -z "$img" ]; then echo "$1: not deployed (disabled in values)"; return; fi
+            if [ "$2" = "true" ]; then echo "$1 -> $img  (rebuilt)"; else echo "$1 -> $img  (unchanged, reused)"; fi
+          }
+          show backend "$BUILT_BE"
+          show frontend "$BUILT_FE"
+          show embedding "$BUILT_EMB"
 
       - name: Diagnostics on failure
         if: failure()

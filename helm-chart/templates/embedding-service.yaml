@@ -1,0 +1,17 @@
+{{- if and .Values.embedding .Values.embedding.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "taipei-city-dashboard.fullname" . }}-embedding
+  labels:
+    {{- include "taipei-city-dashboard.embedding.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.embedding.service.type }}
+  ports:
+    - port: {{ .Values.embedding.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "taipei-city-dashboard.embedding.selectorLabels" . | nindent 4 }}
+{{- end }}

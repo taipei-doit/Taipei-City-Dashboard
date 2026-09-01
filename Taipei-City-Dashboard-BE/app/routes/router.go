@@ -41,6 +41,7 @@ func ConfigureRoutes() {
 	configureContributorRoutes()
 	configureChatLogRoutes()
 	configureAIRoutes()
+	configureTransitRoutes()
 }
 
 func configureAuthRoutes() {
@@ -109,6 +110,9 @@ func configureComponentRoutes() {
 	componentRoutes.Use(middleware.LimitTotalRequests(global.ComponentLimitTotalRequestsTimes, global.LimitRequestsDuration))
 	{
 		componentRoutes.GET("/", controllers.GetAllComponents)
+		componentRoutes.GET("/ai-summary", controllers.GetComponentAISummary)
+		componentRoutes.POST("/ai-summary/trigger", controllers.TriggerComponentAISummaryDAG)
+		componentRoutes.GET("/ai-summary/status/:dag_run_id", controllers.GetComponentAISummaryDAGStatus)
 		componentRoutes.GET("/:id", controllers.GetComponentByID)
 		componentRoutes.GET("/:id/all", controllers.GetComponentByIDAll)
 		componentRoutes.GET("/:id/chart", controllers.GetComponentChartData)
@@ -207,6 +211,19 @@ func configureAIRoutes() {
 		aiRoutes.POST("/chat/openai", controllers.ChatWithOpenAI)
 		aiRoutes.POST("/chat/gemini", controllers.ChatWithGemini)
 	}
+}
+
+func configureTransitRoutes() {
+	transitRoutes := RouterGroup.Group("/transit")
+	transitRoutes.Use(middleware.LimitAPIRequests(global.ComponentLimitAPIRequestsTimes, global.LimitRequestsDuration))
+	transitRoutes.Use(middleware.LimitTotalRequests(global.ComponentLimitTotalRequestsTimes, global.LimitRequestsDuration))
+	{
+		transitRoutes.POST("/isochrone/full", controllers.GetIsochroneFull)
+		transitRoutes.POST("/isochrone/network", controllers.GetIsochroneNetwork)
+	}
+
+	// Legacy endpoint
+	RouterGroup.POST("/isochrone", controllers.GetIsochrone)
 }
 
 // func configureLmRoutes() {

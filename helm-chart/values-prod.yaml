@@ -225,6 +225,51 @@ backend:
     - name: GEMINI_MODEL
       secretKey: "GEMINI_MODEL"
       optional: false
+    - name: AIRFLOW_SUMMARY_BASE_URL
+      secretKey: "AIRFLOW_SUMMARY_BASE_URL"
+      optional: false
+    - name: AIRFLOW_SUMMARY_SVC_USER
+      secretKey: "AIRFLOW_SUMMARY_SVC_USER"
+      optional: false
+    - name: AIRFLOW_SUMMARY_SVC_PASS
+      secretKey: "AIRFLOW_SUMMARY_SVC_PASS"
+      optional: false
+
+# Embedding service (multilingual-e5-base，從後端 image 拆出的獨立推論服務)
+# PROD 先關閉，待 SIT 驗證且後端改為呼叫 API 後再開
+embedding:
+  enabled: false
+  replicaCount: 2
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+
+  image:
+    repository: citydashboard-dhc2gtetgcfqeqhv.azurecr.io/taipei-city-dashboard-embedding
+    tag: ""
+
+  service:
+    type: ClusterIP
+    port: 8080
+    targetPort: 8080
+
+  resources:
+    limits:
+      cpu: 2000m
+      memory: 3Gi
+    requests:
+      cpu: 500m
+      memory: 1Gi
+
+  env:
+    E5_PREFIX: "query: "
+    ADD_SPECIAL_TOKENS: "false"
+    ORT_INTRA_THREADS: "2"
+    # 單次請求上限；服務內部會再切成 MICRO_BATCH 送進 ONNX，記憶體用量與請求大小無關
+    MAX_BATCH: "512"
+    MICRO_BATCH: "32"
 
 externalDatabase: {}
 
