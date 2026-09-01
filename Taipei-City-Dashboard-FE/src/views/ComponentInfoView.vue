@@ -214,10 +214,10 @@ onMounted(() => {
               >
                 <a
                   v-if="
-                    contentStore.contributors[contributor]
+                    contentStore.contributors?.[contributor]
                   "
                   :href="
-                    contentStore.contributors[contributor]
+                    contentStore.contributors?.[contributor]
                       ?.link
                   "
                   target="_blank"
@@ -231,9 +231,9 @@ onMounted(() => {
                         ? contentStore.contributors[
                           contributor
                         ].image
-                        : `/images/contributors/${contentStore.contributors[contributor]?.image}`
+                        : `/images/contributors/${contentStore.contributors?.[contributor]?.image}`
                     "
-                    :alt="`協作者-${contentStore.contributors[contributor]?.user_name ?? ''}`"
+                    :alt="`協作者-${contentStore.contributors?.[contributor]?.user_name ?? ''}`"
                   >
 
                   <p>
