@@ -189,12 +189,8 @@ onMounted(() => {
             v-if="item.links?.length > 0"
             class="componentinfoview-source-links"
           >
-            <h3>
-              相關資料
-            </h3>
-            <div
-              class="componentinfoview-inline-tooltip"
-            >
+            <h3>相關資料</h3>
+            <div class="componentinfoview-inline-tooltip">
               提醒：受資料更新頻率、資料品質、地址轉換結果及來源限制等因素影響，儀表板所呈現之資料內容可能與原始資料略有差異。
             </div>
             <a
@@ -217,29 +213,34 @@ onMounted(() => {
                 :key="contributor"
               >
                 <a
+                  v-if="
+                    contentStore.contributors[contributor]
+                  "
                   :href="
                     contentStore.contributors[contributor]
                       ?.link
                   "
                   target="_blank"
                   rel="noreferrer"
-                ><img
-                   :src="
-                     contentStore.contributors[
-                       contributor
-                     ]?.image.includes('http')
-                       ? contentStore.contributors[
-                         contributor
-                       ].image
-                       : `/images/contributors/${contentStore.contributors[contributor].image}`
-                   "
-                   :alt="`協作者-${contentStore.contributors[contributor].user_name}`"
-                 >
+                >
+                  <img
+                    :src="
+                      contentStore.contributors[
+                        contributor
+                      ]?.image?.includes('http')
+                        ? contentStore.contributors[
+                          contributor
+                        ].image
+                        : `/images/contributors/${contentStore.contributors[contributor]?.image}`
+                    "
+                    :alt="`協作者-${contentStore.contributors[contributor]?.user_name ?? ''}`"
+                  >
+
                   <p>
                     {{
                       contentStore.contributors[
                         contributor
-                      ].user_name
+                      ]?.user_name ?? ""
                     }}
                   </p>
                 </a>
@@ -601,14 +602,14 @@ onMounted(() => {
 }
 
 .componentinfoview-inline-tooltip {
-  flex-shrink: 0;
-  margin: 4px 0 8px;
-  padding: 8px 12px;
-  border: 1px solid #878787;
-  border-radius: 8px;
-  background: #282A2C;
-  color: #878787;
-  font-size: 0.85rem;
-  line-height: 1.5;
+	flex-shrink: 0;
+	margin: 4px 0 8px;
+	padding: 8px 12px;
+	border: 1px solid #878787;
+	border-radius: 8px;
+	background: #282a2c;
+	color: #878787;
+	font-size: 0.85rem;
+	line-height: 1.5;
 }
 </style>
