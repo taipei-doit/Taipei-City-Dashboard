@@ -39,7 +39,11 @@ function getLinkTag(link, index) {
       <DashboardComponent
         :config="dialogStore.moreInfoContent"
         :active-city="dialogStore.moreInfoContent.city"
-        :city-tag="contentStore.cityManager.getTagList(dialogStore.moreInfoContent.city)"
+        :city-tag="
+          contentStore.cityManager.getTagList(
+            dialogStore.moreInfoContent.city,
+          )
+        "
         mode="large"
       />
       <div class="moreinfo-info">
@@ -67,10 +71,8 @@ function getLinkTag(link, index) {
           </div>
           <div v-if="dialogStore.moreInfoContent.links?.length > 0">
             <h3>相關資料</h3>
-            <!-- 提醒文字 -->
-            <div
-              class="moreinfo-inline-tooltip"
-            >
+            <!-- inline tooltip -->
+            <div class="moreinfo-inline-tooltip">
               提醒：受資料更新頻率、資料品質、地址轉換結果及來源限制等因素影響，儀表板所呈現之資料內容可能與原始資料略有差異。
             </div>
             <div class="moreinfo-info-links">
@@ -94,23 +96,24 @@ function getLinkTag(link, index) {
               >
                 <a
                   :href="
-                    contentStore.contributors[contributor]
-                      .link
+                    contentStore.contributors?.[contributor]
+                      ?.link
                   "
                   target="_blank"
                   rel="noreferrer"
-                ><img
-                  :src="
-                    contentStore.contributors[
-                      contributor
-                    ].image.includes('http')
-                      ? contentStore.contributors[
-                        contributor
-                      ].image
-                      : `/images/contributors/${contentStore.contributors[contributor].image}`
-                  "
-                  :alt="`協作者-${contentStore.contributors[contributor].user_name}`"
                 >
+                  <img
+                    :src="
+                      contentStore.contributors?.[
+                        contributor
+                      ]?.image?.includes('http')
+                        ? contentStore.contributors[
+                          contributor
+                        ].image
+                        : `/images/contributors/${contentStore.contributors?.[contributor]?.image}`
+                    "
+                    :alt="`協作者-${contentStore.contributors?.[contributor]?.user_name ?? ''}`"
+                  >
                 </a>
               </div>
             </div>
@@ -123,7 +126,7 @@ function getLinkTag(link, index) {
               dialogStore.showReportIssue(
                 dialogStore.moreInfoContent.id,
                 dialogStore.moreInfoContent.index,
-                dialogStore.moreInfoContent.name
+                dialogStore.moreInfoContent.name,
               )
             "
           >
@@ -286,14 +289,13 @@ function getLinkTag(link, index) {
 }
 
 .moreinfo-inline-tooltip {
-  margin: 8px 0px;
-  padding: 8px 12px;
-  border: 1px solid #878787;
-  border-radius: 8px;
-  background: #282A2C;
-  color: #878787;
-  font-size: 0.75rem;
-  line-height: 1.5;
+	margin: 4px 0 8px;
+	padding: 8px 12px;
+	border: 1px solid #878787;
+	border-radius: 8px;
+	background: #282a2c;
+	color: #878787;
+	font-size: 0.75rem;
+	line-height: 1.5;
 }
-
 </style>
