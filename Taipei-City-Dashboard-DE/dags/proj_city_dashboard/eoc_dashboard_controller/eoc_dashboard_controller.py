@@ -296,7 +296,6 @@ def _transfer(**kwargs):
                             END;  
                         '''}
         }
-        dashboard_id = 96
         for pname in unique_names:
             print(f"處理 pname: {pname}")
             # 若 dashboard 已存在，直接結束排程
@@ -473,30 +472,28 @@ def _transfer(**kwargs):
             comp_ids = [int(x) for x in comp_ids]
 
             # 插入 dashboard 並帶上隨機 index、name=pname、components 會轉成 {x,y,z} 格式
-            dashboard_hook.run(
-                'INSERT INTO public.dashboards ("id", "index","name",components,icon,created_at,updated_at) '
-                'VALUES (%(dashboard_id)s,%(idx)s,%(name)s,%(components)s,%(icon)s,%(created_at)s,%(updated_at)s);',
+            # id 不可寫死：交給 dashboards_id_seq 配（與 BE 一致），
+            # 並在同一句 SQL 用 RETURNING 的 id 寫入 dashboard_groups，避免不同 run 重複用同一個 id
+            dashboard_id = dashboard_hook.run(
+                'WITH d AS ('
+                ' INSERT INTO public.dashboards ("index",name,components,icon,created_at,updated_at)'
+                ' VALUES (%(idx)s,%(name)s,%(components)s,%(icon)s,%(created_at)s,%(updated_at)s)'
+                ' RETURNING id'
+                ') '
+                'INSERT INTO public.dashboard_groups (dashboard_id, group_id) '
+                'SELECT id, %(group_id)s FROM d RETURNING dashboard_id;',
                 parameters={
-                    'dashboard_id': dashboard_id,
                     'idx': rand_idx,
                     'name': pname,
                     'components': comp_ids,
                     'icon': 'crisis_alert',
                     'created_at': datetime.now(timezone.utc),
-                    'updated_at': datetime.now(timezone.utc)
-                }
-            )
-            print(f"已建立/更新 dashboard: idx={rand_idx}, name={pname}, components={comp_ids}")
-
-            # group_id= 171 寫入dashboard_groups (維持 get_records + run)
-
-            dashboard_hook.run(
-                    'INSERT INTO public.dashboard_groups (dashboard_id, group_id) '
-                    'VALUES (%(dashboard_id)s, 171) ON CONFLICT DO NOTHING;',
-                    parameters={'dashboard_id': dashboard_id}
-                )
-            print(f"已建立 dashboard_groups 關聯: dashboard_id={dashboard_id}, group_id={group_id}")
-            dashboard_id += 1  # 每次建立後遞增 dashboard_id
+                    'updated_at': datetime.now(timezone.utc),
+                    'group_id': group_id
+                },
+                handler=lambda cur: cur.fetchone()
+            )[0]
+            print(f"已建立 dashboard: id={dashboard_id}, idx={rand_idx}, name={pname}, components={comp_ids}, group_id={group_id}")
 
     # except Exception as e:
     #     print(f"執行過程中發生錯誤: {e}")
