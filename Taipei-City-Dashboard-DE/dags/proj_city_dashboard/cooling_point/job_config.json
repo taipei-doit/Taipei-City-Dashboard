@@ -24,7 +24,7 @@
     "data_infos":{
         "name_cn": "臺北市涼適點",
         "airflow_update_freq": "twice a month (4th, 25th)",
-        "source": "https://data.taipei/dataset/detail?id=a98a3e0e-a36f-43fa-82f8-b09a3011a47a",
+        "source": "https://data.taipei/dataset/detail?id=a98a3e0e-a36f-43fa-82f8-b09a3011a47a,https://data.taipei/api/frontstage/tpeod/dataset/resource.download?rid=1894ffb6-abea-42e5-9f87-665593376df4",
         "source_type": "data.taipei",
         "source_dept": "臺北市政府",
         "gis_format": "Point",
