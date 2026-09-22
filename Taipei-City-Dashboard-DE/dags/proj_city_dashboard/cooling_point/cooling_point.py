@@ -11,9 +11,9 @@ SOURCES = [
     # (rid, 來源, 是否沿用來源「編號」)
     # 臺北市涼適點 https://data.taipei/dataset/detail?id=a98a3e0e-a36f-43fa-82f8-b09a3011a47a
     ("ae7e5986-859d-4294-b289-7c1b2e7c23f1", "市府", True),
-    # 臺北市民間涼適點 https://data.taipei/dataset/detail?id=a1b59e2f-057a-41e2-ae09-482ba5af7d58
-    # 這份的「編號」同樣自己從 1 開始，與市府那份會撞號，故不沿用，id 留空。
-    ("9269d8b5-f4fa-44ab-8f2c-5203ba70ebe0", "民間", False),
+    # 民間合作涼適點。編號同樣從 1 開始，與市府撞號，故不沿用。
+    # https://data.taipei/api/frontstage/tpeod/dataset/resource.download?rid=1894ffb6-abea-42e5-9f87-665593376df4
+    ("1894ffb6-abea-42e5-9f87-665593376df4", "民間", False),
 ]
 
 COLUMN_MAP = {
