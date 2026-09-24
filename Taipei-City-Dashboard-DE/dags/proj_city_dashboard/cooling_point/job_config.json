@@ -4,8 +4,8 @@
         "start_date": "2025-06-25",
         "schedule_interval": "0 18 4,25 * *",
         "catchup": false,
-        "tags": ["cooling_point_tpe", "臺北市涼適點", "臺北市民間涼適點", "市府資料平台"],
-        "description": "臺北市轄內戶外及室內涼適場所（含市府與民間單位提供之場所）",
+        "tags": ["cooling_point_tpe", "臺北市涼適點", "臺北市民間涼適點", "環境部coolmap", "市府資料平台"],
+        "description": "臺北市轄內戶外及室內涼適場所（含市府、民間與環境部coolmap合作場所）",
         "default_args": {
             "owner": "airflow",
             "email": ["DEFAULT_EMAIL_LIST"],
@@ -24,14 +24,14 @@
     "data_infos":{
         "name_cn": "臺北市涼適點",
         "airflow_update_freq": "twice a month (4th, 25th)",
-        "source": "https://data.taipei/dataset/detail?id=a98a3e0e-a36f-43fa-82f8-b09a3011a47a,https://data.taipei/api/frontstage/tpeod/dataset/resource.download?rid=1894ffb6-abea-42e5-9f87-665593376df4",
+        "source": "https://data.taipei/dataset/detail?id=a98a3e0e-a36f-43fa-82f8-b09a3011a47a,https://data.taipei/api/frontstage/tpeod/dataset/resource.download?rid=1894ffb6-abea-42e5-9f87-665593376df4,https://data.taipei/api/frontstage/tpeod/dataset/resource.download?rid=7f404ef2-ac27-45cc-a300-cfcef3c69394",
         "source_type": "data.taipei",
         "source_dept": "臺北市政府",
         "gis_format": "Point",
         "output_coordinate": "EPSG:4326",
         "is_geometry": 1,
-        "dataset_description": "臺北市轄內戶外及室內涼適場所，含市府與民間單位提供之場所",
-        "etl_description": "由資料平台下載市府與民間兩份CSV（Big5），合併並標準化欄位後以WKB點位寫入PostgreSQL。民間那份的「編號」會與市府撞號，故 id 留空。",
+        "dataset_description": "臺北市轄內戶外及室內涼適場所，含市府、民間與環境部coolmap合作場所",
+        "etl_description": "由資料平台下載市府、民間與環境部coolmap三份CSV（Big5），合併並標準化欄位後以WKB點位寫入PostgreSQL。民間與環境部編號不沿用，id 留空。",
         "sensitivity": "public"
     }
 }
