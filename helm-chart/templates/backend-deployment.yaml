@@ -58,6 +58,12 @@ spec:
             - name: {{ $key }}
               value: {{ $value | quote }}
             {{- end }}
+            {{- /* embedding service 的位址從 release 名稱推導，不用寫死也不用進 secret。
+                   只是叢集內 DNS，非機密；backend.env 有設就以那個為準 */}}
+            {{- if and .Values.embedding .Values.embedding.enabled (not (hasKey (default dict .Values.backend.env) "EMBEDDING_URL")) }}
+            - name: EMBEDDING_URL
+              value: "http://{{ include "taipei-city-dashboard.fullname" . }}-embedding:{{ .Values.embedding.service.port }}"
+            {{- end }}
             {{- if not .Values.backend.useSecretDbDashboardPort }}
             - name: DB_DASHBOARD_PORT
               value: {{ default 5432 .Values.backend.db.dashboard.port | quote }}

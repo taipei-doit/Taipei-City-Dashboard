@@ -83,6 +83,22 @@ app.kubernetes.io/component: backend
 {{- end }}
 
 {{/*
+Embedding labels
+*/}}
+{{- define "taipei-city-dashboard.embedding.labels" -}}
+{{ include "taipei-city-dashboard.labels" . }}
+app.kubernetes.io/component: embedding
+{{- end }}
+
+{{/*
+Embedding selector labels
+*/}}
+{{- define "taipei-city-dashboard.embedding.selectorLabels" -}}
+{{ include "taipei-city-dashboard.selectorLabels" . }}
+app.kubernetes.io/component: embedding
+{{- end }}
+
+{{/*
 Create the name of the service account to use
 */}}
 {{- define "taipei-city-dashboard.serviceAccountName" -}}
