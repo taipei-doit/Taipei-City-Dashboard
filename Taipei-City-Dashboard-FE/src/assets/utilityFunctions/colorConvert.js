@@ -57,3 +57,24 @@ export const hexToHSL = (hex) => {
 		return "0,0%,100%";
 	}
 };
+
+// 3. Transform Color from hex (#aaaaaa) to html
+export const hexToSpan = (text) => {
+	if (!text) return "";
+
+	// 先避免 AI 內容注入 HTML
+	const escaped = text
+		.replace(/&/g, "&amp;")
+		.replace(/</g, "&lt;")
+		.replace(/>/g, "&gt;")
+		.replace(/"/g, "&quot;")
+		.replace(/'/g, "&#039;");
+
+	// 再安全地加入自己的色塊
+	return escaped.replace(
+		/#[0-9A-Fa-f]{6}\b/g,
+		(color) => `
+			<span class="color-preview" style="background:${color}"></span>
+		`,
+	);
+};

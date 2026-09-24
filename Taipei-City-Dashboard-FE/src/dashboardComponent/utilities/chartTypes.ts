@@ -23,4 +23,9 @@ export const chartTypes: chartType = {
 	IndicatorChart: "指標圖", // V
 	MapLegend: "地圖圖例", // V
 	TextUnitChart: "文字數值圖", // V
+	SunburstChart: "旭日圖",
+	QuartileChart: "四分位圖",
+	SankeyChart: "桑基圖",
+	BubbleChart: "泡泡圖",
+	NegativeColumnChart: "負向長條圖",
 };

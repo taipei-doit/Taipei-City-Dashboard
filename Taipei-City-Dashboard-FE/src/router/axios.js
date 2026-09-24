@@ -50,7 +50,7 @@ http.interceptors.response.use(
 		contentStore.error = true;
 		contentStore.loading = false;
 
-		switch (error.response.status) {
+		switch (error.response?.status) {
 			case 401:
 				if (authStore.token) {
 					dialogStore.showNotification(
@@ -86,10 +86,11 @@ http.interceptors.response.use(
 				);
 				break;
 			default:
-				dialogStore.showNotification(
-					"fail",
-					`${error.response.status}，${error.response.data.message}`
-				);
+				console.error(`${error.response.status}，${error.response.data.message}`)
+				// dialogStore.showNotification(
+				// 	"fail",
+				// 	`${error.response.status}，${error.response.data.message}`
+				// );
 				break;
 		}
 		return Promise.reject(error);

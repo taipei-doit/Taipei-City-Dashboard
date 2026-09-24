@@ -58,6 +58,12 @@ def _school_food_supply_chain_links(**kwargs):
     from airflow.models import Variable
 
     ACCESS_CODE = Variable.get("FATRACESCHOOL_ACCESSCODE", default_var="")
+    if not ACCESS_CODE:
+        raise ValueError(
+            "Airflow Variable FATRACESCHOOL_ACCESSCODE 未設定。"
+            "空值時 API 仍回 HTTP 200 但 datasetList=null，會靜默寫入 0 筆；"
+            "因 load_behavior=replace，這會清空 ready 表。請先申請並設定 accesscode。"
+        )
 
     # === Helpers ===
     # NOTE: 暫無對應 utils.extract_stage helper 處理 fatraceschool API。
@@ -229,6 +235,8 @@ def _school_food_supply_chain_links(**kwargs):
     data = data[SELECT_COLUMNS]
 
     # === Load ===
+    # 抓不到資料時由 save_dataframe_to_postgresql 擋下並 raise，
+    # 不會以空資料清空 ready 表。
     engine = create_engine(ready_data_db_uri)
     _ensure_ready_table(engine, default_table, COL_MAP)
     save_dataframe_to_postgresql(

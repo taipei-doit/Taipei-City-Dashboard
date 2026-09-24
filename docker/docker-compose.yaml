@@ -81,6 +81,10 @@ services:
       GEMINI_API_URL: ${GEMINI_API_URL}
       GEMINI_API_KEY: ${GEMINI_API_KEY}
       GEMINI_MODEL: ${GEMINI_MODEL}
+      AIRFLOW_SUMMARY_BASE_URL: ${AIRFLOW_SUMMARY_BASE_URL}
+      AIRFLOW_SUMMARY_SVC_USER: ${AIRFLOW_SUMMARY_SVC_USER}
+      AIRFLOW_SUMMARY_SVC_PASS: ${AIRFLOW_SUMMARY_SVC_PASS}
+
     volumes:
       - ../Taipei-City-Dashboard-BE:/opt/Taipei-City-Dashboard-BE
     working_dir: /opt/Taipei-City-Dashboard-BE
