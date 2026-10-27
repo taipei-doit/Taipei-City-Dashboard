@@ -6,14 +6,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"log"
-	"math"
 	"net/http"
-	"path/filepath"
-
-	"github.com/sugarme/tokenizer"
-	"github.com/sugarme/tokenizer/pretrained"
-	ort "github.com/yalue/onnxruntime_go"
+	"time"
 )
 
 
@@ -92,165 +86,109 @@ func queryQdrant(queryVector []float32, limit int, scoreThreshold float64) (Qdra
 	return result, nil
 }
 
-func InitLmSession() *ort.DynamicSession[int64, float32] {
-	LMConfig := global.LM
+// embeddingQueryClient 用於單筆使用者搜尋（短 timeout）
+var embeddingQueryClient = &http.Client{Timeout: 3 * time.Second}
 
-	// 1) ONNX Runtime 初始化
-	ort.SetSharedLibraryPath("/usr/lib/libonnxruntime.so") // 設定共享函式庫路徑
+// embeddingBatchClient 用於索引重建批次呼叫（長 timeout）
+var embeddingBatchClient = &http.Client{Timeout: 60 * time.Second}
 
-	if err := ort.InitializeEnvironment(); err != nil {
-		log.Fatalf("InitializeEnvironment error: %v", err)
+// embeddingResponse 對應 Embedding 微服務的回應格式
+type embeddingResponse struct {
+	Data []struct {
+		Index     int       `json:"index"`
+		Embedding []float32 `json:"embedding"`
+	} `json:"data"`
+}
+
+// GenVectors 批次將多筆文字轉換為 768 維向量，供索引重建使用。
+// 前綴由 Embedding 微服務統一處理，呼叫端不需自行加入 "query: " 或 "passage: "。
+// 回傳的向量已完成 L2 正規化，可直接寫入 Qdrant。
+func GenVectors(texts []string) ([][]float32, error) {
+	if len(texts) == 0 {
+		return nil, fmt.Errorf("GenVectors: texts must not be empty")
+	}
+	if global.Embedding.Url == "" {
+		return nil, fmt.Errorf("GenVectors: EMBEDDING_URL is not configured")
 	}
 
-	// 2) 模型路徑
-	modelDir := LMConfig.ModelPath
-	modelPath := filepath.Join(modelDir, "model.onnx")
-
-	// 3) 檢查 I/O 資訊
-	// inputsInfo, outputsInfo, err := ort.GetInputOutputInfo(modelPath)
-	// if err != nil {
-	// 	log.Fatalf("GetInputOutputInfo error: %v", err)
-	// }
-
-	// fmt.Println("== Inputs ==")
-	// for _, in := range inputsInfo {
-	// 	fmt.Println("  ", in.String())
-	// }
-	// fmt.Println("== Outputs ==")
-	// for _, out := range outputsInfo {
-	// 	fmt.Println("  ", out.String())
-	// }
-
-	// 4) 建立 DynamicSession：input / output 名稱
-	inputNames := []string{"input_ids", "attention_mask"}
-	outputNames := []string{"last_hidden_state"}
-
-	session, err := ort.NewDynamicSession[int64, float32](modelPath, inputNames, outputNames)
+	body, err := json.Marshal(map[string]any{
+		"input":  texts,
+		"prefix": "passage: ",
+	})
 	if err != nil {
-		log.Fatalf("NewDynamicSession error: %v", err)
+		return nil, fmt.Errorf("GenVectors: marshal request: %w", err)
 	}
 
-	return session
+	resp, err := embeddingBatchClient.Post(
+		global.Embedding.Url+"/v1/embeddings",
+		"application/json",
+		bytes.NewReader(body),
+	)
+	if err != nil {
+		return nil, fmt.Errorf("GenVectors: request failed: %w", err)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		b, _ := io.ReadAll(resp.Body)
+		return nil, fmt.Errorf("GenVectors: embedding service returned %s: %s", resp.Status, b)
+	}
+
+	var out embeddingResponse
+	if err := json.NewDecoder(resp.Body).Decode(&out); err != nil {
+		return nil, fmt.Errorf("GenVectors: decode response: %w", err)
+	}
+	if len(out.Data) != len(texts) {
+		return nil, fmt.Errorf("GenVectors: expected %d vectors, got %d", len(texts), len(out.Data))
+	}
+
+	vectors := make([][]float32, len(texts))
+	for _, d := range out.Data {
+		if d.Index < 0 || d.Index >= len(texts) {
+			return nil, fmt.Errorf("GenVectors: out-of-range index %d in response", d.Index)
+		}
+		vectors[d.Index] = d.Embedding
+	}
+	return vectors, nil
 }
 
-func InitTokenizer() *tokenizer.Tokenizer {
-    modelDir := global.LM.ModelPath
-    tokenizerPath := filepath.Join(modelDir, "tokenizer.json")
-	tk, err := pretrained.FromFile(tokenizerPath)
-    if err != nil {
-        // 啟動時失敗就報警並停止，這比執行中當機好找原因
-        log.Fatalf("Critical: Failed to load tokenizer: %v", err)
-    }
-    return tk
-}
-
+// GenVector 單筆將文字轉換為 768 維向量，供使用者語意搜尋使用。
+// 前綴由 Embedding 微服務統一處理（預設 "query: "），呼叫端不需自行加入。
+// 回傳的向量已完成 L2 正規化，可直接用於 Qdrant 查詢。
 func GenVector(inputText string) ([]float32, error) {
-    // 1) 載入 tokenizer.json 直接檢查全域變數，不再讀取檔案
-    if global.LMTokenizer == nil {
-        return nil, fmt.Errorf("tokenizer is not initialized")
-    }
-    tk := global.LMTokenizer
+	if global.Embedding.Url == "" {
+		return nil, fmt.Errorf("GenVector: EMBEDDING_URL is not configured")
+	}
 
-	// 2) 將查詢字串轉成 input_ids 與 attention_mask
-	text := "query: " + inputText
-
-	enc, err := tk.EncodeSingle(text) // 預設 addSpecialTokens = true
+	body, err := json.Marshal(map[string]any{
+		"input": inputText,
+	})
 	if err != nil {
-		log.Fatalf("tokenize error: %v", err)
+		return nil, fmt.Errorf("GenVector: marshal request: %w", err)
 	}
 
-	ids := enc.GetIds()                // []int
-	attnMask := enc.GetAttentionMask() // []int，1=有效 token, 0=padding
-
-	if len(ids) != len(attnMask) {
-		log.Fatalf("ids len %d != attention_mask len %d", len(ids), len(attnMask))
-	}
-
-	seqLen := int64(len(ids))
-	batchSize := int64(1)
-
-	// 3) 準備 input_ids tensor [1, seq_len] (int64)
-	idsShape := ort.NewShape(batchSize, seqLen)
-	idsTensor, err := ort.NewEmptyTensor[int64](idsShape)
+	resp, err := embeddingQueryClient.Post(
+		global.Embedding.Url+"/v1/embeddings",
+		"application/json",
+		bytes.NewReader(body),
+	)
 	if err != nil {
-		log.Fatalf("NewEmptyTensor ids error: %v", err)
+		return nil, fmt.Errorf("GenVector: request failed: %w", err)
 	}
-	defer idsTensor.Destroy()
+	defer resp.Body.Close()
 
-	idsData := idsTensor.GetData()
-	for i, v := range ids {
-		idsData[i] = int64(v)
-	}
-
-	// 4) 準備 attention_mask tensor [1, seq_len] (int64)
-	maskShape := ort.NewShape(batchSize, seqLen)
-	maskTensor, err := ort.NewEmptyTensor[int64](maskShape)
-	if err != nil {
-		log.Fatalf("NewEmptyTensor mask error: %v", err)
-	}
-	defer maskTensor.Destroy()
-
-	maskData := maskTensor.GetData()
-	for i, v := range attnMask {
-		maskData[i] = int64(v)
+	if resp.StatusCode != http.StatusOK {
+		b, _ := io.ReadAll(resp.Body)
+		return nil, fmt.Errorf("GenVector: embedding service returned %s: %s", resp.Status, b)
 	}
 
-	inputTensors := []*ort.Tensor[int64]{idsTensor, maskTensor}
-
-	// 5) 準備輸出 tensor：last_hidden_state [1, seq_len, 768] (float32)
-	hiddenSize := int64(768)
-	outShape := ort.NewShape(batchSize, seqLen, hiddenSize)
-	outTensor, err := ort.NewEmptyTensor[float32](outShape)
-	if err != nil {
-		log.Fatalf("NewEmptyTensor output error: %v", err)
+	var out embeddingResponse
+	if err := json.NewDecoder(resp.Body).Decode(&out); err != nil {
+		return nil, fmt.Errorf("GenVector: decode response: %w", err)
 	}
-	defer outTensor.Destroy()
-
-	outputTensors := []*ort.Tensor[float32]{outTensor}
-
-	session := global.LMSession
-
-	// 6) 跑一次推論
-	if err := session.Run(inputTensors, outputTensors); err != nil {
-		log.Fatalf("session.Run error: %v", err)
+	if len(out.Data) == 0 {
+		return nil, fmt.Errorf("GenVector: no embedding returned")
 	}
 
-	// 7) 拿出 last_hidden_state 做 mean pooling + L2 normalize
-	lastHidden := outTensor.GetData() // 長度 = 1 * seqLen * 768
-
-	embedding := make([]float32, hiddenSize)
-	var validCount float32
-
-	for t := 0; t < int(seqLen); t++ {
-		if attnMask[t] == 0 {
-			continue // 忽略 padding
-		}
-		validCount += 1.0
-		offset := t * int(hiddenSize)
-		for d := 0; d < int(hiddenSize); d++ {
-			embedding[d] += lastHidden[offset+d]
-		}
-	}
-
-	// 平均
-	if validCount > 0 {
-		for d := 0; d < int(hiddenSize); d++ {
-			embedding[d] /= validCount
-		}
-	}
-
-	// L2 normalize
-	var norm float64
-	for d := 0; d < int(hiddenSize); d++ {
-		norm += float64(embedding[d]) * float64(embedding[d])
-	}
-	
-	norm = math.Sqrt(float64(norm))
-	if norm > 0 {
-		for d := 0; d < int(hiddenSize); d++ {
-			embedding[d] = float32(float64(embedding[d]) / norm)
-		}
-	}
-
-	return embedding, nil
-}
+	return out.Data[0].Embedding, nil
+}
