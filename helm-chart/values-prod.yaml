@@ -236,9 +236,9 @@ backend:
       optional: false
 
 # Embedding service (multilingual-e5-base，從後端 image 拆出的獨立推論服務)
-# PROD 先關閉，待 SIT 驗證且後端改為呼叫 API 後再開
+# 後端已改為呼叫此服務 (EMBEDDING_URL 由 helm 自動注入)，上版必須開啟，否則向量功能失效
 embedding:
-  enabled: false
+  enabled: true
   replicaCount: 2
   updateStrategy:
     type: RollingUpdate
