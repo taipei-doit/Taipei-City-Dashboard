@@ -59,6 +59,7 @@ export const lineInfo: lineInfoType = {
 		{ name: "南港展覽館", id: "BR24" },
 	],
 	R: [
+		{ name: "廣慈/奉天宮", id: "R01" },
 		{ name: "象山", id: "R02" },
 		{ name: "台北101/世貿", id: "R03" },
 		{ name: "信義安和", id: "R04" },

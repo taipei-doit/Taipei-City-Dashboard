@@ -4,9 +4,6 @@ import (
 	"TaipeiCityDashboardBE/logs"
 	"os"
 	"strconv"
-
-	"github.com/sugarme/tokenizer"
-	ort "github.com/yalue/onnxruntime_go"
 )
 
 // IssoConfig defines the structure for Isso configuration
@@ -41,8 +38,8 @@ type QdrantConfig struct {
 	ApiKey       string
 }
 
-type LMConfig struct {
-	ModelPath    string
+type EmbeddingConfig struct {
+	Url string
 }
 
 type AIConfig struct {
@@ -130,8 +127,8 @@ var (
 		ApiKey:     getEnv("QDRANT_API_KEY", ""),
 	}
 
-	LM = LMConfig{
-		ModelPath: getEnv("LM_MODEL_PATH", "/opt/lm_model/onnx-e5/"),
+	Embedding = EmbeddingConfig{
+		Url: getEnv("EMBEDDING_URL", ""),
 	}
 
 	AI = AIConfig{
@@ -163,9 +160,6 @@ var (
 		SvcUser: getEnv("AIRFLOW_SUMMARY_SVC_USER", ""),
 		SvcPass: getEnv("AIRFLOW_SUMMARY_SVC_PASS", ""),
 	}
-	
-	LMSession *ort.DynamicSession[int64, float32]
-	LMTokenizer *tokenizer.Tokenizer
 )
 
 func init() {

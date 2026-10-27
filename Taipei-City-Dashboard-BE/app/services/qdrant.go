@@ -87,11 +87,11 @@ func fetchPublicComponentData() ([]models.QuertChartAndConponentForQdrant, error
 }
 
 func generateVectors(data []models.QuertChartAndConponentForQdrant) ([]qdrantPoint, int, error) {
-	var points []qdrantPoint
-	var vectorSize int
+	// 第一步：蒐集並清洗所有文字，跳過空白項
+	var texts []string
+	var validItems []models.QuertChartAndConponentForQdrant
 
 	for _, item := range data {
-		// Combine text fields for vector generation
 		combinedText := item.LongDesc
 		if item.UseCase != "" {
 			if combinedText != "" {
@@ -100,29 +100,49 @@ func generateVectors(data []models.QuertChartAndConponentForQdrant) ([]qdrantPoi
 			combinedText += item.UseCase
 		}
 
-		// Sanitize newline characters, as suspected by the user.
-		// Replace all `\r\n`, `\r`, and `\n` with a single space.
+		// 清洗換行字元
 		combinedText = strings.ReplaceAll(combinedText, "\r\n", " ")
 		combinedText = strings.ReplaceAll(combinedText, "\r", " ")
 		combinedText = strings.ReplaceAll(combinedText, "\n", " ")
-		
+
 		if combinedText == "" {
 			log.Printf("Skipping item ID %d (%s) due to empty combined text for vector generation.", item.ID, item.Name)
 			continue
 		}
 
-		// Generate vector
-		vector, err := models.GenVector(combinedText)
+		texts = append(texts, combinedText)
+		validItems = append(validItems, item)
+	}
+
+	if len(texts) == 0 {
+		return nil, 0, nil
+	}
+
+	// 第二步：批次呼叫 Embedding 微服務（每批最多 512 筆）
+	const batchSize = 512
+	allVectors := make([][]float32, 0, len(texts))
+
+	for i := 0; i < len(texts); i += batchSize {
+		end := i + batchSize
+		if end > len(texts) {
+			end = len(texts)
+		}
+		batchVectors, err := models.GenVectors(texts[i:end])
 		if err != nil {
-			return nil, 0, fmt.Errorf("failed to generate vector for item %s/%s: %w", item.Index, item.Name, err)
+			return nil, 0, fmt.Errorf("failed to generate vectors for batch [%d:%d]: %w", i, end, err)
 		}
+		allVectors = append(allVectors, batchVectors...)
+	}
 
-		// Set vector size if not already set
+	// 第三步：組裝 qdrantPoint
+	var points []qdrantPoint
+	vectorSize := 0
+
+	for i, item := range validItems {
 		if vectorSize == 0 {
-			vectorSize = len(vector)
+			vectorSize = len(allVectors[i])
 		}
 
-		// Create payload
 		payload := map[string]interface{}{
 			"id":        item.ID,
 			"index":     item.Index,
@@ -132,17 +152,16 @@ func generateVectors(data []models.QuertChartAndConponentForQdrant) ([]qdrantPoi
 			"use_case":  item.UseCase,
 		}
 
-		// Handle point ID type: Qdrant accepts integer or UUID string.
-		// Since item.ID is now int64, we can use it directly as a uint64 point ID.
 		points = append(points, qdrantPoint{
 			ID:      uint64(item.ID),
-			Vector:  vector,
+			Vector:  allVectors[i],
 			Payload: payload,
 		})
 	}
 
 	return points, vectorSize, nil
 }
+
 
 // recreateCollection deletes and then creates a new Qdrant collection.
 func recreateCollection(ctx context.Context, collectionName string, vectorSize uint64) error {

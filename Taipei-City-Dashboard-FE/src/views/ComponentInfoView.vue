@@ -35,19 +35,19 @@ const searchParams = ref({
 	pagenum: 1,
 });
 
-function toggleFavorite(id,name,city) {
+function toggleFavorite(id, name, city) {
 	if (contentStore.favorites.components.includes(id)) {
 		contentStore.unfavoriteComponent(id);
 	} else {
 		contentStore.favoriteComponent(id);
 		// 成功收藏組件時觸發GA自訂事件
 		if (city && name) {
-			gtag('event','popular_component', {
-				dashboard_city:city,
-				component_name:name,
-				city_component:`${city}-${name}`,
+			gtag("event", "popular_component", {
+				dashboard_city: city,
+				component_name: name,
+				city_component: `${city}-${name}`,
 				time: Date.now(),
-  			})
+			});
 		}
 	}
 }
@@ -99,18 +99,17 @@ onMounted(() => {
             :config="item"
             :style="{ height: '350px', width: '400px' }"
             :active-city="item.city"
-            :city-tag="contentStore.cityManager.getTagList(item.city)"
+            :city-tag="
+              contentStore.cityManager.getTagList(item.city)
+            "
             :add-btn="
               !contentStore.editDashboard.components
                 .map((item) => item.id)
-                .includes(item.id) &&
-                !!authStore.token
+                .includes(item.id) && !!authStore.token
             "
             :favorite-btn="!!authStore.token"
             :is-favorite="
-              contentStore.favorites?.components.includes(
-                item.id
-              )
+              contentStore.favorites?.components.includes(item.id)
             "
             @add="
               (id, name) => {
@@ -122,7 +121,7 @@ onMounted(() => {
             "
             @favorite="
               (id) => {
-                toggleFavorite(id,item.name,item.city);
+                toggleFavorite(id, item.name, item.city);
               }
             "
           />
@@ -148,22 +147,21 @@ onMounted(() => {
                 dialogStore.showReportIssue(
                   item.id,
                   item.index,
-                  item.name
+                  item.name,
                 )
               "
             >
               <span>flag</span>回報
             </button>
             <button
-              v-if="
-                item.chart_config.types[0] !==
-                  'MetroChart'
-              "
+              v-if="item.chart_config.types[0] !== 'MetroChart'"
               @click="dialogStore.showDialog('downloadData')"
             >
               <span>download</span>下載
             </button>
-            <button @click="dialogStore.showDialog('embedComponent')">
+            <button
+              @click="dialogStore.showDialog('embedComponent')"
+            >
               <span>code</span>內嵌
             </button>
           </div>
@@ -192,10 +190,7 @@ onMounted(() => {
             class="componentinfoview-source-links"
           >
             <h3>相關資料</h3>
-            <!-- 提醒文字 -->
-            <div
-              class="componentinfoview-inline-tooltip"
-            >
+            <div class="componentinfoview-inline-tooltip">
               提醒：受資料更新頻率、資料品質、地址轉換結果及來源限制等因素影響，儀表板所呈現之資料內容可能與原始資料略有差異。
             </div>
             <a
@@ -214,29 +209,38 @@ onMounted(() => {
             <h3>協作者</h3>
             <div>
               <div
-                v-for="contributor in item
-                  .contributors"
+                v-for="contributor in item.contributors"
                 :key="contributor"
               >
                 <a
-                  :href="contentStore.contributors[contributor]?.link"
+                  v-if="
+                    contentStore.contributors?.[contributor]
+                  "
+                  :href="
+                    contentStore.contributors?.[contributor]
+                      ?.link
+                  "
                   target="_blank"
                   rel="noreferrer"
-                ><img
-                   :src="
-                     contentStore.contributors[
-                       contributor
-                     ]?.image.includes('http')
-                       ? contentStore.contributors[contributor]
-                         .image
-                       : `/images/contributors/${contentStore.contributors[contributor].image}`
-                   "
-                   :alt="`協作者-${contentStore.contributors[contributor].user_name}`"
-                 >
+                >
+                  <img
+                    :src="
+                      contentStore.contributors[
+                        contributor
+                      ]?.image?.includes('http')
+                        ? contentStore.contributors[
+                          contributor
+                        ].image
+                        : `/images/contributors/${contentStore.contributors?.[contributor]?.image}`
+                    "
+                    :alt="`協作者-${contentStore.contributors?.[contributor]?.user_name ?? ''}`"
+                  >
+
                   <p>
                     {{
-                      contentStore.contributors[contributor]
-                        .user_name
+                      contentStore.contributors[
+                        contributor
+                      ]?.user_name ?? ""
                     }}
                   </p>
                 </a>
@@ -599,11 +603,11 @@ onMounted(() => {
 
 .componentinfoview-inline-tooltip {
 	flex-shrink: 0;
-	margin: 8px 0px;
-  	padding: 8px 12px;
+	margin: 4px 0 8px;
+	padding: 8px 12px;
 	border: 1px solid #878787;
 	border-radius: 8px;
-	background: #282A2C;
+	background: #282a2c;
 	color: #878787;
 	font-size: 0.85rem;
 	line-height: 1.5;

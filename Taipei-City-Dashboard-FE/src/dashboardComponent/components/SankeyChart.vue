@@ -54,6 +54,7 @@ const PAD_L = 250;
 const PAD_R = 250;
 const BASE_SVG_H = isMobile ? 420 : 620;
 const TOP_N = 25;
+const OTHER_LABEL = "其他";
 const NC = darken(props.chart_config.color?.[0], 25) ?? "#6b8fa3";
 const MIN_LABEL_GAP = isMobile ? 22 : 16;
 const MIN_NODE_H = isMobile ? 14 : 18;
@@ -268,10 +269,26 @@ const layout = computed(() => {
 	}
 
 	// 逐層選取 TOP N:
-	// 第一層依整體流量排序;之後每一層只從「與前一層已選節點相連」的項目中,
-	// 依相連流量取 TOP N,確保每一層都是承接自前面已選中的節點。
-	const setPerLayer = Array.from({ length: n }, () => new Set());
+	// 第一層先取 TOP N; 後續各層也限制 TOP N,但超出的節點會併入「其他」,
+	// 讓圖表高度可控,同時保留往後層的流向總量。
+	const topSetPerLayer = Array.from({ length: n }, () => new Set());
+	const reachableSetPerLayer = Array.from({ length: n }, () => new Set());
+	const hasOtherPerLayer = Array.from({ length: n }, () => false);
 	const topPerLayer = [];
+
+	const getOtherName = (layerIndex) =>
+		`${OTHER_LABEL}${layerLabels[layerIndex]}`;
+
+	const mapNodeName = (layerIndex, name) => {
+		if (topSetPerLayer[layerIndex].has(name)) return name;
+		if (
+			reachableSetPerLayer[layerIndex].has(name) &&
+			hasOtherPerLayer[layerIndex]
+		) {
+			return getOtherName(layerIndex);
+		}
+		return null;
+	};
 
 	for (let i = 0; i < n; i++) {
 		let candidates;
@@ -282,7 +299,7 @@ const layout = computed(() => {
 			const flowFromSelected = new Map();
 			for (const l of links) {
 				if (l.target_layer !== i) continue;
-				if (!setPerLayer[l.source_layer].has(l.source)) continue;
+				if (!reachableSetPerLayer[l.source_layer].has(l.source)) continue;
 				flowFromSelected.set(
 					l.target,
 					(flowFromSelected.get(l.target) || 0) + l.value,
@@ -294,10 +311,22 @@ const layout = computed(() => {
 		}
 
 		const top = candidates.slice(0, TOP_N);
-		// 第2、3層改為不取 TOP N,而是全部顯示
-		// const top = i === 0 ? candidates.slice(0, TOP_N) : candidates;
-		topPerLayer.push(top);
-		setPerLayer[i] = new Set(top.map(([name]) => name));
+		const overflow = candidates.slice(TOP_N);
+		const displayed = [...top];
+
+		if (i > 0 && overflow.length) {
+			displayed.push([
+				getOtherName(i),
+				overflow.reduce((sum, [, value]) => sum + value, 0),
+			]);
+			hasOtherPerLayer[i] = true;
+		}
+
+		topPerLayer.push(displayed);
+		topSetPerLayer[i] = new Set(top.map(([name]) => name));
+		reachableSetPerLayer[i] = new Set(
+			(i === 0 ? top : candidates).map(([name]) => name),
+		);
 	}
 
 	const maxNodeCount = topPerLayer.reduce(
@@ -324,13 +353,14 @@ const layout = computed(() => {
 	for (const l of links) {
 		const sl = l.source_layer,
 			tl = l.target_layer;
-		if (!setPerLayer[sl].has(l.source) || !setPerLayer[tl].has(l.target))
-			continue;
-		const key = `${sl}|${l.source}||${tl}|${l.target}`;
+		const mappedSource = mapNodeName(sl, l.source);
+		const mappedTarget = mapNodeName(tl, l.target);
+		if (!mappedSource || !mappedTarget) continue;
+		const key = `${sl}|${mappedSource}||${tl}|${mappedTarget}`;
 		const e = aggMap.get(key) ?? {
-			source: l.source,
+			source: mappedSource,
 			source_layer: sl,
-			target: l.target,
+			target: mappedTarget,
 			target_layer: tl,
 			value: 0,
 		};
@@ -595,17 +625,19 @@ function resetFilter() {
     </button>
 
     <!-- 一般檢視 -->
-    <SankeyCanvas
-      :layout="filteredLayout"
-      :svg-h="layout.svgH || BASE_SVG_H"
-      :node-w="NODE_W"
-      :nc="NC"
-      class="sankey-svg"
-      @path-mousemove="onPathMouseMove"
-      @path-mouseleave="onPathMouseLeave"
-      @node-mousemove="onPathMouseMove"
-      @node-mouseleave="onPathMouseLeave"
-    />
+    <div class="sankey-scroll">
+      <SankeyCanvas
+        :layout="filteredLayout"
+        :svg-h="layout.svgH || BASE_SVG_H"
+        :node-w="NODE_W"
+        :nc="NC"
+        class="sankey-svg"
+        @path-mousemove="onPathMouseMove"
+        @path-mouseleave="onPathMouseLeave"
+        @node-mousemove="onPathMouseMove"
+        @node-mouseleave="onPathMouseLeave"
+      />
+    </div>
 
     <!-- Legend -->
     <div class="sankey-legend">
