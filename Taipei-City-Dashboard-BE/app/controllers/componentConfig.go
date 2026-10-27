@@ -326,24 +326,36 @@ func DeleteComponent(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"status": "success", "chart_deleted": deleteChartStatus, "map_deleted": deleteMapStatus})
 }
 
+type QueryVectorReq struct {
+	Query string  `json:"query" form:"query"`
+	Limit int     `json:"limit" form:"limit"`
+	Score float64 `json:"score" form:"score"`
+}
+
 func GetComponentByQueryVector(c *gin.Context) {
-	query := c.PostForm("query")
-	limit, _ := strconv.Atoi(c.DefaultPostForm("limit", "10"))
-	scoreThreshold, _ := strconv.ParseFloat(c.DefaultPostForm("score", "0.78"), 64)
-
-	if limit > 30 {
-		limit = 30
+	req := QueryVectorReq{
+		Limit: 10,
+		Score: 0.78,
 	}
 
-	if limit < 0 {
-		limit = 0
+	if err := c.ShouldBind(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": err.Error()})
+		return
 	}
 
-	if scoreThreshold < 0 || scoreThreshold > 1 {
-		scoreThreshold = 0.78
+	if req.Limit > 30 {
+		req.Limit = 30
 	}
-	
-	cityComponent, err := models.GetComponentByQueryVector(query, limit, scoreThreshold)
+
+	if req.Limit < 0 {
+		req.Limit = 0
+	}
+
+	if req.Score < 0 || req.Score > 1 {
+		req.Score = 0.78
+	}
+
+	cityComponent, err := models.GetComponentByQueryVector(req.Query, req.Limit, req.Score)
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"status": "error", "message": err.Error()})
 		return
