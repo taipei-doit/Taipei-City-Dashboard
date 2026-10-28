@@ -163,7 +163,7 @@ var (
 )
 
 func init() {
-	logs.FInfo(PostgresDashboard.Host)
+	logs.FInfo("%s", PostgresDashboard.Host)
 	
 }
 
