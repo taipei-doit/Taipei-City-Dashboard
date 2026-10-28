@@ -32,10 +32,8 @@ const line = computed(() => {
 	return "R";
 });
 
-// 各分支的終點站（死路端點），需套用跟路線端點站一樣的實心樣式，
-// 並且不再往下延伸連接線。目前捷運路網共有三個這樣的分支終點：
-// 新北投 (R22A)、小碧潭 (G03A)、迴龍 (O21)。
-const branchTerminalIds = ["O21", "R22A", "G03A"];
+// 迴龍為分支終點站，需套用跟路線端點站一樣的實心樣式，且不延伸連接線。
+const branchTerminalIds = ["O21"];
 
 const parsedSeries = computed(() => {
 
