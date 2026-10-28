@@ -1,5 +1,5 @@
 # ====== Builder ======
-FROM golang:1.24-bookworm AS builder
+FROM golang:1.27.3-bookworm AS builder
 WORKDIR /go/src/app
 
 COPY go.mod go.sum ./
@@ -41,7 +41,7 @@ CMD ["/app/TaipeiCityDashboardBE"]
 
 # ====== Dev Target ======
 # 本地開發用：docker build --target dev
-FROM golang:1.24-bookworm AS dev
+FROM golang:1.27.3-bookworm AS dev
 
 ENV GOCACHE=/tmp/go-build-cache
 
