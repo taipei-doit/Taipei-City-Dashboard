@@ -238,6 +238,75 @@ function parseArcLegend(config) {
 	];
 }
 
+function normalizeLegendSizes(items) {
+	const numericSizes = items
+		.map((item) => item.sourceSize)
+		.filter((size) => typeof size === "number" && Number.isFinite(size));
+	if (!numericSizes.length) return [];
+
+	const minimum = Math.min(...numericSizes);
+	const maximum = Math.max(...numericSizes);
+	return items.map((item) => {
+		const ratio =
+			maximum === minimum ? 0.5 : (item.sourceSize - minimum) / (maximum - minimum);
+		return {
+			...item,
+			legendSize: Math.round(8 + ratio * 18),
+		};
+	});
+}
+
+function parseCircleSizeLegend(config) {
+	const radius = config.paint?.["circle-radius"];
+	if (!Array.isArray(radius) || !getFieldName(radius)) return [];
+
+	let items = [];
+	if (radius[0] === "interpolate") {
+		for (let index = 3; index < radius.length; index += 2) {
+			if (typeof radius[index + 1] !== "number") continue;
+			items.push({
+				label: formatValue(radius[index]),
+				sourceSize: radius[index + 1],
+			});
+		}
+	} else if (radius[0] === "step") {
+		const firstStop = radius[3];
+		if (typeof radius[2] === "number" && firstStop !== undefined) {
+			items.push({
+				label: `< ${formatValue(firstStop)}`,
+				sourceSize: radius[2],
+			});
+		}
+		for (let index = 3; index < radius.length; index += 2) {
+			if (typeof radius[index + 1] !== "number") continue;
+			const nextStop = radius[index + 2];
+			items.push({
+				label:
+					nextStop === undefined
+						? `≥ ${formatValue(radius[index])}`
+						: `≥ ${formatValue(radius[index])} 且 < ${formatValue(nextStop)}`,
+				sourceSize: radius[index + 1],
+			});
+		}
+	} else {
+		return [
+			{ label: "數值較低", legendSize: 8 },
+			{ label: "數值中等", legendSize: 17 },
+			{ label: "數值較高", legendSize: 26 },
+		];
+	}
+
+	return normalizeLegendSizes(items);
+}
+
+function getPropertyName(config, expression) {
+	const field = getFieldName(expression);
+	if (!field) return "數量";
+	return (
+		config.property?.find((property) => property.key === field)?.name || field
+	);
+}
+
 function removeDuplicateItems(items) {
 	const keys = new Set();
 	return items.filter((item) => {
@@ -277,6 +346,7 @@ export function buildMapLegend(config) {
 
 	const paint = config.paint || {};
 	const opacity = paint[`${type}-opacity`];
+	const strokeOpacity = paint["circle-stroke-opacity"];
 	const width = paint[`${type}-width`];
 	const strokeColor =
 		type === "circle"
@@ -292,7 +362,14 @@ export function buildMapLegend(config) {
 		colors: item.colors || null,
 		stops: item.stops || null,
 		iconSrc: item.iconSrc || null,
-		opacity: typeof opacity === "number" ? opacity : 1,
+		opacity:
+			item.hollow && typeof strokeOpacity === "number"
+				? strokeOpacity
+				: item.hollow
+					? 1
+					: typeof opacity === "number"
+						? opacity
+						: 1,
 		width: typeof width === "number" ? width : null,
 		strokeColor,
 		hollow: item.hollow || false,
@@ -302,11 +379,34 @@ export function buildMapLegend(config) {
 		continuous: item.continuous || false,
 	}));
 
-	if (!items.length) return null;
+	const sizeItems =
+		type === "circle"
+			? parseCircleSizeLegend(config).map((item) => ({
+				...item,
+				kind: "circle",
+				color: items[0]?.color || strokeColor || "#4ba3e3",
+				opacity: items[0]?.hollow
+					? typeof strokeOpacity === "number"
+						? strokeOpacity
+						: 1
+					: typeof opacity === "number"
+						? opacity
+						: 1,
+				strokeColor,
+				hollow: items[0]?.hollow || false,
+			}))
+			: [];
+
+	if (!items.length && !sizeItems.length) return null;
 	return {
 		title: config.title || "未命名圖層",
 		type,
 		items,
+		sizeTitle:
+			sizeItems.length > 0
+				? getPropertyName(config, paint["circle-radius"])
+				: null,
+		sizeItems,
 	};
 }
 
