@@ -176,7 +176,13 @@ onMounted(() => {
           :aria-pressed="legendOpen"
           @click="legendOpen = !legendOpen"
         >
-          <LegendIcon />
+          <LegendIcon
+            :color="
+              legendOpen
+                ? 'var(--color-highlight)'
+                : 'var(--color-component-background)'
+            "
+          />
         </button>
         <button
           v-if="canUseFindClosestPoint"
@@ -473,12 +479,7 @@ onMounted(() => {
 
 		.legend-btn {
 			padding: 6px;
-			color: var(--color-component-background);
-
-			&.active {
-				background-color: white;
-				color: var(--color-highlight);
-			}
+			background-color: white;
 
 			:deep(svg) {
 				width: 100%;
