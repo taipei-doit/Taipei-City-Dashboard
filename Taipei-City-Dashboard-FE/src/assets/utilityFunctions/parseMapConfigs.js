@@ -80,10 +80,6 @@ function parseMatchExpression(expression) {
 			color: expression[index + 1],
 		});
 	}
-	items.push({
-		label: "其他",
-		color: expression[expression.length - 1],
-	});
 	return items;
 }
 
@@ -121,14 +117,12 @@ function parseCaseExpression(expression) {
 		previousBound = bound;
 	}
 
-	let fallbackLabel = "其他";
 	if (previousBound) {
-		fallbackLabel = `${previousBound.operator === "<=" ? ">" : "≥"} ${formatValue(previousBound.value)}`;
+		items.push({
+			label: `${previousBound.operator === "<=" ? ">" : "≥"} ${formatValue(previousBound.value)}`,
+			color: expression[expression.length - 1],
+		});
 	}
-	items.push({
-		label: fallbackLabel,
-		color: expression[expression.length - 1],
-	});
 	return items;
 }
 
