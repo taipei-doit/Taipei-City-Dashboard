@@ -47,8 +47,9 @@
 - `type`：原始圖徵類型
 - `paint`：顏色、透明度、線寬及 Mapbox expression
 - `icon`：symbol 使用的本地 icon 識別字
-- `size`：圖徵尺寸預設樣式，例如 `big`、`small`
 - `property`：資料欄位 key 與中文名稱，可用於圖例標籤
+
+`size` 與 `circle-radius` 不進入圖例，圖例只對照顏色、形狀與 icon。
 
 圖層 ID 目前由下列格式組成：
 
@@ -122,7 +123,7 @@ buildMapLegend(mapConfig)
 parseLegendFromPaint(paint)
 ```
 
-原因是圖例不只依賴 `paint`，還需要 `type`、`icon`、`size`、`property` 與原始圖徵類型。
+原因是圖例不只依賴 `paint`，還需要 `type`、`icon`、`property` 與原始圖徵類型。`size` 與 `circle-radius` 不進入圖例。
 
 ## 圖徵類型規則
 
@@ -172,7 +173,7 @@ paint["circle-color"]
 1. 優先解析 `circle-color`。
 2. `circle-stroke-color` 只作為圓形外框，不另外建立一組分類。
 3. 若沒有 `circle-color` 或 `circle-opacity` 為 `0`，但有 `circle-stroke-color`，則繪製空心圓圖例。
-4. `circle-radius` 可用於大致區分大小，但不應把依 zoom 變化的 radius 解析成顏色分類。
+4. `circle-radius` 不產生圖例。圖例只顯示顏色對照，不依半徑做大小分級。
 
 附檔中的「緊急避難設施」只有 `circle-stroke-color`，是必須支援空心圓的實際案例。
 
@@ -768,7 +769,7 @@ buildMapLegend(config)
 - `paint`
 - symbol 使用的 `icon`
 
-`property`、`size` 可作為日後增加單位、欄位名稱或尺寸圖例的輔助資訊，但不是目前圖例生成的必要條件。
+`property` 可作為日後增加單位或欄位名稱的輔助資訊，但不是目前圖例生成的必要條件。`size` 與圓點半徑不產生大小分級圖例。
 
 185 筆設定已全部驗證，其中 176 筆應提供圖例的設定皆成功解析，表示目前資料覆蓋本次規格。
 

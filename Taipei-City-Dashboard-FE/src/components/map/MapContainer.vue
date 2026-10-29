@@ -40,7 +40,7 @@ const legendItems = computed(() => {
 			const group = buildMapLegend(mapStore.mapConfigs[layerId]);
 			return group ? { ...group, layerId } : null;
 		})
-		.filter((group) => group?.items.length || group?.sizeItems.length);
+		.filter((group) => group?.items.length);
 });
 
 const canUseFindClosestPoint = computed(() => {
@@ -100,12 +100,6 @@ function getLegendMarkerStyle(item) {
 		style.borderColor = item.strokeColor || "transparent";
 	}
 
-	if (item.legendSize) {
-		style.width = `${item.legendSize}px`;
-		style.height = `${item.legendSize}px`;
-		style.flexBasis = `${item.legendSize}px`;
-	}
-
 	return style;
 }
 
@@ -162,12 +156,6 @@ onMounted(() => {
           里
         </button>
         <button
-          class="isochrone-btn"
-          @click="toggleIsochroneSettings"
-        >
-          <Isochrone />
-        </button>
-        <button
           class="legend-btn"
           :class="{ active: legendOpen }"
           type="button"
@@ -183,6 +171,12 @@ onMounted(() => {
                 : 'var(--color-component-background)'
             "
           />
+        </button>
+        <button
+          class="isochrone-btn"
+          @click="toggleIsochroneSettings"
+        >
+          <Isochrone />
         </button>
         <button
           v-if="canUseFindClosestPoint"
@@ -266,25 +260,6 @@ onMounted(() => {
                 <span>{{ item.label }}</span>
               </div>
             </template>
-            <div
-              v-if="group.sizeItems.length"
-              class="mapcontainer-legend-size"
-            >
-              <h5>圓點大小：數值量級</h5>
-              <div
-                v-for="item in group.sizeItems"
-                :key="`${item.label}-${item.legendSize}`"
-                class="mapcontainer-legend-item mapcontainer-legend-size-item"
-              >
-                <span class="mapcontainer-legend-size-slot">
-                  <span
-                    class="mapcontainer-legend-marker mapcontainer-legend-marker--circle"
-                    :style="getLegendMarkerStyle(item)"
-                  />
-                </span>
-                <span>{{ item.label }}</span>
-              </div>
-            </div>
           </div>
         </div>
         <p v-else>
@@ -543,7 +518,7 @@ onMounted(() => {
 		z-index: 2;
 		display: flex;
 		flex-direction: column;
-		width: min(350px, calc(100% - 20px));
+		width: min(280px, calc(100% - 20px));
 		max-height: min(55%, 480px);
 		overflow: hidden;
 		border: 1px solid #555;
@@ -634,32 +609,6 @@ onMounted(() => {
 				width: 20px;
 				height: 20px;
 				object-fit: contain;
-			}
-		}
-
-		&-size {
-			margin-top: 8px;
-			padding-top: 8px;
-			border-top: 1px solid #444;
-
-			h5 {
-				margin-bottom: 5px;
-				color: #aaa;
-				font-size: 0.75rem;
-				font-weight: 500;
-			}
-
-			&-item {
-				min-height: 30px;
-			}
-
-			&-slot {
-				display: flex;
-				align-items: center;
-				justify-content: center;
-				flex: 0 0 30px;
-				width: 30px;
-				height: 30px;
 			}
 		}
 
