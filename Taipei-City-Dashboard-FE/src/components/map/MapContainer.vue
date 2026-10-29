@@ -9,7 +9,7 @@ import { useContentStore } from "../../store/contentStore";
 import { useDialogStore } from "../../store/dialogStore";
 import { useMapStore } from "../../store/mapStore";
 import { useWindEngine } from "../../composables/useWindEngine";
-import { buildMapLegend } from "../../assets/utilityFunctions/parseMapConfigs";
+import { buildMapLegend, resolveSharedThresholdLabels } from "../../assets/utilityFunctions/parseMapConfigs";
 
 import AddViewPoint from "../dialogs/AddViewPoint.vue";
 import MobileLayers from "../dialogs/MobileLayers.vue";
@@ -33,12 +33,44 @@ const districtLayer = ref(false);
 const villageLayer = ref(false);
 const isoMenu = ref(false);
 const legendOpen = ref(false);
+const legendFeatureRevision = ref(0);
+
+function readLayerFeatures(config, layerId) {
+	const map = mapStore.map;
+	if (!map?.getSource) return [];
+	const source = map.getSource(`${layerId}-source`);
+	if (!source) return [];
+	if (source.type === "geojson") {
+		const data = source._data || source.serialize?.().data;
+		return Array.isArray(data?.features) ? data.features : [];
+	}
+	if (source.type === "vector" && config?.index) {
+		try {
+			return map.querySourceFeatures(`${layerId}-source`, {
+				sourceLayer: config.index,
+			});
+		} catch {
+			return [];
+		}
+	}
+	return [];
+}
 
 const legendItems = computed(() => {
+	legendFeatureRevision.value;
 	return mapStore.currentVisibleLayers
 		.map((layerId) => {
-			const group = buildMapLegend(mapStore.mapConfigs[layerId]);
-			return group ? { ...group, layerId } : null;
+			const config = mapStore.mapConfigs[layerId];
+			const group = buildMapLegend(config);
+			if (!group) return null;
+			return {
+				...group,
+				layerId,
+				items: resolveSharedThresholdLabels(
+					group.items,
+					readLayerFeatures(config, layerId),
+				),
+			};
 		})
 		.filter((group) => group?.items.length);
 });
@@ -126,6 +158,19 @@ function findClosestPointGA() {
 		time: Date.now(),
 	});
 }
+
+watch(
+	() => mapStore.map,
+	(map, _previous, onCleanup) => {
+		if (!map?.on) return;
+		const bumpLegendFeatures = () => {
+			legendFeatureRevision.value += 1;
+		};
+		map.on("idle", bumpLegendFeatures);
+		onCleanup(() => map.off("idle", bumpLegendFeatures));
+	},
+	{ immediate: true },
+);
 
 watch(
 	() => route.query?.city,
