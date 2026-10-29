@@ -27,3 +27,12 @@
 		</defs>
 	</svg>
 </template>
+<style scoped>
+svg {
+	color: inherit;
+}
+
+path {
+	color: inherit;
+}
+</style>
