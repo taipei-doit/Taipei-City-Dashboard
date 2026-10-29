@@ -640,7 +640,10 @@ onMounted(() => {
 
 			&--continuous {
 				width: 90px;
+				height: 14px;
 				flex-basis: 90px;
+				border: none;
+				border-radius: 3px;
 			}
 		}
 	}
