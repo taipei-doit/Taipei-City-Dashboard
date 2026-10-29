@@ -40,7 +40,7 @@ const legendItems = computed(() => {
 			const group = buildMapLegend(mapStore.mapConfigs[layerId]);
 			return group ? { ...group, layerId } : null;
 		})
-		.filter((group) => group?.items.length);
+		.filter((group) => group?.items.length || group?.sizeItems.length);
 });
 
 const canUseFindClosestPoint = computed(() => {
@@ -98,6 +98,12 @@ function getLegendMarkerStyle(item) {
 	} else {
 		style.backgroundColor = item.color;
 		style.borderColor = item.strokeColor || "transparent";
+	}
+
+	if (item.legendSize) {
+		style.width = `${item.legendSize}px`;
+		style.height = `${item.legendSize}px`;
+		style.flexBasis = `${item.legendSize}px`;
 	}
 
 	return style;
@@ -228,26 +234,50 @@ onMounted(() => {
             class="mapcontainer-legend-group"
           >
             <h4>{{ group.title }}</h4>
-            <div
-              v-for="item in group.items"
-              :key="`${item.label}-${item.color}-${item.iconSrc}`"
-              class="mapcontainer-legend-item"
-            >
-              <img
-                v-if="item.kind === 'symbol'"
-                :src="item.iconSrc"
-                alt=""
+            <template v-if="group.items.length">
+              <div
+                v-for="item in group.items"
+                :key="`${item.label}-${item.color}-${item.iconSrc}`"
+                class="mapcontainer-legend-item"
               >
-              <span
-                v-else
-                class="mapcontainer-legend-marker"
-                :class="[
-                  `mapcontainer-legend-marker--${item.kind}`,
-                  { 'mapcontainer-legend-marker--continuous': item.continuous },
-                ]"
-                :style="getLegendMarkerStyle(item)"
-              />
-              <span>{{ item.label }}</span>
+                <img
+                  v-if="item.kind === 'symbol'"
+                  :src="item.iconSrc"
+                  alt=""
+                >
+                <span
+                  v-else
+                  class="mapcontainer-legend-marker"
+                  :class="[
+                    `mapcontainer-legend-marker--${item.kind}`,
+                    {
+                      'mapcontainer-legend-marker--continuous':
+                        item.continuous,
+                    },
+                  ]"
+                  :style="getLegendMarkerStyle(item)"
+                />
+                <span>{{ item.label }}</span>
+              </div>
+            </template>
+            <div
+              v-if="group.sizeItems.length"
+              class="mapcontainer-legend-size"
+            >
+              <h5>大小｜{{ group.sizeTitle }}</h5>
+              <div
+                v-for="item in group.sizeItems"
+                :key="`${item.label}-${item.legendSize}`"
+                class="mapcontainer-legend-item mapcontainer-legend-size-item"
+              >
+                <span class="mapcontainer-legend-size-slot">
+                  <span
+                    class="mapcontainer-legend-marker mapcontainer-legend-marker--circle"
+                    :style="getLegendMarkerStyle(item)"
+                  />
+                </span>
+                <span>{{ item.label }}</span>
+              </div>
             </div>
           </div>
         </div>
@@ -442,13 +472,17 @@ onMounted(() => {
 		}
 
 		.legend-btn {
+			padding: 6px;
+			color: var(--color-component-background);
+
 			&.active {
-				background-color: var(--color-highlight);
+				background-color: white;
+				color: var(--color-highlight);
 			}
 
 			:deep(svg) {
-				width: 1.1rem;
-				height: 1.1rem;
+				width: 100%;
+				height: 100%;
 			}
 		}
 
@@ -602,10 +636,38 @@ onMounted(() => {
 			}
 		}
 
+		&-size {
+			margin-top: 8px;
+			padding-top: 8px;
+			border-top: 1px solid #444;
+
+			h5 {
+				margin-bottom: 5px;
+				color: #aaa;
+				font-size: 0.75rem;
+				font-weight: 500;
+			}
+
+			&-item {
+				min-height: 30px;
+			}
+
+			&-slot {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				flex: 0 0 30px;
+				width: 30px;
+				height: 30px;
+			}
+		}
+
 		&-marker {
+			display: block;
 			flex: 0 0 22px;
 			width: 22px;
 			height: 14px;
+			box-sizing: border-box;
 
 			&--circle {
 				width: 14px;
