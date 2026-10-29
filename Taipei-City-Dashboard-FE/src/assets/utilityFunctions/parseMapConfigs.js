@@ -13,6 +13,13 @@ const PRIMARY_COLOR_KEYS = {
 	line: "line-color",
 };
 
+export const WIND_HEAT_COLOR_STOPS = [
+	[0, "rgba(255,80,80,0.4)"],
+	[0.15, "rgba(255,160,80,0.4)"],
+	[0.35, "rgba(160,220,255,0.4)"],
+	[0.7, "rgba(0,170,255,0.6)"],
+];
+
 const MAP_LEGEND_ICONS = new Set([
 	"triangle_white",
 	"triangle_green",
@@ -232,10 +239,34 @@ function removeDuplicateItems(items) {
 	});
 }
 
+function buildWindHeatLegend(config) {
+	return {
+		title: config.title || "風速熱力圖",
+		type: "wind-heat",
+		items: [
+			{
+				label: "風經過頻率：低 – 高",
+				kind: "fill",
+				color: WIND_HEAT_COLOR_STOPS[0][1],
+				colors: WIND_HEAT_COLOR_STOPS.map((stop) => stop[1]),
+				stops: WIND_HEAT_COLOR_STOPS.map((stop) => stop[0]),
+				iconSrc: null,
+				opacity: 1,
+				width: null,
+				strokeColor: null,
+				hollow: false,
+				dashed: false,
+				continuous: true,
+			},
+		],
+	};
+}
+
 export function buildMapLegend(config) {
 	if (!config) return null;
 
 	const type = config.legendType || config.originalType || config.type;
+	if (type === "wind-heat") return buildWindHeatLegend(config);
 	if (!LEGEND_TYPES.has(type)) return null;
 
 	let items = [];

@@ -357,9 +357,18 @@ const MAP_LEGEND_ICONS = {
 
 ### `wind-heat`
 
-不提供圖例。
+提供固定圖例，不解析 DB paint。
 
-即使設定內有 `circle-color` 或 `circle-stroke-color`，也應在解析 paint 前直接排除。
+色碼與 `useWindEngine.js` 的熱區 `fill-color` 共用 `WIND_HEAT_COLOR_STOPS`。顏色對應的是目前畫面裡的相對風經過頻率，不是固定次數：
+
+```text
+低 frequency 0     -> rgba(255,80,80,0.4)
+                 0.15 -> rgba(255,160,80,0.4)
+                 0.35 -> rgba(160,220,255,0.4)
+高 frequency 0.7 以上 -> rgba(0,170,255,0.6)
+```
+
+圖例標籤為「風經過頻率：低 – 高」。
 
 ## 圖例提供判斷
 
@@ -379,7 +388,6 @@ const NO_LEGEND_TYPES = new Set([
 	"isoline",
 	"symbol-3d",
 	"voronoi",
-	"wind-heat",
 ])
 ```
 
@@ -716,6 +724,7 @@ const legendItems = computed(() => {
 - 將 `interpolate` 輸出為連續色階
 - 將 `step` 輸出為離散區間
 - 將 symbol icon 解析為本地端圖片路徑
+- `wind-heat` 使用固定頻率色階，不讀 paint
 
 舊的 `parseLegendFromPaint(paint)` 暫時保留相容性，但 `MapContainer.vue` 已不再使用。
 
@@ -828,7 +837,7 @@ buildMapLegend(config)
 12. symbol 沒有 paint。
 13. isoline 被轉成 line 後仍不顯示。
 14. voronoi 被轉成 line 後仍不顯示。
-15. symbol-3d 與 wind-heat 不顯示。
+15. symbol-3d 不顯示；wind-heat 顯示固定頻率色階。
 16. 缺少 icon 檔案時的 fallback。
 17. 不支援 expression 時不拋出例外。
 18. 關閉可見圖層後同步移除圖例。

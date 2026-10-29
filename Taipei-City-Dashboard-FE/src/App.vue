@@ -110,11 +110,14 @@ function updateTimeToUpdate() {
 function reloadMapData() {
 	if (!["mapview"].includes(authStore.currentPath)) return;
 	mapStore.currentVisibleLayers.forEach((layerName) => {
+		const layerConfig = mapStore.mapConfigs[layerName];
+		if (layerConfig?.type === "wind-heat" || !mapStore.map.getLayer(layerName)) {
+			return;
+		}
 		mapStore.map.removeLayer(layerName);
 		if (mapStore.map.getSource(`${layerName}-source`)) {
 			mapStore.map.removeSource(`${layerName}-source`);
 		}
-		const layerConfig = mapStore.mapConfigs[layerName];
 
 		// 檢查 source
 		if (layerConfig.source === "geojson") {

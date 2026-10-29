@@ -1,6 +1,7 @@
 // composables/useWindEngine.js
 import { watch, onUnmounted, ref } from "vue";
 import { useMapStore } from "../store/mapStore";
+import { WIND_HEAT_COLOR_STOPS } from "../assets/utilityFunctions/parseMapConfigs";
 import { storeToRefs } from "pinia";
 
 // ── 效能參數 ──────────────────────────────────────────────
@@ -440,14 +441,7 @@ export const useWindEngine = (options = {}) => {
 						"interpolate",
 						["linear"],
 						["get", "frequency"],
-						0,
-						"rgba(255,80,80,0.4)",
-						0.15,
-						"rgba(255,160,80,0.4)",
-						0.35,
-						"rgba(160,220,255,0.4)",
-						0.7,
-						"rgba(0,170,255,0.6)",
+						...WIND_HEAT_COLOR_STOPS.flat(),
 					],
 					"fill-opacity": 0.8,
 				},
