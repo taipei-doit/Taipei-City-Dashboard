@@ -779,6 +779,8 @@ export const useMapStore = defineStore("map", {
 				}
 				let appendLayer = { ...element };
 				appendLayer.layerId = mapLayerId;
+				appendLayer.legendType =
+					element.legendType || element.originalType || element.type;
 				// 1-2. If the layer doesn't exist, call an API to get the layer data
 				this.loadingLayers.push(appendLayer.layerId);
 				if (element.source === "geojson") {
@@ -1251,6 +1253,8 @@ export const useMapStore = defineStore("map", {
 
 			let new_map_config = { ...map_config };
 			new_map_config.type = "line";
+			new_map_config.legendType =
+				map_config.legendType || map_config.originalType || "voronoi";
 			new_map_config.source = "geojson";
 			this.addMapLayer(new_map_config);
 		},
@@ -1348,14 +1352,20 @@ export const useMapStore = defineStore("map", {
 				data: { ...isoline_data },
 			});
 
-			delete map_config.paint?.["isoline-key"];
-			delete map_config.paint?.["isoline-min"];
-			delete map_config.paint?.["isoline-max"];
-			delete map_config.paint?.["isoline-step"];
+			const renderPaint = { ...map_config.paint };
+			delete renderPaint["isoline-key"];
+			delete renderPaint["isoline-min"];
+			delete renderPaint["isoline-max"];
+			delete renderPaint["isoline-step"];
 
 			let new_map_config = {
 				...map_config,
 				type: "line",
+				legendType:
+					map_config.legendType ||
+					map_config.originalType ||
+					"isoline",
+				paint: renderPaint,
 				source: "geojson",
 			};
 			this.addMapLayer(new_map_config);

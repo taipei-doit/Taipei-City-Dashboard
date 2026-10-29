@@ -9,6 +9,7 @@ import { useContentStore } from "../../store/contentStore";
 import { useDialogStore } from "../../store/dialogStore";
 import { useMapStore } from "../../store/mapStore";
 import { useWindEngine } from "../../composables/useWindEngine";
+import { buildMapLegend } from "../../assets/utilityFunctions/parseMapConfigs";
 
 import AddViewPoint from "../dialogs/AddViewPoint.vue";
 import MobileLayers from "../dialogs/MobileLayers.vue";
@@ -16,6 +17,7 @@ import IncidentReport from "../dialogs/IncidentReport.vue";
 import FindClosestPoint from "../dialogs/FindClosestPoint.vue";
 import { savedLocations } from "../../assets/configs/mapbox/savedLocations.js";
 import Isochrone from "../icons/IsochroneIcon.vue";
+import LegendIcon from "../icons/LegendIcon.vue";
 import IsochroneSettingPopup from "./IsochroneSettingPopup.vue";
 
 const authStore = useAuthStore();
@@ -30,6 +32,16 @@ useWindEngine();
 const districtLayer = ref(false);
 const villageLayer = ref(false);
 const isoMenu = ref(false);
+const legendOpen = ref(false);
+
+const legendItems = computed(() => {
+	return mapStore.currentVisibleLayers
+		.map((layerId) => {
+			const group = buildMapLegend(mapStore.mapConfigs[layerId]);
+			return group ? { ...group, layerId } : null;
+		})
+		.filter((group) => group?.items.length);
+});
 
 const canUseFindClosestPoint = computed(() => {
 	let pointLayerCount = 0;
@@ -65,6 +77,30 @@ function toggleVillageLayer() {
 
 function toggleIsochroneSettings() {
 	isoMenu.value = !isoMenu.value;
+}
+
+function getLegendMarkerStyle(item) {
+	const style = { opacity: item.opacity };
+	const colors = item.colors?.filter((color) => typeof color === "string");
+
+	if (colors?.length > 1) {
+		style.background = `linear-gradient(90deg, ${colors.join(", ")})`;
+	} else if (item.kind === "circle") {
+		style.backgroundColor = item.hollow ? "transparent" : item.color;
+		style.borderColor = item.strokeColor || item.color;
+	} else if (item.kind === "line") {
+		if (item.dashed) {
+			style.backgroundImage = `repeating-linear-gradient(90deg, ${item.color} 0 7px, transparent 7px 11px)`;
+		} else {
+			style.backgroundColor = item.color;
+		}
+		style.height = `${Math.min(Math.max(item.width || 3, 2), 6)}px`;
+	} else {
+		style.backgroundColor = item.color;
+		style.borderColor = item.strokeColor || "transparent";
+	}
+
+	return style;
 }
 
 // 尋找最近點時觸發GA自訂事件
@@ -126,6 +162,17 @@ onMounted(() => {
           <Isochrone />
         </button>
         <button
+          class="legend-btn"
+          :class="{ active: legendOpen }"
+          type="button"
+          title="圖徵圖例"
+          aria-label="切換圖徵圖例"
+          :aria-pressed="legendOpen"
+          @click="legendOpen = !legendOpen"
+        >
+          <LegendIcon />
+        </button>
+        <button
           v-if="canUseFindClosestPoint"
           :style="{
             color: villageLayer
@@ -154,6 +201,60 @@ onMounted(() => {
           <div />
         </div>
       </div>
+
+      <section
+        v-if="legendOpen"
+        class="mapcontainer-legend"
+        aria-label="圖徵圖例"
+      >
+        <header>
+          <h3>圖徵圖例</h3>
+          <button
+            class="mapcontainer-legend-close"
+            type="button"
+            aria-label="關閉圖徵圖例"
+            @click="legendOpen = false"
+          >
+            ✕
+          </button>
+        </header>
+        <div
+          v-if="legendItems.length"
+          class="mapcontainer-legend-content"
+        >
+          <div
+            v-for="group in legendItems"
+            :key="group.layerId"
+            class="mapcontainer-legend-group"
+          >
+            <h4>{{ group.title }}</h4>
+            <div
+              v-for="item in group.items"
+              :key="`${item.label}-${item.color}-${item.iconSrc}`"
+              class="mapcontainer-legend-item"
+            >
+              <img
+                v-if="item.kind === 'symbol'"
+                :src="item.iconSrc"
+                alt=""
+              >
+              <span
+                v-else
+                class="mapcontainer-legend-marker"
+                :class="[
+                  `mapcontainer-legend-marker--${item.kind}`,
+                  { 'mapcontainer-legend-marker--continuous': item.continuous },
+                ]"
+                :style="getLegendMarkerStyle(item)"
+              />
+              <span>{{ item.label }}</span>
+            </div>
+          </div>
+        </div>
+        <p v-else>
+          目前無可顯示的圖例
+        </p>
+      </section>
 
       <button
         v-if="authStore.user.is_admin"
@@ -340,6 +441,17 @@ onMounted(() => {
 			transition: color 0.2s;
 		}
 
+		.legend-btn {
+			&.active {
+				background-color: var(--color-highlight);
+			}
+
+			:deep(svg) {
+				width: 1.1rem;
+				height: 1.1rem;
+			}
+		}
+
 		span {
 			color: var(--color-component-background);
 			font-size: 1.2rem;
@@ -385,6 +497,138 @@ onMounted(() => {
 
 			&:hover {
 				background-color: var(--color-highlight);
+			}
+		}
+	}
+
+	&-legend {
+		position: absolute;
+		left: 10px;
+		bottom: 42px;
+		z-index: 2;
+		display: flex;
+		flex-direction: column;
+		width: min(350px, calc(100% - 20px));
+		max-height: min(55%, 480px);
+		overflow: hidden;
+		border: 1px solid #555;
+		border-radius: 8px;
+		background: #2b2c2e;
+		box-shadow: 0 4px 12px rgb(0 0 0 / 30%);
+		color: #eee;
+		font-size: 0.875rem;
+
+		@media (max-width: 1000px) {
+			bottom: 10px;
+		}
+
+		header {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			flex: none;
+			padding: 8px 14px;
+			border-bottom: 1px solid #555;
+			background: #3a3b3d;
+
+			h3 {
+				margin: 0;
+				font-size: 1rem;
+				font-weight: 600;
+			}
+		}
+
+		&-close {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			flex: none;
+			width: 32px;
+			height: 32px;
+			padding: 0;
+			border: 0;
+			border-radius: 50%;
+			background: transparent;
+			color: #aaa;
+			font-size: 0.875rem;
+			line-height: 1;
+			cursor: pointer;
+			transition:
+				color 0.15s,
+				background-color 0.15s;
+
+			&:hover {
+				background-color: #4a4b4d;
+				color: #eee;
+			}
+		}
+
+		p {
+			margin: 0;
+			padding: 14px;
+			color: #aaa;
+		}
+
+		&-content {
+			min-height: 0;
+			padding: 6px 14px 14px;
+			overflow-y: auto;
+		}
+
+		&-group {
+			padding-top: 10px;
+
+			h4 {
+				margin-bottom: 7px;
+				color: #4ba3e3;
+				font-size: 0.8rem;
+				font-weight: 600;
+				letter-spacing: 0.04em;
+			}
+		}
+
+		&-item {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			min-height: 24px;
+			color: #eee;
+			font-size: 0.875rem;
+
+			img {
+				width: 20px;
+				height: 20px;
+				object-fit: contain;
+			}
+		}
+
+		&-marker {
+			flex: 0 0 22px;
+			width: 22px;
+			height: 14px;
+
+			&--circle {
+				width: 14px;
+				height: 14px;
+				flex-basis: 14px;
+				border: 2px solid;
+				border-radius: 50%;
+			}
+
+			&--fill {
+				border: 1px solid;
+				border-radius: 2px;
+			}
+
+			&--line,
+			&--arc {
+				height: 3px;
+				border-radius: 999px;
+			}
+
+			&--continuous {
+				width: 90px;
+				flex-basis: 90px;
 			}
 		}
 	}
