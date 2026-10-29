@@ -264,7 +264,7 @@ onMounted(() => {
               v-if="group.sizeItems.length"
               class="mapcontainer-legend-size"
             >
-              <h5>大小｜{{ group.sizeTitle }}</h5>
+              <h5>圓點大小：數值量級</h5>
               <div
                 v-for="item in group.sizeItems"
                 :key="`${item.label}-${item.legendSize}`"

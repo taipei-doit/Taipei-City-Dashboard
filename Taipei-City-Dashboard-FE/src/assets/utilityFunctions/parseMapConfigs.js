@@ -1,5 +1,4 @@
 const LEGEND_TYPES = new Set([
-	"arc",
 	"circle",
 	"fill",
 	"fill-extrusion",
@@ -226,18 +225,6 @@ function parseSymbolLegend(config) {
 	];
 }
 
-function parseArcLegend(config) {
-	const color = config.paint?.["arc-color"];
-	const colors = Array.isArray(color) ? color : color ? [color] : ["#ffffff"];
-	return [
-		{
-			label: "全部",
-			color: colors[0],
-			colors,
-		},
-	];
-}
-
 function normalizeLegendSizes(items) {
 	const numericSizes = items
 		.map((item) => item.sourceSize)
@@ -289,22 +276,10 @@ function parseCircleSizeLegend(config) {
 			});
 		}
 	} else {
-		return [
-			{ label: "數值較低", legendSize: 8 },
-			{ label: "數值中等", legendSize: 17 },
-			{ label: "數值較高", legendSize: 26 },
-		];
+		return [];
 	}
 
 	return normalizeLegendSizes(items);
-}
-
-function getPropertyName(config, expression) {
-	const field = getFieldName(expression);
-	if (!field) return "數量";
-	return (
-		config.property?.find((property) => property.key === field)?.name || field
-	);
 }
 
 function removeDuplicateItems(items) {
@@ -329,8 +304,6 @@ export function buildMapLegend(config) {
 	let items = [];
 	if (type === "symbol") {
 		items = parseSymbolLegend(config);
-	} else if (type === "arc") {
-		items = parseArcLegend(config);
 	} else {
 		const paint = config.paint || {};
 		items = parseColorValue(paint[PRIMARY_COLOR_KEYS[type]]);
@@ -402,10 +375,6 @@ export function buildMapLegend(config) {
 		title: config.title || "未命名圖層",
 		type,
 		items,
-		sizeTitle:
-			sizeItems.length > 0
-				? getPropertyName(config, paint["circle-radius"])
-				: null,
 		sizeItems,
 	};
 }
