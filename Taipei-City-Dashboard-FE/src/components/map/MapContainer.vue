@@ -84,7 +84,23 @@ function getLegendMarkerStyle(item) {
 	const colors = item.colors?.filter((color) => typeof color === "string");
 
 	if (colors?.length > 1) {
-		style.background = `linear-gradient(90deg, ${colors.join(", ")})`;
+		const stops = item.stops;
+		const hasStops =
+			Array.isArray(stops) &&
+			stops.length === colors.length &&
+			stops.every((stop) => typeof stop === "number");
+		if (hasStops) {
+			const min = stops[0];
+			const span = stops[stops.length - 1] - min;
+			style.background = `linear-gradient(90deg, ${colors
+				.map((color, index) => {
+					const percent = span === 0 ? 0 : ((stops[index] - min) / span) * 100;
+					return `${color} ${percent}%`;
+				})
+				.join(", ")})`;
+		} else {
+			style.background = `linear-gradient(90deg, ${colors.join(", ")})`;
+		}
 	} else if (item.kind === "circle") {
 		style.backgroundColor = item.hollow ? "transparent" : item.color;
 		style.borderColor = item.strokeColor || item.color;
@@ -640,7 +656,10 @@ onMounted(() => {
 
 			&--continuous {
 				width: 90px;
+				height: 14px;
 				flex-basis: 90px;
+				border: none;
+				border-radius: 3px;
 			}
 		}
 	}

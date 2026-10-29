@@ -2165,6 +2165,9 @@ export const useMapStore = defineStore("map", {
 			this.loadingLayers.push(map_config.layerId);
 			this.currentLayers.push(map_config.layerId);
 			this.mapConfigs[map_config.layerId] = map_config;
+			if (!this.currentVisibleLayers.includes(map_config.layerId)) {
+				this.currentVisibleLayers.push(map_config.layerId);
+			}
 			this.windHeatMapSource = data;
 			this.startWind();
 
