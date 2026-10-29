@@ -34,10 +34,43 @@ const MAP_LEGEND_ICONS = new Set([
 	"bike_green",
 ]);
 
+const EMPTY_FIELD_NAMES = new Map();
+
 function formatValue(value) {
 	if (Array.isArray(value)) return value.map(formatValue).join("、");
 	if (value === null || value === undefined || value === "") return "未設定";
 	return String(value);
+}
+
+function buildFieldNames(property) {
+	const names = new Map();
+	if (!Array.isArray(property)) return names;
+	for (const item of property) {
+		if (item && typeof item.key === "string" && item.name) {
+			names.set(item.key, String(item.name));
+		}
+	}
+	return names;
+}
+
+function readFieldKey(expression) {
+	if (!Array.isArray(expression) || typeof expression[0] !== "string") return null;
+	const [operator, first] = expression;
+	if (operator === "get" && typeof first === "string") return first;
+	if (
+		["to-number", "to-string", "to-boolean", "number", "string", "coalesce"].includes(
+			operator,
+		)
+	) {
+		return readFieldKey(first);
+	}
+	return null;
+}
+
+function formatBoundValue(value, fieldNames = EMPTY_FIELD_NAMES) {
+	const field = readFieldKey(value);
+	if (field) return fieldNames.get(field) || field;
+	return formatValue(value);
 }
 
 function getFieldName(expression) {
@@ -51,13 +84,13 @@ function getFieldName(expression) {
 	return null;
 }
 
-function formatCondition(condition) {
+function formatCondition(condition, fieldNames = EMPTY_FIELD_NAMES) {
 	if (!Array.isArray(condition)) return formatValue(condition);
 
 	const [operator, ...args] = condition;
 	if (operator === "all" || operator === "any") {
 		return args
-			.map(formatCondition)
+			.map((item) => formatCondition(item, fieldNames))
 			.filter(Boolean)
 			.join(operator === "all" ? " 且 " : " 或 ");
 	}
@@ -73,7 +106,9 @@ function formatCondition(condition) {
 		const leftField = getFieldName(args[0]);
 		const rightField = getFieldName(args[1]);
 		const value = leftField ? args[1] : args[0];
-		if (leftField || rightField) return `${symbols[operator]} ${formatValue(value)}`;
+		if (leftField || rightField) {
+			return `${symbols[operator]} ${formatBoundValue(value, fieldNames)}`;
+		}
 	}
 
 	return "符合條件";
@@ -105,19 +140,19 @@ function getSimpleUpperBound(condition) {
 	};
 }
 
-function parseCaseExpression(expression) {
+function parseCaseExpression(expression, fieldNames = EMPTY_FIELD_NAMES) {
 	const items = [];
 	let previousBound = null;
 
 	for (let index = 1; index < expression.length - 1; index += 2) {
 		const condition = expression[index];
 		const bound = getSimpleUpperBound(condition);
-		let label = formatCondition(condition);
+		let label = formatCondition(condition, fieldNames);
 
 		if (bound && previousBound && bound.field === previousBound.field) {
 			const lowerOperator = previousBound.operator === "<=" ? ">" : "≥";
 			const upperOperator = bound.operator === "<=" ? "≤" : "<";
-			label = `${lowerOperator} ${formatValue(previousBound.value)} 且 ${upperOperator} ${formatValue(bound.value)}`;
+			label = `${lowerOperator} ${formatBoundValue(previousBound.value, fieldNames)} 且 ${upperOperator} ${formatBoundValue(bound.value, fieldNames)}`;
 		}
 
 		items.push({ label, color: expression[index + 1] });
@@ -126,14 +161,14 @@ function parseCaseExpression(expression) {
 
 	if (previousBound) {
 		items.push({
-			label: `${previousBound.operator === "<=" ? ">" : "≥"} ${formatValue(previousBound.value)}`,
+			label: `${previousBound.operator === "<=" ? ">" : "≥"} ${formatBoundValue(previousBound.value, fieldNames)}`,
 			color: expression[expression.length - 1],
 		});
 	}
 	return items;
 }
 
-function parseInterpolateExpression(expression) {
+function parseInterpolateExpression(expression, fieldNames = EMPTY_FIELD_NAMES) {
 	if (getFieldName(expression[2]) === null) {
 		return [{ label: "全部", color: expression[expression.length - 1] }];
 	}
@@ -148,7 +183,7 @@ function parseInterpolateExpression(expression) {
 
 	return [
 		{
-			label: `${formatValue(stops[0])} – ${formatValue(stops.at(-1))}`,
+			label: `${formatBoundValue(stops[0], fieldNames)} – ${formatBoundValue(stops.at(-1), fieldNames)}`,
 			color: colors[0],
 			colors,
 			stops,
@@ -157,13 +192,13 @@ function parseInterpolateExpression(expression) {
 	];
 }
 
-function parseStepExpression(expression) {
+function parseStepExpression(expression, fieldNames = EMPTY_FIELD_NAMES) {
 	const items = [];
 	const firstStop = expression[3];
 	if (firstStop === undefined) return [];
 
 	items.push({
-		label: `< ${formatValue(firstStop)}`,
+		label: `< ${formatBoundValue(firstStop, fieldNames)}`,
 		color: expression[2],
 	});
 
@@ -173,15 +208,15 @@ function parseStepExpression(expression) {
 		items.push({
 			label:
 				nextStop === undefined
-					? `≥ ${formatValue(stop)}`
-					: `≥ ${formatValue(stop)} 且 < ${formatValue(nextStop)}`,
+					? `≥ ${formatBoundValue(stop, fieldNames)}`
+					: `≥ ${formatBoundValue(stop, fieldNames)} 且 < ${formatBoundValue(nextStop, fieldNames)}`,
 			color: expression[index + 1],
 		});
 	}
 	return items;
 }
 
-function parseColorValue(value) {
+function parseColorValue(value, fieldNames = EMPTY_FIELD_NAMES) {
 	if (typeof value === "string") return [{ label: "全部", color: value }];
 	if (!Array.isArray(value)) return [];
 
@@ -189,11 +224,11 @@ function parseColorValue(value) {
 	case "match":
 		return parseMatchExpression(value);
 	case "case":
-		return parseCaseExpression(value);
+		return parseCaseExpression(value, fieldNames);
 	case "interpolate":
-		return parseInterpolateExpression(value);
+		return parseInterpolateExpression(value, fieldNames);
 	case "step":
-		return parseStepExpression(value);
+		return parseStepExpression(value, fieldNames);
 	default:
 		return [];
 	}
@@ -269,12 +304,13 @@ export function buildMapLegend(config) {
 	if (type === "wind-heat") return buildWindHeatLegend(config);
 	if (!LEGEND_TYPES.has(type)) return null;
 
+	const fieldNames = buildFieldNames(config.property);
 	let items = [];
 	if (type === "symbol") {
 		items = parseSymbolLegend(config);
 	} else {
 		const paint = config.paint || {};
-		items = parseColorValue(paint[PRIMARY_COLOR_KEYS[type]]);
+		items = parseColorValue(paint[PRIMARY_COLOR_KEYS[type]], fieldNames);
 
 		if (
 			type === "circle" &&
