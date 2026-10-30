@@ -46,6 +46,67 @@ const updateChartSummaryLoading = ref(false);
 
 const { currentComponent } = storeToRefs(adminStore);
 const currentSettings = ref("all");
+
+const timePresets = [
+	"current",
+	"static",
+	"demo",
+	"maintain",
+	"day_start",
+	"week_start",
+	"month_start",
+	"quarter_start",
+	"year_start",
+	"day_ago",
+	"week_ago",
+	"month_ago",
+	"quarter_ago",
+	"halfyear_ago",
+	"year_ago",
+];
+const closedTimePresets = ["current", "static", "demo", "maintain"];
+
+function isAbsoluteTime(value) {
+	return typeof value === "string" && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/.test(value);
+}
+
+function toDatetimeLocal(value) {
+	return isAbsoluteTime(value) ? value.slice(0, 16) : "";
+}
+
+function toStoredTime(value) {
+	if (value instanceof Date) {
+		const pad = (part) => String(part).padStart(2, "0");
+		return `${value.getFullYear()}-${pad(value.getMonth() + 1)}-${pad(value.getDate())}T${pad(value.getHours())}:${pad(value.getMinutes())}:00+08:00`;
+	}
+	return value ? `${value}:00+08:00` : "";
+}
+
+const timeRangeSelection = computed({
+	get() {
+		const value = currentComponent.value?.time_from;
+		return isAbsoluteTime(value) ? "custom" : value;
+	},
+	set(value) {
+		if (!currentComponent.value) return;
+		if (value === "custom") {
+			if (!isAbsoluteTime(currentComponent.value.time_from)) {
+				const end = new Date();
+				const start = new Date();
+				start.setHours(0, 0, 0, 0);
+				currentComponent.value.time_from = toStoredTime(start);
+				currentComponent.value.time_to = toStoredTime(end);
+			}
+			return;
+		}
+		currentComponent.value.time_from = value;
+		currentComponent.value.time_to = closedTimePresets.includes(value) ? "" : "now";
+	},
+});
+
+function setCustomTime(field, value) {
+	currentComponent.value[field] = toStoredTime(value);
+}
 const tempInputStorage = ref({
 	link: "",
 	contributor: "",
@@ -462,70 +523,39 @@ onBeforeUnmount(() => {
               </select>
             </div>
             <label>資料區間</label>
-            <!-- eslint-disable no-mixed-spaces-and-tabs -->
-            <div class="three-block">
-              <select
-                v-model="currentComponent.time_from"
-                @change="
-                  () => {
-                    if (
-                      [
-                        'current',
-                        'static',
-                        'demo',
-                        'maintain',
-                      ].includes(
-                        currentComponent.time_from,
-                      )
-                    ) {
-                      currentComponent.time_to = '';
-                    } else {
-                      currentComponent.time_to = 'now';
-                    }
-                  }
-                "
+            <select v-model="timeRangeSelection">
+              <option
+                v-for="time in timePresets"
+                :key="time"
+                :value="time"
               >
-                <option
-                  v-for="time in [
-                    'current',
-                    'static',
-                    'demo',
-                    'maintain',
-                    'day_start',
-                    'week_start',
-                    'month_start',
-                    'quarter_start',
-                    'year_start',
-                    'day_ago',
-                    'week_ago',
-                    'month_ago',
-                    'quarter_ago',
-                    'halfyear_ago',
-                    'year_ago',
-                  ]"
-                  :key="time"
-                  :value="time"
-                >
-                  {{ timeTerms[time] }}
-                </option>
-              </select>
-              <div
-                :style="{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }"
-              >
-                至
-              </div>
+                {{ timeTerms[time] }}
+              </option>
+              <option value="custom">
+                自訂
+              </option>
+            </select>
+            <div
+              v-if="timeRangeSelection === 'custom'"
+              class="custom-time-range"
+            >
               <input
-                :value="
-                  currentComponent.time_to === 'now'
-                    ? '現在'
-                    : 'N/A'
-                "
-                :disabled="true"
+                type="datetime-local"
+                :value="toDatetimeLocal(currentComponent.time_from)"
+                @input="setCustomTime('time_from', $event.target.value)"
               >
+              <span>至</span>
+              <input
+                type="datetime-local"
+                :value="toDatetimeLocal(currentComponent.time_to)"
+                @input="setCustomTime('time_to', $event.target.value)"
+              >
+            </div>
+            <div
+              v-else
+              class="time-range-end"
+            >
+              至 {{ closedTimePresets.includes(currentComponent.time_from) ? 'N/A' : '現在' }}
             </div>
             <label required>組件簡述* ({{
               currentComponent.short_desc.length
@@ -1116,6 +1146,38 @@ onBeforeUnmount(() => {
 			display: grid;
 			grid-template-columns: 1fr 2rem 1fr;
 			column-gap: 0.5rem;
+		}
+
+		.time-range-end {
+			margin-top: 6px;
+			color: var(--color-complement-text);
+			font-size: var(--font-s);
+		}
+
+		.custom-time-range {
+			display: grid;
+			grid-template-columns: 1fr auto 1fr;
+			column-gap: 0.5rem;
+			align-items: center;
+			margin-top: 6px;
+
+			span {
+				color: var(--color-complement-text);
+				font-size: var(--font-s);
+			}
+
+			input[type="datetime-local"] {
+				width: 100%;
+				min-width: 0;
+				color: #fff;
+				font-size: var(--font-s);
+
+				&::-webkit-calendar-picker-indicator {
+					cursor: pointer;
+					filter: invert(1);
+					opacity: 1;
+				}
+			}
 		}
 
 		&-items {

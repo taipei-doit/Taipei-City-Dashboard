@@ -4,7 +4,7 @@
 <!-- NOT PRODUCTION READY -->
 
 <script setup>
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { useAdminStore } from "../../../store/adminStore";
 import { useDialogStore } from "../../../store/dialogStore";
 import http from "../../../router/axios";
@@ -113,6 +113,48 @@ function isShowTimeToBlock(time_to) {
 		return true;
 	}
 }
+
+function isAbsoluteTime(value) {
+	return typeof value === "string" && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/.test(value);
+}
+
+function toDatetimeLocal(value) {
+	return isAbsoluteTime(value) ? value.slice(0, 16) : "";
+}
+
+function toStoredTime(value) {
+	if (value instanceof Date) {
+		const pad = (part) => String(part).padStart(2, "0");
+		return `${value.getFullYear()}-${pad(value.getMonth() + 1)}-${pad(value.getDate())}T${pad(value.getHours())}:${pad(value.getMinutes())}:00+08:00`;
+	}
+	return value ? `${value}:00+08:00` : "";
+}
+
+const timeRangeSelection = computed({
+	get() {
+		return isAbsoluteTime(params.value.time_from) ? "custom" : params.value.time_from;
+	},
+	set(value) {
+		if (value === "custom") {
+			if (!isAbsoluteTime(params.value.time_from)) {
+				const end = new Date();
+				const start = new Date();
+				start.setHours(0, 0, 0, 0);
+				params.value.time_from = toStoredTime(start);
+				params.value.time_to = toStoredTime(end);
+			}
+			return;
+		}
+		if (isAbsoluteTime(params.value.time_from) || !isShowTimeToBlock(value)) {
+			params.value.time_to = null;
+		}
+		params.value.time_from = value;
+	},
+});
+
+function setCustomTime(field, value) {
+	params.value[field] = toStoredTime(value);
+}
 </script>
 
 <template>
@@ -197,7 +239,7 @@ function isShowTimeToBlock(time_to) {
             <label>資料區間</label>
             <div class="time-block">
               <select
-                v-model="params.time_from"
+                v-model="timeRangeSelection"
                 required
               >
                 <option value="day_ago">
@@ -236,10 +278,28 @@ function isShowTimeToBlock(time_to) {
                 <option value="current">
                   即時資料
                 </option>
+                <option value="custom">
+                  自訂
+                </option>
               </select>
-              <span v-show="isShowTimeToBlock(params.time_from)">～</span>
+              <template v-if="timeRangeSelection === 'custom'">
+                <input
+                  class="custom-time"
+                  type="datetime-local"
+                  :value="toDatetimeLocal(params.time_from)"
+                  @input="setCustomTime('time_from', $event.target.value)"
+                >
+                <span>～</span>
+                <input
+                  class="custom-time"
+                  type="datetime-local"
+                  :value="toDatetimeLocal(params.time_to)"
+                  @input="setCustomTime('time_to', $event.target.value)"
+                >
+              </template>
+              <span v-show="timeRangeSelection !== 'custom' && isShowTimeToBlock(params.time_from)">～</span>
               <select
-                v-show="isShowTimeToBlock(params.time_from)"
+                v-show="timeRangeSelection !== 'custom' && isShowTimeToBlock(params.time_from)"
                 v-model="params.time_to"
                 required
               >
@@ -591,8 +651,19 @@ function isShowTimeToBlock(time_to) {
 	display: flex;
 	align-items: center;
 	column-gap: 4px;
+	flex-wrap: wrap;
 	select {
 		width: 100px;
+	}
+	.custom-time {
+		min-width: 0;
+		width: 180px;
+		color: #fff;
+		&::-webkit-calendar-picker-indicator {
+			cursor: pointer;
+			filter: invert(1);
+			opacity: 1;
+		}
 	}
 }
 </style>

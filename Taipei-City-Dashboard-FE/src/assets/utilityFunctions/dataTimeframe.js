@@ -6,6 +6,28 @@ export function getComponentDataTimeframe(time_from, time_to, api) {
 	let parsedTimeFrom = "";
 	let parsedTimeTo = "";
 
+	const absoluteTime = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/;
+	if (absoluteTime.test(time_from || "")) {
+		const formatStoredTime = (value) => {
+			const matched = String(value).match(
+				/^(\d{4}-\d{2}-\d{2})T(\d{2}:\d{2})(?::(\d{2}))?/,
+			);
+			if (!matched) return "";
+			const seconds = matched[3] || "00";
+			return api
+				? `${matched[1]}T${matched[2]}:${seconds}+08:00`
+				: `${matched[1]} ${matched[2]}:${seconds}`;
+		};
+		const parsedTimeFrom = formatStoredTime(time_from);
+		const parsedTimeTo = absoluteTime.test(time_to || "")
+			? formatStoredTime(time_to)
+			: "";
+		if (api === true) {
+			return { timefrom: parsedTimeFrom, timeto: parsedTimeTo };
+		}
+		return { parsedTimeFrom, parsedTimeTo };
+	}
+
 	if (time_from === "max") {
 		nowTimeFrom.setFullYear(nowTimeFrom.getFullYear() - 30);
 	} else if (time_from.split("_")[1] === "start") {

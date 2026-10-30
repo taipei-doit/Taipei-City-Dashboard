@@ -175,6 +175,11 @@ const dataTime = computed(() => {
 	if (props.config.time_from === "day_start") {
 		return `${timefrom.slice(0, 16)} ~ ${timeto.slice(11, 14)}00`;
 	}
+	if (/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/.test(props.config.time_from || "")) {
+		const formatPoint = (value) =>
+			value ? value.slice(0, 16).replace("T", " ") : "";
+		return `${formatPoint(timefrom)} ~ ${formatPoint(timeto)}`;
+	}
 	return `${timefrom.slice(0, 10)} ~ ${timeto.slice(0, 10)}`;
 });
 // Parses update frequency data into display format
