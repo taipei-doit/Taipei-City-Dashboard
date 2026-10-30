@@ -1,4 +1,16 @@
 /* eslint-disable indent */
+const dateOnlyPattern = /^\d{4}-\d{2}-\d{2}$/;
+
+function isDateOnly(value: string) {
+	return typeof value === "string" && dateOnlyPattern.test(value);
+}
+
+function applyDateOnly(date: Date, value: string, endOfDay: boolean) {
+	const [year, month, day] = value.split("-").map(Number);
+	date.setFullYear(year, month - 1, day);
+	date.setHours(endOfDay ? 23 : 0, endOfDay ? 59 : 0, endOfDay ? 59 : 0, 0);
+}
+
 export function getComponentDataTimeframe(
 	time_from: string,
 	time_to: string,
@@ -29,7 +41,9 @@ export function getComponentDataTimeframe(
 		return { timefrom: storedFrom, timeto: storedTo };
 	}
 
-	if (time_from === "max") {
+	if (isDateOnly(time_from)) {
+		applyDateOnly(nowTimeFrom, time_from, false);
+	} else if (time_from === "max") {
 		nowTimeFrom.setFullYear(nowTimeFrom.getFullYear() - 30);
 	} else if (time_from.split("_")[1] === "start") {
 		switch (time_from.split("_")[0]) {
@@ -92,7 +106,13 @@ export function getComponentDataTimeframe(
 		.split(".")[0]
 		.replace("T", " ");
 
-	if (time_to === "now") {
+	if (isDateOnly(time_to)) {
+		applyDateOnly(nowTimeTo, time_to, true);
+		parsedTimeTo = new Date(Number(nowTimeTo) - Number(tzoffset))
+			.toISOString()
+			.split(".")[0]
+			.replace("T", " ");
+	} else if (time_to === "now") {
 		// let parsedTimeTo be the current time formated YYYY-MM-DD HH:MM:SS and in UTC+8
 		parsedTimeTo = new Date(Number(nowTimeTo) - Number(tzoffset))
 			.toISOString()
