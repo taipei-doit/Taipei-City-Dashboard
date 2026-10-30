@@ -67,13 +67,9 @@ function readFieldKey(expression) {
 	return null;
 }
 
-function formatBoundValue(value, fieldNames = EMPTY_FIELD_NAMES, fields = null) {
+function formatBoundValue(value, fieldNames = EMPTY_FIELD_NAMES) {
 	const field = readFieldKey(value);
-	if (field) {
-		const text = fieldNames.get(field) || field;
-		if (fields) fields[field] = text;
-		return text;
-	}
+	if (field) return fieldNames.get(field) || field;
 	return formatValue(value);
 }
 
@@ -88,13 +84,13 @@ function getFieldName(expression) {
 	return null;
 }
 
-function formatCondition(condition, fieldNames = EMPTY_FIELD_NAMES, fields = null) {
+function formatCondition(condition, fieldNames = EMPTY_FIELD_NAMES) {
 	if (!Array.isArray(condition)) return formatValue(condition);
 
 	const [operator, ...args] = condition;
 	if (operator === "all" || operator === "any") {
 		return args
-			.map((item) => formatCondition(item, fieldNames, fields))
+			.map((item) => formatCondition(item, fieldNames))
 			.filter(Boolean)
 			.join(operator === "all" ? " 且 " : " 或 ");
 	}
@@ -111,7 +107,7 @@ function formatCondition(condition, fieldNames = EMPTY_FIELD_NAMES, fields = nul
 		const rightField = getFieldName(args[1]);
 		const value = leftField ? args[1] : args[0];
 		if (leftField || rightField) {
-			return `${symbols[operator]} ${formatBoundValue(value, fieldNames, fields)}`;
+			return `${symbols[operator]} ${formatBoundValue(value, fieldNames)}`;
 		}
 	}
 
@@ -151,29 +147,22 @@ function parseCaseExpression(expression, fieldNames = EMPTY_FIELD_NAMES) {
 	for (let index = 1; index < expression.length - 1; index += 2) {
 		const condition = expression[index];
 		const bound = getSimpleUpperBound(condition);
-		const fields = {};
-		let label = formatCondition(condition, fieldNames, fields);
+		let label = formatCondition(condition, fieldNames);
 
 		if (bound && previousBound && bound.field === previousBound.field) {
 			const lowerOperator = previousBound.operator === "<=" ? ">" : "≥";
 			const upperOperator = bound.operator === "<=" ? "≤" : "<";
-			label = `${lowerOperator} ${formatBoundValue(previousBound.value, fieldNames, fields)} 且 ${upperOperator} ${formatBoundValue(bound.value, fieldNames, fields)}`;
+			label = `${lowerOperator} ${formatBoundValue(previousBound.value, fieldNames)} 且 ${upperOperator} ${formatBoundValue(bound.value, fieldNames)}`;
 		}
 
-		items.push({
-			label,
-			color: expression[index + 1],
-			fields: Object.keys(fields).length ? fields : null,
-		});
+		items.push({ label, color: expression[index + 1] });
 		previousBound = bound;
 	}
 
 	if (previousBound) {
-		const fields = {};
 		items.push({
-			label: `${previousBound.operator === "<=" ? ">" : "≥"} ${formatBoundValue(previousBound.value, fieldNames, fields)}`,
+			label: `${previousBound.operator === "<=" ? ">" : "≥"} ${formatBoundValue(previousBound.value, fieldNames)}`,
 			color: expression[expression.length - 1],
-			fields: Object.keys(fields).length ? fields : null,
 		});
 	}
 	return items;
@@ -186,7 +175,6 @@ function parseInterpolateExpression(expression, fieldNames = EMPTY_FIELD_NAMES) 
 
 	const stops = [];
 	const colors = [];
-	const fields = {};
 	for (let index = 3; index < expression.length; index += 2) {
 		stops.push(expression[index]);
 		colors.push(expression[index + 1]);
@@ -195,8 +183,7 @@ function parseInterpolateExpression(expression, fieldNames = EMPTY_FIELD_NAMES) 
 
 	return [
 		{
-			label: `${formatBoundValue(stops[0], fieldNames, fields)} – ${formatBoundValue(stops.at(-1), fieldNames, fields)}`,
-			fields: Object.keys(fields).length ? fields : null,
+			label: `${formatBoundValue(stops[0], fieldNames)} – ${formatBoundValue(stops.at(-1), fieldNames)}`,
 			color: colors[0],
 			colors,
 			stops,
@@ -210,24 +197,20 @@ function parseStepExpression(expression, fieldNames = EMPTY_FIELD_NAMES) {
 	const firstStop = expression[3];
 	if (firstStop === undefined) return [];
 
-	const firstFields = {};
 	items.push({
-		label: `< ${formatBoundValue(firstStop, fieldNames, firstFields)}`,
+		label: `< ${formatBoundValue(firstStop, fieldNames)}`,
 		color: expression[2],
-		fields: Object.keys(firstFields).length ? firstFields : null,
 	});
 
 	for (let index = 3; index < expression.length; index += 2) {
 		const stop = expression[index];
 		const nextStop = expression[index + 2];
-		const fields = {};
 		items.push({
 			label:
 				nextStop === undefined
-					? `≥ ${formatBoundValue(stop, fieldNames, fields)}`
-					: `≥ ${formatBoundValue(stop, fieldNames, fields)} 且 < ${formatBoundValue(nextStop, fieldNames, fields)}`,
+					? `≥ ${formatBoundValue(stop, fieldNames)}`
+					: `≥ ${formatBoundValue(stop, fieldNames)} 且 < ${formatBoundValue(nextStop, fieldNames)}`,
 			color: expression[index + 1],
-			fields: Object.keys(fields).length ? fields : null,
 		});
 	}
 	return items;
@@ -371,7 +354,6 @@ export function buildMapLegend(config) {
 			type === "line" &&
 			(Boolean(paint["line-dasharray"]) || config.icon === "dash"),
 		continuous: item.continuous || false,
-		fields: item.fields || null,
 	}));
 
 	if (!items.length) return null;
@@ -380,44 +362,6 @@ export function buildMapLegend(config) {
 		type,
 		items,
 	};
-}
-
-function formatLegendNumber(value) {
-	if (Number.isInteger(value)) return String(value);
-	return String(Number(value.toFixed(2)));
-}
-
-function uniformFieldValue(features, key) {
-	let found = null;
-	for (const feature of features) {
-		const raw = feature?.properties?.[key];
-		if (raw === undefined || raw === null || raw === "") continue;
-		const value = Number(raw);
-		if (!Number.isFinite(value)) return null;
-		const rounded = Math.round(value * 10000) / 10000;
-		if (found === null) found = rounded;
-		else if (found !== rounded) return null;
-	}
-	return found;
-}
-
-export function resolveSharedThresholdLabels(items, features = []) {
-	if (!Array.isArray(items) || !features.length) return items;
-	const cache = new Map();
-	return items.map((item) => {
-		if (!item.fields) return item;
-		let label = item.label;
-		const entries = Object.entries(item.fields).sort(
-			(left, right) => right[1].length - left[1].length,
-		);
-		for (const [key, token] of entries) {
-			if (!cache.has(key)) cache.set(key, uniformFieldValue(features, key));
-			const value = cache.get(key);
-			if (value === null || !token) continue;
-			label = label.split(token).join(formatLegendNumber(value));
-		}
-		return label === item.label ? item : { ...item, label };
-	});
 }
 
 export function parseLegendFromPaint(paint = {}) {

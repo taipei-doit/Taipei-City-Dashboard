@@ -612,7 +612,7 @@ expression 的資料輸入可能是：
 
 1. 找到單一 key 時，從 `mapConfig.property` 尋找相同 key 的中文 `name`。
 2. 找不到中文名稱時，顯示原始 key。
-3. `to-number`、`to-string`、`coalesce` 這類包住 `get` 的門檻，圖例先顯示欄位名稱。若已載入圖徵的該欄位是同一個數字，再改成那個數字。例如每一區的 `q1` 都是 `12` 時，`≤ q1` 會變成 `≤ 12`。數值不一致時維持欄位名稱。
+3. `to-number`、`to-string`、`coalesce` 這類包住 `get` 的門檻，圖例只顯示欄位名稱，不讀圖徵上的實際數字。例如 `["to-number", ["get", "q1"]]` 顯示 `q1`；若 property 有中文名稱則顯示中文。
 4. 多欄位運算時，可只顯示區間值，不強制產生欄位名稱。
 5. 欄位名稱適合放在色階標題或 tooltip，不必重複加在每一筆 label。
 
