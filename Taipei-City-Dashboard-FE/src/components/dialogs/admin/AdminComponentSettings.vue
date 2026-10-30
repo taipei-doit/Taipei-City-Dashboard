@@ -47,7 +47,7 @@ const updateChartSummaryLoading = ref(false);
 const { currentComponent } = storeToRefs(adminStore);
 const currentSettings = ref("all");
 
-const timePresets = [
+const timeFromOptions = [
 	"current",
 	"static",
 	"demo",
@@ -63,50 +63,37 @@ const timePresets = [
 	"quarter_ago",
 	"halfyear_ago",
 	"year_ago",
+	"custom",
 ];
 const closedTimePresets = ["current", "static", "demo", "maintain"];
+const dateOnlyPattern = /^\d{4}-\d{2}-\d{2}$/;
 
-function isAbsoluteTime(value) {
-	return typeof value === "string" && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/.test(value);
+function formatLocalDate(date) {
+	const year = date.getFullYear();
+	const month = String(date.getMonth() + 1).padStart(2, "0");
+	const day = String(date.getDate()).padStart(2, "0");
+	return `${year}-${month}-${day}`;
 }
 
-function toDatetimeLocal(value) {
-	return isAbsoluteTime(value) ? value.slice(0, 16) : "";
-}
-
-function toStoredTime(value) {
-	if (value instanceof Date) {
-		const pad = (part) => String(part).padStart(2, "0");
-		return `${value.getFullYear()}-${pad(value.getMonth() + 1)}-${pad(value.getDate())}T${pad(value.getHours())}:${pad(value.getMinutes())}:00+08:00`;
-	}
-	return value ? `${value}:00+08:00` : "";
-}
-
-const timeRangeSelection = computed({
+const timeFromSelect = computed({
 	get() {
-		const value = currentComponent.value?.time_from;
-		return isAbsoluteTime(value) ? "custom" : value;
+		const timeFrom = currentComponent.value?.time_from;
+		return dateOnlyPattern.test(timeFrom) ? "custom" : timeFrom;
 	},
 	set(value) {
 		if (!currentComponent.value) return;
 		if (value === "custom") {
-			if (!isAbsoluteTime(currentComponent.value.time_from)) {
-				const end = new Date();
-				const start = new Date();
-				start.setHours(0, 0, 0, 0);
-				currentComponent.value.time_from = toStoredTime(start);
-				currentComponent.value.time_to = toStoredTime(end);
-			}
+			const today = formatLocalDate(new Date());
+			currentComponent.value.time_from = today;
+			currentComponent.value.time_to = today;
 			return;
 		}
 		currentComponent.value.time_from = value;
-		currentComponent.value.time_to = closedTimePresets.includes(value) ? "" : "now";
+		currentComponent.value.time_to = closedTimePresets.includes(value)
+			? ""
+			: "now";
 	},
 });
-
-function setCustomTime(field, value) {
-	currentComponent.value[field] = toStoredTime(value);
-}
 const tempInputStorage = ref({
 	link: "",
 	contributor: "",
@@ -154,6 +141,20 @@ function isTypeUpdating(type) {
 }
 
 function handleConfirm() {
+	if (timeFromSelect.value === "custom") {
+		const { time_from, time_to } = currentComponent.value;
+		if (
+			!dateOnlyPattern.test(time_from) ||
+			!dateOnlyPattern.test(time_to)
+		) {
+			dialogStore.showNotification("fail", "請填寫自訂資料區間的起訖日期");
+			return;
+		}
+		if (time_from > time_to) {
+			dialogStore.showNotification("fail", "起始日不可晚於結束日");
+			return;
+		}
+	}
 	adminStore.updateComponent(props.searchParams);
 	handleClose();
 }
@@ -370,6 +371,16 @@ async function refreshSummaries(city, index) {
 	}
 }
 
+function describeDataTime(component) {
+	if (component.time_from === "static") {
+		return "靜態資料（無特定期間）";
+	}
+	if (dateOnlyPattern.test(component.time_from)) {
+		return `${component.time_from} 至 ${component.time_to}`;
+	}
+	return timeTerms[component.time_from] || component.time_from;
+}
+
 function buildPrompt(component) {
 	const { name, city, short_desc, long_desc, chart_data, updated_at } =
 		component;
@@ -385,7 +396,7 @@ function buildPrompt(component) {
 		`所屬城市：${city}`,
 		`圖表說明：${short_desc}`,
 		`指標定義與脈絡：${long_desc}`,
-		`資料時間：${component.time_from === "static" ? "靜態資料（無特定期間）" : component.time_from}`,
+		`資料時間：${describeDataTime(component)}`,
 		`資料更新時間：${updated_at}`,
 		`本次數據：\n${kpis.join("\n")}`,
 	].join("\n\n");
@@ -395,6 +406,13 @@ watch(
 	() => currentComponent.value,
 	async (newVal) => {
 		if (!newVal) return;
+
+		if (/^\d{4}-\d{2}-\d{2}T/.test(newVal.time_from || "")) {
+			newVal.time_from = newVal.time_from.slice(0, 10);
+		}
+		if (/^\d{4}-\d{2}-\d{2}T/.test(newVal.time_to || "")) {
+			newVal.time_to = newVal.time_to.slice(0, 10);
+		}
 
 		["chart", "map"].forEach((type) => {
 			const key = getJobKey(newVal.city, newVal.index, type);
@@ -523,39 +541,51 @@ onBeforeUnmount(() => {
               </select>
             </div>
             <label>資料區間</label>
-            <select v-model="timeRangeSelection">
-              <option
-                v-for="time in timePresets"
-                :key="time"
-                :value="time"
-              >
-                {{ timeTerms[time] }}
-              </option>
-              <option value="custom">
-                自訂
-              </option>
-            </select>
             <div
-              v-if="timeRangeSelection === 'custom'"
-              class="custom-time-range"
+              :class="
+                timeFromSelect === 'custom'
+                  ? 'custom-time-block'
+                  : 'three-block'
+              "
             >
-              <input
-                type="datetime-local"
-                :value="toDatetimeLocal(currentComponent.time_from)"
-                @input="setCustomTime('time_from', $event.target.value)"
-              >
-              <span>至</span>
-              <input
-                type="datetime-local"
-                :value="toDatetimeLocal(currentComponent.time_to)"
-                @input="setCustomTime('time_to', $event.target.value)"
-              >
-            </div>
-            <div
-              v-else
-              class="time-range-end"
-            >
-              至 {{ closedTimePresets.includes(currentComponent.time_from) ? 'N/A' : '現在' }}
+              <select v-model="timeFromSelect">
+                <option
+                  v-for="time in timeFromOptions"
+                  :key="time"
+                  :value="time"
+                >
+                  {{ timeTerms[time] }}
+                </option>
+              </select>
+              <template v-if="timeFromSelect === 'custom'">
+                <input
+                  v-model="currentComponent.time_from"
+                  type="date"
+                  required
+                >
+                <div class="time-separator">
+                  至
+                </div>
+                <input
+                  v-model="currentComponent.time_to"
+                  type="date"
+                  :min="currentComponent.time_from"
+                  required
+                >
+              </template>
+              <template v-else>
+                <div class="time-separator">
+                  至
+                </div>
+                <input
+                  :value="
+                    currentComponent.time_to === 'now'
+                      ? '現在'
+                      : 'N/A'
+                  "
+                  disabled
+                >
+              </template>
             </div>
             <label required>組件簡述* ({{
               currentComponent.short_desc.length
@@ -1148,36 +1178,26 @@ onBeforeUnmount(() => {
 			column-gap: 0.5rem;
 		}
 
-		.time-range-end {
-			margin-top: 6px;
-			color: var(--color-complement-text);
-			font-size: var(--font-s);
-		}
-
-		.custom-time-range {
+		.custom-time-block {
 			display: grid;
-			grid-template-columns: 1fr auto 1fr;
+			grid-template-columns: 1fr 2rem 1fr;
 			column-gap: 0.5rem;
+			row-gap: 0.5rem;
 			align-items: center;
-			margin-top: 6px;
 
-			span {
-				color: var(--color-complement-text);
-				font-size: var(--font-s);
+			select {
+				grid-column: 1 / -1;
 			}
 
-			input[type="datetime-local"] {
-				width: 100%;
-				min-width: 0;
-				color: #fff;
-				font-size: var(--font-s);
-
-				&::-webkit-calendar-picker-indicator {
-					cursor: pointer;
-					filter: invert(1);
-					opacity: 1;
-				}
+			input[type="date"]::-webkit-calendar-picker-indicator {
+				filter: invert(1);
+				cursor: pointer;
 			}
+		}
+		.time-separator {
+			display: flex;
+			align-items: center;
+			justify-content: center;
 		}
 
 		&-items {

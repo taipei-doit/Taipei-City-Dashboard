@@ -90,6 +90,20 @@ async function handleSubmit() {
 		);
 		return;
 	}
+	if (timeRangeSelection.value === "custom") {
+		const { time_from, time_to } = params.value;
+		if (
+			!dateOnlyPattern.test(time_from) ||
+			!dateOnlyPattern.test(time_to)
+		) {
+			dialogStore.showNotification("fail", "請填寫自訂資料區間的起訖日期");
+			return;
+		}
+		if (time_from > time_to) {
+			dialogStore.showNotification("fail", "起始日不可晚於結束日");
+			return;
+		}
+	}
 	try {
 		const createRes = await http.post(`/component/`, params.value);
 		const getRes = await http.get(`/component/${createRes.data.data.id}`);
@@ -114,47 +128,37 @@ function isShowTimeToBlock(time_to) {
 	}
 }
 
-function isAbsoluteTime(value) {
-	return typeof value === "string" && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/.test(value);
-}
+const dateOnlyPattern = /^\d{4}-\d{2}-\d{2}$/;
 
-function toDatetimeLocal(value) {
-	return isAbsoluteTime(value) ? value.slice(0, 16) : "";
-}
-
-function toStoredTime(value) {
-	if (value instanceof Date) {
-		const pad = (part) => String(part).padStart(2, "0");
-		return `${value.getFullYear()}-${pad(value.getMonth() + 1)}-${pad(value.getDate())}T${pad(value.getHours())}:${pad(value.getMinutes())}:00+08:00`;
-	}
-	return value ? `${value}:00+08:00` : "";
+function formatLocalDate(date) {
+	const year = date.getFullYear();
+	const month = String(date.getMonth() + 1).padStart(2, "0");
+	const day = String(date.getDate()).padStart(2, "0");
+	return `${year}-${month}-${day}`;
 }
 
 const timeRangeSelection = computed({
 	get() {
-		return isAbsoluteTime(params.value.time_from) ? "custom" : params.value.time_from;
+		return dateOnlyPattern.test(params.value.time_from)
+			? "custom"
+			: params.value.time_from;
 	},
 	set(value) {
 		if (value === "custom") {
-			if (!isAbsoluteTime(params.value.time_from)) {
-				const end = new Date();
-				const start = new Date();
-				start.setHours(0, 0, 0, 0);
-				params.value.time_from = toStoredTime(start);
-				params.value.time_to = toStoredTime(end);
-			}
+			const today = formatLocalDate(new Date());
+			params.value.time_from = today;
+			params.value.time_to = today;
 			return;
 		}
-		if (isAbsoluteTime(params.value.time_from) || !isShowTimeToBlock(value)) {
+		if (
+			dateOnlyPattern.test(params.value.time_from) ||
+			!isShowTimeToBlock(value)
+		) {
 			params.value.time_to = null;
 		}
 		params.value.time_from = value;
 	},
 });
-
-function setCustomTime(field, value) {
-	params.value[field] = toStoredTime(value);
-}
 </script>
 
 <template>
@@ -237,7 +241,13 @@ function setCustomTime(field, value) {
               </select>
             </div>
             <label>資料區間</label>
-            <div class="time-block">
+            <div
+              :class="
+                timeRangeSelection === 'custom'
+                  ? 'custom-time-block'
+                  : 'time-block'
+              "
+            >
               <select
                 v-model="timeRangeSelection"
                 required
@@ -284,17 +294,16 @@ function setCustomTime(field, value) {
               </select>
               <template v-if="timeRangeSelection === 'custom'">
                 <input
-                  class="custom-time"
-                  type="datetime-local"
-                  :value="toDatetimeLocal(params.time_from)"
-                  @input="setCustomTime('time_from', $event.target.value)"
+                  v-model="params.time_from"
+                  type="date"
+                  required
                 >
-                <span>～</span>
+                <span class="time-separator">至</span>
                 <input
-                  class="custom-time"
-                  type="datetime-local"
-                  :value="toDatetimeLocal(params.time_to)"
-                  @input="setCustomTime('time_to', $event.target.value)"
+                  v-model="params.time_to"
+                  type="date"
+                  :min="params.time_from"
+                  required
                 >
               </template>
               <span v-show="timeRangeSelection !== 'custom' && isShowTimeToBlock(params.time_from)">～</span>
@@ -651,19 +660,30 @@ function setCustomTime(field, value) {
 	display: flex;
 	align-items: center;
 	column-gap: 4px;
-	flex-wrap: wrap;
 	select {
 		width: 100px;
 	}
-	.custom-time {
-		min-width: 0;
-		width: 180px;
-		color: #fff;
-		&::-webkit-calendar-picker-indicator {
-			cursor: pointer;
-			filter: invert(1);
-			opacity: 1;
-		}
+}
+.custom-time-block {
+	display: grid;
+	grid-template-columns: 1fr 2rem 1fr;
+	column-gap: 0.5rem;
+	row-gap: 0.5rem;
+	align-items: center;
+
+	select {
+		grid-column: 1 / -1;
+		width: 100%;
 	}
+
+	input[type="date"]::-webkit-calendar-picker-indicator {
+		filter: invert(1);
+		cursor: pointer;
+	}
+}
+.time-separator {
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 </style>

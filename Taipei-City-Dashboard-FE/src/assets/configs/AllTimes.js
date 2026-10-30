@@ -24,5 +24,6 @@ export const timeTerms = {
 	current: "即時資料",
 	demo: "示範靜態資料",
 	maintain: "維護修復中",
+	custom: "自訂",
 	max: "最久",
 };
