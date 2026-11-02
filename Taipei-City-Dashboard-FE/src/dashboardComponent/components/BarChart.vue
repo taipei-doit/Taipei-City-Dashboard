@@ -3,7 +3,6 @@
 import { ref, computed } from "vue";
 import VueApexCharts from "vue3-apexcharts";
 import { formatValueWithUnit, getAxisTitle } from "../utilities/chartUnits";
-import { getChartHeightWithXAxisLabels } from "../utilities/chartLayout";
 
 const props = defineProps([
 	"chart_config",
@@ -92,6 +91,7 @@ const chartOptions = ref({
 		},
 		title: {
 			text: getAxisTitle(props.chart_config.unit, "x"),
+			offsetY: -12,
 			style: {
 				color: "var(--color-complement-text)",
 			},
@@ -108,11 +108,7 @@ const chartOptions = ref({
 });
 
 const chartHeight = computed(() => {
-	const titleHeight = getAxisTitle(props.chart_config.unit, "x") ? 24 : 0;
-	return getChartHeightWithXAxisLabels(
-		40 + props.series[0].data.length * 30,
-		titleHeight > 0,
-	);
+	return `${40 + props.series[0].data.length * 30}`;
 });
 
 const selectedIndex = ref(null);
