@@ -5,6 +5,7 @@
 import { computed, ref } from "vue";
 import VueApexCharts from "vue3-apexcharts";
 import { formatValueWithUnit } from "../utilities/chartUnits";
+import { getChartHeightWithXAxisLabels, getXAxisLabelOptions } from "../utilities/chartLayout";
 
 const props = defineProps([
 	"chart_config",
@@ -116,6 +117,7 @@ const chartOptions = ref({
 			show: false,
 		},
 		labels: {
+			...getXAxisLabelOptions(),
 			show: true,
 		},
 		type: "category",
@@ -131,7 +133,7 @@ const chartOptions = ref({
 
 const chartHeight = computed(() => {
 	const height = 80 + props.series[0].data.length * 60;
-	return height;
+	return getChartHeightWithXAxisLabels(height);
 });
 const selectedIndex = ref(null);
 

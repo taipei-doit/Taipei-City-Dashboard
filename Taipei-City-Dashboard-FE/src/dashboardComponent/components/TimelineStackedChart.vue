@@ -5,6 +5,7 @@ import { ref, watch } from "vue";
 // import { MapConfig, MapFilter } from "../utilities/componentConfig";
 import VueApexCharts from "vue3-apexcharts";
 import { formatValueWithUnit, getAxisTitle } from "../utilities/chartUnits";
+import { getChartHeightWithXAxisLabels, getXAxisLabelOptions } from "../utilities/chartLayout";
 
 const props = defineProps(["chart_config", "activeChart", "series"]);
 
@@ -85,7 +86,7 @@ const chartOptions = ref({
 			show: false,
 		},
 		labels: {
-			datetimeUTC: false,
+			...getXAxisLabelOptions({ datetimeUTC: false }),
 		},
 		tooltip: {
 			enabled: false,
@@ -121,7 +122,7 @@ watch(
 			xaxis: {
 				...chartOptions.value.xaxis,
 				type: "datetime",
-				labels: { datetimeUTC: false },
+				labels: getXAxisLabelOptions({ datetimeUTC: false }),
 			},
 		};
 	},
@@ -133,7 +134,7 @@ watch(
   <div v-if="activeChart === 'TimelineStackedChart'">
     <VueApexCharts
       width="100%"
-      height="260px"
+      :height="getChartHeightWithXAxisLabels(260)"
       type="area"
       :options="chartOptions"
       :series="localSeries"

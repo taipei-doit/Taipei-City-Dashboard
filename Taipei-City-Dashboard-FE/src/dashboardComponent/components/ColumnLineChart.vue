@@ -5,6 +5,7 @@
 import { ref, computed, watch } from "vue";
 import VueApexCharts from "vue3-apexcharts";
 import { formatValueWithUnit, getAxisTitle } from "../utilities/chartUnits";
+import { getChartHeightWithXAxisLabels, getXAxisLabelOptions } from "../utilities/chartLayout";
 
 const props = defineProps(["chart_config", "activeChart", "series"]);
 
@@ -129,7 +130,7 @@ const chartOptions = ref({
 			},
 		},
 		labels: {
-			datetimeUTC: false,
+			...getXAxisLabelOptions({ datetimeUTC: false }),
 		},
 		tooltip: {
 			enabled: false,
@@ -217,7 +218,7 @@ watch(
 				xaxis: {
 					...chartOptions.value.xaxis,
 					type: "datetime",
-					labels: { datetimeUTC: false },
+					labels: getXAxisLabelOptions({ datetimeUTC: false }),
 				},
 			};
 		}
@@ -234,7 +235,7 @@ watch(
     <VueApexCharts
       type="line"
       width="100%"
-      height="260px"
+      :height="getChartHeightWithXAxisLabels(260)"
       :options="chartOptions"
       :series="parseSeries"
     />
