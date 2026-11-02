@@ -121,7 +121,7 @@ function handleDataSelection(index) {
           :src="returnIcon(item.icon)"
         >
         <!-- If there is a value attached, show the value -->
-        <div v-if="item.value !== null && item.value !== undefined && item.value !== ''">
+        <div v-if="item.value">
           <h5>{{ item.name }}</h5>
           <h6>
             {{ item.value }}<template v-if="valueUnit">

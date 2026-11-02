@@ -2,6 +2,7 @@
 import { computed, ref } from "vue";
 import VueApexCharts from "vue3-apexcharts";
 import { formatValueWithUnit, getAxisTitle } from "../utilities/chartUnits";
+import { getChartHeightWithXAxisLabels, getXAxisLabelOptions } from "../utilities/chartLayout";
 
 const props = defineProps([
 	"chart_config",
@@ -138,7 +139,7 @@ const chartOptions = ref({
 			? props.chart_config.categories
 			: [],
 		labels: {
-			offsetY: 2,
+			...getXAxisLabelOptions(),
 		},
 		type: "category",
 	},
@@ -241,7 +242,7 @@ function resetWidth() {
       :key="chartWidth"
       type="bar"
       :width="chartWidth"
-      height="250px"
+      :height="getChartHeightWithXAxisLabels(250)"
       :options="chartOptions"
       :series="series"
       @data-point-selection="handleDataSelection"

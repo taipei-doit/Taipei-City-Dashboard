@@ -4,6 +4,7 @@
 import { ref } from "vue";
 import VueApexCharts from "vue3-apexcharts";
 import { formatValueWithUnit } from "../utilities/chartUnits";
+import { getChartHeightWithXAxisLabels, getXAxisLabelOptions } from "../utilities/chartLayout";
 
 const props = defineProps(["chart_config", "activeChart", "series"]);
 
@@ -78,7 +79,7 @@ const chartOptions = ref({
 			? props.chart_config.categories
 			: [],
 		labels: {
-			offsetY: 5,
+			...getXAxisLabelOptions({ offsetY: 5 }),
 			formatter: function (value) {
 				return value.length > 7 ? value.slice(0, 6) + "..." : value;
 			},
@@ -117,7 +118,7 @@ const chartOptions = ref({
   <div v-if="activeChart === 'RadarChart'">
     <VueApexCharts
       width="100%"
-      height="270px"
+      :height="getChartHeightWithXAxisLabels(270)"
       type="radar"
       :options="chartOptions"
       :series="series"

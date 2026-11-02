@@ -37,8 +37,7 @@ export function getChartUnit(unit, dimension = "value") {
 }
 
 export function getAxisTitle(unit, dimension) {
-	const axisUnit = getChartUnit(unit, dimension);
-	return axisUnit ? `數值（${axisUnit}）` : "";
+	return getChartUnit(unit, dimension);
 }
 
 export function formatValueWithUnit(value, unit, dimension = "value") {
