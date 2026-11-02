@@ -36,6 +36,14 @@ export function getChartUnit(unit, dimension = "value") {
 	return "";
 }
 
+export function getExplicitChartUnit(unit, dimension) {
+	const parsedUnit = parseUnit(unit);
+	if (!parsedUnit || typeof parsedUnit !== "object") return "";
+
+	const dimensionUnit = parsedUnit[dimension];
+	return typeof dimensionUnit === "string" ? dimensionUnit.trim() : "";
+}
+
 export function getAxisTitle(unit, dimension) {
 	return getChartUnit(unit, dimension);
 }
