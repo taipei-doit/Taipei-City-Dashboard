@@ -4,6 +4,7 @@
 <script setup>
 import { computed, ref } from "vue";
 import VueApexCharts from "vue3-apexcharts";
+import { formatValueWithUnit } from "../utilities/chartUnits";
 
 const props = defineProps([
 	"chart_config",
@@ -52,7 +53,11 @@ const chartOptions = ref({
 	},
 	colors: [props.chart_config.color[0]],
 	dataLabels: {
-		enabled: false,
+		enabled: true,
+		formatter: (value) =>
+			formatValueWithUnit(value, props.chart_config.unit),
+		offsetX: 8,
+		textAnchor: "start",
 	},
 	grid: {
 		show: false,
@@ -96,9 +101,9 @@ const chartOptions = ref({
 			return `
 			<div class="chart-tooltip">
 				<h6>${label}-實際數值</h6>
-				<span>${value} ${props.chart_config.unit}</span>
+				<span>${formatValueWithUnit(value, props.chart_config.unit)}</span>
 				<h6>${label}-目標數值</h6>
-				<span>${goalValue} ${props.chart_config.unit}</span>
+				<span>${formatValueWithUnit(goalValue, props.chart_config.unit)}</span>
 			</div>`;
 		},
 		followCursor: true,

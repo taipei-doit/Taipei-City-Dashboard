@@ -2,6 +2,7 @@
 
 <script setup>
 import { ref } from "vue";
+import { getChartUnit } from "../utilities/chartUnits";
 import bus from "../assets/map/bus.png";
 import metro from "../assets/map/metro.png";
 import triangle_green from "../assets/map/triangle_green.png";
@@ -59,6 +60,7 @@ function returnIcon(name) {
 }
 
 const selectedIndex = ref(null);
+const valueUnit = getChartUnit(props.chart_config.unit);
 
 function handleDataSelection(index) {
 	if (!props.map_filter || !props.map_filter_on) {
@@ -119,9 +121,13 @@ function handleDataSelection(index) {
           :src="returnIcon(item.icon)"
         >
         <!-- If there is a value attached, show the value -->
-        <div v-if="item.value">
+        <div v-if="item.value !== null && item.value !== undefined && item.value !== ''">
           <h5>{{ item.name }}</h5>
-          <h6>{{ item.value }} {{ chart_config.unit }}</h6>
+          <h6>
+            {{ item.value }}<template v-if="valueUnit">
+              {{ valueUnit }}
+            </template>
+          </h6>
         </div>
         <div v-else>
           <h6>{{ item.name }}</h6>

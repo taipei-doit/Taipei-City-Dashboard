@@ -2,6 +2,7 @@
 <script setup>
 import { ref, computed } from "vue";
 import VueApexCharts from "vue3-apexcharts";
+import { formatValueWithUnit, getAxisTitle } from "../utilities/chartUnits";
 
 const props = defineProps([
 	"chart_config",
@@ -68,8 +69,10 @@ const chartOptions = ref({
 				w.globals.labels[dataPointIndex] +
 				"</h6>" +
 				"<span>" +
-				series[seriesIndex][dataPointIndex] +
-				` ${props.chart_config.unit}` +
+				formatValueWithUnit(
+					series[seriesIndex][dataPointIndex],
+					props.chart_config.unit,
+				) +
 				"</span>" +
 				"</div>"
 			);
@@ -85,6 +88,12 @@ const chartOptions = ref({
 		},
 		labels: {
 			show: false,
+		},
+		title: {
+			text: getAxisTitle(props.chart_config.unit, "x"),
+			style: {
+				color: "var(--color-complement-text)",
+			},
 		},
 		type: "category",
 	},

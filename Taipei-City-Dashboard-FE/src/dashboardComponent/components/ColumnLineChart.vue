@@ -4,6 +4,7 @@
 <script setup>
 import { ref, computed, watch } from "vue";
 import VueApexCharts from "vue3-apexcharts";
+import { formatValueWithUnit, getAxisTitle } from "../utilities/chartUnits";
 
 const props = defineProps(["chart_config", "activeChart", "series"]);
 
@@ -100,7 +101,11 @@ const chartOptions = ref({
 					w.globals.seriesNames[seriesIndex]
 				}` +
 				`</h6>` +
-				`<span>${series[seriesIndex][dataPointIndex]} ${props.chart_config.unit}</span>` +
+				`<span>${formatValueWithUnit(
+					series[seriesIndex][dataPointIndex],
+					props.chart_config.unit,
+					seriesIndex === 0 ? "y1" : "y2",
+				)}</span>` +
 				`</div>`
 			);
 		},
@@ -146,7 +151,7 @@ const chartOptions = ref({
 				},
 			},
 			title: {
-				text: props.series[0].name,
+				text: getAxisTitle(props.chart_config.unit, "y1"),
 				style: {
 					color: "var(--color-complement-text)",
 				},
@@ -167,7 +172,7 @@ const chartOptions = ref({
 			},
 			opposite: true,
 			title: {
-				text: props.series?.[1]?.name ?? "",
+				text: getAxisTitle(props.chart_config.unit, "y2"),
 				style: {
 					color: "var(--color-complement-text)",
 				},

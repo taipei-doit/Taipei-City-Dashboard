@@ -1,5 +1,6 @@
 <script setup>
 import { computed, onBeforeUnmount, onMounted, ref } from "vue";
+import { formatValueWithUnit } from "../utilities/chartUnits";
 
 const props = defineProps([
 	"chart_config",
@@ -376,7 +377,7 @@ const sunburstData = computed(() => {
 				const pct = ((nodeTotal / ring2total) * 100).toFixed(1);
 				const pathTip =
 					[...chain, k.name].join(" → ") +
-					`：${nodeTotal} ${props.chart_config.unit}（佔${pct}%）`;
+					`：${formatValueWithUnit(nodeTotal, props.chart_config.unit)}（佔${pct}%）`;
 				const innerR = rHole + (childRing - 1) * w;
 				const outerR = rHole + childRing * w;
 				arcs.push({
@@ -388,7 +389,7 @@ const sunburstData = computed(() => {
 					node: k.name,
 					nodeId,
 					parent: parentName,
-					title: `${k.name}：${nodeTotal} ${props.chart_config.unit}`,
+					title: `${k.name}：${formatValueWithUnit(nodeTotal, props.chart_config.unit)}`,
 					tooltip: pathTip,
 				});
 				pushLabel(cur, aEnd, innerR, outerR, k.name, childRing, nodeId);
@@ -407,7 +408,7 @@ const sunburstData = computed(() => {
 				const pct = ((nodeTotal / ring2total) * 100).toFixed(1);
 				const pathTip =
 					[...chain, k.name].join(" → ") +
-					`：${k.value} ${props.chart_config.unit}（佔${pct}%）`;
+					`：${formatValueWithUnit(k.value, props.chart_config.unit)}（佔${pct}%）`;
 				const innerR = rHole + (childRing - 1) * w;
 				const polar = w * (0.12 + 1.18 * (k.value / maxLeafVal));
 				const outerR = baseOuter + polar;
@@ -420,7 +421,7 @@ const sunburstData = computed(() => {
 					node: k.name,
 					nodeId,
 					parent: parentName,
-					title: `${k.name}：${k.value} ${props.chart_config.unit}`,
+					title: `${k.name}：${formatValueWithUnit(k.value, props.chart_config.unit)}`,
 					tooltip: pathTip,
 				});
 				pushLabel(cur, aEnd, innerR, outerR, k.name, childRing, nodeId);
@@ -466,8 +467,8 @@ const sunburstData = computed(() => {
 				node: l1.name,
 				nodeId,
 				parent: root,
-				title: `${l1.name}：${nodeTotal} ${props.chart_config.unit}`,
-				tooltip: `${l1.name}：${nodeTotal} ${props.chart_config.unit}（佔${pct}%）`,
+				title: `${l1.name}：${formatValueWithUnit(nodeTotal, props.chart_config.unit)}`,
+				tooltip: `${l1.name}：${formatValueWithUnit(nodeTotal, props.chart_config.unit)}（佔${pct}%）`,
 			});
 			pushLabel(a0, a1, innerR, outerR, l1.name, 1, nodeId);
 			recurse(l1.name, nodeId, a0, a1, 1, c1, [l1.name], branchFillDepth);
@@ -483,8 +484,8 @@ const sunburstData = computed(() => {
 				node: l1.name,
 				nodeId,
 				parent: root,
-				title: `${l1.name}：${l1.value} ${props.chart_config.unit}`,
-				tooltip: `${l1.name}：${l1.value} ${props.chart_config.unit}（佔${pct}%）`,
+				title: `${l1.name}：${formatValueWithUnit(l1.value, props.chart_config.unit)}`,
+				tooltip: `${l1.name}：${formatValueWithUnit(l1.value, props.chart_config.unit)}（佔${pct}%）`,
 			});
 			pushLabel(a0, a1, rHole, outerR, l1.name, 1, nodeId);
 		}

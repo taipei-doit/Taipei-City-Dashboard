@@ -1,5 +1,6 @@
 <script setup>
 import { computed, ref } from "vue";
+import { formatValueWithUnit } from "../utilities/chartUnits";
 
 const props = defineProps([
 	"chart_config",
@@ -158,7 +159,7 @@ const handleDataSelection = (name) => {
                 Q1
               </div>
               <div class="QuartileChart__labelVal">
-                {{ formatNumber(it.q1) }}
+                {{ formatValueWithUnit(formatNumber(it.q1), chart_config.unit) }}
               </div>
             </div>
 
@@ -167,7 +168,7 @@ const handleDataSelection = (name) => {
                 Q2
               </div>
               <div class="QuartileChart__labelVal">
-                {{ formatNumber(it.median) }}
+                {{ formatValueWithUnit(formatNumber(it.median), chart_config.unit) }}
               </div>
             </div>
 
@@ -176,7 +177,15 @@ const handleDataSelection = (name) => {
                 Q3
               </div>
               <div class="QuartileChart__labelVal">
-                {{ formatNumber(it.q3) }}
+                {{ formatValueWithUnit(formatNumber(it.q3), chart_config.unit) }}
+              </div>
+            </div>
+            <div class="QuartileChart__label">
+              <div class="QuartileChart__labelKey">
+                Q4
+              </div>
+              <div class="QuartileChart__labelVal">
+                {{ formatValueWithUnit(formatNumber(it.max), chart_config.unit) }}
               </div>
             </div>
           </div>
@@ -257,7 +266,7 @@ const handleDataSelection = (name) => {
 
 	&__labels {
 		display: grid;
-		grid-template-columns: repeat(3, 1fr);
+		grid-template-columns: repeat(4, 1fr);
 		font-size: 12px;
 		margin-bottom: 4px;
 	}

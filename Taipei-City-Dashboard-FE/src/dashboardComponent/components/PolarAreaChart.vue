@@ -4,6 +4,7 @@
 <!-- eslint-disable no-mixed-spaces-and-tabs -->
 <script setup>
 import { computed, ref } from "vue";
+import { formatValueWithUnit } from "../utilities/chartUnits";
 
 // register the five required props
 const props = defineProps([
@@ -379,8 +380,7 @@ function handleLegendSelection(index) {
           }}{{ props.chart_config.categories && "-"
           }}{{ showedData[aHovered].data[rHovered].r }}
         </h6>
-        <span>{{ showedData[aHovered].data[rHovered].value
-        }}{{ chart_config.unit }}</span>
+        <span>{{ formatValueWithUnit(showedData[aHovered].data[rHovered].value, chart_config.unit) }}</span>
       </div>
     </Teleport>
   </div>

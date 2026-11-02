@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from "vue";
 import VueApexCharts from "vue3-apexcharts";
+import { getChartUnit } from "../utilities/chartUnits";
 
 const props = defineProps([
 	"series",
@@ -29,14 +30,6 @@ const tooltip = ref({
 	point: null,
 	categories: {},
 });
-
-const parsedUnit = (() => {
-	try {
-		return JSON.parse(props.chart_config.unit);
-	} catch {
-		return props.chart_config.unit;
-	}
-})();
 
 function showTooltip({ name, point, categories }) {
 	tooltip.value.visible = true;
@@ -280,15 +273,15 @@ function handleDataSelection(_e, _chartContext, config) {
           {{ tooltip.categories[0] ?? "X" }}：{{
             formatXForTooltip(tooltip.point.x)
           }}
-          {{ parsedUnit?.x ?? "" }}
+          {{ getChartUnit(props.chart_config.unit, "x") }}
         </div>
         <div>
           {{ tooltip.categories[1] ?? "Y" }}：{{ tooltip.point.y }}
-          {{ parsedUnit?.y ?? "" }}
+          {{ getChartUnit(props.chart_config.unit, "y") }}
         </div>
         <div>
           {{ tooltip.categories[2] ?? "Z" }}：{{ tooltip.point.z }}
-          {{ parsedUnit?.z ?? "" }}
+          {{ getChartUnit(props.chart_config.unit, "z") }}
         </div>
       </div>
     </Teleport>

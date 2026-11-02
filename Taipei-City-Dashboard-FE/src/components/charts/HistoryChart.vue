@@ -3,6 +3,7 @@
 <script setup>
 import { ref } from "vue";
 import { timeTerms } from "../../assets/configs/AllTimes";
+import { formatValueWithUnit } from "../../dashboardComponent/utilities/chartUnits";
 
 const props = defineProps(["chart_config", "series", "history_config"]);
 
@@ -58,12 +59,10 @@ const chartOptions = ref({
 				)}` +
 				"</h6>" +
 				"<span>" +
-				series[seriesIndex][dataPointIndex] +
-				` ${
-					props.history_config.unit
-						? props.history_config.unit
-						: props.chart_config.unit
-				}` +
+				formatValueWithUnit(
+					series[seriesIndex][dataPointIndex],
+					props.history_config.unit || props.chart_config.unit,
+				) +
 				"</span>" +
 				"</div>"
 			);

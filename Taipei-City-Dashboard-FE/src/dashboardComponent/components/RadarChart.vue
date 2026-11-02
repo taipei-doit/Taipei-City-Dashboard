@@ -3,6 +3,7 @@
 <script setup>
 import { ref } from "vue";
 import VueApexCharts from "vue3-apexcharts";
+import { formatValueWithUnit } from "../utilities/chartUnits";
 
 const props = defineProps(["chart_config", "activeChart", "series"]);
 
@@ -63,8 +64,10 @@ const chartOptions = ref({
 				}` +
 				"</h6>" +
 				"<span>" +
-				series[seriesIndex][dataPointIndex] +
-				` ${props.chart_config.unit}` +
+				formatValueWithUnit(
+					series[seriesIndex][dataPointIndex],
+					props.chart_config.unit,
+				) +
 				"</span>" +
 				"</div>"
 			);

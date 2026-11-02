@@ -3,6 +3,7 @@
 <script setup>
 import { ref, computed } from "vue";
 import VueApexCharts from "vue3-apexcharts";
+import { formatValueWithUnit } from "../utilities/chartUnits";
 
 const props = defineProps([
 	"chart_config",
@@ -68,8 +69,10 @@ const chartOptions = ref({
 				w.globals.categoryLabels[dataPointIndex] +
 				"</h6>" +
 				"<span>" +
-				series[seriesIndex][dataPointIndex] +
-				` ${props.chart_config.unit}` +
+				formatValueWithUnit(
+					series[seriesIndex][dataPointIndex],
+					props.chart_config.unit,
+				) +
 				"</span>" +
 				"</div>"
 			);
@@ -143,7 +146,7 @@ function handleDataSelection(_e, _chartContext, config) {
   >
     <div class="treemapchart-title">
       <h5>總合</h5>
-      <h6>{{ sum }} {{ chart_config.unit }}</h6>
+      <h6>{{ formatValueWithUnit(sum, chart_config.unit) }}</h6>
     </div>
     <VueApexCharts
       width="100%"

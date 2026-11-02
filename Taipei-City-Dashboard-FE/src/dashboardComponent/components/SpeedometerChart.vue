@@ -5,6 +5,7 @@
 
 <script setup>
 import { ref } from "vue";
+import { getChartUnit } from "../utilities/chartUnits";
 const props = defineProps([
 	"chart_config",
 	"activeChart",
@@ -255,7 +256,7 @@ function handleTable(list) {
           text-anchor="middle"
           class="small"
         >
-          <tspan>{{ chart_config.unit }}</tspan>
+          <tspan>{{ getChartUnit(chart_config.unit) }}</tspan>
         </text>
       </svg>
       <div class="tablediv">
