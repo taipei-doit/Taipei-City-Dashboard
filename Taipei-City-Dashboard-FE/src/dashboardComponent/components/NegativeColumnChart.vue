@@ -149,6 +149,7 @@ const chartOptions = ref({
 		},
 		title: {
 			text: getAxisTitle(props.chart_config.unit, "y"),
+			rotate: 90,
 			style: {
 				color: "var(--color-complement-text)",
 			},
