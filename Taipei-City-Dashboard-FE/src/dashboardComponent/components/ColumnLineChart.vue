@@ -4,7 +4,10 @@
 <script setup>
 import { ref, computed, watch } from "vue";
 import VueApexCharts from "vue3-apexcharts";
-import { formatValueWithUnit, getAxisTitle } from "../utilities/chartUnits";
+import {
+	formatValueWithUnit,
+	getExplicitChartUnit,
+} from "../utilities/chartUnits";
 
 const props = defineProps(["chart_config", "activeChart", "series"]);
 
@@ -20,22 +23,21 @@ const props = defineProps(["chart_config", "activeChart", "series"]);
 const localSeries = ref(JSON.parse(JSON.stringify(props.series)));
 
 const parseSeries = computed(() => {
-	return localSeries.value.map(
-		(
-			serie,
-			index
-		) => ({
-			...serie,
-			type: index === 0 ? "column" : "line",
-		})
-	);
+	return localSeries.value.map((serie, index) => ({
+		...serie,
+		type: index === 0 ? "column" : "line",
+	}));
 });
+
+const y1AxisTitle = getExplicitChartUnit(props.chart_config.unit, "y1");
+const y2AxisTitle = getExplicitChartUnit(props.chart_config.unit, "y2");
+const hasBothAxisTitles = Boolean(y1AxisTitle && y2AxisTitle);
 
 const totalMax = computed(() => {
 	if (props.series[0].name.slice(-2) === props.series[1].name.slice(-2)) {
 		let max = Math.max(
 			...props.series[0].data.map((d) => d.y),
-			...props.series[1].data.map((d) => d.y)
+			...props.series[1].data.map((d) => d.y),
 		);
 
 		// add 10% then round up to the nearest 100
@@ -88,12 +90,7 @@ const chartOptions = ref({
 	},
 	tooltip: {
 		// The class "chart-tooltip" could be edited in /assets/styles/chartStyles.css
-		custom: function ({
-			series,
-			seriesIndex,
-			dataPointIndex,
-			w,
-		}) {
+		custom: function ({ series, seriesIndex, dataPointIndex, w }) {
 			return (
 				`<div class="chart-tooltip">` +
 				`<h6>` +
@@ -152,9 +149,12 @@ const chartOptions = ref({
 				},
 			},
 			title: {
-				text: getAxisTitle(props.chart_config.unit, "y1"),
+				text: hasBothAxisTitles ? y1AxisTitle : "",
+				offsetX: 0,
+				rotate: 0,
 				style: {
 					color: "var(--color-complement-text)",
+					cssClass: "column-line-y1-axis-title",
 				},
 			},
 		},
@@ -173,9 +173,12 @@ const chartOptions = ref({
 			},
 			opposite: true,
 			title: {
-				text: getAxisTitle(props.chart_config.unit, "y2"),
+				text: hasBothAxisTitles ? y2AxisTitle : "",
+				offsetX: -15,
+				rotate: 0,
 				style: {
 					color: "var(--color-complement-text)",
+					cssClass: "column-line-y2-axis-title",
 				},
 			},
 		},
@@ -191,7 +194,8 @@ watch(
 	(newVal) => {
 		localSeries.value = JSON.parse(JSON.stringify(newVal || []));
 
-		const timestamps = newVal?.[0]?.data?.map((p) => new Date(p.x).getTime()) || [];
+		const timestamps =
+			newVal?.[0]?.data?.map((p) => new Date(p.x).getTime()) || [];
 		if (timestamps.length < 2) return;
 
 		const newDiff = Math.max(...timestamps) - Math.min(...timestamps);
@@ -223,21 +227,18 @@ watch(
 			};
 		}
 	},
-	{ deep: true, immediate: true }
+	{ deep: true, immediate: true },
 );
-
 </script>
 
 <template>
-  <div
-    v-if="activeChart === 'ColumnLineChart'"
-  >
-    <VueApexCharts
-      type="line"
-      width="100%"
-      height="260px"
-      :options="chartOptions"
-      :series="parseSeries"
-    />
-  </div>
+	<div v-if="activeChart === 'ColumnLineChart'">
+		<VueApexCharts
+			type="line"
+			width="100%"
+			height="260px"
+			:options="chartOptions"
+			:series="parseSeries"
+		/>
+	</div>
 </template>
