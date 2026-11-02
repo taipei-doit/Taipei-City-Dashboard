@@ -2,7 +2,6 @@
 import { ref, onMounted, onBeforeUnmount } from "vue";
 import VueApexCharts from "vue3-apexcharts";
 import { getChartUnit } from "../utilities/chartUnits";
-import { getXAxisLabelOptions } from "../utilities/chartLayout";
 
 const props = defineProps([
 	"series",
@@ -169,7 +168,7 @@ const chartOptions = ref({
 		type: isDatetime ? "datetime" : "numeric",
 		tickAmount: 5,
 		labels: {
-			...getXAxisLabelOptions(),
+			offsetY: -4,
 			formatter: isDatetime
 				? undefined
 				: (val) => Number(val).toLocaleString(),
@@ -292,8 +291,7 @@ function handleDataSelection(_e, _chartContext, config) {
 <style lang="scss" scoped>
 .bubbleChart {
 	position: relative;
-	height: calc(90% + 24px);
-	min-height: 284px;
+	height: 90%;
 
 	:deep(.apexcharts-tooltip) {
 		display: none !important;

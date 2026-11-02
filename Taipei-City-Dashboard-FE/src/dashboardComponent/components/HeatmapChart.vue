@@ -4,7 +4,6 @@
 import { computed, ref } from "vue";
 import VueApexCharts from "vue3-apexcharts";
 import { formatValueWithUnit } from "../utilities/chartUnits";
-import { getChartHeightWithXAxisLabels, getXAxisLabelOptions } from "../utilities/chartLayout";
 
 const props = defineProps([
 	"chart_config",
@@ -153,7 +152,7 @@ const chartOptions = ref({
 			? props.chart_config.categories
 			: [],
 		labels: {
-			...getXAxisLabelOptions({ offsetY: 5 }),
+			offsetY: -4,
 			formatter: function (value) {
 				return value.length > 7 ? value.slice(0, 6) + "..." : value;
 			},
@@ -223,7 +222,7 @@ function handleDataSelection(_e, _chartContext, config) {
     </div>
     <VueApexCharts
       width="100%"
-      :height="getChartHeightWithXAxisLabels(360)"
+      height="360px"
       type="heatmap"
       :options="chartOptions"
       :series="series"

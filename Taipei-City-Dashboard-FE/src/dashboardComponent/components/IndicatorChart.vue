@@ -4,7 +4,6 @@
 import { ref, computed } from "vue";
 import VueApexCharts from "vue3-apexcharts";
 import { formatValueWithUnit } from "../utilities/chartUnits";
-import { getChartHeightWithXAxisLabels, getXAxisLabelOptions } from "../utilities/chartLayout";
 
 const props = defineProps([
 	"chart_config",
@@ -107,7 +106,7 @@ const chartOptions = ref({
 		},
 		categories: props.chart_config.categories,
 		labels: {
-			...getXAxisLabelOptions(),
+			offsetY: -4,
 		},
 		type: "category",
 	},
@@ -160,7 +159,7 @@ function handleDataSelection(_e, _chartContext, config) {
   <div v-if="activeChart === 'IndicatorChart'">
     <VueApexCharts
       width="100%"
-      :height="getChartHeightWithXAxisLabels(260)"
+      height="260px"
       type="bar"
       :options="chartOptions"
       :series="parseSeries"
