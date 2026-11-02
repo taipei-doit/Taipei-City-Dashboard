@@ -3,6 +3,7 @@
 <script setup>
 import { computed, ref } from "vue";
 import VueApexCharts from "vue3-apexcharts";
+import { formatValueWithUnit } from "../utilities/chartUnits";
 
 const props = defineProps([
 	"chart_config",
@@ -56,6 +57,9 @@ const parsedLabels = computed(() => {
 const sum = computed(() => {
 	return Math.round(parsedSeries.value.reduce((a, b) => a + b) * 100) / 100;
 });
+const totalLabel = computed(() =>
+	formatValueWithUnit(sum.value, props.chart_config.unit),
+);
 
 // chartOptions needs to be in the bottom since it uses computed data
 const chartOptions = ref({
@@ -108,8 +112,7 @@ const chartOptions = ref({
 				w.globals.labels[seriesIndex] +
 				"</h6>" +
 				"<span>" +
-				series[seriesIndex] +
-				` ${props.chart_config.unit}` +
+				formatValueWithUnit(series[seriesIndex], props.chart_config.unit) +
 				"</span>" +
 				"</div>"
 			);
@@ -170,7 +173,7 @@ function handleDataSelection(_e, _chartContext, config) {
     />
     <div class="donutchart-title">
       <h5>總合</h5>
-      <h6>{{ sum }}</h6>
+      <h6>{{ totalLabel }}</h6>
     </div>
   </div>
 </template>

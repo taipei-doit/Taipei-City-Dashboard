@@ -3,6 +3,7 @@
 <script setup>
 import { computed, ref } from "vue";
 import VueApexCharts from "vue3-apexcharts";
+import { formatValueWithUnit } from "../utilities/chartUnits";
 
 const props = defineProps([
 	"chart_config",
@@ -131,8 +132,10 @@ const chartOptions = ref({
 				`${w.globals.labels[dataPointIndex]}-${w.globals.seriesNames[seriesIndex]}` +
 				"</h6>" +
 				"<span>" +
-				`${series[seriesIndex][dataPointIndex]}` +
-				`${props.chart_config.unit}` +
+				formatValueWithUnit(
+					series[seriesIndex][dataPointIndex],
+					props.chart_config.unit,
+				) +
 				"</span>" +
 				"</div>"
 			);
@@ -215,7 +218,7 @@ function handleDataSelection(_e, _chartContext, config) {
   >
     <div class="heatmapchart-title">
       <h5>總合</h5>
-      <h6>{{ heatmapData.sum }} {{ chart_config.unit }}</h6>
+      <h6>{{ formatValueWithUnit(heatmapData.sum, chart_config.unit) }}</h6>
     </div>
     <VueApexCharts
       width="100%"

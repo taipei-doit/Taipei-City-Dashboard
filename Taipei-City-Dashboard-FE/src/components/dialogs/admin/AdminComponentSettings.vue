@@ -46,6 +46,29 @@ const updateChartSummaryLoading = ref(false);
 
 const { currentComponent } = storeToRefs(adminStore);
 const currentSettings = ref("all");
+const chartUnitInput = computed({
+	get() {
+		const unit = currentComponent.value?.chart_config?.unit;
+		return unit && typeof unit === "object"
+			? JSON.stringify(unit)
+			: unit ?? "";
+	},
+	set(value) {
+		const trimmedValue = value.trim();
+		if (trimmedValue.startsWith("{")) {
+			try {
+				const parsedUnit = JSON.parse(trimmedValue);
+				if (parsedUnit && typeof parsedUnit === "object" && !Array.isArray(parsedUnit)) {
+					currentComponent.value.chart_config.unit = parsedUnit;
+					return;
+				}
+			} catch {
+				// Keep the in-progress JSON input editable until confirmation.
+			}
+		}
+		currentComponent.value.chart_config.unit = value;
+	},
+});
 
 const timeFromOptions = [
 	"current",
@@ -141,6 +164,22 @@ function isTypeUpdating(type) {
 }
 
 function handleConfirm() {
+	const unit = currentComponent.value?.chart_config?.unit;
+	if (typeof unit === "string" && unit.trim().startsWith("{")) {
+		try {
+			const parsedUnit = JSON.parse(unit);
+			if (!parsedUnit || typeof parsedUnit !== "object" || Array.isArray(parsedUnit)) {
+				throw new Error("資料單位格式錯誤");
+			}
+			currentComponent.value.chart_config.unit = parsedUnit;
+		} catch {
+			dialogStore.showNotification(
+				"fail",
+				"資料單位格式錯誤，請輸入有效的 JSON 物件",
+			);
+			return;
+		}
+	}
 	if (timeFromSelect.value === "custom") {
 		const { time_from, time_to } = currentComponent.value;
 		if (
@@ -787,13 +826,11 @@ onBeforeUnmount(() => {
                 圖例資料
               </option>
             </select>
-            <label>資料單位*</label>
+            <label>資料單位</label>
             <input
-              v-model="currentComponent.chart_config.unit"
+              v-model="chartUnitInput"
               type="text"
-              :minlength="1"
-              :maxlength="6"
-              required
+              placeholder="次 或 {&quot;value&quot;:&quot;次&quot;,&quot;x&quot;:&quot;公里&quot;,&quot;y&quot;:&quot;次&quot;,&quot;y1&quot;:&quot;次&quot;,&quot;y2&quot;:&quot;人&quot;}"
             >
             <label>圖表類型*（限3種，依點擊順序排列）</label>
             <SelectButtons

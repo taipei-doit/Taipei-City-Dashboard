@@ -4,6 +4,7 @@
 import { ref, watch } from "vue";
 // import { MapConfig, MapFilter } from "../utilities/componentConfig";
 import VueApexCharts from "vue3-apexcharts";
+import { formatValueWithUnit, getAxisTitle } from "../utilities/chartUnits";
 
 const props = defineProps(["chart_config", "activeChart", "series"]);
 
@@ -62,8 +63,10 @@ const chartOptions = ref({
 				` - ${w.globals.seriesNames[seriesIndex]}` +
 				"</h6>" +
 				"<span>" +
-				series[seriesIndex][dataPointIndex] +
-				` ${props.chart_config.unit}` +
+				formatValueWithUnit(
+					series[seriesIndex][dataPointIndex],
+					props.chart_config.unit,
+				) +
 				"</span>" +
 				"</div>"
 			);
@@ -90,6 +93,12 @@ const chartOptions = ref({
 	},
 	yaxis: {
 		min: 0,
+		title: {
+			text: getAxisTitle(props.chart_config.unit, "y"),
+			style: {
+				color: "var(--color-complement-text)",
+			},
+		},
 	},
 });
 

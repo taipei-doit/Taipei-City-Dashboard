@@ -3,6 +3,7 @@
 <script setup>
 import { computed, ref } from "vue";
 import VueApexCharts from "vue3-apexcharts";
+import { formatValueWithUnit, getAxisTitle } from "../utilities/chartUnits";
 
 const props = defineProps([
 	"chart_config",
@@ -114,8 +115,10 @@ const chartOptions = ref({
 						}` +
 					"</h6>" +
 					"<span>" +
-						series[seriesIndex][dataPointIndex] +
-						` ${props.chart_config.unit}` +
+						formatValueWithUnit(
+							series[seriesIndex][dataPointIndex],
+							props.chart_config.unit,
+						) +
 					"</span>" +
 				"</div>"
 			);
@@ -135,6 +138,14 @@ const chartOptions = ref({
 			offsetY: 2,
 		},
 		type: "category",
+	},
+	yaxis: {
+		title: {
+			text: getAxisTitle(props.chart_config.unit, "y"),
+			style: {
+				color: "var(--color-complement-text)",
+			},
+		},
 	},
 });
 
@@ -273,4 +284,3 @@ function resetWidth() {
 	}
 }
 </style>
-

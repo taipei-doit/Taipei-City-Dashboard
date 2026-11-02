@@ -3,6 +3,7 @@
 
 <script setup>
 import { computed, ref } from "vue";
+import { formatValueWithUnit } from "../utilities/chartUnits";
 
 const props = defineProps(["chart_config", "activeChart", "series"]);
 
@@ -106,7 +107,7 @@ function updateMouseLocation(e) {
           }}</span>
           ％
         </h2>
-        <p>總數：{{ item.data[activeIndex] }}{{ chart_config.unit }}</p>
+        <p>總數：{{ formatValueWithUnit(item.data[activeIndex], chart_config.unit) }}</p>
       </div>
     </div>
     <!-- year buttons -->
@@ -271,4 +272,3 @@ button:hover {
 	}
 }
 </style>
-
