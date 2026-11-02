@@ -3,10 +3,7 @@
 <script setup>
 import { computed, ref } from "vue";
 import VueApexCharts from "vue3-apexcharts";
-import {
-	formatValueWithUnit,
-	getVerticalAxisTitle,
-} from "../utilities/chartUnits";
+import { formatValueWithUnit, getAxisTitle } from "../utilities/chartUnits";
 
 const props = defineProps([
 	"chart_config",
@@ -144,8 +141,7 @@ const chartOptions = ref({
 	},
 	yaxis: {
 		title: {
-			text: getVerticalAxisTitle(props.chart_config.unit, "y"),
-			rotate: 0,
+			text: getAxisTitle(props.chart_config.unit, "y"),
 			style: {
 				color: "var(--color-complement-text)",
 			},

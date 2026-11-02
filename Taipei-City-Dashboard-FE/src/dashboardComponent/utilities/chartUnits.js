@@ -40,11 +40,6 @@ export function getAxisTitle(unit, dimension) {
 	return getChartUnit(unit, dimension);
 }
 
-export function getVerticalAxisTitle(unit, dimension) {
-	const axisTitle = getAxisTitle(unit, dimension);
-	return axisTitle ? Array.from(axisTitle) : "";
-}
-
 export function formatValueWithUnit(value, unit, dimension = "value") {
 	const valueUnit = getChartUnit(unit, dimension);
 	return valueUnit ? `${value} ${valueUnit}` : `${value}`;
