@@ -29,9 +29,14 @@ const parseSeries = computed(() => {
 	}));
 });
 
-const y1AxisTitle = getExplicitChartUnit(props.chart_config.unit, "y1");
-const y2AxisTitle = getExplicitChartUnit(props.chart_config.unit, "y2");
-const hasBothAxisTitles = Boolean(y1AxisTitle && y2AxisTitle);
+const y1Unit = getExplicitChartUnit(props.chart_config.unit, "y1");
+const y2Unit = getExplicitChartUnit(props.chart_config.unit, "y2");
+
+function formatDualAxisLabel(seriesName, unit) {
+	const category = typeof seriesName === "string" ? seriesName.trim() : "";
+	if (category && unit) return `${category}（${unit}）`;
+	return category || unit || "";
+}
 
 const totalMax = computed(() => {
 	if (props.series[0].name.slice(-2) === props.series[1].name.slice(-2)) {
@@ -149,12 +154,9 @@ const chartOptions = ref({
 				},
 			},
 			title: {
-				text: hasBothAxisTitles ? y1AxisTitle : "",
-				offsetX: 0,
-				rotate: 0,
+				text: formatDualAxisLabel(props.series?.[0]?.name, y1Unit),
 				style: {
 					color: "var(--color-complement-text)",
-					cssClass: "column-line-y1-axis-title",
 				},
 			},
 		},
@@ -173,12 +175,9 @@ const chartOptions = ref({
 			},
 			opposite: true,
 			title: {
-				text: hasBothAxisTitles ? y2AxisTitle : "",
-				offsetX: -15,
-				rotate: 0,
+				text: formatDualAxisLabel(props.series?.[1]?.name, y2Unit),
 				style: {
 					color: "var(--color-complement-text)",
-					cssClass: "column-line-y2-axis-title",
 				},
 			},
 		},
@@ -194,9 +193,26 @@ watch(
 	(newVal) => {
 		localSeries.value = JSON.parse(JSON.stringify(newVal || []));
 
+		const yaxis = chartOptions.value.yaxis.map((axis, index) => ({
+			...axis,
+			title: {
+				...axis.title,
+				text: formatDualAxisLabel(
+					newVal?.[index]?.name,
+					index === 0 ? y1Unit : y2Unit,
+				),
+			},
+		}));
+
 		const timestamps =
 			newVal?.[0]?.data?.map((p) => new Date(p.x).getTime()) || [];
-		if (timestamps.length < 2) return;
+		if (timestamps.length < 2) {
+			chartOptions.value = {
+				...chartOptions.value,
+				yaxis,
+			};
+			return;
+		}
 
 		const newDiff = Math.max(...timestamps) - Math.min(...timestamps);
 
@@ -210,6 +226,7 @@ watch(
 			});
 			chartOptions.value = {
 				...chartOptions.value,
+				yaxis,
 				xaxis: {
 					...chartOptions.value.xaxis,
 					type: "category",
@@ -219,6 +236,7 @@ watch(
 		} else {
 			chartOptions.value = {
 				...chartOptions.value,
+				yaxis,
 				xaxis: {
 					...chartOptions.value.xaxis,
 					type: "datetime",
