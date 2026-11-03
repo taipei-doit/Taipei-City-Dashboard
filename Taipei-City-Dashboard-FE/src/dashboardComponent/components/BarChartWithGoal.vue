@@ -4,7 +4,7 @@
 <script setup>
 import { computed, ref } from "vue";
 import VueApexCharts from "vue3-apexcharts";
-import { formatValueWithUnit, getAxisTitle } from "../utilities/chartUnits";
+import { formatValueWithUnit } from "../utilities/chartUnits";
 
 const props = defineProps([
 	"chart_config",
@@ -118,13 +118,6 @@ const chartOptions = ref({
 		labels: {
 			offsetY: -4,
 			show: true,
-		},
-		title: {
-			text: getAxisTitle(props.chart_config.unit, "x"),
-			offsetY: -12,
-			style: {
-				color: "var(--color-complement-text)",
-			},
 		},
 		type: "category",
 	},
