@@ -33,12 +33,6 @@
 	fill: var(--color-complement-text) !important;
 	color: var(--color-complement-text) !important;
 }
-.apexcharts-yaxis-title-text.column-line-y1-axis-title {
-	text-anchor: end;
-}
-.apexcharts-yaxis-title-text.column-line-y2-axis-title {
-	text-anchor: start;
-}
 .vue-apexcharts {
 	display: flex;
 	justify-content: center;
