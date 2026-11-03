@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from "vue";
 import VueApexCharts from "vue3-apexcharts";
-import { getChartUnit } from "../utilities/chartUnits";
+import { getChartUnit, getExplicitChartUnit } from "../utilities/chartUnits";
 
 const props = defineProps([
 	"series",
@@ -117,6 +117,9 @@ const processedSeries = isDatetime
 		})),
 	}));
 
+const xAxisTitle = getExplicitChartUnit(props.chart_config.unit, "x");
+const yAxisTitle = getExplicitChartUnit(props.chart_config.unit, "y");
+
 const chartOptions = ref({
 	chart: {
 		type: "bubble",
@@ -173,6 +176,12 @@ const chartOptions = ref({
 				? undefined
 				: (val) => Number(val).toLocaleString(),
 		},
+		title: {
+			text: xAxisTitle,
+			style: {
+				color: "var(--color-complement-text)",
+			},
+		},
 	},
 
 	yaxis: {
@@ -180,6 +189,13 @@ const chartOptions = ref({
 		labels: {
 			formatter: (val) =>
 				val >= 1000 ? `${(val / 1000).toFixed(0)}k` : `${val}`,
+		},
+		title: {
+			text: yAxisTitle,
+			rotate: 0,
+			style: {
+				color: "var(--color-complement-text)",
+			},
 		},
 	},
 });
