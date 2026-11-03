@@ -17,6 +17,13 @@ const props = defineProps(["chart_config", "activeChart", "series"]);
 // ]);
 
 const color = ref(props.chart_config.color[0]);
+
+const densityLevels = [
+	{ level: 1, label: "舒適", color: "#acc22a" },
+	{ level: 2, label: "普通", color: "#fcd100" },
+	{ level: 3, label: "略多", color: "#ed8502" },
+	{ level: 4, label: "人多", color: "#ce161a" },
+];
 const line = computed(() => {
 	if (props.series[0].data[0].x.includes("BR")) {
 		return "BR";
@@ -65,6 +72,22 @@ const parsedSeries = computed(() => {
     v-if="activeChart === 'MetroChart'"
     class="metrochart"
   >
+    <div
+      class="metrochart-legend"
+      aria-label="擁擠程度圖例"
+    >
+      <div
+        v-for="item in densityLevels"
+        :key="item.level"
+        class="metrochart-legend-item"
+      >
+        <span
+          class="metrochart-legend-swatch"
+          :style="{ backgroundColor: item.color }"
+        />
+        <span>{{ item.label }}</span>
+      </div>
+    </div>
     <div
       v-for="(item, index) in lineInfo[line]"
       :key="`${line}-${index}`"
@@ -170,6 +193,39 @@ const parsedSeries = computed(() => {
 <style scoped lang="scss">
 .metrochart {
 	width: 100%;
+
+	&-legend {
+		position: sticky;
+		top: 0;
+		z-index: 2;
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: center;
+		column-gap: 0.75rem;
+		row-gap: 0.25rem;
+		margin-bottom: 0.35rem;
+		padding: 0.2rem 0.25rem;
+		background-color: var(--color-component-background);
+
+		&-item {
+			display: flex;
+			align-items: center;
+			gap: 4px;
+			color: var(--color-normal-text);
+			font-size: 0.7rem;
+			line-height: 1;
+			pointer-events: none;
+			user-select: none;
+		}
+
+		&-swatch {
+			width: 0.75rem;
+			height: 0.75rem;
+			border-radius: 2px;
+			flex-shrink: 0;
+		}
+	}
 
 	h5 {
 		display: flex;
