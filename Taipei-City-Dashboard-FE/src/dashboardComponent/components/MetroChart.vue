@@ -204,7 +204,7 @@ const parsedSeries = computed(() => {
 		justify-content: center;
 		column-gap: 0.75rem;
 		row-gap: 0.25rem;
-		margin-bottom: 0.35rem;
+		margin-bottom: 1.25rem;
 		padding: 0.2rem 0.25rem;
 		background-color: var(--color-component-background);
 
