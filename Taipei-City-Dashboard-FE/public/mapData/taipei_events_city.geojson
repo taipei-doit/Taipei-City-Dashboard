@@ -1,0 +1,4681 @@
+{
+	"type": "FeatureCollection",
+	"name": "Taipei City Events",
+	"features": [
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.51443, 25.04367]
+			},
+			"properties": {
+				"ID": "c30b5c88-a6bb-4571-a20f-61ef20da2a69",
+				"Caption": "古蹟探祕—勸業銀行舊廈古蹟修復常設展",
+				"Company": "國立臺灣博物館",
+				"StartDate": "2021-11-15 09:30:00",
+				"EndDate": "2026-12-31 17:00:00",
+				"RelatedLink": "https://event.culture.tw/mocweb/reg/NTM/Detail.init.ctr?actId=12242&utm_medium=query",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52281, 25.02655]
+			},
+			"properties": {
+				"ID": "290cc6cf-a6f7-4db1-b635-2391cf36ce41",
+				"Caption": "基礎刺繡雙週課(共2日)┋灰喵的小種子們 - 13種針法組合靈活運用&構圖通用觀念",
+				"Company": "說說刺繡Woyi Embroidery Design",
+				"StartDate": "2023-01-01 14:10:00",
+				"EndDate": "2026-12-31 17:00:00",
+				"RelatedLink": "https://www.woyiembroidery.com/store/p3/basic-seed.html",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52281, 25.02655]
+			},
+			"properties": {
+				"ID": "232c566e-2a2c-4906-93f5-ca3d869011a1",
+				"Caption": "基礎刺繡✦​在刺繡裡與自己​聊聊，自選圖像，繡在自己的圖像上 ​𝟐𝟎𝟐𝟑/𝟒/𝟖(六) (3/28截止報名)",
+				"Company": "說說刺繡 Woyi Embroidery Design",
+				"StartDate": "2023-01-01 14:30:00",
+				"EndDate": "2025-12-31 17:30:00",
+				"RelatedLink": "https://www.woyiembroidery.com/store/p12/basic-light.html",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.51618, 25.07276]
+			},
+			"properties": {
+				"ID": "9029d67c-37d2-4141-bd5c-93f15e116bcf",
+				"Caption": "《遺響曲》第三屆漢服音樂會",
+				"Company": "上元燕楽舍",
+				"StartDate": "2023-02-12 14:00:00",
+				"EndDate": "2040-12-31 00:00:00",
+				"RelatedLink": "https://forms.gle/H5JYQzUgXEmnFVfq8",
+				"City": "臺北市",
+				"Area": "大同區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.55209, 25.03495]
+			},
+			"properties": {
+				"ID": "04ec255a-45da-4c4f-a5ba-003f06fe90aa",
+				"Caption": "敦煌壁畫常設展",
+				"Company": "胡克敏紀念館",
+				"StartDate": "2023-05-20 11:00:00",
+				"EndDate": "2026-12-31 18:00:00",
+				"RelatedLink": "https://www.facebook.com/yangbixuan",
+				"City": "臺北市",
+				"Area": "大安區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.50753, 25.13895]
+			},
+			"properties": {
+				"ID": "92e4a9c7-c23d-4f82-a48c-3c12e508befc",
+				"Caption": "中心新村｜常設展《走進中心新村的街談巷語》&實境解謎遊戲〈無人知曉的眷戀〉",
+				"Company": "北投中心新村",
+				"StartDate": "2023-10-01 10:00:00",
+				"EndDate": "2026-08-30 18:00:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "北投區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52281, 25.02655]
+			},
+			"properties": {
+				"ID": "ba336e0a-b131-4423-ab8e-bb1d60200106",
+				"Caption": "基礎刺繡(2日課程)-新手魔法師： 10種針法組合&靈活運用 毛髮、花瓣漸層表現",
+				"Company": "說說想刺繡工作室 ​Woyi Embroidery",
+				"StartDate": "2023-10-12 13:30:00",
+				"EndDate": "2031-11-11 17:30:00",
+				"RelatedLink": "https://www.woyiembroidery.com/store/p18/basic-magician.html",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52109, 25.06676]
+			},
+			"properties": {
+				"ID": "4c98be6d-89aa-474e-9db1-8512f7f8eec1",
+				"Caption": "《昭和唐唐》2023菊月文化祭",
+				"Company": "上元燕楽舍",
+				"StartDate": "2023-10-15 13:00:00",
+				"EndDate": "2040-12-31 00:00:00",
+				"RelatedLink": "https://facebook.com/Hausofimperialmusic",
+				"City": "臺北市",
+				"Area": "中山區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52109, 25.06676]
+			},
+			"properties": {
+				"ID": "f925a4d2-d884-4865-b90f-4922923d9435",
+				"Caption": "管絃祭 X 裝束繪卷《天寶服飾誌》2023漢服走秀",
+				"Company": "上元燕楽舍",
+				"StartDate": "2023-10-15 15:00:00",
+				"EndDate": "2040-12-31 00:00:00",
+				"RelatedLink": "https://facebook.com/Hausofimperialmusic",
+				"City": "臺北市",
+				"Area": "中山區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.61579, 25.03947]
+			},
+			"properties": {
+				"ID": "98ef427e-f3c4-4d6f-b7a8-5b08661aae4e",
+				"Caption": "從原料、編寫到再利用──邊塞漢簡的生命史",
+				"Company": "中央研究院歷史語言研究所 歷史文物陳列館",
+				"StartDate": "2023-11-11 09:30:00",
+				"EndDate": "2025-12-31 16:30:00",
+				"RelatedLink": "https://museum.sinica.edu.tw/",
+				"City": "臺北市",
+				"Area": "南港區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.55209, 25.03495]
+			},
+			"properties": {
+				"ID": "297861c0-d774-4714-abee-dc9685db5fa8",
+				"Caption": "胡克敏水墨蔬菜長卷特展",
+				"Company": "胡克敏紀念館",
+				"StartDate": "2024-01-01 23:00:00",
+				"EndDate": "2026-12-31 18:00:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "大安區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.55209, 25.03495]
+			},
+			"properties": {
+				"ID": "e325e570-82d7-40b6-a875-afbdfcb40d16",
+				"Caption": "胡克敏水墨百花圖集原作展",
+				"Company": "胡克敏紀念館",
+				"StartDate": "2024-02-01 11:00:00",
+				"EndDate": "2026-12-31 18:00:00",
+				"RelatedLink": "https://www.facebook.com/yangbixuan/posts/pfbid02bajRoXb57uV8Schwde4uSYp1wA8mRHvDH6uSRUu6Eqbxy7t4bheVSJc6HVv4wBMgl",
+				"City": "臺北市",
+				"Area": "大安區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.51618, 25.07276]
+			},
+			"properties": {
+				"ID": "064a9a26-1ba4-4d93-9c5f-2048e86a0c22",
+				"Caption": "《春燈肆楽》第四屆漢服音樂會",
+				"Company": "上元燕楽舍",
+				"StartDate": "2024-02-25 14:00:00",
+				"EndDate": "2040-12-31 00:00:00",
+				"RelatedLink": "https://www.facebook.com/share/p/o4sxJAEDPMPYqca7/?mibextid=qi2Omg",
+				"City": "臺北市",
+				"Area": "大同區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.51112, 25.04307]
+			},
+			"properties": {
+				"ID": "4284958a-4484-4414-9811-15401de95322",
+				"Caption": "《燈宵月夕遊光城》2024上元春燈祭",
+				"Company": "上元燕楽舍",
+				"StartDate": "2024-03-02 09:00:00",
+				"EndDate": "2040-12-31 00:00:00",
+				"RelatedLink": "https://reurl.cc/A4j8yp",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.50753, 25.13895]
+			},
+			"properties": {
+				"ID": "20b6dbb2-d1c8-435a-ba49-bd6d04d237da",
+				"Caption": "中心新村｜互動展覽《眷村故事香》親子空間",
+				"Company": "中心新村",
+				"StartDate": "2024-04-04 10:00:00",
+				"EndDate": "2026-08-31 18:00:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "北投區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.51035, 25.0425]
+			},
+			"properties": {
+				"ID": "8214b24a-2c13-4588-9d59-df843e73b69d",
+				"Caption": "《綰結同心》2024秋月七夕祭",
+				"Company": "上元燕楽舍",
+				"StartDate": "2024-08-11 11:00:00",
+				"EndDate": "2040-12-31 00:00:00",
+				"RelatedLink": "https://facebook.com/events/s/%E7%B6%B0%E7%B5%90%E5%90%8C%E5%BF%832024%E7%A7%8B%E6%9C%88%E4%B8%83%E5%A4%95%E7%A5%AD/1194512421991004/",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5108, 25.04356]
+			},
+			"properties": {
+				"ID": "e759449b-f19f-4db2-bfd9-4df7a86a642f",
+				"Caption": "管絃祭 X 裝束繪卷《嬿婉良緣誌》2024漢婚盛典",
+				"Company": "上元燕楽舍",
+				"StartDate": "2024-08-11 13:00:00",
+				"EndDate": "2040-08-18 13:30:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.53719, 25.04421]
+			},
+			"properties": {
+				"ID": "143d60b6-a598-427e-b6e3-f7f990bc2feb",
+				"Caption": "2024奧夫塞計畫《當自由盛開成舞》",
+				"Company": "忠泰美術館",
+				"StartDate": "2024-08-31 10:00:00",
+				"EndDate": "2025-08-31 18:00:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "大安區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.50753, 25.13895]
+			},
+			"properties": {
+				"ID": "6b68ad4c-ee46-4678-b64b-d2451457e43e",
+				"Caption": "2024 中心新村｜《時光倒影．憶中的家》特展",
+				"Company": "中心新村",
+				"StartDate": "2024-09-01 10:00:00",
+				"EndDate": "2025-08-31 18:00:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "北投區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.50753, 25.13895]
+			},
+			"properties": {
+				"ID": "fffb252f-17b6-48e5-b5b8-5121ef6a0c9b",
+				"Caption": "2024中心新村年度特展(婦聯會眷舍)",
+				"Company": "中心新村",
+				"StartDate": "2024-09-01 10:00:00",
+				"EndDate": "2025-08-31 18:00:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "北投區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.53573, 25.01685]
+			},
+			"properties": {
+				"ID": "a08717d5-15fd-44e0-8a9c-796a70715f3f",
+				"Caption": "bulabulay 原民之耀-臺灣原住民族經典文物聯展暨巡迴展",
+				"Company": "財團法人福祿文化基金會",
+				"StartDate": "2024-11-15 09:30:00",
+				"EndDate": "2025-07-31 17:00:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "大安區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.61601, 25.03943]
+			},
+			"properties": {
+				"ID": "4b2bceb1-3eb7-43fb-9a7f-d570a6d65b74",
+				"Caption": "親近國寶──大理石梟形立雕",
+				"Company": "中央研究院歷史語言研究所 歷史文物陳列館",
+				"StartDate": "2024-12-07 09:30:00",
+				"EndDate": "2025-06-08 16:30:00",
+				"RelatedLink": "https://museum.sinica.edu.tw/exhibitions/124/",
+				"City": "臺北市",
+				"Area": "南港區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.51156, 25.03356]
+			},
+			"properties": {
+				"ID": "0342153d-0a92-4a50-a82c-b4ae05e3789b",
+				"Caption": "安身‧立命 從官邸到紀念館十週年回顧 特展",
+				"Company": "孫運璿科技･人文紀念館",
+				"StartDate": "2024-12-21 10:00:00",
+				"EndDate": "2025-08-03 17:00:00",
+				"RelatedLink": " ",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.54769, 25.05376]
+			},
+			"properties": {
+				"ID": "f2799eb9-cf14-4d08-8b03-74661d757fbb",
+				"Caption": "行天宮附設玄空圖書館敦化本館-電影享讀",
+				"Company": "財團法人台北行天宮附設玄空圖書館",
+				"StartDate": "2024-12-21 13:30:00",
+				"EndDate": "2025-06-21 15:30:00",
+				"RelatedLink": "https://www.ht.org.tw/p4_introduction25.htm",
+				"City": "臺北市",
+				"Area": "松山區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52269, 25.04855]
+			},
+			"properties": {
+				"ID": "7c9b2305-6b15-4c2e-9439-a72522010392",
+				"Caption": "【新月．藝文講座】2025年《神曲》與 塔羅",
+				"Company": "新月社",
+				"StartDate": "2025-01-03 14:00:00",
+				"EndDate": "2025-06-06 16:00:00",
+				"RelatedLink": "https://forms.gle/ws2CSsAR71WisVYi7",
+				"City": "臺北市",
+				"Area": "中山區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.51987, 25.04214]
+			},
+			"properties": {
+				"ID": "3eb26251-9907-4c19-9e4b-09015d49fb5f",
+				"Caption": "幸福滋味－美食郵票特展",
+				"Company": "中華郵政股份有限公司郵政博物館",
+				"StartDate": "2025-01-11 09:00:00",
+				"EndDate": "2025-06-29 17:00:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5143, 25.0356]
+			},
+			"properties": {
+				"ID": "7bc72586-ae85-4363-b030-60df160426e4",
+				"Caption": "｛錢穆故居｝2025年度錢賓四先生著作讀書會（一）~（十九）",
+				"Company": "臺北市文化局─錢穆故居",
+				"StartDate": "2025-01-18 10:00:00",
+				"EndDate": "2025-12-20 12:00:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52912, 25.01902]
+			},
+			"properties": {
+				"ID": "9797f4a6-f415-4de6-ae4d-fbcc7cbc81c1",
+				"Caption": "114年耕莘長青學苑",
+				"Company": "財團法人耕莘文教基金會",
+				"StartDate": "2025-02-05 09:30:00",
+				"EndDate": "2025-06-30 15:00:00",
+				"RelatedLink": "https://www.facebook.com/tiencf/posts/pfbid0SrWQZozhm7oivV4fEZx87LDyKCEDvBoZdguhT2sHfgJHw6pQ9HzaPedreVf3YXfbl?locale=zh_TW",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.51885, 25.03859]
+			},
+			"properties": {
+				"ID": "4581f4de-db4d-4540-8454-63b05217a7bc",
+				"Caption": "2025第十三屆彩繪船奇-全臺小學暨幼兒園海洋繪畫比賽",
+				"Company": "長榮海事博物館",
+				"StartDate": "2025-03-01 00:00:00",
+				"EndDate": "2025-06-02 23:59:00",
+				"RelatedLink": "https://www.evergreenmuseum.org.tw/",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.54486, 25.04016]
+			},
+			"properties": {
+				"ID": "6c96b5ff-87b9-4e3b-99c0-7e36d6be85b4",
+				"Caption": "「印度佛教思想暨印度初期美術」藝文講座",
+				"Company": "大安覺風佛教藝術中心",
+				"StartDate": "2025-03-02 09:00:00",
+				"EndDate": "2025-06-08 16:30:00",
+				"RelatedLink": "https://forms.gle/4HfbnCockir91nZp8",
+				"City": "臺北市",
+				"Area": "大安區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.54486, 25.04016]
+			},
+			"properties": {
+				"ID": "194321d0-3429-4589-83a5-504e8b09d369",
+				"Caption": "蓮花「終活人生」工作坊",
+				"Company": "大安覺風佛教藝術中心",
+				"StartDate": "2025-03-05 10:00:00",
+				"EndDate": "2025-06-25 12:00:00",
+				"RelatedLink": "https://forms.gle/5xg4Js36VrafLt8SA",
+				"City": "臺北市",
+				"Area": "大安區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.54486, 25.04016]
+			},
+			"properties": {
+				"ID": "403e8f4c-80e4-4350-93ae-37046a8b449e",
+				"Caption": "走入敦煌，沐浴佛光──敦煌中唐石窟藝術六講",
+				"Company": "大安覺風佛教藝術中心",
+				"StartDate": "2025-03-07 14:00:00",
+				"EndDate": "2025-06-27 17:00:00",
+				"RelatedLink": "https://forms.gle/fjjRVvbiyucvTNDC7",
+				"City": "臺北市",
+				"Area": "大安區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.53725, 25.04425]
+			},
+			"properties": {
+				"ID": "558f4c7f-4124-4ba8-a472-52a4227b7010",
+				"Caption": "在混沌的世界中建立一點序曲　姚仲涵",
+				"Company": "忠泰美術館",
+				"StartDate": "2025-03-08 10:00:00",
+				"EndDate": "2025-06-29 18:00:00",
+				"RelatedLink": "https://jam.jutfoundation.org.tw/exhibition/4986",
+				"City": "臺北市",
+				"Area": "大安區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5143, 25.0356]
+			},
+			"properties": {
+				"ID": "d28aef86-3858-4f00-adff-436927b9544a",
+				"Caption": "｛素書樓講堂｝2025年度四書與品德教育講座（一）~（十三）",
+				"Company": "臺北市文化局─錢穆故居",
+				"StartDate": "2025-03-08 14:00:00",
+				"EndDate": "2025-12-13 17:00:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52602, 25.03039]
+			},
+			"properties": {
+				"ID": "be968e67-ccc8-4f7a-b902-318af20eaa38",
+				"Caption": "114大安學X全球人壽_公益講座",
+				"Company": "財團法人臺北市昇德基金會",
+				"StartDate": "2025-03-08 14:00:00",
+				"EndDate": "2025-06-21 15:00:00",
+				"RelatedLink": "https://www.sdsch.org",
+				"City": "臺北市",
+				"Area": "大安區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52767, 25.04064]
+			},
+			"properties": {
+				"ID": "45e1742d-7600-4bef-bfc8-676e62c3e597",
+				"Caption": "李國鼎藝術奬2024得奬作品展",
+				"Company": "李國鼎故居",
+				"StartDate": "2025-03-15 10:00:00",
+				"EndDate": "2025-06-30 17:00:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52435, 25.02488]
+			},
+			"properties": {
+				"ID": "6ef83f8a-9956-47de-83d3-d270e9c81461",
+				"Caption": "禪@鈔經",
+				"Company": "法鼓山心靈環保學習中心",
+				"StartDate": "2025-03-18 10:00:00",
+				"EndDate": "2025-12-30 11:30:00",
+				"RelatedLink": "https://csd.ddm.org.tw/xmnews/cont?xsmsid=0M119611289944437548&sid=0O101491923406529958",
+				"City": "臺北市",
+				"Area": "大安區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.53314, 25.04611]
+			},
+			"properties": {
+				"ID": "d3391881-92ab-454f-812a-7121cfdd4138",
+				"Caption": "2025年3月22日【乙級金工-技術士證照】假日班",
+				"Company": "臺灣珠寶藝術學院",
+				"StartDate": "2025-03-22 09:30:00",
+				"EndDate": "2025-07-19 18:00:00",
+				"RelatedLink": "https://jart.org.tw",
+				"City": "臺北市",
+				"Area": "中山區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52484, 25.07257]
+			},
+			"properties": {
+				"ID": "f4c32bbc-3209-4c91-a8ff-dbc02ac09152",
+				"Caption": "北美館 - 兒童藝術教育中心：靜‧物",
+				"Company": "臺北市立美術館",
+				"StartDate": "2025-03-22 09:30:00",
+				"EndDate": "2025-08-31 17:30:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中山區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52912, 25.01902]
+			},
+			"properties": {
+				"ID": "809574a1-703b-410a-beb7-861e4e0ce5f5",
+				"Caption": "文學引路─文學寫作班",
+				"Company": "財團法人耕莘文教基金會",
+				"StartDate": "2025-03-22 10:00:00",
+				"EndDate": "2025-06-07 12:00:00",
+				"RelatedLink": "http://www.tiencf.org.tw/page1.aspx?no=1206&step=1&newsno=43536",
+				"City": "臺北市",
+				"Area": "大安區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.54486, 25.04016]
+			},
+			"properties": {
+				"ID": "3d9fd55b-b27b-4b97-bc76-1190d6af67a3",
+				"Caption": "佛教藝術專題講座",
+				"Company": "大安覺風佛教藝術中心",
+				"StartDate": "2025-03-23 09:00:00",
+				"EndDate": "2025-06-29 16:30:00",
+				"RelatedLink": "https://forms.gle/umqKgGz89FwC5EE88",
+				"City": "臺北市",
+				"Area": "大安區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52121, 25.05367]
+			},
+			"properties": {
+				"ID": "a657277d-c587-43a0-9be0-fda1b6ed138d",
+				"Caption": "即興同理趣（實體課）- 讓新的一年更有溫度",
+				"Company": "微笑角即興劇團",
+				"StartDate": "2025-03-23 09:30:00",
+				"EndDate": "2025-06-08 17:00:00",
+				"RelatedLink": "https://www.facebook.com/SAimprov",
+				"City": "臺北市",
+				"Area": "中山區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52484, 25.07257]
+			},
+			"properties": {
+				"ID": "49e06247-bc64-41f3-b3f8-3e9a87393ba6",
+				"Caption": "北美館 - Lili Deli  麗麗食品",
+				"Company": "臺北市立美術館",
+				"StartDate": "2025-03-29 09:30:00",
+				"EndDate": "2025-06-22 17:30:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中山區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52484, 25.07257]
+			},
+			"properties": {
+				"ID": "97b7b901-6628-461c-ac2f-27641f6b7393",
+				"Caption": "北美館 - 時代劇場：當代影像的複數演繹",
+				"Company": "臺北市立美術館",
+				"StartDate": "2025-03-29 09:30:00",
+				"EndDate": "2025-07-13 17:30:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中山區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.56305, 25.03099]
+			},
+			"properties": {
+				"ID": "05578546-ac5c-472a-9511-ea826747e7e9",
+				"Caption": "2025震怡文化講座(上)",
+				"Company": "財團法人震怡文教基金會",
+				"StartDate": "2025-03-29 14:00:00",
+				"EndDate": "2025-06-14 16:00:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "信義區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.51268, 25.04403]
+			},
+			"properties": {
+				"ID": "f1e42188-5ec2-457b-a5b6-92f540cbfa25",
+				"Caption": "2025歷史復活節～中正．時空旅行",
+				"Company": "臺北市中正區公所",
+				"StartDate": "2025-04-01 00:00:00",
+				"EndDate": "2025-10-31 12:59:00",
+				"RelatedLink": "https://forms.gle/hBF8x1yGfmRm2cMb6",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.51268, 25.04403]
+			},
+			"properties": {
+				"ID": "379253a6-812d-42aa-88c5-740ecf2f15ea",
+				"Caption": "歡迎光臨．大神百貨",
+				"Company": "臺北市中正區公所",
+				"StartDate": "2025-04-01 01:00:00",
+				"EndDate": "2025-10-31 12:59:00",
+				"RelatedLink": "https://www.accupass.com/event/2503151120021116655731",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.51537, 25.09807]
+			},
+			"properties": {
+				"ID": "5277aabe-130a-49c2-bbac-ec50c9174801",
+				"Caption": "救援小英雄波力特展2025",
+				"Company": "綠雷德創新股份有限公司",
+				"StartDate": "2025-04-01 09:00:00",
+				"EndDate": "2025-06-15 17:00:00",
+				"RelatedLink": "https://www.facebook.com/readvisionco",
+				"City": "臺北市",
+				"Area": "士林區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.54924, 25.04125]
+			},
+			"properties": {
+				"ID": "c3b1f1e4-f516-4233-8643-20709a06bf3b",
+				"Caption": "路邊劇場",
+				"Company": "形而上畫廊",
+				"StartDate": "2025-04-01 11:00:00",
+				"EndDate": "2025-05-31 18:30:00",
+				"RelatedLink": "http://www.artmap.com.tw/02-show.htm",
+				"City": "臺北市",
+				"Area": "大安區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.53314, 25.04611]
+			},
+			"properties": {
+				"ID": "70007c84-95b5-4892-90d1-66f7c6918a45",
+				"Caption": "2025年4月7日【珠寶設計師專業職能】",
+				"Company": "臺灣珠寶藝術學院",
+				"StartDate": "2025-04-07 09:00:00",
+				"EndDate": "2025-06-27 17:00:00",
+				"RelatedLink": "https://jart.org.tw",
+				"City": "臺北市",
+				"Area": "中山區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52435, 25.02488]
+			},
+			"properties": {
+				"ID": "a10172d5-86ae-4d1f-bc7f-8cef2c8150ee",
+				"Caption": "禪@創意紙黏土(第3班)",
+				"Company": "法鼓山心靈環保學習中心",
+				"StartDate": "2025-04-07 14:00:00",
+				"EndDate": "2025-06-30 16:00:00",
+				"RelatedLink": "https://csd.ddm.org.tw/xmnews/cont?xsmsid=0M119611289944437548&sid=0O323433766201154100",
+				"City": "臺北市",
+				"Area": "大安區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52912, 25.01902]
+			},
+			"properties": {
+				"ID": "df512d5a-760c-48ca-a217-f80368a659f0",
+				"Caption": "文學導航班",
+				"Company": "財團法人耕莘文教基金會",
+				"StartDate": "2025-04-09 19:00:00",
+				"EndDate": "2025-06-25 21:00:00",
+				"RelatedLink": "http://www.tiencf.org.tw/",
+				"City": "臺北市",
+				"Area": "大安區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.57867, 25.04829]
+			},
+			"properties": {
+				"ID": "d792808f-da07-4180-afba-81eea2eeae52",
+				"Caption": "慶祝2025國定佛誕節特展 「唯慧是業 - 王午、洪子惟、陳又寧版畫聯展 」  518國際博物館日暨教育推廣系列活動 佛誕公仔彩繪",
+				"Company": "佛光緣美術館台北館",
+				"StartDate": "2025-04-12 10:00:00",
+				"EndDate": "2025-12-31 20:30:00",
+				"RelatedLink": "https://www.facebook.com/TaipeiFgy",
+				"City": "臺北市",
+				"Area": "信義區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52262, 25.02962]
+			},
+			"properties": {
+				"ID": "272971d0-2f5a-43bb-9ffd-f02a9a01a26e",
+				"Caption": "【跨域繪本講座】（不）像女孩那樣：繪本裡的陰性力量｜講師：蔡雨辰｜4/12、5/3、6/7（六）",
+				"Company": "童里繪本洋行",
+				"StartDate": "2025-04-12 14:30:00",
+				"EndDate": "2025-06-07 16:30:00",
+				"RelatedLink": "https://www.maisontempsreves.com/products/2025forumbytsaiyucheng",
+				"City": "臺北市",
+				"Area": "大安區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.56134, 25.04774]
+			},
+			"properties": {
+				"ID": "d75272cd-82a8-4493-be8c-a20f617f5422",
+				"Caption": "114年「 掌藝薪傳-大師工作坊」",
+				"Company": "陳錫煌傳統掌中劇團",
+				"StartDate": "2025-04-13 10:00:00",
+				"EndDate": "2025-10-19 17:00:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "松山區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.50664, 25.04127]
+			},
+			"properties": {
+				"ID": "f160380f-942f-410f-83fa-1714cc654724",
+				"Caption": "探索多元文學系列",
+				"Company": "貓頭鷹親子教育協會",
+				"StartDate": "2025-04-17 09:30:00",
+				"EndDate": "2025-06-26 12:00:00",
+				"RelatedLink": "http://www.owltale.org.tw/ap/index.aspx",
+				"City": "臺北市",
+				"Area": "萬華區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52435, 25.02488]
+			},
+			"properties": {
+				"ID": "2f152914-03aa-4f38-bd71-3899dcf3001b",
+				"Caption": "禪@創意氣球(第3班)",
+				"Company": "法鼓山心靈環保學習中心",
+				"StartDate": "2025-04-17 19:00:00",
+				"EndDate": "2025-06-19 21:00:00",
+				"RelatedLink": "https://csd.ddm.org.tw/xmnews/cont?xsmsid=0M119611289944437548&sid=0P048482693289644577",
+				"City": "臺北市",
+				"Area": "大安區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5345, 25.11265]
+			},
+			"properties": {
+				"ID": "c820e148-6ff8-4410-a4fc-71e44d719a2b",
+				"Caption": "失落祕境——劉慧中首個展",
+				"Company": "曙畫廊",
+				"StartDate": "2025-04-19 10:00:00",
+				"EndDate": "2025-06-07 18:30:00",
+				"RelatedLink": "https://enlighten-gallery.com/",
+				"City": "臺北市",
+				"Area": "士林區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52423, 25.04453]
+			},
+			"properties": {
+				"ID": "655280fc-ea0e-4669-a823-059b2a6706eb",
+				"Caption": "天一學社「書道課第五期」",
+				"Company": "社團法人天一學社",
+				"StartDate": "2025-04-23 18:30:00",
+				"EndDate": "2025-07-09 20:30:00",
+				"RelatedLink": "https://reurl.cc/Q5VMoo",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.51899, 25.05078]
+			},
+			"properties": {
+				"ID": "6313fb93-e33c-4281-8e92-06518b9fc9a2",
+				"Caption": "MoCA Studio 我們之中—伊琴．基．查爾斯個展",
+				"Company": "台北當代藝術館",
+				"StartDate": "2025-04-25 10:00:00",
+				"EndDate": "2025-06-15 18:00:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "大同區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52293, 25.02177]
+			},
+			"properties": {
+				"ID": "256bf142-15f6-47fa-96e9-da56f7a58d26",
+				"Caption": "【定靜習書】",
+				"Company": "雅齋兒童書法研習會",
+				"StartDate": "2025-04-25 19:00:00",
+				"EndDate": "2025-06-28 12:00:00",
+				"RelatedLink": "https://yazhai.neocities.org/index.htm",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52534, 25.02013]
+			},
+			"properties": {
+				"ID": "08a8054b-9ef2-4a4f-b929-97ee91a37f27",
+				"Caption": "【童遊客家2025─水的時光廊道：永續綠能未來島─夏令營及推廣活動】",
+				"Company": "財團法人台北市客家文化基金會",
+				"StartDate": "2025-04-27 09:30:00",
+				"EndDate": "2025-09-13 17:00:00",
+				"RelatedLink": "https://ssl.thcp.org.tw/events/1212",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.50698, 25.02834]
+			},
+			"properties": {
+				"ID": "c1546829-3610-40b4-9e01-e865fd548761",
+				"Caption": " 114年度新住民「TQUK 國際咖啡師輔導考照班」",
+				"Company": "臺北市中正區公所",
+				"StartDate": "2025-04-30 18:00:00",
+				"EndDate": "2025-06-29 16:30:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52717, 25.03808]
+			},
+			"properties": {
+				"ID": "2859fdf3-7491-4ad7-9209-6f6615cc35d9",
+				"Caption": "🎶【2026鳴石樂集｜樂壇新秀甄選】",
+				"Company": "鳴石樂集",
+				"StartDate": "2025-05-01 00:00:00",
+				"EndDate": "2025-06-15 23:59:00",
+				"RelatedLink": "https://docs.google.com/forms/d/e/1FAIpQLScybTQZOISyUSouJ9TdqqWLbdM5lAw7bV0eaXTq8bNJvFs4QA/viewform",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.47826, 25.13678]
+			},
+			"properties": {
+				"ID": "1f29879b-715c-4387-b20d-c951fe9f628d",
+				"Caption": "【行天宮北投圖書館】家庭樂學堂114-2期招生",
+				"Company": "財團法人台北行天宮附設玄空圖書館",
+				"StartDate": "2025-05-02 09:00:00",
+				"EndDate": "2025-08-09 16:30:00",
+				"RelatedLink": "https://www.ht.org.tw/p4_introduction12.htm",
+				"City": "臺北市",
+				"Area": "北投區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.50942, 25.0535]
+			},
+			"properties": {
+				"ID": "39b03c72-7e11-4cc2-b73e-c52151af7675",
+				"Caption": "木木水水/木刻版畫聯展",
+				"Company": "岩筆模MBmore",
+				"StartDate": "2025-05-02 11:00:00",
+				"EndDate": "2025-06-08 19:00:00",
+				"RelatedLink": "https://www.mbmore.tw",
+				"City": "臺北市",
+				"Area": "大同區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52484, 25.07257]
+			},
+			"properties": {
+				"ID": "fb2685dc-2c5a-4b15-b90c-9727dbfa66cd",
+				"Caption": "北美館 X-SITE《毛孔城市－佔領計畫》",
+				"Company": "臺北市立美術館",
+				"StartDate": "2025-05-03 09:30:00",
+				"EndDate": "2025-07-13 17:30:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中山區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52125, 25.05272]
+			},
+			"properties": {
+				"ID": "8679bdc7-d3cd-41bd-8d4b-ee4904f7872b",
+				"Caption": "字游字在 — 生活中的書法課",
+				"Company": "雄獅星空Link Lion",
+				"StartDate": "2025-05-03 10:00:00",
+				"EndDate": "2025-07-19 10:00:00",
+				"RelatedLink": "https://www.facebook.com/LinkLion2016",
+				"City": "臺北市",
+				"Area": "中山區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.54929, 25.04666]
+			},
+			"properties": {
+				"ID": "b2e1a8b2-eb28-4539-9778-f51931b44776",
+				"Caption": "羅智信：番茄種子通過身體發芽",
+				"Company": "谷公館",
+				"StartDate": "2025-05-03 11:00:00",
+				"EndDate": "2025-07-19 19:00:00",
+				"RelatedLink": "https://michaelkugallery.com/",
+				"City": "臺北市",
+				"Area": "松山區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.51151, 25.0336]
+			},
+			"properties": {
+				"ID": "578b203e-afd3-40b6-94f4-02137eb4f297",
+				"Caption": "「銀髮活力方程式」——強化你的健康生活感知力 系列講座",
+				"Company": "孫運璿科技･人文紀念館",
+				"StartDate": "2025-05-03 14:00:00",
+				"EndDate": "2025-07-26 16:00:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.50026, 25.03609]
+			},
+			"properties": {
+				"ID": "eba2abb1-28b0-4c61-a07c-368042a4d376",
+				"Caption": "【艋舺光影聚落】皮影親子工作坊（小羊/西遊）",
+				"Company": "影子傳奇劇團",
+				"StartDate": "2025-05-03 14:00:00",
+				"EndDate": "2025-06-14 16:30:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "萬華區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5145, 25.13801]
+			},
+			"properties": {
+				"ID": "b2fad3b3-4d20-42eb-a481-deadf0a6356c",
+				"Caption": "悅己者容 — 纏足文化特展",
+				"Company": "北投文物館",
+				"StartDate": "2025-05-03 22:00:00",
+				"EndDate": "2025-11-16 18:00:00",
+				"RelatedLink": "https://www.facebook.com/beitoumuseum/",
+				"City": "臺北市",
+				"Area": "北投區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52268, 25.04852]
+			},
+			"properties": {
+				"ID": "2eae5ff4-354b-4c3c-8be7-4d8916999f75",
+				"Caption": "【新月．建築講座】日本現代建築之美(三)",
+				"Company": "新月藝文",
+				"StartDate": "2025-05-06 19:00:00",
+				"EndDate": "2025-11-18 21:00:00",
+				"RelatedLink": "https://forms.gle/942NJduVk83H2TqM9",
+				"City": "臺北市",
+				"Area": "中山區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.53033, 25.03866]
+			},
+			"properties": {
+				"ID": "c7b90675-d981-4657-bef0-571c96874309",
+				"Caption": "時代長流：見證旅法藝術家的文化激盪",
+				"Company": "長流美術館",
+				"StartDate": "2025-05-07 12:59:00",
+				"EndDate": "2025-06-29 18:51:00",
+				"RelatedLink": "https://www.chanliu.com/2025/05/07/%e6%99%82%e4%bb%a3%e9%95%b7%e6%b5%81%ef%bc%9a%e8%a6%8b%e8%ad%89%e6%97%85%e6%b3%95%e8%97%9d%e8%a1%93%e5%ae%b6%e7%9a%84%e6%96%87%e5%8c%96%e6%bf%80%e7%9b%aa-5-7-6-29/",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52268, 25.04852]
+			},
+			"properties": {
+				"ID": "510b94ed-445c-43ed-9985-98c8cf42c1fe",
+				"Caption": "【新月．西洋藝術鑑賞】持續百年的藝術革命．從巴比松到印象派",
+				"Company": "新月藝文",
+				"StartDate": "2025-05-07 14:00:00",
+				"EndDate": "2025-07-30 16:00:00",
+				"RelatedLink": "https://www.artfocus.com.tw/?,1161",
+				"City": "臺北市",
+				"Area": "中山區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.55466, 25.04041]
+			},
+			"properties": {
+				"ID": "49c97a30-c67f-439a-97af-4187e8f1fcb6",
+				"Caption": "【1839當代藝廊】《河流全都知道—荒川》宛 超凡攝影個展",
+				"Company": "1839當代藝廊",
+				"StartDate": "2025-05-09 11:00:00",
+				"EndDate": "2025-06-15 19:00:00",
+				"RelatedLink": "https://www.1839cg.com/archives/8226",
+				"City": "臺北市",
+				"Area": "大安區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5521, 25.03495]
+			},
+			"properties": {
+				"ID": "57a986b0-1583-4421-9dd4-d6824ccac722",
+				"Caption": "《清香似舊時——胡克敏水墨百花再現》",
+				"Company": "胡克敏紀念館",
+				"StartDate": "2025-05-09 23:00:00",
+				"EndDate": "2025-06-22 18:00:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "大安區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.51642, 25.06873]
+			},
+			"properties": {
+				"ID": "944b27b2-167a-47a9-a0d0-f24a97de966d",
+				"Caption": "Protection",
+				"Company": "也趣藝廊",
+				"StartDate": "2025-05-10 12:00:00",
+				"EndDate": "2025-05-31 18:30:00",
+				"RelatedLink": "https://www.galleryaki.com/zh/exhibition/category/Current",
+				"City": "臺北市",
+				"Area": "大同區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52408, 25.03869]
+			},
+			"properties": {
+				"ID": "81284466-75e6-4fb4-9ab8-e24a79c80d1c",
+				"Caption": "榮枯盛衰-堉泉個展  Wax and Wane - Yu Chuan Solo Exhibition",
+				"Company": "穎川畫廊",
+				"StartDate": "2025-05-10 15:00:00",
+				"EndDate": "2025-07-04 20:00:00",
+				"RelatedLink": "https://www.facebook.com/InRiverGallery",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.51897, 25.05072]
+			},
+			"properties": {
+				"ID": "7307e82b-0e91-4a37-99ed-6bc467f1b605",
+				"Caption": "MoCA Video 瀰知幻遊—謝宇喬個展",
+				"Company": "台北當代藝術館",
+				"StartDate": "2025-05-10 16:00:00",
+				"EndDate": "2025-07-06 21:00:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "大同區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.55767, 25.03359]
+			},
+			"properties": {
+				"ID": "e6dde384-c450-49f9-a4b1-6c6252a12f5e",
+				"Caption": "建築師藝廊2025年06月交流活動 歡迎參加",
+				"Company": "建築師藝廊",
+				"StartDate": "2025-05-12 14:09:00",
+				"EndDate": "2025-06-21 18:09:00",
+				"RelatedLink": "https://www.facebook.com/groups/334344591422790",
+				"City": "臺北市",
+				"Area": "信義區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52268, 25.04852]
+			},
+			"properties": {
+				"ID": "4bb9107c-9fdd-471a-b0bf-f6ada6c6080a",
+				"Caption": "【新月．藝文講座】從反宗教改革到巴洛克藝術的演進(上)",
+				"Company": "新月藝文",
+				"StartDate": "2025-05-13 19:00:00",
+				"EndDate": "2025-09-16 21:00:00",
+				"RelatedLink": "https://www.artfocus.com.tw/?,1175",
+				"City": "臺北市",
+				"Area": "中山區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.54725, 25.05306]
+			},
+			"properties": {
+				"ID": "beaf3817-5e27-41fa-b5b5-de4ff9085d9a",
+				"Caption": "帝心與藝魂—百年故宮的轉換之道",
+				"Company": "新匯流基金會",
+				"StartDate": "2025-05-14 19:30:00",
+				"EndDate": "2025-06-18 21:30:00",
+				"RelatedLink": "https://convergence.trend.org/course/museum2/",
+				"City": "臺北市",
+				"Area": "松山區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52767, 25.04064]
+			},
+			"properties": {
+				"ID": "4ef82010-6636-4198-9a23-1a2f89c00b9a",
+				"Caption": "2025國鼎數位學苑-「樂齡手機操作應用班」",
+				"Company": "李國鼎故居",
+				"StartDate": "2025-05-15 09:30:00",
+				"EndDate": "2025-08-28 11:30:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52767, 25.04064]
+			},
+			"properties": {
+				"ID": "005b6570-edd6-455c-8f86-4c66ab10f4c2",
+				"Caption": "2025國鼎數位學苑-「生成式AI基礎班」",
+				"Company": "李國鼎故居",
+				"StartDate": "2025-05-15 14:00:00",
+				"EndDate": "2025-06-12 16:30:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52268, 25.04852]
+			},
+			"properties": {
+				"ID": "8e108bb1-269e-4ddb-930c-fbf175aeef29",
+				"Caption": "【新月．音樂講座】音樂劇《悲慘世界》全本導聆",
+				"Company": "新月藝文",
+				"StartDate": "2025-05-15 14:00:00",
+				"EndDate": "2025-06-17 16:00:00",
+				"RelatedLink": "https://www.artfocus.com.tw/?,1189",
+				"City": "臺北市",
+				"Area": "中山區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.55538, 25.04677]
+			},
+			"properties": {
+				"ID": "ea0f4758-b0ca-4442-b903-c7a9e6ff70d8",
+				"Caption": "《平衡的輪廓》李芷筠 張舫少芹 雙個展",
+				"Company": "當代一畫廊",
+				"StartDate": "2025-05-16 10:00:00",
+				"EndDate": "2025-06-28 18:00:00",
+				"RelatedLink": "https://sissyleelee1.wixsite.com/agallery/blank-37",
+				"City": "臺北市",
+				"Area": "松山區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52268, 25.04852]
+			},
+			"properties": {
+				"ID": "dfaedb0e-130f-4b9c-9639-6de3515c8cac",
+				"Caption": "【新月．音樂講座】小提琴之王．克萊斯勒與他的音樂",
+				"Company": "新月藝文",
+				"StartDate": "2025-05-16 14:00:00",
+				"EndDate": "2025-09-12 16:00:00",
+				"RelatedLink": "https://forms.gle/m3zn4UKXwnWz7hcRA",
+				"City": "臺北市",
+				"Area": "中山區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52268, 25.04852]
+			},
+			"properties": {
+				"ID": "4e4c354a-a5da-4ff1-bea1-f8709133159d",
+				"Caption": "【新月．藝文講座】品味密碼： 揭開柏林收藏的秘密！",
+				"Company": "新月藝文",
+				"StartDate": "2025-05-16 19:00:00",
+				"EndDate": "2025-06-20 21:00:00",
+				"RelatedLink": "https://www.artfocus.com.tw/?,1139",
+				"City": "臺北市",
+				"Area": "中山區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52125, 25.05272]
+			},
+			"properties": {
+				"ID": "0d7c0462-8cd1-4383-a8b3-0d1c524703f9",
+				"Caption": "The Wonder Room 想像的房間 — 李佳玲個展",
+				"Company": "雄獅星空人文有限公司",
+				"StartDate": "2025-05-17 15:00:00",
+				"EndDate": "2025-06-15 19:00:00",
+				"RelatedLink": "https://www.facebook.com/LinkLion2016",
+				"City": "臺北市",
+				"Area": "中山區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.53725, 25.04425]
+			},
+			"properties": {
+				"ID": "47a2553a-2a84-42b3-95a7-f7eec0071cb7",
+				"Caption": "《在混沌的世界中建立一點序曲　姚仲涵》特別演出",
+				"Company": "忠泰美術館",
+				"StartDate": "2025-05-17 19:00:00",
+				"EndDate": "2025-06-14 21:00:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "大安區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.51899, 25.05078]
+			},
+			"properties": {
+				"ID": "8fe3ea28-2fda-4d3d-8c55-e8159535786a",
+				"Caption": "安全室",
+				"Company": "台北當代藝術館",
+				"StartDate": "2025-05-24 10:00:00",
+				"EndDate": "2025-09-07 18:00:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "大同區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.51899, 25.05078]
+			},
+			"properties": {
+				"ID": "46a9fc6a-6652-4531-af5b-1977fadd6dad",
+				"Caption": "環世界日誌",
+				"Company": "台北當代藝術館",
+				"StartDate": "2025-05-24 10:00:00",
+				"EndDate": "2025-09-07 18:00:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "大同區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.50326, 25.12306]
+			},
+			"properties": {
+				"ID": "d8d7fba2-dc29-4f95-9a4c-262ccb97bb68",
+				"Caption": "大手小手藝起玩版畫",
+				"Company": "奇岩社區發展協會",
+				"StartDate": "2025-05-24 14:00:00",
+				"EndDate": "2025-06-28 17:00:00",
+				"RelatedLink": "https://www.beclass.com/m/rid=294ff2667f2a26553cd2",
+				"City": "臺北市",
+				"Area": "北投區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.53497, 25.01352]
+			},
+			"properties": {
+				"ID": "726db34c-7c7a-42a0-8a77-69bd88782543",
+				"Caption": "廣藝X盜火劇團《One Two Punch 痛感一擊》搖滾音樂劇",
+				"Company": "盜火劇團",
+				"StartDate": "2025-05-24 14:30:00",
+				"EndDate": "2025-06-01 16:10:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.56176, 25.03099]
+			},
+			"properties": {
+				"ID": "6d916262-eeea-48c5-960d-c872ed1d038d",
+				"Caption": "【2025 PLAYground】《大開眼界》黃柏翰個人魔術秀",
+				"Company": "大清華傳媒股份有限公司",
+				"StartDate": "2025-05-24 19:30:00",
+				"EndDate": "2025-06-29 19:30:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "信義區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.50664, 25.04127]
+			},
+			"properties": {
+				"ID": "d84e96c8-3f7c-4eb3-9be3-a577b82d9acf",
+				"Caption": "0-6歲的繪本共讀",
+				"Company": "貓頭鷹親子教育協會",
+				"StartDate": "2025-05-27 21:30:00",
+				"EndDate": "2025-06-24 12:00:00",
+				"RelatedLink": "http://www.owltale.org.tw/ap/index.aspx",
+				"City": "臺北市",
+				"Area": "萬華區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52268, 25.04852]
+			},
+			"properties": {
+				"ID": "a8c05871-3fb8-4425-8ab2-4eba11d5a125",
+				"Caption": " 【新月．講座】銀鞍白馬度春風：走讀大唐盛世的長安城！",
+				"Company": "新月社",
+				"StartDate": "2025-05-29 14:00:00",
+				"EndDate": "2025-06-27 16:00:00",
+				"RelatedLink": "https://artfocus.com.tw/",
+				"City": "臺北市",
+				"Area": "中山區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.57867, 25.04829]
+			},
+			"properties": {
+				"ID": "c166fe8a-66f0-47ba-bee9-4748fcc377c7",
+				"Caption": "雲出無心-黃國雄書藝創作紀念展",
+				"Company": "佛光緣美術館台北館",
+				"StartDate": "2025-05-31 10:00:00",
+				"EndDate": "2025-07-27 20:30:00",
+				"RelatedLink": "https://www.facebook.com/TaipeiFgy",
+				"City": "臺北市",
+				"Area": "信義區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.51035, 25.0425]
+			},
+			"properties": {
+				"ID": "8601b979-9a52-4e3e-82df-b70843f9a3a2",
+				"Caption": "TCO【傳藝舞繽紛系列】《酬神》",
+				"Company": "臺北市立國樂團",
+				"StartDate": "2025-05-31 19:30:00",
+				"EndDate": "2025-05-31 21:30:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52717, 25.03808]
+			},
+			"properties": {
+				"ID": "d7cdfec0-a105-4f3d-9dd9-837d450aa5ae",
+				"Caption": "鳴石樂集樂壇新秀《誰與爭鋒》陳圓融、林明聯合音樂會",
+				"Company": "鳴石樂集",
+				"StartDate": "2025-05-31 19:30:00",
+				"EndDate": "2025-05-31 21:00:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52069, 25.04057]
+			},
+			"properties": {
+				"ID": "a9fe75c4-559e-4a27-954f-178e90cfa05f",
+				"Caption": "臺大醫院健康大樓公共藝術計畫起跑",
+				"Company": "帝門藝術教育基金會",
+				"StartDate": "2025-06-01 10:00:00",
+				"EndDate": "2025-12-31 18:00:00",
+				"RelatedLink": "https://dialog.deoa.org.tw",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52717, 25.03808]
+			},
+			"properties": {
+				"ID": "47e11bac-dab0-4051-912b-487c62b4c2cb",
+				"Caption": "鳴石樂集樂壇新秀 曹薇均小提琴獨奏會",
+				"Company": "鳴石樂集",
+				"StartDate": "2025-06-01 14:30:00",
+				"EndDate": "2025-06-01 16:00:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.51035, 25.0425]
+			},
+			"properties": {
+				"ID": "30f3a9c2-de25-43c4-bbc9-5f9c9b636336",
+				"Caption": "TCO【首席指揮系列】胡琴高峰會─2025臺北市傳統藝術季閉幕音樂會",
+				"Company": "臺北市立國樂團",
+				"StartDate": "2025-06-01 14:30:00",
+				"EndDate": "2025-06-01 16:30:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.51821, 25.03524]
+			},
+			"properties": {
+				"ID": "e2909a12-c516-42f6-bf56-1e2768e6afd4",
+				"Caption": "舒曼：三首小提琴與鋼琴奏鳴曲",
+				"Company": "台北獨奏家室內樂基金會",
+				"StartDate": "2025-06-01 19:30:00",
+				"EndDate": "2025-06-01 21:00:00",
+				"RelatedLink": "https://www.opentix.life/event/1893862606409043968",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52268, 25.04852]
+			},
+			"properties": {
+				"ID": "320119c0-251e-4dd7-b7dd-0222bf077dd2",
+				"Caption": "中國藝術鑑賞(9)：詩書畫印 . 明代的文人藝術家們！",
+				"Company": "新月社",
+				"StartDate": "2025-06-02 14:00:00",
+				"EndDate": "2025-07-28 16:00:00",
+				"RelatedLink": "https://docs.google.com/forms/d/e/1FAIpQLScQIfjx4euA75YIkOeX0GfVitmIRqrL6dKffOjDpd0toYXNLA/viewform",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52444, 25.04029]
+			},
+			"properties": {
+				"ID": "7f6d6cc5-37e3-4bb9-ae22-4bfd22559ccb",
+				"Caption": "呂文慧、蔡孟昆《揮灑寄遐》書法聯展",
+				"Company": "市長官邸藝文沙龍",
+				"StartDate": "2025-06-03 09:00:00",
+				"EndDate": "2025-06-16 17:00:00",
+				"RelatedLink": "https://www.mayorsalon.tw/Exhibitions",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.55427, 25.05479]
+			},
+			"properties": {
+				"ID": "2300bb30-fc36-469d-8e35-5a9ab4acf0e5",
+				"Caption": "【免費公益講座】樂學翻轉 — 與你「齡」距離：跨世代溝通",
+				"Company": "純青社會福利基金會",
+				"StartDate": "2025-06-03 09:30:00",
+				"EndDate": "2025-06-24 11:30:00",
+				"RelatedLink": "https://www.chun-ching.org.tw/lesson/family_lesson/287",
+				"City": "臺北市",
+				"Area": "松山區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52795, 25.05233]
+			},
+			"properties": {
+				"ID": "300e8a59-176c-4fb5-91b9-b732275b0552",
+				"Caption": "張競芝 創作個展【∞無垠】 Chang Ching-Chih Solo Exhibition: ∞limitlessness",
+				"Company": "金車文藝中心 臺北南京館",
+				"StartDate": "2025-06-03 11:00:00",
+				"EndDate": "2025-07-13 18:00:00",
+				"RelatedLink": "https://www.kingcarart.org.tw/",
+				"City": "臺北市",
+				"Area": "中山區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52268, 25.04852]
+			},
+			"properties": {
+				"ID": "4f742331-0faa-42a1-83eb-c12e463c1821",
+				"Caption": "2025 六月．荷蘭 / 比利時 藝文美學行旅",
+				"Company": "新月藝文",
+				"StartDate": "2025-06-03 22:30:00",
+				"EndDate": "2025-06-14 06:00:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中山區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.55427, 25.05479]
+			},
+			"properties": {
+				"ID": "09b541a5-f4b5-4f67-a7dc-3baa5913e575",
+				"Caption": "【心理課程】生命故事輕鬆聊",
+				"Company": "純青社會福利基金會",
+				"StartDate": "2025-06-04 09:30:00",
+				"EndDate": "2025-06-25 11:30:00",
+				"RelatedLink": "https://www.chun-ching.org.tw/lesson/family_lesson/292",
+				"City": "臺北市",
+				"Area": "松山區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.53218, 25.09779]
+			},
+			"properties": {
+				"ID": "28eb505e-33b1-40a8-9fb8-1917bc7da26d",
+				"Caption": "石在有趣 吳德和雕塑創作展",
+				"Company": "孟焦畫坊",
+				"StartDate": "2025-06-04 11:00:00",
+				"EndDate": "2025-06-22 19:00:00",
+				"RelatedLink": "https://web.hocom.tw/h/?key=399852860856",
+				"City": "臺北市",
+				"Area": "士林區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.51821, 25.03524]
+			},
+			"properties": {
+				"ID": "b9ce43fc-8cef-40de-9435-560f552bb041",
+				"Caption": "2025管風琴推廣音樂會《音樂大師的管風琴情書》",
+				"Company": "國家兩廳院",
+				"StartDate": "2025-06-04 11:20:00",
+				"EndDate": "2025-06-04 11:50:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.55427, 25.05479]
+			},
+			"properties": {
+				"ID": "3227efd8-ef17-418a-9e5d-d57291895048",
+				"Caption": "【免費公益講座】認識網路霸凌",
+				"Company": "純青社會福利基金會",
+				"StartDate": "2025-06-04 14:00:00",
+				"EndDate": "2025-06-25 16:00:00",
+				"RelatedLink": "https://www.chun-ching.org.tw/lesson/family_lesson/286",
+				"City": "臺北市",
+				"Area": "松山區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.55192, 25.0484]
+			},
+			"properties": {
+				"ID": "98378804-8b34-47ab-b4fa-5193145269c4",
+				"Caption": "【藝術下午茶】角斯《臺灣特有種妖怪的創作秘辛》",
+				"Company": "臺北市藝文推廣處",
+				"StartDate": "2025-06-04 14:30:00",
+				"EndDate": "2025-06-04 16:30:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "松山區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.55427, 25.05479]
+			},
+			"properties": {
+				"ID": "fa2ea751-8aef-41cd-ab08-5e0cefd0d971",
+				"Caption": "【免費公益講座】職涯燈塔",
+				"Company": "純青社會福利基金會",
+				"StartDate": "2025-06-04 19:00:00",
+				"EndDate": "2025-06-18 20:50:00",
+				"RelatedLink": "https://www.chun-ching.org.tw/lesson/family_lesson/285",
+				"City": "臺北市",
+				"Area": "松山區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.56864, 25.05028]
+			},
+			"properties": {
+				"ID": "c0dbb935-5263-4e3c-9a12-0fd95d99d9c6",
+				"Caption": "【合辦講座】失親兒福利基金會附設諮商中心 x 臺北市諮商心理師公會：在關係中，你還好嗎？-談自我關照與情緒調適",
+				"Company": "失親兒福利基金會附設諮商中心",
+				"StartDate": "2025-06-04 19:00:00",
+				"EndDate": "2025-06-04 21:00:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "松山區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.51821, 25.03524]
+			},
+			"properties": {
+				"ID": "f1cfab72-5ad5-4173-bee8-fc64d331a270",
+				"Caption": "洪幗襄2025小提琴獨奏會",
+				"Company": "燈角樂團",
+				"StartDate": "2025-06-04 19:30:00",
+				"EndDate": "2025-06-04 21:30:00",
+				"RelatedLink": "https://www.opentix.life/event/1914959694296322048",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52268, 25.04852]
+			},
+			"properties": {
+				"ID": "bbf64f09-ce7b-41c4-b812-318fc5bcbfcb",
+				"Caption": " 【新月．講座】奧斯卡最佳配樂．跨世紀大賞！",
+				"Company": "新月社",
+				"StartDate": "2025-06-05 14:00:00",
+				"EndDate": "2025-09-04 16:00:00",
+				"RelatedLink": "https://artfocus.com.tw/",
+				"City": "臺北市",
+				"Area": "中山區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.50714, 25.04071]
+			},
+			"properties": {
+				"ID": "5c8b0a70-3b15-484e-ab92-3c1eeed68e2b",
+				"Caption": "【國史館專題演講】平埔族埔里大流亡─清代中部熟番的第二次集體出走(同步線上直播)",
+				"Company": "國史館",
+				"StartDate": "2025-06-05 14:00:00",
+				"EndDate": "2025-06-05 16:00:00",
+				"RelatedLink": "https://onlinecourses.drnh.gov.tw/",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.55427, 25.05479]
+			},
+			"properties": {
+				"ID": "2a866b80-9f97-4f2b-bbaa-e702d03e59e2",
+				"Caption": "【免費公益講座】愛與財的平衡術",
+				"Company": "純青社會福利基金會",
+				"StartDate": "2025-06-05 19:00:00",
+				"EndDate": "2025-06-26 20:50:00",
+				"RelatedLink": "https://www.chun-ching.org.tw/lesson/family_lesson/291",
+				"City": "臺北市",
+				"Area": "大安區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.55427, 25.05479]
+			},
+			"properties": {
+				"ID": "a877fbaa-11a1-4317-9b59-f985c729db02",
+				"Caption": "經絡滾筒",
+				"Company": "純青社會福利基金會",
+				"StartDate": "2025-06-05 19:20:00",
+				"EndDate": "2025-06-26 20:50:00",
+				"RelatedLink": "https://www.chun-ching.org.tw/lesson/family_lesson/299",
+				"City": "臺北市",
+				"Area": "松山區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.51934, 25.03713]
+			},
+			"properties": {
+				"ID": "91b74b41-0d38-4e5c-9eee-36b2a7395eb5",
+				"Caption": "21世紀牧神之聲-布魯諾長笛演奏會",
+				"Company": "環境有限公司",
+				"StartDate": "2025-06-05 19:40:00",
+				"EndDate": "2025-06-05 21:50:00",
+				"RelatedLink": "https://www.newaspect.org.tw/mariobrunorecital2025",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.55427, 25.05479]
+			},
+			"properties": {
+				"ID": "533f4568-4a9c-424d-b640-8c045ec1b147",
+				"Caption": "【免費公益講座】健康新知簡單學 — 提升免疫力 打造健康力",
+				"Company": "純青社會福利基金會",
+				"StartDate": "2025-06-06 09:30:00",
+				"EndDate": "2025-06-27 11:30:00",
+				"RelatedLink": "https://www.chun-ching.org.tw/lesson/family_lesson/290",
+				"City": "臺北市",
+				"Area": "松山區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.47153, 25.13536]
+			},
+			"properties": {
+				"ID": "42852efe-2cb2-4f88-942d-f81f9655a41b",
+				"Caption": "遺物址—美術館尋常空間展示計畫",
+				"Company": "關渡美術館",
+				"StartDate": "2025-06-06 10:00:00",
+				"EndDate": "2025-08-10 05:00:00",
+				"RelatedLink": "https://kdmofa.tnua.edu.tw/mod/exhibition/index.php?REQUEST_ID=e1626ae68798853bcff9a390f902a9df97af5c7fca776fbbb9bd814d87bed159",
+				"City": "臺北市",
+				"Area": "北投區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.46975, 25.13396]
+			},
+			"properties": {
+				"ID": "51f97946-475b-4f0f-998e-237213b3e25c",
+				"Caption": "版畫人生，純屬虛構。—池枻龍個展",
+				"Company": "關渡美術館",
+				"StartDate": "2025-06-06 10:00:00",
+				"EndDate": "2025-08-10 05:00:00",
+				"RelatedLink": "https://kdmofa.tnua.edu.tw/mod/exhibition/index.php?REQUEST_ID=e1626ae68798853bcff9a390f902a9dff62b3a80530de57c6f0645ed06f05886",
+				"City": "臺北市",
+				"Area": "北投區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.47153, 25.13536]
+			},
+			"properties": {
+				"ID": "ca6e5c4b-5e9e-467a-8c6d-f971e3b82a7f",
+				"Caption": "藍門後的光—張庭甄個展",
+				"Company": "關渡美術館",
+				"StartDate": "2025-06-06 10:00:00",
+				"EndDate": "2025-08-10 17:00:00",
+				"RelatedLink": "https://kdmofa.tnua.edu.tw/mod/exhibition/index.php?REQUEST_ID=e1626ae68798853bcff9a390f902a9df1ab3ac9cccc3890e7df5990a6ed24d06",
+				"City": "臺北市",
+				"Area": "北投區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.56146, 25.08631]
+			},
+			"properties": {
+				"ID": "ced7b5d1-e6d5-43d2-926c-7695f2612e38",
+				"Caption": "｢生命樹｣ 安卓藝術十五周年特展",
+				"Company": "安卓藝術股份有限公司",
+				"StartDate": "2025-06-06 13:00:00",
+				"EndDate": "2025-08-08 18:00:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "內湖區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52268, 25.04852]
+			},
+			"properties": {
+				"ID": "0181e8e9-67be-438d-a5d6-2b890cf2fa20",
+				"Caption": " 【新月．講座】文學導讀：歐洲文學經典",
+				"Company": "新月社",
+				"StartDate": "2025-06-06 14:00:00",
+				"EndDate": "2025-06-06 16:00:00",
+				"RelatedLink": "https://artfocus.com.tw/",
+				"City": "臺北市",
+				"Area": "中山區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52967, 25.0518]
+			},
+			"properties": {
+				"ID": "d3b7b916-6069-4411-b3dd-5e7d8ee24faf",
+				"Caption": "6/6(五) 吳駿聲《金字塔之謎》講座",
+				"Company": "發現者旅行社有限公司",
+				"StartDate": "2025-06-06 19:00:00",
+				"EndDate": "2025-06-06 21:00:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中山區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.55427, 25.05479]
+			},
+			"properties": {
+				"ID": "f0bc1f78-b9a4-4ee7-ab88-d332039545e0",
+				"Caption": "【免費公益講座】與原生家庭的距離",
+				"Company": "純青社會福利基金會",
+				"StartDate": "2025-06-06 19:00:00",
+				"EndDate": "2025-06-27 20:50:00",
+				"RelatedLink": "https://www.chun-ching.org.tw/lesson/family_lesson/289",
+				"City": "臺北市",
+				"Area": "松山區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5181, 25.0352]
+			},
+			"properties": {
+				"ID": "0e6464ce-08ed-4533-8bd1-7aabd68d930f",
+				"Caption": "2025新點子實驗場 蒂摩爾古薪舞集 巴魯．瑪迪霖 《排彎動物園》",
+				"Company": "國家表演藝術中心國家兩廳院",
+				"StartDate": "2025-06-07 07:30:00",
+				"EndDate": "2025-06-08 14:30:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.51151, 25.0336]
+			},
+			"properties": {
+				"ID": "461834da-33e7-455b-b51d-95226de47083",
+				"Caption": "食農雙語學習營",
+				"Company": "孫運璿科技･人文紀念館",
+				"StartDate": "2025-06-07 09:00:00",
+				"EndDate": "2025-06-07 12:00:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.61601, 25.03943]
+			},
+			"properties": {
+				"ID": "5af221a7-55cc-4fa8-91de-fdf4f80c73df",
+				"Caption": "鑄匠入魂──殷周青銅器的鑄造技術展",
+				"Company": "中央研究院歷史語言研究所 歷史文物陳列館",
+				"StartDate": "2025-06-07 09:20:00",
+				"EndDate": "2026-06-07 16:30:00",
+				"RelatedLink": "https://museum.sinica.edu.tw/exhibitions/167/",
+				"City": "臺北市",
+				"Area": "南港區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.51243, 25.0319]
+			},
+			"properties": {
+				"ID": "bef51648-deec-434d-9c39-61c89ad43631",
+				"Caption": "衣定浪漫．蓮花君",
+				"Company": "臺北市中正區公所",
+				"StartDate": "2025-06-07 13:00:00",
+				"EndDate": "2025-06-07 18:00:00",
+				"RelatedLink": "https://www.unijoys.com.tw/activity/20250607%E8%A1%A3%E5%AE%9A%E6%B5%AA%E6%BC%AB%EF%BC%8E%E8%93%AE%E8%8A%B1%E5%90%9B",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.53023, 25.10553]
+			},
+			"properties": {
+				"ID": "7208e9bc-6420-4fbb-91f4-035960d040b0",
+				"Caption": "6/7 天母工作室 《世界海洋日》🌊World Ocean Day",
+				"Company": "小時尚工坊",
+				"StartDate": "2025-06-07 13:30:00",
+				"EndDate": "2025-06-07 17:00:00",
+				"RelatedLink": "https://petitemodestudio.pse.is/PM_design08",
+				"City": "臺北市",
+				"Area": "士林區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52767, 25.04064]
+			},
+			"properties": {
+				"ID": "888cffe8-0027-4d00-b26a-3b77e850524a",
+				"Caption": "114年李國鼎故居綠手指_沈秀雀老師_臺灣原生趣味盆栽周末系列課程",
+				"Company": "李國鼎故居",
+				"StartDate": "2025-06-07 14:00:00",
+				"EndDate": "2025-06-07 16:30:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.51264, 25.05708]
+			},
+			"properties": {
+				"ID": "1a6b2aa6-46d7-435c-a9e1-a5664a443478",
+				"Caption": "【茶香繚繞・仕紳雅聚】手作茶香袋體驗",
+				"Company": "新芳春茶行",
+				"StartDate": "2025-06-07 14:00:00",
+				"EndDate": "2025-08-16 15:00:00",
+				"RelatedLink": "https://www.accupass.com/go/TeaDIY20250608",
+				"City": "臺北市",
+				"Area": "大同區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.55723, 25.08274]
+			},
+			"properties": {
+				"ID": "8e0ec6f8-889d-4eda-a626-fdc831f3c72f",
+				"Caption": "╱ 冰市 Chill on Ice ╱ 冰上市集音樂節",
+				"Company": "NOKE 忠泰樂生活",
+				"StartDate": "2025-06-07 14:00:00",
+				"EndDate": "2025-06-08 21:30:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中山區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.50971, 25.05567]
+			},
+			"properties": {
+				"ID": "837c8f53-df2c-4874-a0f6-16a163c461dc",
+				"Caption": "【發現定靜的力量】 關於兒童書法教育",
+				"Company": "雅齋兒童書法研習會/廟前街聚落",
+				"StartDate": "2025-06-07 14:30:00",
+				"EndDate": "2025-06-07 16:30:00",
+				"RelatedLink": "https://forms.gle/teT4YvwrFjUUHVk47",
+				"City": "臺北市",
+				"Area": "大同區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52717, 25.03808]
+			},
+			"properties": {
+				"ID": "e4f8c2a6-c01a-475c-8234-b659611bfc20",
+				"Caption": "鳴石樂集樂壇新秀 《舞音集韻》 徐昌鈺中提琴獨奏會",
+				"Company": "鳴石樂集",
+				"StartDate": "2025-06-07 19:30:00",
+				"EndDate": "2025-06-07 21:00:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.51151, 25.0336]
+			},
+			"properties": {
+				"ID": "021c6332-d41d-4701-bec3-d650674c323c",
+				"Caption": "《生態與科技的對話》工作坊一：自然觀察與繪圖",
+				"Company": "孫運璿科技･人文紀念館",
+				"StartDate": "2025-06-08 14:00:00",
+				"EndDate": "2025-06-08 17:00:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52066, 25.02154]
+			},
+			"properties": {
+				"ID": "20cf8abc-378e-4588-929f-31f106020b05",
+				"Caption": "中華民國筆會季刊《譯之華》論壇：止戰之殤",
+				"Company": "中華民國筆會",
+				"StartDate": "2025-06-08 14:00:00",
+				"EndDate": "2025-06-08 16:00:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52717, 25.03808]
+			},
+			"properties": {
+				"ID": "382f5f24-5f3f-4e7f-8f59-6ed1363e0ab3",
+				"Caption": "鳴石樂集樂壇新秀 吳蕙羽長笛獨奏會",
+				"Company": "鳴石樂集",
+				"StartDate": "2025-06-08 14:30:00",
+				"EndDate": "2025-06-08 16:00:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.54408, 25.03826]
+			},
+			"properties": {
+				"ID": "e20fa23d-0aea-4cb4-ad4c-d1ce315eb269",
+				"Caption": "跨域的十二夜【四】當音樂成為表演",
+				"Company": "台新銀行文化藝術基金會",
+				"StartDate": "2025-06-11 19:00:00",
+				"EndDate": "2025-06-11 21:00:00",
+				"RelatedLink": "https://www.taishinart.org.tw/news-detail/996.html",
+				"City": "臺北市",
+				"Area": "大安區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.50714, 25.04071]
+			},
+			"properties": {
+				"ID": "c832d954-f082-44f8-aa09-65e4d49c43d7",
+				"Caption": "【國史館專題演講】陳誠的1949—以新發現日記年份與《台政紀要》為中心",
+				"Company": "國史館",
+				"StartDate": "2025-06-12 14:00:00",
+				"EndDate": "2025-06-12 16:00:00",
+				"RelatedLink": "https://www.drnh.gov.tw/p/412-1003-163.php?Lang=zh-tw",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.53336, 25.0605]
+			},
+			"properties": {
+				"ID": "9442f905-5eb9-4712-a40d-e0a64dd04c1d",
+				"Caption": "【合辦講座】點晴心理諮商所 x 臺北市諮商心理師公會：鏡子裡的我，好醜－談身材與容貌焦慮調適",
+				"Company": "臺北市諮商心理師公會",
+				"StartDate": "2025-06-12 19:00:00",
+				"EndDate": "2025-06-12 21:00:00",
+				"RelatedLink": "https://forms.gle/KedQNqf4GWGPfWWv8",
+				"City": "臺北市",
+				"Area": "中山區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52162, 25.04468]
+			},
+			"properties": {
+				"ID": "90994ccc-af78-4bf7-a9b2-5b860312a500",
+				"Caption": "【2025文學向南系列講座】雨林、膠樹、娘惹糕以及……：華馬小說說什麼？",
+				"Company": "財團法人社教文化基金會",
+				"StartDate": "2025-06-13 14:30:00",
+				"EndDate": "2025-06-13 16:30:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.54769, 25.05376]
+			},
+			"properties": {
+				"ID": "f003ed2c-cb37-4f1f-888e-41f7627122e6",
+				"Caption": "【給阿婆的歌】音樂會~彭郁雯爵士三重奏",
+				"Company": "財團法人台北行天宮附設玄空圖書館",
+				"StartDate": "2025-06-13 19:00:00",
+				"EndDate": "2025-06-13 21:00:00",
+				"RelatedLink": "https://www.ht.org.tw/p4_introduction25.htm",
+				"City": "臺北市",
+				"Area": "松山區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.51934, 25.03713]
+			},
+			"properties": {
+				"ID": "b35f4663-675c-4411-8588-afb2778ff125",
+				"Caption": "【2025 TSO名家系列】坎布雷林、芭耶娃與TSO",
+				"Company": "臺北市立交響樂團",
+				"StartDate": "2025-06-13 19:30:00",
+				"EndDate": "2025-06-13 21:30:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.53315, 25.04654]
+			},
+			"properties": {
+				"ID": "610ec82c-cf39-4628-8005-694e3151d357",
+				"Caption": "6/14(六)免費諮詢日",
+				"Company": "財團法人吾心文教基金會",
+				"StartDate": "2025-06-14 09:00:00",
+				"EndDate": "2025-06-14 16:00:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中山區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.55427, 25.05479]
+			},
+			"properties": {
+				"ID": "1620b738-8950-41a8-b897-239da628236a",
+				"Caption": "發現自我優勢，從認識自己開始！ (職涯規劃工作坊)",
+				"Company": "純青社會福利基金會",
+				"StartDate": "2025-06-14 09:29:00",
+				"EndDate": "2025-06-14 16:30:00",
+				"RelatedLink": "https://www.chun-ching.org.tw/lesson/family_lesson/294",
+				"City": "臺北市",
+				"Area": "松山區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.55427, 25.05479]
+			},
+			"properties": {
+				"ID": "dc107c71-25b1-4fdf-ac09-84ccd95bd047",
+				"Caption": "【免費公益講座】暑假3C風暴",
+				"Company": "純青社會福利基金會",
+				"StartDate": "2025-06-14 09:30:00",
+				"EndDate": "2025-06-28 11:30:00",
+				"RelatedLink": "https://www.chun-ching.org.tw/lesson/family_lesson/293",
+				"City": "臺北市",
+				"Area": "松山區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.53933, 25.00943]
+			},
+			"properties": {
+				"ID": "eafab453-2b88-40a5-b954-de64cd73f2f6",
+				"Caption": "煥民生態小週末 : 飛行日",
+				"Company": "蟾蜍山煥民新村",
+				"StartDate": "2025-06-14 10:00:00",
+				"EndDate": "2025-06-21 12:00:00",
+				"RelatedLink": "https://www.accupass.com/event/2504250215311117717369",
+				"City": "臺北市",
+				"Area": "大安區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.55317, 25.04121]
+			},
+			"properties": {
+				"ID": "23189a1a-98b9-4256-8de0-55c2e2513439",
+				"Caption": "《次序之外》楊桃派Young&Top-阿波羅畫廊新銳畫家助長計畫(12) 蘇泓諺×張凱閔×林禹良×江為彬",
+				"Company": "阿波羅畫廊",
+				"StartDate": "2025-06-14 11:00:00",
+				"EndDate": "2025-07-12 19:00:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "大安區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52767, 25.04064]
+			},
+			"properties": {
+				"ID": "17aacac6-cb95-4b97-9765-7970c33c1795",
+				"Caption": "育秀學園-智慧生活實驗室",
+				"Company": "李國鼎故居",
+				"StartDate": "2025-06-14 13:30:00",
+				"EndDate": "2025-06-14 16:00:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.51657, 25.03753]
+			},
+			"properties": {
+				"ID": "b8418de0-dfba-4653-aef1-e46e346d0afb",
+				"Caption": "文學與藝術的共生、合作與演繹",
+				"Company": "趨勢匯流人文書院",
+				"StartDate": "2025-06-14 14:00:00",
+				"EndDate": "2025-06-14 17:00:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.57867, 25.04829]
+			},
+			"properties": {
+				"ID": "381ee3ed-7528-4f54-bd6c-adfad103f427",
+				"Caption": "雲出無心-黃國雄書藝創作紀念展(教育推廣活動-禪繞畫創作 墨線遊心：書法藝術裡的禪意繪旅)",
+				"Company": "佛光緣美術館台北館",
+				"StartDate": "2025-06-14 14:00:00",
+				"EndDate": "2025-06-14 15:30:00",
+				"RelatedLink": "https://www.facebook.com/TaipeiFgy",
+				"City": "臺北市",
+				"Area": "信義區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.57867, 25.04829]
+			},
+			"properties": {
+				"ID": "e22f1a0a-1b73-4671-beab-f624acca5586",
+				"Caption": "雲出無心-黃國雄書藝創作紀念展教育推廣活動",
+				"Company": "佛光緣美術館台北館",
+				"StartDate": "2025-06-14 14:00:00",
+				"EndDate": "2025-06-14 15:30:00",
+				"RelatedLink": "https://www.facebook.com/TaipeiFgy",
+				"City": "臺北市",
+				"Area": "信義區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.53417, 25.01538]
+			},
+			"properties": {
+				"ID": "f11cec16-211c-4dd7-924f-3ff2955283dc",
+				"Caption": "臺灣歐洲文化論壇32",
+				"Company": "臺灣歐盟中心",
+				"StartDate": "2025-06-14 14:00:00",
+				"EndDate": "2025-06-14 16:30:00",
+				"RelatedLink": "https://forms.gle/MX1izmmhJpvJ5rm99",
+				"City": "臺北市",
+				"Area": "大安區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.55192, 25.0484]
+			},
+			"properties": {
+				"ID": "746d2cc3-04d9-4fb4-88bf-498678ebe6da",
+				"Caption": "【周末輕鬆講】藝術蝦《漫步裡的臺灣美術》",
+				"Company": "臺北市藝文推廣處",
+				"StartDate": "2025-06-14 14:30:00",
+				"EndDate": "2025-06-14 16:30:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "松山區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52162, 25.04468]
+			},
+			"properties": {
+				"ID": "0bbaf847-e06d-42c9-af50-273bf3925e6b",
+				"Caption": "【2025文學向南系列講座】印度裔美國女性書寫：以穆可杰為例",
+				"Company": "財團法人社教文化基金會",
+				"StartDate": "2025-06-14 14:30:00",
+				"EndDate": "2025-06-14 16:30:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52717, 25.03808]
+			},
+			"properties": {
+				"ID": "00aa1758-28ef-40a5-8eac-b89bd4da231b",
+				"Caption": "鳴石樂集樂壇新秀《旅程》陳堂輔小提琴獨奏會",
+				"Company": "鳴石樂集",
+				"StartDate": "2025-06-14 19:30:00",
+				"EndDate": "2025-06-14 21:00:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.56436, 25.04984]
+			},
+			"properties": {
+				"ID": "4b7c8bbc-7522-42e6-bcd2-2060d47abbc5",
+				"Caption": "2025華山親子表藝節「心球漫遊」",
+				"Company": "台灣文創發展股份有限公司",
+				"StartDate": "2025-06-15 00:00:00",
+				"EndDate": "2025-08-17 23:59:00",
+				"RelatedLink": "https://www.huashan1914.com/w/umaytheater/performance_25041017084752937",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52717, 25.03808]
+			},
+			"properties": {
+				"ID": "1da75f2c-f1cd-4f23-82be-cedf5b948300",
+				"Caption": "鳴石樂集樂壇新秀 2025 何芊蓉小提琴獨奏會",
+				"Company": "鳴石樂集",
+				"StartDate": "2025-06-15 14:30:00",
+				"EndDate": "2025-06-15 16:00:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.53023, 25.10553]
+			},
+			"properties": {
+				"ID": "2cbde467-75fc-496d-a19c-11c96d0a1802",
+				"Caption": "2025 小時尚設計夏令營《天母精緻班》",
+				"Company": "小孩設計工坊",
+				"StartDate": "2025-06-16 10:00:00",
+				"EndDate": "2025-08-29 16:00:00",
+				"RelatedLink": "https://petitemodestudio.pse.is/PM_Camp01",
+				"City": "臺北市",
+				"Area": "士林區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52308, 25.0625]
+			},
+			"properties": {
+				"ID": "3347d580-2b1e-45fd-ae79-60d38d05a227",
+				"Caption": "【上海商銀】豐富人生｜江靖波&楊竣傑—海頓工人尋寶計畫PART3-熊與母雞",
+				"Company": "財團法人上海商業儲蓄銀行文教基金會",
+				"StartDate": "2025-06-16 19:00:00",
+				"EndDate": "2025-06-16 21:00:00",
+				"RelatedLink": "https://www.accupass.com/event/2505090322591161440223",
+				"City": "臺北市",
+				"Area": "中山區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52444, 25.04029]
+			},
+			"properties": {
+				"ID": "798716f7-dac3-478f-9d9f-52533efdc903",
+				"Caption": "生活金2025─李敏惠 創作展",
+				"Company": "市長官邸藝文沙龍",
+				"StartDate": "2025-06-18 09:00:00",
+				"EndDate": "2025-07-01 17:00:00",
+				"RelatedLink": "https://www.mayorsalon.tw/Exhibitions",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.55192, 25.0484]
+			},
+			"properties": {
+				"ID": "fff77987-fa4f-44f2-b4ad-0ad70abd6644",
+				"Caption": "【藝術下午茶】廖書荻《畫筆拾光：記錄生活的微小驚喜》",
+				"Company": "臺北市藝文推廣處",
+				"StartDate": "2025-06-18 14:30:00",
+				"EndDate": "2025-06-18 16:30:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "松山區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52308, 25.0625]
+			},
+			"properties": {
+				"ID": "9fe0e0fe-239e-4fde-9e82-45090f057237",
+				"Caption": "【上海商銀】豐富人生 X 音樂天地｜林仁斌—李斯特十二首鋼琴超技練習曲",
+				"Company": "財團法人上海商業儲蓄銀行文教基金會",
+				"StartDate": "2025-06-18 19:00:00",
+				"EndDate": "2025-06-18 21:00:00",
+				"RelatedLink": "https://www.accupass.com/event/2505050723551381754891",
+				"City": "臺北市",
+				"Area": "中山區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5293, 25.04328]
+			},
+			"properties": {
+				"ID": "95a161e8-81ac-44b2-be81-db63a0664efa",
+				"Caption": "《Share＆Rhythm》踢踏經典再現",
+				"Company": "舞工廠舞團",
+				"StartDate": "2025-06-18 19:30:00",
+				"EndDate": "2025-06-19 19:30:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.51322, 25.05089]
+			},
+			"properties": {
+				"ID": "401ea8d4-fd64-417c-99c1-3df870bc3efa",
+				"Caption": "境界：謝昀蓉的梭織空間",
+				"Company": " Pièce藝文空間",
+				"StartDate": "2025-06-19 14:00:00",
+				"EndDate": "2025-06-29 19:00:00",
+				"RelatedLink": "https://piecetw.com/2025/05/13/realm/",
+				"City": "臺北市",
+				"Area": "大同區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.54769, 25.05376]
+			},
+			"properties": {
+				"ID": "c99b9802-3f0f-4326-ac50-e71ed0bee658",
+				"Caption": "行天宮附設玄空圖書館敦化本館-電影享讀",
+				"Company": "財團法人台北行天宮附設玄空圖書館",
+				"StartDate": "2025-06-19 14:00:00",
+				"EndDate": "2025-12-20 16:00:00",
+				"RelatedLink": "https://www.ht.org.tw/p4_introduction25.htm",
+				"City": "臺北市",
+				"Area": "松山區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.50714, 25.04071]
+			},
+			"properties": {
+				"ID": "22182db7-25b7-4255-8356-25ba81862d9c",
+				"Caption": "【國史館專題演講】從家族史到礦業史：海山女礦工的生命考掘(同步線上直播)",
+				"Company": "國史館",
+				"StartDate": "2025-06-19 14:00:00",
+				"EndDate": "2025-06-19 16:00:00",
+				"RelatedLink": "https://onlinecourses.drnh.gov.tw/",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.51013, 25.04311]
+			},
+			"properties": {
+				"ID": "8610180f-d0fa-492f-8e05-f45e4cca074c",
+				"Caption": "2025第27屆台北電影節",
+				"Company": "台北電影節",
+				"StartDate": "2025-06-20 10:00:00",
+				"EndDate": "2025-07-05 23:59:00",
+				"RelatedLink": "https://www.taipeiff.taipei/tw/",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52308, 25.0625]
+			},
+			"properties": {
+				"ID": "638387d7-3980-43de-b25c-eefecee4be10",
+				"Caption": "【上海商銀】海光電影院｜許榮哲VS楊力州—《紅盒子》",
+				"Company": "財團法人上海商業儲蓄銀行文教基金會",
+				"StartDate": "2025-06-20 19:00:00",
+				"EndDate": "2025-06-20 21:00:00",
+				"RelatedLink": "https://www.accupass.com/event/2504290754551986433877",
+				"City": "臺北市",
+				"Area": "中山區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52967, 25.0518]
+			},
+			"properties": {
+				"ID": "12307ffe-2c1a-4b62-8ee6-bb8441507c32",
+				"Caption": "6/20(五) 吳駿聲《古代埃及人民生活》講座",
+				"Company": "發現者旅行社有限公司",
+				"StartDate": "2025-06-20 19:00:00",
+				"EndDate": "2025-06-20 21:00:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中山區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5181, 25.0352]
+			},
+			"properties": {
+				"ID": "fa28088a-8ff3-41e5-98b8-d99d517ec471",
+				"Caption": "2025新點子實驗場 曾彥婷 《煉丹場》",
+				"Company": "國家表演藝術中心國家兩廳院",
+				"StartDate": "2025-06-20 19:30:00",
+				"EndDate": "2025-06-22 14:30:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.54087, 25.00134]
+			},
+			"properties": {
+				"ID": "091afe33-ada9-40a3-98fb-b639a26d1092",
+				"Caption": "帶一本書來Bookbar：酷兒／移民視角下的跨物種親密",
+				"Company": "社團法人台灣伴侶權利推動聯盟",
+				"StartDate": "2025-06-20 19:30:00",
+				"EndDate": "2025-06-20 21:00:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "文山區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.51821, 25.03524]
+			},
+			"properties": {
+				"ID": "a0464ca2-96b3-45fa-889e-0560993329a3",
+				"Caption": "獨一無二 - 舒曼的奇幻世界",
+				"Company": "台北獨奏家室內樂基金會",
+				"StartDate": "2025-06-20 19:30:00",
+				"EndDate": "2025-06-20 21:15:00",
+				"RelatedLink": "https://www.opentix.life/event/1897201058618073089",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.50026, 25.03609]
+			},
+			"properties": {
+				"ID": "7341628e-de4e-43e8-96fa-69a4f3a3d1e4",
+				"Caption": "【兩個太陽】原民皮影戲劇展演",
+				"Company": "影子傳奇劇團",
+				"StartDate": "2025-06-21 13:30:00",
+				"EndDate": "2025-06-21 14:30:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "萬華區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52066, 25.05211]
+			},
+			"properties": {
+				"ID": "6008f4bd-e402-4a1e-98e4-1a9ea8e9ca86",
+				"Caption": "【廖瞇新書分享會】在沖印歷史中遇見爸媽的拚搏青春——家族書寫的能或不能《小廖與阿美的沖印歲月，還有攝影家三叔公》",
+				"Company": "遠流台灣館",
+				"StartDate": "2025-06-21 14:00:00",
+				"EndDate": "2025-06-21 15:30:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中山區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.51295, 25.03584]
+			},
+			"properties": {
+				"ID": "5ec1d094-555b-4466-8326-a0353cd387cb",
+				"Caption": "｛素書樓講堂｝2025年度史傳與人生─歷史人物講座（五）（六）：士與吏—〈袁盎鼂錯列傳〉（一）（二）",
+				"Company": "臺北市文化局─錢穆故居",
+				"StartDate": "2025-06-21 14:00:00",
+				"EndDate": "2025-08-16 16:00:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.55192, 25.0484]
+			},
+			"properties": {
+				"ID": "4ae729a5-5593-4659-b513-8646c154065d",
+				"Caption": "【周末輕鬆講】簡士頡《漫畫北投：女巫之鄉的創作術》",
+				"Company": "臺北市藝文推廣處",
+				"StartDate": "2025-06-21 14:30:00",
+				"EndDate": "2025-06-21 16:30:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "松山區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52162, 25.04468]
+			},
+			"properties": {
+				"ID": "bd0f8a84-14b3-401a-81e9-4cd8c03af82d",
+				"Caption": "【2025文學向南系列講座】從文學讀越南：創傷、療癒而起飛",
+				"Company": "財團法人社教文化基金會",
+				"StartDate": "2025-06-21 14:30:00",
+				"EndDate": "2025-06-21 16:30:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.53485, 25.01292]
+			},
+			"properties": {
+				"ID": "4b91a2eb-ecf1-4908-a7fc-7a129e2ab6a7",
+				"Caption": "《 撼山河 撼向世界 - 聊聊人生與創作   》",
+				"Company": "財團法人龍顏基金會",
+				"StartDate": "2025-06-21 14:30:00",
+				"EndDate": "2025-06-21 16:30:00",
+				"RelatedLink": "https://docs.google.com/forms/d/1vRot0xOYAw0Ln9S7bA1B6HykJCYrIyFzkDyf_M_4VO4/edit",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52717, 25.03808]
+			},
+			"properties": {
+				"ID": "cf54be3b-35ab-455a-8d83-12a613028166",
+				"Caption": "鳴石樂集音樂殿堂 謝尚恩小提琴獨奏會",
+				"Company": "鳴石樂集",
+				"StartDate": "2025-06-21 15:00:00",
+				"EndDate": "2025-06-21 16:30:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52717, 25.03808]
+			},
+			"properties": {
+				"ID": "5dca3542-c7bb-4280-851a-7da73ccf733b",
+				"Caption": "鳴石樂集樂壇新秀 丁子晏大提琴獨奏會",
+				"Company": "鳴石樂集",
+				"StartDate": "2025-06-22 14:30:00",
+				"EndDate": "2025-06-22 16:00:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52308, 25.0625]
+			},
+			"properties": {
+				"ID": "63ddb44d-50ec-4c95-9876-f7d492db8b88",
+				"Caption": "【上海商銀】豐富人生｜盧立偉—文藝跨海之行：紐約大都會博物館@台北故宮",
+				"Company": "財團法人上海商業儲蓄銀行文教基金會",
+				"StartDate": "2025-06-23 19:00:00",
+				"EndDate": "2025-06-23 21:00:00",
+				"RelatedLink": "https://www.facebook.com/scsbfoundation",
+				"City": "臺北市",
+				"Area": "中山區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52717, 25.03808]
+			},
+			"properties": {
+				"ID": "e7cea65b-9728-463a-80ce-90cb8f48c7eb",
+				"Caption": "無壓力成人大提琴體驗課，大人學習音樂的最佳選擇！",
+				"Company": "鳴石樂集",
+				"StartDate": "2025-06-25 15:00:00",
+				"EndDate": "2025-06-25 16:15:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.51821, 25.03524]
+			},
+			"properties": {
+				"ID": "e4b08379-7d20-4ee7-81a6-ca27c0753b46",
+				"Caption": "2025節慶長笛樂團音樂會─笛影輕舞的湖光傳說",
+				"Company": "就是愛樂管弦樂團",
+				"StartDate": "2025-06-25 19:00:00",
+				"EndDate": "2025-06-25 21:30:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.47352, 25.13669]
+			},
+			"properties": {
+				"ID": "387d57a1-347e-4d0d-82ae-03310465720a",
+				"Caption": "2025關渡藝術節──《流浪樹》山峸製作設計Ｘ日本52PRO！劇團",
+				"Company": "山峸製作設計有限公司",
+				"StartDate": "2025-06-25 19:30:00",
+				"EndDate": "2025-06-29 14:30:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "北投區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.50714, 25.04071]
+			},
+			"properties": {
+				"ID": "e8d229c1-d280-42c1-a384-e129f3145ea4",
+				"Caption": "【國史館專題演講】用祖先的方法修祖先的路－手作步道的技藝與文化傳承",
+				"Company": "國史館",
+				"StartDate": "2025-06-26 14:00:00",
+				"EndDate": "2025-06-26 16:00:00",
+				"RelatedLink": "https://www.drnh.gov.tw/p/412-1003-163.php?Lang=zh-tw",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52268, 25.04852]
+			},
+			"properties": {
+				"ID": "4709ef94-5c25-43ad-9072-6105f3921364",
+				"Caption": " 【新月．講座】台南的文化遺產與建築",
+				"Company": "新月社",
+				"StartDate": "2025-06-26 19:00:00",
+				"EndDate": "2025-06-26 21:00:00",
+				"RelatedLink": "https://artfocus.com.tw/",
+				"City": "臺北市",
+				"Area": "中山區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.51041, 25.04551]
+			},
+			"properties": {
+				"ID": "623216e4-3aaa-4624-87b4-356368ffddc6",
+				"Caption": "《獨自跳舞 Solo Dance》第二屆舞蹈創作平台演出",
+				"Company": "賴翠霜舞創劇場",
+				"StartDate": "2025-06-27 19:00:00",
+				"EndDate": "2025-06-29 16:30:00",
+				"RelatedLink": "https://www.accupass.com/go/solodance2025 ",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52308, 25.0625]
+			},
+			"properties": {
+				"ID": "ab5a11f0-ea65-4f20-8ed6-342cb2f964d0",
+				"Caption": "【上海商銀】健康樂活｜林昭庚—針灸與工作壓力、緊張焦慮之中西醫養生秘訣",
+				"Company": "財團法人上海商業儲蓄銀行文教基金會",
+				"StartDate": "2025-06-27 19:00:00",
+				"EndDate": "2025-06-27 21:00:00",
+				"RelatedLink": "https://www.accupass.com/event/2505130550381172860158",
+				"City": "臺北市",
+				"Area": "中山區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.54769, 25.05376]
+			},
+			"properties": {
+				"ID": "9ddfc8be-0d7d-4c1c-aab3-551dd64bbfec",
+				"Caption": "【野狼、兔子、Amigo】-偶偶偶劇團",
+				"Company": "財團法人台北行天宮附設玄空圖書館",
+				"StartDate": "2025-06-27 19:00:00",
+				"EndDate": "2025-06-27 21:00:00",
+				"RelatedLink": "https://www.ht.org.tw/p4_introduction25.htm",
+				"City": "臺北市",
+				"Area": "松山區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5181, 25.0352]
+			},
+			"properties": {
+				"ID": "fc496105-cbcf-4de6-8cf7-04eec47bb417",
+				"Caption": "2025新點子實驗場 不二擊聲音製造所 薛詠之 《寄聲之廟》",
+				"Company": " 國家表演藝術中心國家兩廳院",
+				"StartDate": "2025-06-27 19:30:00",
+				"EndDate": "2025-06-29 14:30:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52437, 25.08515]
+			},
+			"properties": {
+				"ID": "da13e727-fce2-4bdf-958d-fc41852e5e4a",
+				"Caption": "2025臺北兒童藝術節",
+				"Company": "臺北市政府、臺北表演藝術中心",
+				"StartDate": "2025-06-28 09:00:00",
+				"EndDate": "2025-08-02 22:00:00",
+				"RelatedLink": "https://tpac.org.taipei/festival-tcaf",
+				"City": "臺北市",
+				"Area": "士林區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52534, 25.02013]
+			},
+			"properties": {
+				"ID": "5e753586-dff1-4348-8b0a-51b0f5a3a3ff",
+				"Caption": "【回憶泡影】客家皮影親子劇✦皮影工作坊",
+				"Company": "影子傳奇劇團",
+				"StartDate": "2025-06-28 13:30:00",
+				"EndDate": "2025-06-29 16:00:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.51295, 25.03584]
+			},
+			"properties": {
+				"ID": "0087f9f0-c640-45e3-a79b-d1b3764b15ce",
+				"Caption": "｛素書樓講堂｝2025年度文化系列講座─閱讀系列─呂思勉先生的四部文字學講義",
+				"Company": "臺北市文化局─錢穆故居",
+				"StartDate": "2025-06-28 14:00:00",
+				"EndDate": "2025-06-28 16:00:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52717, 25.03808]
+			},
+			"properties": {
+				"ID": "879a2caf-2d1a-4208-a192-3238b86131e9",
+				"Caption": "鳴石樂集樂壇新秀 《長號的誘惑》簡祺睿長號獨奏會",
+				"Company": "鳴石樂集",
+				"StartDate": "2025-06-28 14:30:00",
+				"EndDate": "2025-06-28 16:00:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.55192, 25.0484]
+			},
+			"properties": {
+				"ID": "67e92349-d8e3-43df-ad0f-bf74cc7cad37",
+				"Caption": "【周末輕鬆講】綦宗涵《風景畫與心靈療癒》",
+				"Company": "臺北市藝文推廣處",
+				"StartDate": "2025-06-28 14:30:00",
+				"EndDate": "2025-06-28 16:30:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "松山區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.56454, 25.03715]
+			},
+			"properties": {
+				"ID": "8d22e161-1373-4cda-8cf5-cd3ebd435cde",
+				"Caption": "2025臺北相聲大會",
+				"Company": "台北曲藝團",
+				"StartDate": "2025-06-28 14:30:00",
+				"EndDate": "2025-06-29 14:30:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "信義區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52162, 25.04468]
+			},
+			"properties": {
+				"ID": "dd0373c7-9ecb-4e91-aa06-a58c724fbd54",
+				"Caption": "【2025文學向南系列講座】菲律賓的殖民創傷與文化創生：從《老爸的笑聲》談起",
+				"Company": "財團法人社教文化基金會",
+				"StartDate": "2025-06-28 14:30:00",
+				"EndDate": "2025-06-28 16:30:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52717, 25.03808]
+			},
+			"properties": {
+				"ID": "672b2aea-4941-4767-8625-54e5ca57080f",
+				"Caption": "鳴石樂集樂壇新秀《追憶浪漫》溫鎮陽鋼琴獨奏會",
+				"Company": "鳴石樂集",
+				"StartDate": "2025-06-28 19:30:00",
+				"EndDate": "2025-06-28 21:00:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52717, 25.03808]
+			},
+			"properties": {
+				"ID": "a8f6a9aa-4821-4d41-a06d-f76c9f90d42a",
+				"Caption": "鳴石樂集樂壇新秀 施宥安小提琴獨奏會",
+				"Company": "鳴石樂集",
+				"StartDate": "2025-06-29 14:30:00",
+				"EndDate": "2025-06-29 16:00:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.51821, 25.03524]
+			},
+			"properties": {
+				"ID": "566569c7-4802-475e-b4ab-930671acc37d",
+				"Caption": "舒曼：三首弦樂四重奏",
+				"Company": "台北獨奏家室內樂基金會",
+				"StartDate": "2025-06-29 14:30:00",
+				"EndDate": "2025-06-29 16:15:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.53242, 25.01627]
+			},
+			"properties": {
+				"ID": "16bad2b9-f07f-4662-95cc-f7cdc9fa393c",
+				"Caption": "臺灣風情畫",
+				"Company": "雅卓藝術",
+				"StartDate": "2025-06-29 19:30:00",
+				"EndDate": "2025-06-29 21:00:00",
+				"RelatedLink": "https://www.accupass.com/event/2502170646503874448120",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52308, 25.0625]
+			},
+			"properties": {
+				"ID": "4c3baa5b-3ef0-43ed-9c48-8ed6717380a8",
+				"Caption": "【上海商銀】領略聲音之美｜陳景貽—時光旋律機：從迪士尼到輕歌劇的夢幻之旅",
+				"Company": "財團法人上海商業儲蓄銀行文教基金會",
+				"StartDate": "2025-06-30 19:00:00",
+				"EndDate": "2025-06-30 21:00:00",
+				"RelatedLink": "https://www.accupass.com/event/2504290746471245911917",
+				"City": "臺北市",
+				"Area": "中山區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.51821, 25.03524]
+			},
+			"properties": {
+				"ID": "90ea92b9-b33a-4b54-a81f-4b33f6a0174a",
+				"Caption": "第13屆典美公益音樂會《琴鍵上的星光》",
+				"Company": "財團法人典美文化基金會",
+				"StartDate": "2025-06-30 19:30:00",
+				"EndDate": "2025-07-02 21:00:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52329, 25.03635]
+			},
+			"properties": {
+				"ID": "222a10db-3dab-4289-9b8b-7b02c0995b6c",
+				"Caption": "2025「蹲點‧台灣」 暑期偏鄉志工招募！即日起至4/27止",
+				"Company": "點‧台灣｜財團法人中華電信基金會",
+				"StartDate": "2025-07-01 01:00:00",
+				"EndDate": "2025-08-31 23:59:00",
+				"RelatedLink": "https://youth.chtf.org.tw/register",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5218, 25.06715]
+			},
+			"properties": {
+				"ID": "94486f35-5bd4-4fee-ada2-5126419b0a25",
+				"Caption": "2025 小時尚設計夏令營",
+				"Company": "小孩設計工坊",
+				"StartDate": "2025-07-01 09:00:00",
+				"EndDate": "2025-08-08 17:00:00",
+				"RelatedLink": "https://petitemodestudio.pse.is/TPE_SC01",
+				"City": "臺北市",
+				"Area": "中山區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52308, 25.0625]
+			},
+			"properties": {
+				"ID": "788665af-8946-4e26-93d6-e37e25e57d88",
+				"Caption": "【上海商銀】豐富人生 X 音樂天地｜林仁斌VS.謝維庭—樂讀蕭邦－探索音符中的音樂密碼",
+				"Company": "財團法人上海商業儲蓄銀行文教基金會",
+				"StartDate": "2025-07-02 19:00:00",
+				"EndDate": "2025-07-02 21:00:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中山區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.51821, 25.03524]
+			},
+			"properties": {
+				"ID": "04514014-79d5-4356-b3f7-94c222d39ff0",
+				"Caption": "窩噗瘋-薩克斯風重奏團",
+				"Company": "藝之美有限公司",
+				"StartDate": "2025-07-03 19:30:00",
+				"EndDate": "2025-07-05 16:15:00",
+				"RelatedLink": "https://www.newaspect.org.tw/whoopgroup2025",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52717, 25.03808]
+			},
+			"properties": {
+				"ID": "d606f114-a638-470c-9005-ba91b9e683bf",
+				"Caption": "大人合唱課🎵跟著名師學唱歌 無壓力體驗",
+				"Company": "鳴石樂集",
+				"StartDate": "2025-07-04 14:00:00",
+				"EndDate": "2025-07-04 15:30:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52967, 25.0518]
+			},
+			"properties": {
+				"ID": "91f42e7a-cfbd-49b4-a432-dc0a12da306e",
+				"Caption": "7/4(五) 吳駿聲《埃及好好玩》講座",
+				"Company": "發現者旅行社有限公司",
+				"StartDate": "2025-07-04 19:00:00",
+				"EndDate": "2025-07-04 21:00:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中山區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52717, 25.03808]
+			},
+			"properties": {
+				"ID": "10e881eb-bf46-4413-b92a-4a110bc4b552",
+				"Caption": "鳴石樂集樂壇新秀《星樂之音》盧以潔小提琴獨奏會",
+				"Company": "鳴石樂集",
+				"StartDate": "2025-07-04 19:30:00",
+				"EndDate": "2025-07-04 21:00:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5181, 25.0352]
+			},
+			"properties": {
+				"ID": "8b7fd3f9-a567-4ee8-8150-a126479b24e2",
+				"Caption": "2025新點子實驗場 楊乃璇《漚 少年 àu siàu-liân》",
+				"Company": "國家表演藝術中心國家兩廳院",
+				"StartDate": "2025-07-04 19:30:00",
+				"EndDate": "2025-07-06 14:30:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52767, 25.04064]
+			},
+			"properties": {
+				"ID": "9ef5a664-9236-4864-8ab3-45553bc0b676",
+				"Caption": "114年李國鼎故居綠手指_沈秀雀老師_臺灣原生趣味盆栽周末系列課程",
+				"Company": "李國鼎故居",
+				"StartDate": "2025-07-05 14:00:00",
+				"EndDate": "2025-07-05 16:30:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52183, 25.03465]
+			},
+			"properties": {
+				"ID": "c3759fc8-0982-4e63-9ad3-c881e8d2b89d",
+				"Caption": "文學中的二二八或白色恐怖小說 ＜建議高中生以上＞",
+				"Company": "中正紀念堂",
+				"StartDate": "2025-07-05 14:30:00",
+				"EndDate": "2025-07-05 16:30:00",
+				"RelatedLink": "https://event.culture.tw/mocweb/reg/CKSMH/Detail.init.ctr?actId=50518",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.51821, 25.03524]
+			},
+			"properties": {
+				"ID": "a4fb22cb-c938-4d5c-9231-29ab667da8fa",
+				"Caption": "2025陳宥霖鋼琴獨奏會",
+				"Company": "燈角樂團",
+				"StartDate": "2025-07-05 19:30:00",
+				"EndDate": "2025-07-05 21:30:00",
+				"RelatedLink": "https://www.opentix.life/event/1914210407595184129",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52717, 25.03808]
+			},
+			"properties": {
+				"ID": "e53982de-c4af-473c-85ef-f0b9ea9e8fa3",
+				"Caption": "鳴石樂集樂壇新秀 2025陳沛雨鋼琴獨奏會",
+				"Company": "鳴石樂集",
+				"StartDate": "2025-07-06 14:30:00",
+				"EndDate": "2025-07-06 16:00:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.53314, 25.04611]
+			},
+			"properties": {
+				"ID": "17250f87-270e-45f6-b77b-cb2318424d21",
+				"Caption": "2025年7月7日【乙級金工-技術士證照】平日班",
+				"Company": "臺灣珠寶藝術學院",
+				"StartDate": "2025-07-07 09:30:00",
+				"EndDate": "2025-08-15 17:00:00",
+				"RelatedLink": "https://jart.org.tw",
+				"City": "臺北市",
+				"Area": "中山區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52293, 25.02177]
+			},
+			"properties": {
+				"ID": "e04e2d5d-9c3a-4c4a-bd13-481eb0c2c607",
+				"Caption": "2025暑期【書法啟蒙】",
+				"Company": "雅齋兒童書法研習會",
+				"StartDate": "2025-07-07 22:20:00",
+				"EndDate": "2025-07-18 12:00:00",
+				"RelatedLink": "https://www.facebook.com/share/1Aa2KmTaZb/",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52772, 25.03057]
+			},
+			"properties": {
+				"ID": "fe168bae-ab7e-4023-abb7-1315f518d87a",
+				"Caption": "穿越商與周--解讀古代神秘文字",
+				"Company": "國立政治大學公共行政及企業管理教育中心",
+				"StartDate": "2025-07-08 13:30:00",
+				"EndDate": "2025-07-29 16:20:00",
+				"RelatedLink": "https://cpbae.nccu.edu.tw/cpbae/class?id=149&classId=N706B4071",
+				"City": "臺北市",
+				"Area": "大安區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52268, 25.04852]
+			},
+			"properties": {
+				"ID": "f0c98953-ffda-4991-ba2d-b45af7837f89",
+				"Caption": " 【新月．講座】二十世紀編舞大師．探索歐洲當代舞蹈的無限可能",
+				"Company": "新月社",
+				"StartDate": "2025-07-08 14:00:00",
+				"EndDate": "2025-12-09 16:00:00",
+				"RelatedLink": "https://artfocus.com.tw/",
+				"City": "臺北市",
+				"Area": "中山區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.54408, 25.03826]
+			},
+			"properties": {
+				"ID": "af3bddd2-b05b-406a-bfe4-c3f502388e25",
+				"Caption": "跨域的十二夜【五】誰的地景，誰的藝術？",
+				"Company": "台新銀行文化藝術基金會",
+				"StartDate": "2025-07-09 19:00:00",
+				"EndDate": "2025-07-09 21:00:00",
+				"RelatedLink": "https://www.taishinart.org.tw/news-detail/996.html",
+				"City": "臺北市",
+				"Area": "大安區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.51512, 25.05891]
+			},
+			"properties": {
+				"ID": "aea657c1-c186-424b-8ee6-bb53db9c10cc",
+				"Caption": "臺灣新文化運動劇本創作工作坊",
+				"Company": "聚思製造端",
+				"StartDate": "2025-07-10 14:00:00",
+				"EndDate": "2025-07-24 17:00:00",
+				"RelatedLink": "https://docs.google.com/forms/d/e/1FAIpQLSe96IMIeaC5E0-j98xFX0D-ImA6-1i03hsiwJCIfnVxOuVv6A/viewform?fbclid=IwY2xjawKl8J5leHRuA2FlbQIxMABicmlkETFURzNGanFWWGxrZVQ2YTdhAR4CRHN5riOpa79o7WhKV8F92j_L_Tgjlf2w9PeJUjkKrVVfh0U4V4EmvO0dcA_aem_-4ltRgvC0XNKm6tvVQw4hA",
+				"City": "臺北市",
+				"Area": "大同區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52717, 25.03808]
+			},
+			"properties": {
+				"ID": "f6260d6b-8353-49a4-8dee-05a26c6ebafc",
+				"Caption": "鳴石樂集樂壇新秀《波特西尼之夜》羅仕奇低音提琴獨奏會",
+				"Company": "鳴石樂集",
+				"StartDate": "2025-07-12 19:30:00",
+				"EndDate": "2025-07-12 21:00:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52717, 25.03808]
+			},
+			"properties": {
+				"ID": "ade05694-fe7e-449f-9d96-d1176b2768fd",
+				"Caption": "鳴石樂集樂壇新秀 陳宜柔長笛獨奏會",
+				"Company": "鳴石樂集",
+				"StartDate": "2025-07-13 14:30:00",
+				"EndDate": "2025-07-13 16:00:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5181, 25.0352]
+			},
+			"properties": {
+				"ID": "7e35bcdf-a273-481d-b5b9-56d7b77be2e1",
+				"Caption": "2025廳院選《少年Pi的奇幻漂流》",
+				"Company": " 國家表演藝術中心國家兩廳院",
+				"StartDate": "2025-07-17 07:30:00",
+				"EndDate": "2025-07-27 14:30:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52268, 25.04852]
+			},
+			"properties": {
+				"ID": "c4b32242-c552-40c8-a7f3-a0f6338e4d0c",
+				"Caption": "【新月．講座】水融墨變：20世紀東方繪畫的華麗轉身！",
+				"Company": "新月社",
+				"StartDate": "2025-07-18 14:00:00",
+				"EndDate": "2025-10-31 16:00:00",
+				"RelatedLink": "https://artfocus.com.tw/",
+				"City": "臺北市",
+				"Area": "中山區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5404, 25.03367]
+			},
+			"properties": {
+				"ID": "837ec115-a743-4878-8a7d-3f8ce66c9bb7",
+				"Caption": "臺北廣播電臺 114年 「戀戀臺北 夏日演唱會」",
+				"Company": "臺北廣播電臺",
+				"StartDate": "2025-07-19 13:30:00",
+				"EndDate": "2025-07-19 18:30:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "大安區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52717, 25.03808]
+			},
+			"properties": {
+				"ID": "549009a9-c21a-41e7-a7e8-7040a832431a",
+				"Caption": "鳴石樂集樂壇新秀《十鳴禾弦》張十禾小提琴獨奏會",
+				"Company": "鳴石樂集",
+				"StartDate": "2025-07-20 14:30:00",
+				"EndDate": "2025-07-20 16:00:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.51264, 25.05708]
+			},
+			"properties": {
+				"ID": "70312905-e10f-4f8c-ad6a-487759db1015",
+				"Caption": "2025年新芳春茶行兒童夏令營—悠遊茶香時光屋",
+				"Company": "新芳春茶行",
+				"StartDate": "2025-07-23 10:00:00",
+				"EndDate": "2025-08-21 17:00:00",
+				"RelatedLink": "https://www.accupass.com/event/2505140715361930537002",
+				"City": "臺北市",
+				"Area": "大同區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52162, 25.04468]
+			},
+			"properties": {
+				"ID": "2ec8f7af-3312-4774-b3df-92a809758e74",
+				"Caption": "《第一時間，怎麼說、怎麼在？——心理急救認識課》不需要是心理師，也能成為溫柔的第一線",
+				"Company": "財團法人社教文化基金會",
+				"StartDate": "2025-07-25 14:30:00",
+				"EndDate": "2025-07-25 16:30:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.51534, 25.03174]
+			},
+			"properties": {
+				"ID": "e47e7128-c931-47e0-a9a2-12b921dd8286",
+				"Caption": "三缺一劇團 × 蔡茵茵《人類擬態喜劇大賞》&杜逸帆《I am getting old》",
+				"Company": "三缺一劇團",
+				"StartDate": "2025-07-25 19:30:00",
+				"EndDate": "2025-07-27 16:40:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52602, 25.03039]
+			},
+			"properties": {
+				"ID": "dcfaca28-c257-45e8-b068-c3e10ee9752c",
+				"Caption": "2025🎐夏日風鈴祭 X 榕錦時光日式古蹟園區",
+				"Company": "逸居股份有限公司",
+				"StartDate": "2025-07-26 11:00:00",
+				"EndDate": "2025-08-10 19:00:00",
+				"RelatedLink": "https://www.rongjinchoice.com/blogs/news/2025summer",
+				"City": "臺北市",
+				"Area": "大安區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.51295, 25.03584]
+			},
+			"properties": {
+				"ID": "48f9889f-ae7f-4aaa-a61b-3a86d46daae3",
+				"Caption": "｛素書樓講堂｝2025年度文化與歷史系列講座─陳喬兵變，黃袍加身的真相",
+				"Company": "臺北市文化局─錢穆故居",
+				"StartDate": "2025-07-26 14:00:00",
+				"EndDate": "2025-07-26 16:00:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52717, 25.03808]
+			},
+			"properties": {
+				"ID": "9796a124-18b9-4535-b89a-b3489e08b279",
+				"Caption": "鳴石樂集樂壇新秀 《跨越世紀的琴聲》鄭元睿大提琴獨奏會",
+				"Company": "鳴石樂集",
+				"StartDate": "2025-07-26 19:30:00",
+				"EndDate": "2025-07-26 21:00:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52717, 25.03808]
+			},
+			"properties": {
+				"ID": "4f1164e2-5742-4abe-8cb4-f6a62da64476",
+				"Caption": "2025 Concerto Taipei 古典樂派音樂節 講座音樂會 & 工作坊",
+				"Company": "鳴石樂集",
+				"StartDate": "2025-07-28 09:30:00",
+				"EndDate": "2025-07-31 19:00:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52767, 25.04064]
+			},
+			"properties": {
+				"ID": "3458e4fc-2d77-4cee-9b19-2abfe7669d53",
+				"Caption": "114年李國鼎故居綠手指_沈秀雀老師_臺灣原生趣味盆栽周末系列課程",
+				"Company": "李國鼎故居",
+				"StartDate": "2025-08-02 14:00:00",
+				"EndDate": "2025-08-02 16:30:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52717, 25.03808]
+			},
+			"properties": {
+				"ID": "29b07444-4452-4c14-b247-ee237a650b31",
+				"Caption": "鳴石樂集樂壇新秀《綻放》丞妍 & 可芸的音樂會",
+				"Company": "鳴石樂集",
+				"StartDate": "2025-08-03 14:30:00",
+				"EndDate": "2025-08-03 16:00:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52772, 25.03057]
+			},
+			"properties": {
+				"ID": "4b69e501-d22f-4114-a4ca-d8349271310a",
+				"Caption": "穿越商與周--欣賞青銅器",
+				"Company": "國立政治大學公共行政及企業管理教育中心",
+				"StartDate": "2025-08-05 13:30:00",
+				"EndDate": "2025-08-26 16:20:00",
+				"RelatedLink": "https://cpbae.nccu.edu.tw/cpbae/class?id=4&classId=N706B4081",
+				"City": "臺北市",
+				"Area": "大安區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52717, 25.03808]
+			},
+			"properties": {
+				"ID": "a7e85418-2d48-47ea-aa52-606dfa367fa4",
+				"Caption": "鳴石樂集樂壇新秀 璩偉丞大提琴獨奏會",
+				"Company": "鳴石樂集",
+				"StartDate": "2025-08-09 19:30:00",
+				"EndDate": "2025-08-09 21:00:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52717, 25.03808]
+			},
+			"properties": {
+				"ID": "c641a059-6043-4c40-8c01-d3547b1d34f7",
+				"Caption": "鳴石樂集樂壇新秀《樂界》 Music Beyond Borders 鄧若辰首場薩克斯風獨奏會",
+				"Company": "鳴石樂集",
+				"StartDate": "2025-08-10 14:30:00",
+				"EndDate": "2025-08-10 17:00:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5102, 25.043]
+			},
+			"properties": {
+				"ID": "fd54986f-e8fe-4a85-858d-5c6a66d2bfe4",
+				"Caption": "【2025 TSO 夏日音樂漫步】 莊東杰、張凱閔與TSO",
+				"Company": "臺北市立交響樂團",
+				"StartDate": "2025-08-10 14:30:00",
+				"EndDate": "2025-08-10 16:00:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.51821, 25.03524]
+			},
+			"properties": {
+				"ID": "1e191915-3276-4b41-9d3a-12a5328014b5",
+				"Caption": "Liebe 聶羽萱雙簧管獨奏會",
+				"Company": "燈角樂團",
+				"StartDate": "2025-08-10 19:30:00",
+				"EndDate": "2025-08-10 21:30:00",
+				"RelatedLink": "https://www.opentix.life/event/1915573557359464449",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.54408, 25.03826]
+			},
+			"properties": {
+				"ID": "e1d48011-db89-44ff-b006-08f26a1f60d5",
+				"Caption": "跨域的十二夜【六】應用劇場的跨域性",
+				"Company": "台新銀行文化藝術基金會",
+				"StartDate": "2025-08-13 19:00:00",
+				"EndDate": "2025-08-13 21:00:00",
+				"RelatedLink": "https://www.taishinart.org.tw/news-detail/996.html",
+				"City": "臺北市",
+				"Area": "大安區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.51821, 25.03524]
+			},
+			"properties": {
+				"ID": "db7f4a1f-f00f-4738-a289-33013dc0bf76",
+				"Caption": "【2025 TSO 夏日音樂漫步】TSO、林易與好朋友們─德法篇",
+				"Company": "臺北市立交響樂團",
+				"StartDate": "2025-08-15 19:30:00",
+				"EndDate": "2025-08-15 21:30:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52717, 25.03808]
+			},
+			"properties": {
+				"ID": "ea6a68b5-9040-416c-8bb0-5cabe591ed79",
+				"Caption": "2025 鳴石鋼琴音樂節 TT PianoFest《88交響琴鍵》",
+				"Company": "鳴石樂集",
+				"StartDate": "2025-08-17 13:30:00",
+				"EndDate": "2025-08-28 17:00:00",
+				"RelatedLink": "https://www.accupass.com/event/2504020134091864911796",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5102, 25.043]
+			},
+			"properties": {
+				"ID": "6d0b6419-0682-4045-a750-450ca8b66ae7",
+				"Caption": "【2025 TSO 夏日音樂漫步】 莊東杰、林易、賈基夫、莫羅與TSO",
+				"Company": "臺北市立交響樂團",
+				"StartDate": "2025-08-17 14:30:00",
+				"EndDate": "2025-08-17 16:00:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52293, 25.02177]
+			},
+			"properties": {
+				"ID": "5cdfc80b-da2b-4d2a-b8b7-41e79208aae6",
+				"Caption": "2005暑期【專注剪紙】",
+				"Company": "琥珀傳統藝術工作群",
+				"StartDate": "2025-08-18 15:50:00",
+				"EndDate": "2025-08-22 17:30:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.51821, 25.03524]
+			},
+			"properties": {
+				"ID": "313e5bda-9184-4f64-81de-4f088566f2a4",
+				"Caption": "【2025 TSO 夏日音樂漫步】TSO、林易與好朋友們─俄國篇",
+				"Company": "臺北市立交響樂團",
+				"StartDate": "2025-08-20 19:30:00",
+				"EndDate": "2025-08-20 21:30:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.56059, 25.04395]
+			},
+			"properties": {
+				"ID": "f8024561-60b6-4a4a-a303-97041a624cdb",
+				"Caption": "2025台北新藝術博覽會《居然 · 藝術生活展》",
+				"Company": "社團法人台灣國際當代藝術家協會",
+				"StartDate": "2025-08-22 11:00:00",
+				"EndDate": "2025-08-24 18:00:00",
+				"RelatedLink": "https://www.arts.org.tw/",
+				"City": "臺北市",
+				"Area": "信義區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.51821, 25.03524]
+			},
+			"properties": {
+				"ID": "272d6a9d-9d85-45b1-8fb6-bc0b1fef7b70",
+				"Caption": "【2025 TSO 夏日音樂漫步】TSO、林易與好朋友們─德奧篇",
+				"Company": "臺北市立交響樂團",
+				"StartDate": "2025-08-22 19:30:00",
+				"EndDate": "2025-08-22 21:30:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.50729, 25.04214]
+			},
+			"properties": {
+				"ID": "ebc0c776-eb9a-4eb6-9054-f5be70d7bc61",
+				"Caption": "三缺一劇團 × 何冠儀《大伙快炒》",
+				"Company": "三缺一劇團",
+				"StartDate": "2025-08-22 19:30:00",
+				"EndDate": "2025-08-24 16:00:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "萬華區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.51295, 25.03584]
+			},
+			"properties": {
+				"ID": "46eb542c-4098-4762-9423-da075b2089b7",
+				"Caption": "｛素書樓講堂｝2025年度文化系列講座─閱讀系列─呂思勉先生「史學名著選讀」講義二種",
+				"Company": "臺北市文化局─錢穆故居",
+				"StartDate": "2025-08-23 14:00:00",
+				"EndDate": "2025-08-23 16:00:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52437, 25.08515]
+			},
+			"properties": {
+				"ID": "606b9b63-bccd-4bf4-b6c9-00d2315d6d1e",
+				"Caption": "國際共製大型音樂劇《囍宴 The Wedding Banquet》",
+				"Company": "華文環球藝術娛樂股份有限公司",
+				"StartDate": "2025-08-30 14:30:00",
+				"EndDate": "2025-09-07 14:30:00",
+				"RelatedLink": "https://huaent.tw/en18OqIVz",
+				"City": "臺北市",
+				"Area": "士林區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.51821, 25.03524]
+			},
+			"properties": {
+				"ID": "9f7a050d-da0f-4670-a483-0b1918986939",
+				"Caption": "陳渝真鋼琴獨奏會",
+				"Company": "燈角樂團",
+				"StartDate": "2025-09-06 14:30:00",
+				"EndDate": "2025-09-06 16:30:00",
+				"RelatedLink": "https://www.opentix.life/event/1924387953734569985",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.5102, 25.043]
+			},
+			"properties": {
+				"ID": "4388347d-b3d1-428e-937b-c817e963c085",
+				"Caption": "【 TSO名家系列】重返1806─維特哈絲與TSO",
+				"Company": "臺北市立交響樂團",
+				"StartDate": "2025-09-06 19:30:00",
+				"EndDate": "2025-09-06 21:30:00",
+				"RelatedLink": "https://www.opentix.life/event/1862132733156151296",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52767, 25.04064]
+			},
+			"properties": {
+				"ID": "b9586e5f-7166-44a4-9ee9-fc83eac549a2",
+				"Caption": "114年李國鼎故居綠手指_沈秀雀老師_臺灣原生趣味盆栽周末系列課程",
+				"Company": "李國鼎故居",
+				"StartDate": "2025-09-13 14:00:00",
+				"EndDate": "2025-09-13 16:30:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.51821, 25.03524]
+			},
+			"properties": {
+				"ID": "6b77e11a-4d88-4d44-9aa0-fdd64a48ee40",
+				"Caption": "【2025 TSO名家系列】卡特、梁仁模與TSO",
+				"Company": "臺北市立交響樂團",
+				"StartDate": "2025-09-13 19:30:00",
+				"EndDate": "2025-09-13 21:30:00",
+				"RelatedLink": "https://www.opentix.life/event/1862135709833277441",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.51821, 25.03524]
+			},
+			"properties": {
+				"ID": "0b71b119-8a1d-42ff-848d-48c19f42e251",
+				"Caption": "曼陀林的平行宇宙",
+				"Company": "臺灣曼陀林樂團",
+				"StartDate": "2025-09-21 19:30:00",
+				"EndDate": "2025-09-21 21:00:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52268, 25.04852]
+			},
+			"properties": {
+				"ID": "4b530c70-5b84-451f-b4c1-ac07e7fbcf3b",
+				"Caption": "【新月．建築講座】李乾朗教授談：建築畫與建築",
+				"Company": "新月社",
+				"StartDate": "2025-09-25 19:00:00",
+				"EndDate": "2025-11-27 21:00:00",
+				"RelatedLink": "https://docs.google.com/forms/d/e/1FAIpQLScWRgVs--jEAPh9oTmB373tp6wxY4wwofWIAkWb2JrD3ZC8aA/viewform",
+				"City": "臺北市",
+				"Area": "中山區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52268, 25.04852]
+			},
+			"properties": {
+				"ID": "838ef7a9-8039-4ee5-b90d-4decc0301aa1",
+				"Caption": "2025 九月 漫步巴黎 人文藝術輕旅行",
+				"Company": "新月藝文",
+				"StartDate": "2025-09-27 23:00:00",
+				"EndDate": "2025-10-06 11:00:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中山區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.51934, 25.03713]
+			},
+			"properties": {
+				"ID": "5e1fcdc6-00fb-41b6-ae2d-96f0af738897",
+				"Caption": "【2025 TSO 大師系列】殷巴爾、白建宇與TSO",
+				"Company": "臺北市立交響樂團",
+				"StartDate": "2025-10-03 19:30:00",
+				"EndDate": "2025-10-03 21:30:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.51534, 25.03174]
+			},
+			"properties": {
+				"ID": "a5c1425b-696a-4fac-8705-bf1663f7764e",
+				"Caption": "三缺一劇團 × 陳瑞祥《野犬》",
+				"Company": "三缺一劇團",
+				"StartDate": "2025-10-10 19:30:00",
+				"EndDate": "2025-10-12 16:00:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52767, 25.04064]
+			},
+			"properties": {
+				"ID": "a3624f03-3edf-4bd3-9043-26ffbf77620f",
+				"Caption": "114年李國鼎故居綠手指_沈秀雀老師_臺灣原生趣味盆栽周末系列課程",
+				"Company": "李國鼎故居",
+				"StartDate": "2025-10-25 14:00:00",
+				"EndDate": "2025-10-25 16:30:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52268, 25.04852]
+			},
+			"properties": {
+				"ID": "ec3cba6e-f91c-4fbc-b543-0beb130d26c2",
+				"Caption": "2025南疆 探尋西域古國千年輝煌 藝文參訪",
+				"Company": "新月藝文",
+				"StartDate": "2025-10-27 13:30:00",
+				"EndDate": "2025-11-08 11:15:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中山區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.51934, 25.03713]
+			},
+			"properties": {
+				"ID": "43ceebce-acb7-4cdd-afbb-beff0ee65589",
+				"Caption": "【2025 TSO大師系列】殷巴爾、李映衡與TSO",
+				"Company": "臺北市立交響樂團",
+				"StartDate": "2025-11-02 19:30:00",
+				"EndDate": "2025-11-02 21:30:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.51934, 25.03713]
+			},
+			"properties": {
+				"ID": "1c744d20-6f3c-4b0a-a5d8-097a5d2e5e1a",
+				"Caption": "【2025 TSO大師系列】殷巴爾、秦立巍與TSO",
+				"Company": "臺北市立交響樂團",
+				"StartDate": "2025-11-15 19:30:00",
+				"EndDate": "2025-11-15 21:30:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.52767, 25.04064]
+			},
+			"properties": {
+				"ID": "6d1fd7be-408c-4e99-bad5-8d38ffe05797",
+				"Caption": "114年李國鼎故居綠手指_沈秀雀老師_臺灣原生趣味盆栽周末系列課程",
+				"Company": "李國鼎故居",
+				"StartDate": "2025-11-22 14:00:00",
+				"EndDate": "2025-11-22 16:30:00",
+				"RelatedLink": "",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		},
+		{
+			"type": "Feature",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [121.51821, 25.03524]
+			},
+			"properties": {
+				"ID": "4e1b3c45-d047-463c-a1dc-a0ef5e334a60",
+				"Caption": "【TSO特別企劃】候任首席指揮里柏瑞契、蓋哈特與TSO",
+				"Company": "臺北市立交響樂團",
+				"StartDate": "2025-11-27 19:30:00",
+				"EndDate": "2025-11-27 21:30:00",
+				"RelatedLink": "https://www.opentix.life/event/1895028360018948096",
+				"City": "臺北市",
+				"Area": "中正區"
+			}
+		}
+	]
+}

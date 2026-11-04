@@ -1,0 +1,4 @@
+business_district--people
+
+0//未有鄰近捷運站
+1//其他情況

@@ -1,0 +1,11 @@
+min_price_range,color,description
+<2000,#1a9850,Very Cheap
+2000-2999,#91cf60,Cheap
+3000-3999,#fee08b,Moderate
+4000-4999,#fc8d59,Expensive
+>=5000,#d73027,Very Expensive
+
+,,"
+"
+,"
+"
