@@ -1,0 +1,38 @@
+{
+  "dag_infos": {
+    "dag_id": "schools_distribution",
+    "start_date": "2026-05-22",
+    "schedule_interval": "@daily",
+    "catchup": false,
+    "tags": ["schools", "education", "Taipei-City"],
+    "description": "Daily import of Taipei schools distribution (elementary, junior high, senior high, special education, municipal tertiary) from data.gov.tw dataset 121225.",
+    "default_args": {
+      "owner": "airflow",
+      "email": ["DEFAULT_EMAIL_LIST"],
+      "email_on_retry": false,
+      "email_on_failure": true,
+      "retries": 1,
+      "retry_delay": 60
+    },
+    "ready_data_db": "postgres_default",
+    "ready_data_default_table": "schools_distribution",
+    "ready_data_history_table": "",
+    "raw_data_db": "postgres_default",
+    "raw_data_table": "",
+    "load_behavior": "replace"
+  },
+  "data_infos": {
+    "name_cn": "臺北市各級學校分布圖",
+    "airflow_update_freq": "daily",
+    "source": "https://data.gov.tw/dataset/121225",
+    "source_type": "CKAN_dataset",
+    "source_dept": "Ministry / City Open Data",
+    "gis_format": "geojson",
+    "output_coordinate": "EPSG:4326",
+    "is_geometry": 1,
+    "component_name": "schools_distribution_map",
+    "dataset_description": "臺北市各級學校分布資料 (每日更新)",
+    "etl_description": "Fetch CKAN package, pick geojson resource, normalize columns, add wkb_geometry, save to postgres",
+    "sensitivity": "public"
+  }
+}
