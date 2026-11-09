@@ -118,7 +118,13 @@ export const useChatStore = defineStore("chat", () => {
 		chatData,
 		(newVal) => {
 			// 只存使用者與機器人的聊天訊息，不存重複的預設訊息
-			const userBotMessages = newVal.filter((item) => !item.isDefault);
+			const userBotMessages = newVal
+				.filter((item) => !item.isDefault)
+				.map((item) => {
+					const copy = { ...item };
+					delete copy.typewriter;
+					return copy;
+				});
 			sessionStorage.setItem("chatData", JSON.stringify(userBotMessages));
 		},
 		{ deep: true },
@@ -245,130 +251,6 @@ export const useChatStore = defineStore("chat", () => {
 		await getChatSessionDetail(session);
 	};
 
-	const findJsonValueEnd = (text, start) => {
-		let depth = 0;
-		let inString = false;
-		let escaped = false;
-
-		for (let i = start; i < text.length; i++) {
-			const ch = text[i];
-			if (inString) {
-				if (escaped) {
-					escaped = false;
-				} else if (ch === "\\") {
-					escaped = true;
-				} else if (ch === '"') {
-					inString = false;
-				}
-				continue;
-			}
-			if (ch === '"') {
-				inString = true;
-			} else if (ch === "{" || ch === "[") {
-				depth += 1;
-			} else if (ch === "}" || ch === "]") {
-				depth -= 1;
-				if (depth === 0) {
-					return i + 1;
-				}
-			}
-		}
-		return -1;
-	};
-
-	// 只取出 data 陣列裡已經收完的物件，後半段還沒到齊的 JSON 先略過。
-	const parsePartialVectorData = (input) => {
-		const marker = '"data":';
-		const markerAt = input.indexOf(marker);
-		if (markerAt < 0) {
-			return [];
-		}
-
-		let index = markerAt + marker.length;
-		while (index < input.length && /\s/.test(input[index])) {
-			index += 1;
-		}
-		if (input[index] !== "[") {
-			return [];
-		}
-		index += 1;
-
-		const items = [];
-		while (index < input.length) {
-			while (index < input.length && /[\s,]/.test(input[index])) {
-				index += 1;
-			}
-			if (index >= input.length || input[index] === "]") {
-				break;
-			}
-			if (input[index] !== "{") {
-				break;
-			}
-			const end = findJsonValueEnd(input, index);
-			if (end < 0) {
-				break;
-			}
-			try {
-				items.push(JSON.parse(input.slice(index, end)));
-			} catch {
-				break;
-			}
-			index = end;
-		}
-		return items;
-	};
-
-	const dedupeComponents = (list) =>
-		Array.from(
-			(list || [])
-				.reduce((map, item) => {
-					const key = item.index;
-					const exist = map.get(key);
-					if (!exist || item.city === "metrotaipei") {
-						map.set(key, item);
-					}
-					return map;
-				}, new Map())
-				.values(),
-		);
-
-	const readVectorStream = async (response, onItems) => {
-		const reader = response.body.getReader();
-		const decoder = new TextDecoder();
-		let pending = "";
-		let jsonBuffer = "";
-
-		const consumeBlock = (block) => {
-			block.split("\n").forEach((line) => {
-				if (!line.startsWith("data:")) {
-					return;
-				}
-				const data = line.slice(5).trimStart();
-				if (!data || data === "[DONE]") {
-					return;
-				}
-				jsonBuffer += data;
-				onItems(parsePartialVectorData(jsonBuffer));
-			});
-		};
-
-		while (true) {
-			const { value, done } = await reader.read();
-			if (done) {
-				break;
-			}
-			pending += decoder.decode(value, { stream: true });
-			const parts = pending.split("\n\n");
-			pending = parts.pop() ?? "";
-			parts.forEach(consumeBlock);
-		}
-		pending += decoder.decode();
-		if (pending) {
-			consumeBlock(pending);
-		}
-		return parsePartialVectorData(jsonBuffer);
-	};
-
 	const addQueryData = async (newChatData) => {
 		chatData.value.push({
 			id: chatData.value.length + 1,
@@ -377,86 +259,89 @@ export const useChatStore = defineStore("chat", () => {
 		});
 
 		recommendComponents.value = [];
+		let topK = null;
 		const sessionName = resolveSessionName();
-		let listMessageIndex = -1;
-		let dashMap = null;
-
-		const publishList = (list) => {
-			const result = dedupeComponents(list).sort(
-				(a, b) => b.score - a.score,
-			);
-			recommendComponents.value = result;
-			if (dashMap && result.length) {
-				applyDashboardMap(result, dashMap);
-			}
-			if (!result.length) {
-				return;
-			}
-			if (listMessageIndex < 0) {
-				listMessageIndex = chatData.value.length;
-				chatData.value.push({
-					id: chatData.value.length + 1,
-					role: "bot",
-					isDefault: false,
-					button: [{ id: 1, text: "建立儀表板" }],
-					content: `您好 😊 \n 以下是根據您的問題，自動為您推薦的「組件清單」。您可以將這些組件整批加入「個人儀表板」，方便日後快速查看與使用。\n`,
-					relations: result,
-				});
-				return;
-			}
-			chatData.value[listMessageIndex].relations = result;
-		};
 
 		try {
-			const dashboardsPromise = http
-				.get(`/dashboard/`)
-				.then((dashboards) => {
-					dashMap = dashboards.data.data;
-					if (recommendComponents.value?.length) {
-						applyDashboardMap(recommendComponents.value, dashMap);
-					}
-				})
-				.catch((error) => {
-					console.error("mapComponentsToDashboards error:", error);
-				});
-			const base = String(import.meta.env.VITE_API_URL || "").replace(
-				/\/$/,
-				"",
-			);
-			const response = await fetch(`${base}/vector/component/stream`, {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/x-www-form-urlencoded",
-					Authorization: authStore.token
-						? `Bearer ${authStore.token}`
-						: "Bearer",
-				},
-				body: new URLSearchParams({
+			const response = await http.post(
+				"/vector/component",
+				new URLSearchParams({
 					query: newChatData.content,
 					limit: 10,
 					score: 0.8,
 					session: sessionName,
 				}),
-			});
+				{
+					headers: {
+						"Content-Type": "application/x-www-form-urlencoded",
+					},
+				},
+			);
 
-			if (!response.ok) {
-				throw new Error(`vector stream failed: ${response.status}`);
-			}
 			if (!activeChatSession.value) {
 				activeChatSession.value = sessionName;
 			}
 
-			await readVectorStream(response, publishList);
-			await dashboardsPromise;
+			const dashboards = await http.get(`/dashboard/`);
+
+			const compList = response.data.data;
+			const dashMap = dashboards.data.data;
+
+			applyDashboardMap(compList, dashMap);
+
+			if (response.data?.data?.length > 0) {
+				recommendComponents.value = response.data.data;
+			}
+
+			// 去除重複項目存到 result
+			const result = Array.from(
+				recommendComponents.value
+					.reduce((map, item) => {
+						const key = item.index;
+						const exist = map.get(key);
+
+						// 如果還沒放過，直接放
+						if (!exist) {
+							map.set(key, item);
+							return map;
+						}
+
+						// 如果已存在，但現在的是 metrotaipei，就覆蓋
+						if (item.city === "metrotaipei") {
+							map.set(key, item);
+						}
+
+						return map;
+					}, new Map())
+					.values(),
+			);
+			// 把 result 蓋回去 recommendComponents
+			recommendComponents.value = result;
 		} catch (error) {
 			console.error("VectorAnalysisError :", error);
 		}
 
-		if (recommendComponents.value?.length > 0) {
+		if (
+			recommendComponents.value &&
+			recommendComponents.value?.length > 0
+		) {
+			topK = [...recommendComponents.value].sort(
+				(a, b) => b.score - a.score,
+			);
 			chatData.value.push({
 				id: chatData.value.length + 1,
 				role: "bot",
 				isDefault: false,
+				typewriter: true,
+				button: [{ id: 1, text: "建立儀表板" }],
+				content: `您好 😊 \n 以下是根據您的問題，自動為您推薦的「組件清單」。您可以將這些組件整批加入「個人儀表板」，方便日後快速查看與使用。\n`,
+				relations: topK,
+			});
+			chatData.value.push({
+				id: chatData.value.length + 1,
+				role: "bot",
+				isDefault: false,
+				typewriter: true,
 				content: `若您有任何新的查詢或想深入探索的內容，都可以隨時在對話框告訴我～\n 我很樂意再協助您 💬✨`,
 			});
 		} else {
@@ -464,11 +349,12 @@ export const useChatStore = defineStore("chat", () => {
 				id: chatData.value.length + 1,
 				role: "bot",
 				isDefault: false,
+				typewriter: true,
 				content: `很抱歉，您提供的描述沒有相似組件，請繼續提問 ! `,
 			});
 		}
 
-		// 問答紀錄由 /vector/component/stream 在後端寫入，這裡只更新近一月對話列表
+		// 問答紀錄由 /vector/component 在後端寫入，這裡只更新近一月對話列表
 		if (user.value?.user_id) {
 			await getChatSessionList();
 		}
@@ -501,8 +387,10 @@ export const useChatStore = defineStore("chat", () => {
 			if (!activeChatSession.value) {
 				activeChatSession.value = sessionName;
 			}
+			return true;
 		} catch (error) {
 			console.error("saveChatLog error:", error);
+			return false;
 		}
 	};
 
