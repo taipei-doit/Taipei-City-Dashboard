@@ -1,10 +1,14 @@
-import { ref, watch } from 'vue'
-import { defineStore } from 'pinia'
+import { ref, watch } from "vue";
+import { defineStore, storeToRefs } from "pinia";
 import http from "../router/axios";
+import { useAuthStore } from "./authStore";
 
-export const useChatStore = defineStore('chat', () => {
-  	// 預設訊息
-  	const defaultChatData = [
+export const useChatStore = defineStore("chat", () => {
+	const authStore = useAuthStore();
+	const { user } = storeToRefs(authStore);
+
+	// 預設訊息
+	const defaultChatData = [
 		{
 			id: 1,
 			role: "bot",
@@ -14,92 +18,239 @@ export const useChatStore = defineStore('chat', () => {
 		},
 	];
 
-	const recommendComponents = ref(null)
+	const recommendComponents = ref(null);
 
 	// 儲存組件對應主題
 	const compToDashIndexMap = ref({});
 
-  	// 從 sessionStorage 讀取
-  	const savedChatData = JSON.parse(sessionStorage.getItem('chatData')) || [];
+	// 近一月對話列表與目前開啟的對話
+	const chatSessionList = ref([]);
+	const activeChatSession = ref(
+		sessionStorage.getItem("activeChatSession") || null,
+	);
 
-  	// 拼接預設訊息 + sessionStorage 的聊天紀錄
-  	const chatData = ref([...defaultChatData, ...savedChatData]);
+	// 從 sessionStorage 讀取
+	const savedChatData = JSON.parse(sessionStorage.getItem("chatData")) || [];
 
-	// 初始化時重建 compToDashIndexMap
-	const rebuildCompToDashIndexMap = async () => {
-		// 收集所有 relations 裡的組件
-		const allComps = savedChatData.flatMap((msg) => msg.relations || []);
+	// 拼接預設訊息 + sessionStorage 的聊天紀錄
+	const chatData = ref([...defaultChatData, ...savedChatData]);
 
-		if (allComps.length === 0) return;
+	const unescapeHtml = (value) =>
+		String(value)
+			.replace(/&#34;/g, '"')
+			.replace(/&#39;/g, "'")
+			.replace(/&lt;/g, "<")
+			.replace(/&gt;/g, ">")
+			.replace(/&amp;/g, "&");
+
+	const decodeAnswer = (answer) => {
+		const raw = unescapeHtml(answer);
+		try {
+			return JSON.parse(raw);
+		} catch {
+			return raw;
+		}
+	};
+
+	const applyDashboardMap = (compList, dashMap) => {
+		compList.forEach((comp) => {
+			const matched = [];
+
+			Object.entries(dashMap).forEach(([city, cityDashboards]) => {
+				cityDashboards.forEach((dash) => {
+					if (dash.components.includes(comp.id)) {
+						// 避免同名主題重複加入
+						if (
+							!matched.some(
+								(item) =>
+									item.index === dash.index &&
+									item.city === city,
+							)
+						) {
+							matched.push({
+								name: dash.name,
+								index: dash.index,
+								city: city,
+							});
+						}
+					}
+				});
+			});
+
+			compToDashIndexMap.value[comp.id] = matched;
+		});
+	};
+
+	const mapComponentsToDashboards = async (compList) => {
+		if (!compList?.length) return;
 
 		try {
 			const dashboards = await http.get(`/dashboard/`);
-			const dashMap = dashboards.data.data;
-
-			allComps.forEach((comp) => {
-				const matched = [];
-
-				Object.entries(dashMap).forEach(([city,cityDashboards]) => {
-					cityDashboards.forEach((dash) => {
-						if (dash.components.includes(comp.id)) {
-							if (!matched.some((m) => m.index === dash.index && m.city === city)) {
-								matched.push({
-									name: dash.name,
-									index: dash.index,
-									city: city
-								});
-							}
-						}
-					});
-				});
-
-				compToDashIndexMap.value[comp.id] = matched;
-			});
+			applyDashboardMap(compList, dashboards.data.data);
 		} catch (error) {
-			console.error("rebuildCompToDashIndexMap error:", error);
+			console.error("mapComponentsToDashboards error:", error);
 		}
+	};
+
+	// 初始化時重建 compToDashIndexMap
+	const rebuildCompToDashIndexMap = async () => {
+		const allComps = savedChatData.flatMap((msg) => msg.relations || []);
+		await mapComponentsToDashboards(allComps);
 	};
 
 	// 有舊資料才重建
 	if (savedChatData.length > 0) {
-  		rebuildCompToDashIndexMap();
+		rebuildCompToDashIndexMap();
 	}
 
-  	// 監聽 chatData 的變化，自動同步到 sessionStorage
-  	watch(
-    	chatData,
-    	(newVal) => {
-      	// 只存使用者與機器人的聊天訊息，不存重複的預設訊息
-      	const userBotMessages = newVal.filter((item) => !item.isDefault)
-      	sessionStorage.setItem('chatData', JSON.stringify(userBotMessages))
-    	},
-    	{ deep: true }
-  	);
+	// 監聽 chatData 的變化，自動同步到 sessionStorage
+	watch(
+		chatData,
+		(newVal) => {
+			// 只存使用者與機器人的聊天訊息，不存重複的預設訊息
+			const userBotMessages = newVal.filter((item) => !item.isDefault);
+			sessionStorage.setItem("chatData", JSON.stringify(userBotMessages));
+		},
+		{ deep: true },
+	);
 
-  	const addChatData = (newChatData) => {
-    	chatData.value.push({ id: chatData.value.length + 1, isDefault: false, ...newChatData });
-  	};
+	watch(activeChatSession, (session) => {
+		if (session) {
+			sessionStorage.setItem("activeChatSession", session);
+		} else {
+			sessionStorage.removeItem("activeChatSession");
+		}
+	});
 
-  	const addQueryData = async (newChatData) => {
+	const addChatData = (newChatData) => {
+		chatData.value.push({
+			id: chatData.value.length + 1,
+			isDefault: false,
+			...newChatData,
+		});
+	};
 
-    	chatData.value.push({ id: chatData.value.length + 1, isDefault: false, ...newChatData });
+	// 取得近一月對話列表
+	const getChatSessionList = async () => {
+		try {
+			const response = await http.get("/chatlog/session");
+			const sessionListRaw = response.data?.data || [];
+			const oneMonthAgo = Date.now() - 30 * 24 * 60 * 60 * 1000;
+
+			chatSessionList.value = sessionListRaw
+				.filter(
+					(item) =>
+						new Date(item.created_at).getTime() >= oneMonthAgo,
+				)
+				.sort(
+					(a, b) =>
+						new Date(b.created_at).getTime() -
+						new Date(a.created_at).getTime(),
+				);
+		} catch (error) {
+			console.error("getChatSessionList error:", error);
+		}
+	};
+
+	// 取得指定對話的訊息，並還原成目前聊天內容
+	const getChatSessionDetail = async (sessionName) => {
+		try {
+			const response = await http.get(
+				`/chatlog/session/${sessionName}`,
+			);
+			const logs = [...(response.data?.data || [])].sort(
+				(a, b) =>
+					new Date(a.created_at) - new Date(b.created_at) ||
+					a.id - b.id,
+			);
+
+			chatData.value = [...defaultChatData];
+			const components = [];
+
+			logs.forEach((item) => {
+				if (item.question) {
+					addChatData({
+						role: "user",
+						content: unescapeHtml(item.question),
+					});
+				}
+
+				if (
+					!item.answer ||
+					item.answer === "null" ||
+					item.answer === "[]"
+				) {
+					return;
+				}
+
+				const decoded = decodeAnswer(item.answer);
+
+				if (item.question === "建立儀表板") {
+					addChatData({
+						role: "bot",
+						content:
+							typeof decoded === "string"
+								? decoded
+								: "使用者成功建立儀表板!",
+					});
+					return;
+				}
+
+				if (Array.isArray(decoded) && decoded.length > 0) {
+					const relations = [...decoded].sort(
+						(a, b) => b.score - a.score,
+					);
+					components.push(...relations);
+					addChatData({
+						role: "bot",
+						button: [{ id: 1, text: "建立儀表板" }],
+						content:
+							"您好 😊 \n 以下是根據您的問題，自動為您推薦的「組件清單」。您可以將這些組件整批加入「個人儀表板」，方便日後快速查看與使用。\n",
+						relations,
+					});
+				}
+			});
+
+			if (components.length > 0) {
+				await mapComponentsToDashboards(components);
+			}
+		} catch (error) {
+			console.error("getChatSessionDetail error:", error);
+		}
+	};
+
+	const openChatSession = async (session) => {
+		activeChatSession.value = session;
+		if (!session) {
+			chatData.value = [...defaultChatData];
+			return;
+		}
+		await getChatSessionDetail(session);
+	};
+
+	const addQueryData = async (newChatData) => {
+		chatData.value.push({
+			id: chatData.value.length + 1,
+			isDefault: false,
+			...newChatData,
+		});
 
 		recommendComponents.value = [];
 		let topK = null;
 
 		try {
 			const response = await http.post(
-  				"/vector/component",
-  				new URLSearchParams({
-    				query: newChatData.content,
-    				limit: 10,
-    				score: 0.8,
-  				}),
-  				{
-    				headers: {
-      					"Content-Type": "application/x-www-form-urlencoded",
-    				},
-  				}
+				"/vector/component",
+				new URLSearchParams({
+					query: newChatData.content,
+					limit: 10,
+					score: 0.8,
+				}),
+				{
+					headers: {
+						"Content-Type": "application/x-www-form-urlencoded",
+					},
+				},
 			);
 
 			const dashboards = await http.get(`/dashboard/`);
@@ -107,92 +258,115 @@ export const useChatStore = defineStore('chat', () => {
 			const compList = response.data.data;
 			const dashMap = dashboards.data.data;
 
-			compList.forEach((comp) => {
-				const matched = [];
+			applyDashboardMap(compList, dashMap);
 
-				Object.entries(dashMap).forEach(([city,cityDashboards]) => {
-					cityDashboards.forEach((dash) => {
-						if (dash.components.includes(comp.id)) {
-							// 避免同名主題重複加入
-							if (!matched.some((m) => m.index === dash.index && m.city === city)) {
-								matched.push({
-									name: dash.name,
-									index: dash.index,
-									city: city
-								});
-							}
-						}
-					});
-				});
-
-				compToDashIndexMap.value[comp.id] = matched;
-			});
-			
 			if (response.data?.data?.length > 0) {
 				recommendComponents.value = response.data.data;
 			}
 
 			// 去除重複項目存到 result
 			const result = Array.from(
-  				recommendComponents.value.reduce((map, item) => {
-    				const key = item.index
-    				const exist = map.get(key)
+				recommendComponents.value
+					.reduce((map, item) => {
+						const key = item.index;
+						const exist = map.get(key);
 
-    				// 如果還沒放過，直接放
-    				if (!exist) {
-      					map.set(key, item)
-      					return map
-    				}
+						// 如果還沒放過，直接放
+						if (!exist) {
+							map.set(key, item);
+							return map;
+						}
 
-    				// 如果已存在，但現在的是 metrotaipei，就覆蓋
-    				if (item.city === 'metrotaipei') {
-      					map.set(key, item)
-    				}
+						// 如果已存在，但現在的是 metrotaipei，就覆蓋
+						if (item.city === "metrotaipei") {
+							map.set(key, item);
+						}
 
-    				return map
-  				}, new Map()).values()
-			)
+						return map;
+					}, new Map())
+					.values(),
+			);
 			// 把 result 蓋回去 recommendComponents
-			recommendComponents.value = result
-
-		} catch (error) { 
+			recommendComponents.value = result;
+		} catch (error) {
 			console.error("VectorAnalysisError :", error);
 		}
 
-		if (recommendComponents.value && recommendComponents.value?.length > 0) {
-			topK = [...recommendComponents.value].sort((a, b) => b.score - a.score);
-			chatData.value.push({ id: chatData.value.length + 1, role: 'bot', isDefault: false, button: [{ id:1, text:'建立儀表板' }], content: `您好 😊 \n 以下是根據您的問題，自動為您推薦的「組件清單」。您可以將這些組件整批加入「個人儀表板」，方便日後快速查看與使用。\n`, relations: topK });
-			chatData.value.push({ id: chatData.value.length + 1, role: 'bot', isDefault: false, content: `若您有任何新的查詢或想深入探索的內容，都可以隨時在對話框告訴我～\n 我很樂意再協助您 💬✨` });
+		if (
+			recommendComponents.value &&
+			recommendComponents.value?.length > 0
+		) {
+			topK = [...recommendComponents.value].sort(
+				(a, b) => b.score - a.score,
+			);
+			chatData.value.push({
+				id: chatData.value.length + 1,
+				role: "bot",
+				isDefault: false,
+				button: [{ id: 1, text: "建立儀表板" }],
+				content: `您好 😊 \n 以下是根據您的問題，自動為您推薦的「組件清單」。您可以將這些組件整批加入「個人儀表板」，方便日後快速查看與使用。\n`,
+				relations: topK,
+			});
+			chatData.value.push({
+				id: chatData.value.length + 1,
+				role: "bot",
+				isDefault: false,
+				content: `若您有任何新的查詢或想深入探索的內容，都可以隨時在對話框告訴我～\n 我很樂意再協助您 💬✨`,
+			});
 		} else {
-			chatData.value.push({ id: chatData.value.length + 1, role: 'bot', isDefault: false, content: `很抱歉，您提供的描述沒有相似組件，請繼續提問 ! ` });
+			chatData.value.push({
+				id: chatData.value.length + 1,
+				role: "bot",
+				isDefault: false,
+				content: `很抱歉，您提供的描述沒有相似組件，請繼續提問 ! `,
+			});
 		}
 
-		// 分析結束後紀錄問答log
-		saveChatLog(newChatData.content, recommendComponents.value);
-  	};
-
-	const saveChatLog = async(question, answer) => {
-		try {
-        	const formData = new FormData();
-        	const d = new Date();
-        	const todayId =
-          		d.getFullYear() +
-          		String(d.getMonth() + 1).padStart(2, "0") +
-          		String(d.getDate()).padStart(2, "0");
-
-        	formData.append("session", "session_" + todayId);
-        	formData.append("question", question);
-        	formData.append("answer", JSON.stringify(answer));
-
-        	await http.post("/chatlog/", formData, {
-          		headers: {
-            		"Content-Type": "multipart/form-data",
-          		},
-        	});
-      	} catch (error) {
-        	console.error("saveChatLog error:", error);
-      	}
+		// 分析結束後紀錄問答log，並更新近一月對話列表
+		await saveChatLog(newChatData.content, recommendComponents.value);
+		if (user.value?.user_id) {
+			await getChatSessionList();
+		}
 	};
 
-	return { chatData, compToDashIndexMap, addChatData, addQueryData, saveChatLog }
-})
+	const saveChatLog = async (question, answer) => {
+		try {
+			const formData = new FormData();
+			const d = new Date();
+			const todayId =
+				d.getFullYear() +
+				String(d.getMonth() + 1).padStart(2, "0") +
+				String(d.getDate()).padStart(2, "0");
+			const sessionName =
+				activeChatSession.value || `session_${todayId}`;
+
+			formData.append("session", sessionName);
+			formData.append("question", question);
+			formData.append("answer", JSON.stringify(answer));
+
+			await http.post("/chatlog/", formData, {
+				headers: {
+					"Content-Type": "multipart/form-data",
+				},
+			});
+
+			if (!activeChatSession.value) {
+				activeChatSession.value = sessionName;
+			}
+		} catch (error) {
+			console.error("saveChatLog error:", error);
+		}
+	};
+
+	return {
+		chatData,
+		compToDashIndexMap,
+		chatSessionList,
+		activeChatSession,
+		addChatData,
+		addQueryData,
+		saveChatLog,
+		getChatSessionList,
+		openChatSession,
+	};
+});

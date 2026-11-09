@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch, nextTick } from "vue";
+import { ref, watch, nextTick, onMounted, computed } from "vue";
 import { storeToRefs } from "pinia";
 import SendIcon from "../icons/SendIcon.vue";
 import BotLogo from "../icons/BotLogo.vue";
@@ -13,9 +13,11 @@ import http from "../../router/axios";
 const chatStore = useChatStore();
 const contentStore = useContentStore();
 const authStore = useAuthStore();
-const { addChatData, addQueryData, saveChatLog } = chatStore;
+const { addChatData, addQueryData, saveChatLog, getChatSessionList, openChatSession } =
+	chatStore;
 const { createDashboard } = contentStore;
-const { chatData, compToDashIndexMap } = storeToRefs(chatStore);
+const { chatData, compToDashIndexMap, chatSessionList, activeChatSession } =
+	storeToRefs(chatStore);
 const { editDashboard } = storeToRefs(contentStore);
 const { user } = storeToRefs(authStore);
 
@@ -23,6 +25,32 @@ const userMessage = ref("");
 const chatAreaRef = ref(null);
 const isStickyOpen = ref(false);
 const dashboardCreationLoading = ref(false);
+const isListOpen = ref(false);
+
+const checkTodaySession = computed(() => {
+	const today = new Date();
+	const todayStr = [
+		today.getFullYear(),
+		String(today.getMonth() + 1).padStart(2, "0"),
+		String(today.getDate()).padStart(2, "0"),
+	].join("");
+
+	return chatSessionList.value.some((sessionObj) =>
+		sessionObj.session.endsWith(todayStr),
+	);
+});
+
+const formatSessionLabel = (session) => {
+	const date = session.slice(-8);
+	if (/^\d{8}$/.test(date)) {
+		return `${date.slice(0, 4)}/${date.slice(4, 6)}/${date.slice(6, 8)}`;
+	}
+	return session;
+};
+
+const chatListToggle = () => {
+	isListOpen.value = !isListOpen.value;
+};
 
 const qaBtnHandler = async (text, relations) => {
 	if (text === "建立儀表板") {
@@ -76,29 +104,83 @@ const toggleSticky = () => {
 };
 
 watch(
-	() => chatData.value.length,
+	() => [chatData.value.length, activeChatSession.value],
 	async () => {
 		await nextTick();
 		const chat = chatAreaRef.value;
 		if (!chat) return;
 		chat.scrollTop = chat.scrollHeight - chat.clientHeight;
 	},
-	{ deep: true },
 );
+
+watch(
+	() => user.value?.user_id,
+	(userId) => {
+		if (userId) {
+			getChatSessionList();
+		}
+	},
+);
+
+onMounted(() => {
+	if (user.value?.user_id) {
+		getChatSessionList();
+	}
+});
 </script>
 
 <template>
-  <div class="chat-widget">
+  <div
+    class="chat-widget"
+    :class="{ 'list-open': user?.user_id && isListOpen }"
+  >
     <!-- 標題 -->
     <div class="header">
       <h3>臺北城市儀表板小幫手</h3>
     </div>
 
-    <!-- 聊天區 -->
-    <div
-      ref="chatAreaRef"
-      class="chat-area scrollbar-custom"
-    >
+    <div class="chat-content">
+      <div
+        v-if="user?.user_id"
+        class="chat-list"
+      >
+        <div>
+          <button
+            type="button"
+            class="list-toggle"
+            @click="chatListToggle"
+          >
+            ☰
+          </button>
+        </div>
+        <div v-if="isListOpen">
+          <h4>近一月對話</h4>
+          <ul>
+            <li
+              v-if="!checkTodaySession"
+              :class="{ active: !activeChatSession }"
+              @click="openChatSession(null)"
+            >
+              新建本日對話
+            </li>
+            <li
+              v-for="item in chatSessionList"
+              :key="item.session"
+              :class="{ active: activeChatSession === item.session }"
+              @click="openChatSession(item.session)"
+            >
+              {{ formatSessionLabel(item.session) }}
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="content-area">
+        <!-- 聊天區 -->
+        <div
+          ref="chatAreaRef"
+          class="chat-area scrollbar-custom"
+        >
       <!-- 置頂訊息 -->
       <div class="chat-message sticky-message">
         <div
@@ -224,20 +306,22 @@ watch(
             </div>
           </div>
         </div>
-      </div>
-    </div>
+        </div>
+        </div>
 
-    <!-- 輸入區 -->
-    <div class="input-area">
-      <input
-        v-model="userMessage"
-        type="text"
-        placeholder="輸入訊息..."
-        @keyup.enter="sendBtnHandler(userMessage)"
-      >
-      <button @click="sendBtnHandler(userMessage)">
-        <SendIcon />
-      </button>
+        <!-- 輸入區 -->
+        <div class="input-area">
+          <input
+            v-model="userMessage"
+            type="text"
+            placeholder="輸入訊息..."
+            @keyup.enter="sendBtnHandler(userMessage)"
+          >
+          <button @click="sendBtnHandler(userMessage)">
+            <SendIcon />
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -290,6 +374,10 @@ $radius-20: 20px;
 	display: flex;
 	flex-direction: column;
 
+	&.list-open {
+		width: 525px;
+	}
+
 	.header {
 		padding: 1rem;
 		background: $panel-bg;
@@ -303,8 +391,68 @@ $radius-20: 20px;
 		}
 	}
 
+	.chat-content {
+		flex: 1;
+		display: flex;
+		min-height: 0;
+
+		.chat-list {
+			max-width: 125px;
+			display: flex;
+			flex-direction: column;
+			min-height: 0;
+			overflow-y: auto;
+			padding: 8px;
+			border-right: 1px solid $border-color;
+
+			h4 {
+				color: #888787;
+				font-size: 14px;
+				margin: 10px 0;
+			}
+
+			ul {
+				list-style: none;
+				display: flex;
+				flex-direction: column;
+				gap: 0.5rem;
+				margin: 0;
+				padding: 0;
+				font-size: 13px;
+				text-align: center;
+
+				li {
+					color: #888787;
+					cursor: pointer;
+
+					&.active {
+						color: white;
+					}
+				}
+			}
+
+			.list-toggle {
+				background: transparent;
+				border: none;
+				color: $white;
+				font-size: 18px;
+				cursor: pointer;
+				padding: 0;
+			}
+		}
+
+		.content-area {
+			flex: 1;
+			display: flex;
+			flex-direction: column;
+			min-width: 0;
+			min-height: 0;
+		}
+	}
+
 	.chat-area {
 		flex: 1;
+		min-height: 0;
 		margin: 0.25rem;
 		padding: 0.75rem;
 		overflow-y: auto;
@@ -500,12 +648,15 @@ $radius-20: 20px;
 }
 
 @media (max-width: 600px) {
-      .chat-widget {
-        .chat-area {
+	.chat-widget,
+	.chat-widget.list-open {
+		width: 100%;
+
+		.chat-area {
 			padding-left: 0.5rem;
 			padding-right: 0.5rem;
-        }
-    }
+		}
+	}
 }
 
 </style>

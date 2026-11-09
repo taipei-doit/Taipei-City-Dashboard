@@ -353,7 +353,6 @@ onBeforeUnmount(() => {
 	z-index: 10;
 
 	.chatbox {
-		width: 400px;
 		height: 500px;
 		margin-bottom: 35px;
 	}
