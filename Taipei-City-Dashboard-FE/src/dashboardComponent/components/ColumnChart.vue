@@ -142,7 +142,6 @@ const chartOptions = ref({
 	yaxis: {
 		title: {
 			text: getAxisTitle(props.chart_config.unit, "y"),
-			rotate: 0,
 			style: {
 				color: "var(--color-complement-text)",
 			},

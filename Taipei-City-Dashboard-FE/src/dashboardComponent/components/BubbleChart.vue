@@ -192,7 +192,6 @@ const chartOptions = ref({
 		},
 		title: {
 			text: yAxisTitle,
-			rotate: 0,
 			style: {
 				color: "var(--color-complement-text)",
 			},

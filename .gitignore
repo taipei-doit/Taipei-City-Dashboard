@@ -54,6 +54,7 @@ Taipei-City-Dashboard-FE/.env
 Taipei-City-Dashboard-FE/.env.development
 Taipei-City-Dashboard-FE/.env.production
 Taipei-City-Dashboard-FE/.env.test
+Taipei-City-Dashboard-FE/docs/map-legend-file-changes.md
 
 # docker-compose
 # db data
