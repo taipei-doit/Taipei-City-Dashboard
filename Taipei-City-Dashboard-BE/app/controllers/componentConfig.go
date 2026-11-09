@@ -2,11 +2,15 @@
 package controllers
 
 import (
+	"encoding/json"
+	"html"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"TaipeiCityDashboardBE/app/models"
 	"TaipeiCityDashboardBE/app/services"
+	"TaipeiCityDashboardBE/logs"
 
 	"github.com/gin-gonic/gin"
 )
@@ -327,9 +331,10 @@ func DeleteComponent(c *gin.Context) {
 }
 
 type QueryVectorReq struct {
-	Query string  `json:"query" form:"query"`
-	Limit int     `json:"limit" form:"limit"`
-	Score float64 `json:"score" form:"score"`
+	Query   string  `json:"query" form:"query"`
+	Limit   int     `json:"limit" form:"limit"`
+	Score   float64 `json:"score" form:"score"`
+	Session string  `json:"session" form:"session"`
 }
 
 func GetComponentByQueryVector(c *gin.Context) {
@@ -361,5 +366,65 @@ func GetComponentByQueryVector(c *gin.Context) {
 		return
 	}
 
+	// 問答紀錄改在這支 API 寫入，避免瀏覽器把推薦結果 JSON 再打去 /chatlog/ 時被 WAF 擋下。
+	if strings.TrimSpace(req.Session) != "" {
+		recordVectorChatLog(c, req.Session, req.Query, cityComponent)
+	}
+
 	c.JSON(http.StatusOK, gin.H{"status": "success", "data": cityComponent})
+}
+
+// dedupeComponentScores 與前端聊天推薦清單一致：同一個 index 只留一筆，後出現的 metrotaipei 覆蓋先前結果。
+func dedupeComponentScores(components []models.CityComponentScore) []models.CityComponentScore {
+	order := make([]string, 0, len(components))
+	byIndex := make(map[string]models.CityComponentScore, len(components))
+	for _, item := range components {
+		if _, exists := byIndex[item.Index]; !exists {
+			order = append(order, item.Index)
+			byIndex[item.Index] = item
+			continue
+		}
+		if item.City == "metrotaipei" {
+			byIndex[item.Index] = item
+		}
+	}
+
+	deduped := make([]models.CityComponentScore, 0, len(order))
+	for _, index := range order {
+		deduped = append(deduped, byIndex[index])
+	}
+	return deduped
+}
+
+func recordVectorChatLog(c *gin.Context, session, question string, components []models.CityComponentScore) {
+	accountID, exists := c.Get("accountID")
+	if !exists {
+		logs.Error("skip vector chat log: accountID missing")
+		return
+	}
+	userID, ok := accountID.(int)
+	if !ok {
+		logs.Error("skip vector chat log: accountID is not int")
+		return
+	}
+
+	deduped := dedupeComponentScores(components)
+	if deduped == nil {
+		deduped = []models.CityComponentScore{}
+	}
+	payload, err := json.Marshal(deduped)
+	if err != nil {
+		logs.FError("marshal vector chat log failed: %v", err)
+		return
+	}
+
+	if _, err := models.CreateChatLog(
+		html.EscapeString(strings.TrimSpace(session)),
+		html.EscapeString(question),
+		html.EscapeString(string(payload)),
+		c.ClientIP(),
+		userID,
+	); err != nil {
+		logs.FError("create vector chat log failed: %v", err)
+	}
 }

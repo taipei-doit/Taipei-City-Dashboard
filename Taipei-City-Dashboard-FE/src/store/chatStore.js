@@ -237,6 +237,7 @@ export const useChatStore = defineStore("chat", () => {
 
 		recommendComponents.value = [];
 		let topK = null;
+		const sessionName = resolveSessionName();
 
 		try {
 			const response = await http.post(
@@ -245,6 +246,7 @@ export const useChatStore = defineStore("chat", () => {
 					query: newChatData.content,
 					limit: 10,
 					score: 0.8,
+					session: sessionName,
 				}),
 				{
 					headers: {
@@ -252,6 +254,10 @@ export const useChatStore = defineStore("chat", () => {
 					},
 				},
 			);
+
+			if (!activeChatSession.value) {
+				activeChatSession.value = sessionName;
+			}
 
 			const dashboards = await http.get(`/dashboard/`);
 
@@ -322,23 +328,25 @@ export const useChatStore = defineStore("chat", () => {
 			});
 		}
 
-		// 分析結束後紀錄問答log，並更新近一月對話列表
-		await saveChatLog(newChatData.content, recommendComponents.value);
+		// 問答紀錄由 /vector/component 在後端寫入，這裡只更新近一月對話列表
 		if (user.value?.user_id) {
 			await getChatSessionList();
 		}
 	};
 
+	const resolveSessionName = () => {
+		const d = new Date();
+		const todayId =
+			d.getFullYear() +
+			String(d.getMonth() + 1).padStart(2, "0") +
+			String(d.getDate()).padStart(2, "0");
+		return activeChatSession.value || `session_${todayId}`;
+	};
+
 	const saveChatLog = async (question, answer) => {
 		try {
 			const formData = new FormData();
-			const d = new Date();
-			const todayId =
-				d.getFullYear() +
-				String(d.getMonth() + 1).padStart(2, "0") +
-				String(d.getDate()).padStart(2, "0");
-			const sessionName =
-				activeChatSession.value || `session_${todayId}`;
+			const sessionName = resolveSessionName();
 
 			formData.append("session", sessionName);
 			formData.append("question", question);
