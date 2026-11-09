@@ -4,6 +4,7 @@ import { storeToRefs } from "pinia";
 import SendIcon from "../icons/SendIcon.vue";
 import BotLogo from "../icons/BotLogo.vue";
 import UserLogo from "../icons/UserLogo.vue";
+import ChatTypewriter from "./ChatTypewriter.vue";
 
 import { useChatStore } from "../../store/chatStore";
 import { useContentStore } from "../../store/contentStore";
@@ -26,6 +27,35 @@ const chatAreaRef = ref(null);
 const isStickyOpen = ref(false);
 const dashboardCreationLoading = ref(false);
 const isListOpen = ref(false);
+const typedIds = ref({});
+
+const activeTypeId = computed(() => {
+	const pending = chatData.value.find(
+		(item) => item.role === "bot" && item.typewriter && !typedIds.value[item.id],
+	);
+	return pending?.id ?? null;
+});
+
+const extrasReady = (chat) => !chat.typewriter || typedIds.value[chat.id];
+
+const bubbleReady = (chat) =>
+	!chat.typewriter || typedIds.value[chat.id] || activeTypeId.value === chat.id;
+
+const isTypewriting = (chat) =>
+	Boolean(chat.typewriter) &&
+	activeTypeId.value === chat.id &&
+	!typedIds.value[chat.id];
+
+const finishType = (id) => {
+	typedIds.value = { ...typedIds.value, [id]: true };
+};
+
+const scrollChat = async () => {
+	await nextTick();
+	const chat = chatAreaRef.value;
+	if (!chat) return;
+	chat.scrollTop = chat.scrollHeight - chat.clientHeight;
+};
 
 const checkTodaySession = computed(() => {
 	const today = new Date();
@@ -53,39 +83,62 @@ const chatListToggle = () => {
 };
 
 const qaBtnHandler = async (text, relations) => {
-	if (text === "建立儀表板") {
-		if (dashboardCreationLoading.value === true) return;
-		dashboardCreationLoading.value = true;
-		// 確認個人儀表板是否超過20個
+	if (text !== "建立儀表板") return;
+	if (dashboardCreationLoading.value === true) return;
+	dashboardCreationLoading.value = true;
+	addChatData({
+		role: "user",
+		content: "建立儀表板",
+	});
+
+	try {
 		const response = await http.get(`/dashboard/`);
 		if (response.data?.data?.personal?.length > 20) {
 			addChatData({
 				role: "bot",
+				typewriter: true,
 				content:
 					"您的個人儀表板已超出限制 20 個，請先移除既有儀表板後，重新執行本功能！",
 			});
-			dashboardCreationLoading.value = false;
 			return;
 		}
+
+		if (!user.value?.user_id) {
+			addChatData({
+				role: "bot",
+				typewriter: true,
+				content: "請先登入會員以使用此功能喔！",
+			});
+			return;
+		}
+
 		const components = Array.from(new Set(relations.map((r) => r.id))).map(
 			(id) => ({ id }),
 		);
-
-		if (user.value.user_id) {
-			editDashboard.value = {
-				index: "",
-				name: "推薦儀表板",
-				icon: "star",
-				components: components,
-			};
-			await createDashboard();
-			saveChatLog("建立儀表板", "使用者成功建立儀表板!");
-		} else {
-			addChatData({
-				role: "bot",
-				content: "請先登入會員以使用此功能喔！",
-			});
-		}
+		editDashboard.value = {
+			index: "",
+			name: "推薦儀表板",
+			icon: "star",
+			components: components,
+		};
+		await createDashboard();
+		const successMessage = "使用者成功建立儀表板!";
+		const logged = await saveChatLog("建立儀表板", successMessage);
+		addChatData({
+			role: "bot",
+			typewriter: true,
+			content: logged
+				? successMessage
+				: "儀表板已建立，但對話紀錄沒有寫入，請稍後再試。",
+		});
+	} catch (error) {
+		console.error("createDashboard error:", error);
+		addChatData({
+			role: "bot",
+			typewriter: true,
+			content: "建立儀表板時發生錯誤，請稍後再試。",
+		});
+	} finally {
 		dashboardCreationLoading.value = false;
 	}
 };
@@ -104,14 +157,16 @@ const toggleSticky = () => {
 };
 
 watch(
-	() => [chatData.value.length, activeChatSession.value],
-	async () => {
-		await nextTick();
-		const chat = chatAreaRef.value;
-		if (!chat) return;
-		chat.scrollTop = chat.scrollHeight - chat.clientHeight;
+	() => chatData.value.length,
+	() => {
+		scrollChat();
 	},
 );
+
+watch(activeChatSession, () => {
+	typedIds.value = {};
+	scrollChat();
+});
 
 watch(
 	() => user.value?.user_id,
@@ -215,14 +270,19 @@ onMounted(() => {
           </div>
           <div class="content">
             <div
-              v-if="chat.content"
+              v-if="chat.content && bubbleReady(chat)"
               class="message--bubble"
             >
-              <p>{{ chat.content }}</p>
+              <ChatTypewriter
+                :text="chat.content"
+                :enabled="isTypewriting(chat)"
+                @tick="scrollChat"
+                @done="finishType(chat.id)"
+              />
             </div>
             <!-- 表格區 -->
             <div
-              v-if="chat.relations"
+              v-if="chat.relations && extrasReady(chat)"
               v-horizontal-wheel
               class="relation-area"
             >
@@ -275,7 +335,7 @@ onMounted(() => {
               </table>
             </div>
             <div
-              v-if="chat.button"
+              v-if="chat.button && extrasReady(chat)"
               v-horizontal-wheel
               class="message--button scrollbar-x-hide"
             >
@@ -573,6 +633,15 @@ $radius-20: 20px;
 							padding-left: 16px;
 							padding-right: 16px;
 							font-size: 16px;
+						}
+
+						.type-caret {
+							display: inline-block;
+							width: 2px;
+							height: 1em;
+							margin-left: 2px;
+							background: $white;
+							vertical-align: text-bottom;
 						}
 					}
 

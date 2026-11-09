@@ -3,7 +3,6 @@ package controllers
 
 import (
 	"encoding/json"
-	"fmt"
 	"html"
 	"net/http"
 	"strconv"
@@ -347,24 +346,6 @@ func GetComponentByQueryVector(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"status": "success", "data": cityComponent})
 }
 
-func GetComponentByQueryVectorStream(c *gin.Context) {
-	_, cityComponent, ok := loadQueryVector(c)
-	if !ok {
-		return
-	}
-	if cityComponent == nil {
-		cityComponent = []models.CityComponentScore{}
-	}
-
-	payload, err := json.Marshal(gin.H{"status": "success", "data": cityComponent})
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": err.Error()})
-		return
-	}
-
-	writeVectorSSE(c, payload)
-}
-
 func loadQueryVector(c *gin.Context) (QueryVectorReq, []models.CityComponentScore, bool) {
 	req := QueryVectorReq{
 		Limit: 10,
@@ -400,31 +381,6 @@ func loadQueryVector(c *gin.Context) (QueryVectorReq, []models.CityComponentScor
 	}
 
 	return req, cityComponent, true
-}
-
-func writeVectorSSE(c *gin.Context, payload []byte) {
-	c.Header("Content-Type", "text/event-stream; charset=utf-8")
-	c.Header("Cache-Control", "no-cache")
-	c.Header("Connection", "keep-alive")
-	c.Header("X-Accel-Buffering", "no")
-
-	flusher, _ := c.Writer.(http.Flusher)
-	const chunkSize = 32
-	runes := []rune(string(payload))
-	for start := 0; start < len(runes); start += chunkSize {
-		end := start + chunkSize
-		if end > len(runes) {
-			end = len(runes)
-		}
-		fmt.Fprintf(c.Writer, "data: %s\n\n", string(runes[start:end]))
-		if flusher != nil {
-			flusher.Flush()
-		}
-	}
-	fmt.Fprint(c.Writer, "data: [DONE]\n\n")
-	if flusher != nil {
-		flusher.Flush()
-	}
 }
 
 // dedupeComponentScores 與前端聊天推薦清單一致：同一個 index 只留一筆，後出現的 metrotaipei 覆蓋先前結果。
