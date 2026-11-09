@@ -3,6 +3,7 @@ package controllers
 
 import (
 	"encoding/json"
+	"fmt"
 	"html"
 	"net/http"
 	"strconv"
@@ -338,6 +339,33 @@ type QueryVectorReq struct {
 }
 
 func GetComponentByQueryVector(c *gin.Context) {
+	_, cityComponent, ok := loadQueryVector(c)
+	if !ok {
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"status": "success", "data": cityComponent})
+}
+
+func GetComponentByQueryVectorStream(c *gin.Context) {
+	_, cityComponent, ok := loadQueryVector(c)
+	if !ok {
+		return
+	}
+	if cityComponent == nil {
+		cityComponent = []models.CityComponentScore{}
+	}
+
+	payload, err := json.Marshal(gin.H{"status": "success", "data": cityComponent})
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": err.Error()})
+		return
+	}
+
+	writeVectorSSE(c, payload)
+}
+
+func loadQueryVector(c *gin.Context) (QueryVectorReq, []models.CityComponentScore, bool) {
 	req := QueryVectorReq{
 		Limit: 10,
 		Score: 0.78,
@@ -345,7 +373,7 @@ func GetComponentByQueryVector(c *gin.Context) {
 
 	if err := c.ShouldBind(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": err.Error()})
-		return
+		return req, nil, false
 	}
 
 	if req.Limit > 30 {
@@ -363,15 +391,40 @@ func GetComponentByQueryVector(c *gin.Context) {
 	cityComponent, err := models.GetComponentByQueryVector(req.Query, req.Limit, req.Score)
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"status": "error", "message": err.Error()})
-		return
+		return req, nil, false
 	}
 
-	// 問答紀錄改在這支 API 寫入，避免瀏覽器把推薦結果 JSON 再打去 /chatlog/ 時被 WAF 擋下。
+	// 問答紀錄在查詢當下寫入，瀏覽器不必再把推薦 JSON 打去 /chatlog/。
 	if strings.TrimSpace(req.Session) != "" {
 		recordVectorChatLog(c, req.Session, req.Query, cityComponent)
 	}
 
-	c.JSON(http.StatusOK, gin.H{"status": "success", "data": cityComponent})
+	return req, cityComponent, true
+}
+
+func writeVectorSSE(c *gin.Context, payload []byte) {
+	c.Header("Content-Type", "text/event-stream; charset=utf-8")
+	c.Header("Cache-Control", "no-cache")
+	c.Header("Connection", "keep-alive")
+	c.Header("X-Accel-Buffering", "no")
+
+	flusher, _ := c.Writer.(http.Flusher)
+	const chunkSize = 32
+	runes := []rune(string(payload))
+	for start := 0; start < len(runes); start += chunkSize {
+		end := start + chunkSize
+		if end > len(runes) {
+			end = len(runes)
+		}
+		fmt.Fprintf(c.Writer, "data: %s\n\n", string(runes[start:end]))
+		if flusher != nil {
+			flusher.Flush()
+		}
+	}
+	fmt.Fprint(c.Writer, "data: [DONE]\n\n")
+	if flusher != nil {
+		flusher.Flush()
+	}
 }
 
 // dedupeComponentScores 與前端聊天推薦清單一致：同一個 index 只留一筆，後出現的 metrotaipei 覆蓋先前結果。

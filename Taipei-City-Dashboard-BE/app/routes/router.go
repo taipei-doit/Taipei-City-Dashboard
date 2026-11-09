@@ -99,6 +99,7 @@ func configureLMRoutes() {
 	componentRoutes.Use(middleware.LimitTotalRequests(global.ComponentLimitTotalRequestsTimes, global.LimitRequestsDuration))
 	{
 		componentRoutes.POST("/component", controllers.GetComponentByQueryVector)
+		componentRoutes.POST("/component/stream", controllers.GetComponentByQueryVectorStream)
 	}
 }
 
