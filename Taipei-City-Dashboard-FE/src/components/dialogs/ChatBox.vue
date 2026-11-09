@@ -41,6 +41,8 @@ const extrasReady = (chat) => !chat.typewriter || typedIds.value[chat.id];
 const bubbleReady = (chat) =>
 	!chat.typewriter || typedIds.value[chat.id] || activeTypeId.value === chat.id;
 
+const messageVisible = (chat) => chat.role !== "bot" || bubbleReady(chat);
+
 const isTypewriting = (chat) =>
 	Boolean(chat.typewriter) &&
 	activeTypeId.value === chat.id &&
@@ -257,6 +259,7 @@ onMounted(() => {
       </div>
       <div
         v-for="chat in chatData"
+        v-show="messageVisible(chat)"
         :key="chat.id"
         class="message"
       >
