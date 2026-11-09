@@ -63,12 +63,19 @@ export const useChatStore = defineStore("chat", () => {
 	};
 
 	const applyDashboardMap = (compList, dashMap) => {
+		if (!dashMap) return;
+
 		compList.forEach((comp) => {
 			const matched = [];
 
 			Object.entries(dashMap).forEach(([city, cityDashboards]) => {
+				if (!Array.isArray(cityDashboards)) return;
+
 				cityDashboards.forEach((dash) => {
-					if (dash.components.includes(comp.id)) {
+					const componentIds = Array.isArray(dash?.components)
+						? dash.components
+						: [];
+					if (componentIds.includes(comp.id)) {
 						// 避免同名主題重複加入
 						if (
 							!matched.some(
