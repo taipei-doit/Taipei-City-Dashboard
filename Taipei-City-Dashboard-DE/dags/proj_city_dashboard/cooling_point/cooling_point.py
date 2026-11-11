@@ -9,7 +9,7 @@ from operators.common_pipeline import CommonDag
 # 涼適點資料來源包含：
 # 1. 臺北市公有涼適點（中文欄名，沿用編號 1..N）
 # 2. 臺北市民間合作涼適點（中文欄名，編號撞號故不沿用）
-# 3. 環境部 coolmap 納入之本市合作涼適點（英文欄名、0/1 旗標，代碼編號故不沿用）
+# 3. 環境部 coolmap 納入之本市合作涼適點（中文欄名、Y/N 旗標，與上兩份欄位不同，編號不沿用）
 SOURCES = [
     # (rid, 來源, 是否沿用來源「編號」, 格式類型)
     # 臺北市涼適點 https://data.taipei/dataset/detail?id=a98a3e0e-a36f-43fa-82f8-b09a3011a47a
@@ -46,6 +46,24 @@ COLUMN_MAP = {
     "無障礙座位": "accessible_seat",
     "其他特色及亮點": "features",
     "備註": "note",
+}
+
+# coolmap 來源中文欄名 → _transform_coolmap 使用的英文欄名
+COOLMAP_COLUMN_MAP = {
+    "鄉鎮": "district",
+    "名稱": "placename",
+    "地址": "address",
+    "電話": "phone",
+    "經度": "longitude",
+    "緯度": "latitude",
+    "營業時間": "openinghours",
+    "有無冷氣": "airconditioning",
+    "有無廁所": "restroom",
+    "有無座位": "seats",
+    "有無飲水機": "waterdispenser",
+    "是否為戶外": "isoutdoor",
+    "有無無障礙設施": "isaccessible",
+    "店家種類": "coolingtype",
 }
 
 READY_COLUMNS = [
@@ -89,6 +107,9 @@ def _cooling_point(**kwargs):
     from utils.transform_geometry import add_point_wkbgeometry_column_to_df
 
     def _transform_coolmap(df):
+        # data.taipei 實際下載的是中文欄名 + Y/N 旗標（2026-11-11 確認），
+        # 先收斂成下面用的英文欄名；rename 忽略對不到的 key，英文版來源照樣能跑。
+        df = df.rename(columns=COOLMAP_COLUMN_MAP)
         district_clean = df["district"].astype(str).str.strip()
 
         def format_address(row):
@@ -110,8 +131,8 @@ def _cooling_point(**kwargs):
             ext.loc[has_hash] = split_phone[1].str.strip()
         localcall = localcall.replace({"nan": pd.NA, "": pd.NA})
 
-        yn = lambda col: df[col].map({1: "Y", 0: "N"}).fillna(pd.NA)
-        location_type = df["isoutdoor"].map({1: "戶外", 0: "室內"}).fillna("室內")
+        yn = lambda col: df[col].map({"Y": "Y", "N": "N", 1: "Y", 0: "N"}).fillna(pd.NA)
+        location_type = df["isoutdoor"].map({"Y": "戶外", "N": "室內", 1: "戶外", 0: "室內"}).fillna("室內")
 
         return pd.DataFrame({
             "id": pd.Series(pd.NA, index=df.index, dtype="Int64"),
