@@ -2,7 +2,7 @@
 <!-- Refactored and Maintained by Taipei Urban Intelligence Center -->
 
 <script setup>
-import { ref, computed, watch } from "vue";
+import { ref, computed, watch, inject } from "vue";
 import VueApexCharts from "vue3-apexcharts";
 import {
 	formatValueWithUnit,
@@ -10,8 +10,24 @@ import {
 	alignVerticalAxisTitles,
 	toVerticalDualAxisTitle,
 } from "../utilities/chartUnits";
+import { withAxisRange } from "../utilities/dataTimeframe";
 
 const props = defineProps(["chart_config", "activeChart", "series"]);
+const componentAxisRange = inject(
+	"componentAxisRange",
+	computed(() => null),
+);
+
+function datetimeXaxis(xaxis) {
+	return withAxisRange(
+		{
+			...xaxis,
+			type: "datetime",
+			labels: { datetimeUTC: false, offsetY: -4 },
+		},
+		componentAxisRange.value,
+	);
+}
 
 // const emits = defineEmits([
 // 	"filterByParam",
@@ -184,8 +200,9 @@ function parseTime(time) {
 }
 
 watch(
-	() => props.series,
-	(newVal) => {
+	() => [props.series, componentAxisRange.value],
+	() => {
+		const newVal = props.series;
 		localSeries.value = JSON.parse(JSON.stringify(newVal || []));
 
 		const yaxis = chartOptions.value.yaxis.map((axis, index) => ({
@@ -202,13 +219,14 @@ watch(
 			chartOptions.value = {
 				...chartOptions.value,
 				yaxis,
+				xaxis: datetimeXaxis(chartOptions.value.xaxis),
 			};
 			return;
 		}
 
 		const newDiff = Math.max(...timestamps) - Math.min(...timestamps);
 
-		// 跨度超過三年改成年份類別
+		// 跨度超過三年改成年份類別，類別軸不套時間 min/max
 		if (newDiff >= 3 * 31536000000) {
 			localSeries.value.forEach((item) => {
 				item.data = item.data.map((a) => ({
@@ -219,21 +237,20 @@ watch(
 			chartOptions.value = {
 				...chartOptions.value,
 				yaxis,
-				xaxis: {
-					...chartOptions.value.xaxis,
-					type: "category",
-					tickAmount: Math.floor(newDiff / 31536000000),
-				},
+				xaxis: withAxisRange(
+					{
+						...chartOptions.value.xaxis,
+						type: "category",
+						tickAmount: Math.floor(newDiff / 31536000000),
+					},
+					null,
+				),
 			};
 		} else {
 			chartOptions.value = {
 				...chartOptions.value,
 				yaxis,
-				xaxis: {
-					...chartOptions.value.xaxis,
-					type: "datetime",
-					labels: { datetimeUTC: false, offsetY: -4 },
-				},
+				xaxis: datetimeXaxis(chartOptions.value.xaxis),
 			};
 		}
 	},

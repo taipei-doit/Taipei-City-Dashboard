@@ -1,9 +1,12 @@
 <script setup>
-import { computed, ref, onUnmounted } from "vue";
+import { computed, provide, ref, onUnmounted } from "vue";
 // import "./styles/chartStyles.css";
 // import "./styles/toggleswitch.css";
 import "material-icons/iconfont/material-icons.css";
-import { getComponentDataTimeframe } from "./utilities/dataTimeframe";
+import {
+	getComponentAxisRange,
+	getComponentDataTimeframe,
+} from "./utilities/dataTimeframe";
 import { timeTerms } from "./utilities/AllTimes";
 import { chartTypes } from "./utilities/chartTypes";
 import { useWindowManager } from "../composables/useWindowManager";
@@ -91,6 +94,13 @@ const props = defineProps({
 	activeCity: { type: String, default: "" },
 	toggleOn: { type: Boolean, default: false },
 });
+
+provide(
+	"componentAxisRange",
+	computed(() =>
+		getComponentAxisRange(props.config?.time_from, props.config?.time_to),
+	),
+);
 
 const emits = defineEmits([
 	"favorite",

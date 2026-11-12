@@ -1,7 +1,7 @@
 <!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 
 <script setup>
-import { ref, watch } from "vue";
+import { ref, watch, inject, computed } from "vue";
 // import { MapConfig, MapFilter } from "../utilities/componentConfig";
 import VueApexCharts from "vue3-apexcharts";
 import {
@@ -10,8 +10,24 @@ import {
 	alignVerticalAxisTitles,
 	toVerticalAxisTitle,
 } from "../utilities/chartUnits";
+import { withAxisRange } from "../utilities/dataTimeframe";
 
 const props = defineProps(["chart_config", "activeChart", "series"]);
+const componentAxisRange = inject(
+	"componentAxisRange",
+	computed(() => null),
+);
+
+function datetimeXaxis(xaxis) {
+	return withAxisRange(
+		{
+			...xaxis,
+			type: "datetime",
+			labels: { datetimeUTC: false, offsetY: -4 },
+		},
+		componentAxisRange.value,
+	);
+}
 
 // const emits = defineEmits([
 // 	"filterByParam",
@@ -113,21 +129,12 @@ function parseTime(time) {
 }
 
 watch(
-	() => props.series,
-	(newVal) => {
-		localSeries.value = JSON.parse(JSON.stringify(newVal || []));
-
-		const timestamps =
-			newVal?.[0]?.data?.map((p) => new Date(p.x).getTime()) || [];
-		if (timestamps.length < 2) return;
-
+	() => [props.series, componentAxisRange.value],
+	() => {
+		localSeries.value = JSON.parse(JSON.stringify(props.series || []));
 		chartOptions.value = {
 			...chartOptions.value,
-			xaxis: {
-				...chartOptions.value.xaxis,
-				type: "datetime",
-				labels: { datetimeUTC: false, offsetY: -4 },
-			},
+			xaxis: datetimeXaxis(chartOptions.value.xaxis),
 		};
 	},
 	{ deep: true, immediate: true },
