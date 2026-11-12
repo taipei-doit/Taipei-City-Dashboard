@@ -7,6 +7,8 @@ import VueApexCharts from "vue3-apexcharts";
 import {
 	formatValueWithUnit,
 	getExplicitChartUnit,
+	alignVerticalAxisTitles,
+	toVerticalDualAxisTitle,
 } from "../utilities/chartUnits";
 
 const props = defineProps(["chart_config", "activeChart", "series"]);
@@ -32,10 +34,13 @@ const parseSeries = computed(() => {
 const y1Unit = getExplicitChartUnit(props.chart_config.unit, "y1");
 const y2Unit = getExplicitChartUnit(props.chart_config.unit, "y2");
 
-function formatDualAxisLabel(seriesName, unit) {
-	const category = typeof seriesName === "string" ? seriesName.trim() : "";
-	if (category && unit) return `${category}（${unit}）`;
-	return category || unit || "";
+function dualAxisTitle(seriesName, unit) {
+	return {
+		...toVerticalDualAxisTitle(seriesName, unit),
+		style: {
+			color: "var(--color-complement-text)",
+		},
+	};
 }
 
 const totalMax = computed(() => {
@@ -153,12 +158,7 @@ const chartOptions = ref({
 					return val.toFixed(0);
 				},
 			},
-			title: {
-				text: formatDualAxisLabel(props.series?.[0]?.name, y1Unit),
-				style: {
-					color: "var(--color-complement-text)",
-				},
-			},
+			title: dualAxisTitle(props.series?.[0]?.name, y1Unit),
 		},
 		{
 			min: 0,
@@ -174,12 +174,7 @@ const chartOptions = ref({
 				},
 			},
 			opposite: true,
-			title: {
-				text: formatDualAxisLabel(props.series?.[1]?.name, y2Unit),
-				style: {
-					color: "var(--color-complement-text)",
-				},
-			},
+			title: dualAxisTitle(props.series?.[1]?.name, y2Unit),
 		},
 	],
 });
@@ -195,13 +190,10 @@ watch(
 
 		const yaxis = chartOptions.value.yaxis.map((axis, index) => ({
 			...axis,
-			title: {
-				...axis.title,
-				text: formatDualAxisLabel(
-					newVal?.[index]?.name,
-					index === 0 ? y1Unit : y2Unit,
-				),
-			},
+			title: dualAxisTitle(
+				newVal?.[index]?.name,
+				index === 0 ? y1Unit : y2Unit,
+			),
 		}));
 
 		const timestamps =
@@ -257,6 +249,8 @@ watch(
 			height="260px"
 			:options="chartOptions"
 			:series="parseSeries"
+			@mounted="alignVerticalAxisTitles"
+			@updated="alignVerticalAxisTitles"
 		/>
 	</div>
 </template>

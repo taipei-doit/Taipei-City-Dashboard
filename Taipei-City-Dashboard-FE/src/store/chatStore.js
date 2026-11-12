@@ -145,6 +145,25 @@ export const useChatStore = defineStore("chat", () => {
 		}
 	});
 
+	const ANALYSIS_STATUS = [
+		"正在分析您的提問",
+		"正與儀表板組件比對中",
+		"準備顯示分析比對成果",
+	];
+	const STATUS_STEP_MS = 1400;
+
+	const queryStatus = ref("");
+	const queryPending = ref(false);
+	let querySerial = 0;
+
+	const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+	const clearQueryStatus = () => {
+		querySerial += 1;
+		queryStatus.value = "";
+		queryPending.value = false;
+	};
+
 	const addChatData = (newChatData) => {
 		chatData.value.push({
 			id: chatData.value.length + 1,
@@ -249,7 +268,17 @@ export const useChatStore = defineStore("chat", () => {
 		}
 	};
 
+	const resolveSessionName = () => {
+		const d = new Date();
+		const todayId =
+			d.getFullYear() +
+			String(d.getMonth() + 1).padStart(2, "0") +
+			String(d.getDate()).padStart(2, "0");
+		return activeChatSession.value || `session_${todayId}`;
+	};
+
 	const openChatSession = async (session) => {
+		clearQueryStatus();
 		activeChatSession.value = session;
 		if (!session) {
 			chatData.value = [...defaultChatData];
@@ -258,22 +287,16 @@ export const useChatStore = defineStore("chat", () => {
 		await getChatSessionDetail(session);
 	};
 
-	const addQueryData = async (newChatData) => {
-		chatData.value.push({
-			id: chatData.value.length + 1,
-			isDefault: false,
-			...newChatData,
-		});
-
+	const fetchRecommendations = async (query, serial) => {
+		const stillCurrent = () => serial === querySerial;
 		recommendComponents.value = [];
-		let topK = null;
 		const sessionName = resolveSessionName();
 
 		try {
 			const response = await http.post(
 				"/vector/component",
 				new URLSearchParams({
-					query: newChatData.content,
+					query,
 					limit: 10,
 					score: 0.8,
 					session: sessionName,
@@ -285,11 +308,14 @@ export const useChatStore = defineStore("chat", () => {
 				},
 			);
 
+			if (!stillCurrent()) return null;
+
 			if (!activeChatSession.value) {
 				activeChatSession.value = sessionName;
 			}
 
 			const dashboards = await http.get(`/dashboard/`);
+			if (!stillCurrent()) return null;
 
 			const compList = response.data.data;
 			const dashMap = dashboards.data.data;
@@ -322,19 +348,52 @@ export const useChatStore = defineStore("chat", () => {
 					}, new Map())
 					.values(),
 			);
-			// 把 result 蓋回去 recommendComponents
 			recommendComponents.value = result;
+
+			if (!result.length) return null;
+
+			return [...result].sort((a, b) => b.score - a.score);
 		} catch (error) {
 			console.error("VectorAnalysisError :", error);
+			return null;
 		}
+	};
 
-		if (
-			recommendComponents.value &&
-			recommendComponents.value?.length > 0
-		) {
-			topK = [...recommendComponents.value].sort(
-				(a, b) => b.score - a.score,
-			);
+	const playAnalysisStatus = async (serial) => {
+		await delay(STATUS_STEP_MS);
+		for (let index = 1; index < ANALYSIS_STATUS.length; index += 1) {
+			if (serial !== querySerial) return;
+			queryStatus.value = ANALYSIS_STATUS[index];
+			await delay(STATUS_STEP_MS);
+		}
+	};
+
+	const addQueryData = async (newChatData) => {
+		if (queryPending.value) return;
+
+		const serial = ++querySerial;
+		const stillCurrent = () => serial === querySerial;
+
+		chatData.value.push({
+			id: chatData.value.length + 1,
+			isDefault: false,
+			...newChatData,
+		});
+
+		queryPending.value = true;
+		queryStatus.value = ANALYSIS_STATUS[0];
+
+		const [topK] = await Promise.all([
+			fetchRecommendations(newChatData.content, serial),
+			playAnalysisStatus(serial),
+		]);
+
+		if (!stillCurrent()) return;
+
+		queryStatus.value = "";
+		queryPending.value = false;
+
+		if (topK?.length > 0) {
 			chatData.value.push({
 				id: chatData.value.length + 1,
 				role: "bot",
@@ -362,18 +421,9 @@ export const useChatStore = defineStore("chat", () => {
 		}
 
 		// 問答紀錄由 /vector/component 在後端寫入，這裡只更新近一月對話列表
-		if (user.value?.user_id) {
+		if (stillCurrent() && user.value?.user_id) {
 			await getChatSessionList();
 		}
-	};
-
-	const resolveSessionName = () => {
-		const d = new Date();
-		const todayId =
-			d.getFullYear() +
-			String(d.getMonth() + 1).padStart(2, "0") +
-			String(d.getDate()).padStart(2, "0");
-		return activeChatSession.value || `session_${todayId}`;
 	};
 
 	const saveChatLog = async (question, answer) => {
@@ -406,6 +456,8 @@ export const useChatStore = defineStore("chat", () => {
 		compToDashIndexMap,
 		chatSessionList,
 		activeChatSession,
+		queryStatus,
+		queryPending,
 		addChatData,
 		addQueryData,
 		saveChatLog,

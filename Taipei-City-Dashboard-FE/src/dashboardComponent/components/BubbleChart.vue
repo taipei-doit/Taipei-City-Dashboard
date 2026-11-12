@@ -1,7 +1,12 @@
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from "vue";
 import VueApexCharts from "vue3-apexcharts";
-import { getChartUnit, getExplicitChartUnit } from "../utilities/chartUnits";
+import {
+	getChartUnit,
+	getExplicitChartUnit,
+	alignVerticalAxisTitles,
+	toVerticalAxisTitle,
+} from "../utilities/chartUnits";
 
 const props = defineProps([
 	"series",
@@ -191,7 +196,7 @@ const chartOptions = ref({
 				val >= 1000 ? `${(val / 1000).toFixed(0)}k` : `${val}`,
 		},
 		title: {
-			text: yAxisTitle,
+			...toVerticalAxisTitle(yAxisTitle),
 			style: {
 				color: "var(--color-complement-text)",
 			},
@@ -267,6 +272,8 @@ function handleDataSelection(_e, _chartContext, config) {
       height="100%"
       :options="chartOptions"
       :series="processedSeries"
+      @mounted="alignVerticalAxisTitles"
+      @updated="alignVerticalAxisTitles"
       @data-point-selection="handleDataSelection"
     />
 

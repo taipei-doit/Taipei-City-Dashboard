@@ -17,8 +17,14 @@ const authStore = useAuthStore();
 const { addChatData, addQueryData, saveChatLog, getChatSessionList, openChatSession } =
 	chatStore;
 const { createDashboard } = contentStore;
-const { chatData, compToDashIndexMap, chatSessionList, activeChatSession } =
-	storeToRefs(chatStore);
+const {
+	chatData,
+	compToDashIndexMap,
+	chatSessionList,
+	activeChatSession,
+	queryStatus,
+	queryPending,
+} = storeToRefs(chatStore);
 const { editDashboard } = storeToRefs(contentStore);
 const { user } = storeToRefs(authStore);
 
@@ -146,7 +152,7 @@ const qaBtnHandler = async (text, relations) => {
 };
 
 const sendBtnHandler = (text) => {
-	if (!text.trim()) return;
+	if (queryPending.value || !text.trim()) return;
 	addQueryData({
 		role: "user",
 		content: text,
@@ -167,6 +173,10 @@ watch(
 
 watch(activeChatSession, () => {
 	typedIds.value = {};
+	scrollChat();
+});
+
+watch(queryStatus, () => {
 	scrollChat();
 });
 
@@ -370,6 +380,25 @@ onMounted(() => {
           </div>
         </div>
         </div>
+        <div
+          v-if="queryStatus"
+          class="message"
+          aria-live="polite"
+        >
+          <div class="bot">
+            <div class="avatar">
+              <BotLogo />
+            </div>
+            <div class="content">
+              <div
+                :key="queryStatus"
+                class="message--bubble status-bubble"
+              >
+                <p>{{ queryStatus }}<span class="status-dots" /></p>
+              </div>
+            </div>
+          </div>
+        </div>
         </div>
 
         <!-- 輸入區 -->
@@ -377,10 +406,14 @@ onMounted(() => {
           <input
             v-model="userMessage"
             type="text"
-            placeholder="輸入訊息..."
+            :placeholder="queryPending ? '正在分析比對中...' : '輸入訊息...'"
+            :disabled="queryPending"
             @keyup.enter="sendBtnHandler(userMessage)"
           >
-          <button @click="sendBtnHandler(userMessage)">
+          <button
+            :disabled="queryPending"
+            @click="sendBtnHandler(userMessage)"
+          >
             <SendIcon />
           </button>
         </div>
@@ -627,6 +660,22 @@ $radius-20: 20px;
 						border-radius: $radius-10;
 						background: $card-bg;
 
+						&.status-bubble {
+							animation: status-fade 0.35s ease;
+						}
+
+						.status-dots {
+							display: inline-block;
+							width: 1.5em;
+							margin-left: 0.55em;
+							text-align: left;
+
+							&::after {
+								content: "";
+								animation: status-ellipsis 1.2s infinite;
+							}
+						}
+
 						p {
 							color: $white;
 							white-space: pre-line;
@@ -638,13 +687,15 @@ $radius-20: 20px;
 							font-size: 16px;
 						}
 
-						.type-caret {
+						.type-caret,
+						:deep(.type-caret) {
 							display: inline-block;
 							width: 2px;
 							height: 1em;
 							margin-left: 2px;
 							background: $white;
 							vertical-align: text-bottom;
+							animation: caret-blink 0.9s step-end infinite;
 						}
 					}
 
@@ -705,7 +756,56 @@ $radius-20: 20px;
 			&:hover {
 				filter: brightness(0.5);
 			}
+
+			&:disabled {
+				cursor: default;
+				opacity: 0.45;
+
+				&:hover {
+					filter: none;
+				}
+			}
 		}
+
+		input[type="text"]:disabled {
+			opacity: 0.7;
+			cursor: default;
+		}
+	}
+}
+
+@keyframes status-fade {
+	from {
+		opacity: 0.35;
+	}
+
+	to {
+		opacity: 1;
+	}
+}
+
+@keyframes caret-blink {
+	50% {
+		opacity: 0;
+	}
+}
+
+@keyframes status-ellipsis {
+	0% {
+		content: "";
+	}
+
+	25% {
+		content: ".";
+	}
+
+	50% {
+		content: "..";
+	}
+
+	75%,
+	100% {
+		content: "...";
 	}
 }
 
