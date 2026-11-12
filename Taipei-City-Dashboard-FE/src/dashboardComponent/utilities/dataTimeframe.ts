@@ -128,3 +128,37 @@ export function getComponentDataTimeframe(
 		return { timefrom: parsedTimeFrom, timeto: parsedTimeTo };
 	}
 }
+
+const closedTimePresets = new Set(["static", "current", "demo", "maintain"]);
+
+// 組件有顯示起訖時間時，回傳 X 軸要用的毫秒區間
+export function getComponentAxisRange(
+	time_from?: string | null,
+	time_to?: string | null,
+): { min: number; max: number } | null {
+	if (!time_from || closedTimePresets.has(time_from)) return null;
+
+	const { timefrom, timeto } = getComponentDataTimeframe(
+		time_from,
+		time_to || "",
+		true,
+	);
+	const min = Date.parse(timefrom);
+	const max = Date.parse(timeto);
+	if (!Number.isFinite(min) || !Number.isFinite(max) || min >= max) {
+		return null;
+	}
+	return { min, max };
+}
+
+export function withAxisRange(
+	xaxis: Record<string, unknown> | null | undefined,
+	range: { min: number; max: number } | null,
+) {
+	if (!xaxis) return xaxis;
+	const next = { ...xaxis };
+	delete next.min;
+	delete next.max;
+	if (!range) return next;
+	return { ...next, min: range.min, max: range.max };
+}
