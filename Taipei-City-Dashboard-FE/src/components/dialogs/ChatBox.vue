@@ -35,6 +35,15 @@ const dashboardCreationLoading = ref(false);
 const isListOpen = ref(false);
 const typedIds = ref({});
 
+// 已經在對話裡的訊息拿掉打字機標記，重新打開或切換歷史對話時直接顯示全文
+const revealExistingMessages = () => {
+	chatData.value.forEach((item) => {
+		if (item.typewriter) delete item.typewriter;
+	});
+};
+
+revealExistingMessages();
+
 const activeTypeId = computed(() => {
 	const pending = chatData.value.find(
 		(item) => item.role === "bot" && item.typewriter && !typedIds.value[item.id],
@@ -172,6 +181,7 @@ watch(
 );
 
 watch(activeChatSession, () => {
+	revealExistingMessages();
 	typedIds.value = {};
 	scrollChat();
 });
