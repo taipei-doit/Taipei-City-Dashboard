@@ -4,7 +4,12 @@
 import { ref, watch } from "vue";
 // import { MapConfig, MapFilter } from "../utilities/componentConfig";
 import VueApexCharts from "vue3-apexcharts";
-import { formatValueWithUnit, getAxisTitle } from "../utilities/chartUnits";
+import {
+	formatValueWithUnit,
+	getAxisTitle,
+	alignVerticalAxisTitles,
+	toVerticalAxisTitle,
+} from "../utilities/chartUnits";
 
 const props = defineProps(["chart_config", "activeChart", "series"]);
 
@@ -96,7 +101,7 @@ const chartOptions = ref({
 	yaxis: {
 		min: 0,
 		title: {
-			text: getAxisTitle(props.chart_config.unit, "y"),
+			...toVerticalAxisTitle(getAxisTitle(props.chart_config.unit, "y")),
 			style: {
 				color: "var(--color-complement-text)",
 			},
@@ -138,6 +143,8 @@ watch(
       type="area"
       :options="chartOptions"
       :series="localSeries"
+      @mounted="alignVerticalAxisTitles"
+      @updated="alignVerticalAxisTitles"
     />
   </div>
 </template>

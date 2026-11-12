@@ -3,7 +3,12 @@
 <script setup>
 import { computed, ref } from "vue";
 import VueApexCharts from "vue3-apexcharts";
-import { formatValueWithUnit, getAxisTitle } from "../utilities/chartUnits";
+import {
+	formatValueWithUnit,
+	getAxisTitle,
+	alignVerticalAxisTitles,
+	toVerticalAxisTitle,
+} from "../utilities/chartUnits";
 
 const props = defineProps([
 	"chart_config",
@@ -141,7 +146,7 @@ const chartOptions = ref({
 	},
 	yaxis: {
 		title: {
-			text: getAxisTitle(props.chart_config.unit, "y"),
+			...toVerticalAxisTitle(getAxisTitle(props.chart_config.unit, "y")),
 			style: {
 				color: "var(--color-complement-text)",
 			},
@@ -237,6 +242,8 @@ function resetWidth() {
       height="260px"
       :options="chartOptions"
       :series="series"
+      @mounted="alignVerticalAxisTitles"
+      @updated="alignVerticalAxisTitles"
       @data-point-selection="handleDataSelection"
     />
   </div>
