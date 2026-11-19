@@ -60,6 +60,13 @@ export function getComponentDataTimeframe(
 				nowTimeFrom.setHours(0, 0, 0, 0);
 				nowTimeFrom.setDate(1);
 				break;
+			case "quarter":
+				nowTimeFrom.setHours(0, 0, 0, 0);
+				nowTimeFrom.setMonth(
+					Math.floor(nowTimeFrom.getMonth() / 3) * 3,
+					1,
+				);
+				break;
 			case "year":
 				nowTimeFrom.setHours(0, 0, 0, 0);
 				nowTimeFrom.setMonth(0, 1);

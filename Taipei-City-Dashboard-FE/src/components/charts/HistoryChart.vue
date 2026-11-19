@@ -1,9 +1,13 @@
 <!-- Developed by Taipei Urban Intelligence Center 2023-2024-->
 
 <script setup>
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import { timeTerms } from "../../assets/configs/AllTimes";
 import { formatValueWithUnit } from "../../dashboardComponent/utilities/chartUnits";
+import {
+	getComponentAxisRange,
+	withAxisRange,
+} from "../../dashboardComponent/utilities/dataTimeframe";
 
 const props = defineProps(["chart_config", "series", "history_config"]);
 
@@ -92,6 +96,26 @@ const chartOptions = ref({
 function parseTime(time) {
 	return time.replace("T", " ").replace("+08:00", " ");
 }
+
+watch(
+	() => [currentSeries.value, props.history_config?.range],
+	() => {
+		const key = props.history_config?.range?.[currentSeries.value];
+		const range = key ? getComponentAxisRange(key, "now") : null;
+		chartOptions.value = {
+			...chartOptions.value,
+			xaxis: withAxisRange(
+				{
+					...chartOptions.value.xaxis,
+					type: "datetime",
+					labels: { datetimeUTC: false },
+				},
+				range,
+			),
+		};
+	},
+	{ immediate: true },
+);
 </script>
 
 <template>
