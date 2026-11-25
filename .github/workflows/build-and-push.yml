@@ -47,9 +47,10 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Determine base ref (push only)
+      # workflow_dispatch 也要算出實際 SHA：paths-filter 拿不到 base 時會用字串 'HEAD^'，
+      # 對它做 git fetch 會 invalid refspec，導致手動觸發（force_*）一律失敗。
+      - name: Determine base ref
         id: base
-        if: github.event_name == 'push'
         run: |
           if [ -n "${{ github.event.before }}" ]; then
             echo "base=${{ github.event.before }}" >> $GITHUB_OUTPUT
