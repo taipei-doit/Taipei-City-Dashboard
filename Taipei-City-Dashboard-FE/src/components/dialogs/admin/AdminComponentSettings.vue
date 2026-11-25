@@ -825,6 +825,12 @@ onBeforeUnmount(() => {
               <option value="map_legend">
                 圖例資料
               </option>
+              <option value="bubble">
+                四維資料（系列、X、Y、泡泡大小）
+              </option>
+              <option value="layered_flow">
+                分層流向資料
+              </option>
             </select>
             <label>資料單位</label>
             <input
