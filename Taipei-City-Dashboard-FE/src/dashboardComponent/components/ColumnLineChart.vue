@@ -6,8 +6,9 @@ import { ref, computed, watch, inject } from "vue";
 import VueApexCharts from "vue3-apexcharts";
 import {
 	formatValueWithUnit,
-	getExplicitChartUnit,
+	getChartUnit,
 	alignVerticalAxisTitles,
+	horizontalAxisTitle,
 	toVerticalDualAxisTitle,
 } from "../utilities/chartUnits";
 import { withAxisRange } from "../utilities/dataTimeframe";
@@ -47,8 +48,8 @@ const parseSeries = computed(() => {
 	}));
 });
 
-const y1Unit = getExplicitChartUnit(props.chart_config.unit, "y1");
-const y2Unit = getExplicitChartUnit(props.chart_config.unit, "y2");
+const y1Unit = getChartUnit(props.chart_config.unit, "y1");
+const y2Unit = getChartUnit(props.chart_config.unit, "y2");
 
 function dualAxisTitle(seriesName, unit) {
 	return {
@@ -158,6 +159,7 @@ const chartOptions = ref({
 		tooltip: {
 			enabled: false,
 		},
+		title: horizontalAxisTitle(props.chart_config.unit, "x"),
 		type: "datetime",
 	},
 	yaxis: [

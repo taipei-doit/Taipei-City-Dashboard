@@ -235,6 +235,11 @@ export const useAdminStore = defineStore("admin", {
 			const chart_config = JSON.parse(
 				JSON.stringify(this.currentComponent.chart_config)
 			);
+			// component_charts.unit 是 varchar，後端只接受字串。
+			// 編輯時合法 JSON 會被 parse 成物件，送出前要還原成字串。
+			if (chart_config.unit && typeof chart_config.unit === "object") {
+				chart_config.unit = JSON.stringify(chart_config.unit);
+			}
 			if (this.currentComponent.map_filter !== null) {
 				this.currentComponent.map_filter = JSON.parse(
 					this.currentComponent.map_filter
