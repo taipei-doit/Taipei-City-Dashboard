@@ -1,0 +1,33 @@
+{
+  "dag_infos": {
+    "dag_id": "important_landmarks_ntpe",
+    "start_date": "2026-05-21",
+    "schedule_interval": "@daily",
+    "catchup": false,
+    "default_args": { "email": ["DEFAULT_EMAIL_LIST"] },
+    "description": "New Taipei important landmarks (重要地標資訊)",
+    "tags": ["important_landmarks", "New-Taipei-City", "新北市"],
+    "ready_data_default_table": "important_landmarks_ntpe",
+    "ready_data_history_table": "",
+    "component_name": "important_landmarks_ntpe",
+    "load_behavior": "replace",
+    "ready_data_db": "ready_data"
+  },
+  "data_infos": {
+    "name_cn": "重要地標資訊",
+    "airflow_update_freq": "@daily",
+    "source": "https://data.ntpc.gov.tw/datasets/6dcff24a-838c-40fb-a9df-f1160afafe84",
+    "source_type": "data.ntpc.gov.tw",
+    "source_dept": "新北市政府",
+    "gis_format": "Point",
+    "output_coordinate": "EPSG:4326",
+    "is_geometry": 1,
+    "component_name": "important_landmarks_ntpe",
+    "dataset_description": "新北市重要地標資訊",
+    "etl_description": "Fetch JSON, convert TWD97 xy to wkb_geometry(Point,4326), save to ready table",
+    "sensitivity": "public"
+  },
+  "server": {
+    "ready_data_db_uri": "postgresql://user:pass@db:5432/ready_data"
+  }
+}

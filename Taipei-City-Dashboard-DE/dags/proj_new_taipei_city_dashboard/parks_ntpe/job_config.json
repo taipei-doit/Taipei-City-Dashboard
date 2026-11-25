@@ -1,0 +1,45 @@
+{
+  "dag_infos": {
+    "dag_id": "green_point",
+    "start_date": "2026-05-21",
+    "schedule_interval": "@daily",
+    "catchup": false,
+    "tags": [
+      "green_point",
+      "農業局",
+      "新北市",
+      "New-Taipei-City"
+    ],
+    "description": "每日更新新北市公園基本資料，透過 New Taipei Open Data JSON API 擷取並寫入 PostgreSQL Ready Data 資料表。",
+    "default_args": {
+      "owner": "airflow",
+      "email": [
+        "DEFAULT_EMAIL_LIST"
+      ],
+      "email_on_retry": false,
+      "email_on_failure": true,
+      "retries": 1,
+      "retry_delay": 60
+    },
+    "ready_data_db": "postgres_default",
+    "ready_data_default_table": "green_point",
+    "ready_data_history_table": "",
+    "raw_data_db": "postgres_default",
+    "raw_data_table": "",
+    "load_behavior": "replace"
+  },
+  "data_infos": {
+    "name_cn": "新北市公園",
+    "airflow_update_freq": "@daily",
+    "source": "https://data.ntpc.gov.tw/datasets/5fe3a136-29cc-4695-a17e-6636a32c3342",
+    "source_type": "data.ntpc.gov.tw",
+    "source_dept": "農業局",
+    "gis_format": null,
+    "output_coordinate": "",
+    "is_geometry": 0,
+    "dataset_description": "新北市公園基本資料包含:名稱、所在區、地址、管理單位及聯絡電話。",
+    "etl_description": "透過 New Taipei JSON API 擷取公園資料，轉換欄位名稱並寫入 PostgreSQL。",
+    "sensitivity": "public",
+    "component_name": "green_point"
+  }
+}

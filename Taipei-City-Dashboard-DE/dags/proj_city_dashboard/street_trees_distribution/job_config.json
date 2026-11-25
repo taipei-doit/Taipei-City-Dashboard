@@ -1,0 +1,38 @@
+{
+  "dag_infos": {
+    "dag_id": "street_trees_distribution",
+    "start_date": "2026-05-22",
+    "schedule_interval": "@daily",
+    "catchup": false,
+    "tags": ["street_trees", "urban_trees", "Taipei-City"],
+    "description": "Daily import of Taipei street trees distribution from data.nat.gov.tw dataset 146760.",
+    "default_args": {
+      "owner": "airflow",
+      "email": ["DEFAULT_EMAIL_LIST"],
+      "email_on_retry": false,
+      "email_on_failure": true,
+      "retries": 1,
+      "retry_delay": 60
+    },
+    "ready_data_db": "postgres_default",
+    "ready_data_default_table": "street_trees_distribution",
+    "ready_data_history_table": "",
+    "raw_data_db": "postgres_default",
+    "raw_data_table": "",
+    "load_behavior": "replace"
+  },
+    "data_infos": {
+    "name_cn": "臺北市行道樹分布圖",
+    "airflow_update_freq": "daily",
+    "source": "https://data.nat.gov.tw/dataset/146760",
+    "source_type": "CKAN_dataset",
+    "source_dept": "National open data",
+    "gis_format": "geojson",
+    "output_coordinate": "EPSG:4326",
+    "is_geometry": 1,
+    "component_name": "street_trees_map",
+    "dataset_description": "臺北市行道樹分布資料（每日更新）",
+    "etl_description": "Fetch dataset package, choose geojson/csv resource, normalize columns, add wkb_geometry, save to postgres",
+    "sensitivity": "public"
+  }
+}
