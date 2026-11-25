@@ -59,6 +59,7 @@ function axisTitleStyle() {
 export function horizontalAxisTitle(unit, dimension, fallback = false) {
 	return {
 		text: getAxisTitle(unit, dimension, fallback),
+		offsetY: -12,
 		style: axisTitleStyle(),
 	};
 }
