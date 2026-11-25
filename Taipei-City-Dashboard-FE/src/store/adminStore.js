@@ -265,7 +265,11 @@ export const useAdminStore = defineStore("admin", {
 				JSON.stringify(this.currentComponent)
 			);
 			// 3.2 Update component chart config
-			await http.patch(`/component/${componentId}/chart`, chart_config);
+			await http.patch(`/component/${componentId}/chart`, chart_config, {
+				params: {
+					city: componentCity
+				}
+			});
 
 			// 3.3 Update component component config (incl. history config)
 			await http.patch(`/component/${componentId}`, component_config, {
