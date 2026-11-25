@@ -250,6 +250,12 @@ onMounted(() => {
             class="mapcontainer-legend-group"
           >
             <h4>{{ group.title }}</h4>
+            <p
+              v-if="group.colorField"
+              class="mapcontainer-legend-field"
+            >
+              設色依據：{{ group.colorField }}
+            </p>
             <template v-if="group.items.length">
               <div
                 v-for="item in group.items"
@@ -611,6 +617,13 @@ onMounted(() => {
 				font-weight: 600;
 				letter-spacing: 0.04em;
 			}
+		}
+
+		&-group &-field {
+			margin: -3px 0 5px;
+			padding: 0;
+			color: #aaa;
+			font-size: 0.75rem;
 		}
 
 		&-item {
