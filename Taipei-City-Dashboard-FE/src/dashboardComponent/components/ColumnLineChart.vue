@@ -5,8 +5,7 @@
 import { ref, computed, watch, inject } from "vue";
 import VueApexCharts from "vue3-apexcharts";
 import {
-	formatValueWithUnit,
-	getChartUnit,
+	getExplicitChartUnit,
 	alignVerticalAxisTitles,
 	horizontalAxisTitle,
 	toVerticalDualAxisTitle,
@@ -48,8 +47,12 @@ const parseSeries = computed(() => {
 	}));
 });
 
-const y1Unit = getChartUnit(props.chart_config.unit, "y1");
-const y2Unit = getChartUnit(props.chart_config.unit, "y2");
+const y1Unit = getExplicitChartUnit(props.chart_config.unit, "y1");
+const y2Unit = getExplicitChartUnit(props.chart_config.unit, "y2");
+
+function formatDualAxisValue(value, unit) {
+	return unit ? `${value} ${unit}` : `${value}`;
+}
 
 function dualAxisTitle(seriesName, unit) {
 	return {
@@ -125,10 +128,9 @@ const chartOptions = ref({
 					w.globals.seriesNames[seriesIndex]
 				}` +
 				`</h6>` +
-				`<span>${formatValueWithUnit(
+				`<span>${formatDualAxisValue(
 					series[seriesIndex][dataPointIndex],
-					props.chart_config.unit,
-					seriesIndex === 0 ? "y1" : "y2",
+					seriesIndex === 0 ? y1Unit : y2Unit,
 				)}</span>` +
 				`</div>`
 			);
