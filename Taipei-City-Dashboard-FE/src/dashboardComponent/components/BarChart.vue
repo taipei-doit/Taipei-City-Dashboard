@@ -2,7 +2,12 @@
 <script setup>
 import { ref, computed } from "vue";
 import VueApexCharts from "vue3-apexcharts";
-import { formatValueWithUnit, getAxisTitle } from "../utilities/chartUnits";
+import {
+	alignVerticalAxisTitles,
+	formatValueWithUnit,
+	horizontalAxisTitle,
+	verticalAxisTitle,
+} from "../utilities/chartUnits";
 
 const props = defineProps([
 	"chart_config",
@@ -90,11 +95,8 @@ const chartOptions = ref({
 			show: false,
 		},
 		title: {
-			text: getAxisTitle(props.chart_config.unit, "x"),
+			...horizontalAxisTitle(props.chart_config.unit, "x", true),
 			offsetY: -12,
-			style: {
-				color: "var(--color-complement-text)",
-			},
 		},
 		type: "category",
 	},
@@ -104,6 +106,7 @@ const chartOptions = ref({
 				return value.length > 7 ? value.slice(0, 6) + "..." : value;
 			},
 		},
+		title: verticalAxisTitle(props.chart_config.unit, "y"),
 	},
 });
 
@@ -158,6 +161,8 @@ function handleDataSelection(_e, _chartContext, config) {
       type="bar"
       :options="chartOptions"
       :series="series"
+      @mounted="alignVerticalAxisTitles"
+      @updated="alignVerticalAxisTitles"
       @data-point-selection="handleDataSelection"
     />
   </div>

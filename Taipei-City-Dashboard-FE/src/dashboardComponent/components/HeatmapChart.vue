@@ -3,7 +3,12 @@
 <script setup>
 import { computed, ref } from "vue";
 import VueApexCharts from "vue3-apexcharts";
-import { formatValueWithUnit } from "../utilities/chartUnits";
+import {
+	alignVerticalAxisTitles,
+	formatValueWithUnit,
+	horizontalAxisTitle,
+	verticalAxisTitle,
+} from "../utilities/chartUnits";
 
 const props = defineProps([
 	"chart_config",
@@ -160,6 +165,7 @@ const chartOptions = ref({
 		tooltip: {
 			enabled: false,
 		},
+		title: horizontalAxisTitle(props.chart_config.unit, "x"),
 		type: "category",
 	},
 	yaxis: {
@@ -169,6 +175,7 @@ const chartOptions = ref({
 			}
 			return heatmapData.value.highest;
 		},
+		title: verticalAxisTitle(props.chart_config.unit, "y"),
 	},
 });
 
@@ -226,6 +233,8 @@ function handleDataSelection(_e, _chartContext, config) {
       type="heatmap"
       :options="chartOptions"
       :series="series"
+      @mounted="alignVerticalAxisTitles"
+      @updated="alignVerticalAxisTitles"
       @data-point-selection="handleDataSelection"
     />
   </div>

@@ -5,9 +5,9 @@ import { computed, ref } from "vue";
 import VueApexCharts from "vue3-apexcharts";
 import {
 	formatValueWithUnit,
-	getAxisTitle,
 	alignVerticalAxisTitles,
-	toVerticalAxisTitle,
+	horizontalAxisTitle,
+	verticalAxisTitle,
 } from "../utilities/chartUnits";
 
 const props = defineProps([
@@ -142,15 +142,11 @@ const chartOptions = ref({
 		labels: {
 			offsetY: -4,
 		},
+		title: horizontalAxisTitle(props.chart_config.unit, "x"),
 		type: "category",
 	},
 	yaxis: {
-		title: {
-			...toVerticalAxisTitle(getAxisTitle(props.chart_config.unit, "y")),
-			style: {
-				color: "var(--color-complement-text)",
-			},
-		},
+		title: verticalAxisTitle(props.chart_config.unit, "y", true),
 	},
 });
 

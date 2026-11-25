@@ -6,9 +6,9 @@ import { ref, watch, inject, computed } from "vue";
 import VueApexCharts from "vue3-apexcharts";
 import {
 	formatValueWithUnit,
-	getAxisTitle,
 	alignVerticalAxisTitles,
-	toVerticalAxisTitle,
+	horizontalAxisTitle,
+	verticalAxisTitle,
 } from "../utilities/chartUnits";
 import { withAxisRange } from "../utilities/dataTimeframe";
 
@@ -112,16 +112,12 @@ const chartOptions = ref({
 		tooltip: {
 			enabled: false,
 		},
+		title: horizontalAxisTitle(props.chart_config.unit, "x"),
 		type: "datetime",
 	},
 	yaxis: {
 		min: 0,
-		title: {
-			...toVerticalAxisTitle(getAxisTitle(props.chart_config.unit, "y")),
-			style: {
-				color: "var(--color-complement-text)",
-			},
-		},
+		title: verticalAxisTitle(props.chart_config.unit, "y", true),
 	},
 });
 

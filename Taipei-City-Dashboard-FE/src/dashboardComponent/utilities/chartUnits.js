@@ -44,8 +44,30 @@ export function getExplicitChartUnit(unit, dimension) {
 	return typeof dimensionUnit === "string" ? dimensionUnit.trim() : "";
 }
 
-export function getAxisTitle(unit, dimension) {
-	return getChartUnit(unit, dimension);
+export function getAxisTitle(unit, dimension, fallback = false) {
+	return fallback
+		? getChartUnit(unit, dimension)
+		: getExplicitChartUnit(unit, dimension);
+}
+
+function axisTitleStyle() {
+	return {
+		color: "var(--color-complement-text)",
+	};
+}
+
+export function horizontalAxisTitle(unit, dimension, fallback = false) {
+	return {
+		text: getAxisTitle(unit, dimension, fallback),
+		style: axisTitleStyle(),
+	};
+}
+
+export function verticalAxisTitle(unit, dimension, fallback = false) {
+	return {
+		...toVerticalAxisTitle(getAxisTitle(unit, dimension, fallback)),
+		style: axisTitleStyle(),
+	};
 }
 
 const AXIS_TITLE_FONT_SIZE = 11;
