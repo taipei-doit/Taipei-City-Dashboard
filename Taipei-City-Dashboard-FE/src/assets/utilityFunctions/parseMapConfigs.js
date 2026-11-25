@@ -84,6 +84,38 @@ function getFieldName(expression) {
 	return null;
 }
 
+function getColorFieldKeys(expression) {
+	if (!Array.isArray(expression)) return [];
+
+	let inputs = [];
+	switch (expression[0]) {
+	case "match":
+	case "step":
+		inputs = [expression[1]];
+		break;
+	case "interpolate":
+		inputs = [expression[2]];
+		break;
+	case "case":
+		inputs = expression
+			.slice(1, -1)
+			.filter((_, index) => index % 2 === 0);
+		break;
+	default:
+		return [];
+	}
+
+	return [
+		...new Set(inputs.map((input) => getFieldName(input)).filter(Boolean)),
+	];
+}
+
+function getColorFieldLabel(expression, fieldNames = EMPTY_FIELD_NAMES) {
+	const fields = getColorFieldKeys(expression);
+	if (!fields.length) return null;
+	return fields.map((field) => fieldNames.get(field) || field).join("、");
+}
+
 function formatCondition(condition, fieldNames = EMPTY_FIELD_NAMES) {
 	if (!Array.isArray(condition)) return formatValue(condition);
 
@@ -274,6 +306,13 @@ function removeDuplicateItems(items) {
 	});
 }
 
+function getAllFeaturesLabel(type) {
+	if (type === "circle" || type === "symbol") return "全部點位";
+	if (type === "fill" || type === "fill-extrusion") return "全部區域";
+	if (type === "line") return "全部線段";
+	return "全部資料";
+}
+
 function buildWindHeatLegend(config) {
 	return {
 		title: config.title || "風速熱力圖",
@@ -306,11 +345,14 @@ export function buildMapLegend(config) {
 
 	const fieldNames = buildFieldNames(config.property);
 	let items = [];
+	let colorField = null;
 	if (type === "symbol") {
 		items = parseSymbolLegend(config);
 	} else {
 		const paint = config.paint || {};
-		items = parseColorValue(paint[PRIMARY_COLOR_KEYS[type]], fieldNames);
+		const colorExpression = paint[PRIMARY_COLOR_KEYS[type]];
+		items = parseColorValue(colorExpression, fieldNames);
+		colorField = getColorFieldLabel(colorExpression, fieldNames);
 
 		if (
 			type === "circle" &&
@@ -333,7 +375,7 @@ export function buildMapLegend(config) {
 				: null;
 
 	items = removeDuplicateItems(items).map((item) => ({
-		label: item.label,
+		label: item.label === "全部" ? getAllFeaturesLabel(type) : item.label,
 		kind: type === "fill-extrusion" ? "fill" : type,
 		color: item.color || null,
 		colors: item.colors || null,
@@ -360,6 +402,7 @@ export function buildMapLegend(config) {
 	return {
 		title: config.title || "未命名圖層",
 		type,
+		colorField,
 		items,
 	};
 }
